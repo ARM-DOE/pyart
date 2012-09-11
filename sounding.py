@@ -29,6 +29,7 @@ Scott Collis scollis@anl.gov
 HISTORY
 -------
 2010 11 18: Initial version Version 0.5 (previous versions were in scratch files, hence the higher version
+2012 09 11: Added to git repo
 
 """
 import datetime
