@@ -1,2 +1,42 @@
-Py ART The Python ARM Radar Toolkit
+Welcome to the Python ARM Radar toolkit. 
+This toolkit contains a variety of utilities that can be strung together to produce applications for:
+*Reading Radar data
+*Correcting radar data in antenna coordinates
+*Mapping data to a Cartesian Grid
+*Performing retrievals on this mapped data
+*Doing calculations on the retievals
+*And finally writing both radial and Cartesian data to documented NetCDF files
 
+Dependancies:
+Python 2.6+ with
+-netCDF4
+-numpy
+-scipy
+-ctypes
+-matplotlib
+
+NASA Radar Software Libriary (RSL) 1.43+ and dependancies required to build (Automake etc...)
+
+Installation:
+Currently the only build option is inplace, later we plan to port to using distutils and allow a system wide install. For now unpack your Py-ART distribution where you plan to have it installed.
+
+STEP 1: Build py4dd, a version of RSL patched with the Univeristy of Washington 4D Dealias code.
+set the variable PYART_DIR to the base dir of your pyart install ie if I have unpacked pyart in /home/user/python/pyart I would set PYART_DIR to /home/user/python
+Unless you want to set this before each Py-ART session set this in your .bashrc or whatever. Note also that as we use a sys.path.append($PYART_DIR) please ensure this does not play havoc with you module search.
+
+Copy the RSL tarball to $PYART_DIR/pyart/io/src
+Check that the VERSION is correct in $PYART_DIR/pyart/io/src/patch_and_make.sh
+cd $PYART_DIR/pyart/io/src/
+./patch_and_make.sh
+
+Cheer if it works!
+
+This will create a shared library in $PYART_DIR//pyart/io/lib/librsl.so.1.0.43
+
+STEP 2: Build the ball tree mapper
+cd $PYART_DIR/pyart/map/ball_tree
+python setup.py build_ext --inplace
+cp $PYART_DIR/pyart/map/ball_tree/ball_tree/ball_tree.so $PYART_DIR/pyart/map/
+
+STEP 3: Test
+TBD
