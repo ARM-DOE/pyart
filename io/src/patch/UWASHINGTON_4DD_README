@@ -1,0 +1,40 @@
+This software was developed by the Mesoscale Group, Department of Atmospheric
+Sciences, University of Washington, Seattle, WA, USA.
+
+Access and use of this software shall impose the following obligations on
+the user.  The user is granted the right, without any fee or cost, to use,
+copy, modify, alter, enhance, and distribute this software, and any
+derivative works thereof, and its supporting documentation for any purpose
+whatsoever, except commercial sales, provided that this entire notice appears
+in all copies of the software, derivative works, and supporting documentation.
+Further, the user agrees to credit the University of Washington in any
+publications that result from the use of this software or in any software
+package that includes this software.  The name University of Washington,
+however, may not be used in any advertising or publicity to endorse or
+promote any products or commercial entity unless specific written permission
+is obtained from the University of Washington.  The user also understands
+that the University of Washington is not obligated to provide the user with
+any support, consulting, training, or assistance of any kind with regard to 
+the use, operation, and performance of this software nor to provide the user
+with any updates, revisions, new versions, or "bug fixes."
+
+THIS SOFTWARE IS PROVIDED BY THE UNIVERSITY OF WASHINGTON "AS IS" AND ANY 
+EXPRESS OR IMPLIED WARRANTIES, INCLUDING BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MECHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE 
+DISCLAIMED.  IN NO EVENT SHALL THE UNIVERSITY OF WASHINGTON BE LIABLE FOR
+ANY SPECIAL, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER,
+INCLUDING BUT NOT LIMITED TO CLAIMS ASSOCIATED WITH THE LOSS OF DATA OR 
+PROFITS, WHICH MAY RESULT FROM AN ACTION IN CONTRACT, NEGLIGENCE, OR OTHER
+TORTIOUS CLAIM THAT ARISES OUT OF OR IN CONNECTION WITH THE ACCESS, USE, OR
+PREFORMANCE OF THIS SOFTWARE.
+
+
+Appended by Sandy 16 June 2008
+
+To build this software under Linux,
+edit set_build_env to set 
+	setenv HOST_OS LINUX
+
+Then from this directory execute build.sh,
+resultant executable is FourDD.
+
