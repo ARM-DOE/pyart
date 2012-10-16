@@ -1,4 +1,4 @@
-Welcome to the Python ARM Radar toolkit. 
+Welcome to the Python ARM Radar toolkit!
 This toolkit contains a variety of utilities that can be strung together to produce applications for:
 *Reading Radar data
 *Correcting radar data in antenna coordinates
