@@ -44,6 +44,8 @@ HISTORY
 -------
 2012: First work started
 Oct 18 2012:Updated sys.path,append to work on multi-system installs
+allowed passthrough of kwargs to the two handlers (mdv, rsl)
+added the option of overiding and adding metadata to rsl
 
 """
 
@@ -103,17 +105,27 @@ def create_cube_array_lim(volume, nsweeps, nrays):
 	return ppi
 
 
+def rsl_header_to_dict(header):
+	all_keys=dir(header)
+	my_dict={}
+	for key in all_keys:
+		if key[0]!='_':
+			my_dict.update({key: getattr(header, key)})
+	return my_dict
+
+
+
 class Radar:
 	"""
 	A class for storing antenna coordinate radar data which will interact nicely with CF-Radial files and other pyart code
 	"""
-	def __init__(self, radarobj):
+	def __init__(self, radarobj, **kwargs):
 		#check format of file object
 		if 'vlevel_headers' in dir(radarobj):#this is a mdv file
-			self.mdv2rad(radarobj)
+			self.mdv2rad(radarobj, **kwargs)
 		elif 'contents' in dir(radarobj):#this is a ctype, possibly a rsl object
 			if 'h' in dir(radarobj.contents): #yep a rsl object
-				self.rsl2rad(radarobj)
+				self.rsl2rad(radarobj, **kwargs)
 	def ray_header_time_to_dict(self, h):
 		return {'year':h.year, 'month': h.month, 'day':h.day,'hour':h.hour, 'minute':h.minute, 'second':h.sec}
 	def extract_rsl_pointing(self, volume):
@@ -145,6 +157,7 @@ class Radar:
 	def rsl2rad(self, radarobj, **kwargs):
 		#We only want to transfer fields that we have valid names for... 
 		#An issue that needs to be resolved is that this code likes all sweeps to have the same number of rays.. so for now we take min(nrays) across sweeps and drop rays out side of this... this is an "easy" issue to resolve caused by the fact I have been treating things as cubes and then flattening them
+		add_meta=kwargs.get('add_meta',{}) #additional metadata which will overwrite data from the radar header.. this helps when you know there are issues with the meta
 		name_transfer={'ZT':'DBZ', 'VR':'VEL_F', 'DR':'ZDR', 'KD':'KDP_F', 'SQ':'NCP_F', 'PH':'PHIDP_F', 'VE':'VEL_COR','RH':'RHOHV_F', 'DZ':'DBZ_F', 'SW':'WIDTH', 'ZD':'ZDR_F'}
 		available_data=get_avail_moments(radarobj.contents.volumes)
 		print available_data
@@ -214,6 +227,11 @@ class Radar:
 		self.sweep_mode=array([self.scan_type]*self.nsweeps)
 		self.sweep_number=linspace(0,self.nsweeps-1, self.nsweeps)
 		metadata={'original_container':'rsl'}
+		need_from_rsl_header={'name':'instrument_name', 'project':'project', 'state':'state', 'country':'country'} #rsl_name: radar meta name
+		rsl_dict=rsl_header_to_dict(radarobj.contents.h)
+		for rsl_key in need_from_rsl_header.keys():
+			metadata.update({need_from_rsl_header[rsl_key]: rsl_dict[rsl_key]})
+		metadata.update(add_meta)
 		self.metadata=metadata
 		#now for location variables
 		radar_loc=[ dms_to_d((radarobj.contents.h.latd, radarobj.contents.h.latm, radarobj.contents.h.lats)) , dms_to_d((radarobj.contents.h.lond, radarobj.contents.h.lonm, radarobj.contents.h.lons)) ]
