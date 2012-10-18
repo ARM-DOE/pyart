@@ -1,8 +1,60 @@
+""" A general central radial scanning (or dwelling) instrument class
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+    * Neither the name of the <organization> nor the
+      names of its contributors may be used to endorse or promote products
+      derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL Scott Collis or Argonne National Laboratory BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+-------------------------------------------------------------------------------
+
+
+USE
+---
+for example: 
+xsapr = py4dd.RSL_anyformat_to_radar(filename)
+myradar=radar.Radar(xsapr)
+
+works with rsl and MDV objects at the moment
+
+REQUIREMENTS
+------------
+numpy
+netCDF4
+py4DD
+datetime
+
+HISTORY
+-------
+2012: First work started
+Oct 18 2012:Updated sys.path,append to work on multi-system installs
+
+"""
+
+
+
 import sys
 import os
 from numpy import tile,array, isnan, where, ma, linspace, arange, zeros, float32
 from netCDF4 import date2num
-sys.path.append('/home/sc8/python/pyart/io/')
+pyart_dir=os.environ.get('PYART_DIR',os.environ['HOME']+'/python')
+sys.path.append(pyart_dir+'/pyart/io/')
 import py4dd
 from datetime import datetime
 
