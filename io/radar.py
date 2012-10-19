@@ -242,6 +242,7 @@ class Radar:
 		#now for instrument parameters.. sorry but I am just going to brute force this!
 		#prt mode: Need to fix this.. assumes dual if two prts 
 		inst_params={'prt_mode':{'data':array([self.prtmode(sample_volume.sweeps[i].rays[0].h) for i in range(self.nsweeps)]), 'comments':'Pulsing mode Options are: "fixed", "staggered", "dual" Assumed "fixed" if missing.'}, 
+		'nyquist_velocity':{'data':array([sample_volume.sweeps[i].rays[0].nyq_vel for i in range(self.nsweeps)]), 'units':'m/s', 'comments':"unamb velocity"},
 		'prt':{'data':array([sample_volume.sweeps[i].rays[0].prf for i in range(self.nsweeps)]), 'units':'seconds', 'comments':"Pulse repetition time.For staggered prt, also see prt_ratio."},
 		'unambiguous_range':{'data':array([sample_volume.sweeps[i].rays[0].unam_rng*1000.0 for i in range(self.nsweeps)]), 'units':'meters', 'comment':'Unambiguous range'}}
 		self.inst_params=inst_params
