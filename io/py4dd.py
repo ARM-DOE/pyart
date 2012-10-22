@@ -53,7 +53,7 @@ import sys
 
 pyart_dir=os.environ.get('PYART_DIR',os.environ['HOME']+'/python')
 lib_path=pyart_dir+'/pyart/io/lib/'
-ext={'darwin':'dynlib', 'linux2':'so', 'win32':'DLL'}[sys.platform]#note win32 not supported at this time...
+ext={'darwin':'dylib', 'linux2':'so', 'win32':'DLL'}[sys.platform]#note win32 not supported at this time...
 files_in_dir=os.listdir(lib_path)
 if 'librsl.'+ext in files_in_dir:
 	print "rsl library found ", lib_path+ 'librsl.'+ext
