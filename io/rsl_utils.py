@@ -48,6 +48,7 @@ Scott Collis scollis.acrf@gmail.com
 """
 import ctypes
 import os
+import sys
 pyart_dir=os.environ.get('PYART_DIR',os.environ['HOME']+'/python')
 sys.path.append(pyart_dir+'/pyart/io/')
 try:
