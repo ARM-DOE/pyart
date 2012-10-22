@@ -40,6 +40,7 @@ That version added the vcp field to the Volume_header struct.
 11/5/2010:Scott Collis Added extra headers and a few extra links to rsl functions
 scollis.acrf@gmail.com
 
+22/10/2011: Scott Collis added autosearch for the RSL library to make it platform independant 
 
 """
 
@@ -48,9 +49,20 @@ import numpy as N
 import os.path
 #from pylab 
 import datetime
+import sys
+
+pyart_dir=os.environ.get('PYART_DIR',os.environ['HOME']+'/python')
+lib_path=pyart_dir+'/pyart/io/lib/'
+ext={'darwin':'dynlib', 'linux2':'so', 'win32':'DLL'}[sys.platform]#note win32 not supported at this time...
+files_in_dir=os.listdir(lib_path)
+if 'librsl.'+ext in files_in_dir:
+	print "rsl library found ", lib_path+ 'librsl.'+ext
+	librslPath=lib_path+ 'librsl.'+ext
+
+
 
 #librslPath = '/home/sc8/python/pyart/io/lib/librsl.so.1.0.41'
-librslPath = '/home/sc8/python/pyart/io/lib/librsl.so.1.0.43'
+#librslPath = '/home/sc8/python/pyart/io/lib/librsl.so.1.0.43'
 #librslPath = '/home/titan5/src/temp/lib/librsl.so.1.0.41'
 #librslPath = '/bm/gdata/scollis/osra/lib/librsl.so'
 # REQUIRES version 1.40 to match the updated volume header (added vcp)
