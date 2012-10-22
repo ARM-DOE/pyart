@@ -99,9 +99,10 @@ def create_cube_array(volume):
 def create_cube_array_lim(volume, nsweeps, nrays):
 	ppi=zeros([nsweeps, nrays, volume.sweeps[0].rays[0].h.nbins], dtype=float32)+1.31072000e+05
 	for levnum in range(nsweeps):
+		d=volume.sweeps[levnum].rays[0].data
 		for raynum in range(nrays):
-			data=volume.sweeps[levnum].rays[raynum].data
-			ppi[levnum,raynum, 0:len(data)]=data
+			#data=volume.sweeps[levnum].rays[raynum].data
+			ppi[levnum,raynum, 0:len(d)]=volume.sweeps[levnum].rays[raynum].data
 	return ppi
 
 

@@ -47,12 +47,16 @@ Scott Collis scollis.acrf@gmail.com
 0.1: basic functionality
 2011-07-19:
 1.0 integrated into Py-ART
+2012-10-22:
+1.1 added multi-platform import of pyart
 """
 __author__ = "Scott Collis <scollis@anl.gov>"
 __version__ = "1.0"
 import sys
 import numpy as np
-sys.path.append('/home/sc8/python/pyart/map/ball_tree/ball_tree')
+pyart_dir=os.environ.get('PYART_DIR',os.environ['HOME']+'/python')
+sys.path.append(pyart_dir+'/pyart/map/ball_tree/ball_tree')
+#sys.path.append('/home/sc8/python/pyart/map/ball_tree/ball_tree')
 #sys.path.append('/home/titan5/python/pyorder/cress')
 import ball_tree
 #import cress

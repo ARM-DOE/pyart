@@ -6,7 +6,9 @@ mpl.use('Agg')
 import sys
 import os
 import numpy as np
-sys.path.append('/home/sc8/python/')
+pyart_dir=os.environ.get('PYART_DIR',os.environ['HOME']+'/python')
+sys.path.append(pyart_dir)
+
 import pyart.util.met as met
 #import ballsy_masked as ballsy
 from time import time

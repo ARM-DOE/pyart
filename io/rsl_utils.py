@@ -47,12 +47,9 @@ Scott Collis scollis.acrf@gmail.com
 
 """
 import ctypes
-#see if we need to append for a local install of pyart
 import os
-#if 'PYART_BASE' in os.environ:#Py-ART is installed locally
-#	import sys
-#	print "appending", os.environ['PYART_BASE']
-#	sys.path.append(os.environ['PYART_BASE'])
+pyart_dir=os.environ.get('PYART_DIR',os.environ['HOME']+'/python')
+sys.path.append(pyart_dir+'/pyart/io/')
 try:
 	import py4dd as py4dd
 except ImportError:
