@@ -141,12 +141,19 @@ def sobel(x,window_len=11):
     y=np.convolve(w,s,mode='valid')
     return -1.0*y[window_len/2:len(x)+window_len/2]/(window_len/3.0)
 
-def snr(line):
-	signal=smooth_and_trim(line, window_len=11)
-	noise=smooth_and_trim(np.sqrt((line-signal)**2), window_len=11)
+def snr(line, **kwargs):
+	wl=kwargs.get('wl', 11)
+	signal=smooth_and_trim(line, window_len=wl)
+	noise=smooth_and_trim(np.sqrt((line-signal)**2), window_len=wl)
 	return abs(signal)/noise
 
+def noise(line, **kwargs):
+	wl=kwargs.get('wl', 11)
+	signal=smooth_and_trim(line, window_len=wl)
+	noise=np.sqrt((line-signal)**2)
+	return noise
 
+ 
 
 
 def smooth_and_trim(x,window_len=11,window='hanning'):
@@ -185,12 +192,14 @@ def smooth_and_trim(x,window_len=11,window='hanning'):
         raise ValueError, "Input vector needs to be bigger than window size."
     if window_len<3:
         return x
-    if not window in ['flat', 'hanning', 'hamming', 'bartlett', 'blackman']:
+    if not window in ['flat', 'hanning', 'hamming', 'bartlett', 'blackman', 'sg_smooth']:
         raise ValueError, "Window is on of 'flat', 'hanning', 'hamming', 'bartlett', 'blackman'"
     s=np.r_[x[window_len-1:0:-1],x,x[-1:-window_len:-1]]
     #print(len(s))
     if window == 'flat': #moving average
         w=np.ones(window_len,'d')
+    elif window == 'sg_smooth':
+    	w=np.array([0.1, .25, .3, .25, .1])
     else:
         w=eval('np.'+window+'(window_len)')
     y=np.convolve(w/w.sum(),s,mode='valid')
@@ -237,28 +246,122 @@ def unwrap_masked(lon, centered=False, copy=True):
     else:
         return lon.filled(np.nan)
 
-def det_sys_phase(myfile, fg, **kwargs):
+
+
+def get_phidp_unf_sg(myfile, **kwargs):
 	ncp_lev=kwargs.get('ncp_lev', 0.4)
 	rhohv_lev=kwargs.get('rhohv_lev', 0.6)
+	debug=kwargs.get('debug', False)
+	ncpts=kwargs.get('ncpts', 20)
+	doc=kwargs.get('doc', -10)
+	my_phidp=myfile.read_a_field(myfile.fields.index('PHIDP_F'))[:,:,0:doc]
+	my_rhv=myfile.read_a_field(myfile.fields.index('RHOHV_F'))[:,:,0:doc]
+	my_ncp=myfile.read_a_field(myfile.fields.index('NCP_F'))[:,:,0:doc]
+	my_z=myfile.read_a_field(myfile.fields.index('DBZ_F'))[:,:,0:doc]
+	t=time()
+	system_zero=det_sys_phase(myfile, -141.097702627)
+	cordata=np.zeros(my_rhv.shape, dtype=float)
+	for sweep in range(my_rhv.shape[0]):
+		if debug: print "sweep ::  ", sweep
+		for radial in range(my_rhv.shape[1]):
+			my_snr=snr(my_z[sweep,radial,:])
+			notmeteo=np.logical_or(np.logical_or(my_ncp[sweep,radial,:] < ncp_lev, my_rhv[sweep,radial,:] < rhohv_lev), my_snr < 10.0)
+			#reallynotmeteo=np.logical_or(myfile.NCP_F[sweep,radial,:] < 0.5, myfile.RHOHV_F[sweep,radial,:] < 0.95)
+			x_ma=ma.masked_where(notmeteo, my_phidp[sweep,radial,:])
+			try:
+				ma.notmasked_contiguous(x_ma)
+				for slc in ma.notmasked_contiguous(x_ma):
+					if slc.stop-slc.start < ncpts or slc.start < ncpts: #so trying to get rid of clutter and small things that should not add to phidp anyway
+						x_ma.mask[slc.start-1:slc.stop+1]=True
+				c=0
+			except TypeError:#non sequence, no valid regions
+				#print "No Valid regions"
+				#sys.stderr.write(':NVR:')
+				c=1 #ie do nothing
+				x_ma.mask[:]=True
+			except AttributeError:
+				sys.stderr.write('No Valid Regions, ATTERR \n ')
+				sys.stderr.write(myfile.times['time_end'].isoformat()+'\n')
+				#print x_ma
+				#print x_ma.mask
+				c=1 #also do nothing
+				x_ma.mask=True
+			unwrapped=unwrap_masked(x_ma, centered=False)
+			#system_zero=unwrapped[np.where(np.logical_not(reallynotmeteo))][0:30].mean()
+			system_max=unwrapped[np.where(np.logical_not(notmeteo))][-10:-1].mean()-system_zero #end so no clutter expected
+			unwrapped_fixed=np.zeros(len(x_ma), dtype=float)
+			based=unwrapped-system_zero
+			based[0]=0.0
+			notmeteo[0]=False
+			based[-1]=system_max
+			notmeteo[-1]=False
+			unwrapped_fixed[np.where(np.logical_not(based.mask))[0]]=based[np.where(np.logical_not(based.mask))[0]]
+			#f=interp1d(np.where(np.logical_not(based.mask))[0], based[np.where(np.logical_not(based.mask))[0]], kind='cubic')
+			#unwrapped_fixed[np.where(based.mask)[0]]=f(np.where(based.mask)[0])#, np.where(np.logical_not(based.mask))[0], based[np.where(np.logical_not(based.mask))[0]])
+			if len(based[np.where(np.logical_not(based.mask))[0]]) > 11:
+				unwrapped_fixed[np.where(based.mask)[0]]=np.interp(np.where(based.mask)[0], np.where(np.logical_not(based.mask))[0], smooth_and_trim(based[np.where(np.logical_not(based.mask))[0]]))
+			else:
+				unwrapped_fixed[np.where(based.mask)[0]]=np.interp(np.where(based.mask)[0], np.where(np.logical_not(based.mask))[0], based[np.where(np.logical_not(based.mask))[0]])
+			if c!=1:
+				cordata[sweep, radial, :]=unwrapped_fixed
+			else:
+				cordata[sweep, radial, :]=np.zeros(my_rhv.shape[2])
+	if debug: print "Exec time: ", time()-t
+	return cordata
+
+
+def det_sys_phase_sg(myfile, fg, **kwargs):
+	print "dooooing"
+	ncp_lev=kwargs.get('ncp_lev', 0.4)
+	rhohv_lev=kwargs.get('rhohv_lev', 0.6)
+	print rhohv_lev, ncp_lev
 	good=False
 	n=0
-	for sweep in range(myfile.RHOHV_F.shape[0]):
+	phases=[]
+	mncp=myfile.NCP_F[:,:,30:]
+	mrhv= myfile.RHOHV_F[:,:,30:]
+	#mncp[:,:,0:30]=0.0
+	#mrhv[:,:,0:30]=0.0
+	for sweep in [1]:
 		for radial in range(myfile.RHOHV_F.shape[1]):
-			meteo=np.logical_not(np.logical_or(myfile.NCP_F[sweep,radial,:] < ncp_lev, myfile.RHOHV_F[sweep,radial,:] < rhohv_lev))
-			mpts=np.where(meteo)[0]
-			#print mpts
-			if len(mpts) > 25 and mpts[-1] < 100:
+			meteo=np.logical_and(mncp[sweep, radial,:] > ncp_lev, mrhv[sweep,radial,:] > rhohv_lev)
+			mpts=np.where(meteo)
+			#print len(mpts),  mpts[-1]
+			if len(mpts[0]) > 25:
 				good=True
-				#print "woo"
-				#print mpts
-				if n==0:
-					sys_phase=(myfile.PHIDP_F[sweep,radial,mpts[0:20]].mean())
-				else:
-					sys_phase=(sys_phase+myfile.PHIDP_F[sweep,radial,mpts[0:20]].mean())/2.0
-				n=n+1
-	#print n
+				msmth_phidp=smooth_and_trim(myfile.PHIDP_F[sweep,radial,30:], 9)
+				phases.append(msmth_phidp[mpts].min())
+	print phases[0:30]
 	if not(good): sys_phase=fg
-	return sys_phase
+	print fg
+	return np.median(phases[0:30])
+
+def det_sys_phase(myfile, fg, **kwargs):
+	print "dooooing"
+	ncp_lev=kwargs.get('ncp_lev', 0.4)
+	rhohv_lev=kwargs.get('rhohv_lev', 0.6)
+	print rhohv_lev, ncp_lev
+	good=False
+	n=0
+	phases=[]
+	mncp=myfile.NCP_F
+	mrhv= myfile.RHOHV_F
+	mncp[:,:,0:30]=0.0
+	mrhv[:,:,0:30]=0.0
+	for sweep in [1]:
+		for radial in range(myfile.RHOHV_F.shape[1]):
+			meteo=np.logical_and(mncp[sweep, radial,:] > ncp_lev, mrhv[sweep,radial,:] > rhohv_lev)
+			mpts=np.where(meteo)
+			#print len(mpts),  mpts[-1]
+			if len(mpts[0]) > 25:
+				good=True
+				msmth_phidp=smooth_and_trim(myfile.PHIDP_F[sweep,radial,:], 20)
+				phases.append(msmth_phidp[mpts].min())
+	phases.sort()
+	print phases[0:30]
+	if not(good): sys_phase=fg
+	print fg
+	return np.median(phases[0:30])
 
 
 
@@ -266,6 +369,7 @@ def append_phidp_unf(myfile, **kwargs):
 	ncp_lev=kwargs.get('ncp_lev', 0.4)
 	rhohv_lev=kwargs.get('rhohv_lev', 0.6)
 	debug=kwargs.get('debug', False)
+	ncpts=kwargs('ncpts', 20)
 	d=myfile.read_a_field(myfile.fields.index('PHIDP_F'))
 	d=myfile.read_a_field(myfile.fields.index('RHOHV_F'))
 	d=myfile.read_a_field(myfile.fields.index('NCP_F'))
@@ -283,7 +387,7 @@ def append_phidp_unf(myfile, **kwargs):
 			try:
 				ma.notmasked_contiguous(x_ma)
 				for slc in ma.notmasked_contiguous(x_ma):
-					if slc.stop-slc.start < 20 or slc.start < 20: #so trying to get rid of clutter and small things that should not add to phidp anyway
+					if slc.stop-slc.start < ncpts or slc.start < ncpts: #so trying to get rid of clutter and small things that should not add to phidp anyway
 						x_ma.mask[slc.start-1:slc.stop+1]=True
 				c=0
 			except TypeError:#non sequence, no valid regions
