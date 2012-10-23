@@ -259,6 +259,7 @@ class Radar:
 		self.azimuth={'data':tile(radarobj.az_deg, self.nele), 'units':'degrees', 'comment':'Azimuth of antenna relative to true north', 'long_name':'azimuth_angle_from_true_north', 'standard_name':'beam_azimuth_angle'} #The flat azimuth array which describes the azimuth of each beam
 		self.range={'data':array(radarobj.range_km), 'units':'meters', 'standard_name':'projection_range_coordinate', 'long_name':'range_to_measurement_volume', 'comment':'Coordinate variable for range. Range to center of each bin.', 'spacing_is_constant':'true', 'meters_to_center_of_first_gate':(radarobj.range_km[0])/1000.0, 'meters_between_gates':(radarobj.range_km[1]- radarobj.range_km[0])/1000.0} #the range array which describes the range of all beams (note in this 
 		self.elevation={'data':array(radarobj.el_deg).repeat( self.naz), 'units':'degrees', 'standard_name':'beam_elevation_angle', 'comment':'Elevation of antenna relative to the horizontal plane', 'long_name':'elevation_angle_from_horizontal_plane'}
+		self.scan_type=radarobj.scan_type
 		#append time
 		tu="seconds since %(year)d-%(month)02d-%(day)02d %(hour)02d:%(minute)02d:%(second)02d.0" % dt_to_dict(radarobj.times['time_begin'])
 		cal="gregorian"
