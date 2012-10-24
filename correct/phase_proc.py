@@ -61,23 +61,23 @@ from numpy import ma
 import copy
 import glpk
 
-def radar_coords_to_cart(rng, az, ele, debug=False):
-    """
-    Asumes standard atmosphere, ie R=4Re/3
-    Note that this v
-    """
-    Re=6371.0*1000.0
-    #h=(r^2 + (4Re/3)^2 + 2r(4Re/3)sin(ele))^1/2 -4Re/3
-    #s=4Re/3arcsin(rcos(ele)/(4Re/3+h))
-    p_r=4.0*Re/3.0
-    rm=rng
-    z=(rm**2 + p_r**2 + 2.0*rm*p_r*np.sin(ele*np.pi/180.0))**0.5 -p_r
-    #arc length
-    s=p_r*np.arcsin(rm*np.cos(ele*np.pi/180.)/(p_r+z))
-    if debug: print "Z=", z, "s=", s
-    y=s*np.cos(az*np.pi/180.0)
-    x=s*np.sin(az*np.pi/180.0)
-    return x,y,z
+def fzl_index(fzl, ranges, elevation, radar_height):
+	Re=6371.0*1000.0
+	p_r=4.0*Re/3.0
+	z=radar_height+(ranges**2 + p_r**2 + 2.0*ranges*p_r*np.sin(elevation*np.pi/180.0))**0.5 -p_r
+	return np.where(z < fzl)[0].max()
+
+def det_process_range(radar, sweep, fzl, doc=10):
+	fzl_i=fzl_index(4000.0, radar.range['data'], 
+		radar.sweep_info['fixed_angle']['data'][sweep],
+		radar.location['altitude']['data'])
+	if fzl_i > len(radar.range['data'])-doc:
+		gate_end=len(radar.range['data'])-doc
+	else:
+		gate_end=fzl_i
+	ray_start=radar.sweep_info['sweep_start_ray_index']['data'][sweep]
+	ray_end=radar.sweep_info['sweep_end_ray_index']['data'][sweep]
+	return gate_end, ray_start, ray_end
 
 
 def snr(line, **kwargs):
