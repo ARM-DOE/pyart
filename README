@@ -15,9 +15,14 @@ Python 2.6+ with
 -ctypes
 -matplotlib
 
+
+
 NASA Radar Software Libriary (RSL) 1.43+ and dependancies required to build (Automake etc...)
 
 Installation:
+Get Coffee.. This is new early release software.
+Join the Py-ART users email list http://groups.google.com/group/pyart-users/
+unless you install to $HOME/python you must set the PYART_DIR environment variable
 Currently the only build option is inplace, later we plan to port to using distutils and allow a system wide install. For now unpack your Py-ART distribution where you plan to have it installed.
 
 STEP 1: Build py4dd, a version of RSL patched with the Univeristy of Washington 4D Dealias code.
