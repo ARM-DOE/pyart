@@ -61,6 +61,25 @@ from numpy import ma
 import copy
 import glpk
 
+def radar_coords_to_cart(rng, az, ele, debug=False):
+    """
+    Asumes standard atmosphere, ie R=4Re/3
+    Note that this v
+    """
+    Re=6371.0*1000.0
+    #h=(r^2 + (4Re/3)^2 + 2r(4Re/3)sin(ele))^1/2 -4Re/3
+    #s=4Re/3arcsin(rcos(ele)/(4Re/3+h))
+    p_r=4.0*Re/3.0
+    rm=rng
+    z=(rm**2 + p_r**2 + 2.0*rm*p_r*np.sin(ele*np.pi/180.0))**0.5 -p_r
+    #arc length
+    s=p_r*np.arcsin(rm*np.cos(ele*np.pi/180.)/(p_r+z))
+    if debug: print "Z=", z, "s=", s
+    y=s*np.cos(az*np.pi/180.0)
+    x=s*np.sin(az*np.pi/180.0)
+    return x,y,z
+
+
 def snr(line, **kwargs):
 	wl=kwargs.get('wl', 11)
 	signal=smooth_and_trim(line, window_len=wl)
@@ -250,24 +269,17 @@ def construct_B_vectors(phidp_mod, z_mod, filt, **kwargs):
 	n_rays=phidp_mod.shape[0]
 	filter_length=len(filt)
 	side_pad=(filter_length-1)/2
-	print "Side pad: ", side_pad
 	top_of_B_vectors=np.bmat([[-phidp_mod,phidp_mod]])
-	print top_of_B_vectors.shape, phidp_mod.shape, 360.0*17.0
 	data_edges=np.bmat([phidp_mod[:, 0:side_pad], np.zeros([n_rays, n_gates-filter_length+1]), phidp_mod[:,-side_pad:]])
-	print data_edges.shape
 	ii=filter_length-1
 	jj=data_edges.shape[1]-1
 	list_corrl=np.zeros([n_rays, jj-ii+1])
-	print len(list_corrl)
 	for count in range(list_corrl.shape[1]):
 	    list_corrl[:, count]= -1.0*(np.array(filt)*(np.asarray(data_edges))[:, count:count+ii+1]).sum(axis=1)
-	print list_corrl.shape
 	sct=(((10.0**(0.1*z_mod))**kwargs.get('coef',0.914))/kwargs.get('dweight',60000.0))[:, side_pad:-side_pad]
 	sct[np.where(sct <0.0)]=0.0
 	sct[:, 0:side_pad]=list_corrl[:, 0:side_pad]
 	sct[:, -side_pad:]=list_corrl[:, -side_pad:]
-	print top_of_B_vectors.shape
-	print sct.shape
 	B_vectors=np.bmat([[top_of_B_vectors,sct]])
 	return B_vectors
 
