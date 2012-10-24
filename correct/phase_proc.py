@@ -61,6 +61,25 @@ from numpy import ma
 import copy
 import glpk
 
+def fzl_index(fzl, ranges, elevation, radar_height):
+	Re=6371.0*1000.0
+	p_r=4.0*Re/3.0
+	z=radar_height+(ranges**2 + p_r**2 + 2.0*ranges*p_r*np.sin(elevation*np.pi/180.0))**0.5 -p_r
+	return np.where(z < fzl)[0].max()
+
+def det_process_range(radar, sweep, fzl, doc=10):
+	fzl_i=fzl_index(4000.0, radar.range['data'], 
+		radar.sweep_info['fixed_angle']['data'][sweep],
+		radar.location['altitude']['data'])
+	if fzl_i > len(radar.range['data'])-doc:
+		gate_end=len(radar.range['data'])-doc
+	else:
+		gate_end=fzl_i
+	ray_start=radar.sweep_info['sweep_start_ray_index']['data'][sweep]
+	ray_end=radar.sweep_info['sweep_end_ray_index']['data'][sweep]
+	return gate_end, ray_start, ray_end
+
+
 def snr(line, **kwargs):
 	wl=kwargs.get('wl', 11)
 	signal=smooth_and_trim(line, window_len=wl)
@@ -110,6 +129,7 @@ def unwrap_masked(lon, centered=False, copy=True):
         return lon.filled(np.nan)
 
 
+
 def smooth_and_trim(x,window_len=11,window='hanning'):
     """smooth the data using a window with requested size.
     
@@ -146,7 +166,7 @@ def smooth_and_trim(x,window_len=11,window='hanning'):
         raise ValueError, "Input vector needs to be bigger than window size."
     if window_len<3:
         return x
-    if not window in ['flat', 'hanning', 'hamming', 'bartlett', 'blackman']:
+    if not window in ['flat', 'hanning', 'hamming', 'bartlett', 'blackman', 'sg_smooth']:
         raise ValueError, "Window is on of 'flat', 'hanning', 'hamming', 'bartlett', 'blackman'"
     s=np.r_[x[window_len-1:0:-1],x,x[-1:-window_len:-1]]
     #print(len(s))
@@ -158,7 +178,6 @@ def smooth_and_trim(x,window_len=11,window='hanning'):
         w=eval('np.'+window+'(window_len)')
     y=np.convolve(w/w.sum(),s,mode='valid')
     return y[window_len/2:len(x)+window_len/2]
-
 
 def get_phidp_unf(radar, **kwargs):
 	#['norm_coherent_power', 'reflectivity_horizontal', 'dp_phase_shift', 'doppler_spectral_width', 'diff_reflectivity', 'mean_doppler_velocity', 'copol_coeff', 'diff_phase']
@@ -226,120 +245,71 @@ def get_phidp_unf(radar, **kwargs):
 	if debug: print "Exec time: ", time()-t
 	return cordata
 
+def construct_A_matrix(n_gates, filt):
+    """Construct the A A matrix which is the block matrix given by:
+    $$\bf{A}=\begin{bmatrix} \bf{I} & \bf{-I} \\\\ \bf{-I}& \bf{I} \\\\ \bf{Z} & \bf{M} \end{bmatrix} $$
+	where $\bf{I}$ is the identity matrix, $\bf{Z}$ is a matrix of zeros and $\bf{M}$ contains our differential constraints. Each block is of shape n_gates by n_gates making shape($\bf{A}$)=(3*n, 2*n).
+	Note that $\bf{M}$ contains some side padding to deal with edge issues
+	"""
+    Identity=np.eye(n_gates)
+    filter_length=len(filt)
+    M_matrix_middle=np.diag(np.ones(n_gates-filter_length+1), k=0)*0.0
+    posn=np.linspace(-1.0*(filter_length-1)/2, (filter_length-1)/2, filter_length)
+    for diag in range(filter_length):
+        M_matrix_middle=M_matrix_middle+np.diag(np.ones(n_gates-filter_length+1 - np.abs(posn[diag])), k=posn[diag])*filt[diag]
+    side_pad=(filter_length-1)/2
+    M_matrix=np.bmat([np.zeros([n_gates-filter_length+1, side_pad], dtype=float),
+        M_matrix_middle, 
+        np.zeros([n_gates-filter_length+1, side_pad], dtype=float)])
+    Z_matrix=np.zeros([n_gates-filter_length+1, n_gates])
+    return np.bmat([[Identity, -1.0*Identity], [Identity, Identity], [Z_matrix, M_matrix]])
 
-# class LP_phase_proc:
-# 	def __init__(self, radar, min_phidp=0.01, min_ncp=0.5, min_rhv=0.8, fzl=4000.0):
-# 		self.radar=radar
-# 		self.min_phidp, self.min_ncp, self.min_rhv=(min_phidp, min_rhv, min_ncp)
-# 		self.is_low_z=radar.fields['reflectivity_horizontal']['data'] <10.0
-# 		self.is_high_z=radar.fields['reflectivity_horizontal']['data'] >53.0
-# 		z_mod=copy.deepcopy(radar.fields['reflectivity_horizontal']['data'])
-# 		z_mod[np.where(self.is_high_z)]=53.0
-# 		z_mod[np.where(self.is_low_z)]=10.0
-# 		self.z_mod=z_mod
-# 		self.not_coherent=radar.fields['norm_coherent_power']['data'] < min_ncp
-# 		self.not_correlated=radar.fields['copol_coeff']['data'] < min_rhv
-# 		phidp_mod=copy.deepcopy(radar.fields['unf_dp_phase_shift']['data'])
-# 		self.phidp_neg=phidp_mod < min_phidp
-# 		phidp_mod[np.where(self.phidp_neg)]=min_phidp
-# 		self.phidp_mod=phidp_mod
-# 		self.A_matrix=self.construct_A_matrix(self.radar)
-# 		self.set_up_problem()
-# 		phidp_proc=np.zeros(self.radar.fields['unf_dp_phase_shift']['data'].shape)
-# 		is_garbage=np.logical_or(self.not_coherent , self.not_correlated)
-# 		m=np.where(is_garbage)
-# 		weights=np.zeros(radar.fields['reflectivity_horizontal']['data'].shape)
-# 		weights[m]=1.0
-# 		self.weights=weights
-# 	def __call__(self):
-# 		for ray_number in range(phidp_proc.shape[1]):
-# 			phidp_proc[i,:]=self.process_ray()
-# 		return phidp_proc
-# 	def make_vectors(self):
-# 		n_gates=len(radar.range['data'])
-# 		filter_length=len(self.filter)
-# 		side_pad=(filter_length-1)/2
-# 		top_of_B_vectors=np.bmat([-self.phidp_mod,self.phidp_mod]).transpose()
-# 		self_consistency_constraint=(((10.0**(0.1*self.z_mod))**0.914)/50000.0)[:, side_pad:-side_pad]
-# 		self_consistency_constraint[np.where(self_consistency_constraint <0.0)]=0.0
-# 		self_consistency_constraint[0:side_pad]=list_corrl[0:side_pad]
-# 		data_edges=np.bmat([self.phidp_mod[0:side_pad], np.zeros(n_gates-filter_length+1),
-# 			self.phidp_mod[-side_pad:]])
-# 		ii=filter_length-1
-# 		jj=data_edges.shape[1]-1
-# 		list_corrl=np.zeros(jj-ii+1)
-# 		for count in range(len(list_corrl)):
-# 			list_corrl[count]= -1.0*(array(self.filter)*np.squeeze(np.asarray(data_edges))[count:count+ii+1]).sum()
-# 		self_consistency_constraint[-side_pad:]=list_corrl[-side_pad:]
-# 		b_array=np.bmat([np.squeeze(np.asarray(top_of_B_vector)),np.squeeze(np.asarray(self_consistency_constraint))]).transpose()
-# 		n_gates=len(self.radar.range['data'])
-# 		objective_weights=np.bmat([self.weights, np.zeros(n)])
-# 		for i in range(2*n_gates+n_gates-4):
-#     		self.problem.rows[i].bounds = b_array[i], None
-#     		lp.cols.add(2*n)
-# 		for i in range(2*n):
-#     		lp.cols[i].bounds = 0.0, None
-#     		lp.obj[i]=nw[0,i]
-# 		for cur_row in range(2*n+n-4):
-#     		lp.rows[cur_row].matrix=list(np.squeeze(np.asarray(A_full[cur_row, :])))
-# 		lp.simplex(msg_lev=glpk.LPX.MSG_ON, meth=glpk.LPX.PRIMAL, it_lim=6000, presolve=True)
-# 		mysoln=zeros(n)
-# 		for i in range(n):
-#     		mysoln[i]=lp.cols[i+n].primal
-# 	def process_ray(self, rn):
-# 		n_gates=len(radar.range['data'])
-# 		filter_length=len(self.filter)
-# 		side_pad=(filter_length-1)/2
-# 		top_of_B_vector=np.bmat([-self.phidp_mod[rn,:],self.phidp_mod[rn,:]]).transpose()
-# 		self_consistency_constraint=(((10.0**(0.1*self.z_mod[rn,:]))**0.914)/50000.0)[side_pad:-side_pad]
-# 		self_consistency_constraint[np.where(self_consistency_constraint <0.0)]=0.0
-# 		self_consistency_constraint[0:side_pad]=list_corrl[0:side_pad]
-# 		data_edges=np.bmat([self.phidp_mod[0:side_pad], np.zeros(n_gates-filter_length+1),
-# 			self.phidp_mod[-side_pad:]])
-# 		ii=filter_length-1
-# 		jj=data_edges.shape[1]-1
-# 		list_corrl=np.zeros(jj-ii+1)
-# 		for count in range(len(list_corrl)):
-#     		list_corrl[count]= -1.0*(array(self.filter)*np.squeeze(np.asarray(data_edges))[count:count+ii+1]).sum()
-# 		self_consistency_constraint[-side_pad:]=list_corrl[-side_pad:]
-# 		b_array=np.bmat([np.squeeze(np.asarray(top_of_B_vector)),np.squeeze(np.asarray(self_consistency_constraint))]).transpose()
-# 		n_gates=len(self.radar.range['data'])
-# 		objective_weights=np.bmat([self.weights, np.zeros(n)])
-# 		for i in range(2*n_gates+n_gates-4):
-#     		self.problem.rows[i].bounds = b_array[i], None
-#     		lp.cols.add(2*n)
-# 		for i in range(2*n):
-#     		lp.cols[i].bounds = 0.0, None
-#     		lp.obj[i]=nw[0,i]
-# 		for cur_row in range(2*n+n-4):
-#     		lp.rows[cur_row].matrix=list(np.squeeze(np.asarray(A_full[cur_row, :])))
-# 		lp.simplex(msg_lev=glpk.LPX.MSG_ON, meth=glpk.LPX.PRIMAL, it_lim=6000, presolve=True)
-# 		mysoln=zeros(n)
-# 		for i in range(n):
-#     		mysoln[i]=lp.cols[i+n].primal
-# 	def set_up_lp_problem(self):
-# 		n_gates=len(self.radar.range['data'])
-# 		self.problem=glpk.LPX()
-# 		self.problem.name= 'LP_MIN'
-# 		self.obj.maximize= False
-# 		self.problem.rows.add(2*n_gates+n_gates-4)         # Append rows 
-# 		glpk.env.term_on = True
-# 		self.problem.cols.add(2*n_gates)
-# 		for cur_row in range(2*n_gates+n_gates-4):
-#     		self.problem.rows[cur_row].matrix=list(np.squeeze(np.asarray(self.A_matrix	[cur_row, :])))
-# 	def construct_A_matrix(self, radar):
-# 		n_gates=len(radar.range['data'])
-# 		Identity=eye(n_gates)
-# 		St_Gorlv_differential_5pts=[-.2, -.1, 0, .1, .2]
-# 		self.filter=St_Gorlv_differential_5pts
-# 		filter_length=len(self.filter)
-# 		M_matrix_middle=np.diag(ones(n_gates-filter_length+1), k=0)*0.0
-# 		posn=np.linspace(-1.0*(filter_length-1)/2, (filter_length-1)/2, l)
-# 		for diag in range(filter_length):
-#     		M_matrix_middle=M_matrix_middle+np.diag(ones(n_gates-filter_length+1 - np.abs(posn[diag])), k=posn[diag])*self.filter[diag]
-# 		side_pad=(filter_length-1)/2
-# 		M_matrix=np.bmat([np.zeros([n_gates-filter_length+1, side_pad], dtype=float),
-# 			 M_matrix_middle, 
-# 			 np.zeros([n_gates-filter_length+1, side_pad], dtype=float)])
-# 		Z_matrix=zeros([n-l+1, n])
-# 		retrurn np.bmat([[Identity, -1.0*Identity], [Identity, Identity], [Z_matrix, M_matrix]])
+def construct_B_vectors(phidp_mod, z_mod, filt, **kwargs):
+	n_gates=phidp_mod.shape[1]
+	n_rays=phidp_mod.shape[0]
+	filter_length=len(filt)
+	side_pad=(filter_length-1)/2
+	top_of_B_vectors=np.bmat([[-phidp_mod,phidp_mod]])
+	data_edges=np.bmat([phidp_mod[:, 0:side_pad], np.zeros([n_rays, n_gates-filter_length+1]), phidp_mod[:,-side_pad:]])
+	ii=filter_length-1
+	jj=data_edges.shape[1]-1
+	list_corrl=np.zeros([n_rays, jj-ii+1])
+	for count in range(list_corrl.shape[1]):
+	    list_corrl[:, count]= -1.0*(np.array(filt)*(np.asarray(data_edges))[:, count:count+ii+1]).sum(axis=1)
+	sct=(((10.0**(0.1*z_mod))**kwargs.get('coef',0.914))/kwargs.get('dweight',60000.0))[:, side_pad:-side_pad]
+	sct[np.where(sct <0.0)]=0.0
+	sct[:, 0:side_pad]=list_corrl[:, 0:side_pad]
+	sct[:, -side_pad:]=list_corrl[:, -side_pad:]
+	B_vectors=np.bmat([[top_of_B_vectors,sct]])
+	return B_vectors
+
+
+def LP_solver(A_Matrix, B_vectors, weights, it_lim=7000, presolve=True, verbose=True):
+	if verbose: 
+		message_state=glpk.LPX.MSG_ON
+	else:
+		message_state=glpk.LPX.MSG_OFF
+	n_gates=weights.shape[1]/2
+	n_rays=B_vectors.shape[0]
+	mysoln=np.zeros([n_rays, n_gates])
+	lp = glpk.LPX()        # Create empty problem instance
+	lp.name = 'LP_MIN'     # Assign symbolic name to problem
+	lp.obj.maximize = False # Set this as a maximization problem
+	lp.rows.add(2*n_gates+n_gates-4)# Append rows 
+	lp.cols.add(2*n_gates)
+	glpk.env.term_on = True
+	for cur_row in range(2*n_gates+n_gates-4):
+		lp.rows[cur_row].matrix=list(np.squeeze(np.asarray(A_Matrix[cur_row, :])))
+	for i in range(2*n_gates):
+		lp.cols[i].bounds = 0.0, None
+	for raynum in range(n_rays):
+		this_soln=np.zeros(n_gates)
+		for i in range(2*n_gates+n_gates-4):
+			lp.rows[i].bounds = B_vectors[raynum, i], None
+		for i in range(2*n_gates):
+			lp.obj[i]=weights[raynum,i]
+		lp.simplex(msg_lev=message_state, meth=glpk.LPX.PRIMAL, it_lim=it_lim, presolve=presolve)
+		for i in range(n_gates):
+			this_soln[i]=lp.cols[i+n_gates].primal
+		mysoln[raynum, :]=smooth_and_trim(this_soln, window_len=5, window='sg_smooth')
+	return mysoln
