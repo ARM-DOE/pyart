@@ -300,8 +300,8 @@ def construct_B_vectors(phidp_mod, z_mod, filt, **kwargs):
 	return B_vectors
 
 
-def LP_solver(A_Matrix, B_vectors, weights, it_lim=7000, presolve=True, verbose=True):
-	if verbose: 
+def LP_solver(A_Matrix, B_vectors, weights, it_lim=7000, presolve=True, verbose=True, really_verbose=False):
+	if really_verbose: 
 		message_state=glpk.LPX.MSG_ON
 	else:
 		message_state=glpk.LPX.MSG_OFF
@@ -359,7 +359,7 @@ class phase_proc:
 		phidp_mod[np.where(phidp_neg)]=self.min_phidp
 		self.phidp_mod=phidp_mod
 		self.radar=radar
-	def __call__(self, debug=False):
+	def __call__(self, debug=False, really_verbose=False):
 		proc_ph=copy.deepcopy(self.radar.fields['unf_dp_phase_shift'])
 		proc_ph['data']=self.phidp_mod
 		St_Gorlv_differential_5pts=[-.2, -.1, 0, .1, .2]
@@ -371,7 +371,7 @@ class phase_proc:
 			B_vectors=construct_B_vectors(self.phidp_mod[start_ray:end_ray,start_gate:end_gate], self.z_mod[start_ray:end_ray,start_gate:end_gate], St_Gorlv_differential_5pts)
 			weights=np.ones(self.phidp_mod[start_ray:end_ray,start_gate:end_gate].shape)
 			nw=np.bmat([weights, np.zeros(weights.shape)])
-			mysoln=LP_solver(A_Matrix, B_vectors, nw, it_lim=7000, presolve=True, verbose=debug)
+			mysoln=LP_solver(A_Matrix, B_vectors, nw, it_lim=7000, presolve=True, verbose=debug, really_verbose=really_verbose)
 			proc_ph['data'][start_ray:end_ray,start_gate:end_gate]=mysoln
 		last_gates=proc_ph['data'][start_ray:end_ray,-16]
 		proc_ph['data'][start_ray:end_ray,-16:]=np.meshgrid(np.ones([16]), last_gates)[1]
