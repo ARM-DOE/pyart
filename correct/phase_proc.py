@@ -179,6 +179,22 @@ def smooth_and_trim(x,window_len=11,window='hanning'):
     y=np.convolve(w/w.sum(),s,mode='valid')
     return y[window_len/2:len(x)+window_len/2]
 
+def sobel(x,window_len=11):
+    """Sobel differential filter for calculating KDP
+    output:
+        differential signal (Unscaled for gate spacing
+	    example:
+	"""
+    s=np.r_[x[window_len-1:0:-1],x,x[-1:-window_len:-1]]
+    #print(len(s))
+    w=2.0*np.arange(window_len)/(window_len-1.0) -1.0
+    #print w
+    w=w/(abs(w).sum())
+    y=np.convolve(w,s,mode='valid')
+    return -1.0*y[window_len/2:len(x)+window_len/2]/(window_len/3.0)
+
+
+
 def get_phidp_unf(radar, **kwargs):
 	#['norm_coherent_power', 'reflectivity_horizontal', 'dp_phase_shift', 'doppler_spectral_width', 'diff_reflectivity', 'mean_doppler_velocity', 'copol_coeff', 'diff_phase']
 	ncp_lev=kwargs.get('ncp_lev', 0.4)
@@ -361,5 +377,12 @@ class phase_proc:
 		proc_ph['data'][start_ray:end_ray,-16:]=np.meshgrid(np.ones([16]), last_gates)[1]
 		proc_ph['valid_min']=0.0
 		proc_ph['valid_max']=400.0
-		self.radar.fields.update({'proc_dp_phase_shift':proc_ph})
-		return self.radar
+		kdp=np.zeros(self.radar.fields['dp_phase_shift']['data'].shape)
+		for i in range(kdp.shape[0]):
+			kdp[i,:]=sobel(proc_ph['data'][i, :], window_len=35)/((self.radar.range['data'][1]-self.radar.range['data'][0])/1000.0)
+		sob_kdp=copy.deepcopy(self.radar.fields['diff_phase'])
+		sob_kdp['data']=kdp
+		sob_kdp['valid_min']=0.0
+		sob_kdp['valid_max']=20.0
+		return proc_ph, sob_kdp
+
