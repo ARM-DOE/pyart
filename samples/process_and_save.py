@@ -1,3 +1,4 @@
+#!/bin/python
 import sys
 import os
 pyart_dir=os.environ.get('PYART_DIR',os.environ['HOME']+'/python')
