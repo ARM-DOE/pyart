@@ -11,7 +11,7 @@ import numpy as np
 import pylab
 from pyart.io import nc_utils
 import netCDF4
-
+from pyart.correct import attenuation
 
 def dt_to_dict(dt, **kwargs):
         pref=kwargs.get('pref', '')
