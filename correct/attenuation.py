@@ -62,6 +62,7 @@ sys.path.append(pyart_dir)
 from pyart.correct import phase_proc
 import numpy as np
 import scipy
+import copy
 
 
 def calculate_attenuation(radar,z_offset, **kwargs):
@@ -84,7 +85,7 @@ def calculate_attenuation(radar,z_offset, **kwargs):
 	atten=np.zeros(radar.fields['reflectivity_horizontal']['data'].shape)
 	for sweep in range(len(radar.sweep_info['sweep_start_ray_index']['data'])):
 		if debug: print "Doing ", sweep
-		end_gate, start_ray, end_ray=phase_proc.det_process_range(my_new_radar,sweep,fzl, doc=doc)
+		end_gate, start_ray, end_ray=phase_proc.det_process_range(radar,sweep,fzl, doc=doc)
 		for i in range(start_ray,end_ray+1):
 			is_good= np.logical_and(is_cor[i,0:end_gate], is_cor[i,0:end_gate])
 			good_indeces=np.where(is_good)
