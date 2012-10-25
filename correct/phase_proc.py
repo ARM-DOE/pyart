@@ -358,7 +358,7 @@ class phase_proc:
 			mysoln=LP_solver(A_Matrix, B_vectors, nw, it_lim=7000, presolve=True, verbose=debug)
 			proc_ph['data'][start_ray:end_ray,start_gate:end_gate]=mysoln
 		last_gates=proc_ph['data'][start_ray:end_ray,-16]
-		proc_ph['data'][start_ray:end_ray,-16:]=np.meshgrid(ones([16]), last_gates)[1]
+		proc_ph['data'][start_ray:end_ray,-16:]=np.meshgrid(np.ones([16]), last_gates)[1]
 		proc_ph['valid_min']=0.0
 		proc_ph['valid_max']=400.0
 		self.radar.fields.update({'proc_dp_phase_shift':proc_ph})
