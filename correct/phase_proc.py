@@ -313,3 +313,53 @@ def LP_solver(A_Matrix, B_vectors, weights, it_lim=7000, presolve=True, verbose=
 			this_soln[i]=lp.cols[i+n_gates].primal
 		mysoln[raynum, :]=smooth_and_trim(this_soln, window_len=5, window='sg_smooth')
 	return mysoln
+
+class phase_proc:
+	def __init__(self,radar, offset, **kwargs):
+		debug=kwargs.get('debug', False)
+		if debug: print('populating')
+		low_z=kwargs.get('low_z', 10.0)
+		high_z=kwargs.get('high_z', 53.0)
+		self.min_phidp=kwargs.get('min_phidp',0.01)
+		self.min_ncp=kwargs.get('min_ncp', 0.5)
+		self.min_rhv=kwargs.get('min_rhv',0.8)
+		self.fzl=kwargs.get('fzl':4000.0)
+		refl=copy.deepcopy(radar.fields['reflectivity_horizontal']['data'])+offset
+		is_low_z=(refl) <low_z
+		is_high_z=(refl) >high_z
+		refl[np.where(is_high_z)]=high_z
+		refl[np.where(is_low_z)]=low_z
+		self.z_mod=refl
+		self.not_coherent=radar.fields['norm_coherent_power']['data'] < min_ncp
+		self.not_correlated=myradar.fields['copol_coeff']['data'] < min_rhv
+		if debug: print('Unfolding')
+		my_unf=get_phidp_unf(myradar, ncp_lev=min_ncp, rhohv_lev=min_rhv, ncpts=2, doc=None)
+		my_new_ph=copy.deepcopy(radar.fields['dp_phase_shift'])
+		my_unf[:,-1]=my_unf[:,-2]
+		my_new_ph['data']=my_unf
+		radar.fields.update({'unf_dp_phase_shift':my_new_ph})
+		phidp_mod=copy.deepcopy(radar.fields['unf_dp_phase_shift']['data'])
+		phidp_neg=phidp_mod < min_phidp
+		phidp_mod[np.where(phidp_neg)]=min_phidp
+		self.phidp_mod=phidp_mod
+		self.radar=radar
+	__call__(self, debug=False):
+		proc_ph=copy.deepcopy(self.radar.fields['unf_dp_phase_shift'])
+		proc_ph['data']=self.phidp_mod
+		St_Gorlv_differential_5pts=[-.2, -.1, 0, .1, .2]
+		for sweep in range(len(self.radar.sweep_info['sweep_start_ray_index']['data'])):
+    		if debug:print "Doing ", sweep
+    		end_gate, start_ray, end_ray=det_process_range(self.radar,sweep,self.fzl, doc=15)
+    		start_gate=0
+    		A_Matrix=construct_A_matrix(len(self.radar.range['data'][start_gate:end_gate]),St_Gorlv_differential_5pts )
+    		B_vectors=construct_B_vectors(self.phidp_mod[start_ray:end_ray,start_gate:end_gate], self.z_mod[start_ray:end_ray,start_gate:end_gate], St_Gorlv_differential_5pts)
+    		weights=np.ones(self.phidp_mod['data'][start_ray:end_ray,start_gate:end_gate].shape)
+    		nw=np.bmat([weights, np.zeros(weights.shape)])
+    		mysoln=phase_proc.LP_solver(A_Matrix, B_vectors, nw, it_lim=7000, presolve=True, verbose=debug)
+    		proc_ph['data'][start_ray:end_ray,start_gate:end_gate]=mysoln
+    		last_gates=proc_ph['data'][start_ray:end_ray,-16]
+    		proc_ph['data'][start_ray:end_ray,-16:]=np.meshgrid(ones([16]), last_gates)[1]
+			proc_ph['valid_min']=0.0
+			proc_ph['valid_max']=400.0
+			self.radar.fields.update({'proc_dp_phase_shift':proc_ph})
+		return self.radar
