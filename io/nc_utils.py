@@ -268,6 +268,7 @@ def write_radar(ncobj, radarobj, **kwargs):
 	trans_dict_as_ncattr(radarobj.metadata, ncobj, radarobj.metadata.keys())
 	ncobj.platform_is_mobile=platform_is_mobile
 	ncobj.history="created by user %(user)s on %(machine)s at %(day)d-%(strmon)s-%(year)d,%(hour)d:%(minute)02d:%(second)02d using %(exec)s" %runtime
+	ncobj.conventions="CF/Radial"
 	#populate data for moment variables
 	for moment in moments:
 		my_nc_vars[moment][:]=radarobj.fields[moment]['data']
@@ -350,6 +351,7 @@ def write_radar4(ncobj, radarobj, **kwargs):
 	trans_dict_as_ncattr(radarobj.metadata, ncobj, radarobj.metadata.keys())
 	ncobj.platform_is_mobile=platform_is_mobile
 	ncobj.history="created by user %(user)s on %(machine)s at %(day)d-%(strmon)s-%(year)d,%(hour)d:%(minute)02d:%(second)02d using %(exec)s" %runtime
+	ncobj.conventions="CF/Radial"
 	#populate data for moment variables
 	for moment in moments:
 		my_nc_vars[moment][:]=radarobj.fields[moment]['data']
