@@ -69,8 +69,8 @@ if __name__ == "__main__":
 	else:
 		py4dd.RSL_radar_verbose_on()
 		my_object = py4dd.RSL_anyformat_to_radar(filename)
-	my_display=radar_display.radar_display(myradar)
 	myradar.metadata.update({'instrument_name':"Radar"})
+	my_display=radar_display.radar_display(myradar)
 	f=figure(figsize=[12,5])
 	subplot(1,2,1)
 	my_display.plot_ppi('mean_doppler_velocity',1)
