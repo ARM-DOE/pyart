@@ -43,7 +43,8 @@ HISTORY
 2012-10-26 Start of development 
 Scott Collis scollis.acrf@gmail.com
 """
-
+import matplotlib
+matplotlib.use('agg')
 import netCDF4
 import sys
 import os
