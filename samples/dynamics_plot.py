@@ -75,7 +75,7 @@ if __name__ == "__main__":
 	subplot(1,2,1)
 	my_display.plot_ppi('mean_doppler_velocity',1)
 	my_display.add_cb()
-	pl.subplot(1,2,2)
+	subplot(1,2,2)
 	my_display.plot_ppi('corrected_	mean_doppler_velocity',1)
 	my_display.add_cb()	
 	figname=my_display.generate_filename('six_panel', tilt)
