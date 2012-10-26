@@ -51,7 +51,7 @@ import os
 pyart_dir=os.environ.get('PYART_DIR',os.environ['HOME']+'/python')
 sys.path.append(pyart_dir)
 from pyart.graph import rayplot, radar_display
-from pyart.io import radar
+from pyart.io import radar, py4dd, py_mdv
 from pylab import *
 import copy
 if __name__ == "__main__":
