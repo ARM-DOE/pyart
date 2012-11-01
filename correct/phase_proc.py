@@ -194,9 +194,78 @@ def sobel(x,window_len=11):
     return -1.0*y[window_len/2:len(x)+window_len/2]/(window_len/3.0)
 
 
+def noise(line, **kwargs):
+	wl=kwargs.get('wl', 11)
+	signal=smooth_and_trim(line, window_len=wl)
+	noise=np.sqrt((line-signal)**2)
+	return noise
+
+
+def get_phidp_unf_sg(myfile, **kwargs):
+	ncp_lev=kwargs.get('ncp_lev', 0.4)
+	rhohv_lev=kwargs.get('rhohv_lev', 0.6)
+	debug=kwargs.get('debug', False)
+	ncpts=kwargs.get('ncpts', 20)
+	doc=kwargs.get('doc', -10)
+	my_phidp=myfile.read_a_field(myfile.fields.index('PHIDP_F'))[:,:,0:doc]
+	my_rhv=myfile.read_a_field(myfile.fields.index('RHOHV_F'))[:,:,0:doc]
+	my_ncp=myfile.read_a_field(myfile.fields.index('NCP_F'))[:,:,0:doc]
+	my_z=myfile.read_a_field(myfile.fields.index('DBZ_F'))[:,:,0:doc]
+	t=time()
+	system_zero=det_sys_phase(myfile, -141.097702627)
+	cordata=np.zeros(my_rhv.shape, dtype=float)
+	for sweep in range(my_rhv.shape[0]):
+		if debug: print "sweep ::  ", sweep
+		for radial in range(my_rhv.shape[1]):
+			my_snr=snr(my_z[sweep,radial,:])
+			notmeteo=np.logical_or(np.logical_or(my_ncp[sweep,radial,:] < ncp_lev, my_rhv[sweep,radial,:] < rhohv_lev), my_snr < 10.0)
+			#reallynotmeteo=np.logical_or(myfile.NCP_F[sweep,radial,:] < 0.5, myfile.RHOHV_F[sweep,radial,:] < 0.95)
+			x_ma=ma.masked_where(notmeteo, my_phidp[sweep,radial,:])
+			try:
+				ma.notmasked_contiguous(x_ma)
+				for slc in ma.notmasked_contiguous(x_ma):
+					if slc.stop-slc.start < ncpts or slc.start < ncpts: #so trying to get rid of clutter and small things that should not add to phidp anyway
+						x_ma.mask[slc.start-1:slc.stop+1]=True
+				c=0
+			except TypeError:#non sequence, no valid regions
+				#print "No Valid regions"
+				#sys.stderr.write(':NVR:')
+				c=1 #ie do nothing
+				x_ma.mask[:]=True
+			except AttributeError:
+				sys.stderr.write('No Valid Regions, ATTERR \n ')
+				sys.stderr.write(myfile.times['time_end'].isoformat()+'\n')
+				#print x_ma
+				#print x_ma.mask
+				c=1 #also do nothing
+				x_ma.mask=True
+			unwrapped=unwrap_masked(x_ma, centered=False)
+			#system_zero=unwrapped[np.where(np.logical_not(reallynotmeteo))][0:30].mean()
+			system_max=unwrapped[np.where(np.logical_not(notmeteo))][-10:-1].mean()-system_zero #end so no clutter expected
+			unwrapped_fixed=np.zeros(len(x_ma), dtype=float)
+			based=unwrapped-system_zero
+			based[0]=0.0
+			notmeteo[0]=False
+			based[-1]=system_max
+			notmeteo[-1]=False
+			unwrapped_fixed[np.where(np.logical_not(based.mask))[0]]=based[np.where(np.logical_not(based.mask))[0]]
+			#f=interp1d(np.where(np.logical_not(based.mask))[0], based[np.where(np.logical_not(based.mask))[0]], kind='cubic')
+			#unwrapped_fixed[np.where(based.mask)[0]]=f(np.where(based.mask)[0])#, np.where(np.logical_not(based.mask))[0], based[np.where(np.logical_not(based.mask))[0]])
+			if len(based[np.where(np.logical_not(based.mask))[0]]) > 11:
+				unwrapped_fixed[np.where(based.mask)[0]]=np.interp(np.where(based.mask)[0], np.where(np.logical_not(based.mask))[0], smooth_and_trim(based[np.where(np.logical_not(based.mask))[0]]))
+			else:
+				unwrapped_fixed[np.where(based.mask)[0]]=np.interp(np.where(based.mask)[0], np.where(np.logical_not(based.mask))[0], based[np.where(np.logical_not(based.mask))[0]])
+			if c!=1:
+				cordata[sweep, radial, :]=unwrapped_fixed
+			else:
+				cordata[sweep, radial, :]=np.zeros(my_rhv.shape[2])
+	if debug: print "Exec time: ", time()-t
+	return cordata
+
 
 def get_phidp_unf(radar, **kwargs):
 	#['norm_coherent_power', 'reflectivity_horizontal', 'dp_phase_shift', 'doppler_spectral_width', 'diff_reflectivity', 'mean_doppler_velocity', 'copol_coeff', 'diff_phase']
+	if 'nowrap' in kwargs.keys(): print "Starting late"
 	ncp_lev=kwargs.get('ncp_lev', 0.4)
 	rhohv_lev=kwargs.get('rhohv_lev', 0.6)
 	debug=kwargs.get('debug', False)
@@ -238,7 +307,13 @@ def get_phidp_unf(radar, **kwargs):
 				#print x_ma.mask
 				c=1 #also do nothing
 				x_ma.mask=True
-			unwrapped=unwrap_masked(x_ma, centered=False)
+			if 'nowrap' in kwargs.keys():
+				#Start the unfolding a bit later in order to avoid false jumps based on clutter
+				unwrapped=x_ma
+				end_unwrap=unwrap_masked(x_ma[kwargs['nowrap']::], centered=False)
+				unwrapped[kwargs['nowrap']::]=end_unwrap
+			else:
+				unwrapped=unwrap_masked(x_ma, centered=False)
 			#system_zero=unwrapped[np.where(np.logical_not(reallynotmeteo))][0:30].mean()
 			system_max=unwrapped[np.where(np.logical_not(notmeteo))][-10:-1].mean()-system_zero #end so no clutter expected
 			unwrapped_fixed=np.zeros(len(x_ma), dtype=float)
@@ -349,7 +424,10 @@ class phase_proc:
 		self.not_coherent=radar.fields['norm_coherent_power']['data'] < self.min_ncp
 		self.not_correlated=radar.fields['copol_coeff']['data'] < self.min_rhv
 		if debug: print('Unfolding')
-		my_unf=get_phidp_unf(radar, ncp_lev=self.min_ncp, rhohv_lev=self.min_rhv, ncpts=2, doc=None)
+		if 'nowrap' in kwargs.keys():
+			my_unf=get_phidp_unf(radar, ncp_lev=self.min_ncp, rhohv_lev=self.min_rhv, ncpts=2, doc=None, nowrap=kwargs['nowrap'])
+		else:
+			my_unf=get_phidp_unf(radar, ncp_lev=self.min_ncp, rhohv_lev=self.min_rhv, ncpts=2, doc=None)		
 		my_new_ph=copy.deepcopy(radar.fields['dp_phase_shift'])
 		my_unf[:,-1]=my_unf[:,-2]
 		my_new_ph['data']=my_unf
