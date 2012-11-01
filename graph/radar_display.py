@@ -154,7 +154,7 @@ class radar_display:
 		end_index=self.ends[tilt]
 		this_plot=pcolormesh(self.x[start_index:end_index, :]/1000.0, self.y[start_index:end_index, :]/1000.0,
 			self.fields[var]['data'][start_index:end_index, :], #note we assume a masked array here.. if you want you can always mask the data field
-			vmin=kwargs.get('vmin', self.fields[var]['valid_min']), vmax=kwargs.get('vmax', self.fields[var]['valid_max']), cmap=get_cmap(kwargs.get('cmap', 'jet'))
+			vmin=kwargs.get('vmin', self.fields[var]['valid_min']), vmax=kwargs.get('vmax', self.fields[var]['valid_max']), cmap=get_cmap(kwargs.get('cmap', 'jet')))
 		self.plots.append(this_plot)
 		self.plot_vars.append(var)
 	def labelator(self, standard_name, units):
