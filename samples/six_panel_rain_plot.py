@@ -69,6 +69,7 @@ if __name__ == "__main__":
 		py4dd.RSL_radar_verbose_on()
 		my_object = py4dd.RSL_anyformat_to_radar(filename)
 	#calc R
+	R=300.0*(myradar.fields['specific_attenuation']['data'])**0.89
 	rainrate=copy.deepcopy(myradar.fields['diff_phase'])
 	rainrate['data']=R
 	rainrate['valid_min']=0.0
@@ -107,7 +108,7 @@ if __name__ == "__main__":
 	gca().set_title(my_display.generate_title('corrected_reflectivity_horizontal', tilt))
 	my_display.append_x()
 	my_display.add_cb()
-	my_display.plot_ppi('rain_rate_A', tilt, vmax=150)
+	my_display.plot_ppi('rain_rate_A', tilt, vmax=150, cmap='gist_rainbow_r')
 	gca().set_title(my_display.generate_title('rain_rate_A', tilt))
 	my_display.append_x()
 	my_display.add_cb()
