@@ -69,6 +69,15 @@ if __name__ == "__main__":
 		py4dd.RSL_radar_verbose_on()
 		my_object = py4dd.RSL_anyformat_to_radar(filename)
 	#calc R
+	rainrate=copy.deepcopy(myradar.fields['diff_phase'])
+	rainrate['data']=R
+	rainrate['valid_min']=0.0
+	rainrate['valid_max']=400.0
+	rainrate['standard_name']='rainfall_rate'
+	rainrate['long_name']='rainfall_rate'
+	rainrate['least_significant_digit']=1
+	rainrate['units']='mm/hr'
+	myradar.fields.update({'rain_rate_A':rainrate})
 	my_display=radar_display.radar_display(myradar)
 	f=figure(figsize=[15,18])
 	subplot(3,2,1)
