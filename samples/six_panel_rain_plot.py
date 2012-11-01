@@ -109,7 +109,7 @@ if __name__ == "__main__":
 	my_display.append_x()
 	my_display.add_cb()
 	subplot(3,2,6)
-	my_display.plot_ppi('rain_rate_A', tilt, vmax=150, cmap='gist_ncar')
+	my_display.plot_ppi('rain_rate_A', tilt, vmax=150, cmap='gist_stern')
 	gca().set_title(my_display.generate_title('rain_rate_A', tilt))
 	my_display.append_x()
 	my_display.add_cb()
