@@ -47,7 +47,7 @@ Oct 19 2012: Started development
 #pyart_dir=os.environ.get('PYART_DIR',os.environ['HOME']+'/python')
 #sys.path.append(pyart_dir)
 #from pyart.io import radar, py4dd
-from pylab import gca, pcolormesh, colorbar, meshgrid, plot
+from pylab import gca, pcolormesh, colorbar, meshgrid, plot, get_cmap
 import numpy as np
 from netCDF4 import num2date
 
@@ -154,7 +154,7 @@ class radar_display:
 		end_index=self.ends[tilt]
 		this_plot=pcolormesh(self.x[start_index:end_index, :]/1000.0, self.y[start_index:end_index, :]/1000.0,
 			self.fields[var]['data'][start_index:end_index, :], #note we assume a masked array here.. if you want you can always mask the data field
-			vmin=kwargs.get('vmin', self.fields[var]['valid_min']), vmax=kwargs.get('vmax', self.fields[var]['valid_max']))
+			vmin=kwargs.get('vmin', self.fields[var]['valid_min']), vmax=kwargs.get('vmax', self.fields[var]['valid_max']), cmap=get_cmap(kwargs.get('cmap', 'jet'))
 		self.plots.append(this_plot)
 		self.plot_vars.append(var)
 	def labelator(self, standard_name, units):
