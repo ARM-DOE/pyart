@@ -217,8 +217,8 @@ def get_phidp_unf_sg(myfile, **kwargs):
 	for sweep in range(my_rhv.shape[0]):
 		if debug: print "sweep ::  ", sweep
 		for radial in range(my_rhv.shape[1]):
-			my_snr=snr(my_z[sweep,radial,:])
-			notmeteo=np.logical_or(np.logical_or(my_ncp[sweep,radial,:] < ncp_lev, my_rhv[sweep,radial,:] < rhohv_lev), my_snr < 10.0)
+			my_snr=noise(my_z[sweep,radial,:])#snr(my_z[sweep,radial,:])
+			notmeteo=np.logical_or(np.logical_or(my_ncp[sweep,radial,:] < ncp_lev, my_rhv[sweep,radial,:] < rhohv_lev), my_snr < 6.0)
 			#reallynotmeteo=np.logical_or(myfile.NCP_F[sweep,radial,:] < 0.5, myfile.RHOHV_F[sweep,radial,:] < 0.95)
 			x_ma=ma.masked_where(notmeteo, my_phidp[sweep,radial,:])
 			try:
@@ -309,7 +309,7 @@ def get_phidp_unf(radar, **kwargs):
 				x_ma.mask=True
 			if 'nowrap' in kwargs.keys():
 				#Start the unfolding a bit later in order to avoid false jumps based on clutter
-				unwrapped=x_ma
+				unwrapped=copy.deepcopy(x_ma)
 				end_unwrap=unwrap_masked(x_ma[kwargs['nowrap']::], centered=False)
 				unwrapped[kwargs['nowrap']::]=end_unwrap
 			else:
