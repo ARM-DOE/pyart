@@ -174,6 +174,7 @@ class Radar:
 		add_meta=kwargs.get('add_meta',{}) #additional metadata which will overwrite data from the radar header.. this helps when you know there are issues with the meta
 		name_transfer={'ZT':'DBZ', 'VR':'VEL_F', 'DR':'ZDR', 'KD':'KDP_F', 'SQ':'NCP_F', 'PH':'PHIDP_F', 'VE':'VEL_COR','RH':'RHOHV_F', 'DZ':'DBZ_F', 'SW':'WIDTH', 'ZD':'ZDR_F'}
 		available_data=get_avail_moments(radarobj.contents.volumes)
+		#self.instrument_name=
 		print available_data
 		fields=[name_transfer[key] for key in available_data]
 		print fields
