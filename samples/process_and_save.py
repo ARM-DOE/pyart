@@ -1,4 +1,5 @@
 #!/usr/bin/python
+#Sample for processing phase using LP methods
 import matplotlib
 matplotlib.use('agg')
 
