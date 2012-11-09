@@ -53,7 +53,8 @@ import matplotlib as mpl
 mpl.use('Agg')
 import sys
 import os
-sys.path.append('/home/titan5/python/')
+pyart_dir=os.environ.get('PYART_DIR',os.environ['HOME']+'/python')
+sys.path.append(pyart_dir)
 import pyart.io.py_mdv as py_mdv
 from time import time
 from itertools import groupby
