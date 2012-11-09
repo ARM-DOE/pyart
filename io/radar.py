@@ -353,9 +353,9 @@ class Radar:
 			prt_mode='dual'
 		inst_params={'prt_mode':{'data':array([prt_mode]*self.nele), 'comments':'Pulsing mode Options are: "fixed", "staggered", "dual" Assumed "fixed" if missing.'}, 
 		'prt':{'data':array([radarobj.radar_info['prt_s']]*self.nele), 'units':'seconds', 'comments':"Pulse repetition time.For staggered prt, also see prt_ratio."},
-		'unambiguous_range':{'data':array([radarobj.radar_info['unambig_range_km']*1000.0]*self.naz*self.nele), 'units':'meters', 'comment':'Unambiguous range'}}
+		'unambiguous_range':{'data':array([radarobj.radar_info['unambig_range_km']*1000.0]*self.naz*self.nele), 'units':'meters', 'comment':'Unambiguous range'},
+		'nyquist_velocity':{'data':array([radarobj.radar_info['unambig_vel_mps']]*self.naz*self.nele), 'units':'m/s', 'comments':"unamb velocity"}}
 		self.inst_params=inst_params
-		
 	def get_mdv_meta(self, radarobj, field):
 		debug=True
 		print "go"
