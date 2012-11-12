@@ -144,12 +144,9 @@ class Radar:
 		return {'year':h.year, 'month': h.month, 'day':h.day,'hour':h.hour, 'minute':h.minute, 'second':h.sec}
 	def extract_rsl_pointing(self, volume):
 		#this needs to be moved into C
-		print self.nsweeps, self.nrays
 		azimuth=zeros([self.nsweeps, self.nrays], dtype=float)
 		elevation=zeros([self.nsweeps, self.nrays], dtype=float)
 		for i in range(self.nsweeps):
-			print i
-			print len(volume.sweeps[i].rays)
 			azimuth[i,:]=[volume.sweeps[i].rays[k].h.azimuth for k in range(self.nrays)]
 			elevation[i,:]=[volume.sweeps[i].rays[k].h.elev for k in range(self.nrays)]
 		return azimuth, elevation
@@ -174,21 +171,15 @@ class Radar:
 		add_meta=kwargs.get('add_meta',{}) #additional metadata which will overwrite data from the radar header.. this helps when you know there are issues with the meta
 		name_transfer={'ZT':'DBZ', 'VR':'VEL_F', 'DR':'ZDR', 'KD':'KDP_F', 'SQ':'NCP_F', 'PH':'PHIDP_F', 'VE':'VEL_COR','RH':'RHOHV_F', 'DZ':'DBZ_F', 'SW':'WIDTH', 'ZD':'ZDR_F'}
 		available_data=get_avail_moments(radarobj.contents.volumes)
-		#self.instrument_name=
-		print available_data
 		fields=[name_transfer[key] for key in available_data]
-		print fields
 		todo_fields=set(fields)&set(csapr_standard_names().keys())
-		print todo_fields
 		flat_dict={}
 		sample_volume=radarobj.contents.volumes[py4dd.fieldTypes().list.index(available_data[0])]
 		#determine the min number of rays
 		self.nsweeps=sample_volume.h.nsweeps
 		rays=array([sample_volume.sweeps[i].h.nrays for i in range(self.nsweeps)])
-		print rays.max(), rays.min()
 		self.nrays=rays.min()#sample_volume.sweeps[0].h.nrays
 		self.ngates=sample_volume.sweeps[0].rays[0].h.nbins
-		print "hoo", sample_volume.sweeps[0].h.azimuth
 		if sample_volume.sweeps[0].h.azimuth == -999.0:
 			self.scan_type='ppi'
 			self.naz=self.nrays
@@ -203,12 +194,12 @@ class Radar:
 		self.elevation={'data':elevation.flatten(), 'units':'degrees', 'standard_name':'beam_elevation_angle', 'comment':'Elevation of antenna relative to the horizontal plane', 'long_name':'elevation_angle_from_horizontal_plane'}
 		self.tu="seconds since %(year)d-%(month)02d-%(day)02d %(hour)02d:%(minute)02d:%(second)02d.0" % self.ray_header_time_to_dict(sample_volume.sweeps[0].rays[0].h)
 		self.cal="gregorian"
-		time_end=date2num(datetime(sample_volume.sweeps[-1].rays[-1].h.year, 
-				sample_volume.sweeps[-1].rays[-1].h.month, 
-				sample_volume.sweeps[-1].rays[-1].h.day, 
-				sample_volume.sweeps[-1].rays[-1].h.hour, 
-				sample_volume.sweeps[-1].rays[-1].h.minute,
-				sample_volume.sweeps[-1].rays[-1].h.sec),self.tu, self.cal)	
+		time_end=date2num(datetime(int(sample_volume.sweeps[-1].rays[-1].h.year), 
+				int(sample_volume.sweeps[-1].rays[-1].h.month), 
+				int(sample_volume.sweeps[-1].rays[-1].h.day), 
+				int(sample_volume.sweeps[-1].rays[-1].h.hour), 
+				int(sample_volume.sweeps[-1].rays[-1].h.minute),
+				int(sample_volume.sweeps[-1].rays[-1].h.sec)),self.tu, self.cal)	
 		time_array=linspace(0, time_end, self.nrays*self.nsweeps)
 		self.time={'data':time_array, 'units':self.tu, 'calendar':self.cal, 'comment':'Coordinate variable for time. Time at the center of each ray, in fractional seconds since the global variable time_coverage_start', 'standard_name':'time', 'long_name':'time in seconds since volume start'}
 		for field in todo_fields: #create a dictionary tree for all data fields
