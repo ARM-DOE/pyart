@@ -61,6 +61,33 @@ from numpy import ma
 import copy
 import glpk
 
+def det_sys_phase_sg(myradar, fg, **kwargs):
+	print "dooooing"
+	ncp_lev=kwargs.get('ncp_lev', 0.4)
+	rhohv_lev=kwargs.get('rhohv_lev', 0.6)
+	print rhohv_lev, ncp_lev
+	good=False
+	n=0
+	phases=[]
+	mncp=myradar.fields['norm_coherent_power']['data'][:,30:]
+	mrhv= myradar.fields['copol_coeff']['data'][:,30:]
+	myphi=myradar.fields['dp_phase_shift']['data'][:,30:]
+	#mncp[:,:,0:30]=0.0
+	#mrhv[:,:,0:30]=0.0
+	for radial in range(myradar.sweep_info['sweep_end_ray_index']['data'][0]-1):
+			meteo=np.logical_and(mncp[radial,:] > ncp_lev, mrhv[radial,:] > rhohv_lev)
+			mpts=np.where(meteo)
+			#print len(mpts),  mpts[-1]
+			if len(mpts[0]) > 25:
+				good=True
+				msmth_phidp=smooth_and_trim(myphi[radial,mpts[0]], 9)
+				phases.append(msmth_phidp[0:25].min())
+	print phases
+	if not(good): sys_phase=fg
+	print fg
+	return np.median(phases)
+
+
 def fzl_index(fzl, ranges, elevation, radar_height):
 	Re=6371.0*1000.0
 	p_r=4.0*Re/3.0
@@ -212,7 +239,7 @@ def get_phidp_unf_sg(myfile, **kwargs):
 	my_ncp=myfile.read_a_field(myfile.fields.index('NCP_F'))[:,:,0:doc]
 	my_z=myfile.read_a_field(myfile.fields.index('DBZ_F'))[:,:,0:doc]
 	t=time()
-	system_zero=det_sys_phase(myfile, -141.097702627)
+	system_zero=det_sys_phase_sg(myfile, -141.097702627)
 	cordata=np.zeros(my_rhv.shape, dtype=float)
 	for sweep in range(my_rhv.shape[0]):
 		if debug: print "sweep ::  ", sweep
@@ -283,7 +310,7 @@ def get_phidp_unf(radar, **kwargs):
 		my_ncp=radar.fields['norm_coherent_power']['data']
 		my_z=radar.fields['reflectivity_horizontal']['data']
 	t=time()
-	system_zero=-135.0#det_sys_phase(myfile, -141.097702627)
+	system_zero=det_sys_phase_sg(radar,kwargs.get('sysphase', -135.))
 	cordata=np.zeros(my_rhv.shape, dtype=float)
 	for radial in range(my_rhv.shape[0]):
 			my_snr=snr(my_z[radial,:])

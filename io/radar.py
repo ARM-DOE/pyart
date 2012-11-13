@@ -53,7 +53,7 @@ added the option of overiding and adding metadata to rsl
 
 import sys
 import os
-from numpy import tile,array, isnan, where, ma, linspace, arange, zeros, float32
+from numpy import tile,array, isnan, where, ma, linspace, arange, zeros, float32, abs
 from netCDF4 import date2num
 pyart_dir=os.environ.get('PYART_DIR',os.environ['HOME']+'/python')
 sys.path.append(pyart_dir+'/pyart/io/')
@@ -247,10 +247,20 @@ class Radar:
 		self.location={'latitude':lat, 'longitude':lon, 'altitude':elv}
 		#now for instrument parameters.. sorry but I am just going to brute force this!
 		#prt mode: Need to fix this.. assumes dual if two prts 
-		inst_params={'prt_mode':{'data':array([self.prtmode(sample_volume.sweeps[i].rays[0].h) for i in range(self.nsweeps)]), 'comments':'Pulsing mode Options are: "fixed", "staggered", "dual" Assumed "fixed" if missing.'}, 
-		'nyquist_velocity':{'data':array([sample_volume.sweeps[i].rays[0].nyq_vel for i in range(self.nsweeps)]), 'units':'m/s', 'comments':"unamb velocity"},
-		'prt':{'data':array([sample_volume.sweeps[i].rays[0].prf for i in range(self.nsweeps)]), 'units':'seconds', 'comments':"Pulse repetition time.For staggered prt, also see prt_ratio."},
-		'unambiguous_range':{'data':array([sample_volume.sweeps[i].rays[0].unam_rng*1000.0 for i in range(self.nsweeps)]), 'units':'meters', 'comment':'Unambiguous range'}}
+		#CHECK NYQUIST SET
+		print sample_volume.sweeps[0].rays[0].nyq_vel
+		if abs(sample_volume.sweeps[0].rays[0].nyq_vel) > 0.1:
+			print "nyquist set"
+			inst_params={'prt_mode':{'data':array([self.prtmode(sample_volume.sweeps[i].rays[0].h) for i in range(self.nsweeps)]), 'comments':'Pulsing mode Options are: "fixed", "staggered", "dual" Assumed "fixed" if missing.'}, 
+			'nyquist_velocity':{'data':array([sample_volume.sweeps[i].rays[j].nyq_vel for i in range(self.nsweeps) for j in range(self.nrays)]), 'units':'m/s', 'comments':"unamb velocity"},
+			'prt':{'data':array([1./sample_volume.sweeps[i].rays[j].prf for i in range(self.nsweeps) for j in range(self.nrays)]), 'units':'seconds', 'comments':"Pulse repetition time.For staggered prt, also see prt_ratio."},
+			'unambiguous_range':{'data':array([sample_volume.sweeps[i].rays[0].unam_rng*1000.0 for i in range(self.nsweeps)]), 'units':'meters', 'comment':'Unambiguous range'}}
+		else:
+			print "Nyquist unset, calculating from PRF and lambda"
+			inst_params={'prt_mode':{'data':array([self.prtmode(sample_volume.sweeps[i].rays[0].h) for i in range(self.nsweeps)]), 'comments':'Pulsing mode Options are: "fixed", "staggered", "dual" Assumed "fixed" if missing.'}, 
+			'nyquist_velocity':{'data':array([sample_volume.sweeps[i].rays[j].wavelength*sample_volume.sweeps[i].rays[j].prf/4.0 for i in range(self.nsweeps) for j in range(self.nrays)]), 'units':'m/s', 'comments':"unamb velocity"},
+			'prt':{'data':array([1./sample_volume.sweeps[i].rays[j].prf for i in range(self.nsweeps) for j in range(self.nrays)]), 'units':'seconds', 'comments':"Pulse repetition time.For staggered prt, also see prt_ratio."},
+			'unambiguous_range':{'data':array([sample_volume.sweeps[i].rays[0].unam_rng*1000.0 for i in range(self.nsweeps)]), 'units':'meters', 'comment':'Unambiguous range'}}
 		self.inst_params=inst_params
 	def cf2rad(self,ncobj):
 		if "".join(ncobj.variables['sweep_mode'][1]) == "azimuth_surveillance    ":
