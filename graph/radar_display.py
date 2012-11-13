@@ -47,7 +47,7 @@ Oct 19 2012: Started development
 #pyart_dir=os.environ.get('PYART_DIR',os.environ['HOME']+'/python')
 #sys.path.append(pyart_dir)
 #from pyart.io import radar, py4dd
-from pylab import gca, pcolormesh, colorbar, meshgrid, plot, get_cmap
+from pylab import gca, pcolormesh, colorbar, meshgrid, plot, get_cmap, text
 import numpy as np
 from netCDF4 import num2date
 
@@ -127,9 +127,16 @@ class radar_display:
 		self.ranges=radar.range['data']
 		self.azimuths=radar.azimuth['data']
 		self.elevations=radar.elevation['data']
+		if 'shift' in kwargs: 
+			self.origin='Origin'
+		else:
+			self.origin='Radar'
+		self.shift=kwargs.get('shift', [0.0,0.0])
 		rg,azg=meshgrid(self.ranges,self.azimuths)
 		rg,eleg=meshgrid(self.ranges,self.elevations)
 		self.x,self.y,self.z=radar_coords_to_cart(rg,azg, eleg) #appending carts
+		self.x=self.x+self.shift[0]
+		self.y=self.y+self.shift[1]
 		self.time_begin=num2date(radar.time['data'][0], radar.time['units'], calendar=radar.time['calendar']) #append a datetime object
 		self.radar_name=radar.metadata['instrument_name']
 		self.plots=[]
@@ -146,9 +153,9 @@ class radar_display:
 		infodict.update(dt_to_dict(self.time_begin, pref='begin_'))
 		return '%(name)s %(var)s %(tilt).1f deg %(begin_year)04d%(begin_month)02d%(begin_day)02d%(begin_hour)02d%(begin_minute)02d' %infodict
 	def append_x(self, **kwargs):
-		kwargs.get('axis', gca()).set_xlabel('East West distance from radar (km)')
+		kwargs.get('axis', gca()).set_xlabel('East West distance from'+self.origin+'  (km)')
 	def append_y(self, **kwargs):
-		kwargs.get('axis', gca()).set_ylabel('North South distance from radar (km)')
+		kwargs.get('axis', gca()).set_ylabel('North South distance from '+self.origin+'  (km)')
 	def plot_ppi(self, var, tilt, **kwargs):
 		start_index=self.starts[tilt]
 		end_index=self.ends[tilt]
@@ -199,8 +206,8 @@ class radar_display:
 		use_axis=kwargs.get('axis', gca())
 		for i in range(len(locs)):
 			carts=corner_to_point(self.loc, locs[i])
-			use_axis.plot([carts[0]/1000.0, carts[0]/1000.0], [carts[1]/1000.0, carts[1]/1000.0], kwargs.get('sym', ['r+']*len(locs))[i])
-			use_axis.text(carts[0]/1000.0-5.0, carts[1]/1000.0, labels[i], color=kwargs.get('tc', 'k'))
+			plot([carts[0]/1000.0, carts[0]/1000.0], [carts[1]/1000.0, carts[1]/1000.0], kwargs.get('sym', ['r+']*len(locs))[i])
+			#text(carts[0]-5.0, carts[1], labels[i], color=kwargs.get('tc', 'k'))
 
 
 

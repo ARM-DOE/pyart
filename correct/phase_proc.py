@@ -62,10 +62,10 @@ import copy
 import glpk
 
 def det_sys_phase_sg(myradar, fg, **kwargs):
-	print "dooooing"
+	print "Unfolding"
 	ncp_lev=kwargs.get('ncp_lev', 0.4)
 	rhohv_lev=kwargs.get('rhohv_lev', 0.6)
-	print rhohv_lev, ncp_lev
+	#print rhohv_lev, ncp_lev
 	good=False
 	n=0
 	phases=[]
@@ -82,9 +82,9 @@ def det_sys_phase_sg(myradar, fg, **kwargs):
 				good=True
 				msmth_phidp=smooth_and_trim(myphi[radial,mpts[0]], 9)
 				phases.append(msmth_phidp[0:25].min())
-	print phases
+	#print phases
 	if not(good): sys_phase=fg
-	print fg
+	#print fg
 	return np.median(phases)
 
 
