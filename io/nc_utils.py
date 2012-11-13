@@ -309,13 +309,19 @@ def write_radar4(ncobj, radarobj, **kwargs):
 	moments=radarobj.fields.keys()
 	my_nc_vars={}
 	for moment in moments:
-		my_nc_vars.update({moment:ncobj.createVariable(moment, 'float32', ('time','range'), fill_value=-9999, zlib=True, least_significant_digit=radarobj.fields[moment]['least_significant_digit'])})
+		my_nc_vars.update({moment:ncobj.createVariable(moment, 'float32', ('time','range'), fill_value=-9999.0, zlib=True, least_significant_digit=radarobj.fields[moment]['least_significant_digit'])})
 	#populate metadata for moment variables
 	for moment in moments:
 		print moment
 		want=list(set(radarobj.fields[moment].keys())&set(['long_name', 'standard_name', 'units', 'comment', 'add_offset', 'scale_factor', 'valid_min', 'valid_max', 'axis', 'meta_group', 'coordinates']))
 		print want
 		trans_dict_as_ncattr(radarobj.fields[moment], my_nc_vars[moment], want)
+	#populate data for moment variables
+	for moment in moments:
+		print my_nc_vars[moment]._FillValue
+		print moment
+		if '_fill_value' in dir(radarobj.fields[moment]['data']): radarobj.fields[moment]['data']._fill_value=None #gets around a bug
+		my_nc_vars[moment][:]=radarobj.fields[moment]['data']
 	#populate sweep parameters
 	sweep_params=radarobj.sweep_info.keys()
 	sweep_types={'fixed_angle':'float', 'sweep_start_ray_index':'i4', 'sweep_end_ray_index':'i4', 'sweep_mode':'S1', 'sweep_number':'i4'}
@@ -346,16 +352,12 @@ def write_radar4(ncobj, radarobj, **kwargs):
 			this_var=ncobj.createVariable(var, 'double', zlib=True)
 			trans_dict_as_ncattr(radarobj.location[var], this_var, list(set(['units', 'comment',  'standard_name', 'long_name'])&set(radarobj.location[var].keys())))
 			this_var[:]=radarobj.location[var]['data']
-
 	#append global header data
 	trans_dict_as_ncattr(radarobj.metadata, ncobj, radarobj.metadata.keys())
 	ncobj.platform_is_mobile=platform_is_mobile
 	ncobj.history="created by user %(user)s on %(machine)s at %(day)d-%(strmon)s-%(year)d,%(hour)d:%(minute)02d:%(second)02d using %(exec)s" %runtime
 	ncobj.conventions="CF/Radial"
-	#populate data for moment variables
-	for moment in moments:
-		my_nc_vars[moment][:]=radarobj.fields[moment]['data']
-	
+
 
 def is_moment(varname, moment_fixes):
 	moments=moment_fixes.keys()
