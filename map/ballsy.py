@@ -53,6 +53,7 @@ Scott Collis scollis.acrf@gmail.com
 __author__ = "Scott Collis <scollis@anl.gov>"
 __version__ = "1.0"
 import sys
+import os
 import numpy as np
 pyart_dir=os.environ.get('PYART_DIR',os.environ['HOME']+'/python')
 sys.path.append(pyart_dir+'/pyart/map/ball_tree/ball_tree')
