@@ -53,12 +53,13 @@ added the option of overiding and adding metadata to rsl
 
 import sys
 import os
-from numpy import tile,array, isnan, where, ma, linspace, arange, zeros, float32, abs
+from numpy import tile,array, isnan, where, ma, linspace, arange, zeros, float32, abs,empty, append,max
 from netCDF4 import date2num
 pyart_dir=os.environ.get('PYART_DIR',os.environ['HOME']+'/python')
 sys.path.append(pyart_dir+'/pyart/io/')
 import py4dd
 from datetime import datetime
+import copy
 
 
 def dms_to_d(dms):
@@ -375,3 +376,27 @@ class Radar:
 		'KDP_SOB':{'units':'degrees/km', 'standard_name':'specific_differential_phase_hv','long_name':'specific_differential_phase_hv', 'valid_max':20.0, 'valid_min':-1.0, 'least_significant_digit':3}}
 		return moment_fixes[field]
 
+def join_radar(radar1, radar2):
+	#must have same gate spacing
+	new_radar=copy.deepcopy(radar1)
+	new_radar.azimuth['data']=append(radar1.azimuth['data'], radar2.azimuth['data'])
+	new_radar.elevation['data']=append(radar1.elevation['data'], radar2.elevation['data'])
+	if len(radar1.range['data']) >= len(radar2.range['data']):
+		new_radar.range['data']=radar1.range['data']
+	else:
+		new_radar.range['data']=radar3.range['data']
+	new_radar.time['data']=append(radar1.time['data'], radar2.time['data'])
+	for var in new_radar.fields.keys():
+		sh1=radar1.fields[var]['data'].shape
+		sh2=radar2.fields[var]['data'].shape
+		print sh1, sh2
+		new_field=ma.zeros([sh1[0]+sh2[0], max([sh1[1],sh2[1]])])-9999.0
+		new_field[0:sh1[0], 0:sh1[1]]=radar1.fields[var]['data']
+		new_field[sh1[0]:, 0:sh2[1]]=radar2.fields[var]['data']
+		new_radar.fields[var]['data']=new_field
+	#This will not work for two already moving platforms.. need to enhance later
+	if radar1.location['latitude']['data']!=radar2.location['latitude']['data'] or radar1.location['longitude']['data']!=radar2.location['longitude']['data'] or radar1.location['altitude']['data']!=radar2.location['altitude']['data']:
+		for key in radar1.location.keys():
+			new_radar.location[key]['data']=append( zeros(len(radar1.time['data']))+ radar1.location[key]['data'], zeros(len(radar2.time['data']))+ radar2.location[key]['data'])
+	return new_radar
+		
