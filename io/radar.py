@@ -122,11 +122,40 @@ def create_field_list(variables, nrays, ngates):
         if variables[var].shape == (nrays, ngates): valid_list.append(var)
     return valid_list
 
+def create_field_list_stream(variables, ngates):
+    print ngates
+    valid_list=[]
+    for var in variables.keys():
+        if variables[var].shape == (ngates,): valid_list.append(var)
+    return valid_list
+
+
 def ncvar_to_field(ncvar):
     outdict={'data':ncvar[:]}
     outdict.update(dict([(key, getattr(ncvar,key)) for key in ncvar.ncattrs()]))
     return outdict
 
+def stream_to_2d(data, sweeps, sweepe, ray_len, maxgates, nrays, ray_start_index):
+    time_range=ma.zeros([nrays, maxgates])-9999.0
+    cp=0
+    for sweep_number in range(len(sweepe)):
+        #print sweep_number, "of ", len(sweepe)
+        #print "sweep start ", sweeps[sweep_number], ' sweep end ', sweepe[sweep_number], 'sweep gates ', ray_len[sweeps[sweep_number]],ray_len[sweepe[sweep_number]]
+        ss=sweeps[sweep_number]; se=sweepe[sweep_number]; rls=ray_len[sweeps[sweep_number]]; rle=ray_len[sweeps[sweep_number]]
+        #print ray_len[ss:se].sum(), rle*(se-ss)
+        if ray_len[ss:se].sum() == rle*(se-ss):
+            time_range[ss:se, 0:rle]=data[cp:cp+(se-ss)*rle].reshape(se-ss,rle)
+            cp+=(se-ss)*rle
+        else:
+            for rn in range(se-ss):
+                time_range[ss+rn,0:ray_len[ss+rn]]=data[ray_start_index[ss+rn]:ray_start_index[ss+rn]+ray_len[ss+rn]]
+            cp+=ray_len[ss:se].sum()
+    return time_range
+
+def stream_ncvar_to_field(ncvar, sweeps, sweepe, ray_len, maxgates, nrays, ray_start_index):
+    outdict={'data':stream_to_2d(ncvar[:], sweeps, sweepe, ray_len, maxgates, nrays, ray_start_index)}
+    outdict.update(dict([(key, getattr(ncvar,key)) for key in ncvar.ncattrs()]))
+    return outdict
 
 class Radar:
 	"""
@@ -140,7 +169,10 @@ class Radar:
 			if 'h' in dir(radarobj.contents): #yep a rsl object
 				self.rsl2rad(radarobj, **kwargs)
 		elif 'variables' in dir(radarobj):
-			self.cf2rad(radarobj, **kwargs)
+			if 'ray_start_index' in radarobj.variables.keys():
+				self.streamcf2rad(radarobj, **kwargs)
+			else:
+				self.cf2rad(radarobj, **kwargs)
 	def ray_header_time_to_dict(self, h):
 		return {'year':h.year, 'month': h.month, 'day':h.day,'hour':h.hour, 'minute':h.minute, 'second':h.sec}
 	def extract_rsl_pointing(self, volume):
@@ -290,6 +322,40 @@ class Radar:
 				my_field=ncvar_to_field(ncobj.variables[field])
 				field_dict.update({field:my_field})
 			self.fields=field_dict
+	def streamcf2rad(self,ncobj):
+		try:
+			mode="".join(ncobj.variables['sweep_mode'][1])
+		except TypeError:
+			mode="".join(ncobj.variables['sweep_mode'][1].data)
+		print mode, "azimuth_surveillance    "
+		if mode in "azimuth_surveillance    ":
+			#ppi
+			print "hi"
+			self.metadata=dict([(key, getattr(ncobj,key)) for key in ncobj.ncattrs()])
+			self.scan_type="ppi"
+			self.naz=ncobj.variables['sweep_start_ray_index'][1]-ncobj.variables['sweep_start_ray_index'][0]
+			self.nele=ncobj.variables['sweep_start_ray_index'].shape[0]
+			self.ngates=ncobj.variables['range'].shape[0]
+			loc_dict={}
+			for loc_data in ['latitude', 'altitude', 'longitude']:
+				loc_dict.update({loc_data: ncvar_to_field(ncobj.variables[loc_data])})
+			self.location=loc_dict
+			sweep_dict={}
+			for sweep_data in ['sweep_start_ray_index', 'sweep_mode', 'sweep_number', 'sweep_end_ray_index', 'fixed_angle']:
+				sweep_dict.update({sweep_data: ncvar_to_field(ncobj.variables[sweep_data])})
+			self.sweep_info=sweep_dict
+			self.azimuth=ncvar_to_field(ncobj.variables['azimuth'])
+			self.range=ncvar_to_field(ncobj.variables['range'])
+			self.elevation=ncvar_to_field(ncobj.variables['elevation'])
+			self.time=ncvar_to_field(ncobj.variables['time'])
+			data_fields=create_field_list_stream(ncobj.variables, ncobj.variables['ray_start_index'][-1]+ncobj.variables['ray_n_gates'][-1])
+			field_dict={}
+			for field in data_fields:
+				print field
+				my_field=stream_ncvar_to_field(ncobj.variables[field], ncobj.variables['sweep_start_ray_index'][:], ncobj.variables['sweep_end_ray_index'][:], ncobj.variables['ray_n_gates'][:], ncobj.variables['range'].shape[0],ncobj.variables['time'].shape[0], ncobj.variables['ray_start_index'][:])
+				field_dict.update({field:my_field})
+			self.fields=field_dict
+
 	def mdv2rad(self, radarobj):
 		#We only want to transfer fields that we have valid names for... 
 		valid_fields=csapr_standard_names()
