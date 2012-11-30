@@ -436,6 +436,7 @@ class phase_proc:
 	def __init__(self,radar, offset, **kwargs):
 		debug=kwargs.get('debug', False)
 		if debug: print('populating')
+		self.self_const=kwargs.get('self_const', 60000.0)
 		self.refl_field=kwargs.get('refl_field', 'reflectivity_horizontal')
 		self.ncp_field=kwargs.get('ncp_field', 'norm_coherent_power')
 		self.rhv_field=kwargs.get('rhv_field', 'copol_coeff')
@@ -575,7 +576,7 @@ class phase_proc:
 			end_gate, start_ray, end_ray=det_process_range(self.radar,sweep,self.fzl, doc=15)
 			start_gate=0
 			A_Matrix=construct_A_matrix(len(self.radar.range['data'][start_gate:end_gate]),St_Gorlv_differential_5pts )
-			B_vectors=construct_B_vectors(self.phidp_mod[start_ray:end_ray,start_gate:end_gate], self.z_mod[start_ray:end_ray,start_gate:end_gate], St_Gorlv_differential_5pts)
+			B_vectors=construct_B_vectors(self.phidp_mod[start_ray:end_ray,start_gate:end_gate], self.z_mod[start_ray:end_ray,start_gate:end_gate], St_Gorlv_differential_5pts,dweight=self.self_const)
 			weights=np.ones(self.phidp_mod[start_ray:end_ray,start_gate:end_gate].shape)
 			nw=np.bmat([weights, np.zeros(weights.shape)])
 			mysoln=LP_solver(A_Matrix, B_vectors, nw, it_lim=7000, presolve=True, verbose=debug, really_verbose=really_verbose)
