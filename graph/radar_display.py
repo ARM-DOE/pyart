@@ -39,6 +39,7 @@ matplotlib
 HISTORY
 -------
 Oct 19 2012: Started development
+Dec 2: need more doc
 """
 
 
