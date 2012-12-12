@@ -28,7 +28,7 @@ if __name__ == "__main__":
 	myradar=radar.Radar(my_mdv_object)
 	mydatetime=netCDF4.num2date(myradar.time['data'][0], myradar.time['units'], calendar=myradar.time['calendar']) #append a datetime object
 	mydict=dt_to_dict(mydatetime)
-	mydict.update({'scanmode':{'ppi':'sur','rhi':'rhi'}[myradar.sweep_mode[0]]})
+	mydict.update({'scanmode':{'ppi':'sur','rhi':'rhi'}[myradar.sweep_mode[0]], 'site_desg':site_deseg})
 	ofilename=outdir+'%(scanmode)scmac%(site_deseg)s.a1.%(year)04d%(month)02d%(day)02d.%(hour)02d%(minute)02d%(second)02d.nc' % mydict
 	netcdf_obj=netCDF4.Dataset(ofilename, 'w',format='NETCDF4')
 	nc_utils.write_radar4(netcdf_obj, myradar)
