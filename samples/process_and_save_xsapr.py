@@ -7,7 +7,7 @@ import sys
 import os
 pyart_dir=os.environ.get('PYART_DIR',os.environ['HOME']+'/python')
 sys.path.append(pyart_dir)
-from pyart.io import py_mdv, radar
+from pyart.io import py4dd, radar
 from time import time
 from pyart.graph import rayplot, radar_display
 from pyart.correct import phase_proc
