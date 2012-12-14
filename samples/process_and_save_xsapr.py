@@ -17,6 +17,7 @@ from pyart.io import nc_utils
 import netCDF4
 from pyart.correct import attenuation
 from pyart.correct import dealias
+import copy
 
 
 def dt_to_dict(dt, **kwargs):
