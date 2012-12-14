@@ -42,7 +42,7 @@ if __name__ == "__main__":
 	interp_sonde.close()
 	#Process Phase
 	gates=myradar.range['data'][1]-myradar.range['data'][0]
-	rge=5.0*1000.0
+	rge=10.0*1000.0
 	ng=rge/gates
 	mydatetime=netCDF4.num2date(myradar.time['data'][0], myradar.time['units'], calendar=myradar.time['calendar']) #append a datetime object
 	mydict=dt_to_dict(mydatetime)
@@ -55,6 +55,16 @@ if __name__ == "__main__":
 	spec_at, cor_z=attenuation.calculate_attenuation(myradar,offset, debug=True, a_coef=0.17)
 	myradar.fields.update({'specific_attenuation':spec_at})
 	myradar.fields.update({'corrected_reflectivity_horizontal':cor_z})
+	R=51.3*(myradar.fields['specific_attenuation']['data'])**0.81
+	rainrate=copy.deepcopy(myradar.fields['diff_phase'])
+	rainrate['data']=R
+	rainrate['valid_min']=0.0
+	rainrate['valid_max']=400.0
+	rainrate['standard_name']='rainfall_rate'
+	rainrate['long_name']='rainfall_rate'
+	rainrate['least_significant_digit']=1
+	rainrate['units']='mm/hr'
+	myradar.fields.update({'rain_rate_A':rainrate})
 	netcdf_obj=netCDF4.Dataset(ofilename, 'w',format='NETCDF4')
 	nc_utils.write_radar4(netcdf_obj, myradar)
 	netcdf_obj.close()
