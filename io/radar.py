@@ -311,6 +311,13 @@ class Radar:
 			for sweep_data in ['sweep_start_ray_index', 'sweep_mode', 'sweep_number', 'sweep_end_ray_index', 'fixed_angle']:
 				sweep_dict.update({sweep_data: ncvar_to_field(ncobj.variables[sweep_data])})
 			self.sweep_info=sweep_dict
+			inst_dict={}
+			for inst_data in ['frequency', 'follow_mode' , 'pulse_width', 'prt_mode','prt',
+				 'prt_ratio', 'polarization_mode', 'nyquist_velocity',
+				  'unambiguous_range', 'n_samples']:
+				if inst_data in ncobj.variables.keys():
+					inst_dict.update({inst_data: ncvar_to_field(ncobj.variables[inst_data])})
+			self.inst_params=inst_dict
 			self.azimuth=ncvar_to_field(ncobj.variables['azimuth'])
 			self.range=ncvar_to_field(ncobj.variables['range'])
 			self.elevation=ncvar_to_field(ncobj.variables['elevation'])
@@ -416,11 +423,11 @@ class Radar:
 		#now for instrument parameters.. sorry but I am just going to brute force this!
 		#prt mode: Need to fix this.. assumes dual if two prts 
 		if radarobj.radar_info['prt2_s']==0.0:
-			prt_mode='fixed'
+			prt_mode='fixed                   '
 		else:
-			prt_mode='dual'
+			prt_mode='dual                    '
 		inst_params={'prt_mode':{'data':array([prt_mode]*self.nele), 'comments':'Pulsing mode Options are: "fixed", "staggered", "dual" Assumed "fixed" if missing.'}, 
-		'prt':{'data':array([radarobj.radar_info['prt_s']]*self.nele), 'units':'seconds', 'comments':"Pulse repetition time.For staggered prt, also see prt_ratio."},
+		'prt':{'data':array([radarobj.radar_info['prt_s']]*self.nele*self.naz), 'units':'seconds', 'comments':"Pulse repetition time.For staggered prt, also see prt_ratio."},
 		'unambiguous_range':{'data':array([radarobj.radar_info['unambig_range_km']*1000.0]*self.naz*self.nele), 'units':'meters', 'comment':'Unambiguous range'},
 		'nyquist_velocity':{'data':array([radarobj.radar_info['unambig_vel_mps']]*self.naz*self.nele), 'units':'m/s', 'comments':"unamb velocity"}}
 		self.inst_params=inst_params

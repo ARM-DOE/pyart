@@ -339,6 +339,22 @@ def write_radar4(ncobj, radarobj, **kwargs):
 			print netCDF4.stringtochar(np.array(radarobj.sweep_info[item]['data'])).shape
 			this_var[:]=netCDF4.stringtochar(np.array(radarobj.sweep_info[item]['data']))
 	#populate instr params
+	inst_types={'frequency':'float', 'follow_mode': 'S1', 'pulse_width':'float',
+		'prt_mode': 'S1','prt':'float', 'prt_ratio':'float', 'polarization_mode':'S1', 
+		'nyquist_velocity': 'float', 'unambiguous_range':'float', 'n_samples':'i4'}
+	inst_dims={'frequency':'time', 'follow_mode':('sweep','string_length_24') , 'pulse_width':'time',
+		'prt_mode':('sweep','string_length_24') ,'prt':'time', 'prt_ratio':'time', 'polarization_mode':('sweep','string_length_24'), 
+		'nyquist_velocity': 'time', 'unambiguous_range':'time', 'n_samples':'time'}
+	for key in radarobj.inst_params.keys():
+		this_var=ncobj.createVariable(key, inst_types[key], inst_dims[key], zlib=True)
+		trans_dict_as_ncattr(radarobj.inst_params[key], this_var,  list(set(['units', 'comment',  'standard_name', 'long_name'])&set(radarobj.inst_params[key].keys())))
+		this_var.meta_group="instrument_parameters"
+		if key not in ["follow_mode" ,"prt_mode", "polarization_mode"]:
+			this_var[:]=radarobj.inst_params[key]['data']
+		else:
+			print radarobj.inst_params[key]['data'], 'moom'
+			print netCDF4.stringtochar(np.array(radarobj.inst_params[key]['data'])).shape
+			this_var[:]=netCDF4.stringtochar(np.array(radarobj.inst_params[key]['data']))
 	#popuate location params
 	if 'sort' in dir(radarobj.location['latitude']['data']): #we have an array, aka a moving platform
 		for var in radarobj.location.keys():
