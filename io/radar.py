@@ -194,9 +194,9 @@ class Radar:
 				#volume.sweeps[i].rays[k].h.sec),self.tu, self.cal) for k in range(self.nrays)]
 	def prtmode(self,h):
 		if h.prf2 !=h.prf:
-			mode='dual'
+			mode='dual                    '
 		else:
-			mode='fixed'
+			mode='fixed                   '
 		return mode
 	def rsl2rad(self, radarobj, **kwargs):
 		#We only want to transfer fields that we have valid names for... 
@@ -287,13 +287,13 @@ class Radar:
 			inst_params={'prt_mode':{'data':array([self.prtmode(sample_volume.sweeps[i].rays[0].h) for i in range(self.nsweeps)]), 'comments':'Pulsing mode Options are: "fixed", "staggered", "dual" Assumed "fixed" if missing.'}, 
 			'nyquist_velocity':{'data':array([sample_volume.sweeps[i].rays[j].nyq_vel for i in range(self.nsweeps) for j in range(self.nrays)]), 'units':'m/s', 'comments':"unamb velocity"},
 			'prt':{'data':array([1./sample_volume.sweeps[i].rays[j].prf for i in range(self.nsweeps) for j in range(self.nrays)]), 'units':'seconds', 'comments':"Pulse repetition time.For staggered prt, also see prt_ratio."},
-			'unambiguous_range':{'data':array([sample_volume.sweeps[i].rays[0].unam_rng*1000.0 for i in range(self.nsweeps)]), 'units':'meters', 'comment':'Unambiguous range'}}
+			'unambiguous_range':{'data':array([sample_volume.sweeps[i].rays[j].unam_rng*1000.0 for i in range(self.nsweeps) for j in range(self.nrays)]), 'units':'meters', 'comment':'Unambiguous range'}}
 		else:
 			print "Nyquist unset, calculating from PRF and lambda"
 			inst_params={'prt_mode':{'data':array([self.prtmode(sample_volume.sweeps[i].rays[0].h) for i in range(self.nsweeps)]), 'comments':'Pulsing mode Options are: "fixed", "staggered", "dual" Assumed "fixed" if missing.'}, 
 			'nyquist_velocity':{'data':array([sample_volume.sweeps[i].rays[j].wavelength*sample_volume.sweeps[i].rays[j].prf/4.0 for i in range(self.nsweeps) for j in range(self.nrays)]), 'units':'m/s', 'comments':"unamb velocity"},
 			'prt':{'data':array([1./sample_volume.sweeps[i].rays[j].prf for i in range(self.nsweeps) for j in range(self.nrays)]), 'units':'seconds', 'comments':"Pulse repetition time.For staggered prt, also see prt_ratio."},
-			'unambiguous_range':{'data':array([sample_volume.sweeps[i].rays[0].unam_rng*1000.0 for i in range(self.nsweeps)]), 'units':'meters', 'comment':'Unambiguous range'}}
+			'unambiguous_range':{'data':array([sample_volume.sweeps[i].rays[0].unam_rng*1000.0 for i in range(self.nsweeps) for j in range(self.nrays)]), 'units':'meters', 'comment':'Unambiguous range'}}
 		self.inst_params=inst_params
 	def cf2rad(self,ncobj):
 		if "".join(ncobj.variables['sweep_mode'][1]) == "azimuth_surveillance    ":
