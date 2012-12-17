@@ -448,6 +448,8 @@ class phase_proc:
 		self.min_ncp=kwargs.get('min_ncp', 0.5)
 		self.min_rhv=kwargs.get('min_rhv',0.8)
 		self.fzl=kwargs.get('fzl',4000.0)
+		self.sys_phase=kwargs.get('sys_phase',0.0)
+		self.overide_sys_phase=kwargs.get('overide_sys_phase',False)
 		refl=copy.deepcopy(radar.fields[self.refl_field]['data'])+offset
 		is_low_z=(refl) <self.low_z
 		is_high_z=(refl) >self.high_z
@@ -490,7 +492,10 @@ class phase_proc:
 			my_ncp=radar.fields[self.ncp_field]['data']
 			my_z=radar.fields[self.refl_field]['data']
 		t=time()
-		system_zero=self.det_sys_phase_sg(radar,kwargs.get('sysphase', -135.))
+		if self.overide_sys_phase:
+			system_zero=self.sys_phase
+		else:
+			system_zero=self.det_sys_phase_sg(radar,self.sys_phase)
 		cordata=np.zeros(my_rhv.shape, dtype=float)
 		for radial in range(my_rhv.shape[0]):
 				my_snr=snr(my_z[radial,:])
@@ -544,8 +549,8 @@ class phase_proc:
 		return cordata
 	def det_sys_phase_sg(self, myradar, fg, **kwargs):
 		print "Unfolding"
-		ncp_lev=kwargs.get('ncp_lev', 0.4)
-		rhohv_lev=kwargs.get('rhohv_lev', 0.6)
+		ncp_lev=kwargs.get('ncp_lev', 0.6)
+		rhohv_lev=kwargs.get('rhohv_lev', 0.8)
 		#print rhohv_lev, ncp_lev
 		good=False
 		n=0
