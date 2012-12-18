@@ -296,13 +296,18 @@ class Radar:
 			'unambiguous_range':{'data':array([sample_volume.sweeps[i].rays[0].unam_rng*1000.0 for i in range(self.nsweeps) for j in range(self.nrays)]), 'units':'meters', 'comment':'Unambiguous range'}}
 		self.inst_params=inst_params
 	def cf2rad(self,ncobj):
-		if "".join(ncobj.variables['sweep_mode'][1]) == "azimuth_surveillance    ":
+		try:
+			mode="".join(ncobj.variables['sweep_mode'][1])
+		except TypeError:
+			mode="".join(ncobj.variables['sweep_mode'][1].data)
+		print mode, "azimuth_surveillance    "
+		if "sur" in mode:
 			#ppi
 			self.metadata=dict([(key, getattr(ncobj,key)) for key in ncobj.ncattrs()])
 			self.scan_type="ppi"
 			self.naz=ncobj.variables['sweep_start_ray_index'][1]-ncobj.variables['sweep_start_ray_index'][0]
 			self.nele=ncobj.variables['sweep_start_ray_index'].shape[0]
-			self.ngates=ncobj.variables['reflectivity_horizontal'].shape[1]
+			self.ngates=len(ncobj.dimensions['range'])
 			loc_dict={}
 			for loc_data in ['latitude', 'altitude', 'longitude']:
 				loc_dict.update({loc_data: ncvar_to_field(ncobj.variables[loc_data])})
@@ -322,13 +327,47 @@ class Radar:
 			self.range=ncvar_to_field(ncobj.variables['range'])
 			self.elevation=ncvar_to_field(ncobj.variables['elevation'])
 			self.time=ncvar_to_field(ncobj.variables['time'])
-			data_fields=create_field_list(ncobj.variables, ncobj.variables['reflectivity_horizontal'].shape[0], self.ngates)
+			data_fields=create_field_list(ncobj.variables, len(ncobj.dimensions['time']), self.ngates)
 			field_dict={}
 			for field in data_fields:
 				print field
 				my_field=ncvar_to_field(ncobj.variables[field])
 				field_dict.update({field:my_field})
 			self.fields=field_dict
+		if "rhi" in mode:
+			#rhi
+			self.metadata=dict([(key, getattr(ncobj,key)) for key in ncobj.ncattrs()])
+			self.scan_type="ppi"
+			self.nele=ncobj.variables['sweep_start_ray_index'][1]-ncobj.variables['sweep_start_ray_index'][0]
+			self.naz=ncobj.variables['sweep_start_ray_index'].shape[0]
+			self.ngates=len(ncobj.dimensions['range'])
+			loc_dict={}
+			for loc_data in ['latitude', 'altitude', 'longitude']:
+				loc_dict.update({loc_data: ncvar_to_field(ncobj.variables[loc_data])})
+			self.location=loc_dict
+			sweep_dict={}
+			for sweep_data in ['sweep_start_ray_index', 'sweep_mode', 'sweep_number', 'sweep_end_ray_index', 'fixed_angle']:
+				sweep_dict.update({sweep_data: ncvar_to_field(ncobj.variables[sweep_data])})
+			self.sweep_info=sweep_dict
+			inst_dict={}
+			for inst_data in ['frequency', 'follow_mode' , 'pulse_width', 'prt_mode','prt',
+				 'prt_ratio', 'polarization_mode', 'nyquist_velocity',
+				  'unambiguous_range', 'n_samples']:
+				if inst_data in ncobj.variables.keys():
+					inst_dict.update({inst_data: ncvar_to_field(ncobj.variables[inst_data])})
+			self.inst_params=inst_dict
+			self.azimuth=ncvar_to_field(ncobj.variables['azimuth'])
+			self.range=ncvar_to_field(ncobj.variables['range'])
+			self.elevation=ncvar_to_field(ncobj.variables['elevation'])
+			self.time=ncvar_to_field(ncobj.variables['time'])
+			data_fields=create_field_list(ncobj.variables, len(ncobj.dimensions['time']), self.ngates)
+			field_dict={}
+			for field in data_fields:
+				print field
+				my_field=ncvar_to_field(ncobj.variables[field])
+				field_dict.update({field:my_field})
+			self.fields=field_dict
+
 	def streamcf2rad(self,ncobj):
 		try:
 			mode="".join(ncobj.variables['sweep_mode'][1])

@@ -171,6 +171,21 @@ class radar_display:
 
 		self.plots.append(this_plot)
 		self.plot_vars.append(var)
+	def plot_rhi(self, var, tilt, **kwargs):
+		start_index=self.starts[tilt]
+		end_index=self.ends[tilt]
+		R=np.sqrt((self.x[start_index:end_index, :]/1000.0)**2 + (self.y[start_index:end_index, :]/1000.0)**2)
+		try:
+			this_plot=pcolormesh(R, self.z[start_index:end_index, :]/1000.0,
+				self.fields[var]['data'][start_index:end_index, :], #note we assume a masked array here.. if you want you can always mask the data field
+				vmin=kwargs.get('vmin', self.fields[var]['valid_min']), vmax=kwargs.get('vmax', self.fields[var]['valid_max']), cmap=get_cmap(kwargs.get('cmap', 'jet')))
+		except KeyError:
+			this_plot=pcolormesh(R, self.z[start_index:end_index, :]/1000.0,
+				self.fields[var]['data'][start_index:end_index, :], #note we assume a masked array here.. if you want you can always mask the data field
+				vmin=kwargs.get('vmin', -6), vmax=kwargs.get('vmax', 100), cmap=get_cmap(kwargs.get('cmap', 'jet')))
+		self.plots.append(this_plot)
+		self.plot_vars.append(var)
+
 	def labelator(self, standard_name, units):
 		return standard_name.replace('_', ' ')+ ' (' + units +')'
 	def add_cb(self, **kwargs):
