@@ -157,6 +157,10 @@ class radar_display:
 		kwargs.get('axis', gca()).set_xlabel('East West distance from'+self.origin+'  (km)')
 	def append_y(self, **kwargs):
 		kwargs.get('axis', gca()).set_ylabel('North South distance from '+self.origin+'  (km)')
+	def append_r(self, **kwargs):
+		kwargs.get('axis', gca()).set_xlabel('Distance from '+self.origin+'  (km)')
+	def append_z(self, **kwargs):
+		kwargs.get('axis', gca()).set_ylabel('Distance Above '+self.origin+'  (km)')	
 	def plot_ppi(self, var, tilt, **kwargs):
 		start_index=self.starts[tilt]
 		end_index=self.ends[tilt]
