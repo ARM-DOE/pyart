@@ -305,7 +305,10 @@ class Radar:
 			#ppi
 			self.metadata=dict([(key, getattr(ncobj,key)) for key in ncobj.ncattrs()])
 			self.scan_type="ppi"
-			self.naz=ncobj.variables['sweep_start_ray_index'][1]-ncobj.variables['sweep_start_ray_index'][0]
+			if len(ncobj.variables['sweep_start_ray_index'])==1:
+				self.naz=ncobj.variables['sweep_end_ray_index'][0]+1
+			else:
+				self.naz=ncobj.variables['sweep_start_ray_index'][1]-ncobj.variables['sweep_start_ray_index'][0]
 			self.nele=ncobj.variables['sweep_start_ray_index'].shape[0]
 			self.ngates=len(ncobj.dimensions['range'])
 			loc_dict={}
@@ -337,8 +340,11 @@ class Radar:
 		if "rhi" in mode:
 			#rhi
 			self.metadata=dict([(key, getattr(ncobj,key)) for key in ncobj.ncattrs()])
-			self.scan_type="ppi"
-			self.nele=ncobj.variables['sweep_start_ray_index'][1]-ncobj.variables['sweep_start_ray_index'][0]
+			self.scan_type="rhi"
+			if len(ncobj.variables['sweep_start_ray_index'])==1:
+				self.nele=ncobj.variables['sweep_end_ray_index'][0]+1
+			else:
+				self.nele=ncobj.variables['sweep_start_ray_index'][1]-ncobj.variables['sweep_start_ray_index'][0]
 			self.naz=ncobj.variables['sweep_start_ray_index'].shape[0]
 			self.ngates=len(ncobj.dimensions['range'])
 			loc_dict={}
