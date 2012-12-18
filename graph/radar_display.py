@@ -124,7 +124,7 @@ class radar_display:
 	def __init__(self, radar, **kwargs):
 		#initialize the object with all the information needed to make neat code downstream
 		self.fields=radar.fields #data
-		self.fixed_angles=radar.sweep_info['fixed_angle']['data']
+		self.fixed_angle=radar.sweep_info['fixed_angle']['data']
 		self.scan_type=radar.scan_type
 		self.ranges=radar.range['data']
 		self.azimuths=radar.azimuth['data']
