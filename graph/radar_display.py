@@ -124,6 +124,7 @@ class radar_display:
 	def __init__(self, radar, **kwargs):
 		#initialize the object with all the information needed to make neat code downstream
 		self.fields=radar.fields #data
+		self.fixed_angles=radar.sweep_info['fixed_angle']['data']
 		self.scan_type=radar.scan_type
 		self.ranges=radar.range['data']
 		self.azimuths=radar.azimuth['data']
@@ -150,7 +151,7 @@ class radar_display:
 		infodict.update(dt_to_dict(self.time_begin, pref='begin_'))
 		return '%(name)s_%(var)s_%(tilt)02d_%(begin_year)04d%(begin_month)02d%(begin_day)02d%(begin_hour)02d%(begin_minute)02d.png' %infodict
 	def generate_title(self, var, tilt):
-		infodict={'name':self.radar_name,'tilt':self.sweep_info['fixed_angle'][tilt], 'var':var.replace('_', ' ')}
+		infodict={'name':self.radar_name,'tilt':self.fixed_angle[tilt], 'var':var.replace('_', ' ')}
 		infodict.update(dt_to_dict(self.time_begin, pref='begin_'))
 		return '%(name)s %(var)s %(tilt).1f deg %(begin_year)04d%(begin_month)02d%(begin_day)02d%(begin_hour)02d%(begin_minute)02d' %infodict
 	def append_x(self, **kwargs):
