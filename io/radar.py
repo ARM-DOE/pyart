@@ -297,9 +297,9 @@ class Radar:
 		self.inst_params=inst_params
 	def cf2rad(self,ncobj):
 		try:
-			mode="".join(ncobj.variables['sweep_mode'][1])
+			mode="".join(ncobj.variables['sweep_mode'][0])
 		except TypeError:
-			mode="".join(ncobj.variables['sweep_mode'][1].data)
+			mode="".join(ncobj.variables['sweep_mode'][0].data)
 		print mode, "azimuth_surveillance    "
 		if "sur" in mode:
 			#ppi
@@ -370,9 +370,9 @@ class Radar:
 
 	def streamcf2rad(self,ncobj):
 		try:
-			mode="".join(ncobj.variables['sweep_mode'][1])
+			mode="".join(ncobj.variables['sweep_mode'][0])
 		except TypeError:
-			mode="".join(ncobj.variables['sweep_mode'][1].data)
+			mode="".join(ncobj.variables['sweep_mode'][0].data)
 		print mode, "azimuth_surveillance    "
 		if mode in "azimuth_surveillance    ":
 			#ppi
