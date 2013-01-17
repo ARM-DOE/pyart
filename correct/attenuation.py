@@ -52,9 +52,10 @@ HISTORY
 -------
 2012-10-25 Start of development 
 Scott Collis scollis.acrf@gmail.com
+0.5 Scott Collis: Added filtering to the reflectivity to remove second trips etc...
 """
 __author__ = "Scott Collis <scollis@anl.gov>"
-__version__ = "0.1"
+__version__ = "0.5"
 import os
 import sys
 pyart_dir=os.environ.get('PYART_DIR',os.environ['HOME']+'/python')
@@ -73,12 +74,12 @@ def calculate_attenuation(radar,z_offset, **kwargs):
 	a_coef=kwargs.get('a_coef',0.06)
 	beta=kwargs.get('beta',0.8)
 	debug=kwargs.get('debug',False)
-	refl=copy.deepcopy(radar.fields['reflectivity_horizontal']['data'])+z_offset
-	ref_init_correct=refl +radar.fields['proc_dp_phase_shift']['data']*a_coef
 	is_cor=radar.fields['copol_coeff']['data'] > rhv_min
 	is_coh= radar.fields['norm_coherent_power']['data'] > ncp_min
 	is_good = np.logical_and(is_cor, is_cor)
 	good_indeces=np.where(is_good)
+	refl=ma.masked_where(copy.deepcopy(radar.fields['reflectivity_horizontal']['data'])+z_offset, np.logical_not(is_good))
+	ref_init_correct=refl +radar.fields['proc_dp_phase_shift']['data']*a_coef
 	npts_good=len(good_indeces[0])
 	dr=(radar.range['data'][1]-radar.range['data'][0])/1000.0
 	specific_atten=np.zeros(radar.fields['reflectivity_horizontal']['data'].shape)
