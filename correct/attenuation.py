@@ -78,7 +78,8 @@ def calculate_attenuation(radar,z_offset, **kwargs):
 	is_coh= radar.fields['norm_coherent_power']['data'] > ncp_min
 	is_good = np.logical_and(is_cor, is_cor)
 	good_indeces=np.where(is_good)
-	refl=np.ma.masked_where( np.logical_not(is_good), copy.deepcopy(radar.fields['reflectivity_horizontal']['data'])+z_offset)
+	#refl=np.ma.masked_where( np.logical_not(is_good), copy.deepcopy(radar.fields['reflectivity_horizontal']['data'])+z_offset)
+	refl=np.ma.masked_where(np.logical_or((radar.fields['norm_coherent_power']['data'] <ncp_min), (radar.fields['copol_coeff']['data'] <rhv_min)),copy.deepcopy(radar.fields['reflectivity_horizontal']['data'])+z_offset)
 	ref_init_correct=refl +radar.fields['proc_dp_phase_shift']['data']*a_coef
 	npts_good=len(good_indeces[0])
 	dr=(radar.range['data'][1]-radar.range['data'][0])/1000.0

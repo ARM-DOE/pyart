@@ -83,10 +83,10 @@ if __name__ == "__main__":
 	f=figure(figsize=[15,18])
 	subplot(3,2,1)
 	tilt=0
-	my_display.plot_ppi('proc_dp_phase_shift', tilt)
+	my_display.plot_ppi('norm_coherent_power', tilt)
 	my_display.append_x()
 	my_display.append_y()
-	gca().set_title(my_display.generate_title('proc_dp_phase_shift', tilt))
+	gca().set_title(my_display.generate_title('norm_coherent_power', tilt))
 	my_display.add_cb()
 	subplot(3,2,2)
 	my_display.plot_ppi('recalculated_diff_phase', tilt)

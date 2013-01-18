@@ -84,7 +84,7 @@ if __name__ == "__main__":
 	reproc_phase, sob_kdp=mylp(debug=True)
 	myradar.fields.update({'recalculated_diff_phase':sob_kdp, 'proc_dp_phase_shift': reproc_phase})
 	#attenuation correction
-	spec_at, cor_z=attenuation.calculate_attenuation(myradar,params['reflectivity_offset'], debug=True)
+	spec_at, cor_z=attenuation.calculate_attenuation(myradar,params['reflectivity_offset'], debug=True, ncp_min=0.4)
 	myradar.fields.update({'specific_attenuation':spec_at})
 	myradar.fields.update({'corrected_reflectivity_horizontal':cor_z})
 	R=300.0*(myradar.fields['specific_attenuation']['data'])**0.89

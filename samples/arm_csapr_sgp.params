@@ -1,4 +1,4 @@
-instrument_name-metadata string sgpxsaprse
+instrument_name-metadata string sgpcsapr
 reflectivity_offset float -2.0
 sys_phase float 332.0
 overide_sys_phase bool False
