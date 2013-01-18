@@ -74,7 +74,7 @@ if __name__ == "__main__":
 	interp_sonde.close()
 	#Process Phase
 	gates=myradar.range['data'][1]-myradar.range['data'][0]
-	rge=10.0*1000.0
+	rge=40.0*1000.0
 	ng=rge/gates
 	mydatetime=netCDF4.num2date(myradar.time['data'][0], myradar.time['units'], calendar=myradar.time['calendar']) #append a datetime object
 	mydict=dt_to_dict(mydatetime)
@@ -84,7 +84,7 @@ if __name__ == "__main__":
 	reproc_phase, sob_kdp=mylp(debug=True)
 	myradar.fields.update({'recalculated_diff_phase':sob_kdp, 'proc_dp_phase_shift': reproc_phase})
 	#attenuation correction
-	spec_at, cor_z=attenuation.calculate_attenuation(myradar,params['reflectivity_offset'], debug=True, a_coef=0.17)
+	spec_at, cor_z=attenuation.calculate_attenuation(myradar,params['reflectivity_offset'], debug=True)
 	myradar.fields.update({'specific_attenuation':spec_at})
 	myradar.fields.update({'corrected_reflectivity_horizontal':cor_z})
 	R=300.0*(myradar.fields['specific_attenuation']['data'])**0.89
