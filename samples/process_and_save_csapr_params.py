@@ -89,7 +89,7 @@ if __name__ == "__main__":
 	myradar.fields.update({'corrected_reflectivity_horizontal':cor_z})
 	R=300.0*(myradar.fields['specific_attenuation']['data'])**0.89
 	rainrate=copy.deepcopy(myradar.fields['diff_phase'])
-	rainrate['data']=R
+	rainrate['data']=np.ma.masked_where(np.logical_or((myradar.fields['norm_coherent_power']['data'] <0.4), (myradar.fields['copol_coeff']['data'] <0.8)),R)
 	rainrate['valid_min']=0.0
 	rainrate['valid_max']=400.0
 	rainrate['standard_name']='rainfall_rate'
