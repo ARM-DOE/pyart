@@ -40,17 +40,17 @@ scollis@anl.gov
 
 """
 
-#Sample for processing phase using LP methods
+__author__ = "Scott Collis <scollis@anl.gov>"
+__version__ = "0.1"
+
 import matplotlib
 matplotlib.use('agg')
-
 import sys
 import os
 pyart_dir=os.environ.get('PYART_DIR',os.environ['HOME']+'/python')
 sys.path.append(pyart_dir)
 from pyart.io import py4dd, radar, py_mdv
 from time import time
-from pyart.graph import rayplot, radar_display
 from pyart.correct import phase_proc
 import numpy as np
 import pylab
@@ -129,7 +129,9 @@ if __name__ == "__main__":
 	myradar.fields.update({'corrected_mean_doppler_velocity':my_new_field})
 	#Close out the ARM VAP file containing the sounding data
 	interp_sonde.close()
-	#Process Phase
+	#Phase processing time, first calculate the number of the gates to ignore phase jumps
+	#This is needed as clutter can be both coherent and correlated and can trick the phase
+	#folding algorithm, in this case we use 40km, may need to change
 	gates=myradar.range['data'][1]-myradar.range['data'][0]
 	rge=40.0*1000.0
 	ng=rge/gates
@@ -149,16 +151,6 @@ if __name__ == "__main__":
 	#Append these new fields to the radar object
 	myradar.fields.update({'specific_attenuation':spec_at})
 	myradar.fields.update({'corrected_reflectivity_horizontal':cor_z})
-	R=300.0*(myradar.fields['specific_attenuation']['data'])**0.89
-	rainrate=copy.deepcopy(myradar.fields['diff_phase'])
-	rainrate['data']=np.ma.masked_where(np.logical_or((myradar.fields['norm_coherent_power']['data'] <0.4), (myradar.fields['copol_coeff']['data'] <0.8)),R)
-	rainrate['valid_min']=0.0
-	rainrate['valid_max']=400.0
-	rainrate['standard_name']='rainfall_rate'
-	rainrate['long_name']='rainfall_rate'
-	rainrate['least_significant_digit']=1
-	rainrate['units']='mm/hr'
-	myradar.fields.update({'rain_rate_A':rainrate})
 	#The following lines deal with determining file name
 	mydatetime=netCDF4.num2date(myradar.time['data'][0], myradar.time['units'], calendar=myradar.time['calendar']) #append a datetime object
 	mydict=dt_to_dict(mydatetime)
@@ -169,3 +161,4 @@ if __name__ == "__main__":
 	#write a CF-Radial complaint netcdf file out
 	nc_utils.write_radar4(netcdf_obj, myradar)
 	netcdf_obj.close()
+	#Fin!
