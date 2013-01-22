@@ -136,12 +136,13 @@ class pyGrid:
 			#grid the data
 			(xr,yr,zr), (nx,ny,nz), grids=grid2(args[0], **kwargs)
 			#create the fields
-			self.fields=grids
+			self.fields={}
 			#move metadata from the radar to the grid
 			for fld in grids.keys():
+				self.fields.update({fld:{'data':grids[fld]}})
 				for meta in args[0][0].fields[fld].keys():
 					if meta!='data':
-						self.fields.update({meta:args[0][0].fields[fld][meta]})
+						self.fields[fld].update({meta:args[0][0].fields[fld][meta]})
 			#create some axes
 			x_array=np.linspace(xr[0],xr[1],nx)
 			y_array=np.linspace(yr[0],yr[1],ny)
