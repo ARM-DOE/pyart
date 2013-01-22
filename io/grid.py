@@ -47,6 +47,10 @@ Jan 22 2013: added functions for gridding from radar objects
 
 __author__ = "Scott Collis <scollis@anl.gov>"
 __version__ = "1.0"
+import os
+import sys
+pyart_dir=os.environ.get('PYART_DIR',os.environ['HOME']+'/python')
+sys.path.append(pyart_dir)
 
 import pyart.map.ballsy as ballsy
 import numpy as np
@@ -65,34 +69,34 @@ def grid2(radars, **kwargs):
     nx,ny,nz=kwargs.get('nxyz', (81,81,69))
     xr,yr,zr=kwargs.get('xyzr', ((-30000., 20000), (-20000., 20000.), (0., 17000.)))
     toa=kwargs.get('toa', 17000.0)
-    cf_lat, cf_lon, cf_alt=kwargs.get('origin', (dms_to_d([36.0, 36.0, 18.35]), -1.0*dms_to_d( [97.0, 29.0, 10.69]), 320.0 /1000.0)#need to just set to the radar..
+    cf_lat, cf_lon, cf_alt=kwargs.get('origin', (dms_to_d([36.0, 36.0, 18.35]), -1.0*dms_to_d( [97.0, 29.0, 10.69]), 320.0 /1000.0))#need to just set to the radar..
     #initialize blank arrays to be filled by the radar gate coordinates 
-    x=array([]); y=array([]); z=array([])
+    x=np.array([]); y=np.array([]); z=np.array([])
     #parameters to be mapped, reflectivity should always be first!
     parms=kwargs.get('params',['corrected_reflectivity_horizontal', 'reflectivity_horizontal', 'rain_rate_A','recalculated_diff_phase'])
-    data=dict([(parms[i], array([])) for i in range(len(parms))])
+    data=dict([(parms[i], np.array([])) for i in range(len(parms))])
     #Loop over radars and append them to the lists to be used to call the mapping object
     for myradar in radars:
     	#calculate radar offset to the origin
         displacement=radar_display.corner_to_point([cf_lat, cf_lon], [myradar.location['latitude']['data'], myradar.location['longitude']['data']])
         #meshgrid up azimuths, ranges and elevations
-        rg,azg=meshgrid(myradar.range['data'],myradar.azimuth['data'])
-        rg,eleg=meshgrid(myradar.range['data'],myradar.elevation['data'])
+        rg,azg=np.meshgrid(myradar.range['data'],myradar.azimuth['data'])
+        rg,eleg=np.meshgrid(myradar.range['data'],myradar.elevation['data'])
         #Calculate cartesian locations of gates
         xdash,ydash,zdash=radar_display.radar_coords_to_cart(rg,azg, eleg) 
         del rg, azg #housekeeping
         #only use gates below toa
-        within_sensible=where(zdash.flatten() < toa)[0]
+        within_sensible=np.where(zdash.flatten() < toa)[0]
         x_disp=displacement[0]; y_disp=displacement[1]
         #append geolocation.. 
-        x=append( x, (xdash+x_disp).flatten()[within_sensible])
-        y=append(y, (ydash+y_disp).flatten()[within_sensible])
-        z=append(z, zdash.flatten()[within_sensible])
+        x=np.append( x, (xdash+x_disp).flatten()[within_sensible])
+        y=np.append(y, (ydash+y_disp).flatten()[within_sensible])
+        z=np.append(z, zdash.flatten()[within_sensible])
         #append gate variables.. 
         for var in parms:
-            data[var]=append(data[var],myradar.fields[var]['data'].flatten()[within_sensible])
+            data[var]=np.append(data[var],myradar.fields[var]['data'].flatten()[within_sensible])
     #find NaNs and crazy reflectivities
-    where_the_data_is_good=where(np.logical_and(np.isfinite(data[parms[0]]), data[parms[0]] < 100.0))[0]
+    where_the_data_is_good=np.where(np.logical_and(np.isfinite(data[parms[0]]), data[parms[0]] < 100.0))[0]
     #Create a meshgrid(cube) to allow calculation of radii of influence
     zg,yg,xg= np.mgrid[zr[0]:zr[1]:nz*1j, yr[0]:yr[1]:ny*1j, xr[0]:xr[1]:nx*1j ]
     #Virtual beam width and beam spacing
@@ -101,13 +105,13 @@ def grid2(radars, **kwargs):
     #Query radius of influence, flattened
     qrf=(zg/20.0 + np.sqrt(yg**2 +xg**2)*np.tan(nb*bsp*np.pi/180.0) + 500.0).flatten() 
     #flattened query points
-    ask=column_stack((xg.flatten(),yg.flatten(),zg.flatten()))
+    ask=np.column_stack((xg.flatten(),yg.flatten(),zg.flatten()))
     #fill values
     badval=-9999.0
     #mask and flatten the data
-    masked_data=np.ma.masked_array(column_stack([data[key][where_the_data_is_good] for key in parms]), column_stack([data[key][where_the_data_is_good] for key in parms]) == badval)
+    masked_data=np.ma.masked_array(np.column_stack([data[key][where_the_data_is_good] for key in parms]), np.column_stack([data[key][where_the_data_is_good] for key in parms]) == badval)
     #populate the ball tree
-    mapping_obj = ballsy.BallsyMapper(column_stack((x[where_the_data_is_good],y[where_the_data_is_good],z[where_the_data_is_good])) ,masked_data , debug=True)
+    mapping_obj = ballsy.BallsyMapper(np.column_stack((x[where_the_data_is_good],y[where_the_data_is_good],z[where_the_data_is_good])) ,masked_data , debug=True)
     #house keeping
     del data
     #query the tree and get the flattened interpolation
@@ -129,15 +133,29 @@ class pyGrid:
 			self.axes={}
 		elif 'count' in dir(args[0]):
 			#a tuple of radar objects
+			#grid the data
 			(xr,yr,zr), (nx,ny,nz), grids=grid2(args[0], **kwargs)
+			#create the fields
 			self.fields=grids
+			#move metadata from the radar to the grid
+			for fld in grids.keys():
+				for meta in args[0][0].fields[fld].keys():
+					if meta!='data':
+						self.fields.update({meta:args[0][0].fields[fld][meta]})
+			#create some axes
 			x_array=np.linspace(xr[0],xr[1],nx)
 			y_array=np.linspace(yr[0],yr[1],ny)
 			z_array=np.linspace(zr[0],zr[1],nz)
-			xaxis={'data':x_array, '
-			
+			xaxis={'data':x_array, 
+				'long_name':'x-coordinate in Cartesian system',
+				'axis':'X', 'units':'m'}
+			yaxis={'data':y_array, 
+				'long_name':'y-coordinate in Cartesian system',
+				'axis':'Y', 'units':'m'}
+			zaxis={'data':z_array, 
+				'long_name':'z-coordinate in Cartesian system',
+				'axis':'Z', 'units':'m', 'positive':'up'}
+			self.axes={'x_disp':xaxis, 'y_disp':yaxis, 'z_disp':zaxis}
 		else:
+			print("foo")
 			#TBI from various grid sources, WRF etc..
-		
-		
-	
