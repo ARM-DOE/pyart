@@ -58,10 +58,12 @@ def dms_to_d(dms):
     return dms[0]+(dms[1] + dms[2]/60.0)/60.0
 
 
-def grid2(radars, nx=81, ny=81, nz=69, zr=(0.,17000.), yr=(-20000., 20000.), xr=(-30000., 20000.), **kwargs):
+def grid2(radars, **kwargs):
     """map tuples of Py-Radar objects to a cartesian grid..
     Usage: (xr,yr,zr), (nx,ny,nz), grids2=grid2((radar1, radar2, radarn,  nx=81, ny=81, nz=69, zr=(0.,17000.), yr=(-20000., 20000.), xr=(-30000., 20000.), origin=(lat, lon, height_m))
     """
+    nx,ny,nz=kwargs.get('nxyz', (81,81,69))
+    xr,yr,zr=kwargs.get('xyzr', ((-30000., 20000), (-20000., 20000.), (0., 17000.)))
     toa=kwargs.get('toa', 17000.0)
     cf_lat, cf_lon, cf_alt=kwargs.get('origin', (dms_to_d([36.0, 36.0, 18.35]), -1.0*dms_to_d( [97.0, 29.0, 10.69]), 320.0 /1000.0)#need to just set to the radar..
     #initialize blank arrays to be filled by the radar gate coordinates 
@@ -119,12 +121,21 @@ def grid2(radars, nx=81, ny=81, nz=69, zr=(0.,17000.), yr=(-20000., 20000.), xr=
 
 
 class pyGrid:
-	def __init__(self, *args):
+	def __init__(self, *args, **kwargs):
 		if len(args)==0:
 			#initialize an empty pyGrid object
 			self.fields={}
 			self.metadata={}
 			self.axes={}
+		elif 'count' in dir(args[0]):
+			#a tuple of radar objects
+			(xr,yr,zr), (nx,ny,nz), grids=grid2(args[0], **kwargs)
+			self.fields=grids
+			x_array=np.linspace(xr[0],xr[1],nx)
+			y_array=np.linspace(yr[0],yr[1],ny)
+			z_array=np.linspace(zr[0],zr[1],nz)
+			xaxis={'data':x_array, '
+			
 		else:
 			#TBI from various grid sources, WRF etc..
 		
