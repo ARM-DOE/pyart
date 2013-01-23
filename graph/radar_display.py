@@ -179,7 +179,7 @@ class radar_display:
 	def plot_rhi(self, var, tilt, **kwargs):
 		start_index=self.starts[tilt]
 		end_index=self.ends[tilt]
-		R=np.sqrt((self.x[start_index:end_index, :]/1000.0)**2 + (self.y[start_index:end_index, :]/1000.0)**2)
+		R=np.sqrt((self.x[start_index:end_index, :]/1000.0)**2 + (self.y[start_index:end_index, :]/1000.0)**2)*np.sign(self.y[start_index:end_index, :])
 		try:
 			this_plot=pcolormesh(R, self.z[start_index:end_index, :]/1000.0,
 				self.fields[var]['data'][start_index:end_index, :], #note we assume a masked array here.. if you want you can always mask the data field
