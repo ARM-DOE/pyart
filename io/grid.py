@@ -55,6 +55,10 @@ sys.path.append(pyart_dir)
 import pyart.map.ballsy as ballsy
 import numpy as np
 from pyart.graph import radar_display
+import getpass
+import socket
+import datetime as dt
+
 
 #now to grid
 def dms_to_d(dms):
@@ -147,6 +151,16 @@ class pyGrid:
 			x_array=np.linspace(xr[0],xr[1],nx)
 			y_array=np.linspace(yr[0],yr[1],ny)
 			z_array=np.linspace(zr[0],zr[1],nz)
+			time_start={'data': args[0][0].time['data'][0],
+				'units':args[0][0].time['units'],
+				'calendar':args[0][0].time['calendar'],
+				'standard_name':args[0][0].time['standard_name'],
+				'long_name':'time in seconds of volume start'}
+			time_end={'data': args[0][0].time['data'][-1],
+				'units':args[0][0].time['units'],
+				'calendar':args[0][0].time['calendar'],
+				'standard_name':args[0][0].time['standard_name'],
+				'long_name':'time in seconds of volume end'}	
 			xaxis={'data':x_array, 
 				'long_name':'x-coordinate in Cartesian system',
 				'axis':'X', 'units':'m'}
@@ -156,7 +170,16 @@ class pyGrid:
 			zaxis={'data':z_array, 
 				'long_name':'z-coordinate in Cartesian system',
 				'axis':'Z', 'units':'m', 'positive':'up'}
-			self.axes={'x_disp':xaxis, 'y_disp':yaxis, 'z_disp':zaxis}
+			self.axes={ 'time_start':time_start, 'time_end':time_end, 'z_disp':zaxis , 'y_disp':yaxis,'x_disp':xaxis}
+			self.metadata=args[0][0].metadata
+			runtime=dict( [(key, getattr(dt.datetime.now(), key)) for key in    ['year', 'month', 'day', 'hour', 'minute', 'second']])
+			runtime.update({'strmon': dt.datetime.now().strftime('%b')})
+			runtime.update({'user':getpass.getuser(), 'machine':socket.gethostname()})
+			history_text="Gridded by user %(user)s on %(machine)s at %(day)d-%(strmon)s-%(year)d,%(hour)d:%(minute)02d:%(second)02d using grids2" %runtime
+			if 'history' in self.metadata.keys():
+				self.metadata['history']=self.metadata['history'] + '\n' + history_text
+			else:
+				self.metadata['history']=history_text
 		else:
 			print("foo")
 			#TBI from various grid sources, WRF etc..
