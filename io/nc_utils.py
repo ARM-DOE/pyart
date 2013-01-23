@@ -777,6 +777,50 @@ def copy_axis(myfile, cgfile):
 	rnvar.long_name = "Range from antenna"
 	rnvar.units = "meter"
 
+def save_pyGrid(ncfobj, pygrid):
+    """Saves a pyGrid object to a CF and ARM standard netcdf file
+    usage: save_pyGrid(netCDF4_object, pyGrid_object)
+    """
+    #first create the time dimension
+    ncfobj.createDimension('time', None)
+    #Axes dimensions
+    nz,ny,nx=pygrid.fields[pygrid.fields.keys()[0]]['data'].shape #grab the dimensions from the first moment field
+    ncfobj.createDimension('nz', nz)
+    ncfobj.createDimension('ny', ny)
+    ncfobj.createDimension('nx', nx)
+    #axes
+    #Generate the variables
+    akeys=pygrid.axes.keys()
+    akeys.sort() #makes sure time comes first
+    dims_lookup={'x_disp':'nx', 'y_disp':'ny','z_disp':'nz','time_end':'time', 'time_start':'time'}
+    avars=[ncfobj.createVariable(key,np.float, (dims_lookup[key],)) for key in akeys]
+    #loop and populate attributes
+    for axis in akeys:
+        print axis
+        for meta in pygrid.axes[axis].keys():
+            if meta!='data':
+                setattr(ncfobj.variables[axis], meta, pygrid.axes[axis][meta])
+    #mapped moment data
+    vvars=[ncfobj.createVariable(key,np.float, ('time','nz','ny','nx'), fill_value=pygrid.fields[key]['_FillValue']) for key in pygrid.fields.keys()]
+    #loop and populate attributes
+    for field in pygrid.fields.keys():
+        for meta in pygrid.fields[field].keys():
+            if meta!='data' and meta!='_FillValue':
+                setattr(ncfobj.variables[field], meta, pygrid.fields[field][meta])
+    #global metadata
+    if 'process_version' in  pygrid.metadata.keys():
+        ncfobj.process_version=pygrid.metadata['process_version']
+    for meta in pygrid.metadata.keys():
+        if meta !='history' or meta!='process_version':
+            setattr(ncfobj, meta, pygrid.metadata[meta])
+    ncfobj.history=pygrid.metadata['history']
+    #now populate data.. we leave this until last to speed up..
+    for i in range(len(akeys)):
+        print(akeys[i], pygrid.axes[akeys[i]]['data'].shape, avars[i].shape)
+        avars[i][:]=pygrid.axes[akeys[i]]['data']
+    for i in range(len(pygrid.fields.keys())):
+        vvars[i][0,:,:,:]=pygrid.fields[pygrid.fields.keys()[i]]['data'][:,:,:]
+    
 
 def save_mdv_ncf(myfile, output_file, parms, **kwargs):
 	debug=kwargs.get('debug', False)
