@@ -963,40 +963,55 @@ def save_pyGrid(ncfobj, pygrid):
     usage: save_pyGrid(netCDF4_object, pyGrid_object)
 
     """
+    
     #first create the time dimension
+    
     ncfobj.createDimension('time', None)
+    
     #Axes dimensions
     #grab the dimensions from the first moment field
+    
     nz, ny, nx = pygrid.fields[pygrid.fields.keys()[0]]['data'].shape
     ncfobj.createDimension('nz', nz)
     ncfobj.createDimension('ny', ny)
     ncfobj.createDimension('nx', nx)
+    
     #axes
     #Generate the variables
-    akeys = pygrid.axes.keys()
-    akeys.sort()  # makes sure time comes first
-    dims_lookup = {'x_disp': 'nx', 'y_disp': 'ny', 'z_disp': 'nz',
-                   'time_end': 'time', 'time_start': 'time'}
-    avars = [ncfobj.createVariable(key, np.float, (dims_lookup[key], ))
-             for key in akeys]
-    # loop and populate attributes
-    for axis in akeys:
-        print axis
-        for meta in pygrid.axes[axis].keys():
-            if meta != 'data':
-                setattr(ncfobj.variables[axis], meta, pygrid.axes[axis][meta])
-    # mapped moment data
+    
+        # mapped moment data
+    
     vvars = [ncfobj.createVariable(
         key, np.float, ('time', 'nz', 'ny', 'nx'),
         fill_value=pygrid.fields[key]['_FillValue']) for key in
         pygrid.fields.keys()]
+    
     # loop and populate attributes
+    
     for field in pygrid.fields.keys():
         for meta in pygrid.fields[field].keys():
             if meta != 'data' and meta != '_FillValue':
                 setattr(ncfobj.variables[field], meta,
                         pygrid.fields[field][meta])
+    akeys = pygrid.axes.keys()
+    akeys.sort()  # makes sure time comes first
+    dims_lookup = {'x_disp': 'nx', 'y_disp': 'ny', 'z_disp': 'nz',
+                   'time_end': 'time', 'time_start': 'time',
+                   'lat':'time', 'lon':'time', 'alt':'time'}
+    avars = [ncfobj.createVariable(key, np.float, (dims_lookup[key], ))
+             for key in akeys]
+    
+    # loop and populate attributes
+    
+    for axis in akeys:
+        print axis
+        for meta in pygrid.axes[axis].keys():
+            if meta != 'data':
+                setattr(ncfobj.variables[axis], meta, pygrid.axes[axis][meta])
+    
+
     # global metadata
+    
     if 'process_version' in pygrid.metadata.keys():
         ncfobj.process_version = pygrid.metadata['process_version']
     for meta in pygrid.metadata.keys():
