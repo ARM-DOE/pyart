@@ -7,6 +7,7 @@ from os.path import join, dirname
 
 mdv = py_mdv.read_mdv(join(dirname(__file__), '110635.mdv'))
 
+
 def test_master_header():
     # test the master header
     ref_master_header = {
@@ -41,7 +42,7 @@ def test_master_header():
         'time_expire': 1305890265,
         'time_gen': 1305889595,
         'time_written': 1305889668,
-        'unused_fl3212': (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 
+        'unused_fl3212': (0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
                           0.0, 0.0, 0.0),
         'unused_si325': (0, 0, 0, 0, 0),
         'user_data': 0,
@@ -52,7 +53,7 @@ def test_master_header():
         'vlevel_included': 1,
         'vlevel_type': 9}
 
-    for k,v in ref_master_header.iteritems():
+    for k, v in ref_master_header.iteritems():
         assert mdv.master_header[k] == v
 
 
@@ -95,7 +96,7 @@ def test_chunk_headers():
         'size': 240,
         'struct_id': 14145,
         'unused_si32': (0, 0)}
-    for k,v in ref_chunk_header_0.iteritems():
+    for k, v in ref_chunk_header_0.iteritems():
         assert mdv.chunk_headers[0][k] == v
 
 
@@ -163,8 +164,9 @@ def test_calib_info():
         'zv1km_co_dbz': -34.11470031738281,
         'zv1km_cx_dbz': -34.11470031738281}
 
-    for k,v in ref_calib_info.iteritems():
+    for k, v in ref_calib_info.iteritems():
         assert mdv.calib_info[k] == v
+
 
 def test_radar_info():
 
@@ -209,8 +211,9 @@ def test_radar_info():
         'wavelength_cm': 5.330544471740723,
         'xmit_peak_pwr_watts': 231739552.0}
 
-    for k,v in ref_radar_info.iteritems():
+    for k, v in ref_radar_info.iteritems():
         assert mdv.radar_info[k] == v
+
 
 def test_geometry():
     # test geometry attributes
@@ -238,18 +241,19 @@ def test_cart():
     assert mdv.carts['z'].shape == (17, 360, 983)
     assert round(mdv.carts['x'][1, 2, 3], 2) == 16.67
     assert round(mdv.carts['y'][1, 2, 3], 2) == 477.23
-    assert round(mdv.carts['z'][1, 2, 3], 2) == 10.02    
+    assert round(mdv.carts['z'][1, 2, 3], 2) == 10.02
 
 
 def test_fields():
     # test fields
-    ref_fields = ['DBMHC', 'DBMVC', 'DBZ', 'DBZ_F', 'DBZVC', 'DBZVC_F', 
-                  'VEL', 'VEL_F', 'WIDTH', 'WIDTH_F', 'ZDR', 'ZDR_F', 
+    ref_fields = ['DBMHC', 'DBMVC', 'DBZ', 'DBZ_F', 'DBZVC', 'DBZVC_F',
+                  'VEL', 'VEL_F', 'WIDTH', 'WIDTH_F', 'ZDR', 'ZDR_F',
                   'RHOHV', 'RHOHV_F', 'PHIDP', 'PHIDP_F', 'KDP', 'KDP_F',
                   'NCP', 'NCP_F']
-    
-    for a,b in zip(ref_fields, mdv.fields):
+
+    for a, b in zip(ref_fields, mdv.fields):
         assert a == b
+
 
 def test_fileptr():
     # test fileptr
@@ -258,11 +262,11 @@ def test_fileptr():
 
 def test_read_one_field():
     # extract a field
-    assert hasattr(mdv, 'DBMHC') == False
+    assert hasattr(mdv, 'DBMHC') is False
     sweeps = mdv.read_a_field(0)
     assert sweeps.shape == (17, 360, 983)
     assert round(sweeps[1, 2, 3], 2) == -37.95
-    assert hasattr(mdv, 'DBMHC') == True
+    assert hasattr(mdv, 'DBMHC') is True
 
     # compression level for last read field
     ref_current_compression_info = {
@@ -272,54 +276,56 @@ def test_read_one_field():
         'nbytes_uncompressed': 707760,
         'spare': (0, 0)}
 
-    for k,v in ref_current_compression_info.iteritems():
+    for k, v in ref_current_compression_info.iteritems():
         assert mdv.current_compression_info[k] == v
 
 
 def test_read_all_fields():
-    
-    # read all fields
-    assert hasattr(mdv, 'PHIDP') == False
-    mdv.get_all_fields()
-    assert hasattr(mdv, 'DBMHC') == True
-    assert hasattr(mdv, 'DBMVC') == True
-    assert hasattr(mdv, 'DBZ') == True
-    assert hasattr(mdv, 'DBZ_F') == True
-    assert hasattr(mdv, 'DBZVC') == True
-    assert hasattr(mdv, 'DBZVC_F') == True
-    assert hasattr(mdv, 'VEL') == True
-    assert hasattr(mdv, 'VEL_F') == True
-    assert hasattr(mdv, 'WIDTH') == True
-    assert hasattr(mdv, 'WIDTH_F') == True
-    assert hasattr(mdv, 'ZDR') == True
-    assert hasattr(mdv, 'ZDR_F') == True
-    assert hasattr(mdv, 'RHOHV') == True
-    assert hasattr(mdv, 'RHOHV_F') == True
-    assert hasattr(mdv, 'PHIDP') == True
-    assert hasattr(mdv, 'PHIDP_F') == True
-    assert hasattr(mdv, 'KDP') == True
-    assert hasattr(mdv, 'KDP_F') == True
-    assert hasattr(mdv, 'NCP') == True
-    assert hasattr(mdv, 'NCP_F') == True
 
-    assert round(mdv.DBMHC[1, 2 ,3], 2) == -37.95
-    assert round(mdv.DBMVC[1, 2 ,3], 2) == -40.63
-    assert round(mdv.DBZ[1, 2 ,3], 2) == 35.31
-    assert round(mdv.DBZ_F[1, 2 ,3], 2) == 17.6
-    assert round(mdv.DBZVC[1, 2 ,3], 2) == 32.64
-    assert round(mdv.DBZVC_F[1, 2 ,3], 2) == 15.85
-    assert round(mdv.VEL[1, 2 ,3], 2) == -0.93
-    assert round(mdv.VEL_F[1, 2 ,3], 2) == -0.18
-    assert round(mdv.WIDTH[1, 2 ,3], 2) == 0.63
-    assert round(mdv.WIDTH_F[1, 2 ,3], 2) == 7.26
-    assert round(mdv.ZDR[1, 2 ,3], 2) == 1.4
-    assert round(mdv.ZDR_F[1, 2 ,3], 2) == 0.47
-    assert round(mdv.RHOHV[1, 2 ,3], 2) == 0.98
-    assert round(mdv.RHOHV_F[1, 2 ,3], 2) == 0.72
-    assert round(mdv.PHIDP[1, 2 ,3], 2) == -155.72
-    assert round(mdv.PHIDP_F[1, 2 ,3], 2) == -155.72
-    assert round(mdv.KDP[1, 2 ,3], 2) == 0.1
-    assert round(mdv.KDP_F[1, 2 ,3], 2) == 0.1
-    assert round(mdv.NCP[1, 2 ,3], 2) == 0.98
-    assert round(mdv.NCP_F[1, 2 ,3], 2) == 0.39
+    # read all fields
+    assert hasattr(mdv, 'PHIDP') is False
+    mdv.get_all_fields()
+    assert hasattr(mdv, 'DBMHC') is True
+    assert hasattr(mdv, 'DBMVC') is True
+    assert hasattr(mdv, 'DBZ') is True
+    assert hasattr(mdv, 'DBZ_F') is True
+    assert hasattr(mdv, 'DBZVC') is True
+    assert hasattr(mdv, 'DBZVC_F') is True
+    assert hasattr(mdv, 'VEL') is True
+    assert hasattr(mdv, 'VEL_F') is True
+    assert hasattr(mdv, 'WIDTH') is True
+    assert hasattr(mdv, 'WIDTH_F') is True
+    assert hasattr(mdv, 'ZDR') is True
+    assert hasattr(mdv, 'ZDR_F') is True
+    assert hasattr(mdv, 'RHOHV') is True
+    assert hasattr(mdv, 'RHOHV_F') is True
+    assert hasattr(mdv, 'PHIDP') is True
+    assert hasattr(mdv, 'PHIDP_F') is True
+    assert hasattr(mdv, 'KDP') is True
+    assert hasattr(mdv, 'KDP_F') is True
+    assert hasattr(mdv, 'NCP') is True
+    assert hasattr(mdv, 'NCP_F') is True
+
+    assert round(mdv.DBMHC[1, 2, 3], 2) == -37.95
+    assert round(mdv.DBMVC[1, 2, 3], 2) == -40.63
+    assert round(mdv.DBZ[1, 2, 3], 2) == 35.31
+    assert round(mdv.DBZ_F[1, 2, 3], 2) == 17.6
+    assert round(mdv.DBZVC[1, 2, 3], 2) == 32.64
+    assert round(mdv.DBZVC_F[1, 2, 3], 2) == 15.85
+    assert round(mdv.VEL[1, 2, 3], 2) == -0.93
+    assert round(mdv.VEL_F[1, 2, 3], 2) == -0.18
+    assert round(mdv.WIDTH[1, 2, 3], 2) == 0.63
+    assert round(mdv.WIDTH_F[1, 2, 3], 2) == 7.26
+    assert round(mdv.ZDR[1, 2, 3], 2) == 1.4
+    assert round(mdv.ZDR_F[1, 2, 3], 2) == 0.47
+    assert round(mdv.RHOHV[1, 2, 3], 2) == 0.98
+    assert round(mdv.RHOHV_F[1, 2, 3], 2) == 0.72
+    assert round(mdv.PHIDP[1, 2, 3], 2) == -155.72
+    assert round(mdv.PHIDP_F[1, 2, 3], 2) == -155.72
+    assert round(mdv.KDP[1, 2, 3], 2) == 0.1
+    assert round(mdv.KDP_F[1, 2, 3], 2) == 0.1
+    assert round(mdv.NCP[1, 2, 3], 2) == 0.98
+    assert round(mdv.NCP_F[1, 2, 3], 2) == 0.39
+
+
 test_read_all_fields.slow = True
