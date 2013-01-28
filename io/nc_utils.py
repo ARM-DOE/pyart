@@ -979,8 +979,6 @@ def save_pyGrid(ncfobj, pygrid):
     #axes
     #Generate the variables
     
-        # mapped moment data
-    
     vvars = [ncfobj.createVariable(
         key, np.float, ('time', 'nz', 'ny', 'nx'),
         fill_value=pygrid.fields[key]['_FillValue']) for key in
@@ -995,6 +993,16 @@ def save_pyGrid(ncfobj, pygrid):
                         pygrid.fields[field][meta])
     akeys = pygrid.axes.keys()
     akeys.sort()  # makes sure time comes first
+    
+    #For ARM compliance we want alt, lat and lon to be at the end
+    
+    for mkey in [ 'lat', 'lon', 'alt']:
+        try:
+            akeys.remove(mkey)
+            akeys.append(mkey)
+        except ValueError:
+            print(mkey, " not existing")
+    
     dims_lookup = {'x_disp': 'nx', 'y_disp': 'ny', 'z_disp': 'nz',
                    'time_end': 'time', 'time_start': 'time',
                    'lat':'time', 'lon':'time', 'alt':'time'}
@@ -1004,10 +1012,20 @@ def save_pyGrid(ncfobj, pygrid):
     # loop and populate attributes
     
     for axis in akeys:
-        print axis
-        for meta in pygrid.axes[axis].keys():
+        metakeys=pygrid.axes[axis].keys()
+        
+        #again, reorder to meet ARM standards.. 
+        
+        for mkey in ['units', 'long_name']:
+            try:
+                metakeys.remove(mkey)
+                metakeys.insert(0, mkey)
+            except ValueError:
+                print(mkey, " not existing")
+        for meta in metakeys:
             if meta != 'data':
-                setattr(ncfobj.variables[axis], meta, pygrid.axes[axis][meta])
+                setattr(ncfobj.variables[axis], 
+                    meta, pygrid.axes[axis][meta])
     
 
     # global metadata
@@ -1018,7 +1036,9 @@ def save_pyGrid(ncfobj, pygrid):
         if meta != 'history' or meta != 'process_version':
             setattr(ncfobj, meta, pygrid.metadata[meta])
     ncfobj.history = pygrid.metadata['history']
+    
     #now populate data.. we leave this until last to speed up..
+    
     for i in range(len(akeys)):
         print(akeys[i], pygrid.axes[akeys[i]]['data'].shape, avars[i].shape)
         avars[i][:] = pygrid.axes[akeys[i]]['data']
