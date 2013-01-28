@@ -89,3 +89,7 @@ io/doc
 io/include
 io/lib
 io/src/rsl-*
+
+# radar data files #
+####################
+*.mdv

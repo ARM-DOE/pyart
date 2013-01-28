@@ -309,7 +309,7 @@ class read_mdv:
                 gzip_file_handle = gzip.GzipFile(fileobj=cd_fobj)
                 n_pts = (self.master_header['ngates'] *
                          self.master_header['nrays'])
-                encoding_type = self.field_header[fnum]['encoding_type']
+                encoding_type = self.field_headers[fnum]['encoding_type']
                 if encoding_type == self.ENCODING_INT8:
                     form = '>%(n)dB' % {'n': n_pts}
                 elif encoding_type == self.ENCODING_INT16:
@@ -417,7 +417,7 @@ class read_mdv:
             self.fileptr.seek(self.chunk_headers[i]['chunk_data_offset'])
             #print self.CHUNK_DSRADAR_ELEVATIONS, '==',
             #print self.chunk_headers[i]['chunk_id']
-            chunk_id = self.chunk_headers[o]['chunk_id']
+            chunk_id = self.chunk_headers[i]['chunk_id']
             if chunk_id == self.CHUNK_DSRADAR_PARAMS:
                 if debug:
                     print 'Getting radar info'
