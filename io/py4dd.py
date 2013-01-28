@@ -444,6 +444,11 @@ RSL_anyformat_to_radar = librsl.RSL_anyformat_to_radar
 RSL_anyformat_to_radar.restype = POINTER(Radar)
 RSL_anyformat_to_radar.argtypes = [STRING]
 
+RSL_wsr88d_to_radar = librsl.RSL_wsr88d_to_radar
+RSL_wsr88d_to_radar.restype = POINTER(Radar)
+RSL_wsr88d_to_radar.argtypes = [STRING, STRING]
+
+
 RSL_radar_to_uf = librsl.RSL_radar_to_uf
 RSL_radar_to_uf.argtypes = [POINTER(Radar), STRING]
 

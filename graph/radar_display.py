@@ -217,9 +217,15 @@ class radar_display:
                                mappable=kwargs.get('plot', self.plots[-1]))
         else:
             this_cb = colorbar(mappable=kwargs.get('plot', self.plots[-1]))
-        this_cb.set_label(kwargs.get('label', self.labelator(
-            self.fields[self.plot_vars[-1]]['standard_name'],
-            self.fields[self.plot_vars[-1]]['units'])))
+        try:
+            this_cb.set_label(kwargs.get('label', self.labelator(
+                self.fields[self.plot_vars[-1]]['standard_name'],
+                self.fields[self.plot_vars[-1]]['units'])))
+        except KeyError:
+            this_cb.set_label(kwargs.get('label', self.labelator(
+                self.fields[self.plot_vars[-1]]['long_name'],
+                self.fields[self.plot_vars[-1]]['units'])))
+
         self.cbs.append(this_cb)
 
     def plot_rangering(self, rnge, **kwargs):
