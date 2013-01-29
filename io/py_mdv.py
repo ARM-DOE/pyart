@@ -19,6 +19,7 @@ import StringIO
 import zlib
 import datetime
 
+import numpy as np
 from numpy import array, float32, putmask, NaN, floor, arange, zeros, cos, \
     sin, pi, arcsin, meshgrid, ones
 
@@ -312,18 +313,24 @@ class read_mdv:
                 encoding_type = self.field_headers[fnum]['encoding_type']
                 if encoding_type == self.ENCODING_INT8:
                     form = '>%(n)dB' % {'n': n_pts}
+                    np_form = '>B'
                 elif encoding_type == self.ENCODING_INT16:
                     form = '>%(n)dH' % {'n': n_pts}
+                    np_form = '>H'
                 elif encoding_type == self.ENCODING_FLOAT32:
                     form = '>%(n)df' % {'n': n_pts}
+                    np_form = '>f'
                 #print "using: ", form
                 decompressed_data = gzip_file_handle.read(
                     struct.calcsize(form))
                 gzip_file_handle.close()
-                my_array = array(struct.unpack(
-                    form, decompressed_data)).reshape((
-                        self.master_header['nrays'],
-                        self.master_header['ngates'])).astype(float32)
+
+                my_array = np.fromstring(
+                    decompressed_data, np_form).astype(float32)
+                shape = (self.master_header['nrays'],
+                         self.master_header['ngates'])
+                my_array.shape = shape
+
                 putmask(my_array, my_array == self.field_headers[
                     fnum]['bad_data_value'], [NaN])
                 ret_array = (my_array * self.field_headers[fnum]['scale'] +

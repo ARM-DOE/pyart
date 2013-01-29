@@ -92,4 +92,6 @@ io/src/rsl-*
 
 # radar data files #
 ####################
-*.mdv
+io/tests/110635.mdv
+io/tests/sample_nc.nc
+io/tests/sample_uf.uf

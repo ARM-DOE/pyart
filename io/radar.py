@@ -1,4 +1,5 @@
-""" A general central radial scanning (or dwelling) instrument class
+"""
+A general central radial scanning (or dwelling) instrument class
 
 USE
 ---
@@ -12,6 +13,7 @@ import os
 from datetime import datetime
 import copy
 
+# TODO change this to import numpy
 from numpy import tile, array, isnan, where, ma, linspace, arange, zeros, \
     float32, abs, empty, append, max
 from netCDF4 import date2num
@@ -20,6 +22,7 @@ import py4dd
 
 
 def dms_to_d(dms):
+    """ Degrees, minutes, seconds to degrees """
     return dms[0] + (dms[1] + dms[2] / 60.0) / 60.0
 
 
@@ -53,14 +56,6 @@ def defaut_mdv_metadata_map():
     return mdm
 
 
-def get_avail_moments(volumes):
-    av = []
-    for i in range(len(volumes)):
-        if volumes[i] is not None:
-            av.append(py4dd.fieldTypes().list[i])
-    return av
-
-
 def create_cube_array(volume):
     ppi = zeros([volume.h.nsweeps, volume.sweeps[0].h.nrays,
                 volume.sweeps[0].rays[0].h.nbins],
@@ -71,16 +66,131 @@ def create_cube_array(volume):
             ppi[levnum, raynum, 0:len(data)] = data
     return ppi
 
+###############################################
+# RSL functions                               #
+# should be moved to rsl.py or a similar file #
+###############################################
 
+
+def get_avail_moments(volumes):
+    """ Return a list of fields present in a RSL Volumes object """
+    av = []
+    for i in range(len(volumes)):
+        if volumes[i] is not None:
+            av.append(py4dd.fieldTypes().list[i])
+    return av
+
+
+# move to rsl.py
 def create_cube_array_lim(volume, nsweeps, nrays):
+    """ Extract a field from an RSL Volume.
+
+    Parameters
+    ----------
+    volume : RSL_Volume
+        RSL Volume from which to extract the field.
+    nsweeps : int
+        Number of valid (non-null) sweeps in the volume.
+    nrays : int
+        Number of valid (non-null rays in each Sweep in the volume.
+
+    Returns
+    -------
+    data : array, (nsweep, nrays, *), dtype=float32
+        Three dimensional array holding the extracted field.
+
+    """
+    # XXX move to rsl.py
     ppi = zeros([nsweeps, nrays, volume.sweeps[0].rays[0].h.nbins],
                 dtype=float32) + 1.31072000e+05
     for levnum in range(nsweeps):
-        d = volume.sweeps[levnum].rays[0].data
+        rays = volume.sweeps[levnum].rays
+        len_d = len(rays[0].data)
         for raynum in range(nrays):
-            ppi[levnum, raynum, 0:len(d)] = \
-                volume.sweeps[levnum].rays[raynum].data
+            ppi[levnum, raynum, 0:len_d] = rays[raynum].data
     return ppi
+
+
+def rsl_extract_inst_param(sample_volume, nsweeps, nrays, valid_nyq_vel):
+    """ Extract instrument parameters from RSL Volume """
+    # XXX move to rsl.py
+    total_rays = nsweeps * nrays
+    pm_data = empty(nsweeps, dtype='|S24')
+    nv_data = empty(total_rays, dtype='float64')
+    pr_data = empty(total_rays, dtype='float64')
+    ur_data = empty(total_rays, dtype='float64')
+
+    for i, sweep in enumerate(sample_volume.sweeps):
+        for j, ray in enumerate(sweep.rays):
+            if j == 0:
+                pm_data[i] = prtmode(ray.h)
+            idx = j * nsweeps + i
+
+            if valid_nyq_vel:
+                nv_data[idx] = ray.nyq_vel
+            else:
+                nv_data[idx] = ray.wavelength * ray.prf / 4.0
+            pr_data[idx] = 1. / ray.prf
+            ur_data[idx] = ray.unam_rng * 1000.0
+
+    return {
+        'prt_mode': {
+            'data': pm_data,
+            'comments': 'Pulsing mode Options are: "fixed", "staggered", "dual" Assumed "fixed" if missing.'},
+
+        'nyquist_velocity': {
+            'data': nv_data,
+            'units': 'm/s',
+            'comments': "unamb velocity"},
+
+        'prt': {
+            'data': pr_data,
+            'units': 'seconds',
+            'comments': "Pulse repetition time. For staggered prt, also see prt_ratio."},
+
+        'unambiguous_range': {
+            'data': ur_data,
+            'units': 'meters',
+            'comment': 'Unambiguous range'}}
+
+
+def prtmode(h):
+    # XXX move to rsl.py
+    # TODO prt mode: Need to fix this.. assumes dual if two prts
+    if h.prf2 != h.prf:
+        mode = 'dual                    '
+    else:
+        mode = 'fixed                   '
+    return mode
+
+
+# XXX move to rsl.py
+def extract_rsl_pointing(volume, nsweeps, nrays):
+    """ Extract the azimuth and elevation parameters from a RSL Volume.
+
+    Parameters
+    ----------
+    volume : RSL_Volume
+        RSL Volume from which to extract the azimuth and elevation from.
+    nsweeps : int
+        Number of valid (non-null) sweeps in the volume
+    nrays : int
+        Number of valid (non-null rays in each Sweep in the volume.
+
+    Returns
+    -------
+    azimuth : array, (nsweeps, nrays),  dtype=float
+        Array containing azimuth values in degrees.
+    elevation : array, (nsweeps, nrays), dtype=float
+        Array containing elevation values in degrees.
+    """
+    azimuth = zeros([nsweeps, nrays], dtype=float)
+    elevation = zeros([nsweeps, nrays], dtype=float)
+    for i, sweep in enumerate(volume.sweeps):
+        for j, ray in enumerate(sweep.rays):
+            azimuth[i, j] = ray.h.azimuth
+            elevation[i, j] = ray.h.elev
+    return azimuth, elevation
 
 
 def rsl_header_to_dict(header):
@@ -90,6 +200,18 @@ def rsl_header_to_dict(header):
         if key[0] != '_':
             my_dict.update({key: getattr(header, key)})
     return my_dict
+
+
+def ray_header_time_to_dict(h):
+    return {'year': h.year, 'month': h.month, 'day': h.day,
+            'hour': h.hour, 'minute': h.minute, 'second': h.sec}
+
+
+def ray_header_time_to_datetime(h):
+    return datetime(h.year, h.month, h.day, h.hour, h.minute, int(h.sec))
+
+
+### END
 
 
 def create_field_list(variables, nrays, ngates):
@@ -169,38 +291,25 @@ class Radar:
             else:
                 self.cf2rad(radarobj, **kwargs)
 
-    def ray_header_time_to_dict(self, h):
-        return {'year': h.year, 'month': h.month, 'day': h.day,
-                'hour': h.hour, 'minute': h.minute, 'second': h.sec}
-
-    def extract_rsl_pointing(self, volume):
-        #this needs to be moved into C
-        azimuth = zeros([self.nsweeps, self.nrays], dtype=float)
-        elevation = zeros([self.nsweeps, self.nrays], dtype=float)
-        for i in range(self.nsweeps):
-            azimuth[i, :] = [volume.sweeps[i].rays[k].h.azimuth for k in
-                             range(self.nrays)]
-            elevation[i, :] = [volume.sweeps[i].rays[k].h.elev for k in
-                               range(self.nrays)]
-        return azimuth, elevation
-
-    def prtmode(self, h):
-        if h.prf2 != h.prf:
-            mode = 'dual                    '
-        else:
-            mode = 'fixed                   '
-        return mode
-
     def rsl2rad(self, radarobj, **kwargs):
-        # We only want to transfer fields that we have valid names for...
+        """ Load data and parameters from RSL Radar object"""
+
+        # TODO
         # An issue that needs to be resolved is that this code likes all
         # sweeps to have the same number of rays.. so for now we take
         # min(nrays) across sweeps and drop rays out side of this...
         # this is an "easy" issue to resolve caused by the fact I have been
         # treating things as cubes and then flattening them
-        add_meta = kwargs.get('add_meta', {})
+        # what needs to be done is to make the field['data'] be masked arrays
+        # and mask out location where the ray is Null
+
         # additional metadata which will overwrite data from the radar header.
         # this helps when you know there are issues with the meta
+        add_meta = kwargs.get('add_meta', {})
+
+        # determine which fields should be transfered to the radar object
+        # only rtransfer the fields which we have valid names.
+        available_fields = get_avail_moments(radarobj.contents.volumes)
         name_transfer = {'ZT': 'DBZ',
                          'VR': 'VEL_F',
                          'DR': 'ZDR',
@@ -212,19 +321,25 @@ class Radar:
                          'DZ': 'DBZ_F',
                          'SW': 'WIDTH',
                          'ZD': 'ZDR_F'}
-        available_data = get_avail_moments(radarobj.contents.volumes)
-        fields = [name_transfer[key] for key in available_data]
+        name_transfer_back = {v: k for v, k in name_transfer.iteritems()}
+        fields = [name_transfer[key] for key in available_fields]
         todo_fields = set(fields) & set(csapr_standard_names().keys())
-        flat_dict = {}
+
+        # extract a sample volume, sweep and ray
         sample_volume = radarobj.contents.volumes[
-            py4dd.fieldTypes().list.index(available_data[0])]
-        # determine the min number of rays
+            py4dd.fieldTypes().list.index(available_fields[0])]
+        sample_sweep = sample_volume.sweeps[0]
+        sample_ray = sample_sweep.rays[0]
+
+        # determine the shape parameters of the fields
         self.nsweeps = sample_volume.h.nsweeps
         rays = array([sample_volume.sweeps[i].h.nrays for i in
                       range(self.nsweeps)])
-        self.nrays = rays.min()  # sample_volume.sweeps[0].h.nrays
-        self.ngates = sample_volume.sweeps[0].rays[0].h.nbins
-        if sample_volume.sweeps[0].h.azimuth == -999.0:
+        self.nrays = rays.min()  # see TODO above
+        self.ngates = sample_ray.h.nbins
+
+        # set scan_type, naz, and nele
+        if sample_sweep.h.azimuth == -999.0:
             self.scan_type = 'ppi'
             self.naz = self.nrays
             self.nele = self.nsweeps
@@ -232,24 +347,25 @@ class Radar:
             self.scan_type = 'rhi'
             self.naz = self.nsweeps
             self.nele = self.nrays
-        azimuth, elevation = self.extract_rsl_pointing(sample_volume)
+
+        # extract the elevation and azimuth attributes
+        azimuth, elevation = extract_rsl_pointing(sample_volume, self.nsweeps,
+                                                  self.nrays)
 
         # the range array which describes the range of all beams
-        # (note in this
         self.range = {
-            'data': sample_volume.sweeps[0].rays[0].dists,
+            'data': sample_ray.dists,
             'units': 'meters',
             'standard_name': 'projection_range_coordinate',
             'long_name': 'range_to_measurement_volume',
             'comment': (
                 'Coordinate variable for range. Range to center of each bin.'),
             'spacing_is_constant': 'true',
-            'meters_to_center_of_first_gate': (
-                sample_volume.sweeps[0].rays[0].h.range_bin1),
-            'meters_between_gates': sample_volume.sweeps[0].rays[0].h.gate_size
+            'meters_to_center_of_first_gate': sample_ray.h.range_bin1,
+            'meters_between_gates': sample_ray.h.gate_size
         }
 
-        #The flat azimuth array which describes the azimuth of each beam
+        # the flat azimuth array which describes the azimuth of each beam
         self.azimuth = {
             'data': azimuth.flatten(),
             'units': 'degrees',
@@ -264,25 +380,23 @@ class Radar:
             'comment': 'Elevation of antenna relative to the horizontal plane',
             'long_name': 'elevation_angle_from_horizontal_plane', }
 
-        self.tu = (
-            "seconds since %(year)d-%(month)02d-%(day)02d %(hour)02d:%(minute)02d:%(second)02d.0" %
-            self.ray_header_time_to_dict(sample_volume.sweeps[0].rays[0].h))
+        # set the time attributes
+        last_ray = sample_volume.sweeps[-1].rays[-1]
+        t_start = ray_header_time_to_datetime(sample_ray.h)
+        t_end = ray_header_time_to_datetime(last_ray.h)
+        t_span = (t_end - t_start).seconds
+        self.tu = "seconds since " + t_start.strftime("%Y-%m-%d %H:%M:%S.0")
         self.cal = "gregorian"
-        time_end = date2num(datetime(
-            int(sample_volume.sweeps[-1].rays[-1].h.year),
-            int(sample_volume.sweeps[-1].rays[-1].h.month),
-            int(sample_volume.sweeps[-1].rays[-1].h.day),
-            int(sample_volume.sweeps[-1].rays[-1].h.hour),
-            int(sample_volume.sweeps[-1].rays[-1].h.minute),
-            int(sample_volume.sweeps[-1].rays[-1].h.sec)), self.tu, self.cal)
-        time_array = linspace(0, time_end, self.nrays * self.nsweeps)
         self.time = {
-            'data': time_array,
+            'data': linspace(0, t_span, self.nrays * self.nsweeps),
             'units': self.tu,
             'calendar': self.cal,
             'comment': 'Coordinate variable for time. Time at the center of each ray, in fractional seconds since the global variable time_coverage_start',
             'standard_name': 'time',
             'long_name': 'time in seconds since volume start'}
+
+        # extract the fields
+        fields_dict = {}
         for field in todo_fields:
             #create a dictionary tree for all data fields
             print "Doing ", field
@@ -290,20 +404,19 @@ class Radar:
                          value == field][0]
             print "Corresponds to ",  rsl_field
 
-            data = create_cube_array_lim(radarobj.contents.volumes[
-                py4dd.fieldTypes().list.index(rsl_field)], self.nsweeps,
-                self.nrays)
-            # radarobj.read_a_field(radarobj.fields.index(field))
-            ## # grab data from MDV object
+            volume = radarobj.contents.volumes[
+                py4dd.fieldTypes().list.index(rsl_field)]
+            data = create_cube_array_lim(volume, self.nsweeps, self.nrays)
             data[where(isnan(data))] = -9999.0
             data[where(data == 131072)] = -9999.0
             meta = self.get_mdv_meta(radarobj, field)  # fetch metadata
-            fielddict = {
-                'data': ma.masked_equal(data, -9999.0).reshape(data.shape[0] *
-                data.shape[1], data.shape[2])}
+            fielddict = {'data': ma.masked_equal(data, -9999.0).reshape(
+                data.shape[0] * data.shape[1], data.shape[2])}
             fielddict.update(meta)
-            flat_dict.update({csapr_standard_names()[field]: fielddict})
-        self.fields = flat_dict
+            fields_dict.update({csapr_standard_names()[field]: fielddict})
+        self.fields = fields_dict
+
+        # set the sweep parameters
         if self.scan_type == 'ppi':
             self.nsweeps = self.nele
             sweep_number = {'data': range(self.nsweeps), 'units': 'count',
@@ -352,6 +465,7 @@ class Radar:
                                self.nele),
                 'long_name': 'index of last ray in sweep, 0-based',
                 'units': 'count'}
+
         self.sweep_info = {
             'sweep_number': sweep_number,
             'sweep_mode': sweep_mode,
@@ -384,75 +498,10 @@ class Radar:
                'standard_name': 'Altitude', 'units': 'meters'}
         self.location = {'latitude': lat, 'longitude': lon, 'altitude': elv}
 
-        # now for instrument parameters..
-        # sorry but I am just going to brute force this!
-        # prt mode: Need to fix this.. assumes dual if two prts
-        # CHECK NYQUIST SET
-        print sample_volume.sweeps[0].rays[0].nyq_vel
-        if abs(sample_volume.sweeps[0].rays[0].nyq_vel) > 0.1:
-            print "nyquist set"
-            inst_params = {
-                'prt_mode': {
-                    'data': array([self.prtmode(
-                        sample_volume.sweeps[i].rays[0].h) for i in
-                        range(self.nsweeps)]),
-                    'comments': 'Pulsing mode Options are: "fixed", "staggered", "dual" Assumed "fixed" if missing.'},
-
-                'nyquist_velocity': {
-                    'data': array([sample_volume.sweeps[i].rays[j].nyq_vel
-                                  for i in range(self.nsweeps)
-                                  for j in range(self.nrays)]),
-                    'units': 'm/s',
-                    'comments': "unamb velocity"},
-
-                'prt': {
-                    'data': array([1./sample_volume.sweeps[i].rays[j].prf
-                                  for i in range(self.nsweeps)
-                                  for j in range(self.nrays)]),
-                    'units': 'seconds',
-                    'comments': "Pulse repetition time.For staggered prt, also see prt_ratio."},
-
-                'unambiguous_range': {
-                    'data': array([sample_volume.sweeps[i].rays[j].unam_rng *
-                                   1000.0
-                                   for i in range(self.nsweeps)
-                                   for j in range(self.nrays)]),
-                    'units': 'meters',
-                    'comment': 'Unambiguous range'}
-            }
-        else:
-            print "Nyquist unset, calculating from PRF and lambda"
-
-            inst_params = {
-                'prt_mode': {
-                    'data': array(
-                        [self.prtmode(sample_volume.sweeps[i].rays[0].h)
-                         for i in range(self.nsweeps)]),
-                    'comments': 'Pulsing mode Options are: "fixed", "staggered", "dual" Assumed "fixed" if missing.'},
-
-                'nyquist_velocity': {
-                    'data': array([sample_volume.sweeps[i].rays[j].wavelength *
-                                   sample_volume.sweeps[i].rays[j].prf / 4.0
-                                   for i in range(self.nsweeps)
-                                   for j in range(self.nrays)]),
-                    'units': 'm/s',
-                    'comments': "unamb velocity"},
-
-                'prt': {
-                    'data': array([1./sample_volume.sweeps[i].rays[j].prf
-                                  for i in range(self.nsweeps)
-                                  for j in range(self.nrays)]),
-                    'units': 'seconds',
-                    'comments': "Pulse repetition time.For staggered prt, also see prt_ratio."},
-
-                'unambiguous_range': {
-                    'data': array([sample_volume.sweeps[i].rays[0].unam_rng *
-                                  1000.0 for i in range(self.nsweeps)
-                                  for j in range(self.nrays)]),
-                    'units': 'meters',
-                    'comment': 'Unambiguous range'}
-            }
-        self.inst_params = inst_params
+        # set instrument parameters attribute
+        valid_nyq_vel = (abs(sample_ray.nyq_vel) > 0.1)
+        self.inst_params = rsl_extract_inst_param(
+            sample_volume, self.nsweeps, self.nrays, valid_nyq_vel)
 
     def cf2rad(self, ncobj):
         try:
