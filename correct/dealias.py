@@ -52,8 +52,8 @@ class dealiaser:
                    * 100) * 1000 + dayofyear
         self.fulljuldate = (juldate * 10000 + datetime_sounding.hour * 100 +
                             datetime_sounding.minute)
-        self.sounding_height = sounding_height
-        self.sounding_wind_speeds = sounding_wind_speed
+        self.sounding_heights = sounding_heights
+        self.sounding_wind_speeds = sounding_wind_speeds
         self.sounding_wind_direction = sounding_wind_direction
 
     def __call__(self, prep=1, low_dbz=-10, filt=1, rsl_badval=131072,
