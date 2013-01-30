@@ -321,7 +321,7 @@ class Radar:
                          'DZ': 'DBZ_F',
                          'SW': 'WIDTH',
                          'ZD': 'ZDR_F'}
-        name_transfer_back = dict((v, k) for (v, k) in
+        name_transfer_back = dict((v, k) for (k, v) in
                                   name_transfer.iteritems())
         # the next line requires python 2.7+ dict comprehensions
         #name_transfer_back = {v: k for v, k in name_transfer.iteritems()}
