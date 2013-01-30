@@ -37,7 +37,7 @@ class dealiaser:
 
     """
 
-    def __init__(self, myradar, sonding_heights, sounding_wind_speeds,
+    def __init__(self, myradar, sounding_heights, sounding_wind_speeds,
                  sounding_wind_direction, datetime_sounding):
         self.radar = myradar
         self.rsl_radar = rsl_utils.radar_to_rsl(myradar, {
@@ -60,13 +60,13 @@ class dealiaser:
                  fill_value=-9999.0):
         self.my_new_volume, self.sonde_volume = py4dd.dealias_radar_array(
             self.rsl_radar,
-            None,
+            self.fulljuldate,
             self.sounding_heights,
             self.sounding_wind_speeds,
             self.sounding_wind_direction,
-            self.fulljuldate,
+            None,
             prep=prep,
-            LOWDBZ=low_dbz,
+            #LOWDBZ=low_dbz,
             filt=filt)
 
         dealiased_data = radar.create_cube_array_lim(
