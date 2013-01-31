@@ -319,6 +319,7 @@ class Radar:
                          'VE': 'VEL_COR',
                          'RH': 'RHOHV_F',
                          'DZ': 'DBZ_F',
+                         'CZ': 'DBZ',
                          'SW': 'WIDTH',
                          'ZD': 'ZDR_F'}
         name_transfer_back = dict((v, k) for (k, v) in
