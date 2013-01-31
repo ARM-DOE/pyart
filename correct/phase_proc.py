@@ -9,7 +9,7 @@ Adapted by Scott Collis and Scott Giangrande,
 
 import copy
 from time import time
-
+from ..util import sigmath
 import numpy as np
 from numpy import ma
 import glpk
@@ -68,6 +68,7 @@ def snr(line, **kwargs):
     signal = smooth_and_trim(line, window_len=wl)
     noise = smooth_and_trim(np.sqrt((line-signal) ** 2), window_len=wl)
     return abs(signal) / noise
+
 
 
 def unwrap_masked(lon, centered=False, copy=True):
@@ -286,11 +287,16 @@ def get_phidp_unf(radar, **kwargs):
     t = time()
     system_zero = det_sys_phase_sg(radar, kwargs.get('sysphase', -135.))
     cordata = np.zeros(my_rhv.shape, dtype=float)
+    texture=sigmath.texture(radar, kwargs.get('texvar','copol_coeff'))
+    
+    #make sure first 10 gates are masked.. no folding here..
+    
+    texture[:,0:10]=100.0
     for radial in range(my_rhv.shape[0]):
-            my_snr = snr(my_z[radial, :])
+            #my_snr = snr(my_z[radial, :])
             notmeteo = np.logical_or(np.logical_or(
                 my_ncp[radial, :] < ncp_lev, my_rhv[radial, :] < rhohv_lev),
-                my_snr < 10.0)
+                texture[radial, :] < 0.05)
             x_ma = ma.masked_where(notmeteo, my_phidp[radial, :])
             try:
                 ma.notmasked_contiguous(x_ma)
