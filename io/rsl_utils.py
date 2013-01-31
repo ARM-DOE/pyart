@@ -8,6 +8,8 @@ from netCDF4 import num2date
 
 import py4dd
 
+import numpy as np
+
 
 def mdv_to_rsl(myfile, trans):
     """
@@ -99,7 +101,8 @@ def radar_to_rsl(myradar, trans):
 
     radar = py4dd.RSL_new_radar(40)
     for radar_fld in trans.keys():
-        radar_data = myradar.fields[radar_fld]['data']
+        radar_data = myradar.fields[radar_fld]['data'][:]
+        radar_data[np.where(radar_data == myradar.fields[radar_fld]['_FillValue']) = 131072
         rsl_index = getattr(py4dd.fieldTypes(), trans[radar_fld])
         print "Transfering ", radar_fld, " to ", trans[radar_fld],\
             " which has an RSL index of ", rsl_index
