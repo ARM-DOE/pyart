@@ -18,7 +18,7 @@
 #ifndef FDD_H
 #define FDD_H
 #define MAXRAYS   375      /* added by SRB 980310 */
-#define MAXBINS 1024
+#define MAXBINS 2048
 #define HIGHDBZTHRESHOLD (float) 80.0
 #define VERBOSE 0  /* Verbose=1 for detailed printout during execution */
 #define PROXIMITY 5 /* For unfolding using windowing.*/

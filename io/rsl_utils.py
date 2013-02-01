@@ -171,10 +171,9 @@ def radar_to_rsl(myradar, trans):
                 ray.contents.h.gate_size = int(sweep_gate_width)
                 ray.contents.h.fix_angle = myradar.sweep_info[
                     'fixed_angle']['data'][i_s]
-
-                ray.contents.h.lat = int(0)  # typically not set
-                ray.contents.h.lon = int(0)  # typically not set
-                ray.contents.h.alt = int(0)  # typically not set
+                ray.contents.h.lat = int(lat)  # These is sometimes 0
+                ray.contents.h.lon = int(lon)  # These is sometimes 0
+                ray.contents.h.alt = int(alt)  # This is sometimes 0
                 ray.contents.h.beam_width = 1.0
                 ray.contents.h.nyq_vel = myradar.inst_params[
                     'nyquist_velocity']['data'][sweep_start+i_r]
