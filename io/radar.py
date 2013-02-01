@@ -520,7 +520,7 @@ class Radar:
             self.metadata = dict([(key, getattr(ncobj, key)) for key in
                                  ncobj.ncattrs()])
             self.scan_type = "ppi"
-            self.sweep_mode = np.array(['ppi']*self.nsweeps)
+            self.sweep_mode = array(['ppi']*self.nsweeps)
             if len(ncobj.variables['sweep_start_ray_index']) == 1:
                 self.naz = ncobj.variables['sweep_end_ray_index'][0] + 1
             else:
@@ -563,7 +563,7 @@ class Radar:
             self.metadata = dict([(key, getattr(ncobj, key)) for key in
                                  ncobj.ncattrs()])
             self.scan_type = "sec"
-            self.sweep_mode = np.array(['sec']*self.nsweeps)
+            self.sweep_mode = array(['sec']*self.nsweeps)
             if len(ncobj.variables['sweep_start_ray_index']) == 1:
                 self.naz = ncobj.variables['sweep_end_ray_index'][0] + 1
             else:
@@ -605,7 +605,7 @@ class Radar:
             self.metadata = dict([(key, getattr(ncobj, key))
                                  for key in ncobj.ncattrs()])
             self.scan_type = "rhi"
-            self.sweep_mode = np.array(['rhi']*self.nsweeps)
+            self.sweep_mode = array(['rhi']*self.nsweeps)
             if len(ncobj.variables['sweep_start_ray_index']) == 1:
                 self.nele = ncobj.variables['sweep_end_ray_index'][0] + 1
             else:
