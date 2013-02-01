@@ -658,7 +658,7 @@ class phase_proc:
             sob_kdp['data'] = kdp
             sob_kdp['valid_min'] = 0.0
             sob_kdp['valid_max'] = 20.0
-        except keyError:
+        except KeyError:
             sob_kdp = copy.deepcopy(self.radar.fields[self.phidp_field])
             sob_kdp['data'] = kdp
             sob_kdp['valid_min'] = 0.0
