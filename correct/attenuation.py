@@ -66,7 +66,7 @@ def calculate_attenuation(radar, z_offset, **kwargs):
                 specific_atten[i, :]) * dr * 2.0
             atten[i, -1] = atten[i, -2]
 
-    spec_at = copy.deepcopy(radar.fields['diff_phase'])
+    spec_at = copy.deepcopy(radar.fields[radar.fields.keys()[0]])
     spec_at['data'] = specific_atten
     spec_at['valid_min'] = 0.0
     spec_at['valid_max'] = 1.0
