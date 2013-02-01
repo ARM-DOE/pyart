@@ -428,10 +428,16 @@ def write_radar4(ncobj, radarobj, **kwargs):
     moments = radarobj.fields.keys()
     my_nc_vars = {}
     for moment in moments:
-        my_nc_vars.update({moment: ncobj.createVariable(
-            moment, 'float32', ('time', 'range'), fill_value=-9999.0,
-            zlib=True, least_significant_digit=radarobj.fields[
-                moment]['least_significant_digit'])})
+        if 'least_significant_digit' in radarobj.fields.keys():
+            my_nc_vars.update({moment: ncobj.createVariable(
+                moment, 'float32', ('time', 'range'), fill_value=-9999.0,
+                zlib=True, least_significant_digit=radarobj.fields[
+                    moment]['least_significant_digit'])})
+        else:
+            my_nc_vars.update({moment: ncobj.createVariable(
+                moment, 'float32', ('time', 'range'), fill_value=-9999.0,
+                zlib=True)})
+	  
 
     #populate metadata for moment variables
     for moment in moments:
