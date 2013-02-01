@@ -653,8 +653,20 @@ class phase_proc:
             kdp[i, :] = (sobel(proc_ph['data'][i, :], window_len=35) /
                          (2.0 * (self.radar.range['data'][1] -
                          self.radar.range['data'][0]) / 1000.0))
-        sob_kdp = copy.deepcopy(self.radar.fields[self.kdp_field])
-        sob_kdp['data'] = kdp
-        sob_kdp['valid_min'] = 0.0
-        sob_kdp['valid_max'] = 20.0
+        try:
+            sob_kdp = copy.deepcopy(self.radar.fields[self.kdp_field])
+            sob_kdp['data'] = kdp
+            sob_kdp['valid_min'] = 0.0
+            sob_kdp['valid_max'] = 20.0
+        except keyError:
+            sob_kdp = copy.deepcopy(self.radar.fields[self.phidp_field])
+            sob_kdp['data'] = kdp
+            sob_kdp['valid_min'] = 0.0
+            sob_kdp['valid_max'] = 20.0
+            sob_kdp['standard_name'] = "specific_differential_phase_hv"
+            sob_kdp['long_name'] = "specific_differential_phase_hv"
+            sob_kdp['units'] = "degrees/km"
+            sob_kdp['least_significant_digit'] = 2
+            sob_kdp['_FillValue']=-9999.
+
         return proc_ph, sob_kdp
