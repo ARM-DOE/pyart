@@ -38,10 +38,14 @@ class dealiaser:
     """
 
     def __init__(self, myradar, sounding_heights, sounding_wind_speeds,
-                 sounding_wind_direction, datetime_sounding):
+                 sounding_wind_direction, datetime_sounding, **kwargs):
         self.radar = myradar
-        self.rsl_radar = rsl_utils.radar_to_rsl(myradar, {
-            'reflectivity_horizontal': 'DZ', 'mean_doppler_velocity': 'VR'})
+        if 'rsl_radar' in kwargs:
+            self.rsl_radar=kwargs['rsl_radar']
+        else:
+            self.rsl_radar = rsl_utils.radar_to_rsl(myradar, {
+                kwargs.get('refl','reflectivity_horizontal'): 'DZ',
+                kwargs.get('vel', 'mean_doppler_velocity'): 'VR'})
 
         dayofyear = (datetime.datetime(
             datetime_sounding.year, datetime_sounding.month,

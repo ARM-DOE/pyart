@@ -515,9 +515,52 @@ class Radar:
         print mode, "azimuth_surveillance    "
         if "sur" in mode:
             #ppi
+            self.nsweeps=len(ncobj.variables['sweep_start_ray_index'])
             self.metadata = dict([(key, getattr(ncobj, key)) for key in
                                  ncobj.ncattrs()])
             self.scan_type = "ppi"
+            if len(ncobj.variables['sweep_start_ray_index']) == 1:
+                self.naz = ncobj.variables['sweep_end_ray_index'][0] + 1
+            else:
+                self.naz = (ncobj.variables['sweep_start_ray_index'][1] -
+                            ncobj.variables['sweep_start_ray_index'][0])
+            self.nele = ncobj.variables['sweep_start_ray_index'].shape[0]
+            self.ngates = len(ncobj.dimensions['range'])
+            loc_dict = {}
+            for loc_data in ['latitude', 'altitude', 'longitude']:
+                loc_dict.update(
+                    {loc_data: ncvar_to_field(ncobj.variables[loc_data])})
+            self.location = loc_dict
+            sweep_dict = {}
+            for sweep_data in ['sweep_start_ray_index', 'sweep_mode', 'sweep_number', 'sweep_end_ray_index', 'fixed_angle']:
+                sweep_dict.update(
+                    {sweep_data: ncvar_to_field(ncobj.variables[sweep_data])})
+            self.sweep_info = sweep_dict
+            inst_dict = {}
+            for inst_data in ['frequency', 'follow_mode', 'pulse_width', 'prt_mode', 'prt', 'prt_ratio', 'polarization_mode', 'nyquist_velocity', 'unambiguous_range', 'n_samples']:
+                if inst_data in ncobj.variables.keys():
+                    inst_dict.update(
+                        {inst_data: (
+                            ncvar_to_field(ncobj.variables[inst_data]))})
+            self.inst_params = inst_dict
+            self.azimuth = ncvar_to_field(ncobj.variables['azimuth'])
+            self.range = ncvar_to_field(ncobj.variables['range'])
+            self.elevation = ncvar_to_field(ncobj.variables['elevation'])
+            self.time = ncvar_to_field(ncobj.variables['time'])
+            data_fields = create_field_list(
+                ncobj.variables, len(ncobj.dimensions['time']), self.ngates)
+            field_dict = {}
+            for field in data_fields:
+                print field
+                my_field = ncvar_to_field(ncobj.variables[field])
+                field_dict.update({field: my_field})
+            self.fields = field_dict
+        if "sec" in mode:
+            #sec
+            self.nsweeps=len(ncobj.variables['sweep_start_ray_index'])
+            self.metadata = dict([(key, getattr(ncobj, key)) for key in
+                                 ncobj.ncattrs()])
+            self.scan_type = "sec"
             if len(ncobj.variables['sweep_start_ray_index']) == 1:
                 self.naz = ncobj.variables['sweep_end_ray_index'][0] + 1
             else:
