@@ -296,7 +296,7 @@ def get_phidp_unf(radar, **kwargs):
             #my_snr = snr(my_z[radial, :])
             notmeteo = np.logical_or(np.logical_or(
                 my_ncp[radial, :] < ncp_lev, my_rhv[radial, :] < rhohv_lev),
-                texture[radial, :] < 0.05)
+                texture[radial, :] > 0.05)
             x_ma = ma.masked_where(notmeteo, my_phidp[radial, :])
             try:
                 ma.notmasked_contiguous(x_ma)
@@ -485,7 +485,7 @@ class phase_proc:
             radar.fields[self.rhv_field]['data'] < self.min_rhv
         if debug:
             print('Unfolding')
-        if 'nowrap' in kwargs.keys():
+        if 'nowrap' in kwargs.keys():\
             my_unf = self.get_phidp_unf(radar, ncp_lev=self.min_ncp,
                                         rhohv_lev=self.min_rhv, ncpts=2,
                                         doc=None, nowrap=kwargs['nowrap'])
