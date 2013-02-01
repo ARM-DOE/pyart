@@ -98,11 +98,20 @@ def radar_to_rsl(myradar, trans):
     ----------
 
     """
-
+    if 'shape' in dir(myradar.location['latitude']['data']):
+    	lat=myradar.location['latitude']['data'][0]
+    	lon=myradar.location['longitude']['data'][0]
+    	alt=myradar.location['altitude']['data'][0]
+    else:
+    	lat=myradar.location['latitude']['data']
+    	lon=myradar.location['longitude']['data']
+    	alt=myradar.location['altitude']['data']
     radar = py4dd.RSL_new_radar(40)
     for radar_fld in trans.keys():
         radar_data = myradar.fields[radar_fld]['data'][:]
         radar_data[np.where(radar_data == myradar.fields[radar_fld]['_FillValue'])] = 131072
+        print np.where(np.isnan(radar_data))[0].shape
+        radar_data[np.where(np.isnan(radar_data))] = 131072
         rsl_index = getattr(py4dd.fieldTypes(), trans[radar_fld])
         print "Transfering ", radar_fld, " to ", trans[radar_fld],\
             " which has an RSL index of ", rsl_index
@@ -161,9 +170,9 @@ def radar_to_rsl(myradar, trans):
                 ray.contents.h.gate_size = int(sweep_gate_width)
                 ray.contents.h.fix_angle = myradar.sweep_info[
                     'fixed_angle']['data'][i_s]
-                ray.contents.h.lat = myradar.location['latitude']['data']
-                ray.contents.h.lon = myradar.location['longitude']['data']
-                ray.contents.h.alt = int(myradar.location['altitude']['data'])
+                ray.contents.h.lat = int(lat) # myradar.location['latitude']['data']
+                ray.contents.h.lon = int(lon) #myradar.location['longitude']['data']
+                ray.contents.h.alt = int(alt) #int(myradar.location['altitude']['data'])
                 ray.contents.h.beam_width = 1.0
                 ray.contents.h.nyq_vel = myradar.inst_params[
                     'nyquist_velocity']['data'][sweep_start+i_r]
