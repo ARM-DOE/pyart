@@ -390,7 +390,7 @@ class Radar:
         t_start = ray_header_time_to_datetime(sample_ray.h)
         t_end = ray_header_time_to_datetime(last_ray.h)
         t_span = (t_end - t_start).seconds
-        self.tu = "seconds since " + t_start.strftime("%Y-%m-%d %H:%M:%S.0")
+        self.tu = "seconds since " + t_start.strftime("%Y-%m-%dT%H:%M:%SZ")
         self.cal = "gregorian"
         self.time = {
             'data': linspace(0, t_span, self.nrays * self.nsweeps),
