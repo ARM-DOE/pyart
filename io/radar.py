@@ -186,7 +186,9 @@ def extract_rsl_pointing(volume, nsweeps, nrays):
     """
     azimuth = zeros([nsweeps, nrays], dtype=float)
     elevation = zeros([nsweeps, nrays], dtype=float)
+    print azimuth.shape
     for i, sweep in enumerate(volume.sweeps):
+        print len(sweep.rays)
         for j, ray in enumerate(sweep.rays):
             azimuth[i, j] = ray.h.azimuth
             elevation[i, j] = ray.h.elev
@@ -338,21 +340,32 @@ class Radar:
 
         # determine the shape parameters of the fields
         self.nsweeps = sample_volume.h.nsweeps
+        print self.nsweeps	
         rays = array([sample_volume.sweeps[i].h.nrays for i in
                       range(self.nsweeps)])
         self.nrays = rays.min()  # see TODO above
         self.ngates = sample_ray.h.nbins
 
         # set scan_type, naz, and nele
-        if sample_sweep.h.azimuth == -999.0:
-            self.scan_type = 'ppi'
-            self.naz = self.nrays
-            self.nele = self.nsweeps
+        if 'scan_mode' in kwargs:
+            if kwargs['scan_mode']=='ppi':
+                self.scan_type = 'ppi'
+                self.naz = self.nrays
+                self.nele = self.nsweeps
+            elif kwargs['scan_mode']=='rhi':
+                self.scan_type = 'rhi'
+                self.naz = self.nsweeps
+                self.nele = self.nrays
         else:
-            self.scan_type = 'rhi'
-            self.naz = self.nsweeps
-            self.nele = self.nrays
-
+			if sample_sweep.h.azimuth == -999.0:
+				self.scan_type = 'ppi'
+				self.naz = self.nrays
+				self.nele = self.nsweeps
+			else:
+				self.scan_type = 'rhi'
+				self.naz = self.nsweeps
+				self.nele = self.nrays
+        print self.scan_type, self.nsweeps, self.nrays
         # extract the elevation and azimuth attributes
         azimuth, elevation = extract_rsl_pointing(sample_volume, self.nsweeps,
                                                   self.nrays)
@@ -602,6 +615,7 @@ class Radar:
             self.fields = field_dict
         if "rhi" in mode:
             #rhi
+            self.nsweeps=len(ncobj.variables['sweep_start_ray_index'])
             self.metadata = dict([(key, getattr(ncobj, key))
                                  for key in ncobj.ncattrs()])
             self.scan_type = "rhi"
