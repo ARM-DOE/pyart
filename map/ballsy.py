@@ -18,7 +18,7 @@ import ball_tree
 
 class BallsyMapper:
 
-    def __init__(self, X, z, leafsize=10, debug=False):
+    def __init__(self, X, z, leafsize=10, debug=False, badval=-9999.0):
 
         assert len(X) == len(z), "len(X) %d != len(z) %d" % (len(X), len(z))
 
@@ -29,8 +29,10 @@ class BallsyMapper:
         self.tree = ball_tree.BallTree(X, leafsize=leafsize)
         self.z = z
         self.X = X
+        self.badval=badval
 
     def __call__(self, q, r, debug=False, func='Cressman'):
+        print("Calling")
         q = np.asarray(q)
         qdim = q.ndim
         if qdim == 1:
@@ -44,8 +46,10 @@ class BallsyMapper:
         if debug:
             print "Removing voids"
         isgood = np.where(np.array([len(x) for x in self.locations]) != 0)[0]
+        print len(isgood)
+        print len(self.locations)
         interpol = np.empty((len(self.locations), ) + np.shape(self.z[0]))
-        interpol.fill(np.nan)
+        interpol.fill(self.badval)
         jinterpol = 0
         t3 = time()
         if debug:
@@ -71,4 +75,4 @@ class BallsyMapper:
             print "Time to query the tree:", t2 - t1
             print "time to remove voids:", t3 - t2
             print "time to calculate weights and map:", t4 - t3
-        return interpol
+        return np.ma.masked_where(interpol==self.badval, interpol)

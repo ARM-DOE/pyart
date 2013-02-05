@@ -374,7 +374,7 @@ def write_radar4(ncobj, radarobj, **kwargs):
     Writes a Py-ART antenna coordinate radar object to a CF-Radial complaint
     netcdf file)
     """
-    __DoD_version__ = "0.5"
+    __DoD_version__ = "1.0"
 
     # Set up some nice formatting tools
     runtime = dict([(key, getattr(dt.datetime.now(), key)) for key in
@@ -392,10 +392,16 @@ def write_radar4(ncobj, radarobj, **kwargs):
                     'machine': socket.gethostname(), 'exec': sys.argv[0]})
 
     #create dimensions with time first
-    ncobj.createDimension('time', len(radarobj.time['data']))
+    ncobj.createDimension('time', None)#len(radarobj.time['data']))
     ncobj.createDimension('range', radarobj.ngates)
     ncobj.createDimension('sweep', radarobj.nsweeps)
     ncobj.createDimension('string_length_24', 24)
+    ncobj.createDimension('string_length_32', 32)
+    ncobj.createDimension('string_length_12', 12)
+    if 'frequency' in radarobj.inst_params.keys():
+       ncobj.createDimension('frequency', len(radarobj.inst_params['frequency']['data']))
+    
+    
 
     #create axis variables with time first
     time_var = ncobj.createVariable('time', 'double', ('time',))
@@ -465,10 +471,13 @@ def write_radar4(ncobj, radarobj, **kwargs):
         'sweep_end_ray_index': 'i4',
         'sweep_mode': 'S1',
         'sweep_number': 'i4'}
+    char_shape= netCDF4.stringtochar(np.array(
+                radarobj.sweep_info['sweep_mode']['data'])).shape[1]
+    string_string='string_length_%(d)d' % {'d':char_shape}
     dims = {'fixed_angle': 'sweep',
             'sweep_start_ray_index': 'sweep',
             'sweep_end_ray_index': 'sweep',
-            'sweep_mode': ('sweep', 'string_length_24'),
+            'sweep_mode': ('sweep',string_string),
             'sweep_number': 'sweep'}
     for item in sweep_params:
         print item, sweep_types[item]
@@ -483,13 +492,19 @@ def write_radar4(ncobj, radarobj, **kwargs):
         if item != "sweep_mode":
             this_var[:] = radarobj.sweep_info[item]['data']
         else:
-            print radarobj.sweep_info[item]['data'], 'moom'
+            print radarobj.sweep_info[item]['data'], 'moom', item
             print netCDF4.stringtochar(np.array(
                 radarobj.sweep_info[item]['data'])).shape
+            print this_var[:].shape
             this_var[:] = netCDF4.stringtochar(np.array(
                 radarobj.sweep_info[item]['data']))
 
     #populate instr params
+    
+    #inst_shape= netCDF4.stringtochar(np.array(
+    #            radarobj.sweep_info['prt_mode']['data'])).shape[1]
+    #inst_str='string_length_%(d)d' % {'d':inst_shape}
+
     inst_types = {
         'frequency': 'float',
         'follow_mode': 'S1',
@@ -502,13 +517,13 @@ def write_radar4(ncobj, radarobj, **kwargs):
         'unambiguous_range': 'float',
         'n_samples': 'i4'}
     inst_dims = {
-        'frequency': 'time',
-        'follow_mode': ('sweep', 'string_length_24'),
+        'frequency': 'frequency',
+        'follow_mode': ('sweep', string_string),
         'pulse_width': 'time',
-        'prt_mode': ('sweep', 'string_length_24'),
+        'prt_mode': ('sweep', string_string),
         'prt': 'time',
         'prt_ratio': 'time',
-        'polarization_mode': ('sweep', 'string_length_24'),
+        'polarization_mode': ('sweep', string_string),
         'nyquist_velocity': 'time',
         'unambiguous_range': 'time',
         'n_samples': 'time'}
@@ -521,6 +536,7 @@ def write_radar4(ncobj, radarobj, **kwargs):
                                   set(radarobj.inst_params[key].keys())))
         this_var.meta_group = "instrument_parameters"
         if key not in ["follow_mode", "prt_mode", "polarization_mode"]:
+	    print key
             this_var[:] = radarobj.inst_params[key]['data']
         else:
             print radarobj.inst_params[key]['data'], 'moom'
@@ -531,16 +547,27 @@ def write_radar4(ncobj, radarobj, **kwargs):
 
     #popuate location params
     if 'sort' in dir(radarobj.location['latitude']['data']):
-        # we have an array, aka a moving platform
-        for var in radarobj.location.keys():
-            platform_is_mobile = 'True'
-            this_var = ncobj.createVariable(var, 'double', ('time',),
-                                            zlib=True)
-            trans_dict_as_ncattr(radarobj.location[var], this_var,
-                                 list(set(['units', 'comment',
-                                           'standard_name', 'long_name']) &
-                                      set(radarobj.location[var].keys())))
-            this_var[:] = radarobj.location[var]['data']
+        if len(radarobj.location['latitude']['data']) > 1:
+            # we have an array, aka a moving platform
+            for var in radarobj.location.keys():
+                platform_is_mobile = 'True'
+                this_var = ncobj.createVariable(var, 'double', ('time',),
+                                                zlib=True)
+                trans_dict_as_ncattr(radarobj.location[var], this_var,
+                                     list(set(['units', 'comment',
+                                              'standard_name', 'long_name']) &
+                                          set(radarobj.location[var].keys())))
+                this_var[:] = radarobj.location[var]['data']
+        else:
+            # we have a single float, ie a fixed antenna
+            for var in radarobj.location.keys():
+                platform_is_mobile = 'False'
+                this_var = ncobj.createVariable(var, 'double', zlib=True)
+                trans_dict_as_ncattr(radarobj.location[var], this_var,
+                                     list(set(['units', 'comment',
+                                               'standard_name', 'long_name']) &
+                                          set(radarobj.location[var].keys())))
+                this_var[:] = radarobj.location[var]['data'][:]
     else:
         # we have a single float, ie a fixed antenna
         for var in radarobj.location.keys():
@@ -555,7 +582,7 @@ def write_radar4(ncobj, radarobj, **kwargs):
     trans_dict_as_ncattr(radarobj.metadata, ncobj, radarobj.metadata.keys())
     ncobj.platform_is_mobile = platform_is_mobile
     ncobj.history = "created by user %(user)s on %(machine)s at %(day)d-%(strmon)s-%(year)d,%(hour)d:%(minute)02d:%(second)02d using %(exec)s" % runtime
-    ncobj.conventions = "CF/Radial"
+    ncobj.Conventions = "CF/Radial"
 
 
 def is_moment(varname, moment_fixes):
