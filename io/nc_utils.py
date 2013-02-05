@@ -374,7 +374,7 @@ def write_radar4(ncobj, radarobj, **kwargs):
     Writes a Py-ART antenna coordinate radar object to a CF-Radial complaint
     netcdf file)
     """
-    __DoD_version__ = "0.5"
+    __DoD_version__ = "1.0"
 
     # Set up some nice formatting tools
     runtime = dict([(key, getattr(dt.datetime.now(), key)) for key in
@@ -392,7 +392,7 @@ def write_radar4(ncobj, radarobj, **kwargs):
                     'machine': socket.gethostname(), 'exec': sys.argv[0]})
 
     #create dimensions with time first
-    ncobj.createDimension('time', len(radarobj.time['data']))
+    ncobj.createDimension('time', None)#len(radarobj.time['data']))
     ncobj.createDimension('range', radarobj.ngates)
     ncobj.createDimension('sweep', radarobj.nsweeps)
     ncobj.createDimension('string_length_24', 24)
