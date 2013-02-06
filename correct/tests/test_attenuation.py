@@ -11,7 +11,6 @@ from numpy.testing import assert_array_equal
 DIR = os.path.dirname(__file__)
 
 RSLNAME = os.path.join(DIR, "sample.sigmet")
-SOBNAME = os.path.join(DIR, 'sob_kdp_reference.npy')
 PHASENAME = os.path.join(DIR, 'reproc_phase_reference.npy')
 CORZNAME = os.path.join(DIR, 'cor_z_reference.npy')
 SPECATNAME = os.path.join(DIR, 'spec_at_reference.npy')
@@ -30,9 +29,7 @@ def test_attenuation_correction_rsl():
     radar = pyart.io.radar.Radar(radarobj)
 
     # add the fields created by phase_proc
-    sob_kdp = np.load(SOBNAME)
     reproc_phase = np.load(PHASENAME)
-    radar.fields['recalulcated_diff_phase'] = {'data': sob_kdp}
     radar.fields['proc_dp_phase_shift'] = {'data': reproc_phase}
 
     spec_at, cor_z = attenuation.calculate_attenuation(
