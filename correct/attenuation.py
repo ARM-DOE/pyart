@@ -77,8 +77,8 @@ def calculate_attenuation(radar, z_offset, debug=False, doc=15, fzl=4000.0,
     dr = (radar.range['data'][1] - radar.range['data'][0]) / 1000.0
     
     # create array to hold specific attenuation and attenuation
-    specific_atten = np.zeros(reflectivity_horizontal.shape)
-    atten = np.zeros(reflectivity_horizontal.shape)
+    specific_atten = np.zeros(reflectivity_horizontal.shape, dtype='float32')
+    atten = np.zeros(reflectivity_horizontal.shape, dtype='float32')
     
     for sweep in xrange(nsweeps):
         # loop over the sweeps
@@ -92,14 +92,10 @@ def calculate_attenuation(radar, z_offset, debug=False, doc=15, fzl=4000.0,
 
             # extract the ray's phase shift and init. refl. correction
             ray_phase_shift = proc_dp_phase_shift[i, 0:end_gate]
-            ray_init_refl = init_refl_correct[i, 0:end_gate]
-            
-            is_good = np.logical_and(is_cor[i, 0:end_gate],
-                                     is_cor[i, 0:end_gate])
-            last_six_good = np.where(is_good)[0][-6:]
-            #last_six_good = np.where(is_good[i, 0:end_gate])[0][-6:]
+            ray_init_refl = init_refl_correct[i, 0:end_gate] 
             
             # perform calculation
+            last_six_good = np.where(is_good[i, 0:end_gate])[0][-6:]
             phidp_max = np.median(ray_phase_shift[last_six_good])
             sm_refl = phase_proc.smooth_and_trim(ray_init_refl, window_len=5)
             reflectivity_linear = 10.0 ** (0.1 * beta * sm_refl)
@@ -126,7 +122,7 @@ def calculate_attenuation(radar, z_offset, debug=False, doc=15, fzl=4000.0,
     spec_at['units'] = 'dB/km'
     
     cor_z=copy.deepcopy(radar.fields['reflectivity_horizontal'])
-    cor_z['data'] = init_refl_correct  # atten+cor_z['data']+z_offset
+    cor_z['data'] = atten + cor_z['data'] + z_offset
     cor_z['least_significant_digit'] = 2
     cor_z['valid_max'] = 80.0
     
