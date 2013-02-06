@@ -90,6 +90,11 @@ io/include
 io/lib
 io/src/rsl-*
 
+# Documentation files #
+#######################
+/doc/build
+/doc/source/generated
+
 # radar data files #
 ####################
 io/tests/110635.mdv
