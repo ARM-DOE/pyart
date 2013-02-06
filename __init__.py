@@ -7,3 +7,4 @@ __all__ = ['sounding', 'io']
 
 from sounding import sounding
 import io
+import correct

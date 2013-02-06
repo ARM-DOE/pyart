@@ -63,8 +63,8 @@ def dealias(radar, sounding_heights, sounding_wind_speeds,
     Due to limitations in the C code do not call with numpy arrays over 900
     elements long
 
-    Reference
-    ---------
+    References
+    ----------
     C. N. James and R. A Houze Jr, A Real-Time Four-Dimensional Doppler
     Dealising Scheme, Journal of Atmospheric and Oceanic Technology, 2001, 18,
     1674.
