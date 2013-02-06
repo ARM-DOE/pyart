@@ -79,12 +79,10 @@ if __name__ == "__main__":
     # Get the right timestep in the file
     myheight, myspeed, mydirection = dealias.find_time_in_interp_sonde(
         interp_sonde, target)
-    # Create a dealiasing object.. this uses the radar object
-    deal_obj = dealias.dealiaser(myradar, myheight * 1000.0, myspeed,
-                                 mydirection, target)
-    # Call the dealiaser which pushes through the radar object to the
-    # UWash 4D Dealias code (using a TRMM RSL carrier)
-    my_new_field = deal_obj()
+    # Perform dealiasing using the UWash 4D Dealias code (using a TRMM RSL
+    # carrier)
+    my_new_field = dealias.dealias(myradar, myheight * 1000.0, myspeed,
+                                   mydirection, target)
     # append the new field to the radar object
     myradar.fields.update({'corrected_mean_doppler_velocity': my_new_field})
     # Close out the ARM VAP file containing the sounding data

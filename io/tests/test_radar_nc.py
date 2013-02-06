@@ -29,6 +29,8 @@
 # streamcf2rad              : creator, move to nc_utils.py
 # ray_header_time_to_dict   :
 
+from os.path import join, dirname
+
 import numpy as np
 from numpy.ma.core import MaskedArray
 import netCDF4
@@ -36,7 +38,8 @@ import netCDF4
 import pyart
 
 # read in the sample file and create a a Radar object
-nc_radar = pyart.io.radar.Radar(netCDF4.Dataset('sample_nc.nc'))
+fname = join(dirname(__file__), 'sample_nc.nc')
+nc_radar = pyart.io.radar.Radar(netCDF4.Dataset(fname))
 
 
 # azimuth attribute

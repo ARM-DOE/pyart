@@ -31,14 +31,17 @@
 # streamcf2rad              : creator, move to nc_utils.py
 # ray_header_time_to_dict   :
 
+from os.path import join, dirname
+
 import numpy as np
 from numpy.ma.core import MaskedArray
 
 import pyart
 
 # read in the sample file and create a a Radar object
+fname = join(dirname(__file__), 'sample_uf.uf')
 rsl_radar = pyart.io.radar.Radar(
-    pyart.io.py4dd.RSL_anyformat_to_radar('sample_uf.uf'))
+    pyart.io.py4dd.RSL_anyformat_to_radar(fname))
 
 
 # azimuth attribute
@@ -301,7 +304,7 @@ def test_rsl_time():
     assert 'units' in rsl_radar.time.keys()
     assert 'calendar' in rsl_radar.time.keys()
     assert 'data' in rsl_radar.time.keys()
-    assert rsl_radar.time['units'] == 'seconds since 2011-05-23 22:42:59.0'
+    assert rsl_radar.time['units'] == 'seconds since 2011-05-23T22:42:59Z'
     assert rsl_radar.time['data'].shape == (7920, )
     assert round(rsl_radar.time['data'][600]) == 25.0
 
@@ -368,4 +371,4 @@ def test_rsl_nrays():
 
 def test_rsl_tu():
     """ RSL radar, tu attribute """
-    assert rsl_radar.tu == 'seconds since 2011-05-23 22:42:59.0'
+    assert rsl_radar.tu == 'seconds since 2011-05-23T22:42:59Z'

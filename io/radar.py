@@ -340,7 +340,7 @@ class Radar:
 
         # determine the shape parameters of the fields
         self.nsweeps = sample_volume.h.nsweeps
-        print self.nsweeps	
+        print self.nsweeps
         rays = array([sample_volume.sweeps[i].h.nrays for i in
                       range(self.nsweeps)])
         self.nrays = rays.min()  # see TODO above
@@ -348,23 +348,23 @@ class Radar:
 
         # set scan_type, naz, and nele
         if 'scan_mode' in kwargs:
-            if kwargs['scan_mode']=='ppi':
+            if kwargs['scan_mode'] == 'ppi':
                 self.scan_type = 'ppi'
                 self.naz = self.nrays
                 self.nele = self.nsweeps
-            elif kwargs['scan_mode']=='rhi':
+            elif kwargs['scan_mode'] == 'rhi':
                 self.scan_type = 'rhi'
                 self.naz = self.nsweeps
                 self.nele = self.nrays
         else:
-			if sample_sweep.h.azimuth == -999.0:
-				self.scan_type = 'ppi'
-				self.naz = self.nrays
-				self.nele = self.nsweeps
-			else:
-				self.scan_type = 'rhi'
-				self.naz = self.nsweeps
-				self.nele = self.nrays
+            if sample_sweep.h.azimuth == -999.0:
+                self.scan_type = 'ppi'
+                self.naz = self.nrays
+                self.nele = self.nsweeps
+            else:
+                self.scan_type = 'rhi'
+                self.naz = self.nsweeps
+                self.nele = self.nrays
         print self.scan_type, self.nsweeps, self.nrays
         # extract the elevation and azimuth attributes
         azimuth, elevation = extract_rsl_pointing(sample_volume, self.nsweeps,
@@ -429,7 +429,7 @@ class Radar:
             data[where(data == 131072)] = -9999.0
             meta = self.get_mdv_meta(radarobj, field)  # fetch metadata
             fielddict = {'data': ma.masked_equal(data, -9999.0).reshape(
-                data.shape[0] * data.shape[1], data.shape[2]),  '_FillValue':-9999.0}
+                data.shape[0] * data.shape[1], data.shape[2]),  '_FillValue': -9999.0}
             fielddict.update(meta)
             fields_dict.update({csapr_standard_names()[field]: fielddict})
         self.fields = fields_dict
@@ -529,7 +529,7 @@ class Radar:
         print mode, "azimuth_surveillance    "
         if "sur" in mode:
             #ppi
-            self.nsweeps=len(ncobj.variables['sweep_start_ray_index'])
+            self.nsweeps = len(ncobj.variables['sweep_start_ray_index'])
             self.metadata = dict([(key, getattr(ncobj, key)) for key in
                                  ncobj.ncattrs()])
             self.scan_type = "ppi"
@@ -572,7 +572,7 @@ class Radar:
             self.fields = field_dict
         if "sec" in mode:
             #sec
-            self.nsweeps=len(ncobj.variables['sweep_start_ray_index'])
+            self.nsweeps = len(ncobj.variables['sweep_start_ray_index'])
             self.metadata = dict([(key, getattr(ncobj, key)) for key in
                                  ncobj.ncattrs()])
             self.scan_type = "sec"
@@ -615,7 +615,7 @@ class Radar:
             self.fields = field_dict
         if "rhi" in mode:
             #rhi
-            self.nsweeps=len(ncobj.variables['sweep_start_ray_index'])
+            self.nsweeps = len(ncobj.variables['sweep_start_ray_index'])
             self.metadata = dict([(key, getattr(ncobj, key))
                                  for key in ncobj.ncattrs()])
             self.scan_type = "rhi"

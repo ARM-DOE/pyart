@@ -90,13 +90,12 @@ def grid2(radars, **kwargs):
                 var]['data'].flatten()[within_sensible])
 
     # find NaNs and crazy reflectivities
-    is_finite=np.isfinite(data[parms[0]])
-    is_not_crazy=data[parms[0]] < 190.0
-    is_not_masked=np.logical_not(data[parms[0]].mask)
-    
+    is_finite = np.isfinite(data[parms[0]])
+    is_not_crazy = data[parms[0]] < 190.0
+    is_not_masked = np.logical_not(data[parms[0]].mask)
 
-    where_the_data_is_good = np.where(np.logical_and(np.logical_and(is_not_masked, is_finite), 
-                                      is_not_crazy))[0]
+    where_the_data_is_good = np.where(np.logical_and(np.logical_and(
+        is_not_masked, is_finite), is_not_crazy))[0]
     print(len(where_the_data_is_good))
     print(len(data[parms[0]]))
     # Create a meshgrid(cube) to allow calculation of radii of influence
@@ -150,7 +149,6 @@ def grid2(radars, **kwargs):
     for i in range(len(parms)):
         grids.update({parms[i]: interpol[:, i].reshape((nz, ny, nx))})
     return (xr, yr, zr), (nx, ny, nz), grids
-
 
 
 class pyGrid:

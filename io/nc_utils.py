@@ -392,19 +392,17 @@ def write_radar4(ncobj, radarobj, **kwargs):
                     'machine': socket.gethostname(), 'exec': sys.argv[0]})
 
     #create dimensions with time first
-    ncobj.createDimension('time', None)#len(radarobj.time['data']))
+    ncobj.createDimension('time', None)  # len(radarobj.time['data']))
     ncobj.createDimension('range', radarobj.ngates)
     ncobj.createDimension('sweep', radarobj.nsweeps)
     ncobj.createDimension('string_length_24', 24)
     ncobj.createDimension('string_length_32', 32)
     ncobj.createDimension('string_length_12', 12)
     if 'frequency' in radarobj.inst_params.keys():
-       ncobj.createDimension('frequency', len(radarobj.inst_params['frequency']['data']))
-    
-    
+        ncobj.createDimension('frequency', len(radarobj.inst_params['frequency']['data']))
 
     #create axis variables with time first
-    time_var = ncobj.createVariable('time', 'double', ('time',))
+    time_var = ncobj.createVariable('time', 'double', ('time', ))
     time_var[:] = radarobj.time['data']
     trans_dict_as_ncattr(radarobj.time, time_var,
                          list(set(['units', 'comment', 'calendar',
@@ -443,7 +441,6 @@ def write_radar4(ncobj, radarobj, **kwargs):
             my_nc_vars.update({moment: ncobj.createVariable(
                 moment, 'float32', ('time', 'range'), fill_value=-9999.0,
                 zlib=True)})
-	  
 
     #populate metadata for moment variables
     for moment in moments:
@@ -471,13 +468,13 @@ def write_radar4(ncobj, radarobj, **kwargs):
         'sweep_end_ray_index': 'i4',
         'sweep_mode': 'S1',
         'sweep_number': 'i4'}
-    char_shape= netCDF4.stringtochar(np.array(
-                radarobj.sweep_info['sweep_mode']['data'])).shape[1]
-    string_string='string_length_%(d)d' % {'d':char_shape}
+    char_shape = netCDF4.stringtochar(np.array(
+        radarobj.sweep_info['sweep_mode']['data'])).shape[1]
+    string_string = 'string_length_%(d)d' % {'d': char_shape}
     dims = {'fixed_angle': 'sweep',
             'sweep_start_ray_index': 'sweep',
             'sweep_end_ray_index': 'sweep',
-            'sweep_mode': ('sweep',string_string),
+            'sweep_mode': ('sweep', string_string),
             'sweep_number': 'sweep'}
     for item in sweep_params:
         print item, sweep_types[item]
@@ -500,7 +497,7 @@ def write_radar4(ncobj, radarobj, **kwargs):
                 radarobj.sweep_info[item]['data']))
 
     #populate instr params
-    
+
     #inst_shape= netCDF4.stringtochar(np.array(
     #            radarobj.sweep_info['prt_mode']['data'])).shape[1]
     #inst_str='string_length_%(d)d' % {'d':inst_shape}
@@ -536,7 +533,7 @@ def write_radar4(ncobj, radarobj, **kwargs):
                                   set(radarobj.inst_params[key].keys())))
         this_var.meta_group = "instrument_parameters"
         if key not in ["follow_mode", "prt_mode", "polarization_mode"]:
-	    print key
+            print key
             this_var[:] = radarobj.inst_params[key]['data']
         else:
             print radarobj.inst_params[key]['data'], 'moom'
