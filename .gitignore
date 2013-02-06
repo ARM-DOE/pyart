@@ -90,8 +90,17 @@ io/include
 io/lib
 io/src/rsl-*
 
+# Documentation files #
+#######################
+/doc/build
+/doc/source/generated
+
 # radar data files #
 ####################
 io/tests/110635.mdv
 io/tests/sample_nc.nc
 io/tests/sample_uf.uf
+correct/tests/sgpinterpolatedsondeC1.c1.20110510.000000.cdf
+correct/tests/sample.nc
+correct/tests/sample.sigmet
+correct/tests/*.npy

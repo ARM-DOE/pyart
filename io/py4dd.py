@@ -510,8 +510,8 @@ def dealias_radar(radar, vad_time, last_radar=None, sondfile=None,
     """
     Dealias a RSL Radar object.
 
-    Parameter
-    ---------
+    Parameters
+    ----------
     radar : pointer to a Radar object (LP_Radar)
         RSL Radar object to dealias.
     vad_time : int
