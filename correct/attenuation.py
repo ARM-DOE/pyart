@@ -123,6 +123,7 @@ def calculate_attenuation(radar, z_offset, debug=False, doc=15, fzl=4000.0,
 
     cor_z = copy.deepcopy(radar.fields['reflectivity_horizontal'])
     cor_z['data'] = atten + cor_z['data'] + z_offset
+    cor_z['data'].mask = init_refl_correct.mask
     cor_z['least_significant_digit'] = 2
     cor_z['valid_max'] = 80.0
 
