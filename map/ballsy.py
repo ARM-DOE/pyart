@@ -29,7 +29,7 @@ class BallsyMapper:
         self.tree = ball_tree.BallTree(X, leafsize=leafsize)
         self.z = z
         self.X = X
-        self.badval=badval
+        self.badval = badval
 
     def __call__(self, q, r, debug=False, func='Cressman'):
         print("Calling")
@@ -75,4 +75,4 @@ class BallsyMapper:
             print "Time to query the tree:", t2 - t1
             print "time to remove voids:", t3 - t2
             print "time to calculate weights and map:", t4 - t3
-        return np.ma.masked_where(interpol==self.badval, interpol)
+        return np.ma.masked_where(interpol == self.badval, interpol)

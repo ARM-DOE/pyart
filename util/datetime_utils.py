@@ -15,12 +15,11 @@ def datetimes_from_radar(radar):
 
 def datetime_from_dataset(dataset):
     """ Return a datetime for the first time in a netCDF Dataset. """
-    return netCDF4.num2date(dataset.variables['time'][0], 
-                           dataset.variables['time'].units)
+    return netCDF4.num2date(dataset.variables['time'][0],
+                            dataset.variables['time'].units)
 
 
 def datetimes_from_dataset(dataset):
     """ Return an array of datetimes for the times in a netCDF Dataset. """
-    return netCDF4.num2date(dataset.variables['time'][:], 
-                           dataset.variables['time'].units)
-
+    return netCDF4.num2date(dataset.variables['time'][:],
+                            dataset.variables['time'].units)
