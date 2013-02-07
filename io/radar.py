@@ -186,9 +186,7 @@ def extract_rsl_pointing(volume, nsweeps, nrays):
     """
     azimuth = zeros([nsweeps, nrays], dtype=float)
     elevation = zeros([nsweeps, nrays], dtype=float)
-    print azimuth.shape
     for i, sweep in enumerate(volume.sweeps):
-        print len(sweep.rays)
         for j, ray in enumerate(sweep.rays):
             azimuth[i, j] = ray.h.azimuth
             elevation[i, j] = ray.h.elev
@@ -340,32 +338,21 @@ class Radar:
 
         # determine the shape parameters of the fields
         self.nsweeps = sample_volume.h.nsweeps
-        print self.nsweeps	
         rays = array([sample_volume.sweeps[i].h.nrays for i in
                       range(self.nsweeps)])
         self.nrays = rays.min()  # see TODO above
         self.ngates = sample_ray.h.nbins
 
         # set scan_type, naz, and nele
-        if 'scan_mode' in kwargs:
-            if kwargs['scan_mode']=='ppi':
-                self.scan_type = 'ppi'
-                self.naz = self.nrays
-                self.nele = self.nsweeps
-            elif kwargs['scan_mode']=='rhi':
-                self.scan_type = 'rhi'
-                self.naz = self.nsweeps
-                self.nele = self.nrays
+        if sample_sweep.h.azimuth == -999.0:
+            self.scan_type = 'ppi'
+            self.naz = self.nrays
+            self.nele = self.nsweeps
         else:
-			if sample_sweep.h.azimuth == -999.0:
-				self.scan_type = 'ppi'
-				self.naz = self.nrays
-				self.nele = self.nsweeps
-			else:
-				self.scan_type = 'rhi'
-				self.naz = self.nsweeps
-				self.nele = self.nrays
-        print self.scan_type, self.nsweeps, self.nrays
+            self.scan_type = 'rhi'
+            self.naz = self.nsweeps
+            self.nele = self.nrays
+
         # extract the elevation and azimuth attributes
         azimuth, elevation = extract_rsl_pointing(sample_volume, self.nsweeps,
                                                   self.nrays)
@@ -403,7 +390,7 @@ class Radar:
         t_start = ray_header_time_to_datetime(sample_ray.h)
         t_end = ray_header_time_to_datetime(last_ray.h)
         t_span = (t_end - t_start).seconds
-        self.tu = "seconds since " + t_start.strftime("%Y-%m-%dT%H:%M:%SZ")
+        self.tu = "seconds since " + t_start.strftime("%Y-%m-%d %H:%M:%S.0")
         self.cal = "gregorian"
         self.time = {
             'data': linspace(0, t_span, self.nrays * self.nsweeps),
@@ -615,7 +602,6 @@ class Radar:
             self.fields = field_dict
         if "rhi" in mode:
             #rhi
-            self.nsweeps=len(ncobj.variables['sweep_start_ray_index'])
             self.metadata = dict([(key, getattr(ncobj, key))
                                  for key in ncobj.ncattrs()])
             self.scan_type = "rhi"
@@ -732,9 +718,9 @@ class Radar:
             'comment': (
                 'Coordinate variable for range. Range to center of each bin.'),
             'spacing_is_constant': 'true',
-            'meters_to_center_of_first_gate': (radarobj.range_km[0]) / 1000.0,
+            'meters_to_center_of_first_gate': (radarobj.range_km[0]) * 1000.0,
             'meters_between_gates': (radarobj.range_km[1] -
-                                     radarobj.range_km[0])/1000.0}
+                                     radarobj.range_km[0])*1000.0}
 
         self.elevation = {
             'data': array(radarobj.el_deg).repeat(self.naz),

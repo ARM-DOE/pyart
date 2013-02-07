@@ -1064,14 +1064,17 @@ def save_pyGrid(ncfobj, pygrid):
                         meta, pygrid.axes[axis][meta])
 
     # global metadata
-
+    if 'Conventions' in pygrid.metadata.keys():
+         ncfobj.Conventions = pygrid.metadata['conventions']
+    else:
+         ncfobj.Conventions = 'CF-1.5'
     if 'process_version' in pygrid.metadata.keys():
         ncfobj.process_version = pygrid.metadata['process_version']
     for meta in pygrid.metadata.keys():
         if meta != 'history' or meta != 'process_version':
             setattr(ncfobj, meta, pygrid.metadata[meta])
     ncfobj.history = pygrid.metadata['history']
-
+    
     #now populate data.. we leave this until last to speed up..
 
     for i in range(len(akeys)):
