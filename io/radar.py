@@ -764,8 +764,9 @@ class Radar:
             data[where(data == 131072)] = -9999.0
             meta = self.get_mdv_meta(radarobj, field)  # fetch metadata
             fielddict = {
-                'data': ma.masked_equal(data, -9999.0).reshape(data.shape[0] *
-                data.shape[1], data.shape[2])}
+                'data': ma.masked_equal(data, -9999.0).reshape(
+                    data.shape[0] * data.shape[1], data.shape[2]),
+                '_FillValue': -9999.0}
             fielddict.update(meta)
             flat_dict.update({csapr_standard_names()[field]: fielddict})
         self.fields = flat_dict
