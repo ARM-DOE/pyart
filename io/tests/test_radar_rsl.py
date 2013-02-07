@@ -304,7 +304,7 @@ def test_rsl_time():
     assert 'units' in rsl_radar.time.keys()
     assert 'calendar' in rsl_radar.time.keys()
     assert 'data' in rsl_radar.time.keys()
-    assert rsl_radar.time['units'] == 'seconds since 2011-05-23T22:42:59Z'
+    assert rsl_radar.time['units'] == 'seconds since 2011-05-23 22:42:59.0'
     assert rsl_radar.time['data'].shape == (7920, )
     assert round(rsl_radar.time['data'][600]) == 25.0
 
@@ -371,4 +371,4 @@ def test_rsl_nrays():
 
 def test_rsl_tu():
     """ RSL radar, tu attribute """
-    assert rsl_radar.tu == 'seconds since 2011-05-23T22:42:59Z'
+    assert rsl_radar.tu == 'seconds since 2011-05-23 22:42:59.0'
