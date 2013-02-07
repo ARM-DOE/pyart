@@ -70,7 +70,6 @@ def snr(line, **kwargs):
     return abs(signal) / noise
 
 
-
 def unwrap_masked(lon, centered=False, copy=True):
     """
     Unwrap a sequence of longitudes or headings in degrees.
@@ -287,11 +286,11 @@ def get_phidp_unf(radar, **kwargs):
     t = time()
     system_zero = det_sys_phase_sg(radar, kwargs.get('sysphase', -135.))
     cordata = np.zeros(my_rhv.shape, dtype=float)
-    texture=sigmath.texture(radar, kwargs.get('texvar','copol_coeff'))
-    
+    texture = sigmath.texture(radar, kwargs.get('texvar', 'copol_coeff'))
+
     #make sure first 10 gates are masked.. no folding here..
-    
-    texture[:,0:10]=100.0
+
+    texture[:, 0:10] = 100.0
     for radial in range(my_rhv.shape[0]):
             #my_snr = snr(my_z[radial, :])
             notmeteo = np.logical_or(np.logical_or(
@@ -485,7 +484,7 @@ class phase_proc:
             radar.fields[self.rhv_field]['data'] < self.min_rhv
         if debug:
             print('Unfolding')
-        if 'nowrap' in kwargs.keys():\
+        if 'nowrap' in kwargs.keys():
             my_unf = self.get_phidp_unf(radar, ncp_lev=self.min_ncp,
                                         rhohv_lev=self.min_rhv, ncpts=2,
                                         doc=None, nowrap=kwargs['nowrap'])
@@ -667,6 +666,6 @@ class phase_proc:
             sob_kdp['long_name'] = "specific_differential_phase_hv"
             sob_kdp['units'] = "degrees/km"
             sob_kdp['least_significant_digit'] = 2
-            sob_kdp['_FillValue']=-9999.
+            sob_kdp['_FillValue'] = -9999.
 
         return proc_ph, sob_kdp

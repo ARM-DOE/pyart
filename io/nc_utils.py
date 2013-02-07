@@ -578,8 +578,10 @@ def write_radar4(ncobj, radarobj, **kwargs):
     #append global header data
     trans_dict_as_ncattr(radarobj.metadata, ncobj, radarobj.metadata.keys())
     ncobj.platform_is_mobile = platform_is_mobile
-    ncobj.history = "created by user %(user)s on %(machine)s at %(day)d-%(strmon)s-%(year)d,%(hour)d:%(minute)02d:%(second)02d using %(exec)s" % runtime
-    ncobj.Conventions = "CF/Radial"
+    if 'Conventions' not in radarobj.metadata.keys():
+        ncobj.Conventions = "CF/Radial"
+    if 'history' not in radarobj.metadata.keys():
+        ncobj.history = "created by user %(user)s on %(machine)s at %(day)d-%(strmon)s-%(year)d,%(hour)d:%(minute)02d:%(second)02d using %(exec)s" % runtime
 
 
 def is_moment(varname, moment_fixes):
@@ -1058,7 +1060,10 @@ def save_pyGrid(ncfobj, pygrid):
                         meta, pygrid.axes[axis][meta])
 
     # global metadata
-
+    if 'Conventions' in pygrid.metadata.keys():
+        ncfobj.Conventions = pygrid.metadata['conventions']
+    else:
+        ncfobj.Conventions = 'CF-1.5'
     if 'process_version' in pygrid.metadata.keys():
         ncfobj.process_version = pygrid.metadata['process_version']
     for meta in pygrid.metadata.keys():
@@ -1069,7 +1074,6 @@ def save_pyGrid(ncfobj, pygrid):
     #now populate data.. we leave this until last to speed up..
 
     for i in range(len(akeys)):
-        print(akeys[i], pygrid.axes[akeys[i]]['data'].shape, avars[i].shape)
         avars[i][:] = pygrid.axes[akeys[i]]['data']
     for i in range(len(pygrid.fields.keys())):
         vvars[i][0, :, :, :] = pygrid.fields[
