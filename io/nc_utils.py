@@ -993,7 +993,7 @@ def copy_axis(myfile, cgfile):
     rnvar.units = "meter"
 
 
-def save_pyGrid(ncfobj, pygrid):
+def save_pyGrid(ncfobj, pygrid, **kwargs):
     """Saves a pyGrid object to a CF and ARM standard netcdf file
 
     usage: save_pyGrid(netCDF4_object, pyGrid_object)
@@ -1017,7 +1017,8 @@ def save_pyGrid(ncfobj, pygrid):
 
     vvars = [ncfobj.createVariable(
         key, np.float, ('time', 'nz', 'ny', 'nx'),
-        fill_value=pygrid.fields[key]['_FillValue']) for key in
+        fill_value=pygrid.fields[key]['_FillValue'],
+        zlib=kwargs.get('zlib', False)) for key in
         pygrid.fields.keys()]
 
     # loop and populate attributes
@@ -1039,7 +1040,7 @@ def save_pyGrid(ncfobj, pygrid):
         except ValueError:
             print(mkey, " not existing")
 
-    dims_lookup = {'x_disp': 'nx', 'y_disp': 'ny', 'z_disp': 'nz',
+    dims_lookup = {'time':'time', 'x_disp': 'nx', 'y_disp': 'ny', 'z_disp': 'nz',
                    'time_end': 'time', 'time_start': 'time',
                    'lat': 'time', 'lon': 'time', 'alt': 'time'}
     avars = [ncfobj.createVariable(key, np.float, (dims_lookup[key], ))
@@ -1077,11 +1078,19 @@ def save_pyGrid(ncfobj, pygrid):
     
     #now populate data.. we leave this until last to speed up..
 
-    for i in range(len(akeys)):
-         avars[i][:] = pygrid.axes[akeys[i]]['data']
     for i in range(len(pygrid.fields.keys())):
         vvars[i][0, :, :, :] = pygrid.fields[
             pygrid.fields.keys()[i]]['data'][:, :, :]
+
+    
+    for i in range(len(akeys)):
+         if 'shape' in dir(pygrid.axes[akeys[i]]['data']):
+             avars[i][:] = pygrid.axes[akeys[i]]['data']
+             print akeys[i], "is array"
+         else:
+             avars[i][:] = np.array([pygrid.axes[akeys[i]]['data']])
+             print np.array([pygrid.axes[akeys[i]]['data']])
+             print akeys[i], "is not array"
 
 
 def save_mdv_ncf(myfile, output_file, parms, **kwargs):
