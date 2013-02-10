@@ -4,7 +4,7 @@ sys_phase float 332.0
 overide_sys_phase bool True
 experiment-metadata string MC3E
 facility-metadata string I4
-sounding_dir string /data-in/sc8pjt1/mergedsonde/sgp/
+sounding_dir string /data/mergedsonde/sgp/
 dod_version-metadata string 1.0
 site_id-metadata string I4: Billings, Oklahoma
 facility_id-metadata string sgp 		

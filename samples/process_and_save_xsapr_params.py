@@ -2,6 +2,11 @@
 # sample script for processing phase using LP methods
 # usage : process_and_save_xsar_params.py filename outdir params
 
+basedir='/Users/scollis/local_modules/'
+import sys
+sys.path.append(basedir)
+
+
 import sys
 import copy
 
