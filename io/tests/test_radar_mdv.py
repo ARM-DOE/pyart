@@ -28,13 +28,16 @@
 # streamcf2rad              : creator, move to nc_utils.py
 # ray_header_time_to_dict   :
 
+from os.path import join, dirname
+
 import numpy as np
 from numpy.ma.core import MaskedArray
 
 import pyart
 
 # read in the sample file and create a a Radar object
-mdv_radar = pyart.io.radar.Radar(pyart.io.py_mdv.read_mdv('110635.mdv'))
+fname = join(dirname(__file__), '110635.mdv')
+mdv_radar = pyart.io.radar.Radar(pyart.io.py_mdv.read_mdv(fname))
 
 
 # azimuth attribute

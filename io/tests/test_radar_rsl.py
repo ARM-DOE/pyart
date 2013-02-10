@@ -31,14 +31,17 @@
 # streamcf2rad              : creator, move to nc_utils.py
 # ray_header_time_to_dict   :
 
+from os.path import join, dirname
+
 import numpy as np
 from numpy.ma.core import MaskedArray
 
 import pyart
 
 # read in the sample file and create a a Radar object
+fname = join(dirname(__file__), 'sample_uf.uf')
 rsl_radar = pyart.io.radar.Radar(
-    pyart.io.py4dd.RSL_anyformat_to_radar('sample_uf.uf'))
+    pyart.io.py4dd.RSL_anyformat_to_radar(fname))
 
 
 # azimuth attribute

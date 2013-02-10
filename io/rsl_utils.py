@@ -89,11 +89,13 @@ def mdv_to_rsl(myfile, trans):
                     ray.contents.range[i_g] = range_value
     return radar
 
-def radar_to_rsl(myradar,trans):
-    if myradar.sweep_mode[0]=='ppi':
+
+def radar_to_rsl(myradar, trans):
+    if myradar.sweep_mode[0] == 'ppi':
         return ppi_radar_to_rsl(myradar, trans)
-    elif myradar.sweep_mode[0]=='rhi':
+    elif myradar.sweep_mode[0] == 'rhi':
         return rhi_radar_to_rsl(myradar, trans)
+
 
 def ppi_radar_to_rsl(myradar, trans):
     """
@@ -191,6 +193,7 @@ def ppi_radar_to_rsl(myradar, trans):
                     ray.contents.range[i_g] = range_value
     return radar
 
+
 def rhi_radar_to_rsl(myradar, trans):
     """
     Convert a Radar object into a RSL Radar object
@@ -237,8 +240,8 @@ def rhi_radar_to_rsl(myradar, trans):
             vol.contents.sweep[i_s] = sweep
             sweep.contents.h.field_type = trans[radar_fld]
             sweep.contents.h.sweep_num = i_s + 1  # one-indexed
-            sweep.contents.h.elev = -999.0#myradar.elevation['data'][sweep_start]
-            sweep.contents.h.azimuth= myradar.azimuth['data'][sweep_start]
+            sweep.contents.h.elev = -999.0  # myradar.elevation['data'][sweep_start]
+            sweep.contents.h.azimuth = myradar.azimuth['data'][sweep_start]
             sweep.contents.h.beam_width = 1.0  # change this
             sweep.contents.h.nrays = nrays
             sweep.contents.h.f = field_f

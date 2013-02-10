@@ -8,5 +8,9 @@ cband : Functions to correct cband data such as phidp processing and
 
 """
 
-__all__ = ['cband']
+__all__ = ['cband', 'dealias', 'phase_proc', 'attenuation']
+
 import cband
+import dealias
+import phase_proc
+import attenuation

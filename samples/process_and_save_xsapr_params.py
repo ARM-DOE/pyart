@@ -72,9 +72,8 @@ if __name__ == "__main__":
     interp_sonde = netCDF4.Dataset(is_dir + fname)
     myheight, myspeed, mydirection = dealias.find_time_in_interp_sonde(
         interp_sonde, target)
-    deal_obj = dealias.dealiaser(myradar, myheight * 1000.0, myspeed,
-                                 mydirection, target)
-    my_new_field = deal_obj()
+    my_new_field = dealias.dealias(myradar, myheight * 1000.0, myspeed,
+                                   mydirection, target)
     myradar.fields.update({'corrected_mean_doppler_velocity': my_new_field})
     interp_sonde.close()
 
