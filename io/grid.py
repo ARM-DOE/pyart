@@ -27,6 +27,7 @@ def grid2(radars, **kwargs):
          origin=(lat, lon, height_m))
 
     """
+    print(kwargs.get('h_factor', 'h_factor not set'))
     nx, ny, nz = kwargs.get('nxyz', (81, 81, 69))
     xr, yr, zr = kwargs.get(
         'xyzr', ((-30000., 20000), (-20000., 20000.), (0., 17000.)))
@@ -105,13 +106,16 @@ def grid2(radars, **kwargs):
 
     # Virtual beam width and beam spacing
 
-    nb = 1.5
-    bsp = 1.0
+    nb = kwargs.get('nb',1.5)
+    bsp = kwargs.get('bsp',1.0)
 
     # Query radius of influence, flattened
-
-    qrf = (zg / 20.0 + np.sqrt(yg ** 2 + xg ** 2) *
-           np.tan(nb * bsp * np.pi / 180.0) + 500.0).flatten()
+    
+    if 'qrf' in kwargs.keys():
+        qrf=kwargs['qrf'](xg, yg, zg).flatten()
+    else:
+        qrf = (kwargs.get('h_factor', 1.0)*(zg / 20.0) + np.sqrt(yg ** 2 + xg ** 2) *
+               np.tan(nb * bsp * np.pi / 180.0) + 500.0).flatten()
 
     # flattened query points
 
@@ -140,15 +144,28 @@ def grid2(radars, **kwargs):
     del data
 
     # query the tree and get the flattened interpolation
-
-    interpol = mapping_obj(ask, qrf, debug=True, func='Barnes')
+    #break it into parts for memory management
+    asplit=np.split(ask, nx)
+    qsplit=np.split(qrf, nx)
+    interpols=[]
+    for i in range(nx):
+        print(i)
+        interpols.append(mapping_obj(asplit[i], qsplit[i], debug=True, func='Barnes'))
+    interpol=np.concatenate(interpols)
     grids = {}
 
     #reshape and store the grids in a dictionary
 
     for i in range(len(parms)):
         grids.update({parms[i]: interpol[:, i].reshape((nz, ny, nx))})
+    grids.update({'ROI': qrf.reshape((nz, ny, nx))})
     return (xr, yr, zr), (nx, ny, nz), grids
+
+def ncvar_to_field(ncvar):
+    outdict = {'data': ncvar[:]}
+    outdict.update(dict([(key, getattr(ncvar, key)) for key in
+                         ncvar.ncattrs()]))
+    return outdict
 
 
 class pyGrid:
@@ -160,6 +177,30 @@ class pyGrid:
             self.fields = {}
             self.metadata = {}
             self.axes = {}
+        elif 'variables' in dir(args[0]):
+            
+            #netcdf file of grids
+            #lets assume it is nicely formatted
+            
+            netcdfobj=args[0]
+            
+            #grab the variable names
+            
+            all_variables=netcdfobj.variables.keys()
+            fields=[]
+            
+            #anything that has more than 2 axes is a field
+            
+            for var in all_variables:
+                if len(netcdfobj.variables[var].shape) > 1:
+                    fields.append(var)
+            print(fields)
+            self.fields={}
+            
+            for field in fields:
+                self.fields.update({field:ncvar_to_field(netcdfobj.variables[field])})
+                
+            
         elif 'count' in dir(args[0]):
 
             # a tuple of radar objects
@@ -174,11 +215,21 @@ class pyGrid:
             #move metadata from the radar to the grid
 
             for fld in grids.keys():
-                self.fields.update({fld: {'data': grids[fld]}})
-                for meta in args[0][0].fields[fld].keys():
-                    if meta != 'data':
-                        self.fields[fld].update(
-                            {meta: args[0][0].fields[fld][meta]})
+                if fld != 'ROI':
+					self.fields.update({fld: {'data': grids[fld]}})
+					for meta in args[0][0].fields[fld].keys():
+						if meta != 'data':
+							self.fields[fld].update(
+								{meta: args[0][0].fields[fld][meta]})
+            
+            self.fields.update({'ROI':{'data':grids['ROI'], 
+               'standard_name':'radius_of_influence',
+               'long_name':'Radius of influence for mapping',
+               'units':'m',
+               'least_significant_digit':1,
+               'valid_min':0.,
+               'valid_max':100000.,
+               '_FillValue':9999.}})
 
             #create some axes
 
@@ -195,6 +246,13 @@ class pyGrid:
             x_array = np.linspace(xr[0], xr[1], nx)
             y_array = np.linspace(yr[0], yr[1], ny)
             z_array = np.linspace(zr[0], zr[1], nz)
+            
+            time = {
+                'data': args[0][0].time['data'][0],
+                'units': args[0][0].time['units'],
+                'calendar': args[0][0].time['calendar'],
+                'standard_name': args[0][0].time['standard_name'],
+                'long_name': 'time in seconds of volume start'}
 
             time_start = {
                 'data': args[0][0].time['data'][0],
@@ -244,7 +302,7 @@ class pyGrid:
                 'long_name': 'longitude at grid origin',
                 'units': 'degrees_east'}
 
-            self.axes = {'time_start': time_start, 'time_end': time_end,
+            self.axes = {'time': time, 'time_start': time_start, 'time_end': time_end,
                          'z_disp': zaxis, 'y_disp': yaxis, 'x_disp': xaxis,
                          'alt': altorigin, 'lat': latorigin, 'lon': lonorigin}
 
