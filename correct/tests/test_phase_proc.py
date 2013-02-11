@@ -5,6 +5,7 @@ import os.path
 import pyart
 from pyart.correct import phase_proc
 
+import netCDF4
 import numpy as np
 from numpy.testing import assert_array_equal
 
@@ -16,6 +17,11 @@ PHASENAME = os.path.join(DIR, 'reproc_phase_reference.npy')
 ####################
 # Phase proc tests #
 ####################
+
+radar = pyart.io.radar.Radar(netCDF4.Dataset('sample.nc')) 
+
+def test_det_sys_phase_sg():
+    assert round(phase_proc.det_sys_phase_sg(radar, -332.0), 2) == 126.08
 
 
 def test_phase_rsl():

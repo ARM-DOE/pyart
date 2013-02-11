@@ -15,17 +15,17 @@ from numpy import ma
 import glpk
 
 
-def det_sys_phase_sg(myradar, fg, **kwargs):
+def det_sys_phase_sg(myradar, fg, ncp_lev=0.4, rhohv_lev=0.6, 
+                     ncp_field='norm_coherent_power', rhv_field='copol_coeff',
+                     phidp_field='dp_phase_shift'):
     print "Unfolding"
-    ncp_lev = kwargs.get('ncp_lev', 0.4)
-    rhohv_lev = kwargs.get('rhohv_lev', 0.6)
     #print rhohv_lev, ncp_lev
     good = False
     n = 0
     phases = []
-    mncp = myradar.fields['norm_coherent_power']['data'][:, 30:]
-    mrhv = myradar.fields['copol_coeff']['data'][:, 30:]
-    myphi = myradar.fields['dp_phase_shift']['data'][:, 30:]
+    mncp = myradar.fields[ncp_field]['data'][:, 30:]
+    mrhv = myradar.fields[rhv_field]['data'][:, 30:]
+    myphi = myradar.fields[phidp_field]['data'][:, 30:]
     for radial in range(myradar.sweep_info['sweep_end_ray_index']['data'][0] - 1):
             meteo = np.logical_and(mncp[radial, :] > ncp_lev,
                                    mrhv[radial, :] > rhohv_lev)
@@ -453,25 +453,40 @@ def LP_solver(A_Matrix, B_vectors, weights, it_lim=7000, presolve=True,
 
 
 class phase_proc:
+    """
 
-    def __init__(self, radar, offset, **kwargs):
-        debug = kwargs.get('debug', False)
+    """
+
+    def __init__(self, radar, offset, debug=False, self_const=60000.0,
+            refl_field='reflectivity_horizontal', 
+            ncp_field='norm_coherent_power', rhv_field = 'copol_coeff',
+            phidp_field='dp_phase_shift', kdp_field = 'diff_phase', low_z=10.0,
+            high_z = 53.0, min_phidp=0.01, min_ncp=0.5, min_rhv=0.8, 
+            fzl=4000.0, sys_phase=0.0, overide_sys_phase=False, **kwargs):
+        """
+
+        """
+
+        debug = debug
         if debug:
             print('populating')
-        self.self_const = kwargs.get('self_const', 60000.0)
-        self.refl_field = kwargs.get('refl_field', 'reflectivity_horizontal')
-        self.ncp_field = kwargs.get('ncp_field', 'norm_coherent_power')
-        self.rhv_field = kwargs.get('rhv_field', 'copol_coeff')
-        self.phidp_field = kwargs.get('phidp_field', 'dp_phase_shift')
-        self.kdp_field = kwargs.get('kdp_field', 'diff_phase')
-        self.low_z = kwargs.get('low_z', 10.0)
-        self.high_z = kwargs.get('high_z', 53.0)
-        self.min_phidp = kwargs.get('min_phidp', 0.01)
-        self.min_ncp = kwargs.get('min_ncp', 0.5)
-        self.min_rhv = kwargs.get('min_rhv', 0.8)
-        self.fzl = kwargs.get('fzl', 4000.0)
-        self.sys_phase = kwargs.get('sys_phase', 0.0)
-        self.overide_sys_phase = kwargs.get('overide_sys_phase', False)
+        
+        # populate attributes in the class
+        self.self_const = self_const
+        self.refl_field = refl_field
+        self.ncp_field = ncp_field
+        self.rhv_field = rhv_field
+        self.phidp_field = phidp_field
+        self.kdp_field = kdp_field
+        self.low_z = low_z
+        self.high_z = high_z
+        self.min_phidp = min_phidp
+        self.min_ncp = min_ncp
+        self.min_rhv = min_rhv
+        self.fzl = fzl
+        self.sys_phase = sys_phase
+        self.overide_sys_phase = overide_sys_phase
+
         refl = copy.deepcopy(radar.fields[self.refl_field]['data']) + offset
         is_low_z = (refl) < self.low_z
         is_high_z = (refl) > self.high_z
@@ -525,7 +540,9 @@ class phase_proc:
         if self.overide_sys_phase:
             system_zero = self.sys_phase
         else:
-            system_zero = self.det_sys_phase_sg(radar, self.sys_phase)
+            system_zero = det_sys_phase_sg(
+                radar, self.sys_phase, ncp_field=self.ncp_field, 
+                rhv_field=self.rhv_field, phidp_field=self.phidp_field)
         cordata = np.zeros(my_rhv.shape, dtype=float)
         for radial in range(my_rhv.shape[0]):
                 my_snr = snr(my_z[radial, :])
@@ -591,32 +608,6 @@ class phase_proc:
         if debug:
             print "Exec time: ", time() - t
         return cordata
-
-    def det_sys_phase_sg(self, myradar, fg, **kwargs):
-        print "Unfolding"
-        ncp_lev = kwargs.get('ncp_lev', 0.6)
-        rhohv_lev = kwargs.get('rhohv_lev', 0.8)
-        #print rhohv_lev, ncp_lev
-        good = False
-        n = 0
-        phases = []
-        mncp = myradar.fields[self.ncp_field]['data'][:, 30:]
-        mrhv = myradar.fields[self.rhv_field]['data'][:, 30:]
-        myphi = myradar.fields[self.phidp_field]['data'][:, 30:]
-        for radial in range(myradar.sweep_info['sweep_end_ray_index']['data'][0] - 1):
-                meteo = np.logical_and(mncp[radial, :] >
-                                       ncp_lev, mrhv[radial, :] > rhohv_lev)
-                mpts = np.where(meteo)
-                #print len(mpts),  mpts[-1]
-                if len(mpts[0]) > 25:
-                    good = True
-                    msmth_phidp = smooth_and_trim(myphi[radial, mpts[0]], 9)
-                    phases.append(msmth_phidp[0:25].min())
-        #print phases
-        if not(good):
-            sys_phase = fg
-        #print fg
-        return np.median(phases)
 
     def __call__(self, debug=False, really_verbose=False):
         proc_ph = copy.deepcopy(self.radar.fields[self.phidp_field])
