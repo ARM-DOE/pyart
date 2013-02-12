@@ -89,10 +89,9 @@ if __name__ == "__main__":
     mydict.update({'scanmode': {'ppi': 'sur', 'rhi': 'rhi'}
                   [myradar.sweep_mode[0]], 'fac': metadata['facility']})
     ofilename = outdir + '%(scanmode)scmac%(fac)s.c0.%(year)04d%(month)02d%(day)02d.%(hour)02d%(minute)02d%(second)02d.nc' % mydict
-    mylp = phase_proc.phase_proc(
+    reproc_phase, sob_kdp = phase_proc.phase_proc(
         myradar, params['reflectivity_offset'], sys_phase=params['sys_phase'],
         overide_sys_phase=params['overide_sys_phase'], debug=True, nowrap=ng)
-    reproc_phase, sob_kdp = mylp(debug=True)
     myradar.fields.update({'recalculated_diff_phase': sob_kdp,
                           'proc_dp_phase_shift': reproc_phase})
 
