@@ -266,8 +266,8 @@ def sobel(x, window_len=11):
     window_len : int
         Length of window.
 
-    Return
-    ------
+    Returns
+    -------
     output : array
         Differential signal (Unscaled for gate spacing)
 

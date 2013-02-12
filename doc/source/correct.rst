@@ -22,7 +22,7 @@ Phase Processing
 .. autosummary::
     :toctree: generated/
 
-    phase_proc.det_sys_phase_sg
+    phase_proc.det_sys_phase
     phase_proc.det_process_range
     phase_proc.fzl_index
     phase_proc.snr
