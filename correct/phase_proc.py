@@ -15,9 +15,9 @@ from numpy import ma
 import glpk
 
 
-def det_sys_phase_sg(radar, fg, ncp_lev=0.4, rhohv_lev=0.6,
-                     ncp_field='norm_coherent_power', rhv_field='copol_coeff',
-                     phidp_field='dp_phase_shift'):
+def det_sys_phase(radar, ncp_lev=0.4, rhohv_lev=0.6,
+                  ncp_field='norm_coherent_power', rhv_field='copol_coeff',
+                  phidp_field='dp_phase_shift'):
     """
     Determine the system phase.
 
@@ -25,8 +25,6 @@ def det_sys_phase_sg(radar, fg, ncp_lev=0.4, rhohv_lev=0.6,
     ----------
     radar : Radar
         Radar object for which to determine the system phase.
-    fg : float
-        XXX not used.
     ncp_lev :
         Miminum normal coherence power level.  Regions below this value will
         not be included in the phase calculation.
@@ -40,8 +38,8 @@ def det_sys_phase_sg(radar, fg, ncp_lev=0.4, rhohv_lev=0.6,
 
     Returns
     -------
-    sys_phase : float
-        Estimate of the system phase.
+    sys_phase : float or None
+        Estimate of the system phase.  None is not estimate can be made.
 
     """
     print "Unfolding"
@@ -49,16 +47,16 @@ def det_sys_phase_sg(radar, fg, ncp_lev=0.4, rhohv_lev=0.6,
     rhv = radar.fields[rhv_field]['data'][:, 30:]
     phidp = radar.fields[phidp_field]['data'][:, 30:]
     last_ray_idx = radar.sweep_info['sweep_end_ray_index']['data'][0]
-    return _det_sys_phase_sg(ncp, rhv, phidp, last_ray_idx, fg, ncp_lev,
-                             rhohv_lev)
+    return _det_sys_phase(ncp, rhv, phidp, last_ray_idx, ncp_lev,
+                          rhohv_lev)
 
 
-def _det_sys_phase_sg(ncp, rhv, phidp, last_ray_idx, fg, ncp_lev=0.4,
-                      rhv_lev=0.6):
-    """ Determine the system phase, see :py:func:`det_sys_phase_sg`. """
+def _det_sys_phase(ncp, rhv, phidp, last_ray_idx, ncp_lev=0.4,
+                   rhv_lev=0.6):
+    """ Determine the system phase, see :py:func:`det_sys_phase`. """
     good = False
     phases = []
-    for radial in xrange(last_ray_idx - 1):  # XXX should be + 1
+    for radial in xrange(last_ray_idx + 1):
         meteo = np.logical_and(ncp[radial, :] > ncp_lev,
                                rhv[radial, :] > rhv_lev)
         mpts = np.where(meteo)
@@ -67,8 +65,7 @@ def _det_sys_phase_sg(ncp, rhv, phidp, last_ray_idx, fg, ncp_lev=0.4,
             msmth_phidp = smooth_and_trim(phidp[radial, mpts[0]], 9)
             phases.append(msmth_phidp[0:25].min())
     if not(good):
-        # XXX should this return None, also fg not used.
-        sys_phase = fg
+        return None
     return np.median(phases)
 
 
@@ -90,7 +87,7 @@ def fzl_index(fzl, ranges, elevation, radar_height):
     Returns
     -------
     idx : int
-        Index of last gate which has an altitude below `flz`.
+        Index of last gate which has an altitude below `fzl`.
 
     Notes
     -----
@@ -118,7 +115,7 @@ def det_process_range(radar, sweep, fzl, doc=10):
         Radar object from which ranges will be determined.
     sweep : int
         Sweep (0 indexed) for which to determine processing ranges.
-    flz : float
+    fzl : float
         Maximum altitude in meters. The determined range will not include
         gates which are above this limit.
     doc : int
@@ -128,7 +125,7 @@ def det_process_range(radar, sweep, fzl, doc=10):
     Returns
     -------
     gate_end : int
-        Index of last gate below `flz` and satisfying the `doc` parameter.
+        Index of last gate below `fzl` and satisfying the `doc` parameter.
     ray_start : int
         Ray index which defines the start of the region.
     ray_end : int
@@ -140,8 +137,7 @@ def det_process_range(radar, sweep, fzl, doc=10):
     ranges = radar.range['data']
     elevation = radar.sweep_info['fixed_angle']['data'][sweep]
     radar_height = radar.location['altitude']['data']
-    # XXX fzl is not acutally used
-    gate_end = fzl_index(4000.0, ranges, elevation, radar_height)
+    gate_end = fzl_index(fzl, ranges, elevation, radar_height)
     gate_end = min(gate_end, len(ranges) - doc)
 
     ray_start = radar.sweep_info['sweep_start_ray_index']['data'][sweep]
@@ -354,9 +350,11 @@ def get_phidp_unf(radar, ncp_lev=0.4, rhohv_lev=0.6, debug=False, ncpts=20,
     if overide_sys_phase:
         system_zero = sys_phase
     else:
-        system_zero = det_sys_phase_sg(
-            radar, sys_phase, ncp_field=ncp_field, rhv_field=rhv_field,
+        system_zero = det_sys_phase(
+            radar, ncp_field=ncp_field, rhv_field=rhv_field,
             phidp_field=phidp_field)
+        if system_zero is None:
+            system_zero = sys_phase
     cordata = np.zeros(my_rhv.shape, dtype=float)
     for radial in range(my_rhv.shape[0]):
         my_snr = snr(my_z[radial, :])
@@ -614,7 +612,7 @@ def phase_proc(radar, offset, debug=False, self_const=60000.0,
         Minimum normal coherent power.
     min_rhv : float
         Minimum copolar coefficient.
-    flz :
+    fzl :
         Maximum altitude.
     sys_phase : float
         System phase in degrees.

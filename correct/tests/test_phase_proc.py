@@ -21,8 +21,8 @@ PHASENAME = os.path.join(DIR, 'reproc_phase_reference.npy')
 radar = pyart.io.radar.Radar(netCDF4.Dataset('sample.nc'))
 
 
-def test_det_sys_phase_sg():
-    assert round(phase_proc.det_sys_phase_sg(radar, -332.0), 2) == 126.08
+def test_det_sys_phase():
+    assert round(phase_proc.det_sys_phase(radar), 2) == 126.02
 
 
 def test_phase_rsl():
