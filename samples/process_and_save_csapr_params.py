@@ -91,18 +91,11 @@ if __name__ == "__main__":
     gates = myradar.range['data'][1] - myradar.range['data'][0]
     rge = 40.0 * 1000.0
     ng = rge / gates
-    # Create a Linear programming phase processing object.
-    # This does things like initialize the matrices used in solving the
-    # linear problem and doing
-    # the initial unfolding and masking
-    mylp = phase_proc.phase_proc(
+    # Perform a Linear programming phase processing to get the conditionally
+    # fitted phase profile and sobel filtered KDP field
+    reproc_phase, sob_kdp = phase_proc.phase_proc(
         myradar, params['reflectivity_offset'], sys_phase=params['sys_phase'],
         overide_sys_phase=params['overide_sys_phase'], debug=True, nowrap=ng)
-    # calling the phase processing object in order to get the conditionally
-    # fitted phase profile
-    # And sobel filtered KDP field
-    reproc_phase, sob_kdp = mylp(debug=True)
-    # Append these back into the radar object
     myradar.fields.update({'recalculated_diff_phase': sob_kdp,
                            'proc_dp_phase_shift': reproc_phase})
     # attenuation correction, this time we just use a straight procedural
