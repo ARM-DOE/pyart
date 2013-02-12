@@ -46,8 +46,8 @@ if __name__ == "__main__":
 
     ofilename = outdir + '%(scanmode)scmacI7.c0.%(year)04d%(month)02d%(day)02d.%(hour)02d%(minute)02d%(second)02d.nc' % mydict
 
-    mylp = phase_proc.phase_proc(myradar, -2.0, debug=True, nowrap=ng)
-    reproc_phase, sob_kdp = mylp(debug=True)
+    reproc_phase, sob_kdp = phase_proc.phase_proc(myradar, -2.0, debug=True, 
+                                                  nowrap=ng)
     myradar.fields.update({'recalculated_diff_phase': sob_kdp,
                            'proc_dp_phase_shift': reproc_phase})
     spec_at, cor_z = attenuation.calculate_attenuation(
