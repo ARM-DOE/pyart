@@ -605,6 +605,7 @@ class Radar:
             self.metadata = dict([(key, getattr(ncobj, key))
                                  for key in ncobj.ncattrs()])
             self.scan_type = "rhi"
+            self.nsweeps = len(ncobj.variables['sweep_start_ray_index'])
             self.sweep_mode = array(['rhi']*self.nsweeps)
             if len(ncobj.variables['sweep_start_ray_index']) == 1:
                 self.nele = ncobj.variables['sweep_end_ray_index'][0] + 1
