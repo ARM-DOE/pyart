@@ -845,7 +845,7 @@ class Radar:
             prt_mode = 'dual                    '
         inst_params = {
             'prt_mode': {
-                'data': array([prt_mode]*self.nele),
+                'data': array([prt_mode]*self.nsweeps),
                 'comments': 'Pulsing mode Options are: "fixed", "staggered", "dual" Assumed "fixed" if missing.'},
 
             'prt': {
