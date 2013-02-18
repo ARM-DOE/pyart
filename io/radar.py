@@ -724,6 +724,14 @@ class Radar:
 				'meters_to_center_of_first_gate': (radarobj.range_km[0]) * 1000.0,
 				'meters_between_gates': (radarobj.range_km[1] -
 										 radarobj.range_km[0])*1000.0}
+			self.elevation = {
+				'data':array(radarobj.el_deg).repeat(self.naz), 
+				'units': 'degrees',
+				'standard_name': 'beam_elevation_angle',
+				'comment': 'Elevation of antenna relative to the horizontal plane',
+				'long_name': 'elevation_angle_from_horizontal_plane'}
+
+
         elif self.scan_type == 'rhi':
 			self.azimuth = {
 				'data': array(radarobj.az_deg).repeat(self.nele),
