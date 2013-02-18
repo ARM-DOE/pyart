@@ -453,8 +453,8 @@ def write_radar4(ncobj, radarobj, **kwargs):
         trans_dict_as_ncattr(radarobj.fields[moment], my_nc_vars[moment], want)
     #populate data for moment variables
     for moment in moments:
-        print my_nc_vars[moment]._FillValue
-        print moment
+        #print my_nc_vars[moment]._FillValue
+        #print moment
         if '_fill_value' in dir(radarobj.fields[moment]['data']):
             radarobj.fields[moment]['data']._fill_value = None
             # gets around a bug
@@ -477,22 +477,19 @@ def write_radar4(ncobj, radarobj, **kwargs):
             'sweep_mode': ('sweep', string_string),
             'sweep_number': 'sweep'}
     for item in sweep_params:
-        print item, sweep_types[item]
+        #print item, sweep_types[item]
         this_var = ncobj.createVariable(
             item, sweep_types[item], dims[item], zlib=True)
-        print "made"
+        #print "made"
         trans_dict_as_ncattr(radarobj.sweep_info[item], this_var,
                              list(set(['units', 'comment',  'standard_name',
                                        'long_name']) &
                                   set(radarobj.sweep_info[item].keys())))
         print "Transfered"
         if item != "sweep_mode":
+            print item, this_var.shape
             this_var[:] = radarobj.sweep_info[item]['data']
         else:
-            print radarobj.sweep_info[item]['data'], 'moom', item
-            print netCDF4.stringtochar(np.array(
-                radarobj.sweep_info[item]['data'])).shape
-            print this_var[:].shape
             this_var[:] = netCDF4.stringtochar(np.array(
                 radarobj.sweep_info[item]['data']))
 
@@ -539,8 +536,9 @@ def write_radar4(ncobj, radarobj, **kwargs):
             print radarobj.inst_params[key]['data'], 'moom'
             print netCDF4.stringtochar(np.array(
                 radarobj.inst_params[key]['data'])).shape
-            this_var[:] = netCDF4.stringtochar(np.array(
-                radarobj.inst_params[key]['data']))
+            print this_var[:, 0:char_shape].shape
+            this_var[:, 0:char_shape] = netCDF4.stringtochar(np.array(
+                radarobj.inst_params[key]['data']))[:, 0:char_shape]
 
     #popuate location params
     if 'sort' in dir(radarobj.location['latitude']['data']):
