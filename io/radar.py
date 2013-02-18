@@ -106,8 +106,9 @@ def create_cube_array_lim(volume, nsweeps, nrays):
     for levnum in range(nsweeps):
         rays = volume.sweeps[levnum].rays
         len_d = len(rays[0].data)
+	print(len_d);
         for raynum in range(nrays):
-            ppi[levnum, raynum, 0:len_d] = rays[raynum].data
+            ppi[levnum, raynum, 0:len(rays[raynum].data)] = rays[raynum].data
     return ppi
 
 
