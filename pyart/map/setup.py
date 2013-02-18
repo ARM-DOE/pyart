@@ -7,7 +7,7 @@ def configuration(parent_package='', top_path=None):
     from numpy.distutils.misc_util import Configuration
     from numpy.distutils.system_info import get_info, BlasNotFoundError
 
-    config = Configuration('ball_tree', parent_package, top_path)
+    config = Configuration('map', parent_package, top_path)
     config.add_extension('ball_tree',
                          sources=[join('src', 'ball_tree.cpp')],
                          depends=[join('src', 'BallTree.h'),

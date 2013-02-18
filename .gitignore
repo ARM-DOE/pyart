@@ -97,10 +97,12 @@ io/src/rsl-*
 
 # radar data files #
 ####################
-io/tests/110635.mdv
-io/tests/sample_nc.nc
-io/tests/sample_uf.uf
-correct/tests/sgpinterpolatedsondeC1.c1.20110510.000000.cdf
-correct/tests/sample.nc
-correct/tests/sample.sigmet
-correct/tests/*.npy
+pyart/io/tests/110635.mdv
+pyart/io/tests/sample_nc.nc
+pyart/io/tests/sample_uf.uf
+pyart/correct/tests/sgpinterpolatedsondeC1.c1.20110510.000000.cdf
+pyart/correct/tests/sample.nc
+pyart/correct/tests/sample.sigmet
+pyart/correct/tests/*.npy
+pyart/version.py
+
