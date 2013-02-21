@@ -17,8 +17,7 @@ def find_librsl_path():
     """ Return the path of the RSL dynamic library. """
     # assumed to be ./lib/librsl.{so, dylib, DLL}
     ext = {'darwin': 'dylib', 'linux2': 'so', 'win32': 'DLL'}[sys.platform]
-    lib_dir = os.path.join(os.path.dirname(__file__), 'lib')
-    return os.path.join(lib_dir, 'librsl.' + ext)
+    return os.path.join(os.path.dirname(__file__), '_wraplibrsl.' + ext)
 
 librsl = CDLL(find_librsl_path())
 
