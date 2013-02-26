@@ -12,7 +12,6 @@ from time import time
 
 import numpy as np
 from numpy import ma
-import glpk
 
 
 def det_sys_phase(radar, ncp_lev=0.4, rhohv_lev=0.6,
@@ -26,14 +25,14 @@ def det_sys_phase(radar, ncp_lev=0.4, rhohv_lev=0.6,
     radar : Radar
         Radar object for which to determine the system phase.
     ncp_lev :
-        Miminum normal coherence power level.  Regions below this value will
+        Miminum normal coherent power level.  Regions below this value will
         not be included in the phase calculation.
     rhohv_lev :
         Miminum copolar coefficient level.  Regions below this value will not
         be included in the phase calculation.
     ncp_field, rhv_field, phidp_field : str
         Field names within the radar object which represent the normal
-        coherence power, the copolar coefficient, and the differential phase
+        coherent power, the copolar coefficient, and the differential phase
         shift.
 
     Returns
@@ -290,7 +289,7 @@ def noise(line, wl=11):
 def get_phidp_unf(radar, ncp_lev=0.4, rhohv_lev=0.6, debug=False, ncpts=20,
                   doc=-10, overide_sys_phase=False, sys_phase=-135,
                   nowrap=None, refl_field='reflectivity_horizontal',
-                  ncp_field='norm_coherence_power', rhv_field='copol_coeff',
+                  ncp_field='norm_coherent_power', rhv_field='copol_coeff',
                   phidp_field='dp_phase_shift'):
     """
     Get Unfolded Phi differential phase
@@ -300,7 +299,7 @@ def get_phidp_unf(radar, ncp_lev=0.4, rhohv_lev=0.6, debug=False, ncpts=20,
     radar : Radar
         The input radar.
     ncp_lev :
-        Miminum normal coherence power level.  Regions below this value will
+        Miminum normal coherent power level.  Regions below this value will
         not be included in the calculation.
     rhohv_lev :
         Miminum copolar coefficient level.  Regions below this value will not
@@ -323,7 +322,7 @@ def get_phidp_unf(radar, ncp_lev=0.4, rhohv_lev=0.6, debug=False, ncpts=20,
         gates.
     refl_field ncp_field, rhv_field, phidp_field : str
         Field names within the radar object which represent the horizonal
-        reflectivity, normal coherence power, the copolar coefficient, and the
+        reflectivity, normal coherent power, the copolar coefficient, and the
         differential phase shift.
 
     Returns
@@ -521,10 +520,66 @@ def construct_B_vectors(phidp_mod, z_mod, filt, coef=0.914, dweight=60000.0):
     return B_vectors
 
 
-def LP_solver(A_Matrix, B_vectors, weights, it_lim=7000, presolve=True,
-              really_verbose=False):
+def LP_solver_cvxopt(A_Matrix, B_vectors, weights, solver='glpk'):
     """
-    Solve the Linear Programming problem, see Giangrande et al, 2012.
+    Solve the Linear Programming problem given in Giangrande et al, 2012 using
+    the CVXOPT module.
+
+    Parameters
+    ----------
+    A_Matrix : matrix
+        Row augmented A matrix, see :py:func:`construct_A_matrix`
+    B_vectors : matrix
+        Matrix containing B vectors, see :py:func:`construct_B_vectors`
+    weights : array
+        Weights.
+    solver : str or None
+        LP solver backend to use, choices are 'glpk', 'mosek' or None to use
+        the conelp function in CVXOPT.  'glpk' and 'mosek' are only available
+        if they are installed and CVXOPT was build with the correct bindings.
+
+    Returns
+    -------
+    soln : array
+        Solution to LP problem.
+
+    See Also
+    --------
+    LP_solver_pyglpk : Solve LP problem using the PyGLPK module.
+
+    """
+    from cvxopt import matrix, solvers
+    n_gates = weights.shape[1]/2
+    n_rays = B_vectors.shape[0]
+    mysoln = np.zeros([n_rays, n_gates])
+
+    G = matrix(np.bmat([[-A_Matrix], [-np.eye(2 * n_gates)]]))
+    h_array = np.zeros(5 * n_gates - 4)
+    for raynum in range(n_rays):
+        print "raynum", raynum
+        c = matrix(weights[raynum]).T
+        h_array[:3 * n_gates - 4] = -B_vectors[raynum]
+        h = matrix(h_array)
+        sol = solvers.lp(c, G, h, solver=solver)
+        # XXX when a solution is not found sol is None, need to check and
+        # deal with this...
+
+        # extract the solution
+        this_soln = np.zeros(n_gates)
+        for i in range(n_gates):
+            this_soln[i] = sol['x'][i + n_gates]
+
+        # apply smoothing filter and record in output array
+        mysoln[raynum, :] = smooth_and_trim(this_soln, window_len=5,
+                                            window='sg_smooth')
+    return mysoln
+
+
+def LP_solver_pyglpk(A_Matrix, B_vectors, weights, it_lim=7000, presolve=True,
+                     really_verbose=False):
+    """
+    Solve the Linear Programming problem given in Giangrande et al, 2012 using
+    the PyGLPK module.
 
     Parameters
     ----------
@@ -546,7 +601,13 @@ def LP_solver(A_Matrix, B_vectors, weights, it_lim=7000, presolve=True,
     soln : array
         Solution to LP problem.
 
+    See Also
+    --------
+    LP_solver_cvxopt : Solve LP problem using the CVXOPT module.
+
     """
+    import glpk
+
     if really_verbose:
         message_state = glpk.LPX.MSG_ON
     else:
@@ -584,7 +645,7 @@ def phase_proc(radar, offset, debug=False, self_const=60000.0,
                low_z=10.0, high_z=53.0, min_phidp=0.01, min_ncp=0.5,
                min_rhv=0.8, fzl=4000.0, sys_phase=0.0,
                overide_sys_phase=False, nowrap=None, really_verbose=False,
-               refl_field='reflectivity_horizontal',
+               LP_solver='pyglpk', refl_field='reflectivity_horizontal',
                ncp_field='norm_coherent_power', rhv_field='copol_coeff',
                phidp_field='dp_phase_shift', kdp_field='diff_phase'):
     """
@@ -623,6 +684,8 @@ def phase_proc(radar, offset, debug=False, self_const=60000.0,
         Gate number to begin phase unwrapping.  None will unwrap all phases.
     really_verbose : bool
         True to print LPX messaging. False to suppress.
+    LP_solver : 'pyglpk' or 'cvxopt'
+        Module to use to solve LP problem.
     refl_field, ncp_field, rhv_field, phidp_field, kdp_field: str
         Name of field in radar which contains the horizonal reflectivity,
         normal cohernect power, copolar coefficient, differential phase shift,
@@ -694,8 +757,13 @@ def phase_proc(radar, offset, debug=False, self_const=60000.0,
 
         nw = np.bmat([weights, np.zeros(weights.shape)])
 
-        mysoln = LP_solver(A_Matrix, B_vectors, nw, it_lim=7000,
-                           presolve=True, really_verbose=really_verbose)
+        if LP_solver == 'pyglpk':
+            mysoln = LP_solver_pyglpk(A_Matrix, B_vectors, nw,
+                                      really_verbose=really_verbose)
+        elif LP_solver == 'cvxopt':
+            mysoln = LP_solver_cvxopt(A_Matrix, B_vectors, nw)
+        else:
+            raise ValueError('unknown LP_solver:' + LP_solver)
 
         proc_ph['data'][start_ray:end_ray, start_gate:end_gate] = mysoln
 
