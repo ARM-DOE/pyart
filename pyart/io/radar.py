@@ -128,44 +128,46 @@ class Radar:
     A class for storing antenna coordinate radar data which will interact
     nicely with CF-Radial files and other pyart code
     """
-
     def __init__(self, nsweeps, nrays, ngates, scan_type, naz, nele, _range,
                  azimuth, elevation, tu, cal, time, fields, sweep_info,
                  sweep_mode, sweep_number, location, inst_params, metadata):
-        self.nsweeps = nsweeps
-        self.nrays = nrays
-        self.ngates = ngates
-        self.scan_type = scan_type
-        self.naz = naz
-        self.nele = nele
-        self.range = _range
+        
         self.azimuth = azimuth
         self.elevation = elevation
-        self.tu = tu
-        self.cal = cal
-        self.time = time
         self.fields = fields
+        self.location = location
+        self.metadata  = metadata
+        self.naz = naz
+        self.nele = nele
+        self.ngates = ngates
+        self.nsweeps = nsweeps
+        self.range = _range
+        self.scan_type = scan_type
         self.sweep_info = sweep_info
         self.sweep_mode = sweep_mode
         self.sweep_number = sweep_number
-        self.location = location
+        self.time = time
         self.inst_params = inst_params
-        self.metadata  = metadata
-
-    #def __init__(self, radarobj, **kwargs):
-    #
-    #    #check format of file object
-    #    if 'vlevel_headers' in dir(radarobj):  # this is a mdv file
-    #        self.mdv2rad(radarobj, **kwargs)
-    #    elif 'contents' in dir(radarobj):  # this is a ctype, rsl object?
-    #        if 'h' in dir(radarobj.contents):  # yes a rsl object
-    #            self.rsl2rad(radarobj, **kwargs)
-    #    elif 'variables' in dir(radarobj):  # netCDF file
-    #        if 'ray_start_index' in radarobj.variables.keys():
-    #            self.streamcf2rad(radarobj, **kwargs)
-    #        else:
-    #            self.cf2rad(radarobj, **kwargs)
-
+        
+        self.cal = cal
+        self.nrays = nrays
+        self.tu = tu
+    
+    """
+    def __init__(self, radarobj, **kwargs):
+    
+        #check format of file object
+        if 'vlevel_headers' in dir(radarobj):  # this is a mdv file
+            self.mdv2rad(radarobj, **kwargs)
+        elif 'contents' in dir(radarobj):  # this is a ctype, rsl object?
+            if 'h' in dir(radarobj.contents):  # yes a rsl object
+                self.rsl2rad(radarobj, **kwargs)
+        elif 'variables' in dir(radarobj):  # netCDF file
+            if 'ray_start_index' in radarobj.variables.keys():
+                self.streamcf2rad(radarobj, **kwargs)
+            else:
+                self.cf2rad(radarobj, **kwargs)
+    """
     def cf2rad(self, ncobj):
         try:
             mode = "".join(ncobj.variables['sweep_mode'][0])
@@ -348,213 +350,6 @@ class Radar:
                     ncobj.variables['ray_start_index'][:])
                 field_dict.update({field: my_field})
             self.fields = field_dict
-
-    def mdv2rad(self, radarobj):
-
-        # We only want to transfer fields that we have valid names for...
-        valid_fields = csapr_standard_names()
-        todo_fields = set(radarobj.fields) & set(csapr_standard_names().keys())
-        # the intersection of the set of available and valid names
-        flat_dict = {}  # a holder to be updated
-        self.naz = len(radarobj.az_deg)
-        self.nele = len(radarobj.el_deg)
-        self.ngates = len(radarobj.range_km)
-        self.scan_type = radarobj.scan_type
-
-        #The flat azimuth array which describes the azimuth of each beam
-        if self.scan_type == 'ppi':
-			self.azimuth = {
-				'data': tile(radarobj.az_deg, self.nele),
-				'units': 'degrees',
-				'comment': 'Azimuth of antenna relative to true north',
-				'long_name': 'azimuth_angle_from_true_north',
-				'standard_name': 'beam_azimuth_angle'}
-			
-			#the range array which describes the range of all beams (note in this
-			self.range = {
-				'data': array(radarobj.range_km*1000.0),
-				'units': 'meters',
-				'standard_name': 'projection_range_coordinate',
-				'long_name': 'range_to_measurement_volume',
-				'comment': (
-					'Coordinate variable for range. Range to center of each bin.'),
-				'spacing_is_constant': 'true',
-				'meters_to_center_of_first_gate': (radarobj.range_km[0]) * 1000.0,
-				'meters_between_gates': (radarobj.range_km[1] -
-										 radarobj.range_km[0])*1000.0}
-			self.elevation = {
-				'data':array(radarobj.el_deg).repeat(self.naz), 
-				'units': 'degrees',
-				'standard_name': 'beam_elevation_angle',
-				'comment': 'Elevation of antenna relative to the horizontal plane',
-				'long_name': 'elevation_angle_from_horizontal_plane'}
-
-
-        elif self.scan_type == 'rhi':
-			self.azimuth = {
-				'data': array(radarobj.az_deg).repeat(self.nele),
-				'units': 'degrees',
-				'comment': 'Azimuth of antenna relative to true north',
-				'long_name': 'azimuth_angle_from_true_north',
-				'standard_name': 'beam_azimuth_angle'}
-				
-			#the range array which describes the range of all beams (note in this
-			self.range = {
-				'data': array(radarobj.range_km*1000.0),
-				'units': 'meters',
-				'standard_name': 'projection_range_coordinate',
-				'long_name': 'range_to_measurement_volume',
-				'comment': (
-					'Coordinate variable for range. Range to center of each bin.'),
-				'spacing_is_constant': 'true',
-				'meters_to_center_of_first_gate': (radarobj.range_km[0]) * 1000.0,
-				'meters_between_gates': (radarobj.range_km[1] -
-										 radarobj.range_km[0])*1000.0}
-			
-			
-			self.elevation = {
-				'data': tile(radarobj.el_deg, self.naz),
-				'units': 'degrees',
-				'standard_name': 'beam_elevation_angle',
-				'comment': 'Elevation of antenna relative to the horizontal plane',
-				'long_name': 'elevation_angle_from_horizontal_plane'}
-
-        #append time
-        tu = "seconds since %(year)d-%(month)02d-%(day)02d %(hour)02d:%(minute)02d:%(second)02d.0" % dt_to_dict(radarobj.times['time_begin'])
-        cal = "gregorian"
-        time_array = linspace(date2num(radarobj.times['time_begin'], tu, cal),
-                              date2num(radarobj.times['time_end'], tu, cal),
-                              self.naz * self.nele)
-        self.time = {
-            'data': time_array, 'units': tu, 'calendar': cal,
-            'comment': 'Coordinate variable for time. Time at the center of each ray, in fractional seconds since the global variable time_coverage_start',
-            'standard_name': 'time',
-            'long_name': 'time in seconds since volume start'}
-        for field in todo_fields:
-            # create a dictionary tree for all data fields
-            print "Doing ", field
-            # grab data from MDV object
-            data = radarobj.read_a_field(radarobj.fields.index(field))
-            data[where(isnan(data))] = -9999.0
-            data[where(data == 131072)] = -9999.0
-            meta = self.get_mdv_meta(radarobj, field)  # fetch metadata
-            fielddict = {
-                'data': ma.masked_equal(data, -9999.0).reshape(
-                    data.shape[0] * data.shape[1], data.shape[2]),
-                '_FillValue': -9999.0}
-            fielddict.update(meta)
-            flat_dict.update({csapr_standard_names()[field]: fielddict})
-        self.fields = flat_dict
-        #sweep based stuff now:
-        if radarobj.scan_type == 'ppi':
-            self.nsweeps = self.nele
-            sweep_number = {'data': range(self.nsweeps), 'units': 'count',
-                            'long_name': 'sweep_number'}
-            sweep_mode = {
-                'data': self.nsweeps*['azimuth_surveillance    '],
-                'long_name': 'sweep_mode',
-                'units': 'uniteless',
-                'comment': 'Options are:"sector","coplane",rhi","vertical_pointing","idle","azimuth_surveillance","elevation_surveillance","sunscan","pointing","manual_ppi","manual_rhi"'}
-            fixed_angle = {
-                'data': array(radarobj.el_deg),
-                'long_name': 'target_angle_for_sweep',
-                'units': 'degrees',
-                'standard_name': 'target_fixed_angle'}
-            sweep_start_ray_index = {
-                'data': arange(0, len(self.time['data']), self.naz),
-                'long_name': 'index of first ray in sweep, 0-based',
-                'units': 'count'}
-            sweep_end_ray_index = {
-                'data': arange(self.naz-1, len(self.time['data']), self.naz),
-                'long_name': 'index of last ray in sweep, 0-based',
-                'units': 'count'}
-        elif radarobj.scan_type == 'rhi':
-            self.nsweeps = self.naz
-            sweep_number = {
-                'data': range(self.nsweeps),
-                'units': 'count',
-                'long_name': 'sweep_number'}
-            sweep_mode = {
-                'data': self.nsweeps * ['rhi                     '],
-                'long_name': 'sweep_mode',
-                'units': 'uniteless',
-                'comment': 'Options are:"sector","coplane",rhi","vertical_pointing","idle","azimuth_surveillance","elevation_surveillance","sunscan","pointing","manual_ppi","manual_rhi"'}
-            fixed_angle = {
-                'data': array(radarobj.az_deg),
-                'long_name': 'target_angle_for_sweep',
-                'units': 'degrees',
-                'standard_name': 'target_fixed_angle'}
-            sweep_start_ray_index = {
-                'data': arange(0, len(self.time['data']), self.nele),
-                'long_name': 'index of first ray in sweep, 0-based',
-                'units': 'count'}
-            sweep_end_ray_index = {
-                'data': arange(self.nele - 1, len(self.time['data']),
-                               self.nele),
-                'long_name': 'index of last ray in sweep, 0-based',
-                'units': 'count'}
-
-        elif radarobj.scan_type == 'vpr':
-            self.nsweeps = 1
-        self.sweep_info = {
-            'sweep_number': sweep_number,
-            'sweep_mode': sweep_mode,
-            'fixed_angle': fixed_angle,
-            'sweep_start_ray_index': sweep_start_ray_index,
-            'sweep_end_ray_index': sweep_end_ray_index}
-        self.sweep_mode = array([radarobj.scan_type] * self.nsweeps)
-        self.sweep_number = linspace(0, self.nsweeps-1, self.nsweeps)
-        mapme = defaut_mdv_metadata_map()
-        metadata = {}
-        masterdata = dict([(key, radarobj.master_header[mapme[key]])
-                           for key in mapme.keys()])
-        metadata.update(masterdata)
-        self.metadata = metadata
-        #now for location variables
-        lat = {
-            'data': radarobj.radar_info['latitude_deg'],
-            'standard_name': 'Latitude',
-            'units': 'degrees_north'}
-        lon = {
-            'data': radarobj.radar_info['longitude_deg'],
-            'standard_name': 'Longitude',
-            'units': 'degrees_east'}
-        elv = {
-            'data': radarobj.radar_info['altitude_km']*1000.0,
-            'standard_name': 'Altitude',
-            'units': 'meters'}
-        self.location = {'latitude': lat, 'longitude': lon, 'altitude': elv}
-        # now for instrument parameters..
-        # sorry but I am just going to brute force this!
-        # prt mode: Need to fix this.. assumes dual if two prts
-        if radarobj.radar_info['prt2_s'] == 0.0:
-            prt_mode = 'fixed                   '
-        else:
-            prt_mode = 'dual                    '
-        inst_params = {
-            'prt_mode': {
-                'data': array([prt_mode]*self.nsweeps),
-                'comments': 'Pulsing mode Options are: "fixed", "staggered", "dual" Assumed "fixed" if missing.'},
-
-            'prt': {
-                'data': array([radarobj.radar_info['prt_s']] *
-                              self.nele * self.naz),
-                'units': 'seconds',
-                'comments': "Pulse repetition time.For staggered prt, also see prt_ratio."},
-
-            'unambiguous_range': {
-                'data': array([radarobj.radar_info['unambig_range_km'] *
-                              1000.0] * self.naz * self.nele),
-                'units': 'meters',
-                'comment': 'Unambiguous range'},
-
-            'nyquist_velocity': {
-                'data': array([radarobj.radar_info['unambig_vel_mps']] *
-                              self.naz*self.nele),
-                'units': 'm/s',
-                'comments': "unamb velocity"}
-        }
-        self.inst_params = inst_params
 
     def get_mdv_meta(self, radarobj, field):
         debug = True

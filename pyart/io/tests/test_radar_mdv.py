@@ -37,7 +37,8 @@ import pyart
 
 # read in the sample file and create a a Radar object
 fname = join(dirname(__file__), '110635.mdv')
-mdv_radar = pyart.io.radar.Radar(pyart.io.py_mdv.read_mdv(fname))
+mdv_radar = pyart.io.read_mdv(fname)
+#mdv_radar = pyart.io.radar.Radar(pyart.io.py_mdv.read_mdv(fname))
 
 
 # azimuth attribute
