@@ -1,7 +1,4 @@
-"""
-netcdf
-
-"""
+""" Utilities for reading netcdf files. """
 
 import numpy as np
 import netCDF4
@@ -22,10 +19,10 @@ def read_netcdf(filename):
     -------
     radar : Radar
         Radar object.
-    
+
     """
     ncobj = netCDF4.Dataset(filename)
-    
+
     if 'ray_start_index' in ncobj.variables.keys():
         return _read_netcdf_streamcf(ncobj)
     else:
@@ -34,8 +31,8 @@ def read_netcdf(filename):
 
 def _read_netcdf_cf(ncobj):
     """
-    Read a 
-    
+    Read a
+
     Parameters
     ----------
     ncobj : Dataset
@@ -53,19 +50,19 @@ def _read_netcdf_cf(ncobj):
     except TypeError:
         mode = "".join(ncobj.variables['sweep_mode'][0].data)
     print mode, "azimuth_surveillance    "
-    
+
     if "sur" in mode:
         #ppi
         nsweeps = len(ncobj.variables['sweep_start_ray_index'])
         metadata = dict([(key, getattr(ncobj, key)) for key in
-                             ncobj.ncattrs()])
+                         ncobj.ncattrs()])
         scan_type = "ppi"
         sweep_mode = np.array(['ppi']*nsweeps)
         if len(ncobj.variables['sweep_start_ray_index']) == 1:
             naz = ncobj.variables['sweep_end_ray_index'][0] + 1
         else:
             naz = (ncobj.variables['sweep_start_ray_index'][1] -
-                        ncobj.variables['sweep_start_ray_index'][0])
+                   ncobj.variables['sweep_start_ray_index'][0])
         nele = ncobj.variables['sweep_start_ray_index'].shape[0]
         ngates = len(ncobj.dimensions['range'])
         loc_dict = {}
@@ -97,19 +94,19 @@ def _read_netcdf_cf(ncobj):
             my_field = ncvar_to_field(ncobj.variables[field])
             field_dict.update({field: my_field})
         fields = field_dict
-    
+
     if "sec" in mode:
         #sec
         nsweeps = len(ncobj.variables['sweep_start_ray_index'])
         metadata = dict([(key, getattr(ncobj, key)) for key in
-                             ncobj.ncattrs()])
+                         ncobj.ncattrs()])
         scan_type = "sec"
         sweep_mode = np.array(['sec'] * nsweeps)
         if len(ncobj.variables['sweep_start_ray_index']) == 1:
             naz = ncobj.variables['sweep_end_ray_index'][0] + 1
         else:
             naz = (ncobj.variables['sweep_start_ray_index'][1] -
-                        ncobj.variables['sweep_start_ray_index'][0])
+                   ncobj.variables['sweep_start_ray_index'][0])
         nele = ncobj.variables['sweep_start_ray_index'].shape[0]
         ngates = len(ncobj.dimensions['range'])
         loc_dict = {}
@@ -141,11 +138,11 @@ def _read_netcdf_cf(ncobj):
             my_field = ncvar_to_field(ncobj.variables[field])
             field_dict.update({field: my_field})
         fields = field_dict
-    
+
     if "rhi" in mode:
         #rhi
         metadata = dict([(key, getattr(ncobj, key))
-                             for key in ncobj.ncattrs()])
+                         for key in ncobj.ncattrs()])
         scan_type = "rhi"
         nsweeps = len(ncobj.variables['sweep_start_ray_index'])
         sweep_mode = np.array(['rhi'] * nsweeps)
@@ -153,7 +150,7 @@ def _read_netcdf_cf(ncobj):
             nele = ncobj.variables['sweep_end_ray_index'][0] + 1
         else:
             nele = (ncobj.variables['sweep_start_ray_index'][1] -
-                         ncobj.variables['sweep_start_ray_index'][0])
+                    ncobj.variables['sweep_start_ray_index'][0])
         naz = ncobj.variables['sweep_start_ray_index'].shape[0]
         ngates = len(ncobj.dimensions['range'])
         loc_dict = {}
@@ -185,7 +182,7 @@ def _read_netcdf_cf(ncobj):
             my_field = ncvar_to_field(ncobj.variables[field])
             field_dict.update({field: my_field})
         fields = field_dict
-   
+
     # XXX
     nrays = 99
     tu = 999
@@ -196,13 +193,14 @@ def _read_netcdf_cf(ncobj):
                  azimuth, elevation, tu, cal, time, fields, sweep_info,
                  sweep_mode, sweep_number, location, inst_params, metadata)
 
+
 def _read_netcdf_streamcf(ncobj):
     try:
         mode = "".join(ncobj.variables['sweep_mode'][0])
     except TypeError:
         mode = "".join(ncobj.variables['sweep_mode'][0].data)
     print mode, "azimuth_surveillance    "
-    
+
     if mode in "azimuth_surveillance    ":
         #ppi
         print "hi"
@@ -210,7 +208,7 @@ def _read_netcdf_streamcf(ncobj):
             [(key, getattr(ncobj, key)) for key in ncobj.ncattrs()])
         scan_type = "ppi"
         naz = (ncobj.variables['sweep_start_ray_index'][1] -
-                    ncobj.variables['sweep_start_ray_index'][0])
+               ncobj.variables['sweep_start_ray_index'][0])
         nele = ncobj.variables['sweep_start_ray_index'].shape[0]
         ngates = ncobj.variables['range'].shape[0]
         loc_dict = {}
@@ -299,7 +297,6 @@ def stream_to_2d(data, sweeps, sweepe, ray_len, maxgates, nrays,
     for sweep_number in range(len(sweepe)):
         ss = sweeps[sweep_number]
         se = sweepe[sweep_number]
-        rls = ray_len[sweeps[sweep_number]]
         rle = ray_len[sweeps[sweep_number]]
 
         if ray_len[ss:se].sum() == rle * (se - ss):

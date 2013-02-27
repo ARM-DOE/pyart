@@ -1,6 +1,4 @@
-"""
-Utilities for saving mapped and radar co-ordinate radar data
-"""
+""" Utilities for saving mapped and radar co-ordinate radar data. """
 
 import sys
 import socket
@@ -1034,8 +1032,8 @@ def save_pyGrid(ncfobj, pygrid, **kwargs):
         except ValueError:
             print(mkey, " not existing")
 
-    dims_lookup = {'time':'time', 'x_disp': 'nx', 'y_disp': 'ny', 'z_disp': 'nz',
-                   'time_end': 'time', 'time_start': 'time',
+    dims_lookup = {'time': 'time', 'x_disp': 'nx', 'y_disp': 'ny',
+                   'z_disp': 'nz', 'time_end': 'time', 'time_start': 'time',
                    'lat': 'time', 'lon': 'time', 'alt': 'time'}
     avars = [ncfobj.createVariable(key, np.float, (dims_lookup[key], ))
              for key in akeys]
@@ -1076,15 +1074,14 @@ def save_pyGrid(ncfobj, pygrid, **kwargs):
         vvars[i][0, :, :, :] = pygrid.fields[
             pygrid.fields.keys()[i]]['data'][:, :, :]
 
-    
     for i in range(len(akeys)):
-         if 'shape' in dir(pygrid.axes[akeys[i]]['data']):
-             avars[i][:] = pygrid.axes[akeys[i]]['data']
-             print akeys[i], "is array"
-         else:
-             avars[i][:] = np.array([pygrid.axes[akeys[i]]['data']])
-             print np.array([pygrid.axes[akeys[i]]['data']])
-             print akeys[i], "is not array"
+        if 'shape' in dir(pygrid.axes[akeys[i]]['data']):
+            avars[i][:] = pygrid.axes[akeys[i]]['data']
+            print akeys[i], "is array"
+        else:
+            avars[i][:] = np.array([pygrid.axes[akeys[i]]['data']])
+            print np.array([pygrid.axes[akeys[i]]['data']])
+            print akeys[i], "is not array"
 
 
 def save_mdv_ncf(myfile, output_file, parms, **kwargs):

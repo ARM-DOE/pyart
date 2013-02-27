@@ -1,12 +1,4 @@
-"""
-A general central radial scanning (or dwelling) instrument class
-
-USE
----
-xsapr = py4dd.RSL_anyformat_to_radar(filename)
-myradar=radar.Radar(xsapr)
-
-"""
+""" A general central radial scanning (or dwelling) instrument class. """
 
 import copy
 
@@ -18,16 +10,16 @@ class Radar:
     A class for storing antenna coordinate radar data which will interact
     nicely with CF-Radial files and other pyart code
     """
-    
+
     def __init__(self, nsweeps, nrays, ngates, scan_type, naz, nele, _range,
                  azimuth, elevation, tu, cal, time, fields, sweep_info,
                  sweep_mode, sweep_number, location, inst_params, metadata):
-        
+
         self.azimuth = azimuth
         self.elevation = elevation
         self.fields = fields
         self.location = location
-        self.metadata  = metadata
+        self.metadata = metadata
         self.naz = naz
         self.nele = nele
         self.ngates = ngates
@@ -39,11 +31,11 @@ class Radar:
         self.sweep_number = sweep_number
         self.time = time
         self.inst_params = inst_params
-        
+
         self.cal = cal
         self.nrays = nrays
         self.tu = tu
-    
+
 
 def join_radar(radar1, radar2):
 
@@ -58,13 +50,15 @@ def join_radar(radar1, radar2):
         new_radar.range['data'] = radar1.range['data']
     else:
         new_radar.range['data'] = radar2.range['data']
-    new_radar.time['data'] = np.append(radar1.time['data'], radar2.time['data'])
+    new_radar.time['data'] = np.append(radar1.time['data'],
+                                       radar2.time['data'])
 
     for var in new_radar.fields.keys():
         sh1 = radar1.fields[var]['data'].shape
         sh2 = radar2.fields[var]['data'].shape
         print sh1, sh2
-        new_field = np.ma.zeros([sh1[0] + sh2[0], max([sh1[1], sh2[1]])]) - 9999.0
+        new_field = np.ma.zeros([sh1[0] + sh2[0],
+                                max([sh1[1], sh2[1]])]) - 9999.0
         new_field[0:sh1[0], 0:sh1[1]] = radar1.fields[var]['data']
         new_field[sh1[0]:, 0:sh2[1]] = radar2.fields[var]['data']
         new_radar.fields[var]['data'] = new_field

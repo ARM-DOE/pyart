@@ -1,7 +1,4 @@
-"""
-rsl
-
-"""
+""" Python wrapper around the RSL library """
 
 from datetime import datetime
 
@@ -14,7 +11,7 @@ from common import dms_to_d, csapr_standard_names, get_mdv_meta
 
 def read_rsl(filename, add_meta={}):
     """
-    Read a file supported by RSL 
+    Read a file supported by RSL
 
     Parameters
     ----------
@@ -72,8 +69,7 @@ def read_rsl(filename, add_meta={}):
 
     # determine the shape parameters of the fields
     nsweeps = sample_volume.h.nsweeps
-    rays = np.array([sample_volume.sweeps[i].h.nrays for i in
-                  range(nsweeps)])
+    rays = np.array([sample_volume.sweeps[i].h.nrays for i in range(nsweeps)])
     nrays = rays.min()  # see TODO above
     ngates = sample_ray.h.nbins
 
@@ -129,7 +125,9 @@ def read_rsl(filename, add_meta={}):
         'data': np.linspace(0, t_span, nrays * nsweeps),
         'units': tu,
         'calendar': cal,
-        'comment': 'Coordinate variable for time. Time at the center of each ray, in fractional seconds since the global variable time_coverage_start',
+        'comment': ('Coordinate variable for time. '
+                    'Time at the center of each ray, in fractional seconds '
+                    'since the global variable time_coverage_start'),
         'standard_name': 'time',
         'long_name': 'time in seconds since volume start'}
 
@@ -149,7 +147,8 @@ def read_rsl(filename, add_meta={}):
         data[np.where(data == 131072)] = -9999.0
         meta = get_mdv_meta(radarobj, field)  # fetch metadata
         fielddict = {'data': np.ma.masked_equal(data, -9999.0).reshape(
-            data.shape[0] * data.shape[1], data.shape[2]),  '_FillValue': -9999.0}
+            data.shape[0] * data.shape[1], data.shape[2]),
+            '_FillValue': -9999.0}
         fielddict.update(meta)
         fields_dict.update({csapr_standard_names()[field]: fielddict})
     fields = fields_dict
@@ -163,10 +162,13 @@ def read_rsl(filename, add_meta={}):
             'data': nsweeps * ['azimuth_surveillance    '],
             'long_name': 'sweep_mode',
             'units': 'uniteless',
-            'comment': 'Options are:"sector","coplane",rhi","vertical_pointing","idle","azimuth_surveillance","elevation_surveillance","sunscan","pointing","manual_ppi","manual_rhi"'}
+            'comment': ('Options are: "sector", "coplane", "rhi", '
+                        '"vertical_pointing", "idle", '
+                        '"azimuth_surveillance", "elevation_surveillance", '
+                        '"sunscan", "pointing", "manual_ppi", "manual_rhi"')}
         fixed_angle = {
             'data': np.array([sample_volume.sweeps[i].h.elev
-                           for i in range(nsweeps)]),
+                              for i in range(nsweeps)]),
             'long_name': 'target_angle_for_sweep',
             'units': 'degrees',
             'standard_name': 'target_fixed_angle'}
@@ -187,10 +189,13 @@ def read_rsl(filename, add_meta={}):
             'data': nsweeps * ['rhi                     '],
             'long_name': 'sweep_mode',
             'units': 'uniteless',
-            'comment': 'Options are:"sector","coplane",rhi","vertical_pointing","idle","azimuth_surveillance","elevation_surveillance","sunscan","pointing","manual_ppi","manual_rhi"'}
+            'comment': ('Options are: "sector", "coplane", "rhi", '
+                        '"vertical_pointing", "idle", '
+                        '"azimuth_surveillance", "elevation_surveillance", '
+                        '"sunscan", "pointing", "manual_ppi", "manual_rhi"')}
         fixed_angle = {
             'data': np.array([sample_volume.sweeps[i].h.azimuth
-                           for i in range(nsweeps)]),
+                              for i in range(nsweeps)]),
             'long_name': 'target_angle_for_sweep',
             'units': 'degrees',
             'standard_name': 'target_fixed_angle'}
@@ -199,8 +204,7 @@ def read_rsl(filename, add_meta={}):
             'long_name': 'index of first ray in sweep, 0-based',
             'units': 'count'}
         sweep_end_ray_index = {
-            'data': np.arange(nele - 1, len(time['data']),
-                           nele),
+            'data': np.arange(nele - 1, len(time['data']), nele),
             'long_name': 'index of last ray in sweep, 0-based',
             'units': 'count'}
 
@@ -259,9 +263,9 @@ def get_avail_moments(volumes):
 
 
 def create_cube_array(volume):
-    ppi = zeros([volume.h.nsweeps, volume.sweeps[0].h.nrays,
-                volume.sweeps[0].rays[0].h.nbins],
-                dtype=float32) + 1.31072000e+05
+    ppi = np.zeros([volume.h.nsweeps, volume.sweeps[0].h.nrays,
+                    volume.sweeps[0].rays[0].h.nbins],
+                   dtype=np.float32) + 1.31072000e+05
     for levnum in range(volume.h.nsweeps):
         for raynum in range(volume.sweeps[0].h.nrays):
             data = volume.sweeps[levnum].rays[raynum].data
@@ -288,11 +292,10 @@ def create_cube_array_lim(volume, nsweeps, nrays):
 
     """
     ppi = np.zeros([nsweeps, nrays, volume.sweeps[0].rays[0].h.nbins],
-                dtype='float32') + 1.31072000e+05
+                   dtype='float32') + 1.31072000e+05
     for levnum in range(nsweeps):
         rays = volume.sweeps[levnum].rays
         len_d = len(rays[0].data)
-	print(len_d);
         for raynum in range(nrays):
             ppi[levnum, raynum, 0:len(rays[raynum].data)] = rays[raynum].data
     return ppi
@@ -322,7 +325,8 @@ def rsl_extract_inst_param(sample_volume, nsweeps, nrays, valid_nyq_vel):
     return {
         'prt_mode': {
             'data': pm_data,
-            'comments': 'Pulsing mode Options are: "fixed", "staggered", "dual" Assumed "fixed" if missing.'},
+            'comments': ('Pulsing mode Options are: "fixed", "staggered", '
+                         '"dual". Assumed "fixed" if missing.')},
 
         'nyquist_velocity': {
             'data': nv_data,
@@ -332,7 +336,8 @@ def rsl_extract_inst_param(sample_volume, nsweeps, nrays, valid_nyq_vel):
         'prt': {
             'data': pr_data,
             'units': 'seconds',
-            'comments': "Pulse repetition time. For staggered prt, also see prt_ratio."},
+            'comments': ("Pulse repetition time. For staggered prt, "
+                         "also see prt_ratio.")},
 
         'unambiguous_range': {
             'data': ur_data,

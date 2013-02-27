@@ -1,7 +1,4 @@
-"""
-Python wrapper around the Univ. Washington FourDD dealiasing code
-
-"""
+""" Python wrapper around the Univ. Washington FourDD dealiasing code. """
 
 import os
 from ctypes import c_int, c_ushort, c_float, POINTER
@@ -57,7 +54,6 @@ def dealias_radar(radar, vad_time, last_radar=None, sondfile=None,
         DZvolume = radar.contents.v[DZindex]
     else:
         print "no DZ field available"
-        outDZ = 0
         prep = 0
 
     if radar.contents.volumes[_rsl.fieldTypes().VR] is None:
@@ -67,11 +63,8 @@ def dealias_radar(radar, vad_time, last_radar=None, sondfile=None,
     # store last Velocity Volumes from last_radar if present
     if last_radar is not None:
         lastVelVolume = last_radar.contents.volumes[_rsl.fieldTypes().VE]
-        numSweepsLast = lastVelVolume.h.nsweeps
-        numSweepsCurrent = radialVelVolume.h.nsweeps
     else:
         lastVelVolume = None
-        nolast = 1
 
     # read in sounding if present
     success = c_ushort(0)
@@ -88,7 +81,7 @@ def dealias_radar(radar, vad_time, last_radar=None, sondfile=None,
         if prep == 1:
             _rsl.prepVolume(DZvolume, unfoldedVolume, MISSINGVEL)
         usuccess = c_ushort(0)
-        _rsl.unfoldVolume(unfoldedVolume, sondVolume, lastVelVolume, 
+        _rsl.unfoldVolume(unfoldedVolume, sondVolume, lastVelVolume,
                           MISSINGVEL, filt, usuccess)
     return unfoldedVolume
 
@@ -147,7 +140,6 @@ def dealias_radar_array(radar, vad_time, height, speed, direction, last_radar,
         DZvolume = radar.contents.v[DZindex]
     else:
         print "no DZ field available"
-        outDZ = 0
         prep = 0
 
     if radar.contents.volumes[_rsl.fieldTypes().VR] is None:
@@ -157,19 +149,16 @@ def dealias_radar_array(radar, vad_time, height, speed, direction, last_radar,
     # store last velocity volumes from last_data if present
     if last_radar is not None:
         lastVelVolume = last_radar.contents.volumes[_rsl.fieldTypes().VE]
-        numSweepsLast = lastVelVolume.h.nsweeps
-        numSweepsCurrent = radialVelVolume.h.nsweeps
     else:
         lastVelVolume = None
-        nolast = 1
 
     # read in sounding if present
     success = c_ushort(0)
     sondVolume = _rsl.RSL_copy_volume(radialVelVolume)
     _rsl.firstGuessNoRead(sondVolume, MISSINGVEL, hc.ctypes.data_as(c_float_p),
-                     sc.ctypes.data_as(c_float_p),
-                     dc.ctypes.data_as(c_float_p), c_int(len(height)),
-                     vad_time, success)
+                          sc.ctypes.data_as(c_float_p),
+                          dc.ctypes.data_as(c_float_p), c_int(len(height)),
+                          vad_time, success)
 
     if success.value == 1 or lastVelVolume is not None:
         print "dealiasing"
@@ -177,6 +166,6 @@ def dealias_radar_array(radar, vad_time, height, speed, direction, last_radar,
         if prep == 1:
             _rsl.prepVolume(DZvolume, unfoldedVolume, MISSINGVEL)
         usuccess = c_ushort(0)
-        _rsl.unfoldVolume(unfoldedVolume, sondVolume, lastVelVolume, 
+        _rsl.unfoldVolume(unfoldedVolume, sondVolume, lastVelVolume,
                           MISSINGVEL, filt, usuccess)
     return unfoldedVolume, sondVolume

@@ -1,12 +1,11 @@
-"""
-Utilities for reading of MDV data into numpy objects
+""" Utilities for reading of MDV data into numpy objects
 
 Code is adapted from Nitin Bharadwaj's Matlab code
 
 Notes
 -----
-Currently this code works only on polar MDV files which are gzipped..
-future versions will be expanded to load cartesian and deal with
+Currently this code works only on polar MDV files which are gzipped.
+Future versions will be expanded to load cartesian and deal with
 non-gzipped files
 
 """
@@ -14,14 +13,13 @@ non-gzipped files
 import struct
 import gzip
 import StringIO
-import zlib
 import datetime
 
 import numpy as np
 from netCDF4 import date2num
 
 from radar import Radar
-from common import dms_to_d, csapr_standard_names, get_mdv_meta
+from common import csapr_standard_names, get_mdv_meta
 
 
 def read_mdv(filename):
@@ -37,12 +35,11 @@ def read_mdv(filename):
     -------
     radar : Radar
         Radar object.
-    
+
     """
     radarobj = MdvFile(filename)
 
     # We only want to transfer fields that we have valid names for...
-    valid_fields = csapr_standard_names()
     todo_fields = set(radarobj.fields) & set(csapr_standard_names().keys())
     # the intersection of the set of available and valid names
     flat_dict = {}  # a holder to be updated
@@ -54,71 +51,73 @@ def read_mdv(filename):
 
     #The flat azimuth array which describes the azimuth of each beam
     if scan_type == 'ppi':
-		azimuth = {
-			'data': np.tile(radarobj.az_deg, nele),
-			'units': 'degrees',
-			'comment': 'Azimuth of antenna relative to true north',
-			'long_name': 'azimuth_angle_from_true_north',
-			'standard_name': 'beam_azimuth_angle'}
-		
-		#the range array which describes the range of all beams (note in this
-		_range = {
-			'data': np.array(radarobj.range_km*1000.0),
-			'units': 'meters',
-			'standard_name': 'projection_range_coordinate',
-			'long_name': 'range_to_measurement_volume',
-			'comment': (
-				'Coordinate variable for range. Range to center of each bin.'),
-			'spacing_is_constant': 'true',
-			'meters_to_center_of_first_gate': (radarobj.range_km[0]) * 1000.0,
-			'meters_between_gates': (radarobj.range_km[1] -
-									 radarobj.range_km[0])*1000.0}
-		elevation = {
-			'data': np.array(radarobj.el_deg).repeat(naz), 
-			'units': 'degrees',
-			'standard_name': 'beam_elevation_angle',
-			'comment': 'Elevation of antenna relative to the horizontal plane',
-			'long_name': 'elevation_angle_from_horizontal_plane'}
+        azimuth = {
+            'data': np.tile(radarobj.az_deg, nele),
+            'units': 'degrees',
+            'comment': 'Azimuth of antenna relative to true north',
+            'long_name': 'azimuth_angle_from_true_north',
+            'standard_name': 'beam_azimuth_angle'}
 
+        #the range array which describes the range of all beams (note in this
+        _range = {
+            'data': np.array(radarobj.range_km*1000.0),
+            'units': 'meters',
+            'standard_name': 'projection_range_coordinate',
+            'long_name': 'range_to_measurement_volume',
+            'comment': (
+                'Coordinate variable for range. Range to center of each bin.'),
+            'spacing_is_constant': 'true',
+            'meters_to_center_of_first_gate': (radarobj.range_km[0]) * 1000.0,
+            'meters_between_gates': (radarobj.range_km[1] -
+                                     radarobj.range_km[0])*1000.0}
+        elevation = {
+            'data': np.array(radarobj.el_deg).repeat(naz),
+            'units': 'degrees',
+            'standard_name': 'beam_elevation_angle',
+            'comment': 'Elevation of antenna relative to the horizontal plane',
+            'long_name': 'elevation_angle_from_horizontal_plane'}
 
     elif scan_type == 'rhi':
-		azimuth = {
-			'data': np.array(radarobj.az_deg).repeat(nele),
-			'units': 'degrees',
-			'comment': 'Azimuth of antenna relative to true north',
-			'long_name': 'azimuth_angle_from_true_north',
-			'standard_name': 'beam_azimuth_angle'}
-			
-		#the range array which describes the range of all beams (note in this
-		_range = {
-			'data': np.array(radarobj.range_km*1000.0),
-			'units': 'meters',
-			'standard_name': 'projection_range_coordinate',
-			'long_name': 'range_to_measurement_volume',
-			'comment': (
-				'Coordinate variable for range. Range to center of each bin.'),
-			'spacing_is_constant': 'true',
-			'meters_to_center_of_first_gate': (radarobj.range_km[0]) * 1000.0,
-			'meters_between_gates': (radarobj.range_km[1] -
-									 radarobj.range_km[0])*1000.0}
-		
-		
-		elevation = {
-			'data': np.tile(radarobj.el_deg, naz),
-			'units': 'degrees',
-			'standard_name': 'beam_elevation_angle',
-			'comment': 'Elevation of antenna relative to the horizontal plane',
-			'long_name': 'elevation_angle_from_horizontal_plane'}
+        azimuth = {
+            'data': np.array(radarobj.az_deg).repeat(nele),
+            'units': 'degrees',
+            'comment': 'Azimuth of antenna relative to true north',
+            'long_name': 'azimuth_angle_from_true_north',
+            'standard_name': 'beam_azimuth_angle'}
+
+        #the range array which describes the range of all beams (note in this
+        _range = {
+            'data': np.array(radarobj.range_km*1000.0),
+            'units': 'meters',
+            'standard_name': 'projection_range_coordinate',
+            'long_name': 'range_to_measurement_volume',
+            'comment': (
+                'Coordinate variable for range. Range to center of each bin.'),
+            'spacing_is_constant': 'true',
+            'meters_to_center_of_first_gate': (radarobj.range_km[0]) * 1000.0,
+            'meters_between_gates': (radarobj.range_km[1] -
+                                     radarobj.range_km[0])*1000.0}
+
+        elevation = {
+            'data': np.tile(radarobj.el_deg, naz),
+            'units': 'degrees',
+            'standard_name': 'beam_elevation_angle',
+            'comment': 'Elevation of antenna relative to the horizontal plane',
+            'long_name': 'elevation_angle_from_horizontal_plane'}
 
     #append time
-    tu = "seconds since %(year)d-%(month)02d-%(day)02d %(hour)02d:%(minute)02d:%(second)02d.0" % dt_to_dict(radarobj.times['time_begin'])
+    time_dic = dt_to_dict(radarobj.times['time_begin'])
+    tu = ("seconds since %(year)d-%(month)02d-%(day)02d"
+          " %(hour)02d:%(minute)02d:%(second)02d.0") % time_dic
     cal = "gregorian"
     time_array = np.linspace(date2num(radarobj.times['time_begin'], tu, cal),
                              date2num(radarobj.times['time_end'], tu, cal),
                              naz * nele)
     time = {
         'data': time_array, 'units': tu, 'calendar': cal,
-        'comment': 'Coordinate variable for time. Time at the center of each ray, in fractional seconds since the global variable time_coverage_start',
+        'comment': ('Coordinate variable for time.'
+                    'Time at the center of each ray, in fractional seconds '
+                    'since the global variable time_coverage_start'),
         'standard_name': 'time',
         'long_name': 'time in seconds since volume start'}
     for field in todo_fields:
@@ -145,7 +144,10 @@ def read_mdv(filename):
             'data': nsweeps*['azimuth_surveillance    '],
             'long_name': 'sweep_mode',
             'units': 'uniteless',
-            'comment': 'Options are:"sector","coplane",rhi","vertical_pointing","idle","azimuth_surveillance","elevation_surveillance","sunscan","pointing","manual_ppi","manual_rhi"'}
+            'comment': ('Options are: "sector", "coplane", "rhi", '
+                        '"vertical_pointing", "idle", '
+                        '"azimuth_surveillance", "elevation_surveillance", '
+                        '"sunscan", "pointing", "manual_ppi", "manual_rhi"')}
         fixed_angle = {
             'data': np.array(radarobj.el_deg),
             'long_name': 'target_angle_for_sweep',
@@ -169,7 +171,10 @@ def read_mdv(filename):
             'data': nsweeps * ['rhi                     '],
             'long_name': 'sweep_mode',
             'units': 'uniteless',
-            'comment': 'Options are:"sector","coplane",rhi","vertical_pointing","idle","azimuth_surveillance","elevation_surveillance","sunscan","pointing","manual_ppi","manual_rhi"'}
+            'comment': ('Options are: "sector", "coplane", "rhi", '
+                        '"vertical_pointing", "idle", "azimuth_surveillance", '
+                        '"elevation_surveillance", "sunscan", "pointing", '
+                        '"manual_ppi", "manual_rhi"')}
         fixed_angle = {
             'data': np.array(radarobj.az_deg),
             'long_name': 'target_angle_for_sweep',
@@ -180,8 +185,7 @@ def read_mdv(filename):
             'long_name': 'index of first ray in sweep, 0-based',
             'units': 'count'}
         sweep_end_ray_index = {
-            'data': np.arange(nele - 1, len(time['data']),
-                           nele),
+            'data': np.arange(nele - 1, len(time['data']), nele),
             'long_name': 'index of last ray in sweep, 0-based',
             'units': 'count'}
 
@@ -224,29 +228,31 @@ def read_mdv(filename):
     inst_params = {
         'prt_mode': {
             'data': np.array([prt_mode]*nsweeps),
-            'comments': 'Pulsing mode Options are: "fixed", "staggered", "dual" Assumed "fixed" if missing.'},
+            'comments': ('Pulsing mode Options are: "fixed", "staggered", '
+                         '"dual". Assumed "fixed" if missing.')},
 
         'prt': {
             'data': np.array([radarobj.radar_info['prt_s']] * nele * naz),
             'units': 'seconds',
-            'comments': "Pulse repetition time.For staggered prt, also see prt_ratio."},
+            'comments': ("Pulse repetition time. For staggered prt, "
+                         "also see prt_ratio.")},
 
         'unambiguous_range': {
             'data': np.array([radarobj.radar_info['unambig_range_km'] *
-                          1000.0] * naz * nele),
+                              1000.0] * naz * nele),
             'units': 'meters',
             'comment': 'Unambiguous range'},
 
         'nyquist_velocity': {
             'data': np.array([radarobj.radar_info['unambig_vel_mps']] *
-                          naz*nele),
+                             naz * nele),
             'units': 'm/s',
             'comments': "unamb velocity"}
     }
 
     return Radar(nsweeps, nrays, ngates, scan_type, naz, nele, _range,
                  azimuth, elevation, tu, cal, time, fields, sweep_info,
-                 sweep_mode, sweep_number, location, inst_params, metadata) 
+                 sweep_mode, sweep_number, location, inst_params, metadata)
 
 
 #####################
@@ -540,8 +546,9 @@ class MdvFile:
             forms = ['%(n)dI' % {'n': self.master_header['nsweeps']}] * 2
             sweep_info_dict = self.read_list_from_file(items, forms, '>')
             sweep_list = np.zeros([self.master_header['nsweeps'],
-                                self.master_header['nrays'],
-                                self.master_header['ngates']], dtype=np.float32)
+                                   self.master_header['nrays'],
+                                   self.master_header['ngates']],
+                                  dtype=np.float32)
             for sw in range(self.master_header['nsweeps']):
                 if debug:
                     print "doint sweep ", sw
@@ -718,14 +725,14 @@ class MdvFile:
 
         #simple calculation involving 4/3 earth radius
         xx = np.zeros([self.master_header['nsweeps'],
-                    self.master_header['nrays'],
-                    self.master_header['ngates']], dtype=np.float32)
+                       self.master_header['nrays'],
+                       self.master_header['ngates']], dtype=np.float32)
         yy = np.zeros([self.master_header['nsweeps'],
-                    self.master_header['nrays'],
-                    self.master_header['ngates']], dtype=np.float32)
+                       self.master_header['nrays'],
+                       self.master_header['ngates']], dtype=np.float32)
         zz = np.zeros([self.master_header['nsweeps'],
-                    self.master_header['nrays'],
-                    self.master_header['ngates']], dtype=np.float32)
+                       self.master_header['nrays'],
+                       self.master_header['ngates']], dtype=np.float32)
         if self.scan_type == 'rhi':
             rg, ele = np.meshgrid(self.range_km, self.el_deg)
             for aznum in range(self.master_header['nsweeps']):

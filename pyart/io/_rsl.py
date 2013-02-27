@@ -1,8 +1,4 @@
-""" 
-ctypes wrapper around librsl and the University of Washington FourDD 
-dealias code
-
-"""
+""" ctypes wrapper around librsl and U. Washington FourDD dealias code. """
 
 from ctypes import *
 import numpy as N
@@ -14,7 +10,7 @@ import sys
 def find_librsl_path():
     """ Return the path of the RSL dynamic library. """
     # assumed to be ./lib/librsl.{so, dylib, DLL}
-    ext = {'darwin': 'dylib', 'linux2': 'so', 'win32': 'DLL'}[sys.platform] 
+    ext = {'darwin': 'dylib', 'linux2': 'so', 'win32': 'DLL'}[sys.platform]
     p = os.path.join(os.path.dirname(__file__), '_wraplibrsl.' + ext)
     if p.startswith('_wraplibrsl.'):
         p = './' + p

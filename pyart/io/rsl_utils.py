@@ -1,6 +1,4 @@
-"""
-Utilities for converting to RSL radar objects
-"""
+""" Utilities for converting to RSL radar objects. """
 
 import ctypes
 
@@ -8,6 +6,7 @@ from netCDF4 import num2date
 import numpy as np
 
 import _rsl
+
 
 def mdv_to_rsl(myfile, trans):
     """
@@ -51,9 +50,6 @@ def mdv_to_rsl(myfile, trans):
             else:
                 sweep_az = myfile.az_deg
             #print sweep_az
-            sweep_beam_width = 1.0
-            sweep_gate_width = myfile.field_headers[1]['grid_dx']*1000
-            sweep_nyquist = myfile.radar_info['unambig_vel_mps']
             for i_r in range(nrays):
                 ray = _rsl.RSL_new_ray(ngates)
                 sweep.contents.ray[i_r] = ray
@@ -119,7 +115,7 @@ def ppi_radar_to_rsl(myradar, trans):
         print np.where(np.isnan(radar_data))[0].shape
         radar_data[np.where(np.isnan(radar_data))] = 131072
         rsl_index = getattr(_rsl.fieldTypes(), trans[radar_fld])
-        print "Transfering ", radar_fld, " to ", trans[radar_fld],\
+        print "Transfering ", radar_fld, " to ", trans[radar_fld], \
             " which has an RSL index of ", rsl_index
         nsweeps, nrays, ngates = myradar.nsweeps, myradar.naz, myradar.ngates
         print nsweeps, nrays, ngates
@@ -135,7 +131,6 @@ def ppi_radar_to_rsl(myradar, trans):
             print "Sweep: ", i_s, "of ", nsweeps
             sweep_start = myradar.sweep_info['sweep_start_ray_index'][
                 'data'][i_s]
-            sweep_end = myradar.sweep_info['sweep_end_ray_index']['data'][i_s]
             sweep = _rsl.RSL_new_sweep(nrays)
             vol.contents.sweep[i_s] = sweep
             sweep.contents.h.field_type = trans[radar_fld]
@@ -148,14 +143,10 @@ def ppi_radar_to_rsl(myradar, trans):
             sweep_time = num2date(myradar.time['data'][sweep_start],
                                   myradar.time['units'],
                                   calendar=myradar.time['calendar'])
-            sweep_az = myradar.azimuth['data'][sweep_start:sweep_end]
             #print sweep_az
-            sweep_beam_width = 1.0
             sweep_gate_width = (myradar.range['data'][1] -
                                 myradar.range['data'][0])
             #myfile.field_headers[1]['grid_dx']*1000
-            sweep_nyquist = myradar.inst_params['nyquist_velocity'][
-                'data'][sweep_start]
             for i_r in range(nrays):
                 ray = _rsl.RSL_new_ray(ngates)
                 sweep.contents.ray[i_r] = ray
@@ -217,7 +208,7 @@ def rhi_radar_to_rsl(myradar, trans):
         print np.where(np.isnan(radar_data))[0].shape
         radar_data[np.where(np.isnan(radar_data))] = 131072
         rsl_index = getattr(_rsl.fieldTypes(), trans[radar_fld])
-        print "Transfering ", radar_fld, " to ", trans[radar_fld],\
+        print "Transfering ", radar_fld, " to ", trans[radar_fld], \
             " which has an RSL index of ", rsl_index
         nsweeps, nrays, ngates = myradar.nsweeps, myradar.nele, myradar.ngates
         print nsweeps, nrays, ngates
@@ -233,12 +224,12 @@ def rhi_radar_to_rsl(myradar, trans):
             print "Sweep: ", i_s, "of ", nsweeps
             sweep_start = myradar.sweep_info['sweep_start_ray_index'][
                 'data'][i_s]
-            sweep_end = myradar.sweep_info['sweep_end_ray_index']['data'][i_s]
             sweep = _rsl.RSL_new_sweep(nrays)
             vol.contents.sweep[i_s] = sweep
             sweep.contents.h.field_type = trans[radar_fld]
             sweep.contents.h.sweep_num = i_s + 1  # one-indexed
-            sweep.contents.h.elev = -999.0  # myradar.elevation['data'][sweep_start]
+            sweep.contents.h.elev = -999.0
+            # myradar.elevation['data'][sweep_start]
             sweep.contents.h.azimuth = myradar.azimuth['data'][sweep_start]
             sweep.contents.h.beam_width = 1.0  # change this
             sweep.contents.h.nrays = nrays
@@ -247,14 +238,10 @@ def rhi_radar_to_rsl(myradar, trans):
             sweep_time = num2date(myradar.time['data'][sweep_start],
                                   myradar.time['units'],
                                   calendar=myradar.time['calendar'])
-            sweep_az = myradar.azimuth['data'][sweep_start:sweep_end]
             #print sweep_az
-            sweep_beam_width = 1.0
             sweep_gate_width = (myradar.range['data'][1] -
                                 myradar.range['data'][0])
             #myfile.field_headers[1]['grid_dx']*1000
-            sweep_nyquist = myradar.inst_params['nyquist_velocity'][
-                'data'][sweep_start]
             for i_r in range(nrays):
                 ray = _rsl.RSL_new_ray(ngates)
                 sweep.contents.ray[i_r] = ray

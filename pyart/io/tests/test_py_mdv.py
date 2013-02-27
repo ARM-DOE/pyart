@@ -1,11 +1,11 @@
 """ tests for py_mdv module of pyart.io """
 
-from pyart.io import py_mdv
+import pyart
 from datetime import datetime
 import numpy as np
 from os.path import join, dirname
 
-mdv = py_mdv.read_mdv(join(dirname(__file__), '110635.mdv'))
+mdv = pyart.io.mdv.MdvFile(join(dirname(__file__), '110635.mdv'))
 
 
 def test_master_header():
