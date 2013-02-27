@@ -6,7 +6,7 @@ import numpy as np
 
 # XXX fix these up when io is reorganized
 from pyart.io import radar as rsl
-from pyart.io import py4dd, rsl_utils
+from pyart.io import fourdd, rsl_utils
 
 from ..util import datetime_utils
 
@@ -78,7 +78,7 @@ def dealias(radar, sounding_heights, sounding_wind_speeds,
 
     # perform dealiasing
     juldate = int(datetime_sounding.strftime('%y%j%H%M'))   # YYDDDHHMM
-    new_volume, _ = py4dd.dealias_radar_array(
+    new_volume, _ = fourdd.dealias_radar_array(
         rsl_radar, juldate, sounding_heights, sounding_wind_speeds,
         sounding_wind_direction, None, prep=prep, filt=filt)
 

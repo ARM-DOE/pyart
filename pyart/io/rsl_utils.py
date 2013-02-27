@@ -5,11 +5,9 @@ Utilities for converting to RSL radar objects
 import ctypes
 
 from netCDF4 import num2date
-
-import py4dd
-
 import numpy as np
 
+import _rsl
 
 def mdv_to_rsl(myfile, trans):
     """
@@ -19,26 +17,26 @@ def mdv_to_rsl(myfile, trans):
     ----------
 
     """
-    radar = py4dd.RSL_new_radar(40)
+    radar = _rsl.RSL_new_radar(40)
 
     for mdv_fld in trans.keys():
         mdv_data = myfile.read_a_field(myfile.fields.index(mdv_fld))
-        rsl_index = getattr(py4dd.fieldTypes(), trans[mdv_fld])
+        rsl_index = getattr(_rsl.fieldTypes(), trans[mdv_fld])
         print "Transfering ", mdv_fld, " to ", trans[mdv_fld], \
             " which has an RSL index of ", rsl_index
         nsweeps, nrays, ngates = mdv_data.shape
         print nsweeps, nrays, ngates
-        vol = py4dd.RSL_new_volume(nsweeps)
+        vol = _rsl.RSL_new_volume(nsweeps)
         radar.contents.v[rsl_index] = vol
         vol.contents.h.field_type = trans[mdv_fld]
         vol.contents.h.nsweeps = nsweeps
         vol.contents.h.calibr_const = 0
-        field_f, field_invf = py4dd.conversion_functions[trans[mdv_fld]]
+        field_f, field_invf = _rsl.conversion_functions[trans[mdv_fld]]
         vol.contents.h.f = field_f
         vol.contents.h.invf = field_invf
         for i_s in range(nsweeps):
             print "Sweep: ", i_s, "of ", nsweeps
-            sweep = py4dd.RSL_new_sweep(nrays)
+            sweep = _rsl.RSL_new_sweep(nrays)
             vol.contents.sweep[i_s] = sweep
             sweep.contents.h.field_type = trans[mdv_fld]
             sweep.contents.h.sweep_num = i_s + 1  # one-indexed
@@ -57,7 +55,7 @@ def mdv_to_rsl(myfile, trans):
             sweep_gate_width = myfile.field_headers[1]['grid_dx']*1000
             sweep_nyquist = myfile.radar_info['unambig_vel_mps']
             for i_r in range(nrays):
-                ray = py4dd.RSL_new_ray(ngates)
+                ray = _rsl.RSL_new_ray(ngates)
                 sweep.contents.ray[i_r] = ray
                 ray.contents.h.nbins = ngates
                 ray.contents.h.year = sweep_time.year
@@ -113,24 +111,24 @@ def ppi_radar_to_rsl(myradar, trans):
         lat = myradar.location['latitude']['data']
         lon = myradar.location['longitude']['data']
         alt = myradar.location['altitude']['data']
-    radar = py4dd.RSL_new_radar(40)
+    radar = _rsl.RSL_new_radar(40)
     for radar_fld in trans.keys():
         radar_data = myradar.fields[radar_fld]['data'][:]
         radar_data[np.where(radar_data ==
                             myradar.fields[radar_fld]['_FillValue'])] = 131072
         print np.where(np.isnan(radar_data))[0].shape
         radar_data[np.where(np.isnan(radar_data))] = 131072
-        rsl_index = getattr(py4dd.fieldTypes(), trans[radar_fld])
+        rsl_index = getattr(_rsl.fieldTypes(), trans[radar_fld])
         print "Transfering ", radar_fld, " to ", trans[radar_fld],\
             " which has an RSL index of ", rsl_index
         nsweeps, nrays, ngates = myradar.nsweeps, myradar.naz, myradar.ngates
         print nsweeps, nrays, ngates
-        vol = py4dd.RSL_new_volume(nsweeps)
+        vol = _rsl.RSL_new_volume(nsweeps)
         radar.contents.v[rsl_index] = vol
         vol.contents.h.field_type = trans[radar_fld]
         vol.contents.h.nsweeps = nsweeps
         vol.contents.h.calibr_const = 0
-        field_f, field_invf = py4dd.conversion_functions[trans[radar_fld]]
+        field_f, field_invf = _rsl.conversion_functions[trans[radar_fld]]
         vol.contents.h.f = field_f
         vol.contents.h.invf = field_invf
         for i_s in range(nsweeps):
@@ -138,7 +136,7 @@ def ppi_radar_to_rsl(myradar, trans):
             sweep_start = myradar.sweep_info['sweep_start_ray_index'][
                 'data'][i_s]
             sweep_end = myradar.sweep_info['sweep_end_ray_index']['data'][i_s]
-            sweep = py4dd.RSL_new_sweep(nrays)
+            sweep = _rsl.RSL_new_sweep(nrays)
             vol.contents.sweep[i_s] = sweep
             sweep.contents.h.field_type = trans[radar_fld]
             sweep.contents.h.sweep_num = i_s + 1  # one-indexed
@@ -159,7 +157,7 @@ def ppi_radar_to_rsl(myradar, trans):
             sweep_nyquist = myradar.inst_params['nyquist_velocity'][
                 'data'][sweep_start]
             for i_r in range(nrays):
-                ray = py4dd.RSL_new_ray(ngates)
+                ray = _rsl.RSL_new_ray(ngates)
                 sweep.contents.ray[i_r] = ray
                 ray.contents.h.nbins = ngates
                 ray.contents.h.year = sweep_time.year
@@ -211,24 +209,24 @@ def rhi_radar_to_rsl(myradar, trans):
         lat = myradar.location['latitude']['data']
         lon = myradar.location['longitude']['data']
         alt = myradar.location['altitude']['data']
-    radar = py4dd.RSL_new_radar(40)
+    radar = _rsl.RSL_new_radar(40)
     for radar_fld in trans.keys():
         radar_data = myradar.fields[radar_fld]['data'][:]
         radar_data[np.where(radar_data ==
                             myradar.fields[radar_fld]['_FillValue'])] = 131072
         print np.where(np.isnan(radar_data))[0].shape
         radar_data[np.where(np.isnan(radar_data))] = 131072
-        rsl_index = getattr(py4dd.fieldTypes(), trans[radar_fld])
+        rsl_index = getattr(_rsl.fieldTypes(), trans[radar_fld])
         print "Transfering ", radar_fld, " to ", trans[radar_fld],\
             " which has an RSL index of ", rsl_index
         nsweeps, nrays, ngates = myradar.nsweeps, myradar.nele, myradar.ngates
         print nsweeps, nrays, ngates
-        vol = py4dd.RSL_new_volume(nsweeps)
+        vol = _rsl.RSL_new_volume(nsweeps)
         radar.contents.v[rsl_index] = vol
         vol.contents.h.field_type = trans[radar_fld]
         vol.contents.h.nsweeps = nsweeps
         vol.contents.h.calibr_const = 0
-        field_f, field_invf = py4dd.conversion_functions[trans[radar_fld]]
+        field_f, field_invf = _rsl.conversion_functions[trans[radar_fld]]
         vol.contents.h.f = field_f
         vol.contents.h.invf = field_invf
         for i_s in range(nsweeps):
@@ -236,7 +234,7 @@ def rhi_radar_to_rsl(myradar, trans):
             sweep_start = myradar.sweep_info['sweep_start_ray_index'][
                 'data'][i_s]
             sweep_end = myradar.sweep_info['sweep_end_ray_index']['data'][i_s]
-            sweep = py4dd.RSL_new_sweep(nrays)
+            sweep = _rsl.RSL_new_sweep(nrays)
             vol.contents.sweep[i_s] = sweep
             sweep.contents.h.field_type = trans[radar_fld]
             sweep.contents.h.sweep_num = i_s + 1  # one-indexed
@@ -258,7 +256,7 @@ def rhi_radar_to_rsl(myradar, trans):
             sweep_nyquist = myradar.inst_params['nyquist_velocity'][
                 'data'][sweep_start]
             for i_r in range(nrays):
-                ray = py4dd.RSL_new_ray(ngates)
+                ray = _rsl.RSL_new_ray(ngates)
                 sweep.contents.ray[i_r] = ray
                 ray.contents.h.nbins = ngates
                 ray.contents.h.year = sweep_time.year

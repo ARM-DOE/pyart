@@ -1,12 +1,6 @@
 """ 
-ctypes wrapper librsl.
-
-
-around for the University of Washington 4D dealias code
-
-TODO
-----
-split into fourdd.py, _rslwrap.py, and move others to rsl_utils.py
+ctypes wrapper around librsl and the University of Washington FourDD 
+dealias code
 
 """
 

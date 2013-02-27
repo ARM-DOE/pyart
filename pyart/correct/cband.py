@@ -15,7 +15,6 @@ import scipy.integrate
 from scipy.interpolate import interp1d
 import matplotlib as mpl
 
-import pyart.io.py_mdv as py_mdv
 
 
 def fdif(data):
