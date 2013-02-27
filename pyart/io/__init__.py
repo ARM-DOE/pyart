@@ -8,6 +8,7 @@ Sub package io
 
 from rsl import read_rsl
 from mdv import read_mdv
+from netcdf import read_netcdf
 
 #__all__ = ['py_mdv', 'py4dd', 'rsl_utils', 'nc_utils', 'radar']
 

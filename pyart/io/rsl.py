@@ -258,6 +258,17 @@ def get_avail_moments(volumes):
     return av
 
 
+def create_cube_array(volume):
+    ppi = zeros([volume.h.nsweeps, volume.sweeps[0].h.nrays,
+                volume.sweeps[0].rays[0].h.nbins],
+                dtype=float32) + 1.31072000e+05
+    for levnum in range(volume.h.nsweeps):
+        for raynum in range(volume.sweeps[0].h.nrays):
+            data = volume.sweeps[levnum].rays[raynum].data
+            ppi[levnum, raynum, 0:len(data)] = data
+    return ppi
+
+
 def create_cube_array_lim(volume, nsweeps, nrays):
     """ Extract a field from an RSL Volume.
 
