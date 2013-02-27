@@ -8,6 +8,8 @@ import datetime as dt
 import netCDF4
 import numpy as np
 
+from common import COMMON2STANDARD
+
 
 def is_moment(varname, moment_fixes):
     moments = moment_fixes.keys()
@@ -80,27 +82,10 @@ def fix_variables(cgfile):
                         moment_fixes[variable_name][attr])
 
 
-def csapr_standard_names():
-    prop_names = {
-        'DBZ_F': 'reflectivity_horizontal',
-        'VEL_F': 'mean_doppler_velocity',
-        'WIDTH_F': 'doppler_spectral_width',
-        'ZDR_F': 'diff_reflectivity',
-        'RHOHV_F': 'copol_coeff',
-        'NCP_F': 'norm_coherent_power',
-        'KDP_F': 'diff_phase',
-        'PHIDP_F': 'dp_phase_shift',
-        'VEL_COR': 'corrected_mean_doppler_velocity',
-        'PHIDP_UNF': 'unfolded_dp_phase_shift',
-        'KDP_SOB': 'recalculated_diff_phase',
-        'DBZ_AC': 'attenuation_corrected_reflectivity_horizontal'}
-    return prop_names
-
-
 def fix_variables_csapr(cgfile):
     debug = True
     print "go"
-    csapr_names = csapr_standard_names()
+    csapr_names = COMMON2STANDARD
     moment_fixes = {
         'DBZ_F': {
             'units': 'dBZ',
@@ -766,7 +751,7 @@ def rsl_to_arm_netcdf(rslobj, ofilename, **kwargs):
     # dms_to_d((rslobj.contents.h.lond, rslobj.contents.h.lonm,
     #           rslobj.contents.h.lons))]
     #write variables
-    csapr_names = csapr_standard_names()
+    csapr_names = COMMON2STANDARD
     available_pars = list(set(csapr_names.keys()) & set(rslobj.grids.keys()))
     vvars = [ofile.createVariable(csapr_names[par], np.float,
              ('time', 'nz', 'ny', 'nx'), fill_value=-9999) for par in
@@ -862,7 +847,7 @@ def mdv_to_arm_netcdf(mdvobj, ofilename, **kwargs):
     append_coords(ofile, xar, yar, zar, mdvobj.grid_origin)
 
     #write variables
-    csapr_names = csapr_standard_names()
+    csapr_names = COMMON2STANDARD
     available_pars = list(set(csapr_names.keys()) & set(mdvobj.grids.keys()))
     vvars = [ofile.createVariable(csapr_names[par], np.float,
              ('time', 'nz', 'ny', 'nx'), fill_value=-9999) for par in
@@ -903,7 +888,7 @@ def save_netcdf_cube(grids, output_file, myfile, xr, yr, zr, origin, **kwargs):
     ofile.createDimension('y', ny)
     ofile.createDimension('z', nz)
     ofile.createDimension('time', 1)
-    csapr_names = csapr_standard_names()
+    csapr_names = COMMON2STANDARD
     available_pars = list(set(csapr_names.keys()) & set(grids.keys()))
     print available_pars
     vvars = [ofile.createVariable(csapr_names[par], np.float,
@@ -1107,7 +1092,7 @@ def save_mdv_ncf(myfile, output_file, parms, **kwargs):
     copy_axis(myfile, ofile)
     if debug:
         print "Creating variables"
-    csapr_names = csapr_standard_names()
+    csapr_names = COMMON2STANDARD
     available_pars = list(set(csapr_names.keys()) & set(parms))
     vvars = [ofile.createVariable(csapr_names[par], np.float,
              ('time', 'nsweeps', 'nrays', 'ngates'), fill_value=-999) for

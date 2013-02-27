@@ -6,7 +6,7 @@ import numpy as np
 
 import _rsl
 from radar import Radar
-from common import dms_to_d, csapr_standard_names, get_mdv_meta
+from common import dms_to_d, COMMON2STANDARD, get_field_metadata
 
 
 def read_rsl(filename, add_meta={}):
@@ -59,7 +59,7 @@ def read_rsl(filename, add_meta={}):
     # the next line requires python 2.7+ dict comprehensions
     #name_transfer_back = {v: k for v, k in name_transfer.iteritems()}
     fields = [name_transfer[key] for key in available_fields]
-    todo_fields = set(fields) & set(csapr_standard_names().keys())
+    todo_fields = set(fields) & set(COMMON2STANDARD.keys())
 
     # extract a sample volume, sweep and ray
     sample_volume = radarobj.contents.volumes[
@@ -145,12 +145,12 @@ def read_rsl(filename, add_meta={}):
         data = create_cube_array_lim(volume, nsweeps, nrays)
         data[np.where(np.isnan(data))] = -9999.0
         data[np.where(data == 131072)] = -9999.0
-        meta = get_mdv_meta(radarobj, field)  # fetch metadata
+        meta = get_field_metadata(field)  # fetch metadata
         fielddict = {'data': np.ma.masked_equal(data, -9999.0).reshape(
             data.shape[0] * data.shape[1], data.shape[2]),
             '_FillValue': -9999.0}
         fielddict.update(meta)
-        fields_dict.update({csapr_standard_names()[field]: fielddict})
+        fields_dict.update({COMMON2STANDARD[field]: fielddict})
     fields = fields_dict
 
     # set the sweep parameters

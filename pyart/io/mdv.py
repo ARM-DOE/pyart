@@ -19,7 +19,7 @@ import numpy as np
 from netCDF4 import date2num
 
 from radar import Radar
-from common import csapr_standard_names, get_mdv_meta
+from common import COMMON2STANDARD, get_field_metadata
 
 
 def read_mdv(filename):
@@ -40,7 +40,7 @@ def read_mdv(filename):
     radarobj = MdvFile(filename)
 
     # We only want to transfer fields that we have valid names for...
-    todo_fields = set(radarobj.fields) & set(csapr_standard_names().keys())
+    todo_fields = set(radarobj.fields) & set(COMMON2STANDARD.keys())
     # the intersection of the set of available and valid names
     flat_dict = {}  # a holder to be updated
     naz = len(radarobj.az_deg)
@@ -127,13 +127,13 @@ def read_mdv(filename):
         data = radarobj.read_a_field(radarobj.fields.index(field))
         data[np.where(np.isnan(data))] = -9999.0
         data[np.where(data == 131072)] = -9999.0
-        meta = get_mdv_meta(radarobj, field)  # fetch metadata
+        meta = get_field_metadata(field)  # fetch metadata
         fielddict = {
             'data': np.ma.masked_equal(data, -9999.0).reshape(
                 data.shape[0] * data.shape[1], data.shape[2]),
             '_FillValue': -9999.0}
         fielddict.update(meta)
-        flat_dict.update({csapr_standard_names()[field]: fielddict})
+        flat_dict.update({COMMON2STANDARD[field]: fielddict})
     fields = flat_dict
     #sweep based stuff now:
     if radarobj.scan_type == 'ppi':
