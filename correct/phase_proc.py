@@ -290,7 +290,7 @@ def noise(line, wl=11):
 def get_phidp_unf(radar, ncp_lev=0.4, rhohv_lev=0.6, debug=False, ncpts=20,
                   doc=-10, overide_sys_phase=False, sys_phase=-135,
                   nowrap=None, refl_field='reflectivity_horizontal',
-                  ncp_field='norm_coherence_power', rhv_field='copol_coeff',
+                  ncp_field='norm_coherent_power', rhv_field='copol_coeff',
                   phidp_field='dp_phase_shift'):
     """
     Get Unfolded Phi differential phase
