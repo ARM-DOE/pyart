@@ -9,6 +9,41 @@ class Radar:
     """
     A class for storing antenna coordinate radar data which will interact
     nicely with CF-Radial files and other pyart code
+
+    Dictionary attributes
+    ---------------------
+    * azimuth
+    * elevation
+    * range (with additional)
+    * time (with additional)
+    * sweep_mode
+        same as sweep_info['sweep_mode'] ...sorta
+    * sweep_number
+        same as sweep_info[sweep_number'] ... sorta
+
+    Value attributes
+    ----------------
+    * tu - string like "seconds since ...."
+        same as time['tu']
+    * cal : str
+        Calender (gregorian), same as time['cal']
+
+    * nele : int
+    * naz : int
+    * ngates : int
+    * nrays : int
+    * nsweeps : int
+    * scan_type : str
+
+    Special attributes
+    ------------------
+    * fields
+    * sweep_info : dict of dicts
+    * location : dict of dicts
+
+    #   metadata
+    #   inst_params
+
     """
 
     def __init__(self, nsweeps, nrays, ngates, scan_type, naz, nele, _range,

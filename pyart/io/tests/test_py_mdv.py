@@ -268,23 +268,11 @@ def test_read_one_field():
     assert round(sweeps[1, 2, 3], 2) == -37.95
     assert hasattr(mdv, 'DBMHC') is True
 
-    # compression level for last read field
-    ref_current_compression_info = {
-        'magic_cookie': 4160223223,
-        'nbytes_coded': 502227,
-        'nbytes_compressed': 502251,
-        'nbytes_uncompressed': 707760,
-        'spare': (0, 0)}
-
-    for k, v in ref_current_compression_info.iteritems():
-        assert mdv.current_compression_info[k] == v
-
-
 def test_read_all_fields():
 
     # read all fields
     assert hasattr(mdv, 'PHIDP') is False
-    mdv.get_all_fields()
+    mdv.read_all_fields()
     assert hasattr(mdv, 'DBMHC') is True
     assert hasattr(mdv, 'DBMVC') is True
     assert hasattr(mdv, 'DBZ') is True

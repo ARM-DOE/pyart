@@ -302,7 +302,7 @@ def test_mdv_time():
     assert 'units' in mdv_radar.time.keys()
     assert 'calendar' in mdv_radar.time.keys()
     assert 'data' in mdv_radar.time.keys()
-    assert mdv_radar.time['units'] == 'seconds since 2011-05-20 11:01:00.0'
+    assert mdv_radar.time['units'] == 'seconds since 2011-05-20T11:01:00.0Z'
     assert mdv_radar.time['data'].shape == (6120, )
     assert round(mdv_radar.time['data'][600]) == 33.
 

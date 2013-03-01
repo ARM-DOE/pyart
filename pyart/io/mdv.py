@@ -1,12 +1,6 @@
-""" Utilities for reading of MDV data into numpy objects
+""" Utilities for reading of MDV files.
 
 Code is adapted from Nitin Bharadwaj's Matlab code
-
-Notes
------
-Currently this code works only on polar MDV files which are gzipped.
-Future versions will be expanded to load cartesian and deal with
-non-gzipped files
 
 """
 
@@ -19,178 +13,113 @@ import numpy as np
 from netCDF4 import date2num
 
 from radar import Radar
-from common import COMMON2STANDARD, get_field_metadata
+from common import COMMON2STANDARD, get_metadata, make_tu_str
+from common import radar_coords_to_cart
 
 
 def read_mdv(filename):
     """
-    Read a mdv file.
+    Read a MDV file.
 
     Parameters
     ----------
     filename : str
-        Name of mdv file to read data from.
+        Name of MDV file to read data from.
 
     Returns
     -------
     radar : Radar
-        Radar object.
+        Radar object containing data from MDV file.
+
+    Notes
+    -----
+    Currently this function can only read polar MDV files which are gzipped.
+    Support for cartesian and non-gzipped file are planned.
 
     """
     radarobj = MdvFile(filename)
 
-    # We only want to transfer fields that we have valid names for...
-    todo_fields = set(radarobj.fields) & set(COMMON2STANDARD.keys())
-    # the intersection of the set of available and valid names
-    flat_dict = {}  # a holder to be updated
+    # value attributes
     naz = len(radarobj.az_deg)
     nrays = naz
     nele = len(radarobj.el_deg)
     ngates = len(radarobj.range_km)
     scan_type = radarobj.scan_type
 
-    #The flat azimuth array which describes the azimuth of each beam
-    if scan_type == 'ppi':
-        azimuth = {
-            'data': np.tile(radarobj.az_deg, nele),
-            'units': 'degrees',
-            'comment': 'Azimuth of antenna relative to true north',
-            'long_name': 'azimuth_angle_from_true_north',
-            'standard_name': 'beam_azimuth_angle'}
+    # azimuth, range and elevation parameters determined from scan_type
+    azimuth = get_metadata('azimuth')
+    elevation = get_metadata('elevation')
+    _range = get_metadata('range')
+    _range['data'] = np.array(radarobj.range_km * 1000.0)
+    _range['spacing_is_constant'] = 'true',
+    _range['meters_to_center_of_first_gate'] = radarobj.range_km[0] * 1000.
+    gate_0 = radarobj.range_km[0]
+    gate_1 = radarobj.range_km[1]
+    _range['meters_between_gates'] = (gate_1 - gate_0) * 1000.0
 
-        #the range array which describes the range of all beams (note in this
-        _range = {
-            'data': np.array(radarobj.range_km*1000.0),
-            'units': 'meters',
-            'standard_name': 'projection_range_coordinate',
-            'long_name': 'range_to_measurement_volume',
-            'comment': (
-                'Coordinate variable for range. Range to center of each bin.'),
-            'spacing_is_constant': 'true',
-            'meters_to_center_of_first_gate': (radarobj.range_km[0]) * 1000.0,
-            'meters_between_gates': (radarobj.range_km[1] -
-                                     radarobj.range_km[0])*1000.0}
-        elevation = {
-            'data': np.array(radarobj.el_deg).repeat(naz),
-            'units': 'degrees',
-            'standard_name': 'beam_elevation_angle',
-            'comment': 'Elevation of antenna relative to the horizontal plane',
-            'long_name': 'elevation_angle_from_horizontal_plane'}
+    if scan_type == 'ppi':
+        azimuth['data'] = np.tile(radarobj.az_deg, nele)
+        elevation['data'] = np.array(radarobj.el_deg).repeat(naz)
 
     elif scan_type == 'rhi':
-        azimuth = {
-            'data': np.array(radarobj.az_deg).repeat(nele),
-            'units': 'degrees',
-            'comment': 'Azimuth of antenna relative to true north',
-            'long_name': 'azimuth_angle_from_true_north',
-            'standard_name': 'beam_azimuth_angle'}
+        azimuth['data'] = np.array(radarobj.az_deg).repeat(nele),
+        elevation['data'] = np.tile(radarobj.el_deg, naz)
 
-        #the range array which describes the range of all beams (note in this
-        _range = {
-            'data': np.array(radarobj.range_km*1000.0),
-            'units': 'meters',
-            'standard_name': 'projection_range_coordinate',
-            'long_name': 'range_to_measurement_volume',
-            'comment': (
-                'Coordinate variable for range. Range to center of each bin.'),
-            'spacing_is_constant': 'true',
-            'meters_to_center_of_first_gate': (radarobj.range_km[0]) * 1000.0,
-            'meters_between_gates': (radarobj.range_km[1] -
-                                     radarobj.range_km[0])*1000.0}
-
-        elevation = {
-            'data': np.tile(radarobj.el_deg, naz),
-            'units': 'degrees',
-            'standard_name': 'beam_elevation_angle',
-            'comment': 'Elevation of antenna relative to the horizontal plane',
-            'long_name': 'elevation_angle_from_horizontal_plane'}
-
-    #append time
-    time_dic = dt_to_dict(radarobj.times['time_begin'])
-    tu = ("seconds since %(year)d-%(month)02d-%(day)02d"
-          " %(hour)02d:%(minute)02d:%(second)02d.0") % time_dic
+    # time
+    tu = make_tu_str(radarobj.times['time_begin'])
     cal = "gregorian"
-    time_array = np.linspace(date2num(radarobj.times['time_begin'], tu, cal),
-                             date2num(radarobj.times['time_end'], tu, cal),
-                             naz * nele)
-    time = {
-        'data': time_array, 'units': tu, 'calendar': cal,
-        'comment': ('Coordinate variable for time.'
-                    'Time at the center of each ray, in fractional seconds '
-                    'since the global variable time_coverage_start'),
-        'standard_name': 'time',
-        'long_name': 'time in seconds since volume start'}
-    for field in todo_fields:
-        # create a dictionary tree for all data fields
-        print "Doing ", field
-        # grab data from MDV object
+    time_start = date2num(radarobj.times['time_begin'], tu, cal)
+    time_end = date2num(radarobj.times['time_end'], tu, cal)
+    time = get_metadata('time')
+    time['data'] = np.linspace(time_start, time_end, naz * nele)
+    time['units'] = tu
+    time['calendar'] = cal
+
+    # fields
+    fields = {}
+    # Transfer only the fields that we have valid names for and are present.
+    for field in set(radarobj.fields) & set(COMMON2STANDARD.keys()):
+
+        # grab data from MDV object, mask and reshape
         data = radarobj.read_a_field(radarobj.fields.index(field))
         data[np.where(np.isnan(data))] = -9999.0
         data[np.where(data == 131072)] = -9999.0
-        meta = get_field_metadata(field)  # fetch metadata
-        fielddict = {
-            'data': np.ma.masked_equal(data, -9999.0).reshape(
-                data.shape[0] * data.shape[1], data.shape[2]),
-            '_FillValue': -9999.0}
-        fielddict.update(meta)
-        flat_dict.update({COMMON2STANDARD[field]: fielddict})
-    fields = flat_dict
-    #sweep based stuff now:
+        data = np.ma.masked_equal(data, -9999.0)
+        data.shape = (data.shape[0] * data.shape[1], data.shape[2])
+
+        # create and store the field dictionary
+        fielddict = get_metadata(field)
+        fielddict['data'] = data
+        fielddict['_FillValue'] = -9999.0
+        fields[COMMON2STANDARD[field]] = fielddict
+
+    # sweep information
+    sweep_number = get_metadata('sweep_number')
+    sweep_mode = get_metadata('sweep_mode')
+    fixed_angle = get_metadata('fixed_angle')
+    sweep_start_ray_index = get_metadata('sweep_start_ray_index')
+    sweep_end_ray_index = get_metadata('sweep_end_ray_index')
+    len_time = len(time['data'])
     if radarobj.scan_type == 'ppi':
         nsweeps = nele
-        sweep_number = {'data': range(nsweeps), 'units': 'count',
-                        'long_name': 'sweep_number'}
-        sweep_mode = {
-            'data': nsweeps*['azimuth_surveillance    '],
-            'long_name': 'sweep_mode',
-            'units': 'uniteless',
-            'comment': ('Options are: "sector", "coplane", "rhi", '
-                        '"vertical_pointing", "idle", '
-                        '"azimuth_surveillance", "elevation_surveillance", '
-                        '"sunscan", "pointing", "manual_ppi", "manual_rhi"')}
-        fixed_angle = {
-            'data': np.array(radarobj.el_deg),
-            'long_name': 'target_angle_for_sweep',
-            'units': 'degrees',
-            'standard_name': 'target_fixed_angle'}
-        sweep_start_ray_index = {
-            'data': np.arange(0, len(time['data']), naz),
-            'long_name': 'index of first ray in sweep, 0-based',
-            'units': 'count'}
-        sweep_end_ray_index = {
-            'data': np.arange(naz-1, len(time['data']), naz),
-            'long_name': 'index of last ray in sweep, 0-based',
-            'units': 'count'}
+        sweep_number['data'] = range(nsweeps)
+        sweep_mode['data'] = nsweeps * ['azimuth_surveillance    ']
+        fixed_angle['data'] = np.array(radarobj.el_deg)
+        sweep_start_ray_index['data'] = np.arange(0, len_time, naz)
+        sweep_end_ray_index['data'] = np.arange(naz-1, len_time, naz)
+
     elif radarobj.scan_type == 'rhi':
         nsweeps = naz
-        sweep_number = {
-            'data': range(nsweeps),
-            'units': 'count',
-            'long_name': 'sweep_number'}
-        sweep_mode = {
-            'data': nsweeps * ['rhi                     '],
-            'long_name': 'sweep_mode',
-            'units': 'uniteless',
-            'comment': ('Options are: "sector", "coplane", "rhi", '
-                        '"vertical_pointing", "idle", "azimuth_surveillance", '
-                        '"elevation_surveillance", "sunscan", "pointing", '
-                        '"manual_ppi", "manual_rhi"')}
-        fixed_angle = {
-            'data': np.array(radarobj.az_deg),
-            'long_name': 'target_angle_for_sweep',
-            'units': 'degrees',
-            'standard_name': 'target_fixed_angle'}
-        sweep_start_ray_index = {
-            'data': np.arange(0, len(time['data']), nele),
-            'long_name': 'index of first ray in sweep, 0-based',
-            'units': 'count'}
-        sweep_end_ray_index = {
-            'data': np.arange(nele - 1, len(time['data']), nele),
-            'long_name': 'index of last ray in sweep, 0-based',
-            'units': 'count'}
+        sweep_number['data'] = range(nsweeps)
+        sweep_mode['data'] = nsweeps * ['rhi                     ']
+        fixed_angle['data'] = np.array(radarobj.az_deg)
+        sweep_start_ray_index['data'] = np.arange(0, len_time, nele)
+        sweep_end_ray_index['data'] = np.arange(nele - 1, len_time, nele)
 
     elif radarobj.scan_type == 'vpr':
         nsweeps = 1
+        # XXX set sweep_ parameters
+
     sweep_info = {
         'sweep_number': sweep_number,
         'sweep_mode': sweep_mode,
@@ -199,559 +128,686 @@ def read_mdv(filename):
         'sweep_end_ray_index': sweep_end_ray_index}
     sweep_mode = np.array([radarobj.scan_type] * nsweeps)
     sweep_number = np.linspace(0, nsweeps-1, nsweeps)
-    mapme = defaut_mdv_metadata_map()
+
+    # metadata
     metadata = {}
-    masterdata = dict([(key, radarobj.master_header[mapme[key]])
-                       for key in mapme.keys()])
-    metadata.update(masterdata)
-    #now for location variables
-    lat = {
-        'data': radarobj.radar_info['latitude_deg'],
-        'standard_name': 'Latitude',
-        'units': 'degrees_north'}
-    lon = {
-        'data': radarobj.radar_info['longitude_deg'],
-        'standard_name': 'Longitude',
-        'units': 'degrees_east'}
-    elv = {
-        'data': radarobj.radar_info['altitude_km']*1000.0,
-        'standard_name': 'Altitude',
-        'units': 'meters'}
+    for meta_key, mdv_key in MDV_METADATA_MAP.iteritems():
+        metadata[meta_key] = radarobj.master_header[mdv_key]
+
+    # location dictionary
+    lat = get_metadata('latitude')
+    lon = get_metadata('longitude')
+    elv = get_metadata('altitude')
+    lat['data'] = radarobj.radar_info['latitude_deg']
+    lon['data'] = radarobj.radar_info['longitude_deg']
+    elv['data'] = radarobj.radar_info['altitude_km'] * 1000.0
     location = {'latitude': lat, 'longitude': lon, 'altitude': elv}
-    # now for instrument parameters..
-    # sorry but I am just going to brute force this!
-    # prt mode: Need to fix this.. assumes dual if two prts
+
+    # instrument parameters
+    # XXX prt mode: Need to fix this.. assumes dual if two prts
     if radarobj.radar_info['prt2_s'] == 0.0:
-        prt_mode = 'fixed                   '
+        prt_mode_str = 'fixed                   '
     else:
-        prt_mode = 'dual                    '
-    inst_params = {
-        'prt_mode': {
-            'data': np.array([prt_mode]*nsweeps),
-            'comments': ('Pulsing mode Options are: "fixed", "staggered", '
-                         '"dual". Assumed "fixed" if missing.')},
+        prt_mode_str = 'dual                    '
 
-        'prt': {
-            'data': np.array([radarobj.radar_info['prt_s']] * nele * naz),
-            'units': 'seconds',
-            'comments': ("Pulse repetition time. For staggered prt, "
-                         "also see prt_ratio.")},
+    prt_mode = get_metadata('prt_mode')
+    prt = get_metadata('prt')
+    unambiguous_range = get_metadata('unambiguous_range')
+    nyquist_velocity = get_metadata('nyquist_velocity')
 
-        'unambiguous_range': {
-            'data': np.array([radarobj.radar_info['unambig_range_km'] *
-                              1000.0] * naz * nele),
-            'units': 'meters',
-            'comment': 'Unambiguous range'},
+    prt_mode['data'] = np.array([prt_mode_str] * nsweeps)
+    prt['data'] = np.array([radarobj.radar_info['prt_s']] * nele * naz)
 
-        'nyquist_velocity': {
-            'data': np.array([radarobj.radar_info['unambig_vel_mps']] *
-                             naz * nele),
-            'units': 'm/s',
-            'comments': "unamb velocity"}
-    }
+    urange_m = radarobj.radar_info['unambig_range_km'] * 1000.0
+    unambiguous_range['data'] = np.array([urange_m] * naz * nele)
+
+    uvel_mps = radarobj.radar_info['unambig_vel_mps']
+    nyquist_velocity['data'] = np.array([uvel_mps] * naz * nele)
+
+    inst_params = {'prt_mode': prt_mode, 'prt': prt,
+                   'unambiguous_range': unambiguous_range,
+                   'nyquist_velocity': nyquist_velocity}
 
     return Radar(nsweeps, nrays, ngates, scan_type, naz, nele, _range,
                  azimuth, elevation, tu, cal, time, fields, sweep_info,
                  sweep_mode, sweep_number, location, inst_params, metadata)
 
 
-#####################
-# private functions #
-#####################
+# mapping from MDV name space to CF-Radial name space
+MDV_METADATA_MAP = {'instrument_name': 'data_set_source',
+                    'source': 'data_set_info'}
 
 
-# XXX move to common
-def dt_to_dict(dt, **kwargs):
-    pref = kwargs.get('pref', '')
-    return dict([(pref+key, getattr(dt, key)) for key in
-                ['year', 'month', 'day', 'hour', 'minute', 'second']])
+# Information about the MDV file structure
+MDV_CHUNK_INFO_LEN = 480
+MDV_INFO_LEN = 512
+MDV_LONG_FIELD_LEN = 64
+MDV_MAX_PROJ_PARAMS = 8
+MDV_MAX_VLEVELS = 122
+MDV_NAME_LEN = 128
+MDV_SHORT_FIELD_LEN = 16
+MDV_TRANSFORM_LEN = 16
+MDV_UNITS_LEN = 16
+MDV_N_COORD_LABELS = 3
+MDV_COORD_UNITS_LEN = 32
 
+# (x,y) in degrees. Simple latitude-longitude grid.
+# Also known as the Simple Cylindrical or Platte Carree projection.
+PROJ_LATLON = 0
+# (x,y) in km. Lambert Conformal Conic projection.
+PROJ_LAMBERT_CONF = 3
+# (x,y) in km. Polar Stereographic projection.
+PROJ_POLAR_STEREO = 5
+# Cartesian, (x,y) in km. This is a simple line-of-sight
+# projection used for single radar sites. The formal name is
+# Oblique Lambert Azimuthal projection.
+PROJ_FLAT = 8
+# radar data in native Plan Position Indicator (PPI) coordinates of
+# range, azimuth angle and elevation angle. x is radial range (km),
+# y is azimuth angle (deg), z is elev angle (deg).
+PROJ_POLAR_RADAR = 9
+# (x,y) in km. Oblique Stereographic projection.
+PROJ_OBLIQUE_STEREO = 12
+# radar data in native Range Height Indicator (RHI) coordinates.
+# x is radial range (km), y is elev angle (deg), z is az angle (deg).
+PROJ_RHI_RADAR = 13
+#  ***************** COMPRESSION *******************
+COMPRESSION_NONE = 0  # no compression
+COMPRESSION_ZLIB = 3  # Lempel-Ziv
+COMPRESSION_BZIP = 4  # bzip2
+COMPRESSION_GZIP = 5  # Lempel-Ziv in gzip format
 
-# XXX move to common?
-def radar_coords_to_cart(rng, az, ele, debug=False):
-    """
-    Asumes standard atmosphere, ie R=4Re/3
-    """
-    Re = 6371.0 * 1000.0
-    #h=(r^2 + (4Re/3)^2 + 2r(4Re/3)sin(ele))^1/2 -4Re/3
-    #s=4Re/3arcsin(rcos(ele)/(4Re/3+h))
-    p_r = 4.0 * Re / 3.0
-    rm = rng * 1000.0
-    z = (rm ** 2 + p_r ** 2 + 2.0 * rm * p_r *
-         np.sin(ele * np.pi / 180.0)) ** 0.5 - p_r
-    #arc length
-    s = p_r * np.arcsin(rm * np.cos(ele * np.pi / 180.) / (p_r + z))
-    if debug:
-        print "Z=", z, "s=", s
-    y = s * np.cos(az * np.pi / 180.0)
-    x = s * np.sin(az * np.pi / 180.0)
-    return x, y, z
+#  ***************** COMPRESSION CODE *******************
+TA_NOT_COMPRESSED = 791621423
+GZIP_COMPRESSED = 4160223223
 
+#  ***************** TRANSFORM *******************
+DATA_TRANSFORM_NONE = 0  # None
+DATA_TRANSFORM_LOG = 1  # Natural log
 
-def defaut_mdv_metadata_map():
-    """
-    produce the default mappings from mdv name space to cf-radial name space
-    """
-    mdm = {'instrument_name': 'data_set_source', 'source': 'data_set_info'}
-    return mdm
+#  ***************** BIT ENCODING *******************
+ENCODING_INT8 = 1  # unsigned 8 bit integer
+ENCODING_INT16 = 2  # unsigned 16 bit integer
+ENCODING_FLOAT32 = 5  # 32 bit IEEE floating point
+
+#  ***************** CHUNK HEADER and DATA *******************
+CHUNK_DSRADAR_PARAMS = 3
+CHUNK_DSRADAR_ELEVATIONS = 10
+CHUNK_DSRADAR_CALIB = 7
+DS_LABEL_LEN = 40
+NCHAR_DS_RADAR_PARAMS = 2 * DS_LABEL_LEN
+DS_RADAR_CALIB_NAME_LEN = 16
+DS_RADAR_CALIB_MISSING = -9999.0
 
 
 class MdvFile:
+    """
+    A file object for MDV data.
 
-    def __init__(self, filename, **kwargs):
-        debug = kwargs.get('debug', False)  # Noise on or off
+    A `MdvFile` object stores metadata and data from a MDV file.  Metadata is
+    stored in dictionaries as attributes of the object, field data is
+    stored as NumPy ndarrays as attributes with the field name. By default
+    only metadata is read initially and field data must be read using the
+    `read_a_field` or `read_all_fields` methods.  This behavior can be changed
+    by setting the `read_fields` parameter to True.
 
-        #The class initializes by loading the binary data
+    Parameters
+    ----------
+    filename : str
+        Name of MDV file.
+    debug : bool
+        True to print out debugging information, False to supress
+    read_fields : bool
+        True to read all field during initalization, False (default) only
+        reads metadata.
+
+    """
+
+    def __init__(self, filename, debug=False, read_fields=False):
+        """ initalize MdvFile from filename (str). """
+
         if debug:
             print "Opening ", filename
-
-        #open and add the binary file to the class
         self.fileptr = open(filename, 'rb')
 
-        #Some information about the MDV file structure
-        self.MDV_CHUNK_INFO_LEN = 480
-        self.MDV_INFO_LEN = 512
-        self.MDV_LONG_FIELD_LEN = 64
-        self.MDV_MAX_PROJ_PARAMS = 8
-        self.MDV_MAX_VLEVELS = 122
-        self.MDV_NAME_LEN = 128
-        self.MDV_SHORT_FIELD_LEN = 16
-        self.MDV_TRANSFORM_LEN = 16
-        self.MDV_UNITS_LEN = 16
-        self.MDV_N_COORD_LABELS = 3
-        self.MDV_COORD_UNITS_LEN = 32
-
-        # (x,y) in degrees. Simple latitude-longitude grid.
-        # Also known as the Simple Cylindrical or Platte Carree projection.
-        self.PROJ_LATLON = 0
-        # (x,y) in km. Lambert Conformal Conic projection.
-        self.PROJ_LAMBERT_CONF = 3
-        # (x,y) in km. Polar Stereographic projection.
-        self.PROJ_POLAR_STEREO = 5
-        # Cartesian, (x,y) in km. This is a simple line-of-sight
-        # projection used for single radar sites. The formal name is
-        # Oblique Lambert Azimuthal projection.
-        self.PROJ_FLAT = 8
-        # radar data in native Plan Position Indicator (PPI) coordinates of
-        # range, azimuth angle and elevation angle. x is radial range (km),
-        # y is azimuth angle (deg), z is elev angle (deg).
-        self.PROJ_POLAR_RADAR = 9
-        # (x,y) in km. Oblique Stereographic projection.
-        self.PROJ_OBLIQUE_STEREO = 12
-        # radar data in native Range Height Indicator (RHI) coordinates.
-        # x is radial range (km), y is elev angle (deg), z is az angle (deg).
-        self.PROJ_RHI_RADAR = 13
-        #  ***************** COMPRESSION *******************
-        self.COMPRESSION_NONE = 0  # no compression
-        self.COMPRESSION_ZLIB = 3  # Lempel-Ziv
-        self.COMPRESSION_BZIP = 4  # bzip2
-        self.COMPRESSION_GZIP = 5  # Lempel-Ziv in gzip format
-
-        #  ***************** COMPRESSION CODE *******************
-        self.TA_NOT_COMPRESSED = 791621423
-        self.GZIP_COMPRESSED = 4160223223
-
-        #  ***************** TRANSFORM *******************
-        self.DATA_TRANSFORM_NONE = 0  # None
-        self.DATA_TRANSFORM_LOG = 1  # Natural log
-
-        #  ***************** BIT ENCODING *******************
-        self.ENCODING_INT8 = 1  # unsigned 8 bit integer
-        self.ENCODING_INT16 = 2  # unsigned 16 bit integer
-        self.ENCODING_FLOAT32 = 5  # 32 bit IEEE floating point
-
-        #  ***************** CHUNK HEADER and DATA *******************
-        self.CHUNK_DSRADAR_PARAMS = 3
-        self.CHUNK_DSRADAR_ELEVATIONS = 10
-        self.CHUNK_DSRADAR_CALIB = 7
-        self.DS_LABEL_LEN = 40
-        self.NCHAR_DS_RADAR_PARAMS = 2 * self.DS_LABEL_LEN
-        self.DS_RADAR_CALIB_NAME_LEN = 16
-        self.DS_RADAR_CALIB_MISSING = -9999.0
         if debug:
             print "Getting master header"
-        self.get_master_header()
+        self.master_header = self._get_master_header()
+
         if debug:
             print "getting field headers"
-        self.get_field_headers(self.master_header['nfields'])
+        nfields = self.master_header['nfields']
+        self.field_headers = self._get_field_headers(nfields)
+
         if debug:
             print "getting vlevel headers"
-        self.get_vlevel_headers(self.master_header['nfields'])
+        self.vlevel_headers = self._get_vlevel_headers(nfields)
+
         if debug:
             print "getting chunk headers"
-        self.get_chunk_headers(self.master_header['nchunks'])
+        nchunks = self.master_header['nchunks']
+        self.chunk_headers = self._get_chunk_headers(nchunks)
+
         if debug:
-            print "Reading Chunks"
-        self.read_chunks()
+            print "Getting Chunk Data"
+        radar_info, elevations, calib_info = self._get_chunks()
+        if radar_info is not None:
+            self.radar_info = radar_info
+        if elevations is not None:
+            self.elevations = elevations
+        if calib_info is not None:
+            self.calib_info = calib_info
+
         if debug:
             print "Calculating Radar coordinates"
-        self.calc_geometry()
+        self.az_deg, self.range_km, self.el_deg = self._calc_geometry()
+
         if debug:
             print "Making usable time objects"
-        self.append_time()
+        self.times = self._make_time_dict()
+
         if debug:
             print "Calculating cartesian coordinates"
-        self.append_carts()
+        self.carts = self._make_carts_dict()
+
         if debug:
             print "indexing fields"
-        self.index_fields()
+        self.fields = self._make_fields_list()
 
-    def read_list_from_file(self, items, forms, endian, **kwargs):
-
-        debug = kwargs.get('debug', False)  # Noise on or off
-        my_dict = {}
-        for i in range(len(forms)):
-            nbytes = struct.calcsize(forms[i])
+        if read_fields:
             if debug:
-                print "reading ", nbytes, " of header data"
-            bin_data = self.fileptr.read(nbytes)
-            if 'c' in forms[i]:
-                my_dict.update({items[i]: "".join(struct.unpack(
-                    endian + forms[i], bin_data)).split('\x00')[0]})
+                print "Reading all fields"
+            self.read_all_fields()
+        return
+
+    ##################
+    # public methods #
+    ##################
+
+    def read_a_field(self, fnum, debug=False):
+        """
+        Read a field from the MDV file.
+
+        Parameters
+        ----------
+        fnum : int
+            Field number to read.
+        debug : bool
+            True to print debugging information, False to supress.
+
+        Returns
+        -------
+        field_data : array
+            Field data.  This data is also stored as a object attribute under
+            the field name.
+
+        See Also
+        --------
+        read_all_fields : Read all fields in the MDV file.
+
+        """
+
+        field_header = self.field_headers[fnum]
+        # if the field has already been read, return it
+        if hasattr(self, field_header['field_name']):
+            if debug:
+                print "Getting data from the object."
+            return getattr(self, field_header['field_name'])
+
+        # field has not yet been read, populate the object and return
+        if debug:
+            print "No data found in object, populating"
+
+        nsweeps = self.master_header['nsweeps']
+        nrays = self.master_header['nrays']
+        ngates = self.master_header['ngates']
+
+        # read the header
+        field_data = np.zeros([nsweeps, nrays, ngates], dtype='float32')
+        self.fileptr.seek(field_header['field_data_offset'])
+        self._get_sweep_info(nsweeps)  # dict not used, but need to seek.
+
+        for sw in xrange(nsweeps):
+            if debug:
+                print "doing sweep ", sw
+
+            # get the compressed sweep data
+            compr_info = self._get_compression_info()
+            compr_data = self.fileptr.read(compr_info['nbytes_coded'])
+            cd_fobj = StringIO.StringIO(compr_data)
+
+            # decompress the sweep data
+            gzip_file_handle = gzip.GzipFile(fileobj=cd_fobj)
+            encoding_type = field_header['encoding_type']
+            if encoding_type == ENCODING_INT8:
+                fmt = '>%iB' % (ngates * nrays)
+                np_form = '>B'
+            elif encoding_type == ENCODING_INT16:
+                fmt = '>%iH' % (ngates * nrays)
+                np_form = '>H'
+            elif encoding_type == ENCODING_FLOAT32:
+                fmt = '>%if' % (ngates * nrays)
+                np_form = '>f'
             else:
-                my_dict.update({items[i]: struct.unpack(
-                    endian+forms[i], bin_data)})
-                if len(my_dict[items[i]]) == 1:
-                    my_dict[items[i]] = my_dict[items[i]][0]
-        return my_dict
+                raise ValueError('unknown encoding: ', encoding_type)
+            decompr_data = gzip_file_handle.read(struct.calcsize(fmt))
+            gzip_file_handle.close()
+
+            # read the decompressed data, reshape and mask
+            sw_data = np.fromstring(decompr_data, np_form).astype('float32')
+            sw_data.shape = (nrays, ngates)
+            mask = sw_data == field_header['bad_data_value']
+            np.putmask(sw_data, mask, [np.NaN])
+
+            # scale and offset the data, store in field_data
+            scale = field_header['scale']
+            bias = field_header['bias']
+            field_data[sw, :, :] = sw_data * scale + bias
+
+        # store data as object attribute and return
+        setattr(self, field_header['field_name'], field_data)
+        return field_data
+
+    def read_all_fields(self):
+        """ Read all fields, storing data to field name attributes. """
+        for i in xrange(self.master_header['nfields']):
+            self.read_a_field(i)
 
     def close(self):
-        #close the mdv file
+        """ Close the MDV file. """
         self.fileptr.close()
 
-    def get_master_header(self):
-        endian = '>'
-        items = [
-            "record_len1",
-            "struct_id",
-            "revision_number",
-            "time_gen",
-            "user_time",
-            "time_begin",
-            "time_end",
-            "time_centroid",
-            "time_expire",
-            "num_data_times",
-            "index_number",
-            "data_dimension",
-            "data_collection_type",
-            "user_data",
-            "native_vlevel_type",
-            "vlevel_type",
-            "vlevel_included",
-            "grid_orientation",
-            "data_ordering",
-            "nfields",
-            "ngates",
-            "nrays",
-            "nsweeps",
-            "nchunks",
-            "field_hdr_offset",
-            "vlevel_hdr_offset",
-            "chunk_hdr_offset",
-            "field_grids_differ",
-            "user_data_si328",
-            "time_written",
-            "unused_si325",
-            "user_data_fl326",
-            "sensor_lon",
-            "sensor_lat",
-            "sensor_alt",
-            "unused_fl3212",
-            "data_set_info",
-            "data_set_name",
-            "data_set_source",
-            "record_len2"]
-        forms = ['i', 'i', 'i', 'i', 'i', 'i', 'i', 'i', 'i', 'i', 'i', 'i',
-                 'i', 'i', 'i', 'i', 'i', 'i', 'i', 'i', 'i', 'i', 'i', 'i',
-                 'i', 'i', 'i', 'i', '8i', 'i', '5i', '6f', 'f', 'f', 'f',
-                 '12f', '%(n)dc' % {'n': self.MDV_INFO_LEN},
-                 '%(n)dc' % {'n': self.MDV_NAME_LEN},
-                 '%(n)dc' % {'n': self.MDV_NAME_LEN}, 'i']
-        my_dict = self.read_list_from_file(items, forms, '>')
-        self.master_header = my_dict
+    ###################
+    # private methods #
+    ###################
 
-    def get_field_headers(self, nfields):
-        items = ["record_len1", "struct_id", "field_code", "user_time1",
-                 "forecast_delta", "user_time2", "user_time3",
-                 "forecast_time", "user_time4", "ngates", "nrays", "nsweeps",
-                 "proj_type", "encoding_type", "data_element_nbytes",
-                 "field_data_offset", "volume_size", "user_data_si32",
-                 "compression_type", "transform_type", "scaling_type",
-                 "native_vlevel_type", "vlevel_type", "dz_constant",
-                 "data_dimension", "zoom_clipped", "zoom_no_overlap",
-                 "unused_si32", "proj_origin_lat", "proj_origin_lon",
-                 "proj_param", "vert_reference", "grid_dx", "grid_dy",
-                 "grid_dz", "grid_minx", "grid_miny", "grid_minz", "scale",
-                 "bias", "bad_data_value", "missing_data_value",
-                 "proj_rotation", "user_data_fl32", "min_value",
-                 "max_value", "min_value_orig_vol", "max_value_orig_vol",
-                 "unused_fl32", "field_name_long", "field_name", "units",
-                 "transform", "unused_char", "record_len2"]
-        forms = (['i'] * 17 + ['10i'] + ['i'] * 9 + ['4i'] +
-                 ['f', 'f', '%(n)df' % {'n': self.MDV_MAX_PROJ_PARAMS}] +
-                 ['f'] * 12 + ['4f'] + ['f'] * 5 +
-                 ['%(n)dc' % {'n': self.MDV_LONG_FIELD_LEN},
-                 '%(n)dc' % {'n': self.MDV_SHORT_FIELD_LEN},
-                 '%(n)dc' % {'n': self.MDV_UNITS_LEN},
-                 '%(n)dc' % {'n': self.MDV_TRANSFORM_LEN},
-                 '%(n)dc' % {'n': self.MDV_UNITS_LEN}, 'i'])
-        fld_headers = []
-        for i in range(nfields):
-            my_dict = self.read_list_from_file(items, forms, '>')
-            fld_headers.append(my_dict)
-        self.field_headers = fld_headers
+    # get_ methods for reading headers
 
-    def get_vlevel_headers(self, nfields):
-        items = ["record_len1", "struct_id", "type", "unused_si32", "level",
-                 "unused_fl32", "record_len2"]
-        forms = ['i', 'i', '%(n)di' % {'n': self.MDV_MAX_VLEVELS}, '4i',
-                 '%(n)df' % {'n': self.MDV_MAX_VLEVELS}, '5f', 'i']
-        vl_headers = []
-        for i in range(nfields):
-            my_dict = self.read_list_from_file(items, forms, '>')
-            vl_headers.append(my_dict)
-        self.vlevel_headers = vl_headers
+    def _get_master_header(self):
+        """ Read the MDV master header, return a dict. """
+        fmt = '>28i 8i i 5i 6f 3f 12f 512c 128c 128c i'
+        l = struct.unpack(fmt, self.fileptr.read(struct.calcsize(fmt)))
+        d = {}
+        d["record_len1"] = l[0]             # 28i: 1
+        d["struct_id"] = l[1]               # 28i: 2
+        d["revision_number"] = l[2]         # 28i: 3
+        d["time_gen"] = l[3]                # 28i: 4
+        d["user_time"] = l[4]               # 28i: 5
+        d["time_begin"] = l[5]              # 28i: 6
+        d["time_end"] = l[6]                # 28i: 7
+        d["time_centroid"] = l[7]           # 28i: 8
+        d["time_expire"] = l[8]             # 28i: 9
+        d["num_data_times"] = l[9]          # 28i: 10
+        d["index_number"] = l[10]           # 28i: 11
+        d["data_dimension"] = l[11]         # 28i: 12
+        d["data_collection_type"] = l[12]   # 28i: 13
+        d["user_data"] = l[13]              # 28i: 14
+        d["native_vlevel_type"] = l[14]     # 28i: 15
+        d["vlevel_type"] = l[15]            # 28i: 16
+        d["vlevel_included"] = l[16]        # 28i: 17
+        d["grid_orientation"] = l[17]       # 28i: 18
+        d["data_ordering"] = l[18]          # 28i: 19
+        d["nfields"] = l[19]                # 28i: 20
+        d["ngates"] = l[20]                 # 28i: 21
+        d["nrays"] = l[21]                  # 28i: 22
+        d["nsweeps"] = l[22]                # 28i: 23
+        d["nchunks"] = l[23]                # 28i: 24
+        d["field_hdr_offset"] = l[24]       # 28i: 25
+        d["vlevel_hdr_offset"] = l[25]      # 28i: 26
+        d["chunk_hdr_offset"] = l[26]       # 28i: 27
+        d["field_grids_differ"] = l[27]     # 28i: 28
+        d["user_data_si328"] = l[28:36]     # 8i
+        d["time_written"] = l[36]           # i
+        d["unused_si325"] = l[37:42]        # 5i
+        d["user_data_fl326"] = l[42:48]     # 6f
+        d["sensor_lon"] = l[48]             # 3f : 1
+        d["sensor_lat"] = l[49]             # 3f : 2
+        d["sensor_alt"] = l[50]             # 3f : 3
+        d["unused_fl3212"] = l[51:63]       # 12f
+        d["data_set_info"] = ''.join(l[63:575]).strip('\x00')       # 512c
+        d["data_set_name"] = ''.join(l[575:703]).strip('\x00')      # 128c
+        d["data_set_source"] = ''.join(l[703:831]).strip('\x00')    # 128c
+        d["record_len2"] = l[831]           # i
+        return d
 
-    def get_chunk_headers(self, nchunks):
-        items = ["record_len1", "struct_id", "chunk_id", "chunk_data_offset",
-                 "size", "unused_si32", "info", "record_len2"]
-        forms = ['i'] * 5 + ['2i',
-                             '%(n)dc' % {'n': self.MDV_CHUNK_INFO_LEN}, 'i']
-        ch_headers = []
-        for i in range(nchunks):
-            my_dict = self.read_list_from_file(items, forms, '>')
-            ch_headers.append(my_dict)
-        self.chunk_headers = ch_headers
+    def _get_field_headers(self, nfields):
+        """ Read nfields field headers, return a list of dicts. """
+        return [self._get_field_header() for i in range(nfields)]
 
-    def get_compression_info(self):
-        #we assume the file pointer is at the right spot!
-        items = ['magic_cookie', 'nbytes_uncompressed', 'nbytes_compressed',
-                 'nbytes_coded', 'spare']
-        forms = ['I'] * 4 + ['2I']
-        my_dict = self.read_list_from_file(items, forms, '>')
-        self.current_compression_info = my_dict
+    def _get_field_header(self):
+        """ Read a single field header, return a dict. """
 
-    def read_a_field(self, fnum, **kwargs):
-        debug = kwargs.get('debug', False)
-        try:
-            sweep_list = getattr(self, self.field_headers[fnum]['field_name'])
-            if debug:
-                print 'Getting data from object'
-        except AttributeError:
-            if debug:
-                print 'No data found in object, populating'
-            self.fileptr.seek(self.field_headers[fnum]['field_data_offset'])
-            items = ['vlevel_offsets', 'vlevel_nbytes']
-            forms = ['%(n)dI' % {'n': self.master_header['nsweeps']}] * 2
-            sweep_info_dict = self.read_list_from_file(items, forms, '>')
-            sweep_list = np.zeros([self.master_header['nsweeps'],
-                                   self.master_header['nrays'],
-                                   self.master_header['ngates']],
-                                  dtype=np.float32)
-            for sw in range(self.master_header['nsweeps']):
-                if debug:
-                    print "doint sweep ", sw
-                self.get_compression_info()
-                #print self.current_compression_info
-                compressed_data = self.fileptr.read(
-                    self.current_compression_info['nbytes_coded'])
-                #pp=open('/tmp/foo2.gz', 'wb')
-                #pp.write(compressed_data)
-                #pp.close()
-                cd_fobj = StringIO.StringIO(compressed_data)
-                gzip_file_handle = gzip.GzipFile(fileobj=cd_fobj)
-                n_pts = (self.master_header['ngates'] *
-                         self.master_header['nrays'])
-                encoding_type = self.field_headers[fnum]['encoding_type']
-                if encoding_type == self.ENCODING_INT8:
-                    form = '>%(n)dB' % {'n': n_pts}
-                    np_form = '>B'
-                elif encoding_type == self.ENCODING_INT16:
-                    form = '>%(n)dH' % {'n': n_pts}
-                    np_form = '>H'
-                elif encoding_type == self.ENCODING_FLOAT32:
-                    form = '>%(n)df' % {'n': n_pts}
-                    np_form = '>f'
-                #print "using: ", form
-                decompressed_data = gzip_file_handle.read(
-                    struct.calcsize(form))
-                gzip_file_handle.close()
+        fmt = '>17i 10i 9i 4i f f 8f 12f 4f 5f 64c 16c 16c 16c 16c i'
+        l = struct.unpack(fmt, self.fileptr.read(struct.calcsize(fmt)))
+        d = {}
+        d["record_len1"] = l[0]             # 17i: 1
+        d["struct_id"] = l[1]               # 17i: 2
+        d["field_code"] = l[2]              # 17i: 3
+        d["user_time1"] = l[3]              # 17i: 4
+        d["forecast_delta"] = l[4]          # 17i: 5
+        d["user_time2"] = l[5]              # 17i: 6
+        d["user_time3"] = l[6]              # 17i: 7
+        d["forecast_time"] = l[7]           # 17i: 8
+        d["user_time4"] = l[8]              # 17i: 9
+        d["ngates"] = l[9]                  # 17i: 10
+        d["nrays"] = l[10]                  # 17i: 11
+        d["nsweeps"] = l[11]                # 17i: 12
+        d["proj_type"] = l[12]              # 17i: 13
+        d["encoding_type"] = l[13]          # 17i: 14
+        d["data_element_nbytes"] = l[14]    # 17i: 15
+        d["field_data_offset"] = l[15]      # 17i: 16
+        d["volume_size"] = l[16]            # 17i: 17
+        d["user_data_si32"] = l[17:27]      # 10i
+        d["compression_type"] = l[27]       # 9i: 1
+        d["transform_type"] = l[28]         # 9i: 2
+        d["scaling_type"] = l[29]           # 9i: 3
+        d["native_vlevel_type"] = l[30]     # 9i: 4
+        d["vlevel_type"] = l[31]            # 9i: 5
+        d["dz_constant"] = l[32]            # 9i: 6
+        d["data_dimension"] = l[33]         # 9i: 7
+        d["zoom_clipped"] = l[34]           # 9i: 8
+        d["zoom_no_overlap"] = l[35]        # 9i: 9
+        d["unused_si32"] = l[36:40]         # 4i
+        d["proj_origin_lat"] = l[40]        # f
+        d["proj_origin_lon"] = l[41]        # f
+        d["proj_param"] = l[42:50]          # 8f
+        d["vert_reference"] = l[50]         # 12f: 1
+        d["grid_dx"] = l[51]                # 12f: 2
+        d["grid_dy"] = l[52]                # 12f: 3
+        d["grid_dz"] = l[53]                # 12f: 4
+        d["grid_minx"] = l[54]              # 12f: 5
+        d["grid_miny"] = l[55]              # 12f: 6
+        d["grid_minz"] = l[56]              # 12f: 7
+        d["scale"] = l[57]                  # 12f: 8
+        d["bias"] = l[58]                   # 12f: 9
+        d["bad_data_value"] = l[59]         # 12f: 10
+        d["missing_data_value"] = l[60]     # 12f: 11
+        d["proj_rotation"] = l[61]          # 12f: 12
+        d["user_data_fl32"] = l[62:66]      # 4f
+        d["min_value"] = l[66]              # 5f: 1
+        d["max_value"] = l[67]              # 5f: 2
+        d["min_value_orig_vol"] = l[68]     # 5f: 3
+        d["max_value_orig_vol"] = l[69]     # 5f: 4
+        d["unused_fl32"] = l[70]            # 5f: 5
+        d["field_name_long"] = ''.join(l[71:135]).strip('\x00')     # 64c
+        d["field_name"] = ''.join(l[135:151]).strip('\x00')         # 16c
+        d["units"] = ''.join(l[151:167]).strip('\x00')              # 16c
+        d["transform"] = ''.join(l[167:183]).strip('\x00')          # 16c
+        d["unused_char"] = ''.join(l[183:199]).strip('\x00')        # 16c
+        d["record_len2"] = l[199]           # i
+        return d
 
-                my_array = np.fromstring(
-                    decompressed_data, np_form).astype(np.float32)
-                shape = (self.master_header['nrays'],
-                         self.master_header['ngates'])
-                my_array.shape = shape
+    def _get_vlevel_headers(self, nfields):
+        """ Read nfields vlevel headers, return a list of dicts. """
+        return [self._get_vlevel_header() for i in range(nfields)]
 
-                np.putmask(my_array, my_array == self.field_headers[
-                    fnum]['bad_data_value'], [np.NaN])
-                ret_array = (my_array * self.field_headers[fnum]['scale'] +
-                             self.field_headers[fnum]['bias'])
-                sweep_list[sw, :, :] = ret_array
-            setattr(self, self.field_headers[fnum]['field_name'], sweep_list)
-        return sweep_list
+    def _get_vlevel_header(self):
+        """ Read a single vlevel header, return a dict. """
+        fmt = '>i i 122i 4i 122f 5f i'
+        l = struct.unpack(fmt, self.fileptr.read(struct.calcsize(fmt)))
+        d = {}
+        d["record_len1"] = l[0]         # i
+        d["struct_id"] = l[1]           # i
+        d["type"] = l[2:124]            # 122i
+        d["unused_si32"] = l[124:128]   # 4i
+        d["level"] = l[128:250]         # 122f
+        d["unused_fl32"] = l[250:255]   # 5f
+        d["record_len2"] = l[255]       # i
+        return d
 
-    def get_all_fields(self):
-        my_list = []
-        for i in range(self.master_header['nfields']):
-            print "reading field"
-            my_list.append(self.read_a_field(i))
+    def _get_chunk_headers(self, nchunks):
+        """ Get nchunk chunk headers, return a list of dicts. """
+        return [self._get_chunk_header() for i in range(nchunks)]
 
-    def read_radar_info(self, nbytes):
-        weareat = self.fileptr.tell()
-        items = ["radar_id", "radar_type", "nfields", "ngates",
-                 "samples_per_beam", "scan_type", "scan_mode",
-                 "nfields_current", "field_flag", "polarization",
-                 "follow_mode", "prf_mode", "spare_ints",
-                 "radar_constant", "altitude_km", "latitude_deg",
-                 "longitude_deg", "gate_spacing_km", "start_range_km",
-                 "horiz_beam_width_deg", "vert_beam_width_deg",
-                 "pulse_width_us", "prf_hz", "wavelength_cm",
-                 "xmit_peak_pwr_watts", "receiver_mds_dbm",
-                 "receiver_gain_db", "antenna_gain_db", "system_gain_db",
-                 "unambig_vel_mps", "unambig_range_km",
-                 "measXmitPowerDbmH_dbm", "measXmitPowerDbmV_dbm",
-                 "prt_s", "prt2_s", "spare_floats", "radar_name",
-                 "scan_type_name"]
-        forms = (['i'] * 12 + ['2i'] + ['f'] * 22 +
-                 ['4f', '%(n)dc' % {'n': self.DS_LABEL_LEN},
-                  '%(n)dc' % {'n': self.DS_LABEL_LEN}])
-        #for i in range(len(forms)):
-        #   print items[i], ':', forms[i]
-        radar_info_dict = self.read_list_from_file(items, forms, '>')
-        self.radar_info = radar_info_dict
-        chunk_read_bytes = self.fileptr.tell()-weareat
-        #print self.fileptr.tell()-weareat
-        #print nbytes-chunk_read_bytes
-        self.fileptr.seek(nbytes - chunk_read_bytes, 1)
+    def _get_chunk_header(self):
+        """ Get a single chunk header, return a dict. """
+        fmt = '>5i 2i 480c i'
+        l = struct.unpack(fmt, self.fileptr.read(struct.calcsize(fmt)))
+        d = {}
+        d["record_len1"] = l[0]         # 5i: 1
+        d["struct_id"] = l[1]           # 5i: 2
+        d["chunk_id"] = l[2]            # 5i: 3
+        d["chunk_data_offset"] = l[3]   # 5i: 4
+        d["size"] = l[4]                # 5i: 5
+        d["unused_si32"] = l[5:7]       # 2i
+        d["info"] = ''.join(l[7:487]).strip('\x00')     # 480c
+        d["record_len2"] = l[487]       # i
+        return d
 
-    def get_elevs(self, nbytes):
-        SIZE_FLOAT = 4.0
-        nelevations = np.floor(nbytes / SIZE_FLOAT)
-        #print nelevations
-        fid_start = self.fileptr.tell()
-        form = '%(n)df' % {'n': nelevations}
-        eledata = self.fileptr.read(struct.calcsize(form))
-        elevations = np.array(struct.unpack(form, eledata))
-        self.elevations = elevations
-        chunk_read_bytes = self.fileptr.tell() - fid_start
-        #print chunk_read_bytes
-        self.fileptr.seek(nbytes-chunk_read_bytes, 1)
-        #print nbytes-chunk_read_bytes
+    def _get_chunks(self, debug=False):
+        """ Get data in chunks, return radar_info, elevations, calib_info. """
+        radar_info, elevations, calib_info = None, None, None
+        for curr_chunk_header in self.chunk_headers:
 
-    def get_calib(self, nbytes):
-        fid_start = self.fileptr.tell()
-        items = ["radar_name", "year", "month", "day", "hour", "minute",
-                 "second", "wavelength_cm", "beamwidth_h_deg",
-                 "beamwidth_v_deg", "antenna_gain_h_db", "antenna_gain_v_db",
-                 "pulse_width_us", "xmit_power_h_dbm", "xmit_power_v_dbm",
-                 "twoway_waveguide_loss_h_db", "twoway_waveguide_loss_v_db",
-                 "twoway_radome_loss_h_db", "twoway_radome_loss_v_db",
-                 "filter_loss_db", "radar_constant_h_db",
-                 "radar_constant_v_db", "noise_h_co_dbm", "noise_h_cx_dbm",
-                 "noise_v_co_dbm", "noise_v_cx_dbm", "rx_gain_h_co_dbm",
-                 "rx_gain_h_cx_dbm", "rx_gain_v_co_dbm", "rx_gain_v_cx_dbm",
-                 "zh1km_co_dbz", "zh1km_cx_dbz", "zv1km_co_dbz",
-                 "zv1km_cx_dbz", "sun_h_co_dbm", "sun_h_cx_dbm",
-                 "sun_v_co_dbm", "sun_v_cx_dbm", "noise_source_h_dbm",
-                 "noise_source_v_dbm", "power_meas_loss_h_db",
-                 "power_meas_loss_v_db", "coupler_fwd_loss_h_db",
-                 "coupler_fwd_loss_v_db", "zdr_bias_db", "ldr_h_bias_db",
-                 "ldr_v_bias_db", "system_phidp_deg", "test_pulse_h_dbm",
-                 "test_pulse_v_dbm", "rx_slope_h_co_db", "rx_slope_h_cx_db",
-                 "rx_slope_v_co_db", "rx_slope_v_cx_db", "I0_h_co_dbm",
-                 "I0_h_cx_dbm", "I0_v_co_dbm", "I0_v_cx_dbm", "spare"]
-        forms = (['%(n)dc' % {'n': self.DS_RADAR_CALIB_NAME_LEN}] +
-                 ['i'] * 6 + ['f'] * 51 + ['14f'])
-        radar_calib_dict = self.read_list_from_file(items, forms, '>')
-        self.calib_info = radar_calib_dict
-        chunk_read_bytes = self.fileptr.tell()-fid_start
-        self.fileptr.seek(nbytes - chunk_read_bytes, 1)
+            chunk_id = curr_chunk_header['chunk_id']
+            self.fileptr.seek(curr_chunk_header['chunk_data_offset'])
 
-    def read_chunks(self, **kwargs):
-        debug = kwargs.get('debug', False)
-        cal_info = []
-        self.fileptr.seek(self.chunk_headers[0]['chunk_data_offset'])
-        for i in range(self.master_header['nchunks']):
-            self.fileptr.seek(self.chunk_headers[i]['chunk_data_offset'])
-            #print self.CHUNK_DSRADAR_ELEVATIONS, '==',
-            #print self.chunk_headers[i]['chunk_id']
-            chunk_id = self.chunk_headers[i]['chunk_id']
-            if chunk_id == self.CHUNK_DSRADAR_PARAMS:
+            if chunk_id == CHUNK_DSRADAR_PARAMS:
                 if debug:
                     print 'Getting radar info'
-                self.read_radar_info(self.chunk_headers[i]['size'])
-            elif chunk_id == self.CHUNK_DSRADAR_CALIB:
-                #self.CHUNK_DSRADAR_ELEVATIONS:
+                radar_info = self._get_radar_info()
+
+            elif chunk_id == CHUNK_DSRADAR_CALIB:
                 if debug:
                     print 'getting elevations'
-                self.get_elevs(self.chunk_headers[i]['size'])
-            elif chunk_id == self.CHUNK_DSRADAR_ELEVATIONS:
-                #self.CHUNK_DSRADAR_CALIB:
+                elevations = self._get_elevs(curr_chunk_header['size'])
+
+            elif chunk_id == CHUNK_DSRADAR_ELEVATIONS:
                 if debug:
                     print 'getting cal'
-                self.get_calib(self.chunk_headers[i]['size'])
+                calib_info = self._get_calib()
 
-    def calc_geometry(self):
-        range_km = self.field_headers[1]['grid_minx'] + np.arange(
-            self.master_header['ngates']) * self.field_headers[1]['grid_dx']
-        if self.field_headers[1]['proj_type'] == self.PROJ_RHI_RADAR:
+        return radar_info, elevations, calib_info
+
+    def _get_radar_info(self):
+        """ Get the radar information, return dict. """
+        fmt = '>12i 2i 22f 4f 40c 40c'
+        l = struct.unpack(fmt, self.fileptr.read(struct.calcsize(fmt)))
+        d = {}
+        d["radar_id"] = l[0]                # 12i: 1
+        d["radar_type"] = l[1]              # 12i: 2
+        d["nfields"] = l[2]                 # 12i: 3
+        d["ngates"] = l[3]                  # 12i: 4
+        d["samples_per_beam"] = l[4]        # 12i: 5
+        d["scan_type"] = l[5]               # 12i: 6
+        d["scan_mode"] = l[6]               # 12i: 7
+        d["nfields_current"] = l[7]         # 12i: 8
+        d["field_flag"] = l[8]              # 12i: 9
+        d["polarization"] = l[9]            # 12i: 10
+        d["follow_mode"] = l[10]            # 12i: 11
+        d["prf_mode"] = l[11]               # 12i: 12
+        d["spare_ints"] = l[12:14]          # 2i
+        d["radar_constant"] = l[14]         # 22f: 1
+        d["altitude_km"] = l[15]            # 22f: 2
+        d["latitude_deg"] = l[16]           # 22f: 3
+        d["longitude_deg"] = l[17]          # 22f: 4
+        d["gate_spacing_km"] = l[18]        # 22f: 5
+        d["start_range_km"] = l[19]         # 22f: 6
+        d["horiz_beam_width_deg"] = l[20]   # 22f: 7
+        d["vert_beam_width_deg"] = l[21]    # 22f: 8
+        d["pulse_width_us"] = l[22]         # 22f: 9
+        d["prf_hz"] = l[23]                 # 22f: 10
+        d["wavelength_cm"] = l[24]          # 22f: 11
+        d["xmit_peak_pwr_watts"] = l[25]    # 22f: 12
+        d["receiver_mds_dbm"] = l[26]       # 22f: 13
+        d["receiver_gain_db"] = l[27]       # 22f: 14
+        d["antenna_gain_db"] = l[28]        # 22f: 15
+        d["system_gain_db"] = l[29]         # 22f: 16
+        d["unambig_vel_mps"] = l[30]        # 22f: 17
+        d["unambig_range_km"] = l[31]       # 22f: 18
+        d["measXmitPowerDbmH_dbm"] = l[32]  # 22f: 19
+        d["measXmitPowerDbmV_dbm"] = l[33]  # 22f: 20
+        d["prt_s"] = l[34]                  # 22f: 21
+        d["prt2_s"] = l[35]                 # 22f: 22
+        d["spare_floats"] = l[36:40]        # 4f
+        d["radar_name"] = ''.join(l[40:80]).strip('\x00')       # 40c
+        d["scan_type_name"] = ''.join(l[80:120]).strip('\x00')   # 40c
+        return d
+
+    def _get_elevs(self, nbytes):
+        """ Return an array of elevation read from current file position. """
+        SIZE_FLOAT = 4.0
+        nelevations = np.floor(nbytes / SIZE_FLOAT)
+        fmt = '%df' % (nelevations)
+        l = struct.unpack(fmt, self.fileptr.read(struct.calcsize(fmt)))
+        return np.array(l)
+
+    def _get_calib(self):
+        """ Get the calibration information, return a dict. """
+        fmt = '>16c 6i 51f 14f'
+        l = struct.unpack(fmt, self.fileptr.read(struct.calcsize(fmt)))
+        d = {}
+        d["radar_name"] = ''.join(l[0:16]).strip('\x00')    # c16
+        d["year"] = l[16]                           # 6i: 1
+        d["month"] = l[17]                          # 6i: 2
+        d["day"] = l[18]                            # 6i: 3
+        d["hour"] = l[19]                           # 6i: 4
+        d["minute"] = l[20]                         # 6i: 5
+        d["second"] = l[21]                         # 6i: 6
+        d["wavelength_cm"] = l[22]                  # 51f: 1
+        d["beamwidth_h_deg"] = l[23]                # 51f: 2
+        d["beamwidth_v_deg"] = l[24]                # 51f: 3
+        d["antenna_gain_h_db"] = l[25]              # 51f: 4
+        d["antenna_gain_v_db"] = l[26]              # 51f: 5
+        d["pulse_width_us"] = l[27]                 # 51f: 6
+        d["xmit_power_h_dbm"] = l[28]               # 51f: 7
+        d["xmit_power_v_dbm"] = l[29]               # 51f: 8
+        d["twoway_waveguide_loss_h_db"] = l[30]     # 51f: 9
+        d["twoway_waveguide_loss_v_db"] = l[31]     # 51f: 10
+        d["twoway_radome_loss_h_db"] = l[32]        # 51f: 11
+        d["twoway_radome_loss_v_db"] = l[33]        # 51f: 12
+        d["filter_loss_db"] = l[34]                 # 51f: 13
+        d["radar_constant_h_db"] = l[35]            # 51f: 14
+        d["radar_constant_v_db"] = l[36]            # 51f: 15
+        d["noise_h_co_dbm"] = l[37]                 # 51f: 16
+        d["noise_h_cx_dbm"] = l[38]                 # 51f: 17
+        d["noise_v_co_dbm"] = l[39]                 # 51f: 18
+        d["noise_v_cx_dbm"] = l[40]                 # 51f: 19
+        d["rx_gain_h_co_dbm"] = l[41]               # 51f: 20
+        d["rx_gain_h_cx_dbm"] = l[42]               # 51f: 21
+        d["rx_gain_v_co_dbm"] = l[43]               # 51f: 22
+        d["rx_gain_v_cx_dbm"] = l[44]               # 51f: 23
+        d["zh1km_co_dbz"] = l[45]                   # 51f: 24
+        d["zh1km_cx_dbz"] = l[46]                   # 51f: 25
+        d["zv1km_co_dbz"] = l[47]                   # 51f: 26
+        d["zv1km_cx_dbz"] = l[48]                   # 51f: 27
+        d["sun_h_co_dbm"] = l[49]                   # 51f: 28
+        d["sun_h_cx_dbm"] = l[50]                   # 51f: 29
+        d["sun_v_co_dbm"] = l[51]                   # 51f: 30
+        d["sun_v_cx_dbm"] = l[52]                   # 51f: 31
+        d["noise_source_h_dbm"] = l[53]             # 51f: 32
+        d["noise_source_v_dbm"] = l[54]             # 51f: 33
+        d["power_meas_loss_h_db"] = l[55]           # 51f: 34
+        d["power_meas_loss_v_db"] = l[56]           # 51f: 35
+        d["coupler_fwd_loss_h_db"] = l[57]          # 51f: 36
+        d["coupler_fwd_loss_v_db"] = l[58]          # 51f: 37
+        d["zdr_bias_db"] = l[59]                    # 51f: 38
+        d["ldr_h_bias_db"] = l[60]                  # 51f: 39
+        d["ldr_v_bias_db"] = l[61]                  # 51f: 40
+        d["system_phidp_deg"] = l[62]               # 51f: 41
+        d["test_pulse_h_dbm"] = l[63]               # 51f: 42
+        d["test_pulse_v_dbm"] = l[64]               # 51f: 43
+        d["rx_slope_h_co_db"] = l[65]               # 51f: 44
+        d["rx_slope_h_cx_db"] = l[66]               # 51f: 45
+        d["rx_slope_v_co_db"] = l[67]               # 51f: 46
+        d["rx_slope_v_cx_db"] = l[68]               # 51f: 47
+        d["I0_h_co_dbm"] = l[69]                    # 51f: 48
+        d["I0_h_cx_dbm"] = l[70]                    # 51f: 49
+        d["I0_v_co_dbm"] = l[71]                    # 51f: 50
+        d["I0_v_cx_dbm"] = l[72]                    # 51f: 51
+        d["spare"] = l[73:87]                       # 14f
+        return d
+
+    def _get_compression_info(self):
+        """ Get compression infomation, return a dict. """
+        # the file pointer must be set at the correct location prior to call
+        fmt = '>I I I I 2I'
+        l = struct.unpack(fmt, self.fileptr.read(struct.calcsize(fmt)))
+        d = {}
+        d['magic_cookie'] = l[0]
+        d['nbytes_uncompressed'] = l[1]
+        d['nbytes_compressed'] = l[2]
+        d['nbytes_coded'] = l[3]
+        d['spare'] = l[4:6]
+        return d
+
+    def _get_sweep_info(self, nsweeps):
+        """ Get sweep information, return a dict. """
+        # the file pointer must be set at the correct location prior to call
+        fmt = '%iI %iI' % (nsweeps, nsweeps)
+        l = struct.unpack(fmt, self.fileptr.read(struct.calcsize(fmt)))
+        d = {}
+        d['vlevel_offsets'] = l[:nsweeps]
+        d['vlevel_nbytes'] = l[nsweeps:2*nsweeps]
+        return d
+
+    # misc. methods
+
+    def _calc_geometry(self):
+        """ Calculate geometry, return az_deg, range_km, el_deg. """
+        nsweeps = self.master_header['nsweeps']
+        nrays = self.master_header['nrays']
+        ngates = self.master_header['ngates']
+        grid_minx = self.field_headers[1]['grid_minx']
+        grid_miny = self.field_headers[1]['grid_miny']
+        grid_dx = self.field_headers[1]['grid_dx']
+        grid_dy = self.field_headers[1]['grid_dy']
+
+        range_km = grid_minx + np.arange(ngates) * grid_dx
+
+        if self.field_headers[1]['proj_type'] == PROJ_RHI_RADAR:
             self.scan_type = 'rhi'
-            el_deg = self.field_headers[1]['grid_miny'] + np.arange(
-                self.master_header['nrays']) * self.field_headers[1]['grid_dy']
-            az_deg = self.vlevel_headers[1]['level'][
-                0:self.master_header['nsweeps']]
-        if self.field_headers[1]['proj_type'] == self.PROJ_POLAR_RADAR:
+            el_deg = grid_miny + np.arange(nrays) * grid_dy
+            az_deg = self.vlevel_headers[1]['level'][0:nsweeps]
+
+        if self.field_headers[1]['proj_type'] == PROJ_POLAR_RADAR:
             self.scan_type = 'ppi'
-            az_deg = self.field_headers[1]['grid_miny'] + np.arange(
-                self.master_header['nrays']) * self.field_headers[1]['grid_dy']
-            el_deg = self.vlevel_headers[1]['level'][
-                0:self.master_header['nsweeps']]
-        self.az_deg = az_deg
-        self.range_km = range_km
-        self.el_deg = el_deg
+            az_deg = grid_miny + np.arange(nrays) * grid_dy
+            el_deg = self.vlevel_headers[1]['level'][0:nsweeps]
 
-    def append_time(self):
-        time_objects = ['time_begin', 'time_end', 'time_centroid']
-        time_dict = {}
-        base_time = datetime.datetime(1970, 1, 1, 00, 00)
-        for obj in time_objects:
-            time_dict.update({obj: base_time + datetime.timedelta(
-                seconds=self.master_header[obj])})
-        self.times = time_dict
+        return az_deg, range_km, el_deg
 
-    def append_carts(self):
+    def _make_time_dict(self):
+        """ Return a time dictionary. """
+        t_base = datetime.datetime(1970, 1, 1, 00, 00)
+        tb = datetime.timedelta(seconds=self.master_header['time_begin'])
+        te = datetime.timedelta(seconds=self.master_header['time_end'])
+        tc = datetime.timedelta(seconds=self.master_header['time_centroid'])
+        return {'time_begin': t_base + tb, 'time_end': t_base + te,
+                'time_centroid': t_base + tc}
 
-        #simple calculation involving 4/3 earth radius
-        xx = np.zeros([self.master_header['nsweeps'],
-                       self.master_header['nrays'],
-                       self.master_header['ngates']], dtype=np.float32)
-        yy = np.zeros([self.master_header['nsweeps'],
-                       self.master_header['nrays'],
-                       self.master_header['ngates']], dtype=np.float32)
-        zz = np.zeros([self.master_header['nsweeps'],
-                       self.master_header['nrays'],
-                       self.master_header['ngates']], dtype=np.float32)
+    def _make_carts_dict(self):
+        """ Return a carts dictionary. """
+
+        # simple calculation involving 4/3 earth radius
+        nsweeps = self.master_header['nsweeps']
+        nrays = self.master_header['nrays']
+        ngates = self.master_header['ngates']
+        xx = np.empty([nsweeps, nrays, ngates], dtype=np.float32)
+        yy = np.empty([nsweeps, nrays, ngates], dtype=np.float32)
+        zz = np.empty([nsweeps, nrays, ngates], dtype=np.float32)
+
         if self.scan_type == 'rhi':
             rg, ele = np.meshgrid(self.range_km, self.el_deg)
-            for aznum in range(self.master_header['nsweeps']):
+            for aznum in xrange(nsweeps):
                 azg = np.ones(rg.shape, dtype=np.float32) * self.az_deg[aznum]
                 x, y, z = radar_coords_to_cart(rg, azg, ele)
                 zz[aznum, :, :] = z
                 xx[aznum, :, :] = x
                 yy[aznum, :, :] = y
-        if self.scan_type == 'ppi':
+
+        elif self.scan_type == 'ppi':
             rg, azg = np.meshgrid(self.range_km, self.az_deg)
-            for elnum in range(self.master_header['nsweeps']):
+            for elnum in xrange(nsweeps):
                 ele = np.ones(rg.shape, dtype=np.float32) * self.el_deg[elnum]
                 x, y, z = radar_coords_to_cart(rg, azg, ele)
                 zz[elnum, :, :] = z
                 xx[elnum, :, :] = x
                 yy[elnum, :, :] = y
-        self.carts = {'x': xx, 'y': yy, 'z': zz}
 
-    def index_fields(self):
-        flds = [self.field_headers[i]['field_name'] for i in
-                range(len(self.field_headers))]
-        self.fields = flds
+        return {'x': xx, 'y': yy, 'z': zz}
+
+    def _make_fields_list(self):
+        """ Return a list of fields. """
+        fh = self.field_headers
+        return [fh[i]['field_name'] for i in range(len(fh))]
