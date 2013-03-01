@@ -1,5 +1,7 @@
 """ io routines common to many file formats. """
 
+import numpy as np
+
 
 def dms_to_d(dms):
     """ Degrees, minutes, seconds to degrees """

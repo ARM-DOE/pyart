@@ -20,171 +20,88 @@ def read_netcdf(filename):
     radar : Radar
         Radar object.
 
+    Notes
+    -----
+    This function has not been tested on "stream" netCDF files.
+
     """
     ncobj = netCDF4.Dataset(filename)
+    ncvars = ncobj.variables
 
-    if 'ray_start_index' in ncobj.variables.keys():
-        return _read_netcdf_streamcf(ncobj)
+    # azimuth, range, elevation, time, nsweeps, ngates
+    azimuth = _ncvar_to_dict(ncvars['azimuth'])
+    _range = _ncvar_to_dict(ncvars['range'])
+    elevation = _ncvar_to_dict(ncvars['elevation'])
+    time = _ncvar_to_dict(ncvars['time'])
+    nsweeps = len(ncvars['sweep_start_ray_index'])
+    ngates = len(ncobj.dimensions['range'])
+
+    # sweep info
+    keys = ['sweep_start_ray_index', 'sweep_mode', 'sweep_number',
+            'sweep_end_ray_index', 'fixed_angle']
+    sweep_info = dict((k, _ncvar_to_dict(ncvars[k])) for k in keys)
+
+    # location
+    keys = ['latitude', 'altitude', 'longitude']
+    location = dict((k, _ncvar_to_dict(ncvars[k])) for k in keys)
+
+    # inst_params
+    keys = ['frequency', 'follow_mode', 'pulse_width', 'prt_mode', 'prt',
+            'prt_ratio', 'polarization_mode', 'nyquist_velocity',
+            'unambiguous_range', 'n_samples']
+    keys = [k for k in keys if k in ncvars.keys()]  # only those present
+    inst_params = dict((k, _ncvar_to_dict(ncvars[k])) for k in keys)
+
+    # metadata
+    metadata = dict([(k, getattr(ncobj, k)) for k in ncobj.ncattrs()])
+
+    # naz, nele
+    ssri = ncvars['sweep_start_ray_index']
+    if len(ssri) == 1:
+        naz = ssri[0] + 1
     else:
-        return _read_netcdf_cf(ncobj)
-
-
-def _read_netcdf_cf(ncobj):
-    """
-    Read a
-
-    Parameters
-    ----------
-    ncobj : Dataset
-        NetCDF4 Dataset to read data from
-
-    Returns
-    -------
-    radar : Radar
-        Radar object
-
-    """
+        naz = ssri[1] - ssri[0]
+    nele = ssri.shape[0]
 
     try:
-        mode = "".join(ncobj.variables['sweep_mode'][0])
+        mode = "".join(ncvars['sweep_mode'][0])
     except TypeError:
-        mode = "".join(ncobj.variables['sweep_mode'][0].data)
-    print mode, "azimuth_surveillance    "
+        mode = "".join(ncvars['sweep_mode'][0].data)
 
     if "sur" in mode:
-        #ppi
-        nsweeps = len(ncobj.variables['sweep_start_ray_index'])
-        metadata = dict([(key, getattr(ncobj, key)) for key in
-                         ncobj.ncattrs()])
         scan_type = "ppi"
-        sweep_mode = np.array(['ppi']*nsweeps)
-        if len(ncobj.variables['sweep_start_ray_index']) == 1:
-            naz = ncobj.variables['sweep_end_ray_index'][0] + 1
-        else:
-            naz = (ncobj.variables['sweep_start_ray_index'][1] -
-                   ncobj.variables['sweep_start_ray_index'][0])
-        nele = ncobj.variables['sweep_start_ray_index'].shape[0]
-        ngates = len(ncobj.dimensions['range'])
-        loc_dict = {}
-        for loc_data in ['latitude', 'altitude', 'longitude']:
-            loc_dict.update(
-                {loc_data: ncvar_to_field(ncobj.variables[loc_data])})
-        location = loc_dict
-        sweep_dict = {}
-        for sweep_data in ['sweep_start_ray_index', 'sweep_mode', 'sweep_number', 'sweep_end_ray_index', 'fixed_angle']:
-            sweep_dict.update(
-                {sweep_data: ncvar_to_field(ncobj.variables[sweep_data])})
-        sweep_info = sweep_dict
-        inst_dict = {}
-        for inst_data in ['frequency', 'follow_mode', 'pulse_width', 'prt_mode', 'prt', 'prt_ratio', 'polarization_mode', 'nyquist_velocity', 'unambiguous_range', 'n_samples']:
-            if inst_data in ncobj.variables.keys():
-                inst_dict.update(
-                    {inst_data: (
-                        ncvar_to_field(ncobj.variables[inst_data]))})
-        inst_params = inst_dict
-        azimuth = ncvar_to_field(ncobj.variables['azimuth'])
-        _range = ncvar_to_field(ncobj.variables['range'])
-        elevation = ncvar_to_field(ncobj.variables['elevation'])
-        time = ncvar_to_field(ncobj.variables['time'])
-        data_fields = create_field_list(
-            ncobj.variables, len(ncobj.dimensions['time']), ngates)
-        field_dict = {}
-        for field in data_fields:
-            print field
-            my_field = ncvar_to_field(ncobj.variables[field])
-            field_dict.update({field: my_field})
-        fields = field_dict
-
-    if "sec" in mode:
-        #sec
-        nsweeps = len(ncobj.variables['sweep_start_ray_index'])
-        metadata = dict([(key, getattr(ncobj, key)) for key in
-                         ncobj.ncattrs()])
+    elif "sec" in mode:
         scan_type = "sec"
-        sweep_mode = np.array(['sec'] * nsweeps)
-        if len(ncobj.variables['sweep_start_ray_index']) == 1:
-            naz = ncobj.variables['sweep_end_ray_index'][0] + 1
-        else:
-            naz = (ncobj.variables['sweep_start_ray_index'][1] -
-                   ncobj.variables['sweep_start_ray_index'][0])
-        nele = ncobj.variables['sweep_start_ray_index'].shape[0]
-        ngates = len(ncobj.dimensions['range'])
-        loc_dict = {}
-        for loc_data in ['latitude', 'altitude', 'longitude']:
-            loc_dict.update(
-                {loc_data: ncvar_to_field(ncobj.variables[loc_data])})
-        location = loc_dict
-        sweep_dict = {}
-        for sweep_data in ['sweep_start_ray_index', 'sweep_mode', 'sweep_number', 'sweep_end_ray_index', 'fixed_angle']:
-            sweep_dict.update(
-                {sweep_data: ncvar_to_field(ncobj.variables[sweep_data])})
-        sweep_info = sweep_dict
-        inst_dict = {}
-        for inst_data in ['frequency', 'follow_mode', 'pulse_width', 'prt_mode', 'prt', 'prt_ratio', 'polarization_mode', 'nyquist_velocity', 'unambiguous_range', 'n_samples']:
-            if inst_data in ncobj.variables.keys():
-                inst_dict.update(
-                    {inst_data: (
-                        ncvar_to_field(ncobj.variables[inst_data]))})
-        inst_params = inst_dict
-        azimuth = ncvar_to_field(ncobj.variables['azimuth'])
-        _range = ncvar_to_field(ncobj.variables['range'])
-        elevation = ncvar_to_field(ncobj.variables['elevation'])
-        time = ncvar_to_field(ncobj.variables['time'])
-        data_fields = create_field_list(
-            ncobj.variables, len(ncobj.dimensions['time']), ngates)
-        field_dict = {}
-        for field in data_fields:
-            print field
-            my_field = ncvar_to_field(ncobj.variables[field])
-            field_dict.update({field: my_field})
-        fields = field_dict
-
-    if "rhi" in mode:
-        #rhi
-        metadata = dict([(key, getattr(ncobj, key))
-                         for key in ncobj.ncattrs()])
+    elif "rhi" in mode:
         scan_type = "rhi"
-        nsweeps = len(ncobj.variables['sweep_start_ray_index'])
-        sweep_mode = np.array(['rhi'] * nsweeps)
-        if len(ncobj.variables['sweep_start_ray_index']) == 1:
-            nele = ncobj.variables['sweep_end_ray_index'][0] + 1
-        else:
-            nele = (ncobj.variables['sweep_start_ray_index'][1] -
-                    ncobj.variables['sweep_start_ray_index'][0])
-        naz = ncobj.variables['sweep_start_ray_index'].shape[0]
-        ngates = len(ncobj.dimensions['range'])
-        loc_dict = {}
-        for loc_data in ['latitude', 'altitude', 'longitude']:
-            loc_dict.update(
-                {loc_data: ncvar_to_field(ncobj.variables[loc_data])})
-        location = loc_dict
-        sweep_dict = {}
-        for sweep_data in ['sweep_start_ray_index', 'sweep_mode', 'sweep_number', 'sweep_end_ray_index', 'fixed_angle']:
-            sweep_dict.update(
-                {sweep_data: ncvar_to_field(ncobj.variables[sweep_data])})
-        sweep_info = sweep_dict
-        inst_dict = {}
-        for inst_data in ['frequency', 'follow_mode', 'pulse_width', 'prt_mode', 'prt', 'prt_ratio', 'polarization_mode', 'nyquist_velocity', 'unambiguous_range', 'n_samples']:
-            if inst_data in ncobj.variables.keys():
-                inst_dict.update(
-                    {inst_data: (
-                        ncvar_to_field(ncobj.variables[inst_data]))})
-        inst_params = inst_dict
-        azimuth = ncvar_to_field(ncobj.variables['azimuth'])
-        _range = ncvar_to_field(ncobj.variables['range'])
-        elevation = ncvar_to_field(ncobj.variables['elevation'])
-        time = ncvar_to_field(ncobj.variables['time'])
-        data_fields = create_field_list(
-            ncobj.variables, len(ncobj.dimensions['time']), ngates)
-        field_dict = {}
-        for field in data_fields:
-            print field
-            my_field = ncvar_to_field(ncobj.variables[field])
-            field_dict.update({field: my_field})
-        fields = field_dict
+        nele, naz = nele, naz
+
+    sweep_mode = np.array([scan_type] * nsweeps)
+
+    # fields and nrays
+    if 'ray_start_index' in ncvars.keys():
+        ngates = ncvars['ray_start_index'][-1] + ncvars['ray_n_gates'][-1]
+        sweeps = ncvars['sweep_start_ray_index'][:]
+        sweepe = ncvars['sweep_end_ray_index'][:]
+        ray_len = ncvars['ray_n_gates'][:]
+        maxgates = ncvars['range'].shape[0]
+        nrays = ncvars['time'].shape[0]
+        ray_start_index = ncvars['ray_start_index'][:]
+        keys = [k for k, v in ncvars.iteritems() if v.shape == (ngates,)]
+
+        fields = {}
+        for field in keys:
+            fields[field] = _stream_ncvar_to_dict(
+                ncvars[field], sweeps, sweepe, ray_len, maxgates, nrays,
+                ray_start_index)
+    else:
+        # CF/Radial
+        nrays = len(ncobj.dimensions['time'])
+        shape = (nrays, ngates)
+        keys = [k for k, v in ncvars.iteritems() if v.shape == shape]
+        fields = dict((k, _ncvar_to_dict(ncvars[k])) for k in keys)
 
     # XXX
-    nrays = 99
     tu = 999
     cal = 999
     sweep_number = 999
@@ -194,104 +111,27 @@ def _read_netcdf_cf(ncobj):
                  sweep_mode, sweep_number, location, inst_params, metadata)
 
 
-def _read_netcdf_streamcf(ncobj):
-    try:
-        mode = "".join(ncobj.variables['sweep_mode'][0])
-    except TypeError:
-        mode = "".join(ncobj.variables['sweep_mode'][0].data)
-    print mode, "azimuth_surveillance    "
-
-    if mode in "azimuth_surveillance    ":
-        #ppi
-        print "hi"
-        metadata = dict(
-            [(key, getattr(ncobj, key)) for key in ncobj.ncattrs()])
-        scan_type = "ppi"
-        naz = (ncobj.variables['sweep_start_ray_index'][1] -
-               ncobj.variables['sweep_start_ray_index'][0])
-        nele = ncobj.variables['sweep_start_ray_index'].shape[0]
-        ngates = ncobj.variables['range'].shape[0]
-        loc_dict = {}
-        for loc_data in ['latitude', 'altitude', 'longitude']:
-            loc_dict.update(
-                {loc_data: ncvar_to_field(ncobj.variables[loc_data])})
-        location = loc_dict
-        sweep_dict = {}
-        for sweep_data in ['sweep_start_ray_index', 'sweep_mode', 'sweep_number', 'sweep_end_ray_index', 'fixed_angle']:
-            sweep_dict.update(
-                {sweep_data: ncvar_to_field(ncobj.variables[sweep_data])})
-        sweep_info = sweep_dict
-        azimuth = ncvar_to_field(ncobj.variables['azimuth'])
-        _range = ncvar_to_field(ncobj.variables['range'])
-        elevation = ncvar_to_field(ncobj.variables['elevation'])
-        time = ncvar_to_field(ncobj.variables['time'])
-        data_fields = create_field_list_stream(
-            ncobj.variables, (ncobj.variables['ray_start_index'][-1] +
-                              ncobj.variables['ray_n_gates'][-1]))
-        field_dict = {}
-        for field in data_fields:
-            print field
-            my_field = stream_ncvar_to_field(
-                ncobj.variables[field],
-                ncobj.variables['sweep_start_ray_index'][:],
-                ncobj.variables['sweep_end_ray_index'][:],
-                ncobj.variables['ray_n_gates'][:],
-                ncobj.variables['range'].shape[0],
-                ncobj.variables['time'].shape[0],
-                ncobj.variables['ray_start_index'][:])
-            field_dict.update({field: my_field})
-        fields = field_dict
-
-    # XXX
-    nrays = 99
-    tu = 999
-    cal = 999
-    sweep_number = 999
-    nsweeps = 999
-    sweep_mode = 999
-    inst_params = {}
-
-    return Radar(nsweeps, nrays, ngates, scan_type, naz, nele, _range,
-                 azimuth, elevation, tu, cal, time, fields, sweep_info,
-                 sweep_mode, sweep_number, location, inst_params, metadata)
+def _ncvar_to_dict(ncvar):
+    """ Convert a NetCDF Dataset variable to a dictionary. """
+    d = dict((k, getattr(ncvar, k)) for k in ncvar.ncattrs())
+    d['data'] = ncvar[:]
+    return d
 
 
-def create_field_list(variables, nrays, ngates):
-    print nrays, ngates
-    valid_list = []
-    for var in variables.keys():
-        if variables[var].shape == (nrays, ngates):
-            valid_list.append(var)
-    return valid_list
-
-
-def create_field_list_stream(variables, ngates):
-    print ngates
-    valid_list = []
-    for var in variables.keys():
-        if variables[var].shape == (ngates,):
-            valid_list.append(var)
-    return valid_list
-
-
-def ncvar_to_field(ncvar):
-    outdict = {'data': ncvar[:]}
-    outdict.update(dict([(key, getattr(ncvar, key)) for key in
-                         ncvar.ncattrs()]))
-    return outdict
-
-
-def stream_ncvar_to_field(ncvar, sweeps, sweepe, ray_len, maxgates, nrays,
+def _stream_ncvar_to_dict(ncvar, sweeps, sweepe, ray_len, maxgates, nrays,
                           ray_start_index):
-    outdict = {'data': stream_to_2d(
-        ncvar[:], sweeps, sweepe, ray_len, maxgates, nrays, ray_start_index)}
-    outdict.update(dict([(key, getattr(ncvar, key)) for key in
-                   ncvar.ncattrs()]))
-    return outdict
+    """ Convert a Stream NetCDF Dataset variable to a dict. """
+    d = dict((k, getattr(ncvar, k)) for k in ncvar.ncattrs())
+    data = _stream_to_2d(ncvar[:], sweeps, sweepe, ray_len, maxgates, nrays,
+                         ray_start_index)
+    d['data'] = data
+    return d
 
 
-def stream_to_2d(data, sweeps, sweepe, ray_len, maxgates, nrays,
-                 ray_start_index):
+def _stream_to_2d(data, sweeps, sweepe, ray_len, maxgates, nrays,
+                  ray_start_index):
+    """ Convert a 1D stream to a 2D array. """
+    # XXX clean this up, need to find sample data
     time_range = np.ma.zeros([nrays, maxgates]) - 9999.0
     cp = 0
     for sweep_number in range(len(sweepe)):
