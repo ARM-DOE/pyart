@@ -18,10 +18,9 @@ PHASENAME = os.path.join(DIR, 'reproc_phase_reference.npy')
 # Phase proc tests #
 ####################
 
-radar = pyart.io.radar.Radar(netCDF4.Dataset('sample.nc'))
-
 
 def test_det_sys_phase():
+    radar = pyart.io.read_netcdf('sample.nc')
     assert round(phase_proc.det_sys_phase(radar), 2) == 126.02
 
 
@@ -29,8 +28,7 @@ def test_phase_rsl():
     """ Phase Correct a file read using RSL """
 
     # read in the data
-    radarobj = pyart.io.py4dd.RSL_anyformat_to_radar(RSLNAME)
-    radar = pyart.io.radar.Radar(radarobj)
+    radar = pyart.io.read_rsl(RSLNAME)
 
     # process phase
     gates = radar.range['data'][1] - radar.range['data'][0]
@@ -52,11 +50,11 @@ def test_phase_rsl_fast():
     """ Phase Correct a file read using RSL """
 
     # read in the data
-    radarobj = pyart.io.py4dd.RSL_anyformat_to_radar(RSLNAME)
+    radarobj = pyart.io._rsl.RSL_anyformat_to_radar(RSLNAME)
     v = radarobj.contents.volumes[0]
     v.h.nsweeps = 1
 
-    radar = pyart.io.radar.Radar(radarobj)
+    radar = pyart.io.read_rsl(radarobj)
 
     # process phase
     gates = radar.range['data'][1] - radar.range['data'][0]

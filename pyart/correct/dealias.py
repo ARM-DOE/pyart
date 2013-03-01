@@ -5,8 +5,8 @@ Front end to the University of Washington 4DD code for Doppler dealiasing.
 import numpy as np
 
 # XXX fix these up when io is reorganized
-from pyart.io import radar as rsl
-from pyart.io import fourdd, rsl_utils
+from ..io import rsl, fourdd, rsl_utils
+from ..io.common import get_metadata
 
 from ..util import datetime_utils
 
@@ -93,7 +93,7 @@ def dealias(radar, sounding_heights, sounding_wind_speeds,
 
     # build the field dictionary
     dealiased_fielddict = {'data': dealiased_data}
-    meta = radar.get_mdv_meta(rsl_radar, 'VEL_COR')
+    meta = get_metadata('VEL_COR')
     dealiased_fielddict.update(meta)
     return dealiased_fielddict
 

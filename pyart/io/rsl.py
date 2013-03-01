@@ -15,8 +15,8 @@ def read_rsl(filename, add_meta=None):
 
     Parameters
     ----------
-    filename : str
-        Name of file whose format is supported by RSL
+    filename : str or RSL_radar
+        Name of file whose format is supported by RSL, or a RSL_Radar object.
     add_meta : dict or None
         Dictionary containing additional metadata to add to the created
         Radar object.  This will overwrite metadata extracted from the file.
@@ -28,7 +28,10 @@ def read_rsl(filename, add_meta=None):
         Radar object.
 
     """
-    radarobj = _rsl.RSL_anyformat_to_radar(filename)
+    if type(filename) != str:
+        radarobj = filename
+    else:
+        radarobj = _rsl.RSL_anyformat_to_radar(filename)
 
     # TODO
     # An issue that needs to be resolved is that this code likes all
