@@ -762,7 +762,7 @@ class Radar:
 				'long_name': 'elevation_angle_from_horizontal_plane'}
 
         #append time
-        tu = "seconds since %(year)d-%(month)02d-%(day)02d %(hour)02d:%(minute)02d:%(second)02d.0" % dt_to_dict(radarobj.times['time_begin'])
+        tu = "seconds since %(year)04d-%(month)02d-%(day)02dT%(hour)02d:%(minute)02d:%(second)02dZ" % dt_to_dict(radarobj.times['time_begin'])
         cal = "gregorian"
         time_array = linspace(date2num(radarobj.times['time_begin'], tu, cal),
                               date2num(radarobj.times['time_end'], tu, cal),
