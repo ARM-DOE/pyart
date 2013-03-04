@@ -1,20 +1,30 @@
 """
+pyart.correct.dealias
+=====================
+
 Front end to the University of Washington 4DD code for Doppler dealiasing.
+
+.. autosummary::
+    :toctree: generated/
+
+    dealias_fourdd
+    find_time_in_interp_sonde
+
+
 """
 
 import numpy as np
 
-# XXX fix these up when io is reorganized
 from ..io import rsl, fourdd, rsl_utils
 from ..io.common import get_metadata
-
 from ..util import datetime_utils
 
 
-def dealias(radar, sounding_heights, sounding_wind_speeds,
-            sounding_wind_direction, datetime_sounding, rsl_radar=None,
-            prep=1, filt=1, rsl_badval=131072, fill_value=-9999.0,
-            refl='reflectivity_horizontal', vel='mean_doppler_velocity'):
+def dealias_fourdd(radar, sounding_heights, sounding_wind_speeds,
+                   sounding_wind_direction, datetime_sounding, rsl_radar=None,
+                   prep=1, filt=1, rsl_badval=131072, fill_value=-9999.0,
+                   refl='reflectivity_horizontal',
+                   vel='mean_doppler_velocity'):
     """
     Dealias the Doppler velocities field using the University of Washington
     4DD algorithm utilizing information from sounding data.

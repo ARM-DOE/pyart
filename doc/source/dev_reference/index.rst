@@ -18,3 +18,4 @@ Documentation is broken down by directory and module.
     :maxdepth: 2
 
     io
+    correct

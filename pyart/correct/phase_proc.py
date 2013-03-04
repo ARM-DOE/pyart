@@ -1,9 +1,31 @@
 """
+pyart.correct.phase_proc
+========================
+
 Utilities for working with phase data.
 
 Code adapted from PAPER by Scott Giangrande et al
 
 Adapted by Scott Collis and Scott Giangrande, refactored by Jonathan Helmus
+
+.. autosummary::
+    :toctree: generated/
+
+    det_sys_phase
+    _det_sys_phase
+    fzl_index
+    det_process_range
+    snr
+    unwrap_masked
+    smooth_and_trim
+    sobel
+    noise
+    get_phidp_unf
+    construct_A_matrix
+    construct_B_vectors
+    LP_solver_cvxopt
+    LP_solver_pyglpk
+    phase_proc_lp
 
 """
 
@@ -641,13 +663,13 @@ def LP_solver_pyglpk(A_Matrix, B_vectors, weights, it_lim=7000, presolve=True,
     return mysoln
 
 
-def phase_proc(radar, offset, debug=False, self_const=60000.0,
-               low_z=10.0, high_z=53.0, min_phidp=0.01, min_ncp=0.5,
-               min_rhv=0.8, fzl=4000.0, sys_phase=0.0,
-               overide_sys_phase=False, nowrap=None, really_verbose=False,
-               LP_solver='pyglpk', refl_field='reflectivity_horizontal',
-               ncp_field='norm_coherent_power', rhv_field='copol_coeff',
-               phidp_field='dp_phase_shift', kdp_field='diff_phase'):
+def phase_proc_lp(radar, offset, debug=False, self_const=60000.0,
+                  low_z=10.0, high_z=53.0, min_phidp=0.01, min_ncp=0.5,
+                  min_rhv=0.8, fzl=4000.0, sys_phase=0.0,
+                  overide_sys_phase=False, nowrap=None, really_verbose=False,
+                  LP_solver='pyglpk', refl_field='reflectivity_horizontal',
+                  ncp_field='norm_coherent_power', rhv_field='copol_coeff',
+                  phidp_field='dp_phase_shift', kdp_field='diff_phase'):
     """
     Phase process using a LP method[1].
 
