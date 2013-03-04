@@ -33,7 +33,8 @@ Phase Processing
     phase_proc.get_phidp_unf
     phase_proc.construct_A_matrix
     phase_proc.construct_B_vectors
-    phase_proc.LP_solver
+    phase_proc.LP_solver_pyglpk
+    phase_proc.LP_solver_cvxopt
 
 Utilities
 =========

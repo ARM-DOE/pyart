@@ -192,7 +192,8 @@ numpydoc_show_class_members = True
 
 if sphinx.__version__ >= "0.7":
     import glob
-    autosummary_generate = glob.glob("*.rst")
+    #autosummary_generate = glob.glob("*.rst")
+    autosummary_generate = True
 
 #----------------------------------------------------------------------------
 # Source code links

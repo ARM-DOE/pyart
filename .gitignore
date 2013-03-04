@@ -93,7 +93,8 @@ io/src/rsl-*
 # Documentation files #
 #######################
 /doc/build
-/doc/source/generated
+/doc/source/user_reference/generated
+/doc/source/dev_reference/generated
 
 # radar data files #
 ####################
