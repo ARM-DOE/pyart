@@ -1,4 +1,18 @@
-""" Utilities for converting to RSL radar objects. """
+"""
+pyart.io.rsl_utils
+==================
+
+Utilities for converting to RSL radar objects.
+
+.. autosummary::
+    :toctree: generated/
+
+    mdv_to_rsl
+    radar_to_rsl
+    ppi_radar_to_rsl
+    rhi_radar_to_rsl
+
+"""
 
 import ctypes
 

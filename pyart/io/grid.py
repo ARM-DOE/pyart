@@ -1,4 +1,17 @@
-""" A general gridded data object for radar data. """
+"""
+pyart.io.grid
+=============
+
+A general gridded data object for radar data.
+
+.. autosummary::
+    :toctree: generated/
+
+    grid2
+    ncvar_to_field
+    pyGrid
+
+"""
 
 import numpy as np
 import pyart.map.ballsy as ballsy

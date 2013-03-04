@@ -1,4 +1,19 @@
-""" Utilities for reading netcdf files. """
+"""
+pyart.io.netcdf
+===============
+
+Utilities for reading netcdf files.
+
+.. autosummary::
+    :toctree: generated/
+
+    read_netcdf
+    _ncvar_to_dict
+    _stream_ncvar_to_dict
+    _stream_to_2d
+
+
+"""
 
 import numpy as np
 import netCDF4

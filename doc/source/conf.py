@@ -55,7 +55,7 @@ today_fmt = '%B %d, %Y'
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
-exclude_patterns = []
+exclude_patterns = ['_templates/*']
 
 # If true, '()' will be appended to :func: etc. cross-reference text.
 add_function_parentheses = False

@@ -1,4 +1,38 @@
-""" Utilities for saving mapped and radar co-ordinate radar data. """
+"""
+pyart.io.nc_utils
+=================
+
+Utilities for saving mapped and radar co-ordinate radar data.
+
+.. autosummary::
+    :toctree: generated/
+
+    is_moment
+    is_radar
+    fix_variables
+    fix_variables_csapr
+    cf_radial_coords
+    trans_dict_as_ncattr
+    write_radar
+    write_radar4
+    append_global_metatdata_csapr
+    append_global_metatdata_xsapr
+    append_coords
+    fix_time
+    dt_to_dict
+    dms_to_d
+    corner_to_point
+    ax_radius
+    rsl_to_arm_netcdf
+    mdv_to_arm_netcdf
+    save_netcdf_cube
+    noncf_append_global_metatdata
+    copy_meta
+    copy_axis
+    save_pyGrid
+    save_mdv_ncf
+
+"""
 
 import sys
 import socket

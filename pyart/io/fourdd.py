@@ -1,4 +1,15 @@
-""" Python wrapper around the Univ. Washington FourDD dealiasing code. """
+"""
+pyart.io.fourdd
+===============
+Python wrapper around the Univ. Washington FourDD dealiasing code.
+
+.. autosummary::
+    :toctree: generated/
+
+    dealias_radar
+    dealias_radar_array
+
+"""
 
 import os
 from ctypes import c_int, c_ushort, c_float, POINTER

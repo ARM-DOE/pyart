@@ -1,4 +1,29 @@
-""" ctypes wrapper around librsl and U. Washington FourDD dealias code. """
+"""
+pyart.io._rsl
+=============
+
+ctypes wrapper around librsl and U. Washington FourDD dealias code.
+
+.. autosummary::
+    :toctree: generated/
+
+    find_librsl_path
+    getAllRays
+    does_volume_exist
+    create_PPI_array
+    return_header_metadata
+    print_metadata
+    fieldTypes
+    Ray_header
+    Ray
+    Sweep_header
+    Sweep
+    Volume_header
+    Volume
+    Radar_header
+    Radar
+
+"""
 
 from ctypes import *
 import numpy as N

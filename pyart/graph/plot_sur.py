@@ -8,7 +8,7 @@ import matplotlib
 from pylab import *
 import numpy as N
 
-import pyart.io.py4dd as py4dd
+import pyart.io._rsl as _rsl
 
 
 def ax_radius(lat, units='radians'):
@@ -103,7 +103,7 @@ def plot_sur(xsapr, imagefilename, var, sweep, **kwargs):
     locs = kwargs.get('locs', [])
     labels = kwargs.get('labels', [])
     print rges
-    field = py4dd.fieldTypes().list.index(var)
+    field = _rsl.fieldTypes().list.index(var)
     plain_data = create_flat_array(xsapr.contents.volumes[field].sweeps[sweep])
     azmths = array(
         [xsapr.contents.volumes[field].sweeps[sweep].rays[i].h.azimuth
@@ -165,8 +165,8 @@ def plot_sur_masked(xsapr, imagefilename, var, masking_var, masking_value,
     locs = kwargs.get('locs', [])
     labels = kwargs.get('labels', [])
     print rges
-    field = py4dd.fieldTypes().list.index(var)
-    mask_field = py4dd.fieldTypes().list.index(masking_var)
+    field = _rsl.fieldTypes().list.index(var)
+    mask_field = _rsl.fieldTypes().list.index(masking_var)
     plain_data = create_flat_array(xsapr.contents.volumes[field].sweeps[sweep])
     plain_mask = create_flat_array(
         xsapr.contents.volumes[mask_field].sweeps[sweep])

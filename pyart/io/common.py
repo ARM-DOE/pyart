@@ -1,4 +1,18 @@
-""" io routines common to many file formats. """
+"""
+pyart.io.common
+===============
+
+Input/output routines common to many file formats.
+
+.. autosummary::
+    :toctree: generated/
+
+    dms_to_d
+    radar_coords_to_cart
+    make_tu_str
+    get_metadata
+
+"""
 
 import numpy as np
 

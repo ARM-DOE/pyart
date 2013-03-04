@@ -1,4 +1,17 @@
-""" A general central radial scanning (or dwelling) instrument class. """
+"""
+pyart.io.radar
+==============
+
+A general central radial scanning (or dwelling) instrument class.
+
+.. autosummary::
+    :toctree: generated/
+
+    Radar
+    join_radar
+
+
+"""
 
 import copy
 

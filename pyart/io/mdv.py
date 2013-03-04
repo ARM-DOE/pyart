@@ -1,6 +1,16 @@
-""" Utilities for reading of MDV files.
+"""
+pyart.io.mdv
+============
+
+Utilities for reading of MDV files.
 
 Code is adapted from Nitin Bharadwaj's Matlab code
+
+.. autosummary::
+    :toctree: generated/
+
+    read_mdv
+    MdvFile
 
 """
 
