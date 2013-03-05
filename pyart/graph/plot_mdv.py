@@ -220,9 +220,9 @@ def single_panel_ppi(mdvobj, sweep, fld, **kwargs):
     info_dict.update({'ele': mdvobj.el_deg[sweep]})
     tit_str = kwargs.get('tit_str', forminator())
     my_title = tit_str % info_dict
-    x = mdvobj.carts['x'][sweep, :, :, ]
-    y = mdvobj.carts['y'][sweep, :, :, ]
-    z = mdvobj.carts['z'][sweep, :, :, :]
+    x = mdvobj.carts['x'][sweep, :, :]
+    y = mdvobj.carts['y'][sweep, :, :]
+    z = mdvobj.carts['z'][sweep, :, :]
     if 'mask' in kwargs.keys():
         mask = mdvobj.read_a_field(mdvobj.fields.index(
             kwargs['mask'][0]))[sweep, :, :]

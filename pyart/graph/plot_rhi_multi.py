@@ -1,10 +1,10 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # Code to plot a Domer RHI file
 
-import sys
+import sys, os
 import getopt
 
-import pyart.io.py4dd as py4dd
+import pyart.io._rsl as _rsl
 from pylab import *
 import numpy as N
 
@@ -79,12 +79,12 @@ def plot_rhi_multi(xsapr, imagefilename, varss, sweep, **kwargs):
         'PH': 'Phidp degs'})
     fsize = kwargs.get('fsize', [10, 10])
     print rges
-    fields = [py4dd.fieldTypes().list.index(var) for var in varss]
+    fields = [_rsl.fieldTypes().list.index(var) for var in varss]
     plain_data = [create_RHI_array(xsapr.contents.volumes[field].sweeps[sweep])
                   for field in fields]
     if 'mask' in kwargs.keys():
         plain_mask = create_RHI_array(xsapr.contents.volumes[
-            py4dd.fieldTypes().list.index(kwargs['mask'][0])].sweeps[sweep])
+            _rsl.fieldTypes().list.index(kwargs['mask'][0])].sweeps[sweep])
     azmths = array(
         [xsapr.contents.volumes[fields[0]].sweeps[sweep].rays[i].h.azimuth
          for i in
@@ -171,9 +171,9 @@ if __name__ == "__main__":
     if debug:
         print "file name=", filename
     if debug:
-        py4dd.RSL_radar_verbose_on()
-    xsapr = py4dd.RSL_anyformat_to_radar(filename)
-    plot_rhi_multi(xsapr, '/home/sc8/python/test_rhi0.png',
+        _rsl.RSL_radar_verbose_on()
+    xsapr = _rsl.RSL_anyformat_to_radar(filename)
+    plot_rhi_multi(xsapr, 'test_rhi0.png',
                    ['DZ'], 0, titl="RHI " + filename.split('/')[-1][0:3] +
                    "-%(radar_name)sp %(year)04d-%(month)02d-%(day)02d %(hour)02d:%(min)02d:%(sec)02d Azimuth: %(az).2f",
                    rges={
@@ -187,4 +187,4 @@ if __name__ == "__main__":
                        'DR': [-6, 6]},
                    fsize=[10, 5])
     print "hi"
-    py4dd.RSL_free_radar(xsapr)
+    _rsl.RSL_free_radar(xsapr)

@@ -1,13 +1,13 @@
 #! /usr/bin/env python
 
 import sys
-import getops
+import getopt
 
 import numpy as np
 from pylab import *
 
-import pyart.io.py_mdv as py_mdv
-import pyart.io.py4dd as py4dd
+import pyart.io.mdv as mdv
+import pyart.io._rsl as _rsl
 from pyart.graph import plot_mdv as plot_mdv
 
 
@@ -41,7 +41,7 @@ if __name__ == "__main__":
     except IndexError:
         usage()
         sys.exit(2)
-    myfile = py_mdv.read_mdv(filename, debug=True)
+    myfile = mdv.MdvFile(filename, debug=True)
     f = figure(figsize=[5, 5])
     plot_mdv.single_panel_ppi(myfile, 0, 'DBZ_F', mask=['NCP_F', 0.5],
                               ylim=[-120, 120], xlim=[-120, 120])
@@ -49,6 +49,6 @@ if __name__ == "__main__":
     gca().axes.get_yaxis().set_visible(False)
     f.get_axes()[1].set_visible(False)
     subplots_adjust(left=0, bottom=0, right=1, top=1, wspace=0, hspace=0)
-    savefig('/home/sc8/scratch/test_kml.png', transparent=True)
+    savefig('test_kml.png', transparent=True)
     close(f)
     myfile.close()
