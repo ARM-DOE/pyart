@@ -72,7 +72,7 @@ def read_mdv(filename):
         elevation['data'] = np.array(radarobj.el_deg).repeat(naz)
 
     elif scan_type == 'rhi':
-        azimuth['data'] = np.array(radarobj.az_deg).repeat(nele),
+        azimuth['data'] = np.array(radarobj.az_deg).repeat(nele)
         elevation['data'] = np.tile(radarobj.el_deg, naz)
 
     # time

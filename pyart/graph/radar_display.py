@@ -1,75 +1,32 @@
 """
-A class to make nice plots from the radar class
+pyart.graph.radar_display
+=========================
+
+General class for creating plots from Radar objects.
+
+.. autosummary::
+    :toctree:: generated/
 
 """
 
 from pylab import gca, pcolormesh, colorbar, meshgrid, plot, get_cmap, text
+import matplotlib.pyplot as plt
 import numpy as np
 from netCDF4 import num2date
 
+from .common import corner_to_point, ax_radius, dt_to_dict 
+from .common import radar_coords_to_cart as _radar_coords_to_cart
 
-def corner_to_point(corner, point):
-    print corner, point
-    Re = 6371.0 * 1000.0
-    Rc = ax_radius(point[0], units='degrees')
-    #print Rc/Re
-    y = ((point[0] - corner[0]) / 360.0) * np.pi * 2.0 * Re
-    x = ((point[1] - corner[1]) / 360.0) * np.pi * 2.0 * Rc
-    return x, y
-
-
-def ax_radius(lat, units='radians'):
-    #Determine the radius of a circle of constant longitude at a certain
-    #Latitude
-    Re = 6371.0 * 1000.0
-    if units == 'degrees':
-        const = np.pi / 180.0
-    else:
-        const = 1.0
-    R = Re * np.sin(np.pi / 2.0 - np.abs(lat * const))
-    return R
-
-
-def plot_x(rnge):
-    npts = 100
-
-    #vert
-    x = zeros(npts, dtype=float32)
-    y = linspace(-rnge, rnge, npts)
-    plot(x, y, 'k-')
-
-    #hor
-    y = zeros(npts, dtype=float32)
-    x = linspace(-rnge, rnge, npts)
-    plot(x, y, 'k-')
-
-
-def dt_to_dict(dt, **kwargs):
-        pref = kwargs.get('pref', '')
-        return dict([(pref+key, getattr(dt, key)) for key in
-                    ['year', 'month', 'day', 'hour', 'minute', 'second']])
-
+from .common_display import AbstractDisplay
 
 def radar_coords_to_cart(rng, az, ele, debug=False):
     """
-    Asumes standard atmosphere, ie R=4Re/3
-    Note that this v
+    rng in meters
     """
-    Re = 6371.0 * 1000.0
-    p_r = 4.0 * Re / 3.0
-    rm = rng
-    z = (rm ** 2 + p_r ** 2 + 2.0 * rm * p_r *
-         np.sin(ele * np.pi / 180.0)) ** 0.5 - p_r
-    #arc length
-    s = p_r * np.arcsin(rm * np.cos(ele * np.pi / 180.) / (p_r + z))
-    if debug:
-        print "Z=", z, "s=", s
-    y = s * np.cos(az * np.pi / 180.0)
-    x = s * np.sin(az * np.pi / 180.0)
-    return x, y, z
+    return _radar_coords_to_cart(rng / 1000.0, az, ele, debug=False)
 
 
-class radar_display:
+class RadarDisplay(AbstractDisplay):
     """
     Class for display radar data stored in a python radar object
 
@@ -132,135 +89,217 @@ class radar_display:
         infodict.update(dt_to_dict(self.time_begin, pref='begin_'))
         return '%(name)s %(var)s %(tilt).1f deg %(begin_year)04d%(begin_month)02d%(begin_day)02d%(begin_hour)02d%(begin_minute)02d' % infodict
 
-    def append_x(self, **kwargs):
-        kwargs.get('axis', gca()).set_xlabel('East West distance from' +
-                                             self.origin + '  (km)')
+    def append_x(self, ax=None):
+        if ax is None:
+            ax = plt.gca()
+        ax.set_xlabel('East West distance from ' + self.origin + ' (km)')
 
-    def append_y(self, **kwargs):
-        kwargs.get('axis', gca()).set_ylabel('North South distance from ' +
-                                             self.origin + '  (km)')
+    def append_y(self, ax=None):
+        if ax is None:
+            ax = plt.gca()
+        ax.set_ylabel('North South distance from ' + self.origin + ' (km)')
 
-    def append_r(self, **kwargs):
-        kwargs.get('axis', gca()).set_xlabel('Distance from ' + self.origin +
-                                             '  (km)')
+    def append_r(self, ax=None):
+        if ax is None:
+            ax = plt.gca()
+        ax.set_xlabel('Distance from ' + self.origin + ' (km)')
 
-    def append_z(self, **kwargs):
-        kwargs.get('axis', gca()).set_ylabel('Distance Above ' +
-                                             self.origin + '  (km)')
+    def append_z(self, ax=None):
+        if ax is None:
+            ax = plt.gca()
+        ax.set_ylabel('Distance Above ' + self.origin + '  (km)')
 
-    def plot_ppi(self, var, tilt, **kwargs):
+    def plot_ppi(self, field, tilt, mask=None, vmin=None, vmax=None, 
+            cmap='jet', title_and_labels=False, colorbar=False, 
+            ax=None, fig=None):
+        """
+        Plot a PPI.
+
+        Parameters
+        ----------
+        field : str
+            Field to plot.
+        tilt : int,
+            Tilt number to plot.
+    
+        Other Parameters
+        ----------------
+        mask : tuple
+            2-Tuple containing the field name and value below which to mask
+            field prior to plotting, for example to mask all data where 
+            NCP < 0.5 set mask to ['NCP', 0.5]. None performs no masking.
+        vmin : float
+            Luminance minimum value, None for default value.
+        vmax : float
+            Luminance maximum value, None for default value.
+        cmap : str
+            Matplotlib colormap name.   
+        title_and_labels : bool
+            True to set default figure titles and axis labels.
+        colorbar : bool
+            True to add a colorbar with label to the axis.
+        ax : Axis
+            Axis to plot on. None will use the current axis.
+        fig : Figure
+            Figure to add the colorbar to. None will use the current figure.
+        
+        """
+        if ax is None:
+            ax = plt.gca()
+        if fig is None:
+            fig = plt.gcf()
         start_index = self.starts[tilt]
         end_index = self.ends[tilt]
-        try:
-            # note we assume a masked array here.. if you want you can
-            # always mask the data field
-            this_plot = pcolormesh(
-                self.x[start_index:end_index, :] / 1000.0,
-                self.y[start_index:end_index, :] / 1000.0,
-                self.fields[var]['data'][start_index:end_index, :],
-                vmin=kwargs.get('vmin', self.fields[var]['valid_min']),
-                vmax=kwargs.get('vmax', self.fields[var]['valid_max']),
-                cmap=get_cmap(kwargs.get('cmap', 'jet')))
-        except KeyError:
-            # note we assume a masked array here.. if you want you can
-            # always mask the data field
-            this_plot = pcolormesh(
-                self.x[start_index:end_index, :] / 1000.0,
-                self.y[start_index:end_index, :] / 1000.0,
-                self.fields[var]['data'][start_index:end_index, :],
-                vmin=kwargs.get('vmin', -6),
-                vmax=kwargs.get('vmax', 100),
-                cmap=get_cmap(kwargs.get('cmap', 'jet')))
+      
+        field_dict = self.fields[field]
 
-        self.plots.append(this_plot)
-        self.plot_vars.append(var)
+        if vmin is None:
+            if 'valid_min' in field_dict:
+                vmin = field_dict['valid_min']
+            else:
+                vmin = -6
+        if vmax is None:
+            if 'valid_max' in field_dict:
+                vmax = field_dict['valid_max']
+            else:
+                vmax = 100
 
-    def plot_rhi(self, var, tilt, **kwargs):
+        x = self.x[start_index:end_index] / 1000.0
+        y = self.y[start_index:end_index] / 1000.0
+        data = field_dict['data'][start_index:end_index, :]
+
+        if mask is not None:
+            mask_field, mask_value = mask
+            mdata = self.fields[mask_field]['data'][start_index:end_index]
+            data = np.ma.masked_where(mdata < mask_value, data)
+
+        pm = ax.pcolormesh(x, y, data, vmin=vmin, vmax=vmax, cmap=cmap) 
+        
+        if title_and_labels:
+            self.append_x(ax)
+            self.append_y(ax)
+            ax.set_title(self.generate_title(field, tilt))
+
+        self.plots.append(pm)
+        self.plot_vars.append(field)
+        
+        if colorbar:
+            self.plot_colorbar(mappable=pm, fig=fig) 
+
+    def plot_rhi(self, field, tilt, mask=None, vmin=None, vmax=None, 
+            cmap='jet', title_and_labels=False, colorbar=False, 
+            ax=None, fig=None):
+        """
+        Plot a RHI.
+
+        Parameters
+        ----------
+        field : str
+            Field to plot.
+        tilt : int,
+            Tilt number to plot.
+    
+        Other Parameters
+        ----------------
+        mask : tuple
+            2-Tuple containing the field name and value below which to mask
+            field prior to plotting, for example to mask all data where 
+            NCP < 0.5 set mask to ['NCP', 0.5]. None performs no masking.
+        vmin : float
+            Luminance minimum value, None for default value.
+        vmax : float
+            Luminance maximum value, None for default value.
+        cmap : str
+            Matplotlib colormap name.   
+        title_and_labels : bool
+            True to set default figure titles and axis labels.
+        colorbar : bool
+            True to add a colorbar with label to the axis.
+        ax : Axis
+            Axis to plot on. None will use the current axis.
+        fig : Figure
+            Figure to add the colorbar to. None will use the current figure.
+        
+        """ 
+        if ax is None:
+            ax = plt.gca()
+        if fig is None:
+            fig = plt.gcf()
         start_index = self.starts[tilt]
         end_index = self.ends[tilt]
-        R = (np.sqrt((self.x[start_index:end_index, :] / 1000.0) ** 2 +
-                     (self.y[start_index:end_index, :] / 1000.0) ** 2) *
-             np.sign(self.y[start_index:end_index, :]))
-        try:
-            # note we assume a masked array here.. if you want you can
-            # always mask the data field
-            this_plot = pcolormesh(
-                R,
-                self.z[start_index:end_index, :] / 1000.0,
-                self.fields[var]['data'][start_index:end_index, :],
-                vmin=kwargs.get('vmin', self.fields[var]['valid_min']),
-                vmax=kwargs.get('vmax', self.fields[var]['valid_max']),
-                cmap=get_cmap(kwargs.get('cmap', 'jet')))
-        except KeyError:
-            # note we assume a masked array here.. if you want you can
-            # always mask the data field
-            this_plot = pcolormesh(
-                R,
-                self.z[start_index:end_index, :] / 1000.0,
-                self.fields[var]['data'][start_index:end_index, :],
-                vmin=kwargs.get('vmin', -6),
-                vmax=kwargs.get('vmax', 100),
-                cmap=get_cmap(kwargs.get('cmap', 'jet')))
-        self.plots.append(this_plot)
-        self.plot_vars.append(var)
+      
+        field_dict = self.fields[field]
+
+        if vmin is None:
+            if 'valid_min' in field_dict:
+                vmin = field_dict['valid_min']
+            else:
+                vmin = -6
+        if vmax is None:
+            if 'valid_max' in field_dict:
+                vmax = field_dict['valid_max']
+            else:
+                vmax = 100
+
+        x = self.x[start_index:end_index] / 1000.0
+        y = self.y[start_index:end_index] / 1000.0
+        z = self.z[start_index:end_index] / 1000.0
+        data = field_dict['data'][start_index:end_index, :]
+
+        if mask is not None:
+            mask_field, mask_value = mask
+            mdata = self.fields[mask_field]['data'][start_index:end_index]
+            data = np.ma.masked_where(mdata < mask_value, data)
+
+        R = np.sqrt(x ** 2 + y ** 2) * np.sign(y) 
+        pm = ax.pcolormesh(R, z, data, vmin=vmin, vmax=vmax, cmap=cmap)
+        
+        if title_and_labels:
+            self.append_r(ax)
+            self.append_z(ax)
+            ax.set_title(self.generate_title(field, tilt))
+        
+        self.plots.append(pm)
+        self.plot_vars.append(field)
+
+        if colorbar:
+            self.plot_colorbar(mappable=pm, fig=fig)
 
     def labelator(self, standard_name, units):
+        """ Return a label (str) for the given field name and units. """
         return standard_name.replace('_', ' ') + ' (' + units + ')'
 
-    def add_cb(self, **kwargs):
+    def plot_colorbar(self, mappable=None, label=None, cax=None, fig=None):
         """
-        Adds a colorbar to a plot,
-        defaults to the last created..
+        Plot a colorbar
+
+        Parameters
+        ----------
+        mappable : Image, ContourSet, etc.
+            Image, ContourSet, etc to which the colorbar applied.  If None the
+            last mappable object will be used.
+        label :
+            Colorbar label.  None will use a default value from the last field
+            plotted.
+        cax : Axis
+            Axis onto which the colorbar will be drawn.  None is also valid.
+        fig : Figure
+            Figure to place colorbar on.  None will use the current figure.
+  
         """
-        if 'target_axis' in kwargs.keys():
-            this_cb = colorbar(cax=kwargs['target_axis'],
-                               mappable=kwargs.get('plot', self.plots[-1]))
-        else:
-            this_cb = colorbar(mappable=kwargs.get('plot', self.plots[-1]))
-        try:
-            this_cb.set_label(kwargs.get('label', self.labelator(
-                self.fields[self.plot_vars[-1]]['standard_name'],
-                self.fields[self.plot_vars[-1]]['units'])))
-        except KeyError:
-            this_cb.set_label(kwargs.get('label', self.labelator(
-                self.fields[self.plot_vars[-1]]['long_name'],
-                self.fields[self.plot_vars[-1]]['units'])))
+        if fig is None:
+            fig = plt.gcf()
+        if mappable is None:
+            mappable = self.plots[-1]
+        if label is None:
+            last_field_dict = self.fields[self.plot_vars[-1]]
+            if 'standard_name' in last_field_dict:
+                standard_name = last_field_dict['standard_name']
+            else:
+                standard_name = last_field_dict['long_name']
+            units = last_field_dict['units']
+            label = self.labelator(standard_name, units)
 
-        self.cbs.append(this_cb)
-
-    def plot_rangering(self, rnge, **kwargs):
-        """
-        Plots range rings on your PPI
-        """
-        npts = kwargs.get('npts', 100)
-        use_axis = kwargs.get('axis', gca())
-        theta = np.linspace(0, 2 * np.pi, npts)
-        r = np.ones([npts]) * rnge
-        x = r * np.sin(theta)
-        y = r * np.cos(theta)
-        use_axis.plot(x, y, 'k-')
-
-    def plot_x(self, rnge, **kwargs):
-        """
-        Puts cross hairs on the ppi plot
-        """
-        npts = kwargs.get('npts', 100)
-        use_axis = kwargs.get('axis', gca())
-
-        #vert
-        x = np.zeros(npts)
-        y = np.linspace(-rnge, rnge, npts)
-        use_axis.plot(x, y, 'k-')
-
-        #hor
-        y = np.zeros(npts)
-        x = np.linspace(-rnge, rnge, npts)
-        use_axis.plot(x, y, 'k-')
-
-    def plot_locs(self, locs, labels, **kwargs):
-        use_axis = kwargs.get('axis', gca())
-        for i in range(len(locs)):
-            carts = corner_to_point(self.loc, locs[i])
-            plot([carts[0] / 1000.0, carts[0] / 1000.0],
-                 [carts[1] / 1000.0, carts[1] / 1000.0],
-                 kwargs.get('sym', ['r+'] * len(locs))[i])
+        cb = fig.colorbar(mappable, cax=cax)
+        cb.set_label(label)
+        self.cbs.append(cb)
