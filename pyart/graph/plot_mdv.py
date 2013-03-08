@@ -5,236 +5,151 @@ pyart.graph.plot_mdv
 Routines for plotting radar data from MDV file.
 
 .. autosummary::
-    :toctree:: generated/
+    :toctree: generated/
+    :template: dev_template.rst
 
     MdvDisplay
 
 """
 
-import getopt
-import sys
-import os
-
-from pylab import *
-import matplotlib.pyplot as plt
-from numpy import ma, sin, cos, ones, zeros, pi, abs, sign
 import numpy as np
 
-from .common import dt_to_dict, corner_to_point, ax_radius
-from .common_display import AbstractDisplay
+from .radar_display import RadarDisplay
 
-class MdvDisplay(AbstractDisplay):
-    """ 
-    A class for creating plots from MdvFiles objects.
+
+class MdvDisplay(RadarDisplay):
+    """
+    A display object for creating plots from data in a MdvFile objects.
+
+    Parameters
+    ----------
+    mdvfile : MdvFile
+        MdvFile object to use for creating plots.
+
+    Attributes
+    ----------
+    plots : list
+        List of plots created.
+    plot_vars : list
+        List of fields plotted, order matches plot list.
+    cbs : list
+        List of colorbars created.
+    loc : (float, float)
+        Latitude and Longitude of radar in degrees.
+    origin : 'Radar'
+       'Radar'
+    time_begin : datetime
+        Time of first radar scan.
+    radar_name : str
+        Radar name.
+    mdvfile : MdvFile
+        MdvFile object use to create plots.
+
     """
 
-    # XXX not generic
     def __init__(self, mdvfile):
+        """ Initialize the object. """
+        self.plots = []
+        self.plot_vars = []
+        self.cbs = []
+        lat = mdvfile.radar_info['latitude_deg']
+        lon = mdvfile.radar_info['longitude_deg']
+        self.loc = [lat, lon]
+        self.origin = 'Radar'
+        self.time_begin = mdvfile.times['time_begin']
+        self.radar_name = mdvfile.radar_info['radar_name']
         self.mdvfile = mdvfile
-        info_dict = make_info(self.mdvfile, 'DBZ_F')
-        lat, lon = info_dict['latitude_deg'], info_dict['longitude_deg']
-        self._radar_location = [lat, lon]
-        self._last_mappable = None
 
-    # XXX not generic
-    def plot_ppi(self, field, sweep, mask=None, vmin=None, vmax=None,
-                 title_str=None, colorbar=False, fig=None, ax=None):
+    # public methods which are overridden.
+
+    def generate_title(self, field, tilt):
         """
-        Plot a PPI.
+        Generate a title for a plot.
 
         Parameters
         ----------
         field : str
-            Field to plot.
-        sweep : int,
-            Sweep number to plot.
-    
-        Other Parameters
-        ----------------
-        mask : tuple
-            2-Tuple containing the field name and value below which to mask
-            field prior to plotting, for example to mask all data where 
-            NCP < 0.5 set mask to ['NCP', 0.5]. None performs no masking.
-        vmin : float
-            Luminance minimum value, None for default value.
-        vmax : float
-            Luminance maximum value, None for default value.
-        title_str : str
-            String
-        colorbar : bool
-            True to add a colorbar with label to the axis.
-        ax : Axis
-            Axis to plot on. None will use the current axis.
-        fig : Figure
-            Figure to add the colorbar to. None will use the current figure.
-        
-        """
-        # parse the parameters
-        if ax is None:
-            ax = plt.gca()
-        if fig is None:
-            fig = plt.gcf()
+            Field plotted.
+        tilt : int
+            Tilt plotted.
 
-        info_dict = make_info(self.mdvfile, field)
-        info_dict.update({'ele': self.mdvfile.el_deg[sweep]})
-    
-        if title_str is None:
-            title_str = forminator()
-    
+        Returns
+        -------
+        title : str
+            Plot title.
+
+        """
+        radar_name = self.mdvfile.radar_info['radar_name']
+        if self.mdvfile.scan_type == 'rhi':
+            fixed_angle = self.mdvfile.az_deg[tilt]
+        else:
+            fixed_angle = self.mdvfile.el_deg[tilt]
+
+        time_str = self.time_begin.isoformat() + 'Z'
+        l1 = "%s %.1f Deg. %s " % (radar_name, fixed_angle, time_str)
+        field_name = FANCY_NAMES[field]
+        return l1 + '\n' + field_name
+
+    # private methods which are overridden
+
+    def _parse_vmin_vmax(self, field, vmin, vmax):
         if vmin is None:
-            vmin = get_default_range(self.mdvfile, field)[0]
+            vmin = _get_default_range(self.mdvfile, field)[0]
         if vmax is None:
-            vmax = get_default_range(self.mdvfile, field)[1]
-     
-        # extract coordinates in km
-        x = self.mdvfile.carts['x'][sweep] / 1000.0  # x coords in km
-        y = self.mdvfile.carts['y'][sweep] / 1000.0  # y coords in km
-        z = self.mdvfile.carts['z'][sweep] / 1000.0  # z corrds in km
-   
-        # read in the data, mask if needed
+            vmax = _get_default_range(self.mdvfile, field)[1]
+        return vmin, vmax
+
+    def _get_data(self, field, tilt, mask_tuple):
+        """ Retrieve and return data from a plot function. """
         field_num = self.mdvfile.fields.index(field)
-        data = self.mdvfile.read_a_field(field_num)[sweep]
-        if mask is not None:
-            mask_field, mask_value = mask
+        data = self.mdvfile.read_a_field(field_num)[tilt]
+        if mask_tuple is not None:
+            mask_field, mask_value = mask_tuple
             mask_field_num = self.mdvfile.fields.index(mask_field)
-            mdata = self.mdvfile.read_a_field(mask_field_num)[sweep]
+            mdata = self.mdvfile.read_a_field(mask_field_num)[tilt]
             data = np.ma.masked_where(mdata < mask_value, data)
+        return data
 
-        # create the plot
-        pm = ax.pcolormesh(x, y, data, vmin=vmin, vmax=vmax)
-        self._last_mappable = pm
-       
-        # add labels and title
-        ax.set_xlabel('x (km)')
-        ax.set_ylabel('y (km)') 
-        ax.set_title(title_str % info_dict)
- 
-        self._last_field = field
-        self._last_field_dict = make_info(self.mdvfile, field)
-        self._last_field_dict.update({'ele': self.mdvfile.el_deg[sweep]})
-        
-        if colorbar:
-            self.plot_colorbar(pm, info_dict['name'], ax, fig)
+    def _get_x_y(self, tilt):
+        """ Retrieve and return x and y coordinate in km. """
+        x = self.mdvfile.carts['x'][tilt] / 1000.0  # x coords in km
+        y = self.mdvfile.carts['y'][tilt] / 1000.0  # y coords in km
+        return x, y
 
-    # XXX not generic
-    def plot_rhi(self, field, sweep, mask=None, vmin=None, vmax=None,
-                 title_str=None, colorbar=False, ax=None, fig=None):
-        """ 
-        Plot a RHI. 
-        
-        Parameters
-        ----------
-        field : str
-            Field to plot.
-        sweep : int,
-            Sweep number to plot.
-    
-        Other Parameters
-        ----------------
-        mask : tuple
-            2-Tuple containing the field name and value below which to mask
-            field prior to plotting, for example to mask all data where 
-            NCP < 0.5 set mask to ['NCP', 0.5]. None performs no masking.
-        vmin : float
-            Luminance minimum value, None for default value.
-        vmax : float
-            Luminance maximum value, None for default value.
-        title_str : str
-            String
-        colorbar : bool
-            True to add a colorbar with label to the axis.
-        ax : Axis
-            Axis to plot on. None will use the current axis.
-        fig : Figure
-            Figure to add the colorbar to. None will use the current figure.
- 
-        """
-        # parse the parameters
-        if ax is None:
-            ax = plt.gca()
-        if fig is None:
-            fig = plt.gcf()
+    def _get_x_y_z(self, tilt):
+        """ Retrieve and return x, y, and z coordinate in km. """
+        x = self.mdvfile.carts['x'][tilt] / 1000.0  # x coords in km
+        y = self.mdvfile.carts['y'][tilt] / 1000.0  # y coords in km
+        z = self.mdvfile.carts['z'][tilt] / 1000.0  # y coords in km
+        return x, y, z
 
-        info_dict = make_info(self.mdvfile, field)
-        info_dict.update({'ele': self.mdvfile.az_deg[sweep]})
+    def _label_axes_ppi(self, axis_labels, ax):
+        """ Set the x and y axis labels for a PPI plot. """
+        x_label, y_label = axis_labels
+        if x_label is None:
+            x_label = 'x (km)'
+        if y_label is None:
+            y_label = 'y (km)'
+        ax.set_xlabel(x_label)
+        ax.set_ylabel(y_label)
 
-        if title_str is None:
-            title_str = forminator()
+    def _label_axes_rhi(self, axis_labels, ax):
+        """ Set the x and y axis labels for a RHI plot. """
+        x_label, y_label = axis_labels
+        if x_label is None:
+            x_label = 'Range (km)'
+        if y_label is None:
+            y_label = 'Distance above radar (km)'
+        ax.set_xlabel(x_label)
+        ax.set_ylabel(y_label)
 
-        if vmin is None:
-            vmin = get_default_range(self.mdvfile, field)[0]
-        if vmax is None:
-            vmax = get_default_range(self.mdvfile, field)[1]
- 
-        # extract coordinate in km
-        x = self.mdvfile.carts['x'][sweep] / 1000.0
-        y = self.mdvfile.carts['y'][sweep] / 1000.0
-        z = self.mdvfile.carts['z'][sweep] / 1000.0
-     
-        # read in the data, mask if needed
-        field_num = self.mdvfile.fields.index(field)
-        data = self.mdvfile.read_a_field(field_num)[sweep]
-        if mask is not None:
-            mask_field, mask_value = mask
-            mask_field_num = self.mdvfile.fields.index(mask_field)
-            mdata = self.mdvfile.read_a_field(mask_field_num)[sweep]
-            data = np.ma.masked_where(mdata < mask_value, data)
-
-        # create the plot
-        x_range = np.sign(y) * np.sqrt(y ** 2 + x ** 2)
-        pm = ax.pcolormesh(x_range, z, data, vmin=vmin, vmax=vmax)
-        
-        self._last_mappable = pm
-        
-        # add labels and title
-        ax.set_xlabel('Range (km)')
-        ax.set_ylabel('Distance above radar (km)')
-        ax.set_title(title_str % info_dict)
-
-        self._last_field = field
-        self._last_field_dict = make_info(self.mdvfile, field)
-        self._last_field_dict.update({'ele': self.mdvfile.el_deg[sweep]})
-        
-        if colorbar:
-            self.plot_colorbar(pm, info_dict['name'], ax, fig)
+    def _get_colorbar_label(self, field):
+        """ Return a colobar label for a given field. """
+        return UNIT_NAMES[field]
 
 
-    # XXX not generic
-    def plot_colorbar(self, mappable=None, label=None, ax=None, fig=None):
-        """ 
-        Plot a colorbar.
-        
-        Parameters
-        ----------
-        mappable : Image, ContourSet, etc.
-            Image, ContourSet, etc to which the colorbar applied.  If None the
-            last mappable object will be used.
-        label :
-            Colorbar label.  None will use a default value from the last field
-            plotted.
-        ax : Axis
-            Axis to plot on.  None will use the current axis.
-        fig : Figure
-            Figure to place colorbar on.  None will use the current figure.
-        
-        """
-        if ax is None:
-            ax = plt.gca()
-        if fig is None:
-            fig = plt.gcf()
-        if mappable is None:
-            if self._last_mappable is None:
-                raise ValueError("No mappable object found")
-            mappable = self._last_mappable
-            
-        if label is None:
-            label = self._last_field_dict['name']
-        cb = fig.colorbar(mappable)
-        cb.set_label(label)
-
-
-def get_default_range(mdvfile, field):
-    """ Return the default range for a field """
+def _get_default_range(mdvfile, field):
+    """ Return the default range for a field. """
     def_ranges = {
         'DBMHC': [-100, 0],
         'DBMVC': [-100, 0],
@@ -259,88 +174,49 @@ def get_default_range(mdvfile, field):
         'NCP': [0, 1],
         'NCP_F': [0, 1]}
     return def_ranges[field]
- 
-
-def forminator():
-    """
-    The forminator is used in future functions.. create a new forminator
-    to format the titles of plots...
-    """
-    return '%(radar_name)s %(ele).1f Degree %(scan_type)s %(begin_year)04d-%(begin_month)02d-%(begin_day)02d %(begin_hour)02d:%(begin_minute)02d \n %(fancy_name)s '
 
 
-def fancy_names():
-    """
-    Returns a dictionary for appending fancy names to a plot of MDV files...
-    the moment names are typical of those from a TITAN setup
-    """
-    return {
-        'DBMHC': "Horizontal recieved power",
-        'DBMVC': "Vertical recieved power",
-        'DBZ': 'Horizontal equivalent reflectivity factor',
-        'DBZ_F': 'Horizontal equivalent reflectivity factor',
-        'DBZVC': 'Vertical equivalent reflectivity factor',
-        'DBZVC_F': 'Vertical equivalent reflectivity factor',
-        'VEL': "Radial velocity of scatterers (positive away)",
-        'VEL_F': "Radial velocity of scatterers (positive away)",
-        'WIDTH': "Spectral Width",
-        'WIDTH_F': "Spectral Width",
-        'ZDR': "Differential reflectivity",
-        'ZDR_F': "Differential reflectivity",
-        'RHOHV': 'Co-Polar correlation coefficient',
-        'RHOHV_F': 'Co-Polar Correlation Coefficient',
-        'PHIDP': "Differential propigation phase",
-        'PHIDP_F': "Differential propigation phase",
-        'KDP': "Specific differential phase",
-        'KDP_F': "Specific differential phase",
-        'NCP': "Normalized coherent power",
-        'NCP_F': "Normalized coherent power"}
+FANCY_NAMES = {
+    'DBMHC': "Horizontal recieved power",
+    'DBMVC': "Vertical recieved power",
+    'DBZ': 'Horizontal equivalent reflectivity factor',
+    'DBZ_F': 'Horizontal equivalent reflectivity factor',
+    'DBZVC': 'Vertical equivalent reflectivity factor',
+    'DBZVC_F': 'Vertical equivalent reflectivity factor',
+    'VEL': "Radial velocity of scatterers (positive away)",
+    'VEL_F': "Radial velocity of scatterers (positive away)",
+    'WIDTH': "Spectral Width",
+    'WIDTH_F': "Spectral Width",
+    'ZDR': "Differential reflectivity",
+    'ZDR_F': "Differential reflectivity",
+    'RHOHV': 'Co-Polar correlation coefficient',
+    'RHOHV_F': 'Co-Polar Correlation Coefficient',
+    'PHIDP': "Differential propigation phase",
+    'PHIDP_F': "Differential propigation phase",
+    'KDP': "Specific differential phase",
+    'KDP_F': "Specific differential phase",
+    'NCP': "Normalized coherent power",
+    'NCP_F': "Normalized coherent power"}
 
 
-def names_units():
-    """
-    Returns units for moments in an MDV file, moment names are typical of
-    those in a file generated by TITAN
-    """
-    return {
-        'DBMHC': " H Rec Power (dBm)",
-        'DBMVC': "V Rec Power (dBm)",
-        'DBZ': "Hz Eq. Ref. Fac (dBz)",
-        'DBZ_F': "Hz Eq. Ref. Fac (dBz)",
-        'DBZVC': "V Eq. Ref. Fac (dBz)",
-        'DBZVC_F': "V Eq. Ref. Fac (dBz)",
-        'VEL': "Rad. Vel. (m/s, +away)",
-        'VEL_F': "Rad. Vel. (m/s, +away)",
-        'WIDTH': "Spec. Width (m/s)",
-        'WIDTH_F': "Spec. Width (m/s)",
-        'ZDR': "Dif Refl (dB)",
-        'ZDR_F': "Dif Refl (dB)",
-        'RHOHV': "Cor. Coef (frac)",
-        'RHOHV_F': "Cor. Coef (frac)",
-        'PHIDP': "Dif Phase (deg)",
-        'PHIDP_F': "Dif Phase (deg)",
-        'KDP': "Spec Dif Ph. (deg/km)",
-        'KDP_F': "Spec Dif Ph. (deg/km)",
-        'NCP': "Norm. Coh. Power (frac)",
-        'NCP_F': "Norm. Coh. Power (frac)"}
-
-
-def make_info(mdvobj, fld):
-    """
-    Concatinate metadata from the MDV file and info about the moment fld
-    into one dictionary
-    usage:
-        dictionary = make_info(mdvobject,
-                               string of the moment you want to append)
-
-    """
-    info = mdvobj.radar_info
-    info.update({'scan_type': mdvobj.scan_type.upper()})
-    info.update(dt_to_dict(mdvobj.times['time_begin'], pref='begin_'))
-    info.update(dt_to_dict(mdvobj.times['time_end'], pref='end_'))
-    name = names_units()[fld]
-    units = dict([(mdvobj.fields[i], mdvobj.field_headers[i]['units'])
-                  for i in range(len(mdvobj.fields))])[fld]
-    fancy_name = fancy_names()[fld]
-    info.update({'name': name, 'units': units, 'fancy_name': fancy_name})
-    return info
+UNIT_NAMES = {
+    'DBMHC': " H Rec Power (dBm)",
+    'DBMVC': "V Rec Power (dBm)",
+    'DBZ': "Hz Eq. Ref. Fac (dBz)",
+    'DBZ_F': "Hz Eq. Ref. Fac (dBz)",
+    'DBZVC': "V Eq. Ref. Fac (dBz)",
+    'DBZVC_F': "V Eq. Ref. Fac (dBz)",
+    'VEL': "Rad. Vel. (m/s, +away)",
+    'VEL_F': "Rad. Vel. (m/s, +away)",
+    'WIDTH': "Spec. Width (m/s)",
+    'WIDTH_F': "Spec. Width (m/s)",
+    'ZDR': "Dif Refl (dB)",
+    'ZDR_F': "Dif Refl (dB)",
+    'RHOHV': "Cor. Coef (frac)",
+    'RHOHV_F': "Cor. Coef (frac)",
+    'PHIDP': "Dif Phase (deg)",
+    'PHIDP_F': "Dif Phase (deg)",
+    'KDP': "Spec Dif Ph. (deg/km)",
+    'KDP_F': "Spec Dif Ph. (deg/km)",
+    'NCP': "Norm. Coh. Power (frac)",
+    'NCP_F': "Norm. Coh. Power (frac)"}
