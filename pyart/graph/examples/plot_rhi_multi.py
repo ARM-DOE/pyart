@@ -8,6 +8,7 @@ import pyart.io._rsl as _rsl
 from pylab import *
 import numpy as N
 
+from pyart.graph.common import radar_coords_to_cart
 
 def create_RHI_array(sweep):
     ppi = N.zeros([sweep.h.nrays, sweep.rays[0].h.nbins],
@@ -16,27 +17,6 @@ def create_RHI_array(sweep):
         data = sweep.rays[raynum].data
         ppi[raynum, 0:len(data)] = sweep.rays[raynum].data
     return ppi
-
-
-def radar_coords_to_cart(rng, az, ele, debug=False):
-    """
-    Asumes standard atmosphere, ie R=4Re/3
-    """
-    Re = 6371.0 * 1000.0
-    #h=(r^2 + (4Re/3)^2 + 2r(4Re/3)sin(ele))^1/2 -4Re/3
-    #s=4Re/3arcsin(rcos(ele)/(4Re/3+h))
-    p_r = 4.0 * Re / 3.0
-    rm = rng * 1000.0
-    z = (rm ** 2 + p_r ** 2 + 2.0 * rm * p_r *
-         sin(ele * pi / 180.0)) ** 0.5 - p_r
-
-    #arc length
-    s = p_r * arcsin(rm * cos(ele * pi / 180.) / (p_r + z))
-    if debug:
-        print "Z=", z, "s=", s
-    y = s * cos(az * pi / 180.0)
-    x = s * sin(az * pi / 180.0)
-    return x, y, z
 
 
 def get_optargs(argv):

@@ -1,13 +1,14 @@
 #! /usr/bin/env python
+# Create a PPI plot from a MDV file.
+# Example usage: ./vanilla_ppi.py 110635.mdv test_mdv_ppi.png
 
 import sys
 import getopt
 
 import numpy as np
-from pylab import *
+import matplotlib.pyplot as plt
 
 import pyart.io.mdv as mdv
-import pyart.io._rsl as _rsl
 from pyart.graph import plot_mdv as plot_mdv
 
 
@@ -41,14 +42,20 @@ if __name__ == "__main__":
     except IndexError:
         usage()
         sys.exit(2)
-    myfile = mdv.MdvFile(filename, debug=True)
-    f = figure(figsize=[5, 5])
-    plot_mdv.single_panel_ppi(myfile, 0, 'DBZ_F', mask=['NCP_F', 0.5],
-                              ylim=[-120, 120], xlim=[-120, 120])
-    gca().axes.get_xaxis().set_visible(False)
-    gca().axes.get_yaxis().set_visible(False)
-    f.get_axes()[1].set_visible(False)
-    subplots_adjust(left=0, bottom=0, right=1, top=1, wspace=0, hspace=0)
-    savefig('test_kml.png', transparent=True)
-    close(f)
-    myfile.close()
+    
+    outfile = 'test_kml.png'
+
+    # read in the data
+    mdvfile = mdv.MdvFile(filename, debug=True)
+    mdvdisplay = plot_mdv.MdvDisplay(mdvfile)   
+
+    # create the figure
+    fig = plt.figure(figsize=[5, 5])
+    ax = fig.add_subplot(111)
+    mdvdisplay.plot_ppi('DBZ_F', 0, mask=['NCP_F', 0.5])
+    mdvdisplay.set_limits(ylim=[-120, 120], xlim=[-120, 120])
+    ax.xaxis.set_visible(False)
+    ax.yaxis.set_visible(False)
+    fig.subplots_adjust(left=0, bottom=0, right=1, top=1, wspace=0, hspace=0)
+    fig.savefig(outfile, transparent=True)
+    mdvfile.close()
