@@ -1,3 +1,15 @@
+"""
+pyart.graph.plot_rsl
+====================
+
+Routines for plotting radar data from files readable by RSL.
+
+.. autosummary::
+    :toctree:: generated/
+
+
+"""
+
 #!/usr/bin/python
 # Code to plot a PPI from p4dd
 
@@ -9,30 +21,7 @@ from pylab import *
 import numpy as N
 
 import pyart.io._rsl as _rsl
-
-
-def ax_radius(lat, units='radians'):
-    pi = 3.145
-    # Determine the radius of a circle of constant longitude at a certain
-    # Latitude
-    Re = 6371.0 * 1000.0
-    if units == 'degrees':
-        const = pi / 180.0
-    else:
-        const = 1.0
-
-    R = Re * sin(pi / 2.0 - abs(lat * const))
-    return R
-
-
-def corner_to_point(corner, point):
-    pi = 3.145
-    Re = 6371.0*1000.0
-    Rc = ax_radius(point[0], units='degrees')
-    #print Rc/Re
-    y = ((point[0] - corner[0]) / 360.0) * pi * 2.0 * Re
-    x = ((point[1] - corner[1]) / 360.0) * pi * 2.0 * Rc
-    return x, y
+from .common import ax_radius, corner_to_point, radar_coords_to_cart, dms_to_d
 
 
 def create_flat_array(sweep):
@@ -42,44 +31,6 @@ def create_flat_array(sweep):
         data = sweep.rays[raynum].data
         ppi[raynum, 0:len(data)] = sweep.rays[raynum].data
     return ppi
-
-
-def dms_to_d(dms):
-    return dms[0] + (dms[1] + dms[2] / 60.0) / 60.0
-
-
-def radar_coords_to_cart(rng, az, ele, debug=False):
-    """
-    Asumes standard atmosphere, ie R=4Re/3
-    """
-    Re = 6371.0 * 1000.0
-    p_r = 4.0 * Re / 3.0
-    rm = rng * 1000.0
-    z = (rm ** 2 + p_r ** 2 + 2.0 * rm * p_r *
-         sin(ele * pi / 180.0)) ** 0.5 - p_r
-    #arc length
-    s = p_r * arcsin(rm * cos(ele * pi / 180.) / (p_r + z))
-    if debug:
-        print "Z=", z, "s=", s
-    y = s * cos(az * pi / 180.0)
-    x = s * sin(az * pi / 180.0)
-    return x, y, z
-
-
-def get_optargs(argv):
-    try:
-        opts, args = getopt.getopt(argv, "d", ['debug'])
-    except getopt.GetoptError:
-        usage()
-        sys.exit(2)
-    return opts, args
-
-
-def usage():
-    print """
-    plot_sur.py -d filename outpath
-    should work on UF, Sigmet/IRIS/88D (not that they do RHIs!)
-    """
 
 
 def plot_sur(xsapr, imagefilename, var, sweep, **kwargs):
