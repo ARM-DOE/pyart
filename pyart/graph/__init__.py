@@ -17,3 +17,5 @@ __all__ = ['RadarDisplay']
 
 from radar_display import RadarDisplay
 from plot_mdv import MdvDisplay
+from plot_rsl import RslDisplay
+from plot_netcdf import NetcdfDisplay

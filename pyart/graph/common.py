@@ -3,6 +3,7 @@ import numpy as np
 
 PI = 3.141592653589793
 
+
 def dms_to_d(dms):
     return dms[0] + (dms[1] + dms[2] / 60.0) / 60.0
 
@@ -63,5 +64,3 @@ def radar_coords_to_cart(rng, az, ele, debug=False):
     y = s * np.cos(az * PI / 180.0)
     x = s * np.sin(az * PI / 180.0)
     return x, y, z
-
-

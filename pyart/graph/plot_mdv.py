@@ -57,7 +57,7 @@ class MdvDisplay(RadarDisplay):
         self.loc = [lat, lon]
         self.origin = 'Radar'
         self.time_begin = mdvfile.times['time_begin']
-        self.radar_name = mdvfile.radar_info['radar_name']
+        self.radar_name = mdvfile.master_header['data_set_source']
         self.mdvfile = mdvfile
 
     # public methods which are overridden.
@@ -79,7 +79,7 @@ class MdvDisplay(RadarDisplay):
             Plot title.
 
         """
-        radar_name = self.mdvfile.radar_info['radar_name']
+        radar_name = self.radar_name
         if self.mdvfile.scan_type == 'rhi':
             fixed_angle = self.mdvfile.az_deg[tilt]
         else:
@@ -122,26 +122,6 @@ class MdvDisplay(RadarDisplay):
         y = self.mdvfile.carts['y'][tilt] / 1000.0  # y coords in km
         z = self.mdvfile.carts['z'][tilt] / 1000.0  # y coords in km
         return x, y, z
-
-    def _label_axes_ppi(self, axis_labels, ax):
-        """ Set the x and y axis labels for a PPI plot. """
-        x_label, y_label = axis_labels
-        if x_label is None:
-            x_label = 'x (km)'
-        if y_label is None:
-            y_label = 'y (km)'
-        ax.set_xlabel(x_label)
-        ax.set_ylabel(y_label)
-
-    def _label_axes_rhi(self, axis_labels, ax):
-        """ Set the x and y axis labels for a RHI plot. """
-        x_label, y_label = axis_labels
-        if x_label is None:
-            x_label = 'Range (km)'
-        if y_label is None:
-            y_label = 'Distance above radar (km)'
-        ax.set_xlabel(x_label)
-        ax.set_ylabel(y_label)
 
     def _get_colorbar_label(self, field):
         """ Return a colobar label for a given field. """

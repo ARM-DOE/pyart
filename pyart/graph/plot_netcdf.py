@@ -165,8 +165,8 @@ class NetcdfDisplay(RadarDisplay):
         """ Return a colobar label for a given field. """
         last_field_dict = self.dataset.variables[field].ncattrs()
         if 'standard_name' in last_field_dict:
-            standard_name = last_field_dict['standard_name']
+            standard_name = self.dataset.variables[field].standard_name
         else:
-            standard_name = last_field_dict['long_name']
-        units = last_field_dict['units']
+            standard_name = self.dataset.variables[field].long_name
+        units = self.dataset.variables[field].units
         return self._generate_colorbar_label(standard_name, units)

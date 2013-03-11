@@ -105,5 +105,17 @@ pyart/correct/tests/sgpinterpolatedsondeC1.c1.20110510.000000.cdf
 pyart/correct/tests/sample.nc
 pyart/correct/tests/sample.sigmet
 pyart/correct/tests/*.npy
-pyart/version.py
 
+pyart/graph/tests/*.RAW**
+pyart/graph/tests/*.cdf
+pyart/graph/tests/*.nc
+pyart/graph/tests/*.mdv
+
+pyart/graph/examples/*.RAW**
+pyart/graph/examples/*.cdf
+pyart/graph/examples/*.nc
+pyart/graph/examples/*.mdv
+
+
+
+pyart/version.py

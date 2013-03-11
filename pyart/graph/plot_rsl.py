@@ -252,7 +252,7 @@ class RslDisplay(RadarDisplay):
         """
         radar_name = self.radar_name
         volume_num = _rsl.fieldTypes().list.index(field)
-        sweep = self.rslradar.contents.volumes[volume_num].sweep[tilt]
+        sweep = self.rslradar.contents.volumes[volume_num].sweeps[tilt]
         fixed_angle = sweep.rays[0].azimuth
 
         time_str = self.time_begin.isoformat() + 'Z'
@@ -286,25 +286,18 @@ class RslDisplay(RadarDisplay):
 
     def _get_x_y(self, field, tilt):
         """ Retrieve and return x and y coordinate in km. """
-        volume_num = _rsl.fieldTypes().list.index(field)
-        sweep = self.rslradar.contents.volumes[volume_num].sweeps[tilt]
-
-        ranges = sweep.rays[0].dists / 1000.0
-        elevs = [sweep.rays[i].h.elev for i in xrange(sweep.h.nrays)]
-        rg, ele = np.meshgrid(ranges, elevs)
-        azg = np.ones_like(rg) * sweep.h.azimuth
-        x, y, z = radar_coords_to_cart(rg, azg, ele)
-        return x / 1000.0, y / 1000.0
+        x, y, z = self._get_x_y_z(field, tilt)
+        return x, y
 
     def _get_x_y_z(self, field, tilt):
         """ Retrieve and return x, y, and z coordinate in km. """
         volume_num = _rsl.fieldTypes().list.index(field)
         sweep = self.rslradar.contents.volumes[volume_num].sweeps[tilt]
-
         ranges = sweep.rays[0].dists / 1000.0
         elevs = [sweep.rays[i].h.elev for i in xrange(sweep.h.nrays)]
+        azimuths = [sweep.rays[i].h.azimuth for i in xrange(sweep.h.nrays)]
         rg, ele = np.meshgrid(ranges, elevs)
-        azg = np.ones_like(rg) * sweep.h.azimuth
+        rg, azg = np.meshgrid(ranges, azimuths)
         x, y, z = radar_coords_to_cart(rg, azg, ele)
         return x / 1000.0, y / 1000.0, z / 1000.0
 
