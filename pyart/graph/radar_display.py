@@ -121,7 +121,7 @@ class RadarDisplay:
     def plot_ppi(self, field, tilt, mask_tuple=None, vmin=None, vmax=None,
                  cmap='jet', title=None, title_flag=True,
                  axislabels=(None, None), axislabels_flag=True,
-                 colorbar_flag=True, ax=None, fig=None):
+                 colorbar_flag=True, colorbar_label=None, ax=None, fig=None):
         """
         Plot a PPI.
 
@@ -159,6 +159,9 @@ class RadarDisplay:
         colorbar_flag : bool
             True to add a colorbar with label to the axis.  False leaves off
             the colorbar.
+        colorbar_label : str
+            Colorbar label, None will use a default label generated from the
+            field information.
         ax : Axis
             Axis to plot on. None will use the current axis.
         fig : Figure
@@ -187,12 +190,13 @@ class RadarDisplay:
         self.plot_vars.append(field)
 
         if colorbar_flag:
-            self.plot_colorbar(mappable=pm, field=field, fig=fig)
+            self.plot_colorbar(mappable=pm, label=colorbar_label,
+                               field=field, fig=fig)
 
     def plot_rhi(self, field, tilt, mask_tuple=None, vmin=None, vmax=None,
                  cmap='jet', title=None, title_flag=True,
                  axislabels=(None, None), axislabels_flag=True,
-                 colorbar_flag=True, ax=None, fig=None):
+                 colorbar_flag=True, colorbar_label= None, ax=None, fig=None):
         """
         Plot a RHI.
 
@@ -230,6 +234,9 @@ class RadarDisplay:
         colorbar_flag : bool
             True to add a colorbar with label to the axis.  False leaves off
             the colorbar.
+        colorbar_label : str
+            Colorbar label, None will use a default label generated from the
+            field information.
         ax : Axis
             Axis to plot on. None will use the current axis.
         fig : Figure
@@ -259,7 +266,8 @@ class RadarDisplay:
         self.plot_vars.append(field)
 
         if colorbar_flag:
-            self.plot_colorbar(mappable=pm, field=field, fig=fig)
+            self.plot_colorbar(mappable=pm, label=colorbar_label,
+                               field=field, fig=fig)
 
     def plot_range_rings(self, range_rings, ax=None):
         """
@@ -475,7 +483,7 @@ class RadarDisplay:
         if y_label is None:
             self.label_yaxis_y(ax)
         else:
-            ax.set_xlabel(y_label)
+            ax.set_ylabel(y_label)
 
     def _label_axes_rhi(self, axis_labels, ax):
         """ Set the x and y axis labels for a RHI plot. """
@@ -487,7 +495,7 @@ class RadarDisplay:
         if y_label is None:
             self.label_yaxis_z(ax)
         else:
-            ax.set_ylabel(x_label)
+            ax.set_ylabel(y_label)
 
     ##########################
     # name generator methods #
