@@ -39,7 +39,8 @@ import pyart
 
 # read in the sample file and create a a Radar object
 fname = join(dirname(__file__), 'sample_nc.nc')
-nc_radar = pyart.io.radar.Radar(netCDF4.Dataset(fname))
+nc_radar = pyart.io.read_netcdf(fname)
+#nc_radar = pyart.io.radar.Radar(netCDF4.Dataset(fname))
 
 
 # azimuth attribute

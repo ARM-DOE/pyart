@@ -1,15 +1,27 @@
 """
-PyART: The Python ARM Radar Toolkit
-====================================
+==================================
+Input and output (:mod:`pyart.io`)
+==================================
 
-Sub package io
+.. currentmodule:: pyart.io
+
+Py-ART has modules, classes and functions which are able to read data
+from and write data to a number of file formats.
+
+.. autosummary::
+    :toctree: generated/
+
+    read_rsl
+    read_mdv
+    read_netcdf
+
+    Radar
 
 """
 
-__all__ = ['py_mdv', 'py4dd', 'rsl_utils', 'nc_utils', 'radar']
+from .rsl import read_rsl
+from .mdv import read_mdv
+from .netcdf import read_netcdf
+from .radar import Radar
 
-import py_mdv
-import py4dd
-import rsl_utils
-import nc_utils
-import radar
+__all__ = [s for s in dir() if not s.startswith('_')]

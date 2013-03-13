@@ -2,6 +2,7 @@
 # the following attributes are tested in some form or another for a
 # rsl radar object:
 #   azimuth
+#   cal             # not defined for mdv files
 #   elevation
 #   fields
 #   location
@@ -9,6 +10,7 @@
 #   naz
 #   nele
 #   ngates
+#   nrays           # " "
 #   nsweeps
 #   range
 #   scan_type
@@ -16,20 +18,8 @@
 #   sweep_mode
 #   sweep_number
 #   time
-#   inst_params
-#   cal             # not defined for mdv files
-#   nrays           # " "
 #   tu              # " "
-
-# The following methods are not tested
-# cf2rad                    : creator, move to nc_utils.py
-# extract_rsl_pointing
-# get_mdv_meta
-# mdv2rad                   : creator, move to py_rsl.py
-# prtmode
-# rsl2rad                   : creator, move to py4dd.py
-# streamcf2rad              : creator, move to nc_utils.py
-# ray_header_time_to_dict   :
+#   inst_params
 
 from os.path import join, dirname
 
@@ -40,8 +30,7 @@ import pyart
 
 # read in the sample file and create a a Radar object
 fname = join(dirname(__file__), 'sample_uf.uf')
-rsl_radar = pyart.io.radar.Radar(
-    pyart.io.py4dd.RSL_anyformat_to_radar(fname))
+rsl_radar = pyart.io.read_rsl(fname)
 
 
 # azimuth attribute

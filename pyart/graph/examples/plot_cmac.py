@@ -8,29 +8,7 @@ import netCDF4
 from pylab import *
 from numpy import *
 
-
-def dt_to_dict(dt, **kwargs):
-    pref = kwargs.get('pref', '')
-    return dict([(pref + key, getattr(dt, key)) for key in
-                ['year', 'month', 'day', 'hour', 'minute', 'second']])
-
-
-def radar_coords_to_cart(rng, az, ele, debug=False):
-    """
-    Asumes standard atmosphere, ie R = 4 * Re / 3
-    """
-    Re = 6371.0 * 1000.0
-    p_r = 4.0 * Re / 3.0
-    rm = rng * 1000.0
-    z = (rm ** 2 + p_r ** 2 + 2.0 * rm * p_r *
-         sin(ele * pi / 180.0)) ** 0.5 - p_r
-    #arc length
-    s = p_r * arcsin(rm * cos(ele * pi / 180.) / (p_r + z))
-    if debug:
-        print "Z=", z, "s=", s
-    y = s * cos(az * pi / 180.0)
-    x = s * sin(az * pi / 180.0)
-    return x, y, z
+from pyart.graph.common import dt_to_dict, radar_coords_to_cart
 
 
 def plot_multi_hsrhi(ncobj, var, **kwargs):

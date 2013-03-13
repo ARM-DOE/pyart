@@ -1,16 +1,25 @@
 """
-Sub package correct
+========================================
+Radar Corrections (:mod:`pyart.correct`)
+========================================
 
-Contents
---------
-cband : Functions to correct cband data such as phidp processing and
-        attenuation correction
+.. currentmodule:: pyart.correct
+
+Py-ART has the ability to perform a number of common corrections on radar
+moments and data.
+
+.. autosummary::
+    :toctree: generated/
+
+    dealias_fourdd
+    calculate_attenuation
+    phase_proc_lp
+    find_time_in_interp_sonde
 
 """
 
-__all__ = ['cband', 'dealias', 'phase_proc', 'attenuation']
+from .dealias import dealias_fourdd, find_time_in_interp_sonde
+from .attenuation import calculate_attenuation
+from .phase_proc import phase_proc_lp
 
-import cband
-import dealias
-import phase_proc
-import attenuation
+__all__ = [s for s in dir() if not s.startswith('_')]
