@@ -9,8 +9,9 @@ import matplotlib
 from pylab import *
 import numpy as N
 
-from pyart.io import py4dd
-
+from pyart.io import _rsl
+import pyart.graph.plot_sur as plot_sur
+from pyart.graph.common import radar_coords_to_cart
 
 def create_RHI_array(sweep):
     ppi = N.zeros([sweep.h.nrays, sweep.rays[0].h.nbins],
@@ -19,24 +20,6 @@ def create_RHI_array(sweep):
         data = sweep.rays[raynum].data
         ppi[raynum, 0:len(data)] = sweep.rays[raynum].data
     return ppi
-
-
-def radar_coords_to_cart(rng, az, ele, debug=False):
-    """
-    Asumes standard atmosphere, ie R=4Re/3
-    """
-    Re = 6371.0 * 1000.0
-    p_r = 4.0 * Re / 3.0
-    rm = rng * 1000.0
-    z = (rm ** 2 + p_r ** 2 + 2.0 * rm * p_r *
-         sin(ele * pi / 180.0)) ** 0.5 - p_r
-    #arc length
-    s = p_r * arcsin(rm * cos(ele * pi / 180.) / (p_r + z))
-    if debug:
-        print "Z=", z, "s=", s
-    y = s * cos(az * pi / 180.0)
-    x = s * sin(az * pi / 180.0)
-    return x, y, z
 
 
 def get_optargs(argv):
@@ -61,7 +44,7 @@ def plot_rhi(xsapr, imagefilename, var, sweep, **kwargs):
     var_lab = kwargs.get('var_lab', {
         'CZ': 'Eq refl fact (dBz)', 'ZT': 'Eq refl fact (dBz)'}[var])
     print rges
-    field = py4dd.fieldTypes().list.index(var)
+    field = _rsl.fieldTypes().list.index(var)
     plain_data = create_RHI_array(xsapr.contents.volumes[field].sweeps[sweep])
     azmths = array(
         [xsapr.contents.volumes[field].sweeps[sweep].rays[i].h.azimuth
@@ -120,9 +103,9 @@ if __name__ == "__main__":
     if debug:
         print "file name=", filename
     if debug:
-        py4dd.RSL_radar_verbose_on()
-    xsapr = py4dd.RSL_anyformat_to_radar(filename)
-    plot_rhi(xsapr, '/home/titan5/python/test_rhi0.png', 'CZ', 0,
+        _rsl.RSL_radar_verbose_on()
+    xsapr = _rsl.RSL_anyformat_to_radar(filename)
+    plot_rhi(xsapr, 'test_rhi0.png', 'ZT', 0,
              rges=[-32, 64], titl="RHI " + filename.split('/')[-1][0:3] +
              "-%(radar_name)sp %(year)04d-%(month)02d-%(day)02d %(hour)02d:%(min)02d:%(sec)02d Azimuth: %(az).2f")
-    py4dd.RSL_free_radar(xsapr)
+    _rsl.RSL_free_radar(xsapr)

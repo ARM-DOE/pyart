@@ -1,8 +1,24 @@
 """
-Sub package graph
+=============================
+Graphing (:mod:`pyart.graph`)
+=============================
+
+.. currentmodule:: pyart.graph
+
+.. autosummary::
+    :toctree: generated/
+
+    RadarDisplay
+    MdvDisplay
+    RslDisplay
+    NetcdfDisplay
+
+
 """
 
-__all__ = ['plot_mdv', 'plot_sur']
+__all__ = ['RadarDisplay', 'MdvDisplay', 'RslDisplay', 'NetcdfDisplay']
 
-import plot_mdv
-import plot_sur
+from radar_display import RadarDisplay
+from plot_mdv import MdvDisplay
+from plot_rsl import RslDisplay
+from plot_netcdf import NetcdfDisplay

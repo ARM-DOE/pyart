@@ -1,5 +1,37 @@
 """
-Utilities for saving mapped and radar co-ordinate radar data
+pyart.io.nc_utils
+=================
+
+Utilities for saving mapped and radar co-ordinate radar data.
+
+.. autosummary::
+    :toctree: generated/
+
+    is_moment
+    is_radar
+    fix_variables
+    fix_variables_csapr
+    cf_radial_coords
+    trans_dict_as_ncattr
+    write_radar
+    write_radar4
+    append_global_metatdata_csapr
+    append_global_metatdata_xsapr
+    append_coords
+    fix_time
+    dt_to_dict
+    dms_to_d
+    corner_to_point
+    ax_radius
+    rsl_to_arm_netcdf
+    mdv_to_arm_netcdf
+    save_netcdf_cube
+    noncf_append_global_metatdata
+    copy_meta
+    copy_axis
+    save_pyGrid
+    save_mdv_ncf
+
 """
 
 import sys
@@ -9,6 +41,8 @@ import datetime as dt
 
 import netCDF4
 import numpy as np
+
+from common import COMMON2STANDARD
 
 
 def is_moment(varname, moment_fixes):
@@ -82,27 +116,10 @@ def fix_variables(cgfile):
                         moment_fixes[variable_name][attr])
 
 
-def csapr_standard_names():
-    prop_names = {
-        'DBZ_F': 'reflectivity_horizontal',
-        'VEL_F': 'mean_doppler_velocity',
-        'WIDTH_F': 'doppler_spectral_width',
-        'ZDR_F': 'diff_reflectivity',
-        'RHOHV_F': 'copol_coeff',
-        'NCP_F': 'norm_coherent_power',
-        'KDP_F': 'diff_phase',
-        'PHIDP_F': 'dp_phase_shift',
-        'VEL_COR': 'corrected_mean_doppler_velocity',
-        'PHIDP_UNF': 'unfolded_dp_phase_shift',
-        'KDP_SOB': 'recalculated_diff_phase',
-        'DBZ_AC': 'attenuation_corrected_reflectivity_horizontal'}
-    return prop_names
-
-
 def fix_variables_csapr(cgfile):
     debug = True
     print "go"
-    csapr_names = csapr_standard_names()
+    csapr_names = COMMON2STANDARD
     moment_fixes = {
         'DBZ_F': {
             'units': 'dBZ',
@@ -768,7 +785,7 @@ def rsl_to_arm_netcdf(rslobj, ofilename, **kwargs):
     # dms_to_d((rslobj.contents.h.lond, rslobj.contents.h.lonm,
     #           rslobj.contents.h.lons))]
     #write variables
-    csapr_names = csapr_standard_names()
+    csapr_names = COMMON2STANDARD
     available_pars = list(set(csapr_names.keys()) & set(rslobj.grids.keys()))
     vvars = [ofile.createVariable(csapr_names[par], np.float,
              ('time', 'nz', 'ny', 'nx'), fill_value=-9999) for par in
@@ -864,7 +881,7 @@ def mdv_to_arm_netcdf(mdvobj, ofilename, **kwargs):
     append_coords(ofile, xar, yar, zar, mdvobj.grid_origin)
 
     #write variables
-    csapr_names = csapr_standard_names()
+    csapr_names = COMMON2STANDARD
     available_pars = list(set(csapr_names.keys()) & set(mdvobj.grids.keys()))
     vvars = [ofile.createVariable(csapr_names[par], np.float,
              ('time', 'nz', 'ny', 'nx'), fill_value=-9999) for par in
@@ -905,7 +922,7 @@ def save_netcdf_cube(grids, output_file, myfile, xr, yr, zr, origin, **kwargs):
     ofile.createDimension('y', ny)
     ofile.createDimension('z', nz)
     ofile.createDimension('time', 1)
-    csapr_names = csapr_standard_names()
+    csapr_names = COMMON2STANDARD
     available_pars = list(set(csapr_names.keys()) & set(grids.keys()))
     print available_pars
     vvars = [ofile.createVariable(csapr_names[par], np.float,
@@ -1034,8 +1051,8 @@ def save_pyGrid(ncfobj, pygrid, **kwargs):
         except ValueError:
             print(mkey, " not existing")
 
-    dims_lookup = {'time':'time', 'x_disp': 'nx', 'y_disp': 'ny', 'z_disp': 'nz',
-                   'time_end': 'time', 'time_start': 'time',
+    dims_lookup = {'time': 'time', 'x_disp': 'nx', 'y_disp': 'ny',
+                   'z_disp': 'nz', 'time_end': 'time', 'time_start': 'time',
                    'lat': 'time', 'lon': 'time', 'alt': 'time'}
     avars = [ncfobj.createVariable(key, np.float, (dims_lookup[key], ))
              for key in akeys]
@@ -1076,15 +1093,14 @@ def save_pyGrid(ncfobj, pygrid, **kwargs):
         vvars[i][0, :, :, :] = pygrid.fields[
             pygrid.fields.keys()[i]]['data'][:, :, :]
 
-    
     for i in range(len(akeys)):
-         if 'shape' in dir(pygrid.axes[akeys[i]]['data']):
-             avars[i][:] = pygrid.axes[akeys[i]]['data']
-             print akeys[i], "is array"
-         else:
-             avars[i][:] = np.array([pygrid.axes[akeys[i]]['data']])
-             print np.array([pygrid.axes[akeys[i]]['data']])
-             print akeys[i], "is not array"
+        if 'shape' in dir(pygrid.axes[akeys[i]]['data']):
+            avars[i][:] = pygrid.axes[akeys[i]]['data']
+            print akeys[i], "is array"
+        else:
+            avars[i][:] = np.array([pygrid.axes[akeys[i]]['data']])
+            print np.array([pygrid.axes[akeys[i]]['data']])
+            print akeys[i], "is not array"
 
 
 def save_mdv_ncf(myfile, output_file, parms, **kwargs):
@@ -1110,7 +1126,7 @@ def save_mdv_ncf(myfile, output_file, parms, **kwargs):
     copy_axis(myfile, ofile)
     if debug:
         print "Creating variables"
-    csapr_names = csapr_standard_names()
+    csapr_names = COMMON2STANDARD
     available_pars = list(set(csapr_names.keys()) & set(parms))
     vvars = [ofile.createVariable(csapr_names[par], np.float,
              ('time', 'nsweeps', 'nrays', 'ngates'), fill_value=-999) for

@@ -1,9 +1,18 @@
 """
-Calculating attenuation from polarimetric radars.
+pyart.correct.attenuation
+=========================
+
+Attenuation correction from polarimetric radars.
 
 Code adapted from XXX by Scott Giangrande et al
 
 Adapted by Scott Collis and Scott Giangrande, refactored by Jonathan Helmus.
+
+.. autosummary::
+    :toctree: generated/
+
+    calculate_attenuation
+
 
 """
 import copy

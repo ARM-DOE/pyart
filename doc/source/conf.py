@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Py-ART documentation configuration file
 
-import sys, os
+import sys, os, re
 
 # Check Sphinx version
 import sphinx
@@ -38,11 +38,18 @@ copyright = u'2013, Py-ART developers'
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
 # built documents.
-#
-# The short X.Y version.
-version = 'v0.1_internal_use_only'
+
+import pyart
+# The short X.Y version (including the .devXXXX suffix if present)
+version = re.sub(r'^(\d+\.\d+)\.\d+(.*)', r'\1\2', pyart.__version__)
+if 'dev' in version:
+    # retain the .dev suffix, but clean it up
+    version = re.sub(r'(\.dev\d*).*?$', r'\1', version)
+else:
+    # strip all other suffixes
+    version = re.sub(r'^(\d+\.\d+).*?$', r'\1', version)
 # The full version, including alpha/beta/rc tags.
-release = 'v0.1_internal_use_only'
+release = pyart.__version__
 
 # There are two options for replacing |today|: either, you set today to some
 # non-false value, then it is used:
@@ -55,7 +62,7 @@ today_fmt = '%B %d, %Y'
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
-exclude_patterns = []
+exclude_patterns = ['_templates/*']
 
 # If true, '()' will be appended to :func: etc. cross-reference text.
 add_function_parentheses = False
@@ -192,7 +199,8 @@ numpydoc_show_class_members = True
 
 if sphinx.__version__ >= "0.7":
     import glob
-    autosummary_generate = glob.glob("*.rst")
+    #autosummary_generate = glob.glob("*.rst")
+    autosummary_generate = True
 
 #----------------------------------------------------------------------------
 # Source code links

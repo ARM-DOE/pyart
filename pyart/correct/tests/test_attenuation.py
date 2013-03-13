@@ -25,8 +25,7 @@ def test_attenuation_correction_rsl():
     """ Test calculate_attenuation on data read using RSL """
 
     # read in the data
-    radarobj = pyart.io.py4dd.RSL_anyformat_to_radar(RSLNAME)
-    radar = pyart.io.radar.Radar(radarobj)
+    radar = pyart.io.read_rsl(RSLNAME)
 
     # add the fields created by phase_proc
     reproc_phase = np.load(PHASENAME)

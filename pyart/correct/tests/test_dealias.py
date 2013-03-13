@@ -46,8 +46,7 @@ def test_dealias_rsl():
     """ Dealias data from a RSL object """
 
     # read in the data
-    radarobj = pyart.io.py4dd.RSL_anyformat_to_radar(RSLNAME)
-    radar = pyart.io.radar.Radar(radarobj)
+    radar = pyart.io.read_rsl(RSLNAME)
 
     # find and extract sonde data
     target = netCDF4.num2date(radar.time['data'][0], radar.time['units'])
@@ -68,8 +67,7 @@ def test_dealias_ncf():
     """ Dealias data from a NetCDF file """
 
     # read in the data
-    ncf = netCDF4.Dataset(NCFNAME)
-    radar = pyart.io.radar.Radar(ncf)
+    radar = pyart.io.read_netcdf(NCFNAME)
 
     # find and extract the sonde data
     target = netCDF4.num2date(radar.time['data'][0], radar.time['units'])
@@ -90,8 +88,8 @@ def test_dealias_compare_rsl():
     """ Compare dealiasing with and without a rsl_radar """
 
     # read in the data
-    radarobj = pyart.io.py4dd.RSL_anyformat_to_radar(RSLNAME)
-    radar = pyart.io.radar.Radar(radarobj)
+    radarobj = pyart.io._rsl.RSL_anyformat_to_radar(RSLNAME)
+    radar = pyart.io.read_rsl(RSLNAME)
 
     # find and extract the sonde data
     target = netCDF4.num2date(radar.time['data'][0], radar.time['units'])

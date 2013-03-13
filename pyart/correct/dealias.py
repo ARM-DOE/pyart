@@ -1,20 +1,30 @@
 """
+pyart.correct.dealias
+=====================
+
 Front end to the University of Washington 4DD code for Doppler dealiasing.
+
+.. autosummary::
+    :toctree: generated/
+
+    dealias_fourdd
+    find_time_in_interp_sonde
+
+
 """
 
 import numpy as np
 
-# XXX fix these up when io is reorganized
-from pyart.io import radar as rsl
-from pyart.io import py4dd, rsl_utils
-
+from ..io import rsl, fourdd, rsl_utils
+from ..io.common import get_metadata
 from ..util import datetime_utils
 
 
-def dealias(radar, sounding_heights, sounding_wind_speeds,
-            sounding_wind_direction, datetime_sounding, rsl_radar=None,
-            prep=1, filt=1, rsl_badval=131072, fill_value=-9999.0,
-            refl='reflectivity_horizontal', vel='mean_doppler_velocity'):
+def dealias_fourdd(radar, sounding_heights, sounding_wind_speeds,
+                   sounding_wind_direction, datetime_sounding, rsl_radar=None,
+                   prep=1, filt=1, rsl_badval=131072, fill_value=-9999.0,
+                   refl='reflectivity_horizontal',
+                   vel='mean_doppler_velocity'):
     """
     Dealias the Doppler velocities field using the University of Washington
     4DD algorithm utilizing information from sounding data.
@@ -78,7 +88,7 @@ def dealias(radar, sounding_heights, sounding_wind_speeds,
 
     # perform dealiasing
     juldate = int(datetime_sounding.strftime('%y%j%H%M'))   # YYDDDHHMM
-    new_volume, _ = py4dd.dealias_radar_array(
+    new_volume, _ = fourdd.dealias_radar_array(
         rsl_radar, juldate, sounding_heights, sounding_wind_speeds,
         sounding_wind_direction, None, prep=prep, filt=filt)
 
@@ -93,7 +103,7 @@ def dealias(radar, sounding_heights, sounding_wind_speeds,
 
     # build the field dictionary
     dealiased_fielddict = {'data': dealiased_data}
-    meta = radar.get_mdv_meta(rsl_radar, 'VEL_COR')
+    meta = get_metadata('VEL_COR')
     dealiased_fielddict.update(meta)
     return dealiased_fielddict
 
