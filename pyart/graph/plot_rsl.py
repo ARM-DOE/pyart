@@ -15,10 +15,9 @@ Routines for plotting radar data from files readable by RSL.
 
 import numpy as np
 
-import pyart.io._rsl as _rsl
 from .common import radar_coords_to_cart, dms_to_d
 
-from ..io import rsl
+from ..io import rsl, _rsl
 from .radar_display import RadarDisplay
 
 
@@ -79,160 +78,6 @@ class RslDisplay(RadarDisplay):
 
     # public methods which are overridden.
 
-    def plot_ppi(self, field, tilt, mask_tuple=None, vmin=None, vmax=None,
-                 cmap='jet', title=None, title_flag=True,
-                 axislabels=(None, None), axislabels_flag=True,
-                 colorbar_flag=True, colorbar_label=None, ax=None, fig=None):
-        """
-        Plot a PPI.
-
-        Parameters
-        ----------
-        field : str
-            Field to plot.
-        tilt : int,
-            Tilt number to plot.
-
-        Other Parameters
-        ----------------
-        mask_tuple : (str, float)
-            Tuple containing the field name and value below which to mask
-            field prior to plotting, for example to mask all data where
-            NCP < 0.5 set mask_tuple to ['NCP', 0.5]. None performs no masking.
-        vmin : float
-            Luminance minimum value, None for default value.
-        vmax : float
-            Luminance maximum value, None for default value.
-        cmap : str
-            Matplotlib colormap name.
-        title : str
-            Title to label plot with, None to use default title generated from
-            the field and tilt parameters. Parameter is ignored if title_flag
-            is False.
-        title_flag : bool
-            True to add a title to the plot, False does not add a title.
-        axislabels : (str, str)
-            2-tuple of x-axis, y-axis labels.  None for either label will use
-            the default axis label.  Parameter is ignored if axislabels_flag is
-            False.
-        axislabel_flag : bool
-            True to add label the axes, False does not label the axes.
-        colorbar_flag : bool
-            True to add a colorbar with label to the axis.  False leaves off
-            the colorbar.
-        colorbar_label : str
-            Colorbar label, None will use a default label generated from the
-            field information.
-        ax : Axis
-            Axis to plot on. None will use the current axis.
-        fig : Figure
-            Figure to add the colorbar to. None will use the current figure.
-
-        """
-        # parse parameters
-        ax, fig = self._parse_ax_fig(ax, fig)
-        vmin, vmax = self._parse_vmin_vmax(field, vmin, vmax)
-
-        # get data for the plot
-        data = self._get_data(field, tilt, mask_tuple)
-        x, y = self._get_x_y(field, tilt)   # added field
-
-        # plot the data
-        data = np.ma.masked_outside(data, vmin, vmax)   # added masking
-        pm = ax.pcolormesh(x, y, data, vmin=vmin, vmax=vmax, cmap=cmap)
-
-        if title_flag:
-            self._set_title(field, tilt, title, ax)
-
-        if axislabels_flag:
-            self._label_axes_ppi(axislabels, ax)
-
-        # add plot and field to lists
-        self.plots.append(pm)
-        self.plot_vars.append(field)
-
-        if colorbar_flag:
-            self.plot_colorbar(mappable=pm, label=colorbar_label,
-                               field=field, fig=fig)
-
-    # added masking for data outside vmin, vmax
-    def plot_rhi(self, field, tilt, mask_tuple=None, vmin=None, vmax=None,
-                 cmap='jet', title=None, title_flag=True,
-                 axislabels=(None, None), axislabels_flag=True,
-                 colorbar_flag=True, colorbar_label= None, ax=None, fig=None):
-        """
-        Plot a RHI.
-
-        Parameters
-        ----------
-        field : str
-            Field to plot.
-        tilt : int,
-            Tilt number to plot.
-
-        Other Parameters
-        ----------------
-        mask_tuple : (str, float)
-            2-Tuple containing the field name and value below which to mask
-            field prior to plotting, for example to mask all data where
-            NCP < 0.5 set mask to ['NCP', 0.5]. None performs no masking.
-        vmin : float
-            Luminance minimum value, None for default value.
-        vmax : float
-            Luminance maximum value, None for default value.
-        cmap : str
-            Matplotlib colormap name.
-        title : str
-            Title to label plot with, None to use default title generated from
-            the field and tilt parameters. Parameter is ignored if title_flag
-            is False.
-        title_flag : bool
-            True to add a title to the plot, False does not add a title.
-        axislabels : (str, str)
-            2-tuple of x-axis, y-axis labels.  None for either label will use
-            the default axis label.  Parameter is ignored if axislabels_flag is
-            False.
-        axislabel_flag : bool
-            True to add label the axes, False does not label the axes.
-        colorbar_flag : bool
-            True to add a colorbar with label to the axis.  False leaves off
-            the colorbar.
-        colorbar_label : str
-            Colorbar label, None will use a default label generated from the
-            field information.
-        ax : Axis
-            Axis to plot on. None will use the current axis.
-        fig : Figure
-            Figure to add the colorbar to. None will use the current figure.
-
-        """
-        # parse parameters
-        ax, fig = self._parse_ax_fig(ax, fig)
-        vmin, vmax = self._parse_vmin_vmax(field, vmin, vmax)
-
-        # get data for the plot
-        data = self._get_data(field, tilt, mask_tuple)
-        x, y, z = self._get_x_y_z(field, tilt)  # added field
-
-        # plot the data
-        R = np.sqrt(x ** 2 + y ** 2) * np.sign(y)   # added masking
-        data = np.ma.masked_outside(data, vmin, vmax)
-        pm = ax.pcolormesh(R, z, data, vmin=vmin, vmax=vmax, cmap=cmap)
-
-        if title_flag:
-            self._set_title(field, tilt, title, ax)
-
-        if axislabels_flag:
-            self._label_axes_rhi(axislabels, ax)
-
-        # add plot and field to lists
-        self.plots.append(pm)
-        self.plot_vars.append(field)
-
-        if colorbar_flag:
-            self.plot_colorbar(mappable=pm, label=colorbar_label,
-                               field=field, fig=fig)
-
     def generate_title(self, field, tilt):
         """
         Generate a title for a plot.
@@ -250,13 +95,14 @@ class RslDisplay(RadarDisplay):
             Plot title.
 
         """
-        radar_name = self.radar_name
         volume_num = _rsl.fieldTypes().list.index(field)
         sweep = self.rslradar.contents.volumes[volume_num].sweeps[tilt]
-        fixed_angle = sweep.rays[0].azimuth
+        fixed_angle = sweep.h.azimuth
+        if fixed_angle == -999.0:   # ppi scan
+            fixed_angle = sweep.h.elev
 
         time_str = self.time_begin.isoformat() + 'Z'
-        l1 = "%s %.1f Deg. %s " % (radar_name, fixed_angle, time_str)
+        l1 = "%s %.1f Deg. %s " % (self.radar_name, fixed_angle, time_str)
         return l1 + '\n' + field
 
     # private methods which are overridden

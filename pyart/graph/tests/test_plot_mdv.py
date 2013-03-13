@@ -8,6 +8,7 @@
 import matplotlib.pyplot as plt
 import pyart
 
+
 def test_plot_mdv_rhi(outfile=None):
     mdvfile = pyart.io.mdv.MdvFile('110041.mdv')
     display = pyart.graph.MdvDisplay(mdvfile)

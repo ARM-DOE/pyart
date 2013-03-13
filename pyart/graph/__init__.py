@@ -10,10 +10,13 @@ Graphing (:mod:`pyart.graph`)
 
     RadarDisplay
     MdvDisplay
+    RslDisplay
+    NetcdfDisplay
+
 
 """
 
-__all__ = ['RadarDisplay']
+__all__ = ['RadarDisplay', 'MdvDisplay', 'RslDisplay', 'NetcdfDisplay']
 
 from radar_display import RadarDisplay
 from plot_mdv import MdvDisplay

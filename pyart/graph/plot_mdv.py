@@ -9,6 +9,7 @@ Routines for plotting radar data from MDV file.
     :template: dev_template.rst
 
     MdvDisplay
+    _get_default_range
 
 """
 
@@ -55,7 +56,7 @@ class MdvDisplay(RadarDisplay):
         lat = mdvfile.radar_info['latitude_deg']
         lon = mdvfile.radar_info['longitude_deg']
         self.loc = [lat, lon]
-        self.origin = 'Radar'
+        self.origin = 'radar'
         self.time_begin = mdvfile.times['time_begin']
         self.radar_name = mdvfile.master_header['data_set_source']
         self.mdvfile = mdvfile
@@ -79,14 +80,13 @@ class MdvDisplay(RadarDisplay):
             Plot title.
 
         """
-        radar_name = self.radar_name
         if self.mdvfile.scan_type == 'rhi':
             fixed_angle = self.mdvfile.az_deg[tilt]
         else:
             fixed_angle = self.mdvfile.el_deg[tilt]
 
         time_str = self.time_begin.isoformat() + 'Z'
-        l1 = "%s %.1f Deg. %s " % (radar_name, fixed_angle, time_str)
+        l1 = "%s %.1f Deg. %s " % (self.radar_name, fixed_angle, time_str)
         field_name = FANCY_NAMES[field]
         return l1 + '\n' + field_name
 
@@ -110,13 +110,13 @@ class MdvDisplay(RadarDisplay):
             data = np.ma.masked_where(mdata < mask_value, data)
         return data
 
-    def _get_x_y(self, tilt):
+    def _get_x_y(self, field, tilt):
         """ Retrieve and return x and y coordinate in km. """
         x = self.mdvfile.carts['x'][tilt] / 1000.0  # x coords in km
         y = self.mdvfile.carts['y'][tilt] / 1000.0  # y coords in km
         return x, y
 
-    def _get_x_y_z(self, tilt):
+    def _get_x_y_z(self, field, tilt):
         """ Retrieve and return x, y, and z coordinate in km. """
         x = self.mdvfile.carts['x'][tilt] / 1000.0  # x coords in km
         y = self.mdvfile.carts['y'][tilt] / 1000.0  # y coords in km

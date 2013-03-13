@@ -9,6 +9,7 @@ import netCDF4
 import matplotlib.pyplot as plt
 import pyart
 
+
 def test_plot_netcdf_rhi(outfile=None):
     rhi_file = 'sgpxsaprrhicmacI5.c0.20110524.015604_NC4.nc'
     dataset = netCDF4.Dataset(rhi_file)

@@ -5,7 +5,7 @@ pyart.graph.plot_netcdf
 Routines for plotting radar data from netCDF files.
 
 .. autosummary::
-    :toctree:: generated/
+    :toctree: generated/
     :template: dev_template.rst
 
     NetcdfDisplay
@@ -82,9 +82,9 @@ class NetcdfDisplay(RadarDisplay):
 
         # origin
         if shift != (0.0, 0.0):
-            self.origin = 'Origin'
+            self.origin = 'origin'
         else:
-            self.origin = 'Radar'
+            self.origin = 'radar'
 
         # x, y, z attributes: cartesian location for a sweep in km.
         rg, azg = np.meshgrid(self.ranges, self.azimuths)

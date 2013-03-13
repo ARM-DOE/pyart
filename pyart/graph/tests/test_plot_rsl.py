@@ -8,6 +8,7 @@
 import matplotlib.pyplot as plt
 import pyart
 
+
 def test_plot_rsl_rhi(outfile=None):
     rslradar = pyart.io._rsl.RSL_anyformat_to_radar('XSW110520113537.RAW7HHL')
     display = pyart.graph.RslDisplay(rslradar)

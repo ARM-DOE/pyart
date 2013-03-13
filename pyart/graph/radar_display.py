@@ -82,9 +82,9 @@ class RadarDisplay:
 
         # origin
         if shift != (0.0, 0.0):
-            self.origin = 'Origin'
+            self.origin = 'origin'
         else:
-            self.origin = 'Radar'
+            self.origin = 'radar'
 
         # x, y, z attributes: cartesian location for a sweep in km.
         rg, azg = np.meshgrid(self.ranges, self.azimuths)
@@ -119,7 +119,7 @@ class RadarDisplay:
     ####################
 
     def plot_ppi(self, field, tilt, mask_tuple=None, vmin=None, vmax=None,
-                 cmap='jet', title=None, title_flag=True,
+                 cmap='jet', mask_outside=True, title=None, title_flag=True,
                  axislabels=(None, None), axislabels_flag=True,
                  colorbar_flag=True, colorbar_label=None, ax=None, fig=None):
         """
@@ -144,6 +144,9 @@ class RadarDisplay:
             Luminance maximum value, None for default value.
         cmap : str
             Matplotlib colormap name.
+        mask_outside : bool
+            True to mask data outside of vmin, vmax.  False performs no
+            masking.
         title : str
             Title to label plot with, None to use default title generated from
             the field and tilt parameters. Parameter is ignored if title_flag
@@ -174,7 +177,11 @@ class RadarDisplay:
 
         # get data for the plot
         data = self._get_data(field, tilt, mask_tuple)
-        x, y = self._get_x_y(tilt)
+        x, y = self._get_x_y(field, tilt)
+
+        # mask the data where outside the limits
+        if mask_outside:
+            data = np.ma.masked_outside(data, vmin, vmax)
 
         # plot the data
         pm = ax.pcolormesh(x, y, data, vmin=vmin, vmax=vmax, cmap=cmap)
@@ -194,7 +201,7 @@ class RadarDisplay:
                                field=field, fig=fig)
 
     def plot_rhi(self, field, tilt, mask_tuple=None, vmin=None, vmax=None,
-                 cmap='jet', title=None, title_flag=True,
+                 cmap='jet', mask_outside=True, title=None, title_flag=True,
                  axislabels=(None, None), axislabels_flag=True,
                  colorbar_flag=True, colorbar_label= None, ax=None, fig=None):
         """
@@ -249,7 +256,11 @@ class RadarDisplay:
 
         # get data for the plot
         data = self._get_data(field, tilt, mask_tuple)
-        x, y, z = self._get_x_y_z(tilt)
+        x, y, z = self._get_x_y_z(field, tilt)
+
+        # mask the data where outside the limits
+        if mask_outside:
+            data = np.ma.masked_outside(data, vmin, vmax)
 
         # plot the data
         R = np.sqrt(x ** 2 + y ** 2) * np.sign(y)
@@ -598,7 +609,7 @@ class RadarDisplay:
     def _get_data(self, field, tilt, mask_tuple):
         """ Retrieve and return data from a plot function. """
         start = self.starts[tilt]
-        end = self.ends[tilt]
+        end = self.ends[tilt] + 1
         data = self.fields[field]['data'][start:end]
 
         if mask_tuple is not None:  # mask data if mask_tuple provided
@@ -607,16 +618,16 @@ class RadarDisplay:
             data = np.ma.masked_where(mdata < mask_value, data)
         return data
 
-    def _get_x_y(self, tilt):
+    def _get_x_y(self, field, tilt):
         """ Retrieve and return x and y coordinate in km. """
         start = self.starts[tilt]
-        end = self.ends[tilt]
+        end = self.ends[tilt] + 1
         return self.x[start:end] / 1000.0, self.y[start:end] / 1000.0
 
-    def _get_x_y_z(self, tilt):
+    def _get_x_y_z(self, field, tilt):
         """ Retrieve and return x, y, and z coordinate in km. """
         start = self.starts[tilt]
-        end = self.ends[tilt]
+        end = self.ends[tilt] + 1
         x = self.x[start:end] / 1000.0
         y = self.y[start:end] / 1000.0
         z = self.z[start:end] / 1000.0
