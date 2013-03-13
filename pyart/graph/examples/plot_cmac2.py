@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-Example script for plotting RHIs from the CMAC VAP.
+Example script for plotting RHIs from the CMAC VAP
 """
 
 import argparse
@@ -22,8 +22,9 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # read the data and create the display object
-    dataset = netCDF4.Dataset(args.filename, 'r')
-    display = pyart.graph.NetcdfDisplay(dataset)
+    radar = pyart.io.read_netcdf(args.filename)
+    radar.metadata['instrument_name'] = 'XSAPR'  # XXX Hack
+    display = pyart.graph.RadarDisplay(radar)
 
     # create the figure
     fig = plt.figure(figsize=[12, 17])
@@ -31,13 +32,13 @@ if __name__ == "__main__":
     xlabel = 'Distance from radar (km)'
     ylabel = 'Height agl (km)'
     colorbar_label = 'Hz. Eq. Refl. Fac. (dBZ)'
-    nplots = len(dataset.variables['sweep_number'])
 
     # plot each RHI
-    for snum in dataset.variables['sweep_number']:
+    for snum in radar.sweep_info['sweep_number']['data']:
 
-        title = 'HSRHI Az=%.3f' % dataset.variables['fixed_angle'][snum]
-        ax = fig.add_subplot(nplots, 1, snum+1)
+        fixed_angle = radar.sweep_info['fixed_angle']['data'][snum]
+        title = 'HSRHI Az=%.3f' % (fixed_angle)
+        ax = fig.add_subplot(radar.nsweeps, 1, snum+1)
         display.plot_rhi('reflectivity_horizontal', snum, vmin=-20, vmax=20,
                          mask_outside=False, title=title,
                          axislabels=(xlabel, ylabel),

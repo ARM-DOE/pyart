@@ -1,0 +1,31 @@
+This directory contains examples which show how the plotting functionality in
+Py-ART can be used to create scripts for generating plots from radar files.
+
+Each script includes two version, the first uses the file type Display object
+to create the plots.  The second, denoted with a `2` at the end of the script
+name uses a RadarDisplay object for creating the plots.
+
+The ``example_`` files are example output from the various scripts.  The data 
+used to create theses examples can be found at XXX.
+
+To create figure which should match the corresponding example_ figure:
+
+./plot_cmac.py sgpxsaprrhicmacI5.c0.20110524.015604_NC4.nc figure_cmac_
+./plot_cmac2.py sgpxsaprrhicmacI5.c0.20110524.015604_NC4.nc figure_cmac2_
+./plot_rhi.py XSW110520113537.RAW7HHL figure_rhi.png
+./plot_rhi2.py XSW110520113537.RAW7HHL figure_rhi2.png
+./plot_multi_rhi.py XSW110520113537.RAW7HHL figure_multi.png
+./plot_multi_rhi.py XSW110520113537.RAW7HHL figure_multi2.png
+./plot_vanilla_ppi.py 110635.mdv figure_vanilla.png
+./plot_vanilla_ppi2.py 110635.mdv figure_vanilla2.png
+
+To remake the example_ files:
+
+./plot_cmac.py sgpxsaprrhicmacI5.c0.20110524.015604_NC4.nc example_cmac_
+./plot_cmac2.py sgpxsaprrhicmacI5.c0.20110524.015604_NC4.nc example_cmac2_
+./plot_rhi.py XSW110520113537.RAW7HHL example_rhi.png
+./plot_rhi2.py XSW110520113537.RAW7HHL example_rhi2.png
+./plot_multi_rhi.py XSW110520113537.RAW7HHL example_multi.png
+./plot_multi_rhi.py XSW110520113537.RAW7HHL example_multi2.png
+./plot_vanilla_ppi.py 110635.mdv example_vanilla.png
+./plot_vanilla_ppi2.py 110635.mdv example_vanilla2.png

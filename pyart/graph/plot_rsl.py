@@ -9,6 +9,10 @@ Routines for plotting radar data from files readable by RSL.
     :template: dev_template.rst
 
     RslDisplay
+
+.. autosummary::
+    :toctree: generated/
+
     _get_sweep_data
 
 """

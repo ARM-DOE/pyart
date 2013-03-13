@@ -9,6 +9,10 @@ Routines for plotting radar data from MDV file.
     :template: dev_template.rst
 
     MdvDisplay
+
+.. autosummary::
+    :toctree: generated/
+
     _get_default_range
 
 """
