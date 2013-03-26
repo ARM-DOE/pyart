@@ -8,21 +8,12 @@ Utilities for saving mapped and radar co-ordinate radar data.
     :toctree: generated/
 
     is_moment
-    is_radar
-    fix_variables
     fix_variables_csapr
-    cf_radial_coords
-    trans_dict_as_ncattr
     append_global_metatdata_csapr
     append_global_metatdata_xsapr
     append_coords
     fix_time
     dt_to_dict
-    dms_to_d
-    corner_to_point
-    ax_radius
-    rsl_to_arm_netcdf
-    mdv_to_arm_netcdf
     save_netcdf_cube
     noncf_append_global_metatdata
     copy_meta
@@ -40,78 +31,12 @@ import datetime as dt
 import netCDF4
 import numpy as np
 
-from common import COMMON2STANDARD
+from common import COMMON2STANDARD, dms_to_d
 
 
 def is_moment(varname, moment_fixes):
     moments = moment_fixes.keys()
     return True in [foo in varname for foo in moments]
-
-
-def is_radar(varname, radar_list):
-    return True in [foo in varname for foo in radar_list]
-
-
-def fix_variables(cgfile):
-    debug = True
-    print "go"
-    moment_fixes = {
-        'DBZ_F': {
-            'units': 'dBZ',
-            'standard_name': 'equivalent_reflectivity_factor',
-            'valid_max': 80.0,
-            'valid_min': -45.0},
-        'VEL_F': {
-            'units': 'm/s',
-            'standard_name': (
-                'radial_velocity_of_scatterers_away_from_instrument'),
-            'valid_max': 45.0,
-            'valid_min': -45.0},
-        'KDP_F': {
-            'units': 'degrees/km',
-            'standard_name': 'specific_differential_phase_hv',
-            'valid_max': 10.0,
-            'valid_min': -10.0},
-        'ZDR_F': {
-            'units': 'dB',
-            'standard_name': 'log_differential_reflectivity_hv',
-            'valid_max': 6.0,
-            'valid_min': -6.0},
-        'RHOHV_F': {
-            'units': 'ratio',
-            'standard_name': 'cross_correlation_ratio_hv',
-            'valid_max': 1.0,
-            'valid_min': 0.0},
-        'NCP_F': {
-            'units': 'ratio',
-            'standard_name': 'signal_quality',
-            'valid_max': 1.0,
-            'valid_min': 0.0},
-        'WIDTH_F': {
-            'units': 'm/s',
-            'standard_name': 'spectrum_width',
-            'valid_max': 45.0,
-            'valid_min': 0.0},
-        'PHIDP_F': {
-            'units': 'degrees',
-            'standard_name': 'differential_phase_hv',
-            'valid_max': 80.0,
-            'valid_min': -45.0},
-        'VEL_COR': {
-            'units': 'm/s',
-            'standard_name': (
-                'radial_velocity_of_scatterers_away_from_instrument'),
-            'valid_max': 45.0,
-            'valid_min': -45.0}
-    }
-    for variable_name in cgfile.variables.keys():
-        if debug:
-            print "doing ", variable_name
-        if is_moment(variable_name, moment_fixes):
-            print "doing ", variable_name
-            for attr in moment_fixes[variable_name].keys():
-                setattr(cgfile.variables[variable_name], attr,
-                        moment_fixes[variable_name][attr])
 
 
 def fix_variables_csapr(cgfile):
@@ -209,52 +134,6 @@ def fix_variables_csapr(cgfile):
                         moment_fixes[variable_name][attr])
 
 
-def cf_radial_coords(ncobj, radarobj):
-    print lats.shape
-    latvar[:] = lats
-    print lons.shape
-    lonvar[:] = lons
-    print xar.shape
-    xvar[:] = xar
-    print yar.shape
-    yvar[:] = yar
-    print levs.shape
-    levvar[:] = levs
-    xvar.axis = "X"
-    xvar.long_name = "x-coordinate in Cartesian system"
-    xvar.standard_name = xvar.long_name
-    xvar.units = "m"
-    yvar.axis = "Y"
-    yvar.long_name = "y-coordinate in Cartesian system"
-    yvar.standard_name = yvar.long_name
-    yvar.units = "m"
-    levvar.long_name = "height"
-    levvar.standard_name = levvar.long_name
-    levvar.units = "meter"
-    lonvar.long_name = "longitude"
-    lonvar.standard_name = lonvar.long_name
-    lonvar.units = "degrees_east"
-    latvar.long_name = "latitude"
-    latvar.standard_name = latvar.long_name
-    latvar.units = "degrees_north"
-    levvar.positive = "up"
-
-
-def trans_dict_as_ncattr(mydict, ncobj, trans):
-    print trans
-    for attr in trans:
-        ncobj.setncattr(attr, mydict[attr])
-
-
-def is_moment(varname, moment_fixes):
-    moments = moment_fixes.keys()
-    return True in [foo in varname for foo in moments]
-
-
-def is_radar(varname, radar_list):
-    return True in [foo in varname for foo in radar_list]
-
-
 def append_global_metatdata_csapr(cgfile):
     cgfile.Conventions = 'CF 1.5'
     cgfile.title = 'Radar moments mapped to a Cartesian grid'
@@ -283,7 +162,6 @@ def append_coords(cgfile, xar, yar, zar, radar_loc):
     Re = 6371.0 * 1000.0
     rad_at_radar = Re * np.sin(np.pi / 2.0 -
                                np.abs(radar_loc[0] * np.pi / 180.0))
-    # ax_radius(float(lat_cpol), units='degrees')
     lons = radar_loc[1] + 360.0 * xar / (rad_at_radar * 2.0 * np.pi)
     lats = radar_loc[0] + 360.0 * yar / (Re * 2.0 * np.pi)
     levs = zar
@@ -341,223 +219,6 @@ def dt_to_dict(dt, **kwargs):
     pref = kwargs.get('pref', '')
     return dict([(pref+key, getattr(dt, key)) for key in
                 ['year', 'month', 'day', 'hour', 'minute', 'second']])
-
-
-def dms_to_d(dms):
-    return dms[0] + (dms[1] + dms[2] / 60.0) / 60.0
-
-
-def corner_to_point(corner, point):
-    Re = 6371.0 * 1000.0
-    Rc = ax_radius(point[0], units='degrees')
-    #print Rc/Re
-    y = ((point[0] - corner[0]) / 360.0) * np.pi * 2.0 * Re
-    x = ((point[1] - corner[1]) / 360.0) * np.pi * 2.0 * Rc
-    return x, y
-
-
-def ax_radius(lat, units='radians'):
-    #Determine the radius of a circle of constant longitude at a certain
-    #Latitude
-    Re = 6371.0 * 1000.0
-    if units == 'degrees':
-        const = np.pi / 180.0
-    else:
-        const = 1.0
-    R = Re * np.sin(np.pi / 2.0 - np.abs(lat * const))
-    return R
-
-
-def rsl_to_arm_netcdf(rslobj, ofilename, **kwargs):
-    """
-    Save an enhanced MDV object (containing gridded data) to a
-    ARM complaint netcdf file
-    DoD Version 0.5
-    """
-    __DoD_version__ = "0.5"
-    debug = kwargs.get('debug', False)
-
-    #Set up some nice formatting tools
-    runtime = dict([(key, getattr(dt.datetime.now(), key)) for key in
-                    ['year', 'month', 'day', 'hour', 'minute', 'second']])
-    runtime.update({'strmon': dt.datetime.now().strftime('%b')})
-    runtime.update({'user': getpass.getuser(),
-                    'machine': socket.gethostname(), 'exec': sys.argv[0]})
-    datastream_format = "%(name)s : %(version)s : %(s_year)04d%(s_month)02d%(s_day)02d.%(s_hour)02d%(s_minute)02d%(s_second)02d-%(e_year)04d%(e_month)02d%(e_day)02d.%(e_hour)02d%(e_minute)02d%(e_second)02d;\n"
-    dd2 = dt_to_dict(netCDF4.num2date(
-        rslobj.sounding_used.variables['time'][:],
-        units=rslobj.sounding_used.variables['time'].units,
-        calendar='gregorian')[0], pref='s_')
-
-    print "eat"
-    dd2.update(dt_to_dict(netCDF4.num2date(
-        rslobj.sounding_used.variables['time'][:],
-        units=rslobj.sounding_used.variables['time'].units,
-        calendar='gregorian')[-1], pref='e_'))
-    dd2.update({'version': rslobj.sounding_used.process_version,
-                'name': rslobj.sounding_used.site_id +
-                rslobj.sounding_used.dod_version.split('-')[0]})
-    ds2 = datastream_format % dd2
-    print "cake"
-    dd1 = dt_to_dict(rslobj.contents.datetime, pref='s_')
-    dd1.update(dt_to_dict(rslobj.contents.datetime, pref='e_'))
-    dd1.update({'version': 'raw_stream',
-                'name': rslobj.filename.split('/')[-1].lower()[0:3] +
-                rslobj.contents.h.radar_name})
-    ds1 = datastream_format % dd1
-    print ds1
-    #open the file, netcdf3 for now
-    print "fopo"
-    if debug:
-        print "opening ", ofilename
-    ofile = netCDF4.Dataset(ofilename, 'w', format='NETCDF3_CLASSIC')
-    # create the dimensions, time must be first and unlimited,
-    # no one letter dimensions
-    nz, ny, nx = rslobj.grids[rslobj.grids.keys()[0]].shape
-    ofile.createDimension('time', None)
-    ofile.createDimension('nz', nz)
-    ofile.createDimension('ny', ny)
-    ofile.createDimension('nx', nx)
-    #create the indexing variables, time must be first,
-    fix_time(ofile, rslobj.contents.datetime)
-    xar = np.linspace(rslobj.grid_coords['xr'][0],
-                      rslobj.grid_coords['xr'][1], nx)
-    yar = np.linspace(rslobj.grid_coords['yr'][0],
-                      rslobj.grid_coords['yr'][1], ny)
-    zar = np.linspace(rslobj.grid_coords['zr'][0],
-                      rslobj.grid_coords['zr'][1], nz)
-    append_coords(ofile, xar, yar, zar, rslobj.origin)
-    #[dms_to_d((rslobj.contents.h.latd, rslobj.contents.h.latm,
-    #           rslobj.contents.h.lats)),
-    # dms_to_d((rslobj.contents.h.lond, rslobj.contents.h.lonm,
-    #           rslobj.contents.h.lons))]
-    #write variables
-    csapr_names = COMMON2STANDARD
-    available_pars = list(set(csapr_names.keys()) & set(rslobj.grids.keys()))
-    vvars = [ofile.createVariable(csapr_names[par], np.float,
-             ('time', 'nz', 'ny', 'nx'), fill_value=-9999) for par in
-             available_pars]
-    fix_variables_csapr(ofile)
-
-    #write global headers, history must be last
-    ofile.process_version = __version__
-    ofile.conventions = "CF 1.5"
-    ofile.command_line = rslobj.command_line
-    ofile.dod_version = __DoD_version__
-    sgp_map = {
-        'NW': 'I6: Deer Creek, Oklahoma',
-        'SW': 'I5: Garber, Oklahoma',
-        'SE': 'I4: Billings, Oklahoma'}
-    if rslobj.filename.split('/')[-1][1:3] in sgp_map.keys():
-        ofile.site_id = sgp_map[rslobj.filename.split('/')[-1][1:3]]
-        ofile.facility_id = 'sgp'
-    else:
-        ofile.site_id = "Alaska, to be fixed"
-        ofile.facility_id = 'nsa'
-    ofile.pyart_procs = rslobj.pyart_procs
-    ofile.input_datastreams_num = "2"
-    ofile.input_datastreams = ds1 + ds2
-    ofile.history = "created by user %(user)s on %(machine)s at %(day)d-%(strmon)s-%(year)d,%(hour)d:%(minute)02d:%(second)02d using %(exec)s" % runtime
-    #write the actual data
-    for i in range(len(available_pars)):
-        print "writing: ", available_pars[i]
-        vvars[i][0, :, :, :] = np.ma.masked_array(
-            rslobj.grids[available_pars[i]],
-            np.isnan(rslobj.grids[available_pars[i]]))
-    #write out and close
-    ofile.close()
-
-
-def mdv_to_arm_netcdf(mdvobj, ofilename, **kwargs):
-    """Save an enhanced MDV object (containing gridded data) to a
-    ARM complaint netcdf file
-    DoD Version 0.5
-    """
-    __DoD_version__ = "0.5"
-    debug = kwargs.get('debug', False)
-
-    #Set up some nice formatting tools
-    runtime = dict([(key, getattr(dt.datetime.now(), key)) for key in
-                   ['year', 'month', 'day', 'hour', 'minute', 'second']])
-    runtime.update({'strmon': dt.datetime.now().strftime('%b')})
-    runtime.update({'user': getpass.getuser(),
-                    'machine': socket.gethostname(), 'exec': sys.argv[0]})
-    datastream_format = "%(name)s : %(version)s : %(s_year)04d%(s_month)02d%(s_day)02d.%(s_hour)02d%(s_minute)02d%(s_second)02d-%(e_year)04d%(e_month)02d%(e_day)02d.%(e_hour)02d%(e_minute)02d%(e_second)02d;\n"
-    dd2 = dt_to_dict(netCDF4.num2date(
-        mdvobj.sounding_used.variables['time'][:],
-        units=mdvobj.sounding_used.variables['time'].units,
-        calendar='gregorian')[0], pref='s_')
-    dd2.update(dt_to_dict(netCDF4.num2date(
-        mdvobj.sounding_used.variables['time'][:],
-        units=mdvobj.sounding_used.variables['time'].units,
-        calendar='gregorian')[-1], pref='e_'))
-    dd2.update({'version': mdvobj.sounding_used.process_version,
-                'name': mdvobj.sounding_used.site_id +
-                mdvobj.sounding_used.dod_version.split('-')[0]})
-    ds2 = datastream_format % dd2
-    dd1 = dt_to_dict(mdvobj.times['time_begin'], pref='s_')
-    dd1.update(dt_to_dict(mdvobj.times['time_end'], pref='e_'))
-    dd1.update({'version': str(mdvobj.master_header['revision_number']),
-                'name': mdvobj.master_header['data_set_source'].split(' ')[1] +
-                mdvobj.master_header['data_set_name']})
-    ds1 = datastream_format % dd1
-    print ds1
-    #open the file, netcdf3 for now
-    if debug:
-        print "opening ", ofilename
-    ofile = netCDF4.Dataset(ofilename, 'w', format='NETCDF3_CLASSIC')
-    # create the dimensions, time must be first and unlimited,
-    # no one letter dimensions
-    nz, ny, nx = mdvobj.grids[mdvobj.grids.keys()[0]].shape
-    ofile.createDimension('time', None)
-    ofile.createDimension('nz', nz)
-    ofile.createDimension('ny', ny)
-    ofile.createDimension('nx', nx)
-
-    #create the indexing variables, time must be first,
-    print "Fixing time"
-    print mdvobj.times['time_begin']
-    fix_time(ofile, mdvobj.times['time_begin'])
-    print "time fixed"
-    xar = np.linspace(mdvobj.grid_coords['xr'][0],
-                      mdvobj.grid_coords['xr'][1], nx)
-    yar = np.linspace(mdvobj.grid_coords['yr'][0],
-                      mdvobj.grid_coords['yr'][1], ny)
-    zar = np.linspace(mdvobj.grid_coords['zr'][0],
-                      mdvobj.grid_coords['zr'][1], nz)
-    append_coords(ofile, xar, yar, zar, mdvobj.grid_origin)
-
-    #write variables
-    csapr_names = COMMON2STANDARD
-    available_pars = list(set(csapr_names.keys()) & set(mdvobj.grids.keys()))
-    vvars = [ofile.createVariable(csapr_names[par], np.float,
-             ('time', 'nz', 'ny', 'nx'), fill_value=-9999) for par in
-             available_pars]
-    fix_variables_csapr(ofile)
-
-    #write global headers, history must be last
-    ofile.process_version = __version__
-    ofile.conventions = "CF 1.5"
-    ofile.command_line = mdvobj.command_line
-    ofile.dod_version = __DoD_version__
-    if mdvobj.master_header['data_set_source'].split(' ')[1].lower() == 'sgp':
-        ofile.site_id = "I7: Nardin, Oklahoma"
-    else:
-        ofile.site_id = "I1: Lombrum, Manus Island"
-    ofile.facility_id = mdvobj.master_header[
-        'data_set_source'].split(' ')[1].lower()
-    ofile.pyart_procs = mdvobj.pyart_procs
-    ofile.input_datastreams_num = "2"
-    ofile.input_datastreams = ds1 + ds2
-    ofile.history = "created by user %(user)s on %(machine)s at %(day)d-%(strmon)s-%(year)d,%(hour)d:%(minute)02d:%(second)02d using %(exec)s" % runtime
-
-    #write the actual data
-    for i in range(len(available_pars)):
-        vvars[i][0, :, :, :] = np.ma.masked_array(
-            mdvobj.grids[available_pars[i]],
-            np.isnan(mdvobj.grids[available_pars[i]]))
-    #write out and close
-    ofile.close()
 
 
 def save_netcdf_cube(grids, output_file, myfile, xr, yr, zr, origin, **kwargs):
