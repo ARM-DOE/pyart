@@ -25,7 +25,6 @@ def test_det_sys_phase():
 
 
 def test_phase_rsl():
-    """ Phase Correct a file read using RSL """
 
     # read in the data
     radar = pyart.io.read_rsl(RSLNAME)
@@ -35,7 +34,7 @@ def test_phase_rsl():
     rge = 10.0 * 1000.0
     ng = rge / gates
 
-    reproc_phase, sob_kdp = phase_proc.phase_proc(
+    reproc_phase, sob_kdp = phase_proc.phase_proc_lp(
         radar, 8.6, sys_phase=332.0, overide_sys_phase=True, debug=True,
         nowrap=ng)
 
@@ -47,20 +46,24 @@ def test_phase_rsl():
 
 
 def test_phase_rsl_fast():
-    """ Phase Correct a file read using RSL """
 
     # read in the data
-    radarobj = pyart.io._rsl.RSL_anyformat_to_radar(RSLNAME)
-    v = radarobj.contents.volumes[0]
-    v.h.nsweeps = 1
+    radar = pyart.io.read_rsl(RSLNAME)
 
-    radar = pyart.io.read_rsl(radarobj)
+    # hack to make the radar object appear to only have a single sweep
+    radar.sweep_info['sweep_start_ray_index']['data'] = np.array([0])
+    radar.nsweeps = 1
+    data = radar.fields['dp_phase_shift']['data']
+    radar.fields['dp_phase_shift']['data'] = data[:360, :]
+    data = radar.fields['copol_coeff']['data']
+    radar.fields['copol_coeff']['data'] = data[:360, :]
+    radarobj = pyart.io._rsl.RSL_anyformat_to_radar(RSLNAME)
 
     # process phase
     gates = radar.range['data'][1] - radar.range['data'][0]
     rge = 10.0 * 1000.0
     ng = rge / gates
-    reproc_phase, sob_kdp = phase_proc.phase_proc(
+    reproc_phase, sob_kdp = phase_proc.phase_proc_lp(
         radar, 8.6, sys_phase=332.0, overide_sys_phase=True, debug=True,
         nowrap=ng)
 

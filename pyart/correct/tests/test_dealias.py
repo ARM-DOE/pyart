@@ -55,8 +55,8 @@ def test_dealias_rsl():
     height, speed, direction = t
 
     # perform dealiasing
-    dealias_data = dealias.dealias(radar, height * 1000.0, speed, direction,
-                                   target)
+    dealias_data = dealias.dealias_fourdd(
+        radar, height * 1000.0, speed, direction, target)
 
     # compare against known good data
     reference_data = np.load(REFNAME)
@@ -76,8 +76,8 @@ def test_dealias_ncf():
     height, speed, direction = t
 
     # perform dealiasing
-    dealias_data = dealias.dealias(radar, height * 1000.0, speed, direction,
-                                   target)
+    dealias_data = dealias.dealias_fourdd(
+        radar, height * 1000.0, speed, direction, target)
 
     # compare against know good data
     reference_data = np.load(REFNAME)
@@ -98,15 +98,15 @@ def test_dealias_compare_rsl():
     height, speed, direction = t
 
     # perform dealiasing, with recreation of a new RSL Radar
-    dealias_data = dealias.dealias(radar, height * 1000.0, speed,
-                                   direction, target)
+    dealias_data = dealias.dealias_fourdd(
+        radar, height * 1000.0, speed, direction, target)
 
     # perform dealiasing, without creating a new RSL Radar
 
     # the original RSL file does not set the altitude correct...
     radarobj.contents.volumes[0].sweeps[0].rays[0].h.alt = 340
     radarobj.contents.volumes[1].sweeps[0].rays[0].h.alt = 340
-    dealias_data2 = dealias.dealias(radar, height * 1000.0, speed,
-                                    direction, target, rsl_radar=radarobj)
+    dealias_data2 = dealias.dealias_fourdd(
+        radar, height * 1000.0, speed, direction, target, rsl_radar=radarobj)
 
     assert_array_equal(dealias_data2['data'].data, dealias_data['data'].data)
