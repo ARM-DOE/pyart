@@ -2,6 +2,8 @@
 import os
 import sys
 
+from numpy import get_include
+
 
 def guess_rsl_path():
     return {'darwin': '/usr/local/trmm',
@@ -41,11 +43,23 @@ def configuration(parent_package='', top_path=None):
     sources = ['src/findRay.c', 'src/firstGuess_noread.c', 'src/firstGuess.c',
                'src/FourDD.c', 'src/prepVolume.c', 'src/unfoldVolume.c',
                'src/window.c']
+
+    # ctypes wrapper around RSL and FourDD
     config.add_extension('_wraplibrsl', sources=sources,
                          library_dirs=[rsl_lib_path],
                          include_dirs=[rsl_include_path],
                          runtime_library_dirs=[rsl_lib_path],
                          extra_link_args=["-lrsl", "-lm"])
+
+    # Cython wrapper around RSL
+    config.add_extension(
+        '_rsl_interface',
+        sources=['_rsl_interface.c'],
+        libraries=['rsl'],
+        library_dirs=[rsl_lib_path],
+        include_dirs=[rsl_include_path] + [get_include()],
+        runtime_library_dirs=[rsl_lib_path])
+
     return config
 
 if __name__ == '__main__':

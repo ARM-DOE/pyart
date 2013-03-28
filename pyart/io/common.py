@@ -71,6 +71,107 @@ def get_metadata(p):
 # dictionary of standard metadata for various parameters
 METADATA = {
     # metadata for radar fields
+    'reflectivity_horizontal': {
+        'units': 'dBZ',
+        'standard_name': 'equivalent_reflectivity_factor',
+        'long_name': 'equivalent_reflectivity_factor',
+        'valid_max': 80.0,
+        'valid_min': -45.0,
+        'least_significant_digit': 2},
+
+    'mean_doppler_velocity': {
+        'units': 'm/s',
+        'standard_name': (
+            'radial_velocity_of_scatterers_away_from_instrument'),
+        'long_name': (
+            'radial_velocity_of_scatterers_away_from_instrument'),
+        'valid_max': 95.0,
+        'valid_min': -95.0,
+        'least_significant_digit': 2},
+
+    'diff_phase': {
+        'units': 'degrees/km',
+        'standard_name': 'specific_differential_phase_hv',
+        'long_name': 'specific_differential_phase_hv',
+        'valid_max': 20.0,
+        'valid_min': -10.0,
+        'least_significant_digit': 2},
+
+    'diff_reflectivity': {
+        'units': 'dB',
+        'standard_name': 'log_differential_reflectivity_hv',
+        'long_name': 'log_differential_reflectivity_hv',
+        'valid_max': 8.0,
+        'valid_min': -6.0,
+        'least_significant_digit': 3},
+
+    'copol_coeff': {
+        'units': 'ratio',
+        'standard_name': 'cross_correlation_ratio_hv',
+        'long_name': 'cross_correlation_ratio_hv',
+        'valid_max': 1.0,
+        'valid_min': 0.0,
+        'least_significant_digit': 5},
+
+    'norm_coherent_power': {
+        'units': 'ratio',
+        'standard_name': 'signal_quality',
+        'long_name': 'signal_quality',
+        'valid_max': 1.0,
+        'valid_min': 0.0,
+        'comment': 'Also know as Normalized Coherent Power',
+        'least_significant_digit': 5},
+
+    'doppler_spectral_width': {
+        'units': 'm/s',
+        'standard_name': 'spectrum_width',
+        'long_name': 'spectrum_width',
+        'valid_max': 45.0,
+        'valid_min': 0.0,
+        'least_significant_digit': 2},
+
+    'dp_phase_shift': {
+        'units': 'degrees',
+        'standard_name': 'differential_phase_hv',
+        'long_name': 'differential_phase_hv',
+        'valid_max': 180.0,
+        'valid_min': -180.0,
+        'least_significant_digit': 2},
+
+    'corrected_mean_doppler_velocity': {
+        'units': 'm/s',
+        'standard_name': (
+            'radial_velocity_of_scatterers_away_from_instrument'),
+        'long_name': (
+            'radial_velocity_of_scatterers_away_from_instrument'),
+        'valid_max': 45.0,
+        'valid_min': -45.0,
+        'least_significant_digit': 2},
+
+    'unfolded_dp_phase_shift': {
+        'units': 'degrees',
+        'standard_name': 'differential_phase_hv',
+        'long_name': 'differential_phase_hv',
+        'valid_max': 480.0,
+        'valid_min': 0.0,
+        'least_significant_digit': 2},
+
+    'attenuation_corrected_reflectivity_horizontal': {
+        'units': 'dBZ',
+        'standard_name': 'equivalent_reflectivity_factor',
+        'long_name': 'equivalent_reflectivity_factor',
+        'valid_max': 80.0,
+        'valid_min': -45.0,
+        'least_significant_digit': 2},
+
+    'recalculated_diff_phase': {
+        'units': 'degrees/km',
+        'standard_name': 'specific_differential_phase_hv',
+        'long_name': 'specific_differential_phase_hv',
+        'valid_max': 20.0,
+        'valid_min': -1.0,
+        'least_significant_digit': 3},
+
     'DBZ_F': {
         'units': 'dBZ',
         'standard_name': 'equivalent_reflectivity_factor',

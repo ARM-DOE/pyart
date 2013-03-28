@@ -8,12 +8,17 @@ Utilities for reading netcdf files.
     :toctree: generated/
 
     read_netcdf
+    write_netcdf
     _ncvar_to_dict
     _stream_ncvar_to_dict
     _stream_to_2d
-
+    _create_ncvar
 
 """
+
+import getpass
+import datetime
+import platform
 
 import numpy as np
 import netCDF4
@@ -165,3 +170,127 @@ def _stream_to_2d(data, sweeps, sweepe, ray_len, maxgates, nrays,
                          ray_len[ss+rn]])
             cp += ray_len[ss:se].sum()
     return time_range
+
+
+def write_netcdf(filename, radar, format='NETCDF4'):
+    """
+    Write a Radar object to a CF/Radial compliant netCDF file.
+
+    Parameters
+    ----------
+    filename : str
+        Filename to create.
+    radar : Radar
+        Radar object.
+    format : str, optional
+        NetCDF format, one of 'NETCDF4', 'NETCDF4_CLASSIC',
+        'NETCDF3_CLASSIC' or 'NETCDF3_64BIT'. See netCDF4 documentation for
+        details.
+
+    """
+    dataset = netCDF4.Dataset(filename, 'w', format=format)
+
+    # create time, range and sweep dimensions
+    dataset.createDimension('time', None)
+    dataset.createDimension('range', radar.ngates)
+    dataset.createDimension('sweep', radar.nsweeps)
+
+    # global attributes
+    dataset.setncatts(radar.metadata)
+    if 'history' not in dataset.ncattrs():
+        user = getpass.getuser()
+        node = platform.node()
+        time_str = datetime.datetime.now().isoformat()
+        t = (user, node, time_str)
+        history_str = 'created by %s on %s at %s using Py-ART' % (t)
+        dataset.setncattr('history',  history_str)
+    if 'Conventions' not in dataset.ncattrs():
+        dataset.setncattr('Conventions', "CF/Radial")
+
+    # standard variables
+    _create_ncvar(radar.time, dataset, 'time', ('time', ))
+    _create_ncvar(radar.range, dataset, 'range', ('range', ))
+    _create_ncvar(radar.azimuth, dataset, 'azimuth', ('time', ))
+    _create_ncvar(radar.elevation, dataset, 'elevation', ('time', ))
+
+    # fields
+    for field, dic in radar.fields.iteritems():
+        _create_ncvar(dic, dataset, field, ('time', 'range'))
+
+    # sweep parameters
+    keys = ['fixed_angle', 'sweep_start_ray_index', 'sweep_end_ray_index',
+            'sweep_number']
+    for key in keys:
+        _create_ncvar(radar.sweep_info[key], dataset, key, ('sweep', ))
+
+    sdim_length = radar.sweep_info['sweep_mode']['data'].shape[1]
+    sdim_string = 'string_length_%d' % (sdim_length)
+    dataset.createDimension(sdim_string, sdim_length)
+    _create_ncvar(radar.sweep_info['sweep_mode'], dataset, 'sweep_mode',
+                  ('sweep', sdim_string))
+
+    # inst_params
+    if 'frequency' in radar.inst_params.keys():
+        size = len(radar.inst_params['frequency']['data'])
+        dataset.createDimension('frequency', size)
+    inst_dims = {
+        'frequency': ('frequency'),
+        'follow_mode': ('sweep', sdim_string),
+        'pulse_width': ('time', ),
+        'prt_mode': ('sweep', sdim_string),
+        'prt': ('time', ),
+        'prt_ratio': ('time', ),
+        'polarization_mode': ('sweep', sdim_string),
+        'nyquist_velocity': ('time', ),
+        'unambiguous_range': ('time', ),
+        'n_samples': ('time', ),
+    }
+    for k in radar.inst_params.keys():
+        _create_ncvar(radar.inst_params[k], dataset, k, inst_dims[k])
+
+    # location parameters
+    # TODO moving platform
+    for k in radar.location.keys():
+        _create_ncvar(radar.location[k], dataset, k, ())
+
+    dataset.close()
+
+
+def _create_ncvar(dic, dataset, name, dimensions):
+    """
+    Create and fill a Variable in a netCDF Dataset object.
+
+    Parameters
+    ----------
+    dic : dict
+        Radar dictionary to containing variable data and meta-data
+    dataset : Dataset
+        NetCDF dataset to create variable in.
+    name : str
+        Name of variable to create.
+    dimension : tuple of str
+        Dimension of variable.
+
+    """
+
+    # create the dataset variable
+    if 'least_significant_digit' in dic:
+        lsd = dic['least_significant_digit']
+    else:
+        lsd = None
+    if "_FillValue" in dic:
+        fill_value = dic['_FillValue']
+    else:
+        fill_value = None
+
+    ncvar = dataset.createVariable(name, dic['data'].dtype, dimensions,
+                                   zlib=True, least_significant_digit=lsd,
+                                   fill_value=fill_value)
+
+    # set all attributes
+    for key, value in dic.iteritems():
+        if key not in ['data', '_FillValue']:
+            ncvar.setncattr(key, value)
+
+    # set the data
+    ncvar[:] = dic['data']
