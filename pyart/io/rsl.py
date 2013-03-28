@@ -8,13 +8,9 @@ Python wrapper around the RSL library.
     :toctree: generated/
 
     read_rsl
-    get_avail_moments
     create_cube_array_lim
-    rsl_extract_inst_param
-    prtmode
-    extract_rsl_pointing
-    rsl_header_to_dict
     ray_header_time_to_datetime
+
 
 """
 
@@ -22,9 +18,9 @@ from datetime import datetime
 
 import numpy as np
 
-import _rsl
-from radar import Radar
-from common import dms_to_d, COMMON2STANDARD, get_metadata, make_tu_str
+import _rsl_interface
+from pyart.io.radar import Radar
+from pyart.io.common import dms_to_d, get_metadata, make_tu_str
 
 
 def read_rsl(filename, add_meta=None):
@@ -34,7 +30,7 @@ def read_rsl(filename, add_meta=None):
     Parameters
     ----------
     filename : str or RSL_radar
-        Name of file whose format is supported by RSL, or a RSL_Radar object.
+        Name of file whose format is supported by RSL.
     add_meta : dict or None
         Dictionary containing additional metadata to add to the created
         Radar object.  This will overwrite metadata extracted from the file.
@@ -46,10 +42,11 @@ def read_rsl(filename, add_meta=None):
         Radar object.
 
     """
-    if type(filename) != str:
-        radarobj = filename
-    else:
-        radarobj = _rsl.RSL_anyformat_to_radar(filename)
+    rslfile = _rsl_interface.RslFile(filename)
+    available_vols = rslfile.available_moments()
+    first_volume = rslfile.get_volume(available_vols[0])
+    first_sweep = first_volume.get_sweep(0)
+    first_ray = first_sweep.get_ray(0)
 
     # TODO
     # An issue that needs to be resolved is that this code likes all
@@ -60,21 +57,13 @@ def read_rsl(filename, add_meta=None):
     # what needs to be done is to make the field['data'] be masked arrays
     # and mask out location where the ray is Null
 
-    # extract a sample volume, sweep and ray
-    available_fields = get_avail_moments(radarobj.contents.volumes)
-    first_field_idx = _rsl.fieldTypes().list.index(available_fields[0])
-    sample_volume = radarobj.contents.volumes[first_field_idx]
-    sample_sweep = sample_volume.sweeps[0]
-    sample_ray = sample_sweep.rays[0]
-
     # determine the shape parameters of the fields
-    nsweeps = sample_volume.h.nsweeps
-    rays = np.array([sample_volume.sweeps[i].h.nrays for i in range(nsweeps)])
-    nrays = rays.min()  # see TODO above
-    ngates = sample_ray.h.nbins
+    nsweeps = first_volume.nsweeps
+    nrays = min(first_volume.get_nray_list())
+    ngates = first_ray.nbins
 
     # scan_type, naz, and nele
-    if sample_sweep.h.azimuth == -999.0:
+    if first_sweep.azimuth == -999.0:
         scan_type = 'ppi'
         naz = nrays
         nele = nsweeps
@@ -85,22 +74,25 @@ def read_rsl(filename, add_meta=None):
 
     # range
     _range = get_metadata('range')
-    _range['data'] = sample_ray.dists
+    range_bin1 = first_ray.range_bin1
+    gate_size = first_ray.gate_size
+    _range['data'] = range_bin1 + gate_size * np.arange(ngates)
     _range['spacing_is_constant'] = 'true'
-    _range['meters_to_center_of_first_gate'] = sample_ray.h.range_bin1
-    _range['meters_between_gates'] = sample_ray.h.gate_size
+    _range['meters_to_center_of_first_gate'] = range_bin1
+    _range['meters_between_gates'] = gate_size
 
     # azimuth and elevation
-    _azimuth, _elevation = extract_rsl_pointing(sample_volume, nsweeps, nrays)
+    _azimuth, _elevation = first_volume.get_azimuth_and_elev_array()
     azimuth = get_metadata('azimuth')
     azimuth['data'] = _azimuth.flatten()
     elevation = get_metadata('elevation')
     elevation['data'] = _elevation.flatten()
 
     # time
-    last_ray = sample_volume.sweeps[-1].rays[-1]
-    t_start = ray_header_time_to_datetime(sample_ray.h)
-    t_end = ray_header_time_to_datetime(last_ray.h)
+    last_sweep = first_volume.get_sweep(nsweeps - 1)
+    last_ray = last_sweep.get_ray(nrays - 1)
+    t_start = first_ray.get_datetime()
+    t_end = last_ray.get_datetime()
     t_span = (t_end - t_start).seconds
     tu = make_tu_str(t_start)
     cal = "gregorian"
@@ -108,43 +100,6 @@ def read_rsl(filename, add_meta=None):
     time['data'] = np.linspace(0, t_span, nrays * nsweeps)
     time['units'] = tu
     time['calendar'] = cal
-
-    # fields
-    fields = {}
-    rsl2common = {'ZT': 'DBZ',
-                  'VR': 'VEL_F',
-                  'DR': 'ZDR',
-                  'KD': 'KDP_F',
-                  'SQ': 'NCP_F',
-                  'PH': 'PHIDP_F',
-                  'VE': 'VEL_COR',
-                  'RH': 'RHOHV_F',
-                  'DZ': 'DBZ_F',
-                  'CZ': 'DBZ',
-                  'SW': 'WIDTH',
-                  'ZD': 'ZDR_F',
-                  'TI': 'VEL'}
-    common2rsl = dict((v, k) for k, v in rsl2common.iteritems())
-
-    available_fields_common = [rsl2common[key] for key in available_fields]
-    # transfer only those which are available and have a standard name
-    for field in set(available_fields_common) & set(COMMON2STANDARD.keys()):
-
-        # extract the field, mask and reshape
-        rsl_field = common2rsl[field]
-        volume = radarobj.contents.volumes[
-            _rsl.fieldTypes().list.index(rsl_field)]
-        data = create_cube_array_lim(volume, nsweeps, nrays)
-        data[np.where(np.isnan(data))] = -9999.0
-        data[np.where(data == 131072)] = -9999.0
-        data = np.ma.masked_equal(data, -9999.0)
-        data.shape = (data.shape[0] * data.shape[1], data.shape[2])
-
-        # create the field dictionary
-        fielddict = get_metadata(field)
-        fielddict['data'] = data
-        fielddict['_FillValue'] = -9999.0
-        fields[COMMON2STANDARD[field]] = fielddict
 
     # sweep parameters
     sweep_number = get_metadata('sweep_number')
@@ -158,8 +113,7 @@ def read_rsl(filename, add_meta=None):
         nsweeps = nele
         sweep_number['data'] = range(nsweeps)
         sweep_mode['data'] = nsweeps * ['azimuth_surveillance    ']
-        fixed_angle['data'] = np.array([sample_volume.sweeps[i].h.elev
-                                        for i in range(nsweeps)])
+        fixed_angle['data'] = first_volume.get_sweep_elevs()
         sweep_start_ray_index['data'] = np.arange(0, len_time, naz)
         sweep_end_ray_index['data'] = np.arange(naz - 1, len_time, naz)
 
@@ -167,8 +121,7 @@ def read_rsl(filename, add_meta=None):
         nsweeps = naz
         sweep_number['data'] = range(nsweeps)
         sweep_mode['data'] = nsweeps * ['rhi                     ']
-        fixed_angle['data'] = np.array([sample_volume.sweeps[i].h.azimuth
-                                        for i in range(nsweeps)])
+        fixed_angle['data'] = first_volume.get_sweep_azimuths()
         sweep_start_ray_index['data'] = np.arange(0, len_time, nele)
         sweep_end_ray_index['data'] = np.arange(nele - 1, len_time, nele)
 
@@ -183,7 +136,7 @@ def read_rsl(filename, add_meta=None):
 
     # metadata
     metadata = {'original_container': 'rsl'}
-    rsl_dict = rsl_header_to_dict(radarobj.contents.h)
+    rsl_dict = rslfile.get_radar_header()
     need_from_rsl_header = {
         'name': 'instrument_name', 'project': 'project', 'state': 'state',
         'country': 'country'}  # rsl_name : radar_metadata_name
@@ -196,23 +149,54 @@ def read_rsl(filename, add_meta=None):
     lat = get_metadata('latitude')
     lon = get_metadata('longitude')
     elv = get_metadata('altitude')
-    latd = radarobj.contents.h.latd
-    latm = radarobj.contents.h.latm
-    lats = radarobj.contents.h.lats
+    latd = rsl_dict['latd']
+    latm = rsl_dict['latm']
+    lats = rsl_dict['lats']
     lat['data'] = dms_to_d((latd, latm, lats))
 
-    lond = radarobj.contents.h.lond
-    lonm = radarobj.contents.h.lonm
-    lons = radarobj.contents.h.lons
+    lond = rsl_dict['lond']
+    lonm = rsl_dict['lonm']
+    lons = rsl_dict['lons']
     lon['data'] = dms_to_d((lond, lonm, lons))
 
-    elv['data'] = radarobj.contents.h.height
+    elv['data'] = rsl_dict['height']
     location = {'latitude': lat, 'longitude': lon, 'altitude': elv}
 
     # set instrument parameters attribute
-    valid_nyq_vel = abs(sample_ray.nyq_vel) > 0.1
-    inst_params = rsl_extract_inst_param(
-        sample_volume, nsweeps, nrays, valid_nyq_vel)
+    inst_params = {}
+    inst_params['prt_mode'] = get_metadata('prt_mode')
+    inst_params['nyquist_velocity'] = get_metadata('nyquist_velocity')
+    inst_params['prt'] = get_metadata('prt')
+    inst_params['unambiguous_range'] = get_metadata('unambiguous_range')
+
+    pm_data, nv_data, pr_data, ur_data = first_volume.get_instr_params()
+    inst_params['prt_mode']['data'] = pm_data
+    inst_params['nyquist_velocity']['data'] = nv_data.flatten()
+    inst_params['prt']['data'] = pr_data.flatten()
+    inst_params['unambiguous_range']['data'] = ur_data.flatten()
+
+    # fields
+    # transfer only those which are available and have a standard name
+    fields = {}
+    available_vols = rslfile.available_moments()
+    good_vols = VOLUMENUM2STANDARDNAME.keys()
+    volumes_to_extract = [i for i in available_vols if i in good_vols]
+
+    for volume_num in volumes_to_extract:
+
+        # extract the field, mask and reshape
+        data = rslfile.get_volume_array(volume_num)
+        data[np.where(np.isnan(data))] = -9999.0
+        data[np.where(data == 131072)] = -9999.0
+        data = np.ma.masked_equal(data, -9999.0)
+        data.shape = (data.shape[0] * data.shape[1], data.shape[2])
+
+        # create the field dictionary
+        standard_field_name = VOLUMENUM2STANDARDNAME[volume_num]
+        fielddict = get_metadata(standard_field_name)
+        fielddict['data'] = data
+        fielddict['_FillValue'] = -9999.0
+        fields[standard_field_name] = fielddict
 
     return Radar(nsweeps, nrays, ngates, scan_type, naz, nele, _range,
                  azimuth, elevation, tu, cal, time, fields, sweep_info,
@@ -223,13 +207,50 @@ def read_rsl(filename, add_meta=None):
 # private functions #
 #####################
 
-def get_avail_moments(volumes):
-    """ Return a list of fields present in a RSL Volumes object """
-    av = []
-    for i in xrange(len(volumes)):
-        if volumes[i] is not None:
-            av.append(_rsl.fieldTypes().list[i])
-    return av
+#   id  abbreviation    common_name     standard_name
+#   0   DZ              DBZ_F           reflectivity_horizontal
+#   1   VR              VEL_F           mean_doppler_velocity
+#   2   SW              WIDTH
+#   3   CZ              DBZ
+#   4   ZT              DBZ
+#   5   DR              ZDR
+#   6   LR
+#   7   ZD              ZDR_F           diff_reflectivity
+#   8   DM
+#   9   RH              RHOHV_F         copol_coeff
+#   10  PH              PHIDP_F         dp_phase_shift
+#   11  XZ
+#   12  CD
+#   13  MZ
+#   14  MD
+#   15  ZE
+#   16  VE              VEL_COR         corrected_mean_doppler_velocity
+#   17  KD              KDP_F           diff_phase
+#   18  TI              VEL
+#   19  DX
+#   20  CH
+#   21  AH
+#   22  CV
+#   23  AV
+#   24  SQ              NCP_F           norm_coherent_power
+
+VOLUMENUM2STANDARDNAME = {
+    0: 'reflectivity_horizontal',
+    1: 'mean_doppler_velocity',
+    7: 'diff_reflectivity',
+    9: 'copol_coeff',
+    10: 'dp_phase_shift',
+    16: 'corrected_mean_doppler_velocity',
+    17: 'diff_phase',
+    24: 'norm_coherent_power'}
+
+
+# XXX these should be removed when the ctypes RSL wrapper is dropped
+
+
+def ray_header_time_to_datetime(h):
+    """ Return a datetime object from a RSL ray header. """
+    return datetime(h.year, h.month, h.day, h.hour, h.minute, int(h.sec))
 
 
 def create_cube_array_lim(volume, nsweeps, nrays):
@@ -258,90 +279,3 @@ def create_cube_array_lim(volume, nsweeps, nrays):
         for raynum in range(nrays):
             ppi[levnum, raynum, 0:len(rays[raynum].data)] = rays[raynum].data
     return ppi
-
-
-def rsl_extract_inst_param(sample_volume, nsweeps, nrays, valid_nyq_vel):
-    """ Return an instrument parameter dictionary from an RSL Volume. """
-    total_rays = nsweeps * nrays
-    pm_data = np.empty(nsweeps, dtype='|S24')
-    nv_data = np.empty(total_rays, dtype='float64')
-    pr_data = np.empty(total_rays, dtype='float64')
-    ur_data = np.empty(total_rays, dtype='float64')
-
-    for i, sweep in enumerate(sample_volume.sweeps):
-        for j, ray in enumerate(sweep.rays):
-            if j == 0:
-                pm_data[i] = prtmode(ray.h)
-            idx = j * nsweeps + i
-
-            if valid_nyq_vel:
-                nv_data[idx] = ray.nyq_vel
-            else:
-                nv_data[idx] = ray.wavelength * ray.prf / 4.0
-            pr_data[idx] = 1. / ray.prf
-            ur_data[idx] = ray.unam_rng * 1000.0
-    inst_param = {}
-    inst_param['prt_mode'] = get_metadata('prt_mode')
-    inst_param['nyquist_velocity'] = get_metadata('nyquist_velocity')
-    inst_param['prt'] = get_metadata('prt')
-    inst_param['unambiguous_range'] = get_metadata('unambiguous_range')
-    inst_param['prt_mode']['data'] = pm_data
-    inst_param['nyquist_velocity']['data'] = nv_data
-    inst_param['prt']['data'] = pr_data
-    inst_param['unambiguous_range']['data'] = ur_data
-    return inst_param
-
-
-def prtmode(h):
-    """ Return the prt mode from a RSL ray header. """
-    # TODO prt mode: Need to fix this.. assumes dual if two prts
-    if h.prf2 != h.prf:
-        mode = 'dual                    '
-    else:
-        mode = 'fixed                   '
-    return mode
-
-
-def extract_rsl_pointing(volume, nsweeps, nrays):
-    """
-    Extract the azimuth and elevation parameters from a RSL Volume.
-
-    Parameters
-    ----------
-    volume : RSL_Volume
-        RSL Volume from which to extract the azimuth and elevation from.
-    nsweeps : int
-        Number of valid (non-null) sweeps in the volume
-    nrays : int
-        Number of valid (non-null rays in each Sweep in the volume.
-
-    Returns
-    -------
-    azimuth : array, (nsweeps, nrays),  dtype=float
-        Array containing azimuth values in degrees.
-    elevation : array, (nsweeps, nrays), dtype=float
-        Array containing elevation values in degrees.
-
-    """
-    azimuth = np.zeros([nsweeps, nrays], dtype=np.float)
-    elevation = np.zeros([nsweeps, nrays], dtype=np.float)
-    for i, sweep in enumerate(volume.sweeps):
-        for j, ray in enumerate(sweep.rays):
-            azimuth[i, j] = ray.h.azimuth
-            elevation[i, j] = ray.h.elev
-    return azimuth, elevation
-
-
-def rsl_header_to_dict(header):
-    """ Return a dictionary containing the attributes in a RSL header. """
-    all_keys = dir(header)
-    d = {}
-    for key in all_keys:
-        if key[0] != '_':
-            d[key] = getattr(header, key)
-    return d
-
-
-def ray_header_time_to_datetime(h):
-    """ Return a datetime object from a RSL ray header. """
-    return datetime(h.year, h.month, h.day, h.hour, h.minute, int(h.sec))

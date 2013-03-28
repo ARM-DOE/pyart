@@ -14,6 +14,7 @@ from and write data to a number of file formats.
     read_rsl
     read_mdv
     read_netcdf
+    write_netcdf
 
     Radar
 
@@ -21,7 +22,7 @@ from and write data to a number of file formats.
 
 from .rsl import read_rsl
 from .mdv import read_mdv
-from .netcdf import read_netcdf
+from .netcdf import read_netcdf, write_netcdf
 from .radar import Radar
 
 __all__ = [s for s in dir() if not s.startswith('_')]
