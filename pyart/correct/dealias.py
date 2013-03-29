@@ -15,13 +15,13 @@ Front end to the University of Washington 4DD code for Doppler dealiasing.
 
 import numpy as np
 
-from ..io import rsl, fourdd, rsl_utils
+from ..io import _rsl_interface
 from ..io.common import get_metadata
 from ..util import datetime_utils
 
 
 def dealias_fourdd(radar, sounding_heights, sounding_wind_speeds,
-                   sounding_wind_direction, datetime_sounding, rsl_radar=None,
+                   sounding_wind_direction, datetime_sounding,
                    prep=1, filt=1, rsl_badval=131072, fill_value=-9999.0,
                    refl='reflectivity_horizontal',
                    vel='mean_doppler_velocity'):
@@ -34,8 +34,7 @@ def dealias_fourdd(radar, sounding_heights, sounding_wind_speeds,
     radar : Radar
         Radar object to use for dealiasing.  Must have a Nyquist defined in the
         inst_params attribute and have a reflectivity_horizontal and
-        mean_doppler_velocity fields.  Data is not extracted from this object
-        for dealiasing if `rsl_radar` is defined.
+        mean_doppler_velocity fields.
     sounding_heights : array
         Sounding heights is meters.
     sounding_wind_speeds : array
@@ -44,8 +43,6 @@ def dealias_fourdd(radar, sounding_heights, sounding_wind_speeds,
         Sounding wind directions in degrees.
     datetime_sounding : datetime
         Datetime representing the mean time of the sounding profile.
-    rsl_radar : RSL Radar, optional
-        RSL Radar to use for dealiasing, None to extract this data from radar.
 
     Other Parameters
     ----------------
@@ -80,29 +77,45 @@ def dealias_fourdd(radar, sounding_heights, sounding_wind_speeds,
     1674.
 
     """
-    # XXX add check for arrays over 900 elements (???)
+    # TODO use radar with recent correct vel instead of sond data
+    # TODO option not to use refl.
+    # TODO test with RHI radar
 
-    # create a RSL Radar if one is not provided
-    if rsl_radar is None:
-        rsl_radar = rsl_utils.radar_to_rsl(radar, {refl: 'DZ', vel: 'VR'})
+    # convert the sounding data to 1D float32 arrays
+    hc = np.ascontiguousarray(sounding_heights, dtype='float32')
+    sc = np.ascontiguousarray(sounding_wind_speeds, dtype='float32')
+    dc = np.ascontiguousarray(sounding_wind_direction, dtype='float32')
+
+    # interger representation of the time
+    vad_time = int(datetime_sounding.strftime('%y%j%H%M'))   # YYDDDHHMM
+
+    # extract the reflectivity and create a RslVolume containing it
+    nshape = (radar.nsweeps, -1, radar.ngates)
+    refl_array = radar.fields[refl]['data'].reshape(nshape).astype('float32')
+    refl_array[np.where(refl_array == fill_value)] = rsl_badval
+    refl_array[np.where(np.isnan(refl_array))] = rsl_badval
+    refl_volume = _rsl_interface.create_volume(refl_array)
+    _rsl_interface._label_volume(refl_volume, radar)
+
+    # extract the doppler velocity and create a RslVolume containing it
+    vel_array = radar.fields[vel]['data'].reshape(nshape).astype('float32')
+    vel_array[np.where(vel_array == fill_value)] = rsl_badval
+    vel_array[np.where(np.isnan(vel_array))] = rsl_badval
+    vel_volume = _rsl_interface.create_volume(vel_array)
+    _rsl_interface._label_volume(vel_volume, radar)
 
     # perform dealiasing
-    juldate = int(datetime_sounding.strftime('%y%j%H%M'))   # YYDDDHHMM
-    new_volume, _ = fourdd.dealias_radar_array(
-        rsl_radar, juldate, sounding_heights, sounding_wind_speeds,
-        sounding_wind_direction, None, prep=prep, filt=filt)
+    flag, data = _rsl_interface.fourdd_dealias(
+        refl_volume, vel_volume, hc, sc, dc, vad_time, prep, filt)
 
-    # extract data, mask and reshape
-    dealiased_data = rsl.create_cube_array_lim(
-        new_volume[0], new_volume.contents.h.nsweeps,
-        new_volume.contents.sweeps[0].h.nrays)
-    dealiased_data[np.where(np.isnan(dealiased_data))] = fill_value
-    dealiased_data[np.where(dealiased_data == rsl_badval)] = fill_value
-    dealiased_data = np.ma.masked_equal(dealiased_data, -9999.0)
-    dealiased_data.shape = (-1, dealiased_data.shape[2])
+    # reshape and mask data
+    data.shape = (-1, radar.ngates)
+    data[np.where(np.isnan(data))] = fill_value
+    data[np.where(data == rsl_badval)] = fill_value
+    data = np.ma.masked_equal(data, fill_value)
 
-    # build the field dictionary
-    dealiased_fielddict = {'data': dealiased_data}
+    # create and return field dictionary containing dealiased data
+    dealiased_fielddict = {'data': data}
     meta = get_metadata('VEL_COR')
     dealiased_fielddict.update(meta)
     return dealiased_fielddict

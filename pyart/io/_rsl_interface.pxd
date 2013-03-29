@@ -2,6 +2,21 @@
 
 # data structures
 
+cdef extern from "FourDD.h":
+    void firstGuess(Volume* soundVolume, float missingVal, 
+                    char* sounding_name, int VAD_time, 
+                    unsigned short* sounding)
+    void firstGuessNoRead(Volume* soundVolume, float missingVal,
+                          float *height_array, float *speed_array,
+                          float *direction_array, int nlevels, int VAD_time,
+                          unsigned short* sounding)
+
+    void unfoldVolume(Volume* rvVolume, Volume* soundVolume, 
+                      Volume* lastVolume, float missingVal, 
+                      unsigned short rm, unsigned short* success)
+
+    void prepVolume(Volume* DBZVolume, Volume* rvVolume, float missingVal)
+
 
 cdef extern from "rsl.h":
     
@@ -110,9 +125,21 @@ cdef extern from "rsl.h":
         Volume **v
     
     # Function definitions
-    #Radar RSL_any_format_to_radar
 
     Radar * RSL_anyformat_to_radar(char *infile)
+    Volume * RSL_new_volume(int max_sweeps)
+    Volume * RSL_copy_volume(Volume *v)
+    
+    Sweep * RSL_new_sweep(int max_rays)
+    
+    Ray *RSL_new_ray(int max_bins)
+    
     void RSL_print_version()
+    
+    # conversion functions
+    float DZ_F(Range x)
+    Range DZ_INVF(float x)
 
-
+    float VR_F(Range x)
+    Range VR_INVF(float x)
+    

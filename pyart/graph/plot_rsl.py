@@ -21,10 +21,11 @@ import numpy as np
 
 from .common import radar_coords_to_cart, dms_to_d
 
-from ..io import rsl, _rsl
+#from ..io import rsl, _rsl
 from .radar_display import RadarDisplay
 
 
+# XXX currenly broken
 class RslDisplay(RadarDisplay):
     """
     A display object for creating plots from data in a RSL Radar objects.

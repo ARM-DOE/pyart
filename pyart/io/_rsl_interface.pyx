@@ -5,7 +5,129 @@ import numpy as np
 cimport numpy as np
 from datetime import datetime
 
-from pyart.io.common import get_metadata
+
+cpdef copy_volume(_RslVolume volume):
+    """ Return a copy of a _RslVolume object. """
+    volume_copy = _rsl_interface.RSL_copy_volume(volume._Volume)
+    rslvolume = _RslVolume()
+    rslvolume.load(volume_copy)
+    return rslvolume
+
+
+cpdef create_volume(np.ndarray[np.float32_t, ndim=3] arr):
+    """
+    Create a _RslVolume object from a 3D float32 array.
+
+    Note that the all headers parameters except nsweeps, nrays and nbins are
+    not set.
+
+    """
+    cdef _rsl_interface.Volume * volume
+    cdef _rsl_interface.Sweep * sweep
+    cdef _rsl_interface.Ray * ray
+
+    nsweeps = arr.shape[0]
+    nrays = arr.shape[1]
+    nbins = arr.shape[2]
+
+    volume = _rsl_interface.RSL_new_volume(nsweeps)
+    volume.h.nsweeps = nsweeps
+
+    for nsweep in range(nsweeps):
+        sweep = _rsl_interface.RSL_new_sweep(nrays)
+        sweep.h.nrays = nrays
+        volume.sweep[nsweep] = sweep
+
+        for nray in range(nrays):
+            ray = _rsl_interface.RSL_new_ray(nbins)
+            sweep.ray[nray] = ray
+            ray.h.nbins = nbins
+            ray.h.f = _rsl_interface.VR_F
+            ray.h.invf = _rsl_interface.VR_INVF
+
+            for nbin in range(nbins):
+                ray.range[nbin] = ray.h.invf(arr[nsweep, nray, nbin])
+
+    rslvolume = _RslVolume()
+    rslvolume.load(volume)
+    return rslvolume
+
+cpdef _label_volume(_RslVolume volume, radar):
+    """ Add labeled to a _RslVolume object from a radar. """
+
+    cdef _rsl_interface.Sweep * sweep
+    cdef _rsl_interface.Ray * ray
+
+    vol = volume._Volume
+    nsweeps = vol.h.nsweeps
+    nrays = vol.sweep[0].h.nrays
+    nbins = vol.sweep[0].ray[0].h.nbins
+
+    gate_size = int(radar.range['meters_between_gates'])
+    range_bin1 = int(radar.range['meters_to_center_of_first_gate'])
+    if 'shape' in dir(radar.location['altitude']):
+        alt = radar.location['altitude']['data'][0]
+    else:
+        alt = radar.location['altitude']['data']
+
+    nyq_vels = radar.inst_params['nyquist_velocity']['data']
+    azimuths = radar.azimuth['data']
+    elevs = radar.elevation['data']
+
+    # label the volume
+    vol.h.nsweeps = nsweeps
+
+    for nsweep in range(nsweeps):
+        sweep = vol.sweep[nsweep]
+        for nray in range(nrays):
+            ray = sweep.ray[nray]
+            ray_index = nsweep * nrays + nray
+            ray.h.azimuth = azimuths[ray_index]
+            ray.h.elev = elevs[ray_index]
+            ray.h.nyq_vel = nyq_vels[ray_index]
+
+            ray.h.range_bin1 = range_bin1
+            ray.h.gate_size = gate_size
+            ray.h.alt = alt
+    return
+
+
+cpdef fourdd_dealias(_RslVolume DZvolume, _RslVolume radialVelVolume,
+                     np.ndarray[np.float32_t, ndim=1] hc,
+                     np.ndarray[np.float32_t, ndim=1] sc,
+                     np.ndarray[np.float32_t, ndim=1] dc,
+                     vad_time, prep, filt):
+    """
+    Dealias using the U. Wash FourDD algorithm.
+    """
+    # TODO version which does not need DZvolume (prep is 0)
+    # TODO version which uses
+    # See FourDD.c for addition details
+
+    cdef _RslVolume unfoldedVolume = copy_volume(radialVelVolume)
+    cdef _RslVolume sondVolume = copy_volume(radialVelVolume)
+
+    cdef float MISSINGVEL = 131072.0
+    cdef unsigned short success = 0
+    cdef unsigned short usuccess = 0
+
+    # MAy not always be needed...
+    _rsl_interface.firstGuessNoRead(
+        sondVolume._Volume, MISSINGVEL, <float *> hc.data, <float *> sc.data,
+        <float *> dc.data, <int> len(hc), vad_time, &success)
+
+    if success != 1:
+        raise ValueError
+
+    # dealias
+    if prep == 1:
+        _rsl_interface.prepVolume(DZvolume._Volume, unfoldedVolume._Volume,
+                                  MISSINGVEL)
+    _rsl_interface.unfoldVolume(
+        unfoldedVolume._Volume, sondVolume._Volume, NULL,
+        MISSINGVEL, filt, &usuccess)
+    data = unfoldedVolume.get_data()
+    return usuccess, data
 
 
 cdef class _RslRay:
@@ -427,6 +549,29 @@ cdef class _RslVolume:
                 ur_data[i, j] = ray.h.unam_rng * 1000.0
 
         return pm_data, nv_data, pr_data, ur_data
+
+    def get_data(self):
+
+        cdef _rsl_interface.Range raw
+        cdef np.ndarray[np.float32_t, ndim = 3] data
+
+        vol = self._Volume
+
+        nsweeps = vol.h.nsweeps
+        nrays = vol.sweep[0].h.nrays
+        nbins = vol.sweep[0].ray[0].h.nbins
+
+        shape = (nsweeps, nrays, nbins)
+        data = np.zeros(shape, dtype='float32') + 1.31072000e+05
+        for nsweep in range(nsweeps):
+            sweep = vol.sweep[nsweep]
+            for nray in range(nrays):
+                ray = sweep.ray[nray]
+                nbins = ray.h.nbins
+                for nbin in range(nbins):
+                    raw = ray.range[nbin]
+                    data[nsweep, nray, nbin] = ray.h.f(raw)
+        return data
 
     cdef _prtmode(self, _rsl_interface.Ray_header h):
         # TODO need to add additional logic here
