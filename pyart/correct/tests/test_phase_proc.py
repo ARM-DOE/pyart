@@ -57,7 +57,6 @@ def test_phase_rsl_fast():
     radar.fields['dp_phase_shift']['data'] = data[:360, :]
     data = radar.fields['copol_coeff']['data']
     radar.fields['copol_coeff']['data'] = data[:360, :]
-    radarobj = pyart.io._rsl.RSL_anyformat_to_radar(RSLNAME)
 
     # process phase
     gates = radar.range['data'][1] - radar.range['data'][0]
