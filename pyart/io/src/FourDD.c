@@ -179,6 +179,6 @@ main(int argc, char** argv)
     RSL_radar_to_uf(radarOut,outputFN);
     printf("freeing memory ... \n");
     RSL_free_radar(radarOut);
-    return;
+    return 0;
 } /* main */
 
