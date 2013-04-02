@@ -178,29 +178,10 @@ class pyGrid:
             self.metadata = {}
             self.axes = {}
         elif 'variables' in dir(args[0]):
-            
-            #netcdf file of grids
-            #lets assume it is nicely formatted
-            
-            netcdfobj=args[0]
-            
-            #grab the variable names
-            
-            all_variables=netcdfobj.variables.keys()
-            fields=[]
-            
-            #anything that has more than 2 axes is a field
-            
-            for var in all_variables:
-                if len(netcdfobj.variables[var].shape) > 1:
-                    fields.append(var)
-            print(fields)
-            self.fields={}
-            
-            for field in fields:
-                self.fields.update({field:ncvar_to_field(netcdfobj.variables[field])})
-                
-            
+            if 'x_disp' in args[0].variables.keys():
+                self.PyGridCF_to_PyGrid(args[0])
+            elif 'TITLE' in dir(args[0]):
+                self.WRFGridCF_to_PyGrid(args[0])
         elif 'count' in dir(args[0]):
 
             # a tuple of radar objects
@@ -322,3 +303,61 @@ class pyGrid:
         else:
             print("foo")
             #TBI from various grid sources, WRF etc..
+    
+    def PyGridCF_to_PyGrid(self, netcdfobj):
+            #netcdf file of grids
+            #lets assume it is nicely formatted
+            
+            #grab the variable names
+            
+            all_variables=netcdfobj.variables.keys()
+            fields=[]
+            
+            #anything that has more than 2 axes is a field
+            
+            for var in all_variables:
+                if len(netcdfobj.variables[var].shape) > 1:
+                    fields.append(var)
+            self.fields={}
+            
+            for field in fields:
+                self.fields.update({field:ncvar_to_field(netcdfobj.variables[field])})
+            
+            #now for axes, anything that is one of shape tuples
+            self.axes={}
+            axes=[]
+            for var in all_variables:
+                if len(netcdfobj.variables[var].shape) == 1:
+                    axes.append(var)
+            for axis in axes:
+                self.axes.update({axis:ncvar_to_field(netcdfobj.variables[axis])})
+
+    def WRFGridCF_to_PyGrid(self, netcdfobj):
+            #netcdf file WRF of grids
+            #lets assume it is nicely formatted
+            
+            #grab the variable names
+            
+            all_variables=netcdfobj.variables.keys()
+            fields=[]
+            
+            #anything that has more than 2 axes is a field
+            
+            for var in all_variables:
+                if len(netcdfobj.variables[var].shape) > 1:
+                    fields.append(var)
+            self.fields={}
+            
+            for field in fields:
+                self.fields.update({field:ncvar_to_field(netcdfobj.variables[field])})
+            
+            #now for axes, anything that is one of shape tuples
+            self.axes={}
+            axes=[]
+            for var in all_variables:
+                if len(netcdfobj.variables[var].shape) == 1:
+                    axes.append(var)
+            for axis in axes:
+                self.axes.update({axis:ncvar_to_field(netcdfobj.variables[axis])})
+           
+           
