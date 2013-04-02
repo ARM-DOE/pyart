@@ -1,15 +1,14 @@
+====================
 Py-ART documentation
 ====================
 
-:Release: |version|
-:Date: |today|
+Welcome this is the documentation for the Python ARM Radar Toolkit (Py-ART).
 
-
-Reference
----------
+Latest Release
+==============
 
 .. toctree::
     :maxdepth: 1
-    
-    io
-    correct
+
+    user_reference/index
+    dev_reference/index

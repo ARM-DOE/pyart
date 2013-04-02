@@ -8,6 +8,7 @@
 *.diff
 *.org
 .project
+.pydevproject
 *.rej
 .settings/
 .*.sw[nop]
@@ -93,14 +94,32 @@ io/src/rsl-*
 # Documentation files #
 #######################
 /doc/build
-/doc/source/generated
+/doc/source/user_reference/generated
+/doc/source/dev_reference/generated
 
 # radar data files #
 ####################
-io/tests/110635.mdv
-io/tests/sample_nc.nc
-io/tests/sample_uf.uf
-correct/tests/sgpinterpolatedsondeC1.c1.20110510.000000.cdf
-correct/tests/sample.nc
-correct/tests/sample.sigmet
-correct/tests/*.npy
+pyart/io/tests/110635.mdv
+pyart/io/tests/sample_nc.nc
+pyart/io/tests/sample_uf.uf
+pyart/io/rsl_wrap/sample_uf.uf
+pyart/io/tests/cfrad.20080604_002217_000_SPOL_v36_SUR_netcdf3.nc
+pyart/io/tests/cfrad.20080604_002217_000_SPOL_v36_SUR_netcdf4.nc
+pyart/correct/tests/sgpinterpolatedsondeC1.c1.20110510.000000.cdf
+pyart/correct/tests/sample.nc
+pyart/correct/tests/sample.sigmet
+pyart/correct/tests/*.npy
+
+pyart/graph/tests/*.RAW**
+pyart/graph/tests/*.cdf
+pyart/graph/tests/*.nc
+pyart/graph/tests/*.mdv
+
+pyart/graph/examples/*.RAW**
+pyart/graph/examples/*.cdf
+pyart/graph/examples/*.nc
+pyart/graph/examples/*.mdv
+
+
+
+pyart/version.py
