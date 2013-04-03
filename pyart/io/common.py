@@ -79,6 +79,14 @@ METADATA = {
         'valid_min': -45.0,
         'least_significant_digit': 2},
 
+    'reflectivity_horizontal_filtered': {
+        'units': 'dBZ',
+        'standard_name': 'equivalent_reflectivity_factor_filtered',
+        'long_name': 'equivalent_reflectivity_factor_filtered',
+        'valid_max': 80.0,
+        'valid_min': -45.0,
+        'least_significant_digit': 2},
+
     'mean_doppler_velocity': {
         'units': 'm/s',
         'standard_name': (
