@@ -212,7 +212,7 @@ def read_rsl(filename, add_meta=None):
 #   1   VR              VEL_F           mean_doppler_velocity
 #   2   SW              WIDTH
 #   3   CZ              DBZ
-#   4   ZT              DBZ
+#   4   ZT              DBZ             reflectivity_horizontal_filtered
 #   5   DR              ZDR
 #   6   LR
 #   7   ZD              ZDR_F           diff_reflectivity
@@ -237,6 +237,7 @@ def read_rsl(filename, add_meta=None):
 VOLUMENUM2STANDARDNAME = {
     0: 'reflectivity_horizontal',
     1: 'mean_doppler_velocity',
+    4: 'reflectivity_horizontal_filtered',
     7: 'diff_reflectivity',
     9: 'copol_coeff',
     10: 'dp_phase_shift',
