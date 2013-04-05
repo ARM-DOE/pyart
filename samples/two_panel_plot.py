@@ -6,8 +6,8 @@ import sys
 
 import pylab as plt
 
-from pyart.graph import radar_display
-from pyart.io import py4dd, py_mdv, radar
+from pyart.graph.radar_display import RadarDisplay 
+from pyart.io import  radar, rsl, mdv
 
 if __name__ == "__main__":
 
@@ -16,13 +16,11 @@ if __name__ == "__main__":
 
     print "plotting ", filename, " to test.png"
     if ".mdv" in filename:
-        my_object = py_mdv.read_mdv(filename, debug=True)
+        my_object = mdv.read_mdv(filename, debug=True)
     else:
-        py4dd.RSL_radar_verbose_on()
-        my_object = py4dd.RSL_anyformat_to_radar(filename)
+        radar_object = rsl.read_rsl(filename)
 
-    radar_object = radar.Radar(my_object)
-    my_display = radar_display.radar_display(radar_object)
+    my_display = RadarDisplay(radar_object)
     fig = plt.figure()
     plt.subplot(1, 2, 1)
     my_display.plot_ppi('reflectivity_horizontal', 1)
