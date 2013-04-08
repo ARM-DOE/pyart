@@ -234,6 +234,38 @@ def read_rsl(filename, add_meta=None):
 #   23  AV
 #   24  SQ              NCP_F           norm_coherent_power
 
+
+VOLUMENUM2RSLNAME = {
+    0: 'DZ',
+    1: 'VR',
+    2: 'SW',
+    3: 'CZ',
+    4: 'ZT',
+    5: 'DR',
+    6: 'LR',
+    7: 'ZD',
+    8: 'DM',
+    9: 'RH',
+    10: 'PH',
+    11: 'XZ',
+    12: 'CD',
+    13: 'MZ',
+    14: 'MD',
+    15: 'ZE',
+    16: 'VE',
+    17: 'KD',
+    18: 'TI',
+    19: 'DX',
+    20: 'CH',
+    21: 'AH',
+    22: 'CV',
+    23: 'AV',
+    24: 'SQ'}
+
+
+RSLNAME2VOLUMENUM = dict([(v, k) for k, v in VOLUMENUM2RSLNAME.iteritems()])
+
+
 VOLUMENUM2STANDARDNAME = {
     0: 'reflectivity_horizontal',
     1: 'mean_doppler_velocity',

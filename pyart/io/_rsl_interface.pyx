@@ -427,6 +427,26 @@ cdef class _RslSweep:
         rslray.load(self._Sweep.ray[ray_number])
         return rslray
 
+    def get_data(self):
+
+        cdef _rsl_interface.Range raw
+        cdef np.ndarray[np.float32_t, ndim = 2] data
+
+        sweep = self._Sweep
+        nrays = sweep.h.nrays
+        nbins = sweep.ray[0].h.nbins
+
+        shape = (nrays, nbins)
+        data = np.zeros(shape, dtype='float32') + 1.31072000e+05
+        for nray in range(nrays):
+            ray = sweep.ray[nray]
+            nbins = ray.h.nbins
+            for nbin in range(nbins):
+                raw = ray.range[nbin]
+                data[nray, nbin] = ray.h.f(raw)
+        return data
+
+
     # header properties
     property sweep_num:
         def __get__(self):
@@ -646,3 +666,141 @@ cdef class RslFile:
                     raw = ray.range[nbin]
                     data[nsweep, nray, nbin] = ray.h.f(raw)
         return data
+
+    # header properties
+    property month:
+        def __get__(self):
+            return self._Radar.h.month
+
+        def __set__(self, int month):
+            self._Radar.h.month = month
+
+    property day:
+        def __get__(self):
+            return self._Radar.h.day
+
+        def __set__(self, int day):
+            self._Radar.h.day = day
+
+    property year:
+        def __get__(self):
+            return self._Radar.h.year
+
+        def __set__(self, int year):
+            self._Radar.h.year = year
+
+    property hour:
+        def __get__(self):
+            return self._Radar.h.hour
+
+        def __set__(self, int hour):
+            self._Radar.h.hour = hour
+
+    property minute:
+        def __get__(self):
+            return self._Radar.h.minute
+
+        def __set__(self, int minute):
+            self._Radar.h.minute = minute
+
+    property sec:
+        def __get__(self):
+            return self._Radar.h.sec
+
+        def __set__(self, float sec):
+            self._Radar.h.sec = sec
+
+    property nvolumes:
+        def __get__(self):
+            return self._Radar.h.nvolumes
+
+        def __set__(self, int nvolumes):
+            self._Radar.h.nvolumes = nvolumes
+
+    property number:
+        def __get__(self):
+            return self._Radar.h.number
+
+        def __set__(self, int number):
+            self._Radar.h.number = number
+
+    property latd:
+        def __get__(self):
+            return self._Radar.h.latd
+
+        def __set__(self, int latd):
+            self._Radar.h.latd = latd
+
+    property latm:
+        def __get__(self):
+            return self._Radar.h.latm
+
+        def __set__(self, int latm):
+            self._Radar.h.latm = latm
+
+    property lats:
+        def __get__(self):
+            return self._Radar.h.lats
+
+        def __set__(self, int lats):
+            self._Radar.h.lats = lats
+
+    property lond:
+        def __get__(self):
+            return self._Radar.h.lond
+
+        def __set__(self, int lond):
+            self._Radar.h.lond = lond
+
+    property lonm:
+        def __get__(self):
+            return self._Radar.h.lonm
+
+        def __set__(self, int lonm):
+            self._Radar.h.lonm = lonm
+
+    property lons:
+        def __get__(self):
+            return self._Radar.h.lons
+
+        def __set__(self, int lons):
+            self._Radar.h.lons = lons
+
+    property height:
+        def __get__(self):
+            return self._Radar.h.height
+
+        def __set__(self, int height):
+            self._Radar.h.height = height
+
+    property spulse:
+        def __get__(self):
+            return self._Radar.h.spulse
+
+        def __set__(self, int spulse):
+            self._Radar.h.spulse = spulse
+
+    property lpulse:
+        def __get__(self):
+            return self._Radar.h.lpulse
+
+        def __set__(self, int lpulse):
+            self._Radar.h.lpulse = lpulse
+
+    property scan_mode:
+        def __get__(self):
+            return self._Radar.h.scan_mode
+
+        def __set__(self, int scan_mode):
+            self._Radar.h.scan_mode = scan_mode
+
+    property vcp:
+        def __get__(self):
+            return self._Radar.h.vcp
+
+        def __set__(self, int vcp):
+            self._Radar.h.vcp = vcp
+
+
+
+

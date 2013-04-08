@@ -10,8 +10,8 @@ import pyart
 
 
 def test_plot_rsl_rhi(outfile=None):
-    rslradar = pyart.io._rsl.RSL_anyformat_to_radar('XSW110520113537.RAW7HHL')
-    display = pyart.graph.RslDisplay(rslradar)
+    rslfile = pyart.io._rsl_interface.RslFile('XSW110520113537.RAW7HHL')
+    display = pyart.graph.RslDisplay(rslfile)
     fig = plt.figure()
     ax = fig.add_subplot(111)
     display.plot_rhi('DZ', 0)
@@ -20,8 +20,8 @@ def test_plot_rsl_rhi(outfile=None):
 
 
 def test_plot_rsl_ppi(outfile=None):
-    rslradar = pyart.io._rsl.RSL_anyformat_to_radar('XSW110520105408.RAW7HHF')
-    display = pyart.graph.RslDisplay(rslradar)
+    rslfile = pyart.io._rsl_interface.RslFile('XSW110520105408.RAW7HHF')
+    display = pyart.graph.RslDisplay(rslfile)
     fig = plt.figure()
     ax = fig.add_subplot(111)
     display.plot_ppi('DZ', 0)
