@@ -8,9 +8,6 @@ Python wrapper around the RSL library.
     :toctree: generated/
 
     read_rsl
-    create_cube_array_lim
-    ray_header_time_to_datetime
-
 
 """
 
@@ -234,49 +231,45 @@ def read_rsl(filename, add_meta=None):
 #   23  AV
 #   24  SQ              NCP_F           norm_coherent_power
 
+
+VOLUMENUM2RSLNAME = {
+    0: 'DZ',
+    1: 'VR',
+    2: 'SW',
+    3: 'CZ',
+    4: 'ZT',
+    5: 'DR',
+    6: 'LR',
+    7: 'ZD',
+    8: 'DM',
+    9: 'RH',
+    10: 'PH',
+    11: 'XZ',
+    12: 'CD',
+    13: 'MZ',
+    14: 'MD',
+    15: 'ZE',
+    16: 'VE',
+    17: 'KD',
+    18: 'TI',
+    19: 'DX',
+    20: 'CH',
+    21: 'AH',
+    22: 'CV',
+    23: 'AV',
+    24: 'SQ'}
+
+
+RSLNAME2VOLUMENUM = dict([(v, k) for k, v in VOLUMENUM2RSLNAME.iteritems()])
+
+
 VOLUMENUM2STANDARDNAME = {
-    0: 'reflectivity_horizontal',
+    0: 'reflectivity_horizontal_filtered',
     1: 'mean_doppler_velocity',
-    4: 'reflectivity_horizontal_filtered',
+    4: 'horizontal_reflectivity',
     7: 'diff_reflectivity',
     9: 'copol_coeff',
     10: 'dp_phase_shift',
     16: 'corrected_mean_doppler_velocity',
     17: 'diff_phase',
     24: 'norm_coherent_power'}
-
-
-# XXX these should be removed when the ctypes RSL wrapper is dropped
-
-
-def ray_header_time_to_datetime(h):
-    """ Return a datetime object from a RSL ray header. """
-    return datetime(h.year, h.month, h.day, h.hour, h.minute, int(h.sec))
-
-
-def create_cube_array_lim(volume, nsweeps, nrays):
-    """
-    Extract a field from an RSL Volume.
-
-    Parameters
-    ----------
-    volume : RSL_Volume
-        RSL Volume from which to extract the field.
-    nsweeps : int
-        Number of valid (non-null) sweeps in the volume.
-    nrays : int
-        Number of valid (non-null rays in each Sweep in the volume.
-
-    Returns
-    -------
-    data : array, (nsweep, nrays, nbins), dtype=float32
-        Three dimensional array holding the extracted field.
-
-    """
-    nbins = volume.sweeps[0].rays[0].h.nbins
-    ppi = np.zeros([nsweeps, nrays, nbins], dtype='float32') + 1.31072000e+05
-    for levnum in xrange(nsweeps):
-        rays = volume.sweeps[levnum].rays
-        for raynum in range(nrays):
-            ppi[levnum, raynum, 0:len(rays[raynum].data)] = rays[raynum].data
-    return ppi

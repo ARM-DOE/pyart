@@ -10,30 +10,25 @@ Routines for plotting radar data from files readable by RSL.
 
     RslDisplay
 
-.. autosummary::
-    :toctree: generated/
-
-    _get_sweep_data
-
 """
 
 import numpy as np
 
 from .common import radar_coords_to_cart, dms_to_d
 
-#from ..io import rsl, _rsl
+from ..io import rsl
 from .radar_display import RadarDisplay
 
 
 # XXX currenly broken
 class RslDisplay(RadarDisplay):
     """
-    A display object for creating plots from data in a RSL Radar objects.
+    A display object for creating plots from data in a RslFile object.
 
     Parameters
     ----------
-    rslradar : RSL Radar
-        RSL Radar object to use for creating plots.
+    rslfile : RslFile
+        RslFile object to use for creating plots.
 
     Attributes
     ----------
@@ -51,35 +46,35 @@ class RslDisplay(RadarDisplay):
         Time of first radar scan.
     radar_name : str
         Radar name.
-    rslradar : RSL radar
+    rslfile : RslFile
         RSL radar object use to create plots.
 
     """
 
-    def __init__(self, rslradar):
+    def __init__(self, rslfile):
         """ Initialize the object. """
         self.plots = []
         self.plot_vars = []
         self.cbs = []
 
-        latd = rslradar.contents.h.latd
-        latm = rslradar.contents.h.latm
-        lats = rslradar.contents.h.lats
+        # radar location in lat, lon
+        latd = rslfile.latd
+        latm = rslfile.latm
+        lats = rslfile.lats
 
-        lond = rslradar.contents.h.lond
-        lonm = rslradar.contents.h.lonm
-        lons = rslradar.contents.h.lons
+        lond = rslfile.lond
+        lonm = rslfile.lonm
+        lons = rslfile.lons
 
         lat = dms_to_d((latd, latm, lats))
         lon = dms_to_d((lond, lonm, lons))
         self.loc = [lat, lon]
         self.origin = 'radar'
+        dt = rslfile.get_volume(0).get_sweep(0).get_ray(0).get_datetime()
+        self.time_begin = dt
 
-        first_ray_header = rslradar.contents.volumes[0].sweeps[0].rays[0].h
-        self.time_begin = rsl.ray_header_time_to_datetime(first_ray_header)
-
-        self.radar_name = rslradar.contents.h.radar_name
-        self.rslradar = rslradar
+        self.radar_name = rslfile.get_radar_header()['radar_name']
+        self.rslfile = rslfile
 
     # public methods which are overridden.
 
@@ -100,11 +95,11 @@ class RslDisplay(RadarDisplay):
             Plot title.
 
         """
-        volume_num = _rsl.fieldTypes().list.index(field)
-        sweep = self.rslradar.contents.volumes[volume_num].sweeps[tilt]
-        fixed_angle = sweep.h.azimuth
+        volume_num = rsl.RSLNAME2VOLUMENUM[field]
+        sweep = self.rslfile.get_volume(volume_num).get_sweep(tilt)
+        fixed_angle = sweep.azimuth
         if fixed_angle == -999.0:   # ppi scan
-            fixed_angle = sweep.h.elev
+            fixed_angle = sweep.elev
 
         time_str = self.time_begin.isoformat() + 'Z'
         l1 = "%s %.1f Deg. %s " % (self.radar_name, fixed_angle, time_str)
@@ -127,11 +122,15 @@ class RslDisplay(RadarDisplay):
 
     def _get_data(self, field, tilt, mask_tuple):
         """ Retrieve and return data from a plot function. """
-        data = _get_sweep_data(self.rslradar, field, tilt)
+        volume_num = rsl.RSLNAME2VOLUMENUM[field]
+        sweep = self.rslfile.get_volume(volume_num).get_sweep(tilt)
+        data = sweep.get_data()
 
         if mask_tuple is not None:
             mask_field, mask_value = mask_tuple
-            mdata = _get_sweep_data(self.rslradar, mask_field, tilt)
+            mask_num = rsl.RSLNAME2VOLUMENUM[mask_field]
+            sweep = self.rslfile.get_volume(mask_num).get_sweep(tilt)
+            mdata = sweep.get_data()
             data = np.ma.masked_where(mdata < mask_value, data)
         return data
 
@@ -142,11 +141,13 @@ class RslDisplay(RadarDisplay):
 
     def _get_x_y_z(self, field, tilt):
         """ Retrieve and return x, y, and z coordinate in km. """
-        volume_num = _rsl.fieldTypes().list.index(field)
-        sweep = self.rslradar.contents.volumes[volume_num].sweeps[tilt]
-        ranges = sweep.rays[0].dists / 1000.0
-        elevs = [sweep.rays[i].h.elev for i in xrange(sweep.h.nrays)]
-        azimuths = [sweep.rays[i].h.azimuth for i in xrange(sweep.h.nrays)]
+        volume_num = rsl.RSLNAME2VOLUMENUM[field]
+        sweep = self.rslfile.get_volume(volume_num).get_sweep(tilt)
+        ray = sweep.get_ray(0)
+        ranges = ray.range_bin1 + ray.gate_size * np.arange(ray.nbins)
+        ranges = ranges / 1000.0
+        elevs = [sweep.get_ray(i).elev for i in xrange(sweep.nrays)]
+        azimuths = [sweep.get_ray(i).azimuth for i in xrange(sweep.nrays)]
         rg, ele = np.meshgrid(ranges, elevs)
         rg, azg = np.meshgrid(ranges, azimuths)
         x, y, z = radar_coords_to_cart(rg, azg, ele)
@@ -159,18 +160,6 @@ class RslDisplay(RadarDisplay):
         else:
             return "Unknown units"
 
-
-def _get_sweep_data(rslradar, field, tilt):
-    """ Extract and return the data for a given field and tilt (sweep). """
-    volume_num = _rsl.fieldTypes().list.index(field)
-    sweep = rslradar.contents.volumes[volume_num].sweeps[tilt]
-    nrays = sweep.h.nrays
-    nbins = sweep.rays[0].h.nbins
-    data = np.zeros([nrays, nbins], 'float32') + 1.31072000e+05
-    for raynum in xrange(nrays):
-        ray_data = sweep.rays[raynum].data
-        data[raynum, 0:len(ray_data)] = ray_data
-    return data
 
 DEFAULT_VMIN_VMAX = {
     'CZ': [-16., 64.],
