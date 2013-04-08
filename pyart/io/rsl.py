@@ -8,9 +8,6 @@ Python wrapper around the RSL library.
     :toctree: generated/
 
     read_rsl
-    create_cube_array_lim
-    ray_header_time_to_datetime
-
 
 """
 
@@ -267,48 +264,12 @@ RSLNAME2VOLUMENUM = dict([(v, k) for k, v in VOLUMENUM2RSLNAME.iteritems()])
 
 
 VOLUMENUM2STANDARDNAME = {
-    0: 'reflectivity_horizontal',
+    0: 'reflectivity_horizontal_filtered',
     1: 'mean_doppler_velocity',
-    4: 'reflectivity_horizontal_filtered',
+    4: 'horizontal_reflectivity',
     7: 'diff_reflectivity',
     9: 'copol_coeff',
     10: 'dp_phase_shift',
     16: 'corrected_mean_doppler_velocity',
     17: 'diff_phase',
     24: 'norm_coherent_power'}
-
-
-# XXX these should be removed when the ctypes RSL wrapper is dropped
-
-
-def ray_header_time_to_datetime(h):
-    """ Return a datetime object from a RSL ray header. """
-    return datetime(h.year, h.month, h.day, h.hour, h.minute, int(h.sec))
-
-
-def create_cube_array_lim(volume, nsweeps, nrays):
-    """
-    Extract a field from an RSL Volume.
-
-    Parameters
-    ----------
-    volume : RSL_Volume
-        RSL Volume from which to extract the field.
-    nsweeps : int
-        Number of valid (non-null) sweeps in the volume.
-    nrays : int
-        Number of valid (non-null rays in each Sweep in the volume.
-
-    Returns
-    -------
-    data : array, (nsweep, nrays, nbins), dtype=float32
-        Three dimensional array holding the extracted field.
-
-    """
-    nbins = volume.sweeps[0].rays[0].h.nbins
-    ppi = np.zeros([nsweeps, nrays, nbins], dtype='float32') + 1.31072000e+05
-    for levnum in xrange(nsweeps):
-        rays = volume.sweeps[levnum].rays
-        for raynum in range(nrays):
-            ppi[levnum, raynum, 0:len(rays[raynum].data)] = rays[raynum].data
-    return ppi
