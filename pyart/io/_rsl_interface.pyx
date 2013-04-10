@@ -1,4 +1,35 @@
-""" Cython wrapper around NASA TRMM RSL Library """
+"""
+pyart.io._rsl_interface
+=======================
+
+Cython wrapper around the NASA TRMM RSL library.
+
+.. autosummary::
+    :toctree: generated/
+
+    copy_volume
+    create_volume
+    _label_volume
+    fourdd_dealias
+
+.. autosummary::
+    :toctree: generated/
+    :template: dev_template.rst
+
+    RslFile
+    _RslVolume
+    _RslSweep
+    _RslRay
+
+
+"""
+
+# TODO
+# NULL checking, dealloc
+# seperate _rsl_interface.pxd into rsh_h and fourdd_h
+# seperate _rsl_interface.pyx into _rsl_interface and _fourdd_interface
+# better FourDD dealias
+# create volume with correct f/invf routines
 
 cimport _rsl_interface
 import numpy as np
@@ -7,7 +38,22 @@ from datetime import datetime
 
 
 cpdef copy_volume(_RslVolume volume):
-    """ Return a copy of a _RslVolume object. """
+    """
+    copy_volume(volume)
+
+    Return a copy of a _RslVolume object.
+
+    Parameters
+    ----------
+    volume : _RslVolume
+        _RslVolume object to create a copy of.
+
+    Returns
+    -------
+    nvolume : _RslVolume
+        Copy of volume.
+
+    """
     volume_copy = _rsl_interface.RSL_copy_volume(volume._Volume)
     rslvolume = _RslVolume()
     rslvolume.load(volume_copy)
@@ -16,10 +62,22 @@ cpdef copy_volume(_RslVolume volume):
 
 cpdef create_volume(np.ndarray[np.float32_t, ndim=3] arr):
     """
+    create_volume(arr)
+
     Create a _RslVolume object from a 3D float32 array.
 
-    Note that the all headers parameters except nsweeps, nrays and nbins are
-    not set.
+    No headers parameters except nsweeps, nrays and nbins are not set in the
+    resulting _RslVolume object.
+
+    Parameters
+    ----------
+    arr : array, 3D, float32
+        Three dimensional float32 array.
+
+    Returns
+    -------
+    volumes : _RslVolume
+        _RslVolume containing array data.
 
     """
     cdef _rsl_interface.Volume * volume
@@ -42,7 +100,7 @@ cpdef create_volume(np.ndarray[np.float32_t, ndim=3] arr):
             ray = _rsl_interface.RSL_new_ray(nbins)
             sweep.ray[nray] = ray
             ray.h.nbins = nbins
-            ray.h.f = _rsl_interface.VR_F
+            ray.h.f = _rsl_interface.VR_F   # XXX this should be selectable
             ray.h.invf = _rsl_interface.VR_INVF
 
             for nbin in range(nbins):
@@ -53,7 +111,24 @@ cpdef create_volume(np.ndarray[np.float32_t, ndim=3] arr):
     return rslvolume
 
 cpdef _label_volume(_RslVolume volume, radar):
-    """ Add labeled to a _RslVolume object from a radar. """
+    """
+    _label_volume(volume, radar)
+
+    Add labels for dealiasing to a _RslVolume object from a radar object.
+
+    This function does not set all parameter in the _RslVolume suitable for
+    writing out the volume, rather it set those parameters which must be set
+    prior to using :py:func:`fourdd_dealias`.
+
+    Parameters
+    ----------
+    volume : _RslVolume
+        Volume object to which parameters will be set as needed prior to
+        dealiasing.  Object is manipulated in-place.
+    radar : Radar
+        Radar object from which parameters are taken.
+
+    """
 
     cdef _rsl_interface.Sweep * sweep
     cdef _rsl_interface.Ray * ray
@@ -98,7 +173,46 @@ cpdef fourdd_dealias(_RslVolume DZvolume, _RslVolume radialVelVolume,
                      np.ndarray[np.float32_t, ndim=1] dc,
                      vad_time, prep, filt):
     """
-    Dealias using the U. Wash FourDD algorithm.
+    fourdd_dealias(DZvolume, radialVelVolume, hc, sc, dc, vad_time, prep,
+                   filt)
+
+    Dealias using the FourDD algorithm.
+
+    Parameters
+    ----------
+    DZvolume : _RslVolume
+        Reflectivity to use when thresholding is selected.
+    radialVelVolume : _RslVolume
+        Radial velocities which will be dealiased.
+    hc : array
+        Sounding heights in meters.  Must be a contiguous one-dimensional
+        float32 array.
+    sc : array
+        Sounding wind speed in m/s.  Must be a contiguous one-dimensional
+        float32 array.
+    dc : array
+        Sounding wind direction in degrees.  Must be a contiguous
+        one-dimensional float32 array.
+    vad_time : int
+        Time of sounding in YYDDDHHMM format.
+    prep : int
+        Flag controlling thresholding of DZvolume, 1 = yes, 0 = no.
+    filt : int
+        Flag controlling Bergen and Albers filter, 1 = yes, 0 = no.
+
+    Returns
+    -------
+    usuccess : int
+        Flag indicating if the unfolding was successful, 1 = yes, 0 = no.
+    data : array
+        Array of unfolded velocities.
+
+    References
+    ----------
+    C. N. James and R. A Houze Jr, A Real-Time Four-Dimensional Doppler
+    Dealising Scheme, Journal of Atmospheric and Oceanic Technology, 2001, 18,
+    1674.
+
     """
     # TODO version which does not need DZvolume (prep is 0)
     # TODO version which uses
@@ -111,7 +225,7 @@ cpdef fourdd_dealias(_RslVolume DZvolume, _RslVolume radialVelVolume,
     cdef unsigned short success = 0
     cdef unsigned short usuccess = 0
 
-    # MAy not always be needed...
+    # May not always be needed...
     _rsl_interface.firstGuessNoRead(
         sondVolume._Volume, MISSINGVEL, <float *> hc.data, <float *> sc.data,
         <float *> dc.data, <int> len(hc), vad_time, &success)
@@ -131,16 +245,131 @@ cpdef fourdd_dealias(_RslVolume DZvolume, _RslVolume radialVelVolume,
 
 
 cdef class _RslRay:
+    """
+    A object for accessing RSL Ray data and header information
+
+    This class should not be initalized from within Python.  _RslRay object are
+    returned from the :py:func:`_RslSweep.get_ray` method.
+
+    Attributes
+    ----------
+    month : int
+        Date for this ray, month (1-12).
+    day : int
+        Date for this ray, day (1-31).
+    year : int
+        Date for this ray, year (eg. 1993).
+    hour : int
+        Time for this ray, hour (0-23).
+    minute : int
+        Time for this ray, minute (0-59).
+    sec : float
+        Time for this ray, second + fractor of second.
+    unam_rng : float
+        Unambiguous range in km.
+    azimuth : float
+        Mean azimuth angle in degrees for the ray, must be positive.
+        0 for north, 90 for east, 270 for west.
+    ray_num : int
+        Ray number within a scan.
+    elev : float
+        Elevation angle in degrees.
+    elev_num : int
+        Elevation number within the volume scan.
+    range_bin1 : int
+        Range to first gate in meters.
+    gate_size : int
+        Gate size in meters.
+    vel_res : float
+        Doppler velocity resolution.
+    sweep_rate : float
+        Sweep rate, full sweeps / minute.
+    prf : int
+        Pulse repetition frequency in Hz.
+    prf2 : int
+        Second pulse repition frequenct for dual PRF data.
+    azim_rate : float
+        Sweep rate in degrees / second.
+    fix_angle : float
+        Elevation angle for the sweep in degrees.
+    pitch : float
+        Pitch angle.
+    roll : float
+        Roll angle.
+    heading : float
+        Heading.
+    pitch_rate : float
+        Pitch rate in angle / sec.
+    roll_rate : float
+        Roll rate in angle / sec.
+    heading_rate : float
+        Heading rate in angle / sec.
+    lat : float
+        Latitude in degrees.
+    lon : float
+        Longitude in degrees.
+    alt : int
+        Altitude in meters.
+    rvs : float
+        Radial velocity correction in meters / second.
+    vel_east : float
+        Platform velocity to the east in meters / second.  Negative values for
+        velocity to the west.
+    vel_north : float
+        Platform velocity to the north in meters / second.  Negative values for
+        velocity to the south.
+    vel_up : float
+        Platform velocity upward in meters / second.  Negative values for
+        velocity downward.
+    pulse_count : int
+        Pulses used in a single dwell time.
+    pulse_width : float
+        Pulse width in microseconds.
+    beam_width : float
+        Beamwidth in degrees.
+    frequency : float
+        Carrier frequency in GHz.
+    wavelength : float
+        Wavelength in meters.
+    nyq_vel : float
+        Nyquist velocity in meters / second.
+    nbins : int
+        Number of array elements in ray data.
+
+    """
+
     cdef _rsl_interface.Ray * _Ray
 
     cdef load(self, _rsl_interface.Ray * Ray):
+        """ Load the _RslRay object, must be called after creation. """
         self._Ray = Ray
 
     def get_datetime(self):
+        """
+        get_datetime()
+
+        Return a datetime describing the date and time of the ray.
+        """
         s = self
         return datetime(s.year, s.month, s.day, s.hour, s.minute, int(s.sec))
 
-    # header properties
+    def get_data(self):
+        """
+        get_data()
+
+        Return the one-dimensional data contained in the ray.
+        """
+        cdef _rsl_interface.Range raw
+        cdef np.ndarray[np.float32_t, ndim = 1] data
+
+        shape = (self._Ray.h.nbins)
+        data = np.zeros(shape, dtype='float32') + 1.31072000e+05
+        for nbin in range(self._Ray.h.nbins):
+            raw = self._Ray.range[nbin]
+            data[nbin] = self._Ray.h.f(raw)
+        return data
+
+    # header properties mapped to class attributes.
     property month:
         def __get__(self):
             return self._Ray.h.month
@@ -416,19 +645,64 @@ cdef class _RslRay:
 
 
 cdef class _RslSweep:
+    """
+    A object for accessing RSL Sweep data and header information.
+
+    This class should not be initalized from within Python.  _RslSweep objects
+    are returned from the :py:func:`_RslVolume.get_sweep` method.
+
+    Attributes
+    ----------
+    sweep_num : int
+        Interger sweep number.
+    elev : float
+        Mean elevation angle for thr sweep.  -999.0 for RHI sweeps.
+    azimuth : float
+        Azumuth for the sweep.  -999.0 for PPI scans.
+    beam_width : float
+        Beam width in degrees.  Can also be found in _RslRay objects.
+    vert_half_bw : float
+        Vertical beam width divided by 2.
+    horz_half_bw : float
+        Horizontal beam width divided by 2.
+    nrays : int
+        Number of rays in the sweep.
+
+    """
 
     cdef _rsl_interface.Sweep * _Sweep
 
     cdef load(self, _rsl_interface.Sweep * Sweep):
+        """ Load the _RslSweep object, must be called after creation. """
         self._Sweep = Sweep
 
     def get_ray(self, int ray_number):
+        """
+        get_ray(ray_number)
+
+        Return a _RslRay for a given ray.
+
+        Parameters
+        ----------
+        ray_number : int
+            Ray number to retrieve
+
+        Returns
+        -------
+        ray : _RslRay
+            _RslRay object containing the requested ray.
+
+        """
         rslray = _RslRay()
         rslray.load(self._Sweep.ray[ray_number])
         return rslray
 
     def get_data(self):
+        """
+        get_data()
 
+        Return the two-dimensional data contained in the sweep.
+        """
         cdef _rsl_interface.Range raw
         cdef np.ndarray[np.float32_t, ndim = 2] data
 
@@ -446,8 +720,7 @@ cdef class _RslSweep:
                 data[nray, nbin] = ray.h.f(raw)
         return data
 
-
-    # header properties
+    # header properties mapped to class attributes.
     property sweep_num:
         def __get__(self):
             return self._Sweep.h.sweep_num
@@ -499,22 +772,63 @@ cdef class _RslSweep:
 
 
 cdef class _RslVolume:
+    """
+    A object for accessing RSL Volume data and header information.
+
+    This class should not be initalized from within Python.  _RslVolume
+    objects are returned from the :py:func:`RslFile.get_volume` and other
+    functions/methods.
+
+    Attributes
+    ----------
+    nsweeps : int
+        Sweep number.
+    calibr_const : float
+        Calibration constant.
+
+    """
 
     cdef _rsl_interface.Volume * _Volume
 
     cdef load(self, _rsl_interface.Volume * Volume):
+        """ Load the _RslVolume object, must be called after creation. """
         self._Volume = Volume
 
     def get_sweep(self, int sweep_number):
+        """
+        get_sweep(sweep_numer)
+
+        Return a _RslSweep for a given sweep number.
+
+        Parameters
+        ----------
+        sweep_number : int
+            Sweep number to retrieve
+
+        Returns
+        -------
+        sweep : _RslSweep
+            _RslSweep object containing the requested sweep.
+
+        """
         rslsweep = _RslSweep()
         rslsweep.load(self._Volume.sweep[sweep_number])
         return rslsweep
 
     def get_nray_list(self):
+        """
+        get_nray_list()
+
+        Return a list of the number of rays for each sweep.
+        """
         return [self._Volume.sweep[i].h.nrays for i in range(self.nsweeps)]
 
     def get_azimuth_and_elev_array(self):
+        """
+        get_azimuth_and_elev_array()
 
+        Return azimuth and elevation array for each sweep and ray.
+        """
         cdef int nrays = self._Volume.sweep[0].h.nrays
         cdef _rsl_interface.Sweep * sweep
         cdef _rsl_interface.Ray * ray
@@ -530,18 +844,45 @@ cdef class _RslVolume:
         return azimuth, elev
 
     def get_sweep_azimuths(self):
+        """
+        get_sweep_azimuths()
+
+        Return azimuth array for each sweep.
+        """
         azimuth = np.empty((self.nsweeps), dtype='float32')
         for i in range(self.nsweeps):
             azimuth[i] = self._Volume.sweep[i].h.azimuth
         return azimuth
 
     def get_sweep_elevs(self):
+        """
+        get_sweep_elevs()
+
+        Return elevation array for each sweep.
+        """
         elev = np.empty((self.nsweeps), dtype='float32')
         for i in range(self.nsweeps):
             elev[i] = self._Volume.sweep[i].h.elev
         return elev
 
     def get_instr_params(self):
+        """
+        get_instr_params()
+
+        Return instrumental parameter for the volume.
+
+        Returns
+        -------
+        pm_data : array, (nsweeps)
+            Array of prt modes.
+        nv_data : array, (nsweeps, nrays)
+            Array of nyquist velocities.
+        pr_data : array, (nsweeps, nrays)
+            Array of pulse repetition frequency in Hz.
+        ur_data : array, (nsweeps, nrays)
+            Array of unambiguous ranges, in km.
+
+        """
         cdef int nrays = self._Volume.sweep[0].h.nrays
         nyq_vel = self._Volume.sweep[0].ray[0].h.nyq_vel
         cdef _rsl_interface.Sweep * sweep
@@ -571,7 +912,11 @@ cdef class _RslVolume:
         return pm_data, nv_data, pr_data, ur_data
 
     def get_data(self):
+        """
+        get_data()
 
+        Return the three-dimensional data contained in the volume.
+        """
         cdef _rsl_interface.Range raw
         cdef np.ndarray[np.float32_t, ndim = 3] data
 
@@ -594,6 +939,7 @@ cdef class _RslVolume:
         return data
 
     cdef _prtmode(self, _rsl_interface.Ray_header h):
+        """ Return the prt mode of a given Ray header. """
         # TODO need to add additional logic here
         if h.prf2 != h.prf:
             mode = 'dual                    '
@@ -601,8 +947,7 @@ cdef class _RslVolume:
             mode = 'fixed                   '
         return mode
 
-    # header attributes
-
+    # header properties mapped to class attributes.
     property nsweeps:
         def __get__(self):
             return self._Volume.h.nsweeps
@@ -619,22 +964,87 @@ cdef class _RslVolume:
 
 
 cdef class RslFile:
+    """
+    RslFile(filename)
 
+    A object for accessing Radar data and parameter using the RSL library.
+
+    Parameters
+    ----------
+    filename : str
+        Radar file to read.
+
+    Attributes
+    ----------
+    month : int
+        Date, month (1-12).
+    day : int
+        Date, day (1-31).
+    year : int
+        Date, year (eg. 1993).
+    hour : int
+        Time, hour (0-23).
+    minute : int
+        Time, minute (0-59).
+    sec : float
+        Time, second + fractions of second.
+    nvolumes : int
+        Number of volume slots in the file.
+    number : int
+        Arbitrary number for this radar site.
+    latd, latm, lats : int
+        Latitude degrees, minutes and seconds for the site.
+    lond, lonm, lons : int
+        Longitude degrees, minutes and seconds for the site.
+    height : int
+        Height of site in meters above sea level.
+    spulse : int
+        Length of short pulse in ns.
+    lpulse : int
+        Length of long pulse in ns.
+    scan_mode : int
+        Scan mode, 0 for PPI, 1 for RHI.
+    vcp : int
+        Volume coverage pattern, WSR-88D only.
+
+    """
     cdef _rsl_interface.Radar * _Radar
     cdef _rsl_interface.Volume * _Volume
     cdef _rsl_interface.Sweep * _Sweep
     cdef _rsl_interface.Ray * _Ray
     cdef readonly int _first_volume_idx
 
-    def __cinit__(self, s):
-        self._Radar = _rsl_interface.RSL_anyformat_to_radar(s)
+    def __cinit__(self, filename):
+        """ Initalize the _RslFile object. """
+        self._Radar = _rsl_interface.RSL_anyformat_to_radar(filename)
 
     def get_volume(self, int volume_number):
+        """
+        get_volume(volume_number)
+
+        Return a _RslVolume for a given volume number.
+
+        Parameters
+        ----------
+        volume_number : int
+            Volume number to retrieve
+
+        Returns
+        -------
+        volume : _RslVolume
+            _RslVolume object containing requested volume.
+
+        """
         rslvolume = _RslVolume()
         rslvolume.load(self._Radar.v[volume_number])
         return rslvolume
 
     def available_moments(self):
+        """
+        available_moments()
+
+        Return a list of available volume moments.
+        """
         av = []
         for i in range(self._Radar.h.nvolumes):
             if self._Radar.v[i] is not NULL:
@@ -642,10 +1052,29 @@ cdef class RslFile:
         return av
 
     def get_radar_header(self):
+        """
+        get_radar_headers()
+
+        Return a dictionary of radar header parameters.
+        """
         return self._Radar.h
 
     def get_volume_array(self, int volume_num):
+        """
+        get_volume_array(volume_number)
 
+        Return the three-dimensional data contained in a given volume.
+
+        Parameters
+        ----------
+        volume_number : int
+
+        Returns
+        -------
+        volume : array (nsweep, nrays, nbins), float32
+            Array containing  data for the given volume.
+
+        """
         cdef _rsl_interface.Range raw
         cdef np.ndarray[np.float32_t, ndim = 3] data
 
@@ -667,7 +1096,7 @@ cdef class RslFile:
                     data[nsweep, nray, nbin] = ray.h.f(raw)
         return data
 
-    # header properties
+    # header properties mapped to class attributes.
     property month:
         def __get__(self):
             return self._Radar.h.month
@@ -800,7 +1229,3 @@ cdef class RslFile:
 
         def __set__(self, int vcp):
             self._Radar.h.vcp = vcp
-
-
-
-
