@@ -266,7 +266,7 @@ RSLNAME2VOLUMENUM = dict([(v, k) for k, v in VOLUMENUM2RSLNAME.iteritems()])
 VOLUMENUM2STANDARDNAME = {
     0: 'reflectivity_horizontal_filtered',
     1: 'mean_doppler_velocity',
-    4: 'horizontal_reflectivity',
+    4: 'reflectivity_horizontal',
     7: 'diff_reflectivity',
     9: 'copol_coeff',
     10: 'dp_phase_shift',
