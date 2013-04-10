@@ -16,6 +16,7 @@ Front end to the University of Washington 4DD code for Doppler dealiasing.
 import numpy as np
 
 from ..io import _rsl_interface
+from . import _fourdd_interface
 from ..io.common import get_metadata
 from ..util import datetime_utils
 
@@ -94,18 +95,18 @@ def dealias_fourdd(radar, sounding_heights, sounding_wind_speeds,
     refl_array = radar.fields[refl]['data'].reshape(nshape).astype('float32')
     refl_array[np.where(refl_array == fill_value)] = rsl_badval
     refl_array[np.where(np.isnan(refl_array))] = rsl_badval
-    refl_volume = _rsl_interface.create_volume(refl_array)
+    refl_volume = _rsl_interface.create_volume(refl_array, 0)
     _rsl_interface._label_volume(refl_volume, radar)
 
     # extract the doppler velocity and create a RslVolume containing it
     vel_array = radar.fields[vel]['data'].reshape(nshape).astype('float32')
     vel_array[np.where(vel_array == fill_value)] = rsl_badval
     vel_array[np.where(np.isnan(vel_array))] = rsl_badval
-    vel_volume = _rsl_interface.create_volume(vel_array)
+    vel_volume = _rsl_interface.create_volume(vel_array, 1)
     _rsl_interface._label_volume(vel_volume, radar)
 
     # perform dealiasing
-    flag, data = _rsl_interface.fourdd_dealias(
+    flag, data = _fourdd_interface.fourdd_dealias(
         refl_volume, vel_volume, hc, sc, dc, vad_time, prep, filt)
 
     # reshape and mask data
