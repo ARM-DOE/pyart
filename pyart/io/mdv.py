@@ -8,9 +8,14 @@ Code is adapted from Nitin Bharadwaj's Matlab code
 
 .. autosummary::
     :toctree: generated/
+    :template: dev_template.rst
+
+    MdvFile
+
+.. autosummary::
+    :toctree: generated/
 
     read_mdv
-    MdvFile
 
 """
 
