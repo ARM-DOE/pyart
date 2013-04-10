@@ -10,13 +10,18 @@
     fixme: We may want to move to using _ast trees because the compiler for
            them is about 6 times faster than compiler.compile.
 """
+from __future__ import division, absolute_import, print_function
 
 import sys
-import cStringIO
 from compiler.ast import Const, Name, Tuple, Div, Mul, Sub, Add
 
+if sys.version_info[0] >= 3:
+    from io import StringIO
+else:
+    from io import StringIO
+
 def unparse(ast, single_line_functions=False):
-    s = cStringIO.StringIO()
+    s = StringIO()
     UnparseCompilerAst(ast, s, single_line_functions)
     return s.getvalue().lstrip()
 
