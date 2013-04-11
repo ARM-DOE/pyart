@@ -223,7 +223,7 @@ def write_netcdf(filename, radar, format='NETCDF4'):
     for key in keys:
         _create_ncvar(radar.sweep_info[key], dataset, key, ('sweep', ))
 
-    sdim_length = radar.sweep_info['sweep_mode']['data'].shape[1]
+    sdim_length = len(radar.sweep_info['sweep_mode']['data'][0])
     sdim_string = 'string_length_%d' % (sdim_length)
     dataset.createDimension(sdim_string, sdim_length)
     _create_ncvar(radar.sweep_info['sweep_mode'], dataset, 'sweep_mode',
@@ -272,6 +272,15 @@ def _create_ncvar(dic, dataset, name, dimensions):
         Dimension of variable.
 
     """
+    # create array from list, etc.
+    data = dic['data']
+    if isinstance(data, np.ndarray) is not True:
+        print "Warning, converting non-array to array:", name
+        data = np.array(data)
+
+    # convert string array to character arrays
+    if data.dtype.char is 'S' and data.dtype != 'S1':
+        data = netCDF4.stringtochar(data)
 
     # create the dataset variable
     if 'least_significant_digit' in dic:
@@ -283,7 +292,7 @@ def _create_ncvar(dic, dataset, name, dimensions):
     else:
         fill_value = None
 
-    ncvar = dataset.createVariable(name, dic['data'].dtype, dimensions,
+    ncvar = dataset.createVariable(name, data.dtype, dimensions,
                                    zlib=True, least_significant_digit=lsd,
                                    fill_value=fill_value)
 
@@ -293,4 +302,7 @@ def _create_ncvar(dic, dataset, name, dimensions):
             ncvar.setncattr(key, value)
 
     # set the data
-    ncvar[:] = dic['data']
+    if type(data) == np.ma.MaskedArray:
+        ncvar[:] = data.data
+    else:
+        ncvar[:] = data

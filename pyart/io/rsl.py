@@ -108,16 +108,16 @@ def read_rsl(filename, add_meta=None):
 
     if scan_type == 'ppi':
         nsweeps = nele
-        sweep_number['data'] = range(nsweeps)
-        sweep_mode['data'] = nsweeps * ['azimuth_surveillance    ']
+        sweep_number['data'] = np.arange(nsweeps)
+        sweep_mode['data'] = np.array(nsweeps * ['azimuth_surveillance    '])
         fixed_angle['data'] = first_volume.get_sweep_elevs()
         sweep_start_ray_index['data'] = np.arange(0, len_time, naz)
         sweep_end_ray_index['data'] = np.arange(naz - 1, len_time, naz)
 
     elif scan_type == 'rhi':
         nsweeps = naz
-        sweep_number['data'] = range(nsweeps)
-        sweep_mode['data'] = nsweeps * ['rhi                     ']
+        sweep_number['data'] = np.arange(nsweeps)
+        sweep_mode['data'] = np.array(nsweeps * ['rhi                     '])
         fixed_angle['data'] = first_volume.get_sweep_azimuths()
         sweep_start_ray_index['data'] = np.arange(0, len_time, nele)
         sweep_end_ray_index['data'] = np.arange(nele - 1, len_time, nele)
@@ -149,14 +149,14 @@ def read_rsl(filename, add_meta=None):
     latd = rsl_dict['latd']
     latm = rsl_dict['latm']
     lats = rsl_dict['lats']
-    lat['data'] = dms_to_d((latd, latm, lats))
+    lat['data'] = np.array(dms_to_d((latd, latm, lats)))
 
     lond = rsl_dict['lond']
     lonm = rsl_dict['lonm']
     lons = rsl_dict['lons']
-    lon['data'] = dms_to_d((lond, lonm, lons))
+    lon['data'] = np.array(dms_to_d((lond, lonm, lons)))
 
-    elv['data'] = rsl_dict['height']
+    elv['data'] = np.array(rsl_dict['height'])
     location = {'latitude': lat, 'longitude': lon, 'altitude': elv}
 
     # set instrument parameters attribute
