@@ -21,6 +21,26 @@ import socket
 import datetime as dt
 
 
+def radar_coords_to_cart(rng, az, ele, debug=False):
+    """
+    Assumes standard atmosphere, ie R=4Re/3
+    """
+    Re = 6371.0 * 1000.0
+    #h=(r^2 + (4Re/3)^2 + 2r(4Re/3)sin(ele))^1/2 -4Re/3
+    #s=4Re/3arcsin(rcos(ele)/(4Re/3+h))
+    p_r = 4.0 * Re / 3.0
+    rm = rng
+    z = (rm ** 2 + p_r ** 2 + 2.0 * rm * p_r *
+         np.sin(ele * np.pi / 180.0)) ** 0.5 - p_r
+    #arc length
+    s = p_r * np.arcsin(rm * np.cos(ele * np.pi / 180.) / (p_r + z))
+    if debug:
+        print "Z=", z, "s=", s
+    y = s * np.cos(az * np.pi / 180.0)
+    x = s * np.sin(az * np.pi / 180.0)
+    return x, y, z
+
+
 def grid2(radars, **kwargs):
     """
     map tuples of Py-Radar objects to a cartesian grid..
@@ -75,7 +95,7 @@ def grid2(radars, **kwargs):
 
         # Calculate cartesian locations of gates
 
-        xdash, ydash, zdash = radar_display.radar_coords_to_cart(rg, azg, eleg)
+        xdash, ydash, zdash = radar_coords_to_cart(rg, azg, eleg)
         del rg, azg  # housekeeping
 
         #only use gates below toa
@@ -314,26 +334,26 @@ class pyGrid:
         else:
             print("foo")
             #TBI from various grid sources, WRF etc..
-    
+
     def PyGridCF_to_PyGrid(self, netcdfobj):
             #netcdf file of grids
             #lets assume it is nicely formatted
-            
+
             #grab the variable names
-            
+
             all_variables=netcdfobj.variables.keys()
             fields=[]
-            
+
             #anything that has more than 2 axes is a field
-            
+
             for var in all_variables:
                 if len(netcdfobj.variables[var].shape) > 1:
                     fields.append(var)
             self.fields={}
-            
+
             for field in fields:
                 self.fields.update({field:ncvar_to_field(netcdfobj.variables[field])})
-            
+
             #now for axes, anything that is one of shape tuples
             self.axes={}
             axes=[]
@@ -346,22 +366,22 @@ class pyGrid:
     def WRFGridCF_to_PyGrid(self, netcdfobj):
             #netcdf file WRF of grids
             #lets assume it is nicely formatted
-            
+
             #grab the variable names
-            
+
             all_variables=netcdfobj.variables.keys()
             fields=[]
-            
+
             #anything that has more than 2 axes is a field
-            
+
             for var in all_variables:
                 if len(netcdfobj.variables[var].shape) > 1:
                     fields.append(var)
             self.fields={}
-            
+
             for field in fields:
                 self.fields.update({field:ncvar_to_field(netcdfobj.variables[field])})
-            
+
             #now for axes, anything that is one of shape tuples
             self.axes={}
             axes=[]
@@ -370,5 +390,5 @@ class pyGrid:
                     axes.append(var)
             for axis in axes:
                 self.axes.update({axis:ncvar_to_field(netcdfobj.variables[axis])})
-           
-           
+
+
