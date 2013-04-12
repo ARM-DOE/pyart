@@ -162,7 +162,7 @@ def grid2(radars, **kwargs):
 
     mapping_obj = ballsy.BallsyMapper(np.column_stack((
         x[where_the_data_is_good], y[where_the_data_is_good],
-        z[where_the_data_is_good])), masked_data, debug=True)
+        z[where_the_data_is_good])), masked_data, debug=False)
 
     # house keeping
 

@@ -17,6 +17,16 @@ def configuration(parent_package='', top_path=None):
                          sources=['ball_tree.c'],
                          include_dirs=[numpy.get_include()],
                          libraries=libraries)
+
+    config.add_extension('ckdtree',
+                         sources=['ckdtree.c'],
+                         include_dirs=[numpy.get_include()],
+                         libraries=libraries)
+
+    config.add_extension('_load_nn_field_data',
+                         sources=['_load_nn_field_data.c'],
+                         include_dirs=[numpy.get_include()])
+
     return config
 
 if __name__ == '__main__':

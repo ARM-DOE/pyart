@@ -1,13 +1,20 @@
 """
-Mapping subdirectory
+==========================
+Mapping (:mod:`pyart.map`)
+==========================
 
-Contents
---------
-ballsy : Uses a ball tree object to do a distance weighted average of
-         non-cartesian data
+.. current modules:: pyart.map
+
+Py-ART has a robust function for mapping radar data from the collected radar
+coordinates to Cartesian coordinates.
+
+.. autosummary::
+    :toctree: generated/
+
+    map_to_grid
 
 """
 
-__all__ = ['ballsy']
+from map_to_grid import map_to_grid
 
-import ballsy
+__all__ = [s for s in dir() if not s.startswith('_')]
