@@ -26,7 +26,7 @@ class BallsyMapper:
             print "Filling out the Ball Tree"
 
         # build the tree
-        self.tree = ball_tree.BallTree(X, leafsize=leafsize)
+        self.tree = ball_tree.BallTree(X, leaf_size=leafsize)
         self.z = z
         self.X = X
         self.badval = badval
