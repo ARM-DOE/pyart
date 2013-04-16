@@ -1,0 +1,11 @@
+instrument_name-metadata string sgpxsaprse
+reflectivity_offset float 8.6
+sys_phase float 332.0
+overide_sys_phase bool True
+experiment-metadata string MC3E
+facility-metadata string I4
+sounding_dir string /data/mergedsonde/sgp/
+dod_version-metadata string 1.0
+site_id-metadata string I4: Billings, Oklahoma
+facility_id-metadata string sgp 		
+input_datastreams_num-metadata string 2

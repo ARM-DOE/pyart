@@ -1,0 +1,11 @@
+instrument_name-metadata string sgpcsapr
+reflectivity_offset float -2.0
+sys_phase float 332.0
+overide_sys_phase bool False
+experiment-metadata string MC3E
+facility-metadata string I7
+sounding_dir string /data-in/sc8pjt1/mergedsonde/sgp/
+dod_version-metadata string 1.0
+site_id-metadata string I7: Nardin, Oklahoma
+facility_id-metadata string sgp 		
+input_datastreams_num-metadata string 2

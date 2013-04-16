@@ -1,0 +1,73 @@
+==============================
+Building and installing Py-ART
+==============================
+
+Dependancies
+============
+
+Py-ART requires the following software for best use, earlier version may work
+but have not been extensively tested.
+
+1) Python__ 2.6.x or newer
+
+__ http://www.python.org
+
+2) NumPy__ 1.6.x or newer
+
+__ http://www.scipy.org
+
+3) SciPy__ 0.10.x or newer
+
+__ http://www.scipy.org
+
+4) matplotlib__ 1.1.0 or newer
+ 
+__ http://matplotlib.org/
+
+5) netCDF4__ 1.0.2 or newer
+
+__ http://code.google.com/p/netcdf4-python/
+
+6) TRMM RSL__ 1.43 or newer
+
+__ http://trmm-fc.gsfc.nasa.gov/trmm_gv/software/rsl/
+
+7) PyGLPK__
+
+__ http://tfinley.net/software/pyglpk/
+
+
+Obtaining the latest source
+===========================
+
+The latest source code for Py-ART can be obtained from the GitHub repository,
+https://github.com/ARM-DOE/pyart.
+
+The latest source can be checked out using
+    
+    $ git clone https://github.com/ARM-DOE/pyart.git
+
+
+Installing from Source
+======================
+
+The path to the TRMM RSL library must be provided during install.  This can
+either be done by setting the `RSL_PATH` environmentation variable.  In bash
+this can be done using `export RSL_PATH=/path/to/rsl/`. If this location is
+not specified, some common locations will be searched.  Note that the location
+provided should be the root TRMM RSL path, under which both a `lib` and
+`include` directory are contained, the default location is `/lib/local/trmm`.
+
+After specifying the TRMM RSL path Py-ART can be installed globally using
+
+    $ python setup.py install
+
+of locally using
+
+    $ python setup.py install --user
+
+If you prefer to use Py-ART without installing, simply add the this path to 
+your PYTHONPATH (directory or with a .pth file) and compile the extension
+in-place.
+
+    $ python setup.py build_ext -i
