@@ -14,7 +14,7 @@ A general gridded data object for radar data.
 """
 
 import numpy as np
-import pyart.map.ballsy as ballsy
+#import pyart.map.ballsy as ballsy
 from pyart.graph import radar_display
 import getpass
 import socket

@@ -1,6 +1,6 @@
 """
-pyart.io.map_to_grid
-====================
+pyart.map.grid_mapper
+=====================
 
 Utilities for mapping radar objects to Cartesian grids.
 
@@ -15,8 +15,6 @@ Utilities for mapping radar objects to Cartesian grids.
     :template: dev_template.rst
 
     NNLocator
-    BallTree
-    cKDTree
 
 """
 

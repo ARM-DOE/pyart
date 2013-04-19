@@ -15,6 +15,6 @@ coordinates to Cartesian coordinates.
 
 """
 
-from map_to_grid import map_to_grid
+from grid_mapper import map_to_grid
 
 __all__ = [s for s in dir() if not s.startswith('_')]
