@@ -20,3 +20,4 @@ Documentation is broken down by directory and module.
     io
     correct
     graph
+    map

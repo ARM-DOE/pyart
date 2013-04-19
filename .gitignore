@@ -120,6 +120,6 @@ pyart/graph/examples/*.cdf
 pyart/graph/examples/*.nc
 pyart/graph/examples/*.mdv
 
-
+pyart/map/tests/*.nc
 
 pyart/version.py
