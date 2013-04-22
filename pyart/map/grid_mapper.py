@@ -151,8 +151,8 @@ def map_to_grid(radars, grid_shape=(81, 81, 69),
         Top of atmosphere in meters. Collected points above this height are
         not included in the interpolation.
 
-    Optional Parameters
-    -------------------
+    Other parameters
+    ----------------
     h_factor : float
         H factor which influences the increase in the radius of influence as
         elevation increases.  Only used when qrf_func is None.
@@ -229,6 +229,9 @@ def map_to_grid(radars, grid_shape=(81, 81, 69),
         # A table mapping filtered gates to raw gates is created later.
         # Since the dtype is not not know this method is slow.
         field_data_objs = np.empty((nfields, nradars), dtype='object')
+        # We also need to know how many gates from each radar are included
+        # in the NNLocator, the filtered_gates_per_radar list records this
+        filtered_gates_per_radar = []
 
     # loop over the radars finding gate locations and field data
     for iradar, radar in enumerate(radars):
@@ -263,6 +266,12 @@ def map_to_grid(radars, grid_shape=(81, 81, 69),
             gflags = np.logical_and(gflags, np.logical_not(refl_data.mask))
             gflags = gflags.data
         include_gate[start:end] = gflags.flat
+
+        if not copy_field_data:
+            # record the number of gates from the current radar which
+            # are included in the interpolation.
+            filtered_gates_per_radar.append(gflags.sum())
+
         del refl_data, gflags, zg_loc
 
         # copy/store references to field data for lookup
@@ -280,12 +289,25 @@ def map_to_grid(radars, grid_shape=(81, 81, 69),
         # same manner as we will filter the gate locations.
         filtered_field_data = field_data[include_gate]
     else:
-        # copy_field_data == True, we need a lookup table which maps from
+        # copy_field_data == True, build a lookup table which maps from
         # filtered gate number to (radar number, radar gate number)
+        # the radar number is given as the quotent of the lookup table
+        # value divided by total_gates, the remainer gives the index of
+        # the gate in the flat field data array.
+
+        # initalize the lookup table with values from 0 ... total gates
         lookup = np.where(include_gate)[0]
-        max_gates = max(ngates_per_radar)
-        # XXX add max_gates*radar_i to lookup table for gates in radars
-        # beyond 1
+
+        # number of filtered gates before a given radar
+        filtered_gate_offset = np.cumsum([0] + filtered_gates_per_radar)
+
+        # for radars 1 to N-1 add total_gates to the lookup table and
+        # subtract the number of gates in all ealier radars.
+        for i in xrange(1, nradars):
+            l_start = filtered_gate_offset[i]
+            l_end = filtered_gate_offset[i + 1]
+            gates_before = gate_offset[i]
+            lookup[l_start:l_end] += (total_gates * i - gates_before)
 
     # populate the nearest neighbor locator with the filtered gate locations
     nnlocator = NNLocator(gate_locations[include_gate], algorithm=algorithm,
@@ -343,7 +365,7 @@ def map_to_grid(radars, grid_shape=(81, 81, 69),
             # radar numbers and gate numbers for the neighbors.  Then
             # use the _load_nn_field_data function to load this data from
             # the field data object array.  This is done in Cython for speed.
-            r_nums, e_nums = divmod(lookup[ind], max_gates)
+            r_nums, e_nums = divmod(lookup[ind], total_gates)
             npoints = r_nums.size
             nn_field_data = np.empty((npoints, nfields), np.float64)
             _load_nn_field_data(field_data_objs, nfields, npoints, r_nums,
