@@ -209,7 +209,7 @@ def map_to_grid(radars, grid_shape=(81, 81, 69),
     # determine the number of gates (collected points) in each radar
     nradars = len(radars)
     ngates_per_radar = [r.fields[refl_field]['data'].size for r in radars]
-    total_gates = np.prod(ngates_per_radar)
+    total_gates = np.sum(ngates_per_radar)
     gate_offset = np.cumsum([0] + ngates_per_radar)
 
     # create arrays to hold the gate locations and indicators if the gate
