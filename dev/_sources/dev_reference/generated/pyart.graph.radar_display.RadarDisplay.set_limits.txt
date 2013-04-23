@@ -1,0 +1,6 @@
+pyart.graph.radar_display.RadarDisplay.set_limits
+=================================================
+
+.. currentmodule:: pyart.graph.radar_display
+
+.. automethod:: RadarDisplay.set_limits

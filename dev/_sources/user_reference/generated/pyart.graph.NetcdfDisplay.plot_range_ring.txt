@@ -1,0 +1,6 @@
+pyart.graph.NetcdfDisplay.plot_range_ring
+=========================================
+
+.. currentmodule:: pyart.graph
+
+.. automethod:: NetcdfDisplay.plot_range_ring

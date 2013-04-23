@@ -1,0 +1,6 @@
+pyart.io.nc_utils.is_moment
+===========================
+
+.. currentmodule:: pyart.io.nc_utils
+
+.. autofunction:: is_moment

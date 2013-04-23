@@ -1,0 +1,6 @@
+pyart.graph.NetcdfDisplay.plot_rhi
+==================================
+
+.. currentmodule:: pyart.graph
+
+.. automethod:: NetcdfDisplay.plot_rhi

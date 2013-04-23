@@ -1,0 +1,6 @@
+pyart.graph.plot_netcdf.NetcdfDisplay.label_yaxis_z
+===================================================
+
+.. currentmodule:: pyart.graph.plot_netcdf
+
+.. automethod:: NetcdfDisplay.label_yaxis_z

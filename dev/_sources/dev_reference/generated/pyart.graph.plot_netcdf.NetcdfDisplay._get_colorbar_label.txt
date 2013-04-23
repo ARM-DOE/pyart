@@ -1,0 +1,6 @@
+pyart.graph.plot_netcdf.NetcdfDisplay._get_colorbar_label
+=========================================================
+
+.. currentmodule:: pyart.graph.plot_netcdf
+
+.. automethod:: NetcdfDisplay._get_colorbar_label

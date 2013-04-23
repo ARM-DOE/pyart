@@ -1,0 +1,6 @@
+pyart.io.nc_utils.append_global_metatdata_csapr
+===============================================
+
+.. currentmodule:: pyart.io.nc_utils
+
+.. autofunction:: append_global_metatdata_csapr

@@ -1,0 +1,6 @@
+pyart.io.mdv.MdvFile._get_compression_info
+==========================================
+
+.. currentmodule:: pyart.io.mdv
+
+.. automethod:: MdvFile._get_compression_info

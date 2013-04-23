@@ -1,0 +1,6 @@
+pyart.graph.NetcdfDisplay.plot_cross_hair
+=========================================
+
+.. currentmodule:: pyart.graph
+
+.. automethod:: NetcdfDisplay.plot_cross_hair

@@ -1,0 +1,6 @@
+pyart.graph.plot_mdv._get_default_range
+=======================================
+
+.. currentmodule:: pyart.graph.plot_mdv
+
+.. autofunction:: _get_default_range

@@ -1,0 +1,6 @@
+pyart.io.grid.grid2
+===================
+
+.. currentmodule:: pyart.io.grid
+
+.. autofunction:: grid2

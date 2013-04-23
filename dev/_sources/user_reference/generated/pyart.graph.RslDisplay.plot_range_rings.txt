@@ -1,0 +1,6 @@
+pyart.graph.RslDisplay.plot_range_rings
+=======================================
+
+.. currentmodule:: pyart.graph
+
+.. automethod:: RslDisplay.plot_range_rings

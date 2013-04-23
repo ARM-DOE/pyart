@@ -1,0 +1,6 @@
+pyart.io.nc_utils.save_netcdf_cube
+==================================
+
+.. currentmodule:: pyart.io.nc_utils
+
+.. autofunction:: save_netcdf_cube

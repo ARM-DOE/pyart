@@ -1,0 +1,6 @@
+pyart.io.nc_utils.copy_axis
+===========================
+
+.. currentmodule:: pyart.io.nc_utils
+
+.. autofunction:: copy_axis

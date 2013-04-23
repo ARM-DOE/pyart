@@ -1,0 +1,6 @@
+pyart.io.nc_utils.fix_time
+==========================
+
+.. currentmodule:: pyart.io.nc_utils
+
+.. autofunction:: fix_time

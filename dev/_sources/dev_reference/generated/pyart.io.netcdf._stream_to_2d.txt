@@ -1,0 +1,6 @@
+pyart.io.netcdf._stream_to_2d
+=============================
+
+.. currentmodule:: pyart.io.netcdf
+
+.. autofunction:: _stream_to_2d

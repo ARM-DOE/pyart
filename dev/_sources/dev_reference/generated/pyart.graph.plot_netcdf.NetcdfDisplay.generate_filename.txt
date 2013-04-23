@@ -1,0 +1,6 @@
+pyart.graph.plot_netcdf.NetcdfDisplay.generate_filename
+=======================================================
+
+.. currentmodule:: pyart.graph.plot_netcdf
+
+.. automethod:: NetcdfDisplay.generate_filename

@@ -1,0 +1,6 @@
+pyart.graph.MdvDisplay.plot_rhi
+===============================
+
+.. currentmodule:: pyart.graph
+
+.. automethod:: MdvDisplay.plot_rhi

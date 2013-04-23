@@ -1,0 +1,6 @@
+pyart.io.netcdf._ncvar_to_dict
+==============================
+
+.. currentmodule:: pyart.io.netcdf
+
+.. autofunction:: _ncvar_to_dict

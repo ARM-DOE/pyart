@@ -1,0 +1,6 @@
+pyart.graph.plot_netcdf.NetcdfDisplay.label_xaxis_r
+===================================================
+
+.. currentmodule:: pyart.graph.plot_netcdf
+
+.. automethod:: NetcdfDisplay.label_xaxis_r

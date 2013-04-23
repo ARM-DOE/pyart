@@ -1,0 +1,6 @@
+pyart.graph.plot_netcdf.NetcdfDisplay.set_limits
+================================================
+
+.. currentmodule:: pyart.graph.plot_netcdf
+
+.. automethod:: NetcdfDisplay.set_limits

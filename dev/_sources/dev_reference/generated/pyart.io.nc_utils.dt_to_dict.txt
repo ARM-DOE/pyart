@@ -1,0 +1,6 @@
+pyart.io.nc_utils.dt_to_dict
+============================
+
+.. currentmodule:: pyart.io.nc_utils
+
+.. autofunction:: dt_to_dict

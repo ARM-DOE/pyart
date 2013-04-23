@@ -1,0 +1,6 @@
+pyart.graph.plot_netcdf.NetcdfDisplay.plot_label
+================================================
+
+.. currentmodule:: pyart.graph.plot_netcdf
+
+.. automethod:: NetcdfDisplay.plot_label

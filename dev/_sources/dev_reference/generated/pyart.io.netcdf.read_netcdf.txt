@@ -1,0 +1,6 @@
+pyart.io.netcdf.read_netcdf
+===========================
+
+.. currentmodule:: pyart.io.netcdf
+
+.. autofunction:: read_netcdf

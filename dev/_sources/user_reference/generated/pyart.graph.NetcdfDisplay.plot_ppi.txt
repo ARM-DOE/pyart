@@ -1,0 +1,6 @@
+pyart.graph.NetcdfDisplay.plot_ppi
+==================================
+
+.. currentmodule:: pyart.graph
+
+.. automethod:: NetcdfDisplay.plot_ppi

@@ -1,0 +1,258 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pyart.correct &mdash; Py-ART Documentation (DRAFT)</title>
+    
+    <link rel="stylesheet" href="../_static/scipy.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1.0.dev-ac2f1bf',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Py-ART Documentation (DRAFT)" href="../index.html" />
+    <link rel="up" title="Developer Reference Manual" href="index.html" />
+    <link rel="next" title="pyart.correct.attenuation.calculate_attenuation" href="generated/pyart.correct.attenuation.calculate_attenuation.html" />
+    <link rel="prev" title="pyart.io._rsl_interface._RslRay.__subclasshook__" href="generated/pyart.io._rsl_interface._RslRay.__subclasshook__.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="generated/pyart.correct.attenuation.calculate_attenuation.html" title="pyart.correct.attenuation.calculate_attenuation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="generated/pyart.io._rsl_interface._RslRay.__subclasshook__.html" title="pyart.io._rsl_interface._RslRay.__subclasshook__"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">Py-ART Documentation (DRAFT)</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Developer Reference Manual</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="pyart-correct">
+<h1>pyart.correct<a class="headerlink" href="#pyart-correct" title="Permalink to this headline">¶</a></h1>
+<p>Radar Moment correction routines.</p>
+<span class="target" id="module-pyart.correct.attenuation"></span><div class="section" id="pyart-correct-attenuation">
+<h2>pyart.correct.attenuation<a class="headerlink" href="#pyart-correct-attenuation" title="Permalink to this headline">¶</a></h2>
+<p>Attenuation correction from polarimetric radars.</p>
+<p>Code adapted from XXX by Scott Giangrande et al</p>
+<p>Adapted by Scott Collis and Scott Giangrande, refactored by Jonathan Helmus.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.attenuation.calculate_attenuation.html#pyart.correct.attenuation.calculate_attenuation" title="pyart.correct.attenuation.calculate_attenuation"><tt class="xref py py-obj docutils literal"><span class="pre">calculate_attenuation</span></tt></a>(radar,&nbsp;z_offset[,&nbsp;...])</td>
+<td>Calculate the attenuation from a polarimetric radar using XXX</td>
+</tr>
+</tbody>
+</table>
+</div>
+<span class="target" id="module-pyart.correct.dealias"></span><div class="section" id="pyart-correct-dealias">
+<h2>pyart.correct.dealias<a class="headerlink" href="#pyart-correct-dealias" title="Permalink to this headline">¶</a></h2>
+<p>Front end to the University of Washington 4DD code for Doppler dealiasing.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.dealias.dealias_fourdd.html#pyart.correct.dealias.dealias_fourdd" title="pyart.correct.dealias.dealias_fourdd"><tt class="xref py py-obj docutils literal"><span class="pre">dealias_fourdd</span></tt></a>(radar,&nbsp;sounding_heights,&nbsp;...)</td>
+<td>Dealias the Doppler velocities field using the University of Washington</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.correct.dealias.find_time_in_interp_sonde.html#pyart.correct.dealias.find_time_in_interp_sonde" title="pyart.correct.dealias.find_time_in_interp_sonde"><tt class="xref py py-obj docutils literal"><span class="pre">find_time_in_interp_sonde</span></tt></a>(interp_sonde,&nbsp;target)</td>
+<td>Find the wind parameter for a given time in a ARM interpsonde file.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<span class="target" id="module-pyart.correct.phase_proc"></span><div class="section" id="pyart-correct-phase-proc">
+<h2>pyart.correct.phase_proc<a class="headerlink" href="#pyart-correct-phase-proc" title="Permalink to this headline">¶</a></h2>
+<p>Utilities for working with phase data.</p>
+<p>Code adapted from PAPER by Scott Giangrande et al</p>
+<p>Adapted by Scott Collis and Scott Giangrande, refactored by Jonathan Helmus</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.phase_proc.det_sys_phase.html#pyart.correct.phase_proc.det_sys_phase" title="pyart.correct.phase_proc.det_sys_phase"><tt class="xref py py-obj docutils literal"><span class="pre">det_sys_phase</span></tt></a>(radar[,&nbsp;ncp_lev,&nbsp;rhohv_lev,&nbsp;...])</td>
+<td>Determine the system phase.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.correct.phase_proc._det_sys_phase.html#pyart.correct.phase_proc._det_sys_phase" title="pyart.correct.phase_proc._det_sys_phase"><tt class="xref py py-obj docutils literal"><span class="pre">_det_sys_phase</span></tt></a>(ncp,&nbsp;rhv,&nbsp;phidp,&nbsp;last_ray_idx)</td>
+<td>Determine the system phase, see <a class="reference internal" href="generated/pyart.correct.phase_proc.det_sys_phase.html#pyart.correct.phase_proc.det_sys_phase" title="pyart.correct.phase_proc.det_sys_phase"><tt class="xref py py-func docutils literal"><span class="pre">det_sys_phase</span></tt></a>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.phase_proc.fzl_index.html#pyart.correct.phase_proc.fzl_index" title="pyart.correct.phase_proc.fzl_index"><tt class="xref py py-obj docutils literal"><span class="pre">fzl_index</span></tt></a>(fzl,&nbsp;ranges,&nbsp;elevation,&nbsp;radar_height)</td>
+<td>Return the index of the last gate below a given altitude.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.correct.phase_proc.det_process_range.html#pyart.correct.phase_proc.det_process_range" title="pyart.correct.phase_proc.det_process_range"><tt class="xref py py-obj docutils literal"><span class="pre">det_process_range</span></tt></a>(radar,&nbsp;sweep,&nbsp;fzl[,&nbsp;doc])</td>
+<td>Determine the processing range for a given sweep.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.phase_proc.snr.html#pyart.correct.phase_proc.snr" title="pyart.correct.phase_proc.snr"><tt class="xref py py-obj docutils literal"><span class="pre">snr</span></tt></a>(line[,&nbsp;wl])</td>
+<td>Return the signal to noise ratio after smoothing.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.correct.phase_proc.unwrap_masked.html#pyart.correct.phase_proc.unwrap_masked" title="pyart.correct.phase_proc.unwrap_masked"><tt class="xref py py-obj docutils literal"><span class="pre">unwrap_masked</span></tt></a>(lon[,&nbsp;centered,&nbsp;copy])</td>
+<td>Unwrap a sequence of longitudes or headings in degrees.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.phase_proc.smooth_and_trim.html#pyart.correct.phase_proc.smooth_and_trim" title="pyart.correct.phase_proc.smooth_and_trim"><tt class="xref py py-obj docutils literal"><span class="pre">smooth_and_trim</span></tt></a>(x[,&nbsp;window_len,&nbsp;window])</td>
+<td>Smooth data using a window with requested size.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.correct.phase_proc.sobel.html#pyart.correct.phase_proc.sobel" title="pyart.correct.phase_proc.sobel"><tt class="xref py py-obj docutils literal"><span class="pre">sobel</span></tt></a>(x[,&nbsp;window_len])</td>
+<td>Sobel differential filter, useful for calculating KDP.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.phase_proc.noise.html#pyart.correct.phase_proc.noise" title="pyart.correct.phase_proc.noise"><tt class="xref py py-obj docutils literal"><span class="pre">noise</span></tt></a>(line[,&nbsp;wl])</td>
+<td>Return the noise after smoothing.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.correct.phase_proc.get_phidp_unf.html#pyart.correct.phase_proc.get_phidp_unf" title="pyart.correct.phase_proc.get_phidp_unf"><tt class="xref py py-obj docutils literal"><span class="pre">get_phidp_unf</span></tt></a>(radar[,&nbsp;ncp_lev,&nbsp;rhohv_lev,&nbsp;...])</td>
+<td>Get Unfolded Phi differential phase</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.phase_proc.construct_A_matrix.html#pyart.correct.phase_proc.construct_A_matrix" title="pyart.correct.phase_proc.construct_A_matrix"><tt class="xref py py-obj docutils literal"><span class="pre">construct_A_matrix</span></tt></a>(n_gates,&nbsp;filt)</td>
+<td>Construct a row-augmented A matrix. Equation 5 in Giangrande et al, 2012.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.correct.phase_proc.construct_B_vectors.html#pyart.correct.phase_proc.construct_B_vectors" title="pyart.correct.phase_proc.construct_B_vectors"><tt class="xref py py-obj docutils literal"><span class="pre">construct_B_vectors</span></tt></a>(phidp_mod,&nbsp;z_mod,&nbsp;filt)</td>
+<td>Construct B vectors.  See Giangrande et al, 2012.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.phase_proc.LP_solver_cvxopt.html#pyart.correct.phase_proc.LP_solver_cvxopt" title="pyart.correct.phase_proc.LP_solver_cvxopt"><tt class="xref py py-obj docutils literal"><span class="pre">LP_solver_cvxopt</span></tt></a>(A_Matrix,&nbsp;B_vectors,&nbsp;weights)</td>
+<td>Solve the Linear Programming problem given in Giangrande et al, 2012 using</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.correct.phase_proc.LP_solver_pyglpk.html#pyart.correct.phase_proc.LP_solver_pyglpk" title="pyart.correct.phase_proc.LP_solver_pyglpk"><tt class="xref py py-obj docutils literal"><span class="pre">LP_solver_pyglpk</span></tt></a>(A_Matrix,&nbsp;B_vectors,&nbsp;weights)</td>
+<td>Solve the Linear Programming problem given in Giangrande et al, 2012 using</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.phase_proc.phase_proc_lp.html#pyart.correct.phase_proc.phase_proc_lp" title="pyart.correct.phase_proc.phase_proc_lp"><tt class="xref py py-obj docutils literal"><span class="pre">phase_proc_lp</span></tt></a>(radar,&nbsp;offset[,&nbsp;debug,&nbsp;...])</td>
+<td>Phase process using a LP method[1].</td>
+</tr>
+</tbody>
+</table>
+</div>
+<span class="target" id="module-pyart.correct._fourdd_interface"></span><div class="section" id="pyart-correct-fourdd-interface">
+<h2>pyart.correct._fourdd_interface<a class="headerlink" href="#pyart-correct-fourdd-interface" title="Permalink to this headline">¶</a></h2>
+<p>Cython wrapper around the Univ. of Washington FourDD algorithm.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct._fourdd_interface.fourdd_dealias.html#pyart.correct._fourdd_interface.fourdd_dealias" title="pyart.correct._fourdd_interface.fourdd_dealias"><tt class="xref py py-obj docutils literal"><span class="pre">fourdd_dealias</span></tt></a>(DZvolume,&nbsp;radialVelVolume,&nbsp;...)</td>
+<td>Dealias using the FourDD algorithm.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">pyart.correct</a><ul>
+<li><a class="reference internal" href="#pyart-correct-attenuation">pyart.correct.attenuation</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#pyart-correct-dealias">pyart.correct.dealias</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#pyart-correct-phase-proc">pyart.correct.phase_proc</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#pyart-correct-fourdd-interface">pyart.correct._fourdd_interface</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="generated/pyart.io._rsl_interface._RslRay.__subclasshook__.html"
+                        title="previous chapter">pyart.io._rsl_interface._RslRay.__subclasshook__</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="generated/pyart.correct.attenuation.calculate_attenuation.html"
+                        title="next chapter">pyart.correct.attenuation.calculate_attenuation</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/dev_reference/correct.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="generated/pyart.correct.attenuation.calculate_attenuation.html" title="pyart.correct.attenuation.calculate_attenuation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="generated/pyart.io._rsl_interface._RslRay.__subclasshook__.html" title="pyart.io._rsl_interface._RslRay.__subclasshook__"
+             >previous</a> |</li>
+        <li><a href="../index.html">Py-ART Documentation (DRAFT)</a> &raquo;</li>
+          <li><a href="index.html" >Developer Reference Manual</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Py-ART developers.
+      Last updated on Apr 22, 2013.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

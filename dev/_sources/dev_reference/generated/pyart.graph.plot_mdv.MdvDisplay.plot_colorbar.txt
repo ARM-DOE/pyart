@@ -1,0 +1,6 @@
+pyart.graph.plot_mdv.MdvDisplay.plot_colorbar
+=============================================
+
+.. currentmodule:: pyart.graph.plot_mdv
+
+.. automethod:: MdvDisplay.plot_colorbar
