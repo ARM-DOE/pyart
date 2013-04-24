@@ -212,19 +212,20 @@ class PyGrid:
     Parameters
     ----------
     fields : dict
-
+        Dictionary of field dictionaries.
     axes : dict
-
+        Dictionary of axes dictionaries.
     metadata : dict
-
+        Dictionary of metadata.
 
     Attributes
     ----------
     fields: dict
-
+        Dictionary of field dictionaries.
     axes: dict
-
+        Dictionary of axes dictionaries.
     metadata: dict
+        Dictionary of metadata.
 
     """
     def __init__(self, fields, axes, metadata):

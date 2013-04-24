@@ -7,6 +7,7 @@ Utilities for mapping radar objects to Cartesian grids.
 .. autosummary::
     :toctree: generated/
 
+    grid_from_radars
     map_to_grid
     _load_nn_field_data
 
@@ -35,22 +36,29 @@ from .ball_tree import BallTree
 
 def grid_from_radars(radars, grid_shape, grid_limits, **kwargs):
     """
+    Map one or more radars to a Cartesian grid returning a PyGrid object.
+
+    Additional arguments are passed to :py:func:`map_to_grid`
 
     Parameters
     ----------
-    radars : tuple
-
-    grid_shape :
-
-    grid_limits :
-
-    **kwargs :
-
+    radars : tuple of Radar objects.
+        Radar objects which will be mapped to the Cartesian grid.
+    grid_shape : 3-tuple of floats
+        Number of points in the grid (x, y, z).
+    grid_limits : 3-tuple of 2-tuples
+        Minimum and maximum grid location (inclusive) in meters for the
+        x, y, z coordinates.
 
     Returns
     -------
     pygrid : PyGrid
-        A PyGrid object containing the gridded radar data.
+        A :py:class:`pyart.io.PyGrid` object containing the gridded radar
+        data.
+
+    See Also
+    --------
+    map_to_grid : Map to grid and return a dictionary of radar fields
 
     """
     # map the radar(s) to a cartesian grid
@@ -327,6 +335,10 @@ def map_to_grid(radars, grid_shape=(81, 81, 69),
         Dictionary of mapped fields.  The keysof the dictionary are given by
         parameter fields.  Each elements is a `grid_size` float64 array
         containing the interpolated grid for that field.
+
+    See Also
+    --------
+    grid_from_radars : Map to grid and return a PyGrid object.
 
     """
     # check the parameters
