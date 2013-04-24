@@ -266,4 +266,4 @@ def linkcode_resolve(domain, info):
 
     fn = relpath(fn, start=dirname(pyart.__file__))
 
-    return "http://github.com/ARM-DOE/pyart/blob/master/%s%s" % (fn, linespec)
+    return "http://github.com/ARM-DOE/pyart/blob/master/pyart/%s%s" % (fn, linespec)

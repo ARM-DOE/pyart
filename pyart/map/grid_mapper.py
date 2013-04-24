@@ -7,6 +7,7 @@ Utilities for mapping radar objects to Cartesian grids.
 .. autosummary::
     :toctree: generated/
 
+    grid_from_radars
     map_to_grid
     _load_nn_field_data
 
@@ -18,14 +19,163 @@ Utilities for mapping radar objects to Cartesian grids.
 
 """
 
+import getpass
+import socket
+import datetime
+
 import numpy as np
 import scipy.spatial
 
 from ..graph.common import corner_to_point
 from ..io.common import radar_coords_to_cart
+from ..io.grid import PyGrid
 from ._load_nn_field_data import _load_nn_field_data
 from .ckdtree import cKDTree
 from .ball_tree import BallTree
+
+
+def grid_from_radars(radars, grid_shape, grid_limits, **kwargs):
+    """
+    Map one or more radars to a Cartesian grid returning a PyGrid object.
+
+    Additional arguments are passed to :py:func:`map_to_grid`
+
+    Parameters
+    ----------
+    radars : tuple of Radar objects.
+        Radar objects which will be mapped to the Cartesian grid.
+    grid_shape : 3-tuple of floats
+        Number of points in the grid (x, y, z).
+    grid_limits : 3-tuple of 2-tuples
+        Minimum and maximum grid location (inclusive) in meters for the
+        x, y, z coordinates.
+
+    Returns
+    -------
+    pygrid : PyGrid
+        A :py:class:`pyart.io.PyGrid` object containing the gridded radar
+        data.
+
+    See Also
+    --------
+    map_to_grid : Map to grid and return a dictionary of radar fields
+
+    """
+    # map the radar(s) to a cartesian grid
+    grids = map_to_grid(radars, grid_shape=grid_shape,
+                        grid_limits=grid_limits, **kwargs)
+
+    # create and populate the field dictionary
+    fields = {}
+    first_radar = radars[0]
+
+    for field in grids.keys():
+        if field == 'ROI':
+            fields['ROI'] = {
+                'data': grids['ROI'],
+                'standard_name': 'radius_of_influence',
+                'long_name': 'Radius of influence for mapping',
+                'units': 'm',
+                'least_significant_digit': 1,
+                'valid_min': 0.,
+                'valid_max': 100000.,
+                '_FillValue': 9999.0}
+        else:
+            fields[field] = {'data': grids[field]}
+            # copy the metadata from the radar to the grid
+            for key in first_radar.fields[field].keys():
+                if key == 'data':
+                    continue
+                fields[field][key] = first_radar.fields[field][key]
+
+    # time dictionaries
+    time = {
+        'data': first_radar.time['data'][0],
+        'units': first_radar.time['units'],
+        'calendar': first_radar.time['calendar'],
+        'standard_name': first_radar.time['standard_name'],
+        'long_name': 'time in seconds of volume start'}
+
+    time_start = {
+        'data': first_radar.time['data'][0],
+        'units': first_radar.time['units'],
+        'calendar': first_radar.time['calendar'],
+        'standard_name': first_radar.time['standard_name'],
+        'long_name': 'time in seconds of volume start'}
+
+    time_end = {
+        'data': first_radar.time['data'][-1],
+        'units': first_radar.time['units'],
+        'calendar': first_radar.time['calendar'],
+        'standard_name': first_radar.time['standard_name'],
+        'long_name': 'time in seconds of volume end'}
+
+    # grid coordinate dictionaries
+    nx, ny, nz = grid_shape
+    (x0, x1), (y0, y1), (z0, z1) = grid_limits
+
+    xaxis = {'data':  np.linspace(x0, x1, nx),
+             'long_name': 'x-coordinate in Cartesian system',
+             'axis': 'X',
+             'units': 'm'}
+
+    yaxis = {'data': np.linspace(y0, y1, ny),
+             'long_name': 'y-coordinate in Cartesian system',
+             'axis': 'Y',
+             'units': 'm'}
+
+    zaxis = {'data': np.linspace(z0, z1, nz),
+             'long_name': 'z-coordinate in Cartesian system',
+             'axis': 'Z',
+             'units': 'm',
+             'positive': 'up'}
+
+    # grid origin location dictionaries
+    if 'origin' in kwargs:
+        lat, lon, alt = kwargs['origin']
+    else:
+        location = first_radar.location
+        lat = location['latitude']['data']
+        lon = location['longitude']['data']
+        alt = location['altitude']['data']
+
+    altorigin = {'data': alt,
+                 'long_name': 'Altitude at grid origin',
+                 'units': 'm'}
+
+    latorigin = {'data': lat,
+                 'long_name': 'latitude at grid origin',
+                 'units': 'degrees_north'}
+
+    lonorigin = {'data': lon,
+                 'long_name': 'longitude at grid origin',
+                 'units': 'degrees_east'}
+
+    # axes dictionary
+    axes = {'time': time,
+            'time_start': time_start,
+            'time_end': time_end,
+            'z_disp': zaxis,
+            'y_disp': yaxis,
+            'x_disp': xaxis,
+            'alt': altorigin,
+            'lat': latorigin,
+            'lon': lonorigin}
+
+    # metadata dictionary
+    metadata = dict(first_radar.metadata)
+
+    # update history
+    time_str = datetime.datetime.now().strftime('%d-%b-%Y, %X')
+    t = (getpass.getuser(), socket.gethostname(), time_str)
+    text = "Gridded by user %s on %s at %s using Py-ART's map_to_grid" % t
+
+    if 'history' in metadata.keys():
+        metadata['history'] = (metadata['history'] + '\n' + text)
+    else:
+        metadata['history'] = text
+
+    return PyGrid(fields, axes, metadata)
 
 
 class NNLocator:
@@ -151,8 +301,8 @@ def map_to_grid(radars, grid_shape=(81, 81, 69),
         Top of atmosphere in meters. Collected points above this height are
         not included in the interpolation.
 
-    Optional Parameters
-    -------------------
+    Other parameters
+    ----------------
     h_factor : float
         H factor which influences the increase in the radius of influence as
         elevation increases.  Only used when qrf_func is None.
@@ -185,6 +335,10 @@ def map_to_grid(radars, grid_shape=(81, 81, 69),
         Dictionary of mapped fields.  The keysof the dictionary are given by
         parameter fields.  Each elements is a `grid_size` float64 array
         containing the interpolated grid for that field.
+
+    See Also
+    --------
+    grid_from_radars : Map to grid and return a PyGrid object.
 
     """
     # check the parameters
@@ -229,6 +383,9 @@ def map_to_grid(radars, grid_shape=(81, 81, 69),
         # A table mapping filtered gates to raw gates is created later.
         # Since the dtype is not not know this method is slow.
         field_data_objs = np.empty((nfields, nradars), dtype='object')
+        # We also need to know how many gates from each radar are included
+        # in the NNLocator, the filtered_gates_per_radar list records this
+        filtered_gates_per_radar = []
 
     # loop over the radars finding gate locations and field data
     for iradar, radar in enumerate(radars):
@@ -263,6 +420,12 @@ def map_to_grid(radars, grid_shape=(81, 81, 69),
             gflags = np.logical_and(gflags, np.logical_not(refl_data.mask))
             gflags = gflags.data
         include_gate[start:end] = gflags.flat
+
+        if not copy_field_data:
+            # record the number of gates from the current radar which
+            # are included in the interpolation.
+            filtered_gates_per_radar.append(gflags.sum())
+
         del refl_data, gflags, zg_loc
 
         # copy/store references to field data for lookup
@@ -280,12 +443,25 @@ def map_to_grid(radars, grid_shape=(81, 81, 69),
         # same manner as we will filter the gate locations.
         filtered_field_data = field_data[include_gate]
     else:
-        # copy_field_data == True, we need a lookup table which maps from
+        # copy_field_data == True, build a lookup table which maps from
         # filtered gate number to (radar number, radar gate number)
+        # the radar number is given as the quotent of the lookup table
+        # value divided by total_gates, the remainer gives the index of
+        # the gate in the flat field data array.
+
+        # initalize the lookup table with values from 0 ... total gates
         lookup = np.where(include_gate)[0]
-        max_gates = max(ngates_per_radar)
-        # XXX add max_gates*radar_i to lookup table for gates in radars
-        # beyond 1
+
+        # number of filtered gates before a given radar
+        filtered_gate_offset = np.cumsum([0] + filtered_gates_per_radar)
+
+        # for radars 1 to N-1 add total_gates to the lookup table and
+        # subtract the number of gates in all ealier radars.
+        for i in xrange(1, nradars):
+            l_start = filtered_gate_offset[i]
+            l_end = filtered_gate_offset[i + 1]
+            gates_before = gate_offset[i]
+            lookup[l_start:l_end] += (total_gates * i - gates_before)
 
     # populate the nearest neighbor locator with the filtered gate locations
     nnlocator = NNLocator(gate_locations[include_gate], algorithm=algorithm,
@@ -343,7 +519,7 @@ def map_to_grid(radars, grid_shape=(81, 81, 69),
             # radar numbers and gate numbers for the neighbors.  Then
             # use the _load_nn_field_data function to load this data from
             # the field data object array.  This is done in Cython for speed.
-            r_nums, e_nums = divmod(lookup[ind], max_gates)
+            r_nums, e_nums = divmod(lookup[ind], total_gates)
             npoints = r_nums.size
             nn_field_data = np.empty((npoints, nfields), np.float64)
             _load_nn_field_data(field_data_objs, nfields, npoints, r_nums,
