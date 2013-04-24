@@ -89,21 +89,35 @@
 </div>
 <span class="target" id="module-pyart.io.grid"></span><div class="section" id="pyart-io-grid">
 <h2>pyart.io.grid<a class="headerlink" href="#pyart-io-grid" title="Permalink to this headline">¶</a></h2>
-<p>A general gridded data object for radar data.</p>
+<p>Reading and writing PyGrid objects.</p>
 <table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.grid.grid2.html#pyart.io.grid.grid2" title="pyart.io.grid.grid2"><tt class="xref py py-obj docutils literal"><span class="pre">grid2</span></tt></a>(radars,&nbsp;**kwargs)</td>
-<td>map tuples of Py-Radar objects to a cartesian grid..</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.grid.read_grid.html#pyart.io.grid.read_grid" title="pyart.io.grid.read_grid"><tt class="xref py py-obj docutils literal"><span class="pre">read_grid</span></tt></a>(filename)</td>
+<td>Read a netCDF grid file</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.grid.ncvar_to_field.html#pyart.io.grid.ncvar_to_field" title="pyart.io.grid.ncvar_to_field"><tt class="xref py py-obj docutils literal"><span class="pre">ncvar_to_field</span></tt></a>(ncvar)</td>
-<td></td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.grid.write_grid.html#pyart.io.grid.write_grid" title="pyart.io.grid.write_grid"><tt class="xref py py-obj docutils literal"><span class="pre">write_grid</span></tt></a>(filename,&nbsp;pygrid[,&nbsp;format])</td>
+<td>Write a PyGrid object to a CF-1.5 and ARM standard netcdf file</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.grid.pyGrid.html#pyart.io.grid.pyGrid" title="pyart.io.grid.pyGrid"><tt class="xref py py-obj docutils literal"><span class="pre">pyGrid</span></tt></a>(*args,&nbsp;**kwargs)</td>
-<td></td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.grid._read_grid_cf.html#pyart.io.grid._read_grid_cf" title="pyart.io.grid._read_grid_cf"><tt class="xref py py-obj docutils literal"><span class="pre">_read_grid_cf</span></tt></a>(filename)</td>
+<td>Read a CF compliant netCDF file containing a grid.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.grid._read_grid_wrf.html#pyart.io.grid._read_grid_wrf" title="pyart.io.grid._read_grid_wrf"><tt class="xref py py-obj docutils literal"><span class="pre">_read_grid_wrf</span></tt></a>(filename)</td>
+<td>Read a WRF netCDF file containing a grid.</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.grid.PyGrid.html#pyart.io.grid.PyGrid" title="pyart.io.grid.PyGrid"><tt class="xref py py-obj docutils literal"><span class="pre">PyGrid</span></tt></a>(fields,&nbsp;axes,&nbsp;metadata)</td>
+<td>An object for holding gridded Radar data.</td>
 </tr>
 </tbody>
 </table>
@@ -381,7 +395,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Apr 22, 2013.
+      Last updated on Apr 24, 2013.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>

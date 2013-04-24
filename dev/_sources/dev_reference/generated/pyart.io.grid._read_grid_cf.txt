@@ -1,0 +1,6 @@
+pyart.io.grid._read_grid_cf
+===========================
+
+.. currentmodule:: pyart.io.grid
+
+.. autofunction:: _read_grid_cf

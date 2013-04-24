@@ -1,0 +1,6 @@
+pyart.io.PyGrid.write
+=====================
+
+.. currentmodule:: pyart.io
+
+.. automethod:: PyGrid.write
