@@ -18,14 +18,156 @@ Utilities for mapping radar objects to Cartesian grids.
 
 """
 
+import getpass
+import socket
+import datetime
+
 import numpy as np
 import scipy.spatial
 
 from ..graph.common import corner_to_point
 from ..io.common import radar_coords_to_cart
+from ..io.grid import PyGrid
 from ._load_nn_field_data import _load_nn_field_data
 from .ckdtree import cKDTree
 from .ball_tree import BallTree
+
+
+def grid_from_radars(radars, grid_shape, grid_limits, **kwargs):
+    """
+
+    Parameters
+    ----------
+    radars : tuple
+
+    grid_shape :
+
+    grid_limits :
+
+    **kwargs :
+
+
+    Returns
+    -------
+    pygrid : PyGrid
+        A PyGrid object containing the gridded radar data.
+
+    """
+    # map the radar(s) to a cartesian grid
+    grids = map_to_grid(radars, grid_shape=grid_shape,
+                        grid_limits=grid_limits, **kwargs)
+
+    # create and populate the field dictionary
+    fields = {}
+    first_radar = radars[0]
+
+    for field in grids.keys():
+        if field == 'ROI':
+            fields['ROI'] = {
+                'data': grids['ROI'],
+                'standard_name': 'radius_of_influence',
+                'long_name': 'Radius of influence for mapping',
+                'units': 'm',
+                'least_significant_digit': 1,
+                'valid_min': 0.,
+                'valid_max': 100000.,
+                '_FillValue': 9999.0}
+        else:
+            fields[field] = {'data': grids[field]}
+            # copy the metadata from the radar to the grid
+            for key in first_radar.fields[field].keys():
+                if key == 'data':
+                    continue
+                fields[field][key] = first_radar.fields[field][key]
+
+    # time dictionaries
+    time = {
+        'data': first_radar.time['data'][0],
+        'units': first_radar.time['units'],
+        'calendar': first_radar.time['calendar'],
+        'standard_name': first_radar.time['standard_name'],
+        'long_name': 'time in seconds of volume start'}
+
+    time_start = {
+        'data': first_radar.time['data'][0],
+        'units': first_radar.time['units'],
+        'calendar': first_radar.time['calendar'],
+        'standard_name': first_radar.time['standard_name'],
+        'long_name': 'time in seconds of volume start'}
+
+    time_end = {
+        'data': first_radar.time['data'][-1],
+        'units': first_radar.time['units'],
+        'calendar': first_radar.time['calendar'],
+        'standard_name': first_radar.time['standard_name'],
+        'long_name': 'time in seconds of volume end'}
+
+    # grid coordinate dictionaries
+    nx, ny, nz = grid_shape
+    (x0, x1), (y0, y1), (z0, z1) = grid_limits
+
+    xaxis = {'data':  np.linspace(x0, x1, nx),
+             'long_name': 'x-coordinate in Cartesian system',
+             'axis': 'X',
+             'units': 'm'}
+
+    yaxis = {'data': np.linspace(y0, y1, ny),
+             'long_name': 'y-coordinate in Cartesian system',
+             'axis': 'Y',
+             'units': 'm'}
+
+    zaxis = {'data': np.linspace(z0, z1, nz),
+             'long_name': 'z-coordinate in Cartesian system',
+             'axis': 'Z',
+             'units': 'm',
+             'positive': 'up'}
+
+    # grid origin location dictionaries
+    if 'origin' in kwargs:
+        lat, lon, alt = kwargs['origin']
+    else:
+        location = first_radar.location
+        lat = location['latitude']['data']
+        lon = location['longitude']['data']
+        alt = location['altitude']['data']
+
+    altorigin = {'data': alt,
+                 'long_name': 'Altitude at grid origin',
+                 'units': 'm'}
+
+    latorigin = {'data': lat,
+                 'long_name': 'latitude at grid origin',
+                 'units': 'degrees_north'}
+
+    lonorigin = {'data': lon,
+                 'long_name': 'longitude at grid origin',
+                 'units': 'degrees_east'}
+
+    # axes dictionary
+    axes = {'time': time,
+            'time_start': time_start,
+            'time_end': time_end,
+            'z_disp': zaxis,
+            'y_disp': yaxis,
+            'x_disp': xaxis,
+            'alt': altorigin,
+            'lat': latorigin,
+            'lon': lonorigin}
+
+    # metadata dictionary
+    metadata = dict(first_radar.metadata)
+
+    # update history
+    time_str = datetime.datetime.now().strftime('%d-%b-%Y, %X')
+    t = (getpass.getuser(), socket.gethostname(), time_str)
+    text = "Gridded by user %s on %s at %s using Py-ART's map_to_grid" % t
+
+    if 'history' in metadata.keys():
+        metadata['history'] = (metadata['history'] + '\n' + text)
+    else:
+        metadata['history'] = text
+
+    return PyGrid(fields, axes, metadata)
 
 
 class NNLocator:
