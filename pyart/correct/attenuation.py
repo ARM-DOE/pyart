@@ -4,7 +4,7 @@ pyart.correct.attenuation
 
 Attenuation correction from polarimetric radars.
 
-Code adapted from XXX by Scott Giangrande et al
+Code adapted from method in Gu et al, JAMC 2011, 50, 39.
 
 Adapted by Scott Collis and Scott Giangrande, refactored by Jonathan Helmus.
 
@@ -26,7 +26,7 @@ from . import phase_proc
 def calculate_attenuation(radar, z_offset, debug=False, doc=15, fzl=4000.0,
                           rhv_min=0.8, ncp_min=0.5, a_coef=0.06, beta=0.8):
     """
-    Calculate the attenuation from a polarimetric radar using XXX
+    Calculate the attenuation from a polarimetric radar using Z-PHI method.
 
     Parameters
     ----------
@@ -50,9 +50,11 @@ def calculate_attenuation(radar, z_offset, debug=False, doc=15, fzl=4000.0,
     ----------------
 
     doc : float
-        `doc` parameter passed to :py:phase_proc.det_process_range, XXX.
+        Number of gates at the end of each ray to to remove from the 
+        calculation.
     fzl : float
-        `fzl` parameter passed to :py:phase_proc.det_process_range, XXX.
+        Freezing layer, gates above this point are not included in the
+        correction.
     rhv_min : float
         Minimum copol_coeff value to consider valid.
     ncp_min : float
@@ -64,7 +66,8 @@ def calculate_attenuation(radar, z_offset, debug=False, doc=15, fzl=4000.0,
 
     References
     ----------
-    Giangrande et al. XXX
+    Gu et al. Polarimetric Attenuation Correction in Heavy Rain at C Band,
+    JAMC, 2011, 50, 39-58.
 
     """
     # extract fields and parameters from radar
