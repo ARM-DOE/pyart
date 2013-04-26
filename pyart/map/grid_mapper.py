@@ -233,7 +233,8 @@ class NNLocator:
             ind = self.tree.query_ball_point(q, r)
             if len(ind) == 0:
                 return ind, 0
-            dist = scipy.spatial.minkowski_distance_p(q, self.tree.data[ind])
+            dist = scipy.spatial.minkowski_distance(q, self.tree.data[ind])
+
             return ind, dist
 
         elif self._algorithm == 'ball_tree':
@@ -533,7 +534,7 @@ def map_to_grid(radars, grid_shape=(81, 81, 69),
             weights = (r2 - dist2) / (r2 + dist2)
             value = np.average(nn_field_data, weights=weights, axis=0)
         elif weighting_function.upper() == 'BARNES':
-            w = np.exp(-dist2 / 2.0 * r2) + 1e-5
+            w = np.exp(-dist2 / (2.0 * r2)) + 1e-5
             w /= np.sum(w)
             value = np.ma.dot(w, nn_field_data)
 
