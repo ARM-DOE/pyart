@@ -39,6 +39,8 @@ def read_rsl(filename, add_meta=None):
         Radar object.
 
     """
+    _FilleValue=-9999.0
+
     rslfile = _rsl_interface.RslFile(filename)
     available_vols = rslfile.available_moments()
     first_volume = rslfile.get_volume(available_vols[0])
@@ -183,16 +185,16 @@ def read_rsl(filename, add_meta=None):
 
         # extract the field, mask and reshape
         data = rslfile.get_volume_array(volume_num)
-        data[np.where(np.isnan(data))] = -9999.0
-        data[np.where(data == 131072)] = -9999.0
-        data = np.ma.masked_equal(data, -9999.0)
+        data[np.where(np.isnan(data))] = _FillValue
+        data[np.where(data == 131072)] = _FilleValue
+        data = np.ma.masked_equal(data, _FilleValue)
         data.shape = (data.shape[0] * data.shape[1], data.shape[2])
 
         # create the field dictionary
         standard_field_name = VOLUMENUM2STANDARDNAME[volume_num]
         fielddict = get_metadata(standard_field_name)
         fielddict['data'] = data
-        fielddict['_FillValue'] = -9999.0
+        fielddict['_FillValue'] = _FilleValue
         fields[standard_field_name] = fielddict
 
     return Radar(nsweeps, nrays, ngates, scan_type, naz, nele, _range,
@@ -208,8 +210,8 @@ def read_rsl(filename, add_meta=None):
 #   0   DZ              DBZ_F           reflectivity_horizontal
 #   1   VR              VEL_F           mean_doppler_velocity
 #   2   SW              WIDTH
-#   3   CZ              DBZ
-#   4   ZT              DBZ             reflectivity_horizontal_filtered
+#   3   CZ              DBZ             reflectivity_horizontal_filtered
+#   4   ZT              DBZ             total_reflectivity
 #   5   DR              ZDR
 #   6   LR
 #   7   ZD              ZDR_F           diff_reflectivity
@@ -229,7 +231,7 @@ def read_rsl(filename, add_meta=None):
 #   21  AH
 #   22  CV
 #   23  AV
-#   24  SQ              NCP_F           norm_coherent_power
+#   24  SQ              SQI             signal_quality_index 
 
 
 VOLUMENUM2RSLNAME = {
@@ -264,12 +266,13 @@ RSLNAME2VOLUMENUM = dict([(v, k) for k, v in VOLUMENUM2RSLNAME.iteritems()])
 
 
 VOLUMENUM2STANDARDNAME = {
-    0: 'reflectivity_horizontal_filtered',
+    0: 'reflectivity_horizontal',
     1: 'mean_doppler_velocity',
-    4: 'reflectivity_horizontal',
+    3: 'reflectivity_horizontal_filtered',
+    4: 'total_reflectivity',
     7: 'diff_reflectivity',
     9: 'copol_coeff',
     10: 'dp_phase_shift',
     16: 'corrected_mean_doppler_velocity',
     17: 'diff_phase',
-    24: 'norm_coherent_power'}
+    24: 'signal_quality_index'}
