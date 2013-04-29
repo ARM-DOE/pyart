@@ -20,7 +20,7 @@ from pyart.io.radar import Radar
 from pyart.io.common import dms_to_d, get_metadata, make_tu_str
 
 
-def read_rsl(filename, add_meta=None):
+def read_rsl(filename, radar_format=None, callid=None, add_meta=None):
     """
     Read a file supported by RSL
 
@@ -28,6 +28,11 @@ def read_rsl(filename, add_meta=None):
     ----------
     filename : str or RSL_radar
         Name of file whose format is supported by RSL.
+    radar_format : str or None
+        Format of the radar file.  Must be one of 'wsr88d'.
+    callid : str or None
+        Four letter NEXRAD radar Call ID, only used when radar_format is
+        'wsr88d'.
     add_meta : dict or None
         Dictionary containing additional metadata to add to the created
         Radar object.  This will overwrite metadata extracted from the file.
@@ -39,7 +44,7 @@ def read_rsl(filename, add_meta=None):
         Radar object.
 
     """
-    rslfile = _rsl_interface.RslFile(filename)
+    rslfile = _rsl_interface.RslFile(filename, radar_format, callid)
     available_vols = rslfile.available_moments()
     first_volume = rslfile.get_volume(available_vols[0])
     first_sweep = first_volume.get_sweep(0)

@@ -986,9 +986,18 @@ cdef class RslFile:
     cdef _rsl_h.Sweep * _Sweep
     cdef _rsl_h.Ray * _Ray
 
-    def __cinit__(self, filename):
+    def __cinit__(self, filename, radar_format=None, callid=None):
         """ Initalize the _RslFile object. """
-        self._Radar = _rsl_h.RSL_anyformat_to_radar(filename)
+        if radar_format == 'wsr88d':
+            if callid is None:
+                raise ValueError('callid must be provided.')
+            self._Radar = _rsl_h.RSL_wsr88d_to_radar(filename, callid)
+        elif radar_format is None:
+            self._Radar = _rsl_h.RSL_anyformat_to_radar(filename)
+        else:
+            raise ValueError('invalid radar_format:', radar_format)
+        if self._Radar is NULL:
+            raise IOError('file cannot be read.')
 
     def __dealloc__(self):
         """ Free memory used by object. """
