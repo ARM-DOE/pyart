@@ -105,6 +105,7 @@ pyart/io/tests/sample_uf.uf
 pyart/io/rsl_wrap/sample_uf.uf
 pyart/io/tests/cfrad.20080604_002217_000_SPOL_v36_SUR_netcdf3.nc
 pyart/io/tests/cfrad.20080604_002217_000_SPOL_v36_SUR_netcdf4.nc
+pyart/io/tests/swx_20120520_0641.nc
 pyart/correct/tests/sgpinterpolatedsondeC1.c1.20110510.000000.cdf
 pyart/correct/tests/sample.nc
 pyart/correct/tests/sample.sigmet
