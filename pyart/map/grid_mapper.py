@@ -19,10 +19,6 @@ Utilities for mapping radar objects to Cartesian grids.
 
 """
 
-import getpass
-import socket
-import datetime
-
 import numpy as np
 import scipy.spatial
 
@@ -90,42 +86,42 @@ def grid_from_radars(radars, grid_shape, grid_limits, **kwargs):
 
     # time dictionaries
     time = {
-        'data': first_radar.time['data'][0],
+        'data': np.array(first_radar.time['data'][0]),
         'units': first_radar.time['units'],
         'calendar': first_radar.time['calendar'],
         'standard_name': first_radar.time['standard_name'],
-        'long_name': 'time in seconds of volume start'}
+        'long_name': 'Time in seconds since volume start'}
 
     time_start = {
         'data': first_radar.time['data'][0],
         'units': first_radar.time['units'],
         'calendar': first_radar.time['calendar'],
         'standard_name': first_radar.time['standard_name'],
-        'long_name': 'time in seconds of volume start'}
+        'long_name': 'Time in seconds of volume start'}
 
     time_end = {
         'data': first_radar.time['data'][-1],
         'units': first_radar.time['units'],
         'calendar': first_radar.time['calendar'],
         'standard_name': first_radar.time['standard_name'],
-        'long_name': 'time in seconds of volume end'}
+        'long_name': 'Time in seconds of volume end'}
 
     # grid coordinate dictionaries
     nx, ny, nz = grid_shape
     (x0, x1), (y0, y1), (z0, z1) = grid_limits
 
     xaxis = {'data':  np.linspace(x0, x1, nx),
-             'long_name': 'x-coordinate in Cartesian system',
+             'long_name': 'X-coordinate in Cartesian system',
              'axis': 'X',
              'units': 'm'}
 
     yaxis = {'data': np.linspace(y0, y1, ny),
-             'long_name': 'y-coordinate in Cartesian system',
+             'long_name': 'Y-coordinate in Cartesian system',
              'axis': 'Y',
              'units': 'm'}
 
     zaxis = {'data': np.linspace(z0, z1, nz),
-             'long_name': 'z-coordinate in Cartesian system',
+             'long_name': 'Z-coordinate in Cartesian system',
              'axis': 'Z',
              'units': 'm',
              'positive': 'up'}
@@ -141,15 +137,25 @@ def grid_from_radars(radars, grid_shape, grid_limits, **kwargs):
 
     altorigin = {'data': alt,
                  'long_name': 'Altitude at grid origin',
-                 'units': 'm'}
+                 'units': 'm',
+                 'standard_name': 'altitude',
+                 }
 
     latorigin = {'data': lat,
-                 'long_name': 'latitude at grid origin',
-                 'units': 'degrees_north'}
+                 'long_name': 'Latitude at grid origin',
+                 'units': 'degree_N',
+                 'standard_name': 'latitude',
+                 'valid_min': -90.,
+                 'valid_max': 90.
+                 }
 
     lonorigin = {'data': lon,
-                 'long_name': 'longitude at grid origin',
-                 'units': 'degrees_east'}
+                 'long_name': 'Longitude at grid origin',
+                 'units': 'degree_E',
+                 'standard_name': 'longitude',
+                 'valid_min': -180.,
+                 'valid_max': 180.
+                 }
 
     # axes dictionary
     axes = {'time': time,
@@ -164,16 +170,6 @@ def grid_from_radars(radars, grid_shape, grid_limits, **kwargs):
 
     # metadata dictionary
     metadata = dict(first_radar.metadata)
-
-    # update history
-    time_str = datetime.datetime.now().strftime('%d-%b-%Y, %X')
-    t = (getpass.getuser(), socket.gethostname(), time_str)
-    text = "Gridded by user %s on %s at %s using Py-ART's map_to_grid" % t
-
-    if 'history' in metadata.keys():
-        metadata['history'] = (metadata['history'] + '\n' + text)
-    else:
-        metadata['history'] = text
 
     return PyGrid(fields, axes, metadata)
 

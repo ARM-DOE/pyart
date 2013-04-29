@@ -97,7 +97,7 @@ def write_grid(filename, pygrid, format='NETCDF4'):
         details.
 
     """
-    ncobj = netCDF4.Dataset(filename, 'w')
+    ncobj = netCDF4.Dataset(filename, 'w', format=format)
 
     # create the time dimension
     ncobj.createDimension('time', None)
@@ -109,14 +109,12 @@ def write_grid(filename, pygrid, format='NETCDF4'):
     ncobj.createDimension('ny', ny)
     ncobj.createDimension('nx', nx)
 
-    # field variables
-    for field, field_dic in pygrid.fields.iteritems():
-        # append 1, to the shape of all data to indicate the time var.
-        field_dic['data'].shape = (1, ) + field_dic['data'].shape
-        _create_ncvar(field_dic, ncobj, field, ('time', 'nz', 'ny', 'nx'))
-        field_dic['data'].shape = field_dic['data'].shape[1:]
-
     # axes variables
+    if 'base_time' in pygrid.axes.keys():
+        _create_ncvar(pygrid.axes['base_time'], ncobj, 'base_time', ())
+    if 'time_offset' in pygrid.axes.keys():
+        _create_ncvar(pygrid.axes['time_offset'], ncobj, 'time_offset',
+                      ('time',))
     _create_ncvar(pygrid.axes['time'], ncobj, 'time', ('time', ))
     _create_ncvar(pygrid.axes['time_end'], ncobj, 'time_end', ('time', ))
     _create_ncvar(pygrid.axes['time_start'], ncobj, 'time_start', ('time', ))
@@ -127,11 +125,16 @@ def write_grid(filename, pygrid, format='NETCDF4'):
     _create_ncvar(pygrid.axes['lon'], ncobj, 'lon', ('time', ))
     _create_ncvar(pygrid.axes['alt'], ncobj, 'alt', ('time', ))
 
+    # field variables
+    for field, field_dic in pygrid.fields.iteritems():
+        # append 1, to the shape of all data to indicate the time var.
+        field_dic['data'].shape = (1, ) + field_dic['data'].shape
+        _create_ncvar(field_dic, ncobj, field, ('time', 'nz', 'ny', 'nx'))
+        field_dic['data'].shape = field_dic['data'].shape[1:]
+
     # metadata
     for k, v in pygrid.metadata.iteritems():
         setattr(ncobj, k, v)
-    if 'Conventions' not in pygrid.metadata.keys():
-        ncobj.Conventions = 'CF-1.5'
 
     ncobj.close()
     return
