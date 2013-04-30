@@ -76,12 +76,12 @@ def read_rsl(filename, radar_format=None, callid=None, add_meta=None):
 
     # range
     _range = get_metadata('range')
-    range_bin1 = first_ray.range_bin1
+    gate0 = first_ray.range_bin1
     gate_size = first_ray.gate_size
-    _range['data'] = range_bin1 + gate_size * np.arange(ngates)
+    _range['data'] = gate0 + gate_size * np.arange(ngates, dtype='float32')
     _range['spacing_is_constant'] = 'true'
-    _range['meters_to_center_of_first_gate'] = range_bin1
-    _range['meters_between_gates'] = gate_size
+    _range['meters_to_center_of_first_gate'] = _range['data'][0]
+    _range['meters_between_gates'] = np.array(gate_size, dtype='float32')
 
     # azimuth and elevation
     _azimuth, _elevation = first_volume.get_azimuth_and_elev_array()
@@ -113,19 +113,23 @@ def read_rsl(filename, radar_format=None, callid=None, add_meta=None):
 
     if scan_type == 'ppi':
         nsweeps = nele
-        sweep_number['data'] = np.arange(nsweeps)
+        sweep_number['data'] = np.arange(nsweeps, dtype='int32')
         sweep_mode['data'] = np.array(nsweeps * ['azimuth_surveillance    '])
         fixed_angle['data'] = first_volume.get_sweep_elevs()
-        sweep_start_ray_index['data'] = np.arange(0, len_time, naz)
-        sweep_end_ray_index['data'] = np.arange(naz - 1, len_time, naz)
+        sweep_start_ray_index['data'] = np.arange(0, len_time, naz,
+                                                  dtype='int32')
+        sweep_end_ray_index['data'] = np.arange(naz - 1, len_time, naz,
+                                                dtype='int32')
 
     elif scan_type == 'rhi':
         nsweeps = naz
-        sweep_number['data'] = np.arange(nsweeps)
+        sweep_number['data'] = np.arange(nsweeps, dtype='int32')
         sweep_mode['data'] = np.array(nsweeps * ['rhi                     '])
         fixed_angle['data'] = first_volume.get_sweep_azimuths()
-        sweep_start_ray_index['data'] = np.arange(0, len_time, nele)
-        sweep_end_ray_index['data'] = np.arange(nele - 1, len_time, nele)
+        sweep_start_ray_index['data'] = np.arange(0, len_time, nele,
+                                                  dtype='int32')
+        sweep_end_ray_index['data'] = np.arange(nele - 1, len_time, nele,
+                                                dtype='int32')
 
     sweep_info = {
         'sweep_number': sweep_number,
@@ -144,6 +148,12 @@ def read_rsl(filename, radar_format=None, callid=None, add_meta=None):
         'country': 'country'}  # rsl_name : radar_metadata_name
     for rsl_key, metadata_key in need_from_rsl_header.iteritems():
         metadata[metadata_key] = rsl_dict[rsl_key]
+    metadata['title'] = ''
+    metadata['institution'] = ''
+    metadata['references'] = ''
+    metadata['source'] = ''
+    metadata['comment'] = ''
+
     if add_meta is not None:
         metadata.update(add_meta)
 
@@ -154,14 +164,14 @@ def read_rsl(filename, radar_format=None, callid=None, add_meta=None):
     latd = rsl_dict['latd']
     latm = rsl_dict['latm']
     lats = rsl_dict['lats']
-    lat['data'] = np.array(dms_to_d((latd, latm, lats)))
+    lat['data'] = np.array(dms_to_d((latd, latm, lats)), dtype='float64')
 
     lond = rsl_dict['lond']
     lonm = rsl_dict['lonm']
     lons = rsl_dict['lons']
-    lon['data'] = np.array(dms_to_d((lond, lonm, lons)))
+    lon['data'] = np.array(dms_to_d((lond, lonm, lons)), dtype='float64')
 
-    elv['data'] = np.array(rsl_dict['height'])
+    elv['data'] = np.array(rsl_dict['height'], dtype='float64')
     location = {'latitude': lat, 'longitude': lon, 'altitude': elv}
 
     # set instrument parameters attribute

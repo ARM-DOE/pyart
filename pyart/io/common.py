@@ -286,25 +286,28 @@ METADATA = {
         'units': 'degrees',
         'standard_name': 'beam_azimuth_angle',
         'long_name': 'azimuth_angle_from_true_north',
+        'axis': 'radial_azimuth_coordinate',
         'comment': 'Azimuth of antenna relative to true north'},
 
     'elevation': {
         'units': 'degrees',
         'standard_name': 'beam_elevation_angle',
         'long_name': 'elevation_angle_from_horizontal_plane',
+        'axis': 'radial_elevation_coordinate',
         'comment': 'Elevation of antenna relative to the horizontal plane'},
 
     'range': {
         'units': 'meters',
         'standard_name': 'projection_range_coordinate',
         'long_name': 'range_to_measurement_volume',
+        'axis': 'radial_range_coordinate',
         'comment': (
             'Coordinate variable for range. Range to center of each bin.')},
 
     'time': {
         'units': 'seconds',
         'standard_name': 'time',
-        'long_name': 'time in seconds since volume start',
+        'long_name': 'time_in_seconds_since_volume_start',
         'comment': ('Coordinate variable for time. '
                     'Time at the center of each ray, in fractional seconds '
                     'since the global variable time_coverage_start')},
