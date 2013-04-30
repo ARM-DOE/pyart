@@ -109,6 +109,8 @@ cdef extern from "rsl.h":
     
     # function definitions
     Radar * RSL_anyformat_to_radar(char *infile)
+    Radar * RSL_wsr88d_to_radar(char *infile, char *call_or_first_tape_file)
+    
     Volume * RSL_copy_volume(Volume *v)
     
     Volume * RSL_new_volume(int max_sweeps)
