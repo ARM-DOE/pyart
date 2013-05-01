@@ -86,21 +86,21 @@ def grid_from_radars(radars, grid_shape, grid_limits, **kwargs):
 
     # time dictionaries
     time = {
-        'data': np.array(first_radar.time['data'][0]),
+        'data': np.array([first_radar.time['data'][0]]),
         'units': first_radar.time['units'],
         'calendar': first_radar.time['calendar'],
         'standard_name': first_radar.time['standard_name'],
         'long_name': 'Time in seconds since volume start'}
 
     time_start = {
-        'data': first_radar.time['data'][0],
+        'data': np.array([first_radar.time['data'][0]]),
         'units': first_radar.time['units'],
         'calendar': first_radar.time['calendar'],
         'standard_name': first_radar.time['standard_name'],
         'long_name': 'Time in seconds of volume start'}
 
     time_end = {
-        'data': first_radar.time['data'][-1],
+        'data': np.array([first_radar.time['data'][-1]]),
         'units': first_radar.time['units'],
         'calendar': first_radar.time['calendar'],
         'standard_name': first_radar.time['standard_name'],

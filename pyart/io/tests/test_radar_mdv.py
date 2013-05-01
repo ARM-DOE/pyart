@@ -250,7 +250,7 @@ def test_mdv_sweep_info_mode():
     assert 'long_name' in sm.keys()
     assert 'data' in sm.keys()
     assert 'comment' in sm.keys()
-    assert sm['data'] == ['azimuth_surveillance    '] * 17
+    assert np.all(sm['data'] == ['azimuth_surveillance    '])
 
 
 def test_mdv_sweep_info_number():
@@ -259,7 +259,7 @@ def test_mdv_sweep_info_number():
     assert 'data' in sn.keys()
     assert 'long_name' in sn.keys()
     assert 'units' in sn.keys()
-    assert sn['data'] == range(17)
+    assert np.all(sn['data'] == range(17))
 
 
 def test_mdv_sweep_info_end():
