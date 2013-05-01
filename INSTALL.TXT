@@ -21,7 +21,7 @@ __ http://www.scipy.org
 __ http://www.scipy.org
 
 4) matplotlib__ 1.1.0 or newer
- 
+
 __ http://matplotlib.org/
 
 5) netCDF4__ 1.0.2 or newer
@@ -44,7 +44,7 @@ The latest source code for Py-ART can be obtained from the GitHub repository,
 https://github.com/ARM-DOE/pyart.
 
 The latest source can be checked out using
-    
+
     $ git clone https://github.com/ARM-DOE/pyart.git
 
 
@@ -66,16 +66,17 @@ of locally using
 
     $ python setup.py install --user
 
-If you prefer to use Py-ART without installing, simply add the this path to 
+If you prefer to use Py-ART without installing, simply add the this path to
 your PYTHONPATH (directory or with a .pth file) and compile the extension
 in-place.
 
     $ python setup.py build_ext -i
 
-Frequency Asked Questions
-=========================
+Frequently asked questions
+==========================
 
-1) I'm getting a segfault in python when using rsl.read_rsl() with IRIS Raw files. 
-A: Via Jonathan Helmus: This is due to a bug in RSL, and can be remedied by adding -fno-stack-protector -D_FORTIFY_SOURCE=0 to the CFLAGS parameter of the makefile of rsl. 
-
-
+Q) I'm getting a segfault or another error in python when using
+     rsl.read_rsl() with IRIS/other files.
+A)  This is due to a bug in RSL, and can be remedied by adding
+    -fno-stack-protector -D_FORTIFY_SOURCE=0 to the CFLAGS parameter of the
+    makefile of rsl.  This issue has been reported to the RSL maintainers.

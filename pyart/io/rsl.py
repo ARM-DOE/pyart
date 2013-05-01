@@ -44,7 +44,7 @@ def read_rsl(filename, radar_format=None, callid=None, add_meta=None):
         Radar object.
 
     """
-    FILLVALUE=-9999.0
+    fillvalue = -9999.0
     rslfile = _rsl_interface.RslFile(filename, radar_format, callid)
     available_vols = rslfile.available_moments()
     first_volume = rslfile.get_volume(available_vols[0])
@@ -199,16 +199,16 @@ def read_rsl(filename, radar_format=None, callid=None, add_meta=None):
 
         # extract the field, mask and reshape
         data = rslfile.get_volume_array(volume_num)
-        data[np.where(np.isnan(data))] = FILLVALUE 
-        data[np.where(data == 131072)] = FILLVALUE
-        data = np.ma.masked_equal(data, FILLVALUE)
+        data[np.where(np.isnan(data))] = fillvalue
+        data[np.where(data == 131072)] = fillvalue
+        data = np.ma.masked_equal(data, fillvalue)
         data.shape = (data.shape[0] * data.shape[1], data.shape[2])
 
         # create the field dictionary
         standard_field_name = VOLUMENUM2STANDARDNAME[volume_num]
         fielddict = get_metadata(standard_field_name)
         fielddict['data'] = data
-        fielddict['_FillValue'] = _FillValue
+        fielddict['_FillValue'] = fillvalue
         fields[standard_field_name] = fielddict
 
     return Radar(nsweeps, nrays, ngates, scan_type, naz, nele, _range,
