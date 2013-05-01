@@ -194,6 +194,7 @@ def write_netcdf(filename, radar, format='NETCDF4'):
     dataset.createDimension('time', None)
     dataset.createDimension('range', radar.ngates)
     dataset.createDimension('sweep', radar.nsweeps)
+    dataset.createDimension('string_length_short', 20)
 
     # global attributes
     dataset.setncatts(radar.metadata)
@@ -253,6 +254,19 @@ def write_netcdf(filename, radar, format='NETCDF4'):
     for k in radar.location.keys():
         _create_ncvar(radar.location[k], dataset, k, ())
 
+    # time_coverage_start and time_coverage_end variables
+    time_dim = ('string_length_short', )
+    units = radar.time['units']
+    start_dt = netCDF4.num2date(radar.time['data'][0], units)
+    end_dt = netCDF4.num2date(radar.time['data'][-1], units)
+    start_dic = {'data': np.array(start_dt.isoformat() + 'Z')}
+    end_dic = {'data': np.array(end_dt.isoformat() + 'Z')}
+    _create_ncvar(start_dic, dataset, 'time_coverage_start', time_dim)
+    _create_ncvar(end_dic, dataset, 'time_coverage_end', time_dim)
+
+    _create_ncvar({'data': np.array([0], dtype='int32')}, dataset,
+                  'volume_number', ())
+
     dataset.close()
 
 
@@ -302,7 +316,8 @@ def _create_ncvar(dic, dataset, name, dimensions):
             ncvar.setncattr(key, value)
 
     # set the data
-    if type(data) == np.ma.MaskedArray:
-        ncvar[:] = data.data
-    else:
-        ncvar[:] = data
+    ncvar[:] = data[:]
+    #if type(data) == np.ma.MaskedArray:
+    #    ncvar[:] = data.data
+    #else:
+    #    ncvar[:] = data

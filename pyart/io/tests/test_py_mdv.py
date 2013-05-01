@@ -220,7 +220,7 @@ def test_geometry():
     assert np.all(mdv.az_deg == np.arange(360))
 
     assert len(mdv.range_km) == 983
-    assert mdv.range_km[10] == 1.3170482218265533
+    assert round(mdv.range_km[10], 2) == 1.32
 
     assert len(mdv.el_deg) == 17
     assert mdv.el_deg[12] == 17.5

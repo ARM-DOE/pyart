@@ -65,12 +65,12 @@ def read_mdv(filename):
     azimuth = get_metadata('azimuth')
     elevation = get_metadata('elevation')
     _range = get_metadata('range')
-    _range['data'] = np.array(radarobj.range_km * 1000.0)
+    _range['data'] = np.array(radarobj.range_km * 1000.0, dtype='float32')
     _range['spacing_is_constant'] = 'true',
-    _range['meters_to_center_of_first_gate'] = radarobj.range_km[0] * 1000.
-    gate_0 = radarobj.range_km[0]
-    gate_1 = radarobj.range_km[1]
-    _range['meters_between_gates'] = (gate_1 - gate_0) * 1000.0
+    _range['meters_to_center_of_first_gate'] = _range['data'][0]
+    gate_0 = _range['data'][0]
+    gate_1 = _range['data'][1]
+    _range['meters_between_gates'] = (gate_1 - gate_0)
 
     if scan_type == 'ppi':
         azimuth['data'] = np.tile(radarobj.az_deg, nele)
@@ -117,19 +117,23 @@ def read_mdv(filename):
     len_time = len(time['data'])
     if radarobj.scan_type == 'ppi':
         nsweeps = nele
-        sweep_number['data'] = range(nsweeps)
-        sweep_mode['data'] = nsweeps * ['azimuth_surveillance    ']
-        fixed_angle['data'] = np.array(radarobj.el_deg)
-        sweep_start_ray_index['data'] = np.arange(0, len_time, naz)
-        sweep_end_ray_index['data'] = np.arange(naz-1, len_time, naz)
+        sweep_number['data'] = np.arange(nsweeps, dtype='int32')
+        sweep_mode['data'] = np.array(nsweeps * ['azimuth_surveillance    '])
+        fixed_angle['data'] = np.array(radarobj.el_deg, dtype='float32')
+        sweep_start_ray_index['data'] = np.arange(0, len_time, naz,
+                                                  dtype='int32')
+        sweep_end_ray_index['data'] = np.arange(naz-1, len_time, naz,
+                                                dtype='int32')
 
     elif radarobj.scan_type == 'rhi':
         nsweeps = naz
-        sweep_number['data'] = range(nsweeps)
-        sweep_mode['data'] = nsweeps * ['rhi                     ']
-        fixed_angle['data'] = np.array(radarobj.az_deg)
-        sweep_start_ray_index['data'] = np.arange(0, len_time, nele)
-        sweep_end_ray_index['data'] = np.arange(nele - 1, len_time, nele)
+        sweep_number['data'] = np.arange(nsweeps, dtype='int32')
+        sweep_mode['data'] = np.array(nsweeps * ['rhi                     '])
+        fixed_angle['data'] = np.array(radarobj.az_deg, dtype='float32')
+        sweep_start_ray_index['data'] = np.arange(0, len_time, nele,
+                                                  dtype='int32')
+        sweep_end_ray_index['data'] = np.arange(nele - 1, len_time, nele,
+                                                dtype='int32')
 
     elif radarobj.scan_type == 'vpr':
         nsweeps = 1
@@ -149,13 +153,24 @@ def read_mdv(filename):
     for meta_key, mdv_key in MDV_METADATA_MAP.iteritems():
         metadata[meta_key] = radarobj.master_header[mdv_key]
 
+    # additional required metadata set to blank
+    metadata['title'] = ''
+    metadata['institution'] = ''
+    metadata['references'] = ''
+    metadata['source'] = ''
+    metadata['history'] = ''
+    metadata['comment'] = ''
+
     # location dictionary
     lat = get_metadata('latitude')
     lon = get_metadata('longitude')
     elv = get_metadata('altitude')
-    lat['data'] = radarobj.radar_info['latitude_deg']
-    lon['data'] = radarobj.radar_info['longitude_deg']
-    elv['data'] = radarobj.radar_info['altitude_km'] * 1000.0
+    lat['data'] = np.array(radarobj.radar_info['latitude_deg'],
+                           dtype='float64')
+    lon['data'] = np.array(radarobj.radar_info['longitude_deg'],
+                           dtype='float64')
+    elv['data'] = np.array(radarobj.radar_info['altitude_km'] * 1000.0,
+                           dtype='float64')
     location = {'latitude': lat, 'longitude': lon, 'altitude': elv}
 
     # instrument parameters
@@ -315,7 +330,10 @@ class MdvFile:
 
         if debug:
             print "Calculating Radar coordinates"
-        self.az_deg, self.range_km, self.el_deg = self._calc_geometry()
+        az_deg, range_km, el_deg = self._calc_geometry()
+        self.az_deg = np.array(az_deg, dtype='float32')
+        self.range_km = np.array(range_km, dtype='float32')
+        self.el_deg = np.array(el_deg, dtype='float32')
 
         if debug:
             print "Making usable time objects"
