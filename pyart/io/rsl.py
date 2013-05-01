@@ -198,7 +198,7 @@ def read_rsl(filename, radar_format=None, callid=None, add_meta=None):
         standard_field_name = VOLUMENUM2STANDARDNAME[volume_num]
         fielddict = get_metadata(standard_field_name)
         fielddict['data'] = data
-        fielddict['_FillValue'] = _FillValue
+        fielddict['_FillValue'] = FILLVALUE
         fields[standard_field_name] = fielddict
 
     return Radar(nsweeps, nrays, ngates, scan_type, naz, nele, _range,
