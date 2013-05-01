@@ -316,7 +316,8 @@ def _create_ncvar(dic, dataset, name, dimensions):
             ncvar.setncattr(key, value)
 
     # set the data
-    if type(data) == np.ma.MaskedArray:
-        ncvar[:] = data.data
-    else:
-        ncvar[:] = data
+    ncvar[:] = data[:]
+    #if type(data) == np.ma.MaskedArray:
+    #    ncvar[:] = data.data
+    #else:
+    #    ncvar[:] = data

@@ -331,8 +331,8 @@ class MdvFile:
         if debug:
             print "Calculating Radar coordinates"
         az_deg, range_km, el_deg = self._calc_geometry()
-        self.az_deg = az_deg.astype('float32')
-        self.range_km = range_km.astype('float32')
+        self.az_deg = np.array(az_deg, dtype='float32')
+        self.range_km = np.array(range_km, dtype='float32')
         self.el_deg = np.array(el_deg, dtype='float32')
 
         if debug:
