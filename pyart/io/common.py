@@ -281,6 +281,22 @@ METADATA = {
         'valid_min': -1.0,
         'least_significant_digit': 3},
 
+    'SQI': {
+        'units':'ratio',
+        'standard_name' : 'signal_quality_index',
+        'long_name': 'signal_quality_index',
+        'valid_max': 1,
+        'valid_min': 0,
+        'least_significant_digit':3},
+
+    'default' : {
+        'units': 'undefined',
+        'standard_name': 'default',
+        'long_name': 'custom_variable',
+        'valid_max': 1000,
+        'valid_min': -1000,
+        'lest_significant_digit':3},
+
     # metadata for radar attributes
     'azimuth': {
         'units': 'degrees',
