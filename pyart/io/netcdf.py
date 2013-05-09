@@ -53,6 +53,10 @@ def read_netcdf(filename):
     _range = _ncvar_to_dict(ncvars['range'])
     elevation = _ncvar_to_dict(ncvars['elevation'])
     time = _ncvar_to_dict(ncvars['time'])
+
+    # check to see if calendar is in the time dict.. if not default to gregorian
+    if 'calendar' not in time.keys():
+        time.update({'calendar':'gregorian'})
     nsweeps = len(ncvars['sweep_start_ray_index'])
     ngates = len(ncobj.dimensions['range'])
 
