@@ -9,7 +9,7 @@ Input/output routines common to many file formats.
 
     dms_to_d
     radar_coords_to_cart
-    make_tu_str
+    make_time_unit_str
     get_metadata
 
 """
@@ -59,9 +59,9 @@ COMMON2STANDARD = {
     'DBZ_AC': 'attenuation_corrected_reflectivity_horizontal', }
 
 
-def make_tu_str(dtobj):
+def make_time_unit_str(dtobj):
     """ Return a time unit string from a datetime object. """
-    return "seconds since " + dtobj.strftime("%Y-%m-%dT%H:%M:%S.0Z")
+    return "seconds since " + dtobj.strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
 def get_metadata(p):
@@ -324,6 +324,7 @@ METADATA = {
         'units': 'seconds',
         'standard_name': 'time',
         'long_name': 'time_in_seconds_since_volume_start',
+        'calendar': 'gregorian',
         'comment': ('Coordinate variable for time. '
                     'Time at the center of each ray, in fractional seconds '
                     'since the global variable time_coverage_start')},
@@ -367,7 +368,8 @@ METADATA = {
 
     'altitude': {
         'standard_name': 'Altitude',
-        'units': 'meters'},
+        'units': 'meters',
+        'positive': 'up'},
 
     # metadata for instrument parameter dictionary
     'prt_mode': {
