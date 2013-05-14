@@ -11,13 +11,11 @@ Python wrapper around the RSL library.
 
 """
 
-from datetime import datetime
-
 import numpy as np
 
-import _rsl_interface
-from pyart.io.radar import Radar
-from pyart.io.common import dms_to_d, get_metadata, make_tu_str
+from . import _rsl_interface
+from .radar import Radar
+from .common import dms_to_d, get_metadata, make_time_unit_str
 
 
 def read_rsl(filename, radar_format=None, callid=None, add_meta=None):
@@ -75,6 +73,19 @@ def read_rsl(filename, radar_format=None, callid=None, add_meta=None):
         naz = nsweeps
         nele = nrays
 
+    # time
+    time = get_metadata('time')
+
+    t_start = first_ray.get_datetime()
+
+    last_sweep = first_volume.get_sweep(nsweeps - 1)
+    last_ray = last_sweep.get_ray(nrays - 1)
+    t_end = last_ray.get_datetime()
+
+    t_span = (t_end - t_start).seconds
+    time['data'] = np.linspace(0, t_span, nrays * nsweeps)
+    time['units'] = make_time_unit_str(t_start)
+
     # range
     _range = get_metadata('range')
     gate0 = first_ray.range_bin1
@@ -83,110 +94,6 @@ def read_rsl(filename, radar_format=None, callid=None, add_meta=None):
     _range['spacing_is_constant'] = 'true'
     _range['meters_to_center_of_first_gate'] = _range['data'][0]
     _range['meters_between_gates'] = np.array(gate_size, dtype='float32')
-
-    # azimuth and elevation
-    _azimuth, _elevation = first_volume.get_azimuth_and_elev_array()
-    azimuth = get_metadata('azimuth')
-    azimuth['data'] = _azimuth.flatten()
-    elevation = get_metadata('elevation')
-    elevation['data'] = _elevation.flatten()
-
-    # time
-    last_sweep = first_volume.get_sweep(nsweeps - 1)
-    last_ray = last_sweep.get_ray(nrays - 1)
-    t_start = first_ray.get_datetime()
-    t_end = last_ray.get_datetime()
-    t_span = (t_end - t_start).seconds
-    tu = make_tu_str(t_start)
-    cal = "gregorian"
-    time = get_metadata('time')
-    time['data'] = np.linspace(0, t_span, nrays * nsweeps)
-    time['units'] = tu
-    time['calendar'] = cal
-
-    # sweep parameters
-    sweep_number = get_metadata('sweep_number')
-    sweep_mode = get_metadata('sweep_mode')
-    fixed_angle = get_metadata('fixed_angle')
-    sweep_start_ray_index = get_metadata('sweep_start_ray_index')
-    sweep_end_ray_index = get_metadata('sweep_end_ray_index')
-    len_time = len(time['data'])
-
-    if scan_type == 'ppi':
-        nsweeps = nele
-        sweep_number['data'] = np.arange(nsweeps, dtype='int32')
-        sweep_mode['data'] = np.array(nsweeps * ['azimuth_surveillance    '])
-        fixed_angle['data'] = first_volume.get_sweep_elevs()
-        sweep_start_ray_index['data'] = np.arange(0, len_time, naz,
-                                                  dtype='int32')
-        sweep_end_ray_index['data'] = np.arange(naz - 1, len_time, naz,
-                                                dtype='int32')
-
-    elif scan_type == 'rhi':
-        nsweeps = naz
-        sweep_number['data'] = np.arange(nsweeps, dtype='int32')
-        sweep_mode['data'] = np.array(nsweeps * ['rhi                     '])
-        fixed_angle['data'] = first_volume.get_sweep_azimuths()
-        sweep_start_ray_index['data'] = np.arange(0, len_time, nele,
-                                                  dtype='int32')
-        sweep_end_ray_index['data'] = np.arange(nele - 1, len_time, nele,
-                                                dtype='int32')
-
-    sweep_info = {
-        'sweep_number': sweep_number,
-        'sweep_mode': sweep_mode,
-        'fixed_angle': fixed_angle,
-        'sweep_start_ray_index': sweep_start_ray_index,
-        'sweep_end_ray_index': sweep_end_ray_index}
-    sweep_mode = np.array([scan_type] * nsweeps)
-    sweep_number = np.linspace(0, nsweeps - 1, nsweeps)
-
-    # metadata
-    metadata = {'original_container': 'rsl'}
-    rsl_dict = rslfile.get_radar_header()
-    need_from_rsl_header = {
-        'name': 'instrument_name', 'project': 'project', 'state': 'state',
-        'country': 'country'}  # rsl_name : radar_metadata_name
-    for rsl_key, metadata_key in need_from_rsl_header.iteritems():
-        metadata[metadata_key] = rsl_dict[rsl_key]
-    metadata['title'] = ''
-    metadata['institution'] = ''
-    metadata['references'] = ''
-    metadata['source'] = ''
-    metadata['comment'] = ''
-
-    if add_meta is not None:
-        metadata.update(add_meta)
-
-    # location
-    lat = get_metadata('latitude')
-    lon = get_metadata('longitude')
-    elv = get_metadata('altitude')
-    latd = rsl_dict['latd']
-    latm = rsl_dict['latm']
-    lats = rsl_dict['lats']
-    lat['data'] = np.array(dms_to_d((latd, latm, lats)), dtype='float64')
-
-    lond = rsl_dict['lond']
-    lonm = rsl_dict['lonm']
-    lons = rsl_dict['lons']
-    lon['data'] = np.array(dms_to_d((lond, lonm, lons)), dtype='float64')
-
-    elv['data'] = np.array(rsl_dict['height'], dtype='float64')
-    location = {'latitude': lat, 'longitude': lon, 'altitude': elv}
-
-    # set instrument parameters attribute
-    inst_params = {}
-    inst_params['prt_mode'] = get_metadata('prt_mode')
-    inst_params['nyquist_velocity'] = get_metadata('nyquist_velocity')
-    inst_params['prt'] = get_metadata('prt')
-    inst_params['unambiguous_range'] = get_metadata('unambiguous_range')
-
-    pm_data, nv_data, pr_data, ur_data = first_volume.get_instr_params()
-    inst_params['prt_mode']['data'] = pm_data
-    inst_params['nyquist_velocity']['data'] = nv_data.flatten()
-    inst_params['prt']['data'] = pr_data.flatten()
-    inst_params['unambiguous_range']['data'] = ur_data.flatten()
 
     # fields
     # transfer only those which are available and have a standard name
@@ -209,11 +116,106 @@ def read_rsl(filename, radar_format=None, callid=None, add_meta=None):
         fielddict = get_metadata(standard_field_name)
         fielddict['data'] = data
         fielddict['_FillValue'] = fillvalue
+        fielddict['coordinates'] = 'time range'
         fields[standard_field_name] = fielddict
 
-    return Radar(nsweeps, nrays, ngates, scan_type, naz, nele, _range,
-                 azimuth, elevation, tu, cal, time, fields, sweep_info,
-                 sweep_mode, sweep_number, location, inst_params, metadata)
+    # metadata
+    metadata = {'original_container': 'rsl'}
+    rsl_dict = rslfile.get_radar_header()
+    need_from_rsl_header = {
+        'name': 'instrument_name', 'project': 'project', 'state': 'state',
+        'country': 'country'}  # rsl_name : radar_metadata_name
+    for rsl_key, metadata_key in need_from_rsl_header.iteritems():
+        metadata[metadata_key] = rsl_dict[rsl_key]
+
+    # additional required CF/Radial metadata set to blank strings
+    metadata['title'] = ''
+    metadata['institution'] = ''
+    metadata['references'] = ''
+    metadata['source'] = ''
+    metadata['comment'] = ''
+
+    if add_meta is not None:
+        metadata.update(add_meta)
+
+    # latitude
+    latitude = get_metadata('latitude')
+    lat = dms_to_d((rsl_dict['latd'], rsl_dict['latm'], rsl_dict['lats']))
+    latitude['data'] = np.array(lat, dtype='float64')
+
+    # longitude
+    longitude = get_metadata('longitude')
+    lon = dms_to_d((rsl_dict['lond'], rsl_dict['lonm'], rsl_dict['lons']))
+    longitude['data'] = np.array(lon, dtype='float64')
+
+    # altitude
+    altitude = get_metadata('altitude')
+    altitude['data'] = np.array(rsl_dict['height'], dtype='float64')
+
+    # sweep_number, sweep_mode, fixed_angle, sweep_start_ray_index,
+    # sweep_end_ray_index
+    sweep_number = get_metadata('sweep_number')
+    sweep_mode = get_metadata('sweep_mode')
+    fixed_angle = get_metadata('fixed_angle')
+    sweep_start_ray_index = get_metadata('sweep_start_ray_index')
+    sweep_end_ray_index = get_metadata('sweep_end_ray_index')
+    len_time = len(time['data'])
+
+    if scan_type == 'ppi':
+        nsweeps = nele
+        sweep_number['data'] = np.arange(nsweeps, dtype='int32')
+        sweep_mode['data'] = np.array(nsweeps * ['azimuth_surveillance'])
+        fixed_angle['data'] = first_volume.get_sweep_elevs()
+        sweep_start_ray_index['data'] = np.arange(0, len_time, naz,
+                                                  dtype='int32')
+        sweep_end_ray_index['data'] = np.arange(naz - 1, len_time, naz,
+                                                dtype='int32')
+
+    elif scan_type == 'rhi':
+        nsweeps = naz
+        sweep_number['data'] = np.arange(nsweeps, dtype='int32')
+        sweep_mode['data'] = np.array(nsweeps * ['rhi'])
+        fixed_angle['data'] = first_volume.get_sweep_azimuths()
+        sweep_start_ray_index['data'] = np.arange(0, len_time, nele,
+                                                  dtype='int32')
+        sweep_end_ray_index['data'] = np.arange(nele - 1, len_time, nele,
+                                                dtype='int32')
+
+    # azimuth, elevation
+    azimuth = get_metadata('azimuth')
+    elevation = get_metadata('elevation')
+    _azimuth, _elevation = first_volume.get_azimuth_and_elev_array()
+    azimuth['data'] = _azimuth.flatten()
+    elevation['data'] = _elevation.flatten()
+
+    # instrument_parameters
+    prt = get_metadata('prt')
+    prt_mode = get_metadata('prt_mode')
+    nyquist_velocity = get_metadata('nyquist_velocity')
+    unambiguous_range = get_metadata('unambiguous_range')
+
+    prt['meta_group'] = 'instrument_parameters'
+    prt_mode['meta_group'] = 'instrument_parameters'
+    nyquist_velocity['meta_group'] = 'instrument_parameters'
+    unambiguous_range['meta_group'] = 'instrument_parameters'
+
+    pm_data, nv_data, pr_data, ur_data = first_volume.get_instr_params()
+    prt['data'] = pr_data.flatten()
+    prt_mode['data'] = pm_data
+    nyquist_velocity['data'] = nv_data.flatten()
+    unambiguous_range['data'] = ur_data.flatten()
+
+    instrument_parameters = {'unambiguous_range': unambiguous_range,
+                             'prt_mode': prt_mode, 'prt': prt,
+                             'nyquist_velocity': nyquist_velocity}
+
+    return Radar(
+        time, _range, fields, metadata, scan_type,
+        latitude, longitude, altitude,
+        sweep_number, sweep_mode, fixed_angle, sweep_start_ray_index,
+        sweep_end_ray_index,
+        azimuth, elevation,
+        instrument_parameters=instrument_parameters)
 
 
 #####################
