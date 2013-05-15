@@ -292,20 +292,22 @@ def write_netcdf(filename, radar, format='NETCDF4'):
         _create_ncvar(dic, dataset, field, ('time', 'range'))
 
     # sweep parameters
-    keys = ['fixed_angle', 'sweep_start_ray_index', 'sweep_end_ray_index',
-            'sweep_number']
-    for key in keys:
-        _create_ncvar(radar.sweep_info[key], dataset, key, ('sweep', ))
+    _create_ncvar(radar.sweep_number, dataset, 'sweep_number', ('sweep', ))
+    _create_ncvar(radar.fixed_angle, dataset, 'fixed_angle', ('sweep', ))
+    _create_ncvar(radar.sweep_start_ray_index, dataset,
+                  'sweep_start_ray_index', ('sweep', ))
+    _create_ncvar(radar.sweep_end_ray_index, dataset,
+                  'sweep_end_ray_index', ('sweep', ))
 
-    sdim_length = len(radar.sweep_info['sweep_mode']['data'][0])
+    sdim_length = len(radar.sweep_mode['data'][0])
     sdim_string = 'string_length_%d' % (sdim_length)
     dataset.createDimension(sdim_string, sdim_length)
-    _create_ncvar(radar.sweep_info['sweep_mode'], dataset, 'sweep_mode',
+    _create_ncvar(radar.sweep_mode, dataset, 'sweep_mode',
                   ('sweep', sdim_string))
 
-    # inst_params
-    if 'frequency' in radar.inst_params.keys():
-        size = len(radar.inst_params['frequency']['data'])
+    # instrument_parameters
+    if 'frequency' in radar.instrument_parameters.keys():
+        size = len(radar.instrument_parameters['frequency']['data'])
         dataset.createDimension('frequency', size)
     inst_dims = {
         'frequency': ('frequency'),
@@ -319,13 +321,15 @@ def write_netcdf(filename, radar, format='NETCDF4'):
         'unambiguous_range': ('time', ),
         'n_samples': ('time', ),
     }
-    for k in radar.inst_params.keys():
-        _create_ncvar(radar.inst_params[k], dataset, k, inst_dims[k])
+    for k in radar.instrument_parameters.keys():
+        _create_ncvar(radar.instrument_parameters[k], dataset, k,
+                      inst_dims[k])
 
-    # location parameters
+    # latitude, longitude, altitude
     # TODO moving platform
-    for k in radar.location.keys():
-        _create_ncvar(radar.location[k], dataset, k, ())
+    _create_ncvar(radar.latitude, dataset, 'latitude', ())
+    _create_ncvar(radar.longitude, dataset, 'longitude', ())
+    _create_ncvar(radar.altitude, dataset, 'altitude', ())
 
     # time_coverage_start and time_coverage_end variables
     time_dim = ('string_length_short', )

@@ -164,12 +164,12 @@ cpdef _label_volume(_RslVolume volume, radar):
 
     gate_size = int(radar.range['meters_between_gates'])
     range_bin1 = int(radar.range['meters_to_center_of_first_gate'])
-    if 'shape' in dir(radar.location['altitude']):
-        alt = radar.location['altitude']['data'][0]
+    if 'shape' in dir(radar.altitude['data']):
+        alt = radar.altitude['data'][0]
     else:
-        alt = radar.location['altitude']['data']
+        alt = radar.altitude['data']
 
-    nyq_vels = radar.inst_params['nyquist_velocity']['data']
+    nyq_vels = radar.instrument_parameters['nyquist_velocity']['data']
     azimuths = radar.azimuth['data']
     elevs = radar.elevation['data']
 

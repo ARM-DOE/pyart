@@ -178,13 +178,23 @@ def join_radar(radar1, radar2):
         new_field[sh1[0]:, 0:sh2[1]] = radar2.fields[var]['data']
         new_radar.fields[var]['data'] = new_field
 
-    # This will not work for two already moving platforms..
-    # need to enhance later
-    if radar1.location['latitude']['data'] != radar2.location['latitude']['data'] or radar1.location['longitude']['data'] != radar2.location['longitude']['data'] or radar1.location['altitude']['data'] != radar2.location['altitude']['data']:
-        for key in radar1.location.keys():
-            new_radar.location[key]['data'] = np.append(
-                np.zeros(len(radar1.time['data'])) +
-                radar1.location[key]['data'],
-                np.zeros(len(radar2.time['data'])) +
-                radar2.location[key]['data'])
+    # radar locations
+    # TODO moving platforms
+    lat1 = float(radar1.latitude['data'])
+    lon1 = float(radar1.longitude['data'])
+    alt1 = float(radar1.altitude['data'])
+    lat2 = float(radar2.latitude['data'])
+    lon2 = float(radar2.longitude['data'])
+    alt2 = float(radar2.altitude['data'])
+
+    if (lat1 != lat2) or (lon1 != lon2) or (alt1 != alt2):
+        ones1 = np.ones(len(radar1.time['data']), dtype='float32')
+        ones2 = np.ones(len(radar2.time['data']), dtype='float32')
+        new_radar.latitude['data'] = np.append(ones1 * lat1, ones2 * lat2)
+        new_radar.longitude['data'] = np.append(ones1 * lon1, ones2 * lon2)
+        new_radar.latitude['data'] = np.append(ones1 * alt1, ones2 * alt2)
+    else:
+        new_radar.latitude = radar1.latitude['data']
+        new_radar.longitude = radar1.latitude['data']
+        new_radar.altitude = radar1.altitude['data']
     return new_radar

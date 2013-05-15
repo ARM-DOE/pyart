@@ -33,9 +33,9 @@ def dealias_fourdd(radar, sounding_heights, sounding_wind_speeds,
     Parameters
     ----------
     radar : Radar
-        Radar object to use for dealiasing.  Must have a Nyquist defined in the
-        inst_params attribute and have a reflectivity_horizontal and
-        mean_doppler_velocity fields.
+        Radar object to use for dealiasing.  Must have a Nyquist defined in
+        the instrument_parameters attribute and have a
+        reflectivity_horizontal and mean_doppler_velocity fields.
     sounding_heights : array
         Sounding heights is meters.
     sounding_wind_speeds : array

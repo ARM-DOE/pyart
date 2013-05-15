@@ -343,7 +343,7 @@ METADATA = {
         'standard_name': 'sweep_number',
         'long_name': 'sweep_number'},
 
-    # metadata for radar sweep_info dictionary
+    # metadata for radar sweep information dictionaries
     'sweep_start_ray_index': {
         'long_name': 'index of first ray in sweep, 0-based',
         'units': 'count'},
@@ -357,7 +357,7 @@ METADATA = {
         'units': 'degrees',
         'standard_name': 'target_fixed_angle'},
 
-    # metadata for radar location dictionary
+    # metadata for radar location dictionaries
     'latitude': {
         'standard_name': 'Latitude',
         'units': 'degrees_north'},

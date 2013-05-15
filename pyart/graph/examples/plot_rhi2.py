@@ -36,7 +36,7 @@ if __name__ == "__main__":
     # plot the data
     radar_name = radar.metadata['instrument_name']
     time_text = ' ' + display.time_begin.isoformat() + 'Z '
-    azimuth = radar.sweep_info['fixed_angle']['data'][0]
+    azimuth = radar.fixed_angle['data'][0]
     title = 'RHI ' + radar_name + time_text + 'Azimuth %.2f' % (azimuth)
     colorbar_label = 'Eq refl fact (dBz)'
 

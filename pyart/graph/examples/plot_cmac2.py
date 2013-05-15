@@ -34,9 +34,9 @@ if __name__ == "__main__":
     colorbar_label = 'Hz. Eq. Refl. Fac. (dBZ)'
 
     # plot each RHI
-    for snum in radar.sweep_info['sweep_number']['data']:
+    for snum in radar.sweep_number['data']:
 
-        fixed_angle = radar.sweep_info['fixed_angle']['data'][snum]
+        fixed_angle = radar.fixed_angle['data'][snum]
         title = 'HSRHI Az=%.3f' % (fixed_angle)
         ax = fig.add_subplot(radar.nsweeps, 1, snum+1)
         display.plot_rhi('reflectivity_horizontal', snum, vmin=-20, vmax=20,

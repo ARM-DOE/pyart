@@ -51,7 +51,7 @@ def test_phase_rsl_fast():
     radar = pyart.io.read_rsl(RSLNAME)
 
     # hack to make the radar object appear to only have a single sweep
-    radar.sweep_info['sweep_start_ray_index']['data'] = np.array([0])
+    radar.sweep_start_ray_index['data'] = np.array([0])
     radar.nsweeps = 1
     data = radar.fields['dp_phase_shift']['data']
     radar.fields['dp_phase_shift']['data'] = data[:360, :]
