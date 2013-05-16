@@ -1,0 +1,6 @@
+pyart.io.netcdf._find_all_meta_group_vars
+=========================================
+
+.. currentmodule:: pyart.io.netcdf
+
+.. autofunction:: _find_all_meta_group_vars
