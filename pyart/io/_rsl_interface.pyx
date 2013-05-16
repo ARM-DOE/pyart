@@ -165,7 +165,10 @@ cpdef _label_volume(_RslVolume volume, radar):
     gate_size = int(radar.range['meters_between_gates'])
     range_bin1 = int(radar.range['meters_to_center_of_first_gate'])
     if 'shape' in dir(radar.altitude['data']):
-        alt = radar.altitude['data'][0]
+        if radar.altitude['data'].shape == ():
+            alt = float(radar.altitude['data'])
+        else:
+            alt = radar.altitude['data'][0]
     else:
         alt = radar.altitude['data']
 

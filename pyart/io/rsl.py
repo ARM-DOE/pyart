@@ -141,16 +141,16 @@ def read_rsl(filename, radar_format=None, callid=None, add_meta=None):
     # latitude
     latitude = get_metadata('latitude')
     lat = dms_to_d((rsl_dict['latd'], rsl_dict['latm'], rsl_dict['lats']))
-    latitude['data'] = np.array(lat, dtype='float64')
+    latitude['data'] = np.array([lat], dtype='float64')
 
     # longitude
     longitude = get_metadata('longitude')
     lon = dms_to_d((rsl_dict['lond'], rsl_dict['lonm'], rsl_dict['lons']))
-    longitude['data'] = np.array(lon, dtype='float64')
+    longitude['data'] = np.array([lon], dtype='float64')
 
     # altitude
     altitude = get_metadata('altitude')
-    altitude['data'] = np.array(rsl_dict['height'], dtype='float64')
+    altitude['data'] = np.array([rsl_dict['height']], dtype='float64')
 
     # sweep_number, sweep_mode, fixed_angle, sweep_start_ray_index,
     # sweep_end_ray_index
