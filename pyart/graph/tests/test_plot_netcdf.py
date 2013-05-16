@@ -5,14 +5,19 @@
 # display figure_plot_netcdf_ppi.png& display figure_plot_netcdf_ppi_radar.png&
 # display figure_plot_netcdf_rhi.png& display figure_plot_netcdf_rhi_radar.png&
 
+import os.path
+
 import netCDF4
 import matplotlib.pyplot as plt
 import pyart
 
+DIR = os.path.dirname(__file__)
+NETCDF_RHI = os.path.join(DIR, 'sgpxsaprrhicmacI5.c0.20110524.015604_NC4.nc')
+NETCDF_PPI = os.path.join(DIR, 'sgpxsaprsesurcmacI4.c0.20110520.105511.nc')
+
 
 def test_plot_netcdf_rhi(outfile=None):
-    rhi_file = 'sgpxsaprrhicmacI5.c0.20110524.015604_NC4.nc'
-    dataset = netCDF4.Dataset(rhi_file)
+    dataset = netCDF4.Dataset(NETCDF_RHI)
     display = pyart.graph.NetcdfDisplay(dataset)
     fig = plt.figure()
     ax = fig.add_subplot(111)
@@ -22,8 +27,7 @@ def test_plot_netcdf_rhi(outfile=None):
 
 
 def test_plot_netcdf_ppi(outfile=None):
-    ppi_file = 'sgpxsaprsesurcmacI4.c0.20110520.105511.nc'
-    dataset = netCDF4.Dataset(ppi_file)
+    dataset = netCDF4.Dataset(NETCDF_PPI)
     display = pyart.graph.NetcdfDisplay(dataset)
     fig = plt.figure()
     ax = fig.add_subplot(111)
@@ -36,8 +40,7 @@ def test_plot_netcdf_ppi(outfile=None):
 
 
 def test_plot_netcdf_radar_rhi(outfile=None):
-    rhi_file = 'sgpxsaprrhicmacI5.c0.20110524.015604_NC4.nc'
-    radar = pyart.io.read_netcdf(rhi_file)
+    radar = pyart.io.read_netcdf(NETCDF_RHI)
     radar.metadata['instrument_name'] = ''
     display = pyart.graph.RadarDisplay(radar)
     fig = plt.figure()
@@ -48,8 +51,7 @@ def test_plot_netcdf_radar_rhi(outfile=None):
 
 
 def test_plot_netcdf_radar_ppi(outfile=None):
-    ppi_file = 'sgpxsaprsesurcmacI4.c0.20110520.105511.nc'
-    radar = pyart.io.read_netcdf(ppi_file)
+    radar = pyart.io.read_netcdf(NETCDF_PPI)
     display = pyart.graph.RadarDisplay(radar)
     fig = plt.figure()
     ax = fig.add_subplot(111)

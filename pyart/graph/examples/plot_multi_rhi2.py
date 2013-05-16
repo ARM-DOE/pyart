@@ -50,7 +50,7 @@ if __name__ == "__main__":
     # set the figure title
     radar_name = display.radar_name
     time_text = ' ' + display.time_begin.isoformat() + 'Z '
-    azimuth = radar.sweep_info['fixed_angle']['data'][0]
+    azimuth = radar.fixed_angle['data'][0]
     title = 'RHI ' + radar_name + time_text + 'Azimuth %.2f' % (azimuth)
     plt.suptitle(title)
 

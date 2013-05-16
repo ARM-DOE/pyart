@@ -20,69 +20,136 @@ import numpy as np
 
 class Radar:
     """
-    A class for storing antenna coordinate radar data which will interact
-    nicely with CF-Radial files and other pyart code
+    A class for storing antenna coordinate radar data.
 
-    Dictionary attributes
-    ---------------------
-    * azimuth
-    * elevation
-    * range (with additional)
-    * time (with additional)
-    * sweep_mode
-        same as sweep_info['sweep_mode'] ...sorta
-    * sweep_number
-        same as sweep_info[sweep_number'] ... sorta
+    The structure of the Radar class is based on the CF/Radial Data file
+    format.  Global attributes and variables (section 4.1 and 4.3) are
+    represented as a dictionary in the metadata attribute.  Other required and
+    optional variables are represented as dictionaries in a attribute with the
+    same name as the variable in the CF/Radial standard.  When a optional
+    attribute not present the attribute has a value of None.  The data for a
+    given variable is stored in the dictionary under the 'data' key.  Moment
+    field data is stored as a dictionary of dictionaries in the fields
+    attribute.  Sub-convention variables are stored as a dictionary of
+    dictionaries under the meta_group attribute.
 
-    Value attributes
-    ----------------
-    * tu - string like "seconds since ...."
-        same as time['tu']
-    * cal : str
-        Calender (gregorian), same as time['cal']
+    Refer to the attribute section for information on the parameters.
 
-    * nele : int
-    * naz : int
-    * ngates : int
-    * nrays : int
-    * nsweeps : int
-    * scan_type : str
-
-    Special attributes
-    ------------------
-    * fields
-    * sweep_info : dict of dicts
-    * location : dict of dicts
-
-    #   metadata
-    #   inst_params
+    Attributes
+    ----------
+    time : dict
+        Time at the center of each ray.
+    range : dict
+        Range to the center of each gate (bin).
+    fields : dict of dicts
+        Moment fields.
+    metadata : dict
+        Metadata describing the instrument and data.
+    scan_type : str
+        Type of scan, one of 'ppi', 'rhi', 'sector' or 'other'.  If the scan
+        volume contains multiple sweep modes this should be 'other'.
+    latitude : dict
+        Latitude of the instrument.
+    longitude : dict
+        Longitude of the instrument.
+    altitude :
+        Altitude of the instrument, above sea level.
+    altitude_agl : dict or None
+        Altitude of the instrument above ground level.  If not provided this
+        attribute is set to None, indicating this parameter not available.
+    sweep_number : dict
+        The number of the sweep in the volume scan, 0-based.
+    sweep_mode : dict
+        Sweep mode for each mode in the volume scan.
+    fixed_angle : dict
+        Target angle for thr sweep.  Azimuth angle in RHI modes, elevation
+        angle in all other modes.
+    sweep_start_ray_index : dict
+        Index of the first ray in each sweep relative to the start of the
+        volume, 0-based.
+    sweep_end_ray_index : dict
+        Index of the last ray in each sweep relative to the start of the
+        volume, 0-based.
+    target_scan_rate : dict or None
+        Intended scan rate for each sweep.  If not provided this attribute is
+        set to None, indicating this parameter is not available.
+    azimuth : dict
+        Azimuth of antenna, relative to true North.
+    elevation : dict
+        Elevation of antenna, relative to the horizontal plane.
+    scan_rate : dict or None
+        Actual antenna scan rate.  If not provided this attribute is set to
+        None, indicating this parameter is not available.
+    antenna_transition : dict or None
+        Flag indicating if the antenna is in transition, 1 = tes, 0 = no.
+        If not provided this attribute is set to None, indicating this
+        parameter is not available.
+    instruments_parameters : dict of dicts or None
+        Instrument parameters, if not provided this attribute is set to None,
+        indicating these parameters are not avaiable.  This dictionary also
+        includes variables in the radar_parameters CF/Radial subconvention.
+    radar_calibration : dict of dicts or None
+        Instrument calibration parameters.  If not provided this attribute is
+        set to None, indicating these parameters are not available
+    ngates : int
+        Number of gates (bins) in the volume.
+    nrays : int
+        Number of rays in the volume.
+    nsweeps : int
+        Number of sweep in the volume.
 
     """
 
-    def __init__(self, nsweeps, nrays, ngates, scan_type, naz, nele, _range,
-                 azimuth, elevation, tu, cal, time, fields, sweep_info,
-                 sweep_mode, sweep_number, location, inst_params, metadata):
+    def __init__(self, time, _range, fields, metadata, scan_type,
+                 latitude, longitude, altitude,
+
+                 sweep_number, sweep_mode, fixed_angle, sweep_start_ray_index,
+                 sweep_end_ray_index,
+
+                 azimuth, elevation,
+
+                 altitude_agl=None,
+                 target_scan_rate=None,
+
+                 scan_rate=None, antenna_transition=None,
+
+                 instrument_parameters=None,
+                 radar_calibration=None,
+
+                 ):
+
+        if 'calendar' not in time:
+            time['calendar'] = 'gregorian'
+        self.time = time
+        self.range = _range
+
+        self.fields = fields
+        self.metadata = metadata
+        self.scan_type = scan_type
+
+        self.latitude = latitude
+        self.longitude = longitude
+        self.altitude = altitude
+        self.altitude_agl = altitude_agl  # optional
+
+        self.sweep_number = sweep_number
+        self.sweep_mode = sweep_mode
+        self.fixed_angle = fixed_angle
+        self.sweep_start_ray_index = sweep_start_ray_index
+        self.sweep_end_ray_index = sweep_end_ray_index
+        self.target_scan_rate = target_scan_rate  # optional
 
         self.azimuth = azimuth
         self.elevation = elevation
-        self.fields = fields
-        self.location = location
-        self.metadata = metadata
-        self.naz = naz
-        self.nele = nele
-        self.ngates = ngates
-        self.nsweeps = nsweeps
-        self.range = _range
-        self.scan_type = scan_type
-        self.sweep_info = sweep_info
-        self.sweep_mode = sweep_mode
-        self.sweep_number = sweep_number
-        self.time = time
-        self.inst_params = inst_params
+        self.scan_rate = scan_rate  # optional
+        self.antenna_transition = antenna_transition  # optional
 
-        self.cal = cal
-        self.nrays = nrays
-        self.tu = tu
+        self.instrument_parameters = instrument_parameters  # optional
+        self.radar_calibration = radar_calibration  # optional
+
+        self.ngates = len(_range['data'])
+        self.nrays = len(time['data'])
+        self.nsweeps = len(sweep_number['data'])
 
 
 def join_radar(radar1, radar2):
@@ -111,13 +178,23 @@ def join_radar(radar1, radar2):
         new_field[sh1[0]:, 0:sh2[1]] = radar2.fields[var]['data']
         new_radar.fields[var]['data'] = new_field
 
-    # This will not work for two already moving platforms..
-    # need to enhance later
-    if radar1.location['latitude']['data'] != radar2.location['latitude']['data'] or radar1.location['longitude']['data'] != radar2.location['longitude']['data'] or radar1.location['altitude']['data'] != radar2.location['altitude']['data']:
-        for key in radar1.location.keys():
-            new_radar.location[key]['data'] = np.append(
-                np.zeros(len(radar1.time['data'])) +
-                radar1.location[key]['data'],
-                np.zeros(len(radar2.time['data'])) +
-                radar2.location[key]['data'])
+    # radar locations
+    # TODO moving platforms
+    lat1 = float(radar1.latitude['data'])
+    lon1 = float(radar1.longitude['data'])
+    alt1 = float(radar1.altitude['data'])
+    lat2 = float(radar2.latitude['data'])
+    lon2 = float(radar2.longitude['data'])
+    alt2 = float(radar2.altitude['data'])
+
+    if (lat1 != lat2) or (lon1 != lon2) or (alt1 != alt2):
+        ones1 = np.ones(len(radar1.time['data']), dtype='float32')
+        ones2 = np.ones(len(radar2.time['data']), dtype='float32')
+        new_radar.latitude['data'] = np.append(ones1 * lat1, ones2 * lat2)
+        new_radar.longitude['data'] = np.append(ones1 * lon1, ones2 * lon2)
+        new_radar.latitude['data'] = np.append(ones1 * alt1, ones2 * alt2)
+    else:
+        new_radar.latitude = radar1.latitude['data']
+        new_radar.longitude = radar1.latitude['data']
+        new_radar.altitude = radar1.altitude['data']
     return new_radar
