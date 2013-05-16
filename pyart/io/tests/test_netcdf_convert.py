@@ -2,14 +2,17 @@
 
 import tempfile
 import os
+import os.path
 
 import netCDF4
 from numpy.testing import assert_array_equal
 import pyart
 
-
-NETCDF3_FILE = 'cfrad.20080604_002217_000_SPOL_v36_SUR_netcdf3.nc'
-NETCDF4_FILE = 'cfrad.20080604_002217_000_SPOL_v36_SUR_netcdf4.nc'
+DIR = os.path.dirname(__file__)
+NETCDF3_FILE = os.path.join(
+    DIR, 'cfrad.20080604_002217_000_SPOL_v36_SUR_netcdf3.nc')
+NETCDF4_FILE = os.path.join(
+    DIR, 'cfrad.20080604_002217_000_SPOL_v36_SUR_netcdf4.nc')
 
 
 def test_netcdf4_to_netcdf():
