@@ -267,7 +267,7 @@ def write_netcdf(filename, radar, format='NETCDF4'):
     dataset.createDimension('time', None)
     dataset.createDimension('range', radar.ngates)
     dataset.createDimension('sweep', radar.nsweeps)
-    dataset.createDimension('string_length_short', 20)
+    dataset.createDimension('string_length_short', 20)  # time_coverage_*
 
     # global attributes
     # remove global variables from copy of metadata
@@ -315,17 +315,26 @@ def write_netcdf(filename, radar, format='NETCDF4'):
                   ('sweep', sdim_string))
 
     # instrument_parameters
+
+    # determine the string size for string variables.
+    for k in ['follow_mode', 'prt_mode', 'polarization_mode']:
+        if k in radar.instrument_parameters:
+            sdim_string = 'string_length_' + k
+            sdim_length = len(radar.instrument_parameters[k]['data'][0])
+            dataset.createDimension(sdim_string, sdim_length)
+
     if 'frequency' in radar.instrument_parameters.keys():
         size = len(radar.instrument_parameters['frequency']['data'])
         dataset.createDimension('frequency', size)
+
     instrument_dimensions = {
         'frequency': ('frequency'),
-        'follow_mode': ('sweep', sdim_string),
+        'follow_mode': ('sweep', 'string_length_follow_mode'),
         'pulse_width': ('time', ),
-        'prt_mode': ('sweep', sdim_string),
+        'prt_mode': ('sweep', 'string_length_prt_mode'),
         'prt': ('time', ),
         'prt_ratio': ('time', ),
-        'polarization_mode': ('sweep', sdim_string),
+        'polarization_mode': ('sweep', 'string_length_polarization_mode'),
         'nyquist_velocity': ('time', ),
         'unambiguous_range': ('time', ),
         'n_samples': ('time', ),
@@ -418,7 +427,10 @@ def _create_ncvar(dic, dataset, name, dimensions):
     # set the data
     if data.shape == ():
         data.shape = (1,)
-    ncvar[:] = data[:]
+    if data.dtype == 'S1' and data.ndim == 2:  # 2D char arrays
+        ncvar[:, :data.shape[1]] = data[:]
+    else:
+        ncvar[:] = data[:]
     #if type(data) == np.ma.MaskedArray:
     #    ncvar[:] = data.data
     #else:
