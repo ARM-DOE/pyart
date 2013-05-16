@@ -13,6 +13,8 @@ DIR = os.path.dirname(__file__)
 RSLNAME = os.path.join(DIR, "sample.sigmet")
 SOBNAME = os.path.join(DIR, 'sob_kdp_reference.npy')
 PHASENAME = os.path.join(DIR, 'reproc_phase_reference.npy')
+SOB_SINGLE = os.path.join(DIR, 'sob_kdp_single_reference.npy')
+PHASE_SINGLE = os.path.join(DIR, 'reproc_phase_single_reference.npy')
 
 ####################
 # Phase proc tests #
@@ -20,10 +22,11 @@ PHASENAME = os.path.join(DIR, 'reproc_phase_reference.npy')
 
 
 def test_det_sys_phase():
-    radar = pyart.io.read_netcdf('sample.nc')
+    radar = pyart.io.read_netcdf(os.path.join(DIR, 'sample.nc'))
     assert round(phase_proc.det_sys_phase(radar), 2) == 126.02
 
 
+""" # takes too long to run
 def test_phase_rsl():
 
     # read in the data
@@ -43,6 +46,7 @@ def test_phase_rsl():
     ref_reproc_phase = np.load(PHASENAME)
     assert_array_equal(ref_reproc_phase, reproc_phase['data'])
     assert_array_equal(ref_sob_kdp, sob_kdp['data'])
+"""
 
 
 def test_phase_rsl_fast():
@@ -51,7 +55,7 @@ def test_phase_rsl_fast():
     radar = pyart.io.read_rsl(RSLNAME)
 
     # hack to make the radar object appear to only have a single sweep
-    radar.sweep_info['sweep_start_ray_index']['data'] = np.array([0])
+    radar.sweep_start_ray_index['data'] = np.array([0])
     radar.nsweeps = 1
     data = radar.fields['dp_phase_shift']['data']
     radar.fields['dp_phase_shift']['data'] = data[:360, :]
@@ -67,7 +71,7 @@ def test_phase_rsl_fast():
         nowrap=ng)
 
     # compare to known good data
-    ref_sob_kdp = np.load('sob_kdp_single_reference.npy')
-    ref_reproc_phase = np.load('reproc_phase_single_reference.npy')
+    ref_sob_kdp = np.load(SOB_SINGLE)
+    ref_reproc_phase = np.load(PHASE_SINGLE)
     assert_array_equal(ref_reproc_phase, reproc_phase['data'])
     assert_array_equal(ref_sob_kdp, sob_kdp['data'])

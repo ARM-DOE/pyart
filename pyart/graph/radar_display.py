@@ -77,7 +77,7 @@ class RadarDisplay:
         self.ranges = radar.range['data']
         self.azimuths = radar.azimuth['data']
         self.elevations = radar.elevation['data']
-        self.fixed_angle = radar.sweep_info['fixed_angle']['data']
+        self.fixed_angle = radar.fixed_angle['data']
         self.radar_name = radar.metadata['instrument_name']
 
         # origin
@@ -95,8 +95,8 @@ class RadarDisplay:
         self.y = self.y + self.shift[1]
 
         # radar location in latitude and longitude
-        lat = radar.location['latitude']['data']
-        lon = radar.location['longitude']['data']
+        lat = float(radar.latitude['data'])
+        lon = float(radar.longitude['data'])
         self.loc = (lat, lon)
 
         # datetime object describing first sweep time
@@ -106,8 +106,8 @@ class RadarDisplay:
         self.time_begin = netCDF4.num2date(times, units, calendar)
 
         # sweep start and end indices
-        self.starts = radar.sweep_info['sweep_start_ray_index']['data']
-        self.ends = radar.sweep_info['sweep_end_ray_index']['data']
+        self.starts = radar.sweep_start_ray_index['data']
+        self.ends = radar.sweep_end_ray_index['data']
 
         # list to hold plots, plotted fields and plotted colorbars
         self.plots = []

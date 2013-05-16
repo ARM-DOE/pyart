@@ -130,10 +130,9 @@ def grid_from_radars(radars, grid_shape, grid_limits, **kwargs):
     if 'origin' in kwargs:
         lat, lon, alt = kwargs['origin']
     else:
-        location = first_radar.location
-        lat = location['latitude']['data']
-        lon = location['longitude']['data']
-        alt = location['altitude']['data']
+        lat = first_radar.latitude['data']
+        lon = first_radar.longitude['data']
+        alt = first_radar.altitude['data']
 
     altorigin = {'data': alt,
                  'long_name': 'Altitude at grid origin',
@@ -346,8 +345,8 @@ def map_to_grid(radars, grid_shape=(81, 81, 69),
 
     # find the grid origin if not given
     if grid_origin is None:
-        lat = float(radars[0].location['latitude']['data'])
-        lon = float(radars[0].location['longitude']['data'])
+        lat = float(radars[0].latitude['data'])
+        lon = float(radars[0].longitude['data'])
         grid_origin = (lat, lon)
 
     # fields which should be mapped, None for fields which are in all radars
@@ -388,8 +387,8 @@ def map_to_grid(radars, grid_shape=(81, 81, 69),
     for iradar, radar in enumerate(radars):
 
         # calculate radar offset from the origin
-        radar_lat = radar.location['latitude']['data']
-        radar_lon = radar.location['longitude']['data']
+        radar_lat = float(radar.latitude['data'])
+        radar_lon = float(radar.longitude['data'])
         x_disp, y_disp = corner_to_point(grid_origin, (radar_lat, radar_lon))
 
         # calculate cartesian locations of gates

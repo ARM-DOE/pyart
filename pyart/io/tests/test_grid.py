@@ -2,13 +2,17 @@
 
 import tempfile
 import os
+import os.path
 
 import pyart
 import numpy as np
 
+DIR = os.path.dirname(__file__)
+NETCDF_FILE = os.path.join(DIR, 'swx_20120520_0641.nc')
+
 
 def test_grid():
-    xsapr_se = pyart.io.read_netcdf('swx_20120520_0641.nc')
+    xsapr_se = pyart.io.read_netcdf(NETCDF_FILE)
     pygrid = pyart.map.grid_from_radars(
         (xsapr_se, ),
         grid_shape=(101, 101, 2),

@@ -9,6 +9,7 @@ Utilities for reading netcdf files.
 
     read_netcdf
     write_netcdf
+    _find_all_meta_group_vars
     _ncvar_to_dict
     _stream_ncvar_to_dict
     _stream_to_2d
@@ -48,58 +49,88 @@ def read_netcdf(filename):
     ncobj = netCDF4.Dataset(filename)
     ncvars = ncobj.variables
 
-    # azimuth, range, elevation, time, nsweeps, ngates
-    azimuth = _ncvar_to_dict(ncvars['azimuth'])
-    _range = _ncvar_to_dict(ncvars['range'])
-    elevation = _ncvar_to_dict(ncvars['elevation'])
-    time = _ncvar_to_dict(ncvars['time'])
-    nsweeps = len(ncvars['sweep_start_ray_index'])
-    ngates = len(ncobj.dimensions['range'])
-
-    # sweep info
-    keys = ['sweep_start_ray_index', 'sweep_mode', 'sweep_number',
-            'sweep_end_ray_index', 'fixed_angle']
-    sweep_info = dict((k, _ncvar_to_dict(ncvars[k])) for k in keys)
-
-    # location
-    keys = ['latitude', 'altitude', 'longitude']
-    location = dict((k, _ncvar_to_dict(ncvars[k])) for k in keys)
-
-    # inst_params
-    keys = ['frequency', 'follow_mode', 'pulse_width', 'prt_mode', 'prt',
-            'prt_ratio', 'polarization_mode', 'nyquist_velocity',
-            'unambiguous_range', 'n_samples']
-    keys = [k for k in keys if k in ncvars.keys()]  # only those present
-    inst_params = dict((k, _ncvar_to_dict(ncvars[k])) for k in keys)
-
-    # metadata
+    # 4.1 Global attribute -> move to metadata dictionary
     metadata = dict([(k, getattr(ncobj, k)) for k in ncobj.ncattrs()])
 
-    # naz, nele
-    ssri = ncvars['sweep_start_ray_index']
-    if len(ssri) == 1:
-        naz = ssri[0] + 1
+    # 4.2 Dimensions (do nothing) TODO check if n_points present
+
+    # 4.3 Global variable -> move to metadata dictionary
+    if 'volume_number' in ncvars:
+        metadata['volume_number'] = int(ncvars['volume_number'][:])
     else:
-        naz = ssri[1] - ssri[0]
-    nele = ssri.shape[0]
+        metadata['volume_number'] = 0
 
-    try:
-        mode = "".join(ncvars['sweep_mode'][0])
-    except TypeError:
-        mode = "".join(ncvars['sweep_mode'][0].data)
+    global_vars = {'platform_type': 'fixed', 'instrument_type': 'radar',
+                   'primary_axis': 'axis_z'}
+    # ignore time_* global variables, these are calculated from the time
+    # variable when the file is written.
+    for var, default_value in global_vars.iteritems():
+        if k in ncvars:
+            metadata[var] = str(netCDF4.chartostring(ncvars[var][:]))
+        else:
+            metadata[var] = default_value
 
+    # 4.4 coordinate variables -> create attribute dictionaries
+    time = _ncvar_to_dict(ncvars['time'])
+    _range = _ncvar_to_dict(ncvars['range'])
+
+    # 4.5 Ray dimension variables TODO working with this
+
+    # 4.6 Location variables -> create attribute dictionaries
+    latitude = _ncvar_to_dict(ncvars['latitude'])
+    longitude = _ncvar_to_dict(ncvars['longitude'])
+    altitude = _ncvar_to_dict(ncvars['altitude'])
+    if 'altitude_agl' in ncvars:
+        altitude_agl = _ncvar_to_dict(ncvars['altitude_agl'])
+    else:
+        altitude_agl = None
+
+    # 4.7 Sweep variables -> create atrribute dictionaries
+    sweep_number = _ncvar_to_dict(ncvars['sweep_number'])
+    sweep_mode = _ncvar_to_dict(ncvars['sweep_mode'])
+    fixed_angle = _ncvar_to_dict(ncvars['fixed_angle'])
+    sweep_start_ray_index = _ncvar_to_dict(ncvars['sweep_start_ray_index'])
+    sweep_end_ray_index = _ncvar_to_dict(ncvars['sweep_end_ray_index'])
+    if 'target_scan_rate' in ncvars:
+        target_scan_rate = _ncvar_to_dict(ncvars['target_scan_rate'])
+    else:
+        target_scan_rate = None
+
+    # first sweep mode determines scan_type
+    mode = str(netCDF4.chartostring(sweep_mode['data'][0]))
     if "sur" in mode:
         scan_type = "ppi"
     elif "sec" in mode:
-        scan_type = "sec"
+        scan_type = "sector"
     elif "rhi" in mode:
         scan_type = "rhi"
-        nele, naz = nele, naz
+    else:
+        scan_type = "other"
 
-    sweep_mode = np.array([scan_type] * nsweeps)
+    # 4.8 Sensor pointing variables -> create attribute dictionaries
+    azimuth = _ncvar_to_dict(ncvars['azimuth'])
+    elevation = _ncvar_to_dict(ncvars['elevation'])
+    if 'scan_rate' in ncvars:
+        scan_rate = _ncvar_to_dict(ncvars['scan_rate'])
+    else:
+        scan_rate = None
 
-    # fields and nrays
-    if 'ray_start_index' in ncvars.keys():
+    if 'antenna_transition' in ncvars:
+        antenna_transition = _ncvar_to_dict(ncvars['antenna_transition'])
+    else:
+        antenna_transition = None
+
+    # 4.9 Moving platform geo-reference variables
+    # TODO moving radar subclass
+
+    # 4.10 Moments field data variables -> field attribute dictionary
+    if 'ray_start_index' not in ncvars:     # CF/Radial
+
+        # all variables with dimensions of 'time', 'range' are fields
+        fields = dict([(k, _ncvar_to_dict(v)) for k, v in ncvars.iteritems()
+                       if v.dimensions == ('time', 'range')])
+
+    else:  # stream file
         ngates = ncvars['ray_start_index'][-1] + ncvars['ray_n_gates'][-1]
         sweeps = ncvars['sweep_start_ray_index'][:]
         sweepe = ncvars['sweep_end_ray_index'][:]
@@ -114,21 +145,63 @@ def read_netcdf(filename):
             fields[field] = _stream_ncvar_to_dict(
                 ncvars[field], sweeps, sweepe, ray_len, maxgates, nrays,
                 ray_start_index)
-    else:
-        # CF/Radial
-        nrays = len(ncobj.dimensions['time'])
-        shape = (nrays, ngates)
-        keys = [k for k, v in ncvars.iteritems() if v.shape == shape]
-        fields = dict((k, _ncvar_to_dict(ncvars[k])) for k in keys)
 
-    # XXX
-    tu = 999
-    cal = 999
-    sweep_number = 999
+    # 4.5 instrument_parameters sub-convention -> instrument_parameters dict
 
-    return Radar(nsweeps, nrays, ngates, scan_type, naz, nele, _range,
-                 azimuth, elevation, tu, cal, time, fields, sweep_info,
-                 sweep_mode, sweep_number, location, inst_params, metadata)
+    # the meta_group attribute is often set incorrectly so we cannot
+    # use this as a indicator of instrument_parameters
+    #keys = _find_all_meta_group_vars(ncvars, 'instrument_parameters')
+    valid_keys = ['frequency', 'follow_mode', 'pulse_width', 'prt_mode',
+                  'prt', 'prt_ratio', 'polarization_mode', 'nyquist_velocity',
+                  'unambiguous_range', 'n_samples', 'sampling_ration']
+    keys = [k for k in valid_keys if k in ncvars]
+    instrument_parameters = dict((k, _ncvar_to_dict(ncvars[k])) for k in keys)
+
+    # 4.6 radar_parameters sub-convention -> instrument_parameters dict
+
+    # the meta_group attribute is often set incorrectly so we cannot
+    # use this as a indicator of instrument_parameters
+    #keys = _find_all_meta_group_vars(ncvars, 'radar_parameters')
+    valid_keys = ['radar_antenna_gain_h', 'radar_antenna_gain_v',
+                  'radar_beam_width_h', 'radar_beam_width_v',
+                  'radar_reciever_bandwidth',
+                  'radar_measured_transmit_power_h',
+                  'radar_measured_transmit_power_v']
+    # these keys are not in CF/Radial 1.2 standard but are common
+    valid_keys += ['radar_rx_bandwidth', 'measured_transmit_power_h',
+                   'measured_transmit_power_v']
+    keys = [k for k in valid_keys if k in ncvars]
+    radar_parameters = dict((k, _ncvar_to_dict(ncvars[k])) for k in keys)
+    instrument_parameters.update(radar_parameters)  # add to instr_params
+
+    if instrument_parameters == {}:  # if no parameters set to None
+        instrument_parameters = None
+
+    # 4.7 lidar_parameters sub-convention -> skip
+
+    # 4.8 radar_calibration sub-convention -> radar_calibration
+    keys = _find_all_meta_group_vars(ncvars, 'radar_calibration')
+    radar_calibration = dict((k, _ncvar_to_dict(ncvars[k])) for k in keys)
+
+    return Radar(
+        time, _range, fields, metadata, scan_type,
+        latitude, longitude, altitude,
+        sweep_number, sweep_mode, fixed_angle, sweep_start_ray_index,
+        sweep_end_ray_index,
+        azimuth, elevation,
+        instrument_parameters=instrument_parameters,
+        radar_calibration=radar_calibration,
+        altitude_agl=altitude_agl,
+        scan_rate=scan_rate,
+        antenna_transition=antenna_transition)
+
+
+def _find_all_meta_group_vars(ncvars, meta_group_name):
+    """
+    Return a list of all variables which are in a given meta_group.
+    """
+    return [k for k, v in ncvars.iteritems() if 'meta_group' in v.ncattrs()
+            and v.meta_group == meta_group_name]
 
 
 def _ncvar_to_dict(ncvar):
@@ -194,10 +267,19 @@ def write_netcdf(filename, radar, format='NETCDF4'):
     dataset.createDimension('time', None)
     dataset.createDimension('range', radar.ngates)
     dataset.createDimension('sweep', radar.nsweeps)
-    dataset.createDimension('string_length_short', 20)
+    dataset.createDimension('string_length_short', 20)  # time_coverage_*
 
     # global attributes
-    dataset.setncatts(radar.metadata)
+    # remove global variables from copy of metadata
+    metadata_copy = dict(radar.metadata)
+    global_variables = ['volume_number', 'platform_type', 'instrument_type',
+                        'primary_axis', 'time_coverage_start',
+                        'time_coverage_end', 'time_reference']
+    for var in global_variables:
+        if var in metadata_copy:
+            metadata_copy.pop(var)
+
+    dataset.setncatts(metadata_copy)
     if 'history' not in dataset.ncattrs():
         user = getpass.getuser()
         node = platform.node()
@@ -219,40 +301,67 @@ def write_netcdf(filename, radar, format='NETCDF4'):
         _create_ncvar(dic, dataset, field, ('time', 'range'))
 
     # sweep parameters
-    keys = ['fixed_angle', 'sweep_start_ray_index', 'sweep_end_ray_index',
-            'sweep_number']
-    for key in keys:
-        _create_ncvar(radar.sweep_info[key], dataset, key, ('sweep', ))
+    _create_ncvar(radar.sweep_number, dataset, 'sweep_number', ('sweep', ))
+    _create_ncvar(radar.fixed_angle, dataset, 'fixed_angle', ('sweep', ))
+    _create_ncvar(radar.sweep_start_ray_index, dataset,
+                  'sweep_start_ray_index', ('sweep', ))
+    _create_ncvar(radar.sweep_end_ray_index, dataset,
+                  'sweep_end_ray_index', ('sweep', ))
 
-    sdim_length = len(radar.sweep_info['sweep_mode']['data'][0])
+    sdim_length = len(radar.sweep_mode['data'][0])
     sdim_string = 'string_length_%d' % (sdim_length)
     dataset.createDimension(sdim_string, sdim_length)
-    _create_ncvar(radar.sweep_info['sweep_mode'], dataset, 'sweep_mode',
+    _create_ncvar(radar.sweep_mode, dataset, 'sweep_mode',
                   ('sweep', sdim_string))
 
-    # inst_params
-    if 'frequency' in radar.inst_params.keys():
-        size = len(radar.inst_params['frequency']['data'])
+    # instrument_parameters
+
+    # determine the string size for string variables.
+    for k in ['follow_mode', 'prt_mode', 'polarization_mode']:
+        if k in radar.instrument_parameters:
+            sdim_string = 'string_length_' + k
+            sdim_length = len(radar.instrument_parameters[k]['data'][0])
+            dataset.createDimension(sdim_string, sdim_length)
+
+    if 'frequency' in radar.instrument_parameters.keys():
+        size = len(radar.instrument_parameters['frequency']['data'])
         dataset.createDimension('frequency', size)
-    inst_dims = {
+
+    instrument_dimensions = {
         'frequency': ('frequency'),
-        'follow_mode': ('sweep', sdim_string),
+        'follow_mode': ('sweep', 'string_length_follow_mode'),
         'pulse_width': ('time', ),
-        'prt_mode': ('sweep', sdim_string),
+        'prt_mode': ('sweep', 'string_length_prt_mode'),
         'prt': ('time', ),
         'prt_ratio': ('time', ),
-        'polarization_mode': ('sweep', sdim_string),
+        'polarization_mode': ('sweep', 'string_length_polarization_mode'),
         'nyquist_velocity': ('time', ),
         'unambiguous_range': ('time', ),
         'n_samples': ('time', ),
+        'sampling_ratio': ('time', ),
+        'radar_antenna_gain_h': (),
+        'radar_antenna_gain_v': (),
+        'radar_beam_width_h': (),
+        'radar_beam_width_v': (),
+        'radar_reciever_bandwidth': (),
+        'radar_rx_bandwidth': (),           # non-standard
+        'radar_measured_transmit_power_h': ('time', ),
+        'radar_measured_transmit_power_v': ('time', ),
+        'measured_transmit_power_v': ('time', ),    # non-standard
+        'measured_transmit_power_h': ('time', ),    # non-standard
     }
-    for k in radar.inst_params.keys():
-        _create_ncvar(radar.inst_params[k], dataset, k, inst_dims[k])
+    for k in radar.instrument_parameters.keys():
+        if k in instrument_dimensions:
+            dim = instrument_dimensions[k]
+        else:
+            dim = ()
+        _create_ncvar(radar.instrument_parameters[k], dataset, k, dim)
 
-    # location parameters
+    # latitude, longitude, altitude
     # TODO moving platform
-    for k in radar.location.keys():
-        _create_ncvar(radar.location[k], dataset, k, ())
+    _create_ncvar(radar.latitude, dataset, 'latitude', ())
+    _create_ncvar(radar.longitude, dataset, 'longitude', ())
+    _create_ncvar(radar.altitude, dataset, 'altitude', ())
 
     # time_coverage_start and time_coverage_end variables
     time_dim = ('string_length_short', )
@@ -318,7 +427,10 @@ def _create_ncvar(dic, dataset, name, dimensions):
     # set the data
     if data.shape == ():
         data.shape = (1,)
-    ncvar[:] = data[:]
+    if data.dtype == 'S1' and data.ndim == 2:  # 2D char arrays
+        ncvar[:, :data.shape[1]] = data[:]
+    else:
+        ncvar[:] = data[:]
     #if type(data) == np.ma.MaskedArray:
     #    ncvar[:] = data.data
     #else:

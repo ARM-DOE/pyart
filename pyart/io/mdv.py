@@ -27,9 +27,9 @@ import datetime
 import numpy as np
 from netCDF4 import date2num
 
-from radar import Radar
-from common import COMMON2STANDARD, get_metadata, make_tu_str
-from common import radar_coords_to_cart
+from .radar import Radar
+from .common import COMMON2STANDARD, get_metadata, make_time_unit_str
+from .common import radar_coords_to_cart
 
 
 def read_mdv(filename):
@@ -52,51 +52,40 @@ def read_mdv(filename):
     Support for cartesian and non-gzipped file are planned.
 
     """
-    radarobj = MdvFile(filename)
+    mdvfile = MdvFile(filename)
 
     # value attributes
-    naz = len(radarobj.az_deg)
-    nrays = naz
-    nele = len(radarobj.el_deg)
-    ngates = len(radarobj.range_km)
-    scan_type = radarobj.scan_type
+    naz = len(mdvfile.az_deg)
+    nele = len(mdvfile.el_deg)
+    scan_type = mdvfile.scan_type
 
-    # azimuth, range and elevation parameters determined from scan_type
-    azimuth = get_metadata('azimuth')
-    elevation = get_metadata('elevation')
+    if scan_type not in ['ppi', 'rhi']:
+        NotImplemented('No support for scan_type %s.' % scan_type)
+
+    # time
+    time = get_metadata('time')
+    units = make_time_unit_str(mdvfile.times['time_begin'])
+    time['units'] = units
+    time_start = date2num(mdvfile.times['time_begin'], units)
+    time_end = date2num(mdvfile.times['time_end'], units)
+    time['data'] = np.linspace(time_start, time_end, naz * nele)
+
+    # range
     _range = get_metadata('range')
-    _range['data'] = np.array(radarobj.range_km * 1000.0, dtype='float32')
+    _range['data'] = np.array(mdvfile.range_km * 1000.0, dtype='float32')
     _range['spacing_is_constant'] = 'true',
     _range['meters_to_center_of_first_gate'] = _range['data'][0]
     gate_0 = _range['data'][0]
     gate_1 = _range['data'][1]
     _range['meters_between_gates'] = (gate_1 - gate_0)
 
-    if scan_type == 'ppi':
-        azimuth['data'] = np.tile(radarobj.az_deg, nele)
-        elevation['data'] = np.array(radarobj.el_deg).repeat(naz)
-
-    elif scan_type == 'rhi':
-        azimuth['data'] = np.array(radarobj.az_deg).repeat(nele)
-        elevation['data'] = np.tile(radarobj.el_deg, naz)
-
-    # time
-    tu = make_tu_str(radarobj.times['time_begin'])
-    cal = "gregorian"
-    time_start = date2num(radarobj.times['time_begin'], tu, cal)
-    time_end = date2num(radarobj.times['time_end'], tu, cal)
-    time = get_metadata('time')
-    time['data'] = np.linspace(time_start, time_end, naz * nele)
-    time['units'] = tu
-    time['calendar'] = cal
-
     # fields
     fields = {}
     # Transfer only the fields that we have valid names for and are present.
-    for field in set(radarobj.fields) & set(COMMON2STANDARD.keys()):
+    for field in set(mdvfile.fields) & set(COMMON2STANDARD.keys()):
 
         # grab data from MDV object, mask and reshape
-        data = radarobj.read_a_field(radarobj.fields.index(field))
+        data = mdvfile.read_a_field(mdvfile.fields.index(field))
         data[np.where(np.isnan(data))] = -9999.0
         data[np.where(data == 131072)] = -9999.0
         data = np.ma.masked_equal(data, -9999.0)
@@ -106,54 +95,15 @@ def read_mdv(filename):
         fielddict = get_metadata(field)
         fielddict['data'] = data
         fielddict['_FillValue'] = -9999.0
+        fielddict['coordinates'] = 'time range'
         fields[COMMON2STANDARD[field]] = fielddict
-
-    # sweep information
-    sweep_number = get_metadata('sweep_number')
-    sweep_mode = get_metadata('sweep_mode')
-    fixed_angle = get_metadata('fixed_angle')
-    sweep_start_ray_index = get_metadata('sweep_start_ray_index')
-    sweep_end_ray_index = get_metadata('sweep_end_ray_index')
-    len_time = len(time['data'])
-    if radarobj.scan_type == 'ppi':
-        nsweeps = nele
-        sweep_number['data'] = np.arange(nsweeps, dtype='int32')
-        sweep_mode['data'] = np.array(nsweeps * ['azimuth_surveillance    '])
-        fixed_angle['data'] = np.array(radarobj.el_deg, dtype='float32')
-        sweep_start_ray_index['data'] = np.arange(0, len_time, naz,
-                                                  dtype='int32')
-        sweep_end_ray_index['data'] = np.arange(naz-1, len_time, naz,
-                                                dtype='int32')
-
-    elif radarobj.scan_type == 'rhi':
-        nsweeps = naz
-        sweep_number['data'] = np.arange(nsweeps, dtype='int32')
-        sweep_mode['data'] = np.array(nsweeps * ['rhi                     '])
-        fixed_angle['data'] = np.array(radarobj.az_deg, dtype='float32')
-        sweep_start_ray_index['data'] = np.arange(0, len_time, nele,
-                                                  dtype='int32')
-        sweep_end_ray_index['data'] = np.arange(nele - 1, len_time, nele,
-                                                dtype='int32')
-
-    elif radarobj.scan_type == 'vpr':
-        nsweeps = 1
-        # XXX set sweep_ parameters
-
-    sweep_info = {
-        'sweep_number': sweep_number,
-        'sweep_mode': sweep_mode,
-        'fixed_angle': fixed_angle,
-        'sweep_start_ray_index': sweep_start_ray_index,
-        'sweep_end_ray_index': sweep_end_ray_index}
-    sweep_mode = np.array([radarobj.scan_type] * nsweeps)
-    sweep_number = np.linspace(0, nsweeps-1, nsweeps)
 
     # metadata
     metadata = {}
     for meta_key, mdv_key in MDV_METADATA_MAP.iteritems():
-        metadata[meta_key] = radarobj.master_header[mdv_key]
+        metadata[meta_key] = mdvfile.master_header[mdv_key]
 
-    # additional required metadata set to blank
+    # additional required CF/Radial metadata set to blank strings
     metadata['title'] = ''
     metadata['institution'] = ''
     metadata['references'] = ''
@@ -161,46 +111,101 @@ def read_mdv(filename):
     metadata['history'] = ''
     metadata['comment'] = ''
 
-    # location dictionary
-    lat = get_metadata('latitude')
-    lon = get_metadata('longitude')
-    elv = get_metadata('altitude')
-    lat['data'] = np.array(radarobj.radar_info['latitude_deg'],
-                           dtype='float64')
-    lon['data'] = np.array(radarobj.radar_info['longitude_deg'],
-                           dtype='float64')
-    elv['data'] = np.array(radarobj.radar_info['altitude_km'] * 1000.0,
-                           dtype='float64')
-    location = {'latitude': lat, 'longitude': lon, 'altitude': elv}
+    # latitude
+    latitude = get_metadata('latitude')
+    latitude['data'] = np.array(mdvfile.radar_info['latitude_deg'],
+                                dtype='float64')
+    # longitude
+    longitude = get_metadata('longitude')
+    longitude['data'] = np.array(mdvfile.radar_info['longitude_deg'],
+                                 dtype='float64')
+    # altitude
+    altitude = get_metadata('altitude')
+    altitude['data'] = np.array(mdvfile.radar_info['altitude_km'] * 1000.0,
+                                dtype='float64')
+
+    # sweep_number, sweep_mode, fixed_angle, sweep_start_ray_index,
+    # sweep_end_ray_index
+    sweep_number = get_metadata('sweep_number')
+    sweep_mode = get_metadata('sweep_mode')
+    fixed_angle = get_metadata('fixed_angle')
+    sweep_start_ray_index = get_metadata('sweep_start_ray_index')
+    sweep_end_ray_index = get_metadata('sweep_end_ray_index')
+    len_time = len(time['data'])
+
+    if mdvfile.scan_type == 'ppi':
+        nsweeps = nele
+        sweep_number['data'] = np.arange(nsweeps, dtype='int32')
+        sweep_mode['data'] = np.array(nsweeps * ['azimuth_surveillance'])
+        fixed_angle['data'] = np.array(mdvfile.el_deg, dtype='float32')
+        sweep_start_ray_index['data'] = np.arange(0, len_time, naz,
+                                                  dtype='int32')
+        sweep_end_ray_index['data'] = np.arange(naz-1, len_time, naz,
+                                                dtype='int32')
+
+    elif mdvfile.scan_type == 'rhi':
+        nsweeps = naz
+        sweep_number['data'] = np.arange(nsweeps, dtype='int32')
+        sweep_mode['data'] = np.array(nsweeps * ['rhi'])
+        fixed_angle['data'] = np.array(mdvfile.az_deg, dtype='float32')
+        sweep_start_ray_index['data'] = np.arange(0, len_time, nele,
+                                                  dtype='int32')
+        sweep_end_ray_index['data'] = np.arange(nele - 1, len_time, nele,
+                                                dtype='int32')
+
+    # azimuth, elevation
+    azimuth = get_metadata('azimuth')
+    elevation = get_metadata('elevation')
+
+    if scan_type == 'ppi':
+        azimuth['data'] = np.tile(mdvfile.az_deg, nele)
+        elevation['data'] = np.array(mdvfile.el_deg).repeat(naz)
+
+    elif scan_type == 'rhi':
+        azimuth['data'] = np.array(mdvfile.az_deg).repeat(nele)
+        elevation['data'] = np.tile(mdvfile.el_deg, naz)
 
     # instrument parameters
-    # XXX prt mode: Need to fix this.. assumes dual if two prts
-    if radarobj.radar_info['prt2_s'] == 0.0:
-        prt_mode_str = 'fixed                   '
+    # we will set 4 parameters in the instrument_parameters dict
+    # prt, prt_mode, unambiguous_range, and nyquist_velocity
+
+    # TODO prt mode: Need to fix this.. assumes dual if two prts
+    if mdvfile.radar_info['prt2_s'] == 0.0:
+        prt_mode_str = 'fixed'
     else:
-        prt_mode_str = 'dual                    '
+        prt_mode_str = 'dual'
 
     prt_mode = get_metadata('prt_mode')
     prt = get_metadata('prt')
     unambiguous_range = get_metadata('unambiguous_range')
     nyquist_velocity = get_metadata('nyquist_velocity')
 
-    prt_mode['data'] = np.array([prt_mode_str] * nsweeps)
-    prt['data'] = np.array([radarobj.radar_info['prt_s']] * nele * naz)
+    # set the meta_group
+    prt_mode['meta_group'] = 'instrument_parameters'
+    prt['meta_group'] = 'instrument_parameters'
+    unambiguous_range['meta_group'] = 'instrument_parameters'
+    nyquist_velocity['meta_group'] = 'instrument_parameters'
 
-    urange_m = radarobj.radar_info['unambig_range_km'] * 1000.0
+    prt_mode['data'] = np.array([prt_mode_str] * nsweeps)
+    prt['data'] = np.array([mdvfile.radar_info['prt_s']] * nele * naz)
+
+    urange_m = mdvfile.radar_info['unambig_range_km'] * 1000.0
     unambiguous_range['data'] = np.array([urange_m] * naz * nele)
 
-    uvel_mps = radarobj.radar_info['unambig_vel_mps']
+    uvel_mps = mdvfile.radar_info['unambig_vel_mps']
     nyquist_velocity['data'] = np.array([uvel_mps] * naz * nele)
 
-    inst_params = {'prt_mode': prt_mode, 'prt': prt,
-                   'unambiguous_range': unambiguous_range,
-                   'nyquist_velocity': nyquist_velocity}
+    instrument_parameters = {'prt_mode': prt_mode, 'prt': prt,
+                             'unambiguous_range': unambiguous_range,
+                             'nyquist_velocity': nyquist_velocity}
 
-    return Radar(nsweeps, nrays, ngates, scan_type, naz, nele, _range,
-                 azimuth, elevation, tu, cal, time, fields, sweep_info,
-                 sweep_mode, sweep_number, location, inst_params, metadata)
+    return Radar(
+        time, _range, fields, metadata, scan_type,
+        latitude, longitude, altitude,
+        sweep_number, sweep_mode, fixed_angle, sweep_start_ray_index,
+        sweep_end_ray_index,
+        azimuth, elevation,
+        instrument_parameters=instrument_parameters)
 
 
 # mapping from MDV name space to CF-Radial name space

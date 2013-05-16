@@ -67,7 +67,7 @@ def det_sys_phase(radar, ncp_lev=0.4, rhohv_lev=0.6,
     ncp = radar.fields[ncp_field]['data'][:, 30:]
     rhv = radar.fields[rhv_field]['data'][:, 30:]
     phidp = radar.fields[phidp_field]['data'][:, 30:]
-    last_ray_idx = radar.sweep_info['sweep_end_ray_index']['data'][0]
+    last_ray_idx = radar.sweep_end_ray_index['data'][0]
     return _det_sys_phase(ncp, rhv, phidp, last_ray_idx, ncp_lev,
                           rhohv_lev)
 
@@ -156,13 +156,13 @@ def det_process_range(radar, sweep, fzl, doc=10):
 
     # determine the index of the last valid gate
     ranges = radar.range['data']
-    elevation = radar.sweep_info['fixed_angle']['data'][sweep]
-    radar_height = radar.location['altitude']['data']
+    elevation = radar.fixed_angle['data'][sweep]
+    radar_height = radar.altitude['data']
     gate_end = fzl_index(fzl, ranges, elevation, radar_height)
     gate_end = min(gate_end, len(ranges) - doc)
 
-    ray_start = radar.sweep_info['sweep_start_ray_index']['data'][sweep]
-    ray_end = radar.sweep_info['sweep_end_ray_index']['data'][sweep]
+    ray_start = radar.sweep_start_ray_index['data'][sweep]
+    ray_end = radar.sweep_end_ray_index['data'][sweep]
     return gate_end, ray_start, ray_end
 
 
@@ -758,7 +758,7 @@ def phase_proc_lp(radar, offset, debug=False, self_const=60000.0,
     proc_ph = copy.deepcopy(radar.fields[phidp_field])
     proc_ph['data'] = phidp_mod
     St_Gorlv_differential_5pts = [-.2, -.1, 0, .1, .2]
-    for sweep in range(len(radar.sweep_info['sweep_start_ray_index']['data'])):
+    for sweep in range(len(radar.sweep_start_ray_index['data'])):
         if debug:
             print "Doing ", sweep
         end_gate, start_ray, end_ray = det_process_range(

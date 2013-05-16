@@ -27,8 +27,7 @@ class rayplot:
         ax_list = []
         plot_list = {}
         i = 1
-        ray_number = self.radar.sweep_info['sweep_start_ray_index'][
-            'data'][ray[0]] + ray[1]
+        ray_number = self.radar.sweep_start_ray_index['data'][ray[0]] + ray[1]
         for var in vars:
             cur_ax = subplot(nfig, 1, i)
             cur_good = plot(

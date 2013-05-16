@@ -5,12 +5,19 @@
 # display figure_plot_rsl_ppi.png & display figure_plot_rsl_ppi_radar.png &
 # display figure_plot_rsl_rhi.png & display figure_plot_rsl_rhi_radar.png &
 
+import os.path
+
 import matplotlib.pyplot as plt
 import pyart
 
 
+DIR = os.path.dirname(__file__)
+RSL_RHI = os.path.join(DIR, 'XSW110520113537.RAW7HHL')
+RSL_PPI = os.path.join(DIR, 'XSW110520105408.RAW7HHF')
+
+
 def test_plot_rsl_rhi(outfile=None):
-    rslfile = pyart.io._rsl_interface.RslFile('XSW110520113537.RAW7HHL')
+    rslfile = pyart.io._rsl_interface.RslFile(RSL_RHI)
     display = pyart.graph.RslDisplay(rslfile)
     fig = plt.figure()
     ax = fig.add_subplot(111)
@@ -20,7 +27,7 @@ def test_plot_rsl_rhi(outfile=None):
 
 
 def test_plot_rsl_ppi(outfile=None):
-    rslfile = pyart.io._rsl_interface.RslFile('XSW110520105408.RAW7HHF')
+    rslfile = pyart.io._rsl_interface.RslFile(RSL_PPI)
     display = pyart.graph.RslDisplay(rslfile)
     fig = plt.figure()
     ax = fig.add_subplot(111)
@@ -33,7 +40,7 @@ def test_plot_rsl_ppi(outfile=None):
 
 
 def test_plot_rsl_radar_rhi(outfile=None):
-    radar = pyart.io.read_rsl('XSW110520113537.RAW7HHL')
+    radar = pyart.io.read_rsl(RSL_RHI)
     display = pyart.graph.RadarDisplay(radar)
     fig = plt.figure()
     ax = fig.add_subplot(111)
@@ -43,7 +50,7 @@ def test_plot_rsl_radar_rhi(outfile=None):
 
 
 def test_plot_rsl_radar_ppi(outfile=None):
-    radar = pyart.io.read_rsl('XSW110520105408.RAW7HHF')
+    radar = pyart.io.read_rsl(RSL_PPI)
     display = pyart.graph.RadarDisplay(radar)
     fig = plt.figure()
     ax = fig.add_subplot(111)

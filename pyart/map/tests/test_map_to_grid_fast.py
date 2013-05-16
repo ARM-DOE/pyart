@@ -1,9 +1,14 @@
 #!/usr/bin/env python
 # script to test map_to_grid function, creates figure_map_to_grid_fast.png
 
+import os.path
+
 import numpy as np
 import matplotlib.pyplot as plt
 import pyart
+
+DIR = os.path.dirname(__file__)
+NETCDF_FILE = os.path.join(DIR, 'sgpcsaprsurcmacI7.c0.20110520.110100.nc')
 
 
 def dms_to_d(dms):
@@ -20,10 +25,10 @@ def my_qrf(xg, yg, zg):
     return qrf
 
 
-def test_map_to_grid_fast():
+def test_map_to_grid_fast(outfile=None):
 
     # read in the data
-    radar = pyart.io.read_netcdf('sgpcsaprsurcmacI7.c0.20110520.110100.nc')
+    radar = pyart.io.read_netcdf(NETCDF_FILE)
 
     # mask out last 10 gates along each ray
     radar.fields['reflectivity_horizontal']['data'][:, -10:] = np.ma.masked
@@ -50,7 +55,8 @@ def test_map_to_grid_fast():
     fig = plt.figure()
     ax = fig.add_subplot(111)
     ax.imshow(refl[1], origin='lower')
-    fig.savefig('figure_map_to_grid_fast.png')
+    if outfile:
+        fig.savefig(outfile)
 
 if __name__ == "__main__":
-    test_map_to_grid_fast()
+    test_map_to_grid_fast('figure_map_grid_fast.png')

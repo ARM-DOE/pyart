@@ -5,12 +5,19 @@
 # display figure_plot_mdv_ppi.png & display figure_plot_mdv_ppi_radar.png &
 # display figure_plot_mdv_rhi.png & display figure_plot_mdv_rhi_radar.png &
 
+import os.path
+
 import matplotlib.pyplot as plt
 import pyart
 
 
+DIR = os.path.dirname(__file__)
+MDV_RHI = os.path.join(DIR, '110041.mdv')
+MDV_PPI = os.path.join(DIR, '110635.mdv')
+
+
 def test_plot_mdv_rhi(outfile=None):
-    mdvfile = pyart.io.mdv.MdvFile('110041.mdv')
+    mdvfile = pyart.io.mdv.MdvFile(MDV_RHI)
     display = pyart.graph.MdvDisplay(mdvfile)
     fig = plt.figure()
     ax = fig.add_subplot(111)
@@ -20,7 +27,7 @@ def test_plot_mdv_rhi(outfile=None):
 
 
 def test_plot_mdv_ppi(outfile=None):
-    mdvfile = pyart.io.mdv.MdvFile('110635.mdv')
+    mdvfile = pyart.io.mdv.MdvFile(MDV_PPI)
     display = pyart.graph.MdvDisplay(mdvfile)
     fig = plt.figure()
     ax = fig.add_subplot(111)
@@ -33,7 +40,7 @@ def test_plot_mdv_ppi(outfile=None):
 
 
 def test_plot_mdv_radar_rhi(outfile=None):
-    radar = pyart.io.read_mdv('110041.mdv')
+    radar = pyart.io.read_mdv(MDV_RHI)
     display = pyart.graph.RadarDisplay(radar)
     fig = plt.figure()
     ax = fig.add_subplot(111)
@@ -43,7 +50,7 @@ def test_plot_mdv_radar_rhi(outfile=None):
 
 
 def test_plot_mdv_radar_ppi(outfile=None):
-    radar = pyart.io.read_mdv('110635.mdv')
+    radar = pyart.io.read_mdv(MDV_PPI)
     display = pyart.graph.RadarDisplay(radar)
     fig = plt.figure()
     ax = fig.add_subplot(111)
