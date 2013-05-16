@@ -24,6 +24,7 @@ def test_det_sys_phase():
     assert round(phase_proc.det_sys_phase(radar), 2) == 126.02
 
 
+""" # takes too long to run
 def test_phase_rsl():
 
     # read in the data
@@ -43,6 +44,7 @@ def test_phase_rsl():
     ref_reproc_phase = np.load(PHASENAME)
     assert_array_equal(ref_reproc_phase, reproc_phase['data'])
     assert_array_equal(ref_sob_kdp, sob_kdp['data'])
+"""
 
 
 def test_phase_rsl_fast():
