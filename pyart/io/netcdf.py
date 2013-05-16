@@ -270,7 +270,16 @@ def write_netcdf(filename, radar, format='NETCDF4'):
     dataset.createDimension('string_length_short', 20)
 
     # global attributes
-    dataset.setncatts(radar.metadata)
+    # remove global variables from copy of metadata
+    metadata_copy = dict(radar.metadata)
+    global_variables = ['volume_number', 'platform_type', 'instrument_type',
+                        'primary_axis', 'time_coverage_start',
+                        'time_coverage_end', 'time_reference']
+    for var in global_variables:
+        if var in metadata_copy:
+            metadata_copy.pop(var)
+
+    dataset.setncatts(metadata_copy)
     if 'history' not in dataset.ncattrs():
         user = getpass.getuser()
         node = platform.node()
@@ -309,7 +318,7 @@ def write_netcdf(filename, radar, format='NETCDF4'):
     if 'frequency' in radar.instrument_parameters.keys():
         size = len(radar.instrument_parameters['frequency']['data'])
         dataset.createDimension('frequency', size)
-    inst_dims = {
+    instrument_dimensions = {
         'frequency': ('frequency'),
         'follow_mode': ('sweep', sdim_string),
         'pulse_width': ('time', ),
@@ -320,10 +329,24 @@ def write_netcdf(filename, radar, format='NETCDF4'):
         'nyquist_velocity': ('time', ),
         'unambiguous_range': ('time', ),
         'n_samples': ('time', ),
+        'sampling_ratio': ('time', ),
+        'radar_antenna_gain_h': (),
+        'radar_antenna_gain_v': (),
+        'radar_beam_width_h': (),
+        'radar_beam_width_v': (),
+        'radar_reciever_bandwidth': (),
+        'radar_rx_bandwidth': (),           # non-standard
+        'radar_measured_transmit_power_h': ('time', ),
+        'radar_measured_transmit_power_v': ('time', ),
+        'measured_transmit_power_v': ('time', ),    # non-standard
+        'measured_transmit_power_h': ('time', ),    # non-standard
     }
     for k in radar.instrument_parameters.keys():
-        _create_ncvar(radar.instrument_parameters[k], dataset, k,
-                      inst_dims[k])
+        if k in instrument_dimensions:
+            dim = instrument_dimensions[k]
+        else:
+            dim = ()
+        _create_ncvar(radar.instrument_parameters[k], dataset, k, dim)
 
     # latitude, longitude, altitude
     # TODO moving platform

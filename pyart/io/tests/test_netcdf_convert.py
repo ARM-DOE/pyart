@@ -85,6 +85,8 @@ def check_variable_to_ref(var, ref_var):
         print "Checking attribute", attr
         if attr == '_FillValue':
             continue
+        if attr == 'calendar':  # we add a calendar attribute to time var
+            continue
 
         assert attr in ref_var.ncattrs()
         attribute_equal(var, ref_var, attr)
