@@ -66,7 +66,7 @@
 <dl class="function">
 <dt id="pyart.correct.calculate_attenuation">
 <tt class="descclassname">pyart.correct.</tt><tt class="descname">calculate_attenuation</tt><big>(</big><em>radar</em>, <em>z_offset</em>, <em>debug=False</em>, <em>doc=15</em>, <em>fzl=4000.0</em>, <em>rhv_min=0.8</em>, <em>ncp_min=0.5</em>, <em>a_coef=0.06</em>, <em>beta=0.8</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/correct/attenuation.py#L26"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.correct.calculate_attenuation" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate the attenuation from a polarimetric radar using XXX</p>
+<dd><p>Calculate the attenuation from a polarimetric radar using Z-PHI method.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -100,11 +100,13 @@ reflectivity_horizontal fields.</p>
 <tr class="field-odd field"><th class="field-name" colspan="2">Other Parameters:</th></tr>
 <tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><p class="first"><strong>doc</strong> : float</p>
 <blockquote>
-<div><p><cite>doc</cite> parameter passed to :py:phase_proc.det_process_range, XXX.</p>
+<div><p>Number of gates at the end of each ray to to remove from the 
+calculation.</p>
 </div></blockquote>
 <p><strong>fzl</strong> : float</p>
 <blockquote>
-<div><p><cite>fzl</cite> parameter passed to :py:phase_proc.det_process_range, XXX.</p>
+<div><p>Freezing layer, gates above this point are not included in the
+correction.</p>
 </div></blockquote>
 <p><strong>rhv_min</strong> : float</p>
 <blockquote>
@@ -127,7 +129,8 @@ reflectivity_horizontal fields.</p>
 </tbody>
 </table>
 <p class="rubric">References</p>
-<p>Giangrande et al. XXX</p>
+<p>Gu et al. Polarimetric Attenuation Correction in Heavy Rain at C Band,
+JAMC, 2011, 50, 39-58.</p>
 </dd></dl>
 
 </div>
@@ -191,7 +194,7 @@ reflectivity_horizontal fields.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Apr 24, 2013.
+      Last updated on May 16, 2013.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>

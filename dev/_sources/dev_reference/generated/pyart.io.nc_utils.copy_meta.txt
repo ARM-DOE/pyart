@@ -1,6 +1,0 @@
-pyart.io.nc_utils.copy_meta
-===========================
-
-.. currentmodule:: pyart.io.nc_utils
-
-.. autofunction:: copy_meta

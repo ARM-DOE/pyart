@@ -1,6 +1,0 @@
-pyart.io.nc_utils.append_global_metatdata_xsapr
-===============================================
-
-.. currentmodule:: pyart.io.nc_utils
-
-.. autofunction:: append_global_metatdata_xsapr

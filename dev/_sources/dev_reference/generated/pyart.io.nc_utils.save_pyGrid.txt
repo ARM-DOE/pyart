@@ -1,6 +1,0 @@
-pyart.io.nc_utils.save_pyGrid
-=============================
-
-.. currentmodule:: pyart.io.nc_utils
-
-.. autofunction:: save_pyGrid

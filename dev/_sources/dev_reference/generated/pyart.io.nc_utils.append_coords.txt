@@ -1,6 +1,0 @@
-pyart.io.nc_utils.append_coords
-===============================
-
-.. currentmodule:: pyart.io.nc_utils
-
-.. autofunction:: append_coords
