@@ -11,6 +11,7 @@ from and write data to a number of file formats.
 .. autosummary::
     :toctree: generated/
 
+    read
     read_rsl
     read_mdv
     read_netcdf
@@ -23,6 +24,7 @@ from and write data to a number of file formats.
 
 """
 
+from .auto_read import read
 from .rsl import read_rsl
 from .mdv import read_mdv
 from .netcdf import read_netcdf, write_netcdf

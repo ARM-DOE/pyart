@@ -27,7 +27,7 @@ def read_rsl(filename, radar_format=None, callid=None, add_meta=None):
     filename : str or RSL_radar
         Name of file whose format is supported by RSL.
     radar_format : str or None
-        Format of the radar file.  Must be one of 'wsr88d'.
+        Format of the radar file.  Must be 'wsr88d' or None.
     callid : str or None
         Four letter NEXRAD radar Call ID, only used when radar_format is
         'wsr88d'.
