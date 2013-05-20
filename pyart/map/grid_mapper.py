@@ -24,7 +24,7 @@ import scipy.spatial
 
 from ..graph.common import corner_to_point
 from ..io.common import radar_coords_to_cart
-from ..io.grid import PyGrid
+from ..io.grid import Grid
 from ._load_nn_field_data import _load_nn_field_data
 from .ckdtree import cKDTree
 from .ball_tree import BallTree
@@ -32,7 +32,7 @@ from .ball_tree import BallTree
 
 def grid_from_radars(radars, grid_shape, grid_limits, **kwargs):
     """
-    Map one or more radars to a Cartesian grid returning a PyGrid object.
+    Map one or more radars to a Cartesian grid returning a Grid object.
 
     Additional arguments are passed to :py:func:`map_to_grid`
 
@@ -48,8 +48,8 @@ def grid_from_radars(radars, grid_shape, grid_limits, **kwargs):
 
     Returns
     -------
-    pygrid : PyGrid
-        A :py:class:`pyart.io.PyGrid` object containing the gridded radar
+    grid : Grid
+        A :py:class:`pyart.io.Grid` object containing the gridded radar
         data.
 
     See Also
@@ -170,7 +170,7 @@ def grid_from_radars(radars, grid_shape, grid_limits, **kwargs):
     # metadata dictionary
     metadata = dict(first_radar.metadata)
 
-    return PyGrid(fields, axes, metadata)
+    return Grid(fields, axes, metadata)
 
 
 class NNLocator:
@@ -334,7 +334,7 @@ def map_to_grid(radars, grid_shape=(81, 81, 69),
 
     See Also
     --------
-    grid_from_radars : Map to grid and return a PyGrid object.
+    grid_from_radars : Map to grid and return a Grid object.
 
     """
     # check the parameters
