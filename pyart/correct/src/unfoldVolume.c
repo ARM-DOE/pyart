@@ -307,7 +307,8 @@ void unfoldVolume(Volume* rvVolume, Volume* soundVolume, Volume* lastVolume,
 		 next=i+1;
 		 prev=i-1;
 		 /* Look at all bins adjacent to current bin in question: */
-		 if (i>DELNUM) {
+		 if (val != missingVal) {  // don't look for neighbors of missingVal
+         if (i>DELNUM) {
 		   if (GOOD[prev][left]==1) {
 		     if (flag==0) flag=1;
 		     countindex=countindex+1;
@@ -391,7 +392,7 @@ void unfoldVolume(Volume* rvVolume, Volume* soundVolume, Volume* lastVolume,
 		     countbins=countbins+1;
 		   }
 		 }
-
+         }
 		 /* Perform last step of Bergen and Albers filter: */
 		 if (loopcount==1 && countbins+countindex<1) 
 		       GOOD[i][currIndex]=-1;  
