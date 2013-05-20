@@ -70,14 +70,14 @@ def get_metadata(p):
 
 # dictionary of standard metadata for various parameters
 METADATA = {
-    # metadata for radar fields
+    # metadata for radar fields, assuming a stationary platform
     'reflectivity_horizontal': {
         'units': 'dBZ',
         'standard_name': 'equivalent_reflectivity_factor',
         'long_name': 'equivalent_reflectivity_factor',
         'valid_max': 80.0,
         'valid_min': -45.0,
-        'least_significant_digit': 2},
+        'coordinates': 'elevation azimuth range'},
 
     'reflectivity_horizontal_filtered': {
         'units': 'dBZ',
@@ -85,17 +85,17 @@ METADATA = {
         'long_name': 'equivalent_reflectivity_factor_filtered',
         'valid_max': 80.0,
         'valid_min': -45.0,
-        'least_significant_digit': 2},
+        'coordinates': 'elevation azimuth range'},
 
     'mean_doppler_velocity': {
-        'units': 'm/s',
+        'units': 'meters_per_second',
         'standard_name': (
             'radial_velocity_of_scatterers_away_from_instrument'),
         'long_name': (
             'radial_velocity_of_scatterers_away_from_instrument'),
         'valid_max': 95.0,
         'valid_min': -95.0,
-        'least_significant_digit': 2},
+        'coordinates': 'elevation azimuth range'},
 
     'diff_phase': {
         'units': 'degrees/km',
@@ -103,7 +103,7 @@ METADATA = {
         'long_name': 'specific_differential_phase_hv',
         'valid_max': 20.0,
         'valid_min': -10.0,
-        'least_significant_digit': 2},
+        'coordinates': 'elevation azimuth range'},
 
     'diff_reflectivity': {
         'units': 'dB',
@@ -111,7 +111,7 @@ METADATA = {
         'long_name': 'log_differential_reflectivity_hv',
         'valid_max': 8.0,
         'valid_min': -6.0,
-        'least_significant_digit': 3},
+        'coordinates': 'elevation azimuth range'},
 
     'copol_coeff': {
         'units': 'ratio',
@@ -119,7 +119,7 @@ METADATA = {
         'long_name': 'cross_correlation_ratio_hv',
         'valid_max': 1.0,
         'valid_min': 0.0,
-        'least_significant_digit': 5},
+        'coordinates': 'elevation azimuth range'},
 
     'norm_coherent_power': {
         'units': 'ratio',
@@ -128,15 +128,15 @@ METADATA = {
         'valid_max': 1.0,
         'valid_min': 0.0,
         'comment': 'Also know as Normalized Coherent Power',
-        'least_significant_digit': 5},
+        'coordinates': 'elevation azimuth range'},
 
     'doppler_spectral_width': {
-        'units': 'm/s',
+        'units': 'meters_per_second',
         'standard_name': 'spectrum_width',
         'long_name': 'spectrum_width',
         'valid_max': 45.0,
         'valid_min': 0.0,
-        'least_significant_digit': 2},
+        'coordinates': 'elevation azimuth range'},
 
     'dp_phase_shift': {
         'units': 'degrees',
@@ -144,17 +144,17 @@ METADATA = {
         'long_name': 'differential_phase_hv',
         'valid_max': 180.0,
         'valid_min': -180.0,
-        'least_significant_digit': 2},
+        'coordinates': 'elevation azimuth range'},
 
     'corrected_mean_doppler_velocity': {
-        'units': 'm/s',
+        'units': 'meters_per_second',
         'standard_name': (
             'radial_velocity_of_scatterers_away_from_instrument'),
         'long_name': (
             'radial_velocity_of_scatterers_away_from_instrument'),
         'valid_max': 45.0,
         'valid_min': -45.0,
-        'least_significant_digit': 2},
+        'coordinates': 'elevation azimuth range'},
 
     'unfolded_dp_phase_shift': {
         'units': 'degrees',
@@ -162,7 +162,7 @@ METADATA = {
         'long_name': 'differential_phase_hv',
         'valid_max': 480.0,
         'valid_min': 0.0,
-        'least_significant_digit': 2},
+        'coordinates': 'elevation azimuth range'},
 
     'attenuation_corrected_reflectivity_horizontal': {
         'units': 'dBZ',
@@ -170,7 +170,7 @@ METADATA = {
         'long_name': 'equivalent_reflectivity_factor',
         'valid_max': 80.0,
         'valid_min': -45.0,
-        'least_significant_digit': 2},
+        'coordinates': 'elevation azimuth range'},
 
     'recalculated_diff_phase': {
         'units': 'degrees/km',
@@ -186,17 +186,17 @@ METADATA = {
         'long_name': 'equivalent_reflectivity_factor',
         'valid_max': 80.0,
         'valid_min': -45.0,
-        'least_significant_digit': 2},
+        'coordinates': 'elevation azimuth range'},
 
     'VEL_F': {
-        'units': 'm/s',
+        'units': 'meters_per_second',
         'standard_name': (
             'radial_velocity_of_scatterers_away_from_instrument'),
         'long_name': (
             'radial_velocity_of_scatterers_away_from_instrument'),
         'valid_max': 95.0,
         'valid_min': -95.0,
-        'least_significant_digit': 2},
+        'coordinates': 'elevation azimuth range'},
 
     'KDP_F': {
         'units': 'degrees/km',
@@ -204,7 +204,7 @@ METADATA = {
         'long_name': 'specific_differential_phase_hv',
         'valid_max': 20.0,
         'valid_min': -10.0,
-        'least_significant_digit': 2},
+        'coordinates': 'elevation azimuth range'},
 
     'ZDR_F': {
         'units': 'dB',
@@ -212,7 +212,7 @@ METADATA = {
         'long_name': 'log_differential_reflectivity_hv',
         'valid_max': 8.0,
         'valid_min': -6.0,
-        'least_significant_digit': 3},
+        'coordinates': 'elevation azimuth range'},
 
     'RHOHV_F': {
         'units': 'ratio',
@@ -220,7 +220,7 @@ METADATA = {
         'long_name': 'cross_correlation_ratio_hv',
         'valid_max': 1.0,
         'valid_min': 0.0,
-        'least_significant_digit': 5},
+        'coordinates': 'elevation azimuth range'},
 
     'NCP_F': {
         'units': 'ratio',
@@ -229,15 +229,15 @@ METADATA = {
         'valid_max': 1.0,
         'valid_min': 0.0,
         'comment': 'Also know as Normalized Coherent Power',
-        'least_significant_digit': 5},
+        'coordinates': 'elevation azimuth range'},
 
     'WIDTH_F': {
-        'units': 'm/s',
+        'units': 'meters_per_second',
         'standard_name': 'spectrum_width',
         'long_name': 'spectrum_width',
         'valid_max': 45.0,
         'valid_min': 0.0,
-        'least_significant_digit': 2},
+        'coordinates': 'elevation azimuth range'},
 
     'PHIDP_F': {
         'units': 'degrees',
@@ -245,17 +245,17 @@ METADATA = {
         'long_name': 'differential_phase_hv',
         'valid_max': 180.0,
         'valid_min': -180.0,
-        'least_significant_digit': 2},
+        'coordinates': 'elevation azimuth range'},
 
     'VEL_COR': {
-        'units': 'm/s',
+        'units': 'meters_per_second',
         'standard_name': (
             'radial_velocity_of_scatterers_away_from_instrument'),
         'long_name': (
             'radial_velocity_of_scatterers_away_from_instrument'),
         'valid_max': 45.0,
         'valid_min': -45.0,
-        'least_significant_digit': 2},
+        'coordinates': 'elevation azimuth range'},
 
     'PHIDP_UNF': {
         'units': 'degrees',
@@ -263,7 +263,7 @@ METADATA = {
         'long_name': 'differential_phase_hv',
         'valid_max': 480.0,
         'valid_min': 0.0,
-        'least_significant_digit': 2},
+        'coordinates': 'elevation azimuth range'},
 
     'DBZ_AC': {
         'units': 'dBZ',
@@ -271,7 +271,7 @@ METADATA = {
         'long_name': 'equivalent_reflectivity_factor',
         'valid_max': 80.0,
         'valid_min': -45.0,
-        'least_significant_digit': 2},
+        'coordinates': 'elevation azimuth range'},
 
     'KDP_SOB': {
         'units': 'degrees/km',
@@ -279,7 +279,7 @@ METADATA = {
         'long_name': 'specific_differential_phase_hv',
         'valid_max': 20.0,
         'valid_min': -1.0,
-        'least_significant_digit': 3},
+        'coordinates': 'elevation azimuth range'},
 
     'SQI': {
         'units': 'ratio',
@@ -287,7 +287,7 @@ METADATA = {
         'long_name': 'signal_quality_index',
         'valid_max': 1,
         'valid_min': 0,
-        'least_significant_digit': 3},
+        'coordinates': 'elevation azimuth range'},
 
     'default': {
         'units': 'undefined',
@@ -295,7 +295,7 @@ METADATA = {
         'long_name': 'custom_variable',
         'valid_max': 1000,
         'valid_min': -1000,
-        'least_significant_digit': 3},
+        'coordinates': 'elevation azimuth range'},
 
     # metadata for radar attributes
     'azimuth': {
@@ -317,6 +317,7 @@ METADATA = {
         'standard_name': 'projection_range_coordinate',
         'long_name': 'range_to_measurement_volume',
         'axis': 'radial_range_coordinate',
+        'spacing_is_constant': 'true',
         'comment': (
             'Coordinate variable for range. Range to center of each bin.')},
 
@@ -374,19 +375,23 @@ METADATA = {
     # metadata for instrument parameter dictionary
     'prt_mode': {
         'comments': ('Pulsing mode Options are: "fixed", "staggered", '
-                     '"dual". Assumed "fixed" if missing.')},
+                     '"dual". Assumed "fixed" if missing.'),
+        'meta_group': 'instrument_parameters'},
 
     'nyquist_velocity': {
-        'units': 'm/s',
-        'comments': "Unambiguous velocity"},
+        'units': 'meters_per_second',
+        'comments': "Unambiguous velocity",
+        'meta_group': 'instrument_parameters'},
 
     'prt': {
         'units': 'seconds',
         'comments': ("Pulse repetition time. For staggered prt, "
-                     "also see prt_ratio.")},
+                     "also see prt_ratio."),
+        'meta_group': 'instrument_parameters'},
 
     'unambiguous_range': {
         'units': 'meters',
-        'comment': 'Unambiguous range'},
+        'comment': 'Unambiguous range',
+        'meta_group': 'instrument_parameters'},
 
 }

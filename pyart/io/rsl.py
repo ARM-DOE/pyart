@@ -27,7 +27,7 @@ def read_rsl(filename, radar_format=None, callid=None, add_meta=None):
     filename : str or RSL_radar
         Name of file whose format is supported by RSL.
     radar_format : str or None
-        Format of the radar file.  Must be one of 'wsr88d'.
+        Format of the radar file.  Must be 'wsr88d' or None.
     callid : str or None
         Four letter NEXRAD radar Call ID, only used when radar_format is
         'wsr88d'.
@@ -91,7 +91,6 @@ def read_rsl(filename, radar_format=None, callid=None, add_meta=None):
     gate0 = first_ray.range_bin1
     gate_size = first_ray.gate_size
     _range['data'] = gate0 + gate_size * np.arange(ngates, dtype='float32')
-    _range['spacing_is_constant'] = 'true'
     _range['meters_to_center_of_first_gate'] = _range['data'][0]
     _range['meters_between_gates'] = np.array(gate_size, dtype='float32')
 
@@ -116,7 +115,6 @@ def read_rsl(filename, radar_format=None, callid=None, add_meta=None):
         fielddict = get_metadata(standard_field_name)
         fielddict['data'] = data
         fielddict['_FillValue'] = fillvalue
-        fielddict['coordinates'] = 'time range'
         fields[standard_field_name] = fielddict
 
     # metadata
@@ -193,11 +191,6 @@ def read_rsl(filename, radar_format=None, callid=None, add_meta=None):
     prt_mode = get_metadata('prt_mode')
     nyquist_velocity = get_metadata('nyquist_velocity')
     unambiguous_range = get_metadata('unambiguous_range')
-
-    prt['meta_group'] = 'instrument_parameters'
-    prt_mode['meta_group'] = 'instrument_parameters'
-    nyquist_velocity['meta_group'] = 'instrument_parameters'
-    unambiguous_range['meta_group'] = 'instrument_parameters'
 
     pm_data, nv_data, pr_data, ur_data = first_volume.get_instr_params()
     prt['data'] = pr_data.flatten()
