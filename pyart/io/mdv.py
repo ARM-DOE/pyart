@@ -73,7 +73,6 @@ def read_mdv(filename):
     # range
     _range = get_metadata('range')
     _range['data'] = np.array(mdvfile.range_km * 1000.0, dtype='float32')
-    _range['spacing_is_constant'] = 'true',
     _range['meters_to_center_of_first_gate'] = _range['data'][0]
     gate_0 = _range['data'][0]
     gate_1 = _range['data'][1]
@@ -95,7 +94,6 @@ def read_mdv(filename):
         fielddict = get_metadata(field)
         fielddict['data'] = data
         fielddict['_FillValue'] = -9999.0
-        fielddict['coordinates'] = 'time range'
         fields[COMMON2STANDARD[field]] = fielddict
 
     # metadata
@@ -180,20 +178,17 @@ def read_mdv(filename):
     unambiguous_range = get_metadata('unambiguous_range')
     nyquist_velocity = get_metadata('nyquist_velocity')
 
-    # set the meta_group
-    prt_mode['meta_group'] = 'instrument_parameters'
-    prt['meta_group'] = 'instrument_parameters'
-    unambiguous_range['meta_group'] = 'instrument_parameters'
-    nyquist_velocity['meta_group'] = 'instrument_parameters'
-
     prt_mode['data'] = np.array([prt_mode_str] * nsweeps)
-    prt['data'] = np.array([mdvfile.radar_info['prt_s']] * nele * naz)
+    prt['data'] = np.array([mdvfile.radar_info['prt_s']] * nele * naz,
+                           dtype='float32')
 
     urange_m = mdvfile.radar_info['unambig_range_km'] * 1000.0
-    unambiguous_range['data'] = np.array([urange_m] * naz * nele)
+    unambiguous_range['data'] = np.array([urange_m] * naz * nele,
+                                         dtype='float32')
 
     uvel_mps = mdvfile.radar_info['unambig_vel_mps']
-    nyquist_velocity['data'] = np.array([uvel_mps] * naz * nele)
+    nyquist_velocity['data'] = np.array([uvel_mps] * naz * nele,
+                                        dtype='float32')
 
     instrument_parameters = {'prt_mode': prt_mode, 'prt': prt,
                              'unambiguous_range': unambiguous_range,
