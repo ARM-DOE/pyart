@@ -2,7 +2,7 @@
 pyart.io.grid
 =============
 
-Reading and writing PyGrid objects.
+Reading and writing Grid objects.
 
 .. autosummary::
     :toctree: generated/
@@ -17,7 +17,7 @@ Reading and writing PyGrid objects.
     :toctree: generated/
     :template: dev_template.rst
 
-    PyGrid
+    Grid
 
 """
 
@@ -39,8 +39,8 @@ def read_grid(filename):
 
     Returns
     -------
-    pygrid : PyGrid
-        PyGrid object containing Grid data.
+    grid : Grid
+        Grid object containing Grid data.
 
     """
     ncobj = netCDF4.Dataset(filename, 'r')
@@ -59,7 +59,7 @@ def read_grid(filename):
     # determine the correct shape of the fields
     # ARM standard required a time dimension, so the shape of the fields
     # in the file are (1, nz, ny, nx) but the field data should be shaped
-    # (nz, ny, nx) in the PyGrid object
+    # (nz, ny, nx) in the Grid object
     ncdims = ncobj.dimensions
     field_shape = tuple([len(ncdims[i]) for i in ['nz', 'ny', 'nx']])
     field_shape_with_time = (1, ) + field_shape  # 1, nz, ny, nx on disk
@@ -78,19 +78,19 @@ def read_grid(filename):
             bad_shape = field_dic['data'].shape
             warn('Field %s skipped, incorrect shape %s', (field, bad_shape))
 
-    return PyGrid(fields, axes, metadata)
+    return Grid(fields, axes, metadata)
 
 
-def write_grid(filename, pygrid, format='NETCDF4'):
+def write_grid(filename, grid, format='NETCDF4'):
     """
-    Write a PyGrid object to a CF-1.5 and ARM standard netcdf file
+    Write a Grid object to a CF-1.5 and ARM standard netcdf file
 
     Parameters
     ----------
     filename : str
-        Filename to save pygrid to.
-    pygrid : PyGrid
-        PyGrid object to write.
+        Filename to save grid to.
+    grid : Grid
+        Grid object to write.
     format : str, optional
         NetCDF format, one of 'NETCDF4', 'NETCDF4_CLASSIC',
         'NETCDF3_CLASSIC' or 'NETCDF3_64BIT'. See netCDF4 documentation for
@@ -103,37 +103,37 @@ def write_grid(filename, pygrid, format='NETCDF4'):
     ncobj.createDimension('time', None)
 
     # create additional dimensions
-    grid_shape = pygrid.fields[pygrid.fields.keys()[0]]['data'].shape
+    grid_shape = grid.fields[grid.fields.keys()[0]]['data'].shape
     nz, ny, nx = grid_shape
     ncobj.createDimension('nz', nz)
     ncobj.createDimension('ny', ny)
     ncobj.createDimension('nx', nx)
 
     # axes variables
-    if 'base_time' in pygrid.axes.keys():
-        _create_ncvar(pygrid.axes['base_time'], ncobj, 'base_time', ())
-    if 'time_offset' in pygrid.axes.keys():
-        _create_ncvar(pygrid.axes['time_offset'], ncobj, 'time_offset',
+    if 'base_time' in grid.axes.keys():
+        _create_ncvar(grid.axes['base_time'], ncobj, 'base_time', ())
+    if 'time_offset' in grid.axes.keys():
+        _create_ncvar(grid.axes['time_offset'], ncobj, 'time_offset',
                       ('time',))
-    _create_ncvar(pygrid.axes['time'], ncobj, 'time', ('time', ))
-    _create_ncvar(pygrid.axes['time_end'], ncobj, 'time_end', ('time', ))
-    _create_ncvar(pygrid.axes['time_start'], ncobj, 'time_start', ('time', ))
-    _create_ncvar(pygrid.axes['x_disp'], ncobj, 'x_disp', ('nx', ))
-    _create_ncvar(pygrid.axes['y_disp'], ncobj, 'y_disp', ('ny', ))
-    _create_ncvar(pygrid.axes['z_disp'], ncobj, 'z_disp', ('nz', ))
-    _create_ncvar(pygrid.axes['lat'], ncobj, 'lat', ('time', ))
-    _create_ncvar(pygrid.axes['lon'], ncobj, 'lon', ('time', ))
-    _create_ncvar(pygrid.axes['alt'], ncobj, 'alt', ('time', ))
+    _create_ncvar(grid.axes['time'], ncobj, 'time', ('time', ))
+    _create_ncvar(grid.axes['time_end'], ncobj, 'time_end', ('time', ))
+    _create_ncvar(grid.axes['time_start'], ncobj, 'time_start', ('time', ))
+    _create_ncvar(grid.axes['x_disp'], ncobj, 'x_disp', ('nx', ))
+    _create_ncvar(grid.axes['y_disp'], ncobj, 'y_disp', ('ny', ))
+    _create_ncvar(grid.axes['z_disp'], ncobj, 'z_disp', ('nz', ))
+    _create_ncvar(grid.axes['lat'], ncobj, 'lat', ('time', ))
+    _create_ncvar(grid.axes['lon'], ncobj, 'lon', ('time', ))
+    _create_ncvar(grid.axes['alt'], ncobj, 'alt', ('time', ))
 
     # field variables
-    for field, field_dic in pygrid.fields.iteritems():
+    for field, field_dic in grid.fields.iteritems():
         # append 1, to the shape of all data to indicate the time var.
         field_dic['data'].shape = (1, ) + field_dic['data'].shape
         _create_ncvar(field_dic, ncobj, field, ('time', 'nz', 'ny', 'nx'))
         field_dic['data'].shape = field_dic['data'].shape[1:]
 
     # metadata
-    for k, v in pygrid.metadata.iteritems():
+    for k, v in grid.metadata.iteritems():
         setattr(ncobj, k, v)
 
     ncobj.close()
@@ -151,13 +151,13 @@ def _read_grid_cf(filename):
 
     Returns
     -------
-    pygrid : PyGrid
-        PyGrid object containing data.
+    grid : Grid
+        Frid object containing data.
 
     Notes
     -----
     This function does only the most basic variable checking.  The resulting
-    PyGrid object is most likely not writable.
+    Grid object is most likely not writable.
 
     """
     ncobj = netCDF4.Dataset(filename)
@@ -171,7 +171,7 @@ def _read_grid_cf(filename):
         else:
             # dimensionality of 1 are axes variables
             axes[var] = _ncvar_to_dict(ncvars[var])
-    return PyGrid(fields, axes, {})
+    return Grid(fields, axes, {})
 
 
 def _read_grid_wrf(filename):
@@ -185,13 +185,13 @@ def _read_grid_wrf(filename):
 
     Returns
     -------
-    pygrid : PyGrid
-        PyGrid object containing data.
+    grid : Grid
+        Grid object containing data.
 
     Notes
     -----
     This function does only the most basic variable checking.  The resulting
-    PyGrid object is most likely not writable.
+    Grid object is most likely not writable.
 
     """
     ncobj = netCDF4.Dataset(filename)
@@ -205,10 +205,10 @@ def _read_grid_wrf(filename):
         else:
             # dimensionality of 1 are axes variables
             axes[var] = _ncvar_to_dict(ncvars[var])
-    return PyGrid(fields, axes, {})
+    return Grid(fields, axes, {})
 
 
-class PyGrid:
+class Grid:
     """
     An object for holding gridded Radar data.
 
@@ -240,7 +240,7 @@ class PyGrid:
 
     def write(self, filename, format='NETCDF4'):
         """
-        Write the the PyGrid object to a netcdf file.
+        Write the the Grid object to a netcdf file.
 
         Parameters
         ----------

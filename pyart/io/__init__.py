@@ -20,7 +20,7 @@ from and write data to a number of file formats.
     write_grid
 
     Radar
-    PyGrid
+    Grid
 
 """
 
@@ -29,6 +29,6 @@ from .rsl import read_rsl
 from .mdv import read_mdv
 from .netcdf import read_netcdf, write_netcdf
 from .radar import Radar
-from .grid import read_grid, write_grid, PyGrid
+from .grid import read_grid, write_grid, Grid
 
 __all__ = [s for s in dir() if not s.startswith('_')]
