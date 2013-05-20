@@ -1,8 +1,10 @@
 #!/usr/bin/env python
-# Script to check the complience of a file with the CF/Radial 1.2 standard
+"""
+Script to check the compliance of a file with the CF/Radial 1.2 standard
+"""
 
-import sys
 import time
+import argparse
 
 import numpy as np
 import netCDF4
@@ -48,7 +50,7 @@ class AttributeTable:
         self.optional_attrs.append(attr_name)
 
     def check_attr(self, attr_name, required, test_var, verb):
-        """ Check an attribute, log errors or notes if required. """
+        """ Check an attribute, log errors or notes if detected. """
         if attr_name not in test_var.ncattrs():
             if required:
                 t = "Required %s '%s' missing." % (self.text, attr_name)
@@ -75,7 +77,7 @@ class AttributeTable:
             log_error(self.section, t)
 
     def check(self, test_var, verb=False):
-        """ Check all attributes. """
+        """ Check all attributes for errror and notes. """
         # check for required attributes
         for attr_name in self.required_attrs:
             self.check_attr(attr_name, True, test_var, verb)
@@ -84,23 +86,44 @@ class AttributeTable:
 
 
 class Attribute:
+    """
+    A class for holding and checking netCDF variable attributes.
+
+    Parameters
+    ----------
+    _type : type or None
+        Expected type of the attribute, None for no expected type.
+    value : any or None
+        Expected value for the attribute, None for no expected value.
+
+    """
 
     def __init__(self, _type=None, value=None):
+        """ initialize the object. """
         self._type = _type
         self.value = value
 
     def type_bad(self, _type):
+        """
+        Return True if the provided type does not matches the expected type.
+        """
         if self._type is None or self._type == _type:
             return False
         return True
 
     def value_bad(self, value):
+        """
+        Return True if the provided value does not match the expected value.
+        """
         if self.value is None or self.value == value:
             return False
         return True
 
 
 class VariableTable:
+    """
+    A class represeting a table of required/optional variables.
+    """
     def __init__(self, text, section):
         """ Initialize the table. """
         self.text = text
@@ -175,13 +198,28 @@ class VariableTable:
 
 
 class Variable:
+    """
+    A class for holding and checking netCDF variables.
+
+    Parameters
+    ----------
+    dtype : type or None
+        Expected dtype of the variable, None for no expected type.
+    dim : tuple of str
+        Expected dimensions of the variable, None for no expected dimensions.
+    units : str
+        Expected units attribute of the variable.  None for no expected units.
+
+    """
+
     def __init__(self, dtype=None, dim=None, units=None):
+        """ initalize the object. """
         self.dtype = dtype
         self.dim = dim
         self.units = units
 
     def dtype_bad(self, dtype):
-        """ """
+        """ True if the provided dtype does not match the expected dtype. """
         if self.dtype is None:
             return False
         elif self.dtype == dtype:
@@ -190,6 +228,7 @@ class Variable:
             return True
 
     def dim_bad(self, dim):
+        """ True if the provided dim does not match the expected dim. """
         if self.dim is None:
             return False
         elif self.dim == dim:
@@ -198,6 +237,7 @@ class Variable:
             return True
 
     def units_bad(self, units):
+        """ True is the provided units does not match the expected units. """
         if self.units is None:
             return False
         elif self.units == units:
@@ -207,10 +247,16 @@ class Variable:
 
 
 def log_error(section, text):
+    """
+    Log an error, print it to standard out.
+    """
     print "ERROR: (%s) %s" % (section, text)
 
 
 def log_note(section, text):
+    """
+    Log a note (unmet optional part of the standard), print to standard out.
+    """
     print "NOTE: (%s) %s" % (section, text)
 
 
@@ -228,7 +274,8 @@ def check_attribute(section, obj, text, attr_name, valid_choices):
 def check_char_variable(section, dataset, text, var_name, valid_options):
     """ Check a char variable which has a set number of valid values."""
     if var_name in dataset.variables:
-        value = dataset.variables[var_name][:].tostring().strip('\x00')
+        var = dataset.variables[var_name][:]
+        value = var.tostring().strip('\x00').strip()
         if value not in valid_options:
             tup = (text, var_name, value, ' '.join(valid_options))
             t = "%s '%s' has an invalid value: %s must be one of %s" % tup
@@ -243,7 +290,7 @@ def check_chararr_variable(section, dataset, text, var_name, valid_options):
     if var_name in dataset.variables:
         for i, chars in enumerate(dataset.variables[var_name]):
 
-            value = chars.tostring().strip('\x00')
+            value = chars.tostring().strip('\x00').strip()
             if value not in valid_options:
                 tup = (text, var_name, i, value, ' '.join(valid_options))
                 t = ("%s '%s' has an invalid value in position %i: "
@@ -301,12 +348,19 @@ def find_all_meta_group_vars(dataset, meta_group_name):
             'meta_group' in v.ncattrs() and v.meta_group == meta_group_name]
 
 
-if __name__ == '__main__':
+def check_cfradial_compliance(dataset, verb=False):
+    """
+    Check a netcdf dataset for CF/Radial compliance.
 
-    verb = False
-    filename = sys.argv[1]
-    dataset = netCDF4.Dataset(filename)
+    Parameters
+    ----------
+    dataset : Dataset
+        NetCDF Dataset to check against CF/Radial version 1.2 standard
+    verb : bool
+        True to turn on verbose messages (Notes on missing optional
+        variables/attributes).  False (default) to suppress
 
+    """
     ##########################
     # 3 Convention hierarchy #
     ##########################
@@ -436,7 +490,7 @@ if __name__ == '__main__':
                 time.strptime(time_str, '%Y-%m-%dT%H:%M:%SZ')
             except:
                 tup = (time_str, 'yyyy-mm-ddThh:mm:ssZ')
-                t = ("'time' attrbite 'units' has an invalid formatted time"
+                t = ("'time' attribute 'units' has an invalid formatted time"
                      "value: %s should be %s" % (tup))
                 log_error('4.4.1', t)
 
@@ -611,7 +665,7 @@ if __name__ == '__main__':
     ip_vars.opt_var('prt', FLOAT, ('time', ), 'seconds')
     ip_vars.opt_var('prt_ratio', FLOAT, ('time', ))
     ip_vars.opt_var('polarization_mode', CHAR)
-    ip_vars.opt_var('nyquist_velocity', FLOAT, ('time', ), 'meter_per_second')
+    ip_vars.opt_var('nyquist_velocity', FLOAT, ('time', ), 'meters_per_second')
     ip_vars.opt_var('unambiguous_range', FLOAT, ('time', ), 'meters')
     ip_vars.opt_var('n_samples', INT, ('time', ))
     ip_vars.opt_var('sampling_ratio', FLOAT, ('time'))
@@ -796,7 +850,7 @@ if __name__ == '__main__':
             log_error('5.4.2', text)
         else:
             for i, time_arr in enumerate(r_calib_time):
-                s = time_arr.tostring().strip('\x00')
+                s = time_arr.tostring().strip('\x00').strip()
                 try:
                     time.strptime(s, '%Y-%m-%dT%H:%M:%SZ')
                 except:
@@ -885,3 +939,17 @@ if __name__ == '__main__':
     # 6.1 Proposed standard names for metadata variables
 
     # 6.2 Standard names for moments variables
+    return
+
+
+if __name__ == '__main__':
+
+    parser = argparse.ArgumentParser(
+        description='Check a file for CF/Radial version 1.2 compliance.')
+    parser.add_argument('filename', type=str, help='netcdf file to check')
+    parser.add_argument('--verb', '-v', dest='verb', action='store_true',
+                        default=False, help='turn on verbose messages')
+    args = parser.parse_args()
+
+    dataset = netCDF4.Dataset(args.filename, 'r')
+    check_cfradial_compliance(dataset, args.verb)
