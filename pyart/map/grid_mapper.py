@@ -481,8 +481,9 @@ def map_to_grid(radars, grid_shape=(81, 81, 69),
         qrf_func = standard_qrf
 
     # create array to hold interpolated grid data and roi if requested
-    grid_data = np.ma.empty((nz, ny, nx, nfields), dtype=np.float64,
-                            fill_value=badval)
+    grid_data = np.ma.empty((nz, ny, nx, nfields), dtype=np.float64)
+    grid_data.set_fill_value(badval)
+
     if map_roi:
         roi = np.empty((nz, ny, nx), dtype=np.float64)
 
