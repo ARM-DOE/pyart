@@ -1,0 +1,12 @@
+This directory contains small example files for some of the radar formats
+supported by Py-ART.  This files are used to test the functionality of Py-ART
+and should not be used as real radar data sets.  
+
+This directory should not be used directly, rather use the functionality of
+the various pyart.testing functions and modules.
+
+These files can be recreated from original radar files using the
+make_small_* scripts.  These original radar files are not included in the 
+Py-ART as they are quite large in size.
+
+Plots of these example files can be made using the quick_plot_* scripts. 
