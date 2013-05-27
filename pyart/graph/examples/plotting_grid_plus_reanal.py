@@ -10,8 +10,9 @@ def reanal_oplot(mapobj, grid, **kwargs):
     clevs = kwargs.get('clevs', np.arange(900,1100.,1.))
     grid_date=num2date(grid.axes['time']['data'], grid.axes['time']['units'])
     datestr=grid_date[0].strftime('%Y%m%d')
+    datestr_s=grid_date[0].strftime('%Y%m')
     
-    address='http://nomads.ncdc.noaa.gov/dods/NCEP_NARR_DAILY/201105/20110520/narr-a_221_'+datestr+'_0000_000'
+    address='http://nomads.ncdc.noaa.gov/dods/NCEP_NARR_DAILY/'+datestr_s+'/'+datestr+'/narr-a_221_'+datestr+'_0000_000'
     data=Dataset(address)
     lats = data.variables['lat'][:]
     lons = data.variables['lon'][:] #(360.0-data.variables['lon'][:])*-1.0
