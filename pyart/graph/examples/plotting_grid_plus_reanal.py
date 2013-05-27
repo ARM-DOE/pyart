@@ -31,4 +31,4 @@ font = {'size'   : 16}
 matplotlib.rc('font', **font)
 f=plt.figure(figsize=[15,8])
 pyart.graph.mapplotgrid_3p(grid, f, vmin=-8, vmax=64, level=5, debug=True, lat_cut=36.5, lon_cut=-98.5, overplot=reanal_oplot)
-plt.savefig('/home/user/test.png', dpi=200)
+plt.savefig('/home/user/test_map_plotting.png', dpi=200)
