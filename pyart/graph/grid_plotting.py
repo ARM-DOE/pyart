@@ -146,7 +146,7 @@ def mapplotgrid_3p(grid, fig, **kwargs):
     if 'overplot' in kwargs.keys():
         if debug:
             print('overplotting')
-        kwargs['overplot'](m, grids, **kwargs)
+        kwargs['overplot'](m, grid, **kwargs)
         
     
     plt.plot(x_lon_cut, y_lon_cut, 'r--', linewidth=2)
