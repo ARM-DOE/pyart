@@ -15,5 +15,6 @@ unit tests.
 
 from .sample_files import MDV_PPI_FILE, MDV_RHI_FILE
 from .sample_files import NETCDF_PPI_FILE, NETCDF_RHI_FILE
+from .sample_objects import make_empty_ppi_radar, make_target_radar
 
 __all__ = [s for s in dir() if not s.startswith('_')]
