@@ -781,22 +781,22 @@ class MdvFile:
         nsweeps = self.master_header['nsweeps']
         nrays = self.master_header['nrays']
         ngates = self.master_header['ngates']
-        grid_minx = self.field_headers[1]['grid_minx']
-        grid_miny = self.field_headers[1]['grid_miny']
-        grid_dx = self.field_headers[1]['grid_dx']
-        grid_dy = self.field_headers[1]['grid_dy']
+        grid_minx = self.field_headers[0]['grid_minx']
+        grid_miny = self.field_headers[0]['grid_miny']
+        grid_dx = self.field_headers[0]['grid_dx']
+        grid_dy = self.field_headers[0]['grid_dy']
 
         range_km = grid_minx + np.arange(ngates) * grid_dx
 
-        if self.field_headers[1]['proj_type'] == PROJ_RHI_RADAR:
+        if self.field_headers[0]['proj_type'] == PROJ_RHI_RADAR:
             self.scan_type = 'rhi'
             el_deg = grid_miny + np.arange(nrays) * grid_dy
-            az_deg = self.vlevel_headers[1]['level'][0:nsweeps]
+            az_deg = self.vlevel_headers[0]['level'][0:nsweeps]
 
-        if self.field_headers[1]['proj_type'] == PROJ_POLAR_RADAR:
+        if self.field_headers[0]['proj_type'] == PROJ_POLAR_RADAR:
             self.scan_type = 'ppi'
             az_deg = grid_miny + np.arange(nrays) * grid_dy
-            el_deg = self.vlevel_headers[1]['level'][0:nsweeps]
+            el_deg = self.vlevel_headers[0]['level'][0:nsweeps]
 
         return az_deg, range_km, el_deg
 
