@@ -391,7 +391,7 @@ METADATA = {
 
     'unambiguous_range': {
         'units': 'meters',
-        'comment': 'Unambiguous range',
+        'comments': 'Unambiguous range',
         'meta_group': 'instrument_parameters'},
 
 }
