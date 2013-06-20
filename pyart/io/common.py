@@ -65,9 +65,16 @@ def make_time_unit_str(dtobj):
 
 
 def get_metadata(p):
-    """ Return a dictionary of metadata for a given parameter, p. """
-    return METADATA[p].copy()
+    """
+    Return a dictionary of metadata for a given parameter, p.
 
+    An empty dictionary will be returned in no metadata dictionary exists for
+    parameter p.
+    """
+    if p in METADATA:
+        return METADATA[p].copy()
+    else:
+        return {}
 # dictionary of standard metadata for various parameters
 METADATA = {
     # metadata for radar fields, assuming a stationary platform
@@ -391,7 +398,7 @@ METADATA = {
 
     'unambiguous_range': {
         'units': 'meters',
-        'comment': 'Unambiguous range',
+        'comments': 'Unambiguous range',
         'meta_group': 'instrument_parameters'},
 
 }
