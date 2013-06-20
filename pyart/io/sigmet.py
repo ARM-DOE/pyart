@@ -8,6 +8,21 @@ Reading and writing of Sigmet (raw format) files
     :toctree: generated/
 
     read_sigmet
+    SigmetFile
+    convert_sigmet_data
+    bin2_to_angle
+    bin4_to_angle
+    ymds_time_to_datetime
+    _data_types_from_mask
+    _is_bit_set
+    _parse_ray_headers
+    _unpack_structure
+    _unpack_key
+    _unpack_ingest_data_headers
+    _unpack_ingest_data_header
+    _unpack_raw_prod_bhdr
+    _unpack_product_hdr
+    _unpack_ingest_header
 
 """
 
@@ -20,134 +35,33 @@ import numpy as np
 from .common import get_metadata, make_time_unit_str
 from .radar import Radar
 
-RECORD_SIZE = 6144      # Raw product file blocked into 6144 byte records
 SPEED_OF_LIGHT = 299793000.0
 
-SIGMET_FIELD_NAMES = {
-    1: 'DBT',
-    2: 'DBZ',
-    3: 'VEL',
-    4: 'WIDTH',
-    5: 'ZDR',
-    7: 'DBZC',
-    8: 'DBT2',
-    9: 'DBZ2',
-    10: 'VEL2',
-    11: 'WIDTH2',
-    12: 'ZDR2',
-    13: 'RAINRATE2',
-    14: 'KDP',
-    15: 'KDP2',
-    16: 'PHIDP',
-    17: 'VELC',
-    18: 'SQI',
-    19: 'RHOHV',
-    20: 'RHOHV2',
-    21: 'DBZC2',
-    22: 'VELC2',
-    23: 'SQI2',
-    24: 'PHIDP2',
-    25: 'LDRH',
-    26: 'LDRH2',
-    27: 'LDRV',
-    28: 'LDRV2',
-    32: 'HEIGHT',
-    33: 'VIL2',
-    34: 'RAW',
-    35: 'SHEAR',
-    36: 'DIVERGE2',
-    37: 'FLIQUID2',
-    38: 'USER',
-    39: 'OTHER',
-    40: 'DEFORM2',
-    41: 'VVEL2',
-    42: 'HVEL2',
-    43: 'HDIR2',
-    44: 'AXDIL2',
-    45: 'TIME2',
-    46: 'RHOH',
-    47: 'RHOH2',
-    48: 'RHOV',
-    49: 'RHOV2',
-    50: 'PHIH',
-    51: 'PHIH2',
-    52: 'PHIV',
-    53: 'PHIV2',
-    54: 'USER2',
-    55: 'HCLASS',
-    56: 'HCLASS2',
-    57: 'ZDRC',
-    58: 'ZDRC2'
-}
 
-STANDARD_FIELD_NAMES = {
-    2: 'reflectivity_horizontal',
-    3: 'mean_doppler_velocity',
-    4: 'doppler_spectral_width',
-    5: 'diff_reflectivity',
-    7: 'reflectivity_horizontal_filtered',
-    9: 'reflectivity_horizontal',
-    10: 'mean_doppler_velocity',
-    11: 'doppler_spectra_width',
-    12: 'diff_reflectivity',
-    14: 'diff_phase',
-    15: 'diff_phase',
-    16: 'dp_phase_shift',
-    17: 'corrected_mean_doppler_velocity',
-    18: 'norm_coherent_power',
-    19: 'copol_coeff',
-    20: 'copol_coeff',
-    21: 'reflectivity_horizontal_filtered',
-    22: 'corrected_mean_doppler_velocity',
-    23: 'norm_coherent_power',
-    24: 'dp_phase_shift',
-}
-"""
-    1: # total power (uncorrected reflectivity)
-    8: # total power (uncorrected reflectivity)
-    13: # rainfall rate
-    25: # LDRH
-    26: # LDRH
-    27: # LDRV
-    28: # LDRV
-    32: # height
-    33: # linear liquid
-    34: # raw data
-    35: # wind shear
-    36: # divergence
-    37: # floated liquid
-    38: # user specified
-    39: # other
-    40: # deformation
-    41: # vertical velocity
-    42: # horizontal velocity
-    43: # horizontal wind direction
-    44: # axis of dilatation
-    45: # time in seconds
-    46: # rho H V
-    47: # rho H V
-    48: # rho V H
-    49: # rho V H
-    50: # phi H V
-    51: # phi H V
-    52: # phi V H
-    53: # phi V H
-    54: # user
-    55: # hydrometeor class
-    56: # hydrometeor class
-    57: # corrected differential reflectivity
-    58: # corrected differential reflectivity
-"""
-
-
-def read_sigmet(filename, debug=False):
+def read_sigmet(filename, field_names=None, field_metadata=None,
+                sigmet_field_names=False, debug=False):
     """
-    Read a Sigmet (IRIS) file.
+    Read a Sigmet (IRIS) product file.
 
     Parameters
     ----------
-    filename : str or RSL_radar
-        Name of file whose format is supported by RSL.
+    filename : str
+        Name of Sigmet (IRIS) product file to read.
+    field_names : dict, optional
+        Dictionary mapping Sigmet data type names to radar field names. If a
+        data type found in the file does not appear in this dictionary it will
+        not be placed in the radar.fields dictionary.  If None (default) a
+        standard mapping will be used (SIGMET_TO_STANDARD)
+    field_metadata : dict of dicts, optional
+        Dictionary of dictionaries to retrieve field metadata from, if a mapped
+        field does not appear in this list standard metadata will be used, or
+        none if these is no metadata.  None (default) uses a blank dictionary.
+    sigmet_field_names : bool, optional
+        True to use the Sigmet data type names for the field names. If this
+        case the field_metadata and field_names parameters are ignored and the
+        returned radar object has a fields attribute filled with the sigmet
+        data type names with no metadata.
+    debug : bool, optional
 
     Returns
     -------
@@ -155,8 +69,16 @@ def read_sigmet(filename, debug=False):
         Radar object
 
     """
+    # parse parameters
+    if field_names is None:
+        field_names = SIGMET_TO_STANDARD
+    if field_metadata is None:
+        field_metadata = {}
+
+    # open the file, read data
     sigmetfile = SigmetFile(filename, debug=debug)
     sigmet_data, sigmet_metadata = sigmetfile.read_data()
+    sigmetfile.close()
 
     ingest_config = sigmetfile.ingest_header['ingest_configuration']
     task_config = sigmetfile.ingest_header['task_configuration']
@@ -189,7 +111,19 @@ def read_sigmet(filename, debug=False):
     # fields
     fields = {}
     for data_type_name, fdata in sigmet_data.iteritems():
-        fields[data_type_name] = {'data': fdata.reshape(-1, nbins)}
+        if sigmet_field_names:
+            fields[data_type_name] = {'data': fdata.reshape(-1, nbins)}
+        elif data_type_name in field_names:
+
+            field_name = field_names[data_type_name]
+
+            if field_name in field_metadata:
+                field_dic = field_metadata[field_name].copy()
+            else:
+                field_dic = get_metadata(field_name)
+
+            field_dic['data'] = fdata.reshape(-1, nbins)
+            fields[field_name] = field_dic
 
     # metadata
     metadata = {'title': '', 'institution': '', 'references': '',
@@ -297,10 +231,73 @@ def read_sigmet(filename, debug=False):
         azimuth, elevation,
         instrument_parameters=instrument_parameters)
 
+# This dictionary maps sigmet data types -> radar field names
+# Users can pass their own version of this dictionary to the read_sigmet
+# function as the field_names parameter.
+SIGMET_TO_STANDARD = {
+    #'DBT': 'DBT',                       # (1) Total Power
+    #'DBZ': 'DBZ',                       # (2) Reflectivity
+    #'VEL': 'VEL',                       # (3) Velocity
+    #'WIDTH': 'WIDTH',                   # (4) Width
+    #'ZDR': 'ZDR',                       # (5) Differential reflectivity
+    #'DBZC': 'DBZC',                     # (7) Corrected reflectivity
+    #'DBT2': 'DBT2',                     # (8) Total Power
+    'DBZ2': 'reflectivity_horizontal',  # (9) Reflectivity
+    'VEL2': 'mean_doppler_velocity',    # (10) Velocity
+    #'WIDTH2': 'WIDTH2',                 # (11) Width
+    'ZDR2': 'diff_reflectivity',        # (12) Differential reflectivity
+    #'RAINRATE2': 'RAINRATE2',           # (13) Rainfall rate
+    #'KDP': 'KDP',                       # (14) KDP (differential phase)
+    'KDP2': 'diff_phase',               # (15) KDP (differential phase)
+    #'PHIDP': 'PHIDP',                   # (16) PhiDP (differential phase)
+    #'VELC': 'VELC',                     # (17) Corrected velocity
+    #'SQI': 'SQI',                       # (18) SQI
+    #'RHOHV': 'RHOHV',                   # (19) RhoHV
+    'RHOHV2': 'copol_coeff',            # (20) RhoHV
+    'DBZC2': 'reflectivity_horizontal_filtered',    # (21) Corrected Reflec.
+    #'VELC2': 'VELC2',                   # (21) Corrected Velocity
+    'SQI2': 'norm_coherent_power',      # (23) SQI
+    'PHIDP2': 'dp_phase_shift',         # (24) PhiDP (differential phase)
+    #'LDRH': 'LDRH',                     # (25) LDR xmt H, rcv V
+    #'LDRH2': 'LDRH2',                   # (26) LDR xmt H, rcv V
+    #'LDRV': 'LDRV',                     # (27) LDR xmt V, rcv H
+    #'LDRV2': 'LDRV2',                   # (28) LDR xmt V, rcv H
+    #'HEIGHT': 'HEIGHT',                 # (32) Height (1/10 km)
+    #'VIL2': 'VIL2',                     # (33) Linear Liquid
+    #'RAW': 'RAW',                       # (34) Raw Data
+    #'SHEAR': 'SHEAR',                   # (35) Wind Shear
+    #'DIVERGE2': 'DIVERGE2',             # (36) Divergence
+    #'FLIQUID2': 'FLIQUID2',             # (37) Floated liquid
+    #'USER': 'USER',                     # (38) User type
+    #'OTHER': 'OTHER',                   # (39) Unspecified
+    #'DEFORM2': 'DEFORM2',               # (40) Deformation
+    #'VVEL2': 'VVEL2',                   # (41) Vertical velocity
+    #'HVEL2': 'HVEL2',                   # (42) Horizontal velocity
+    #'HDIR2': 'HDIR2',                   # (43) Horizontal wind direction
+    #'AXDIL2': 'AXDIL2',                 # (44) Axis of dilation
+    #'TIME2': 'TIME2',                   # (45) Time in seconds
+    #'RHOH': 'RHOH',                     # (46) Rho, xmt H, rcv V
+    #'RHOH2': 'RHOH2',                   # (47) Rho, xmt H, rcv V
+    #'RHOV': 'RHOV',                     # (48) Rho, xmt V, rcv H
+    #'RHOV2': 'RHOV2',                   # (49) Rho, xmt V, rcv H
+    #'PHIH': 'PHIH',                     # (50) Phi, xmt H, rcv V
+    #'PHIH2': 'PHIH2',                   # (51) Phi, xmt H, rcv V
+    #'PHIV': 'PHIV',                     # (52) Phi, xmt V, rcv H
+    #'PHIV2': 'PHIV2',                   # (53) Phi, xmt V, rcv H
+    #'USER2': 'USER2',                   # (54) User type
+    #'HCLASS': 'HCLASS',                 # (55) Hydrometeor class
+    #'HCLASS2': 'HCLASS2',               # (56) Hydrometeor class
+    #'ZDRC': 'ZDRC',                     # (57) Corrected diff. refl.
+    #'ZDRC2': 'ZDRC2'                    # (58) Corrected diff. refl.
+}
+
+
+RECORD_SIZE = 6144      # Raw product file blocked into 6144 byte records
+
 
 class SigmetFile():
     """
-    A class for accessing data from Sigmet product file.
+    A class for accessing data from Sigmet (IRIS) product files.
 
     Parameters
     ----------
@@ -310,40 +307,54 @@ class SigmetFile():
     Attributes
     ----------
     debug : bool
-
+        Set True to print out debugging information, False otherwise.
     product_hdr : dict
-
+        Product_hdr structure.
     ingest_header : dict
-
+        Ingest_header structure.
+    ingest_data_headers : list of dict
+        Ingest_data_header structures for each data type.  Indexed by the
+        data type name (str).  None when data has not yet been read.
     data_types : list
-
+        List of data types (int) in the file.
+    data_type_names : list
+        List of data type names (stR) in the file.
     ndata_types : int
-
+        Number of data types in the file.
     _fh : file
-
+        Open file being read.
     _record_number : int
-
-    _rbuf : ndarray
-
+        Last record number read.
+    _rbuf : ndarray of dtype 'int16'
+        Record buffer, holds current working record.  None when no record has
+        been loaded.
     _rbuf_pos : int
+        Working location in rbuf.  None when no record has been loaded.
+    _raw_product_bhdrs : list
+        List of raw_product_bhdr structure dictionaries seperated by sweep.
+        None when data has not yet been read.
 
     """
 
     def __init__(self, filename, debug=True):
         """ initalize the object. """
+
         self.debug = debug
 
+        # open the file
         fh = open(filename, 'rb')
 
+        # read the headers from the first 2 records.
         self.product_hdr = _unpack_product_hdr(fh.read(RECORD_SIZE))
         self.ingest_header = _unpack_ingest_header(fh.read(RECORD_SIZE))
 
+        # determine data types contained in the file
         self.data_types = self._determine_data_types()
         self.ndata_types = len(self.data_types)
-        self.data_type_names = [SIGMET_FIELD_NAMES[i] for i in self.data_types]
+        self.data_type_names = [SIGMET_DATA_TYPES[i] for i in self.data_types]
 
+        # set attributes
         self.ingest_data_headers = None
-
         self._fh = fh
         self._record_number = 2
         self._rbuf = None
@@ -357,18 +368,38 @@ class SigmetFile():
         task_dsp_info = task_config['task_dsp_info']
         word1 = task_dsp_info['current_data_type_mask']['mask_word_0']
         word2 = task_dsp_info['current_data_type_mask']['mask_word_1']
-        return data_types_from_mask(word1, word2)
+        return _data_types_from_mask(word1, word2)
+
+    def close(self):
+        """ Close the file. """
+        self._fh.close()
 
     def read_data(self):
-        """ Read all data. """
+        """
+        Read all data from the file.
 
+        Returns
+        -------
+        data : dict of ndarrays
+            Data arrays of shape=(nsweeps, nrays, nbins) for each data type.
+            Indexed by data type name (str).
+        metadata : dict of dicts
+            Arrays of 'azimuth_0', 'azimuth_1', 'elevation_0', 'elevation_1',
+            'nbins', and 'time' for each data type.  Indexed by data type name
+            (str).
+
+        """
+
+        # determine size of data
         nsweeps = self.ingest_header['task_configuration'][
             'task_scan_info']['number_sweeps']
         nbins = self.product_hdr['product_end']['number_bins']
         nrays = self.ingest_header['ingest_configuration'][
             'number_rays_sweep']
 
-        data = dict([(name, np.empty((nsweeps, nrays, nbins), dtype='float32'))
+        # create empty outputs
+        shape = (nsweeps, nrays, nbins)
+        data = dict([(name, np.ma.empty(shape, dtype='float32'))
                     for name in self.data_type_names])
 
         metadata = {}
@@ -386,76 +417,94 @@ class SigmetFile():
                                          self.data_type_names])
 
         self._raw_product_bhdrs = []
+
+        # read in data sweep by sweep
         for i in xrange(nsweeps):
-            idh, sweep_data, sweep_metadata = self.get_sweep()
-            az_0, el_0, az_1, el_1, ray_nbins, ray_time = sweep_metadata
+            ingest_data_hdrs, sweep_data, sweep_metadata = self._get_sweep()
 
             for j, name in enumerate(self.data_type_names):
+                az0, el0, az1, el1, ray_nbins, ray_time = sweep_metadata[j]
+
                 data[name][i] = sweep_data[j]
-                metadata[name]['azimuth_0'][i] = az_0[j::self.ndata_types]
-                metadata[name]['azimuth_1'][i] = az_1[j::self.ndata_types]
-                metadata[name]['elevation_0'][i] = el_0[j::self.ndata_types]
-                metadata[name]['elevation_1'][i] = el_1[j::self.ndata_types]
-                metadata[name]['nbins'][i] = ray_nbins[j::self.ndata_types]
-                metadata[name]['time'][i] = ray_time[j::self.ndata_types]
-                self.ingest_data_headers[name].append(idh[j])
+                metadata[name]['azimuth_0'][i] = az0
+                metadata[name]['azimuth_1'][i] = az1
+                metadata[name]['elevation_0'][i] = el0
+                metadata[name]['elevation_1'][i] = el1
+                metadata[name]['nbins'][i] = ray_nbins
+                metadata[name]['time'][i] = ray_time
+                self.ingest_data_headers[name].append(ingest_data_hdrs[j])
 
         return data, metadata
 
-    def get_sweep(self):
-        """ get a sweep. """
+    def _get_sweep(self):
+        """
+        Get the data and metadata from the next sweep.
+
+        Returns
+        -------
+        ingest_data_headers : list of dict
+            List of ingest_data_header structures for each data type.
+        sweep_data : list of arrays
+            Sweep data for each data types in the order they appear in the
+            file.
+        sweep_metadata : list of tuples
+            Sweep metadata for each data type in the same order as sweep_data.
+
+        """
+
         # get the next record
         lead_record = self._fh.read(RECORD_SIZE)
         self._record_number += 1
 
+        # unpack structures
         raw_prod_bhdr = _unpack_raw_prod_bhdr(lead_record)
+        self._raw_product_bhdrs.append([raw_prod_bhdr])
         ingest_data_headers = _unpack_ingest_data_headers(
             lead_record, self.ndata_types)
 
-        # determine data size
+        # determine size of data
         nray_data_types = [d['number_rays_file_actual']
                            for d in ingest_data_headers]
         nrays = sum(nray_data_types)    # total rays
         nbins = self.product_hdr['product_end']['number_bins']
 
         # prepare to read rays
-        self._raw_product_bhdrs.append([raw_prod_bhdr])
         self._rbuf = np.fromstring(lead_record, dtype='int16')
         self._rbuf_pos = int((12 + 76 * self.ndata_types) / 2)
-
         raw_sweep_data = np.empty((nrays, nbins + 6), dtype='int16')
 
-        # get the rays data
+        # get the raw data ray-by-ray
         for ray_i in xrange(nrays):
             if self.debug:
                 print "Reading ray: %i of %i" % (ray_i, nrays),
                 print "self._rbuf_pos is", self._rbuf_pos
             raw_sweep_data[ray_i] = self._get_ray(nbins)
 
-        # convert the ray data
+        # convert the data and parse the metadata
         sweep_data = []
+        sweep_metadata = []
         for i, data_type in enumerate(self.data_types):
             sweep_data.append(convert_sigmet_data(
                 data_type, raw_sweep_data[i::self.ndata_types, 6:]))
-
-        ray_headers = raw_sweep_data[:, :6]
-        return (ingest_data_headers, sweep_data,
-                self._parse_ray_headers(ray_headers))
-
-    def _parse_ray_headers(self, ray_headers):
-        """
-        Parse ray headers.
-        """
-        az_0 = bin2_to_angle(ray_headers.view('uint16')[..., 0])
-        el_0 = bin2_to_angle(ray_headers.view('uint16')[..., 1])
-        az_1 = bin2_to_angle(ray_headers.view('uint16')[..., 2])
-        el_1 = bin2_to_angle(ray_headers.view('uint16')[..., 3])
-        nbins = ray_headers.view('int16')[..., 4]
-        time = ray_headers.view('uint16')[..., 5]
-        return (az_0, el_0, az_1, el_1, nbins, time)
+            sweep_metadata.append(_parse_ray_headers(
+                raw_sweep_data[i::self.ndata_types, :6]))
+        return ingest_data_headers, sweep_data, sweep_metadata
 
     def _get_ray(self, nbins):
-        """ Get the next ray, loading new records as needed. """
+        """
+        Get the next ray, loading new records as needed.
+
+        Parameters
+        ----------
+        nbins : int
+            Number of bins in the ray.
+
+        Returns
+        -------
+        out : array
+            Raw data for the ray.
+
+        """
         compression_code = self._rbuf[self._rbuf_pos]
         self._incr_rbuf_pos()
         out = np.empty((nbins + 6,), dtype='int16')
@@ -491,7 +540,7 @@ class SigmetFile():
 
     def _incr_rbuf_pos(self, incr=1):
         """
-        Increment the record buffer position, load new buffer if needed.
+        Increment the record buffer position, load a new record if needed.
         """
         self._rbuf_pos += incr
         if self._rbuf_pos >= 3072:
@@ -507,9 +556,13 @@ class SigmetFile():
         self._rbuf = np.fromstring(record, dtype='int16')
         self._rbuf_pos = 6
 
+# functions used by the SigmetFile class
 
-def data_types_from_mask(word0, word1):
-    """ determine the data types from a data_type mask. """
+
+def _data_types_from_mask(word0, word1):
+    """
+    Return a list of the data types from the words in the data_type mask.
+    """
     data_types = [i for i in range(32) if _is_bit_set(word0, i)]
     data_types += [i+32 for i in range(32) if _is_bit_set(word1, i)]
     return data_types
@@ -519,127 +572,164 @@ def _is_bit_set(number, bit):
     """ Return True if bit is set in number. """
     return number >> bit & 1 == 1
 
+
+def _parse_ray_headers(ray_headers):
+    """
+    Parse the metadata from Sigmet ray headers.
+
+    Parameters
+    ----------
+    ray_headers : array, shape=(..., 6)
+        Ray headers to parse.
+
+    Returns
+    -------
+    az0 : array
+        Azimuth angles (in degrees) at beginning of the rays.
+    el0 : array
+        Elevation angles at the beginning of the rays.
+    az1 : array
+        Azimuth angles at the end of the rays.
+    el1 : array
+        Elevation angles at the end of the rays.
+    nbins : array
+        Number of bins in the rays.
+    time : array
+        Seconds since the start of the sweep for the rays.
+
+    """
+    az0 = bin2_to_angle(ray_headers.view('uint16')[..., 0])
+    el0 = bin2_to_angle(ray_headers.view('uint16')[..., 1])
+    az1 = bin2_to_angle(ray_headers.view('uint16')[..., 2])
+    el1 = bin2_to_angle(ray_headers.view('uint16')[..., 3])
+    nbins = ray_headers.view('int16')[..., 4]
+    time = ray_headers.view('uint16')[..., 5]
+    return (az0, el0, az1, el1, nbins, time)
+
+
 ###################
 # format converts #
 ###################
 
-# sigmet data type constants
-DB_XHDR = 0
-DB_DBT = 1
-DB_DBZ = 2
-DB_VEL = 3
-DB_WIDTH = 4
-DB_ZDR = 5
-DB_DBZC = 7
-DB_DBT2 = 8
-DB_DBZ2 = 9
-DB_VEL2 = 10
-DB_WIDTH2 = 11
-DB_ZDR2 = 12
-DB_RAINRATE2 = 13
-DB_KDP = 14
-DB_KDP2 = 15
-DB_PHIDP = 16
-DB_VELC = 17
-DB_SQI = 18
-DB_RHOHV = 19
-DB_RHOHV2 = 20
-DB_DBZC2 = 21
-DB_VELC2 = 22
-DB_SQI2 = 23
-DB_PHIDP2 = 24
-DB_LDRH = 25
-DB_LDRH2 = 26
-DB_LDRV = 27
-DB_LDRV2 = 28
-DB_HEIGHT = 32
-DB_VIL2 = 33
-DB_RAW = 34
-DB_SHEAR = 35
-DB_DIVERGE2 = 36
-DB_FLIQUID2 = 37
-DB_USER = 38
-DB_OTHER = 39
-DB_DEFORM2 = 40
-DB_VVEL2 = 41
-DB_HVEL2 = 42
-DB_HDIR2 = 43
-DB_AXDIL2 = 44
-DB_TIME2 = 45
-DB_RHOH = 46
-DB_RHOH2 = 47
-DB_RHOV = 48
-DB_RHOV2 = 49
-DB_PHIH = 50
-DB_PHIH2 = 51
-DB_PHIV = 52
-DB_PHIV2 = 53
-DB_USER2 = 54
-DB_HCLASS = 55
-DB_HCLASS2 = 56
-DB_ZDRC = 57
-DB_ZDRC2 = 58
+SIGMET_DATA_TYPES = {
+    1: 'DBT',
+    2: 'DBZ',
+    3: 'VEL',
+    4: 'WIDTH',
+    5: 'ZDR',
+    7: 'DBZC',
+    8: 'DBT2',
+    9: 'DBZ2',
+    10: 'VEL2',
+    11: 'WIDTH2',
+    12: 'ZDR2',
+    13: 'RAINRATE2',
+    14: 'KDP',
+    15: 'KDP2',
+    16: 'PHIDP',
+    17: 'VELC',
+    18: 'SQI',
+    19: 'RHOHV',
+    20: 'RHOHV2',
+    21: 'DBZC2',
+    22: 'VELC2',
+    23: 'SQI2',
+    24: 'PHIDP2',
+    25: 'LDRH',
+    26: 'LDRH2',
+    27: 'LDRV',
+    28: 'LDRV2',
+    32: 'HEIGHT',
+    33: 'VIL2',
+    34: 'RAW',
+    35: 'SHEAR',
+    36: 'DIVERGE2',
+    37: 'FLIQUID2',
+    38: 'USER',
+    39: 'OTHER',
+    40: 'DEFORM2',
+    41: 'VVEL2',
+    42: 'HVEL2',
+    43: 'HDIR2',
+    44: 'AXDIL2',
+    45: 'TIME2',
+    46: 'RHOH',
+    47: 'RHOH2',
+    48: 'RHOV',
+    49: 'RHOV2',
+    50: 'PHIH',
+    51: 'PHIH2',
+    52: 'PHIV',
+    53: 'PHIV2',
+    54: 'USER2',
+    55: 'HCLASS',
+    56: 'HCLASS2',
+    57: 'ZDRC',
+    58: 'ZDRC2'
+}
 
 
 def convert_sigmet_data(data_type, data):
     """ Convert sigmet data. """
     out = np.ma.empty_like(data, dtype='float32')
 
+    data_type_name = SIGMET_DATA_TYPES[data_type]
+
     like_dbt2 = [
-        DB_DBT2,     # 2-byte Reflectivity Format, section 4.3.4
-        DB_DBZ2,     # " "
-        DB_KDP2,     # 2-byte KDP Format, section 4.3.13
-        DB_LDRH2,    # 2-byte LDR Format, section 4.3.15
-        DB_LDRV2,    # " "
-        DB_VEL2,     # 2-byte Velocity Format, section 4.3.30
-        DB_VELC2,    # 2-byte Unfolded Velocity Format, section 4.3.32
-        DB_ZDR2,     # 2-byte ZDR Format, section 4.3.38
-        DB_DBZC2,    # Corrected reflectivity, XXX not certain of format
-        DB_ZDRC2,    # Corrected differential reflectivity, XXX not certain
+        'DBT2',     # 2-byte Reflectivity Format, section 4.3.4
+        'DBZ2',     # " "
+        'KDP2',     # 2-byte KDP Format, section 4.3.13
+        'LDRH2',    # 2-byte LDR Format, section 4.3.15
+        'LDRV2',    # " "
+        'VEL2',     # 2-byte Velocity Format, section 4.3.30
+        'VELC2',    # 2-byte Unfolded Velocity Format, section 4.3.32
+        'ZDR2',     # 2-byte ZDR Format, section 4.3.38
+        'DBZC2',    # Corrected reflectivity, XXX not certain of format
+        'ZDRC2',    # Corrected differential reflectivity, XXX not certain
     ]
 
     like_sqi2 = [
-        DB_RHOV2,   # 2-byte Rho Format, section 4.3.22
-        DB_RHOH2,   # " "
-        DB_RHOHV2,  # 2-byte RhoHV Format, section 4.3.24
-        DB_SQI2,    # 2-byte Signal Quality Index Format, section 4.3.27
+        'RHOV2',   # 2-byte Rho Format, section 4.3.22
+        'RHOH2',   # " "
+        'RHOHV2',  # 2-byte RhoHV Format, section 4.3.24
+        'SQI2',    # 2-byte Signal Quality Index Format, section 4.3.27
     ]
 
-    if data_type in like_dbt2:
+    if data_type_name in like_dbt2:
         # value = (N - 32768) / 100.
         # 0 : no data available (mask)
         # 65535 Reserved for area not scanned in product file (nothing)
         out[:] = (data.view('uint16') - 32768.) / 100.
         out[data.view('uint16') == 0] = np.ma.masked
 
-    elif data_type in like_sqi2:
+    elif data_type_name in like_sqi2:
         # value = (N - 1) / 65533
         # 0 : no data available (mask)
         # 65535 Area not scanned
         out[:] = (data.view('uint16') - 1.) / 65533.
         out[data.view('uint16') == 0] = np.ma.masked
 
-    elif data_type == DB_WIDTH2:
+    elif data_type_name == 'WIDTH2':
         # DB_WIDTH2, 11, Width (2 byte)
         # 2-byte Width Format, section 4.3.36
         out[:] = data.view('uint16') / 100.
         out[data.view('uint16') == 0] = np.ma.masked
 
-    elif data_type == DB_PHIDP2:
+    elif data_type_name == 'PHIDP2':
         # DB_PHIDP2, 24, PhiDP (Differential Phase) (2 byte)
         # 2-byte PhiDP format, section 4.3.19
         out[:] = 360. * (data.view('uint16') - 1.) / 65534.
         out[data.view('uint16') == 0] = np.ma.masked
 
-    elif data_type == DB_HCLASS2:
+    elif data_type_name == 'HCLASS2':
         # DB_HCLASS2, 56, Hydrometeor class (2 byte)
         # 2-byte HydroClass Format, section 4.3.9
         out[:] = data.view('uint16')
 
     else:
+        # TODO implement conversions for additional formats.
         raise NotImplementedError
 
-    out.data[out.mask] = -9999.0
     out.set_fill_value(-9999.0)
     return out
 
@@ -809,7 +899,7 @@ UINT16_T = 'H'
 # M21131EN-B
 
 # Chapter 4 deals with data formats
-# section 4.5.4 deals with RAW Product format
+# section 4.5.4 deals with the RAW Product format
 
 # 640 bytes: product_hdr (section 4.2.25, page 47)
 PRODUCT_HDR = OrderedDict([

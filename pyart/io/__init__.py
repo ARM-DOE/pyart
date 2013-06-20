@@ -14,6 +14,7 @@ from and write data to a number of file formats.
     read
     read_rsl
     read_mdv
+    read_sigmet
     read_netcdf
     write_netcdf
     read_grid
@@ -27,6 +28,7 @@ from and write data to a number of file formats.
 from .auto_read import read
 from .rsl import read_rsl
 from .mdv import read_mdv
+from .sigmet import read_sigmet
 from .netcdf import read_netcdf, write_netcdf
 from .radar import Radar
 from .grid import read_grid, write_grid, Grid
