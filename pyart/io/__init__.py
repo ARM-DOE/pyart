@@ -30,6 +30,7 @@ from .rsl import read_rsl
 from .mdv import read_mdv
 from .sigmet import read_sigmet
 from .netcdf import read_netcdf, write_netcdf
+from .wsr88d import read_wsr88d
 from .radar import Radar
 from .grid import read_grid, write_grid, Grid
 
