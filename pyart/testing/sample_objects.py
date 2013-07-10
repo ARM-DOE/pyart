@@ -14,6 +14,7 @@ Functions for creating sample Radar and Grid objects.
 
 import numpy as np
 
+from .sample_files import _EXAMPLE_RAYS_FILE
 from ..io.common import get_metadata
 from ..io.radar import Radar
 
@@ -99,4 +100,23 @@ def make_target_radar():
     fdata[:, 40:50] = 40.
     fields['reflectivity_horizontal']['data'] = fdata
     radar.fields = fields
+    return radar
+
+
+def make_single_ray_radar():
+    """
+    Return a PPI radar with a single ray taken from a ARM C-SAPR Radar
+
+    Radar object returned has 'reflectivity_horizontal',
+    'norm_coherent_power', 'copol_coeff', 'dp_phase_shift', and 'diff_phase'
+    fields with no metadata but a 'data' key.  This radar is used for unit
+    tests in correct modules.
+
+    """
+    radar = make_empty_ppi_radar(983, 1, 1)
+    radar.range['data'] = 117.8784 + np.arange(983) * 119.91698
+    f = np.load(_EXAMPLE_RAYS_FILE)
+    for field_name in f:
+        radar.fields[field_name] = {'data': f[field_name]}
+    f.close()
     return radar

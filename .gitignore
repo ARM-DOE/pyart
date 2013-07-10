@@ -107,6 +107,7 @@ pyart/testing/data/110041.mdv
 pyart/testing/data/110635.mdv
 pyart/testing/data/XSW110520105408.RAW7HHF
 pyart/testing/data/XSW110520113537.RAW7HHL
+pyart/testing/data/095636.mdv
 
 # system_tests data
 system_tests/*.npy
