@@ -103,6 +103,40 @@ def make_target_radar():
     return radar
 
 
+def make_velocity_aliased_radar():
+    """
+    Return a PPI radar with a target like reflectivity_horizontal field.
+    """
+    radar = make_empty_ppi_radar(50, 360, 1)
+    radar.range['meters_between_gates'] = 1.0
+    radar.range['meters_to_center_of_first_gate'] = 1.0
+    radar.instrument_parameters = {
+        'nyquist_velocity': {'data': np.array([10.0] * 360)}}
+
+    fields = {
+        'reflectivity_horizontal': get_metadata('reflectivity_horizontal'),
+        'mean_doppler_velocity': get_metadata('mean_doppler_velocity')}
+
+    # fake reflectivity data, all zero reflectivity
+    fdata = np.zeros((360, 50), dtype='float32')
+    fields['reflectivity_horizontal']['data'] = fdata
+
+    # fake velocity data, all zeros except a wind burst on at ~13 degrees.
+    # burst is partially aliased.
+    vdata = np.zeros((360 * 1, 50), dtype='float32')
+
+    for i, idx in enumerate(range(13, -1, -1)):
+        vdata[i, idx:idx + i + 1] = np.arange(0.5, 0.5 + i * 1. + 0.001)
+    vdata[:14, 14:27] = vdata[:14, 12::-1]  # left/right flip
+    vdata[14:27] = vdata[12::-1, :]         # top/bottom flip
+    aliased = np.where(vdata > 10.0)
+    vdata[aliased] += -20.
+    fields['mean_doppler_velocity']['data'] = vdata
+
+    radar.fields = fields
+    return radar
+
+
 def make_single_ray_radar():
     """
     Return a PPI radar with a single ray taken from a ARM C-SAPR Radar
