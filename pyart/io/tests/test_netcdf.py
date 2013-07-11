@@ -1,16 +1,21 @@
 """ Unit Tests for Py-ART's io/netcdf.py module. """
 
-from os.path import join, dirname
+import tempfile
+import os
 
 import numpy as np
 from numpy.ma.core import MaskedArray
+from numpy.testing import assert_array_equal
 import netCDF4
 
 import pyart
 
+###############################################
+# read_netcdf tests (verify radar attributes) #
+###############################################
+
 # read in the sample file and create a a Radar object
-fname = join(dirname(__file__), 'sample_nc.nc')
-radar = pyart.io.read_netcdf(fname)
+radar = pyart.io.read_netcdf(pyart.testing.NETCDF_PPI_FILE)
 
 
 # time attribute
@@ -21,9 +26,9 @@ def test_time():
     assert 'units' in radar.time.keys()
     assert 'calendar' in radar.time.keys()
     assert 'data' in radar.time.keys()
-    assert radar.time['units'] == 'seconds since 2012-12-11T22:48:21Z'
-    assert radar.time['data'].shape == (3524, )
-    assert round(radar.time['data'][600]) == 51.
+    assert radar.time['units'] == 'seconds since 2011-05-20T10:54:16Z'
+    assert radar.time['data'].shape == (40, )
+    assert round(radar.time['data'][38]) == 14.
 
 
 # range attribute
@@ -35,7 +40,7 @@ def test_range():
     assert 'units' in radar.range
     assert 'data' in radar.range
     assert 'spacing_is_constant' in radar.range
-    assert radar.range['data'].shape == (1333, )
+    assert radar.range['data'].shape == (42, )
     assert round(radar.range['data'][0]) == 0.0
 
 
@@ -44,21 +49,19 @@ def test_range():
 
 # metadata attribute
 def test_metadata():
-    assert 'comment' in radar.metadata
-    assert 'scan_id' in radar.metadata
-    assert 'platform_is_mobile' in radar.metadata
-    assert 'site_name' in radar.metadata
-    assert 'title' in radar.metadata
-    assert 'scan_name' in radar.metadata
-    assert 'n_gates_vary' in radar.metadata
     assert 'Conventions' in radar.metadata
-    assert 'source' in radar.metadata
-    assert 'version' in radar.metadata
-    assert 'references' in radar.metadata
-    assert 'instrument_name' in radar.metadata
-    assert 'ray_times_increase' in radar.metadata
-    assert 'institution' in radar.metadata
+    assert 'comment' in radar.metadata
     assert 'history' in radar.metadata
+    assert 'institution' in radar.metadata
+    assert 'instrument_name' in radar.metadata
+    assert 'instrument_type' in radar.metadata
+    assert 'platform_type' in radar.metadata
+    assert 'primary_axis' in radar.metadata
+    assert 'references' in radar.metadata
+    assert 'source' in radar.metadata
+    assert 'title' in radar.metadata
+    assert 'version' in radar.metadata
+    assert 'volume_number' in radar.metadata
 
 
 # scan_type attribute
@@ -71,7 +74,7 @@ def test_latitude():
     assert 'data' in radar.latitude
     assert 'standard_name' in radar.latitude
     assert 'units' in radar.latitude
-    assert round(radar.latitude['data']) == -2.0
+    assert round(radar.latitude['data']) == 36.0
 
 
 # longitude attribute
@@ -79,7 +82,7 @@ def test_longitude():
     assert 'data' in radar.longitude
     assert 'standard_name' in radar.longitude
     assert 'units' in radar.longitude
-    assert round(radar.longitude['data']) == 147.0
+    assert round(radar.longitude['data']) == -98.0
 
 
 # altitude attribute
@@ -88,7 +91,7 @@ def test_altitude():
     assert 'standard_name' in radar.altitude
     assert 'units' in radar.altitude
     assert 'positive' in radar.altitude
-    assert round(radar.altitude['data']) == 126.0
+    assert round(radar.altitude['data']) == 214.0
 
 
 # altitude_agl attribute
@@ -99,14 +102,13 @@ def test_altitude_agl():
 # sweep_number attribute
 def test_sweep_number():
     assert 'standard_name' in radar.sweep_number
-    assert '_FillValue' in radar.sweep_number
-    assert np.all(radar.sweep_number['data'] == range(9, 19))
+    assert np.all(radar.sweep_number['data'] == range(1))
 
 
 # sweep_mode attribute
 def test_sweep_mode():
     assert 'standard_name' in radar.sweep_mode
-    assert radar.sweep_mode['data'].shape == (10, 32)
+    assert radar.sweep_mode['data'].shape == (1, 20)
     str_array = netCDF4.chartostring(radar.sweep_mode['data'])
     assert np.all(str_array == ['azimuth_surveillance'])
 
@@ -115,25 +117,22 @@ def test_sweep_mode():
 def test_fixed_angle():
     assert 'standard_name' in radar.fixed_angle
     assert 'units' in radar.fixed_angle
-    assert '_FillValue' in radar.fixed_angle
-    assert radar.fixed_angle['data'].shape == (10, )
-    assert round(radar.fixed_angle['data'][0], 2) == 6.4
+    assert radar.fixed_angle['data'].shape == (1, )
+    assert round(radar.fixed_angle['data'][0], 2) == 0.50
 
 
 # sweep_start_ray_index attribute
 def test_sweep_start_ray_index():
-    assert 'standard_name' in radar.sweep_start_ray_index
-    assert '_FillValue' in radar.sweep_start_ray_index
-    assert radar.sweep_start_ray_index['data'].shape == (10, )
-    assert round(radar.sweep_start_ray_index['data'][1]) == 271.0
+    assert 'long_name' in radar.sweep_start_ray_index
+    assert radar.sweep_start_ray_index['data'].shape == (1, )
+    assert round(radar.sweep_start_ray_index['data'][0]) == 0.0
 
 
 # sweep_end_ray_index attribute
 def test_sweep_end_ray_index():
-    assert 'standard_name' in radar.sweep_end_ray_index
-    assert '_FillValue' in radar.sweep_end_ray_index
-    assert radar.sweep_end_ray_index['data'].shape == (10, )
-    assert round(radar.sweep_end_ray_index['data'][0]) == 270.0
+    assert 'long_name' in radar.sweep_end_ray_index
+    assert radar.sweep_end_ray_index['data'].shape == (1, )
+    assert round(radar.sweep_end_ray_index['data'][0]) == 399.0
 
 
 # target_scan_rate attribute
@@ -143,50 +142,34 @@ def test_target_scan_rate():
 
 # azimuth attribute
 def test_azimuth():
-    assert '_FillValue' in radar.azimuth
     assert 'standard_name' in radar.azimuth
     assert 'units' in radar.azimuth
-    assert round(radar.azimuth['data'][0]) == 6.0
-    assert round(radar.azimuth['data'][10]) == 16.0
+    assert round(radar.azimuth['data'][0]) == 360.
+    assert round(radar.azimuth['data'][10]) == 90.0
 
 
 # elevation attribute
 def test_elevation():
-    assert '_FillValue' in radar.elevation
-    assert 'positive' in radar.elevation
     assert 'standard_name' in radar.elevation
     assert 'units' in radar.elevation
-    assert radar.elevation['data'].shape == (3524, )
-    assert round(radar.elevation['data'][0], 2) == 6.4
+    assert radar.elevation['data'].shape == (40, )
+    assert round(radar.elevation['data'][0], 2) == 0.48
 
 
 # scan_rate attribute
 def test_scan_rate():
-    assert 'standard_name' in radar.scan_rate
-    #assert 'meta_group' in radar.scan_rate  # shouldn't be in this group
-    assert 'units' in radar.scan_rate
-    assert '_FillValue' in radar.scan_rate
-    assert np.ma.is_masked(radar.scan_rate['data'][0])
+    assert radar.scan_rate is None
 
 
 # antenna_transition attribute
 def test_antenna_transition():
-    assert 'standard_name' in radar.antenna_transition
-    assert 'comment' in radar.antenna_transition
-    assert np.all(radar.antenna_transition['data'] == 0)
+    assert radar.antenna_transition is None
 
 
 # instrument_parameters attribute
 def test_instument_parameters():
     # instrument_parameter sub-convention
-    keys = ['frequency', 'follow_mode', 'pulse_width', 'prt_mode', 'prt',
-            'prt_ratio', 'polarization_mode', 'nyquist_velocity',
-            'unambiguous_range', 'n_samples']
-    # radar_parameters sub-convention
-    keys += ['radar_antenna_gain_h', 'radar_antenna_gain_v',
-             'radar_beam_width_h', 'radar_beam_width_v',
-             'measured_transmit_power_h', 'measured_transmit_power_v',
-             'radar_rx_bandwidth']
+    keys = ['prt_mode', 'prt', 'nyquist_velocity', 'unambiguous_range']
     for k in keys:
         description = 'instrument_parameters: %s' % k
         check_instrument_parameter.description = description
@@ -195,84 +178,23 @@ def test_instument_parameters():
 
 def check_instrument_parameter(param):
     assert param in radar.instrument_parameters
-    # the meta_group is not reliably set in CF/Radial files
-    #param_dic = radar.instrument_parameters[param]
-    #assert param_dic['meta_group'] == 'instrument_parameters'
-
-
-# radar_calibration attribute
-def test_radar_calibration():
-    keys = ['r_calib_index',
-            'r_calib_time',
-            'r_calib_pulse_width',
-            'r_calib_antenna_gain_h',   # should be r_calib_ant_gain_h
-            'r_calib_antenna_gain_v',   # should be r_calib_ant_gain_v
-            'r_calib_xmit_power_h',
-            'r_calib_xmit_power_v',
-            'r_calib_two_way_waveguide_loss_h',
-            'r_calib_two_way_waveguide_loss_v',
-            'r_calib_two_way_radome_loss_h',
-            'r_calib_two_way_radome_loss_v',
-            'r_calib_receiver_mismatch_loss',
-            'r_calib_radar_constant_h',
-            'r_calib_radar_constant_v',
-            'r_calib_noise_hc',
-            'r_calib_noise_vc',
-            'r_calib_noise_hx',
-            'r_calib_noise_vx',
-            'r_calib_receiver_gain_hc',
-            'r_calib_receiver_gain_vc',
-            'r_calib_receiver_gain_hx',
-            'r_calib_receiver_gain_vx',
-            'r_calib_base_dbz_1km_hc',
-            'r_calib_base_dbz_1km_vc',
-            'r_calib_base_dbz_1km_hx',
-            'r_calib_base_dbz_1km_vx',
-            'r_calib_sun_power_hc',
-            'r_calib_sun_power_vc',
-            'r_calib_sun_power_hx',
-            'r_calib_sun_power_vx',
-            'r_calib_noise_source_power_h',
-            'r_calib_noise_source_power_v',
-            'r_calib_power_measure_loss_h',
-            'r_calib_power_measure_loss_v',
-            'r_calib_coupler_forward_loss_h',
-            'r_calib_coupler_forward_loss_v',
-            'r_calib_zdr_correction',
-            'r_calib_ldr_correction_h',
-            'r_calib_ldr_correction_v',
-            'r_calib_system_phidp',
-            'r_calib_test_power_h',
-            'r_calib_test_power_v',
-            'r_calib_receiver_slope_hc',
-            'r_calib_receiver_slope_vc',
-            'r_calib_receiver_slope_hx',
-            'r_calib_receiver_slope_vx', ]
-    for k in keys:
-        description = 'radar_calibration: %s' % k
-        check_radar_calibration.description = description
-        yield check_radar_calibration, k
-
-
-def check_radar_calibration(param):
-    assert param in radar.radar_calibration
-    param_dic = radar.radar_calibration[param]
-    assert param_dic['meta_group'] == 'radar_calibration'
+    param_dic = radar.instrument_parameters[param]
+    assert param_dic['meta_group'] == 'instrument_parameters'
 
 
 # ngates attribute
 def test_ngates():
-    assert radar.ngates == 1333
+    assert radar.ngates == 42
 
 
 # nrays attribute
 def test_nrays():
-    assert radar.nrays == 3524
+    assert radar.nrays == 40
 
 
 # nsweeps attribute
 def test_nsweeps():
-    assert radar.nsweeps == 10
+    assert radar.nsweeps == 1
 
 
 ####################
@@ -281,9 +203,9 @@ def test_nsweeps():
 
 
 def test_field_dics():
-    fields = ['PHIDP', 'WIDTH', 'DBZ', 'DBM', 'RHOHV', 'SNR', 'VEL', 'ZDR']
+    fields = ['reflectivity_horizontal', ]
     for field in fields:
-        description = "fields : %s, dictionary" % field
+        description = "field : %s, dictionary" % field
         check_field_dic.description = description
         yield check_field_dic, field
 
@@ -297,7 +219,7 @@ def check_field_dic(field):
 
 
 def test_field_shapes():
-    fields = ['PHIDP', 'WIDTH', 'DBZ', 'DBM', 'RHOHV', 'SNR', 'VEL', 'ZDR']
+    fields = ['reflectivity_horizontal', ]
     for field in fields:
         description = "field : %s, shape" % field
         check_field_shape.description = description
@@ -305,18 +227,11 @@ def test_field_shapes():
 
 
 def check_field_shape(field):
-    assert radar.fields[field]['data'].shape == (3524, 1333)
+    assert radar.fields[field]['data'].shape == (40, 42)
 
 
 def test_field_types():
-    fields = {'PHIDP': np.ndarray,
-              'WIDTH': np.ndarray,
-              'DBZ': MaskedArray,
-              'DBM': np.ndarray,
-              'RHOHV': np.ndarray,
-              'SNR': MaskedArray,
-              'VEL': np.ndarray,
-              'ZDR': MaskedArray}
+    fields = {'reflectivity_horizontal': MaskedArray, }
     for field, field_type in fields.iteritems():
         description = "field : %s, type" % field
         check_field_type.description = description
@@ -330,14 +245,7 @@ def check_field_type(field, field_type):
 def test_field_first_points():
     # these values can be found using:
     # [round(radar.fields[f]['data'][0,0]) for f in radar.fields]
-    fields = {'PHIDP': -111.0,
-              'WIDTH': 5.0,
-              'DBZ': 20.0,
-              'DBM': -50.0,
-              'RHOHV': 1.0,
-              'SNR': 63.0,
-              'VEL': -8.0,
-              'ZDR': 0.0}
+    fields = {'reflectivity_horizontal': -6.0, }
     for field, field_value in fields.iteritems():
         description = "field : %s, first point" % field
         check_field_first_point.description = description
@@ -346,3 +254,128 @@ def test_field_first_points():
 
 def check_field_first_point(field, value):
     assert round(radar.fields[field]['data'][0, 0]) == value
+
+######################################################################
+# write_netcdf tests (verify data in written netCDF matches original #
+######################################################################
+
+
+def test_write_ppi():
+    # CF/Radial example file -> Radar object -> netCDF file
+    tmpfile = tempfile.mkstemp(suffix='.nc', dir='.')[1]
+    radar = pyart.io.read_netcdf(pyart.testing.NETCDF_PPI_FILE)
+    pyart.io.write_netcdf(tmpfile, radar)
+    ref = netCDF4.Dataset(pyart.testing.NETCDF_PPI_FILE)
+    dset = netCDF4.Dataset(tmpfile)
+    check_dataset_to_ref(dset, ref)
+    os.remove(tmpfile)
+
+
+def test_write_rhi():
+    # CF/Radial example file -> Radar object -> netCDF file
+    tmpfile = tempfile.mkstemp(suffix='.nc', dir='.')[1]
+    radar = pyart.io.read_netcdf(pyart.testing.NETCDF_RHI_FILE)
+    pyart.io.write_netcdf(tmpfile, radar)
+    ref = netCDF4.Dataset(pyart.testing.NETCDF_RHI_FILE)
+    dset = netCDF4.Dataset(tmpfile)
+    check_dataset_to_ref(dset, ref)
+    os.remove(tmpfile)
+
+
+def check_dataset_to_ref(dset, ref):
+    """ Check that all data in Dataset is contained in the ref Dataset. """
+
+    # file format (these are not expected to match)
+    assert dset.file_format == ref.file_format
+
+    # global attributes
+    dset_attributes = dset.ncattrs()
+    ref_attributes = ref.ncattrs()
+
+    for attr in dset_attributes:
+        print "Global attribute:", attr
+        assert attr in ref_attributes
+        attribute_equal(dset, ref, attr, allow_str_case_diff=True)
+
+    # cmptypes, expected to be empty
+    print "Checking cmptypes..."
+    assert dset.cmptypes == ref.cmptypes
+
+    # groups, expected to be empty
+    print "Checking groups..."
+    assert dset.groups == ref.groups
+
+    # dimensions (these are not expected to match)
+    print "Checking dimensions"
+    for dim in dset.dimensions.keys():
+        print "Dimension", dim
+        assert dim in ref.dimensions.keys()
+
+    # variables
+    print "Checking variables..."
+    dset_vars = dset.variables
+    ref_vars = ref.variables
+    for v in dset_vars.keys():
+        print "Variable", v
+        check_variable_to_ref(dset_vars[v], ref_vars[v])
+
+
+def check_variable_to_ref(var, ref_var):
+    """ Check that the data/metadata in var matches the ref. variable. """
+    # check variable attributes
+    for attr in var.ncattrs():
+        print "Checking attribute", attr
+        assert attr in ref_var.ncattrs()
+        attribute_equal(var, ref_var, attr)
+
+    # instance variables
+    assert var.dimensions == ref_var.dimensions
+    assert var.dtype == ref_var.dtype
+    assert var.ndim == ref_var.ndim
+    assert var.shape == ref_var.shape
+
+    if 'least_significant_digit' in dir(var):
+        assert 'least_significant_digit' in dir(ref_var)
+        assert var.least_significant_digit == ref_var.least_significant_digit
+
+    # properties
+    assert var.size == ref_var.size
+    assert var.maskandscale == ref_var.maskandscale
+
+    # data and the mask
+    data = var[:]
+    ref_data = ref_var[:]
+    assert ('mask' in dir(data)) == ('mask' in dir(ref_data))
+    if 'mask' in dir(data):
+        assert_array_equal(data, ref_data)
+        assert_array_equal(data.mask, ref_data.mask)
+    else:
+        assert_array_equal(data, ref_data)
+
+
+def attribute_equal(class1, class2, key, allow_str_case_diff=True):
+    """ Check that an attribute of two classes are equal. """
+    a1 = getattr(class1, key)
+    a2 = getattr(class2, key)
+
+    assert type(a1) == type(a2)
+
+    if type(a1) is unicode and allow_str_case_diff:
+        assert a1.upper() == a2.upper()
+    else:
+        assert a1 == a2
+    return
+
+
+def test_auto_history_and_conventions():
+    # history and Conventions metadata should be created on write if
+    # they do not exist in the original radar object
+    tmpfile = tempfile.mkstemp(suffix='.nc', dir='.')[1]
+    radar = pyart.io.read_netcdf(pyart.testing.NETCDF_RHI_FILE)
+    radar.metadata.pop('Conventions')
+    radar.metadata.pop('history')
+    pyart.io.write_netcdf(tmpfile, radar)
+    radar2 = pyart.io.read_netcdf(tmpfile)
+    assert 'Conventions' in radar2.metadata
+    assert 'history' in radar2.metadata
+    os.remove(tmpfile)

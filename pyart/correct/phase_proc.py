@@ -162,7 +162,7 @@ def det_process_range(radar, sweep, fzl, doc=10):
     gate_end = min(gate_end, len(ranges) - doc)
 
     ray_start = radar.sweep_start_ray_index['data'][sweep]
-    ray_end = radar.sweep_end_ray_index['data'][sweep]
+    ray_end = radar.sweep_end_ray_index['data'][sweep] + 1
     return gate_end, ray_start, ray_end
 
 

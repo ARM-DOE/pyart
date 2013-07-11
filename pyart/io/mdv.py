@@ -60,7 +60,7 @@ def read_mdv(filename):
     scan_type = mdvfile.scan_type
 
     if scan_type not in ['ppi', 'rhi']:
-        NotImplemented('No support for scan_type %s.' % scan_type)
+        raise NotImplementedError('No support for scan_type %s.' % scan_type)
 
     # time
     time = get_metadata('time')
