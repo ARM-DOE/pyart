@@ -1,25 +1,23 @@
-#!/usr/bin/env python
+""" Unit Tests for Py-ART's io/grid.py module. """
 
 import tempfile
 import os
-import os.path
 
-import pyart
 import numpy as np
 
-DIR = os.path.dirname(__file__)
-NETCDF_FILE = os.path.join(DIR, 'swx_20120520_0641.nc')
+import pyart
+
+COMMON_MAP_TO_GRID_ARGS = {
+    'grid_shape': (10, 9, 3),
+    'grid_limits': ((-900.0, 900.0), (-900.0, 900.0), (-400, 400)),
+    'fields': ['reflectivity_horizontal'],
+    'qrf_func': lambda x, y, z: 30, }
 
 
-def test_grid():
-    xsapr_se = pyart.io.read_netcdf(NETCDF_FILE)
-    grid = pyart.map.grid_from_radars(
-        (xsapr_se, ),
-        grid_shape=(101, 101, 2),
-        grid_limits= ((-50000, 50000), (-50000, 50000), (0, 1000)),
-        fields=['corrected_reflectivity_horizontal'],
-        refl_field='corrected_reflectivity_horizontal',
-        max_refl=100.)
+def test_grid_from_radars():
+    radar = pyart.testing.make_target_radar()
+    grid = pyart.map.grid_from_radars((radar,), **COMMON_MAP_TO_GRID_ARGS)
+
     tmpfile = tempfile.mkstemp(suffix='.nc', dir='.')[1]
     grid.write(tmpfile)
     grid2 = pyart.io.read_grid(tmpfile)

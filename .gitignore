@@ -84,12 +84,9 @@ Thumbs.db
 
 # Things specific to this project #
 ###################################
+.coverage
 sandbox
-io/bin
-io/doc
-io/include
-io/lib
-io/src/rsl-*
+pyart/version.py
 
 # Documentation files #
 #######################
@@ -99,33 +96,16 @@ io/src/rsl-*
 
 # radar data files #
 ####################
-pyart/io/tests/110635.mdv
-pyart/io/tests/sample_nc.nc
-pyart/io/tests/sample_uf.uf
-pyart/io/rsl_wrap/sample_uf.uf
-pyart/io/tests/cfrad.20080604_002217_000_SPOL_v36_SUR_netcdf3.nc
-pyart/io/tests/cfrad.20080604_002217_000_SPOL_v36_SUR_netcdf4.nc
-pyart/io/tests/swx_20120520_0641.nc
-pyart/correct/tests/sgpinterpolatedsondeC1.c1.20110510.000000.cdf
-pyart/correct/tests/sample.nc
-pyart/correct/tests/sample.sigmet
-pyart/correct/tests/*.npy
-
-pyart/graph/tests/*.RAW**
-pyart/graph/tests/*.cdf
-pyart/graph/tests/*.nc
-pyart/graph/tests/*.mdv
 
 pyart/graph/examples/*.RAW**
 pyart/graph/examples/*.cdf
 pyart/graph/examples/*.nc
 pyart/graph/examples/*.mdv
 
-pyart/map/tests/*.nc
-
+# full sized sample data files
 pyart/testing/data/110041.mdv
 pyart/testing/data/110635.mdv
 pyart/testing/data/XSW110520105408.RAW7HHF
 pyart/testing/data/XSW110520113537.RAW7HHL
-
-pyart/version.py
+pyart/testing/data/095636.mdv
+pyart/testing/data/sgpinterpolatedsondeC1.c1.20110510.000000.cdf
