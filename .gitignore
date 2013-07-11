@@ -109,13 +109,3 @@ pyart/testing/data/XSW110520105408.RAW7HHF
 pyart/testing/data/XSW110520113537.RAW7HHL
 pyart/testing/data/095636.mdv
 pyart/testing/data/sgpinterpolatedsondeC1.c1.20110510.000000.cdf
-
-# system_tests data
-system_tests/*.npy
-system_tests/*.mdv
-system_tests/*.nc
-system_tests/*.cdf
-system_tests/*.RAW*
-system_tests/*.sigmet
-system_tests/*.uf
-
