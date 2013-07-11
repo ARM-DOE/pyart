@@ -123,6 +123,7 @@ def read_sigmet(filename, field_names=None, field_metadata=None,
                 field_dic = get_metadata(field_name)
 
             field_dic['data'] = fdata.reshape(-1, nbins)
+            field_dic['_FillValue'] = -9999.0
             fields[field_name] = field_dic
 
     # metadata
