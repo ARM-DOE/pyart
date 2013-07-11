@@ -1,32 +1,21 @@
-""" Tests for the dealias module in pyart.correct """
+""" Unit Tests for Py-ART's correct/dealias.py module. """
+
+# python test_dealias.py
+# to recreate a dealias_plot.png file showing the before and after doppler
+# velocities
 
 import datetime
-import os.path
 
 import netCDF4
-import numpy as np
-from numpy.testing import assert_array_equal
-
 import pyart
-from pyart.correct import dealias
+import numpy as np
+from numpy.testing import assert_allclose
 
 
-DIR = os.path.dirname(__file__)
-RSLNAME = os.path.join(DIR, "sample.sigmet")
-SONDNAME = os.path.join(DIR, 'sgpinterpolatedsondeC1.c1.20110510.000000.cdf')
-NCFNAME = os.path.join(DIR, 'sample.nc')
-REFNAME = os.path.join(DIR, 'dealias_reference.npy')
-
-#################
-# Dealias Tests #
-#################
-
-
-def test_find_time():
-    """ find_time_in_interp_sonde test """
+def test_find_time_in_interp_sounde():
     target = datetime.datetime(2011, 5, 10, 11, 30, 8)
-    interp_sounde = netCDF4.Dataset(SONDNAME)
-    t = dealias.find_time_in_interp_sonde(interp_sounde, target)
+    interp_sounde = netCDF4.Dataset(pyart.testing.INTERP_SOUNDE_FILE)
+    t = pyart.correct.dealias.find_time_in_interp_sonde(interp_sounde, target)
     height, speed, direction = t
 
     assert height.shape == (316,)
@@ -42,43 +31,46 @@ def test_find_time():
     assert round(direction[100], 2) == 231.8
 
 
-def test_dealias_rsl():
-    """ Dealias data from a RSL object """
-
-    # read in the data
-    radar = pyart.io.read_rsl(RSLNAME)
-
-    # find and extract sonde data
-    target = netCDF4.num2date(radar.time['data'][0], radar.time['units'])
-    interp_sounde = netCDF4.Dataset(SONDNAME)
-    t = dealias.find_time_in_interp_sonde(interp_sounde, target)
-    height, speed, direction = t
-
-    # perform dealiasing
-    dealias_data = dealias.dealias_fourdd(radar, height * 1000.0, speed,
-                                          direction, target)
-
-    # compare against known good data
-    reference_data = np.load(REFNAME)
-    assert_array_equal(reference_data, dealias_data['data'].data)
+def test_dealias():
+    radar, dealias_vel = perform_dealias()
+    assert_allclose(
+        dealias_vel['data'][13, :27],
+        [0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 9.5, 10.5, 11.5,
+         12.5, 13.5, 12.5, 11.5, 10.5, 9.5, 8.5, 7.5, 6.5, 5.5, 4.5, 3.5,
+         2.5, 1.5, 0.5])
 
 
-def test_dealias_ncf():
-    """ Dealias data from a NetCDF file """
+def perform_dealias():
+    """ Perform velocity dealiasing on reference data. """
+    radar = pyart.testing.make_velocity_aliased_radar()
+    height = np.linspace(150, 250, 10).astype('float32')
+    speed = np.ones((10), dtype='float32') * 0.5
+    direction = np.ones((10), dtype='float32') * 5.
+    target = datetime.datetime(2011, 5, 10, 11, 30, 8)
+    dealias_vel = pyart.correct.dealias_fourdd(radar, height, speed, direction,
+                                               target)
+    return radar, dealias_vel
 
-    # read in the data
-    radar = pyart.io.read_netcdf(NCFNAME)
 
-    # find and extract the sonde data
-    target = netCDF4.num2date(radar.time['data'][0], radar.time['units'])
-    interp_sounde = netCDF4.Dataset(SONDNAME)
-    t = dealias.find_time_in_interp_sonde(interp_sounde, target)
-    height, speed, direction = t
+if __name__ == "__main__":
 
-    # perform dealiasing
-    dealias_data = dealias.dealias_fourdd(radar, height * 1000.0, speed,
-                                          direction, target)
+    radar, dealias_vel = perform_dealias()
+    radar.fields['dealiased_velocity'] = dealias_vel
 
-    # compare against know good data
-    reference_data = np.load(REFNAME)
-    assert_array_equal(reference_data, dealias_data['data'].data)
+    # print out results
+    print("ray 13 velocitites before dealias:")
+    print(radar.fields['mean_doppler_velocity']['data'][13])
+    print("ray 13 velocities after dealias:")
+    print(radar.fields['dealiased_velocity']['data'][13])
+
+    # create plot
+    import matplotlib.pyplot as plt
+    fig = plt.figure(figsize=[5, 10])
+    ax1 = fig.add_subplot(2, 1, 1)
+    ax2 = fig.add_subplot(2, 1, 2)
+    rd = pyart.graph.RadarDisplay(radar)
+    rd.plot_ppi('mean_doppler_velocity', 0, ax=ax1, colorbar_flag=False,
+                title='', vmin=-10, vmax=10)
+    rd.plot_ppi('dealiased_velocity', 0, ax=ax2, colorbar_flag=False,
+                title='', vmin=-10, vmax=20)
+    fig.savefig('dealias_plot.png')

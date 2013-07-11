@@ -1,43 +1,43 @@
-""" Tests for the attenuation module in pyart.correct """
+""" Unit Tests for Py-ART's correct/attenuation.py module. """
 
-import os.path
+# python test_phase_attenuation.py
+# to recreate the reference_rays.npz file.
+
+import os
 
 import pyart
-from pyart.correct import attenuation
-
 import numpy as np
-from numpy.testing import assert_array_equal
+from numpy.testing import assert_allclose
 
-DIR = os.path.dirname(__file__)
-
-RSLNAME = os.path.join(DIR, "sample.sigmet")
-PHASENAME = os.path.join(DIR, 'reproc_phase_reference.npy')
-CORZNAME = os.path.join(DIR, 'cor_z_reference.npy')
-SPECATNAME = os.path.join(DIR, 'spec_at_reference.npy')
+PATH = os.path.dirname(__file__)
+REFERENCE_RAYS_FILE = os.path.join(PATH, 'attenuation_rays.npz')
 
 
-################################
-# Attenuation correction tests #
-################################
+def test_attenuation():
+    spec_at, cor_z = perform_attenuation()
+    ref = np.load(REFERENCE_RAYS_FILE)
+    assert_allclose(ref['spec_at'], spec_at['data'])
+    assert_allclose(ref['cor_z'], cor_z['data'].data)
 
 
-def test_attenuation_correction_rsl():
-    """ Test calculate_attenuation on data read using RSL """
+def perform_attenuation():
+    """ Perform attenuation correction on a single ray radar. """
+    radar = pyart.testing.make_single_ray_radar()
+    # hack to get test to run, TODO fix the attenuation code to not need this
+    radar.fields['proc_dp_phase_shift'] = radar.fields['dp_phase_shift']
+    a = radar.fields['reflectivity_horizontal']['data']
+    radar.fields['reflectivity_horizontal']['data'] = np.ma.array(a)
+    spec_at, cor_z = pyart.correct.calculate_attenuation(radar, 0.0)
+    return spec_at, cor_z
 
-    # read in the data
-    radar = pyart.io.read_rsl(RSLNAME)
 
-    # add the fields created by phase_proc
-    reproc_phase = np.load(PHASENAME)
-    radar.fields['proc_dp_phase_shift'] = {'data': reproc_phase}
+def save_reference_rays(spec_at, cor_z):
+    """ Save the phase processed rays to REFERENCE_RAY_FILE. """
+    np.savez(REFERENCE_RAYS_FILE,
+             spec_at=spec_at['data'], cor_z=cor_z['data'].data)
 
-    spec_at, cor_z = attenuation.calculate_attenuation(
-        radar, 8.6, debug=True, a_coef=0.17)
 
-    ref_cor_z = np.load(CORZNAME)
-    ref_spec_at = np.load(SPECATNAME)
-
-    # XXX no recasting to float32 should be done here.
-    cor_z['data'].data[cor_z['data'].mask] = -9999.0
-    assert_array_equal(ref_spec_at, spec_at['data'].astype('float32'))
-    assert_array_equal(ref_cor_z, cor_z['data'].astype('float32'))
+if __name__ == "__main__":
+    spec_at, cor_z = perform_attenuation()
+    save_reference_rays(spec_at, cor_z)
+    print("Reference rays saved")

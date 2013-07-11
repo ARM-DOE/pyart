@@ -243,7 +243,7 @@ def map_to_grid(radars, grid_shape=(81, 81, 69),
                 refl_field='reflectivity_horizontal', max_refl=190.0,
                 qrf_func=None, map_roi=True, weighting_function='Barnes',
                 toa=17000.0,
-                h_factor=1.0, nb=1.5, bsp=1.0,
+                h_factor=1.0, nb=1.5, bsp=1.0, min_radius=500.0,
                 copy_field_data=True, algorithm='kd_tree', leafsize = 10,
                 badval=-9999.0):
     """
@@ -306,6 +306,8 @@ def map_to_grid(radars, grid_shape=(81, 81, 69),
         Virtual beam width. Only used when qrf_func is None.
     bsp : float
         Virtual beam spacing. Only used when qrf_func is None.
+    min_radius : float
+        Minimum radius of influence. Only used when qrf_func is None.
     copy_field_data : bool
         True to copy the data within the radar fields for faster gridding,
         False will not copy the data which will use less memory but result in
@@ -475,7 +477,7 @@ def map_to_grid(radars, grid_shape=(81, 81, 69),
 
     def standard_qrf(xg, yg, zg):
         return (h_factor * (zg / 20.0) + np.sqrt(yg ** 2 + xg ** 2) *
-                np.tan(nb * bsp * np.pi / 180.0) + 500.0).flatten()
+                np.tan(nb * bsp * np.pi / 180.0) + min_radius).flatten()
 
     if qrf_func is None:
         qrf_func = standard_qrf
