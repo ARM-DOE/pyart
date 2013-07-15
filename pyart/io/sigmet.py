@@ -26,7 +26,6 @@ Reading and writing of Sigmet (raw format) files
 
 """
 
-from collections import OrderedDict
 import struct
 import datetime
 
@@ -123,6 +122,7 @@ def read_sigmet(filename, field_names=None, field_metadata=None,
                 field_dic = get_metadata(field_name)
 
             field_dic['data'] = fdata.reshape(-1, nbins)
+            field_dic['_FillValue'] = -9999.0
             fields[field_name] = field_dic
 
     # metadata
@@ -756,16 +756,16 @@ def ymds_time_to_datetime(ymds):
 #####################
 
 
-def _unpack_structure(string, structure_dict):
+def _unpack_structure(string, structure):
     """ Unpack a structure """
-    fmt = ''.join(structure_dict.values())
+    fmt = ''.join([i[1] for i in structure])
     l = struct.unpack(fmt, string)
-    return dict(zip(structure_dict, l))
+    return dict(zip([i[0] for i in structure], l))
 
 
-def _unpack_key(dic, key, structure_dic):
+def _unpack_key(dic, key, structure):
     """ Unpack a key. """
-    dic[key] = _unpack_structure(dic[key], structure_dic)
+    dic[key] = _unpack_structure(dic[key], structure)
 
 
 def _unpack_ingest_data_headers(record, ndata_types):
@@ -902,23 +902,23 @@ UINT16_T = 'H'
 # section 4.5.4 deals with the RAW Product format
 
 # 640 bytes: product_hdr (section 4.2.25, page 47)
-PRODUCT_HDR = OrderedDict([
+PRODUCT_HDR = (
     ('structure_header', '12s'),        # 12 bytes
     ('product_configuration', '320s'),  # 320 bytes
     ('product_end', '308s'),            # 308 bytes
-])
+)
 
 # 12 bytes : structure_header (section 4.2.47)
-STRUCTURE_HEADER = OrderedDict([
+STRUCTURE_HEADER = (
     ('structure_identifier', SINT2),
     ('format_version', SINT2),
     ('bytes_in_structure', SINT4),
     ('reserved', SINT2),
     ('flag', SINT2),
-])
+)
 
 # 320 bytes: product_configuration (section 4.2.23, page 43) 320 bytes
-PRODUCT_CONFIGURATION = OrderedDict([
+PRODUCT_CONFIGURATION = (
     ('structure_header', '12s'),    # 12 bytes: structure_header
     ('product_type_code', UINT2),
     ('scheduling_code', UINT2),
@@ -955,29 +955,29 @@ PRODUCT_CONFIGURATION = OrderedDict([
     ('minor_task_suffix', '16s'),
     ('spare_2', '12s'),             # 12 bytes
     ('color_scale_def', '48s')      # 48 bytes: color_scale_def
-])
+)
 
 # 12 bytes: ymds_time Structure (section 4.2.76, page 72)
-YMDS_TIME = OrderedDict([
+YMDS_TIME = (
     ('seconds', SINT4),
     ('milliseconds', UINT2),    # milliseconds in lowest 10 bits,
     ('year', SINT2),
     ('month', SINT2),
     ('day', SINT2),
-])
+)
 
 # 48 bytes: color_scale_def (section 4.2.5, page 34)
-COLOR_SCALE_DEF = OrderedDict([
+COLOR_SCALE_DEF = (
     ('iflags', UINT4),
     ('istart', SINT4),
     ('istep', SINT4),
     ('icolcnt', SINT2),
     ('iset_and_scale', UINT2),
     ('ilevel_seams', '32s')     # 32 bytes: UINT2[16]
-])
+)
 
 # 308 bytes : product_end (section 4.2.24)
-PRODUCT_END = OrderedDict([
+PRODUCT_END = (
     ('site_name', '16s'),
     ('iris_version_created', '8s'),
     ('ingest_iris_version', '8s'),
@@ -1038,20 +1038,20 @@ PRODUCT_END = OrderedDict([
     ('tz_name', '8s'),
     ('extended_product_header_offset', UINT4),
     ('spare_4', '4s'),              # 4 bytes
-])
+)
 
 # 4884 bytes ingest_header Structure (section 4.2.16, page 40)
-INGEST_HEADER = OrderedDict([
+INGEST_HEADER = (
     ('structure_header', '12s'),        # 12 bytes: structure_header
     ('ingest_configuration', '480s'),   # 480 bytes: ingest_configuration
     ('task_configuration', '2612s'),    # 2612 bytes: task_configuration
     ('spare_0', '732s'),                # 732 bytes
     ('gparm', '128s'),                  # 128 bytes
     ('reserved', '920s'),               # 920 bytes
-])
+)
 
 # 480 bytes ingest_configuration Structure (section 4.2.14, page 38)
-INGEST_CONFIGURATION = OrderedDict([
+INGEST_CONFIGURATION = (
     ('filename', '80s'),
     ('number_files', SINT2),
     ('number_sweeps_completed', SINT2),
@@ -1090,10 +1090,10 @@ INGEST_CONFIGURATION = OrderedDict([
     ('flags', UINT4),
     ('configuration_name', '16s'),
     ('spare_3', '228s')
-])
+)
 
 # 2612 bytes: task_configuration Structure (section 4.2.50, page 61)
-TASK_CONFIGURATION = OrderedDict([
+TASK_CONFIGURATION = (
     ('structure_header', '12s'),    # 12 bytes: structure_header
     ('task_sched_info', '120s'),    # 120 bytes: task_sched_info
     ('task_dsp_info', '320s'),      # 320 bytes: task_dsp_info
@@ -1103,10 +1103,10 @@ TASK_CONFIGURATION = OrderedDict([
     ('task_misc_info', '320s'),     # 320 bytes: task_misc_info
     ('task_end_info', '320s'),      # 320 bytes: task_end_info
     ('comments', '720s'),
-])
+)
 
 # 120 bytes: task_sched_info Structure (section 4.2.61, page 65)
-TASK_SCHED_INFO = OrderedDict([
+TASK_SCHED_INFO = (
     ('start_time', SINT4),
     ('stop_time', SINT4),
     ('skip_time', SINT4),
@@ -1115,10 +1115,10 @@ TASK_SCHED_INFO = OrderedDict([
     ('last_run_day', SINT4),
     ('flag', UINT2),
     ('spare_0', '94s'),
-])
+)
 
 # 320 bytes: task_dsp_info Structure (section 4.2.51, page 61)
-TASK_DSP_INFO = OrderedDict([
+TASK_DSP_INFO = (
     ('major_mode', UINT2),
     ('dsp_type', UINT2),
     ('current_data_type_mask', '24s'),      # 24 bytes: dsp_data_mask
@@ -1144,20 +1144,20 @@ TASK_DSP_INFO = OrderedDict([
     ('spare_1', '2s'),
     ('custom_ray_header_name', '16s'),
     ('spare_2', '120s')
-])
+)
 
 # 24 bytes: dsp_data_mask Structure (section 4.2.7, page 36)
-DSP_DATA_MASK = OrderedDict([
+DSP_DATA_MASK = (
     ('mask_word_0', UINT4),
     ('extended_header_type', UINT4),
     ('mask_word_1', UINT4),
     ('mask_word_2', UINT4),
     ('mask_word_3', UINT4),
     ('mask_word_4', UINT4),
-])
+)
 
 # 32 bytes: task_dsp_mode_batch (section 4.2.52, page 62)
-TASK_DSP_MODE_BATCH = OrderedDict([
+TASK_DSP_MODE_BATCH = (
     ('low_prf_hz', UINT2),
     ('low_prf_factional', UINT2),
     ('low_prf_sample_size', SINT2),
@@ -1166,10 +1166,10 @@ TASK_DSP_MODE_BATCH = OrderedDict([
     ('velocity_unfolding_threshold', SINT2),
     ('width_unfolding_threshold', SINT2),
     ('spare_0', '18s'),
-])
+)
 
 # 320 bytes: task_calib_info Structure (section 4.2.49, page 59)
-TASK_CALIB_INFO = OrderedDict([
+TASK_CALIB_INFO = (
     ('reflectivity_slope', SINT2),
     ('reflectivity_noise_threshold', SINT2),
     ('clutter_correction_threshold', SINT2),
@@ -1198,10 +1198,10 @@ TASK_CALIB_INFO = OrderedDict([
     ('reciever_bandwidth', UINT2),
     ('flags2', UINT16_T),
     ('spare_3', '256s'),
-])
+)
 
 # 160 bytes: task_range_info Structure (section 4.2.58, page 64)
-TASK_RANGE_INFO = OrderedDict([
+TASK_RANGE_INFO = (
     ('first_bin_range', SINT4),
     ('last_bin_range', SINT4),
     ('number_input_bins', SINT2),
@@ -1211,52 +1211,52 @@ TASK_RANGE_INFO = OrderedDict([
     ('variable_range_bin_flag', UINT2),
     ('range_bin_averaging_flag', SINT2),
     ('spare_0', '136s'),
-])
+)
 
 # 320 bytes: task_scan_info Structure (section 4.2.60, page 65)
-TASK_SCAN_INFO = OrderedDict([
+TASK_SCAN_INFO = (
     ('antenna_scan_mode', UINT2),
     ('angular_resolution_desired', SINT2),
     ('spare_0', '2s'),
     ('number_sweeps', SINT2),
     ('task_scan_type_scan_info', '200s'),   # 200 bytes: task_foo_scan_info
     ('spare_1', '112s'),
-])
+)
 
 # 200 bytes: task_rhi_scan_info Structure (section 4.2.59, page 64)
-TASK_RHI_SCAN_INFO = OrderedDict([
+TASK_RHI_SCAN_INFO = (
     ('lower_elevation_limit', UINT2),
     ('upper_elevation_limit', UINT2),
     ('azimuth_list', '80s'),            # UINT2[40]
     ('spare_0', '115s'),
     ('start_first_sector_flag', 'c'),   # unknown type
-])
+)
 
 # 200 bytes: task_ppi_scan_info (section 4.2.57, page 64)
-TASK_PPI_SCAN_INFO = OrderedDict([
+TASK_PPI_SCAN_INFO = (
     ('left_azimuth_limit', BIN2),
     ('right_azimuth_limit', BIN2),
     ('elevation_list', '80s'),          # UINT2[40]
     ('spare_0', '115s'),
     ('start_first_section_flag', 'c'),  # unknown type
-])
+)
 
 # 200 bytes: task_file_scan_info (section 4.2.54, page 63)
-TASK_FILE_SCAN_INFO = OrderedDict([
+TASK_FILE_SCAN_INFO = (
     ('first_azimuth', UINT2),
     ('first_elevation', UINT2),
     ('filename', '12s'),
     ('spare_0', '184s'),
-])
+)
 
 # 200 bytes: task_manual_scan_info (section 4.2.55, page 63)
-TASK_MANUAL_SCAN_INFO = OrderedDict([
+TASK_MANUAL_SCAN_INFO = (
     ('flags', UINT2),
     ('spare_0', '198s'),
-])
+)
 
 # 320 bytes: task_misc_info Structure (section 4.2.55, page 63)
-TASK_MISC_INFO = OrderedDict([
+TASK_MISC_INFO = (
     ('wavelength', SINT4),
     ('tr_serial_number', '16s'),
     ('transmit_power', SINT4),
@@ -1270,10 +1270,10 @@ TASK_MISC_INFO = OrderedDict([
     ('vertical_beamwidth', BIN4),
     ('customer_storage', '40s'),    # 40 bytes, uint4[10]
     ('spare_2', '208s'),
-])
+)
 
 # 320 bytes: task_end_info Structure (section 4.2.53, page 62)
-TASK_END_INFO = OrderedDict([
+TASK_END_INFO = (
     ('task_major_number', SINT2),
     ('task_minor_number', SINT2),
     ('task_configuration_file_name', '12s'),
@@ -1283,21 +1283,21 @@ TASK_END_INFO = OrderedDict([
     ('spare_0', '2s'),
     ('task_data_time', '12s'),      # 12 bytes: ymds_time
     ('spare_1', '204s'),
-])
+)
 
 
 # 12 bytes raw_prod_bhdr structure (section 4.2.30, page 50)
-RAW_PROD_BHDR = OrderedDict([
+RAW_PROD_BHDR = (
     ('record_number', SINT2),
     ('sweep_number', SINT2),
     ('first_ray_offset', SINT2),
     ('ray_number', SINT2),
     ('flags', UINT2),
     ('spare_0', '2s'),
-])
+)
 
 # 76 bytes ingest_data_header (section 4.2.15, pages 40)
-INGEST_DATA_HEADER = OrderedDict([
+INGEST_DATA_HEADER = (
     ('structure_header', '12s'),    # 12 bytes: structure_header
     ('sweep_start_time', '12s'),    # 12 bytes: ymds_time
     ('sweep_number', SINT2),
@@ -1309,4 +1309,4 @@ INGEST_DATA_HEADER = OrderedDict([
     ('bit_per_bin', SINT2),
     ('data_type', UINT2),
     ('spare_0', '36s')      # 36 bytes
-])
+)
