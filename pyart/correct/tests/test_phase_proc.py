@@ -12,11 +12,26 @@ import os
 
 import pyart
 import numpy as np
+from numpy.testing.decorators import skipif
+
+try:
+    import cvxopt
+    cvxopt_available = True
+except ImportError:
+    cvxopt_available = False
+
+try:
+    import glpk
+    glpk_available = True
+except ImportError:
+    glpk_available = False
+
 
 PATH = os.path.dirname(__file__)
 REFERENCE_RAYS_FILE = os.path.join(PATH, 'reference_rays.npz')
 
 
+@skipif(not glpk_available)
 def test_phase_proc_lp_glpk():
     radar, phidp, kdp = perform_phase_processing()
     ref = np.load(REFERENCE_RAYS_FILE)
@@ -26,6 +41,7 @@ def test_phase_proc_lp_glpk():
                   radar.fields['unf_dp_phase_shift']['data']) <= 0.01
 
 
+@skipif(not cvxopt_available)
 def test_phase_proc_lp_cvxopt():
     radar, phidp, kdp = perform_phase_processing('cvxopt')
     ref = np.load(REFERENCE_RAYS_FILE)
