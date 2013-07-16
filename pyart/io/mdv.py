@@ -822,8 +822,10 @@ class MdvFile:
 
         if self.scan_type == 'rhi':
             rg, ele = np.meshgrid(self.range_km, self.el_deg)
+            rg = np.array(rg, dtype=np.float64)
+            ele = np.array(ele, dtype=np.float64)
             for aznum in xrange(nsweeps):
-                azg = np.ones(rg.shape, dtype=np.float32) * self.az_deg[aznum]
+                azg = np.ones(rg.shape, dtype=np.float64) * self.az_deg[aznum]
                 x, y, z = radar_coords_to_cart(rg, azg, ele)
                 zz[aznum, :, :] = z
                 xx[aznum, :, :] = x
@@ -831,8 +833,10 @@ class MdvFile:
 
         elif self.scan_type == 'ppi':
             rg, azg = np.meshgrid(self.range_km, self.az_deg)
+            rg = np.array(rg, dtype=np.float64)
+            azg = np.array(azg, dtype=np.float64)
             for elnum in xrange(nsweeps):
-                ele = np.ones(rg.shape, dtype=np.float32) * self.el_deg[elnum]
+                ele = np.ones(rg.shape, dtype=np.float64) * self.el_deg[elnum]
                 x, y, z = radar_coords_to_cart(rg, azg, ele)
                 zz[elnum, :, :] = z
                 xx[elnum, :, :] = x
