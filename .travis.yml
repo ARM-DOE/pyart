@@ -1,0 +1,29 @@
+# Travis CI build script
+# This is a modified version of the .travis.yml file from the scikit-learn
+# project: https://github.com/scikit-learn/scikit-learn
+#
+# Currently we are testing only using the host Python 2.7 in order to avoid
+# compiling SciPy from source.  Using wheel binaries may allow us to 
+# efficiently test on other Python versions, but requires significant
+# additional work.
+language: python
+python:
+    - "2.7"
+before_install:
+    - deactivate
+    # Add the adrian-m-benson Ubuntu repo so we can apt-get python-netcdf4
+    - sudo add-apt-repository -y ppa:adrian-m-benson/ppa
+    - sudo apt-get update -qq
+    # Install the SciPy stack
+    - sudo apt-get install -qq python-scipy python-nose python-matplotlib 
+    # Install additional Py-ART dependencies
+    - sudo apt-get install -qq librsl-dev python-cvxopt python-netcdf4
+    # Set the RSL_PATH as installed from the librsl-dev package
+    - export RSL_PATH=/usr
+    - virtualenv --system-site-packages ~/virtualenv/this
+    - source ~/virtualenv/this/bin/activate
+install: python setup.py build_ext --inplace
+# run the tests inside a virtual X server so that matplotlib can plot
+# skip any RSL tests, the RSL shipped with Ubuntu has stack protection on
+# and therefore crashes when read Sigmet files.
+script: xvfb-run nosetests -e "rsl" -v pyart
