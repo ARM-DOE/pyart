@@ -43,9 +43,9 @@ class NetcdfDisplay(RadarDisplay):
     origin : str
         'Origin' or 'Radar'.
     shift : (float, float)
-        Shift in km.
+        Shift in meters.
     x, y, z : array
-        Cartesian location of a sweep in km.
+        Cartesian location of a sweep in meters.
     loc : (float, float)
         Latitude and Longitude of radar in degrees.
     time_begin : datetime
