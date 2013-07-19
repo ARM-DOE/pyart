@@ -6,11 +6,23 @@ import numpy as np
 
 from .radar import Radar
 from .common import get_metadata, make_time_unit_str
-from .wsr88d_level2 import Archive2File
+from .nexrad_level2_common import Archive2File
 
 
-def read_wsr88d(filename):
+def read_nexrad_level2_archive(filename):
     """
+    Read a NEXRAD Level 2 Archive file.
+
+    Parameters
+    ----------
+    filename : str
+        Filename of NEXRAD Level 2 Archive file.
+
+    Returns
+    -------
+    radars : list
+        List of radar objects.
+
     """
     afile = Archive2File(filename)
     return [_radar_from_archive2(afile, i) for i in range(afile.nscans)]

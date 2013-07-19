@@ -16,7 +16,8 @@ from and write data to a number of file formats.
     read_mdv
     read_sigmet
     read_netcdf
-    read_nexrad_cdm
+    read_nexrad_level2_archive
+    read_nexrad_level2_cdm
     write_netcdf
     read_grid
     write_grid
@@ -31,8 +32,8 @@ from .rsl import read_rsl
 from .mdv import read_mdv
 from .sigmet import read_sigmet
 from .netcdf import read_netcdf, write_netcdf
-from .wsr88d import read_wsr88d
-from .cdm import read_nexrad_cdm
+from .nexrad_level2_archive import read_nexrad_level2_archive
+from .nexrad_level2_cdm import read_nexrad_level2_cdm
 from .radar import Radar
 from .grid import read_grid, write_grid, Grid
 

@@ -1,13 +1,13 @@
 """
-pyart.io.cdm
-============
+pyart.io.nexrad_level2_cdm
+==========================
 
 Functions for accessing Common Data Model (CDM) NEXRAD Level 2 files.
 
 .. autosummary::
     :toctree: generated/
 
-    read_nexrad_cdm
+    read_nexrad_level2_cdm
     _gen_vnames
     _radar_from_cdm
 
@@ -75,7 +75,7 @@ NEXRAD_METADATA = {
 }
 
 
-def read_nexrad_cdm(filename):
+def read_nexrad_level2_cdm(filename):
     """
     Read a Common Data Model (CDM) NEXRAD Level 2 file.
 
