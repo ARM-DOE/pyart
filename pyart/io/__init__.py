@@ -16,6 +16,7 @@ from and write data to a number of file formats.
     read_mdv
     read_sigmet
     read_netcdf
+    read_nexrad_cdm
     write_netcdf
     read_grid
     write_grid
@@ -31,6 +32,7 @@ from .mdv import read_mdv
 from .sigmet import read_sigmet
 from .netcdf import read_netcdf, write_netcdf
 from .wsr88d import read_wsr88d
+from .cdm import read_nexrad_cdm
 from .radar import Radar
 from .grid import read_grid, write_grid, Grid
 
