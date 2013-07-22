@@ -1,11 +1,11 @@
 """
 """
 
+import bz2
 import struct
-from collections import OrderedDict
-import os
-import numpy as np
 from datetime import datetime, timedelta
+
+import numpy as np
 
 
 class Archive2File():
@@ -23,17 +23,26 @@ class Archive2File():
 
         # read in the volume header and compression_record
         fh = open(filename, 'rb')
-        self.volume_header = _unpack_from_file(fh, VOLUME_HEADER)
-        self._compression_record = fh.read(12)
-        # TODO check if compressed
+        self.volume_header = _unpack_structure(fh.read(24), VOLUME_HEADER)
+        compression_record = fh.read(12)
 
-        # read records
-        self._offsets = []
-        self._records = []
-        while fh.tell() != os.fstat(fh.fileno()).st_size:
-            self._offsets.append(fh.tell())
-            self._records.append(_get_record(fh))
+        # read the records in the file, decompressing as needed
+        if compression_record[4:6] == 'BZ':
+            buf = _decompress_records(fh)
+        elif compression_record[4:6] == '\x00\x00':
+            buf = fh.read()
+        else:
+            raise IOError('unknown compression record')
+
         fh.close()
+        buf_length = len(buf)
+        pos = 0
+        self._records = []
+
+        # read the records from the buffer
+        while pos < buf_length:
+            pos, dic = _get_record_from_buf(buf, pos)
+            self._records.append(dic)
 
         # pull out records with data
         self.msg31s = [r for r in self._records if r['header']['type'] == 31]
@@ -134,27 +143,47 @@ RECORD_SIZE = 2432
 MSG_HEADER_SIZE = 16
 
 
-def _get_record(fh):
-    """ Retrieve and unpack a record from a file. """
-    dic = {'header': _unpack_from_file(fh, MSG_HEADER)}
+def _decompress_records(fh):
+    """
+    Decompressed the records from an BZ2 compressed Archive 2 file.
+    """
+    fh.seek(0)
+    cbuf = fh.read()    # read all data from the file
+    decompressor = bz2.BZ2Decompressor()
+    buf = decompressor.decompress(cbuf[28:])    # skip volume head + size
+    while len(decompressor.unused_data):
+        cbuf = decompressor.unused_data
+        decompressor = bz2.BZ2Decompressor()
+        buf += decompressor.decompress(cbuf[4:])  # skip size (4-bytes)
+
+    return buf[12:]
+
+
+def _get_record_from_buf(buf, pos):
+    """ Retrieve and unpack a record from a buffer. """
+
+    packed_header = buf[pos:pos + MSG_HEADER_SIZE]
+    dic = {'header': _unpack_structure(packed_header, MSG_HEADER)}
     msg_type = dic['header']['type']
+
     if msg_type == 31:
-        buf = fh.read(dic['header']['size'] * 2 - 4)
-        msg_31_header = _unpack_structure(buf[:68], MSG_31)
+        msg_size = dic['header']['size'] * 2 - 4
+        new_pos = pos + MSG_HEADER_SIZE + msg_size
+        mbuf = buf[pos + MSG_HEADER_SIZE:new_pos]
+        msg_31_header = _unpack_structure(mbuf[:68], MSG_31)
 
         block_pointers = [v for k, v in msg_31_header.iteritems()
                           if k.startswith('block_pointer') and v > 0]
         for block_pointer in block_pointers:
-            block_name, block_dic = _get_msg31_data_block(buf, block_pointer)
+            block_name, block_dic = _get_msg31_data_block(mbuf, block_pointer)
             dic[block_name] = block_dic
 
         dic['msg_31_header'] = msg_31_header
-        #dic['raw_message'] = buf
 
-    else:   # not message 31 or 1
-        fh.read(RECORD_SIZE - MSG_HEADER_SIZE)
+    else:   # not message 31 or 1, no decoding
+        new_pos = pos + RECORD_SIZE
 
-    return dic
+    return new_pos, dic
 
 
 def _get_msg31_data_block(buf, ptr):
@@ -183,19 +212,11 @@ def _get_msg31_data_block(buf, ptr):
 
 ####
 
-def _unpack_from_file(f, structure_dict, endiness='>'):
-    """ Unpack a structure after reading from a file. """
-    fmt = endiness + ''.join(structure_dict.values())
-    l = struct.unpack(fmt, f.read(struct.calcsize(fmt)))
-    return dict(zip(structure_dict, l))
-
-
-def _unpack_structure(string, structure_dict):
+def _unpack_structure(string, structure):
     """ Unpack a structure """
-    fmt = '>' + ''.join(structure_dict.values())
+    fmt = '>' + ''.join([i[1] for i in structure])
     l = struct.unpack(fmt, string)
-    return dict(zip(structure_dict, l))
-
+    return dict(zip([i[0] for i in structure], l))
 
 # Data formats
 CODE1 = 'B'
@@ -211,20 +232,20 @@ SINT4 = 'i'
 
 #
 #
-VOLUME_HEADER = OrderedDict([
+VOLUME_HEADER = (
     ('tape', '9s'),
     ('extension', '3s'),
     ('date', 'I'),
     ('time', 'I'),
     ('icao', '4s')
-])
+)
 
 
 # rememeber 4-byte control word before this at LDM record start...
 # then 8-byes padding???? (12 bytes total)
 # Table II Message Header Data
 # page 3-8
-MSG_HEADER = MESSAGE_HEADER = OrderedDict([
+MSG_HEADER = MESSAGE_HEADER = (
     ('size', INT2),                 # size of data, no including header
     ('channels', INT1),
     ('type', INT1),
@@ -233,11 +254,11 @@ MSG_HEADER = MESSAGE_HEADER = OrderedDict([
     ('ms', INT4),
     ('segments', INT2),
     ('seg_num', INT2),
-])
+)
 
 # Table XVII Digital Radar Generic Format Blocks (Message Type 31)
 # pages 3-93 to 3-95
-MSG_31 = MESSAGE_31 = OrderedDict([
+MSG_31 = MESSAGE_31 = (
     ('id', '4s'),                   # 0-3
     ('collect_ms', INT4),           # 4-7
     ('collect_date', INT2),         # 8-9
@@ -263,11 +284,11 @@ MSG_31 = MESSAGE_31 = OrderedDict([
     ('block_pointer_7', INT4),      # 56-59  Moment "ZDR"
     ('block_pointer_8', INT4),      # 60-63  Moment "PHI"
     ('block_pointer_9', INT4),      # 64-67  Moment "RHO"
-])
+)
 
 # Table XVII-B Data Block (Descriptor of Generic Data Moment Type)
 # pages 3-96 and 3-97
-GENERIC_DATA_BLOCK = OrderedDict([
+GENERIC_DATA_BLOCK = (
     ('block_type', '1s'),
     ('data_name', '3s'),        # VEL, REF, SW, RHO, PHI, ZDR
     ('reserved', INT4),
@@ -281,11 +302,11 @@ GENERIC_DATA_BLOCK = OrderedDict([
     ('scale', REAL4),
     ('offset', REAL4),
     # then data
-])
+)
 
 # Table XVII-E Data Block (Volume Data Constant Type)
 # page 3-98
-VOLUME_DATA_BLOCK = OrderedDict([
+VOLUME_DATA_BLOCK = (
     ('block_type', '1s'),
     ('data_name', '3s'),
     ('lrtup', INT2),
@@ -302,21 +323,21 @@ VOLUME_DATA_BLOCK = OrderedDict([
     ('init_phase', REAL4),
     ('vcp', INT2),
     ('spare', '2s'),
-])
+)
 
 # Table XVII-F Data Block (Elevation Data Constant Type)
 # page 3-99
-ELEVATION_DATA_BLOCK = OrderedDict([
+ELEVATION_DATA_BLOCK = (
     ('block_type', '1s'),
     ('data_name', '3s'),
     ('lrtup', INT2),
     ('atmos', SINT2),
     ('refl_calib', REAL4),
-])
+)
 
 # Table XVII-H Data Block (Radial Data Constant Type)
 # pages 3-99
-RADIAL_DATA_BLOCK = OrderedDict([
+RADIAL_DATA_BLOCK = (
     ('block_type', '1s'),
     ('data_name', '3s'),
     ('lrtup', INT2),
@@ -325,4 +346,4 @@ RADIAL_DATA_BLOCK = OrderedDict([
     ('noise_v', REAL4),
     ('nyquist_vel', SINT2),
     ('spare', '2s')
-])
+)
