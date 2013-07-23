@@ -1,4 +1,6 @@
 """
+pyart.io.nexrad
+
 """
 
 import bz2
@@ -53,64 +55,82 @@ class Archive2File():
                           for i in range(elev_nums.max())]
         self.nscans = len(self.scan_msgs)
 
-    def get_scan_moment(self, scan_num, moment):
-        """
-        A
-        """
-        raw_data = self._get_scan_moment_raw(scan_num, moment)
-
-        if moment == 'REF':
-            offset = 66.0
-            scale = 2.0
-        elif moment == 'VEL':
-            offset = 129.0
-            scale = 1.0         # XXX sometime 2
-        elif moment == 'SW':
-            offset = 129.0
-            scale = 2.0
-        elif moment == 'ZDR':
-            offset = 128.0
-            scale = 16.0
-        elif moment == 'PHI':
-            offset = 2.0
-            scale = 2.8361
-        elif moment == 'RHO':
-            offset = -60.5
-            scale = 300.0
-        else:
-            offset = 0.0        # these value should never be used
-            scale = 1.0
-        return (raw_data - offset) / (scale)
-
-    def _get_scan_moment_raw(self, scan_num, moment):
-        """
-        Retrieve
-        """
-        msg_for_elev = self.scan_msgs[scan_num]
-        nrays = len(msg_for_elev)
-        ngates = self.msg31s[msg_for_elev[0]][moment]['ngates']
-
-        data = np.empty((nrays, ngates), dtype='>i1')
-        for i, msg_num in enumerate(msg_for_elev):
-            data[i] = self.msg31s[msg_num][moment]['data']
-        return np.ma.masked_less_equal(data, 2)
-
-    def get_scan_time(self, scan_num):
+    def get_scan_info(self):
         """ A """
-        days = self._array_from_msg31_headers(scan_num, 'collect_date')
-        secs = self._array_from_msg31_headers(scan_num, 'collect_ms') / 1000.
+        dic = {'REF': {1: {'ngates': [], 'scans': []},
+                       2: {'ngates': [], 'scans': []}},
+               'VEL': {1: {'ngates': [], 'scans': []},
+                       2: {'ngates': [], 'scans': []}},
+               'SW': {1: {'ngates': [], 'scans': []},
+                      2: {'ngates': [], 'scans': []}},
+               'ZDR': {1: {'ngates': [], 'scans': []},
+                       2: {'ngates': [], 'scans': []}},
+               'PHI': {1: {'ngates': [], 'scans': []},
+                       2: {'ngates': [], 'scans': []}},
+               'RHO': {1: {'ngates': [], 'scans': []},
+                       2: {'ngates': [], 'scans': []}}}
+        for scan in range(self.nscans):
+            msg31_number = self.scan_msgs[scan][0]
+            msg = self.msg31s[msg31_number]
+            res = msg['msg_31_header']['azimuth_resolution']
+            for moment in dic.keys():
+                if moment in msg.keys():
+                    dic[moment][res]['scans'].append(scan)
+                    dic[moment][res]['ngates'].append(msg[moment]['ngates'])
+
+        return dic
+
+    def get_data(self, scans, moment, max_gates, raw_data=False):
+        """ A """
+        msg_nums = np.concatenate([self.scan_msgs[i] for i in scans])
+        nrays = len(msg_nums)
+
+        if moment != 'PHI':
+            data = np.ones((nrays, max_gates), dtype='i1')
+        else:
+            data = np.ones((nrays, max_gates), dtype='i2')
+        for i, msg_num in enumerate(msg_nums):
+            msg = self.msg31s[msg_num]
+            data[i, :msg[moment]['ngates']] = msg[moment]['data']
+
+        if raw_data:
+            return data
+        else:   # mask, scale and offset
+            msg = self.msg31s[msg_nums[0]]
+            offset = msg[moment]['offset']
+            scale = msg[moment]['scale']
+            return (np.ma.masked_less_equal(data, 2) - offset) / (scale)
+
+    def get_time_scans(self, scans):
+        """ A """
+        msg_nums = np.concatenate([self.scan_msgs[i] for i in scans])
+
+        days = np.array([self.msg31s[i]['msg_31_header']['collect_date']
+                         for i in msg_nums])
+        secs = np.array([self.msg31s[i]['msg_31_header']['collect_ms']
+                         for i in msg_nums]) / 1000.
 
         offset = timedelta(days=int(days[0]) - 1, seconds=int(secs[0]))
         time_start = datetime(1970, 1, 1) + offset
 
-        time = secs - secs[0] + (days - days[0]) * 86400
+        time = secs - int(secs[0]) + (days - days[0]) * 86400
         return time_start, time
 
-    def get_scan_moment_names(self, scan_num):
+    def get_nrays(self, scan):
         """ A """
-        dic = self.msg31s[self.scan_msgs[scan_num][0]]
-        moments = ['REF', 'VEL', 'SW', 'ZDR', 'PHI', 'RHO']
-        return [k for k in dic.keys() if k in moments]
+        return len(self.scan_msgs[scan])
+
+    def get_azimuth_angles_scans(self, scans):
+        """ A """
+        msg_nums = np.concatenate([self.scan_msgs[i] for i in scans])
+        return np.array([self.msg31s[i]['msg_31_header']['azimuth_angle']
+                         for i in msg_nums])
+
+    def get_elevation_angles_scans(self, scans):
+        """ A """
+        msg_nums = np.concatenate([self.scan_msgs[i] for i in scans])
+        return np.array([self.msg31s[i]['msg_31_header']['elevation_angle']
+                         for i in msg_nums])
 
     def get_scan_range(self, scan_num, moment):
         """ Return an array of gate ranges for a given scan and moment. """
@@ -124,19 +144,6 @@ class Archive2File():
         """ A """
         dic = self.msg31s[0]['VOL']
         return dic['lat'], dic['lon'], dic['height']
-
-    def get_scan_azimuth_angles(self, scan_num):
-        """ A """
-        return self._array_from_msg31_headers(scan_num, 'azimuth_angle')
-
-    def get_scan_elevation_angles(self, scan_num):
-        """ A """
-        return self._array_from_msg31_headers(scan_num, 'elevation_angle')
-
-    def _array_from_msg31_headers(self, scan_num, key):
-        """ A """
-        return np.array([self.msg31s[i]['msg_31_header'][key]
-                         for i in self.scan_msgs[scan_num]])
 
 
 RECORD_SIZE = 2432

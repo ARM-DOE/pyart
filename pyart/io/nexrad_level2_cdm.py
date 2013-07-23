@@ -277,7 +277,6 @@ def _radar_from_cdm(dataset, vnames):
     sweep_start_ray_index = get_metadata('sweep_start_ray_index')
     sweep_end_ray_index = get_metadata('sweep_end_ray_index')
 
-    nsweeps = len(dataset.dimensions['scanR_HI'])
     rays_per_sweep = len(dataset.dimensions[vnames['radial']])
 
     sweep_number['data'] = np.arange(nsweeps, dtype='int32')
