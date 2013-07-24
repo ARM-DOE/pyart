@@ -1,6 +1,74 @@
 """
-pyart.io.nexrad
+pyart.io.nexrad_archive2file
+============================
 
+.. autosummary::
+    :toctree: generated/
+    :template: dev_template.rst
+
+    Archive2File
+
+.. autosummary::
+    :toctree: generated/
+
+    _decompress_records
+    _get_record_from_buf
+    _get_msg31_data_block
+    _unpack_structure
+
+
+"""
+
+# This file is part of the Py-ART, the Python ARM Radar Toolkit
+# https://github.com/ARM-DOE/pyart
+
+# Care has been taken to keep this file free from extraneous dependancies
+# so that it can be used by other projects with no/minimal modification.
+
+# Please feel free to use this file in other project provided the license
+# below is followed.  Keeping the above comment lines would also be helpful
+# to direct other back to the Py-ART project and the source of this file.
+
+"""
+Copyright (c) 2013, UChicago Argonne, LLC
+All rights reserved.
+
+Copyright 2013 UChicago Argonne, LLC. This software was produced under U.S.
+Government contract DE-AC02-06CH11357 for Argonne National Laboratory (ANL),
+which is operated by UChicago Argonne, LLC for the U.S. Department of Energy.
+The U.S. Government has rights to use, reproduce, and distribute this
+software. NEITHER THE GOVERNMENT NOR UCHICAGO ARGONNE, LLC MAKES ANY
+WARRANTY, EXPRESS OR IMPLIED, OR ASSUMES ANY LIABILITY FOR THE USE OF THIS
+SOFTWARE. If software is modified to produce derivative works, such modified
+software should be clearly marked, so as not to confuse it with the version
+available from ANL.
+
+Additionally, redistribution and use in source and binary forms, with or
+without modification, are permitted provided that the following conditions
+are met:
+
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+
+    * Neither the name of UChicago Argonne, LLC, Argonne National
+      Laboratory, ANL, the U.S. Government, nor the names of its
+      contributors may be used to endorse or promote products derived
+      from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY UCHICAGO ARGONNE, LLC AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL UCHICAGO ARGONNE, LLC OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
 import bz2
@@ -12,7 +80,7 @@ import numpy as np
 
 class Archive2File():
     """
-    Class for reading NEXRAD (WSR-88D) Archive II files.
+    Class for accessing NEXRAD (WSR-88D) Archive II file.
 
     Parameters
     ----------
@@ -22,7 +90,6 @@ class Archive2File():
     """
     def __init__(self, filename):
         """ initalize the object. """
-
         # read in the volume header and compression_record
         fh = open(filename, 'rb')
         self.volume_header = _unpack_structure(fh.read(24), VOLUME_HEADER)

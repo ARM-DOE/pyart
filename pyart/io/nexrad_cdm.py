@@ -1,15 +1,17 @@
 """
-pyart.io.nexrad_level2_cdm
-==========================
+pyart.io.nexrad_cdm
+===================
 
 Functions for accessing Common Data Model (CDM) NEXRAD Level 2 files.
 
 .. autosummary::
     :toctree: generated/
 
-    read_nexrad_level2_cdm
+    read_nexrad_cdm
     _gen_vnames
     _radar_from_cdm
+    CDM_FIELD_MAPPING
+    NEXRAD_METADATA
 
 """
 
@@ -18,64 +20,10 @@ import numpy as np
 
 from .radar import Radar
 from .common import get_metadata
-
-# XXX move this into a nexrad_common module
-# METADATA specific to NEXRAD fields
-NEXRAD_METADATA = {
-
-    'reflectivity': {
-        'units': 'dBZ',
-        'standard_name': 'equivalent_reflectivity_factor',
-        'long_name': 'equivalent_reflectivity_factor',
-        'valid_max': 94.5,
-        'valid_min': -32.0,
-        'coordinates': 'elevation azimuth range'},
-
-    'velocity': {
-        'units': 'meters_per_second',
-        'standard_name': (
-            'radial_velocity_of_scatterers_away_from_instrument'),
-        'long_name': (
-            'radial_velocity_of_scatterers_away_from_instrument'),
-        'valid_max': 95.0,          # XXX
-        'valid_min': -95.0,         # XXX
-        'coordinates': 'elevation azimuth range'},
-
-    'spectrum_width': {
-        'units': 'meters_per_second',
-        'standard_name': 'spectrum_width',
-        'long_name': 'spectrum_width',
-        'valid_max': 63.0,
-        'valid_min': -63.5,
-        'coordinates': 'elevation azimuth range'},
-
-    'differential_reflectivity': {
-        'units': 'dB',
-        'standard_name': 'log_differential_reflectivity_hv',
-        'long_name': 'log_differential_reflectivity_hv',
-        'valid_max': 7.9375,
-        'valid_min': -7.8750,
-        'coordinates': 'elevation azimuth range'},
-
-    'differential_phase': {
-        'units': 'degrees',
-        'standard_name': 'differential_phase_hv',
-        'long_name': 'differential_phase_hv',
-        'valid_max': 360.0,
-        'valid_min': 0.0,
-        'coordinates': 'elevation azimuth range'},
-
-    'correlation_coefficient': {
-        'units': 'ratio',
-        'standard_name': 'cross_correlation_ratio_hv',
-        'long_name': 'cross_correlation_ratio_hv',
-        'valid_max': 1.0,
-        'valid_min': 0.0,
-        'coordinates': 'elevation azimuth range'},
-}
+from .nexrad_common import NEXRAD_METADATA
 
 
-def read_nexrad_level2_cdm(filename):
+def read_nexrad_cdm(filename, field_mapping=None, field_metadata=None):
     """
     Read a Common Data Model (CDM) NEXRAD Level 2 file.
 
@@ -83,8 +31,22 @@ def read_nexrad_level2_cdm(filename):
     ----------
     filename : str
         File name or URL of a Common Data Model (CDM) NEXRAD Level 2 file.
-        This file can be created using NetCDF Java Library tools [1]_,
-        or a URL of a OPeNDAP file on the UCAR THREDDS Data Server [2]_.
+        File of in this format can be created using the NetCDF Java Library
+        tools [1]_.  A URL of a OPeNDAP file on the UCAR THREDDS Data
+        Server [2]_ is also accepted the netCDF4 library has been compiled
+        with OPeNDAP support.
+    field_mapping : None or dict, optional
+        Dictionary mapping CDM variables to the corresponding field names in
+        the radar objects returned. None will use :data:`CDM_FIELD_MAPPING`.
+        which also served as an example of the format for this parameter.
+        If a dictionary parameter is used it must have the same dictionary
+        keys as CDM_FIELD_MAPPING.  In addition, field_metadata must also be
+        provided which contains the field metadata for the fields specified.
+    field_metadata : None or dict, optional
+        Metadata for the fields specified by field_mapping, None will use the
+        field metadata provided in :data:`NEXRAD_METADATA`, which also serves
+        as an example of the format for this parameter.  This metadata will
+        be used for the field in the created radar objects returned.
 
     Returns
     -------
@@ -106,20 +68,30 @@ def read_nexrad_level2_cdm(filename):
     .. [2] http://thredds.ucar.edu/thredds/catalog.html
 
     """
+    # parse field_mapping and field_metadata parameters
+    if field_mapping is None:
+        field_mapping = CDM_FIELD_MAPPING.copy()
+    if field_metadata is None:
+        field_metadata = NEXRAD_METADATA.copy()
+
     dataset = netCDF4.Dataset(filename)
     dattrs = dataset.ncattrs()
     if 'cdm_data_type' not in dattrs or dataset.cdm_data_type != 'RADIAL':
         raise IOError('%s is not a valid CDM NetCDF file' % (filename))
 
     # Might need to add a check to see if all fields/resolution are present.
-    refl_hi = _radar_from_cdm(dataset, _gen_vnames('refl', True))
-    dopl_hi = _radar_from_cdm(dataset, _gen_vnames('doppler', True))
-    refl_sd = _radar_from_cdm(dataset, _gen_vnames('refl', False))
-    dopl_sd = _radar_from_cdm(dataset, _gen_vnames('doppler', False))
+    refl_hi = _radar_from_cdm(dataset, _gen_vnames('refl', True),
+                              field_mapping, field_metadata)
+    dopl_hi = _radar_from_cdm(dataset, _gen_vnames('doppler', True),
+                              field_mapping, field_metadata)
+    refl_sd = _radar_from_cdm(dataset, _gen_vnames('refl', False),
+                              field_mapping, field_metadata)
+    dopl_sd = _radar_from_cdm(dataset, _gen_vnames('doppler', False),
+                              field_mapping, field_metadata)
     return refl_hi, dopl_hi, refl_sd, dopl_sd
 
 
-# mappings from CDM dataset variables to Radar object field names
+# default mappings from CDM dataset variables to Radar object field names
 CDM_FIELD_MAPPING = {
     'Reflectivity_HI': 'reflectivity',
     'RadialVelocity_HI': 'velocity',
@@ -138,7 +110,7 @@ CDM_FIELD_MAPPING = {
 
 def _gen_vnames(field, high_res):
     """
-    Return a dictionary of variables/dimension names in a thredds dataset.
+    Return a dictionary of variables/dimension names in a CDM dataset.
 
     Parameters
     ----------
@@ -183,10 +155,29 @@ def _gen_vnames(field, high_res):
     return vnames
 
 
-def _radar_from_cdm(dataset, vnames):
+def _radar_from_cdm(dataset, vnames, field_mapping, field_metadata):
     """
-    Return a Radar from a CDM dataset using the variable and dimension names
-    in the vnames dictionary.
+    Return a Radar from a CDM dataset.
+
+    Parameters
+    ----------
+    dataset : Dataset
+        CDM dataset with NEXRAD Level II data.
+    vnames : dict
+        Variable and dimension names in dataset which will be used to
+        populate the Radar.
+    field_mapping : dict
+        Mapping between CDM variable and radar field names.  See
+        :func:`read_nexrad_cdm` for details.
+    field_metadata
+        Metadata for the field specified in field_mapping.  See
+        :func:`read_nexrad_cdm` for details.
+
+    Return
+    ------
+    radar : Radar
+        Radar containing the requested fields.
+
     """
     dvars = dataset.variables
 
@@ -216,8 +207,8 @@ def _radar_from_cdm(dataset, vnames):
         if field not in dvars:  # do nothing if field is not present
             continue
 
-        field_name = CDM_FIELD_MAPPING[field]
-        field_dic = NEXRAD_METADATA[field_name].copy()
+        field_name = field_mapping[field]
+        field_dic = field_metadata[field_name].copy()
 
         # extract the field
         fvar = dvars[field]
