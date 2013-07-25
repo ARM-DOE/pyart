@@ -173,8 +173,8 @@ def _radar_from_cdm(dataset, vnames, field_mapping, field_metadata):
         Metadata for the field specified in field_mapping.  See
         :func:`read_nexrad_cdm` for details.
 
-    Return
-    ------
+    Returns
+    -------
     radar : Radar
         Radar containing the requested fields.
 

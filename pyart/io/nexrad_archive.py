@@ -8,7 +8,7 @@ Functions for reading NEXRAD Level II Archive files.
     :toctree: generated/
 
     read_nexrad_archive
-    _radar_from_archive
+    _radar_from_nexradl2
     ARCHIVE_MAPPING
     NEXRAD_METADATA
 
@@ -19,7 +19,7 @@ import numpy as np
 from .radar import Radar
 from .common import get_metadata, make_time_unit_str
 from .nexrad_common import NEXRAD_METADATA
-from .nexrad_archive2file import Archive2File
+from .nexradlevel2file import NEXRADLevel2File
 
 
 def read_nexrad_archive(filename, field_mapping=None, field_metadata=None):
@@ -30,7 +30,7 @@ def read_nexrad_archive(filename, field_mapping=None, field_metadata=None):
     ----------
     filename : str
         Filename of NEXRAD Level 2 Archive file.  The files hosted by
-        at the NOAA NAtional Climate Data Center [1]_ as well as on the
+        at the NOAA National Climate Data Center [1]_ as well as on the
         UCAR THREDDS Data Server [2]_ have been tested.  Other NEXRAD Level
         2 Archibe files may or may not work.
     field_mapping : None or dict, optional
@@ -75,8 +75,8 @@ def read_nexrad_archive(filename, field_mapping=None, field_metadata=None):
         field_metadata = NEXRAD_METADATA.copy()
 
     # open the file and retrieve scan information
-    afile = Archive2File(filename)
-    scan_info = afile.get_scan_info()
+    nfile = NEXRADLevel2File(filename)
+    scan_info = nfile.scan_info()
 
     # function for making radars res, 1: super resolution, 2: standard
     def _mr(moment, res):
@@ -99,9 +99,9 @@ def read_nexrad_archive(filename, field_mapping=None, field_metadata=None):
                                   scan_info['VEL'][res]['scans'][0])
 
         # read the radar from the archive file
-        return _radar_from_archive(afile, moments, scans, max_gates,
-                                   field_mapping, field_metadata,
-                                   dualpol_offset)
+        return _radar_from_nexradl2(nfile, moments, scans, max_gates,
+                                    field_mapping, field_metadata,
+                                    dualpol_offset)
 
     return _mr('REF', 1), _mr('VEL', 1), _mr('REF', 2), _mr('VEL', 2)
 
@@ -117,15 +117,15 @@ ARCHIVE_MAPPING = {
 }
 
 
-def _radar_from_archive(afile, moments, scans, max_gates, field_mapping,
-                        field_metadata, dualpol_offset=0):
+def _radar_from_nexradl2(nfile, moments, scans, max_gates, field_mapping,
+                         field_metadata, dualpol_offset=0):
     """
-    Create a radar object from a Archive2File object.
+    Create a radar object from a NEXRADLevel2File object.
 
     Parameters
     ----------
-    afile : Archive2File
-        Archive2File to read radar data from
+    nfile : NEXRADLevel2File
+        NEXRADLevel2File to read radar data from.
     moments : list
         Moments to retrieve.
     scans : list
@@ -151,13 +151,13 @@ def _radar_from_archive(afile, moments, scans, max_gates, field_mapping,
 
     # time
     time = get_metadata('time')
-    time_start, _time = afile.get_time_scans(scans)
+    time_start, _time = nfile.get_times(scans)
     time['data'] = _time
     time['units'] = make_time_unit_str(time_start)
 
     # _range
     _range = get_metadata('range')
-    _range['data'] = afile.get_scan_range(scans[0], moments[0])
+    _range['data'] = nfile.get_range(scans[0], moments[0])
 
     # fields
     fields = {}
@@ -167,13 +167,13 @@ def _radar_from_archive(afile, moments, scans, max_gates, field_mapping,
         fields[field_name] = get_metadata(field_name)
         if moment in ['ZDR', 'RHO', 'PHI']:
             offset_scans = [s + dualpol_offset for s in scans]
-            fdata = afile.get_data(offset_scans, moment, max_gates)
+            fdata = nfile.get_data(offset_scans, moment, max_gates)
         else:
-            fdata = afile.get_data(scans, moment, max_gates)
+            fdata = nfile.get_data(scans, moment, max_gates)
         fields[field_name]['data'] = fdata
 
     # metadata
-    metadata = {'original_container': 'NEXRAD Level II Archive'}
+    metadata = {'original_container': 'NEXRAD Level II'}
     # additional required CF/Radial metadata set to blank strings
     metadata['title'] = ''
     metadata['institution'] = ''
@@ -190,7 +190,7 @@ def _radar_from_archive(afile, moments, scans, max_gates, field_mapping,
     longitude = get_metadata('longitude')
     altitude = get_metadata('altitude')
 
-    lat, lon, alt = afile.get_location()
+    lat, lon, alt = nfile.location()
     latitude['data'] = np.array([lat], dtype='float64')
     longitude['data'] = np.array([lon], dtype='float64')
     altitude['data'] = np.array([alt], dtype='float64')
@@ -206,7 +206,7 @@ def _radar_from_archive(afile, moments, scans, max_gates, field_mapping,
     nsweeps = len(scans)
     sweep_number['data'] = np.arange(len(scans), dtype='int32')
     sweep_mode['data'] = np.array(nsweeps * ['azimuth_surveillance'])
-    rays_per_scan = afile.get_nrays(scans[0])
+    rays_per_scan = nfile.get_nrays(scans[0])
     ssri = np.arange(nsweeps, dtype='int32') * rays_per_scan
     sweep_start_ray_index['data'] = ssri
     sweep_end_ray_index['data'] = ssri + (rays_per_scan - 1)
@@ -214,8 +214,8 @@ def _radar_from_archive(afile, moments, scans, max_gates, field_mapping,
     # azimuth, elevation
     azimuth = get_metadata('azimuth')
     elevation = get_metadata('elevation')
-    azimuth['data'] = afile.get_azimuth_angles_scans(scans)
-    elev = afile.get_elevation_angles_scans(scans)
+    azimuth['data'] = nfile.get_azimuth_angles(scans)
+    elev = nfile.get_elevation_angles(scans)
     elevation['data'] = elev.astype('float32')
     fixed_angle['data'] = elev.astype('float32')
 
