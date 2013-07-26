@@ -1,0 +1,6 @@
+pyart.io.sigmet._unpack_key
+===========================
+
+.. currentmodule:: pyart.io.sigmet
+
+.. autofunction:: _unpack_key

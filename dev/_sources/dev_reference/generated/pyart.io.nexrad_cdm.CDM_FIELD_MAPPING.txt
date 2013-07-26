@@ -1,0 +1,6 @@
+pyart.io.nexrad_cdm.CDM_FIELD_MAPPING
+=====================================
+
+.. currentmodule:: pyart.io.nexrad_cdm
+
+.. autodata:: CDM_FIELD_MAPPING

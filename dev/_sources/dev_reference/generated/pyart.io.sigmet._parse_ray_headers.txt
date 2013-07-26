@@ -1,0 +1,6 @@
+pyart.io.sigmet._parse_ray_headers
+==================================
+
+.. currentmodule:: pyart.io.sigmet
+
+.. autofunction:: _parse_ray_headers

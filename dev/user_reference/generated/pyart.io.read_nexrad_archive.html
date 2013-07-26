@@ -1,0 +1,209 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pyart.io.read_nexrad_archive &mdash; Py-ART Documentation (DRAFT)</title>
+    
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1.0.dev-ac2f1bf',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Py-ART Documentation (DRAFT)" href="../../index.html" />
+    <link rel="up" title="Input and output (pyart.io)" href="../io.html" />
+    <link rel="next" title="pyart.io.read_nexrad_cdm" href="pyart.io.read_nexrad_cdm.html" />
+    <link rel="prev" title="pyart.io.read_netcdf" href="pyart.io.read_netcdf.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pyart.io.read_nexrad_cdm.html" title="pyart.io.read_nexrad_cdm"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pyart.io.read_netcdf.html" title="pyart.io.read_netcdf"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">Py-ART Documentation (DRAFT)</a> &raquo;</li>
+          <li><a href="../index.html" >User Reference Manual</a> &raquo;</li>
+          <li><a href="../io.html" accesskey="U">Input and output (<tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">pyart.io</span></tt>)</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="pyart-io-read-nexrad-archive">
+<h1>pyart.io.read_nexrad_archive<a class="headerlink" href="#pyart-io-read-nexrad-archive" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="pyart.io.read_nexrad_archive">
+<tt class="descclassname">pyart.io.</tt><tt class="descname">read_nexrad_archive</tt><big>(</big><em>filename</em>, <em>bzip=None</em>, <em>field_mapping=None</em>, <em>field_metadata=None</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/io/nexrad_archive.py#L25"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.io.read_nexrad_archive" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a NEXRAD Level 2 Archive file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
+<blockquote>
+<div><p>Filename of NEXRAD Level 2 Archive file.  The files hosted by
+at the NOAA National Climate Data Center <a class="reference internal" href="#r19">[R19]</a> as well as on the
+UCAR THREDDS Data Server <a class="reference internal" href="#r20">[R20]</a> have been tested.  Other NEXRAD Level
+2 Archibe files may or may not work.</p>
+</div></blockquote>
+<p><strong>bzip</strong> : bool or None</p>
+<blockquote>
+<div><p>True if the file is compressed as a bzip2 file, False otherwise.
+None will examine the filename for a bzip extension.</p>
+</div></blockquote>
+<p><strong>field_mapping</strong> : None or dict, optional</p>
+<blockquote>
+<div><p>Dictionary mapping NEXRAD moments to the corresponding field names in
+the radar objects returned. None will use <tt class="xref py py-data docutils literal"><span class="pre">ARCHIVE_MAPPING</span></tt>.
+which also served as an example of the format for this parameter.
+If a dictionary parameter is used it must have the same dictionary
+keys as ARCHIVE_MAPPING.  In addition, field_metadata must also be
+provided which contains the field metadata for the fields specified.</p>
+</div></blockquote>
+<p><strong>field_metadata</strong> : None or dict, optional</p>
+<blockquote>
+<div><p>Metadata for the fields specified by field_mapping, None will use the
+field metadata provided in <tt class="xref py py-data docutils literal"><span class="pre">NEXRAD_METADATA</span></tt>, which also serves
+as an example of the format for this parameter.  This metadata will
+be used for the field in the created radar objects returned.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>refl_hi</strong> : Radar or None</p>
+<blockquote>
+<div><p>Radar object containing the super resolution reflectivity field.
+If the file does not contain these fields None is returned, this is
+true for all returns.</p>
+</div></blockquote>
+<p><strong>dopl_hi</strong> : Radar or None</p>
+<blockquote>
+<div><p>Radar object containing the super resolution doppler fields present.
+Possible fields in the radar are: velocity, spectrum_width,
+differential_reflectivity, differential_phase, and
+correlation_coefficient.</p>
+</div></blockquote>
+<p><strong>refl_sd</strong> : Radar or None</p>
+<blockquote>
+<div><p>Radar object containing the standard resolution reflectivity field.</p>
+</div></blockquote>
+<p><strong>dopl_sd</strong> : Radar or None</p>
+<blockquote class="last">
+<div><p>Radar object containing the standard resolution doppler fields.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">References</p>
+<table class="docutils citation" frame="void" id="r19" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[R19]</td><td><em>(<a class="fn-backref" href="#id1">1</a>, <a class="fn-backref" href="#id3">2</a>)</em> <a class="reference external" href="http://www.ncdc.noaa.gov/">http://www.ncdc.noaa.gov/</a></td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r20" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[R20]</td><td><em>(<a class="fn-backref" href="#id2">1</a>, <a class="fn-backref" href="#id4">2</a>)</em> <a class="reference external" href="http://thredds.ucar.edu/thredds/catalog.html">http://thredds.ucar.edu/thredds/catalog.html</a></td></tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pyart.io.read_netcdf.html"
+                        title="previous chapter">pyart.io.read_netcdf</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pyart.io.read_nexrad_cdm.html"
+                        title="next chapter">pyart.io.read_nexrad_cdm</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/user_reference/generated/pyart.io.read_nexrad_archive.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pyart.io.read_nexrad_cdm.html" title="pyart.io.read_nexrad_cdm"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pyart.io.read_netcdf.html" title="pyart.io.read_netcdf"
+             >previous</a> |</li>
+        <li><a href="../../index.html">Py-ART Documentation (DRAFT)</a> &raquo;</li>
+          <li><a href="../index.html" >User Reference Manual</a> &raquo;</li>
+          <li><a href="../io.html" >Input and output (<tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">pyart.io</span></tt>)</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Py-ART developers.
+      Last updated on Jul 26, 2013.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>

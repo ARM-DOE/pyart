@@ -1,0 +1,176 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pyart.io.sigmet.read_sigmet &mdash; Py-ART Documentation (DRAFT)</title>
+    
+    <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.1.0.dev-ac2f1bf',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="Py-ART Documentation (DRAFT)" href="../../index.html" />
+    <link rel="up" title="pyart.io" href="../io.html" />
+    <link rel="next" title="pyart.io.sigmet.SigmetFile" href="pyart.io.sigmet.SigmetFile.html" />
+    <link rel="prev" title="pyart.io._rsl_interface._RslRay.__subclasshook__" href="pyart.io._rsl_interface._RslRay.__subclasshook__.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pyart.io.sigmet.SigmetFile.html" title="pyart.io.sigmet.SigmetFile"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pyart.io._rsl_interface._RslRay.__subclasshook__.html" title="pyart.io._rsl_interface._RslRay.__subclasshook__"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../../index.html">Py-ART Documentation (DRAFT)</a> &raquo;</li>
+          <li><a href="../index.html" >Developer Reference Manual</a> &raquo;</li>
+          <li><a href="../io.html" accesskey="U">pyart.io</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="pyart-io-sigmet-read-sigmet">
+<h1>pyart.io.sigmet.read_sigmet<a class="headerlink" href="#pyart-io-sigmet-read-sigmet" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="pyart.io.sigmet.read_sigmet">
+<tt class="descclassname">pyart.io.sigmet.</tt><tt class="descname">read_sigmet</tt><big>(</big><em>filename</em>, <em>field_names=None</em>, <em>field_metadata=None</em>, <em>sigmet_field_names=False</em>, <em>debug=False</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/io/sigmet.py#L40"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.io.sigmet.read_sigmet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a Sigmet (IRIS) product file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
+<blockquote>
+<div><p>Name of Sigmet (IRIS) product file to read.</p>
+</div></blockquote>
+<p><strong>field_names</strong> : dict, optional</p>
+<blockquote>
+<div><p>Dictionary mapping Sigmet data type names to radar field names. If a
+data type found in the file does not appear in this dictionary it will
+not be placed in the radar.fields dictionary.  If None (default) a
+standard mapping will be used (SIGMET_TO_STANDARD)</p>
+</div></blockquote>
+<p><strong>field_metadata</strong> : dict of dicts, optional</p>
+<blockquote>
+<div><p>Dictionary of dictionaries to retrieve field metadata from, if a mapped
+field does not appear in this list standard metadata will be used, or
+none if these is no metadata.  None (default) uses a blank dictionary.</p>
+</div></blockquote>
+<p><strong>sigmet_field_names</strong> : bool, optional</p>
+<blockquote>
+<div><p>True to use the Sigmet data type names for the field names. If this
+case the field_metadata and field_names parameters are ignored and the
+returned radar object has a fields attribute filled with the sigmet
+data type names with no metadata.</p>
+</div></blockquote>
+<p><strong>debug</strong> : bool, optional</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>radar</strong> : Radar</p>
+<blockquote class="last">
+<div><p>Radar object</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="pyart.io._rsl_interface._RslRay.__subclasshook__.html"
+                        title="previous chapter">pyart.io._rsl_interface._RslRay.__subclasshook__</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="pyart.io.sigmet.SigmetFile.html"
+                        title="next chapter">pyart.io.sigmet.SigmetFile</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../../_sources/dev_reference/generated/pyart.io.sigmet.read_sigmet.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="../../np-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pyart.io.sigmet.SigmetFile.html" title="pyart.io.sigmet.SigmetFile"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pyart.io._rsl_interface._RslRay.__subclasshook__.html" title="pyart.io._rsl_interface._RslRay.__subclasshook__"
+             >previous</a> |</li>
+        <li><a href="../../index.html">Py-ART Documentation (DRAFT)</a> &raquo;</li>
+          <li><a href="../index.html" >Developer Reference Manual</a> &raquo;</li>
+          <li><a href="../io.html" >pyart.io</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2013, Py-ART developers.
+      Last updated on Jul 26, 2013.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+    </div>
+  </body>
+</html>
