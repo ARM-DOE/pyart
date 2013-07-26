@@ -810,7 +810,7 @@ class MdvFile:
                 'time_centroid': t_base + tc}
 
     def _make_carts_dict(self):
-        """ Return a carts dictionary. """
+        """ Return a carts dictionary, distances in meters. """
 
         # simple calculation involving 4/3 earth radius
         nsweeps = self.master_header['nsweeps']
