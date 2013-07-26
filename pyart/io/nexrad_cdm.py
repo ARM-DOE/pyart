@@ -199,6 +199,8 @@ def _radar_from_cdm(dataset, vnames, field_mapping, field_metadata):
     # _range
     _range = get_metadata('range')
     _range['data'] = dvars[vnames['distance']][:]
+    _range['meters_to_center_of_first_gate'] = _range['data'][0]
+    _range['meters_between_gates'] = _range['data'][1] - _range['data'][0]
 
     # fields
     fields = {}
@@ -209,6 +211,7 @@ def _radar_from_cdm(dataset, vnames, field_mapping, field_metadata):
 
         field_name = field_mapping[field]
         field_dic = field_metadata[field_name].copy()
+        field_dic['_FillValue'] = -9999.0
 
         # extract the field
         fvar = dvars[field]

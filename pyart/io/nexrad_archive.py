@@ -19,10 +19,11 @@ import numpy as np
 from .radar import Radar
 from .common import get_metadata, make_time_unit_str
 from .nexrad_common import NEXRAD_METADATA
-from .nexradlevel2file import NEXRADLevel2File
+from .nexrad_level2 import NEXRADLevel2File
 
 
-def read_nexrad_archive(filename, field_mapping=None, field_metadata=None):
+def read_nexrad_archive(filename, bzip=None, field_mapping=None,
+                        field_metadata=None):
     """
     Read a NEXRAD Level 2 Archive file.
 
@@ -33,6 +34,9 @@ def read_nexrad_archive(filename, field_mapping=None, field_metadata=None):
         at the NOAA National Climate Data Center [1]_ as well as on the
         UCAR THREDDS Data Server [2]_ have been tested.  Other NEXRAD Level
         2 Archibe files may or may not work.
+    bzip : bool or None
+        True if the file is compressed as a bzip2 file, False otherwise.
+        None will examine the filename for a bzip extension.
     field_mapping : None or dict, optional
         Dictionary mapping NEXRAD moments to the corresponding field names in
         the radar objects returned. None will use :data:`ARCHIVE_MAPPING`.
@@ -68,14 +72,20 @@ def read_nexrad_archive(filename, field_mapping=None, field_metadata=None):
     .. [2] http://thredds.ucar.edu/thredds/catalog.html
 
     """
-    # parse field_mapping and field_metadata parameters
+    # parse the parameters
     if field_mapping is None:
         field_mapping = ARCHIVE_MAPPING.copy()
     if field_metadata is None:
         field_metadata = NEXRAD_METADATA.copy()
 
+    if bzip is None:
+        if filename.endswith('.bz2') or filename.endswith('bzip2'):
+            bzip = True
+        else:
+            bzip = False
+
     # open the file and retrieve scan information
-    nfile = NEXRADLevel2File(filename)
+    nfile = NEXRADLevel2File(filename, bzip)
     scan_info = nfile.scan_info()
 
     # function for making radars res, 1: super resolution, 2: standard
@@ -158,13 +168,15 @@ def _radar_from_nexradl2(nfile, moments, scans, max_gates, field_mapping,
     # _range
     _range = get_metadata('range')
     _range['data'] = nfile.get_range(scans[0], moments[0])
+    _range['meters_to_center_of_first_gate'] = _range['data'][0]
+    _range['meters_between_gates'] = _range['data'][1] - _range['data'][0]
 
     # fields
     fields = {}
     for moment in moments:
         field_name = field_mapping[moment]
         fields[field_name] = field_metadata[field_name].copy()
-        fields[field_name] = get_metadata(field_name)
+        fields[field_name]['_FillValue'] = -9999.0
         if moment in ['ZDR', 'RHO', 'PHI']:
             offset_scans = [s + dualpol_offset for s in scans]
             fdata = nfile.get_data(offset_scans, moment, max_gates)

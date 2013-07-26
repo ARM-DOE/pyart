@@ -1,6 +1,6 @@
 """
-pyart.io.nexradlevel2file
-=========================
+pyart.io.nexrad_level2
+======================
 
 .. autosummary::
     :toctree: generated/
@@ -96,6 +96,8 @@ class NEXRADLevel2File():
     ----------
     filename : str
         Filename of Archive II file to read.
+    bzip : bool
+        True if the file is a compressed bzip2 file.
 
     Attributes
     ----------
@@ -119,10 +121,13 @@ class NEXRADLevel2File():
 
 
     """
-    def __init__(self, filename):
+    def __init__(self, filename, bzip=False):
         """ initalize the object. """
         # read in the volume header and compression_record
-        fh = open(filename, 'rb')
+        if bzip:
+            fh = bz2.BZ2File(filename)
+        else:
+            fh = open(filename, 'rb')
         size = _structure_size(VOLUME_HEADER)
         self.volume_header = _unpack_structure(fh.read(size), VOLUME_HEADER)
         compression_record = fh.read(COMPRESSION_RECORD_SIZE)
@@ -352,9 +357,9 @@ class NEXRADLevel2File():
 
         # extract the data
         if moment != 'PHI':
-            data = np.ones((nrays, max_gates), dtype='i1')
+            data = np.ones((nrays, max_gates), dtype='u1')
         else:
-            data = np.ones((nrays, max_gates), dtype='i2')
+            data = np.ones((nrays, max_gates), dtype='u2')
         for i, msg_num in enumerate(msg_nums):
             msg = self.msg31s[msg_num]
             data[i, :msg[moment]['ngates']] = msg[moment]['data']
@@ -366,7 +371,7 @@ class NEXRADLevel2File():
             msg = self.msg31s[msg_nums[0]]
             offset = msg[moment]['offset']
             scale = msg[moment]['scale']
-            return (np.ma.masked_less_equal(data, 2) - offset) / (scale)
+            return (np.ma.masked_less_equal(data, 1) - offset) / (scale)
 
 
 def _decompress_records(file_handler):
@@ -426,9 +431,9 @@ def _get_msg31_data_block(buf, ptr):
         ngates = dic['ngates']
         ptr2 = ptr + _structure_size(GENERIC_DATA_BLOCK)
         if block_name == 'PHI':
-            data = np.fromstring(buf[ptr2: ptr2 + ngates * 2], '>i2')
+            data = np.fromstring(buf[ptr2: ptr2 + ngates * 2], '>u2')
         else:
-            data = np.fromstring(buf[ptr2: ptr2 + ngates], '>i1')
+            data = np.fromstring(buf[ptr2: ptr2 + ngates], '>u1')
         dic['data'] = data
     else:
         dic = {}
