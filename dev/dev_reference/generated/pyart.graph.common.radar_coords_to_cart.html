@@ -66,7 +66,51 @@
 <dl class="function">
 <dt id="pyart.graph.common.radar_coords_to_cart">
 <tt class="descclassname">pyart.graph.common.</tt><tt class="descname">radar_coords_to_cart</tt><big>(</big><em>rng</em>, <em>az</em>, <em>ele</em>, <em>debug=False</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/io/common.py#L26"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.graph.common.radar_coords_to_cart" title="Permalink to this definition">¶</a></dt>
-<dd><p>Assumes standard atmosphere, ie R=4Re/3</p>
+<dd><p>Calculate Cartesian coordinate from radar coordinates</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>rng</strong> : array</p>
+<blockquote>
+<div><p>Distances to the center of the radar gates (bins) in kilometers.</p>
+</div></blockquote>
+<p><strong>az</strong> : array</p>
+<blockquote>
+<div><p>Azimuth angle of the radar in degrees.</p>
+</div></blockquote>
+<p><strong>ele</strong> : array</p>
+<blockquote>
+<div><p>Elevation angle of the radar in degrees.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>x, y, z</strong> : array</p>
+<blockquote class="last">
+<div><p>Cartesian coordinates in meters from the radar.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The calculation for Cartesian coordinate is adapted from equations
+2.28(b) and 2.28(c) of Doviak and Zrnic <a class="reference internal" href="#r1">[R1]</a> assuming a
+standard atmosphere (4/3 Earth&#8217;s radius model).</p>
+<div class="math">
+\[z = \sqrt{r^2+R^2+r*R*sin(\theta_e)} - R\]\[s = R * arcsin(\frac{r*cos(\theta_e)}{R+z})\]\[x = s * sin(\theta_a)\]\[y = s * cos(\theta_a)\]</div>
+<p>Where r is the distance from the radar to the center of the gate,
+<span class="math">\(\theta_a\)</span> is the azimuth angle, <span class="math">\(\theta_e\)</span> is the
+elevation angle, s is the arc length, and R is the effective radius
+of the earth, taken to be 4/3 the mean radius of earth (6371 km).</p>
+<p class="rubric">References</p>
+<table class="docutils citation" frame="void" id="r1" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[R1]</td><td><em>(<a class="fn-backref" href="#id1">1</a>, <a class="fn-backref" href="#id2">2</a>)</em> Doviak and Zrnic, Doppler Radar and Weather Observations, Second
+Edition, 1993, p. 21.</td></tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -130,7 +174,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on May 16, 2013.
+      Last updated on Jul 26, 2013.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>

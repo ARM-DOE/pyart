@@ -29,7 +29,7 @@
     <link rel="top" title="Py-ART Documentation (DRAFT)" href="../../index.html" />
     <link rel="up" title="pyart.io" href="../io.html" />
     <link rel="next" title="pyart.io.mdv.MdvFile.close" href="pyart.io.mdv.MdvFile.close.html" />
-    <link rel="prev" title="pyart.io.grid.PyGrid.__init__" href="pyart.io.grid.PyGrid.__init__.html" /> 
+    <link rel="prev" title="pyart.io.grid.Grid.__init__" href="pyart.io.grid.Grid.__init__.html" /> 
   </head>
   <body>
     <div class="related">
@@ -48,7 +48,7 @@
           <a href="pyart.io.mdv.MdvFile.close.html" title="pyart.io.mdv.MdvFile.close"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="pyart.io.grid.PyGrid.__init__.html" title="pyart.io.grid.PyGrid.__init__"
+          <a href="pyart.io.grid.Grid.__init__.html" title="pyart.io.grid.Grid.__init__"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">Py-ART Documentation (DRAFT)</a> &raquo;</li>
           <li><a href="../index.html" >Developer Reference Manual</a> &raquo;</li>
@@ -65,7 +65,7 @@
 <h1>pyart.io.mdv.MdvFile<a class="headerlink" href="#pyart-io-mdv-mdvfile" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="pyart.io.mdv.MdvFile">
-<em class="property">class </em><tt class="descclassname">pyart.io.mdv.</tt><tt class="descname">MdvFile</tt><big>(</big><em>filename</em>, <em>debug=False</em>, <em>read_fields=False</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/io/mdv.py#L278"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.io.mdv.MdvFile" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">pyart.io.mdv.</tt><tt class="descname">MdvFile</tt><big>(</big><em>filename</em>, <em>debug=False</em>, <em>read_fields=False</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/io/mdv.py#L273"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.io.mdv.MdvFile" title="Permalink to this definition">¶</a></dt>
 <dd><p>A file object for MDV data.</p>
 <p>A <cite>MdvFile</cite> object stores metadata and data from a MDV file.  Metadata is
 stored in dictionaries as attributes of the object, field data is
@@ -168,7 +168,7 @@ reads metadata.</p>
 <td>Read nfields vlevel headers, return a list of dicts.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="pyart.io.mdv.MdvFile._make_carts_dict.html#pyart.io.mdv.MdvFile._make_carts_dict" title="pyart.io.mdv.MdvFile._make_carts_dict"><tt class="xref py py-obj docutils literal"><span class="pre">_make_carts_dict</span></tt></a>()</td>
-<td>Return a carts dictionary.</td>
+<td>Return a carts dictionary, distances in meters.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="pyart.io.mdv.MdvFile._make_fields_list.html#pyart.io.mdv.MdvFile._make_fields_list" title="pyart.io.mdv.MdvFile._make_fields_list"><tt class="xref py py-obj docutils literal"><span class="pre">_make_fields_list</span></tt></a>()</td>
 <td>Return a list of fields.</td>
@@ -189,8 +189,8 @@ reads metadata.</p>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="pyart.io.grid.PyGrid.__init__.html"
-                        title="previous chapter">pyart.io.grid.PyGrid.__init__</a></p>
+  <p class="topless"><a href="pyart.io.grid.Grid.__init__.html"
+                        title="previous chapter">pyart.io.grid.Grid.__init__</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="pyart.io.mdv.MdvFile.close.html"
                         title="next chapter">pyart.io.mdv.MdvFile.close</a></p>
@@ -232,7 +232,7 @@ reads metadata.</p>
           <a href="pyart.io.mdv.MdvFile.close.html" title="pyart.io.mdv.MdvFile.close"
              >next</a> |</li>
         <li class="right" >
-          <a href="pyart.io.grid.PyGrid.__init__.html" title="pyart.io.grid.PyGrid.__init__"
+          <a href="pyart.io.grid.Grid.__init__.html" title="pyart.io.grid.Grid.__init__"
              >previous</a> |</li>
         <li><a href="../../index.html">Py-ART Documentation (DRAFT)</a> &raquo;</li>
           <li><a href="../index.html" >Developer Reference Manual</a> &raquo;</li>
@@ -241,7 +241,7 @@ reads metadata.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on May 16, 2013.
+      Last updated on Jul 26, 2013.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>

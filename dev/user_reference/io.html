@@ -28,7 +28,7 @@
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="Py-ART Documentation (DRAFT)" href="../index.html" />
     <link rel="up" title="User Reference Manual" href="index.html" />
-    <link rel="next" title="pyart.io.read_rsl" href="generated/pyart.io.read_rsl.html" />
+    <link rel="next" title="pyart.io.read" href="generated/pyart.io.read.html" />
     <link rel="prev" title="User Reference Manual" href="index.html" /> 
   </head>
   <body>
@@ -45,7 +45,7 @@
           <a href="../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="generated/pyart.io.read_rsl.html" title="pyart.io.read_rsl"
+          <a href="generated/pyart.io.read.html" title="pyart.io.read"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="index.html" title="User Reference Manual"
@@ -70,14 +70,26 @@ from and write data to a number of file formats.</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.read_rsl.html#pyart.io.read_rsl" title="pyart.io.read_rsl"><tt class="xref py py-obj docutils literal"><span class="pre">read_rsl</span></tt></a>(filename[,&nbsp;radar_format,&nbsp;callid,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.read.html#pyart.io.read" title="pyart.io.read"><tt class="xref py py-obj docutils literal"><span class="pre">read</span></tt></a>(filename[,&nbsp;callid])</td>
+<td>Read a radar file and return a radar object.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.read_rsl.html#pyart.io.read_rsl" title="pyart.io.read_rsl"><tt class="xref py py-obj docutils literal"><span class="pre">read_rsl</span></tt></a>(filename[,&nbsp;radar_format,&nbsp;callid,&nbsp;...])</td>
 <td>Read a file supported by RSL</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.read_mdv.html#pyart.io.read_mdv" title="pyart.io.read_mdv"><tt class="xref py py-obj docutils literal"><span class="pre">read_mdv</span></tt></a>(filename)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.read_mdv.html#pyart.io.read_mdv" title="pyart.io.read_mdv"><tt class="xref py py-obj docutils literal"><span class="pre">read_mdv</span></tt></a>(filename)</td>
 <td>Read a MDV file.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.read_sigmet.html#pyart.io.read_sigmet" title="pyart.io.read_sigmet"><tt class="xref py py-obj docutils literal"><span class="pre">read_sigmet</span></tt></a>(filename[,&nbsp;field_names,&nbsp;...])</td>
+<td>Read a Sigmet (IRIS) product file.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.read_netcdf.html#pyart.io.read_netcdf" title="pyart.io.read_netcdf"><tt class="xref py py-obj docutils literal"><span class="pre">read_netcdf</span></tt></a>(filename)</td>
 <td>Read a netCDF file.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.read_nexrad_archive.html#pyart.io.read_nexrad_archive" title="pyart.io.read_nexrad_archive"><tt class="xref py py-obj docutils literal"><span class="pre">read_nexrad_archive</span></tt></a>(filename[,&nbsp;bzip,&nbsp;...])</td>
+<td>Read a NEXRAD Level 2 Archive file.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.read_nexrad_cdm.html#pyart.io.read_nexrad_cdm" title="pyart.io.read_nexrad_cdm"><tt class="xref py py-obj docutils literal"><span class="pre">read_nexrad_cdm</span></tt></a>(filename[,&nbsp;field_mapping,&nbsp;...])</td>
+<td>Read a Common Data Model (CDM) NEXRAD Level 2 file.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.write_netcdf.html#pyart.io.write_netcdf" title="pyart.io.write_netcdf"><tt class="xref py py-obj docutils literal"><span class="pre">write_netcdf</span></tt></a>(filename,&nbsp;radar[,&nbsp;format])</td>
 <td>Write a Radar object to a CF/Radial compliant netCDF file.</td>
@@ -85,13 +97,13 @@ from and write data to a number of file formats.</p>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.read_grid.html#pyart.io.read_grid" title="pyart.io.read_grid"><tt class="xref py py-obj docutils literal"><span class="pre">read_grid</span></tt></a>(filename)</td>
 <td>Read a netCDF grid file</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.write_grid.html#pyart.io.write_grid" title="pyart.io.write_grid"><tt class="xref py py-obj docutils literal"><span class="pre">write_grid</span></tt></a>(filename,&nbsp;pygrid[,&nbsp;format])</td>
-<td>Write a PyGrid object to a CF-1.5 and ARM standard netcdf file</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.write_grid.html#pyart.io.write_grid" title="pyart.io.write_grid"><tt class="xref py py-obj docutils literal"><span class="pre">write_grid</span></tt></a>(filename,&nbsp;grid[,&nbsp;format])</td>
+<td>Write a Grid object to a CF-1.5 and ARM standard netcdf file</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.Radar.html#pyart.io.Radar" title="pyart.io.Radar"><tt class="xref py py-obj docutils literal"><span class="pre">Radar</span></tt></a>(time,&nbsp;_range,&nbsp;fields,&nbsp;metadata,&nbsp;...[,&nbsp;...])</td>
 <td>A class for storing antenna coordinate radar data.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.PyGrid.html#pyart.io.PyGrid" title="pyart.io.PyGrid"><tt class="xref py py-obj docutils literal"><span class="pre">PyGrid</span></tt></a>(fields,&nbsp;axes,&nbsp;metadata)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.Grid.html#pyart.io.Grid" title="pyart.io.Grid"><tt class="xref py py-obj docutils literal"><span class="pre">Grid</span></tt></a>(fields,&nbsp;axes,&nbsp;metadata)</td>
 <td>An object for holding gridded Radar data.</td>
 </tr>
 </tbody>
@@ -108,8 +120,8 @@ from and write data to a number of file formats.</p>
   <p class="topless"><a href="index.html"
                         title="previous chapter">User Reference Manual</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="generated/pyart.io.read_rsl.html"
-                        title="next chapter">pyart.io.read_rsl</a></p>
+  <p class="topless"><a href="generated/pyart.io.read.html"
+                        title="next chapter">pyart.io.read</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../_sources/user_reference/io.txt"
@@ -145,7 +157,7 @@ from and write data to a number of file formats.</p>
           <a href="../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="generated/pyart.io.read_rsl.html" title="pyart.io.read_rsl"
+          <a href="generated/pyart.io.read.html" title="pyart.io.read"
              >next</a> |</li>
         <li class="right" >
           <a href="index.html" title="User Reference Manual"
@@ -156,7 +168,7 @@ from and write data to a number of file formats.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on May 16, 2013.
+      Last updated on Jul 26, 2013.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
