@@ -1,5 +1,4 @@
 
-
 def configuration(parent_package='', top_path=None):
     from numpy.distutils.misc_util import Configuration
     config = Configuration('pyart', parent_package, top_path)
@@ -8,6 +7,7 @@ def configuration(parent_package='', top_path=None):
     config.add_subpackage('io')
     config.add_subpackage('map')
     config.add_subpackage('retrieve')
+    config.add_subpackage('testing')
     config.add_subpackage('util')
     return config
 
