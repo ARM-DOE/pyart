@@ -28,11 +28,19 @@ __ http://matplotlib.org/
 
 __ http://code.google.com/p/netcdf4-python/
 
-6) TRMM RSL__ 1.43 or newer
+
+Optional Dependancies
+=====================
+
+The following packages are recommended for a fully-functional Py-ART
+installation, but the package will install and work with reduced functionality
+without these packages.
+
+1) TRMM RSL__ 1.43 or newer
 
 __ http://trmm-fc.gsfc.nasa.gov/trmm_gv/software/rsl/
 
-7) PyGLPK__
+2) PyGLPK__
 
 __ http://tfinley.net/software/pyglpk/
 
@@ -80,3 +88,14 @@ Q) I'm getting a segfault or another error in python when using
 A)  This is due to a bug in RSL, and can be remedied by adding
     -fno-stack-protector -D_FORTIFY_SOURCE=0 to the CFLAGS parameter of the
     makefile of rsl.  This issue has been reported to the RSL maintainers.
+
+Q) I'm having trouble getting PyGLPK to compile on my 64-bit operating system.
+A) Change the line in the setup.py file from:
+
+define_macros = macros, extra_compile_args=['-m32'], extra_link_args=['-m32'],
+   
+   to:
+
+define_macros = macros, extra_compile_args=['-m64'], extra_link_args=['-m64'],
+
+  Then build and install PyGLPK as recommended in the PYGLPK README.txt file. 

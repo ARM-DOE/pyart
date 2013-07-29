@@ -20,5 +20,9 @@ __all__ = ['RadarDisplay', 'MdvDisplay', 'RslDisplay', 'NetcdfDisplay']
 
 from radar_display import RadarDisplay
 from plot_mdv import MdvDisplay
-from plot_rsl import RslDisplay
+try:
+    from plot_rsl import RslDisplay
+except ImportError:
+    import warnings
+    warnings.warn('RSL not installed, RslDisplay not available')
 from plot_netcdf import NetcdfDisplay

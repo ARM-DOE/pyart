@@ -18,7 +18,11 @@ moments and data.
 
 """
 
-from .dealias import dealias_fourdd, find_time_in_interp_sonde
+try:
+    from .dealias import dealias_fourdd, find_time_in_interp_sonde
+except ImportError:
+    import warnings
+    warnings.warn('RSL not installed, dealias_fourdd not available')
 from .attenuation import calculate_attenuation
 from .phase_proc import phase_proc_lp
 
