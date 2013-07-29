@@ -17,7 +17,7 @@ Graphing (:mod:`pyart.graph`)
 
 """
 
-__all__ = ['RadarDisplay', 'MdvDisplay', 'RslDisplay', 'NetcdfDisplay', 
+__all__ = ['RadarDisplay', 'MdvDisplay', 'RslDisplay', 'NetcdfDisplay',
            'mapplotgrid_3p']
 
 from radar_display import RadarDisplay
