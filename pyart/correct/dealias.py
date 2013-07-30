@@ -12,6 +12,8 @@ Front end to the University of Washington 4DD code for Doppler dealiasing.
 
 
 """
+# Nothing from this module is imported to pyart.correct if RSL is not
+# installed.
 
 import numpy as np
 

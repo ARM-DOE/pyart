@@ -11,6 +11,7 @@ Python wrapper around the RSL library.
 
 """
 
+# Nothing from this module is imported into pyart.io if RSL is not installed.
 import numpy as np
 
 from . import _rsl_interface

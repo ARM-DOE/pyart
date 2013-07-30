@@ -18,7 +18,10 @@ moments and data.
 
 """
 
-from .dealias import dealias_fourdd, find_time_in_interp_sonde
+try:
+    from .dealias import dealias_fourdd, find_time_in_interp_sonde
+except ImportError:
+    pass
 from .attenuation import calculate_attenuation
 from .phase_proc import phase_proc_lp
 

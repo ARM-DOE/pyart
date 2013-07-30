@@ -13,11 +13,17 @@ Automatic reading of radar files by detecting format.
 """
 
 from .mdv import read_mdv
-from .rsl import read_rsl
+try:
+    from .rsl import read_rsl
+    RSL_AVAILABLE = True
+except ImportError:
+    RSL_AVAILABLE = False
 from .netcdf import read_netcdf
+from .sigmet import read_sigmet
+from .nexrad_archive import read_nexrad_archive
 
 
-def read(filename, callid='KABR'):
+def read(filename, callid='KABR', use_rsl=True):
     """
     Read a radar file and return a radar object.
 
@@ -29,6 +35,9 @@ def read(filename, callid='KABR'):
         Four letter NEXRAD radar call id, only used if format is determined to
         be 'WSR88D'.  The default value will set the location of the radar to
         Aberdeen, SD.  The fields will still be correct.
+    use_rsl : bool
+        True to use the TRMM RSL library for reading.  If RSL is not
+        installed
 
     Returns
     -------
@@ -39,17 +48,27 @@ def read(filename, callid='KABR'):
     """
     filetype = determine_filetype(filename)
 
+    # Py-ART only supported formats
     if filetype == "MDV":
         return read_mdv(filename)
     if filetype == "NETCDF3" or filetype == "NETCDF4":
         return read_netcdf(filename)
-    if filetype == 'WSR88D':
-        read_rsl(filename, callid=callid)
-    rsl_formats = ['UF', 'HDF4', 'RSL', 'DORAD', 'SIGMET']
-    if filetype in rsl_formats:
-        return read_rsl(filename)
 
-    raise TypeError('file format is cannot be determined.')
+    # RSL supported file formats
+    if use_rsl and RSL_AVAILABLE:
+        if filetype == 'WSR88D':
+            read_rsl(filename, callid=callid)
+        rsl_formats = ['UF', 'HDF4', 'RSL', 'DORAD', 'SIGMET']
+        if filetype in rsl_formats and RSL_AVAILABLE and use_rsl:
+            return read_rsl(filename)
+
+    # RSL supported formats which are also supported natively in Py-ART
+    if filetype == "SIGMET":
+        return read_sigmet(filename)
+    if filetype == 'WSR88D':
+        return read_nexrad_archive(filename)
+
+    raise TypeError('Unknown or unsupported file format.')
 
 
 def determine_filetype(filename):

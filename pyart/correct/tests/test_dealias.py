@@ -10,8 +10,10 @@ import netCDF4
 import pyart
 import numpy as np
 from numpy.testing import assert_allclose
+from numpy.testing.decorators import skipif
 
 
+@skipif(not pyart.io._RSL_AVAILABLE)
 def test_find_time_in_interp_sounde():
     target = datetime.datetime(2011, 5, 10, 11, 30, 8)
     interp_sounde = netCDF4.Dataset(pyart.testing.INTERP_SOUNDE_FILE)
@@ -31,6 +33,7 @@ def test_find_time_in_interp_sounde():
     assert round(direction[100], 2) == 231.8
 
 
+@skipif(not pyart.io._RSL_AVAILABLE)
 def test_dealias():
     radar, dealias_vel = perform_dealias()
     assert_allclose(

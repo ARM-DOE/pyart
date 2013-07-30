@@ -17,13 +17,10 @@ before_install:
     # Install the SciPy stack
     - sudo apt-get install -qq python-scipy python-nose python-matplotlib 
     # Install additional Py-ART dependencies
-    - sudo apt-get install -qq librsl-dev python-cvxopt python-netcdf4
-    # Set the RSL_PATH as installed from the librsl-dev package
-    - export RSL_PATH=/usr
+    - sudo apt-get install -qq python-cvxopt python-netcdf4
     - virtualenv --system-site-packages ~/virtualenv/this
     - source ~/virtualenv/this/bin/activate
 install: python setup.py build_ext --inplace
 # run the tests inside a virtual X server so that matplotlib can plot
-# skip any RSL tests, the RSL shipped with Ubuntu has stack protection on
-# and therefore crashes when read Sigmet files.
-script: xvfb-run nosetests -e "rsl" -v pyart
+# No RSL related tests are executed as we do not install RSL
+script: xvfb-run nosetests -v pyart
