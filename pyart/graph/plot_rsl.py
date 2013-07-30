@@ -12,6 +12,8 @@ Routines for plotting radar data from files readable by RSL.
 
 """
 
+# Nothing from this module is imported into pyart.graph is RSL is not
+# installed.
 import numpy as np
 
 from .common import radar_coords_to_cart, dms_to_d

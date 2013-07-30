@@ -28,7 +28,11 @@ from and write data to a number of file formats.
 """
 
 from .auto_read import read
-from .rsl import read_rsl
+try:
+    from .rsl import read_rsl
+    _RSL_AVAILABLE = True
+except ImportError:
+    _RSL_AVAILABLE = False
 from .mdv import read_mdv
 from .sigmet import read_sigmet
 from .netcdf import read_netcdf, write_netcdf

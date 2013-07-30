@@ -9,9 +9,11 @@
 # be created, not that they are correct.
 
 import matplotlib.pyplot as plt
+from numpy.testing.decorators import skipif
 import pyart
 
 
+@skipif(not pyart.io._RSL_AVAILABLE)
 def test_plot_rsl_rhi(outfile=None):
     rslfile = pyart.io._rsl_interface.RslFile(pyart.testing.SIGMET_RHI_FILE)
     display = pyart.graph.RslDisplay(rslfile)
@@ -22,6 +24,7 @@ def test_plot_rsl_rhi(outfile=None):
         fig.savefig(outfile)
 
 
+@skipif(not pyart.io._RSL_AVAILABLE)
 def test_plot_rsl_ppi(outfile=None):
     rslfile = pyart.io._rsl_interface.RslFile(pyart.testing.SIGMET_PPI_FILE)
     display = pyart.graph.RslDisplay(rslfile)
@@ -35,6 +38,7 @@ def test_plot_rsl_ppi(outfile=None):
 # version of above which use the RadarDisplay to return similar images.
 
 
+@skipif(not pyart.io._RSL_AVAILABLE)
 def test_plot_rsl_radar_rhi(outfile=None):
     radar = pyart.io.read_rsl(pyart.testing.SIGMET_RHI_FILE)
     display = pyart.graph.RadarDisplay(radar)
@@ -46,6 +50,7 @@ def test_plot_rsl_radar_rhi(outfile=None):
         fig.savefig(outfile)
 
 
+@skipif(not pyart.io._RSL_AVAILABLE)
 def test_plot_rsl_radar_ppi(outfile=None):
     radar = pyart.io.read_rsl(pyart.testing.SIGMET_PPI_FILE)
     display = pyart.graph.RadarDisplay(radar)
