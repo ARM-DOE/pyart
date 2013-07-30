@@ -32,8 +32,6 @@ try:
     from .rsl import read_rsl
     _RSL_AVAILABLE = True
 except ImportError:
-    import warnings
-    warnings.warn('RSL not installed, read_rsl not available')
     _RSL_AVAILABLE = False
 from .mdv import read_mdv
 from .sigmet import read_sigmet

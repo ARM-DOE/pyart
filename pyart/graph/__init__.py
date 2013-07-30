@@ -23,6 +23,5 @@ from plot_mdv import MdvDisplay
 try:
     from plot_rsl import RslDisplay
 except ImportError:
-    import warnings
-    warnings.warn('RSL not installed, RslDisplay not available')
+    pass
 from plot_netcdf import NetcdfDisplay

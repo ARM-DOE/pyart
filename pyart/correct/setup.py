@@ -32,7 +32,6 @@ def configuration(parent_package='', top_path=None):
     rsl_path = os.environ.get('RSL_PATH')
     if rsl_path is None:
         rsl_path = guess_rsl_path()
-    print "rsl_path set to", rsl_path
     rsl_lib_path = os.path.join(rsl_path, 'lib')
     rsl_include_path = os.path.join(rsl_path, 'include')
 
