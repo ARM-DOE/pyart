@@ -9,22 +9,22 @@ Graphing (:mod:`pyart.graph`)
     :toctree: generated/
 
     RadarDisplay
+    GridMapDisplay
     MdvDisplay
     RslDisplay
     NetcdfDisplay
-    mapplotgrid_3p
 
 
 """
 
-__all__ = ['RadarDisplay', 'MdvDisplay', 'RslDisplay', 'NetcdfDisplay',
-           'mapplotgrid_3p']
-
-from radar_display import RadarDisplay
-from plot_mdv import MdvDisplay
-from plot_rsl import RslDisplay
-from plot_netcdf import NetcdfDisplay
+from .radar_display import RadarDisplay
+from .plot_mdv import MdvDisplay
+from .plot_rsl import RslDisplay
+from .plot_netcdf import NetcdfDisplay
 try:
-    from grid_plotting import mapplotgrid_3p
+    from .gridmapdisplay import GridMapDisplay
 except ImportError:
-    print('Skipping grid plotting, requires matplotlib and pyproj')
+    import warnings
+    warnings.warn('No grid plotting support, requires matplotlib and pyproj')
+
+__all__ = [s for s in dir() if not s.startswith('_')]
