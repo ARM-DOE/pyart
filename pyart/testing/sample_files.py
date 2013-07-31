@@ -2,6 +2,23 @@
 pyart.testing.sample_files
 ==========================
 
+Sample radar files in a number of formats.  Many of these files
+are incomplete, they should only be used for testing, not production.
+
+.. autosummary::
+    :toctree: generated/
+
+    MDV_PPI_FILE
+    MDV_RHI_FILE
+    NETCDF_PPI_FILE
+    NETCDF_RHI_FILE
+    SIGMET_PPI_FILE
+    SIGMET_RHI_FILE
+    NEXRAD_ARCHIVE_FILE
+    NEXRAD_ARCHIVE_COMPRESSED_FILE
+    NEXRAD_CDM_FILE
+    INTERP_SOUNDE_FILE
+
 """
 
 import os
