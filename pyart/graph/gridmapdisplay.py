@@ -4,7 +4,7 @@ pyart.graph.gridmapdisplay
 
 A class for plotting grid objects with a basemap.
 
-..autosummary::
+.. autosummary::
     :toctree: generated/
     :template: dev_template.rst
 
@@ -26,13 +26,15 @@ class GridMapDisplay():
     ----------
     grid : Grid
         Grid with data which will be used to create plots.
+    debug : bool
+        True to print debugging messages, False to supress them.
 
     Attributes
     ----------
     grid : Grid
         Grid object.
     debug : bool
-        True to print debugging message, False to supressed them.
+        True to print debugging messages, False to supressed them.
     proj : Proj
         Object for perforning cartographic transformations specific to the
         grid.
@@ -73,9 +75,7 @@ class GridMapDisplay():
         self.fields = []
         self.basemap = None
 
-    def plot_basemap(self,
-                     lat_lines=np.arange(30, 46, 1),
-                     lon_lines=np.arange(-110, -75, 1),
+    def plot_basemap(self, lat_lines=None, lon_lines=None,
                      resolution='l', area_thresh=10000,
                      auto_range=True,
                      min_lon=-92, max_lon=-86, min_lat=40, max_lat=44,
@@ -85,8 +85,10 @@ class GridMapDisplay():
 
         Parameters
         ----------
-        lat_lines, lon_lines : array
+        lat_lines, lon_lines : array or None
             Locations at which to draw latitude and longitude lines.
+            None will use default values which are resonable for North
+            America maps.
         auto_range : bool
             True to determine map ranges from the grid_lats and grid_lons
             attribute.  False will use the min_lon, max_lon, min_lat, and
@@ -103,7 +105,12 @@ class GridMapDisplay():
             Axis to add the basemap to, if None the current axis is used.
 
         """
+        # parse the parameters
         ax = self._parse_ax(ax)
+        if lat_lines is None:
+            lat_lines = np.arange(30, 46, 1)
+        if lon_lines is None:
+            lon_lines = np.arange(-110, -75, 1)
 
         # determine map region
         if auto_range:
