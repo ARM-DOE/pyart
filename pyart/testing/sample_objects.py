@@ -9,6 +9,10 @@ Functions for creating sample Radar and Grid objects.
 
     make_empty_ppi_radar
     make_target_radar
+    make_velocity_aliased_radar
+    make_single_ray_radar
+    make_empty_grid
+    make_target_grid
 
 """
 
@@ -17,6 +21,7 @@ import numpy as np
 from .sample_files import _EXAMPLE_RAYS_FILE
 from ..io.common import get_metadata
 from ..io.radar import Radar
+from ..io.grid import Grid
 
 
 def make_empty_ppi_radar(ngates, rays_per_sweep, nsweeps):
@@ -154,3 +159,118 @@ def make_single_ray_radar():
         radar.fields[field_name] = {'data': f[field_name]}
     f.close()
     return radar
+
+
+def make_empty_grid(grid_shape, grid_limits):
+    """
+    Make an empty grid object without any fields or metadata.
+
+    Parameters
+    ----------
+    grid_shape : 3-tuple of floats
+        Number of points in the grid (x, y, z).
+    grid_limits : 3-tuple of 2-tuples
+        Minimum and maximum grid location (inclusive) in meters for the
+        x, y, z coordinates.
+
+    Returns
+    -------
+    grid : Grid
+        Empty Grid object, centered near the ARM SGP site (Oklahoma).
+
+    """
+    time = {
+        'data': np.array([0.0]),
+        'units': 'seconds since 2000-01-01T00:00:00Z',
+        'calendar': 'gregorian',
+        'standard_name': 'time',
+        'long_name': 'Time in seconds since volume start'}
+
+    time_start = {
+        'data': np.array([0.0]),
+        'units': 'seconds since 2000-01-01T00:00:00Z',
+        'calendar': 'gregorian',
+        'standard_name': 'time',
+        'long_name': 'Time in seconds since volume start'}
+
+    time_end = {
+        'data': np.array([0.0]),
+        'units': 'seconds since 2000-01-01T00:00:00Z',
+        'calendar': 'gregorian',
+        'standard_name': 'time',
+        'long_name': 'Time in seconds since volume start'}
+
+    # grid coordinate dictionaries
+    nx, ny, nz = grid_shape
+    (x0, x1), (y0, y1), (z0, z1) = grid_limits
+
+    xaxis = {'data': np.linspace(x0, x1, nx),
+             'long_name': 'X-coordinate in Cartesian system',
+             'axis': 'X',
+             'units': 'm'}
+
+    yaxis = {'data': np.linspace(y0, y1, ny),
+             'long_name': 'Y-coordinate in Cartesian system',
+             'axis': 'Y',
+             'units': 'm'}
+
+    zaxis = {'data': np.linspace(z0, z1, nz),
+             'long_name': 'Z-coordinate in Cartesian system',
+             'axis': 'Z',
+             'units': 'm',
+             'positive': 'up'}
+
+    altorigin = {'data': np.array([300.]),
+                 'long_name': 'Altitude at grid origin',
+                 'units': 'm',
+                 'standard_name': 'altitude',
+                 }
+
+    latorigin = {'data': np.array([36.74]),
+                 'long_name': 'Latitude at grid origin',
+                 'units': 'degree_N',
+                 'standard_name': 'latitude',
+                 'valid_min': -90.,
+                 'valid_max': 90.
+                 }
+
+    lonorigin = {'data': np.array([-98.1]),
+                 'long_name': 'Longitude at grid origin',
+                 'units': 'degree_E',
+                 'standard_name': 'longitude',
+                 'valid_min': -180.,
+                 'valid_max': 180.
+                 }
+
+    axes = {'time': time,
+            'time_start': time_start,
+            'time_end': time_end,
+            'z_disp': zaxis,
+            'y_disp': yaxis,
+            'x_disp': xaxis,
+            'alt': altorigin,
+            'lat': latorigin,
+            'lon': lonorigin}
+
+    return Grid({}, axes, {})
+
+
+def make_target_grid():
+    """
+    Make a sample Grid with a rectangular target.
+    """
+    grid_shape = (320, 400, 2)
+    grid_limits = ((-300000, 300000), (-400000, 400000), (0, 500))
+    grid = make_empty_grid(grid_shape, grid_limits)
+
+    fdata = np.zeros((2, 400, 320), dtype='float32')
+    fdata[:, 50:-50, 40:-40] = 10.
+    fdata[:, 100:-100, 80:-80] = 20.
+    fdata[:, 150:-150, 120:-120] = 30.
+    fdata[1] += 5
+    rdic = {
+        'data': fdata,
+        'long_name': 'reflectivity',
+        'units': 'dBz'}
+    grid.fields = {'reflectivity': rdic}
+    return grid
