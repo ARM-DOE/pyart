@@ -82,3 +82,13 @@ def test_grid_from_radars():
                        np.linspace(-900, 900, 9).astype('float64'))
     assert_array_equal(grid.axes['z_disp']['data'],
                        np.linspace(-400, 400, 3).astype('float64'))
+
+
+def test_grid_from_radars_grid_origin():
+    radar = pyart.testing.make_target_radar()
+    grid = pyart.map.grid_from_radars((radar,), grid_origin=(36.4, -97.6),
+                                      **COMMON_MAP_TO_GRID_ARGS)
+    print round(grid.axes['lat']['data'][0], 2)
+    print round(grid.axes['lon']['data'][0], 2)
+    assert round(grid.axes['lat']['data'][0], 2) == 36.4
+    assert round(grid.axes['lon']['data'][0], 2) == -97.6
