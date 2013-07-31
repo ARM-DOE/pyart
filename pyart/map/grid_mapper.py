@@ -127,8 +127,10 @@ def grid_from_radars(radars, grid_shape, grid_limits, **kwargs):
              'positive': 'up'}
 
     # grid origin location dictionaries
-    if 'origin' in kwargs:
-        lat, lon, alt = kwargs['origin']
+    if 'grid_origin' in kwargs:
+        lat = np.array([kwargs['grid_origin'][0]])
+        lon = np.array([kwargs['grid_origin'][1]])
+        alt = first_radar.altitude['data']
     else:
         lat = first_radar.latitude['data']
         lon = first_radar.longitude['data']
