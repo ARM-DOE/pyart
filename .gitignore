@@ -93,6 +93,7 @@ pyart/version.py
 /doc/build
 /doc/source/user_reference/generated
 /doc/source/dev_reference/generated
+/doc/source/auto_examples
 
 # radar data files #
 ####################

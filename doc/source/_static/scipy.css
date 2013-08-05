@@ -8,7 +8,7 @@ div.body p, div.body dd, div.body li {
   line-height: 125%;
 }
 
-ul.simple { 
+ul.simple {
     margin-top: 0;
     margin-bottom: 0;
     padding-top: 0;
@@ -39,22 +39,22 @@ div.sphinxsidebarwrapper p.topless {
 }
 
 /**
- * Hide dummy toctrees 
+ * Hide dummy toctrees
  */
 
-ul { 
+ul {
   padding-top: 0;
   padding-bottom: 0;
   margin-top: 0;
   margin-bottom: 0;
 }
-ul li { 
+ul li {
   padding-top: 0;
   padding-bottom: 0;
   margin-top: 0;
   margin-bottom: 0;
 }
-ul li a.reference { 
+ul li a.reference {
   padding-top: 0;
   padding-bottom: 0;
   margin-top: 0;
@@ -64,24 +64,24 @@ ul li a.reference {
 /**
  * Make high-level subsections easier to distinguish from top-level ones
  */
-div.body h3 { 
+div.body h3 {
   background-color: transparent;
 }
 
-div.body h4 { 
+div.body h4 {
   border: none;
   background-color: transparent;
 }
 
-/** 
+/**
  * Scipy colors
  */
 
-body { 
+body {
   background-color: rgb(100,135,220);
 }
 
-div.document { 
+div.document {
   background-color: rgb(230,230,230);
 }
 
@@ -122,8 +122,8 @@ div.sphinxsidebar ul.want-points {
   white-space: nowrap;
 }
 
-/** 
- * Extra admonitions 
+/**
+ * Extra admonitions
  */
 
 div.tip {
@@ -131,18 +131,18 @@ div.tip {
   border: 1px solid #ee6;
 }
 
-div.plot-output { 
+div.plot-output {
   clear-after: both;
 }
 
-div.plot-output .figure { 
+div.plot-output .figure {
   float: left;
   text-align: center;
   margin-bottom: 0;
   padding-bottom: 0;
 }
 
-div.plot-output .caption { 
+div.plot-output .caption {
   margin-top: 2;
   padding-top: 0;
 }
@@ -151,11 +151,11 @@ div.plot-output p.admonition-title {
   display: none;
 }
 
-div.plot-output:after { 
-  content: ""; 
-  display: block; 
-  height: 0; 
-  clear: both; 
+div.plot-output:after {
+  content: "";
+  display: block;
+  height: 0;
+  clear: both;
 }
 
 
@@ -175,15 +175,32 @@ table.field-list th {
   padding-left: 5px;
 }
 
-table.field-list { 
+table.field-list {
   border-collapse: separate;
   border-spacing: 10px;
 }
 
-/** 
+/**
  * Styling for footnotes
  */
 
 table.footnote td, table.footnote th {
   border: none;
+}
+
+/**
+ * Styling for Examples
+ */
+div#examples.section .figure img {
+    max-width: 160px;
+    max-height: 160px;
+    display: block;
+    margin: auto;
+}
+
+div#examples.section .thumbnailContainer {
+    float: left;
+    width: 182px;
+    height: 242px;
+    overflow: auto;
 }
