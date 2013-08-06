@@ -98,11 +98,6 @@ pyart/version.py
 # radar data files #
 ####################
 
-pyart/graph/examples/*.RAW**
-pyart/graph/examples/*.cdf
-pyart/graph/examples/*.nc
-pyart/graph/examples/*.mdv
-
 # full sized sample data files
 pyart/testing/data/110041.mdv
 pyart/testing/data/110635.mdv
@@ -118,3 +113,4 @@ examples/plotting/110041.mdv
 examples/plotting/110635.mdv
 examples/plotting/20110520100000_nex_3d.nc
 examples/plotting/XSW110520113537.RAW7HHL
+examples/plotting/sgpxsaprrhicmacI5.c0.20110524.015604_NC4.nc
