@@ -108,7 +108,7 @@ pyart/testing/data/Level2_KATX_20130717_1950.ar2v
 pyart/testing/data/sgpinterpolatedsondeC1.c1.20110510.000000.cdf
 pyart/testing/data/095636.mdv
 
-# example data
+# example data (reuse testing data is much as possible)
 examples/plotting/110041.mdv
 examples/plotting/110635.mdv
 examples/plotting/XSW110520105408.RAW7HHF
@@ -117,3 +117,6 @@ examples/plotting/KATX20130717_195021_V06
 examples/plotting/Level2_KATX_20130717_1950.ar2v
 examples/plotting/sgpxsaprrhicmacI5.c0.20110524.015604_NC4.nc
 examples/plotting/20110520100000_nex_3d.nc
+
+examples/correct/095636.mdv
+examples/correct/sgpinterpolatedsondeC1.c1.20110510.000000.cdf
