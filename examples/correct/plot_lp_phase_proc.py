@@ -12,13 +12,20 @@ print __doc__
 # Author: Jonathan J. Helmus (jhelmus@anl.gov)
 # License: BSD 3 clause
 
+import numpy as np
 import matplotlib.pyplot as plt
 import pyart
 
 
 # perform LP phase processing (this takes a while)
 radar = pyart.io.read_mdv('095636.mdv')
-phidp, kdp = pyart.correct.phase_proc_lp(radar, 0.0)
+
+# the next line force only the first sweep to be processed, this
+# significantly speeds up the calculation but should be commented out
+# in production so that the entire volume is processed
+radar.sweep_start_ray_index['data'] = np.array([0])
+
+phidp, kdp = pyart.correct.phase_proc_lp(radar, 0.0, debug=True)
 radar.fields['proc_dp_phase_shift'] = phidp
 radar.fields['recalculated_diff_phase'] = kdp
 
