@@ -1,0 +1,6 @@
+pyart.graph.gridmapdisplay.GridMapDisplay._parse_ax
+===================================================
+
+.. currentmodule:: pyart.graph.gridmapdisplay
+
+.. automethod:: GridMapDisplay._parse_ax

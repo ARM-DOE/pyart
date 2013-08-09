@@ -1,0 +1,6 @@
+pyart.testing.sample_files.SIGMET_RHI_FILE
+==========================================
+
+.. currentmodule:: pyart.testing.sample_files
+
+.. autodata:: SIGMET_RHI_FILE

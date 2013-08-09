@@ -1,0 +1,6 @@
+pyart.graph.gridmapdisplay.GridMapDisplay._check_basemap
+========================================================
+
+.. currentmodule:: pyart.graph.gridmapdisplay
+
+.. automethod:: GridMapDisplay._check_basemap

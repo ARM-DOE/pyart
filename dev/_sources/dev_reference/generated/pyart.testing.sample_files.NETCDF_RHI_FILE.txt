@@ -1,0 +1,6 @@
+pyart.testing.sample_files.NETCDF_RHI_FILE
+==========================================
+
+.. currentmodule:: pyart.testing.sample_files
+
+.. autodata:: NETCDF_RHI_FILE

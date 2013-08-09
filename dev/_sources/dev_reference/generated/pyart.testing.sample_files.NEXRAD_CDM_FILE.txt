@@ -1,0 +1,6 @@
+pyart.testing.sample_files.NEXRAD_CDM_FILE
+==========================================
+
+.. currentmodule:: pyart.testing.sample_files
+
+.. autodata:: NEXRAD_CDM_FILE
