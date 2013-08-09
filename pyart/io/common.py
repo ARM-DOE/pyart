@@ -377,7 +377,7 @@ METADATA = {
     'sweep_mode': {
         'units': 'unitless',
         'standard_name': 'sweep_mode',
-        'long_name': 'sweep_mode',
+        'long_name': 'Sweep mode',
         'comment': ('Options are: "sector", "coplane", "rhi", '
                     '"vertical_pointing", "idle", "azimuth_surveillance", '
                     '"elevation_surveillance", "sunscan", "pointing", '
@@ -386,32 +386,35 @@ METADATA = {
     'sweep_number': {
         'units': 'count',
         'standard_name': 'sweep_number',
-        'long_name': 'sweep_number'},
+        'long_name': 'Sweep number'},
 
     # metadata for radar sweep information dictionaries
     'sweep_start_ray_index': {
-        'long_name': 'index of first ray in sweep, 0-based',
+        'long_name': 'Index of first ray in sweep, 0-based',
         'units': 'count'},
 
     'sweep_end_ray_index': {
-        'long_name': 'index of first ray in sweep, 0-based',
+        'long_name': 'Index of last ray in sweep, 0-based',
         'units': 'count'},
 
     'fixed_angle': {
-        'long_name': 'target_angle_for_sweep',
+        'long_name': 'Target angle for sweep',
         'units': 'degrees',
         'standard_name': 'target_fixed_angle'},
 
     # metadata for radar location dictionaries
     'latitude': {
+        'long_name': 'Latitude',
         'standard_name': 'Latitude',
         'units': 'degrees_north'},
 
     'longitude': {
+        'long_name': 'Longitude',
         'standard_name': 'Longitude',
         'units': 'degrees_east'},
 
     'altitude': {
+        'long_name': 'Altitude',
         'standard_name': 'Altitude',
         'units': 'meters',
         'positive': 'up'},
@@ -420,22 +423,27 @@ METADATA = {
     'prt_mode': {
         'comments': ('Pulsing mode Options are: "fixed", "staggered", '
                      '"dual". Assumed "fixed" if missing.'),
-        'meta_group': 'instrument_parameters'},
+        'meta_group': 'instrument_parameters',
+        'long_name': 'Pulsing mode',
+        'units': 'unitless'},
 
     'nyquist_velocity': {
         'units': 'meters_per_second',
         'comments': "Unambiguous velocity",
-        'meta_group': 'instrument_parameters'},
+        'meta_group': 'instrument_parameters',
+        'long_name': 'Nyquist velocity'},
 
     'prt': {
         'units': 'seconds',
         'comments': ("Pulse repetition time. For staggered prt, "
                      "also see prt_ratio."),
-        'meta_group': 'instrument_parameters'},
+        'meta_group': 'instrument_parameters',
+        'long_name': 'Pulse repetition time'},
 
     'unambiguous_range': {
         'units': 'meters',
         'comments': 'Unambiguous range',
-        'meta_group': 'instrument_parameters'},
+        'meta_group': 'instrument_parameters',
+        'long_name': 'Unambiguous range'},
 
 }
