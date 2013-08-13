@@ -58,8 +58,8 @@ class GridMapDisplay():
         self.debug = debug
 
         # set up the projection
-        lat0 = grid.axes['lat']['data'][0]
-        lon0 = grid.axes['lon']['data'][0]
+        lat0 = grid.axes['lat']['data']
+        lon0 = grid.axes['lon']['data']
         self.proj = pyproj.Proj(proj='lcc', datum='NAD83',
                                 lat_0=lat0, lon_0=lon0,
                                 x_0=0.0, y_0=0.0)
@@ -361,9 +361,9 @@ class GridMapDisplay():
     def _parse_lon_lat(self, lon, lat):
         """ Parse lat and lon parameters """
         if lat is None:
-            lat = self.grid.axes['lat']['data'][0]
+            lat = self.grid.axes['lat']['data']
         if lon is None:
-            lon = self.grid.axes['lon']['data'][0]
+            lon = self.grid.axes['lon']['data']
         return lon, lat
 
     def _parse_ax(self, ax):
