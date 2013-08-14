@@ -1,5 +1,6 @@
 """
 Colored ray plotter
+needs more documentation
 """
 
 from pylab import figure, plot, title, xlabel, ylabel, subplot, xlim, ylim
