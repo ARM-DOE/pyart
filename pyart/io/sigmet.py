@@ -434,6 +434,10 @@ class SigmetFile():
                 metadata[name]['time'][i] = ray_time
                 self.ingest_data_headers[name].append(ingest_data_hdrs[j])
 
+                # mask gates past nbins
+                # assuming nbins constant for all rays in a sweep
+                data[name][i, :, ray_nbins[0]:] = np.ma.masked
+
         return data, metadata
 
     def _get_sweep(self):
