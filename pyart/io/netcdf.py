@@ -307,6 +307,9 @@ def write_netcdf(filename, radar, format='NETCDF4', time_reference=False):
     if 'Conventions' not in dataset.ncattrs():
         dataset.setncattr('Conventions', "CF/Radial")
 
+    if 'field_names' not in dataset.ncattrs():
+        dataset.setncattr('field_names', ', '.join(radar.fields.keys()))
+
     # history should be the last attribute, ARM standard
     dataset.setncattr('history',  history)
 
