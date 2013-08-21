@@ -24,6 +24,7 @@ import platform
 import numpy as np
 import netCDF4
 
+from .common import stringarray_to_chararray
 from radar import Radar
 
 
@@ -424,7 +425,7 @@ def _create_ncvar(dic, dataset, name, dimensions):
 
     # convert string array to character arrays
     if data.dtype.char is 'S' and data.dtype != 'S1':
-        data = netCDF4.stringtochar(data)
+        data = stringarray_to_chararray(data)
 
     # create the dataset variable
     if 'least_significant_digit' in dic:
@@ -462,11 +463,7 @@ def _create_ncvar(dic, dataset, name, dimensions):
     # set the data
     if data.shape == ():
         data.shape = (1,)
-    if data.dtype == 'S1' and data.ndim == 2:  # 2D char arrays
-        ncvar[:, :data.shape[1]] = data[:]
+    if data.dtype == 'S1':  # string/char arrays
+        ncvar[..., :data.shape[-1]] = data[:]
     else:
         ncvar[:] = data[:]
-    #if type(data) == np.ma.MaskedArray:
-    #    ncvar[:] = data.data
-    #else:
-    #    ncvar[:] = data
