@@ -108,7 +108,7 @@ def test_sweep_number():
 # sweep_mode attribute
 def test_sweep_mode():
     assert 'standard_name' in radar.sweep_mode
-    assert radar.sweep_mode['data'].shape == (1, 20)
+    assert radar.sweep_mode['data'].shape == (1, 32)
     str_array = netCDF4.chartostring(radar.sweep_mode['data'])
     assert np.all(str_array == ['azimuth_surveillance'])
 

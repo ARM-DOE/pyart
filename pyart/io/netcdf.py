@@ -25,7 +25,7 @@ import numpy as np
 import netCDF4
 
 from .common import stringarray_to_chararray
-from radar import Radar
+from .radar import Radar
 
 
 def read_netcdf(filename):
@@ -267,11 +267,19 @@ def write_netcdf(filename, radar, format='NETCDF4', time_reference=False):
     """
     dataset = netCDF4.Dataset(filename, 'w', format=format)
 
+    # determine the maximum string length
+    max_str_len = len(radar.sweep_mode['data'][0])
+    for k in ['follow_mode', 'prt_mode', 'polarization_mode']:
+        if k in radar.instrument_parameters:
+            sdim_length = len(radar.instrument_parameters[k]['data'][0])
+            max_str_len = max(max_str_len, sdim_length)
+    str_len = max(max_str_len, 32)      # minimum string legth of 32
+
     # create time, range and sweep dimensions
     dataset.createDimension('time', None)
     dataset.createDimension('range', radar.ngates)
     dataset.createDimension('sweep', radar.nsweeps)
-    dataset.createDimension('string_length_short', 20)  # time_coverage_*
+    dataset.createDimension('string_length', str_len)
 
     # global attributes
     # remove global variables from copy of metadata
@@ -319,34 +327,22 @@ def write_netcdf(filename, radar, format='NETCDF4', time_reference=False):
                   'sweep_start_ray_index', ('sweep', ))
     _create_ncvar(radar.sweep_end_ray_index, dataset,
                   'sweep_end_ray_index', ('sweep', ))
-
-    sdim_length = len(radar.sweep_mode['data'][0])
-    sdim_string = 'string_length_%d' % (sdim_length)
-    dataset.createDimension(sdim_string, sdim_length)
     _create_ncvar(radar.sweep_mode, dataset, 'sweep_mode',
-                  ('sweep', sdim_string))
+                  ('sweep', 'string_length'))
 
     # instrument_parameters
-
-    # determine the string size for string variables.
-    for k in ['follow_mode', 'prt_mode', 'polarization_mode']:
-        if k in radar.instrument_parameters:
-            sdim_string = 'string_length_' + k
-            sdim_length = len(radar.instrument_parameters[k]['data'][0])
-            dataset.createDimension(sdim_string, sdim_length)
-
     if 'frequency' in radar.instrument_parameters.keys():
         size = len(radar.instrument_parameters['frequency']['data'])
         dataset.createDimension('frequency', size)
 
     instrument_dimensions = {
         'frequency': ('frequency'),
-        'follow_mode': ('sweep', 'string_length_follow_mode'),
+        'follow_mode': ('sweep', 'string_length'),
         'pulse_width': ('time', ),
-        'prt_mode': ('sweep', 'string_length_prt_mode'),
+        'prt_mode': ('sweep', 'string_length'),
         'prt': ('time', ),
         'prt_ratio': ('time', ),
-        'polarization_mode': ('sweep', 'string_length_polarization_mode'),
+        'polarization_mode': ('sweep', 'string_length'),
         'nyquist_velocity': ('time', ),
         'unambiguous_range': ('time', ),
         'n_samples': ('time', ),
@@ -376,7 +372,7 @@ def write_netcdf(filename, radar, format='NETCDF4', time_reference=False):
     _create_ncvar(radar.altitude, dataset, 'altitude', ())
 
     # time_coverage_start and time_coverage_end variables
-    time_dim = ('string_length_short', )
+    time_dim = ('string_length', )
     units = radar.time['units']
     start_dt = netCDF4.num2date(radar.time['data'][0], units)
     end_dt = netCDF4.num2date(radar.time['data'][-1], units)
