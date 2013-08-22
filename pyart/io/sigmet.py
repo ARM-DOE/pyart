@@ -38,7 +38,7 @@ SPEED_OF_LIGHT = 299793000.0
 
 
 def read_sigmet(filename, field_names=None, field_metadata=None,
-                sigmet_field_names=False, debug=False):
+                sigmet_field_names=False, time_ordered=True, debug=False):
     """
     Read a Sigmet (IRIS) product file.
 
@@ -60,6 +60,9 @@ def read_sigmet(filename, field_names=None, field_metadata=None,
         case the field_metadata and field_names parameters are ignored and the
         returned radar object has a fields attribute filled with the sigmet
         data type names with no metadata.
+    time_ordered : bool, optional
+        True (default) to return data in Radar object in time increasing
+        order.  False will return the data ordered as present in the file.
     debug : bool, optional
 
     Returns
@@ -77,6 +80,9 @@ def read_sigmet(filename, field_names=None, field_metadata=None,
     # open the file, read data
     sigmetfile = SigmetFile(filename, debug=debug)
     sigmet_data, sigmet_metadata = sigmetfile.read_data()
+    if time_ordered:
+        _time_order_data_and_metadata(sigmet_data, sigmet_metadata)
+
     sigmetfile.close()
 
     ingest_config = sigmetfile.ingest_header['ingest_configuration']
@@ -231,6 +237,39 @@ def read_sigmet(filename, field_names=None, field_metadata=None,
         azimuth, elevation,
         instrument_parameters=instrument_parameters)
 
+
+def _time_order_data_and_metadata(data, metadata):
+    """ Put Sigmet data and metadata in time increasing order. """
+
+    # Sigmet data is stored by sweep in azimuth increasing order,
+    # to place in time increasing order we must roll each sweep so
+    # the earliest collected ray is first.
+    # This assuming all the fields have the same timing and the rays
+    # were collected in sequentially, which appears to be true.
+
+    ref_time = metadata[metadata.keys()[0]]['time'].astype('int32')
+    for i, sweep_time in enumerate(ref_time):
+
+        # determine the number of place by which elements should be shifted.
+        sweep_time_diff = np.diff(sweep_time)
+        if sweep_time_diff.min() >= 0:
+            continue    # already time ordered
+        shift = -(sweep_time_diff.argmin() + 1)
+
+        # roll the data and metadata for each field
+        for field in data.keys():
+            data[field][i] = np.roll(data[field][i], shift, axis=0)
+
+            fmd = metadata[field]
+            fmd['time'][i] = np.roll(fmd['time'][i], shift)
+            fmd['nbins'][i] = np.roll(fmd['nbins'][i], shift)
+            fmd['elevation_1'][i] = np.roll(fmd['elevation_1'][i], shift)
+            fmd['elevation_0'][i] = np.roll(fmd['elevation_0'][i], shift)
+            fmd['azimuth_0'][i] = np.roll(fmd['azimuth_0'][i], shift)
+            fmd['azimuth_1'][i] = np.roll(fmd['azimuth_1'][i], shift)
+
+    return
+
 # This dictionary maps sigmet data types -> radar field names
 # Users can pass their own version of this dictionary to the read_sigmet
 # function as the field_names parameter.
@@ -336,7 +375,7 @@ class SigmetFile():
 
     """
 
-    def __init__(self, filename, debug=True):
+    def __init__(self, filename, debug=False):
         """ initalize the object. """
 
         self.debug = debug
