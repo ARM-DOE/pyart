@@ -24,7 +24,8 @@ import platform
 import numpy as np
 import netCDF4
 
-from radar import Radar
+from .common import stringarray_to_chararray
+from .radar import Radar
 
 
 def read_netcdf(filename):
@@ -245,7 +246,7 @@ def _stream_to_2d(data, sweeps, sweepe, ray_len, maxgates, nrays,
     return time_range
 
 
-def write_netcdf(filename, radar, format='NETCDF4'):
+def write_netcdf(filename, radar, format='NETCDF4', time_reference=False):
     """
     Write a Radar object to a CF/Radial compliant netCDF file.
 
@@ -259,15 +260,26 @@ def write_netcdf(filename, radar, format='NETCDF4'):
         NetCDF format, one of 'NETCDF4', 'NETCDF4_CLASSIC',
         'NETCDF3_CLASSIC' or 'NETCDF3_64BIT'. See netCDF4 documentation for
         details.
+    time_reference : bool
+        True to include a time_reference variable, False will not include
+        this variable.
 
     """
     dataset = netCDF4.Dataset(filename, 'w', format=format)
+
+    # determine the maximum string length
+    max_str_len = len(radar.sweep_mode['data'][0])
+    for k in ['follow_mode', 'prt_mode', 'polarization_mode']:
+        if k in radar.instrument_parameters:
+            sdim_length = len(radar.instrument_parameters[k]['data'][0])
+            max_str_len = max(max_str_len, sdim_length)
+    str_len = max(max_str_len, 32)      # minimum string legth of 32
 
     # create time, range and sweep dimensions
     dataset.createDimension('time', None)
     dataset.createDimension('range', radar.ngates)
     dataset.createDimension('sweep', radar.nsweeps)
-    dataset.createDimension('string_length_short', 20)  # time_coverage_*
+    dataset.createDimension('string_length', str_len)
 
     # global attributes
     # remove global variables from copy of metadata
@@ -279,16 +291,27 @@ def write_netcdf(filename, radar, format='NETCDF4'):
         if var in metadata_copy:
             metadata_copy.pop(var)
 
-    dataset.setncatts(metadata_copy)
-    if 'history' not in dataset.ncattrs():
+    # determine the history attribute if it doesn't exist, save for
+    # the last attribute.
+    if 'history' in metadata_copy:
+        history = metadata_copy.pop('history')
+    else:
         user = getpass.getuser()
         node = platform.node()
         time_str = datetime.datetime.now().isoformat()
         t = (user, node, time_str)
-        history_str = 'created by %s on %s at %s using Py-ART' % (t)
-        dataset.setncattr('history',  history_str)
+        history = 'created by %s on %s at %s using Py-ART' % (t)
+
+    dataset.setncatts(metadata_copy)
+
     if 'Conventions' not in dataset.ncattrs():
         dataset.setncattr('Conventions', "CF/Radial")
+
+    if 'field_names' not in dataset.ncattrs():
+        dataset.setncattr('field_names', ', '.join(radar.fields.keys()))
+
+    # history should be the last attribute, ARM standard
+    dataset.setncattr('history',  history)
 
     # standard variables
     _create_ncvar(radar.time, dataset, 'time', ('time', ))
@@ -307,34 +330,22 @@ def write_netcdf(filename, radar, format='NETCDF4'):
                   'sweep_start_ray_index', ('sweep', ))
     _create_ncvar(radar.sweep_end_ray_index, dataset,
                   'sweep_end_ray_index', ('sweep', ))
-
-    sdim_length = len(radar.sweep_mode['data'][0])
-    sdim_string = 'string_length_%d' % (sdim_length)
-    dataset.createDimension(sdim_string, sdim_length)
     _create_ncvar(radar.sweep_mode, dataset, 'sweep_mode',
-                  ('sweep', sdim_string))
+                  ('sweep', 'string_length'))
 
     # instrument_parameters
-
-    # determine the string size for string variables.
-    for k in ['follow_mode', 'prt_mode', 'polarization_mode']:
-        if k in radar.instrument_parameters:
-            sdim_string = 'string_length_' + k
-            sdim_length = len(radar.instrument_parameters[k]['data'][0])
-            dataset.createDimension(sdim_string, sdim_length)
-
     if 'frequency' in radar.instrument_parameters.keys():
         size = len(radar.instrument_parameters['frequency']['data'])
         dataset.createDimension('frequency', size)
 
     instrument_dimensions = {
         'frequency': ('frequency'),
-        'follow_mode': ('sweep', 'string_length_follow_mode'),
+        'follow_mode': ('sweep', 'string_length'),
         'pulse_width': ('time', ),
-        'prt_mode': ('sweep', 'string_length_prt_mode'),
+        'prt_mode': ('sweep', 'string_length'),
         'prt': ('time', ),
         'prt_ratio': ('time', ),
-        'polarization_mode': ('sweep', 'string_length_polarization_mode'),
+        'polarization_mode': ('sweep', 'string_length'),
         'nyquist_velocity': ('time', ),
         'unambiguous_range': ('time', ),
         'n_samples': ('time', ),
@@ -364,18 +375,28 @@ def write_netcdf(filename, radar, format='NETCDF4'):
     _create_ncvar(radar.altitude, dataset, 'altitude', ())
 
     # time_coverage_start and time_coverage_end variables
-    time_dim = ('string_length_short', )
+    time_dim = ('string_length', )
     units = radar.time['units']
     start_dt = netCDF4.num2date(radar.time['data'][0], units)
     end_dt = netCDF4.num2date(radar.time['data'][-1], units)
-    start_dic = {'data': np.array(start_dt.isoformat() + 'Z')}
-    end_dic = {'data': np.array(end_dt.isoformat() + 'Z')}
+    start_dic = {'data': np.array(start_dt.isoformat() + 'Z'),
+                 'long_name': 'UTC time of first ray in the file',
+                 'units': 'unitless'}
+    end_dic = {'data': np.array(end_dt.isoformat() + 'Z'),
+               'long_name': 'UTC time of last ray in the file',
+               'units': 'unitless'}
     _create_ncvar(start_dic, dataset, 'time_coverage_start', time_dim)
     _create_ncvar(end_dic, dataset, 'time_coverage_end', time_dim)
+    if time_reference:
+        ref_dic = {'data': np.array(radar.time['units'][-20:]),
+                   'long_name': 'UTC time reference',
+                   'units': 'unitless'}
+        _create_ncvar(ref_dic, dataset, 'time_reference', time_dim)
 
-    _create_ncvar({'data': np.array([0], dtype='int32')}, dataset,
-                  'volume_number', ())
-
+    vol_dic = {'data': np.array([0], dtype='int32'),
+               'long_name': 'Volume number',
+               'units': 'unitless'}
+    _create_ncvar(vol_dic, dataset, 'volume_number', ())
     dataset.close()
 
 
@@ -403,7 +424,7 @@ def _create_ncvar(dic, dataset, name, dimensions):
 
     # convert string array to character arrays
     if data.dtype.char is 'S' and data.dtype != 'S1':
-        data = netCDF4.stringtochar(data)
+        data = stringarray_to_chararray(data)
 
     # create the dataset variable
     if 'least_significant_digit' in dic:
@@ -419,19 +440,29 @@ def _create_ncvar(dic, dataset, name, dimensions):
                                    zlib=True, least_significant_digit=lsd,
                                    fill_value=fill_value)
 
+    # long_name attribute first if present, ARM standard
+    if 'long_name' in dic.keys():
+        ncvar.setncattr('long_name', dic['long_name'])
+
+    # units attribute second if present, ARM standard
+    if 'units' in dic.keys():
+        ncvar.setncattr('units', dic['units'])
+
+    # remove _FillValue and replace to make it the third attribute.
+    if '_FillValue' in ncvar.ncattrs():
+        fv = ncvar._FillValue
+        ncvar.delncattr('_FillValue')
+        ncvar.setncattr('_FillValue', fv)
+
     # set all attributes
     for key, value in dic.iteritems():
-        if key not in ['data', '_FillValue']:
+        if key not in ['data', '_FillValue', 'long_name', 'units']:
             ncvar.setncattr(key, value)
 
     # set the data
     if data.shape == ():
         data.shape = (1,)
-    if data.dtype == 'S1' and data.ndim == 2:  # 2D char arrays
-        ncvar[:, :data.shape[1]] = data[:]
+    if data.dtype == 'S1':  # string/char arrays
+        ncvar[..., :data.shape[-1]] = data[:]
     else:
         ncvar[:] = data[:]
-    #if type(data) == np.ma.MaskedArray:
-    #    ncvar[:] = data.data
-    #else:
-    #    ncvar[:] = data

@@ -8,6 +8,7 @@ Input/output routines common to many file formats.
     :toctree: generated/
 
     dms_to_d
+    stringarray_to_chararray
     radar_coords_to_cart
     make_time_unit_str
     get_metadata
@@ -15,11 +16,45 @@ Input/output routines common to many file formats.
 """
 
 import numpy as np
+import netCDF4
 
 
 def dms_to_d(dms):
     """ Degrees, minutes, seconds to degrees """
     return dms[0] + (dms[1] + dms[2] / 60.0) / 60.0
+
+
+def stringarray_to_chararray(arr, numchars=None):
+    """
+    Convert an string array to a character array with one extra dimension.
+
+    Parameters
+    ----------
+    arr : array
+        Array with numpy dtype 'SN', where N is the number of characters
+        in the string.
+
+    numchars : int
+        Number of characters used to represent the string.  If numchar > N
+        the results will be padded on the right with blanks.  The default,
+        None will use N.
+
+    Returns
+    -------
+    chararr : array
+        Array with dtype 'S1' and shape = arr.shape + (numchars, ).
+
+    """
+    carr = netCDF4.stringtochar(arr)
+    if numchars is None:
+        return carr
+
+    arr_numchars = carr.shape[-1]
+    if numchars <= arr_numchars:
+        raise ValueError('numchars must be >= %i' % (arr_numchars))
+    chararr = np.zeros(arr.shape + (numchars, ), dtype='S1')
+    chararr[..., :arr_numchars] = carr[:]
+    return chararr
 
 
 # XXX move this to another module
@@ -377,7 +412,7 @@ METADATA = {
     'sweep_mode': {
         'units': 'unitless',
         'standard_name': 'sweep_mode',
-        'long_name': 'sweep_mode',
+        'long_name': 'Sweep mode',
         'comment': ('Options are: "sector", "coplane", "rhi", '
                     '"vertical_pointing", "idle", "azimuth_surveillance", '
                     '"elevation_surveillance", "sunscan", "pointing", '
@@ -386,32 +421,35 @@ METADATA = {
     'sweep_number': {
         'units': 'count',
         'standard_name': 'sweep_number',
-        'long_name': 'sweep_number'},
+        'long_name': 'Sweep number'},
 
     # metadata for radar sweep information dictionaries
     'sweep_start_ray_index': {
-        'long_name': 'index of first ray in sweep, 0-based',
+        'long_name': 'Index of first ray in sweep, 0-based',
         'units': 'count'},
 
     'sweep_end_ray_index': {
-        'long_name': 'index of first ray in sweep, 0-based',
+        'long_name': 'Index of last ray in sweep, 0-based',
         'units': 'count'},
 
     'fixed_angle': {
-        'long_name': 'target_angle_for_sweep',
+        'long_name': 'Target angle for sweep',
         'units': 'degrees',
         'standard_name': 'target_fixed_angle'},
 
     # metadata for radar location dictionaries
     'latitude': {
+        'long_name': 'Latitude',
         'standard_name': 'Latitude',
         'units': 'degrees_north'},
 
     'longitude': {
+        'long_name': 'Longitude',
         'standard_name': 'Longitude',
         'units': 'degrees_east'},
 
     'altitude': {
+        'long_name': 'Altitude',
         'standard_name': 'Altitude',
         'units': 'meters',
         'positive': 'up'},
@@ -420,22 +458,27 @@ METADATA = {
     'prt_mode': {
         'comments': ('Pulsing mode Options are: "fixed", "staggered", '
                      '"dual". Assumed "fixed" if missing.'),
-        'meta_group': 'instrument_parameters'},
+        'meta_group': 'instrument_parameters',
+        'long_name': 'Pulsing mode',
+        'units': 'unitless'},
 
     'nyquist_velocity': {
         'units': 'meters_per_second',
         'comments': "Unambiguous velocity",
-        'meta_group': 'instrument_parameters'},
+        'meta_group': 'instrument_parameters',
+        'long_name': 'Nyquist velocity'},
 
     'prt': {
         'units': 'seconds',
         'comments': ("Pulse repetition time. For staggered prt, "
                      "also see prt_ratio."),
-        'meta_group': 'instrument_parameters'},
+        'meta_group': 'instrument_parameters',
+        'long_name': 'Pulse repetition time'},
 
     'unambiguous_range': {
         'units': 'meters',
         'comments': 'Unambiguous range',
-        'meta_group': 'instrument_parameters'},
+        'meta_group': 'instrument_parameters',
+        'long_name': 'Unambiguous range'},
 
 }

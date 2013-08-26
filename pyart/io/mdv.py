@@ -111,15 +111,15 @@ def read_mdv(filename):
 
     # latitude
     latitude = get_metadata('latitude')
-    latitude['data'] = np.array(mdvfile.radar_info['latitude_deg'],
+    latitude['data'] = np.array([mdvfile.radar_info['latitude_deg']],
                                 dtype='float64')
     # longitude
     longitude = get_metadata('longitude')
-    longitude['data'] = np.array(mdvfile.radar_info['longitude_deg'],
+    longitude['data'] = np.array([mdvfile.radar_info['longitude_deg']],
                                  dtype='float64')
     # altitude
     altitude = get_metadata('altitude')
-    altitude['data'] = np.array(mdvfile.radar_info['altitude_km'] * 1000.0,
+    altitude['data'] = np.array([mdvfile.radar_info['altitude_km'] * 1000.0],
                                 dtype='float64')
 
     # sweep_number, sweep_mode, fixed_angle, sweep_start_ray_index,
