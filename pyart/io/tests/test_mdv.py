@@ -60,6 +60,7 @@ def test_latitude():
     assert 'data' in radar.latitude
     assert 'standard_name' in radar.latitude
     assert 'units' in radar.latitude
+    assert radar.latitude['data'].shape == (1, )
     assert round(radar.latitude['data']) == 37.0
 
 
@@ -68,6 +69,7 @@ def test_longitude():
     assert 'data' in radar.longitude
     assert 'standard_name' in radar.longitude
     assert 'units' in radar.longitude
+    assert radar.longitude['data'].shape == (1, )
     assert round(radar.longitude['data']) == -97.0
 
 
@@ -77,6 +79,7 @@ def test_altitude():
     assert 'standard_name' in radar.altitude
     assert 'units' in radar.altitude
     assert 'positive' in radar.altitude
+    assert radar.altitude['data'].shape == (1, )
     assert round(radar.altitude['data']) == 328.0
 
 
