@@ -20,12 +20,13 @@ Graphing (:mod:`pyart.graph`)
 from .radar_display import RadarDisplay
 from .plot_mdv import MdvDisplay
 from .plot_netcdf import NetcdfDisplay
+from . import cm
 
 try:
     from .gridmapdisplay import GridMapDisplay
 except ImportError:
     import warnings
-    warnings.warn('No grid plotting support, requires matplotlib and pyproj')
+    warnings.warn('No grid plotting support, requires basemap and pyproj')
 
 try:
     from .plot_rsl import RslDisplay
