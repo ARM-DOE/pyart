@@ -17,3 +17,4 @@ Input/Output routines.
 .. automodule:: pyart.io.rsl
 .. automodule:: pyart.io._rsl_interface
 .. automodule:: pyart.io.sigmet
+.. automodule:: pyart.io._sigmetfile
