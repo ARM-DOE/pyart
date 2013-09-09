@@ -222,7 +222,7 @@ cdef class SigmetFile:
         # prepare to read rays
         self._rbuf = np.fromstring(lead_record, dtype='int16')
         self._rbuf_p = <np.int16_t*>self._rbuf.data
-        self._rbuf_pos = int((12 + 76 * self.ndata_types) / 2)
+        self._rbuf_pos = int((12 + 76 * self.ndata_types) / 2) - 1
         # set data initially to ones so that missing data can be better
         # seen when debugging
         raw_sweep_data = np.ones((nrays, nbins + 6), dtype='int16')
@@ -265,8 +265,8 @@ cdef class SigmetFile:
         cdef short compression_code
         cdef int words, remain, out_pos, first_end, i
 
-        compression_code = self._rbuf_p[self._rbuf_pos]
         self._incr_rbuf_pos()
+        compression_code = self._rbuf_p[self._rbuf_pos]
         out_pos = 0
 
         if compression_code == 1:
@@ -276,6 +276,7 @@ cdef class SigmetFile:
 
         while compression_code != 1:
 
+            self._incr_rbuf_pos()
             if compression_code < 0:
                 words = compression_code + 32768    # last 7 bits give size
                 if self._rbuf_pos + words <= 3072:
@@ -305,7 +306,6 @@ cdef class SigmetFile:
                     out[out_pos + i] = 0
                 out_pos += compression_code
             compression_code = self._rbuf_p[self._rbuf_pos]
-            self._incr_rbuf_pos()
 
         return
 
