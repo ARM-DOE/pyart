@@ -32,7 +32,8 @@ def read_sigmet(filename, field_names=None, field_metadata=None,
     Parameters
     ----------
     filename : str
-        Name of Sigmet (IRIS) product file to read.
+        Name of Sigmet (IRIS) product file to read or file-like object
+        pointing to the beginning of such a file.
     field_names : dict, optional
         Dictionary mapping Sigmet data type names to radar field names. If a
         data type found in the file does not appear in this dictionary it will

@@ -41,7 +41,7 @@ cdef class SigmetFile:
     Parameters
     ----------
     filename : str
-        Filename.
+        Filename or file-like object.
 
     Attributes
     ----------
@@ -81,7 +81,10 @@ cdef class SigmetFile:
         self.debug = debug
 
         # open the file
-        fh = open(filename, 'rb')
+        try:
+            fh = open(filename, 'rb')
+        except TypeError:
+            fh = filename
 
         # read the headers from the first 2 records.
         self.product_hdr = _unpack_product_hdr(fh.read(RECORD_SIZE))
@@ -96,7 +99,7 @@ cdef class SigmetFile:
         self.ingest_data_headers = None
         self._fh = fh
         self._record_number = 2
-        self._raw_product_bhdrs = None
+        self._raw_product_bhdrs = []
 
     def _determine_data_types(self):
         """ Determine the available data types in the file. """
@@ -178,9 +181,15 @@ cdef class SigmetFile:
 
         return data, metadata
 
-    def _get_sweep(self):
+    def _get_sweep(self, raw_data=False):
         """
         Get the data and metadata from the next sweep.
+
+        Parameters
+        ----------
+        raw_data : bool, optional
+            True to return the raw_data for the given sweep, False to
+            convert the data to floating point representation.
 
         Returns
         -------
@@ -214,7 +223,9 @@ cdef class SigmetFile:
         self._rbuf = np.fromstring(lead_record, dtype='int16')
         self._rbuf_p = <np.int16_t*>self._rbuf.data
         self._rbuf_pos = int((12 + 76 * self.ndata_types) / 2)
-        raw_sweep_data = np.empty((nrays, nbins + 6), dtype='int16')
+        # set data initially to ones so that missing data can be better
+        # seen when debugging
+        raw_sweep_data = np.ones((nrays, nbins + 6), dtype='int16')
 
         # get the raw data ray-by-ray
         for ray_i in xrange(nrays):
@@ -222,6 +233,10 @@ cdef class SigmetFile:
                 print "Reading ray: %i of %i" % (ray_i, nrays),
                 print "self._rbuf_pos is", self._rbuf_pos
             self._get_ray(nbins, raw_sweep_data[ray_i])
+
+        # return raw data if requested
+        if raw_data:
+            return ingest_data_headers, raw_sweep_data
 
         # convert the data and parse the metadata
         sweep_data = []
@@ -368,6 +383,7 @@ def _parse_ray_headers(ray_headers):
 # format converts #
 ###################
 
+# Data type constants, table 13, section 4.8
 SIGMET_DATA_TYPES = {
     1: 'DBT',
     2: 'DBZ',
@@ -449,10 +465,16 @@ def convert_sigmet_data(data_type, data):
     ]
 
     like_sqi2 = [
-        'RHOV2',   # 2-byte Rho Format, section 4.3.22
-        'RHOH2',   # " "
-        'RHOHV2',  # 2-byte RhoHV Format, section 4.3.24
-        'SQI2',    # 2-byte Signal Quality Index Format, section 4.3.27
+        'RHOV2',    # 2-byte Rho Format, section 4.3.22
+        'RHOH2',    # " "
+        'RHOHV2',   # 2-byte RhoHV Format, section 4.3.24
+        'SQI2',     # 2-byte Signal Quality Index Format, section 4.3.27
+    ]
+
+    like_dbt = [
+        'DBT',      # 1-bytes Reflectivity Format, section 4.3.3
+        'DBZ',      # " "
+
     ]
 
     if data_type_name in like_dbt2:
@@ -486,6 +508,75 @@ def convert_sigmet_data(data_type, data):
         # 2-byte HydroClass Format, section 4.3.9
         out[:] = data.view('uint16')
 
+    # one byte data types
+    elif data_type_name[-1] != 2:
+        # make a view of left half of the data as uint8,
+        # this is the actual ray data collected, the right half is blank.
+        nrays, nbins = data.shape
+        ndata = data.view('(2,) uint8').reshape(nrays, -1)[:, :nbins]
+
+        if data_type_name in like_dbt:
+            # DB_DBT, 1, Total Power (1 byte)
+            # 1-byte Reflectivity Format, section 4.3.3
+            out[:] = (ndata - 64) / 2.
+            out[ndata == 0] = np.ma.masked
+
+        elif data_type_name == 'VEL':
+            # VEL, 3, Velocity (1 byte)
+            # 1-byte Velocity Format, section 4.3.29
+            # Note that this data should be multiplied by Nyquist
+            out[:] = (ndata - 128) / 127.
+            out[ndata == 0] = np.ma.masked
+
+        elif data_type_name == 'WIDTH':
+            # WIDTH, 4, Width (1 byte)
+            # 1-byte Width format, section 4.3.25
+            # Note that this data should be multiplied by the unambiguous
+            # velocity
+            out[:] = ndata / 256.
+            out[ndata == 0] = np.ma.masked
+
+        elif data_type_name == 'ZDR':
+            # ZDR, 5, Differential reflectivity (1 byte)
+            # 1-byte ZDR format, section 4.3.37
+            out[:] = (ndata - 128) / 16.
+            out[ndata == 0] = np.ma.masked
+
+        elif data_type_name == 'KDP':
+            # KDP, 14, KDP (Differential phase) (1 byte)
+            # 1-byte KDP format, section 4.3.12
+            # Note that this data should be divided by the wavelength in cm
+            # as is the units are deg * cm / km
+
+            # above 128 use positive value equation
+            exp = np.power(600., (ndata[ndata > 128] - 129.) / 126.)
+            out[ndata > 128] = 0.25 * exp
+            # below 128, use negative value equation
+            exp = np.power(600., (127. - ndata[ndata < 128]) / 126.)
+            out[ndata < 128] = -0.25 * exp
+            # equal to 128, zero
+            out[ndata == 128] = 0
+
+            out[ndata == 0] = np.ma.masked
+            out[ndata == 255] = np.ma.masked
+
+        elif data_type_name == 'PHIDP':
+            # PHIDP, 16, PhiDP(Differential phase) (1 byte)
+            # 1-byte PhiDP format, section 4.3.18
+            out[:] = 180. * ((ndata - 1) / 254.)
+            out[ndata == 0] = np.ma.masked
+            out[ndata == 255] = np.ma.masked
+
+        elif data_type_name == 'RHOHV':
+            # RHOHV, 19, RhoHV (1 byte)
+            # 1-bytes RhoHV format, section 4.3.23
+            out[:] = np.sqrt((ndata - 1) / 253)
+            out[ndata == 0] = np.ma.masked
+            out[ndata == 255] = np.ma.masked
+
+        else:
+            # TODO implement conversions for addition 1-byte formats
+            raise NotImplementedError
     else:
         # TODO implement conversions for additional formats.
         raise NotImplementedError
