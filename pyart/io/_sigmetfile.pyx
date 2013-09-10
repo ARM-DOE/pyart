@@ -142,6 +142,8 @@ cdef class SigmetFile:
         shape = (nsweeps, nrays, nbins)
         data = dict([(name, np.ma.empty(shape, dtype='float32'))
                     for name in self.data_type_names])
+        if 'XHDR' in self.data_type_names:
+            data['XHDR'] = np.ones((nsweeps, nrays, 1), dtype='int32')
 
         metadata = {}
         for name in self.data_type_names:
@@ -385,6 +387,7 @@ def _parse_ray_headers(ray_headers):
 
 # Data type constants, table 13, section 4.8
 SIGMET_DATA_TYPES = {
+    0: 'XHDR',
     1: 'DBT',
     2: 'DBZ',
     3: 'VEL',
@@ -474,7 +477,6 @@ def convert_sigmet_data(data_type, data):
     like_dbt = [
         'DBT',      # 1-bytes Reflectivity Format, section 4.3.3
         'DBZ',      # " "
-
     ]
 
     if data_type_name in like_dbt2:
@@ -507,6 +509,12 @@ def convert_sigmet_data(data_type, data):
         # DB_HCLASS2, 56, Hydrometeor class (2 byte)
         # 2-byte HydroClass Format, section 4.3.9
         out[:] = data.view('uint16')
+
+    elif data_type_name == 'XHDR':
+        # Extended Headers, 0
+        # extended_header_v0, _v1, _v2, section 4.2.8-4.2.10
+        # Here we return an array with the times in milliseconds.
+        return data[..., :2].copy().view('i4')
 
     # one byte data types
     elif data_type_name[-1] != 2:

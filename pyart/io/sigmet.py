@@ -71,6 +71,8 @@ def read_sigmet(filename, field_names=None, field_metadata=None,
     ingest_config = sigmetfile.ingest_header['ingest_configuration']
     task_config = sigmetfile.ingest_header['task_configuration']
     first_data_type = sigmetfile.data_type_names[0]
+    if first_data_type == 'XHDR':   # don't use XHDR as the first data type
+        first_data_type = sigmetfile.data_type_names[1]
     sigmetfile.close()
     nsweeps, nrays, nbins = sigmet_data[first_data_type].shape
 
@@ -104,16 +106,21 @@ def read_sigmet(filename, field_names=None, field_metadata=None,
     # time
     time = get_metadata('time')
 
+    if 'XHDR' in sigmet_data:   # use time in extended headers
+        tdata = sigmet_data.pop('XHDR')
+        tdata = (tdata.flatten() / 1000.).astype('float64')
+    else:
+        tdata = sigmet_metadata[first_data_type]['time'].astype('float64')
+        tdata = tdata.filled()
+
     # add sweep_start time to all time values in each sweep.
     dts = [ymds_time_to_datetime(d['sweep_start_time'])
            for d in sigmetfile.ingest_data_headers[first_data_type]]
-
-    tdata = sigmet_metadata[first_data_type]['time'].astype('float64')
     for i, dt in enumerate(dts):
         start = sweep_start_ray_index['data'][i]
         end = sweep_end_ray_index['data'][i]
         tdata[start: end + 1] += (dt - dts[0]).total_seconds()
-    time['data'] = tdata.filled()
+    time['data'] = tdata
     time['units'] = make_time_unit_str(dts[0])
 
     # _range
@@ -287,6 +294,9 @@ def ymds_time_to_datetime(ymds):
 # Users can pass their own version of this dictionary to the read_sigmet
 # function as the field_names parameter.
 SIGMET_TO_STANDARD = {
+    'XHDR': 'XHDR',                     # (0) Extended Header, keep this name
+                                        # and the radar object will have time
+                                        # in milliseconds when present.
     #'DBT': 'DBT',                       # (1) Total Power
     #'DBZ': 'DBZ',                       # (2) Reflectivity
     #'VEL': 'VEL',                       # (3) Velocity
