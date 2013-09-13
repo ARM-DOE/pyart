@@ -1,9 +1,175 @@
-<html>
-    <title>Py-ART documentation</title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<meta name="description" content="Your description goes here" />
+	<meta name="keywords" content="your,keywords,goes,here" />
+	<meta name="author" content="Jonathan J. Helmus" />
+	<link rel="stylesheet" type="text/css" href="1024px.css" title="1024px" media="screen,projection" />
+	<title>Py-ART - The Python ARM Radar Toolkit.</title>
+</head>
 
-Py-ART Documentation available:
-<ul>
-    <li><a href="dev/index.html">Current Documentation</a></li>
-</ul>
+<body>
+<div id="wrap">
 
+	<div id="header">
+		<p id="toplinks"></p>
+        <!--- <img src="images/logo.jpg" width="99" height="148" alt="logo" class="left" /> --!>
+		<h1><a href="index.html">Py-ART</a></h1>
+		<p id="slogan">The Python ART Radar Toolkit</p>
+	</div>
+
+	<div id="content">
+
+		<h2>What is Py-ART?</h2>
+        <p>The Python ARM Radar Toolkit, Py-ART, is a Python module 
+        containing a collection of weather radar algorithms and utilities.  
+        Py-ART is used by the 
+        <a href="http://www.arm.gov/">Atmospheric Radiation Measurement (ARM) Climate Research Facility</a>
+        for working with data from a number of its 
+        <a href="http://radar.arm.gov">precipitation and cloud radars,</a>
+        but has been designed so that it can be used by others in the
+        radar and atmospheric communities to examine, processes, and analyze 
+        data from many types of weather radars.
+		</p>
+		
+		<h2>What can Py-ART do?</h2>
+
+        <p>
+        Py-ART has the ability to ingest (read) from a number of common weather
+        radar formats including Sigmet/IRIS, MDV, CF/Radial, UF, and NEXRAD Level II 
+        archive files. Radar data can be written to NetCDF files which conform to
+        the CF/Radial convension.
+        </p>
+        
+        <p>
+        Py-ART also contains routines which can produce common
+        radar plots including PPIs and RHIs.  
+        </p> 
+        <center>
+        <img src="ppi.png" width="400" height="300" alt="PPI Plot" align=center />
+		<img src="rhi.png" width="550" height="200" alt="RHI Plot" align=center />
+        </center>
+        <p>
+        Algorithms in the module are able to performs a number of corrections
+        on the radar moment data in antenna coordinate including attenuation
+        correction of the reflectivity, velocity dealiasing, and correction
+        of the specific (Kdp) and differential (PhiDP) phases.
+		</p>
+
+        <p>
+        A sophisticated mapping routines is able to efficiently create 
+        uniform Cartesian grids of radar fields from one or more radars.
+        Routines exist in Py-ART for plotting these grids as well as
+        saving them to NetCDF files.
+		</p>
+
+		<h2>Installation</h2>
+		
+		<p>Py-ART requires an install of Python 2.6 or 2.7 as well as the following modules.</p>
+
+		<ul>
+			<li><a href="http://numpy.scipy.org">NumPy</a></li>
+			<li><a href="http:/scipy.org">SciPy</a></li>
+			<li><a href="http://matplotlib.org/">matplotlib</a></li>
+			<li><a href="http://code.google.com/p/netcdf4-python/">netcdf4-python</a></li>
+    		 </ul>
+
+             <p>
+             The following are optional dependencies that if installed will provide 
+             additional functionality:
+             </p>
+		
+		<ul>
+    		<li><a href="http://trmm-fc.gsfc.nasa.gov/trmm_gv/software/rsl/">NASA TRMM RSL</a></li>
+            <li><a href="http://tfinley.net/software/pyglpk/">PyGLPK</a></li> 
+            <li><a href="http://matplotlib.org/basemap/">Basemap</a></li> 
+            <li><a href="http://code.google.com/p/pyproj/">pyproj</a></li> 
+        </ul>
+
+        An easy way to obtain most or all of these dependancies is to install a
+        Scientific Python distribution such as
+        <a href="https://www.enthought.com/products/canopy/">Enthought Canopy</a>,
+        or <a href="https://store.continuum.io/cshop/anaconda/">Anaconda</a> which 
+        both have free versions.  Additional details on installing a SciPy stack can 
+        found <a href="http://www.scipy.org/install.html">online.</a>
+
+        <p>
+        To install Py-ART on Linux or OS-X clone the git repository or 
+        download the repositories zip file and extract the file.  Then run:</p>
+
+		<p>$ python setup.py install</p> 
+
+        <p>
+        Installing Py-ART on Windows has not been tested.
+		Additional detail on installing Py-ART can be found in the
+		<a href="https://github.com/ARM-DOE/pyart/blob/master/INSTALL.TXT">INSTALL.TXT file.</a>
+		</p>
+
+		<h2>Documentation</h2>
+		<p>
+		Documentation for Py-ART can be found in the online 
+		<a href="http://arm-doe.github.io/pyart/dev/index.html">documentation</a>
+        or using Python's built in help system. 
+		A number of
+		<a href="http://arm-doe.github.io/pyart/dev/auto_examples/index.html">examples</a> 
+		are also provided for those wishing to see real world uses of Py-ART. The 
+		<a href="http://arm-doe.github.io/pyart/dev/user_reference/index.html">user reference manual</a>
+	    may be of use to those needing a detailed information about the modules, functions and
+        classes in Py-ART.
+		</p>
+        
+		<h2>Getting help</h2>
+		<p>
+        Py-ART has a <a href="http://groups.google.com/group/pyart-users/">mailing list</a> where 
+        you can ask questions and request help.  Also feel free to email the lead developer of the 
+        pproject, <a href="mailto:jhelmus@anl.gov.com">Jonathan J. Helmus,</a> directly with questions or comments.
+		</p>
+
+		<h2>Contributing</h2>
+		<p>
+		Py-ART is an open source software package distributed under the
+		<a href="http://opensource.org/licenses/BSD-3-Clause">New BSD License.</a>  
+		Source code for the package is available on 
+		<a href="https://github.com/ARM-DOE/pyart">GitHub</a>.  
+		Feature requests and bug reports can be sumbitted to the 
+		<a href="https://github.com/ARM-DOE/pyart/issues">Issue tracker,</a> posting
+		to the <a href="http://groups.google.com/group/pyart-users/">pyart-users mailing list</a>
+        or contacting Jonathan Helmus directly.	 Contributions of source code, documentation
+        or additional example are always appreciated from both developers and users.  Developers
+        looking for more detailed information on the inner workings of Py-ART should examine the 
+		<a href="http://arm-doe.github.io/pyart/dev/dev_reference/index.html">developer reference manual.</a>
+	</div>
+
+	<div id="sidebar">
+		<h2>Documentation</h2>
+		<ul>
+			<li><a href="http://arm-doe.github.io/pyart/dev/user_reference/index.html">User Ref. Manual</a></li>
+			<li><a href="http://arm-doe.github.io/pyart/dev/dev_reference/index.html">Developer Ref. Manual</a></li>
+			<li><a href="http://arm-doe.github.io/pyart/dev/auto_examples/index.html">Examples</a></li>
+            <li><a href="https://github.com/ARM-DOE/pyart/blob/master/INSTALL.TXT">Install information</a></li>
+		</ul>	
+
+		<h2>Downloads</h2>
+		<ul>
+			<li><a href="https://github.com/ARM-DOE/pyart">GitHub Repo</a></li>
+            <li><a href="https://github.com/ARM-DOE/pyart/archive/master.zip">Zip file of repository</a></li>
+		</ul>	
+		
+		<h2>Links</h2>
+		<ul>
+			<li><a href="https://github.com/ARM-DOE/pyart">Source Code</a></li>
+			<li><a href="http://groups.google.com/group/pyart-users/">Mailing List</a></li>
+			<li><a href="https://github.com/ARM-DOE/pyart/issues">Report Bugs</a></li>
+			<li><a href="http://www.arm.gov/">ARM</a></li>
+			<li><a href="http://radar.arm.gov/ARM_Radars/Home.html">ARM Radar Group</a></li>
+		</ul>
+
+	</div>
+
+	<div id="footer">
+	</div>
+
+</div>
+</body>
 </html>
