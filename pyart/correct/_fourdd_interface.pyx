@@ -26,7 +26,7 @@ cpdef fourdd_dealias(_RslVolume DZvolume,
                      np.ndarray[np.float32_t, ndim=1] hc,
                      np.ndarray[np.float32_t, ndim=1] sc,
                      np.ndarray[np.float32_t, ndim=1] dc,
-                     vad_time, prep, filt):
+                     vad_time, prep, filt, debug):
     """
     fourdd_dealias(DZvolume, radialVelVolume, hc, sc, dc, vad_time, prep,
                    filt)
@@ -54,6 +54,10 @@ cpdef fourdd_dealias(_RslVolume DZvolume,
         Flag controlling thresholding of DZvolume, 1 = yes, 0 = no.
     filt : int
         Flag controlling Bergen and Albers filter, 1 = yes, 0 = no.
+    debug : bool
+        True to return debugging RSL Volume objects for debugging:
+        usuccess, DZvolume, radialVelVolume, unfoldedVolume, sondVolume
+
 
     Returns
     -------
@@ -96,4 +100,6 @@ cpdef fourdd_dealias(_RslVolume DZvolume,
     _fourdd_h.unfoldVolume(unfoldedVolume._Volume, sondVolume._Volume, NULL,
                            MISSINGVEL, filt, &usuccess)
     data = unfoldedVolume.get_data()
+    if debug:
+        return usuccess, DZvolume, radialVelVolume, unfoldedVolume, sondVolume
     return usuccess, data
