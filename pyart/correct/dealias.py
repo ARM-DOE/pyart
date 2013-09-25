@@ -27,7 +27,8 @@ def dealias_fourdd(radar, sounding_heights, sounding_wind_speeds,
                    sounding_wind_direction, datetime_sounding,
                    prep=1, filt=1, rsl_badval=131072, fill_value=-9999.0,
                    refl='reflectivity_horizontal',
-                   vel='mean_doppler_velocity'):
+                   vel='mean_doppler_velocity',
+                   debug=False):
     """
     Dealias the Doppler velocities field using the University of Washington
     4DD algorithm utilizing information from sounding data.
@@ -61,6 +62,9 @@ def dealias_fourdd(radar, sounding_heights, sounding_wind_speeds,
         Field in radar to use as the doppler velocities during dealiasing.
     vel : str
         Field in radar to use as the reflectivity during dealiasing
+    debug : bool
+        Set True to return RSL Volume objects for debugging:
+        usuccess, DZvolume, radialVelVolume, unfoldedVolume, sondVolume
 
     Returns
     -------
@@ -108,8 +112,11 @@ def dealias_fourdd(radar, sounding_heights, sounding_wind_speeds,
     _rsl_interface._label_volume(vel_volume, radar)
 
     # perform dealiasing
+    if debug:
+        return _fourdd_interface.fourdd_dealias(
+            refl_volume, vel_volume, hc, sc, dc, vad_time, prep, filt, True)
     flag, data = _fourdd_interface.fourdd_dealias(
-        refl_volume, vel_volume, hc, sc, dc, vad_time, prep, filt)
+        refl_volume, vel_volume, hc, sc, dc, vad_time, prep, filt, False)
 
     # reshape and mask data
     data.shape = (-1, radar.ngates)
