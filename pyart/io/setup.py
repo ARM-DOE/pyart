@@ -68,8 +68,12 @@ def configuration(parent_package='', top_path=None):
     else:
         import warnings
         warnings.warn(RSL_MISSING_WARNING % (rsl_path))
-    return config
 
+    config.add_extension('_sigmetfile',
+                         sources=['_sigmetfile.c'],
+                         include_dirs=[get_include()])
+
+    return config
 
 if __name__ == '__main__':
     from numpy.distutils.core import setup
