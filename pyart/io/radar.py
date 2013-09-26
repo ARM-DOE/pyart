@@ -151,6 +151,54 @@ class Radar:
         self.nrays = len(time['data'])
         self.nsweeps = len(sweep_number['data'])
 
+    def add_field(self, field_name, dic):
+        """
+        Add a field to the object.
+
+        Parameters
+        ----------
+        field_name : str
+            Name of the field to add to the dictionary of fields.
+        dic : dict
+            Dictionary contain field data and metadata.
+
+        """
+        # check that the field dictionary to add is valid
+        if field_name in self.fields:
+            err = 'A field with name: %s already exists' % (field_name)
+            raise ValueError(err)
+        if 'data' not in dic:
+            raise KeyError("dic must contain a 'data' key")
+        if dic['data'].shape != (self.nrays, self.ngates):
+            t = (self.nrays, self.ngates)
+            err = "'data' has invalid shape, should be (%i, %i)" % t
+            raise ValueError(err)
+        # add the field
+        self.fields[field_name] = dic
+        return
+
+    def add_field_like(self, existing_field_name, field_name, data):
+        """
+        Add a field to the object with metadata from a existing field.
+
+        Parameters
+        ----------
+        existing_field_name : str
+            Name of an existing field to take metadata from when adding
+            the new field to the object.
+        field_name : str
+            Name of the field to add to the dictionary of fields.
+        data : array
+            Field data.
+
+        """
+        if existing_field_name not in self.fields:
+            err = 'field %s does not exist in object' % (existing_field_name)
+            raise ValueError(err)
+        dic = self.fields[existing_field_name]
+        dic['data'] = data
+        return self.add_field(field_name, dic)
+
 
 def join_radar(radar1, radar2):
 

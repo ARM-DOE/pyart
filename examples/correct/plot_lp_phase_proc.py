@@ -26,8 +26,8 @@ radar = pyart.io.read_mdv('095636.mdv')
 radar.sweep_start_ray_index['data'] = np.array([0])
 
 phidp, kdp = pyart.correct.phase_proc_lp(radar, 0.0, debug=True)
-radar.fields['proc_dp_phase_shift'] = phidp
-radar.fields['recalculated_diff_phase'] = kdp
+radar.add_field('proc_dp_phase_shift', phidp)
+radar.add_field('recalculated_diff_phase', kdp)
 
 # the following line can be used to save/load in preprocessed data
 #pyart.io.write_netcdf('preprocessed.nc', radar)
