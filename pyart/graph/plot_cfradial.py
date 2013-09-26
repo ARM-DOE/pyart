@@ -1,14 +1,14 @@
 """
-pyart.graph.plot_netcdf
-=======================
+pyart.graph.plot_cfradial
+=========================
 
-Routines for plotting radar data from netCDF files.
+Routines for plotting radar data from CF/Radial netCDF files.
 
 .. autosummary::
     :toctree: generated/
     :template: dev_template.rst
 
-    NetcdfDisplay
+    CFRadialDisplay
 
 """
 
@@ -19,7 +19,7 @@ from .radar_display import RadarDisplay
 from .common import radar_coords_to_cart
 
 
-class NetcdfDisplay(RadarDisplay):
+class CFRadialDisplay(RadarDisplay):
     """
     A display object for creating plots from data in NetCDF4 Dataset objects.
 

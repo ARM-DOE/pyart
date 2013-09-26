@@ -18,7 +18,7 @@ try:
     RSL_AVAILABLE = True
 except ImportError:
     RSL_AVAILABLE = False
-from .netcdf import read_netcdf
+from .cfradial import read_cfradial
 from .sigmet import read_sigmet
 from .nexrad_archive import read_nexrad_archive
 
@@ -52,7 +52,7 @@ def read(filename, callid='KABR', use_rsl=True):
     if filetype == "MDV":
         return read_mdv(filename)
     if filetype == "NETCDF3" or filetype == "NETCDF4":
-        return read_netcdf(filename)
+        return read_cfradial(filename)
 
     # RSL supported file formats
     if use_rsl and RSL_AVAILABLE:
@@ -124,11 +124,11 @@ def determine_filetype(filename):
     if begin[:12] == mdv_signature:
         return "MDV"
 
-    # NetCDF3, read with read_netcdf
+    # NetCDF3, read with read_cfradial
     if begin[:3] == "CDF":
         return "NETCDF3"
 
-    # NetCDF4, read with read_netcdf, contained in a HDF5 container
+    # NetCDF4, read with read_cfradial, contained in a HDF5 container
     # HDF5 format signature from HDF5 specification documentation
     hdf5_signature = '\x89\x48\x44\x46\x0d\x0a\x1a\x0a'
     if begin[:8] == hdf5_signature:

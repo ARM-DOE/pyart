@@ -10,7 +10,7 @@ import pyart
 
 
 def test_radar_display_rhi(outfile=None):
-    radar = pyart.io.read_netcdf(pyart.testing.NETCDF_RHI_FILE)
+    radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_RHI_FILE)
     radar.metadata['instrument_name'] = ''
     del radar.fields['reflectivity_horizontal']['valid_min']
     del radar.fields['reflectivity_horizontal']['valid_max']
@@ -24,14 +24,14 @@ def test_radar_display_rhi(outfile=None):
 
 
 def test_radar_display_generate_filename():
-    radar = pyart.io.read_netcdf(pyart.testing.NETCDF_PPI_FILE)
+    radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
     display = pyart.graph.RadarDisplay(radar, shift=(0.1, 0.0))
     filename = display.generate_filename('test', 0)
     assert filename == 'xsapr-sgp_test_00_20110520105416.png'
 
 
 def test_radar_display_ppi(outfile=None):
-    radar = pyart.io.read_netcdf(pyart.testing.NETCDF_PPI_FILE)
+    radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
     display = pyart.graph.RadarDisplay(radar, shift=(0.1, 0.0))
     fig = plt.figure()
     ax = fig.add_subplot(111)

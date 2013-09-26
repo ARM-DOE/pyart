@@ -25,7 +25,7 @@ from warnings import warn
 
 import netCDF4
 
-from .netcdf import _ncvar_to_dict, _create_ncvar
+from .cfradial import _ncvar_to_dict, _create_ncvar
 
 
 def read_grid(filename):

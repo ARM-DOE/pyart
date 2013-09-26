@@ -4,7 +4,7 @@ Create a multiple panel RHI plot from a CF/Radial file
 ======================================================
 
 An example which creates a multiple panel RHI plot of a CF/Radial file using
-both a NetcdfDisplay and a RadarDisplay object.
+both a CFRadialDisplay and a RadarDisplay object.
 
 """
 print __doc__
@@ -18,9 +18,9 @@ import pyart
 
 filename = 'sgpxsaprrhicmacI5.c0.20110524.015604_NC4.nc'
 
-# create the plot using NetcdfDisplay
+# create the plot using CFRadialDisplay
 dataset = netCDF4.Dataset(filename, 'r')
-display = pyart.graph.NetcdfDisplay(dataset)
+display = pyart.graph.CFRadialDisplay(dataset)
 
 fig = plt.figure(figsize=[12, 17])
 fig.subplots_adjust(hspace=0.4)
@@ -45,7 +45,7 @@ fig.text(0.35, 0.92, figure_title)
 plt.show()
 
 # create the plot using RadarDisplay
-radar = pyart.io.read_netcdf(filename)
+radar = pyart.io.read_cfradial(filename)
 radar.metadata['instrument_name'] = 'XSARP'
 display = pyart.graph.RadarDisplay(radar)
 

@@ -18,7 +18,7 @@ import pyart
 RADAR_NAME = 'sgpcsaprsurcmacI7.c0.20110520.095101.nc'
 
 # read in the data
-radar = pyart.io.read_netcdf(RADAR_NAME)
+radar = pyart.io.read_cfradial(RADAR_NAME)
 
 # remove existing corrections
 radar.fields.pop('specific_attenuation')

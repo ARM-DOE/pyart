@@ -30,8 +30,8 @@ radar.add_field('proc_dp_phase_shift', phidp)
 radar.add_field('recalculated_diff_phase', kdp)
 
 # the following line can be used to save/load in preprocessed data
-#pyart.io.write_netcdf('preprocessed.nc', radar)
-#radar = pyart.io.read_netcdf('preprocessed.nc')
+#pyart.io.write_cfradial('preprocessed.nc', radar)
+#radar = pyart.io.read_cfradial('preprocessed.nc')
 
 # create a plot of the various differential phase fields
 display = pyart.graph.RadarDisplay(radar)

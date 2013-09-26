@@ -15,10 +15,10 @@ from and write data to a number of file formats.
     read_rsl
     read_mdv
     read_sigmet
-    read_netcdf
+    read_cfradial
     read_nexrad_archive
     read_nexrad_cdm
-    write_netcdf
+    write_cfradial
     read_grid
     write_grid
 
@@ -35,7 +35,7 @@ except ImportError:
     _RSL_AVAILABLE = False
 from .mdv import read_mdv
 from .sigmet import read_sigmet
-from .netcdf import read_netcdf, write_netcdf
+from .cfradial import read_cfradial, write_cfradial
 from .nexrad_archive import read_nexrad_archive
 from .nexrad_cdm import read_nexrad_cdm
 from .radar import Radar
