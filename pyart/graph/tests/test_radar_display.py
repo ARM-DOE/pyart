@@ -7,36 +7,31 @@
 
 import matplotlib.pyplot as plt
 import pyart
+from numpy.testing import assert_raises
 
 
-def test_radar_display_rhi(outfile=None):
+# Top level Figure generating tests
+def test_radardisplay_rhi(outfile=None):
     radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_RHI_FILE)
-    radar.metadata['instrument_name'] = ''
     del radar.fields['reflectivity_horizontal']['valid_min']
     del radar.fields['reflectivity_horizontal']['valid_max']
     display = pyart.graph.RadarDisplay(radar)
     fig = plt.figure()
     ax = fig.add_subplot(111)
-    display.plot_rhi('reflectivity_horizontal', 0, ax=ax,
-                     axislabels=('X-axis', 'Y-axis'))
+    display.plot_rhi('reflectivity_horizontal', 0, ax=ax)
     if outfile:
         fig.savefig(outfile)
+    plt.close()
 
 
-def test_radar_display_generate_filename():
-    radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
-    display = pyart.graph.RadarDisplay(radar, shift=(0.1, 0.0))
-    filename = display.generate_filename('test', 0)
-    assert filename == 'xsapr-sgp_test_00_20110520105416.png'
-
-
-def test_radar_display_ppi(outfile=None):
+def test_radardisplay_ppi(outfile=None):
     radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
     display = pyart.graph.RadarDisplay(radar, shift=(0.1, 0.0))
     fig = plt.figure()
     ax = fig.add_subplot(111)
-    display.plot_ppi('reflectivity_horizontal', 0, colorbar_flag=False,
-                     title="Fancy PPI Plot", axislabels=('X-axis', 'Y-axis'))
+    display.plot_ppi('reflectivity_horizontal', 0, colorbar_flag=True,
+                     title="Fancy PPI Plot",
+                     mask_tuple=('reflectivity_horizontal', -100))
     display.plot_colorbar()
     display.plot_range_rings([10, 20, 30, 40], ax=ax)
     display.plot_labels(['tree'], [(36.68, -97.62)], symbols='k+', ax=ax)
@@ -44,8 +39,104 @@ def test_radar_display_ppi(outfile=None):
     display.set_limits(ylim=[-50, 50], xlim=[-50, 50])
     if outfile:
         fig.savefig(outfile)
+    plt.close()
+
+
+def test_radardisplay_ray(outfile=None):
+    radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_RHI_FILE)
+    display = pyart.graph.RadarDisplay(radar)
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    display.plot_ray('reflectivity_horizontal', 0, ray_min=15, ray_max=40,
+                     mask_outside=True, ax=ax,
+                     mask_tuple=('reflectivity_horizontal', -10))
+    if outfile:
+        fig.savefig(outfile)
+    plt.close()
+
+
+# Tests of methods, these tests do not generate figures
+
+
+def test_radardisplay_init():
+    # test that a display object can be created with and without
+    radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
+    display = pyart.graph.RadarDisplay(radar)
+    assert display.radar_name == 'xsapr-sgp'
+    del radar.metadata['instrument_name']
+    display = pyart.graph.RadarDisplay(radar)
+    assert display.radar_name == ''
+
+
+def test_radardisplay_generate_filename():
+    radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
+    display = pyart.graph.RadarDisplay(radar, shift=(0.1, 0.0))
+    filename = display.generate_filename('test', 0)
+    assert filename == 'xsapr-sgp_test_00_20110520105416.png'
+
+
+def test_radardisplay_plot_labels_errors():
+    radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
+    display = pyart.graph.RadarDisplay(radar)
+    # len(labels) != len(locations)
+    assert_raises(ValueError, display.plot_labels, ['a', 'a'], [(0, 0)])
+    # len(labels) != len(symbols)
+    assert_raises(ValueError, display.plot_labels, ['a'], [(0, 0)],
+                  symbols=['r+', 'r+'])
+
+
+def test_radardisplay_user_specified_labels():
+    # test that labels are set when a user specifies them.
+    radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
+    display = pyart.graph.RadarDisplay(radar)
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+
+    display._set_ray_title('field', 0, 'foo', ax)
+    assert ax.get_title() == 'foo'
+
+    display._label_axes_ppi(('foo', 'bar'), ax)
+    assert ax.get_xlabel() == 'foo'
+    assert ax.get_ylabel() == 'bar'
+
+    display._label_axes_rhi(('spam', 'eggs'), ax)
+    assert ax.get_xlabel() == 'spam'
+    assert ax.get_ylabel() == 'eggs'
+
+    display._label_axes_ray(('baz', 'qux'), 'field', ax)
+    assert ax.get_xlabel() == 'baz'
+    assert ax.get_ylabel() == 'qux'
+
+    plt.close()
+
+
+def test_radardisplay_get_colorbar_label():
+    radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
+    display = pyart.graph.RadarDisplay(radar)
+
+    # default is to base the label on the standard_name key
+    assert (display._get_colorbar_label('reflectivity_horizontal') ==
+            'equivalent reflectivity factor (dBZ)')
+
+    # next is to look at the long_name
+    del display.fields['reflectivity_horizontal']['standard_name']
+    assert (display._get_colorbar_label('reflectivity_horizontal') ==
+            'equivalent reflectivity factor (dBZ)')
+
+    # use the field if standard_name and long_name missing
+    del display.fields['reflectivity_horizontal']['long_name']
+    print display._get_colorbar_label('reflectivity_horizontal')
+    assert (display._get_colorbar_label('reflectivity_horizontal') ==
+            'reflectivity horizontal (dBZ)')
+
+    # no units if key is missing
+    del display.fields['reflectivity_horizontal']['units']
+    print display._get_colorbar_label('reflectivity_horizontal')
+    assert (display._get_colorbar_label('reflectivity_horizontal') ==
+            'reflectivity horizontal (?)')
 
 
 if __name__ == "__main__":
-    test_radar_display_rhi('figure_radar_display_rhi.png')
-    test_radar_display_ppi('figure_radar_display_ppi.png')
+    test_radardisplay_rhi('figure_radar_display_rhi.png')
+    test_radardisplay_ppi('figure_radar_display_ppi.png')
+    test_radardisplay_ray('figure_radar_display_ray.png')
