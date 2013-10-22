@@ -26,12 +26,12 @@ radar = pyart.io.read_mdv('095636.mdv')
 radar.sweep_start_ray_index['data'] = np.array([0])
 
 phidp, kdp = pyart.correct.phase_proc_lp(radar, 0.0, debug=True)
-radar.fields['proc_dp_phase_shift'] = phidp
-radar.fields['recalculated_diff_phase'] = kdp
+radar.add_field('proc_dp_phase_shift', phidp)
+radar.add_field('recalculated_diff_phase', kdp)
 
 # the following line can be used to save/load in preprocessed data
-#pyart.io.write_netcdf('preprocessed.nc', radar)
-#radar = pyart.io.read_netcdf('preprocessed.nc')
+#pyart.io.write_cfradial('preprocessed.nc', radar)
+#radar = pyart.io.read_cfradial('preprocessed.nc')
 
 # create a plot of the various differential phase fields
 display = pyart.graph.RadarDisplay(radar)
@@ -59,19 +59,17 @@ display.plot_ppi('recalculated_diff_phase', 0, ax=ax4,
 plt.show()
 
 # plot a fields from a single ray
+display = pyart.graph.RadarDisplay(radar)
 fig = plt.figure(figsize=[10, 5])
 ax = fig.add_subplot(111)
-
 ray_num = 191
-range_km = radar.range['data'] / 1000.
-phidp_ray = radar.fields['proc_dp_phase_shift']['data'][ray_num]
-unfolded_phidp_ray = radar.fields['unf_dp_phase_shift']['data'][ray_num]
-kdp_ray = radar.fields['recalculated_diff_phase']['data'][ray_num]
-refl_ray = radar.fields['reflectivity_horizontal']['data'][ray_num]
 
 # filtered phidp and unfolded phidp
-p1, = ax.plot(range_km, phidp_ray, 'b-')
-p2, = ax.plot(range_km, unfolded_phidp_ray, 'g-')
+display.plot_ray('proc_dp_phase_shift', ray_num, format_str='b-',
+                 axislabels_flag=False, title_flag=False, ax=ax)
+
+display.plot_ray('unf_dp_phase_shift', ray_num, format_str='g-',
+                 axislabels_flag=False, title_flag=False, ax=ax)
 
 # set labels
 ax.set_ylim(0, 250)
@@ -80,12 +78,16 @@ ax.set_xlabel('Range (km)')
 
 # plot KDP and reflectivity on second axis
 ax2 = ax.twinx()
-p3, = ax2.plot(range_km, kdp_ray, 'r-')
-p4, = ax2.plot(range_km, refl_ray/10.)
+display.plot_ray('recalculated_diff_phase', ray_num, format_str='r-',
+                 axislabels_flag=False, title_flag=False, ax=ax2)
+radar.add_field_like('reflectivity_horizontal', 'scaled_reflectivity',
+                     radar.fields['reflectivity_horizontal']['data']/10.)
+display.plot_ray('scaled_reflectivity', ray_num, format_str='b-',
+                 axislabels_flag=False, title_flag=False, ax=ax2)
 
 # decorate
 ax2.yaxis.grid(color='gray', linestyle='dashed')
-ax.legend([p1, p2, p3, p4],
+ax.legend(display.plots,
           ["Filtered phiDP", "Unfolded phiDP", 'KDP', 'Z/10.0'],
           loc='upper left')
 plt.show()

@@ -11,7 +11,6 @@ import pylab as pl
 
 import pyart.util.met as met
 #import ballsy_masked as ballsy
-from pyart import sounding
 
 
 def get_lowest_elevation(mmcg_ncf, req_moments, corrections):

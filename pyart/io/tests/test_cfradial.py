@@ -1,4 +1,4 @@
-""" Unit Tests for Py-ART's io/netcdf.py module. """
+""" Unit Tests for Py-ART's io/cfradial.py module. """
 
 import tempfile
 import os
@@ -10,12 +10,12 @@ import netCDF4
 
 import pyart
 
-###############################################
-# read_netcdf tests (verify radar attributes) #
-###############################################
+#################################################
+# read_cfradial tests (verify radar attributes) #
+#################################################
 
 # read in the sample file and create a a Radar object
-radar = pyart.io.read_netcdf(pyart.testing.NETCDF_PPI_FILE)
+radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
 
 
 # time attribute
@@ -258,17 +258,17 @@ def test_field_first_points():
 def check_field_first_point(field, value):
     assert round(radar.fields[field]['data'][0, 0]) == value
 
-######################################################################
-# write_netcdf tests (verify data in written netCDF matches original #
-######################################################################
+########################################################################
+# write_cfradial tests (verify data in written netCDF matches original #
+########################################################################
 
 
 def test_write_ppi():
     # CF/Radial example file -> Radar object -> netCDF file
     tmpfile = tempfile.mkstemp(suffix='.nc', dir='.')[1]
-    radar = pyart.io.read_netcdf(pyart.testing.NETCDF_PPI_FILE)
-    pyart.io.write_netcdf(tmpfile, radar)
-    ref = netCDF4.Dataset(pyart.testing.NETCDF_PPI_FILE)
+    radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
+    pyart.io.write_cfradial(tmpfile, radar)
+    ref = netCDF4.Dataset(pyart.testing.CFRADIAL_PPI_FILE)
     dset = netCDF4.Dataset(tmpfile)
     check_dataset_to_ref(dset, ref)
     os.remove(tmpfile)
@@ -277,9 +277,9 @@ def test_write_ppi():
 def test_write_rhi():
     # CF/Radial example file -> Radar object -> netCDF file
     tmpfile = tempfile.mkstemp(suffix='.nc', dir='.')[1]
-    radar = pyart.io.read_netcdf(pyart.testing.NETCDF_RHI_FILE)
-    pyart.io.write_netcdf(tmpfile, radar)
-    ref = netCDF4.Dataset(pyart.testing.NETCDF_RHI_FILE)
+    radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_RHI_FILE)
+    pyart.io.write_cfradial(tmpfile, radar)
+    ref = netCDF4.Dataset(pyart.testing.CFRADIAL_RHI_FILE)
     dset = netCDF4.Dataset(tmpfile)
     check_dataset_to_ref(dset, ref)
     os.remove(tmpfile)
@@ -374,11 +374,11 @@ def test_auto_history_and_conventions():
     # history and Conventions metadata should be created on write if
     # they do not exist in the original radar object
     tmpfile = tempfile.mkstemp(suffix='.nc', dir='.')[1]
-    radar = pyart.io.read_netcdf(pyart.testing.NETCDF_RHI_FILE)
+    radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_RHI_FILE)
     radar.metadata.pop('Conventions')
     radar.metadata.pop('history')
-    pyart.io.write_netcdf(tmpfile, radar)
-    radar2 = pyart.io.read_netcdf(tmpfile)
+    pyart.io.write_cfradial(tmpfile, radar)
+    radar2 = pyart.io.read_cfradial(tmpfile)
     assert 'Conventions' in radar2.metadata
     assert 'history' in radar2.metadata
     os.remove(tmpfile)

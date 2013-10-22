@@ -1,16 +1,16 @@
 #! /usr/bin/env python
 """
-Make a small netCDF CF/Radial file containing a single RHI scan.
+Make a small netCDF CF/Radial file containing a single PPI scan.
 
-Single field and scan is converted from sigmet file XSW110520113537.RAW7HHL
+Single field and scan is converted from sigmet file XSW110520105408.RAW7HHF
 """
 
 import pyart
 
-radar = pyart.io.read_rsl('XSW110520113537.RAW7HHL')
+radar = pyart.io.read_rsl('XSW110520105408.RAW7HHF')
 
-time_slice = slice(None, 713, 18)
-range_slice = slice(None, None, 12)
+time_slice = slice(None, 400, 10)
+range_slice = slice(None, None, 16)
 sweep_slice = slice(None, 1)
 
 # remove all but the reflectivity_horizontal fields
@@ -21,7 +21,7 @@ radar.fields = {'reflectivity_horizontal': rf_field}
 
 radar.nsweeps = 1
 radar.nray = 40
-radar.ngates = 45
+radar.ngates = 42
 
 # truncate the range based variables
 radar.range['data'] = radar.range['data'][range_slice]
@@ -57,7 +57,7 @@ radar.instrument_parameters['prt_mode']['data'] = \
 radar.metadata = {
     'Conventions': 'CF/Radial instrument_parameters',
     'version': '1.2',
-    'title': 'Py-ART Example RHI netcdf file',
+    'title': 'Py-ART Example PPI CF/Radial file',
     'institution': ('United States Department of Energy - Atmospheric '
                     'Radiation Measurement (ARM) program'),
     'references': 'none',
@@ -66,4 +66,4 @@ radar.metadata = {
     'comment': 'none',
     'instrument_name': 'xsapr-sgp'}
 
-pyart.io.write_netcdf('example_netcdf_rhi.nc', radar)
+pyart.io.write_cfradial('example_cfradial_ppi.nc', radar)

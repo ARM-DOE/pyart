@@ -13,6 +13,7 @@ Reading and writing of Sigmet (raw format) files
 
 """
 
+from __future__ import division
 import datetime
 
 import numpy as np
@@ -119,7 +120,9 @@ def read_sigmet(filename, field_names=None, field_metadata=None,
     for i, dt in enumerate(dts):
         start = sweep_start_ray_index['data'][i]
         end = sweep_end_ray_index['data'][i]
-        tdata[start: end + 1] += (dt - dts[0]).total_seconds()
+        td = (dt - dts[0])
+        tdata[start:end + 1] += (td.microseconds + (td.seconds + td.days *
+                                 24 * 3600) * 10**6) / 10**6
     time['data'] = tdata
     time['units'] = make_time_unit_str(dts[0])
 

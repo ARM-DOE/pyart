@@ -18,7 +18,7 @@ import pyart
 RADAR_NAME = 'sgpcsaprsurcmacI7.c0.20110520.095101.nc'
 
 # read in the data
-radar = pyart.io.read_netcdf(RADAR_NAME)
+radar = pyart.io.read_cfradial(RADAR_NAME)
 
 # remove existing corrections
 radar.fields.pop('specific_attenuation')
@@ -26,8 +26,8 @@ radar.fields.pop('corrected_reflectivity_horizontal')
 
 # perform attenuation correction
 spec_at, cor_z = pyart.correct.calculate_attenuation(radar, 0)
-radar.fields['specific_attenuation'] = spec_at
-radar.fields['corrected_reflectivity_horizontal'] = cor_z
+radar.add_field('specific_attenuation', spec_at)
+radar.add_field('corrected_reflectivity_horizontal', cor_z)
 
 # create the plot
 fig = plt.figure(figsize=(15, 5))

@@ -12,14 +12,14 @@ Graphing (:mod:`pyart.graph`)
     GridMapDisplay
     MdvDisplay
     RslDisplay
-    NetcdfDisplay
+    CFRadialDisplay
 
 
 """
 
 from .radar_display import RadarDisplay
 from .plot_mdv import MdvDisplay
-from .plot_netcdf import NetcdfDisplay
+from .plot_cfradial import CFRadialDisplay
 from . import cm
 
 try:

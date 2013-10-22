@@ -21,7 +21,7 @@ unit tests.
 """
 
 from .sample_files import MDV_PPI_FILE, MDV_RHI_FILE
-from .sample_files import NETCDF_PPI_FILE, NETCDF_RHI_FILE
+from .sample_files import CFRADIAL_PPI_FILE, CFRADIAL_RHI_FILE
 from .sample_files import SIGMET_PPI_FILE, SIGMET_RHI_FILE
 from .sample_files import INTERP_SOUNDE_FILE
 from .sample_files import NEXRAD_ARCHIVE_FILE, NEXRAD_CDM_FILE

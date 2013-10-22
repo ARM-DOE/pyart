@@ -78,7 +78,10 @@ class RadarDisplay:
         self.azimuths = radar.azimuth['data']
         self.elevations = radar.elevation['data']
         self.fixed_angle = radar.fixed_angle['data']
-        self.radar_name = radar.metadata['instrument_name']
+        if 'instrument_name' in radar.metadata:
+            self.radar_name = radar.metadata['instrument_name']
+        else:
+            self.radar_name = ''
 
         # origin
         if shift != (0.0, 0.0):
@@ -117,6 +120,78 @@ class RadarDisplay:
     ####################
     # Plotting methods #
     ####################
+
+    def plot_ray(self, field, ray, format_str='k-', mask_tuple=None,
+                 ray_min=None, ray_max=None, mask_outside=False, title=None,
+                 title_flag=True, axislabels=(None, None),
+                 axislabels_flag=True, ax=None, fig=None):
+        """
+        Plot a single ray.
+
+        Parameters
+        ----------
+        field : str
+            Field to plot.
+        ray : int
+            Ray number to plot.
+
+        Other Parameters
+        ----------------
+        format_str : str
+            Format string defining the line style and marker.
+        mask_tuple : (str, float)
+            Tuple containing the field name and value below which to mask
+            field prior to plotting, for example to mask all data where
+            NCP < 0.5 set mask_tuple to ['NCP', 0.5]. None performs no masking.
+        ray_min : float
+            Minimum ray value, None for default value, ignored if mask_outside
+            is False.
+        ray_max : float
+            Maximum ray value, None for default value, ignored if mask_outside
+            is False.
+        mask_outside : bool
+            True to mask data outside of vmin, vmax.  False performs no
+            masking.
+        title : str
+            Title to label plot with, None to use default title generated from
+            the field and ray parameters. Parameter is ignored if title_flag
+            is False.
+        title_flag : bool
+            True to add a title to the plot, False does not add a title.
+        axislabels : (str, str)
+            2-tuple of x-axis, y-axis labels.  None for either label will use
+            the default axis label.  Parameter is ignored if axislabels_flag is
+            False.
+        axislabel_flag : bool
+            True to add label the axes, False does not label the axes.
+        ax : Axis
+            Axis to plot on. None will use the current axis.
+        fig : Figure
+            Figure to add the colorbar to. None will use the current figure.
+
+        """
+        # parse parameters
+        ax, fig = self._parse_ax_fig(ax, fig)
+
+        # get the data and mask
+        data = self._get_ray_data(field, ray, mask_tuple)
+
+         # mask the data where outside the limits
+        if mask_outside:
+            data = np.ma.masked_outside(data, ray_min, ray_max)
+
+        # plot the data
+        line, = ax.plot(self.ranges / 1000., data, format_str)
+
+        if title_flag:
+            self._set_ray_title(field, ray, title, ax)
+
+        if axislabels_flag:
+            self._label_axes_ray(axislabels, field, ax)
+
+        # add plot and field to attribute lists
+        self.plots.append(line)
+        self.plot_vars.append(field)
 
     def plot_ppi(self, field, tilt, mask_tuple=None, vmin=None, vmax=None,
                  cmap='jet', mask_outside=True, title=None, title_flag=True,
@@ -477,10 +552,22 @@ class RadarDisplay:
         ax = self._parse_ax(ax)
         ax.set_ylabel('Distance Above ' + self.origin + '  (km)')
 
+    def label_yaxis_field(self, field, ax=None):
+        """ Label the yaxis with the default label for a field units. """
+        ax = self._parse_ax(ax)
+        ax.set_ylabel(self._get_colorbar_label(field))
+
     def _set_title(self, field, tilt, title, ax):
         """ Set the figure title using a default title. """
         if title is None:
             ax.set_title(self.generate_title(field, tilt))
+        else:
+            ax.set_title(title)
+
+    def _set_ray_title(self, field, ray, title, ax):
+        """ Set the figure title for a ray plot using a default title. """
+        if title is None:
+            ax.set_title(self.generate_ray_title(field, ray))
         else:
             ax.set_title(title)
 
@@ -505,6 +592,18 @@ class RadarDisplay:
             ax.set_xlabel(x_label)
         if y_label is None:
             self.label_yaxis_z(ax)
+        else:
+            ax.set_ylabel(y_label)
+
+    def _label_axes_ray(self, axis_labels, field, ax):
+        """ Set the x and y axis labels for a ray plot. """
+        x_label, y_label = axis_labels
+        if x_label is None:
+            self.label_xaxis_r(ax)
+        else:
+            ax.set_xlabel(x_label)
+        if y_label is None:
+            self.label_yaxis_field(field, ax)
         else:
             ax.set_ylabel(y_label)
 
@@ -565,6 +664,34 @@ class RadarDisplay:
         field_name = field_name[0].upper() + field_name[1:]
         return l1 + '\n' + field_name
 
+    def generate_ray_title(self, field, ray):
+        """
+        Generate a title for a ray plot.
+
+        Parameters
+        ----------
+        field : str
+            Field plotted.
+        ray : int
+            Ray plotted.
+
+        Returns
+        -------
+        title : str
+            Plot title.
+
+        """
+        time_str = self.time_begin.isoformat() + 'Z'
+        l1 = "%s %s" % (self.radar_name, time_str)
+
+        azim = self.azimuths[ray]
+        elev = self.elevations[ray]
+        l2 = "Ray: %i  Elevation: %.1f Azimuth: %.1f" % (ray, azim, elev)
+
+        field_name = self.fields[field]['standard_name'].replace('_', ' ')
+        field_name = field_name[0].upper() + field_name[1:]
+        return l1 + '\n' + l2 + '\n' + field_name
+
     def _generate_colorbar_label(self, standard_name, units):
         """ Generate and return a label for a colorbar. """
         return standard_name.replace('_', ' ') + ' (' + units + ')'
@@ -618,6 +745,16 @@ class RadarDisplay:
             data = np.ma.masked_where(mdata < mask_value, data)
         return data
 
+    def _get_ray_data(self, field, ray, mask_tuple):
+        """ Retrieve and return ray data from a plot function. """
+        data = self.fields[field]['data'][ray]
+
+        if mask_tuple is not None:
+            mask_field, mask_value = mask_tuple
+            mdata = self.fields[mask_field]['data'][ray]
+            data = np.ma.masked_where(mdata < mask_value, data)
+        return data
+
     def _get_x_y(self, field, tilt):
         """ Retrieve and return x and y coordinate in km. """
         start = self.starts[tilt]
@@ -638,7 +775,13 @@ class RadarDisplay:
         last_field_dict = self.fields[field]
         if 'standard_name' in last_field_dict:
             standard_name = last_field_dict['standard_name']
-        else:
+        elif 'long_name' in last_field_dict:
             standard_name = last_field_dict['long_name']
-        units = last_field_dict['units']
+        else:
+            standard_name = field
+
+        if 'units' in last_field_dict:
+            units = last_field_dict['units']
+        else:
+            units = '?'
         return self._generate_colorbar_label(standard_name, units)

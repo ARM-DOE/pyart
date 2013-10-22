@@ -12,8 +12,10 @@ A general central radial scanning (or dwelling) instrument class.
 
 
 """
+from __future__ import print_function
 
 import copy
+import sys
 
 import numpy as np
 
@@ -52,7 +54,7 @@ class Radar:
         Latitude of the instrument.
     longitude : dict
         Longitude of the instrument.
-    altitude :
+    altitude : dict
         Altitude of the instrument, above sea level.
     altitude_agl : dict or None
         Altitude of the instrument above ground level.  If not provided this
@@ -151,6 +153,171 @@ class Radar:
         self.nrays = len(time['data'])
         self.nsweeps = len(sweep_number['data'])
 
+    def info(self, level='standard', out=sys.stdout):
+        """
+        Print information on radar.
+
+        Parameters
+        ----------
+        level : {'compact', 'standard', 'full', 'c', 's', 'f'}
+            Level of information on radar object to print, compact is
+            minimal information, standard more and full everything.
+        out : file-like
+            Stream to direct output to, default is to print information
+            to standard out (the screen).
+
+        """
+        if level == 'c':
+            level = 'compact'
+        elif level == 's':
+            level = 'standard'
+        elif level == 'f':
+            level = 'full'
+
+        if level not in ['standard', 'compact', 'full']:
+            raise ValueError('invalid level parameter')
+
+        self._dic_info('altitude', level, out)
+        self._dic_info('altitude_agl', level, out)
+        self._dic_info('antenna_transition', level, out)
+        self._dic_info('azimuth', level, out)
+        self._dic_info('elevation', level, out)
+
+        for field_name, field_dic in self.fields.iteritems():
+            print('fields:', file=out)
+            self._dic_info(field_name, level, out, field_dic, 1)
+
+        self._dic_info('fixed_angle', level, out)
+
+        if self.instrument_parameters is None:
+            print('instrument_parameters: None', file=out)
+        else:
+            for name, dic in self.instrument_parameters.iteritems():
+                print('instrument_parameters:', file=out)
+                self._dic_info(name, level, out, dic, 1)
+
+        self._dic_info('latitude', level, out)
+        self._dic_info('longitude', level, out)
+
+        print('nsweeps:', self.nsweeps, file=out)
+        print('ngates:', self.ngates, file=out)
+        print('nrays:', self.nrays, file=out)
+
+        if self.radar_calibration is None:
+            print('radar_calibration: None', file=out)
+        else:
+            for name, dic in self.radar_calibration.iteritems():
+                print('radar_calibration:', file=out)
+                self._dic_info(name, level, out, dic, 1)
+
+        self._dic_info('range', level, out)
+        self._dic_info('scan_rate', level, out)
+        print('scan_type:', self.scan_type, file=out)
+        self._dic_info('sweep_end_ray_index', level, out)
+        self._dic_info('sweep_mode', level, out)
+        self._dic_info('sweep_number', level, out)
+        self._dic_info('sweep_start_ray_index', level, out)
+        self._dic_info('target_scan_rate', level, out)
+        self._dic_info('time', level, out)
+
+        # always print out all metadata last
+        self._dic_info('metadata', 'full', out)
+
+    def _dic_info(self, attr, level, out, dic=None, ident_level=0):
+        """ Print information on a dictionary attribute. """
+        if dic is None:
+            dic = getattr(self, attr)
+
+        ilvl0 = '\t' * ident_level
+        ilvl1 = '\t' * (ident_level + 1)
+
+        if dic is None:
+            print(attr + ': None', file=out)
+            return
+
+        # make a string summary of the data key if it exists.
+        if 'data' not in dic:
+            d_str = 'Missing'
+        elif not isinstance(dic['data'], np.ndarray):
+            d_str = '<not a ndarray>'
+        else:
+            data = dic['data']
+            t = (data.dtype, data.shape)
+            d_str = '<ndarray of type: %s and shape: %s>' % t
+
+        # compact, only data summary
+        if level == 'compact':
+            print(ilvl0 + attr + ':', d_str, file=out)
+
+        # standard, all keys, only summary for data
+        elif level == 'standard':
+            print(ilvl0 + attr + ':', file=out)
+            print(ilvl1 + 'data:', d_str, file=out)
+            for key, val in dic.iteritems():
+                if key == 'data':
+                    continue
+                print(ilvl1 + key + ':', val, file=out)
+
+        # full, all keys, full data
+        elif level == 'full':
+            print(attr + ':', file=out)
+            if 'data' in dic:
+                print(ilvl1 + 'data:', dic['data'], file=out)
+            for key, val in dic.iteritems():
+                if key == 'data':
+                    continue
+                print(ilvl1 + key + ':', val, file=out)
+
+        return
+
+    def add_field(self, field_name, dic):
+        """
+        Add a field to the object.
+
+        Parameters
+        ----------
+        field_name : str
+            Name of the field to add to the dictionary of fields.
+        dic : dict
+            Dictionary contain field data and metadata.
+
+        """
+        # check that the field dictionary to add is valid
+        if field_name in self.fields:
+            err = 'A field with name: %s already exists' % (field_name)
+            raise ValueError(err)
+        if 'data' not in dic:
+            raise KeyError("dic must contain a 'data' key")
+        if dic['data'].shape != (self.nrays, self.ngates):
+            t = (self.nrays, self.ngates)
+            err = "'data' has invalid shape, should be (%i, %i)" % t
+            raise ValueError(err)
+        # add the field
+        self.fields[field_name] = dic
+        return
+
+    def add_field_like(self, existing_field_name, field_name, data):
+        """
+        Add a field to the object with metadata from a existing field.
+
+        Parameters
+        ----------
+        existing_field_name : str
+            Name of an existing field to take metadata from when adding
+            the new field to the object.
+        field_name : str
+            Name of the field to add to the dictionary of fields.
+        data : array
+            Field data.
+
+        """
+        if existing_field_name not in self.fields:
+            err = 'field %s does not exist in object' % (existing_field_name)
+            raise ValueError(err)
+        dic = self.fields[existing_field_name]
+        dic['data'] = data
+        return self.add_field(field_name, dic)
+
 
 def join_radar(radar1, radar2):
 
@@ -171,7 +338,7 @@ def join_radar(radar1, radar2):
     for var in new_radar.fields.keys():
         sh1 = radar1.fields[var]['data'].shape
         sh2 = radar2.fields[var]['data'].shape
-        print sh1, sh2
+        print(sh1, sh2)
         new_field = np.ma.zeros([sh1[0] + sh2[0],
                                 max([sh1[1], sh2[1]])]) - 9999.0
         new_field[0:sh1[0], 0:sh1[1]] = radar1.fields[var]['data']

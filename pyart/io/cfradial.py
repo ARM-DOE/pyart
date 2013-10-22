@@ -1,14 +1,14 @@
 """
-pyart.io.netcdf
-===============
+pyart.io.cfradial
+=================
 
-Utilities for reading netcdf files.
+Utilities for reading CF/Radial files.
 
 .. autosummary::
     :toctree: generated/
 
-    read_netcdf
-    write_netcdf
+    read_cfradial
+    write_cfradial
     _find_all_meta_group_vars
     _ncvar_to_dict
     _stream_ncvar_to_dict
@@ -28,14 +28,14 @@ from .common import stringarray_to_chararray
 from .radar import Radar
 
 
-def read_netcdf(filename):
+def read_cfradial(filename):
     """
-    Read a netCDF file.
+    Read a CF/Radial netCDF file.
 
     Parameters
     ----------
     filename : str
-        Name of netCDF file to read data from.
+        Name of CF/Radial netCDF file to read data from.
 
     Returns
     -------
@@ -44,7 +44,7 @@ def read_netcdf(filename):
 
     Notes
     -----
-    This function has not been tested on "stream" netCDF files.
+    This function has not been tested on "stream" CF/Radial files.
 
     """
     ncobj = netCDF4.Dataset(filename)
@@ -246,7 +246,7 @@ def _stream_to_2d(data, sweeps, sweepe, ray_len, maxgates, nrays,
     return time_range
 
 
-def write_netcdf(filename, radar, format='NETCDF4', time_reference=False):
+def write_cfradial(filename, radar, format='NETCDF4', time_reference=False):
     """
     Write a Radar object to a CF/Radial compliant netCDF file.
 

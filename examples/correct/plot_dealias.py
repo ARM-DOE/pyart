@@ -32,7 +32,7 @@ height, speed, direction = t
 # perform dealiasing
 dealias_data = pyart.correct.dealias_fourdd(radar, height * 1000.0, speed,
                                             direction, target)
-radar.fields['corrected_mean_doppler_velocity'] = dealias_data
+radar.add_field('corrected_mean_doppler_velocity', dealias_data)
 
 # create a plot of the first and sixth tilts
 fig = plt.figure(figsize=(15, 10))
