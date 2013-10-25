@@ -212,6 +212,26 @@ class NEXRADLevel2File():
 
         return dic
 
+    def scan_info2(self):
+        """
+        """
+
+        info = []
+        for scan in range(self.nscans):
+            nrays = len(self.scan_msgs[scan])
+
+            msg31_number = self.scan_msgs[scan][0]
+            msg = self.msg31s[msg31_number]
+
+            nexrad_moments = ['REF', 'VEL', 'SW', 'ZDR', 'PHI', 'RHO']
+            moments = [f for f in nexrad_moments if f in msg]
+            ngates = [msg[f]['ngates'] for f in moments]
+            info.append({
+                'nrays': nrays,
+                'ngates': ngates,
+                'moments': moments})
+        return info
+
     def get_nrays(self, scan):
         """
         Return the number of rays in a given scan.

@@ -21,6 +21,50 @@ from .common import get_metadata, make_time_unit_str
 from .nexrad_common import NEXRAD_METADATA
 from .nexrad_level2 import NEXRADLevel2File
 
+def read_nexrad_new(filename, bzip=None, field_mapping=None,
+                    field_metadata=None):
+    """
+
+    """
+    # parse the parameters
+    if field_mapping is None:
+        field_mapping = ARCHIVE_MAPPING.copy()
+    if field_metadata is None:
+        field_metadata = NEXRAD_METADATA.copy()
+
+    if bzip is None:
+        if filename.endswith('.bz2') or filename.endswith('bzip2'):
+            bzip = True
+        else:
+            bzip = False
+
+    # open the file and retrieve scan information
+    nfile = NEXRADLevel2File(filename, bzip)
+    scan_info = nfile.scan_info2()
+
+    ngates = max([max(s['ngates']) for s in scan_info])
+    nrays = sum([s['nrays'] for s in scan_info])
+
+    field_shape = (nrays, ngates)
+
+    fields = {
+        'REF': {'data': np.ma.masked_all(field_shape, dtype='float32')},
+        'VEL': {'data': np.ma.masked_all(field_shape, dtype='float32')},
+        'SW': {'data': np.ma.masked_all(field_shape, dtype='float32')},
+        'ZDR': {'data': np.ma.masked_all(field_shape, dtype='float32')},
+        'PHI': {'data': np.ma.masked_all(field_shape, dtype='float32')},
+        'RHO': {'data': np.ma.masked_all(field_shape, dtype='float32')},
+    }
+    nexrad_moments = ['REF', 'VEL', 'SW', 'ZDR', 'PHI', 'RHO']
+    for i, msg in enumerate(nfile.msg31s):
+        for moment in [m for m in msg.keys() if m in nexrad_moments]:
+            offset = msg[moment]['offset']
+            scale = msg[moment]['scale']
+            ngates = msg[moment]['ngates']
+            data = msg[moment]['data']
+            mdata = (np.ma.masked_less_equal(data, 1) - offset) / (scale)
+            fields[moment]['data'][i, :ngates] = mdata
+    return fields
 
 def read_nexrad_archive(filename, bzip=None, field_mapping=None,
                         field_metadata=None):
