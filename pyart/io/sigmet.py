@@ -26,7 +26,7 @@ SPEED_OF_LIGHT = 299793000.0
 
 
 def read_sigmet(filename, field_names=None, field_metadata=None,
-                sigmet_field_names=False, time_ordered=True, debug=False):
+                sigmet_field_names=False, time_ordered='full', debug=False):
     """
     Read a Sigmet (IRIS) product file.
 
@@ -49,9 +49,14 @@ def read_sigmet(filename, field_names=None, field_metadata=None,
         case the field_metadata and field_names parameters are ignored and the
         returned radar object has a fields attribute filled with the sigmet
         data type names with no metadata.
-    time_ordered : bool, optional
-        True (default) to return data in Radar object in time increasing
-        order.  False will return the data ordered as present in the file.
+    time_ordered : 'full', 'none' or 'roll'.
+        Parameter controlling the time ordering of the data.  'full' will
+        place data within each sweep in a strictly time increasing order,
+        'none' will keep data ordered in the same manner as the Sigmet file.
+        'roll' will attempt to time order the data within each sweep using a
+        single roll operation, complete time increasing ordering is not
+        ensured, but this method is considerable faster than the 'full' method
+        and gives time increasing data when the data is sequentially ordered.
     debug : bool, optional
 
     Returns
@@ -83,8 +88,10 @@ def read_sigmet(filename, field_names=None, field_metadata=None,
         sigmet_metadata[k]['time'] = np.ma.masked_array(v['time'], bad_rays)
 
     # time order
-    if time_ordered:
-        _time_order_data_and_metadata(sigmet_data, sigmet_metadata)
+    if time_ordered == 'full':
+        _time_order_data_and_metadata_full(sigmet_data, sigmet_metadata)
+    if time_ordered == 'roll':
+        _time_order_data_and_metadata_roll(sigmet_data, sigmet_metadata)
 
     # remove missing rays from the data
     good_rays = (sigmet_metadata[first_data_type]['nbins'] != -1)
@@ -253,16 +260,21 @@ def read_sigmet(filename, field_names=None, field_metadata=None,
         instrument_parameters=instrument_parameters)
 
 
-def _time_order_data_and_metadata(data, metadata):
-    """ Put Sigmet data and metadata in time increasing order. """
-
+def _time_order_data_and_metadata_roll(data, metadata):
+    """
+    Put Sigmet data and metadata in time increasing order using a single
+    roll.
+    """
     # Sigmet data is stored by sweep in azimuth increasing order,
     # to place in time increasing order we must roll each sweep so
     # the earliest collected ray is first.
     # This assuming all the fields have the same timing and the rays
     # were collected in sequentially, which appears to be true.
 
-    ref_time = metadata[metadata.keys()[0]]['time'].astype('int32')
+    if 'XHDR' in data:
+        ref_time = np.squeeze(data['XHDR']).copy()
+    else:
+        ref_time = metadata[metadata.keys()[0]]['time'].astype('int32')
     for i, sweep_time in enumerate(ref_time):
 
         # determine the number of place by which elements should be shifted.
@@ -282,6 +294,46 @@ def _time_order_data_and_metadata(data, metadata):
             fmd['elevation_0'][i] = np.roll(fmd['elevation_0'][i], shift)
             fmd['azimuth_0'][i] = np.roll(fmd['azimuth_0'][i], shift)
             fmd['azimuth_1'][i] = np.roll(fmd['azimuth_1'][i], shift)
+
+    return
+
+
+def _time_order_data_and_metadata_full(data, metadata):
+    """
+    Put Sigmet data and metadata in time increasing order by sorting the
+    time.
+    """
+
+    # Sigmet data is stored by sweep in azimuth increasing order,
+    # to place in time increasing order we must sort each sweep so
+    # that the rays are time ordered.
+    # This assuming all the fields have the same timing, rays are not
+    # assumed to be collected sequentially.
+
+    if 'XHDR' in data:
+        ref_time = np.squeeze(data['XHDR']).copy()
+    else:
+        ref_time = metadata[metadata.keys()[0]]['time'].astype('int32')
+    for i, sweep_time in enumerate(ref_time):
+
+        # determine the indices which sort the sweep time using a stable
+        # sorting algorithm to prevent excessive azimuth scrambling.
+        sweep_time_diff = np.diff(sweep_time)
+        if sweep_time_diff.min() >= 0:
+            continue    # already time ordered
+        sort_idx = np.argsort(sweep_time, kind='mergesort')
+
+        # sort the data and metadata for each field
+        for field in data.keys():
+            data[field][i] = data[field][i][sort_idx]
+
+            fmd = metadata[field]
+            fmd['time'][i] = fmd['time'][i][sort_idx]
+            fmd['nbins'][i] = fmd['nbins'][i][sort_idx]
+            fmd['elevation_1'][i] = fmd['elevation_1'][i][sort_idx]
+            fmd['elevation_0'][i] = fmd['elevation_0'][i][sort_idx]
+            fmd['azimuth_0'][i] = fmd['azimuth_0'][i][sort_idx]
+            fmd['azimuth_1'][i] = fmd['azimuth_1'][i][sort_idx]
 
     return
 
