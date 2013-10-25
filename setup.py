@@ -21,6 +21,7 @@ import shutil
 import sys
 import re
 import subprocess
+import glob
 
 if sys.version_info[0] < 3:
     import __builtin__ as builtins
@@ -58,6 +59,8 @@ MINOR = 0
 MICRO = 0
 ISRELEASED = False
 VERSION = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
+SCRIPTS = glob.glob('scripts/*')
+
 
 # Return the git revision as a string
 def git_version():
@@ -73,7 +76,7 @@ def git_version():
         env['LANG'] = 'C'
         env['LC_ALL'] = 'C'
         out = subprocess.Popen(
-            cmd, stdout = subprocess.PIPE, env=env).communicate()[0]
+            cmd, stdout=subprocess.PIPE, env=env).communicate()[0]
         return out
 
     try:
@@ -86,7 +89,8 @@ def git_version():
 
 # BEFORE importing distutils, remove MANIFEST. distutils doesn't properly
 # update it when the contents of directories change.
-if os.path.exists('MANIFEST'): os.remove('MANIFEST')
+if os.path.exists('MANIFEST'):
+    os.remove('MANIFEST')
 
 # This is a bit hackish: we are setting a global variable so that the main
 # pyart __init__ can detect if it is being loaded by the setup routine, to
@@ -117,8 +121,8 @@ if not release:
         try:
             from pyart.version import git_revision as GIT_REVISION
         except ImportError:
-            raise ImportError("Unable to import git_revision. Try removing " \
-                              "pyart/version.py and the build directory " \
+            raise ImportError("Unable to import git_revision. Try removing "
+                              "pyart/version.py and the build directory "
                               "before building.")
     else:
         GIT_REVISION = "Unknown"
@@ -129,13 +133,14 @@ if not release:
     a = open(filename, 'w')
     try:
         a.write(cnt % {'version': VERSION,
-                       'full_version' : FULLVERSION,
-                       'git_revision' : GIT_REVISION,
+                       'full_version': FULLVERSION,
+                       'git_revision': GIT_REVISION,
                        'isrelease': str(ISRELEASED)})
     finally:
         a.close()
 
-def configuration(parent_package='',top_path=None):
+
+def configuration(parent_package='', top_path=None):
     from numpy.distutils.misc_util import Configuration
     config = Configuration(None, parent_package, top_path)
     config.set_options(ignore_setup_xxx_py=True,
@@ -155,7 +160,7 @@ def setup_package():
     write_version_py()
 
     from numpy.distutils.core import setup
-    
+
     setup(
         name=NAME,
         maintainer=MAINTAINER,
@@ -166,8 +171,9 @@ def setup_package():
         download_url=DOWNLOAD_URL,
         license=LICENSE,
         classifiers=CLASSIFIERS,
-        platforms = PLATFORMS,
-        configuration=configuration
+        platforms=PLATFORMS,
+        configuration=configuration,
+        scripts=SCRIPTS,
     )
 
 if __name__ == '__main__':

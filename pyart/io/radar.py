@@ -183,8 +183,8 @@ class Radar:
         self._dic_info('azimuth', level, out)
         self._dic_info('elevation', level, out)
 
+        print('fields:', file=out)
         for field_name, field_dic in self.fields.iteritems():
-            print('fields:', file=out)
             self._dic_info(field_name, level, out, field_dic, 1)
 
         self._dic_info('fixed_angle', level, out)
@@ -192,8 +192,8 @@ class Radar:
         if self.instrument_parameters is None:
             print('instrument_parameters: None', file=out)
         else:
+            print('instrument_parameters:', file=out)
             for name, dic in self.instrument_parameters.iteritems():
-                print('instrument_parameters:', file=out)
                 self._dic_info(name, level, out, dic, 1)
 
         self._dic_info('latitude', level, out)
@@ -206,8 +206,8 @@ class Radar:
         if self.radar_calibration is None:
             print('radar_calibration: None', file=out)
         else:
+            print('radar_calibration:', file=out)
             for name, dic in self.radar_calibration.iteritems():
-                print('radar_calibration:', file=out)
                 self._dic_info(name, level, out, dic, 1)
 
         self._dic_info('range', level, out)
