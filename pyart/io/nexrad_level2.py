@@ -157,6 +157,10 @@ class NEXRADLevel2File():
         self.scan_msgs = [np.where(elev_nums == i + 1)[0]
                           for i in range(elev_nums.max())]
         self.nscans = len(self.scan_msgs)
+
+        # pull out the vcp record
+        self.vcp = [r for r in self._records if r['header']['type'] == 5][0]
+
         return
 
     def location(self):
@@ -174,7 +178,7 @@ class NEXRADLevel2File():
 
         """
         dic = self.msg31s[0]['VOL']
-        return dic['lat'], dic['lon'], dic['height']
+        return dic['lat'], dic['lon'], dic['height'] + dic['feedhorn_height']
 
     def scan_info(self):
         """
@@ -346,6 +350,14 @@ class NEXRADLevel2File():
         """
         return self._msg31_array(scans, 'elevation_angle')
 
+    def get_fixed_angles(self, scans):
+        """
+        """
+        cp = self.vcp['cut_parameters']
+        scale = 360. / 65536.
+        return np.array([cp[i]['elevation_angle'] * scale for i in scans],
+                        dtype='float32')
+
     def get_data(self, scans, moment, max_gates, raw_data=False):
         """
         Retrieve moment data for a given set of scans.
@@ -430,6 +442,19 @@ def _get_record_from_buf(buf, pos):
 
         dic['msg31_header'] = msg_31_header
 
+    elif msg_type == 5:
+        msg_header_size = _structure_size(MSG_HEADER)
+        msg5_header_size = _structure_size(MSG_5)
+        msg5_elev_size = _structure_size(MSG_5_ELEV)
+
+        dic['msg5_header'] = _unpack_from_buf(buf, pos + msg_header_size,
+                                              MSG_5)
+        dic['cut_parameters'] = []
+        for i in range(dic['msg5_header']['num_cuts']):
+            p = pos + msg_header_size + msg5_header_size + msg5_elev_size * i
+            dic['cut_parameters'].append(_unpack_from_buf(buf, p, MSG_5_ELEV))
+
+        new_pos = pos + RECORD_SIZE
     else:   # not message 31 or 1, no decoding performed
         new_pos = pos + RECORD_SIZE
 
@@ -462,7 +487,7 @@ def _get_msg31_data_block(buf, ptr):
 
 def _structure_size(structure):
     """ Find the size of a structure in bytes. """
-    return struct.calcsize(''.join([i[1] for i in structure]))
+    return struct.calcsize('>' + ''.join([i[1] for i in structure]))
 
 
 def _unpack_from_buf(buf, pos, structure):
@@ -555,6 +580,48 @@ MSG_31 = (
     ('block_pointer_7', INT4),      # 56-59  Moment "ZDR"
     ('block_pointer_8', INT4),      # 60-63  Moment "PHI"
     ('block_pointer_9', INT4),      # 64-67  Moment "RHO"
+)
+
+
+# Table XI Volume Coverage Pattern Data (Message Type 5 & 7)
+# pages 3-51 to 3-54
+MSG_5 = (
+    ('msg_size', INT2),
+    ('pattern_type', CODE2),
+    ('pattern_number', INT2),
+    ('num_cuts', INT2),
+    ('clutter_map_group', INT2),
+    ('doppler_vel_res', CODE1),     # 2: 0.5 degrees, 4: 1.0 degrees
+    ('pulse_width', CODE1),         # 2: short, 4: long
+    ('spare', '10s')                # halfwords 7-11 (10 bytes, 5 halfwords)
+)
+
+MSG_5_ELEV = (
+    ('elevation_angle', CODE2),  # scaled by 360/65536 for value in degrees.
+    ('channel_config', CODE1),
+    ('waveform_type', CODE1),
+    ('super_resolution', CODE1),
+    ('prf_number', INT1),
+    ('prf_pulse_count', INT2),
+    ('azimuth_rate', CODE2),
+    ('ref_thresh', SINT2),
+    ('vel_thresh', SINT2),
+    ('sw_thresh', SINT2),
+    ('zdr_thres', SINT2),
+    ('phi_thres', SINT2),
+    ('rho_thres', SINT2),
+    ('edge_angle_1', CODE2),
+    ('dop_prf_num_1', INT2),
+    ('dop_prf_pulse_count_1', INT2),
+    ('spare_1', '2s'),
+    ('edge_angle_2', CODE2),
+    ('dop_prf_num_2', INT2),
+    ('dop_prf_pulse_count_2', INT2),
+    ('spare_2', '2s'),
+    ('edge_angle_3', CODE2),
+    ('dop_prf_num_3', INT2),
+    ('dop_prf_pulse_count_3', INT2),
+    ('spare_3', '2s'),
 )
 
 # Table XVII-B Data Block (Descriptor of Generic Data Moment Type)

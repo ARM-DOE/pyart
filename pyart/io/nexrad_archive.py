@@ -21,6 +21,7 @@ from .common import get_metadata, make_time_unit_str
 from .nexrad_common import NEXRAD_METADATA
 from .nexrad_level2 import NEXRADLevel2File
 
+
 def read_nexrad_new(filename, bzip=None, field_mapping=None,
                     field_metadata=None):
     """
@@ -42,6 +43,23 @@ def read_nexrad_new(filename, bzip=None, field_mapping=None,
     nfile = NEXRADLevel2File(filename, bzip)
     scan_info = nfile.scan_info2()
 
+    SCANS = range(nfile.nscans)
+    # time
+    time = get_metadata('time')
+    time_start, _time = nfile.get_times(SCANS)
+    time['data'] = _time
+    time['units'] = make_time_unit_str(time_start)
+
+    # range
+    scan_max_gates = np.argmax([max(s['ngates']) for s in scan_info])
+    i = np.argmax(scan_info[scan_max_gates]['ngates'])
+    moment_max_gates = scan_info[scan_max_gates]['moments'][i]
+    _range = get_metadata('range')
+    _range['data'] = nfile.get_range(scan_max_gates, moment_max_gates)
+    _range['meters_to_center_of_first_gate'] = _range['data'][0]
+    _range['meters_between_gates'] = _range['data'][1] - _range['data'][0]
+
+    # fields
     ngates = max([max(s['ngates']) for s in scan_info])
     nrays = sum([s['nrays'] for s in scan_info])
 
@@ -64,7 +82,65 @@ def read_nexrad_new(filename, bzip=None, field_mapping=None,
             data = msg[moment]['data']
             mdata = (np.ma.masked_less_equal(data, 1) - offset) / (scale)
             fields[moment]['data'][i, :ngates] = mdata
-    return fields
+
+    # metadata
+    metadata = {'original_container': 'NEXRAD Level II'}
+    # additional required CF/Radial metadata set to blank strings
+    metadata['title'] = ''
+    metadata['institution'] = ''
+    metadata['references'] = ''
+    metadata['source'] = ''
+    metadata['comment'] = ''
+    metadata['instrument_name'] = ''
+
+    # scan_type
+    scan_type = 'ppi'
+
+    # latitude, longitude, altitude
+    latitude = get_metadata('latitude')
+    longitude = get_metadata('longitude')
+    altitude = get_metadata('altitude')
+
+    lat, lon, alt = nfile.location()
+    latitude['data'] = np.array([lat], dtype='float64')
+    longitude['data'] = np.array([lon], dtype='float64')
+    altitude['data'] = np.array([alt], dtype='float64')
+
+    # sweep_number, sweep_mode, fixed_angle, sweep_start_ray_index
+    # sweep_end_ray_index
+    sweep_number = get_metadata('sweep_number')
+    sweep_mode = get_metadata('sweep_mode')
+    fixed_angle = get_metadata('fixed_angle')
+    sweep_start_ray_index = get_metadata('sweep_start_ray_index')
+    sweep_end_ray_index = get_metadata('sweep_end_ray_index')
+
+    nsweeps = int(nfile.nscans)
+    sweep_number['data'] = np.arange(nsweeps, dtype='int32')
+    sweep_mode['data'] = np.array(nsweeps * ['azimuth_surveillance'])
+
+    rays_per_scan = [s['nrays'] for s in scan_info]
+    sweep_end_ray_index['data'] = np.cumsum(rays_per_scan, dtype='int32') - 1
+
+    rays_per_scan.insert(0, 0)
+    sweep_start_ray_index['data'] = np.cumsum(rays_per_scan[:-1],
+                                              dtype='int32')
+
+    # azimuth, elevation
+    azimuth = get_metadata('azimuth')
+    elevation = get_metadata('elevation')
+    azimuth['data'] = nfile.get_azimuth_angles(SCANS)
+    elev = nfile.get_elevation_angles(SCANS)
+    elevation['data'] = elev.astype('float32')
+    fixed_angle['data'] = nfile.get_fixed_angles(SCANS)
+
+    return Radar(
+        time, _range, fields, metadata, scan_type,
+        latitude, longitude, altitude,
+        sweep_number, sweep_mode, fixed_angle, sweep_start_ray_index,
+        sweep_end_ray_index,
+        azimuth, elevation,
+        instrument_parameters=None)
+
 
 def read_nexrad_archive(filename, bzip=None, field_mapping=None,
                         field_metadata=None):
