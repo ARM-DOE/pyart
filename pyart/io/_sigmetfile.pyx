@@ -26,6 +26,7 @@ A class and supporting functions for reading Sigmet (raw format) files.
 
 import struct
 import datetime
+import warnings
 
 import numpy as np
 cimport numpy as np
@@ -73,7 +74,7 @@ cdef class SigmetFile:
 
     cdef np.ndarray _rbuf
     cdef np.int16_t * _rbuf_p   # hack for fast indexing of _rbuf
-    cdef int _rbuf_pos, _record_number
+    cdef public int _rbuf_pos, _record_number
 
     def __init__(self, filename, debug=False):
         """ initalize the object. """
@@ -106,9 +107,11 @@ cdef class SigmetFile:
         # determine the available fields
         task_config = self.ingest_header['task_configuration']
         task_dsp_info = task_config['task_dsp_info']
-        word1 = task_dsp_info['current_data_type_mask']['mask_word_0']
-        word2 = task_dsp_info['current_data_type_mask']['mask_word_1']
-        return _data_types_from_mask(word1, word2)
+        word0 = task_dsp_info['current_data_type_mask']['mask_word_0']
+        word1 = task_dsp_info['current_data_type_mask']['mask_word_1']
+        word2 = task_dsp_info['current_data_type_mask']['mask_word_2']
+        word3 = task_dsp_info['current_data_type_mask']['mask_word_3']
+        return _data_types_from_mask(word0, word1, word2, word3)
 
     def close(self):
         """ Close the file. """
@@ -165,6 +168,18 @@ cdef class SigmetFile:
         for i in xrange(nsweeps):
             ingest_data_hdrs, sweep_data, sweep_metadata = self._get_sweep()
 
+            # check for a truncated file, return sweep(s) read up until error
+            if ingest_data_hdrs is None:
+
+                mess = 'File truncated, %i of %i sweeps read' % (i, nsweeps)
+                warnings.warn(mess)
+
+                for name in self.data_type_names:
+                    data[name] = data[name][:i]
+                    for k in metadata[name]:
+                        metadata[name][k] = metadata[name][k][:i]
+                return data, metadata
+
             for j, name in enumerate(self.data_type_names):
                 az0, el0, az1, el1, ray_nbins, ray_time = sweep_metadata[j]
 
@@ -187,6 +202,8 @@ cdef class SigmetFile:
         """
         Get the data and metadata from the next sweep.
 
+        If the file ends early None is returned for all values.
+
         Parameters
         ----------
         raw_data : bool, optional
@@ -208,6 +225,10 @@ cdef class SigmetFile:
         # get the next record
         lead_record = self._fh.read(RECORD_SIZE)
         self._record_number += 1
+
+        # check if the file ended early, if so return Nones
+        if len(lead_record) != RECORD_SIZE:
+            return None, None, None
 
         # unpack structures
         raw_prod_bhdr = _unpack_raw_prod_bhdr(lead_record)
@@ -333,12 +354,14 @@ cdef class SigmetFile:
 # functions used by the SigmetFile class
 
 
-def _data_types_from_mask(word0, word1):
+def _data_types_from_mask(word0, word1, word2, word3):
     """
     Return a list of the data types from the words in the data_type mask.
     """
     data_types = [i for i in range(32) if _is_bit_set(word0, i)]
     data_types += [i+32 for i in range(32) if _is_bit_set(word1, i)]
+    data_types += [i+64 for i in range(32) if _is_bit_set(word2, i)]
+    data_types += [i+96 for i in range(32) if _is_bit_set(word3, i)]
     return data_types
 
 
@@ -441,7 +464,15 @@ SIGMET_DATA_TYPES = {
     55: 'HCLASS',
     56: 'HCLASS2',
     57: 'ZDRC',
-    58: 'ZDRC2'
+    58: 'ZDRC2',
+    59: 'UNKNOWN_59',
+    60: 'UNKNOWN_60',
+    61: 'UNKNOWN_61',
+    62: 'UNKNOWN_62',
+    63: 'UNKNOWN_63',
+    64: 'UNKNOWN_64',
+    65: 'UNKNOWN_65',
+    66: 'UNKNOWN_66',   # there may be more field, add as needed
 }
 
 
@@ -584,10 +615,14 @@ def convert_sigmet_data(data_type, data):
 
         else:
             # TODO implement conversions for addition 1-byte formats
-            raise NotImplementedError
+            warnings.warn('Unknown type: %s, returning raw data' % data_type)
+            out[:] = data
+            return out
     else:
         # TODO implement conversions for additional formats.
-        raise NotImplementedError
+        warnings.warn('Unknown type: %s, returning raw data' % data_type)
+        out[:] = data
+        return out
 
     out.set_fill_value(-9999.0)
     return out
