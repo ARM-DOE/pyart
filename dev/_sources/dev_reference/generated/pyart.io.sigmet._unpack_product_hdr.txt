@@ -1,6 +1,0 @@
-pyart.io.sigmet._unpack_product_hdr
-===================================
-
-.. currentmodule:: pyart.io.sigmet
-
-.. autofunction:: _unpack_product_hdr

@@ -1,6 +1,0 @@
-pyart.graph.NetcdfDisplay.generate_title
-========================================
-
-.. currentmodule:: pyart.graph
-
-.. automethod:: NetcdfDisplay.generate_title

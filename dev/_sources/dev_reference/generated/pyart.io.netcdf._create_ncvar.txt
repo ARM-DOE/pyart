@@ -1,6 +1,0 @@
-pyart.io.netcdf._create_ncvar
-=============================
-
-.. currentmodule:: pyart.io.netcdf
-
-.. autofunction:: _create_ncvar

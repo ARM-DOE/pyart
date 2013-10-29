@@ -1,6 +1,0 @@
-pyart.testing.sample_files.NETCDF_PPI_FILE
-==========================================
-
-.. currentmodule:: pyart.testing.sample_files
-
-.. autodata:: NETCDF_PPI_FILE

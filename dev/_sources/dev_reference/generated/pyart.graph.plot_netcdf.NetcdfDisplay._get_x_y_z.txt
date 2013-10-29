@@ -1,6 +1,0 @@
-pyart.graph.plot_netcdf.NetcdfDisplay._get_x_y_z
-================================================
-
-.. currentmodule:: pyart.graph.plot_netcdf
-
-.. automethod:: NetcdfDisplay._get_x_y_z

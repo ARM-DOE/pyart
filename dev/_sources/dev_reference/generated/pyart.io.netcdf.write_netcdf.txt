@@ -1,6 +1,0 @@
-pyart.io.netcdf.write_netcdf
-============================
-
-.. currentmodule:: pyart.io.netcdf
-
-.. autofunction:: write_netcdf

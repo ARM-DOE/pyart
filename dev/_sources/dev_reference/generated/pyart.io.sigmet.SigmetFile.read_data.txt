@@ -1,6 +1,0 @@
-pyart.io.sigmet.SigmetFile.read_data
-====================================
-
-.. currentmodule:: pyart.io.sigmet
-
-.. automethod:: SigmetFile.read_data
