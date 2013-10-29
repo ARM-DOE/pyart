@@ -1,0 +1,63 @@
+#! /usr/bin/env python
+
+import pyart
+import argparse
+
+if __name__ == '__main__':
+
+    # parse the arguments
+    parser = argparse.ArgumentParser(
+        description='Print information on a radar file.')
+    parser.add_argument('filename', type=str, help='radar file to check')
+
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument('-f', '--full', dest='level', action='store_const',
+                       const='f', help='print out all information')
+    group.add_argument('-s', '-standard', dest='level', action='store_const',
+                       const='s', help='print out standard information')
+    group.add_argument('-c', '--compact', dest='level', action='store_const',
+                       const='c',
+                       help='print out minimal information (default)')
+    parser.set_defaults(level='c')
+
+    igroup = parser.add_argument_group(
+        title='ingest method, optional',
+        description=('The method of file ingest can be specified. '
+                     'If no ingest is specified, the format of the file will '
+                     'be used to determine the best ingest method. '
+                     'Specify only one of the following:'))
+
+    igroup.add_argument('--sigmet', action='store_true',
+                        help='Sigmet/IRIS ingest')
+    igroup.add_argument('--mdv', action='store_true', help='MDV ingest')
+    igroup.add_argument('--cfradial', action='store_true',
+                        help='CF/Radial ingest')
+    igroup.add_argument('--rsl', action='store_true',
+                        help='RSL ingest')
+    igroup.add_argument('--nexrad_archive', action='store_true',
+                        help='NEXRAD level 2 archive ingest')
+    igroup.add_argument('--nexrad_cdm', action='store_true',
+                        help='NEXRAD level 2 CDM ingest')
+
+    parser.add_argument('-v', '--version', action='version',
+                        version='Py-ART version %s' % (pyart.__version__))
+    args = parser.parse_args()
+
+    # read in the file
+    if args.sigmet:
+        radar = pyart.io.read_sigmet(args.filename)
+    elif args.mdv:
+        radar = pyart.io.read_mdv(args.filename)
+    elif args.cfradial:
+        radar = pyart.io.read_cfradial(args.filename)
+    elif args.rsl:
+        radar = pyart.io.read_rsl(args.filename)
+    elif args.nexrad_archive:
+        radar = pyart.io.read_nexrad_archive(args.filename)
+    elif args.nexrad_cdm:
+        radar = pyart.io.read_nexrad_cdm(args.filename)
+    else:
+        radar = pyart.io.read(args.filename)
+
+    # print out information
+    radar.info(args.level)

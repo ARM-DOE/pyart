@@ -272,7 +272,8 @@ def _time_order_data_and_metadata_roll(data, metadata):
     # were collected in sequentially, which appears to be true.
 
     if 'XHDR' in data:
-        ref_time = np.squeeze(data['XHDR']).copy()
+        ref_time = data['XHDR'].copy()
+        ref_time.shape = ref_time.shape[:-1]
     else:
         ref_time = metadata[metadata.keys()[0]]['time'].astype('int32')
     for i, sweep_time in enumerate(ref_time):
@@ -311,7 +312,8 @@ def _time_order_data_and_metadata_full(data, metadata):
     # assumed to be collected sequentially.
 
     if 'XHDR' in data:
-        ref_time = np.squeeze(data['XHDR']).copy()
+        ref_time = data['XHDR'].copy()
+        ref_time.shape = ref_time.shape[:-1]
     else:
         ref_time = metadata[metadata.keys()[0]]['time'].astype('int32')
     for i, sweep_time in enumerate(ref_time):

@@ -1,0 +1,131 @@
+#! /usr/bin/env python
+
+import argparse
+
+import matplotlib.pyplot as plt
+import pyart
+
+if __name__ == '__main__':
+
+    # parse the arguments
+    parser = argparse.ArgumentParser(
+        description='Plot a field from a radar file.')
+
+    # positional arguments
+    parser.add_argument('filename', type=str, help='name of radar file')
+    parser.add_argument('field', type=str, help='field in radar to plot')
+    parser.add_argument('figname', type=str, nargs='?',
+                        help=('file to save figure as, if not specified '
+                              'figure is displayed on screen'))
+
+    # value optional arguments
+    parser.add_argument('--tilt', type=int, default=0,
+                        help=('radar tilt/sweep to plot. ' 'A value of 0, '
+                              'the first tilt, is used if not specified.'))
+    parser.add_argument('--vmin', type=float, default=None,
+                        help='luminance minimum value')
+    parser.add_argument('--vmax', type=float, default=None,
+                        help='luminance maximum value')
+    parser.add_argument('--cmap', type=str, default='jet',
+                        help='name of colormap used to plot data')
+    parser.add_argument('--title', type=str, default=None,
+                        help='title of the plot')
+    parser.add_argument('--axis_labels', type=str, nargs=2,
+                        default=(None, None),
+                        metavar=('XAXIS_LABEL', 'YAXIS_LABEL'),
+                        help='x-axis and y-axis labels')
+    parser.add_argument('--colorbar_label', type=str, default=None,
+                        help='colorbar label')
+
+    # boolean optional arguments
+    parser.add_argument('--no_mask_outside', action='store_true',
+                        help='do not mask data outside of vmin and vmax')
+    parser.add_argument('--no_title', action='store_true',
+                        help='do not title the figure')
+    parser.add_argument('--no_axis_labels', action='store_true',
+                        help='do not label the axes')
+    parser.add_argument('--no_colorbar', action='store_true',
+                        help='do not create a colorbar')
+
+    parser.add_argument('-v', '--version', action='version',
+                        version='Py-ART version %s' % (pyart.__version__))
+
+    # ingest arguments
+    igroup = parser.add_argument_group(
+        title='ingest method, optional',
+        description=('The method of file ingest can be specified. '
+                     'If no ingest is specified, the format of the file will '
+                     'be used to determine the best ingest method. '
+                     'Specify only one of the following:'))
+
+    igroup.add_argument('--sigmet', action='store_true',
+                        help='Sigmet/IRIS ingest')
+    igroup.add_argument('--mdv', action='store_true', help='MDV ingest')
+    igroup.add_argument('--cfradial', action='store_true',
+                        help='CF/Radial ingest')
+    igroup.add_argument('--rsl', action='store_true',
+                        help='RSL ingest')
+    igroup.add_argument('--nexrad_archive', action='store_true',
+                        help='NEXRAD level 2 archive ingest')
+    igroup.add_argument('--nexrad_cdm', action='store_true',
+                        help='NEXRAD level 2 CDM ingest')
+
+    args = parser.parse_args()
+
+    # read in the file
+    if args.sigmet:
+        radar = pyart.io.read_sigmet(args.filename)
+    elif args.mdv:
+        radar = pyart.io.read_mdv(args.filename)
+    elif args.cfradial:
+        radar = pyart.io.read_cfradial(args.filename)
+    elif args.rsl:
+        radar = pyart.io.read_rsl(args.filename)
+    elif args.nexrad_archive:
+        radar = pyart.io.read_nexrad_archive(args.filename)
+    elif args.nexrad_cdm:
+        radar = pyart.io.read_nexrad_cdm(args.filename)
+    else:
+        radar = pyart.io.read(args.filename)
+
+    # create the plot
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+
+    if args.field not in radar.fields:
+        print "Valid fields:"
+        for f in radar.fields:
+            print '\t' + f
+        raise ValueError('invalid field: ' + args.field)
+
+    display = pyart.graph.RadarDisplay(radar)
+    if radar.scan_type == 'ppi':
+        display.plot_ppi(
+            args.field, args.tilt, ax=ax, fig=fig,
+            vmin=args.vmin, vmax=args.vmax, cmap=args.cmap,
+            mask_outside=(not args.no_mask_outside),
+            title_flag=(not args.no_title),
+            axislabels_flag=(not args.no_axis_labels),
+            colorbar_flag=(not args.no_colorbar),
+            title=args.title,
+            axislabels=args.axis_labels,
+            colorbar_label=args.colorbar_label)
+    elif radar.scan_type == 'rhi':
+        display.plot_rhi(
+            args.field, args.tilt, ax=ax, fig=fig,
+            vmin=args.vmin, vmax=args.vmax, cmap=args.cmap,
+            mask_outside=(not args.no_mask_outside),
+            title_flag=(not args.no_title),
+            axislabels_flag=(not args.no_axis_labels),
+            colorbar_flag=(not args.no_colorbar),
+            title=args.title,
+            axislabels=args.axis_labels,
+            colorbar_label=args.colorbar_label)
+    else:
+        raise ValueError('Cannot plot radar scan_type: ' + radar.scan_type)
+
+    # show the plot if no figname provided, otherwise save the figure
+    if args.figname is None:
+        plt.show()
+    else:
+        fig.savefig(args.figname)

@@ -1,0 +1,69 @@
+#! /usr/bin/env python
+
+import pyart
+import argparse
+
+if __name__ == '__main__':
+
+    # parse the arguments
+    parser = argparse.ArgumentParser(
+        description='Convert a radar file to CF/Radial format.')
+    parser.add_argument('infile', type=str, help='radar file to convert')
+    parser.add_argument('outfile', type=str, help='file to save file to')
+
+    igroup = parser.add_argument_group(
+        title='ingest method, optional',
+        description=('The method of file ingest can be specified. '
+                     'If no ingest is specified, the format of the file will '
+                     'be used to determine the best ingest method. '
+                     'Specify only one of the following:'))
+
+    igroup.add_argument('--sigmet', action='store_true',
+                        help='Sigmet/IRIS ingest')
+    igroup.add_argument('--mdv', action='store_true', help='MDV ingest')
+    igroup.add_argument('--cfradial', action='store_true',
+                        help='CF/Radial ingest')
+    igroup.add_argument('--rsl', action='store_true',
+                        help='RSL ingest')
+    igroup.add_argument('--nexrad_archive', action='store_true',
+                        help='NEXRAD level 2 archive ingest')
+    igroup.add_argument('--nexrad_cdm', action='store_true',
+                        help='NEXRAD level 2 CDM ingest')
+
+    fgroup = parser.add_mutually_exclusive_group()
+    fgroup.add_argument('--netcdf3_classic', action='store_const',
+                        const='NETCDF3_CLASSIC', dest='netcdf_format',
+                        help='create a NetCDF3 classic formatted file')
+    fgroup.add_argument('--netcdf3_64bit', action='store_const',
+                        const='NETCDF3_64BIT', dest='netcdf_format',
+                        help='create a NetCDF3 64-bit offset formatted file')
+    fgroup.add_argument('--netcdf4', action='store_const',
+                        const='NETCDF4', dest='netcdf_format',
+                        help='create a NetCDF4 formatted file (default)')
+    fgroup.add_argument('--netcdf4_classic', action='store_const',
+                        const='NETCDF4_CLASSIC', dest='netcdf_format',
+                        help='create a NetCDF4 classic formatted file')
+    parser.set_defaults(netcdf_format='NETCDF4')
+
+    parser.add_argument('-v', '--version', action='version',
+                        version='Py-ART version %s' % (pyart.__version__))
+    args = parser.parse_args()
+
+    # read in the file
+    if args.sigmet:
+        radar = pyart.io.read_sigmet(args.infile)
+    elif args.mdv:
+        radar = pyart.io.read_mdv(args.infile)
+    elif args.cfradial:
+        radar = pyart.io.read_cfradial(args.infile)
+    elif args.rsl:
+        radar = pyart.io.read_rsl(args.infile)
+    elif args.nexrad_archive:
+        radar = pyart.io.read_nexrad_archive(args.infile)
+    elif args.nexrad_cdm:
+        radar = pyart.io.read_nexrad_cdm(args.infile)
+    else:
+        radar = pyart.io.read(args.infile)
+
+    # convert to CF/Radial
+    pyart.io.write_cfradial(args.outfile, radar, format=args.netcdf_format)
