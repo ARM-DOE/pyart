@@ -255,7 +255,8 @@ cdef class SigmetFile:
             if self.debug:
                 print "Reading ray: %i of %i" % (ray_i, nrays),
                 print "self._rbuf_pos is", self._rbuf_pos
-            self._get_ray(nbins, raw_sweep_data[ray_i])
+            if self._get_ray(nbins, raw_sweep_data[ray_i]):
+                return None, None, None
 
         # return raw data if requested
         if raw_data:
@@ -271,9 +272,8 @@ cdef class SigmetFile:
                 raw_sweep_data[i::self.ndata_types, :6]))
         return ingest_data_headers, sweep_data, sweep_metadata
 
-    @cython.boundscheck(False)
     @cython.wraparound(False)
-    cdef void _get_ray(self, int nbins, np.ndarray[np.int16_t, ndim=1] out):
+    cdef int _get_ray(self, int nbins, np.ndarray[np.int16_t, ndim=1] out):
         """
         Get the next ray, loading new records as needed.
 
@@ -284,29 +284,37 @@ cdef class SigmetFile:
         out : ndarray
             Array to load ray data into.
 
+        Returns
+        -------
+        status : int
+            0 on success, -1 if failed.
+
         """
         cdef short compression_code
         cdef int words, remain, out_pos, first_end, i
 
-        self._incr_rbuf_pos()
+        if self._incr_rbuf_pos():
+            return -1   # failed read
         compression_code = self._rbuf_p[self._rbuf_pos]
         out_pos = 0
 
         if compression_code == 1:
             out[4] = -1     # mark ray as missing by setting numbers
                             # of bins to -1
-            return
+            return 0
 
         while compression_code != 1:
 
-            self._incr_rbuf_pos()
+            if self._incr_rbuf_pos():
+                return -1   # failed read
             if compression_code < 0:
                 words = compression_code + 32768    # last 7 bits give size
                 if self._rbuf_pos + words <= 3072:
                     # all compressed data is in the current record
                     for i in range(words):
                         out[out_pos + i] = self._rbuf_p[self._rbuf_pos + i]
-                    self._incr_rbuf_pos(words)
+                    if self._incr_rbuf_pos(words):
+                        return -1   # failed read
                     out_pos += words
                 else:
                     # data is split between current and next record
@@ -321,28 +329,35 @@ cdef class SigmetFile:
                     for i in range(out_pos + words - first_end):
                         out[first_end + i] = self._rbuf_p[self._rbuf_pos + i]
 
-                    self._incr_rbuf_pos(remain)
+                    if self._incr_rbuf_pos(remain):
+                        return -1   # failed read
                     out_pos += words
             else:
                 # add zeros to out
+                if compression_code + out_pos > nbins + 6:
+                    return -1   # file is corrupt
                 for i in range(compression_code):
                     out[out_pos + i] = 0
                 out_pos += compression_code
             compression_code = self._rbuf_p[self._rbuf_pos]
 
-        return
+        return 0
 
-    cdef void _incr_rbuf_pos(self, int incr=1):
+    cdef int _incr_rbuf_pos(self, int incr=1):
         """
         Increment the record buffer position, load a new record if needed.
         """
         self._rbuf_pos += incr
         if self._rbuf_pos >= 3072:
-            self._load_record()
+            if self._load_record():
+                return -1   # failed read
+        return 0
 
-    cdef void _load_record(self):
-        """ Load the next record. """
+    cdef int _load_record(self):
+        """ Load the next record. returns -1 on fail, 0 if success. """
         record = self._fh.read(RECORD_SIZE)
+        if len(record) != RECORD_SIZE:
+            return -1   # failed read
         self._record_number += 1
         if self.debug:
             print "Finished loading record:", self._record_number
@@ -350,6 +365,7 @@ cdef class SigmetFile:
         self._rbuf = np.fromstring(record, dtype='int16')
         self._rbuf_pos = 6
         self._rbuf_p = <np.int16_t*>self._rbuf.data
+        return 0
 
 # functions used by the SigmetFile class
 

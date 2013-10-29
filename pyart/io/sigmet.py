@@ -9,7 +9,8 @@ Reading and writing of Sigmet (raw format) files
 
     read_sigmet
     ymds_time_to_datetime
-    _time_order_data_and_metadata
+    _time_order_data_and_metadata_full
+    _time_order_data_and_metadata_roll
 
 """
 
@@ -117,9 +118,11 @@ def read_sigmet(filename, field_names=None, field_metadata=None,
     if 'XHDR' in sigmet_data:   # use time in extended headers
         tdata = sigmet_data.pop('XHDR')
         tdata = (tdata.flatten() / 1000.).astype('float64')
+        sigmet_extended_header = True
     else:
         tdata = sigmet_metadata[first_data_type]['time'].astype('float64')
         tdata = tdata.filled()
+        sigmet_extended_header = False
 
     # add sweep_start time to all time values in each sweep.
     dts = [ymds_time_to_datetime(d['sweep_start_time'])
@@ -167,6 +170,10 @@ def read_sigmet(filename, field_names=None, field_metadata=None,
                 'source': '', 'history': '', 'comment': ''}
     metadata['original_container'] = 'sigmet'
     metadata['instrument_name'] = ingest_config['site_name'].strip()
+    if sigmet_extended_header:
+        metadata['sigmet_extended_header'] = 'true'
+    else:
+        metadata['sigmet_extended_header'] = 'false'
 
     # scan_type
     if task_config['task_scan_info']['antenna_scan_mode'] == 2:
