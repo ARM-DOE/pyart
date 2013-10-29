@@ -11,6 +11,9 @@ pyart.io.Radar
       .. autosummary::
          :toctree:
       
+         Radar.add_field
+         Radar.add_field_like
+         Radar.info
 
 
 

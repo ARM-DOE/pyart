@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.1.0.dev-ac2f1bf',
+        VERSION:     '1.0.0.dev-2632d0f',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <link rel="top" title="Py-ART Documentation (DRAFT)" href="../../index.html" />
     <link rel="up" title="pyart.graph.plot_mdv.MdvDisplay" href="pyart.graph.plot_mdv.MdvDisplay.html" />
     <link rel="next" title="pyart.graph.plot_mdv.MdvDisplay.set_limits" href="pyart.graph.plot_mdv.MdvDisplay.set_limits.html" />
-    <link rel="prev" title="pyart.graph.plot_mdv.MdvDisplay.plot_range_rings" href="pyart.graph.plot_mdv.MdvDisplay.plot_range_rings.html" /> 
+    <link rel="prev" title="pyart.graph.plot_mdv.MdvDisplay.plot_ray" href="pyart.graph.plot_mdv.MdvDisplay.plot_ray.html" /> 
   </head>
   <body>
     <div class="related">
@@ -48,7 +48,7 @@
           <a href="pyart.graph.plot_mdv.MdvDisplay.set_limits.html" title="pyart.graph.plot_mdv.MdvDisplay.set_limits"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="pyart.graph.plot_mdv.MdvDisplay.plot_range_rings.html" title="pyart.graph.plot_mdv.MdvDisplay.plot_range_rings"
+          <a href="pyart.graph.plot_mdv.MdvDisplay.plot_ray.html" title="pyart.graph.plot_mdv.MdvDisplay.plot_ray"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">Py-ART Documentation (DRAFT)</a> &raquo;</li>
           <li><a href="../index.html" >Developer Reference Manual</a> &raquo;</li>
@@ -66,7 +66,7 @@
 <h1>pyart.graph.plot_mdv.MdvDisplay.plot_rhi<a class="headerlink" href="#pyart-graph-plot-mdv-mdvdisplay-plot-rhi" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="pyart.graph.plot_mdv.MdvDisplay.plot_rhi">
-<tt class="descclassname">MdvDisplay.</tt><tt class="descname">plot_rhi</tt><big>(</big><em>field</em>, <em>tilt</em>, <em>mask_tuple=None</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>cmap='jet'</em>, <em>mask_outside=True</em>, <em>title=None</em>, <em>title_flag=True</em>, <em>axislabels=(None</em>, <em>None)</em>, <em>axislabels_flag=True</em>, <em>colorbar_flag=True</em>, <em>colorbar_label=None</em>, <em>ax=None</em>, <em>fig=None</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/graph/radar_display.py#L203"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.graph.plot_mdv.MdvDisplay.plot_rhi" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">MdvDisplay.</tt><tt class="descname">plot_rhi</tt><big>(</big><em>field</em>, <em>tilt</em>, <em>mask_tuple=None</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>cmap='jet'</em>, <em>mask_outside=True</em>, <em>title=None</em>, <em>title_flag=True</em>, <em>axislabels=(None</em>, <em>None)</em>, <em>axislabels_flag=True</em>, <em>colorbar_flag=True</em>, <em>colorbar_label=None</em>, <em>ax=None</em>, <em>fig=None</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/graph/radar_display.py#L278"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.graph.plot_mdv.MdvDisplay.plot_rhi" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot a RHI.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -154,8 +154,8 @@ field information.</p>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="pyart.graph.plot_mdv.MdvDisplay.plot_range_rings.html"
-                        title="previous chapter">pyart.graph.plot_mdv.MdvDisplay.plot_range_rings</a></p>
+  <p class="topless"><a href="pyart.graph.plot_mdv.MdvDisplay.plot_ray.html"
+                        title="previous chapter">pyart.graph.plot_mdv.MdvDisplay.plot_ray</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="pyart.graph.plot_mdv.MdvDisplay.set_limits.html"
                         title="next chapter">pyart.graph.plot_mdv.MdvDisplay.set_limits</a></p>
@@ -197,7 +197,7 @@ field information.</p>
           <a href="pyart.graph.plot_mdv.MdvDisplay.set_limits.html" title="pyart.graph.plot_mdv.MdvDisplay.set_limits"
              >next</a> |</li>
         <li class="right" >
-          <a href="pyart.graph.plot_mdv.MdvDisplay.plot_range_rings.html" title="pyart.graph.plot_mdv.MdvDisplay.plot_range_rings"
+          <a href="pyart.graph.plot_mdv.MdvDisplay.plot_ray.html" title="pyart.graph.plot_mdv.MdvDisplay.plot_ray"
              >previous</a> |</li>
         <li><a href="../../index.html">Py-ART Documentation (DRAFT)</a> &raquo;</li>
           <li><a href="../index.html" >Developer Reference Manual</a> &raquo;</li>
@@ -207,7 +207,7 @@ field information.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Aug 09, 2013.
+      Last updated on Oct 29, 2013.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>

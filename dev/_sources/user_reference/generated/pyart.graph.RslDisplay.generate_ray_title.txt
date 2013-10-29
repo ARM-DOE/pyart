@@ -1,0 +1,6 @@
+pyart.graph.RslDisplay.generate_ray_title
+=========================================
+
+.. currentmodule:: pyart.graph
+
+.. automethod:: RslDisplay.generate_ray_title

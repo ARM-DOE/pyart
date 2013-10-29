@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.1.0.dev-ac2f1bf',
+        VERSION:     '1.0.0.dev-2632d0f',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -77,8 +77,8 @@ coordinates to a Cartesian grid.</p>
 <span class="c"># read in the data from both XSAPR radars</span>
 <span class="n">XSAPR_SW_FILE</span> <span class="o">=</span> <span class="s">&#39;swx_20120520_0641.nc&#39;</span>
 <span class="n">XSAPR_SE_FILE</span> <span class="o">=</span> <span class="s">&#39;sex_20120520_0641.nc&#39;</span>
-<span class="n">radar_sw</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_netcdf</span><span class="p">(</span><span class="n">XSAPR_SW_FILE</span><span class="p">)</span>
-<span class="n">radar_se</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_netcdf</span><span class="p">(</span><span class="n">XSAPR_SE_FILE</span><span class="p">)</span>
+<span class="n">radar_sw</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_cfradial</span><span class="p">(</span><span class="n">XSAPR_SW_FILE</span><span class="p">)</span>
+<span class="n">radar_se</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_cfradial</span><span class="p">(</span><span class="n">XSAPR_SE_FILE</span><span class="p">)</span>
 
 <span class="c"># perform Cartesian mapping, limit to the reflectivity field.</span>
 <span class="n">grid</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">grid_from_radars</span><span class="p">(</span>
@@ -98,7 +98,7 @@ coordinates to a Cartesian grid.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the example:</strong>  62.43 seconds</p>
+<p><strong>Total running time of the example:</strong>  50.33 seconds</p>
 </div>
 
 
@@ -159,7 +159,7 @@ coordinates to a Cartesian grid.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Aug 09, 2013.
+      Last updated on Oct 29, 2013.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>

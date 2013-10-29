@@ -1,0 +1,6 @@
+pyart.graph.plot_cfradial.CFRadialDisplay._parse_vmin_vmax
+==========================================================
+
+.. currentmodule:: pyart.graph.plot_cfradial
+
+.. automethod:: CFRadialDisplay._parse_vmin_vmax

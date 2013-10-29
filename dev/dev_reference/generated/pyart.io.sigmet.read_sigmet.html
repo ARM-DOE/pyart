@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.1.0.dev-ac2f1bf',
+        VERSION:     '1.0.0.dev-2632d0f',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -28,7 +28,7 @@
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="Py-ART Documentation (DRAFT)" href="../../index.html" />
     <link rel="up" title="pyart.io" href="../io.html" />
-    <link rel="next" title="pyart.io.sigmet.SigmetFile" href="pyart.io.sigmet.SigmetFile.html" />
+    <link rel="next" title="pyart.io.sigmet.ymds_time_to_datetime" href="pyart.io.sigmet.ymds_time_to_datetime.html" />
     <link rel="prev" title="pyart.io._rsl_interface._RslRay.__subclasshook__" href="pyart.io._rsl_interface._RslRay.__subclasshook__.html" /> 
   </head>
   <body>
@@ -45,7 +45,7 @@
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pyart.io.sigmet.SigmetFile.html" title="pyart.io.sigmet.SigmetFile"
+          <a href="pyart.io.sigmet.ymds_time_to_datetime.html" title="pyart.io.sigmet.ymds_time_to_datetime"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="pyart.io._rsl_interface._RslRay.__subclasshook__.html" title="pyart.io._rsl_interface._RslRay.__subclasshook__"
@@ -65,7 +65,7 @@
 <h1>pyart.io.sigmet.read_sigmet<a class="headerlink" href="#pyart-io-sigmet-read-sigmet" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pyart.io.sigmet.read_sigmet">
-<tt class="descclassname">pyart.io.sigmet.</tt><tt class="descname">read_sigmet</tt><big>(</big><em>filename</em>, <em>field_names=None</em>, <em>field_metadata=None</em>, <em>sigmet_field_names=False</em>, <em>debug=False</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/io/sigmet.py#L40"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.io.sigmet.read_sigmet" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">pyart.io.sigmet.</tt><tt class="descname">read_sigmet</tt><big>(</big><em>filename</em>, <em>field_names=None</em>, <em>field_metadata=None</em>, <em>sigmet_field_names=False</em>, <em>time_ordered='full'</em>, <em>debug=False</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/io/sigmet.py#L29"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.io.sigmet.read_sigmet" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read a Sigmet (IRIS) product file.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -73,7 +73,8 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
 <blockquote>
-<div><p>Name of Sigmet (IRIS) product file to read.</p>
+<div><p>Name of Sigmet (IRIS) product file to read or file-like object
+pointing to the beginning of such a file.</p>
 </div></blockquote>
 <p><strong>field_names</strong> : dict, optional</p>
 <blockquote>
@@ -94,6 +95,16 @@ none if these is no metadata.  None (default) uses a blank dictionary.</p>
 case the field_metadata and field_names parameters are ignored and the
 returned radar object has a fields attribute filled with the sigmet
 data type names with no metadata.</p>
+</div></blockquote>
+<p><strong>time_ordered</strong> : &#8216;full&#8217;, &#8216;none&#8217; or &#8216;roll&#8217;.</p>
+<blockquote>
+<div><p>Parameter controlling the time ordering of the data.  &#8216;full&#8217; will
+place data within each sweep in a strictly time increasing order,
+&#8216;none&#8217; will keep data ordered in the same manner as the Sigmet file.
+&#8216;roll&#8217; will attempt to time order the data within each sweep using a
+single roll operation, complete time increasing ordering is not
+ensured, but this method is considerable faster than the &#8216;full&#8217; method
+and gives time increasing data when the data is sequentially ordered.</p>
 </div></blockquote>
 <p><strong>debug</strong> : bool, optional</p>
 </td>
@@ -120,8 +131,8 @@ data type names with no metadata.</p>
   <p class="topless"><a href="pyart.io._rsl_interface._RslRay.__subclasshook__.html"
                         title="previous chapter">pyart.io._rsl_interface._RslRay.__subclasshook__</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="pyart.io.sigmet.SigmetFile.html"
-                        title="next chapter">pyart.io.sigmet.SigmetFile</a></p>
+  <p class="topless"><a href="pyart.io.sigmet.ymds_time_to_datetime.html"
+                        title="next chapter">pyart.io.sigmet.ymds_time_to_datetime</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/dev_reference/generated/pyart.io.sigmet.read_sigmet.txt"
@@ -157,7 +168,7 @@ data type names with no metadata.</p>
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pyart.io.sigmet.SigmetFile.html" title="pyart.io.sigmet.SigmetFile"
+          <a href="pyart.io.sigmet.ymds_time_to_datetime.html" title="pyart.io.sigmet.ymds_time_to_datetime"
              >next</a> |</li>
         <li class="right" >
           <a href="pyart.io._rsl_interface._RslRay.__subclasshook__.html" title="pyart.io._rsl_interface._RslRay.__subclasshook__"
@@ -169,7 +180,7 @@ data type names with no metadata.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Aug 09, 2013.
+      Last updated on Oct 29, 2013.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>

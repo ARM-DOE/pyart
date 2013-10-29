@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.1.0.dev-ac2f1bf',
+        VERSION:     '1.0.0.dev-2632d0f',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <link rel="top" title="Py-ART Documentation (DRAFT)" href="../../index.html" />
     <link rel="up" title="pyart.graph" href="../graph.html" />
     <link rel="next" title="pyart.graph.plot_rsl.RslDisplay.generate_filename" href="pyart.graph.plot_rsl.RslDisplay.generate_filename.html" />
-    <link rel="prev" title="pyart.graph.plot_netcdf.NetcdfDisplay._set_title" href="pyart.graph.plot_netcdf.NetcdfDisplay._set_title.html" /> 
+    <link rel="prev" title="pyart.graph.plot_mdv._get_default_range" href="pyart.graph.plot_mdv._get_default_range.html" /> 
   </head>
   <body>
     <div class="related">
@@ -48,7 +48,7 @@
           <a href="pyart.graph.plot_rsl.RslDisplay.generate_filename.html" title="pyart.graph.plot_rsl.RslDisplay.generate_filename"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="pyart.graph.plot_netcdf.NetcdfDisplay._set_title.html" title="pyart.graph.plot_netcdf.NetcdfDisplay._set_title"
+          <a href="pyart.graph.plot_mdv._get_default_range.html" title="pyart.graph.plot_mdv._get_default_range"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">Py-ART Documentation (DRAFT)</a> &raquo;</li>
           <li><a href="../index.html" >Developer Reference Manual</a> &raquo;</li>
@@ -122,14 +122,20 @@
 <tr class="row-odd"><td><a class="reference internal" href="pyart.graph.plot_rsl.RslDisplay.generate_filename.html#pyart.graph.plot_rsl.RslDisplay.generate_filename" title="pyart.graph.plot_rsl.RslDisplay.generate_filename"><tt class="xref py py-obj docutils literal"><span class="pre">generate_filename</span></tt></a>(field,&nbsp;tilt[,&nbsp;ext])</td>
 <td>Generate a filename for a plot.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.graph.plot_rsl.RslDisplay.generate_title.html#pyart.graph.plot_rsl.RslDisplay.generate_title" title="pyart.graph.plot_rsl.RslDisplay.generate_title"><tt class="xref py py-obj docutils literal"><span class="pre">generate_title</span></tt></a>(field,&nbsp;tilt)</td>
+<tr class="row-even"><td><a class="reference internal" href="pyart.graph.plot_rsl.RslDisplay.generate_ray_title.html#pyart.graph.plot_rsl.RslDisplay.generate_ray_title" title="pyart.graph.plot_rsl.RslDisplay.generate_ray_title"><tt class="xref py py-obj docutils literal"><span class="pre">generate_ray_title</span></tt></a>(field,&nbsp;ray)</td>
+<td>Generate a title for a ray plot.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pyart.graph.plot_rsl.RslDisplay.generate_title.html#pyart.graph.plot_rsl.RslDisplay.generate_title" title="pyart.graph.plot_rsl.RslDisplay.generate_title"><tt class="xref py py-obj docutils literal"><span class="pre">generate_title</span></tt></a>(field,&nbsp;tilt)</td>
 <td>Generate a title for a plot.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.graph.plot_rsl.RslDisplay.label_xaxis_r.html#pyart.graph.plot_rsl.RslDisplay.label_xaxis_r" title="pyart.graph.plot_rsl.RslDisplay.label_xaxis_r"><tt class="xref py py-obj docutils literal"><span class="pre">label_xaxis_r</span></tt></a>([ax])</td>
+<tr class="row-even"><td><a class="reference internal" href="pyart.graph.plot_rsl.RslDisplay.label_xaxis_r.html#pyart.graph.plot_rsl.RslDisplay.label_xaxis_r" title="pyart.graph.plot_rsl.RslDisplay.label_xaxis_r"><tt class="xref py py-obj docutils literal"><span class="pre">label_xaxis_r</span></tt></a>([ax])</td>
 <td>Label the xaxis with the default label for r units.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.graph.plot_rsl.RslDisplay.label_xaxis_x.html#pyart.graph.plot_rsl.RslDisplay.label_xaxis_x" title="pyart.graph.plot_rsl.RslDisplay.label_xaxis_x"><tt class="xref py py-obj docutils literal"><span class="pre">label_xaxis_x</span></tt></a>([ax])</td>
+<tr class="row-odd"><td><a class="reference internal" href="pyart.graph.plot_rsl.RslDisplay.label_xaxis_x.html#pyart.graph.plot_rsl.RslDisplay.label_xaxis_x" title="pyart.graph.plot_rsl.RslDisplay.label_xaxis_x"><tt class="xref py py-obj docutils literal"><span class="pre">label_xaxis_x</span></tt></a>([ax])</td>
 <td>Label the xaxis with the default label for x units.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pyart.graph.plot_rsl.RslDisplay.label_yaxis_field.html#pyart.graph.plot_rsl.RslDisplay.label_yaxis_field" title="pyart.graph.plot_rsl.RslDisplay.label_yaxis_field"><tt class="xref py py-obj docutils literal"><span class="pre">label_yaxis_field</span></tt></a>(field[,&nbsp;ax])</td>
+<td>Label the yaxis with the default label for a field units.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="pyart.graph.plot_rsl.RslDisplay.label_yaxis_y.html#pyart.graph.plot_rsl.RslDisplay.label_yaxis_y" title="pyart.graph.plot_rsl.RslDisplay.label_yaxis_y"><tt class="xref py py-obj docutils literal"><span class="pre">label_yaxis_y</span></tt></a>([ax])</td>
 <td>Label the yaxis with the default label for y units.</td>
@@ -158,10 +164,13 @@
 <tr class="row-odd"><td><a class="reference internal" href="pyart.graph.plot_rsl.RslDisplay.plot_range_rings.html#pyart.graph.plot_rsl.RslDisplay.plot_range_rings" title="pyart.graph.plot_rsl.RslDisplay.plot_range_rings"><tt class="xref py py-obj docutils literal"><span class="pre">plot_range_rings</span></tt></a>(range_rings[,&nbsp;ax])</td>
 <td>Plot a series of range rings.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.graph.plot_rsl.RslDisplay.plot_rhi.html#pyart.graph.plot_rsl.RslDisplay.plot_rhi" title="pyart.graph.plot_rsl.RslDisplay.plot_rhi"><tt class="xref py py-obj docutils literal"><span class="pre">plot_rhi</span></tt></a>(field,&nbsp;tilt[,&nbsp;mask_tuple,&nbsp;vmin,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="pyart.graph.plot_rsl.RslDisplay.plot_ray.html#pyart.graph.plot_rsl.RslDisplay.plot_ray" title="pyart.graph.plot_rsl.RslDisplay.plot_ray"><tt class="xref py py-obj docutils literal"><span class="pre">plot_ray</span></tt></a>(field,&nbsp;ray[,&nbsp;format_str,&nbsp;...])</td>
+<td>Plot a single ray.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pyart.graph.plot_rsl.RslDisplay.plot_rhi.html#pyart.graph.plot_rsl.RslDisplay.plot_rhi" title="pyart.graph.plot_rsl.RslDisplay.plot_rhi"><tt class="xref py py-obj docutils literal"><span class="pre">plot_rhi</span></tt></a>(field,&nbsp;tilt[,&nbsp;mask_tuple,&nbsp;vmin,&nbsp;...])</td>
 <td>Plot a RHI.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.graph.plot_rsl.RslDisplay.set_limits.html#pyart.graph.plot_rsl.RslDisplay.set_limits" title="pyart.graph.plot_rsl.RslDisplay.set_limits"><tt class="xref py py-obj docutils literal"><span class="pre">set_limits</span></tt></a>([xlim,&nbsp;ylim,&nbsp;ax])</td>
+<tr class="row-even"><td><a class="reference internal" href="pyart.graph.plot_rsl.RslDisplay.set_limits.html#pyart.graph.plot_rsl.RslDisplay.set_limits" title="pyart.graph.plot_rsl.RslDisplay.set_limits"><tt class="xref py py-obj docutils literal"><span class="pre">set_limits</span></tt></a>([xlim,&nbsp;ylim,&nbsp;ax])</td>
 <td>Set the display limits.</td>
 </tr>
 </tbody>
@@ -188,14 +197,20 @@
 <tr class="row-even"><td><a class="reference internal" href="pyart.graph.plot_rsl.RslDisplay._get_data.html#pyart.graph.plot_rsl.RslDisplay._get_data" title="pyart.graph.plot_rsl.RslDisplay._get_data"><tt class="xref py py-obj docutils literal"><span class="pre">_get_data</span></tt></a>(field,&nbsp;tilt,&nbsp;mask_tuple)</td>
 <td>Retrieve and return data from a plot function.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.graph.plot_rsl.RslDisplay._get_x_y.html#pyart.graph.plot_rsl.RslDisplay._get_x_y" title="pyart.graph.plot_rsl.RslDisplay._get_x_y"><tt class="xref py py-obj docutils literal"><span class="pre">_get_x_y</span></tt></a>(field,&nbsp;tilt)</td>
+<tr class="row-odd"><td><a class="reference internal" href="pyart.graph.plot_rsl.RslDisplay._get_ray_data.html#pyart.graph.plot_rsl.RslDisplay._get_ray_data" title="pyart.graph.plot_rsl.RslDisplay._get_ray_data"><tt class="xref py py-obj docutils literal"><span class="pre">_get_ray_data</span></tt></a>(field,&nbsp;ray,&nbsp;mask_tuple)</td>
+<td>Retrieve and return ray data from a plot function.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pyart.graph.plot_rsl.RslDisplay._get_x_y.html#pyart.graph.plot_rsl.RslDisplay._get_x_y" title="pyart.graph.plot_rsl.RslDisplay._get_x_y"><tt class="xref py py-obj docutils literal"><span class="pre">_get_x_y</span></tt></a>(field,&nbsp;tilt)</td>
 <td>Retrieve and return x and y coordinate in km.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.graph.plot_rsl.RslDisplay._get_x_y_z.html#pyart.graph.plot_rsl.RslDisplay._get_x_y_z" title="pyart.graph.plot_rsl.RslDisplay._get_x_y_z"><tt class="xref py py-obj docutils literal"><span class="pre">_get_x_y_z</span></tt></a>(field,&nbsp;tilt)</td>
+<tr class="row-odd"><td><a class="reference internal" href="pyart.graph.plot_rsl.RslDisplay._get_x_y_z.html#pyart.graph.plot_rsl.RslDisplay._get_x_y_z" title="pyart.graph.plot_rsl.RslDisplay._get_x_y_z"><tt class="xref py py-obj docutils literal"><span class="pre">_get_x_y_z</span></tt></a>(field,&nbsp;tilt)</td>
 <td>Retrieve and return x, y, and z coordinate in km.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.graph.plot_rsl.RslDisplay._label_axes_ppi.html#pyart.graph.plot_rsl.RslDisplay._label_axes_ppi" title="pyart.graph.plot_rsl.RslDisplay._label_axes_ppi"><tt class="xref py py-obj docutils literal"><span class="pre">_label_axes_ppi</span></tt></a>(axis_labels,&nbsp;ax)</td>
+<tr class="row-even"><td><a class="reference internal" href="pyart.graph.plot_rsl.RslDisplay._label_axes_ppi.html#pyart.graph.plot_rsl.RslDisplay._label_axes_ppi" title="pyart.graph.plot_rsl.RslDisplay._label_axes_ppi"><tt class="xref py py-obj docutils literal"><span class="pre">_label_axes_ppi</span></tt></a>(axis_labels,&nbsp;ax)</td>
 <td>Set the x and y axis labels for a PPI plot.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pyart.graph.plot_rsl.RslDisplay._label_axes_ray.html#pyart.graph.plot_rsl.RslDisplay._label_axes_ray" title="pyart.graph.plot_rsl.RslDisplay._label_axes_ray"><tt class="xref py py-obj docutils literal"><span class="pre">_label_axes_ray</span></tt></a>(axis_labels,&nbsp;field,&nbsp;ax)</td>
+<td>Set the x and y axis labels for a ray plot.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="pyart.graph.plot_rsl.RslDisplay._label_axes_rhi.html#pyart.graph.plot_rsl.RslDisplay._label_axes_rhi" title="pyart.graph.plot_rsl.RslDisplay._label_axes_rhi"><tt class="xref py py-obj docutils literal"><span class="pre">_label_axes_rhi</span></tt></a>(axis_labels,&nbsp;ax)</td>
 <td>Set the x and y axis labels for a RHI plot.</td>
@@ -209,7 +224,10 @@
 <tr class="row-odd"><td><a class="reference internal" href="pyart.graph.plot_rsl.RslDisplay._parse_vmin_vmax.html#pyart.graph.plot_rsl.RslDisplay._parse_vmin_vmax" title="pyart.graph.plot_rsl.RslDisplay._parse_vmin_vmax"><tt class="xref py py-obj docutils literal"><span class="pre">_parse_vmin_vmax</span></tt></a>(field,&nbsp;vmin,&nbsp;vmax)</td>
 <td></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.graph.plot_rsl.RslDisplay._set_title.html#pyart.graph.plot_rsl.RslDisplay._set_title" title="pyart.graph.plot_rsl.RslDisplay._set_title"><tt class="xref py py-obj docutils literal"><span class="pre">_set_title</span></tt></a>(field,&nbsp;tilt,&nbsp;title,&nbsp;ax)</td>
+<tr class="row-even"><td><a class="reference internal" href="pyart.graph.plot_rsl.RslDisplay._set_ray_title.html#pyart.graph.plot_rsl.RslDisplay._set_ray_title" title="pyart.graph.plot_rsl.RslDisplay._set_ray_title"><tt class="xref py py-obj docutils literal"><span class="pre">_set_ray_title</span></tt></a>(field,&nbsp;ray,&nbsp;title,&nbsp;ax)</td>
+<td>Set the figure title for a ray plot using a default title.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pyart.graph.plot_rsl.RslDisplay._set_title.html#pyart.graph.plot_rsl.RslDisplay._set_title" title="pyart.graph.plot_rsl.RslDisplay._set_title"><tt class="xref py py-obj docutils literal"><span class="pre">_set_title</span></tt></a>(field,&nbsp;tilt,&nbsp;title,&nbsp;ax)</td>
 <td>Set the figure title using a default title.</td>
 </tr>
 </tbody>
@@ -225,8 +243,8 @@
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="pyart.graph.plot_netcdf.NetcdfDisplay._set_title.html"
-                        title="previous chapter">pyart.graph.plot_netcdf.NetcdfDisplay._set_title</a></p>
+  <p class="topless"><a href="pyart.graph.plot_mdv._get_default_range.html"
+                        title="previous chapter">pyart.graph.plot_mdv._get_default_range</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="pyart.graph.plot_rsl.RslDisplay.generate_filename.html"
                         title="next chapter">pyart.graph.plot_rsl.RslDisplay.generate_filename</a></p>
@@ -268,7 +286,7 @@
           <a href="pyart.graph.plot_rsl.RslDisplay.generate_filename.html" title="pyart.graph.plot_rsl.RslDisplay.generate_filename"
              >next</a> |</li>
         <li class="right" >
-          <a href="pyart.graph.plot_netcdf.NetcdfDisplay._set_title.html" title="pyart.graph.plot_netcdf.NetcdfDisplay._set_title"
+          <a href="pyart.graph.plot_mdv._get_default_range.html" title="pyart.graph.plot_mdv._get_default_range"
              >previous</a> |</li>
         <li><a href="../../index.html">Py-ART Documentation (DRAFT)</a> &raquo;</li>
           <li><a href="../index.html" >Developer Reference Manual</a> &raquo;</li>
@@ -277,7 +295,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Aug 09, 2013.
+      Last updated on Oct 29, 2013.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>

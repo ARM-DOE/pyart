@@ -12,9 +12,11 @@ pyart.graph.plot_rsl.RslDisplay
          :toctree:
       
          RslDisplay.generate_filename
+         RslDisplay.generate_ray_title
          RslDisplay.generate_title
          RslDisplay.label_xaxis_r
          RslDisplay.label_xaxis_x
+         RslDisplay.label_yaxis_field
          RslDisplay.label_yaxis_y
          RslDisplay.label_yaxis_z
          RslDisplay.plot_colorbar
@@ -24,6 +26,7 @@ pyart.graph.plot_rsl.RslDisplay
          RslDisplay.plot_ppi
          RslDisplay.plot_range_ring
          RslDisplay.plot_range_rings
+         RslDisplay.plot_ray
          RslDisplay.plot_rhi
          RslDisplay.set_limits
 
@@ -39,13 +42,16 @@ pyart.graph.plot_rsl.RslDisplay
          ~RslDisplay._generate_colorbar_label
          ~RslDisplay._get_colorbar_label
          ~RslDisplay._get_data
+         ~RslDisplay._get_ray_data
          ~RslDisplay._get_x_y
          ~RslDisplay._get_x_y_z
          ~RslDisplay._label_axes_ppi
+         ~RslDisplay._label_axes_ray
          ~RslDisplay._label_axes_rhi
          ~RslDisplay._parse_ax
          ~RslDisplay._parse_ax_fig
          ~RslDisplay._parse_vmin_vmax
+         ~RslDisplay._set_ray_title
          ~RslDisplay._set_title
    
    

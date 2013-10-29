@@ -12,9 +12,11 @@ pyart.graph.plot_mdv.MdvDisplay
          :toctree:
       
          MdvDisplay.generate_filename
+         MdvDisplay.generate_ray_title
          MdvDisplay.generate_title
          MdvDisplay.label_xaxis_r
          MdvDisplay.label_xaxis_x
+         MdvDisplay.label_yaxis_field
          MdvDisplay.label_yaxis_y
          MdvDisplay.label_yaxis_z
          MdvDisplay.plot_colorbar
@@ -24,6 +26,7 @@ pyart.graph.plot_mdv.MdvDisplay
          MdvDisplay.plot_ppi
          MdvDisplay.plot_range_ring
          MdvDisplay.plot_range_rings
+         MdvDisplay.plot_ray
          MdvDisplay.plot_rhi
          MdvDisplay.set_limits
 
@@ -39,13 +42,16 @@ pyart.graph.plot_mdv.MdvDisplay
          ~MdvDisplay._generate_colorbar_label
          ~MdvDisplay._get_colorbar_label
          ~MdvDisplay._get_data
+         ~MdvDisplay._get_ray_data
          ~MdvDisplay._get_x_y
          ~MdvDisplay._get_x_y_z
          ~MdvDisplay._label_axes_ppi
+         ~MdvDisplay._label_axes_ray
          ~MdvDisplay._label_axes_rhi
          ~MdvDisplay._parse_ax
          ~MdvDisplay._parse_ax_fig
          ~MdvDisplay._parse_vmin_vmax
+         ~MdvDisplay._set_ray_title
          ~MdvDisplay._set_title
    
    

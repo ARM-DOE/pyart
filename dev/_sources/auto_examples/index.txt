@@ -543,7 +543,7 @@ Plotting real world radar data with Py-ART.
 .. raw:: html
 
 
-    <p>An example which creates a multiple panel RHI plot of a CF/Radial file using both a NetcdfDispl...
+    <p>An example which creates a multiple panel RHI plot of a CF/Radial file using both a CFRadialDis...
     </p></div>
     </div>
 

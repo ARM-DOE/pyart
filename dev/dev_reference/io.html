@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.1.0.dev-ac2f1bf',
+        VERSION:     '1.0.0.dev-2632d0f',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -93,14 +93,50 @@
 <tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.common.dms_to_d.html#pyart.io.common.dms_to_d" title="pyart.io.common.dms_to_d"><tt class="xref py py-obj docutils literal"><span class="pre">dms_to_d</span></tt></a>(dms)</td>
 <td>Degrees, minutes, seconds to degrees</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.common.radar_coords_to_cart.html#pyart.io.common.radar_coords_to_cart" title="pyart.io.common.radar_coords_to_cart"><tt class="xref py py-obj docutils literal"><span class="pre">radar_coords_to_cart</span></tt></a>(rng,&nbsp;az,&nbsp;ele[,&nbsp;debug])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.common.stringarray_to_chararray.html#pyart.io.common.stringarray_to_chararray" title="pyart.io.common.stringarray_to_chararray"><tt class="xref py py-obj docutils literal"><span class="pre">stringarray_to_chararray</span></tt></a>(arr[,&nbsp;numchars])</td>
+<td>Convert an string array to a character array with one extra dimension.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.common.radar_coords_to_cart.html#pyart.io.common.radar_coords_to_cart" title="pyart.io.common.radar_coords_to_cart"><tt class="xref py py-obj docutils literal"><span class="pre">radar_coords_to_cart</span></tt></a>(rng,&nbsp;az,&nbsp;ele[,&nbsp;debug])</td>
 <td>Calculate Cartesian coordinate from radar coordinates</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.common.make_time_unit_str.html#pyart.io.common.make_time_unit_str" title="pyart.io.common.make_time_unit_str"><tt class="xref py py-obj docutils literal"><span class="pre">make_time_unit_str</span></tt></a>(dtobj)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.common.make_time_unit_str.html#pyart.io.common.make_time_unit_str" title="pyart.io.common.make_time_unit_str"><tt class="xref py py-obj docutils literal"><span class="pre">make_time_unit_str</span></tt></a>(dtobj)</td>
 <td>Return a time unit string from a datetime object.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.common.get_metadata.html#pyart.io.common.get_metadata" title="pyart.io.common.get_metadata"><tt class="xref py py-obj docutils literal"><span class="pre">get_metadata</span></tt></a>(p)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.common.get_metadata.html#pyart.io.common.get_metadata" title="pyart.io.common.get_metadata"><tt class="xref py py-obj docutils literal"><span class="pre">get_metadata</span></tt></a>(p)</td>
 <td>Return a dictionary of metadata for a given parameter, p.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<span class="target" id="module-pyart.io.cfradial"></span><div class="section" id="pyart-io-cfradial">
+<h2>pyart.io.cfradial<a class="headerlink" href="#pyart-io-cfradial" title="Permalink to this headline">¶</a></h2>
+<p>Utilities for reading CF/Radial files.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.cfradial.read_cfradial.html#pyart.io.cfradial.read_cfradial" title="pyart.io.cfradial.read_cfradial"><tt class="xref py py-obj docutils literal"><span class="pre">read_cfradial</span></tt></a>(filename)</td>
+<td>Read a CF/Radial netCDF file.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.cfradial.write_cfradial.html#pyart.io.cfradial.write_cfradial" title="pyart.io.cfradial.write_cfradial"><tt class="xref py py-obj docutils literal"><span class="pre">write_cfradial</span></tt></a>(filename,&nbsp;radar[,&nbsp;format,&nbsp;...])</td>
+<td>Write a Radar object to a CF/Radial compliant netCDF file.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.cfradial._find_all_meta_group_vars.html#pyart.io.cfradial._find_all_meta_group_vars" title="pyart.io.cfradial._find_all_meta_group_vars"><tt class="xref py py-obj docutils literal"><span class="pre">_find_all_meta_group_vars</span></tt></a>(ncvars,&nbsp;...)</td>
+<td>Return a list of all variables which are in a given meta_group.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.cfradial._ncvar_to_dict.html#pyart.io.cfradial._ncvar_to_dict" title="pyart.io.cfradial._ncvar_to_dict"><tt class="xref py py-obj docutils literal"><span class="pre">_ncvar_to_dict</span></tt></a>(ncvar)</td>
+<td>Convert a NetCDF Dataset variable to a dictionary.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.cfradial._stream_ncvar_to_dict.html#pyart.io.cfradial._stream_ncvar_to_dict" title="pyart.io.cfradial._stream_ncvar_to_dict"><tt class="xref py py-obj docutils literal"><span class="pre">_stream_ncvar_to_dict</span></tt></a>(ncvar,&nbsp;sweeps,&nbsp;sweepe,&nbsp;...)</td>
+<td>Convert a Stream NetCDF Dataset variable to a dict.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.cfradial._stream_to_2d.html#pyart.io.cfradial._stream_to_2d" title="pyart.io.cfradial._stream_to_2d"><tt class="xref py py-obj docutils literal"><span class="pre">_stream_to_2d</span></tt></a>(data,&nbsp;sweeps,&nbsp;sweepe,&nbsp;ray_len,&nbsp;...)</td>
+<td>Convert a 1D stream to a 2D array.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.cfradial._create_ncvar.html#pyart.io.cfradial._create_ncvar" title="pyart.io.cfradial._create_ncvar"><tt class="xref py py-obj docutils literal"><span class="pre">_create_ncvar</span></tt></a>(dic,&nbsp;dataset,&nbsp;name,&nbsp;dimensions)</td>
+<td>Create and fill a Variable in a netCDF Dataset object.</td>
 </tr>
 </tbody>
 </table>
@@ -163,39 +199,6 @@
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.mdv.read_mdv.html#pyart.io.mdv.read_mdv" title="pyart.io.mdv.read_mdv"><tt class="xref py py-obj docutils literal"><span class="pre">read_mdv</span></tt></a>(filename)</td>
 <td>Read a MDV file.</td>
-</tr>
-</tbody>
-</table>
-</div>
-<span class="target" id="module-pyart.io.netcdf"></span><div class="section" id="pyart-io-netcdf">
-<h2>pyart.io.netcdf<a class="headerlink" href="#pyart-io-netcdf" title="Permalink to this headline">¶</a></h2>
-<p>Utilities for reading netcdf files.</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.netcdf.read_netcdf.html#pyart.io.netcdf.read_netcdf" title="pyart.io.netcdf.read_netcdf"><tt class="xref py py-obj docutils literal"><span class="pre">read_netcdf</span></tt></a>(filename)</td>
-<td>Read a netCDF file.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.netcdf.write_netcdf.html#pyart.io.netcdf.write_netcdf" title="pyart.io.netcdf.write_netcdf"><tt class="xref py py-obj docutils literal"><span class="pre">write_netcdf</span></tt></a>(filename,&nbsp;radar[,&nbsp;format])</td>
-<td>Write a Radar object to a CF/Radial compliant netCDF file.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.netcdf._find_all_meta_group_vars.html#pyart.io.netcdf._find_all_meta_group_vars" title="pyart.io.netcdf._find_all_meta_group_vars"><tt class="xref py py-obj docutils literal"><span class="pre">_find_all_meta_group_vars</span></tt></a>(ncvars,&nbsp;...)</td>
-<td>Return a list of all variables which are in a given meta_group.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.netcdf._ncvar_to_dict.html#pyart.io.netcdf._ncvar_to_dict" title="pyart.io.netcdf._ncvar_to_dict"><tt class="xref py py-obj docutils literal"><span class="pre">_ncvar_to_dict</span></tt></a>(ncvar)</td>
-<td>Convert a NetCDF Dataset variable to a dictionary.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.netcdf._stream_ncvar_to_dict.html#pyart.io.netcdf._stream_ncvar_to_dict" title="pyart.io.netcdf._stream_ncvar_to_dict"><tt class="xref py py-obj docutils literal"><span class="pre">_stream_ncvar_to_dict</span></tt></a>(ncvar,&nbsp;sweeps,&nbsp;sweepe,&nbsp;...)</td>
-<td>Convert a Stream NetCDF Dataset variable to a dict.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.netcdf._stream_to_2d.html#pyart.io.netcdf._stream_to_2d" title="pyart.io.netcdf._stream_to_2d"><tt class="xref py py-obj docutils literal"><span class="pre">_stream_to_2d</span></tt></a>(data,&nbsp;sweeps,&nbsp;sweepe,&nbsp;ray_len,&nbsp;...)</td>
-<td>Convert a 1D stream to a 2D array.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.netcdf._create_ncvar.html#pyart.io.netcdf._create_ncvar" title="pyart.io.netcdf._create_ncvar"><tt class="xref py py-obj docutils literal"><span class="pre">_create_ncvar</span></tt></a>(dic,&nbsp;dataset,&nbsp;name,&nbsp;dimensions)</td>
-<td>Create and fill a Variable in a netCDF Dataset object.</td>
 </tr>
 </tbody>
 </table>
@@ -392,49 +395,67 @@
 <tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.sigmet.read_sigmet.html#pyart.io.sigmet.read_sigmet" title="pyart.io.sigmet.read_sigmet"><tt class="xref py py-obj docutils literal"><span class="pre">read_sigmet</span></tt></a>(filename[,&nbsp;field_names,&nbsp;...])</td>
 <td>Read a Sigmet (IRIS) product file.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.sigmet.SigmetFile.html#pyart.io.sigmet.SigmetFile" title="pyart.io.sigmet.SigmetFile"><tt class="xref py py-obj docutils literal"><span class="pre">SigmetFile</span></tt></a>(filename[,&nbsp;debug])</td>
-<td>A class for accessing data from Sigmet (IRIS) product files.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.sigmet.convert_sigmet_data.html#pyart.io.sigmet.convert_sigmet_data" title="pyart.io.sigmet.convert_sigmet_data"><tt class="xref py py-obj docutils literal"><span class="pre">convert_sigmet_data</span></tt></a>(data_type,&nbsp;data)</td>
-<td>Convert sigmet data.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.sigmet.bin2_to_angle.html#pyart.io.sigmet.bin2_to_angle" title="pyart.io.sigmet.bin2_to_angle"><tt class="xref py py-obj docutils literal"><span class="pre">bin2_to_angle</span></tt></a>(bin2)</td>
-<td>Return an angle from Sigmet bin2 encoded value (or array).</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.sigmet.bin4_to_angle.html#pyart.io.sigmet.bin4_to_angle" title="pyart.io.sigmet.bin4_to_angle"><tt class="xref py py-obj docutils literal"><span class="pre">bin4_to_angle</span></tt></a>(bin4)</td>
-<td>Return an angle from Sigmet bin4 encoded value (or array).</td>
-</tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.sigmet.ymds_time_to_datetime.html#pyart.io.sigmet.ymds_time_to_datetime" title="pyart.io.sigmet.ymds_time_to_datetime"><tt class="xref py py-obj docutils literal"><span class="pre">ymds_time_to_datetime</span></tt></a>(ymds)</td>
 <td>Return a datetime object from a Sigmet ymds_time dictionary.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.sigmet._data_types_from_mask.html#pyart.io.sigmet._data_types_from_mask" title="pyart.io.sigmet._data_types_from_mask"><tt class="xref py py-obj docutils literal"><span class="pre">_data_types_from_mask</span></tt></a>(word0,&nbsp;word1)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.sigmet._time_order_data_and_metadata_full.html#pyart.io.sigmet._time_order_data_and_metadata_full" title="pyart.io.sigmet._time_order_data_and_metadata_full"><tt class="xref py py-obj docutils literal"><span class="pre">_time_order_data_and_metadata_full</span></tt></a>(data,&nbsp;...)</td>
+<td>Put Sigmet data and metadata in time increasing order by sorting the</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.sigmet._time_order_data_and_metadata_roll.html#pyart.io.sigmet._time_order_data_and_metadata_roll" title="pyart.io.sigmet._time_order_data_and_metadata_roll"><tt class="xref py py-obj docutils literal"><span class="pre">_time_order_data_and_metadata_roll</span></tt></a>(data,&nbsp;...)</td>
+<td>Put Sigmet data and metadata in time increasing order using a single</td>
+</tr>
+</tbody>
+</table>
+</div>
+<span class="target" id="module-pyart.io._sigmetfile"></span><div class="section" id="pyart-io-sigmetfile">
+<h2>pyart.io._sigmetfile<a class="headerlink" href="#pyart-io-sigmetfile" title="Permalink to this headline">¶</a></h2>
+<p>A class and supporting functions for reading Sigmet (raw format) files.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io._sigmetfile.SigmetFile.html#pyart.io._sigmetfile.SigmetFile" title="pyart.io._sigmetfile.SigmetFile"><tt class="xref py py-obj docutils literal"><span class="pre">SigmetFile</span></tt></a></td>
+<td>A class for accessing data from Sigmet (IRIS) product files.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io._sigmetfile.convert_sigmet_data.html#pyart.io._sigmetfile.convert_sigmet_data" title="pyart.io._sigmetfile.convert_sigmet_data"><tt class="xref py py-obj docutils literal"><span class="pre">convert_sigmet_data</span></tt></a></td>
+<td>Convert sigmet data.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io._sigmetfile.bin2_to_angle.html#pyart.io._sigmetfile.bin2_to_angle" title="pyart.io._sigmetfile.bin2_to_angle"><tt class="xref py py-obj docutils literal"><span class="pre">bin2_to_angle</span></tt></a></td>
+<td>Return an angle from Sigmet bin2 encoded value (or array).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io._sigmetfile.bin4_to_angle.html#pyart.io._sigmetfile.bin4_to_angle" title="pyart.io._sigmetfile.bin4_to_angle"><tt class="xref py py-obj docutils literal"><span class="pre">bin4_to_angle</span></tt></a></td>
+<td>Return an angle from Sigmet bin4 encoded value (or array).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io._sigmetfile._data_types_from_mask.html#pyart.io._sigmetfile._data_types_from_mask" title="pyart.io._sigmetfile._data_types_from_mask"><tt class="xref py py-obj docutils literal"><span class="pre">_data_types_from_mask</span></tt></a></td>
 <td>Return a list of the data types from the words in the data_type mask.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.sigmet._is_bit_set.html#pyart.io.sigmet._is_bit_set" title="pyart.io.sigmet._is_bit_set"><tt class="xref py py-obj docutils literal"><span class="pre">_is_bit_set</span></tt></a>(number,&nbsp;bit)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io._sigmetfile._is_bit_set.html#pyart.io._sigmetfile._is_bit_set" title="pyart.io._sigmetfile._is_bit_set"><tt class="xref py py-obj docutils literal"><span class="pre">_is_bit_set</span></tt></a></td>
 <td>Return True if bit is set in number.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.sigmet._parse_ray_headers.html#pyart.io.sigmet._parse_ray_headers" title="pyart.io.sigmet._parse_ray_headers"><tt class="xref py py-obj docutils literal"><span class="pre">_parse_ray_headers</span></tt></a>(ray_headers)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io._sigmetfile._parse_ray_headers.html#pyart.io._sigmetfile._parse_ray_headers" title="pyart.io._sigmetfile._parse_ray_headers"><tt class="xref py py-obj docutils literal"><span class="pre">_parse_ray_headers</span></tt></a></td>
 <td>Parse the metadata from Sigmet ray headers.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.sigmet._unpack_structure.html#pyart.io.sigmet._unpack_structure" title="pyart.io.sigmet._unpack_structure"><tt class="xref py py-obj docutils literal"><span class="pre">_unpack_structure</span></tt></a>(string,&nbsp;structure)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io._sigmetfile._unpack_structure.html#pyart.io._sigmetfile._unpack_structure" title="pyart.io._sigmetfile._unpack_structure"><tt class="xref py py-obj docutils literal"><span class="pre">_unpack_structure</span></tt></a></td>
 <td>Unpack a structure</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.sigmet._unpack_key.html#pyart.io.sigmet._unpack_key" title="pyart.io.sigmet._unpack_key"><tt class="xref py py-obj docutils literal"><span class="pre">_unpack_key</span></tt></a>(dic,&nbsp;key,&nbsp;structure)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io._sigmetfile._unpack_key.html#pyart.io._sigmetfile._unpack_key" title="pyart.io._sigmetfile._unpack_key"><tt class="xref py py-obj docutils literal"><span class="pre">_unpack_key</span></tt></a></td>
 <td>Unpack a key.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.sigmet._unpack_ingest_data_headers.html#pyart.io.sigmet._unpack_ingest_data_headers" title="pyart.io.sigmet._unpack_ingest_data_headers"><tt class="xref py py-obj docutils literal"><span class="pre">_unpack_ingest_data_headers</span></tt></a>(record,&nbsp;ndata_types)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io._sigmetfile._unpack_ingest_data_headers.html#pyart.io._sigmetfile._unpack_ingest_data_headers" title="pyart.io._sigmetfile._unpack_ingest_data_headers"><tt class="xref py py-obj docutils literal"><span class="pre">_unpack_ingest_data_headers</span></tt></a></td>
 <td>Unpack one or more ingest_data_header from a record.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.sigmet._unpack_ingest_data_header.html#pyart.io.sigmet._unpack_ingest_data_header" title="pyart.io.sigmet._unpack_ingest_data_header"><tt class="xref py py-obj docutils literal"><span class="pre">_unpack_ingest_data_header</span></tt></a>(record,&nbsp;number)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io._sigmetfile._unpack_ingest_data_header.html#pyart.io._sigmetfile._unpack_ingest_data_header" title="pyart.io._sigmetfile._unpack_ingest_data_header"><tt class="xref py py-obj docutils literal"><span class="pre">_unpack_ingest_data_header</span></tt></a></td>
 <td>Unpack a single ingest_data_header from record.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.sigmet._unpack_raw_prod_bhdr.html#pyart.io.sigmet._unpack_raw_prod_bhdr" title="pyart.io.sigmet._unpack_raw_prod_bhdr"><tt class="xref py py-obj docutils literal"><span class="pre">_unpack_raw_prod_bhdr</span></tt></a>(record)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io._sigmetfile._unpack_raw_prod_bhdr.html#pyart.io._sigmetfile._unpack_raw_prod_bhdr" title="pyart.io._sigmetfile._unpack_raw_prod_bhdr"><tt class="xref py py-obj docutils literal"><span class="pre">_unpack_raw_prod_bhdr</span></tt></a></td>
 <td>Return a dict with the unpacked raw_prod_bhdr from a record.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.sigmet._unpack_product_hdr.html#pyart.io.sigmet._unpack_product_hdr" title="pyart.io.sigmet._unpack_product_hdr"><tt class="xref py py-obj docutils literal"><span class="pre">_unpack_product_hdr</span></tt></a>(record)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io._sigmetfile._unpack_product_hdr.html#pyart.io._sigmetfile._unpack_product_hdr" title="pyart.io._sigmetfile._unpack_product_hdr"><tt class="xref py py-obj docutils literal"><span class="pre">_unpack_product_hdr</span></tt></a></td>
 <td>Return a dict with the unpacked product_hdr from the first record.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.sigmet._unpack_ingest_header.html#pyart.io.sigmet._unpack_ingest_header" title="pyart.io.sigmet._unpack_ingest_header"><tt class="xref py py-obj docutils literal"><span class="pre">_unpack_ingest_header</span></tt></a>(record)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io._sigmetfile._unpack_ingest_header.html#pyart.io._sigmetfile._unpack_ingest_header" title="pyart.io._sigmetfile._unpack_ingest_header"><tt class="xref py py-obj docutils literal"><span class="pre">_unpack_ingest_header</span></tt></a></td>
 <td>Return a dict with the unpacked ingest_header from the second record.</td>
 </tr>
 </tbody>
@@ -457,13 +478,13 @@
 <li><a class="reference internal" href="#pyart-io-common">pyart.io.common</a><ul>
 </ul>
 </li>
+<li><a class="reference internal" href="#pyart-io-cfradial">pyart.io.cfradial</a><ul>
+</ul>
+</li>
 <li><a class="reference internal" href="#pyart-io-grid">pyart.io.grid</a><ul>
 </ul>
 </li>
 <li><a class="reference internal" href="#pyart-io-mdv">pyart.io.mdv</a><ul>
-</ul>
-</li>
-<li><a class="reference internal" href="#pyart-io-netcdf">pyart.io.netcdf</a><ul>
 </ul>
 </li>
 <li><a class="reference internal" href="#pyart-io-nexrad-archive">pyart.io.nexrad_archive</a><ul>
@@ -488,6 +509,9 @@
 </ul>
 </li>
 <li><a class="reference internal" href="#pyart-io-sigmet">pyart.io.sigmet</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#pyart-io-sigmetfile">pyart.io._sigmetfile</a><ul>
 </ul>
 </li>
 </ul>
@@ -546,7 +570,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Aug 09, 2013.
+      Last updated on Oct 29, 2013.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>

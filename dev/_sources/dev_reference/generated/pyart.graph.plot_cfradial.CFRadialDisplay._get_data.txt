@@ -1,0 +1,6 @@
+pyart.graph.plot_cfradial.CFRadialDisplay._get_data
+===================================================
+
+.. currentmodule:: pyart.graph.plot_cfradial
+
+.. automethod:: CFRadialDisplay._get_data
