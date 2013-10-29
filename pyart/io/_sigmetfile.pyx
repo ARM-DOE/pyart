@@ -272,7 +272,6 @@ cdef class SigmetFile:
                 raw_sweep_data[i::self.ndata_types, :6]))
         return ingest_data_headers, sweep_data, sweep_metadata
 
-    @cython.boundscheck(False)
     @cython.wraparound(False)
     cdef int _get_ray(self, int nbins, np.ndarray[np.int16_t, ndim=1] out):
         """
@@ -335,6 +334,8 @@ cdef class SigmetFile:
                     out_pos += words
             else:
                 # add zeros to out
+                if compression_code + out_pos > nbins + 6:
+                    return -1   # file is corrupt
                 for i in range(compression_code):
                     out[out_pos + i] = 0
                 out_pos += compression_code
