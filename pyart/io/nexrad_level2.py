@@ -174,7 +174,7 @@ class NEXRADLevel2File():
         longitude: float
             Longitude of the radar in degrees.
         height : int
-            Height of radar in meters above mean sea level.
+            Height of radar and feedhorn in meters above mean sea level.
 
         """
         dic = self.msg31s[0]['VOL']
@@ -182,47 +182,23 @@ class NEXRADLevel2File():
 
     def scan_info(self):
         """
-        Return a dictionary with information on the scans performed.
+        Return a list of dictionaries with scan information.
 
         Returns
         -------
-        scan_info : dict
-            Dictionary of radar moments, each with a two dictionaries indexed
-            by 1 (super resolution) and 2 (standard resolution).  These
-            contain a list of scans and ngates which were performed for that
-            moment and resolution.
+        scan_info : list
+            A list of the scan performed with a dictionary with keys
+            'moments', 'ngates', and 'nrays' for each scan.  The 'moments'
+            and 'ngates' keys are lists of the NEXRAD moments and number
+            of gates for that moment collected during the specific scan.
+            The 'nrays' key provides the number of radials collected in the
+            given scan.
 
-        """
-        dic = {'REF': {1: {'ngates': [], 'scans': []},
-                       2: {'ngates': [], 'scans': []}},
-               'VEL': {1: {'ngates': [], 'scans': []},
-                       2: {'ngates': [], 'scans': []}},
-               'SW': {1: {'ngates': [], 'scans': []},
-                      2: {'ngates': [], 'scans': []}},
-               'ZDR': {1: {'ngates': [], 'scans': []},
-                       2: {'ngates': [], 'scans': []}},
-               'PHI': {1: {'ngates': [], 'scans': []},
-                       2: {'ngates': [], 'scans': []}},
-               'RHO': {1: {'ngates': [], 'scans': []},
-                       2: {'ngates': [], 'scans': []}}}
-        for scan in range(self.nscans):
-            msg31_number = self.scan_msgs[scan][0]
-            msg = self.msg31s[msg31_number]
-            res = msg['msg31_header']['azimuth_resolution']
-            for moment in dic.keys():
-                if moment in msg.keys():
-                    dic[moment][res]['scans'].append(scan)
-                    dic[moment][res]['ngates'].append(msg[moment]['ngates'])
-
-        return dic
-
-    def scan_info2(self):
-        """
         """
 
         info = []
         for scan in range(self.nscans):
-            nrays = len(self.scan_msgs[scan])
+            nrays = self.get_nrays(scan)
 
             msg31_number = self.scan_msgs[scan][0]
             msg = self.msg31s[msg31_number]
@@ -289,14 +265,16 @@ class NEXRADLevel2File():
         t = [self.msg31s[i]['msg31_header'][key] for i in msg_nums]
         return np.array(t)
 
-    def get_times(self, scans):
+    def get_times(self, scans=None):
         """
         Retrieve the times at which the rays were collected.
 
         Parameters
         ----------
-        scans : list
+        scans : list or None
             Scans (0-based) to retrieve ray (radial) collection times from.
+            None (the default) will return the times for all scans in the
+            volume.
 
         Returns
         -------
@@ -307,6 +285,8 @@ class NEXRADLevel2File():
             in the requested scans were collected.
 
         """
+        if scans is None:
+            scans = range(self.nscans)
         days = self._msg31_array(scans, 'collect_date')
         secs = self._msg31_array(scans, 'collect_ms') / 1000.
         offset = timedelta(days=int(days[0]) - 1, seconds=int(secs[0]))
@@ -314,15 +294,16 @@ class NEXRADLevel2File():
         time = secs - int(secs[0]) + (days - days[0]) * 86400
         return time_start, time
 
-    def get_azimuth_angles(self, scans):
+    def get_azimuth_angles(self, scans=None):
         """
         Retrieve the azimuth angles of all rays in the requested scans.
 
         Parameters
         ----------
-        scans : list
+        scans : list ot None
             Scans (0 based) for which ray (radial) azimuth angles will be
-            retrieved.
+            retrieved.  None (the default) will return the angles for all
+            scans in the volume.
 
         Returns
         -------
@@ -330,17 +311,20 @@ class NEXRADLevel2File():
             Azimuth angles in degress for all rays in the requested scans.
 
         """
+        if scans is None:
+            scans = range(self.nscans)
         return self._msg31_array(scans, 'azimuth_angle')
 
-    def get_elevation_angles(self, scans):
+    def get_elevation_angles(self, scans=None):
         """
         Retrieve the elevation angles of all rays in the requested scans.
 
         Parameters
         ----------
-        scans : list
+        scans : list or None
             Scans (0 based) for which ray (radial) azimuth angles will be
-            retrieved.
+            retrieved. None (the default) will return the angles for
+            all scans in the volume.
 
         Returns
         -------
@@ -348,17 +332,36 @@ class NEXRADLevel2File():
             Elevation angles in degress for all rays in the requested scans.
 
         """
+        if scans is None:
+            scans = range(self.nscans)
         return self._msg31_array(scans, 'elevation_angle')
 
-    def get_fixed_angles(self, scans):
+    def get_target_angles(self, scans=None):
         """
+        Retrieve the target elevation angle of the requested scans.
+
+        Parameters
+        ----------
+        scans : list or None
+            Scans (0 based) for which the target elevation angles will be
+            retrieved. None (the default) will return the angles for all
+            scans in the volume.
+
+        Returns
+        -------
+        angles : ndarray
+            Target elevation angles in degress for the requested scans.
+
         """
+        if scans is None:
+            scans = range(self.nscans)
         cp = self.vcp['cut_parameters']
         scale = 360. / 65536.
         return np.array([cp[i]['elevation_angle'] * scale for i in scans],
                         dtype='float32')
 
-    def get_data(self, scans, moment, max_gates, raw_data=False):
+    # XXX not longer used
+    def get_data_XXX(self, scans, moment, max_gates, raw_data=False):
         """
         Retrieve moment data for a given set of scans.
 
