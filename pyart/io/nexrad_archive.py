@@ -94,33 +94,19 @@ def read_nexrad_archive(filename, bzip=None, field_mapping=None,
     _range['meters_between_gates'] = _range['data'][1] - _range['data'][0]
 
     # fields
+    max_ngates = max([max(s['ngates']) for s in scan_info])
+    available_moments = set([])
+    for info in scan_info:
+        for moment in info['moments']:
+            available_moments.add(moment)
 
-    # determine shape of field data
-    ngates = max([max(s['ngates']) for s in scan_info])
-    nrays = sum([s['nrays'] for s in scan_info])
-    field_shape = (nrays, ngates)
-    nexrad_moments = ['REF', 'VEL', 'SW', 'ZDR', 'PHI', 'RHO']
-
-    # create empty field dictionary
     fields = {}
-    for moment in nexrad_moments:
+    for moment in available_moments:
         field_name = field_mapping[moment]
         dic = field_metadata[field_name].copy()
         dic['_FillValue'] = -9999.0
-        dic['data'] = np.ma.masked_all(field_shape, dtype='float32')
+        dic['data'] = nfile.get_data(moment, max_ngates)
         fields[field_name] = dic
-
-    # fill in data
-    for i, msg in enumerate(nfile.msg31s):
-        for moment in [m for m in msg.keys() if m in nexrad_moments]:
-            offset = msg[moment]['offset']
-            scale = msg[moment]['scale']
-            ngates = msg[moment]['ngates']
-            data = msg[moment]['data']
-            mdata = (np.ma.masked_less_equal(data, 1) - offset) / (scale)
-            field_name = field_mapping[moment]
-            fields[field_name]['data'][i, :ngates] = mdata
-            #fields[moment]['data'][i, :ngates] = mdata
 
     # metadata
     metadata = {'original_container': 'NEXRAD Level II'}

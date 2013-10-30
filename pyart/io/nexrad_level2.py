@@ -110,6 +110,8 @@ class NEXRADLevel2File():
         belong to a given scan.
     volume_header : dict
         Volume header.
+    vcp : dict
+        VCP information dictionary.
     _records : list
         A list of all records (message) in the file.
 
@@ -195,7 +197,6 @@ class NEXRADLevel2File():
             given scan.
 
         """
-
         info = []
         for scan in range(self.nscans):
             nrays = self.get_nrays(scan)
@@ -360,53 +361,70 @@ class NEXRADLevel2File():
         return np.array([cp[i]['elevation_angle'] * scale for i in scans],
                         dtype='float32')
 
-    # XXX not longer used
-    def get_data_XXX(self, scans, moment, max_gates, raw_data=False):
+    def get_data(self, moment, max_ngates, scans=None, raw_data=False):
         """
         Retrieve moment data for a given set of scans.
 
-        All scans should have the same number of rays (radials).
+        Masked points indicate that the data was not collected, below
+        threshold or is range folded.
 
         Parameters
         ----------
-        scans : list
-            Scans to retrieve data from (0 based).
         moment : 'REF', 'VEL', 'SW', 'ZDR', 'PHI', or 'RHO'
             Moment for which to to retrieve data.
-        max_gates : int
+        max_ngates : int
             Maximum number of gates (bins) in any ray.
             requested.
         raw_data : bool
             True to return the raw data, False to perform masking as well as
-            applying the appropiate scale and offset to the data.
+            applying the appropiate scale and offset to the data.  When
+            raw_data is True values of 1 in the data likely indicate that
+            the gate was not present in the sweep, in some cases in will
+            indicate range folded data.
+        scans : list or None.
+            Scans to retrieve data from (0 based).  None (the default) will
+            get the data for all scans in the volume.
 
         Returns
         -------
         data : ndarray
 
-
         """
+        if scans is None:
+            scans = range(self.nscans)
+
         # determine the number of rays
         msg_nums = self._msg_nums(scans)
         nrays = len(msg_nums)
 
         # extract the data
         if moment != 'PHI':
-            data = np.ones((nrays, max_gates), dtype='u1')
+            data = np.ones((nrays, max_ngates), dtype='u1')
         else:
-            data = np.ones((nrays, max_gates), dtype='u2')
+            data = np.ones((nrays, max_ngates), dtype='u2')
         for i, msg_num in enumerate(msg_nums):
             msg = self.msg31s[msg_num]
-            data[i, :msg[moment]['ngates']] = msg[moment]['data']
+            if moment not in msg.keys():
+                continue
+            ngates = msg[moment]['ngates']
+            data[i, :ngates] = msg[moment]['data']
 
-        # mask, scale and offset if requested
+        # return raw data if requested
         if raw_data:
             return data
-        else:
-            msg = self.msg31s[msg_nums[0]]
-            offset = msg[moment]['offset']
-            scale = msg[moment]['scale']
-            return (np.ma.masked_less_equal(data, 1) - offset) / (scale)
+
+        # mask, scan and offset, assume that the offset and scale
+        # are the same in all scans/gates
+        for scan in scans:  # find a scan which contains the moment
+            msg_num = self.scan_msgs[scan][0]
+            msg = self.msg31s[msg_num]
+            if moment in msg.keys():
+                offset = msg[moment]['offset']
+                scale = msg[moment]['scale']
+                return (np.ma.masked_less_equal(data, 1) - offset) / (scale)
+
+        # moment is not present in any scan, mask all values
+        return np.ma.masked_less_equal(data, 1)
 
 
 def _decompress_records(file_handler):
