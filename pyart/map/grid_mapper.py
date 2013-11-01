@@ -292,7 +292,7 @@ def map_to_grid(radars, grid_shape=(81, 81, 69),
         True to include a radius of influence field in the returned
         dictionary under the 'ROI' key.  This is the value of qrf_func at all
         grid points.
-    weighting_functions : 'Barnes' or 'Cressman'
+    weighting_function : 'Barnes' or 'Cressman'
         Functions used to weight nearby collected points when interpolating a
         grid point.
     toa : float
