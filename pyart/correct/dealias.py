@@ -40,7 +40,10 @@ def dealias_fourdd(radar, sounding_heights, sounding_wind_speeds,
         the instrument_parameters attribute and have a
         reflectivity_horizontal and mean_doppler_velocity fields.
     sounding_heights : array
-        Sounding heights is meters.
+        Sounding heights is meters above mean sea level.  If altitude
+        attribute of the radar object if reference against something other
+        than mean sea level then this parameter should also be referenced in
+        that manner.
     sounding_wind_speeds : array
         Sounding wind speeds in m/s.
     sounding_wind_direction : array
