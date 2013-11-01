@@ -45,6 +45,14 @@ __ http://trmm-fc.gsfc.nasa.gov/trmm_gv/software/rsl/
 __ http://tfinley.net/software/pyglpk/
 
 
+3) Basemap__
+
+__ http://matplotlib.org/basemap/
+
+4) pyproj__
+
+__ http://code.google.com/p/pyproj/
+
 Obtaining the latest source
 ===========================
 
