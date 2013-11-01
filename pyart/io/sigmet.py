@@ -27,7 +27,7 @@ SPEED_OF_LIGHT = 299793000.0
 
 
 def read_sigmet(filename, field_names=None, field_metadata=None,
-                sigmet_field_names=False, time_ordered='full', debug=False):
+                sigmet_field_names=False, time_ordered='none', debug=False):
     """
     Read a Sigmet (IRIS) product file.
 
@@ -51,13 +51,15 @@ def read_sigmet(filename, field_names=None, field_metadata=None,
         returned radar object has a fields attribute filled with the sigmet
         data type names with no metadata.
     time_ordered : 'full', 'none' or 'roll'.
-        Parameter controlling the time ordering of the data.  'full' will
-        place data within each sweep in a strictly time increasing order,
-        'none' will keep data ordered in the same manner as the Sigmet file.
-        'roll' will attempt to time order the data within each sweep using a
-        single roll operation, complete time increasing ordering is not
-        ensured, but this method is considerable faster than the 'full' method
-        and gives time increasing data when the data is sequentially ordered.
+        Parameter controlling the time ordering of the data. The default,
+        'none' keep the data ordered in the same manner as it appears in
+        the Sigmet file.  'roll' will attempt to time order the data within
+        each sweep by rolling the earliest collected ray to be the beginning.
+        Sequential ordering of the rays is maintained but strict time
+        increasing order is not guaranteed.  'full' will place data within
+        each sweep in a strictly time increasing order, but the rays will
+        likely become non-sequential.  The 'full' option is not recommended
+        unless strict time increasing order is required.
     debug : bool, optional
 
     Returns
