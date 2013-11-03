@@ -18,6 +18,6 @@ Python 2.6+ with
     - matplotlib
     - netCDF4
 
-Installation: See INSTALL.TXT file
+For additional instruction and optional dependancies see the INSTALL.TXT file.
 
 Join the Py-ART users email list http://groups.google.com/group/pyart-users/
