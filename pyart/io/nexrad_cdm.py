@@ -10,6 +10,7 @@ Functions for accessing Common Data Model (CDM) NEXRAD Level 2 files.
     read_nexrad_cdm
     _scan_info
     _populate_scan_dic
+    _get_moment_data
     CDM_FIELD_MAPPING
     NEXRAD_METADATA
 
