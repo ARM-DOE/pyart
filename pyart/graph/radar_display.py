@@ -659,9 +659,7 @@ class RadarDisplay:
         time_str = self.time_begin.isoformat() + 'Z'
         fixed_angle = self.fixed_angle[tilt]
         l1 = "%s %.1f Deg. %s " % (self.radar_name, fixed_angle, time_str)
-
-        field_name = self.fields[field]['standard_name'].replace('_', ' ')
-        field_name = field_name[0].upper() + field_name[1:]
+        field_name = self._generate_field_name(field)
         return l1 + '\n' + field_name
 
     def generate_ray_title(self, field, ray):
@@ -683,14 +681,23 @@ class RadarDisplay:
         """
         time_str = self.time_begin.isoformat() + 'Z'
         l1 = "%s %s" % (self.radar_name, time_str)
-
         azim = self.azimuths[ray]
         elev = self.elevations[ray]
         l2 = "Ray: %i  Elevation: %.1f Azimuth: %.1f" % (ray, azim, elev)
-
-        field_name = self.fields[field]['standard_name'].replace('_', ' ')
-        field_name = field_name[0].upper() + field_name[1:]
+        field_name = self._generate_field_name(field)
         return l1 + '\n' + l2 + '\n' + field_name
+
+    def _generate_field_name(self, field):
+        """ Return a nice field name for a particular field. """
+        if 'standard_name' in self.fields[field]:
+            field_name = self.fields[field]['standard_name']
+        elif 'long_name' in self.fields[field]:
+            field_name = self.fields[field]['long_name']
+        else:
+            field_name = str(field)
+        field_name = field_name.replace('_', ' ')
+        field_name = field_name[0].upper() + field_name[1:]
+        return field_name
 
     def _generate_colorbar_label(self, standard_name, units):
         """ Generate and return a label for a colorbar. """
