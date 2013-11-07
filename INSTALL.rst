@@ -2,56 +2,60 @@
 Building and installing Py-ART
 ==============================
 
-Dependancies
-============
+Required Dependencies
+=====================
 
-Py-ART requires the following software for best use, earlier version may work
-but have not been extensively tested.
+Py-ART requires the following software, earlier version may work but have 
+not been extensively tested.
 
-1) Python__ 2.6.x or newer
+* Python__ 2.6.x or newer
 
 __ http://www.python.org
 
-2) NumPy__ 1.6.x or newer
+* NumPy__ 1.6.x or newer
 
 __ http://www.scipy.org
 
-3) SciPy__ 0.10.x or newer
+* SciPy__ 0.10.x or newer
 
 __ http://www.scipy.org
 
-4) matplotlib__ 1.1.0 or newer
+* matplotlib__ 1.1.0 or newer
 
 __ http://matplotlib.org/
 
-5) netCDF4__ 1.0.2 or newer
+* netCDF4__ 1.0.2 or newer
 
 __ http://code.google.com/p/netcdf4-python/
 
 
-Optional Dependancies
+Optional Dependencies
 =====================
 
 The following packages are recommended for a fully-functional Py-ART
 installation, but the package will install and work with reduced functionality
 without these packages.
 
-1) TRMM RSL__ 1.43 or newer
+* TRMM RSL__ 1.43 or newer
 
 __ http://trmm-fc.gsfc.nasa.gov/trmm_gv/software/rsl/
 
-2) PyGLPK__
+* PyGLPK__
 
 __ http://tfinley.net/software/pyglpk/
 
 
-3) Basemap__
+* Basemap__
 
 __ http://matplotlib.org/basemap/
 
-4) pyproj__
+* pyproj__
 
 __ http://code.google.com/p/pyproj/
+
+* nose__
+
+__ http://nose.readthedocs.org/en/latest/
 
 Obtaining the latest source
 ===========================
@@ -91,19 +95,20 @@ in-place.
 Frequently asked questions
 ==========================
 
-Q) I'm getting a segfault or another error in python when using
-     rsl.read_rsl() with IRIS/other files.
-A)  This is due to a bug in RSL, and can be remedied by adding
-    -fno-stack-protector -D_FORTIFY_SOURCE=0 to the CFLAGS parameter of the
-    makefile of rsl.  This issue has been reported to the RSL maintainers.
+* I'm getting a segfault or another error in python when using 
+  pyart.io.read_rsl() with IRIS/other files.
+  
+  This is due to a bug in RSL, and can be remedied by adding
+  -fno-stack-protector -D_FORTIFY_SOURCE=0 to the CFLAGS parameter of the
+  makefile of RSL.  This issue has been reported to the RSL maintainers.
 
-Q) I'm having trouble getting PyGLPK to compile on my 64-bit operating system.
-A) Change the line in the setup.py file from:
+* I'm having trouble getting PyGLPK to compile on my 64-bit operating system.
+  Change the line in the setup.py file from
+  
+  define_macros = macros, extra_compile_args=['-m32'], extra_link_args=['-m32'],
+  
+  to
+  
+  define_macros = macros, extra_compile_args=['-m64'], extra_link_args=['-m64'],
 
-define_macros = macros, extra_compile_args=['-m32'], extra_link_args=['-m32'],
-   
-   to:
-
-define_macros = macros, extra_compile_args=['-m64'], extra_link_args=['-m64'],
-
-  Then build and install PyGLPK as recommended in the PYGLPK README.txt file. 
+  Then build and install PyGLPK as recommended in the PYGLPK README.txt file.
