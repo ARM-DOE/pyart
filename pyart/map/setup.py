@@ -8,7 +8,7 @@ def configuration(parent_package='', top_path=None):
     from numpy.distutils.misc_util import Configuration
     from numpy.distutils.system_info import get_info, BlasNotFoundError
     config = Configuration('map', parent_package, top_path)
-
+    config.add_data_dir('tests')
     libraries = []
     if os.name == 'posix':
         libraries.append('m')
