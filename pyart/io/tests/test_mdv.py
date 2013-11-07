@@ -513,6 +513,8 @@ def test_fileptr():
 
 
 def test_read_one_field():
+
+    mdvfile = pyart.io.mdv.MdvFile(pyart.testing.MDV_PPI_FILE)
     # extract a field
     assert hasattr(mdvfile, 'DBZ_F') is False
     sweeps = mdvfile.read_a_field(0)
@@ -531,6 +533,7 @@ def test_read_one_field():
 
 def test_read_all_fields():
 
+    mdvfile = pyart.io.mdv.MdvFile(pyart.testing.MDV_PPI_FILE)
     # read all fields
     assert hasattr(mdvfile, 'DBZ_F') is False
     mdvfile.read_all_fields()
