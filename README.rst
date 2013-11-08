@@ -63,7 +63,7 @@ functionality is available of the the following modules are installed.
   installed in the default location (/usr/local/trmm).
 
 * `GLPK <http://www.gnu.org/software/glpk/>`_ and
-  `PyGLPK <http://tfinley.net/software/pyglpk/`_.
+  `PyGLPK <http://tfinley.net/software/pyglpk/>`_.
   These packages are required to use the LP phase processing method.  
   See the discussion in the **INSTALL.rst** file if you have problems
   installing PyGLPK. The `CVXOPT <http://cvxopt.org/>`_ package may be used
