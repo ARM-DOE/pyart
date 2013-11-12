@@ -14,6 +14,7 @@ from . import io
 from . import correct
 from . import graph
 from . import map
+from . import metadata
 from . import testing
 
 # test function setup based on scikit-image test function

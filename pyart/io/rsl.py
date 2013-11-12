@@ -269,7 +269,19 @@ VOLUMENUM2RSLNAME = {
     21: 'AH',
     22: 'CV',
     23: 'AV',
-    24: 'SQ'}
+    24: 'SQ',
+    25: 'VS',
+    26: 'VL',
+    27: 'VG',
+    28: 'VT',
+    29: 'NP',
+    30: 'HC',
+    31: 'VC',
+    32: 'V2',
+    33: 'S2',
+    34: 'V3',
+    35: 'S3',
+}
 
 
 RSLNAME2VOLUMENUM = dict([(v, k) for k, v in VOLUMENUM2RSLNAME.iteritems()])

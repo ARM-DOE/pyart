@@ -19,15 +19,17 @@ import datetime
 
 import numpy as np
 
-from .common import get_metadata, make_time_unit_str
+from ..metadata.manager import FileMetadata
+from .common import make_time_unit_str
 from .radar import Radar
 from ._sigmetfile import SigmetFile, bin4_to_angle, bin2_to_angle
 
 SPEED_OF_LIGHT = 299793000.0
 
 
-def read_sigmet(filename, field_names=None, field_metadata=None,
-                sigmet_field_names=False, time_ordered='none', debug=False):
+def read_sigmet(filename, field_names=None, additional_metadata=None,
+                file_field_names=False, exclude_fields=None,
+                time_ordered='none', debug=False):
     """
     Read a Sigmet (IRIS) product file.
 
@@ -38,18 +40,24 @@ def read_sigmet(filename, field_names=None, field_metadata=None,
         pointing to the beginning of such a file.
     field_names : dict, optional
         Dictionary mapping Sigmet data type names to radar field names. If a
-        data type found in the file does not appear in this dictionary it will
-        not be placed in the radar.fields dictionary.  If None (default) a
-        standard mapping will be used (SIGMET_TO_STANDARD)
-    field_metadata : dict of dicts, optional
-        Dictionary of dictionaries to retrieve field metadata from, if a mapped
-        field does not appear in this list standard metadata will be used, or
-        none if these is no metadata.  None (default) uses a blank dictionary.
-    sigmet_field_names : bool, optional
+        data type found in the file does not appear in this dictionary or has
+        a value of None it will not be placed in the radar.fields dictionary.
+        A value of None, the default, will use the mapping defined in the
+        metadata configuration file.
+    additional_metadata : dict of dicts, optional
+        Dictionary of dictionaries to retrieve metadata from during this read.
+        This metadata is not used during any successive file reads unless
+        explicitly included.  A value of None, the default, will not
+        introduct any addition metadata and the file specific or default
+        metadata as specified by the metadata configuration file will be used.
+    file_field_names : bool, optional
         True to use the Sigmet data type names for the field names. If this
-        case the field_metadata and field_names parameters are ignored and the
-        returned radar object has a fields attribute filled with the sigmet
-        data type names with no metadata.
+        case the field_names parameter is ignored. The field dictionary will
+        likely only have a 'data' key, unless the fields are defined in
+        `additional_metadata`.
+    exclude_fields : list or None, optional
+        List of fields to exclude from the radar object. This is applied
+        after the `file_field_names` and `field_names` parameters.
     time_ordered : 'full', 'none' or 'roll'.
         Parameter controlling the time ordering of the data. The default,
         'none' keep the data ordered in the same manner as it appears in
@@ -68,11 +76,8 @@ def read_sigmet(filename, field_names=None, field_metadata=None,
         Radar object
 
     """
-    # parse parameters
-    if field_names is None:
-        field_names = SIGMET_TO_STANDARD
-    if field_metadata is None:
-        field_metadata = {}
+    filemetadata = FileMetadata('sigmet', field_names, additional_metadata,
+                                file_field_names, exclude_fields)
 
     # open the file, read data
     sigmetfile = SigmetFile(filename, debug=debug)
@@ -107,15 +112,15 @@ def read_sigmet(filename, field_names=None, field_metadata=None,
 
     # sweep_start_ray_index and sweep_end_ray_index
     ray_count = good_rays.sum(axis=1)
-    sweep_start_ray_index = get_metadata('sweep_start_ray_index')
-    sweep_end_ray_index = get_metadata('sweep_end_ray_index')
+    sweep_start_ray_index = filemetadata('sweep_start_ray_index')
+    sweep_end_ray_index = filemetadata('sweep_end_ray_index')
 
     ssri = np.cumsum(np.append([0], ray_count[:-1])).astype('int32')
     sweep_start_ray_index['data'] = ssri
     sweep_end_ray_index['data'] = np.cumsum(ray_count).astype('int32') - 1
 
     # time
-    time = get_metadata('time')
+    time = filemetadata('time')
 
     if 'XHDR' in sigmet_data:   # use time in extended headers
         tdata = sigmet_data.pop('XHDR')
@@ -139,7 +144,7 @@ def read_sigmet(filename, field_names=None, field_metadata=None,
     time['units'] = make_time_unit_str(dts[0])
 
     # _range
-    _range = get_metadata('range')
+    _range = filemetadata('range')
     range_info = task_config['task_range_info']
     gate_0 = range_info['first_bin_range'] / 100.       # meters
     gate_nbin = range_info['last_bin_range'] / 100.     # meters
@@ -152,20 +157,13 @@ def read_sigmet(filename, field_names=None, field_metadata=None,
     # fields
     fields = {}
     for data_type_name, fdata in sigmet_data.iteritems():
-        if sigmet_field_names:
-            fields[data_type_name] = {'data': fdata.reshape(-1, nbins)}
-        elif data_type_name in field_names:
-
-            field_name = field_names[data_type_name]
-
-            if field_name in field_metadata:
-                field_dic = field_metadata[field_name].copy()
-            else:
-                field_dic = get_metadata(field_name)
-
-            field_dic['data'] = fdata
-            field_dic['_FillValue'] = -9999.0
-            fields[field_name] = field_dic
+        field_name = filemetadata.get_field_name(data_type_name)
+        if field_name is None:
+            continue
+        field_dic = filemetadata(field_name)
+        field_dic['data'] = fdata.reshape(-1, nbins)
+        field_dic['_FillValue'] = -9999.0
+        fields[field_name] = field_dic
 
     # metadata
     metadata = {'title': '', 'institution': '', 'references': '',
@@ -184,37 +182,37 @@ def read_sigmet(filename, field_names=None, field_metadata=None,
         scan_type = 'ppi'
 
     # latitude
-    latitude = get_metadata('latitude')
+    latitude = filemetadata('latitude')
     lat = bin4_to_angle(ingest_config['latitude_radar'])
     if lat > 180.0:
         lat -= 360.0
     latitude['data'] = np.array([lat], dtype='float64')
 
     # longitude
-    longitude = get_metadata('longitude')
+    longitude = filemetadata('longitude')
     lon = bin4_to_angle(ingest_config['longitude_radar'])
     if lon > 180.0:
         lon -= 360.0
     longitude['data'] = np.array([lon], dtype='float64')
 
     # altitude
-    altitude = get_metadata('altitude')
+    altitude = filemetadata('altitude')
     alt = sigmetfile.product_hdr['product_end']['ground_height']
     altitude['data'] = np.array([alt], dtype='float64')
 
     # sweep_number
-    sweep_number = get_metadata('sweep_number')
+    sweep_number = filemetadata('sweep_number')
     sweep_number['data'] = np.arange(nsweeps, dtype='int32')
 
     # sweep_mode
-    sweep_mode = get_metadata('sweep_mode')
+    sweep_mode = filemetadata('sweep_mode')
     if scan_type == 'ppi':
         sweep_mode['data'] = np.array(nsweeps * ['azimuth_surveillance'])
     else:
         sweep_mode['data'] = np.array(nsweeps * ['rhi'])
 
     # fixed_angle
-    fixed_angle = get_metadata('fixed_angle')
+    fixed_angle = filemetadata('fixed_angle')
     fa = [d['fixed_angle'] for d in
           sigmetfile.ingest_data_headers[first_data_type]]
     fixed_angle['data'] = bin2_to_angle(np.array(fa, dtype='float32'))
@@ -225,21 +223,21 @@ def read_sigmet(filename, field_names=None, field_metadata=None,
     el0 = sigmet_metadata[first_data_type]['elevation_0']
     el1 = sigmet_metadata[first_data_type]['elevation_1']
 
-    azimuth = get_metadata('azimuth')
+    azimuth = filemetadata('azimuth')
     az = (az0 + az1) / 2.
     az[np.where(np.abs(az0 - az1) > 180.0)] += 180.
     az[az > 360.0] -= 360.
     azimuth['data'] = az.astype('float32')
 
     # elevation
-    elevation = get_metadata('elevation')
+    elevation = filemetadata('elevation')
     elevation['data'] = ((el0 + el1) / 2.).astype('float32')
 
     # instrument_parameters
-    prt = get_metadata('prt')
-    prt_mode = get_metadata('prt_mode')
-    nyquist_velocity = get_metadata('nyquist_velocity')
-    unambiguous_range = get_metadata('unambiguous_range')
+    prt = filemetadata('prt')
+    prt_mode = filemetadata('prt_mode')
+    nyquist_velocity = filemetadata('nyquist_velocity')
+    unambiguous_range = filemetadata('unambiguous_range')
 
     trays = nsweeps * nrays     # this is correct even with missing rays
     prt_value = 1. / sigmetfile.product_hdr['product_end']['prf']
@@ -354,67 +352,3 @@ def ymds_time_to_datetime(ymds):
     dt = datetime.datetime(ymds['year'], ymds['month'], ymds['day'])
     delta = datetime.timedelta(seconds=ymds['seconds'])
     return dt + delta
-
-
-# This dictionary maps sigmet data types -> radar field names
-# Users can pass their own version of this dictionary to the read_sigmet
-# function as the field_names parameter.
-SIGMET_TO_STANDARD = {
-    'XHDR': 'XHDR',                     # (0) Extended Header, keep this name
-                                        # and the radar object will have time
-                                        # in milliseconds when present.
-    #'DBT': 'DBT',                       # (1) Total Power
-    #'DBZ': 'DBZ',                       # (2) Reflectivity
-    #'VEL': 'VEL',                       # (3) Velocity
-    #'WIDTH': 'WIDTH',                   # (4) Width
-    #'ZDR': 'ZDR',                       # (5) Differential reflectivity
-    #'DBZC': 'DBZC',                     # (7) Corrected reflectivity
-    #'DBT2': 'DBT2',                     # (8) Total Power
-    'DBZ2': 'reflectivity_horizontal',  # (9) Reflectivity
-    'VEL2': 'mean_doppler_velocity',    # (10) Velocity
-    #'WIDTH2': 'WIDTH2',                 # (11) Width
-    'ZDR2': 'diff_reflectivity',        # (12) Differential reflectivity
-    #'RAINRATE2': 'RAINRATE2',           # (13) Rainfall rate
-    #'KDP': 'KDP',                       # (14) KDP (differential phase)
-    'KDP2': 'diff_phase',               # (15) KDP (differential phase)
-    #'PHIDP': 'PHIDP',                   # (16) PhiDP (differential phase)
-    #'VELC': 'VELC',                     # (17) Corrected velocity
-    #'SQI': 'SQI',                       # (18) SQI
-    #'RHOHV': 'RHOHV',                   # (19) RhoHV
-    'RHOHV2': 'copol_coeff',            # (20) RhoHV
-    'DBZC2': 'reflectivity_horizontal_filtered',    # (21) Corrected Reflec.
-    #'VELC2': 'VELC2',                   # (21) Corrected Velocity
-    'SQI2': 'norm_coherent_power',      # (23) SQI
-    'PHIDP2': 'dp_phase_shift',         # (24) PhiDP (differential phase)
-    #'LDRH': 'LDRH',                     # (25) LDR xmt H, rcv V
-    #'LDRH2': 'LDRH2',                   # (26) LDR xmt H, rcv V
-    #'LDRV': 'LDRV',                     # (27) LDR xmt V, rcv H
-    #'LDRV2': 'LDRV2',                   # (28) LDR xmt V, rcv H
-    #'HEIGHT': 'HEIGHT',                 # (32) Height (1/10 km)
-    #'VIL2': 'VIL2',                     # (33) Linear Liquid
-    #'RAW': 'RAW',                       # (34) Raw Data
-    #'SHEAR': 'SHEAR',                   # (35) Wind Shear
-    #'DIVERGE2': 'DIVERGE2',             # (36) Divergence
-    #'FLIQUID2': 'FLIQUID2',             # (37) Floated liquid
-    #'USER': 'USER',                     # (38) User type
-    #'OTHER': 'OTHER',                   # (39) Unspecified
-    #'DEFORM2': 'DEFORM2',               # (40) Deformation
-    #'VVEL2': 'VVEL2',                   # (41) Vertical velocity
-    #'HVEL2': 'HVEL2',                   # (42) Horizontal velocity
-    #'HDIR2': 'HDIR2',                   # (43) Horizontal wind direction
-    #'AXDIL2': 'AXDIL2',                 # (44) Axis of dilation
-    #'TIME2': 'TIME2',                   # (45) Time in seconds
-    #'RHOH': 'RHOH',                     # (46) Rho, xmt H, rcv V
-    #'RHOH2': 'RHOH2',                   # (47) Rho, xmt H, rcv V
-    #'RHOV': 'RHOV',                     # (48) Rho, xmt V, rcv H
-    #'RHOV2': 'RHOV2',                   # (49) Rho, xmt V, rcv H
-    #'PHIH': 'PHIH',                     # (50) Phi, xmt H, rcv V
-    #'PHIH2': 'PHIH2',                   # (51) Phi, xmt H, rcv V
-    #'PHIV': 'PHIV',                     # (52) Phi, xmt V, rcv H
-    #'PHIV2': 'PHIV2',                   # (53) Phi, xmt V, rcv H
-    #'USER2': 'USER2',                   # (54) User type
-    #'HCLASS': 'HCLASS',                 # (55) Hydrometeor class
-    #'HCLASS2': 'HCLASS2',               # (56) Hydrometeor class
-    #'ZDRC': 'ZDRC',                     # (57) Corrected diff. refl.
-    #'ZDRC2': 'ZDRC2'                    # (58) Corrected diff. refl.
-}
