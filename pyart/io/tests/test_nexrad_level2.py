@@ -50,7 +50,7 @@ def test_get_azimuth_angles():
 
 
 def test_get_data_ref():
-    data = nfile.get_data([0, 1], 'REF', 1832)
+    data = nfile.get_data('REF', 1832, [0, 1])
     assert data.shape == (1440, 1832)
     assert round(data[0, 0]) == -32.0
     assert np.all(data == -32)
@@ -58,40 +58,40 @@ def test_get_data_ref():
 
 
 def test_get_data_vel():
-    data = nfile.get_data([1, 3], 'VEL', 1192)
+    data = nfile.get_data('VEL', 1192, [1, 3])
     assert data.shape == (1440, 1192)
     assert round(data[0, 0], 2) == -63.5
     assert np.all(data == -63.5)
 
 
 def test_get_data_sw():
-    data = nfile.get_data([1, 3], 'SW', 1192)
+    data = nfile.get_data('SW', 1192, [1, 3])
     assert data.shape == (1440, 1192)
     assert round(data[0, 0], 2) == -63.5
     assert np.all(data == -63.5)
 
 
 def test_get_data_zdr():
-    data = nfile.get_data([0, 2], 'ZDR', 1192)
+    data = nfile.get_data('ZDR', 1192, [0, 2])
     assert data.shape == (1440, 1192)
     assert round(data[0, 0], 3) == -7.875
     assert np.all(data == -7.875)
 
 
 def test_get_data_phi():
-    data = nfile.get_data([0, 2], 'PHI', 1192)
+    data = nfile.get_data('PHI', 1192, [0, 2])
     assert data.shape == (1440, 1192)
     assert round(data[0, 0], 1) == 180.5
 
 
 def test_get_data_rho():
-    data = nfile.get_data([0, 2], 'RHO', 1192)
+    data = nfile.get_data('RHO', 1192, [0, 2])
     assert data.shape == (1440, 1192)
     assert round(data[0, 0], 3) == 0.208
 
 
 def test_get_data_ref_raw():
-    data = nfile.get_data([0, 1], 'REF', 1832, True)
+    data = nfile.get_data('REF', 1832, [0, 1], True)
     assert data.shape == (1440, 1832)
     assert round(data[0, 0]) == 2
     assert np.all(data[:720, :] == 2)
@@ -100,35 +100,35 @@ def test_get_data_ref_raw():
 
 
 def test_get_data_vel_raw():
-    data = nfile.get_data([1, 3], 'VEL', 1192, True)
+    data = nfile.get_data('VEL', 1192, [1, 3], True)
     assert data.shape == (1440, 1192)
     assert round(data[0, 0], 2) == 2
     assert np.all(data == 2)
 
 
 def test_get_data_sw_raw():
-    data = nfile.get_data([1, 3], 'SW', 1192, True)
+    data = nfile.get_data('SW', 1192, [1, 3], True)
     assert data.shape == (1440, 1192)
     assert round(data[0, 0]) == 2
     assert np.all(data == 2)
 
 
 def test_get_data_zdr_raw():
-    data = nfile.get_data([0, 2], 'ZDR', 1192, True)
+    data = nfile.get_data('ZDR', 1192, [0, 2], True)
     assert data.shape == (1440, 1192)
     assert round(data[0, 0]) == 2
     assert np.all(data == 2)
 
 
 def test_get_data_phi_raw():
-    data = nfile.get_data([0, 2], 'PHI', 1192, True)
+    data = nfile.get_data('PHI', 1192, [0, 2], True)
     assert data.shape == (1440, 1192)
     assert round(data[0, 0]) == 514     # big-endiann packing of 0,0
     assert np.all(data == 514)
 
 
 def test_get_data_rho_raw():
-    data = nfile.get_data([0, 2], 'RHO', 1192, True)
+    data = nfile.get_data('RHO', 1192, [0, 2], True)
     assert data.shape == (1440, 1192)
     assert round(data[0, 0]) == 2
     assert np.all(data == 2)
@@ -165,41 +165,53 @@ def test_location():
     lat, lon, alt = nfile.location()
     assert round(lat, 1) == 48.2
     assert round(lon, 1) == -122.5
-    assert round(alt) == 161
+    assert round(alt) == 195
 
 
 def test_scan_info():
     scan_info = nfile.scan_info()
 
-    assert scan_info['REF'][1]['scans'] == [0, 1, 2, 3]
-    assert max(scan_info['REF'][1]['ngates']) == 1832
-    assert scan_info['REF'][2]['scans'] == range(4, 16)
-    assert max(scan_info['REF'][2]['ngates']) == 1352
+    assert len(scan_info) == 16
 
-    assert scan_info['VEL'][1]['scans'] == [1, 3]
-    assert max(scan_info['VEL'][1]['ngates']) == 1192
-    assert scan_info['VEL'][2]['scans'] == range(4, 16)
-    assert max(scan_info['VEL'][2]['ngates']) == 1192
+    nrays = [s['nrays'] for s in scan_info]
+    ref_nrays = [720, 720, 720, 720, 360, 360, 360, 360, 360, 360, 360, 360,
+                 360, 360, 360, 360]
+    assert nrays == ref_nrays
 
-    assert scan_info['SW'][1]['scans'] == [1, 3]
-    assert max(scan_info['SW'][1]['ngates']) == 1192
-    assert scan_info['SW'][2]['scans'] == range(4, 16)
-    assert max(scan_info['SW'][2]['ngates']) == 1192
+    assert scan_info[0]['moments'] == ['REF', 'ZDR', 'PHI', 'RHO']
+    assert scan_info[1]['moments'] == ['REF', 'VEL', 'SW']
+    assert scan_info[2]['moments'] == ['REF', 'ZDR', 'PHI', 'RHO']
+    assert scan_info[3]['moments'] == ['REF', 'VEL', 'SW']
+    all_moments = ['REF', 'VEL', 'SW', 'ZDR', 'PHI', 'RHO']
+    assert scan_info[4]['moments'] == all_moments
+    assert scan_info[5]['moments'] == all_moments
+    assert scan_info[6]['moments'] == all_moments
+    assert scan_info[7]['moments'] == all_moments
+    assert scan_info[8]['moments'] == all_moments
+    assert scan_info[9]['moments'] == all_moments
+    assert scan_info[10]['moments'] == all_moments
+    assert scan_info[11]['moments'] == all_moments
+    assert scan_info[12]['moments'] == all_moments
+    assert scan_info[13]['moments'] == all_moments
+    assert scan_info[14]['moments'] == all_moments
+    assert scan_info[15]['moments'] == all_moments
 
-    assert scan_info['PHI'][1]['scans'] == [0, 2]
-    assert max(scan_info['PHI'][1]['ngates']) == 1192
-    assert scan_info['PHI'][2]['scans'] == range(4, 16)
-    assert max(scan_info['PHI'][2]['ngates']) == 1192
-
-    assert scan_info['RHO'][1]['scans'] == [0, 2]
-    assert max(scan_info['RHO'][1]['ngates']) == 1192
-    assert scan_info['RHO'][2]['scans'] == range(4, 16)
-    assert max(scan_info['RHO'][2]['ngates']) == 1192
-
-    assert scan_info['ZDR'][1]['scans'] == [0, 2]
-    assert max(scan_info['ZDR'][1]['ngates']) == 1192
-    assert scan_info['ZDR'][2]['scans'] == range(4, 16)
-    assert max(scan_info['ZDR'][2]['ngates']) == 1192
+    assert scan_info[0]['ngates'] == [1832, 1192, 1192, 1192]
+    assert scan_info[1]['ngates'] == [1192, 1192, 1192]
+    assert scan_info[2]['ngates'] == [1676, 1192, 1192, 1192]
+    assert scan_info[3]['ngates'] == [1192, 1192, 1192]
+    assert scan_info[4]['ngates'] == [1352, 1192, 1192, 1192, 1192, 1192]
+    assert scan_info[5]['ngates'] == [1112, 1112, 1112, 1112, 1112, 1112]
+    assert scan_info[6]['ngates'] == [940, 940, 940, 940, 940, 940]
+    assert scan_info[7]['ngates'] == [800, 800, 800, 800, 800, 800]
+    assert scan_info[8]['ngates'] == [704, 704, 704, 704, 704, 704]
+    assert scan_info[9]['ngates'] == [540, 540, 540, 540, 540, 540]
+    assert scan_info[10]['ngates'] == [500, 500, 500, 500, 500, 500]
+    assert scan_info[11]['ngates'] == [460, 460, 460, 460, 460, 460]
+    assert scan_info[12]['ngates'] == [388, 388, 388, 388, 388, 388]
+    assert scan_info[13]['ngates'] == [332, 332, 332, 332, 332, 332]
+    assert scan_info[14]['ngates'] == [280, 280, 280, 280, 280, 280]
+    assert scan_info[15]['ngates'] == [240, 240, 240, 240, 240, 240]
 
 
 # create a NEXRADLevel2File from a COMPRESSED file
@@ -230,37 +242,37 @@ def test_compressed_get_azimuth_angles():
 
 
 def test_compressed_get_data():
-    data = cfile.get_data([0], 'REF', 1832)
+    data = cfile.get_data('REF', 1832, [0])
     assert data.shape == (120, 1832)
     assert round(data[0, 0], 1) == 10.5
 
-    data = cfile.get_data([0], 'PHI', 1192)
+    data = cfile.get_data('PHI', 1192, [0])
     assert data.shape == (120, 1192)
     assert round(data[0, 0]) == 254
 
-    data = cfile.get_data([0], 'RHO', 1192)
+    data = cfile.get_data('RHO', 1192, [0])
     assert data.shape == (120, 1192)
     assert round(data[0, 0], 3) == 0.688
 
-    data = cfile.get_data([0], 'ZDR', 1192)
+    data = cfile.get_data('ZDR', 1192, [0])
     assert data.shape == (120, 1192)
     assert round(data[0, 0], 3) == -7.875
 
 
 def test_compressed_get_data_raw():
-    data = cfile.get_data([0], 'REF', 1832, True)
+    data = cfile.get_data('REF', 1832, [0], True)
     assert data.shape == (120, 1832)
     assert round(data[0, 0]) == 87
 
-    data = cfile.get_data([0], 'PHI', 1192, True)
+    data = cfile.get_data('PHI', 1192, [0], True)
     assert data.shape == (120, 1192)
     assert round(data[0, 0]) == 722
 
-    data = cfile.get_data([0], 'RHO', 1192, True)
+    data = cfile.get_data('RHO', 1192, [0], True)
     assert data.shape == (120, 1192)
     assert round(data[0, 0]) == 146
 
-    data = cfile.get_data([0], 'ZDR', 1192, True)
+    data = cfile.get_data('ZDR', 1192, [0], True)
     assert data.shape == (120, 1192)
     assert round(data[0, 0]) == 2
 
@@ -293,23 +305,16 @@ def test_compressed_location():
     lat, lon, alt = cfile.location()
     assert round(lat, 1) == 48.2
     assert round(lon, 1) == -122.5
-    assert round(alt) == 161
+    assert round(alt) == 195
 
 
 def test_compressed_scan_info():
     scan_info = cfile.scan_info()
 
-    assert scan_info['REF'][1]['scans'] == [0]
-    assert max(scan_info['REF'][1]['ngates']) == 1832
-
-    assert scan_info['PHI'][1]['scans'] == [0]
-    assert max(scan_info['PHI'][1]['ngates']) == 1192
-
-    assert scan_info['RHO'][1]['scans'] == [0]
-    assert max(scan_info['RHO'][1]['ngates']) == 1192
-
-    assert scan_info['ZDR'][1]['scans'] == [0]
-    assert max(scan_info['ZDR'][1]['ngates']) == 1192
+    assert len(scan_info) == 1
+    assert scan_info[0]['moments'] == ['REF', 'ZDR', 'PHI', 'RHO']
+    assert scan_info[0]['ngates'] == [1832, 1192, 1192, 1192]
+    assert scan_info[0]['nrays'] == 120
 
 
 def test_bad_compression_header():
