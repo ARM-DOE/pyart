@@ -1,11 +1,14 @@
 """
-pyart.metadata.manager
-======================
+pyart.config
+============
 
-Metadata management functions.
+Py-ART configuration functions.
 
 .. autosummary::
     :toctree: generated/
+
+    load_config
+    FileMetadata
 
 """
 
@@ -13,7 +16,19 @@ import os
 import imp
 
 
-def load_metadata_config(filename):
+def load_config(filename):
+    """
+    Load a configuration from a Py-ART config file.
+
+    Parameters
+    ----------
+    filename : str
+        Filename of Py-ART configuration file.  An example file
+        can be found in the pyart source directory named `default_config.py`.
+        The code in this file is executed as is which may be a security
+        issue, do not load un-trusted configuration files.
+
+    """
     global DEFAULT_METADATA
     global FILE_SPECIFIC_METADATA
     global FIELD_MAPPINGS
@@ -23,34 +38,14 @@ def load_metadata_config(filename):
     FILE_SPECIFIC_METADATA = config.FILE_SPECIFIC_METADATA
     FIELD_MAPPINGS = config.FIELD_MAPPINGS
 
-_config_file = os.environ.get('PYART_METADATA_CONFIG')
+_config_file = os.environ.get('PYART_CONFIG')
 if _config_file is None:
     dirname = os.path.dirname(__file__)
-    _config_file = os.path.join(dirname, 'metadata_config.py')
-load_metadata_config(_config_file)
+    _config_file = os.path.join(dirname, 'default_config.py')
+load_config(_config_file)
 
 
-# dictionary matching commonly found fields to their standard names
-COMMON2STANDARD = {
-    'DBZ_F': 'reflectivity_horizontal',
-    'VEL_F': 'mean_doppler_velocity',
-    'WIDTH_F': 'doppler_spectral_width',
-    'ZDR_F': 'diff_reflectivity',
-    'RHOHV_F': 'copol_coeff',
-    'NCP_F': 'norm_coherent_power',
-    'KDP_F': 'diff_phase',
-    'PHIDP_F': 'dp_phase_shift',
-    'VEL_COR': 'corrected_mean_doppler_velocity',
-    'PHIDP_UNF': 'unfolded_dp_phase_shift',
-    'KDP_SOB': 'recalculated_diff_phase',
-    'DBZ_AC': 'attenuation_corrected_reflectivity_horizontal', }
-
-
-#from .metadata_config import DEFAULT_METADATA
-#from .metadata_config import FILE_SPECIFIC_METADATA
-#from .metadata_config import FIELD_MAPPINGS
-
-class FileMetadata():
+class _FileMetadata():
 
     def __init__(self, filetype, field_names=None, additional_metadata=None,
                  file_field_names=False, exclude_fields=None):

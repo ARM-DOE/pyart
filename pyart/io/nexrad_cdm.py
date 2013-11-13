@@ -11,8 +11,6 @@ Functions for accessing Common Data Model (CDM) NEXRAD Level 2 files.
     _scan_info
     _populate_scan_dic
     _get_moment_data
-    CDM_FIELD_MAPPING
-    NEXRAD_METADATA
 
 """
 
@@ -21,12 +19,13 @@ from datetime import datetime, timedelta
 import netCDF4
 import numpy as np
 
+from ..config import _FileMetadata
 from .radar import Radar
-from .common import get_metadata, make_time_unit_str
-from .nexrad_common import NEXRAD_METADATA
+from .common import make_time_unit_str
 
 
-def read_nexrad_cdm(filename, field_mapping=None, field_metadata=None):
+def read_nexrad_cdm(filename, field_names=None, additional_metadata=None,
+                    file_field_names=False, exclude_fields=None):
     """
     Read a Common Data Model (CDM) NEXRAD Level 2 file.
 
@@ -38,18 +37,26 @@ def read_nexrad_cdm(filename, field_mapping=None, field_metadata=None):
         tools [1]_.  A URL of a OPeNDAP file on the UCAR THREDDS Data
         Server [2]_ is also accepted the netCDF4 library has been compiled
         with OPeNDAP support.
-    field_mapping : None or dict, optional
-        Dictionary mapping CDM variables to the corresponding field names in
-        the radar objects returned. None will use :data:`CDM_FIELD_MAPPING`.
-        which also served as an example of the format for this parameter.
-        If a dictionary parameter is used it must have the same dictionary
-        keys as CDM_FIELD_MAPPING.  In addition, field_metadata must also be
-        provided which contains the field metadata for the fields specified.
-    field_metadata : None or dict, optional
-        Metadata for the fields specified by field_mapping, None will use the
-        field metadata provided in :data:`NEXRAD_METADATA`, which also serves
-        as an example of the format for this parameter.  This metadata will
-        be used for the field in the created radar objects returned.
+    field_names : dict, optional
+        Dictionary mapping NEXRAD moments to radar field names. If a
+        data type found in the file does not appear in this dictionary or has
+        a value of None it will not be placed in the radar.fields dictionary.
+        A value of None, the default, will use the mapping defined in the
+        metadata configuration file.
+    additional_metadata : dict of dicts, optional
+        Dictionary of dictionaries to retrieve metadata from during this read.
+        This metadata is not used during any successive file reads unless
+        explicitly included.  A value of None, the default, will not
+        introduct any addition metadata and the file specific or default
+        metadata as specified by the metadata configuration file will be used.
+    file_field_names : bool, optional
+        True to use the NEXRAD field names for the field names. If this
+        case the field_names parameter is ignored. The field dictionary will
+        likely only have a 'data' key, unless the fields are defined in
+        `additional_metadata`.
+    exclude_fields : list or None, optional
+        List of fields to exclude from the radar object. This is applied
+        after the `file_field_names` and `field_names` parameters.
 
     Returns
     -------
@@ -63,11 +70,10 @@ def read_nexrad_cdm(filename, field_mapping=None, field_metadata=None):
     .. [2] http://thredds.ucar.edu/thredds/catalog.html
 
     """
-    # parse field_mapping and field_metadata parameters
-    if field_mapping is None:
-        field_mapping = CDM_FIELD_MAPPING.copy()
-    if field_metadata is None:
-        field_metadata = NEXRAD_METADATA.copy()
+    # create metadata retrieval object
+    filemetadata = _FileMetadata('nexrad_cdm', field_names,
+                                 additional_metadata, file_field_names,
+                                 exclude_fields)
 
     # open the file
     dataset = netCDF4.Dataset(filename)
@@ -140,7 +146,7 @@ def read_nexrad_cdm(filename, field_mapping=None, field_metadata=None):
         ray_i += nradials
 
     # time
-    time = get_metadata('time')
+    time = filemetadata('time')
     first_time_var = scan_info[0]['time_vars'][0]
     time_start = datetime.strptime(dvars[first_time_var].units[-20:],
                                    "%Y-%m-%dT%H:%M:%SZ")
@@ -149,7 +155,7 @@ def read_nexrad_cdm(filename, field_mapping=None, field_metadata=None):
     time['units'] = make_time_unit_str(time_start)
 
     # range
-    _range = get_metadata('range')
+    _range = filemetadata('range')
     max_ngates_scan_index = ngates_per_scan.index(ngates)
     scan_dic = scan_info[max_ngates_scan_index]
     max_ngates_moment_index = scan_dic['ngates'].index(ngates)
@@ -161,8 +167,8 @@ def read_nexrad_cdm(filename, field_mapping=None, field_metadata=None):
     # fields
     fields = {}
     for moment_name, moment_data in fdata.iteritems():
-        field_name = field_mapping[moment_name]
-        field_dic = field_metadata[field_name].copy()
+        field_name = filemetadata.get_field_name(moment_name)
+        field_dic = filemetadata(field_name)
         field_dic['_FillValue'] = -9999.0
         field_dic['data'] = moment_data
         fields[field_name] = field_dic
@@ -181,9 +187,9 @@ def read_nexrad_cdm(filename, field_mapping=None, field_metadata=None):
     scan_type = 'ppi'
 
     # latitude, longitude, altitude
-    latitude = get_metadata('latitude')
-    longitude = get_metadata('longitude')
-    altitude = get_metadata('altitude')
+    latitude = filemetadata('latitude')
+    longitude = filemetadata('longitude')
+    altitude = filemetadata('altitude')
     latitude['data'] = np.array([dataset.StationLatitude], dtype='float64')
     longitude['data'] = np.array([dataset.StationLongitude], dtype='float64')
     altitude['data'] = np.array([dataset.StationElevationInMeters],
@@ -191,10 +197,10 @@ def read_nexrad_cdm(filename, field_mapping=None, field_metadata=None):
 
     # sweep_number, sweep_mode, fixed_angle, sweep_start_ray_index
     # sweep_end_ray_index
-    sweep_number = get_metadata('sweep_number')
-    sweep_mode = get_metadata('sweep_mode')
-    sweep_start_ray_index = get_metadata('sweep_start_ray_index')
-    sweep_end_ray_index = get_metadata('sweep_end_ray_index')
+    sweep_number = filemetadata('sweep_number')
+    sweep_mode = filemetadata('sweep_mode')
+    sweep_start_ray_index = filemetadata('sweep_start_ray_index')
+    sweep_end_ray_index = filemetadata('sweep_end_ray_index')
 
     sweep_number['data'] = np.arange(nsweeps, dtype='int32')
     sweep_mode['data'] = np.array(nsweeps * ['azimuth_surveillance'])
@@ -206,9 +212,9 @@ def read_nexrad_cdm(filename, field_mapping=None, field_metadata=None):
                                               dtype='int32')
 
     # azimuth, elevation, fixed_angle
-    azimuth = get_metadata('azimuth')
-    elevation = get_metadata('elevation')
-    fixed_angle = get_metadata('fixed_angle')
+    azimuth = filemetadata('azimuth')
+    elevation = filemetadata('elevation')
+    fixed_angle = filemetadata('fixed_angle')
     azimuth['data'] = azim_data
     elevation['data'] = elev_data
     fixed_angle['data'] = fixed_agl_data
@@ -319,19 +325,3 @@ def _get_moment_data(moment_var, index, ngates):
         add_offset = 0.0
 
     return raw_moment_data * scale + add_offset
-
-# default mappings from CDM dataset variables to Radar object field names
-CDM_FIELD_MAPPING = {
-    'Reflectivity_HI': 'reflectivity',
-    'RadialVelocity_HI': 'velocity',
-    'SpectrumWidth_HI': 'spectrum_width',
-    'DifferentialReflectivity_HI': 'differential_reflectivity',
-    'DifferentialPhase_HI': 'differential_phase',
-    'CorrelationCoefficient_HI': 'correlation_coefficient',
-    'Reflectivity': 'reflectivity',
-    'RadialVelocity': 'velocity',
-    'SpectrumWidth': 'spectrum_width',
-    'DifferentialReflectivity': 'differential_reflectivity',
-    'DifferentialPhase': 'differential_phase',
-    'CorrelationCoefficient': 'correlation_coefficient'
-}
