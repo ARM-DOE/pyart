@@ -143,20 +143,14 @@ def read_rsl(filename, field_names=None, additional_metadata=None,
         fields[field_name] = field_dic
 
     # metadata
-    metadata = {'original_container': 'rsl'}
+    metadata = filemetadata('metadata')
+    metadata['original_container'] = 'rsl'
     rsl_dict = rslfile.get_radar_header()
     need_from_rsl_header = {
         'name': 'instrument_name', 'project': 'project', 'state': 'state',
         'country': 'country'}  # rsl_name : radar_metadata_name
     for rsl_key, metadata_key in need_from_rsl_header.iteritems():
         metadata[metadata_key] = rsl_dict[rsl_key]
-
-    # additional required CF/Radial metadata set to blank strings
-    metadata['title'] = ''
-    metadata['institution'] = ''
-    metadata['references'] = ''
-    metadata['source'] = ''
-    metadata['comment'] = ''
 
     # latitude
     latitude = filemetadata('latitude')

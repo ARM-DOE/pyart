@@ -159,6 +159,17 @@ DEFAULT_METADATA = {
         'standard_name': 'sweep_number',
         'long_name': 'Sweep number'},
 
+    'metadata': {
+        'Conventions': 'CF/Radial instrument_parameters',
+        'version': '1.3',
+        'title': '',
+        'institution': '',
+        'references': '',
+        'source': '',
+        'history': '',
+        'comment': '',
+        'instrument_name': ''},
+
     # metadata for radar sweep information dictionaries
     'sweep_start_ray_index': {
         'long_name': 'Index of first ray in sweep, 0-based',

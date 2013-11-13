@@ -173,14 +173,8 @@ def read_nexrad_cdm(filename, field_names=None, additional_metadata=None,
         fields[field_name] = field_dic
 
     # metadata
-    metadata = {'original_container': 'NEXRAD Level II'}
-    # additional required CF/Radial metadata set to blank strings
-    metadata['title'] = ''
-    metadata['institution'] = ''
-    metadata['references'] = ''
-    metadata['source'] = ''
-    metadata['comment'] = ''
-    metadata['instrument_name'] = ''
+    metadata = filemetadata('metadata')
+    metadata['original_container'] = 'NEXRAD Level II'
 
     # scan_type
     scan_type = 'ppi'

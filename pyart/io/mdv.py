@@ -122,17 +122,9 @@ def read_mdv(filename, field_names=None, additional_metadata=None,
         fields[field_name] = field_dic
 
     # metadata
-    metadata = {}
+    metadata = filemetadata('metadata')
     for meta_key, mdv_key in MDV_METADATA_MAP.iteritems():
         metadata[meta_key] = mdvfile.master_header[mdv_key]
-
-    # additional required CF/Radial metadata set to blank strings
-    metadata['title'] = ''
-    metadata['institution'] = ''
-    metadata['references'] = ''
-    metadata['source'] = ''
-    metadata['history'] = ''
-    metadata['comment'] = ''
 
     # latitude
     latitude = filemetadata('latitude')

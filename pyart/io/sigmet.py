@@ -167,8 +167,7 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
         fields[field_name] = field_dic
 
     # metadata
-    metadata = {'title': '', 'institution': '', 'references': '',
-                'source': '', 'history': '', 'comment': ''}
+    metadata = filemetadata('metadata')
     metadata['original_container'] = 'sigmet'
     metadata['instrument_name'] = ingest_config['site_name'].strip()
     if sigmet_extended_header:
