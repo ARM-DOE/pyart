@@ -1,3 +1,5 @@
+FILL_VALUE = -9999.0
+
 # dictionary of standard metadata for various parameters
 DEFAULT_METADATA = {
     # metadata for radar fields, assuming a stationary platform
@@ -273,10 +275,19 @@ NEXRAD_METADATA = {
         'coordinates': 'elevation azimuth range'},
 }
 
+CFRADIAL_METADATA = {}
+
+MDV_METADATA = {}
+
+RSL_METADATA = {}
+
 FILE_SPECIFIC_METADATA = {
     'sigmet': SIGMET_METADATA,
     'nexrad_archive': NEXRAD_METADATA,
     'nexrad_cdm': NEXRAD_METADATA,
+    'cfradial': CFRADIAL_METADATA,
+    'mdv': MDV_METADATA,
+    'rsl': RSL_METADATA,
 }
 
 

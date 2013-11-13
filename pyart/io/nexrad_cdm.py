@@ -19,7 +19,7 @@ from datetime import datetime, timedelta
 import netCDF4
 import numpy as np
 
-from ..config import _FileMetadata
+from ..config import _FileMetadata, get_fillvalue
 from .radar import Radar
 from .common import make_time_unit_str
 
@@ -168,7 +168,7 @@ def read_nexrad_cdm(filename, field_names=None, additional_metadata=None,
     for moment_name, moment_data in fdata.iteritems():
         field_name = filemetadata.get_field_name(moment_name)
         field_dic = filemetadata(field_name)
-        field_dic['_FillValue'] = -9999.0
+        field_dic['_FillValue'] = get_fillvalue()
         field_dic['data'] = moment_data
         fields[field_name] = field_dic
 

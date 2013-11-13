@@ -17,6 +17,7 @@ Front end to the University of Washington 4DD code for Doppler dealiasing.
 
 import numpy as np
 
+from ..config import get_fillvalue
 from ..io import _rsl_interface
 from . import _fourdd_interface
 from ..config import get_metadata
@@ -25,7 +26,7 @@ from ..util import datetime_utils
 
 def dealias_fourdd(radar, sounding_heights, sounding_wind_speeds,
                    sounding_wind_direction, datetime_sounding,
-                   prep=1, filt=1, rsl_badval=131072, fill_value=-9999.0,
+                   prep=1, filt=1, rsl_badval=131072,
                    refl='reflectivity_horizontal',
                    vel='mean_doppler_velocity',
                    debug=False):
@@ -59,8 +60,6 @@ def dealias_fourdd(radar, sounding_heights, sounding_wind_speeds,
         Flag controlling Bergen and Albers filter, 1 = yes, 0 = no.
     rsl_badval : int
         Value which represented a bad, masked, points in RSL.
-    fill_value : float
-        Value to fill array with at masked points.
     refl : str
         Field in radar to use as the doppler velocities during dealiasing.
     vel : str
@@ -87,6 +86,7 @@ def dealias_fourdd(radar, sounding_heights, sounding_wind_speeds,
     1674.
 
     """
+    fill_value = get_fillvalue()
     # TODO use radar with recent correct vel instead of sond data
     # TODO option not to use refl.
     # TODO test with RHI radar

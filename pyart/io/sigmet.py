@@ -19,7 +19,7 @@ import datetime
 
 import numpy as np
 
-from ..config import _FileMetadata
+from ..config import _FileMetadata, get_fillvalue
 from .common import make_time_unit_str
 from .radar import Radar
 from ._sigmetfile import SigmetFile, bin4_to_angle, bin2_to_angle
@@ -163,7 +163,7 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
             continue
         field_dic = filemetadata(field_name)
         field_dic['data'] = fdata.reshape(-1, nbins)
-        field_dic['_FillValue'] = -9999.0
+        field_dic['_FillValue'] = get_fillvalue()
         fields[field_name] = field_dic
 
     # metadata

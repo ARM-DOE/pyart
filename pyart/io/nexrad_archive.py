@@ -15,7 +15,7 @@ Functions for reading NEXRAD Level II Archive files.
 
 import numpy as np
 
-from ..config import _FileMetadata
+from ..config import _FileMetadata, get_fillvalue
 from .radar import Radar
 from .common import make_time_unit_str
 from .nexrad_level2 import NEXRADLevel2File
@@ -114,7 +114,7 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
         if field_name is None:
             continue
         dic = filemetadata(field_name)
-        dic['_FillValue'] = -9999.0
+        dic['_FillValue'] = get_fillvalue()
         dic['data'] = nfile.get_data(moment, max_ngates)
         fields[field_name] = dic
 

@@ -16,7 +16,7 @@ Python wrapper around the RSL library.
 # Nothing from this module is imported into pyart.io if RSL is not installed.
 import numpy as np
 
-from ..config import _FileMetadata
+from ..config import _FileMetadata, get_fillvalue
 from . import _rsl_interface
 from .radar import Radar
 from .common import dms_to_d, make_time_unit_str
@@ -69,7 +69,7 @@ def read_rsl(filename, field_names=None, additional_metadata=None,
                                  file_field_names, exclude_fields)
 
     # read the file
-    fillvalue = -9999.0
+    fillvalue = get_fillvalue()
     rslfile = _rsl_interface.RslFile(filename, radar_format, callid)
     available_vols = rslfile.available_moments()
     first_volume = rslfile.get_volume(available_vols[0])

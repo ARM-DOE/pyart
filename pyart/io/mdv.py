@@ -26,7 +26,7 @@ import datetime
 import numpy as np
 from netCDF4 import date2num
 
-from ..config import _FileMetadata
+from ..config import _FileMetadata, get_fillvalue
 from .radar import Radar
 from .common import make_time_unit_str
 from .common import radar_coords_to_cart
@@ -110,15 +110,15 @@ def read_mdv(filename, field_names=None, additional_metadata=None,
 
         # grab data from MDV object, mask and reshape
         data = mdvfile.read_a_field(mdvfile.fields.index(mdv_field))
-        data[np.where(np.isnan(data))] = -9999.0
-        data[np.where(data == 131072)] = -9999.0
-        data = np.ma.masked_equal(data, -9999.0)
+        data[np.where(np.isnan(data))] = get_fillvalue()
+        data[np.where(data == 131072)] = get_fillvalue()
+        data = np.ma.masked_equal(data, get_fillvalue())
         data.shape = (data.shape[0] * data.shape[1], data.shape[2])
 
         # create and store the field dictionary
         field_dic = filemetadata(field_name)
         field_dic['data'] = data
-        field_dic['_FillValue'] = -9999.0
+        field_dic['_FillValue'] = get_fillvalue()
         fields[field_name] = field_dic
 
     # metadata

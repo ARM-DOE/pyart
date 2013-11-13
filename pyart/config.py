@@ -30,14 +30,16 @@ def load_config(filename):
         issue, do not load un-trusted configuration files.
 
     """
-    global DEFAULT_METADATA
-    global FILE_SPECIFIC_METADATA
-    global FIELD_MAPPINGS
+    global _DEFAULT_METADATA
+    global _FILE_SPECIFIC_METADATA
+    global _FIELD_MAPPINGS
+    global _FILL_VALUE
 
     config = imp.load_source('metadata_config', filename)
-    DEFAULT_METADATA = config.DEFAULT_METADATA
-    FILE_SPECIFIC_METADATA = config.FILE_SPECIFIC_METADATA
-    FIELD_MAPPINGS = config.FIELD_MAPPINGS
+    _DEFAULT_METADATA = config.DEFAULT_METADATA
+    _FILE_SPECIFIC_METADATA = config.FILE_SPECIFIC_METADATA
+    _FIELD_MAPPINGS = config.FIELD_MAPPINGS
+    _FILL_VALUE = config.FILL_VALUE
 
 _config_file = os.environ.get('PYART_CONFIG')
 if _config_file is None:
@@ -53,10 +55,17 @@ def get_metadata(p):
     An empty dictionary will be returned in no metadata dictionary exists for
     parameter p.
     """
-    if p in DEFAULT_METADATA:
-        return DEFAULT_METADATA[p].copy()
+    if p in _DEFAULT_METADATA:
+        return _DEFAULT_METADATA[p].copy()
     else:
         return {}
+
+
+def get_fillvalue():
+    """
+    Return the current fill value
+    """
+    return _FILL_VALUE
 
 
 class _FileMetadata():
@@ -67,8 +76,8 @@ class _FileMetadata():
         """
 
         # parse filetype parameter
-        if filetype in FILE_SPECIFIC_METADATA:
-            self.file_specific_metadata = FILE_SPECIFIC_METADATA[filetype]
+        if filetype in _FILE_SPECIFIC_METADATA:
+            self.file_specific_metadata = _FILE_SPECIFIC_METADATA[filetype]
         else:
             self.file_specific_metadata = {}
 
@@ -82,7 +91,7 @@ class _FileMetadata():
         if file_field_names:
             self.field_names = None
         elif field_names is None:
-            self.field_names = FIELD_MAPPINGS[filetype]
+            self.field_names = _FIELD_MAPPINGS[filetype]
         else:
             self.field_names = field_names
 
@@ -105,8 +114,8 @@ class _FileMetadata():
             return self.file_specific_metadata[p].copy()
 
         # and finally the default metadata
-        elif p in DEFAULT_METADATA:
-            return DEFAULT_METADATA[p].copy()
+        elif p in _DEFAULT_METADATA:
+            return _DEFAULT_METADATA[p].copy()
 
         # return a empty dict if the parameter is in none of the above
         else:

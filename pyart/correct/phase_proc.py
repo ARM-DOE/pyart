@@ -35,6 +35,8 @@ from time import time
 import numpy as np
 from numpy import ma
 
+from ..config import get_fillvalue
+
 
 def det_sys_phase(radar, ncp_lev=0.4, rhohv_lev=0.6,
                   ncp_field='norm_coherent_power', rhv_field='copol_coeff',
@@ -815,6 +817,6 @@ def phase_proc_lp(radar, offset, debug=False, self_const=60000.0,
         sob_kdp['long_name'] = "specific_differential_phase_hv"
         sob_kdp['units'] = "degrees/km"
         sob_kdp['least_significant_digit'] = 2
-        sob_kdp['_FillValue'] = -9999.
+        sob_kdp['_FillValue'] = get_fillvalue()
 
     return proc_ph, sob_kdp
