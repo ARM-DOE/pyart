@@ -44,7 +44,7 @@ def test_plot_rsl_radar_rhi(outfile=None):
     display = pyart.graph.RadarDisplay(radar)
     fig = plt.figure()
     ax = fig.add_subplot(111)
-    display.plot_rhi('reflectivity_horizontal_filtered', 0,
+    display.plot_rhi('reflectivity', 0,
                      vmin=-16, vmax=64, ax=ax)
     if outfile:
         fig.savefig(outfile)
@@ -56,7 +56,7 @@ def test_plot_rsl_radar_ppi(outfile=None):
     display = pyart.graph.RadarDisplay(radar)
     fig = plt.figure()
     ax = fig.add_subplot(111)
-    display.plot_ppi('reflectivity_horizontal_filtered', 0,
+    display.plot_ppi('reflectivity', 0,
                      vmin=-16, vmax=64, ax=ax)
     if outfile:
         fig.savefig(outfile)

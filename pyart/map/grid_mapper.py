@@ -243,7 +243,7 @@ class NNLocator:
 def map_to_grid(radars, grid_shape=(81, 81, 69),
                 grid_limits=((-30000., 20000), (-20000., 20000.), (0, 17000.)),
                 grid_origin=None, fields=None,
-                refl_field='reflectivity_horizontal', max_refl=190.0,
+                refl_field='reflectivity', max_refl=190.0,
                 qrf_func=None, map_roi=True, weighting_function='Barnes',
                 toa=17000.0,
                 h_factor=1.0, nb=1.5, bsp=1.0, min_radius=500.0,

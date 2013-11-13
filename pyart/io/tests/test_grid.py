@@ -10,7 +10,7 @@ import pyart
 COMMON_MAP_TO_GRID_ARGS = {
     'grid_shape': (10, 9, 3),
     'grid_limits': ((-900.0, 900.0), (-900.0, 900.0), (-400, 400)),
-    'fields': ['reflectivity_horizontal'],
+    'fields': ['reflectivity'],
     'qrf_func': lambda x, y, z: 30, }
 
 

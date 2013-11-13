@@ -198,7 +198,7 @@ def test_nsweeps():
 
 def test_field_dics():
     fields = ['differential_phase', 'spectrum_width',
-              'correlation_coefficient', 'reflectivity',
+              'cross_correlation_ratio', 'reflectivity',
               'differential_reflectivity', 'velocity']
     for field in fields:
         description = "field : %s, dictionary" % field
@@ -216,7 +216,7 @@ def check_field_dic(field):
 
 def test_field_shapes():
     fields = ['differential_phase', 'spectrum_width',
-              'correlation_coefficient', 'reflectivity',
+              'cross_correlation_ratio', 'reflectivity',
               'differential_reflectivity', 'velocity']
     for field in fields:
         description = "field : %s, shape" % field
@@ -232,7 +232,7 @@ def test_field_types():
     fields = {
         'differential_phase': MaskedArray,
         'spectrum_width': MaskedArray,
-        'correlation_coefficient': MaskedArray,
+        'cross_correlation_ratio': MaskedArray,
         'reflectivity': MaskedArray,
         'differential_reflectivity': MaskedArray,
         'velocity': MaskedArray}
@@ -251,7 +251,7 @@ def test_field_first_points():
     # [round(radar.fields[f]['data'][0,0]) for f in radar.fields]
     fields = {'differential_phase': 181.0,
               'spectrum_width': np.ma.masked,
-              'correlation_coefficient': 0.0,
+              'cross_correlation_ratio': 0.0,
               'reflectivity': -32.0,
               'differential_reflectivity': -8.0,
               'velocity': np.ma.masked}

@@ -1,118 +1,54 @@
-FILL_VALUE = -9999.0
+"""
+Configuration file for the Python ARM Radar Toolkit (Py-ART)
 
-# dictionary of standard metadata for various parameters
-DEFAULT_METADATA = {
-    # metadata for radar fields, assuming a stationary platform
-    'reflectivity_horizontal': {
-        'units': 'dBZ',
-        'standard_name': 'equivalent_reflectivity_factor',
-        'long_name': 'equivalent_reflectivity_factor',
-        'valid_max': 80.0,
-        'valid_min': -45.0,
-        'coordinates': 'elevation azimuth range'},
+The values for a number of Py-ART parameters and the default metadata created
+when reading files, correcting fields, etc. is controlled by this single
+Python configuration file.
 
-    'reflectivity_horizontal_filtered': {
-        'units': 'dBZ',
-        'standard_name': 'equivalent_reflectivity_factor_filtered',
-        'long_name': 'equivalent_reflectivity_factor_filtered',
-        'valid_max': 80.0,
-        'valid_min': -45.0,
-        'coordinates': 'elevation azimuth range'},
+Py-ART's configuration can be modified by setting the environmental
+variable PYART_CONFIG to point to a configuration file with formatting similar
+to this file.
 
-    'mean_doppler_velocity': {
-        'units': 'meters_per_second',
-        'standard_name': (
-            'radial_velocity_of_scatterers_away_from_instrument'),
-        'long_name': (
-            'radial_velocity_of_scatterers_away_from_instrument'),
-        'valid_max': 95.0,
-        'valid_min': -95.0,
-        'coordinates': 'elevation azimuth range'},
+The recommended method for changing these defaults is for users to copy this
+file into their home directory, rename it to .pyart_config.py, make any
+desired changes, and adjust their login scripts to set the PYART_CONFIG
+environmental variable to point to .pyart_config.py in their home directory.
 
-    'diff_phase': {
-        'units': 'degrees/km',
-        'standard_name': 'specific_differential_phase_hv',
-        'long_name': 'specific_differential_phase_hv',
-        'valid_max': 20.0,
-        'valid_min': -10.0,
-        'coordinates': 'elevation azimuth range'},
+Py-ART's configuration can also be modified within a script or shell session
+using the load_config functions, such modification will last until a the end
+of the script/session or until a new configuration is loaded.
 
-    'diff_reflectivity': {
-        'units': 'dB',
-        'standard_name': 'log_differential_reflectivity_hv',
-        'long_name': 'log_differential_reflectivity_hv',
-        'valid_max': 8.0,
-        'valid_min': -6.0,
-        'coordinates': 'elevation azimuth range'},
+"""
+# Currently the following variables MUST be defined in this file, other
+# variable are optional:
+# FILL_VALUE, DEFAULT_METADATA, FILE_SPECIFIC_METADATA, FIELD_MAPPINGS
+#
+# These variables are also marked below.
 
-    'copol_coeff': {
-        'units': 'ratio',
-        'standard_name': 'cross_correlation_ratio_hv',
-        'long_name': 'cross_correlation_ratio_hv',
-        'valid_max': 1.0,
-        'valid_min': 0.0,
-        'coordinates': 'elevation azimuth range'},
+##############################################################################
+# Parameters
+#
+# Various single valued parameters used in Py-ART.
+##############################################################################
 
-    'norm_coherent_power': {
-        'units': 'ratio',
-        'standard_name': 'signal_quality',
-        'long_name': 'signal_quality',
-        'valid_max': 1.0,
-        'valid_min': 0.0,
-        'comment': 'Also know as Normalized Coherent Power',
-        'coordinates': 'elevation azimuth range'},
+FILL_VALUE = -9999.0    # Required variable, the default fill value for
+                        # masked arrays and _FillValue keys.
 
-    'doppler_spectral_width': {
-        'units': 'meters_per_second',
-        'standard_name': 'spectrum_width',
-        'long_name': 'spectrum_width',
-        'valid_max': 45.0,
-        'valid_min': 0.0,
-        'coordinates': 'elevation azimuth range'},
 
-    'dp_phase_shift': {
-        'units': 'degrees',
-        'standard_name': 'differential_phase_hv',
-        'long_name': 'differential_phase_hv',
-        'valid_max': 180.0,
-        'valid_min': -180.0,
-        'coordinates': 'elevation azimuth range'},
+##############################################################################
+# Default metadata
+#
+# The DEFAULT_METADATA dictionary contains dictionaries which provide
+# the default radar attribute and field metadata.  When reading in a file
+# with Py-ART the FILE_SPECIFIC_METADATA variable is first queued for a
+# metadata dictionary, if it is not found then the metadata in
+# DEFAULT_METADATA is utilized.
+##############################################################################
 
-    'corrected_mean_doppler_velocity': {
-        'units': 'meters_per_second',
-        'standard_name': (
-            'radial_velocity_of_scatterers_away_from_instrument'),
-        'long_name': (
-            'radial_velocity_of_scatterers_away_from_instrument'),
-        'valid_max': 45.0,
-        'valid_min': -45.0,
-        'coordinates': 'elevation azimuth range'},
-
-    'unfolded_dp_phase_shift': {
-        'units': 'degrees',
-        'standard_name': 'differential_phase_hv',
-        'long_name': 'differential_phase_hv',
-        'valid_max': 480.0,
-        'valid_min': 0.0,
-        'coordinates': 'elevation azimuth range'},
-
-    'attenuation_corrected_reflectivity_horizontal': {
-        'units': 'dBZ',
-        'standard_name': 'equivalent_reflectivity_factor',
-        'long_name': 'equivalent_reflectivity_factor',
-        'valid_max': 80.0,
-        'valid_min': -45.0,
-        'coordinates': 'elevation azimuth range'},
-
-    'recalculated_diff_phase': {
-        'units': 'degrees/km',
-        'standard_name': 'specific_differential_phase_hv',
-        'long_name': 'specific_differential_phase_hv',
-        'valid_max': 20.0,
-        'valid_min': -1.0,
-        'least_significant_digit': 3},
+DEFAULT_METADATA = {    # Required variable
 
     # metadata for radar attributes
+    # these closely follow the CF/Radial standard
     'azimuth': {
         'units': 'degrees',
         'standard_name': 'beam_azimuth_angle',
@@ -184,7 +120,7 @@ DEFAULT_METADATA = {
         'units': 'degrees',
         'standard_name': 'target_fixed_angle'},
 
-    # metadata for radar location dictionaries
+    # metadata for radar location attributes
     'latitude': {
         'long_name': 'Latitude',
         'standard_name': 'Latitude',
@@ -201,7 +137,7 @@ DEFAULT_METADATA = {
         'units': 'meters',
         'positive': 'up'},
 
-    # metadata for instrument parameter dictionary
+    # metadata for instrument_parameter dictionary
     'prt_mode': {
         'comments': ('Pulsing mode Options are: "fixed", "staggered", '
                      '"dual". Assumed "fixed" if missing.'),
@@ -228,35 +164,191 @@ DEFAULT_METADATA = {
         'meta_group': 'instrument_parameters',
         'long_name': 'Unambiguous range'},
 
+    # reflectivity fields
+    'reflectivity': {
+        'units': 'dBZ',
+        'standard_name': 'equivalent_reflectivity_factor',
+        'long_name': 'Reflectivity',
+        'coordinates': 'elevation azimuth range'},
+
+    'corrected_reflectivity': {
+        'units': 'dBZ',
+        'standard_name': 'corrected_equivalent_reflectivity_factor',
+        'long_name': 'Corrected reflectivity',
+        'coordinates': 'elevation azimuth range'},
+
+    'total_power': {
+        'units': 'dBZ',
+        'standard_name': 'equivalent_reflectivity_factor',
+        'long_name': 'Total power',
+        'coordinates': 'elevation azimuth range'},
+
+    # velocity fields
+    'velocity': {
+        'units': 'meters_per_second',
+        'standard_name': 'radial_velocity_of_scatterers_away_from_instrument',
+        'long_name': 'Mean dopper velocity',
+        'coordinates': 'elevation azimuth range'},
+
+    'corrected_velocity': {
+        'units': 'meters_per_second',
+        'standard_name': (
+            'corrected_radial_velocity_of_scatterers_away_from_instrument'),
+        'long_name': 'Corrected mean doppler velocity',
+        'coordinates': 'elevation azimuth range'},
+
+    # spectrum width fields
+    'spectrum_width': {
+        'units': 'meters_per_second',
+        'standard_name': 'doppler_spectrum_width',
+        'long_name': 'Doppler spectrum width',
+        'coordinates': 'elevation azimuth range'},
+
+    # Dual Pol fields
+    'differential_reflectivity': {
+        'units': 'dB',
+        'standard_name': 'log_differential_reflectivity_hv',
+        'long_name': 'Differential reflectivity',
+        'coordinates': 'elevation azimuth range'},
+
+    'corrected_differential_reflectivity': {
+        'units': 'dB',
+        'standard_name': 'corrected_log_differential_reflectivity_hv',
+        'long_name': 'Corrected differential reflectivity',
+        'coordinates': 'elevation azimuth range'},
+
+    'cross_correlation_ratio': {
+        'units': 'ratio',
+        'standard_name': 'cross_correlation_ratio_hv',
+        'long_name': 'Cross correlation ratio (RHOHV)',
+        'valid_max': 1.0,
+        'valid_min': 0.0,
+        'coordinates': 'elevation azimuth range'},
+
+    'normalized_coherent_power': {
+        'units': 'ratio',
+        'standard_name': 'normalized_coherent_power',
+        'long_name': 'Normalized coherent power',
+        'valid_max': 1.0,
+        'valid_min': 0.0,
+        'comment': 'Also know as signal quality index (SQI)',
+        'coordinates': 'elevation azimuth range'},
+
+    'differential_phase': {
+        'units': 'degrees',
+        'standard_name': 'differential_phase_hv',
+        'long_name': 'Differential phase (PhiDP)',
+        'valid_max': 180.0,
+        'valid_min': -180.0,
+        'coordinates': 'elevation azimuth range'},
+
+    'unfolded_differential_phase': {
+        'units': 'degrees',
+        'standard_name': 'differential_phase_hv',
+        'long_name': 'Unfolded differential phase',
+        'coordinates': 'elevation azimuth range'},
+
+    'corrected_differential_phase': {
+        'units': 'degrees',
+        'standard_name': 'differential_phase_hv',
+        'long_name': 'Corrected differential phase',
+        'coordinates': 'elevation azimuth range'},
+
+    'specific_differential_phase': {
+        'units': 'degrees/km',
+        'standard_name': 'specific_differential_phase_hv',
+        'long_name': 'Specific differential phase (KDP)',
+        'coordinates': 'elevation azimuth range'},
+
+    'corrected_specific_differential_phase': {
+        'units': 'degrees/km',
+        'standard_name': 'specific_differential_phase_hv',
+        'long_name': 'Corrected specific differential phase (KDP)',
+        'coordinates': 'elevation azimuth range'},
+
+
+    # depolarization ratio fields
+    'linear_depolarization_ratio': {
+        'units': 'dB',
+        'standard_name': 'log_linear_depolarization_ratio_hv',
+        'long_name': 'Linear depolarization ratio',
+        'coordinates': 'elevation azimuth range'},
+
+    'linear_depolarization_ratio_h': {
+        'units': 'dB',
+        'standard_name': 'log_linear_depolarization_ratio_h',
+        'long_name': 'Linear depolarization ratio horizontal',
+        'coordinates': 'elevation azimuth range'},
+
+    'linear_depolarization_ratio_v': {
+        'units': 'dB',
+        'standard_name': 'log_linear_depolarization_ratio_v',
+        'long_name': 'Linear depolarization ratio vertical',
+        'coordinates': 'elevation azimuth range'},
+
+    # misc. fields
+    'signal_to_noise_ratio': {
+        'units': 'dB',
+        'standard_name': 'signal_to_noise_ratio',
+        'long_name': 'Signal to noise ratio',
+        'coordinates': 'elevation azimuth range'},
+
+    'rain_rate': {
+        'units': 'kg/m2/s',
+        'standard_name': 'rain_rate',
+        'long_name': 'Rain rate',
+        'coordinates': 'elevation azimuth range'},
+
+    'radar_estimated_rain_rate': {
+        'units': 'mm/hr',
+        'standard_name': 'radar_estimated_rain_rate',
+        'long_name': 'Radar estimated rain rate',
+        'coordinates': 'elevation azimuth range'},
+
+    'radar_echo_classification': {
+        'units': 'legend',
+        'standard_name': 'radar_echo_classification',
+        'long_name': 'Radar Echo classification',
+        'coordinates': 'elevation azimuth range'},
+
 }
 
 
+##############################################################################
 # File specific metadata
+#
+# These dictionaries define metadata that is to be used only when reading in
+# a given type of file.  This metadata is used in place of the
+# DEFAULT_METADATA when it is avialable.  The main use of these variable
+# is to define field specific data, it is safe to leave some/all of these
+# empty if the default metadata is acceptable.
+##############################################################################
+
+# Metadata for Sigmet/IRIS files
 SIGMET_METADATA = {}
 
+# Metadata for NEXRAD Level II files (Archive and CDM files)
 NEXRAD_METADATA = {
     'reflectivity': {
         'units': 'dBZ',
         'standard_name': 'equivalent_reflectivity_factor',
-        'long_name': 'equivalent_reflectivity_factor',
+        'long_name': 'Reflectivity',
         'valid_max': 94.5,
         'valid_min': -32.0,
         'coordinates': 'elevation azimuth range'},
 
     'velocity': {
         'units': 'meters_per_second',
-        'standard_name': (
-            'radial_velocity_of_scatterers_away_from_instrument'),
-        'long_name': (
-            'radial_velocity_of_scatterers_away_from_instrument'),
-        'valid_max': 95.0,          # XXX
-        'valid_min': -95.0,         # XXX
+        'standard_name': 'radial_velocity_of_scatterers_away_from_instrument',
+        'long_name': 'Mean doppler Velocity',
+        'valid_max': 95.0,
+        'valid_min': -95.0,
         'coordinates': 'elevation azimuth range'},
 
     'spectrum_width': {
         'units': 'meters_per_second',
-        'standard_name': 'spectrum_width',
-        'long_name': 'spectrum_width',
+        'standard_name': 'doppler_spectrum_width',
+        'long_name': 'Spectrum Width',
         'valid_max': 63.0,
         'valid_min': -63.5,
         'coordinates': 'elevation azimuth range'},
@@ -277,146 +369,173 @@ NEXRAD_METADATA = {
         'valid_min': 0.0,
         'coordinates': 'elevation azimuth range'},
 
-    'correlation_coefficient': {
+    'cross_correlation_ratio': {
         'units': 'ratio',
         'standard_name': 'cross_correlation_ratio_hv',
-        'long_name': 'cross_correlation_ratio_hv',
+        'long_name': 'Cross correlation_ratio (RHOHV)',
         'valid_max': 1.0,
         'valid_min': 0.0,
         'coordinates': 'elevation azimuth range'},
 }
 
+# Metadata for CF/Radial files
 CFRADIAL_METADATA = {}
 
+# Metadata for MDV files
 MDV_METADATA = {}
 
+# Metadata for RSL files
 RSL_METADATA = {}
 
-FILE_SPECIFIC_METADATA = {
+FILE_SPECIFIC_METADATA = {      # Required
     'sigmet': SIGMET_METADATA,
     'nexrad_archive': NEXRAD_METADATA,
     'nexrad_cdm': NEXRAD_METADATA,
     'cfradial': CFRADIAL_METADATA,
     'mdv': MDV_METADATA,
-    'rsl': RSL_METADATA,
+    'rsl': RSL_METADATA
 }
 
+##############################################################################
+# Field name mapping
+#
+# These dictionaries map file field names or data types to a radar field
+# name.  These are used to populate the radar.fields dictionary during a read
+# in Py-ART.  A value of None will not include that field in the radar object.
+# These can be over-ridden on a per-read basis using the field_mapping
+# parameter, or using setting the file_field_names parameter to True.
+##############################################################################
 
-# FIELD_MAPPINGS
-
-# This dictionary maps sigmet data types -> radar field names
-# Users can pass their own version of this dictionary to the read_sigmet
-# function as the field_names parameter.
+# Sigmet/IRIS file field mapping
+# Note that multiple sigmet fields map to the same radar field, if
+# more than one of these fields are present the radar field will be
+# overwritten with the last sigmet field.
 SIGMET_FIELD_MAPPING = {
-    'XHDR': None,                       # (0) Extended Header, cannot be mapped
-    'DBT': None,                        # (1) Total Power
-    'DBZ': None,                        # (2) Reflectivity
-    'VEL': None,                        # (3) Velocity
-    'WIDTH': None,                      # (4) Width
-    'ZDR': None,                        # (5) Differential reflectivity
-    'DBZC': None,                       # (7) Corrected reflectivity
-    'DBT2': None,                       # (8) Total Power
-    'DBZ2': 'reflectivity_horizontal',  # (9) Reflectivity
-    'VEL2': 'mean_doppler_velocity',    # (10) Velocity
-    'WIDTH2': None,                     # (11) Width
-    'ZDR2': 'diff_reflectivity',        # (12) Differential reflectivity
-    'RAINRATE2': None,                  # (13) Rainfall rate
-    'KDP': None,                        # (14) KDP (differential phase)
-    'KDP2': 'diff_phase',               # (15) KDP (differential phase)
-    'PHIDP': None,                      # (16) PhiDP (differential phase)
-    'VELC': None,                       # (17) Corrected velocity
-    'SQI': None,                        # (18) SQI
-    'RHOHV': None,                      # (19) RhoHV
-    'RHOHV2': 'copol_coeff',            # (20) RhoHV
-    'DBZC2': 'reflectivity_horizontal_filtered',    # (21) Corrected Reflec.
-    'VELC2': 'VELC2',                   # (21) Corrected Velocity
-    'SQI2': 'norm_coherent_power',      # (23) SQI
-    'PHIDP2': 'dp_phase_shift',         # (24) PhiDP (differential phase)
-    'LDRH': None,                       # (25) LDR xmt H, rcv V
-    'LDRH2': None,                      # (26) LDR xmt H, rcv V
-    'LDRV': None,                       # (27) LDR xmt V, rcv H
-    'LDRV2': None,                      # (28) LDR xmt V, rcv H
-    'HEIGHT': None,                     # (32) Height (1/10 km)
-    'VIL2': None,                       # (33) Linear Liquid
-    'RAW': None,                        # (34) Raw Data
-    'SHEAR': None,                      # (35) Wind Shear
-    'DIVERGE2': None,                   # (36) Divergence
-    'FLIQUID2': None,                   # (37) Floated liquid
-    'USER': None,                       # (38) User type
-    'OTHER': None,                      # (39) Unspecified
-    'DEFORM2': None,                    # (40) Deformation
-    'VVEL2': None,                      # (41) Vertical velocity
-    'HVEL2': None,                      # (42) Horizontal velocity
-    'HDIR2': None,                      # (43) Horizontal wind direction
-    'AXDIL2': None,                     # (44) Axis of dilation
-    'TIME2': None,                      # (45) Time in seconds
-    'RHOH': None,                       # (46) Rho, xmt H, rcv V
-    'RHOH2': None,                      # (47) Rho, xmt H, rcv V
-    'RHOV': None,                       # (48) Rho, xmt V, rcv H
-    'RHOV2': None,                      # (49) Rho, xmt V, rcv H
-    'PHIH': None,                       # (50) Phi, xmt H, rcv V
-    'PHIH2': None,                      # (51) Phi, xmt H, rcv V
-    'PHIV': None,                       # (52) Phi, xmt V, rcv H
-    'PHIV2': None,                      # (53) Phi, xmt V, rcv H
-    'USER2': None,                      # (54) User type
-    'HCLASS': None,                     # (55) Hydrometeor class
-    'HCLASS2': None,                    # (56) Hydrometeor class
-    'ZDRC': None,                       # (57) Corrected diff. refl.
-    'ZDRC2': None                       # (58) Corrected diff. refl.
+    # Sigmet data type :field name              # (Data_type) Description
+    'XHDR': None,                               # (0) Extended Header
+    'DBT': 'total_power',                       # (1) Total Power
+    'DBZ': 'reflectivity',                      # (2) Reflectivity
+    'VEL': 'velocity',                          # (3) Velocity
+    'WIDTH': 'spectrum_width',                  # (4) Width
+    'ZDR': 'differential_reflectivity',         # (5) Diff. reflectivity
+    'DBZC': 'corrected_reflectivity',           # (7) Corrected reflectivity
+    'DBT2': 'total_power',                      # (8) Total Power
+    'DBZ2': 'reflectivity',                     # (9) Reflectivity
+    'VEL2': 'velocity',                         # (10) Velocity
+    'WIDTH2': 'spectrum_width',                 # (11) Width
+    'ZDR2': 'differential_reflectivity',        # (12) Diff. reflectivity
+    'RAINRATE2': 'radar_estimated_rain_rate',   # (13) Rainfall rate
+    'KDP': 'specific_differential_phase',       # (14) KDP (diff. phase)
+    'KDP2': 'specific_differential_phase',      # (15) KDP (diff. phase)
+    'PHIDP': 'differential_phase',              # (16) PhiDP (diff. phase)
+    'VELC': 'corrected_velocity',               # (17) Corrected velocity
+    'SQI': 'normalized_coherent_power',         # (18) SQI
+    'RHOHV': 'cross_correlation_ratio',         # (19) RhoHV
+    'RHOHV2': 'cross_correlation_ratio',        # (20) RhoHV
+    'DBZC2': 'corrected_reflectivity',          # (21) Corrected Reflec.
+    'VELC2': 'corrected_velocity',              # (21) Corrected Velocity
+    'SQI2': 'normalized_coherent_power',        # (23) SQI
+    'PHIDP2': 'differential_phase',             # (24) PhiDP (diff. phase)
+    'LDRH': 'linear_depolarization_ratio_h',    # (25) LDR xmt H, rcv V
+    'LDRH2': 'linear_depolarization_ratio_h',   # (26) LDR xmt H, rcv V
+    'LDRV': 'linear_depolarization_ratio_v',    # (27) LDR xmt V, rcv H
+    'LDRV2': 'linear_depolaization_ratio_v',    # (28) LDR xmt V, rcv H
+    'HEIGHT': None,                             # (32) Height (1/10 km)
+    'VIL2': None,                               # (33) Linear Liquid
+    'RAW': None,                                # (34) Raw Data
+    'SHEAR': None,                              # (35) Wind Shear
+    'DIVERGE2': None,                           # (36) Divergence
+    'FLIQUID2': None,                           # (37) Floated liquid
+    'USER': None,                               # (38) User type
+    'OTHER': None,                              # (39) Unspecified
+    'DEFORM2': None,                            # (40) Deformation
+    'VVEL2': None,                              # (41) Vertical velocity
+    'HVEL2': None,                              # (42) Horizontal velocity
+    'HDIR2': None,                              # (43) Horiz. wind direction
+    'AXDIL2': None,                             # (44) Axis of dilation
+    'TIME2': None,                              # (45) Time in seconds
+    'RHOH': None,                               # (46) Rho, xmt H, rcv V
+    'RHOH2': None,                              # (47) Rho, xmt H, rcv V
+    'RHOV': None,                               # (48) Rho, xmt V, rcv H
+    'RHOV2': None,                              # (49) Rho, xmt V, rcv H
+    'PHIH': None,                               # (50) Phi, xmt H, rcv V
+    'PHIH2': None,                              # (51) Phi, xmt H, rcv V
+    'PHIV': None,                               # (52) Phi, xmt V, rcv H
+    'PHIV2': None,                              # (53) Phi, xmt V, rcv H
+    'USER2': None,                              # (54) User type
+    'HCLASS': 'radar_echo_classification',      # (55) Hydrometeor class
+    'HCLASS2': 'radar_echo_classification',     # (56) Hydrometeor class
+    'ZDRC': 'corrected_differential_reflectivity',
+                                                # (57) Corrected diff. refl.
+    'ZDRC2': 'corrected_differential_reflectivity',
+                                                # (58) Corrected diff. refl.
 }
 
 
+# NEXRAD Level II Archive files
 NEXRAD_ARCHIVE_FIELD_MAPPING = {
+    # NEXRAD field: radar field name
     'REF': 'reflectivity',
     'VEL': 'velocity',
     'SW': 'spectrum_width',
     'ZDR': 'differential_reflectivity',
     'PHI': 'differential_phase',
-    'RHO': 'correlation_coefficient'
+    'RHO': 'cross_correlation_ratio'
 }
 
+# NEXRAD Level II CDM files
 NEXRAD_CDM_FIELD_MAPPING = {
+    # CDM variable name (without _HI): radar field name
     'Reflectivity': 'reflectivity',
     'RadialVelocity': 'velocity',
     'SpectrumWidth': 'spectrum_width',
     'DifferentialReflectivity': 'differential_reflectivity',
     'DifferentialPhase': 'differential_phase',
-    'CorrelationCoefficient': 'correlation_coefficient'
+    'CorrelationCoefficient': 'cross_correlation_ratio'
 }
 
+# MDV files
 MDV_FIELD_MAPPING = {
-    'DBZ_F': 'reflectivity_horizontal',
-    'VEL_F': 'mean_doppler_velocity',
-    'WIDTH_F': 'doppler_spectral_width',
-    'ZDR_F': 'diff_reflectivity',
-    'RHOHV_F': 'copol_coeff',
-    'NCP_F': 'norm_coherent_power',
-    'KDP_F': 'diff_phase',
-    'PHIDP_F': 'dp_phase_shift',
-    'VEL_COR': 'corrected_mean_doppler_velocity',
-    'PHIDP_UNF': 'unfolded_dp_phase_shift',
-    'KDP_SOB': 'recalculated_diff_phase',
-    'DBZ_AC': 'attenuation_corrected_reflectivity_horizontal', }
+    # MDV moment: radar field name
+    'DBZ_F': 'reflectivity',
+    'VEL_F': 'velocity',
+    'WIDTH_F': 'spectrum_width',
+    'ZDR_F': 'differential_reflectivity',
+    'RHOHV_F': 'cross_correlation_ratio',
+    'NCP_F': 'normalized_coherent_power',
+    'KDP_F': 'specific_differential_phase',
+    'PHIDP_F': 'differential_phase',
+    'VEL_COR': 'corrected_velocity',
+    'PHIDP_UNF': 'unfolded_differential_phase',
+    'KDP_SOB': 'corrected_specific_differential_phase',
+    'DBZ_AC': 'corrected_reflectivity', }
 
+# CF/Radial files
 CFRADIAL_FIELD_MAPPING = {}
+
+# RSL files
+# Note that multiple RSL field map to the same radar field, if
+# more than one of these fields are present in the RSL data structure
+# the radar field will be overwritten with the last field.
 RSL_FIELD_MAPPING = {
-    'DZ': 'reflectivity_horizontal_filtered',   # reflectivity
-    'VR': 'mean_doppler_velocity',              # velocity
-    'SW': None,                                 # spectrum width
-    'CZ': None,                                 # corrected reflectivity
-    'ZT': 'reflectivity_horizontal',            # uncorrected reflectivity
-    'DR': None,                                 # differential reflectivity
-    'LR': None,                                 # another diff. reflectivity
+    # RSL 2 letter field: radar field           # RSL description
+    'DZ': 'reflectivity',                       # reflectivity
+    'VR': 'velocity',                           # velocity
+    'SW': 'spectrum_width',                     # spectrum width
+    'CZ': 'corrected_reflectivity',             # corrected reflectivity
+    'ZT': 'reflectivity',                       # uncorrected reflectivity
+    'DR': 'differential_reflectivity',          # differential reflectivity
+    'LR': 'differential_reflectivity',          # another diff. reflectivity
     'ZD': 'differential_reflectivity',          # another diff. reflectivity
     'DM': None,                                 # received power
-    'RH': 'copolor_coefficient',                # RhoHV
-    'PH': 'differential_phase_shift',           # PhiDP
+    'RH': 'cross_correlation_ratio',            # RhoHV
+    'PH': 'differential_phase',                 # PhiDP
     'XZ': None,                                 # X-band reflectivity
-    'CD': None,                                 # Corrected DR.
+    'CD': 'corrected_differential_reflectivity',    # Corrected DR.
     'MZ': None,                                 # DZ mask
     'MD': None,                                 # DR Mask
-    'ZE': None,                                 # edited reflectivity
-    'VE': 'corrected_mean_doppler_velocity',    # edited velocity
+    'ZE': 'corrected_reflectivity',             # edited reflectivity
+    'VE': 'corrected_velocity',                 # edited velocity
     'KD': 'specific_differential_phase',        # specific diff. phase
     'TI': None,                                 # TIME (unknown)
     'DX': None,                                 # ???
@@ -429,8 +548,8 @@ RSL_FIELD_MAPPING = {
     'VL': None,                                 # Radial Vel. combined
     'VG': None,                                 # Radial Vel. combined
     'VT': None,                                 # Radial Vel. combined
-    'NP': None,                                 # Normalized Coherent Power
-    'HC': None,                                 # Hydroclass
+    'NP': 'normalizsed_coherent_power',         # Normalized Coherent Power
+    'HC': 'radar_echo_classification',          # Hydroclass
     'VC': None,                                 # Radial Vel. Corrected.
     'V2': None,                                 # Radial Vel cut 2
     'S2': None,                                 # Spectrum width cut 2
@@ -438,8 +557,7 @@ RSL_FIELD_MAPPING = {
     'S3': None,                                 # Spectrum width cut 3
 }
 
-#
-FIELD_MAPPINGS = {
+FIELD_MAPPINGS = {                  # Required variable
     'sigmet': SIGMET_FIELD_MAPPING,
     'nexrad_archive': NEXRAD_ARCHIVE_FIELD_MAPPING,
     'nexrad_cdm': NEXRAD_CDM_FIELD_MAPPING,

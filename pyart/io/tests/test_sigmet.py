@@ -198,7 +198,7 @@ def test_nsweeps():
 
 
 def test_field_dics():
-    fields = ['reflectivity_horizontal', ]
+    fields = ['reflectivity', ]
     for field in fields:
         description = "field : %s, dictionary" % field
         check_field_dic.description = description
@@ -214,7 +214,7 @@ def check_field_dic(field):
 
 
 def test_field_shapes():
-    fields = ['reflectivity_horizontal', ]
+    fields = ['reflectivity', ]
     for field in fields:
         description = "field : %s, shape" % field
         check_field_shape.description = description
@@ -226,7 +226,7 @@ def check_field_shape(field):
 
 
 def test_field_types():
-    fields = {'reflectivity_horizontal': MaskedArray, }
+    fields = {'reflectivity': MaskedArray, }
     for field, field_type in fields.iteritems():
         description = "field : %s, type" % field
         check_field_type.description = description
@@ -240,7 +240,7 @@ def check_field_type(field, field_type):
 def test_field_first_points():
     # these values can be found using:
     # [round(radar.fields[f]['data'][0,0]) for f in radar.fields]
-    fields = {'reflectivity_horizontal': 0.0}
+    fields = {'reflectivity': 0.0}
     for field, field_value in fields.iteritems():
         description = "field : %s, first point" % field
         check_field_first_point.description = description

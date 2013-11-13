@@ -92,25 +92,25 @@ def make_empty_ppi_radar(ngates, rays_per_sweep, nsweeps):
 
 def make_target_radar():
     """
-    Return a PPI radar with a target like reflectivity_horizontal field.
+    Return a PPI radar with a target like reflectivity field.
     """
     radar = make_empty_ppi_radar(50, 360, 1)
     fields = {
-        'reflectivity_horizontal': get_metadata('reflectivity_horizontal')}
+        'reflectivity': get_metadata('reflectivity')}
     fdata = np.zeros((360, 50), dtype='float32')
     fdata[:, 0:10] = 0.
     fdata[:, 10:20] = 10.
     fdata[:, 20:30] = 20.
     fdata[:, 30:40] = 30.
     fdata[:, 40:50] = 40.
-    fields['reflectivity_horizontal']['data'] = fdata
+    fields['reflectivity']['data'] = fdata
     radar.fields = fields
     return radar
 
 
 def make_velocity_aliased_radar():
     """
-    Return a PPI radar with a target like reflectivity_horizontal field.
+    Return a PPI radar with a target like reflectivity field.
     """
     radar = make_empty_ppi_radar(50, 360, 1)
     radar.range['meters_between_gates'] = 1.0
@@ -119,12 +119,12 @@ def make_velocity_aliased_radar():
         'nyquist_velocity': {'data': np.array([10.0] * 360)}}
 
     fields = {
-        'reflectivity_horizontal': get_metadata('reflectivity_horizontal'),
-        'mean_doppler_velocity': get_metadata('mean_doppler_velocity')}
+        'reflectivity': get_metadata('reflectivity'),
+        'velocity': get_metadata('velocity')}
 
     # fake reflectivity data, all zero reflectivity
     fdata = np.zeros((360, 50), dtype='float32')
-    fields['reflectivity_horizontal']['data'] = fdata
+    fields['reflectivity']['data'] = fdata
 
     # fake velocity data, all zeros except a wind burst on at ~13 degrees.
     # burst is partially aliased.
@@ -136,7 +136,7 @@ def make_velocity_aliased_radar():
     vdata[14:27] = vdata[12::-1, :]         # top/bottom flip
     aliased = np.where(vdata > 10.0)
     vdata[aliased] += -20.
-    fields['mean_doppler_velocity']['data'] = vdata
+    fields['velocity']['data'] = vdata
 
     radar.fields = fields
     return radar

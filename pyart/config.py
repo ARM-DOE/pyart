@@ -199,7 +199,7 @@ class _FileMetadata():
 
         """
         if self._field_names is None:
-            field_name = file_field_names
+            field_name = file_field_name
         elif file_field_name in self._field_names:
             field_name = self._field_names[file_field_name]
         else:
