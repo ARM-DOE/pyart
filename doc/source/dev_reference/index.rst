@@ -5,7 +5,7 @@ Developer Reference Manual
 ##########################
 
 :Release: |version|
-:Date: |version|
+:Date: |today|
 
 The intended audience of this guide is developers who use Py-ART, for a more
 generate introduction to Py-ART aimed at users see the :ref:`user`.
@@ -18,6 +18,7 @@ Documentation is broken down by directory and module.
     :maxdepth: 2
 
     io
+    config
     correct
     graph
     map

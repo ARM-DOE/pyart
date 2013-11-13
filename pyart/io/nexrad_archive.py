@@ -8,8 +8,6 @@ Functions for reading NEXRAD Level II Archive files.
     :toctree: generated/
 
     read_nexrad_archive
-    ARCHIVE_MAPPING
-    NEXRAD_METADATA
 
 """
 

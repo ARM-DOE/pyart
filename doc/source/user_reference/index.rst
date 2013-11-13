@@ -5,7 +5,7 @@ User Reference Manual
 #####################
 
 :Release: |version|
-:Date: |version|
+:Date: |today|
 
 This guide provides details on all public functions, modules and classes 
 included in Py-ART which a typical user will use on a regular basis.
@@ -21,3 +21,12 @@ and private) aimed at developers please see the :ref:`developer`.
     graph
     map
     testing
+
+Packages level functions:
+
+.. currentmodule:: pyart
+.. autosummary::
+    :toctree: generated/
+
+    load_config
+    test
