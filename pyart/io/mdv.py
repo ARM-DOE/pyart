@@ -4,8 +4,6 @@ pyart.io.mdv
 
 Utilities for reading of MDV files.
 
-Code is adapted from Nitin Bharadwaj's Matlab code
-
 .. autosummary::
     :toctree: generated/
     :template: dev_template.rst
@@ -18,6 +16,7 @@ Code is adapted from Nitin Bharadwaj's Matlab code
     read_mdv
 
 """
+# Code is adapted from Nitin Bharadwaj's Matlab code
 
 import struct
 import gzip
@@ -27,12 +26,14 @@ import datetime
 import numpy as np
 from netCDF4 import date2num
 
+from ..config import _FileMetadata
 from .radar import Radar
-from .common import COMMON2STANDARD, get_metadata, make_time_unit_str
+from .common import COMMON2STANDARD, make_time_unit_str
 from .common import radar_coords_to_cart
 
 
-def read_mdv(filename):
+def read_mdv(filename, field_names=None, additional_metadata=None,
+             file_field_names=False, exclude_fields=None):
     """
     Read a MDV file.
 
@@ -40,6 +41,26 @@ def read_mdv(filename):
     ----------
     filename : str
         Name of MDV file to read data from.
+    field_names : dict, optional
+        Dictionary mapping MDV data type names to radar field names. If a
+        data type found in the file does not appear in this dictionary or has
+        a value of None it will not be placed in the radar.fields dictionary.
+        A value of None, the default, will use the mapping defined in the
+        Py-ART configuration file.
+    additional_metadata : dict of dicts, optional
+        Dictionary of dictionaries to retrieve metadata from during this read.
+        This metadata is not used during any successive file reads unless
+        explicitly included.  A value of None, the default, will not
+        introduct any addition metadata and the file specific or default
+        metadata as specified by the Py-ART configuration file will be used.
+    file_field_names : bool, optional
+        True to use the MDV data type names for the field names. If this
+        case the field_names parameter is ignored. The field dictionary will
+        likely only have a 'data' key, unless the fields are defined in
+        `additional_metadata`.
+    exclude_fields : list or None, optional
+        List of fields to exclude from the radar object. This is applied
+        after the `file_field_names` and `field_names` parameters.
 
     Returns
     -------
@@ -52,6 +73,10 @@ def read_mdv(filename):
     Support for cartesian and non-gzipped file are planned.
 
     """
+    # create metadata retrieval object
+    filemetadata = _FileMetadata('mdv', field_names, additional_metadata,
+                                 file_field_names, exclude_fields)
+
     mdvfile = MdvFile(filename)
 
     # value attributes
@@ -63,7 +88,7 @@ def read_mdv(filename):
         raise NotImplementedError('No support for scan_type %s.' % scan_type)
 
     # time
-    time = get_metadata('time')
+    time = filemetadata('time')
     units = make_time_unit_str(mdvfile.times['time_begin'])
     time['units'] = units
     time_start = date2num(mdvfile.times['time_begin'], units)
@@ -71,30 +96,30 @@ def read_mdv(filename):
     time['data'] = np.linspace(time_start, time_end, naz * nele)
 
     # range
-    _range = get_metadata('range')
+    _range = filemetadata('range')
     _range['data'] = np.array(mdvfile.range_km * 1000.0, dtype='float32')
     _range['meters_to_center_of_first_gate'] = _range['data'][0]
-    gate_0 = _range['data'][0]
-    gate_1 = _range['data'][1]
-    _range['meters_between_gates'] = (gate_1 - gate_0)
+    _range['meters_between_gates'] = (_range['data'][1] - _range['data'][0])
 
     # fields
     fields = {}
-    # Transfer only the fields that we have valid names for and are present.
-    for field in set(mdvfile.fields) & set(COMMON2STANDARD.keys()):
+    for mdv_field in set(mdvfile.fields):
+        field_name = filemetadata.get_field_name(mdv_field)
+        if field_name is None:
+            continue
 
         # grab data from MDV object, mask and reshape
-        data = mdvfile.read_a_field(mdvfile.fields.index(field))
+        data = mdvfile.read_a_field(mdvfile.fields.index(mdv_field))
         data[np.where(np.isnan(data))] = -9999.0
         data[np.where(data == 131072)] = -9999.0
         data = np.ma.masked_equal(data, -9999.0)
         data.shape = (data.shape[0] * data.shape[1], data.shape[2])
 
         # create and store the field dictionary
-        fielddict = get_metadata(field)
-        fielddict['data'] = data
-        fielddict['_FillValue'] = -9999.0
-        fields[COMMON2STANDARD[field]] = fielddict
+        field_dic = filemetadata(field_name)
+        field_dic['data'] = data
+        field_dic['_FillValue'] = -9999.0
+        fields[field_name] = field_dic
 
     # metadata
     metadata = {}
@@ -110,25 +135,25 @@ def read_mdv(filename):
     metadata['comment'] = ''
 
     # latitude
-    latitude = get_metadata('latitude')
+    latitude = filemetadata('latitude')
     latitude['data'] = np.array([mdvfile.radar_info['latitude_deg']],
                                 dtype='float64')
     # longitude
-    longitude = get_metadata('longitude')
+    longitude = filemetadata('longitude')
     longitude['data'] = np.array([mdvfile.radar_info['longitude_deg']],
                                  dtype='float64')
     # altitude
-    altitude = get_metadata('altitude')
+    altitude = filemetadata('altitude')
     altitude['data'] = np.array([mdvfile.radar_info['altitude_km'] * 1000.0],
                                 dtype='float64')
 
     # sweep_number, sweep_mode, fixed_angle, sweep_start_ray_index,
     # sweep_end_ray_index
-    sweep_number = get_metadata('sweep_number')
-    sweep_mode = get_metadata('sweep_mode')
-    fixed_angle = get_metadata('fixed_angle')
-    sweep_start_ray_index = get_metadata('sweep_start_ray_index')
-    sweep_end_ray_index = get_metadata('sweep_end_ray_index')
+    sweep_number = filemetadata('sweep_number')
+    sweep_mode = filemetadata('sweep_mode')
+    fixed_angle = filemetadata('fixed_angle')
+    sweep_start_ray_index = filemetadata('sweep_start_ray_index')
+    sweep_end_ray_index = filemetadata('sweep_end_ray_index')
     len_time = len(time['data'])
 
     if mdvfile.scan_type == 'ppi':
@@ -152,8 +177,8 @@ def read_mdv(filename):
                                                 dtype='int32')
 
     # azimuth, elevation
-    azimuth = get_metadata('azimuth')
-    elevation = get_metadata('elevation')
+    azimuth = filemetadata('azimuth')
+    elevation = filemetadata('elevation')
 
     if scan_type == 'ppi':
         azimuth['data'] = np.tile(mdvfile.az_deg, nele)
@@ -173,10 +198,10 @@ def read_mdv(filename):
     else:
         prt_mode_str = 'dual'
 
-    prt_mode = get_metadata('prt_mode')
-    prt = get_metadata('prt')
-    unambiguous_range = get_metadata('unambiguous_range')
-    nyquist_velocity = get_metadata('nyquist_velocity')
+    prt_mode = filemetadata('prt_mode')
+    prt = filemetadata('prt')
+    unambiguous_range = filemetadata('unambiguous_range')
+    nyquist_velocity = filemetadata('nyquist_velocity')
 
     prt_mode['data'] = np.array([prt_mode_str] * nsweeps)
     prt['data'] = np.array([mdvfile.radar_info['prt_s']] * nele * naz,

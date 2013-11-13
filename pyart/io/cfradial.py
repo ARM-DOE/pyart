@@ -24,18 +24,35 @@ import platform
 import numpy as np
 import netCDF4
 
+from ..config import _FileMetadata
 from .common import stringarray_to_chararray
 from .radar import Radar
 
 
-def read_cfradial(filename):
+def read_cfradial(filename, field_names=None, additional_metadata=None,
+                  file_field_names=False, exclude_fields=None):
     """
-    Read a CF/Radial netCDF file.
+    Read a Cfradial netCDF file.
 
     Parameters
     ----------
     filename : str
         Name of CF/Radial netCDF file to read data from.
+    field_names : dict, optional
+        Dictionary mapping field names in the file names to radar field names.
+        Unlike other read functions, fields not in this dictionary or having a
+        value of None are still included in the radar.fields dictionary, to
+        exclude them use the `exclude_fields` parameter. Fields which are
+        mapped by this dictionary will be renamed from key to value.
+    additional_metadata : dict of dicts, optional
+        This parameter is not used, it is included for uniformity.
+    file_field_names : bool, optional
+        True to force the use of the field names from the file in which
+        case the `field_names` parameter is ignored. False will use to
+        `field_names` parameter to rename fields.
+    exclude_fields : list or None, optional
+        List of fields to exclude from the radar object. This is applied
+        after the `file_field_names` and `field_names` parameters.
 
     Returns
     -------
@@ -44,9 +61,14 @@ def read_cfradial(filename):
 
     Notes
     -----
-    This function has not been tested on "stream" CF/Radial files.
+    This function has not been tested on "stream" Cfradial files.
 
     """
+    # create metadata retrieval object
+    filemetadata = _FileMetadata('cfradial', field_names, additional_metadata,
+                                 file_field_names, exclude_fields)
+
+    # read the data
     ncobj = netCDF4.Dataset(filename)
     ncvars = ncobj.variables
 
@@ -125,11 +147,19 @@ def read_cfradial(filename):
     # TODO moving radar subclass
 
     # 4.10 Moments field data variables -> field attribute dictionary
-    if 'ray_start_index' not in ncvars:     # CF/Radial
+    if 'ray_start_index' not in ncvars:     # Cfradial
 
+        fields = {}
         # all variables with dimensions of 'time', 'range' are fields
-        fields = dict([(k, _ncvar_to_dict(v)) for k, v in ncvars.iteritems()
-                       if v.dimensions == ('time', 'range')])
+        keys = [k for k, v in ncvars.iteritems()
+                if v.dimensions == ('time', 'range')]
+        for key in keys:
+            field_name = filemetadata.get_field_name(key)
+            if field_name is None:
+                if exclude_fields is not None and key in exclude_fields:
+                    continue
+                field_name = key
+            fields[field_name] = _ncvar_to_dict(ncvars[key])
 
     else:  # stream file
         ngates = ncvars['ray_start_index'][-1] + ncvars['ray_n_gates'][-1]
@@ -142,9 +172,14 @@ def read_cfradial(filename):
         keys = [k for k, v in ncvars.iteritems() if v.shape == (ngates,)]
 
         fields = {}
-        for field in keys:
-            fields[field] = _stream_ncvar_to_dict(
-                ncvars[field], sweeps, sweepe, ray_len, maxgates, nrays,
+        for key in keys:
+            field_name = filemetadata.get_field_name(key)
+            if field_name is None:
+                if exclude_fields is not None and key in exclude_fields:
+                    continue
+                field_name = key
+            fields[field_name] = _stream_ncvar_to_dict(
+                ncvars[key], sweeps, sweepe, ray_len, maxgates, nrays,
                 ray_start_index)
 
     # 4.5 instrument_parameters sub-convention -> instrument_parameters dict

@@ -8,18 +8,23 @@ Python wrapper around the RSL library.
     :toctree: generated/
 
     read_rsl
+    VOLUMENUM2RSLNAME
+    RSLNAME2VOLUMENUM
 
 """
 
 # Nothing from this module is imported into pyart.io if RSL is not installed.
 import numpy as np
 
+from ..config import _FileMetadata
 from . import _rsl_interface
 from .radar import Radar
-from .common import dms_to_d, get_metadata, make_time_unit_str
+from .common import dms_to_d, make_time_unit_str
 
 
-def read_rsl(filename, radar_format=None, callid=None, add_meta=None):
+def read_rsl(filename, field_names=None, additional_metadata=None,
+             file_field_names=False, exclude_fields=None,
+             radar_format=None, callid=None):
     """
     Read a file supported by RSL
 
@@ -27,15 +32,31 @@ def read_rsl(filename, radar_format=None, callid=None, add_meta=None):
     ----------
     filename : str or RSL_radar
         Name of file whose format is supported by RSL.
+    field_names : dict, optional
+        Dictionary mapping RSL data type names to radar field names. If a
+        data type found in the file does not appear in this dictionary or has
+        a value of None it will not be placed in the radar.fields dictionary.
+        A value of None, the default, will use the mapping defined in the
+        Py-ART configuration file.
+    additional_metadata : dict of dicts, optional
+        Dictionary of dictionaries to retrieve metadata from during this read.
+        This metadata is not used during any successive file reads unless
+        explicitly included.  A value of None, the default, will not
+        introduct any addition metadata and the file specific or default
+        metadata as specified by the Py-ART configuration file will be used.
+    file_field_names : bool, optional
+        True to use the RSL data type names for the field names. If this
+        case the field_names parameter is ignored. The field dictionary will
+        likely only have a 'data' key, unless the fields are defined in
+        `additional_metadata`.
+    exclude_fields : list or None, optional
+        List of fields to exclude from the radar object. This is applied
+        after the `file_field_names` and `field_names` parameters.
     radar_format : str or None
         Format of the radar file.  Must be 'wsr88d' or None.
     callid : str or None
         Four letter NEXRAD radar Call ID, only used when radar_format is
         'wsr88d'.
-    add_meta : dict or None
-        Dictionary containing additional metadata to add to the created
-        Radar object.  This will overwrite metadata extracted from the file.
-        None is add no additional metadata.
 
     Returns
     -------
@@ -43,6 +64,11 @@ def read_rsl(filename, radar_format=None, callid=None, add_meta=None):
         Radar object.
 
     """
+    # create metadata retrieval object
+    filemetadata = _FileMetadata('rsl', field_names, additional_metadata,
+                                 file_field_names, exclude_fields)
+
+    # read the file
     fillvalue = -9999.0
     rslfile = _rsl_interface.RslFile(filename, radar_format, callid)
     available_vols = rslfile.available_moments()
@@ -75,7 +101,7 @@ def read_rsl(filename, radar_format=None, callid=None, add_meta=None):
         nele = nrays
 
     # time
-    time = get_metadata('time')
+    time = filemetadata('time')
 
     t_start = first_ray.get_datetime()
 
@@ -88,7 +114,7 @@ def read_rsl(filename, radar_format=None, callid=None, add_meta=None):
     time['units'] = make_time_unit_str(t_start)
 
     # range
-    _range = get_metadata('range')
+    _range = filemetadata('range')
     gate0 = first_ray.range_bin1
     gate_size = first_ray.gate_size
     _range['data'] = gate0 + gate_size * np.arange(ngates, dtype='float32')
@@ -98,11 +124,10 @@ def read_rsl(filename, radar_format=None, callid=None, add_meta=None):
     # fields
     # transfer only those which are available and have a standard name
     fields = {}
-    available_vols = rslfile.available_moments()
-    good_vols = VOLUMENUM2STANDARDNAME.keys()
-    volumes_to_extract = [i for i in available_vols if i in good_vols]
+    for volume_num in available_vols:
 
-    for volume_num in volumes_to_extract:
+        rsl_field_name = VOLUMENUM2RSLNAME[volume_num]
+        field_name = filemetadata.get_field_name(rsl_field_name)
 
         # extract the field, mask and reshape
         data = rslfile.get_volume_array(volume_num)
@@ -112,11 +137,10 @@ def read_rsl(filename, radar_format=None, callid=None, add_meta=None):
         data.shape = (data.shape[0] * data.shape[1], data.shape[2])
 
         # create the field dictionary
-        standard_field_name = VOLUMENUM2STANDARDNAME[volume_num]
-        fielddict = get_metadata(standard_field_name)
-        fielddict['data'] = data
-        fielddict['_FillValue'] = fillvalue
-        fields[standard_field_name] = fielddict
+        field_dic = filemetadata(field_name)
+        field_dic['data'] = data
+        field_dic['_FillValue'] = fillvalue
+        fields[field_name] = field_dic
 
     # metadata
     metadata = {'original_container': 'rsl'}
@@ -134,30 +158,27 @@ def read_rsl(filename, radar_format=None, callid=None, add_meta=None):
     metadata['source'] = ''
     metadata['comment'] = ''
 
-    if add_meta is not None:
-        metadata.update(add_meta)
-
     # latitude
-    latitude = get_metadata('latitude')
+    latitude = filemetadata('latitude')
     lat = dms_to_d((rsl_dict['latd'], rsl_dict['latm'], rsl_dict['lats']))
     latitude['data'] = np.array([lat], dtype='float64')
 
     # longitude
-    longitude = get_metadata('longitude')
+    longitude = filemetadata('longitude')
     lon = dms_to_d((rsl_dict['lond'], rsl_dict['lonm'], rsl_dict['lons']))
     longitude['data'] = np.array([lon], dtype='float64')
 
     # altitude
-    altitude = get_metadata('altitude')
+    altitude = filemetadata('altitude')
     altitude['data'] = np.array([rsl_dict['height']], dtype='float64')
 
     # sweep_number, sweep_mode, fixed_angle, sweep_start_ray_index,
     # sweep_end_ray_index
-    sweep_number = get_metadata('sweep_number')
-    sweep_mode = get_metadata('sweep_mode')
-    fixed_angle = get_metadata('fixed_angle')
-    sweep_start_ray_index = get_metadata('sweep_start_ray_index')
-    sweep_end_ray_index = get_metadata('sweep_end_ray_index')
+    sweep_number = filemetadata('sweep_number')
+    sweep_mode = filemetadata('sweep_mode')
+    fixed_angle = filemetadata('fixed_angle')
+    sweep_start_ray_index = filemetadata('sweep_start_ray_index')
+    sweep_end_ray_index = filemetadata('sweep_end_ray_index')
     len_time = len(time['data'])
 
     if scan_type == 'ppi':
@@ -181,17 +202,17 @@ def read_rsl(filename, radar_format=None, callid=None, add_meta=None):
                                                 dtype='int32')
 
     # azimuth, elevation
-    azimuth = get_metadata('azimuth')
-    elevation = get_metadata('elevation')
+    azimuth = filemetadata('azimuth')
+    elevation = filemetadata('elevation')
     _azimuth, _elevation = first_volume.get_azimuth_and_elev_array()
     azimuth['data'] = _azimuth.flatten()
     elevation['data'] = _elevation.flatten()
 
     # instrument_parameters
-    prt = get_metadata('prt')
-    prt_mode = get_metadata('prt_mode')
-    nyquist_velocity = get_metadata('nyquist_velocity')
-    unambiguous_range = get_metadata('unambiguous_range')
+    prt = filemetadata('prt')
+    prt_mode = filemetadata('prt_mode')
+    nyquist_velocity = filemetadata('nyquist_velocity')
+    unambiguous_range = filemetadata('unambiguous_range')
 
     pm_data, nv_data, pr_data, ur_data = first_volume.get_instr_params()
     prt['data'] = pr_data.flatten()
@@ -210,38 +231,6 @@ def read_rsl(filename, radar_format=None, callid=None, add_meta=None):
         sweep_end_ray_index,
         azimuth, elevation,
         instrument_parameters=instrument_parameters)
-
-
-#####################
-# private functions #
-#####################
-
-#   id  abbreviation    common_name     standard_name
-#   0   DZ              DBZ_F           reflectivity_horizontal
-#   1   VR              VEL_F           mean_doppler_velocity
-#   2   SW              WIDTH
-#   3   CZ              DBZ
-#   4   ZT              DBZ             reflectivity_horizontal_filtered
-#   5   DR              ZDR
-#   6   LR
-#   7   ZD              ZDR_F           diff_reflectivity
-#   8   DM
-#   9   RH              RHOHV_F         copol_coeff
-#   10  PH              PHIDP_F         dp_phase_shift
-#   11  XZ
-#   12  CD
-#   13  MZ
-#   14  MD
-#   15  ZE
-#   16  VE              VEL_COR         corrected_mean_doppler_velocity
-#   17  KD              KDP_F           diff_phase
-#   18  TI              VEL
-#   19  DX
-#   20  CH
-#   21  AH
-#   22  CV
-#   23  AV
-#   24  SQ              NCP_F           norm_coherent_power
 
 
 VOLUMENUM2RSLNAME = {
@@ -283,17 +272,4 @@ VOLUMENUM2RSLNAME = {
     35: 'S3',
 }
 
-
 RSLNAME2VOLUMENUM = dict([(v, k) for k, v in VOLUMENUM2RSLNAME.iteritems()])
-
-
-VOLUMENUM2STANDARDNAME = {
-    0: 'reflectivity_horizontal_filtered',
-    1: 'mean_doppler_velocity',
-    4: 'reflectivity_horizontal',
-    7: 'diff_reflectivity',
-    9: 'copol_coeff',
-    10: 'dp_phase_shift',
-    16: 'corrected_mean_doppler_velocity',
-    17: 'diff_phase',
-    24: 'norm_coherent_power'}
