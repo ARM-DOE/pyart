@@ -19,7 +19,7 @@ Functions for creating sample Radar and Grid objects.
 import numpy as np
 
 from .sample_files import _EXAMPLE_RAYS_FILE
-from ..io.common import get_metadata
+from ..config import get_metadata
 from ..io.radar import Radar
 from ..io.grid import Grid
 

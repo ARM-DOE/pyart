@@ -8,6 +8,7 @@ Py-ART configuration functions.
     :toctree: generated/
 
     load_config
+    get_metadata
     FileMetadata
 
 """
@@ -43,6 +44,19 @@ if _config_file is None:
     dirname = os.path.dirname(__file__)
     _config_file = os.path.join(dirname, 'default_config.py')
 load_config(_config_file)
+
+
+def get_metadata(p):
+    """
+    Return a dictionary of metadata for a given parameter, p.
+
+    An empty dictionary will be returned in no metadata dictionary exists for
+    parameter p.
+    """
+    if p in DEFAULT_METADATA:
+        return DEFAULT_METADATA[p].copy()
+    else:
+        return {}
 
 
 class _FileMetadata():

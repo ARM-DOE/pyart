@@ -121,7 +121,6 @@ def read_nexrad_cdm(filename, field_names=None, additional_metadata=None,
         time_var = scan_dic['time_vars'][0]
         azimuth_var = scan_dic['azimuth_vars'][0]
         elevation_var = scan_dic['elevation_vars'][0]
-        time_index = scan_dic['index'][0]
         nradials = scan_dic['nradials'][0]
 
         time_data[ray_i:ray_i + nradials] = dvars[time_var][var_index]

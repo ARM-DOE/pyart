@@ -19,7 +19,7 @@ import numpy as np
 
 from ..io import _rsl_interface
 from . import _fourdd_interface
-from ..io.common import get_metadata
+from ..config import get_metadata
 from ..util import datetime_utils
 
 
@@ -129,7 +129,7 @@ def dealias_fourdd(radar, sounding_heights, sounding_wind_speeds,
 
     # create and return field dictionary containing dealiased data
     dealiased_fielddict = {'data': data}
-    meta = get_metadata('VEL_COR')
+    meta = get_metadata('corrected_mean_doppler_velocity')
     dealiased_fielddict.update(meta)
     return dealiased_fielddict
 
