@@ -22,18 +22,42 @@ of the script/session or until a new configuration is loaded.
 # Currently the following variables MUST be defined in this file, other
 # variable are optional:
 # FILL_VALUE, DEFAULT_METADATA, FILE_SPECIFIC_METADATA, FIELD_MAPPINGS
+# DEFAULT_FIELD_NAMES
 #
 # These variables are also marked below.
 
 ##############################################################################
 # Parameters
 #
-# Various single valued parameters used in Py-ART.
+# Various parameters used in Py-ART.
 ##############################################################################
 
 FILL_VALUE = -9999.0    # Required variable, the default fill value for
                         # masked arrays and _FillValue keys.
 
+# The DEFAULT_FIELD_NAMES controls the field names which are used in
+# by the correction and retrieval algorithms in Py-ART.  The keys of the
+# dictionary are "internal" names which cannot change, the values are the field
+# names which will be used in the algorithms by default.
+# which will be used.  For best results if you change a field name the names
+# should also be changed in the DEFAULT_METADATA and FIELD_MAPPINGS variable.
+# This is not required but highly suggested.
+
+DEFAULT_FIELD_NAMES = {  # Required variable
+    # internal field name (do not change): field name used (can change)
+    'reflectivity': 'reflectivity',
+    'corrected_reflectivity': 'corrected_reflectivity',
+    'velocity': 'velocity',
+    'corrected_velocity': 'corrected_velocity',
+    'spectrum_width': 'spectrum_width',
+    'differential_reflectivity': 'differential_reflectivity',
+    'cross_correlation_ratio': 'cross_correlation_ratio',
+    'differential_phase': 'differential_phase',
+    'unfolded_differential_phase': 'unfolded_differential_phase',
+    'specific_differential_phase': 'specific_differential_phase',
+    'normalized_coherent_power': 'normalized_coherent_power',
+    'specific_attenuation': 'specific_attenuation',
+}
 
 ##############################################################################
 # Default metadata
@@ -311,6 +335,13 @@ DEFAULT_METADATA = {    # Required variable
         'long_name': 'Radar Echo classification',
         'coordinates': 'elevation azimuth range'},
 
+    'specific_attenuation': {
+        'units': 'dB/km',
+        'standard_name': 'specific_attenuation',
+        'long_name': 'Specific attenuation',
+        'valid_min': 0.0,
+        'valid_max': 1.0,
+        'coordinates': 'elevation azimuth range'},
 }
 
 

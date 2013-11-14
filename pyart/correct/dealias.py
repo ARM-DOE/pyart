@@ -17,7 +17,7 @@ Front end to the University of Washington 4DD code for Doppler dealiasing.
 
 import numpy as np
 
-from ..config import get_fillvalue
+from ..config import get_field_name, get_fillvalue, get_metadata
 from ..io import _rsl_interface
 from . import _fourdd_interface
 from ..config import get_metadata
@@ -27,7 +27,7 @@ from ..util import datetime_utils
 def dealias_fourdd(radar, sounding_heights, sounding_wind_speeds,
                    sounding_wind_direction, datetime_sounding,
                    prep=1, filt=1, rsl_badval=131072,
-                   refl='reflectivity', vel='velocity', debug=False):
+                   refl=None, vel=None, corr_vel=None, debug=False):
     """
     Dealias the Doppler velocities field using the University of Washington
     4DD algorithm utilizing information from sounding data.
@@ -60,8 +60,14 @@ def dealias_fourdd(radar, sounding_heights, sounding_wind_speeds,
         Value which represented a bad, masked, points in RSL.
     refl : str
         Field in radar to use as the doppler velocities during dealiasing.
+        None will use the default field name from the Py-ART configuration
+        file.
     vel : str
-        Field in radar to use as the reflectivity during dealiasing
+        Field in radar to use as the reflectivity during dealiasing. None
+        will use the default field name from the Py-ART configuration file.
+    corr_vel : str
+        Name to use for the dealiased doppler velocity field metadata.  None
+        will use the default field name from the Py-ART configuration file.
     debug : bool
         Set True to return RSL Volume objects for debugging:
         usuccess, DZvolume, radialVelVolume, unfoldedVolume, sondVolume
@@ -84,6 +90,14 @@ def dealias_fourdd(radar, sounding_heights, sounding_wind_speeds,
     1674.
 
     """
+    # parse the field parameters
+    if refl is None:
+        refl = get_field_name('reflectivity')
+    if vel is None:
+        vel = get_field_name('velocity')
+    if corr_vel is None:
+        corr_vel = get_field_name('corrected_velocity')
+
     fill_value = get_fillvalue()
     # TODO use radar with recent correct vel instead of sond data
     # TODO option not to use refl.
@@ -126,9 +140,9 @@ def dealias_fourdd(radar, sounding_heights, sounding_wind_speeds,
     data = np.ma.masked_equal(data, fill_value)
 
     # create and return field dictionary containing dealiased data
-    dealiased_fielddict = {'data': data}
-    meta = get_metadata('corrected_mean_doppler_velocity')
-    dealiased_fielddict.update(meta)
+    dealiased_fielddict = get_metadata(corr_vel)
+    dealiased_fielddict['data'] = data
+    dealiased_fielddict['_FillValue'] = get_fillvalue()
     return dealiased_fielddict
 
 

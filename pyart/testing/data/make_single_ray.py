@@ -11,8 +11,9 @@ import pyart
 radar = pyart.io.read_mdv('095636.mdv')
 
 # extract ray 191 from the requested fields
-fields_to_extract = ['reflectivity_horizontal', 'norm_coherent_power',
-                     'copol_coeff', 'dp_phase_shift', 'diff_phase']
+fields_to_extract = ['reflectivity', 'normalized_coherent_power',
+                     'cross_correlation_ratio', 'specific_differential_phase',
+                     'differential_phase']
 ray_dic = dict()
 for field_name in fields_to_extract:
     ray = radar.fields[field_name]['data'].data[191]

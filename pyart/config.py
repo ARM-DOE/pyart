@@ -10,6 +10,7 @@ Py-ART configuration.
     load_config
     get_metadata
     get_fillvalue
+    get_field_name
     _FileMetadata
 
 """
@@ -55,12 +56,14 @@ def load_config(filename):
     global _FILE_SPECIFIC_METADATA
     global _FIELD_MAPPINGS
     global _FILL_VALUE
+    global _DEFAULT_FIELD_NAMES
 
     config = imp.load_source('metadata_config', filename)
     _DEFAULT_METADATA = config.DEFAULT_METADATA
     _FILE_SPECIFIC_METADATA = config.FILE_SPECIFIC_METADATA
     _FIELD_MAPPINGS = config.FIELD_MAPPINGS
     _FILL_VALUE = config.FILL_VALUE
+    _DEFAULT_FIELD_NAMES = config.DEFAULT_FIELD_NAMES
 
 # load the configuration from the enviromental parameter if it is set
 _config_file = os.environ.get('PYART_CONFIG')
@@ -92,6 +95,13 @@ def get_fillvalue():
     Return the current fill value.
     """
     return _FILL_VALUE
+
+
+def get_field_name(field):
+    """
+    Return the field name from the configuration file for a given field.
+    """
+    return str(_DEFAULT_FIELD_NAMES[field])
 
 
 class _FileMetadata():
