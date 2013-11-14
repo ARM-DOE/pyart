@@ -51,7 +51,7 @@ time_text = ' ' + display.time_begin.isoformat() + 'Z '
 azimuth = radar.fixed_angle['data'][0]
 title = 'RHI ' + radar_name + time_text + 'Azimuth %.2f' % (azimuth)
 
-display.plot_rhi('reflectivity_horizontal', 0, vmin=-32, vmax=64,
+display.plot_rhi('reflectivity', 0, vmin=-32, vmax=64,
                  title=title, colorbar_flag=False, ax=ax)
 display.set_limits(ylim=[0, 17])
 

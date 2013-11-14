@@ -38,7 +38,7 @@ display.plot_ppi('differential_phase', 0, ax=ax,
 display.set_limits((-300, 300), (-300, 300), ax=ax)
 
 ax = fig.add_subplot(224)
-display.plot_ppi('correlation_coefficient', 0, ax=ax,
+display.plot_ppi('cross_correlation_ratio', 0, ax=ax,
                  title='Correlation Coefficient', colorbar_label='',
                  axislabels=('East West distance from radar (km)', ''))
 display.set_limits((-300, 300), (-300, 300), ax=ax)

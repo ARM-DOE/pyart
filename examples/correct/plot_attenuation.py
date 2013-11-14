@@ -25,7 +25,10 @@ radar.fields.pop('specific_attenuation')
 radar.fields.pop('corrected_reflectivity_horizontal')
 
 # perform attenuation correction
-spec_at, cor_z = pyart.correct.calculate_attenuation(radar, 0)
+spec_at, cor_z = pyart.correct.calculate_attenuation(
+    radar, 0, refl_field='reflectivity_horizontal',
+    ncp_field='norm_coherent_power', rhv_field='copol_coeff',
+    phidp_field='proc_dp_phase_shift')
 radar.add_field('specific_attenuation', spec_at)
 radar.add_field('corrected_reflectivity_horizontal', cor_z)
 
