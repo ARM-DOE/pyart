@@ -11,16 +11,22 @@ Py-ART configuration.
     get_metadata
     get_fillvalue
     get_field_name
-    _FileMetadata
+    FileMetadata
 
 """
 
 import os
-import warnings
 import imp
+import traceback
+import warnings
 
 
-def load_config(filename):
+# the path to the default configuration file
+_dirname = os.path.dirname(__file__)
+_DEFAULT_CONFIG_FILE = os.path.join(_dirname, 'default_config.py')
+
+
+def load_config(filename=None):
     """
     Load a Py-ART configuration from a config file.
 
@@ -49,32 +55,46 @@ def load_config(filename):
     Parameters
     ----------
     filename : str
-        Filename of configuration file.
+        Filename of configuration file.  If None the default configuration
+        file is loaded from the Py-ART source code directory.
 
     """
+    if filename is None:
+        filename = _DEFAULT_CONFIG_FILE
+
+    # these are private since they should not be accessed by users or other
+    # modules, use the get_ functions.
     global _DEFAULT_METADATA
     global _FILE_SPECIFIC_METADATA
     global _FIELD_MAPPINGS
     global _FILL_VALUE
     global _DEFAULT_FIELD_NAMES
 
-    config = imp.load_source('metadata_config', filename)
-    _DEFAULT_METADATA = config.DEFAULT_METADATA
-    _FILE_SPECIFIC_METADATA = config.FILE_SPECIFIC_METADATA
-    _FIELD_MAPPINGS = config.FIELD_MAPPINGS
-    _FILL_VALUE = config.FILL_VALUE
-    _DEFAULT_FIELD_NAMES = config.DEFAULT_FIELD_NAMES
+    cfile = imp.load_source('metadata_config', filename)
+    _DEFAULT_METADATA = cfile.DEFAULT_METADATA
+    _FILE_SPECIFIC_METADATA = cfile.FILE_SPECIFIC_METADATA
+    _FIELD_MAPPINGS = cfile.FIELD_MAPPINGS
+    _FILL_VALUE = cfile.FILL_VALUE
+    _DEFAULT_FIELD_NAMES = cfile.DEFAULT_FIELD_NAMES
+    return
 
 # load the configuration from the enviromental parameter if it is set
+# if the load fails issue a warning and load the default config.
 _config_file = os.environ.get('PYART_CONFIG')
 if _config_file is None:
-    dirname = os.path.dirname(__file__)
-    _config_file = os.path.join(dirname, 'default_config.py')
+    load_config(_DEFAULT_CONFIG_FILE)
 else:
-    if not os.path.isfile(_config_file):
-        warnings.warn('PYART_CONFIG does not point to a file, using defaults')
-        _config_file = os.path.join(dirname, 'default_config.py')
-load_config(_config_file)
+    try:
+        load_config(_config_file)
+    except:
+        msg = ("\nLoading configuration from PYART_CONFIG enviromental "
+               "variable failed:"
+               "\n--- START IGNORED TRACEBACK --- \n" +
+               traceback.format_exc() +
+               "\n --- END IGNORED TRACEBACK ---"
+               "\nLoading default configuration")
+        warnings.warn(msg)
+        load_config(_DEFAULT_CONFIG_FILE)
 
 
 def get_metadata(p):
@@ -104,7 +124,7 @@ def get_field_name(field):
     return str(_DEFAULT_FIELD_NAMES[field])
 
 
-class _FileMetadata():
+class FileMetadata():
     """
     A class for accessing metadata needed when reading files.
 
@@ -144,7 +164,8 @@ class _FileMetadata():
         # parse field_names and file_field_names
         if file_field_names:
             self._field_names = None
-        elif field_names is None:
+        elif field_names is None and filetype in _FIELD_MAPPINGS:
+            # if filetype is missing there is no mapping
             self._field_names = _FIELD_MAPPINGS[filetype]
         else:
             self._field_names = field_names

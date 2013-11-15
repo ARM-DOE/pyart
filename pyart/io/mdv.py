@@ -26,7 +26,7 @@ import datetime
 import numpy as np
 from netCDF4 import date2num
 
-from ..config import _FileMetadata, get_fillvalue
+from ..config import FileMetadata, get_fillvalue
 from .radar import Radar
 from .common import make_time_unit_str
 from .common import radar_coords_to_cart
@@ -74,8 +74,8 @@ def read_mdv(filename, field_names=None, additional_metadata=None,
 
     """
     # create metadata retrieval object
-    filemetadata = _FileMetadata('mdv', field_names, additional_metadata,
-                                 file_field_names, exclude_fields)
+    filemetadata = FileMetadata('mdv', field_names, additional_metadata,
+                                file_field_names, exclude_fields)
 
     mdvfile = MdvFile(filename)
 

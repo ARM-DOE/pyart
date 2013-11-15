@@ -24,7 +24,7 @@ import platform
 import numpy as np
 import netCDF4
 
-from ..config import _FileMetadata
+from ..config import FileMetadata
 from .common import stringarray_to_chararray
 from .radar import Radar
 
@@ -65,8 +65,8 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
 
     """
     # create metadata retrieval object
-    filemetadata = _FileMetadata('cfradial', field_names, additional_metadata,
-                                 file_field_names, exclude_fields)
+    filemetadata = FileMetadata('cfradial', field_names, additional_metadata,
+                                file_field_names, exclude_fields)
 
     # read the data
     ncobj = netCDF4.Dataset(filename)

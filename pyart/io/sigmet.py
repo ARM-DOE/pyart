@@ -19,7 +19,7 @@ import datetime
 
 import numpy as np
 
-from ..config import _FileMetadata, get_fillvalue
+from ..config import FileMetadata, get_fillvalue
 from .common import make_time_unit_str
 from .radar import Radar
 from ._sigmetfile import SigmetFile, bin4_to_angle, bin2_to_angle
@@ -77,8 +77,8 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
 
     """
     # create metadata retrieval object
-    filemetadata = _FileMetadata('sigmet', field_names, additional_metadata,
-                                 file_field_names, exclude_fields)
+    filemetadata = FileMetadata('sigmet', field_names, additional_metadata,
+                                file_field_names, exclude_fields)
 
     # open the file, read data
     sigmetfile = SigmetFile(filename, debug=debug)

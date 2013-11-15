@@ -13,7 +13,7 @@ Functions for reading NEXRAD Level II Archive files.
 
 import numpy as np
 
-from ..config import _FileMetadata, get_fillvalue
+from ..config import FileMetadata, get_fillvalue
 from .radar import Radar
 from .common import make_time_unit_str
 from .nexrad_level2 import NEXRADLevel2File
@@ -70,9 +70,9 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
 
     """
     # create metadata retrieval object
-    filemetadata = _FileMetadata('nexrad_archive', field_names,
-                                 additional_metadata, file_field_names,
-                                 exclude_fields)
+    filemetadata = FileMetadata('nexrad_archive', field_names,
+                                additional_metadata, file_field_names,
+                                exclude_fields)
     # parse bzip parameter
     if bzip is None:
         if filename.endswith('.bz2') or filename.endswith('bzip2'):
