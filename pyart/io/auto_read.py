@@ -30,7 +30,7 @@ def read(filename, use_rsl=False, **kwargs):
     """
     Read a radar file and return a radar object.
 
-    Additional parameters are passed to the underlying read_ function.
+    Additional parameters are passed to the underlying read_* function.
 
     Parameters
     ----------
