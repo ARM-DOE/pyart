@@ -595,6 +595,15 @@ sigmet_field_mapping = {
                                                 # (57) Corrected diff. refl.
     'ZDRC2': corrected_differential_reflectivity,
                                                 # (58) Corrected diff. refl.
+    'UNKNOWN_59': None,                         # Unknown field
+    'UNKNOWN_60': None,                         # Unknown field
+    'UNKNOWN_61': None,                         # Unknown field
+    'UNKNOWN_62': None,                         # Unknown field
+    'UNKNOWN_63': None,                         # Unknown field
+    'UNKNOWN_64': None,                         # Unknown field
+    'UNKNOWN_65': None,                         # Unknown field
+    'UNKNOWN_66': None,                         # Unknown field
+    # there may be more field, add as needed
 }
 
 
