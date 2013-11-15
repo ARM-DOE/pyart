@@ -34,8 +34,8 @@ radar = pyart.io.read_mdv(filename)
 display = pyart.graph.RadarDisplay(radar)
 fig = plt.figure(figsize=[5, 5])
 ax = fig.add_subplot(111, frameon=False)
-display.plot_ppi('reflectivity_horizontal', 0, vmin=-16., vmax=64,
-                 mask_tuple=['norm_coherent_power', 0.5],
+display.plot_ppi('reflectivity', 0, vmin=-16., vmax=64,
+                 mask_tuple=['normalized_coherent_power', 0.5],
                  colorbar_flag=False, title_flag=False,
                  axislabels_flag=False)
 display.set_limits(ylim=[-120, 120], xlim=[-120, 120])

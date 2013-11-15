@@ -32,29 +32,29 @@ height, speed, direction = t
 # perform dealiasing
 dealias_data = pyart.correct.dealias_fourdd(radar, height * 1000.0, speed,
                                             direction, target)
-radar.add_field('corrected_mean_doppler_velocity', dealias_data)
+radar.add_field('corrected_velocity', dealias_data)
 
 # create a plot of the first and sixth tilts
 fig = plt.figure(figsize=(15, 10))
 ax1 = fig.add_subplot(221)
 display = pyart.graph.RadarDisplay(radar)
-display.plot_ppi('mean_doppler_velocity', 0, vmin=-16, vmax=16, ax=ax1,
+display.plot_ppi('velocity', 0, vmin=-16, vmax=16, ax=ax1,
                  colorbar_label='',
                  title='Raw Doppler Velocity, First Tilt')
 
 ax2 = fig.add_subplot(222)
-display.plot_ppi('corrected_mean_doppler_velocity', 0, vmin=-40, vmax=40,
+display.plot_ppi('corrected_velocity', 0, vmin=-40, vmax=40,
                  colorbar_label='', ax=ax2,
                  title='Corrected Doppler Velocity, First Tilt')
 
 ax3 = fig.add_subplot(223)
 display = pyart.graph.RadarDisplay(radar)
-display.plot_ppi('mean_doppler_velocity', 5, vmin=-16, vmax=16,
+display.plot_ppi('velocity', 5, vmin=-16, vmax=16,
                  colorbar_label='', ax=ax3,
                  title='Raw Doppler Velocity, Sixth Tilt')
 
 ax4 = fig.add_subplot(224)
-display.plot_ppi('corrected_mean_doppler_velocity', 5, vmin=-40, vmax=40,
+display.plot_ppi('corrected_velocity', 5, vmin=-40, vmax=40,
                  colorbar_label='', ax=ax4,
                  title='Corrected Doppler Velocity, Sixth Tilt')
 plt.suptitle('Velocity dealiasing using Py-ART', fontsize=16)

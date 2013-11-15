@@ -8,21 +8,20 @@ Functions for reading NEXRAD Level II Archive files.
     :toctree: generated/
 
     read_nexrad_archive
-    ARCHIVE_MAPPING
-    NEXRAD_METADATA
 
 """
 
 import numpy as np
 
+from ..config import FileMetadata, get_fillvalue
 from .radar import Radar
-from .common import get_metadata, make_time_unit_str
-from .nexrad_common import NEXRAD_METADATA
+from .common import make_time_unit_str
 from .nexrad_level2 import NEXRADLevel2File
 
 
-def read_nexrad_archive(filename, bzip=None, field_mapping=None,
-                        field_metadata=None):
+def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
+                        file_field_names=False, exclude_fields=None,
+                        bzip=None):
     """
     Read a NEXRAD Level 2 Archive file.
 
@@ -34,21 +33,29 @@ def read_nexrad_archive(filename, bzip=None, field_mapping=None,
         UCAR THREDDS Data Server [2]_ have been tested.  Other NEXRAD
         Level 2 Archive files may or may not work.  Message type 1 file
         at not yet supported, only message type 31.
+    field_names : dict, optional
+        Dictionary mapping NEXRAD moments to radar field names. If a
+        data type found in the file does not appear in this dictionary or has
+        a value of None it will not be placed in the radar.fields dictionary.
+        A value of None, the default, will use the mapping defined in the
+        metadata configuration file.
+    additional_metadata : dict of dicts, optional
+        Dictionary of dictionaries to retrieve metadata from during this read.
+        This metadata is not used during any successive file reads unless
+        explicitly included.  A value of None, the default, will not
+        introduct any addition metadata and the file specific or default
+        metadata as specified by the metadata configuration file will be used.
+    file_field_names : bool, optional
+        True to use the NEXRAD field names for the field names. If this
+        case the field_names parameter is ignored. The field dictionary will
+        likely only have a 'data' key, unless the fields are defined in
+        `additional_metadata`.
+    exclude_fields : list or None, optional
+        List of fields to exclude from the radar object. This is applied
+        after the `file_field_names` and `field_names` parameters.
     bzip : bool or None
         True if the file is compressed as a bzip2 file, False otherwise.
         None will examine the filename for a bzip extension.
-    field_mapping : None or dict, optional
-        Dictionary mapping NEXRAD moments to the corresponding field names in
-        the radar objects returned. None will use :data:`ARCHIVE_MAPPING`.
-        which also served as an example of the format for this parameter.
-        If a dictionary parameter is used it must have the same dictionary
-        keys as ARCHIVE_MAPPING.  In addition, field_metadata must also be
-        provided which contains the field metadata for the fields specified.
-    field_metadata : None or dict, optional
-        Metadata for the fields specified by field_mapping, None will use the
-        field metadata provided in :data:`NEXRAD_METADATA`, which also serves
-        as an example of the format for this parameter.  This metadata will
-        be used for the field in the created radar objects returned.
 
     Returns
     -------
@@ -62,12 +69,11 @@ def read_nexrad_archive(filename, bzip=None, field_mapping=None,
     .. [2] http://thredds.ucar.edu/thredds/catalog.html
 
     """
-    # parse the parameters
-    if field_mapping is None:
-        field_mapping = ARCHIVE_MAPPING.copy()
-    if field_metadata is None:
-        field_metadata = NEXRAD_METADATA.copy()
-
+    # create metadata retrieval object
+    filemetadata = FileMetadata('nexrad_archive', field_names,
+                                additional_metadata, file_field_names,
+                                exclude_fields)
+    # parse bzip parameter
     if bzip is None:
         if filename.endswith('.bz2') or filename.endswith('bzip2'):
             bzip = True
@@ -79,7 +85,7 @@ def read_nexrad_archive(filename, bzip=None, field_mapping=None,
     scan_info = nfile.scan_info()
 
     # time
-    time = get_metadata('time')
+    time = filemetadata('time')
     time_start, _time = nfile.get_times()
     time['data'] = _time
     time['units'] = make_time_unit_str(time_start)
@@ -88,7 +94,7 @@ def read_nexrad_archive(filename, bzip=None, field_mapping=None,
     scan_max_gates = np.argmax([max(s['ngates']) for s in scan_info])
     i = np.argmax(scan_info[scan_max_gates]['ngates'])
     moment_max_gates = scan_info[scan_max_gates]['moments'][i]
-    _range = get_metadata('range')
+    _range = filemetadata('range')
     _range['data'] = nfile.get_range(scan_max_gates, moment_max_gates)
     _range['meters_to_center_of_first_gate'] = _range['data'][0]
     _range['meters_between_gates'] = _range['data'][1] - _range['data'][0]
@@ -102,29 +108,25 @@ def read_nexrad_archive(filename, bzip=None, field_mapping=None,
 
     fields = {}
     for moment in available_moments:
-        field_name = field_mapping[moment]
-        dic = field_metadata[field_name].copy()
-        dic['_FillValue'] = -9999.0
+        field_name = filemetadata.get_field_name(moment)
+        if field_name is None:
+            continue
+        dic = filemetadata(field_name)
+        dic['_FillValue'] = get_fillvalue()
         dic['data'] = nfile.get_data(moment, max_ngates)
         fields[field_name] = dic
 
     # metadata
-    metadata = {'original_container': 'NEXRAD Level II'}
-    # additional required CF/Radial metadata set to blank strings
-    metadata['title'] = ''
-    metadata['institution'] = ''
-    metadata['references'] = ''
-    metadata['source'] = ''
-    metadata['comment'] = ''
-    metadata['instrument_name'] = ''
+    metadata = filemetadata('metadata')
+    metadata['original_container'] = 'NEXRAD Level II'
 
     # scan_type
     scan_type = 'ppi'
 
     # latitude, longitude, altitude
-    latitude = get_metadata('latitude')
-    longitude = get_metadata('longitude')
-    altitude = get_metadata('altitude')
+    latitude = filemetadata('latitude')
+    longitude = filemetadata('longitude')
+    altitude = filemetadata('altitude')
 
     lat, lon, alt = nfile.location()
     latitude['data'] = np.array([lat], dtype='float64')
@@ -133,10 +135,10 @@ def read_nexrad_archive(filename, bzip=None, field_mapping=None,
 
     # sweep_number, sweep_mode, fixed_angle, sweep_start_ray_index
     # sweep_end_ray_index
-    sweep_number = get_metadata('sweep_number')
-    sweep_mode = get_metadata('sweep_mode')
-    sweep_start_ray_index = get_metadata('sweep_start_ray_index')
-    sweep_end_ray_index = get_metadata('sweep_end_ray_index')
+    sweep_number = filemetadata('sweep_number')
+    sweep_mode = filemetadata('sweep_mode')
+    sweep_start_ray_index = filemetadata('sweep_start_ray_index')
+    sweep_end_ray_index = filemetadata('sweep_end_ray_index')
 
     nsweeps = int(nfile.nscans)
     sweep_number['data'] = np.arange(nsweeps, dtype='int32')
@@ -150,9 +152,9 @@ def read_nexrad_archive(filename, bzip=None, field_mapping=None,
                                               dtype='int32')
 
     # azimuth, elevation, fixed_angle
-    azimuth = get_metadata('azimuth')
-    elevation = get_metadata('elevation')
-    fixed_angle = get_metadata('fixed_angle')
+    azimuth = filemetadata('azimuth')
+    elevation = filemetadata('elevation')
+    fixed_angle = filemetadata('fixed_angle')
     azimuth['data'] = nfile.get_azimuth_angles()
     elevation['data'] = nfile.get_elevation_angles().astype('float32')
     fixed_angle['data'] = nfile.get_target_angles()
@@ -164,14 +166,3 @@ def read_nexrad_archive(filename, bzip=None, field_mapping=None,
         sweep_end_ray_index,
         azimuth, elevation,
         instrument_parameters=None)
-
-
-# default mapping from Archive Level 2 moment to Radar object field names
-ARCHIVE_MAPPING = {
-    'REF': 'reflectivity',
-    'VEL': 'velocity',
-    'SW': 'spectrum_width',
-    'ZDR': 'differential_reflectivity',
-    'PHI': 'differential_phase',
-    'RHO': 'correlation_coefficient'
-}

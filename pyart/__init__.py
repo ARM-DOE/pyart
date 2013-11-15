@@ -3,7 +3,6 @@ Py-ART: The Python ARM Radar Toolkit
 =====================================
 
 """
-__all__ = ['sounding', 'io']
 
 # versioning
 from .version import git_revision as __git_revision__
@@ -15,13 +14,15 @@ from . import correct
 from . import graph
 from . import map
 from . import testing
+from . import config
+
+# root level functions
+from config import load_config
 
 # test function setup based on scikit-image test function
 import imp as _imp
 import os.path as _osp
 import functools as _functools
-
-pkg_dir = _osp.abspath(_osp.dirname(__file__))
 
 try:
     _imp.find_module('nose')
@@ -38,6 +39,7 @@ else:
         Invoke the Py-ART test suite.
         """
         import nose
+        pkg_dir = _osp.abspath(_osp.dirname(__file__))
         args = ['', pkg_dir, '--exe']
         if verbose:
             args.extend(['-v', '-s'])

@@ -38,7 +38,7 @@ def test_phase_proc_lp_glpk():
     assert _ratio(ref['reference_phidp'], phidp['data']) <= 0.01
     assert _ratio(ref['reference_kdp'], kdp['data']) <= 0.01
     assert _ratio(ref['reference_unfolded_phidp'],
-                  radar.fields['unf_dp_phase_shift']['data']) <= 0.01
+                  radar.fields['unfolded_differential_phase']['data']) <= 0.01
 
 
 @skipif(not cvxopt_available)
@@ -48,7 +48,7 @@ def test_phase_proc_lp_cvxopt():
     assert _ratio(ref['reference_phidp'], phidp['data']) <= 0.01
     assert _ratio(ref['reference_kdp'], kdp['data']) <= 0.01
     assert _ratio(ref['reference_unfolded_phidp'],
-                  radar.fields['unf_dp_phase_shift']['data']) <= 0.01
+                  radar.fields['unfolded_differential_phase']['data']) <= 0.01
 
 
 def _ratio(a1, a2):
@@ -67,11 +67,12 @@ def perform_phase_processing(LP_solver='pyglpk'):
 
 def save_reference_rays(radar, phidp, kdp):
     """ Save the phase processed rays to REFERENCE_RAY_FILE. """
+    unfolded = radar.fields['unfolded_differential_phase']
     np.savez(
         REFERENCE_RAYS_FILE,
         reference_phidp=phidp['data'],
         reference_kdp=kdp['data'],
-        reference_unfolded_phidp=radar.fields['unf_dp_phase_shift']['data'])
+        reference_unfolded_phidp=unfolded['data'])
 
 
 def make_plot(range_km, unfolded_phidp, refl, phidp, kdp, filename):
@@ -126,6 +127,6 @@ if __name__ == "__main__":
         filename = 'reference_ray_plot.png'
 
     make_plot(radar.range['data'] / 1000.0,
-              radar.fields['unf_dp_phase_shift'],
-              radar.fields['reflectivity_horizontal'],
+              radar.fields['unfolded_differential_phase'],
+              radar.fields['reflectivity'],
               phidp, kdp, filename)

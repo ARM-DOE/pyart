@@ -23,10 +23,8 @@ def test_attenuation():
 def perform_attenuation():
     """ Perform attenuation correction on a single ray radar. """
     radar = pyart.testing.make_single_ray_radar()
-    # hack to get test to run, TODO fix the attenuation code to not need this
-    radar.fields['proc_dp_phase_shift'] = radar.fields['dp_phase_shift']
-    a = radar.fields['reflectivity_horizontal']['data']
-    radar.fields['reflectivity_horizontal']['data'] = np.ma.array(a)
+    a = radar.fields['reflectivity']['data']
+    radar.fields['reflectivity']['data'] = np.ma.array(a)
     spec_at, cor_z = pyart.correct.calculate_attenuation(radar, 0.0)
     return spec_at, cor_z
 

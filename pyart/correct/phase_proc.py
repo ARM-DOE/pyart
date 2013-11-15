@@ -4,7 +4,8 @@ pyart.correct.phase_proc
 
 Utilities for working with phase data.
 
-Code adapted from PAPER by Scott Giangrande et al
+Code based upon algorithm descriped in:
+S. E. Giangrande et al, J. of Atmos. and Ocean. Tech., 2013, 30, 1716.
 
 Adapted by Scott Collis and Scott Giangrande, refactored by Jonathan Helmus
 
@@ -35,10 +36,11 @@ from time import time
 import numpy as np
 from numpy import ma
 
+from ..config import get_fillvalue, get_field_name
+
 
 def det_sys_phase(radar, ncp_lev=0.4, rhohv_lev=0.6,
-                  ncp_field='norm_coherent_power', rhv_field='copol_coeff',
-                  phidp_field='dp_phase_shift'):
+                  ncp_field=None, rhv_field=None, phidp_field=None):
     """
     Determine the system phase.
 
@@ -55,7 +57,8 @@ def det_sys_phase(radar, ncp_lev=0.4, rhohv_lev=0.6,
     ncp_field, rhv_field, phidp_field : str
         Field names within the radar object which represent the normal
         coherent power, the copolar coefficient, and the differential phase
-        shift.
+        shift.  A value of None for any of these parameters will use the
+        default field name as defined in the Py-ART configuration file.
 
     Returns
     -------
@@ -63,6 +66,14 @@ def det_sys_phase(radar, ncp_lev=0.4, rhohv_lev=0.6,
         Estimate of the system phase.  None is not estimate can be made.
 
     """
+    # parse the field parameters
+    if ncp_field is None:
+        ncp_field = get_field_name('normalized_coherent_power')
+    if rhv_field is None:
+        rhv_field = get_field_name('cross_correlation_ratio')
+    if phidp_field is None:
+        phidp_field = get_field_name('differential_phase')
+
     print "Unfolding"
     ncp = radar.fields[ncp_field]['data'][:, 30:]
     rhv = radar.fields[rhv_field]['data'][:, 30:]
@@ -310,9 +321,8 @@ def noise(line, wl=11):
 
 def get_phidp_unf(radar, ncp_lev=0.4, rhohv_lev=0.6, debug=False, ncpts=20,
                   doc=-10, overide_sys_phase=False, sys_phase=-135,
-                  nowrap=None, refl_field='reflectivity_horizontal',
-                  ncp_field='norm_coherent_power', rhv_field='copol_coeff',
-                  phidp_field='dp_phase_shift'):
+                  nowrap=None, refl_field=None, ncp_field=None,
+                  rhv_field=None, phidp_field=None):
     """
     Get Unfolded Phi differential phase
 
@@ -345,7 +355,9 @@ def get_phidp_unf(radar, ncp_lev=0.4, rhohv_lev=0.6, debug=False, ncpts=20,
     refl_field ncp_field, rhv_field, phidp_field : str
         Field names within the radar object which represent the horizonal
         reflectivity, normal coherent power, the copolar coefficient, and the
-        differential phase shift.
+        differential phase shift. A value of None for any of these parameters
+        will use the default field name as defined in the Py-ART
+        configuration file.
 
     Returns
     -------
@@ -353,8 +365,17 @@ def get_phidp_unf(radar, ncp_lev=0.4, rhohv_lev=0.6, debug=False, ncpts=20,
         Unwrapped phi differential phase.
 
     """
+    # parse the field parameters
+    if refl_field is None:
+        refl_field = get_field_name('reflectivity')
+    if ncp_field is None:
+        ncp_field = get_field_name('normalized_coherent_power')
+    if rhv_field is None:
+        rhv_field = get_field_name('cross_correlation_ratio')
+    if phidp_field is None:
+        phidp_field = get_field_name('differential_phase')
 
-    if 'nowrap' is not None:
+    if nowrap is not None:
         print "Starting late"
 
     if doc is not None:
@@ -667,11 +688,11 @@ def phase_proc_lp(radar, offset, debug=False, self_const=60000.0,
                   low_z=10.0, high_z=53.0, min_phidp=0.01, min_ncp=0.5,
                   min_rhv=0.8, fzl=4000.0, sys_phase=0.0,
                   overide_sys_phase=False, nowrap=None, really_verbose=False,
-                  LP_solver='pyglpk', refl_field='reflectivity_horizontal',
-                  ncp_field='norm_coherent_power', rhv_field='copol_coeff',
-                  phidp_field='dp_phase_shift', kdp_field='diff_phase'):
+                  LP_solver='pyglpk', refl_field=None, ncp_field=None,
+                  rhv_field=None, phidp_field=None, kdp_field=None,
+                  unf_field=None):
     """
-    Phase process using a LP method[1].
+    Phase process using a LP method [1].
 
     Parameters
     ----------
@@ -710,8 +731,15 @@ def phase_proc_lp(radar, offset, debug=False, self_const=60000.0,
         Module to use to solve LP problem.
     refl_field, ncp_field, rhv_field, phidp_field, kdp_field: str
         Name of field in radar which contains the horizonal reflectivity,
-        normal cohernect power, copolar coefficient, differential phase shift,
-        and differential phase.
+        normal coherent power, copolar coefficient, differential phase shift,
+        and differential phase. A value of None for any of these parameters
+        will use the default field name as defined in the Py-ART configuration
+        file.
+    unf_field : str
+        Name of field which will be added to the radar object which will
+        contain the unfolded differential phase.  Metadata for this field
+        will be taken from the phidp_field.  A value of None will use
+        the default field name as defined in the Py-ART configuration file.
 
     Returns
     -------
@@ -722,11 +750,24 @@ def phase_proc_lp(radar, offset, debug=False, self_const=60000.0,
 
     References
     ----------
-    [1] Giangrande, S.E., R. McGraw, and L. Lei, 2012: An Application of
+    [1] Giangrande, S.E., R. McGraw, and L. Lei. An Application of
     Linear Programming to Polarimetric Radar Differential Phase Processing.
-    Submitted, J. Atmos. and Oceanic Tech.
+    J. Atmos. and Oceanic Tech, 2013, 30, 1716.
 
     """
+    # parse the field parameters
+    if refl_field is None:
+        refl_field = get_field_name('reflectivity')
+    if ncp_field is None:
+        ncp_field = get_field_name('normalized_coherent_power')
+    if rhv_field is None:
+        rhv_field = get_field_name('cross_correlation_ratio')
+    if phidp_field is None:
+        phidp_field = get_field_name('differential_phase')
+    if kdp_field is None:
+        kdp_field = get_field_name('specific_differential_phase')
+    if unf_field is None:
+        unf_field = get_field_name('unfolded_differential_phase')
 
     # prepare reflectivity field
     refl = copy.deepcopy(radar.fields[refl_field]['data']) + offset
@@ -748,9 +789,9 @@ def phase_proc_lp(radar, offset, debug=False, self_const=60000.0,
     my_new_ph = copy.deepcopy(radar.fields[phidp_field])
     my_unf[:, -1] = my_unf[:, -2]
     my_new_ph['data'] = my_unf
-    radar.fields.update({'unf_dp_phase_shift': my_new_ph})
+    radar.fields.update({unf_field: my_new_ph})
 
-    phidp_mod = copy.deepcopy(radar.fields['unf_dp_phase_shift']['data'])
+    phidp_mod = copy.deepcopy(radar.fields[unf_field]['data'])
     phidp_neg = phidp_mod < min_phidp
     phidp_mod[np.where(phidp_neg)] = min_phidp
 
@@ -792,8 +833,8 @@ def phase_proc_lp(radar, offset, debug=False, self_const=60000.0,
     last_gates = proc_ph['data'][start_ray:end_ray, -16]
     proc_ph['data'][start_ray:end_ray, -16:] = \
         np.meshgrid(np.ones([16]), last_gates)[1]
-    proc_ph['valid_min'] = 0.0
-    proc_ph['valid_max'] = 400.0
+    proc_ph['valid_min'] = 0.0          # XXX is this correct?
+    proc_ph['valid_max'] = 400.0        # XXX is this correct?
 
     # prepare output
     kdp = np.zeros(radar.fields[phidp_field]['data'].shape)
@@ -801,20 +842,14 @@ def phase_proc_lp(radar, offset, debug=False, self_const=60000.0,
         kdp[i, :] = (sobel(proc_ph['data'][i, :], window_len=35) /
                      (2.0 * (radar.range['data'][1] -
                      radar.range['data'][0]) / 1000.0))
-    try:
+
+    # copy the KDP metadata from existing field or create anew
+    if kdp_field in radar.fields:
         sob_kdp = copy.deepcopy(radar.fields[kdp_field])
-        sob_kdp['data'] = kdp
-        sob_kdp['valid_min'] = 0.0
-        sob_kdp['valid_max'] = 20.0
-    except KeyError:
-        sob_kdp = copy.deepcopy(radar.fields[phidp_field])
-        sob_kdp['data'] = kdp
-        sob_kdp['valid_min'] = 0.0
-        sob_kdp['valid_max'] = 20.0
-        sob_kdp['standard_name'] = "specific_differential_phase_hv"
-        sob_kdp['long_name'] = "specific_differential_phase_hv"
-        sob_kdp['units'] = "degrees/km"
-        sob_kdp['least_significant_digit'] = 2
-        sob_kdp['_FillValue'] = -9999.
+    else:
+        sob_kdp = get_metadata(kdp_field)
+
+    sob_kdp['data'] = kdp
+    sob_kdp['_FillValue'] = get_fillvalue()
 
     return proc_ph, sob_kdp

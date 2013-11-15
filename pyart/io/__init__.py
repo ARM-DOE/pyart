@@ -27,7 +27,6 @@ from and write data to a number of file formats.
 
 """
 
-from .auto_read import read
 try:
     from .rsl import read_rsl
     _RSL_AVAILABLE = True
@@ -40,5 +39,6 @@ from .nexrad_archive import read_nexrad_archive
 from .nexrad_cdm import read_nexrad_cdm
 from .radar import Radar
 from .grid import read_grid, write_grid, Grid
+from .auto_read import read
 
 __all__ = [s for s in dir() if not s.startswith('_')]

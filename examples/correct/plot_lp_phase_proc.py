@@ -37,7 +37,7 @@ radar.add_field('recalculated_diff_phase', kdp)
 display = pyart.graph.RadarDisplay(radar)
 fig = plt.figure(figsize=(10, 10))
 ax1 = fig.add_subplot(221)
-display.plot_ppi('dp_phase_shift', 0, ax=ax1,
+display.plot_ppi('differential_phase', 0, ax=ax1,
                  title='Raw Differential Phase', colorbar_label='',
                  axislabels_flag=False)
 
@@ -47,7 +47,7 @@ display.plot_ppi('proc_dp_phase_shift', 0, ax=ax2,
                  axislabels_flag=False)
 
 ax3 = fig.add_subplot(223)
-display.plot_ppi('diff_phase', 0, ax=ax3,
+display.plot_ppi('specific_differential_phase', 0, ax=ax3,
                  title='Raw Specific Differential Phase', colorbar_label='',
                  axislabels_flag=False)
 
@@ -68,7 +68,7 @@ ray_num = 191
 display.plot_ray('proc_dp_phase_shift', ray_num, format_str='b-',
                  axislabels_flag=False, title_flag=False, ax=ax)
 
-display.plot_ray('unf_dp_phase_shift', ray_num, format_str='g-',
+display.plot_ray('unfolded_differential_phase', ray_num, format_str='g-',
                  axislabels_flag=False, title_flag=False, ax=ax)
 
 # set labels
@@ -80,8 +80,8 @@ ax.set_xlabel('Range (km)')
 ax2 = ax.twinx()
 display.plot_ray('recalculated_diff_phase', ray_num, format_str='r-',
                  axislabels_flag=False, title_flag=False, ax=ax2)
-radar.add_field_like('reflectivity_horizontal', 'scaled_reflectivity',
-                     radar.fields['reflectivity_horizontal']['data']/10.)
+radar.add_field_like('reflectivity', 'scaled_reflectivity',
+                     radar.fields['reflectivity']['data']/10.)
 display.plot_ray('scaled_reflectivity', ray_num, format_str='b-',
                  axislabels_flag=False, title_flag=False, ax=ax2)
 

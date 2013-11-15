@@ -25,7 +25,7 @@ def test_add_field():
 def test_add_field_errors():
     radar = pyart.testing.make_target_radar()
 
-    assert_raises(ValueError, radar.add_field, 'reflectivity_horizontal', {})
+    assert_raises(ValueError, radar.add_field, 'reflectivity', {})
 
     dic = {'dat': np.zeros((360, 50)), 'standard_name': 'test'}
     assert_raises(KeyError, radar.add_field, 'test', dic)
@@ -37,7 +37,7 @@ def test_add_field_errors():
 def test_add_field_like():
     radar = pyart.testing.make_target_radar()
     data = np.zeros((360, 50))
-    radar.add_field_like('reflectivity_horizontal', 'test', data)
+    radar.add_field_like('reflectivity', 'test', data)
     assert 'test' in radar.fields
     assert 'data' in radar.fields['test']
     assert radar.fields['test']['units'] == 'dBZ'
@@ -56,7 +56,7 @@ def test_info_levels():
 def test_info_nonstandard():
     # build a non-standard radar object for testing all paths in info
     radar = pyart.testing.make_target_radar()
-    radar.fields['reflectivity_horizontal']['data'] = [1, 2, 3, 4]
+    radar.fields['reflectivity']['data'] = [1, 2, 3, 4]
     radar.instrument_parameters = {'foobar': {'data': [1, 2], 'bar': 'foo'}}
     radar.radar_calibration = {'foobar': {'data': [1, 2], 'bar': 'foo'}}
     check_info('standard', radar)

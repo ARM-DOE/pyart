@@ -12,32 +12,55 @@ Automatic reading of radar files by detecting format.
 
 """
 
-from .mdv import read_mdv
-try:
+import bz2
+
+import netCDF4
+
+from . import _RSL_AVAILABLE
+if _RSL_AVAILABLE:
     from .rsl import read_rsl
-    RSL_AVAILABLE = True
-except ImportError:
-    RSL_AVAILABLE = False
+from .mdv import read_mdv
 from .cfradial import read_cfradial
 from .sigmet import read_sigmet
 from .nexrad_archive import read_nexrad_archive
+from .nexrad_cdm import read_nexrad_cdm
 
 
-def read(filename, callid='KABR', use_rsl=True):
+def read(filename, use_rsl=False, **kwargs):
     """
     Read a radar file and return a radar object.
+
+    Additional parameters are passed to the underlying read_* function.
 
     Parameters
     ----------
     filename : str
         Name of radar file to read
-    callid : str
-        Four letter NEXRAD radar call id, only used if format is determined to
-        be 'WSR88D'.  The default value will set the location of the radar to
-        Aberdeen, SD.  The fields will still be correct.
     use_rsl : bool
-        True to use the TRMM RSL library for reading.  If RSL is not
-        installed
+        True to use the TRMM RSL library for reading if RSL is installed.
+
+    Other Parameters
+    -------------------
+    field_names : dict, optional
+        Dictionary mapping file data type names to radar field names. If a
+        data type found in the file does not appear in this dictionary or has
+        a value of None it will not be placed in the radar.fields dictionary.
+        A value of None, the default, will use the mapping defined in the
+        metadata configuration file.
+    additional_metadata : dict of dicts, optional
+        Dictionary of dictionaries to retrieve metadata from during this read.
+        This metadata is not used during any successive file reads unless
+        explicitly included.  A value of None, the default, will not
+        introduct any addition metadata and the file specific or default
+        metadata as specified by the metadata configuration file will be used.
+    file_field_names : bool, optional
+        True to use the file data type names for the field names. If this
+        case the field_names parameter is ignored. The field dictionary will
+        likely only have a 'data' key, unless the fields are defined in
+        `additional_metadata`.
+    exclude_fields : list or None, optional
+        List of fields to exclude from the radar object. This is applied
+        after the `file_field_names` and `field_names` parameters.
 
     Returns
     -------
@@ -48,25 +71,30 @@ def read(filename, callid='KABR', use_rsl=True):
     """
     filetype = determine_filetype(filename)
 
+    # Bzip, uncompress and see if we can determine the type
+    if filetype == 'BZ2':
+        filetype = determine_filetype(bz2.BZ2File(filename))
+
     # Py-ART only supported formats
     if filetype == "MDV":
-        return read_mdv(filename)
+        return read_mdv(filename, **kwargs)
     if filetype == "NETCDF3" or filetype == "NETCDF4":
-        return read_cfradial(filename)
+        dset = netCDF4.Dataset(filename)
+        if 'cdm_data_type' in dset.ncattrs():   # NEXRAD CDM
+            return read_nexrad_cdm(filename, **kwargs)
+        else:
+            return read_cfradial(filename, **kwargs)    # CF/Radial
+    if filetype == 'WSR88D':
+        return read_nexrad_archive(filename, **kwargs)
 
     # RSL supported file formats
-    if use_rsl and RSL_AVAILABLE:
-        if filetype == 'WSR88D':
-            read_rsl(filename, callid=callid)
-        rsl_formats = ['UF', 'HDF4', 'RSL', 'DORAD', 'SIGMET']
-        if filetype in rsl_formats and RSL_AVAILABLE and use_rsl:
-            return read_rsl(filename)
+    rsl_formats = ['UF', 'HDF4', 'RSL', 'DORAD', 'SIGMET']
+    if filetype in rsl_formats and _RSL_AVAILABLE and use_rsl:
+        return read_rsl(filename, **kwargs)
 
     # RSL supported formats which are also supported natively in Py-ART
     if filetype == "SIGMET":
-        return read_sigmet(filename)
-    if filetype == 'WSR88D':
-        return read_nexrad_archive(filename)
+        return read_sigmet(filename, **kwargs)
 
     raise TypeError('Unknown or unsupported file format.')
 
@@ -86,6 +114,7 @@ def determine_filetype(filename):
     * 'RSL'
     * 'DORAD'
     * 'SIGMET'
+    * 'BZ2'
     * 'UNKNOWN'
 
     Parameters
@@ -98,7 +127,6 @@ def determine_filetype(filename):
     filetype : str
         Type of file.
 
-
     """
     # TODO
     # detect the following formats, those supported by RSL
@@ -110,7 +138,10 @@ def determine_filetype(filename):
     # 'RAINBOW'
 
     # read the first 12 bytes from the file
-    f = open(filename, 'rb')
+    try:
+        f = open(filename, 'rb')
+    except TypeError:
+        f = filename
     begin = f.read(12)
     f.close()
 
@@ -164,6 +195,11 @@ def determine_filetype(filename):
     sigmet_signature = '\x1b'
     if begin[0] == sigmet_signature:
         return "SIGMET"
+
+    # bzip2 compressed files
+    bzip2_signature = 'BZh'
+    if begin[:3] == bzip2_signature:
+        return 'BZ2'
 
     # Cannot determine filetype
     return "UNKNOWN"

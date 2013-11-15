@@ -52,7 +52,7 @@ def test_plot_mdv_radar_rhi(outfile=None):
     display = pyart.graph.RadarDisplay(radar)
     fig = plt.figure()
     ax = fig.add_subplot(111)
-    display.plot_rhi('reflectivity_horizontal', 0, vmin=-16, vmax=64, ax=ax)
+    display.plot_rhi('reflectivity', 0, vmin=-16, vmax=64, ax=ax)
     if outfile:
         fig.savefig(outfile)
 
@@ -62,8 +62,8 @@ def test_plot_mdv_radar_rhi_masked(outfile=None):
     display = pyart.graph.RadarDisplay(radar)
     fig = plt.figure()
     ax = fig.add_subplot(111)
-    display.plot_rhi('reflectivity_horizontal', 0, vmin=-16, vmax=64,
-                     mask_tuple=('reflectivity_horizontal', 16.), ax=ax)
+    display.plot_rhi('reflectivity', 0, vmin=-16, vmax=64,
+                     mask_tuple=('reflectivity', 16.), ax=ax)
     if outfile:
         fig.savefig(outfile)
 
@@ -73,7 +73,7 @@ def test_plot_mdv_radar_ppi(outfile=None):
     display = pyart.graph.RadarDisplay(radar)
     fig = plt.figure()
     ax = fig.add_subplot(111)
-    display.plot_ppi('reflectivity_horizontal', 0, vmin=-16, vmax=64, ax=ax)
+    display.plot_ppi('reflectivity', 0, vmin=-16, vmax=64, ax=ax)
     if outfile:
         fig.savefig(outfile)
 

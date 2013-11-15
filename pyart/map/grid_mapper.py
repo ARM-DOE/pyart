@@ -22,6 +22,7 @@ Utilities for mapping radar objects to Cartesian grids.
 import numpy as np
 import scipy.spatial
 
+from ..config import get_fillvalue
 from ..graph.common import corner_to_point
 from ..io.common import radar_coords_to_cart
 from ..io.grid import Grid
@@ -75,7 +76,7 @@ def grid_from_radars(radars, grid_shape, grid_limits, **kwargs):
                 'least_significant_digit': 1,
                 'valid_min': 0.,
                 'valid_max': 100000.,
-                '_FillValue': 9999.0}
+                '_FillValue': get_fillvalue()}
         else:
             fields[field] = {'data': grids[field]}
             # copy the metadata from the radar to the grid
@@ -242,12 +243,11 @@ class NNLocator:
 def map_to_grid(radars, grid_shape=(81, 81, 69),
                 grid_limits=((-30000., 20000), (-20000., 20000.), (0, 17000.)),
                 grid_origin=None, fields=None,
-                refl_field='reflectivity_horizontal', max_refl=190.0,
+                refl_field='reflectivity', max_refl=190.0,
                 qrf_func=None, map_roi=True, weighting_function='Barnes',
                 toa=17000.0,
                 h_factor=1.0, nb=1.5, bsp=1.0, min_radius=500.0,
-                copy_field_data=True, algorithm='kd_tree', leafsize = 10,
-                badval=-9999.0):
+                copy_field_data=True, algorithm='kd_tree', leafsize = 10):
     """
     Map one or more radars to a Cartesian grid.
 
@@ -324,9 +324,6 @@ def map_to_grid(radars, grid_shape=(81, 81, 69),
         to store the tree. The optimal value depends on the nature of the
         problem. This value should only effect the speed of the gridding,
         not the results.
-    badval : float
-        Value to set points in the grid to which have no valid collected
-        points within  the radius of influence.  These points are also masked.
 
 
     Returns
@@ -346,6 +343,7 @@ def map_to_grid(radars, grid_shape=(81, 81, 69),
         raise ValueError('unknown weighting_function')
     if algorithm not in ['kd_tree', 'ball_tree']:
         raise ValueError('unknow algorithm: %s' % algorithm)
+    badval = get_fillvalue()
 
     # find the grid origin if not given
     if grid_origin is None:

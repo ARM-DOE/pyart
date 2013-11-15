@@ -20,11 +20,15 @@ import copy
 import numpy as np
 from scipy.integrate import cumtrapz
 
+from ..config import get_metadata, get_field_name, get_fillvalue
 from . import phase_proc
 
 
 def calculate_attenuation(radar, z_offset, debug=False, doc=15, fzl=4000.0,
-                          rhv_min=0.8, ncp_min=0.5, a_coef=0.06, beta=0.8):
+                          rhv_min=0.8, ncp_min=0.5, a_coef=0.06, beta=0.8,
+                          refl_field=None, ncp_field=None, rhv_field=None,
+                          phidp_field=None, spec_at_field=None,
+                          corr_refl_field=None):
     """
     Calculate the attenuation from a polarimetric radar using Z-PHI method.
 
@@ -48,7 +52,6 @@ def calculate_attenuation(radar, z_offset, debug=False, doc=15, fzl=4000.0,
 
     Other Parameters
     ----------------
-
     doc : float
         Number of gates at the end of each ray to to remove from the
         calculation.
@@ -63,6 +66,19 @@ def calculate_attenuation(radar, z_offset, debug=False, doc=15, fzl=4000.0,
         A coefficient in attenuation calculation.
     beta : float
         Beta parameter in attenuation calculation.
+    refl_field, ncp_field, rhv_field, phidp_field : str
+        Field names within the radar object which represent the horizonal
+        reflectivity, normal coherent power, the copolar coefficient, and the
+        differential phase shift. A value of None for any of these parameters
+        will use the default field name as defined in the Py-ART
+        configuration file.
+    spec_at_field, corr_refl_field : str
+        Names of the specific attenuation and the corrected
+        reflectivity fields that will be used to fill in the metadata for
+        the returned fields.  A value of None for any of these parameters
+        will use the default field names as defined in the Py-ART
+        configuration file.
+
 
     References
     ----------
@@ -70,11 +86,25 @@ def calculate_attenuation(radar, z_offset, debug=False, doc=15, fzl=4000.0,
     JAMC, 2011, 50, 39-58.
 
     """
+    # parse the field parameters
+    if refl_field is None:
+        refl_field = get_field_name('reflectivity')
+    if ncp_field is None:
+        ncp_field = get_field_name('normalized_coherent_power')
+    if rhv_field is None:
+        rhv_field = get_field_name('cross_correlation_ratio')
+    if phidp_field is None:
+        phidp_field = get_field_name('differential_phase')
+    if spec_at_field is None:
+        spec_at_field = get_field_name('specific_attenuation')
+    if corr_refl_field is None:
+        corr_refl_field = get_field_name('corrected_reflectivity')
+
     # extract fields and parameters from radar
-    norm_coherent_power = radar.fields['norm_coherent_power']['data']
-    copol_coeff = radar.fields['copol_coeff']['data']
-    reflectivity_horizontal = radar.fields['reflectivity_horizontal']['data']
-    proc_dp_phase_shift = radar.fields['proc_dp_phase_shift']['data']
+    norm_coherent_power = radar.fields[ncp_field]['data']
+    copol_coeff = radar.fields[rhv_field]['data']
+    reflectivity_horizontal = radar.fields[refl_field]['data']
+    proc_dp_phase_shift = radar.fields[phidp_field]['data']
     nsweeps = int(radar.nsweeps)
 
     # determine where the reflectivity is valid, mask out bad locations.
@@ -124,19 +154,13 @@ def calculate_attenuation(radar, z_offset, debug=False, doc=15, fzl=4000.0,
             atten[i, -1] = atten[i, -2]
 
     # prepare output field dictionaries
-    spec_at = dict()
+    spec_at = get_metadata(spec_at_field)
     spec_at['data'] = specific_atten
-    spec_at['valid_min'] = 0.0
-    spec_at['valid_max'] = 1.0
-    spec_at['standard_name'] = 'specific_attenuation'
-    spec_at['long_name'] = 'specific_attenuation'
-    spec_at['least_significant_digit'] = 4
-    spec_at['units'] = 'dB/km'
+    spec_at['_FillValue'] = get_fillvalue()
 
-    cor_z = copy.deepcopy(radar.fields['reflectivity_horizontal'])
-    cor_z['data'] = atten + cor_z['data'] + z_offset
+    cor_z = get_metadata(corr_refl_field)
+    cor_z['data'] = atten + reflectivity_horizontal + z_offset
     cor_z['data'].mask = init_refl_correct.mask
-    cor_z['least_significant_digit'] = 2
-    cor_z['valid_max'] = 80.0
+    cor_z['_FillValue'] = get_fillvalue()
 
     return spec_at, cor_z
