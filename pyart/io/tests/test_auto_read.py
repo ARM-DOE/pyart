@@ -5,6 +5,7 @@ import os
 import bz2
 from StringIO import StringIO
 
+from numpy.testing.decorators import skipif
 from numpy.testing import assert_raises
 
 import pyart
@@ -24,11 +25,14 @@ def test_autoread_sigmet():
     radar = pyart.io.read(pyart.testing.SIGMET_PPI_FILE, use_rsl=False)
     assert radar.metadata['original_container'] == 'sigmet'
 
-    radar = pyart.io.read(pyart.testing.SIGMET_PPI_FILE, use_rsl=True)
-    assert radar.metadata['original_container'] == 'rsl'
-
     radar = pyart.io.read(pyart.testing.SIGMET_RHI_FILE, use_rsl=False)
     assert radar.metadata['original_container'] == 'sigmet'
+
+
+@skipif(not pyart.io._RSL_AVAILABLE)
+def test_autoread_sigmet_rsl():
+    radar = pyart.io.read(pyart.testing.SIGMET_PPI_FILE, use_rsl=True)
+    assert radar.metadata['original_container'] == 'rsl'
 
     radar = pyart.io.read(pyart.testing.SIGMET_RHI_FILE, use_rsl=True)
     assert radar.metadata['original_container'] == 'rsl'
