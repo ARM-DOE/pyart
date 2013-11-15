@@ -34,5 +34,5 @@ and a RadarDisplay object.
 .. literalinclude:: plot_ppi_mdv.py
     :lines: 10-
 
-**Total running time of the example:**  4.10 seconds
+**Total running time of the example:**  4.06 seconds
     

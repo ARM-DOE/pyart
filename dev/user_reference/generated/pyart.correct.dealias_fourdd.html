@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.0.0.dev-2632d0f',
+        VERSION:     '1.0.0.dev-9b578da',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -65,7 +65,7 @@
 <h1>pyart.correct.dealias_fourdd<a class="headerlink" href="#pyart-correct-dealias-fourdd" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pyart.correct.dealias_fourdd">
-<tt class="descclassname">pyart.correct.</tt><tt class="descname">dealias_fourdd</tt><big>(</big><em>radar</em>, <em>sounding_heights</em>, <em>sounding_wind_speeds</em>, <em>sounding_wind_direction</em>, <em>datetime_sounding</em>, <em>prep=1</em>, <em>filt=1</em>, <em>rsl_badval=131072</em>, <em>fill_value=-9999.0</em>, <em>refl='reflectivity_horizontal'</em>, <em>vel='mean_doppler_velocity'</em>, <em>debug=False</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/correct/dealias.py#L26"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.correct.dealias_fourdd" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">pyart.correct.</tt><tt class="descname">dealias_fourdd</tt><big>(</big><em>radar</em>, <em>sounding_heights</em>, <em>sounding_wind_speeds</em>, <em>sounding_wind_direction</em>, <em>datetime_sounding</em>, <em>prep=1</em>, <em>filt=1</em>, <em>rsl_badval=131072</em>, <em>refl=None</em>, <em>vel=None</em>, <em>corr_vel=None</em>, <em>debug=False</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/correct/dealias.py#L27"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.correct.dealias_fourdd" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dealias the Doppler velocities field using the University of Washington
 4DD algorithm utilizing information from sounding data.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -80,7 +80,10 @@ reflectivity_horizontal and mean_doppler_velocity fields.</p>
 </div></blockquote>
 <p><strong>sounding_heights</strong> : array</p>
 <blockquote>
-<div><p>Sounding heights is meters.</p>
+<div><p>Sounding heights is meters above mean sea level.  If altitude
+attribute of the radar object if reference against something other
+than mean sea level then this parameter should also be referenced in
+that manner.</p>
 </div></blockquote>
 <p><strong>sounding_wind_speeds</strong> : array</p>
 <blockquote>
@@ -116,17 +119,21 @@ array is stored under the &#8216;data&#8217; key.</p>
 <blockquote>
 <div><p>Value which represented a bad, masked, points in RSL.</p>
 </div></blockquote>
-<p><strong>fill_value</strong> : float</p>
-<blockquote>
-<div><p>Value to fill array with at masked points.</p>
-</div></blockquote>
 <p><strong>refl</strong> : str</p>
 <blockquote>
-<div><p>Field in radar to use as the doppler velocities during dealiasing.</p>
+<div><p>Field in radar to use as the doppler velocities during dealiasing.
+None will use the default field name from the Py-ART configuration
+file.</p>
 </div></blockquote>
 <p><strong>vel</strong> : str</p>
 <blockquote>
-<div><p>Field in radar to use as the reflectivity during dealiasing</p>
+<div><p>Field in radar to use as the reflectivity during dealiasing. None
+will use the default field name from the Py-ART configuration file.</p>
+</div></blockquote>
+<p><strong>corr_vel</strong> : str</p>
+<blockquote>
+<div><p>Name to use for the dealiased doppler velocity field metadata.  None
+will use the default field name from the Py-ART configuration file.</p>
 </div></blockquote>
 <p><strong>debug</strong> : bool</p>
 <blockquote class="last">
@@ -207,7 +214,7 @@ Dealising Scheme, Journal of Atmospheric and Oceanic Technology, 2001, 18,
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Oct 29, 2013.
+      Last updated on Nov 15, 2013.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>

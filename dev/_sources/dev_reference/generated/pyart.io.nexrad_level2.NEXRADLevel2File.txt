@@ -16,6 +16,7 @@ pyart.io.nexrad_level2.NEXRADLevel2File
          NEXRADLevel2File.get_elevation_angles
          NEXRADLevel2File.get_nrays
          NEXRADLevel2File.get_range
+         NEXRADLevel2File.get_target_angles
          NEXRADLevel2File.get_times
          NEXRADLevel2File.location
          NEXRADLevel2File.scan_info

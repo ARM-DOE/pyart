@@ -23,5 +23,5 @@ An example which creates a PPI plot of a Sigmet file.
 .. literalinclude:: plot_ppi_sigmet.py
     :lines: 9-
 
-**Total running time of the example:**  3.28 seconds
+**Total running time of the example:**  3.61 seconds
     

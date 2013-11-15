@@ -40,6 +40,7 @@ pyart.graph.plot_mdv.MdvDisplay
     
          ~MdvDisplay.__init__
          ~MdvDisplay._generate_colorbar_label
+         ~MdvDisplay._generate_field_name
          ~MdvDisplay._get_colorbar_label
          ~MdvDisplay._get_data
          ~MdvDisplay._get_ray_data

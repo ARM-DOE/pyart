@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.0.0.dev-2632d0f',
+        VERSION:     '1.0.0.dev-9b578da',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -80,7 +80,7 @@ Cartesian grid.</p>
 <span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_mdv</span><span class="p">(</span><span class="n">RADAR_FILE</span><span class="p">)</span>
 
 <span class="c"># mask out last 10 gates of each ray, this removed the &quot;ring&quot; around th radar.</span>
-<span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s">&#39;reflectivity_horizontal&#39;</span><span class="p">][</span><span class="s">&#39;data&#39;</span><span class="p">][:,</span> <span class="o">-</span><span class="mi">10</span><span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked</span>
+<span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s">&#39;reflectivity&#39;</span><span class="p">][</span><span class="s">&#39;data&#39;</span><span class="p">][:,</span> <span class="o">-</span><span class="mi">10</span><span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked</span>
 
 <span class="c"># perform Cartesian mapping, limit to the reflectivity field.</span>
 <span class="n">grid</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">grid_from_radars</span><span class="p">(</span>
@@ -88,16 +88,16 @@ Cartesian grid.</p>
     <span class="n">grid_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">241</span><span class="p">,</span> <span class="mi">241</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span>
     <span class="n">grid_limits</span><span class="o">=</span><span class="p">((</span><span class="o">-</span><span class="mf">123000.0</span><span class="p">,</span> <span class="mf">123000.0</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mf">123000.0</span><span class="p">,</span> <span class="mf">123000.0</span><span class="p">),</span>
                  <span class="p">(</span><span class="mi">1500</span><span class="p">,</span> <span class="mi">2000</span><span class="p">)),</span>
-    <span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;reflectivity_horizontal&#39;</span><span class="p">])</span>
+    <span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;reflectivity&#39;</span><span class="p">])</span>
 
 <span class="c"># create the plot</span>
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s">&#39;reflectivity_horizontal&#39;</span><span class="p">][</span><span class="s">&#39;data&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">origin</span><span class="o">=</span><span class="s">&#39;lower&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s">&#39;reflectivity&#39;</span><span class="p">][</span><span class="s">&#39;data&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">origin</span><span class="o">=</span><span class="s">&#39;lower&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the example:</strong>  32.22 seconds</p>
+<p><strong>Total running time of the example:</strong>  32.28 seconds</p>
 </div>
 
 
@@ -158,7 +158,7 @@ Cartesian grid.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Oct 29, 2013.
+      Last updated on Nov 15, 2013.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>

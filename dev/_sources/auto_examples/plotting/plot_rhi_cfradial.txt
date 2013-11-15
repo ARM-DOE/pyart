@@ -34,5 +34,5 @@ both a CFRadialDisplay and a RadarDisplay object.
 .. literalinclude:: plot_rhi_cfradial.py
     :lines: 10-
 
-**Total running time of the example:**  5.30 seconds
+**Total running time of the example:**  5.42 seconds
     

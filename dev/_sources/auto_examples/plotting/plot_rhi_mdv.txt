@@ -34,5 +34,5 @@ and a RadarDisplay object.
 .. literalinclude:: plot_rhi_mdv.py
     :lines: 10-
 
-**Total running time of the example:**  0.38 seconds
+**Total running time of the example:**  0.39 seconds
     

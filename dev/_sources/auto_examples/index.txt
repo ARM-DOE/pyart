@@ -366,6 +366,34 @@ Plotting real world radar data with Py-ART.
         <div class="docstringWrapper">
 
 
+.. figure:: plotting/images/thumb/plot_nexrad_reflectivity.png
+   :target: ./plotting/plot_nexrad_reflectivity.html
+
+   :ref:`example_plotting_plot_nexrad_reflectivity.py`
+
+
+.. raw:: html
+
+
+    <p>An example which creates a plot containing the first collected scan from a NEXRAD file.
+    </p></div>
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   plotting/plot_nexrad_reflectivity
+
+
+
+.. raw:: html
+
+
+    <div class="thumbnailContainer">
+        <div class="docstringWrapper">
+
+
 .. figure:: plotting/images/thumb/plot_rhi_mdv.png
    :target: ./plotting/plot_rhi_mdv.html
 
@@ -394,16 +422,16 @@ Plotting real world radar data with Py-ART.
         <div class="docstringWrapper">
 
 
-.. figure:: plotting/images/thumb/plot_nexrad_reflectivity.png
-   :target: ./plotting/plot_nexrad_reflectivity.html
+.. figure:: plotting/images/thumb/plot_ppi_mdv.png
+   :target: ./plotting/plot_ppi_mdv.html
 
-   :ref:`example_plotting_plot_nexrad_reflectivity.py`
+   :ref:`example_plotting_plot_ppi_mdv.py`
 
 
 .. raw:: html
 
 
-    <p>An example which creates a plot containing the first collected super resolution and standard re...
+    <p>An example which creates a PPI plot of a MDV file using both a MdvDisplay and a RadarDisplay ob...
     </p></div>
     </div>
 
@@ -411,7 +439,7 @@ Plotting real world radar data with Py-ART.
 .. toctree::
    :hidden:
 
-   plotting/plot_nexrad_reflectivity
+   plotting/plot_ppi_mdv
 
 
 
@@ -440,34 +468,6 @@ Plotting real world radar data with Py-ART.
    :hidden:
 
    plotting/plot_nexrad_multiple_moments
-
-
-
-.. raw:: html
-
-
-    <div class="thumbnailContainer">
-        <div class="docstringWrapper">
-
-
-.. figure:: plotting/images/thumb/plot_ppi_mdv.png
-   :target: ./plotting/plot_ppi_mdv.html
-
-   :ref:`example_plotting_plot_ppi_mdv.py`
-
-
-.. raw:: html
-
-
-    <p>An example which creates a PPI plot of a MDV file using both a MdvDisplay and a RadarDisplay ob...
-    </p></div>
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   plotting/plot_ppi_mdv
 
 
 

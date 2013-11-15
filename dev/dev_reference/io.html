@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.0.0.dev-2632d0f',
+        VERSION:     '1.0.0.dev-9b578da',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -72,7 +72,7 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.auto_read.read.html#pyart.io.auto_read.read" title="pyart.io.auto_read.read"><tt class="xref py py-obj docutils literal"><span class="pre">read</span></tt></a>(filename[,&nbsp;callid,&nbsp;use_rsl])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.auto_read.read.html#pyart.io.auto_read.read" title="pyart.io.auto_read.read"><tt class="xref py py-obj docutils literal"><span class="pre">read</span></tt></a>(filename[,&nbsp;use_rsl])</td>
 <td>Read a radar file and return a radar object.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.auto_read.determine_filetype.html#pyart.io.auto_read.determine_filetype" title="pyart.io.auto_read.determine_filetype"><tt class="xref py py-obj docutils literal"><span class="pre">determine_filetype</span></tt></a>(filename)</td>
@@ -102,9 +102,6 @@
 <tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.common.make_time_unit_str.html#pyart.io.common.make_time_unit_str" title="pyart.io.common.make_time_unit_str"><tt class="xref py py-obj docutils literal"><span class="pre">make_time_unit_str</span></tt></a>(dtobj)</td>
 <td>Return a time unit string from a datetime object.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.common.get_metadata.html#pyart.io.common.get_metadata" title="pyart.io.common.get_metadata"><tt class="xref py py-obj docutils literal"><span class="pre">get_metadata</span></tt></a>(p)</td>
-<td>Return a dictionary of metadata for a given parameter, p.</td>
-</tr>
 </tbody>
 </table>
 </div>
@@ -117,8 +114,8 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.cfradial.read_cfradial.html#pyart.io.cfradial.read_cfradial" title="pyart.io.cfradial.read_cfradial"><tt class="xref py py-obj docutils literal"><span class="pre">read_cfradial</span></tt></a>(filename)</td>
-<td>Read a CF/Radial netCDF file.</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.cfradial.read_cfradial.html#pyart.io.cfradial.read_cfradial" title="pyart.io.cfradial.read_cfradial"><tt class="xref py py-obj docutils literal"><span class="pre">read_cfradial</span></tt></a>(filename[,&nbsp;field_names,&nbsp;...])</td>
+<td>Read a Cfradial netCDF file.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.cfradial.write_cfradial.html#pyart.io.cfradial.write_cfradial" title="pyart.io.cfradial.write_cfradial"><tt class="xref py py-obj docutils literal"><span class="pre">write_cfradial</span></tt></a>(filename,&nbsp;radar[,&nbsp;format,&nbsp;...])</td>
 <td>Write a Radar object to a CF/Radial compliant netCDF file.</td>
@@ -179,7 +176,6 @@
 <span class="target" id="module-pyart.io.mdv"></span><div class="section" id="pyart-io-mdv">
 <h2>pyart.io.mdv<a class="headerlink" href="#pyart-io-mdv" title="Permalink to this headline">¶</a></h2>
 <p>Utilities for reading of MDV files.</p>
-<p>Code is adapted from Nitin Bharadwaj&#8217;s Matlab code</p>
 <table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
@@ -197,7 +193,7 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.mdv.read_mdv.html#pyart.io.mdv.read_mdv" title="pyart.io.mdv.read_mdv"><tt class="xref py py-obj docutils literal"><span class="pre">read_mdv</span></tt></a>(filename)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.mdv.read_mdv.html#pyart.io.mdv.read_mdv" title="pyart.io.mdv.read_mdv"><tt class="xref py py-obj docutils literal"><span class="pre">read_mdv</span></tt></a>(filename[,&nbsp;field_names,&nbsp;...])</td>
 <td>Read a MDV file.</td>
 </tr>
 </tbody>
@@ -212,17 +208,8 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.nexrad_archive.read_nexrad_archive.html#pyart.io.nexrad_archive.read_nexrad_archive" title="pyart.io.nexrad_archive.read_nexrad_archive"><tt class="xref py py-obj docutils literal"><span class="pre">read_nexrad_archive</span></tt></a>(filename[,&nbsp;bzip,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.nexrad_archive.read_nexrad_archive.html#pyart.io.nexrad_archive.read_nexrad_archive" title="pyart.io.nexrad_archive.read_nexrad_archive"><tt class="xref py py-obj docutils literal"><span class="pre">read_nexrad_archive</span></tt></a>(filename[,&nbsp;field_names,&nbsp;...])</td>
 <td>Read a NEXRAD Level 2 Archive file.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.nexrad_archive._radar_from_nexradl2.html#pyart.io.nexrad_archive._radar_from_nexradl2" title="pyart.io.nexrad_archive._radar_from_nexradl2"><tt class="xref py py-obj docutils literal"><span class="pre">_radar_from_nexradl2</span></tt></a>(nfile,&nbsp;moments,&nbsp;scans,&nbsp;...)</td>
-<td>Create a radar object from a NEXRADLevel2File object.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.nexrad_archive.ARCHIVE_MAPPING.html#pyart.io.nexrad_archive.ARCHIVE_MAPPING" title="pyart.io.nexrad_archive.ARCHIVE_MAPPING"><tt class="xref py py-obj docutils literal"><span class="pre">ARCHIVE_MAPPING</span></tt></a></td>
-<td></td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.nexrad_archive.NEXRAD_METADATA.html#pyart.io.nexrad_archive.NEXRAD_METADATA" title="pyart.io.nexrad_archive.NEXRAD_METADATA"><tt class="xref py py-obj docutils literal"><span class="pre">NEXRAD_METADATA</span></tt></a></td>
-<td></td>
 </tr>
 </tbody>
 </table>
@@ -236,35 +223,17 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.nexrad_cdm.read_nexrad_cdm.html#pyart.io.nexrad_cdm.read_nexrad_cdm" title="pyart.io.nexrad_cdm.read_nexrad_cdm"><tt class="xref py py-obj docutils literal"><span class="pre">read_nexrad_cdm</span></tt></a>(filename[,&nbsp;field_mapping,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.nexrad_cdm.read_nexrad_cdm.html#pyart.io.nexrad_cdm.read_nexrad_cdm" title="pyart.io.nexrad_cdm.read_nexrad_cdm"><tt class="xref py py-obj docutils literal"><span class="pre">read_nexrad_cdm</span></tt></a>(filename[,&nbsp;field_names,&nbsp;...])</td>
 <td>Read a Common Data Model (CDM) NEXRAD Level 2 file.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.nexrad_cdm._gen_vnames.html#pyart.io.nexrad_cdm._gen_vnames" title="pyart.io.nexrad_cdm._gen_vnames"><tt class="xref py py-obj docutils literal"><span class="pre">_gen_vnames</span></tt></a>(field,&nbsp;high_res)</td>
-<td>Return a dictionary of variables/dimension names in a CDM dataset.</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.nexrad_cdm._scan_info.html#pyart.io.nexrad_cdm._scan_info" title="pyart.io.nexrad_cdm._scan_info"><tt class="xref py py-obj docutils literal"><span class="pre">_scan_info</span></tt></a>(dvars)</td>
+<td>Return a list of information on the scans in the volume.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.nexrad_cdm._radar_from_cdm.html#pyart.io.nexrad_cdm._radar_from_cdm" title="pyart.io.nexrad_cdm._radar_from_cdm"><tt class="xref py py-obj docutils literal"><span class="pre">_radar_from_cdm</span></tt></a>(dataset,&nbsp;vnames,&nbsp;...)</td>
-<td>Return a Radar from a CDM dataset.</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.nexrad_cdm._populate_scan_dic.html#pyart.io.nexrad_cdm._populate_scan_dic" title="pyart.io.nexrad_cdm._populate_scan_dic"><tt class="xref py py-obj docutils literal"><span class="pre">_populate_scan_dic</span></tt></a>(scan_dic,&nbsp;time_var,&nbsp;...)</td>
+<td>Populate a dictionary in the scan_info list.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.nexrad_cdm.CDM_FIELD_MAPPING.html#pyart.io.nexrad_cdm.CDM_FIELD_MAPPING" title="pyart.io.nexrad_cdm.CDM_FIELD_MAPPING"><tt class="xref py py-obj docutils literal"><span class="pre">CDM_FIELD_MAPPING</span></tt></a></td>
-<td></td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.nexrad_cdm.NEXRAD_METADATA.html#pyart.io.nexrad_cdm.NEXRAD_METADATA" title="pyart.io.nexrad_cdm.NEXRAD_METADATA"><tt class="xref py py-obj docutils literal"><span class="pre">NEXRAD_METADATA</span></tt></a></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-</div>
-<span class="target" id="module-pyart.io.nexrad_common"></span><div class="section" id="pyart-io-nexrad-common">
-<h2>pyart.io.nexrad_common<a class="headerlink" href="#pyart-io-nexrad-common" title="Permalink to this headline">¶</a></h2>
-<p>Variables common to the NEXRAD format.</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.nexrad_common.NEXRAD_METADATA.html#pyart.io.nexrad_common.NEXRAD_METADATA" title="pyart.io.nexrad_common.NEXRAD_METADATA"><tt class="xref py py-obj docutils literal"><span class="pre">NEXRAD_METADATA</span></tt></a></td>
-<td></td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.nexrad_cdm._get_moment_data.html#pyart.io.nexrad_cdm._get_moment_data" title="pyart.io.nexrad_cdm._get_moment_data"><tt class="xref py py-obj docutils literal"><span class="pre">_get_moment_data</span></tt></a>(moment_var,&nbsp;index,&nbsp;ngates)</td>
+<td>Retieve moment data for a given scan.</td>
 </tr>
 </tbody>
 </table>
@@ -336,8 +305,14 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.rsl.read_rsl.html#pyart.io.rsl.read_rsl" title="pyart.io.rsl.read_rsl"><tt class="xref py py-obj docutils literal"><span class="pre">read_rsl</span></tt></a>(filename[,&nbsp;radar_format,&nbsp;callid,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.rsl.read_rsl.html#pyart.io.rsl.read_rsl" title="pyart.io.rsl.read_rsl"><tt class="xref py py-obj docutils literal"><span class="pre">read_rsl</span></tt></a>(filename[,&nbsp;field_names,&nbsp;...])</td>
 <td>Read a file supported by RSL</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.rsl.VOLUMENUM2RSLNAME.html#pyart.io.rsl.VOLUMENUM2RSLNAME" title="pyart.io.rsl.VOLUMENUM2RSLNAME"><tt class="xref py py-obj docutils literal"><span class="pre">VOLUMENUM2RSLNAME</span></tt></a></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.rsl.RSLNAME2VOLUMENUM.html#pyart.io.rsl.RSLNAME2VOLUMENUM" title="pyart.io.rsl.RSLNAME2VOLUMENUM"><tt class="xref py py-obj docutils literal"><span class="pre">RSLNAME2VOLUMENUM</span></tt></a></td>
+<td></td>
 </tr>
 </tbody>
 </table>
@@ -493,9 +468,6 @@
 <li><a class="reference internal" href="#pyart-io-nexrad-cdm">pyart.io.nexrad_cdm</a><ul>
 </ul>
 </li>
-<li><a class="reference internal" href="#pyart-io-nexrad-common">pyart.io.nexrad_common</a><ul>
-</ul>
-</li>
 <li><a class="reference internal" href="#pyart-io-nexrad-level2">pyart.io.nexrad_level2</a><ul>
 </ul>
 </li>
@@ -570,7 +542,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Oct 29, 2013.
+      Last updated on Nov 15, 2013.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>

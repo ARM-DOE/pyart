@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.0.0.dev-2632d0f',
+        VERSION:     '1.0.0.dev-9b578da',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <link rel="top" title="Py-ART Documentation (DRAFT)" href="../../index.html" />
     <link rel="up" title="pyart.io.nexrad_level2.NEXRADLevel2File" href="pyart.io.nexrad_level2.NEXRADLevel2File.html" />
     <link rel="next" title="pyart.io.nexrad_level2.NEXRADLevel2File.location" href="pyart.io.nexrad_level2.NEXRADLevel2File.location.html" />
-    <link rel="prev" title="pyart.io.nexrad_level2.NEXRADLevel2File.get_range" href="pyart.io.nexrad_level2.NEXRADLevel2File.get_range.html" /> 
+    <link rel="prev" title="pyart.io.nexrad_level2.NEXRADLevel2File.get_target_angles" href="pyart.io.nexrad_level2.NEXRADLevel2File.get_target_angles.html" /> 
   </head>
   <body>
     <div class="related">
@@ -48,7 +48,7 @@
           <a href="pyart.io.nexrad_level2.NEXRADLevel2File.location.html" title="pyart.io.nexrad_level2.NEXRADLevel2File.location"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="pyart.io.nexrad_level2.NEXRADLevel2File.get_range.html" title="pyart.io.nexrad_level2.NEXRADLevel2File.get_range"
+          <a href="pyart.io.nexrad_level2.NEXRADLevel2File.get_target_angles.html" title="pyart.io.nexrad_level2.NEXRADLevel2File.get_target_angles"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">Py-ART Documentation (DRAFT)</a> &raquo;</li>
           <li><a href="../index.html" >Developer Reference Manual</a> &raquo;</li>
@@ -66,15 +66,17 @@
 <h1>pyart.io.nexrad_level2.NEXRADLevel2File.get_times<a class="headerlink" href="#pyart-io-nexrad-level2-nexradlevel2file-get-times" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="pyart.io.nexrad_level2.NEXRADLevel2File.get_times">
-<tt class="descclassname">NEXRADLevel2File.</tt><tt class="descname">get_times</tt><big>(</big><em>scans</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/io/nexrad_level2.py#L268"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.io.nexrad_level2.NEXRADLevel2File.get_times" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">NEXRADLevel2File.</tt><tt class="descname">get_times</tt><big>(</big><em>scans=None</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/io/nexrad_level2.py#L269"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.io.nexrad_level2.NEXRADLevel2File.get_times" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve the times at which the rays were collected.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>scans</strong> : list</p>
+<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>scans</strong> : list or None</p>
 <blockquote>
-<div><p>Scans (0-based) to retrieve ray (radial) collection times from.</p>
+<div><p>Scans (0-based) to retrieve ray (radial) collection times from.
+None (the default) will return the times for all scans in the
+volume.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -102,8 +104,8 @@ in the requested scans were collected.</p>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="pyart.io.nexrad_level2.NEXRADLevel2File.get_range.html"
-                        title="previous chapter">pyart.io.nexrad_level2.NEXRADLevel2File.get_range</a></p>
+  <p class="topless"><a href="pyart.io.nexrad_level2.NEXRADLevel2File.get_target_angles.html"
+                        title="previous chapter">pyart.io.nexrad_level2.NEXRADLevel2File.get_target_angles</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="pyart.io.nexrad_level2.NEXRADLevel2File.location.html"
                         title="next chapter">pyart.io.nexrad_level2.NEXRADLevel2File.location</a></p>
@@ -145,7 +147,7 @@ in the requested scans were collected.</p>
           <a href="pyart.io.nexrad_level2.NEXRADLevel2File.location.html" title="pyart.io.nexrad_level2.NEXRADLevel2File.location"
              >next</a> |</li>
         <li class="right" >
-          <a href="pyart.io.nexrad_level2.NEXRADLevel2File.get_range.html" title="pyart.io.nexrad_level2.NEXRADLevel2File.get_range"
+          <a href="pyart.io.nexrad_level2.NEXRADLevel2File.get_target_angles.html" title="pyart.io.nexrad_level2.NEXRADLevel2File.get_target_angles"
              >previous</a> |</li>
         <li><a href="../../index.html">Py-ART Documentation (DRAFT)</a> &raquo;</li>
           <li><a href="../index.html" >Developer Reference Manual</a> &raquo;</li>
@@ -155,7 +157,7 @@ in the requested scans were collected.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Oct 29, 2013.
+      Last updated on Nov 15, 2013.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>

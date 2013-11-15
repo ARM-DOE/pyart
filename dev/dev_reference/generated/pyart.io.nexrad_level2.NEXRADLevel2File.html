@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.0.0.dev-2632d0f',
+        VERSION:     '1.0.0.dev-9b578da',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <link rel="top" title="Py-ART Documentation (DRAFT)" href="../../index.html" />
     <link rel="up" title="pyart.io" href="../io.html" />
     <link rel="next" title="pyart.io.nexrad_level2.NEXRADLevel2File.get_azimuth_angles" href="pyart.io.nexrad_level2.NEXRADLevel2File.get_azimuth_angles.html" />
-    <link rel="prev" title="pyart.io.nexrad_common.NEXRAD_METADATA" href="pyart.io.nexrad_common.NEXRAD_METADATA.html" /> 
+    <link rel="prev" title="pyart.io.nexrad_cdm._get_moment_data" href="pyart.io.nexrad_cdm._get_moment_data.html" /> 
   </head>
   <body>
     <div class="related">
@@ -48,7 +48,7 @@
           <a href="pyart.io.nexrad_level2.NEXRADLevel2File.get_azimuth_angles.html" title="pyart.io.nexrad_level2.NEXRADLevel2File.get_azimuth_angles"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="pyart.io.nexrad_common.NEXRAD_METADATA.html" title="pyart.io.nexrad_common.NEXRAD_METADATA"
+          <a href="pyart.io.nexrad_cdm._get_moment_data.html" title="pyart.io.nexrad_cdm._get_moment_data"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">Py-ART Documentation (DRAFT)</a> &raquo;</li>
           <li><a href="../index.html" >Developer Reference Manual</a> &raquo;</li>
@@ -127,7 +127,10 @@ read using this class.</p>
 <tr class="row-even"><td>volume_header</td>
 <td>(dict) Volume header.</td>
 </tr>
-<tr class="row-odd"><td>_records</td>
+<tr class="row-odd"><td>vcp</td>
+<td>(dict) VCP information dictionary.</td>
+</tr>
+<tr class="row-even"><td>_records</td>
 <td>(list) A list of all records (message) in the file.</td>
 </tr>
 </tbody>
@@ -139,13 +142,13 @@ read using this class.</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="pyart.io.nexrad_level2.NEXRADLevel2File.get_azimuth_angles.html#pyart.io.nexrad_level2.NEXRADLevel2File.get_azimuth_angles" title="pyart.io.nexrad_level2.NEXRADLevel2File.get_azimuth_angles"><tt class="xref py py-obj docutils literal"><span class="pre">get_azimuth_angles</span></tt></a>(scans)</td>
+<tr class="row-odd"><td><a class="reference internal" href="pyart.io.nexrad_level2.NEXRADLevel2File.get_azimuth_angles.html#pyart.io.nexrad_level2.NEXRADLevel2File.get_azimuth_angles" title="pyart.io.nexrad_level2.NEXRADLevel2File.get_azimuth_angles"><tt class="xref py py-obj docutils literal"><span class="pre">get_azimuth_angles</span></tt></a>([scans])</td>
 <td>Retrieve the azimuth angles of all rays in the requested scans.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.io.nexrad_level2.NEXRADLevel2File.get_data.html#pyart.io.nexrad_level2.NEXRADLevel2File.get_data" title="pyart.io.nexrad_level2.NEXRADLevel2File.get_data"><tt class="xref py py-obj docutils literal"><span class="pre">get_data</span></tt></a>(scans,&nbsp;moment,&nbsp;max_gates[,&nbsp;raw_data])</td>
+<tr class="row-even"><td><a class="reference internal" href="pyart.io.nexrad_level2.NEXRADLevel2File.get_data.html#pyart.io.nexrad_level2.NEXRADLevel2File.get_data" title="pyart.io.nexrad_level2.NEXRADLevel2File.get_data"><tt class="xref py py-obj docutils literal"><span class="pre">get_data</span></tt></a>(moment,&nbsp;max_ngates[,&nbsp;scans,&nbsp;raw_data])</td>
 <td>Retrieve moment data for a given set of scans.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.io.nexrad_level2.NEXRADLevel2File.get_elevation_angles.html#pyart.io.nexrad_level2.NEXRADLevel2File.get_elevation_angles" title="pyart.io.nexrad_level2.NEXRADLevel2File.get_elevation_angles"><tt class="xref py py-obj docutils literal"><span class="pre">get_elevation_angles</span></tt></a>(scans)</td>
+<tr class="row-odd"><td><a class="reference internal" href="pyart.io.nexrad_level2.NEXRADLevel2File.get_elevation_angles.html#pyart.io.nexrad_level2.NEXRADLevel2File.get_elevation_angles" title="pyart.io.nexrad_level2.NEXRADLevel2File.get_elevation_angles"><tt class="xref py py-obj docutils literal"><span class="pre">get_elevation_angles</span></tt></a>([scans])</td>
 <td>Retrieve the elevation angles of all rays in the requested scans.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="pyart.io.nexrad_level2.NEXRADLevel2File.get_nrays.html#pyart.io.nexrad_level2.NEXRADLevel2File.get_nrays" title="pyart.io.nexrad_level2.NEXRADLevel2File.get_nrays"><tt class="xref py py-obj docutils literal"><span class="pre">get_nrays</span></tt></a>(scan)</td>
@@ -154,14 +157,17 @@ read using this class.</p>
 <tr class="row-odd"><td><a class="reference internal" href="pyart.io.nexrad_level2.NEXRADLevel2File.get_range.html#pyart.io.nexrad_level2.NEXRADLevel2File.get_range" title="pyart.io.nexrad_level2.NEXRADLevel2File.get_range"><tt class="xref py py-obj docutils literal"><span class="pre">get_range</span></tt></a>(scan_num,&nbsp;moment)</td>
 <td>Return an array of gate ranges for a given scan and moment.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.io.nexrad_level2.NEXRADLevel2File.get_times.html#pyart.io.nexrad_level2.NEXRADLevel2File.get_times" title="pyart.io.nexrad_level2.NEXRADLevel2File.get_times"><tt class="xref py py-obj docutils literal"><span class="pre">get_times</span></tt></a>(scans)</td>
+<tr class="row-even"><td><a class="reference internal" href="pyart.io.nexrad_level2.NEXRADLevel2File.get_target_angles.html#pyart.io.nexrad_level2.NEXRADLevel2File.get_target_angles" title="pyart.io.nexrad_level2.NEXRADLevel2File.get_target_angles"><tt class="xref py py-obj docutils literal"><span class="pre">get_target_angles</span></tt></a>([scans])</td>
+<td>Retrieve the target elevation angle of the requested scans.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pyart.io.nexrad_level2.NEXRADLevel2File.get_times.html#pyart.io.nexrad_level2.NEXRADLevel2File.get_times" title="pyart.io.nexrad_level2.NEXRADLevel2File.get_times"><tt class="xref py py-obj docutils literal"><span class="pre">get_times</span></tt></a>([scans])</td>
 <td>Retrieve the times at which the rays were collected.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.io.nexrad_level2.NEXRADLevel2File.location.html#pyart.io.nexrad_level2.NEXRADLevel2File.location" title="pyart.io.nexrad_level2.NEXRADLevel2File.location"><tt class="xref py py-obj docutils literal"><span class="pre">location</span></tt></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="pyart.io.nexrad_level2.NEXRADLevel2File.location.html#pyart.io.nexrad_level2.NEXRADLevel2File.location" title="pyart.io.nexrad_level2.NEXRADLevel2File.location"><tt class="xref py py-obj docutils literal"><span class="pre">location</span></tt></a>()</td>
 <td>Find the location of the radar.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.io.nexrad_level2.NEXRADLevel2File.scan_info.html#pyart.io.nexrad_level2.NEXRADLevel2File.scan_info" title="pyart.io.nexrad_level2.NEXRADLevel2File.scan_info"><tt class="xref py py-obj docutils literal"><span class="pre">scan_info</span></tt></a>()</td>
-<td>Return a dictionary with information on the scans performed.</td>
+<tr class="row-odd"><td><a class="reference internal" href="pyart.io.nexrad_level2.NEXRADLevel2File.scan_info.html#pyart.io.nexrad_level2.NEXRADLevel2File.scan_info" title="pyart.io.nexrad_level2.NEXRADLevel2File.scan_info"><tt class="xref py py-obj docutils literal"><span class="pre">scan_info</span></tt></a>()</td>
+<td>Return a list of dictionaries with scan information.</td>
 </tr>
 </tbody>
 </table>
@@ -197,8 +203,8 @@ read using this class.</p>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="pyart.io.nexrad_common.NEXRAD_METADATA.html"
-                        title="previous chapter">pyart.io.nexrad_common.NEXRAD_METADATA</a></p>
+  <p class="topless"><a href="pyart.io.nexrad_cdm._get_moment_data.html"
+                        title="previous chapter">pyart.io.nexrad_cdm._get_moment_data</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="pyart.io.nexrad_level2.NEXRADLevel2File.get_azimuth_angles.html"
                         title="next chapter">pyart.io.nexrad_level2.NEXRADLevel2File.get_azimuth_angles</a></p>
@@ -240,7 +246,7 @@ read using this class.</p>
           <a href="pyart.io.nexrad_level2.NEXRADLevel2File.get_azimuth_angles.html" title="pyart.io.nexrad_level2.NEXRADLevel2File.get_azimuth_angles"
              >next</a> |</li>
         <li class="right" >
-          <a href="pyart.io.nexrad_common.NEXRAD_METADATA.html" title="pyart.io.nexrad_common.NEXRAD_METADATA"
+          <a href="pyart.io.nexrad_cdm._get_moment_data.html" title="pyart.io.nexrad_cdm._get_moment_data"
              >previous</a> |</li>
         <li><a href="../../index.html">Py-ART Documentation (DRAFT)</a> &raquo;</li>
           <li><a href="../index.html" >Developer Reference Manual</a> &raquo;</li>
@@ -249,7 +255,7 @@ read using this class.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Oct 29, 2013.
+      Last updated on Nov 15, 2013.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>

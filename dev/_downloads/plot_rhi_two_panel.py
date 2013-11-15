@@ -22,7 +22,7 @@ radar = pyart.io.read_rsl(filename)
 display = pyart.graph.RadarDisplay(radar)
 
 # fields to plot and ranges
-fields_to_plot = ['reflectivity_horizontal', 'mean_doppler_velocity']
+fields_to_plot = ['reflectivity', 'velocity']
 ranges = [(-32, 64), (-17.0, 17.0)]
 
 # plot the data

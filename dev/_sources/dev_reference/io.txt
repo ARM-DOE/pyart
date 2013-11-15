@@ -11,7 +11,6 @@ Input/Output routines.
 .. automodule:: pyart.io.mdv
 .. automodule:: pyart.io.nexrad_archive
 .. automodule:: pyart.io.nexrad_cdm
-.. automodule:: pyart.io.nexrad_common
 .. automodule:: pyart.io.nexrad_level2
 .. automodule:: pyart.io.radar
 .. automodule:: pyart.io.rsl

@@ -40,6 +40,7 @@ pyart.graph.plot_rsl.RslDisplay
     
          ~RslDisplay.__init__
          ~RslDisplay._generate_colorbar_label
+         ~RslDisplay._generate_field_name
          ~RslDisplay._get_colorbar_label
          ~RslDisplay._get_data
          ~RslDisplay._get_ray_data

@@ -24,5 +24,5 @@ for a polarimetric radar using a Z-PHI method implemented in Py-ART.
 .. literalinclude:: plot_attenuation.py
     :lines: 10-
 
-**Total running time of the example:**  8.98 seconds
+**Total running time of the example:**  8.77 seconds
     

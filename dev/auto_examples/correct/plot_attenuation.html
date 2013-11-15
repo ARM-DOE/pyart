@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.0.0.dev-2632d0f',
+        VERSION:     '1.0.0.dev-9b578da',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -84,7 +84,10 @@ for a polarimetric radar using a Z-PHI method implemented in Py-ART.</p>
 <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;corrected_reflectivity_horizontal&#39;</span><span class="p">)</span>
 
 <span class="c"># perform attenuation correction</span>
-<span class="n">spec_at</span><span class="p">,</span> <span class="n">cor_z</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">correct</span><span class="o">.</span><span class="n">calculate_attenuation</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">spec_at</span><span class="p">,</span> <span class="n">cor_z</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">correct</span><span class="o">.</span><span class="n">calculate_attenuation</span><span class="p">(</span>
+    <span class="n">radar</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">refl_field</span><span class="o">=</span><span class="s">&#39;reflectivity_horizontal&#39;</span><span class="p">,</span>
+    <span class="n">ncp_field</span><span class="o">=</span><span class="s">&#39;norm_coherent_power&#39;</span><span class="p">,</span> <span class="n">rhv_field</span><span class="o">=</span><span class="s">&#39;copol_coeff&#39;</span><span class="p">,</span>
+    <span class="n">phidp_field</span><span class="o">=</span><span class="s">&#39;proc_dp_phase_shift&#39;</span><span class="p">)</span>
 <span class="n">radar</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s">&#39;specific_attenuation&#39;</span><span class="p">,</span> <span class="n">spec_at</span><span class="p">)</span>
 <span class="n">radar</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s">&#39;corrected_reflectivity_horizontal&#39;</span><span class="p">,</span> <span class="n">cor_z</span><span class="p">)</span>
 
@@ -111,7 +114,7 @@ for a polarimetric radar using a Z-PHI method implemented in Py-ART.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the example:</strong>  8.98 seconds</p>
+<p><strong>Total running time of the example:</strong>  8.77 seconds</p>
 </div>
 
 
@@ -172,7 +175,7 @@ for a polarimetric radar using a Z-PHI method implemented in Py-ART.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Oct 29, 2013.
+      Last updated on Nov 15, 2013.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>

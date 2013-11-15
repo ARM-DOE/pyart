@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.0.0.dev-2632d0f',
+        VERSION:     '1.0.0.dev-9b578da',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -65,8 +65,8 @@
 <h1>pyart.io.read_cfradial<a class="headerlink" href="#pyart-io-read-cfradial" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pyart.io.read_cfradial">
-<tt class="descclassname">pyart.io.</tt><tt class="descname">read_cfradial</tt><big>(</big><em>filename</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/io/cfradial.py#L31"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.io.read_cfradial" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read a CF/Radial netCDF file.</p>
+<tt class="descclassname">pyart.io.</tt><tt class="descname">read_cfradial</tt><big>(</big><em>filename</em>, <em>field_names=None</em>, <em>additional_metadata=None</em>, <em>file_field_names=False</em>, <em>exclude_fields=None</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/io/cfradial.py#L32"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.io.read_cfradial" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a Cfradial netCDF file.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -74,6 +74,29 @@
 <tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
 <blockquote>
 <div><p>Name of CF/Radial netCDF file to read data from.</p>
+</div></blockquote>
+<p><strong>field_names</strong> : dict, optional</p>
+<blockquote>
+<div><p>Dictionary mapping field names in the file names to radar field names.
+Unlike other read functions, fields not in this dictionary or having a
+value of None are still included in the radar.fields dictionary, to
+exclude them use the <cite>exclude_fields</cite> parameter. Fields which are
+mapped by this dictionary will be renamed from key to value.</p>
+</div></blockquote>
+<p><strong>additional_metadata</strong> : dict of dicts, optional</p>
+<blockquote>
+<div><p>This parameter is not used, it is included for uniformity.</p>
+</div></blockquote>
+<p><strong>file_field_names</strong> : bool, optional</p>
+<blockquote>
+<div><p>True to force the use of the field names from the file in which
+case the <cite>field_names</cite> parameter is ignored. False will use to
+<cite>field_names</cite> parameter to rename fields.</p>
+</div></blockquote>
+<p><strong>exclude_fields</strong> : list or None, optional</p>
+<blockquote>
+<div><p>List of fields to exclude from the radar object. This is applied
+after the <cite>file_field_names</cite> and <cite>field_names</cite> parameters.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -86,7 +109,7 @@
 </tbody>
 </table>
 <p class="rubric">Notes</p>
-<p>This function has not been tested on &#8220;stream&#8221; CF/Radial files.</p>
+<p>This function has not been tested on &#8220;stream&#8221; Cfradial files.</p>
 </dd></dl>
 
 </div>
@@ -150,7 +173,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Oct 29, 2013.
+      Last updated on Nov 15, 2013.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>

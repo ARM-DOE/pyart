@@ -24,5 +24,5 @@ Cartesian grid.
 .. literalinclude:: plot_map_one_radar_to_grid.py
     :lines: 10-
 
-**Total running time of the example:**  32.22 seconds
+**Total running time of the example:**  32.28 seconds
     

@@ -26,5 +26,5 @@ grid.
 .. literalinclude:: plot_grid_three_panel.py
     :lines: 12-
 
-**Total running time of the example:**  9.17 seconds
+**Total running time of the example:**  9.07 seconds
     

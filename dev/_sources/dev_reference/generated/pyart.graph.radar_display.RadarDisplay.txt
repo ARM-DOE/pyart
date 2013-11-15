@@ -40,6 +40,7 @@ pyart.graph.radar_display.RadarDisplay
     
          ~RadarDisplay.__init__
          ~RadarDisplay._generate_colorbar_label
+         ~RadarDisplay._generate_field_name
          ~RadarDisplay._get_colorbar_label
          ~RadarDisplay._get_data
          ~RadarDisplay._get_ray_data

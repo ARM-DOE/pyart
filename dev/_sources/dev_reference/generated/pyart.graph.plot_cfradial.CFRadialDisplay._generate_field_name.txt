@@ -1,0 +1,6 @@
+pyart.graph.plot_cfradial.CFRadialDisplay._generate_field_name
+==============================================================
+
+.. currentmodule:: pyart.graph.plot_cfradial
+
+.. automethod:: CFRadialDisplay._generate_field_name

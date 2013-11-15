@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.0.0.dev-2632d0f',
+        VERSION:     '1.0.0.dev-9b578da',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -72,9 +72,8 @@ fields of a ARM C-SAPR radar.</p>
 </ul>
 <p><strong>Script output</strong>:</p>
 <div class="highlight-python"><pre>Unfolding
-Starting late
 Unfolding
-Exec time:  13.1737298965
+Exec time:  13.2823121548
 Doing  0</pre>
 </div>
 <p><strong>Python source code:</strong> <a class="reference download internal" href="../../_downloads/plot_lp_phase_proc.py"><tt class="xref download docutils literal"><span class="pre">plot_lp_phase_proc.py</span></tt></a></p>
@@ -108,7 +107,7 @@ Doing  0</pre>
 <span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
 <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">221</span><span class="p">)</span>
-<span class="n">display</span><span class="o">.</span><span class="n">plot_ppi</span><span class="p">(</span><span class="s">&#39;dp_phase_shift&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span>
+<span class="n">display</span><span class="o">.</span><span class="n">plot_ppi</span><span class="p">(</span><span class="s">&#39;differential_phase&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span>
                  <span class="n">title</span><span class="o">=</span><span class="s">&#39;Raw Differential Phase&#39;</span><span class="p">,</span> <span class="n">colorbar_label</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span>
                  <span class="n">axislabels_flag</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 
@@ -118,7 +117,7 @@ Doing  0</pre>
                  <span class="n">axislabels_flag</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 
 <span class="n">ax3</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">223</span><span class="p">)</span>
-<span class="n">display</span><span class="o">.</span><span class="n">plot_ppi</span><span class="p">(</span><span class="s">&#39;diff_phase&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax3</span><span class="p">,</span>
+<span class="n">display</span><span class="o">.</span><span class="n">plot_ppi</span><span class="p">(</span><span class="s">&#39;specific_differential_phase&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax3</span><span class="p">,</span>
                  <span class="n">title</span><span class="o">=</span><span class="s">&#39;Raw Specific Differential Phase&#39;</span><span class="p">,</span> <span class="n">colorbar_label</span><span class="o">=</span><span class="s">&#39;&#39;</span><span class="p">,</span>
                  <span class="n">axislabels_flag</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
 
@@ -139,7 +138,7 @@ Doing  0</pre>
 <span class="n">display</span><span class="o">.</span><span class="n">plot_ray</span><span class="p">(</span><span class="s">&#39;proc_dp_phase_shift&#39;</span><span class="p">,</span> <span class="n">ray_num</span><span class="p">,</span> <span class="n">format_str</span><span class="o">=</span><span class="s">&#39;b-&#39;</span><span class="p">,</span>
                  <span class="n">axislabels_flag</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">title_flag</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 
-<span class="n">display</span><span class="o">.</span><span class="n">plot_ray</span><span class="p">(</span><span class="s">&#39;unf_dp_phase_shift&#39;</span><span class="p">,</span> <span class="n">ray_num</span><span class="p">,</span> <span class="n">format_str</span><span class="o">=</span><span class="s">&#39;g-&#39;</span><span class="p">,</span>
+<span class="n">display</span><span class="o">.</span><span class="n">plot_ray</span><span class="p">(</span><span class="s">&#39;unfolded_differential_phase&#39;</span><span class="p">,</span> <span class="n">ray_num</span><span class="p">,</span> <span class="n">format_str</span><span class="o">=</span><span class="s">&#39;g-&#39;</span><span class="p">,</span>
                  <span class="n">axislabels_flag</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">title_flag</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 
 <span class="c"># set labels</span>
@@ -151,8 +150,8 @@ Doing  0</pre>
 <span class="n">ax2</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">twinx</span><span class="p">()</span>
 <span class="n">display</span><span class="o">.</span><span class="n">plot_ray</span><span class="p">(</span><span class="s">&#39;recalculated_diff_phase&#39;</span><span class="p">,</span> <span class="n">ray_num</span><span class="p">,</span> <span class="n">format_str</span><span class="o">=</span><span class="s">&#39;r-&#39;</span><span class="p">,</span>
                  <span class="n">axislabels_flag</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">title_flag</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">)</span>
-<span class="n">radar</span><span class="o">.</span><span class="n">add_field_like</span><span class="p">(</span><span class="s">&#39;reflectivity_horizontal&#39;</span><span class="p">,</span> <span class="s">&#39;scaled_reflectivity&#39;</span><span class="p">,</span>
-                     <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s">&#39;reflectivity_horizontal&#39;</span><span class="p">][</span><span class="s">&#39;data&#39;</span><span class="p">]</span><span class="o">/</span><span class="mf">10.</span><span class="p">)</span>
+<span class="n">radar</span><span class="o">.</span><span class="n">add_field_like</span><span class="p">(</span><span class="s">&#39;reflectivity&#39;</span><span class="p">,</span> <span class="s">&#39;scaled_reflectivity&#39;</span><span class="p">,</span>
+                     <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s">&#39;reflectivity&#39;</span><span class="p">][</span><span class="s">&#39;data&#39;</span><span class="p">]</span><span class="o">/</span><span class="mf">10.</span><span class="p">)</span>
 <span class="n">display</span><span class="o">.</span><span class="n">plot_ray</span><span class="p">(</span><span class="s">&#39;scaled_reflectivity&#39;</span><span class="p">,</span> <span class="n">ray_num</span><span class="p">,</span> <span class="n">format_str</span><span class="o">=</span><span class="s">&#39;b-&#39;</span><span class="p">,</span>
                  <span class="n">axislabels_flag</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">title_flag</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">)</span>
 
@@ -164,7 +163,7 @@ Doing  0</pre>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the example:</strong>  174.81 seconds</p>
+<p><strong>Total running time of the example:</strong>  174.21 seconds</p>
 </div>
 
 
@@ -225,7 +224,7 @@ Doing  0</pre>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Oct 29, 2013.
+      Last updated on Nov 15, 2013.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>

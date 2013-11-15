@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.0.0.dev-2632d0f',
+        VERSION:     '1.0.0.dev-9b578da',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -28,7 +28,7 @@
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="Py-ART Documentation (DRAFT)" href="../../index.html" />
     <link rel="up" title="Examples" href="../index.html" />
-    <link rel="next" title="Create a RHI plot from a MDV file" href="plot_rhi_mdv.html" />
+    <link rel="next" title="Create a plot of NEXRAD reflectivity" href="plot_nexrad_reflectivity.html" />
     <link rel="prev" title="Map two radars to a Cartesian grid" href="../mapping/plot_map_two_radars_to_grid.html" /> 
   </head>
   <body>
@@ -45,7 +45,7 @@
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="plot_rhi_mdv.html" title="Create a RHI plot from a MDV file"
+          <a href="plot_nexrad_reflectivity.html" title="Create a plot of NEXRAD reflectivity"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="../mapping/plot_map_two_radars_to_grid.html" title="Map two radars to a Cartesian grid"
@@ -80,13 +80,13 @@
 <span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
-<span class="n">display</span><span class="o">.</span><span class="n">plot_ppi</span><span class="p">(</span><span class="s">&#39;reflectivity_horizontal&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">32</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">64.</span><span class="p">)</span>
+<span class="n">display</span><span class="o">.</span><span class="n">plot_ppi</span><span class="p">(</span><span class="s">&#39;reflectivity&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">32</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">64.</span><span class="p">)</span>
 <span class="n">display</span><span class="o">.</span><span class="n">plot_range_rings</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">])</span>
 <span class="n">display</span><span class="o">.</span><span class="n">plot_cross_hair</span><span class="p">(</span><span class="mf">5.</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the example:</strong>  3.28 seconds</p>
+<p><strong>Total running time of the example:</strong>  3.61 seconds</p>
 </div>
 
 
@@ -99,8 +99,8 @@
   <p class="topless"><a href="../mapping/plot_map_two_radars_to_grid.html"
                         title="previous chapter">Map two radars to a Cartesian grid</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="plot_rhi_mdv.html"
-                        title="next chapter">Create a RHI plot from a MDV file</a></p>
+  <p class="topless"><a href="plot_nexrad_reflectivity.html"
+                        title="next chapter">Create a plot of NEXRAD reflectivity</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/auto_examples/plotting/plot_ppi_sigmet.txt"
@@ -136,7 +136,7 @@
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="plot_rhi_mdv.html" title="Create a RHI plot from a MDV file"
+          <a href="plot_nexrad_reflectivity.html" title="Create a plot of NEXRAD reflectivity"
              >next</a> |</li>
         <li class="right" >
           <a href="../mapping/plot_map_two_radars_to_grid.html" title="Map two radars to a Cartesian grid"
@@ -147,7 +147,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Oct 29, 2013.
+      Last updated on Nov 15, 2013.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>

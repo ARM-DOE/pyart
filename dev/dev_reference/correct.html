@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.0.0.dev-2632d0f',
+        VERSION:     '1.0.0.dev-9b578da',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <link rel="top" title="Py-ART Documentation (DRAFT)" href="../index.html" />
     <link rel="up" title="Developer Reference Manual" href="index.html" />
     <link rel="next" title="pyart.correct.attenuation.calculate_attenuation" href="generated/pyart.correct.attenuation.calculate_attenuation.html" />
-    <link rel="prev" title="pyart.io._sigmetfile._unpack_ingest_header" href="generated/pyart.io._sigmetfile._unpack_ingest_header.html" /> 
+    <link rel="prev" title="pyart.config.FileMetadata.get_metadata" href="generated/pyart.config.FileMetadata.get_metadata.html" /> 
   </head>
   <body>
     <div class="related">
@@ -48,7 +48,7 @@
           <a href="generated/pyart.correct.attenuation.calculate_attenuation.html" title="pyart.correct.attenuation.calculate_attenuation"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="generated/pyart.io._sigmetfile._unpack_ingest_header.html" title="pyart.io._sigmetfile._unpack_ingest_header"
+          <a href="generated/pyart.config.FileMetadata.get_metadata.html" title="pyart.config.FileMetadata.get_metadata"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">Py-ART Documentation (DRAFT)</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Developer Reference Manual</a> &raquo;</li> 
@@ -101,7 +101,8 @@
 <span class="target" id="module-pyart.correct.phase_proc"></span><div class="section" id="pyart-correct-phase-proc">
 <h2>pyart.correct.phase_proc<a class="headerlink" href="#pyart-correct-phase-proc" title="Permalink to this headline">¶</a></h2>
 <p>Utilities for working with phase data.</p>
-<p>Code adapted from PAPER by Scott Giangrande et al</p>
+<p>Code based upon algorithm descriped in:
+S. E. Giangrande et al, J. of Atmos. and Ocean. Tech., 2013, 30, 1716.</p>
 <p>Adapted by Scott Collis and Scott Giangrande, refactored by Jonathan Helmus</p>
 <table border="1" class="longtable docutils">
 <colgroup>
@@ -152,7 +153,7 @@
 <td>Solve the Linear Programming problem given in Giangrande et al, 2012 using</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.phase_proc.phase_proc_lp.html#pyart.correct.phase_proc.phase_proc_lp" title="pyart.correct.phase_proc.phase_proc_lp"><tt class="xref py py-obj docutils literal"><span class="pre">phase_proc_lp</span></tt></a>(radar,&nbsp;offset[,&nbsp;debug,&nbsp;...])</td>
-<td>Phase process using a LP method[1].</td>
+<td>Phase process using a LP method [1].</td>
 </tr>
 </tbody>
 </table>
@@ -200,8 +201,8 @@
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="generated/pyart.io._sigmetfile._unpack_ingest_header.html"
-                        title="previous chapter">pyart.io._sigmetfile._unpack_ingest_header</a></p>
+  <p class="topless"><a href="generated/pyart.config.FileMetadata.get_metadata.html"
+                        title="previous chapter">pyart.config.FileMetadata.get_metadata</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="generated/pyart.correct.attenuation.calculate_attenuation.html"
                         title="next chapter">pyart.correct.attenuation.calculate_attenuation</a></p>
@@ -243,7 +244,7 @@
           <a href="generated/pyart.correct.attenuation.calculate_attenuation.html" title="pyart.correct.attenuation.calculate_attenuation"
              >next</a> |</li>
         <li class="right" >
-          <a href="generated/pyart.io._sigmetfile._unpack_ingest_header.html" title="pyart.io._sigmetfile._unpack_ingest_header"
+          <a href="generated/pyart.config.FileMetadata.get_metadata.html" title="pyart.config.FileMetadata.get_metadata"
              >previous</a> |</li>
         <li><a href="../index.html">Py-ART Documentation (DRAFT)</a> &raquo;</li>
           <li><a href="index.html" >Developer Reference Manual</a> &raquo;</li> 
@@ -251,7 +252,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Oct 29, 2013.
+      Last updated on Nov 15, 2013.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
