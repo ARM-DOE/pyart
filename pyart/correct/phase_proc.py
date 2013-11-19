@@ -19,7 +19,6 @@ Adapted by Scott Collis and Scott Giangrande, refactored by Jonathan Helmus
     snr
     unwrap_masked
     smooth_and_trim
-    sobel
     noise
     get_phidp_unf
     construct_A_matrix
@@ -35,6 +34,7 @@ from time import time
 
 import numpy as np
 from numpy import ma
+import scipy.ndimage
 
 from ..config import get_fillvalue, get_field_name, get_metadata
 
@@ -285,31 +285,6 @@ def smooth_and_trim(x, window_len=11, window='hanning'):
     y = np.convolve(w / w.sum(), s, mode='valid')
 
     return y[window_len / 2:len(x) + window_len / 2]
-
-
-def sobel(x, window_len=11):
-    """
-    Sobel differential filter, useful for calculating KDP.
-
-    Parameters
-    ----------
-    x : array
-        Input signal.
-    window_len : int
-        Length of window.
-
-    Returns
-    -------
-    output : array
-        Differential signal (Unscaled for gate spacing)
-
-    """
-    s = np.r_[x[window_len - 1:0:-1], x, x[-1:-window_len:-1]]
-    w = 2.0 * np.arange(window_len) / (window_len-1.0) - 1.0
-    w = w / (abs(w).sum())
-    y = np.convolve(w, s, mode='valid')
-    return (-1.0 * y[window_len / 2:len(x) + window_len / 2] /
-            (window_len / 3.0))
 
 
 def noise(line, wl=11):
@@ -690,7 +665,7 @@ def phase_proc_lp(radar, offset, debug=False, self_const=60000.0,
                   overide_sys_phase=False, nowrap=None, really_verbose=False,
                   LP_solver='pyglpk', refl_field=None, ncp_field=None,
                   rhv_field=None, phidp_field=None, kdp_field=None,
-                  unf_field=None):
+                  unf_field=None, window_len=35):
     """
     Phase process using a LP method [1].
 
@@ -740,6 +715,9 @@ def phase_proc_lp(radar, offset, debug=False, self_const=60000.0,
         contain the unfolded differential phase.  Metadata for this field
         will be taken from the phidp_field.  A value of None will use
         the default field name as defined in the Py-ART configuration file.
+    window_len : int
+        Length of Sobel window applied to PhiDP field when prior to
+        calculating KDP.
 
     Returns
     -------
@@ -837,11 +815,12 @@ def phase_proc_lp(radar, offset, debug=False, self_const=60000.0,
     proc_ph['valid_max'] = 400.0        # XXX is this correct?
 
     # prepare output
-    kdp = np.zeros(radar.fields[phidp_field]['data'].shape)
-    for i in range(kdp.shape[0]):
-        kdp[i, :] = (sobel(proc_ph['data'][i, :], window_len=35) /
-                     (2.0 * (radar.range['data'][1] -
-                     radar.range['data'][0]) / 1000.0))
+    sobel = 2. * np.arange(window_len)/(window_len - 1.0) - 1.0
+    sobel = sobel/(abs(sobel).sum())
+    sobel = sobel[::-1]
+    gate_spacing = (radar.range['data'][1] - radar.range['data'][0]) / 1000.
+    kdp = (scipy.ndimage.filters.convolve1d(proc_ph['data'], sobel, axis=1) /
+           ((window_len / 3.0) * 2.0 * gate_spacing))
 
     # copy the KDP metadata from existing field or create anew
     if kdp_field in radar.fields:
