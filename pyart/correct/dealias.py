@@ -26,7 +26,7 @@ from ..util import datetime_utils
 
 def dealias_fourdd(radar, sounding_heights, sounding_wind_speeds,
                    sounding_wind_direction, datetime_sounding,
-                   prep=1, filt=1, rsl_badval=131072,
+                   prep=1, filt=1, rsl_badval=131072, keep_original=False,
                    refl=None, vel=None, corr_vel=None, debug=False):
     """
     Dealias the Doppler velocities field using the University of Washington
@@ -58,6 +58,10 @@ def dealias_fourdd(radar, sounding_heights, sounding_wind_speeds,
         Flag controlling Bergen and Albers filter, 1 = yes, 0 = no.
     rsl_badval : int
         Value which represented a bad, masked, points in RSL.
+    keep_original : bool
+        True to keep original doppler velocity values when the dealiasing
+        procedure fails, otherwises these gates will be masked.  NaN values
+        are still masked.
     refl : str
         Field in radar to use as the doppler velocities during dealiasing.
         None will use the default field name from the Py-ART configuration
@@ -136,7 +140,12 @@ def dealias_fourdd(radar, sounding_heights, sounding_wind_speeds,
     # reshape and mask data
     data.shape = (-1, radar.ngates)
     data[np.where(np.isnan(data))] = fill_value
-    data[np.where(data == rsl_badval)] = fill_value
+    bad_gates = np.where(data == rsl_badval)
+    if keep_original:
+        vel_array.shape = (-1, radar.ngates)
+        data[bad_gates] = vel_array[bad_gates]
+    else:
+        data[bad_gates] = fill_value
     data = np.ma.masked_equal(data, fill_value)
 
     # create and return field dictionary containing dealiased data
