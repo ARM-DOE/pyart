@@ -24,9 +24,9 @@ of the script/session or until a new configuration is loaded.
 ##############################################################################
 # Simple configuration
 #
-# Adjust the values of the variable (left hand side of the equal sign) in this
-# section for an easy method of customizing Py-ART.  Do not change the
-# variables names (the right hand side of the equal sign).  More advanced
+# Adjust the values of the variable (right hand side of the equal sign) in
+# this section for an easy method of customizing Py-ART.  Do not change the
+# variables names (the left hand side of the equal sign).  More advanced
 # settings are based upon these variables.  Most users will find that
 # adjusting this section is all that is needed.
 ##############################################################################
