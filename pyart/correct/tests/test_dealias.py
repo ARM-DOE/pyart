@@ -41,17 +41,34 @@ def test_dealias():
         [0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 9.5, 10.5, 11.5,
          12.5, 13.5, 12.5, 11.5, 10.5, 9.5, 8.5, 7.5, 6.5, 5.5, 4.5, 3.5,
          2.5, 1.5, 0.5])
+    assert dealias_vel['data'][13, 46] is np.ma.masked
+    assert dealias_vel['data'][13, 47] is np.ma.masked
 
 
-def perform_dealias():
+@skipif(not pyart.io._RSL_AVAILABLE)
+def test_dealias_keep_original():
+    radar, dealias_vel = perform_dealias(True)
+    assert_allclose(
+        dealias_vel['data'][13, :27],
+        [0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 9.5, 10.5, 11.5,
+         12.5, 13.5, 12.5, 11.5, 10.5, 9.5, 8.5, 7.5, 6.5, 5.5, 4.5, 3.5,
+         2.5, 1.5, 0.5])
+    assert dealias_vel['data'][13, 46] == -7.5
+    assert dealias_vel['data'][13, 47] == 8.5
+
+
+def perform_dealias(keep_original=False):
     """ Perform velocity dealiasing on reference data. """
     radar = pyart.testing.make_velocity_aliased_radar()
+    # speckling that will not be dealiased.
+    radar.fields['velocity']['data'][13, -4:] = [-7.5, 8.5, 0, 0]
     height = np.linspace(150, 250, 10).astype('float32')
     speed = np.ones((10), dtype='float32') * 0.5
     direction = np.ones((10), dtype='float32') * 5.
     target = datetime.datetime(2011, 5, 10, 11, 30, 8)
     dealias_vel = pyart.correct.dealias_fourdd(radar, height, speed, direction,
-                                               target)
+                                               target,
+                                               keep_original=keep_original)
     return radar, dealias_vel
 
 
