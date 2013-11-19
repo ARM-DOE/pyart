@@ -32,7 +32,7 @@ def corner_to_point(corner, point):
     corner : (float, float)
         Latitude and longitude in degrees of the corner.
     point : (float, float)
-        Latitude and longtide in degrees of the point.
+        Latitude and longitude in degrees of the point.
 
     Returns
     -------
@@ -50,19 +50,20 @@ def corner_to_point(corner, point):
 
 def ax_radius(lat, units='radians'):
     """
-    Return the radius of a constant longitude circle at a given latitude.
+    Return the radius of a constant latitude circle for a given latitude.
 
     Parameters
     ----------
     lat : float
-        Latitude to calculate constant longitude circle radius.
+        Latitude at which to calculate constant latitude circle (parallel)
+        radius.
     units : 'radians' or 'degrees'
         Units of lat, either 'radians' or 'degrees'.
 
     Returns
     -------
     R : float
-        Radius in meters of a constant longitude circle at latitude.
+        Radius in meters of a constant latitude circle (parallel).
 
     """
     Re = 6371.0 * 1000.0
