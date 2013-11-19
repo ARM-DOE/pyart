@@ -131,28 +131,25 @@ S. E. Giangrande et al, J. of Atmos. and Ocean. Tech., 2013, 30, 1716.</p>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.phase_proc.smooth_and_trim.html#pyart.correct.phase_proc.smooth_and_trim" title="pyart.correct.phase_proc.smooth_and_trim"><tt class="xref py py-obj docutils literal"><span class="pre">smooth_and_trim</span></tt></a>(x[,&nbsp;window_len,&nbsp;window])</td>
 <td>Smooth data using a window with requested size.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.correct.phase_proc.sobel.html#pyart.correct.phase_proc.sobel" title="pyart.correct.phase_proc.sobel"><tt class="xref py py-obj docutils literal"><span class="pre">sobel</span></tt></a>(x[,&nbsp;window_len])</td>
-<td>Sobel differential filter, useful for calculating KDP.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.phase_proc.noise.html#pyart.correct.phase_proc.noise" title="pyart.correct.phase_proc.noise"><tt class="xref py py-obj docutils literal"><span class="pre">noise</span></tt></a>(line[,&nbsp;wl])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.correct.phase_proc.noise.html#pyart.correct.phase_proc.noise" title="pyart.correct.phase_proc.noise"><tt class="xref py py-obj docutils literal"><span class="pre">noise</span></tt></a>(line[,&nbsp;wl])</td>
 <td>Return the noise after smoothing.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.correct.phase_proc.get_phidp_unf.html#pyart.correct.phase_proc.get_phidp_unf" title="pyart.correct.phase_proc.get_phidp_unf"><tt class="xref py py-obj docutils literal"><span class="pre">get_phidp_unf</span></tt></a>(radar[,&nbsp;ncp_lev,&nbsp;rhohv_lev,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.phase_proc.get_phidp_unf.html#pyart.correct.phase_proc.get_phidp_unf" title="pyart.correct.phase_proc.get_phidp_unf"><tt class="xref py py-obj docutils literal"><span class="pre">get_phidp_unf</span></tt></a>(radar[,&nbsp;ncp_lev,&nbsp;rhohv_lev,&nbsp;...])</td>
 <td>Get Unfolded Phi differential phase</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.phase_proc.construct_A_matrix.html#pyart.correct.phase_proc.construct_A_matrix" title="pyart.correct.phase_proc.construct_A_matrix"><tt class="xref py py-obj docutils literal"><span class="pre">construct_A_matrix</span></tt></a>(n_gates,&nbsp;filt)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.correct.phase_proc.construct_A_matrix.html#pyart.correct.phase_proc.construct_A_matrix" title="pyart.correct.phase_proc.construct_A_matrix"><tt class="xref py py-obj docutils literal"><span class="pre">construct_A_matrix</span></tt></a>(n_gates,&nbsp;filt)</td>
 <td>Construct a row-augmented A matrix. Equation 5 in Giangrande et al, 2012.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.correct.phase_proc.construct_B_vectors.html#pyart.correct.phase_proc.construct_B_vectors" title="pyart.correct.phase_proc.construct_B_vectors"><tt class="xref py py-obj docutils literal"><span class="pre">construct_B_vectors</span></tt></a>(phidp_mod,&nbsp;z_mod,&nbsp;filt)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.phase_proc.construct_B_vectors.html#pyart.correct.phase_proc.construct_B_vectors" title="pyart.correct.phase_proc.construct_B_vectors"><tt class="xref py py-obj docutils literal"><span class="pre">construct_B_vectors</span></tt></a>(phidp_mod,&nbsp;z_mod,&nbsp;filt)</td>
 <td>Construct B vectors.  See Giangrande et al, 2012.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.phase_proc.LP_solver_cvxopt.html#pyart.correct.phase_proc.LP_solver_cvxopt" title="pyart.correct.phase_proc.LP_solver_cvxopt"><tt class="xref py py-obj docutils literal"><span class="pre">LP_solver_cvxopt</span></tt></a>(A_Matrix,&nbsp;B_vectors,&nbsp;weights)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.correct.phase_proc.LP_solver_cvxopt.html#pyart.correct.phase_proc.LP_solver_cvxopt" title="pyart.correct.phase_proc.LP_solver_cvxopt"><tt class="xref py py-obj docutils literal"><span class="pre">LP_solver_cvxopt</span></tt></a>(A_Matrix,&nbsp;B_vectors,&nbsp;weights)</td>
 <td>Solve the Linear Programming problem given in Giangrande et al, 2012 using</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.correct.phase_proc.LP_solver_pyglpk.html#pyart.correct.phase_proc.LP_solver_pyglpk" title="pyart.correct.phase_proc.LP_solver_pyglpk"><tt class="xref py py-obj docutils literal"><span class="pre">LP_solver_pyglpk</span></tt></a>(A_Matrix,&nbsp;B_vectors,&nbsp;weights)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.phase_proc.LP_solver_pyglpk.html#pyart.correct.phase_proc.LP_solver_pyglpk" title="pyart.correct.phase_proc.LP_solver_pyglpk"><tt class="xref py py-obj docutils literal"><span class="pre">LP_solver_pyglpk</span></tt></a>(A_Matrix,&nbsp;B_vectors,&nbsp;weights)</td>
 <td>Solve the Linear Programming problem given in Giangrande et al, 2012 using</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.phase_proc.phase_proc_lp.html#pyart.correct.phase_proc.phase_proc_lp" title="pyart.correct.phase_proc.phase_proc_lp"><tt class="xref py py-obj docutils literal"><span class="pre">phase_proc_lp</span></tt></a>(radar,&nbsp;offset[,&nbsp;debug,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.correct.phase_proc.phase_proc_lp.html#pyart.correct.phase_proc.phase_proc_lp" title="pyart.correct.phase_proc.phase_proc_lp"><tt class="xref py py-obj docutils literal"><span class="pre">phase_proc_lp</span></tt></a>(radar,&nbsp;offset[,&nbsp;debug,&nbsp;...])</td>
 <td>Phase process using a LP method [1].</td>
 </tr>
 </tbody>
@@ -252,7 +249,7 @@ S. E. Giangrande et al, J. of Atmos. and Ocean. Tech., 2013, 30, 1716.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Nov 15, 2013.
+      Last updated on Nov 19, 2013.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>

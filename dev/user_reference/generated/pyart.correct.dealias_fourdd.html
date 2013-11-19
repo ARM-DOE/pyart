@@ -65,7 +65,7 @@
 <h1>pyart.correct.dealias_fourdd<a class="headerlink" href="#pyart-correct-dealias-fourdd" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pyart.correct.dealias_fourdd">
-<tt class="descclassname">pyart.correct.</tt><tt class="descname">dealias_fourdd</tt><big>(</big><em>radar</em>, <em>sounding_heights</em>, <em>sounding_wind_speeds</em>, <em>sounding_wind_direction</em>, <em>datetime_sounding</em>, <em>prep=1</em>, <em>filt=1</em>, <em>rsl_badval=131072</em>, <em>refl=None</em>, <em>vel=None</em>, <em>corr_vel=None</em>, <em>debug=False</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/correct/dealias.py#L27"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.correct.dealias_fourdd" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">pyart.correct.</tt><tt class="descname">dealias_fourdd</tt><big>(</big><em>radar</em>, <em>sounding_heights</em>, <em>sounding_wind_speeds</em>, <em>sounding_wind_direction</em>, <em>datetime_sounding</em>, <em>prep=1</em>, <em>filt=1</em>, <em>rsl_badval=131072</em>, <em>keep_original=False</em>, <em>refl=None</em>, <em>vel=None</em>, <em>corr_vel=None</em>, <em>debug=False</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/correct/dealias.py#L27"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.correct.dealias_fourdd" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dealias the Doppler velocities field using the University of Washington
 4DD algorithm utilizing information from sounding data.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -118,6 +118,12 @@ array is stored under the &#8216;data&#8217; key.</p>
 <p><strong>rsl_badval</strong> : int</p>
 <blockquote>
 <div><p>Value which represented a bad, masked, points in RSL.</p>
+</div></blockquote>
+<p><strong>keep_original</strong> : bool</p>
+<blockquote>
+<div><p>True to keep original doppler velocity values when the dealiasing
+procedure fails, otherwises these gates will be masked.  NaN values
+are still masked.</p>
 </div></blockquote>
 <p><strong>refl</strong> : str</p>
 <blockquote>
@@ -214,7 +220,7 @@ Dealising Scheme, Journal of Atmospheric and Oceanic Technology, 2001, 18,
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Nov 15, 2013.
+      Last updated on Nov 19, 2013.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>

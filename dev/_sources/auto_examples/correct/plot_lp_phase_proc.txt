@@ -31,7 +31,7 @@ fields of a ARM C-SAPR radar.
 
   Unfolding
   Unfolding
-  Exec time:  13.2823121548
+  Exec time:  13.6145980358
   Doing  0
 
 
@@ -41,5 +41,5 @@ fields of a ARM C-SAPR radar.
 .. literalinclude:: plot_lp_phase_proc.py
     :lines: 10-
 
-**Total running time of the example:**  174.21 seconds
+**Total running time of the example:**  177.64 seconds
     

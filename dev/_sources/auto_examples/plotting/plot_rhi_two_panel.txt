@@ -24,5 +24,5 @@ included in the two panels are reflectivity and doppler velocity.
 .. literalinclude:: plot_rhi_two_panel.py
     :lines: 10-
 
-**Total running time of the example:**  1.86 seconds
+**Total running time of the example:**  1.89 seconds
     

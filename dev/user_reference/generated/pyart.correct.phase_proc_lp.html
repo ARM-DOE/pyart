@@ -65,7 +65,7 @@
 <h1>pyart.correct.phase_proc_lp<a class="headerlink" href="#pyart-correct-phase-proc-lp" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pyart.correct.phase_proc_lp">
-<tt class="descclassname">pyart.correct.</tt><tt class="descname">phase_proc_lp</tt><big>(</big><em>radar</em>, <em>offset</em>, <em>debug=False</em>, <em>self_const=60000.0</em>, <em>low_z=10.0</em>, <em>high_z=53.0</em>, <em>min_phidp=0.01</em>, <em>min_ncp=0.5</em>, <em>min_rhv=0.8</em>, <em>fzl=4000.0</em>, <em>sys_phase=0.0</em>, <em>overide_sys_phase=False</em>, <em>nowrap=None</em>, <em>really_verbose=False</em>, <em>LP_solver='pyglpk'</em>, <em>refl_field=None</em>, <em>ncp_field=None</em>, <em>rhv_field=None</em>, <em>phidp_field=None</em>, <em>kdp_field=None</em>, <em>unf_field=None</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/correct/phase_proc.py#L687"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.correct.phase_proc_lp" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">pyart.correct.</tt><tt class="descname">phase_proc_lp</tt><big>(</big><em>radar</em>, <em>offset</em>, <em>debug=False</em>, <em>self_const=60000.0</em>, <em>low_z=10.0</em>, <em>high_z=53.0</em>, <em>min_phidp=0.01</em>, <em>min_ncp=0.5</em>, <em>min_rhv=0.8</em>, <em>fzl=4000.0</em>, <em>sys_phase=0.0</em>, <em>overide_sys_phase=False</em>, <em>nowrap=None</em>, <em>really_verbose=False</em>, <em>LP_solver='pyglpk'</em>, <em>refl_field=None</em>, <em>ncp_field=None</em>, <em>rhv_field=None</em>, <em>phidp_field=None</em>, <em>kdp_field=None</em>, <em>unf_field=None</em>, <em>window_len=35</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/correct/phase_proc.py#L662"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.correct.phase_proc_lp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Phase process using a LP method [1].</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -149,6 +149,11 @@ contain the unfolded differential phase.  Metadata for this field
 will be taken from the phidp_field.  A value of None will use
 the default field name as defined in the Py-ART configuration file.</p>
 </div></blockquote>
+<p><strong>window_len</strong> : int</p>
+<blockquote>
+<div><p>Length of Sobel window applied to PhiDP field when prior to
+calculating KDP.</p>
+</div></blockquote>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>reproc_phase</strong> : dict</p>
@@ -230,7 +235,7 @@ J. Atmos. and Oceanic Tech, 2013, 30, 1716.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Nov 15, 2013.
+      Last updated on Nov 19, 2013.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
