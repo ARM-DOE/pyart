@@ -22,7 +22,7 @@ Utilities for mapping radar objects to Cartesian grids.
 import numpy as np
 import scipy.spatial
 
-from ..config import get_fillvalue
+from ..config import get_fillvalue, get_field_name
 from ..graph.common import corner_to_point
 from ..io.common import radar_coords_to_cart
 from ..io.grid import Grid
@@ -243,7 +243,7 @@ class NNLocator:
 def map_to_grid(radars, grid_shape=(81, 81, 69),
                 grid_limits=((-30000., 20000), (-20000., 20000.), (0, 17000.)),
                 grid_origin=None, fields=None,
-                refl_field='reflectivity', max_refl=190.0,
+                refl_filter_flag=True, refl_field=None, max_refl=None,
                 qrf_func=None, map_roi=True, weighting_function='Barnes',
                 toa=17000.0,
                 h_factor=1.0, nb=1.5, bsp=1.0, min_radius=500.0,
@@ -275,12 +275,20 @@ def map_to_grid(radars, grid_shape=(81, 81, 69),
         List of fields within the radar objects which will be mapped to
         the cartesian grid. None, the default, will map the fields which are
         present in all the radar objects.
+    refl_filter_flag : bool
+        True to filter the collected points based on the reflectivity field.
+        False to perform no filtering.  Gates where the reflectivity field,
+        specified by the `refl_field` parameter, is not-finited, masked or
+        has a value above the `max_refl` parameter are excluded from the
+        grid interpolation.
     refl_field : str
-        Name of the field which will be used to filter the collected points
-        based on masking and maximum reflectivity.
+        Name of the field which will be used to filter the collected points.
+        A value of None will use the default field name as defined in the
+        Py-ART configuration file.
     max_refl : float
-        Maximum allowable reflectivity.  Points in the refl_field which are
-        above is value are not included in the interpolation.
+        Maximum allowable reflectivity.  Points in the `refl_field` which are
+        above is value are not included in the interpolation. None will
+        include skip this filtering.
     qrf_func : function or None
         Query radius of influence function.  A functions which takes an
         x, y, z grid location, in meters, and returns a radius (in meters)
@@ -360,7 +368,7 @@ def map_to_grid(radars, grid_shape=(81, 81, 69),
 
     # determine the number of gates (collected points) in each radar
     nradars = len(radars)
-    ngates_per_radar = [r.fields[refl_field]['data'].size for r in radars]
+    ngates_per_radar = [r.fields[fields[0]]['data'].size for r in radars]
     total_gates = np.sum(ngates_per_radar)
     gate_offset = np.cumsum([0] + ngates_per_radar)
 
@@ -407,16 +415,24 @@ def map_to_grid(radars, grid_shape=(81, 81, 69),
         del xg_loc, yg_loc
 
         # determine which gates should be included in the interpolation
-        refl_data = radar.fields[refl_field]['data']
         gflags = zg_loc < toa      # include only those below toa
-        gflags = np.logical_and(gflags, np.isfinite(refl_data))
 
-        if max_refl is not None:
-            gflags = np.logical_and(gflags, refl_data < max_refl)
+        if refl_filter_flag:
+            if refl_field is None:
+                refl_field = get_field_name('reflectivity')
 
-        if np.ma.is_masked(refl_data):
-            gflags = np.logical_and(gflags, np.logical_not(refl_data.mask))
-            gflags = gflags.data
+            refl_data = radar.fields[refl_field]['data']
+            gflags = np.logical_and(gflags, np.isfinite(refl_data))
+
+            if max_refl is not None:
+                gflags = np.logical_and(gflags, refl_data < max_refl)
+
+            if np.ma.is_masked(refl_data):
+                gflags = np.logical_and(gflags,
+                                        np.logical_not(refl_data.mask))
+                gflags = gflags.data
+
+            del refl_data
         include_gate[start:end] = gflags.flat
 
         if not copy_field_data:
@@ -424,7 +440,7 @@ def map_to_grid(radars, grid_shape=(81, 81, 69),
             # are included in the interpolation.
             filtered_gates_per_radar.append(gflags.sum())
 
-        del refl_data, gflags, zg_loc
+        del gflags, zg_loc
 
         # copy/store references to field data for lookup
         for ifield, field in enumerate(fields):
