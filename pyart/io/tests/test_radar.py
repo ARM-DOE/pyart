@@ -8,6 +8,79 @@ from numpy.testing import assert_raises
 import pyart
 
 
+def test_extract_sweeps():
+    radar = pyart.testing.make_empty_ppi_radar(100, 360, 3)
+    radar.fields['reflectivity'] = {'data': np.zeros((1080, 100))}
+    radar.fields['velocity'] = {'data': np.zeros((1080, 100))}
+
+    eradar = radar.extract_sweeps([0, 2])
+
+    # extracted radar should have 720 rays, 2 sweeps, 100 gates
+    assert eradar.time['data'].shape == (720, )
+    assert eradar.range['data'].shape == (100, )
+
+    assert eradar.metadata['instrument_name'] == 'fake_radar'
+    assert eradar.scan_type == 'ppi'
+
+    assert eradar.latitude['data'].shape == (1, )
+    assert eradar.longitude['data'].shape == (1, )
+    assert eradar.altitude['data'].shape == (1, )
+    assert eradar.altitude_agl is None
+
+    assert eradar.sweep_number['data'].shape == (2, )
+    assert eradar.sweep_mode['data'].shape == (2, )
+    assert eradar.fixed_angle['data'].shape == (2, )
+    assert eradar.sweep_start_ray_index['data'].shape == (2, )
+    assert eradar.sweep_end_ray_index['data'].shape == (2, )
+    assert eradar.target_scan_rate is None
+
+    assert eradar.azimuth['data'].shape == (720, )
+    assert eradar.elevation['data'].shape == (720, )
+    assert eradar.scan_rate is None
+    assert eradar.antenna_transition is None
+
+    assert eradar.instrument_parameters is None
+    assert eradar.radar_calibration is None
+
+    assert eradar.ngates == 100
+    assert eradar.nrays == 720
+    assert eradar.nsweeps == 2
+
+    assert eradar.fields['reflectivity']['data'].shape == (720, 100)
+    assert eradar.fields['velocity']['data'].shape == (720, 100)
+
+
+def test_extract_sweeps_extra():
+    radar = pyart.testing.make_empty_ppi_radar(10, 36, 3)
+    radar.instrument_parameters = {
+        'prt': {'data': np.zeros((108, ))},
+        'prt_mode': {'data': np.array(['fixed'] * 3)},
+        'radar_antenna_gain_h': {'data': np.array(0)},
+    }
+
+    radar.radar_calibration = {
+        'r_calib_index': {'data': np.zeros((108, ))},
+        'r_calib_time': {'data': np.zeros((8, ))}
+    }
+
+    eradar = radar.extract_sweeps([0, 2])
+
+    instr = eradar.instrument_parameters
+    assert instr['prt']['data'].shape == (72, )
+    assert instr['prt_mode']['data'].shape == (2, )
+    assert instr['radar_antenna_gain_h']['data'].shape == ()
+
+    calib = eradar.radar_calibration
+    assert calib['r_calib_index']['data'].shape == (72, )
+    assert calib['r_calib_time']['data'].shape == (8, )
+
+
+def test_extract_sweeps_errors():
+    radar = pyart.testing.make_empty_ppi_radar(10, 36, 2)
+    assert_raises(ValueError, radar.extract_sweeps, [0, 2])
+    assert_raises(ValueError, radar.extract_sweeps, [-1, 1])
+
+
 def test_radar_creation():
     radar = pyart.testing.make_target_radar()
     assert isinstance(radar, pyart.io.Radar)

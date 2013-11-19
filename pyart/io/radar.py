@@ -318,6 +318,130 @@ class Radar:
         dic['data'] = data
         return self.add_field(field_name, dic)
 
+    def extract_sweeps(self, sweeps):
+        """
+        Create a new radar contains only the data from select sweeps.
+
+        Parameters
+        ----------
+        sweeps : array_like
+            Sweeps (0-based) to include in new Radar object.
+
+        Returns
+        -------
+        radar : Radar
+            Radar object which contains a copy of data from the selected
+            sweeps.
+
+        """
+
+        # parse and verify parameters
+        sweeps = np.array(sweeps, dtype='int32')
+        if np.any(sweeps > (self.nsweeps - 1)):
+            raise ValueError('invalid sweeps indices in sweeps parameter')
+        if np.any(sweeps < 0):
+            raise ValueError('only positive sweeps can be extracted')
+
+        def mkdic(dic, select):
+            """ Make a dictionary, selecting out select from data key """
+            if dic is None:
+                return None
+            d = dic.copy()
+            if 'data' in d and select is not None:
+                d['data'] = d['data'][select].copy()
+            return d
+
+        # create array of rays which select the sweeps selected and
+        # the number of rays per sweep.
+        ray_count = (self.sweep_end_ray_index['data'] -
+                     self.sweep_start_ray_index['data'] + 1)[sweeps]
+        ssri = self.sweep_start_ray_index['data'][sweeps]
+        rays = np.concatenate(
+            [range(s, s+e) for s, e in zip(ssri, ray_count)]).astype('int32')
+
+        # radar location attribute dictionary selector
+        if len(self.altitude['data']) == 1:
+            loc_select = None
+        else:
+            loc_select = sweeps
+
+        # create new dictionaries
+        time = mkdic(self.time, rays)
+        _range = mkdic(self.range, None)
+
+        fields = {}
+        for field_name, dic in self.fields.iteritems():
+            fields[field_name] = mkdic(dic, rays)
+        metadata = mkdic(self.metadata, None)
+        scan_type = str(self.scan_type)
+
+        latitude = mkdic(self.latitude, loc_select)
+        longitude = mkdic(self.longitude, loc_select)
+        altitude = mkdic(self.altitude, loc_select)
+        altitude_agl = mkdic(self.altitude_agl, loc_select)
+
+        sweep_number = mkdic(self.sweep_number, sweeps)
+        sweep_mode = mkdic(self.sweep_mode, sweeps)
+        fixed_angle = mkdic(self.fixed_angle, sweeps)
+        sweep_start_ray_index = mkdic(self.sweep_start_ray_index, None)
+        sweep_start_ray_index['data'] = np.cumsum(np.append([0],
+                                                  ray_count[:-1]))
+        sweep_end_ray_index = mkdic(self.sweep_end_ray_index, None)
+        sweep_end_ray_index['data'] = np.cumsum(ray_count) - 1
+        target_scan_rate = mkdic(self.target_scan_rate, sweeps)
+
+        azimuth = mkdic(self.azimuth, rays)
+        elevation = mkdic(self.elevation, rays)
+        scan_rate = mkdic(self.scan_rate, rays)
+        antenna_transition = mkdic(self.antenna_transition, rays)
+
+        # instrument_parameters
+        # Filter the instrument_parameter dictionary based size of leading
+        # dimension, this might not always be correct.
+        if self.instrument_parameters is None:
+            instrument_parameters = None
+        else:
+            instrument_parameters = {}
+            for key, dic in self.instrument_parameters.iteritems():
+                if dic['data'].ndim != 0:
+                    dim0_size = dic['data'].shape[0]
+                else:
+                    dim0_size = -1
+                if dim0_size == self.nsweeps:
+                    fdic = mkdic(dic, sweeps)
+                elif dim0_size == self.nrays:
+                    fdic = mkdic(dic, rays)
+                else:   # keep everything
+                    fdic = mkdic(dic, None)
+                instrument_parameters[key] = fdic
+
+        # radar_calibration
+        # copy all field in radar_calibration as is except for
+        # r_calib_index which we filter based upon time.  This might
+        # leave some indices in the "r_calib" dimension not referenced in
+        # the r_calib_index array.
+        if self.radar_calibration is None:
+            radar_calibration = None
+        else:
+            radar_calibration = {}
+            for key, dic in self.radar_calibration.iteritems():
+                if key == 'r_calib_index':
+                    radar_calibration[key] = mkdic(dic, rays)
+                else:
+                    radar_calibration[key] = mkdic(dic, None)
+
+        return Radar(time, _range, fields, metadata, scan_type,
+                     latitude, longitude, altitude,
+                     sweep_number, sweep_mode, fixed_angle,
+                     sweep_start_ray_index, sweep_end_ray_index,
+                     azimuth, elevation,
+                     altitude_agl=altitude_agl,
+                     target_scan_rate=target_scan_rate,
+                     scan_rate=scan_rate,
+                     antenna_transition=antenna_transition,
+                     instrument_parameters=instrument_parameters,
+                     radar_calibration=radar_calibration)
+
 
 def join_radar(radar1, radar2):
 
