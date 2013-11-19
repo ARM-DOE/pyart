@@ -36,7 +36,7 @@ from time import time
 import numpy as np
 from numpy import ma
 
-from ..config import get_fillvalue, get_field_name
+from ..config import get_fillvalue, get_field_name, get_metadata
 
 
 def det_sys_phase(radar, ncp_lev=0.4, rhohv_lev=0.6,
