@@ -1,7 +1,7 @@
 """ Unit Tests for Py-ART's map/grid_mapper.py module. """
 
 import numpy as np
-from numpy.testing import assert_array_equal
+from numpy.testing import assert_array_equal, assert_raises
 
 import pyart
 
@@ -10,7 +10,7 @@ EXPECTED_CENTER_SLICE = [40, 30, 20, 10, 0, 0, 10, 20, 30, 40]
 COMMON_MAP_TO_GRID_ARGS = {
     'grid_shape': (10, 9, 3),
     'grid_limits': ((-900.0, 900.0), (-900.0, 900.0), (-400, 400)),
-    'fields': ['reflectivity'],
+    'fields': None,
     'qrf_func': lambda x, y, z: 30, }
 
 
@@ -20,6 +20,13 @@ def test_map_to_grid_default():
                                   **COMMON_MAP_TO_GRID_ARGS)
     center_slice = grids['reflectivity'][1, 4, :]
     assert_array_equal(np.round(center_slice), EXPECTED_CENTER_SLICE)
+
+
+def test_map_to_grid_errors():
+    assert_raises(ValueError, pyart.map.map_to_grid, (None, ),
+                  weighting_function='foo')
+    assert_raises(ValueError, pyart.map.map_to_grid, (None, ),
+                  algorithm='foo')
 
 
 def test_map_to_grid_qrf():
