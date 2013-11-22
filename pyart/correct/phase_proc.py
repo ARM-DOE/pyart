@@ -26,7 +26,7 @@ Adapted by Scott Collis and Scott Giangrande, refactored by Jonathan Helmus
     construct_B_vectors
     LP_solver_cvxopt
     LP_solver_pyglpk
-    _solve_cylp
+    solve_cylp
     LP_solver_cylp_mp
     LP_solver_cylp
     phase_proc_lp
@@ -729,13 +729,15 @@ def solve_cylp(model, B_vectors, weights, ray, chunksize):
     Parameters
     ----------
     model : CyClpModel
-        Model of the LP Problem, see :py:func:`LP_solver_cyclp_mp`
+        Model of the LP Problem, see :py:func:`LP_solver_cylp_mp`
     B_vectors : matrix
         Matrix containing B vectors, see :py:func:`construct_B_vectors`
     weights : array
         Weights.
-    ray : start ray
-    chunksize : number of rays to process
+    ray : int
+        Starting ray.
+    chunksize : int
+        Number of rays to process.
 
     Returns
     -------
@@ -746,6 +748,7 @@ def solve_cylp(model, B_vectors, weights, ray, chunksize):
     --------
     LP_solver_cylp_mp : Parent function.
     LP_solver_cylp : Single Process Solver.
+
     """
     from CyLP.cy.CyClpSimplex import CyClpSimplex
     from CyLP.py.modeling.CyLPModel import CyLPModel, CyLPArray
@@ -792,7 +795,8 @@ def LP_solver_cylp_mp(A_Matrix, B_vectors, weights, really_verbose=False,
         Weights.
     really_verbose : bool
         True to print CLP messaging. False to suppress.
-    proc : Number of worker processes
+    proc : int
+        Number of worker processes.
 
     Returns
     -------
@@ -1004,7 +1008,7 @@ def phase_proc_lp(radar, offset, debug=False, self_const=60000.0,
         Length of Sobel window applied to PhiDP field when prior to
         calculating KDP.
     proc : int
-        Number of worker processes, only useed when `LP_solver` is 'cylp_mp'.
+        Number of worker processes, only used when `LP_solver` is 'cylp_mp'.
 
     Returns
     -------
