@@ -19,6 +19,7 @@ Adapted by Scott Collis and Scott Giangrande, refactored by Jonathan Helmus
     snr
     unwrap_masked
     smooth_and_trim
+    smooth_and_trim_scan
     noise
     get_phidp_unf
     construct_A_matrix
@@ -285,6 +286,57 @@ def smooth_and_trim(x, window_len=11, window='hanning'):
     y = np.convolve(w / w.sum(), s, mode='valid')
 
     return y[window_len / 2:len(x) + window_len / 2]
+
+# adapted smooth and trim function to work with 2dimensional arrays
+def smooth_and_trim_scan(x, window_len=11, window='hanning'):
+    """
+    Smooth data using a window with requested size.
+
+    This method is based on the convolution of a scaled window with the signal.
+    The signal is prepared by introducing reflected copies of the signal
+    (with the window size) in both ends so that transient parts are minimized
+    in the begining and end part of the output signal.
+
+    Parameters
+    ----------
+    x : ndarray
+        The input signal
+    window_len: int
+        The dimension of the smoothing window; should be an odd integer.
+    window : str
+        The type of window from 'flat', 'hanning', 'hamming', 'bartlett',
+        'blackman' or 'sg_smooth'. A flat window will produce a moving
+        average smoothing.
+
+    Returns
+    -------
+    y : ndarray
+        The smoothed signal with length equal to the input signal.
+
+    """
+    from scipy.ndimage.filters import convolve1d
+    
+    if x.ndim != 2:
+        raise ValueError("smooth only accepts 2 dimension arrays.")
+    if x.shape[1] < window_len:
+        raise ValueError("Input dimension 1 needs to be bigger than window size.")
+    if window_len < 3:
+        return x
+    valid_windows = ['flat', 'hanning', 'hamming', 'bartlett', 'blackman',
+                     'sg_smooth']
+    if not window in valid_windows:
+        raise ValueError("Window is on of " + ' '.join(valid_windows))
+
+    if window == 'flat':  # moving average
+        w = np.ones(window_len, 'd')
+    elif window == 'sg_smooth':
+        w = np.array([0.1, .25, .3, .25, .1])
+    else:
+        w = eval('np.' + window + '(window_len)')
+
+    y = convolve1d(x, w / w.sum(), axis=1)
+
+    return y
 
 
 def noise(line, wl=11):
