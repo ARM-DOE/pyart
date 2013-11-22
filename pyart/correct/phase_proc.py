@@ -26,6 +26,7 @@ Adapted by Scott Collis and Scott Giangrande, refactored by Jonathan Helmus
     construct_B_vectors
     LP_solver_cvxopt
     LP_solver_pyglpk
+    LP_solver_cylp
     phase_proc_lp
 
 """
@@ -616,6 +617,7 @@ def LP_solver_cvxopt(A_Matrix, B_vectors, weights, solver='glpk'):
     See Also
     --------
     LP_solver_pyglpk : Solve LP problem using the PyGLPK module.
+    LP_solver_cylp : Solve LP problem using the CyLP module.
 
     """
     from cvxopt import matrix, solvers
@@ -674,6 +676,7 @@ def LP_solver_pyglpk(A_Matrix, B_vectors, weights, it_lim=7000, presolve=True,
     See Also
     --------
     LP_solver_cvxopt : Solve LP problem using the CVXOPT module.
+    LP_solver_cylp : Solve LP problem using the CyLP module.
 
     """
     import glpk
@@ -710,6 +713,71 @@ def LP_solver_pyglpk(A_Matrix, B_vectors, weights, it_lim=7000, presolve=True,
                                             window='sg_smooth')
     return mysoln
 
+def LP_solver_cylp(A_Matrix, B_vectors, weights, really_verbose=False):
+    """
+    Solve the Linear Programming problem given in Giangrande et al, 2012 using
+    the CyLP module.
+
+    Parameters
+    ----------
+    A_Matrix : matrix
+        Row augmented A matrix, see :py:func:`construct_A_matrix`
+    B_vectors : matrix
+        Matrix containing B vectors, see :py:func:`construct_B_vectors`
+    weights : array
+        Weights.
+    really_verbose : bool
+        True to print CLP messaging. False to suppress.
+
+    Returns
+    -------
+    soln : array
+        Solution to LP problem.
+
+    See Also
+    --------
+    LP_solver_cvxopt : Solve LP problem using the CVXOPT module.
+    LP_solver_pyglpk : Solve LP problem using the PyGLPK module.
+
+    """
+    from CyLP.cy.CyClpSimplex import CyClpSimplex
+    from CyLP.py.modeling.CyLPModel import CyLPModel, CyLPArray
+
+    n_gates = weights.shape[1]/2
+    n_rays = B_vectors.shape[0]
+    soln = np.zeros([n_rays, n_gates])
+
+    # Create CyLPModel and initialize it
+    model = CyLPModel()
+    G = np.matrix(A_Matrix)
+    h = CyLPArray(np.empty(B_vectors.shape[1]))
+    x = model.addVariable('x',G.shape[1])
+    model.addConstraint(G * x >= h)
+    #c = CyLPArray(np.empty(weights.shape[1]))
+    c = CyLPArray(np.squeeze(weights[0]))
+    model.objective = c * x
+
+    # import model in solver
+    s = CyClpSimplex(model)
+    # disable logging
+    if not really_verbose:
+            s.logLevel = 0
+
+    for raynum in xrange(n_rays):
+        print "raynum", raynum
+
+        # set new B_vector values for actual ray
+        s.setRowLowerArray(np.squeeze(np.asarray(B_vectors[raynum])))
+        # set new weights (objectives) for actual ray
+        #s.setObjectiveArray(np.squeeze(np.asarray(weights[raynum])))
+        # solve with dual method, it is faster
+        s.dual()
+        # extract primal solution
+        soln[raynum,:] = s.primalVariableSolution['x'][n_gates: 2*n_gates]
+
+    # apply smoothing filter on a per scan basis
+    soln = smooth_and_trim_scan(soln, window_len=5, window='sg_smooth')
+    return soln
 
 def phase_proc_lp(radar, offset, debug=False, self_const=60000.0,
                   low_z=10.0, high_z=53.0, min_phidp=0.01, min_ncp=0.5,
@@ -754,7 +822,7 @@ def phase_proc_lp(radar, offset, debug=False, self_const=60000.0,
         Gate number to begin phase unwrapping.  None will unwrap all phases.
     really_verbose : bool
         True to print LPX messaging. False to suppress.
-    LP_solver : 'pyglpk' or 'cvxopt'
+    LP_solver : 'pyglpk' or 'cvxopt' or 'cylp'
         Module to use to solve LP problem.
     refl_field, ncp_field, rhv_field, phidp_field, kdp_field: str
         Name of field in radar which contains the horizonal reflectivity,
@@ -855,6 +923,9 @@ def phase_proc_lp(radar, offset, debug=False, self_const=60000.0,
                                       really_verbose=really_verbose)
         elif LP_solver == 'cvxopt':
             mysoln = LP_solver_cvxopt(A_Matrix, B_vectors, nw)
+        elif LP_solver == 'cylp':
+            mysoln = LP_solver_cylp(A_Matrix, B_vectors, nw,            
+                                      really_verbose=really_verbose)
         else:
             raise ValueError('unknown LP_solver:' + LP_solver)
 
