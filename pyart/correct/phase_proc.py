@@ -950,7 +950,7 @@ def phase_proc_lp(radar, offset, debug=False, self_const=60000.0,
                   overide_sys_phase=False, nowrap=None, really_verbose=False,
                   LP_solver='pyglpk', refl_field=None, ncp_field=None,
                   rhv_field=None, phidp_field=None, kdp_field=None,
-                  unf_field=None, window_len=35):
+                  unf_field=None, window_len=35, proc=1):
     """
     Phase process using a LP method [1].
 
@@ -987,7 +987,7 @@ def phase_proc_lp(radar, offset, debug=False, self_const=60000.0,
         Gate number to begin phase unwrapping.  None will unwrap all phases.
     really_verbose : bool
         True to print LPX messaging. False to suppress.
-    LP_solver : 'pyglpk' or 'cvxopt' or 'cylp'
+    LP_solver : 'pyglpk' or 'cvxopt', 'cylp', or 'cylp_mp'
         Module to use to solve LP problem.
     refl_field, ncp_field, rhv_field, phidp_field, kdp_field: str
         Name of field in radar which contains the horizonal reflectivity,
@@ -1003,6 +1003,8 @@ def phase_proc_lp(radar, offset, debug=False, self_const=60000.0,
     window_len : int
         Length of Sobel window applied to PhiDP field when prior to
         calculating KDP.
+    proc : int
+        Number of worker processes, only useed when `LP_solver` is 'cylp_mp'.
 
     Returns
     -------
@@ -1092,8 +1094,9 @@ def phase_proc_lp(radar, offset, debug=False, self_const=60000.0,
             mysoln = LP_solver_cylp(A_Matrix, B_vectors, nw,
                                     really_verbose=really_verbose)
         elif LP_solver == 'cylp_mp':
-            mysoln = LP_solver_cylp_mp(A_Matrix, B_vectors, nw, proc,
-                                       really_verbose=really_verbose)
+            mysoln = LP_solver_cylp_mp(A_Matrix, B_vectors, nw,
+                                       really_verbose=really_verbose,
+                                       proc=proc)
         else:
             raise ValueError('unknown LP_solver:' + LP_solver)
 
