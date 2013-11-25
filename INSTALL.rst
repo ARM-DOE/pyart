@@ -40,10 +40,9 @@ without these packages.
 
 __ http://trmm-fc.gsfc.nasa.gov/trmm_gv/software/rsl/
 
-* PyGLPK__
-
-__ http://tfinley.net/software/pyglpk/
-
+* `CyLP <https://github.com/mpy/CyLP>`_ or 
+  `PyGLPK <http://tfinley.net/software/pyglpk/>`_ or
+  `CVXOPT <http://cvxopt.org/>`_ and their dependencies.
 
 * Basemap__
 
@@ -100,7 +99,7 @@ Frequently asked questions
   
   This is due to a bug in RSL, and can be remedied by adding
   -fno-stack-protector -D_FORTIFY_SOURCE=0 to the CFLAGS parameter of the
-  makefile of RSL.  This issue has been reported to the RSL maintainers.
+  makefile of RSL.  This issue has been fixed with the release of rsl-v1.44.
 
 * I'm having trouble getting PyGLPK to compile on my 64-bit operating system.
   Change the line in the setup.py file from
