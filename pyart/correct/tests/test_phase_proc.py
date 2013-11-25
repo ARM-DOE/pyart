@@ -27,6 +27,13 @@ except ImportError:
     glpk_available = False
 
 
+try:
+    import CyLP.cy
+    cylp_available = True
+except ImportError:
+    cylp_available = False
+
+
 PATH = os.path.dirname(__file__)
 REFERENCE_RAYS_FILE = os.path.join(PATH, 'reference_rays.npz')
 
@@ -44,6 +51,26 @@ def test_phase_proc_lp_glpk():
 @skipif(not cvxopt_available)
 def test_phase_proc_lp_cvxopt():
     radar, phidp, kdp = perform_phase_processing('cvxopt')
+    ref = np.load(REFERENCE_RAYS_FILE)
+    assert _ratio(ref['reference_phidp'], phidp['data']) <= 0.01
+    assert _ratio(ref['reference_kdp'], kdp['data']) <= 0.01
+    assert _ratio(ref['reference_unfolded_phidp'],
+                  radar.fields['unfolded_differential_phase']['data']) <= 0.01
+
+
+@skipif(not cylp_available)
+def test_phase_proc_lp_cylp():
+    radar, phidp, kdp = perform_phase_processing('cylp')
+    ref = np.load(REFERENCE_RAYS_FILE)
+    assert _ratio(ref['reference_phidp'], phidp['data']) <= 0.01
+    assert _ratio(ref['reference_kdp'], kdp['data']) <= 0.01
+    assert _ratio(ref['reference_unfolded_phidp'],
+                  radar.fields['unfolded_differential_phase']['data']) <= 0.01
+
+
+@skipif(not cylp_available)
+def test_phase_proc_lp_cylp_mp():
+    radar, phidp, kdp = perform_phase_processing('cylp_mp')
     ref = np.load(REFERENCE_RAYS_FILE)
     assert _ratio(ref['reference_phidp'], phidp['data']) <= 0.01
     assert _ratio(ref['reference_kdp'], kdp['data']) <= 0.01
