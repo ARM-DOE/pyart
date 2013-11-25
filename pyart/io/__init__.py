@@ -18,6 +18,7 @@ from and write data to a number of file formats.
     read_cfradial
     read_nexrad_archive
     read_nexrad_cdm
+    read_gamic
     write_cfradial
     read_grid
     write_grid
@@ -37,6 +38,11 @@ from .sigmet import read_sigmet
 from .cfradial import read_cfradial, write_cfradial
 from .nexrad_archive import read_nexrad_archive
 from .nexrad_cdm import read_nexrad_cdm
+try:
+    from .gamic_hdf5 import read_gamic
+    _HDF5_AVAILABLE = True
+except:
+    _HDF5_AVAILABLE = False
 from .radar import Radar
 from .grid import read_grid, write_grid, Grid
 from .auto_read import read

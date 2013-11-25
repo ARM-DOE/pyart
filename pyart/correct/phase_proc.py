@@ -19,12 +19,16 @@ Adapted by Scott Collis and Scott Giangrande, refactored by Jonathan Helmus
     snr
     unwrap_masked
     smooth_and_trim
+    smooth_and_trim_scan
     noise
     get_phidp_unf
     construct_A_matrix
     construct_B_vectors
     LP_solver_cvxopt
     LP_solver_pyglpk
+    solve_cylp
+    LP_solver_cylp_mp
+    LP_solver_cylp
     phase_proc_lp
 
 """
@@ -285,6 +289,59 @@ def smooth_and_trim(x, window_len=11, window='hanning'):
     y = np.convolve(w / w.sum(), s, mode='valid')
 
     return y[window_len / 2:len(x) + window_len / 2]
+
+
+# adapted smooth and trim function to work with 2dimensional arrays
+def smooth_and_trim_scan(x, window_len=11, window='hanning'):
+    """
+    Smooth data using a window with requested size.
+
+    This method is based on the convolution of a scaled window with the signal.
+    The signal is prepared by introducing reflected copies of the signal
+    (with the window size) in both ends so that transient parts are minimized
+    in the begining and end part of the output signal.
+
+    Parameters
+    ----------
+    x : ndarray
+        The input signal
+    window_len: int
+        The dimension of the smoothing window; should be an odd integer.
+    window : str
+        The type of window from 'flat', 'hanning', 'hamming', 'bartlett',
+        'blackman' or 'sg_smooth'. A flat window will produce a moving
+        average smoothing.
+
+    Returns
+    -------
+    y : ndarray
+        The smoothed signal with length equal to the input signal.
+
+    """
+    from scipy.ndimage.filters import convolve1d
+
+    if x.ndim != 2:
+        raise ValueError("smooth only accepts 2 dimension arrays.")
+    if x.shape[1] < window_len:
+        mess = "Input dimension 1 needs to be bigger than window size."
+        raise ValueError(mess)
+    if window_len < 3:
+        return x
+    valid_windows = ['flat', 'hanning', 'hamming', 'bartlett', 'blackman',
+                     'sg_smooth']
+    if not window in valid_windows:
+        raise ValueError("Window is on of " + ' '.join(valid_windows))
+
+    if window == 'flat':  # moving average
+        w = np.ones(window_len, 'd')
+    elif window == 'sg_smooth':
+        w = np.array([0.1, .25, .3, .25, .1])
+    else:
+        w = eval('np.' + window + '(window_len)')
+
+    y = convolve1d(x, w / w.sum(), axis=1)
+
+    return y
 
 
 def noise(line, wl=11):
@@ -564,6 +621,9 @@ def LP_solver_cvxopt(A_Matrix, B_vectors, weights, solver='glpk'):
     See Also
     --------
     LP_solver_pyglpk : Solve LP problem using the PyGLPK module.
+    LP_solver_cylp : Solve LP problem using the CyLP module.
+    LP_solver_cylp_mp : Solve LP problem using the CyLP module
+                        using multi processes.
 
     """
     from cvxopt import matrix, solvers
@@ -622,6 +682,9 @@ def LP_solver_pyglpk(A_Matrix, B_vectors, weights, it_lim=7000, presolve=True,
     See Also
     --------
     LP_solver_cvxopt : Solve LP problem using the CVXOPT module.
+    LP_solver_cylp : Solve LP problem using the CyLP module.
+    LP_solver_cylp_mp : Solve LP problem using the CyLP module
+                        using multi processes.
 
     """
     import glpk
@@ -659,13 +722,239 @@ def LP_solver_pyglpk(A_Matrix, B_vectors, weights, it_lim=7000, presolve=True,
     return mysoln
 
 
+def solve_cylp(model, B_vectors, weights, ray, chunksize):
+    """
+    Worker process for LP_solver_cylp_mp.
+
+    Parameters
+    ----------
+    model : CyClpModel
+        Model of the LP Problem, see :py:func:`LP_solver_cylp_mp`
+    B_vectors : matrix
+        Matrix containing B vectors, see :py:func:`construct_B_vectors`
+    weights : array
+        Weights.
+    ray : int
+        Starting ray.
+    chunksize : int
+        Number of rays to process.
+
+    Returns
+    -------
+    soln : array
+        Solution to LP problem.
+
+    See Also
+    --------
+    LP_solver_cylp_mp : Parent function.
+    LP_solver_cylp : Single Process Solver.
+
+    """
+    from CyLP.cy.CyClpSimplex import CyClpSimplex
+    from CyLP.py.modeling.CyLPModel import CyLPModel, CyLPArray
+
+    n_gates = weights.shape[1]/2
+    n_rays = B_vectors.shape[0]
+    soln = np.zeros([chunksize, n_gates])
+
+    # import LP model in solver
+    s = CyClpSimplex(model)
+
+    # disable logging in multiprocessing anyway
+    s.logLevel = 0
+
+    i = 0
+    for raynum in xrange(ray, ray + chunksize):
+        print("Calculating %dth ray" % (raynum))
+        # set new B_vector values for actual ray
+        s.setRowLowerArray(np.squeeze(np.asarray(B_vectors[raynum])))
+        # set new weights (objectives) for actual ray
+        s.setObjectiveArray(np.squeeze(np.asarray(weights[raynum])))
+        # solve with dual method, it is faster
+        s.dual()
+        # extract primal solution
+        soln[i, :] = s.primalVariableSolution['x'][n_gates: 2 * n_gates]
+        i = i + 1
+
+    return soln
+
+
+def LP_solver_cylp_mp(A_Matrix, B_vectors, weights, really_verbose=False,
+                      proc=1):
+    """
+    Solve the Linear Programming problem given in Giangrande et al, 2012 using
+    the CyLP module using multiple processes.
+
+    Parameters
+    ----------
+    A_Matrix : matrix
+        Row augmented A matrix, see :py:func:`construct_A_matrix`
+    B_vectors : matrix
+        Matrix containing B vectors, see :py:func:`construct_B_vectors`
+    weights : array
+        Weights.
+    really_verbose : bool
+        True to print CLP messaging. False to suppress.
+    proc : int
+        Number of worker processes.
+
+    Returns
+    -------
+    soln : array
+        Solution to LP problem.
+
+    See Also
+    --------
+    LP_solver_cvxopt : Solve LP problem using the CVXOPT module.
+    LP_solver_pyglpk : Solve LP problem using the PyGLPK module.
+    LP_solver_cylp : Solve LP problem using the CyLP module using single
+                     process.
+
+    """
+    from CyLP.cy.CyClpSimplex import CyClpSimplex
+    from CyLP.py.modeling.CyLPModel import CyLPModel, CyLPArray
+    import multiprocessing as mp
+
+    n_gates = weights.shape[1]/2
+    n_rays = B_vectors.shape[0]
+    soln = np.zeros([n_rays, n_gates])
+
+    # Create CyLPModel and initialize it
+    model = CyLPModel()
+    G = np.matrix(A_Matrix)
+    h = CyLPArray(np.empty(B_vectors.shape[1]))
+    x = model.addVariable('x', G.shape[1])
+    model.addConstraint(G * x >= h)
+    c = CyLPArray(np.empty(weights.shape[1]))
+    #c = CyLPArray(np.squeeze(weights[0]))
+    model.objective = c * x
+
+    chunksize = int(n_rays/proc)
+    # check if equal sized chunks can be distributed to worker processes
+    if n_rays % chunksize != 0:
+        print("Problem of %d rays cannot be split to %d worker processes!\n\r"
+              "Fallback to 1 process!" % (n_rays, proc))
+        chunksize = n_rays  # fall back to one process
+        proc = 1
+
+    print("Calculating with %d processes, %d rays per chunk" %
+          (proc, chunksize))
+
+    def worker(model, B_vectors, weights, ray, chunksize, out_q):
+        """
+        The worker function, invoked in a process.
+        The results are placed in a dictionary that's pushed to a queue.
+        """
+        outdict = {}
+        iray = int(ray/chunksize)
+        outdict[iray] = solve_cylp(model, B_vectors, weights, ray, chunksize)
+        out_q.put(outdict)
+
+    # Queue for LP solutions
+    out_q = mp.Queue()
+    procs = []
+
+    # fire off worker processes
+    for raynum in xrange(0, n_rays, chunksize):
+        p = mp.Process(target=worker, args=(
+            model, B_vectors, weights, raynum, chunksize, out_q))
+        procs.append(p)
+        p.start()
+
+    # collecting results
+    resultdict = {}
+    for raynum in xrange(0, n_rays, chunksize):
+        resultdict.update(out_q.get())
+
+    # Wait for all worker processes to finish
+    for p in procs:
+        p.join()
+
+    # copy results in output array
+    for raynum in xrange(0, int(n_rays / chunksize)):
+        soln[raynum * chunksize:raynum * chunksize + chunksize, :] = (
+            resultdict[raynum])
+
+    # apply smoothing filter to output array
+    soln = smooth_and_trim_scan(soln, window_len=5, window='sg_smooth')
+
+    return soln
+
+
+def LP_solver_cylp(A_Matrix, B_vectors, weights, really_verbose=False):
+    """
+    Solve the Linear Programming problem given in Giangrande et al, 2012 using
+    the CyLP module.
+
+    Parameters
+    ----------
+    A_Matrix : matrix
+        Row augmented A matrix, see :py:func:`construct_A_matrix`
+    B_vectors : matrix
+        Matrix containing B vectors, see :py:func:`construct_B_vectors`
+    weights : array
+        Weights.
+    really_verbose : bool
+        True to print CLP messaging. False to suppress.
+
+    Returns
+    -------
+    soln : array
+        Solution to LP problem.
+
+    See Also
+    --------
+    LP_solver_cvxopt : Solve LP problem using the CVXOPT module.
+    LP_solver_pyglpk : Solve LP problem using the PyGLPK module.
+
+    """
+    from CyLP.cy.CyClpSimplex import CyClpSimplex
+    from CyLP.py.modeling.CyLPModel import CyLPModel, CyLPArray
+
+    n_gates = weights.shape[1]/2
+    n_rays = B_vectors.shape[0]
+    soln = np.zeros([n_rays, n_gates])
+
+    # Create CyLPModel and initialize it
+    model = CyLPModel()
+    G = np.matrix(A_Matrix)
+    h = CyLPArray(np.empty(B_vectors.shape[1]))
+    x = model.addVariable('x', G.shape[1])
+    model.addConstraint(G * x >= h)
+    #c = CyLPArray(np.empty(weights.shape[1]))
+    c = CyLPArray(np.squeeze(weights[0]))
+    model.objective = c * x
+
+    # import model in solver
+    s = CyClpSimplex(model)
+    # disable logging
+    if not really_verbose:
+            s.logLevel = 0
+
+    for raynum in xrange(n_rays):
+        print "raynum", raynum
+
+        # set new B_vector values for actual ray
+        s.setRowLowerArray(np.squeeze(np.asarray(B_vectors[raynum])))
+        # set new weights (objectives) for actual ray
+        #s.setObjectiveArray(np.squeeze(np.asarray(weights[raynum])))
+        # solve with dual method, it is faster
+        s.dual()
+        # extract primal solution
+        soln[raynum, :] = s.primalVariableSolution['x'][n_gates: 2 * n_gates]
+
+    # apply smoothing filter on a per scan basis
+    soln = smooth_and_trim_scan(soln, window_len=5, window='sg_smooth')
+    return soln
+
+
 def phase_proc_lp(radar, offset, debug=False, self_const=60000.0,
                   low_z=10.0, high_z=53.0, min_phidp=0.01, min_ncp=0.5,
                   min_rhv=0.8, fzl=4000.0, sys_phase=0.0,
                   overide_sys_phase=False, nowrap=None, really_verbose=False,
                   LP_solver='pyglpk', refl_field=None, ncp_field=None,
                   rhv_field=None, phidp_field=None, kdp_field=None,
-                  unf_field=None, window_len=35):
+                  unf_field=None, window_len=35, proc=1):
     """
     Phase process using a LP method [1].
 
@@ -702,7 +991,7 @@ def phase_proc_lp(radar, offset, debug=False, self_const=60000.0,
         Gate number to begin phase unwrapping.  None will unwrap all phases.
     really_verbose : bool
         True to print LPX messaging. False to suppress.
-    LP_solver : 'pyglpk' or 'cvxopt'
+    LP_solver : 'pyglpk' or 'cvxopt', 'cylp', or 'cylp_mp'
         Module to use to solve LP problem.
     refl_field, ncp_field, rhv_field, phidp_field, kdp_field: str
         Name of field in radar which contains the horizonal reflectivity,
@@ -718,6 +1007,8 @@ def phase_proc_lp(radar, offset, debug=False, self_const=60000.0,
     window_len : int
         Length of Sobel window applied to PhiDP field when prior to
         calculating KDP.
+    proc : int
+        Number of worker processes, only used when `LP_solver` is 'cylp_mp'.
 
     Returns
     -------
@@ -803,6 +1094,13 @@ def phase_proc_lp(radar, offset, debug=False, self_const=60000.0,
                                       really_verbose=really_verbose)
         elif LP_solver == 'cvxopt':
             mysoln = LP_solver_cvxopt(A_Matrix, B_vectors, nw)
+        elif LP_solver == 'cylp':
+            mysoln = LP_solver_cylp(A_Matrix, B_vectors, nw,
+                                    really_verbose=really_verbose)
+        elif LP_solver == 'cylp_mp':
+            mysoln = LP_solver_cylp_mp(A_Matrix, B_vectors, nw,
+                                       really_verbose=really_verbose,
+                                       proc=proc)
         else:
             raise ValueError('unknown LP_solver:' + LP_solver)
 
