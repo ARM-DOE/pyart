@@ -170,6 +170,9 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
     metadata = filemetadata('metadata')
     metadata['original_container'] = 'sigmet'
     metadata['instrument_name'] = ingest_config['site_name'].strip()
+    metadata['sigmet_task_name'] = (
+        sigmetfile.product_hdr['product_configuration']['task_name'])
+
     if sigmet_extended_header:
         metadata['sigmet_extended_header'] = 'true'
     else:
