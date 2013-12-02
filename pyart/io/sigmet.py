@@ -91,11 +91,6 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
     sigmetfile.close()
     nsweeps, nrays, nbins = sigmet_data[first_data_type].shape
 
-    # mark times as missing on rays not collected
-    bad_rays = (sigmet_metadata[first_data_type]['nbins'] == -1)
-    for k, v in sigmet_metadata.iteritems():
-        sigmet_metadata[k]['time'] = np.ma.masked_array(v['time'], bad_rays)
-
     # time order
     if time_ordered == 'full':
         _time_order_data_and_metadata_full(sigmet_data, sigmet_metadata)
@@ -129,7 +124,6 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
         sigmet_extended_header = True
     else:
         tdata = sigmet_metadata[first_data_type]['time'].astype('float64')
-        tdata = tdata.filled()
         sigmet_extended_header = False
 
     # add sweep_start time to all time values in each sweep.
