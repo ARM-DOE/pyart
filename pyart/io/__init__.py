@@ -22,6 +22,8 @@ from and write data to a number of file formats.
     write_cfradial
     read_grid
     write_grid
+    is_vpt
+    to_vpt
 
     Radar
     Grid
@@ -43,7 +45,7 @@ try:
     _HDF5_AVAILABLE = True
 except:
     _HDF5_AVAILABLE = False
-from .radar import Radar
+from .radar import Radar, is_vpt, to_vpt
 from .grid import read_grid, write_grid, Grid
 from .auto_read import read
 

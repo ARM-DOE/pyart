@@ -355,6 +355,87 @@ class RadarDisplay:
             self.plot_colorbar(mappable=pm, label=colorbar_label,
                                field=field, fig=fig)
 
+    def plot_vpt(self, field, mask_tuple=None, vmin=None, vmax=None,
+                 cmap='jet', mask_outside=True, title=None, title_flag=True,
+                 axislabels=(None, None), axislabels_flag=True,
+                 colorbar_flag=True, colorbar_label=None, ax=None, fig=None):
+        """
+        Plot a VPT scan.
+
+        Parameters
+        ----------
+        field : str
+            Field to plot.
+
+        Other Parameters
+        ----------------
+        mask_tuple : (str, float)
+            Tuple containing the field name and value below which to mask
+            field prior to plotting, for example to mask all data where
+            NCP < 0.5 set mask_tuple to ['NCP', 0.5]. None performs no masking.
+        vmin : float
+            Luminance minimum value, None for default value.
+        vmax : float
+            Luminance maximum value, None for default value.
+        cmap : str
+            Matplotlib colormap name.
+        mask_outside : bool
+            True to mask data outside of vmin, vmax.  False performs no
+            masking.
+        title : str
+            Title to label plot with, None to use default title generated from
+            the field and tilt parameters. Parameter is ignored if title_flag
+            is False.
+        title_flag : bool
+            True to add a title to the plot, False does not add a title.
+        axislabels : (str, str)
+            2-tuple of x-axis, y-axis labels.  None for either label will use
+            the default axis label.  Parameter is ignored if axislabels_flag is
+            False.
+        axislabel_flag : bool
+            True to add label the axes, False does not label the axes.
+        colorbar_flag : bool
+            True to add a colorbar with label to the axis.  False leaves off
+            the colorbar.
+        colorbar_label : str
+            Colorbar label, None will use a default label generated from the
+            field information.
+        ax : Axis
+            Axis to plot on. None will use the current axis.
+        fig : Figure
+            Figure to add the colorbar to. None will use the current figure.
+
+        """
+        # parse parameters
+        ax, fig = self._parse_ax_fig(ax, fig)
+        vmin, vmax = self._parse_vmin_vmax(field, vmin, vmax)
+
+        # get data for the plot
+        data = self._get_vpt_data(field, mask_tuple)
+        x = np.arange(data.shape[1])
+        y = self.ranges / 1000.
+
+        # mask the data where outside the limits
+        if mask_outside:
+            data = np.ma.masked_outside(data, vmin, vmax)
+
+        # plot the data
+        pm = ax.pcolormesh(x, y, data, vmin=vmin, vmax=vmax, cmap=cmap)
+
+        if title_flag:
+            self._set_vpt_title(field, title, ax)
+
+        if axislabels_flag:
+            self._label_axes_vpt(axislabels, ax)
+
+        # add plot and field to lists
+        self.plots.append(pm)
+        self.plot_vars.append(field)
+
+        if colorbar_flag:
+            self.plot_colorbar(mappable=pm, label=colorbar_label,
+                               field=field, fig=fig)
+
     def plot_range_rings(self, range_rings, ax=None):
         """
         Plot a series of range rings.
@@ -552,6 +633,11 @@ class RadarDisplay:
         ax = self._parse_ax(ax)
         ax.set_ylabel('Distance Above ' + self.origin + '  (km)')
 
+    def label_xaxis_rays(self, ax=None):
+        """ Label the yaxis with the default label for rays. """
+        ax = self._parse_ax(ax)
+        ax.set_xlabel('Ray number (unitless)')
+
     def label_yaxis_field(self, field, ax=None):
         """ Label the yaxis with the default label for a field units. """
         ax = self._parse_ax(ax)
@@ -561,6 +647,13 @@ class RadarDisplay:
         """ Set the figure title using a default title. """
         if title is None:
             ax.set_title(self.generate_title(field, tilt))
+        else:
+            ax.set_title(title)
+
+    def _set_vpt_title(self, field, title, ax):
+        """ Set the figure title using a default title. """
+        if title is None:
+            ax.set_title(self.generate_vpt_title(field))
         else:
             ax.set_title(title)
 
@@ -604,6 +697,18 @@ class RadarDisplay:
             ax.set_xlabel(x_label)
         if y_label is None:
             self.label_yaxis_field(field, ax)
+        else:
+            ax.set_ylabel(y_label)
+
+    def _label_axes_vpt(self, axis_labels, ax):
+        """ Set the x and y axis labels for a PPI plot. """
+        x_label, y_label = axis_labels
+        if x_label is None:
+            self.label_xaxis_rays(ax)
+        else:
+            ax.set_xlabel(x_label)
+        if y_label is None:
+            self.label_yaxis_z(ax)
         else:
             ax.set_ylabel(y_label)
 
@@ -659,6 +764,26 @@ class RadarDisplay:
         time_str = self.time_begin.isoformat() + 'Z'
         fixed_angle = self.fixed_angle[tilt]
         l1 = "%s %.1f Deg. %s " % (self.radar_name, fixed_angle, time_str)
+        field_name = self._generate_field_name(field)
+        return l1 + '\n' + field_name
+
+    def generate_vpt_title(self, field):
+        """
+        Generate a title for a VPT plot.
+
+        Parameters
+        ----------
+        field : str
+            Field plotted.
+
+        Returns
+        -------
+        title : str
+            Plot title.
+
+        """
+        time_str = self.time_begin.isoformat() + 'Z'
+        l1 = "%s %s " % (self.radar_name, time_str)
         field_name = self._generate_field_name(field)
         return l1 + '\n' + field_name
 
@@ -751,6 +876,16 @@ class RadarDisplay:
             mdata = self.fields[mask_field]['data'][start:end]
             data = np.ma.masked_where(mdata < mask_value, data)
         return data
+
+    def _get_vpt_data(self, field, mask_tuple):
+        """ Retrieve and return vpt data from a plot function. """
+        data = self.fields[field]['data']
+
+        if mask_tuple is not None:  # mask data if mask_tuple provided
+            mask_field, mask_value = mask_tuple
+            mdata = self.fields[mask_field]['data']
+            data = np.ma.masked_where(mdata < mask_value, data)
+        return data.T
 
     def _get_ray_data(self, field, ray, mask_tuple):
         """ Retrieve and return ray data from a plot function. """
