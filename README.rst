@@ -62,13 +62,14 @@ functionality is available of the the following modules are installed.
   should point to the location where RSL was installed if RSL was not
   installed in the default location (/usr/local/trmm).
 
-* `GLPK <http://www.gnu.org/software/glpk/>`_ and
-  `PyGLPK <http://tfinley.net/software/pyglpk/>`_.
-  These packages are required to use the LP phase processing method.  
-  See the discussion in the **INSTALL.rst** file if you have problems
-  installing PyGLPK. The `CVXOPT <http://cvxopt.org/>`_ package may be used
-  in place of these packages, although the results of this package have not been
-  as well tested.
+* A linear programming solver and Python wrapper to use the LP phase
+  processing method. `CyLP <https://github.com/mpy/CyLP>`_ is recommended as
+  it gives the fastest results, but 
+  `PyGLPK <http://tfinley.net/software/pyglpk/>`_ and 
+  `CVXOPT <http://cvxopt.org/>`_ are also supported. The underlying LP 
+  solvers `CBC <https://projects.coin-or.org/Cbc>`_ or 
+  `GLPK <http://www.gnu.org/software/glpk/>`_ will also be required depending
+  on which wrapper is used.
 
 * `Basemap <http://matplotlib.org/basemap/>`_ and
   `pyproj <http://code.google.com/p/pyproj/>`_.  

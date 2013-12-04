@@ -9,6 +9,8 @@ A general central radial scanning (or dwelling) instrument class.
 
     Radar
     join_radar
+    is_vpt
+    to_vpt
 
 
 """
@@ -441,6 +443,98 @@ class Radar:
                      antenna_transition=antenna_transition,
                      instrument_parameters=instrument_parameters,
                      radar_calibration=radar_calibration)
+
+
+def is_vpt(radar, offset=0.5):
+    """
+    Determine if a Radar appears to be a vertical pointing scan.
+
+    This function only verifies that the object is a vertical pointing scan,
+    use the :py:func:`to_vpt` function to convert the radar to a vpt scan
+    if this function returns True.
+
+    Parameters
+    ----------
+    radar : Radar
+        Radar object to determine if
+    offset : float
+        Maximum offset of the elevation from 90 degrees to still consider
+        to be vertically pointing.
+
+    Returns
+    -------
+    flag : bool
+        True if the radar appear to be verticle pointing, False if not.
+
+    """
+    # check that the elevation is within offset of 90 degrees.
+    elev = radar.elevation['data']
+    return np.all((elev < 90.0 + offset) & (elev > 90.0 - offset))
+
+
+def to_vpt(radar, single_scan=True):
+    """
+    Convert an existing Radar object to represent a vertical pointing scan.
+
+    This function does not verify that the Radar object contains a vertical
+    pointing scan.  To perform such a check use :py:func:`is_vpt`.
+
+    Parameters
+    ----------
+    radar : Radar
+        Mislabeled vertical pointing scan Radar object to convert to be
+        properly labeled.  This object is converted in place, no copy of
+        the existing data is made.
+    single_scan : bool, optional
+        True to convert the volume to a single scan, any azimuth angle data
+        is lost.  False will convert the scan to contain the same number of
+        scans as rays, azimuth angles are retained.
+
+    """
+    if single_scan:
+        nsweeps = 1
+        radar.azimuth['data'][:] = 0.0
+        seri = np.array([radar.nrays - 1], dtype='int32')
+        radar.sweep_end_ray_index['data'] = seri
+    else:
+        nsweeps = radar.nrays
+        # radar.azimuth not adjusted
+        radar.sweep_end_ray_index['data'] = np.arange(nsweeps, dtype='int32')
+
+    radar.scan_type = 'vpt'
+    radar.nsweeps = nsweeps
+    radar.target_scan_rate = None       # no scanning
+    radar.elevation['data'][:] = 90.0
+
+    radar.sweep_number['data'] = np.arange(nsweeps, dtype='int32')
+    radar.sweep_mode['data'] = np.array(['vertical_pointing'] * nsweeps)
+    radar.fixed_angle['data'] = np.ones(nsweeps, dtype='float32') * 90.0
+    radar.sweep_start_ray_index['data'] = np.arange(nsweeps, dtype='int32')
+
+    if radar.instrument_parameters is not None:
+        for key in ['prt_mode', 'follow_mode', 'polarization_mode']:
+            if key in radar.instrument_parameters:
+                ip_dic = radar.instrument_parameters[key]
+                ip_dic['data'] = np.array([ip_dic['data'][0]] * nsweeps)
+
+    # Attributes that do not need any changes
+    # radar.altitude
+    # radar.altitude_agl
+    # radar.latitude
+    # radar.longitude
+
+    # radar.range
+    # radar.ngates
+    # radar.nrays
+
+    # radar.metadata
+    # radar.radar_calibration
+
+    # radar.time
+    # radar.fields
+    # radar.antenna_transition
+    # radar.scan_rate
+    return
 
 
 def join_radar(radar1, radar2):

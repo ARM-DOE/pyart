@@ -121,14 +121,30 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
 
     # first sweep mode determines scan_type
     mode = str(netCDF4.chartostring(sweep_mode['data'][0]))
-    if "sur" in mode:
-        scan_type = "ppi"
-    elif "sec" in mode:
-        scan_type = "sector"
-    elif "rhi" in mode:
-        scan_type = "rhi"
+
+    # options specified in the CF/Radial standard
+    if mode == 'rhi':
+        scan_type = 'rhi'
+    elif mode == 'vertical_pointing':
+        scan_type = 'vpt'
+    elif mode == 'azimuth_surveillance':
+        scan_type = 'ppi'
+    elif mode == 'elevation_surveillance':
+        scan_type = 'rhi'
+    elif mode == 'manual_ppi':
+        scan_type = 'ppi'
+    elif mode == 'manual_rhi':
+        scan_type = 'rhi'
+
+    # fallback types
+    elif 'sur' in mode:
+        scan_type = 'ppi'
+    elif 'sec' in mode:
+        scan_type = 'sector'
+    elif 'rhi' in mode:
+        scan_type = 'rhi'
     else:
-        scan_type = "other"
+        scan_type = 'other'
 
     # 4.8 Sensor pointing variables -> create attribute dictionaries
     azimuth = _ncvar_to_dict(ncvars['azimuth'])

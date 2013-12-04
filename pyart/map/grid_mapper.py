@@ -364,6 +364,7 @@ def map_to_grid(radars, grid_shape=(81, 81, 69),
         fields = set(radars[0].fields.keys())
         for radar in radars[1:]:
             fields = fields.intersection(radar.fields.keys())
+        fields = list(fields)
     nfields = len(fields)
 
     # determine the number of gates (collected points) in each radar
