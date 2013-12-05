@@ -614,3 +614,9 @@ def test_rhi_elevation():
     assert 'axis' in RADAR_RHI.elevation
     assert RADAR_RHI.elevation['data'].shape == (283, )
     assert round(RADAR_RHI.elevation['data'][0], 2) == 19.6
+
+
+def test_open_from_file_obj():
+    fh = open(pyart.testing.MDV_PPI_FILE, 'rb')
+    radar = pyart.io.read_mdv(pyart.testing.MDV_PPI_FILE)
+    fh.close()
