@@ -290,13 +290,10 @@ class GridMapDisplay():
             the last field plotted or '' if the field does not have these
             keys.
         cax : axis
-            Axes object into which the colorbar will be drawn.  None will use
-            the current axis.
+            Axes object into which the colorbar will be drawn.
+            None is also allowed.
 
         """
-        # parse the parameters
-        cax = self._parse_ax(cax)
-
         if mappable is None:
             if len(self.mappables) == 0:
                 raise ValueError('mappable must be specified.')

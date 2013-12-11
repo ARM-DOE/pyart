@@ -40,7 +40,8 @@ def read_mdv(filename, field_names=None, additional_metadata=None,
     Parameters
     ----------
     filename : str
-        Name of MDV file to read data from.
+        Name of MDV file to read or file-like object pointing to the
+        beginning of such a file.
     field_names : dict, optional
         Dictionary mapping MDV data type names to radar field names. If a
         data type found in the file does not appear in this dictionary or has
@@ -300,8 +301,9 @@ class MdvFile:
 
     Parameters
     ----------
-    filename : str
-        Name of MDV file.
+    filename : str or file-like
+        Name of MDV file to read or file-like object pointing to the
+        beginning of such a file.
     debug : bool
         True to print out debugging information, False to supress
     read_fields : bool
@@ -315,7 +317,10 @@ class MdvFile:
 
         if debug:
             print "Opening ", filename
-        self.fileptr = open(filename, 'rb')
+        if hasattr(filename, 'read'):
+            self.fileptr = filename
+        else:
+            self.fileptr = open(filename, 'rb')
 
         if debug:
             print "Getting master header"
