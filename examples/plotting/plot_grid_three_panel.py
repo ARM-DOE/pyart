@@ -72,7 +72,7 @@ display.basemap.contour(x, y, prmsl, clevs, colors='k', linewidths=1.)
 
 # colorbar
 cbax = fig.add_axes(colorbar_panel_axes)
-display.plot_colorbar()
+display.plot_colorbar(cax=cbax)
 
 # panel 2, longitude slice.
 ax2 = fig.add_axes(x_cut_panel_axes)
