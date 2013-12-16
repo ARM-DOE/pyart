@@ -278,7 +278,8 @@ class RadarDisplay:
     def plot_rhi(self, field, tilt, mask_tuple=None, vmin=None, vmax=None,
                  cmap='jet', mask_outside=True, title=None, title_flag=True,
                  axislabels=(None, None), axislabels_flag=True,
-                 colorbar_flag=True, colorbar_label= None, ax=None, fig=None):
+                 reverse_xaxis=None, colorbar_flag=True, colorbar_label=None,
+                 ax=None, fig=None):
         """
         Plot a RHI.
 
@@ -313,6 +314,10 @@ class RadarDisplay:
             False.
         axislabel_flag : bool
             True to add label the axes, False does not label the axes.
+        reverse_xaxis : bool or None
+            True to reverse the x-axis so the plot reads east to west, False
+            to have east to west.  None (the default) will reverse the axis
+            only when all the distances are negative.
         colorbar_flag : bool
             True to add a colorbar with label to the axis.  False leaves off
             the colorbar.
@@ -339,6 +344,11 @@ class RadarDisplay:
 
         # plot the data
         R = np.sqrt(x ** 2 + y ** 2) * np.sign(y)
+        if reverse_xaxis is None:
+            # reverse if all distances (nearly, up to 1 m) negative.
+            reverse_xaxis = np.all(R < 1.)
+        if reverse_xaxis:
+            R = -R
         pm = ax.pcolormesh(R, z, data, vmin=vmin, vmax=vmax, cmap=cmap)
 
         if title_flag:
