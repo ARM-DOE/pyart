@@ -580,3 +580,29 @@ def map_to_grid(radars, grid_shape=(81, 81, 69),
     if map_roi:
         grids['ROI'] = roi
     return grids
+
+
+def _gen_multi_qrf(h_factor, nb, bsp, min_radius, offsets):
+
+    def qrf(xg_i, yg_i, zg_i):
+        v = []
+        for offset in offsets:
+            z_offset, y_offset, x_offset = offset
+            xg, yg, zg = xg_i - x_offset, yg_i - y_offset, zg_i - z_offset
+            r = (h_factor * (zg / 20.0) + np.sqrt(yg ** 2 + xg ** 2) *
+                 np.tan(nb * bsp * np.pi / 180.0) + min_radius).flatten()
+            v.append(r)
+        #print v
+        #import IPython; IPython.embed()
+        return min(v)
+    return qrf
+
+
+def _gen_standard_qrf(h_factor, nb, bsp, min_radius, offset):
+    z_offset, y_offset, x_offset = offset
+
+    def standard_qrf(xg, yg, zg):
+        xg, yg, zg = xg - x_offset, yg - y_offset, zg - z_offset
+        return (h_factor * (zg / 20.0) + np.sqrt(yg ** 2 + xg ** 2) *
+                np.tan(nb * bsp * np.pi / 180.0) + min_radius).flatten()
+    return standard_qrf
