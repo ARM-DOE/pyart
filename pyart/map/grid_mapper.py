@@ -320,8 +320,15 @@ def map_to_grid(radars, grid_shape=(81, 81, 69),
         Minimum radius of influence. Only used when qrf_func is None.
     copy_field_data : bool
         True to copy the data within the radar fields for faster gridding,
-        False will not copy the data which will use less memory but result in
-        significantly fast gridding times.
+        the dtype for all fields in the grid will be float64. False will not
+        copy the data which preserves the dtype of the fields in the grid,
+        may use less memory but results in significantly slower gridding
+        times.  When False gates which are masked in a particular field but
+        are not masked in the  `refl_field` field will still be included in
+        the interpolation.  This can be prevented by setting this parameter
+        to True or by gridding each field individually setting the
+        `refl_field` parameter and the `fields` parameter to the field in
+        question.  It is recommended to set this parameter to True.
     algorithm : 'kd_tree' or 'ball_tree'
         Algorithms to use for finding the nearest neighbors. 'kd_tree' tends
         to be faster.  This value should only effects the speed of the
@@ -383,7 +390,7 @@ def map_to_grid(radars, grid_shape=(81, 81, 69),
         # copy_field_data == True, lookups are performed on a 2D copy of
         # all of the field data in all radar objects, this can be a
         # large array.  These lookup are fast as the dtype is know.
-        field_data = np.empty((total_gates, nfields), dtype=np.float64)
+        field_data = np.ma.empty((total_gates, nfields), dtype=np.float64)
     else:
         # copy_field_data == False, lookups are performed on a 2D object
         # array pointing to the radar fields themselved, no copies are made.
@@ -547,7 +554,7 @@ def map_to_grid(radars, grid_shape=(81, 81, 69),
 
         if weighting_function.upper() == 'CRESSMAN':
             weights = (r2 - dist2) / (r2 + dist2)
-            value = np.average(nn_field_data, weights=weights, axis=0)
+            value = np.ma.average(nn_field_data, weights=weights, axis=0)
         elif weighting_function.upper() == 'BARNES':
             w = np.exp(-dist2 / (2.0 * r2)) + 1e-5
             w /= np.sum(w)
