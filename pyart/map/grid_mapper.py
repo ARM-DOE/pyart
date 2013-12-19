@@ -9,7 +9,12 @@ Utilities for mapping radar objects to Cartesian grids.
 
     grid_from_radars
     map_to_grid
+    example_roi_func_constant
+    example_roi_func_dist
     _load_nn_field_data
+    _gen_roi_func_constant
+    _gen_roi_func_dist
+    _gen_roi_func_dist_beam
 
 .. autosummary::
     :toctree: generated/
@@ -42,10 +47,10 @@ def grid_from_radars(radars, grid_shape, grid_limits, **kwargs):
     radars : tuple of Radar objects.
         Radar objects which will be mapped to the Cartesian grid.
     grid_shape : 3-tuple of floats
-        Number of points in the grid (x, y, z).
+        Number of points in the grid (z, y, x).
     grid_limits : 3-tuple of 2-tuples
         Minimum and maximum grid location (inclusive) in meters for the
-        x, y, z coordinates.
+        z, x, y coordinates.
 
     Returns
     -------
@@ -59,8 +64,7 @@ def grid_from_radars(radars, grid_shape, grid_limits, **kwargs):
 
     """
     # map the radar(s) to a cartesian grid
-    grids = map_to_grid(radars, grid_shape=grid_shape,
-                        grid_limits=grid_limits, **kwargs)
+    grids = map_to_grid(radars, grid_shape, grid_limits, **kwargs)
 
     # create and populate the field dictionary
     fields = {}
@@ -74,8 +78,6 @@ def grid_from_radars(radars, grid_shape, grid_limits, **kwargs):
                 'long_name': 'Radius of influence for mapping',
                 'units': 'm',
                 'least_significant_digit': 1,
-                'valid_min': 0.,
-                'valid_max': 100000.,
                 '_FillValue': get_fillvalue()}
         else:
             fields[field] = {'data': grids[field]}
@@ -108,8 +110,8 @@ def grid_from_radars(radars, grid_shape, grid_limits, **kwargs):
         'long_name': 'Time in seconds of volume end'}
 
     # grid coordinate dictionaries
-    nx, ny, nz = grid_shape
-    (x0, x1), (y0, y1), (z0, z1) = grid_limits
+    nz, ny, nx = grid_shape
+    (z0, z1), (y0, y1), (x0, x1) = grid_limits
 
     xaxis = {'data':  np.linspace(x0, x1, nx),
              'long_name': 'X-coordinate in Cartesian system',
@@ -253,14 +255,14 @@ class NNLocator:
             return ind[0], dist[0]
 
 
-def map_to_grid(radars, grid_shape=(81, 81, 69),
-                grid_limits=((-30000., 20000), (-20000., 20000.), (0, 17000.)),
-                grid_origin=None, fields=None,
-                refl_filter_flag=True, refl_field=None, max_refl=None,
-                qrf_func=None, map_roi=True, weighting_function='Barnes',
-                toa=17000.0,
-                h_factor=1.0, nb=1.5, bsp=1.0, min_radius=500.0,
-                copy_field_data=True, algorithm='kd_tree', leafsize = 10):
+def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
+                fields=None, refl_filter_flag=True, refl_field=None,
+                max_refl=None, map_roi=True, weighting_function='Barnes',
+                toa=17000.0, copy_field_data=True, algorithm='kd_tree',
+                leafsize=10., roi_func='dist_beam',
+                constant_roi=500.,
+                z_factor=0.05, xy_factor=0.02, min_radius=500.0,
+                h_factor=1.0, nb=1.5, bsp=1.0):
     """
     Map one or more radars to a Cartesian grid.
 
@@ -277,10 +279,10 @@ def map_to_grid(radars, grid_shape=(81, 81, 69),
     radars : tuple of Radar objects.
         Radar objects which will be mapped to the Cartesian grid.
     grid_shape : 3-tuple of floats
-        Number of points in the grid (x, y, z).
+        Number of points in the grid (z, y, x).
     grid_limits : 3-tuple of 2-tuples
         Minimum and maximum grid location (inclusive) in meters for the
-        x, y, z coordinates.
+        z, y, x coordinates.
     grid_origin : (float, float) or None
         Latitude and longitude of grid origin.  None sets the origin
         to the location of the first radar.
@@ -302,16 +304,24 @@ def map_to_grid(radars, grid_shape=(81, 81, 69),
         Maximum allowable reflectivity.  Points in the `refl_field` which are
         above is value are not included in the interpolation. None will
         include skip this filtering.
-    qrf_func : function or None
-        Query radius of influence function.  A functions which takes an
-        x, y, z grid location, in meters, and returns a radius (in meters)
+    roi_func : str of function
+        Radius of influence function.  A functions which takes an
+        z, y, x grid location, in meters, and returns a radius (in meters)
         within which all collected points will be included in the weighting
-        for that grid points. None will use a function which takes into
-        account the h_factor, nb and bsp parameters and increases the radius
-        quadratically with elevation.
+        for that grid points. Examples can be found in the
+        :py:func:`example_roi_constant`, :py:func:`example_roi_dist`,
+        and :py:func:`example_roi_dist_beam`.
+        Alternatively the following strings can use to specify built in
+        radius of influence functions:
+            * 'constant' : constant radius of influence.
+            * 'dist' : radius grows with the distance from each radar.
+            * 'dist_beam' : radius grows with the distance from each radar
+                            and parameter are based of virtual beam sizes.
+        The parameters which control these functions are listed in the
+        `Other parameters` section below.
     map_roi : bool
         True to include a radius of influence field in the returned
-        dictionary under the 'ROI' key.  This is the value of qrf_func at all
+        dictionary under the 'ROI' key.  This is the value of roi_func at all
         grid points.
     weighting_function : 'Barnes' or 'Cressman'
         Functions used to weight nearby collected points when interpolating a
@@ -322,15 +332,22 @@ def map_to_grid(radars, grid_shape=(81, 81, 69),
 
     Other parameters
     ----------------
-    h_factor : float
-        H factor which influences the increase in the radius of influence as
-        elevation increases.  Only used when qrf_func is None.
-    nb : float
-        Virtual beam width. Only used when qrf_func is None.
-    bsp : float
-        Virtual beam spacing. Only used when qrf_func is None.
-    min_radius : float
-        Minimum radius of influence. Only used when qrf_func is None.
+    constant_roi : float
+        Radius of influence parameter for the built in 'constant' function.
+        This parameter is the constant radius in meter for all grid points.
+        This parameter is only used when `roi_func` is `constant`.
+    z_factor, xy_factor, min_radius : float
+        Radius of influence parameters for the built in 'dist' function.
+        The parameter correspond to the radius size increase, in meters,
+        per meter increase in the z-dimension from the nearest radar,
+        the same foreach meteter in the xy-distance from the nearest radar,
+        and the minimum radius of influence in meters. These parameters are
+        only used when `roi_func` is 'dist'.
+    h_factor, nb, bsp, min_radius : float
+        Radius of influence parameters for the built in 'dist_beam' function.
+        The parameter correspond to the height scaling, virtual beam width,
+        virtual beam spacing, and minimum radius of influence. These
+        parameters are only used when `roi_func` is 'dist_mean'.
     copy_field_data : bool
         True to copy the data within the radar fields for faster gridding,
         the dtype for all fields in the grid will be float64. False will not
@@ -398,6 +415,8 @@ def map_to_grid(radars, grid_shape=(81, 81, 69),
     gate_locations = np.empty((total_gates, 3), dtype=np.float64)
     include_gate = np.ones((total_gates), dtype=np.bool)
 
+    offsets = []    # offsets from the grid origin, in meters, for each radar
+
     # create a field lookup tables
     if copy_field_data:
         # copy_field_data == True, lookups are performed on a 2D copy of
@@ -414,13 +433,14 @@ def map_to_grid(radars, grid_shape=(81, 81, 69),
         # in the NNLocator, the filtered_gates_per_radar list records this
         filtered_gates_per_radar = []
 
-    # loop over the radars finding gate locations and field data
+    # loop over the radars finding gate locations, field data, and offset
     for iradar, radar in enumerate(radars):
 
         # calculate radar offset from the origin
         radar_lat = float(radar.latitude['data'])
         radar_lon = float(radar.longitude['data'])
         x_disp, y_disp = corner_to_point(grid_origin, (radar_lat, radar_lon))
+        offsets.append((0, y_disp, x_disp))  # XXX should include z
 
         # calculate cartesian locations of gates
         rg, azg = np.meshgrid(radar.range['data'], radar.azimuth['data'])
@@ -430,9 +450,9 @@ def map_to_grid(radars, grid_shape=(81, 81, 69),
 
         # add gate locations to gate_locations array
         start, end = gate_offset[iradar], gate_offset[iradar + 1]
-        gate_locations[start:end, 0] = (xg_loc + x_disp).flat
+        gate_locations[start:end, 0] = zg_loc.flat
         gate_locations[start:end, 1] = (yg_loc + y_disp).flat
-        gate_locations[start:end, 2] = zg_loc.flat
+        gate_locations[start:end, 2] = (xg_loc + x_disp).flat
         del xg_loc, yg_loc
 
         # determine which gates should be included in the interpolation
@@ -503,21 +523,36 @@ def map_to_grid(radars, grid_shape=(81, 81, 69),
                           leafsize=leafsize)
 
     # unpack the grid parameters
-    nx, ny, nz = grid_shape
-    xr, yr, zr = grid_limits
-    x_start, x_stop = xr
-    y_start, y_stop = yr
+    nz, ny, nx = grid_shape
+    zr, yr, xr = grid_limits
     z_start, z_stop = zr
-    x_step = (x_stop - x_start) / (nx - 1.)
-    y_step = (y_stop - y_start) / (ny - 1.)
-    z_step = (z_stop - z_start) / (nz - 1.)
+    y_start, y_stop = yr
+    x_start, x_stop = xr
 
-    def standard_qrf(xg, yg, zg):
-        return (h_factor * (zg / 20.0) + np.sqrt(yg ** 2 + xg ** 2) *
-                np.tan(nb * bsp * np.pi / 180.0) + min_radius).flatten()
+    if nz == 1:
+        z_step = 0.
+    else:
+        z_step = (z_stop - z_start) / (nz - 1.)
+    if ny == 1:
+        y_step = 0.
+    else:
+        y_step = (y_stop - y_start) / (ny - 1.)
+    if nx == 1:
+        x_step = 0.
+    else:
+        x_step = (x_stop - x_start) / (nx - 1.)
 
-    if qrf_func is None:
-        qrf_func = standard_qrf
+    if not hasattr(roi_func, '__call__'):
+        if roi_func == 'constant':
+            roi_func = _gen_roi_func_constant(constand_roi)
+        elif roi_func == 'dist':
+            roi_func = _gen_roi_func_dist(
+                z_factor, xy_factor, min_radius, offsets)
+        elif roi_func == 'dist_beam':
+            roi_func = _gen_roi_func_dist_beam(
+                h_factor, nb, bsp, min_radius, offsets)
+        else:
+            raise ValueError('unknown roi_func: %s' % roi_func)
 
     # create array to hold interpolated grid data and roi if requested
     grid_data = np.ma.empty((nz, ny, nx, nfields), dtype=np.float64)
@@ -533,12 +568,12 @@ def map_to_grid(radars, grid_shape=(81, 81, 69),
         x = x_start + x_step * ix
         y = y_start + y_step * iy
         z = z_start + z_step * iz
-        r = qrf_func(x, y, z)
+        r = roi_func(z, y, x)
         if map_roi:
             roi[iz, iy, ix] = r
 
         #find neighbors and distances
-        ind, dist = nnlocator.find_neighbors_and_dists((x, y, z), r)
+        ind, dist = nnlocator.find_neighbors_and_dists((z, y, x), r)
 
         if len(ind) == 0:
             # when there are no neighbors, mark the grid point as bad
@@ -582,27 +617,141 @@ def map_to_grid(radars, grid_shape=(81, 81, 69),
     return grids
 
 
-def _gen_multi_qrf(h_factor, nb, bsp, min_radius, offsets):
-
-    def qrf(xg_i, yg_i, zg_i):
-        v = []
-        for offset in offsets:
-            z_offset, y_offset, x_offset = offset
-            xg, yg, zg = xg_i - x_offset, yg_i - y_offset, zg_i - z_offset
-            r = (h_factor * (zg / 20.0) + np.sqrt(yg ** 2 + xg ** 2) *
-                 np.tan(nb * bsp * np.pi / 180.0) + min_radius).flatten()
-            v.append(r)
-        #print v
-        #import IPython; IPython.embed()
-        return min(v)
-    return qrf
+# Radius of Influence (RoI) functions
 
 
-def _gen_standard_qrf(h_factor, nb, bsp, min_radius, offset):
-    z_offset, y_offset, x_offset = offset
+def example_roi_func_constant(zg, yg, xg):
+    """
+    Example RoI function which returns a constant radius.
 
-    def standard_qrf(xg, yg, zg):
-        xg, yg, zg = xg - x_offset, yg - y_offset, zg - z_offset
-        return (h_factor * (zg / 20.0) + np.sqrt(yg ** 2 + xg ** 2) *
-                np.tan(nb * bsp * np.pi / 180.0) + min_radius).flatten()
-    return standard_qrf
+    Parameters
+    ----------
+    zg, yg, xg : float
+        Distance from the grid center in meters for the x, y and z axes.
+
+    Returns
+    -------
+    roi : float
+        Radius of influence in meters
+    """
+    # RoI function parameters
+    constant = 500.     # constant 500 meter RoI
+    return constant
+
+
+def _gen_roi_func_constant(constant_roi):
+    """
+    Return a RoI function which returns a constant radius.
+
+    See :py:func:`map_to_grid` for a description of the parameters.
+    """
+
+    def roi(zg, yg, xg):
+        """ constant radius of influence function. """
+        return constant_roi
+
+    return roi
+
+
+def example_roi_func_dist(zg, yg, xg):
+    """
+    Example RoI function which returns a radius which grows with distance.
+
+    Parameters
+    ----------
+    zg, yg, xg : float
+        Distance from the grid center in meters for the x, y and z axes.
+
+    Returns
+    -------
+    roi : float
+
+    """
+    # RoI function parameters
+    z_factor = 0.05         # increase in radius per meter increase in z dim
+    xy_factor = 0.02        # increase in radius per meter increase in xy dim
+    min_radius = 500.       # minimum radius
+    offsets = ((0, 0, 0), )  # z, y, x offset of grid in meters from radar(s)
+
+    offsets = np.array(offsets)
+    zg_off = offsets[:, 0]
+    yg_off = offsets[:, 1]
+    xg_off = offsets[:, 2]
+    r = (z_factor * (zg - zg_off) +
+         xy_factor * np.sqrt((xg - xg_off)**2 + (yg - yg_off)**2) +
+         min_radius)
+    return min(r)
+
+
+def _gen_roi_func_dist(z_factor, xy_factor, min_radius, offsets):
+    """
+    Return a RoI function whose radius grows with distance.
+
+    See :py:func:`map_to_grid` for a description of the parameters.
+    """
+    offsets = np.array(offsets)
+    zg_off = offsets[:, 0]
+    yg_off = offsets[:, 1]
+    xg_off = offsets[:, 2]
+
+    def roi(zg, yg, xg):
+        """ dist radius of influence function. """
+        r = (z_factor * (zg - zg_off) +
+             xy_factor * np.sqrt((xg - xg_off)**2 + (yg - yg_off)**2) +
+             min_radius)
+        return min(r)
+
+    return roi
+
+
+def example_roi_func_dist_beam(zg, yg, xg):
+    """
+    Example RoI function which returns a radius which grows with distance
+    and whose parameters are based on virtual beam size.
+
+    Parameters
+    ----------
+    zg, yg, xg : float
+        Distance from the grid center in meters for the x, y and z axes.
+
+    Returns
+    -------
+    roi : float
+
+    """
+    # RoI function parameters
+    h_factor = 1.0      # height scaling
+    nb = 1.5            # virtual beam width
+    bsp = 1.0           # virtual beam spacing
+    min_radius = 500.   # minimum radius in meters
+
+    offsets = np.array(offsets)
+    zg_off = offsets[:, 0]
+    yg_off = offsets[:, 1]
+    xg_off = offsets[:, 2]
+    r = (h_factor * ((zg - zg_off) / 20.0) +
+         np.sqrt((yg - yg_off)**2 + (xg - xg_off)**2) *
+         np.tan(nb * bsp * np.pi / 180.0) + min_radius)
+    return min(r)
+
+
+def _gen_roi_func_dist_beam(h_factor, nb, bsp, min_radius, offsets):
+    """
+    Return a RoI function whose radius which grows with distance
+    and whose parameters are based on virtual beam size.
+
+    See :py:func:`map_to_grid` for a description of the parameters.
+    """
+    offsets = np.array(offsets)
+    zg_off = offsets[:, 0]
+    yg_off = offsets[:, 1]
+    xg_off = offsets[:, 2]
+
+    def roi(zg, yg, xg):
+        """ dist_beam radius of influence function. """
+        r = (h_factor * ((zg - zg_off) / 20.0) +
+             np.sqrt((yg - yg_off)**2 + (xg - xg_off)**2) *
+             np.tan(nb * bsp * np.pi / 180.0) + min_radius)
+        return min(r)
+
+    return roi

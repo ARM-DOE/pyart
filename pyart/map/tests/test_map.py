@@ -8,10 +8,10 @@ import pyart
 EXPECTED_CENTER_SLICE = [40, 30, 20, 10, 0, 0, 10, 20, 30, 40]
 
 COMMON_MAP_TO_GRID_ARGS = {
-    'grid_shape': (10, 9, 3),
-    'grid_limits': ((-900.0, 900.0), (-900.0, 900.0), (-400, 400)),
+    'grid_shape': (3, 9, 10),
+    'grid_limits': ((-400.0, 400.0), (-900.0, 900.0), (-900, 900)),
     'fields': None,
-    'qrf_func': lambda x, y, z: 30, }
+    'roi_func': lambda x, y, z: 30, }
 
 
 def test_map_to_grid_default():
@@ -23,9 +23,11 @@ def test_map_to_grid_default():
 
 
 def test_map_to_grid_errors():
-    assert_raises(ValueError, pyart.map.map_to_grid, (None, ),
+    assert_raises(ValueError, pyart.map.map_to_grid, (None, ), (1, 1, 1),
+                  ((-1, 1), (-1, 1), (-1, 1)),
                   weighting_function='foo')
-    assert_raises(ValueError, pyart.map.map_to_grid, (None, ),
+    assert_raises(ValueError, pyart.map.map_to_grid, (None, ), (1, 1, 1),
+                  ((-1, 1), (-1, 1), (-1, 1)),
                   algorithm='foo')
 
 
@@ -33,8 +35,8 @@ def test_map_to_grid_qrf():
     radar = pyart.testing.make_target_radar()
     grids = pyart.map.map_to_grid(
         (radar,),
-        grid_shape=(10, 9, 3),
-        grid_limits=((-900.0, 900.0), (-900.0, 900.0), (-400, 400)),
+        grid_shape=(3, 9, 10),
+        grid_limits=((-400.0, 400.0), (-900.0, 900.0), (-900, 900)),
         fields=['reflectivity'],
         min_radius=30, bsp=0., h_factor=0.)
     center_slice = grids['reflectivity'][1, 4, :]
