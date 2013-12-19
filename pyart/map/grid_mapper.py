@@ -304,21 +304,24 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
         Maximum allowable reflectivity.  Points in the `refl_field` which are
         above is value are not included in the interpolation. None will
         include skip this filtering.
-    roi_func : str of function
+    roi_func : str or function
         Radius of influence function.  A functions which takes an
         z, y, x grid location, in meters, and returns a radius (in meters)
         within which all collected points will be included in the weighting
         for that grid points. Examples can be found in the
-        :py:func:`example_roi_constant`, :py:func:`example_roi_dist`,
-        and :py:func:`example_roi_dist_beam`.
-        Alternatively the following strings can use to specify built in
-        radius of influence functions:
-            * 'constant' : constant radius of influence.
-            * 'dist' : radius grows with the distance from each radar.
-            * 'dist_beam' : radius grows with the distance from each radar
-                            and parameter are based of virtual beam sizes.
+        :py:func:`example_roi_func_constant`,
+        :py:func:`example_roi_func_dist`, and
+        :py:func:`example_roi_func_dist_beam`.
+        Alternatively the following strings can use to specify a built in
+        radius of influence function:
+
+            * constant: constant radius of influence.
+            * dist: radius grows with the distance from each radar.
+            * dist_beam: radius grows with the distance from each radar
+              and parameter are based of virtual beam sizes.
+
         The parameters which control these functions are listed in the
-        `Other parameters` section below.
+        `Other Parameters` section below.
     map_roi : bool
         True to include a radius of influence field in the returned
         dictionary under the 'ROI' key.  This is the value of roi_func at all
@@ -330,7 +333,7 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
         Top of atmosphere in meters. Collected points above this height are
         not included in the interpolation.
 
-    Other parameters
+    Other Parameters
     ----------------
     constant_roi : float
         Radius of influence parameter for the built in 'constant' function.
@@ -369,7 +372,6 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
         to store the tree. The optimal value depends on the nature of the
         problem. This value should only effect the speed of the gridding,
         not the results.
-
 
     Returns
     -------
