@@ -546,7 +546,7 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
 
     if not hasattr(roi_func, '__call__'):
         if roi_func == 'constant':
-            roi_func = _gen_roi_func_constant(constand_roi)
+            roi_func = _gen_roi_func_constant(constant_roi)
         elif roi_func == 'dist':
             roi_func = _gen_roi_func_dist(
                 z_factor, xy_factor, min_radius, offsets)
@@ -726,6 +726,7 @@ def example_roi_func_dist_beam(zg, yg, xg):
     nb = 1.5            # virtual beam width
     bsp = 1.0           # virtual beam spacing
     min_radius = 500.   # minimum radius in meters
+    offsets = ((0, 0, 0), )  # z, y, x offset of grid in meters from radar(s)
 
     offsets = np.array(offsets)
     zg_off = offsets[:, 0]
