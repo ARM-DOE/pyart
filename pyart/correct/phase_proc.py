@@ -541,8 +541,8 @@ def construct_A_matrix(n_gates, filt):
     side_pad = (filter_length - 1) / 2
     M_matrix = np.bmat(
         [np.zeros([n_gates-filter_length + 1, side_pad], dtype=float),
-         M_matrix_middle, np.zeros([n_gates-filter_length+1, side_pad],
-         dtype=float)])
+         M_matrix_middle, np.zeros(
+             [n_gates-filter_length+1, side_pad], dtype=float)])
     Z_matrix = np.zeros([n_gates - filter_length + 1, n_gates])
     return np.bmat([[Identity, -1.0 * Identity], [Identity, Identity],
                    [Z_matrix, M_matrix]])
@@ -621,8 +621,8 @@ def LP_solver_cvxopt(A_Matrix, B_vectors, weights, solver='glpk'):
     See Also
     --------
     LP_solver_pyglpk : Solve LP problem using the PyGLPK module.
-    LP_solver_cylp : Solve LP problem using the CyLP module.
-    LP_solver_cylp_mp : Solve LP problem using the CyLP module
+    LP_solver_cylp : Solve LP problem using the cylp module.
+    LP_solver_cylp_mp : Solve LP problem using the cylp module
                         using multi processes.
 
     """
@@ -682,8 +682,8 @@ def LP_solver_pyglpk(A_Matrix, B_vectors, weights, it_lim=7000, presolve=True,
     See Also
     --------
     LP_solver_cvxopt : Solve LP problem using the CVXOPT module.
-    LP_solver_cylp : Solve LP problem using the CyLP module.
-    LP_solver_cylp_mp : Solve LP problem using the CyLP module
+    LP_solver_cylp : Solve LP problem using the cylp module.
+    LP_solver_cylp_mp : Solve LP problem using the cylp module
                         using multi processes.
 
     """
@@ -750,8 +750,8 @@ def solve_cylp(model, B_vectors, weights, ray, chunksize):
     LP_solver_cylp : Single Process Solver.
 
     """
-    from CyLP.cy.CyClpSimplex import CyClpSimplex
-    from CyLP.py.modeling.CyLPModel import CyLPModel, CyLPArray
+    from cylp.cy.CyClpSimplex import CyClpSimplex
+    from cylp.py.modeling.CyLPModel import CyLPModel, CyLPArray
 
     n_gates = weights.shape[1]/2
     n_rays = B_vectors.shape[0]
@@ -811,8 +811,8 @@ def LP_solver_cylp_mp(A_Matrix, B_vectors, weights, really_verbose=False,
                      process.
 
     """
-    from CyLP.cy.CyClpSimplex import CyClpSimplex
-    from CyLP.py.modeling.CyLPModel import CyLPModel, CyLPArray
+    from cylp.cy.CyClpSimplex import CyClpSimplex
+    from cylp.py.modeling.CyLPModel import CyLPModel, CyLPArray
     import multiprocessing as mp
 
     n_gates = weights.shape[1]/2
@@ -908,8 +908,8 @@ def LP_solver_cylp(A_Matrix, B_vectors, weights, really_verbose=False):
     LP_solver_pyglpk : Solve LP problem using the PyGLPK module.
 
     """
-    from CyLP.cy.CyClpSimplex import CyClpSimplex
-    from CyLP.py.modeling.CyLPModel import CyLPModel, CyLPArray
+    from cylp.cy.CyClpSimplex import CyClpSimplex
+    from cylp.py.modeling.CyLPModel import CyLPModel, CyLPArray
 
     n_gates = weights.shape[1]/2
     n_rays = B_vectors.shape[0]

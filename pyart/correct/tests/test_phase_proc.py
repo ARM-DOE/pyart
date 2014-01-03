@@ -28,7 +28,7 @@ except ImportError:
 
 
 try:
-    import CyLP.cy
+    import cylp.cy
     cylp_available = True
 except ImportError:
     cylp_available = False
