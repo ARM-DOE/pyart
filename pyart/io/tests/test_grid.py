@@ -8,10 +8,10 @@ import numpy as np
 import pyart
 
 COMMON_MAP_TO_GRID_ARGS = {
-    'grid_shape': (10, 9, 3),
-    'grid_limits': ((-900.0, 900.0), (-900.0, 900.0), (-400, 400)),
+    'grid_shape': (3, 9, 10),
+    'grid_limits': ((-400.0, 400.0), (-900.0, 900.0), (-900, 900)),
     'fields': ['reflectivity'],
-    'qrf_func': lambda x, y, z: 30, }
+    'roi_func': lambda x, y, z: 30, }
 
 
 def test_grid_from_radars():

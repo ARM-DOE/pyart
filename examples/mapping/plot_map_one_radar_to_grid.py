@@ -26,13 +26,12 @@ radar.fields['reflectivity']['data'][:, -10:] = np.ma.masked
 # perform Cartesian mapping, limit to the reflectivity field.
 grid = pyart.map.grid_from_radars(
     (radar,),
-    grid_shape=(241, 241, 2),
-    grid_limits=((-123000.0, 123000.0), (-123000.0, 123000.0),
-                 (1500, 2000)),
+    grid_shape=(1, 241, 241),
+    grid_limits=((2000, 2000), (-123000.0, 123000.0), (-123000.0, 123000.0)),
     fields=['reflectivity'])
 
 # create the plot
 fig = plt.figure()
 ax = fig.add_subplot(111)
-ax.imshow(grid.fields['reflectivity']['data'][1], origin='lower')
+ax.imshow(grid.fields['reflectivity']['data'][0], origin='lower')
 plt.show()
