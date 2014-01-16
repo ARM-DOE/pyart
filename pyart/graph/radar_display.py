@@ -121,6 +121,39 @@ class RadarDisplay:
     # Plotting methods #
     ####################
 
+    def plot(self, field, sweep=0, **kwargs):
+        """
+        Create a plot appropiate for the radar.
+
+        This function calls the plotting function corresponding to
+        the scan_type of the radar.  Additional keywords can be passed to
+        customize the plot, see the appropiate plot function for the
+        allowed keywords.
+
+        Parameters
+        ----------
+        field : str
+            Field to plot.
+        sweep : int
+            Sweep number to plot, not used for VPT scans.
+
+        See Also
+        --------
+        plot_ppi : Plot a PPI scan
+        plot_rhi : Plot a RHI scan
+        plot_vpt : Plot a VPT scan
+
+        """
+        if self.scan_type == 'ppi':
+            self.plot_ppi(field, sweep, **kwargs)
+        elif self.scan_type == 'rhi':
+            self.plot_rhi(field, sweep, **kwargs)
+        elif self.scan_type == 'vpt':
+            self.plot_vpt(field, **kwargs)
+        else:
+            raise ValueError('unknown scan_type % s' % (self.scan_type))
+        return
+
     def plot_ray(self, field, ray, format_str='k-', mask_tuple=None,
                  ray_min=None, ray_max=None, mask_outside=False, title=None,
                  title_flag=True, axislabels=(None, None),
