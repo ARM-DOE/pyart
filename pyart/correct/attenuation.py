@@ -94,7 +94,13 @@ def calculate_attenuation(radar, z_offset, debug=False, doc=15, fzl=4000.0,
     if rhv_field is None:
         rhv_field = get_field_name('cross_correlation_ratio')
     if phidp_field is None:
-        phidp_field = get_field_name('differential_phase')
+        # use corrrected_differential_phae or unfolded_differential_phase
+        # fields if they are available, if not use differential_phase field
+        phidp_field = get_field_name('corrected_differential_phase')
+        if phidp_field not in radar.fields:
+            phidp_field = get_field_name('unfolded_differential_phase')
+        if phidp_field not in radar.fields:
+            phidp_field = get_field_name('differential_phase')
     if spec_at_field is None:
         spec_at_field = get_field_name('specific_attenuation')
     if corr_refl_field is None:
