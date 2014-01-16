@@ -36,20 +36,17 @@ radar.add_field('corrected_reflectivity_horizontal', cor_z)
 fig = plt.figure(figsize=(15, 5))
 ax1 = fig.add_subplot(131)
 display = pyart.graph.RadarDisplay(radar)
-display.plot_ppi('reflectivity_horizontal', 0, ax=ax1, vmin=0, vmax=60.,
-                 colorbar_label='',
-                 title='Raw Reflectivity')
+display.plot('reflectivity_horizontal', 0, ax=ax1, vmin=0, vmax=60.,
+             colorbar_label='', title='Raw Reflectivity')
 
 ax2 = fig.add_subplot(132)
-display.plot_ppi('specific_attenuation', 0, vmin=0, vmax=1.0,
-                 colorbar_label='', ax=ax2,
-                 title='Specific Attenuation')
+display.plot('specific_attenuation', 0, vmin=0, vmax=1.0,
+             colorbar_label='', ax=ax2, title='Specific Attenuation')
 
 ax3 = fig.add_subplot(133)
 display = pyart.graph.RadarDisplay(radar)
-display.plot_ppi('corrected_reflectivity_horizontal', 0, vmin=0, vmax=60.,
-                 colorbar_label='', ax=ax3,
-                 title='Corrected Reflectivity')
+display.plot('corrected_reflectivity_horizontal', 0, vmin=0, vmax=60.,
+             colorbar_label='', ax=ax3, title='Corrected Reflectivity')
 
 plt.suptitle('Attenuation correction using Py-ART', fontsize=16)
 plt.show()
