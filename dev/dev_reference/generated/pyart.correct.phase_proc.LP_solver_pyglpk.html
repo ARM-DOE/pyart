@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.0.0.dev-9b578da',
+        VERSION:     '1.0.0.dev-a639eaa',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -28,7 +28,7 @@
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="Py-ART Documentation (DRAFT)" href="../../index.html" />
     <link rel="up" title="pyart.correct" href="../correct.html" />
-    <link rel="next" title="pyart.correct.phase_proc.phase_proc_lp" href="pyart.correct.phase_proc.phase_proc_lp.html" />
+    <link rel="next" title="pyart.correct.phase_proc.solve_cylp" href="pyart.correct.phase_proc.solve_cylp.html" />
     <link rel="prev" title="pyart.correct.phase_proc.LP_solver_cvxopt" href="pyart.correct.phase_proc.LP_solver_cvxopt.html" /> 
   </head>
   <body>
@@ -45,7 +45,7 @@
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pyart.correct.phase_proc.phase_proc_lp.html" title="pyart.correct.phase_proc.phase_proc_lp"
+          <a href="pyart.correct.phase_proc.solve_cylp.html" title="pyart.correct.phase_proc.solve_cylp"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="pyart.correct.phase_proc.LP_solver_cvxopt.html" title="pyart.correct.phase_proc.LP_solver_cvxopt"
@@ -65,7 +65,7 @@
 <h1>pyart.correct.phase_proc.LP_solver_pyglpk<a class="headerlink" href="#pyart-correct-phase-proc-lp-solver-pyglpk" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pyart.correct.phase_proc.LP_solver_pyglpk">
-<tt class="descclassname">pyart.correct.phase_proc.</tt><tt class="descname">LP_solver_pyglpk</tt><big>(</big><em>A_Matrix</em>, <em>B_vectors</em>, <em>weights</em>, <em>it_lim=7000</em>, <em>presolve=True</em>, <em>really_verbose=False</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/correct/phase_proc.py#L596"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.correct.phase_proc.LP_solver_pyglpk" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">pyart.correct.phase_proc.</tt><tt class="descname">LP_solver_pyglpk</tt><big>(</big><em>A_Matrix</em>, <em>B_vectors</em>, <em>weights</em>, <em>it_lim=7000</em>, <em>presolve=True</em>, <em>really_verbose=False</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/correct/phase_proc.py#L651"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.correct.phase_proc.LP_solver_pyglpk" title="Permalink to this definition">¶</a></dt>
 <dd><p>Solve the Linear Programming problem given in Giangrande et al, 2012 using
 the PyGLPK module.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -111,6 +111,10 @@ the PyGLPK module.</p>
 <dl class="last docutils">
 <dt><a class="reference internal" href="pyart.correct.phase_proc.LP_solver_cvxopt.html#pyart.correct.phase_proc.LP_solver_cvxopt" title="pyart.correct.phase_proc.LP_solver_cvxopt"><tt class="xref py py-obj docutils literal"><span class="pre">LP_solver_cvxopt</span></tt></a></dt>
 <dd>Solve LP problem using the CVXOPT module.</dd>
+<dt><a class="reference internal" href="pyart.correct.phase_proc.LP_solver_cylp.html#pyart.correct.phase_proc.LP_solver_cylp" title="pyart.correct.phase_proc.LP_solver_cylp"><tt class="xref py py-obj docutils literal"><span class="pre">LP_solver_cylp</span></tt></a></dt>
+<dd>Solve LP problem using the cylp module.</dd>
+<dt><a class="reference internal" href="pyart.correct.phase_proc.LP_solver_cylp_mp.html#pyart.correct.phase_proc.LP_solver_cylp_mp" title="pyart.correct.phase_proc.LP_solver_cylp_mp"><tt class="xref py py-obj docutils literal"><span class="pre">LP_solver_cylp_mp</span></tt></a></dt>
+<dd>Solve LP problem using the cylp module using multi processes.</dd>
 </dl>
 </div>
 </dd></dl>
@@ -127,8 +131,8 @@ the PyGLPK module.</p>
   <p class="topless"><a href="pyart.correct.phase_proc.LP_solver_cvxopt.html"
                         title="previous chapter">pyart.correct.phase_proc.LP_solver_cvxopt</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="pyart.correct.phase_proc.phase_proc_lp.html"
-                        title="next chapter">pyart.correct.phase_proc.phase_proc_lp</a></p>
+  <p class="topless"><a href="pyart.correct.phase_proc.solve_cylp.html"
+                        title="next chapter">pyart.correct.phase_proc.solve_cylp</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/dev_reference/generated/pyart.correct.phase_proc.LP_solver_pyglpk.txt"
@@ -164,7 +168,7 @@ the PyGLPK module.</p>
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pyart.correct.phase_proc.phase_proc_lp.html" title="pyart.correct.phase_proc.phase_proc_lp"
+          <a href="pyart.correct.phase_proc.solve_cylp.html" title="pyart.correct.phase_proc.solve_cylp"
              >next</a> |</li>
         <li class="right" >
           <a href="pyart.correct.phase_proc.LP_solver_cvxopt.html" title="pyart.correct.phase_proc.LP_solver_cvxopt"
@@ -176,7 +180,7 @@ the PyGLPK module.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Nov 19, 2013.
+      Last updated on Jan 16, 2014.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>

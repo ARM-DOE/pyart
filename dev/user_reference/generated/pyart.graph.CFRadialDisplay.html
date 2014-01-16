@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.0.0.dev-9b578da',
+        VERSION:     '1.0.0.dev-a639eaa',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -52,7 +52,7 @@
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">Py-ART Documentation (DRAFT)</a> &raquo;</li>
           <li><a href="../index.html" >User Reference Manual</a> &raquo;</li>
-          <li><a href="../graph.html" accesskey="U">Graphing (<tt class="docutils literal docutils literal"><span class="pre">pyart.graph</span></tt>)</a> &raquo;</li> 
+          <li><a href="../graph.html" accesskey="U">Graphing (<tt class="docutils literal"><span class="pre">pyart.graph</span></tt>)</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -118,10 +118,10 @@
 <td>(datetime) Beginning time of first radar scan.</td>
 </tr>
 <tr class="row-even"><td>starts</td>
-<td>(array) Starting ray index for each tilt.</td>
+<td>(array) Starting ray index for each sweep.</td>
 </tr>
 <tr class="row-odd"><td>ends</td>
-<td>(array) Ending ray index for each tilt.</td>
+<td>(array) Ending ray index for each sweep.</td>
 </tr>
 <tr class="row-even"><td>ranges</td>
 <td>(array) Gate ranges in meters.</td>
@@ -144,17 +144,23 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="pyart.graph.CFRadialDisplay.generate_filename.html#pyart.graph.CFRadialDisplay.generate_filename" title="pyart.graph.CFRadialDisplay.generate_filename"><tt class="xref py py-obj docutils literal"><span class="pre">generate_filename</span></tt></a>(field,&nbsp;tilt[,&nbsp;ext])</td>
+<tr class="row-odd"><td><a class="reference internal" href="pyart.graph.CFRadialDisplay.generate_filename.html#pyart.graph.CFRadialDisplay.generate_filename" title="pyart.graph.CFRadialDisplay.generate_filename"><tt class="xref py py-obj docutils literal"><span class="pre">generate_filename</span></tt></a>(field,&nbsp;sweep[,&nbsp;ext])</td>
 <td>Generate a filename for a plot.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="pyart.graph.CFRadialDisplay.generate_ray_title.html#pyart.graph.CFRadialDisplay.generate_ray_title" title="pyart.graph.CFRadialDisplay.generate_ray_title"><tt class="xref py py-obj docutils literal"><span class="pre">generate_ray_title</span></tt></a>(field,&nbsp;ray)</td>
 <td>Generate a title for a ray plot.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.graph.CFRadialDisplay.generate_title.html#pyart.graph.CFRadialDisplay.generate_title" title="pyart.graph.CFRadialDisplay.generate_title"><tt class="xref py py-obj docutils literal"><span class="pre">generate_title</span></tt></a>(field,&nbsp;tilt)</td>
+<tr class="row-odd"><td><a class="reference internal" href="pyart.graph.CFRadialDisplay.generate_title.html#pyart.graph.CFRadialDisplay.generate_title" title="pyart.graph.CFRadialDisplay.generate_title"><tt class="xref py py-obj docutils literal"><span class="pre">generate_title</span></tt></a>(field,&nbsp;sweep)</td>
 <td>Generate a title for a plot.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.graph.CFRadialDisplay.label_xaxis_r.html#pyart.graph.CFRadialDisplay.label_xaxis_r" title="pyart.graph.CFRadialDisplay.label_xaxis_r"><tt class="xref py py-obj docutils literal"><span class="pre">label_xaxis_r</span></tt></a>([ax])</td>
+<tr class="row-even"><td><a class="reference internal" href="pyart.graph.CFRadialDisplay.generate_vpt_title.html#pyart.graph.CFRadialDisplay.generate_vpt_title" title="pyart.graph.CFRadialDisplay.generate_vpt_title"><tt class="xref py py-obj docutils literal"><span class="pre">generate_vpt_title</span></tt></a>(field)</td>
+<td>Generate a title for a VPT plot.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pyart.graph.CFRadialDisplay.label_xaxis_r.html#pyart.graph.CFRadialDisplay.label_xaxis_r" title="pyart.graph.CFRadialDisplay.label_xaxis_r"><tt class="xref py py-obj docutils literal"><span class="pre">label_xaxis_r</span></tt></a>([ax])</td>
 <td>Label the xaxis with the default label for r units.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pyart.graph.CFRadialDisplay.label_xaxis_rays.html#pyart.graph.CFRadialDisplay.label_xaxis_rays" title="pyart.graph.CFRadialDisplay.label_xaxis_rays"><tt class="xref py py-obj docutils literal"><span class="pre">label_xaxis_rays</span></tt></a>([ax])</td>
+<td>Label the yaxis with the default label for rays.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="pyart.graph.CFRadialDisplay.label_xaxis_x.html#pyart.graph.CFRadialDisplay.label_xaxis_x" title="pyart.graph.CFRadialDisplay.label_xaxis_x"><tt class="xref py py-obj docutils literal"><span class="pre">label_xaxis_x</span></tt></a>([ax])</td>
 <td>Label the xaxis with the default label for x units.</td>
@@ -168,32 +174,38 @@
 <tr class="row-even"><td><a class="reference internal" href="pyart.graph.CFRadialDisplay.label_yaxis_z.html#pyart.graph.CFRadialDisplay.label_yaxis_z" title="pyart.graph.CFRadialDisplay.label_yaxis_z"><tt class="xref py py-obj docutils literal"><span class="pre">label_yaxis_z</span></tt></a>([ax])</td>
 <td>Label the yaxis with the default label for z units.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.graph.CFRadialDisplay.plot_colorbar.html#pyart.graph.CFRadialDisplay.plot_colorbar" title="pyart.graph.CFRadialDisplay.plot_colorbar"><tt class="xref py py-obj docutils literal"><span class="pre">plot_colorbar</span></tt></a>([mappable,&nbsp;field,&nbsp;label,&nbsp;cax,&nbsp;fig])</td>
+<tr class="row-odd"><td><a class="reference internal" href="pyart.graph.CFRadialDisplay.plot.html#pyart.graph.CFRadialDisplay.plot" title="pyart.graph.CFRadialDisplay.plot"><tt class="xref py py-obj docutils literal"><span class="pre">plot</span></tt></a>(field[,&nbsp;sweep])</td>
+<td>Create a plot appropiate for the radar.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pyart.graph.CFRadialDisplay.plot_colorbar.html#pyart.graph.CFRadialDisplay.plot_colorbar" title="pyart.graph.CFRadialDisplay.plot_colorbar"><tt class="xref py py-obj docutils literal"><span class="pre">plot_colorbar</span></tt></a>([mappable,&nbsp;field,&nbsp;label,&nbsp;cax,&nbsp;fig])</td>
 <td>Plot a colorbar.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.graph.CFRadialDisplay.plot_cross_hair.html#pyart.graph.CFRadialDisplay.plot_cross_hair" title="pyart.graph.CFRadialDisplay.plot_cross_hair"><tt class="xref py py-obj docutils literal"><span class="pre">plot_cross_hair</span></tt></a>(size[,&nbsp;npts,&nbsp;ax])</td>
+<tr class="row-odd"><td><a class="reference internal" href="pyart.graph.CFRadialDisplay.plot_cross_hair.html#pyart.graph.CFRadialDisplay.plot_cross_hair" title="pyart.graph.CFRadialDisplay.plot_cross_hair"><tt class="xref py py-obj docutils literal"><span class="pre">plot_cross_hair</span></tt></a>(size[,&nbsp;npts,&nbsp;ax])</td>
 <td>Plot a cross-hair on a ppi plot.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.graph.CFRadialDisplay.plot_label.html#pyart.graph.CFRadialDisplay.plot_label" title="pyart.graph.CFRadialDisplay.plot_label"><tt class="xref py py-obj docutils literal"><span class="pre">plot_label</span></tt></a>(label,&nbsp;location[,&nbsp;symbol,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="pyart.graph.CFRadialDisplay.plot_label.html#pyart.graph.CFRadialDisplay.plot_label" title="pyart.graph.CFRadialDisplay.plot_label"><tt class="xref py py-obj docutils literal"><span class="pre">plot_label</span></tt></a>(label,&nbsp;location[,&nbsp;symbol,&nbsp;...])</td>
 <td>Plot a single symbol and label at a given location.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.graph.CFRadialDisplay.plot_labels.html#pyart.graph.CFRadialDisplay.plot_labels" title="pyart.graph.CFRadialDisplay.plot_labels"><tt class="xref py py-obj docutils literal"><span class="pre">plot_labels</span></tt></a>(labels,&nbsp;locations[,&nbsp;symbols,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="pyart.graph.CFRadialDisplay.plot_labels.html#pyart.graph.CFRadialDisplay.plot_labels" title="pyart.graph.CFRadialDisplay.plot_labels"><tt class="xref py py-obj docutils literal"><span class="pre">plot_labels</span></tt></a>(labels,&nbsp;locations[,&nbsp;symbols,&nbsp;...])</td>
 <td>Plot symbols and labels at given locations.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.graph.CFRadialDisplay.plot_ppi.html#pyart.graph.CFRadialDisplay.plot_ppi" title="pyart.graph.CFRadialDisplay.plot_ppi"><tt class="xref py py-obj docutils literal"><span class="pre">plot_ppi</span></tt></a>(field,&nbsp;tilt[,&nbsp;mask_tuple,&nbsp;vmin,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="pyart.graph.CFRadialDisplay.plot_ppi.html#pyart.graph.CFRadialDisplay.plot_ppi" title="pyart.graph.CFRadialDisplay.plot_ppi"><tt class="xref py py-obj docutils literal"><span class="pre">plot_ppi</span></tt></a>(field[,&nbsp;sweep,&nbsp;mask_tuple,&nbsp;vmin,&nbsp;...])</td>
 <td>Plot a PPI.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.graph.CFRadialDisplay.plot_range_ring.html#pyart.graph.CFRadialDisplay.plot_range_ring" title="pyart.graph.CFRadialDisplay.plot_range_ring"><tt class="xref py py-obj docutils literal"><span class="pre">plot_range_ring</span></tt></a>(range_ring_location_km[,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="pyart.graph.CFRadialDisplay.plot_range_ring.html#pyart.graph.CFRadialDisplay.plot_range_ring" title="pyart.graph.CFRadialDisplay.plot_range_ring"><tt class="xref py py-obj docutils literal"><span class="pre">plot_range_ring</span></tt></a>(range_ring_location_km[,&nbsp;...])</td>
 <td>Plot a single range ring.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.graph.CFRadialDisplay.plot_range_rings.html#pyart.graph.CFRadialDisplay.plot_range_rings" title="pyart.graph.CFRadialDisplay.plot_range_rings"><tt class="xref py py-obj docutils literal"><span class="pre">plot_range_rings</span></tt></a>(range_rings[,&nbsp;ax])</td>
+<tr class="row-even"><td><a class="reference internal" href="pyart.graph.CFRadialDisplay.plot_range_rings.html#pyart.graph.CFRadialDisplay.plot_range_rings" title="pyart.graph.CFRadialDisplay.plot_range_rings"><tt class="xref py py-obj docutils literal"><span class="pre">plot_range_rings</span></tt></a>(range_rings[,&nbsp;ax])</td>
 <td>Plot a series of range rings.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.graph.CFRadialDisplay.plot_ray.html#pyart.graph.CFRadialDisplay.plot_ray" title="pyart.graph.CFRadialDisplay.plot_ray"><tt class="xref py py-obj docutils literal"><span class="pre">plot_ray</span></tt></a>(field,&nbsp;ray[,&nbsp;format_str,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="pyart.graph.CFRadialDisplay.plot_ray.html#pyart.graph.CFRadialDisplay.plot_ray" title="pyart.graph.CFRadialDisplay.plot_ray"><tt class="xref py py-obj docutils literal"><span class="pre">plot_ray</span></tt></a>(field,&nbsp;ray[,&nbsp;format_str,&nbsp;...])</td>
 <td>Plot a single ray.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.graph.CFRadialDisplay.plot_rhi.html#pyart.graph.CFRadialDisplay.plot_rhi" title="pyart.graph.CFRadialDisplay.plot_rhi"><tt class="xref py py-obj docutils literal"><span class="pre">plot_rhi</span></tt></a>(field,&nbsp;tilt[,&nbsp;mask_tuple,&nbsp;vmin,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="pyart.graph.CFRadialDisplay.plot_rhi.html#pyart.graph.CFRadialDisplay.plot_rhi" title="pyart.graph.CFRadialDisplay.plot_rhi"><tt class="xref py py-obj docutils literal"><span class="pre">plot_rhi</span></tt></a>(field[,&nbsp;sweep,&nbsp;mask_tuple,&nbsp;vmin,&nbsp;...])</td>
 <td>Plot a RHI.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pyart.graph.CFRadialDisplay.plot_vpt.html#pyart.graph.CFRadialDisplay.plot_vpt" title="pyart.graph.CFRadialDisplay.plot_vpt"><tt class="xref py py-obj docutils literal"><span class="pre">plot_vpt</span></tt></a>(field[,&nbsp;mask_tuple,&nbsp;vmin,&nbsp;vmax,&nbsp;...])</td>
+<td>Plot a VPT scan.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="pyart.graph.CFRadialDisplay.set_limits.html#pyart.graph.CFRadialDisplay.set_limits" title="pyart.graph.CFRadialDisplay.set_limits"><tt class="xref py py-obj docutils literal"><span class="pre">set_limits</span></tt></a>([xlim,&nbsp;ylim,&nbsp;ax])</td>
 <td>Set the display limits.</td>
@@ -258,12 +270,12 @@
              >previous</a> |</li>
         <li><a href="../../index.html">Py-ART Documentation (DRAFT)</a> &raquo;</li>
           <li><a href="../index.html" >User Reference Manual</a> &raquo;</li>
-          <li><a href="../graph.html" >Graphing (<tt class="docutils literal docutils literal"><span class="pre">pyart.graph</span></tt>)</a> &raquo;</li> 
+          <li><a href="../graph.html" >Graphing (<tt class="docutils literal"><span class="pre">pyart.graph</span></tt>)</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Nov 19, 2013.
+      Last updated on Jan 16, 2014.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>

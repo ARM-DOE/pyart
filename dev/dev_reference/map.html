@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.0.0.dev-9b578da',
+        VERSION:     '1.0.0.dev-a639eaa',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <link rel="top" title="Py-ART Documentation (DRAFT)" href="../index.html" />
     <link rel="up" title="Developer Reference Manual" href="index.html" />
     <link rel="next" title="pyart.map.grid_mapper.grid_from_radars" href="generated/pyart.map.grid_mapper.grid_from_radars.html" />
-    <link rel="prev" title="pyart.graph.radar_display.RadarDisplay._set_title" href="generated/pyart.graph.radar_display.RadarDisplay._set_title.html" /> 
+    <link rel="prev" title="pyart.graph.radar_display.RadarDisplay._set_vpt_title" href="generated/pyart.graph.radar_display.RadarDisplay._set_vpt_title.html" /> 
   </head>
   <body>
     <div class="related">
@@ -48,7 +48,7 @@
           <a href="generated/pyart.map.grid_mapper.grid_from_radars.html" title="pyart.map.grid_mapper.grid_from_radars"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="generated/pyart.graph.radar_display.RadarDisplay._set_title.html" title="pyart.graph.radar_display.RadarDisplay._set_title"
+          <a href="generated/pyart.graph.radar_display.RadarDisplay._set_vpt_title.html" title="pyart.graph.radar_display.RadarDisplay._set_vpt_title"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">Py-ART Documentation (DRAFT)</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Developer Reference Manual</a> &raquo;</li> 
@@ -75,11 +75,26 @@
 <tr class="row-odd"><td><a class="reference internal" href="generated/pyart.map.grid_mapper.grid_from_radars.html#pyart.map.grid_mapper.grid_from_radars" title="pyart.map.grid_mapper.grid_from_radars"><tt class="xref py py-obj docutils literal"><span class="pre">grid_from_radars</span></tt></a>(radars,&nbsp;grid_shape,&nbsp;...)</td>
 <td>Map one or more radars to a Cartesian grid returning a Grid object.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.map.grid_mapper.map_to_grid.html#pyart.map.grid_mapper.map_to_grid" title="pyart.map.grid_mapper.map_to_grid"><tt class="xref py py-obj docutils literal"><span class="pre">map_to_grid</span></tt></a>(radars[,&nbsp;grid_shape,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.map.grid_mapper.map_to_grid.html#pyart.map.grid_mapper.map_to_grid" title="pyart.map.grid_mapper.map_to_grid"><tt class="xref py py-obj docutils literal"><span class="pre">map_to_grid</span></tt></a>(radars,&nbsp;grid_shape,&nbsp;grid_limits)</td>
 <td>Map one or more radars to a Cartesian grid.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.map.grid_mapper.example_roi_func_constant.html#pyart.map.grid_mapper.example_roi_func_constant" title="pyart.map.grid_mapper.example_roi_func_constant"><tt class="xref py py-obj docutils literal"><span class="pre">example_roi_func_constant</span></tt></a>(zg,&nbsp;yg,&nbsp;xg)</td>
+<td>Example RoI function which returns a constant radius.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.map.grid_mapper.example_roi_func_dist.html#pyart.map.grid_mapper.example_roi_func_dist" title="pyart.map.grid_mapper.example_roi_func_dist"><tt class="xref py py-obj docutils literal"><span class="pre">example_roi_func_dist</span></tt></a>(zg,&nbsp;yg,&nbsp;xg)</td>
+<td>Example RoI function which returns a radius which grows with distance.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pyart.map.grid_mapper._load_nn_field_data.html#pyart.map.grid_mapper._load_nn_field_data" title="pyart.map.grid_mapper._load_nn_field_data"><tt class="xref py py-obj docutils literal"><span class="pre">_load_nn_field_data</span></tt></a>(data,&nbsp;nfields,&nbsp;npoints,&nbsp;...)</td>
 <td>Load the nearest neighbor field data into sdata</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.map.grid_mapper._gen_roi_func_constant.html#pyart.map.grid_mapper._gen_roi_func_constant" title="pyart.map.grid_mapper._gen_roi_func_constant"><tt class="xref py py-obj docutils literal"><span class="pre">_gen_roi_func_constant</span></tt></a>(constant_roi)</td>
+<td>Return a RoI function which returns a constant radius.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.map.grid_mapper._gen_roi_func_dist.html#pyart.map.grid_mapper._gen_roi_func_dist" title="pyart.map.grid_mapper._gen_roi_func_dist"><tt class="xref py py-obj docutils literal"><span class="pre">_gen_roi_func_dist</span></tt></a>(z_factor,&nbsp;xy_factor,&nbsp;...)</td>
+<td>Return a RoI function whose radius grows with distance.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.map.grid_mapper._gen_roi_func_dist_beam.html#pyart.map.grid_mapper._gen_roi_func_dist_beam" title="pyart.map.grid_mapper._gen_roi_func_dist_beam"><tt class="xref py py-obj docutils literal"><span class="pre">_gen_roi_func_dist_beam</span></tt></a>(h_factor,&nbsp;nb,&nbsp;bsp,&nbsp;...)</td>
+<td>Return a RoI function whose radius which grows with distance</td>
 </tr>
 </tbody>
 </table>
@@ -114,8 +129,8 @@
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="generated/pyart.graph.radar_display.RadarDisplay._set_title.html"
-                        title="previous chapter">pyart.graph.radar_display.RadarDisplay._set_title</a></p>
+  <p class="topless"><a href="generated/pyart.graph.radar_display.RadarDisplay._set_vpt_title.html"
+                        title="previous chapter">pyart.graph.radar_display.RadarDisplay._set_vpt_title</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="generated/pyart.map.grid_mapper.grid_from_radars.html"
                         title="next chapter">pyart.map.grid_mapper.grid_from_radars</a></p>
@@ -157,7 +172,7 @@
           <a href="generated/pyart.map.grid_mapper.grid_from_radars.html" title="pyart.map.grid_mapper.grid_from_radars"
              >next</a> |</li>
         <li class="right" >
-          <a href="generated/pyart.graph.radar_display.RadarDisplay._set_title.html" title="pyart.graph.radar_display.RadarDisplay._set_title"
+          <a href="generated/pyart.graph.radar_display.RadarDisplay._set_vpt_title.html" title="pyart.graph.radar_display.RadarDisplay._set_vpt_title"
              >previous</a> |</li>
         <li><a href="../index.html">Py-ART Documentation (DRAFT)</a> &raquo;</li>
           <li><a href="index.html" >Developer Reference Manual</a> &raquo;</li> 
@@ -165,7 +180,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Nov 19, 2013.
+      Last updated on Jan 16, 2014.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>

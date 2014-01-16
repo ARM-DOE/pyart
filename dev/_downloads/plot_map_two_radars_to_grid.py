@@ -24,8 +24,8 @@ radar_se = pyart.io.read_cfradial(XSAPR_SE_FILE)
 # perform Cartesian mapping, limit to the reflectivity field.
 grid = pyart.map.grid_from_radars(
     (radar_se, radar_sw),
-    grid_shape=(201, 201, 2),
-    grid_limits=((-60000, 40000), (-50000, 40000), (0, 1000)),
+    grid_shape=(1, 201, 201),
+    grid_limits=((1000, 1000), (-50000, 40000), (-60000, 40000)),
     grid_origin = (36.57861, -97.363611),
     fields=['corrected_reflectivity_horizontal'],
     refl_field='corrected_reflectivity_horizontal',
@@ -34,6 +34,6 @@ grid = pyart.map.grid_from_radars(
 # create the plot
 fig = plt.figure()
 ax = fig.add_subplot(111)
-ax.imshow(grid.fields['corrected_reflectivity_horizontal']['data'][1],
+ax.imshow(grid.fields['corrected_reflectivity_horizontal']['data'][0],
           origin='lower', extent=(-60, 40, -50, 40), vmin=0, vmax=48)
 plt.show()

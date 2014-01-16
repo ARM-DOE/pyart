@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.0.0.dev-9b578da',
+        VERSION:     '1.0.0.dev-a639eaa',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -112,6 +112,11 @@ grid.</p>
 <span class="n">y_m</span> <span class="o">=</span> <span class="n">grid_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s">&#39;%Y%m&#39;</span><span class="p">)</span>
 <span class="n">url</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;http://nomads.ncdc.noaa.gov/dods/NCEP_NARR_DAILY/&#39;</span> <span class="o">+</span> <span class="n">y_m</span> <span class="o">+</span> <span class="s">&#39;/&#39;</span> <span class="o">+</span>
        <span class="n">y_m_d</span> <span class="o">+</span> <span class="s">&#39;/narr-a_221_&#39;</span> <span class="o">+</span> <span class="n">y_m_d</span> <span class="o">+</span> <span class="s">&#39;_0000_000&#39;</span><span class="p">)</span>
+<span class="c"># Use a local copy of the online NCEP NARR data, this file can be created with</span>
+<span class="c"># the command:</span>
+<span class="c"># nccopy http://nomads.ncdc.noaa.gov/dods/NCEP_NARR_DAILY/201105/20110520/narr-a_221_20110520_0000_000?lon,lat,time,prmsl narr-a_221_20110520_0000_000.nc</span>
+<span class="c"># comment out the next line to retrieve the data from the OPeNDAP server.</span>
+<span class="n">url</span> <span class="o">=</span> <span class="s">&#39;narr-a_221_20110520_0000_000.nc&#39;</span>
 <span class="n">data</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
 
 <span class="c"># extract data at correct time</span>
@@ -127,7 +132,7 @@ grid.</p>
 
 <span class="c"># colorbar</span>
 <span class="n">cbax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_axes</span><span class="p">(</span><span class="n">colorbar_panel_axes</span><span class="p">)</span>
-<span class="n">display</span><span class="o">.</span><span class="n">plot_colorbar</span><span class="p">()</span>
+<span class="n">display</span><span class="o">.</span><span class="n">plot_colorbar</span><span class="p">(</span><span class="n">cax</span><span class="o">=</span><span class="n">cbax</span><span class="p">)</span>
 
 <span class="c"># panel 2, longitude slice.</span>
 <span class="n">ax2</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_axes</span><span class="p">(</span><span class="n">x_cut_panel_axes</span><span class="p">)</span>
@@ -147,7 +152,7 @@ grid.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the example:</strong>  9.95 seconds</p>
+<p><strong>Total running time of the example:</strong>  5.67 seconds</p>
 </div>
 
 
@@ -202,7 +207,7 @@ grid.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Nov 19, 2013.
+      Last updated on Jan 16, 2014.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>

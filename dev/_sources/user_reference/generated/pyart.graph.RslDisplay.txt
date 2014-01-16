@@ -14,11 +14,14 @@ pyart.graph.RslDisplay
          RslDisplay.generate_filename
          RslDisplay.generate_ray_title
          RslDisplay.generate_title
+         RslDisplay.generate_vpt_title
          RslDisplay.label_xaxis_r
+         RslDisplay.label_xaxis_rays
          RslDisplay.label_xaxis_x
          RslDisplay.label_yaxis_field
          RslDisplay.label_yaxis_y
          RslDisplay.label_yaxis_z
+         RslDisplay.plot
          RslDisplay.plot_colorbar
          RslDisplay.plot_cross_hair
          RslDisplay.plot_label
@@ -28,6 +31,7 @@ pyart.graph.RslDisplay
          RslDisplay.plot_range_rings
          RslDisplay.plot_ray
          RslDisplay.plot_rhi
+         RslDisplay.plot_vpt
          RslDisplay.set_limits
 
 

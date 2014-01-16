@@ -14,11 +14,14 @@ pyart.graph.plot_mdv.MdvDisplay
          MdvDisplay.generate_filename
          MdvDisplay.generate_ray_title
          MdvDisplay.generate_title
+         MdvDisplay.generate_vpt_title
          MdvDisplay.label_xaxis_r
+         MdvDisplay.label_xaxis_rays
          MdvDisplay.label_xaxis_x
          MdvDisplay.label_yaxis_field
          MdvDisplay.label_yaxis_y
          MdvDisplay.label_yaxis_z
+         MdvDisplay.plot
          MdvDisplay.plot_colorbar
          MdvDisplay.plot_cross_hair
          MdvDisplay.plot_label
@@ -28,6 +31,7 @@ pyart.graph.plot_mdv.MdvDisplay
          MdvDisplay.plot_range_rings
          MdvDisplay.plot_ray
          MdvDisplay.plot_rhi
+         MdvDisplay.plot_vpt
          MdvDisplay.set_limits
 
    |
@@ -44,16 +48,19 @@ pyart.graph.plot_mdv.MdvDisplay
          ~MdvDisplay._get_colorbar_label
          ~MdvDisplay._get_data
          ~MdvDisplay._get_ray_data
+         ~MdvDisplay._get_vpt_data
          ~MdvDisplay._get_x_y
          ~MdvDisplay._get_x_y_z
          ~MdvDisplay._label_axes_ppi
          ~MdvDisplay._label_axes_ray
          ~MdvDisplay._label_axes_rhi
+         ~MdvDisplay._label_axes_vpt
          ~MdvDisplay._parse_ax
          ~MdvDisplay._parse_ax_fig
          ~MdvDisplay._parse_vmin_vmax
          ~MdvDisplay._set_ray_title
          ~MdvDisplay._set_title
+         ~MdvDisplay._set_vpt_title
    
    
 

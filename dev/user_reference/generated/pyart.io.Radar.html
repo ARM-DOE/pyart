@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.0.0.dev-9b578da',
+        VERSION:     '1.0.0.dev-a639eaa',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +29,7 @@
     <link rel="top" title="Py-ART Documentation (DRAFT)" href="../../index.html" />
     <link rel="up" title="Input and output (pyart.io)" href="../io.html" />
     <link rel="next" title="pyart.io.Radar.add_field" href="pyart.io.Radar.add_field.html" />
-    <link rel="prev" title="pyart.io.write_grid" href="pyart.io.write_grid.html" /> 
+    <link rel="prev" title="pyart.io.to_vpt" href="pyart.io.to_vpt.html" /> 
   </head>
   <body>
     <div class="related">
@@ -48,11 +48,11 @@
           <a href="pyart.io.Radar.add_field.html" title="pyart.io.Radar.add_field"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="pyart.io.write_grid.html" title="pyart.io.write_grid"
+          <a href="pyart.io.to_vpt.html" title="pyart.io.to_vpt"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">Py-ART Documentation (DRAFT)</a> &raquo;</li>
           <li><a href="../index.html" >User Reference Manual</a> &raquo;</li>
-          <li><a href="../io.html" accesskey="U">Input and output (<tt class="docutils literal docutils literal docutils literal"><span class="pre">pyart.io</span></tt>)</a> &raquo;</li> 
+          <li><a href="../io.html" accesskey="U">Input and output (<tt class="docutils literal"><span class="pre">pyart.io</span></tt>)</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -65,7 +65,7 @@
 <h1>pyart.io.Radar<a class="headerlink" href="#pyart-io-radar" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="pyart.io.Radar">
-<em class="property">class </em><tt class="descclassname">pyart.io.</tt><tt class="descname">Radar</tt><big>(</big><em>time</em>, <em>_range</em>, <em>fields</em>, <em>metadata</em>, <em>scan_type</em>, <em>latitude</em>, <em>longitude</em>, <em>altitude</em>, <em>sweep_number</em>, <em>sweep_mode</em>, <em>fixed_angle</em>, <em>sweep_start_ray_index</em>, <em>sweep_end_ray_index</em>, <em>azimuth</em>, <em>elevation</em>, <em>altitude_agl=None</em>, <em>target_scan_rate=None</em>, <em>scan_rate=None</em>, <em>antenna_transition=None</em>, <em>instrument_parameters=None</em>, <em>radar_calibration=None</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/io/radar.py#L23"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.io.Radar" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">pyart.io.</tt><tt class="descname">Radar</tt><big>(</big><em>time</em>, <em>_range</em>, <em>fields</em>, <em>metadata</em>, <em>scan_type</em>, <em>latitude</em>, <em>longitude</em>, <em>altitude</em>, <em>sweep_number</em>, <em>sweep_mode</em>, <em>fixed_angle</em>, <em>sweep_start_ray_index</em>, <em>sweep_end_ray_index</em>, <em>azimuth</em>, <em>elevation</em>, <em>altitude_agl=None</em>, <em>target_scan_rate=None</em>, <em>scan_rate=None</em>, <em>antenna_transition=None</em>, <em>instrument_parameters=None</em>, <em>radar_calibration=None</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/io/radar.py#L25"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.io.Radar" title="Permalink to this definition">¶</a></dt>
 <dd><p>A class for storing antenna coordinate radar data.</p>
 <p>The structure of the Radar class is based on the CF/Radial Data file
 format.  Global attributes and variables (section 4.1 and 4.3) are
@@ -191,8 +191,8 @@ dictionaries under the meta_group attribute.</p>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="pyart.io.write_grid.html"
-                        title="previous chapter">pyart.io.write_grid</a></p>
+  <p class="topless"><a href="pyart.io.to_vpt.html"
+                        title="previous chapter">pyart.io.to_vpt</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="pyart.io.Radar.add_field.html"
                         title="next chapter">pyart.io.Radar.add_field</a></p>
@@ -234,16 +234,16 @@ dictionaries under the meta_group attribute.</p>
           <a href="pyart.io.Radar.add_field.html" title="pyart.io.Radar.add_field"
              >next</a> |</li>
         <li class="right" >
-          <a href="pyart.io.write_grid.html" title="pyart.io.write_grid"
+          <a href="pyart.io.to_vpt.html" title="pyart.io.to_vpt"
              >previous</a> |</li>
         <li><a href="../../index.html">Py-ART Documentation (DRAFT)</a> &raquo;</li>
           <li><a href="../index.html" >User Reference Manual</a> &raquo;</li>
-          <li><a href="../io.html" >Input and output (<tt class="docutils literal docutils literal docutils literal"><span class="pre">pyart.io</span></tt>)</a> &raquo;</li> 
+          <li><a href="../io.html" >Input and output (<tt class="docutils literal"><span class="pre">pyart.io</span></tt>)</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Nov 19, 2013.
+      Last updated on Jan 16, 2014.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>

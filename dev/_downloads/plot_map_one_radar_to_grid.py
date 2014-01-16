@@ -20,19 +20,18 @@ import pyart
 RADAR_FILE = '110635.mdv'
 radar = pyart.io.read_mdv(RADAR_FILE)
 
-# mask out last 10 gates of each ray, this removed the "ring" around th radar.
+# mask out last 10 gates of each ray, this removes the "ring" around th radar.
 radar.fields['reflectivity']['data'][:, -10:] = np.ma.masked
 
 # perform Cartesian mapping, limit to the reflectivity field.
 grid = pyart.map.grid_from_radars(
     (radar,),
-    grid_shape=(241, 241, 2),
-    grid_limits=((-123000.0, 123000.0), (-123000.0, 123000.0),
-                 (1500, 2000)),
+    grid_shape=(1, 241, 241),
+    grid_limits=((2000, 2000), (-123000.0, 123000.0), (-123000.0, 123000.0)),
     fields=['reflectivity'])
 
 # create the plot
 fig = plt.figure()
 ax = fig.add_subplot(111)
-ax.imshow(grid.fields['reflectivity']['data'][1], origin='lower')
+ax.imshow(grid.fields['reflectivity']['data'][0], origin='lower')
 plt.show()

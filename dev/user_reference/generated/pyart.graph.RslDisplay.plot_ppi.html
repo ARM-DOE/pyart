@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.0.0.dev-9b578da',
+        VERSION:     '1.0.0.dev-a639eaa',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -52,7 +52,7 @@
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">Py-ART Documentation (DRAFT)</a> &raquo;</li>
           <li><a href="../index.html" >User Reference Manual</a> &raquo;</li>
-          <li><a href="../graph.html" >Graphing (<tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">pyart.graph</span></tt>)</a> &raquo;</li>
+          <li><a href="../graph.html" >Graphing (<tt class="docutils literal"><span class="pre">pyart.graph</span></tt>)</a> &raquo;</li>
           <li><a href="pyart.graph.RslDisplay.html" accesskey="U">pyart.graph.RslDisplay</a> &raquo;</li> 
       </ul>
     </div>  
@@ -66,7 +66,7 @@
 <h1>pyart.graph.RslDisplay.plot_ppi<a class="headerlink" href="#pyart-graph-rsldisplay-plot-ppi" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="pyart.graph.RslDisplay.plot_ppi">
-<tt class="descclassname">RslDisplay.</tt><tt class="descname">plot_ppi</tt><big>(</big><em>field</em>, <em>tilt</em>, <em>mask_tuple=None</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>cmap='jet'</em>, <em>mask_outside=True</em>, <em>title=None</em>, <em>title_flag=True</em>, <em>axislabels=(None</em>, <em>None)</em>, <em>axislabels_flag=True</em>, <em>colorbar_flag=True</em>, <em>colorbar_label=None</em>, <em>ax=None</em>, <em>fig=None</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/graph/radar_display.py#L196"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.graph.RslDisplay.plot_ppi" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">RslDisplay.</tt><tt class="descname">plot_ppi</tt><big>(</big><em>field</em>, <em>sweep=0</em>, <em>mask_tuple=None</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>cmap='jet'</em>, <em>mask_outside=True</em>, <em>title=None</em>, <em>title_flag=True</em>, <em>axislabels=(None</em>, <em>None)</em>, <em>axislabels_flag=True</em>, <em>colorbar_flag=True</em>, <em>colorbar_label=None</em>, <em>ax=None</em>, <em>fig=None</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/graph/radar_display.py#L229"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.graph.RslDisplay.plot_ppi" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot a PPI.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -76,9 +76,9 @@
 <blockquote>
 <div><p>Field to plot.</p>
 </div></blockquote>
-<p><strong>tilt</strong> : int,</p>
+<p><strong>sweep</strong> : int,</p>
 <blockquote>
-<div><p>Tilt number to plot.</p>
+<div><p>Sweep number to plot.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -109,7 +109,7 @@ masking.</p>
 <p><strong>title</strong> : str</p>
 <blockquote>
 <div><p>Title to label plot with, None to use default title generated from
-the field and tilt parameters. Parameter is ignored if title_flag
+the field and sweep parameters. Parameter is ignored if title_flag
 is False.</p>
 </div></blockquote>
 <p><strong>title_flag</strong> : bool</p>
@@ -206,13 +206,13 @@ field information.</p>
              >previous</a> |</li>
         <li><a href="../../index.html">Py-ART Documentation (DRAFT)</a> &raquo;</li>
           <li><a href="../index.html" >User Reference Manual</a> &raquo;</li>
-          <li><a href="../graph.html" >Graphing (<tt class="docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal docutils literal"><span class="pre">pyart.graph</span></tt>)</a> &raquo;</li>
+          <li><a href="../graph.html" >Graphing (<tt class="docutils literal"><span class="pre">pyart.graph</span></tt>)</a> &raquo;</li>
           <li><a href="pyart.graph.RslDisplay.html" >pyart.graph.RslDisplay</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Nov 19, 2013.
+      Last updated on Jan 16, 2014.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
