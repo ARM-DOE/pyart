@@ -51,9 +51,9 @@ class RadarDisplay:
     time_begin : datetime
         Beginning time of first radar scan.
     starts : array
-        Starting ray index for each tilt.
+        Starting ray index for each sweep.
     ends : array
-        Ending ray index for each tilt.
+        Ending ray index for each sweep.
     fields : dict
         Radar fields.
     scan_type : str
@@ -226,7 +226,7 @@ class RadarDisplay:
         self.plots.append(line)
         self.plot_vars.append(field)
 
-    def plot_ppi(self, field, tilt, mask_tuple=None, vmin=None, vmax=None,
+    def plot_ppi(self, field, sweep=0, mask_tuple=None, vmin=None, vmax=None,
                  cmap='jet', mask_outside=True, title=None, title_flag=True,
                  axislabels=(None, None), axislabels_flag=True,
                  colorbar_flag=True, colorbar_label=None, ax=None, fig=None):
@@ -237,8 +237,8 @@ class RadarDisplay:
         ----------
         field : str
             Field to plot.
-        tilt : int,
-            Tilt number to plot.
+        sweep : int,
+            Sweep number to plot.
 
         Other Parameters
         ----------------
@@ -257,7 +257,7 @@ class RadarDisplay:
             masking.
         title : str
             Title to label plot with, None to use default title generated from
-            the field and tilt parameters. Parameter is ignored if title_flag
+            the field and sweep parameters. Parameter is ignored if title_flag
             is False.
         title_flag : bool
             True to add a title to the plot, False does not add a title.
@@ -284,8 +284,8 @@ class RadarDisplay:
         vmin, vmax = self._parse_vmin_vmax(field, vmin, vmax)
 
         # get data for the plot
-        data = self._get_data(field, tilt, mask_tuple)
-        x, y = self._get_x_y(field, tilt)
+        data = self._get_data(field, sweep, mask_tuple)
+        x, y = self._get_x_y(field, sweep)
 
         # mask the data where outside the limits
         if mask_outside:
@@ -295,7 +295,7 @@ class RadarDisplay:
         pm = ax.pcolormesh(x, y, data, vmin=vmin, vmax=vmax, cmap=cmap)
 
         if title_flag:
-            self._set_title(field, tilt, title, ax)
+            self._set_title(field, sweep, title, ax)
 
         if axislabels_flag:
             self._label_axes_ppi(axislabels, ax)
@@ -308,7 +308,7 @@ class RadarDisplay:
             self.plot_colorbar(mappable=pm, label=colorbar_label,
                                field=field, fig=fig)
 
-    def plot_rhi(self, field, tilt, mask_tuple=None, vmin=None, vmax=None,
+    def plot_rhi(self, field, sweep=0, mask_tuple=None, vmin=None, vmax=None,
                  cmap='jet', mask_outside=True, title=None, title_flag=True,
                  axislabels=(None, None), axislabels_flag=True,
                  reverse_xaxis=None, colorbar_flag=True, colorbar_label=None,
@@ -320,8 +320,8 @@ class RadarDisplay:
         ----------
         field : str
             Field to plot.
-        tilt : int,
-            Tilt number to plot.
+        sweep : int,
+            Sweep number to plot.
 
         Other Parameters
         ----------------
@@ -337,7 +337,7 @@ class RadarDisplay:
             Matplotlib colormap name.
         title : str
             Title to label plot with, None to use default title generated from
-            the field and tilt parameters. Parameter is ignored if title_flag
+            the field and sweep parameters. Parameter is ignored if title_flag
             is False.
         title_flag : bool
             True to add a title to the plot, False does not add a title.
@@ -368,8 +368,8 @@ class RadarDisplay:
         vmin, vmax = self._parse_vmin_vmax(field, vmin, vmax)
 
         # get data for the plot
-        data = self._get_data(field, tilt, mask_tuple)
-        x, y, z = self._get_x_y_z(field, tilt)
+        data = self._get_data(field, sweep, mask_tuple)
+        x, y, z = self._get_x_y_z(field, sweep)
 
         # mask the data where outside the limits
         if mask_outside:
@@ -385,7 +385,7 @@ class RadarDisplay:
         pm = ax.pcolormesh(R, z, data, vmin=vmin, vmax=vmax, cmap=cmap)
 
         if title_flag:
-            self._set_title(field, tilt, title, ax)
+            self._set_title(field, sweep, title, ax)
 
         if axislabels_flag:
             self._label_axes_rhi(axislabels, ax)
@@ -427,7 +427,7 @@ class RadarDisplay:
             masking.
         title : str
             Title to label plot with, None to use default title generated from
-            the field and tilt parameters. Parameter is ignored if title_flag
+            the field and sweep parameters. Parameter is ignored if title_flag
             is False.
         title_flag : bool
             True to add a title to the plot, False does not add a title.
@@ -686,10 +686,10 @@ class RadarDisplay:
         ax = self._parse_ax(ax)
         ax.set_ylabel(self._get_colorbar_label(field))
 
-    def _set_title(self, field, tilt, title, ax):
+    def _set_title(self, field, sweep, title, ax):
         """ Set the figure title using a default title. """
         if title is None:
-            ax.set_title(self.generate_title(field, tilt))
+            ax.set_title(self.generate_title(field, sweep))
         else:
             ax.set_title(title)
 
@@ -759,19 +759,19 @@ class RadarDisplay:
     # name generator methods #
     ##########################
 
-    def generate_filename(self, field, tilt, ext='png'):
+    def generate_filename(self, field, sweep, ext='png'):
         """
         Generate a filename for a plot.
 
         Generated filename has form:
-            radar_name_field_tilt_time.ext
+            radar_name_field_sweep_time.ext
 
         Parameters
         ----------
         field : str
             Field plotted.
-        titl : int
-            Tilt plotted.
+        sweep : int
+            Sweep plotted.
         ext : str
             Filename extension.
 
@@ -784,10 +784,10 @@ class RadarDisplay:
         name_s = self.radar_name.replace(' ', '_')
         field_s = field.replace(' ', '_')
         time_s = self.time_begin.strftime('%Y%m%d%H%M%S')
-        tilt_s = str(tilt).zfill(2)
-        return '%s_%s_%s_%s.%s' % (name_s, field_s, tilt_s, time_s, ext)
+        sweep_s = str(sweep).zfill(2)
+        return '%s_%s_%s_%s.%s' % (name_s, field_s, sweep_s, time_s, ext)
 
-    def generate_title(self, field, tilt):
+    def generate_title(self, field, sweep):
         """
         Generate a title for a plot.
 
@@ -795,8 +795,8 @@ class RadarDisplay:
         ----------
         field : str
             Field plotted.
-        tilt : int
-            Tilt plotted.
+        sweep : int
+            Sweep plotted.
 
         Returns
         -------
@@ -805,7 +805,7 @@ class RadarDisplay:
 
         """
         time_str = self.time_begin.isoformat() + 'Z'
-        fixed_angle = self.fixed_angle[tilt]
+        fixed_angle = self.fixed_angle[sweep]
         l1 = "%s %.1f Deg. %s " % (self.radar_name, fixed_angle, time_str)
         field_name = self._generate_field_name(field)
         return l1 + '\n' + field_name
@@ -908,10 +908,10 @@ class RadarDisplay:
     # Get methods #
     ###############
 
-    def _get_data(self, field, tilt, mask_tuple):
+    def _get_data(self, field, sweep, mask_tuple):
         """ Retrieve and return data from a plot function. """
-        start = self.starts[tilt]
-        end = self.ends[tilt] + 1
+        start = self.starts[sweep]
+        end = self.ends[sweep] + 1
         data = self.fields[field]['data'][start:end]
 
         if mask_tuple is not None:  # mask data if mask_tuple provided
@@ -940,16 +940,16 @@ class RadarDisplay:
             data = np.ma.masked_where(mdata < mask_value, data)
         return data
 
-    def _get_x_y(self, field, tilt):
+    def _get_x_y(self, field, sweep):
         """ Retrieve and return x and y coordinate in km. """
-        start = self.starts[tilt]
-        end = self.ends[tilt] + 1
+        start = self.starts[sweep]
+        end = self.ends[sweep] + 1
         return self.x[start:end] / 1000.0, self.y[start:end] / 1000.0
 
-    def _get_x_y_z(self, field, tilt):
+    def _get_x_y_z(self, field, sweep):
         """ Retrieve and return x, y, and z coordinate in km. """
-        start = self.starts[tilt]
-        end = self.ends[tilt] + 1
+        start = self.starts[sweep]
+        end = self.ends[sweep] + 1
         x = self.x[start:end] / 1000.0
         y = self.y[start:end] / 1000.0
         z = self.z[start:end] / 1000.0

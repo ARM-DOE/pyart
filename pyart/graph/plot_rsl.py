@@ -80,7 +80,7 @@ class RslDisplay(RadarDisplay):
 
     # public methods which are overridden.
 
-    def generate_title(self, field, tilt):
+    def generate_title(self, field, sweep):
         """
         Generate a title for a plot.
 
@@ -88,8 +88,8 @@ class RslDisplay(RadarDisplay):
         ----------
         field : str
             Field plotted.
-        tilt : int
-            Tilt plotted.
+        sweep : int
+            Sweep plotted.
 
         Returns
         -------
@@ -98,7 +98,7 @@ class RslDisplay(RadarDisplay):
 
         """
         volume_num = rsl.RSLNAME2VOLUMENUM[field]
-        sweep = self.rslfile.get_volume(volume_num).get_sweep(tilt)
+        sweep = self.rslfile.get_volume(volume_num).get_sweep(sweep)
         fixed_angle = sweep.azimuth
         if fixed_angle == -999.0:   # ppi scan
             fixed_angle = sweep.elev
@@ -122,29 +122,29 @@ class RslDisplay(RadarDisplay):
                 vmax = 64.0
         return vmin, vmax
 
-    def _get_data(self, field, tilt, mask_tuple):
+    def _get_data(self, field, sweep, mask_tuple):
         """ Retrieve and return data from a plot function. """
         volume_num = rsl.RSLNAME2VOLUMENUM[field]
-        sweep = self.rslfile.get_volume(volume_num).get_sweep(tilt)
+        sweep = self.rslfile.get_volume(volume_num).get_sweep(sweep)
         data = sweep.get_data()
 
         if mask_tuple is not None:
             mask_field, mask_value = mask_tuple
             mask_num = rsl.RSLNAME2VOLUMENUM[mask_field]
-            sweep = self.rslfile.get_volume(mask_num).get_sweep(tilt)
+            sweep = self.rslfile.get_volume(mask_num).get_sweep(sweep)
             mdata = sweep.get_data()
             data = np.ma.masked_where(mdata < mask_value, data)
         return data
 
-    def _get_x_y(self, field, tilt):
+    def _get_x_y(self, field, sweep):
         """ Retrieve and return x and y coordinate in km. """
-        x, y, z = self._get_x_y_z(field, tilt)
+        x, y, z = self._get_x_y_z(field, sweep)
         return x, y
 
-    def _get_x_y_z(self, field, tilt):
+    def _get_x_y_z(self, field, sweep):
         """ Retrieve and return x, y, and z coordinate in km. """
         volume_num = rsl.RSLNAME2VOLUMENUM[field]
-        sweep = self.rslfile.get_volume(volume_num).get_sweep(tilt)
+        sweep = self.rslfile.get_volume(volume_num).get_sweep(sweep)
         ray = sweep.get_ray(0)
         ranges = ray.range_bin1 + ray.gate_size * np.arange(ray.nbins)
         ranges = ranges / 1000.0
