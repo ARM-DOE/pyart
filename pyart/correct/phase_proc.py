@@ -78,7 +78,6 @@ def det_sys_phase(radar, ncp_lev=0.4, rhohv_lev=0.6,
     if phidp_field is None:
         phidp_field = get_field_name('differential_phase')
 
-    print "Unfolding"
     ncp = radar.fields[ncp_field]['data'][:, 30:]
     rhv = radar.fields[rhv_field]['data'][:, 30:]
     phidp = radar.fields[phidp_field]['data'][:, 30:]
@@ -407,9 +406,6 @@ def get_phidp_unf(radar, ncp_lev=0.4, rhohv_lev=0.6, debug=False, ncpts=20,
     if phidp_field is None:
         phidp_field = get_field_name('differential_phase')
 
-    if nowrap is not None:
-        print "Starting late"
-
     if doc is not None:
         my_phidp = radar.fields[phidp_field]['data'][:, 0:doc]
         my_rhv = radar.fields[rhv_field]['data'][:, 0:doc]
@@ -634,7 +630,6 @@ def LP_solver_cvxopt(A_Matrix, B_vectors, weights, solver='glpk'):
     G = matrix(np.bmat([[-A_Matrix], [-np.eye(2 * n_gates)]]))
     h_array = np.zeros(5 * n_gates - 4)
     for raynum in range(n_rays):
-        print "raynum", raynum
         c = matrix(weights[raynum]).T
         h_array[:3 * n_gates - 4] = -B_vectors[raynum]
         h = matrix(h_array)
@@ -765,7 +760,6 @@ def solve_cylp(model, B_vectors, weights, ray, chunksize):
 
     i = 0
     for raynum in xrange(ray, ray + chunksize):
-        print("Calculating %dth ray" % (raynum))
         # set new B_vector values for actual ray
         s.setRowLowerArray(np.squeeze(np.asarray(B_vectors[raynum])))
         # set new weights (objectives) for actual ray
@@ -932,7 +926,6 @@ def LP_solver_cylp(A_Matrix, B_vectors, weights, really_verbose=False):
             s.logLevel = 0
 
     for raynum in xrange(n_rays):
-        print "raynum", raynum
 
         # set new B_vector values for actual ray
         s.setRowLowerArray(np.squeeze(np.asarray(B_vectors[raynum])))
@@ -952,7 +945,7 @@ def phase_proc_lp(radar, offset, debug=False, self_const=60000.0,
                   low_z=10.0, high_z=53.0, min_phidp=0.01, min_ncp=0.5,
                   min_rhv=0.8, fzl=4000.0, sys_phase=0.0,
                   overide_sys_phase=False, nowrap=None, really_verbose=False,
-                  LP_solver='pyglpk', refl_field=None, ncp_field=None,
+                  LP_solver='cylp', refl_field=None, ncp_field=None,
                   rhv_field=None, phidp_field=None, kdp_field=None,
                   unf_field=None, window_len=35, proc=1):
     """
