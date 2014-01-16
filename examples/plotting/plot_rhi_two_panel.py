@@ -35,7 +35,7 @@ for plot_num in xrange(nplots):
     vmin, vmax = ranges[plot_num]
 
     plt.subplot(1, nplots, plot_num + 1)
-    display.plot_rhi(field, 0, vmin=vmin, vmax=vmax, title_flag=False)
+    display.plot(field, 0, vmin=vmin, vmax=vmax, title_flag=False)
     display.set_limits(ylim=[0, 17])
 
 # set the figure title and show
