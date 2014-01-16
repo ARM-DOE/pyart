@@ -121,6 +121,17 @@ if __name__ == '__main__':
             title=args.title,
             axislabels=args.axis_labels,
             colorbar_label=args.colorbar_label)
+    elif radar.scan_type == 'vpt':
+         display.plot_rhi(
+            args.field, ax=ax, fig=fig,
+            vmin=args.vmin, vmax=args.vmax, cmap=args.cmap,
+            mask_outside=(not args.no_mask_outside),
+            title_flag=(not args.no_title),
+            axislabels_flag=(not args.no_axis_labels),
+            colorbar_flag=(not args.no_colorbar),
+            title=args.title,
+            axislabels=args.axis_labels,
+            colorbar_label=args.colorbar_label)
     else:
         raise ValueError('Cannot plot radar scan_type: ' + radar.scan_type)
 
