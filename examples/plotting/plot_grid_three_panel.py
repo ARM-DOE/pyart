@@ -57,6 +57,11 @@ y_m_d = grid_date.strftime('%Y%m%d')
 y_m = grid_date.strftime('%Y%m')
 url = ('http://nomads.ncdc.noaa.gov/dods/NCEP_NARR_DAILY/' + y_m + '/' +
        y_m_d + '/narr-a_221_' + y_m_d + '_0000_000')
+# Use a local copy of the online NCEP NARR data, this file can be created with
+# the command:
+# nccopy http://nomads.ncdc.noaa.gov/dods/NCEP_NARR_DAILY/201105/20110520/narr-a_221_20110520_0000_000?lon,lat,time,prmsl narr-a_221_20110520_0000_000.nc
+# comment out the next line to retrieve the data from the OPeNDAP server.
+url = 'narr-a_221_20110520_0000_000.nc'
 data = Dataset(url)
 
 # extract data at correct time

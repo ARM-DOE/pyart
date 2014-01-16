@@ -18,7 +18,7 @@ def test_radardisplay_rhi(outfile=None):
     display = pyart.graph.RadarDisplay(radar)
     fig = plt.figure()
     ax = fig.add_subplot(111)
-    display.plot_rhi('reflectivity_horizontal', 0, ax=ax)
+    display.plot('reflectivity_horizontal', 0, ax=ax)
     if outfile:
         fig.savefig(outfile)
     plt.close()
@@ -29,9 +29,9 @@ def test_radardisplay_ppi(outfile=None):
     display = pyart.graph.RadarDisplay(radar, shift=(0.1, 0.0))
     fig = plt.figure()
     ax = fig.add_subplot(111)
-    display.plot_ppi('reflectivity_horizontal', 0, colorbar_flag=True,
-                     title="Fancy PPI Plot",
-                     mask_tuple=('reflectivity_horizontal', -100))
+    display.plot('reflectivity_horizontal', 0, colorbar_flag=True,
+                 title="Fancy PPI Plot",
+                 mask_tuple=('reflectivity_horizontal', -100))
     display.plot_colorbar()
     display.plot_range_rings([10, 20, 30, 40], ax=ax)
     display.plot_labels(['tree'], [(36.68, -97.62)], symbols='k+', ax=ax)
@@ -61,8 +61,8 @@ def test_radardisplay_vpt(outfile=None):
     display = pyart.graph.RadarDisplay(radar)
     fig = plt.figure()
     ax = fig.add_subplot(111)
-    display.plot_vpt('reflectivity_horizontal', colorbar_flag=True,
-                     mask_tuple=('reflectivity_horizontal', -100), ax=ax)
+    display.plot('reflectivity_horizontal', colorbar_flag=True,
+                 mask_tuple=('reflectivity_horizontal', -100), ax=ax)
     if outfile:
         fig.savefig(outfile)
     plt.close()
@@ -98,6 +98,9 @@ def test_radardisplay_plot_labels_errors():
     # len(labels) != len(symbols)
     assert_raises(ValueError, display.plot_labels, ['a'], [(0, 0)],
                   symbols=['r+', 'r+'])
+    # unknown scan_type
+    display.scan_type = 'foo'
+    assert_raises(ValueError, display.plot, 'fake_field')
     plt.close()
 
 

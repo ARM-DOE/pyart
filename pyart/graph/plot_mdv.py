@@ -67,7 +67,7 @@ class MdvDisplay(RadarDisplay):
 
     # public methods which are overridden.
 
-    def generate_title(self, field, tilt):
+    def generate_title(self, field, sweep):
         """
         Generate a title for a plot.
 
@@ -75,8 +75,8 @@ class MdvDisplay(RadarDisplay):
         ----------
         field : str
             Field plotted.
-        tilt : int
-            Tilt plotted.
+        sweep : int
+            Sweep plotted.
 
         Returns
         -------
@@ -85,9 +85,9 @@ class MdvDisplay(RadarDisplay):
 
         """
         if self.mdvfile.scan_type == 'rhi':
-            fixed_angle = self.mdvfile.az_deg[tilt]
+            fixed_angle = self.mdvfile.az_deg[sweep]
         else:
-            fixed_angle = self.mdvfile.el_deg[tilt]
+            fixed_angle = self.mdvfile.el_deg[sweep]
 
         time_str = self.time_begin.isoformat() + 'Z'
         l1 = "%s %.1f Deg. %s " % (self.radar_name, fixed_angle, time_str)
@@ -103,28 +103,28 @@ class MdvDisplay(RadarDisplay):
             vmax = _get_default_range(self.mdvfile, field)[1]
         return vmin, vmax
 
-    def _get_data(self, field, tilt, mask_tuple):
+    def _get_data(self, field, sweep, mask_tuple):
         """ Retrieve and return data from a plot function. """
         field_num = self.mdvfile.fields.index(field)
-        data = self.mdvfile.read_a_field(field_num)[tilt]
+        data = self.mdvfile.read_a_field(field_num)[sweep]
         if mask_tuple is not None:
             mask_field, mask_value = mask_tuple
             mask_field_num = self.mdvfile.fields.index(mask_field)
-            mdata = self.mdvfile.read_a_field(mask_field_num)[tilt]
+            mdata = self.mdvfile.read_a_field(mask_field_num)[sweep]
             data = np.ma.masked_where(mdata < mask_value, data)
         return data
 
-    def _get_x_y(self, field, tilt):
+    def _get_x_y(self, field, sweep):
         """ Retrieve and return x and y coordinate in km. """
-        x = self.mdvfile.carts['x'][tilt] / 1000.0  # x coords in km
-        y = self.mdvfile.carts['y'][tilt] / 1000.0  # y coords in km
+        x = self.mdvfile.carts['x'][sweep] / 1000.0  # x coords in km
+        y = self.mdvfile.carts['y'][sweep] / 1000.0  # y coords in km
         return x, y
 
-    def _get_x_y_z(self, field, tilt):
+    def _get_x_y_z(self, field, sweep):
         """ Retrieve and return x, y, and z coordinate in km. """
-        x = self.mdvfile.carts['x'][tilt] / 1000.0  # x coords in km
-        y = self.mdvfile.carts['y'][tilt] / 1000.0  # y coords in km
-        z = self.mdvfile.carts['z'][tilt] / 1000.0  # y coords in km
+        x = self.mdvfile.carts['x'][sweep] / 1000.0  # x coords in km
+        y = self.mdvfile.carts['y'][sweep] / 1000.0  # y coords in km
+        z = self.mdvfile.carts['z'][sweep] / 1000.0  # y coords in km
         return x, y, z
 
     def _get_colorbar_label(self, field):
