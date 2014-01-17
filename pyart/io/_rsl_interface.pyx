@@ -670,8 +670,12 @@ cdef class _RslSweep:
         get_data()
 
         Return the two-dimensional data contained in the sweep.
+
+        If a given ray has few bins than the first ray, the missing bins
+        will be filled with 131072.0
         """
         cdef _rsl_h.Range raw
+        cdef _rsl_h.Ray * ray
         cdef np.ndarray[np.float32_t, ndim = 2] data
 
         sweep = self._Sweep
@@ -682,6 +686,7 @@ cdef class _RslSweep:
         data = np.zeros(shape, dtype='float32') + 1.31072000e+05
         for nray in range(nrays):
             ray = sweep.ray[nray]
+            assert ray is not NULL
             nbins = ray.h.nbins
             for nbin in range(nbins):
                 raw = ray.range[nbin]
@@ -767,6 +772,28 @@ cdef class _RslVolume:
         self._Volume = Volume
         self._dealloc = 0
 
+    def total_rays(self):
+        """
+        total_rays()
+
+        Return the total number of rays present in all sweeps of the volume.
+        """
+        return np.sum(self.get_nray_array())
+
+    def get_nray_array(self):
+        """
+        get_nray_array()
+
+        Return an array of the number of rays for each sweep.
+        """
+        cdef _rsl_h.Sweep * sweep
+        nrays = np.empty((self.nsweeps), dtype='int32')
+        for i in range(self.nsweeps):
+            sweep = self._Volume.sweep[i]
+            assert sweep is not NULL
+            nrays[i] = sweep.h.nrays
+        return nrays
+
     def get_sweep(self, int sweep_number):
         """
         get_sweep(sweep_numer)
@@ -791,14 +818,6 @@ cdef class _RslVolume:
         rslsweep.load(self._Volume.sweep[sweep_number])
         return rslsweep
 
-    def get_nray_list(self):
-        """
-        get_nray_list()
-
-        Return a list of the number of rays for each sweep.
-        """
-        return [self._Volume.sweep[i].h.nrays for i in range(self.nsweeps)]
-
     def get_azimuth_and_elev_array(self):
         """
         get_azimuth_and_elev_array()
@@ -806,17 +825,27 @@ cdef class _RslVolume:
         Return azimuth and elevation array for each sweep and ray.
         """
         cdef int nrays = self._Volume.sweep[0].h.nrays
+        cdef int ray_count
         cdef _rsl_h.Sweep * sweep
         cdef _rsl_h.Ray * ray
-        azimuth = np.empty([self.nsweeps, nrays], dtype='float32')
-        elev = np.empty([self.nsweeps, nrays], dtype='float32')
 
+        # create empty azimuth and elev output arrays
+        total_rays = self.total_rays()
+        azimuth = np.empty([total_rays], dtype='float32')
+        elev = np.empty([total_rays], dtype='float32')
+
+        # loop over the sweeps and rays storing azimuth and elev
+        ray_count = 0
         for i in range(self.nsweeps):
             sweep = self._Volume.sweep[i]
+            assert sweep is not NULL
+            nrays = sweep.h.nrays
             for j in range(nrays):
                 ray = sweep.ray[j]
-                azimuth[i, j] = ray.h.azimuth
-                elev[i, j] = ray.h.elev
+                assert ray is not NULL
+                azimuth[ray_count + j] = ray.h.azimuth
+                elev[ray_count + j] = ray.h.elev
+            ray_count += nrays
         return azimuth, elev
 
     def get_sweep_azimuths(self):
@@ -825,9 +854,12 @@ cdef class _RslVolume:
 
         Return azimuth array for each sweep.
         """
+        cdef _rsl_h.Sweep * sweep
         azimuth = np.empty((self.nsweeps), dtype='float32')
         for i in range(self.nsweeps):
-            azimuth[i] = self._Volume.sweep[i].h.azimuth
+            sweep = self._Volume.sweep[i]
+            assert sweep is not NULL
+            azimuth[i] = sweep.h.azimuth
         return azimuth
 
     def get_sweep_elevs(self):
@@ -836,9 +868,12 @@ cdef class _RslVolume:
 
         Return elevation array for each sweep.
         """
+        cdef _rsl_h.Sweep * sweep
         elev = np.empty((self.nsweeps), dtype='float32')
         for i in range(self.nsweeps):
-            elev[i] = self._Volume.sweep[i].h.elev
+            sweep = self._Volume.sweep[i]
+            assert sweep is not NULL
+            elev[i] = sweep.h.elev
         return elev
 
     def get_instr_params(self):
@@ -851,67 +886,88 @@ cdef class _RslVolume:
         -------
         pm_data : array, (nsweeps)
             Array of prt modes.
-        nv_data : array, (nsweeps, nrays)
+        nv_data : array, (total_rays)
             Array of nyquist velocities.
-        pr_data : array, (nsweeps, nrays)
+        pr_data : array, (total_rays)
             Array of pulse repetition frequency in Hz.
-        ur_data : array, (nsweeps, nrays)
+        ur_data : array, (total_rays)
             Array of unambiguous ranges, in km.
 
         """
         cdef int nrays = self._Volume.sweep[0].h.nrays
-        nyq_vel = self._Volume.sweep[0].ray[0].h.nyq_vel
+        cdef int ray_count
         cdef _rsl_h.Sweep * sweep
         cdef _rsl_h.Ray * ray
 
+        # calculate the total number of rays in the volume
+
+        # initalize empty instrument parameter arrays
+        total_rays = self.total_rays()
+        nyq_vel = self._Volume.sweep[0].ray[0].h.nyq_vel
         valid_nyq_vel = abs(nyq_vel) > 0.1
         pm_data = np.empty(self.nsweeps, dtype='|S24')
-        nv_data = np.empty((self.nsweeps, nrays), dtype='float32')
-        pr_data = np.empty((self.nsweeps, nrays), dtype='float32')
-        ur_data = np.empty((self.nsweeps, nrays), dtype='float32')
+        nv_data = np.empty((total_rays), dtype='float32')
+        pr_data = np.empty((total_rays), dtype='float32')
+        ur_data = np.empty((total_rays), dtype='float32')
 
+        # loop over sweeps and rays storing instrument parameters
+        ray_count = 0
         for i in range(self.nsweeps):
             sweep = self._Volume.sweep[i]
+            assert sweep is not NULL
+            nrays = sweep.h.nrays
             for j in range(nrays):
                 ray = sweep.ray[j]
+                assert ray is not NULL
                 if j == 0:
                     pm_data[i] = self._prtmode(ray.h)
 
                 if valid_nyq_vel:
-                    nv_data[i, j] = ray.h.nyq_vel
+                    nv_data[ray_count + j] = ray.h.nyq_vel
                 else:
-                    nv_data[i, j] = ray.h.wavelength * ray.h.prf / 4.0
+                    nv_data[ray_count + j] = (ray.h.wavelength *
+                                              ray.h.prf / 4.0)
 
-                pr_data[i, j] = 1. / ray.h.prf
-                ur_data[i, j] = ray.h.unam_rng * 1000.0
-
+                pr_data[ray_count + j] = 1. / ray.h.prf
+                ur_data[ray_count + j] = ray.h.unam_rng * 1000.0
+            ray_count += nrays
         return pm_data, nv_data, pr_data, ur_data
 
     def get_data(self):
         """
         get_data()
 
-        Return the three-dimensional data contained in the volume.
+        Return the two-dimensional data contained in the volume.
+
+        If a given ray has few bins than the first ray, the missing bins
+        will be filled with 131072.0
         """
         cdef _rsl_h.Range raw
-        cdef np.ndarray[np.float32_t, ndim = 3] data
+        cdef _rsl_h.Sweep * sweep
+        cdef _rsl_h.Ray * ray
+        cdef int ray_count, nsweeps, nrays, nbins, nray, nsweep, nbin
+        cdef np.ndarray[np.float32_t, ndim = 2] data
 
         vol = self._Volume
-
-        nsweeps = vol.h.nsweeps
-        nrays = vol.sweep[0].h.nrays
         nbins = vol.sweep[0].ray[0].h.nbins
-
-        shape = (nsweeps, nrays, nbins)
+        total_rays = self.total_rays()
+        shape = (total_rays, nbins)
         data = np.zeros(shape, dtype='float32') + 1.31072000e+05
+
+        ray_count = 0
+        nsweeps = vol.h.nsweeps
         for nsweep in range(nsweeps):
             sweep = vol.sweep[nsweep]
+            assert sweep is not NULL
+            nrays = sweep.h.nrays
             for nray in range(nrays):
                 ray = sweep.ray[nray]
+                assert ray is not NULL
                 nbins = ray.h.nbins
                 for nbin in range(nbins):
                     raw = ray.range[nbin]
-                    data[nsweep, nray, nbin] = ray.h.f(raw)
+                    data[ray_count + nray, nbin] = ray.h.f(raw)
+            ray_count += nrays
         return data
 
     cdef _prtmode(self, _rsl_h.Ray_header h):
@@ -1066,26 +1122,7 @@ cdef class RslFile:
             Array containing  data for the given volume.
 
         """
-        cdef _rsl_h.Range raw
-        cdef np.ndarray[np.float32_t, ndim = 3] data
-
-        vol = self._Radar.v[volume_num]
-
-        nsweeps = vol.h.nsweeps
-        nrays = vol.sweep[0].h.nrays
-        nbins = vol.sweep[0].ray[0].h.nbins
-
-        shape = (nsweeps, nrays, nbins)
-        data = np.zeros(shape, dtype='float32') + 1.31072000e+05
-        for nsweep in range(nsweeps):
-            sweep = vol.sweep[nsweep]
-            for nray in range(nrays):
-                ray = sweep.ray[nray]
-                nbins = ray.h.nbins
-                for nbin in range(nbins):
-                    raw = ray.range[nbin]
-                    data[nsweep, nray, nbin] = ray.h.f(raw)
-        return data
+        return self.get_volume(volume_num).get_data()
 
     # header properties mapped to class attributes.
     property month:
