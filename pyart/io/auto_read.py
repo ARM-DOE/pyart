@@ -37,7 +37,10 @@ def read(filename, use_rsl=False, **kwargs):
     filename : str
         Name of radar file to read
     use_rsl : bool
-        True to use the TRMM RSL library for reading if RSL is installed.
+        True will use the TRMM RSL library to read files which are supported
+        both natively and by RSL.  False will choose the native read function.
+        RSL will always be used to read a file if it is not supported
+        natively.
 
     Other Parameters
     -------------------
@@ -87,16 +90,19 @@ def read(filename, use_rsl=False, **kwargs):
     if filetype == 'WSR88D':
         return read_nexrad_archive(filename, **kwargs)
 
-    # RSL supported file formats
-    rsl_formats = ['UF', 'HDF4', 'RSL', 'DORAD', 'SIGMET']
-    if filetype in rsl_formats and _RSL_AVAILABLE and use_rsl:
-        return read_rsl(filename, **kwargs)
-
     # RSL supported formats which are also supported natively in Py-ART
     if filetype == "SIGMET":
-        return read_sigmet(filename, **kwargs)
+        if use_rsl:
+            return read_rsl(filename, **kwargs)
+        else:
+            return read_sigmet(filename, **kwargs)
 
-    raise TypeError('Unknown or unsupported file format.')
+    # RSL only supported file formats
+    rsl_formats = ['UF', 'HDF4', 'RSL', 'DORAD', 'LASSEN']
+    if filetype in rsl_formats and _RSL_AVAILABLE:
+        return read_rsl(filename, **kwargs)
+
+    raise TypeError('Unknown or unsupported file format: ' + filetype)
 
 
 def determine_filetype(filename):
@@ -114,6 +120,7 @@ def determine_filetype(filename):
     * 'RSL'
     * 'DORAD'
     * 'SIGMET'
+    * 'LASSEN'
     * 'BZ2'
     * 'UNKNOWN'
 
@@ -131,7 +138,6 @@ def determine_filetype(filename):
     # TODO
     # detect the following formats, those supported by RSL
     # 'RADTEC', the SPANDAR radar at Wallops Island, VA
-    # 'LASSEN', Darwin Australia
     # 'MCGILL', McGill S-band
     # 'TOGA', DYNAMO project's radar
     # 'RAPIC', Berrimah Australia
@@ -177,6 +183,10 @@ def determine_filetype(filename):
     # DORADE files
     if begin[:4] == "SSWB" or begin[:4] == "VOLD" or begin[:4] == "COMM":
         return "DORADE"
+
+    # LASSEN
+    if begin[4:11] == 'SUNRISE':
+        return "LASSEN"
 
     # RSL file
     if begin[:3] == "RSL":
