@@ -29,13 +29,13 @@ before_install:
   # Install additional packages from Binstar
   - conda install --yes -c http://conda.binstar.org/jjhelmus pyproj trmm_rsl
   # LP solver cylp and its dependancy CBC
-  - conda install --yes -c http://conda.binstar.org/jjhelmus cbc cylp
+  - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then conda install --yes -c http://conda.binstar.org/jjhelmus cbc cylp ; fi
   # LP solvers pyglpk based on GLPK
   - sudo apt-get update -qq
   - sudo apt-get install -qq libglpk-dev
   - conda install --yes -c http://conda.binstar.org/jjhelmus pyglpk
   # LP solvers cvxopt with GLPK support
-  - conda install --yes -c http://conda.binstar.org/jjhelmus cvxopt_glpk
+  - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then conda install --yes -c http://conda.binstar.org/jjhelmus cvxopt_glpk ; fi
 install:
   - export RSL_PATH=~/anaconda/envs/testenv
   - pip install python-coveralls --use-mirrors
