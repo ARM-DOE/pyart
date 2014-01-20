@@ -179,14 +179,14 @@ def grid_from_radars(radars, grid_shape, grid_limits, **kwargs):
     # to the metadata dictionary.
     for i, radar in enumerate(radars):
         # will need to add logic here to support moving platform radars
-        metadata['radar_{:d}_lat'.format(i)] = radar.latitude['data'][0]
-        metadata['radar_{:d}_lon'.format(i)] = radar.longitude['data'][0]
-        metadata['radar_{:d}_alt'.format(i)] = radar.altitude['data'][0]
+        metadata['radar_{0:d}_lat'.format(i)] = radar.latitude['data'][0]
+        metadata['radar_{0:d}_lon'.format(i)] = radar.longitude['data'][0]
+        metadata['radar_{0:d}_alt'.format(i)] = radar.altitude['data'][0]
         if 'instrument_name' in radar.metadata:
             i_name = radar.metadata['instrument_name']
         else:
             i_name = ''
-        metadata['radar_{:d}_instrument_name'.format(i)] = i_name
+        metadata['radar_{0:d}_instrument_name'.format(i)] = i_name
 
     return Grid(fields, axes, metadata)
 
