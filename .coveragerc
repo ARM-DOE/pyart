@@ -1,3 +1,10 @@
+[run]
+source = pyart
+include = */pyart/*
+omit =
+    */setup.py
+    */tests*
+
 [report]
 exclude_lines =
     pragma: no cover

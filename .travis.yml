@@ -2,25 +2,46 @@
 # This is a modified version of the .travis.yml file from the scikit-learn
 # project: https://github.com/scikit-learn/scikit-learn
 #
-# Currently we are testing only using the host Python 2.7 in order to avoid
-# compiling SciPy from source.  Using wheel binaries may allow us to 
-# efficiently test on other Python versions, but requires significant
-# additional work.
+# We are using Miniconda to provide a Python environment.  This
+# allows us to perform a conda based install of the SciPy stack on multiple
+# versions of python as well as use conda and binstar to install additional
+# module which are not in the default Anaconda repository.
+#
 language: python
 python:
     - "2.7"
+    - "2.6"
 before_install:
-    - deactivate
-    # Add the adrian-m-benson Ubuntu repo so we can apt-get python-netcdf4
-    - sudo add-apt-repository -y ppa:adrian-m-benson/ppa
-    - sudo apt-get update -qq
-    # Install the SciPy stack
-    - sudo apt-get install -qq python-scipy python-nose python-matplotlib 
-    # Install additional Py-ART dependencies
-    - sudo apt-get install -qq python-cvxopt python-netcdf4
-    - virtualenv --system-site-packages ~/virtualenv/this
-    - source ~/virtualenv/this/bin/activate
-install: python setup.py build_ext --inplace
-# run the tests inside a virtual X server so that matplotlib can plot
-# No RSL related tests are executed as we do not install RSL
-script: xvfb-run nosetests -v pyart
+  # Download and install Miniconda
+  - wget http://repo.continuum.io/miniconda/Miniconda-2.2.2-Linux-x86_64.sh -O miniconda.sh
+  - chmod +x miniconda.sh
+  - ./miniconda.sh -b
+  - export PATH=/home/travis/anaconda/bin:$PATH
+  # Update conda
+  - conda update --yes conda
+  - conda update --yes conda
+  # Create a testenv
+  - conda create -n testenv --yes pip python=$TRAVIS_PYTHON_VERSION
+  - source activate testenv
+  # Install dependencies from the anaconda repo to the environment
+  - conda install --yes numpy scipy matplotlib netcdf4 nose
+  - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then conda install --yes basemap ; fi
+  # Install additional packages from Binstar
+  - conda install --yes -c http://conda.binstar.org/jjhelmus pyproj trmm_rsl
+  # LP solver cylp and its dependancy CBC
+  - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then conda install --yes -c http://conda.binstar.org/jjhelmus cbc cylp ; fi
+  # LP solvers pyglpk based on GLPK
+  - sudo apt-get update -qq
+  - sudo apt-get install -qq libglpk-dev
+  - conda install --yes -c http://conda.binstar.org/jjhelmus pyglpk
+  # LP solvers cvxopt with GLPK support
+  - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then conda install --yes -c http://conda.binstar.org/jjhelmus cvxopt_glpk ; fi
+install:
+  - export RSL_PATH=~/anaconda/envs/testenv
+  - pip install python-coveralls --use-mirrors
+  - pip install nose-cov --use-mirrors
+  - python setup.py build_ext --inplace
+
+script: xvfb-run nosetests -v --with-cov --cov pyart pyart
+after_success:
+    - coveralls
