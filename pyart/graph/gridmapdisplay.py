@@ -15,7 +15,7 @@ A class for plotting grid objects with a basemap.
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.basemap import Basemap
-import pyproj
+from mpl_toolkits.basemap import pyproj
 
 
 class GridMapDisplay():

@@ -26,7 +26,7 @@ try:
     from .gridmapdisplay import GridMapDisplay
 except ImportError:
     import warnings
-    warnings.warn('No grid plotting support, requires basemap and pyproj')
+    warnings.warn('No grid plotting support, requires basemap.')
 
 try:
     from .plot_rsl import RslDisplay
