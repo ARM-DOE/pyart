@@ -136,7 +136,7 @@ class GridMapDisplay():
         basemap.drawmeridians(lon_lines, labels=[0, 0, 0, 1])
         self.basemap = basemap
 
-    def plot_grid(self, field, level=0, vmin=None, vmax=None):
+    def plot_grid(self, field, level=0, vmin=None, vmax=None, cmap=None):
         """
         Plot the grid onto the current basemap.
 
@@ -160,7 +160,7 @@ class GridMapDisplay():
         xd, yd = self.basemap(self.grid_lons, self.grid_lats)
         self.mappables.append(self.basemap.pcolormesh(
             xd, yd, self.grid.fields[field]['data'][level],
-            vmin=vmin, vmax=vmax))
+            vmin=vmin, vmax=vmax, cmap=cmap))
         self.fields.append(field)
         return
 
@@ -199,7 +199,7 @@ class GridMapDisplay():
         return
 
     def plot_latitude_slice(self, field, lon=None, lat=None,
-                            vmin=None, vmax=None, ax=None):
+                            vmin=None, vmax=None, ax=None, cmap=None):
         """
         Plot a slice along a given latitude.
 
@@ -230,14 +230,14 @@ class GridMapDisplay():
             self.grid.axes['x_disp']['data'] / 1000.0,
             self.grid.axes['z_disp']['data'] / 1000.0,
             self.grid.fields[field]['data'][:, y_index, :],
-            vmin=vmin, vmax=vmax))
+            vmin=vmin, vmax=vmax, cmap=cmap))
         self.fields.append(field)
         ax.set_ylabel('Height (km)')
         ax.set_title('Slice at ' + str(lat) + ' Latitude')
         return
 
     def plot_longitude_slice(self, field, lon=None, lat=None,
-                             vmin=None, vmax=None, ax=None):
+                             vmin=None, vmax=None, ax=None, cmap=None):
         """
         Plot a slice along a given longitude.
 
@@ -267,7 +267,7 @@ class GridMapDisplay():
             self.grid.axes['y_disp']['data'] / 1000.0,
             self.grid.axes['z_disp']['data'] / 1000.0,
             self.grid.fields[field]['data'][:, :, x_index],
-            vmin=vmin, vmax=vmax))
+            vmin=vmin, vmax=vmax, cmap=cmap))
         self.fields.append(field)
         ax.set_ylabel('Height (km)')
         ax.set_title('Slice at ' + str(lon) + ' Longitude')
