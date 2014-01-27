@@ -71,9 +71,8 @@ functionality is available of the the following modules are installed.
   `GLPK <http://www.gnu.org/software/glpk/>`_ will also be required depending
   on which wrapper is used.
 
-* `Basemap <http://matplotlib.org/basemap/>`_ and
-  `pyproj <http://code.google.com/p/pyproj/>`_.  
-  If installed the ability to plot grids on geographic maps is available.
+* `Basemap <http://matplotlib.org/basemap/>`_. If installed the ability to 
+  plot grids on geographic maps is available.
 
 * `nose <http://nose.readthedocs.org/en/latest/>`_.  
   Required to run the Py-ART unit tests.

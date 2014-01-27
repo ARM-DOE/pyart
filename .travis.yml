@@ -26,8 +26,8 @@ before_install:
   # Install dependencies from the anaconda repo to the environment
   - conda install --yes numpy scipy matplotlib netcdf4 nose
   - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then conda install --yes basemap ; fi
-  # Install additional packages from Binstar
-  - conda install --yes -c http://conda.binstar.org/jjhelmus pyproj trmm_rsl
+  # Install RSL from binstar
+  - conda install --yes -c http://conda.binstar.org/jjhelmus trmm_rsl
   # LP solver cylp and its dependancy CBC
   - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then conda install --yes -c http://conda.binstar.org/jjhelmus cbc cylp ; fi
   # LP solvers pyglpk based on GLPK

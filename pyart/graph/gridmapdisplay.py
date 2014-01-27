@@ -15,7 +15,7 @@ A class for plotting grid objects with a basemap.
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.basemap import Basemap
-import pyproj
+from mpl_toolkits.basemap import pyproj
 
 
 class GridMapDisplay():
@@ -136,7 +136,7 @@ class GridMapDisplay():
         basemap.drawmeridians(lon_lines, labels=[0, 0, 0, 1])
         self.basemap = basemap
 
-    def plot_grid(self, field, level=0, vmin=None, vmax=None):
+    def plot_grid(self, field, level=0, vmin=None, vmax=None, cmap='jet'):
         """
         Plot the grid onto the current basemap.
 
@@ -150,6 +150,8 @@ class GridMapDisplay():
             Lower and upper range for the colormesh.  If either parameter is
             None, a value will be determined from the field attributes (if
             available) or the default values of -8, 64 will be used.
+        cmap : str
+            Matplotlib colormap name or colormap object.
 
         """
         # parse parameters
@@ -160,7 +162,7 @@ class GridMapDisplay():
         xd, yd = self.basemap(self.grid_lons, self.grid_lats)
         self.mappables.append(self.basemap.pcolormesh(
             xd, yd, self.grid.fields[field]['data'][level],
-            vmin=vmin, vmax=vmax))
+            vmin=vmin, vmax=vmax, cmap=cmap))
         self.fields.append(field)
         return
 
@@ -199,7 +201,7 @@ class GridMapDisplay():
         return
 
     def plot_latitude_slice(self, field, lon=None, lat=None,
-                            vmin=None, vmax=None, ax=None):
+                            vmin=None, vmax=None, cmap='jet', ax=None):
         """
         Plot a slice along a given latitude.
 
@@ -214,6 +216,8 @@ class GridMapDisplay():
             Lower and upper range for the colormesh.  If either parameter is
             None, a value will be determined from the field attributes (if
             available) or the default values of -8, 64 will be used.
+        cmap : str
+            Matplotlib colormap name or colormap object.
         ax : axes or None.
             Where to create the plot, if None the current axis is used.
 
@@ -230,14 +234,14 @@ class GridMapDisplay():
             self.grid.axes['x_disp']['data'] / 1000.0,
             self.grid.axes['z_disp']['data'] / 1000.0,
             self.grid.fields[field]['data'][:, y_index, :],
-            vmin=vmin, vmax=vmax))
+            vmin=vmin, vmax=vmax, cmap=cmap))
         self.fields.append(field)
         ax.set_ylabel('Height (km)')
         ax.set_title('Slice at ' + str(lat) + ' Latitude')
         return
 
     def plot_longitude_slice(self, field, lon=None, lat=None,
-                             vmin=None, vmax=None, ax=None):
+                             vmin=None, vmax=None, cmap='jet', ax=None):
         """
         Plot a slice along a given longitude.
 
@@ -252,6 +256,8 @@ class GridMapDisplay():
             Lower and upper range for the colormesh.  If either parameter is
             None, a value will be determined from the field attributes (if
             available) or the default values of -8, 64 will be used.
+        cmap : str
+            Matplotlib colormap name or colormap object.
         ax : axes or None.
             Where to create the plot, if None the current axis is used.
 
@@ -267,7 +273,7 @@ class GridMapDisplay():
             self.grid.axes['y_disp']['data'] / 1000.0,
             self.grid.axes['z_disp']['data'] / 1000.0,
             self.grid.fields[field]['data'][:, :, x_index],
-            vmin=vmin, vmax=vmax))
+            vmin=vmin, vmax=vmax, cmap=cmap))
         self.fields.append(field)
         ax.set_ylabel('Height (km)')
         ax.set_title('Slice at ' + str(lon) + ' Longitude')
