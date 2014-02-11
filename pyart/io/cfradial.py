@@ -297,7 +297,8 @@ def _stream_to_2d(data, sweeps, sweepe, ray_len, maxgates, nrays,
     return time_range
 
 
-def write_cfradial(filename, radar, format='NETCDF4', time_reference=False):
+def write_cfradial(filename, radar, format='NETCDF4', time_reference=False,
+                   arm_time_variables=False):
     """
     Write a Radar object to a CF/Radial compliant netCDF file.
 
@@ -314,6 +315,9 @@ def write_cfradial(filename, radar, format='NETCDF4', time_reference=False):
     time_reference : bool
         True to include a time_reference variable, False will not include
         this variable.
+    arm_time_variables : bool
+        True to create the ARM standard time variables base_time and
+        time_offset, False will not create these variables.
 
     """
     dataset = netCDF4.Dataset(filename, 'w', format=format)
@@ -363,6 +367,28 @@ def write_cfradial(filename, radar, format='NETCDF4', time_reference=False):
 
     # history should be the last attribute, ARM standard
     dataset.setncattr('history',  history)
+
+    # arm time variables base_time and time_offset if requested
+    if arm_time_variables:
+        dt = netCDF4.num2date(radar.time['data'][0], radar.time['units'])
+        td = dt - datetime.datetime.utcfromtimestamp(0)
+        base_time = {
+            'data': np.array([td.seconds + td.days * 24 * 3600], 'int32'),
+            'string': dt.strftime('%d-%b-%Y,%H:%M:%S GMT'),
+            'units': 'seconds since 1970-1-1 0:00:00 0:00',
+            'ancillary_variables': 'time_offset',
+            'long_name': 'Base time in Epoch',
+        }
+        _create_ncvar(base_time, dataset, 'base_time', ())
+
+        time_offset = {
+            'data': radar.time['data'],
+            'long_name': 'Time offset from base_time',
+            'units': radar.time['units'].replace('T', ' ').replace('Z', ''),
+            'ancillary_variables': 'time_offset',
+            'calendar': 'gregorian',
+        }
+        _create_ncvar(time_offset, dataset, 'time_offset', ('time', ))
 
     # standard variables
     _create_ncvar(radar.time, dataset, 'time', ('time', ))

@@ -285,6 +285,26 @@ def test_write_rhi():
     os.remove(tmpfile)
 
 
+def test_write_ppi_arm_time_vars():
+    # CF/Radial example file -> Radar object -> netCDF file
+    tmpfile = tempfile.mkstemp(suffix='.nc', dir='.')[1]
+    radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
+    pyart.io.write_cfradial(tmpfile, radar, arm_time_variables=True)
+    dset = netCDF4.Dataset(tmpfile)
+    assert 'base_time' in dset.variables
+    assert 'time_offset' in dset.variables
+
+    base_time = dset.variables['base_time']
+    assert base_time[0] == 1305888856
+    assert base_time.string == '20-May-2011,10:54:16 GMT'
+
+    time_offset = dset.variables['time_offset']
+    assert time_offset.units == 'seconds since 2011-05-20 10:54:16'
+    assert round(time_offset[10]) == 4
+    dset.close()
+    os.remove(tmpfile)
+
+
 def check_dataset_to_ref(dset, ref):
     """ Check that all data in Dataset is contained in the ref Dataset. """
 
