@@ -17,7 +17,8 @@ from . import testing
 from . import config
 
 # root level functions
-from config import load_config
+from .config import load_config
+from ._debug_info import _debug_info
 
 # test function setup based on scikit-image test function
 import imp as _imp
