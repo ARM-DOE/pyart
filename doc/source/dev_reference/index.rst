@@ -16,10 +16,11 @@ Documentation is broken down by directory and module.
 
 .. toctree::
     :maxdepth: 2
-
+    
     io
     config
     correct
     graph
     map
     testing
+    _debug_info

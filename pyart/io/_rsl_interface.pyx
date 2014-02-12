@@ -29,6 +29,9 @@ cimport numpy as np
 from datetime import datetime
 
 
+_RSL_VERSION_STR = _rsl_h._RSL_VERSION_STR
+
+
 cpdef copy_volume(_RslVolume volume):
     """
     copy_volume(volume)

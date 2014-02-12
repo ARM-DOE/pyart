@@ -2,6 +2,8 @@
 
 cdef extern from "rsl.h":
    
+    cdef char[6] _RSL_VERSION_STR "RSL_VERSION_STR"
+
     # data structures
     ctypedef unsigned short Range
     
