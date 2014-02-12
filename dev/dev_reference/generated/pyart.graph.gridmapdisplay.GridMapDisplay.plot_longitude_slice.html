@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.0.0.dev-a639eaa',
+        VERSION:     '1.0.0.dev-f30f39d',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -66,7 +66,7 @@
 <h1>pyart.graph.gridmapdisplay.GridMapDisplay.plot_longitude_slice<a class="headerlink" href="#pyart-graph-gridmapdisplay-gridmapdisplay-plot-longitude-slice" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="pyart.graph.gridmapdisplay.GridMapDisplay.plot_longitude_slice">
-<tt class="descclassname">GridMapDisplay.</tt><tt class="descname">plot_longitude_slice</tt><big>(</big><em>field</em>, <em>lon=None</em>, <em>lat=None</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>ax=None</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/graph/gridmapdisplay.py#L239"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.graph.gridmapdisplay.GridMapDisplay.plot_longitude_slice" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">GridMapDisplay.</tt><tt class="descname">plot_longitude_slice</tt><big>(</big><em>field</em>, <em>lon=None</em>, <em>lat=None</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>cmap='jet'</em>, <em>ax=None</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/graph/gridmapdisplay.py#L243"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.graph.gridmapdisplay.GridMapDisplay.plot_longitude_slice" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot a slice along a given longitude.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -86,6 +86,10 @@ None the center of the grid is used.</p>
 <div><p>Lower and upper range for the colormesh.  If either parameter is
 None, a value will be determined from the field attributes (if
 available) or the default values of -8, 64 will be used.</p>
+</div></blockquote>
+<p><strong>cmap</strong> : str</p>
+<blockquote>
+<div><p>Matplotlib colormap name or colormap object.</p>
 </div></blockquote>
 <p><strong>ax</strong> : axes or None.</p>
 <blockquote class="last">
@@ -159,7 +163,7 @@ available) or the default values of -8, 64 will be used.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Jan 16, 2014.
+      Last updated on Feb 12, 2014.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>

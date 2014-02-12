@@ -14,10 +14,11 @@ pyart.io._rsl_interface._RslVolume
          _RslVolume.get_azimuth_and_elev_array
          _RslVolume.get_data
          _RslVolume.get_instr_params
-         _RslVolume.get_nray_list
+         _RslVolume.get_nray_array
          _RslVolume.get_sweep
          _RslVolume.get_sweep_azimuths
          _RslVolume.get_sweep_elevs
+         _RslVolume.total_rays
 
    |
 

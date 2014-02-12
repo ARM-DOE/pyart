@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.0.0.dev-a639eaa',
+        VERSION:     '1.0.0.dev-f30f39d',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -65,7 +65,7 @@
 <h1>pyart.io.cfradial.write_cfradial<a class="headerlink" href="#pyart-io-cfradial-write-cfradial" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pyart.io.cfradial.write_cfradial">
-<tt class="descclassname">pyart.io.cfradial.</tt><tt class="descname">write_cfradial</tt><big>(</big><em>filename</em>, <em>radar</em>, <em>format='NETCDF4'</em>, <em>time_reference=False</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/io/cfradial.py#L300"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.io.cfradial.write_cfradial" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">pyart.io.cfradial.</tt><tt class="descname">write_cfradial</tt><big>(</big><em>filename</em>, <em>radar</em>, <em>format='NETCDF4'</em>, <em>time_reference=False</em>, <em>arm_time_variables=False</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/io/cfradial.py#L300"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.io.cfradial.write_cfradial" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write a Radar object to a CF/Radial compliant netCDF file.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -86,9 +86,14 @@
 details.</p>
 </div></blockquote>
 <p><strong>time_reference</strong> : bool</p>
-<blockquote class="last">
+<blockquote>
 <div><p>True to include a time_reference variable, False will not include
 this variable.</p>
+</div></blockquote>
+<p><strong>arm_time_variables</strong> : bool</p>
+<blockquote class="last">
+<div><p>True to create the ARM standard time variables base_time and
+time_offset, False will not create these variables.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -157,7 +162,7 @@ this variable.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Jan 16, 2014.
+      Last updated on Feb 12, 2014.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>

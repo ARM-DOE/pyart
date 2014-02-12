@@ -16,7 +16,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.0.0.dev-a639eaa',
+        VERSION:     '1.0.0.dev-f30f39d',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -96,13 +96,13 @@ functions/methods.</p>
 <td>Return azimuth and elevation array for each sweep and ray.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="pyart.io._rsl_interface._RslVolume.get_data.html#pyart.io._rsl_interface._RslVolume.get_data" title="pyart.io._rsl_interface._RslVolume.get_data"><tt class="xref py py-obj docutils literal"><span class="pre">get_data</span></tt></a>()</td>
-<td>Return the three-dimensional data contained in the volume.</td>
+<td>Return the two-dimensional data contained in the volume.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="pyart.io._rsl_interface._RslVolume.get_instr_params.html#pyart.io._rsl_interface._RslVolume.get_instr_params" title="pyart.io._rsl_interface._RslVolume.get_instr_params"><tt class="xref py py-obj docutils literal"><span class="pre">get_instr_params</span></tt></a>()</td>
 <td>Return instrumental parameter for the volume.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.io._rsl_interface._RslVolume.get_nray_list.html#pyart.io._rsl_interface._RslVolume.get_nray_list" title="pyart.io._rsl_interface._RslVolume.get_nray_list"><tt class="xref py py-obj docutils literal"><span class="pre">get_nray_list</span></tt></a>()</td>
-<td>Return a list of the number of rays for each sweep.</td>
+<tr class="row-even"><td><a class="reference internal" href="pyart.io._rsl_interface._RslVolume.get_nray_array.html#pyart.io._rsl_interface._RslVolume.get_nray_array" title="pyart.io._rsl_interface._RslVolume.get_nray_array"><tt class="xref py py-obj docutils literal"><span class="pre">get_nray_array</span></tt></a>()</td>
+<td>Return an array of the number of rays for each sweep.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="pyart.io._rsl_interface._RslVolume.get_sweep.html#pyart.io._rsl_interface._RslVolume.get_sweep" title="pyart.io._rsl_interface._RslVolume.get_sweep"><tt class="xref py py-obj docutils literal"><span class="pre">get_sweep</span></tt></a>(sweep_numer)</td>
 <td>Return a _RslSweep for a given sweep number.</td>
@@ -112,6 +112,9 @@ functions/methods.</p>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="pyart.io._rsl_interface._RslVolume.get_sweep_elevs.html#pyart.io._rsl_interface._RslVolume.get_sweep_elevs" title="pyart.io._rsl_interface._RslVolume.get_sweep_elevs"><tt class="xref py py-obj docutils literal"><span class="pre">get_sweep_elevs</span></tt></a>()</td>
 <td>Return elevation array for each sweep.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pyart.io._rsl_interface._RslVolume.total_rays.html#pyart.io._rsl_interface._RslVolume.total_rays" title="pyart.io._rsl_interface._RslVolume.total_rays"><tt class="xref py py-obj docutils literal"><span class="pre">total_rays</span></tt></a>()</td>
+<td>Return the total number of rays present in all sweeps of the volume.</td>
 </tr>
 </tbody>
 </table>
@@ -208,7 +211,7 @@ functions/methods.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Jan 16, 2014.
+      Last updated on Feb 12, 2014.
       Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
     </div>
   </body>
