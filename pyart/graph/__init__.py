@@ -13,17 +13,24 @@ Graphing (:mod:`pyart.graph`)
     MdvDisplay
     RslDisplay
     CFRadialDisplay
+    RadarDisplayMap
 
 
 """
 
-from .radar_display import RadarDisplay, RadarDisplayMap
+from .radar_display import RadarDisplay
 from .plot_mdv import MdvDisplay
 from .plot_cfradial import CFRadialDisplay
 from . import cm
 
 try:
     from .gridmapdisplay import GridMapDisplay
+except ImportError:
+    import warnings
+    warnings.warn('No grid plotting support, requires basemap.')
+
+try:
+    from .radar_display import RadarDisplayMap
 except ImportError:
     import warnings
     warnings.warn('No grid plotting support, requires basemap.')
