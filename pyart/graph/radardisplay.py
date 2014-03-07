@@ -28,7 +28,7 @@ class RadarDisplay:
     radar : Radar
         Radar object to use for creating plots.
     shift : (float, float)
-        Shifts in km to offset the calulcated x and y locations.
+        Shifts in km to offset the calculated x and y locations.
 
     Attributes
     ----------
@@ -237,7 +237,7 @@ class RadarDisplay:
         ----------
         field : str
             Field to plot.
-        sweep : int,
+        sweep : int, optional
             Sweep number to plot.
 
         Other Parameters
