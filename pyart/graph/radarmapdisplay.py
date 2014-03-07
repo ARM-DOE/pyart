@@ -1,6 +1,6 @@
 """
 pyart.graph.radarmapdisplay
-=========================
+===========================
 
 Class for creating plots on a geographic map using a Radar objects.
 
