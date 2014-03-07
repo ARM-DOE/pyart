@@ -15,7 +15,7 @@ Routines for plotting radar data from CF/Radial netCDF files.
 import numpy as np
 import netCDF4
 
-from .radar_display import RadarDisplay
+from .radardisplay import RadarDisplay
 from .common import radar_coords_to_cart
 
 

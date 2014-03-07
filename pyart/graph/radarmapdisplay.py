@@ -14,7 +14,7 @@ Class for creating plots on a geographic map using a Radar objects.
 
 import numpy as np
 
-from .radar_display import RadarDisplay
+from .radardisplay import RadarDisplay
 
 #Here we have an added method that inherits the radar
 #display and allows the plotting on a basemap object

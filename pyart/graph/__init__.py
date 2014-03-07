@@ -18,7 +18,7 @@ Graphing (:mod:`pyart.graph`)
 
 """
 
-from .radar_display import RadarDisplay
+from .radardisplay import RadarDisplay
 from .plot_mdv import MdvDisplay
 from .plot_cfradial import CFRadialDisplay
 from . import cm

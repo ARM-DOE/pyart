@@ -1,5 +1,5 @@
 """
-pyart.graph.radar_display
+pyart.graph.radardisplay
 =========================
 
 Class for creating plots from Radar objects.
