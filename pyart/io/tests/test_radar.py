@@ -116,6 +116,23 @@ def test_add_field_like():
     assert radar.fields['test']['units'] == 'dBZ'
 
 
+def test_add_field_like_bug():
+    # tests for bug where adding a field over-writes 'like' field
+    # data/metadata.
+    radar = pyart.testing.make_target_radar()
+    data = np.ones((360, 50))
+    radar.add_field_like('reflectivity', 'test', data)
+    radar.fields['test']['units'] = 'fake'
+
+    # check field added
+    assert radar.fields['test']['units'] == 'fake'
+    assert radar.fields['test']['data'][0, 0] == 1
+
+    # check original field
+    assert radar.fields['reflectivity']['units'] == 'dBZ'
+    assert radar.fields['reflectivity']['data'][0, 0] == 0
+
+
 def test_add_field_like_errors():
     radar = pyart.testing.make_target_radar()
     assert_raises(ValueError, radar.add_field_like, 'foo', 'bar', [])

@@ -316,7 +316,10 @@ class Radar:
         if existing_field_name not in self.fields:
             err = 'field %s does not exist in object' % (existing_field_name)
             raise ValueError(err)
-        dic = self.fields[existing_field_name]
+        dic = {}
+        for k, v in self.fields[existing_field_name].items():
+            if k != 'data':
+                dic[k] = v
         dic['data'] = data
         return self.add_field(field_name, dic)
 
