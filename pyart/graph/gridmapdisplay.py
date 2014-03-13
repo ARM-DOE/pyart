@@ -36,7 +36,7 @@ class GridMapDisplay():
     debug : bool
         True to print debugging messages, False to supressed them.
     proj : Proj
-        Object for perforning cartographic transformations specific to the
+        Object for performing cartographic transformations specific to the
         grid.
     grid_lons : array
         Grid longitudes in degrees.
@@ -87,8 +87,8 @@ class GridMapDisplay():
         ----------
         lat_lines, lon_lines : array or None
             Locations at which to draw latitude and longitude lines.
-            None will use default values which are resonable for North
-            America maps.
+            None will use default values which are resonable for maps of
+            North America.
         auto_range : bool
             True to determine map ranges from the grid_lats and grid_lons
             attribute.  False will use the min_lon, max_lon, min_lat, and
@@ -132,8 +132,8 @@ class GridMapDisplay():
                           resolution=resolution, ax=ax)
         basemap.drawcoastlines(linewidth=1.25)
         basemap.drawstates()
-        basemap.drawparallels(lat_lines, labels=[1, 1, 0, 0])
-        basemap.drawmeridians(lon_lines, labels=[0, 0, 0, 1])
+        basemap.drawparallels(lat_lines, labels=[True, False, False, False])
+        basemap.drawmeridians(lon_lines, labels=[False, False, False, True])
         self.basemap = basemap
 
     def plot_grid(self, field, level=0, vmin=None, vmax=None, cmap='jet'):
