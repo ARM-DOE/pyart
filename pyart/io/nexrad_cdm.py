@@ -19,10 +19,11 @@ from datetime import datetime, timedelta
 import netCDF4
 import numpy as np
 
-from ..config import FileMetadata, get_fillvalue
+from ..config import FileMetadata, get_fillvalue, get_radar_location
 from .radar import Radar
 from .common import make_time_unit_str
 
+import os
 
 def read_nexrad_cdm(filename, field_names=None, additional_metadata=None,
                     file_field_names=False, exclude_fields=None):
@@ -123,10 +124,10 @@ def read_nexrad_cdm(filename, field_names=None, additional_metadata=None,
         elevation_var = scan_dic['elevation_vars'][0]
         nradials = scan_dic['nradials'][0]
 
-        time_data[ray_i:ray_i + nradials] = dvars[time_var][var_index]
-        azim_data[ray_i:ray_i + nradials] = dvars[azimuth_var][var_index]
-        elev_data[ray_i:ray_i + nradials] = dvars[elevation_var][var_index]
-        fixed_agl_data[scan_index] = np.mean(dvars[elevation_var][var_index])
+        time_data[ray_i:ray_i + nradials] = dvars[time_var][var_index][:nradials]
+        azim_data[ray_i:ray_i + nradials] = dvars[azimuth_var][var_index][:nradials]
+        elev_data[ray_i:ray_i + nradials] = dvars[elevation_var][var_index][:nradials]
+        fixed_agl_data[scan_index] = np.mean(dvars[elevation_var][var_index][:nradials])
 
         for i, moment in enumerate(scan_dic['moments']):
 
@@ -140,7 +141,7 @@ def read_nexrad_cdm(filename, field_names=None, additional_metadata=None,
                 fdata_name = moment
 
             sweep = _get_moment_data(dvars[moment], moment_index, m_ngates)
-            fdata[fdata_name][ray_i:ray_i + m_nradials, :m_ngates] = sweep
+            fdata[fdata_name][ray_i:ray_i + m_nradials, :m_ngates] = sweep[:m_nradials, :m_ngates]
 
         ray_i += nradials
 
@@ -183,10 +184,25 @@ def read_nexrad_cdm(filename, field_names=None, additional_metadata=None,
     latitude = filemetadata('latitude')
     longitude = filemetadata('longitude')
     altitude = filemetadata('altitude')
-    latitude['data'] = np.array([dataset.StationLatitude], dtype='float64')
-    longitude['data'] = np.array([dataset.StationLongitude], dtype='float64')
-    altitude['data'] = np.array([dataset.StationElevationInMeters],
-                                dtype='float64')
+    try:
+        latitude['data'] = np.array([dataset.StationLatitude], dtype='float64')
+        longitude['data'] = np.array([dataset.StationLongitude], dtype='float64')
+        altitude['data'] = np.array([dataset.StationElevationInMeters],
+                                    dtype='float64')
+    # It is possible the CDM archive doesn't have this information, then we need retrieve this information from a preset     
+    except AttributeError,ex:
+        # Get radar name from first four letter of CDM archive. 
+        # FIXME: It is possible to use Dataset.filepath() to get URL of the dataset. 
+        #        However, this requires change HAS_NC_INQ_PATH in constants.pyx in python-netcdf4 and 
+        #        recompiling python-netcdf4. We need to report this issue to EPD or Anaconda. It is safe to turn this on
+        #        because netcdf >= 4.1.2 is widely spreaded.
+        station_name = os.path.basename(filename)[:4].upper()
+        location = get_radar_location(station_name)
+        if location is None:
+            raise AttributeError("Radar location is not obtained either from archive or radar name.")
+        latitude['data'] = np.array([location[0]], dtype='float64')
+        longitude['data'] = np.array([location[1]], dtype='float64')
+        altitude['data'] = np.array([location[2]], dtype='float64')
 
     # sweep_number, sweep_mode, fixed_angle, sweep_start_ray_index
     # sweep_end_ray_index
