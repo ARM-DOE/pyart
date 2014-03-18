@@ -2,7 +2,7 @@
 pyart.correct._fourdd_interface
 ===============================
 
-Cython wrapper around the Univ. of Washington FourDD algorithm.
+Cython wrapper around the University of Washington FourDD algorithm.
 
 .. autosummary::
     :toctree: generated/
@@ -10,9 +10,6 @@ Cython wrapper around the Univ. of Washington FourDD algorithm.
     fourdd_dealias
 
 """
-
-# TODO
-# better FourDD dealias
 
 cimport _fourdd_h
 cimport numpy as np
@@ -23,13 +20,14 @@ from ..io import _rsl_interface
 
 cpdef fourdd_dealias(_RslVolume DZvolume,
                      _RslVolume radialVelVolume,
+                     _RslVolume lastVelVolume,
                      np.ndarray[np.float32_t, ndim=1] hc,
                      np.ndarray[np.float32_t, ndim=1] sc,
                      np.ndarray[np.float32_t, ndim=1] dc,
                      vad_time, prep, filt, debug):
     """
-    fourdd_dealias(DZvolume, radialVelVolume, hc, sc, dc, vad_time, prep,
-                   filt)
+    fourdd_dealias(DZvolume, radialVelVolume, lastVelVolume hc, sc, dc,
+                   vad_time, prep, filt)
 
     Dealias using the FourDD algorithm.
 
@@ -39,13 +37,17 @@ cpdef fourdd_dealias(_RslVolume DZvolume,
         Reflectivity to use when thresholding is selected.
     radialVelVolume : _RslVolume
         Radial velocities which will be dealiased.
-    hc : array
+    lastVelVolume : _RslVolume
+        Radial velocities from a previously dealiased radar volume. For best
+        results, this radar should represent the previous volume scan in time.
+        If the last velocity volume is unavailable, set this to None.
+    hc : np.ndarray
         Sounding heights in meters.  Must be a contiguous one-dimensional
         float32 array.
-    sc : array
+    sc : np.ndarray
         Sounding wind speed in m/s.  Must be a contiguous one-dimensional
         float32 array.
-    dc : array
+    dc : np.ndarray
         Sounding wind direction in degrees.  Must be a contiguous
         one-dimensional float32 array.
     vad_time : int
@@ -63,7 +65,7 @@ cpdef fourdd_dealias(_RslVolume DZvolume,
     -------
     usuccess : int
         Flag indicating if the unfolding was successful, 1 = yes, 0 = no.
-    data : array
+    data : np.ndarray
         Array of unfolded velocities.
 
     References
@@ -73,9 +75,10 @@ cpdef fourdd_dealias(_RslVolume DZvolume,
     1674.
 
     """
-    # TODO version which does not need DZvolume (prep is 0)
-    # TODO version which uses
+    
+    # TODO: version which does not need DZvolume, i.e. prep = 0
     # See FourDD.c for addition details
+    
     cdef _RslVolume unfoldedVolume
     cdef _RslVolume sondVolume
     cdef float MISSINGVEL = 131072.0
@@ -85,21 +88,33 @@ cpdef fourdd_dealias(_RslVolume DZvolume,
     unfoldedVolume = _rsl_interface.copy_volume(radialVelVolume)
     sondVolume = _rsl_interface.copy_volume(radialVelVolume)
 
-    # May not always be needed...
-    _fourdd_h.firstGuessNoRead(
-        sondVolume._Volume, MISSINGVEL, <float *> hc.data, <float *> sc.data,
-        <float *> dc.data, <int> len(hc), vad_time, &success)
+    # may not always be needed...
+    _fourdd_h.firstGuessNoRead(sondVolume._Volume, MISSINGVEL,
+                        <float *> hc.data, <float *> sc.data,
+                        <float *> dc.data, <int> len(hc),
+                        vad_time, &success)
 
     if success != 1:
-        raise ValueError
+        raise ValueError('Error with sounding data')
 
-    # dealias
+    # prepare the velocity volume
+    # any gates where reflectivity is bad "should" be removed
     if prep == 1:
         _fourdd_h.prepVolume(DZvolume._Volume, unfoldedVolume._Volume,
                              MISSINGVEL)
-    _fourdd_h.unfoldVolume(unfoldedVolume._Volume, sondVolume._Volume, NULL,
-                           MISSINGVEL, filt, &usuccess)
-    data = unfoldedVolume.get_data()
+        
+    # dealias
+    if lastVelVolume is not None:
+        _fourdd_h.unfoldVolume(unfoldedVolume._Volume, sondVolume._Volume,
+                               lastVelVolume._Volume, MISSINGVEL, filt,
+                               &usuccess)
+    else:
+        _fourdd_h.unfoldVolume(unfoldedVolume._Volume, sondVolume._Volume,
+                               NULL, MISSINGVEL, filt, &usuccess)
+        
     if debug:
         return usuccess, DZvolume, radialVelVolume, unfoldedVolume, sondVolume
+    
+    data = unfoldedVolume.get_data()
+    
     return usuccess, data
