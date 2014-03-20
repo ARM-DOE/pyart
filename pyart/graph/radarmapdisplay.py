@@ -2,7 +2,7 @@
 pyart.graph.radarmapdisplay
 ===========================
 
-Class for creating plots on a geographic map using a Radar objects.
+Class for creating plots on a geographic map using a Radar object.
 
 .. autosummary::
     :toctree: generated/
@@ -189,8 +189,9 @@ class RadarMapDisplay(RadarDisplay):
         # plot the basemap
         basemap = Basemap(llcrnrlon=min_lon, llcrnrlat=min_lat,
                           urcrnrlon=max_lon, urcrnrlat=max_lat,
-                          projection='mill', area_thresh=1000,
-                          resolution=resolution, ax=ax)
+                          projection='lcc', area_thresh=1000,
+                          resolution=resolution, ax=ax, lat_0=self.loc[0],
+                          lon_0=self.loc[1])
         basemap.drawcoastlines(linewidth=1.25)
         basemap.drawstates()
         basemap.drawparallels(lat_lines, labels=[True, False, False, False])
