@@ -15,6 +15,7 @@ Class for creating plots on a geographic map using a Radar object.
 import numpy as np
 from mpl_toolkits.basemap import Basemap
 from mpl_toolkits.basemap import pyproj
+from matplotlib.pyplot import gca
 
 from .radardisplay import RadarDisplay
 
@@ -216,3 +217,31 @@ class RadarMapDisplay(RadarDisplay):
             self.plot_colorbar(mappable=pm, label=colorbar_label,
                                field=field, fig=fig)
         return
+
+    def plot_point(lon, lat, symbol='ro', label_text=None,
+                   label_offset=[0.05,0.05]):
+        """
+        Plot a point on a geographic PPI.
+
+        Parameters
+        ----------
+        lon : float
+              Longitude of point to plot.
+        lat : float
+              Latitude of point to plot.
+
+        Other Parameters
+        ----------------
+        symbol : str
+               Matplotlob label to use
+        label_text : str
+               Text string to label symbol with
+        label_offset : [float, float]
+               offset in degrees for the label text bottom left corner
+        """
+        xp, yp = self.basemap([lon, lat])
+        gca().plot([xp,xp], [yp,yp], symbol)
+        if label_text != None:
+            label_lonlat = [lon + label_offset[0], lat + label_offset[1]]
+            xl, yl = self.Basemap(label_lonlat)
+            gca().text(xl, yl, label_text)
