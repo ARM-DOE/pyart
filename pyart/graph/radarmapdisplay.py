@@ -265,7 +265,7 @@ class RadarMapDisplay(RadarDisplay):
         xp, yp = self.basemap(line_lons, line_lats)
         gca().plot(xp, yp, line_style)
 
-    def plot_line_xy(self, line_x, line_y, line_style = 'r'):
+    def plot_line_xy(self, line_x, line_y, line_style = 'r-'):
         """
         Plot x y line segments on a map.
 
@@ -284,7 +284,7 @@ class RadarMapDisplay(RadarDisplay):
         lons, lats = self.proj(line_x, line_y, inverse=True)
         self.plot_line_geo(lons, lats, line_style = line_style)
 
-    def plot_range_ring(self, radar_range, line_style = '-r'):
+    def plot_range_ring(self, radar_range, line_style = 'r-'):
         """
         Plot a ring around the radar on a map.
 
