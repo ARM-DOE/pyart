@@ -218,7 +218,7 @@ class RadarMapDisplay(RadarDisplay):
                                field=field, fig=fig)
         return
 
-    def plot_point(lon, lat, symbol='ro', label_text=None,
+    def plot_point(self, lon, lat, symbol='ro', label_text=None,
                    label_offset=[0.05,0.05]):
         """
         Plot a point on a geographic PPI.
@@ -239,9 +239,9 @@ class RadarMapDisplay(RadarDisplay):
         label_offset : [float, float]
                offset in degrees for the label text bottom left corner
         """
-        xp, yp = self.basemap([lon, lat])
+        xp, yp = self.basemap(lon, lat)
         gca().plot([xp,xp], [yp,yp], symbol)
         if label_text != None:
             label_lonlat = [lon + label_offset[0], lat + label_offset[1]]
-            xl, yl = self.Basemap(label_lonlat)
+            xl, yl = self.basemap(lon,lat)
             gca().text(xl, yl, label_text)
