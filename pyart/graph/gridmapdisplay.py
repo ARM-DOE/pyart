@@ -29,6 +29,7 @@ class GridMapDisplay:
     grid : Grid
         Grid with data which will be used to create plots.
     proj : str
+        The projection to be used.
     datum : str
     debug : bool
         True to print debugging information.
@@ -64,7 +65,7 @@ class GridMapDisplay:
 
     """
 
-    def __init__(self, grid, proj='mill', datum='NAD83', debug=False):
+    def __init__(self, grid, proj='lcc', datum='NAD83', debug=False):
         """ Initialize graph object. """
         
         self.debug = debug
@@ -83,8 +84,8 @@ class GridMapDisplay:
         self.x = grid.axes['x_disp']['data']
         self.y = grid.axes['y_disp']['data']
         self.z = grid.axes['z_disp']['data']
-        self.lat = grid.axes['lat']['data']
-        self.lon = grid.axes['lon']['data']
+        self.lat = grid.axes['lat']['data'][0]
+        self.lon = grid.axes['lon']['data'][0]
 
         # Set up the projection
         self.proj = pyproj.Proj(proj=proj, datum=datum, lat_0=self.lat,
@@ -93,8 +94,8 @@ class GridMapDisplay:
         self.datum = datum
 
        # Determine grid latitudes and longitudes
-        x, y = np.meshgrid(self.x, self.y)
-        self.grid_lons, self.grid_lats = self.proj(x, y, inverse=True)
+        X, Y = np.meshgrid(self.x, self.y)
+        self.grid_lons, self.grid_lats = self.proj(X, Y, inverse=True)
 
         # Populate graph attributes
         self.plots = []
