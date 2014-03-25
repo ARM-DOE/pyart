@@ -64,3 +64,4 @@ def steiner_conv_strat(grid, dx=500.0, dy=500.0, intense=42.0,
             'comment': ('Convective-stratiform echo ',
                         'classification based on ',
                         'Steiner et al. (1995)')}
+    
