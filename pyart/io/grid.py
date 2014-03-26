@@ -21,11 +21,13 @@ Reading and writing Grid objects.
 
 """
 
-from warnings import warn
-
+import numpy as np
 import netCDF4
 
+from warnings import warn
+
 from .cfradial import _ncvar_to_dict, _create_ncvar
+from ..config import get_fillvalue
 
 
 def read_grid(filename, exclude_fields=[]):
@@ -51,26 +53,25 @@ def read_grid(filename, exclude_fields=[]):
     
     ncobj = netCDF4.Dataset(filename, mode='r')
 
-    # metadata
+    # Metadata
     metadata = dict([(k, getattr(ncobj, k)) for k in ncobj.ncattrs()])
 
-    # axes
+    # Axes
     axes_keys = ['time', 'time_start', 'time_end', 'base_time',
                  'time_offset', 'z_disp', 'y_disp', 'x_disp',
                  'alt', 'lat', 'lon', 'z', 'y', 'x', 'lev']
     axes = dict((k, _ncvar_to_dict(ncobj.variables[k])) for k in axes_keys if
                 k in ncobj.variables)
     
-    # determine the correct shape of the fields
-    # ARM standard required a time dimension, so the shape of the fields
-    # in the file are (1, nz, ny, nx) but the field data should be shaped
-    # (nz, ny, nx) in the Grid object
+    # Determine the correct shape of the fields. ARM standard required a time
+    # dimension, so the shape of the fields in the file are (1, nz, ny, nx)
+    # but the field data should be shaped (nz, ny, nx) in the Grid object
     dim_keys = ['nz', 'ny', 'nx', 'z', 'y', 'x']
     field_shape = tuple([len(ncobj.dimensions[i]) for i in dim_keys if
                          i in ncobj.dimensions])
     field_shape_with_time = (1, ) + field_shape
 
-    # check all non-axes variables, those with the correct shape
+    # Check all non-axes variables, those with the correct shape
     # are added to the field dictionary, if a wrong sized field is
     # detected a warning is raised
     field_keys = [k for k in ncobj.variables if k not in axes_keys and
@@ -292,5 +293,51 @@ class Grid:
             raise ValueError('Field has invalid shape')
         
         self.fields[field_name] = field_dic
+        
+        return
+    
+    def despeckle_field(self, field, window_size=6, noise_threshold=85.0,
+                        proc=1, fill_value=None):
+        """
+        Remove outliers in gridded data.
+        
+        Parameters
+        ----------
+        field : str
+            Name of field to despeckle.
+        
+        Optional parameters
+        -------------------
+        window_size : int
+            The size (length) of the window in the x-, y-, and z-dimension.
+        noise_threshold : float
+            The threshold as a percent for the number of grid points in the
+            window required in order for a grid point to be classified as
+            noise. For example with a threshold of 85, then for a grid point
+            to be classified as noise, over 85% of the grid points in the
+            window must also be noise.
+        proc : int
+            Number of processors requested.
+        fill_value : float
+            Missing value used to signify bad data points. A value of None
+            will use the default fill value as defined in the Py-ART
+            configuration file
+        """
+        
+        # Get fill value
+        if fill_value is None:
+            fill_value = get_fillvalue()
+            
+        # Get data
+        data = self.fields[field]['data']
+        data = np.ma.filled(data, fill_value).astype(np.float64)
+        
+        data_qc = grid_qc.despeckle(data, window_size=window_size,
+                                    noise_threshold=noise_threshold,
+                                    proc=proc, fill_value=fill_value)
+        
+        data_qc = np.ma.masked_equal(data_qc, fill_value)
+        
+        self.fields[field]['data'] = data_qc
         
         return
