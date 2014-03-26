@@ -28,6 +28,7 @@ from warnings import warn
 
 from .cfradial import _ncvar_to_dict, _create_ncvar
 from ..config import get_fillvalue
+from ..io import grid_qc
 
 
 def read_grid(filename, exclude_fields=[]):
@@ -296,7 +297,7 @@ class Grid:
         
         return
     
-    def despeckle_field(self, field, window_size=6, noise_threshold=85.0,
+    def despeckle_field(self, field, window_size=6, noise_ratio=85.0,
                         proc=1, fill_value=None):
         """
         Remove outliers in gridded data.
@@ -310,12 +311,13 @@ class Grid:
         -------------------
         window_size : int
             The size (length) of the window in the x-, y-, and z-dimension.
-        noise_threshold : float
-            The threshold as a percent for the number of grid points in the
-            window required in order for a grid point to be classified as
-            noise. For example with a threshold of 85, then for a grid point
-            to be classified as noise, over 85% of the grid points in the
-            window must also be noise.
+            This will be a square box for interior grid points and a
+            rectangular box for boundary grid points.
+        noise_ratio : float
+            The ratio (as a percent) for when a grid point can be classified
+            as noise. For example, if the noise ratio is 85, then when more
+            than 85% of the grid points in the box are noise, then that grid
+            point will also be classified as noise.
         proc : int
             Number of processors requested.
         fill_value : float
@@ -333,8 +335,8 @@ class Grid:
         data = np.ma.filled(data, fill_value).astype(np.float64)
         
         data_qc = grid_qc.despeckle(data, window_size=window_size,
-                                    noise_threshold=noise_threshold,
-                                    proc=proc, fill_value=fill_value)
+                                    noise_ratio=noise_ratio, proc=proc,
+                                    fill_value=fill_value)
         
         data_qc = np.ma.masked_equal(data_qc, fill_value)
         

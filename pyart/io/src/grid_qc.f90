@@ -1,22 +1,21 @@
 !  Module: grid_qc.f90
 
 
-subroutine despeckle(data, window_size, noise_threshold, proc, &
+subroutine despeckle(data, window_size, noise_ratio, proc, &
                      fill_value, nx, ny, nz, data_qc)
 
    implicit none
 
    integer(kind=4), intent(in)                    :: nx, ny, nz
    integer(kind=4), intent(in)                    :: window_size, proc
-   real(kind=8), intent(in)                       :: noise_threshold, &
-                                                     fill_value
+   real(kind=8), intent(in)                       :: noise_ratio, fill_value
    real(kind=8), intent(in), dimension(nz,ny,nx)  :: data
    real(kind=8), intent(out), dimension(nz,ny,nx) :: data_qc
 
 
 !  Local variables ===========================================================
 
-   real(kind=8)                 :: n, sum_p
+   real(kind=8)                 :: n_total, n_noise
 
    logical, dimension(nz,ny,nx) :: m_data
 
@@ -31,7 +30,7 @@ subroutine despeckle(data, window_size, noise_threshold, proc, &
 
    !f2py integer(kind=4), optional, intent(in) :: nx, ny, nz
    !f2py integer(kind=4), intent(in)           :: window_size, proc
-   !f2py real(kind=8), intent(in)              :: noise_threshold, fill_value
+   !f2py real(kind=8), intent(in)              :: noise_ratio, fill_value
    !f2py real(kind=8), intent(in)              :: data
    !f2py real(kind=8), intent(out)             :: data_qc
 
@@ -80,10 +79,10 @@ subroutine despeckle(data, window_size, noise_threshold, proc, &
 !           be the same value for most grid points, except for grid points
 !           that are near the boundaries of the grid, where the window will
 !           naturally be smaller
-            n = (imax-imin+1.d0) * (jmax-jmin+1.d0) * (kmax-kmin+1.d0)
-            sum_p = dble(count(m_data(kmin:kmax,jmin:jmax,imin:imax)))
+            n_total = (imax-imin+1.d0) * (jmax-jmin+1.d0) * (kmax-kmin+1.d0)
+            n_noise = dble(count(m_data(kmin:kmax,jmin:jmax,imin:imax)))
             
-            if (sum_p > noise_threshold * n / 100.d0) then
+            if (100.d0 * n_noise / n_total > noise_ratio) then
                data_qc(k,j,i) = fill_value
             endif
             
