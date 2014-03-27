@@ -219,7 +219,7 @@ class RadarMapDisplay(RadarDisplay):
         return
 
     def plot_point(self, lon, lat, symbol='ro', label_text=None,
-                   label_offset=[0.05,0.05]):
+                   label_offset=[0.01,0.01]):
         """
         Plot a point on a geographic PPI.
 
@@ -243,7 +243,7 @@ class RadarMapDisplay(RadarDisplay):
         gca().plot([xp,xp], [yp,yp], symbol)
         if label_text != None:
             label_lonlat = [lon + label_offset[0], lat + label_offset[1]]
-            xl, yl = self.basemap(lon,lat)
+            xl, yl = self.basemap(label_lonlat[0], label_lonlat[1])
             gca().text(xl, yl, label_text)
 
     def plot_line_geo(self, line_lons, line_lats, line_style = 'r-'):
