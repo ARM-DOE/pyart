@@ -133,8 +133,7 @@ def grid_from_radars(radars, grid_shape, grid_limits, **kwargs):
     if 'grid_origin' in kwargs:
         lat = np.array([kwargs['grid_origin'][0]])
         lon = np.array([kwargs['grid_origin'][1]])
-        # Set the desired altitude to absolute altitude above sea surface, not first radar.
-        alt = np.array([0.0])
+        alt = first_radar.altitude['data']
     else:
         lat = first_radar.latitude['data']
         lon = first_radar.longitude['data']
@@ -260,7 +259,7 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
                 fields=None, refl_filter_flag=True, refl_field=None,
                 max_refl=None, map_roi=True, weighting_function='Barnes',
                 toa=17000.0, copy_field_data=True, algorithm='kd_tree',
-                leafsize=50., roi_func='dist_beam',
+                leafsize=10., roi_func='dist_beam',
                 constant_roi=500.,
                 z_factor=0.05, xy_factor=0.02, min_radius=500.0,
                 h_factor=1.0, nb=1.5, bsp=1.0):

@@ -69,7 +69,6 @@ def load_config(filename=None):
     global _FIELD_MAPPINGS
     global _FILL_VALUE
     global _DEFAULT_FIELD_NAMES
-    global _KNOWN_STATION_LOCATIONS
 
     cfile = imp.load_source('metadata_config', filename)
     _DEFAULT_METADATA = cfile.DEFAULT_METADATA
@@ -77,8 +76,6 @@ def load_config(filename=None):
     _FIELD_MAPPINGS = cfile.FIELD_MAPPINGS
     _FILL_VALUE = cfile.FILL_VALUE
     _DEFAULT_FIELD_NAMES = cfile.DEFAULT_FIELD_NAMES
-    _KNOWN_STATION_LOCATIONS = cfile.KNOWN_STATION_LOCATIONS
-    
     return
 
 # load the configuration from the enviromental parameter if it is set
@@ -243,22 +240,3 @@ class FileMetadata():
             return None     # field is excluded
         else:
             return field_name
-
-def get_radar_location(radar):
-    """
-    Return the location of radars in tuple of (lat, lon, alt)
-    
-    Parameters
-    ----------
-    radar : str
-        Name of radar in string. 
-        
-    Returns
-    -------
-    location : tuple
-        Location of radar in tuple of (lat, lon, alt). Latitude and longitude are in decimal degrees and altitude is in meters    
-    """
-    if not _KNOWN_STATION_LOCATIONS.has_key(radar):
-        return None
-    loc = _KNOWN_STATION_LOCATIONS[radar]
-    return (loc[0], loc[1], loc[4])
