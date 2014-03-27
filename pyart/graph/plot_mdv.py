@@ -19,7 +19,7 @@ Routines for plotting radar data from MDV file.
 
 import numpy as np
 
-from .radar_display import RadarDisplay
+from .radardisplay import RadarDisplay
 
 
 class MdvDisplay(RadarDisplay):

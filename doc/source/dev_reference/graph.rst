@@ -11,5 +11,5 @@ Radar data graphing routines.
 .. automodule:: pyart.graph.plot_cfradial
 .. automodule:: pyart.graph.plot_mdv
 .. automodule:: pyart.graph.plot_rsl
-.. automodule:: pyart.graph.radar_display
-.. .. automodule:: pyart.graph.rayplot
+.. automodule:: pyart.graph.radardisplay
+.. automodule:: pyart.graph.radarmapdisplay
