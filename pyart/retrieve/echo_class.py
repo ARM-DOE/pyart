@@ -12,8 +12,8 @@ from ..retrieve import echo_steiner
 
 def steiner_conv_strat(grid, dx=500.0, dy=500.0, intense=42.0,
                        work_level=3000.0, peak_relation='default',
-                       bkg_rad=11000.0, use_intense=True,
-                       area_relation='medium', fill_value=None,
+                       area_relation='medium', bkg_rad=11000.0,
+                       use_intense=True, fill_value=None,
                        refl_field=None):
     """
     
@@ -23,6 +23,23 @@ def steiner_conv_strat(grid, dx=500.0, dy=500.0, intense=42.0,
     
     Optional parameters
     -------------------
+    dx, dy : float
+        The x- and y-dimension resolutions, respectively.
+    intense : float
+    
+    work_level : float
+    
+    peak_relation : 'default' or 'sgp'
+    
+    area_relation : 'small', 'medium', 'large', or 'sgp'
+    
+    bkg_rad : float
+        Background radius.
+    use_intense : bool
+        True to use the intensity criteria.
+    fill_value : float
+    
+    refl_field : str
     
     Returns
     -------
@@ -45,7 +62,7 @@ def steiner_conv_strat(grid, dx=500.0, dy=500.0, intense=42.0,
     
     # Get reflectivity data
     ze = np.copy(grid.fields[refl_field]['data'])
-    ze = np.ma.filled(ze, fill_value)
+    ze = np.ma.filled(ze, fill_value).astype(np.float64)
     
     # Call Fortran routine
     eclass = echo_steiner.classify(ze, x, y, z, dx=dx, dy=dy, bkg_rad=bkg_rad,
@@ -61,7 +78,7 @@ def steiner_conv_strat(grid, dx=500.0, dy=500.0, intense=42.0,
             'long_name': 'Steiner echo classification',
             'valid_min': 0,
             'valid_max': 2,
-            'comment': ('Convective-stratiform echo ',
-                        'classification based on ',
+            'comment': ('Convective-stratiform echo '
+                        'classification based on '
                         'Steiner et al. (1995)')}
     
