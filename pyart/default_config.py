@@ -445,18 +445,18 @@ DEFAULT_METADATA = {
         'valid_min': 0.0,
         'valid_max': 1.0,
         'coordinates': 'elevation azimuth range'},
-                    
+
     # Wind retrieval fields
     eastward_wind_component: {
         'units': 'meters_per_second',
         'standard_name': 'eastward_wind_component',
         'long_name': 'Eastward wind component'},
-                    
+
     northward_wind_component: {
         'units': 'meters_per_second',
         'standard_name': 'northward_wind_component',
         'long_name': 'Northward wind component'},
-                    
+
     vertical_wind_component: {
         'units': 'meters_per_second',
         'standard_name': 'vertical_wind_component',
