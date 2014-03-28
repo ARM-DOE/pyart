@@ -88,7 +88,7 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
     # ignore time_* global variables, these are calculated from the time
     # variable when the file is written.
     for var, default_value in global_vars.iteritems():
-        if k in ncvars:
+        if var in ncvars:
             metadata[var] = str(netCDF4.chartostring(ncvars[var][:]))
         else:
             metadata[var] = default_value
