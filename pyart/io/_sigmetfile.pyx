@@ -481,15 +481,23 @@ SIGMET_DATA_TYPES = {
     56: 'HCLASS2',
     57: 'ZDRC',
     58: 'ZDRC2',
-    59: 'UNKNOWN_59',
-    60: 'UNKNOWN_60',
-    61: 'UNKNOWN_61',
-    62: 'UNKNOWN_62',
-    63: 'UNKNOWN_63',
-    64: 'UNKNOWN_64',
-    65: 'UNKNOWN_65',
-    66: 'UNKNOWN_66',   # there may be more field, add as needed
-}
+    59: 'TEMPERATURE16',
+    60: 'VIR16',
+    61: 'DBTV8',
+    62: 'DBTV16',
+    63: 'DBZV8',
+    64: 'DBZV16',
+    65: 'SNR8',
+    66: 'SNR16',
+    67: 'ALBEDO8',
+    68: 'ALBEDO16',
+    69: 'VILD16',
+    70: 'TURB16',
+    71: 'DBTE8',
+    72: 'DBTE16',       # Total Power Enhanced
+    73: 'DBZE8',
+    74: 'DBZE16',       # Clutter Corrected Reflectivity Enhanced
+}   # there may be more field, add as needed
 
 
 # This function takes a majority of the time when reading data from a sigmet
@@ -512,6 +520,11 @@ def convert_sigmet_data(data_type, data):
         'ZDR2',     # 2-byte ZDR Format, section 4.3.38
         'DBZC2',    # Corrected reflectivity, XXX not certain of format
         'ZDRC2',    # Corrected differential reflectivity, XXX not certain
+        'DBTV16',   # Total V power, 2-byte
+        'DBZV16',   # Clutter corrected V reflectivity, 2-byte
+        'SNR16',    # Signal to noise ratio, 2-byte
+        'DBTE16',   # Total Power Enhanced, 2-byte
+        'DBZE16',   # Clutter corrected reflectivity enhanced, 2-byte
     ]
 
     like_sqi2 = [
@@ -524,6 +537,11 @@ def convert_sigmet_data(data_type, data):
     like_dbt = [
         'DBT',      # 1-bytes Reflectivity Format, section 4.3.3
         'DBZ',      # " "
+        'DBTV8',    # Total V power, 1-byte
+        'DBZV8',    # Clutter corrected V reflectivity, 1-byte
+        'SNR8',     # Signal to noise ratio, 1-byte
+        'DBTE8',    # Total power enhanced, 1-byte
+        'DBZE8',    # Clutter corrected reflectivity enhanced, 1-byte
     ]
 
     if data_type_name in like_dbt2:
