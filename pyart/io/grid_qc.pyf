@@ -1,0 +1,21 @@
+!    -*- f90 -*-
+! Note: the context of this file is case sensitive.
+
+python module grid_qc ! in 
+    interface  ! in :grid_qc
+        subroutine despeckle(data,window_size,noise_ratio,proc,fill_value,nx,ny,nz,data_qc) ! in :grid_qc:grid_qc.f90
+            real(kind=8) dimension(nz,ny,nx),intent(in) :: data
+            integer(kind=4) intent(in) :: window_size
+            real(kind=8) intent(in) :: noise_ratio
+            integer(kind=4) intent(in) :: proc
+            real(kind=8) intent(in) :: fill_value
+            integer(kind=4), optional,intent(in),check(shape(data,2)==nx),depend(data) :: nx=shape(data,2)
+            integer(kind=4), optional,intent(in),check(shape(data,1)==ny),depend(data) :: ny=shape(data,1)
+            integer(kind=4), optional,intent(in),check(shape(data,0)==nz),depend(data) :: nz=shape(data,0)
+            real(kind=8) dimension(nz,ny,nx),intent(out),depend(nz,ny,nx) :: data_qc
+        end subroutine despeckle
+    end interface 
+end python module grid_qc
+
+! This file was auto-generated with f2py (version:2).
+! See http://cens.ioc.ee/projects/f2py2e/

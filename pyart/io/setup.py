@@ -72,6 +72,11 @@ def configuration(parent_package='', top_path=None):
     config.add_extension('_sigmetfile',
                          sources=['_sigmetfile.c'],
                          include_dirs=[get_include()])
+    
+    # f2py wrappers
+    config.add_extension('grid_qc',
+                         sources=['grid_qc.pyf','src/grid_qc.f90'],
+                         f2py_options=[])
 
     return config
 
