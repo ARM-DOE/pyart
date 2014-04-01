@@ -2,7 +2,7 @@
 pyart.graph.radarmapdisplay
 ===========================
 
-Class for creating plots on a geographic map using a Radar objects.
+Class for creating plots on a geographic map using a Radar object.
 
 .. autosummary::
     :toctree: generated/
@@ -15,6 +15,7 @@ Class for creating plots on a geographic map using a Radar objects.
 import numpy as np
 from mpl_toolkits.basemap import Basemap
 from mpl_toolkits.basemap import pyproj
+from matplotlib.pyplot import gca
 
 from .radardisplay import RadarDisplay
 
@@ -189,8 +190,9 @@ class RadarMapDisplay(RadarDisplay):
         # plot the basemap
         basemap = Basemap(llcrnrlon=min_lon, llcrnrlat=min_lat,
                           urcrnrlon=max_lon, urcrnrlat=max_lat,
-                          projection='mill', area_thresh=1000,
-                          resolution=resolution, ax=ax)
+                          projection='lcc', area_thresh=1000,
+                          resolution=resolution, ax=ax, lat_0=self.loc[0],
+                          lon_0=self.loc[1])
         basemap.drawcoastlines(linewidth=1.25)
         basemap.drawstates()
         basemap.drawparallels(lat_lines, labels=[True, False, False, False])
@@ -215,3 +217,90 @@ class RadarMapDisplay(RadarDisplay):
             self.plot_colorbar(mappable=pm, label=colorbar_label,
                                field=field, fig=fig)
         return
+
+    def plot_point(self, lon, lat, symbol='ro', label_text=None,
+                   label_offset=[0.01,0.01]):
+        """
+        Plot a point on a geographic PPI.
+
+        Parameters
+        ----------
+        lon : float
+              Longitude of point to plot.
+        lat : float
+              Latitude of point to plot.
+
+        Other Parameters
+        ----------------
+        symbol : str
+               Matplotlob label to use
+        label_text : str
+               Text string to label symbol with
+        label_offset : [float, float]
+               offset in degrees for the label text bottom left corner
+        """
+        xp, yp = self.basemap(lon, lat)
+        gca().plot([xp,xp], [yp,yp], symbol)
+        if label_text != None:
+            label_lonlat = [lon + label_offset[0], lat + label_offset[1]]
+            xl, yl = self.basemap(label_lonlat[0], label_lonlat[1])
+            gca().text(xl, yl, label_text)
+
+    def plot_line_geo(self, line_lons, line_lats, line_style = 'r-'):
+        """
+        Plot lat lon line segments on a map.
+
+        Parameters
+        ----------
+        line_lons : array of floats
+              Longitude of points to plot.
+        line_lats : array of floats
+              Latitude of points to plot.
+
+        Other Parameters
+        ----------------
+        line_style : str
+               Matplotlob style to use
+        """
+        xp, yp = self.basemap(line_lons, line_lats)
+        gca().plot(xp, yp, line_style)
+
+    def plot_line_xy(self, line_x, line_y, line_style = 'r-'):
+        """
+        Plot x y line segments on a map.
+
+        Parameters
+        ----------
+        line_x : array of floats
+              radar origin x of points to plot in meters
+        line_y : array of floats
+              radar origin y of points to plot in meters
+
+        Other Parameters
+        ----------------
+        line_style : str
+               Matplotlob style to use
+        """
+        lons, lats = self.proj(line_x, line_y, inverse=True)
+        self.plot_line_geo(lons, lats, line_style = line_style)
+
+    def plot_range_ring(self, radar_range, line_style = 'r-'):
+        """
+        Plot a ring around the radar on a map.
+
+        Parameters
+        ----------
+        radar_range : float
+              range in meters of the ring to draw
+
+        Other Parameters
+        ----------------
+        line_style : str
+               Matplotlob style to use
+        """
+
+        npts = 360
+        angle = np.linspace(0., 2.0 * np.pi, npts)
+        xpts = radar_range * np.sin(angle)
+        ypts = radar_range * np.cos(angle)
+        self.plot_line_xy(xpts, ypts, line_style=line_style)
