@@ -14,8 +14,6 @@ Class for creating plots on a geographic map using a Radar object.
 
 import numpy as np
 from mpl_toolkits.basemap import Basemap
-from mpl_toolkits.basemap import pyproj
-from matplotlib.pyplot import gca
 
 from .radardisplay import RadarDisplay
 
@@ -25,9 +23,8 @@ class RadarMapDisplay(RadarDisplay):
     A display object for creating plots on a geographic map from data in a
     Radar object.
 
-    This class is still an in progress addition to Py-ART.  Some
-    functionality may not work correctly. Please report any problems to
-    the Py-ART GitHub Issue Tracker.
+    This class is still a work in progress.  Some functionality may not work
+    correctly. Please report any problems to the Py-ART GitHub Issue Tracker.
 
     Parameters
     ----------
@@ -87,12 +84,16 @@ class RadarMapDisplay(RadarDisplay):
         # initalize the base class
         RadarDisplay.__init__(self, radar, shift=shift)
 
-        # additional Map attributes.
+        # additional attributes needed for plotting on a basemap.
         self.basemap = None
-        self.proj = pyproj.Proj(proj='lcc', datum='NAD83',
-                                lat_0=self.loc[0], lon_0=self.loc[1],
-                                x_0=0.0, y_0=0.0)
+        self._x0 = None     # x axis radar location in map coords (meters)
+        self._y0 = None     # y axis radar location in map coords (meters)
         return
+
+    def _check_basemap(self):
+        """ Check that basemap is not None, raise ValueError if it is. """
+        if self.basemap is None:
+            raise ValueError('no basemap plotted')
 
     def plot_ppi_map(self, field, sweep=0, mask_tuple=None,
                      vmin=None, vmax=None, cmap='jet', mask_outside=True,
@@ -100,11 +101,14 @@ class RadarMapDisplay(RadarDisplay):
                      colorbar_flag=True, colorbar_label=None,
                      ax=None, fig=None,
                      lat_lines=None, lon_lines=None,
-                     auto_range=True,
-                     min_lon=-92, max_lon=-86, min_lat=40, max_lat=44,
-                     resolution='h', shapefile=None):
+                     projection='lcc', area_thresh=10000,
+                     min_lon=None, max_lon=None, min_lat=None, max_lat=None,
+                     width=None, height=None, lon_0=None, lat_0=None,
+                     resolution='h', shapefile=None, **kwargs):
         """
         Plot a PPI volume sweep onto a geographic map.
+
+        Additional arguments are passed to Basemap.
 
         Parameters
         ----------
@@ -148,13 +152,27 @@ class RadarMapDisplay(RadarDisplay):
             Locations at which to draw latitude and longitude lines.
             None will use default values which are resonable for maps of
             North America.
-        auto_range : bool
-            True to determine map ranges from the extend of the radar data.
-            False will use the min_lon, max_lon, min_lat, and max_lat
-            parameters for the map range.
+        projection : str
+            Map projection supported by basemap.  The use of cylindrical
+            projections (mill, merc, cyl, etc) is not recommended as they
+            exhibit large distortions at high latitudes.  Equal area
+            (aea, laea), conformal (lcc, tmerc, stere) or equidistant
+            projection (aeqd, cass) work well even at high latitudes.
+        area_thresh : float
+            Coastline or lake with an area smaller than area_thresh in
+            km^2 will not be plotted.
         min_lat, max_lat, min_lon, max_lon : float
             Latitude and longitude ranges for the map projection region in
-            degrees.  These parameter are not used if auto_range is True.
+            degrees.
+        width, height : float
+            Width and height of map domain in meters.
+            Only this set of parameters or the previous set of parameters
+            (min_lat, max_lat, min_lon, max_lon) should be specified.
+            If neither set is specified then the map domain will be determined
+            from the extend of the radar gate locations.
+        lon_0, lat_0 : float
+            Center of the map domain in degrees.  If the default, None is used
+            the latitude and longitude of the radar will be used.
         shapefile : str
             Filename for a ESRI shapefile as background (untested).
         resolution : 'c', 'l', 'i', 'h', or 'f'.
@@ -169,6 +187,10 @@ class RadarMapDisplay(RadarDisplay):
             lat_lines = np.arange(30, 46, 1)
         if lon_lines is None:
             lon_lines = np.arange(-110, -75, 1)
+        if lat_0 is None:
+            lat_0 = self.loc[0]
+        if lon_0 is None:
+            lon_0 = self.loc[1]
 
         # get data for the plot
         data = self._get_data(field, sweep, mask_tuple)
@@ -178,30 +200,39 @@ class RadarMapDisplay(RadarDisplay):
         if mask_outside:
             data = np.ma.masked_outside(data, vmin, vmax)
 
-        # determine map region
-        lon, lat = self.proj(x * 1000.0, y * 1000.0, inverse=True)
-
-        if auto_range:
-            max_lat = lat.max()
-            max_lon = lon.max()
-            min_lat = lat.min()
-            min_lon = lon.min()
-
         # plot the basemap
-        basemap = Basemap(llcrnrlon=min_lon, llcrnrlat=min_lat,
-                          urcrnrlon=max_lon, urcrnrlat=max_lat,
-                          projection='lcc', area_thresh=1000,
-                          resolution=resolution, ax=ax, lat_0=self.loc[0],
-                          lon_0=self.loc[1])
+        using_corners = (None not in [min_lon, min_lat, max_lon, max_lat])
+        if using_corners:
+            basemap = Basemap(llcrnrlon=min_lon, llcrnrlat=min_lat,
+                              urcrnrlon=max_lon, urcrnrlat=max_lat,
+                              lat_0=lat_0, lon_0=lon_0,
+                              projection=projection, area_thresh=area_thresh,
+                              resolution=resolution, ax=ax, **kwargs)
+        else:   # using width and height
+            # map domain determined from location of radar gates
+            if width is None:
+                width = (x.max() - y.min()) * 1000.
+            if height is None:
+                height = (y.max() - y.min()) * 1000.
+            basemap = Basemap(width=width, height=height,
+                              lon_0=lon_0, lat_0=lat_0,
+                              projection=projection, area_thresh=area_thresh,
+                              resolution=resolution, ax=ax, **kwargs)
+
+        # add embelishments
         basemap.drawcoastlines(linewidth=1.25)
         basemap.drawstates()
         basemap.drawparallels(lat_lines, labels=[True, False, False, False])
         basemap.drawmeridians(lon_lines, labels=[False, False, False, True])
         self.basemap = basemap
+        self._x0, self._y0 = basemap(self.loc[1], self.loc[0])
 
         # plot the data and optionally the shape file
-        xd, yd = basemap(lon, lat)
-        pm = basemap.pcolormesh(xd, yd, data, vmin=vmin, vmax=vmax, cmap=cmap)
+        # we need to convert the radar gate locations (x and y) which are in
+        # km to meters as well as add the map coordiate radar location
+        # which is given by self._x0, self._y0.
+        pm = basemap.pcolormesh(self._x0 + x * 1000., self._y0 + y * 1000.,
+                                data, vmin=vmin, vmax=vmax, cmap=cmap)
 
         if shapefile is not None:
             basemap.readshapefile(shapefile, 'shapefile', ax=ax)
@@ -219,88 +250,102 @@ class RadarMapDisplay(RadarDisplay):
         return
 
     def plot_point(self, lon, lat, symbol='ro', label_text=None,
-                   label_offset=[0.01,0.01]):
+                   label_offset=(None, None), **kwargs):
         """
-        Plot a point on a geographic PPI.
+        Plot a point on the current map.
+
+        Additional arguments are passed to basemap.plot.
 
         Parameters
         ----------
         lon : float
-              Longitude of point to plot.
+            Longitude of point to plot.
         lat : float
-              Latitude of point to plot.
-
-        Other Parameters
-        ----------------
+            Latitude of point to plot.
         symbol : str
-               Matplotlob label to use
-        label_text : str
-               Text string to label symbol with
+            Matplotlib compatible string which specified the symbol of the
+            point.
+        label_text : str, optional.
+            Text to label symbol with.  If None no label will be added.
         label_offset : [float, float]
-               offset in degrees for the label text bottom left corner
-        """
-        xp, yp = self.basemap(lon, lat)
-        gca().plot([xp,xp], [yp,yp], symbol)
-        if label_text != None:
-            label_lonlat = [lon + label_offset[0], lat + label_offset[1]]
-            xl, yl = self.basemap(label_lonlat[0], label_lonlat[1])
-            gca().text(xl, yl, label_text)
+            Offset in lon, lat degrees for the bottom left corner of the label
+            text relative to the point. A value of None will use 0.01 de
 
-    def plot_line_geo(self, line_lons, line_lats, line_style = 'r-'):
         """
-        Plot lat lon line segments on a map.
+        self._check_basemap()
+        lon_offset, lat_offset = label_offset
+        if lon_offset is None:
+            lon_offset = 0.01
+        if lat_offset is None:
+            lat_offset = 0.01
+        self.basemap.plot(lon, lat, symbol, latlon=True, **kwargs)
+        if label_text is not None:
+            # basemap does not have a text method so we must determine
+            # the x and y points and plot them on the basemap's axis.
+            x_text, y_text = self.basemap(lon + lon_offset,
+                                          lat + lat_offset)
+            self.basemap.ax.text(x_text, y_text, label_text)
+
+    def plot_line_geo(self, line_lons, line_lats, line_style='r-', **kwargs):
+        """
+        Plot a line segments on the current map given values in lat and lon.
+
+        Additional arguments are passed to basemap.plot.
 
         Parameters
         ----------
-        line_lons : array of floats
-              Longitude of points to plot.
-        line_lats : array of floats
-              Latitude of points to plot.
-
-        Other Parameters
-        ----------------
+        line_lons : array
+            Longitude of line segment to plot.
+        line_lats : array
+            Latitude of line segment to plot.
         line_style : str
-               Matplotlob style to use
-        """
-        xp, yp = self.basemap(line_lons, line_lats)
-        gca().plot(xp, yp, line_style)
+            Matplotlib compatible string which specifies the line style.
 
-    def plot_line_xy(self, line_x, line_y, line_style = 'r-'):
         """
-        Plot x y line segments on a map.
+        self._check_basemap()
+        self.basemap.plot(line_lons, line_lats, line_style, latlon=True,
+                          **kwargs)
+
+    def plot_line_xy(self, line_x, line_y, line_style='r-', **kwargs):
+        """
+        Plot a line segments on the current map given radar x, y values.
+
+        Additional arguments are passed to basemap.plot.
 
         Parameters
         ----------
-        line_x : array of floats
-              radar origin x of points to plot in meters
-        line_y : array of floats
-              radar origin y of points to plot in meters
+        line_x : array
+            X location of points to plot in meters from the radar.
+        line_y : array
+            Y location of points to plot in meters from the radar.
+        line_style : str, optional
+            Matplotlib compatible string which specifies the line style.
 
-        Other Parameters
-        ----------------
-        line_style : str
-               Matplotlob style to use
         """
-        lons, lats = self.proj(line_x, line_y, inverse=True)
-        self.plot_line_geo(lons, lats, line_style = line_style)
+        self._check_basemap()
+        self.basemap.plot(self._x0 + line_x, self._y0 + line_y, line_style,
+                          latlon=False, **kwargs)
 
-    def plot_range_ring(self, radar_range, line_style = 'r-'):
+    def plot_range_ring(self, range_ring_location_km, npts=360,
+                        line_style='k-', **kwargs):
         """
-        Plot a ring around the radar on a map.
+        Plot a single range ring on the map.
+
+        Additional arguments are passed to basemap.plot.
 
         Parameters
         ----------
-        radar_range : float
-              range in meters of the ring to draw
-
-        Other Parameters
-        ----------------
+        range_ring_location_km : float
+            Location of range ring in km.
+        npts: int
+            Number of points in the ring, higher for better resolution.
         line_style : str
-               Matplotlob style to use
-        """
+            Matplotlib compatible string which specified the line
+            style of the ring.
 
-        npts = 360
+        """
+        self._check_basemap()
         angle = np.linspace(0., 2.0 * np.pi, npts)
-        xpts = radar_range * np.sin(angle)
-        ypts = radar_range * np.cos(angle)
-        self.plot_line_xy(xpts, ypts, line_style=line_style)
+        xpts = range_ring_location_km * 1000. * np.sin(angle)
+        ypts = range_ring_location_km * 1000. * np.cos(angle)
+        self.plot_line_xy(xpts, ypts, line_style=line_style, **kwargs)
