@@ -302,6 +302,13 @@ def write_cfradial(filename, radar, format='NETCDF4', time_reference=False,
     """
     Write a Radar object to a CF/Radial compliant netCDF file.
 
+    The files produced by this routine follow the `CF/Radial standard`_.
+    Attempts are also made to to meet many of the standards outlined in the
+    `ARM Data File Standards`_.
+
+    .. _CF/Radial standard: http://www.ral.ucar.edu/projects/titan/docs/radial_formats/cfradial.html
+    .. _ARM Data File Standards: https://docs.google.com/document/d/1gBMw4Kje6v8LBlsrjaGFfSLoU0jRx-07TIazpthZGt0/edit?pli=1
+
     Parameters
     ----------
     filename : str
