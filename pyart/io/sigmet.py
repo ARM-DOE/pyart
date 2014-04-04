@@ -212,7 +212,7 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
     fixed_angle = filemetadata('fixed_angle')
     fa = [d['fixed_angle'] for d in
           sigmetfile.ingest_data_headers[first_data_type]]
-    fixed_angle['data'] = bin2_to_angle(np.array(fa, dtype='float32'))
+    fixed_angle['data'] = bin2_to_angle(np.array(fa)).astype('float32')
 
     # azimuth
     az0 = sigmet_metadata[first_data_type]['azimuth_0']
