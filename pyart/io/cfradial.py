@@ -297,7 +297,7 @@ def _stream_to_2d(data, sweeps, sweepe, ray_len, maxgates, nrays,
     return time_range
 
 
-def write_cfradial(filename, radar, format='NETCDF4', time_reference=False,
+def write_cfradial(filename, radar, format='NETCDF4', time_reference=None,
                    arm_time_variables=False):
     """
     Write a Radar object to a CF/Radial compliant netCDF file.
@@ -321,7 +321,8 @@ def write_cfradial(filename, radar, format='NETCDF4', time_reference=False,
         details.
     time_reference : bool
         True to include a time_reference variable, False will not include
-        this variable.
+        this variable. The default, None, will include the time_reference
+        variable when the first time value is non-zero.
     arm_time_variables : bool
         True to create the ARM standard time variables base_time and
         time_offset, False will not create these variables.
@@ -471,6 +472,13 @@ def write_cfradial(filename, radar, format='NETCDF4', time_reference=False,
                'units': 'unitless'}
     _create_ncvar(start_dic, dataset, 'time_coverage_start', time_dim)
     _create_ncvar(end_dic, dataset, 'time_coverage_end', time_dim)
+
+    # time_reference is required or requested.
+    if time_reference is None:
+        if radar.time['data'][0] == 0:
+            time_reference = False
+        else:
+            time_reference = True
     if time_reference:
         ref_dic = {'data': np.array(radar.time['units'][-20:]),
                    'long_name': 'UTC time reference',
