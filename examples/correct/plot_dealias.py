@@ -4,7 +4,7 @@ Dealias doppler velocities using the FourDD algorithm
 =====================================================
 
 In this example doppler velocities are dealiased using the Univ. of
-Washington FourDD algorithm implemented in Py-ART.  Sonde data is
+Washington FourDD algorithm implemented in Py-ART.  Sounding data is
 used for the initial condition of the dealiasing.
 
 """
@@ -30,8 +30,9 @@ t = pyart.correct.find_time_in_interp_sonde(interp_sounde, target)
 height, speed, direction = t
 
 # perform dealiasing
-dealias_data = pyart.correct.dealias_fourdd(radar, height * 1000.0, speed,
-                                            direction, target)
+dealias_data = pyart.correct.dealias_fourdd(
+    radar, sounding_heights=height * 1000.0, sounding_wind_speeds=speed,
+    sounding_wind_direction=direction)
 radar.add_field('corrected_velocity', dealias_data)
 
 # create a plot of the first and sixth sweeps
