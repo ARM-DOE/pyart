@@ -179,16 +179,24 @@ def read_rsl(filename, field_names=None, additional_metadata=None,
     prt_mode = filemetadata('prt_mode')
     nyquist_velocity = filemetadata('nyquist_velocity')
     unambiguous_range = filemetadata('unambiguous_range')
+    beam_width_h = filemetadata('radar_beam_width_h')
+    beam_width_v = filemetadata('radar_beam_width_v')
 
     pm_data, nv_data, pr_data, ur_data = first_volume.get_instr_params()
     prt['data'] = pr_data
     prt_mode['data'] = pm_data
     nyquist_velocity['data'] = nv_data
     unambiguous_range['data'] = ur_data
+    beam_width_h['data'] = np.array([first_sweep.horz_half_bw * 2.],
+                                    dtype='float32')
+    beam_width_v['data'] = np.array([first_sweep.vert_half_bw * 2.],
+                                    dtype='float32')
 
     instrument_parameters = {'unambiguous_range': unambiguous_range,
                              'prt_mode': prt_mode, 'prt': prt,
-                             'nyquist_velocity': nyquist_velocity}
+                             'nyquist_velocity': nyquist_velocity,
+                             'radar_beam_width_h': beam_width_h,
+                             'radar_beam_width_v': beam_width_v}
 
     return Radar(
         time, _range, fields, metadata, scan_type,

@@ -333,7 +333,8 @@ def write_cfradial(filename, radar, format='NETCDF4', time_reference=None,
     # determine the maximum string length
     max_str_len = len(radar.sweep_mode['data'][0])
     for k in ['follow_mode', 'prt_mode', 'polarization_mode']:
-        if k in radar.instrument_parameters:
+        if ((radar.instrument_parameters is not None) and
+                (k in radar.instrument_parameters)):
             sdim_length = len(radar.instrument_parameters[k]['data'][0])
             max_str_len = max(max_str_len, sdim_length)
     str_len = max(max_str_len, 32)      # minimum string legth of 32
@@ -419,7 +420,8 @@ def write_cfradial(filename, radar, format='NETCDF4', time_reference=None,
                   ('sweep', 'string_length'))
 
     # instrument_parameters
-    if 'frequency' in radar.instrument_parameters.keys():
+    if ((radar.instrument_parameters is not None) and
+            ('frequency' in radar.instrument_parameters.keys())):
         size = len(radar.instrument_parameters['frequency']['data'])
         dataset.createDimension('frequency', size)
 
@@ -446,12 +448,13 @@ def write_cfradial(filename, radar, format='NETCDF4', time_reference=None,
         'measured_transmit_power_v': ('time', ),    # non-standard
         'measured_transmit_power_h': ('time', ),    # non-standard
     }
-    for k in radar.instrument_parameters.keys():
-        if k in instrument_dimensions:
-            dim = instrument_dimensions[k]
-        else:
-            dim = ()
-        _create_ncvar(radar.instrument_parameters[k], dataset, k, dim)
+    if radar.instrument_parameters is not None:
+        for k in radar.instrument_parameters.keys():
+            if k in instrument_dimensions:
+                dim = instrument_dimensions[k]
+            else:
+                dim = ()
+            _create_ncvar(radar.instrument_parameters[k], dataset, k, dim)
 
     # latitude, longitude, altitude
     # TODO moving platform
