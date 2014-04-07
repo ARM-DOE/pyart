@@ -235,6 +235,8 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
     prt_mode = filemetadata('prt_mode')
     nyquist_velocity = filemetadata('nyquist_velocity')
     unambiguous_range = filemetadata('unambiguous_range')
+    beam_width_h = filemetadata('radar_beam_width_h')
+    beam_width_v = filemetadata('radar_beam_width_v')
 
     trays = nsweeps * nrays     # this is correct even with missing rays
     prt_value = 1. / sigmetfile.product_hdr['product_end']['prf']
@@ -250,10 +252,18 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
     wavelength_cm = sigmetfile.product_hdr['product_end']['wavelength']
     nv_value = wavelength_cm / (10000.0 * 4.0 * prt_value)
     nyquist_velocity['data'] = nv_value * np.ones(trays, dtype='float32')
+    beam_width_h['data'] = np.array([bin4_to_angle(
+        task_config['task_misc_info']['horizontal_beamwidth'])],
+        dtype='float32')
+    beam_width_v['data'] = np.array([bin4_to_angle(
+        task_config['task_misc_info']['vertical_beamwidth'])],
+        dtype='float32')
 
     instrument_parameters = {'unambiguous_range': unambiguous_range,
                              'prt_mode': prt_mode, 'prt': prt,
-                             'nyquist_velocity': nyquist_velocity}
+                             'nyquist_velocity': nyquist_velocity,
+                             'radar_beam_width_h': beam_width_h,
+                             'radar_beam_width_v': beam_width_v}
 
     return Radar(
         time, _range, fields, metadata, scan_type,
