@@ -195,6 +195,8 @@ def read_mdv(filename, field_names=None, additional_metadata=None,
     prt = filemetadata('prt')
     unambiguous_range = filemetadata('unambiguous_range')
     nyquist_velocity = filemetadata('nyquist_velocity')
+    beam_width_h = filemetadata('radar_beam_width_h')
+    beam_width_v = filemetadata('radar_beam_width_v')
 
     prt_mode['data'] = np.array([prt_mode_str] * nsweeps)
     prt['data'] = np.array([mdvfile.radar_info['prt_s']] * nele * naz,
@@ -207,10 +209,16 @@ def read_mdv(filename, field_names=None, additional_metadata=None,
     uvel_mps = mdvfile.radar_info['unambig_vel_mps']
     nyquist_velocity['data'] = np.array([uvel_mps] * naz * nele,
                                         dtype='float32')
+    beam_width_h['data'] = np.array(
+        [mdvfile.radar_info['horiz_beam_width_deg']], dtype='float32')
+    beam_width_v['data'] = np.array(
+        [mdvfile.radar_info['vert_beam_width_deg']], dtype='float32')
 
     instrument_parameters = {'prt_mode': prt_mode, 'prt': prt,
                              'unambiguous_range': unambiguous_range,
-                             'nyquist_velocity': nyquist_velocity}
+                             'nyquist_velocity': nyquist_velocity,
+                             'radar_beam_width_h': beam_width_h,
+                             'radar_beam_width_v': beam_width_v}
 
     return Radar(
         time, _range, fields, metadata, scan_type,
