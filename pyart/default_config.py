@@ -291,6 +291,17 @@ DEFAULT_METADATA = {
         'meta_group': 'instrument_parameters',
         'long_name': 'Unambiguous range'},
 
+    # Metadata for radar_parameter sub-convention
+    'radar_beam_width_h': {
+        'units': 'degrees',
+        'meta_group': 'radar_parameters',
+        'long_name': 'Antenna beam width H polarization'},
+
+    'radar_beam_width_v': {
+        'units': 'degrees',
+        'meta_group': 'radar_parameters',
+        'long_name': 'Antenna beam width V polarization'},
+
     # Reflectivity fields
     reflectivity: {
         'units': 'dBZ',
