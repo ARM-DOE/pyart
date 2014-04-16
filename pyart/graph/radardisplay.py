@@ -306,7 +306,7 @@ class RadarDisplay:
 
         if colorbar_flag:
             self.plot_colorbar(mappable=pm, label=colorbar_label,
-                               field=field, fig=fig)
+                               field=field, ax=ax, fig=fig)
 
     def plot_rhi(self, field, sweep=0, mask_tuple=None, vmin=None, vmax=None,
                  cmap='jet', mask_outside=True, title=None, title_flag=True,
@@ -396,7 +396,7 @@ class RadarDisplay:
 
         if colorbar_flag:
             self.plot_colorbar(mappable=pm, label=colorbar_label,
-                               field=field, fig=fig)
+                               field=field, ax=ax, fig=fig)
 
     def plot_vpt(self, field, mask_tuple=None, vmin=None, vmax=None,
                  cmap='jet', mask_outside=True, title=None, title_flag=True,
@@ -477,7 +477,7 @@ class RadarDisplay:
 
         if colorbar_flag:
             self.plot_colorbar(mappable=pm, label=colorbar_label,
-                               field=field, fig=fig)
+                               field=field, ax=ax, fig=fig)
 
     def plot_range_rings(self, range_rings, ax=None):
         """
@@ -599,7 +599,7 @@ class RadarDisplay:
         ax.plot(y, x, 'k-')  # horizontal
 
     def plot_colorbar(self, mappable=None, field=None, label=None, cax=None,
-                      fig=None):
+                      ax=None, fig=None):
         """
         Plot a colorbar.
 
@@ -615,6 +615,8 @@ class RadarDisplay:
             plotted.
         cax : Axis
             Axis onto which the colorbar will be drawn.  None is also valid.
+        ax : Axes
+            Axis onto which the colorbar will be drawn. None is also valid.
         fig : Figure
             Figure to place colorbar on.  None will use the current figure.
 
@@ -627,7 +629,7 @@ class RadarDisplay:
             if field is None:
                 field = self.plot_vars[-1]
             label = self._get_colorbar_label(field)
-        cb = fig.colorbar(mappable, cax=cax)
+        cb = fig.colorbar(mappable, ax=ax, cax=cax)
         cb.set_label(label)
         self.cbs.append(cb)
 
