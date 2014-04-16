@@ -16,35 +16,51 @@ def steiner_conv_strat(grid, dx=500.0, dy=500.0, intense=42.0,
                        use_intense=True, fill_value=None,
                        refl_field=None):
     """
+    Partition reflectivity into convective-stratiform using the Steiner et
+    al. (1995) algorithm.
     
     Parameters
     ----------
     grid : Grid
+        Grid containing reflectivity field to partition.
     
     Optional parameters
     -------------------
     dx, dy : float
-        The x- and y-dimension resolutions, respectively.
+        The x- and y-dimension resolutions in meters, respectively.
     intense : float
-    
+        The intensity value in dBZ. Grid points with a reflectivity
+        value greater or equal to the intensity are automatically
+        flagged as convective. See reference for more information.
     work_level : float
-    
+        The working level (separation altitude) in meters. This is the height
+        at which the partitioning will be done, and should minimize bright band
+        contamination. See reference for more information.
     peak_relation : 'default' or 'sgp'
-    
+        The peakedness relation. See reference for more information.
     area_relation : 'small', 'medium', 'large', or 'sgp'
-    
+        The convective area relation. See reference for more information.
     bkg_rad : float
-        Background radius.
+        The background radius in meters. See reference for more information.
     use_intense : bool
         True to use the intensity criteria.
     fill_value : float
-    
+         Missing value used to signify bad data points. A value of None
+         will use the default fill value as defined in the Py-ART
+         configuration file.
     refl_field : str
-    
+         Field in grid to use as the reflectivity during partitioning. None
+         will use the default field name from the Py-ART configuration file.
     Returns
     -------
     eclass : dict
         Steiner convective-stratiform classification dictionary.
+    
+    References
+    ----------
+    Steiner, M. R., R. A. Houze Jr., and S. E. Yuter, 1995: Climatological
+    Characterization of Three-Dimensional Storm Structure from Operational
+    Radar and Rain Gauge Data. J. Appl. Meteor., 34, 1978-2007. 
     """
     
     # Get fill value
@@ -72,13 +88,13 @@ def steiner_conv_strat(grid, dx=500.0, dy=500.0, intense=42.0,
                                    use_intense=use_intense,
                                    fill_value=fill_value)
     
-    
     return {'data': eclass.astype(np.int32),
             'standard_name': 'echo_classification',
             'long_name': 'Steiner echo classification',
             'valid_min': 0,
             'valid_max': 2,
-            'comment': ('Convective-stratiform echo '
-                        'classification based on '
-                        'Steiner et al. (1995)')}
-    
+            'comment_1': ('Convective-stratiform echo '
+                         'classification based on '
+                         'Steiner et al. (1995)'),
+            'comment_2': ('0 = Undefined, 1 = Stratiform, '
+                          '2 = Convective')}
