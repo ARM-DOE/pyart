@@ -196,6 +196,16 @@ cdef class SigmetFile:
                 # assuming nbins constant for all rays in a sweep
                 data[name][i, :, ray_nbins[0]:] = np.ma.masked
 
+        # scale 1-byte velocity by the Nyquist
+        # this conversion is kept in this method so that the
+        # product_hdr does not need to be accessed at lower abstraction
+        # layers.
+        if 'VEL' in self.data_type_names:
+            wavelength_cm = self.product_hdr['product_end']['wavelength']
+            prt_value = 1. / self.product_hdr['product_end']['prf']
+            nyquist = wavelength_cm / (10000.0 * 4.0 * prt_value)
+            data['VEL'] *= nyquist
+
         return data, metadata
 
     def _get_sweep(self, raw_data=False):
@@ -591,14 +601,15 @@ def convert_sigmet_data(data_type, data):
         if data_type_name in like_dbt:
             # DB_DBT, 1, Total Power (1 byte)
             # 1-byte Reflectivity Format, section 4.3.3
-            out[:] = (ndata - 64) / 2.
+            out[:] = (ndata - 64.) / 2.
             out[ndata == 0] = np.ma.masked
 
         elif data_type_name == 'VEL':
             # VEL, 3, Velocity (1 byte)
             # 1-byte Velocity Format, section 4.3.29
-            # Note that this data should be multiplied by Nyquist
-            out[:] = (ndata - 128) / 127.
+            # Note that this data should be multiplied by Nyquist,
+            # this is done in the get_data method of the SigmetFile class.
+            out[:] = (ndata - 128.) / 127.
             out[ndata == 0] = np.ma.masked
 
         elif data_type_name == 'WIDTH':
@@ -612,7 +623,7 @@ def convert_sigmet_data(data_type, data):
         elif data_type_name == 'ZDR':
             # ZDR, 5, Differential reflectivity (1 byte)
             # 1-byte ZDR format, section 4.3.37
-            out[:] = (ndata - 128) / 16.
+            out[:] = (ndata - 128.) / 16.
             out[ndata == 0] = np.ma.masked
 
         elif data_type_name == 'KDP':
@@ -636,14 +647,14 @@ def convert_sigmet_data(data_type, data):
         elif data_type_name == 'PHIDP':
             # PHIDP, 16, PhiDP(Differential phase) (1 byte)
             # 1-byte PhiDP format, section 4.3.18
-            out[:] = 180. * ((ndata - 1) / 254.)
+            out[:] = 180. * ((ndata - 1.) / 254.)
             out[ndata == 0] = np.ma.masked
             out[ndata == 255] = np.ma.masked
 
         elif data_type_name == 'RHOHV':
             # RHOHV, 19, RhoHV (1 byte)
             # 1-bytes RhoHV format, section 4.3.23
-            out[:] = np.sqrt((ndata - 1) / 253)
+            out[:] = np.sqrt((ndata - 1.) / 253.)
             out[ndata == 0] = np.ma.masked
             out[ndata == 255] = np.ma.masked
 
