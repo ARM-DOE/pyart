@@ -44,8 +44,6 @@ int filter_by_reflectivity(
     Volume* ref_volume, Volume* vel_volume, float missingVal,
     float lowdbz, float highdbz, int rm_missing)
 {
-    float minpossDBZ = -50.0;  /* XXX remove this variable */
-    
     int ray_index, sweep_index, i, j, ref_index, dbz_per_vel;
     float ref;
     div_t gate_ratio; 
@@ -75,16 +73,17 @@ int filter_by_reflectivity(
         for (ray_index=0; ray_index < (vel_sweep->h.nrays); ray_index++) {
             for (i=0; i < (vel_sweep->ray[0]->h.nbins); i++) {
                 for (j=0; j < dbz_per_vel; j++) {
-
                     ref_index =i * dbz_per_vel + j;
                     if (ref_index >= (dbz_sweep->ray[0]->h.nbins))
                         return 0;     /* Index out of bounds */
 
                     ref = ray_val(dbz_sweep->ray[ray_index], ref_index);
-                    /* TODO fix this to do what is says in docs */
-                    if (ref >= minpossDBZ && ref<lowdbz) 
+                    
+                    if (ref < lowdbz)
                         ray_set(vel_sweep->ray[ray_index], i, missingVal);
-                    if (((ref<minpossDBZ) || (ref>highdbz)) && rm_missing==1)
+                    if (ref > highdbz)    
+                        ray_set(vel_sweep->ray[ray_index], i, missingVal);
+                    if ((rm_missing==1) && fabs(ref - missingVal) > 0.00001)
                         ray_set(vel_sweep->ray[ray_index], i, missingVal);
                 }
             }
