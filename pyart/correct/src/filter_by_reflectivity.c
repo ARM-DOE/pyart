@@ -83,7 +83,7 @@ int filter_by_reflectivity(
                         ray_set(vel_sweep->ray[ray_index], i, missingVal);
                     if (ref > highdbz)    
                         ray_set(vel_sweep->ray[ray_index], i, missingVal);
-                    if ((rm_missing==1) && fabs(ref - missingVal) > 0.00001)
+                    if ((rm_missing==1) && fabs(ref - missingVal) < 0.00001)
                         ray_set(vel_sweep->ray[ray_index], i, missingVal);
                 }
             }
