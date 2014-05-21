@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -16,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.0.0.dev-f30f39d',
+        VERSION:     '1.0.0.dev-770ca76',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -29,7 +27,7 @@
     <link rel="top" title="Py-ART Documentation (DRAFT)" href="../../index.html" />
     <link rel="up" title="pyart.correct" href="../correct.html" />
     <link rel="next" title="pyart.graph" href="../graph.html" />
-    <link rel="prev" title="pyart.correct.phase_proc.phase_proc_lp" href="pyart.correct.phase_proc.phase_proc_lp.html" /> 
+    <link rel="prev" title="pyart.correct._fourdd_interface.create_soundvolume" href="pyart.correct._fourdd_interface.create_soundvolume.html" /> 
   </head>
   <body>
     <div class="related">
@@ -48,7 +46,7 @@
           <a href="../graph.html" title="pyart.graph"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="pyart.correct.phase_proc.phase_proc_lp.html" title="pyart.correct.phase_proc.phase_proc_lp"
+          <a href="pyart.correct._fourdd_interface.create_soundvolume.html" title="pyart.correct._fourdd_interface.create_soundvolume"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">Py-ART Documentation (DRAFT)</a> &raquo;</li>
           <li><a href="../index.html" >Developer Reference Manual</a> &raquo;</li>
@@ -65,38 +63,31 @@
 <h1>pyart.correct._fourdd_interface.fourdd_dealias<a class="headerlink" href="#pyart-correct-fourdd-interface-fourdd-dealias" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pyart.correct._fourdd_interface.fourdd_dealias">
-<tt class="descclassname">pyart.correct._fourdd_interface.</tt><tt class="descname">fourdd_dealias</tt><big>(</big><em>DZvolume</em>, <em>radialVelVolume</em>, <em>hc</em>, <em>sc</em>, <em>dc</em>, <em>vad_time</em>, <em>prep</em>, <em>filt</em><big>)</big><a class="headerlink" href="#pyart.correct._fourdd_interface.fourdd_dealias" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">pyart.correct._fourdd_interface.</tt><tt class="descname">fourdd_dealias</tt><big>(</big><em>radialVelVolume</em>, <em>lastVelVolume</em>, <em>soundVolume</em>, <em>DZvolume</em>, <em>prep</em>, <em>filt</em>, <em>lowdbz=0.0</em>, <em>highdbz=80.0</em>, <em>rm_missing=0</em>, <em>compthresh=0.25</em>, <em>compthresh2=0.49</em>, <em>thresh=0.4</em>, <em>epsilon=0.00001</em>, <em>ckval=1.0</em>, <em>stdthresh=0.8</em>, <em>maxcount=10</em>, <em>pass2=1</em>, <em>rm=0</em>, <em>proximity=5</em>, <em>mingood=5</em>, <em>ba_mincount=5</em>, <em>ba_edgecount=3</em>, <em>debug=False</em><big>)</big><a class="headerlink" href="#pyart.correct._fourdd_interface.fourdd_dealias" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dealias using the FourDD algorithm.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>DZvolume</strong> : _RslVolume</p>
-<blockquote>
-<div><p>Reflectivity to use when thresholding is selected.</p>
-</div></blockquote>
-<p><strong>radialVelVolume</strong> : _RslVolume</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>radialVelVolume</strong> : _RslVolume</p>
 <blockquote>
 <div><p>Radial velocities which will be dealiased.</p>
 </div></blockquote>
-<p><strong>hc</strong> : array</p>
+<p><strong>lastVelVolume</strong> : _RslVolume or None</p>
 <blockquote>
-<div><p>Sounding heights in meters.  Must be a contiguous one-dimensional
-float32 array.</p>
+<div><p>Radial velocities from a previously dealiased radar volume. For best
+results, this radar should represent the previous volume scan in time.
+If the last velocity volume is unavailable, set this to None.</p>
 </div></blockquote>
-<p><strong>sc</strong> : array</p>
+<p><strong>soundVolume</strong> : _RslVolume or None</p>
 <blockquote>
-<div><p>Sounding wind speed in m/s.  Must be a contiguous one-dimensional
-float32 array.</p>
+<div><p>Volume created from sounding data.  If unavailable, set this to None.
+soundVolume and lastVelVolume cannot both be None.</p>
 </div></blockquote>
-<p><strong>dc</strong> : array</p>
+<p><strong>DZvolume</strong> : _RslVolume or None</p>
 <blockquote>
-<div><p>Sounding wind direction in degrees.  Must be a contiguous
-one-dimensional float32 array.</p>
-</div></blockquote>
-<p><strong>vad_time</strong> : int</p>
-<blockquote>
-<div><p>Time of sounding in YYDDDHHMM format.</p>
+<div><p>Reflectivity to use when thresholding is selected.  This parameter
+is not used when prep is 0 and can then be set to None.</p>
 </div></blockquote>
 <p><strong>prep</strong> : int</p>
 <blockquote>
@@ -106,18 +97,13 @@ one-dimensional float32 array.</p>
 <blockquote>
 <div><p>Flag controlling Bergen and Albers filter, 1 = yes, 0 = no.</p>
 </div></blockquote>
-<p><strong>debug</strong> : bool</p>
-<blockquote>
-<div><p>True to return debugging RSL Volume objects for debugging:
-usuccess, DZvolume, radialVelVolume, unfoldedVolume, sondVolume</p>
-</div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>usuccess</strong> : int</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>usuccess</strong> : int</p>
 <blockquote>
 <div><p>Flag indicating if the unfolding was successful, 1 = yes, 0 = no.</p>
 </div></blockquote>
-<p><strong>data</strong> : array</p>
+<p><strong>data</strong> : np.ndarray</p>
 <blockquote class="last">
 <div><p>Array of unfolded velocities.</p>
 </div></blockquote>
@@ -140,8 +126,8 @@ Dealising Scheme, Journal of Atmospheric and Oceanic Technology, 2001, 18,
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="pyart.correct.phase_proc.phase_proc_lp.html"
-                        title="previous chapter">pyart.correct.phase_proc.phase_proc_lp</a></p>
+  <p class="topless"><a href="pyart.correct._fourdd_interface.create_soundvolume.html"
+                        title="previous chapter">pyart.correct._fourdd_interface.create_soundvolume</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="../graph.html"
                         title="next chapter">pyart.graph</a></p>
@@ -183,7 +169,7 @@ Dealising Scheme, Journal of Atmospheric and Oceanic Technology, 2001, 18,
           <a href="../graph.html" title="pyart.graph"
              >next</a> |</li>
         <li class="right" >
-          <a href="pyart.correct.phase_proc.phase_proc_lp.html" title="pyart.correct.phase_proc.phase_proc_lp"
+          <a href="pyart.correct._fourdd_interface.create_soundvolume.html" title="pyart.correct._fourdd_interface.create_soundvolume"
              >previous</a> |</li>
         <li><a href="../../index.html">Py-ART Documentation (DRAFT)</a> &raquo;</li>
           <li><a href="../index.html" >Developer Reference Manual</a> &raquo;</li>
@@ -192,8 +178,8 @@ Dealising Scheme, Journal of Atmospheric and Oceanic Technology, 2001, 18,
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Feb 12, 2014.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      Last updated on May 21, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
   </body>
 </html>

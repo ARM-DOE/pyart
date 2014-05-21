@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -16,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.0.0.dev-f30f39d',
+        VERSION:     '1.0.0.dev-770ca76',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -65,13 +63,13 @@
 <h1>pyart.correct.find_time_in_interp_sonde<a class="headerlink" href="#pyart-correct-find-time-in-interp-sonde" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pyart.correct.find_time_in_interp_sonde">
-<tt class="descclassname">pyart.correct.</tt><tt class="descname">find_time_in_interp_sonde</tt><big>(</big><em>interp_sonde</em>, <em>target</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/correct/dealias.py#L158"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.correct.find_time_in_interp_sonde" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">pyart.correct.</tt><tt class="descname">find_time_in_interp_sonde</tt><big>(</big><em>interp_sonde</em>, <em>target</em>, <em>debug=False</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/correct/dealias.py#L216"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.correct.find_time_in_interp_sonde" title="Permalink to this definition">¶</a></dt>
 <dd><p>Find the wind parameter for a given time in a ARM interpsonde file.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>interp_sonde</strong> : netCDF4.Dataset</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>interp_sonde</strong> : netCDF4.Dataset</p>
 <blockquote>
 <div><p>netCDF4 object pointing to a ARM interpsonde file.</p>
 </div></blockquote>
@@ -82,15 +80,15 @@ used.</p>
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>height</strong> : array</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>height</strong> : np.ndarray</p>
 <blockquote>
 <div><p>Heights above the ground for the time closest to target.</p>
 </div></blockquote>
-<p><strong>speed</strong> : array</p>
+<p><strong>speed</strong> : np.ndarray</p>
 <blockquote>
 <div><p>Wind speeds at given height for the time closest to taget.</p>
 </div></blockquote>
-<p><strong>direction</strong> : array</p>
+<p><strong>direction</strong> : np.ndarray</p>
 <blockquote class="last">
 <div><p>Wind direction at given height for the time closest to target.</p>
 </div></blockquote>
@@ -161,8 +159,8 @@ used.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Feb 12, 2014.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      Last updated on May 21, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
   </body>
 </html>

@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -16,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.0.0.dev-f30f39d',
+        VERSION:     '1.0.0.dev-770ca76',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -65,17 +63,21 @@
 <h1>pyart.io._rsl_interface.create_volume<a class="headerlink" href="#pyart-io-rsl-interface-create-volume" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pyart.io._rsl_interface.create_volume">
-<tt class="descclassname">pyart.io._rsl_interface.</tt><tt class="descname">create_volume</tt><big>(</big><em>arr</em><big>)</big><a class="headerlink" href="#pyart.io._rsl_interface.create_volume" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a _RslVolume object from a 3D float32 array.</p>
+<tt class="descclassname">pyart.io._rsl_interface.</tt><tt class="descname">create_volume</tt><big>(</big><em>arr</em>, <em>rays_per_sweep</em>, <em>vol_num=1</em><big>)</big><a class="headerlink" href="#pyart.io._rsl_interface.create_volume" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a _RslVolume object from a 2D float32 array.</p>
 <p>No headers parameters except nsweeps, nrays and nbins are not set in the
 resulting _RslVolume object.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters :</th><td class="field-body"><p class="first"><strong>arr</strong> : array, 3D, float32</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>arr</strong> : array, 2D, float32</p>
 <blockquote>
-<div><p>Three dimensional float32 array.</p>
+<div><p>Two dimensional float32 array.</p>
+</div></blockquote>
+<p><strong>rays_per_sweep: array, 1D, int32</strong> :</p>
+<blockquote>
+<div><p>Array listing number of rays in each sweep.</p>
 </div></blockquote>
 <p><strong>vol_num</strong> : int</p>
 <blockquote>
@@ -85,7 +87,7 @@ for velocity fields.  Useful values are 0 for reflectivity and
 </div></blockquote>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns :</th><td class="field-body"><p class="first"><strong>volumes</strong> : _RslVolume</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>volumes</strong> : _RslVolume</p>
 <blockquote class="last">
 <div><p>_RslVolume containing array data.</p>
 </div></blockquote>
@@ -156,8 +158,8 @@ for velocity fields.  Useful values are 0 for reflectivity and
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Feb 12, 2014.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      Last updated on May 21, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
   </body>
 </html>

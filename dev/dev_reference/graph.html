@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -16,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.0.0.dev-f30f39d',
+        VERSION:     '1.0.0.dev-770ca76',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -76,7 +74,7 @@
 <td>Degrees, minutes, seconds to degrees</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pyart.graph.common.radar_coords_to_cart.html#pyart.graph.common.radar_coords_to_cart" title="pyart.graph.common.radar_coords_to_cart"><tt class="xref py py-obj docutils literal"><span class="pre">radar_coords_to_cart</span></tt></a>(rng,&nbsp;az,&nbsp;ele[,&nbsp;debug])</td>
-<td>Calculate Cartesian coordinate from radar coordinates</td>
+<td>Calculate Cartesian coordinate from radar coordinates   :Parameters:      <strong>rng</strong> : array          Distances to the center of the radar gates (bins) in kilometers.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.common.corner_to_point.html#pyart.graph.common.corner_to_point" title="pyart.graph.common.corner_to_point"><tt class="xref py py-obj docutils literal"><span class="pre">corner_to_point</span></tt></a>(corner,&nbsp;point)</td>
 <td>Return the x, y distances in meters from a corner to a point.</td>
@@ -103,7 +101,7 @@
 <td>perform reversal.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.cm._reverse_cmap_spec.html#pyart.graph.cm._reverse_cmap_spec" title="pyart.graph.cm._reverse_cmap_spec"><tt class="xref py py-obj docutils literal"><span class="pre">_reverse_cmap_spec</span></tt></a>(spec)</td>
-<td>Reverses cmap specification <em>spec</em>, can handle both dict and tuple</td>
+<td>Reverses cmap specification <em>spec</em>, can handle both dict and tuple type specs.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pyart.graph.cm._generate_cmap.html#pyart.graph.cm._generate_cmap" title="pyart.graph.cm._generate_cmap"><tt class="xref py py-obj docutils literal"><span class="pre">_generate_cmap</span></tt></a>(name,&nbsp;lutsize)</td>
 <td>Generates the requested cmap from it&#8217;s name <em>name</em>.</td>
@@ -227,8 +225,8 @@
 </tbody>
 </table>
 </div>
-<span class="target" id="module-pyart.graph.radar_display"></span><div class="section" id="pyart-graph-radar-display">
-<h2>pyart.graph.radar_display<a class="headerlink" href="#pyart-graph-radar-display" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-pyart.graph.radardisplay"></span><div class="section" id="pyart-graph-radardisplay">
+<h2>pyart.graph.radardisplay<a class="headerlink" href="#pyart-graph-radardisplay" title="Permalink to this headline">¶</a></h2>
 <p>Class for creating plots from Radar objects.</p>
 <table border="1" class="longtable docutils">
 <colgroup>
@@ -236,8 +234,23 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.radar_display.RadarDisplay.html#pyart.graph.radar_display.RadarDisplay" title="pyart.graph.radar_display.RadarDisplay"><tt class="xref py py-obj docutils literal"><span class="pre">RadarDisplay</span></tt></a>(radar[,&nbsp;shift])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.radardisplay.RadarDisplay.html#pyart.graph.radardisplay.RadarDisplay" title="pyart.graph.radardisplay.RadarDisplay"><tt class="xref py py-obj docutils literal"><span class="pre">RadarDisplay</span></tt></a>(radar[,&nbsp;shift])</td>
 <td>A display object for creating plots from data in a radar object.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<span class="target" id="module-pyart.graph.radarmapdisplay"></span><div class="section" id="pyart-graph-radarmapdisplay">
+<h2>pyart.graph.radarmapdisplay<a class="headerlink" href="#pyart-graph-radarmapdisplay" title="Permalink to this headline">¶</a></h2>
+<p>Class for creating plots on a geographic map using a Radar object.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.radarmapdisplay.RadarMapDisplay.html#pyart.graph.radarmapdisplay.RadarMapDisplay" title="pyart.graph.radarmapdisplay.RadarMapDisplay"><tt class="xref py py-obj docutils literal"><span class="pre">RadarMapDisplay</span></tt></a>(radar[,&nbsp;shift])</td>
+<td>A display object for creating plots on a geographic map from data in a Radar object.</td>
 </tr>
 </tbody>
 </table>
@@ -253,28 +266,17 @@
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">pyart.graph</a><ul>
-<li><a class="reference internal" href="#pyart-graph-common">pyart.graph.common</a><ul>
-</ul>
-</li>
-<li><a class="reference internal" href="#pyart-graph-cm">pyart.graph.cm</a><ul>
-</ul>
-</li>
+<li><a class="reference internal" href="#pyart-graph-common">pyart.graph.common</a></li>
+<li><a class="reference internal" href="#pyart-graph-cm">pyart.graph.cm</a></li>
 <li><a class="reference internal" href="#id1">pyart.graph._cm</a></li>
-<li><a class="reference internal" href="#pyart-graph-gridmapdisplay">pyart.graph.gridmapdisplay</a><ul>
-</ul>
-</li>
-<li><a class="reference internal" href="#pyart-graph-plot-cfradial">pyart.graph.plot_cfradial</a><ul>
-</ul>
-</li>
+<li><a class="reference internal" href="#pyart-graph-gridmapdisplay">pyart.graph.gridmapdisplay</a></li>
+<li><a class="reference internal" href="#pyart-graph-plot-cfradial">pyart.graph.plot_cfradial</a></li>
 <li><a class="reference internal" href="#pyart-graph-plot-mdv">pyart.graph.plot_mdv</a><ul>
 </ul>
 </li>
-<li><a class="reference internal" href="#pyart-graph-plot-rsl">pyart.graph.plot_rsl</a><ul>
-</ul>
-</li>
-<li><a class="reference internal" href="#pyart-graph-radar-display">pyart.graph.radar_display</a><ul>
-</ul>
-</li>
+<li><a class="reference internal" href="#pyart-graph-plot-rsl">pyart.graph.plot_rsl</a></li>
+<li><a class="reference internal" href="#pyart-graph-radardisplay">pyart.graph.radardisplay</a></li>
+<li><a class="reference internal" href="#pyart-graph-radarmapdisplay">pyart.graph.radarmapdisplay</a></li>
 </ul>
 </li>
 </ul>
@@ -331,8 +333,8 @@
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Feb 12, 2014.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      Last updated on May 21, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
   </body>
 </html>

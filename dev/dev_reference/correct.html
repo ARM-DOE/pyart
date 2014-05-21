@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -16,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.0.0.dev-f30f39d',
+        VERSION:     '1.0.0.dev-770ca76',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -89,11 +87,14 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.dealias.dealias_fourdd.html#pyart.correct.dealias.dealias_fourdd" title="pyart.correct.dealias.dealias_fourdd"><tt class="xref py py-obj docutils literal"><span class="pre">dealias_fourdd</span></tt></a>(radar,&nbsp;sounding_heights,&nbsp;...)</td>
-<td>Dealias the Doppler velocities field using the University of Washington</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.dealias.dealias_fourdd.html#pyart.correct.dealias.dealias_fourdd" title="pyart.correct.dealias.dealias_fourdd"><tt class="xref py py-obj docutils literal"><span class="pre">dealias_fourdd</span></tt></a>(radar[,&nbsp;last_radar,&nbsp;...])</td>
+<td>Dealias Doppler velocities using the 4DD algorithm.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pyart.correct.dealias.find_time_in_interp_sonde.html#pyart.correct.dealias.find_time_in_interp_sonde" title="pyart.correct.dealias.find_time_in_interp_sonde"><tt class="xref py py-obj docutils literal"><span class="pre">find_time_in_interp_sonde</span></tt></a>(interp_sonde,&nbsp;target)</td>
 <td>Find the wind parameter for a given time in a ARM interpsonde file.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.dealias._create_rsl_volume.html#pyart.correct.dealias._create_rsl_volume" title="pyart.correct.dealias._create_rsl_volume"><tt class="xref py py-obj docutils literal"><span class="pre">_create_rsl_volume</span></tt></a>(radar,&nbsp;field_name,&nbsp;...)</td>
+<td>Create a RSLVolume containing data from a field in radar.</td>
 </tr>
 </tbody>
 </table>
@@ -138,28 +139,28 @@ S. E. Giangrande et al, J. of Atmos. and Ocean. Tech., 2013, 30, 1716.</p>
 <td>Return the noise after smoothing.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pyart.correct.phase_proc.get_phidp_unf.html#pyart.correct.phase_proc.get_phidp_unf" title="pyart.correct.phase_proc.get_phidp_unf"><tt class="xref py py-obj docutils literal"><span class="pre">get_phidp_unf</span></tt></a>(radar[,&nbsp;ncp_lev,&nbsp;rhohv_lev,&nbsp;...])</td>
-<td>Get Unfolded Phi differential phase</td>
+<td>Get Unfolded Phi differential phase   :Parameters:      <strong>radar</strong> : Radar          The input radar.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.phase_proc.construct_A_matrix.html#pyart.correct.phase_proc.construct_A_matrix" title="pyart.correct.phase_proc.construct_A_matrix"><tt class="xref py py-obj docutils literal"><span class="pre">construct_A_matrix</span></tt></a>(n_gates,&nbsp;filt)</td>
-<td>Construct a row-augmented A matrix. Equation 5 in Giangrande et al, 2012.</td>
+<td>Construct a row-augmented A matrix.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pyart.correct.phase_proc.construct_B_vectors.html#pyart.correct.phase_proc.construct_B_vectors" title="pyart.correct.phase_proc.construct_B_vectors"><tt class="xref py py-obj docutils literal"><span class="pre">construct_B_vectors</span></tt></a>(phidp_mod,&nbsp;z_mod,&nbsp;filt)</td>
-<td>Construct B vectors.  See Giangrande et al, 2012.</td>
+<td>Construct B vectors.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.phase_proc.LP_solver_cvxopt.html#pyart.correct.phase_proc.LP_solver_cvxopt" title="pyart.correct.phase_proc.LP_solver_cvxopt"><tt class="xref py py-obj docutils literal"><span class="pre">LP_solver_cvxopt</span></tt></a>(A_Matrix,&nbsp;B_vectors,&nbsp;weights)</td>
-<td>Solve the Linear Programming problem given in Giangrande et al, 2012 using</td>
+<td>Solve the Linear Programming problem given in Giangrande et al, 2012 using the CVXOPT module.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pyart.correct.phase_proc.LP_solver_pyglpk.html#pyart.correct.phase_proc.LP_solver_pyglpk" title="pyart.correct.phase_proc.LP_solver_pyglpk"><tt class="xref py py-obj docutils literal"><span class="pre">LP_solver_pyglpk</span></tt></a>(A_Matrix,&nbsp;B_vectors,&nbsp;weights)</td>
-<td>Solve the Linear Programming problem given in Giangrande et al, 2012 using</td>
+<td>Solve the Linear Programming problem given in Giangrande et al, 2012 using the PyGLPK module.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.phase_proc.solve_cylp.html#pyart.correct.phase_proc.solve_cylp" title="pyart.correct.phase_proc.solve_cylp"><tt class="xref py py-obj docutils literal"><span class="pre">solve_cylp</span></tt></a>(model,&nbsp;B_vectors,&nbsp;weights,&nbsp;ray,&nbsp;...)</td>
 <td>Worker process for LP_solver_cylp_mp.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pyart.correct.phase_proc.LP_solver_cylp_mp.html#pyart.correct.phase_proc.LP_solver_cylp_mp" title="pyart.correct.phase_proc.LP_solver_cylp_mp"><tt class="xref py py-obj docutils literal"><span class="pre">LP_solver_cylp_mp</span></tt></a>(A_Matrix,&nbsp;B_vectors,&nbsp;weights)</td>
-<td>Solve the Linear Programming problem given in Giangrande et al, 2012 using</td>
+<td>Solve the Linear Programming problem given in Giangrande et al, 2012 using the CyLP module using multiple processes.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.phase_proc.LP_solver_cylp.html#pyart.correct.phase_proc.LP_solver_cylp" title="pyart.correct.phase_proc.LP_solver_cylp"><tt class="xref py py-obj docutils literal"><span class="pre">LP_solver_cylp</span></tt></a>(A_Matrix,&nbsp;B_vectors,&nbsp;weights)</td>
-<td>Solve the Linear Programming problem given in Giangrande et al, 2012 using</td>
+<td>Solve the Linear Programming problem given in Giangrande et al, 2012 using the CyLP module.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pyart.correct.phase_proc.phase_proc_lp.html#pyart.correct.phase_proc.phase_proc_lp" title="pyart.correct.phase_proc.phase_proc_lp"><tt class="xref py py-obj docutils literal"><span class="pre">phase_proc_lp</span></tt></a>(radar,&nbsp;offset[,&nbsp;debug,&nbsp;...])</td>
 <td>Phase process using a LP method [1].</td>
@@ -169,14 +170,17 @@ S. E. Giangrande et al, J. of Atmos. and Ocean. Tech., 2013, 30, 1716.</p>
 </div>
 <span class="target" id="module-pyart.correct._fourdd_interface"></span><div class="section" id="pyart-correct-fourdd-interface">
 <h2>pyart.correct._fourdd_interface<a class="headerlink" href="#pyart-correct-fourdd-interface" title="Permalink to this headline">¶</a></h2>
-<p>Cython wrapper around the Univ. of Washington FourDD algorithm.</p>
+<p>Cython wrapper around the University of Washington FourDD algorithm.</p>
 <table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct._fourdd_interface.fourdd_dealias.html#pyart.correct._fourdd_interface.fourdd_dealias" title="pyart.correct._fourdd_interface.fourdd_dealias"><tt class="xref py py-obj docutils literal"><span class="pre">fourdd_dealias</span></tt></a>(DZvolume,&nbsp;radialVelVolume,&nbsp;...)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct._fourdd_interface.create_soundvolume.html#pyart.correct._fourdd_interface.create_soundvolume" title="pyart.correct._fourdd_interface.create_soundvolume"><tt class="xref py py-obj docutils literal"><span class="pre">create_soundvolume</span></tt></a></td>
+<td>Create a RSL Volume containing sounding data.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.correct._fourdd_interface.fourdd_dealias.html#pyart.correct._fourdd_interface.fourdd_dealias" title="pyart.correct._fourdd_interface.fourdd_dealias"><tt class="xref py py-obj docutils literal"><span class="pre">fourdd_dealias</span></tt></a>(radialVelVolume,&nbsp;...[,&nbsp;...])</td>
 <td>Dealias using the FourDD algorithm.</td>
 </tr>
 </tbody>
@@ -193,18 +197,10 @@ S. E. Giangrande et al, J. of Atmos. and Ocean. Tech., 2013, 30, 1716.</p>
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">pyart.correct</a><ul>
-<li><a class="reference internal" href="#pyart-correct-attenuation">pyart.correct.attenuation</a><ul>
-</ul>
-</li>
-<li><a class="reference internal" href="#pyart-correct-dealias">pyart.correct.dealias</a><ul>
-</ul>
-</li>
-<li><a class="reference internal" href="#pyart-correct-phase-proc">pyart.correct.phase_proc</a><ul>
-</ul>
-</li>
-<li><a class="reference internal" href="#pyart-correct-fourdd-interface">pyart.correct._fourdd_interface</a><ul>
-</ul>
-</li>
+<li><a class="reference internal" href="#pyart-correct-attenuation">pyart.correct.attenuation</a></li>
+<li><a class="reference internal" href="#pyart-correct-dealias">pyart.correct.dealias</a></li>
+<li><a class="reference internal" href="#pyart-correct-phase-proc">pyart.correct.phase_proc</a></li>
+<li><a class="reference internal" href="#pyart-correct-fourdd-interface">pyart.correct._fourdd_interface</a></li>
 </ul>
 </li>
 </ul>
@@ -261,8 +257,8 @@ S. E. Giangrande et al, J. of Atmos. and Ocean. Tech., 2013, 30, 1716.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Feb 12, 2014.
-      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.3.
+      Last updated on May 21, 2014.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
     </div>
   </body>
 </html>
