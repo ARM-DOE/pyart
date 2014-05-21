@@ -387,9 +387,9 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
     """
     # check the parameters
     if weighting_function.upper() not in ['CRESSMAN', 'BARNES']:
-        raise ValueError('unknown weighting_function')
+        raise ValueError('Unknown weighting_function')
     if algorithm not in ['kd_tree', 'ball_tree']:
-        raise ValueError('unknow algorithm: %s' % algorithm)
+        raise ValueError('Unknown algorithm: %s' %algorithm)
     badval = get_fillvalue()
 
     # find the grid origin if not given
@@ -554,7 +554,7 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
             roi_func = _gen_roi_func_dist_beam(
                 h_factor, nb, bsp, min_radius, offsets)
         else:
-            raise ValueError('unknown roi_func: %s' % roi_func)
+            raise ValueError('Unknown roi_func: %s' %roi_func)
 
     # create array to hold interpolated grid data and roi if requested
     grid_data = np.ma.empty((nz, ny, nx, nfields), dtype=np.float64)
@@ -598,13 +598,20 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
             _load_nn_field_data(field_data_objs, nfields, npoints, r_nums,
                                 e_nums, nn_field_data)
 
-        # preforms weighting of neighbors.
+        # performs weighting of neighbors
         dist2 = dist * dist
         r2 = r * r
-
+        
+        # the Cressman filter (weight) is a function of the radial distance
+        # separating an analysis point from a data point (r) and the radius
+        # of influence (Rc) parameter
         if weighting_function.upper() == 'CRESSMAN':
             weights = (r2 - dist2) / (r2 + dist2)
             value = np.ma.average(nn_field_data, weights=weights, axis=0)
+            
+        # the Barnes filter (weight) is a function of the radial distance
+        # separating an analysis point from a data point (r) and the
+        # smoothing parameter (k)
         elif weighting_function.upper() == 'BARNES':
             w = np.exp(-dist2 / (2.0 * r2)) + 1e-5
             w /= np.sum(w)
