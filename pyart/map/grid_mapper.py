@@ -214,7 +214,7 @@ class NNLocator:
     """
 
     def __init__(self, data, leafsize=10, algorithm='kd_tree'):
-        """ initalize. """
+        """ Initialize. """
         self._algorithm = algorithm
 
         # build the query tree
@@ -247,7 +247,6 @@ class NNLocator:
             if len(ind) == 0:
                 return ind, 0
             dist = scipy.spatial.minkowski_distance(q, self.tree.data[ind])
-
             return ind, dist
 
         elif self._algorithm == 'ball_tree':
@@ -257,12 +256,12 @@ class NNLocator:
 
 def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
                 fields=None, refl_filter_flag=True, refl_field=None,
-                max_refl=None, map_roi=True, weighting_function='Barnes',
+                max_refl=None, map_roi=True, weighting_function='Cressman',
                 toa=17000.0, copy_field_data=True, algorithm='kd_tree',
-                leafsize=10., roi_func='dist_beam',
-                constant_roi=500.,
+                leafsize=10.0, roi_func='dist_beam', constant_roi=500.0,
                 z_factor=0.05, xy_factor=0.02, min_radius=500.0,
-                h_factor=1.0, nb=1.5, bsp=1.0):
+                h_factor=1.0, nb=1.5, bsp=1.0, max_radius=4000.0,
+                kappa_star=0.5, data_spacing=1220.0):
     """
     Map one or more radars to a Cartesian grid.
 
@@ -387,10 +386,21 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
     """
     # check the parameters
     if weighting_function.upper() not in ['CRESSMAN', 'BARNES']:
-        raise ValueError('Unknown weighting_function')
-    if algorithm not in ['kd_tree', 'ball_tree']:
+        raise ValueError('Unknown weighting_function: %s' %weighting_function)
+    if algorithm.upper() not in ['KD_TREE', 'BALL_TREE']:
         raise ValueError('Unknown algorithm: %s' %algorithm)
-    badval = get_fillvalue()
+    fill_value = get_fillvalue()
+    
+    # determine what weighting scheme is desired since this affects whether
+    # a radius of influence or smoothing parameter are used
+    if weighting_function.upper() == 'CRESSMAN':
+        is_cressman = True
+    else:
+        is_cressman = False
+    if weighting_function.upper() == 'BARNES':
+        is_barnes = True
+    else:
+        is_barnes = False
 
     # find the grid origin if not given
     if grid_origin is None:
@@ -444,7 +454,7 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
         x_disp, y_disp = corner_to_point(grid_origin, (radar_lat, radar_lon))
         offsets.append((0, y_disp, x_disp))  # XXX should include z
 
-        # calculate cartesian locations of gates
+        # calculate Cartesian locations of gates
         rg, azg = np.meshgrid(radar.range['data'], radar.azimuth['data'])
         rg, eleg = np.meshgrid(radar.range['data'], radar.elevation['data'])
         xg_loc, yg_loc, zg_loc = radar_coords_to_cart(rg / 1000., azg, eleg)
@@ -458,7 +468,7 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
         del xg_loc, yg_loc
 
         # determine which gates should be included in the interpolation
-        gflags = zg_loc < toa      # include only those below toa
+        gflags = zg_loc < toa      # include only those below TOA
 
         if refl_filter_flag:
             if refl_field is None:
@@ -471,8 +481,8 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
                 gflags = np.logical_and(gflags, refl_data < max_refl)
 
             if np.ma.is_masked(refl_data):
-                gflags = np.logical_and(gflags,
-                                        np.logical_not(refl_data.mask))
+                gflags = np.logical_and(
+                                gflags, np.logical_not(refl_data.mask))
                 gflags = gflags.data
 
             del refl_data
@@ -502,18 +512,18 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
     else:
         # copy_field_data == True, build a lookup table which maps from
         # filtered gate number to (radar number, radar gate number)
-        # the radar number is given as the quotent of the lookup table
-        # value divided by total_gates, the remainer gives the index of
+        # the radar number is given as the quotient of the lookup table
+        # value divided by total_gates, the remainder gives the index of
         # the gate in the flat field data array.
 
-        # initalize the lookup table with values from 0 ... total gates
+        # initialize the lookup table with values from 0 ... total gates
         lookup = np.where(include_gate)[0]
 
         # number of filtered gates before a given radar
         filtered_gate_offset = np.cumsum([0] + filtered_gates_per_radar)
 
         # for radars 1 to N-1 add total_gates to the lookup table and
-        # subtract the number of gates in all ealier radars.
+        # subtract the number of gates in all earlier radars.
         for i in xrange(1, nradars):
             l_start = filtered_gate_offset[i]
             l_end = filtered_gate_offset[i + 1]
@@ -544,7 +554,7 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
     else:
         x_step = (x_stop - x_start) / (nx - 1.)
 
-    if not hasattr(roi_func, '__call__'):
+    if not hasattr(roi_func, '__call__') and is_cressman:
         if roi_func == 'constant':
             roi_func = _gen_roi_func_constant(constant_roi)
         elif roi_func == 'dist':
@@ -556,31 +566,38 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
         else:
             raise ValueError('Unknown roi_func: %s' %roi_func)
 
-    # create array to hold interpolated grid data and roi if requested
+    # create array to hold interpolated grid data and radius of influence if
+    # requested
     grid_data = np.ma.empty((nz, ny, nx, nfields), dtype=np.float64)
-    grid_data.set_fill_value(badval)
+    grid_data.set_fill_value(fill_value)
 
-    if map_roi:
+    if map_roi and is_cressman:
         roi = np.empty((nz, ny, nx), dtype=np.float64)
 
     # interpolate field values for each point in the grid
     for iz, iy, ix in np.ndindex(nz, ny, nx):
 
-        # calculate the grid point
+        # calculate the current analysis point
         x = x_start + x_step * ix
         y = y_start + y_step * iy
         z = z_start + z_step * iz
-        r = roi_func(z, y, x)
-        if map_roi:
-            roi[iz, iy, ix] = r
+        
+        # determine either the radius of influence (Cressman) or the maximum
+        # radius (Barnes) to check for nearest neighbors to the current 
+        # analysis point
+        if is_cressman:
+            max_radius = roi_func(z, y, x)
+            Rc = max_radius
+        if map_roi and is_cressman:
+            roi[iz, iy, ix] = Rc
 
-        #find neighbors and distances
-        ind, dist = nnlocator.find_neighbors_and_dists((z, y, x), r)
+        # find neighbors and distances
+        ind, dist = nnlocator.find_neighbors_and_dists((z, y, x), max_radius)
 
         if len(ind) == 0:
             # when there are no neighbors, mark the grid point as bad
             grid_data[iz, iy, ix] = np.ma.masked
-            grid_data.data[iz, iy, ix] = badval
+            grid_data.data[iz, iy, ix] = fill_value
             continue
 
         # find the field values for all neighbors
@@ -598,35 +615,37 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
             _load_nn_field_data(field_data_objs, nfields, npoints, r_nums,
                                 e_nums, nn_field_data)
 
-        # performs weighting of neighbors
+        # perform weighting of neighbors
         dist2 = dist * dist
-        r2 = r * r
         
         # the Cressman filter (weight) is a function of the radial distance
-        # separating an analysis point from a data point (r) and the radius
-        # of influence (Rc) parameter
-        if weighting_function.upper() == 'CRESSMAN':
-            weights = (r2 - dist2) / (r2 + dist2)
-            value = np.ma.average(nn_field_data, weights=weights, axis=0)
+        # separating an analysis point from a data point (dist) and the
+        # radius of influence (Rc) parameter
+        if is_cressman:
+            Rc2 = Rc * Rc
+            wq = (Rc2 - dist2) / (Rc2 + dist2)
+            fq = np.ma.average(nn_field_data, weights=wq, axis=0)
             
         # the Barnes filter (weight) is a function of the radial distance
-        # separating an analysis point from a data point (r) and the
-        # smoothing parameter (k)
-        elif weighting_function.upper() == 'BARNES':
-            w = np.exp(-dist2 / (2.0 * r2)) + 1e-5
-            w /= np.sum(w)
-            value = np.ma.dot(w, nn_field_data)
+        # separating an analysis point from a data point (dist) and the
+        # smoothing parameter (kappa)
+        elif is_barnes:
+            kappa = kappa_star * (2.0 * data_spacing)**2
+            wq = np.exp(-dist2 / kappa)
+            fq = np.ma.average(nn_field_data, weights=wq, axis=0)
 
-        grid_data[iz, iy, ix] = value
+        grid_data[iz, iy, ix] = fq
 
     # create and return the grid dictionary
     grids = dict([(f, grid_data[..., i]) for i, f in enumerate(fields)])
-    if map_roi:
-        grids['ROI'] = roi
+    
+    if map_roi and is_cressman:
+        grids['radius_of_influence'] = roi
+    
     return grids
 
 
-# Radius of Influence (RoI) functions
+# Radius of influence (RoI) functions
 
 
 def example_roi_func_constant(zg, yg, xg):
@@ -643,9 +662,7 @@ def example_roi_func_constant(zg, yg, xg):
     roi : float
         Radius of influence in meters
     """
-    # RoI function parameters
-    constant = 500.     # constant 500 meter RoI
-    return constant
+    return 500.0 # constant 500 meter radius of influence
 
 
 def _gen_roi_func_constant(constant_roi):
@@ -679,7 +696,7 @@ def example_roi_func_dist(zg, yg, xg):
     # RoI function parameters
     z_factor = 0.05         # increase in radius per meter increase in z dim
     xy_factor = 0.02        # increase in radius per meter increase in xy dim
-    min_radius = 500.       # minimum radius
+    min_radius = 500.0      # minimum radius
     offsets = ((0, 0, 0), )  # z, y, x offset of grid in meters from radar(s)
 
     offsets = np.array(offsets)
@@ -732,7 +749,7 @@ def example_roi_func_dist_beam(zg, yg, xg):
     h_factor = 1.0      # height scaling
     nb = 1.5            # virtual beam width
     bsp = 1.0           # virtual beam spacing
-    min_radius = 500.   # minimum radius in meters
+    min_radius = 500.0  # minimum radius in meters
     offsets = ((0, 0, 0), )  # z, y, x offset of grid in meters from radar(s)
 
     offsets = np.array(offsets)
