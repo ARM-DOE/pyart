@@ -37,21 +37,21 @@ from .ckdtree import cKDTree
 from .ball_tree import BallTree
 
 
-def grid_from_radars(radars, grid_shape, grid_limits, **kwargs):
+def grid_from_radars(radars, grid_shape, grid_dimensions, **kwargs):
     """
-    Map one or more radars to a Cartesian grid returning a Grid object.
+    Map one or more radars to a Cartesian grid, returning a Grid object.
 
     Additional arguments are passed to :py:func:`map_to_grid`
 
     Parameters
     ----------
-    radars : tuple of Radar objects.
-        Radar objects which will be mapped to the Cartesian grid.
-    grid_shape : 3-tuple of floats
-        Number of points in the grid (z, y, x).
-    grid_limits : 3-tuple of 2-tuples
-        Minimum and maximum grid location (inclusive) in meters for the
-        z, x, y coordinates.
+    radars : list
+        List of Radar objects which will be mapped to a Cartesian grid.
+    grid_shape : tuple
+        The (nz, ny, nx) dimension lengths of the grid.
+    grid_dimensions : tuple
+        The (z, y, x) coordinates of the grid in meters. These can describe
+        either a uniform or non-uniform grid.
 
     Returns
     -------
@@ -255,7 +255,7 @@ class NNLocator:
             return ind[0], dist[0]
 
 
-def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
+def map_to_grid(radars, grid_shape, grid_dimensions, grid_origin=None,
                 fields=None, refl_filter_flag=True, refl_field=None,
                 max_refl=None, map_roi=True, weighting_function='Cressman',
                 toa=17000.0, copy_field_data=True, algorithm='kd_tree',
@@ -277,16 +277,16 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
 
     Parameters
     ----------
-    radars : tuple of Radar objects.
-        Radar objects which will be mapped to the Cartesian grid.
-    grid_shape : 3-tuple of floats
-        Number of points in the grid (z, y, x).
-    grid_limits : 3-tuple of 2-tuples
-        Minimum and maximum grid location (inclusive) in meters for the
-        z, y, x coordinates.
-    grid_origin : (float, float) or None
-        Latitude and longitude of grid origin.  None sets the origin
-        to the location of the first radar.
+    radars : list
+        List of Radar objects which will be mapped to a Cartesian grid.
+    grid_shape : tuple
+        The (nz, ny, nx) dimension lengths of the grid.
+    grid_dimensions : tuple
+        The (z, y, x) coordinates of the grid in meters. These can describe
+        either a uniform or non-uniform grid.
+    grid_origin : tuple or None
+        Latitude and longitude of the grid origin. A value of None sets the
+        origin to the location of the first radar.
     fields : list or None
         List of fields within the radar objects which will be mapped to
         the cartesian grid. None, the default, will map the fields which are
@@ -432,15 +432,16 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
     # create arrays to hold the gate locations and indicators if the gate
     # should be included in the interpolation
     gate_locations = np.empty((total_gates, 3), dtype=np.float64)
-    include_gate = np.ones((total_gates), dtype=np.bool)
+    include_gate = np.ones((total_gates, 1), dtype=np.bool)
+    
+    # offsets from the grid origin in meters for each radar
+    offsets = []
 
-    offsets = []    # offsets from the grid origin, in meters, for each radar
-
-    # create a field lookup tables
+    # create the field lookup tables
     if copy_field_data:
         # copy_field_data == True, lookups are performed on a 2-D copy of
         # all of the field data in all radar objects, which can be a
-        # large array.  These lookups are fast since the data type is known
+        # large array. These lookups are fast since the data type is known
         field_data = np.ma.empty((total_gates, nfields), dtype=np.float64)
     else:
         # copy_field_data == False, lookups are performed on a 2-D array
@@ -464,50 +465,54 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
                            lat_0=grid_origin[0], lon_0=grid_origin[1],
                            x_0=0.0, y_0=0.0)
         radar_x, radar_y = proj(radar_lon, radar_lat)
-        offsets.append((0, radar_y, radar_x))  # XXX should include z
+        offsets.append((0, radar_y, radar_x)) # XXX should include z
 
-        # calculate Cartesian locations of gates
+        # calculate the Cartesian locations of all the radar gates
         rg, azg = np.meshgrid(radar.range['data'], radar.azimuth['data'])
         rg, eleg = np.meshgrid(radar.range['data'], radar.elevation['data'])
-        xg_loc, yg_loc, zg_loc = radar_coords_to_cart(rg / 1000., azg, eleg)
+        xg_loc, yg_loc, zg_loc = radar_coords_to_cart(rg / 1000.0, azg, eleg)
         del rg, azg, eleg
 
         # add gate locations to gate_locations array
         start, end = gate_offset[iradar], gate_offset[iradar + 1]
-        gate_locations[start:end, 0] = zg_loc.flat
-        gate_locations[start:end, 1] = (yg_loc + y_disp).flat
-        gate_locations[start:end, 2] = (xg_loc + x_disp).flat
+        gate_locations[start:end, 0] = zg_loc.ravel()
+        gate_locations[start:end, 1] = (yg_loc + radar_y).ravel()
+        gate_locations[start:end, 2] = (xg_loc + radar_x).ravel()
         del xg_loc, yg_loc
 
         # determine which gates should be included in the interpolation
-        gflags = zg_loc < toa      # include only those below TOA
+        # this involves removing gates that are above the TOA and where
+        # there is missing reflectivity data
+        gflags = zg_loc < toa
 
         if refl_filter_flag:
             if refl_field is None:
-                refl_field = get_field_name('reflectivity')
-
+                refl_field = get_field_name('corrected_reflectivity')
             refl_data = radar.fields[refl_field]['data']
+            
+            if np.ma.is_masked(refl_data):
+                gflags = np.logical_and(gflags, ~refl_data.mask)
+                
             gflags = np.logical_and(gflags, np.isfinite(refl_data))
 
             if max_refl is not None:
                 gflags = np.logical_and(gflags, refl_data < max_refl)
-
-            if np.ma.is_masked(refl_data):
-                gflags = np.logical_and(
-                                gflags, np.logical_not(refl_data.mask))
+                
+            if isinstance(gflags, np.ma.MaskedArray):
                 gflags = gflags.data
 
-            del refl_data
-        include_gate[start:end] = gflags.flat
+            del refl_data, zg_loc
+            
+        include_gate[start:end] = gflags.ravel()
 
         if not copy_field_data:
-            # record the number of gates from the current radar which
-            # are included in the interpolation.
+            # record the number of gates from the current radar which will be
+            # included in the interpolation
             filtered_gates_per_radar.append(gflags.sum())
 
-        del gflags, zg_loc
+        del gflags
 
-        # copy/store references to field data for lookup
+        # copy and/or store references to field data for lookup
         for ifield, field in enumerate(fields):
             flat_field_data = radar.fields[field]['data'].ravel()
             if copy_field_data:
@@ -518,11 +523,11 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
 
     # build field data lookup tables
     if copy_field_data:
-        # copy_field_data == True we filtered the field data in the
-        # same manner as we will filter the gate locations.
+        # copy_field_data == True we filter the field data in the
+        # same manner as we filtered the gate locations
         filtered_field_data = field_data[include_gate]
     else:
-        # copy_field_data == True, build a lookup table which maps from
+        # copy_field_data == False, build a lookup table which maps from
         # filtered gate number to (radar number, radar gate number)
         # the radar number is given as the quotient of the lookup table
         # value divided by total_gates, the remainder gives the index of
@@ -535,36 +540,20 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
         filtered_gate_offset = np.cumsum([0] + filtered_gates_per_radar)
 
         # for radars 1 to N-1 add total_gates to the lookup table and
-        # subtract the number of gates in all earlier radars.
+        # subtract the number of gates in all earlier radars
         for i in xrange(1, nradars):
             l_start = filtered_gate_offset[i]
             l_end = filtered_gate_offset[i + 1]
             gates_before = gate_offset[i]
             lookup[l_start:l_end] += (total_gates * i - gates_before)
+            
+    # unpack the analysis domain parameters
+    nz, ny, nx = grid_shape
+    z, y, x = grid_dimensions
 
     # populate the nearest neighbor locator with the filtered gate locations
     nnlocator = NNLocator(gate_locations[include_gate], algorithm=algorithm,
                           leafsize=leafsize)
-
-    # unpack the grid parameters
-    nz, ny, nx = grid_shape
-    zr, yr, xr = grid_limits
-    z_start, z_stop = zr
-    y_start, y_stop = yr
-    x_start, x_stop = xr
-
-    if nz == 1:
-        z_step = 0.
-    else:
-        z_step = (z_stop - z_start) / (nz - 1.)
-    if ny == 1:
-        y_step = 0.
-    else:
-        y_step = (y_stop - y_start) / (ny - 1.)
-    if nx == 1:
-        x_step = 0.
-    else:
-        x_step = (x_stop - x_start) / (nx - 1.)
 
     if not hasattr(roi_func, '__call__') and is_cressman:
         if roi_func == 'constant':
@@ -576,7 +565,7 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
             roi_func = _gen_roi_func_dist_beam(
                 h_factor, nb, bsp, min_radius, offsets)
         else:
-            raise ValueError('Unknown roi_func: %s' %roi_func)
+            raise ValueError('Unknown Cressman roi_func: %s' %roi_func)
 
     # create array to hold interpolated grid data and radius of influence if
     # requested
@@ -586,25 +575,21 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
     if map_roi and is_cressman:
         roi = np.empty((nz, ny, nx), dtype=np.float64)
 
-    # interpolate field values for each point in the grid
+    # interpolate field values onto each analysis grid point
     for iz, iy, ix in np.ndindex(nz, ny, nx):
-
-        # calculate the current analysis point
-        x = x_start + x_step * ix
-        y = y_start + y_step * iy
-        z = z_start + z_step * iz
         
         # determine either the radius of influence (Cressman) or the maximum
         # radius (Barnes) to check for nearest neighbors to the current 
         # analysis point
         if is_cressman:
-            max_radius = roi_func(z, y, x)
+            max_radius = roi_func(z[iz], y[iy], x[ix])
             Rc = max_radius
         if map_roi and is_cressman:
             roi[iz, iy, ix] = Rc
 
         # find neighbors and distances
-        ind, dist = nnlocator.find_neighbors_and_dists((z, y, x), max_radius)
+        ind, dist = nnlocator.find_neighbors_and_dists(
+                                        (z[iz], y[iy], x[ix]), max_radius)
 
         if len(ind) == 0:
             # when there are no neighbors, mark the grid point as bad
@@ -614,7 +599,7 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
 
         # find the field values for all neighbors
         if copy_field_data:
-            # copy_field_data == True, a slice will get the field data.
+            # copy_field_data == True, a slice will get the field data
             nn_field_data = filtered_field_data[ind]
         else:
             # copy_field_data == False, use the lookup table to find the
