@@ -65,7 +65,7 @@ def grid_from_radars(radars, grid_shape, grid_dimensions, **kwargs):
 
     """
     # map the radar(s) to a cartesian grid
-    grids = map_to_grid(radars, grid_shape, grid_limits, **kwargs)
+    grids = map_to_grid(radars, grid_shape, grid_dimensions, **kwargs)
 
     # create and populate the field dictionary
     fields = {}
@@ -112,22 +112,22 @@ def grid_from_radars(radars, grid_shape, grid_dimensions, **kwargs):
 
     # grid coordinate dictionaries
     nz, ny, nx = grid_shape
-    (z0, z1), (y0, y1), (x0, x1) = grid_limits
+    z, y, x = grid_dimensions
 
-    xaxis = {'data':  np.linspace(x0, x1, nx),
+    xaxis = {'data':  x,
              'long_name': 'X-coordinate in Cartesian system',
              'axis': 'X',
-             'units': 'm'}
+             'units': 'meters'}
 
-    yaxis = {'data': np.linspace(y0, y1, ny),
+    yaxis = {'data': y,
              'long_name': 'Y-coordinate in Cartesian system',
              'axis': 'Y',
-             'units': 'm'}
+             'units': 'meters'}
 
-    zaxis = {'data': np.linspace(z0, z1, nz),
+    zaxis = {'data': z,
              'long_name': 'Z-coordinate in Cartesian system',
              'axis': 'Z',
-             'units': 'm',
+             'units': 'meters',
              'positive': 'up'}
 
     # grid origin location dictionaries
@@ -352,6 +352,9 @@ def map_to_grid(radars, grid_shape, grid_dimensions, grid_origin=None,
         The parameter correspond to the height scaling, virtual beam width,
         virtual beam spacing, and minimum radius of influence. These
         parameters are only used when `roi_func` is 'dist_mean'.
+    max_radius : float
+        The maximum radius in meters to search for points. This is only valid
+        when weighting_function is 'Barnes'. 
     copy_field_data : bool
         True to copy the data within the radar fields for faster gridding,
         the dtype for all fields in the grid will be float64. False will not
@@ -380,8 +383,8 @@ def map_to_grid(radars, grid_shape, grid_dimensions, grid_origin=None,
     Returns
     -------
     grids : dict
-        Dictionary of mapped fields.  The keysof the dictionary are given by
-        parameter fields.  Each elements is a `grid_size` float64 array
+        Dictionary of mapped fields.  The keys of the dictionary are given by
+        parameter fields.  Each element is a `grid_size` float64 array
         containing the interpolated grid for that field.
 
     See Also
@@ -579,20 +582,23 @@ def map_to_grid(radars, grid_shape, grid_dimensions, grid_origin=None,
     for iz, iy, ix in np.ndindex(nz, ny, nx):
         
         # determine either the radius of influence (Cressman) or the maximum
-        # radius (Barnes) to check for nearest neighbors to the current 
+        # radius (Barnes) to check for nearest neighbors to the current
         # analysis point
+        # find nearest neighbors and their distances
         if is_cressman:
-            max_radius = roi_func(z[iz], y[iy], x[ix])
-            Rc = max_radius
-        if map_roi and is_cressman:
-            roi[iz, iy, ix] = Rc
-
-        # find neighbors and distances
-        ind, dist = nnlocator.find_neighbors_and_dists(
+            Rc = roi_func(z[iz], y[iy], x[ix])
+            if map_roi:
+                roi[iz, iy, ix] = Rc
+            
+            ind, dist = nnlocator.find_neighbors_and_dists(
+                                        (z[iz], y[iy], x[ix]), Rc)
+        
+        if is_barnes:
+            ind, dist = nnlocator.find_neighbors_and_dists(
                                         (z[iz], y[iy], x[ix]), max_radius)
-
+            
+        # when there are no neighbors, mark the grid point as bad
         if len(ind) == 0:
-            # when there are no neighbors, mark the grid point as bad
             grid_data[iz, iy, ix] = np.ma.masked
             grid_data.data[iz, iy, ix] = fill_value
             continue
@@ -605,28 +611,29 @@ def map_to_grid(radars, grid_shape, grid_dimensions, grid_origin=None,
             # copy_field_data == False, use the lookup table to find the
             # radar numbers and gate numbers for the neighbors.  Then
             # use the _load_nn_field_data function to load this data from
-            # the field data object array.  This is done in Cython for speed.
+            # the field data object array.  This is done in Cython for
+            # speed
             r_nums, e_nums = divmod(lookup[ind], total_gates)
             npoints = r_nums.size
             nn_field_data = np.empty((npoints, nfields), np.float64)
             _load_nn_field_data(field_data_objs, nfields, npoints, r_nums,
                                 e_nums, nn_field_data)
-
-        # perform weighting of neighbors
-        dist2 = dist * dist
         
-        # the Cressman filter (weight) is a function of the radial distance
-        # separating an analysis point from a data point (dist) and the
-        # radius of influence (Rc) parameter
+        # perform weighting of neighbors
+        dist2 = dist**2
+        
+        # the Cressman filter (weight) is a function of the radial
+        # distance separating an analysis point from a data point
+        # (dist) and the radius of influence (Rc) parameter
         if is_cressman:
-            Rc2 = Rc * Rc
+            Rc2 = Rc**2
             wq = (Rc2 - dist2) / (Rc2 + dist2)
             fq = np.ma.average(nn_field_data, weights=wq, axis=0)
-            
+        
         # the Barnes filter (weight) is a function of the radial distance
         # separating an analysis point from a data point (dist) and the
         # smoothing parameter (kappa)
-        elif is_barnes:
+        if is_barnes:
             kappa = kappa_star * (2.0 * data_spacing)**2
             wq = np.exp(-dist2 / kappa)
             fq = np.ma.average(nn_field_data, weights=wq, axis=0)
@@ -643,7 +650,6 @@ def map_to_grid(radars, grid_shape, grid_dimensions, grid_origin=None,
 
 
 # Radius of influence (RoI) functions
-
 
 def example_roi_func_constant(zg, yg, xg):
     """
