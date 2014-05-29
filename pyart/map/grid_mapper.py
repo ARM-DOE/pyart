@@ -37,7 +37,7 @@ from .ckdtree import cKDTree
 from .ball_tree import BallTree
 
 
-def grid_from_radars(radars, grid_shape, grid_dimensions, **kwargs):
+def grid_from_radars(radars, grid_dimensions, **kwargs):
     """
     Map one or more radars to a Cartesian grid, returning a Grid object.
 
@@ -47,8 +47,6 @@ def grid_from_radars(radars, grid_shape, grid_dimensions, **kwargs):
     ----------
     radars : list
         List of Radar objects which will be mapped to a Cartesian grid.
-    grid_shape : tuple
-        The (nz, ny, nx) dimension lengths of the grid.
     grid_dimensions : tuple
         The (z, y, x) coordinates of the grid in meters. These can describe
         either a uniform or non-uniform grid.
@@ -65,7 +63,7 @@ def grid_from_radars(radars, grid_shape, grid_dimensions, **kwargs):
 
     """
     # map the radar(s) to a cartesian grid
-    grids = map_to_grid(radars, grid_shape, grid_dimensions, **kwargs)
+    grids = map_to_grid(radars, grid_dimensions, **kwargs)
 
     # create and populate the field dictionary
     fields = {}
@@ -111,7 +109,6 @@ def grid_from_radars(radars, grid_shape, grid_dimensions, **kwargs):
         'long_name': 'Time in seconds of volume end'}
 
     # grid coordinate dictionaries
-    nz, ny, nx = grid_shape
     z, y, x = grid_dimensions
 
     xaxis = {'data':  x,
@@ -255,9 +252,9 @@ class NNLocator:
             return ind[0], dist[0]
 
 
-def map_to_grid(radars, grid_shape, grid_dimensions, grid_origin=None,
-                fields=None, refl_filter_flag=True, refl_field=None,
-                max_refl=None, map_roi=True, weighting_function='Cressman',
+def map_to_grid(radars, grid_dimensions, grid_origin=None, fields=None,
+                refl_filter_flag=True, refl_field=None, max_refl=None,
+                map_roi=True, weighting_function='Cressman',
                 toa=17000.0, copy_field_data=True, algorithm='kd_tree',
                 leafsize=10.0, roi_func='dist_beam', constant_roi=500.0,
                 z_factor=0.05, xy_factor=0.02, min_radius=500.0,
@@ -279,8 +276,6 @@ def map_to_grid(radars, grid_shape, grid_dimensions, grid_origin=None,
     ----------
     radars : list
         List of Radar objects which will be mapped to a Cartesian grid.
-    grid_shape : tuple
-        The (nz, ny, nx) dimension lengths of the grid.
     grid_dimensions : tuple
         The (z, y, x) coordinates of the grid in meters. These can describe
         either a uniform or non-uniform grid.
@@ -354,7 +349,8 @@ def map_to_grid(radars, grid_shape, grid_dimensions, grid_origin=None,
         parameters are only used when `roi_func` is 'dist_mean'.
     max_radius : float
         The maximum radius in meters to search for points. This is only valid
-        when weighting_function is 'Barnes'. 
+        when weighting_function is 'Barnes', and should be large enough to
+        capture all points where the Barnes weight is nonzero. 
     copy_field_data : bool
         True to copy the data within the radar fields for faster gridding,
         the dtype for all fields in the grid will be float64. False will not
@@ -551,8 +547,8 @@ def map_to_grid(radars, grid_shape, grid_dimensions, grid_origin=None,
             lookup[l_start:l_end] += (total_gates * i - gates_before)
             
     # unpack the analysis domain parameters
-    nz, ny, nx = grid_shape
     z, y, x = grid_dimensions
+    nz, ny, nx = len(z), len(y), len(x)
 
     # populate the nearest neighbor locator with the filtered gate locations
     nnlocator = NNLocator(gate_locations[include_gate], algorithm=algorithm,
@@ -593,7 +589,7 @@ def map_to_grid(radars, grid_shape, grid_dimensions, grid_origin=None,
             ind, dist = nnlocator.find_neighbors_and_dists(
                                         (z[iz], y[iy], x[ix]), Rc)
         
-        if is_barnes:
+        elif is_barnes:
             ind, dist = nnlocator.find_neighbors_and_dists(
                                         (z[iz], y[iy], x[ix]), max_radius)
             
@@ -633,7 +629,7 @@ def map_to_grid(radars, grid_shape, grid_dimensions, grid_origin=None,
         # the Barnes filter (weight) is a function of the radial distance
         # separating an analysis point from a data point (dist) and the
         # smoothing parameter (kappa)
-        if is_barnes:
+        elif is_barnes:
             kappa = kappa_star * (2.0 * data_spacing)**2
             wq = np.exp(-dist2 / kappa)
             fq = np.ma.average(nn_field_data, weights=wq, axis=0)
