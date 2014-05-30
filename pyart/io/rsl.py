@@ -119,6 +119,8 @@ def read_rsl(filename, field_names=None, additional_metadata=None,
 
         rsl_field_name = VOLUMENUM2RSLNAME[volume_num]
         field_name = filemetadata.get_field_name(rsl_field_name)
+        if field_name is None:
+            continue
 
         # extract the field and mask
         data = rslfile.get_volume_array(volume_num)
