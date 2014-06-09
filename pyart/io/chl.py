@@ -27,7 +27,7 @@ def read_chl(filename):
     Returns
     -------
     radar : Radar
-        Radar object containing data from MDV file.
+        Radar object containing data from CHL file.
 
     Notes
     -----
