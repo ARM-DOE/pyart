@@ -17,8 +17,10 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.basemap import Basemap
 from mpl_toolkits.basemap import pyproj
 
+from ..util import datetime_utils
 
-class GridMapDisplay():
+
+class GridMapDisplay:
     """
     A class for creating plots from a grid object on top of a Basemap.
 
@@ -26,68 +28,91 @@ class GridMapDisplay():
     ----------
     grid : Grid
         Grid with data which will be used to create plots.
+    proj : str
+        The projection to be used.
+    datum : str
     debug : bool
-        True to print debugging messages, False to supress them.
+        True to print debugging information.
 
     Attributes
     ----------
-    grid : Grid
-        Grid object.
-    debug : bool
-        True to print debugging messages, False to supressed them.
+    fields : dict
+        Field data and metadata dictionaries.
     proj : Proj
         Object for performing cartographic transformations specific to the
         grid.
     grid_lons : array
         Grid longitudes in degrees.
     grid_lats : array
-        Grid latitudes in degress.
+        Grid latitudes in degrees.
+    start_time : datetime
+        Start time of gridded data.
+    x, y, z : np.ndarray
+        Eastward, Northward, and vertical Cartesian axes in meters.
+    lat, lon : float
+        Latitude and longitude location of the grid origin.
+    source : str
+        The source of the gridded data. For gridded radar data, this should
+        be the instrument name of the radar.
     basemap : Basemap
-        Last plotted basemap, None when no basemap has been plotted.
-    mappables : list
-        List of ContourSet, etc. which have been plotted, useful
-        when adding colorbars.
-    fields : list
-        List of fields which have been plotted.
+        Last plotted Basemap. None when no Basemap has been plotted.
+    plots : list
+        List of plots created.
+    plot_vars : list
+        List of fields plotted, order matches plot list.
+    debug : bool
+        True to print debugging information.
 
     """
 
-    def __init__(self, grid, debug=False):
-        """ initalize the object. """
-        self.grid = grid
+    def __init__(self, grid, proj='lcc', datum='NAD83', debug=False):
+        """ Initialize graph object. """
+        
         self.debug = debug
+        
+        # Populate the fields attribute
+        self.fields = grid.fields
+        
+        # Set source or instrument attribute
+        if 'radar_0_instrument_name' in grid.metadata:
+            self.source = str(grid.metadata['radar_0_instrument_name'])
+        else:
+            self.source = 'Model'
+        
+        # Populate axes attributes
+        self.start_time = datetime_utils.datetime_from_grid(grid)
+        self.x = grid.axes['x_disp']['data']
+        self.y = grid.axes['y_disp']['data']
+        self.z = grid.axes['z_disp']['data']
+        self.lat = grid.axes['lat']['data'][0]
+        self.lon = grid.axes['lon']['data'][0]
 
-        # set up the projection
-        lat0 = grid.axes['lat']['data'][0]
-        lon0 = grid.axes['lon']['data'][0]
-        self.proj = pyproj.Proj(proj='lcc', datum='NAD83',
-                                lat_0=lat0, lon_0=lon0,
-                                x_0=0.0, y_0=0.0)
+        # Set up the projection
+        self.proj = pyproj.Proj(proj=proj, datum=datum, lat_0=self.lat,
+                                lon_0=self.lon, x_0=0.0, y_0=0.0)
+        self.projection = proj
+        self.datum = datum
 
-       # determine grid latitudes and longitudes.
-        x_1d = grid.axes['x_disp']['data']
-        y_1d = grid.axes['y_disp']['data']
-        x_2d, y_2d = np.meshgrid(x_1d, y_1d)
-        self.grid_lons, self.grid_lats = self.proj(x_2d, y_2d, inverse=True)
+       # Determine grid latitudes and longitudes
+        X, Y = np.meshgrid(self.x, self.y)
+        self.grid_lons, self.grid_lats = self.proj(X, Y, inverse=True)
 
-        # set attributes
-        self.mappables = []
-        self.fields = []
+        # Populate graph attributes
+        self.plots = []
+        self.plot_vars = []
         self.basemap = None
 
-    def plot_basemap(self, lat_lines=None, lon_lines=None,
-                     resolution='l', area_thresh=10000,
-                     auto_range=True,
-                     min_lon=-92, max_lon=-86, min_lat=40, max_lat=44,
-                     ax=None):
+    def create_basemap(self, lat_lines=None, lon_lines=None, resolution='l',
+                       area_thresh=10000, auto_range=True, min_lon=-92,
+                       max_lon=-86, min_lat=40, max_lat=44, ax=None):
         """
-        Plot a basemap.
+        Create a Basemap instance.
 
         Parameters
         ----------
-        lat_lines, lon_lines : array or None
+        lat_lines, lon_lines : array_like
             Locations at which to draw latitude and longitude lines.
-            None will use default values which are resonable for maps of
+            None will use default values which are reasonable for maps of
             North America.
         auto_range : bool
             True to determine map ranges from the grid_lats and grid_lons
@@ -100,19 +125,21 @@ class GridMapDisplay():
             Resolution of boundary database to use. See Basemap documentation
             for details.
         area_thresh : int
-            Basemap area_thresh parameter. See Basemap documentation.
-        ax : axes or None.
-            Axis to add the basemap to, if None the current axis is used.
+            Basemap area_thresh parameter. See Basemap documentation for more
+            details.
+        ax : Axes
+            Axis to add the Basemap to. If None the current axis is used.
 
         """
-        # parse the parameters
+        
+        # Parse the parameters
         ax = self._parse_ax(ax)
         if lat_lines is None:
             lat_lines = np.arange(30, 46, 1)
         if lon_lines is None:
             lon_lines = np.arange(-110, -75, 1)
 
-        # determine map region
+        # Determine the map region
         if auto_range:
             max_lat = self.grid_lats.max()
             max_lon = self.grid_lons.max()
@@ -120,52 +147,239 @@ class GridMapDisplay():
             min_lon = self.grid_lons.min()
 
         if self.debug:
-            print "Maximum latitude: ", max_lat
-            print "Maximum longitude: ", max_lon
-            print "Minimum latitude: ", min_lat
-            print "Minimum longitute: ", min_lon
+            print "Maximum latitude is %.2f " %max_lat
+            print "Maximum longitude is %.2f " %max_lon
+            print "Minimum latitude is %.2f " %min_lat
+            print "Minimum longitude is %.2f " %min_lon
 
-        # plot the basemap
-        basemap = Basemap(llcrnrlon=min_lon, llcrnrlat=min_lat,
-                          urcrnrlon=max_lon, urcrnrlat=max_lat,
-                          projection='mill', area_thresh=area_thresh,
-                          resolution=resolution, ax=ax)
-        basemap.drawcoastlines(linewidth=1.25)
-        basemap.drawstates()
-        basemap.drawparallels(lat_lines, labels=[True, False, False, False])
-        basemap.drawmeridians(lon_lines, labels=[False, False, False, True])
-        self.basemap = basemap
+        # Create the Basemap instance
+        m = Basemap(llcrnrlon=min_lon, llcrnrlat=min_lat, urcrnrlon=max_lon,
+                    urcrnrlat=max_lat, lat_0=self.lat, lon_0=self.lon,
+                    area_thresh=area_thresh, resolution=resolution,
+                    projection=self.projection, ax=ax)
+        m.drawcoastlines(linewidth=1.25)
+        m.drawstates()
+        m.drawparallels(lat_lines, labels=[True, False, False, False])
+        m.drawmeridians(lon_lines, labels=[False, False, False, True])
+        
+        self.basemap = m
 
-    def plot_grid(self, field, level=0, vmin=None, vmax=None, cmap='jet'):
+    def plot_basemap(self, field, level=0, vmin=None, vmax=None, cmap='jet',
+                     title=None, title_flag=True, colorbar_label=None,
+                     colorbar_flag=True, orientation='vertical', fig=None,
+                     ax=None):
         """
-        Plot the grid onto the current basemap.
+        Plot the grid onto the current Basemap.
 
         Parameters
         ----------
         field : str
             Field to be plotted.
         level : int
-            Index of the z level to be plotted.
+            Index of the height level to be plotted.
         vmin, vmax : float
-            Lower and upper range for the colormesh.  If either parameter is
+            Lower and upper range for the color bar.  If either parameter is
             None, a value will be determined from the field attributes (if
-            available) or the default values of -8, 64 will be used.
-        cmap : str
-            Matplotlib colormap name or colormap object.
+            available) or the default reflectivity values will be used.
+        cmap : str or Colormap
+            Color map name or Colormap instance.
 
         """
-        # parse parameters
-        vmin, vmax = self._parse_vmin_vmax(field, vmin, vmax)
+        
         self._check_basemap()
+        
+        # Parse parameters
+        ax = self._parse_ax(ax)
+        vmin, vmax = self._parse_vmin_vmax(field, vmin, vmax)
+        x, y = self.basemap(self.grid_lons, self.grid_lats)
 
-        # plot the grid
-        xd, yd = self.basemap(self.grid_lons, self.grid_lats)
-        self.mappables.append(self.basemap.pcolormesh(
-            xd, yd, self.grid.fields[field]['data'][level],
-            vmin=vmin, vmax=vmax, cmap=cmap))
-        self.fields.append(field)
+        # Plot the grid
+        qm = self.basemap.pcolormesh(x, y, self.fields[field]['data'][level],
+                                     vmin=vmin, vmax=vmax, cmap=cmap)
+        
+        self.plots.append(qm)
+        self.plot_vars.append(field)
+        
+        # Plot color bar
+        if colorbar_flag:
+            self.plot_colorbar(field, mappable=qm, orientation=orientation,
+                               label=colorbar_label, fig=fig, ax=ax)
+        
+        # Set title
+        if title_flag:
+            self._set_xy_title(field, level, title, ax)
+        
+        return
+    
+    def plot_xy_slice(self, field, level=0, vmin=None, vmax=None, cmap='jet',
+                      title=None, title_flag=True, colorbar_label=None,
+                      colorbar_flag=True, orientation='vertical',
+                      axislabels=(None,None), axislabels_flag=True,
+                      fig=None, ax=None):
+        """
+        Plot the grid on a horizontal cross section plot.
+        
+        Parameters
+        ----------
+        
+        """
+        
+        # Parse the parameters
+        ax = self._parse_ax(ax)
+        vmin, vmax = self._parse_vmin_vmax(field, vmin, vmax)
+        
+        qm = ax.pcolormesh(self.x/1000, self.y/1000,
+                           self.fields[field]['data'][level],
+                           vmin=vmin, vmax=vmax, cmap=cmap)
+        
+        self.plots.append(qm)
+        self.plot_vars.append(field)
+        
+        # Set axis labels
+        if axislabels_flag:
+            self._label_axes_xy(axislabels, ax)
+            
+        # Plot color bar
+        if colorbar_flag:
+            self.plot_colorbar(field, mappable=qm, orientation=orientation,
+                               label=colorbar_label, fig=fig, ax=ax)
+            
+        # Set title
+        if title_flag:
+            self._set_xy_title(field, level, title, ax)
+            
         return
 
+    def plot_latitude_slice(self, field, lon=None, lat=None, vmin=None,
+                            vmax=None, cmap='jet', title=None,
+                            title_flag=True, colorbar_label=None,
+                            colorbar_flag=True, orientation='vertical',
+                            fig=None, ax=None):
+        """
+        Plot a slice along a given latitude.
+
+        Parameters
+        ----------
+        field : str
+            Field to be plotted.
+        lon, lat : float
+            Longitude and latitude in degrees specifying the slice. If None
+            then the center of the grid is used.
+        vmin, vmax : float
+            Lower and upper range for the color bar.  If either parameter is
+            None, a value will be determined from the field attributes (if
+            available) or the default reflectivity values will be used.
+        cmap : str or Colormap
+            Color map name or Colormap instance.
+        ax : Axes
+            Axis to add the plot to. If None the current axis is used.
+        """
+        
+        # Parse the parameters
+        ax = self._parse_ax(ax)
+        lon, lat = self._parse_lon_lat(lon, lat)
+        vmin, vmax = self._parse_vmin_vmax(field, vmin, vmax)
+        i, j = self._find_nearest_grid_indices(lon, lat)
+        
+        qm = ax.pcolormesh(self.x/1000, self.z/1000,
+                           self.fields[field]['data'][:,j,:],
+                           vmin=vmin, vmax=vmax, cmap=cmap)
+            
+        self.plots.append(qm)
+        self.plot_vars.append(field)
+        
+        # Plot color bar
+        if colorbar_flag:
+            self.plot_colorbar(field, mappable=qm, orientation=orientation,
+                               label=colorbar_label, fig=fig, ax=ax)
+        
+        # Set title
+        if title_flag:
+            self._set_lat_slice_title(field, lat, title, ax)
+        
+        return
+
+    def plot_longitude_slice(self, field, lon=None, lat=None, vmin=None,
+                             vmax=None, cmap='jet', title=None,
+                             title_flag=True, colorbar_label=None,
+                             colorbar_flag=True, orientation='vertical',
+                             fig=None, ax=None):
+        """
+        Plot a slice along a given longitude.
+
+        Parameters
+        ----------
+        field : str
+            Field to be plotted.
+        lon, lat : float
+            Longitude and latitude in degrees specifying the slice. If None
+            then the center of the grid is used.
+        vmin, vmax : float
+            Lower and upper range for the color bar.  If either parameter is
+            None, a value will be determined from the field attributes (if
+            available) or the default reflectivity values will be used.
+        cmap : str or Colormap
+            Color map name or Colormap instance.
+        ax : Axes
+            Axis to add the plot to. If None the current axis is used.
+
+        """
+        
+        # Parse the parameters
+        ax = self._parse_ax(ax)
+        lon, lat = self._parse_lon_lat(lon, lat)
+        vmin, vmax = self._parse_vmin_vmax(field, vmin, vmax)
+        i, j = self._find_nearest_grid_indices(lon, lat)
+
+        qm = ax.pcolormesh(self.y/1000, self.z/1000,
+                           self.fields[field]['data'][:,:,i],
+                           vmin=vmin, vmax=vmax, cmap=cmap)
+            
+        self.plots.append(qm)
+        self.plot_vars.append(field)
+        
+        # Plot color bar
+        if colorbar_flag:
+            self.plot_colorbar(field, mappable=qm, orientation=orientation,
+                               label=colorbar_label, fig=fig, ax=ax)
+        
+        # Set title
+        if title_flag:
+            self._set_lon_slice_title(field, lat, title, ax)
+        
+        return
+
+    def plot_colorbar(self, field, mappable=None, orientation='vertical',
+                      label=None, fig=None, ax=None, cax=None):
+        """
+        Plot a color bar to an axis.
+
+        Parameters
+        ----------
+        mappable : ScalarMappable
+            None will use the last mappable plotted.
+        orientation : 'vertical' or 'horizontal'
+            Color bar orientation on plot.
+        label : str
+            Color bar label.  None will use 'long_name' ['units'] for the
+            last field plotted or an empty string if the field does not have
+            these keys.
+        fig : Figure
+        ax : Axes
+        """
+        
+        # Parse the parameters
+        mappable = self._parse_mappable(mappable)
+        
+        # Create color bar instance
+        cb = plt.colorbar(mappable=mappable, orientation=orientation,
+                          ax=ax, cax=cax)
+
+        # Set label
+        self._set_colorbar_label(field, label, cb)
+
+        return
+    
     def plot_crosshairs(self, lon=None, lat=None,
                         line_style='r--', linewidth=2, ax=None):
         """
@@ -199,178 +413,215 @@ class GridMapDisplay():
         ax.plot(x_lon, y_lon, line_style, linewidth=linewidth)
         ax.plot(x_lat, y_lat, line_style, linewidth=linewidth)
         return
-
-    def plot_latitude_slice(self, field, lon=None, lat=None,
-                            vmin=None, vmax=None, cmap='jet', ax=None):
+    
+    def generate_xy_title(self, field, level):
         """
-        Plot a slice along a given latitude.
-
+        Generate a title for a horizontal cross section plot.
+        
         Parameters
         ----------
         field : str
-            Field to be plotted.
-        lon, lat : float
-            Longitude and latitude (in degrees) specifying the slice.  If
-            None the center of the grid is used.
-        vmin, vmax : float
-            Lower and upper range for the colormesh.  If either parameter is
-            None, a value will be determined from the field attributes (if
-            available) or the default values of -8, 64 will be used.
-        cmap : str
-            Matplotlib colormap name or colormap object.
-        ax : axes or None.
-            Where to create the plot, if None the current axis is used.
-
-
+            The field to be plotted.
+        level : int
+            The level to be plotted.
+        
+        Returns
+        -------
+        title : str
+            The title for the plot.
         """
-        # parse the parameters
+        
+        date = self.start_time.isoformat() + 'Z'
+        height = '%.2f km ' %(self.z[level] / 1000)
+        field_name = self.fields[field]['long_name']
+        
+        return self.source + ' ' + height + date + '\n' + field_name
+    
+    def generate_lat_slice_title(self, field, lat):
+        """
+        Generate a title for a latitude slice plot.
+        """
+        
+        # Parse paremeters
+        lon, lat = self._parse_lon_lat(None, lat)
+        
+        date = self.start_time.isoformat() + 'Z'
+        field_name = self.fields[field]['long_name']
+        lat = '%.2f deg ' %lat
+        
+        return self.source + ' ' + lat + date + '\n' + field_name
+    
+    def generate_lon_slice_title(self, field, lon):
+        """
+        Generate a title for a latitude slice plot.
+        """
+        
+        # Parse paremeters
+        lon, lat = self._parse_lon_lat(lon, None)
+        
+        date = self.start_time.isoformat() + 'Z'
+        field_name = self.fields[field]['long_name']
+        lon = '%.2f deg ' %lon
+        
+        return self.source + ' ' + lon + date + '\n' + field_name
+    
+    def generate_colorbar_label(self, field):
+        """
+        Generate the color bar label for a plot.
+        """
+        
+        field_name = self.fields[field]['long_name']
+        units = self.fields[field]['units']
+        
+        return field_name + ' ' + '[' + units + ']'
+    
+    def _label_axes_xy(self, labels, ax):
+        """
+        Label the axes for horizontal cross section plots.
+        """
+        
         ax = self._parse_ax(ax)
-        lon, lat = self._parse_lon_lat(lon, lat)
-        vmin, vmax = self._parse_vmin_vmax(field, vmin, vmax)
-
-        # plot the slice.
-        x_index, y_index = self._find_nearest_grid_indices(lon, lat)
-        self.mappables.append(ax.pcolormesh(
-            self.grid.axes['x_disp']['data'] / 1000.0,
-            self.grid.axes['z_disp']['data'] / 1000.0,
-            self.grid.fields[field]['data'][:, y_index, :],
-            vmin=vmin, vmax=vmax, cmap=cmap))
-        self.fields.append(field)
-        ax.set_ylabel('Height (km)')
-        ax.set_title('Slice at ' + str(lat) + ' Latitude')
-        return
-
-    def plot_longitude_slice(self, field, lon=None, lat=None,
-                             vmin=None, vmax=None, cmap='jet', ax=None):
+        
+        xlabel, ylabel = labels
+        
+        if xlabel is None:
+            ax.set_xlabel('Eastward Distance from Origin [km]')
+        else:
+            ax.set_xlabel(xlabel)
+        if ylabel is None:
+            ax.set_ylabel('Northward Distance from Origin [km]')
+        else:
+            ax.set_ylabel(ylabel)
+    
+    def _set_xy_title(self, field, level, title, ax):
         """
-        Plot a slice along a given longitude.
-
-        Parameters
-        ----------
-        field : str
-            Field to be plotted.
-        lon, lat : float
-            Longitude and latitude (in degrees) specifying the slice.  If
-            None the center of the grid is used.
-        vmin, vmax : float
-            Lower and upper range for the colormesh.  If either parameter is
-            None, a value will be determined from the field attributes (if
-            available) or the default values of -8, 64 will be used.
-        cmap : str
-            Matplotlib colormap name or colormap object.
-        ax : axes or None.
-            Where to create the plot, if None the current axis is used.
-
+        Set figure title for horizontal cross section plots.
         """
-        # parse the parameters
+        
         ax = self._parse_ax(ax)
-        lon, lat = self._parse_lon_lat(lon, lat)
-        vmin, vmax = self._parse_vmin_vmax(field, vmin, vmax)
-
-        # plot the slice
-        x_index, y_index = self._find_nearest_grid_indices(lon, lat)
-        self.mappables.append(ax.pcolormesh(
-            self.grid.axes['y_disp']['data'] / 1000.0,
-            self.grid.axes['z_disp']['data'] / 1000.0,
-            self.grid.fields[field]['data'][:, :, x_index],
-            vmin=vmin, vmax=vmax, cmap=cmap))
-        self.fields.append(field)
-        ax.set_ylabel('Height (km)')
-        ax.set_title('Slice at ' + str(lon) + ' Longitude')
-        return
-
-    def plot_colorbar(self, mappable=None, orientation='horizontal',
-                      label=None, cax=None):
+        
+        if title is None:
+            ax.set_title(self.generate_xy_title(field, level))
+        else:
+            ax.set_title(title)
+            
+    def _set_lat_slice_title(self, field, lat, title, ax):
         """
-        Plot a colorbar to an axis.
-
-        Parameters
-        ----------
-        mappable : ContourSet, etc.
-            Matplotlib object to create colorbar for.  None will use
-            the last mappable plotted.
-        orientation : 'vertical' or 'horizontal'
-            Colorbar orientation.
-        label : str
-            Colorbar label.  None will use: 'long_name' ('units') for
-            the last field plotted or '' if the field does not have these
-            keys.
-        cax : axis
-            Axes object into which the colorbar will be drawn.
-            None is also allowed.
-
+        Set the figure title for latitude slice plots.
         """
-        if mappable is None:
-            if len(self.mappables) == 0:
-                raise ValueError('mappable must be specified.')
-            else:
-                mappable = self.mappables[-1]
-
+        
+        ax = self._parse_ax(ax)
+        
+        if title is None:
+            ax.set_title(self.generate_lat_slice_title(field, lat))
+        else:
+            ax.set_title(title)
+            
+    def _set_lon_slice_title(self, field, lon, title, ax):
+        """
+        Set the figure title for longitude slice plots.
+        """
+        
+        ax = self._parse_ax(ax)
+        
+        if title is None:
+            ax.set_title(self.generate_lon_slice_title(field, lon))
+        else:
+            ax.set_title(title)
+            
+    def _set_colorbar_label(self, field, label, cb):
+        """
+        """
+        
         if label is None:
-            if len(self.fields) == 0:
-                raise ValueError('field must be specified.')
-            field = self.grid.fields[self.fields[-1]]
-            if 'long_name' in field and 'units' in field:
-                label = field['long_name'] + '(' + field['units'] + ')'
-            else:
-                label = ''
-
-        # plot the colorbar and set the label.
-        cb = plt.colorbar(cax=cax, mappable=mappable, orientation=orientation)
-        cb.set_label(label)
-
-        return
+            cb.set_label(self.generate_colorbar_label(field))
+        else:
+            cb.set_label(label)
 
     def _check_basemap(self):
-        """ Check that basemap is not None, raise ValueError if it is. """
+        """
+        If Basemap is None raise a ValueError.
+        """
+        
         if self.basemap is None:
-            raise ValueError('no basemap plotted')
+            raise ValueError('No basemap has been plotted yet')
 
     def _find_nearest_grid_indices(self, lon, lat):
         """
-        Find the nearest x, y grid indices for a given latitude and longitude.
+        Find the nearest (x, y) grid indices for a given latitude and
+        longitude.
         """
+        
         lon, lat = self._parse_lon_lat(lon, lat)
         x_cut, y_cut = self.proj(lon, lat)
 
         if self.debug:
-            print "x_cut: ", x_cut,
-            print "y_cut: ", y_cut
+            print "x = %.1f m at longitude = %.2f deg" %(x_cut, lon)
+            print "y = %.1f m at latitude = %.2f deg" %(y_cut, lat)
 
-        x_index = np.abs(self.grid.axes['x_disp']['data'] - x_cut).argmin()
-        y_index = np.abs(self.grid.axes['y_disp']['data'] - y_cut).argmin()
+        x_index = np.abs(self.x - x_cut).argmin()
+        y_index = np.abs(self.y - y_cut).argmin()
 
         if self.debug:
-            print "x_index", x_index
-            print "y_index", y_index
+            print "x index is %i", x_index
+            print "y index is %i", y_index
 
         return x_index, y_index
 
     def _parse_vmin_vmax(self, field, vmin, vmax):
-        """ Parse vmin and vmax parameters. """
+        """
+        Parse vmin and vmax parameters. If these parameters are not
+        supplied and the field does not have the valid min and max
+        metadata, then vmin and vmax default to reflectivity values.
+        """
+        
         if vmin is None:
-            if 'valid_min' in self.grid.fields[field]:
-                vmin = self.grid.fields[field]['valid_min']
+            
+            if 'valid_min' in self.fields[field]:
+                vmin = self.fields[field]['valid_min']
             else:
                 vmin = -8
 
         if vmax is None:
-            if 'valid_max' in self.grid.fields[field]:
-                vmax = self.grid.fields[field]['valid_max']
+            
+            if 'valid_max' in self.fields[field]:
+                vmax = self.fields[field]['valid_max']
             else:
                 vmax = 64
+                
         return vmin, vmax
 
     def _parse_lon_lat(self, lon, lat):
-        """ Parse lat and lon parameters """
+        """
+        Parse latitude and longitude parameters.
+        """
+        
         if lat is None:
-            lat = self.grid.axes['lat']['data'][0]
+            lat = self.lat
         if lon is None:
-            lon = self.grid.axes['lon']['data'][0]
+            lon = self.lon
+            
         return lon, lat
 
     def _parse_ax(self, ax):
-        """ Parse the ax parameter. """
+        """
+        Parse the axis parameter.
+        """
+        
         if ax is None:
-            return plt.gca()
+            ax = plt.gca()
+            
         return ax
+    
+    def _parse_mappable(self, mappable):
+        """
+        Parse the ScalarMappable.
+        """
+        
+        if mappable is None:
+            if len(self.plots) == 0:
+                raise ValueError('No mappables (plots) found')
+            else:
+                mappable = self.plots[-1]
+                
+        return mappable

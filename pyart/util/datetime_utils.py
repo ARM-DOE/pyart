@@ -1,4 +1,6 @@
-""" Functions for converting date and time between various forms """
+"""
+Functions for converting date and time between various forms.
+"""
 
 import netCDF4
 
@@ -23,3 +25,11 @@ def datetimes_from_dataset(dataset):
     """ Return an array of datetimes for the times in a netCDF Dataset. """
     return netCDF4.num2date(dataset.variables['time'][:],
                             dataset.variables['time'].units)
+    
+def datetime_from_grid(grid):
+    """
+    Return a datetime for the time in Grid.
+    """
+    
+    return netCDF4.num2date(grid.axes['time_start']['data'][0],
+                            grid.axes['time_start']['units'])
