@@ -54,8 +54,9 @@ if [[ "$FROM_RECIPE" == "true" ]]; then
     conda install --yes conda-build
     conda config --add channels http://conda.binstar.org/jjhelmus
     source activate testenv
-    export CONDA_PACKAGE=`conda build --output conda_recipe/`
     conda build -b -q conda_recipe/
+    conda install jinja
+    export CONDA_PACKAGE=`conda build --output conda_recipe/`
     echo $CONDA_PACKAGE
     conda install $CONDA_PACKAGE
     mkdir foo   # required so source directory not picked up during tests
