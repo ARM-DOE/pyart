@@ -14,10 +14,7 @@ python:
 before_install:  source continuous_integration/install.sh
 install:
   - export RSL_PATH=~/anaconda/envs/testenv
-  - pip install python-coveralls --use-mirrors
-  - pip install nose-cov --use-mirrors
   - python setup.py build_ext --inplace
-
 script: xvfb-run nosetests -v --with-cov --cov pyart pyart
 after_success:
-    - coveralls
+    - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then coveralls ; fi

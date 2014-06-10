@@ -34,3 +34,11 @@ if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then
     conda install --yes -c http://conda.binstar.org/jjhelmus cbc cylp
     conda install --yes -c http://conda.binstar.org/jjhelmus cvxopt_glpk
 fi
+
+# install coverage modules
+pip install nose-cov
+
+if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then
+    pip install python-coveralls
+fi
+
