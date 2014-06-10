@@ -9,12 +9,12 @@ matrix:
         - PYTHON_VERSION="2.7"
         - NOSE_ARGS="-v --no-skip --with-cov --cov pyart pyart"
         - COVERALLS="true"
-        - DOC_BUILD="true"
     - python: 2.7
       env:
         - PYTHON_VERSION="2.7"
         - NOSE_ARGS="-v --no-skip --with-cov --cov pyart --exe pyart"
         - FROM_RECIPE="true"
+        - DOC_BUILD="true"
     - python: 2.6
       env:
         - PYTHON_VERSION="2.6"
