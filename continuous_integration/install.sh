@@ -62,6 +62,7 @@ if [[ "$FROM_RECIPE" == "true" ]]; then
     export CONDA_PACKAGE=`conda build --output conda_recipe/`
     conda build --output conda_recipe/
     echo $CONDA_PACKAGE
+    ls -la /home/travis/miniconda/conda-bld/linux-64/
     conda install $CONDA_PACKAGE
     conda install /home/travis/miniconda/conda-bld/linux-64/pyart-git-np18py27_0.tar.bz2
     mkdir foo   # required so source directory not picked up during tests
