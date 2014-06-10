@@ -7,8 +7,9 @@
 # The behavior of the script is controlled by environment variabled defined
 # in the .travis.yml in the top level folder of the project.
 
-#set -e
-set -x
+set -e
+# use next line to debug this script
+#set -x
 
 sudo apt-get update -qq
 
@@ -57,14 +58,8 @@ if [[ "$FROM_RECIPE" == "true" ]]; then
     source activate testenv
     conda build --no-test -q conda_recipe/
    
-    conda package -u
-    conda install --yes jinja2 setuptools
     export CONDA_PACKAGE=`conda build --output conda_recipe/`
-    conda build --output conda_recipe/
-    echo $CONDA_PACKAGE
-    ls -la /home/travis/miniconda/conda-bld/linux-64/
     conda install $CONDA_PACKAGE
-    conda install /home/travis/miniconda/conda-bld/linux-64/pyart-git-np18py27_0.tar.bz2
     mkdir foo   # required so source directory not picked up during tests
     cd foo
 else
