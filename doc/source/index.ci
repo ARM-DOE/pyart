@@ -1,0 +1,31 @@
+====================
+Py-ART documentation
+====================
+
+Welcome, this is the documentation for the Python ARM Radar Toolkit (Py-ART).
+
+Bleeding Edge Documentation
+===========================
+
+This documentation was build automatically from the
+`Py-ART GitHub repository <https://github.com/ARM-DOE/pyart>`_ and may contain
+errors which will be fixed before the next release.  See the next section
+links to documentation and examples from the latest release.
+
+.. toctree::
+    :maxdepth: 1
+
+    user_reference/index
+    dev_reference/index
+
+
+Latest Release
+==============
+
+* `User Reference Manual`_
+* `Developer Reference Manual`_
+* `Examples`_
+
+.. _User Reference Manual: http://arm-doe.github.io/pyart/dev/user_reference/index.html
+.. _Developer Reference Manual: http://arm-doe.github.io/pyart/dev/dev_reference/index.html
+.. _Examples: http://arm-doe.github.io/pyart/dev/auto_examples/index.html
