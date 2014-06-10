@@ -19,7 +19,7 @@ wget http://repo.continuum.io/miniconda/Miniconda-3.5.2-Linux-x86_64.sh \
     -O miniconda.sh
 chmod +x miniconda.sh
 ./miniconda.sh -b
-export PATH=/home/travis/anaconda/bin:$PATH
+export PATH=/home/travis/miniconda/bin:$PATH
 conda update --yes conda
 conda update --yes conda
 
@@ -46,5 +46,5 @@ if [[ "$REPORT_COVERAGE" == "true" ]]; then
 fi
 
 # install Py-ART
-export RSL_PATH=~/anaconda/envs/testenv
+export RSL_PATH=~/miniconda/envs/testenv
 python setup.py build_ext --inplace
