@@ -52,13 +52,13 @@ export RSL_PATH=~/miniconda/envs/testenv
 if [[ "$FROM_RECIPE" == "true" ]]; then
     source deactivate
     conda install --yes conda-build
-    conda install --yes jinja2
+    conda install --yes jinja2 setuptools
     conda config --add channels http://conda.binstar.org/jjhelmus
     source activate testenv
     conda build -b -q conda_recipe/
    
     conda package -u
-    conda install --yes jinja2
+    conda install --yes jinja2 setuptools
     export CONDA_PACKAGE=`conda build --output conda_recipe/`
     conda build --output conda_recipe/
     echo $CONDA_PACKAGE
