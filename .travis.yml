@@ -27,4 +27,4 @@ after_success:
     # because the coverage report failed to be published.
     - if [[ "$COVERALLS" == "true" ]]; then coveralls || echo "failed"; fi
     # Build docs if requested
-    - if [[ "$DOC_BUILD" == "true" ]]; then source continuous_integration/build_docs.sh; fi
+    - if [[ "$DOC_BUILD" == "true" ]]; then cd $TRAVIS_BUILD_DIR; source continuous_integration/build_docs.sh; fi
