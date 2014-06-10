@@ -55,7 +55,7 @@ if [[ "$FROM_RECIPE" == "true" ]]; then
     conda config --add channels http://conda.binstar.org/jjhelmus
     source activate testenv
     conda build -b -q conda_recipe/
-    conda install jinja2
+    conda install --yes jinja2
     export CONDA_PACKAGE=`conda build --output conda_recipe/`
     echo $CONDA_PACKAGE
     conda install $CONDA_PACKAGE
