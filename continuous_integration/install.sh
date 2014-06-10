@@ -41,10 +41,10 @@ source activate testenv
 #fi
 
 # install coverage modules
-#pip install nose-cov
-#if [[ "$COVERALLS" == "true" ]]; then
-#    pip install python-coveralls
-#fi
+pip install nose-cov
+if [[ "$COVERALLS" == "true" ]]; then
+    pip install python-coveralls
+fi
 
 # install Py-ART
 export RSL_PATH=~/miniconda/envs/testenv
