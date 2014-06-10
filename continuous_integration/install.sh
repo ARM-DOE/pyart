@@ -15,7 +15,7 @@ sudo apt-get update -qq
 # a conda based install of the SciPy stack on multiple versions of Python
 # as well as use conda and binstar to install additional modules which are not
 # in the default repository.
-wget http://repo.continuum.io/miniconda/Miniconda-2.2.2-Linux-x86_64.sh \
+wget http://repo.continuum.io/miniconda/Miniconda-3.5.2-Linux-x86_64.sh \
     -O miniconda.sh
 chmod +x miniconda.sh
 ./miniconda.sh -b
@@ -44,3 +44,7 @@ pip install nose-cov
 if [[ "$REPORT_COVERAGE" == "true" ]]; then
     pip install python-coveralls
 fi
+
+# install Py-ART
+export RSL_PATH=~/anaconda/envs/testenv
+python setup.py build_ext --inplace

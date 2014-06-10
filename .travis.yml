@@ -7,20 +7,17 @@ matrix:
     - python: 2.7
       env:
         - PYTHON_VERSION="2.7"
-        - NOSE_ARGS="-v --with-cov --cov pyart"
-        - REPORT_COVERAGE="true"
+        - NOSE_ARGS="-v --no-skip --with-cov --cov pyart pyart"
+        - COVERALLS="true"
     - python: 2.6
       env:
         - PYTHON_VERSION="2.6"
-        - NOSE_ARGS="-v --with-cov --cov pyart"
+        - NOSE_ARGS="-v --with-cov --cov pyart pyart"
 
-before_install: source continuous_integration/install.sh
-install:
-  - export RSL_PATH=~/anaconda/envs/testenv
-  - python setup.py build_ext --inplace
-script: xvfb-run nosetests $NOSE_ARGS pyart
+install: source continuous_integration/install.sh
+script: xvfb-run nosetests $NOSE_ARGS
 after_success:
     # Ignore coveralls failures as the coveralls server is not very reliable
     # but we don't want travis to report a failure in the github UI just
     # because the coverage report failed to be published.
-    - if [[ "$REPORT_COVERAGE" == "true" ]]; then coveralls || echo "failed"; fi
+    - if [[ "$COVERALLS" == "true" ]]; then coveralls || echo "failed"; fi
