@@ -55,10 +55,13 @@ if [[ "$FROM_RECIPE" == "true" ]]; then
     conda config --add channels http://conda.binstar.org/jjhelmus
     source activate testenv
     conda build -b -q conda_recipe/
+    
     conda install --yes jinja2
     export CONDA_PACKAGE=`conda build --output conda_recipe/`
+    conda build --output conda_recipe/
     echo $CONDA_PACKAGE
     conda install $CONDA_PACKAGE
+    conda install /home/travis/miniconda/conda-bld/linux-64/pyart-git-np18py27_0.tar.bz2
     mkdir foo   # required so source directory not picked up during tests
     cd foo
 else
