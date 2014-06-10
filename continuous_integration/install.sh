@@ -49,9 +49,11 @@ fi
 export RSL_PATH=~/miniconda/envs/testenv
 
 if [[ "$FROM_RECIPE" == "true" ]]; then
+    source deactivate
     conda install --yes conda-build
     conda build -b -q conda_recipe/
     CONDA_PACKAGE=`conda build --output conda_recipe/`
+    source activate testenv
     conda install $CONDA_PACKAGE
     mkdir foo   # required so source directory not picked up during tests
     cd foo
