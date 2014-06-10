@@ -11,31 +11,7 @@ language: python
 python:
     - "2.7"
     - "2.6"
-before_install:
-  # Download and install Miniconda
-  - wget http://repo.continuum.io/miniconda/Miniconda-2.2.2-Linux-x86_64.sh -O miniconda.sh
-  - chmod +x miniconda.sh
-  - ./miniconda.sh -b
-  - export PATH=/home/travis/anaconda/bin:$PATH
-  # Update conda
-  - conda update --yes conda
-  - conda update --yes conda
-  # Create a testenv
-  - conda create -n testenv --yes pip python=$TRAVIS_PYTHON_VERSION
-  - source activate testenv
-  # Install dependencies from the anaconda repo to the environment
-  - conda install --yes numpy scipy matplotlib netcdf4 nose
-  - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then conda install --yes basemap ; fi
-  # Install RSL from binstar
-  - conda install --yes -c http://conda.binstar.org/jjhelmus trmm_rsl
-  # LP solver cylp and its dependancy CBC
-  - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then conda install --yes -c http://conda.binstar.org/jjhelmus cbc cylp ; fi
-  # LP solvers pyglpk based on GLPK
-  - sudo apt-get update -qq
-  - sudo apt-get install -qq libglpk-dev
-  - conda install --yes -c http://conda.binstar.org/jjhelmus pyglpk
-  # LP solvers cvxopt with GLPK support
-  - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then conda install --yes -c http://conda.binstar.org/jjhelmus cvxopt_glpk ; fi
+before_install:  source continuous_integration/install.sh
 install:
   - export RSL_PATH=~/anaconda/envs/testenv
   - pip install python-coveralls --use-mirrors
