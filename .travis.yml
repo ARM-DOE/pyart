@@ -9,6 +9,7 @@ matrix:
         - PYTHON_VERSION="2.7"
         - NOSE_ARGS="-v --no-skip --with-cov --cov pyart pyart"
         - COVERALLS="true"
+        - DOC_BUILD="true"
     - python: 2.7
       env:
         - PYTHON_VERSION="2.7"
@@ -25,3 +26,5 @@ after_success:
     # but we don't want travis to report a failure in the github UI just
     # because the coverage report failed to be published.
     - if [[ "$COVERALLS" == "true" ]]; then coveralls || echo "failed"; fi
+    # Build docs if requested
+    - if [[ "$DOC_BUILD" == "true" ]]; then source continuous_integration/build_docs.sh; fi
