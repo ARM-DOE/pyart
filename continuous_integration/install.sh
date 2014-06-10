@@ -29,16 +29,16 @@ conda create -n testenv --yes pip python=$PYTHON_VERSION
 source activate testenv
 
 # Install Py-ART dependencies
-#conda install --yes numpy scipy matplotlib netcdf4 nose
-#conda install --yes -c http://conda.binstar.org/jjhelmus trmm_rsl
-#sudo apt-get install -qq libglpk-dev
-#conda install --yes -c http://conda.binstar.org/jjhelmus pyglpk
+conda install --yes numpy scipy matplotlib netcdf4 nose
+conda install --yes -c http://conda.binstar.org/jjhelmus trmm_rsl
+sudo apt-get install -qq libglpk-dev
+conda install --yes -c http://conda.binstar.org/jjhelmus pyglpk
 
-#if [[ $PYTHON_VERSION == '2.7' ]]; then
-#    conda install --yes basemap 
-#    conda install --yes -c http://conda.binstar.org/jjhelmus cbc cylp
-#    conda install --yes -c http://conda.binstar.org/jjhelmus cvxopt_glpk
-#fi
+if [[ $PYTHON_VERSION == '2.7' ]]; then
+    conda install --yes basemap 
+    conda install --yes -c http://conda.binstar.org/jjhelmus cbc cylp
+    conda install --yes -c http://conda.binstar.org/jjhelmus cvxopt_glpk
+fi
 
 # install coverage modules
 pip install nose-cov
