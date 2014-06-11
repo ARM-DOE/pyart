@@ -2,6 +2,12 @@
 # This is a modified version of the .travis.yml file from the scikit-learn
 # project: https://github.com/scikit-learn/scikit-learn
 language: python
+
+env:
+  global:
+    # jjhelmus pyart-docs-bot GH
+    secure: G39rov2TailVUD5DezEcXjV+bSCsJWa5viOXk9CD2FmZxFGn0PjmKpifNOR6y7q5srzG5jeK1+5EEXe+dnj4KynDguyol+qLmJuEc3Zy6TxC+QWVWJuXsEtN33u3GyPC0LM6dmF51FT8ocQgSFtr1jJL2iTX8ktSLy7lvR9RllM=
+
 matrix:
     include:
     - python: 2.7

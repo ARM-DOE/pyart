@@ -24,5 +24,7 @@ git checkout gh-pages
 touch .nojekyll
 git add --all .
 git commit -m "Version" --allow-empty
+git remote add origin https://$GH_TOKEN@github.com/jjhelmus/pyart-docs-travis
+git push origin gh-pages -f
 
 exit 0
