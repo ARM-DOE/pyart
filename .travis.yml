@@ -6,7 +6,7 @@ language: python
 env:
   global:
     # jjhelmus pyart-docs-bot GH
-    secure: G39rov2TailVUD5DezEcXjV+bSCsJWa5viOXk9CD2FmZxFGn0PjmKpifNOR6y7q5srzG5jeK1+5EEXe+dnj4KynDguyol+qLmJuEc3Zy6TxC+QWVWJuXsEtN33u3GyPC0LM6dmF51FT8ocQgSFtr1jJL2iTX8ktSLy7lvR9RllM=
+    secure: "HJGznPVMQ2M5EX9EkseJhjg+1EewpAOwRzTda+DNF9iNRxRk+9aI1F3GAM82TTDL5CrOxSuCzGyMQrPEPl9fX11a9tTPdhnpyjH8/BlQaN4UdqzSjDK59z8l5rkPjrPi6fKn+syUIOl6KiaLRFhpP+ntkFwidpdXvhabXK1z7No=" 
 
 matrix:
     include:
