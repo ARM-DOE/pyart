@@ -27,7 +27,7 @@ if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
     touch .nojekyll
     git add --all .
     git commit -m "Version" --allow-empty
-    git remote add origin https://$GH_TOKEN@github.com/jjhelmus/pyart-docs-travis
+    git remote add origin https://$GH_TOKEN@github.com/ARM-DOE/pyart-docs-travis.git
     git push origin gh-pages -f
 fi
 
