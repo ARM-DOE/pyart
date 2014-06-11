@@ -13,7 +13,7 @@ mv -f source/index.ci source/index.rst
 make html
 
 # upload to pyart-docs-travis repo is this is not a pull request
-if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+#if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
     cd /tmp/doc/build/html
     git config --global user.email "pyart-docs-bot@example.com"
     git config --global user.name "pyart-docs-bot"
@@ -29,6 +29,6 @@ if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
     git commit -m "Version" --allow-empty
     git remote add origin https://$GH_TOKEN@github.com/ARM-DOE/pyart-docs-travis.git
     git push origin gh-pages -f
-fi
+#fi
 
 exit 0
