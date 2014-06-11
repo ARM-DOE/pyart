@@ -9,6 +9,7 @@ conda install --yes sphinx pil h5py
 
 mv "$TRAVIS_BUILD_DIR"/doc /tmp
 cd /tmp/doc
+mv -f source/index.ci source/index.rst
 make html
 
 # upload to pyart-docs-travis repo is this is not a pull request
