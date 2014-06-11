@@ -5,7 +5,7 @@
 cd "$TRAVIS_BUILD_DIR"
 
 echo "Building Docs"
-conda install --yes sphinx pil
+conda install --yes sphinx pil h5py
 
 mv "$TRAVIS_BUILD_DIR"/doc /tmp
 cd /tmp/doc
