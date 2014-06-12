@@ -37,6 +37,7 @@ except ImportError:
     _RSL_AVAILABLE = False
 from .mdv import read_mdv
 from .sigmet import read_sigmet
+from .chl import read_chl
 from .cfradial import read_cfradial, write_cfradial
 from .nexrad_archive import read_nexrad_archive
 from .nexrad_cdm import read_nexrad_cdm
