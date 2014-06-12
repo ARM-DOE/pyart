@@ -1,47 +1,36 @@
 # Travis CI build script
 # This is a modified version of the .travis.yml file from the scikit-learn
 # project: https://github.com/scikit-learn/scikit-learn
-#
-# We are using Miniconda to provide a Python environment.  This
-# allows us to perform a conda based install of the SciPy stack on multiple
-# versions of python as well as use conda and binstar to install additional
-# module which are not in the default Anaconda repository.
-#
 language: python
-python:
-    - "2.7"
-    - "2.6"
-before_install:
-  # Download and install Miniconda
-  - wget http://repo.continuum.io/miniconda/Miniconda-2.2.2-Linux-x86_64.sh -O miniconda.sh
-  - chmod +x miniconda.sh
-  - ./miniconda.sh -b
-  - export PATH=/home/travis/anaconda/bin:$PATH
-  # Update conda
-  - conda update --yes conda
-  - conda update --yes conda
-  # Create a testenv
-  - conda create -n testenv --yes pip python=$TRAVIS_PYTHON_VERSION
-  - source activate testenv
-  # Install dependencies from the anaconda repo to the environment
-  - conda install --yes numpy scipy matplotlib netcdf4 nose
-  - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then conda install --yes basemap ; fi
-  # Install RSL from binstar
-  - conda install --yes -c http://conda.binstar.org/jjhelmus trmm_rsl
-  # LP solver cylp and its dependancy CBC
-  - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then conda install --yes -c http://conda.binstar.org/jjhelmus cbc cylp ; fi
-  # LP solvers pyglpk based on GLPK
-  - sudo apt-get update -qq
-  - sudo apt-get install -qq libglpk-dev
-  - conda install --yes -c http://conda.binstar.org/jjhelmus pyglpk
-  # LP solvers cvxopt with GLPK support
-  - if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then conda install --yes -c http://conda.binstar.org/jjhelmus cvxopt_glpk ; fi
-install:
-  - export RSL_PATH=~/anaconda/envs/testenv
-  - pip install python-coveralls --use-mirrors
-  - pip install nose-cov --use-mirrors
-  - python setup.py build_ext --inplace
 
-script: xvfb-run nosetests -v --with-cov --cov pyart pyart
+env:
+  global:
+    # pyart-docs-bot GH
+    secure: "cHUzL+m2ZBGAY0adl6DirWg3zUXvfuVo1meTf5sSMg0XBCoUlhpLuIrFMGgBET88G6OokfzUa8wfZHml4bkjN4N3u9ZjphvAB+zrhC5yL1cecLvo0Z9k+umfq9/Ieo4qe2oofr1TfRbqkgWViio+GSYrrhh/vEbF1zr4weaPGRY="
+
+matrix:
+    include:
+    - python: 2.7
+      env:
+        - PYTHON_VERSION="2.7"
+        - NOSE_ARGS="-v --no-skip --with-cov --cov pyart pyart"
+        - COVERALLS="true"
+    - python: 2.7
+      env:
+        - PYTHON_VERSION="2.7"
+        - NOSE_ARGS="-v --no-skip --with-cov --cov pyart --exe pyart"
+        - FROM_RECIPE="true"
+        - DOC_BUILD="true"
+    - python: 2.6
+      env:
+        - PYTHON_VERSION="2.6"
+        - NOSE_ARGS="-v --with-cov --cov pyart pyart"
+install: source continuous_integration/install.sh
+script: xvfb-run nosetests $NOSE_ARGS
 after_success:
-    - coveralls
+    # Ignore coveralls failures as the coveralls server is not very reliable
+    # but we don't want travis to report a failure in the github UI just
+    # because the coverage report failed to be published.
+    - if [[ "$COVERALLS" == "true" ]]; then coveralls || echo "failed"; fi
+    # Build docs if requested
+    - if [[ "$DOC_BUILD" == "true" ]]; then cd $TRAVIS_BUILD_DIR; source continuous_integration/build_docs.sh; fi

@@ -107,8 +107,8 @@ cpdef fourdd_dealias(
     filt : int
         Flag controlling Bergen and Albers filter, 1 = yes, 0 = no.
     
-    Other Parameter
-    ---------------
+    Other Parameters
+    ----------------
     lowdbz : float
         Lowest allowed reflectivity.  Gates with reflectivities below this
         value are filtered and not included in the dealiasing.

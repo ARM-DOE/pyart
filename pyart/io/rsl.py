@@ -119,6 +119,8 @@ def read_rsl(filename, field_names=None, additional_metadata=None,
 
         rsl_field_name = VOLUMENUM2RSLNAME[volume_num]
         field_name = filemetadata.get_field_name(rsl_field_name)
+        if field_name is None:
+            continue
 
         # extract the field and mask
         data = rslfile.get_volume_array(volume_num)
@@ -244,6 +246,14 @@ VOLUMENUM2RSLNAME = {
     33: 'S2',
     34: 'V3',
     35: 'S3',
+    36: 'CR',
+    37: 'CC',
+    38: 'PR',
+    39: 'SD',
+    40: 'ZZ',
+    41: 'RD',
+    42: 'ET',
+    43: 'EZ',
 }
 
 RSLNAME2VOLUMENUM = dict([(v, k) for k, v in VOLUMENUM2RSLNAME.iteritems()])

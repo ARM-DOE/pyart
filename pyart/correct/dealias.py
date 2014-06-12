@@ -225,8 +225,8 @@ def find_time_in_interp_sonde(interp_sonde, target, debug=False):
         Target datetime, the closest time in the interpsonde file will be
         used.
 
-    Optional parameters
-    -------------------
+    Other Parameters
+    ----------------
     debug : bool
         Print debugging information.
 
