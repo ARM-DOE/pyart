@@ -37,8 +37,8 @@ def read_grid(filename, exclude_fields=None):
     filename : str
         Filename of NetCDF grid file to read.
 
-    Optional parameters
-    -------------------
+    Other Parameters
+    ----------------
     exclude_fields : list
         A list of fields to exclude from the grid object.
 
@@ -67,7 +67,7 @@ def read_grid(filename, exclude_fields=None):
     # read in the fields
     # determine the correct shape of the fields
     # ARM standard requires the left-most dimension to be time, so the shape
-    # of the fields in the file is (1, nz, ny, nx) but the field data should 
+    # of the fields in the file is (1, nz, ny, nx) but the field data should
     # be shaped (nz, ny, nx) in the Grid object
     dim_keys = ['nz', 'ny', 'nx', 'z', 'y', 'x']
     field_shape = tuple([len(ncobj.dimensions[k]) for k in dim_keys
@@ -87,7 +87,7 @@ def read_grid(filename, exclude_fields=None):
             fields[field] = field_dic
         else:
             bad_shape = field_dic['data'].shape
-            warn('Field %s skipped due to incorrect shape' %field)
+            warn('Field %s skipped due to incorrect shape' % (field))
 
     return Grid(fields, axes, metadata)
 
@@ -273,7 +273,7 @@ class Grid:
         field_name : str
             Name of field to add.
         field_dict : dict
-            Dictionary containing field data and metadata. 
+            Dictionary containing field data and metadata.
         """
 
         nz, ny, nx = self.fields[self.fields.keys[0]]['data'].shape
@@ -281,7 +281,7 @@ class Grid:
         if 'data' not in field_dict:
             raise KeyError('Field dictionary must contain a "data" key')
         if field_name in self.fields:
-            raise ValueError('A field named %s already exists' %field_name)
+            raise ValueError('A field named %s already exists' % (field_name))
         if field_dict['data'].shape != (nz, ny, nx):
             raise ValueError('Field has invalid shape')
 
