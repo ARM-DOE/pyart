@@ -27,8 +27,8 @@ make html
     touch .nojekyll
     git add --all .
     git commit -m "Version" --allow-empty
-    git remote add origin https://$GH_TOKEN@github.com/ARM-DOE/pyart-docs-travis.git
-    git push origin gh-pages -f
+    git remote add origin https://$GH_TOKEN@github.com/ARM-DOE/pyart-docs-travis.git &> /dev/null
+    git push origin gh-pages -fq &> /dev/null
 #fi
 
 exit 0

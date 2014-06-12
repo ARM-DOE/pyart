@@ -5,8 +5,8 @@ language: python
 
 env:
   global:
-    # jjhelmus pyart-docs-bot GH
-    secure: HJGznPVMQ2M5EX9EkseJhjg+1EewpAOwRzTda+DNF9iNRxRk+9aI1F3GAM82TTDL5CrOxSuCzGyMQrPEPl9fX11a9tTPdhnpyjH8/BlQaN4UdqzSjDK59z8l5rkPjrPi6fKn+syUIOl6KiaLRFhpP+ntkFwidpdXvhabXK1z7No=
+    # pyart-docs-bot GH
+    secure: "cHUzL+m2ZBGAY0adl6DirWg3zUXvfuVo1meTf5sSMg0XBCoUlhpLuIrFMGgBET88G6OokfzUa8wfZHml4bkjN4N3u9ZjphvAB+zrhC5yL1cecLvo0Z9k+umfq9/Ieo4qe2oofr1TfRbqkgWViio+GSYrrhh/vEbF1zr4weaPGRY="
 
 matrix:
     include:
