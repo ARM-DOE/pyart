@@ -10,6 +10,7 @@ def configuration(parent_package='', top_path=None):
     config.add_subpackage('retrieve')
     config.add_subpackage('testing')
     config.add_subpackage('util')
+    config.add_subpackage('io/aux_reader')
 
     config.add_data_dir('tests')
     return config
