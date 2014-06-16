@@ -5,6 +5,7 @@ pyart.io
 Input/Output routines.
 
 .. automodule:: pyart.io.auto_read
+.. automodule:: pyart.io.chl
 .. automodule:: pyart.io.common
 .. automodule:: pyart.io.cfradial
 .. automodule:: pyart.io.grid

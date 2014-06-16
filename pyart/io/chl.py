@@ -4,73 +4,130 @@ pyart.io.chl
 
 Utilities for reading CSU-CHILL CHL files.
 
+.. autosummary::
+    :toctree: generated/
+    :template: dev_template.rst
+
+    ChlFile
+
+.. autosummary::
+    :toctree: generated/
+
+    read_chl
+    _unpack_structure
+
 """
 
 import struct
+from datetime import datetime
+
 import numpy as np
 
 from ..config import FileMetadata, get_fillvalue
 from .radar import Radar
 from .common import make_time_unit_str
-from .common import radar_coords_to_cart
 
-# XXX first gate offset
+# XXX unit tests
 
 
-def read_chl(filename):
+def read_chl(filename, field_names=None, additional_metadata=None,
+             file_field_names=None, exclude_fields=None,
+             use_file_field_attributes=True):
     """
-    Read a CHL file.
+    Read a CSU-CHILL CHL file.
 
     Parameters
     ----------
     filename : str
         Name of CHL file.
+    field_names : dict, optional
+        Dictionary mapping CHL field names to radar field names. If a
+        data type found in the file does not appear in this dictionary or has
+        a value of None it will not be placed in the radar.fields dictionary.
+        A value of None, the default, will use the mapping defined in the
+        Py-ART configuration file.
+    additional_metadata : dict of dicts, optional
+        Dictionary of dictionaries to retrieve metadata from during this read.
+        This metadata is not used during any successive file reads unless
+        explicitly included.  A value of None, the default, will not
+        introduct any addition metadata and the file specific or default
+        metadata as specified by the Py-ART configuration file will be used.
+    file_field_names : bool, optional
+        True to use the CHL field names for the field names in the radar
+        object. If this case the field_names parameter is ignored.
+        The field dictionary will likely only have a 'data' key, unless
+        the fields are defined in `additional_metadata`.
+    exclude_fields : list or None, optional
+        List of fields to exclude from the radar object. This is applied
+        after the `file_field_names` and `field_names` parameters.
+    use_file_field_attributes : bool, optional
+        True to use information provided by in the file to set the field
+        attribute `long_name`, `units`, `valid_max`, and `valid_min`.  False
+        will not set these unless they are defined in the configuration file
+        or in `additional_metadata`.
+
+    Returns
+    -------
+    radar : Radar
+        Radar object containing data from MDV file.
 
     Returns
     -------
     radar : Radar
         Radar object containing data from CHL file.
 
-    Notes
-    -----
-    This is still an alpha-level function so use with caution.
-
     """
+    # XXX remove these and introduce these into default_config.py
+    if field_names is None:
+        field_names = CHILL_DEFAULT_FIELD_NAMES
+    if additional_metadata is None:
+        additional_metadata = CHILL_DEFAULT_METADATA
 
     # create metadata retrival object
-    filemetadata = FileMetadata('chill')    # XXX additional parameters
+    filemetadata = FileMetadata('chl', field_names, additional_metadata,
+                                file_field_names, exclude_fields)
 
     # read data
-    chl_file = CHLfile(filename)
+    chl_file = ChlFile(filename)
 
     # time
     time = filemetadata('time')
-    time['data'] = chl_file.time
-    time['units'] = 'seconds since 1970-01-01 00:00 UTC'    # XXX
+    tdata = np.array(chl_file.time)
+    min_time = tdata.min()
+    time['data'] = (tdata - min_time).astype('float64')
+    time['units'] = make_time_unit_str(datetime.fromtimestamp(min_time))
 
     # range
     _range = filemetadata('range')
-    _range['data'] = np.array(range(chl_file.ngates)) * chl_file.gate_spacing
+    _range['data'] = (np.array(range(chl_file.ngates)) *
+                      chl_file.gate_spacing + chl_file.first_gate_offset)
     _range['meters_between_gates'] = np.array(chl_file.gate_spacing)
-    _range['meters_to_center_of_first_gate'] = 0.0      # XXX
+    _range['meters_to_center_of_first_gate'] = 0.0
 
     # scan_type
-    scan_type = {'data': SCAN_MODE_NAMES[chl_file.scan_types[-1]]}    # XXX
+    scan_type = SCAN_MODE_NAMES[chl_file.scan_types[-1]]
 
-    # fields XXX
+    # fields
     fields = {}
     for i, fdata in chl_file.fields.items():
+
         field_info = chl_file.field_info[i]
-        field_name = CHILL_FIELD_MAPPING[field_info['name']]
-        fields[field_name] = {
-            'coordinates': 'elevation azimuth range',
-            'data': np.ma.masked_array(fdata),
-            'long_name': field_info['descr'],
-            'standard_name': CHILL_FIELD_STANDARD_NAME[field_info['name']],
-            'units': field_info['units'],
-            'valid_max': field_info['max_val'],
-            'valid_min': field_info['min_val']
-        }
+        field_name = filemetadata.get_field_name(field_info['name'])
+        if field_name is None:
+            continue
+
+        field_dic = filemetadata(field_name)
+        np.ma.set_fill_value(fdata, get_fillvalue())
+        field_dic['data'] = fdata
+        field_dic['_FillValue'] = get_fillvalue()
+
+        if use_file_field_attributes:
+            field_dic['long_name'] = field_info['descr']
+            field_dic['units'] = field_info['units']
+            field_dic['valid_max'] = field_info['max_val']
+            field_dic['valid_min'] = field_info['min_val']
+
+        fields[field_name] = field_dic
 
     # metadata
     metadata = filemetadata('metadata')
@@ -81,9 +138,9 @@ def read_chl(filename):
     latitude = filemetadata('latitude')
     longitude = filemetadata('longitude')
     altitude = filemetadata('altitude')
-    latitude['data'] = chl_file.radar_info['latitude']
-    longitude['data'] = chl_file.radar_info['longitude']
-    altitude['data'] = chl_file.radar_info['altitude']
+    latitude['data'] = np.array([chl_file.radar_info['latitude']], 'f8')
+    longitude['data'] = np.array([chl_file.radar_info['longitude']], 'f8')
+    altitude['data'] = np.array([chl_file.radar_info['altitude']], 'f8')
 
     # sweep_number, sweep_mode, fixed_angle, sweep_start_ray_index,
     # sweep_end_ray_index
@@ -92,23 +149,21 @@ def read_chl(filename):
     fixed_angle = filemetadata('fixed_angle')
     sweep_start_ray_index = filemetadata('sweep_start_ray_index')
     sweep_end_ray_index = filemetadata('sweep_end_ray_index')
-    sweep_number['data'] = {  # XXX
-        'data': range(chl_file.num_sweeps), 'long_name': 'Sweep_number',
-        'standard_name': 'sweep_number', 'units': 'count'}
-    sweep_mode['data'] = SCAN_MODE_NAMES[chl_file.scan_types[-1]]
-    fixed_angle['data'] = chl_file.fixed_angle
+    sweep_number['data'] = np.arange(chl_file.num_sweeps, dtype='int32')
+    sweep_mode['data'] = np.array(
+        [SCAN_MODE_NAMES[i] for i in chl_file.scan_types])
+    fixed_angle['data'] = np.array(chl_file.fixed_angle, dtype='float32')
 
     ray_count = chl_file.rays_per_sweep
     ssri = np.cumsum(np.append([0], ray_count[:-1])).astype('int32')
     sweep_start_ray_index['data'] = ssri
-    # XXX
-    sweep_end_ray_index['data'] = np.cumsum(ray_count).astype('int32')  # - 1
+    sweep_end_ray_index['data'] = np.cumsum(ray_count).astype('int32') - 1
 
     # azimuth, elevation
     azimuth = filemetadata('azimuth')
     elevation = filemetadata('elevation')
-    azimuth['data'] = chl_file.azimuth
-    elevation['data'] = chl_file.elevation
+    azimuth['data'] = np.array(chl_file.azimuth, dtype='float32')
+    elevation['data'] = np.array(chl_file.elevation, dtype='float32')
 
     # instrument parameters
     instrument_parameters = None
@@ -122,57 +177,92 @@ def read_chl(filename):
         instrument_parameters=instrument_parameters)
 
 
-class CHLfile(object):
+class ChlFile(object):
     """
     A file object for CHL data.
 
-    A `CHLFile` object stores metadata and data from a CHL file.  Metadata is
-    stored in dictionaries as attributes of the object, field data is
-    stored as NumPy ndarrays as attributes with the field name.
-
     Parameters
     ----------
-    filename : str
-        Name of CHL file to read.
+    filename : str or file-like.
+        Name of CHL file to read or a file-like object pointing to the
+        beginning of such a file.
+    ns_time : bool
+        True to determine ray collection times to the nano-second, False
+        will only determine times to the second.
+    debug : bool
+        True to keep packet data in the _packets attribute to aid in
+        debugging.
+
+    Attributes
+    ----------
+    ngates : int
+        Number of gates per ray.
+    num_sweeps : int
+        Number of sweeps in the volume.
+    gate_spacing : float
+        Spacing in meters between gates.
+    first_gate_offset : float
+        Distance in meters to the first range gate.
+    time : list of ints
+        Time in seconds in epoch for each ray in the volume.
+    azimuth : list of floats
+        Azimuth angle for each ray in the volume in degrees.
+    elevation : list of floats
+        Elevation angle for each ray in the volume in degrees.
+    fixed_angle : list of floats
+        Fixed angles for each sweep.
+    sweep_number : list of ints
+        Sweep numbers reported in file.
+    scan_types : list of ints
+        Chill defined scan type for each sweep.
+    rays_per_sweep : list of ints
+        Number of rays in each sweep.
+    fields : dict
+        Dictionary of field data index by field number.
+    radar_info : dict
+        Radar information recorded in the file.
+    field_info : dict
+        Field information (limits, name, etc.) recorded in the file.
+    processor_info : dict
+        Porcessor information recorded in the file.
+
     """
 
-    def __init__(self, filename, debug=False):
+    def __init__(self, filename, ns_time=True, debug=False):
 
-        # public attributes
-        self.filename = filename    # filename
-        self.ngates = None          # number of gates per ray
-        self.num_sweeps = None      # number of sweeps in the volume
-        self.gate_spacing = None    # spacing in meters between gates
-
-        self.time = []              # list of time for each ray
-        self.azimuth = []           # list of azimuth angle for each ray
-        self.elevation = []         # list of elevation angle for each ray
-
-        self.fixed_angle = []       # list of fixed angles for each sweep
-        self.sweep_number = []      # sweep numbers reported in file
-        self.scan_types = []        # scan type for each sweep
-        self.rays_per_sweep = None  # number of rays per sweep
-
-        self.fields = {}            # dictionary of field data
-
-        self.radar_info = None      # dictionary of radar information
-        self.field_info = {}        # field information (limits, name, etc.)
+        # initalize attributes
+        self.ngates = None
+        self.num_sweeps = None
+        self.gate_spacing = None
+        self.time = []
+        self.azimuth = []
+        self.elevation = []
+        self.fixed_angle = []
+        self.sweep_number = []
+        self.scan_types = []
+        self.rays_per_sweep = None
+        self.fields = {}
+        self.radar_info = None
+        self.field_info = {}
         self.processor_info = None
+        self.first_gate_offset = None
 
         # private attributes
-
-        self._dstring = ''      # string containing field data
-        self._bit_mask = None   # bit_mask
-        self._dtype = None      # dtype of a gate
-        self._ray_bsize = None  # size in bytes of a single ray (all fields)
-        self._packets = []      # list of packets, not set if debug is False.
-        self._field_nums = None  # field number available in file
-        self._rays_in_current_sweep = None
-
-        # unknown
+        self._dstring = ''      # string containing field data.
+        self._bit_mask = None   # bit mask specifying fields present in file.
+        self._dtype = None      # NumPy dtype for a single gate (all fields).
+        self._ray_bsize = None  # size in bytes of a single ray (all fields).
+        self._packets = []      # List of packets, not set if debug is False.
+        self._field_nums = None     # Field number available in file.
+        self._rays_in_current_sweep = None  # accumulator for counting rays.
+        self._fh = None         # file handler
+        self._include_ns_time = ns_time
 
         # read all blocks from the file
-        self._fh = open(self.filename, "rb")
+        if hasattr(filename, 'read'):
+            self._fh = filename
+        else:
+            self._fh = open(filename, "rb")
         packet = 1
         while packet is not None:
             packet = self._read_block()
@@ -240,6 +330,7 @@ class CHLfile(object):
         """ Parse a processor_info block.  Set dr attribute. """
         packet = _unpack_structure(payload, PROCESSOR_INFO)
         self.gate_spacing = packet['gate_spacing']
+        self.first_gate_offset = packet['range_offset']  # XXX is the correct?
         self.processor_info = packet.copy()
         return packet
 
@@ -287,7 +378,10 @@ class CHLfile(object):
 
         # store ray data and pointing data
         self._dstring += self._fh.read(self._ray_bsize)
-        self.time.append(packet['time'])
+        if self._include_ns_time:
+            self.time.append(packet['time'] + packet['ns_time']/1e9)
+        else:
+            self.time.append(packet['time'])
         self.azimuth.append(packet['azimuth'])
         self.elevation.append(packet['elevation'])
         self._rays_in_current_sweep += 1
@@ -298,21 +392,17 @@ class CHLfile(object):
         """ Extract field data from _dstring attribute post read. """
         all_data = np.fromstring(self._dstring, dtype=self._dtype)
         all_data = all_data.reshape(-1, self.ngates)
-
         for i, field_num in enumerate(self._field_nums):
-            fsl = self.field_info[field_num]
-            dat = all_data[all_data.dtype.names[i]].copy()
 
-            # XXX should be masked arrays
-            if not issubclass(dat.dtype.type, np.integer):
-                dat[dat == 0] = np.nan
-            else:
-                dat = dat.astype('float')
-                dat[dat == 0] = np.nan
-                dat = ((dat * fsl['dat_factor'] + fsl['dat_bias']) /
-                       float(fsl['fld_factor']))
+            fdata = np.ma.masked_values(all_data[all_data.dtype.names[i]], 0)
+            # apply scale and offset factors to interger data types
+            if issubclass(fdata.dtype.type, np.integer):
+                dat_factor = float(self.field_info[field_num]['dat_factor'])
+                dat_bias = float(self.field_info[field_num]['dat_bias'])
+                fld_factor = float(self.field_info[field_num]['fld_factor'])
+                fdata = (fdata * dat_factor + dat_bias) / fld_factor
 
-            self.fields[field_num] = dat
+            self.fields[field_num] = fdata
         return
 
 # CHL packet types
@@ -453,8 +543,6 @@ SCAN_SEG = (
     ('current_fixed_angle', 'f'),
 )
 
-# XXX
-
 _FIELD_TABLE = {
     # Chill field name : (Py-ART field name, field long_name attribute)
     'Z': ('DBZ', 'equivalent_reflectivity_factor'),
@@ -496,5 +584,7 @@ _FIELD_TABLE = {
     '\xcf\x81 HCX': ('RHOHCX', 'lag_0_h_co_to_cross_correlation'),
     '\xcf\x81 VCX': ('RHOVCX', 'lag_0_v_co_to_cross_correlation'),
 }
-CHILL_FIELD_MAPPING = dict((k, v[0]) for k, v in _FIELD_TABLE.items())
-CHILL_FIELD_STANDARD_NAME = dict((k, v[1]) for k, v in _FIELD_TABLE.items())
+CHILL_DEFAULT_FIELD_NAMES = dict((k, v[0]) for k, v in _FIELD_TABLE.items())
+CHILL_DEFAULT_METADATA = dict(
+    (v[0], {'coordinates': 'elevation azimuth range', 'standard_name': v[1]})
+    for k, v in _FIELD_TABLE.items())
