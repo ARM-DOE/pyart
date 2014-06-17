@@ -27,8 +27,6 @@ from ..config import FileMetadata, get_fillvalue
 from .radar import Radar
 from .common import make_time_unit_str
 
-# XXX unit tests
-
 
 def read_chl(filename, field_names=None, additional_metadata=None,
              file_field_names=None, exclude_fields=None,
@@ -274,9 +272,6 @@ class ChlFile(object):
             return None
         block_id, length = struct.unpack("<2i", pld)
         payload = self._fh.read(length - 8)
-
-        if block_id is None:  # redundant sanity check
-            return None
 
         # parse the block
         if block_id == ARCH_ID_FILE_HDR:
