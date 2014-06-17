@@ -72,8 +72,8 @@ corrected_specific_differential_phase = 'corrected_specific_differential_phase'
 
 # Linear depolarization ration (h - horizontal, v - vertical), LDR
 linear_depolarization_ratio = 'linear_polarization_ratio'
-linear_depolarization_ratio_h = 'linear_polarization_ratio_h'
-linear_depolarization_ratio_v = 'linear_polarization_ratio_v'
+linear_depolarization_ratio_h = 'linear_depolarization_ratio_h'
+linear_depolarization_ratio_v = 'linear_depolarization_ratio_v'
 
 # Misc fields
 signal_to_noise_ratio = 'signal_to_noise_ratio'
@@ -549,128 +549,7 @@ mdv_metadata = {}
 rsl_metadata = {}
 
 # Metadata for CSU-CHILL, CHL files
-chl_metadata = {
-    'DBZ': {
-        'coordinates': 'elevation azimuth range',
-        'standard_name': 'equivalent_reflectivity_factor'},
-
-    'VEL': {
-        'coordinates': 'elevation azimuth range',
-        'standard_name': 'radial_velocity_of_scatterers_away_from_instrument'},
-
-    'WIDTH': {
-        'coordinates': 'elevation azimuth range',
-        'standard_name': 'doppler_spectrum_width'},
-
-    'ZDR': {
-        'coordinates': 'elevation azimuth range',
-        'standard_name': 'log_differential_reflectivity_hv'},
-
-    'LDRH': {
-        'coordinates': 'elevation azimuth range',
-        'standard_name': 'log_linear_depolarization_ratio_h'},
-
-    'LDRV': {
-        'coordinates': 'elevation azimuth range',
-        'standard_name': 'log_linear_depolarization_ratio_v'},
-
-    'PHIDP': {
-        'coordinates': 'elevation azimuth range',
-        'standard_name': 'differential_phase_hv'},
-
-    'KDP': {
-        'coordinates': 'elevation azimuth range',
-        'standard_name': 'specific_differential_phase_hv'},
-
-    'RHOHV': {
-        'coordinates': 'elevation azimuth range',
-        'standard_name': 'cross_correlation_ratio_hv'},
-
-    'NCP': {
-        'coordinates': 'elevation azimuth range',
-        'standard_name': 'normalized_coherent_power'},
-
-    'H Re(lag 1)': {
-        'coordinates': 'elevation azimuth range',
-        'standard_name': 'real_part_of_lag_1_correlation_h'},
-
-    'V Re(lag 2)': {
-        'coordinates': 'elevation azimuth range',
-        'standard_name': 'real_part_of_lag_2_correlation_v'},
-
-    'VAvgQ': {
-        'coordinates': 'elevation azimuth range',
-        'standard_name': 'v_average_quadrature'},
-
-    'V Im(lag 1)': {
-        'coordinates': 'elevation azimuth range',
-        'standard_name': 'imaginary_part_of_v_at_lag_1'},
-
-    'HAvgQ': {
-        'coordinates': 'elevation azimuth range',
-        'standard_name': 'h_average_quadrature'},
-
-    'H Im(lag 2)': {
-        'coordinates': 'elevation azimuth range',
-        'standard_name': 'imaginary_part_lag_2_correlation_h'},
-
-    'V lag 0': {
-        'coordinates': 'elevation azimuth range',
-        'standard_name': 'absolute_value_of_lag_0_correlation_v'},
-
-    'H lag 0': {
-        'coordinates': 'elevation azimuth range',
-        'standard_name': 'absolute_value_of_lag_0_correlation_h'},
-
-    'H lag 0 cx': {
-        'coordinates': 'elevation azimuth range',
-        'standard_name': 'absolute_value_of_lag_0_cross_correlation_h'},
-
-    'H Im(lag 1)': {
-        'coordinates': 'elevation azimuth range',
-        'standard_name': 'imaginary_part_of_lag_1_correlation_h'},
-
-    'H Re(lag 2)': {
-        'coordinates': 'elevation azimuth range',
-        'standard_name': 'real_part_of_lag_2_correlation_h'},
-
-    'V lag 0 cx': {
-        'coordinates': 'elevation azimuth range',
-        'standard_name': 'absolute_value_of_lag_0_cross_correlation_v'},
-
-    'V Re(lag 1)': {
-        'coordinates': 'elevation azimuth range',
-        'standard_name': 'real_part_of_lag_1_correlation_v'},
-
-    'V Im(lag 2)': {
-        'coordinates': 'elevation azimuth range',
-        'standard_name': 'imaginary_part_of_lag_2_correlation_v'},
-
-    'HV lag 0 I': {
-        'coordinates': 'elevation azimuth range',
-        'standard_name': 'real_part_of_cross_channel_correlation_at_lag_0'},
-
-    'HV lag 0 Q': {
-        'coordinates': 'elevation azimuth range',
-        'standard_name':
-        'imaginary_part_of_cross_channel_correlation_at_lag_0'},
-
-    'VAvgI': {
-        'coordinates': 'elevation azimuth range',
-        'standard_name': 'v_average_inphase'},
-
-    'HAvgI': {
-        'coordinates': 'elevation azimuth range',
-        'standard_name': 'h_average_inphase'},
-
-    'RHOHCX': {
-        'coordinates': 'elevation azimuth range',
-        'standard_name': 'lag_0_h_co_to_cross_correlation'},
-
-    'RHOVCX': {
-        'coordinates': 'elevation azimuth range',
-        'standard_name': 'lag_0_v_co_to_cross_correlation'},
-}
+chl_metadata = {}
 
 FILE_SPECIFIC_METADATA = {      # Required
     'sigmet': sigmet_metadata,
@@ -854,36 +733,40 @@ rsl_field_mapping = {
 
 chl_field_mapping = {
     # Chill field name : radar field name
-    'Z': 'DBZ',
-    'V': 'VEL',
-    'W': 'WIDTH',
-    'ZDR': 'ZDR',
-    'LDRH': 'LDRH',
-    'LDRV': 'LDRV',
-    '\xce\xa8 DP': 'PHIDP',
-    'KDP': 'KDP',
-    '\xcf\x81 HV': 'RHOHV',
-    'NCP': 'NCP',
-    'H Re(lag 1)': 'H Re(lag 1)',
-    'V Re(lag 2)': 'V Re(lag 2)',
-    'VAvgQ': 'VAvgQ',
-    'V Im(lag 1)': 'V Im(lag 1)',
-    'HAvgQ': 'HAvgQ',
-    'H Im(lag 2)': 'H Im(lag 2)',
-    'V lag 0': 'V lag 0',
-    'H lag 0': 'H lag 0',
-    'H lag 0 cx': 'H lag 0 cx',
-    'H Im(lag 1)': 'H Im(lag 1)',
-    'H Re(lag 2)': 'H Re(lag 2)',
-    'V lag 0 cx': 'V lag 0 cx',
-    'V Re(lag 1)': 'V Re(lag 1)',
-    'V Im(lag 2)': 'V Im(lag 2)',
-    'HV lag 0 I': 'HV lag 0 I',
-    'HV lag 0 Q': 'HV lag 0 Q',
-    'VAvgI': 'VAvgI',
-    'HAvgI': 'HAvgI',
-    '\xcf\x81 HCX': 'RHOHCX',
-    '\xcf\x81 VCX': 'RHOVCX',
+    'Z': reflectivity,
+    'V': velocity,
+    'W': spectrum_width,
+    'ZDR': differential_reflectivity,
+    'LDRH': linear_depolarization_ratio_h,
+    'LDRV': linear_depolarization_ratio_v,
+    '\xce\xa8 DP': differential_phase,
+    'KDP': specific_differential_phase,
+    '\xcf\x81 HV': cross_correlation_ratio,
+    'NCP': normalized_coherent_power,
+    # These fields are not mapped by default
+    'H Re(lag 1)': None,    # Real part of lag-1 correlation, H Channel
+    'V Re(lag 2)': None,    # Real part of lag-2 correlation, V Channel
+    'VAvgQ': None,          # Average Q, V Channel
+    'V Im(lag 1)': None,    # Imaginary part of lag-1 correlation, V Channel
+    'HAvgQ': None,          # Average Q, H Channel
+    'H Im(lag 2)': None,    # Imaginary part of lag-2 correlation, H Channel
+    'V lag 0': None,        # Absolute value of lag-0 correlation, V Channel
+    'H lag 0': None,        # Absolute value of lag-0 correlation, H Channel
+    'H lag 0 cx': None,     # Absolute value of lag-0 cross correlation,
+                            # H Channel
+    'H Im(lag 1)': None,    # Imaginary part of lag-1 correlation, H Channel
+    'H Re(lag 2)': None,    # Real part of lag-2 correlation, H Channel
+    'V lag 0 cx': None,     # Absolute value of lag-0 cross correlation,
+                            # V Channel
+    'V Re(lag 1)': None,    # Real part of lag-1 correlation, V Channel
+    'V Im(lag 2)': None,    # Imaginary part of lag-2 correlation, V Channel
+    'HV lag 0 I': None,     # Real part of cross channel correlation at lag-0
+    'HV lag 0 Q': None,     # Imaginary part of cross channel correlation at
+                            # lag-0
+    'VAvgI': None,          # Average I, V Channel
+    'HAvgI': None,          # Average I, H Channel
+    '\xcf\x81 HCX': None,   # H Co to Cross Correlation
+    '\xcf\x81 VCX': None,   # V Co to Cross Correlation
 }
 
 FIELD_MAPPINGS = {                  # Required variable
