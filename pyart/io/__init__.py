@@ -16,6 +16,7 @@ from and write data to a number of file formats.
     read_mdv
     read_sigmet
     read_cfradial
+    read_chl
     read_nexrad_archive
     read_nexrad_cdm
     read_gamic
@@ -37,6 +38,7 @@ except ImportError:
     _RSL_AVAILABLE = False
 from .mdv import read_mdv
 from .sigmet import read_sigmet
+from .chl import read_chl
 from .cfradial import read_cfradial, write_cfradial
 from .nexrad_archive import read_nexrad_archive
 from .nexrad_cdm import read_nexrad_cdm
