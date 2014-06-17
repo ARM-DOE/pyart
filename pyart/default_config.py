@@ -548,13 +548,138 @@ mdv_metadata = {}
 # Metadata for RSL files
 rsl_metadata = {}
 
+# Metadata for CSU-CHILL, CHL files
+chl_metadata = {
+    'DBZ': {
+        'coordinates': 'elevation azimuth range',
+        'standard_name': 'equivalent_reflectivity_factor'},
+
+    'VEL': {
+        'coordinates': 'elevation azimuth range',
+        'standard_name': 'radial_velocity_of_scatterers_away_from_instrument'},
+
+    'WIDTH': {
+        'coordinates': 'elevation azimuth range',
+        'standard_name': 'doppler_spectrum_width'},
+
+    'ZDR': {
+        'coordinates': 'elevation azimuth range',
+        'standard_name': 'log_differential_reflectivity_hv'},
+
+    'LDRH': {
+        'coordinates': 'elevation azimuth range',
+        'standard_name': 'log_linear_depolarization_ratio_h'},
+
+    'LDRV': {
+        'coordinates': 'elevation azimuth range',
+        'standard_name': 'log_linear_depolarization_ratio_v'},
+
+    'PHIDP': {
+        'coordinates': 'elevation azimuth range',
+        'standard_name': 'differential_phase_hv'},
+
+    'KDP': {
+        'coordinates': 'elevation azimuth range',
+        'standard_name': 'specific_differential_phase_hv'},
+
+    'RHOHV': {
+        'coordinates': 'elevation azimuth range',
+        'standard_name': 'cross_correlation_ratio_hv'},
+
+    'NCP': {
+        'coordinates': 'elevation azimuth range',
+        'standard_name': 'normalized_coherent_power'},
+
+    'H Re(lag 1)': {
+        'coordinates': 'elevation azimuth range',
+        'standard_name': 'real_part_of_lag_1_correlation_h'},
+
+    'V Re(lag 2)': {
+        'coordinates': 'elevation azimuth range',
+        'standard_name': 'real_part_of_lag_2_correlation_v'},
+
+    'VAvgQ': {
+        'coordinates': 'elevation azimuth range',
+        'standard_name': 'v_average_quadrature'},
+
+    'V Im(lag 1)': {
+        'coordinates': 'elevation azimuth range',
+        'standard_name': 'imaginary_part_of_v_at_lag_1'},
+
+    'HAvgQ': {
+        'coordinates': 'elevation azimuth range',
+        'standard_name': 'h_average_quadrature'},
+
+    'H Im(lag 2)': {
+        'coordinates': 'elevation azimuth range',
+        'standard_name': 'imaginary_part_lag_2_correlation_h'},
+
+    'V lag 0': {
+        'coordinates': 'elevation azimuth range',
+        'standard_name': 'absolute_value_of_lag_0_correlation_v'},
+
+    'H lag 0': {
+        'coordinates': 'elevation azimuth range',
+        'standard_name': 'absolute_value_of_lag_0_correlation_h'},
+
+    'H lag 0 cx': {
+        'coordinates': 'elevation azimuth range',
+        'standard_name': 'absolute_value_of_lag_0_cross_correlation_h'},
+
+    'H Im(lag 1)': {
+        'coordinates': 'elevation azimuth range',
+        'standard_name': 'imaginary_part_of_lag_1_correlation_h'},
+
+    'H Re(lag 2)': {
+        'coordinates': 'elevation azimuth range',
+        'standard_name': 'real_part_of_lag_2_correlation_h'},
+
+    'V lag 0 cx': {
+        'coordinates': 'elevation azimuth range',
+        'standard_name': 'absolute_value_of_lag_0_cross_correlation_v'},
+
+    'V Re(lag 1)': {
+        'coordinates': 'elevation azimuth range',
+        'standard_name': 'real_part_of_lag_1_correlation_v'},
+
+    'V Im(lag 2)': {
+        'coordinates': 'elevation azimuth range',
+        'standard_name': 'imaginary_part_of_lag_2_correlation_v'},
+
+    'HV lag 0 I': {
+        'coordinates': 'elevation azimuth range',
+        'standard_name': 'real_part_of_cross_channel_correlation_at_lag_0'},
+
+    'HV lag 0 Q': {
+        'coordinates': 'elevation azimuth range',
+        'standard_name':
+        'imaginary_part_of_cross_channel_correlation_at_lag_0'},
+
+    'VAvgI': {
+        'coordinates': 'elevation azimuth range',
+        'standard_name': 'v_average_inphase'},
+
+    'HAvgI': {
+        'coordinates': 'elevation azimuth range',
+        'standard_name': 'h_average_inphase'},
+
+    'RHOHCX': {
+        'coordinates': 'elevation azimuth range',
+        'standard_name': 'lag_0_h_co_to_cross_correlation'},
+
+    'RHOVCX': {
+        'coordinates': 'elevation azimuth range',
+        'standard_name': 'lag_0_v_co_to_cross_correlation'},
+}
+
 FILE_SPECIFIC_METADATA = {      # Required
     'sigmet': sigmet_metadata,
     'nexrad_archive': nexrad_metadata,
     'nexrad_cdm': nexrad_metadata,
     'cfradial': cfradial_metadata,
     'mdv': mdv_metadata,
-    'rsl': rsl_metadata
+    'rsl': rsl_metadata,
+    'chl': chl_metadata,
 }
 
 ##############################################################################
@@ -727,6 +852,40 @@ rsl_field_mapping = {
     'S3': None,                                 # Spectrum width cut 3
 }
 
+chl_field_mapping = {
+    # Chill field name : radar field name
+    'Z': 'DBZ',
+    'V': 'VEL',
+    'W': 'WIDTH',
+    'ZDR': 'ZDR',
+    'LDRH': 'LDRH',
+    'LDRV': 'LDRV',
+    '\xce\xa8 DP': 'PHIDP',
+    'KDP': 'KDP',
+    '\xcf\x81 HV': 'RHOHV',
+    'NCP': 'NCP',
+    'H Re(lag 1)': 'H Re(lag 1)',
+    'V Re(lag 2)': 'V Re(lag 2)',
+    'VAvgQ': 'VAvgQ',
+    'V Im(lag 1)': 'V Im(lag 1)',
+    'HAvgQ': 'HAvgQ',
+    'H Im(lag 2)': 'H Im(lag 2)',
+    'V lag 0': 'V lag 0',
+    'H lag 0': 'H lag 0',
+    'H lag 0 cx': 'H lag 0 cx',
+    'H Im(lag 1)': 'H Im(lag 1)',
+    'H Re(lag 2)': 'H Re(lag 2)',
+    'V lag 0 cx': 'V lag 0 cx',
+    'V Re(lag 1)': 'V Re(lag 1)',
+    'V Im(lag 2)': 'V Im(lag 2)',
+    'HV lag 0 I': 'HV lag 0 I',
+    'HV lag 0 Q': 'HV lag 0 Q',
+    'VAvgI': 'VAvgI',
+    'HAvgI': 'HAvgI',
+    '\xcf\x81 HCX': 'RHOHCX',
+    '\xcf\x81 VCX': 'RHOVCX',
+}
+
 FIELD_MAPPINGS = {                  # Required variable
     'sigmet': sigmet_field_mapping,
     'nexrad_archive': nexrad_archive_field_mapping,
@@ -734,4 +893,5 @@ FIELD_MAPPINGS = {                  # Required variable
     'cfradial': cfradial_field_mapping,
     'mdv': mdv_field_mapping,
     'rsl': rsl_field_mapping,
+    'chl': chl_field_mapping,
 }

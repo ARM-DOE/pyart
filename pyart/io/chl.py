@@ -77,12 +77,6 @@ def read_chl(filename, field_names=None, additional_metadata=None,
         Radar object containing data from CHL file.
 
     """
-    # XXX remove these and introduce these into default_config.py
-    if field_names is None:
-        field_names = CHILL_DEFAULT_FIELD_NAMES
-    if additional_metadata is None:
-        additional_metadata = CHILL_DEFAULT_METADATA
-
     # create metadata retrival object
     filemetadata = FileMetadata('chl', field_names, additional_metadata,
                                 file_field_names, exclude_fields)
@@ -542,49 +536,3 @@ SCAN_SEG = (
     ('project', '16s'),
     ('current_fixed_angle', 'f'),
 )
-
-_FIELD_TABLE = {
-    # Chill field name : (Py-ART field name, field long_name attribute)
-    'Z': ('DBZ', 'equivalent_reflectivity_factor'),
-    'V': ('VEL', 'radial_velocity_of_scatterers_away_from_instrument'),
-    'W': ('WIDTH', 'doppler_spectrum_width'),
-    'ZDR': ('ZDR', 'log_differential_reflectivity_hv'),
-    'LDRH': ('LDRH', 'log_linear_depolarization_ratio_h'),
-    'LDRV': ('LDRV', 'log_linear_depolarization_artio_v'),
-    '\xce\xa8 DP': ('PHIDP', 'differential_phase_hv'),
-    'KDP': ('KDP', 'specific_differential_phase_hv'),
-    '\xcf\x81 HV': ('RHOHV', 'cross_correlation_ratio_hv'),
-    'NCP': ('NCP', 'normalized_coherent_power'),
-    'H Re(lag 1)': ('H Re(lag 1)', 'real_part_of_lag_1_correlation_h'),
-    'V Re(lag 2)': ('V Re(lag 2)', 'real_part_of_lag_2_correlation_v'),
-    'VAvgQ': ('VAvgQ', 'v_average_quadrature'),
-    'V Im(lag 1)': ('V Im(lag 1)', 'imaginary_part_of_v_at_lag_1'),
-    'HAvgQ': ('HAvgQ', 'h_average_quadrature'),
-    'H Im(lag 2)': ('H Im(lag 2)', 'imaginary_part_lag_2_correlation_h'),
-    'V lag 0': ('V lag 0', 'absolute_value_of_lag_0_correlation_v'),
-    'H lag 0': ('H lag 0', 'absolute_value_of_lag_0_correlation_h'),
-    'H lag 0 cx':
-    ('H lag 0 cx', 'absolute_value_of_lag_0_cross_correlation_h'),
-    'H Im(lag 1)':
-    ('H Im(lag 1)', 'imaginary_part_of_lag_1_correlation_h'),
-    'H Re(lag 2)':
-    ('H Re(lag 2)', 'real_part_of_lag_2_correlation_h'),
-    'V lag 0 cx':
-    ('V lag 0 cx', 'absolute_value_of_lag_0_cross_correlation_v'),
-    'V Re(lag 1)': ('V Re(lag 1)', 'real_part_of_lag_1_correlation_v'),
-    'V Im(lag 2)':
-    ('V Im(lag 2)', 'imaginary_part_of_lag_2_correlation_v'),
-    'HV lag 0 I':
-    ('HV lag 0 I', 'real_part_of_cross_channel_correlation_at_lag_0'),
-    'HV lag 0 Q':
-    ('HV lag 0 Q',
-     'imaginary_part_of_cross_channel_correlation_at_lag_0'),
-    'VAvgI': ('VAvgI', 'v_average_inphase'),
-    'HAvgI': ('HAvgI', 'h_average_inphase'),
-    '\xcf\x81 HCX': ('RHOHCX', 'lag_0_h_co_to_cross_correlation'),
-    '\xcf\x81 VCX': ('RHOVCX', 'lag_0_v_co_to_cross_correlation'),
-}
-CHILL_DEFAULT_FIELD_NAMES = dict((k, v[0]) for k, v in _FIELD_TABLE.items())
-CHILL_DEFAULT_METADATA = dict(
-    (v[0], {'coordinates': 'elevation azimuth range', 'standard_name': v[1]})
-    for k, v in _FIELD_TABLE.items())
