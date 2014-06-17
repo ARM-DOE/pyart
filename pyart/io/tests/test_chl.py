@@ -21,8 +21,7 @@ def test_time():
     assert 'units' in radar.time.keys()
     assert 'calendar' in radar.time.keys()
     assert 'data' in radar.time.keys()
-    print radar.time['units']
-    assert radar.time['units'] == 'seconds since 2012-07-05T18:01:23Z'
+    assert radar.time['units'] == 'seconds since 2012-07-05T23:01:23Z'
     assert radar.time['data'].shape == (2, )
     assert round(radar.time['data'][1]) == 21.
 
