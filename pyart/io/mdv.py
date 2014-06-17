@@ -71,8 +71,8 @@ def read_mdv(filename, field_names=None, additional_metadata=None,
 
     Notes
     -----
-    Currently this function can only read polar MDV files which are gzipped.
-    Support for cartesian and non-gzipped file are planned.
+    Currently this function can only read polar MDV files with fields
+    compressed with gzip or zlib.
 
     """
     # create metadata retrieval object
