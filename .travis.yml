@@ -42,6 +42,6 @@ install:
   - pip install nose-cov --use-mirrors
   - python setup.py build_ext --inplace
 
-script: xvfb-run nosetests -v --with-cov --cov pyart pyart
+script: xvfb-run nosetests -v -s --with-cov --cov pyart pyart
 after_success:
     - coveralls
