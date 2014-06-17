@@ -678,7 +678,17 @@ mdv_field_mapping = {
     'VEL_COR': corrected_velocity,
     'PHIDP_UNF': unfolded_differential_phase,
     'KDP_SOB': corrected_specific_differential_phase,
-    'DBZ_AC': corrected_reflectivity, }
+    'DBZ_AC': corrected_reflectivity,
+    # repeated integer moments
+    'DBZ': reflectivity,
+    'VEL': velocity,
+    'WIDTH': spectrum_width,
+    'ZDR': differential_reflectivity,
+    'RHOHV': cross_correlation_ratio,
+    'NCP': normalized_coherent_power,
+    'KDP': specific_differential_phase,
+    'PHIDP': differential_phase,
+}
 
 # CF/Radial files
 cfradial_field_mapping = {}
