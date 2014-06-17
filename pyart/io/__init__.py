@@ -16,6 +16,7 @@ from and write data to a number of file formats.
     read_mdv
     read_sigmet
     read_cfradial
+    read_chl
     read_nexrad_archive
     read_nexrad_cdm
     read_gamic
