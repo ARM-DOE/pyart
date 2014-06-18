@@ -15,6 +15,7 @@ from . import graph
 from . import map
 from . import testing
 from . import config
+from . import aux_io
 
 # root level functions
 from .config import load_config

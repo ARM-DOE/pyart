@@ -18,6 +18,7 @@ Documentation is broken down by directory and module.
     :maxdepth: 2
     
     io
+    aux_io
     config
     correct
     graph

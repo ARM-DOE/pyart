@@ -17,6 +17,7 @@ and private) aimed at developers please see the :ref:`developer`.
     :maxdepth: 1
 
     io
+    aux_io
     correct
     graph
     map
