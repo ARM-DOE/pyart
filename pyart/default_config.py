@@ -291,6 +291,12 @@ DEFAULT_METADATA = {
         'meta_group': 'instrument_parameters',
         'long_name': 'Unambiguous range'},
 
+    'pulse_width': {
+        'units': 'seconds',
+        'comments': 'Pulse width',
+        'meta_group': 'instrument_parameters',
+        'long_name': 'Pulse width'},
+
     # Metadata for radar_parameter sub-convention
     'radar_beam_width_h': {
         'units': 'degrees',
