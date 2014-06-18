@@ -1,7 +1,7 @@
 !    -*- f90 -*-
 ! Note: the context of this file is case sensitive.
 
-python module echo_steiner ! in 
+python module _echo_steiner ! in 
     interface  ! in :echo_steiner
         subroutine convective_radius(ze_bkg,area_relation,conv_rad) ! in :echo_steiner:echo_steiner.f90
             real(kind=8) intent(in) :: ze_bkg
@@ -33,7 +33,7 @@ python module echo_steiner ! in
             integer(kind=4) dimension(ny,nx),intent(out),depend(ny,nx) :: sclass
         end subroutine classify
     end interface 
-end python module echo_steiner
+end python module _echo_steiner
 
 ! This file was auto-generated with f2py (version:2).
 ! See http://cens.ioc.ee/projects/f2py2e/

@@ -277,3 +277,25 @@ def make_target_grid():
         'units': 'dBz'}
     grid.fields = {'reflectivity': rdic}
     return grid
+
+
+def make_storm_grid():
+    """
+    Make a sample Grid with a rectangular storm target.
+    """
+    grid_shape = (40, 50, 2)
+    grid_limits = ((-300000, 300000), (-400000, 400000), (0, 500))
+    grid = make_empty_grid(grid_shape, grid_limits)
+
+    fdata = np.ma.zeros((2, 50, 40), dtype='float32')
+    fdata[:] = np.ma.masked
+    fdata[:, 5:-5, 4:-4] = 20.
+    fdata[:, 10:-10, 8:-8] = 30.
+    fdata[:, 15:-15, 12:-12] = 60.
+    fdata[1] += 5
+    rdic = {
+        'data': fdata,
+        'long_name': 'reflectivity',
+        'units': 'dBz'}
+    grid.fields = {'reflectivity': rdic}
+    return grid

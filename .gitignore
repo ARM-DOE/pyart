@@ -87,6 +87,7 @@ Thumbs.db
 .coverage
 sandbox
 pyart/version.py
+pyart/retrieve/_echo_steinermodule.c
 
 # Documentation files #
 #######################

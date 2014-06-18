@@ -17,6 +17,7 @@ from . import map
 from . import testing
 from . import config
 from . import aux_io
+from . import retrieve
 
 # root level functions
 from .config import load_config

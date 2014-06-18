@@ -29,6 +29,7 @@ from .sample_files import NEXRAD_ARCHIVE_FILE, NEXRAD_CDM_FILE
 from .sample_files import NEXRAD_ARCHIVE_COMPRESSED_FILE
 from .sample_objects import make_empty_ppi_radar, make_target_radar
 from .sample_objects import make_single_ray_radar, make_velocity_aliased_radar
-from .sample_objects import make_empty_grid, make_target_grid
+from .sample_objects import make_empty_grid
+from .sample_objects import make_target_grid, make_storm_grid
 
 __all__ = [s for s in dir() if not s.startswith('_')]
