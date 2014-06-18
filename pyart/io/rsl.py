@@ -18,7 +18,7 @@ import numpy as np
 
 from ..config import FileMetadata, get_fillvalue
 from . import _rsl_interface
-from .radar import Radar
+from ..core.radar import Radar
 from .common import dms_to_d, make_time_unit_str
 
 

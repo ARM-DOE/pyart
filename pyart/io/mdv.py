@@ -28,7 +28,7 @@ import numpy as np
 from netCDF4 import date2num
 
 from ..config import FileMetadata, get_fillvalue
-from .radar import Radar
+from ..core.radar import Radar
 from .common import make_time_unit_str
 from .common import radar_coords_to_cart
 

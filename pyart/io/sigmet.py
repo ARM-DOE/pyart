@@ -20,8 +20,8 @@ import datetime
 import numpy as np
 
 from ..config import FileMetadata, get_fillvalue
+from ..core.radar import Radar
 from .common import make_time_unit_str
-from .radar import Radar
 from ._sigmetfile import SigmetFile, bin4_to_angle, bin2_to_angle
 
 SPEED_OF_LIGHT = 299793000.0

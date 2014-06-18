@@ -27,7 +27,8 @@ except:
 
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.mathjax',
               'sphinx.ext.autosummary', 'numpydoc', 'gen_rst']
-if os.environ['CI'] == 'true':      # don't include examples in CI builds
+# don't include examples in CI builds
+if 'CI' in os.environ and os.environ['CI'] == 'true':
     extensions.remove('gen_rst')
 
 # Add any paths that contain templates here, relative to this directory.
@@ -58,7 +59,8 @@ else:
     version = re.sub(r'^(\d+\.\d+).*?$', r'\1', version)
 # The full version, including alpha/beta/rc tags.
 release = pyart.__version__
-if os.environ['CI'] == 'true':      # full Py-ART version in CI built docs
+# full Py-ART version in CI built docs
+if 'CI' in os.environ and os.environ['CI'] == 'true':
     version = release
 
 # There are two options for replacing |today|: either, you set today to some

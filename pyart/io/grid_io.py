@@ -13,18 +13,13 @@ Reading and writing Grid objects.
     _read_grid_cf
     _read_grid_wrf
 
-.. autosummary::
-    :toctree: generated/
-    :template: dev_template.rst
-
-    Grid
-
 """
 
 from warnings import warn
 
 import netCDF4
 
+from ..core.grid import Grid
 from .cfradial import _ncvar_to_dict, _create_ncvar
 
 
@@ -218,72 +213,3 @@ def _read_grid_wrf(filename):
             # dimensionality of 1 are axes variables
             axes[var] = _ncvar_to_dict(ncvars[var])
     return Grid(fields, axes, {})
-
-
-class Grid:
-    """
-    An object for holding gridded Radar data.
-
-    Parameters
-    ----------
-    fields : dict
-        Dictionary of field dictionaries.
-    axes : dict
-        Dictionary of axes dictionaries.
-    metadata : dict
-        Dictionary of metadata.
-
-    Attributes
-    ----------
-    fields: dict
-        Dictionary of field dictionaries.
-    axes: dict
-        Dictionary of axes dictionaries.
-    metadata: dict
-        Dictionary of metadata.
-
-    """
-    def __init__(self, fields, axes, metadata):
-        """ Initalize object. """
-        self.fields = fields
-        self.metadata = metadata
-        self.axes = axes
-        return
-
-    def write(self, filename, format='NETCDF4'):
-        """
-        Write the the Grid object to a NetCDF file.
-
-        Parameters
-        ----------
-        filename : str
-            Filename to save to.
-        format : str, optional
-            NetCDF format, one of 'NETCDF4', 'NETCDF4_CLASSIC',
-            'NETCDF3_CLASSIC' or 'NETCDF3_64BIT'.
-
-        """
-        write_grid(filename, self, format=format)
-
-    def add_field(self, field_name, field_dict):
-        """ Add field to Grid object.
-
-        Parameters
-        ----------
-        field_name : str
-            Name of field to add.
-        field_dict : dict
-            Dictionary containing field data and metadata.
-        """
-
-        nz, ny, nx = self.fields[self.fields.keys[0]]['data'].shape
-
-        if 'data' not in field_dict:
-            raise KeyError('Field dictionary must contain a "data" key')
-        if field_name in self.fields:
-            raise ValueError('A field named %s already exists' % (field_name))
-        if field_dict['data'].shape != (nz, ny, nx):
-            raise ValueError('Field has invalid shape')
-
-        self.fields[field_name] = field_dict
-        return

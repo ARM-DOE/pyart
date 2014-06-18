@@ -9,12 +9,14 @@ from .version import git_revision as __git_revision__
 from .version import version as __version__
 
 # import subpackages
+from . import core
 from . import io
 from . import correct
 from . import graph
 from . import map
 from . import testing
 from . import config
+from . import aux_io
 
 # root level functions
 from .config import load_config
