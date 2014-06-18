@@ -85,7 +85,7 @@ def read_chl(filename, field_names=None, additional_metadata=None,
     # time
     time = filemetadata('time')
     tdata = np.array(chl_file.time)
-    min_time = tdata.min()
+    min_time = np.floor(tdata.min())
     time['data'] = (tdata - min_time).astype('float64')
     time['units'] = make_time_unit_str(datetime.utcfromtimestamp(min_time))
 
@@ -319,7 +319,7 @@ class ChlFile(object):
         """ Parse a processor_info block.  Set dr attribute. """
         packet = _unpack_structure(payload, PROCESSOR_INFO)
         self.gate_spacing = packet['gate_spacing']
-        self.first_gate_offset = packet['range_offset']  # XXX is the correct?
+        self.first_gate_offset = packet['range_offset']
         self.processor_info = packet.copy()
         return packet
 
@@ -462,11 +462,16 @@ RADAR_INFO_T = (
     ('altitude', 'f'),
     ('beamwidth', 'f'),
     ('wavelength_cm', 'f'),
+    ('unused1', 'f'),
+    ('unused2', 'f'),
+    ('unused3', 'f'),
+    ('unused4', 'f'),
     ('gain_ant_h', 'f'),
     ('gain_ant_v', 'f'),
     ('zdr_cal_base', 'f'),
     ('phidp_rot', 'f'),
     ('base_radar_constant', 'f'),
+    ('unused5', 'f'),
     ('power_measurement_loss_h', 'f'),
     ('power_measurement_loss_v', 'f'),
     ('zdr_cal_base_vhs', 'f'),
@@ -474,11 +479,6 @@ RADAR_INFO_T = (
     ('test_power_v', 'f'),
     ('dc_loss_h', 'f'),
     ('dc_loss_v', 'f'),
-    ('unknown_0', 'f'),
-    ('unknown_1', 'f'),
-    ('unknown_2', 'f'),
-    ('unknown_3', 'f'),
-    ('unknown_4', 'f'),
 )
 
 PROCESSOR_INFO = (
@@ -496,12 +496,12 @@ PROCESSOR_INFO = (
     ('range_stop', 'f'),
     ('max_gate', 'I'),
     ('test_power', 'f'),
+    ('unused1', 'f'),
+    ('unused2', 'f'),
     ('test_pulse_range', 'f'),
     ('test_pulse_length', 'f'),
     ('prt2', 'f'),
     ('range_offset', 'f'),
-    ('unknown_0', 'f'),
-    ('unknown_1', 'f'),
 )
 
 SCAN_SEG = (
