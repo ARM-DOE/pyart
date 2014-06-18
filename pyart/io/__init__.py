@@ -22,11 +22,6 @@ from and write data to a number of file formats.
     write_cfradial
     read_grid
     write_grid
-    is_vpt
-    to_vpt
-
-    Radar
-    Grid
 
 """
 
@@ -41,8 +36,7 @@ from .chl import read_chl
 from .cfradial import read_cfradial, write_cfradial
 from .nexrad_archive import read_nexrad_archive
 from .nexrad_cdm import read_nexrad_cdm
-from .radar import Radar, is_vpt, to_vpt
-from .grid import read_grid, write_grid, Grid
+from .grid_io import read_grid, write_grid
 from .auto_read import read
 
 __all__ = [s for s in dir() if not s.startswith('_')]

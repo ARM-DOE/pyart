@@ -17,6 +17,7 @@ Documentation is broken down by directory and module.
 .. toctree::
     :maxdepth: 2
     
+    core
     io
     aux_io
     config

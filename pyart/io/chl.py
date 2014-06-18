@@ -24,7 +24,7 @@ from datetime import datetime
 import numpy as np
 
 from ..config import FileMetadata, get_fillvalue
-from .radar import Radar
+from ..core.radar import Radar
 from .common import make_time_unit_str
 
 

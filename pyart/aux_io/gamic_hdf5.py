@@ -20,7 +20,7 @@ import numpy as np
 
 from ..config import FileMetadata
 from ..io.common import make_time_unit_str
-from ..io.radar import Radar
+from ..core.radar import Radar
 
 
 def read_gamic(filename, field_names=None, additional_metadata=None,
