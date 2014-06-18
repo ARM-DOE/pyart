@@ -16,7 +16,9 @@ and private) aimed at developers please see the :ref:`developer`.
 .. toctree::
     :maxdepth: 1
 
+    core
     io
+    aux_io
     correct
     graph
     map

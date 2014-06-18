@@ -12,6 +12,7 @@ are incomplete, they should only be used for testing, not production.
     MDV_RHI_FILE
     CFRADIAL_PPI_FILE
     CFRADIAL_RHI_FILE
+    CHL_RHI_FILE
     SIGMET_PPI_FILE
     SIGMET_RHI_FILE
     NEXRAD_ARCHIVE_FILE
@@ -29,6 +30,7 @@ MDV_PPI_FILE = os.path.join(DATA_PATH, 'example_mdv_ppi.mdv')
 MDV_RHI_FILE = os.path.join(DATA_PATH, 'example_mdv_rhi.mdv')
 CFRADIAL_PPI_FILE = os.path.join(DATA_PATH, 'example_cfradial_ppi.nc')
 CFRADIAL_RHI_FILE = os.path.join(DATA_PATH, 'example_cfradial_rhi.nc')
+CHL_RHI_FILE = os.path.join(DATA_PATH, 'example_chl_rhi.chl')
 SIGMET_PPI_FILE = os.path.join(DATA_PATH, 'example_sigmet_ppi.sigmet')
 SIGMET_RHI_FILE = os.path.join(DATA_PATH, 'example_sigmet_rhi.sigmet')
 NEXRAD_ARCHIVE_FILE = os.path.join(DATA_PATH, 'example_nexrad_archive.bz2')

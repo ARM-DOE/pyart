@@ -20,8 +20,8 @@ import datetime
 import numpy as np
 
 from ..config import FileMetadata, get_fillvalue
+from ..core.radar import Radar
 from .common import make_time_unit_str
-from .radar import Radar
 from ._sigmetfile import SigmetFile, bin4_to_angle, bin2_to_angle
 
 SPEED_OF_LIGHT = 299793000.0
@@ -212,7 +212,7 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
     fixed_angle = filemetadata('fixed_angle')
     fa = [d['fixed_angle'] for d in
           sigmetfile.ingest_data_headers[first_data_type]]
-    fixed_angle['data'] = bin2_to_angle(np.array(fa, dtype='float32'))
+    fixed_angle['data'] = bin2_to_angle(np.array(fa)).astype('float32')
 
     # azimuth
     az0 = sigmet_metadata[first_data_type]['azimuth_0']
@@ -235,6 +235,9 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
     prt_mode = filemetadata('prt_mode')
     nyquist_velocity = filemetadata('nyquist_velocity')
     unambiguous_range = filemetadata('unambiguous_range')
+    beam_width_h = filemetadata('radar_beam_width_h')
+    beam_width_v = filemetadata('radar_beam_width_v')
+    pulse_width = filemetadata('pulse_width')
 
     trays = nsweeps * nrays     # this is correct even with missing rays
     prt_value = 1. / sigmetfile.product_hdr['product_end']['prf']
@@ -250,10 +253,22 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
     wavelength_cm = sigmetfile.product_hdr['product_end']['wavelength']
     nv_value = wavelength_cm / (10000.0 * 4.0 * prt_value)
     nyquist_velocity['data'] = nv_value * np.ones(trays, dtype='float32')
+    beam_width_h['data'] = np.array([bin4_to_angle(
+        task_config['task_misc_info']['horizontal_beamwidth'])],
+        dtype='float32')
+    beam_width_v['data'] = np.array([bin4_to_angle(
+        task_config['task_misc_info']['vertical_beamwidth'])],
+        dtype='float32')
+    pulse_width['data'] = np.array(
+        [task_config['task_dsp_info']['pulse_width'] * 1e-5] *
+        len(time['data']), dtype='float32')
 
     instrument_parameters = {'unambiguous_range': unambiguous_range,
                              'prt_mode': prt_mode, 'prt': prt,
-                             'nyquist_velocity': nyquist_velocity}
+                             'nyquist_velocity': nyquist_velocity,
+                             'radar_beam_width_h': beam_width_h,
+                             'radar_beam_width_v': beam_width_v,
+                             'pulse_width': pulse_width}
 
     return Radar(
         time, _range, fields, metadata, scan_type,

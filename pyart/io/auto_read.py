@@ -24,6 +24,7 @@ from .cfradial import read_cfradial
 from .sigmet import read_sigmet
 from .nexrad_archive import read_nexrad_archive
 from .nexrad_cdm import read_nexrad_cdm
+from .chl import read_chl
 
 
 def read(filename, use_rsl=False, **kwargs):
@@ -89,6 +90,8 @@ def read(filename, use_rsl=False, **kwargs):
             return read_cfradial(filename, **kwargs)    # CF/Radial
     if filetype == 'WSR88D':
         return read_nexrad_archive(filename, **kwargs)
+    if filetype == 'CHL':
+        return read_chl(filename, **kwargs)
 
     # RSL supported formats which are also supported natively in Py-ART
     if filetype == "SIGMET":
@@ -160,6 +163,14 @@ def determine_filetype(filename):
     mdv_signature = '\x00\x00\x03\xf8\x00\x007>\x00\x00\x00\x01'
     if begin[:12] == mdv_signature:
         return "MDV"
+
+    # CSU-CHILL
+    # begins with ARCH_ID_FILE_HDR = 0x5aa80004
+    # import struct
+    # struct.pack('<i', 0x5aa80004)
+    chl_signature = '\x04\x00\xa8Z'
+    if begin[:4] == chl_signature:
+        return "CHL"
 
     # NetCDF3, read with read_cfradial
     if begin[:3] == "CDF":

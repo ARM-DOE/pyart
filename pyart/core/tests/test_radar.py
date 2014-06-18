@@ -1,4 +1,4 @@
-""" Unit Tests for Py-ART's io/radar.py module. """
+""" Unit Tests for Py-ART's core/radar.py module. """
 
 import sys
 from io import BytesIO
@@ -83,7 +83,7 @@ def test_extract_sweeps_errors():
 
 def test_radar_creation():
     radar = pyart.testing.make_target_radar()
-    assert isinstance(radar, pyart.io.Radar)
+    assert isinstance(radar, pyart.core.Radar)
 
 
 def test_add_field():
@@ -114,6 +114,23 @@ def test_add_field_like():
     assert 'test' in radar.fields
     assert 'data' in radar.fields['test']
     assert radar.fields['test']['units'] == 'dBZ'
+
+
+def test_add_field_like_bug():
+    # tests for bug where adding a field over-writes 'like' field
+    # data/metadata.
+    radar = pyart.testing.make_target_radar()
+    data = np.ones((360, 50))
+    radar.add_field_like('reflectivity', 'test', data)
+    radar.fields['test']['units'] = 'fake'
+
+    # check field added
+    assert radar.fields['test']['units'] == 'fake'
+    assert radar.fields['test']['data'][0, 0] == 1
+
+    # check original field
+    assert radar.fields['reflectivity']['units'] == 'dBZ'
+    assert radar.fields['reflectivity']['data'][0, 0] == 0
 
 
 def test_add_field_like_errors():
@@ -154,9 +171,9 @@ def test_info_errors():
 
 def test_is_vpt():
     radar = pyart.testing.make_empty_ppi_radar(10, 36, 3)
-    assert not pyart.io.is_vpt(radar)
-    pyart.io.to_vpt(radar)
-    assert pyart.io.is_vpt(radar)
+    assert not pyart.core.is_vpt(radar)
+    pyart.core.to_vpt(radar)
+    assert pyart.core.is_vpt(radar)
 
 
 def test_to_vpt():
@@ -165,8 +182,8 @@ def test_to_vpt():
     radar.instrument_parameters = {
         'prt_mode': {'data': np.array(['fixed'] * 3)}
     }
-    pyart.io.to_vpt(radar)
-    assert pyart.io.is_vpt(radar)
+    pyart.core.to_vpt(radar)
+    assert pyart.core.is_vpt(radar)
     assert radar.nsweeps == 1
     assert radar.azimuth['data'][10] == 0.0
     assert radar.elevation['data'][0] == 90.0
@@ -177,8 +194,8 @@ def test_to_vpt():
     radar.instrument_parameters = {
         'prt_mode': {'data': np.array(['fixed'] * 3)}
     }
-    pyart.io.to_vpt(radar, False)
-    assert pyart.io.is_vpt(radar)
+    pyart.core.to_vpt(radar, False)
+    assert pyart.core.is_vpt(radar)
     assert radar.nsweeps == 108
     assert radar.azimuth['data'][10] == 10.0
     assert radar.elevation['data'][0] == 90.0

@@ -5,18 +5,18 @@ The values for a number of Py-ART parameters and the default metadata created
 when reading files, correcting fields, etc. is controlled by this single
 Python configuration file.
 
-Py-ART's configuration can be modified by setting the environmental
-variable PYART_CONFIG to point to a configuration file with formatting similar
-to this file.
+Py-ART's configuration can be modified by setting the environment variable
+PYART_CONFIG to point to a configuration file with formatting similar to this
+file.
 
 The recommended method for changing these defaults is for users to copy this
 file into their home directory, rename it to .pyart_config.py, make any
 desired changes, and adjust their login scripts to set the PYART_CONFIG
-environmental variable to point to .pyart_config.py in their home directory.
+environment variable to point to .pyart_config.py in their home directory.
 
 Py-ART's configuration can also be modified within a script or shell session
-using the load_config functions, such modification will last until a the end
-of the script/session or until a new configuration is loaded.
+using the load_config functions, such modification will last until the end of
+the script/session or until a new configuration is loaded.
 
 """
 
@@ -26,7 +26,7 @@ of the script/session or until a new configuration is loaded.
 #
 # Adjust the values of the variable (right hand side of the equal sign) in
 # this section for an easy method of customizing Py-ART.  Do not change the
-# variables names (the left hand side of the equal sign).  More advanced
+# variable names (the left hand side of the equal sign). More advanced
 # settings are based upon these variables.  Most users will find that
 # adjusting this section is all that is needed.
 ##############################################################################
@@ -39,26 +39,26 @@ fill_value = -9999.0
 # and retrieval algorithms. The comments in this section provide additional
 # information about the fields in that section.
 
-# radar reflectivity fields,
+# Radar reflectivity fields, DZ
 reflectivity = 'reflectivity'
 corrected_reflectivity = 'corrected_reflectivity'
 total_power = 'total_power'
 
-# mean doppler velocity fields, VEL
+# Mean Doppler velocity fields, VEL
 velocity = 'velocity'
 corrected_velocity = 'corrected_velocity'
 
-# spectral width field, SW
+# Spectral width fields, SW
 spectrum_width = 'spectrum_width'
 
-# differential reflectivity fields, ZDR
+# Differential reflectivity fields, ZDR
 differential_reflectivity = 'differential_reflectivity'
 corrected_differential_reflectivity = 'corrected_differential_reflectivity'
 
-# cross correlation ratio, correlation coefficient, RhoHV
+# Cross correlation ratio, correlation coefficient, RhoHV
 cross_correlation_ratio = 'cross_correlation_ratio'
 
-# normalized coherent power, signal quality index, SQI, NCP
+# Normalized coherent power, signal quality index, SQI, NCP
 normalized_coherent_power = 'normalized_coherent_power'
 
 # Differential phase shift, PhiDP
@@ -72,8 +72,8 @@ corrected_specific_differential_phase = 'corrected_specific_differential_phase'
 
 # Linear depolarization ration (h - horizontal, v - vertical), LDR
 linear_depolarization_ratio = 'linear_polarization_ratio'
-linear_depolarization_ratio_h = 'linear_polarization_ratio_h'
-linear_depolarization_ratio_v = 'linear_polarization_ratio_v'
+linear_depolarization_ratio_h = 'linear_depolarization_ratio_h'
+linear_depolarization_ratio_v = 'linear_depolarization_ratio_v'
 
 # Misc fields
 signal_to_noise_ratio = 'signal_to_noise_ratio'
@@ -82,6 +82,11 @@ radar_estimated_rain_rate = 'radar_estimated_rain_rate'
 radar_echo_classification = 'radar_echo_classification'
 specific_attenuation = 'specific_attenuation'
 
+# Wind retrieval fields
+eastward_wind_component = 'eastward_wind_component'
+northward_wind_component = 'northward_wind_component'
+vertical_wind_component = 'vertical_wind_component'
+
 # End of Simple Configuration section
 
 ##############################################################################
@@ -89,7 +94,7 @@ specific_attenuation = 'specific_attenuation'
 # Advanced Configuration
 #
 # Most users will not want to make any changes in this section.  For users
-# who want a more fined grained control over Py-ART's configuration this
+# who want a more fine-grained control over Py-ART's configuration this
 # section provides access to these controls.  The layout of this section can
 # be changed, the only requirement for a valid configuration file is that
 # the ALL CAPITALIZED variable must must be present with the formatting
@@ -114,18 +119,18 @@ specific_attenuation = 'specific_attenuation'
 FILL_VALUE = fill_value     # the default fill value for masked arrays and
                             # the _FillValue key.
 
-# The DEFAULT_FIELD_NAMES controls the field names which are used in
-# by the correction and retrieval algorithms in Py-ART.  The keys of the
-# dictionary are "internal" names which cannot change, the values are the field
-# names which will be used in the algorithms by default.
-# which will be used.  For best results use the names defined by the variables
-# in simple configuration section which are also used in the DEFAULT_METADATA
-# and FIELD_MAPPINGS variable.  If you choose to change a field name
-# the names should also be changed in the DEFAULT_METADATA and FIELD_MAPPINGS
-# variable. This is not required but highly suggested.
+# The DEFAULT_FIELD_NAMES controls the field names which are used in the
+# correction and retrieval algorithms in Py-ART. The keys of the dictionary
+# are "internal" names which cannot change, the values are the field names
+# which will be used in the algorithms by default. For best results use the
+# names defined by the variables in simple configuration section which are
+# also used in the DEFAULT_METADATA and FIELD_MAPPINGS variable. If you
+# choose to change a field name the names should also be changed in the
+# DEFAULT_METADATA and FIELD_MAPPINGS variable. This is not required but
+# highly suggested.
 
 DEFAULT_FIELD_NAMES = {
-    # internal field name (do not change): field name used (can change)
+    # Internal field name (do not change): field name used (can change)
     'reflectivity': reflectivity,
     'corrected_reflectivity': corrected_reflectivity,
     'total_power': total_power,
@@ -151,23 +156,26 @@ DEFAULT_FIELD_NAMES = {
     'radar_estimated_rain_rate': radar_estimated_rain_rate,
     'radar_echo_classification': radar_echo_classification,
     'specific_attenuation': specific_attenuation,
+    'eastward_wind_component': eastward_wind_component,
+    'northward_wind_component': northward_wind_component,
+    'vertical_wind_component': vertical_wind_component,
 }
 
 
 ##############################################################################
 # Default metadata
 #
-# The DEFAULT_METADATA dictionary contains dictionaries which provide
-# the default radar attribute and field metadata.  When reading in a file
-# with Py-ART the FILE_SPECIFIC_METADATA variable is first queued for a
-# metadata dictionary, if it is not found then the metadata in
-# DEFAULT_METADATA is utilized.
+# The DEFAULT_METADATA dictionary contains dictionaries which provide the
+# default radar attribute and field metadata. When reading in a file with
+# Py-ART the FILE_SPECIFIC_METADATA variable is first queued for a metadata
+# dictionary, if it is not found then the metadata in DEFAULT_METADATA is
+# utilized.
 ##############################################################################
 
 DEFAULT_METADATA = {
 
-    # metadata for radar attributes
-    # these closely follow the CF/Radial standard
+    # Metadata for radar attributes. These closely follow the CF/Radial
+    # standard
     'azimuth': {
         'units': 'degrees',
         'standard_name': 'beam_azimuth_angle',
@@ -225,7 +233,7 @@ DEFAULT_METADATA = {
         'comment': '',
         'instrument_name': ''},
 
-    # metadata for radar sweep information dictionaries
+    # Metadata for radar sweep information dictionaries
     'sweep_start_ray_index': {
         'long_name': 'Index of first ray in sweep, 0-based',
         'units': 'count'},
@@ -239,7 +247,7 @@ DEFAULT_METADATA = {
         'units': 'degrees',
         'standard_name': 'target_fixed_angle'},
 
-    # metadata for radar location attributes
+    # Metadata for radar location attributes
     'latitude': {
         'long_name': 'Latitude',
         'standard_name': 'Latitude',
@@ -256,7 +264,7 @@ DEFAULT_METADATA = {
         'units': 'meters',
         'positive': 'up'},
 
-    # metadata for instrument_parameter dictionary
+    # Metadata for instrument_parameter dictionary
     'prt_mode': {
         'comments': ('Pulsing mode Options are: "fixed", "staggered", '
                      '"dual". Assumed "fixed" if missing.'),
@@ -283,7 +291,24 @@ DEFAULT_METADATA = {
         'meta_group': 'instrument_parameters',
         'long_name': 'Unambiguous range'},
 
-    # reflectivity fields
+    'pulse_width': {
+        'units': 'seconds',
+        'comments': 'Pulse width',
+        'meta_group': 'instrument_parameters',
+        'long_name': 'Pulse width'},
+
+    # Metadata for radar_parameter sub-convention
+    'radar_beam_width_h': {
+        'units': 'degrees',
+        'meta_group': 'radar_parameters',
+        'long_name': 'Antenna beam width H polarization'},
+
+    'radar_beam_width_v': {
+        'units': 'degrees',
+        'meta_group': 'radar_parameters',
+        'long_name': 'Antenna beam width V polarization'},
+
+    # Reflectivity fields
     reflectivity: {
         'units': 'dBZ',
         'standard_name': 'equivalent_reflectivity_factor',
@@ -302,7 +327,7 @@ DEFAULT_METADATA = {
         'long_name': 'Total power',
         'coordinates': 'elevation azimuth range'},
 
-    # velocity fields
+    # Velocity fields
     velocity: {
         'units': 'meters_per_second',
         'standard_name': 'radial_velocity_of_scatterers_away_from_instrument',
@@ -316,14 +341,14 @@ DEFAULT_METADATA = {
         'long_name': 'Corrected mean doppler velocity',
         'coordinates': 'elevation azimuth range'},
 
-    # spectrum width fields
+    # Spectrum width fields
     spectrum_width: {
         'units': 'meters_per_second',
         'standard_name': 'doppler_spectrum_width',
         'long_name': 'Doppler spectrum width',
         'coordinates': 'elevation azimuth range'},
 
-    # Dual Pol fields
+    # Dual-polarization fields
     differential_reflectivity: {
         'units': 'dB',
         'standard_name': 'log_differential_reflectivity_hv',
@@ -386,7 +411,7 @@ DEFAULT_METADATA = {
         'coordinates': 'elevation azimuth range'},
 
 
-    # depolarization ratio fields
+    # Depolarization ratio fields
     linear_depolarization_ratio: {
         'units': 'dB',
         'standard_name': 'log_linear_depolarization_ratio_hv',
@@ -405,7 +430,7 @@ DEFAULT_METADATA = {
         'long_name': 'Linear depolarization ratio vertical',
         'coordinates': 'elevation azimuth range'},
 
-    # misc. fields
+    # Misc fields
     signal_to_noise_ratio: {
         'units': 'dB',
         'standard_name': 'signal_to_noise_ratio',
@@ -437,6 +462,22 @@ DEFAULT_METADATA = {
         'valid_min': 0.0,
         'valid_max': 1.0,
         'coordinates': 'elevation azimuth range'},
+
+    # Wind retrieval fields
+    eastward_wind_component: {
+        'units': 'meters_per_second',
+        'standard_name': 'eastward_wind_component',
+        'long_name': 'Eastward wind component'},
+
+    northward_wind_component: {
+        'units': 'meters_per_second',
+        'standard_name': 'northward_wind_component',
+        'long_name': 'Northward wind component'},
+
+    vertical_wind_component: {
+        'units': 'meters_per_second',
+        'standard_name': 'vertical_wind_component',
+        'long_name': 'Vertical wind component'},
 }
 
 
@@ -513,13 +554,17 @@ mdv_metadata = {}
 # Metadata for RSL files
 rsl_metadata = {}
 
+# Metadata for CSU-CHILL, CHL files
+chl_metadata = {}
+
 FILE_SPECIFIC_METADATA = {      # Required
     'sigmet': sigmet_metadata,
     'nexrad_archive': nexrad_metadata,
     'nexrad_cdm': nexrad_metadata,
     'cfradial': cfradial_metadata,
     'mdv': mdv_metadata,
-    'rsl': rsl_metadata
+    'rsl': rsl_metadata,
+    'chl': chl_metadata,
 }
 
 ##############################################################################
@@ -643,7 +688,17 @@ mdv_field_mapping = {
     'VEL_COR': corrected_velocity,
     'PHIDP_UNF': unfolded_differential_phase,
     'KDP_SOB': corrected_specific_differential_phase,
-    'DBZ_AC': corrected_reflectivity, }
+    'DBZ_AC': corrected_reflectivity,
+    # repeated integer moments
+    'DBZ': reflectivity,
+    'VEL': velocity,
+    'WIDTH': spectrum_width,
+    'ZDR': differential_reflectivity,
+    'RHOHV': cross_correlation_ratio,
+    'NCP': normalized_coherent_power,
+    'KDP': specific_differential_phase,
+    'PHIDP': differential_phase,
+}
 
 # CF/Radial files
 cfradial_field_mapping = {}
@@ -692,6 +747,44 @@ rsl_field_mapping = {
     'S3': None,                                 # Spectrum width cut 3
 }
 
+chl_field_mapping = {
+    # Chill field name : radar field name
+    'Z': reflectivity,
+    'V': velocity,
+    'W': spectrum_width,
+    'ZDR': differential_reflectivity,
+    'LDRH': linear_depolarization_ratio_h,
+    'LDRV': linear_depolarization_ratio_v,
+    '\xce\xa8 DP': differential_phase,
+    'KDP': specific_differential_phase,
+    '\xcf\x81 HV': cross_correlation_ratio,
+    'NCP': normalized_coherent_power,
+    # These fields are not mapped by default
+    'H Re(lag 1)': None,    # Real part of lag-1 correlation, H Channel
+    'V Re(lag 2)': None,    # Real part of lag-2 correlation, V Channel
+    'VAvgQ': None,          # Average Q, V Channel
+    'V Im(lag 1)': None,    # Imaginary part of lag-1 correlation, V Channel
+    'HAvgQ': None,          # Average Q, H Channel
+    'H Im(lag 2)': None,    # Imaginary part of lag-2 correlation, H Channel
+    'V lag 0': None,        # Absolute value of lag-0 correlation, V Channel
+    'H lag 0': None,        # Absolute value of lag-0 correlation, H Channel
+    'H lag 0 cx': None,     # Absolute value of lag-0 cross correlation,
+                            # H Channel
+    'H Im(lag 1)': None,    # Imaginary part of lag-1 correlation, H Channel
+    'H Re(lag 2)': None,    # Real part of lag-2 correlation, H Channel
+    'V lag 0 cx': None,     # Absolute value of lag-0 cross correlation,
+                            # V Channel
+    'V Re(lag 1)': None,    # Real part of lag-1 correlation, V Channel
+    'V Im(lag 2)': None,    # Imaginary part of lag-2 correlation, V Channel
+    'HV lag 0 I': None,     # Real part of cross channel correlation at lag-0
+    'HV lag 0 Q': None,     # Imaginary part of cross channel correlation at
+                            # lag-0
+    'VAvgI': None,          # Average I, V Channel
+    'HAvgI': None,          # Average I, H Channel
+    '\xcf\x81 HCX': None,   # H Co to Cross Correlation
+    '\xcf\x81 VCX': None,   # V Co to Cross Correlation
+}
+
 FIELD_MAPPINGS = {                  # Required variable
     'sigmet': sigmet_field_mapping,
     'nexrad_archive': nexrad_archive_field_mapping,
@@ -699,4 +792,5 @@ FIELD_MAPPINGS = {                  # Required variable
     'cfradial': cfradial_field_mapping,
     'mdv': mdv_field_mapping,
     'rsl': rsl_field_mapping,
+    'chl': chl_field_mapping,
 }

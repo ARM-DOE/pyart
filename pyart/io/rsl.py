@@ -18,7 +18,7 @@ import numpy as np
 
 from ..config import FileMetadata, get_fillvalue
 from . import _rsl_interface
-from .radar import Radar
+from ..core.radar import Radar
 from .common import dms_to_d, make_time_unit_str
 
 
@@ -119,6 +119,8 @@ def read_rsl(filename, field_names=None, additional_metadata=None,
 
         rsl_field_name = VOLUMENUM2RSLNAME[volume_num]
         field_name = filemetadata.get_field_name(rsl_field_name)
+        if field_name is None:
+            continue
 
         # extract the field and mask
         data = rslfile.get_volume_array(volume_num)
@@ -179,16 +181,24 @@ def read_rsl(filename, field_names=None, additional_metadata=None,
     prt_mode = filemetadata('prt_mode')
     nyquist_velocity = filemetadata('nyquist_velocity')
     unambiguous_range = filemetadata('unambiguous_range')
+    beam_width_h = filemetadata('radar_beam_width_h')
+    beam_width_v = filemetadata('radar_beam_width_v')
 
     pm_data, nv_data, pr_data, ur_data = first_volume.get_instr_params()
     prt['data'] = pr_data
     prt_mode['data'] = pm_data
     nyquist_velocity['data'] = nv_data
     unambiguous_range['data'] = ur_data
+    beam_width_h['data'] = np.array([first_sweep.horz_half_bw * 2.],
+                                    dtype='float32')
+    beam_width_v['data'] = np.array([first_sweep.vert_half_bw * 2.],
+                                    dtype='float32')
 
     instrument_parameters = {'unambiguous_range': unambiguous_range,
                              'prt_mode': prt_mode, 'prt': prt,
-                             'nyquist_velocity': nyquist_velocity}
+                             'nyquist_velocity': nyquist_velocity,
+                             'radar_beam_width_h': beam_width_h,
+                             'radar_beam_width_v': beam_width_v}
 
     return Radar(
         time, _range, fields, metadata, scan_type,
@@ -236,6 +246,14 @@ VOLUMENUM2RSLNAME = {
     33: 'S2',
     34: 'V3',
     35: 'S3',
+    36: 'CR',
+    37: 'CC',
+    38: 'PR',
+    39: 'SD',
+    40: 'ZZ',
+    41: 'RD',
+    42: 'ET',
+    43: 'EZ',
 }
 
 RSLNAME2VOLUMENUM = dict([(v, k) for k, v in VOLUMENUM2RSLNAME.iteritems()])

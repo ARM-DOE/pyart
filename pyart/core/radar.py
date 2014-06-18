@@ -1,16 +1,21 @@
 """
-pyart.io.radar
-==============
+pyart.core.radar
+================
 
 A general central radial scanning (or dwelling) instrument class.
 
 .. autosummary::
     :toctree: generated/
 
-    Radar
     join_radar
     is_vpt
     to_vpt
+
+.. autosummary::
+    :toctree: generated/
+    :template: dev_template.rst
+
+    Radar
 
 
 """
@@ -22,7 +27,7 @@ import sys
 import numpy as np
 
 
-class Radar:
+class Radar(object):
     """
     A class for storing antenna coordinate radar data.
 
@@ -316,7 +321,10 @@ class Radar:
         if existing_field_name not in self.fields:
             err = 'field %s does not exist in object' % (existing_field_name)
             raise ValueError(err)
-        dic = self.fields[existing_field_name]
+        dic = {}
+        for k, v in self.fields[existing_field_name].items():
+            if k != 'data':
+                dic[k] = v
         dic['data'] = data
         return self.add_field(field_name, dic)
 

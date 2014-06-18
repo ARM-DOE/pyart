@@ -20,8 +20,8 @@ import numpy as np
 
 from .sample_files import _EXAMPLE_RAYS_FILE
 from ..config import get_metadata
-from ..io.radar import Radar
-from ..io.grid import Grid
+from ..core.radar import Radar
+from ..core.grid import Grid
 
 
 def make_empty_ppi_radar(ngates, rays_per_sweep, nsweeps):
@@ -108,9 +108,11 @@ def make_target_radar():
     return radar
 
 
-def make_velocity_aliased_radar():
+def make_velocity_aliased_radar(alias=True):
     """
     Return a PPI radar with a target like reflectivity field.
+
+    Set alias to False to return a de-aliased radar.
     """
     radar = make_empty_ppi_radar(50, 360, 1)
     radar.range['meters_between_gates'] = 1.0
@@ -135,7 +137,8 @@ def make_velocity_aliased_radar():
     vdata[:14, 14:27] = vdata[:14, 12::-1]  # left/right flip
     vdata[14:27] = vdata[12::-1, :]         # top/bottom flip
     aliased = np.where(vdata > 10.0)
-    vdata[aliased] += -20.
+    if alias:
+        vdata[aliased] += -20.
     fields['velocity']['data'] = vdata
 
     radar.fields = fields

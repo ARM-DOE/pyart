@@ -30,7 +30,7 @@ import scipy.spatial
 from ..config import get_fillvalue, get_field_name
 from ..graph.common import corner_to_point
 from ..io.common import radar_coords_to_cart
-from ..io.grid import Grid
+from ..core.grid import Grid
 from ._load_nn_field_data import _load_nn_field_data
 from .ckdtree import cKDTree
 from .ball_tree import BallTree

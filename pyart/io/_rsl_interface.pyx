@@ -56,19 +56,24 @@ cpdef copy_volume(_RslVolume volume):
     return rslvolume
 
 
-cpdef create_volume(np.ndarray[np.float32_t, ndim=3] arr, int vol_num=1):
+cpdef create_volume(
+        np.ndarray[np.float32_t, ndim=2] arr,
+        np.ndarray[np.int32_t, ndim=1] rays_per_sweep,
+        int vol_num=1):
     """
-    create_volume(arr)
+    create_volume(arr, rays_per_sweep, vol_num=1)
 
-    Create a _RslVolume object from a 3D float32 array.
+    Create a _RslVolume object from a 2D float32 array.
 
     No headers parameters except nsweeps, nrays and nbins are not set in the
     resulting _RslVolume object.
 
     Parameters
     ----------
-    arr : array, 3D, float32
-        Three dimensional float32 array.
+    arr : array, 2D, float32
+        Two dimensional float32 array.
+    rays_per_sweep: array, 1D, int32
+        Array listing number of rays in each sweep.
     vol_num : int
         Volume number used to set f and invf in the header.  The default is
         for velocity fields.  Useful values are 0 for reflectivity and
@@ -109,33 +114,35 @@ cpdef create_volume(np.ndarray[np.float32_t, ndim=3] arr, int vol_num=1):
     cdef _rsl_h.Volume * volume
     cdef _rsl_h.Sweep * sweep
     cdef _rsl_h.Ray * ray
+    cdef int ray_i
 
-    nsweeps = arr.shape[0]
-    nrays = arr.shape[1]
-    nbins = arr.shape[2]
+    nsweeps = rays_per_sweep.shape[0]
+    nbins = arr.shape[1]
 
     volume = _rsl_h.RSL_new_volume(nsweeps)
     volume.h.nsweeps = nsweeps
 
+    ray_index = 0
     for nsweep in range(nsweeps):
+        nrays = rays_per_sweep[nsweep]
         sweep = _rsl_h.RSL_new_sweep(nrays)
-        sweep.h.nrays = nrays
         volume.sweep[nsweep] = sweep
-
+        sweep.h.nrays = nrays
         for nray in range(nrays):
             ray = _rsl_h.RSL_new_ray(nbins)
             sweep.ray[nray] = ray
             ray.h.nbins = nbins
             ray.h.f = RSL_f_list[vol_num]
             ray.h.invf = RSL_invf_list[vol_num]
-
             for nbin in range(nbins):
-                ray.range[nbin] = ray.h.invf(arr[nsweep, nray, nbin])
+                ray.range[nbin] = ray.h.invf(arr[ray_index, nbin])
+            ray_index += 1
 
     rslvolume = _RslVolume()
     rslvolume.load(volume)
     rslvolume._dealloc = 1
     return rslvolume
+
 
 cpdef _label_volume(_RslVolume volume, radar):
     """
@@ -159,10 +166,10 @@ cpdef _label_volume(_RslVolume volume, radar):
 
     cdef _rsl_h.Sweep * sweep
     cdef _rsl_h.Ray * ray
+    cdef int ray_index
 
     vol = volume._Volume
     nsweeps = vol.h.nsweeps
-    nrays = vol.sweep[0].h.nrays
     nbins = vol.sweep[0].ray[0].h.nbins
 
     gate_size = int(radar.range['meters_between_gates'])
@@ -180,20 +187,20 @@ cpdef _label_volume(_RslVolume volume, radar):
     elevs = radar.elevation['data']
 
     # label the volume
+    ray_index = 0
     vol.h.nsweeps = nsweeps
-
     for nsweep in range(nsweeps):
         sweep = vol.sweep[nsweep]
+        nrays = sweep.h.nrays
         for nray in range(nrays):
             ray = sweep.ray[nray]
-            ray_index = nsweep * nrays + nray
             ray.h.azimuth = azimuths[ray_index]
             ray.h.elev = elevs[ray_index]
             ray.h.nyq_vel = nyq_vels[ray_index]
-
             ray.h.range_bin1 = range_bin1
             ray.h.gate_size = gate_size
             ray.h.alt = alt
+            ray_index += 1
     return
 
 
