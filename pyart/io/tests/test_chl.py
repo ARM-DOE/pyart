@@ -38,7 +38,7 @@ def test_range():
     assert 'axis' in radar.range
     assert 'comment' in radar.range
     assert radar.range['data'].shape == (800, )
-    assert round(radar.range['data'][1]) == 153.
+    assert round(radar.range['data'][1]) == 3230.
 
 
 # fields attribute is tested later
