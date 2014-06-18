@@ -85,7 +85,7 @@ def read_chl(filename, field_names=None, additional_metadata=None,
     # time
     time = filemetadata('time')
     tdata = np.array(chl_file.time)
-    min_time = tdata.min()
+    min_time = np.floor(tdata.min())
     time['data'] = (tdata - min_time).astype('float64')
     time['units'] = make_time_unit_str(datetime.utcfromtimestamp(min_time))
 

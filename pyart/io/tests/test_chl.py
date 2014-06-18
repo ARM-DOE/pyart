@@ -23,7 +23,7 @@ def test_time():
     assert 'data' in radar.time.keys()
     assert radar.time['units'] == 'seconds since 2012-07-05T23:01:23Z'
     assert radar.time['data'].shape == (2, )
-    assert round(radar.time['data'][1]) == 21.
+    assert round(radar.time['data'][1]) == 22.
 
 
 # range attribute
