@@ -159,7 +159,8 @@ def test_antenna_transition():
 # instrument_parameters attribute
 def test_instument_parameters():
     # instrument_parameter sub-convention
-    keys = ['prt', 'unambiguous_range', 'prt_mode', 'nyquist_velocity']
+    keys = ['prt', 'unambiguous_range', 'prt_mode', 'nyquist_velocity',
+            'pulse_width']
     for k in keys:
         description = 'instrument_parameters: %s' % k
         check_instrument_parameter.description = description
