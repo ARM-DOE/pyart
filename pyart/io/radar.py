@@ -88,7 +88,24 @@ class Radar:
         Flag indicating if the antenna is in transition, 1 = tes, 0 = no.
         If not provided this attribute is set to None, indicating this
         parameter is not available.
-    instruments_parameters : dict of dicts or None
+    rotation : dict or None
+        The rotation angle of the antenna.  The angle about the aircraft
+        longitudinal axis for a vertically scanning radar.
+    tilt : dict or None
+        The tilt angle with respect to the plane orthogonal (Z-axis) to aircraft 
+        longitudinal axis. 
+    roll : dict or None
+        The roll angle of platform, for aircraft right wing down is positive.
+    drift : dict or None
+        Drift angle of antenna, the angle between heading and track.
+    heading : dict or None
+        Heading (compass) angle, clockwise from north.
+    pitch : dict or None
+        Pitch angle of antenna, for aircraft nose up is positive.
+    georefs_applied : dict or None
+        Indicates whether the variables have had georeference calculation applied.
+        Leading to Earth-centric azimuth and elevation angles. 
+    instrument_parameters : dict of dicts or None
         Instrument parameters, if not provided this attribute is set to None,
         indicating these parameters are not avaiable.  This dictionary also
         includes variables in the radar_parameters CF/Radial subconvention.
@@ -119,6 +136,9 @@ class Radar:
 
                  instrument_parameters=None,
                  radar_calibration=None,
+                 
+                 rotation=None, tilt=None, roll=None, drift=None, heading=None,
+                 pitch=None, georefs_applied=None,
 
                  ):
 
@@ -147,6 +167,13 @@ class Radar:
         self.elevation = elevation
         self.scan_rate = scan_rate  # optional
         self.antenna_transition = antenna_transition  # optional
+        self.rotation = rotation # optional
+        self.tilt = tilt # optional
+        self.roll = roll # optional
+        self.drift = drift # optional
+        self.heading = heading # optional
+        self.pitch = pitch # optional
+        self.georefs_applied = georefs_applied # optional
 
         self.instrument_parameters = instrument_parameters  # optional
         self.radar_calibration = radar_calibration  # optional
