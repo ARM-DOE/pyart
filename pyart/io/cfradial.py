@@ -26,7 +26,7 @@ import netCDF4
 
 from ..config import FileMetadata
 from .common import stringarray_to_chararray
-from .radar import Radar
+from ..core.radar import Radar
 
 
 def read_cfradial(filename, field_names=None, additional_metadata=None,

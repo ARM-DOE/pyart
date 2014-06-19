@@ -1,0 +1,24 @@
+package:
+    name: pyart
+    version: git
+
+requirements:
+    build:
+        - python
+        - numpy
+        - trmm_rsl
+
+    run:
+        - python
+        - numpy
+        - scipy
+        - matplotlib
+        - netcdf4
+
+test:
+    imports:
+        - pyart
+
+about:
+    home: http://arm-doe.github.io/pyart/
+    license: BSD

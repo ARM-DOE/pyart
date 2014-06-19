@@ -1,16 +1,21 @@
 """
-pyart.io.radar
-==============
+pyart.core.radar
+================
 
 A general central radial scanning (or dwelling) instrument class.
 
 .. autosummary::
     :toctree: generated/
 
-    Radar
     join_radar
     is_vpt
     to_vpt
+
+.. autosummary::
+    :toctree: generated/
+    :template: dev_template.rst
+
+    Radar
 
 
 """
@@ -22,7 +27,7 @@ import sys
 import numpy as np
 
 
-class Radar:
+class Radar(object):
     """
     A class for storing antenna coordinate radar data.
 

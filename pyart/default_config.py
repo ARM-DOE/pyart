@@ -72,8 +72,8 @@ corrected_specific_differential_phase = 'corrected_specific_differential_phase'
 
 # Linear depolarization ration (h - horizontal, v - vertical), LDR
 linear_depolarization_ratio = 'linear_polarization_ratio'
-linear_depolarization_ratio_h = 'linear_polarization_ratio_h'
-linear_depolarization_ratio_v = 'linear_polarization_ratio_v'
+linear_depolarization_ratio_h = 'linear_depolarization_ratio_h'
+linear_depolarization_ratio_v = 'linear_depolarization_ratio_v'
 
 # Misc fields
 signal_to_noise_ratio = 'signal_to_noise_ratio'
@@ -290,6 +290,12 @@ DEFAULT_METADATA = {
         'comments': 'Unambiguous range',
         'meta_group': 'instrument_parameters',
         'long_name': 'Unambiguous range'},
+
+    'pulse_width': {
+        'units': 'seconds',
+        'comments': 'Pulse width',
+        'meta_group': 'instrument_parameters',
+        'long_name': 'Pulse width'},
 
     # Metadata for radar_parameter sub-convention
     'radar_beam_width_h': {
@@ -548,13 +554,17 @@ mdv_metadata = {}
 # Metadata for RSL files
 rsl_metadata = {}
 
+# Metadata for CSU-CHILL, CHL files
+chl_metadata = {}
+
 FILE_SPECIFIC_METADATA = {      # Required
     'sigmet': sigmet_metadata,
     'nexrad_archive': nexrad_metadata,
     'nexrad_cdm': nexrad_metadata,
     'cfradial': cfradial_metadata,
     'mdv': mdv_metadata,
-    'rsl': rsl_metadata
+    'rsl': rsl_metadata,
+    'chl': chl_metadata,
 }
 
 ##############################################################################
@@ -678,7 +688,17 @@ mdv_field_mapping = {
     'VEL_COR': corrected_velocity,
     'PHIDP_UNF': unfolded_differential_phase,
     'KDP_SOB': corrected_specific_differential_phase,
-    'DBZ_AC': corrected_reflectivity, }
+    'DBZ_AC': corrected_reflectivity,
+    # repeated integer moments
+    'DBZ': reflectivity,
+    'VEL': velocity,
+    'WIDTH': spectrum_width,
+    'ZDR': differential_reflectivity,
+    'RHOHV': cross_correlation_ratio,
+    'NCP': normalized_coherent_power,
+    'KDP': specific_differential_phase,
+    'PHIDP': differential_phase,
+}
 
 # CF/Radial files
 cfradial_field_mapping = {}
@@ -727,6 +747,44 @@ rsl_field_mapping = {
     'S3': None,                                 # Spectrum width cut 3
 }
 
+chl_field_mapping = {
+    # Chill field name : radar field name
+    'Z': reflectivity,
+    'V': velocity,
+    'W': spectrum_width,
+    'ZDR': differential_reflectivity,
+    'LDRH': linear_depolarization_ratio_h,
+    'LDRV': linear_depolarization_ratio_v,
+    '\xce\xa8 DP': differential_phase,
+    'KDP': specific_differential_phase,
+    '\xcf\x81 HV': cross_correlation_ratio,
+    'NCP': normalized_coherent_power,
+    # These fields are not mapped by default
+    'H Re(lag 1)': None,    # Real part of lag-1 correlation, H Channel
+    'V Re(lag 2)': None,    # Real part of lag-2 correlation, V Channel
+    'VAvgQ': None,          # Average Q, V Channel
+    'V Im(lag 1)': None,    # Imaginary part of lag-1 correlation, V Channel
+    'HAvgQ': None,          # Average Q, H Channel
+    'H Im(lag 2)': None,    # Imaginary part of lag-2 correlation, H Channel
+    'V lag 0': None,        # Absolute value of lag-0 correlation, V Channel
+    'H lag 0': None,        # Absolute value of lag-0 correlation, H Channel
+    'H lag 0 cx': None,     # Absolute value of lag-0 cross correlation,
+                            # H Channel
+    'H Im(lag 1)': None,    # Imaginary part of lag-1 correlation, H Channel
+    'H Re(lag 2)': None,    # Real part of lag-2 correlation, H Channel
+    'V lag 0 cx': None,     # Absolute value of lag-0 cross correlation,
+                            # V Channel
+    'V Re(lag 1)': None,    # Real part of lag-1 correlation, V Channel
+    'V Im(lag 2)': None,    # Imaginary part of lag-2 correlation, V Channel
+    'HV lag 0 I': None,     # Real part of cross channel correlation at lag-0
+    'HV lag 0 Q': None,     # Imaginary part of cross channel correlation at
+                            # lag-0
+    'VAvgI': None,          # Average I, V Channel
+    'HAvgI': None,          # Average I, H Channel
+    '\xcf\x81 HCX': None,   # H Co to Cross Correlation
+    '\xcf\x81 VCX': None,   # V Co to Cross Correlation
+}
+
 FIELD_MAPPINGS = {                  # Required variable
     'sigmet': sigmet_field_mapping,
     'nexrad_archive': nexrad_archive_field_mapping,
@@ -734,4 +792,5 @@ FIELD_MAPPINGS = {                  # Required variable
     'cfradial': cfradial_field_mapping,
     'mdv': mdv_field_mapping,
     'rsl': rsl_field_mapping,
+    'chl': chl_field_mapping,
 }

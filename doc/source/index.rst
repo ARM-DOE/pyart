@@ -2,7 +2,7 @@
 Py-ART documentation
 ====================
 
-Welcome this is the documentation for the Python ARM Radar Toolkit (Py-ART).
+Welcome, this is the documentation for the Python ARM Radar Toolkit (Py-ART).
 
 Latest Release
 ==============

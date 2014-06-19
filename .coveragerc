@@ -4,6 +4,7 @@ include = */pyart/*
 omit =
     */setup.py
     */tests*
+    pyart/aux_io/*
 
 [report]
 exclude_lines =
