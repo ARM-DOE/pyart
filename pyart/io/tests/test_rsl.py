@@ -193,6 +193,23 @@ def check_instrument_parameter(param):
     assert param_dic['meta_group'] == 'instrument_parameters'
 
 
+# radar_parameters attribute
+@skipif(not pyart.io._RSL_AVAILABLE)
+def test_radar_parameters():
+    # instrument_parameter sub-convention
+    keys = ['radar_beam_width_h', 'radar_beam_width_v']
+    for k in keys:
+        description = 'radar_parameters: %s' % k
+        check_radar_parameter.description = description
+        yield check_radar_parameter, k
+
+
+def check_radar_parameter(param):
+    assert param in radar.instrument_parameters
+    param_dic = radar.instrument_parameters[param]
+    assert param_dic['meta_group'] == 'radar_parameters'
+
+
 # radar_calibration attribute
 @skipif(not pyart.io._RSL_AVAILABLE)
 def test_radar_calibration():

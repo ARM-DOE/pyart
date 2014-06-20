@@ -20,8 +20,8 @@ import numpy as np
 
 from .sample_files import _EXAMPLE_RAYS_FILE
 from ..config import get_metadata
-from ..io.radar import Radar
-from ..io.grid import Grid
+from ..core.radar import Radar
+from ..core.grid import Grid
 
 
 def make_empty_ppi_radar(ngates, rays_per_sweep, nsweeps):
@@ -108,9 +108,11 @@ def make_target_radar():
     return radar
 
 
-def make_velocity_aliased_radar():
+def make_velocity_aliased_radar(alias=True):
     """
     Return a PPI radar with a target like reflectivity field.
+
+    Set alias to False to return a de-aliased radar.
     """
     radar = make_empty_ppi_radar(50, 360, 1)
     radar.range['meters_between_gates'] = 1.0
@@ -135,7 +137,8 @@ def make_velocity_aliased_radar():
     vdata[:14, 14:27] = vdata[:14, 12::-1]  # left/right flip
     vdata[14:27] = vdata[12::-1, :]         # top/bottom flip
     aliased = np.where(vdata > 10.0)
-    vdata[aliased] += -20.
+    if alias:
+        vdata[aliased] += -20.
     fields['velocity']['data'] = vdata
 
     radar.fields = fields
@@ -267,6 +270,28 @@ def make_target_grid():
     fdata[:, 50:-50, 40:-40] = 10.
     fdata[:, 100:-100, 80:-80] = 20.
     fdata[:, 150:-150, 120:-120] = 30.
+    fdata[1] += 5
+    rdic = {
+        'data': fdata,
+        'long_name': 'reflectivity',
+        'units': 'dBz'}
+    grid.fields = {'reflectivity': rdic}
+    return grid
+
+
+def make_storm_grid():
+    """
+    Make a sample Grid with a rectangular storm target.
+    """
+    grid_shape = (40, 50, 2)
+    grid_limits = ((-300000, 300000), (-400000, 400000), (0, 500))
+    grid = make_empty_grid(grid_shape, grid_limits)
+
+    fdata = np.ma.zeros((2, 50, 40), dtype='float32')
+    fdata[:] = np.ma.masked
+    fdata[:, 5:-5, 4:-4] = 20.
+    fdata[:, 10:-10, 8:-8] = 30.
+    fdata[:, 15:-15, 12:-12] = 60.
     fdata[1] += 5
     rdic = {
         'data': fdata,

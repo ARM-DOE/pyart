@@ -159,7 +159,8 @@ def test_antenna_transition():
 # instrument_parameters attribute
 def test_instument_parameters():
     # instrument_parameter sub-convention
-    keys = ['prt', 'unambiguous_range', 'prt_mode', 'nyquist_velocity']
+    keys = ['prt', 'unambiguous_range', 'prt_mode', 'nyquist_velocity',
+            'pulse_width']
     for k in keys:
         description = 'instrument_parameters: %s' % k
         check_instrument_parameter.description = description
@@ -170,6 +171,22 @@ def check_instrument_parameter(param):
     assert param in radar.instrument_parameters
     param_dic = radar.instrument_parameters[param]
     assert param_dic['meta_group'] == 'instrument_parameters'
+
+
+# radar_parameters attribute
+def test_radar_parameters():
+    # radar_parameter sub-convention
+    keys = ['radar_beam_width_h', 'radar_beam_width_v']
+    for k in keys:
+        description = 'radar_parameters: %s' % k
+        check_radar_parameter.description = description
+        yield check_radar_parameter, k
+
+
+def check_radar_parameter(param):
+    assert param in radar.instrument_parameters
+    param_dic = radar.instrument_parameters[param]
+    assert param_dic['meta_group'] == 'radar_parameters'
 
 
 # radar_calibration attribute

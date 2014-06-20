@@ -20,6 +20,7 @@ Utilities for reading of MDV files.
 
 import struct
 import gzip
+import zlib
 import StringIO
 import datetime
 
@@ -27,7 +28,7 @@ import numpy as np
 from netCDF4 import date2num
 
 from ..config import FileMetadata, get_fillvalue
-from .radar import Radar
+from ..core.radar import Radar
 from .common import make_time_unit_str
 from .common import radar_coords_to_cart
 
@@ -70,8 +71,8 @@ def read_mdv(filename, field_names=None, additional_metadata=None,
 
     Notes
     -----
-    Currently this function can only read polar MDV files which are gzipped.
-    Support for cartesian and non-gzipped file are planned.
+    Currently this function can only read polar MDV files with fields
+    compressed with gzip or zlib.
 
     """
     # create metadata retrieval object
@@ -195,6 +196,8 @@ def read_mdv(filename, field_names=None, additional_metadata=None,
     prt = filemetadata('prt')
     unambiguous_range = filemetadata('unambiguous_range')
     nyquist_velocity = filemetadata('nyquist_velocity')
+    beam_width_h = filemetadata('radar_beam_width_h')
+    beam_width_v = filemetadata('radar_beam_width_v')
 
     prt_mode['data'] = np.array([prt_mode_str] * nsweeps)
     prt['data'] = np.array([mdvfile.radar_info['prt_s']] * nele * naz,
@@ -207,10 +210,16 @@ def read_mdv(filename, field_names=None, additional_metadata=None,
     uvel_mps = mdvfile.radar_info['unambig_vel_mps']
     nyquist_velocity['data'] = np.array([uvel_mps] * naz * nele,
                                         dtype='float32')
+    beam_width_h['data'] = np.array(
+        [mdvfile.radar_info['horiz_beam_width_deg']], dtype='float32')
+    beam_width_v['data'] = np.array(
+        [mdvfile.radar_info['vert_beam_width_deg']], dtype='float32')
 
     instrument_parameters = {'prt_mode': prt_mode, 'prt': prt,
                              'unambiguous_range': unambiguous_range,
-                             'nyquist_velocity': nyquist_velocity}
+                             'nyquist_velocity': nyquist_velocity,
+                             'radar_beam_width_h': beam_width_h,
+                             'radar_beam_width_v': beam_width_v}
 
     return Radar(
         time, _range, fields, metadata, scan_type,
@@ -429,10 +438,7 @@ class MdvFile:
             # get the compressed sweep data
             compr_info = self._get_compression_info()
             compr_data = self.fileptr.read(compr_info['nbytes_coded'])
-            cd_fobj = StringIO.StringIO(compr_data)
 
-            # decompress the sweep data
-            gzip_file_handle = gzip.GzipFile(fileobj=cd_fobj)
             encoding_type = field_header['encoding_type']
             if encoding_type == ENCODING_INT8:
                 fmt = '>%iB' % (ngates * nrays)
@@ -445,8 +451,25 @@ class MdvFile:
                 np_form = '>f'
             else:
                 raise ValueError('unknown encoding: ', encoding_type)
-            decompr_data = gzip_file_handle.read(struct.calcsize(fmt))
-            gzip_file_handle.close()
+
+            # decompress the sweep data
+            if compr_info['magic_cookie'] == 0xf7f7f7f7:
+                cd_fobj = StringIO.StringIO(compr_data)
+                gzip_file_handle = gzip.GzipFile(fileobj=cd_fobj)
+                decompr_data = gzip_file_handle.read(struct.calcsize(fmt))
+                gzip_file_handle.close()
+            elif compr_info['magic_cookie'] == 0xf5f5f5f5:
+                decompr_data = zlib.decompress(compr_data)
+            else:
+                raise NotImplementedError('unsupported compression mode')
+                # With sample data it should be possible to write
+                # decompressor for other modes, the compression magic
+                # cookies for these modes are:
+                # 0x2f2f2f2f : TA_NOT_COMPRESSED
+                # 0xf8f8f8f8 : GZIP_NOT_COMPRSSED
+                # 0xf3f3f3f3 : BZIP_COMPRESSED
+                # 0xf4f4f4f4 : BZIP_NOT_COMPRESSED
+                # 0xf6f6f6f6 : ZLIB_NOT_COMPRESSED
 
             # read the decompressed data, reshape and mask
             sw_data = np.fromstring(decompr_data, np_form).astype('float32')

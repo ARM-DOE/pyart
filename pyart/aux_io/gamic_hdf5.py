@@ -1,6 +1,6 @@
 """
-pyart.io.read_gamic
-=================
+pyart.aux_io.read_gamic
+=======================
 
 Utilities for reading gamic hdf5 files.
 
@@ -9,7 +9,7 @@ Utilities for reading gamic hdf5 files.
 
     read_gamic
     _h5_to_dict
-    _h5_moment_to_dict
+    _h5_moments_to_dict
 
 """
 
@@ -19,8 +19,8 @@ import h5py
 import numpy as np
 
 from ..config import FileMetadata
-from .common import make_time_unit_str
-from .radar import Radar
+from ..io.common import make_time_unit_str
+from ..core.radar import Radar
 
 
 def read_gamic(filename, field_names=None, additional_metadata=None,

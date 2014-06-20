@@ -1,4 +1,4 @@
-""" Unit Tests for Py-ART's io/grid.py module. """
+""" Unit Tests for Py-ART's core/grid.py module. """
 
 import tempfile
 import os

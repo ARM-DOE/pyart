@@ -26,7 +26,7 @@ import netCDF4
 
 from ..config import FileMetadata
 from .common import stringarray_to_chararray
-from .radar import Radar
+from ..core.radar import Radar
 
 
 def read_cfradial(filename, field_names=None, additional_metadata=None,
@@ -88,7 +88,7 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
     # ignore time_* global variables, these are calculated from the time
     # variable when the file is written.
     for var, default_value in global_vars.iteritems():
-        if k in ncvars:
+        if var in ncvars:
             metadata[var] = str(netCDF4.chartostring(ncvars[var][:]))
         else:
             metadata[var] = default_value
@@ -297,10 +297,17 @@ def _stream_to_2d(data, sweeps, sweepe, ray_len, maxgates, nrays,
     return time_range
 
 
-def write_cfradial(filename, radar, format='NETCDF4', time_reference=False,
+def write_cfradial(filename, radar, format='NETCDF4', time_reference=None,
                    arm_time_variables=False):
     """
     Write a Radar object to a CF/Radial compliant netCDF file.
+
+    The files produced by this routine follow the `CF/Radial standard`_.
+    Attempts are also made to to meet many of the standards outlined in the
+    `ARM Data File Standards`_.
+
+    .. _CF/Radial standard: http://www.ral.ucar.edu/projects/titan/docs/radial_formats/cfradial.html
+    .. _ARM Data File Standards: https://docs.google.com/document/d/1gBMw4Kje6v8LBlsrjaGFfSLoU0jRx-07TIazpthZGt0/edit?pli=1
 
     Parameters
     ----------
@@ -314,7 +321,8 @@ def write_cfradial(filename, radar, format='NETCDF4', time_reference=False,
         details.
     time_reference : bool
         True to include a time_reference variable, False will not include
-        this variable.
+        this variable. The default, None, will include the time_reference
+        variable when the first time value is non-zero.
     arm_time_variables : bool
         True to create the ARM standard time variables base_time and
         time_offset, False will not create these variables.
@@ -325,7 +333,8 @@ def write_cfradial(filename, radar, format='NETCDF4', time_reference=False,
     # determine the maximum string length
     max_str_len = len(radar.sweep_mode['data'][0])
     for k in ['follow_mode', 'prt_mode', 'polarization_mode']:
-        if k in radar.instrument_parameters:
+        if ((radar.instrument_parameters is not None) and
+                (k in radar.instrument_parameters)):
             sdim_length = len(radar.instrument_parameters[k]['data'][0])
             max_str_len = max(max_str_len, sdim_length)
     str_len = max(max_str_len, 32)      # minimum string legth of 32
@@ -411,7 +420,8 @@ def write_cfradial(filename, radar, format='NETCDF4', time_reference=False,
                   ('sweep', 'string_length'))
 
     # instrument_parameters
-    if 'frequency' in radar.instrument_parameters.keys():
+    if ((radar.instrument_parameters is not None) and
+            ('frequency' in radar.instrument_parameters.keys())):
         size = len(radar.instrument_parameters['frequency']['data'])
         dataset.createDimension('frequency', size)
 
@@ -438,12 +448,13 @@ def write_cfradial(filename, radar, format='NETCDF4', time_reference=False,
         'measured_transmit_power_v': ('time', ),    # non-standard
         'measured_transmit_power_h': ('time', ),    # non-standard
     }
-    for k in radar.instrument_parameters.keys():
-        if k in instrument_dimensions:
-            dim = instrument_dimensions[k]
-        else:
-            dim = ()
-        _create_ncvar(radar.instrument_parameters[k], dataset, k, dim)
+    if radar.instrument_parameters is not None:
+        for k in radar.instrument_parameters.keys():
+            if k in instrument_dimensions:
+                dim = instrument_dimensions[k]
+            else:
+                dim = ()
+            _create_ncvar(radar.instrument_parameters[k], dataset, k, dim)
 
     # latitude, longitude, altitude
     # TODO moving platform
@@ -464,6 +475,13 @@ def write_cfradial(filename, radar, format='NETCDF4', time_reference=False,
                'units': 'unitless'}
     _create_ncvar(start_dic, dataset, 'time_coverage_start', time_dim)
     _create_ncvar(end_dic, dataset, 'time_coverage_end', time_dim)
+
+    # time_reference is required or requested.
+    if time_reference is None:
+        if radar.time['data'][0] == 0:
+            time_reference = False
+        else:
+            time_reference = True
     if time_reference:
         ref_dic = {'data': np.array(radar.time['units'][-20:]),
                    'long_name': 'UTC time reference',

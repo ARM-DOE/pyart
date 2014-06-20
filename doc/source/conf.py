@@ -25,8 +25,11 @@ try:
 except:
     pass
 
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.mathjax', 
+extensions = ['sphinx.ext.autodoc', 'sphinx.ext.mathjax',
               'sphinx.ext.autosummary', 'numpydoc', 'gen_rst']
+# don't include examples in CI builds
+if 'CI' in os.environ and os.environ['CI'] == 'true':
+    extensions.remove('gen_rst')
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -56,6 +59,9 @@ else:
     version = re.sub(r'^(\d+\.\d+).*?$', r'\1', version)
 # The full version, including alpha/beta/rc tags.
 release = pyart.__version__
+# full Py-ART version in CI built docs
+if 'CI' in os.environ and os.environ['CI'] == 'true':
+    version = release
 
 # There are two options for replacing |today|: either, you set today to some
 # non-false value, then it is used:
@@ -95,7 +101,7 @@ html_style = 'scipy.css'
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
-html_title = "Py-ART Documentation (DRAFT)"
+html_title = "Py-ART Documentation"
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
@@ -151,7 +157,7 @@ html_file_suffix = '.html'
 htmlhelp_basename = 'pyart'
 
 # ---------------------------------------------------------------------------
-# LaTeX output 
+# LaTeX output
 #----------------------------------------------------------------------------
 
 latex_elements = {

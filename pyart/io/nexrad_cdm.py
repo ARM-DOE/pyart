@@ -14,18 +14,21 @@ Functions for accessing Common Data Model (CDM) NEXRAD Level 2 files.
 
 """
 
+import os
 from datetime import datetime, timedelta
 
 import netCDF4
 import numpy as np
 
+from .nexrad_common import get_nexrad_location
 from ..config import FileMetadata, get_fillvalue
-from .radar import Radar
+from ..core.radar import Radar
 from .common import make_time_unit_str
 
 
 def read_nexrad_cdm(filename, field_names=None, additional_metadata=None,
-                    file_field_names=False, exclude_fields=None):
+                    file_field_names=False, exclude_fields=None,
+                    station=None):
     """
     Read a Common Data Model (CDM) NEXRAD Level 2 file.
 
@@ -57,6 +60,13 @@ def read_nexrad_cdm(filename, field_names=None, additional_metadata=None,
     exclude_fields : list or None, optional
         List of fields to exclude from the radar object. This is applied
         after the `file_field_names` and `field_names` parameters.
+    station : str
+        Four letter ICAO name of the NEXRAD station used to determine the
+        location in the returned radar object.  This parameter is only
+        used when the location is not contained in the file, which occur
+        in older NEXRAD files.  If the location is not provided in the file
+        and this parameter is set to None the station name will be determined
+        from the filename.
 
     Returns
     -------
@@ -123,10 +133,12 @@ def read_nexrad_cdm(filename, field_names=None, additional_metadata=None,
         elevation_var = scan_dic['elevation_vars'][0]
         nradials = scan_dic['nradials'][0]
 
-        time_data[ray_i:ray_i + nradials] = dvars[time_var][var_index]
-        azim_data[ray_i:ray_i + nradials] = dvars[azimuth_var][var_index]
-        elev_data[ray_i:ray_i + nradials] = dvars[elevation_var][var_index]
-        fixed_agl_data[scan_index] = np.mean(dvars[elevation_var][var_index])
+        end = ray_i + nradials
+        time_data[ray_i:end] = dvars[time_var][var_index][:nradials]
+        azim_data[ray_i:end] = dvars[azimuth_var][var_index][:nradials]
+        elev_data[ray_i:end] = dvars[elevation_var][var_index][:nradials]
+        fixed_agl_data[scan_index] = np.mean(
+            dvars[elevation_var][var_index][:nradials])
 
         for i, moment in enumerate(scan_dic['moments']):
 
@@ -140,7 +152,8 @@ def read_nexrad_cdm(filename, field_names=None, additional_metadata=None,
                 fdata_name = moment
 
             sweep = _get_moment_data(dvars[moment], moment_index, m_ngates)
-            fdata[fdata_name][ray_i:ray_i + m_nradials, :m_ngates] = sweep
+            fdata[fdata_name][ray_i:ray_i + m_nradials, :m_ngates] = (
+                sweep[:m_nradials, :m_ngates])
 
         ray_i += nradials
 
@@ -183,10 +196,25 @@ def read_nexrad_cdm(filename, field_names=None, additional_metadata=None,
     latitude = filemetadata('latitude')
     longitude = filemetadata('longitude')
     altitude = filemetadata('altitude')
-    latitude['data'] = np.array([dataset.StationLatitude], dtype='float64')
-    longitude['data'] = np.array([dataset.StationLongitude], dtype='float64')
-    altitude['data'] = np.array([dataset.StationElevationInMeters],
-                                dtype='float64')
+
+    # use the locations in the NetCDF file is available
+    if ((hasattr(dataset, 'StationLatitude') and
+         hasattr(dataset, 'StationLongitude') and
+         hasattr(dataset, 'StationElevationInMeters'))):
+            lat = dataset.StationLatitude
+            lon = dataset.StationLongitude
+            alt = dataset.StationElevationInMeters
+    else:
+        # if no locations in the file look them up from station name.
+        if station is None:
+            # determine the station name from the filename
+            # this will fail in some cases, in which case station
+            # should be implicitly provided in the function call.
+            station = os.path.basename(filename)[:4].upper()
+        lat, lon, alt = get_nexrad_location(station)
+    latitude['data'] = np.array([lat], dtype='float64')
+    longitude['data'] = np.array([lon], dtype='float64')
+    altitude['data'] = np.array([alt], dtype='float64')
 
     # sweep_number, sweep_mode, fixed_angle, sweep_start_ray_index
     # sweep_end_ray_index
