@@ -17,7 +17,7 @@ from ..config import get_fillvalue, get_field_name
 from . import _echo_steiner
 
 
-def steiner_conv_strat(grid, dx=500.0, dy=500.0, intense=42.0,
+def steiner_conv_strat(grid, dx=None, dy=None, intense=42.0,
                        work_level=3000.0, peak_relation='default',
                        area_relation='medium', bkg_rad=11000.0,
                        use_intense=True, fill_value=None,
@@ -34,7 +34,8 @@ def steiner_conv_strat(grid, dx=500.0, dy=500.0, intense=42.0,
     Other Parameters
     ----------------
     dx, dy : float
-        The x- and y-dimension resolutions in meters, respectively.
+        The x- and y-dimension resolutions in meters, respectively.  If None
+        the resolution is determined from the first two axes values.
     intense : float
         The intensity value in dBZ. Grid points with a reflectivity
         value greater or equal to the intensity are automatically
@@ -57,7 +58,8 @@ def steiner_conv_strat(grid, dx=500.0, dy=500.0, intense=42.0,
          configuration file.
     refl_field : str
          Field in grid to use as the reflectivity during partitioning. None
-         will use the default field name from the Py-ART configuration file.
+         will use the default reflectivity field name from the Py-ART
+         configuration file.
 
     Returns
     -------
@@ -77,7 +79,13 @@ def steiner_conv_strat(grid, dx=500.0, dy=500.0, intense=42.0,
 
     # Parse field parameters
     if refl_field is None:
-        refl_field = get_field_name('corrected_reflectivity')
+        refl_field = get_field_name('reflectivity')
+
+    # parse dx and dy
+    if dx is None:
+        dx = grid.axes['x_disp']['data'][1] - grid.axes['x_disp']['data'][0]
+    if dy is None:
+        dy = grid.axes['y_disp']['data'][1] - grid.axes['y_disp']['data'][0]
 
     # Get axes
     x = grid.axes['x_disp']['data']
