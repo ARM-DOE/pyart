@@ -260,7 +260,7 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
         task_config['task_misc_info']['vertical_beamwidth'])],
         dtype='float32')
     pulse_width['data'] = np.array(
-        [task_config['task_dsp_info']['pulse_width'] * 1e-5] *
+        [task_config['task_dsp_info']['pulse_width'] * 1e-8] *
         len(time['data']), dtype='float32')
 
     instrument_parameters = {'unambiguous_range': unambiguous_range,
