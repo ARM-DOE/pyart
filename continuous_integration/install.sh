@@ -36,6 +36,7 @@ sudo apt-get install -qq libglpk-dev
 conda install --yes -c http://conda.binstar.org/jjhelmus pyglpk
 
 if [[ $PYTHON_VERSION == '2.7' ]]; then
+    sudo apt-get install -qq gfortran
     conda install --yes basemap 
     conda install --yes -c http://conda.binstar.org/jjhelmus cbc cylp
     conda install --yes -c http://conda.binstar.org/jjhelmus cvxopt_glpk

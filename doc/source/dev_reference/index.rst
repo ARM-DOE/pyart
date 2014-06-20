@@ -22,6 +22,7 @@ Documentation is broken down by directory and module.
     aux_io
     config
     correct
+    retrieve
     graph
     map
     testing
