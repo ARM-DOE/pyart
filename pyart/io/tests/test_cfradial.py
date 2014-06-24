@@ -295,7 +295,7 @@ def test_write_ppi_arm_time_vars():
     assert 'time_offset' in dset.variables
 
     base_time = dset.variables['base_time']
-    assert base_time[0] == 1305888856
+    assert base_time[:] == 1305888856
     assert base_time.string == '20-May-2011,10:54:16 GMT'
 
     time_offset = dset.variables['time_offset']
