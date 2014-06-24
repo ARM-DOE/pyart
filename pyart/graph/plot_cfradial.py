@@ -95,8 +95,8 @@ class CFRadialDisplay(RadarDisplay):
         self.y = self.y + self.shift[1]
 
         # radar location in latitude and longitude
-        lon = dataset.variables['longitude'][0]
-        lat = dataset.variables['latitude'][0]
+        lon = dataset.variables['longitude'][:]
+        lat = dataset.variables['latitude'][:]
         self.loc = [lat, lon]
 
         # datetime object describing first sweep time

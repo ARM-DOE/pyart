@@ -260,6 +260,11 @@ def _ncvar_to_dict(ncvar):
     """ Convert a NetCDF Dataset variable to a dictionary. """
     d = dict((k, getattr(ncvar, k)) for k in ncvar.ncattrs())
     d['data'] = ncvar[:]
+    if np.isscalar(d['data']):
+        # netCDF4 1.1.0+ returns a scalar for 0-dim array, we always want
+        # 1-dim+ arrays with a valid shape.
+        d['data'] = np.array(d['data'])
+        d['data'].shape = (1, )
     return d
 
 
