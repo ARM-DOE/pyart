@@ -79,7 +79,7 @@ class RadarDisplay_Airborne:
         self.ranges = radar.range['data']
         self.azimuths = radar.azimuth['data']
         self.elevations = radar.elevation['data']
-        self.fixed_angle = radar.fixed_angle['data']
+        self.fixed_angle = radar.fixed_angle['data'][0]
         self.rotation = radar.rotation['data']
         self.roll = radar.roll['data']
         self.drift = radar.drift['data']
@@ -110,6 +110,12 @@ class RadarDisplay_Airborne:
                                    Rotg, Rollg, Driftg, Tiltg, Pitchg)
         self.x = self.x + self.shift[0]
         self.y = self.y + self.shift[1]
+        
+        if radar.metadata['platform_type'] == 'aircraft_belly':
+            self.x, self.y, self.z = radar_coords_to_cart_track_relative(rg / 1000.0, 
+                                   Rotg, Rollg, Driftg, Tiltg, Pitchg)
+            self.x = self.x + self.shift[0]
+            self.y = self.y + self.shift[1]
 
         # radar location in latitude and longitude
         middle_lat = radar.latitude['data'].shape[0]/2 # find the middle poing
