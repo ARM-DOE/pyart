@@ -15,6 +15,7 @@ Front end to the University of Washington 4DD code for Doppler dealiasing.
 # Nothing from this module is imported to pyart.correct if RSL is not
 # installed.
 
+import copy
 import numpy as np
 
 from ..config import get_field_name, get_fillvalue, get_metadata
@@ -26,9 +27,10 @@ from ..util import datetime_utils
 def dealias_fourdd(radar, last_radar=None, sounding_heights=None,
                    sounding_wind_speeds=None, sounding_wind_direction=None,
                    prep=1, filt=1, rsl_badval=131072.0, keep_original=False,
+                   extra_prep=False, ncp_min=0.3, rhv_min=0.7,
                    refl_field=None, vel_field=None, corr_vel_field=None,
-                   last_vel_field=None, debug=False, max_shear=0.05,
-                   sign=1, **kwargs):
+                   last_vel_field=None, ncp_field=None, rhv_field=None,
+                   debug=False, max_shear=0.05, sign=1, **kwargs):
     """
     Dealias Doppler velocities using the 4DD algorithm.
 
@@ -140,14 +142,28 @@ def dealias_fourdd(radar, last_radar=None, sounding_heights=None,
     if corr_vel_field is None:
         corr_vel_field = get_field_name('corrected_velocity')
     if last_vel_field is None:
-        last_vel_field = str(corr_vel_field)
+        last_vel_field = get_field_name('corrected_velocity')
+    if ncp_field is None:
+        ncp_field = get_field_name('normalized_coherent_power')
+    if rhv_field is None:
+        rhv_field = get_field_name('cross_correlation_ratio')
 
     # get fill value
     fill_value = get_fillvalue()
 
+    # extra volume preparation
+    # this assumes the radar has a normalized coherent power field and a
+    # cross correlation ratio field
+    radar_copy = copy.deepcopy(radar)
+    if prep and extra_prep:
+        not_coherent = np.logical_or(
+                        radar_copy.fields[ncp_field]['data'] < ncp_min,
+                        radar_copy.fields[rhv_field]['data'] < rhv_min)
+        radar_copy.fields[refl_field]['data'][not_coherent] = fill_value
+
     # create RSL volumes containing the reflectivity, doppler velocity, and
     # doppler velocity in the last radar (if provided)
-    refl_volume = _create_rsl_volume(radar, refl_field, 0, rsl_badval)
+    refl_volume = _create_rsl_volume(radar_copy, refl_field, 0, rsl_badval)
     vel_volume = _create_rsl_volume(radar, vel_field, 1, rsl_badval)
 
     if last_radar is not None:
