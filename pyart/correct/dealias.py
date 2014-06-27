@@ -79,6 +79,17 @@ def dealias_fourdd(radar, last_radar=None, sounding_heights=None,
         True to keep original doppler velocity values when the dealiasing
         procedure fails, otherwises these gates will be masked.  NaN values
         are still masked.
+    extra_prep : bool
+        True to use extra volume preperation, which will use the normalized
+        coherent power and cross correlation ratio fields to further remove
+        bad gates. Set this to False (default) if those fields are not
+        available.
+    ncp_min : float
+        Minimum normalized coherent power allowed for any gate. Only
+        applicable when extra_prep is True.
+    rhv_min : float
+        Minimum cross correlation ratio allowed for any gate. Only
+        applicable when extra_prep is True.
     refl_field : str
         Field in radar to use as the reflectivity during dealiasing.
         None will use the default field name from the Py-ART configuration
@@ -93,6 +104,11 @@ def dealias_fourdd(radar, last_radar=None, sounding_heights=None,
     last_vel_field : str
         Name to use for the dealiased Doppler velocity field metadata in
         last_radar.  None will use the corr_vel_field name.
+    ncp_field, rhv_field : str
+        Fields in radar to use as the normalized coherent power and cross
+        correlation ratio, respectively. None will use the default field name
+        from the Py-ART configuration file. Only applicable when extra_prep
+        is True.
     maxshear : float
         Maximum vertical shear which will be incorperated into the created
         volume from the sounding data.  Parameter not used when no
@@ -150,6 +166,12 @@ def dealias_fourdd(radar, last_radar=None, sounding_heights=None,
 
     # get fill value
     fill_value = get_fillvalue()
+
+    # check extra volume preparation inputs
+    if extra_prep:
+        if ncp_field not in radar.fields and rhv_field not in radar.fields:
+            raise KeyError(('Radar does not have necessary fields for'
+                            'extra volume preparation'))
 
     # extra volume preparation
     # this assumes the radar has a normalized coherent power field and a
