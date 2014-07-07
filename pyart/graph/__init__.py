@@ -14,6 +14,7 @@ Graphing (:mod:`pyart.graph`)
     MdvDisplay
     RslDisplay
     CFRadialDisplay
+    RadarDisplay_Airborne
 
 
 """
@@ -22,6 +23,7 @@ from .radardisplay import RadarDisplay
 from .plot_mdv import MdvDisplay
 from .plot_cfradial import CFRadialDisplay
 from . import cm
+from .radardisplay_airborne import RadarDisplay_Airborne
 
 try:
     from .gridmapdisplay import GridMapDisplay
