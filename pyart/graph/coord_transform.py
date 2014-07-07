@@ -191,3 +191,41 @@ def radar_coords_to_cart_aircraft_relative(rng, rot, tilt, debug=False):
     Y = r * np.sin(Tilt)
     Z = r * np.cos(Rot) * np.cos(Tilt)
     return X, Y, Z
+    
+def latlon2xy(latitude,longitude,altitude,): ####NOT IN WORKING ORDER######
+
+    """/* These calculations are from the book
+    * "Aerospace Coordinate Systems and Transformations"
+    * by G. Minkler/J. Minkler
+    * these are the ECEF/ENU point transformations
+    """
+
+    earth_rad = 6370000.
+    h = earth_rad + altitude[0]
+    delta_o = np.radians(latitude[0])
+    lambda_o = np.radians(longitude[0])
+
+    sinLambda = np.sin(lambda_o)
+    cosLambda = np.cos(lambda_o)
+    sinDelta = np.sin(delta_o)
+    cosDelta = np.cos(delta_o)
+    
+    R_p = earth_rad + altitude
+    delta_p = np.radians(latitude)
+    lambda_p = np.radians(longitude)
+    R_p_pr = R_p * np.cos(delta_p)
+
+    xe = R_p * np.sin(delta_p)
+    ye = -R_p_pr * np.sin(lambda_p)
+    ze = R_p_pr * np. cos(lambda_p)
+
+# transform to ENU coordinates */
+
+    a = -h * sinDelta + xe
+    b =  h * cosDelta * sinLambda + ye
+    c = -h * cosDelta * cosLambda + ze
+
+    X = -cosLambda * b - (sinLambda * c);
+    Y = (cosDelta * a)  +  (sinLambda * sinDelta * b) - (cosLambda * sinDelta * c)
+    Z = (sinDelta * a)  - (sinLambda * cosDelta * b) + (cosLambda * cosDelta * c)
+    return X, Y, Z
