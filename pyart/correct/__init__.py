@@ -26,5 +26,6 @@ except ImportError:
 from .attenuation import calculate_attenuation
 from .phase_proc import phase_proc_lp
 from .filters import GateFilter
+from .unwrap import dealias_unwrap_phase
 
 __all__ = [s for s in dir() if not s.startswith('_')]
