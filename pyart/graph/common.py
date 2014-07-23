@@ -20,6 +20,37 @@ PI = 3.141592653589793
 
 from ..io.common import dms_to_d, radar_coords_to_cart
 
+def centers_to_edges(x):
+    """ 
+    Create a length N+1 vector of edge locations from a
+    length N vector of center locations.
+    
+    In the interior, the edge positions set to the midpoints
+    of the values in x. For the outermost edges, the closest 
+    dx is assumed to apply. 
+    
+    Useful when plotting with pcolor, which requires
+    X, Y of shape (N+1) and grid center values of shape (N).
+    Otherwise, pcolor silently discards the last row and column
+    of grid center values.
+    
+    Parameters
+    ----------
+    x : array, shape (N,)
+        Locations of the centers 
+    
+    Returns
+    -------
+    xedge : array, shape (N+1,)
+    
+    """
+    xedge=np.zeros(x.shape[0]+1)
+    xedge[1:-1] = (x[:-1] + x[1:])/2.0
+    dx = np.mean(np.abs(xedge[2:-1] - xedge[1:-2]))
+    xedge[0] = xedge[1] - dx
+    xedge[-1] = xedge[-2] + dx
+    return xedge        
+
 
 def corner_to_point(corner, point):
     """
