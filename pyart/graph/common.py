@@ -72,7 +72,7 @@ def centers_to_edges_2d(x):
     # calculate the deltas along each edge, excluding corners
     xedge[1:-1,0] = xedge[1:-1, 1] - (xedge[1:-1, 2] - xedge[1:-1, 1])/2.0
     xedge[1:-1,-1]= xedge[1:-1,-2] - (xedge[1:-1,-3] - xedge[1:-1,-2])/2.0
-    xedge[0,1:-1] = xedge[-2,1:-1] - (xedge[-3,1:-1] - xedge[-2,1:-1])/2.0 
+    xedge[0,1:-1] = xedge[1,1:-1]  - (xedge[2,1:-1]  - xedge[1,1:-1])/2.0 
     xedge[-1,1:-1]= xedge[-2,1:-1] - (xedge[-3,1:-1] - xedge[-2,1:-1])/2.0
     
     # now do the corners
