@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import netCDF4
 
-from .common import corner_to_point, radar_coords_to_cart, centers_to_edges_2d
+from .common import corner_to_point, radar_coords_to_cart, centers_to_edges, centers_to_edges_2d
 
 
 class RadarDisplay:
@@ -465,7 +465,7 @@ class RadarDisplay:
             data = np.ma.masked_outside(data, vmin, vmax)
 
         # plot the data
-        xedge, yedge = centers_to_edges_2d(x), centers_to_edges_2d(y)
+        xedge, yedge = centers_to_edges(x), centers_to_edges(y)
         pm = ax.pcolormesh(xedge, yedge, data, vmin=vmin, vmax=vmax, cmap=cmap)
 
         if title_flag:
