@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import netCDF4
 
-from .common import corner_to_point, radar_coords_to_cart
+from .common import corner_to_point, radar_coords_to_cart, centers_to_edges_2d
 
 
 class RadarDisplay:
@@ -286,14 +286,15 @@ class RadarDisplay:
         # get data for the plot
         data = self._get_data(field, sweep, mask_tuple)
         x, y = self._get_x_y(field, sweep)
-
+        
         # mask the data where outside the limits
         if mask_outside:
             data = np.ma.masked_outside(data, vmin, vmax)
 
         # plot the data
-        pm = ax.pcolormesh(x, y, data, vmin=vmin, vmax=vmax, cmap=cmap)
-
+        xedge, yedge = centers_to_edges_2d(x), centers_to_edges_2d(y)
+        pm = ax.pcolormesh(xedge, yedge, data, vmin=vmin, vmax=vmax, cmap=cmap)
+        
         if title_flag:
             self._set_title(field, sweep, title, ax)
 
@@ -382,7 +383,8 @@ class RadarDisplay:
             reverse_xaxis = np.all(R < 1.)
         if reverse_xaxis:
             R = -R
-        pm = ax.pcolormesh(R, z, data, vmin=vmin, vmax=vmax, cmap=cmap)
+        Redge, zedge = centers_to_edges_2d(R), centers_to_edges_2d(z)
+        pm = ax.pcolormesh(Redge, zedge, data, vmin=vmin, vmax=vmax, cmap=cmap)
 
         if title_flag:
             self._set_title(field, sweep, title, ax)
@@ -463,7 +465,8 @@ class RadarDisplay:
             data = np.ma.masked_outside(data, vmin, vmax)
 
         # plot the data
-        pm = ax.pcolormesh(x, y, data, vmin=vmin, vmax=vmax, cmap=cmap)
+        xedge, yedge = centers_to_edges_2d(x), centers_to_edges_2d(y)
+        pm = ax.pcolormesh(xedge, yedge, data, vmin=vmin, vmax=vmax, cmap=cmap)
 
         if title_flag:
             self._set_vpt_title(field, title, ax)
