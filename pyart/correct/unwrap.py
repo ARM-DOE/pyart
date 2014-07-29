@@ -133,7 +133,7 @@ def _dealias_unwrap_3d(radar, vel_field, nyquist_vel):
     if mask.ndim == 0:  # fix when the mask is a single True/False
         mask = np.ones_like(scaled_cube, dtype=np.uint8, order='C') * mask
 
-    mask = np.asarray(make, dtype=np.uint8, order='C')
+    mask = np.asarray(mask, dtype=np.uint8, order='C')
     cube_no_mask = np.asarray(scaled_cube, dtype=np.float64, order='C')
     cube_scaled_unwrapped = np.empty_like(cube_no_mask, dtype=np.float64,
                                           order='C')
@@ -194,7 +194,7 @@ def _dealias_unwrap_2d(radar, vel_field, nyquist_vel):
             mask = np.zeros_like(sweep, dtype=np.uint8, order='C')
         if mask.ndim == 0:  # fix when the mask is a single True/False
             mask = np.ones_like(sweep, dtype=np.uint8, order='C') * mask
-        mask = np.asarray(make, dtype=np.uint8, order='C')
+        mask = np.asarray(mask, dtype=np.uint8, order='C')
         csweep = np.asarray(scaled_sweep, dtype=np.float64, order='C')
         scaled_unwrapped = np.empty_like(csweep, dtype=np.float64, order='C')
         unwrap_2d(csweep, mask, scaled_unwrapped, [True, True])
