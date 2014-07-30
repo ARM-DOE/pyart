@@ -40,8 +40,8 @@ def test_radarmapdisplay_auto_range():
     fig = plt.figure()
     ax = fig.add_subplot(111)
     display.plot_ppi_map('reflectivity_horizontal', resolution='c')
-    assert round(display.basemap.latmax, 2) == 36.84
-    assert round(display.basemap.latmin, 2) == 36.14
+    assert round(display.basemap.latmax, 2) == 36.85
+    assert round(display.basemap.latmin, 2) == 36.13
     assert round(display.basemap.lonmax, 2) == -97.15
     assert round(display.basemap.lonmin, 2) == -98.04
     plt.close()

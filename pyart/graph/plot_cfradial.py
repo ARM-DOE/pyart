@@ -152,7 +152,7 @@ class CFRadialDisplay(RadarDisplay):
     def _get_data(self, field, sweep, mask_tuple):
         """ Retrieve and return data from a plot function. """
         start = self.starts[sweep]
-        end = self.ends[sweep]
+        end = self.ends[sweep] + 1
         data = self.dataset.variables[field][start:end]
 
         if mask_tuple is not None:

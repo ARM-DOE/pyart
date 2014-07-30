@@ -136,13 +136,15 @@ class RslDisplay(RadarDisplay):
             data = np.ma.masked_where(mdata < mask_value, data)
         return data
 
-    def _get_x_y(self, field, sweep):
+    def _get_x_y(self, field, sweep, edges):
         """ Retrieve and return x and y coordinate in km. """
-        x, y, z = self._get_x_y_z(field, sweep)
+        # TODO perform interpolating if edges is True
+        x, y, z = self._get_x_y_z(field, sweep, edges)
         return x, y
 
-    def _get_x_y_z(self, field, sweep):
+    def _get_x_y_z(self, field, sweep, edges):
         """ Retrieve and return x, y, and z coordinate in km. """
+        # TODO perform interpolating if edges is True
         volume_num = rsl.RSLNAME2VOLUMENUM[field]
         sweep = self.rslfile.get_volume(volume_num).get_sweep(sweep)
         ray = sweep.get_ray(0)
