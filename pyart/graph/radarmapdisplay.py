@@ -104,7 +104,7 @@ class RadarMapDisplay(RadarDisplay):
                      projection='lcc', area_thresh=10000,
                      min_lon=None, max_lon=None, min_lat=None, max_lat=None,
                      width=None, height=None, lon_0=None, lat_0=None,
-                     resolution='h', shapefile=None, **kwargs):
+                     resolution='h', shapefile=None, edges=True, **kwargs):
         """
         Plot a PPI volume sweep onto a geographic map.
 
@@ -178,6 +178,13 @@ class RadarMapDisplay(RadarDisplay):
         resolution : 'c', 'l', 'i', 'h', or 'f'.
             Resolution of boundary database to use. See Basemap documentation
             for details.
+        edges : bool
+            True will interpolate and extrapolate the gate edges from the
+            range, azimuth and elevations in the radar, treating these
+            as specifying the center of each gate.  False treats these
+            coordinates themselved as the gate edges, resulting in a plot
+            in which the last gate in each ray and the entire last ray are not
+            not plotted.
 
         """
         # parse parameters
@@ -194,7 +201,7 @@ class RadarMapDisplay(RadarDisplay):
 
         # get data for the plot
         data = self._get_data(field, sweep, mask_tuple)
-        x, y = self._get_x_y(field, sweep)
+        x, y = self._get_x_y(field, sweep, edges)
 
         # mask the data where outside the limits
         if mask_outside:

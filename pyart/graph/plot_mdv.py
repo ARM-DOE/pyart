@@ -114,14 +114,16 @@ class MdvDisplay(RadarDisplay):
             data = np.ma.masked_where(mdata < mask_value, data)
         return data
 
-    def _get_x_y(self, field, sweep):
+    def _get_x_y(self, field, sweep, edges):
         """ Retrieve and return x and y coordinate in km. """
+        # TODO perform interpolating if edges is True
         x = self.mdvfile.carts['x'][sweep] / 1000.0  # x coords in km
         y = self.mdvfile.carts['y'][sweep] / 1000.0  # y coords in km
         return x, y
 
-    def _get_x_y_z(self, field, sweep):
+    def _get_x_y_z(self, field, sweep, edges):
         """ Retrieve and return x, y, and z coordinate in km. """
+        # TODO perform interpolating if edges is True
         x = self.mdvfile.carts['x'][sweep] / 1000.0  # x coords in km
         y = self.mdvfile.carts['y'][sweep] / 1000.0  # y coords in km
         z = self.mdvfile.carts['z'][sweep] / 1000.0  # y coords in km
