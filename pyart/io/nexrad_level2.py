@@ -421,8 +421,8 @@ class NEXRADLevel2File():
             msg_num = self.scan_msgs[scan][0]
             msg = self.msg31s[msg_num]
             if moment in msg.keys():
-                offset = msg[moment]['offset']
-                scale = msg[moment]['scale']
+                offset = np.float32(msg[moment]['offset'])
+                scale = np.float32(msg[moment]['scale'])
                 return (np.ma.masked_less_equal(data, 1) - offset) / (scale)
 
         # moment is not present in any scan, mask all values

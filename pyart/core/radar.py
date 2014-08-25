@@ -277,7 +277,7 @@ class Radar(object):
 
         return
 
-    def add_field(self, field_name, dic):
+    def add_field(self, field_name, dic, replace_existing=False):
         """
         Add a field to the object.
 
@@ -287,10 +287,14 @@ class Radar(object):
             Name of the field to add to the dictionary of fields.
         dic : dict
             Dictionary contain field data and metadata.
+        replace_existing : bool
+            True to replace the existing field with key field_name if it
+            exists, loosing any existing data.  False will raise a ValueError
+            when the field already exists.
 
         """
         # check that the field dictionary to add is valid
-        if field_name in self.fields:
+        if field_name in self.fields and replace_existing is False:
             err = 'A field with name: %s already exists' % (field_name)
             raise ValueError(err)
         if 'data' not in dic:
@@ -303,7 +307,8 @@ class Radar(object):
         self.fields[field_name] = dic
         return
 
-    def add_field_like(self, existing_field_name, field_name, data):
+    def add_field_like(self, existing_field_name, field_name, data,
+                       replace_existing=False):
         """
         Add a field to the object with metadata from a existing field.
 
@@ -316,6 +321,10 @@ class Radar(object):
             Name of the field to add to the dictionary of fields.
         data : array
             Field data.
+        replace_existing : bool
+            True to replace the existing field with key field_name if it
+            exists, loosing any existing data.  False will raise a ValueError
+            when the field already exists.
 
         """
         if existing_field_name not in self.fields:
@@ -326,7 +335,8 @@ class Radar(object):
             if k != 'data':
                 dic[k] = v
         dic['data'] = data
-        return self.add_field(field_name, dic)
+        return self.add_field(field_name, dic,
+                              replace_existing=replace_existing)
 
     def extract_sweeps(self, sweeps):
         """
