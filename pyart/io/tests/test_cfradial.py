@@ -363,7 +363,14 @@ def check_variable_to_ref(var, ref_var):
 
     # properties
     assert var.size == ref_var.size
-    assert var.maskandscale == ref_var.maskandscale
+    # netCDF4 version < 1.1.1 use the maskandscale attribute
+    if hasattr(ref_var, 'maskandscale'):
+        assert var.maskandscale == ref_var.maskandscale
+    # netCDF4 version >= 1.1.1 use a seperate mask and scale attributes
+    if hasattr(ref_var, 'mask'):
+        assert var.mask == ref_var.mask
+    if hasattr(ref_var, 'scale'):
+        assert var.scale == ref_var.scale
 
     # data and the mask
     data = var[:]
