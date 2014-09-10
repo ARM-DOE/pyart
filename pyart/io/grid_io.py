@@ -156,7 +156,6 @@ def write_grid(filename, grid, format='NETCDF4', arm_time_variables=False):
         }
         _create_ncvar(time_offset, ncobj, 'time_offset', ('time', ))
 
-
     # field variables
     for field, field_dic in grid.fields.iteritems():
         # append 1, to the shape of all data to indicate the time var.
