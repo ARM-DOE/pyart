@@ -23,13 +23,15 @@ from ..config import FileMetadata, get_fillvalue
 from ..core.radar import Radar
 from .common import make_time_unit_str
 from ._sigmetfile import SigmetFile, bin4_to_angle, bin2_to_angle
+from . import _sigmet_noaa_hh
 
 SPEED_OF_LIGHT = 299793000.0
 
 
 def read_sigmet(filename, field_names=None, additional_metadata=None,
                 file_field_names=False, exclude_fields=None,
-                time_ordered='none', debug=False):
+                time_ordered='none', full_xhdr=None, noaa_hh_hdr=None,
+                debug=False):
     """
     Read a Sigmet (IRIS) product file.
 
@@ -68,7 +70,18 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
         each sweep in a strictly time increasing order, but the rays will
         likely become non-sequential.  The 'full' option is not recommended
         unless strict time increasing order is required.
+    full_xhdr : bool or None
+        Flag to read in all extended headers for possible decoding. None will
+        determine if extended headers should be read in automatically by
+        examining the extended header type.
+    noaa_hh_hdr : bool or None
+        Flag indicating if the extended header should be decoded as those
+        used by the NOAA Hurricane Hunters aircraft radars.  None will
+        determine if the extended header is of this type automatically by
+        examining the header. The `full_xhdr` parameter is set to True
+        when this parameter is True.
     debug : bool, optional
+        Print debug information during read.
 
     Returns
     -------
@@ -80,16 +93,37 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
     filemetadata = FileMetadata('sigmet', field_names, additional_metadata,
                                 file_field_names, exclude_fields)
 
-    # open the file, read data
+    # open the file
     sigmetfile = SigmetFile(filename, debug=debug)
-    sigmet_data, sigmet_metadata = sigmetfile.read_data()
     ingest_config = sigmetfile.ingest_header['ingest_configuration']
     task_config = sigmetfile.ingest_header['task_configuration']
+
+    # determine if full extended headers should be read
+    if noaa_hh_hdr is True:
+        full_xhdr = True
+    if full_xhdr is None:
+        type_mask = task_config['task_dsp_info']['current_data_type_mask']
+        if type_mask['extended_header_type'] == 2:
+            full_xhdr = True
+        else:
+            full_xhdr = False
+
+    # read data
+    sigmet_data, sigmet_metadata = sigmetfile.read_data(full_xhdr=full_xhdr)
     first_data_type = sigmetfile.data_type_names[0]
     if first_data_type == 'XHDR':   # don't use XHDR as the first data type
         first_data_type = sigmetfile.data_type_names[1]
     sigmetfile.close()
     nsweeps, nrays, nbins = sigmet_data[first_data_type].shape
+
+    # parse the extended headers for time
+    if full_xhdr and 'XHDR' in sigmet_data:
+        # extract the ms timing data store full header for later analysis,
+        # keep them in the sigmet_data dictionary so that they get ordered
+        # and missing data is remove as with other fields
+        xhdr = sigmet_data.pop('XHDR')
+        sigmet_data['XHDR'] = xhdr[:, :, :2].copy().view('i4')
+        sigmet_data['XHDR_FULL'] = xhdr
 
     # time order
     if time_ordered == 'full':
@@ -101,7 +135,8 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
     good_rays = (sigmet_metadata[first_data_type]['nbins'] != -1)
     for field_name in sigmet_data.keys():
         sigmet_data[field_name] = sigmet_data[field_name][good_rays]
-
+        if field_name == 'XHDR_FULL':
+            continue
         field_metadata = sigmet_metadata[field_name]
         for key in field_metadata.keys():
             field_metadata[key] = field_metadata[key][good_rays]
@@ -152,6 +187,8 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
     # fields
     fields = {}
     for data_type_name, fdata in sigmet_data.iteritems():
+        if data_type_name == 'XHDR_FULL':
+            continue
         field_name = filemetadata.get_field_name(data_type_name)
         if field_name is None:
             continue
@@ -270,13 +307,31 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
                              'radar_beam_width_v': beam_width_v,
                              'pulse_width': pulse_width}
 
+    # decode extended headers
+    extended_header_params = {}
+    if noaa_hh_hdr is None:
+        type_mask = task_config['task_dsp_info']['current_data_type_mask']
+        htype = type_mask['extended_header_type']
+        if full_xhdr and htype == 2 and sigmet_data['XHDR_FULL'][0, 3] == 136:
+            noaa_hh_hdr = True
+        else:
+            noaa_hh_hdr = False
+
+    if noaa_hh_hdr:
+        t = _sigmet_noaa_hh.decode_noaa_hh_hdr(
+            sigmet_data['XHDR_FULL'], azimuth, elevation)
+        (latitude, longitude, altitude, extended_header_params) = t
+        metadata['platform_type'] = 'aircraft'
+        scan_type = 'rhi'
+
     return Radar(
         time, _range, fields, metadata, scan_type,
         latitude, longitude, altitude,
         sweep_number, sweep_mode, fixed_angle, sweep_start_ray_index,
         sweep_end_ray_index,
         azimuth, elevation,
-        instrument_parameters=instrument_parameters)
+        instrument_parameters=instrument_parameters,
+        **extended_header_params)
 
 
 def _time_order_data_and_metadata_roll(data, metadata):
