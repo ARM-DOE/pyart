@@ -308,6 +308,43 @@ DEFAULT_METADATA = {
         'meta_group': 'radar_parameters',
         'long_name': 'Antenna beam width V polarization'},
 
+    # Metadata for airborne radar parameters
+    'rotation': {
+        'units': 'degrees',
+        'standard_name': 'ray_rotation_angle_relative_to_platform',
+        'long_name': 'Ray rotation angle relative to platform'},
+
+    'tilt': {
+        'units': 'degrees',
+        'standard_name': 'ray_tilt_angle_relative_to_platform',
+        'long_name': 'Ray tilt angle relative to platform'},
+
+    'roll': {
+        'units': 'degrees',
+        'standard_name': 'platform_roll_angle',
+        'long_name': 'Platform roll angle'},
+
+    'drift': {
+        'units': 'degrees',
+        'standard_name': 'platform_drift_angle',
+        'long_name': 'Platform drift angle'},
+
+    'heading': {
+        'units': 'degrees',
+        'standard_name': 'platform_heading_angle',
+        'long_name': 'Platform heading angle'},
+
+    'pitch': {
+        'units': 'degrees',
+        'standard_name': 'platform_pitch_angle',
+        'long_name': 'Platform pitch angle'},
+
+    'georefs_applied': {
+        'units': 'unitless',
+        'standard_name': 'georefs_have_been_applied_to_ray',
+        'long_name': 'Geoferences have been applied to ray',
+        'comment': '1 if georefs have been applied, 0 otherwise'},
+
     # Reflectivity fields
     reflectivity: {
         'units': 'dBZ',

@@ -1,14 +1,14 @@
 """
-pyart.graph.radardisplay
-=========================
+pyart.graph.radardisplay_airborne
+=================================
 
-Class for creating plots from Radar objects.
+Class for creating plots from Airborne Radar objects.
 
 .. autosummary::
     :toctree: generated/
     :template: dev_template.rst
 
-    RadarDisplay
+    RadarDisplay_Airborne
 
 """
 
@@ -17,18 +17,19 @@ import numpy as np
 import netCDF4
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
-from .common import corner_to_point, radar_coords_to_cart 
-from .coord_transform import radar_coords_to_cart_track_relative,radar_coords_to_cart_earth_relative
+from .common import corner_to_point, radar_coords_to_cart
+from .coord_transform import radar_coords_to_cart_track_relative
+from .coord_transform import radar_coords_to_cart_earth_relative
 
 
 class RadarDisplay_Airborne:
     """
-    A display object for creating plots from data in a radar object.
+    A display object for creating plots from data in a airborne radar object.
 
     Parameters
     ----------
     radar : Radar
-        Radar object to use for creating plots.
+        Radar object to use for creating plots, should be an airborne radar.
     shift : (float, float)
         Shifts in km to offset the calculated x and y locations.
 
@@ -68,8 +69,24 @@ class RadarDisplay_Airborne:
         Elevations in degrees.
     fixed_angle : array
         Scan angle in degrees.
+    rotation : array
+        Rotation angle in degrees.
+    roll : array
+        Roll angle in degrees.
+    drift : array
+        Drift angle in degrees.
+    tilt : array
+        Tilt angle in degrees.
+    heading : array
+        Heading angle in degrees.
+    pitch : array
+        Pitch angle in degrees.
+    altitude : array
+        Altitude angle in meters.
+
 
     """
+    # TODO this class could likely be made a subclass of RadarDisplay.
 
     def __init__(self, radar, shift=(0.0, 0.0)):
         """ Initialize the object. """
@@ -99,32 +116,29 @@ class RadarDisplay_Airborne:
             self.origin = 'radar'
 
         # x, y, z attributes: cartesian location for a sweep in km.
-        rg, azg = np.meshgrid(self.ranges, self.azimuths)
-        rg, eleg = np.meshgrid(self.ranges, self.elevations)
-        rg, Rotg = np.meshgrid(self.ranges, self.rotation)
-        rg, Rollg = np.meshgrid(self.ranges, self.roll)
-        rg, Driftg = np.meshgrid(self.ranges, self.drift)
-        rg, Tiltg = np.meshgrid(self.ranges, self.tilt)
-        rg, Pitchg = np.meshgrid(self.ranges, self.pitch)
-        rg, Headingg = np.meshgrid(self.ranges, self.heading)
-
         self.shift = shift
-        
+
         if radar.metadata['platform_type'] == 'aircraft_belly':
-            self.x, self.y, self.z = radar_coords_to_cart(rg / 1000.0, azg, eleg)
-#            self.x, self.y, self.z = radar_coords_to_cart(rg / 1000.0, #_earth_relative?
-#                                   Rotg, Rollg, Driftg, Tiltg, Pitchg)
+            rg, azg = np.meshgrid(self.ranges, self.azimuths)
+            rg, eleg = np.meshgrid(self.ranges, self.elevations)
+            self.x, self.y, self.z = radar_coords_to_cart(
+                rg / 1000.0, azg, eleg)
             self.x = self.x + self.shift[0]
             self.y = self.y + self.shift[1]
         else:
-            self.x, self.y, self.z = radar_coords_to_cart_track_relative(rg / 1000.0, 
-                                   Rotg, Rollg, Driftg, Tiltg, Pitchg)
+            rg, rotg = np.meshgrid(self.ranges, self.rotation)
+            rg, rollg = np.meshgrid(self.ranges, self.roll)
+            rg, driftg = np.meshgrid(self.ranges, self.drift)
+            rg, tiltg = np.meshgrid(self.ranges, self.tilt)
+            rg, pitchg = np.meshgrid(self.ranges, self.pitch)
+            self.x, self.y, self.z = radar_coords_to_cart_track_relative(
+                rg / 1000.0, rotg, rollg, driftg, tiltg, pitchg)
             self.x = self.x + self.shift[0]
             self.y = self.y + self.shift[1]
 
         # radar location in latitude and longitude
-        middle_lat = radar.latitude['data'].shape[0]/2 # find the middle poing
-        middle_lon = radar.longitude['data'].shape[0]/2 # find the middle point
+        middle_lat = int(radar.latitude['data'].shape[0] / 2)
+        middle_lon = int(radar.longitude['data'].shape[0] / 2)
         lat = float(radar.latitude['data'][middle_lat])
         lon = float(radar.longitude['data'][middle_lon])
         self.loc = (lat, lon)
@@ -165,8 +179,7 @@ class RadarDisplay_Airborne:
         See Also
         --------
         plot_ppi : Plot a PPI scan
-        plot_rhi : Plot a RHI scan
-        plot_vpt : Plot a VPT scan
+        plot_sweep_grid : Plot a RHI or VPT scan
 
         """
         if self.scan_type == 'ppi':
@@ -252,12 +265,13 @@ class RadarDisplay_Airborne:
         self.plot_vars.append(field)
 
     def plot_sweep_grid(self, field, mask_tuple=None, vmin=None, vmax=None,
-                 cmap='jet', mask_outside=True, title=None, title_flag=True,
-                 axislabels=(None, None), axislabels_flag=True,
-                 colorbar_flag=True, colorbar_label=None, colorbar_orient=None,
-                 ax=None, fig=None):
+                        cmap='jet', mask_outside=True, title=None,
+                        title_flag=True, axislabels=(None, None),
+                        axislabels_flag=True, colorbar_flag=True,
+                        colorbar_label=None, colorbar_orient=None,
+                        ax=None, fig=None):
         """
-        Plot a PPI.
+        Plot a sweep as a grid.
 
         Parameters
         ----------
@@ -298,7 +312,8 @@ class RadarDisplay_Airborne:
             Colorbar label, None will use a default label generated from the
             field information.
         colorbar_orient : str
-            Colorbar orientation, None will use default orientation of vertical.
+            Colorbar orientation, None will use default orientation of
+            vertical.
         ax : Axis
             Axis to plot on. None will use the current axis.
         fig : Figure
@@ -321,7 +336,7 @@ class RadarDisplay_Airborne:
         pm = ax.pcolormesh(x, z, data, vmin=vmin, vmax=vmax, cmap=cmap)
 
         # Set the aspcet ratio
- #       ax.axis('scaled')
+        # ax.axis('scaled')
 
         if title_flag:
             self._set_title(field, title, ax)
@@ -338,7 +353,7 @@ class RadarDisplay_Airborne:
             self.plot_colorbar(mappable=pm, label=colorbar_label,
                                orient=colorbar_orient,
                                field=field, ax=ax, fig=fig)
-                               
+
     def plot_ppi(self, field, sweep=0, mask_tuple=None, vmin=None, vmax=None,
                  cmap='jet', mask_outside=True, title=None, title_flag=True,
                  axislabels=(None, None), axislabels_flag=True,
@@ -421,7 +436,8 @@ class RadarDisplay_Airborne:
             self.plot_colorbar(mappable=pm, label=colorbar_label,
                                field=field, ax=ax, fig=fig)
 
-    def plot_range_rings(self, range_rings, ax=None, col=None, ls=None, lw=None):
+    def plot_range_rings(self, range_rings, ax=None, col=None, ls=None,
+                         lw=None):
         """
         Plot a series of range rings.
 
@@ -439,9 +455,10 @@ class RadarDisplay_Airborne:
         """
         ax = self._parse_ax(ax)
         for range_ring_location_km in range_rings:
-            self.plot_range_ring(range_ring_location_km, ax=ax, col=col, ls=ls)
+            self.plot_range_ring(range_ring_location_km, ax=ax, col=col,
+                                 ls=ls, lw=lw)
 
-    def plot_range_ring(self, range_ring_location_km, npts=100, ax=None, 
+    def plot_range_ring(self, range_ring_location_km, npts=100, ax=None,
                         col=None, ls=None, lw=None):
         """
         Plot a single range ring.
@@ -472,8 +489,8 @@ class RadarDisplay_Airborne:
         if col is None:
             col = 'k'
         ax.plot(x, y, c=col, ls=ls, lw=lw)
-        
-    def plot_grid_lines(self,ax=None,col=None, ls=None, lw=None):
+
+    def plot_grid_lines(self, ax=None, col=None, ls=None, lw=None):
         """
         Plot grid lines.
 
@@ -495,7 +512,6 @@ class RadarDisplay_Airborne:
         if col is None:
             col = 'k'
         ax.grid(c=col, ls=ls)
-        
 
     def plot_labels(self, labels, locations, symbols='r+', text_color='k',
                     ax=None):
@@ -603,9 +619,6 @@ class RadarDisplay_Airborne:
             Figure to place colorbar on.  None will use the current figure.
 
         """
-        xlims = ax.get_xlim()
-        ylims = ax.get_ylim()
-
         if fig is None:
             fig = plt.gcf()
         if mappable is None:
@@ -616,19 +629,15 @@ class RadarDisplay_Airborne:
             label = self._get_colorbar_label(field)
         # Find the axes locations to set colorbar
         box = make_axes_locatable(ax)
-        
+
         if orient is None:
             orient = 'vertical'
         if orient == 'vertical':
-#            frac = (ylims[1] - ylims[0]) / (xlims[1] - xlims[0])
             cax = box.append_axes("right", size="3%", pad=0.05)
         if orient == 'horizontal':
-#            frac = (ylims[1] - ylims[0]) / (ylims[1] - ylims[0])
             cax = box.append_axes("bottom", size="6%", pad=0.50)
-#            .set_position([box.x0*1.05, box.y0, box.width, box.height])
-        cb = fig.colorbar(mappable, orientation=orient, ax=ax, cax=cax)#, shrink = frac)
+        cb = fig.colorbar(mappable, orientation=orient, ax=ax, cax=cax)
         cb.set_label(label)
-#        self.cbs.append(cb)
 
     ##########################
     # Plot adjusting methods #
@@ -675,11 +684,6 @@ class RadarDisplay_Airborne:
         ax = self._parse_ax(ax)
         ax.set_xlabel('Distance from ' + self.origin + ' (km)')
 
-    def label_yaxis_z(self, ax=None):
-        """ Label the yaxis with the default label for z units. """
-        ax = self._parse_ax(ax)
-        ax.set_ylabel('Distance Above ' + self.origin + '  (km)')
-
     def label_xaxis_rays(self, ax=None):
         """ Label the yaxis with the default label for rays. """
         ax = self._parse_ax(ax)
@@ -689,14 +693,14 @@ class RadarDisplay_Airborne:
         """ Label the yaxis with the default label for a field units. """
         ax = self._parse_ax(ax)
         ax.set_ylabel(self._get_colorbar_label(field))
-            
+
     def set_aspect_ratio(self, aratio=None, ax=None):
         """ Set the aspect ratio for plot area. """
         ax = self._parse_ax(ax)
         if aratio is None:
-           ax.set_aspect(0.75)
+            ax.set_aspect(0.75)
         else:
-           ax.set_aspect(aratio)
+            ax.set_aspect(aratio)
 
     def _set_title(self, field, title, ax):
         """ Set the figure title using a default title. """
@@ -720,7 +724,7 @@ class RadarDisplay_Airborne:
         else:
             ax.set_xlabel(x_label)
         if y_label is None:
-            self.label_zaxis_y(ax)
+            self.label_yaxis_y(ax)
         else:
             ax.set_ylabel(y_label)
 
@@ -787,7 +791,7 @@ class RadarDisplay_Airborne:
         name_s = self.radar_name.replace(' ', '_')
         field_s = field.replace(' ', '_')
         time_s = self.time_begin.strftime('%Y%m%d%H%M%S')
-        time_s = time_s.replace('-',':')
+        time_s = time_s.replace('-', ':')
         return '%s_%s_%s.%s' % (name_s, field_s, time_s, ext)
 
     def generate_title(self, field):
@@ -809,7 +813,7 @@ class RadarDisplay_Airborne:
         fixed_angle = self.fixed_angle
         l1 = "%s %.1f Deg. %s " % (self.radar_name, fixed_angle, time_str)
         field_name = self._generate_field_name(field)
-        return l1# + '\n' + field_name
+        return l1 + '\n' + field_name
 
     def generate_ray_title(self, field, ray):
         """

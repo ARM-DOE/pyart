@@ -117,9 +117,17 @@ cdef class SigmetFile:
         """ Close the file. """
         self._fh.close()
 
-    def read_data(self):
+    def read_data(self, full_xhdr=False):
         """
         Read all data from the file.
+
+        Parameters
+        ----------
+        full_xhdr : bool
+            True to return the full extended headers if they exist padded with
+            ones.  False will return a length 1 extended header converted to
+            int32.  This is useful when the file contains a customer specified
+            extended header (for example aircraft radar).
 
         Returns
         -------
@@ -146,7 +154,10 @@ cdef class SigmetFile:
         data = dict([(name, np.ma.empty(shape, dtype='float32'))
                     for name in self.data_type_names])
         if 'XHDR' in self.data_type_names:
-            data['XHDR'] = np.ones((nsweeps, nrays, 1), dtype='int32')
+            if full_xhdr:
+                data['XHDR'] = np.ones(shape, dtype='int16')
+            else:
+                data['XHDR'] = np.ones((nsweeps, nrays, 1), dtype='int32')
 
         metadata = {}
         for name in self.data_type_names:
@@ -166,7 +177,8 @@ cdef class SigmetFile:
 
         # read in data sweep by sweep
         for i in xrange(nsweeps):
-            ingest_data_hdrs, sweep_data, sweep_metadata = self._get_sweep()
+            ingest_data_hdrs, sweep_data, sweep_metadata = self._get_sweep(
+                    full_xhdr=full_xhdr)
 
             # check for a truncated file, return sweep(s) read up until error
             if ingest_data_hdrs is None:
@@ -194,7 +206,8 @@ cdef class SigmetFile:
 
                 # mask gates past nbins
                 # assuming nbins constant for all rays in a sweep
-                data[name][i, :, ray_nbins[0]:] = np.ma.masked
+                if name != 'XHDR':
+                    data[name][i, :, ray_nbins[0]:] = np.ma.masked
 
         # scale 1-byte velocity by the Nyquist
         # this conversion is kept in this method so that the
@@ -208,7 +221,7 @@ cdef class SigmetFile:
 
         return data, metadata
 
-    def _get_sweep(self, raw_data=False):
+    def _get_sweep(self, full_xhdr=False, raw_data=False):
         """
         Get the data and metadata from the next sweep.
 
@@ -216,6 +229,11 @@ cdef class SigmetFile:
 
         Parameters
         ----------
+        full_xhdr : bool
+            True to return the full extended headers if they exist padded with
+            ones.  False will return a length 1 extended header converted to
+            int32.  This is useful when the file contains a customer specified
+            extended header (for example aircraft radar).
         raw_data : bool, optional
             True to return the raw_data for the given sweep, False to
             convert the data to floating point representation.
@@ -276,8 +294,11 @@ cdef class SigmetFile:
         sweep_data = []
         sweep_metadata = []
         for i, data_type in enumerate(self.data_types):
-            sweep_data.append(convert_sigmet_data(
-                data_type, raw_sweep_data[i::self.ndata_types, 6:]))
+            if data_type == 0 and full_xhdr:
+                sweep_data.append(raw_sweep_data[i::self.ndata_types, 6:])
+            else:
+                sweep_data.append(convert_sigmet_data(
+                    data_type, raw_sweep_data[i::self.ndata_types, 6:]))
             sweep_metadata.append(_parse_ray_headers(
                 raw_sweep_data[i::self.ndata_types, :6]))
         return ingest_data_headers, sweep_data, sweep_metadata
