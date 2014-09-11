@@ -69,8 +69,24 @@ class RadarDisplay_Airborne:
         Elevations in degrees.
     fixed_angle : array
         Scan angle in degrees.
+    rotation : array
+        Rotation angle in degrees.
+    roll : array
+        Roll angle in degrees.
+    drift : array
+        Drift angle in degrees.
+    tilt : array
+        Tilt angle in degrees.
+    heading : array
+        Heading angle in degrees.
+    pitch : array
+        Pitch angle in degrees.
+    altitude : array
+        Altitude angle in meters.
+
 
     """
+    # TODO this class could likely be made a subclass of RadarDisplay.
 
     def __init__(self, radar, shift=(0.0, 0.0)):
         """ Initialize the object. """
@@ -100,25 +116,23 @@ class RadarDisplay_Airborne:
             self.origin = 'radar'
 
         # x, y, z attributes: cartesian location for a sweep in km.
-        rg, azg = np.meshgrid(self.ranges, self.azimuths)
-        rg, eleg = np.meshgrid(self.ranges, self.elevations)
-        rg, Rotg = np.meshgrid(self.ranges, self.rotation)
-        rg, Rollg = np.meshgrid(self.ranges, self.roll)
-        rg, Driftg = np.meshgrid(self.ranges, self.drift)
-        rg, Tiltg = np.meshgrid(self.ranges, self.tilt)
-        rg, Pitchg = np.meshgrid(self.ranges, self.pitch)
-        rg, Headingg = np.meshgrid(self.ranges, self.heading)
-
         self.shift = shift
 
         if radar.metadata['platform_type'] == 'aircraft_belly':
+            rg, azg = np.meshgrid(self.ranges, self.azimuths)
+            rg, eleg = np.meshgrid(self.ranges, self.elevations)
             self.x, self.y, self.z = radar_coords_to_cart(
                 rg / 1000.0, azg, eleg)
             self.x = self.x + self.shift[0]
             self.y = self.y + self.shift[1]
         else:
+            rg, rotg = np.meshgrid(self.ranges, self.rotation)
+            rg, rollg = np.meshgrid(self.ranges, self.roll)
+            rg, driftg = np.meshgrid(self.ranges, self.drift)
+            rg, tiltg = np.meshgrid(self.ranges, self.tilt)
+            rg, pitchg = np.meshgrid(self.ranges, self.pitch)
             self.x, self.y, self.z = radar_coords_to_cart_track_relative(
-                rg / 1000.0, Rotg, Rollg, Driftg, Tiltg, Pitchg)
+                rg / 1000.0, rotg, rollg, driftg, tiltg, pitchg)
             self.x = self.x + self.shift[0]
             self.y = self.y + self.shift[1]
 
@@ -165,8 +179,7 @@ class RadarDisplay_Airborne:
         See Also
         --------
         plot_ppi : Plot a PPI scan
-        plot_rhi : Plot a RHI scan
-        plot_vpt : Plot a VPT scan
+        plot_sweep_grid : Plot a RHI or VPT scan
 
         """
         if self.scan_type == 'ppi':
@@ -258,7 +271,7 @@ class RadarDisplay_Airborne:
                         colorbar_label=None, colorbar_orient=None,
                         ax=None, fig=None):
         """
-        Plot a PPI.
+        Plot a sweep as a grid.
 
         Parameters
         ----------
@@ -442,7 +455,8 @@ class RadarDisplay_Airborne:
         """
         ax = self._parse_ax(ax)
         for range_ring_location_km in range_rings:
-            self.plot_range_ring(range_ring_location_km, ax=ax, col=col, ls=ls)
+            self.plot_range_ring(range_ring_location_km, ax=ax, col=col,
+                                 ls=ls, lw=lw)
 
     def plot_range_ring(self, range_ring_location_km, npts=100, ax=None,
                         col=None, ls=None, lw=None):
@@ -605,9 +619,6 @@ class RadarDisplay_Airborne:
             Figure to place colorbar on.  None will use the current figure.
 
         """
-        xlims = ax.get_xlim()
-        ylims = ax.get_ylim()
-
         if fig is None:
             fig = plt.gcf()
         if mappable is None:
@@ -673,11 +684,6 @@ class RadarDisplay_Airborne:
         ax = self._parse_ax(ax)
         ax.set_xlabel('Distance from ' + self.origin + ' (km)')
 
-    def label_yaxis_z(self, ax=None):
-        """ Label the yaxis with the default label for z units. """
-        ax = self._parse_ax(ax)
-        ax.set_ylabel('Distance Above ' + self.origin + '  (km)')
-
     def label_xaxis_rays(self, ax=None):
         """ Label the yaxis with the default label for rays. """
         ax = self._parse_ax(ax)
@@ -718,7 +724,7 @@ class RadarDisplay_Airborne:
         else:
             ax.set_xlabel(x_label)
         if y_label is None:
-            self.label_zaxis_y(ax)
+            self.label_yaxis_y(ax)
         else:
             ax.set_ylabel(y_label)
 
@@ -807,7 +813,7 @@ class RadarDisplay_Airborne:
         fixed_angle = self.fixed_angle
         l1 = "%s %.1f Deg. %s " % (self.radar_name, fixed_angle, time_str)
         field_name = self._generate_field_name(field)
-        return l1  # + '\n' + field_name
+        return l1 + '\n' + field_name
 
     def generate_ray_title(self, field, ray):
         """
