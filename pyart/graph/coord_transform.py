@@ -8,14 +8,15 @@ Coordinate transform routines.
     :toctree: generated/
 
     radar_coords_to_cart_track_relative
+    radar_coords_to_cart_earth_relative
+    radar_coords_to_cart_aircraft_relative
 
 """
 
 import numpy as np
 
 
-def radar_coords_to_cart_track_relative(
-        rng, rot, roll, drift, tilt, pitch, debug=False):
+def radar_coords_to_cart_track_relative(rng, rot, roll, drift, tilt, pitch):
     """
     Calculate track-relative Cartesian coordinates from radar coordinates.
 
@@ -36,7 +37,7 @@ def radar_coords_to_cart_track_relative(
 
     Returns
     -------
-    X, Y, Z : array
+    x, y, z : array
         Cartesian coordinates in meters from the radar.
 
     Notes
@@ -44,46 +45,31 @@ def radar_coords_to_cart_track_relative(
     Project native (polar) coordinate radar sweep data onto
     track-relative Cartesian coordinate grid.
 
-    .. math::
-
-        z =
-
-        s = R * arcsin(\\frac{r*cos(\\theta_e)}{R+z})
-
-        x =
-        y =
-
-    Where r is the distance from the radar to the center of the gate,
-    :math:`\\theta_a` is the azimuth angle, :math:`\\theta_e` is the
-    elevation angle, s is the arc length, and R is the effective radius
-    of the earth, taken to be 4/3 the mean radius of earth (6371 km).
-
     References
     ----------
     .. [1] Lee et al. (1994) Journal of Atmospheric and Oceanic Technology.
 
     """
-    Rot = np.radians(rot)               # rotation angle in radians.
-    Roll = np.radians(roll)             # roll angle in radians.
-    Drift = np.radians(drift)           # drift angle in radians.
-    Tilt = np.radians(tilt)             # tilt angle in radians.
-    Pitch = np.radians(pitch)           # pitch angle in radians.
+    rot = np.radians(rot)               # rotation angle in radians.
+    roll = np.radians(roll)             # roll angle in radians.
+    drift = np.radians(drift)           # drift angle in radians.
+    tilt = np.radians(tilt)             # tilt angle in radians.
+    pitch = np.radians(pitch)           # pitch angle in radians.
     r = rng * 1000.0                    # distances to gates in meters.
 
-    X = r * (np.cos(Rot + Roll) * np.sin(Drift) * np.cos(Tilt) *
-             np.sin(Pitch) + np.cos(Drift) * np.sin(Rot + Roll) *
-             np.cos(Tilt) - np.sin(Drift) * np.cos(Pitch) * np.sin(Tilt))
-    Y = r * (-1. * np.cos(Rot + Roll) * np.cos(Drift) * np.cos(Tilt) *
-             np.sin(Pitch) + np.sin(Drift) * np.sin(Rot + Roll) *
-             np.cos(Tilt) + np.cos(Drift) * np.cos(Pitch) * np.sin(Tilt))
-    Z = (r * np.cos(Pitch) * np.cos(Tilt) * np.cos(Rot + Roll) +
-         np.sin(Pitch) * np.sin(Tilt))
-    return X, Y, Z
+    x = r * (np.cos(rot + roll) * np.sin(drift) * np.cos(tilt) *
+             np.sin(pitch) + np.cos(drift) * np.sin(rot + roll) *
+             np.cos(tilt) - np.sin(drift) * np.cos(pitch) * np.sin(tilt))
+    y = r * (-1. * np.cos(rot + roll) * np.cos(drift) * np.cos(tilt) *
+             np.sin(pitch) + np.sin(drift) * np.sin(rot + roll) *
+             np.cos(tilt) + np.cos(drift) * np.cos(pitch) * np.sin(tilt))
+    z = (r * np.cos(pitch) * np.cos(tilt) * np.cos(rot + roll) +
+         np.sin(pitch) * np.sin(tilt))
+    return x, y, z
 
 
-def radar_coords_to_cart_earth_relative(
-        rng, rot, roll, heading, tilt, pitch, debug=False):
-    """,tilt,heading,pitch
+def radar_coords_to_cart_earth_relative(rng, rot, roll, heading, tilt, pitch):
+    """
     Calculate earth-relative Cartesian coordinates from radar coordinates
 
     Parameters
@@ -103,7 +89,7 @@ def radar_coords_to_cart_earth_relative(
 
     Returns
     -------
-    X, Y, Z : array
+    x, y, z : array
         Cartesian coordinates in meters from the radar.
 
     Notes
@@ -111,44 +97,30 @@ def radar_coords_to_cart_earth_relative(
     Project native (polar) coordinate radar sweep data onto
     earth-relative Cartesian coordinate grid.
 
-    .. math::
-
-        z =
-
-        s = R * arcsin(\\frac{r*cos(\\theta_e)}{R+z})
-
-        x =
-        y =
-
-    Where r is the distance from the radar to the center of the gate,
-    :math:`\\theta_a` is the azimuth angle, :math:`\\theta_e` is the
-    elevation angle, s is the arc length, and R is the effective radius
-    of the earth, taken to be 4/3 the mean radius of earth (6371 km).
-
     References
     ----------
     .. [1] Lee et al. (1994) Journal of Atmospheric and Oceanic Technology.
 
     """
-    Rot = np.radians(rot)               # rotation angle in radians.
-    Roll = np.radians(roll)             # roll angle in radians.
-    Heading = np.radians(heading)       # drift angle in radians.
-    Tilt = np.radians(tilt)             # tilt angle in radians.
-    Pitch = np.radians(pitch)           # pitch angle in radians.
+    rot = np.radians(rot)               # rotation angle in radians.
+    roll = np.radians(roll)             # roll angle in radians.
+    heading = np.radians(heading)       # drift angle in radians.
+    tilt = np.radians(tilt)             # tilt angle in radians.
+    pitch = np.radians(pitch)           # pitch angle in radians.
     r = rng * 1000.0                    # distances to gates in meters.
 
-    X = r * (-1. * np.cos(Rot + Roll) * np.sin(Heading) * np.cos(Tilt) *
-             np.sin(Pitch) + np.cos(Heading) * np.sin(Rot + Roll) *
-             np.cos(Tilt) + np.sin(Heading) * np.cos(Pitch) * np.sin(Tilt))
-    Y = r * (-1. * np.cos(Rot + Roll) * np.cos(Heading) * np.cos(Tilt) *
-             np.sin(Pitch) - np.sin(Heading) * np.sin(Rot + Roll) *
-             np.cos(Tilt) + np.cos(Heading) * np.cos(Pitch) * np.sin(Tilt))
-    Z = (r * np.cos(Pitch) * np.cos(Tilt) * np.cos(Rot + Roll) +
-         np.sin(Pitch) * np.sin(Tilt))
-    return X, Y, Z
+    x = r * (-1. * np.cos(rot + roll) * np.sin(heading) * np.cos(tilt) *
+             np.sin(pitch) + np.cos(heading) * np.sin(rot + roll) *
+             np.cos(tilt) + np.sin(heading) * np.cos(pitch) * np.sin(tilt))
+    y = r * (-1. * np.cos(rot + roll) * np.cos(heading) * np.cos(tilt) *
+             np.sin(pitch) - np.sin(heading) * np.sin(rot + roll) *
+             np.cos(tilt) + np.cos(heading) * np.cos(pitch) * np.sin(tilt))
+    z = (r * np.cos(pitch) * np.cos(tilt) * np.cos(rot + roll) +
+         np.sin(pitch) * np.sin(tilt))
+    return x, y, z
 
 
-def radar_coords_to_cart_aircraft_relative(rng, rot, tilt, debug=False):
+def radar_coords_to_cart_aircraft_relative(rng, rot, tilt):
     """
     Calculate aircraft-relative Cartesian coordinates from radar coordinates.
 
@@ -171,71 +143,15 @@ def radar_coords_to_cart_aircraft_relative(rng, rot, tilt, debug=False):
     Project native (polar) coordinate radar sweep data onto
     earth-relative Cartesian coordinate grid.
 
-    .. math::
-
-        z =
-
-        s = R * arcsin(\\frac{r*cos(\\theta_e)}{R+z})
-
-        x =
-        y =
-
-    Where r is the distance from the radar to the center of the gate,
-    :math:`\\theta_a` is the azimuth angle, :math:`\\theta_e` is the
-    elevation angle, s is the arc length, and R is the effective radius
-    of the earth, taken to be 4/3 the mean radius of earth (6371 km).
-
     References
     ----------
     .. [1] Lee et al. (1994) Journal of Atmospheric and Oceanic Technology.
 
     """
-    Rot = np.radians(rot)               # rotation angle in radians.
-    Tilt = np.radians(tilt)             # tilt angle in radians.
+    rot = np.radians(rot)               # rotation angle in radians.
+    tilt = np.radians(tilt)             # tilt angle in radians.
     r = rng * 1000.0                    # distances to gates in meters.
-    X = r * np.cos(Tilt) * np.sin(Rot)
-    Y = r * np.sin(Tilt)
-    Z = r * np.cos(Rot) * np.cos(Tilt)
-    return X, Y, Z
-
-
-# XXX Not in working order
-def latlon2xy(latitude, longitude, altitude):
-
-    """/* These calculations are from the book
-    * "Aerospace Coordinate Systems and Transformations"
-    * by G. Minkler/J. Minkler
-    * these are the ECEF/ENU point transformations
-    """
-
-    earth_rad = 6370000.
-    h = earth_rad + altitude[0]
-    delta_o = np.radians(latitude[0])
-    lambda_o = np.radians(longitude[0])
-
-    sinLambda = np.sin(lambda_o)
-    cosLambda = np.cos(lambda_o)
-    sinDelta = np.sin(delta_o)
-    cosDelta = np.cos(delta_o)
-
-    R_p = earth_rad + altitude
-    delta_p = np.radians(latitude)
-    lambda_p = np.radians(longitude)
-    R_p_pr = R_p * np.cos(delta_p)
-
-    xe = R_p * np.sin(delta_p)
-    ye = -R_p_pr * np.sin(lambda_p)
-    ze = R_p_pr * np. cos(lambda_p)
-
-    # transform to ENU coordinates */
-
-    a = -h * sinDelta + xe
-    b = h * cosDelta * sinLambda + ye
-    c = -h * cosDelta * cosLambda + ze
-
-    X = -cosLambda * b - (sinLambda * c)
-    Y = ((cosDelta * a) + (sinLambda * sinDelta * b) -
-         (cosLambda * sinDelta * c))
-    Z = ((sinDelta * a) - (sinLambda * cosDelta * b) +
-         (cosLambda * cosDelta * c))
-    return X, Y, Z
+    x = r * np.cos(tilt) * np.sin(rot)
+    y = r * np.sin(tilt)
+    z = r * np.cos(rot) * np.cos(tilt)
+    return x, y, z
