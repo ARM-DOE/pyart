@@ -15,7 +15,6 @@ Front end to the University of Washington 4DD code for Doppler dealiasing.
 # Nothing from this module is imported to pyart.correct if RSL is not
 # installed.
 
-import copy
 import numpy as np
 
 from ..config import get_field_name, get_fillvalue, get_metadata
@@ -176,16 +175,18 @@ def dealias_fourdd(radar, last_radar=None, sounding_heights=None,
     # extra volume preparation
     # this assumes the radar has a normalized coherent power field and a
     # cross correlation ratio field
-    radar_copy = copy.deepcopy(radar)
     if prep and extra_prep:
         not_coherent = np.logical_or(
-                        radar_copy.fields[ncp_field]['data'] < ncp_min,
-                        radar_copy.fields[rhv_field]['data'] < rhv_min)
-        radar_copy.fields[refl_field]['data'][not_coherent] = fill_value
+            radar.fields[ncp_field]['data'] < ncp_min,
+            radar.fields[rhv_field]['data'] < rhv_min)
+        fdata = np.copy(radar.fields[field_name]['data']).astype(np.float32)
+        fdata[not_coferent] = fill_value
+    else:
+        fdata = None
 
     # create RSL volumes containing the reflectivity, doppler velocity, and
     # doppler velocity in the last radar (if provided)
-    refl_volume = _create_rsl_volume(radar_copy, refl_field, 0, rsl_badval)
+    refl_volume = _create_rsl_volume(radar, refl_field, 0, rsl_badval, fdata)
     vel_volume = _create_rsl_volume(radar, vel_field, 1, rsl_badval)
 
     if last_radar is not None:
@@ -234,12 +235,13 @@ def dealias_fourdd(radar, last_radar=None, sounding_heights=None,
     return vr_corr
 
 
-def _create_rsl_volume(radar, field_name, vol_num, rsl_badval):
+def _create_rsl_volume(radar, field_name, vol_num, rsl_badval, fdata=None):
     """
     Create a RSLVolume containing data from a field in radar.
     """
     fill_value = get_fillvalue()
-    fdata = np.copy(radar.fields[field_name]['data']).astype(np.float32)
+    if fdata is None:
+        fdata = np.copy(radar.fields[field_name]['data']).astype(np.float32)
     fdata = np.ma.filled(fdata, fill_value)
     is_bad = np.logical_or(fdata == fill_value, np.isnan(fdata))
     fdata[is_bad] = rsl_badval
