@@ -1,71 +1,129 @@
 """
-Functions for reading the Sigmet files from NOAA Hurricane hunter
-airborne radars
+pyart.io._sigmet_noaa_hh
+========================
+
+Functions needed for reading Sigmet files from the airborne radar located on
+NOAA's Hurricane Hunter aircraft.
+
+.. autosummary::
+    :toctree: generated/
+
+    _decode_noaa_hh_hdr
+    _georeference_yprime
+
 """
 
 import numpy as np
+from ._sigmetfile import bin4_to_angle, bin2_to_angle
 
 
-def decode_noaa_hh_hdr(raw_extended_headers, azimuth, elevation,
-                       position_source='irs', heading_source='irs'):
+def _decode_noaa_hh_hdr(
+        raw_extended_headers, filemetadata, azimuth, elevation,
+        position_source='irs', heading_source='irs'):
     """
-    Extract parameters from NOAA Hurricane hunter radar extended headers.
+    Extract data from Sigmet extended headers produced by NOAA
+    Hurricane Hunter airborne radars.
+
+    Parameters
+    ----------
+    raw_extended_headers : ndarray
+        Raw Sigmet extended headers.
+    filemetadata : FileMetadata
+        FileMetadata class from which metadata will be derived.
+    azimuth : dict
+        Dictionary of azimuth angles recorded in Sigmet file.
+    elevation : dict
+        Dictionary of elevation angles recorded in Sigmet file.
+    position_source: {'irs', 'gps', 'aamps'}, optional
+        Instrument from which to derive position parameters.
+    heading_source: {'irs', 'aamps'}
+        Instrument from which to derive heading parameters.
+
+    Returns
+    -------
+    latitude : dict
+        Dictionary containing latitude data and metadata.
+    longitude : dict
+        Dictionary containing longitude data and metadata.
+    altitude : dict
+        Dictionary containing altitude data and metadata.
+    heading_params : dict
+        Dictionary of dictionary containing aircraft heading data and
+        metadata.  Contains 'heading', 'roll', pitch', 'drift', 'rotation',
+        'tilt' and 'georefs_applied' dictionaries.
+
     """
     xhdr = np.rec.fromstring(raw_extended_headers[..., :68].tostring(),
-                             dtype=list(P3_EXTENDED_HEADER))
+                             dtype=list(NOAA_HH_EXTENDED_HEADER))
 
     # rotation and tilt from azimuth/elevation angles
+    rotation = filemetadata('rotation')
+    tilt = filemetadata('tilt')
+
     rotation_data = 90. - elevation['data'].copy()
     rotation_data[rotation_data < 0] += 360.
+    rotation['data'] = rotation_data
+
     tilt_data = azimuth['data'].copy()
     tilt_data[tilt_data > 180] -= 360.
-    rotation = {'data': rotation_data}
-    tilt = {'data': tilt_data}
+    tilt['data'] = tilt_data
 
     # airborne parameters
+    heading = filemetadata('heading')
+    roll = filemetadata('roll')
+    pitch = filemetadata('pitch')
+    drift = filemetadata('drift')
+
     if heading_source == 'irs':
-        heading_data = _bam16_to_angle(xhdr['irs_heading'])
-        roll_data = _bam16_to_angle(xhdr['irs_roll'])
-        pitch_data = _bam16_to_angle(xhdr['irs_pitch'])
-        drift_data = _bam16_to_angle(xhdr['irs_drift'])
+        heading_data = bin2_to_angle(xhdr['irs_heading'])
+        roll_data = bin2_to_angle(xhdr['irs_roll'])
+        pitch_data = bin2_to_angle(xhdr['irs_pitch'])
+        drift_data = bin2_to_angle(xhdr['irs_drift'])
     elif heading_source == 'aamps':
-        heading_data = _bam16_to_angle(xhdr['aamps_heading'])
-        roll_data = _bam16_to_angle(xhdr['aamps_roll'])
-        pitch_data = _bam16_to_angle(xhdr['aamps_pitch'])
-        drift_data = _bam16_to_angle(xhdr['aamps_drift'])
+        heading_data = bin2_to_angle(xhdr['aamps_heading'])
+        roll_data = bin2_to_angle(xhdr['aamps_roll'])
+        pitch_data = bin2_to_angle(xhdr['aamps_pitch'])
+        drift_data = bin2_to_angle(xhdr['aamps_drift'])
     else:
         raise ValueError('Unknown heading_source')
-    heading = {'data': heading_data}
-    roll = {'data': roll_data}
-    pitch = {'data': pitch_data}
-    drift = {'data': drift_data}
 
-    # positions: latitude, longitude, altitude
-    if position_source == 'gps':
-        lat_data = _bam32_to_angle(xhdr['gps_lat'])
-        lon_data = _bam32_to_angle(xhdr['gps_long'])
-        alt_data = xhdr['gps_alt'] / 100.
-    elif position_source == 'aamps':
-        lat_data = _bam32_to_angle(xhdr['aamps_lat'])
-        lon_data = _bam32_to_angle(xhdr['aamps_long'])
-        alt_data = xhdr['aamps_alt'] / 100.
-    elif position_source == 'irs':
-        lat_data = _bam32_to_angle(xhdr['irs_lat'])
-        lon_data = _bam32_to_angle(xhdr['irs_long'])
-        alt_data = xhdr['gps_alt'] / 100.
-    else:
-        raise ValueError('Invalid position_source')
-
-    latitude = {'data': lat_data}
-    longitude = {'data': lon_data}
-    altitude = {'data': alt_data}
+    heading['data'] = heading_data
+    roll['data'] = roll_data
+    pitch['data'] = pitch_data
+    drift['data'] = drift_data
 
     # georeferenced azimuth and elevation
-    az, elev = _compute_azimuth_elevation(
+    az, elev = _georeference_yprime(
         roll_data, pitch_data, heading_data, drift_data, rotation_data,
         tilt_data)
     azimuth['data'] = az
     elevation['data'] = elev
+    georefs_applied = filemetadata('georefs_applied')
+    georefs_applied['data'] = np.ones(az.shape, dtype='int8')
+
+    # positions: latitude, longitude, altitude
+    latitude = filemetadata('latitude')
+    longitude = filemetadata('longitude')
+    altitude = filemetadata('altitude')
+
+    if position_source == 'gps':
+        lat_data = bin4_to_angle(xhdr['gps_lat'])
+        lon_data = bin4_to_angle(xhdr['gps_long'])
+        alt_data = xhdr['gps_alt'] / 100.
+    elif position_source == 'aamps':
+        lat_data = bin4_to_angle(xhdr['aamps_lat'])
+        lon_data = bin4_to_angle(xhdr['aamps_long'])
+        alt_data = xhdr['aamps_alt'] / 100.
+    elif position_source == 'irs':
+        lat_data = bin4_to_angle(xhdr['irs_lat'])
+        lon_data = bin4_to_angle(xhdr['irs_long'])
+        alt_data = xhdr['gps_alt'] / 100.
+    else:
+        raise ValueError('Invalid position_source')
+
+    latitude['data'] = lat_data
+    longitude['data'] = lon_data
+    altitude['data'] = alt_data
 
     extended_header_params = {
         'heading': heading,
@@ -74,68 +132,60 @@ def decode_noaa_hh_hdr(raw_extended_headers, azimuth, elevation,
         'drift': drift,
         'rotation': rotation,
         'tilt': tilt,
-        'georefs_applied': None}
+        'georefs_applied': georefs_applied}
     return (latitude, longitude, altitude, extended_header_params)
 
 
-def _compute_azimuth_elevation(roll, pitch, heading, drift,
-                               rotation, tilt):
-    """ Compute georefered azimuth and elevation angles. """
-    # Adapted from SigmetRadxFile::_computeAzEl method of Radx found in
+def _georeference_yprime(roll, pitch, heading, drift, rotation, tilt):
+    """
+    Compute georeferenced azimuth and elevation angles for a Y-prime radar.
+
+    This is the georeferencing needed for the tail doppler radar on the
+    NOAA P3 aircraft.
+    """
+    # Adapted from Radx's SigmetRadxFile::_computeAzEl method found in
     # SigmetRadxFile.cc
-    # Based on transforms in Wen-Chau et al, JTech, 1994, 11, 572-578.
-    degree_to_radian = np.pi / 180.
+    # Transforms defined in Wen-Chau Lee et al, JTech, 1994, 11, 572-578.
 
-    R = roll * degree_to_radian
-    P = pitch * degree_to_radian
-    H = heading * degree_to_radian
-    D = drift * degree_to_radian
-    T = H + D
+    # Convert to radians and use variable names from Wen-Chau Lee paper
+    R = np.radians(roll)        # roll
+    P = np.radians(pitch)       # pitch
+    H = np.radians(heading)     # heading
+    D = np.radians(drift)       # drift
+    T = H + D                   # track
+    theta_a = np.radians(rotation)
+    tau_a = np.radians(tilt)
 
-    sinP = np.sin(P)
-    cosP = np.cos(P)
-    sinD = np.sin(D)
-    cosD = np.cos(D)
+    # Eq. (9)
+    x_t = (np.cos(theta_a + R) * np.sin(D) * np.cos(tau_a) * np.sin(P) +
+           np.cos(D) * np.sin(theta_a + R) * np.cos(tau_a) -
+           np.sin(D) * np.cos(P) * np.sin(tau_a))
 
-    theta_a = rotation * degree_to_radian
-    tau_a = tilt * degree_to_radian
-    sin_tau_a = np.sin(tau_a)
-    cos_tau_a = np.cos(tau_a)
-    sin_theta_rc = np.sin(theta_a + R)
-    cos_theta_rc = np.cos(theta_a + R)
+    y_t = (-np.cos(theta_a + R) * np.cos(D) * np.cos(tau_a) * np.sin(P) +
+           np.sin(D) * np.sin(theta_a + R) * np.cos(tau_a) +
+           np.cos(P) * np.cos(D) * np.sin(tau_a))
 
-    xsubt = (cos_theta_rc * sinD * cos_tau_a * sinP +
-             cosD * sin_theta_rc * cos_tau_a -
-             sinD * cosP * sin_tau_a)
+    z_t = (np.cos(P) * np.cos(tau_a) * np.cos(theta_a + R) +
+           np.sin(P) * np.sin(tau_a))
 
-    ysubt = (-cos_theta_rc * cosD * cos_tau_a * sinP +
-             sinD * sin_theta_rc * cos_tau_a +
-             cosP * cosD * sin_tau_a)
-
-    zsubt = (cosP * cos_tau_a * cos_theta_rc + sinP * sin_tau_a)
-    lambda_t = np.arctan2(xsubt, ysubt)
+    # Eq. (12) and discussion after Eq. (17)
+    lambda_t = np.arctan2(x_t, y_t)
     azimuth = np.fmod(lambda_t + T, 2 * np.pi)
-    elevation = np.arcsin(zsubt)
+
+    # Eq (17)
+    elevation = np.arcsin(z_t)
 
     return azimuth, elevation
 
-
-def _bam16_to_angle(arr):
-    """ Convert a 16-bit Binary angle to a angle """
-    return arr * 360. / 65536.0
-
-
-def _bam32_to_angle(arr):
-    return arr * 360. / 4294967296.0
-
-# Structure types
+# NOAA Hurrican Hunter Sigmet Extended header structure
+# scalar definitions
 UINT16 = 'H'
 INT16 = 'h'
 BAM16 = 'h'
 INT32 = 'i'
 BAM32 = 'i'
 
-P3_EXTENDED_HEADER = (
+NOAA_HH_EXTENDED_HEADER = (
     ('msecs_since_sweep_start', INT32),
     ('calib_signal_level', INT16),
     ('nbytes_in_header', INT16),

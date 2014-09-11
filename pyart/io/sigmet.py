@@ -320,8 +320,8 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
             noaa_hh_hdr = False
 
     if noaa_hh_hdr:
-        t = _sigmet_noaa_hh.decode_noaa_hh_hdr(
-            sigmet_data['XHDR_FULL'], azimuth, elevation)
+        t = _sigmet_noaa_hh._decode_noaa_hh_hdr(
+            sigmet_data['XHDR_FULL'], filemetadata, azimuth, elevation)
         (latitude, longitude, altitude, extended_header_params) = t
         metadata['platform_type'] = 'aircraft'
         scan_type = 'rhi'
