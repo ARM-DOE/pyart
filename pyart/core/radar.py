@@ -254,6 +254,22 @@ class Radar(object):
         self._dic_info('target_scan_rate', level, out)
         self._dic_info('time', level, out)
 
+        # Airborne radar parameters
+        if self.rotation is not None:
+            self._dic_info('rotation', level, out)
+        if self.tilt is not None:
+            self._dic_info('tilt', level, out)
+        if self.roll is not None:
+            self._dic_info('roll', level, out)
+        if self.drift is not None:
+            self._dic_info('drift', level, out)
+        if self.heading is not None:
+            self._dic_info('heading', level, out)
+        if self.pitch is not None:
+            self._dic_info('pitch', level, out)
+        if self.georefs_applied is not None:
+            self._dic_info('georefs_applied', level, out)
+
         # always print out all metadata last
         self._dic_info('metadata', 'full', out)
 
