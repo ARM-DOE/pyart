@@ -175,6 +175,11 @@ def _georeference_yprime(roll, pitch, heading, drift, rotation, tilt):
     # Eq (17)
     elevation = np.arcsin(z_t)
 
+    # convert to degrees and fix range
+    azimuth = np.degrees(azimuth)
+    azimuth[azimuth < 0] += 360.
+    elevation = np.degrees(elevation)
+    elevation[elevation > 180] -= 360.
     return azimuth, elevation
 
 # NOAA Hurrican Hunter Sigmet Extended header structure
