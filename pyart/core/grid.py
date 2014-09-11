@@ -43,7 +43,7 @@ class Grid(object):
         self.axes = axes
         return
 
-    def write(self, filename, format='NETCDF4'):
+    def write(self, filename, format='NETCDF4', arm_time_variables=False):
         """
         Write the the Grid object to a NetCDF file.
 
@@ -54,11 +54,16 @@ class Grid(object):
         format : str, optional
             NetCDF format, one of 'NETCDF4', 'NETCDF4_CLASSIC',
             'NETCDF3_CLASSIC' or 'NETCDF3_64BIT'.
+        arm_time_variables : bool
+            True to write the ARM standard time variables base_time and
+            time_offset. False will not write these variables.
 
         """
         # delayed import to avoid circular import
         from ..io.grid_io import write_grid
-        write_grid(filename, self, format=format)
+
+        write_grid(filename, self, format=format,
+                   arm_time_variables=arm_time_variables)
 
     def add_field(self, field_name, field_dict):
         """ Add field to Grid object.

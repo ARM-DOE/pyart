@@ -17,7 +17,9 @@ Reading and writing Grid objects.
 
 from warnings import warn
 
+import numpy as np
 import netCDF4
+import datetime
 
 from ..core.grid import Grid
 from .cfradial import _ncvar_to_dict, _create_ncvar
@@ -87,7 +89,7 @@ def read_grid(filename, exclude_fields=None):
     return Grid(fields, axes, metadata)
 
 
-def write_grid(filename, grid, format='NETCDF4'):
+def write_grid(filename, grid, format='NETCDF4', arm_time_variables=False):
     """
     Write a Grid object to a CF-1.5 and ARM standard netcdf file
 
@@ -101,6 +103,9 @@ def write_grid(filename, grid, format='NETCDF4'):
         NetCDF format, one of 'NETCDF4', 'NETCDF4_CLASSIC',
         'NETCDF3_CLASSIC' or 'NETCDF3_64BIT'. See netCDF4 documentation for
         details.
+    arm_time_variables : bool
+        True to write the ARM standard time variables base_time and
+        time_offset. False will not write these variables.
 
     """
     ncobj = netCDF4.Dataset(filename, mode='w', format=format)
@@ -116,11 +121,6 @@ def write_grid(filename, grid, format='NETCDF4'):
     ncobj.createDimension('nx', nx)
 
     # axes variables
-    if 'base_time' in grid.axes.keys():
-        _create_ncvar(grid.axes['base_time'], ncobj, 'base_time', ())
-    if 'time_offset' in grid.axes.keys():
-        _create_ncvar(grid.axes['time_offset'], ncobj, 'time_offset',
-                      ('time',))
     _create_ncvar(grid.axes['time'], ncobj, 'time', ('time', ))
     _create_ncvar(grid.axes['time_end'], ncobj, 'time_end', ('time', ))
     _create_ncvar(grid.axes['time_start'], ncobj, 'time_start', ('time', ))
@@ -130,6 +130,31 @@ def write_grid(filename, grid, format='NETCDF4'):
     _create_ncvar(grid.axes['lat'], ncobj, 'lat', ('time', ))
     _create_ncvar(grid.axes['lon'], ncobj, 'lon', ('time', ))
     _create_ncvar(grid.axes['alt'], ncobj, 'alt', ('time', ))
+
+    # create ARM time variables base_time and time_offset, if requested
+    if arm_time_variables:
+        time = grid.axes['time']
+        dt = netCDF4.num2date(time['data'][0], time['units'])
+        td = dt - datetime.datetime.utcfromtimestamp(0)
+        td = td.seconds + td.days * 24 * 3600
+
+        base_time = {
+            'data': np.array([td], dtype=np.int32),
+            'string': dt.strftime('%d-%b-%Y,%H:%M:%S GMT'),
+            'units': 'seconds since 1970-1-1 0:00:00 0:00',
+            'ancillary_variables': 'time_offset',
+            'long_name': 'Base time in Epoch',
+        }
+        _create_ncvar(base_time, ncobj, 'base_time', ())
+
+        time_offset = {
+            'data': np.array(time['data'], dtype=np.float64),
+            'long_name': 'Time offset from base_time',
+            'units': time['units'].replace('T', ' ').replace('Z', ''),
+            'ancillary_variables': 'time_offset',
+            'calendar': 'gregorian',
+        }
+        _create_ncvar(time_offset, ncobj, 'time_offset', ('time', ))
 
     # field variables
     for field, field_dic in grid.fields.iteritems():
