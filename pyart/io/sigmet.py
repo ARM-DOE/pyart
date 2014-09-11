@@ -118,12 +118,16 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
 
     # parse the extended headers for time
     if full_xhdr and 'XHDR' in sigmet_data:
-        # extract the ms timing data store full header for later analysis,
-        # keep them in the sigmet_data dictionary so that they get ordered
-        # and missing data is remove as with other fields
+        # extract the ms timing data and store the full header for later
+        # analysis, keep both in the sigmet_data dictionary so time ordering
+        # and removal of missing rays is performed on these "fields"
         xhdr = sigmet_data.pop('XHDR')
         sigmet_data['XHDR'] = xhdr[:, :, :2].copy().view('i4')
         sigmet_data['XHDR_FULL'] = xhdr
+        xhdr_metadata = {}
+        for key in sigmet_metadata['XHDR'].keys():
+            xhdr_metadata[key] = sigmet_metadata['XHDR'][key].copy()
+        sigmet_metadata['XHDR_FULL'] = xhdr_metadata
 
     # time order
     if time_ordered == 'full':
@@ -135,8 +139,6 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
     good_rays = (sigmet_metadata[first_data_type]['nbins'] != -1)
     for field_name in sigmet_data.keys():
         sigmet_data[field_name] = sigmet_data[field_name][good_rays]
-        if field_name == 'XHDR_FULL':
-            continue
         field_metadata = sigmet_metadata[field_name]
         for key in field_metadata.keys():
             field_metadata[key] = field_metadata[key][good_rays]
