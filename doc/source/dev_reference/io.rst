@@ -18,3 +18,4 @@ Input/Output routines.
 .. automodule:: pyart.io._rsl_interface
 .. automodule:: pyart.io.sigmet
 .. automodule:: pyart.io._sigmetfile
+.. automodule:: pyart.io._sigmet_noaa_hh

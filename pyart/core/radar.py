@@ -93,7 +93,24 @@ class Radar(object):
         Flag indicating if the antenna is in transition, 1 = tes, 0 = no.
         If not provided this attribute is set to None, indicating this
         parameter is not available.
-    instruments_parameters : dict of dicts or None
+    rotation : dict or None
+        The rotation angle of the antenna.  The angle about the aircraft
+        longitudinal axis for a vertically scanning radar.
+    tilt : dict or None
+        The tilt angle with respect to the plane orthogonal (Z-axis) to
+        aircraft longitudinal axis.
+    roll : dict or None
+        The roll angle of platform, for aircraft right wing down is positive.
+    drift : dict or None
+        Drift angle of antenna, the angle between heading and track.
+    heading : dict or None
+        Heading (compass) angle, clockwise from north.
+    pitch : dict or None
+        Pitch angle of antenna, for aircraft nose up is positive.
+    georefs_applied : dict or None
+        Indicates whether the variables have had georeference calculation
+        applied.  Leading to Earth-centric azimuth and elevation angles.
+    instrument_parameters : dict of dicts or None
         Instrument parameters, if not provided this attribute is set to None,
         indicating these parameters are not avaiable.  This dictionary also
         includes variables in the radar_parameters CF/Radial subconvention.
@@ -125,6 +142,9 @@ class Radar(object):
                  instrument_parameters=None,
                  radar_calibration=None,
 
+                 rotation=None, tilt=None, roll=None, drift=None, heading=None,
+                 pitch=None, georefs_applied=None,
+
                  ):
 
         if 'calendar' not in time:
@@ -152,6 +172,13 @@ class Radar(object):
         self.elevation = elevation
         self.scan_rate = scan_rate  # optional
         self.antenna_transition = antenna_transition  # optional
+        self.rotation = rotation  # optional
+        self.tilt = tilt  # optional
+        self.roll = roll  # optional
+        self.drift = drift  # optional
+        self.heading = heading  # optional
+        self.pitch = pitch  # optional
+        self.georefs_applied = georefs_applied  # optional
 
         self.instrument_parameters = instrument_parameters  # optional
         self.radar_calibration = radar_calibration  # optional
@@ -226,6 +253,22 @@ class Radar(object):
         self._dic_info('sweep_start_ray_index', level, out)
         self._dic_info('target_scan_rate', level, out)
         self._dic_info('time', level, out)
+
+        # Airborne radar parameters
+        if self.rotation is not None:
+            self._dic_info('rotation', level, out)
+        if self.tilt is not None:
+            self._dic_info('tilt', level, out)
+        if self.roll is not None:
+            self._dic_info('roll', level, out)
+        if self.drift is not None:
+            self._dic_info('drift', level, out)
+        if self.heading is not None:
+            self._dic_info('heading', level, out)
+        if self.pitch is not None:
+            self._dic_info('pitch', level, out)
+        if self.georefs_applied is not None:
+            self._dic_info('georefs_applied', level, out)
 
         # always print out all metadata last
         self._dic_info('metadata', 'full', out)

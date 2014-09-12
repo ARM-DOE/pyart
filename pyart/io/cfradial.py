@@ -160,7 +160,41 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
         antenna_transition = None
 
     # 4.9 Moving platform geo-reference variables
-    # TODO moving radar subclass
+    # Aircraft specific varaibles
+    if 'rotation' in ncvars:
+        rotation = _ncvar_to_dict(ncvars['rotation'])
+    else:
+        rotation = None
+
+    if 'tilt' in ncvars:
+        tilt = _ncvar_to_dict(ncvars['tilt'])
+    else:
+        tilt = None
+
+    if 'roll' in ncvars:
+        roll = _ncvar_to_dict(ncvars['roll'])
+    else:
+        roll = None
+
+    if 'drift' in ncvars:
+        drift = _ncvar_to_dict(ncvars['drift'])
+    else:
+        drift = None
+
+    if 'heading' in ncvars:
+        heading = _ncvar_to_dict(ncvars['heading'])
+    else:
+        heading = None
+
+    if 'pitch' in ncvars:
+        pitch = _ncvar_to_dict(ncvars['pitch'])
+    else:
+        pitch = None
+
+    if 'georefs_applied' in ncvars:
+        georefs_applied = _ncvar_to_dict(ncvars['georefs_applied'])
+    else:
+        georefs_applied = None
 
     # 4.10 Moments field data variables -> field attribute dictionary
     if 'ray_start_index' not in ncvars:     # Cfradial
@@ -245,7 +279,9 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
         radar_calibration=radar_calibration,
         altitude_agl=altitude_agl,
         scan_rate=scan_rate,
-        antenna_transition=antenna_transition)
+        antenna_transition=antenna_transition,
+        rotation=rotation, tilt=tilt, roll=roll, drift=drift, heading=heading,
+        pitch=pitch, georefs_applied=georefs_applied)
 
 
 def _find_all_meta_group_vars(ncvars, meta_group_name):
