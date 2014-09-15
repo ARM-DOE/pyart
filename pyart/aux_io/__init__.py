@@ -18,8 +18,12 @@ reported but fixing them will not be a priority.
     :toctree: generated/
 
     read_gamic
+    read_pattern
+
 
 """
+
+from pattern import read_pattern
 
 try:
     from .gamic_hdf5 import read_gamic
