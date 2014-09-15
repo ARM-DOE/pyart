@@ -109,9 +109,12 @@ def sweep_coords_to_cart(ranges, azimuths, elevations, edges=False):
 
     """
     if edges:
-        ranges = _interpolate_range_edges(ranges)
-        elevations = _interpolate_elevation_edges(elevations)
-        azimuths = _interpolate_azimuth_edges(azimuths)
+        if len(ranges) != 1:
+            ranges = _interpolate_range_edges(ranges)
+        if len(elevations) != 1:
+            elevations = _interpolate_elevation_edges(elevations)
+        if len(azimuths) != 1:
+            azimuths = _interpolate_azimuth_edges(azimuths)
     rg, azg = np.meshgrid(ranges, azimuths)
     rg, eleg = np.meshgrid(ranges, elevations)
     return radar_coords_to_cart(rg / 1000., azg, eleg)
