@@ -179,8 +179,8 @@ def dealias_fourdd(radar, last_radar=None, sounding_heights=None,
         not_coherent = np.logical_or(
             radar.fields[ncp_field]['data'] < ncp_min,
             radar.fields[rhv_field]['data'] < rhv_min)
-        fdata = np.copy(radar.fields[field_name]['data']).astype(np.float32)
-        fdata[not_coferent] = fill_value
+        fdata = np.copy(radar.fields[refl_field]['data']).astype(np.float32)
+        fdata[not_coherent] = fill_value
     else:
         fdata = None
 
