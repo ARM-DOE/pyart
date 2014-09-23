@@ -137,9 +137,8 @@ def _dealias_unwrap_3d(radar, vel_field, nyquist_vel):
     cube_no_mask = np.asarray(scaled_cube, dtype=np.float64, order='C')
     cube_scaled_unwrapped = np.empty_like(cube_no_mask, dtype=np.float64,
                                           order='C')
-    # XXX should be [False, True, True] but bug in code...
     unwrap_3d(cube_no_mask, mask, cube_scaled_unwrapped,
-              [False, False, False])
+              [False, True, False])
 
     # scale back to velocity units, prepare output
     unwrapped_cube = cube_scaled_unwrapped * nyquist_vel / np.pi
