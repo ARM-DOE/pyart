@@ -19,6 +19,6 @@ Core Py-ART classes and function for interacting with weather radar data.
 
 from .radar import Radar, is_vpt, to_vpt
 from .grid import Grid
-from .echo_classes import *
+import echo_classes
 
 __all__ = [s for s in dir() if not s.startswith('_')]
