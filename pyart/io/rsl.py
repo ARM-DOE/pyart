@@ -92,15 +92,16 @@ def read_rsl(filename, field_names=None, additional_metadata=None,
 
     # time
     time = filemetadata('time')
-
-    t_start = first_ray.get_datetime()
-
-    last_sweep = first_volume.get_sweep(nsweeps - 1)
-    last_ray = last_sweep.get_ray(last_sweep.nrays - 1)
-    t_end = last_ray.get_datetime()
-
-    t_span = (t_end - t_start).seconds
-    time['data'] = np.linspace(0, t_span, first_volume.total_rays())
+    datetimes = []
+    for i in range(nsweeps):
+        sweep = first_volume.get_sweep(i)
+        for j in range(sweep.nrays):
+            datetimes.append(sweep.get_ray(j).get_datetime())
+    t_start = min(datetimes)
+    t_delta = [t-t_start for t in datetimes]
+    # microseconds not needed since RSL only stores time to sec precision.
+    time['data'] = np.array(
+        [td.seconds + td.days*3600*24 for td in t_delta], dtype=np.float64)
     time['units'] = make_time_unit_str(t_start)
 
     # range
