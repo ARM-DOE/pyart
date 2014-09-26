@@ -116,6 +116,9 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
     sigmetfile.close()
     nsweeps, nrays, nbins = sigmet_data[first_data_type].shape
 
+    if nsweeps == 0:
+        raise IOError('File contains no readable sweep data.')
+
     # parse the extended headers for time
     if full_xhdr and 'XHDR' in sigmet_data:
         # extract the ms timing data and store the full header for later
