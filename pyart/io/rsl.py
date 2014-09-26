@@ -92,24 +92,17 @@ def read_rsl(filename, field_names=None, additional_metadata=None,
 
     # time
     time = filemetadata('time')
-
-    last_sweep = first_volume.get_sweep(nsweeps - 1)
-    last_ray = last_sweep.get_ray(last_sweep.nrays - 1)
-
-    #changes by scollis, real datetime, allows non-monotonic
-    date_time_list = []
-    for i in range(nsweeps): #loop over all sweeps
-        this_sweep = first_volume.get_sweep(i)
-        for j in range(this_sweep.nrays): #loop over all rays in sweep
-            date_time_list.append(this_sweep.get_ray(j).get_datetime())
-    date_time_array = np.array(date_time_list)
-
-    #get the lowest time, assume it is the start of the volume
-    volume_start_date_time = date_time_array.min()
-    time_in_seconds_array = \
-        np.array([(this_dt - volume_start_date_time).seconds for this_dt in date_time_array])
-    time['data'] = time_in_seconds_array
-    time['units'] = make_time_unit_str(volume_start_date_time)
+    datetimes = []
+    for i in range(nsweeps):
+        sweep = first_volume.get_sweep(i)
+        for j in range(sweep.nrays):
+            datetimes.append(sweep.get_ray(j).get_datetime())
+    t_start = min(datetimes)
+    t_delta = [t-t_start for t in datetimes]
+    # microseconds not needed since RSL only stores time to sec precision.
+    time['data'] = np.array(
+        [td.seconds + td.days*3600*24 for td in t_delta], dtype=np.float64)
+    time['units'] = make_time_unit_str(t_start)
 
     # range
     _range = filemetadata('range')
