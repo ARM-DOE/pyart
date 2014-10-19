@@ -27,6 +27,7 @@ from pattern import read_pattern
 
 try:
     from .gamic_hdf5 import read_gamic
+    from .odim_h5 import read_odim_h5
     _HDF5_AVAILABLE = True
 except:
     _HDF5_AVAILABLE = False
