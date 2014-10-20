@@ -11,14 +11,14 @@ Routines for reading ODIM_H5 files.
 
 """
 
-import numpy as np
-import h5py
 import datetime
 
-from pyart.config import FileMetadata, get_fillvalue
-from pyart.io.radar import Radar
-from pyart.io.common import make_time_unit_str
-from pyart.io.common import radar_coords_to_cart
+import numpy as np
+import h5py
+
+from ..config import FileMetadata, get_fillvalue
+from ..io.common import make_time_unit_str, radar_coords_to_cart
+from ..core.radar import Radar
 
 
 ODIM_H5_FIELD_NAMES = {
