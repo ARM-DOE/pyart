@@ -13,6 +13,7 @@ Automatic reading of radar files by detecting format.
 """
 
 import bz2
+import gzip
 
 import netCDF4
 
@@ -77,7 +78,13 @@ def read(filename, use_rsl=False, **kwargs):
 
     # Bzip, uncompress and see if we can determine the type
     if filetype == 'BZ2':
-        filetype = determine_filetype(bz2.BZ2File(filename))
+        filename = bz2.BZ2File(filename)
+        return read(filename, use_rsl, **kwargs)
+
+    # Gzip, uncompress and see if we can determine the type
+    if filetype == 'GZ':
+        filename = gzip.open(filename, 'rb')
+        return read(filename, use_rsl, **kwargs)
 
     # Py-ART only supported formats
     if filetype == "MDV":
@@ -125,6 +132,7 @@ def determine_filetype(filename):
     * 'SIGMET'
     * 'LASSEN'
     * 'BZ2'
+    * 'GZ'
     * 'UNKNOWN'
 
     Parameters
@@ -149,10 +157,12 @@ def determine_filetype(filename):
     # read the first 12 bytes from the file
     try:
         f = open(filename, 'rb')
+        begin = f.read(12)
+        f.close()
     except TypeError:
         f = filename
-    begin = f.read(12)
-    f.close()
+        begin = f.read(12)
+        f.seek(-12, 1)
 
     # MDV, read with read_mdv
     # MDV format signature from MDV FORMAT Interface Control Document (ICD)
@@ -222,5 +232,8 @@ def determine_filetype(filename):
     if begin[:3] == bzip2_signature:
         return 'BZ2'
 
+    gzip_signature = '\x1f\x8b'
+    if begin[:2] == gzip_signature:
+        return 'GZ'
     # Cannot determine filetype
     return "UNKNOWN"

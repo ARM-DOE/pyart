@@ -129,7 +129,10 @@ class NEXRADLevel2File():
         if bzip:
             fh = bz2.BZ2File(filename)
         else:
-            fh = open(filename, 'rb')
+            try:
+                fh = open(filename, 'rb')
+            except:
+                fh = filename
         size = _structure_size(VOLUME_HEADER)
         self.volume_header = _unpack_structure(fh.read(size), VOLUME_HEADER)
         compression_record = fh.read(COMPRESSION_RECORD_SIZE)
