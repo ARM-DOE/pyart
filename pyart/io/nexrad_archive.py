@@ -75,9 +75,12 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
                                 exclude_fields)
     # parse bzip parameter
     if bzip is None:
-        if filename.endswith('.bz2') or filename.endswith('bzip2'):
-            bzip = True
-        else:
+        try:
+            if filename.endswith('.bz2') or filename.endswith('bzip2'):
+                bzip = True
+            else:
+                bzip = False
+        except:
             bzip = False
 
     # open the file and retrieve scan information
