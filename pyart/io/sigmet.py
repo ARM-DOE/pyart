@@ -16,6 +16,7 @@ Reading and writing of Sigmet (raw format) files
 
 from __future__ import division
 import datetime
+import warnings
 
 import numpy as np
 
@@ -243,13 +244,6 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
     sweep_number = filemetadata('sweep_number')
     sweep_number['data'] = np.arange(nsweeps, dtype='int32')
 
-    # sweep_mode
-    sweep_mode = filemetadata('sweep_mode')
-    if scan_type == 'ppi':
-        sweep_mode['data'] = np.array(nsweeps * ['azimuth_surveillance'])
-    else:
-        sweep_mode['data'] = np.array(nsweeps * ['rhi'])
-
     # fixed_angle
     fixed_angle = filemetadata('fixed_angle')
     fa = [d['fixed_angle'] for d in
@@ -327,7 +321,21 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
             sigmet_data['XHDR_FULL'], filemetadata, azimuth, elevation)
         (latitude, longitude, altitude, extended_header_params) = t
         metadata['platform_type'] = 'aircraft'
-        scan_type = 'rhi'
+        # scan_type determined from the antenna_scan_mode parameters
+        noaa_hh_scan_modes = {4: 'ppi', 7: 'rhi'}
+        scan_mode = task_config['task_scan_info']['antenna_scan_mode']
+        if scan_mode not in noaa_hh_scan_modes:
+            warnings.warn("Unknown antenna_scan_mode, defaulting to 'rhi'.")
+            scan_type = 'rhi'
+        else:
+            scan_type = noaa_hh_scan_modes[scan_mode]
+
+    # sweep_mode
+    sweep_mode = filemetadata('sweep_mode')
+    if scan_type == 'ppi':
+        sweep_mode['data'] = np.array(nsweeps * ['azimuth_surveillance'])
+    else:
+        sweep_mode['data'] = np.array(nsweeps * ['rhi'])
 
     return Radar(
         time, _range, fields, metadata, scan_type,
