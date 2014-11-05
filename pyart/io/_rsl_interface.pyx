@@ -858,6 +858,25 @@ cdef class _RslVolume:
             ray_count += nrays
         return azimuth, elev
 
+    def get_sweep_fix_angles(self):
+        """
+        get_sweep_fix_angles()
+
+        Return array of fix angle for each sweep.
+
+        Angles determined from the first ray in each sweep.
+        """
+        cdef _rsl_h.Sweep * sweep
+        cdef _rsl_h.Ray * ray
+        fix_angles = np.empty((self.nsweeps), dtype='float32')
+        for i in range(self.nsweeps):
+            sweep = self._Volume.sweep[i]
+            assert sweep is not NULL
+            ray = sweep.ray[0]
+            assert ray is not NULL
+            fix_angles[i] = ray.h.fix_angle
+        return fix_angles
+
     def get_sweep_azimuths(self):
         """
         get_sweep_azimuths()
