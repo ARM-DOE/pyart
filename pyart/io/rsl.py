@@ -78,17 +78,18 @@ def read_rsl(filename, field_names=None, additional_metadata=None,
     nsweeps = first_volume.nsweeps
 
     # scan_type, sweep_mode, fixed_angle
-    sweep_mode = filemetadata('sweep_mode')
     fixed_angle = filemetadata('fixed_angle')
+    fdata = first_volume.get_sweep_fix_angles()
+    fdata[fdata < 0.] = 360. + fdata[fdata < 0.]    # all angles positive
+    fixed_angle['data'] = fdata
+    sweep_mode = filemetadata('sweep_mode')
 
-    if first_sweep.azimuth == -999.0:
+    if rslfile.scan_mode == 0:      # 0 = PPI, 1 = RHI
         scan_type = 'ppi'
         sweep_mode['data'] = np.array(nsweeps * ['azimuth_surveillance'])
-        fixed_angle['data'] = first_volume.get_sweep_elevs()
     else:
         scan_type = 'rhi'
         sweep_mode['data'] = np.array(nsweeps * ['rhi'])
-        fixed_angle['data'] = first_volume.get_sweep_azimuths()
 
     # time
     time = filemetadata('time')
