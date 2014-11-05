@@ -539,6 +539,30 @@ def write_cfradial(filename, radar, format='NETCDF4', time_reference=None,
                'long_name': 'Volume number',
                'units': 'unitless'}
     _create_ncvar(vol_dic, dataset, 'volume_number', ())
+
+    # moving platform geo-reference variables
+    if radar.rotation is not None:
+        _create_ncvar(radar.rotation, dataset, 'rotation', ('time', ))
+
+    if radar.tilt is not None:
+        _create_ncvar(radar.tilt, dataset, 'tilt', ('time', ))
+
+    if radar.roll is not None:
+        _create_ncvar(radar.roll, dataset, 'roll', ('time', ))
+
+    if radar.drift is not None:
+        _create_ncvar(radar.drift, dataset, 'drift', ('time', ))
+
+    if radar.heading is not None:
+        _create_ncvar(radar.heading, dataset, 'heading', ('time', ))
+
+    if radar.pitch is not None:
+        _create_ncvar(radar.pitch, dataset, 'pitch', ('time', ))
+
+    if radar.georefs_applied is not None:
+        _create_ncvar(radar.georefs_applied, dataset, 'georefs_applied',
+                      ('time', ))
+
     dataset.close()
 
 
