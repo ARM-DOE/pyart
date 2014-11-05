@@ -524,7 +524,7 @@ def write_cfradial(filename, radar, format='NETCDF4', time_reference=None,
         else:
             time_reference = True
     if time_reference:
-        ref_dic = {'data': np.array(radar.time['units'][-20:]),
+        ref_dic = {'data': np.array(radar.time['units'][-20:], dtype='S'),
                    'long_name': 'UTC time reference',
                    'units': 'unitless'}
         _create_ncvar(ref_dic, dataset, 'time_reference', time_dim)
@@ -560,6 +560,8 @@ def _create_ncvar(dic, dataset, name, dimensions):
 
     # convert string array to character arrays
     if data.dtype.char is 'S' and data.dtype != 'S1':
+        data = stringarray_to_chararray(data)
+    if data.dtype.char is 'U' and data.dtype != 'U1':
         data = stringarray_to_chararray(data)
 
     # create the dataset variable
