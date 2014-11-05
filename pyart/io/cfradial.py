@@ -498,10 +498,16 @@ def write_cfradial(filename, radar, format='NETCDF4', time_reference=None,
             _create_ncvar(radar.instrument_parameters[k], dataset, k, dim)
 
     # latitude, longitude, altitude
-    # TODO moving platform
-    _create_ncvar(radar.latitude, dataset, 'latitude', ())
-    _create_ncvar(radar.longitude, dataset, 'longitude', ())
-    _create_ncvar(radar.altitude, dataset, 'altitude', ())
+    if radar.latitude['data'].size == 1:
+        # stationary platform
+        _create_ncvar(radar.latitude, dataset, 'latitude', ())
+        _create_ncvar(radar.longitude, dataset, 'longitude', ())
+        _create_ncvar(radar.altitude, dataset, 'altitude', ())
+    else:
+        # moving platform
+        _create_ncvar(radar.latitude, dataset, 'latitude', ('time', ))
+        _create_ncvar(radar.longitude, dataset, 'longitude', ('time', ))
+        _create_ncvar(radar.altitude, dataset, 'altitude', ('time', ))
 
     # time_coverage_start and time_coverage_end variables
     time_dim = ('string_length', )
@@ -524,7 +530,7 @@ def write_cfradial(filename, radar, format='NETCDF4', time_reference=None,
         else:
             time_reference = True
     if time_reference:
-        ref_dic = {'data': np.array(radar.time['units'][-20:]),
+        ref_dic = {'data': np.array(radar.time['units'][-20:], dtype='S'),
                    'long_name': 'UTC time reference',
                    'units': 'unitless'}
         _create_ncvar(ref_dic, dataset, 'time_reference', time_dim)
@@ -533,6 +539,30 @@ def write_cfradial(filename, radar, format='NETCDF4', time_reference=None,
                'long_name': 'Volume number',
                'units': 'unitless'}
     _create_ncvar(vol_dic, dataset, 'volume_number', ())
+
+    # moving platform geo-reference variables
+    if radar.rotation is not None:
+        _create_ncvar(radar.rotation, dataset, 'rotation', ('time', ))
+
+    if radar.tilt is not None:
+        _create_ncvar(radar.tilt, dataset, 'tilt', ('time', ))
+
+    if radar.roll is not None:
+        _create_ncvar(radar.roll, dataset, 'roll', ('time', ))
+
+    if radar.drift is not None:
+        _create_ncvar(radar.drift, dataset, 'drift', ('time', ))
+
+    if radar.heading is not None:
+        _create_ncvar(radar.heading, dataset, 'heading', ('time', ))
+
+    if radar.pitch is not None:
+        _create_ncvar(radar.pitch, dataset, 'pitch', ('time', ))
+
+    if radar.georefs_applied is not None:
+        _create_ncvar(radar.georefs_applied, dataset, 'georefs_applied',
+                      ('time', ))
+
     dataset.close()
 
 
@@ -560,6 +590,8 @@ def _create_ncvar(dic, dataset, name, dimensions):
 
     # convert string array to character arrays
     if data.dtype.char is 'S' and data.dtype != 'S1':
+        data = stringarray_to_chararray(data)
+    if data.dtype.char is 'U' and data.dtype != 'U1':
         data = stringarray_to_chararray(data)
 
     # create the dataset variable

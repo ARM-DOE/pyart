@@ -12,6 +12,8 @@ Class for creating plots from Radar objects.
 
 """
 
+import warnings
+
 import matplotlib.pyplot as plt
 import numpy as np
 import netCDF4
@@ -98,8 +100,19 @@ class RadarDisplay:
         self.y = self.y + self.shift[1]
 
         # radar location in latitude and longitude
-        lat = float(radar.latitude['data'])
-        lon = float(radar.longitude['data'])
+        if radar.latitude['data'].size == 1:
+            lat = float(radar.latitude['data'])
+            lon = float(radar.longitude['data'])
+        else:
+            # for moving platforms stores use the median location.
+            # The RadarDisplay object does not give a proper
+            # visualization for moving platform data as the origin
+            # of each ray changes and needs to be calculated individually or
+            # georeferences.  When that is not available the following
+            # gives acceptable results.
+            lat = np.median(radar.latitude['data'])
+            lon = np.median(radar.longitude['data'])
+            warnings.warn('RadarDisplay does not correct for moving platforms')
         self.loc = (lat, lon)
 
         # datetime object describing first sweep time
