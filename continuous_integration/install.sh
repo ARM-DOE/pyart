@@ -60,7 +60,7 @@ if [[ "$FROM_RECIPE" == "true" ]]; then
     conda build --no-test -q conda_recipe/
    
     export CONDA_PACKAGE=`conda build --output conda_recipe/`
-    conda install $CONDA_PACKAGE
+    conda install --yes $CONDA_PACKAGE
     mkdir foo   # required so source directory not picked up during tests
     cd foo
 else
