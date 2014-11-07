@@ -84,7 +84,7 @@ def read_gamic(filename, field_names=None, additional_metadata=None,
             h5obj['/scan0/how'].attrs['timestamp'], '%Y-%m-%dT%H:%M:%SZ')
     except ValueError:
         scan_time = datetime.datetime.strptime(
-            h5obj['/scan0/how'].attrs['timestamp'], '%Y-%m-%dT%H:%M:%S.000Z')
+            h5obj['/scan0/how'].attrs['timestamp'], '%Y-%m-%dT%H:%M:%S.%fZ')
     time['units'] = make_time_unit_str(scan_time)
 
     # get scan0 ray header
