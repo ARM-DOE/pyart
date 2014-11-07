@@ -19,12 +19,12 @@ reported but fixing them will not be a priority.
 
     read_gamic
     read_pattern
-
+    read_radx
 
 """
 
 from pattern import read_pattern
-
+from radx import read_radx
 try:
     from .gamic_hdf5 import read_gamic
     from .odim_h5 import read_odim_h5
