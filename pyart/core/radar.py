@@ -82,6 +82,14 @@ class Radar(object):
     target_scan_rate : dict or None
         Intended scan rate for each sweep.  If not provided this attribute is
         set to None, indicating this parameter is not available.
+    rays_are_indexed : dict or None
+        Indication of whether ray angles are indexed to a regular grid in
+        each sweep.  If not provided this attribute is set to None, indicating
+        ray angle spacing is not determined.
+    ray_angle_res : dict or None
+        If rays_are_indexed is not None, this provides the angular resolution
+        of the grid.  If not provided or available this attribute is set to
+        None.
     azimuth : dict
         Azimuth of antenna, relative to true North.
     elevation : dict
@@ -135,7 +143,8 @@ class Radar(object):
                  azimuth, elevation,
 
                  altitude_agl=None,
-                 target_scan_rate=None,
+                 target_scan_rate=None, rays_are_indexed=None,
+                 ray_angle_res=None,
 
                  scan_rate=None, antenna_transition=None,
 
@@ -167,6 +176,8 @@ class Radar(object):
         self.sweep_start_ray_index = sweep_start_ray_index
         self.sweep_end_ray_index = sweep_end_ray_index
         self.target_scan_rate = target_scan_rate  # optional
+        self.rays_are_indexed = rays_are_indexed    # optional
+        self.ray_angle_res = ray_angle_res  # optional
 
         self.azimuth = azimuth
         self.elevation = elevation

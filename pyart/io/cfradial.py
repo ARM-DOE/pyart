@@ -150,6 +150,14 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
         target_scan_rate = _ncvar_to_dict(ncvars['target_scan_rate'])
     else:
         target_scan_rate = None
+    if 'rays_are_indexed' in ncvars:
+        rays_are_indexed = _ncvar_to_dict(ncvars['rays_are_indexed'])
+    else:
+        rays_are_indexed = None
+    if 'ray_angle_res' in ncvars:
+        ray_angle_res = _ncvar_to_dict(ncvars['ray_angle_res'])
+    else:
+        ray_angle_res = None
 
     # first sweep mode determines scan_type
     mode = str(netCDF4.chartostring(sweep_mode['data'][0]))
@@ -289,6 +297,7 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
         scan_rate=scan_rate,
         antenna_transition=antenna_transition,
         target_scan_rate=target_scan_rate,
+        rays_are_indexed=rays_are_indexed, ray_angle_res=ray_angle_res,
         rotation=rotation, tilt=tilt, roll=roll, drift=drift, heading=heading,
         pitch=pitch, georefs_applied=georefs_applied)
 
@@ -477,6 +486,12 @@ def write_cfradial(filename, radar, format='NETCDF4', time_reference=None,
                   ('sweep', 'string_length'))
     if radar.target_scan_rate is not None:
         _create_ncvar(radar.target_scan_rate, dataset, 'target_scan_rate',
+                      ('sweep', ))
+    if radar.rays_are_indexed is not None:
+        _create_ncvar(radar.rays_are_indexed, dataset, 'rays_are_indexed',
+                      ('sweep', 'string_length'))
+    if radar.ray_angle_res is not None:
+        _create_ncvar(radar.ray_angle_res, dataset, 'ray_angle_res',
                       ('sweep', ))
 
     # instrument_parameters
