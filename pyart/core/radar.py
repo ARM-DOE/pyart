@@ -90,7 +90,7 @@ class Radar(object):
         Actual antenna scan rate.  If not provided this attribute is set to
         None, indicating this parameter is not available.
     antenna_transition : dict or None
-        Flag indicating if the antenna is in transition, 1 = tes, 0 = no.
+        Flag indicating if the antenna is in transition, 1 = yes, 0 = no.
         If not provided this attribute is set to None, indicating this
         parameter is not available.
     rotation : dict or None

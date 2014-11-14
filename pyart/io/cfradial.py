@@ -454,6 +454,13 @@ def write_cfradial(filename, radar, format='NETCDF4', time_reference=None,
     _create_ncvar(radar.azimuth, dataset, 'azimuth', ('time', ))
     _create_ncvar(radar.elevation, dataset, 'elevation', ('time', ))
 
+    # optional sensor pointing variables
+    if radar.scan_rate is not None:
+        _create_ncvar(radar.scan_rate, dataset, 'scan_rate', ('time', ))
+    if radar.antenna_transition is not None:
+        _create_ncvar(radar.antenna_transition, dataset,
+                      'antenna_transition', ('time', ))
+
     # fields
     for field, dic in radar.fields.iteritems():
         _create_ncvar(dic, dataset, field, ('time', 'range'))
