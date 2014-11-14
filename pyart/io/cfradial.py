@@ -288,6 +288,7 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
         altitude_agl=altitude_agl,
         scan_rate=scan_rate,
         antenna_transition=antenna_transition,
+        target_scan_rate=target_scan_rate,
         rotation=rotation, tilt=tilt, roll=roll, drift=drift, heading=heading,
         pitch=pitch, georefs_applied=georefs_applied)
 
@@ -474,6 +475,9 @@ def write_cfradial(filename, radar, format='NETCDF4', time_reference=None,
                   'sweep_end_ray_index', ('sweep', ))
     _create_ncvar(radar.sweep_mode, dataset, 'sweep_mode',
                   ('sweep', 'string_length'))
+    if radar.target_scan_rate is not None:
+        _create_ncvar(radar.target_scan_rate, dataset, 'target_scan_rate',
+                      ('sweep', ))
 
     # instrument_parameters
     if ((radar.instrument_parameters is not None) and
