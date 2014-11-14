@@ -482,6 +482,20 @@ def write_cfradial(filename, radar, format='NETCDF4', time_reference=None,
                 dim = ()
             _create_ncvar(radar.instrument_parameters[k], dataset, k, dim)
 
+    # radar_calibration variables
+    if radar.radar_calibration is not None:
+        size = [len(d['data']) for k, d in radar.radar_calibration.items()
+                if k not in ['r_calib_index', 'r_calib_time']][0]
+        dataset.createDimension('r_calib', size)
+        for key, dic in radar.radar_calibration.items():
+            if key == 'r_calib_index':
+                dims = ('time', )
+            elif key == 'r_calib_time':
+                dims = ('r_calib', 'string_length')
+            else:
+                dims = ('r_calib', )
+            _create_ncvar(dic, dataset, key, dims)
+
     # latitude, longitude, altitude, altitude_agl
     if radar.latitude['data'].size == 1:
         # stationary platform
