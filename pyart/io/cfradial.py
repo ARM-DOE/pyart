@@ -312,7 +312,10 @@ def _find_all_meta_group_vars(ncvars, meta_group_name):
 
 def _ncvar_to_dict(ncvar):
     """ Convert a NetCDF Dataset variable to a dictionary. """
-    d = dict((k, getattr(ncvar, k)) for k in ncvar.ncattrs())
+    # copy all attribute except for scaling/masking attributes
+    ignore = ['scale_factor', 'add_offset', 'missing_value', '_FillValue']
+    d = dict((k, getattr(ncvar, k)) for k in ncvar.ncattrs()
+             if k not in ignore)
     d['data'] = ncvar[:]
     if np.isscalar(d['data']):
         # netCDF4 1.1.0+ returns a scalar for 0-dim array, we always want
