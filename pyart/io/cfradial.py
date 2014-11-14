@@ -29,6 +29,38 @@ from .common import stringarray_to_chararray
 from ..core.radar import Radar
 
 
+# Variables and dimensions in the instrument_parameter convention and
+# radar_parameters sub-convention that will be read from and written to
+# CfRadial files using Py-ART.
+# The meta_group attribute cannot be used to identify these parameters as
+# it is often set incorrectly.
+_INSTRUMENT_PARAMS_DIMS = {
+    # instrument_parameters sub-convention
+    'frequency': ('frequency'),
+    'follow_mode': ('sweep', 'string_length'),
+    'pulse_width': ('time', ),
+    'prt_mode': ('sweep', 'string_length'),
+    'prt': ('time', ),
+    'prt_ratio': ('time', ),
+    'polarization_mode': ('sweep', 'string_length'),
+    'nyquist_velocity': ('time', ),
+    'unambiguous_range': ('time', ),
+    'n_samples': ('time', ),
+    'sampling_ratio': ('time', ),
+    # radar_parameters sub-convention
+    'radar_antenna_gain_h': (),
+    'radar_antenna_gain_v': (),
+    'radar_beam_width_h': (),
+    'radar_beam_width_v': (),
+    'radar_reciever_bandwidth': (),
+    'radar_measured_transmit_power_h': ('time', ),
+    'radar_measured_transmit_power_v': ('time', ),
+    'radar_rx_bandwidth': (),           # non-standard
+    'measured_transmit_power_v': ('time', ),    # non-standard
+    'measured_transmit_power_h': ('time', ),    # non-standard
+}
+
+
 def read_cfradial(filename, field_names=None, additional_metadata=None,
                   file_field_names=False, exclude_fields=None):
     """
@@ -233,33 +265,9 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
                 ray_start_index)
 
     # 4.5 instrument_parameters sub-convention -> instrument_parameters dict
-
-    # the meta_group attribute is often set incorrectly so we cannot
-    # use this as a indicator of instrument_parameters
-    #keys = _find_all_meta_group_vars(ncvars, 'instrument_parameters')
-    valid_keys = ['frequency', 'follow_mode', 'pulse_width', 'prt_mode',
-                  'prt', 'prt_ratio', 'polarization_mode', 'nyquist_velocity',
-                  'unambiguous_range', 'n_samples', 'sampling_ration']
-    keys = [k for k in valid_keys if k in ncvars]
-    instrument_parameters = dict((k, _ncvar_to_dict(ncvars[k])) for k in keys)
-
     # 4.6 radar_parameters sub-convention -> instrument_parameters dict
-
-    # the meta_group attribute is often set incorrectly so we cannot
-    # use this as a indicator of instrument_parameters
-    #keys = _find_all_meta_group_vars(ncvars, 'radar_parameters')
-    valid_keys = ['radar_antenna_gain_h', 'radar_antenna_gain_v',
-                  'radar_beam_width_h', 'radar_beam_width_v',
-                  'radar_reciever_bandwidth',
-                  'radar_measured_transmit_power_h',
-                  'radar_measured_transmit_power_v']
-    # these keys are not in CF/Radial 1.2 standard but are common
-    valid_keys += ['radar_rx_bandwidth', 'measured_transmit_power_h',
-                   'measured_transmit_power_v']
-    keys = [k for k in valid_keys if k in ncvars]
-    radar_parameters = dict((k, _ncvar_to_dict(ncvars[k])) for k in keys)
-    instrument_parameters.update(radar_parameters)  # add to instr_params
-
+    keys = [k for k in _INSTRUMENT_PARAMS_DIMS.keys() if k in ncvars]
+    instrument_parameters = dict((k, _ncvar_to_dict(ncvars[k])) for k in keys)
     if instrument_parameters == {}:  # if no parameters set to None
         instrument_parameters = None
 
@@ -466,33 +474,10 @@ def write_cfradial(filename, radar, format='NETCDF4', time_reference=None,
         size = len(radar.instrument_parameters['frequency']['data'])
         dataset.createDimension('frequency', size)
 
-    instrument_dimensions = {
-        'frequency': ('frequency'),
-        'follow_mode': ('sweep', 'string_length'),
-        'pulse_width': ('time', ),
-        'prt_mode': ('sweep', 'string_length'),
-        'prt': ('time', ),
-        'prt_ratio': ('time', ),
-        'polarization_mode': ('sweep', 'string_length'),
-        'nyquist_velocity': ('time', ),
-        'unambiguous_range': ('time', ),
-        'n_samples': ('time', ),
-        'sampling_ratio': ('time', ),
-        'radar_antenna_gain_h': (),
-        'radar_antenna_gain_v': (),
-        'radar_beam_width_h': (),
-        'radar_beam_width_v': (),
-        'radar_reciever_bandwidth': (),
-        'radar_rx_bandwidth': (),           # non-standard
-        'radar_measured_transmit_power_h': ('time', ),
-        'radar_measured_transmit_power_v': ('time', ),
-        'measured_transmit_power_v': ('time', ),    # non-standard
-        'measured_transmit_power_h': ('time', ),    # non-standard
-    }
     if radar.instrument_parameters is not None:
         for k in radar.instrument_parameters.keys():
-            if k in instrument_dimensions:
-                dim = instrument_dimensions[k]
+            if k in _INSTRUMENT_PARAMS_DIMS:
+                dim = _INSTRUMENT_PARAMS_DIMS[k]
             else:
                 dim = ()
             _create_ncvar(radar.instrument_parameters[k], dataset, k, dim)
