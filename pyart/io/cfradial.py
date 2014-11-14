@@ -284,6 +284,8 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
     # 4.8 radar_calibration sub-convention -> radar_calibration
     keys = _find_all_meta_group_vars(ncvars, 'radar_calibration')
     radar_calibration = dict((k, _ncvar_to_dict(ncvars[k])) for k in keys)
+    if radar_calibration == {}:
+        radar_calibration = None
 
     return Radar(
         time, _range, fields, metadata, scan_type,
@@ -511,7 +513,7 @@ def write_cfradial(filename, radar, format='NETCDF4', time_reference=None,
             _create_ncvar(radar.instrument_parameters[k], dataset, k, dim)
 
     # radar_calibration variables
-    if radar.radar_calibration is not None:
+    if radar.radar_calibration is not None and radar.radar_calibration != {}:
         size = [len(d['data']) for k, d in radar.radar_calibration.items()
                 if k not in ['r_calib_index', 'r_calib_time']][0]
         dataset.createDimension('r_calib', size)
