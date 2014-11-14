@@ -550,10 +550,33 @@ def write_cfradial(filename, radar, format='NETCDF4', time_reference=None,
                    'units': 'unitless'}
         _create_ncvar(ref_dic, dataset, 'time_reference', time_dim)
 
-    vol_dic = {'data': np.array([0], dtype='int32'),
-               'long_name': 'Volume number',
-               'units': 'unitless'}
+    # global variables
+    # volume_number, required
+    vol_dic = {'long_name': 'Volume number', 'units': 'unitless'}
+    if 'volume_number' in radar.metadata:
+        vol_dic['data'] = np.array([radar.metadata['volume_number']],
+                                   dtype='int32')
+    else:
+        vol_dic['data'] = np.array([0], dtype='int32')
     _create_ncvar(vol_dic, dataset, 'volume_number', ())
+
+    # platform_type, optional
+    if 'platform_type' in radar.metadata:
+        dic = {'long_name': 'Platform type',
+               'data': np.array(radar.metadata['platform_type'])}
+        _create_ncvar(dic, dataset, 'platform_type', ('string_length', ))
+
+    # instrument_type, optional
+    if 'instrument_type' in radar.metadata:
+        dic = {'long_name': 'Instrument type',
+               'data': np.array(radar.metadata['instrument_type'])}
+        _create_ncvar(dic, dataset, 'instrument_type', ('string_length', ))
+
+    # primary_axis, optional
+    if 'primary_axis' in radar.metadata:
+        dic = {'long_name': 'Primary axis',
+               'data': np.array(radar.metadata['primary_axis'])}
+        _create_ncvar(dic, dataset, 'primary_axis', ('string_length', ))
 
     # moving platform geo-reference variables
     if radar.rotation is not None:
