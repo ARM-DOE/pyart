@@ -497,17 +497,22 @@ def write_cfradial(filename, radar, format='NETCDF4', time_reference=None,
                 dim = ()
             _create_ncvar(radar.instrument_parameters[k], dataset, k, dim)
 
-    # latitude, longitude, altitude
+    # latitude, longitude, altitude, altitude_agl
     if radar.latitude['data'].size == 1:
         # stationary platform
         _create_ncvar(radar.latitude, dataset, 'latitude', ())
         _create_ncvar(radar.longitude, dataset, 'longitude', ())
         _create_ncvar(radar.altitude, dataset, 'altitude', ())
+        if radar.altitude_agl is not None:
+            _create_ncvar(radar.altitude_agl, dataset, 'altitude_agl', ())
     else:
         # moving platform
         _create_ncvar(radar.latitude, dataset, 'latitude', ('time', ))
         _create_ncvar(radar.longitude, dataset, 'longitude', ('time', ))
         _create_ncvar(radar.altitude, dataset, 'altitude', ('time', ))
+        if radar.altitude_agl is not None:
+            _create_ncvar(radar.altitude_agl, dataset, 'altitude_agl',
+                          ('time', ))
 
     # time_coverage_start and time_coverage_end variables
     time_dim = ('string_length', )
