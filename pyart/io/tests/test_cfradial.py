@@ -339,6 +339,8 @@ def check_dataset_to_ref(dset, ref):
     dset_vars = dset.variables
     ref_vars = ref.variables
     for v in dset_vars.keys():
+        if v in ['platform_type', 'instrument_type', 'primary_axis']:
+            continue    # default value created by pyart.
         print "Variable", v
         check_variable_to_ref(dset_vars[v], ref_vars[v])
 
