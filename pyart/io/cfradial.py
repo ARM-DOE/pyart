@@ -11,8 +11,7 @@ Utilities for reading CF/Radial files.
     write_cfradial
     _find_all_meta_group_vars
     _ncvar_to_dict
-    _stream_ncvar_to_dict
-    _stream_to_2d
+    _unpack_variable_gate_field_dic
     _create_ncvar
 
 """
@@ -106,8 +105,10 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
 
     # 4.1 Global attribute -> move to metadata dictionary
     metadata = dict([(k, getattr(ncobj, k)) for k in ncobj.ncattrs()])
+    if 'n_gates_vary' in metadata:
+        metadata['n_gates_vary'] = 'false'  # corrected below
 
-    # 4.2 Dimensions (do nothing) TODO check if n_points present
+    # 4.2 Dimensions (do nothing)
 
     # 4.3 Global variable -> move to metadata dictionary
     if 'volume_number' in ncvars:
@@ -129,7 +130,7 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
     time = _ncvar_to_dict(ncvars['time'])
     _range = _ncvar_to_dict(ncvars['range'])
 
-    # 4.5 Ray dimension variables TODO working with this
+    # 4.5 Ray dimension variables
 
     # 4.6 Location variables -> create attribute dictionaries
     latitude = _ncvar_to_dict(ncvars['latitude'])
@@ -237,40 +238,31 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
         georefs_applied = None
 
     # 4.10 Moments field data variables -> field attribute dictionary
-    if 'ray_start_index' not in ncvars:     # Cfradial
-
-        fields = {}
+    if 'ray_n_gates' in ncvars:
+        # all variables with dimensions of n_points are fields.
+        keys = [k for k, v in ncvars.iteritems()
+                if v.dimensions == ('n_points', )]
+    else:
         # all variables with dimensions of 'time', 'range' are fields
         keys = [k for k, v in ncvars.iteritems()
                 if v.dimensions == ('time', 'range')]
-        for key in keys:
-            field_name = filemetadata.get_field_name(key)
-            if field_name is None:
-                if exclude_fields is not None and key in exclude_fields:
-                    continue
-                field_name = key
-            fields[field_name] = _ncvar_to_dict(ncvars[key])
 
-    else:  # stream file
-        ngates = ncvars['ray_start_index'][-1] + ncvars['ray_n_gates'][-1]
-        sweeps = ncvars['sweep_start_ray_index'][:]
-        sweepe = ncvars['sweep_end_ray_index'][:]
-        ray_len = ncvars['ray_n_gates'][:]
-        maxgates = ncvars['range'].shape[0]
-        nrays = ncvars['time'].shape[0]
+    fields = {}
+    for key in keys:
+        field_name = filemetadata.get_field_name(key)
+        if field_name is None:
+            if exclude_fields is not None and key in exclude_fields:
+                continue
+            field_name = key
+        fields[field_name] = _ncvar_to_dict(ncvars[key])
+
+    if 'ray_n_gates' in ncvars:
+        shape = (len(ncvars['time']), len(ncvars['range']))
+        ray_n_gates = ncvars['ray_n_gates'][:]
         ray_start_index = ncvars['ray_start_index'][:]
-        keys = [k for k, v in ncvars.iteritems() if v.shape == (ngates,)]
-
-        fields = {}
-        for key in keys:
-            field_name = filemetadata.get_field_name(key)
-            if field_name is None:
-                if exclude_fields is not None and key in exclude_fields:
-                    continue
-                field_name = key
-            fields[field_name] = _stream_ncvar_to_dict(
-                ncvars[key], sweeps, sweepe, ray_len, maxgates, nrays,
-                ray_start_index)
+        for dic in fields.values():
+            _unpack_variable_gate_field_dic(
+                dic, shape, ray_n_gates, ray_start_index)
 
     # 4.5 instrument_parameters sub-convention -> instrument_parameters dict
     # 4.6 radar_parameters sub-convention -> instrument_parameters dict
@@ -326,38 +318,15 @@ def _ncvar_to_dict(ncvar):
     return d
 
 
-def _stream_ncvar_to_dict(ncvar, sweeps, sweepe, ray_len, maxgates, nrays,
-                          ray_start_index):
-    """ Convert a Stream NetCDF Dataset variable to a dict. """
-    d = dict((k, getattr(ncvar, k)) for k in ncvar.ncattrs())
-    data = _stream_to_2d(ncvar[:], sweeps, sweepe, ray_len, maxgates, nrays,
-                         ray_start_index)
-    d['data'] = data
-    return d
-
-
-def _stream_to_2d(data, sweeps, sweepe, ray_len, maxgates, nrays,
-                  ray_start_index):
-    """ Convert a 1D stream to a 2D array. """
-    # XXX clean this up, need to find sample data
-    time_range = np.ma.zeros([nrays, maxgates]) - 9999.0
-    cp = 0
-    for sweep_number in range(len(sweepe)):
-        ss = sweeps[sweep_number]
-        se = sweepe[sweep_number]
-        rle = ray_len[sweeps[sweep_number]]
-
-        if ray_len[ss:se].sum() == rle * (se - ss):
-            time_range[ss:se, 0:rle] = (
-                data[cp:cp + (se - ss) * rle].reshape(se - ss, rle))
-            cp += (se - ss) * rle
-        else:
-            for rn in range(se - ss):
-                time_range[ss + rn, 0:ray_len[ss + rn]] = (
-                    data[ray_start_index[ss + rn]:ray_start_index[ss + rn] +
-                         ray_len[ss+rn]])
-            cp += ray_len[ss:se].sum()
-    return time_range
+def _unpack_variable_gate_field_dic(
+        dic, shape, ray_n_gates, ray_start_index):
+    """ Create a 2D array from a 1D field data, dic update in place """
+    fdata = dic['data']
+    data = np.ma.masked_all(shape, dtype=fdata.dtype)
+    for i, (gates, idx) in enumerate(zip(ray_n_gates, ray_start_index)):
+        data[i, :gates] = fdata[idx:idx+gates]
+    dic['data'] = data
+    return
 
 
 def write_cfradial(filename, radar, format='NETCDF4', time_reference=None,
@@ -438,7 +407,7 @@ def write_cfradial(filename, radar, format='NETCDF4', time_reference=None,
         dataset.setncattr('field_names', ', '.join(radar.fields.keys()))
 
     # history should be the last attribute, ARM standard
-    dataset.setncattr('history',  history)
+    dataset.setncattr('history', history)
 
     # arm time variables base_time and time_offset if requested
     if arm_time_variables:
