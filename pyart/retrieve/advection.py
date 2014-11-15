@@ -105,5 +105,54 @@ def grid_displacememt_pc(grid1, grid2, var, level, return_value = 'pixels'):
         tbr = (xShift, yShift)
     return tbr
 
+def grid_shift(grid, advection, trim_edges = 0., mask_range = None):
+    """
+    Use scipy.ndimage to shift a grid by a certain number of pixels
+     Parameters
+    ----------
+    grid: Grid
+        Py-ART Grid object.
+    advection : two-tuple of floats
+        Pixels to shift the image by.
+    trim_edges: integer
+        edges to cut off the grid and axes, both x and y. Defaults to zero.
+
+    Returns
+    -------
+    return_grid : Grid
+         grid with fields shifted and, if requested, subset.
+    """
+
+    new_grid = copy.deepcopy(grid)
+
+    #grab the x and y axis and trim
+
+    x_g = grid.axes['x_disp']['data'].copy()
+    y_g = grid.axes['y_disp']['data'].copy()
+    if trim_edges !=0.:
+        new_grid.axes['x_disp']['data'] = x_g[trim_edges:-trim_edges]
+        new_grid.axes['y_disp']['data'] = y_g[trim_edges:-trim_edges]
+    else:
+        new_grid.axes['x_disp']['data'] = x_g
+        new_grid.axes['y_disp']['data'] = y_g
+
+    #now shift each field. Replacing masking is tricky..
+    #either use valid min and max or use  user set
+
+    for field in grid.fields.keys():
+        if mask_range == None:
+            mask_range = [grid.fields[field]['valid_min'],
+                    grid.fields[field]['valid_max'] ]
+        image_data = grid.fields[field]['data'].copy()
+        new_image = scipy.ndimage.interpolation.shift(image_data,
+                [0,advection[0],advection[1]])
+        image_masked = np.ma.masked_outside(new_image,mask_range[0],
+                mask_range[1] )
+        if trim_edges != 0.:
+            new_grid.fields[field]['data'] = image_masked[:,
+                    trim_edges:-trim_edges, trim_edges:-trim_edges]
+        else:
+            new_grid.fields[field]['data'] = image_masked
+    return new_grid
 
 
