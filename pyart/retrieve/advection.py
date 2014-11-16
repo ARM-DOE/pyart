@@ -10,7 +10,7 @@ pyart.retrieve.advection
 
 import numpy as np
 from netCDF4 import datetime
-from skimage.transform import warp, AffineTransform
+import scipy
 import copy
 
 #Based off work by Christoph Gohlke <http://www.lfd.uci.edu/~gohlke/>
