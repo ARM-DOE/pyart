@@ -11,6 +11,7 @@ pyart.retrieve.advection
 import numpy as np
 from netCDF4 import datetime
 from skimage.transform import warp, AffineTransform
+import copy
 
 #Based off work by Christoph Gohlke <http://www.lfd.uci.edu/~gohlke/>
 def grid_displacememt_pc(grid1, grid2, var, level, return_value = 'pixels'):
@@ -105,7 +106,8 @@ def grid_displacememt_pc(grid1, grid2, var, level, return_value = 'pixels'):
         tbr = (xShift, yShift)
     return tbr
 
-def grid_shift(grid, advection, trim_edges = 0., mask_range = None):
+def grid_shift(grid, advection, trim_edges = 0.,
+        mask_range = None, field_list=None):
     """
     Use scipy.ndimage to shift a grid by a certain number of pixels
      Parameters
@@ -138,8 +140,10 @@ def grid_shift(grid, advection, trim_edges = 0., mask_range = None):
 
     #now shift each field. Replacing masking is tricky..
     #either use valid min and max or use  user set
+    if field_list == None:
+        field_list =  grid.fields.keys()
 
-    for field in grid.fields.keys():
+    for field in field_list:
         if mask_range == None:
             mask_range = [grid.fields[field]['valid_min'],
                     grid.fields[field]['valid_max'] ]
