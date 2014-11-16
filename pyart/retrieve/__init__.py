@@ -21,7 +21,7 @@ except:
     _F90_EXTENSIONS_AVAILABLE = False
 
 try:
-    from .advection import  grid_displacememt_pc, grid_shift
+    from .advection import  grid_displacement_pc, grid_shift
     _ADVECTION_AVAILABLE = True
 except:
     _ADVECTION_AVAILABLE = False

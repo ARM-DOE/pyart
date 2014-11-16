@@ -14,7 +14,7 @@ import scipy
 import copy
 
 #Based off work by Christoph Gohlke <http://www.lfd.uci.edu/~gohlke/>
-def grid_displacememt_pc(grid1, grid2, var, level, return_value = 'pixels'):
+def grid_displacement_pc(grid1, grid2, var, level, return_value = 'pixels'):
     """
     Calculate the grid displacement using Phase correlation.
     See:
