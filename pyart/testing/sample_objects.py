@@ -365,3 +365,25 @@ def make_storm_grid():
         'units': 'dBz'}
     grid.fields = {'reflectivity': rdic}
     return grid
+
+def make_normal_storm(sigma, mu):
+    """
+    Make a sample Grid with a gaussian storm target.
+    """
+    test_grid = pyart.testing.make_empty_grid([101,101,1],
+            [(-50,50),(-50,50), (1,1)])
+    x = test_grid.axes['x_disp']['data']
+    y = test_grid.axes['y_disp']['data']
+    z = test_grid.axes['z_disp']['data']
+    zg, yg, xg = np.meshgrid(z,y,x, indexing='ij')
+    r = np.sqrt((xg- mu[0])**2+(yg -mu[1])**2)
+    term1 = 1.0/(sigma * np.sqrt(2.0*np.pi))
+    term2 = -1.0*(r**2/(2.0*sigma**2))
+    data = term1 * np.exp(term2)
+    rdic = {
+        'data': data,
+        'long_name': 'reflectivity',
+        'units': 'dBz'}
+    test_grid.fields.update({'reflectivity': rdic})
+    return test_grid
+

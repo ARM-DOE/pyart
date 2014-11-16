@@ -34,6 +34,4 @@ try:
 except:
     _ADVECTION_AVAILABLE = False
 
-
-
 __all__ = [s for s in dir() if not s.startswith('_')]
