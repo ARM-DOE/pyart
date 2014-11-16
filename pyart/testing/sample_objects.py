@@ -304,7 +304,7 @@ def make_normal_storm(sigma, mu):
     """
     Make a sample Grid with a gaussian storm target.
     """
-    test_grid = pyart.testing.make_empty_grid([101,101,1],
+    test_grid = make_empty_grid([101,101,1],
             [(-50,50),(-50,50), (1,1)])
     x = test_grid.axes['x_disp']['data']
     y = test_grid.axes['y_disp']['data']
