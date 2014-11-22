@@ -12,6 +12,8 @@ import numpy as np
 from netCDF4 import datetime
 import scipy
 import copy
+from ..config import get_fillvalue
+
 
 #Based off work by Christoph Gohlke <http://www.lfd.uci.edu/~gohlke/>
 def grid_displacement_pc(grid1, grid2, var, level, return_value = 'pixels'):
@@ -106,8 +108,7 @@ def grid_displacement_pc(grid1, grid2, var, level, return_value = 'pixels'):
         tbr = (xShift, yShift)
     return tbr
 
-def grid_shift(grid, advection, trim_edges = 0.,
-        mask_range = None, field_list=None):
+def grid_shift(grid, advection, trim_edges = 0., field_list=None):
     """
     Use scipy.ndimage to shift a grid by a certain number of pixels
      Parameters
@@ -144,14 +145,16 @@ def grid_shift(grid, advection, trim_edges = 0.,
         field_list =  grid.fields.keys()
 
     for field in field_list:
-        if mask_range == None:
-            mask_range = [grid.fields[field]['valid_min'],
-                    grid.fields[field]['valid_max'] ]
         image_data = grid.fields[field]['data'].copy()
+        try:
+            ndv = image_data.fill_value
+            image_data = image_data.filled(np.nan)
+        except:
+            ndv = get_fillvalue()
         new_image = scipy.ndimage.interpolation.shift(image_data,
-                [0,advection[0],advection[1]])
-        image_masked = np.ma.masked_outside(new_image,mask_range[0],
-                mask_range[1] )
+                [0,advection[0],advection[1]], prefilter=False)
+        image_masked = np.ma.fix_invalid(new_image, copy=False)
+        image_masked.set_fill_value(ndv)
         if trim_edges != 0.:
             new_grid.fields[field]['data'] = image_masked[:,
                     trim_edges:-trim_edges, trim_edges:-trim_edges]
