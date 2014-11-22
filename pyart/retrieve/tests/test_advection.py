@@ -26,9 +26,9 @@ def test_grid_shift():
     tgrid1 = pyart.testing.make_normal_storm(10.0, [5.0,5.0])
     #trim one, trim and shift the other
     tgrid1_reduced = pyart.retrieve.grid_shift(tgrid1, [0.0, 0.0],
-            trim_edges = 10, mask_range = [400, -9000])
+            trim_edges = 10)
     tgrid0_shifted = pyart.retrieve.grid_shift(tgrid0, [5.0, 5.0],
-            trim_edges = 10, mask_range = [400, -9000])
+            trim_edges = 10)
     #take the difference
     diff = tgrid0_shifted.fields['reflectivity']['data'][0,:,:]\
             - tgrid1_reduced.fields['reflectivity']['data'][0,:,:]
