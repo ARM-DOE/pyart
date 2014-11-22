@@ -36,5 +36,15 @@ def test_grid_shift():
     #This actual value on my MB Air is -1.65633898546e-21
     assert diff.mean() < 1.0e-10
 
+def test_add_grids():
+    tgrid0 = pyart.testing.make_normal_storm(10.00, [0.0,0.0])
+    tgrid1 = pyart.testing.make_normal_storm(10.00, [0.0,0.0])
+    rgrid = pyart.testing.make_normal_storm(10.0, [0.0,0.0])
+    sgrid = pyart.retrieve.add_grids([tgrid0, tgrid1], [1.0, 1.0])
+    image_resultant = rgrid.fields['reflectivity']['data']
+    image_test = sgrid.fields['reflectivity']['data']
+    assert np.abs(image_resultant - image_test).mean() < 1.0e-6
+
+
 
 
