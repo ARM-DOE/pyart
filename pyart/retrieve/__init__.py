@@ -11,6 +11,9 @@ Functions for performing radar retrievals.
     :toctree: generated/
 
     steiner_conv_strat
+    grid_displacement_pc
+    grid_shift
+    add_grids
 
 """
 
@@ -21,7 +24,7 @@ except:
     _F90_EXTENSIONS_AVAILABLE = False
 
 try:
-    from .advection import  grid_displacement_pc, grid_shift
+    from .advection import  grid_displacement_pc, grid_shift, add_grids
     _ADVECTION_AVAILABLE = True
 except:
     _ADVECTION_AVAILABLE = False

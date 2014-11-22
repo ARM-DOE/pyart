@@ -6,6 +6,10 @@ pyart.retrieve.advection
 .. autosummary::
     :toctree: generated/
 
+    grid_displacement_pc
+    grid_shift
+    add_grids
+
 """
 
 import numpy as np
@@ -162,4 +166,46 @@ def grid_shift(grid, advection, trim_edges = 0., field_list=None):
             new_grid.fields[field]['data'] = image_masked
     return new_grid
 
+def add_grids(grids, weights=None, fields=None):
+    """
+    Add a list of grids together. Note: must be same dimensionality
+
+
+     Parameters
+    ----------
+    grids : list of Grids
+        A python list objects to be aggregated.
+    weights : list of floats
+        The weights for the grids. Defaults to [1.0]*len(grids).
+        Must be same length as grids
+    fields : list of strings
+        List of fields to be aggregated, defaults to all grids.
+
+    Returns
+    -------
+    return_grid : Grid
+         Aggregated Grid Resulting fields are SUM(grids[n] * weights[n])
+
+
+    """
+
+    #default is to aggregate all grids
+
+    if fields == None:
+        fields = grids[0].fields.keys()
+
+    #default weights are 1.0, so a simple ad
+
+    if weights == None:
+        weights = [1.0]*len(grids)
+
+    return_grid = copy.deepcopy(grids[0])
+    return_grid.fields =  {k: return_grid.fields.get(k, None) for k in fields}
+
+    for fld in fields:
+        datas = [this_grid.fields[fld]['data'] for this_grid in grids]
+        mean_grid = np.ma.average(datas, axis = 0, weights = weights)
+        return_grid.fields[fld]['data'] = mean_grid
+
+    return return_grid
 
