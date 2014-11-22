@@ -5,6 +5,7 @@ from numpy.testing.decorators import skipif
 
 import pyart
 
+@skipif(not pyart.retrieve._ADVECTION_AVAILABLE)
 def test_grid_displacement_pc():
     test_storm = pyart.testing.make_storm_grid()
     test_storm.fields['reflectivity']['data'] =\
@@ -19,7 +20,7 @@ def test_grid_displacement_pc():
     assert pyart.retrieve.grid_displacement_pc(test_storm,
             test_storm_2, 'reflectivity', 0) == (3,5)
 
-
+@skipif(not pyart.retrieve._ADVECTION_AVAILABLE)
 def test_grid_shift():
     #create two guassian storms
     tgrid0 = pyart.testing.make_normal_storm(10.0, [0.0,0.0])
@@ -36,6 +37,7 @@ def test_grid_shift():
     #This actual value on my MB Air is -1.65633898546e-21
     assert diff.mean() < 1.0e-10
 
+@skipif(not pyart.retrieve._ADVECTION_AVAILABLE)
 def test_add_grids():
     tgrid0 = pyart.testing.make_normal_storm(10.00, [0.0,0.0])
     tgrid1 = pyart.testing.make_normal_storm(10.00, [0.0,0.0])
