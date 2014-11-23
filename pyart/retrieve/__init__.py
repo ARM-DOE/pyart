@@ -14,6 +14,7 @@ Functions for performing radar retrievals.
     grid_displacement_pc
     grid_shift
     add_grids
+    create_substep_grids
 
 """
 
@@ -24,7 +25,7 @@ except:
     _F90_EXTENSIONS_AVAILABLE = False
 
 try:
-    from .advection import  grid_displacement_pc, grid_shift, add_grids
+    from .advection import  grid_displacement_pc, grid_shift, add_grids, create_substep_grids
     _ADVECTION_AVAILABLE = True
 except:
     _ADVECTION_AVAILABLE = False
