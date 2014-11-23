@@ -204,8 +204,9 @@ def add_grids(grids, weights=None, fields=None):
 
     for fld in fields:
         datas = [this_grid.fields[fld]['data'] for this_grid in grids]
-        mean_grid = np.ma.average(datas, axis = 0, weights = weights)
-        return_grid.fields[fld]['data'] = mean_grid
+        mean_grid, sow = np.ma.average(datas, axis = 0,
+                weights = weights, returned = True)
+        return_grid.fields[fld]['data'] = mean_grid*sow
 
     return return_grid
 
