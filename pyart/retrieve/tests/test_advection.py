@@ -44,7 +44,7 @@ def test_add_grids():
     rgrid = pyart.testing.make_normal_storm(10.0, [0.0,0.0])
     sgrid = pyart.retrieve.add_grids([tgrid0, tgrid1], [1.0, 1.0])
     image_resultant = rgrid.fields['reflectivity']['data']
-    image_test = sgrid.fields['reflectivity']['data']
+    image_test = sgrid.fields['reflectivity']['data']/2.0
     assert np.abs(image_resultant - image_test).mean() < 1.0e-6
 
 
