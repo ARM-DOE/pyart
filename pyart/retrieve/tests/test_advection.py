@@ -47,6 +47,20 @@ def test_add_grids():
     image_test = sgrid.fields['reflectivity']['data']/2.0
     assert np.abs(image_resultant - image_test).mean() < 1.0e-6
 
+@skipif(not pyart.retrieve._ADVECTION_AVAILABLE)
+def test_substep_grids():
+    tgrid0 = pyart.testing.make_normal_storm(2.00, [-15.0,-15.0])
+    tgrid1 = pyart.testing.make_normal_storm(2.00, [15.0,15.0])
+    tgrid1.axes['time']['data']=np.array([60.])
+    tgrid_target = pyart.testing.make_normal_storm(2.00, [0.0,0.0])
+    grid_list = pyart.retrieve. create_substep_grids(tgrid0,
+            tgrid1, [30,30], 3, 30)
+    tgrid_target_trimmed =   pyart.retrieve.grid_shift(tgrid_target,
+            [0.0, 0.0],  trim_edges = 30)
+    diff = np.abs(grid_list[1].fields['reflectivity']['data'][0,:,:] - \
+                  tgrid_target_trimmed.fields['reflectivity']['data'][0,:,:])
+    assert diff.mean() < 1e-6
+
 
 
 
