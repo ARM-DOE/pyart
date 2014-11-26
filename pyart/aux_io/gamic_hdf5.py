@@ -18,7 +18,7 @@ import datetime
 import h5py
 import numpy as np
 
-from ..config import FileMetadata
+from ..config import FileMetadata, get_fillvalue
 from ..io.common import make_time_unit_str
 from ..core.radar import Radar
 
@@ -26,201 +26,201 @@ from ..core.radar import Radar
 def read_gamic(filename, field_names=None, additional_metadata=None,
                file_field_names=False, exclude_fields=None):
     """
-    Read a gamic hdf5 file.
+    Read a GAMIC hdf5 file.
 
     Parameters
     ----------
     filename : str
-        Name of gamic hdf5 file to read data from.
+        Name of GAMIC HDF5 file to read data from.
+    field_names : dict, optional
+        Dictionary mapping field names in the file names to radar field names.
+        Unlike other read functions, fields not in this dictionary or having a
+        value of None are still included in the radar.fields dictionary, to
+        exclude them use the `exclude_fields` parameter. Fields which are
+        mapped by this dictionary will be renamed from key to value.
+    additional_metadata : dict of dicts, optional
+        This parameter is not used, it is included for uniformity.
+    file_field_names : bool, optional
+        True to force the use of the field names from the file in which
+        case the `field_names` parameter is ignored. False will use to
+        `field_names` parameter to rename fields.
+    exclude_fields : list or None, optional
+        List of fields to exclude from the radar object. This is applied
+        after the `file_field_names` and `field_names` parameters.
 
     Returns
     -------
     radar : Radar
         Radar object.
 
-    Notes
-    -----
-    First Test.
-
     """
+    # TODO
+    # * unit tests
+    # * add default field mapping, etc to default config
+    # * auto-detect file type with pyart.io.read function
+    # * move to pyart.io namespace
+
     # create metadata retrieval object
-    filemetadata = FileMetadata('cfradial', field_names, additional_metadata,
+    filemetadata = FileMetadata('gamic', field_names, additional_metadata,
                                 file_field_names, exclude_fields)
 
-    # open h5 file and get handle
-    h5obj = h5py.File(filename, 'r')
+    # Open HDF5 file and get handle
+    hfile = h5py.File(filename, 'r')
 
-    # initialize metadata as dict
-    metadata = dict()
+    # metadata, initial empty is filled in throughout
+    metadata = filemetadata('metadata')
 
-    # 4.1 Global attribute -> move to metadata dictionary
-    # no global attribs in gamic hdf5
+    # /where
+    # latitude, longitude and altitude
+    latitude = filemetadata('latitude')
+    longitude = filemetadata('longitude')
+    altitude = filemetadata('altitude')
 
-    # 4.2 Dimensions (do nothing) TODO check if n_points present
+    h_where = hfile['where'].attrs
+    latitude['data'] = np.array([h_where['lat']], dtype='float64')
+    longitude['data'] = np.array([h_where['lon']], dtype='float64')
+    altitude['data'] = np.array([h_where['height']], dtype='float64')
 
-    # 4.3 Global variable -> move to metadata dictionary
-    metadata['volume_number'] = 0
+    # /what
+    what_attrs = hfile['what'].attrs
+    nsweeps = int(what_attrs['sets'])
+    # fill in metadata
+    metadata['original_container'] = 'GAMIC-HDF5'
+    what_mapping = {
+        'version': 'gamic_version', 'sets_scheduled': 'sets_scheduled',
+        'object': 'gamic_object', 'date': 'gamic_date'}
+    for hkey, mkey in what_mapping.items():
+        if hkey in what_attrs:
+            metadata[mkey] = what_attrs[hkey]
 
-    #map some global vars to possible gamic counterparts
-    global_vars = {'platform_type': 'fixed', 'instrument_type': 'radar',
-                   'primary_axis': 'axis_z', 'source': 'software',
-                   'references': 'template_name',
-                   'instrument_name': 'site_name',
-                   'institution': 'host_name', 'version': 'sdp_name'}
-    # ignore time_* global variables, these are calculated from the time
-    # variable when the file is written.
-    for var, default_value in global_vars.iteritems():
-        try:
-            metadata[var] = h5obj['/how'].attrs[default_value]
-        except KeyError:
-            metadata[var] = default_value
+    # /how
+    # fill in metadata
+    how_attrs = hfile['how'].attrs
+    how_keys = ['software', 'template_name', 'site_name', 'host_name',
+                'azimuth_beam', 'elevation_beam', 'sdp_name', 'sw_version',
+                'sdp_version', 'simulated']
+    for key in how_keys:
+        if key in how_attrs:
+            metadata[key] = how_attrs[key]
 
-    # 4.4 coordinate variables -> create attribute dictionaries
-    time = filemetadata.get_metadata('time')
+    # /scan0 to /scan[nsweeps-1]
+    scans = ['scan%i' % (i) for i in range(nsweeps)]
+    # verify that scan0 ... scan[nsweeps-1] are present in file
+    for scan in scans:
+        assert scan in hfile
 
-    # test for possible TimeStamp Issues
-    try:
-        scan_time = datetime.datetime.strptime(
-            h5obj['/scan0/how'].attrs['timestamp'], '%Y-%m-%dT%H:%M:%SZ')
-    except ValueError:
-        scan_time = datetime.datetime.strptime(
-            h5obj['/scan0/how'].attrs['timestamp'], '%Y-%m-%dT%H:%M:%S.%fZ')
-    time['units'] = make_time_unit_str(scan_time)
+    # sweep_start_ray_index, sweep_end_ray_index
+    sweep_start_ray_index = filemetadata('sweep_start_ray_index')
+    sweep_end_ray_index = filemetadata('sweep_end_ray_index')
 
-    # get scan0 ray header
-    # in volume file there are several scans, scanX
-    ray_header = h5obj['/scan0/ray_header']
+    rays_per_sweep = [hfile[s]['how'].attrs['ray_count'] for s in scans]
+    total_rays = sum(rays_per_sweep)
+    ssri = np.cumsum(np.append([0], rays_per_sweep[:-1])).astype('int32')
+    seri = np.cumsum(rays_per_sweep).astype('int32') - 1
+    sweep_start_ray_index['data'] = ssri
+    sweep_end_ray_index['data'] = seri
 
-    # get microseconds since linux epoch
-    scan_time_se = (scan_time -
-                    datetime.datetime(1970, 1, 1)).total_seconds() * 1e6
-    # get timestamp array and subtract epoch, change to seconds again
-    time['data'] = (np.array(ray_header['timestamp']) - scan_time_se) / 1e6
+    # sweep number
+    sweep_number = filemetadata('sweep_number')
+    sweep_number['data'] = np.array(
+        [hfile[scan]['what'].attrs['set_idx'] for scan in scans],
+        dtype='int32')
 
-    # get range, bin etc
-    range_start = h5obj['/scan0/how'].attrs['range_start']
-    range_ = h5obj['/scan0/how'].attrs['range']
-    bin_count = h5obj['/scan0/how'].attrs['bin_count']
-    range_step = h5obj['/scan0/how'].attrs['range_step']
-    range_samples = h5obj['/scan0/how'].attrs['range_samples']
-    _range = filemetadata.get_metadata('range')
-    # create range array
-    _range['data'] = np.linspace(
-        range_start + (range_step * range_samples / 2.),
-        range_ - (range_step * range_samples / 2.), bin_count)
+    # sweep_type
+    scan_type = hfile['scan0']['what'].attrs['scan_type'].lower()
+    if scan_type not in ['ppi', 'rhi']:
+        raise NotImplementedError('Not supported sweep_type: ' + scan_type)
+    # check that all scans in the volume are the same type
+    for scan in scans:
+        if hfile[scan]['what'].attrs['scan_type'].lower() != scan_type:
+            raise NotImplementedError('Mixed scan_type volume in scan:' + scan)
 
-    # 4.5 Ray dimension variables TODO working with this
+    # sweep_mode, fixed_angle
+    sweep_mode = filemetadata('sweep_mode')
+    fixed_angle = filemetadata('fixed_angle')
 
-    # 4.6 Location variables -> create attribute dictionaries
-    # gamic location variables are in subgroup /where
-    latitude = _h5_to_dict(h5obj, '/where', 'lat', 'latitude', filemetadata)
-    longitude = _h5_to_dict(h5obj, '/where', 'lon', 'longitude', filemetadata)
-    altitude = _h5_to_dict(h5obj, '/where', 'height', 'altitude',
-                           filemetadata)
-    altitude_agl = None
+    if scan_type == 'rhi':
+        sweep_mode['data'] = np.array(nsweeps * ['rhi'])
+        sweep_az = [hfile[s]['how'].attrs['azimuth'] for s in scans]
+        fixed_angle['data'] = np.array(sweep_az, dtype='float32')
+    elif scan_type == 'ppi':
+        sweep_mode['data'] = np.array(nsweeps * ['azimuth_surveillance'])
+        sweep_elev = [hfile[s]['how'].attrs['elevation'] for s in scans]
+        fixed_angle['data'] = np.array(sweep_elev, dtype='float32')
 
-    ## 4.7 Sweep variables -> create atrribute dictionaries
-    # if only one scan -> one sweep
-    # TODO: account for volume scans
-    sweep_number = filemetadata.get_metadata('sweep_number')
-    sweep_number['data'] = np.array([0])
-    sweep_mode = _h5_to_dict(h5obj, '/what', 'object', 'sweep_mode',
-                             filemetadata)
-    if 'PVOL' in sweep_mode['data']:
-        fixed_angle = _h5_to_dict(h5obj, '/scan0/how', 'elevation',
-                                  'fixed_angle', filemetadata)
-    elif 'RHI' in sweep_mode['data']:
-        fixed_angle = _h5_to_dict(h5obj, '/scan0/how', 'azimuth',
-                                  'fixed_angle', filemetadata)
+    # time
+    time = filemetadata('time')
+    t_data = np.empty((total_rays, ), dtype='int64')
+    for scan, start, stop in zip(scans, ssri, seri):
+        # retrieve the time for each ray from the header timestamp (usec)
+        t_data[start:stop+1] = hfile[scan]['ray_header']['timestamp']
+    start_epoch = t_data[0] // 1.e6     # truncate to second resolution
+    start_time = datetime.datetime.utcfromtimestamp(start_epoch)
+    time['units'] = make_time_unit_str(start_time)
+    time['data'] = ((t_data - start_epoch * 1.e6) / 1.e6).astype('float64')
 
-    sweep_start_ray_index = filemetadata.get_metadata('sweep_start_ray_index')
-    sweep_start_ray_index['data'] = np.array([0])
-    sweep_end_ray_index = filemetadata.get_metadata('sweep_end_ray_index')
-    sweep_end_ray_index['data'] = [h5obj['/scan0/how'].attrs['ray_count'] - 1]
+    # range
+    _range = filemetadata('range')
+    ngates = int(hfile['/scan0/how'].attrs['bin_count'])
+    range_start = float(hfile['/scan0/how'].attrs['range_start'])
+    range_step = float(hfile['/scan0/how'].attrs['range_step'])
+    # range_step may need to be scaled by range_samples
+    # XXX This gives distances to start of gates not center, this matches
+    # Radx but may be incorrect, add range_step / 2. for center
+    _range['data'] = (np.arange(ngates, dtype='float32') * range_step +
+                      range_start)
+    _range['meters_to_center_of_first_gate'] = range_start
+    _range['meters_between_gates'] = range_step
 
-    # target scan speed is used
-    target_scan_rate = _h5_to_dict(h5obj, '/scan0/how', 'scan_speed',
-                                   'target_scan_rate', filemetadata)
+    # elevation
+    elevation = filemetadata('elevation')
+    el_data = np.empty((total_rays, ), dtype='float32')
+    for scan, start, stop in zip(scans, ssri, seri):
+        startel = hfile[scan]['ray_header']['elevation_start']
+        stopel = hfile[scan]['ray_header']['elevation_stop']
+        scan_el = np.angle(
+            (np.exp(1.j*np.deg2rad(startel)) +
+             np.exp(1.j*np.deg2rad(stopel))) / 2., deg=True)
+        el_data[start:stop+1] = scan_el
+    elevation['data'] = el_data
 
-    # first sweep mode determines scan_type
-    mode = sweep_mode['data']
-    if "PVOL" in mode:
-        scan_type = "ppi"
-    elif "sec" in mode:
-        scan_type = "sector"
-    elif "RHI" in mode:
-        scan_type = "rhi"
-    else:
-        scan_type = "other"
+    # azimuth
+    azimuth = filemetadata('azimuth')
+    az_data = np.empty((total_rays, ), dtype='float32')
+    for scan, start, stop in zip(scans, ssri, seri):
+        startaz = hfile[scan]['ray_header']['azimuth_start']
+        stopaz = hfile[scan]['ray_header']['azimuth_stop']
+        scan_az = np.angle(
+            (np.exp(1.j*np.deg2rad(startaz)) +
+             np.exp(1.j*np.deg2rad(stopaz))) / 2., deg=True) % 360.
+        az_data[start:stop+1] = scan_az
+    azimuth['data'] = az_data
 
-    # 4.8 Sensor pointing variables -> create attribute dictionaries
-    azi_start = np.array(ray_header['azimuth_start'])
-    azi_stop = np.array(ray_header['azimuth_stop'])
-    azimuth = filemetadata.get_metadata('azimuth')
-    zero_index = np.where(azi_stop < azi_start)
-    azi_stop[zero_index[0]] += 360
-    azimuth['data'] = (azi_start + azi_stop) / 2.0
+    # fields
+    fields = {}
+    h_keys = [k for k in hfile['/scan0'] if k.startswith('moment_')]
+    h_fields = [hfile['/scan0'][k].attrs['moment'] for k in h_keys]
 
-    ele_start = np.array(ray_header['elevation_start'])
-    ele_stop = np.array(ray_header['elevation_stop'])
-    elevation = filemetadata.get_metadata('elevation')
-    elevation['data'] = (ele_start + ele_stop) / 2.0
+    for h_field, h_key in zip(h_fields, h_keys):
+        field_name = filemetadata.get_field_name(h_field)
+        if field_name is None:
+            continue
+        fdata = np.ma.zeros((total_rays, ngates), dtype='float32')
+        # loop over the sweeps, copy data into fdata
+        for scan, start, stop in zip(scans, ssri, seri):
+            fdata[start:stop+1] = _get_gamic_sweep_data(hfile[scan][h_key])[:]
+        field_dic = filemetadata(field_name)
+        field_dic['data'] = fdata
+        field_dic['_FillValue'] = get_fillvalue()
+        fields[field_name] = field_dic
 
-    # scan speed per ray could be read
-    scan_rate = None
-
-    # antenna transistions are not recorder in gamic hdf5
-    antenna_transition = None
-
-    # 4.9 Moving platform geo-reference variables
-    # TODO moving radar subclass
-
-    # 4.10 Moments field data variables -> field attribute dictionary
-    # moments are in subgroup /scanX
-    moments = h5obj['/scan0']
-    fields = dict(
-        [(moments[k].attrs['moment'], _h5_moments_to_dict(v, filemetadata))
-         for k, v in moments.iteritems() if 'mom' in k])
-
-    ## 4.5 instrument_parameters sub-convention -> instrument_parameters dict
-
-    ## the meta_group attribute is often set incorrectly so we cannot
-    ## use this as a indicator of instrument_parameters
-    ## need to discuss gamic hdf5 instrument_parameters
-    ##keys = _find_all_meta_group_vars(ncvars, 'instrument_parameters')
-    #valid_keys = ['frequency', 'follow_mode', 'pulse_width', 'prt_mode',
-                  #'prt', 'prt_ratio', 'polarization_mode', 'nyquist_velocity',
-                  #'unambiguous_range', 'n_samples', 'sampling_ration']
-
-    #keys = [k for k in valid_keys if k in ncvars]
-    #instrument_parameters = dict((k, _ncvar_to_dict(ncvars[k])) for k in keys)
-
-    ## 4.6 radar_parameters sub-convention -> instrument_parameters dict
-
-    ## the meta_group attribute is often set incorrectly so we cannot
-    ## use this as a indicator of instrument_parameters
-    ##keys = _find_all_meta_group_vars(ncvars, 'radar_parameters')
-    #valid_keys = ['radar_antenna_gain_h', 'radar_antenna_gain_v',
-                  #'radar_beam_width_h', 'radar_beam_width_v',
-                  #'radar_reciever_bandwidth',
-                  #'radar_measured_transmit_power_h',
-                  #'radar_measured_transmit_power_v']
-    ## these keys are not in CF/Radial 1.2 standard but are common
-    #valid_keys += ['radar_rx_bandwidth', 'measured_transmit_power_h',
-                   #'measured_transmit_power_v']
-    #keys = [k for k in valid_keys if k in ncvars]
-    #radar_parameters = dict((k, _ncvar_to_dict(ncvars[k])) for k in keys)
-    #instrument_parameters.update(radar_parameters)  # add to instr_params
-
-    #if instrument_parameters == {}:  # if no parameters set to None
+    # instrument_parameters
     instrument_parameters = None
 
-    # 4.7 lidar_parameters sub-convention -> skip
-
-    ## 4.8 radar_calibration sub-convention -> radar_calibration
-    #keys = _find_all_meta_group_vars(ncvars, 'radar_calibration')
-    #radar_calibration = dict((k, _ncvar_to_dict(ncvars[k])) for k in keys)
+    # calibration
     radar_calibration = None
+
+    hfile.close()
 
     return Radar(
         time, _range, fields, metadata, scan_type,
@@ -229,35 +229,9 @@ def read_gamic(filename, field_names=None, additional_metadata=None,
         sweep_end_ray_index,
         azimuth, elevation,
         instrument_parameters=instrument_parameters,
-        radar_calibration=radar_calibration,
-        altitude_agl=altitude_agl,
-        scan_rate=scan_rate,
-        antenna_transition=antenna_transition)
+        radar_calibration=radar_calibration)
 
 
-def _h5_to_dict(h5obj, h5path, h5var, ncstring, fmd):
-    """ Convert a HDF Attribute variable to a dictionary. """
-    d = fmd.get_metadata(ncstring)
-    d['data'] = np.array([h5obj[h5path].attrs[h5var]])
-    return d
-
-
-def _h5_moments_to_dict(h5obj, fmd):
-    """
-    Convert gamic HDF5 moment Dataset and attached Attributes to a dictionary.
-    """
-    d = fmd.get_metadata('default')
-    d['valid_min'] = h5obj.attrs['dyn_range_min']
-    d['valid_max'] = h5obj.attrs['dyn_range_max']
-    d['standard_name'] = h5obj.attrs['moment']
-    d['long_name'] = h5obj.attrs['moment']
-    #d['units'] =
-
-    if h5obj.attrs['format'] == 'UV8':
-        div = 256.0
-    else:
-        div = 65536.0
-
-    d['data'] = (d['valid_min'] + h5obj[...] *
-                 (d['valid_max'] - d['valid_min']) / div)
-    return d
+def _get_gamic_sweep_data(group):
+    """ Get GAMIC HDF5 sweep data from a HDF5 group. """
+    return group[:]
