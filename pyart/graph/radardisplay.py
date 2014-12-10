@@ -68,6 +68,9 @@ class RadarDisplay:
         Elevations in degrees.
     fixed_angle : array
         Scan angle in degrees.
+    antenna_transition : array or None
+        Antenna transition flag (1 in transition, 0 in transition) or None
+        if no antenna transition.
 
     """
 
@@ -80,6 +83,10 @@ class RadarDisplay:
         self.azimuths = radar.azimuth['data']
         self.elevations = radar.elevation['data']
         self.fixed_angle = radar.fixed_angle['data']
+        if radar.antenna_transition is None:
+            self.antenna_transition = None
+        else:
+            self.antenna_transition = radar.antenna_transition['data']
         if 'instrument_name' in radar.metadata:
             self.radar_name = radar.metadata['instrument_name']
         else:
@@ -170,6 +177,7 @@ class RadarDisplay:
     def plot_ray(self, field, ray, format_str='k-', mask_tuple=None,
                  ray_min=None, ray_max=None, mask_outside=False, title=None,
                  title_flag=True, axislabels=(None, None),
+                 filter_transitions=True,
                  axislabels_flag=True, ax=None, fig=None):
         """
         Plot a single ray.
@@ -210,6 +218,11 @@ class RadarDisplay:
             False.
         axislabel_flag : bool
             True to add label the axes, False does not label the axes.
+        filter_transitions : bool
+            True to remove rays where the antenna was in transition between
+            sweeps from the plot.  False will include these rays in the plot.
+            No rays are filtered when the antenna_transition attribute of the
+            underlying radar is not present.
         ax : Axis
             Axis to plot on. None will use the current axis.
         fig : Figure
@@ -220,7 +233,7 @@ class RadarDisplay:
         ax, fig = self._parse_ax_fig(ax, fig)
 
         # get the data and mask
-        data = self._get_ray_data(field, ray, mask_tuple)
+        data = self._get_ray_data(field, ray, mask_tuple, filter_transitions)
 
          # mask the data where outside the limits
         if mask_outside:
@@ -243,6 +256,7 @@ class RadarDisplay:
                  cmap='jet', mask_outside=True, title=None, title_flag=True,
                  axislabels=(None, None), axislabels_flag=True,
                  colorbar_flag=True, colorbar_label=None, edges=True,
+                 filter_transitions=True,
                  ax=None, fig=None):
         """
         Plot a PPI.
@@ -294,6 +308,11 @@ class RadarDisplay:
             coordinates themselved as the gate edges, resulting in a plot
             in which the last gate in each ray and the entire last ray are not
             not plotted.
+        filter_transitions : bool
+            True to remove rays where the antenna was in transition between
+            sweeps from the plot.  False will include these rays in the plot.
+            No rays are filtered when the antenna_transition attribute of the
+            underlying radar is not present.
         ax : Axis
             Axis to plot on. None will use the current axis.
         fig : Figure
@@ -305,8 +324,8 @@ class RadarDisplay:
         vmin, vmax = self._parse_vmin_vmax(field, vmin, vmax)
 
         # get data for the plot
-        data = self._get_data(field, sweep, mask_tuple)
-        x, y = self._get_x_y(field, sweep, edges)
+        data = self._get_data(field, sweep, mask_tuple, filter_transitions)
+        x, y = self._get_x_y(field, sweep, edges, filter_transitions)
 
         # mask the data where outside the limits
         if mask_outside:
@@ -333,7 +352,7 @@ class RadarDisplay:
                  cmap='jet', mask_outside=True, title=None, title_flag=True,
                  axislabels=(None, None), axislabels_flag=True,
                  reverse_xaxis=None, colorbar_flag=True, colorbar_label=None,
-                 edges=True, ax=None, fig=None):
+                 edges=True, filter_transitions=True, ax=None, fig=None):
         """
         Plot a RHI.
 
@@ -385,6 +404,11 @@ class RadarDisplay:
             coordinates themselved as the gate edges, resulting in a plot
             in which the last gate in each ray and the entire last ray are not
             not plotted.
+        filter_transitions : bool
+            True to remove rays where the antenna was in transition between
+            sweeps from the plot.  False will include these rays in the plot.
+            No rays are filtered when the antenna_transition attribute of the
+            underlying radar is not present.
         ax : Axis
             Axis to plot on. None will use the current axis.
         fig : Figure
@@ -396,9 +420,8 @@ class RadarDisplay:
         vmin, vmax = self._parse_vmin_vmax(field, vmin, vmax)
 
         # get data for the plot
-        data = self._get_data(field, sweep, mask_tuple)
-        #R, z  = self._get_rhi_foo(sweep, interpolate=True)
-        x, y, z = self._get_x_y_z(field, sweep, edges)
+        data = self._get_data(field, sweep, mask_tuple, filter_transitions)
+        x, y, z = self._get_x_y_z(field, sweep, edges, filter_transitions)
 
         # mask the data where outside the limits
         if mask_outside:
@@ -431,7 +454,7 @@ class RadarDisplay:
                  cmap='jet', mask_outside=True, title=None, title_flag=True,
                  axislabels=(None, None), axislabels_flag=True,
                  colorbar_flag=True, colorbar_label=None,
-                 edges=True, ax=None, fig=None):
+                 edges=True, filter_transitions=True, ax=None, fig=None):
         """
         Plot a VPT scan.
 
@@ -480,6 +503,11 @@ class RadarDisplay:
             coordinates themselved as the gate edges, resulting in a plot
             in which the last gate in each ray and the entire last ray are not
             not plotted.
+        filter_transitions : bool
+            True to remove rays where the antenna was in transition between
+            sweeps from the plot.  False will include these rays in the plot.
+            No rays are filtered when the antenna_transition attribute of the
+            underlying radar is not present.
         ax : Axis
             Axis to plot on. None will use the current axis.
         fig : Figure
@@ -491,7 +519,7 @@ class RadarDisplay:
         vmin, vmax = self._parse_vmin_vmax(field, vmin, vmax)
 
         # get data for the plot
-        data = self._get_vpt_data(field, mask_tuple)
+        data = self._get_vpt_data(field, mask_tuple, filter_transitions)
         if edges:
             y = np.empty((self.ranges.shape[0] + 1, ),
                          dtype=self.ranges.dtype)
@@ -957,29 +985,43 @@ class RadarDisplay:
     # Get methods #
     ###############
 
-    def _get_data(self, field, sweep, mask_tuple):
+    def _get_data(self, field, sweep, mask_tuple, filter_transitions):
         """ Retrieve and return data from a plot function. """
         start = self.starts[sweep]
         end = self.ends[sweep] + 1
         data = self.fields[field]['data'][start:end]
 
-        if mask_tuple is not None:  # mask data if mask_tuple provided
+        # mask data if mask_tuple provided
+        if mask_tuple is not None:
             mask_field, mask_value = mask_tuple
             mdata = self.fields[mask_field]['data'][start:end]
             data = np.ma.masked_where(mdata < mask_value, data)
+
+        # filter out antenna transitions
+        if filter_transitions and self.antenna_transition is not None:
+            in_trans = self.antenna_transition[start:end]
+            data = data[in_trans == 0]
+
         return data
 
-    def _get_vpt_data(self, field, mask_tuple):
+    def _get_vpt_data(self, field, mask_tuple, filter_transitions):
         """ Retrieve and return vpt data from a plot function. """
         data = self.fields[field]['data']
 
-        if mask_tuple is not None:  # mask data if mask_tuple provided
+        # mask data if mask_tuple provided
+        if mask_tuple is not None:
             mask_field, mask_value = mask_tuple
             mdata = self.fields[mask_field]['data']
             data = np.ma.masked_where(mdata < mask_value, data)
+
+        # filter out antenna transitions
+        if filter_transitions and self.antenna_transition is not None:
+            in_trans = self.antenna_transition
+            data = data[in_trans == 0]
+
         return data.T
 
-    def _get_ray_data(self, field, ray, mask_tuple):
+    def _get_ray_data(self, field, ray, mask_tuple, filter_transitions):
         """ Retrieve and return ray data from a plot function. """
         data = self.fields[field]['data'][ray]
 
@@ -987,23 +1029,38 @@ class RadarDisplay:
             mask_field, mask_value = mask_tuple
             mdata = self.fields[mask_field]['data'][ray]
             data = np.ma.masked_where(mdata < mask_value, data)
+
+        # filter out antenna transitions
+        if filter_transitions and self.antenna_transition is not None:
+            in_trans = self.antenna_transition[ray]
+            data = data[in_trans == 0]
+
         return data
 
-    def _get_x_y(self, field, sweep, edges):
+    def _get_x_y(self, field, sweep, edges, filter_transitions):
         """ Retrieve and return x and y coordinate in km. """
-        x, y, z = self._get_x_y_z(field, sweep, edges)
+        x, y, z = self._get_x_y_z(field, sweep, edges,
+                                  filter_transitions=filter_transitions)
         return x, y
 
-    def _get_x_y_z(self, field, sweep, edges):
+    def _get_x_y_z(self, field, sweep, edges, filter_transitions):
         """ Retrieve and return x, y, and z coordinate in km. """
         start = self.starts[sweep]
         end = self.ends[sweep] + 1
+        azimuths = self.azimuths[start:end]
+        elevations = self.elevations[start:end]
+
+        if filter_transitions and self.antenna_transition is not None:
+            in_trans = self.antenna_transition[start:end]
+            azimuths = azimuths[in_trans == 0]
+            elevations = elevations[in_trans == 0]
+
         x, y, z = sweep_coords_to_cart(
-            self.ranges, self.azimuths[start:end], self.elevations[start:end],
-            edges=edges)
+            self.ranges, azimuths, elevations, edges=edges)
         x = (x + self.shift[0]) / 1000.0
         y = (y + self.shift[1]) / 1000.0
         z = z / 1000.0
+
         return x, y, z
 
     def _get_colorbar_label(self, field):

@@ -103,7 +103,7 @@ class MdvDisplay(RadarDisplay):
             vmax = _get_default_range(self.mdvfile, field)[1]
         return vmin, vmax
 
-    def _get_data(self, field, sweep, mask_tuple):
+    def _get_data(self, field, sweep, mask_tuple, filter_transitions):
         """ Retrieve and return data from a plot function. """
         field_num = self.mdvfile.fields.index(field)
         data = self.mdvfile.read_a_field(field_num)[sweep]
@@ -114,14 +114,14 @@ class MdvDisplay(RadarDisplay):
             data = np.ma.masked_where(mdata < mask_value, data)
         return data
 
-    def _get_x_y(self, field, sweep, edges):
+    def _get_x_y(self, field, sweep, edges, filter_transitions):
         """ Retrieve and return x and y coordinate in km. """
         # TODO perform interpolating if edges is True
         x = self.mdvfile.carts['x'][sweep] / 1000.0  # x coords in km
         y = self.mdvfile.carts['y'][sweep] / 1000.0  # y coords in km
         return x, y
 
-    def _get_x_y_z(self, field, sweep, edges):
+    def _get_x_y_z(self, field, sweep, edges, filter_transitions):
         """ Retrieve and return x, y, and z coordinate in km. """
         # TODO perform interpolating if edges is True
         x = self.mdvfile.carts['x'][sweep] / 1000.0  # x coords in km

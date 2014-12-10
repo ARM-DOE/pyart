@@ -74,7 +74,7 @@ class CFRadialDisplay(RadarDisplay):
         self.azimuths = dataset.variables['azimuth']
         self.elevations = dataset.variables['elevation']
         self.fixed_angle = dataset.variables['fixed_angle']
-
+        self.antenna_transition = None
         if 'instrument_name' in dataset.ncattrs():
             self.radar_name = dataset.instrument_name
         else:
@@ -149,7 +149,7 @@ class CFRadialDisplay(RadarDisplay):
             vmax = self.dataset.variables[field].valid_max
         return vmin, vmax
 
-    def _get_data(self, field, sweep, mask_tuple):
+    def _get_data(self, field, sweep, mask_tuple, filter_transitions):
         """ Retrieve and return data from a plot function. """
         start = self.starts[sweep]
         end = self.ends[sweep] + 1
