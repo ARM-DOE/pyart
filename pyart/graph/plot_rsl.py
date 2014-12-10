@@ -122,7 +122,7 @@ class RslDisplay(RadarDisplay):
                 vmax = 64.0
         return vmin, vmax
 
-    def _get_data(self, field, sweep, mask_tuple):
+    def _get_data(self, field, sweep, mask_tuple, filter_transitions):
         """ Retrieve and return data from a plot function. """
         volume_num = rsl.RSLNAME2VOLUMENUM[field]
         sweep = self.rslfile.get_volume(volume_num).get_sweep(sweep)
@@ -136,13 +136,13 @@ class RslDisplay(RadarDisplay):
             data = np.ma.masked_where(mdata < mask_value, data)
         return data
 
-    def _get_x_y(self, field, sweep, edges):
+    def _get_x_y(self, field, sweep, edges, filter_transitions):
         """ Retrieve and return x and y coordinate in km. """
         # TODO perform interpolating if edges is True
-        x, y, z = self._get_x_y_z(field, sweep, edges)
+        x, y, z = self._get_x_y_z(field, sweep, edges, filter_transitions)
         return x, y
 
-    def _get_x_y_z(self, field, sweep, edges):
+    def _get_x_y_z(self, field, sweep, edges, filter_transitions):
         """ Retrieve and return x, y, and z coordinate in km. """
         # TODO perform interpolating if edges is True
         volume_num = rsl.RSLNAME2VOLUMENUM[field]

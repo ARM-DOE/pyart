@@ -104,7 +104,8 @@ class RadarMapDisplay(RadarDisplay):
                      projection='lcc', area_thresh=10000,
                      min_lon=None, max_lon=None, min_lat=None, max_lat=None,
                      width=None, height=None, lon_0=None, lat_0=None,
-                     resolution='h', shapefile=None, edges=True, **kwargs):
+                     resolution='h', shapefile=None, edges=True,
+                     filter_transitions=True, **kwargs):
         """
         Plot a PPI volume sweep onto a geographic map.
 
@@ -178,6 +179,11 @@ class RadarMapDisplay(RadarDisplay):
         resolution : 'c', 'l', 'i', 'h', or 'f'.
             Resolution of boundary database to use. See Basemap documentation
             for details.
+        filter_transitions : bool
+            True to remove rays where the antenna was in transition between
+            sweeps from the plot.  False will include these rays in the plot.
+            No rays are filtered when the antenna_transition attribute of the
+            underlying radar is not present.
         edges : bool
             True will interpolate and extrapolate the gate edges from the
             range, azimuth and elevations in the radar, treating these
@@ -200,8 +206,8 @@ class RadarMapDisplay(RadarDisplay):
             lon_0 = self.loc[1]
 
         # get data for the plot
-        data = self._get_data(field, sweep, mask_tuple)
-        x, y = self._get_x_y(field, sweep, edges)
+        data = self._get_data(field, sweep, mask_tuple, filter_transitions)
+        x, y = self._get_x_y(field, sweep, edges, filter_transitions)
 
         # mask the data where outside the limits
         if mask_outside:
