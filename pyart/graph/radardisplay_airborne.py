@@ -768,7 +768,7 @@ class RadarDisplay_Airborne:
     # name generator methods #
     ##########################
 
-    def generate_filename(self, field, ext='png'):
+    def generate_filename(self, field, sweep, ext='png'):
         """
         Generate a filename for a plot.
 
@@ -779,6 +779,8 @@ class RadarDisplay_Airborne:
         ----------
         field : str
             Field plotted.
+        sweep : int
+            Sweep plotted.
         ext : str
             Filename extension.
 
