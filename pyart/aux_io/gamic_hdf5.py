@@ -23,6 +23,9 @@ from ..io.common import make_time_unit_str
 from ..core.radar import Radar
 
 
+LIGHT_SPEED = 2.99792458e8  # speed of light in meters per second
+
+
 def read_gamic(filename, field_names=None, additional_metadata=None,
                file_field_names=False, exclude_fields=None):
     """
@@ -55,8 +58,13 @@ def read_gamic(filename, field_names=None, additional_metadata=None,
 
     """
     # TODO
+    # * test with RHI and other scans
+    # * valid_min and valid_max on field dictionaries
+    # * refactor
     # * unit tests
     # * add default field mapping, etc to default config
+    # * add default metadata for all defined parameters if they do not exist
+    #   already
     # * auto-detect file type with pyart.io.read function
     # * move to pyart.io namespace
 
@@ -67,7 +75,7 @@ def read_gamic(filename, field_names=None, additional_metadata=None,
     # Open HDF5 file and get handle
     hfile = h5py.File(filename, 'r')
 
-    # metadata, initial empty is filled in throughout
+    # metadata, initial empty, filled in throughout the function
     metadata = filemetadata('metadata')
 
     # /where
@@ -214,11 +222,91 @@ def read_gamic(filename, field_names=None, additional_metadata=None,
         field_dic['_FillValue'] = get_fillvalue()
         fields[field_name] = field_dic
 
-    # instrument_parameters
-    instrument_parameters = None
+    # ray_angle_res
+    ray_angle_res = filemetadata('ray_angle_res')
+    ray_angle_res['data'] = np.array(
+        [hfile[scan]['how'].attrs['angle_step'] for scan in scans],
+        dtype='float32')
 
-    # calibration
-    radar_calibration = None
+    # rays_are_indexed
+    rays_are_indexed = filemetadata('rays_are_indexed')
+    rays_are_indexed['data'] = np.array(
+        [['false', 'true'][hfile[scan]['how'].attrs['angle_sync']] for
+         scan in scans])
+
+    # target_scan_rate
+    target_scan_rate = filemetadata('target_scan_rate')
+    target_scan_rate['data'] = np.array(
+        [hfile[scan]['how'].attrs['scan_speed'] for scan in scans],
+        dtype='float32')
+
+    # scan_rate
+    scan_rate = filemetadata('scan_rate')
+    if 'az_speed' in hfile['/scan0']['ray_header'].dtype.fields:
+        sweep_rates = [hfile[s]['ray_header']['az_speed'] for s in scans]
+        scan_rate['data'] = np.concatenate(sweep_rates).astype('float32')
+    elif 'el_speed' in hfile['/scan0']['ray_header'].dtype.fields:
+        sweep_rates = [hfile[s]['ray_header']['el_speed'] for s in scans]
+        scan_rate['data'] = np.concatenate(sweep_rates).astype('float32')
+    else:
+        scan_rate = None
+
+    # instrument_parameters
+    frequency = filemetadata('frequency')
+    frequency['data'] = np.array(
+        [LIGHT_SPEED / hfile['scan0']['how'].attrs['radar_wave_length']],
+        dtype='float32')
+
+    beamwidth_h = filemetadata('radar_beam_width_h')
+    beamwidth_h['data'] = np.array(
+        [hfile['how'].attrs['azimuth_beam']], dtype='float32')
+
+    beamwidth_v = filemetadata('radar_beam_width_v')
+    beamwidth_v['data'] = np.array(
+        [hfile['how'].attrs['elevation_beam']], dtype='float32')
+
+    pulse_width = filemetadata('pulse_width')
+    t = [hfile[s]['how'].attrs['pulse_width_us']*1e-6 for s in scans]
+    pulse_width['data'] = np.repeat(t, rays_per_sweep).astype('float32')
+
+    prt = filemetadata('prt')
+    t = [1. / hfile[s]['how'].attrs['PRF'] for s in scans]
+    prt['data'] = np.repeat(t, rays_per_sweep).astype('float32')
+
+    prt_mode = filemetadata('prt_mode')
+    prt_ratio = filemetadata('prt_ratio')
+    sweep_unfolding = [hfile[s]['how'].attrs['unfolding'] for s in scans]
+    sweep_prt_mode = map(_prt_mode_from_unfolding, sweep_unfolding)
+    sweep_prt_ratio = [[1, 2./3., 3./4., 4./5.][i] for i in sweep_unfolding]
+    prt_mode['data'] = np.array(sweep_prt_mode)
+    prt_ratio['data'] = np.repeat(sweep_prt_ratio, rays_per_sweep)
+
+    unambiguous_range = filemetadata('unambiguous_range')
+    t = [hfile[s]['how'].attrs['range'] for s in scans]
+    unambiguous_range['data'] = np.repeat(t, rays_per_sweep).astype('float32')
+
+    nyquist_velocity = filemetadata('nyquist_velocity')
+    t = [float(hfile[s]['how']['extended'].attrs['nyquist_velocity'])
+         for s in scans]
+    nyquist_velocity['data'] = np.repeat(t, rays_per_sweep).astype('float32')
+
+    n_samples = filemetadata('n_samples')
+    t = [hfile[s]['how'].attrs['range_samples'] *
+         hfile[s]['how'].attrs['time_samples'] for s in scans]
+    n_samples['data'] = np.repeat(t, rays_per_sweep).astype('int32')
+
+    instrument_parameters = {
+        'frequency': frequency,
+        'radar_beam_width_h': beamwidth_h,
+        'radar_beam_width_v': beamwidth_v,
+        'n_samples': n_samples,
+        'pulse_width': pulse_width,
+        'prt': prt,
+        'prt_ratio': prt_ratio,
+        'nyquist_velocity': nyquist_velocity,
+        'unambiguous_range': unambiguous_range,
+        'prt_mode': prt_mode,
+    }
 
     hfile.close()
 
@@ -229,9 +317,39 @@ def read_gamic(filename, field_names=None, additional_metadata=None,
         sweep_end_ray_index,
         azimuth, elevation,
         instrument_parameters=instrument_parameters,
-        radar_calibration=radar_calibration)
+        ray_angle_res=ray_angle_res,
+        rays_are_indexed=rays_are_indexed,
+        scan_rate=scan_rate, target_scan_rate=target_scan_rate)
+
+
+def _prt_mode_from_unfolding(unfolding):
+    """ Return 'fixed' or 'staggered' depending on unfolding flag """
+    if unfolding == 0:
+        return 'fixed'
+    else:
+        return 'staggered'
 
 
 def _get_gamic_sweep_data(group):
-    """ Get GAMIC HDF5 sweep data from a HDF5 group. """
-    return group[:]
+    """ Get GAMIC HDF5 sweep data from an HDF5 group. """
+    dyn_range_min = group.attrs['dyn_range_min']
+    dyn_range_max = group.attrs['dyn_range_max']
+    raw_data = group[:]
+    fmt = group.attrs['format']
+    if fmt == 'UV16':
+        # unsigned 16-bit integer data, 0 indicates a masked value
+        assert raw_data.dtype == np.uint16
+        scale = (dyn_range_max - dyn_range_min) / 65535.
+        offset = dyn_range_min
+        sweep_data = np.ma.masked_array(
+            raw_data * scale + offset, mask=(raw_data == 0), dtype='float32')
+    elif fmt == 'UV8':
+        # unsigned 8-bit integer data, 0 indicates a masked value
+        assert raw_data.dtype == np.uint8
+        scale = (dyn_range_max - dyn_range_min) / 255.
+        offset = dyn_range_min
+        sweep_data = np.ma.masked_array(
+            raw_data * scale + offset, mask=(raw_data == 0), dtype='float32')
+    else:
+        raise NotImplementedError('GAMIC data format: %s', fmt)
+    return sweep_data
