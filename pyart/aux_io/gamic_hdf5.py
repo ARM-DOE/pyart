@@ -8,10 +8,15 @@ Utilities for reading gamic hdf5 files.
     :toctree: generated/
 
     read_gamic
-    _h5_to_dict
-    _h5_moments_to_dict
+    _prt_mode_from_unfolding
+    _get_gamic_sweep_data
 
 """
+
+# TODO to move out of aux_io namespace:
+# * unit tests - need small sample files.
+# * auto-detect file type with pyart.io.read function
+# * move to pyart.io namespace
 
 import datetime
 import warnings
@@ -66,83 +71,57 @@ def read_gamic(filename, field_names=None, additional_metadata=None,
         Radar object.
 
     """
-    # TODO
-    # * refactor
-
-    # * unit tests
-    # * auto-detect file type with pyart.io.read function
-    # * move to pyart.io namespace
-
     # create metadata retrieval object
     filemetadata = FileMetadata('gamic', field_names, additional_metadata,
                                 file_field_names, exclude_fields)
 
     # Open HDF5 file and get handle
     hfile = h5py.File(filename, 'r')
+    ghelp = _GAMICFileHelper(hfile)
 
-    # metadata, initial empty, filled in throughout the function
-    metadata = filemetadata('metadata')
+    # verify that scan0 ... scan[nsweeps-1] are present in file
+    for scan in ghelp.scans:
+        assert scan in hfile
 
-    # /where
     # latitude, longitude and altitude
     latitude = filemetadata('latitude')
     longitude = filemetadata('longitude')
     altitude = filemetadata('altitude')
+    latitude['data'] = ghelp.where_attr('lat', 'float64')
+    longitude['data'] = ghelp.where_attr('lon', 'float64')
+    altitude['data'] = ghelp.where_attr('height', 'float64')
 
-    h_where = hfile['where'].attrs
-    latitude['data'] = np.array([h_where['lat']], dtype='float64')
-    longitude['data'] = np.array([h_where['lon']], dtype='float64')
-    altitude['data'] = np.array([h_where['height']], dtype='float64')
-
-    # /what
-    what_attrs = hfile['what'].attrs
-    nsweeps = int(what_attrs['sets'])
-    # fill in metadata
+    # metadata
+    metadata = filemetadata('metadata')
     metadata['original_container'] = 'GAMIC-HDF5'
     what_mapping = {
         'version': 'gamic_version', 'sets_scheduled': 'sets_scheduled',
         'object': 'gamic_object', 'date': 'gamic_date'}
     for hkey, mkey in what_mapping.items():
-        if hkey in what_attrs:
-            metadata[mkey] = what_attrs[hkey]
+        if hkey in hfile['what'].attrs:
+            metadata[mkey] = hfile['what'].attrs[hkey]
 
-    # /how
-    # fill in metadata
-    how_attrs = hfile['how'].attrs
     how_keys = ['software', 'template_name', 'site_name', 'host_name',
                 'azimuth_beam', 'elevation_beam', 'sdp_name', 'sw_version',
                 'sdp_version', 'simulated']
     for key in how_keys:
-        if key in how_attrs:
-            metadata[key] = how_attrs[key]
-
-    # /scan0 to /scan[nsweeps-1]
-    scans = ['scan%i' % (i) for i in range(nsweeps)]
-    # verify that scan0 ... scan[nsweeps-1] are present in file
-    for scan in scans:
-        assert scan in hfile
+        if key in hfile['how'].attrs:
+            metadata[key] = hfile['how'].attrs[key]
 
     # sweep_start_ray_index, sweep_end_ray_index
     sweep_start_ray_index = filemetadata('sweep_start_ray_index')
     sweep_end_ray_index = filemetadata('sweep_end_ray_index')
-
-    rays_per_sweep = [hfile[s]['how'].attrs['ray_count'] for s in scans]
-    total_rays = sum(rays_per_sweep)
-    ssri = np.cumsum(np.append([0], rays_per_sweep[:-1])).astype('int32')
-    seri = np.cumsum(rays_per_sweep).astype('int32') - 1
-    sweep_start_ray_index['data'] = ssri
-    sweep_end_ray_index['data'] = seri
+    sweep_start_ray_index['data'] = ghelp.start_ray.astype('int32')
+    sweep_end_ray_index['data'] = ghelp.end_ray.astype('int32')
 
     # sweep number
     sweep_number = filemetadata('sweep_number')
-    sweep_number['data'] = np.array(
-        [hfile[scan]['what'].attrs['set_idx'] for scan in scans],
-        dtype='int32')
+    sweep_number['data'] = ghelp.what_attrs('set_idx', 'int32')
 
     # sweep_type
     scan_type = hfile['scan0']['what'].attrs['scan_type'].lower()
     # check that all scans in the volume are the same type
-    for scan in scans:
+    for scan in ghelp.scans:
         if hfile[scan]['what'].attrs['scan_type'].lower() != scan_type:
             raise NotImplementedError('Mixed scan_type volume in scan:' + scan)
     if scan_type not in ['ppi', 'rhi']:
@@ -153,22 +132,16 @@ def read_gamic(filename, field_names=None, additional_metadata=None,
     # sweep_mode, fixed_angle
     sweep_mode = filemetadata('sweep_mode')
     fixed_angle = filemetadata('fixed_angle')
-
     if scan_type == 'rhi':
-        sweep_mode['data'] = np.array(nsweeps * ['rhi'])
-        sweep_az = [hfile[s]['how'].attrs['azimuth'] for s in scans]
-        fixed_angle['data'] = np.array(sweep_az, dtype='float32')
+        sweep_mode['data'] = np.array(ghelp.nsweeps * ['rhi'])
+        fixed_angle['data'] = ghelp.how_attrs('azimuth', 'float32')
     elif scan_type == 'ppi':
-        sweep_mode['data'] = np.array(nsweeps * ['azimuth_surveillance'])
-        sweep_elev = [hfile[s]['how'].attrs['elevation'] for s in scans]
-        fixed_angle['data'] = np.array(sweep_elev, dtype='float32')
+        sweep_mode['data'] = np.array(ghelp.nsweeps * ['azimuth_surveillance'])
+        fixed_angle['data'] = ghelp.how_attrs('elevation', 'float32')
 
     # time
     time = filemetadata('time')
-    t_data = np.empty((total_rays, ), dtype='int64')
-    for scan, start, stop in zip(scans, ssri, seri):
-        # retrieve the time for each ray from the header timestamp (usec)
-        t_data[start:stop+1] = hfile[scan]['ray_header']['timestamp']
+    t_data = ghelp.ray_header('timestamp', 'int64')
     start_epoch = t_data[0] // 1.e6     # truncate to second resolution
     start_time = datetime.datetime.utcfromtimestamp(start_epoch)
     time['units'] = make_time_unit_str(start_time)
@@ -189,27 +162,15 @@ def read_gamic(filename, field_names=None, additional_metadata=None,
 
     # elevation
     elevation = filemetadata('elevation')
-    el_data = np.empty((total_rays, ), dtype='float32')
-    for scan, start, stop in zip(scans, ssri, seri):
-        startel = hfile[scan]['ray_header']['elevation_start']
-        stopel = hfile[scan]['ray_header']['elevation_stop']
-        scan_el = np.angle(
-            (np.exp(1.j*np.deg2rad(startel)) +
-             np.exp(1.j*np.deg2rad(stopel))) / 2., deg=True)
-        el_data[start:stop+1] = scan_el
-    elevation['data'] = el_data
+    start_angle = ghelp.ray_header('elevation_start', 'float32')
+    stop_angle = ghelp.ray_header('elevation_stop', 'float32')
+    elevation['data'] = _avg_radial_angles(start_angle, stop_angle)
 
     # azimuth
     azimuth = filemetadata('azimuth')
-    az_data = np.empty((total_rays, ), dtype='float32')
-    for scan, start, stop in zip(scans, ssri, seri):
-        startaz = hfile[scan]['ray_header']['azimuth_start']
-        stopaz = hfile[scan]['ray_header']['azimuth_stop']
-        scan_az = np.angle(
-            (np.exp(1.j*np.deg2rad(startaz)) +
-             np.exp(1.j*np.deg2rad(stopaz))) / 2., deg=True) % 360.
-        az_data[start:stop+1] = scan_az
-    azimuth['data'] = az_data
+    start_angle = ghelp.ray_header('azimuth_start', 'float32')
+    stop_angle = ghelp.ray_header('azimuth_stop', 'float32')
+    azimuth['data'] = _avg_radial_angles(start_angle, stop_angle) % 360.
 
     # fields
     fields = {}
@@ -217,16 +178,15 @@ def read_gamic(filename, field_names=None, additional_metadata=None,
     h_fields = [hfile['/scan0'][k].attrs['moment'] for k in h_keys]
 
     for h_field, h_key in zip(h_fields, h_keys):
+
         field_name = filemetadata.get_field_name(h_field)
         if field_name is None:
             continue
-        fdata = np.ma.zeros((total_rays, ngates), dtype='float32')
-        # loop over the sweeps, copy data into fdata
-        for scan, start, stop in zip(scans, ssri, seri):
-            fdata[start:stop+1] = _get_gamic_sweep_data(hfile[scan][h_key])[:]
+
         field_dic = filemetadata(field_name)
-        field_dic['data'] = fdata
+        field_dic['data'] = ghelp.moment_data(h_key, 'float32')
         field_dic['_FillValue'] = get_fillvalue()
+
         if valid_range_from_file:
             try:
                 valid_min = hfile['/scan0'][h_key].attrs['dyn_range_min']
@@ -235,6 +195,7 @@ def read_gamic(filename, field_names=None, additional_metadata=None,
                 field_dic['valid_max'] = valid_max
             except:
                 pass
+
         if units_from_file:
             try:
                 field_dic['units'] = hfile['/scan0'][h_key].attrs['unit']
@@ -244,30 +205,23 @@ def read_gamic(filename, field_names=None, additional_metadata=None,
 
     # ray_angle_res
     ray_angle_res = filemetadata('ray_angle_res')
-    ray_angle_res['data'] = np.array(
-        [hfile[scan]['how'].attrs['angle_step'] for scan in scans],
-        dtype='float32')
+    ray_angle_res['data'] = ghelp.how_attrs('angle_step', 'float32')
 
     # rays_are_indexed
     rays_are_indexed = filemetadata('rays_are_indexed')
     rays_are_indexed['data'] = np.array(
-        [['false', 'true'][hfile[scan]['how'].attrs['angle_sync']] for
-         scan in scans])
+        [['false', 'true'][i] for i in ghelp.how_attrs('angle_sync', 'uint8')])
 
     # target_scan_rate
     target_scan_rate = filemetadata('target_scan_rate')
-    target_scan_rate['data'] = np.array(
-        [hfile[scan]['how'].attrs['scan_speed'] for scan in scans],
-        dtype='float32')
+    target_scan_rate['data'] = ghelp.how_attrs('scan_speed', 'float32')
 
     # scan_rate
     scan_rate = filemetadata('scan_rate')
     if scan_type == 'ppi':
-        sweep_rates = [hfile[s]['ray_header']['az_speed'] for s in scans]
-        scan_rate['data'] = np.concatenate(sweep_rates).astype('float32')
+        scan_rate['data'] = ghelp.ray_header('az_speed', 'float32')
     elif scan_type == 'rhi':
-        sweep_rates = [hfile[s]['ray_header']['el_speed'] for s in scans]
-        scan_rate['data'] = np.concatenate(sweep_rates).astype('float32')
+        scan_rate['data'] = ghelp.ray_header('el_speed', 'float32')
     else:
         scan_rate = None
 
@@ -278,42 +232,38 @@ def read_gamic(filename, field_names=None, additional_metadata=None,
         dtype='float32')
 
     beamwidth_h = filemetadata('radar_beam_width_h')
-    beamwidth_h['data'] = np.array(
-        [hfile['how'].attrs['azimuth_beam']], dtype='float32')
+    beamwidth_h['data'] = ghelp.how_attr('azimuth_beam', 'float32')
 
     beamwidth_v = filemetadata('radar_beam_width_v')
-    beamwidth_v['data'] = np.array(
-        [hfile['how'].attrs['elevation_beam']], dtype='float32')
+    beamwidth_v['data'] = ghelp.how_attr('elevation_beam', 'float32')
 
     pulse_width = filemetadata('pulse_width')
-    t = [hfile[s]['how'].attrs['pulse_width_us']*1e-6 for s in scans]
-    pulse_width['data'] = np.repeat(t, rays_per_sweep).astype('float32')
+    pulse_width['data'] = ghelp.sweep_expand(
+        ghelp.how_attrs('pulse_width_us', 'float32') * 1e-6)
 
     prt = filemetadata('prt')
-    t = [1. / hfile[s]['how'].attrs['PRF'] for s in scans]
-    prt['data'] = np.repeat(t, rays_per_sweep).astype('float32')
+    prt['data'] = ghelp.sweep_expand(1. / ghelp.how_attrs('PRF', 'float32'))
 
     prt_mode = filemetadata('prt_mode')
     prt_ratio = filemetadata('prt_ratio')
-    sweep_unfolding = [hfile[s]['how'].attrs['unfolding'] for s in scans]
+    sweep_unfolding = ghelp.how_attrs('unfolding', 'int32')
     sweep_prt_mode = map(_prt_mode_from_unfolding, sweep_unfolding)
     sweep_prt_ratio = [[1, 2./3., 3./4., 4./5.][i] for i in sweep_unfolding]
     prt_mode['data'] = np.array(sweep_prt_mode)
-    prt_ratio['data'] = np.repeat(sweep_prt_ratio, rays_per_sweep)
+    prt_ratio['data'] = ghelp.sweep_expand(sweep_prt_ratio)
 
     unambiguous_range = filemetadata('unambiguous_range')
-    t = [hfile[s]['how'].attrs['range'] for s in scans]
-    unambiguous_range['data'] = np.repeat(t, rays_per_sweep).astype('float32')
+    unambiguous_range['data'] = ghelp.sweep_expand(
+        ghelp.how_attrs('range', 'float32'))
 
     nyquist_velocity = filemetadata('nyquist_velocity')
-    t = [float(hfile[s]['how']['extended'].attrs['nyquist_velocity'])
-         for s in scans]
-    nyquist_velocity['data'] = np.repeat(t, rays_per_sweep).astype('float32')
+    nyquist_velocity['data'] = ghelp.sweep_expand(
+        ghelp.how_ext_attrs('nyquist_velocity'))
 
     n_samples = filemetadata('n_samples')
-    t = [hfile[s]['how'].attrs['range_samples'] *
-         hfile[s]['how'].attrs['time_samples'] for s in scans]
-    n_samples['data'] = np.repeat(t, rays_per_sweep).astype('int32')
+    n_samples['data'] = ghelp.sweep_expand(
+        ghelp.how_attrs('range_samples', 'int32') *
+        ghelp.how_attrs('time_samples', 'int32'), dtype='int32')
 
     instrument_parameters = {
         'frequency': frequency,
@@ -339,7 +289,86 @@ def read_gamic(filename, field_names=None, additional_metadata=None,
         instrument_parameters=instrument_parameters,
         ray_angle_res=ray_angle_res,
         rays_are_indexed=rays_are_indexed,
-        scan_rate=scan_rate, target_scan_rate=target_scan_rate)
+        scan_rate=scan_rate,
+        target_scan_rate=target_scan_rate)
+
+
+class _GAMICFileHelper(object):
+    """
+    A class to help read GAMIC files.
+
+    This class has methods which perform often used looping routines
+    when reading GAMIC files.
+    """
+
+    def __init__(self, hfile):
+        """ initialize object. """
+
+        self.hfile = hfile
+        self.nsweeps = hfile['what'].attrs['sets']
+        self.scans = ['scan%i' % (i) for i in range(self.nsweeps)]
+        self.rays_per_sweep = self.how_attrs('ray_count', 'int32')
+        self.total_rays = sum(self.rays_per_sweep)
+        self.ngates = int(hfile['/scan0/how'].attrs['bin_count'])
+        # starting and ending ray for each sweep
+        self.start_ray = np.cumsum(np.append([0], self.rays_per_sweep[:-1]))
+        self.end_ray = np.cumsum(self.rays_per_sweep) - 1
+
+        return
+
+    # attribute look up
+    def where_attr(self, attr, dtype):
+        """ Return an array containing a attribute from the where group. """
+        return np.array([self.hfile['where'].attrs[attr]], dtype=dtype)
+
+    def how_attr(self, attr, dtype):
+        """ Return an array containing a attribute from the how group. """
+        return np.array([self.hfile['how'].attrs[attr]], dtype=dtype)
+
+    # scan/sweep based attribute lookup
+    def how_attrs(self, attr, dtype):
+        """ Return an array of an attribute for each scan's how group. """
+        return np.array([self.hfile[s]['how'].attrs[attr]
+                         for s in self.scans], dtype=dtype)
+
+    def how_ext_attrs(self, attr):
+        """
+        Return a list of an attribute in each scan's how/extended group.
+        """
+        return [float(self.hfile[s]['how']['extended'].attrs[attr])
+                for s in self.scans]
+
+    def what_attrs(self, attr, dtype):
+        """ Return a list of an attribute for each scan's what group. """
+        return np.array([self.hfile[s]['what'].attrs[attr]
+                         for s in self.scans], dtype=dtype)
+
+    # misc looping
+    def ray_header(self, field, dtype):
+        """ Return an array containing a ray_header field for each sweep. """
+        data = np.empty((self.total_rays, ), dtype=dtype)
+        for scan, start, end in zip(self.scans, self.start_ray, self.end_ray):
+            data[start:end+1] = self.hfile[scan]['ray_header'][field]
+        return data
+
+    def moment_data(self, moment, dtype):
+        """ Read in moment data from all sweeps. """
+        data = np.ma.zeros((self.total_rays, self.ngates), dtype=dtype)
+        for scan, start, end in zip(self.scans, self.start_ray, self.end_ray):
+            sweep_data = _get_gamic_sweep_data(self.hfile[scan][moment])
+            data[start:end+1] = sweep_data[:]
+        return data
+
+    def sweep_expand(self, arr, dtype='float32'):
+        """ Expand an sweep indexed array to be ray indexed """
+        return np.repeat(arr, self.rays_per_sweep).astype(dtype)
+
+
+def _avg_radial_angles(angle1, angle2):
+    """ Return the average angle between two radial angles. """
+    return np.angle(
+        (np.exp(1.j*np.deg2rad(angle1)) +
+         np.exp(1.j*np.deg2rad(angle2))) / 2., deg=True)
 
 
 def _prt_mode_from_unfolding(unfolding):
