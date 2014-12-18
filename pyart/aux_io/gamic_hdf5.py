@@ -6,10 +6,19 @@ Utilities for reading gamic hdf5 files.
 
 .. autosummary::
     :toctree: generated/
+    :template: dev_template.rst
+
+    _GAMICFileHelper
+
+.. autosummary::
+    :toctree: generated/
 
     read_gamic
+    _get_instrument_params
+    _avg_radial_angles
     _prt_mode_from_unfolding
     _get_gamic_sweep_data
+
 
 """
 
@@ -226,57 +235,7 @@ def read_gamic(filename, field_names=None, additional_metadata=None,
         scan_rate = None
 
     # instrument_parameters
-    frequency = filemetadata('frequency')
-    frequency['data'] = np.array(
-        [LIGHT_SPEED / hfile['scan0']['how'].attrs['radar_wave_length']],
-        dtype='float32')
-
-    beamwidth_h = filemetadata('radar_beam_width_h')
-    beamwidth_h['data'] = ghelp.how_attr('azimuth_beam', 'float32')
-
-    beamwidth_v = filemetadata('radar_beam_width_v')
-    beamwidth_v['data'] = ghelp.how_attr('elevation_beam', 'float32')
-
-    pulse_width = filemetadata('pulse_width')
-    pulse_width['data'] = ghelp.sweep_expand(
-        ghelp.how_attrs('pulse_width_us', 'float32') * 1e-6)
-
-    prt = filemetadata('prt')
-    prt['data'] = ghelp.sweep_expand(1. / ghelp.how_attrs('PRF', 'float32'))
-
-    prt_mode = filemetadata('prt_mode')
-    prt_ratio = filemetadata('prt_ratio')
-    sweep_unfolding = ghelp.how_attrs('unfolding', 'int32')
-    sweep_prt_mode = map(_prt_mode_from_unfolding, sweep_unfolding)
-    sweep_prt_ratio = [[1, 2./3., 3./4., 4./5.][i] for i in sweep_unfolding]
-    prt_mode['data'] = np.array(sweep_prt_mode)
-    prt_ratio['data'] = ghelp.sweep_expand(sweep_prt_ratio)
-
-    unambiguous_range = filemetadata('unambiguous_range')
-    unambiguous_range['data'] = ghelp.sweep_expand(
-        ghelp.how_attrs('range', 'float32'))
-
-    nyquist_velocity = filemetadata('nyquist_velocity')
-    nyquist_velocity['data'] = ghelp.sweep_expand(
-        ghelp.how_ext_attrs('nyquist_velocity'))
-
-    n_samples = filemetadata('n_samples')
-    n_samples['data'] = ghelp.sweep_expand(
-        ghelp.how_attrs('range_samples', 'int32') *
-        ghelp.how_attrs('time_samples', 'int32'), dtype='int32')
-
-    instrument_parameters = {
-        'frequency': frequency,
-        'radar_beam_width_h': beamwidth_h,
-        'radar_beam_width_v': beamwidth_v,
-        'n_samples': n_samples,
-        'pulse_width': pulse_width,
-        'prt': prt,
-        'prt_ratio': prt_ratio,
-        'nyquist_velocity': nyquist_velocity,
-        'unambiguous_range': unambiguous_range,
-        'prt_mode': prt_mode,
-    }
+    instrument_parameters = _get_instrument_params(ghelp, filemetadata)
 
     hfile.close()
 
@@ -293,12 +252,67 @@ def read_gamic(filename, field_names=None, additional_metadata=None,
         target_scan_rate=target_scan_rate)
 
 
+def _get_instrument_params(ghelp, filemetadata):
+    """ Return a dictionary containing instrument parameters. """
+
+    instrument_params = {}
+
+    dic = filemetadata('frequency')
+    dic['data'] = np.array(
+        [LIGHT_SPEED / ghelp.hfile['scan0']['how'].attrs['radar_wave_length']],
+        dtype='float32')
+    instrument_params['frequency'] = dic
+
+    dic = filemetadata('radar_beam_width_h')
+    dic['data'] = ghelp.how_attr('azimuth_beam', 'float32')
+    instrument_params['radar_beam_width_h'] = dic
+
+    dic = filemetadata('radar_beam_width_v')
+    dic['data'] = ghelp.how_attr('elevation_beam', 'float32')
+    instrument_params['radar_beam_width_v'] = dic
+
+    dic = filemetadata('pulse_width')
+    dic['data'] = ghelp.sweep_expand(
+        ghelp.how_attrs('pulse_width_us', 'float32') * 1e-6)
+    instrument_params['pulse_width'] = dic
+
+    dic = filemetadata('prt')
+    dic['data'] = ghelp.sweep_expand(1. / ghelp.how_attrs('PRF', 'float32'))
+    instrument_params['prt'] = dic
+
+    unfolding = ghelp.how_attrs('unfolding', 'int32')
+    dic = filemetadata('prt_mode')
+    dic['data'] = np.array([_prt_mode_from_unfolding(i) for i in unfolding])
+    instrument_params['prt_mode'] = dic
+
+    dic = filemetadata('prt_ratio')
+    dic['data'] = ghelp.sweep_expand(
+        [[1, 2./3., 3./4., 4./5.][i] for i in unfolding])
+    instrument_params['prt_ratio'] = dic
+
+    dic = filemetadata('unambiguous_range')
+    dic['data'] = ghelp.sweep_expand(ghelp.how_attrs('range', 'float32'))
+    instrument_params['unambiguous_range'] = dic
+
+    dic = filemetadata('nyquist_velocity')
+    dic['data'] = ghelp.sweep_expand(ghelp.how_ext_attrs('nyquist_velocity'))
+    instrument_params['nyquist_velocity'] = dic
+
+    dic = filemetadata('n_samples')
+    dic['data'] = ghelp.sweep_expand(
+        ghelp.how_attrs('range_samples', 'int32') *
+        ghelp.how_attrs('time_samples', 'int32'), dtype='int32')
+    instrument_params['n_samples'] = dic
+
+    return instrument_params
+
+
 class _GAMICFileHelper(object):
     """
     A class to help read GAMIC files.
 
-    This class has methods which perform often used looping routines
-    when reading GAMIC files.
+    This class has methods which performs looping routines which are
+    useful when reading GAMIC files.
     """
 
     def __init__(self, hfile):
@@ -309,7 +323,6 @@ class _GAMICFileHelper(object):
         self.scans = ['scan%i' % (i) for i in range(self.nsweeps)]
         self.rays_per_sweep = self.how_attrs('ray_count', 'int32')
         self.total_rays = sum(self.rays_per_sweep)
-        self.ngates = int(hfile['/scan0/how'].attrs['bin_count'])
         # starting and ending ray for each sweep
         self.start_ray = np.cumsum(np.append([0], self.rays_per_sweep[:-1]))
         self.end_ray = np.cumsum(self.rays_per_sweep) - 1
@@ -353,7 +366,8 @@ class _GAMICFileHelper(object):
 
     def moment_data(self, moment, dtype):
         """ Read in moment data from all sweeps. """
-        data = np.ma.zeros((self.total_rays, self.ngates), dtype=dtype)
+        ngates = int(self.hfile['/scan0/how'].attrs['bin_count'])
+        data = np.ma.zeros((self.total_rays, ngates), dtype=dtype)
         for scan, start, end in zip(self.scans, self.start_ray, self.end_ray):
             sweep_data = _get_gamic_sweep_data(self.hfile[scan][moment])
             data[start:end+1] = sweep_data[:]
