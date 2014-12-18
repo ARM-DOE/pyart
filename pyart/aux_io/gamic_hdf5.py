@@ -14,6 +14,7 @@ Utilities for reading gamic hdf5 files.
 """
 
 import datetime
+import warnings
 
 import h5py
 import numpy as np
@@ -27,7 +28,8 @@ LIGHT_SPEED = 2.99792458e8  # speed of light in meters per second
 
 
 def read_gamic(filename, field_names=None, additional_metadata=None,
-               file_field_names=False, exclude_fields=None):
+               file_field_names=False, exclude_fields=None,
+               valid_range_from_file=True, units_from_file=True):
     """
     Read a GAMIC hdf5 file.
 
@@ -50,6 +52,13 @@ def read_gamic(filename, field_names=None, additional_metadata=None,
     exclude_fields : list or None, optional
         List of fields to exclude from the radar object. This is applied
         after the `file_field_names` and `field_names` parameters.
+    valid_range_from_file : bool, optional
+        True to extract valid range (valid_min and valid_max) for all
+        field from the file when they are present.  False will not extract
+        these parameters.
+    units_from_file : bool, optional
+        True to extract the units for all fields from the file when available.
+        False will not extract units using the default units for the fields.
 
     Returns
     -------
@@ -58,13 +67,9 @@ def read_gamic(filename, field_names=None, additional_metadata=None,
 
     """
     # TODO
-    # * test with RHI and other scans
-    # * valid_min and valid_max on field dictionaries
     # * refactor
+
     # * unit tests
-    # * add default field mapping, etc to default config
-    # * add default metadata for all defined parameters if they do not exist
-    #   already
     # * auto-detect file type with pyart.io.read function
     # * move to pyart.io namespace
 
@@ -136,12 +141,14 @@ def read_gamic(filename, field_names=None, additional_metadata=None,
 
     # sweep_type
     scan_type = hfile['scan0']['what'].attrs['scan_type'].lower()
-    if scan_type not in ['ppi', 'rhi']:
-        raise NotImplementedError('Not supported sweep_type: ' + scan_type)
     # check that all scans in the volume are the same type
     for scan in scans:
         if hfile[scan]['what'].attrs['scan_type'].lower() != scan_type:
             raise NotImplementedError('Mixed scan_type volume in scan:' + scan)
+    if scan_type not in ['ppi', 'rhi']:
+        message = "Unknown scan type: %s, reading as RHI scans." % (scan_type)
+        warnings.warn(message)
+        scan_type = 'rhi'
 
     # sweep_mode, fixed_angle
     sweep_mode = filemetadata('sweep_mode')
@@ -220,6 +227,19 @@ def read_gamic(filename, field_names=None, additional_metadata=None,
         field_dic = filemetadata(field_name)
         field_dic['data'] = fdata
         field_dic['_FillValue'] = get_fillvalue()
+        if valid_range_from_file:
+            try:
+                valid_min = hfile['/scan0'][h_key].attrs['dyn_range_min']
+                valid_max = hfile['/scan0'][h_key].attrs['dyn_range_max']
+                field_dic['valid_min'] = valid_min
+                field_dic['valid_max'] = valid_max
+            except:
+                pass
+        if units_from_file:
+            try:
+                field_dic['units'] = hfile['/scan0'][h_key].attrs['unit']
+            except:
+                pass
         fields[field_name] = field_dic
 
     # ray_angle_res
@@ -242,10 +262,10 @@ def read_gamic(filename, field_names=None, additional_metadata=None,
 
     # scan_rate
     scan_rate = filemetadata('scan_rate')
-    if 'az_speed' in hfile['/scan0']['ray_header'].dtype.fields:
+    if scan_type == 'ppi':
         sweep_rates = [hfile[s]['ray_header']['az_speed'] for s in scans]
         scan_rate['data'] = np.concatenate(sweep_rates).astype('float32')
-    elif 'el_speed' in hfile['/scan0']['ray_header'].dtype.fields:
+    elif scan_type == 'rhi':
         sweep_rates = [hfile[s]['ray_header']['el_speed'] for s in scans]
         scan_rate['data'] = np.concatenate(sweep_rates).astype('float32')
     else:
