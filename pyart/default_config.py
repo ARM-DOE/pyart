@@ -190,6 +190,10 @@ DEFAULT_METADATA = {
         'axis': 'radial_elevation_coordinate',
         'comment': 'Elevation of antenna relative to the horizontal plane'},
 
+    'scan_rate': {
+        'units': 'degrees_per_second',
+        'long_name': 'Antenna angle scan rate'},
+
     'range': {
         'units': 'meters',
         'standard_name': 'projection_range_coordinate',
@@ -208,20 +212,6 @@ DEFAULT_METADATA = {
                     'Time at the center of each ray, in fractional seconds '
                     'since the global variable time_coverage_start')},
 
-    'sweep_mode': {
-        'units': 'unitless',
-        'standard_name': 'sweep_mode',
-        'long_name': 'Sweep mode',
-        'comment': ('Options are: "sector", "coplane", "rhi", '
-                    '"vertical_pointing", "idle", "azimuth_surveillance", '
-                    '"elevation_surveillance", "sunscan", "pointing", '
-                    '"manual_ppi", "manual_rhi"')},
-
-    'sweep_number': {
-        'units': 'count',
-        'standard_name': 'sweep_number',
-        'long_name': 'Sweep number'},
-
     'metadata': {
         'Conventions': 'CF/Radial instrument_parameters',
         'version': '1.3',
@@ -233,7 +223,27 @@ DEFAULT_METADATA = {
         'comment': '',
         'instrument_name': ''},
 
+
     # Metadata for radar sweep information dictionaries
+    'sweep_number': {
+        'units': 'count',
+        'standard_name': 'sweep_number',
+        'long_name': 'Sweep number'},
+
+    'sweep_mode': {
+        'units': 'unitless',
+        'standard_name': 'sweep_mode',
+        'long_name': 'Sweep mode',
+        'comment': ('Options are: "sector", "coplane", "rhi", '
+                    '"vertical_pointing", "idle", "azimuth_surveillance", '
+                    '"elevation_surveillance", "sunscan", "pointing", '
+                    '"manual_ppi", "manual_rhi"')},
+
+    'fixed_angle': {
+        'long_name': 'Target angle for sweep',
+        'units': 'degrees',
+        'standard_name': 'target_fixed_angle'},
+
     'sweep_start_ray_index': {
         'long_name': 'Index of first ray in sweep, 0-based',
         'units': 'count'},
@@ -242,10 +252,23 @@ DEFAULT_METADATA = {
         'long_name': 'Index of last ray in sweep, 0-based',
         'units': 'count'},
 
-    'fixed_angle': {
-        'long_name': 'Target angle for sweep',
+    'target_scan_rate': {
+        'long_name': 'Target scan rate for sweep',
+        'units': 'degrees_per_second',
+        },
+
+    'rays_are_indexed': {
+        'long_name': 'Flag for indexed rays',
+        'units': 'unitless',
+        'options': ('true: rays are indexed to a regular grid, ' +
+                    'false: rays are not indexed to a regular grid'),
+        },
+
+    'ray_angle_res': {
+        'long_name': 'Angular resolution between rays',
         'units': 'degrees',
-        'standard_name': 'target_fixed_angle'},
+        'comment': 'Only applicable when rays_are_indexed variable is true',
+        },
 
     # Metadata for radar location attributes
     'latitude': {
@@ -296,6 +319,21 @@ DEFAULT_METADATA = {
         'comments': 'Pulse width',
         'meta_group': 'instrument_parameters',
         'long_name': 'Pulse width'},
+
+    'prt_ratio': {
+        'units': 'seconds',
+        'meta_group': 'instrument_parameters',
+        'long_name': 'Pulse repetition frequency ratio'},
+
+    'frequency': {
+        'units': 's-1',
+        'meta_group': 'instrument_parameters',
+        'long_name': 'Radiation frequency'},
+
+    'n_samples': {
+        'units': 'unitless',
+        'meta_group': 'instrument_parameters',
+        'long_name': 'Number of samples used to compute moments'},
 
     # Metadata for radar_parameter sub-convention
     'radar_beam_width_h': {
@@ -822,6 +860,131 @@ chl_field_mapping = {
     '\xcf\x81 VCX': None,   # V Co to Cross Correlation
 }
 
+# GAMIC HDF5 files
+gamic_field_mapping = {
+    # Description of GAMIC fields taken from Radx source code file:
+    # GamicHdf5RadxFile.cc
+
+    # General notes on field names
+    # ----------------------------
+    # * An 'U' prefix indicated the moment was corrected from a timeseries
+    #   that was not clutter corrected.  Fields without a 'U' prefix are
+    #   calculated from a timeseries that has been clutter corrected.
+    # * An 'A' prefix indicates that the moment has been corrected
+    #   for rainfall attenuation.
+    # * 'h' and 'v' endings indicate a the horizontal and vertical channels
+
+    # GAMIC field name: radar field name
+    'I': None,          # In phase signal
+    'Q': None,          # Quadrature signal
+
+    'Z': corrected_reflectivity,
+                        # Reflectivity, corrected for 2nd trip & clutter
+    'UZ': reflectivity,
+                        # Uncorrected reflectivity
+    'Zh': corrected_reflectivity,
+                        # Corrected reflectivity, horizontal channel
+    'Zv': None,         # Corrected reflectivity, vertical channel
+    'UZh': reflectivity,
+                        # Uncorrected reflectivity, horizontal channel
+    'UZv': None,        # Uncorrected reflectivity, vertical channel
+    'AZh': None,        # Refl., rainfall atten. & clutter corrected, h chan.
+
+    # 'F' in velocity fields indicate folded velocities (no de-aliasing),
+    # velocities fields without an F have been unfolded.
+    'V': corrected_velocity,
+                        # Unfolded velocity from corrected timeseries
+    'VF': velocity,     # Folded velocity from corr. t.s.
+    'UV': None,         # Unfolded velocity from uncorrected timeseries
+    'UVF': None,        # Folded velcity from uncorr. t.s.
+    'Vh': corrected_velocity,
+                        # Velocity from corr. t.s., horizontal channel
+    'Vv': None,         # Velocity from corr. t.s., vertical channel
+    'UVh': None,        # Velocity from uncorr. t.s., horizontal channel
+    'UVv': None,        # Velocity from uncorr. t.s., vertical channel
+    'VFh': velocity,
+                        # Folded velocity, corr. t.s., horizontal channel
+    'VFv': None,        # Folded velocity, corr. t.s., vertical channel
+    'UnV': None,        # Folded velocity from uncorrected timeseries
+    'UnVFh': None,      # Folded velocity, uncorr. t.s., horizontal channel
+    'UnVFv': None,      # Folded velocity, uncorr. t.s., vertical channel
+
+    # 'C' in spectral width fields indicate that the field has been
+    # corrected for decorrelation causes by antenna rotation
+    'W': spectrum_width,
+                        # Spectral width from clutter corrected time series.
+    'UW': None,         # Spectral width from uncorrected timeseries.
+    'CW': None,         # Spec. width, antenna rotation corrected, corr. t.s.
+    'UCW': None,        # Spec. width, antenna rotation corrected, uncorr t.s.
+    'Wh': spectrum_width,
+                        # Spectral width, corr t.s., horizontal channel
+    'Wv': None,         # Spectral width, corr t.s., vertical channel
+    'UWh': None,        # Spectral width, uncorr t.s., horizontal channel
+    'UWv': None,        # Spectral width, uncorr t.s., vertical channel
+    'CWh': None,        # Spec. width, antenna rot. corr., horizontal channel
+    'CWv': None,        # Spec. width, antenna rot. corr., vertical channel
+
+    'SQI': normalized_coherent_power,
+                        # Signal quality index
+    'SQIh': normalized_coherent_power,
+                        # Signal quality index, horizontal channel
+    'SQIv': None,       # Signal quality index, vertical channel
+
+    'CCOR': None,       # Clutter power correction
+    'CCORh': None,      # Clutter power correction, horizontal channel
+    'CCORv': None,      # Clutter power correction, vertical channel
+
+    'SIGPOW': None,     # Singal Power
+    'SNR': None,        # Raw signal to noise ratio
+    'SNRh': None,       # Raw signal to noise ratio, horizontal channel
+    'SNRv': None,       # Raw signal to noise ration, vertical channel
+
+    'DFT': None,        # Signal spectrum amplitude
+    'DFTh': None,       # Signal spectrum amplitude, horizontal channel
+    'DFTv': None,       # Signal spectrum amplitude, vertical channel
+
+    'LOG': None,        # Logarithmic amplitude 10*log Isq + Qsq
+    'LOGh': None,       # Logarithmic amplitude, horizontal channel
+    'LOGv': None,       # Logarithmic amplitude, vertical channel
+
+    'CMAP': None,       # Censor map
+
+    # A '1' ending on differential reflectivity fields indicates that the
+    # moment has calculated using a 1st LAG algorithm.
+    'ZDR': corrected_differential_reflectivity,
+                        # Differential reflectivity from corrected timeseries
+    'UZDR': differential_reflectivity,
+                        # Diff. refl. from uncorrected timeseries
+    'AZDR': None,       # Diff. refl., rainfall atten. corr., corr t.s.
+    'ZDR1': None,       # Diff. refl., corr. t.s., 1st LAG algo.
+    'UZDR1': None,      # Diff. refl., uncorr. t.s., 1st LAG algo.
+    'AZDR1': None,      # Diff. refl., rain. atten. corr., corr. t.s., 1st LAG
+
+    'PHI': corrected_differential_phase,
+                        # Differential phase from corrected timeseries
+    'PHIDP': corrected_differential_phase,
+                        # Differential phase from corrected timeseries
+    'UPHIDP': differential_phase,
+                        # Diff. phase from uncorrected timeseries.
+    'PHIH': None,       # Diff. phase, corr. t.s., horizontal channel
+    'UPHIH': None,      # Diff. phase, uncorr t.s., hortizontal channel
+
+    'KDP': specific_differential_phase,
+                        # Specific differential phase
+
+    'RHO': cross_correlation_ratio,
+                        # Cross correlation coefficient from corrected t.s.
+    'RHOHV': cross_correlation_ratio,
+                        # Cross correlation coefficient from corrected t.s.
+    'URHOHV': None,     # Cross correlation coefficient from uncorr. t.s.
+    'RHOH': None,       # Cross corr., corr. t.s., horizontal transmit only
+    'URHOH': None,      # Cross corr., uncorr t.s., horizontal transmit only
+
+    'LDR': linear_depolarization_ratio,
+                        # Linear depolarization ratio from corr. t.s.
+    'ULDR': None,       # Linear depolarization ratio  from uncorr. t.s.
+}
+
 FIELD_MAPPINGS = {                  # Required variable
     'sigmet': sigmet_field_mapping,
     'nexrad_archive': nexrad_archive_field_mapping,
@@ -830,4 +993,5 @@ FIELD_MAPPINGS = {                  # Required variable
     'mdv': mdv_field_mapping,
     'rsl': rsl_field_mapping,
     'chl': chl_field_mapping,
+    'gamic': gamic_field_mapping,
 }
