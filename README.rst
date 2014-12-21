@@ -38,7 +38,7 @@ The required dependencies to install Py-ART in addition to Python are:
 * `NumPy <http://www.scipy.org>`_ 1.6+
 * `SciPy <http://www.scipy.org>`_ 0.10+
 * `matplotlib <http://matplotlib.org/>`_ 1.1.0+
-* `netCDF4 <http://code.google.com/p/netcdf4-python/>`_ 1.0.2+ 
+* `netCDF4 <https://github.com/Unidata/netcdf4-python>`_ 1.0.2+ 
 
 As well as a working C/C++ compiler.  An easy method to install these
 dependencies is by using a 
