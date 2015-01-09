@@ -125,7 +125,10 @@ def read_gamic(filename, field_names=None, additional_metadata=None,
 
     # sweep number
     sweep_number = filemetadata('sweep_number')
-    sweep_number['data'] = ghelp.what_attrs('set_idx', 'int32')
+    try:
+        sweep_number['data'] = ghelp.what_attrs('set_idx', 'int32')
+    except KeyError:
+        sweep_number['data'] = np.arange(len(ghelp.scans), dtype='int32')
 
     # sweep_type
     scan_type = hfile['scan0']['what'].attrs['scan_type'].lower()
@@ -368,9 +371,12 @@ class _GAMICFileHelper(object):
         """ Read in moment data from all sweeps. """
         ngates = int(self.hfile['/scan0/how'].attrs['bin_count'])
         data = np.ma.zeros((self.total_rays, ngates), dtype=dtype)
+        data[:] = np.ma.masked      # volume data initially all masked
         for scan, start, end in zip(self.scans, self.start_ray, self.end_ray):
-            sweep_data = _get_gamic_sweep_data(self.hfile[scan][moment])
-            data[start:end+1] = sweep_data[:]
+            # read in sweep data if field exists in scan.
+            if moment in self.hfile[scan]:
+                sweep_data = _get_gamic_sweep_data(self.hfile[scan][moment])
+                data[start:end+1, :sweep_data.shape[1]] = sweep_data[:]
         return data
 
     def sweep_expand(self, arr, dtype='float32'):
