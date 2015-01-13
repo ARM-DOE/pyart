@@ -11,6 +11,10 @@ Functions for performing radar retrievals.
     :toctree: generated/
 
     steiner_conv_strat
+    grid_displacement_pc
+    grid_shift
+    add_grids
+    create_substep_grids
 
 """
 
@@ -19,5 +23,12 @@ try:
     _F90_EXTENSIONS_AVAILABLE = True
 except:
     _F90_EXTENSIONS_AVAILABLE = False
+
+try:
+    from .advection import  grid_displacement_pc, grid_shift, add_grids, create_substep_grids
+    _ADVECTION_AVAILABLE = True
+except:
+    _ADVECTION_AVAILABLE = False
+
 
 __all__ = [s for s in dir() if not s.startswith('_')]
