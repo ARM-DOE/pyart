@@ -12,7 +12,9 @@ Radar related colormaps.
     _reverse_cmap_spec
     _generate_cmap
 
-Available colormaps, reversed versions (_r) are also provided:
+
+Available colormaps, reversed versions (_r) are also provided, these
+colormaps are available within matplotlib with names 'pyart_COLORMAP':
 
     * BlueBrown10
     * BlueBrown11
@@ -137,3 +139,8 @@ for cmapname in datad.iterkeys():
     cmap_d[cmapname] = _generate_cmap(cmapname, LUTSIZE)
 
 locals().update(cmap_d)
+
+# register the colormaps so that can be accessed with the names pyart_XXX
+for name, cmap in cmap_d.items():
+    full_name = 'pyart_' + name
+    mpl.cm.register_cmap(name=full_name, cmap=cmap)
