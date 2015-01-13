@@ -26,6 +26,8 @@ import sys
 
 import numpy as np
 
+from ..config import get_metadata
+
 
 class Radar(object):
     """
@@ -79,6 +81,11 @@ class Radar(object):
     sweep_end_ray_index : dict
         Index of the last ray in each sweep relative to the start of the
         volume, 0-based.
+    rays_per_sweep : dict
+        Number of rays in each sweep.  This is a read only attribute,
+        attempting to set the attribute will raise a AttributeError and any
+        changes to the dictionary keys will be lost when the attribute is
+        accessed again.
     target_scan_rate : dict or None
         Intended scan rate for each sweep.  If not provided this attribute is
         set to None, indicating this parameter is not available.
@@ -197,6 +204,161 @@ class Radar(object):
         self.ngates = len(_range['data'])
         self.nrays = len(time['data'])
         self.nsweeps = len(sweep_number['data'])
+
+    @property
+    def rays_per_sweep(self):
+        dic = get_metadata('rays_per_sweep')
+        dic['data'] = (self.sweep_end_ray_index['data'] -
+                       self.sweep_start_ray_index['data'] + 1)
+        return dic
+
+    # private functions for checking limits, etc.
+    def _check_sweep_in_range(self, sweep):
+        """ Check that a sweep number is in range. """
+        if sweep < 0 or sweep >= self.nsweeps:
+            raise IndexError('Sweep out of range: ', sweep)
+        return
+
+    def _check_field_exists(self, field_name):
+        """ Check that a field exists in the fields dictionary. """
+        if field_name not in self.fields:
+            raise KeyError('Field not available: ' + field_name)
+        return
+
+    # Iterators
+
+    def iter_start(self):
+        """ Return an iterator over the sweep start indices. """
+        return (s for s in self.sweep_start_ray_index['data'])
+
+    def iter_end(self):
+        """ Return an iterator over the sweep end indices. """
+        return (s for s in self.sweep_end_ray_index['data'])
+
+    def iter_start_end(self):
+        """ Return an iterator over the sweep start and end indices. """
+        return ((s, e) for s, e in zip(self.iter_start(), self.iter_end()))
+
+    def iter_slice(self):
+        """ Return an iterator which returns sweep slice objects. """
+        return (slice(s, e+1) for s, e in self.iter_start_end())
+
+    def iter_field(self, field_name):
+        """ Return an iterator which returns sweep field data. """
+        self._check_field_exists(field_name)
+        return (self.fields[field_name]['data'][s] for s in self.iter_slice())
+
+    def iter_azimuth(self):
+        """ Return an iterator which returns sweep azimuth data. """
+        return (self.azimuth['data'][s] for s in self.iter_slice())
+
+    def iter_elevation(self):
+        """ Return an iterator which returns sweep elevation data. """
+        return (self.elevation['data'][s] for s in self.iter_slice())
+
+    # get methods
+
+    def get_start(self, sweep):
+        """ Return the starting ray index for a given sweep.  """
+        self._check_sweep_in_range(sweep)
+        return self.sweep_start_ray_index['data'][sweep]
+
+    def get_end(self, sweep):
+        """ Return the ending ray for a given sweep. """
+        self._check_sweep_in_range(sweep)
+        return self.sweep_end_ray_index['data'][sweep]
+
+    def get_start_end(self, sweep):
+        """ Return the starting and ending ray for a given sweep. """
+        return self.get_start(sweep), self.get_end(sweep)
+
+    def get_slice(self, sweep):
+        """ Return a slice for selecting rays for a given sweep. """
+        start, end = self.get_start_end(sweep)
+        return slice(start, end+1)
+
+    def get_field(self, sweep, field_name, copy=False):
+        """
+        Return the field data for a given sweep.
+
+        Parameters
+        ----------
+        sweep : int
+            Sweep number to retrieve data for, 0 based.
+        field_name : str
+            Name of the field from which data should be retrieved.
+        copy : bool, optional
+            True to return a copy of the data. False, the default, returns
+            a view of the data (when possible), changing this data will
+            change the data in the underlying Radar object.
+
+        Returns
+        -------
+        data : array
+            Array containing data for the requested sweep and field.
+
+        """
+        self._check_field_exists(field_name)
+        s = self.get_slice(sweep)
+        data = self.fields[field_name]['data'][s]
+        if copy:
+            return data.copy()
+        else:
+            return data
+
+    def get_azimuth(self, sweep, copy=False):
+        """
+        Return an array of azimuth angles for a given sweep.
+
+        Parameters
+        ----------
+        sweep : int
+            Sweep number to retrieve data for, 0 based.
+        copy : bool, optional
+            True to return a copy of the azimuths. False, the default, returns
+            a view of the azimuths (when possible), changing this data will
+            change the data in the underlying Radar object.
+
+        Returns
+        -------
+        azimuths : array
+            Array containing the azimuth angles for a given sweep.
+
+        """
+        s = self.get_slice(sweep)
+        azimuths = self.azimuth['data'][s]
+        if copy:
+            return azimuths.copy()
+        else:
+            return azimuths
+
+    def get_elevation(self, sweep, copy=False):
+        """
+        Return an array of elevation angles for a given sweep.
+
+        Parameters
+        ----------
+        sweep : int
+            Sweep number to retrieve data for, 0 based.
+        copy : bool, optional
+            True to return a copy of the elevations. False, the default,
+            returns a view of the elevations (when possible), changing this
+            data will change the data in the underlying Radar object.
+
+        Returns
+        -------
+        azimuths : array
+            Array containing the elevation angles for a given sweep.
+
+        """
+        s = self.get_slice(sweep)
+        elevation = self.elevation['data'][s]
+        if copy:
+            return elevation.copy()
+        else:
+            return elevation
+
+    # Methods
 
     def info(self, level='standard', out=sys.stdout):
         """
@@ -611,7 +773,7 @@ def to_vpt(radar, single_scan=True):
 
 def join_radar(radar1, radar2):
 
-    #must have same gate spacing
+    # must have same gate spacing
     new_radar = copy.deepcopy(radar1)
     new_radar.azimuth['data'] = np.append(radar1.azimuth['data'],
                                           radar2.azimuth['data'])
