@@ -26,6 +26,8 @@ import sys
 
 import numpy as np
 
+from ..config import get_metadata
+
 
 class Radar(object):
     """
@@ -79,6 +81,11 @@ class Radar(object):
     sweep_end_ray_index : dict
         Index of the last ray in each sweep relative to the start of the
         volume, 0-based.
+    rays_per_sweep : dict
+        Number of rays in each sweep.  This is a read only attribute,
+        attempting to set the attribute will raise a AttributeError and any
+        changes to the dictionary keys will be lost when the attribute is
+        accessed again.
     target_scan_rate : dict or None
         Intended scan rate for each sweep.  If not provided this attribute is
         set to None, indicating this parameter is not available.
@@ -197,6 +204,13 @@ class Radar(object):
         self.ngates = len(_range['data'])
         self.nrays = len(time['data'])
         self.nsweeps = len(sweep_number['data'])
+
+    @property
+    def rays_per_sweep(self):
+        dic = get_metadata('rays_per_sweep')
+        dic['data'] = (self.sweep_end_ray_index['data'] -
+                       self.sweep_start_ray_index['data'] + 1)
+        return dic
 
     # private functions for checking limits, etc.
     def _check_sweep_in_range(self, sweep):
