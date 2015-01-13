@@ -198,6 +198,40 @@ class Radar(object):
         self.nrays = len(time['data'])
         self.nsweeps = len(sweep_number['data'])
 
+    # Iterators
+
+    def iter_start(self):
+        """ Return an iterator over the sweep start indices. """
+        return (s for s in self.sweep_start_ray_index['data'])
+
+    def iter_end(self):
+        """ Return an iterator over the sweep end indices. """
+        return (s for s in self.sweep_end_ray_index['data'])
+
+    def iter_start_end(self):
+        """ Return an iterator over the sweep start and end indices. """
+        return ((s, e) for s, e in zip(self.iter_start(), self.iter_end()))
+
+    def iter_slice(self):
+        """ Return an iterator which returns sweep slice objects. """
+        return (slice(s, e+1) for s, e in self.iter_start_end())
+
+    def iter_field(self, field_name):
+        """ Return an iterator which returns sweep field data. """
+        if field_name not in self.fields:
+            raise ValueError('Field not available: ' + field_name)
+        return (self.fields[field_name]['data'][s] for s in self.iter_slice())
+
+    def iter_azimuth(self):
+        """ Return an iterator which returns sweep azimuth data. """
+        return (self.azimuth['data'][s] for s in self.iter_slice())
+
+    def iter_elevation(self):
+        """ Return an iterator which returns sweep elevation data. """
+        return (self.elevation['data'][s] for s in self.iter_slice())
+
+    # Methods
+
     def info(self, level='standard', out=sys.stdout):
         """
         Print information on radar.
@@ -611,7 +645,7 @@ def to_vpt(radar, single_scan=True):
 
 def join_radar(radar1, radar2):
 
-    #must have same gate spacing
+    # must have same gate spacing
     new_radar = copy.deepcopy(radar1)
     new_radar.azimuth['data'] = np.append(radar1.azimuth['data'],
                                           radar2.azimuth['data'])

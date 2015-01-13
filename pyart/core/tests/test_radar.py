@@ -2,10 +2,50 @@
 
 import sys
 from io import BytesIO
+import inspect
 
 import numpy as np
 from numpy.testing import assert_raises
 import pyart
+
+
+def test_iterators():
+    radar = pyart.testing.make_empty_ppi_radar(30, 20, 5)
+    radar.fields['reflectivity'] = {
+        'data': np.zeros((100, 30), dtype=np.float32)}
+
+    starts = [0, 20, 40, 60, 80]
+    ends = [19, 39, 59, 79, 99]
+    starts_ends = [(s, e) for s, e in zip(starts, ends)]
+
+    assert inspect.isgenerator(radar.iter_start())
+    assert [s for s in radar.iter_start()] == starts
+
+    assert inspect.isgenerator(radar.iter_end())
+    assert [s for s in radar.iter_end()] == ends
+
+    assert inspect.isgenerator(radar.iter_start_end())
+    assert [s for s in radar.iter_start_end()] == starts_ends
+
+    assert inspect.isgenerator(radar.iter_slice())
+    for s, start, end in zip(radar.iter_slice(), starts, ends):
+        assert s.start == start
+        assert s.stop == end + 1
+        assert s.step is None
+
+    assert inspect.isgenerator(radar.iter_field('reflectivity'))
+    for d in radar.iter_field('reflectivity'):
+        assert d.shape == (20, 30)
+        assert d.dtype == np.float32
+    assert_raises(ValueError, radar.iter_field, 'foobar')
+
+    assert inspect.isgenerator(radar.iter_azimuth())
+    for d in radar.iter_azimuth():
+        assert d.shape == (20, )
+
+    assert inspect.isgenerator(radar.iter_elevation())
+    for d in radar.iter_elevation():
+        assert d.shape == (20, )
 
 
 def test_extract_sweeps():
