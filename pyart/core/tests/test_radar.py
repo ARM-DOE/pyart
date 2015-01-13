@@ -37,7 +37,7 @@ def test_iterators():
     for d in radar.iter_field('reflectivity'):
         assert d.shape == (20, 30)
         assert d.dtype == np.float32
-    assert_raises(ValueError, radar.iter_field, 'foobar')
+    assert_raises(KeyError, radar.iter_field, 'foobar')
 
     assert inspect.isgenerator(radar.iter_azimuth())
     for d in radar.iter_azimuth():
@@ -46,6 +46,50 @@ def test_iterators():
     assert inspect.isgenerator(radar.iter_elevation())
     for d in radar.iter_elevation():
         assert d.shape == (20, )
+
+
+def test_get_methods():
+    radar = pyart.testing.make_empty_ppi_radar(30, 20, 5)
+    radar.fields['reflectivity'] = {
+        'data': np.zeros((100, 30), dtype=np.float32)}
+
+    assert radar.get_start(0) == 0
+    assert radar.get_start(1) == 20
+    assert_raises(IndexError, radar.get_start, -1)
+    assert_raises(IndexError, radar.get_start, 20)
+
+    assert radar.get_end(0) == 19
+    assert radar.get_end(1) == 39
+    assert_raises(IndexError, radar.get_end, -1)
+    assert_raises(IndexError, radar.get_end, 20)
+
+    assert radar.get_start_end(0) == (0, 19)
+    assert radar.get_start_end(1) == (20, 39)
+    assert_raises(IndexError, radar.get_start_end, -1)
+    assert_raises(IndexError, radar.get_start_end, 20)
+
+    assert radar.get_slice(0) == slice(0, 20)
+    assert radar.get_slice(1) == slice(20, 40)
+    assert_raises(IndexError, radar.get_slice, -1)
+    assert_raises(IndexError, radar.get_slice, 20)
+
+    data = radar.get_field(0, 'reflectivity')
+    assert data.shape == (20, 30)
+    assert data.dtype == np.float32
+    data = radar.get_field(1, 'reflectivity')
+    assert data.shape == (20, 30)
+    assert data.dtype == np.float32
+    assert_raises(KeyError, radar.get_field, 0, 'foobar')
+    assert_raises(IndexError, radar.get_field, -1, 'reflectivity')
+    assert_raises(IndexError, radar.get_field, 20, 'reflectivity')
+
+    assert radar.get_azimuth(0).shape == (20, )
+    assert_raises(IndexError, radar.get_azimuth, -1)
+    assert_raises(IndexError, radar.get_azimuth, 20)
+
+    assert radar.get_elevation(0).shape == (20, )
+    assert_raises(IndexError, radar.get_elevation, -1)
+    assert_raises(IndexError, radar.get_elevation, 20)
 
 
 def test_extract_sweeps():

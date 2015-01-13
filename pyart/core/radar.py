@@ -198,6 +198,19 @@ class Radar(object):
         self.nrays = len(time['data'])
         self.nsweeps = len(sweep_number['data'])
 
+    # private functions for checking limits, etc.
+    def _check_sweep_in_range(self, sweep):
+        """ Check that a sweep number is in range. """
+        if sweep < 0 or sweep >= self.nsweeps:
+            raise IndexError('Sweep out of range: ', sweep)
+        return
+
+    def _check_field_exists(self, field_name):
+        """ Check that a field exists in the fields dictionary. """
+        if field_name not in self.fields:
+            raise KeyError('Field not available: ' + field_name)
+        return
+
     # Iterators
 
     def iter_start(self):
@@ -218,8 +231,7 @@ class Radar(object):
 
     def iter_field(self, field_name):
         """ Return an iterator which returns sweep field data. """
-        if field_name not in self.fields:
-            raise ValueError('Field not available: ' + field_name)
+        self._check_field_exists(field_name)
         return (self.fields[field_name]['data'][s] for s in self.iter_slice())
 
     def iter_azimuth(self):
@@ -229,6 +241,108 @@ class Radar(object):
     def iter_elevation(self):
         """ Return an iterator which returns sweep elevation data. """
         return (self.elevation['data'][s] for s in self.iter_slice())
+
+    # get methods
+
+    def get_start(self, sweep):
+        """ Return the starting ray index for a given sweep.  """
+        self._check_sweep_in_range(sweep)
+        return self.sweep_start_ray_index['data'][sweep]
+
+    def get_end(self, sweep):
+        """ Return the ending ray for a given sweep. """
+        self._check_sweep_in_range(sweep)
+        return self.sweep_end_ray_index['data'][sweep]
+
+    def get_start_end(self, sweep):
+        """ Return the starting and ending ray for a given sweep. """
+        return self.get_start(sweep), self.get_end(sweep)
+
+    def get_slice(self, sweep):
+        """ Return a slice for selecting rays for a given sweep. """
+        start, end = self.get_start_end(sweep)
+        return slice(start, end+1)
+
+    def get_field(self, sweep, field_name, copy=False):
+        """
+        Return the field data for a given sweep.
+
+        Parameters
+        ----------
+        sweep : int
+            Sweep number to retrieve data for, 0 based.
+        field_name : str
+            Name of the field from which data should be retrieved.
+        copy : bool, optional
+            True to return a copy of the data. False, the default, returns
+            a view of the data (when possible), changing this data will
+            change the data in the underlying Radar object.
+
+        Returns
+        -------
+        data : array
+            Array containing data for the requested sweep and field.
+
+        """
+        self._check_field_exists(field_name)
+        s = self.get_slice(sweep)
+        data = self.fields[field_name]['data'][s]
+        if copy:
+            return data.copy()
+        else:
+            return data
+
+    def get_azimuth(self, sweep, copy=False):
+        """
+        Return an array of azimuth angles for a given sweep.
+
+        Parameters
+        ----------
+        sweep : int
+            Sweep number to retrieve data for, 0 based.
+        copy : bool, optional
+            True to return a copy of the azimuths. False, the default, returns
+            a view of the azimuths (when possible), changing this data will
+            change the data in the underlying Radar object.
+
+        Returns
+        -------
+        azimuths : array
+            Array containing the azimuth angles for a given sweep.
+
+        """
+        s = self.get_slice(sweep)
+        azimuths = self.azimuth['data'][s]
+        if copy:
+            return azimuths.copy()
+        else:
+            return azimuths
+
+    def get_elevation(self, sweep, copy=False):
+        """
+        Return an array of elevation angles for a given sweep.
+
+        Parameters
+        ----------
+        sweep : int
+            Sweep number to retrieve data for, 0 based.
+        copy : bool, optional
+            True to return a copy of the elevations. False, the default,
+            returns a view of the elevations (when possible), changing this
+            data will change the data in the underlying Radar object.
+
+        Returns
+        -------
+        azimuths : array
+            Array containing the elevation angles for a given sweep.
+
+        """
+        s = self.get_slice(sweep)
+        elevation = self.elevation['data'][s]
+        if copy:
+            return elevation.copy()
+        else:
+            return elevation
 
     # Methods
 
