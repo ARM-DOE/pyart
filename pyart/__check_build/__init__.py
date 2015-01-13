@@ -1,12 +1,12 @@
 """ Module to give helpful messages to the user that did not
-compile the scikit properly.
+compile Py-ART properly.
 """
 import os
 
 INPLACE_MSG = """
-It appears that you are importing a local scikit-learn source tree. For
-this, you need to have an inplace install. Maybe you are in the source
-directory and you need to try from another location."""
+It appears that you are importing a local pyart source tree. For this, you
+need to have an inplace install. Maybe you are in the source directory and
+you need to try from another location."""
 
 STANDARD_MSG = """
 If you have used an installer, please check that it is suited for your
@@ -18,7 +18,7 @@ def raise_build_error(e):
     # directory to help debugging on the mailing list.
     local_dir = os.path.split(__file__)[0]
     msg = STANDARD_MSG
-    if local_dir == "sklearn/__check_build":
+    if local_dir == "pyart/__check_build":
         # Picking up the local install: this will work only if the
         # install is an 'inplace build'
         msg = INPLACE_MSG
@@ -33,11 +33,11 @@ ___________________________________________________________________________
 Contents of %s:
 %s
 ___________________________________________________________________________
-It seems that scikit-learn has not been built correctly.
+It seems that Py-ART has not been built correctly.
 
-If you have installed scikit-learn from source, please do not forget
-to build the package before using it: run `python setup.py install` or
-`make` in the source directory.
+If you have installed Py-ART from source, please do not forget
+to build the package before using it: run `python setup.py install` in the
+source directory.
 %s""" % (e, local_dir, ''.join(dir_content).strip(), msg))
 
 try:
