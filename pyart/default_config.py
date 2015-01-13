@@ -252,6 +252,10 @@ DEFAULT_METADATA = {
         'long_name': 'Index of last ray in sweep, 0-based',
         'units': 'count'},
 
+    'rays_per_sweep': {
+        'long_name': 'Number of rays in each sweep',
+        'units': 'count'},
+
     'target_scan_rate': {
         'long_name': 'Target scan rate for sweep',
         'units': 'degrees_per_second',
