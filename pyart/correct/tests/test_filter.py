@@ -19,129 +19,134 @@ fdata2[4, 4] = np.PINF
 fdata2[5, 5] = np.NINF
 radar.add_field('test_field2', {'data': fdata2})
 
+
 def test_gatefilter_init():
     gfilter = pyart.correct.GateFilter(radar)
-    assert np.all(gfilter.gate_excluded == False)
+    assert np.all(gfilter.gate_excluded == np.False_)
 
 
 def test_gatefilter_exclude_below():
     gfilter = pyart.correct.GateFilter(radar)
     gfilter.exclude_below('test_field', 5)
-    assert gfilter.gate_excluded[0, 0] == True
-    assert gfilter.gate_excluded[0, -1] == False
+    assert gfilter.gate_excluded[0, 0] is np.True_
+    assert gfilter.gate_excluded[0, -1] is np.False_
     gfilter.exclude_below('test_field', 99)
-    assert gfilter.gate_excluded[0, 0] == True
-    assert gfilter.gate_excluded[0, -1] == True
+    assert gfilter.gate_excluded[0, 0] is np.True_
+    assert gfilter.gate_excluded[0, -1] is np.True_
 
 
 def test_gatefilter_exclude_above():
     gfilter = pyart.correct.GateFilter(radar)
     gfilter.exclude_above('test_field', 5)
-    assert gfilter.gate_excluded[0, 0] == False
-    assert gfilter.gate_excluded[0, -1] == True
+    assert gfilter.gate_excluded[0, 0] is np.False_
+    assert gfilter.gate_excluded[0, -1] is np.True_
     gfilter.exclude_above('test_field', -5)
-    assert gfilter.gate_excluded[0, 0] == True
-    assert gfilter.gate_excluded[0, -1] == True
+    assert gfilter.gate_excluded[0, 0] is np.True_
+    assert gfilter.gate_excluded[0, -1] is np.True_
 
 
 def test_gatefilter_exclude_inside():
     gfilter = pyart.correct.GateFilter(radar)
     gfilter.exclude_inside('test_field', 2, 5)
-    assert gfilter.gate_excluded[0, 0] == False
-    assert gfilter.gate_excluded[0, 3] == True
-    assert gfilter.gate_excluded[0, -1] == False
+    assert gfilter.gate_excluded[0, 0] is np.False_
+    assert gfilter.gate_excluded[0, 3] is np.True_
+    assert gfilter.gate_excluded[0, -1] is np.False_
     gfilter = pyart.correct.GateFilter(radar)
     gfilter.exclude_inside('test_field', 5, 2)
-    assert gfilter.gate_excluded[0, 0] == False
-    assert gfilter.gate_excluded[0, 3] == True
-    assert gfilter.gate_excluded[0, -1] == False
+    assert gfilter.gate_excluded[0, 0] is np.False_
+    assert gfilter.gate_excluded[0, 3] is np.True_
+    assert gfilter.gate_excluded[0, -1] is np.False_
+
 
 def test_gatefilter_exclude_outside():
     gfilter = pyart.correct.GateFilter(radar)
     gfilter.exclude_outside('test_field', 2, 5)
-    assert gfilter.gate_excluded[0, 0] == True
-    assert gfilter.gate_excluded[0, 3] == False
-    assert gfilter.gate_excluded[0, -1] == True
+    assert gfilter.gate_excluded[0, 0] is np.True_
+    assert gfilter.gate_excluded[0, 3] is np.False_
+    assert gfilter.gate_excluded[0, -1] is np.True_
     gfilter = pyart.correct.GateFilter(radar)
     gfilter.exclude_outside('test_field', 5, 2)
-    assert gfilter.gate_excluded[0, 0] == True
-    assert gfilter.gate_excluded[0, 3] == False
-    assert gfilter.gate_excluded[0, -1] == True
+    assert gfilter.gate_excluded[0, 0] is np.True_
+    assert gfilter.gate_excluded[0, 3] is np.False_
+    assert gfilter.gate_excluded[0, -1] is np.True_
 
 
 def test_gatefilter_exclude_equal():
     gfilter = pyart.correct.GateFilter(radar)
     gfilter.exclude_equal('test_field', 2)
-    assert gfilter.gate_excluded[0, 2] == True
-    assert gfilter.gate_excluded[0, 3] == False
+    assert gfilter.gate_excluded[0, 2] is np.True_
+    assert gfilter.gate_excluded[0, 3] is np.False_
+
 
 def test_gatefilter_exclude_not_equal():
     gfilter = pyart.correct.GateFilter(radar)
     gfilter.exclude_not_equal('test_field', 2)
-    assert gfilter.gate_excluded[0, 2] == False
-    assert gfilter.gate_excluded[0, 3] == True
+    assert gfilter.gate_excluded[0, 2] is np.False_
+    assert gfilter.gate_excluded[0, 3] is np.True_
 
 
 def test_gatefilter_exclude_all():
     gfilter = pyart.correct.GateFilter(radar)
     gfilter.exclude_all()
-    assert np.all(gfilter.gate_excluded == True)
+    assert np.all(gfilter.gate_excluded == np.True_)
+
 
 def test_gatefilter_exclude_none():
     gfilter = pyart.correct.GateFilter(radar)
     gfilter.exclude_none()
-    assert np.all(gfilter.gate_excluded == False)
+    assert np.all(gfilter.gate_excluded == np.False_)
 
 
 def test_gatefilter_exclude_masked():
     gfilter = pyart.correct.GateFilter(radar)
     gfilter.exclude_masked('test_field2')
-    assert gfilter.gate_excluded[0, 0] == False
-    assert gfilter.gate_excluded[2, 2] == True
-    assert gfilter.gate_excluded[3, 3] == False
-    assert gfilter.gate_excluded[4, 4] == False
-    assert gfilter.gate_excluded[5, 5] == False
+    assert gfilter.gate_excluded[0, 0] is np.False_
+    assert gfilter.gate_excluded[2, 2] is np.True_
+    assert gfilter.gate_excluded[3, 3] is np.False_
+    assert gfilter.gate_excluded[4, 4] is np.False_
+    assert gfilter.gate_excluded[5, 5] is np.False_
 
 
 def test_gatefilter_exclude_invalid():
     gfilter = pyart.correct.GateFilter(radar)
     gfilter.exclude_invalid('test_field2')
-    assert gfilter.gate_excluded[0, 0] == False
-    assert gfilter.gate_excluded[2, 2] == True
-    assert gfilter.gate_excluded[3, 3] == True
-    assert gfilter.gate_excluded[4, 4] == True
-    assert gfilter.gate_excluded[5, 5] == True
+    assert gfilter.gate_excluded[0, 0] is np.False_
+    assert gfilter.gate_excluded[2, 2] is np.True_
+    assert gfilter.gate_excluded[3, 3] is np.True_
+    assert gfilter.gate_excluded[4, 4] is np.True_
+    assert gfilter.gate_excluded[5, 5] is np.True_
+
 
 def test_gatefilter_ops():
     gfilter = pyart.correct.GateFilter(radar)
     gfilter.exclude_below('test_field', 0.5, op='or')
-    assert gfilter.gate_excluded[0, 0] == True
-    assert gfilter.gate_excluded[0, 1] == False
-    assert gfilter.gate_excluded[0, 9] == False
+    assert gfilter.gate_excluded[0, 0] is np.True_
+    assert gfilter.gate_excluded[0, 1] is np.False_
+    assert gfilter.gate_excluded[0, 9] is np.False_
     gfilter.exclude_above('test_field', 8.5, op='or')
-    assert gfilter.gate_excluded[0, 0] == True
-    assert gfilter.gate_excluded[0, 1] == False
-    assert gfilter.gate_excluded[0, 9] == True
+    assert gfilter.gate_excluded[0, 0] is np.True_
+    assert gfilter.gate_excluded[0, 1] is np.False_
+    assert gfilter.gate_excluded[0, 9] is np.True_
 
     gfilter = pyart.correct.GateFilter(radar)
     gfilter.exclude_below('test_field', 0.5, op='or')
-    assert gfilter.gate_excluded[0, 0] == True
-    assert gfilter.gate_excluded[0, 1] == False
-    assert gfilter.gate_excluded[0, 9] == False
+    assert gfilter.gate_excluded[0, 0] is np.True_
+    assert gfilter.gate_excluded[0, 1] is np.False_
+    assert gfilter.gate_excluded[0, 9] is np.False_
     gfilter.exclude_above('test_field', 8.5, op='and')
-    assert gfilter.gate_excluded[0, 0] == False
-    assert gfilter.gate_excluded[0, 1] == False
-    assert gfilter.gate_excluded[0, 9] == False
+    assert gfilter.gate_excluded[0, 0] is np.False_
+    assert gfilter.gate_excluded[0, 1] is np.False_
+    assert gfilter.gate_excluded[0, 9] is np.False_
 
     gfilter = pyart.correct.GateFilter(radar)
     gfilter.exclude_below('test_field', 0.5, op='or')
-    assert gfilter.gate_excluded[0, 0] == True
-    assert gfilter.gate_excluded[0, 1] == False
-    assert gfilter.gate_excluded[0, 9] == False
+    assert gfilter.gate_excluded[0, 0] is np.True_
+    assert gfilter.gate_excluded[0, 1] is np.False_
+    assert gfilter.gate_excluded[0, 9] is np.False_
     gfilter.exclude_above('test_field', 8.5, op='new')
-    assert gfilter.gate_excluded[0, 0] == False
-    assert gfilter.gate_excluded[0, 1] == False
-    assert gfilter.gate_excluded[0, 9] == True
+    assert gfilter.gate_excluded[0, 0] is np.False_
+    assert gfilter.gate_excluded[0, 1] is np.False_
+    assert gfilter.gate_excluded[0, 9] is np.True_
 
 
 def test_gatefilter_raises():
@@ -150,3 +155,109 @@ def test_gatefilter_raises():
                   op='fuzz')
     assert_raises(ValueError, gfilter.exclude_below, 'test_field', 0.5,
                   exclude_masked='fuzz')
+
+
+#################
+# include tests #
+#################
+
+
+def test_gatefilter_gate_included_attribute():
+    gfilter = pyart.correct.GateFilter(radar)
+    gfilter.exclude_below('test_field', 0.5, op='or')
+    assert gfilter.gate_excluded[0, 0] is np.True_
+    assert gfilter.gate_excluded[0, 1] is np.False_
+    assert gfilter.gate_included[0, 0] is np.False_
+    assert gfilter.gate_included[0, 1] is np.True_
+
+
+def test_gatefilter_include_below():
+    gfilter = pyart.correct.GateFilter(radar, exclude_based=False)
+    gfilter.include_below('test_field', 5)
+    assert gfilter.gate_included[0, 0] is np.True_
+    assert gfilter.gate_included[0, -1] is np.False_
+    gfilter.include_below('test_field', 99)
+    assert gfilter.gate_included[0, 0] is np.True_
+    assert gfilter.gate_included[0, -1] is np.True_
+
+
+def test_gatefilter_include_above():
+    gfilter = pyart.correct.GateFilter(radar, exclude_based=False)
+    gfilter.include_above('test_field', 5)
+    assert gfilter.gate_included[0, 0] is np.False_
+    assert gfilter.gate_included[0, -1] is np.True_
+    gfilter.include_above('test_field', -5)
+    assert gfilter.gate_included[0, 0] is np.True_
+    assert gfilter.gate_included[0, -1] is np.True_
+
+
+def test_gatefilter_include_inside():
+    gfilter = pyart.correct.GateFilter(radar, exclude_based=False)
+    gfilter.include_inside('test_field', 2, 5)
+    assert gfilter.gate_included[0, 0] is np.False_
+    assert gfilter.gate_included[0, 3] is np.True_
+    assert gfilter.gate_included[0, -1] is np.False_
+    gfilter = pyart.correct.GateFilter(radar, exclude_based=False)
+    gfilter.include_inside('test_field', 5, 2)
+    assert gfilter.gate_included[0, 0] is np.False_
+    assert gfilter.gate_included[0, 3] is np.True_
+    assert gfilter.gate_included[0, -1] is np.False_
+
+
+def test_gatefilter_include_outside():
+    gfilter = pyart.correct.GateFilter(radar, exclude_based=False)
+    gfilter.include_outside('test_field', 2, 5)
+    assert gfilter.gate_included[0, 0] is np.True_
+    assert gfilter.gate_included[0, 3] is np.False_
+    assert gfilter.gate_included[0, -1] is np.True_
+    gfilter = pyart.correct.GateFilter(radar, exclude_based=False)
+    gfilter.include_outside('test_field', 5, 2)
+    assert gfilter.gate_included[0, 0] is np.True_
+    assert gfilter.gate_included[0, 3] is np.False_
+    assert gfilter.gate_included[0, -1] is np.True_
+
+
+def test_gatefilter_include_equal():
+    gfilter = pyart.correct.GateFilter(radar, exclude_based=False)
+    gfilter.include_equal('test_field', 2)
+    assert gfilter.gate_included[0, 2] is np.True_
+    assert gfilter.gate_included[0, 3] is np.False_
+
+
+def test_gatefilter_include_not_equal():
+    gfilter = pyart.correct.GateFilter(radar, exclude_based=False)
+    gfilter.include_not_equal('test_field', 2)
+    assert gfilter.gate_included[0, 2] is np.False_
+    assert gfilter.gate_included[0, 3] is np.True_
+
+
+def test_gatefilter_include_all():
+    gfilter = pyart.correct.GateFilter(radar, exclude_based=False)
+    gfilter.include_all()
+    assert np.all(gfilter.gate_included == np.True_)
+
+
+def test_gatefilter_include_none():
+    gfilter = pyart.correct.GateFilter(radar, exclude_based=False)
+    gfilter.include_none()
+    assert np.all(gfilter.gate_included == np.False_)
+
+
+def test_gatefilter_include_masked():
+    gfilter = pyart.correct.GateFilter(radar, exclude_based=False)
+    gfilter.include_not_masked('test_field2')
+    assert gfilter.gate_included[0, 0] is np.True_
+    assert gfilter.gate_included[2, 2] is np.False_
+    assert gfilter.gate_included[3, 3] is np.True_
+    assert gfilter.gate_included[4, 4] is np.True_
+    assert gfilter.gate_included[5, 5] is np.True_
+
+
+def test_gatefilter_include_valid():
+    gfilter = pyart.correct.GateFilter(radar, exclude_based=False)
+    gfilter.include_valid('test_field2')
+    assert gfilter.gate_included[0, 0] is np.True_
+    assert gfilter.gate_included[2, 2] is np.False_
+    assert gfilter.gate_included[3, 3] is np.False_
+    assert gfilter.gate_included[4, 4] is np.False_
+    assert gfilter.gate_included[5, 5] is np.False_

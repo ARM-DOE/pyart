@@ -11,6 +11,7 @@ moments and data.
 .. autosummary::
     :toctree: generated/
 
+    GateFilter
     dealias_fourdd
     calculate_attenuation
     phase_proc_lp
