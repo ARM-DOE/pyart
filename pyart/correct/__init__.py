@@ -24,5 +24,6 @@ except ImportError:
     pass
 from .attenuation import calculate_attenuation
 from .phase_proc import phase_proc_lp
+from .filters import GateFilter
 
 __all__ = [s for s in dir() if not s.startswith('_')]
