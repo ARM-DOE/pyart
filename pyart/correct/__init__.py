@@ -11,10 +11,12 @@ moments and data.
 .. autosummary::
     :toctree: generated/
 
-    GateFilter
     dealias_fourdd
+    dealias_unwrap_phase
     calculate_attenuation
     phase_proc_lp
+    GateFilter
+    moment_based_gate_filter
     find_time_in_interp_sonde
 
 """
