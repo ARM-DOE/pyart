@@ -4,6 +4,7 @@ def configuration(parent_package='', top_path=None):
     from numpy.distutils.misc_util import Configuration
     config = Configuration('pyart', parent_package, top_path)
     config.add_subpackage('io')     # io first to detect if RSL is missing.
+    config.add_subpackage('__check_build')
     config.add_subpackage('core')
     config.add_subpackage('correct')
     config.add_subpackage('graph')

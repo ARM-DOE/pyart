@@ -4,6 +4,9 @@ Py-ART: The Python ARM Radar Toolkit
 
 """
 
+# print out helpful message if build fails or importing from source tree
+from . import __check_build
+
 # versioning
 from .version import git_revision as __git_revision__
 from .version import version as __version__
