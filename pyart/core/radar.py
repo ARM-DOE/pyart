@@ -219,8 +219,19 @@ class Radar(object):
             raise IndexError('Sweep out of range: ', sweep)
         return
 
-    def _check_field_exists(self, field_name):
-        """ Check that a field exists in the fields dictionary. """
+    # public check functions
+    def check_field_exists(self, field_name):
+        """
+        Check that a field exists in the fields dictionary.
+
+        If the field does not exist raise a KeyError.
+
+        Parameters
+        ----------
+        field_name : str
+            Name of field to check.
+
+        """
         if field_name not in self.fields:
             raise KeyError('Field not available: ' + field_name)
         return
@@ -245,7 +256,7 @@ class Radar(object):
 
     def iter_field(self, field_name):
         """ Return an iterator which returns sweep field data. """
-        self._check_field_exists(field_name)
+        self.check_field_exists(field_name)
         return (self.fields[field_name]['data'][s] for s in self.iter_slice())
 
     def iter_azimuth(self):
@@ -298,7 +309,7 @@ class Radar(object):
             Array containing data for the requested sweep and field.
 
         """
-        self._check_field_exists(field_name)
+        self.check_field_exists(field_name)
         s = self.get_slice(sweep)
         data = self.fields[field_name]['data'][s]
         if copy:
