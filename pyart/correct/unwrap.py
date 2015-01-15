@@ -265,7 +265,7 @@ def _verify_unwrap_unit(radar, unwrap_unit):
 def _is_radar_cubic(radar):
     """ Test if a radar is cubic (sweeps have the same number of rays). """
     rays_per_sweep = radar.rays_per_sweep['data']
-    return np.all(rays_per_sweep == rays_per_sweep[0])
+    return bool(np.all(rays_per_sweep == rays_per_sweep[0]))
 
 
 def _is_radar_sweep_aligned(radar, diff=0.1):
