@@ -8,6 +8,18 @@ Dealias using multidimensional phase unwrapping algorithms.
     :toctree: generated/
 
     dealias_unwrap_phase
+    _parse_fields
+    _parse_nyquist_vel
+    _parse_gatefilter
+    _parse_rays_wrap_around
+    _dealias_unwrap_3d
+    _dealias_unwrap_2d
+    _dealias_unwrap_1d
+    _verify_unwrap_unit
+    _is_radar_cubic
+    _is_radar_sweep_aligned
+    _is_radar_sequential
+    _is_sweep_sequential
 
 """
 
