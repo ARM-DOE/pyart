@@ -16,20 +16,17 @@ from __future__ import print_function
 import numpy as np
 
 from ..config import get_field_name, get_metadata
+from .filters import moment_based_gate_filter, GateFilter
 
 from ._unwrap_1d import unwrap_1d
 from ._unwrap_2d import unwrap_2d
 from ._unwrap_3d import unwrap_3d
 
-# TODO
-# add choice to change sweep periodicity and auto detect for ppi/rhi
-# test for not allowed unwrap_unit choices?
-# unit tests
-# clean up correct namespace
 
-
-def dealias_unwrap_phase(radar, nyquist_vel=None, unwrap_unit='sweep',
-                         vel_field=None, corr_vel_field=None):
+def dealias_unwrap_phase(
+        radar, unwrap_unit='sweep', nyquist_vel=None, gatefilter=None,
+        rays_wrap_around=None, keep_original=True, vel_field=None,
+        corr_vel_field=None, **kwargs):
     """
     Dealias Doppler velocities using multi-dimensional phase unwrapping.
 
@@ -37,22 +34,39 @@ def dealias_unwrap_phase(radar, nyquist_vel=None, unwrap_unit='sweep',
     ----------
     radar : Radar
         Radar object containing Doppler velocities to dealias.
-    unwrap_unit : {'ray', 'sweep', 'volume', None}
+    unwrap_unit : {'ray', 'sweep', 'volume'}, optional
         Unit to unwrap independently.  'ray' will unwrap each ray
         individually, 'sweep' each sweep, and 'volume' will unwrap the entire
-        volume in a single pass.  None will determine the larges allowed
-        unit from the structure of the radar.  'sweep' often gives superior
+        volume in a single pass.  'sweep', the default, often gives superior
         results when the lower sweeps of the radar volume are contaminated by
-        clutter.
+        clutter. 'ray' does not use the gatefilter parameter and rays where
+        gates ared masked will result in poor dealiasing for that ray.
     nyquist_velocity : float, optional
         Nyquist velocity in unit identical to those stored in the radar's
         velocity field.  None will attempt to determine this value from the
         instrument_parameters attribute.
-    vel_field : str
+    gatefilter : GateFilter, None or False, optional.
+        A GateFilter instance which specified which gates should be
+        ignored when performing de-aliasing.  A value of None, the default,
+        created this filter from the radar moments using any additional
+        arguments by passing them to :py:func:`moment_based_gate_filter`.
+        False disables filtering including all gates in the dealiasing.
+    rays_wrap_around : bool or None, optional
+        True when the rays at the beginning of the sweep and end of the sweep
+        should be interpreted as connected when de-aliasing (PPI scans).
+        False if they edges should not be interpreted as connected (other scan
+        types).  None will determine the correct value from the radar
+        scan type.
+    keep_original : bool, optional
+        True to retain the original Doppler velocity values at gates
+        where the dealiasing procedure fails or was not applied. False
+        does not replacement and these gates will be masked in the corrected
+        velocity field.
+    vel_field : str, optional
         Field in radar to use as the Doppler velocities during dealiasing.
         None will use the default field name from the Py-ART configuration
         file.
-    corr_vel_field : str
+    corr_vel_field : str, optional
         Name to use for the dealiased Doppler velocity field metadata.  None
         will use the default field name from the Py-ART configuration file.
 
@@ -72,13 +86,59 @@ def dealias_unwrap_phase(radar, nyquist_vel=None, unwrap_unit='sweep',
            International Society for Optics and Photonics.
 
     """
-    # parse the field parameters.
+    vel_field, corr_vel_field = _parse_fields(vel_field, corr_vel_field)
+    gatefilter = _parse_gatefilter(gatefilter, radar, **kwargs)
+    rays_wrap_around = _parse_rays_wrap_around(rays_wrap_around, radar)
+    nyquist_vel = _parse_nyquist_vel(nyquist_vel, radar)
+    _verify_unwrap_unit(radar, unwrap_unit)
+
+    # exclude masked and invalid velocity gates
+    gatefilter.exclude_masked(vel_field)
+    gatefilter.exclude_invalid(vel_field)
+    gfilter = gatefilter.gate_excluded
+
+    # perform dealiasing
+    vdata = radar.fields[vel_field]['data']
+    if unwrap_unit == 'ray':
+        # 1D unwrapping does not use the gate filter nor respect
+        # masked gates in the rays.  No information from the radar object is
+        # needed for the unfolding
+        data = _dealias_unwrap_1d(vdata, nyquist_vel)
+    elif unwrap_unit == 'sweep':
+        data = _dealias_unwrap_2d(
+            radar, vdata, nyquist_vel, gfilter, rays_wrap_around)
+    elif unwrap_unit == 'volume':
+        data = _dealias_unwrap_3d(
+            radar, vdata, nyquist_vel, gfilter, rays_wrap_around)
+    else:
+        message = ("Unknown `unwrap_unit` parameter, must be one of"
+                   "'ray', 'sweep', or 'volume'")
+        raise ValueError(message)
+
+    # mask filtered gates and restore original velocities if requested
+    if np.any(gfilter):
+        data = np.ma.array(data, mask=gfilter)
+    if keep_original:
+        # restore original values where dealiasing not applied
+        data[gfilter] = vdata[gfilter]
+
+    # return field dictionary containing dealiased Doppler velocities
+    corr_vel = get_metadata(corr_vel_field)
+    corr_vel['data'] = data
+    return corr_vel
+
+
+def _parse_fields(vel_field, corr_vel_field):
+    """ Parse and return the radar fields for dealiasing. """
     if vel_field is None:
         vel_field = get_field_name('velocity')
     if corr_vel_field is None:
         corr_vel_field = get_field_name('corrected_velocity')
+    return vel_field, corr_vel_field
 
-    # find the nyquist velocity if not specified.
+
+def _parse_nyquist_vel(nyquist_vel, radar):
+    """ Parse the nyquist_vel parameter, extract from the radar if needed. """
     if nyquist_vel is None:
         if (radar.instrument_parameters is None) or (
                 'nyquist_velocity' not in radar.instrument_parameters):
@@ -87,131 +147,112 @@ def dealias_unwrap_phase(radar, nyquist_vel=None, unwrap_unit='sweep',
             raise ValueError(message)
         nyquist_vel = radar.instrument_parameters[
             'nyquist_velocity']['data'][0]
+    return nyquist_vel
 
-    # find unwrap_unit if not specified.
-    if unwrap_unit is None:
-        if _is_radar_sequential(radar):
-            if _is_radar_cubic(radar) and _is_radar_sweep_aligned(radar):
-                unwrap_unit = 'volume'
-            else:
-                unwrap_unit = 'sweep'
-        else:
-            unwrap_unit = 'ray'
-        print("Unwrapping using unwrap_unit:", unwrap_unit)
 
-    # perform dealiasing
-    if unwrap_unit == 'ray':
-        data = _dealias_unwrap_1d(radar, vel_field, nyquist_vel)
-    elif unwrap_unit == 'sweep':
-        data = _dealias_unwrap_2d(radar, vel_field, nyquist_vel)
-    elif unwrap_unit == 'volume':
-        data = _dealias_unwrap_3d(radar, vel_field, nyquist_vel)
+def _parse_gatefilter(gatefilter, radar, **kwargs):
+    """ Parse the gatefilter, return a valid GateFilter object. """
+    # parse the gatefilter parameter
+    if gatefilter is None:  # create a moment based filter
+        gatefilter = moment_based_gate_filter(radar, **kwargs)
+    elif gatefilter is False:
+        gatefilter = GateFilter(radar)
     else:
-        message = ("Unknown `unwrap_unit` parameter, must be one of"
-                   "'ray', 'sweep', or 'volume'")
-        raise ValueError(message)
-
-    # return field dictionary containing dealiased Doppler velocities
-    corr_vel = get_metadata(corr_vel_field)
-    corr_vel['data'] = data
-    return corr_vel
+        gatefilter = gatefilter.copy()
+    return gatefilter
 
 
-def _dealias_unwrap_3d(radar, vel_field, nyquist_vel):
+def _parse_rays_wrap_around(rays_wrap_around, radar):
+    """ Parse the rays_wrap_around parameter. """
+    if rays_wrap_around is None:
+        if radar.scan_type == 'ppi':
+            rays_wrap_around = True
+        else:
+            rays_wrap_around = False
+    return rays_wrap_around
+
+
+def _dealias_unwrap_3d(radar, vdata, nyquist_vel, gfilter, rays_wrap_around):
     """ Dealias using 3D phase unwrapping (full volume at once). """
 
     # form cube and scale to phase units
-    volume = radar.fields[vel_field]['data']
-    scaled_volume = np.pi * volume / nyquist_vel
-    scaled_cube = scaled_volume.reshape(radar.nsweeps, -1, radar.ngates)
+    shape = (radar.nsweeps, -1, radar.ngates)
+    scaled_cube = (np.pi * vdata / nyquist_vel).reshape(shape)
+    filter_cube = gfilter.reshape(shape)
 
     # perform unwrapping
-    if np.ma.isMaskedArray(scaled_cube):
-        mask = np.require(scaled_cube.mask, np.uint8, ['C'])
-    else:
-        mask = np.zeros_like(scaled_cube, dtype=np.uint8, order='C')
-    if mask.ndim == 0:  # fix when the mask is a single True/False
-        mask = np.ones_like(scaled_cube, dtype=np.uint8, order='C') * mask
+    wrapped = np.require(scaled_cube, np.float64, ['C'])
+    mask = np.require(filter_cube, np.uint8, ['C'])
+    unwrapped = np.empty_like(wrapped, dtype=np.float64, order='C')
+    unwrap_3d(wrapped, mask, unwrapped, [False, rays_wrap_around, False])
 
-    mask = np.asarray(mask, dtype=np.uint8, order='C')
-    cube_no_mask = np.asarray(scaled_cube, dtype=np.float64, order='C')
-    cube_scaled_unwrapped = np.empty_like(cube_no_mask, dtype=np.float64,
-                                          order='C')
-    unwrap_3d(cube_no_mask, mask, cube_scaled_unwrapped,
-              [False, True, False])
-
-    # scale back to velocity units, prepare output
-    unwrapped_cube = cube_scaled_unwrapped * nyquist_vel / np.pi
+    # scale back to velocity units
+    unwrapped_cube = unwrapped * nyquist_vel / np.pi
     unwrapped_volume = unwrapped_cube.reshape(-1, radar.ngates)
-    unwrapped_volume = unwrapped_volume.astype(volume.dtype)
-
-    if np.ma.isMaskedArray(volume):
-        return np.ma.array(unwrapped_volume, mask=volume.mask)
-    else:
-        return unwrapped_volume
+    unwrapped_volume = unwrapped_volume.astype(vdata.dtype)
+    return unwrapped_volume
 
 
-def _dealias_unwrap_1d(radar, vel_field, nyquist_vel):
+def _dealias_unwrap_1d(vdata, nyquist_vel):
     """ Dealias using 1D phase unwrapping (ray-by-ray) """
-    # XXX Does not support masked arrays
-    volume = radar.fields[vel_field]['data']
-    data = np.empty_like(volume)
-
-    for i, ray in enumerate(volume):
+    data = np.empty_like(vdata)
+    for i, ray in enumerate(vdata):
+        # extract ray and scale to phase units
         scaled_ray = ray * np.pi / nyquist_vel
 
-        no_mask = np.array(scaled_ray, dtype=np.float64, order='C')
-        scaled_unwrapped = np.empty_like(no_mask, dtype=np.float64, order='C')
-        unwrap_1d(no_mask, scaled_unwrapped)
-        #scaled_unwrapped = skimage.restoration.unwrap_phase(scaled_ray.data)
-        unwrapped = scaled_unwrapped * nyquist_vel / np.pi
-        data[i] = unwrapped[:]
+        # perform unwrapping
+        wrapped = np.require(scaled_ray, np.float64, ['C'])
+        unwrapped = np.empty_like(wrapped, dtype=np.float64, order='C')
+        unwrap_1d(wrapped, unwrapped)
 
-    if np.ma.isMaskedArray(radar.fields[vel_field]['data']):
-        return np.ma.array(data, mask=radar.fields[vel_field]['data'].mask)
-    else:
-        return data
+        # scale back into velocity units and store
+        data[i] = unwrapped * nyquist_vel / np.pi
+    return data
 
 
-def _dealias_unwrap_2d(radar, vel_field, nyquist_vel):
+def _dealias_unwrap_2d(radar, vdata, nyquist_vel, gfilter, rays_wrap_around):
     """ Dealias using 2D phase unwrapping (sweep-by-sweep). """
-    data = np.zeros_like(radar.fields[vel_field]['data'])
-    for sweep_i in range(radar.nsweeps):
-
-        # extract the sweep
-        start = radar.sweep_start_ray_index['data'][sweep_i]
-        end = radar.sweep_end_ray_index['data'][sweep_i]
-        sweep = radar.fields[vel_field]['data'][start: end + 1]
-
-        # scale to phase units (-pi to pi)
-        scaled_sweep = sweep * np.pi / nyquist_vel
+    data = np.zeros_like(vdata)
+    for sweep_slice in radar.iter_slice():
+        # extract sweep and scale to phase units
+        scaled_sweep = vdata[sweep_slice] * np.pi / nyquist_vel
+        sweep_mask = gfilter[sweep_slice]
 
         # perform unwrapping
-        if np.ma.isMaskedArray(sweep):
-            mask = np.require(sweep.mask, np.uint8, ['C'])
-        else:
-            mask = np.zeros_like(sweep, dtype=np.uint8, order='C')
-        if mask.ndim == 0:  # fix when the mask is a single True/False
-            mask = np.ones_like(sweep, dtype=np.uint8, order='C') * mask
-        mask = np.asarray(mask, dtype=np.uint8, order='C')
-        csweep = np.asarray(scaled_sweep, dtype=np.float64, order='C')
-        scaled_unwrapped = np.empty_like(csweep, dtype=np.float64, order='C')
-        unwrap_2d(csweep, mask, scaled_unwrapped, [True, True])
+        wrapped = np.require(scaled_sweep, np.float64, ['C'])
+        mask = np.require(sweep_mask, np.uint8, ['C'])
+        unwrapped = np.empty_like(wrapped, dtype=np.float64, order='C')
+        unwrap_2d(wrapped, mask, unwrapped, [rays_wrap_around, False])
 
-        # scale back into velocity units
-        unwrapped = scaled_unwrapped * nyquist_vel / np.pi
-        data[start:end + 1, :] = unwrapped[:]
+        # scale back into velocity units and store
+        data[sweep_slice, :] = unwrapped * nyquist_vel / np.pi
+    return data
 
-    if np.ma.isMaskedArray(radar.fields[vel_field]['data']):
-        return np.ma.array(data, mask=radar.fields[vel_field]['data'].mask)
-    else:
-        return data
+
+def _verify_unwrap_unit(radar, unwrap_unit):
+    """
+    Verify that the radar supports the requested unwrap unit
+
+    raises a ValueError if the unwrap_unit is not supported.
+    """
+    if unwrap_unit == 'sweep' or unwrap_unit == 'volume':
+        if _is_radar_sequential(radar) is False:
+            mess = ("rays are not sequentially ordered, must use 'ray' "
+                    "unwrap_unit.")
+            raise ValueError(mess)
+    if unwrap_unit == 'volume':
+        if _is_radar_cubic(radar) is False:
+            mess = "Non-cubic radar volume, 'volume' unwrap_unit invalid. "
+            raise ValueError(mess)
+        if _is_radar_sweep_aligned(radar) is False:
+            mess = ("Angle in sequential sweeps in radar volumes are not "
+                    "aligned, 'volume unwrap_unit invalid")
+            raise ValueError(mess)
 
 
 def _is_radar_cubic(radar):
     """ Test if a radar is cubic (sweeps have the same number of rays). """
-    rays_per_sweep = (radar.sweep_end_ray_index['data'] -
-                      radar.sweep_start_ray_index['data']) + 1
+    rays_per_sweep = radar.rays_per_sweep['data']
     return np.all(rays_per_sweep == rays_per_sweep[0])
 
 
