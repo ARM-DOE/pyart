@@ -10,10 +10,98 @@ corrections routines in Py-ART.
     :tempate: dev_template.rst
 
     GateFilter
+    moment_based_gate_filter
 
 """
 
 import numpy as np
+
+from ..config import get_field_name
+
+
+def moment_based_gate_filter(
+        radar, ncp_field=None, rhv_field=None, refl_field=None,
+        min_ncp=0.5, min_rhv=None, min_refl=-20., max_refl=100.0):
+    """
+    Create a filter which removes undesired gates based on moments.
+
+    Creates a gate filter in which the following gates are excluded:
+
+    * Gates where the reflectivity is outside the interval min_refl, max_refl.
+    * Gates where the normalized coherent power is below min_ncp.
+    * Gates where the cross correlation ratio is below min_rhi.  Using the
+      default parameter this filtering is disabled.
+    * Gates where any of the above three fields are masked or contain
+      invalid values (NaNs or infs).
+    * If any of these three fields do not exist in the radar that fields filter
+      criteria is not applied.
+
+    Parameters
+    ----------
+    radar : Radar
+        Radar object from which the gate filter will be built.
+    refl_field, ncp_field, rhv_field : str
+        Names of the radar fields which contain the reflectivity, normalized
+        coherent power (signal quality index) and cross correlation ratio
+        (RhoHV) from which the gate filter will be created using the above
+        criteria.  A value of None for any of these parameters will use the
+        default field name as defined in the Py-ART configuration file.
+    min_ncp, min_rhv : float
+        Minimum values for the normalized coherence power and cross
+        correlation ratio.  Gates in these fields below these limits as well as
+        gates which are masked or contain invalid values will be excluded and
+        not used in calculation which use the filter.  A value of None will
+        disable filtering based upon the given field including removing
+        masked or gates with an invalid value.  To disable the thresholding
+        but retain the masked and invalid filter set the parameter to a value
+        below the lowest value in the field.
+    min_refl, max_refl : float
+        Minimum and maximum values for the reflectivity.  Gates outside
+        of this interval as well as gates which are masked or contain invalid
+        values will be excluded and not used in calculation which use this
+        filter. A value or None for one of these parameters will disable the
+        minimum or maximum filtering but retain the other.  A value of None
+        for both of these values will disable all filtering based upon the
+        reflectivity including removing masked or gates with an invalid value.
+        To disable the interval filtering but retain the masked and invalid
+        filter set the parameters to values above and below the lowest and
+        greatest values in the reflectivity field.
+
+    Returns
+    -------
+    gatefilter : GateFilter
+        A gate filter based upon the described criteria.  This can be
+        used as a gatefilter parameter to various functions in pyart.correct.
+
+    """
+    # parse the field parameters
+    if refl_field is None:
+        refl_field = get_field_name('reflectivity')
+    if ncp_field is None:
+        ncp_field = get_field_name('normalized_coherent_power')
+    if rhv_field is None:
+        rhv_field = get_field_name('cross_correlation_ratio')
+
+    # filter gates based upon field parameters
+    gatefilter = GateFilter(radar)
+    if (min_ncp is not None) and (ncp_field in radar.fields):
+        gatefilter.exclude_below(ncp_field, min_ncp)
+        gatefilter.exclude_masked(ncp_field)
+        gatefilter.exclude_invalid(ncp_field)
+    if (min_rhv is not None) and (rhv_field in radar.fields):
+        gatefilter.exclude_below(rhv_field, min_rhv)
+        gatefilter.exclude_masked(rhv_field)
+        gatefilter.exclude_invalid(rhv_field)
+    if refl_field in radar.fields:
+        if min_refl is not None:
+            gatefilter.exclude_below(refl_field, min_refl)
+            gatefilter.exclude_masked(refl_field)
+            gatefilter.exclude_invalid(refl_field)
+        if max_refl is not None:
+            gatefilter.exclude_above(refl_field, max_refl)
+            gatefilter.exclude_masked(refl_field)
+            gatefilter.exclude_invalid(refl_field)
+    return gatefilter
 
 
 class GateFilter(object):
@@ -79,6 +167,13 @@ class GateFilter(object):
     # Implemetation is based on marking excluded gates stored in the private
     # _gate_excluded attribute. The gate_included attribute can be found
     # by taking the ones complement of gates_included.
+
+    def copy(self):
+        """ Return a copy of the gatefilter. """
+        a = GateFilter(self._radar)
+        a._gate_excluded = self._gate_excluded.copy()
+        return a
+
     @property
     def gate_included(self):
         return ~self._gate_excluded.copy()
