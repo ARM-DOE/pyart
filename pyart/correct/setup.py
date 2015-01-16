@@ -48,11 +48,6 @@ def configuration(parent_package='', top_path=None):
             include_dirs=[rsl_include_path, 'src'] + [get_include()],
             runtime_library_dirs=[rsl_lib_path])
 
-    from Cython.Build import cythonize
-    cythonize(['_unwrap_1d.pyx'])
-    cythonize(['_unwrap_2d.pyx'])
-    cythonize(['_unwrap_3d.pyx'])
-
     # phase unwrap extensions
     config.add_extension('_unwrap_1d', sources=['_unwrap_1d.c'],
                          include_dirs=[get_include()])

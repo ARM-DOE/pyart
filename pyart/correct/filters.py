@@ -7,10 +7,14 @@ corrections routines in Py-ART.
 
 .. autosummary::
     :toctree: generated/
-    :tempate: dev_template.rst
+
+    moment_based_gate_filter
+
+.. autosummary::
+    :toctree: generated/
+    :template: dev_template.rst
 
     GateFilter
-    moment_based_gate_filter
 
 """
 
@@ -69,7 +73,7 @@ def moment_based_gate_filter(
 
     Returns
     -------
-    gatefilter : GateFilter
+    gatefilter : :py:class:`GateFilter`
         A gate filter based upon the described criteria.  This can be
         used as a gatefilter parameter to various functions in pyart.correct.
 
@@ -111,7 +115,7 @@ class GateFilter(object):
     These filter can be used in various algorithms and calculations within
     Py-ART.
 
-    See :py:func:`pyart.correct.GateFilter.exclude_below`: for method
+    See :py:func:`pyart.correct.GateFilter.exclude_below` for method
     parameter details.
 
     Parameters
@@ -120,9 +124,9 @@ class GateFilter(object):
         Radar object from which gate filter will be build.
     exclude_based : bool, optional
         True, the default and suggested method, will begin with all gates
-        included and then use the exclude_ method to exclude gates based on
+        included and then use the exclude methods to exclude gates based on
         conditions.  False will begin with all gates excluded from which
-        a set of gates to include should be set using the include_ methods.
+        a set of gates to include should be set using the include methods.
 
     Attributes
     ----------
@@ -145,9 +149,9 @@ class GateFilter(object):
     --------
     >>> import pyart
     >>> radar = pyart.io.read('radar_file.nc')
-    >>> gate_filter = pyart.correct.GateFilter(radar)
-    >>> gate_filter.exclude_below('reflectivity', 10)
-    >>> gate_filter.exclude_below('normalized_coherent_power', 0.75)
+    >>> gatefilter = pyart.correct.GateFilter(radar)
+    >>> gatefilter.exclude_below('reflectivity', 10)
+    >>> gatefilter.exclude_below('normalized_coherent_power', 0.75)
 
     """
 
@@ -231,10 +235,10 @@ class GateFilter(object):
             gates with the excluded gates from the current operation.
             'and' will perform a logical AND operation, 'or' a logical OR,
             and 'new' will replace the existing excluded gates with the one
-            generated here. 'or', the default for exclude_ methods, is
+            generated here. 'or', the default for exclude methods, is
             typically desired when building up a set of conditions for
             excluding gates where the desired effect is to exclude gates which
-            meet any of the conditions. 'and', the default for include_
+            meet any of the conditions. 'and', the default for include
             methods, is typically desired when building up a set of conditions
             where the desired effect is to include gates which meet any of the
             conditions.  Note that the 'and' method MAY results in including

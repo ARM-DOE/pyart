@@ -109,8 +109,11 @@ def dealias_unwrap_phase(
     gatefilter.exclude_invalid(vel_field)
     gfilter = gatefilter.gate_excluded
 
+    # raw vel. data possibly with masking
+    raw_vdata = radar.fields[vel_field]['data']
+    vdata = raw_vdata.view(np.ndarray)      # mask removed
+
     # perform dealiasing
-    vdata = radar.fields[vel_field]['data']
     if unwrap_unit == 'ray':
         # 1D unwrapping does not use the gate filter nor respect
         # masked gates in the rays.  No information from the radar object is
@@ -127,12 +130,13 @@ def dealias_unwrap_phase(
                    "'ray', 'sweep', or 'volume'")
         raise ValueError(message)
 
-    # mask filtered gates and restore original velocities if requested
+    # mask filtered gates
     if np.any(gfilter):
         data = np.ma.array(data, mask=gfilter)
+
+    # restore original values where dealiasing not applied
     if keep_original:
-        # restore original values where dealiasing not applied
-        data[gfilter] = vdata[gfilter]
+        data[gfilter] = raw_vdata[gfilter]
 
     # return field dictionary containing dealiased Doppler velocities
     corr_vel = get_metadata(corr_vel_field)
@@ -265,7 +269,7 @@ def _verify_unwrap_unit(radar, unwrap_unit):
 def _is_radar_cubic(radar):
     """ Test if a radar is cubic (sweeps have the same number of rays). """
     rays_per_sweep = radar.rays_per_sweep['data']
-    return np.all(rays_per_sweep == rays_per_sweep[0])
+    return bool(np.all(rays_per_sweep == rays_per_sweep[0]))
 
 
 def _is_radar_sweep_aligned(radar, diff=0.1):

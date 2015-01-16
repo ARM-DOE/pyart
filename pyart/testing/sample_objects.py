@@ -90,6 +90,35 @@ def make_empty_ppi_radar(ngates, rays_per_sweep, nsweeps):
                  instrument_parameters=None)
 
 
+def make_empty_rhi_radar(ngates, rays_per_sweep, nsweeps):
+    """
+    Return an Radar object, representing a RHI scan.
+
+    Parameters
+    ----------
+    ngates : int
+        Number of gates per ray.
+    rays_per_sweep : int
+        Number of rays in each PPI sweep.
+    nsweeps : int
+        Number of sweeps.
+
+    Returns
+    -------
+    radar : Radar
+        Radar object with no fields, other parameters are set to default
+        values.
+
+    """
+    radar = make_empty_ppi_radar(ngates, rays_per_sweep, nsweeps)
+    radar.scan_type = 'rhi'
+    nrays = rays_per_sweep * nsweeps
+    radar.sweep_mode['data'] = np.array(['rhi'] * nsweeps)
+    radar.elevation['data'] = np.arange(nrays, dtype='float32')
+    radar.azimuth['data'] = np.array([0.75] * nrays, dtype='float32')
+    return radar
+
+
 def make_target_radar():
     """
     Return a PPI radar with a target like reflectivity field.
@@ -131,6 +160,43 @@ def make_velocity_aliased_radar(alias=True):
     # fake velocity data, all zeros except a wind burst on at ~13 degrees.
     # burst is partially aliased.
     vdata = np.zeros((360 * 1, 50), dtype='float32')
+
+    for i, idx in enumerate(range(13, -1, -1)):
+        vdata[i, idx:idx + i + 1] = np.arange(0.5, 0.5 + i * 1. + 0.001)
+    vdata[:14, 14:27] = vdata[:14, 12::-1]  # left/right flip
+    vdata[14:27] = vdata[12::-1, :]         # top/bottom flip
+    aliased = np.where(vdata > 10.0)
+    if alias:
+        vdata[aliased] += -20.
+    fields['velocity']['data'] = vdata
+
+    radar.fields = fields
+    return radar
+
+
+def make_velocity_aliased_rhi_radar(alias=True):
+    """
+    Return a RHI radar with a target like reflectivity field.
+
+    Set alias to False to return a de-aliased radar.
+    """
+    radar = make_empty_rhi_radar(50, 180, 1)
+    radar.range['meters_between_gates'] = 1.0
+    radar.range['meters_to_center_of_first_gate'] = 1.0
+    radar.instrument_parameters = {
+        'nyquist_velocity': {'data': np.array([10.0] * 360)}}
+
+    fields = {
+        'reflectivity': get_metadata('reflectivity'),
+        'velocity': get_metadata('velocity')}
+
+    # fake reflectivity data, all zero reflectivity
+    fdata = np.zeros((180, 50), dtype='float32')
+    fields['reflectivity']['data'] = fdata
+
+    # fake velocity data, all zeros except a wind burst on at ~13 degrees.
+    # burst is partially aliased.
+    vdata = np.zeros((180 * 1, 50), dtype='float32')
 
     for i, idx in enumerate(range(13, -1, -1)):
         vdata[i, idx:idx + i + 1] = np.arange(0.5, 0.5 + i * 1. + 0.001)
