@@ -31,5 +31,7 @@ from .sample_objects import make_empty_ppi_radar, make_target_radar
 from .sample_objects import make_single_ray_radar, make_velocity_aliased_radar
 from .sample_objects import make_empty_grid
 from .sample_objects import make_target_grid, make_storm_grid
+from .sample_objects import make_empty_rhi_radar
+from .sample_objects import make_velocity_aliased_rhi_radar
 
 __all__ = [s for s in dir() if not s.startswith('_')]
