@@ -50,16 +50,44 @@ def test_dealias_unwrap_phase_explicit_gatefilter():
     assert np.ma.is_masked(dealias_vel['data'][13]) is False
 
 
-def test_dealias_unwrap_phase_masked_field():
+def test_dealias_unwrap_phase_masked_field_sweep():
     radar = pyart.testing.make_velocity_aliased_radar()
     vdata = radar.fields['velocity']['data']
     radar.fields['velocity']['data'] = np.ma.masked_array(vdata)
     radar.fields['velocity']['data'][13, -4:] = [-7.5, 8.5, 0, 0]
     radar.fields['velocity']['data'][180, 25] = np.ma.masked
-    dealias_vel = pyart.correct.dealias_unwrap_phase(radar)
+    dealias_vel = pyart.correct.dealias_unwrap_phase(
+        radar, unwrap_unit='volume')
     assert_allclose(dealias_vel['data'][13, :27], REF_DATA)
     assert np.ma.is_masked(dealias_vel['data'][13]) is False
-    print "180, 25 is:", dealias_vel['data'][180, 25]
+    assert np.ma.is_masked(dealias_vel['data'][180, 25])
+    assert not np.ma.is_masked(dealias_vel['data'][180, 24])
+
+
+def test_dealias_unwrap_phase_masked_field_volume():
+    radar = pyart.testing.make_velocity_aliased_radar()
+    vdata = radar.fields['velocity']['data']
+    radar.fields['velocity']['data'] = np.ma.masked_array(vdata)
+    radar.fields['velocity']['data'][13, -4:] = [-7.5, 8.5, 0, 0]
+    radar.fields['velocity']['data'][180, 25] = np.ma.masked
+    dealias_vel = pyart.correct.dealias_unwrap_phase(
+        radar, unwrap_unit='volume')
+    assert_allclose(dealias_vel['data'][13, :27], REF_DATA)
+    assert np.ma.is_masked(dealias_vel['data'][13]) is False
+    assert np.ma.is_masked(dealias_vel['data'][180, 25])
+    assert not np.ma.is_masked(dealias_vel['data'][180, 24])
+
+
+def test_dealias_unwrap_phase_masked_field_ray():
+    radar = pyart.testing.make_velocity_aliased_radar()
+    vdata = radar.fields['velocity']['data']
+    radar.fields['velocity']['data'] = np.ma.masked_array(vdata)
+    radar.fields['velocity']['data'][13, -4:] = [-7.5, 8.5, 0, 0]
+    radar.fields['velocity']['data'][180, 25] = np.ma.masked
+    dealias_vel = pyart.correct.dealias_unwrap_phase(
+        radar, unwrap_unit='ray')
+    assert_allclose(dealias_vel['data'][13, :27], REF_DATA)
+    assert np.ma.is_masked(dealias_vel['data'][13]) is False
     assert np.ma.is_masked(dealias_vel['data'][180, 25])
     assert not np.ma.is_masked(dealias_vel['data'][180, 24])
 

@@ -109,8 +109,11 @@ def dealias_unwrap_phase(
     gatefilter.exclude_invalid(vel_field)
     gfilter = gatefilter.gate_excluded
 
+    # raw vel. data possibly with masking
+    raw_vdata = radar.fields[vel_field]['data']
+    vdata = raw_vdata.view(np.ndarray)      # mask removed
+
     # perform dealiasing
-    vdata = radar.fields[vel_field]['data']
     if unwrap_unit == 'ray':
         # 1D unwrapping does not use the gate filter nor respect
         # masked gates in the rays.  No information from the radar object is
@@ -126,13 +129,15 @@ def dealias_unwrap_phase(
         message = ("Unknown `unwrap_unit` parameter, must be one of"
                    "'ray', 'sweep', or 'volume'")
         raise ValueError(message)
+    print(vdata[180, 25])
 
-    # mask filtered gates and restore original velocities if requested
+    # mask filtered gates
     if np.any(gfilter):
         data = np.ma.array(data, mask=gfilter)
+
+    # restore original values where dealiasing not applied
     if keep_original:
-        # restore original values where dealiasing not applied
-        data[gfilter] = vdata[gfilter]
+        data[gfilter] = raw_vdata[gfilter]
 
     # return field dictionary containing dealiased Doppler velocities
     corr_vel = get_metadata(corr_vel_field)
@@ -224,6 +229,7 @@ def _dealias_unwrap_1d(vdata, nyquist_vel):
 
 def _dealias_unwrap_2d(radar, vdata, nyquist_vel, gfilter, rays_wrap_around):
     """ Dealias using 2D phase unwrapping (sweep-by-sweep). """
+    print("Inside unwrap:", vdata[180, 25])
     data = np.zeros_like(vdata)
     for sweep_slice in radar.iter_slice():
         # extract sweep and scale to phase units
@@ -234,8 +240,7 @@ def _dealias_unwrap_2d(radar, vdata, nyquist_vel, gfilter, rays_wrap_around):
         wrapped = np.require(scaled_sweep, np.float64, ['C'])
         mask = np.require(sweep_mask, np.uint8, ['C'])
         unwrapped = np.empty_like(wrapped, dtype=np.float64, order='C')
-        unwrap_2d(np.ma.getdata(wrapped), np.ma.getdata(mask),
-                  np.ma.getdata(unwrapped), [rays_wrap_around, False])
+        unwrap_2d(wrapped, mask, unwrapped, [rays_wrap_around, False])
 
         # scale back into velocity units and store
         data[sweep_slice, :] = unwrapped * nyquist_vel / np.pi
