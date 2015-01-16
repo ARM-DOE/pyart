@@ -12,8 +12,11 @@ moments and data.
     :toctree: generated/
 
     dealias_fourdd
+    dealias_unwrap_phase
     calculate_attenuation
     phase_proc_lp
+    GateFilter
+    moment_based_gate_filter
     find_time_in_interp_sonde
 
 """
@@ -24,5 +27,7 @@ except ImportError:
     pass
 from .attenuation import calculate_attenuation
 from .phase_proc import phase_proc_lp
+from .filters import GateFilter, moment_based_gate_filter
+from .unwrap import dealias_unwrap_phase
 
 __all__ = [s for s in dir() if not s.startswith('_')]
