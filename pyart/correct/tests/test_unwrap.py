@@ -59,6 +59,7 @@ def test_dealias_unwrap_phase_masked_field():
     dealias_vel = pyart.correct.dealias_unwrap_phase(radar)
     assert_allclose(dealias_vel['data'][13, :27], REF_DATA)
     assert np.ma.is_masked(dealias_vel['data'][13]) is False
+    print "180, 25 is:", dealias_vel['data'][180, 25]
     assert np.ma.is_masked(dealias_vel['data'][180, 25])
     assert not np.ma.is_masked(dealias_vel['data'][180, 24])
 
