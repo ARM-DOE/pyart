@@ -129,7 +129,6 @@ def dealias_unwrap_phase(
         message = ("Unknown `unwrap_unit` parameter, must be one of"
                    "'ray', 'sweep', or 'volume'")
         raise ValueError(message)
-    print(vdata[180, 25])
 
     # mask filtered gates
     if np.any(gfilter):
@@ -198,7 +197,7 @@ def _dealias_unwrap_3d(radar, vdata, nyquist_vel, gfilter, rays_wrap_around):
     filter_cube = gfilter.reshape(shape)
 
     # perform unwrapping
-    wrapped = np.require(np.ma.getdata(scaled_cube), np.float64, ['C'])
+    wrapped = np.require(scaled_cube, np.float64, ['C'])
     mask = np.require(filter_cube, np.uint8, ['C'])
     unwrapped = np.empty_like(wrapped, dtype=np.float64, order='C')
     unwrap_3d(wrapped, mask, unwrapped, [False, rays_wrap_around, False])
@@ -218,7 +217,7 @@ def _dealias_unwrap_1d(vdata, nyquist_vel):
         scaled_ray = ray * np.pi / nyquist_vel
 
         # perform unwrapping
-        wrapped = np.require(np.ma.getdata(scaled_ray), np.float64, ['C'])
+        wrapped = np.require(scaled_ray, np.float64, ['C'])
         unwrapped = np.empty_like(wrapped, dtype=np.float64, order='C')
         unwrap_1d(wrapped, unwrapped)
 
@@ -229,7 +228,6 @@ def _dealias_unwrap_1d(vdata, nyquist_vel):
 
 def _dealias_unwrap_2d(radar, vdata, nyquist_vel, gfilter, rays_wrap_around):
     """ Dealias using 2D phase unwrapping (sweep-by-sweep). """
-    print("Inside unwrap:", vdata[180, 25])
     data = np.zeros_like(vdata)
     for sweep_slice in radar.iter_slice():
         # extract sweep and scale to phase units
