@@ -231,10 +231,11 @@ def _dealias_unwrap_2d(radar, vdata, nyquist_vel, gfilter, rays_wrap_around):
         sweep_mask = gfilter[sweep_slice]
 
         # perform unwrapping
-        wrapped = np.require(np.ma.getdata(scaled_sweep), np.float64, ['C'])
+        wrapped = np.require(scaled_sweep, np.float64, ['C'])
         mask = np.require(sweep_mask, np.uint8, ['C'])
         unwrapped = np.empty_like(wrapped, dtype=np.float64, order='C')
-        unwrap_2d(wrapped, mask, unwrapped, [rays_wrap_around, False])
+        unwrap_2d(np.ma.getdata(wrapped), np.ma.getdata(mask),
+                  np.ma.getdata(unwrapped), [rays_wrap_around, False])
 
         # scale back into velocity units and store
         data[sweep_slice, :] = unwrapped * nyquist_vel / np.pi
