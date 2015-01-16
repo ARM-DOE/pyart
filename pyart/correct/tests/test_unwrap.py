@@ -4,9 +4,8 @@
 # to recreate a dealias_plot.png file showing the before and after doppler
 # velocities
 
-import datetime
+from __future__ import print_function
 
-import netCDF4
 import pyart
 import numpy as np
 from numpy.testing import assert_allclose
@@ -90,6 +89,23 @@ def test_dealias_unwrap_phase_masked_field_ray():
     assert np.ma.is_masked(dealias_vel['data'][13]) is False
     assert np.ma.is_masked(dealias_vel['data'][180, 25])
     assert not np.ma.is_masked(dealias_vel['data'][180, 24])
+
+
+def test_dealias_unwrap_phase_rhi_sweep():
+    radar = pyart.testing.make_velocity_aliased_rhi_radar()
+    radar.fields['velocity']['data'][13, -4:] = [-7.5, 8.5, 0, 0]
+    dealias_vel = pyart.correct.dealias_unwrap_phase(radar)
+    assert_allclose(dealias_vel['data'][13, :27], REF_DATA)
+    assert np.ma.is_masked(dealias_vel['data'][13]) is False
+
+
+def test_dealias_unwrap_phase_rhi_volume():
+    radar = pyart.testing.make_velocity_aliased_rhi_radar()
+    radar.fields['velocity']['data'][13, -4:] = [-7.5, 8.5, 0, 0]
+    dealias_vel = pyart.correct.dealias_unwrap_phase(
+        radar, unwrap_unit='volume')
+    assert_allclose(dealias_vel['data'][13, :27], REF_DATA)
+    assert np.ma.is_masked(dealias_vel['data'][13]) is False
 
 
 def test_dealias_unwrap_phase_raises():
