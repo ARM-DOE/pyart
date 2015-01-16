@@ -193,7 +193,7 @@ def _dealias_unwrap_3d(radar, vdata, nyquist_vel, gfilter, rays_wrap_around):
     filter_cube = gfilter.reshape(shape)
 
     # perform unwrapping
-    wrapped = np.require(scaled_cube, np.float64, ['C'])
+    wrapped = np.require(np.ma.getdata(scaled_cube), np.float64, ['C'])
     mask = np.require(filter_cube, np.uint8, ['C'])
     unwrapped = np.empty_like(wrapped, dtype=np.float64, order='C')
     unwrap_3d(wrapped, mask, unwrapped, [False, rays_wrap_around, False])
@@ -213,7 +213,7 @@ def _dealias_unwrap_1d(vdata, nyquist_vel):
         scaled_ray = ray * np.pi / nyquist_vel
 
         # perform unwrapping
-        wrapped = np.require(scaled_ray, np.float64, ['C'])
+        wrapped = np.require(np.ma.getdata(scaled_ray), np.float64, ['C'])
         unwrapped = np.empty_like(wrapped, dtype=np.float64, order='C')
         unwrap_1d(wrapped, unwrapped)
 
@@ -231,7 +231,7 @@ def _dealias_unwrap_2d(radar, vdata, nyquist_vel, gfilter, rays_wrap_around):
         sweep_mask = gfilter[sweep_slice]
 
         # perform unwrapping
-        wrapped = np.require(scaled_sweep, np.float64, ['C'])
+        wrapped = np.require(np.ma.getdata(scaled_sweep), np.float64, ['C'])
         mask = np.require(sweep_mask, np.uint8, ['C'])
         unwrapped = np.empty_like(wrapped, dtype=np.float64, order='C')
         unwrap_2d(wrapped, mask, unwrapped, [rays_wrap_around, False])
