@@ -235,8 +235,9 @@ class RadarDisplay:
         # get the data and mask
         data = self._get_ray_data(field, ray, mask_tuple, filter_transitions)
 
-         # mask the data where outside the limits
+        # mask the data where outside the limits
         if mask_outside:
+            data = np.ma.masked_invalid(data)
             data = np.ma.masked_outside(data, ray_min, ray_max)
 
         # plot the data
@@ -329,6 +330,7 @@ class RadarDisplay:
 
         # mask the data where outside the limits
         if mask_outside:
+            data = np.ma.masked_invalid(data)
             data = np.ma.masked_outside(data, vmin, vmax)
 
         # plot the data
@@ -425,6 +427,7 @@ class RadarDisplay:
 
         # mask the data where outside the limits
         if mask_outside:
+            data = np.ma.masked_invalid(data)
             data = np.ma.masked_outside(data, vmin, vmax)
 
         # plot the data
@@ -535,6 +538,7 @@ class RadarDisplay:
 
         # mask the data where outside the limits
         if mask_outside:
+            data = np.ma.masked_invalid(data)
             data = np.ma.masked_outside(data, vmin, vmax)
 
         # plot the data

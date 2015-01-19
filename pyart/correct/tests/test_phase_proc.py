@@ -50,6 +50,8 @@ def test_phase_proc_lp_glpk():
 
 @skipif(not cvxopt_available)
 def test_phase_proc_lp_cvxopt():
+    from cvxopt import solvers
+    solvers.options['LPX_K_MSGLEV'] = 0     # supress screen output
     radar, phidp, kdp = perform_phase_processing('cvxopt')
     ref = np.load(REFERENCE_RAYS_FILE)
     assert _ratio(ref['reference_phidp'], phidp['data']) <= 0.01
