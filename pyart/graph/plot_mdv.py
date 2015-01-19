@@ -111,7 +111,7 @@ class MdvDisplay(RadarDisplay):
             mask_field, mask_value = mask_tuple
             mask_field_num = self.mdvfile.fields.index(mask_field)
             mdata = self.mdvfile.read_a_field(mask_field_num)[sweep]
-            data = np.ma.masked_where(mdata < mask_value, data)
+            data = np.ma.masked_where(np.ma.less(mdata, mask_value), data)
         return data
 
     def _get_x_y(self, field, sweep, edges, filter_transitions):
