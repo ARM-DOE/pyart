@@ -25,7 +25,6 @@ from .unwrap import _parse_nyquist_vel
 
 # TODO
 # * unfold based upon nyquist interval not nyquist velocity
-# * periodic ray boundary (respect rays_wrap_around), only in _edge_sum_and_c
 # * loop over sweeps
 # * mask output if needed
 # * replace masked with original vel
@@ -120,8 +119,8 @@ def dealias_region_based(
 
     labels, nfeatures = _find_regions(vdata, gfilter, segmentation_limits)
     masked_gates, segment_sizes = _segment_sizes(labels, nfeatures)
-    edge_sum, edge_count = _edge_sum_and_count(labels, nfeatures, vdata,
-                                               masked_gates)
+    edge_sum, edge_count = _edge_sum_and_count(
+        labels, nfeatures, vdata, masked_gates, rays_wrap_around)
 
     # find unwrap number for these regions
     region_tracker = _RegionTracker(segment_sizes)
@@ -220,9 +219,12 @@ def _combine_segments(region_tracker, edge_tracker):
     return False
 
 
-def _edge_sum_and_count(labels, nfeatures, data, masked_gates):
+def _edge_sum_and_count(labels, nfeatures, data, masked_gates,
+                        rays_wrap_around):
 
     total_nodes = np.prod(labels.shape) - masked_gates
+    if rays_wrap_around:
+        total_nodes += labels.shape[0] * 2
     l_index = np.zeros(total_nodes * 4, dtype=np.int32)
     n_index = np.zeros(total_nodes * 4, dtype=np.int32)
     e_sum = np.zeros(total_nodes * 4, dtype=np.float64)
@@ -244,10 +246,24 @@ def _edge_sum_and_count(labels, nfeatures, data, masked_gates):
                 n_index[idx] = neighbor
                 e_sum[idx] = vel
                 idx += 1
+        elif rays_wrap_around:
+            neighbor = labels[right, y]
+            if neighbor != label and neighbor != 0:
+                l_index[idx] = label
+                n_index[idx] = neighbor
+                e_sum[idx] = vel
+                idx += 1
 
         # right
         if x != right:
             neighbor = labels[x+1, y]
+            if neighbor != label and neighbor != 0:
+                l_index[idx] = label
+                n_index[idx] = neighbor
+                e_sum[idx] = vel
+                idx += 1
+        elif rays_wrap_around:
+            neighbor = labels[0, y]
             if neighbor != label and neighbor != 0:
                 l_index[idx] = label
                 n_index[idx] = neighbor
