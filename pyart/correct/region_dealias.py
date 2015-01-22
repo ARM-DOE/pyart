@@ -118,11 +118,9 @@ def dealias_region_based(
     vdata = radar.fields[vel_field]['data'].copy()
 
     # find regions/segments in original data
-
     labels, nfeatures = _find_regions(vdata, gfilter, segmentation_limits)
-    masked_gates, segment_sizes = _segment_sizes(labels, nfeatures)
-    edge_sum, edge_count = _edge_sum_and_count(
-        labels, nfeatures, vdata, masked_gates, rays_wrap_around)
+    edge_sum, edge_count, segment_sizes = _edge_sum_and_count(
+        labels, nfeatures, vdata, rays_wrap_around)
 
     # find unwrap number for these regions
     region_tracker = _RegionTracker(segment_sizes)
@@ -196,7 +194,7 @@ def _combine_segments(region_tracker, edge_tracker):
     status, extra = edge_tracker.pop_edge()
     if status:
         return True
-    node1, node2, weight, diff, edge_number = extra
+    node1, node2, _, diff, edge_number = extra
     rdiff = np.round(diff)
 
     # node sizes of nodes to be merged
@@ -222,10 +220,14 @@ def _combine_segments(region_tracker, edge_tracker):
     return False
 
 
-def _edge_sum_and_count(labels, nfeatures, data, masked_gates,
-                        rays_wrap_around):
+def _edge_sum_and_count(labels, nfeatures, data, rays_wrap_around):
+    """ Return a sparse matrices containing the edge sums and counts. """
 
-    total_nodes = np.prod(labels.shape) - masked_gates
+    bincount = np.bincount(labels.ravel())
+    num_masked_gates = bincount[0]
+    segment_sizes = bincount[1:]
+
+    total_nodes = np.prod(labels.shape) - num_masked_gates
     if rays_wrap_around:
         total_nodes += labels.shape[0] * 2
     l_index = np.zeros(total_nodes * 4, dtype=np.int32)
@@ -238,19 +240,19 @@ def _edge_sum_and_count(labels, nfeatures, data, masked_gates,
         if label == 0:
             continue
 
-        x, y = index
-        vel = data[x, y]
+        x_index, y_index = index
+        vel = data[x_index, y_index]
 
         # left
-        if x != 0:
-            neighbor = labels[x-1, y]
+        if x_index != 0:
+            neighbor = labels[x_index-1, y_index]
             if neighbor != label and neighbor != 0:
                 l_index[idx] = label
                 n_index[idx] = neighbor
                 e_sum[idx] = vel
                 idx += 1
         elif rays_wrap_around:
-            neighbor = labels[right, y]
+            neighbor = labels[right, y_index]
             if neighbor != label and neighbor != 0:
                 l_index[idx] = label
                 n_index[idx] = neighbor
@@ -258,15 +260,15 @@ def _edge_sum_and_count(labels, nfeatures, data, masked_gates,
                 idx += 1
 
         # right
-        if x != right:
-            neighbor = labels[x+1, y]
+        if x_index != right:
+            neighbor = labels[x_index+1, y_index]
             if neighbor != label and neighbor != 0:
                 l_index[idx] = label
                 n_index[idx] = neighbor
                 e_sum[idx] = vel
                 idx += 1
         elif rays_wrap_around:
-            neighbor = labels[0, y]
+            neighbor = labels[0, y_index]
             if neighbor != label and neighbor != 0:
                 l_index[idx] = label
                 n_index[idx] = neighbor
@@ -274,8 +276,8 @@ def _edge_sum_and_count(labels, nfeatures, data, masked_gates,
                 idx += 1
 
         # top
-        if y != 0:
-            neighbor = labels[x, y-1]
+        if y_index != 0:
+            neighbor = labels[x_index, y_index-1]
             if neighbor != label and neighbor != 0:
                 l_index[idx] = label
                 n_index[idx] = neighbor
@@ -283,8 +285,8 @@ def _edge_sum_and_count(labels, nfeatures, data, masked_gates,
                 idx += 1
 
         # bottom
-        if y != bottom:
-            neighbor = labels[x, y+1]
+        if y_index != bottom:
+            neighbor = labels[x_index, y_index+1]
             if neighbor != label and neighbor != 0:
                 l_index[idx] = label
                 n_index[idx] = neighbor
@@ -300,12 +302,7 @@ def _edge_sum_and_count(labels, nfeatures, data, masked_gates,
     edge_sum = sparse.coo_matrix((e_sum, (l_index, n_index)), shape=shape)
     edge_count = sparse.coo_matrix((e_count, (l_index, n_index)), shape=shape)
 
-    return edge_sum.tocsr(), edge_count.tocsr()
-
-
-def _segment_sizes(labels, nfeatures):
-    x = np.bincount(labels.ravel())
-    return x[0], x[1:]
+    return edge_sum.tocsr(), edge_count.tocsr(), segment_sizes
 
 
 class _RegionTracker(object):
@@ -357,6 +354,7 @@ class _RegionTracker(object):
 
 
 class _EdgeTracker(object):
+    """ A class for tracking edges in a dynamic network. """
 
     def __init__(self, edge_sum, edge_count, nyquist_interval):
         """ initialize """
@@ -383,16 +381,15 @@ class _EdgeTracker(object):
             self.edges_in_node[i] = []
 
         # fill out data from edge_count and edge_sum
-        a, b = edge_count.nonzero()
         edge = 0
-        for i, j in zip(a, b):
+        for i, j in zip(*edge_count.nonzero()):
             if i < j:
                 continue
 
             self.node_alpha[edge] = i
             self.node_beta[edge] = j
             self.sum_diff[edge] = ((edge_sum[i, j] - edge_sum[j, i]) /
-                nyquist_interval)
+                                   nyquist_interval)
             self.weight[edge] = edge_count[i, j]
             self.edges_in_node[i].append(edge)
             self.edges_in_node[j].append(edge)
@@ -486,15 +483,16 @@ class _EdgeTracker(object):
     def _reverse_edge_direction(self, edge):
         """ Reverse an edges direction, change alpha and beta. """
         # swap nodes
-        a = int(self.node_alpha[edge])
-        b = int(self.node_beta[edge])
-        self.node_alpha[edge] = b
-        self.node_beta[edge] = a
+        old_alpha = int(self.node_alpha[edge])
+        old_beta = int(self.node_beta[edge])
+        self.node_alpha[edge] = old_beta
+        self.node_beta[edge] = old_alpha
         # swap sums
         self.sum_diff[edge] = -1. * self.sum_diff[edge]
         return
 
     def unwrap_node(self, node, nwrap):
+        """ Unwrap a node. """
         if nwrap == 0:
             return
         # add weight * nwrap to each edge in segment
