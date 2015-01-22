@@ -230,12 +230,9 @@ def _edge_sum_and_count(labels, nfeatures, data, rays_wrap_around):
     total_nodes = np.prod(labels.shape) - num_masked_gates
     if rays_wrap_around:
         total_nodes += labels.shape[0] * 2
-    l_index = np.zeros(total_nodes * 4, dtype=np.int32)
-    n_index = np.zeros(total_nodes * 4, dtype=np.int32)
-    e_sum = np.zeros(total_nodes * 4, dtype=np.float64)
+    collector = _EdgeCollector(total_nodes)
     right, bottom = [i-1 for i in labels.shape]
 
-    idx = 0
     for index, label in np.ndenumerate(labels):
         if label == 0:
             continue
@@ -246,63 +243,64 @@ def _edge_sum_and_count(labels, nfeatures, data, rays_wrap_around):
         # left
         if x_index != 0:
             neighbor = labels[x_index-1, y_index]
-            if neighbor != label and neighbor != 0:
-                l_index[idx] = label
-                n_index[idx] = neighbor
-                e_sum[idx] = vel
-                idx += 1
+            collector.add_edge(label, neighbor, vel)
         elif rays_wrap_around:
             neighbor = labels[right, y_index]
-            if neighbor != label and neighbor != 0:
-                l_index[idx] = label
-                n_index[idx] = neighbor
-                e_sum[idx] = vel
-                idx += 1
+            collector.add_edge(label, neighbor, vel)
 
         # right
         if x_index != right:
             neighbor = labels[x_index+1, y_index]
-            if neighbor != label and neighbor != 0:
-                l_index[idx] = label
-                n_index[idx] = neighbor
-                e_sum[idx] = vel
-                idx += 1
+            collector.add_edge(label, neighbor, vel)
         elif rays_wrap_around:
             neighbor = labels[0, y_index]
-            if neighbor != label and neighbor != 0:
-                l_index[idx] = label
-                n_index[idx] = neighbor
-                e_sum[idx] = vel
-                idx += 1
+            collector.add_edge(label, neighbor, vel)
 
         # top
         if y_index != 0:
             neighbor = labels[x_index, y_index-1]
-            if neighbor != label and neighbor != 0:
-                l_index[idx] = label
-                n_index[idx] = neighbor
-                e_sum[idx] = vel
-                idx += 1
+            collector.add_edge(label, neighbor, vel)
 
         # bottom
         if y_index != bottom:
             neighbor = labels[x_index, y_index+1]
-            if neighbor != label and neighbor != 0:
-                l_index[idx] = label
-                n_index[idx] = neighbor
-                e_sum[idx] = vel
-                idx += 1
+            collector.add_edge(label, neighbor, vel)
 
-    l_index = l_index[:idx]
-    n_index = n_index[:idx]
-    e_sum = e_sum[:idx]
-    e_count = np.ones_like(e_sum, dtype=np.int32)
+    edge_sum, edge_count = collector.make_edge_matrices(nfeatures)
+    return edge_sum, edge_count, segment_sizes
 
-    shape = (nfeatures+1, nfeatures+1)
-    edge_sum = sparse.coo_matrix((e_sum, (l_index, n_index)), shape=shape)
-    edge_count = sparse.coo_matrix((e_count, (l_index, n_index)), shape=shape)
 
-    return edge_sum.tocsr(), edge_count.tocsr(), segment_sizes
+class _EdgeCollector(object):
+    """
+    Class for collecting edges.
+    """
+
+    def __init__(self, total_nodes):
+        """ initalize. """
+        self.l_index = np.zeros(total_nodes * 4, dtype=np.int32)
+        self.n_index = np.zeros(total_nodes * 4, dtype=np.int32)
+        self.e_sum = np.zeros(total_nodes * 4, dtype=np.float64)
+        self.idx = 0
+
+    def add_edge(self, label, neighbor, vel):
+        """ Add an edge. """
+        if neighbor == label or neighbor == 0:
+            return
+        self.l_index[self.idx] = label
+        self.n_index[self.idx] = neighbor
+        self.e_sum[self.idx] = vel
+        self.idx += 1
+        return
+
+    def make_edge_matrices(self, nfeatures):
+        """ Return sparse matrices for the edge sums and counts. """
+        matrix_indices = (self.l_index[:self.idx], self.n_index[:self.idx])
+        e_sum = self.e_sum[:self.idx]
+        e_count = np.ones_like(e_sum, dtype=np.int32)
+        shape = (nfeatures+1, nfeatures+1)
+        edge_sum = sparse.coo_matrix((e_sum, matrix_indices), shape=shape)
+        edge_count = sparse.coo_matrix((e_count, matrix_indices), shape=shape)
+        return edge_sum.tocsr(), edge_count.tocsr()
 
 
 class _RegionTracker(object):
@@ -444,7 +442,7 @@ class _EdgeTracker(object):
             if self._common_finder[neighbor]:
                 base_edge_num = self._common_index[neighbor]
                 self._combine_edges(base_edge_num, edge_num,
-                                    base_node, merge_node, neighbor)
+                                    merge_node, neighbor)
             # if not fill in _common_ arrays.
             else:
                 self._common_finder[neighbor] = True
@@ -458,7 +456,7 @@ class _EdgeTracker(object):
         return
 
     def _combine_edges(self, base_edge, merge_edge,
-                       base_node, merge_node, neighbor_node):
+                       merge_node, neighbor_node):
         """ Combine edges into a single edge.  """
         # Merging nodes MUST be set to alpha prior to calling this function
 
