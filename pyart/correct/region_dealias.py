@@ -24,11 +24,12 @@ from .unwrap import _parse_nyquist_vel
 
 
 # TODO
-# * segmentation parameter based number of splits
+# * unfold based upon nyquist interval not nyquist velocity
 # * periodic ray boundary (respect rays_wrap_around), only in _edge_sum_and_c
 # * loop over sweeps
 # * mask output if needed
 # * replace masked with original vel
+# * nyquist free edge tracking?
 # * optimize
 # * refactor
 # * document
@@ -37,7 +38,8 @@ from .unwrap import _parse_nyquist_vel
 
 
 def dealias_region_based(
-        radar, nyquist_vel=None, gatefilter=None,
+        radar, segmentation_splits=3, segmentation_limits=None,
+        nyquist_vel=None, gatefilter=None,
         rays_wrap_around=None, keep_original=True, vel_field=None,
         corr_vel_field=None, **kwargs):
     """
@@ -47,6 +49,18 @@ def dealias_region_based(
     ----------
     radar : Radar
         Radar object containing Doppler velocities to dealias.
+    segmentation_splits : int, optional
+        Number of segments to split the nyquist interval into when finding
+        regions of similar velocity.  More splits creates a larger number of
+        initial regions which takes longer to process but may result in better
+        dealiasing.  The default value of 3 seems to be a good compromise
+        between performance and artifact free dealiasing.  This value
+        is not used if the segmentation_limits parameter is not None.
+    segmentation_limits : array like or None, optional
+        Velocity limits used for finding regions of similar velocity.  Should
+        cover the entire nyquist interval.  None, the default value, will
+        split the nyquist interval into segmentation_splits equal sized
+        intervals.
     nyquist_velocity : float, optional
         Nyquist velocity in unit identical to those stored in the radar's
         velocity field.  None will attempt to determine this value from the
@@ -89,6 +103,11 @@ def dealias_region_based(
     rays_wrap_around = _parse_rays_wrap_around(rays_wrap_around, radar)
     nyquist_vel = _parse_nyquist_vel(nyquist_vel, radar)
 
+    # find segmentation limits
+    if segmentation_limits is None:
+        segmentation_limits = np.linspace(
+            -nyquist_vel, nyquist_vel, segmentation_splits+1, endpoint=True)
+
     # exclude masked and invalid velocity gates
     gatefilter.exclude_masked(vel_field)
     gatefilter.exclude_invalid(vel_field)
@@ -98,7 +117,8 @@ def dealias_region_based(
     vdata = radar.fields[vel_field]['data'].copy()
 
     # find regions/segments in original data
-    labels, nfeatures = _find_segments(vdata, nyquist_vel, gfilter)
+
+    labels, nfeatures = _find_regions(vdata, gfilter, segmentation_limits)
     masked_gates, segment_sizes = _segment_sizes(labels, nfeatures)
     edge_sum, edge_count = _edge_sum_and_count(labels, nfeatures, vdata,
                                                masked_gates)
@@ -122,26 +142,50 @@ def dealias_region_based(
     return corr_vel
 
 
-def _find_segments(vel, nyquist, gfilter):
-    """ Find segments """
-    # label 0 indicates masked gates
+def _find_regions(vel, gfilter, limits):
+    """
+    Find regions of similar velocity.
 
+    For each pair of values in the limits array (or list) find all connected
+    velocity regions within these limits.
+
+    Parameters
+    ----------
+    vel : 2D ndarray
+        Array containing velocity data for a single sweep.
+    gfilter : 2D ndarray
+        Filter indicating if a particular gate should be masked.  True
+        indicates the gate should be masked (excluded).
+    limits : array like
+        Velocity limits for segmentation.  For each pair of limits, taken from
+        elements i and i+1 of the array, all connected regions with velocities
+        within these limits will be found.
+
+    Returns
+    -------
+    label : ndarray
+        Interger array with each region labeled by a value.  The array
+        ranges from 0 to nfeatures, inclusive, where a value of 0 indicates
+        masked gates and non-zero indicates a region of connected gates.
+    nfeatures : int
+        Number of regions found.
+
+    """
     mask = ~gfilter
-    inp = (vel > nyquist * 1/3.)
-    inp = np.logical_and(inp, mask)
-    label, nfeatures = ndimage.label(inp)
+    label = np.zeros(vel.shape, dtype=np.int32)
+    nfeatures = 0
+    for lmin, lmax in zip(limits[:-1], limits[1:]):
 
-    inp = (vel < -nyquist * 1/3.)
-    inp = np.logical_and(inp, mask)
-    labels2, nfeatures2 = ndimage.label(inp)
-    labels2[np.nonzero(labels2)] += nfeatures
+        # find connected regions within the limits
+        inp = (lmin <= vel) & (vel < lmax) & mask
+        limit_label, limit_nfeatures = ndimage.label(inp)
 
-    inp = np.logical_and(vel <= nyquist * 1/3., vel >= -nyquist * 1/3.)
-    inp = np.logical_and(inp, mask)
-    labels3, nfeatures3 = ndimage.label(inp)
-    labels3[np.nonzero(labels3)] += nfeatures + nfeatures2
+        # add these regions to the global regions
+        limit_label[np.nonzero(limit_label)] += nfeatures
+        label += limit_label
+        nfeatures += limit_nfeatures
 
-    return label + labels2 + labels3, nfeatures + nfeatures2 + nfeatures3
+    return label, nfeatures
 
 
 def _combine_segments(region_tracker, edge_tracker):
@@ -240,11 +284,10 @@ def _edge_sum_and_count(labels, nfeatures, data, masked_gates):
     return edge_sum.tocsr(), edge_count.tocsr()
 
 
-
-
 def _segment_sizes(labels, nfeatures):
-    x =  np.bincount(labels.ravel())
+    x = np.bincount(labels.ravel())
     return x[0], x[1:]
+
 
 class _RegionTracker(object):
     """
