@@ -16,11 +16,19 @@ import numpy as np
 import scipy.ndimage as ndimage
 import scipy.sparse as sparse
 
+from ..config import get_metadata
+
+# XXX move these to a _common_dealias module
+from .unwrap import _parse_fields, _parse_gatefilter, _parse_rays_wrap_around
+from .unwrap import _parse_nyquist_vel
+
 
 # TODO
-# * have dealias_region_based function behave like other dealias functions
-# * non-hard coded segmentation with parameter based number of splits
-# * deal with filtered (masked) gates
+# * segmentation parameter based number of splits
+# * periodic ray boundary (respect rays_wrap_around), only in _edge_sum_and_c
+# * loop over sweeps
+# * mask output if needed
+# * replace masked with original vel
 # * optimize
 # * refactor
 # * document
@@ -28,7 +36,10 @@ import scipy.sparse as sparse
 # * merge into Py-ART
 
 
-def dealias_region_based(radar):
+def dealias_region_based(
+        radar, nyquist_vel=None, gatefilter=None,
+        rays_wrap_around=None, keep_original=True, vel_field=None,
+        corr_vel_field=None, **kwargs):
     """
     Dealias Doppler velocities using a region based algorithm.
 
@@ -67,35 +78,73 @@ def dealias_region_based(radar):
 
     Returns
     -------
+    corr_vel : dict
+        Field dictionary containing dealiased Doppler velocities.  Dealiased
+        array is stored under the 'data' key.
 
     """
-    original_data = radar.fields['velocity']['data'].copy()
-    nyquist = radar.instrument_parameters['nyquist_velocity']['data'][0]
+    # parse function parameters
+    vel_field, corr_vel_field = _parse_fields(vel_field, corr_vel_field)
+    gatefilter = _parse_gatefilter(gatefilter, radar, **kwargs)
+    rays_wrap_around = _parse_rays_wrap_around(rays_wrap_around, radar)
+    nyquist_vel = _parse_nyquist_vel(nyquist_vel, radar)
+
+    # exclude masked and invalid velocity gates
+    gatefilter.exclude_masked(vel_field)
+    gatefilter.exclude_invalid(vel_field)
+    gfilter = gatefilter.gate_excluded
+
+    # raw velocity data possibly with masking
+    vdata = radar.fields[vel_field]['data'].copy()
 
     # find regions/segments in original data
-    labels, nfeatures = find_segments(original_data)
-    segment_sizes = _segment_sizes(labels, nfeatures)
-    edge_sum, edge_count = edge_sum_and_count(
-        labels, nfeatures, original_data)
+    labels, nfeatures = _find_segments(vdata, nyquist_vel, gfilter)
+    masked_gates, segment_sizes = _segment_sizes(labels, nfeatures)
+    edge_sum, edge_count = _edge_sum_and_count(labels, nfeatures, vdata,
+                                               masked_gates)
 
     # find unwrap number for these regions
-    region_tracker = RegionTracker(segment_sizes)
-    edge_tracker = EdgeTracker(edge_sum, edge_count, nyquist)
-    for i in range(80000):
-        # print "------------------------"
-        # print "step:", i
-        if combine_segments(region_tracker, edge_tracker):
+    region_tracker = _RegionTracker(segment_sizes)
+    edge_tracker = _EdgeTracker(edge_sum, edge_count, nyquist_vel)
+    while True:
+        if _combine_segments(region_tracker, edge_tracker):
             break
 
     # dealias the data using the unwrap numbers
-    dealias_data = original_data.copy()
-    for i in range(nfeatures+1):
+    dealias_data = vdata.copy()
+    for i in range(1, nfeatures+1):     # start from 0 to skip masked region
         nwrap = region_tracker.unwrap_number[i]
-        dealias_data[labels == i] += nwrap * nyquist
-    return dealias_data
+        dealias_data[labels == i] += nwrap * nyquist_vel
+
+    # return field dictionary containing dealiased Doppler velocities
+    corr_vel = get_metadata(corr_vel_field)
+    corr_vel['data'] = dealias_data
+    return corr_vel
 
 
-def combine_segments(region_tracker, edge_tracker):
+def _find_segments(vel, nyquist, gfilter):
+    """ Find segments """
+    # label 0 indicates masked gates
+
+    mask = ~gfilter
+    inp = (vel > nyquist * 1/3.)
+    inp = np.logical_and(inp, mask)
+    label, nfeatures = ndimage.label(inp)
+
+    inp = (vel < -nyquist * 1/3.)
+    inp = np.logical_and(inp, mask)
+    labels2, nfeatures2 = ndimage.label(inp)
+    labels2[np.nonzero(labels2)] += nfeatures
+
+    inp = np.logical_and(vel <= nyquist * 1/3., vel >= -nyquist * 1/3.)
+    inp = np.logical_and(inp, mask)
+    labels3, nfeatures3 = ndimage.label(inp)
+    labels3[np.nonzero(labels3)] += nfeatures + nfeatures2
+
+    return label + labels2 + labels3, nfeatures + nfeatures2 + nfeatures3
+
+
+def _combine_segments(region_tracker, edge_tracker):
     """ Returns True when done. """
     # Edge parameter from edge with largest weight
     status, extra = edge_tracker.pop_edge()
@@ -127,9 +176,9 @@ def combine_segments(region_tracker, edge_tracker):
     return False
 
 
-def edge_sum_and_count(labels, nfeatures, data):
+def _edge_sum_and_count(labels, nfeatures, data, masked_gates):
 
-    total_nodes = np.prod(labels.shape)
+    total_nodes = np.prod(labels.shape) - masked_gates
     l_index = np.zeros(total_nodes * 4, dtype=np.int32)
     n_index = np.zeros(total_nodes * 4, dtype=np.int32)
     e_sum = np.zeros(total_nodes * 4, dtype=np.float64)
@@ -137,13 +186,16 @@ def edge_sum_and_count(labels, nfeatures, data):
 
     idx = 0
     for index, label in np.ndenumerate(labels):
+        if label == 0:
+            continue
+
         x, y = index
         vel = data[x, y]
 
         # left
         if x != 0:
             neighbor = labels[x-1, y]
-            if neighbor != label:
+            if neighbor != label and neighbor != 0:
                 l_index[idx] = label
                 n_index[idx] = neighbor
                 e_sum[idx] = vel
@@ -152,7 +204,7 @@ def edge_sum_and_count(labels, nfeatures, data):
         # right
         if x != right:
             neighbor = labels[x+1, y]
-            if neighbor != label:
+            if neighbor != label and neighbor != 0:
                 l_index[idx] = label
                 n_index[idx] = neighbor
                 e_sum[idx] = vel
@@ -161,7 +213,7 @@ def edge_sum_and_count(labels, nfeatures, data):
         # top
         if y != 0:
             neighbor = labels[x, y-1]
-            if neighbor != label:
+            if neighbor != label and neighbor != 0:
                 l_index[idx] = label
                 n_index[idx] = neighbor
                 e_sum[idx] = vel
@@ -170,7 +222,7 @@ def edge_sum_and_count(labels, nfeatures, data):
         # bottom
         if y != bottom:
             neighbor = labels[x, y+1]
-            if neighbor != label:
+            if neighbor != label and neighbor != 0:
                 l_index[idx] = label
                 n_index[idx] = neighbor
                 e_sum[idx] = vel
@@ -186,31 +238,15 @@ def edge_sum_and_count(labels, nfeatures, data):
     edge_count = sparse.coo_matrix((e_count, (l_index, n_index)), shape=shape)
 
     return edge_sum.tocsr(), edge_count.tocsr()
-    # return edge_sum.todense(), edge_count.todense()
 
 
-def find_segments(vel):
-    """ Find segments """
-    nyquist = 16.524679
-
-    label, nfeatures = ndimage.label(vel > nyquist * 1/3.)
-
-    labels2, nfeatures2 = ndimage.label(vel < -nyquist * 1/3.)
-    labels2[np.nonzero(labels2)] += nfeatures
-
-    middle = np.logical_and(vel <= nyquist * 1/3.,
-                            vel >= -nyquist * 1/3.)
-    labels3, nfeatures3 = ndimage.label(middle)
-    labels3[np.nonzero(labels3)] += nfeatures + nfeatures2
-
-    return label + labels2 + labels3, nfeatures + nfeatures2 + nfeatures3
 
 
 def _segment_sizes(labels, nfeatures):
-    return np.bincount(labels.ravel())[1:]
+    x =  np.bincount(labels.ravel())
+    return x[0], x[1:]
 
-
-class RegionTracker(object):
+class _RegionTracker(object):
     """
     Tracks the location of radar volume regions contained in each node
     as the network is reduced.
@@ -258,7 +294,7 @@ class RegionTracker(object):
         return self.node_size[node]
 
 
-class EdgeTracker(object):
+class _EdgeTracker(object):
 
     def __init__(self, edge_sum, edge_count, nyquist):
         """ initialize """
