@@ -24,11 +24,12 @@ from .unwrap import _parse_nyquist_vel
 
 
 # TODO
-# * unfold based upon nyquist interval not nyquist velocity
 # * loop over sweeps
 # * mask output if needed
 # * replace masked with original vel
 # * nyquist free edge tracking?
+# * gap jumping edge connections?
+# * 3D segmentation?
 # * optimize
 # * refactor
 # * document
@@ -101,6 +102,7 @@ def dealias_region_based(
     gatefilter = _parse_gatefilter(gatefilter, radar, **kwargs)
     rays_wrap_around = _parse_rays_wrap_around(rays_wrap_around, radar)
     nyquist_vel = _parse_nyquist_vel(nyquist_vel, radar)
+    nyquist_interval = 2. * nyquist_vel
 
     # find segmentation limits
     if segmentation_limits is None:
@@ -124,7 +126,7 @@ def dealias_region_based(
 
     # find unwrap number for these regions
     region_tracker = _RegionTracker(segment_sizes)
-    edge_tracker = _EdgeTracker(edge_sum, edge_count, nyquist_vel)
+    edge_tracker = _EdgeTracker(edge_sum, edge_count, nyquist_interval)
     while True:
         if _combine_segments(region_tracker, edge_tracker):
             break
@@ -133,7 +135,8 @@ def dealias_region_based(
     dealias_data = vdata.copy()
     for i in range(1, nfeatures+1):     # start from 0 to skip masked region
         nwrap = region_tracker.unwrap_number[i]
-        dealias_data[labels == i] += nwrap * nyquist_vel
+        if nwrap != 0:
+            dealias_data[labels == i] += nwrap * nyquist_interval
 
     # return field dictionary containing dealiased Doppler velocities
     corr_vel = get_metadata(corr_vel_field)
@@ -355,7 +358,7 @@ class _RegionTracker(object):
 
 class _EdgeTracker(object):
 
-    def __init__(self, edge_sum, edge_count, nyquist):
+    def __init__(self, edge_sum, edge_count, nyquist_interval):
         """ initialize """
 
         nedges = int(edge_count.nnz / 2)
@@ -388,7 +391,8 @@ class _EdgeTracker(object):
 
             self.node_alpha[edge] = i
             self.node_beta[edge] = j
-            self.sum_diff[edge] = (edge_sum[i, j] - edge_sum[j, i]) / nyquist
+            self.sum_diff[edge] = ((edge_sum[i, j] - edge_sum[j, i]) /
+                nyquist_interval)
             self.weight[edge] = edge_count[i, j]
             self.edges_in_node[i].append(edge)
             self.edges_in_node[j].append(edge)
