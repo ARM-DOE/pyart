@@ -14,12 +14,20 @@ Python wrapper around the RSL library.
 """
 
 # Nothing from this module is imported into pyart.io if RSL is not installed.
+import sys
 import numpy as np
+import logging
 
 from ..config import FileMetadata, get_fillvalue
 from . import _rsl_interface
 from ..core.radar import Radar
 from .common import dms_to_d, make_time_unit_str
+
+logger = logging.getLogger()
+handler = logging.StreamHandler(sys.stderr)
+handler.setFormatter(logging.Formatter('%(asctime)s %(levelname)s %(name)s: %(message)s'))
+logger.addHandler(handler)
+logger.setLevel(logging.INFO)
 
 
 def read_rsl(filename, field_names=None, additional_metadata=None,
@@ -118,7 +126,10 @@ def read_rsl(filename, field_names=None, additional_metadata=None,
     # transfer only those which are available
     fields = {}
     for volume_num in available_vols:
-
+        # if a volume number is not recognized it is skipped.
+        if volume_num not in VOLUMENUM2RSLNAME:
+            logging.warn("Unknown Volume Number %d" % volume_num)
+            continue
         rsl_field_name = VOLUMENUM2RSLNAME[volume_num]
         field_name = filemetadata.get_field_name(rsl_field_name)
         if field_name is None:
