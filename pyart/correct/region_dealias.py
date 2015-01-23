@@ -27,10 +27,8 @@ import scipy.ndimage as ndimage
 import scipy.sparse as sparse
 
 from ..config import get_metadata
-
-# XXX move these to a _common_dealias module
-from .unwrap import _parse_fields, _parse_gatefilter, _parse_rays_wrap_around
-from .unwrap import _parse_nyquist_vel
+from ._common_dealias import _parse_fields, _parse_gatefilter
+from ._common_dealias import _parse_rays_wrap_around, _parse_nyquist_vel
 
 
 # Possible future improvements to the region based dealiasing algorithm:
