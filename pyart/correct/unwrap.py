@@ -8,10 +8,6 @@ Dealias using multidimensional phase unwrapping algorithms.
     :toctree: generated/
 
     dealias_unwrap_phase
-    _parse_fields
-    _parse_nyquist_vel
-    _parse_gatefilter
-    _parse_rays_wrap_around
     _dealias_unwrap_3d
     _dealias_unwrap_2d
     _dealias_unwrap_1d
@@ -27,8 +23,9 @@ from __future__ import print_function
 
 import numpy as np
 
-from ..config import get_field_name, get_metadata
-from .filters import moment_based_gate_filter, GateFilter
+from ..config import get_metadata
+from ._common_dealias import _parse_fields, _parse_gatefilter
+from ._common_dealias import _parse_rays_wrap_around, _parse_nyquist_vel
 
 from ._unwrap_1d import unwrap_1d
 from ._unwrap_2d import unwrap_2d
@@ -142,50 +139,6 @@ def dealias_unwrap_phase(
     corr_vel = get_metadata(corr_vel_field)
     corr_vel['data'] = data
     return corr_vel
-
-
-def _parse_fields(vel_field, corr_vel_field):
-    """ Parse and return the radar fields for dealiasing. """
-    if vel_field is None:
-        vel_field = get_field_name('velocity')
-    if corr_vel_field is None:
-        corr_vel_field = get_field_name('corrected_velocity')
-    return vel_field, corr_vel_field
-
-
-def _parse_nyquist_vel(nyquist_vel, radar):
-    """ Parse the nyquist_vel parameter, extract from the radar if needed. """
-    if nyquist_vel is None:
-        if (radar.instrument_parameters is None) or (
-                'nyquist_velocity' not in radar.instrument_parameters):
-            message = ('Nyquist velocity not specified in radar object, '
-                       'provide this value explicitly in the function call.')
-            raise ValueError(message)
-        nyquist_vel = radar.instrument_parameters[
-            'nyquist_velocity']['data'][0]
-    return nyquist_vel
-
-
-def _parse_gatefilter(gatefilter, radar, **kwargs):
-    """ Parse the gatefilter, return a valid GateFilter object. """
-    # parse the gatefilter parameter
-    if gatefilter is None:  # create a moment based filter
-        gatefilter = moment_based_gate_filter(radar, **kwargs)
-    elif gatefilter is False:
-        gatefilter = GateFilter(radar)
-    else:
-        gatefilter = gatefilter.copy()
-    return gatefilter
-
-
-def _parse_rays_wrap_around(rays_wrap_around, radar):
-    """ Parse the rays_wrap_around parameter. """
-    if rays_wrap_around is None:
-        if radar.scan_type == 'ppi':
-            rays_wrap_around = True
-        else:
-            rays_wrap_around = False
-    return rays_wrap_around
 
 
 def _dealias_unwrap_3d(radar, vdata, nyquist_vel, gfilter, rays_wrap_around):
