@@ -25,7 +25,6 @@ from .unwrap import _parse_nyquist_vel
 
 # TODO
 # * nyquist free edge tracking?
-# * gap jumping edge connections?
 # * 3D segmentation?
 # * optimize
 # * refactor
@@ -36,7 +35,7 @@ from .unwrap import _parse_nyquist_vel
 
 def dealias_region_based(
         radar, segmentation_splits=3, segmentation_limits=None,
-        nyquist_vel=None, gatefilter=None,
+        max_gap_x=2, max_gap_y=2, nyquist_vel=None, gatefilter=None,
         rays_wrap_around=None, keep_original=True, vel_field=None,
         corr_vel_field=None, **kwargs):
     """
@@ -58,6 +57,12 @@ def dealias_region_based(
         cover the entire nyquist interval.  None, the default value, will
         split the nyquist interval into segmentation_splits equal sized
         intervals.
+    max_gap_x, max_gap_y : int, optional
+        Maximum number of filtered gates to skip over when joining regions,
+        gaps between region larger than this will not be connected.  Parameters
+        specify the maximum number of filtered gates along a ray, max_gap_y,
+        and between rays, max_gap_x. Set these parameters to 0 to disable
+        unfolding across filtered gates.
     nyquist_velocity : float, optional
         Nyquist velocity in unit identical to those stored in the radar's
         velocity field.  None will attempt to determine this value from the
@@ -123,7 +128,7 @@ def dealias_region_based(
         # find regions/segments in original data
         labels, nfeatures = _find_regions(sdata, sfilter, segmentation_limits)
         edge_sum, edge_count, segment_sizes = _edge_sum_and_count(
-            labels, nfeatures, sdata, rays_wrap_around)
+            labels, nfeatures, sdata, rays_wrap_around, max_gap_x, max_gap_y)
 
         # find unwrap number for these regions
         region_tracker = _RegionTracker(segment_sizes)
@@ -231,7 +236,8 @@ def _combine_segments(region_tracker, edge_tracker):
     return False
 
 
-def _edge_sum_and_count(labels, nfeatures, data, rays_wrap_around):
+def _edge_sum_and_count(labels, nfeatures, data,
+                        rays_wrap_around, max_gap_x, max_gap_y):
     """ Return a sparse matrices containing the edge sums and counts. """
 
     bincount = np.bincount(labels.ravel())
@@ -252,29 +258,89 @@ def _edge_sum_and_count(labels, nfeatures, data, rays_wrap_around):
         vel = data[x_index, y_index]
 
         # left
-        if x_index != 0:
-            neighbor = labels[x_index-1, y_index]
-            collector.add_edge(label, neighbor, vel)
-        elif rays_wrap_around:
-            neighbor = labels[right, y_index]
+        x_check = x_index - 1
+        if x_check == -1 and rays_wrap_around:
+            x_check = right     # wrap around
+        if x_check != -1:
+            neighbor = labels[x_check, y_index]
+
+            # if the left side gate is masked, keep looking to the left
+            # until we find a valid gate or reach the maximum gap size
+            if neighbor == 0:
+                for i in range(max_gap_x):
+                    x_check -= 1
+                    if x_check == -1:
+                        if rays_wrap_around:
+                            x_check = right
+                        else:
+                            break
+                    neighbor = labels[x_check, y_index]
+                    if neighbor != 0:
+                        break
+
+            # add the edge to the collection (if valid)
             collector.add_edge(label, neighbor, vel)
 
         # right
-        if x_index != right:
-            neighbor = labels[x_index+1, y_index]
-            collector.add_edge(label, neighbor, vel)
-        elif rays_wrap_around:
-            neighbor = labels[0, y_index]
+        x_check = x_index + 1
+        if x_check == right+1 and rays_wrap_around:
+            x_check = 0     # wrap around
+        if x_check != right+1:
+            neighbor = labels[x_check, y_index]
+
+            # if the right side gate is masked, keep looking to the left
+            # until we find a valid gate or reach the maximum gap size
+            if neighbor == 0:
+                for i in range(max_gap_x):
+                    x_check += 1
+                    if x_check == right+1:
+                        if rays_wrap_around:
+                            x_check = 0
+                        else:
+                            break
+                    neighbor = labels[x_check, y_index]
+                    if neighbor != 0:
+                        break
+
+            # add the edge to the collection (if valid)
             collector.add_edge(label, neighbor, vel)
 
         # top
-        if y_index != 0:
-            neighbor = labels[x_index, y_index-1]
+        y_check = y_index - 1
+        if y_check != -1:
+            neighbor = labels[x_index, y_check]
+
+            # if the top side gate is masked, keep looking up
+            # until we find a valid gate or reach the maximum gap size
+            if neighbor == 0:
+                for i in range(max_gap_y):
+                    y_check -= 1
+                    if y_check == -1:
+                        break
+                    neighbor = labels[x_index, y_check]
+                    if neighbor != 0:
+                        break
+
+            # add the edge to the collection (if valid)
             collector.add_edge(label, neighbor, vel)
 
         # bottom
-        if y_index != bottom:
-            neighbor = labels[x_index, y_index+1]
+        y_check = y_index + 1
+        if y_check != bottom + 1:
+            neighbor = labels[x_index, y_check]
+
+            # if the top side gate is masked, keep looking up
+            # until we find a valid gate or reach the maximum gap size
+            if neighbor == 0:
+                for i in range(max_gap_y):
+                    y_check += 1
+                    if y_check == bottom + 1:
+                        break
+                    neighbor = labels[x_index, y_check]
+                    if neighbor != 0:
+                        break
+
+            # add the edge to the collection (if valid)
             collector.add_edge(label, neighbor, vel)
 
     edge_sum, edge_count = collector.make_edge_matrices(nfeatures)
@@ -296,6 +362,8 @@ class _EdgeCollector(object):
     def add_edge(self, label, neighbor, vel):
         """ Add an edge. """
         if neighbor == label or neighbor == 0:
+            # Do not add edges between the same region (circular edges)
+            # or edges to masked gates (indicated by a label of 0).
             return
         self.l_index[self.idx] = label
         self.n_index[self.idx] = neighbor
@@ -394,7 +462,7 @@ class _EdgeTracker(object):
         for i, j in zip(*edge_count.nonzero()):
             if i < j:
                 continue
-
+            assert edge_count[i, j] == edge_count[j, i]
             self.node_alpha[edge] = i
             self.node_beta[edge] = j
             self.sum_diff[edge] = ((edge_sum[i, j] - edge_sum[j, i]) /
