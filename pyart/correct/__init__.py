@@ -13,6 +13,7 @@ moments and data.
 
     dealias_fourdd
     dealias_unwrap_phase
+    dealias_region_based
     calculate_attenuation
     phase_proc_lp
     GateFilter

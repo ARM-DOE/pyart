@@ -8,7 +8,17 @@ Region based dealiasing using a dynamic network reduction for region joining.
     :toctree: generated/
 
     dealias_region_based
+    _find_regions
+    _combine_regions
+    _edge_sum_and_count
 
+.. autosummary::
+    :toctree: generated/
+    :template: dev_template.rst
+
+    _EdgeCollector
+    _RegionTracker
+    _EdgeTracker
 
 """
 
@@ -23,45 +33,67 @@ from .unwrap import _parse_fields, _parse_gatefilter, _parse_rays_wrap_around
 from .unwrap import _parse_nyquist_vel
 
 
-# TODO
-# * nyquist free edge tracking?
-# * 3D segmentation?
-# * optimize
-# * refactor
-# * document
-# * merge into Py-ART
+# Possible future improvements to the region based dealiasing algorithm:
+#
+# * Find connected regions in the entire volume (3D) an dealias the entire
+#   volume as apposed to the current sweep-by-sweep approach.
+# * Scale the Doppler velocities by the Nyquist interval so that
+#   calculations are done in units of percentage of the Nyquist interval.
+#   This scaling is already done in the _EdgeTracker object but could also be
+#   applied before finding regions of similar velocities.
+# * Currently no attmpt is made to unfold gates which are included in the
+#   gatefilter.  One could add a second pass to the algorithms where gates
+#   excluded by the filter are unfolded using a more elemenary approach.  In
+#   this manner the filter could define only "good" gates which establish the
+#   folding pattern which is then applied to all gates.
+# * The largest region in each sweep is assumed to not be folded.  In some
+#   cases this may not be true and all the gates in the corrected sweep
+#   should be unfolded after the routine completes.  By How much the sweep
+#   should be unfolded would need to be determined, perhapes by comparing
+#   against sweeps above and below the current sweep, by calculating the
+#   averaging number of folds and apply unfolding so this is zero, or by
+#   comparing to an atmospheric sounding.
+# * Improve performance by writing portions of the _edge_sum_and_count
+#   function and EdgeCollector in Cython.  This step is typically the most
+#   time-consuming for real world radar volumes.
+# * Improve perfornace by implementing a priority queue in the _EdgeTracker
+#   object. See comments in the class for details.
 
 
 def dealias_region_based(
-        radar, segmentation_splits=3, segmentation_limits=None,
-        max_gap_x=2, max_gap_y=2, nyquist_vel=None, gatefilter=None,
-        rays_wrap_around=None, keep_original=True, vel_field=None,
-        corr_vel_field=None, **kwargs):
+        radar, interval_splits=3, interval_limits=None,
+        skip_between_rays=2, skip_along_ray=2,
+        nyquist_vel=None, gatefilter=None, rays_wrap_around=None,
+        keep_original=True, vel_field=None, corr_vel_field=None, **kwargs):
     """
     Dealias Doppler velocities using a region based algorithm.
+
+    Performs Doppler velocity dealiasing by finding regions of similar
+    velocities and unfolding and merging pairs of regions until all
+    regions are unfolded.  Unfolding and merging regions is accomplished by
+    modeling the problem as a dynamic network reduction.
 
     Parameters
     ----------
     radar : Radar
         Radar object containing Doppler velocities to dealias.
-    segmentation_splits : int, optional
+    interval_splits : int, optional
         Number of segments to split the nyquist interval into when finding
         regions of similar velocity.  More splits creates a larger number of
         initial regions which takes longer to process but may result in better
         dealiasing.  The default value of 3 seems to be a good compromise
         between performance and artifact free dealiasing.  This value
-        is not used if the segmentation_limits parameter is not None.
-    segmentation_limits : array like or None, optional
+        is not used if the interval_limits parameter is not None.
+    interval_limits : array like or None, optional
         Velocity limits used for finding regions of similar velocity.  Should
         cover the entire nyquist interval.  None, the default value, will
-        split the nyquist interval into segmentation_splits equal sized
+        split the Nyquist interval into interval_splits equal sized
         intervals.
-    max_gap_x, max_gap_y : int, optional
+    skip_between_rays, skip_along_ray : int, optional
         Maximum number of filtered gates to skip over when joining regions,
         gaps between region larger than this will not be connected.  Parameters
-        specify the maximum number of filtered gates along a ray, max_gap_y,
-        and between rays, max_gap_x. Set these parameters to 0 to disable
-        unfolding across filtered gates.
+        specify the maximum number of filtered gates between and along a ray.
+        Set these parameters to 0 to disable unfolding across filtered gates.
     nyquist_velocity : float, optional
         Nyquist velocity in unit identical to those stored in the radar's
         velocity field.  None will attempt to determine this value from the
@@ -105,38 +137,41 @@ def dealias_region_based(
     nyquist_vel = _parse_nyquist_vel(nyquist_vel, radar)
     nyquist_interval = 2. * nyquist_vel
 
-    # find segmentation limits
-    if segmentation_limits is None:
-        segmentation_limits = np.linspace(
-            -nyquist_vel, nyquist_vel, segmentation_splits+1, endpoint=True)
+    # find nyquist interval segmentation limits
+    if interval_limits is None:
+        interval_limits = np.linspace(
+            -nyquist_vel, nyquist_vel, interval_splits+1, endpoint=True)
 
     # exclude masked and invalid velocity gates
     gatefilter.exclude_masked(vel_field)
     gatefilter.exclude_invalid(vel_field)
     gfilter = gatefilter.gate_excluded
 
-    # raw velocity data possibly with masking
-    raw_vdata = radar.fields[vel_field]['data']
-    vdata = raw_vdata.view(np.ndarray)
-    dealias_data = vdata.copy()
+    # perform dealiasing
+    vdata = radar.fields[vel_field]['data'].view(np.ndarray)
+    data = vdata.copy()     # dealiased velocities
 
     for sweep_slice in radar.iter_slice():      # loop over sweeps
-        sdata = vdata[sweep_slice].copy()   # is a copy needed here?
-        scorr = dealias_data[sweep_slice]
-        sfilter = gfilter[sweep_slice]
-        # find regions/segments in original data
-        labels, nfeatures = _find_regions(sdata, sfilter, segmentation_limits)
-        edge_sum, edge_count, segment_sizes = _edge_sum_and_count(
-            labels, nfeatures, sdata, rays_wrap_around, max_gap_x, max_gap_y)
 
-        # find unwrap number for these regions
-        region_tracker = _RegionTracker(segment_sizes)
+        # extract sweep data
+        sdata = vdata[sweep_slice].copy()   # is a copy needed here?
+        scorr = data[sweep_slice]
+        sfilter = gfilter[sweep_slice]
+
+        # find regions in original data
+        labels, nfeatures = _find_regions(sdata, sfilter, interval_limits)
+        edge_sum, edge_count, region_sizes = _edge_sum_and_count(
+            labels, nfeatures, sdata, rays_wrap_around, skip_between_rays,
+            skip_along_ray)
+
+        # find the number of folds in the regions
+        region_tracker = _RegionTracker(region_sizes)
         edge_tracker = _EdgeTracker(edge_sum, edge_count, nyquist_interval)
         while True:
-            if _combine_segments(region_tracker, edge_tracker):
+            if _combine_regions(region_tracker, edge_tracker):
                 break
 
-        # dealias the data using the unwrap numbers
+        # dealias the data using the fold numbers
         # start from label 1 to skip masked region
         for i in range(1, nfeatures+1):
             nwrap = region_tracker.unwrap_number[i]
@@ -145,15 +180,15 @@ def dealias_region_based(
 
     # mask filtered gates
     if np.any(gfilter):
-        dealias_data = np.ma.array(dealias_data, mask=gfilter)
+        data = np.ma.array(data, mask=gfilter)
 
     # restore original values where dealiasing not applied
     if keep_original:
-        dealias_data[gfilter] = raw_vdata[gfilter]
+        data[gfilter] = radar.fields[vel_field]['data'][gfilter]
 
     # return field dictionary containing dealiased Doppler velocities
     corr_vel = get_metadata(corr_vel_field)
-    corr_vel['data'] = dealias_data
+    corr_vel['data'] = data
     return corr_vel
 
 
@@ -172,9 +207,9 @@ def _find_regions(vel, gfilter, limits):
         Filter indicating if a particular gate should be masked.  True
         indicates the gate should be masked (excluded).
     limits : array like
-        Velocity limits for segmentation.  For each pair of limits, taken from
-        elements i and i+1 of the array, all connected regions with velocities
-        within these limits will be found.
+        Velocity limits for region finding.  For each pair of limits, taken
+        from elements i and i+1 of the array, all connected regions with
+        velocities within these limits will be found.
 
     Returns
     -------
@@ -203,45 +238,18 @@ def _find_regions(vel, gfilter, limits):
     return label, nfeatures
 
 
-def _combine_segments(region_tracker, edge_tracker):
-    """ Returns True when done. """
-    # Edge parameter from edge with largest weight
-    status, extra = edge_tracker.pop_edge()
-    if status:
-        return True
-    node1, node2, _, diff, edge_number = extra
-    rdiff = np.round(diff)
-
-    # node sizes of nodes to be merged
-    node1_size = region_tracker.get_node_size(node1)
-    node2_size = region_tracker.get_node_size(node2)
-
-    # determine which nodes should be merged
-    if node1_size > node2_size:
-        base_node, merge_node = node1, node2
-    else:
-        base_node, merge_node = node2, node1
-        rdiff = -rdiff
-
-    # unwrap merge_node
-    if rdiff != 0:
-        region_tracker.unwrap_node(merge_node, rdiff)
-        edge_tracker.unwrap_node(merge_node, rdiff)
-
-    # merge nodes
-    region_tracker.merge_nodes(base_node, merge_node)
-    edge_tracker.merge_nodes(base_node, merge_node, edge_number)
-
-    return False
-
-
+# This function takes considerable time and would be a good canidate for
+# rewriting in Cython for better performance.
 def _edge_sum_and_count(labels, nfeatures, data,
                         rays_wrap_around, max_gap_x, max_gap_y):
-    """ Return a sparse matrices containing the edge sums and counts. """
+    """
+    Return sparse matrices containing the edge sums and counts between regions
+    and a array of the number of gates in each region.
+    """
 
     bincount = np.bincount(labels.ravel())
     num_masked_gates = bincount[0]
-    segment_sizes = bincount[1:]
+    region_sizes = bincount[1:]
 
     total_nodes = np.prod(labels.shape) - num_masked_gates
     if rays_wrap_around:
@@ -343,12 +351,12 @@ def _edge_sum_and_count(labels, nfeatures, data,
             collector.add_edge(label, neighbor, vel)
 
     edge_sum, edge_count = collector.make_edge_matrices(nfeatures)
-    return edge_sum, edge_count, segment_sizes
+    return edge_sum, edge_count, region_sizes
 
 
 class _EdgeCollector(object):
     """
-    Class for collecting edges.
+    Class for collecting edges, used by _edge_sum_and_count function.
     """
 
     def __init__(self, total_nodes):
@@ -379,6 +387,38 @@ class _EdgeCollector(object):
         edge_sum = sparse.coo_matrix((e_sum, matrix_indices), shape=shape)
         edge_count = sparse.coo_matrix((e_count, matrix_indices), shape=shape)
         return edge_sum.tocsr(), edge_count.tocsr()
+
+
+def _combine_regions(region_tracker, edge_tracker):
+    """ Returns True when done. """
+    # Edge parameters from edge with largest weight
+    status, extra = edge_tracker.pop_edge()
+    if status:
+        return True
+    node1, node2, weight, diff, edge_number = extra
+    rdiff = np.round(diff)
+
+    # node sizes of nodes to be merged
+    node1_size = region_tracker.get_node_size(node1)
+    node2_size = region_tracker.get_node_size(node2)
+
+    # determine which nodes should be merged
+    if node1_size > node2_size:
+        base_node, merge_node = node1, node2
+    else:
+        base_node, merge_node = node2, node1
+        rdiff = -rdiff
+
+    # unwrap merge_node
+    if rdiff != 0:
+        region_tracker.unwrap_node(merge_node, rdiff)
+        edge_tracker.unwrap_node(merge_node, rdiff)
+
+    # merge nodes
+    region_tracker.merge_nodes(base_node, merge_node)
+    edge_tracker.merge_nodes(base_node, merge_node, edge_number)
+
+    return False
 
 
 class _RegionTracker(object):
@@ -451,7 +491,7 @@ class _EdgeTracker(object):
         self._common_index = np.zeros(nnodes, dtype=np.int32)
         self._last_base_node = -1
 
-        # array of linked lists pointing to each segment
+        # array of linked lists pointing to each node
         self.edges_in_node = np.zeros(nnodes, dtype='object')
         for i in range(nnodes):
             self.edges_in_node[i] = []
@@ -472,8 +512,8 @@ class _EdgeTracker(object):
 
             edge += 1
 
-        # list which orders edges according to their
-        # weight, highest first
+        # list which orders edges according to their weight, highest first
+        # TODO
         self.priority_queue = []
 
     def merge_nodes(self, base_node, merge_node, foo_edge):
@@ -485,7 +525,7 @@ class _EdgeTracker(object):
         self.edges_in_node[base_node].remove(foo_edge)
         self._common_finder[merge_node] = False
 
-        # find all the edges in the two segments
+        # find all the edges in the two nodes
         edges_in_merge = list(self.edges_in_node[merge_node])
 
         # loop over base_node edges if last base_node was different
@@ -571,7 +611,7 @@ class _EdgeTracker(object):
         """ Unwrap a node. """
         if nwrap == 0:
             return
-        # add weight * nwrap to each edge in segment
+        # add weight * nwrap to each edge in node
         for edge in self.edges_in_node[node]:
             weight = self.weight[edge]
             if node == self.node_alpha[edge]:
