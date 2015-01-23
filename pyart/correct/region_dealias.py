@@ -24,9 +24,6 @@ from .unwrap import _parse_nyquist_vel
 
 
 # TODO
-# * loop over sweeps
-# * mask output if needed
-# * replace masked with original vel
 # * nyquist free edge tracking?
 # * gap jumping edge connections?
 # * 3D segmentation?
@@ -115,26 +112,40 @@ def dealias_region_based(
     gfilter = gatefilter.gate_excluded
 
     # raw velocity data possibly with masking
-    vdata = radar.fields[vel_field]['data'].copy()
-
-    # find regions/segments in original data
-    labels, nfeatures = _find_regions(vdata, gfilter, segmentation_limits)
-    edge_sum, edge_count, segment_sizes = _edge_sum_and_count(
-        labels, nfeatures, vdata, rays_wrap_around)
-
-    # find unwrap number for these regions
-    region_tracker = _RegionTracker(segment_sizes)
-    edge_tracker = _EdgeTracker(edge_sum, edge_count, nyquist_interval)
-    while True:
-        if _combine_segments(region_tracker, edge_tracker):
-            break
-
-    # dealias the data using the unwrap numbers
+    raw_vdata = radar.fields[vel_field]['data']
+    vdata = raw_vdata.view(np.ndarray)
     dealias_data = vdata.copy()
-    for i in range(1, nfeatures+1):     # start from 0 to skip masked region
-        nwrap = region_tracker.unwrap_number[i]
-        if nwrap != 0:
-            dealias_data[labels == i] += nwrap * nyquist_interval
+
+    for sweep_slice in radar.iter_slice():      # loop over sweeps
+        sdata = vdata[sweep_slice].copy()   # is a copy needed here?
+        scorr = dealias_data[sweep_slice]
+        sfilter = gfilter[sweep_slice]
+        # find regions/segments in original data
+        labels, nfeatures = _find_regions(sdata, sfilter, segmentation_limits)
+        edge_sum, edge_count, segment_sizes = _edge_sum_and_count(
+            labels, nfeatures, sdata, rays_wrap_around)
+
+        # find unwrap number for these regions
+        region_tracker = _RegionTracker(segment_sizes)
+        edge_tracker = _EdgeTracker(edge_sum, edge_count, nyquist_interval)
+        while True:
+            if _combine_segments(region_tracker, edge_tracker):
+                break
+
+        # dealias the data using the unwrap numbers
+        # start from label 1 to skip masked region
+        for i in range(1, nfeatures+1):
+            nwrap = region_tracker.unwrap_number[i]
+            if nwrap != 0:
+                scorr[labels == i] += nwrap * nyquist_interval
+
+    # mask filtered gates
+    if np.any(gfilter):
+        dealias_data = np.ma.array(dealias_data, mask=gfilter)
+
+    # restore original values where dealiasing not applied
+    if keep_original:
+        dealias_data[gfilter] = raw_vdata[gfilter]
 
     # return field dictionary containing dealiased Doppler velocities
     corr_vel = get_metadata(corr_vel_field)
