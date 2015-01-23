@@ -29,7 +29,6 @@ from .unwrap import _parse_nyquist_vel
 # * optimize
 # * refactor
 # * document
-# * unit tests
 # * merge into Py-ART
 
 
