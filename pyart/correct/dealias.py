@@ -143,9 +143,9 @@ def dealias_fourdd(radar, last_radar=None, sounding_heights=None,
     # TODO test with RHI radar scan
 
     # verify that sounding data or last_volume is provided
-    sounding_available = (
-        None not in [sounding_heights, sounding_wind_speeds,
-                     sounding_wind_direction])
+    sounding_available = ((sounding_heights is not None) and
+                          (sounding_wind_speeds is not None) and
+                          (sounding_wind_direction is not None))
     if (not sounding_available) and (last_radar is None):
         raise ValueError('sounding data or last_radar must be provided')
 

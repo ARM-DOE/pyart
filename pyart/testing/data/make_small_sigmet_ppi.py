@@ -150,13 +150,27 @@ code[5] = 25            # nbins
 code[6:-1] = -32768     # 0 dBZ
 code[-1] = 1            # end of ray marker
 
-for i in range(20):
+for i in range(19):
     code[6] = i     # time
     code.view('uint16')[1] = 182 * 18 * i   # az0 0 -> 360 in steps of 18
     code.view('uint16')[3] = 182 * 18 * i   # az1
     out.write(code.tostring())
 
-out.write('\x00' * 4736)
+# last ray (20th ray, index 19) has 15 bins instead of 25.
+code = np.ones((23), dtype='int16')
+code[0] = -32747        # indicates 21 values follow (-32747 + 32768 = 21)
+code[2] = 91            # el0
+code[4] = 91            # el1
+code[5] = 15            # 15 nbins in last ray
+code[6:-1] = -32768     # 0 dBZ
+code[-1] = 1            # end of ray marker
+
+code[6] = 19     # time
+code.view('uint16')[1] = 182 * 18 * 19   # az0 0 -> 360 in steps of 18
+code.view('uint16')[3] = 182 * 18 * 19   # az1
+out.write(code.tostring())
+
+out.write('\x00' * 4756)
 
 # close the files
 f.close()

@@ -268,6 +268,22 @@ def check_field_first_point(field, value):
     assert round(radar.fields[field]['data'][0, 0]) == value
 
 
+def test_nonuniform_bin_masking():
+    # Check that in non-collected gates are masked for rays in which the
+    # number of bins is smaller than the number of bins in the product header.
+    assert radar.fields['reflectivity']['data'][19, 14] == 0.0
+    assert radar.fields['reflectivity']['data'][19, 15] is np.ma.masked
+    assert radar.fields['reflectivity']['data'][19, 16] is np.ma.masked
+    assert radar.fields['reflectivity']['data'][19, 17] is np.ma.masked
+    assert radar.fields['reflectivity']['data'][19, 18] is np.ma.masked
+    assert radar.fields['reflectivity']['data'][19, 19] is np.ma.masked
+    assert radar.fields['reflectivity']['data'][19, 20] is np.ma.masked
+    assert radar.fields['reflectivity']['data'][19, 21] is np.ma.masked
+    assert radar.fields['reflectivity']['data'][19, 22] is np.ma.masked
+    assert radar.fields['reflectivity']['data'][19, 23] is np.ma.masked
+    assert radar.fields['reflectivity']['data'][19, 24] is np.ma.masked
+
+
 #############
 # RHI tests #
 #############
