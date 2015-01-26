@@ -12,6 +12,7 @@ A class and supporting functions for reading Sigmet (raw format) files.
     bin2_to_angle
     bin4_to_angle
     _data_types_from_mask
+    _mask_gates_not_collected
     _is_bit_set
     _parse_ray_headers
     _unpack_structure
@@ -178,7 +179,7 @@ cdef class SigmetFile:
         # read in data sweep by sweep
         for i in xrange(nsweeps):
             ingest_data_hdrs, sweep_data, sweep_metadata = self._get_sweep(
-                    full_xhdr=full_xhdr)
+                full_xhdr=full_xhdr)
 
             # check for a truncated file, return sweep(s) read up until error
             if ingest_data_hdrs is None:
@@ -298,7 +299,8 @@ cdef class SigmetFile:
                 sweep_data.append(raw_sweep_data[i::self.ndata_types, 6:])
             else:
                 sweep_data.append(convert_sigmet_data(
-                    data_type, raw_sweep_data[i::self.ndata_types, 6:]))
+                    data_type, raw_sweep_data[i::self.ndata_types, 6:],
+                    raw_sweep_data[i::self.ndata_types, 4]))
             sweep_metadata.append(_parse_ray_headers(
                 raw_sweep_data[i::self.ndata_types, :6]))
         return ingest_data_headers, sweep_data, sweep_metadata
@@ -330,8 +332,8 @@ cdef class SigmetFile:
         out_pos = 0
 
         if compression_code == 1:
-            out[4] = -1     # mark ray as missing by setting numbers
-                            # of bins to -1
+            # mark ray as missing by setting numbers of bins to -1
+            out[4] = -1
             return 0
 
         while compression_code != 1:
@@ -590,11 +592,12 @@ SIGMET_DATA_TYPES = {
 
 
 # This function takes a majority of the time when reading data from a sigmet
-# file.  It could be rewritten to use Cython ndarray or typed memoryviews but
-# masking of the output would need to be solved.
-def convert_sigmet_data(data_type, data):
+# file. Rewriting the convertions/masking in Cython does not seem to improved
+# performance likely since most of the routines are already vectorized.
+def convert_sigmet_data(data_type, data, nbins):
     """ Convert sigmet data. """
-    out = np.ma.empty_like(data, dtype='float32')
+    out = np.empty_like(data, dtype='float32')
+    mask = np.zeros_like(data, dtype=np.bool8)
 
     data_type_name = SIGMET_DATA_TYPES[data_type]
 
@@ -638,26 +641,26 @@ def convert_sigmet_data(data_type, data):
         # 0 : no data available (mask)
         # 65535 Reserved for area not scanned in product file (nothing)
         out[:] = (data.view('uint16') - 32768.) / 100.
-        out[data.view('uint16') == 0] = np.ma.masked
+        mask[data.view('uint16') == 0] = True
 
     elif data_type_name in like_sqi2:
         # value = (N - 1) / 65533
         # 0 : no data available (mask)
         # 65535 Area not scanned
         out[:] = (data.view('uint16') - 1.) / 65533.
-        out[data.view('uint16') == 0] = np.ma.masked
+        mask[data.view('uint16') == 0] = True
 
     elif data_type_name == 'WIDTH2':
         # DB_WIDTH2, 11, Width (2 byte)
         # 2-byte Width Format, section 4.3.36
         out[:] = data.view('uint16') / 100.
-        out[data.view('uint16') == 0] = np.ma.masked
+        mask[data.view('uint16') == 0] = True
 
     elif data_type_name == 'PHIDP2':
         # DB_PHIDP2, 24, PhiDP (Differential Phase) (2 byte)
         # 2-byte PhiDP format, section 4.3.19
         out[:] = 360. * (data.view('uint16') - 1.) / 65534.
-        out[data.view('uint16') == 0] = np.ma.masked
+        mask[data.view('uint16') == 0] = True
 
     elif data_type_name == 'HCLASS2':
         # DB_HCLASS2, 56, Hydrometeor class (2 byte)
@@ -681,7 +684,7 @@ def convert_sigmet_data(data_type, data):
             # DB_DBT, 1, Total Power (1 byte)
             # 1-byte Reflectivity Format, section 4.3.3
             out[:] = (ndata - 64.) / 2.
-            out[ndata == 0] = np.ma.masked
+            mask[ndata == 0] = True
 
         elif data_type_name == 'VEL':
             # VEL, 3, Velocity (1 byte)
@@ -689,7 +692,7 @@ def convert_sigmet_data(data_type, data):
             # Note that this data should be multiplied by Nyquist,
             # this is done in the get_data method of the SigmetFile class.
             out[:] = (ndata - 128.) / 127.
-            out[ndata == 0] = np.ma.masked
+            mask[ndata == 0] = True
 
         elif data_type_name == 'WIDTH':
             # WIDTH, 4, Width (1 byte)
@@ -697,13 +700,13 @@ def convert_sigmet_data(data_type, data):
             # Note that this data should be multiplied by the unambiguous
             # velocity
             out[:] = ndata / 256.
-            out[ndata == 0] = np.ma.masked
+            mask[ndata == 0] = True
 
         elif data_type_name == 'ZDR':
             # ZDR, 5, Differential reflectivity (1 byte)
             # 1-byte ZDR format, section 4.3.37
             out[:] = (ndata - 128.) / 16.
-            out[ndata == 0] = np.ma.masked
+            mask[ndata == 0] = True
 
         elif data_type_name == 'KDP':
             # KDP, 14, KDP (Differential phase) (1 byte)
@@ -720,36 +723,54 @@ def convert_sigmet_data(data_type, data):
             # equal to 128, zero
             out[ndata == 128] = 0
 
-            out[ndata == 0] = np.ma.masked
-            out[ndata == 255] = np.ma.masked
+            mask[ndata == 0] = True
+            mask[ndata == 255] = True
 
         elif data_type_name == 'PHIDP':
             # PHIDP, 16, PhiDP(Differential phase) (1 byte)
             # 1-byte PhiDP format, section 4.3.18
             out[:] = 180. * ((ndata - 1.) / 254.)
-            out[ndata == 0] = np.ma.masked
-            out[ndata == 255] = np.ma.masked
+            mask[ndata == 0] = True
+            mask[ndata == 255] = True
 
         elif data_type_name == 'RHOHV':
             # RHOHV, 19, RhoHV (1 byte)
             # 1-bytes RhoHV format, section 4.3.23
             out[:] = np.sqrt((ndata - 1.) / 253.)
-            out[ndata == 0] = np.ma.masked
-            out[ndata == 255] = np.ma.masked
+            mask[ndata == 0] = True
+            mask[ndata == 255] = True
 
         else:
             # TODO implement conversions for addition 1-byte formats
             warnings.warn('Unknown type: %s, returning raw data' % data_type)
-            out[:] = data
+            out[:] = np.ma.masked_array(data)
             return out
     else:
         # TODO implement conversions for additional formats.
         warnings.warn('Unknown type: %s, returning raw data' % data_type)
         out[:] = data
-        return out
+        return np.ma.masked_array(out)
 
-    out.set_fill_value(-9999.0)
-    return out
+    # mask any gates which are beyond the number of gates in that ray.
+    _mask_gates_not_collected(mask.view(np.uint8), nbins)
+
+    return np.ma.masked_array(out, mask=mask, fill_value=-9999.0,
+                              shrink=False)
+
+
+@cython.boundscheck(False)
+cdef _mask_gates_not_collected(
+        np.ndarray[np.uint8_t, ndim=2] mask,
+        np.ndarray[np.int16_t, ndim=1] nbins):
+    """ Add gates not collected (beyond nbin) to the mask. """
+    cdef int i, j, nrays, nbin, full_nbins
+    nrays = mask.shape[0]
+    full_nbins = mask.shape[1]
+    for i in range(nrays):
+        nbin = nbins[i]
+        for j in range(nbin, full_nbins):
+            mask[i, j] = 1
+    return
 
 
 def bin2_to_angle(bin2):
@@ -875,9 +896,9 @@ def _unpack_ingest_header(record):
 
     # task_scan_info substructure
     # TODO unpack task_scan_type_scan_info based on scan type
-    #task_scan_info = task_configuration['task_scan_info']
+    # task_scan_info = task_configuration['task_scan_info']
     #    scan_type_struct =
-    #_unpack_key(task_scan_info, 'task_scan_type_scan_info',
+    # _unpack_key(task_scan_info, 'task_scan_type_scan_info',
     #            scan_type_struct)
 
     # task_end_info substructure

@@ -13,6 +13,7 @@ moments and data.
 
     dealias_fourdd
     dealias_unwrap_phase
+    dealias_region_based
     calculate_attenuation
     phase_proc_lp
     GateFilter
@@ -29,5 +30,6 @@ from .attenuation import calculate_attenuation
 from .phase_proc import phase_proc_lp
 from .filters import GateFilter, moment_based_gate_filter
 from .unwrap import dealias_unwrap_phase
+from .region_dealias import dealias_region_based
 
 __all__ = [s for s in dir() if not s.startswith('_')]
