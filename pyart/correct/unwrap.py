@@ -81,6 +81,9 @@ def dealias_unwrap_phase(
 
     Returns
     -------
+    corr_vel : dict
+        Field dictionary containing dealiased Doppler velocities.  Dealiased
+        array is stored under the 'data' key.
 
     References
     ----------

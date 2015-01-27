@@ -44,13 +44,12 @@ from ._common_dealias import _parse_rays_wrap_around, _parse_nyquist_vel
 #   excluded by the filter are unfolded using a more elemenary approach.  In
 #   this manner the filter could define only "good" gates which establish the
 #   folding pattern which is then applied to all gates.
-# * The largest region in each sweep is assumed to not be folded.  In some
-#   cases this may not be true and all the gates in the corrected sweep
-#   should be unfolded after the routine completes.  By How much the sweep
-#   should be unfolded would need to be determined, perhapes by comparing
-#   against sweeps above and below the current sweep, by calculating the
-#   averaging number of folds and apply unfolding so this is zero, or by
-#   comparing to an atmospheric sounding.
+# * Either each sweep is assumed to be 'centered' or the largest region
+#   is assumed to not be folded.  In some cases this may not be true and
+#   all the gates in the corrected sweep should be unfolded after the routine
+#   completes.  By how much the sweep should be unfolded would need to be
+#   determined, perhapes by comparing against sweeps above and below the
+#   current sweep, or by comparing to an atmospheric sounding.
 # * Improve performance by writing portions of the _edge_sum_and_count
 #   function and EdgeCollector in Cython.  This step is typically the most
 #   time-consuming for real world radar volumes.
@@ -60,7 +59,7 @@ from ._common_dealias import _parse_rays_wrap_around, _parse_nyquist_vel
 
 def dealias_region_based(
         radar, interval_splits=3, interval_limits=None,
-        skip_between_rays=2, skip_along_ray=2,
+        skip_between_rays=2, skip_along_ray=2, centered=True,
         nyquist_vel=None, gatefilter=None, rays_wrap_around=None,
         keep_original=True, vel_field=None, corr_vel_field=None, **kwargs):
     """
@@ -92,6 +91,11 @@ def dealias_region_based(
         gaps between region larger than this will not be connected.  Parameters
         specify the maximum number of filtered gates between and along a ray.
         Set these parameters to 0 to disable unfolding across filtered gates.
+    centered : bool, optional
+        True to apply centering to each sweep after the dealiasing algorithm
+        so that the average number of unfolding is near 0.  False does not
+        apply centering which may results in individual sweeps under or over
+        folded by the nyquist interval.
     nyquist_velocity : float, optional
         Nyquist velocity in unit identical to those stored in the radar's
         velocity field.  None will attempt to determine this value from the
@@ -168,6 +172,16 @@ def dealias_region_based(
         while True:
             if _combine_regions(region_tracker, edge_tracker):
                 break
+
+        # center sweep if requested, determine a global sweep unfold number
+        # so that the average number of gate folds is zero.
+        if centered:
+            gates_dealiased = region_sizes.sum()
+            total_folds = np.sum(
+                region_sizes * region_tracker.unwrap_number[1:])
+            sweep_offset = int(round(float(total_folds) / gates_dealiased))
+            if sweep_offset != 0:
+                region_tracker.unwrap_number -= sweep_offset
 
         # dealias the data using the fold numbers
         # start from label 1 to skip masked region
