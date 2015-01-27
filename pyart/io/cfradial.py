@@ -279,6 +279,7 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
     if radar_calibration == {}:
         radar_calibration = None
 
+    ncobj.close()
     return Radar(
         time, _range, fields, metadata, scan_type,
         latitude, longitude, altitude,
