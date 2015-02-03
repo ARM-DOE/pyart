@@ -62,7 +62,7 @@ MAJOR = 1
 MINOR = 2
 MICRO = 0
 ISRELEASED = True
-VERSION = '%d.%d.%drc1' % (MAJOR, MINOR, MICRO)
+VERSION = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 SCRIPTS = glob.glob('scripts/*')
 
 
