@@ -12,7 +12,6 @@ A class and supporting functions for reading Sigmet (raw format) files.
     bin2_to_angle
     bin4_to_angle
     _data_types_from_mask
-    _mask_gates_not_collected
     _is_bit_set
     _parse_ray_headers
     _unpack_structure
