@@ -1,0 +1,9 @@
+include *.rst
+recursive-include doc *
+recursive-include examples *.py *.txt
+recursive-include pyart *.c *.h *.pyx *.pxd *.f90 *.pyf
+include README.rst
+include LICENSE.txt
+include INSTALL.rst
+include pyart/correct/src/UWASHINGTON_4DD_README
+include pyart/__check_build/README
