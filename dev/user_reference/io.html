@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Input and output (pyart.io) &mdash; Py-ART Documentation (DRAFT)</title>
+    <title>Input and output (pyart.io) &mdash; Py-ART Documentation</title>
     
     <link rel="stylesheet" href="../_static/scipy.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.0.0.dev-770ca76',
+        VERSION:     '1.2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,10 +24,10 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="Py-ART Documentation (DRAFT)" href="../index.html" />
+    <link rel="top" title="Py-ART Documentation" href="../index.html" />
     <link rel="up" title="User Reference Manual" href="index.html" />
     <link rel="next" title="pyart.io.read" href="generated/pyart.io.read.html" />
-    <link rel="prev" title="User Reference Manual" href="index.html" /> 
+    <link rel="prev" title="pyart.core.Grid.write" href="generated/pyart.core.Grid.write.html" /> 
   </head>
   <body>
     <div class="related">
@@ -46,9 +46,9 @@
           <a href="generated/pyart.io.read.html" title="pyart.io.read"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="index.html" title="User Reference Manual"
+          <a href="generated/pyart.core.Grid.write.html" title="pyart.core.Grid.write"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Py-ART Documentation (DRAFT)</a> &raquo;</li>
+        <li><a href="../index.html">Py-ART Documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">User Reference Manual</a> &raquo;</li> 
       </ul>
     </div>  
@@ -72,7 +72,7 @@ from and write data to a number of file formats.</p>
 <td>Read a radar file and return a radar object.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.read_rsl.html#pyart.io.read_rsl" title="pyart.io.read_rsl"><tt class="xref py py-obj docutils literal"><span class="pre">read_rsl</span></tt></a>(filename[,&nbsp;field_names,&nbsp;...])</td>
-<td>Read a file supported by RSL   :Parameters:      <strong>filename</strong> : str or RSL_radar          Name of file whose format is supported by RSL.</td>
+<td>Read a file supported by RSL</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.read_mdv.html#pyart.io.read_mdv" title="pyart.io.read_mdv"><tt class="xref py py-obj docutils literal"><span class="pre">read_mdv</span></tt></a>(filename[,&nbsp;field_names,&nbsp;...])</td>
 <td>Read a MDV file.</td>
@@ -83,35 +83,23 @@ from and write data to a number of file formats.</p>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.read_cfradial.html#pyart.io.read_cfradial" title="pyart.io.read_cfradial"><tt class="xref py py-obj docutils literal"><span class="pre">read_cfradial</span></tt></a>(filename[,&nbsp;field_names,&nbsp;...])</td>
 <td>Read a Cfradial netCDF file.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.read_nexrad_archive.html#pyart.io.read_nexrad_archive" title="pyart.io.read_nexrad_archive"><tt class="xref py py-obj docutils literal"><span class="pre">read_nexrad_archive</span></tt></a>(filename[,&nbsp;field_names,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.read_chl.html#pyart.io.read_chl" title="pyart.io.read_chl"><tt class="xref py py-obj docutils literal"><span class="pre">read_chl</span></tt></a>(filename[,&nbsp;field_names,&nbsp;...])</td>
+<td>Read a CSU-CHILL CHL file.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.read_nexrad_archive.html#pyart.io.read_nexrad_archive" title="pyart.io.read_nexrad_archive"><tt class="xref py py-obj docutils literal"><span class="pre">read_nexrad_archive</span></tt></a>(filename[,&nbsp;field_names,&nbsp;...])</td>
 <td>Read a NEXRAD Level 2 Archive file.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.read_nexrad_cdm.html#pyart.io.read_nexrad_cdm" title="pyart.io.read_nexrad_cdm"><tt class="xref py py-obj docutils literal"><span class="pre">read_nexrad_cdm</span></tt></a>(filename[,&nbsp;field_names,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.read_nexrad_cdm.html#pyart.io.read_nexrad_cdm" title="pyart.io.read_nexrad_cdm"><tt class="xref py py-obj docutils literal"><span class="pre">read_nexrad_cdm</span></tt></a>(filename[,&nbsp;field_names,&nbsp;...])</td>
 <td>Read a Common Data Model (CDM) NEXRAD Level 2 file.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.read_gamic.html#pyart.io.read_gamic" title="pyart.io.read_gamic"><tt class="xref py py-obj docutils literal"><span class="pre">read_gamic</span></tt></a>(filename[,&nbsp;field_names,&nbsp;...])</td>
-<td>Read a gamic hdf5 file.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.write_cfradial.html#pyart.io.write_cfradial" title="pyart.io.write_cfradial"><tt class="xref py py-obj docutils literal"><span class="pre">write_cfradial</span></tt></a>(filename,&nbsp;radar[,&nbsp;format,&nbsp;...])</td>
 <td>Write a Radar object to a CF/Radial compliant netCDF file.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.read_grid.html#pyart.io.read_grid" title="pyart.io.read_grid"><tt class="xref py py-obj docutils literal"><span class="pre">read_grid</span></tt></a>(filename)</td>
-<td>Read a netCDF grid file   :Parameters:      <strong>filename</strong> : str          Filename of netCDF grid file to read  :Returns:      <strong>grid</strong> : Grid          Grid object containing Grid data.</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.read_grid.html#pyart.io.read_grid" title="pyart.io.read_grid"><tt class="xref py py-obj docutils literal"><span class="pre">read_grid</span></tt></a>(filename[,&nbsp;exclude_fields])</td>
+<td>Read a netCDF grid file</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.write_grid.html#pyart.io.write_grid" title="pyart.io.write_grid"><tt class="xref py py-obj docutils literal"><span class="pre">write_grid</span></tt></a>(filename,&nbsp;grid[,&nbsp;format])</td>
-<td>Write a Grid object to a CF-1.5 and ARM standard netcdf file   :Parameters:      <strong>filename</strong> : str          Filename to save grid to.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.is_vpt.html#pyart.io.is_vpt" title="pyart.io.is_vpt"><tt class="xref py py-obj docutils literal"><span class="pre">is_vpt</span></tt></a>(radar[,&nbsp;offset])</td>
-<td>Determine if a Radar appears to be a vertical pointing scan.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.to_vpt.html#pyart.io.to_vpt" title="pyart.io.to_vpt"><tt class="xref py py-obj docutils literal"><span class="pre">to_vpt</span></tt></a>(radar[,&nbsp;single_scan])</td>
-<td>Convert an existing Radar object to represent a vertical pointing scan.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.Radar.html#pyart.io.Radar" title="pyart.io.Radar"><tt class="xref py py-obj docutils literal"><span class="pre">Radar</span></tt></a>(time,&nbsp;_range,&nbsp;fields,&nbsp;metadata,&nbsp;...[,&nbsp;...])</td>
-<td>A class for storing antenna coordinate radar data.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.Grid.html#pyart.io.Grid" title="pyart.io.Grid"><tt class="xref py py-obj docutils literal"><span class="pre">Grid</span></tt></a>(fields,&nbsp;axes,&nbsp;metadata)</td>
-<td>An object for holding gridded Radar data.</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.write_grid.html#pyart.io.write_grid" title="pyart.io.write_grid"><tt class="xref py py-obj docutils literal"><span class="pre">write_grid</span></tt></a>(filename,&nbsp;grid[,&nbsp;format,&nbsp;...])</td>
+<td>Write a Grid object to a CF-1.5 and ARM standard netcdf file</td>
 </tr>
 </tbody>
 </table>
@@ -124,8 +112,8 @@ from and write data to a number of file formats.</p>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="index.html"
-                        title="previous chapter">User Reference Manual</a></p>
+  <p class="topless"><a href="generated/pyart.core.Grid.write.html"
+                        title="previous chapter">pyart.core.Grid.write</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="generated/pyart.io.read.html"
                         title="next chapter">pyart.io.read</a></p>
@@ -167,16 +155,16 @@ from and write data to a number of file formats.</p>
           <a href="generated/pyart.io.read.html" title="pyart.io.read"
              >next</a> |</li>
         <li class="right" >
-          <a href="index.html" title="User Reference Manual"
+          <a href="generated/pyart.core.Grid.write.html" title="pyart.core.Grid.write"
              >previous</a> |</li>
-        <li><a href="../index.html">Py-ART Documentation (DRAFT)</a> &raquo;</li>
+        <li><a href="../index.html">Py-ART Documentation</a> &raquo;</li>
           <li><a href="index.html" >User Reference Manual</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on May 21, 2014.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+      Last updated on Feb 03, 2015.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
 </html>

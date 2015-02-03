@@ -1,0 +1,6 @@
+pyart.correct.GateFilter.include_inside
+=======================================
+
+.. currentmodule:: pyart.correct
+
+.. automethod:: GateFilter.include_inside

@@ -1,0 +1,6 @@
+pyart.correct.region_dealias._edge_sum_and_count
+================================================
+
+.. currentmodule:: pyart.correct.region_dealias
+
+.. autofunction:: _edge_sum_and_count

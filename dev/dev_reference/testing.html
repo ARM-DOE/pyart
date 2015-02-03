@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pyart.testing &mdash; Py-ART Documentation (DRAFT)</title>
+    <title>pyart.testing &mdash; Py-ART Documentation</title>
     
     <link rel="stylesheet" href="../_static/scipy.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.0.0.dev-770ca76',
+        VERSION:     '1.2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,9 +24,9 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="Py-ART Documentation (DRAFT)" href="../index.html" />
+    <link rel="top" title="Py-ART Documentation" href="../index.html" />
     <link rel="up" title="Developer Reference Manual" href="index.html" />
-    <link rel="next" title="pyart.testing.sample_objects.make_empty_ppi_radar" href="generated/pyart.testing.sample_objects.make_empty_ppi_radar.html" />
+    <link rel="next" title="pyart.testing.sample_files.MDV_PPI_FILE" href="generated/pyart.testing.sample_files.MDV_PPI_FILE.html" />
     <link rel="prev" title="pyart.map.grid_mapper.NNLocator.__init__" href="generated/pyart.map.grid_mapper.NNLocator.__init__.html" /> 
   </head>
   <body>
@@ -43,12 +43,12 @@
           <a href="../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="generated/pyart.testing.sample_objects.make_empty_ppi_radar.html" title="pyart.testing.sample_objects.make_empty_ppi_radar"
+          <a href="generated/pyart.testing.sample_files.MDV_PPI_FILE.html" title="pyart.testing.sample_files.MDV_PPI_FILE"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="generated/pyart.map.grid_mapper.NNLocator.__init__.html" title="pyart.map.grid_mapper.NNLocator.__init__"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Py-ART Documentation (DRAFT)</a> &raquo;</li>
+        <li><a href="../index.html">Py-ART Documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Developer Reference Manual</a> &raquo;</li> 
       </ul>
     </div>  
@@ -61,36 +61,6 @@
   <div class="section" id="pyart-testing">
 <h1>pyart.testing<a class="headerlink" href="#pyart-testing" title="Permalink to this headline">¶</a></h1>
 <p>Testing functions and files.</p>
-<span class="target" id="module-pyart.testing.sample_objects"></span><div class="section" id="pyart-testing-sample-objects">
-<h2>pyart.testing.sample_objects<a class="headerlink" href="#pyart-testing-sample-objects" title="Permalink to this headline">¶</a></h2>
-<p>Functions for creating sample Radar and Grid objects.</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.testing.sample_objects.make_empty_ppi_radar.html#pyart.testing.sample_objects.make_empty_ppi_radar" title="pyart.testing.sample_objects.make_empty_ppi_radar"><tt class="xref py py-obj docutils literal"><span class="pre">make_empty_ppi_radar</span></tt></a>(ngates,&nbsp;rays_per_sweep,&nbsp;...)</td>
-<td>Return an Radar object, representing a PPI scan.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.testing.sample_objects.make_target_radar.html#pyart.testing.sample_objects.make_target_radar" title="pyart.testing.sample_objects.make_target_radar"><tt class="xref py py-obj docutils literal"><span class="pre">make_target_radar</span></tt></a>()</td>
-<td>Return a PPI radar with a target like reflectivity field.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.testing.sample_objects.make_velocity_aliased_radar.html#pyart.testing.sample_objects.make_velocity_aliased_radar" title="pyart.testing.sample_objects.make_velocity_aliased_radar"><tt class="xref py py-obj docutils literal"><span class="pre">make_velocity_aliased_radar</span></tt></a>([alias])</td>
-<td>Return a PPI radar with a target like reflectivity field.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.testing.sample_objects.make_single_ray_radar.html#pyart.testing.sample_objects.make_single_ray_radar" title="pyart.testing.sample_objects.make_single_ray_radar"><tt class="xref py py-obj docutils literal"><span class="pre">make_single_ray_radar</span></tt></a>()</td>
-<td>Return a PPI radar with a single ray taken from a ARM C-SAPR Radar  Radar object returned has &#8216;reflectivity_horizontal&#8217;, &#8216;norm_coherent_power&#8217;, &#8216;copol_coeff&#8217;, &#8216;dp_phase_shift&#8217;, and &#8216;diff_phase&#8217; fields with no metadata but a &#8216;data&#8217; key.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.testing.sample_objects.make_empty_grid.html#pyart.testing.sample_objects.make_empty_grid" title="pyart.testing.sample_objects.make_empty_grid"><tt class="xref py py-obj docutils literal"><span class="pre">make_empty_grid</span></tt></a>(grid_shape,&nbsp;grid_limits)</td>
-<td>Make an empty grid object without any fields or metadata.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.testing.sample_objects.make_target_grid.html#pyart.testing.sample_objects.make_target_grid" title="pyart.testing.sample_objects.make_target_grid"><tt class="xref py py-obj docutils literal"><span class="pre">make_target_grid</span></tt></a>()</td>
-<td>Make a sample Grid with a rectangular target.</td>
-</tr>
-</tbody>
-</table>
-</div>
 <span class="target" id="module-pyart.testing.sample_files"></span><div class="section" id="pyart-testing-sample-files">
 <h2>pyart.testing.sample_files<a class="headerlink" href="#pyart-testing-sample-files" title="Permalink to this headline">¶</a></h2>
 <p>Sample radar files in a number of formats.  Many of these files
@@ -113,23 +83,56 @@ are incomplete, they should only be used for testing, not production.</p>
 <tr class="row-even"><td><a class="reference internal" href="generated/pyart.testing.sample_files.CFRADIAL_RHI_FILE.html#pyart.testing.sample_files.CFRADIAL_RHI_FILE" title="pyart.testing.sample_files.CFRADIAL_RHI_FILE"><tt class="xref py py-obj docutils literal"><span class="pre">CFRADIAL_RHI_FILE</span></tt></a></td>
 <td>str(object=&#8217;&#8216;) -&gt; string</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.testing.sample_files.SIGMET_PPI_FILE.html#pyart.testing.sample_files.SIGMET_PPI_FILE" title="pyart.testing.sample_files.SIGMET_PPI_FILE"><tt class="xref py py-obj docutils literal"><span class="pre">SIGMET_PPI_FILE</span></tt></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.testing.sample_files.CHL_RHI_FILE.html#pyart.testing.sample_files.CHL_RHI_FILE" title="pyart.testing.sample_files.CHL_RHI_FILE"><tt class="xref py py-obj docutils literal"><span class="pre">CHL_RHI_FILE</span></tt></a></td>
 <td>str(object=&#8217;&#8216;) -&gt; string</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.testing.sample_files.SIGMET_RHI_FILE.html#pyart.testing.sample_files.SIGMET_RHI_FILE" title="pyart.testing.sample_files.SIGMET_RHI_FILE"><tt class="xref py py-obj docutils literal"><span class="pre">SIGMET_RHI_FILE</span></tt></a></td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.testing.sample_files.SIGMET_PPI_FILE.html#pyart.testing.sample_files.SIGMET_PPI_FILE" title="pyart.testing.sample_files.SIGMET_PPI_FILE"><tt class="xref py py-obj docutils literal"><span class="pre">SIGMET_PPI_FILE</span></tt></a></td>
 <td>str(object=&#8217;&#8216;) -&gt; string</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.testing.sample_files.NEXRAD_ARCHIVE_FILE.html#pyart.testing.sample_files.NEXRAD_ARCHIVE_FILE" title="pyart.testing.sample_files.NEXRAD_ARCHIVE_FILE"><tt class="xref py py-obj docutils literal"><span class="pre">NEXRAD_ARCHIVE_FILE</span></tt></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.testing.sample_files.SIGMET_RHI_FILE.html#pyart.testing.sample_files.SIGMET_RHI_FILE" title="pyart.testing.sample_files.SIGMET_RHI_FILE"><tt class="xref py py-obj docutils literal"><span class="pre">SIGMET_RHI_FILE</span></tt></a></td>
 <td>str(object=&#8217;&#8216;) -&gt; string</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.testing.sample_files.NEXRAD_ARCHIVE_COMPRESSED_FILE.html#pyart.testing.sample_files.NEXRAD_ARCHIVE_COMPRESSED_FILE" title="pyart.testing.sample_files.NEXRAD_ARCHIVE_COMPRESSED_FILE"><tt class="xref py py-obj docutils literal"><span class="pre">NEXRAD_ARCHIVE_COMPRESSED_FILE</span></tt></a></td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.testing.sample_files.NEXRAD_ARCHIVE_FILE.html#pyart.testing.sample_files.NEXRAD_ARCHIVE_FILE" title="pyart.testing.sample_files.NEXRAD_ARCHIVE_FILE"><tt class="xref py py-obj docutils literal"><span class="pre">NEXRAD_ARCHIVE_FILE</span></tt></a></td>
 <td>str(object=&#8217;&#8216;) -&gt; string</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.testing.sample_files.NEXRAD_CDM_FILE.html#pyart.testing.sample_files.NEXRAD_CDM_FILE" title="pyart.testing.sample_files.NEXRAD_CDM_FILE"><tt class="xref py py-obj docutils literal"><span class="pre">NEXRAD_CDM_FILE</span></tt></a></td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.testing.sample_files.NEXRAD_ARCHIVE_COMPRESSED_FILE.html#pyart.testing.sample_files.NEXRAD_ARCHIVE_COMPRESSED_FILE" title="pyart.testing.sample_files.NEXRAD_ARCHIVE_COMPRESSED_FILE"><tt class="xref py py-obj docutils literal"><span class="pre">NEXRAD_ARCHIVE_COMPRESSED_FILE</span></tt></a></td>
 <td>str(object=&#8217;&#8216;) -&gt; string</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.testing.sample_files.INTERP_SOUNDE_FILE.html#pyart.testing.sample_files.INTERP_SOUNDE_FILE" title="pyart.testing.sample_files.INTERP_SOUNDE_FILE"><tt class="xref py py-obj docutils literal"><span class="pre">INTERP_SOUNDE_FILE</span></tt></a></td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.testing.sample_files.NEXRAD_CDM_FILE.html#pyart.testing.sample_files.NEXRAD_CDM_FILE" title="pyart.testing.sample_files.NEXRAD_CDM_FILE"><tt class="xref py py-obj docutils literal"><span class="pre">NEXRAD_CDM_FILE</span></tt></a></td>
 <td>str(object=&#8217;&#8216;) -&gt; string</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.testing.sample_files.INTERP_SOUNDE_FILE.html#pyart.testing.sample_files.INTERP_SOUNDE_FILE" title="pyart.testing.sample_files.INTERP_SOUNDE_FILE"><tt class="xref py py-obj docutils literal"><span class="pre">INTERP_SOUNDE_FILE</span></tt></a></td>
+<td>str(object=&#8217;&#8216;) -&gt; string</td>
+</tr>
+</tbody>
+</table>
+</div>
+<span class="target" id="module-pyart.testing.sample_objects"></span><div class="section" id="pyart-testing-sample-objects">
+<h2>pyart.testing.sample_objects<a class="headerlink" href="#pyart-testing-sample-objects" title="Permalink to this headline">¶</a></h2>
+<p>Functions for creating sample Radar and Grid objects.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.testing.sample_objects.make_empty_ppi_radar.html#pyart.testing.sample_objects.make_empty_ppi_radar" title="pyart.testing.sample_objects.make_empty_ppi_radar"><tt class="xref py py-obj docutils literal"><span class="pre">make_empty_ppi_radar</span></tt></a>(ngates,&nbsp;rays_per_sweep,&nbsp;...)</td>
+<td>Return an Radar object, representing a PPI scan.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.testing.sample_objects.make_target_radar.html#pyart.testing.sample_objects.make_target_radar" title="pyart.testing.sample_objects.make_target_radar"><tt class="xref py py-obj docutils literal"><span class="pre">make_target_radar</span></tt></a>()</td>
+<td>Return a PPI radar with a target like reflectivity field.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.testing.sample_objects.make_velocity_aliased_radar.html#pyart.testing.sample_objects.make_velocity_aliased_radar" title="pyart.testing.sample_objects.make_velocity_aliased_radar"><tt class="xref py py-obj docutils literal"><span class="pre">make_velocity_aliased_radar</span></tt></a>([alias])</td>
+<td>Return a PPI radar with a target like reflectivity field.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.testing.sample_objects.make_single_ray_radar.html#pyart.testing.sample_objects.make_single_ray_radar" title="pyart.testing.sample_objects.make_single_ray_radar"><tt class="xref py py-obj docutils literal"><span class="pre">make_single_ray_radar</span></tt></a>()</td>
+<td>Return a PPI radar with a single ray taken from a ARM C-SAPR Radar</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.testing.sample_objects.make_empty_grid.html#pyart.testing.sample_objects.make_empty_grid" title="pyart.testing.sample_objects.make_empty_grid"><tt class="xref py py-obj docutils literal"><span class="pre">make_empty_grid</span></tt></a>(grid_shape,&nbsp;grid_limits)</td>
+<td>Make an empty grid object without any fields or metadata.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.testing.sample_objects.make_target_grid.html#pyart.testing.sample_objects.make_target_grid" title="pyart.testing.sample_objects.make_target_grid"><tt class="xref py py-obj docutils literal"><span class="pre">make_target_grid</span></tt></a>()</td>
+<td>Make a sample Grid with a rectangular target.</td>
 </tr>
 </tbody>
 </table>
@@ -145,8 +148,8 @@ are incomplete, they should only be used for testing, not production.</p>
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">pyart.testing</a><ul>
-<li><a class="reference internal" href="#pyart-testing-sample-objects">pyart.testing.sample_objects</a></li>
 <li><a class="reference internal" href="#pyart-testing-sample-files">pyart.testing.sample_files</a></li>
+<li><a class="reference internal" href="#pyart-testing-sample-objects">pyart.testing.sample_objects</a></li>
 </ul>
 </li>
 </ul>
@@ -155,8 +158,8 @@ are incomplete, they should only be used for testing, not production.</p>
   <p class="topless"><a href="generated/pyart.map.grid_mapper.NNLocator.__init__.html"
                         title="previous chapter">pyart.map.grid_mapper.NNLocator.__init__</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="generated/pyart.testing.sample_objects.make_empty_ppi_radar.html"
-                        title="next chapter">pyart.testing.sample_objects.make_empty_ppi_radar</a></p>
+  <p class="topless"><a href="generated/pyart.testing.sample_files.MDV_PPI_FILE.html"
+                        title="next chapter">pyart.testing.sample_files.MDV_PPI_FILE</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../_sources/dev_reference/testing.txt"
@@ -192,19 +195,19 @@ are incomplete, they should only be used for testing, not production.</p>
           <a href="../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="generated/pyart.testing.sample_objects.make_empty_ppi_radar.html" title="pyart.testing.sample_objects.make_empty_ppi_radar"
+          <a href="generated/pyart.testing.sample_files.MDV_PPI_FILE.html" title="pyart.testing.sample_files.MDV_PPI_FILE"
              >next</a> |</li>
         <li class="right" >
           <a href="generated/pyart.map.grid_mapper.NNLocator.__init__.html" title="pyart.map.grid_mapper.NNLocator.__init__"
              >previous</a> |</li>
-        <li><a href="../index.html">Py-ART Documentation (DRAFT)</a> &raquo;</li>
+        <li><a href="../index.html">Py-ART Documentation</a> &raquo;</li>
           <li><a href="index.html" >Developer Reference Manual</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on May 21, 2014.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+      Last updated on Feb 03, 2015.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
 </html>

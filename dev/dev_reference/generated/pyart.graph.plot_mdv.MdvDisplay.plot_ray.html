@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pyart.graph.plot_mdv.MdvDisplay.plot_ray &mdash; Py-ART Documentation (DRAFT)</title>
+    <title>pyart.graph.plot_mdv.MdvDisplay.plot_ray &mdash; Py-ART Documentation</title>
     
     <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.0.0.dev-770ca76',
+        VERSION:     '1.2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="Py-ART Documentation (DRAFT)" href="../../index.html" />
+    <link rel="top" title="Py-ART Documentation" href="../../index.html" />
     <link rel="up" title="pyart.graph.plot_mdv.MdvDisplay" href="pyart.graph.plot_mdv.MdvDisplay.html" />
     <link rel="next" title="pyart.graph.plot_mdv.MdvDisplay.plot_rhi" href="pyart.graph.plot_mdv.MdvDisplay.plot_rhi.html" />
     <link rel="prev" title="pyart.graph.plot_mdv.MdvDisplay.plot_range_rings" href="pyart.graph.plot_mdv.MdvDisplay.plot_range_rings.html" /> 
@@ -48,7 +48,7 @@
         <li class="right" >
           <a href="pyart.graph.plot_mdv.MdvDisplay.plot_range_rings.html" title="pyart.graph.plot_mdv.MdvDisplay.plot_range_rings"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Py-ART Documentation (DRAFT)</a> &raquo;</li>
+        <li><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
           <li><a href="../index.html" >Developer Reference Manual</a> &raquo;</li>
           <li><a href="../graph.html" >pyart.graph</a> &raquo;</li>
           <li><a href="pyart.graph.plot_mdv.MdvDisplay.html" accesskey="U">pyart.graph.plot_mdv.MdvDisplay</a> &raquo;</li> 
@@ -64,7 +64,7 @@
 <h1>pyart.graph.plot_mdv.MdvDisplay.plot_ray<a class="headerlink" href="#pyart-graph-plot-mdv-mdvdisplay-plot-ray" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="pyart.graph.plot_mdv.MdvDisplay.plot_ray">
-<tt class="descclassname">MdvDisplay.</tt><tt class="descname">plot_ray</tt><big>(</big><em>field</em>, <em>ray</em>, <em>format_str='k-'</em>, <em>mask_tuple=None</em>, <em>ray_min=None</em>, <em>ray_max=None</em>, <em>mask_outside=False</em>, <em>title=None</em>, <em>title_flag=True</em>, <em>axislabels=(None</em>, <em>None)</em>, <em>axislabels_flag=True</em>, <em>ax=None</em>, <em>fig=None</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/graph/radardisplay.py#L157"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.graph.plot_mdv.MdvDisplay.plot_ray" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">MdvDisplay.</tt><tt class="descname">plot_ray</tt><big>(</big><em>field</em>, <em>ray</em>, <em>format_str='k-'</em>, <em>mask_tuple=None</em>, <em>ray_min=None</em>, <em>ray_max=None</em>, <em>mask_outside=False</em>, <em>title=None</em>, <em>title_flag=True</em>, <em>axislabels=(None</em>, <em>None)</em>, <em>filter_transitions=True</em>, <em>axislabels_flag=True</em>, <em>ax=None</em>, <em>fig=None</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/graph/radardisplay.py#L177"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.graph.plot_mdv.MdvDisplay.plot_ray" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot a single ray.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -125,6 +125,13 @@ False.</p>
 <p><strong>axislabel_flag</strong> : bool</p>
 <blockquote>
 <div><p>True to add label the axes, False does not label the axes.</p>
+</div></blockquote>
+<p><strong>filter_transitions</strong> : bool</p>
+<blockquote>
+<div><p>True to remove rays where the antenna was in transition between
+sweeps from the plot.  False will include these rays in the plot.
+No rays are filtered when the antenna_transition attribute of the
+underlying radar is not present.</p>
 </div></blockquote>
 <p><strong>ax</strong> : Axis</p>
 <blockquote>
@@ -194,7 +201,7 @@ False.</p>
         <li class="right" >
           <a href="pyart.graph.plot_mdv.MdvDisplay.plot_range_rings.html" title="pyart.graph.plot_mdv.MdvDisplay.plot_range_rings"
              >previous</a> |</li>
-        <li><a href="../../index.html">Py-ART Documentation (DRAFT)</a> &raquo;</li>
+        <li><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
           <li><a href="../index.html" >Developer Reference Manual</a> &raquo;</li>
           <li><a href="../graph.html" >pyart.graph</a> &raquo;</li>
           <li><a href="pyart.graph.plot_mdv.MdvDisplay.html" >pyart.graph.plot_mdv.MdvDisplay</a> &raquo;</li> 
@@ -202,8 +209,8 @@ False.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on May 21, 2014.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+      Last updated on Feb 03, 2015.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
 </html>

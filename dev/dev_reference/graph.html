@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pyart.graph &mdash; Py-ART Documentation (DRAFT)</title>
+    <title>pyart.graph &mdash; Py-ART Documentation</title>
     
     <link rel="stylesheet" href="../_static/scipy.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.0.0.dev-770ca76',
+        VERSION:     '1.2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,10 +24,10 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="Py-ART Documentation (DRAFT)" href="../index.html" />
+    <link rel="top" title="Py-ART Documentation" href="../index.html" />
     <link rel="up" title="Developer Reference Manual" href="index.html" />
-    <link rel="next" title="pyart.graph.common.dms_to_d" href="generated/pyart.graph.common.dms_to_d.html" />
-    <link rel="prev" title="pyart.correct._fourdd_interface.fourdd_dealias" href="generated/pyart.correct._fourdd_interface.fourdd_dealias.html" /> 
+    <link rel="next" title="pyart.graph.cm.revcmap" href="generated/pyart.graph.cm.revcmap.html" />
+    <link rel="prev" title="pyart.retrieve.echo_class.steiner_conv_strat" href="generated/pyart.retrieve.echo_class.steiner_conv_strat.html" /> 
   </head>
   <body>
     <div class="related">
@@ -43,12 +43,12 @@
           <a href="../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="generated/pyart.graph.common.dms_to_d.html" title="pyart.graph.common.dms_to_d"
+          <a href="generated/pyart.graph.cm.revcmap.html" title="pyart.graph.cm.revcmap"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="generated/pyart.correct._fourdd_interface.fourdd_dealias.html" title="pyart.correct._fourdd_interface.fourdd_dealias"
+          <a href="generated/pyart.retrieve.echo_class.steiner_conv_strat.html" title="pyart.retrieve.echo_class.steiner_conv_strat"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Py-ART Documentation (DRAFT)</a> &raquo;</li>
+        <li><a href="../index.html">Py-ART Documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Developer Reference Manual</a> &raquo;</li> 
       </ul>
     </div>  
@@ -61,30 +61,6 @@
   <div class="section" id="pyart-graph">
 <h1>pyart.graph<a class="headerlink" href="#pyart-graph" title="Permalink to this headline">¶</a></h1>
 <p>Radar data graphing routines.</p>
-<span class="target" id="module-pyart.graph.common"></span><div class="section" id="pyart-graph-common">
-<h2>pyart.graph.common<a class="headerlink" href="#pyart-graph-common" title="Permalink to this headline">¶</a></h2>
-<p>Common graphing routines.</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.common.dms_to_d.html#pyart.graph.common.dms_to_d" title="pyart.graph.common.dms_to_d"><tt class="xref py py-obj docutils literal"><span class="pre">dms_to_d</span></tt></a>(dms)</td>
-<td>Degrees, minutes, seconds to degrees</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.graph.common.radar_coords_to_cart.html#pyart.graph.common.radar_coords_to_cart" title="pyart.graph.common.radar_coords_to_cart"><tt class="xref py py-obj docutils literal"><span class="pre">radar_coords_to_cart</span></tt></a>(rng,&nbsp;az,&nbsp;ele[,&nbsp;debug])</td>
-<td>Calculate Cartesian coordinate from radar coordinates   :Parameters:      <strong>rng</strong> : array          Distances to the center of the radar gates (bins) in kilometers.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.common.corner_to_point.html#pyart.graph.common.corner_to_point" title="pyart.graph.common.corner_to_point"><tt class="xref py py-obj docutils literal"><span class="pre">corner_to_point</span></tt></a>(corner,&nbsp;point)</td>
-<td>Return the x, y distances in meters from a corner to a point.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.graph.common.ax_radius.html#pyart.graph.common.ax_radius" title="pyart.graph.common.ax_radius"><tt class="xref py py-obj docutils literal"><span class="pre">ax_radius</span></tt></a>(lat[,&nbsp;units])</td>
-<td>Return the radius of a constant latitude circle for a given latitude.</td>
-</tr>
-</tbody>
-</table>
-</div>
 <span class="target" id="module-pyart.graph.cm"></span><div class="section" id="pyart-graph-cm">
 <h2>pyart.graph.cm<a class="headerlink" href="#pyart-graph-cm" title="Permalink to this headline">¶</a></h2>
 <p>Radar related colormaps.</p>
@@ -108,7 +84,8 @@
 </tr>
 </tbody>
 </table>
-<p>Available colormaps, reversed versions (_r) are also provided:</p>
+<p>Available colormaps, reversed versions (_r) are also provided, these
+colormaps are available within matplotlib with names &#8216;pyart_COLORMAP&#8217;:</p>
 <blockquote>
 <div><ul class="simple">
 <li>BlueBrown10</li>
@@ -150,9 +127,62 @@
 </ul>
 </div></blockquote>
 </div>
-<span class="target" id="module-pyart.graph._cm"></span><div class="section" id="id1">
-<h2>pyart.graph._cm<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
-<p>Data for radar related colormaps.</p>
+<span class="target" id="module-pyart.graph.common"></span><div class="section" id="pyart-graph-common">
+<h2>pyart.graph.common<a class="headerlink" href="#pyart-graph-common" title="Permalink to this headline">¶</a></h2>
+<p>Common graphing routines.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.common.dms_to_d.html#pyart.graph.common.dms_to_d" title="pyart.graph.common.dms_to_d"><tt class="xref py py-obj docutils literal"><span class="pre">dms_to_d</span></tt></a>(dms)</td>
+<td>Degrees, minutes, seconds to degrees</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.graph.common.radar_coords_to_cart.html#pyart.graph.common.radar_coords_to_cart" title="pyart.graph.common.radar_coords_to_cart"><tt class="xref py py-obj docutils literal"><span class="pre">radar_coords_to_cart</span></tt></a>(rng,&nbsp;az,&nbsp;ele[,&nbsp;debug])</td>
+<td>Calculate Cartesian coordinate from radar coordinates</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.common.corner_to_point.html#pyart.graph.common.corner_to_point" title="pyart.graph.common.corner_to_point"><tt class="xref py py-obj docutils literal"><span class="pre">corner_to_point</span></tt></a>(corner,&nbsp;point)</td>
+<td>Return the x, y distances in meters from a corner to a point.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.graph.common.ax_radius.html#pyart.graph.common.ax_radius" title="pyart.graph.common.ax_radius"><tt class="xref py py-obj docutils literal"><span class="pre">ax_radius</span></tt></a>(lat[,&nbsp;units])</td>
+<td>Return the radius of a constant latitude circle for a given latitude.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.common.sweep_coords_to_cart.html#pyart.graph.common.sweep_coords_to_cart" title="pyart.graph.common.sweep_coords_to_cart"><tt class="xref py py-obj docutils literal"><span class="pre">sweep_coords_to_cart</span></tt></a>(ranges,&nbsp;azimuths,&nbsp;...)</td>
+<td>Calculate Cartesian coordinate for the gates in a single radar sweep.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.graph.common._interpolate_range_edges.html#pyart.graph.common._interpolate_range_edges" title="pyart.graph.common._interpolate_range_edges"><tt class="xref py py-obj docutils literal"><span class="pre">_interpolate_range_edges</span></tt></a>(ranges)</td>
+<td>Interpolate the edges of the range gates from their centers.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.common._interpolate_elevation_edges.html#pyart.graph.common._interpolate_elevation_edges" title="pyart.graph.common._interpolate_elevation_edges"><tt class="xref py py-obj docutils literal"><span class="pre">_interpolate_elevation_edges</span></tt></a>(elevations)</td>
+<td>Interpolate the edges of the elevation angles from their centers.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.graph.common._interpolate_azimuth_edges.html#pyart.graph.common._interpolate_azimuth_edges" title="pyart.graph.common._interpolate_azimuth_edges"><tt class="xref py py-obj docutils literal"><span class="pre">_interpolate_azimuth_edges</span></tt></a>(azimuths)</td>
+<td>Interpolate the edges of the azimuth angles from their centers.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<span class="target" id="module-pyart.graph.coord_transform"></span><div class="section" id="pyart-graph-coord-transform">
+<h2>pyart.graph.coord_transform<a class="headerlink" href="#pyart-graph-coord-transform" title="Permalink to this headline">¶</a></h2>
+<p>Coordinate transform routines.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.coord_transform.radar_coords_to_cart_track_relative.html#pyart.graph.coord_transform.radar_coords_to_cart_track_relative" title="pyart.graph.coord_transform.radar_coords_to_cart_track_relative"><tt class="xref py py-obj docutils literal"><span class="pre">radar_coords_to_cart_track_relative</span></tt></a>(rng,&nbsp;...)</td>
+<td>Calculate track-relative Cartesian coordinates from radar coordinates.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.graph.coord_transform.radar_coords_to_cart_earth_relative.html#pyart.graph.coord_transform.radar_coords_to_cart_earth_relative" title="pyart.graph.coord_transform.radar_coords_to_cart_earth_relative"><tt class="xref py py-obj docutils literal"><span class="pre">radar_coords_to_cart_earth_relative</span></tt></a>(rng,&nbsp;...)</td>
+<td>Calculate earth-relative Cartesian coordinates from radar coordinates</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.coord_transform.radar_coords_to_cart_aircraft_relative.html#pyart.graph.coord_transform.radar_coords_to_cart_aircraft_relative" title="pyart.graph.coord_transform.radar_coords_to_cart_aircraft_relative"><tt class="xref py py-obj docutils literal"><span class="pre">radar_coords_to_cart_aircraft_relative</span></tt></a>(rng,&nbsp;...)</td>
+<td>Calculate aircraft-relative Cartesian coordinates from radar coordinates.</td>
+</tr>
+</tbody>
+</table>
 </div>
 <span class="target" id="module-pyart.graph.gridmapdisplay"></span><div class="section" id="pyart-graph-gridmapdisplay">
 <h2>pyart.graph.gridmapdisplay<a class="headerlink" href="#pyart-graph-gridmapdisplay" title="Permalink to this headline">¶</a></h2>
@@ -225,6 +255,21 @@
 </tbody>
 </table>
 </div>
+<span class="target" id="module-pyart.graph.radardisplay_airborne"></span><div class="section" id="pyart-graph-radardisplay-airborne">
+<h2>pyart.graph.radardisplay_airborne<a class="headerlink" href="#pyart-graph-radardisplay-airborne" title="Permalink to this headline">¶</a></h2>
+<p>Class for creating plots from Airborne Radar objects.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.radardisplay_airborne.RadarDisplay_Airborne.html#pyart.graph.radardisplay_airborne.RadarDisplay_Airborne" title="pyart.graph.radardisplay_airborne.RadarDisplay_Airborne"><tt class="xref py py-obj docutils literal"><span class="pre">RadarDisplay_Airborne</span></tt></a>(radar[,&nbsp;shift])</td>
+<td>A display object for creating plots from data in a airborne radar object.</td>
+</tr>
+</tbody>
+</table>
+</div>
 <span class="target" id="module-pyart.graph.radardisplay"></span><div class="section" id="pyart-graph-radardisplay">
 <h2>pyart.graph.radardisplay<a class="headerlink" href="#pyart-graph-radardisplay" title="Permalink to this headline">¶</a></h2>
 <p>Class for creating plots from Radar objects.</p>
@@ -255,6 +300,10 @@
 </tbody>
 </table>
 </div>
+<span class="target" id="module-pyart.graph._cm"></span><div class="section" id="id1">
+<h2>pyart.graph._cm<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>Data for radar related colormaps.</p>
+</div>
 </div>
 
 
@@ -266,27 +315,29 @@
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">pyart.graph</a><ul>
-<li><a class="reference internal" href="#pyart-graph-common">pyart.graph.common</a></li>
 <li><a class="reference internal" href="#pyart-graph-cm">pyart.graph.cm</a></li>
-<li><a class="reference internal" href="#id1">pyart.graph._cm</a></li>
+<li><a class="reference internal" href="#pyart-graph-common">pyart.graph.common</a></li>
+<li><a class="reference internal" href="#pyart-graph-coord-transform">pyart.graph.coord_transform</a></li>
 <li><a class="reference internal" href="#pyart-graph-gridmapdisplay">pyart.graph.gridmapdisplay</a></li>
 <li><a class="reference internal" href="#pyart-graph-plot-cfradial">pyart.graph.plot_cfradial</a></li>
 <li><a class="reference internal" href="#pyart-graph-plot-mdv">pyart.graph.plot_mdv</a><ul>
 </ul>
 </li>
 <li><a class="reference internal" href="#pyart-graph-plot-rsl">pyart.graph.plot_rsl</a></li>
+<li><a class="reference internal" href="#pyart-graph-radardisplay-airborne">pyart.graph.radardisplay_airborne</a></li>
 <li><a class="reference internal" href="#pyart-graph-radardisplay">pyart.graph.radardisplay</a></li>
 <li><a class="reference internal" href="#pyart-graph-radarmapdisplay">pyart.graph.radarmapdisplay</a></li>
+<li><a class="reference internal" href="#id1">pyart.graph._cm</a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="generated/pyart.correct._fourdd_interface.fourdd_dealias.html"
-                        title="previous chapter">pyart.correct._fourdd_interface.fourdd_dealias</a></p>
+  <p class="topless"><a href="generated/pyart.retrieve.echo_class.steiner_conv_strat.html"
+                        title="previous chapter">pyart.retrieve.echo_class.steiner_conv_strat</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="generated/pyart.graph.common.dms_to_d.html"
-                        title="next chapter">pyart.graph.common.dms_to_d</a></p>
+  <p class="topless"><a href="generated/pyart.graph.cm.revcmap.html"
+                        title="next chapter">pyart.graph.cm.revcmap</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../_sources/dev_reference/graph.txt"
@@ -322,19 +373,19 @@
           <a href="../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="generated/pyart.graph.common.dms_to_d.html" title="pyart.graph.common.dms_to_d"
+          <a href="generated/pyart.graph.cm.revcmap.html" title="pyart.graph.cm.revcmap"
              >next</a> |</li>
         <li class="right" >
-          <a href="generated/pyart.correct._fourdd_interface.fourdd_dealias.html" title="pyart.correct._fourdd_interface.fourdd_dealias"
+          <a href="generated/pyart.retrieve.echo_class.steiner_conv_strat.html" title="pyart.retrieve.echo_class.steiner_conv_strat"
              >previous</a> |</li>
-        <li><a href="../index.html">Py-ART Documentation (DRAFT)</a> &raquo;</li>
+        <li><a href="../index.html">Py-ART Documentation</a> &raquo;</li>
           <li><a href="index.html" >Developer Reference Manual</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on May 21, 2014.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+      Last updated on Feb 03, 2015.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
 </html>

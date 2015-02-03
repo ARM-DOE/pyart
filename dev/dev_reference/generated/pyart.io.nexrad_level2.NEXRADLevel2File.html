@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pyart.io.nexrad_level2.NEXRADLevel2File &mdash; Py-ART Documentation (DRAFT)</title>
+    <title>pyart.io.nexrad_level2.NEXRADLevel2File &mdash; Py-ART Documentation</title>
     
     <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.0.0.dev-770ca76',
+        VERSION:     '1.2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="Py-ART Documentation (DRAFT)" href="../../index.html" />
+    <link rel="top" title="Py-ART Documentation" href="../../index.html" />
     <link rel="up" title="pyart.io" href="../io.html" />
     <link rel="next" title="pyart.io.nexrad_level2.NEXRADLevel2File.get_azimuth_angles" href="pyart.io.nexrad_level2.NEXRADLevel2File.get_azimuth_angles.html" />
     <link rel="prev" title="pyart.io.nexrad_common.get_nexrad_location" href="pyart.io.nexrad_common.get_nexrad_location.html" /> 
@@ -48,7 +48,7 @@
         <li class="right" >
           <a href="pyart.io.nexrad_common.get_nexrad_location.html" title="pyart.io.nexrad_common.get_nexrad_location"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Py-ART Documentation (DRAFT)</a> &raquo;</li>
+        <li><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
           <li><a href="../index.html" >Developer Reference Manual</a> &raquo;</li>
           <li><a href="../io.html" accesskey="U">pyart.io</a> &raquo;</li> 
       </ul>
@@ -65,9 +65,9 @@
 <dt id="pyart.io.nexrad_level2.NEXRADLevel2File">
 <em class="property">class </em><tt class="descclassname">pyart.io.nexrad_level2.</tt><tt class="descname">NEXRADLevel2File</tt><big>(</big><em>filename</em>, <em>bzip=False</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/io/nexrad_level2.py#L84"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.io.nexrad_level2.NEXRADLevel2File" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class for accessing data in a NEXRAD (WSR-88D) Level II file.</p>
-<p>NEXRAD Level II files <a class="reference internal" href="#r7" id="id1">[R7]</a>, also know as NEXRAD Archive Level II or
+<p>NEXRAD Level II files <a class="reference internal" href="#r14" id="id1">[R14]</a>, also know as NEXRAD Archive Level II or
 WSR-88D Archive level 2, are available from the NOAA National Climate Data
-Center <a class="reference internal" href="#r8" id="id2">[R8]</a> as well as on the UCAR THREDDS Data Server <a class="reference internal" href="#r9" id="id3">[R9]</a>.  Files with
+Center <a class="reference internal" href="#r15" id="id2">[R15]</a> as well as on the UCAR THREDDS Data Server <a class="reference internal" href="#r16" id="id3">[R16]</a>.  Files with
 uncompressed messages and compressed messages are supported.  Currently
 only &#8220;message 31&#8221; type files are supported, &#8220;message 1&#8221; file cannot be
 read using this class.</p>
@@ -88,22 +88,22 @@ read using this class.</p>
 </tbody>
 </table>
 <p class="rubric">References</p>
-<table class="docutils citation" frame="void" id="r7" rules="none">
+<table class="docutils citation" frame="void" id="r14" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label">[R7]</td><td><em>(<a class="fn-backref" href="#id1">1</a>, <a class="fn-backref" href="#id4">2</a>)</em> <a class="reference external" href="http://www.roc.noaa.gov/WSR88D/Level_II/Level2Info.aspx">http://www.roc.noaa.gov/WSR88D/Level_II/Level2Info.aspx</a></td></tr>
+<tr><td class="label">[R14]</td><td><em>(<a class="fn-backref" href="#id1">1</a>, <a class="fn-backref" href="#id4">2</a>)</em> <a class="reference external" href="http://www.roc.noaa.gov/WSR88D/Level_II/Level2Info.aspx">http://www.roc.noaa.gov/WSR88D/Level_II/Level2Info.aspx</a></td></tr>
 </tbody>
 </table>
-<table class="docutils citation" frame="void" id="r8" rules="none">
+<table class="docutils citation" frame="void" id="r15" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label">[R8]</td><td><em>(<a class="fn-backref" href="#id2">1</a>, <a class="fn-backref" href="#id5">2</a>)</em> <a class="reference external" href="http://www.ncdc.noaa.gov/">http://www.ncdc.noaa.gov/</a></td></tr>
+<tr><td class="label">[R15]</td><td><em>(<a class="fn-backref" href="#id2">1</a>, <a class="fn-backref" href="#id5">2</a>)</em> <a class="reference external" href="http://www.ncdc.noaa.gov/">http://www.ncdc.noaa.gov/</a></td></tr>
 </tbody>
 </table>
-<table class="docutils citation" frame="void" id="r9" rules="none">
+<table class="docutils citation" frame="void" id="r16" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label">[R9]</td><td><em>(<a class="fn-backref" href="#id3">1</a>, <a class="fn-backref" href="#id6">2</a>)</em> <a class="reference external" href="http://thredds.ucar.edu/thredds/catalog.html">http://thredds.ucar.edu/thredds/catalog.html</a></td></tr>
+<tr><td class="label">[R16]</td><td><em>(<a class="fn-backref" href="#id3">1</a>, <a class="fn-backref" href="#id6">2</a>)</em> <a class="reference external" href="http://thredds.ucar.edu/thredds/catalog.html">http://thredds.ucar.edu/thredds/catalog.html</a></td></tr>
 </tbody>
 </table>
 <p class="rubric">Attributes</p>
@@ -246,15 +246,15 @@ read using this class.</p>
         <li class="right" >
           <a href="pyart.io.nexrad_common.get_nexrad_location.html" title="pyart.io.nexrad_common.get_nexrad_location"
              >previous</a> |</li>
-        <li><a href="../../index.html">Py-ART Documentation (DRAFT)</a> &raquo;</li>
+        <li><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
           <li><a href="../index.html" >Developer Reference Manual</a> &raquo;</li>
           <li><a href="../io.html" >pyart.io</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on May 21, 2014.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+      Last updated on Feb 03, 2015.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
 </html>

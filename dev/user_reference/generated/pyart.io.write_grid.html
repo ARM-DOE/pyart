@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pyart.io.write_grid &mdash; Py-ART Documentation (DRAFT)</title>
+    <title>pyart.io.write_grid &mdash; Py-ART Documentation</title>
     
     <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.0.0.dev-770ca76',
+        VERSION:     '1.2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,9 +24,9 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="Py-ART Documentation (DRAFT)" href="../../index.html" />
+    <link rel="top" title="Py-ART Documentation" href="../../index.html" />
     <link rel="up" title="Input and output (pyart.io)" href="../io.html" />
-    <link rel="next" title="pyart.io.is_vpt" href="pyart.io.is_vpt.html" />
+    <link rel="next" title="Auxiliary input and output (pyart.aux_io)" href="../aux_io.html" />
     <link rel="prev" title="pyart.io.read_grid" href="pyart.io.read_grid.html" /> 
   </head>
   <body>
@@ -43,12 +43,12 @@
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pyart.io.is_vpt.html" title="pyart.io.is_vpt"
+          <a href="../aux_io.html" title="Auxiliary input and output (pyart.aux_io)"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="pyart.io.read_grid.html" title="pyart.io.read_grid"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Py-ART Documentation (DRAFT)</a> &raquo;</li>
+        <li><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
           <li><a href="../index.html" >User Reference Manual</a> &raquo;</li>
           <li><a href="../io.html" accesskey="U">Input and output (<tt class="docutils literal"><span class="pre">pyart.io</span></tt>)</a> &raquo;</li> 
       </ul>
@@ -63,7 +63,7 @@
 <h1>pyart.io.write_grid<a class="headerlink" href="#pyart-io-write-grid" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pyart.io.write_grid">
-<tt class="descclassname">pyart.io.</tt><tt class="descname">write_grid</tt><big>(</big><em>filename</em>, <em>grid</em>, <em>format='NETCDF4'</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/io/grid.py#L84"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.io.write_grid" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">pyart.io.</tt><tt class="descname">write_grid</tt><big>(</big><em>filename</em>, <em>grid</em>, <em>format='NETCDF4'</em>, <em>arm_time_variables=False</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/io/grid_io.py#L92"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.io.write_grid" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write a Grid object to a CF-1.5 and ARM standard netcdf file</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -78,10 +78,15 @@
 <div><p>Grid object to write.</p>
 </div></blockquote>
 <p><strong>format</strong> : str, optional</p>
-<blockquote class="last">
+<blockquote>
 <div><p>NetCDF format, one of &#8216;NETCDF4&#8217;, &#8216;NETCDF4_CLASSIC&#8217;,
 &#8216;NETCDF3_CLASSIC&#8217; or &#8216;NETCDF3_64BIT&#8217;. See netCDF4 documentation for
 details.</p>
+</div></blockquote>
+<p><strong>arm_time_variables</strong> : bool</p>
+<blockquote class="last">
+<div><p>True to write the ARM standard time variables base_time and
+time_offset. False will not write these variables.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -101,8 +106,8 @@ details.</p>
   <p class="topless"><a href="pyart.io.read_grid.html"
                         title="previous chapter">pyart.io.read_grid</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="pyart.io.is_vpt.html"
-                        title="next chapter">pyart.io.is_vpt</a></p>
+  <p class="topless"><a href="../aux_io.html"
+                        title="next chapter">Auxiliary input and output (<tt class="docutils literal"><span class="pre">pyart.aux_io</span></tt>)</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/user_reference/generated/pyart.io.write_grid.txt"
@@ -138,20 +143,20 @@ details.</p>
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pyart.io.is_vpt.html" title="pyart.io.is_vpt"
+          <a href="../aux_io.html" title="Auxiliary input and output (pyart.aux_io)"
              >next</a> |</li>
         <li class="right" >
           <a href="pyart.io.read_grid.html" title="pyart.io.read_grid"
              >previous</a> |</li>
-        <li><a href="../../index.html">Py-ART Documentation (DRAFT)</a> &raquo;</li>
+        <li><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
           <li><a href="../index.html" >User Reference Manual</a> &raquo;</li>
           <li><a href="../io.html" >Input and output (<tt class="docutils literal"><span class="pre">pyart.io</span></tt>)</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on May 21, 2014.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+      Last updated on Feb 03, 2015.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
 </html>

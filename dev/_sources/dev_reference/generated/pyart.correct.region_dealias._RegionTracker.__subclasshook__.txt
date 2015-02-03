@@ -1,0 +1,6 @@
+pyart.correct.region_dealias._RegionTracker.__subclasshook__
+============================================================
+
+.. currentmodule:: pyart.correct.region_dealias
+
+.. automethod:: _RegionTracker.__subclasshook__

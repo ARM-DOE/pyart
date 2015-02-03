@@ -1,0 +1,6 @@
+pyart.aux_io.gamic_hdf5._get_gamic_sweep_data
+=============================================
+
+.. currentmodule:: pyart.aux_io.gamic_hdf5
+
+.. autofunction:: _get_gamic_sweep_data

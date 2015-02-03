@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pyart.correct &mdash; Py-ART Documentation (DRAFT)</title>
+    <title>pyart.correct &mdash; Py-ART Documentation</title>
     
     <link rel="stylesheet" href="../_static/scipy.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.0.0.dev-770ca76',
+        VERSION:     '1.2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="Py-ART Documentation (DRAFT)" href="../index.html" />
+    <link rel="top" title="Py-ART Documentation" href="../index.html" />
     <link rel="up" title="Developer Reference Manual" href="index.html" />
     <link rel="next" title="pyart.correct.attenuation.calculate_attenuation" href="generated/pyart.correct.attenuation.calculate_attenuation.html" />
     <link rel="prev" title="pyart.config.FileMetadata.get_metadata" href="generated/pyart.config.FileMetadata.get_metadata.html" /> 
@@ -48,7 +48,7 @@
         <li class="right" >
           <a href="generated/pyart.config.FileMetadata.get_metadata.html" title="pyart.config.FileMetadata.get_metadata"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Py-ART Documentation (DRAFT)</a> &raquo;</li>
+        <li><a href="../index.html">Py-ART Documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Developer Reference Manual</a> &raquo;</li> 
       </ul>
     </div>  
@@ -93,8 +93,35 @@
 <tr class="row-even"><td><a class="reference internal" href="generated/pyart.correct.dealias.find_time_in_interp_sonde.html#pyart.correct.dealias.find_time_in_interp_sonde" title="pyart.correct.dealias.find_time_in_interp_sonde"><tt class="xref py py-obj docutils literal"><span class="pre">find_time_in_interp_sonde</span></tt></a>(interp_sonde,&nbsp;target)</td>
 <td>Find the wind parameter for a given time in a ARM interpsonde file.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.dealias._create_rsl_volume.html#pyart.correct.dealias._create_rsl_volume" title="pyart.correct.dealias._create_rsl_volume"><tt class="xref py py-obj docutils literal"><span class="pre">_create_rsl_volume</span></tt></a>(radar,&nbsp;field_name,&nbsp;...)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.dealias._create_rsl_volume.html#pyart.correct.dealias._create_rsl_volume" title="pyart.correct.dealias._create_rsl_volume"><tt class="xref py py-obj docutils literal"><span class="pre">_create_rsl_volume</span></tt></a>(radar,&nbsp;field_name,&nbsp;...[,&nbsp;...])</td>
 <td>Create a RSLVolume containing data from a field in radar.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<span class="target" id="module-pyart.correct.filters"></span><div class="section" id="pyart-correct-filters">
+<h2>pyart.correct.filters<a class="headerlink" href="#pyart-correct-filters" title="Permalink to this headline">¶</a></h2>
+<p>Functions for creating gate filters (masks) which can be used it various
+corrections routines in Py-ART.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.filters.moment_based_gate_filter.html#pyart.correct.filters.moment_based_gate_filter" title="pyart.correct.filters.moment_based_gate_filter"><tt class="xref py py-obj docutils literal"><span class="pre">moment_based_gate_filter</span></tt></a>(radar[,&nbsp;ncp_field,&nbsp;...])</td>
+<td>Create a filter which removes undesired gates based on moments.</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.filters.GateFilter.html#pyart.correct.filters.GateFilter" title="pyart.correct.filters.GateFilter"><tt class="xref py py-obj docutils literal"><span class="pre">GateFilter</span></tt></a>(radar[,&nbsp;exclude_based])</td>
+<td>A class for building a boolean arrays for filtering gates based on a set of condition typically based on the values in the radar fields.</td>
 </tr>
 </tbody>
 </table>
@@ -139,7 +166,7 @@ S. E. Giangrande et al, J. of Atmos. and Ocean. Tech., 2013, 30, 1716.</p>
 <td>Return the noise after smoothing.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pyart.correct.phase_proc.get_phidp_unf.html#pyart.correct.phase_proc.get_phidp_unf" title="pyart.correct.phase_proc.get_phidp_unf"><tt class="xref py py-obj docutils literal"><span class="pre">get_phidp_unf</span></tt></a>(radar[,&nbsp;ncp_lev,&nbsp;rhohv_lev,&nbsp;...])</td>
-<td>Get Unfolded Phi differential phase   :Parameters:      <strong>radar</strong> : Radar          The input radar.</td>
+<td>Get Unfolded Phi differential phase</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.phase_proc.construct_A_matrix.html#pyart.correct.phase_proc.construct_A_matrix" title="pyart.correct.phase_proc.construct_A_matrix"><tt class="xref py py-obj docutils literal"><span class="pre">construct_A_matrix</span></tt></a>(n_gates,&nbsp;filt)</td>
 <td>Construct a row-augmented A matrix.</td>
@@ -168,6 +195,110 @@ S. E. Giangrande et al, J. of Atmos. and Ocean. Tech., 2013, 30, 1716.</p>
 </tbody>
 </table>
 </div>
+<span class="target" id="module-pyart.correct.region_dealias"></span><div class="section" id="pyart-correct-region-dealias">
+<h2>pyart.correct.region_dealias<a class="headerlink" href="#pyart-correct-region-dealias" title="Permalink to this headline">¶</a></h2>
+<p>Region based dealiasing using a dynamic network reduction for region joining.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.region_dealias.dealias_region_based.html#pyart.correct.region_dealias.dealias_region_based" title="pyart.correct.region_dealias.dealias_region_based"><tt class="xref py py-obj docutils literal"><span class="pre">dealias_region_based</span></tt></a>(radar[,&nbsp;...])</td>
+<td>Dealias Doppler velocities using a region based algorithm.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.correct.region_dealias._find_regions.html#pyart.correct.region_dealias._find_regions" title="pyart.correct.region_dealias._find_regions"><tt class="xref py py-obj docutils literal"><span class="pre">_find_regions</span></tt></a>(vel,&nbsp;gfilter,&nbsp;limits)</td>
+<td>Find regions of similar velocity.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.region_dealias._combine_regions.html#pyart.correct.region_dealias._combine_regions" title="pyart.correct.region_dealias._combine_regions"><tt class="xref py py-obj docutils literal"><span class="pre">_combine_regions</span></tt></a>(region_tracker,&nbsp;edge_tracker)</td>
+<td>Returns True when done.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.correct.region_dealias._edge_sum_and_count.html#pyart.correct.region_dealias._edge_sum_and_count" title="pyart.correct.region_dealias._edge_sum_and_count"><tt class="xref py py-obj docutils literal"><span class="pre">_edge_sum_and_count</span></tt></a>(labels,&nbsp;nfeatures,&nbsp;data,&nbsp;...)</td>
+<td>Return sparse matrices containing the edge sums and counts between regions and a array of the number of gates in each region.</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.region_dealias._EdgeCollector.html#pyart.correct.region_dealias._EdgeCollector" title="pyart.correct.region_dealias._EdgeCollector"><tt class="xref py py-obj docutils literal"><span class="pre">_EdgeCollector</span></tt></a>(total_nodes)</td>
+<td>Class for collecting edges, used by _edge_sum_and_count function.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.correct.region_dealias._RegionTracker.html#pyart.correct.region_dealias._RegionTracker" title="pyart.correct.region_dealias._RegionTracker"><tt class="xref py py-obj docutils literal"><span class="pre">_RegionTracker</span></tt></a>(region_sizes)</td>
+<td>Tracks the location of radar volume regions contained in each node as the network is reduced.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.region_dealias._EdgeTracker.html#pyart.correct.region_dealias._EdgeTracker" title="pyart.correct.region_dealias._EdgeTracker"><tt class="xref py py-obj docutils literal"><span class="pre">_EdgeTracker</span></tt></a>(edge_sum,&nbsp;edge_count,&nbsp;...)</td>
+<td>A class for tracking edges in a dynamic network.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<span class="target" id="module-pyart.correct.unwrap"></span><div class="section" id="pyart-correct-unwrap">
+<h2>pyart.correct.unwrap<a class="headerlink" href="#pyart-correct-unwrap" title="Permalink to this headline">¶</a></h2>
+<p>Dealias using multidimensional phase unwrapping algorithms.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.unwrap.dealias_unwrap_phase.html#pyart.correct.unwrap.dealias_unwrap_phase" title="pyart.correct.unwrap.dealias_unwrap_phase"><tt class="xref py py-obj docutils literal"><span class="pre">dealias_unwrap_phase</span></tt></a>(radar[,&nbsp;unwrap_unit,&nbsp;...])</td>
+<td>Dealias Doppler velocities using multi-dimensional phase unwrapping.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.correct.unwrap._dealias_unwrap_3d.html#pyart.correct.unwrap._dealias_unwrap_3d" title="pyart.correct.unwrap._dealias_unwrap_3d"><tt class="xref py py-obj docutils literal"><span class="pre">_dealias_unwrap_3d</span></tt></a>(radar,&nbsp;vdata,&nbsp;...)</td>
+<td>Dealias using 3D phase unwrapping (full volume at once).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.unwrap._dealias_unwrap_2d.html#pyart.correct.unwrap._dealias_unwrap_2d" title="pyart.correct.unwrap._dealias_unwrap_2d"><tt class="xref py py-obj docutils literal"><span class="pre">_dealias_unwrap_2d</span></tt></a>(radar,&nbsp;vdata,&nbsp;...)</td>
+<td>Dealias using 2D phase unwrapping (sweep-by-sweep).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.correct.unwrap._dealias_unwrap_1d.html#pyart.correct.unwrap._dealias_unwrap_1d" title="pyart.correct.unwrap._dealias_unwrap_1d"><tt class="xref py py-obj docutils literal"><span class="pre">_dealias_unwrap_1d</span></tt></a>(vdata,&nbsp;nyquist_vel)</td>
+<td>Dealias using 1D phase unwrapping (ray-by-ray)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.unwrap._verify_unwrap_unit.html#pyart.correct.unwrap._verify_unwrap_unit" title="pyart.correct.unwrap._verify_unwrap_unit"><tt class="xref py py-obj docutils literal"><span class="pre">_verify_unwrap_unit</span></tt></a>(radar,&nbsp;unwrap_unit)</td>
+<td>Verify that the radar supports the requested unwrap unit</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.correct.unwrap._is_radar_cubic.html#pyart.correct.unwrap._is_radar_cubic" title="pyart.correct.unwrap._is_radar_cubic"><tt class="xref py py-obj docutils literal"><span class="pre">_is_radar_cubic</span></tt></a>(radar)</td>
+<td>Test if a radar is cubic (sweeps have the same number of rays).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.unwrap._is_radar_sweep_aligned.html#pyart.correct.unwrap._is_radar_sweep_aligned" title="pyart.correct.unwrap._is_radar_sweep_aligned"><tt class="xref py py-obj docutils literal"><span class="pre">_is_radar_sweep_aligned</span></tt></a>(radar[,&nbsp;diff])</td>
+<td>Test that all sweeps in the radar sample nearly the same angles.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.correct.unwrap._is_radar_sequential.html#pyart.correct.unwrap._is_radar_sequential" title="pyart.correct.unwrap._is_radar_sequential"><tt class="xref py py-obj docutils literal"><span class="pre">_is_radar_sequential</span></tt></a>(radar)</td>
+<td>Test if all sweeps in radar are sequentially ordered.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.unwrap._is_sweep_sequential.html#pyart.correct.unwrap._is_sweep_sequential" title="pyart.correct.unwrap._is_sweep_sequential"><tt class="xref py py-obj docutils literal"><span class="pre">_is_sweep_sequential</span></tt></a>(radar,&nbsp;sweep_number)</td>
+<td>Test if a specific sweep is sequentially ordered.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<span class="target" id="module-pyart.correct._common_dealias"></span><div class="section" id="pyart-correct-common-dealias">
+<h2>pyart.correct._common_dealias<a class="headerlink" href="#pyart-correct-common-dealias" title="Permalink to this headline">¶</a></h2>
+<p>Routines used by multiple dealiasing functions.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct._common_dealias._parse_fields.html#pyart.correct._common_dealias._parse_fields" title="pyart.correct._common_dealias._parse_fields"><tt class="xref py py-obj docutils literal"><span class="pre">_parse_fields</span></tt></a>(vel_field,&nbsp;corr_vel_field)</td>
+<td>Parse and return the radar fields for dealiasing.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.correct._common_dealias._parse_nyquist_vel.html#pyart.correct._common_dealias._parse_nyquist_vel" title="pyart.correct._common_dealias._parse_nyquist_vel"><tt class="xref py py-obj docutils literal"><span class="pre">_parse_nyquist_vel</span></tt></a>(nyquist_vel,&nbsp;radar)</td>
+<td>Parse the nyquist_vel parameter, extract from the radar if needed.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct._common_dealias._parse_gatefilter.html#pyart.correct._common_dealias._parse_gatefilter" title="pyart.correct._common_dealias._parse_gatefilter"><tt class="xref py py-obj docutils literal"><span class="pre">_parse_gatefilter</span></tt></a>(gatefilter,&nbsp;radar,&nbsp;**kwargs)</td>
+<td>Parse the gatefilter, return a valid GateFilter object.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.correct._common_dealias._parse_rays_wrap_around.html#pyart.correct._common_dealias._parse_rays_wrap_around" title="pyart.correct._common_dealias._parse_rays_wrap_around"><tt class="xref py py-obj docutils literal"><span class="pre">_parse_rays_wrap_around</span></tt></a>(rays_wrap_around,&nbsp;radar)</td>
+<td>Parse the rays_wrap_around parameter.</td>
+</tr>
+</tbody>
+</table>
+</div>
 <span class="target" id="module-pyart.correct._fourdd_interface"></span><div class="section" id="pyart-correct-fourdd-interface">
 <h2>pyart.correct._fourdd_interface<a class="headerlink" href="#pyart-correct-fourdd-interface" title="Permalink to this headline">¶</a></h2>
 <p>Cython wrapper around the University of Washington FourDD algorithm.</p>
@@ -186,6 +317,48 @@ S. E. Giangrande et al, J. of Atmos. and Ocean. Tech., 2013, 30, 1716.</p>
 </tbody>
 </table>
 </div>
+<span class="target" id="module-pyart.correct._unwrap_1d"></span><div class="section" id="pyart-correct-unwrap-1d">
+<h2>pyart.correct._unwrap_1d<a class="headerlink" href="#pyart-correct-unwrap-1d" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct._unwrap_1d.unwrap_1d.html#pyart.correct._unwrap_1d.unwrap_1d" title="pyart.correct._unwrap_1d.unwrap_1d"><tt class="xref py py-obj docutils literal"><span class="pre">unwrap_1d</span></tt></a></td>
+<td>Phase unwrapping using the naive approach.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<span class="target" id="module-pyart.correct._unwrap_2d"></span><div class="section" id="pyart-correct-unwrap-2d">
+<h2>pyart.correct._unwrap_2d<a class="headerlink" href="#pyart-correct-unwrap-2d" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct._unwrap_2d.unwrap_2d.html#pyart.correct._unwrap_2d.unwrap_2d" title="pyart.correct._unwrap_2d.unwrap_2d"><tt class="xref py py-obj docutils literal"><span class="pre">unwrap_2d</span></tt></a></td>
+<td>2D phase unwrapping.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<span class="target" id="module-pyart.correct._unwrap_3d"></span><div class="section" id="pyart-correct-unwrap-3d">
+<h2>pyart.correct._unwrap_3d<a class="headerlink" href="#pyart-correct-unwrap-3d" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct._unwrap_3d.unwrap_3d.html#pyart.correct._unwrap_3d.unwrap_3d" title="pyart.correct._unwrap_3d.unwrap_3d"><tt class="xref py py-obj docutils literal"><span class="pre">unwrap_3d</span></tt></a></td>
+<td>3D phase unwrapping.</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 
 
@@ -199,8 +372,19 @@ S. E. Giangrande et al, J. of Atmos. and Ocean. Tech., 2013, 30, 1716.</p>
 <li><a class="reference internal" href="#">pyart.correct</a><ul>
 <li><a class="reference internal" href="#pyart-correct-attenuation">pyart.correct.attenuation</a></li>
 <li><a class="reference internal" href="#pyart-correct-dealias">pyart.correct.dealias</a></li>
+<li><a class="reference internal" href="#pyart-correct-filters">pyart.correct.filters</a><ul>
+</ul>
+</li>
 <li><a class="reference internal" href="#pyart-correct-phase-proc">pyart.correct.phase_proc</a></li>
+<li><a class="reference internal" href="#pyart-correct-region-dealias">pyart.correct.region_dealias</a><ul>
+</ul>
+</li>
+<li><a class="reference internal" href="#pyart-correct-unwrap">pyart.correct.unwrap</a></li>
+<li><a class="reference internal" href="#pyart-correct-common-dealias">pyart.correct._common_dealias</a></li>
 <li><a class="reference internal" href="#pyart-correct-fourdd-interface">pyart.correct._fourdd_interface</a></li>
+<li><a class="reference internal" href="#pyart-correct-unwrap-1d">pyart.correct._unwrap_1d</a></li>
+<li><a class="reference internal" href="#pyart-correct-unwrap-2d">pyart.correct._unwrap_2d</a></li>
+<li><a class="reference internal" href="#pyart-correct-unwrap-3d">pyart.correct._unwrap_3d</a></li>
 </ul>
 </li>
 </ul>
@@ -251,14 +435,14 @@ S. E. Giangrande et al, J. of Atmos. and Ocean. Tech., 2013, 30, 1716.</p>
         <li class="right" >
           <a href="generated/pyart.config.FileMetadata.get_metadata.html" title="pyart.config.FileMetadata.get_metadata"
              >previous</a> |</li>
-        <li><a href="../index.html">Py-ART Documentation (DRAFT)</a> &raquo;</li>
+        <li><a href="../index.html">Py-ART Documentation</a> &raquo;</li>
           <li><a href="index.html" >Developer Reference Manual</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on May 21, 2014.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+      Last updated on Feb 03, 2015.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
 </html>

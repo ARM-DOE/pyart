@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pyart.correct.dealias_fourdd &mdash; Py-ART Documentation (DRAFT)</title>
+    <title>pyart.correct.dealias_fourdd &mdash; Py-ART Documentation</title>
     
     <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.0.0.dev-770ca76',
+        VERSION:     '1.2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,9 +24,9 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="Py-ART Documentation (DRAFT)" href="../../index.html" />
+    <link rel="top" title="Py-ART Documentation" href="../../index.html" />
     <link rel="up" title="Radar Corrections (pyart.correct)" href="../correct.html" />
-    <link rel="next" title="pyart.correct.calculate_attenuation" href="pyart.correct.calculate_attenuation.html" />
+    <link rel="next" title="pyart.correct.dealias_unwrap_phase" href="pyart.correct.dealias_unwrap_phase.html" />
     <link rel="prev" title="pyart.correct.find_time_in_interp_sonde" href="pyart.correct.find_time_in_interp_sonde.html" /> 
   </head>
   <body>
@@ -43,12 +43,12 @@
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pyart.correct.calculate_attenuation.html" title="pyart.correct.calculate_attenuation"
+          <a href="pyart.correct.dealias_unwrap_phase.html" title="pyart.correct.dealias_unwrap_phase"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="pyart.correct.find_time_in_interp_sonde.html" title="pyart.correct.find_time_in_interp_sonde"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Py-ART Documentation (DRAFT)</a> &raquo;</li>
+        <li><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
           <li><a href="../index.html" >User Reference Manual</a> &raquo;</li>
           <li><a href="../correct.html" accesskey="U">Radar Corrections (<tt class="docutils literal"><span class="pre">pyart.correct</span></tt>)</a> &raquo;</li> 
       </ul>
@@ -63,7 +63,7 @@
 <h1>pyart.correct.dealias_fourdd<a class="headerlink" href="#pyart-correct-dealias-fourdd" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pyart.correct.dealias_fourdd">
-<tt class="descclassname">pyart.correct.</tt><tt class="descname">dealias_fourdd</tt><big>(</big><em>radar</em>, <em>last_radar=None</em>, <em>sounding_heights=None</em>, <em>sounding_wind_speeds=None</em>, <em>sounding_wind_direction=None</em>, <em>prep=1</em>, <em>filt=1</em>, <em>rsl_badval=131072.0</em>, <em>keep_original=False</em>, <em>refl_field=None</em>, <em>vel_field=None</em>, <em>corr_vel_field=None</em>, <em>last_vel_field=None</em>, <em>debug=False</em>, <em>max_shear=0.05</em>, <em>sign=1</em>, <em>**kwargs</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/correct/dealias.py#L26"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.correct.dealias_fourdd" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">pyart.correct.</tt><tt class="descname">dealias_fourdd</tt><big>(</big><em>radar</em>, <em>last_radar=None</em>, <em>sounding_heights=None</em>, <em>sounding_wind_speeds=None</em>, <em>sounding_wind_direction=None</em>, <em>prep=1</em>, <em>filt=1</em>, <em>rsl_badval=131072.0</em>, <em>keep_original=False</em>, <em>extra_prep=False</em>, <em>ncp_min=0.3</em>, <em>rhv_min=0.7</em>, <em>refl_field=None</em>, <em>vel_field=None</em>, <em>corr_vel_field=None</em>, <em>last_vel_field=None</em>, <em>ncp_field=None</em>, <em>rhv_field=None</em>, <em>debug=False</em>, <em>max_shear=0.05</em>, <em>sign=1</em>, <em>**kwargs</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/correct/dealias.py#L26"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.correct.dealias_fourdd" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dealias Doppler velocities using the 4DD algorithm.</p>
 <p>Dealias the Doppler velocities field using the University of Washington
 4DD algorithm utilizing information from a previous volume scan and/or
@@ -135,6 +135,23 @@ array is stored under the &#8216;data&#8217; key.</p>
 procedure fails, otherwises these gates will be masked.  NaN values
 are still masked.</p>
 </div></blockquote>
+<p><strong>extra_prep</strong> : bool</p>
+<blockquote>
+<div><p>True to use extra volume preperation, which will use the normalized
+coherent power and cross correlation ratio fields to further remove
+bad gates. Set this to False (default) if those fields are not
+available.</p>
+</div></blockquote>
+<p><strong>ncp_min</strong> : float</p>
+<blockquote>
+<div><p>Minimum normalized coherent power allowed for any gate. Only
+applicable when extra_prep is True.</p>
+</div></blockquote>
+<p><strong>rhv_min</strong> : float</p>
+<blockquote>
+<div><p>Minimum cross correlation ratio allowed for any gate. Only
+applicable when extra_prep is True.</p>
+</div></blockquote>
 <p><strong>refl_field</strong> : str</p>
 <blockquote>
 <div><p>Field in radar to use as the reflectivity during dealiasing.
@@ -156,6 +173,13 @@ will use the default field name from the Py-ART configuration file.</p>
 <blockquote>
 <div><p>Name to use for the dealiased Doppler velocity field metadata in
 last_radar.  None will use the corr_vel_field name.</p>
+</div></blockquote>
+<p><strong>ncp_field, rhv_field</strong> : str</p>
+<blockquote>
+<div><p>Fields in radar to use as the normalized coherent power and cross
+correlation ratio, respectively. None will use the default field name
+from the Py-ART configuration file. Only applicable when extra_prep
+is True.</p>
 </div></blockquote>
 <p><strong>maxshear</strong> : float</p>
 <blockquote>
@@ -201,8 +225,8 @@ Dealising Scheme, Journal of Atmospheric and Oceanic Technology, 2001, 18,
   <p class="topless"><a href="pyart.correct.find_time_in_interp_sonde.html"
                         title="previous chapter">pyart.correct.find_time_in_interp_sonde</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="pyart.correct.calculate_attenuation.html"
-                        title="next chapter">pyart.correct.calculate_attenuation</a></p>
+  <p class="topless"><a href="pyart.correct.dealias_unwrap_phase.html"
+                        title="next chapter">pyart.correct.dealias_unwrap_phase</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/user_reference/generated/pyart.correct.dealias_fourdd.txt"
@@ -238,20 +262,20 @@ Dealising Scheme, Journal of Atmospheric and Oceanic Technology, 2001, 18,
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pyart.correct.calculate_attenuation.html" title="pyart.correct.calculate_attenuation"
+          <a href="pyart.correct.dealias_unwrap_phase.html" title="pyart.correct.dealias_unwrap_phase"
              >next</a> |</li>
         <li class="right" >
           <a href="pyart.correct.find_time_in_interp_sonde.html" title="pyart.correct.find_time_in_interp_sonde"
              >previous</a> |</li>
-        <li><a href="../../index.html">Py-ART Documentation (DRAFT)</a> &raquo;</li>
+        <li><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
           <li><a href="../index.html" >User Reference Manual</a> &raquo;</li>
           <li><a href="../correct.html" >Radar Corrections (<tt class="docutils literal"><span class="pre">pyart.correct</span></tt>)</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on May 21, 2014.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+      Last updated on Feb 03, 2015.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
 </html>

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pyart.correct._fourdd_interface.fourdd_dealias &mdash; Py-ART Documentation (DRAFT)</title>
+    <title>pyart.correct._fourdd_interface.fourdd_dealias &mdash; Py-ART Documentation</title>
     
     <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.0.0.dev-770ca76',
+        VERSION:     '1.2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,9 +24,9 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="top" title="Py-ART Documentation (DRAFT)" href="../../index.html" />
+    <link rel="top" title="Py-ART Documentation" href="../../index.html" />
     <link rel="up" title="pyart.correct" href="../correct.html" />
-    <link rel="next" title="pyart.graph" href="../graph.html" />
+    <link rel="next" title="pyart.correct._unwrap_1d.unwrap_1d" href="pyart.correct._unwrap_1d.unwrap_1d.html" />
     <link rel="prev" title="pyart.correct._fourdd_interface.create_soundvolume" href="pyart.correct._fourdd_interface.create_soundvolume.html" /> 
   </head>
   <body>
@@ -43,12 +43,12 @@
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../graph.html" title="pyart.graph"
+          <a href="pyart.correct._unwrap_1d.unwrap_1d.html" title="pyart.correct._unwrap_1d.unwrap_1d"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="pyart.correct._fourdd_interface.create_soundvolume.html" title="pyart.correct._fourdd_interface.create_soundvolume"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Py-ART Documentation (DRAFT)</a> &raquo;</li>
+        <li><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
           <li><a href="../index.html" >Developer Reference Manual</a> &raquo;</li>
           <li><a href="../correct.html" accesskey="U">pyart.correct</a> &raquo;</li> 
       </ul>
@@ -104,8 +104,108 @@ is not used when prep is 0 and can then be set to None.</p>
 <div><p>Flag indicating if the unfolding was successful, 1 = yes, 0 = no.</p>
 </div></blockquote>
 <p><strong>data</strong> : np.ndarray</p>
-<blockquote class="last">
+<blockquote>
 <div><p>Array of unfolded velocities.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Other Parameters:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body"><p class="first"><strong>lowdbz</strong> : float</p>
+<blockquote>
+<div><p>Lowest allowed reflectivity.  Gates with reflectivities below this
+value are filtered and not included in the dealiasing.</p>
+</div></blockquote>
+<p><strong>highdbz</strong> : float</p>
+<blockquote>
+<div><p>Highest allowed reflectivity.  Gates with reflectivities above this
+value are filtered and not included in the dealiasing.</p>
+</div></blockquote>
+<p><strong>rm_missing</strong> : int</p>
+<blockquote>
+<div><p>Flag to remove gates where the reflectivity is missing.  A value of 1
+will remove the gates, a value of 0 will retain them.</p>
+</div></blockquote>
+<p><strong>compthresh</strong> : float</p>
+<blockquote>
+<div><p>Fraction of the Nyquist velocity to use as a threshold when performing
+continity (initial) dealiasing.  Velocities differences above this
+threshold will not be marked as gate from which to begin unfolding 
+during spatial dealiasing.</p>
+</div></blockquote>
+<p><strong>compthresh2</strong> : float</p>
+<blockquote>
+<div><p>The same as compthresh but the value used during the second pass of 
+dealasing.  This second pass is only performed in both a sounding
+and last volume are provided.</p>
+</div></blockquote>
+<p><strong>thresh</strong> : float</p>
+<blockquote>
+<div><p>Fraction of the Nyquist velocity to use as a threshold when performing
+spatial dealiasing.  Horizontally adjacent gates with velocities above
+this theshold will count against assigning the gate in question the
+velocity value being tested.</p>
+</div></blockquote>
+<p><strong>ckval</strong> : float</p>
+<blockquote>
+<div><p>When the absolute value of the velocities are below this value they
+will not be marked as gates from which to begin unfolding during
+spatial dealiasing.</p>
+</div></blockquote>
+<p><strong>stdthresh</strong> : float</p>
+<blockquote>
+<div><p>Fraction of the Nyquist velocity to use as a standard deviation
+threshold in the window dealiasing portion of the algorithm.</p>
+</div></blockquote>
+<p><strong>epsilon</strong> : float</p>
+<blockquote>
+<div><p>Difference used when comparing a value to missing value, changing this
+from the default is not recommended.</p>
+</div></blockquote>
+<p><strong>maxcount</strong> : int</p>
+<blockquote>
+<div><p>Maximum allowed number of fold allowed when unfolding velocities.</p>
+</div></blockquote>
+<p><strong>pass2</strong> : int</p>
+<blockquote>
+<div><p>Controls weather unfolded gates should be removed (a value of 0)
+or retained for unfolding during the second pass (a value of 1) when
+both a sounding volume and last volume are provided.</p>
+</div></blockquote>
+<p><strong>rm</strong> : int</p>
+<blockquote>
+<div><p>Determines what should be done with gates that are left unfolded 
+after the first pass of dealiasing.  A value of 1 will remove these
+gates, a value of 0 sets these gates to their initial velocity.  If
+both a sounding volume and last volume are provided this parameter is
+ignored.</p>
+</div></blockquote>
+<p><strong>proximity</strong> : int</p>
+<blockquote>
+<div><p>Number of gates and rays to include of either side of the current gate
+during window dealiasing.  This value may be doubled in cases where
+a standard sized window does not capture a sufficient number of 
+good valued gates.</p>
+</div></blockquote>
+<p><strong>mingood</strong> : int</p>
+<blockquote>
+<div><p>Number of good valued gates required within the window before the
+current gate will be unfolded.</p>
+</div></blockquote>
+<p><strong>ba_mincount</strong> : int</p>
+<blockquote>
+<div><p>Number of neighbors required during Bergen and Albers filter for
+a given gate to be included, must be between 1 and 8, 5 recommended.</p>
+</div></blockquote>
+<p><strong>ba_edgecount</strong> : int</p>
+<blockquote>
+<div><p>Same as ba_mincount but used at ray edges, must be between 1 and 5, 
+3 recommended.</p>
+</div></blockquote>
+<p><strong>debug</strong> : bool</p>
+<blockquote class="last">
+<div><p>True to return RSL Volume objects for debugging:
+usuccess, radialVelVolume, lastVelVolume, soundVolume, DZvolume,
+unfoldedVolume</p>
 </div></blockquote>
 </td>
 </tr>
@@ -129,8 +229,8 @@ Dealising Scheme, Journal of Atmospheric and Oceanic Technology, 2001, 18,
   <p class="topless"><a href="pyart.correct._fourdd_interface.create_soundvolume.html"
                         title="previous chapter">pyart.correct._fourdd_interface.create_soundvolume</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="../graph.html"
-                        title="next chapter">pyart.graph</a></p>
+  <p class="topless"><a href="pyart.correct._unwrap_1d.unwrap_1d.html"
+                        title="next chapter">pyart.correct._unwrap_1d.unwrap_1d</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/dev_reference/generated/pyart.correct._fourdd_interface.fourdd_dealias.txt"
@@ -166,20 +266,20 @@ Dealising Scheme, Journal of Atmospheric and Oceanic Technology, 2001, 18,
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../graph.html" title="pyart.graph"
+          <a href="pyart.correct._unwrap_1d.unwrap_1d.html" title="pyart.correct._unwrap_1d.unwrap_1d"
              >next</a> |</li>
         <li class="right" >
           <a href="pyart.correct._fourdd_interface.create_soundvolume.html" title="pyart.correct._fourdd_interface.create_soundvolume"
              >previous</a> |</li>
-        <li><a href="../../index.html">Py-ART Documentation (DRAFT)</a> &raquo;</li>
+        <li><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
           <li><a href="../index.html" >Developer Reference Manual</a> &raquo;</li>
           <li><a href="../correct.html" >pyart.correct</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on May 21, 2014.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+      Last updated on Feb 03, 2015.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
 </html>
