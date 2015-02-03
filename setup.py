@@ -132,7 +132,7 @@ if not release:
         GIT_REVISION = "Unknown"
 
     if not ISRELEASED:
-        FULLVERSION += '.dev-' + GIT_REVISION[:7]
+        FULLVERSION += '.dev+' + GIT_REVISION[:7]
 
     a = open(filename, 'w')
     try:
