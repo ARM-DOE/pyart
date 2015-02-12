@@ -204,11 +204,6 @@ cdef class SigmetFile:
                 metadata[name]['time'][i] = ray_time
                 self.ingest_data_headers[name].append(ingest_data_hdrs[j])
 
-                # mask gates past nbins
-                # assuming nbins constant for all rays in a sweep
-                if name != 'XHDR':
-                    data[name][i, :, ray_nbins[0]:] = np.ma.masked
-
         # scale 1-byte velocity by the Nyquist
         # this conversion is kept in this method so that the
         # product_hdr does not need to be accessed at lower abstraction
