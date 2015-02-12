@@ -32,7 +32,7 @@ SPEED_OF_LIGHT = 299793000.0
 def read_sigmet(filename, field_names=None, additional_metadata=None,
                 file_field_names=False, exclude_fields=None,
                 time_ordered='none', full_xhdr=None, noaa_hh_hdr=None,
-                debug=False, ignore_xhdr=False, ignore_sweep_start_ms=False):
+                debug=False, ignore_xhdr=False, ignore_sweep_start_ms=None):
     """
     Read a Sigmet (IRIS) product file.
 
@@ -85,12 +85,18 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
         True to ignore all data in the extended headers if they exist.
         False, the default, extracts milliseconds precision times and other
         parameter from the extended headers if they exists in the file.
-    ignore_sweep_start_ms : bool, optional
+    ignore_sweep_start_ms : bool or None, optional
         True to ignore the millisecond parameter in the start time for each
         sweep, False will uses this parameter when determining the timing of
-        each ray.  The TRMM RSL library ignores these times so setting this
+        each ray. None, the default, will ignore the millisecond sweep start
+        timing only when the file does not contain extended headers or when
+        the extended header has been explicity ignored using the `ignore_xhdr`
+        parameter.  The TRMM RSL library ignores these times so setting this
         parameter to True is required to match the times determined when
         reading Sigmet files with :py:func:`pyart.io.read_rsl`.
+        When there are not extended headers ignoring the millisecond sweep
+        times provides time data which is always prior to the actual
+        collection time with an error from 0 to 2 seconds.
     debug : bool, optional
         Print debug information during read.
 
@@ -173,32 +179,57 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
     sweep_end_ray_index['data'] = np.cumsum(ray_count).astype('int32') - 1
 
     # time
-    time = filemetadata('time')
+    # The time of each ray collected in a Sigmet file is stored in the ray
+    # header as an offset from the start of of the sweep. If the file contains
+    # extended ray headers then the time is truncated to millisecond
+    # precision. Without extended headers the time is truncated to second
+    # precision. The time of the sweep start is recorded in the ingest data
+    # header to millisecond percision.
+    # The method below sets the volume starting time to the time of the first
+    # sweep truncated to the nearest second so that values time['data'] are
+    # always positive.  The timing of each ray is then calculated from the
+    # offset of the time of the sweep from this volume starting time
+    # and the offset from the sweep start to the ray recorded in the ray
+    # header.  Additional, the user can select to trucate the sweep start
+    # times to second precision using the `ignore_sweep_start_ms` parameter.
+    # This may be desired to match libraries such as TRMM RSL, which do not
+    # read the millisecond sweep start precision.  By default this
+    # trucation is applied when the file contains no extended header.  This
+    # ensures that the times listed occur BEFORE the ray was collected with an
+    # error from 0 to 2 seconds from the recorded time.  Other methods of
+    # combining the mixed percision times would result in times which may have
+    # a negative error which is undesired.
 
+    # extract times from the ray headers
     if 'XHDR' in sigmet_data:   # use time in extended headers
         tdata = sigmet_data.pop('XHDR')
         tdata = (tdata.flatten() / 1000.).astype('float64')
         sigmet_extended_header = True
-    else:
+    else:   # use times from the standard ray headers
         tdata = sigmet_metadata[first_data_type]['time'].astype('float64')
         sigmet_extended_header = False
 
-    # determine sweep start times
+    # determine sweep start times and possibly trucate them to sec. precision
     dts = [ymds_time_to_datetime(d['sweep_start_time'])
            for d in sigmetfile.ingest_data_headers[first_data_type]]
+    if ignore_sweep_start_ms is None:
+        ignore_sweep_start_ms = not sigmet_extended_header
     if ignore_sweep_start_ms:
         dts = [d.replace(microsecond=0) for d in dts]
 
     # truncate volume start time to second precision of first sweep
     dt_start = dts[0].replace(microsecond=0)
 
-    # add sweep_start time to all time values in each sweep.
+    # add sweep start times to all time values in each sweep.
     for i, dt in enumerate(dts):
         start = sweep_start_ray_index['data'][i]
         end = sweep_end_ray_index['data'][i]
         td = (dt - dt_start)    # time delta from volume start
         tdata[start:end + 1] += (td.microseconds + (td.seconds + td.days *
                                  24 * 3600) * 10**6) / 10**6
+
+    # stores this data in the time dictionary
+    time = filemetadata('time')
     time['data'] = tdata
     time['units'] = make_time_unit_str(dt_start)
 
