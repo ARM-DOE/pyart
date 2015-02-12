@@ -32,7 +32,7 @@ SPEED_OF_LIGHT = 299793000.0
 def read_sigmet(filename, field_names=None, additional_metadata=None,
                 file_field_names=False, exclude_fields=None,
                 time_ordered='none', full_xhdr=None, noaa_hh_hdr=None,
-                debug=False):
+                debug=False, ignore_xhdr=False):
     """
     Read a Sigmet (IRIS) product file.
 
@@ -81,6 +81,10 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
         determine if the extended header is of this type automatically by
         examining the header. The `full_xhdr` parameter is set to True
         when this parameter is True.
+    ignore_xhdr : bool
+        True to ignore all data in the extended headers if they exist.
+        False, the default, extracts milliseconds precision times and other
+        parameter from the extended headers if they exists in the file.
     debug : bool, optional
         Print debug information during read.
 
@@ -119,6 +123,12 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
 
     if nsweeps == 0:
         raise IOError('File contains no readable sweep data.')
+
+    # ignore extended header if user requested
+    if ignore_xhdr:
+        if 'XHDR' in sigmet_data:
+            sigmet_data.pop('XHDR')
+            sigmet_metadata.pop('XHDR')
 
     # parse the extended headers for time
     if full_xhdr and 'XHDR' in sigmet_data:
