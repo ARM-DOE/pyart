@@ -165,6 +165,30 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
     rays_per_sweep = good_rays.sum(axis=1)
 
     # time order
+    if time_ordered == 'sequential':
+        # Determine appropiate time ordering operation for the sweep and
+        # determine if that operation will in fact order the times.
+        # If it does not issue a warning and perform no time ordering
+        if task_config['task_scan_info']['antenna_scan_mode'] == 2:
+            # RHI scan
+            if _is_time_ordered_by_reversal(
+                    sigmet_data, sigmet_metadata, rays_per_sweep):
+                time_ordered = 'reverse'
+            else:
+                warnings.warn('Rays not collected sequentially in time.')
+                time_ordered = 'none'
+        else:
+            # PPI scan
+            if _is_time_ordered_by_roll(
+                    sigmet_data, sigmet_metadata, rays_per_sweep):
+                time_ordered = 'roll'
+            elif _is_time_ordered_by_reverse_roll(
+                    sigmet_data, sigmet_metadata, rays_per_sweep):
+                time_ordered = 'reverse_and_roll'
+            else:
+                warnings.warn('Rays not collected sequentially in time.')
+                time_ordered = 'none'
+
     if time_ordered == 'full':
         _time_order_data_and_metadata_full(
             sigmet_data, sigmet_metadata, rays_per_sweep)
@@ -281,6 +305,7 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
         metadata['sigmet_extended_header'] = 'true'
     else:
         metadata['sigmet_extended_header'] = 'false'
+    metadata['time_ordered'] = time_ordered
 
     # scan_type
     if task_config['task_scan_info']['antenna_scan_mode'] == 2:
@@ -484,6 +509,72 @@ def _time_order_data_and_metadata_reverse(data, metadata, rays_per_sweep):
             for key in field_metadata.keys():
                 field_metadata[key][s] = field_metadata[key][s][::-1]
     return
+
+
+def _is_time_ordered_by_reversal(data, metadata, rays_per_sweep):
+    """
+    Returns if volume can be time ordered by reversing some or all sweeps.
+    True if the volume can be time ordered, False if not.
+    """
+    if 'XHDR' in data:
+        ref_time = data['XHDR'].copy()
+        ref_time.shape = ref_time.shape[:-1]
+    else:
+        ref_time = metadata[metadata.keys()[0]]['time'].astype('int32')
+    start = 0
+    for nrays in rays_per_sweep:
+        s = slice(start, start + nrays)     # slice which selects sweep
+        start += nrays
+        sweep_time_diff = np.diff(ref_time[s])
+        if np.all(sweep_time_diff >= 0) or np.all(sweep_time_diff <= 0):
+            continue
+        else:
+            return False
+    return True
+
+
+def _is_time_ordered_by_roll(data, metadata, rays_per_sweep):
+    """
+    Returns if volume can be time ordered by rolling some or all sweeps.
+    True if the volume can be time ordered, False if not.
+    """
+    if 'XHDR' in data:
+        ref_time = data['XHDR'].copy()
+        ref_time.shape = ref_time.shape[:-1]
+    else:
+        ref_time = metadata[metadata.keys()[0]]['time'].astype('int32')
+    start = 0
+    for nrays in rays_per_sweep:
+        s = slice(start, start + nrays)     # slice which selects sweep
+        start += nrays
+        sweep_time_diff = np.diff(ref_time[s])
+        count = np.count_nonzero(sweep_time_diff < 0)
+        if count != 0 and count != 1:
+            return False
+    return True
+
+
+def _is_time_ordered_by_reverse_roll(data, metadata, rays_per_sweep):
+    """
+    Returns if volume can be time ordered by reversing and rolling some or all
+    sweeps.  True if the volume can be time ordered, False if not.
+    """
+    if 'XHDR' in data:
+        ref_time = data['XHDR'].copy()
+        ref_time.shape = ref_time.shape[:-1]
+    else:
+        ref_time = metadata[metadata.keys()[0]]['time'].astype('int32')
+    start = 0
+    for nrays in rays_per_sweep:
+        s = slice(start, start + nrays)     # slice which selects sweep
+        start += nrays
+        sweep_time_diff = np.diff(ref_time[s])
+        if sweep_time_diff.min() < 0:   # optional reverse
+            sweep_time_diff = np.diff(ref_time[s][::-1])
+        count = np.count_nonzero(sweep_time_diff < 0)
+        if count != 0 and count != 1:
+            return False
+    return True
 
 
 def _time_order_data_and_metadata_full(data, metadata, rays_per_sweep):
