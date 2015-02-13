@@ -155,12 +155,6 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
             xhdr_metadata[key] = sigmet_metadata['XHDR'][key].copy()
         sigmet_metadata['XHDR_FULL'] = xhdr_metadata
 
-    # time order
-    if time_ordered == 'full':
-        _time_order_data_and_metadata_full(sigmet_data, sigmet_metadata)
-    if time_ordered == 'roll':
-        _time_order_data_and_metadata_roll(sigmet_data, sigmet_metadata)
-
     # remove missing rays from the data
     good_rays = (sigmet_metadata[first_data_type]['nbins'] != -1)
     for field_name in sigmet_data.keys():
@@ -168,6 +162,15 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
         field_metadata = sigmet_metadata[field_name]
         for key in field_metadata.keys():
             field_metadata[key] = field_metadata[key][good_rays]
+    rays_per_sweep = good_rays.sum(axis=1)
+
+    # time order
+    if time_ordered == 'full':
+        _time_order_data_and_metadata_full(
+            sigmet_data, sigmet_metadata, rays_per_sweep)
+    if time_ordered == 'roll':
+        _time_order_data_and_metadata_roll(
+            sigmet_data, sigmet_metadata, rays_per_sweep)
 
     # sweep_start_ray_index and sweep_end_ray_index
     ray_count = good_rays.sum(axis=1)
@@ -401,25 +404,29 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
         **extended_header_params)
 
 
-def _time_order_data_and_metadata_roll(data, metadata):
+def _time_order_data_and_metadata_roll(data, metadata, rays_per_sweep):
     """
-    Put Sigmet data and metadata in time increasing order using a single
-    roll.
+    Put Sigmet data and metadata in time increasing order using a roll
+    operation.
     """
-    # Sigmet data is stored by sweep in azimuth increasing order,
-    # to place in time increasing order we must roll each sweep so
-    # the earliest collected ray is first.
-    # This assuming all the fields have the same timing and the rays
-    # were collected in sequentially, which appears to be true.
-
+    # Sigmet data is stored by sweep in azimuth or elevation increasing order.
+    # Time ordering PPI scans can typically be achieved by rolling the
+    # ray collected first to the beginning of the sweep, which is performed
+    # here.  Perfect time ordering is achieved if the rays within the sweep
+    # were collected sequentially in a clockwise manner from 0 to 360 degrees
+    # regardless of the first azimuth collected.
     if 'XHDR' in data:
         ref_time = data['XHDR'].copy()
         ref_time.shape = ref_time.shape[:-1]
     else:
         ref_time = metadata[metadata.keys()[0]]['time'].astype('int32')
-    for i, sweep_time in enumerate(ref_time):
 
+    start = 0
+    for nrays in rays_per_sweep:
+
+        s = slice(start, start + nrays)     # slice which selects sweep
         # determine the number of place by which elements should be shifted.
+        sweep_time = ref_time[s]
         sweep_time_diff = np.diff(sweep_time)
         if sweep_time_diff.min() >= 0:
             continue    # already time ordered
@@ -427,57 +434,51 @@ def _time_order_data_and_metadata_roll(data, metadata):
 
         # roll the data and metadata for each field
         for field in data.keys():
-            data[field][i] = np.roll(data[field][i], shift, axis=0)
-
-            fmd = metadata[field]
-            fmd['time'][i] = np.roll(fmd['time'][i], shift)
-            fmd['nbins'][i] = np.roll(fmd['nbins'][i], shift)
-            fmd['elevation_1'][i] = np.roll(fmd['elevation_1'][i], shift)
-            fmd['elevation_0'][i] = np.roll(fmd['elevation_0'][i], shift)
-            fmd['azimuth_0'][i] = np.roll(fmd['azimuth_0'][i], shift)
-            fmd['azimuth_1'][i] = np.roll(fmd['azimuth_1'][i], shift)
-
+            data[field][s] = np.roll(data[field][s], shift, axis=0)
+            field_metadata = metadata[field]
+            for key in field_metadata.keys():
+                field_metadata[key][s] = np.roll(field_metadata[key][s], shift)
+        start += nrays
     return
 
 
-def _time_order_data_and_metadata_full(data, metadata):
+def _time_order_data_and_metadata_full(data, metadata, rays_per_sweep):
     """
     Put Sigmet data and metadata in time increasing order by sorting the
-    time.
+    times.
     """
-
-    # Sigmet data is stored by sweep in azimuth increasing order,
-    # to place in time increasing order we must sort each sweep so
-    # that the rays are time ordered.
-    # This assuming all the fields have the same timing, rays are not
-    # assumed to be collected sequentially.
-
+    # Sigmet data is stored by sweep in azimuth or elevation increasing order.
+    # When rays within the sweeps are collected non-sequentially or in a
+    # complex manner, perfect time ordering can only be achived by sorting
+    # the times themselves and reordering the rays according to this sort.
+    # This ordering method should only be used as a last resort when perfect
+    # time ordering is required in the output and other ordering operations
+    # (roll, reverse, reverse-roll) will not order the rays correctly.
     if 'XHDR' in data:
         ref_time = data['XHDR'].copy()
         ref_time.shape = ref_time.shape[:-1]
     else:
         ref_time = metadata[metadata.keys()[0]]['time'].astype('int32')
-    for i, sweep_time in enumerate(ref_time):
 
+    start = 0
+    for nrays in rays_per_sweep:
+
+        s = slice(start, start + nrays)     # slice which selects sweep
         # determine the indices which sort the sweep time using a stable
         # sorting algorithm to prevent excessive azimuth scrambling.
-        sweep_time_diff = np.diff(sweep_time)
+        sweep_time = ref_time[s]
+        sweep_time_diff = np.diff(ref_time[s])
         if sweep_time_diff.min() >= 0:
             continue    # already time ordered
         sort_idx = np.argsort(sweep_time, kind='mergesort')
 
         # sort the data and metadata for each field
         for field in data.keys():
-            data[field][i] = data[field][i][sort_idx]
-
-            fmd = metadata[field]
-            fmd['time'][i] = fmd['time'][i][sort_idx]
-            fmd['nbins'][i] = fmd['nbins'][i][sort_idx]
-            fmd['elevation_1'][i] = fmd['elevation_1'][i][sort_idx]
-            fmd['elevation_0'][i] = fmd['elevation_0'][i][sort_idx]
-            fmd['azimuth_0'][i] = fmd['azimuth_0'][i][sort_idx]
-            fmd['azimuth_1'][i] = fmd['azimuth_1'][i][sort_idx]
-
+            data[field][s] = data[field][s][sort_idx]
+            field_metadata = metadata[field]
+            for key in field_metadata.keys():
+                field_metadata[key][s] = field_metadata[key][s][sort_idx]
+        start += nrays
     return
 
 
