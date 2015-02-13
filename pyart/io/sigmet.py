@@ -168,6 +168,9 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
     if time_ordered == 'full':
         _time_order_data_and_metadata_full(
             sigmet_data, sigmet_metadata, rays_per_sweep)
+    if time_ordered == 'reverse':
+        _time_order_data_and_metadata_reverse(
+            sigmet_data, sigmet_metadata, rays_per_sweep)
     if time_ordered == 'roll':
         _time_order_data_and_metadata_roll(
             sigmet_data, sigmet_metadata, rays_per_sweep)
@@ -439,6 +442,41 @@ def _time_order_data_and_metadata_roll(data, metadata, rays_per_sweep):
             field_metadata = metadata[field]
             for key in field_metadata.keys():
                 field_metadata[key][s] = np.roll(field_metadata[key][s], shift)
+    return
+
+
+def _time_order_data_and_metadata_reverse(data, metadata, rays_per_sweep):
+    """
+    Put Sigmet data and metadata in time increasing order by reverse sweep in
+    time reversed order.
+    """
+    # Sigmet data is stored by sweep in azimuth or elevation increasing order.
+    # Time ordering RHI scans can typically be achieved by reversing the
+    # ray order of sweep collected in time from 180 to 0 degrees.
+    # Perfect time ordering is achieved if the rays within all sweeps
+    # were collected sequentially from 0 to 180 degree or 180 to 0 degrees.
+    if 'XHDR' in data:
+        ref_time = data['XHDR'].copy()
+        ref_time.shape = ref_time.shape[:-1]
+    else:
+        ref_time = metadata[metadata.keys()[0]]['time'].astype('int32')
+
+    start = 0
+    for nrays in rays_per_sweep:
+
+        s = slice(start, start + nrays)     # slice which selects sweep
+        start += nrays
+        # determine the number of place by which elements should be shifted.
+        sweep_time = ref_time[s]
+        sweep_time_diff = np.diff(sweep_time)
+        if sweep_time_diff.min() >= 0:
+            continue    # already time ordered, no reversal needed
+        # reverse the data and metadata for each field
+        for field in data.keys():
+            data[field][s] = data[field][s][::-1]
+            field_metadata = metadata[field]
+            for key in field_metadata.keys():
+                field_metadata[key][s] = field_metadata[key][s][::-1]
     return
 
 
