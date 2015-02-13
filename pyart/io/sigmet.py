@@ -425,6 +425,7 @@ def _time_order_data_and_metadata_roll(data, metadata, rays_per_sweep):
     for nrays in rays_per_sweep:
 
         s = slice(start, start + nrays)     # slice which selects sweep
+        start += nrays
         # determine the number of place by which elements should be shifted.
         sweep_time = ref_time[s]
         sweep_time_diff = np.diff(sweep_time)
@@ -438,7 +439,6 @@ def _time_order_data_and_metadata_roll(data, metadata, rays_per_sweep):
             field_metadata = metadata[field]
             for key in field_metadata.keys():
                 field_metadata[key][s] = np.roll(field_metadata[key][s], shift)
-        start += nrays
     return
 
 
@@ -464,6 +464,7 @@ def _time_order_data_and_metadata_full(data, metadata, rays_per_sweep):
     for nrays in rays_per_sweep:
 
         s = slice(start, start + nrays)     # slice which selects sweep
+        start += nrays
         # determine the indices which sort the sweep time using a stable
         # sorting algorithm to prevent excessive azimuth scrambling.
         sweep_time = ref_time[s]
@@ -478,7 +479,6 @@ def _time_order_data_and_metadata_full(data, metadata, rays_per_sweep):
             field_metadata = metadata[field]
             for key in field_metadata.keys():
                 field_metadata[key][s] = field_metadata[key][s][sort_idx]
-        start += nrays
     return
 
 
