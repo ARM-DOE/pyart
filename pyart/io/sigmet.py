@@ -171,6 +171,7 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
 
     # sweep_start_ray_index and sweep_end_ray_index
     ray_count = good_rays.sum(axis=1)
+    total_rays = ray_count.sum()
     sweep_start_ray_index = filemetadata('sweep_start_ray_index')
     sweep_end_ray_index = filemetadata('sweep_end_ray_index')
 
@@ -329,12 +330,11 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
     beam_width_v = filemetadata('radar_beam_width_v')
     pulse_width = filemetadata('pulse_width')
 
-    trays = nsweeps * nrays     # this is correct even with missing rays
     prt_value = 1. / sigmetfile.product_hdr['product_end']['prf']
-    prt['data'] = prt_value * np.ones(trays, dtype='float32')
+    prt['data'] = prt_value * np.ones(total_rays, dtype='float32')
 
     ur_value = SPEED_OF_LIGHT * prt_value / 2.
-    unambiguous_range['data'] = ur_value * np.ones(trays, dtype='float32')
+    unambiguous_range['data'] = ur_value * np.ones(total_rays, dtype='float32')
 
     # TODO Multi PRF mode when
     # task_config['task_dsp_info']['multi_prf_flag'] != 0
@@ -342,7 +342,7 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
 
     wavelength_cm = sigmetfile.product_hdr['product_end']['wavelength']
     nv_value = wavelength_cm / (10000.0 * 4.0 * prt_value)
-    nyquist_velocity['data'] = nv_value * np.ones(trays, dtype='float32')
+    nyquist_velocity['data'] = nv_value * np.ones(total_rays, dtype='float32')
     beam_width_h['data'] = np.array([bin4_to_angle(
         task_config['task_misc_info']['horizontal_beamwidth'])],
         dtype='float32')
