@@ -174,6 +174,12 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
     if time_ordered == 'roll':
         _time_order_data_and_metadata_roll(
             sigmet_data, sigmet_metadata, rays_per_sweep)
+    if time_ordered == 'reverse_and_roll':
+        # reverse followed by roll
+        _time_order_data_and_metadata_reverse(
+            sigmet_data, sigmet_metadata, rays_per_sweep)
+        _time_order_data_and_metadata_roll(
+            sigmet_data, sigmet_metadata, rays_per_sweep)
 
     # sweep_start_ray_index and sweep_end_ray_index
     ray_count = good_rays.sum(axis=1)
