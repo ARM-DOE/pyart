@@ -61,16 +61,19 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
     exclude_fields : list or None, optional
         List of fields to exclude from the radar object. This is applied
         after the `file_field_names` and `field_names` parameters.
-    time_ordered : 'full', 'none' or 'roll'.
-        Parameter controlling the time ordering of the data. The default,
-        'none' keep the data ordered in the same manner as it appears in
-        the Sigmet file.  'roll' will attempt to time order the data within
-        each sweep by rolling the earliest collected ray to be the beginning.
-        Sequential ordering of the rays is maintained but strict time
-        increasing order is not guaranteed.  'full' will place data within
-        each sweep in a strictly time increasing order, but the rays will
-        likely become non-sequential.  The 'full' option is not recommended
-        unless strict time increasing order is required.
+    time_ordered : 'none', 'sequential', 'full', ...,  optional
+        Parameter controlling if and how the rays are re-ordered by time.
+        The default, 'none' keeps the rays ordered in the same manner as
+        they appears in the Sigmet file.  'sequential' will determind and
+        apply an operation which maintains a sequential ray order in elevation
+        or azimuth yet orders the rays according to time.  If no operation can
+        be found to accomplish this a warning is issue and the rays are
+        returned in their original order.  'roll', 'reverse', and
+        'reverse_and_roll' will apply that operation to the rays in order to
+        place them in time order, direct use of these is not recommended.
+        'full' will order the rays in strictly time increasing order,
+        but the rays will likely become non-sequential, thisoption is not
+        recommended unless strict time increasing order is required.
     full_xhdr : bool or None
         Flag to read in all extended headers for possible decoding. None will
         determine if extended headers should be read in automatically by
@@ -438,6 +441,72 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
         **extended_header_params)
 
 
+def _is_time_ordered_by_reversal(data, metadata, rays_per_sweep):
+    """
+    Returns if volume can be time ordered by reversing some or all sweeps.
+    True if the volume can be time ordered, False if not.
+    """
+    if 'XHDR' in data:
+        ref_time = data['XHDR'].copy()
+        ref_time.shape = ref_time.shape[:-1]
+    else:
+        ref_time = metadata[metadata.keys()[0]]['time'].astype('int32')
+    start = 0
+    for nrays in rays_per_sweep:
+        s = slice(start, start + nrays)     # slice which selects sweep
+        start += nrays
+        sweep_time_diff = np.diff(ref_time[s])
+        if np.all(sweep_time_diff >= 0) or np.all(sweep_time_diff <= 0):
+            continue
+        else:
+            return False
+    return True
+
+
+def _is_time_ordered_by_roll(data, metadata, rays_per_sweep):
+    """
+    Returns if volume can be time ordered by rolling some or all sweeps.
+    True if the volume can be time ordered, False if not.
+    """
+    if 'XHDR' in data:
+        ref_time = data['XHDR'].copy()
+        ref_time.shape = ref_time.shape[:-1]
+    else:
+        ref_time = metadata[metadata.keys()[0]]['time'].astype('int32')
+    start = 0
+    for nrays in rays_per_sweep:
+        s = slice(start, start + nrays)     # slice which selects sweep
+        start += nrays
+        sweep_time_diff = np.diff(ref_time[s])
+        count = np.count_nonzero(sweep_time_diff < 0)
+        if count != 0 and count != 1:
+            return False
+    return True
+
+
+def _is_time_ordered_by_reverse_roll(data, metadata, rays_per_sweep):
+    """
+    Returns if volume can be time ordered by reversing and rolling some or all
+    sweeps.  True if the volume can be time ordered, False if not.
+    """
+    if 'XHDR' in data:
+        ref_time = data['XHDR'].copy()
+        ref_time.shape = ref_time.shape[:-1]
+    else:
+        ref_time = metadata[metadata.keys()[0]]['time'].astype('int32')
+    start = 0
+    for nrays in rays_per_sweep:
+        s = slice(start, start + nrays)     # slice which selects sweep
+        start += nrays
+        sweep_time_diff = np.diff(ref_time[s])
+        if sweep_time_diff.min() < 0:   # optional reverse
+            sweep_time_diff = np.diff(ref_time[s][::-1])
+        count = np.count_nonzero(sweep_time_diff < 0)
+        if count != 0 and count != 1:
+            return False
+    return True
+
+
 def _time_order_data_and_metadata_roll(data, metadata, rays_per_sweep):
     """
     Put Sigmet data and metadata in time increasing order using a roll
@@ -509,72 +578,6 @@ def _time_order_data_and_metadata_reverse(data, metadata, rays_per_sweep):
             for key in field_metadata.keys():
                 field_metadata[key][s] = field_metadata[key][s][::-1]
     return
-
-
-def _is_time_ordered_by_reversal(data, metadata, rays_per_sweep):
-    """
-    Returns if volume can be time ordered by reversing some or all sweeps.
-    True if the volume can be time ordered, False if not.
-    """
-    if 'XHDR' in data:
-        ref_time = data['XHDR'].copy()
-        ref_time.shape = ref_time.shape[:-1]
-    else:
-        ref_time = metadata[metadata.keys()[0]]['time'].astype('int32')
-    start = 0
-    for nrays in rays_per_sweep:
-        s = slice(start, start + nrays)     # slice which selects sweep
-        start += nrays
-        sweep_time_diff = np.diff(ref_time[s])
-        if np.all(sweep_time_diff >= 0) or np.all(sweep_time_diff <= 0):
-            continue
-        else:
-            return False
-    return True
-
-
-def _is_time_ordered_by_roll(data, metadata, rays_per_sweep):
-    """
-    Returns if volume can be time ordered by rolling some or all sweeps.
-    True if the volume can be time ordered, False if not.
-    """
-    if 'XHDR' in data:
-        ref_time = data['XHDR'].copy()
-        ref_time.shape = ref_time.shape[:-1]
-    else:
-        ref_time = metadata[metadata.keys()[0]]['time'].astype('int32')
-    start = 0
-    for nrays in rays_per_sweep:
-        s = slice(start, start + nrays)     # slice which selects sweep
-        start += nrays
-        sweep_time_diff = np.diff(ref_time[s])
-        count = np.count_nonzero(sweep_time_diff < 0)
-        if count != 0 and count != 1:
-            return False
-    return True
-
-
-def _is_time_ordered_by_reverse_roll(data, metadata, rays_per_sweep):
-    """
-    Returns if volume can be time ordered by reversing and rolling some or all
-    sweeps.  True if the volume can be time ordered, False if not.
-    """
-    if 'XHDR' in data:
-        ref_time = data['XHDR'].copy()
-        ref_time.shape = ref_time.shape[:-1]
-    else:
-        ref_time = metadata[metadata.keys()[0]]['time'].astype('int32')
-    start = 0
-    for nrays in rays_per_sweep:
-        s = slice(start, start + nrays)     # slice which selects sweep
-        start += nrays
-        sweep_time_diff = np.diff(ref_time[s])
-        if sweep_time_diff.min() < 0:   # optional reverse
-            sweep_time_diff = np.diff(ref_time[s][::-1])
-        count = np.count_nonzero(sweep_time_diff < 0)
-        if count != 0 and count != 1:
-            return False
-    return True
 
 
 def _time_order_data_and_metadata_full(data, metadata, rays_per_sweep):
