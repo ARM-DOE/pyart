@@ -164,6 +164,7 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
 
     # remove missing rays from the data
     good_rays = (sigmet_metadata[first_data_type]['nbins'] != -1)
+    rays_missing = (sigmet_metadata[first_data_type]['nbins'] == -1).sum()
     for field_name in sigmet_data.keys():
         sigmet_data[field_name] = sigmet_data[field_name][good_rays]
         field_metadata = sigmet_metadata[field_name]
@@ -313,6 +314,7 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
     else:
         metadata['sigmet_extended_header'] = 'false'
     metadata['time_ordered'] = time_ordered
+    metadata['rays_missing'] = rays_missing
 
     # scan_type
     if task_config['task_scan_info']['antenna_scan_mode'] == 2:
