@@ -453,6 +453,8 @@ def _is_time_ordered_by_reversal(data, metadata, rays_per_sweep):
         ref_time = metadata[metadata.keys()[0]]['time'].astype('int32')
     start = 0
     for nrays in rays_per_sweep:
+        if nrays == 0:
+            continue    # Do not attempt to order sweeps with no rays
         s = slice(start, start + nrays)     # slice which selects sweep
         start += nrays
         sweep_time_diff = np.diff(ref_time[s])
@@ -475,6 +477,8 @@ def _is_time_ordered_by_roll(data, metadata, rays_per_sweep):
         ref_time = metadata[metadata.keys()[0]]['time'].astype('int32')
     start = 0
     for nrays in rays_per_sweep:
+        if nrays == 0:
+            continue    # Do not attempt to order sweeps with no rays
         s = slice(start, start + nrays)     # slice which selects sweep
         start += nrays
         sweep_time_diff = np.diff(ref_time[s])
@@ -496,6 +500,8 @@ def _is_time_ordered_by_reverse_roll(data, metadata, rays_per_sweep):
         ref_time = metadata[metadata.keys()[0]]['time'].astype('int32')
     start = 0
     for nrays in rays_per_sweep:
+        if nrays == 0:
+            continue    # Do not attempt to order sweeps with no rays
         s = slice(start, start + nrays)     # slice which selects sweep
         start += nrays
         sweep_time_diff = np.diff(ref_time[s])
@@ -526,6 +532,8 @@ def _time_order_data_and_metadata_roll(data, metadata, rays_per_sweep):
 
     start = 0
     for nrays in rays_per_sweep:
+        if nrays == 0:
+            continue    # Do not attempt to order sweeps with no rays
 
         s = slice(start, start + nrays)     # slice which selects sweep
         start += nrays
@@ -563,6 +571,8 @@ def _time_order_data_and_metadata_reverse(data, metadata, rays_per_sweep):
 
     start = 0
     for nrays in rays_per_sweep:
+        if nrays == 0:
+            continue    # Do not attempt to order sweeps with no rays
 
         s = slice(start, start + nrays)     # slice which selects sweep
         start += nrays
@@ -600,6 +610,8 @@ def _time_order_data_and_metadata_full(data, metadata, rays_per_sweep):
 
     start = 0
     for nrays in rays_per_sweep:
+        if nrays == 0:
+            continue    # Do not attempt to order sweeps with no rays
 
         s = slice(start, start + nrays)     # slice which selects sweep
         start += nrays
