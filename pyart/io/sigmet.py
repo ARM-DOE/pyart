@@ -9,8 +9,12 @@ Reading and writing of Sigmet (raw format) files
 
     read_sigmet
     ymds_time_to_datetime
-    _time_order_data_and_metadata_full
+    _is_time_ordered_by_reversal
+    _is_time_ordered_by_roll
+    _is_time_ordered_by_reverse_roll
     _time_order_data_and_metadata_roll
+    _time_order_data_and_metadata_reverse
+    _time_order_data_and_metadata_full
 
 """
 
