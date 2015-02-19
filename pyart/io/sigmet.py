@@ -9,8 +9,12 @@ Reading and writing of Sigmet (raw format) files
 
     read_sigmet
     ymds_time_to_datetime
-    _time_order_data_and_metadata_full
+    _is_time_ordered_by_reversal
+    _is_time_ordered_by_roll
+    _is_time_ordered_by_reverse_roll
     _time_order_data_and_metadata_roll
+    _time_order_data_and_metadata_reverse
+    _time_order_data_and_metadata_full
 
 """
 
@@ -32,7 +36,7 @@ SPEED_OF_LIGHT = 299793000.0
 def read_sigmet(filename, field_names=None, additional_metadata=None,
                 file_field_names=False, exclude_fields=None,
                 time_ordered='none', full_xhdr=None, noaa_hh_hdr=None,
-                debug=False):
+                debug=False, ignore_xhdr=False, ignore_sweep_start_ms=None):
     """
     Read a Sigmet (IRIS) product file.
 
@@ -61,16 +65,19 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
     exclude_fields : list or None, optional
         List of fields to exclude from the radar object. This is applied
         after the `file_field_names` and `field_names` parameters.
-    time_ordered : 'full', 'none' or 'roll'.
-        Parameter controlling the time ordering of the data. The default,
-        'none' keep the data ordered in the same manner as it appears in
-        the Sigmet file.  'roll' will attempt to time order the data within
-        each sweep by rolling the earliest collected ray to be the beginning.
-        Sequential ordering of the rays is maintained but strict time
-        increasing order is not guaranteed.  'full' will place data within
-        each sweep in a strictly time increasing order, but the rays will
-        likely become non-sequential.  The 'full' option is not recommended
-        unless strict time increasing order is required.
+    time_ordered : 'none', 'sequential', 'full', ...,  optional
+        Parameter controlling if and how the rays are re-ordered by time.
+        The default, 'none' keeps the rays ordered in the same manner as
+        they appears in the Sigmet file.  'sequential' will determind and
+        apply an operation which maintains a sequential ray order in elevation
+        or azimuth yet orders the rays according to time.  If no operation can
+        be found to accomplish this a warning is issue and the rays are
+        returned in their original order.  'roll', 'reverse', and
+        'reverse_and_roll' will apply that operation to the rays in order to
+        place them in time order, direct use of these is not recommended.
+        'full' will order the rays in strictly time increasing order,
+        but the rays will likely become non-sequential, thisoption is not
+        recommended unless strict time increasing order is required.
     full_xhdr : bool or None
         Flag to read in all extended headers for possible decoding. None will
         determine if extended headers should be read in automatically by
@@ -81,6 +88,22 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
         determine if the extended header is of this type automatically by
         examining the header. The `full_xhdr` parameter is set to True
         when this parameter is True.
+    ignore_xhdr : bool, optional
+        True to ignore all data in the extended headers if they exist.
+        False, the default, extracts milliseconds precision times and other
+        parameter from the extended headers if they exists in the file.
+    ignore_sweep_start_ms : bool or None, optional
+        True to ignore the millisecond parameter in the start time for each
+        sweep, False will uses this parameter when determining the timing of
+        each ray. None, the default, will ignore the millisecond sweep start
+        timing only when the file does not contain extended headers or when
+        the extended header has been explicity ignored using the `ignore_xhdr`
+        parameter.  The TRMM RSL library ignores these times so setting this
+        parameter to True is required to match the times determined when
+        reading Sigmet files with :py:func:`pyart.io.read_rsl`.
+        When there are not extended headers ignoring the millisecond sweep
+        times provides time data which is always prior to the actual
+        collection time with an error from 0 to 2 seconds.
     debug : bool, optional
         Print debug information during read.
 
@@ -120,6 +143,12 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
     if nsweeps == 0:
         raise IOError('File contains no readable sweep data.')
 
+    # ignore extended header if user requested
+    if ignore_xhdr:
+        if 'XHDR' in sigmet_data:
+            sigmet_data.pop('XHDR')
+            sigmet_metadata.pop('XHDR')
+
     # parse the extended headers for time
     if full_xhdr and 'XHDR' in sigmet_data:
         # extract the ms timing data and store the full header for later
@@ -133,22 +162,60 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
             xhdr_metadata[key] = sigmet_metadata['XHDR'][key].copy()
         sigmet_metadata['XHDR_FULL'] = xhdr_metadata
 
-    # time order
-    if time_ordered == 'full':
-        _time_order_data_and_metadata_full(sigmet_data, sigmet_metadata)
-    if time_ordered == 'roll':
-        _time_order_data_and_metadata_roll(sigmet_data, sigmet_metadata)
-
     # remove missing rays from the data
     good_rays = (sigmet_metadata[first_data_type]['nbins'] != -1)
+    rays_missing = (sigmet_metadata[first_data_type]['nbins'] == -1).sum()
     for field_name in sigmet_data.keys():
         sigmet_data[field_name] = sigmet_data[field_name][good_rays]
         field_metadata = sigmet_metadata[field_name]
         for key in field_metadata.keys():
             field_metadata[key] = field_metadata[key][good_rays]
+    rays_per_sweep = good_rays.sum(axis=1)
+
+    # time order
+    if time_ordered == 'sequential':
+        # Determine appropiate time ordering operation for the sweep and
+        # determine if that operation will in fact order the times.
+        # If it does not issue a warning and perform no time ordering
+        if task_config['task_scan_info']['antenna_scan_mode'] == 2:
+            # RHI scan
+            if _is_time_ordered_by_reversal(
+                    sigmet_data, sigmet_metadata, rays_per_sweep):
+                time_ordered = 'reverse'
+            else:
+                warnings.warn('Rays not collected sequentially in time.')
+                time_ordered = 'none'
+        else:
+            # PPI scan
+            if _is_time_ordered_by_roll(
+                    sigmet_data, sigmet_metadata, rays_per_sweep):
+                time_ordered = 'roll'
+            elif _is_time_ordered_by_reverse_roll(
+                    sigmet_data, sigmet_metadata, rays_per_sweep):
+                time_ordered = 'reverse_and_roll'
+            else:
+                warnings.warn('Rays not collected sequentially in time.')
+                time_ordered = 'none'
+
+    if time_ordered == 'full':
+        _time_order_data_and_metadata_full(
+            sigmet_data, sigmet_metadata, rays_per_sweep)
+    if time_ordered == 'reverse':
+        _time_order_data_and_metadata_reverse(
+            sigmet_data, sigmet_metadata, rays_per_sweep)
+    if time_ordered == 'roll':
+        _time_order_data_and_metadata_roll(
+            sigmet_data, sigmet_metadata, rays_per_sweep)
+    if time_ordered == 'reverse_and_roll':
+        # reverse followed by roll
+        _time_order_data_and_metadata_reverse(
+            sigmet_data, sigmet_metadata, rays_per_sweep)
+        _time_order_data_and_metadata_roll(
+            sigmet_data, sigmet_metadata, rays_per_sweep)
 
     # sweep_start_ray_index and sweep_end_ray_index
     ray_count = good_rays.sum(axis=1)
+    total_rays = ray_count.sum()
     sweep_start_ray_index = filemetadata('sweep_start_ray_index')
     sweep_end_ray_index = filemetadata('sweep_end_ray_index')
 
@@ -157,27 +224,59 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
     sweep_end_ray_index['data'] = np.cumsum(ray_count).astype('int32') - 1
 
     # time
-    time = filemetadata('time')
+    # The time of each ray collected in a Sigmet file is stored in the ray
+    # header as an offset from the start of of the sweep. If the file contains
+    # extended ray headers then the time is truncated to millisecond
+    # precision. Without extended headers the time is truncated to second
+    # precision. The time of the sweep start is recorded in the ingest data
+    # header to millisecond percision.
+    # The method below sets the volume starting time to the time of the first
+    # sweep truncated to the nearest second so that values time['data'] are
+    # always positive.  The timing of each ray is then calculated from the
+    # offset of the time of the sweep from this volume starting time
+    # and the offset from the sweep start to the ray recorded in the ray
+    # header.  Additional, the user can select to trucate the sweep start
+    # times to second precision using the `ignore_sweep_start_ms` parameter.
+    # This may be desired to match libraries such as TRMM RSL, which do not
+    # read the millisecond sweep start precision.  By default this
+    # trucation is applied when the file contains no extended header.  This
+    # ensures that the times listed occur BEFORE the ray was collected with an
+    # error from 0 to 2 seconds from the recorded time.  Other methods of
+    # combining the mixed percision times would result in times which may have
+    # a negative error which is undesired.
 
+    # extract times from the ray headers
     if 'XHDR' in sigmet_data:   # use time in extended headers
         tdata = sigmet_data.pop('XHDR')
         tdata = (tdata.flatten() / 1000.).astype('float64')
         sigmet_extended_header = True
-    else:
+    else:   # use times from the standard ray headers
         tdata = sigmet_metadata[first_data_type]['time'].astype('float64')
         sigmet_extended_header = False
 
-    # add sweep_start time to all time values in each sweep.
+    # determine sweep start times and possibly trucate them to sec. precision
     dts = [ymds_time_to_datetime(d['sweep_start_time'])
            for d in sigmetfile.ingest_data_headers[first_data_type]]
+    if ignore_sweep_start_ms is None:
+        ignore_sweep_start_ms = not sigmet_extended_header
+    if ignore_sweep_start_ms:
+        dts = [d.replace(microsecond=0) for d in dts]
+
+    # truncate volume start time to second precision of first sweep
+    dt_start = dts[0].replace(microsecond=0)
+
+    # add sweep start times to all time values in each sweep.
     for i, dt in enumerate(dts):
         start = sweep_start_ray_index['data'][i]
         end = sweep_end_ray_index['data'][i]
-        td = (dt - dts[0])
+        td = (dt - dt_start)    # time delta from volume start
         tdata[start:end + 1] += (td.microseconds + (td.seconds + td.days *
                                  24 * 3600) * 10**6) / 10**6
+
+    # stores this data in the time dictionary
+    time = filemetadata('time')
     time['data'] = tdata
-    time['units'] = make_time_unit_str(dts[0])
+    time['units'] = make_time_unit_str(dt_start)
 
     # _range
     _range = filemetadata('range')
@@ -214,6 +313,8 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
         metadata['sigmet_extended_header'] = 'true'
     else:
         metadata['sigmet_extended_header'] = 'false'
+    metadata['time_ordered'] = time_ordered
+    metadata['rays_missing'] = rays_missing
 
     # scan_type
     if task_config['task_scan_info']['antenna_scan_mode'] == 2:
@@ -275,12 +376,11 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
     beam_width_v = filemetadata('radar_beam_width_v')
     pulse_width = filemetadata('pulse_width')
 
-    trays = nsweeps * nrays     # this is correct even with missing rays
     prt_value = 1. / sigmetfile.product_hdr['product_end']['prf']
-    prt['data'] = prt_value * np.ones(trays, dtype='float32')
+    prt['data'] = prt_value * np.ones(total_rays, dtype='float32')
 
     ur_value = SPEED_OF_LIGHT * prt_value / 2.
-    unambiguous_range['data'] = ur_value * np.ones(trays, dtype='float32')
+    unambiguous_range['data'] = ur_value * np.ones(total_rays, dtype='float32')
 
     # TODO Multi PRF mode when
     # task_config['task_dsp_info']['multi_prf_flag'] != 0
@@ -288,7 +388,7 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
 
     wavelength_cm = sigmetfile.product_hdr['product_end']['wavelength']
     nv_value = wavelength_cm / (10000.0 * 4.0 * prt_value)
-    nyquist_velocity['data'] = nv_value * np.ones(trays, dtype='float32')
+    nyquist_velocity['data'] = nv_value * np.ones(total_rays, dtype='float32')
     beam_width_h['data'] = np.array([bin4_to_angle(
         task_config['task_misc_info']['horizontal_beamwidth'])],
         dtype='float32')
@@ -347,25 +447,104 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
         **extended_header_params)
 
 
-def _time_order_data_and_metadata_roll(data, metadata):
+def _is_time_ordered_by_reversal(data, metadata, rays_per_sweep):
     """
-    Put Sigmet data and metadata in time increasing order using a single
-    roll.
+    Returns if volume can be time ordered by reversing some or all sweeps.
+    True if the volume can be time ordered, False if not.
     """
-    # Sigmet data is stored by sweep in azimuth increasing order,
-    # to place in time increasing order we must roll each sweep so
-    # the earliest collected ray is first.
-    # This assuming all the fields have the same timing and the rays
-    # were collected in sequentially, which appears to be true.
-
     if 'XHDR' in data:
         ref_time = data['XHDR'].copy()
         ref_time.shape = ref_time.shape[:-1]
     else:
         ref_time = metadata[metadata.keys()[0]]['time'].astype('int32')
-    for i, sweep_time in enumerate(ref_time):
+    start = 0
+    for nrays in rays_per_sweep:
+        if nrays == 0:
+            continue    # Do not attempt to order sweeps with no rays
+        s = slice(start, start + nrays)     # slice which selects sweep
+        start += nrays
+        sweep_time_diff = np.diff(ref_time[s])
+        if np.all(sweep_time_diff >= 0) or np.all(sweep_time_diff <= 0):
+            continue
+        else:
+            return False
+    return True
 
+
+def _is_time_ordered_by_roll(data, metadata, rays_per_sweep):
+    """
+    Returns if volume can be time ordered by rolling some or all sweeps.
+    True if the volume can be time ordered, False if not.
+    """
+    if 'XHDR' in data:
+        ref_time = data['XHDR'].copy()
+        ref_time.shape = ref_time.shape[:-1]
+    else:
+        ref_time = metadata[metadata.keys()[0]]['time'].astype('int32')
+    start = 0
+    for nrays in rays_per_sweep:
+        if nrays == 0:
+            continue    # Do not attempt to order sweeps with no rays
+        s = slice(start, start + nrays)     # slice which selects sweep
+        start += nrays
+        sweep_time_diff = np.diff(ref_time[s])
+        count = np.count_nonzero(sweep_time_diff < 0)
+        if count != 0 and count != 1:
+            return False
+    return True
+
+
+def _is_time_ordered_by_reverse_roll(data, metadata, rays_per_sweep):
+    """
+    Returns if volume can be time ordered by reversing and rolling some or all
+    sweeps.  True if the volume can be time ordered, False if not.
+    """
+    if 'XHDR' in data:
+        ref_time = data['XHDR'].copy()
+        ref_time.shape = ref_time.shape[:-1]
+    else:
+        ref_time = metadata[metadata.keys()[0]]['time'].astype('int32')
+    start = 0
+    for nrays in rays_per_sweep:
+        if nrays == 0:
+            continue    # Do not attempt to order sweeps with no rays
+        s = slice(start, start + nrays)     # slice which selects sweep
+        start += nrays
+        sweep_time_diff = np.diff(ref_time[s])
+        if sweep_time_diff.min() < 0:   # optional reverse
+            sweep_time_diff = np.diff(ref_time[s][::-1])
+        count = np.count_nonzero(sweep_time_diff < 0)
+        if count != 0 and count != 1:
+            return False
+    return True
+
+
+def _time_order_data_and_metadata_roll(data, metadata, rays_per_sweep):
+    """
+    Put Sigmet data and metadata in time increasing order using a roll
+    operation.
+    """
+    # Sigmet data is stored by sweep in azimuth or elevation increasing order.
+    # Time ordering PPI scans can typically be achieved by rolling the
+    # ray collected first to the beginning of the sweep, which is performed
+    # here.  Perfect time ordering is achieved if the rays within the sweep
+    # were collected sequentially in a clockwise manner from 0 to 360 degrees
+    # regardless of the first azimuth collected.
+    if 'XHDR' in data:
+        ref_time = data['XHDR'].copy()
+        ref_time.shape = ref_time.shape[:-1]
+    else:
+        ref_time = metadata[metadata.keys()[0]]['time'].astype('int32')
+
+    start = 0
+    for nrays in rays_per_sweep:
+        if nrays == 0:
+            continue    # Do not attempt to order sweeps with no rays
+
+        s = slice(start, start + nrays)     # slice which selects sweep
+        start += nrays
         # determine the number of place by which elements should be shifted.
+        sweep_time = ref_time[s]
         sweep_time_diff = np.diff(sweep_time)
         if sweep_time_diff.min() >= 0:
             continue    # already time ordered
@@ -373,62 +552,96 @@ def _time_order_data_and_metadata_roll(data, metadata):
 
         # roll the data and metadata for each field
         for field in data.keys():
-            data[field][i] = np.roll(data[field][i], shift, axis=0)
-
-            fmd = metadata[field]
-            fmd['time'][i] = np.roll(fmd['time'][i], shift)
-            fmd['nbins'][i] = np.roll(fmd['nbins'][i], shift)
-            fmd['elevation_1'][i] = np.roll(fmd['elevation_1'][i], shift)
-            fmd['elevation_0'][i] = np.roll(fmd['elevation_0'][i], shift)
-            fmd['azimuth_0'][i] = np.roll(fmd['azimuth_0'][i], shift)
-            fmd['azimuth_1'][i] = np.roll(fmd['azimuth_1'][i], shift)
-
+            data[field][s] = np.roll(data[field][s], shift, axis=0)
+            field_metadata = metadata[field]
+            for key in field_metadata.keys():
+                field_metadata[key][s] = np.roll(field_metadata[key][s], shift)
     return
 
 
-def _time_order_data_and_metadata_full(data, metadata):
+def _time_order_data_and_metadata_reverse(data, metadata, rays_per_sweep):
     """
-    Put Sigmet data and metadata in time increasing order by sorting the
-    time.
+    Put Sigmet data and metadata in time increasing order by reverse sweep in
+    time reversed order.
     """
-
-    # Sigmet data is stored by sweep in azimuth increasing order,
-    # to place in time increasing order we must sort each sweep so
-    # that the rays are time ordered.
-    # This assuming all the fields have the same timing, rays are not
-    # assumed to be collected sequentially.
-
+    # Sigmet data is stored by sweep in azimuth or elevation increasing order.
+    # Time ordering RHI scans can typically be achieved by reversing the
+    # ray order of sweep collected in time from 180 to 0 degrees.
+    # Perfect time ordering is achieved if the rays within all sweeps
+    # were collected sequentially from 0 to 180 degree or 180 to 0 degrees.
     if 'XHDR' in data:
         ref_time = data['XHDR'].copy()
         ref_time.shape = ref_time.shape[:-1]
     else:
         ref_time = metadata[metadata.keys()[0]]['time'].astype('int32')
-    for i, sweep_time in enumerate(ref_time):
 
+    start = 0
+    for nrays in rays_per_sweep:
+        if nrays == 0:
+            continue    # Do not attempt to order sweeps with no rays
+
+        s = slice(start, start + nrays)     # slice which selects sweep
+        start += nrays
+        # determine the number of place by which elements should be shifted.
+        sweep_time = ref_time[s]
+        sweep_time_diff = np.diff(sweep_time)
+        if sweep_time_diff.min() >= 0:
+            continue    # already time ordered, no reversal needed
+        # reverse the data and metadata for each field
+        for field in data.keys():
+            data[field][s] = data[field][s][::-1]
+            field_metadata = metadata[field]
+            for key in field_metadata.keys():
+                field_metadata[key][s] = field_metadata[key][s][::-1]
+    return
+
+
+def _time_order_data_and_metadata_full(data, metadata, rays_per_sweep):
+    """
+    Put Sigmet data and metadata in time increasing order by sorting the
+    times.
+    """
+    # Sigmet data is stored by sweep in azimuth or elevation increasing order.
+    # When rays within the sweeps are collected non-sequentially or in a
+    # complex manner, perfect time ordering can only be achived by sorting
+    # the times themselves and reordering the rays according to this sort.
+    # This ordering method should only be used as a last resort when perfect
+    # time ordering is required in the output and other ordering operations
+    # (roll, reverse, reverse-roll) will not order the rays correctly.
+    if 'XHDR' in data:
+        ref_time = data['XHDR'].copy()
+        ref_time.shape = ref_time.shape[:-1]
+    else:
+        ref_time = metadata[metadata.keys()[0]]['time'].astype('int32')
+
+    start = 0
+    for nrays in rays_per_sweep:
+        if nrays == 0:
+            continue    # Do not attempt to order sweeps with no rays
+
+        s = slice(start, start + nrays)     # slice which selects sweep
+        start += nrays
         # determine the indices which sort the sweep time using a stable
         # sorting algorithm to prevent excessive azimuth scrambling.
-        sweep_time_diff = np.diff(sweep_time)
+        sweep_time = ref_time[s]
+        sweep_time_diff = np.diff(ref_time[s])
         if sweep_time_diff.min() >= 0:
             continue    # already time ordered
         sort_idx = np.argsort(sweep_time, kind='mergesort')
 
         # sort the data and metadata for each field
         for field in data.keys():
-            data[field][i] = data[field][i][sort_idx]
-
-            fmd = metadata[field]
-            fmd['time'][i] = fmd['time'][i][sort_idx]
-            fmd['nbins'][i] = fmd['nbins'][i][sort_idx]
-            fmd['elevation_1'][i] = fmd['elevation_1'][i][sort_idx]
-            fmd['elevation_0'][i] = fmd['elevation_0'][i][sort_idx]
-            fmd['azimuth_0'][i] = fmd['azimuth_0'][i][sort_idx]
-            fmd['azimuth_1'][i] = fmd['azimuth_1'][i][sort_idx]
-
+            data[field][s] = data[field][s][sort_idx]
+            field_metadata = metadata[field]
+            for key in field_metadata.keys():
+                field_metadata[key][s] = field_metadata[key][s][sort_idx]
     return
 
 
 def ymds_time_to_datetime(ymds):
     """ Return a datetime object from a Sigmet ymds_time dictionary. """
     dt = datetime.datetime(ymds['year'], ymds['month'], ymds['day'])
-    delta = datetime.timedelta(seconds=ymds['seconds'])
+    # lowest 10 bits of millisecond parameter specifies milliseconds
+    microsec = 1e3 * (ymds['milliseconds'] & 0b1111111111)
+    delta = datetime.timedelta(seconds=ymds['seconds'], microseconds=microsec)
     return dt + delta
