@@ -25,5 +25,5 @@ used for the initial condition of the dealiasing.
 .. literalinclude:: plot_dealias.py
     :lines: 11-
 
-**Total running time of the example:**  9.83 seconds
+**Total running time of the example:**  8.85 seconds
     
