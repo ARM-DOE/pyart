@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.2.0',
+        VERSION:     '1.3.0.dev+46de3ac',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,8 +26,8 @@
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="Py-ART Documentation" href="../../index.html" />
     <link rel="up" title="pyart.io" href="../io.html" />
-    <link rel="next" title="pyart.io._rsl_interface.copy_volume" href="pyart.io._rsl_interface.copy_volume.html" />
-    <link rel="prev" title="pyart.io.sigmet._time_order_data_and_metadata_full" href="pyart.io.sigmet._time_order_data_and_metadata_full.html" /> 
+    <link rel="next" title="pyart.io.sigmet._time_order_data_and_metadata_reverse" href="pyart.io.sigmet._time_order_data_and_metadata_reverse.html" />
+    <link rel="prev" title="pyart.io.sigmet._is_time_ordered_by_reverse_roll" href="pyart.io.sigmet._is_time_ordered_by_reverse_roll.html" /> 
   </head>
   <body>
     <div class="related">
@@ -43,10 +43,10 @@
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pyart.io._rsl_interface.copy_volume.html" title="pyart.io._rsl_interface.copy_volume"
+          <a href="pyart.io.sigmet._time_order_data_and_metadata_reverse.html" title="pyart.io.sigmet._time_order_data_and_metadata_reverse"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="pyart.io.sigmet._time_order_data_and_metadata_full.html" title="pyart.io.sigmet._time_order_data_and_metadata_full"
+          <a href="pyart.io.sigmet._is_time_ordered_by_reverse_roll.html" title="pyart.io.sigmet._is_time_ordered_by_reverse_roll"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
           <li><a href="../index.html" >Developer Reference Manual</a> &raquo;</li>
@@ -63,9 +63,9 @@
 <h1>pyart.io.sigmet._time_order_data_and_metadata_roll<a class="headerlink" href="#pyart-io-sigmet-time-order-data-and-metadata-roll" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pyart.io.sigmet._time_order_data_and_metadata_roll">
-<tt class="descclassname">pyart.io.sigmet.</tt><tt class="descname">_time_order_data_and_metadata_roll</tt><big>(</big><em>data</em>, <em>metadata</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/io/sigmet.py#L350"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.io.sigmet._time_order_data_and_metadata_roll" title="Permalink to this definition">¶</a></dt>
-<dd><p>Put Sigmet data and metadata in time increasing order using a single
-roll.</p>
+<tt class="descclassname">pyart.io.sigmet.</tt><tt class="descname">_time_order_data_and_metadata_roll</tt><big>(</big><em>data</em>, <em>metadata</em>, <em>rays_per_sweep</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/io/sigmet.py#L522"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.io.sigmet._time_order_data_and_metadata_roll" title="Permalink to this definition">¶</a></dt>
+<dd><p>Put Sigmet data and metadata in time increasing order using a roll
+operation.</p>
 </dd></dl>
 
 </div>
@@ -77,11 +77,11 @@ roll.</p>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="pyart.io.sigmet._time_order_data_and_metadata_full.html"
-                        title="previous chapter">pyart.io.sigmet._time_order_data_and_metadata_full</a></p>
+  <p class="topless"><a href="pyart.io.sigmet._is_time_ordered_by_reverse_roll.html"
+                        title="previous chapter">pyart.io.sigmet._is_time_ordered_by_reverse_roll</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="pyart.io._rsl_interface.copy_volume.html"
-                        title="next chapter">pyart.io._rsl_interface.copy_volume</a></p>
+  <p class="topless"><a href="pyart.io.sigmet._time_order_data_and_metadata_reverse.html"
+                        title="next chapter">pyart.io.sigmet._time_order_data_and_metadata_reverse</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/dev_reference/generated/pyart.io.sigmet._time_order_data_and_metadata_roll.txt"
@@ -117,10 +117,10 @@ roll.</p>
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pyart.io._rsl_interface.copy_volume.html" title="pyart.io._rsl_interface.copy_volume"
+          <a href="pyart.io.sigmet._time_order_data_and_metadata_reverse.html" title="pyart.io.sigmet._time_order_data_and_metadata_reverse"
              >next</a> |</li>
         <li class="right" >
-          <a href="pyart.io.sigmet._time_order_data_and_metadata_full.html" title="pyart.io.sigmet._time_order_data_and_metadata_full"
+          <a href="pyart.io.sigmet._is_time_ordered_by_reverse_roll.html" title="pyart.io.sigmet._is_time_ordered_by_reverse_roll"
              >previous</a> |</li>
         <li><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
           <li><a href="../index.html" >Developer Reference Manual</a> &raquo;</li>
@@ -129,7 +129,7 @@ roll.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Feb 03, 2015.
+      Last updated on Feb 19, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>

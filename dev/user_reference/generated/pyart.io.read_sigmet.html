@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.2.0',
+        VERSION:     '1.3.0.dev+46de3ac',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -63,7 +63,7 @@
 <h1>pyart.io.read_sigmet<a class="headerlink" href="#pyart-io-read-sigmet" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pyart.io.read_sigmet">
-<tt class="descclassname">pyart.io.</tt><tt class="descname">read_sigmet</tt><big>(</big><em>filename</em>, <em>field_names=None</em>, <em>additional_metadata=None</em>, <em>file_field_names=False</em>, <em>exclude_fields=None</em>, <em>time_ordered='none'</em>, <em>full_xhdr=None</em>, <em>noaa_hh_hdr=None</em>, <em>debug=False</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/io/sigmet.py#L32"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.io.read_sigmet" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">pyart.io.</tt><tt class="descname">read_sigmet</tt><big>(</big><em>filename</em>, <em>field_names=None</em>, <em>additional_metadata=None</em>, <em>file_field_names=False</em>, <em>exclude_fields=None</em>, <em>time_ordered='none'</em>, <em>full_xhdr=None</em>, <em>noaa_hh_hdr=None</em>, <em>debug=False</em>, <em>ignore_xhdr=False</em>, <em>ignore_sweep_start_ms=None</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/io/sigmet.py#L36"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.io.read_sigmet" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read a Sigmet (IRIS) product file.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -102,17 +102,20 @@ likely only have a &#8216;data&#8217; key, unless the fields are defined in
 <div><p>List of fields to exclude from the radar object. This is applied
 after the <cite>file_field_names</cite> and <cite>field_names</cite> parameters.</p>
 </div></blockquote>
-<p><strong>time_ordered</strong> : &#8216;full&#8217;, &#8216;none&#8217; or &#8216;roll&#8217;.</p>
+<p><strong>time_ordered</strong> : &#8216;none&#8217;, &#8216;sequential&#8217;, &#8216;full&#8217;, ...,  optional</p>
 <blockquote>
-<div><p>Parameter controlling the time ordering of the data. The default,
-&#8216;none&#8217; keep the data ordered in the same manner as it appears in
-the Sigmet file.  &#8216;roll&#8217; will attempt to time order the data within
-each sweep by rolling the earliest collected ray to be the beginning.
-Sequential ordering of the rays is maintained but strict time
-increasing order is not guaranteed.  &#8216;full&#8217; will place data within
-each sweep in a strictly time increasing order, but the rays will
-likely become non-sequential.  The &#8216;full&#8217; option is not recommended
-unless strict time increasing order is required.</p>
+<div><p>Parameter controlling if and how the rays are re-ordered by time.
+The default, &#8216;none&#8217; keeps the rays ordered in the same manner as
+they appears in the Sigmet file.  &#8216;sequential&#8217; will determind and
+apply an operation which maintains a sequential ray order in elevation
+or azimuth yet orders the rays according to time.  If no operation can
+be found to accomplish this a warning is issue and the rays are
+returned in their original order.  &#8216;roll&#8217;, &#8216;reverse&#8217;, and
+&#8216;reverse_and_roll&#8217; will apply that operation to the rays in order to
+place them in time order, direct use of these is not recommended.
+&#8216;full&#8217; will order the rays in strictly time increasing order,
+but the rays will likely become non-sequential, thisoption is not
+recommended unless strict time increasing order is required.</p>
 </div></blockquote>
 <p><strong>full_xhdr</strong> : bool or None</p>
 <blockquote>
@@ -127,6 +130,26 @@ used by the NOAA Hurricane Hunters aircraft radars.  None will
 determine if the extended header is of this type automatically by
 examining the header. The <cite>full_xhdr</cite> parameter is set to True
 when this parameter is True.</p>
+</div></blockquote>
+<p><strong>ignore_xhdr</strong> : bool, optional</p>
+<blockquote>
+<div><p>True to ignore all data in the extended headers if they exist.
+False, the default, extracts milliseconds precision times and other
+parameter from the extended headers if they exists in the file.</p>
+</div></blockquote>
+<p><strong>ignore_sweep_start_ms</strong> : bool or None, optional</p>
+<blockquote>
+<div><p>True to ignore the millisecond parameter in the start time for each
+sweep, False will uses this parameter when determining the timing of
+each ray. None, the default, will ignore the millisecond sweep start
+timing only when the file does not contain extended headers or when
+the extended header has been explicity ignored using the <cite>ignore_xhdr</cite>
+parameter.  The TRMM RSL library ignores these times so setting this
+parameter to True is required to match the times determined when
+reading Sigmet files with <a class="reference internal" href="pyart.io.read_rsl.html#pyart.io.read_rsl" title="pyart.io.read_rsl"><tt class="xref py py-func docutils literal"><span class="pre">pyart.io.read_rsl</span></tt></a>.
+When there are not extended headers ignoring the millisecond sweep
+times provides time data which is always prior to the actual
+collection time with an error from 0 to 2 seconds.</p>
 </div></blockquote>
 <p><strong>debug</strong> : bool, optional</p>
 <blockquote>
@@ -205,7 +228,7 @@ when this parameter is True.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Feb 03, 2015.
+      Last updated on Feb 19, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
