@@ -105,7 +105,7 @@ class RadarMapDisplay(RadarDisplay):
                      min_lon=None, max_lon=None, min_lat=None, max_lat=None,
                      width=None, height=None, lon_0=None, lat_0=None,
                      resolution='h', shapefile=None, edges=True,
-                     filter_transitions=True, **kwargs):
+                     filter_transitions=True, embelish=True, **kwargs):
         """
         Plot a PPI volume sweep onto a geographic map.
 
@@ -191,6 +191,9 @@ class RadarMapDisplay(RadarDisplay):
             coordinates themselved as the gate edges, resulting in a plot
             in which the last gate in each ray and the entire last ray are not
             not plotted.
+        embelish: bool
+            True by default. Set to false to supress drawing of coastlines
+            etc.. Use for speedup when specifying shapefiles.
 
         """
         # parse parameters
@@ -233,10 +236,11 @@ class RadarMapDisplay(RadarDisplay):
                               resolution=resolution, ax=ax, **kwargs)
 
         # add embelishments
-        basemap.drawcoastlines(linewidth=1.25)
-        basemap.drawstates()
-        basemap.drawparallels(lat_lines, labels=[True, False, False, False])
-        basemap.drawmeridians(lon_lines, labels=[False, False, False, True])
+        if embelish == True:
+            basemap.drawcoastlines(linewidth=1.25)
+            basemap.drawstates()
+            basemap.drawparallels(lat_lines, labels=[True, False, False, False])
+            basemap.drawmeridians(lon_lines, labels=[False, False, False, True])
         self.basemap = basemap
         self._x0, self._y0 = basemap(self.loc[1], self.loc[0])
 
