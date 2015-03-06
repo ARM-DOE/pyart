@@ -184,6 +184,8 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
         scan_type = 'sector'
     elif 'rhi' in mode:
         scan_type = 'rhi'
+    elif 'ppi' in mode:
+        scan_type = 'ppi'
     else:
         scan_type = 'other'
 
@@ -279,6 +281,7 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
     if radar_calibration == {}:
         radar_calibration = None
 
+    ncobj.close()
     return Radar(
         time, _range, fields, metadata, scan_type,
         latitude, longitude, altitude,

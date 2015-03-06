@@ -12,7 +12,6 @@ A class and supporting functions for reading Sigmet (raw format) files.
     bin2_to_angle
     bin4_to_angle
     _data_types_from_mask
-    _mask_gates_not_collected
     _is_bit_set
     _parse_ray_headers
     _unpack_structure
@@ -204,11 +203,6 @@ cdef class SigmetFile:
                 metadata[name]['nbins'][i] = ray_nbins
                 metadata[name]['time'][i] = ray_time
                 self.ingest_data_headers[name].append(ingest_data_hdrs[j])
-
-                # mask gates past nbins
-                # assuming nbins constant for all rays in a sweep
-                if name != 'XHDR':
-                    data[name][i, :, ray_nbins[0]:] = np.ma.masked
 
         # scale 1-byte velocity by the Nyquist
         # this conversion is kept in this method so that the

@@ -1,15 +1,14 @@
 #!/usr/bin/env python
 """Py-ART: Python ARM Radar Toolkit
 
-Py-ART is a toolkit contains a variety of utilities that can be strung
-together to produce applications for:
-
-* Reading Radar data
-* Correcting radar data in antenna coordinates
-* Mapping data to a Cartesian Grid
-* Performing retrievals on this mapped data
-* Doing calculations on the retievals
-* And finally writing both radial and Cartesian data to documented NetCDF files
+The Python ARM Radar Toolkit, Py-ART, is an open source Python module containing
+a growing collection of weather radar algorithms and utilities build on top of
+the Scientific Python stack and distributed under the 3-Clause BSD license.
+Py-ART is used by the Atmospheric Radiation Measurement (ARM) Climate Research
+Facility for working with data from a number of precipitation and cloud radars,
+but has been designed so that it can be used by others in the radar and
+atmospheric communities to examine, processes, and analyse data from many types
+of weather radars.
 
 """
 
@@ -30,21 +29,26 @@ else:
 
 
 CLASSIFIERS = """\
-Development Status :: 2 - Pre-Alpha
+Development Status :: 5 - Production/Stable
 Intended Audience :: Science/Research
 Intended Audience :: Developers
 License :: OSI Approved :: BSD License
-Programming Language :: C
 Programming Language :: Python
+Programming Language :: Python :: 2
+Programming Language :: Python :: 2.6
+Programming Language :: Python :: 2.7
+Programming Language :: C
+Programming Language :: Cython
+Programming Language :: Fortran
 Topic :: Scientific/Engineering
 Topic :: Scientific/Engineering :: Atmospheric Science
-Operating System :: Unix
 Operating System :: POSIX :: Linux
-Operating System :: MacOS
+Operating System :: MacOS :: MacOS X
+Operating System :: Microsoft :: Windows
 """
 
 
-NAME = 'pyart'
+NAME = 'arm_pyart'
 MAINTAINER = "Py-ART Developers"
 MAINTAINER_EMAIL = "jhelmus@anl.gov"
 DESCRIPTION = DOCLINES[0]
@@ -55,7 +59,7 @@ LICENSE = 'BSD'
 CLASSIFIERS = filter(None, CLASSIFIERS.split('\n'))
 PLATFORMS = ["Linux", "Mac OS-X", "Unix"]
 MAJOR = 1
-MINOR = 0
+MINOR = 4
 MICRO = 0
 ISRELEASED = False
 VERSION = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
@@ -128,7 +132,7 @@ if not release:
         GIT_REVISION = "Unknown"
 
     if not ISRELEASED:
-        FULLVERSION += '.dev-' + GIT_REVISION[:7]
+        FULLVERSION += '.dev+' + GIT_REVISION[:7]
 
     a = open(filename, 'w')
     try:
@@ -168,6 +172,7 @@ def setup_package():
         description=DESCRIPTION,
         long_description=LONG_DESCRIPTION,
         url=URL,
+        version=VERSION,
         download_url=DOWNLOAD_URL,
         license=LICENSE,
         classifiers=CLASSIFIERS,

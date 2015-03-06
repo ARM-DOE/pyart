@@ -319,7 +319,10 @@ cdef class _RslRay:
         Return a datetime describing the date and time of the ray.
         """
         s = self
-        return datetime(s.year, s.month, s.day, s.hour, s.minute, int(s.sec))
+        full_seconds, fractional_seconds = divmod(s.sec, 1)
+        microseconds = int(fractional_seconds * 1e6)
+        return datetime(s.year, s.month, s.day, s.hour, s.minute, 
+                        int(full_seconds), microseconds)
 
     def get_data(self):
         """
