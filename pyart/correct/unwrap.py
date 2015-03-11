@@ -35,7 +35,7 @@ from ._unwrap_3d import unwrap_3d
 def dealias_unwrap_phase(
         radar, unwrap_unit='sweep', nyquist_vel=None, gatefilter=None,
         rays_wrap_around=None, keep_original=True, vel_field=None,
-        corr_vel_field=None, **kwargs):
+        corr_vel_field=None, skip_checks=False, **kwargs):
     """
     Dealias Doppler velocities using multi-dimensional phase unwrapping.
 
@@ -78,6 +78,10 @@ def dealias_unwrap_phase(
     corr_vel_field : str, optional
         Name to use for the dealiased Doppler velocity field metadata.  None
         will use the default field name from the Py-ART configuration file.
+    skip_checks : bool
+        True to skip checks verifing that an appropiate unwrap_unit is
+        selected, False retains these checked. Setting this parameter to True
+        is not recommended and is only offered as an option for extemem cases.
 
     Returns
     -------
@@ -102,7 +106,8 @@ def dealias_unwrap_phase(
     gatefilter = _parse_gatefilter(gatefilter, radar, **kwargs)
     rays_wrap_around = _parse_rays_wrap_around(rays_wrap_around, radar)
     nyquist_vel = _parse_nyquist_vel(nyquist_vel, radar)
-    _verify_unwrap_unit(radar, unwrap_unit)
+    if not skip_checks:
+        _verify_unwrap_unit(radar, unwrap_unit)
 
     # exclude masked and invalid velocity gates
     gatefilter.exclude_masked(vel_field)
