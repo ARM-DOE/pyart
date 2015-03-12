@@ -667,6 +667,12 @@ def _create_ncvar(dic, dataset, name, dimensions):
     if data.shape == ():
         data.shape = (1,)
     if data.dtype == 'S1':  # string/char arrays
-        ncvar[..., :data.shape[-1]] = data[:]
+        # KLUDGE netCDF4 version around 1.1.6 do not expand an ellipsis
+        # to zero dimensions (Issue #371 of netcdf4-python).
+        # Solution is so we treat 1 dimensional string dimensions explicitly.
+        if ncvar.ndim == 1:
+            ncvar[:data.shape[-1]] = data[:]
+        else:
+            ncvar[..., :data.shape[-1]] = data[:]
     else:
         ncvar[:] = data[:]
