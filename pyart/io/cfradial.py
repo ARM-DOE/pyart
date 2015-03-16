@@ -519,7 +519,14 @@ def write_cfradial(filename, radar, format='NETCDF4', time_reference=None,
     time_dim = ('string_length', )
     units = radar.time['units']
     start_dt = netCDF4.num2date(radar.time['data'][0], units)
+    if start_dt.microsecond != 0:
+        # truncate to nearest second
+        start_dt -= datetime.timedelta(microseconds=start_dt.microsecond)
     end_dt = netCDF4.num2date(radar.time['data'][-1], units)
+    if end_dt.microsecond != 0:
+        # round up to next second
+        end_dt += (datetime.timedelta(seconds=1) -
+                   datetime.timedelta(microseconds=end_dt.microsecond))
     start_dic = {'data': np.array(start_dt.isoformat() + 'Z'),
                  'long_name': 'UTC time of first ray in the file',
                  'units': 'unitless'}
@@ -660,6 +667,12 @@ def _create_ncvar(dic, dataset, name, dimensions):
     if data.shape == ():
         data.shape = (1,)
     if data.dtype == 'S1':  # string/char arrays
-        ncvar[..., :data.shape[-1]] = data[:]
+        # KLUDGE netCDF4 version around 1.1.6 do not expand an ellipsis
+        # to zero dimensions (Issue #371 of netcdf4-python).
+        # Solution is so we treat 1 dimensional string dimensions explicitly.
+        if ncvar.ndim == 1:
+            ncvar[:data.shape[-1]] = data[:]
+        else:
+            ncvar[..., :data.shape[-1]] = data[:]
     else:
         ncvar[:] = data[:]
