@@ -321,7 +321,7 @@ cdef class _RslRay:
         s = self
         full_seconds, fractional_seconds = divmod(s.sec, 1)
         microseconds = int(fractional_seconds * 1e6)
-        return datetime(s.year, s.month, s.day, s.hour, s.minute, 
+        return datetime(s.year, s.month, s.day, s.hour, s.minute,
                         int(full_seconds), microseconds)
 
     def get_data(self):
@@ -1001,6 +1001,39 @@ cdef class _RslVolume:
                     data[ray_count + nray, nbin] = ray.h.f(raw)
             ray_count += nrays
         return data
+
+    def is_range_bins_uniform(self):
+        """
+        is_range_bins_uniform()
+
+        Return True is the locations of the range bin are identical for all
+        rays, False if locations change in one or more rays.
+        """
+        cdef int nrays = self._Volume.sweep[0].h.nrays
+        cdef _rsl_h.Sweep * sweep
+        cdef _rsl_h.Ray * ray
+
+        # loop over the sweeps and rays checking that the gate_size and
+        # range_bin1 are the same as the that in the first ray
+        sweep = self._Volume.sweep[0]
+        assert sweep is not NULL
+        ray = sweep.ray[0]
+        assert ray is not NULL
+        ref_gate_size = ray.h.gate_size
+        ref_range_bin1 = ray.h.range_bin1
+
+        for i in range(self.nsweeps):
+            sweep = self._Volume.sweep[i]
+            assert sweep is not NULL
+            nrays = sweep.h.nrays
+            for j in range(nrays):
+                ray = sweep.ray[j]
+                assert ray is not NULL
+                if ray.h.gate_size != ref_gate_size:
+                    return False
+                if ray.h.range_bin1 != ref_range_bin1:
+                    return False
+        return True
 
     cdef _prtmode(self, _rsl_h.Ray_header h):
         """ Return the prt mode of a given Ray header. """
