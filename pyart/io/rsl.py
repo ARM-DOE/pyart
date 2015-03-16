@@ -27,7 +27,7 @@ from .common import dms_to_d, make_time_unit_str
 
 def read_rsl(filename, field_names=None, additional_metadata=None,
              file_field_names=False, exclude_fields=None,
-             radar_format=None, callid=None):
+             radar_format=None, callid=None, skip_range_check=False):
     """
     Read a file supported by RSL
 
@@ -60,6 +60,11 @@ def read_rsl(filename, field_names=None, additional_metadata=None,
     callid : str or None
         Four letter NEXRAD radar Call ID, only used when radar_format is
         'wsr88d'.
+    skip_range_check : bool, optional
+        True to skip check for uniform range bin location, the reported range
+        locations will only be verified true for the first ray.  False will
+        perform the check and raise a IOError when the locations of the gates
+        change between rays.
 
     Returns
     -------
@@ -111,6 +116,14 @@ def read_rsl(filename, field_names=None, additional_metadata=None,
     time['units'] = make_time_unit_str(t_start)
 
     # range
+    if (not skip_range_check) and (not first_volume.is_range_bins_uniform()):
+        message = (
+            "Range bin locations change between rays. File cannot be read "
+            "with with correct range locations for all rays. "
+            "To read in data reporting the ranges from the first ray set the "
+            "**skip_range_check** parameter to True.")
+        raise IOError(message)
+
     _range = filemetadata('range')
     gate0 = first_ray.range_bin1
     gate_size = first_ray.gate_size
