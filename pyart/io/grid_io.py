@@ -53,15 +53,9 @@ def read_grid(filename, exclude_fields=None):
 
     # metadata
     metadata = dict([(k, getattr(ncobj, k)) for k in ncobj.ncattrs()])
-
-    # axes
-    axes_keys = ['time', 'time_start', 'time_end', 'base_time',
-                 'time_offset', 'z_disp', 'y_disp', 'x_disp',
-                 'alt', 'lat', 'lon', 'z', 'lev', 'y', 'x']
-    axes = dict((k, _ncvar_to_dict(ncobj.variables[k])) for k in axes_keys
-                if k in ncobj.variables)
-
-    # read in the fields
+    
+    # fields are any thing with full shape, axes are anything with parcial shape
+    # first search for fields
     # determine the correct shape of the fields
     # ARM standard requires the left-most dimension to be time, so the shape
     # of the fields in the file is (1, nz, ny, nx) but the field data should
@@ -70,22 +64,36 @@ def read_grid(filename, exclude_fields=None):
     field_shape = tuple([len(ncobj.dimensions[k]) for k in dim_keys
                          if k in ncobj.dimensions])
     field_shape_with_time = (1, ) + field_shape
-
-    # check all non-axes variables, those with the correct shape
-    # are added to the field dictionary, if a wrong sized field is
-    # detected a warning is raised
-    field_keys = [k for k in ncobj.variables if k not in axes_keys
-                  and k not in exclude_fields]
+    dimensions_allowed = set(dim_keys+['time']) #dimensions allowed for axes
+    dimension_to_axis = {'nz':'Z', 'ny':'Y', 'nx':'X', 'z':'Z', 'y':'Z', 'x':'X','time':'T'}
+                         
+                             
+    # check all variables, those with the correct shape
+    # are added to the field dictionary, if a wrong sized add to axes
+    var_keys = [k for k in ncobj.variables if k not in exclude_fields]
+    axes_key = []
     fields = {}
-    for field in field_keys:
+    for field in var_keys:
         field_dic = _ncvar_to_dict(ncobj.variables[field])
         if field_dic['data'].shape == field_shape_with_time:
             field_dic['data'].shape = field_shape
             fields[field] = field_dic
         else:
-            bad_shape = field_dic['data'].shape
-            warn('Field %s skipped due to incorrect shape' % (field))
-
+            axes_key.append(field)
+    
+    #search for axes with correct dimensions, if wrong warning is raised
+    axes = {}
+    for axis in axes_key:
+        dimensions = ncobj.variables[axis].dimensions 
+        if dimensions_allowed.issuperset(dimensions):
+            axis_dic = _ncvar_to_dict(ncobj.variables[axis])
+            if 'axis' not in axis_dic:
+                form = "".join([dimension_to_axis[k] for k in dimensions])
+                axis_dic['axis'] = form
+            axes[axis] = axis_dic
+        else:
+            warn('Field %s skipped due to incorrect shape' % (axis))
+    
     return Grid(fields, axes, metadata)
 
 
@@ -121,15 +129,23 @@ def write_grid(filename, grid, format='NETCDF4', arm_time_variables=False):
     ncobj.createDimension('nx', nx)
 
     # axes variables
-    _create_ncvar(grid.axes['time'], ncobj, 'time', ('time', ))
-    _create_ncvar(grid.axes['time_end'], ncobj, 'time_end', ('time', ))
-    _create_ncvar(grid.axes['time_start'], ncobj, 'time_start', ('time', ))
-    _create_ncvar(grid.axes['x_disp'], ncobj, 'x_disp', ('nx', ))
-    _create_ncvar(grid.axes['y_disp'], ncobj, 'y_disp', ('ny', ))
-    _create_ncvar(grid.axes['z_disp'], ncobj, 'z_disp', ('nz', ))
-    _create_ncvar(grid.axes['lat'], ncobj, 'lat', ('time', ))
-    _create_ncvar(grid.axes['lon'], ncobj, 'lon', ('time', ))
-    _create_ncvar(grid.axes['alt'], ncobj, 'alt', ('time', ))
+    # allow writing all elements of axes to variables, so that the user may change the output netcdf by changing direct the grid object at the same time as Grid created by Pyart are still written in ARM format. We uses the 'axis' attribute to determine the dimension, one however should discuss adding this information direct in the grid object
+    for key in grid.axes.keys():
+        if "axis" in grid.axes[key].keys():
+            if 'X'==grid.axes[key]["axis"]:
+                dimension=('nx',)
+            elif 'Y'==grid.axes[key]["axis"]:
+                dimension=('ny',)
+            elif 'Z'==grid.axes[key]["axis"]:
+                dimension=('nz',)
+            elif 'YX'==grid.axes[key]["axis"]:
+                dimension=('ny','nx')
+            else:
+                dimension=()
+        else:
+            dimension=('time',)
+        _create_ncvar(grid.axes[key], ncobj, key, dimension)
+
 
     # create ARM time variables base_time and time_offset, if requested
     if arm_time_variables:
