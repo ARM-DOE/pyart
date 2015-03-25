@@ -676,3 +676,72 @@ def _create_ncvar(dic, dataset, name, dimensions):
             ncvar[..., :data.shape[-1]] = data[:]
     else:
         ncvar[:] = data[:]
+
+def binarize_ncvar(dic, dtype=np.int8, minimum=None, maximum=None):
+    """
+    Binarize variable data in_place to int, allowing decreassing size need to write it.
+    Add atributes 'scale_factor' and 'add_offset' to scale it back to float
+    
+    Parameters
+    ----------
+    dic : dict
+        Radar dictionary to containing variable data and meta-data
+    dtype : Numpy Dtype
+        Integer numpy dtype to map to.
+    minimum,maximum : float
+        Greatest and Smallest values in the data, those values will be mapped to 
+        the smallest+1 and greates-1 values that dtype can hold. Anything outside
+        that range will be mapped to _Fillvalue. If equal to None will get it with
+        numpy.amin and numpy.amax.
+    
+    """
+    
+    #test: dtype must be integer
+    if dtype in np.sctypes['int']:
+        pass
+    elif dtype in np.sctypes['uint']:
+        import warnings
+        warnings.warn("Warning: netcdf files may not store unsignet integers properly")
+    else:
+        raise ValueError('dtype: %s is not an integer type' % dtype)
+    
+    if "_FillValue" in dic:
+        FillValue = dic["_FillValue"]
+    else:
+        FillValue = np.NaN
+    #mask fill value
+    data = dic['data'].copy()
+    
+    data = np.ma.array(dic['data'].copy(),mask=(~np.isfinite(data) | (data == FillValue) ))
+    
+    if not minimum:
+        minimum=1.0*np.amin(data)
+    if not maximum:
+        maximum=1.0*np.amax(data)
+    
+    if maximum<minimum:
+        raise ValueError('Maximum %f is smaller than Minimum %f' %(maximum,minimum))
+    elif maximum==minimum:
+        import warnings
+        warnings.warn('Maximum %f is equal to Minimum %f' %(maximum,minimum))
+        maximum=minimum+1
+    
+    data = np.ma.array(data,mask=( (data<minimum) | (data > maximum) ))    
+    
+    #get max and min scaled, let extremes for fillvalues
+    maxi=1.0*(np.iinfo(dtype).max-1)
+    mini=1.0*(np.iinfo(dtype).min+1)
+    scale = (maximum-minimum)/(maxi-mini)
+    offset = minimum-mini*scale
+    
+    scaled_data=np.ma.where(data.mask,np.iinfo(dtype).min,((data-offset)/scale))
+    
+    dic["data"] = scaled_data.astype(dtype)
+    dic["_FillValue"] = np.array(np.iinfo(dtype).min,dtype=dtype)
+    dic["scale_factor"] = scale
+    dic["add_offset"] = offset
+    
+
+
+
+

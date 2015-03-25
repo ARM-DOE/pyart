@@ -22,6 +22,7 @@ from and write data to a number of file formats.
     write_cfradial
     read_grid
     write_grid
+    binarize_ncvar
 
 """
 
@@ -33,7 +34,7 @@ except ImportError:
 from .mdv import read_mdv
 from .sigmet import read_sigmet
 from .chl import read_chl
-from .cfradial import read_cfradial, write_cfradial
+from .cfradial import read_cfradial, write_cfradial, binarize_ncvar
 from .nexrad_archive import read_nexrad_archive
 from .nexrad_cdm import read_nexrad_cdm
 from .grid_io import read_grid, write_grid
