@@ -9,7 +9,7 @@ import numpy as np
 from ..core.grid import Grid
 from ..graph.common import corner_to_point
 from ..config import get_fillvalue
-from .cython_fast_grid_mapper import from_cartesian_get_value
+from .cython_fast_grid_mapper import from_cartesian_get_value,cython_fast_map
 
 # libs for parallel processing
 import multiprocessing
@@ -134,6 +134,26 @@ def fast_map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
                 index = k+index-1
                 gate_index[iradar,i] = index
 
+
+    grid_data_simple = cython_fast_map(z,y,x, offset[0],offset[1] , offset[2], max_range,badval, sweeps,sweeps_index, ray_index,gate_index, radars, fields)
+    
+    # create and return the grid dictionary
+    grid_data = np.ma.empty((nz, ny, nx, nfields), dtype=np.float64)
+    grid_data.data[:] = grid_data_simple[:]
+    grid_data = np.ma.masked_where( grid_data.data == badval, grid_data)
+    
+    # create and return the grid dictionary
+    grids = dict([(f, grid_data[..., i]) for i, f in enumerate(fields)])
+    return grids
+    
+#XXX The rest of this file is deprecated
+#XXX 
+#XXX 
+#XXX 
+#XXX 
+#XXX 
+#XXX 
+
 # for every point in grid found the coresponding bin
 # could do this with numpy array but would need to much memory, so make one index at time and parallelize it by hand, also cython if not enough.
     #shared memory, must be simple array, not masked
@@ -167,6 +187,8 @@ def fast_map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
     grids = dict([(f, grid_data[..., i]) for i, f in enumerate(fields)])
     return grids
 
+
+
 def thread_loop(thread, threads, array_indexes, grid_data_shared ,x,y,z,offset,max_range,badval,radars,fields,nfields,sweeps,sweeps_index,ray_index,gate_index):
 
     total_points = array_indexes.shape[0]
@@ -176,39 +198,9 @@ def thread_loop(thread, threads, array_indexes, grid_data_shared ,x,y,z,offset,m
         value = from_cartesian_get_value(z[iz],y[iy],x[ix], offset[0],offset[1] , offset[2], max_range,badval, sweeps,sweeps_index, ray_index,gate_index, radars, fields, nfields)
         grid_data_shared[iz, iy, ix] = value
 
-            
-            
-"""
-def from_cartesian_get_value(z,y,x, z_offset, y_offset, x_offset , max_range,badval ,sweeps,sweeps_index,ray_index,gate_index,radars,fields,nfields):
-    (rng,azi,elev) = cart_to_radar_coords (z,y,x,z_offset, y_offset, x_offset)
-    if rng<0 or rng>=max_range:
-        return badval
-    
-    isweep = sweeps_index[np.ceil((elev+90)*2).astype(int)]
-    if isweep<0: #no elevation, this offen happen
-        return badval
-
-    iray = ray_index[isweep,np.ceil(azi).astype(int)]
-    if iray<0: #no ray, this almost does't happen
-        return badval
-
-    iradar = sweeps[isweep][2]
-    igate = gate_index[iradar,np.ceil(rng/100).astype(int)]
-    if igate<0:#no gate, this almost does't happen
-        return badval
-        
-    # we have data
-    value = np.empty((nfields), dtype=np.float64)
-    value.fill(badval)
-    for ifield in range(nfields):
-        if radars[iradar].fields[fields[ifield]]['data'].mask[iray,igate]:
-            value[ifield] = badval
-        else:
-            value[ifield] = radars[iradar].fields[fields[ifield]]['data'].data[iray,igate]
-    return value
-"""
 
 # XXX move this to another module
+# XXX not being used, cython version used instead
 def cart_to_radar_coords(z,y,x,z_offset,y_offset,x_offset):
     """
     
