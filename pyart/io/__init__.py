@@ -22,6 +22,7 @@ from and write data to a number of file formats.
     write_cfradial
     read_grid
     write_grid
+    add_2d_latlon_axis
 
 """
 
@@ -38,5 +39,6 @@ from .nexrad_archive import read_nexrad_archive
 from .nexrad_cdm import read_nexrad_cdm
 from .grid_io import read_grid, write_grid
 from .auto_read import read
+from .common import add_2d_latlon_axis
 
 __all__ = [s for s in dir() if not s.startswith('_')]
