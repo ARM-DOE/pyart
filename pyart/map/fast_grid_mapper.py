@@ -11,10 +11,6 @@ from ..graph.common import corner_to_point
 from ..config import get_fillvalue
 from .cython_fast_grid_mapper import from_cartesian_get_value,cython_fast_map
 
-# libs for parallel processing
-import multiprocessing
-import ctypes
-import os
 
 def fast_map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
                 fields=None, refl_filter_flag=True, refl_field=None,
@@ -133,8 +129,13 @@ def fast_map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
             else:
                 index = k+index-1
                 gate_index[iradar,i] = index
-
-
+    
+    # create shared memory
+    grid_data_shared_base = multiprocessing.Array(ctypes.c_double, nz*ny*nx*nfields)
+    grid_data_shared      = np.ctypeslib.as_array(grid_data_shared_base.get_obj())
+    grid_data_shared      = grid_data_shared.reshape(nz, ny, nx, nfields)
+    
+    
     grid_data_simple = cython_fast_map(z,y,x, offset[0],offset[1] , offset[2], max_range,badval, sweeps,sweeps_index, ray_index,gate_index, radars, fields)
     
     # create and return the grid dictionary
