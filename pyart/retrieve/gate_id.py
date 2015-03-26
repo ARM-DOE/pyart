@@ -58,14 +58,14 @@ def map_profile_to_gates(profile, heights,
 
     #set up the interpolation
     if toa == None:
-        if 'mask' in dir(my_profile['temp']):
-            toa = np.where(my_profile['temp'].mask)[0].min()
+        if 'mask' in dir(profile):
+            toa = np.where(profile.mask)[0].min()
         else:
             toa = -1
 
     f_interp = interpolate.interp1d(heights[0:toa], profile[0:toa],
             bounds_error = False,
-            fill_value = pyart.config.get_fillvalue())
+            fill_value = get_fillvalue())
 
     #interpolate
     fld = np.ma.masked_equal(f_interp(z + radar.altitude['data'][0]),
