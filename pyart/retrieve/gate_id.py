@@ -95,3 +95,52 @@ def map_profile_to_gates(profile, heights,
 
     return height_dict, profile_dict
 
+def fetch_radar_time_profile(netCDF4_vobject, radar,
+                             time_key = 'time', height_key = 'height',
+                             nvars = None):
+    """
+    This is an ARM specific method which, given a radar object will extract
+    the correct profile out of netCDF Variables from a Interpolated Sonde VAP
+    ----------
+    netCDF4_vobject : OrderedDict
+        Ordered dictionary of NetCDF4 variable objects
+        (as taken from the Dataset.variables)
+    radar : Radar
+        Radar object to use.
+
+    Returns
+    -------
+    return_dic : dict
+        Profiles at the start time of the radar
+
+    Other Parameters
+    ----------------
+    time_key : string
+        Key to find a CF startard time variable
+    height_key : string
+        Key to find profile height data
+
+    References
+    ----------
+
+    """
+    if nvars == None:
+        nvars = []
+        for key in netCDF4_vobject.keys():
+            if netCDF4_vobject[key].shape == (len(netCDF4_vobject[time_key]),
+                                              len(netCDF4_vobject[height_key])):
+                nvars.append(key)
+
+    radar_time_object = netCDF4.num2date(radar.time['data'][0],
+                                         radar.time['units'])
+    seconds_since_start_of_day = (radar_time_object\
+                - netCDF4.datetime(radar_time_object.year,
+                                   radar_time_object.month,
+                                   radar_time_object.day)).seconds
+    time_index = abs(netCDF4_vobject[time_key][:] - seconds_since_start_of_day).argmin()
+    return_dic = {}
+    for key in nvars:
+        return_dic.update({key : netCDF4_vobject[key][time_index, :] })
+    return_dic.update({height_key : netCDF4_vobject[height_key][:]})
+    return return_dic
+
