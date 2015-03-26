@@ -12,6 +12,7 @@ Functions for performing radar retrievals.
 
     steiner_conv_strat
     map_profile_to_gates
+    fetch_radar_time_profile
 
 
 """
@@ -22,6 +23,6 @@ try:
 except:
     _F90_EXTENSIONS_AVAILABLE = False
 
-from .gate_id import map_profile_to_gates
+from .gate_id import map_profile_to_gates, fetch_radar_time_profile
 
 __all__ = [s for s in dir() if not s.startswith('_')]
