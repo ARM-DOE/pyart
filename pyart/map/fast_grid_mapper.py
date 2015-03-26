@@ -130,12 +130,6 @@ def fast_map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
                 index = k+index-1
                 gate_index[iradar,i] = index
     
-    # create shared memory
-    grid_data_shared_base = multiprocessing.Array(ctypes.c_double, nz*ny*nx*nfields)
-    grid_data_shared      = np.ctypeslib.as_array(grid_data_shared_base.get_obj())
-    grid_data_shared      = grid_data_shared.reshape(nz, ny, nx, nfields)
-    
-    
     grid_data_simple = cython_fast_map(z,y,x, offset[0],offset[1] , offset[2], max_range,badval, sweeps,sweeps_index, ray_index,gate_index, radars, fields)
     
     # create and return the grid dictionary
