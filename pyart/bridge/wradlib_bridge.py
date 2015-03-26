@@ -12,6 +12,7 @@ Pyart methods linking to wradlib functions http://wradlib.bitbucket.org/
 """
 import wradlib
 import numpy as np
+from ..config import get_metadata
 
 def texture_of_complex_phase(radar, phidp_key = 'differential_phase'):
     """
@@ -47,7 +48,7 @@ def texture_of_complex_phase(radar, phidp_key = 'differential_phase'):
 
     #calculate texture using wradlib
     w_texture_complex = wradlib.dp.texture((np.real(complex_phase) +1.0)*180)
-    texture_field = pyart.config.get_metadata(phidp_key)
+    texture_field = get_metadata(phidp_key)
     texture_field['data'] = w_texture_complex
     texture_field['long_name'] = 'Texture of Differential phase (PhiDP)'
     texture_field['standard_name'] = 'differential_phase_hv_texture'
