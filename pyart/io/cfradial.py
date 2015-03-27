@@ -644,6 +644,11 @@ def _create_ncvar(dic, dataset, name, dimensions):
                                    zlib=True, least_significant_digit=lsd,
                                    fill_value=fill_value)
 
+    #as the variable type is controled by data.dtype, data must get here in the right type and therefore scaled
+    #we must prevent automatic scalling o re-scaling the data
+    if "scale_factor" in dic.keys() or "add_offset" in dic.keys(): 
+        ncvar.set_auto_maskandscale(False)
+
     # long_name attribute first if present, ARM standard
     if 'long_name' in dic.keys():
         ncvar.setncattr('long_name', dic['long_name'])
@@ -726,7 +731,7 @@ def binarize_ncvar(dic, dtype=np.int8, minimum=None, maximum=None):
         warnings.warn('Maximum %f is equal to Minimum %f' %(maximum,minimum))
         maximum=minimum+1
     
-    data = np.ma.array(data,mask=( (data<minimum) | (data > maximum) ))    
+    data = np.ma.array(data,mask=(data.mask | (data<minimum) | (data > maximum) ))    
     
     #get max and min scaled, let extremes for fillvalues
     maxi=1.0*(np.iinfo(dtype).max-1)
