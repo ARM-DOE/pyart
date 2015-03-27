@@ -36,6 +36,11 @@ from .ckdtree import cKDTree
 from .ball_tree import BallTree
 
 
+
+import multiprocessing
+import ctypes
+import os
+
 def grid_from_radars(radars, grid_shape, grid_limits, **kwargs):
     """
     Map one or more radars to a Cartesian grid returning a Grid object.
@@ -221,7 +226,7 @@ class NNLocator:
         if algorithm == 'kd_tree':
             self.tree = cKDTree(data, leafsize=leafsize)
         elif algorithm == 'ball_tree':
-            self.tree = BallTree(data, leaf_size=leafsize)
+            self.tree = BallTree(data, leaf_size=leafsize,)
 
     def find_neighbors_and_dists(self, q, r):
         """
@@ -386,8 +391,21 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
 
     """
     # check the parameters
-    if weighting_function.upper() not in ['CRESSMAN', 'BARNES']:
+    weighting_function_CRESSMAN = False
+    weighting_function_BARNES = False
+    weighting_function_NEAREST = False
+    weighting_function_AVERAGE = False
+    if weighting_function.upper() == 'CRESSMAN':
+        weighting_function_CRESSMAN = True
+    elif weighting_function.upper() == 'BARNES':
+        weighting_function_BARNES = True
+    elif weighting_function.upper() == 'NEAREST':
+        weighting_function_NEAREST = True
+    elif weighting_function.upper() == 'AVERAGE':
+        weighting_function_AVERAGE = True
+    else:
         raise ValueError('unknown weighting_function')
+    weighting_function_boolean=(weighting_function_CRESSMAN,weighting_function_BARNES,weighting_function_NEAREST,weighting_function_AVERAGE)
     if algorithm not in ['kd_tree', 'ball_tree']:
         raise ValueError('unknow algorithm: %s' % algorithm)
     badval = get_fillvalue()
@@ -490,6 +508,7 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
             flat_field_data = radar.fields[field]['data'].ravel()
             if copy_field_data:
                 field_data[start:end, ifield] = flat_field_data
+                field_data_objs = None
             else:
                 field_data_objs[ifield, iradar] = flat_field_data
         del flat_field_data
@@ -499,6 +518,7 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
         # copy_field_data == True we filtered the field data in the
         # same manner as we will filter the gate locations.
         filtered_field_data = field_data[include_gate]
+        lookup = None
     else:
         # copy_field_data == True, build a lookup table which maps from
         # filtered gate number to (radar number, radar gate number)
@@ -557,61 +577,40 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
             raise ValueError('unknown roi_func: %s' % roi_func)
 
     # create array to hold interpolated grid data and roi if requested
+    #print "Create Grid Data"
     grid_data = np.ma.empty((nz, ny, nx, nfields), dtype=np.float64)
     grid_data.set_fill_value(badval)
+    
+    #print "Create Parallel memory"
+    grid_data_shared_base = multiprocessing.Array(ctypes.c_double, nz*ny*nx*nfields)
+    grid_data_shared      = np.ctypeslib.as_array(grid_data_shared_base.get_obj())
+    grid_data_shared      = grid_data_shared.reshape(nz, ny, nx, nfields)
+    #grid_data_shared[:]   = badval
 
     if map_roi:
         roi = np.empty((nz, ny, nx), dtype=np.float64)
+    else:
+        roi = None
+    x=np.linspace(x_start,  x_stop, nx)
+    y=np.linspace(y_start,  y_stop, ny)
+    z=np.linspace(z_start,  z_stop, nz)
 
-    # interpolate field values for each point in the grid
-    for iz, iy, ix in np.ndindex(nz, ny, nx):
+    processos = []
+    threads = multiprocessing.cpu_count()
+    array_indices = np.indices((nz,ny,nx)).T.reshape(-1,len((nz,ny,nx)))
+    
+    for thread in range(threads):
+       processos.append( multiprocessing.Process( target=from_cartesian_get_value, args=( thread, threads, array_indices,  grid_data_shared,x,y,z,roi_func,map_roi,roi,nnlocator,badval,copy_field_data,filtered_field_data,lookup,total_gates,nfields,field_data_objs, weighting_function_boolean, ) ) )
+   
+    for processo in processos:
+       processo.start()
 
-        # calculate the grid point
-        x = x_start + x_step * ix
-        y = y_start + y_step * iy
-        z = z_start + z_step * iz
-        r = roi_func(z, y, x)
-        if map_roi:
-            roi[iz, iy, ix] = r
-
-        #find neighbors and distances
-        ind, dist = nnlocator.find_neighbors_and_dists((z, y, x), r)
-
-        if len(ind) == 0:
-            # when there are no neighbors, mark the grid point as bad
-            grid_data[iz, iy, ix] = np.ma.masked
-            grid_data.data[iz, iy, ix] = badval
-            continue
-
-        # find the field values for all neighbors
-        if copy_field_data:
-            # copy_field_data == True, a slice will get the field data.
-            nn_field_data = filtered_field_data[ind]
-        else:
-            # copy_field_data == False, use the lookup table to find the
-            # radar numbers and gate numbers for the neighbors.  Then
-            # use the _load_nn_field_data function to load this data from
-            # the field data object array.  This is done in Cython for speed.
-            r_nums, e_nums = divmod(lookup[ind], total_gates)
-            npoints = r_nums.size
-            nn_field_data = np.empty((npoints, nfields), np.float64)
-            _load_nn_field_data(field_data_objs, nfields, npoints, r_nums,
-                                e_nums, nn_field_data)
-
-        # preforms weighting of neighbors.
-        dist2 = dist * dist
-        r2 = r * r
-
-        if weighting_function.upper() == 'CRESSMAN':
-            weights = (r2 - dist2) / (r2 + dist2)
-            value = np.ma.average(nn_field_data, weights=weights, axis=0)
-        elif weighting_function.upper() == 'BARNES':
-            w = np.exp(-dist2 / (2.0 * r2)) + 1e-5
-            w /= np.sum(w)
-            value = np.ma.dot(w, nn_field_data)
-
-        grid_data[iz, iy, ix] = value
-
+    for processo in processos:
+       processo.join() 
+       
+    grid_data.data[:] = grid_data_shared[:]
+    grid_data = np.ma.masked_where( grid_data.data == badval, grid_data)
+    
     # create and return the grid dictionary
     grids = dict([(f, grid_data[..., i]) for i, f in enumerate(fields)])
     if map_roi:
@@ -758,3 +757,86 @@ def _gen_roi_func_dist_beam(h_factor, nb, bsp, min_radius, offsets):
         return min(r)
 
     return roi
+
+def from_cartesian_get_value(thread, threads, array_indices, grid_data_shared ,x,y,z,roi_func,map_roi,roi,nnlocator,badval,copy_field_data,filtered_field_data,lookup,total_gates,nfields,field_data_objs, weighting_function):
+
+    # REVERTON: Apenas obtendo o total de indices
+    total_indices = array_indices.shape[0]
+    
+    for i in range(thread, total_indices, threads):
+        
+        # REVERTON: Obtem o index no array de indices
+        (iz,iy,ix) = array_indices[i]
+        
+        # REVERTON: A partir daqui o codigo fica igual a versao original
+
+        # calculate the grid point
+    #        x = x_start + x_step * ix
+    #        y = y_start + y_step * iy
+    #        z = z_start + z_step * iz
+        r = roi_func(z[iz], y[iy], x[ix])
+        if map_roi:
+            roi[iz, iy, ix] = r
+
+        #find neighbors and distances
+        ind, dist = nnlocator.find_neighbors_and_dists((z[iz], y[iy], x[ix]), r)
+
+        if len(ind) == 0:
+            # when there are no neighbors, mark the grid point as bad
+            # REVERTON: A matriz grid_data_shared nao permite as operacoes abaixo entao
+            # entao apenas marcar como badval e realizar as operacaoes abaixo para cada badval de grid_data_shared
+            # fora da funcao from_cartesian_get_value
+      
+            #grid_data[iz, iy, ix] = np.ma.masked
+            #grid_data.data[iz, iy, ix] = badval
+        
+            # REVERTON: Apenas marcando como badval
+            grid_data_shared[iz, iy, ix] = badval
+            
+            # REVERTON: Na versao original terminava aqui, agora ao pode mais
+            #return
+
+        else:
+
+            # find the field values for all neighbors
+#            if copy_field_data:
+                # copy_field_data == True, a slice will get the field data.
+#                pass
+                
+#            else:
+                # copy_field_data == False, use the lookup table to find the
+                # radar numbers and gate numbers for the neighbors.  Then
+                # use the _load_nn_field_data function to load this data from
+                # the field data object array.  This is done in Cython for speed.
+#                r_nums, e_nums = divmod(lookup[ind], total_gates)
+#                npoints = r_nums.size
+#                nn_field_data = np.empty((npoints, nfields), np.float64)
+#                _load_nn_field_data(field_data_objs, nfields, npoints, r_nums,
+#                                        e_nums, nn_field_data)
+
+            # preforms weighting of neighbors.
+            dist2 = dist * dist
+            r2 = r * r
+
+            if weighting_function[0]:
+                weights = (r2 - dist2) / (r2 + dist2)
+                nn_field_data = filtered_field_data[ind]
+                value = np.ma.average(nn_field_data, weights=weights, axis=0)
+            elif weighting_function[1]:
+                w = np.exp(-dist2 / (2.0 * r2)) + 1e-5
+                w /= np.sum(w)
+                nn_field_data = filtered_field_data[ind]
+                value = np.ma.dot(w, nn_field_data)
+            elif weighting_function[2]:
+                min_ind = dist.argmin()
+                value = filtered_field_data[ind[min_ind]]
+            elif weighting_function[3]:
+                nn_field_data = filtered_field_data[ind]
+                weights = np.ones(dist2.shape)
+                w = weights/len(dist2)
+                value = np.ma.dot(w, nn_field_data)
+            
+            # REVERTON: Convertendo valores mascarados em badval, depois estes valores (badval)
+            # serao mascarados novamente
+            value = np.where( value.mask, badval, value )
+            grid_data_shared[iz, iy, ix] = value
