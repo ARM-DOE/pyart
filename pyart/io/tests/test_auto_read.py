@@ -64,6 +64,11 @@ def test_autoread_nexrad_cdm():
     assert radar.metadata['original_container'] == 'NEXRAD Level II'
 
 
+def test_autoread_nexrad_level3():
+    radar = pyart.io.read(pyart.testing.NEXRAD_LEVEL3_MSG19)
+    assert radar.metadata['original_container'] == 'NEXRAD Level 3'
+
+
 def test_autoread_raises():
     f = StringIO('0000000000000000000')
     assert_raises(TypeError, pyart.io.read, f)
@@ -75,6 +80,7 @@ def test_determine_filetype():
         ('\x89HDF\r\n\x1a\n\x02\x08\x08\x00', 'NETCDF4'),
         ('CDF', 'NETCDF3'),
         ('AR2V0006.501', 'WSR88D'),
+        ('SDUS54 KBMX ', 'NEXRADL3'),
         ('\x1b\x00\x08\x00\x00\x08\xb7\x07\x00\x00\x00\x00', 'SIGMET'),
         ('BZh91AY&SY\xbd\x12', 'BZ2'),
         ('UF', 'UF'),                   # not from a real file
