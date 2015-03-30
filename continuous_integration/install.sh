@@ -40,6 +40,13 @@ if [[ $PYTHON_VERSION == '2.7' ]]; then
     conda install --yes basemap 
     conda install --yes -c http://conda.binstar.org/jjhelmus cbc cylp
     conda install --yes -c http://conda.binstar.org/jjhelmus cvxopt_glpk
+
+    # wradlib and dependencies
+    conda install --yes sphinx gdal numpydoc h5py
+    pip install sphinx-rtd-theme
+    pip install sphinxcontrib-bibtex
+    pip install xmltodict
+    pip install wradlib
 fi
 
 # install coverage modules
