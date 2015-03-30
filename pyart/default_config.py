@@ -87,6 +87,10 @@ eastward_wind_component = 'eastward_wind_component'
 northward_wind_component = 'northward_wind_component'
 vertical_wind_component = 'vertical_wind_component'
 
+# profile variables
+height = 'height'
+interpolated_profile = 'interpolated_profile'
+
 # End of Simple Configuration section
 
 ##############################################################################
@@ -159,6 +163,8 @@ DEFAULT_FIELD_NAMES = {
     'eastward_wind_component': eastward_wind_component,
     'northward_wind_component': northward_wind_component,
     'vertical_wind_component': vertical_wind_component,
+    'height': height,
+    'interpolated_profile': interpolated_profile,
 }
 
 
@@ -557,6 +563,18 @@ DEFAULT_METADATA = {
         'units': 'meters_per_second',
         'standard_name': 'vertical_wind_component',
         'long_name': 'Vertical wind component'},
+
+    # profile variables
+    height: {
+        'long_name': 'Height of radar beam',
+        'standard_name': 'height',
+        'units': 'meters'},
+
+    interpolated_profile: {
+        'long_name': 'Interpolated profile',
+        'standard_name':  'interpolated_profile',
+        'units': 'unknown'},
+
 }
 
 
