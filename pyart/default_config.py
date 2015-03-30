@@ -82,6 +82,9 @@ radar_estimated_rain_rate = 'radar_estimated_rain_rate'
 radar_echo_classification = 'radar_echo_classification'
 specific_attenuation = 'specific_attenuation'
 
+# Textures
+differential_phase_texture = 'differential_phase_texture'
+
 # Wind retrieval fields
 eastward_wind_component = 'eastward_wind_component'
 northward_wind_component = 'northward_wind_component'
@@ -156,6 +159,7 @@ DEFAULT_FIELD_NAMES = {
     'radar_estimated_rain_rate': radar_estimated_rain_rate,
     'radar_echo_classification': radar_echo_classification,
     'specific_attenuation': specific_attenuation,
+    'differential_phase_texture': differential_phase_texture,
     'eastward_wind_component': eastward_wind_component,
     'northward_wind_component': northward_wind_component,
     'vertical_wind_component': vertical_wind_component,
@@ -540,6 +544,13 @@ DEFAULT_METADATA = {
         'long_name': 'Specific attenuation',
         'valid_min': 0.0,
         'valid_max': 1.0,
+        'coordinates': 'elevation azimuth range'},
+
+    # Textures
+    differential_phase_texture: {
+        'units': 'degrees',
+        'standard_name': 'differential_phase_hv_texture',
+        'long_name': 'Texture of differential phase (PhiDP)',
         'coordinates': 'elevation azimuth range'},
 
     # Wind retrieval fields

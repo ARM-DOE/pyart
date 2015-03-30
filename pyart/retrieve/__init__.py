@@ -11,6 +11,7 @@ Functions for performing radar retrievals.
     :toctree: generated/
 
     steiner_conv_strat
+    texture_of_complex_phase
 
 """
 

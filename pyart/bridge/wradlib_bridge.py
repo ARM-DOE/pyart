@@ -1,8 +1,8 @@
 """
 pyart.bridge.wradlib
-=================
+====================
 
-Pyart methods linking to wradlib functions http://wradlib.bitbucket.org/
+Py-ART methods linking to wradlib functions, http://wradlib.bitbucket.org/
 
 .. autosummary::
     :toctree: generated/
@@ -10,48 +10,63 @@ Pyart methods linking to wradlib functions http://wradlib.bitbucket.org/
      texture_of_complex_phase
 
 """
+
+
 import wradlib
 import numpy as np
-from ..config import get_metadata
 
-def texture_of_complex_phase(radar, phidp_key = 'differential_phase'):
+from ..config import get_metadata, get_field_name
+
+
+def texture_of_complex_phase(radar, phidp_field=None,
+                             phidp_texture_field=None):
     """
+    Calculate the texture of the differential phase field.
+
     Calculate the texture of the real part of the complex differential
     phase field
+
+    Parameters
     ----------
     radar : Radar
-        Radar object to use.
+        Radar object from which to .
+    phidp_field : str, optional
+        Name of field in radar which contains the differential phase shift.
+        None will use the default field name in the Py-ART configuration file.
+    phidp_texture_field : str, optional
+        Name to use for the differential phase texture field metadata.
+        None will use the default field name in the Py-ART configuration file.
 
     Returns
     -------
-    texture : dict
+    texture_field : dict
         Field dictionary containing the texture of the real part
-        of the complex differential
-    phase field.
-
-    Other Parameters
-    ----------------
-    phidp_key : string
-        key for the differential phase field
-
+        of the complex differential phase.
 
     References
     ----------
-    Gourley, J. J., P. Tabary, and J. Parent du Chatelet, 2007
-    sing Polarimetric Radar Observations.
+    Gourley, J. J., P. Tabary, and J. Parent du Chatelet,
+    A fuzzy logic algorithm for the separation of precipitating from
+    nonprecipitating echoes using polarimetric radar observations,
+    Journal of Atmospheric and Oceanic Technology 24 (8), 1439-1451
+
     """
-    #Grab the phase data
-    phidp_array = radar.fields[phidp_key]['data']
+    # parse field names
+    if phidp_field is None:
+        phidp_field = get_field_name('differential_phase')
+    if phidp_texture_field is None:
+        phidp_field = get_field_name('differential_phase')
 
-    #convert to complex number
-    complex_phase = np.exp(1j*(phidp_array*np.pi/180.0))
+    # Grab the phase data
+    phidp = radar.fields[phidp_field]['data']
 
-    #calculate texture using wradlib
-    w_texture_complex = wradlib.dp.texture((np.real(complex_phase) +1.0)*180)
-    texture_field = get_metadata(phidp_key)
+    # convert to complex number
+    complex_phase = np.exp(1j*(phidp*np.pi/180.0))
+
+    # calculate texture using wradlib
+    w_texture_complex = wradlib.dp.texture(
+        (np.real(complex_phase) + 1.0) * 180)
+
+    texture_field = get_metadata(phidp_texture_field)
     texture_field['data'] = w_texture_complex
-    texture_field['long_name'] = 'Texture of Differential phase (PhiDP)'
-    texture_field['standard_name'] = 'differential_phase_hv_texture'
-    texture_field['valid_min'] = 0.0
-    texture_field['valid_max'] = 400.0
     return texture_field

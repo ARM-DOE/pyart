@@ -23,6 +23,7 @@ and private) aimed at developers please see the :ref:`developer`.
     retrieve
     graph
     map
+    bridge
     testing
 
 Packages level functions:
