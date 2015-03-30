@@ -10,10 +10,9 @@ Functions for performing radar retrievals.
 .. autosummary::
     :toctree: generated/
 
-    steiner_conv_strat
-    map_profile_to_gates
     fetch_radar_time_profile
-
+    map_profile_to_gates
+    steiner_conv_strat
 
 """
 
