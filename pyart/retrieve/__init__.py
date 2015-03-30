@@ -14,7 +14,7 @@ Functions for performing radar retrievals.
     map_profile_to_gates
     steiner_conv_strat
     calculate_snr_from_reflectivity
-
+    texture_of_complex_phase
 
 """
 
