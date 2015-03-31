@@ -782,19 +782,14 @@ def from_cartesian_get_value(thread, threads, array_indices, grid_data_shared ,x
         ind, dist = nnlocator.find_neighbors_and_dists((z[iz], y[iy], x[ix]), r)
 
         if len(ind) == 0:
-            # when there are no neighbors, mark the grid point as bad
-            # REVERTON: A matriz grid_data_shared nao permite as operacoes abaixo entao
-            # entao apenas marcar como badval e realizar as operacaoes abaixo para cada badval de grid_data_shared
-            # fora da funcao from_cartesian_get_value
-      
+
             #grid_data[iz, iy, ix] = np.ma.masked
             #grid_data.data[iz, iy, ix] = badval
         
-            # REVERTON: Apenas marcando como badval
+
             grid_data_shared[iz, iy, ix] = badval
             
-            # REVERTON: Na versao original terminava aqui, agora ao pode mais
-            #return
+
 
         else:
 
@@ -836,7 +831,5 @@ def from_cartesian_get_value(thread, threads, array_indices, grid_data_shared ,x
                 w = weights/len(dist2)
                 value = np.ma.dot(w, nn_field_data)
             
-            # REVERTON: Convertendo valores mascarados em badval, depois estes valores (badval)
-            # serao mascarados novamente
             value = np.where( value.mask, badval, value )
             grid_data_shared[iz, iy, ix] = value
