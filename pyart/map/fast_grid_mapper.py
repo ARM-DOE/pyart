@@ -1,6 +1,14 @@
 """
+pyart.io.fast_grid_mapper
+===============
 
-ADD FILE DESCRIPTION HERE
+Highly optimized map_to_grid
+
+.. autosummary::
+    :toctree: generated/
+
+    fast_map_to_grid
+
 
 """
 
@@ -14,12 +22,73 @@ from .cython_fast_grid_mapper import from_cartesian_get_value,cython_fast_map
 
 def fast_map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
                 fields=None, refl_filter_flag=True, refl_field=None,
-                max_refl=None, toa=17000.0, max_range=None):
+                max_refl=None, toa=17000.0, max_range=None,round_resolution=(0.5,1,100):
     """
+    Map one or more radars, with same latlon, to a Cartesian grid.
+
+    Generate a Cartesian grid of points for the requested fields from the
+    collected points from one or more radars, but all radars will be considered
+    to have the same latitude and longitude of the first one.  The field value for
+    a grid point is found calculating its corresponding elevation,azimuth and range,
+    and then rounded to a regular grid that indicates the coresponding bin. Collected
+    points are filtered according to a number of criteria so that undesired points
+    are not included in the interpolation.
+
+    Parameters
+    ----------
+    radars : tuple of Radar objects.
+        Radar objects which will be mapped to the Cartesian grid.
+    grid_shape : 3-tuple of floats
+        Number of points in the grid (z, y, x).
+    grid_limits : 3-tuple of 2-tuples or numpy 1d-array
+        if 2-tuples: Minimum and maximum grid location (inclusive) in meters for the
+        z, y, x coordinates.
+        if numpy 1d-array: grid locations in meters for the z, y, x coordinates, must
+        agree in size with grid_shape
+    grid_origin : (float, float) or None
+        Latitude and longitude of grid origin.  None sets the origin
+        to the location of the first radar.
+    fields : list or None
+        List of fields within the radar objects which will be mapped to
+        the cartesian grid. None, the default, will map the fields which are
+        present in all the radar objects.
+    refl_filter_flag : bool
+        True to filter the collected points based on the reflectivity field.
+        False to perform no filtering.  Gates where the reflectivity field,
+        specified by the `refl_field` parameter, is not-finited, masked or
+        has a value above the `max_refl` parameter are excluded from the
+        grid interpolation. (not implemented)
+    refl_field : str
+        Name of the field which will be used to filter the collected points.
+        A value of None will use the default field name as defined in the
+        Py-ART configuration file.
+    max_refl : float
+        Maximum allowable reflectivity.  Points in the `refl_field` which are
+        above is value are not included in the interpolation. None will
+        include skip this filtering. (not implemented)
+    toa : float
+        Top of atmosphere in meters. Collected points above this height are
+        not included in the interpolation. (not implemented)
+
+    Other Parameters
+    ----------------
+    round_resolution: 3-tuple of float
+        Resolution for which data will be rounded in (elev,azi,range) grid, 
+        values given in (angles,angles,meters).Smaller values will increase 
+        resolution in the cost of memory and speed. (this option is not 
+        implemented, using standard 0.5°,1°,100m)
     
-    add function description here
+    Returns
+    -------
+    grids : dict
+        Dictionary of mapped fields.  The keysof the dictionary are given by
+        parameter fields.  Each elements is a `grid_size` float64 array
+        containing the interpolated grid for that field.
     
-    obs: radars must all refere to same latlon (no mosaic) 
+    See Also
+    --------
+    map_to_grid : Similar function with more complet interpolation options and
+    support to multiple radars
     
     """
 #XXX Implement refl_filter
@@ -86,7 +155,7 @@ def fast_map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
         elev = [(e,i,iradar) for i,e in enumerate(radar.fixed_angle["data"])]
         sweeps = sweeps + elev
     sweeps = sorted(sweeps, key=lambda sweep: sweep[0])
-    sweeps_index = np.empty((180*2+1), dtype=np.int) #-90 to +90 with 0.5 elevation precision
+    sweeps_index = np.empty((180*2+1), dtype=np.int) #-90 to +90 with 0.5° elevation precision
     sweeps_index.fill(-1)
     for i in range(180*2+1):
         nominal_elev = (i-90.*2)/2.
@@ -95,7 +164,7 @@ def fast_map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
             sweeps_index[i] = index
     
 # map sweep,azimuth to ray/radar
-    ray_index = np.empty((len(sweeps),360+1), dtype=np.int) #0 to 360 with 1.0 azimuth precision
+    ray_index = np.empty((len(sweeps),360+1), dtype=np.int) #0 to 360 with 1.0° azimuth precision
     ray_index.fill(-1)
     for isweep ,sweep in enumerate(sweeps):
         radar = radars[sweep[2]]
@@ -112,7 +181,7 @@ def fast_map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
             ray_index[isweep,nominal_azi]=rays[index][1]
 
 # map radar,range to bin
-    gate_index = np.empty((len(radars),int(max_range/100)), dtype=np.int) #0 to max_range with 100.0 range precision 
+    gate_index = np.empty((len(radars),int(max_range/100)), dtype=np.int) #0 to max_range with 100.0m range precision 
     gate_index.fill(-1)
     for iradar, radar in enumerate(radars):
         index = 0

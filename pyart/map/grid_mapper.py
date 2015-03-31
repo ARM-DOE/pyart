@@ -54,7 +54,7 @@ def grid_from_radars(radars, grid_shape, grid_limits, grid_mapping_func='map_to_
     grid_mapping_func : 'map_to_grid' or 'fast_map_to_grid'
         Define what grid mapping method will be used. 'map_to_grid' is the 
         most versatil, but may be slow in some cases. 'fast_map_to_grid' is
-        faster but it has some limitations
+        faster but it has some limitations.
 
     Returns
     -------

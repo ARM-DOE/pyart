@@ -8,6 +8,12 @@ cimport cython
 
 
 def  cython_fast_map(z,y,x, double z_offset, double y_offset, double x_offset , double max_range,badval, sweeps,np.ndarray[np.int_t, ndim=1] sweeps_index, np.ndarray[np.int_t, ndim=2] ray_index, np.ndarray[np.int_t, ndim=2] gate_index, radars, fields):
+    """
+    cython_fast_map(z,y,x, z_offset, y_offset, x_offset , max_range,badval, sweeps, sweeps_index, ray_index, gate_index, radars, fields):
+    
+    cython part of function fast_map_to_grid
+    
+    """
     cdef size_t nz = len(z)
     cdef size_t ny = len(y)
     cdef size_t nx = len(x)
@@ -74,12 +80,55 @@ def  cython_fast_map(z,y,x, double z_offset, double y_offset, double x_offset , 
 
 cdef void cart_to_radar_coords( double z, double y, double x, double z_offset, double y_offset,double x_offset,double *rng,double *azi, double *elev):
     """
-    
-    ADD FUNCTION DESCRIPTION HERE
-    copy radar_coords_to_cart
-    
-    verify math
-    
+    Calculate Radar coordinate from Cartesian coordinates
+
+    Parameters
+    ----------
+    x, y, z : double
+        Cartesian coordinates in meters.
+    x_offset, y_offset, z_offset : double
+        Posicion of the radar in Cartesian coordinates in meters.
+    rng : array
+        Distances to the center of the radar gates (bins) in kilometers.
+    az : array
+        Azimuth angle of the radar in degrees.
+    ele : array
+        Elevation angle of the radar in degrees.
+
+    Returns
+    -------
+    rng : double
+        Distances to the center of the radar gates (bins) in kilometers.
+    azi : double
+        Azimuth angle of the radar in degrees.
+    elev : double
+        Elevation angle of the radar in degrees.
+
+    Notes
+    -----
+    The calculation for radar coordinate is derivide from the model of a 
+    straight ray in a 4/3 Earth's radius model.
+
+    .. math::
+
+        azi = \\atan2(x,y)
+
+        s = \\sqrt(x^2+y^2)
+
+        r0 = R * \\tan(s/R)
+
+        h1 = z - \\sqrt(r0^2+R^2)-R
+
+        rng = \\sqrt(r0^2+h1^2-2*r0*h1*\\cos(pi/2. + s/R)) 
+
+        elev = \\asin(h1*\\sin(pi/2. + s/R)/rng)
+
+    Where s is the arc length, r0 is range of the 0° elevation ray at this 
+    arc length, h1 is altitude in respect to the 0° elevation ray, rng
+    is the distance from the radar to the center of the gate and R is the 
+    effective radius of the earth, taken to be 4/3 of the mean radius of 
+    the earth (6371 km).
+
     """
     cdef double R = 6371.0 * 1000.0 * 4.0 / 3.0     # effective radius of earth in meters.
     cdef double pi = 3.14159265358979323846
