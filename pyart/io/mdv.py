@@ -82,9 +82,10 @@ def read_mdv(filename, field_names=None, additional_metadata=None,
     mdvfile = MdvFile(filename)
 
     # value attributes
-    naz = len(mdvfile.az_deg)
-    nele = len(mdvfile.el_deg)
-    scan_type = mdvfile.scan_type
+    az_deg, range_km, el_deg = mdvfile._calc_geometry()
+    naz = len(az_deg)
+    nele = len(el_deg)
+    scan_type = mdvfile.projection
 
     if scan_type not in ['ppi', 'rhi']:
         raise NotImplementedError('No support for scan_type %s.' % scan_type)
@@ -99,13 +100,13 @@ def read_mdv(filename, field_names=None, additional_metadata=None,
 
     # range
     _range = filemetadata('range')
-    _range['data'] = np.array(mdvfile.range_km * 1000.0, dtype='float32')
+    _range['data'] = np.array(range_km * 1000.0, dtype='float32')
     _range['meters_to_center_of_first_gate'] = _range['data'][0]
     _range['meters_between_gates'] = (_range['data'][1] - _range['data'][0])
 
     # fields
     fields = {}
-    for mdv_field in set(mdvfile.fields):
+    for mdv_field in set(mdvfile._make_fields_list()):
         field_name = filemetadata.get_field_name(mdv_field)
         if field_name is None:
             continue
@@ -154,7 +155,7 @@ def read_mdv(filename, field_names=None, additional_metadata=None,
         nsweeps = nele
         sweep_number['data'] = np.arange(nsweeps, dtype='int32')
         sweep_mode['data'] = np.array(nsweeps * ['azimuth_surveillance'])
-        fixed_angle['data'] = np.array(mdvfile.el_deg, dtype='float32')
+        fixed_angle['data'] = np.array(el_deg, dtype='float32')
         sweep_start_ray_index['data'] = np.arange(0, len_time, naz,
                                                   dtype='int32')
         sweep_end_ray_index['data'] = np.arange(naz-1, len_time, naz,
@@ -164,7 +165,7 @@ def read_mdv(filename, field_names=None, additional_metadata=None,
         nsweeps = naz
         sweep_number['data'] = np.arange(nsweeps, dtype='int32')
         sweep_mode['data'] = np.array(nsweeps * ['rhi'])
-        fixed_angle['data'] = np.array(mdvfile.az_deg, dtype='float32')
+        fixed_angle['data'] = np.array(az_deg, dtype='float32')
         sweep_start_ray_index['data'] = np.arange(0, len_time, nele,
                                                   dtype='int32')
         sweep_end_ray_index['data'] = np.arange(nele - 1, len_time, nele,
@@ -175,12 +176,12 @@ def read_mdv(filename, field_names=None, additional_metadata=None,
     elevation = filemetadata('elevation')
 
     if scan_type == 'ppi':
-        azimuth['data'] = np.tile(mdvfile.az_deg, nele)
-        elevation['data'] = np.array(mdvfile.el_deg).repeat(naz)
+        azimuth['data'] = np.tile(az_deg, nele)
+        elevation['data'] = np.array(el_deg).repeat(naz)
 
     elif scan_type == 'rhi':
-        azimuth['data'] = np.array(mdvfile.az_deg).repeat(nele)
-        elevation['data'] = np.tile(mdvfile.el_deg, naz)
+        azimuth['data'] = np.array(az_deg).repeat(nele)
+        elevation['data'] = np.tile(el_deg, naz)
 
     # instrument parameters
     # we will set 4 parameters in the instrument_parameters dict
@@ -320,12 +321,30 @@ class MdvFile:
         reads metadata.
 
     """
-
+    # ftm for use in the struct lib
+    # mapper are used to convert vector to dics, they are of the following type (var_name,inicial pos, final pos, is_string)
+    master_header_fmt = '>28i 8i i 5i 6f 3f 12f 512c 128c 128c i'
+    master_header_mapper = [ ("record_len1",0,1 , False), ("struct_id",1,2 , False), ("revision_number",2,3 , False), ("time_gen",3,4 , False), ("user_time",4,5 , False), ("time_begin",5,6 , False), ("time_end",6,7 , False), ("time_centroid",7,8 , False), ("time_expire",8,9 , False), ("num_data_times",9,10 , False), ("index_number",10,11 , False), ("data_dimension",11,12 , False), ("data_collection_type",12,13 , False), ("user_data",13,14 , False), ("native_vlevel_type",14,15 , False), ("vlevel_type",15,16 , False), ("vlevel_included",16,17 , False), ("grid_orientation",17,18 , False), ("data_ordering",18,19 , False), ("nfields",19,20 , False), ("max_nx",20,21 , False), ("max_ny",21,22 , False), ("max_nz",22,23 , False), ("nchunks",23,24 , False), ("field_hdr_offset",24,25 , False), ("vlevel_hdr_offset",25,26 , False), ("chunk_hdr_offset",26,27 , False), ("field_grids_differ",27,28 , False), ("user_data_si328",28,36 , False), ("time_written",36,37 , False), ("unused_si325",37,42 , False), ("user_data_fl326",42,48 , False), ("sensor_lon",48,49 , False), ("sensor_lat",49,50 , False), ("sensor_alt",50,51 , False), ("unused_fl3212",51,63 , False), ("data_set_info",63,575 , True), ("data_set_name",575,703 , True), ("data_set_source",703,831 , True), ("record_len2",831,832 , False), ]
+    
+    field_header_fmt = '>17i 10i 9i 4i f f 8f 12f 4f 5f 64c 16c 16c 16c 16c i'
+    field_header_mapper = [ ("record_len1",0,1,False), ("struct_id",1,2,False), ("field_code",2,3,False), ("user_time1",3,4,False), ("forecast_delta",4,5,False), ("user_time2",5,6,False), ("user_time3",6,7,False), ("forecast_time",7,8,False), ("user_time4",8,9,False), ("nx",9,10,False), ("ny",10,11,False), ("nz",11,12,False), ("proj_type",12,13,False), ("encoding_type",13,14,False), ("data_element_nbytes",14,15,False), ("field_data_offset",15,16,False), ("volume_size",16,17,False), ("user_data_si32",17,27,False), ("compression_type",27,28,False), ("transform_type",28,29,False), ("scaling_type",29,30,False), ("native_vlevel_type",30,31,False), ("vlevel_type",31,32,False), ("dz_constant",32,33,False), ("data_dimension",33,34,False), ("zoom_clipped",34,35,False), ("zoom_no_overlap",35,36,False), ("unused_si32",36,40,False), ("proj_origin_lat",40,41,False), ("proj_origin_lon",41,42,False), ("proj_param",42,50,False), ("vert_reference",50,51,False), ("grid_dx",51,52,False), ("grid_dy",52,53,False), ("grid_dz",53,54,False), ("grid_minx",54,55,False), ("grid_miny",55,56,False), ("grid_minz",56,57,False), ("scale",57,58,False), ("bias",58,59,False), ("bad_data_value",59,60,False), ("missing_data_value",60,61,False), ("proj_rotation",61,62,False), ("user_data_fl32",62,66,False), ("min_value",66,67,False), ("max_value",67,68,False), ("min_value_orig_vol",68,69,False), ("max_value_orig_vol",69,70,False), ("unused_fl32",70,71,False), ("field_name_long",71,135,True), ("field_name",135,151,True), ("units",151,167,True), ("transform",167,183,True), ("unused_char",183,199,True), ("record_len2",199,200,False),]
+    
+    vlevel_header_fmt = '>i i 122i 4i 122f 5f i'
+    vlevel_header_mapper = [("record_len1",0,1,False), ("struct_id",1,2,False), ("type",2,124,False), ("unused_si32",124,128,False), ("level",128,250,False), ("unused_fl32",250,255,False), ("record_len2",255,256,False),] 
+    
+    chunk_header_fmt = '>5i 2i 480c i'
+    chunk_header_mapper = [("record_len1",0,1,False), ("struct_id",1,2,False), ("chunk_id",2,3,False), ("chunk_data_offset",3,4,False), ("size",4,5,False), ("unused_si32",5,7,False), ("info",7,487,True), ("record_len2",487,488,False),]
+    
+    compression_info_fmt = '>I I I I 2I'
+    compression_info_mapper = [("magic_cookie",0,1,False), ("nbytes_uncompressed",1,2,False), ("nbytes_compressed",2,3,False), ("nbytes_coded",3,4,False), ("spare",4,6,False),] 
+    
     def __init__(self, filename, debug=False, read_fields=False):
         """ initalize MdvFile from filename (str). """
 
         if debug:
             print "Opening ", filename
+        if filename==None:
+            self.fileptr = None #will creat empty struct, for filling and writing after
         if hasattr(filename, 'read'):
             self.fileptr = filename
         else:
@@ -359,24 +378,39 @@ class MdvFile:
         if calib_info is not None:
             self.calib_info = calib_info
 
-        if debug:
-            print "Calculating Radar coordinates"
-        az_deg, range_km, el_deg = self._calc_geometry()
-        self.az_deg = np.array(az_deg, dtype='float32')
-        self.range_km = np.array(range_km, dtype='float32')
-        self.el_deg = np.array(el_deg, dtype='float32')
+        if self.field_headers[0]['proj_type'] == PROJ_LATLON:
+            self.projection = 'latlon'
+        elif self.field_headers[0]['proj_type'] == PROJ_LAMBERT_CONF:
+            self.projection = 'lambert_conform'
+        elif self.field_headers[0]['proj_type'] == PROJ_POLAR_STEREO:
+            self.projection = 'polar_stereographic'
+        elif self.field_headers[0]['proj_type'] == PROJ_FLAT:
+            self.projection = 'flat'
+        elif self.field_headers[0]['proj_type'] == PROJ_POLAR_RADAR:
+            self.projection = 'ppi'
+        elif self.field_headers[0]['proj_type'] == PROJ_OBLIQUE_STEREO:
+            self.projection = 'oblique_stereographic'
+        elif self.field_headers[0]['proj_type'] == PROJ_RHI_RADAR:
+            self.projection = 'rhi'
+
+#        if debug:
+#            print "Calculating Radar coordinates"
+#        az_deg, range_km, el_deg = self._calc_geometry()
+#        self.az_deg = np.array(az_deg, dtype='float32')
+#        self.range_km = np.array(range_km, dtype='float32')
+#        self.el_deg = np.array(el_deg, dtype='float32')
 
         if debug:
             print "Making usable time objects"
         self.times = self._make_time_dict()
 
-        if debug:
-            print "Calculating cartesian coordinates"
-        self.carts = self._make_carts_dict()
+#        if debug:
+#            print "Calculating cartesian coordinates"
+#        self.carts = self._make_carts_dict()
 
-        if debug:
-            print "indexing fields"
-        self.fields = self._make_fields_list()
+#        if debug:
+#            print "indexing fields"
+#        self.fields = self._make_fields_list()
 
         if read_fields:
             if debug:
@@ -422,14 +456,14 @@ class MdvFile:
         if debug:
             print "No data found in object, populating"
 
-        nsweeps = self.master_header['nsweeps']
-        nrays = self.master_header['nrays']
-        ngates = self.master_header['ngates']
+        nsweeps = self.master_header['nz']
+        nrays = self.master_header['ny']
+        ngates = self.master_header['nx']
 
         # read the header
         field_data = np.zeros([nsweeps, nrays, ngates], dtype='float32')
         self.fileptr.seek(field_header['field_data_offset'])
-        self._get_sweep_info(nsweeps)  # dict not used, but need to seek.
+        self._get_levels_info(nsweeps)  # dict not used, but need to seek.
 
         for sw in xrange(nsweeps):
             if debug:
@@ -503,154 +537,171 @@ class MdvFile:
 
     def _get_master_header(self):
         """ Read the MDV master header, return a dict. """
-        fmt = '>28i 8i i 5i 6f 3f 12f 512c 128c 128c i'
-        l = struct.unpack(fmt, self.fileptr.read(struct.calcsize(fmt)))
+        if self.fileptr==None:
+            l = [0]*self.master_header_mapper[-1][2]
+            l[0] = 1016
+            l[1] = 14142
+            l[2] = 1
+            l[9] = 1
+            l[16] = 1
+            l[17] = 1
+            l[831] = 1016
+        else:
+            l = struct.unpack(self.master_header_fmt, self.fileptr.read(struct.calcsize(self.master_header_fmt)))
         d = {}
-        d["record_len1"] = l[0]             # 28i: 1
-        d["struct_id"] = l[1]               # 28i: 2
-        d["revision_number"] = l[2]         # 28i: 3
-        d["time_gen"] = l[3]                # 28i: 4
-        d["user_time"] = l[4]               # 28i: 5
-        d["time_begin"] = l[5]              # 28i: 6
-        d["time_end"] = l[6]                # 28i: 7
-        d["time_centroid"] = l[7]           # 28i: 8
-        d["time_expire"] = l[8]             # 28i: 9
-        d["num_data_times"] = l[9]          # 28i: 10
-        d["index_number"] = l[10]           # 28i: 11
-        d["data_dimension"] = l[11]         # 28i: 12
-        d["data_collection_type"] = l[12]   # 28i: 13
-        d["user_data"] = l[13]              # 28i: 14
-        d["native_vlevel_type"] = l[14]     # 28i: 15
-        d["vlevel_type"] = l[15]            # 28i: 16
-        d["vlevel_included"] = l[16]        # 28i: 17
-        d["grid_orientation"] = l[17]       # 28i: 18
-        d["data_ordering"] = l[18]          # 28i: 19
-        d["nfields"] = l[19]                # 28i: 20
-        d["ngates"] = l[20]                 # 28i: 21
-        d["nrays"] = l[21]                  # 28i: 22
-        d["nsweeps"] = l[22]                # 28i: 23
-        d["nchunks"] = l[23]                # 28i: 24
-        d["field_hdr_offset"] = l[24]       # 28i: 25
-        d["vlevel_hdr_offset"] = l[25]      # 28i: 26
-        d["chunk_hdr_offset"] = l[26]       # 28i: 27
-        d["field_grids_differ"] = l[27]     # 28i: 28
-        d["user_data_si328"] = l[28:36]     # 8i
-        d["time_written"] = l[36]           # i
-        d["unused_si325"] = l[37:42]        # 5i
-        d["user_data_fl326"] = l[42:48]     # 6f
-        d["sensor_lon"] = l[48]             # 3f : 1
-        d["sensor_lat"] = l[49]             # 3f : 2
-        d["sensor_alt"] = l[50]             # 3f : 3
-        d["unused_fl3212"] = l[51:63]       # 12f
-        d["data_set_info"] = ''.join(l[63:575]).strip('\x00')       # 512c
-        d["data_set_name"] = ''.join(l[575:703]).strip('\x00')      # 128c
-        d["data_set_source"] = ''.join(l[703:831]).strip('\x00')    # 128c
-        d["record_len2"] = l[831]           # i
+        for item in self.master_header_mapper:
+            if item[3]:
+                d[item[0]] = "".join(l[item[1]:item[2]]).strip('\x00')
+            else:
+                if item[2]==item[1]+1:
+                    d[item[0]] = l[item[1]]
+                else:
+                    d[item[0]] = l[item[1]:item[2]]
         return d
+
+    def _write_master_header(self):
+        """ Write the MDV master header. """
+        d = self.master_header
+        l=[0]*self.master_header_mapper[-1][2]
+        for item in self.master_header_mapper:
+            if item[3]:
+                l[item[1]:item[2]] = (list(d[item[0]])+[0]*(item[2]-item[1]))[0:item[2]-item[1]]#convert str to list of char and complet with zero
+            else:
+                if item[2]==item[1]+1:
+                    l[item[1]] = d[item[0]]
+                else:
+                    l[item[1]:item[2]] = d[item[0]]
+        string = struct.pack(self.master_header_fmt, l)
+        self.fileptr.write(string)
 
     def _get_field_headers(self, nfields):
         """ Read nfields field headers, return a list of dicts. """
         return [self._get_field_header() for i in range(nfields)]
 
+    def _write_field_headers(self, nfields):
+        """ Write nfields field headers. """
+        for i in range(nfields):
+            self._write_field_header(self.self.field_headers[i])
+
     def _get_field_header(self):
         """ Read a single field header, return a dict. """
-
-        fmt = '>17i 10i 9i 4i f f 8f 12f 4f 5f 64c 16c 16c 16c 16c i'
-        l = struct.unpack(fmt, self.fileptr.read(struct.calcsize(fmt)))
+        if self.fileptr==None:
+            l = [0]*self.field_header_mapper[-1][2]
+            l[0] = 408
+            l[1] = 14143
+            l[199] = 408
+        else:
+            l = struct.unpack(self.field_header_fmt, self.fileptr.read(struct.calcsize(self.field_header_fmt)))
         d = {}
-        d["record_len1"] = l[0]             # 17i: 1
-        d["struct_id"] = l[1]               # 17i: 2
-        d["field_code"] = l[2]              # 17i: 3
-        d["user_time1"] = l[3]              # 17i: 4
-        d["forecast_delta"] = l[4]          # 17i: 5
-        d["user_time2"] = l[5]              # 17i: 6
-        d["user_time3"] = l[6]              # 17i: 7
-        d["forecast_time"] = l[7]           # 17i: 8
-        d["user_time4"] = l[8]              # 17i: 9
-        d["ngates"] = l[9]                  # 17i: 10
-        d["nrays"] = l[10]                  # 17i: 11
-        d["nsweeps"] = l[11]                # 17i: 12
-        d["proj_type"] = l[12]              # 17i: 13
-        d["encoding_type"] = l[13]          # 17i: 14
-        d["data_element_nbytes"] = l[14]    # 17i: 15
-        d["field_data_offset"] = l[15]      # 17i: 16
-        d["volume_size"] = l[16]            # 17i: 17
-        d["user_data_si32"] = l[17:27]      # 10i
-        d["compression_type"] = l[27]       # 9i: 1
-        d["transform_type"] = l[28]         # 9i: 2
-        d["scaling_type"] = l[29]           # 9i: 3
-        d["native_vlevel_type"] = l[30]     # 9i: 4
-        d["vlevel_type"] = l[31]            # 9i: 5
-        d["dz_constant"] = l[32]            # 9i: 6
-        d["data_dimension"] = l[33]         # 9i: 7
-        d["zoom_clipped"] = l[34]           # 9i: 8
-        d["zoom_no_overlap"] = l[35]        # 9i: 9
-        d["unused_si32"] = l[36:40]         # 4i
-        d["proj_origin_lat"] = l[40]        # f
-        d["proj_origin_lon"] = l[41]        # f
-        d["proj_param"] = l[42:50]          # 8f
-        d["vert_reference"] = l[50]         # 12f: 1
-        d["grid_dx"] = l[51]                # 12f: 2
-        d["grid_dy"] = l[52]                # 12f: 3
-        d["grid_dz"] = l[53]                # 12f: 4
-        d["grid_minx"] = l[54]              # 12f: 5
-        d["grid_miny"] = l[55]              # 12f: 6
-        d["grid_minz"] = l[56]              # 12f: 7
-        d["scale"] = l[57]                  # 12f: 8
-        d["bias"] = l[58]                   # 12f: 9
-        d["bad_data_value"] = l[59]         # 12f: 10
-        d["missing_data_value"] = l[60]     # 12f: 11
-        d["proj_rotation"] = l[61]          # 12f: 12
-        d["user_data_fl32"] = l[62:66]      # 4f
-        d["min_value"] = l[66]              # 5f: 1
-        d["max_value"] = l[67]              # 5f: 2
-        d["min_value_orig_vol"] = l[68]     # 5f: 3
-        d["max_value_orig_vol"] = l[69]     # 5f: 4
-        d["unused_fl32"] = l[70]            # 5f: 5
-        d["field_name_long"] = ''.join(l[71:135]).strip('\x00')     # 64c
-        d["field_name"] = ''.join(l[135:151]).strip('\x00')         # 16c
-        d["units"] = ''.join(l[151:167]).strip('\x00')              # 16c
-        d["transform"] = ''.join(l[167:183]).strip('\x00')          # 16c
-        d["unused_char"] = ''.join(l[183:199]).strip('\x00')        # 16c
-        d["record_len2"] = l[199]           # i
+        for item in self.field_header_mapper:
+            if item[3]:
+                d[item[0]] = "".join(l[item[1]:item[2]]).strip('\x00')
+            else:
+                if item[2]==item[1]+1:
+                    d[item[0]] = l[item[1]]
+                else:
+                    d[item[0]] = l[item[1]:item[2]]
         return d
+
+    def _write_field_header(self,d):
+        """ Write the a single field header. """
+        l=[0]*self.field_header_mapper[-1][2]
+        for item in self.field_header_mapper:
+            if item[3]:
+                l[item[1]:item[2]] = (list(d[item[0]])+[0]*(item[2]-item[1]))[0:item[2]-item[1]]#convert str to list of char and complet with zero
+            else:
+                if item[2]==item[1]+1:
+                    l[item[1]] = d[item[0]]
+                else:
+                    l[item[1]:item[2]] = d[item[0]]
+        string = struct.pack(self.field_header_fmt, l)
+        self.fileptr.write(string)
 
     def _get_vlevel_headers(self, nfields):
         """ Read nfields vlevel headers, return a list of dicts. """
         return [self._get_vlevel_header() for i in range(nfields)]
 
+    def _write_vlevel_headers(self, nfields):
+        """ Write nfields vlevel headers"""
+        for i in range(nfields):
+            self._write_vlevel_header(self.vlevel_headers[i])
+
     def _get_vlevel_header(self):
         """ Read a single vlevel header, return a dict. """
-        fmt = '>i i 122i 4i 122f 5f i'
-        l = struct.unpack(fmt, self.fileptr.read(struct.calcsize(fmt)))
+        if self.fileptr==None:
+            l = [0]*self.vlevel_header_mapper[-1][2]
+            l[0] = 1016
+            l[1] = 14144
+            l[255] = 1016
+        else:
+            l = struct.unpack(self.vlevel_header_fmt, self.fileptr.read(struct.calcsize(self.vlevel_header_fmt)))
         d = {}
-        d["record_len1"] = l[0]         # i
-        d["struct_id"] = l[1]           # i
-        d["type"] = l[2:124]            # 122i
-        d["unused_si32"] = l[124:128]   # 4i
-        d["level"] = l[128:250]         # 122f
-        d["unused_fl32"] = l[250:255]   # 5f
-        d["record_len2"] = l[255]       # i
+        for item in self.vlevel_header_mapper:
+            if item[3]:
+                d[item[0]] = "".join(l[item[1]:item[2]]).strip('\x00')
+            else:
+                if item[2]==item[1]+1:
+                    d[item[0]] = l[item[1]]
+                else:
+                    d[item[0]] = l[item[1]:item[2]]
         return d
+
+    def _write_vlevel_header(self,d):
+        """  Write the a single vfield header. """
+        l=[0]*self.vlevel_header_mapper[-1][2]
+        for item in self.vlevel_header_mapper:
+            if item[3]:
+                l[item[1]:item[2]] = (list(d[item[0]])+[0]*(item[2]-item[1]))[0:item[2]-item[1]]#convert str to list of char and complet with zero
+            else:
+                if item[2]==item[1]+1:
+                    l[item[1]] = d[item[0]]
+                else:
+                    l[item[1]:item[2]] = d[item[0]]
+        string = struct.pack(self.vlevel_header_fmt, l)
+        self.fileptr.write(string)
 
     def _get_chunk_headers(self, nchunks):
         """ Get nchunk chunk headers, return a list of dicts. """
         return [self._get_chunk_header() for i in range(nchunks)]
 
+    def _write_chunk_headers(self, nchunks):
+        """ Write nchunk chunk headers. """
+        for i in range(nchunks):
+            self._write_chunk_header(self.chunk_headers[i])
+
     def _get_chunk_header(self):
         """ Get a single chunk header, return a dict. """
-        fmt = '>5i 2i 480c i'
-        l = struct.unpack(fmt, self.fileptr.read(struct.calcsize(fmt)))
+        if self.fileptr==None:
+            l = [0]*self.chunk_header_mapper[-1][2]
+            l[0] = 504
+            l[1] = 14145
+            l[487] = 504
+        else:
+            l = struct.unpack(self.chunk_header_fmt, self.fileptr.read(struct.calcsize(self.chunk_header_fmt)))
         d = {}
-        d["record_len1"] = l[0]         # 5i: 1
-        d["struct_id"] = l[1]           # 5i: 2
-        d["chunk_id"] = l[2]            # 5i: 3
-        d["chunk_data_offset"] = l[3]   # 5i: 4
-        d["size"] = l[4]                # 5i: 5
-        d["unused_si32"] = l[5:7]       # 2i
-        d["info"] = ''.join(l[7:487]).strip('\x00')     # 480c
-        d["record_len2"] = l[487]       # i
+        for item in self.chunk_header_mapper:
+            if item[3]:
+                d[item[0]] = "".join(l[item[1]:item[2]]).strip('\x00')
+            else:
+                if item[2]==item[1]+1:
+                    d[item[0]] = l[item[1]]
+                else:
+                    d[item[0]] = l[item[1]:item[2]]
         return d
+
+    def _write_chunk_header(self,d):
+        """  Write the a single chunk header. """
+        l=[0]*self.chunk_header_mapper[-1][2]
+        for item in self.chunk_header_mapper:
+            if item[3]:
+                l[item[1]:item[2]] = (list(d[item[0]])+[0]*(item[2]-item[1]))[0:item[2]-item[1]]#convert str to list of char and complet with zero
+            else:
+                if item[2]==item[1]+1:
+                    l[item[1]] = d[item[0]]
+                else:
+                    l[item[1]:item[2]] = d[item[0]]
+        string = struct.pack(self.chunk_header_fmt, l)
+        self.fileptr.write(string)
 
     def _get_chunks(self, debug=False):
         """ Get data in chunks, return radar_info, elevations, calib_info. """
@@ -799,33 +850,68 @@ class MdvFile:
     def _get_compression_info(self):
         """ Get compression infomation, return a dict. """
         # the file pointer must be set at the correct location prior to call
-        fmt = '>I I I I 2I'
-        l = struct.unpack(fmt, self.fileptr.read(struct.calcsize(fmt)))
+        if self.fileptr==None:
+            l = [0]*self.compression_info_mapper[-1][2]
+        else:
+            l = struct.unpack(self.compression_info_fmt, self.fileptr.read(struct.calcsize(self.compression_info_fmt)))
         d = {}
-        d['magic_cookie'] = l[0]
-        d['nbytes_uncompressed'] = l[1]
-        d['nbytes_compressed'] = l[2]
-        d['nbytes_coded'] = l[3]
-        d['spare'] = l[4:6]
+        for item in self.compression_info_mapper:
+            if item[3]:
+                d[item[0]] = "".join(l[item[1]:item[2]]).strip('\x00')
+            else:
+                if item[2]==item[1]+1:
+                    d[item[0]] = l[item[1]]
+                else:
+                    d[item[0]] = l[item[1]:item[2]]
         return d
 
-    def _get_sweep_info(self, nsweeps):
-        """ Get sweep information, return a dict. """
+    def _write_compression_info(self,d):
+        """ Write compression infomation"""
         # the file pointer must be set at the correct location prior to call
-        fmt = '%iI %iI' % (nsweeps, nsweeps)
-        l = struct.unpack(fmt, self.fileptr.read(struct.calcsize(fmt)))
+        l=[0]*self.compression_info_mapper[-1][2]
+        for item in self.compression_info_mapper:
+            if item[3]:
+                l[item[1]:item[2]] = (list(d[item[0]])+[0]*(item[2]-item[1]))[0:item[2]-item[1]]#convert str to list of char and complet with zero
+            else:
+                if item[2]==item[1]+1:
+                    l[item[1]] = d[item[0]]
+                else:
+                    l[item[1]:item[2]] = d[item[0]]
+        string = struct.pack(self.compression_info_fmt, l)
+        self.fileptr.write(string)
+
+
+    def _get_levels_info(self, nlevels):
+        """ Get nlevel information, return a dict. """
+        # the file pointer must be set at the correct location prior to call
+        fmt = '%iI %iI' % (nlevels, nlevels)
+        if self.fileptr:
+            l = struct.unpack(fmt, self.fileptr.read(struct.calcsize(fmt)))
+        else:
+            l = [0]*2*nlevels
         d = {}
-        d['vlevel_offsets'] = l[:nsweeps]
-        d['vlevel_nbytes'] = l[nsweeps:2*nsweeps]
+        d['vlevel_offsets'] = l[:nlevels]
+        d['vlevel_nbytes'] = l[nlevels:2*nlevels]
         return d
 
+    def _write_levels_info(self, nlevels,d):
+        """ write levels information, return a dict. """
+        # the file pointer must be set at the correct location prior to call
+        fmt = '%iI %iI' % (nlevels, nlevels)
+        l=[0]*2*nlevels
+        l[0:nlevels] = d['vlevel_offsets']
+        l[nlevels:2*nlevels] = d['vlevel_nbytes']
+        string = struct.pack(fmt, l)
+        self.fileptr.write(string)
+    
     # misc. methods
+    #XXX move some where else, there are not general mdv operations
 
     def _calc_geometry(self):
         """ Calculate geometry, return az_deg, range_km, el_deg. """
-        nsweeps = self.master_header['nsweeps']
-        nrays = self.master_header['nrays']
-        ngates = self.master_header['ngates']
+        nsweeps = self.master_header['nz']
+        nrays = self.master_header['ny']
+        ngates = self.master_header['nx']
         grid_minx = self.field_headers[0]['grid_minx']
         grid_miny = self.field_headers[0]['grid_miny']
         grid_dx = self.field_headers[0]['grid_dx']
@@ -858,9 +944,9 @@ class MdvFile:
         """ Return a carts dictionary, distances in meters. """
 
         # simple calculation involving 4/3 earth radius
-        nsweeps = self.master_header['nsweeps']
-        nrays = self.master_header['nrays']
-        ngates = self.master_header['ngates']
+        nsweeps = self.master_header['nz']
+        nrays = self.master_header['ny']
+        ngates = self.master_header['nx']
         xx = np.empty([nsweeps, nrays, ngates], dtype=np.float32)
         yy = np.empty([nsweeps, nrays, ngates], dtype=np.float32)
         zz = np.empty([nsweeps, nrays, ngates], dtype=np.float32)
