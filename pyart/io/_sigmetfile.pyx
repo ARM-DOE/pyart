@@ -183,7 +183,8 @@ cdef class SigmetFile:
             # check for a truncated file, return sweep(s) read up until error
             if ingest_data_hdrs is None:
 
-                mess = 'File truncated, %i of %i sweeps read' % (i, nsweeps)
+                mess = ('File truncated or corrupt, %i of %i sweeps read' %
+                        (i, nsweeps))
                 warnings.warn(mess)
 
                 for name in self.data_type_names:
@@ -258,6 +259,8 @@ cdef class SigmetFile:
         self._raw_product_bhdrs.append([raw_prod_bhdr])
         ingest_data_headers = _unpack_ingest_data_headers(
             lead_record, self.ndata_types)
+        if ingest_data_headers is None:
+            return None, None, None
 
         # determine size of data
         nray_data_types = [d['number_rays_file_expected']
@@ -798,16 +801,19 @@ def _unpack_ingest_data_headers(record, ndata_types):
     """
     Unpack one or more ingest_data_header from a record.
 
-    Returns a list of dictionaries.
+    Returns a list of dictionaries or None when an error occurs.
 
     """
-    return [_unpack_ingest_data_header(record, i) for i in range(ndata_types)]
+    idh = [_unpack_ingest_data_header(record, i) for i in range(ndata_types)]
+    if None in idh:
+        return None
+    else:
+        return idh
 
 
 def _unpack_ingest_data_header(record, number):
     """
-    Unpack a single ingest_data_header from record.
-
+    Unpack a single ingest_data_header from record.  Return None on error.
     """
     offset = 12 + 76 * number
     string = record[offset:offset + 76]
@@ -815,7 +821,7 @@ def _unpack_ingest_data_header(record, number):
     _unpack_key(idh, 'structure_header', STRUCTURE_HEADER)
     _unpack_key(idh, 'sweep_start_time', YMDS_TIME)
     if idh['structure_header']['structure_identifier'] != 24:
-        raise ValueError
+        return None
     return idh
 
 

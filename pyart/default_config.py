@@ -82,10 +82,17 @@ radar_estimated_rain_rate = 'radar_estimated_rain_rate'
 radar_echo_classification = 'radar_echo_classification'
 specific_attenuation = 'specific_attenuation'
 
+# Textures
+differential_phase_texture = 'differential_phase_texture'
+
 # Wind retrieval fields
 eastward_wind_component = 'eastward_wind_component'
 northward_wind_component = 'northward_wind_component'
 vertical_wind_component = 'vertical_wind_component'
+
+# profile variables
+height = 'height'
+interpolated_profile = 'interpolated_profile'
 
 # End of Simple Configuration section
 
@@ -156,9 +163,12 @@ DEFAULT_FIELD_NAMES = {
     'radar_estimated_rain_rate': radar_estimated_rain_rate,
     'radar_echo_classification': radar_echo_classification,
     'specific_attenuation': specific_attenuation,
+    'differential_phase_texture': differential_phase_texture,
     'eastward_wind_component': eastward_wind_component,
     'northward_wind_component': northward_wind_component,
     'vertical_wind_component': vertical_wind_component,
+    'height': height,
+    'interpolated_profile': interpolated_profile,
 }
 
 
@@ -542,6 +552,13 @@ DEFAULT_METADATA = {
         'valid_max': 1.0,
         'coordinates': 'elevation azimuth range'},
 
+    # Textures
+    differential_phase_texture: {
+        'units': 'degrees',
+        'standard_name': 'differential_phase_hv_texture',
+        'long_name': 'Texture of differential phase (PhiDP)',
+        'coordinates': 'elevation azimuth range'},
+
     # Wind retrieval fields
     eastward_wind_component: {
         'units': 'meters_per_second',
@@ -557,6 +574,18 @@ DEFAULT_METADATA = {
         'units': 'meters_per_second',
         'standard_name': 'vertical_wind_component',
         'long_name': 'Vertical wind component'},
+
+    # profile variables
+    height: {
+        'long_name': 'Height of radar beam',
+        'standard_name': 'height',
+        'units': 'meters'},
+
+    interpolated_profile: {
+        'long_name': 'Interpolated profile',
+        'standard_name':  'interpolated_profile',
+        'units': 'unknown'},
+
 }
 
 
@@ -624,6 +653,35 @@ nexrad_metadata = {
         'coordinates': 'elevation azimuth range'},
 }
 
+# Metadata for NEXRAD Level 3 Products
+nexrad_level3_metadata = {
+
+    radar_estimated_rain_rate: {
+        'units': 'inches',
+        'standard_name': 'radar_estimated_rain_rate',
+        'long_name': 'Radar estimated rain rate',
+        'coordinates': 'elevation azimuth range'},
+
+    radar_echo_classification: {
+        'units': 'legend',
+        'standard_name': 'radar_echo_classification',
+        'long_name': 'Radar echo classification',
+        'options': ('0: Below Threshold (ND), '
+                    '10: Biological (BI), '
+                    '20: Anomalous Propagation/Group Clutter (GC), '
+                    '30: Ice Crystals (IC), '
+                    '40: Dry Snow (DS), '
+                    '50: Wet Snow (WS), '
+                    '60: Light and/or Moderate Rain (RA), '
+                    '70: Heavy Rain (HR), '
+                    '80: Big Drops (rain) (BD), '
+                    '90: Graupel (GR), '
+                    '100: Hail, possibly with rain (HA), '
+                    '140: Unknown Classification (UK), '
+                    '150: Range Folded (RH)'),
+        'coordinates': 'elevation azimuth range'},
+}
+
 # Metadata for CF/Radial files
 cfradial_metadata = {}
 
@@ -640,6 +698,7 @@ FILE_SPECIFIC_METADATA = {      # Required
     'sigmet': sigmet_metadata,
     'nexrad_archive': nexrad_metadata,
     'nexrad_cdm': nexrad_metadata,
+    'nexrad_level3': nexrad_level3_metadata,
     'cfradial': cfradial_metadata,
     'mdv': mdv_metadata,
     'rsl': rsl_metadata,
@@ -751,6 +810,43 @@ nexrad_cdm_field_mapping = {
     'DifferentialReflectivity': differential_reflectivity,
     'DifferentialPhase': differential_phase,
     'CorrelationCoefficient': cross_correlation_ratio
+}
+
+# NEXRAD Level 3 Product files.
+nexrad_level3_mapping = {
+    # Message code : field name         # Product name
+    19: reflectivity,                   # Base Reflectivity
+    20: reflectivity,                   # Base Reflectivity
+    25: velocity,                       # Base Velocity
+    27: velocity,                       # Base Velocity
+    28: spectrum_width,                 # Base Spectrum Width
+    30: spectrum_width,                 # Base Spectrum Width
+    32: reflectivity,                   # Digital Hybrid Scan Reflectivity
+    34: None,                           # Clutter Filter Control
+    56: velocity,                       # Storm Relative Mean Radial Velocity
+    78: radar_estimated_rain_rate,      # Surface Rainfall Accum. (1 hr)
+    79: radar_estimated_rain_rate,      # Surface Rainfall Accum. (3 hr)
+    80: radar_estimated_rain_rate,      # Storm Total Rainfall Accumulation
+    94: reflectivity,                   # Base Reflectivity Data Array
+    99: velocity,                       # Base Velocity Data Array
+    134: None,                          # High Resolution VIL
+    135: None,                          # Enhanced Echo Tops
+    138: radar_estimated_rain_rate,     # Digital Storm Total Precipitation
+    159: differential_reflectivity,     # Digital Differential Reflectivity
+    161: cross_correlation_ratio,       # Digital Correlation Coefficient
+    163: specific_differential_phase,   # Digital Specific Differential Phase
+    165: radar_echo_classification,     # Digital Hydrometeor Classification
+    169: radar_estimated_rain_rate,     # One Hour Accumulation
+    170: radar_estimated_rain_rate,     # Digital Accumulation Array
+    171: radar_estimated_rain_rate,     # Storm Total Accumulation
+    172: radar_estimated_rain_rate,     # Digital Storm Total Accumulation
+    173: radar_estimated_rain_rate,     # Digital User-Selectable Accum.
+    174: radar_estimated_rain_rate,     # Digital 1 hr Diff. Accum.
+    175: radar_estimated_rain_rate,     # Digital Storm Total Diff. Accum.
+    177: radar_echo_classification,     # Hybrid Hydrometeor Classification
+    181: reflectivity,                  # Base Reflectivity
+    182: velocity,                      # Base Velocity
+    186: reflectivity,                  # Base Reflectivity
 }
 
 # MDV files
@@ -993,6 +1089,7 @@ FIELD_MAPPINGS = {                  # Required variable
     'sigmet': sigmet_field_mapping,
     'nexrad_archive': nexrad_archive_field_mapping,
     'nexrad_cdm': nexrad_cdm_field_mapping,
+    'nexrad_level3': nexrad_level3_mapping,
     'cfradial': cfradial_field_mapping,
     'mdv': mdv_field_mapping,
     'rsl': rsl_field_mapping,
