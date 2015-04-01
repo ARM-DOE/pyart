@@ -29,7 +29,7 @@ import scipy.sparse as sparse
 from ..config import get_metadata
 from ._common_dealias import _parse_fields, _parse_gatefilter
 from ._common_dealias import _parse_rays_wrap_around, _parse_nyquist_vel
-
+from ._fast_edge_finder import _fast_edge_finder
 
 # Possible future improvements to the region based dealiasing algorithm:
 #
@@ -50,9 +50,6 @@ from ._common_dealias import _parse_rays_wrap_around, _parse_nyquist_vel
 #   completes.  By how much the sweep should be unfolded would need to be
 #   determined, perhapes by comparing against sweeps above and below the
 #   current sweep, or by comparing to an atmospheric sounding.
-# * Improve performance by writing portions of the _edge_sum_and_count
-#   function and EdgeCollector in Cython.  This step is typically the most
-#   time-consuming for real world radar volumes.
 # * Improve perfornace by implementing a priority queue in the _EdgeTracker
 #   object. See comments in the class for details.
 
@@ -250,155 +247,30 @@ def _find_regions(vel, gfilter, limits):
     return label, nfeatures
 
 
-# This function takes considerable time and would be a good canidate for
-# rewriting in Cython for better performance.
 def _edge_sum_and_count(labels, nfeatures, data,
                         rays_wrap_around, max_gap_x, max_gap_y):
     """
     Return sparse matrices containing the edge sums and counts between regions
-    and a array of the number of gates in each region.
+    and an array of the number of gates in each region.
     """
 
     bincount = np.bincount(labels.ravel())
     num_masked_gates = bincount[0]
     region_sizes = bincount[1:]
 
-    total_nodes = np.prod(labels.shape) - num_masked_gates
+    total_nodes = labels.shape[0] * labels.shape[1] - num_masked_gates
     if rays_wrap_around:
         total_nodes += labels.shape[0] * 2
-    collector = _EdgeCollector(total_nodes)
-    right, bottom = [i-1 for i in labels.shape]
 
-    for index, label in np.ndenumerate(labels):
-        if label == 0:
-            continue
+    indices, velocities = _fast_edge_finder(
+        labels.astype('int32'), data.astype('float32'),
+        rays_wrap_around, max_gap_x, max_gap_y, total_nodes)
 
-        x_index, y_index = index
-        vel = data[x_index, y_index]
-
-        # left
-        x_check = x_index - 1
-        if x_check == -1 and rays_wrap_around:
-            x_check = right     # wrap around
-        if x_check != -1:
-            neighbor = labels[x_check, y_index]
-
-            # if the left side gate is masked, keep looking to the left
-            # until we find a valid gate or reach the maximum gap size
-            if neighbor == 0:
-                for i in range(max_gap_x):
-                    x_check -= 1
-                    if x_check == -1:
-                        if rays_wrap_around:
-                            x_check = right
-                        else:
-                            break
-                    neighbor = labels[x_check, y_index]
-                    if neighbor != 0:
-                        break
-
-            # add the edge to the collection (if valid)
-            collector.add_edge(label, neighbor, vel)
-
-        # right
-        x_check = x_index + 1
-        if x_check == right+1 and rays_wrap_around:
-            x_check = 0     # wrap around
-        if x_check != right+1:
-            neighbor = labels[x_check, y_index]
-
-            # if the right side gate is masked, keep looking to the left
-            # until we find a valid gate or reach the maximum gap size
-            if neighbor == 0:
-                for i in range(max_gap_x):
-                    x_check += 1
-                    if x_check == right+1:
-                        if rays_wrap_around:
-                            x_check = 0
-                        else:
-                            break
-                    neighbor = labels[x_check, y_index]
-                    if neighbor != 0:
-                        break
-
-            # add the edge to the collection (if valid)
-            collector.add_edge(label, neighbor, vel)
-
-        # top
-        y_check = y_index - 1
-        if y_check != -1:
-            neighbor = labels[x_index, y_check]
-
-            # if the top side gate is masked, keep looking up
-            # until we find a valid gate or reach the maximum gap size
-            if neighbor == 0:
-                for i in range(max_gap_y):
-                    y_check -= 1
-                    if y_check == -1:
-                        break
-                    neighbor = labels[x_index, y_check]
-                    if neighbor != 0:
-                        break
-
-            # add the edge to the collection (if valid)
-            collector.add_edge(label, neighbor, vel)
-
-        # bottom
-        y_check = y_index + 1
-        if y_check != bottom + 1:
-            neighbor = labels[x_index, y_check]
-
-            # if the top side gate is masked, keep looking up
-            # until we find a valid gate or reach the maximum gap size
-            if neighbor == 0:
-                for i in range(max_gap_y):
-                    y_check += 1
-                    if y_check == bottom + 1:
-                        break
-                    neighbor = labels[x_index, y_check]
-                    if neighbor != 0:
-                        break
-
-            # add the edge to the collection (if valid)
-            collector.add_edge(label, neighbor, vel)
-
-    edge_sum, edge_count = collector.make_edge_matrices(nfeatures)
-    return edge_sum, edge_count, region_sizes
-
-
-class _EdgeCollector(object):
-    """
-    Class for collecting edges, used by _edge_sum_and_count function.
-    """
-
-    def __init__(self, total_nodes):
-        """ initalize. """
-        self.l_index = np.zeros(total_nodes * 4, dtype=np.int32)
-        self.n_index = np.zeros(total_nodes * 4, dtype=np.int32)
-        self.e_sum = np.zeros(total_nodes * 4, dtype=np.float64)
-        self.idx = 0
-
-    def add_edge(self, label, neighbor, vel):
-        """ Add an edge. """
-        if neighbor == label or neighbor == 0:
-            # Do not add edges between the same region (circular edges)
-            # or edges to masked gates (indicated by a label of 0).
-            return
-        self.l_index[self.idx] = label
-        self.n_index[self.idx] = neighbor
-        self.e_sum[self.idx] = vel
-        self.idx += 1
-        return
-
-    def make_edge_matrices(self, nfeatures):
-        """ Return sparse matrices for the edge sums and counts. """
-        matrix_indices = (self.l_index[:self.idx], self.n_index[:self.idx])
-        e_sum = self.e_sum[:self.idx]
-        e_count = np.ones_like(e_sum, dtype=np.int32)
-        shape = (nfeatures+1, nfeatures+1)
-        edge_sum = sparse.coo_matrix((e_sum, matrix_indices), shape=shape)
-        edge_count = sparse.coo_matrix((e_count, matrix_indices), shape=shape)
-        return edge_sum.tocsr(), edge_count.tocsr()
+    e_count = np.ones_like(velocities, dtype=np.int32)
+    shape = (nfeatures+1, nfeatures+1)
+    edge_sum = sparse.coo_matrix((velocities, indices), shape=shape)
+    edge_count = sparse.coo_matrix((e_count, indices), shape=shape)
+    return edge_sum.tocsr(), edge_count.tocsr(), region_sizes
 
 
 def _combine_regions(region_tracker, edge_tracker):
@@ -408,7 +280,7 @@ def _combine_regions(region_tracker, edge_tracker):
     if status:
         return True
     node1, node2, weight, diff, edge_number = extra
-    rdiff = np.round(diff)
+    rdiff = int(np.round(diff))
 
     # node sizes of nodes to be merged
     node1_size = region_tracker.get_node_size(node1)
