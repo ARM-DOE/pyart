@@ -11,6 +11,7 @@ Input/output routines common to many file formats.
     stringarray_to_chararray
     radar_coords_to_cart
     make_time_unit_str
+    add_2d_latlon_axis
 
 """
 
@@ -121,12 +122,47 @@ def make_time_unit_str(dtobj):
 
 def add_2d_latlon_axis(grid):
     """
-    
-    Function description here
-    
-    verify and explaine math
-    http://mathworld.wolfram.com/AzimuthalEquidistantProjection.html
+    Add to Grid (in place) a 2-dimensional axes for latitude and longitude 
+    of every point in the y,x plane
+
+    Parameters
+    ----------
+    grid: grid object
+        Cartesian grid object containing the 1d axes "x_disp","y_disp" and 
+        scalar axes 'lat','lon'.
+
+    Returns
+    -------
+    grid: grid object
+        Cartesian grid with new axes "longitude","latitude"
+
+    Notes
+    -----
+    The calculation of latitude, longitude is done by converting spherical 
+    azimuthal equidistant projection to latlon projection [1]. It uses the 
+    mean radius of earth (6371 km)
+
+    .. math::
+
+        c = \\sqrt(x^2 + y^2)/R
+
+        azi = \\atan2(y,x)
+
+        lat = \\asin(\\cos(c)*\\sin(lat0)+\\sin(azi)*\\sin(c)*\\cos(lat0))
+
+        lon = \\atan2(\\cos(azi)*\\sin(c),\\cos(c)*\\cos(lat0)-\\sin(azi)*\\sin(c)*\\sin(lat0)) + lon0
+
+    Where x,y are the cartesian position from the center of projection; 
+    lat,lon the corresponding latitude and longitude; lat0,lon0 the latitude 
+    and longitude of the center of the projection; R the mean radius of the 
+    earth (6371 km)
+
+    References
+    ----------
+    .. [1] Snyder, J. P. Map Projections--A Working Manual. U. S. Geological
+        Survey Professional Paper 1395, 1987, pp. 191-202.
     """
+    
     #azimutal equidistant projetion to latlon
     R = 6371.0 * 1000.0     # radius of earth in meters.
     
