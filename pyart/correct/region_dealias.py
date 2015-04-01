@@ -408,7 +408,7 @@ def _combine_regions(region_tracker, edge_tracker):
     if status:
         return True
     node1, node2, weight, diff, edge_number = extra
-    rdiff = np.round(diff)
+    rdiff = int(np.round(diff))
 
     # node sizes of nodes to be merged
     node1_size = region_tracker.get_node_size(node1)
