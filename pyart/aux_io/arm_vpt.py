@@ -9,9 +9,7 @@ existing CF/Radial module.
 
 """
 
-import getpass
-import datetime
-import platform
+import re
 import netCDF4
 import numpy as np
 
@@ -258,13 +256,51 @@ def read_kazr(filename, field_names=None, additional_metadata=None,
                 dic, shape, ray_n_gates, ray_start_index)
 
     # 4.5 instrument_parameters sub-convention -> instrument_parameters dict
+    # this section needed multiple changes and/or additions since the
+    # instrument parameters were primarily located in the global attributes
+    # this section is likely still incomplete
+    freq = float(re.match('\d+.\d+', ncobj.radar_operating_frequency).group())
+    frequency = {
+        'data': np.array([freq / 1e9], dtype=np.float32),
+        'long_name': 'Radar operating frequency',
+        'standard_name': 'radiation_frequency',
+        'units': 'Hz',
+    }
+    prt_mode = {
+        'data': np.array(['fixed'], dtype=np.str),
+        'long_name': 'Pulsing mode',
+        'standard_name': 'transmit_pulse_mode',
+        'units': 'unitless',
+        'meta_group': 'instrument_parameters',
+        'comment': ('Options are "fixed", "staggered", "dual". Assumed '
+                    '"fixed" if missing'),
+    }
 
     # 4.6 radar_parameters sub-convention -> instrument_parameters dict
-    keys = [k for k in cfradial._INSTRUMENT_PARAMS_DIMS.keys() if k in ncvars]
-    instrument_parameters = dict(
-        (k, cfradial._ncvar_to_dict(ncvars[k])) for k in keys)
-    if instrument_parameters == {}:  # if no parameters set to None
-        instrument_parameters = None
+    # this section needed multiple changes and/or additions since the
+    # radar instrument parameters were primarily located in the global
+    # attributes
+    # this section is likely still incomplete
+    nyquist = float(re.match('\d+.\d+', ncobj.nyquist_velocity).group())
+    nyquist_velocity = {
+        'data': nyquist * np.ones(ncvars['time'].size, dtype=np.float32),
+        'long_name': 'Nyquist velocity',
+        'standard_name': 'unambiguous_doppler_velocity',
+        'units': 'meters_per_second',
+        'meta_group': 'instrument_parameters',
+    }
+
+    instrument_parameters = {
+        'frequency': frequency,
+        'prt_mode': prt_mode,
+        'nyquist_velocity': nyquist_velocity,
+    }
+
+    #keys = [k for k in cfradial._INSTRUMENT_PARAMS_DIMS.keys() if k in ncvars]
+    #instrument_parameters = dict(
+    #    (k, cfradial._ncvar_to_dict(ncvars[k])) for k in keys)
+    #if instrument_parameters == {}:  # if no parameters set to None
+    #    instrument_parameters = None
 
     # 4.7 lidar_parameters sub-convention -> skip
 
