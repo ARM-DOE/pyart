@@ -26,18 +26,18 @@ def fast_map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
     """
     Map one or more radars, with same latlon, to a Cartesian grid.
 
-    Generate a Cartesian grid of points for the requested fields from the
-    collected points from one or more radars, but all radars will be considered
-    to have the same latitude and longitude of the first one.  The field value for
-    a grid point is found calculating its corresponding elevation,azimuth and range,
-    and then rounded to a regular grid that indicates the coresponding bin. Collected
-    points are filtered according to a number of criteria so that undesired points
-    are not included in the interpolation.
+    Generate a Cartesian grid of points for the requested fields from the collected 
+    points from one or more radars. The field value for a grid point is found calculating 
+    its corresponding elevation,azimuth and range,  and then rounded to a regular grid 
+    that indicates the coresponding bin. Collected points are filtered according to a 
+    number of criteria so that undesired points are not included in the interpolation.
 
     Parameters
     ----------
     radars : tuple of Radar objects.
-        Radar objects which will be mapped to the Cartesian grid.
+        Radar objects which will be mapped to the Cartesian grid. However all radars must
+        have the same latitude and longitude of the first one. They also need to have full 
+        sweeps, partial or fail sweep will create undefined behaviour. 
     grid_shape : 3-tuple of floats
         Number of points in the grid (z, y, x).
     grid_limits : 3-tuple of 2-tuples or numpy 1d-array
@@ -124,7 +124,7 @@ def fast_map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
         raise ValueError('X variable does not agree in size')
 
     badval = get_fillvalue()
-# find the grid origin if not given
+    # find the grid origin if not given
     if grid_origin is None:
         lat = float(radars[0].latitude['data'])
         lon = float(radars[0].longitude['data'])
@@ -137,19 +137,31 @@ def fast_map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
         offset=(radars[0].altitude['data'], y_disp, x_disp) 
         
         
-# find max range if not given
+    # find max range if not given
     if max_range==None:
         max_range=max(grid_limits[1][1]-grid_limits[1][0],grid_limits[2][1]-grid_limits[2][0])+1
 
-# fields which should be mapped, None for fields which are in all radars
+    # fields which should be mapped, None for fields which are in all radars
     if fields is None:
         fields = set(radars[0].fields.keys())
         for radar in radars[1:]:
             fields = fields.intersection(radar.fields.keys())
         fields = list(fields)
+
+    # put reflectivity as last field, this will be used in cython side for refl_filter_flag
+    if refl_field==None:
+        refl_field='reflectivity'
+    if refl_field in fields:
+        ref=fields.pop(fields.index(refl_field))
+        fields.append(ref)
+    elif refl_filter_flag:
+        raise ValueError('None reflectivity field found')
     nfields = len(fields)
     
-# map elevation to sweep/radar
+    if max_refl==None:
+        max_refl = 120 # cython will need a number to compare
+    
+    # map elevation to sweep/radar
     sweeps = [] #[(elevation,sweep,radar)]
     for iradar, radar in enumerate(radars):
         elev = [(e,i,iradar) for i,e in enumerate(radar.fixed_angle["data"])]
@@ -163,7 +175,7 @@ def fast_map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
         if index>=0 and sweeps[index][0]+5. > nominal_elev:
             sweeps_index[i] = index
     
-# map sweep,azimuth to ray/radar
+    # map sweep,azimuth to ray/radar
     ray_index = np.empty((len(sweeps),360+1), dtype=np.int) #0 to 360 with 1.0° azimuth precision
     ray_index.fill(-1)
     for isweep ,sweep in enumerate(sweeps):
@@ -180,7 +192,7 @@ def fast_map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
             index = i+index-1
             ray_index[isweep,nominal_azi]=rays[index][1]
 
-# map radar,range to bin
+    # map radar,range to bin
     gate_index = np.empty((len(radars),int(max_range/100)), dtype=np.int) #0 to max_range with 100.0m range precision 
     gate_index.fill(-1)
     for iradar, radar in enumerate(radars):
@@ -199,7 +211,7 @@ def fast_map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
                 index = k+index-1
                 gate_index[iradar,i] = index
     
-    grid_data_simple = cython_fast_map(z,y,x, offset[0],offset[1] , offset[2], max_range,badval, sweeps,sweeps_index, ray_index,gate_index, radars, fields)
+    grid_data_simple = cython_fast_map(z,y,x, offset[0],offset[1] , offset[2], max_range,badval, sweeps,sweeps_index, ray_index,gate_index, radars, fields,refl_filter_flag,max_refl)
     
     # create and return the grid dictionary
     grid_data = np.ma.empty((nz, ny, nx, nfields), dtype=np.float64)

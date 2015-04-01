@@ -7,9 +7,9 @@ cimport cython
 
 
 
-def  cython_fast_map(z,y,x, double z_offset, double y_offset, double x_offset , double max_range,badval, sweeps,np.ndarray[np.int_t, ndim=1] sweeps_index, np.ndarray[np.int_t, ndim=2] ray_index, np.ndarray[np.int_t, ndim=2] gate_index, radars, fields):
+def  cython_fast_map(z,y,x, double z_offset, double y_offset, double x_offset , double max_range,badval, sweeps,np.ndarray[np.int_t, ndim=1] sweeps_index, np.ndarray[np.int_t, ndim=2] ray_index, np.ndarray[np.int_t, ndim=2] gate_index, radars, fields,int refl_filter_flag, double max_refl):
     """
-    cython_fast_map(z,y,x, z_offset, y_offset, x_offset , max_range,badval, sweeps, sweeps_index, ray_index, gate_index, radars, fields):
+    cython_fast_map(z,y,x, z_offset, y_offset, x_offset , max_range,badval, sweeps, sweeps_index, ray_index, gate_index, radars, fields, refl_filter_flag, max_refl):
     
     cython part of function fast_map_to_grid
     
@@ -68,13 +68,23 @@ def  cython_fast_map(z,y,x, double z_offset, double y_offset, double x_offset , 
                     continue
                 
                 # we have data
-                for l in range(nfields):
+                for l in range(nfields-1):#last field is reflectivity, process separated
                     if list_mask[iradar][l][iray,igate]:
                         grid_data_simple[i,j,k,l] = badval
-#                        pass
-                    else:
-                        grid_data_simple[i,j,k,l] = list_array[iradar][l][iray,igate] # radars[iradar].fields[fields[l]]['data'].data[iray,igate]
-    
+                    elif refl_filter_flag:
+                        if list_mask[iradar][nfields-1][iray,igate] or list_array[iradar][nfields-1][iray,igate]>max_refl:
+                            grid_data_simple[i,j,k,l] = badval
+                        else:
+                            grid_data_simple[i,j,k,l] = list_array[iradar][l][iray,igate] # radars[iradar].fields[fields[l]]['data'].data[iray,igate]
+                # new process reflectivity
+                l=nfields-1
+                if list_mask[iradar][l][iray,igate]:
+                    grid_data_simple[i,j,k,l] = badval
+                else:
+                    grid_data_simple[i,j,k,l] = list_array[iradar][l][iray,igate] # radars[iradar].fields[fields[l]]['data'].data[iray,igate]
+                    if grid_data_simple[i,j,k,l]>max_refl:
+                        grid_data_simple[i,j,k,l] = badval
+                        
     return np.asarray(grid_data_simple)
 
 
