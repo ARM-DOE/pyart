@@ -187,11 +187,8 @@ def dealias_region_based(
                 region_tracker.unwrap_number -= sweep_offset
 
         # dealias the data using the fold numbers
-        # start from label 1 to skip masked region
-        for i in range(1, nfeatures+1):
-            nwrap = region_tracker.unwrap_number[i]
-            if nwrap != 0:
-                scorr[labels == i] += nwrap * nyquist_interval
+        nwrap = np.take(region_tracker.unwrap_number, labels)
+        scorr += nwrap * nyquist_interval
 
     # mask filtered gates
     if np.any(gfilter):
