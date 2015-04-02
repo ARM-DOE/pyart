@@ -106,13 +106,14 @@ def read_mdv(filename, field_names=None, additional_metadata=None,
 
     # fields
     fields = {}
-    for mdv_field in set(mdvfile._make_fields_list()):
+    mdv_fields = mdvfile._make_fields_list()
+    for mdv_field in set(mdv_fields):
         field_name = filemetadata.get_field_name(mdv_field)
         if field_name is None:
             continue
 
         # grab data from MDV object, mask and reshape
-        data = mdvfile.read_a_field(mdvfile.fields.index(mdv_field))
+        data = mdvfile.read_a_field(mdv_fields.index(mdv_field))
         data[np.where(np.isnan(data))] = get_fillvalue()
         data[np.where(data == 131072)] = get_fillvalue()
         data = np.ma.masked_equal(data, get_fillvalue())
@@ -339,13 +340,13 @@ class MdvFile:
     compression_info_mapper = [("magic_cookie",0,1,False), ("nbytes_uncompressed",1,2,False), ("nbytes_compressed",2,3,False), ("nbytes_coded",3,4,False), ("spare",4,6,False),] 
     
     def __init__(self, filename, debug=False, read_fields=False):
-        """ initalize MdvFile from filename (str). """
+        """ initalize MdvFile from filename (str). If filename=None create empty object"""
 
         if debug:
             print "Opening ", filename
         if filename==None:
             self.fileptr = None #will creat empty struct, for filling and writing after
-        if hasattr(filename, 'read'):
+        elif hasattr(filename, 'read'):
             self.fileptr = filename
         else:
             self.fileptr = open(filename, 'rb')
@@ -377,21 +378,22 @@ class MdvFile:
             self.elevations = elevations
         if calib_info is not None:
             self.calib_info = calib_info
-
-        if self.field_headers[0]['proj_type'] == PROJ_LATLON:
-            self.projection = 'latlon'
-        elif self.field_headers[0]['proj_type'] == PROJ_LAMBERT_CONF:
-            self.projection = 'lambert_conform'
-        elif self.field_headers[0]['proj_type'] == PROJ_POLAR_STEREO:
-            self.projection = 'polar_stereographic'
-        elif self.field_headers[0]['proj_type'] == PROJ_FLAT:
-            self.projection = 'flat'
-        elif self.field_headers[0]['proj_type'] == PROJ_POLAR_RADAR:
-            self.projection = 'ppi'
-        elif self.field_headers[0]['proj_type'] == PROJ_OBLIQUE_STEREO:
-            self.projection = 'oblique_stereographic'
-        elif self.field_headers[0]['proj_type'] == PROJ_RHI_RADAR:
-            self.projection = 'rhi'
+        
+        if self.master_header['nfields']>0:
+            if self.field_headers[0]['proj_type'] == PROJ_LATLON:
+                self.projection = 'latlon'
+            elif self.field_headers[0]['proj_type'] == PROJ_LAMBERT_CONF:
+                self.projection = 'lambert_conform'
+            elif self.field_headers[0]['proj_type'] == PROJ_POLAR_STEREO:
+                self.projection = 'polar_stereographic'
+            elif self.field_headers[0]['proj_type'] == PROJ_FLAT:
+                self.projection = 'flat'
+            elif self.field_headers[0]['proj_type'] == PROJ_POLAR_RADAR:
+                self.projection = 'ppi'
+            elif self.field_headers[0]['proj_type'] == PROJ_OBLIQUE_STEREO:
+                self.projection = 'oblique_stereographic'
+            elif self.field_headers[0]['proj_type'] == PROJ_RHI_RADAR:
+                self.projection = 'rhi'
 
 #        if debug:
 #            print "Calculating Radar coordinates"
@@ -421,7 +423,21 @@ class MdvFile:
     ##################
     # public methods #
     ##################
-
+    def write(self, filename, debug=False):
+        if hasattr(filename, 'write'):
+            self.fileptr = filename
+        else:
+            self.fileptr = open(filename, 'rb')
+        
+        self._calc_file_offsets()
+        
+        
+        
+        
+        
+        
+    
+    
     def read_a_field(self, fnum, debug=False):
         """
         Read a field from the MDV file.
@@ -447,46 +463,46 @@ class MdvFile:
 
         field_header = self.field_headers[fnum]
         # if the field has already been read, return it
-        if hasattr(self, field_header['field_name']):
+        if self.fields_data[fnum]!=None:
             if debug:
                 print "Getting data from the object."
-            return getattr(self, field_header['field_name'])
+            return self.fields_data[fnum]
 
         # field has not yet been read, populate the object and return
         if debug:
             print "No data found in object, populating"
 
-        nsweeps = self.master_header['nz']
-        nrays = self.master_header['ny']
-        ngates = self.master_header['nx']
+        nz = field_header['nz']
+        ny = field_header['ny']
+        nx = field_header['nx']
 
         # read the header
-        field_data = np.zeros([nsweeps, nrays, ngates], dtype='float32')
+        field_data = np.zeros([nz, ny, nx], dtype='float32')
         self.fileptr.seek(field_header['field_data_offset'])
-        self._get_levels_info(nsweeps)  # dict not used, but need to seek.
+        self._get_levels_info(nz)  # dict not used, but need to seek.
 
-        for sw in xrange(nsweeps):
+        for sw in xrange(nz):
             if debug:
-                print "doing sweep ", sw
+                print "doing levels ", sw
 
-            # get the compressed sweep data
+            # get the compressed level data
             compr_info = self._get_compression_info()
             compr_data = self.fileptr.read(compr_info['nbytes_coded'])
 
             encoding_type = field_header['encoding_type']
             if encoding_type == ENCODING_INT8:
-                fmt = '>%iB' % (ngates * nrays)
+                fmt = '>%iB' % (nx * ny)
                 np_form = '>B'
             elif encoding_type == ENCODING_INT16:
-                fmt = '>%iH' % (ngates * nrays)
+                fmt = '>%iH' % (nx * ny)
                 np_form = '>H'
             elif encoding_type == ENCODING_FLOAT32:
-                fmt = '>%if' % (ngates * nrays)
+                fmt = '>%if' % (nx * ny)
                 np_form = '>f'
             else:
                 raise ValueError('unknown encoding: ', encoding_type)
 
-            # decompress the sweep data
+            # decompress the level data
             if compr_info['magic_cookie'] == 0xf7f7f7f7:
                 cd_fobj = StringIO.StringIO(compr_data)
                 gzip_file_handle = gzip.GzipFile(fileobj=cd_fobj)
@@ -507,7 +523,7 @@ class MdvFile:
 
             # read the decompressed data, reshape and mask
             sw_data = np.fromstring(decompr_data, np_form).astype('float32')
-            sw_data.shape = (nrays, ngates)
+            sw_data.shape = (ny, nx)
             mask = sw_data == field_header['bad_data_value']
             np.putmask(sw_data, mask, [np.NaN])
 
@@ -517,9 +533,61 @@ class MdvFile:
             field_data[sw, :, :] = sw_data * scale + bias
 
         # store data as object attribute and return
-        setattr(self, field_header['field_name'], field_data)
+        self.fields_data[fnum]= field_data
         return field_data
 
+    def write_field(self,fnum):
+        field_header = self.field_headers[fnum]
+        if field_header['compression_type']!=3
+            import warnings
+            warnings.warn('mdv writing ALWAYS compress data with zlib')
+            field_header['compression_type']=3
+
+        field_data = self.fields_data[fnum]
+        nz = field_header['nz']
+        
+        field_size=4*2*nz #2*nz int32
+        vlevel_offsets=[0]*nz
+        vlevel_nbytes=[0]*nz
+        for sw in xrange(nz):
+            vlevel_offsets[sw]=field_size
+            scale = field_header['scale']
+            bias = field_header['bias']
+            sw_data = (field_data[sw, :, :]-bias)/scale
+            if hasattr(sw_data, 'mask'):
+                sw_data = np.where( sw_data.mask , field_header['missing_data_value'], sw_data)
+
+            encoding_type = field_header['encoding_type']
+            if encoding_type == ENCODING_INT8:
+                fmt = '>%iB' % (nx * ny)
+                np_form = '>B'
+            elif encoding_type == ENCODING_INT16:
+                fmt = '>%iH' % (nx * ny)
+                np_form = '>H'
+            elif encoding_type == ENCODING_FLOAT32:
+                fmt = '>%if' % (nx * ny)
+                np_form = '>f'
+            else:
+                raise ValueError('unknown encoding: ', encoding_type)
+            uncompr_data = np.array(sw_data,dtype=np_form).tostring()
+            compr_data = zlib.compress(uncompr_data)
+            if len(compr_data)>len(uncompr_data):
+                magic = 0xf6f6f6f6
+                compr_data = uncompr_data
+            else:
+                magic = 0xf5f5f5f5
+            compression_info = {
+                'magic_cookie' = magic
+                'nbytes_uncompressed' = len(uncompr_data)
+                'nbytes_compressed' = len(compr_data) + 24
+                'nbytes_coded' = len(compr_data)
+                'spare' = [0,0]
+            }
+            self._write_compression_info(compression_info)
+            self.fileptr.write(compr_data)
+            field_size=field_size+len(compr_data) + 24
+            vlevel_nbytes[sw]=len(compr_data) + 24
+            
     def read_all_fields(self):
         """ Read all fields, storing data to field name attributes. """
         for i in xrange(self.master_header['nfields']):
@@ -551,6 +619,7 @@ class MdvFile:
         d = {}
         for item in self.master_header_mapper:
             if item[3]:
+                l[item[1]:item[2]] = [unichr(a) for a in l[item[1]:item[2]]]
                 d[item[0]] = "".join(l[item[1]:item[2]]).strip('\x00')
             else:
                 if item[2]==item[1]+1:
@@ -589,12 +658,14 @@ class MdvFile:
             l = [0]*self.field_header_mapper[-1][2]
             l[0] = 408
             l[1] = 14143
+            l[57] = 1 #scale
             l[199] = 408
         else:
             l = struct.unpack(self.field_header_fmt, self.fileptr.read(struct.calcsize(self.field_header_fmt)))
         d = {}
         for item in self.field_header_mapper:
             if item[3]:
+                l[item[1]:item[2]] = [unichr(a) for a in l[item[1]:item[2]]]
                 d[item[0]] = "".join(l[item[1]:item[2]]).strip('\x00')
             else:
                 if item[2]==item[1]+1:
@@ -638,6 +709,7 @@ class MdvFile:
         d = {}
         for item in self.vlevel_header_mapper:
             if item[3]:
+                l[item[1]:item[2]] = [unichr(a) for a in l[item[1]:item[2]]]
                 d[item[0]] = "".join(l[item[1]:item[2]]).strip('\x00')
             else:
                 if item[2]==item[1]+1:
@@ -681,6 +753,7 @@ class MdvFile:
         d = {}
         for item in self.chunk_header_mapper:
             if item[3]:
+                l[item[1]:item[2]] = [unichr(a) for a in l[item[1]:item[2]]]
                 d[item[0]] = "".join(l[item[1]:item[2]]).strip('\x00')
             else:
                 if item[2]==item[1]+1:
@@ -694,6 +767,7 @@ class MdvFile:
         l=[0]*self.chunk_header_mapper[-1][2]
         for item in self.chunk_header_mapper:
             if item[3]:
+                l[item[1]:item[2]] = [unichr(a) for a in l[item[1]:item[2]]]
                 l[item[1]:item[2]] = (list(d[item[0]])+[0]*(item[2]-item[1]))[0:item[2]-item[1]]#convert str to list of char and complet with zero
             else:
                 if item[2]==item[1]+1:
@@ -903,15 +977,33 @@ class MdvFile:
         l[nlevels:2*nlevels] = d['vlevel_nbytes']
         string = struct.pack(fmt, l)
         self.fileptr.write(string)
+
+    def _calc_file_offsets(self):
+        self.master_header["field_hdr_offset"]=1024
+        self.master_header["vlevel_hdr_offset"]=1024+416*self.master_header["nfields"]
+        self.master_header["chunk_hdr_offset"]=1024+(416+1024)*self.master_header["nfields"]
+        
+        file_pos=self.master_header["chunk_hdr_offset"]+512*self.master_header["nchunks"]
+        for i in range(self.master_header["nfields"]):
+            self.field_headers[i]["field_data_offset"]=file_pos
+            file_pos=file_pos+self.field_headers[i]["volume_size"]
+        
+        for i in range(self.master_header["nchunks"]):
+            self.chunk_headers[i]["chunk_data_offset"]=file_pos
+            file_pos=file_pos+self.chunk_headers[i]["size"]
+
+
+
+
     
     # misc. methods
     #XXX move some where else, there are not general mdv operations
 
     def _calc_geometry(self):
         """ Calculate geometry, return az_deg, range_km, el_deg. """
-        nsweeps = self.master_header['nz']
-        nrays = self.master_header['ny']
-        ngates = self.master_header['nx']
+        nsweeps = self.master_header['max_nz']
+        nrays = self.master_header['max_ny']
+        ngates = self.master_header['max_nx']
         grid_minx = self.field_headers[0]['grid_minx']
         grid_miny = self.field_headers[0]['grid_miny']
         grid_dx = self.field_headers[0]['grid_dx']
@@ -944,9 +1036,9 @@ class MdvFile:
         """ Return a carts dictionary, distances in meters. """
 
         # simple calculation involving 4/3 earth radius
-        nsweeps = self.master_header['nz']
-        nrays = self.master_header['ny']
-        ngates = self.master_header['nx']
+        nsweeps = self.master_header['max_nz']
+        nrays = self.master_header['max_ny']
+        ngates = self.master_header['max_nx']
         xx = np.empty([nsweeps, nrays, ngates], dtype=np.float32)
         yy = np.empty([nsweeps, nrays, ngates], dtype=np.float32)
         zz = np.empty([nsweeps, nrays, ngates], dtype=np.float32)
