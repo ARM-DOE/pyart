@@ -132,8 +132,8 @@ def _fast_edge_finder(
                 nvel = data[x_index, y_check]
                 collector.add_edge(label, neighbor, vel, nvel)
 
-    indices, velocities, nvelocities = collector.get_indices_and_velocities()
-    return indices, velocities, nvelocities
+    indices, velocities = collector.get_indices_and_velocities()
+    return indices, velocities
 
 
 # Cython implementation inspired by coo_entries in scipy/spatial/ckdtree.pyx
@@ -163,7 +163,7 @@ cdef class _EdgeCollector:
 
         self.idx = 0
 
-    cdef int add_edge(_EdgeCollector self, int label, int neighbor, 
+    cdef int add_edge(_EdgeCollector self, int label, int neighbor,
                       float vel, float nvel):
         """ Add an edge. """
         if neighbor == label or neighbor == 0:
@@ -180,6 +180,5 @@ cdef class _EdgeCollector:
     def get_indices_and_velocities(self):
         """ Return the edge indices and velocities. """
         indices = (self.l_index[:self.idx], self.n_index[:self.idx])
-        velocities = self.l_velo[:self.idx]
-        nvelocities = self.n_velo[:self.idx]
-        return indices, velocities, nvelocities
+        velocities = (self.l_velo[:self.idx], self.n_velo[:self.idx])
+        return indices, velocities
