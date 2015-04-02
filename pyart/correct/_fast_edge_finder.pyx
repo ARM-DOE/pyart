@@ -27,7 +27,7 @@ def _fast_edge_finder(
     """
     cdef int x_index, y_index, right, bottom, y_check, x_check
     cdef int label, neighbor
-    cdef float vel
+    cdef float vel, nvel
 
     collector = _EdgeCollector(total_nodes)
     right = labels.shape[0] - 1
@@ -64,7 +64,8 @@ def _fast_edge_finder(
                             break
 
                 # add the edge to the collection (if valid)
-                collector.add_edge(label, neighbor, vel)
+                nvel = data[x_check, y_index]
+                collector.add_edge(label, neighbor, vel, nvel)
 
             # right
             x_check = x_index + 1
@@ -88,7 +89,8 @@ def _fast_edge_finder(
                             break
 
                 # add the edge to the collection (if valid)
-                collector.add_edge(label, neighbor, vel)
+                nvel = data[x_check, y_index]
+                collector.add_edge(label, neighbor, vel, nvel)
 
             # top
             y_check = y_index - 1
@@ -107,7 +109,8 @@ def _fast_edge_finder(
                             break
 
                 # add the edge to the collection (if valid)
-                collector.add_edge(label, neighbor, vel)
+                nvel = data[x_index, y_check]
+                collector.add_edge(label, neighbor, vel, nvel)
 
             # bottom
             y_check = y_index + 1
@@ -126,10 +129,11 @@ def _fast_edge_finder(
                             break
 
                 # add the edge to the collection (if valid)
-                collector.add_edge(label, neighbor, vel)
+                nvel = data[x_index, y_check]
+                collector.add_edge(label, neighbor, vel, nvel)
 
-    indices, velocities = collector.get_indices_and_velocities()
-    return indices, velocities
+    indices, velocities, nvelocities = collector.get_indices_and_velocities()
+    return indices, velocities, nvelocities
 
 
 # Cython implementation inspired by coo_entries in scipy/spatial/ckdtree.pyx
@@ -138,23 +142,29 @@ cdef class _EdgeCollector:
     Class for collecting edges, used by _edge_sum_and_count function.
     """
 
-    cdef np.ndarray l_index, n_index, edge_velo
+    cdef np.ndarray l_index, n_index, l_velo, n_velo
     cdef np.int32_t *l_data
     cdef np.int32_t *n_data
-    cdef np.float64_t *e_data
+    cdef np.float64_t *lv_data
+    cdef np.float64_t *nv_data
     cdef int idx
 
     def __init__(self, total_nodes):
         """ initalize. """
         self.l_index = np.zeros(total_nodes * 4, dtype=np.int32)
         self.n_index = np.zeros(total_nodes * 4, dtype=np.int32)
-        self.edge_velo = np.zeros(total_nodes * 4, dtype=np.float64)
+        self.l_velo = np.zeros(total_nodes * 4, dtype=np.float64)
+        self.n_velo = np.zeros(total_nodes * 4, dtype=np.float64)
+
         self.l_data = <np.int32_t *>np.PyArray_DATA(self.l_index)
         self.n_data = <np.int32_t *>np.PyArray_DATA(self.n_index)
-        self.e_data = <np.float64_t*>np.PyArray_DATA(self.edge_velo)
+        self.lv_data = <np.float64_t*>np.PyArray_DATA(self.l_velo)
+        self.nv_data = <np.float64_t*>np.PyArray_DATA(self.n_velo)
+
         self.idx = 0
 
-    cdef int add_edge(_EdgeCollector self, int label, int neighbor, float vel):
+    cdef int add_edge(_EdgeCollector self, int label, int neighbor, 
+                      float vel, float nvel):
         """ Add an edge. """
         if neighbor == label or neighbor == 0:
             # Do not add edges between the same region (circular edges)
@@ -162,12 +172,14 @@ cdef class _EdgeCollector:
             return 0
         self.l_data[self.idx] = label
         self.n_data[self.idx] = neighbor
-        self.e_data[self.idx] = vel
+        self.lv_data[self.idx] = vel
+        self.nv_data[self.idx] = nvel
         self.idx += 1
         return 1
 
     def get_indices_and_velocities(self):
         """ Return the edge indices and velocities. """
         indices = (self.l_index[:self.idx], self.n_index[:self.idx])
-        velocities = self.edge_velo[:self.idx]
-        return indices, velocities
+        velocities = self.l_velo[:self.idx]
+        nvelocities = self.n_velo[:self.idx]
+        return indices, velocities, nvelocities

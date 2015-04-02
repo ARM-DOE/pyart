@@ -159,13 +159,14 @@ def dealias_region_based(
 
         # find regions in original data
         labels, nfeatures = _find_regions(sdata, sfilter, interval_limits)
-        edge_sum, edge_count, region_sizes = _edge_sum_and_count(
+        edge_sum, edge_sum2, edge_count, region_sizes = _edge_sum_and_count(
             labels, nfeatures, sdata, rays_wrap_around, skip_between_rays,
             skip_along_ray)
 
         # find the number of folds in the regions
         region_tracker = _RegionTracker(region_sizes)
-        edge_tracker = _EdgeTracker(edge_sum, edge_count, nyquist_interval)
+        edge_tracker = _EdgeTracker(edge_sum, edge_sum2, edge_count,
+                                    nyquist_interval)
         while True:
             if _combine_regions(region_tracker, edge_tracker):
                 break
@@ -262,15 +263,16 @@ def _edge_sum_and_count(labels, nfeatures, data,
     if rays_wrap_around:
         total_nodes += labels.shape[0] * 2
 
-    indices, velocities = _fast_edge_finder(
+    indices, velocities, nvelocities = _fast_edge_finder(
         labels.astype('int32'), data.astype('float32'),
         rays_wrap_around, max_gap_x, max_gap_y, total_nodes)
 
     e_count = np.ones_like(velocities, dtype=np.int32)
     shape = (nfeatures+1, nfeatures+1)
     edge_sum = sparse.coo_matrix((velocities, indices), shape=shape)
+    edge_sum2 = sparse.coo_matrix((nvelocities, indices), shape=shape)
     edge_count = sparse.coo_matrix((e_count, indices), shape=shape)
-    return edge_sum.tocsr(), edge_count.tocsr(), region_sizes
+    return edge_sum, edge_sum2, edge_count, region_sizes
 
 
 def _combine_regions(region_tracker, edge_tracker):
@@ -356,9 +358,13 @@ class _RegionTracker(object):
 class _EdgeTracker(object):
     """ A class for tracking edges in a dynamic network. """
 
-    def __init__(self, edge_sum, edge_count, nyquist_interval):
+    @profile
+    def __init__(self, edge_sum, edge_sum2, edge_count, nyquist_interval):
         """ initialize """
 
+        edge_count.sum_duplicates()
+        edge_sum.sum_duplicates()
+        edge_sum2.sum_duplicates()
         nedges = int(edge_count.nnz / 2)
         nnodes = edge_count.shape[0]
 
@@ -381,16 +387,19 @@ class _EdgeTracker(object):
             self.edges_in_node[i] = []
 
         # fill out data from edge_count and edge_sum
+        # the edge_count matrix must be symmetric at this point,
+        # edge_count[i,j] == edge_count[j,i], but no
+        # check is performed in the interest of speed
         edge = 0
-        for i, j in zip(*edge_count.nonzero()):
+        for i, j, count, vel, nvel in zip(
+                edge_count.row, edge_count.col, edge_count.data, edge_sum.data,
+                edge_sum2.data):
             if i < j:
                 continue
-            assert edge_count[i, j] == edge_count[j, i]
             self.node_alpha[edge] = i
             self.node_beta[edge] = j
-            self.sum_diff[edge] = ((edge_sum[i, j] - edge_sum[j, i]) /
-                                   nyquist_interval)
-            self.weight[edge] = edge_count[i, j]
+            self.sum_diff[edge] = ((vel - nvel) / nyquist_interval)
+            self.weight[edge] = count
             self.edges_in_node[i].append(edge)
             self.edges_in_node[j].append(edge)
 
