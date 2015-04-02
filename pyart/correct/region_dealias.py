@@ -159,13 +159,19 @@ def dealias_region_based(
 
         # find regions in original data
         labels, nfeatures = _find_regions(sdata, sfilter, interval_limits)
-        edge_sum, edge_count, region_sizes = _edge_sum_and_count(
-            labels, nfeatures, sdata, rays_wrap_around, skip_between_rays,
-            skip_along_ray)
+        bincount = np.bincount(labels.ravel())
+        num_masked_gates = bincount[0]
+        region_sizes = bincount[1:]
+
+        # find all edges between regions
+        indices, edge_count, velos = _edge_sum_and_count(
+            labels, num_masked_gates, sdata, rays_wrap_around,
+            skip_between_rays, skip_along_ray)
 
         # find the number of folds in the regions
         region_tracker = _RegionTracker(region_sizes)
-        edge_tracker = _EdgeTracker(edge_sum, edge_count, nyquist_interval)
+        edge_tracker = _EdgeTracker(indices, edge_count, velos,
+                                    nyquist_interval, nfeatures+1)
         while True:
             if _combine_regions(region_tracker, edge_tracker):
                 break
@@ -181,11 +187,8 @@ def dealias_region_based(
                 region_tracker.unwrap_number -= sweep_offset
 
         # dealias the data using the fold numbers
-        # start from label 1 to skip masked region
-        for i in range(1, nfeatures+1):
-            nwrap = region_tracker.unwrap_number[i]
-            if nwrap != 0:
-                scorr[labels == i] += nwrap * nyquist_interval
+        nwrap = np.take(region_tracker.unwrap_number, labels)
+        scorr += nwrap * nyquist_interval
 
     # mask filtered gates
     if np.any(gfilter):
@@ -247,17 +250,13 @@ def _find_regions(vel, gfilter, limits):
     return label, nfeatures
 
 
-def _edge_sum_and_count(labels, nfeatures, data,
+def _edge_sum_and_count(labels, num_masked_gates, data,
                         rays_wrap_around, max_gap_x, max_gap_y):
     """
-    Return sparse matrices containing the edge sums and counts between regions
-    and an array of the number of gates in each region.
+    Find all edges between labels regions.
+
+    Returns the indices, count and velocities of all edges.
     """
-
-    bincount = np.bincount(labels.ravel())
-    num_masked_gates = bincount[0]
-    region_sizes = bincount[1:]
-
     total_nodes = labels.shape[0] * labels.shape[1] - num_masked_gates
     if rays_wrap_around:
         total_nodes += labels.shape[0] * 2
@@ -265,12 +264,32 @@ def _edge_sum_and_count(labels, nfeatures, data,
     indices, velocities = _fast_edge_finder(
         labels.astype('int32'), data.astype('float32'),
         rays_wrap_around, max_gap_x, max_gap_y, total_nodes)
+    index1, index2 = indices
+    vel1, vel2 = velocities
+    count = np.ones_like(vel1, dtype=np.int32)
 
-    e_count = np.ones_like(velocities, dtype=np.int32)
-    shape = (nfeatures+1, nfeatures+1)
-    edge_sum = sparse.coo_matrix((velocities, indices), shape=shape)
-    edge_count = sparse.coo_matrix((e_count, indices), shape=shape)
-    return edge_sum.tocsr(), edge_count.tocsr(), region_sizes
+    # find the unique edges, procedure based on method in
+    # scipy.sparse.coo_matrix.sum_duplicates
+    # except we have three data arrays, vel1, vel2, and count
+    order = np.lexsort((index1, index2))
+    index1 = index1[order]
+    index2 = index2[order]
+    vel1 = vel1[order]
+    vel2 = vel2[order]
+    count = count[order]
+
+    unique_mask = ((index1[1:] != index1[:-1]) |
+                   (index2[1:] != index2[:-1]))
+    unique_mask = np.append(True, unique_mask)
+    index1 = index1[unique_mask]
+    index2 = index2[unique_mask]
+
+    unique_inds, = np.nonzero(unique_mask)
+    vel1 = np.add.reduceat(vel1, unique_inds, dtype=vel1.dtype)
+    vel2 = np.add.reduceat(vel2, unique_inds, dtype=vel2.dtype)
+    count = np.add.reduceat(count, unique_inds, dtype=count.dtype)
+
+    return (index1, index2), count, (vel1, vel2)
 
 
 def _combine_regions(region_tracker, edge_tracker):
@@ -356,11 +375,11 @@ class _RegionTracker(object):
 class _EdgeTracker(object):
     """ A class for tracking edges in a dynamic network. """
 
-    def __init__(self, edge_sum, edge_count, nyquist_interval):
+    def __init__(self, indices, edge_count, velocities, nyquist_interval,
+                 nnodes):
         """ initialize """
 
-        nedges = int(edge_count.nnz / 2)
-        nnodes = edge_count.shape[0]
+        nedges = len(indices[0]) / 2
 
         # node number and different in sum for each edge
         self.node_alpha = np.zeros(nedges, dtype=np.int32)
@@ -380,17 +399,17 @@ class _EdgeTracker(object):
         for i in range(nnodes):
             self.edges_in_node[i] = []
 
-        # fill out data from edge_count and edge_sum
+        # fill out data from the provides indicies, edge counts and velocities
         edge = 0
-        for i, j in zip(*edge_count.nonzero()):
+        idx1, idx2 = indices
+        vel1, vel2 = velocities
+        for i, j, count, vel, nvel in zip(idx1, idx2, edge_count, vel1, vel2):
             if i < j:
                 continue
-            assert edge_count[i, j] == edge_count[j, i]
             self.node_alpha[edge] = i
             self.node_beta[edge] = j
-            self.sum_diff[edge] = ((edge_sum[i, j] - edge_sum[j, i]) /
-                                   nyquist_interval)
-            self.weight[edge] = edge_count[i, j]
+            self.sum_diff[edge] = ((vel - nvel) / nyquist_interval)
+            self.weight[edge] = count
             self.edges_in_node[i].append(edge)
             self.edges_in_node[j].append(edge)
 
