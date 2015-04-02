@@ -259,12 +259,13 @@ def read_kazr(filename, field_names=None, additional_metadata=None,
     # this section needed multiple changes and/or additions since the
     # instrument parameters were primarily located in the global attributes
     # this section is likely still incomplete
-    freq = float(re.match('\d+.\d+', ncobj.radar_operating_frequency).group())
+    omega = float(ncobj.radar_operating_frequency.split()[0])
     frequency = {
-        'data': np.array([freq / 1e9], dtype=np.float32),
+        'data': np.array([omega / 1e9], dtype=np.float32),
         'long_name': 'Radar operating frequency',
         'standard_name': 'radiation_frequency',
         'units': 'Hz',
+        'meta_group': 'instrument_parameters',
     }
     prt_mode = {
         'data': np.array(['fixed'], dtype=np.str),
@@ -275,25 +276,44 @@ def read_kazr(filename, field_names=None, additional_metadata=None,
         'comment': ('Options are "fixed", "staggered", "dual". Assumed '
                     '"fixed" if missing'),
     }
+    prf = float(ncobj.pulse_repetition_frequency.split()[0])
+    prt = {
+        'data': (1.0 / prf) * np.ones(ncvars['time'].size, dtype=np.float32),
+        'long_name': 'Pulse repetition time',
+        'standard_name': 'pulse_repetition_time',
+        'units': 'seconds',
+        'meta_group': 'instrument_parameters',
+        'comments': 'For staggered PRT, also see prt_ratio',
+    }
+    v_nq = float(ncobj.nyquist_velocity.split()[0])
+    nyquist_velocity = {
+        'data': v_nq * np.ones(ncvars['time'].size, dtype=np.float32),
+        'long_name': 'Nyquist velocity',
+        'standard_name': 'unambiguous_doppler_velocity',
+        'units': 'meters_per_second',
+        'meta_group': 'instrument_parameters',
+    }
+    samples = int(ncobj.num_spectral_averages)
+    n_samples = {
+        'data': samples * np.ones(ncvars['time'].size, dtype=np.int32),
+        'long_name': 'Number of samples used to compute moments',
+        'standard_name': 'number_of_samples_used_to_compute_moments',
+        'units': 'unitless',
+        'meta_group': 'instrument_parameters',
+    }
 
     # 4.6 radar_parameters sub-convention -> instrument_parameters dict
     # this section needed multiple changes and/or additions since the
     # radar instrument parameters were primarily located in the global
     # attributes
     # this section is likely still incomplete
-    nyquist = float(re.match('\d+.\d+', ncobj.nyquist_velocity).group())
-    nyquist_velocity = {
-        'data': nyquist * np.ones(ncvars['time'].size, dtype=np.float32),
-        'long_name': 'Nyquist velocity',
-        'standard_name': 'unambiguous_doppler_velocity',
-        'units': 'meters_per_second',
-        'meta_group': 'instrument_parameters',
-    }
 
     instrument_parameters = {
         'frequency': frequency,
         'prt_mode': prt_mode,
+        'prt': prt,
         'nyquist_velocity': nyquist_velocity,
+        'n_samples': n_samples,
     }
 
     #keys = [k for k in cfradial._INSTRUMENT_PARAMS_DIMS.keys() if k in ncvars]
