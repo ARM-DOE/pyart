@@ -120,16 +120,21 @@ def make_time_unit_str(dtobj):
     return "seconds since " + dtobj.strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
-def add_2d_latlon_axis(grid):
+def add_2d_latlon_axis(grid,**kwargs):
     """
     Add to Grid (in place) a 2-dimensional axes for latitude and longitude 
-    of every point in the y,x plane
+    of every point in the y,x plane. If available conversion is done using Basemap,
+    extra arguments in **kwargs are passed to that function. If not available
+    internal implementation is used
 
     Parameters
     ----------
     grid: grid object
         Cartesian grid object containing the 1d axes "x_disp","y_disp" and 
         scalar axes 'lat','lon'.
+    **kwargs: Basemap options
+        Options to be passed to Basemap. If projection is not specified here it
+        uses projection='aeqd' (azimuthal equidistant)
 
     Returns
     -------
@@ -138,15 +143,15 @@ def add_2d_latlon_axis(grid):
 
     Notes
     -----
-    The calculation of latitude, longitude is done by converting spherical 
-    azimuthal equidistant projection to latlon projection [1]. It uses the 
-    mean radius of earth (6371 km)
+    If Basemap is not available calculation of latitude, longitude is done 
+    by converting spherical azimuthal equidistant projection to latlon projection [1].
+    It uses the mean radius of earth (6371 km)
 
     .. math::
 
         c = \\sqrt(x^2 + y^2)/R
 
-        azi = \\atan2(y,x)
+        azi = \\atan2(y,x) #from east to north
 
         lat = \\asin(\\cos(c)*\\sin(lat0)+\\sin(azi)*\\sin(c)*\\cos(lat0))
 
@@ -162,21 +167,40 @@ def add_2d_latlon_axis(grid):
     .. [1] Snyder, J. P. Map Projections--A Working Manual. U. S. Geological
         Survey Professional Paper 1395, 1987, pp. 191-202.
     """
-    
-    #azimutal equidistant projetion to latlon
-    R = 6371.0 * 1000.0     # radius of earth in meters.
-    
-    x,y=np.meshgrid(grid.axes["x_disp"]['data'],grid.axes["y_disp"]['data'])
-    
-    c=np.sqrt(x*x+y*y)/R;
-    phi_0=grid.axes["lat"]['data']*np.pi/180
-    azi=np.arctan2(y,x);
-    
-    lat = np.arcsin(np.cos(c)*np.sin(phi_0)+np.sin(azi)*np.sin(c)*np.cos(phi_0))*180/np.pi
-    lon=np.arctan2(np.cos(azi)*np.sin(c),np.cos(c)*np.cos(phi_0)-np.sin(azi)*np.sin(c)*np.sin(phi_0))*180/np.pi+grid.axes["lon"]['data']
-    lon=np.fmod(lon+180,360)-180;
+    import sys
+    try:
+        #XXX my version of Basemap (debian wheezy) seem to have some bug, it results in impossible values 1.e+30 etc.
+        #XXX this commented lines should work however
+        #XXX function description above is done supposing a working Basemap
+        #from mpl_toolkits.basemap import Basemap
+        #if 'projection' not in kwargs:
+        #    kwargs['projection']='aeqd'
+        #x,y=np.meshgrid(grid.axes["x_disp"]['data'],grid.axes["y_disp"]['data'])
+        #b = Basemap(lat_0=grid.axes["lat"]['data'],lon_0=grid.axes["lon"]['data'],**kwargs)
+        #lon, lat = b(x, y, inverse=True)
+        #XXX pyproj version
+        import pyproj
+        if 'proj' not in kwargs:
+            kwargs['proj']='aeqd'
+        x,y=np.meshgrid(grid.axes["x_disp"]['data'],grid.axes["y_disp"]['data'])
+        b = pyproj.Proj(lat_0=grid.axes["lat"]['data'],lon_0=grid.axes["lon"]['data'],**kwargs)
+        lon, lat = b(x, y, inverse=True)
+    except ImportError:
+        import warnings
+        warnings.warn('No basemap found, using internal implementation for converting azimuthal equidistant to latlon')
+        #azimutal equidistant projetion to latlon
+        R = 6371.0 * 1000.0     # radius of earth in meters.
         
-    
+        x,y=np.meshgrid(grid.axes["x_disp"]['data'],grid.axes["y_disp"]['data'])
+        
+        c=np.sqrt(x*x+y*y)/R;
+        phi_0=grid.axes["lat"]['data']*np.pi/180
+        azi=np.arctan2(y,x); #from east to north
+        
+        lat = np.arcsin(np.cos(c)*np.sin(phi_0)+np.sin(azi)*np.sin(c)*np.cos(phi_0))*180/np.pi
+        lon=np.arctan2(np.cos(azi)*np.sin(c),np.cos(c)*np.cos(phi_0)-np.sin(azi)*np.sin(c)*np.sin(phi_0))*180/np.pi+grid.axes["lon"]['data']
+        lon=np.fmod(lon+180,360)-180;
+
     lat_axis = {'data':  lat,
              'long_name': 'Latitude for points in Cartesian system',
              'axis': 'YX',
