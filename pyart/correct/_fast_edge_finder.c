@@ -792,7 +792,7 @@ typedef npy_clongdouble __pyx_t_5numpy_clongdouble_t;
  */
 typedef npy_cdouble __pyx_t_5numpy_complex_t;
 
-/* "pyart/correct/_fast_edge_finder.pyx":140
+/* "pyart/correct/_fast_edge_finder.pyx":144
  * 
  * # Cython implementation inspired by coo_entries in scipy/spatial/ckdtree.pyx
  * cdef class _EdgeCollector:             # <<<<<<<<<<<<<<
@@ -891,7 +891,7 @@ struct __pyx_memoryviewslice_obj {
 
 
 
-/* "pyart/correct/_fast_edge_finder.pyx":140
+/* "pyart/correct/_fast_edge_finder.pyx":144
  * 
  * # Cython implementation inspired by coo_entries in scipy/spatial/ckdtree.pyx
  * cdef class _EdgeCollector:             # <<<<<<<<<<<<<<
@@ -1968,9 +1968,19 @@ static PyObject *__pyx_pf_5pyart_7correct_17_fast_edge_finder__fast_edge_finder(
   int __pyx_t_34;
   int __pyx_t_35;
   int __pyx_t_36;
-  PyObject *__pyx_t_37 = NULL;
-  PyObject *__pyx_t_38 = NULL;
-  PyObject *(*__pyx_t_39)(PyObject *);
+  int __pyx_t_37;
+  int __pyx_t_38;
+  int __pyx_t_39;
+  int __pyx_t_40;
+  int __pyx_t_41;
+  int __pyx_t_42;
+  int __pyx_t_43;
+  int __pyx_t_44;
+  int __pyx_t_45;
+  int __pyx_t_46;
+  PyObject *__pyx_t_47 = NULL;
+  PyObject *__pyx_t_48 = NULL;
+  PyObject *(*__pyx_t_49)(PyObject *);
   int __pyx_lineno = 0;
   const char *__pyx_filename = NULL;
   int __pyx_clineno = 0;
@@ -2122,7 +2132,7 @@ static PyObject *__pyx_pf_5pyart_7correct_17_fast_edge_finder__fast_edge_finder(
  *                 x_check = right     # wrap around
  *             if x_check != -1:             # <<<<<<<<<<<<<<
  *                 neighbor = labels[x_check, y_index]
- * 
+ *                 nvel = data[x_check, y_index]
  */
       __pyx_t_9 = ((__pyx_v_x_check != -1) != 0);
       if (__pyx_t_9) {
@@ -2131,14 +2141,25 @@ static PyObject *__pyx_pf_5pyart_7correct_17_fast_edge_finder__fast_edge_finder(
  *                 x_check = right     # wrap around
  *             if x_check != -1:
  *                 neighbor = labels[x_check, y_index]             # <<<<<<<<<<<<<<
+ *                 nvel = data[x_check, y_index]
  * 
- *                 # if the left side gate is masked, keep looking to the left
  */
         __pyx_t_13 = __pyx_v_x_check;
         __pyx_t_14 = __pyx_v_y_index;
         __pyx_v_neighbor = (*((int *) ( /* dim=1 */ ((char *) (((int *) ( /* dim=0 */ (__pyx_v_labels.data + __pyx_t_13 * __pyx_v_labels.strides[0]) )) + __pyx_t_14)) )));
 
-        /* "pyart/correct/_fast_edge_finder.pyx":54
+        /* "pyart/correct/_fast_edge_finder.pyx":51
+ *             if x_check != -1:
+ *                 neighbor = labels[x_check, y_index]
+ *                 nvel = data[x_check, y_index]             # <<<<<<<<<<<<<<
+ * 
+ *                 # if the left side gate is masked, keep looking to the left
+ */
+        __pyx_t_15 = __pyx_v_x_check;
+        __pyx_t_16 = __pyx_v_y_index;
+        __pyx_v_nvel = (*((float *) ( /* dim=1 */ ((char *) (((float *) ( /* dim=0 */ (__pyx_v_data.data + __pyx_t_15 * __pyx_v_data.strides[0]) )) + __pyx_t_16)) )));
+
+        /* "pyart/correct/_fast_edge_finder.pyx":55
  *                 # if the left side gate is masked, keep looking to the left
  *                 # until we find a valid gate or reach the maximum gap size
  *                 if neighbor == 0:             # <<<<<<<<<<<<<<
@@ -2148,18 +2169,18 @@ static PyObject *__pyx_pf_5pyart_7correct_17_fast_edge_finder__fast_edge_finder(
         __pyx_t_9 = ((__pyx_v_neighbor == 0) != 0);
         if (__pyx_t_9) {
 
-          /* "pyart/correct/_fast_edge_finder.pyx":55
+          /* "pyart/correct/_fast_edge_finder.pyx":56
  *                 # until we find a valid gate or reach the maximum gap size
  *                 if neighbor == 0:
  *                     for i in range(max_gap_x):             # <<<<<<<<<<<<<<
  *                         x_check -= 1
  *                         if x_check == -1:
  */
-          __pyx_t_15 = __pyx_v_max_gap_x;
-          for (__pyx_t_16 = 0; __pyx_t_16 < __pyx_t_15; __pyx_t_16+=1) {
-            __pyx_v_i = __pyx_t_16;
+          __pyx_t_17 = __pyx_v_max_gap_x;
+          for (__pyx_t_18 = 0; __pyx_t_18 < __pyx_t_17; __pyx_t_18+=1) {
+            __pyx_v_i = __pyx_t_18;
 
-            /* "pyart/correct/_fast_edge_finder.pyx":56
+            /* "pyart/correct/_fast_edge_finder.pyx":57
  *                 if neighbor == 0:
  *                     for i in range(max_gap_x):
  *                         x_check -= 1             # <<<<<<<<<<<<<<
@@ -2168,7 +2189,7 @@ static PyObject *__pyx_pf_5pyart_7correct_17_fast_edge_finder__fast_edge_finder(
  */
             __pyx_v_x_check = (__pyx_v_x_check - 1);
 
-            /* "pyart/correct/_fast_edge_finder.pyx":57
+            /* "pyart/correct/_fast_edge_finder.pyx":58
  *                     for i in range(max_gap_x):
  *                         x_check -= 1
  *                         if x_check == -1:             # <<<<<<<<<<<<<<
@@ -2178,7 +2199,7 @@ static PyObject *__pyx_pf_5pyart_7correct_17_fast_edge_finder__fast_edge_finder(
             __pyx_t_9 = ((__pyx_v_x_check == -1) != 0);
             if (__pyx_t_9) {
 
-              /* "pyart/correct/_fast_edge_finder.pyx":58
+              /* "pyart/correct/_fast_edge_finder.pyx":59
  *                         x_check -= 1
  *                         if x_check == -1:
  *                             if rays_wrap_around:             # <<<<<<<<<<<<<<
@@ -2188,7 +2209,7 @@ static PyObject *__pyx_pf_5pyart_7correct_17_fast_edge_finder__fast_edge_finder(
               __pyx_t_9 = (__pyx_v_rays_wrap_around != 0);
               if (__pyx_t_9) {
 
-                /* "pyart/correct/_fast_edge_finder.pyx":59
+                /* "pyart/correct/_fast_edge_finder.pyx":60
  *                         if x_check == -1:
  *                             if rays_wrap_around:
  *                                 x_check = right             # <<<<<<<<<<<<<<
@@ -2200,12 +2221,12 @@ static PyObject *__pyx_pf_5pyart_7correct_17_fast_edge_finder__fast_edge_finder(
               }
               /*else*/ {
 
-                /* "pyart/correct/_fast_edge_finder.pyx":61
+                /* "pyart/correct/_fast_edge_finder.pyx":62
  *                                 x_check = right
  *                             else:
  *                                 break             # <<<<<<<<<<<<<<
  *                         neighbor = labels[x_check, y_index]
- *                         if neighbor != 0:
+ *                         nvel = data[x_check, y_index]
  */
                 goto __pyx_L14_break;
               }
@@ -2214,20 +2235,31 @@ static PyObject *__pyx_pf_5pyart_7correct_17_fast_edge_finder__fast_edge_finder(
             }
             __pyx_L15:;
 
-            /* "pyart/correct/_fast_edge_finder.pyx":62
+            /* "pyart/correct/_fast_edge_finder.pyx":63
  *                             else:
  *                                 break
  *                         neighbor = labels[x_check, y_index]             # <<<<<<<<<<<<<<
+ *                         nvel = data[x_check, y_index]
+ *                         if neighbor != 0:
+ */
+            __pyx_t_19 = __pyx_v_x_check;
+            __pyx_t_20 = __pyx_v_y_index;
+            __pyx_v_neighbor = (*((int *) ( /* dim=1 */ ((char *) (((int *) ( /* dim=0 */ (__pyx_v_labels.data + __pyx_t_19 * __pyx_v_labels.strides[0]) )) + __pyx_t_20)) )));
+
+            /* "pyart/correct/_fast_edge_finder.pyx":64
+ *                                 break
+ *                         neighbor = labels[x_check, y_index]
+ *                         nvel = data[x_check, y_index]             # <<<<<<<<<<<<<<
  *                         if neighbor != 0:
  *                             break
  */
-            __pyx_t_17 = __pyx_v_x_check;
-            __pyx_t_18 = __pyx_v_y_index;
-            __pyx_v_neighbor = (*((int *) ( /* dim=1 */ ((char *) (((int *) ( /* dim=0 */ (__pyx_v_labels.data + __pyx_t_17 * __pyx_v_labels.strides[0]) )) + __pyx_t_18)) )));
+            __pyx_t_21 = __pyx_v_x_check;
+            __pyx_t_22 = __pyx_v_y_index;
+            __pyx_v_nvel = (*((float *) ( /* dim=1 */ ((char *) (((float *) ( /* dim=0 */ (__pyx_v_data.data + __pyx_t_21 * __pyx_v_data.strides[0]) )) + __pyx_t_22)) )));
 
-            /* "pyart/correct/_fast_edge_finder.pyx":63
- *                                 break
+            /* "pyart/correct/_fast_edge_finder.pyx":65
  *                         neighbor = labels[x_check, y_index]
+ *                         nvel = data[x_check, y_index]
  *                         if neighbor != 0:             # <<<<<<<<<<<<<<
  *                             break
  * 
@@ -2235,8 +2267,8 @@ static PyObject *__pyx_pf_5pyart_7correct_17_fast_edge_finder__fast_edge_finder(
             __pyx_t_9 = ((__pyx_v_neighbor != 0) != 0);
             if (__pyx_t_9) {
 
-              /* "pyart/correct/_fast_edge_finder.pyx":64
- *                         neighbor = labels[x_check, y_index]
+              /* "pyart/correct/_fast_edge_finder.pyx":66
+ *                         nvel = data[x_check, y_index]
  *                         if neighbor != 0:
  *                             break             # <<<<<<<<<<<<<<
  * 
@@ -2250,20 +2282,9 @@ static PyObject *__pyx_pf_5pyart_7correct_17_fast_edge_finder__fast_edge_finder(
         }
         __pyx_L12:;
 
-        /* "pyart/correct/_fast_edge_finder.pyx":67
+        /* "pyart/correct/_fast_edge_finder.pyx":69
  * 
  *                 # add the edge to the collection (if valid)
- *                 nvel = data[x_check, y_index]             # <<<<<<<<<<<<<<
- *                 collector.add_edge(label, neighbor, vel, nvel)
- * 
- */
-        __pyx_t_15 = __pyx_v_x_check;
-        __pyx_t_16 = __pyx_v_y_index;
-        __pyx_v_nvel = (*((float *) ( /* dim=1 */ ((char *) (((float *) ( /* dim=0 */ (__pyx_v_data.data + __pyx_t_15 * __pyx_v_data.strides[0]) )) + __pyx_t_16)) )));
-
-        /* "pyart/correct/_fast_edge_finder.pyx":68
- *                 # add the edge to the collection (if valid)
- *                 nvel = data[x_check, y_index]
  *                 collector.add_edge(label, neighbor, vel, nvel)             # <<<<<<<<<<<<<<
  * 
  *             # right
@@ -2273,7 +2294,7 @@ static PyObject *__pyx_pf_5pyart_7correct_17_fast_edge_finder__fast_edge_finder(
       }
       __pyx_L11:;
 
-      /* "pyart/correct/_fast_edge_finder.pyx":71
+      /* "pyart/correct/_fast_edge_finder.pyx":72
  * 
  *             # right
  *             x_check = x_index + 1             # <<<<<<<<<<<<<<
@@ -2282,7 +2303,7 @@ static PyObject *__pyx_pf_5pyart_7correct_17_fast_edge_finder__fast_edge_finder(
  */
       __pyx_v_x_check = (__pyx_v_x_index + 1);
 
-      /* "pyart/correct/_fast_edge_finder.pyx":72
+      /* "pyart/correct/_fast_edge_finder.pyx":73
  *             # right
  *             x_check = x_index + 1
  *             if x_check == right+1 and rays_wrap_around:             # <<<<<<<<<<<<<<
@@ -2300,7 +2321,7 @@ static PyObject *__pyx_pf_5pyart_7correct_17_fast_edge_finder__fast_edge_finder(
       __pyx_L19_bool_binop_done:;
       if (__pyx_t_9) {
 
-        /* "pyart/correct/_fast_edge_finder.pyx":73
+        /* "pyart/correct/_fast_edge_finder.pyx":74
  *             x_check = x_index + 1
  *             if x_check == right+1 and rays_wrap_around:
  *                 x_check = 0     # wrap around             # <<<<<<<<<<<<<<
@@ -2312,28 +2333,39 @@ static PyObject *__pyx_pf_5pyart_7correct_17_fast_edge_finder__fast_edge_finder(
       }
       __pyx_L18:;
 
-      /* "pyart/correct/_fast_edge_finder.pyx":74
+      /* "pyart/correct/_fast_edge_finder.pyx":75
  *             if x_check == right+1 and rays_wrap_around:
  *                 x_check = 0     # wrap around
  *             if x_check != right+1:             # <<<<<<<<<<<<<<
  *                 neighbor = labels[x_check, y_index]
- * 
+ *                 nvel = data[x_check, y_index]
  */
       __pyx_t_9 = ((__pyx_v_x_check != (__pyx_v_right + 1)) != 0);
       if (__pyx_t_9) {
 
-        /* "pyart/correct/_fast_edge_finder.pyx":75
+        /* "pyart/correct/_fast_edge_finder.pyx":76
  *                 x_check = 0     # wrap around
  *             if x_check != right+1:
  *                 neighbor = labels[x_check, y_index]             # <<<<<<<<<<<<<<
+ *                 nvel = data[x_check, y_index]
+ * 
+ */
+        __pyx_t_17 = __pyx_v_x_check;
+        __pyx_t_18 = __pyx_v_y_index;
+        __pyx_v_neighbor = (*((int *) ( /* dim=1 */ ((char *) (((int *) ( /* dim=0 */ (__pyx_v_labels.data + __pyx_t_17 * __pyx_v_labels.strides[0]) )) + __pyx_t_18)) )));
+
+        /* "pyart/correct/_fast_edge_finder.pyx":77
+ *             if x_check != right+1:
+ *                 neighbor = labels[x_check, y_index]
+ *                 nvel = data[x_check, y_index]             # <<<<<<<<<<<<<<
  * 
  *                 # if the right side gate is masked, keep looking to the left
  */
-        __pyx_t_19 = __pyx_v_x_check;
-        __pyx_t_20 = __pyx_v_y_index;
-        __pyx_v_neighbor = (*((int *) ( /* dim=1 */ ((char *) (((int *) ( /* dim=0 */ (__pyx_v_labels.data + __pyx_t_19 * __pyx_v_labels.strides[0]) )) + __pyx_t_20)) )));
+        __pyx_t_23 = __pyx_v_x_check;
+        __pyx_t_24 = __pyx_v_y_index;
+        __pyx_v_nvel = (*((float *) ( /* dim=1 */ ((char *) (((float *) ( /* dim=0 */ (__pyx_v_data.data + __pyx_t_23 * __pyx_v_data.strides[0]) )) + __pyx_t_24)) )));
 
-        /* "pyart/correct/_fast_edge_finder.pyx":79
+        /* "pyart/correct/_fast_edge_finder.pyx":81
  *                 # if the right side gate is masked, keep looking to the left
  *                 # until we find a valid gate or reach the maximum gap size
  *                 if neighbor == 0:             # <<<<<<<<<<<<<<
@@ -2343,18 +2375,18 @@ static PyObject *__pyx_pf_5pyart_7correct_17_fast_edge_finder__fast_edge_finder(
         __pyx_t_9 = ((__pyx_v_neighbor == 0) != 0);
         if (__pyx_t_9) {
 
-          /* "pyart/correct/_fast_edge_finder.pyx":80
+          /* "pyart/correct/_fast_edge_finder.pyx":82
  *                 # until we find a valid gate or reach the maximum gap size
  *                 if neighbor == 0:
  *                     for i in range(max_gap_x):             # <<<<<<<<<<<<<<
  *                         x_check += 1
  *                         if x_check == right+1:
  */
-          __pyx_t_21 = __pyx_v_max_gap_x;
-          for (__pyx_t_22 = 0; __pyx_t_22 < __pyx_t_21; __pyx_t_22+=1) {
-            __pyx_v_i = __pyx_t_22;
+          __pyx_t_25 = __pyx_v_max_gap_x;
+          for (__pyx_t_26 = 0; __pyx_t_26 < __pyx_t_25; __pyx_t_26+=1) {
+            __pyx_v_i = __pyx_t_26;
 
-            /* "pyart/correct/_fast_edge_finder.pyx":81
+            /* "pyart/correct/_fast_edge_finder.pyx":83
  *                 if neighbor == 0:
  *                     for i in range(max_gap_x):
  *                         x_check += 1             # <<<<<<<<<<<<<<
@@ -2363,7 +2395,7 @@ static PyObject *__pyx_pf_5pyart_7correct_17_fast_edge_finder__fast_edge_finder(
  */
             __pyx_v_x_check = (__pyx_v_x_check + 1);
 
-            /* "pyart/correct/_fast_edge_finder.pyx":82
+            /* "pyart/correct/_fast_edge_finder.pyx":84
  *                     for i in range(max_gap_x):
  *                         x_check += 1
  *                         if x_check == right+1:             # <<<<<<<<<<<<<<
@@ -2373,7 +2405,7 @@ static PyObject *__pyx_pf_5pyart_7correct_17_fast_edge_finder__fast_edge_finder(
             __pyx_t_9 = ((__pyx_v_x_check == (__pyx_v_right + 1)) != 0);
             if (__pyx_t_9) {
 
-              /* "pyart/correct/_fast_edge_finder.pyx":83
+              /* "pyart/correct/_fast_edge_finder.pyx":85
  *                         x_check += 1
  *                         if x_check == right+1:
  *                             if rays_wrap_around:             # <<<<<<<<<<<<<<
@@ -2383,7 +2415,7 @@ static PyObject *__pyx_pf_5pyart_7correct_17_fast_edge_finder__fast_edge_finder(
               __pyx_t_9 = (__pyx_v_rays_wrap_around != 0);
               if (__pyx_t_9) {
 
-                /* "pyart/correct/_fast_edge_finder.pyx":84
+                /* "pyart/correct/_fast_edge_finder.pyx":86
  *                         if x_check == right+1:
  *                             if rays_wrap_around:
  *                                 x_check = 0             # <<<<<<<<<<<<<<
@@ -2395,12 +2427,12 @@ static PyObject *__pyx_pf_5pyart_7correct_17_fast_edge_finder__fast_edge_finder(
               }
               /*else*/ {
 
-                /* "pyart/correct/_fast_edge_finder.pyx":86
+                /* "pyart/correct/_fast_edge_finder.pyx":88
  *                                 x_check = 0
  *                             else:
  *                                 break             # <<<<<<<<<<<<<<
  *                         neighbor = labels[x_check, y_index]
- *                         if neighbor != 0:
+ *                         nvel = data[x_check, y_index]
  */
                 goto __pyx_L24_break;
               }
@@ -2409,20 +2441,31 @@ static PyObject *__pyx_pf_5pyart_7correct_17_fast_edge_finder__fast_edge_finder(
             }
             __pyx_L25:;
 
-            /* "pyart/correct/_fast_edge_finder.pyx":87
+            /* "pyart/correct/_fast_edge_finder.pyx":89
  *                             else:
  *                                 break
  *                         neighbor = labels[x_check, y_index]             # <<<<<<<<<<<<<<
+ *                         nvel = data[x_check, y_index]
+ *                         if neighbor != 0:
+ */
+            __pyx_t_27 = __pyx_v_x_check;
+            __pyx_t_28 = __pyx_v_y_index;
+            __pyx_v_neighbor = (*((int *) ( /* dim=1 */ ((char *) (((int *) ( /* dim=0 */ (__pyx_v_labels.data + __pyx_t_27 * __pyx_v_labels.strides[0]) )) + __pyx_t_28)) )));
+
+            /* "pyart/correct/_fast_edge_finder.pyx":90
+ *                                 break
+ *                         neighbor = labels[x_check, y_index]
+ *                         nvel = data[x_check, y_index]             # <<<<<<<<<<<<<<
  *                         if neighbor != 0:
  *                             break
  */
-            __pyx_t_23 = __pyx_v_x_check;
-            __pyx_t_24 = __pyx_v_y_index;
-            __pyx_v_neighbor = (*((int *) ( /* dim=1 */ ((char *) (((int *) ( /* dim=0 */ (__pyx_v_labels.data + __pyx_t_23 * __pyx_v_labels.strides[0]) )) + __pyx_t_24)) )));
+            __pyx_t_29 = __pyx_v_x_check;
+            __pyx_t_30 = __pyx_v_y_index;
+            __pyx_v_nvel = (*((float *) ( /* dim=1 */ ((char *) (((float *) ( /* dim=0 */ (__pyx_v_data.data + __pyx_t_29 * __pyx_v_data.strides[0]) )) + __pyx_t_30)) )));
 
-            /* "pyart/correct/_fast_edge_finder.pyx":88
- *                                 break
+            /* "pyart/correct/_fast_edge_finder.pyx":91
  *                         neighbor = labels[x_check, y_index]
+ *                         nvel = data[x_check, y_index]
  *                         if neighbor != 0:             # <<<<<<<<<<<<<<
  *                             break
  * 
@@ -2430,8 +2473,8 @@ static PyObject *__pyx_pf_5pyart_7correct_17_fast_edge_finder__fast_edge_finder(
             __pyx_t_9 = ((__pyx_v_neighbor != 0) != 0);
             if (__pyx_t_9) {
 
-              /* "pyart/correct/_fast_edge_finder.pyx":89
- *                         neighbor = labels[x_check, y_index]
+              /* "pyart/correct/_fast_edge_finder.pyx":92
+ *                         nvel = data[x_check, y_index]
  *                         if neighbor != 0:
  *                             break             # <<<<<<<<<<<<<<
  * 
@@ -2445,20 +2488,9 @@ static PyObject *__pyx_pf_5pyart_7correct_17_fast_edge_finder__fast_edge_finder(
         }
         __pyx_L22:;
 
-        /* "pyart/correct/_fast_edge_finder.pyx":92
+        /* "pyart/correct/_fast_edge_finder.pyx":95
  * 
  *                 # add the edge to the collection (if valid)
- *                 nvel = data[x_check, y_index]             # <<<<<<<<<<<<<<
- *                 collector.add_edge(label, neighbor, vel, nvel)
- * 
- */
-        __pyx_t_21 = __pyx_v_x_check;
-        __pyx_t_22 = __pyx_v_y_index;
-        __pyx_v_nvel = (*((float *) ( /* dim=1 */ ((char *) (((float *) ( /* dim=0 */ (__pyx_v_data.data + __pyx_t_21 * __pyx_v_data.strides[0]) )) + __pyx_t_22)) )));
-
-        /* "pyart/correct/_fast_edge_finder.pyx":93
- *                 # add the edge to the collection (if valid)
- *                 nvel = data[x_check, y_index]
  *                 collector.add_edge(label, neighbor, vel, nvel)             # <<<<<<<<<<<<<<
  * 
  *             # top
@@ -2468,7 +2500,7 @@ static PyObject *__pyx_pf_5pyart_7correct_17_fast_edge_finder__fast_edge_finder(
       }
       __pyx_L21:;
 
-      /* "pyart/correct/_fast_edge_finder.pyx":96
+      /* "pyart/correct/_fast_edge_finder.pyx":98
  * 
  *             # top
  *             y_check = y_index - 1             # <<<<<<<<<<<<<<
@@ -2477,28 +2509,39 @@ static PyObject *__pyx_pf_5pyart_7correct_17_fast_edge_finder__fast_edge_finder(
  */
       __pyx_v_y_check = (__pyx_v_y_index - 1);
 
-      /* "pyart/correct/_fast_edge_finder.pyx":97
+      /* "pyart/correct/_fast_edge_finder.pyx":99
  *             # top
  *             y_check = y_index - 1
  *             if y_check != -1:             # <<<<<<<<<<<<<<
  *                 neighbor = labels[x_index, y_check]
- * 
+ *                 nvel = data[x_index, y_check]
  */
       __pyx_t_9 = ((__pyx_v_y_check != -1) != 0);
       if (__pyx_t_9) {
 
-        /* "pyart/correct/_fast_edge_finder.pyx":98
+        /* "pyart/correct/_fast_edge_finder.pyx":100
  *             y_check = y_index - 1
  *             if y_check != -1:
  *                 neighbor = labels[x_index, y_check]             # <<<<<<<<<<<<<<
+ *                 nvel = data[x_index, y_check]
  * 
- *                 # if the top side gate is masked, keep looking up
  */
         __pyx_t_25 = __pyx_v_x_index;
         __pyx_t_26 = __pyx_v_y_check;
         __pyx_v_neighbor = (*((int *) ( /* dim=1 */ ((char *) (((int *) ( /* dim=0 */ (__pyx_v_labels.data + __pyx_t_25 * __pyx_v_labels.strides[0]) )) + __pyx_t_26)) )));
 
-        /* "pyart/correct/_fast_edge_finder.pyx":102
+        /* "pyart/correct/_fast_edge_finder.pyx":101
+ *             if y_check != -1:
+ *                 neighbor = labels[x_index, y_check]
+ *                 nvel = data[x_index, y_check]             # <<<<<<<<<<<<<<
+ * 
+ *                 # if the top side gate is masked, keep looking up
+ */
+        __pyx_t_31 = __pyx_v_x_index;
+        __pyx_t_32 = __pyx_v_y_check;
+        __pyx_v_nvel = (*((float *) ( /* dim=1 */ ((char *) (((float *) ( /* dim=0 */ (__pyx_v_data.data + __pyx_t_31 * __pyx_v_data.strides[0]) )) + __pyx_t_32)) )));
+
+        /* "pyart/correct/_fast_edge_finder.pyx":105
  *                 # if the top side gate is masked, keep looking up
  *                 # until we find a valid gate or reach the maximum gap size
  *                 if neighbor == 0:             # <<<<<<<<<<<<<<
@@ -2508,18 +2551,18 @@ static PyObject *__pyx_pf_5pyart_7correct_17_fast_edge_finder__fast_edge_finder(
         __pyx_t_9 = ((__pyx_v_neighbor == 0) != 0);
         if (__pyx_t_9) {
 
-          /* "pyart/correct/_fast_edge_finder.pyx":103
+          /* "pyart/correct/_fast_edge_finder.pyx":106
  *                 # until we find a valid gate or reach the maximum gap size
  *                 if neighbor == 0:
  *                     for i in range(max_gap_y):             # <<<<<<<<<<<<<<
  *                         y_check -= 1
  *                         if y_check == -1:
  */
-          __pyx_t_27 = __pyx_v_max_gap_y;
-          for (__pyx_t_28 = 0; __pyx_t_28 < __pyx_t_27; __pyx_t_28+=1) {
-            __pyx_v_i = __pyx_t_28;
+          __pyx_t_33 = __pyx_v_max_gap_y;
+          for (__pyx_t_34 = 0; __pyx_t_34 < __pyx_t_33; __pyx_t_34+=1) {
+            __pyx_v_i = __pyx_t_34;
 
-            /* "pyart/correct/_fast_edge_finder.pyx":104
+            /* "pyart/correct/_fast_edge_finder.pyx":107
  *                 if neighbor == 0:
  *                     for i in range(max_gap_y):
  *                         y_check -= 1             # <<<<<<<<<<<<<<
@@ -2528,7 +2571,7 @@ static PyObject *__pyx_pf_5pyart_7correct_17_fast_edge_finder__fast_edge_finder(
  */
             __pyx_v_y_check = (__pyx_v_y_check - 1);
 
-            /* "pyart/correct/_fast_edge_finder.pyx":105
+            /* "pyart/correct/_fast_edge_finder.pyx":108
  *                     for i in range(max_gap_y):
  *                         y_check -= 1
  *                         if y_check == -1:             # <<<<<<<<<<<<<<
@@ -2538,30 +2581,41 @@ static PyObject *__pyx_pf_5pyart_7correct_17_fast_edge_finder__fast_edge_finder(
             __pyx_t_9 = ((__pyx_v_y_check == -1) != 0);
             if (__pyx_t_9) {
 
-              /* "pyart/correct/_fast_edge_finder.pyx":106
+              /* "pyart/correct/_fast_edge_finder.pyx":109
  *                         y_check -= 1
  *                         if y_check == -1:
  *                             break             # <<<<<<<<<<<<<<
  *                         neighbor = labels[x_index, y_check]
- *                         if neighbor != 0:
+ *                         nvel = data[x_index, y_check]
  */
               goto __pyx_L31_break;
             }
 
-            /* "pyart/correct/_fast_edge_finder.pyx":107
+            /* "pyart/correct/_fast_edge_finder.pyx":110
  *                         if y_check == -1:
  *                             break
  *                         neighbor = labels[x_index, y_check]             # <<<<<<<<<<<<<<
+ *                         nvel = data[x_index, y_check]
+ *                         if neighbor != 0:
+ */
+            __pyx_t_35 = __pyx_v_x_index;
+            __pyx_t_36 = __pyx_v_y_check;
+            __pyx_v_neighbor = (*((int *) ( /* dim=1 */ ((char *) (((int *) ( /* dim=0 */ (__pyx_v_labels.data + __pyx_t_35 * __pyx_v_labels.strides[0]) )) + __pyx_t_36)) )));
+
+            /* "pyart/correct/_fast_edge_finder.pyx":111
+ *                             break
+ *                         neighbor = labels[x_index, y_check]
+ *                         nvel = data[x_index, y_check]             # <<<<<<<<<<<<<<
  *                         if neighbor != 0:
  *                             break
  */
-            __pyx_t_29 = __pyx_v_x_index;
-            __pyx_t_30 = __pyx_v_y_check;
-            __pyx_v_neighbor = (*((int *) ( /* dim=1 */ ((char *) (((int *) ( /* dim=0 */ (__pyx_v_labels.data + __pyx_t_29 * __pyx_v_labels.strides[0]) )) + __pyx_t_30)) )));
+            __pyx_t_37 = __pyx_v_x_index;
+            __pyx_t_38 = __pyx_v_y_check;
+            __pyx_v_nvel = (*((float *) ( /* dim=1 */ ((char *) (((float *) ( /* dim=0 */ (__pyx_v_data.data + __pyx_t_37 * __pyx_v_data.strides[0]) )) + __pyx_t_38)) )));
 
-            /* "pyart/correct/_fast_edge_finder.pyx":108
- *                             break
+            /* "pyart/correct/_fast_edge_finder.pyx":112
  *                         neighbor = labels[x_index, y_check]
+ *                         nvel = data[x_index, y_check]
  *                         if neighbor != 0:             # <<<<<<<<<<<<<<
  *                             break
  * 
@@ -2569,8 +2623,8 @@ static PyObject *__pyx_pf_5pyart_7correct_17_fast_edge_finder__fast_edge_finder(
             __pyx_t_9 = ((__pyx_v_neighbor != 0) != 0);
             if (__pyx_t_9) {
 
-              /* "pyart/correct/_fast_edge_finder.pyx":109
- *                         neighbor = labels[x_index, y_check]
+              /* "pyart/correct/_fast_edge_finder.pyx":113
+ *                         nvel = data[x_index, y_check]
  *                         if neighbor != 0:
  *                             break             # <<<<<<<<<<<<<<
  * 
@@ -2584,20 +2638,9 @@ static PyObject *__pyx_pf_5pyart_7correct_17_fast_edge_finder__fast_edge_finder(
         }
         __pyx_L29:;
 
-        /* "pyart/correct/_fast_edge_finder.pyx":112
+        /* "pyart/correct/_fast_edge_finder.pyx":116
  * 
  *                 # add the edge to the collection (if valid)
- *                 nvel = data[x_index, y_check]             # <<<<<<<<<<<<<<
- *                 collector.add_edge(label, neighbor, vel, nvel)
- * 
- */
-        __pyx_t_27 = __pyx_v_x_index;
-        __pyx_t_28 = __pyx_v_y_check;
-        __pyx_v_nvel = (*((float *) ( /* dim=1 */ ((char *) (((float *) ( /* dim=0 */ (__pyx_v_data.data + __pyx_t_27 * __pyx_v_data.strides[0]) )) + __pyx_t_28)) )));
-
-        /* "pyart/correct/_fast_edge_finder.pyx":113
- *                 # add the edge to the collection (if valid)
- *                 nvel = data[x_index, y_check]
  *                 collector.add_edge(label, neighbor, vel, nvel)             # <<<<<<<<<<<<<<
  * 
  *             # bottom
@@ -2607,7 +2650,7 @@ static PyObject *__pyx_pf_5pyart_7correct_17_fast_edge_finder__fast_edge_finder(
       }
       __pyx_L28:;
 
-      /* "pyart/correct/_fast_edge_finder.pyx":116
+      /* "pyart/correct/_fast_edge_finder.pyx":119
  * 
  *             # bottom
  *             y_check = y_index + 1             # <<<<<<<<<<<<<<
@@ -2616,28 +2659,39 @@ static PyObject *__pyx_pf_5pyart_7correct_17_fast_edge_finder__fast_edge_finder(
  */
       __pyx_v_y_check = (__pyx_v_y_index + 1);
 
-      /* "pyart/correct/_fast_edge_finder.pyx":117
+      /* "pyart/correct/_fast_edge_finder.pyx":120
  *             # bottom
  *             y_check = y_index + 1
  *             if y_check != bottom + 1:             # <<<<<<<<<<<<<<
  *                 neighbor = labels[x_index, y_check]
- * 
+ *                 nvel = data[x_index, y_check]
  */
       __pyx_t_9 = ((__pyx_v_y_check != (__pyx_v_bottom + 1)) != 0);
       if (__pyx_t_9) {
 
-        /* "pyart/correct/_fast_edge_finder.pyx":118
+        /* "pyart/correct/_fast_edge_finder.pyx":121
  *             y_check = y_index + 1
  *             if y_check != bottom + 1:
  *                 neighbor = labels[x_index, y_check]             # <<<<<<<<<<<<<<
+ *                 nvel = data[x_index, y_check]
+ * 
+ */
+        __pyx_t_33 = __pyx_v_x_index;
+        __pyx_t_34 = __pyx_v_y_check;
+        __pyx_v_neighbor = (*((int *) ( /* dim=1 */ ((char *) (((int *) ( /* dim=0 */ (__pyx_v_labels.data + __pyx_t_33 * __pyx_v_labels.strides[0]) )) + __pyx_t_34)) )));
+
+        /* "pyart/correct/_fast_edge_finder.pyx":122
+ *             if y_check != bottom + 1:
+ *                 neighbor = labels[x_index, y_check]
+ *                 nvel = data[x_index, y_check]             # <<<<<<<<<<<<<<
  * 
  *                 # if the top side gate is masked, keep looking up
  */
-        __pyx_t_31 = __pyx_v_x_index;
-        __pyx_t_32 = __pyx_v_y_check;
-        __pyx_v_neighbor = (*((int *) ( /* dim=1 */ ((char *) (((int *) ( /* dim=0 */ (__pyx_v_labels.data + __pyx_t_31 * __pyx_v_labels.strides[0]) )) + __pyx_t_32)) )));
+        __pyx_t_39 = __pyx_v_x_index;
+        __pyx_t_40 = __pyx_v_y_check;
+        __pyx_v_nvel = (*((float *) ( /* dim=1 */ ((char *) (((float *) ( /* dim=0 */ (__pyx_v_data.data + __pyx_t_39 * __pyx_v_data.strides[0]) )) + __pyx_t_40)) )));
 
-        /* "pyart/correct/_fast_edge_finder.pyx":122
+        /* "pyart/correct/_fast_edge_finder.pyx":126
  *                 # if the top side gate is masked, keep looking up
  *                 # until we find a valid gate or reach the maximum gap size
  *                 if neighbor == 0:             # <<<<<<<<<<<<<<
@@ -2647,18 +2701,18 @@ static PyObject *__pyx_pf_5pyart_7correct_17_fast_edge_finder__fast_edge_finder(
         __pyx_t_9 = ((__pyx_v_neighbor == 0) != 0);
         if (__pyx_t_9) {
 
-          /* "pyart/correct/_fast_edge_finder.pyx":123
+          /* "pyart/correct/_fast_edge_finder.pyx":127
  *                 # until we find a valid gate or reach the maximum gap size
  *                 if neighbor == 0:
  *                     for i in range(max_gap_y):             # <<<<<<<<<<<<<<
  *                         y_check += 1
  *                         if y_check == bottom + 1:
  */
-          __pyx_t_33 = __pyx_v_max_gap_y;
-          for (__pyx_t_34 = 0; __pyx_t_34 < __pyx_t_33; __pyx_t_34+=1) {
-            __pyx_v_i = __pyx_t_34;
+          __pyx_t_41 = __pyx_v_max_gap_y;
+          for (__pyx_t_42 = 0; __pyx_t_42 < __pyx_t_41; __pyx_t_42+=1) {
+            __pyx_v_i = __pyx_t_42;
 
-            /* "pyart/correct/_fast_edge_finder.pyx":124
+            /* "pyart/correct/_fast_edge_finder.pyx":128
  *                 if neighbor == 0:
  *                     for i in range(max_gap_y):
  *                         y_check += 1             # <<<<<<<<<<<<<<
@@ -2667,7 +2721,7 @@ static PyObject *__pyx_pf_5pyart_7correct_17_fast_edge_finder__fast_edge_finder(
  */
             __pyx_v_y_check = (__pyx_v_y_check + 1);
 
-            /* "pyart/correct/_fast_edge_finder.pyx":125
+            /* "pyart/correct/_fast_edge_finder.pyx":129
  *                     for i in range(max_gap_y):
  *                         y_check += 1
  *                         if y_check == bottom + 1:             # <<<<<<<<<<<<<<
@@ -2677,30 +2731,41 @@ static PyObject *__pyx_pf_5pyart_7correct_17_fast_edge_finder__fast_edge_finder(
             __pyx_t_9 = ((__pyx_v_y_check == (__pyx_v_bottom + 1)) != 0);
             if (__pyx_t_9) {
 
-              /* "pyart/correct/_fast_edge_finder.pyx":126
+              /* "pyart/correct/_fast_edge_finder.pyx":130
  *                         y_check += 1
  *                         if y_check == bottom + 1:
  *                             break             # <<<<<<<<<<<<<<
  *                         neighbor = labels[x_index, y_check]
- *                         if neighbor != 0:
+ *                         nvel = data[x_index, y_check]
  */
               goto __pyx_L37_break;
             }
 
-            /* "pyart/correct/_fast_edge_finder.pyx":127
+            /* "pyart/correct/_fast_edge_finder.pyx":131
  *                         if y_check == bottom + 1:
  *                             break
  *                         neighbor = labels[x_index, y_check]             # <<<<<<<<<<<<<<
+ *                         nvel = data[x_index, y_check]
+ *                         if neighbor != 0:
+ */
+            __pyx_t_43 = __pyx_v_x_index;
+            __pyx_t_44 = __pyx_v_y_check;
+            __pyx_v_neighbor = (*((int *) ( /* dim=1 */ ((char *) (((int *) ( /* dim=0 */ (__pyx_v_labels.data + __pyx_t_43 * __pyx_v_labels.strides[0]) )) + __pyx_t_44)) )));
+
+            /* "pyart/correct/_fast_edge_finder.pyx":132
+ *                             break
+ *                         neighbor = labels[x_index, y_check]
+ *                         nvel = data[x_index, y_check]             # <<<<<<<<<<<<<<
  *                         if neighbor != 0:
  *                             break
  */
-            __pyx_t_35 = __pyx_v_x_index;
-            __pyx_t_36 = __pyx_v_y_check;
-            __pyx_v_neighbor = (*((int *) ( /* dim=1 */ ((char *) (((int *) ( /* dim=0 */ (__pyx_v_labels.data + __pyx_t_35 * __pyx_v_labels.strides[0]) )) + __pyx_t_36)) )));
+            __pyx_t_45 = __pyx_v_x_index;
+            __pyx_t_46 = __pyx_v_y_check;
+            __pyx_v_nvel = (*((float *) ( /* dim=1 */ ((char *) (((float *) ( /* dim=0 */ (__pyx_v_data.data + __pyx_t_45 * __pyx_v_data.strides[0]) )) + __pyx_t_46)) )));
 
-            /* "pyart/correct/_fast_edge_finder.pyx":128
- *                             break
+            /* "pyart/correct/_fast_edge_finder.pyx":133
  *                         neighbor = labels[x_index, y_check]
+ *                         nvel = data[x_index, y_check]
  *                         if neighbor != 0:             # <<<<<<<<<<<<<<
  *                             break
  * 
@@ -2708,8 +2773,8 @@ static PyObject *__pyx_pf_5pyart_7correct_17_fast_edge_finder__fast_edge_finder(
             __pyx_t_9 = ((__pyx_v_neighbor != 0) != 0);
             if (__pyx_t_9) {
 
-              /* "pyart/correct/_fast_edge_finder.pyx":129
- *                         neighbor = labels[x_index, y_check]
+              /* "pyart/correct/_fast_edge_finder.pyx":134
+ *                         nvel = data[x_index, y_check]
  *                         if neighbor != 0:
  *                             break             # <<<<<<<<<<<<<<
  * 
@@ -2723,20 +2788,9 @@ static PyObject *__pyx_pf_5pyart_7correct_17_fast_edge_finder__fast_edge_finder(
         }
         __pyx_L35:;
 
-        /* "pyart/correct/_fast_edge_finder.pyx":132
+        /* "pyart/correct/_fast_edge_finder.pyx":137
  * 
  *                 # add the edge to the collection (if valid)
- *                 nvel = data[x_index, y_check]             # <<<<<<<<<<<<<<
- *                 collector.add_edge(label, neighbor, vel, nvel)
- * 
- */
-        __pyx_t_33 = __pyx_v_x_index;
-        __pyx_t_34 = __pyx_v_y_check;
-        __pyx_v_nvel = (*((float *) ( /* dim=1 */ ((char *) (((float *) ( /* dim=0 */ (__pyx_v_data.data + __pyx_t_33 * __pyx_v_data.strides[0]) )) + __pyx_t_34)) )));
-
-        /* "pyart/correct/_fast_edge_finder.pyx":133
- *                 # add the edge to the collection (if valid)
- *                 nvel = data[x_index, y_check]
  *                 collector.add_edge(label, neighbor, vel, nvel)             # <<<<<<<<<<<<<<
  * 
  *     indices, velocities = collector.get_indices_and_velocities()
@@ -2749,30 +2803,30 @@ static PyObject *__pyx_pf_5pyart_7correct_17_fast_edge_finder__fast_edge_finder(
     }
   }
 
-  /* "pyart/correct/_fast_edge_finder.pyx":135
+  /* "pyart/correct/_fast_edge_finder.pyx":139
  *                 collector.add_edge(label, neighbor, vel, nvel)
  * 
  *     indices, velocities = collector.get_indices_and_velocities()             # <<<<<<<<<<<<<<
  *     return indices, velocities
  * 
  */
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_collector), __pyx_n_s_get_indices_and_velocities); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 135; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_collector), __pyx_n_s_get_indices_and_velocities); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 139; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_37 = NULL;
+  __pyx_t_47 = NULL;
   if (CYTHON_COMPILING_IN_CPYTHON && likely(PyMethod_Check(__pyx_t_2))) {
-    __pyx_t_37 = PyMethod_GET_SELF(__pyx_t_2);
-    if (likely(__pyx_t_37)) {
+    __pyx_t_47 = PyMethod_GET_SELF(__pyx_t_2);
+    if (likely(__pyx_t_47)) {
       PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_2);
-      __Pyx_INCREF(__pyx_t_37);
+      __Pyx_INCREF(__pyx_t_47);
       __Pyx_INCREF(function);
       __Pyx_DECREF_SET(__pyx_t_2, function);
     }
   }
-  if (__pyx_t_37) {
-    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_37); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 135; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    __Pyx_DECREF(__pyx_t_37); __pyx_t_37 = 0;
+  if (__pyx_t_47) {
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_t_2, __pyx_t_47); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 139; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __Pyx_DECREF(__pyx_t_47); __pyx_t_47 = 0;
   } else {
-    __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_2); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 135; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_1 = __Pyx_PyObject_CallNoArg(__pyx_t_2); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 139; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   }
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
@@ -2786,52 +2840,52 @@ static PyObject *__pyx_pf_5pyart_7correct_17_fast_edge_finder__fast_edge_finder(
     if (unlikely(size != 2)) {
       if (size > 2) __Pyx_RaiseTooManyValuesError(2);
       else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
-      {__pyx_filename = __pyx_f[0]; __pyx_lineno = 135; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+      {__pyx_filename = __pyx_f[0]; __pyx_lineno = 139; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     }
     #if CYTHON_COMPILING_IN_CPYTHON
     if (likely(PyTuple_CheckExact(sequence))) {
       __pyx_t_2 = PyTuple_GET_ITEM(sequence, 0); 
-      __pyx_t_37 = PyTuple_GET_ITEM(sequence, 1); 
+      __pyx_t_47 = PyTuple_GET_ITEM(sequence, 1); 
     } else {
       __pyx_t_2 = PyList_GET_ITEM(sequence, 0); 
-      __pyx_t_37 = PyList_GET_ITEM(sequence, 1); 
+      __pyx_t_47 = PyList_GET_ITEM(sequence, 1); 
     }
     __Pyx_INCREF(__pyx_t_2);
-    __Pyx_INCREF(__pyx_t_37);
+    __Pyx_INCREF(__pyx_t_47);
     #else
-    __pyx_t_2 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 135; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_2 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 139; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_37 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_37)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 135; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    __Pyx_GOTREF(__pyx_t_37);
+    __pyx_t_47 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_47)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 139; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __Pyx_GOTREF(__pyx_t_47);
     #endif
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   } else {
     Py_ssize_t index = -1;
-    __pyx_t_38 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_38)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 135; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    __Pyx_GOTREF(__pyx_t_38);
+    __pyx_t_48 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_48)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 139; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __Pyx_GOTREF(__pyx_t_48);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_39 = Py_TYPE(__pyx_t_38)->tp_iternext;
-    index = 0; __pyx_t_2 = __pyx_t_39(__pyx_t_38); if (unlikely(!__pyx_t_2)) goto __pyx_L40_unpacking_failed;
+    __pyx_t_49 = Py_TYPE(__pyx_t_48)->tp_iternext;
+    index = 0; __pyx_t_2 = __pyx_t_49(__pyx_t_48); if (unlikely(!__pyx_t_2)) goto __pyx_L40_unpacking_failed;
     __Pyx_GOTREF(__pyx_t_2);
-    index = 1; __pyx_t_37 = __pyx_t_39(__pyx_t_38); if (unlikely(!__pyx_t_37)) goto __pyx_L40_unpacking_failed;
-    __Pyx_GOTREF(__pyx_t_37);
-    if (__Pyx_IternextUnpackEndCheck(__pyx_t_39(__pyx_t_38), 2) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 135; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-    __pyx_t_39 = NULL;
-    __Pyx_DECREF(__pyx_t_38); __pyx_t_38 = 0;
+    index = 1; __pyx_t_47 = __pyx_t_49(__pyx_t_48); if (unlikely(!__pyx_t_47)) goto __pyx_L40_unpacking_failed;
+    __Pyx_GOTREF(__pyx_t_47);
+    if (__Pyx_IternextUnpackEndCheck(__pyx_t_49(__pyx_t_48), 2) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 139; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    __pyx_t_49 = NULL;
+    __Pyx_DECREF(__pyx_t_48); __pyx_t_48 = 0;
     goto __pyx_L41_unpacking_done;
     __pyx_L40_unpacking_failed:;
-    __Pyx_DECREF(__pyx_t_38); __pyx_t_38 = 0;
-    __pyx_t_39 = NULL;
+    __Pyx_DECREF(__pyx_t_48); __pyx_t_48 = 0;
+    __pyx_t_49 = NULL;
     if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
-    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 135; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    {__pyx_filename = __pyx_f[0]; __pyx_lineno = 139; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     __pyx_L41_unpacking_done:;
   }
   __pyx_v_indices = __pyx_t_2;
   __pyx_t_2 = 0;
-  __pyx_v_velocities = __pyx_t_37;
-  __pyx_t_37 = 0;
+  __pyx_v_velocities = __pyx_t_47;
+  __pyx_t_47 = 0;
 
-  /* "pyart/correct/_fast_edge_finder.pyx":136
+  /* "pyart/correct/_fast_edge_finder.pyx":140
  * 
  *     indices, velocities = collector.get_indices_and_velocities()
  *     return indices, velocities             # <<<<<<<<<<<<<<
@@ -2839,7 +2893,7 @@ static PyObject *__pyx_pf_5pyart_7correct_17_fast_edge_finder__fast_edge_finder(
  * 
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 136; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 140; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_INCREF(__pyx_v_indices);
   PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_v_indices);
@@ -2863,8 +2917,8 @@ static PyObject *__pyx_pf_5pyart_7correct_17_fast_edge_finder__fast_edge_finder(
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
   __Pyx_XDECREF(__pyx_t_2);
-  __Pyx_XDECREF(__pyx_t_37);
-  __Pyx_XDECREF(__pyx_t_38);
+  __Pyx_XDECREF(__pyx_t_47);
+  __Pyx_XDECREF(__pyx_t_48);
   __Pyx_AddTraceback("pyart.correct._fast_edge_finder._fast_edge_finder", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
@@ -2878,7 +2932,7 @@ static PyObject *__pyx_pf_5pyart_7correct_17_fast_edge_finder__fast_edge_finder(
   return __pyx_r;
 }
 
-/* "pyart/correct/_fast_edge_finder.pyx":152
+/* "pyart/correct/_fast_edge_finder.pyx":156
  *     cdef int idx
  * 
  *     def __init__(self, total_nodes):             # <<<<<<<<<<<<<<
@@ -2918,7 +2972,7 @@ static int __pyx_pw_5pyart_7correct_17_fast_edge_finder_14_EdgeCollector_1__init
         else goto __pyx_L5_argtuple_error;
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 152; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 156; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 1) {
       goto __pyx_L5_argtuple_error;
@@ -2929,7 +2983,7 @@ static int __pyx_pw_5pyart_7correct_17_fast_edge_finder_14_EdgeCollector_1__init
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__init__", 1, 1, 1, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 152; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
+  __Pyx_RaiseArgtupleInvalid("__init__", 1, 1, 1, PyTuple_GET_SIZE(__pyx_args)); {__pyx_filename = __pyx_f[0]; __pyx_lineno = 156; __pyx_clineno = __LINE__; goto __pyx_L3_error;}
   __pyx_L3_error:;
   __Pyx_AddTraceback("pyart.correct._fast_edge_finder._EdgeCollector.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -2955,167 +3009,167 @@ static int __pyx_pf_5pyart_7correct_17_fast_edge_finder_14_EdgeCollector___init_
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("__init__", 0);
 
-  /* "pyart/correct/_fast_edge_finder.pyx":154
+  /* "pyart/correct/_fast_edge_finder.pyx":158
  *     def __init__(self, total_nodes):
  *         """ initalize. """
  *         self.l_index = np.zeros(total_nodes * 4, dtype=np.int32)             # <<<<<<<<<<<<<<
  *         self.n_index = np.zeros(total_nodes * 4, dtype=np.int32)
  *         self.l_velo = np.zeros(total_nodes * 4, dtype=np.float64)
  */
-  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 154; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 158; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_zeros); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 154; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_zeros); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 158; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = PyNumber_Multiply(__pyx_v_total_nodes, __pyx_int_4); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 154; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyNumber_Multiply(__pyx_v_total_nodes, __pyx_int_4); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 158; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 154; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 158; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
   PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
   __pyx_t_1 = 0;
-  __pyx_t_1 = PyDict_New(); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 154; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyDict_New(); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 158; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 154; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 158; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_int32); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 154; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_int32); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 158; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_t_5) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 154; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyDict_SetItem(__pyx_t_1, __pyx_n_s_dtype, __pyx_t_5) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 158; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_3, __pyx_t_1); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 154; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_5 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_3, __pyx_t_1); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 158; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (!(likely(((__pyx_t_5) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_5, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 154; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (!(likely(((__pyx_t_5) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_5, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 158; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GIVEREF(__pyx_t_5);
   __Pyx_GOTREF(__pyx_v_self->l_index);
   __Pyx_DECREF(((PyObject *)__pyx_v_self->l_index));
   __pyx_v_self->l_index = ((PyArrayObject *)__pyx_t_5);
   __pyx_t_5 = 0;
 
-  /* "pyart/correct/_fast_edge_finder.pyx":155
+  /* "pyart/correct/_fast_edge_finder.pyx":159
  *         """ initalize. """
  *         self.l_index = np.zeros(total_nodes * 4, dtype=np.int32)
  *         self.n_index = np.zeros(total_nodes * 4, dtype=np.int32)             # <<<<<<<<<<<<<<
  *         self.l_velo = np.zeros(total_nodes * 4, dtype=np.float64)
  *         self.n_velo = np.zeros(total_nodes * 4, dtype=np.float64)
  */
-  __pyx_t_5 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 155; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_5 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 159; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_zeros); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 155; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_zeros); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 159; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_5 = PyNumber_Multiply(__pyx_v_total_nodes, __pyx_int_4); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 155; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_5 = PyNumber_Multiply(__pyx_v_total_nodes, __pyx_int_4); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 159; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 155; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 159; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
   PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_5);
   __Pyx_GIVEREF(__pyx_t_5);
   __pyx_t_5 = 0;
-  __pyx_t_5 = PyDict_New(); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 155; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_5 = PyDict_New(); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 159; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 155; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 159; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_int32); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 155; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_int32); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 159; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (PyDict_SetItem(__pyx_t_5, __pyx_n_s_dtype, __pyx_t_4) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 155; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyDict_SetItem(__pyx_t_5, __pyx_n_s_dtype, __pyx_t_4) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 159; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_3, __pyx_t_5); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 155; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_3, __pyx_t_5); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 159; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  if (!(likely(((__pyx_t_4) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_4, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 155; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (!(likely(((__pyx_t_4) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_4, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 159; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GIVEREF(__pyx_t_4);
   __Pyx_GOTREF(__pyx_v_self->n_index);
   __Pyx_DECREF(((PyObject *)__pyx_v_self->n_index));
   __pyx_v_self->n_index = ((PyArrayObject *)__pyx_t_4);
   __pyx_t_4 = 0;
 
-  /* "pyart/correct/_fast_edge_finder.pyx":156
+  /* "pyart/correct/_fast_edge_finder.pyx":160
  *         self.l_index = np.zeros(total_nodes * 4, dtype=np.int32)
  *         self.n_index = np.zeros(total_nodes * 4, dtype=np.int32)
  *         self.l_velo = np.zeros(total_nodes * 4, dtype=np.float64)             # <<<<<<<<<<<<<<
  *         self.n_velo = np.zeros(total_nodes * 4, dtype=np.float64)
  * 
  */
-  __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 156; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 160; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_zeros); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 156; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_zeros); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 160; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_5);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  __pyx_t_4 = PyNumber_Multiply(__pyx_v_total_nodes, __pyx_int_4); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 156; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_4 = PyNumber_Multiply(__pyx_v_total_nodes, __pyx_int_4); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 160; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 156; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 160; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
   PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_4);
   __Pyx_GIVEREF(__pyx_t_4);
   __pyx_t_4 = 0;
-  __pyx_t_4 = PyDict_New(); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 156; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_4 = PyDict_New(); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 160; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
-  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 156; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 160; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_float64); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 156; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_float64); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 160; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_dtype, __pyx_t_2) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 156; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyDict_SetItem(__pyx_t_4, __pyx_n_s_dtype, __pyx_t_2) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 160; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 156; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_5, __pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 160; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
-  if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 156; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 160; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GIVEREF(__pyx_t_2);
   __Pyx_GOTREF(__pyx_v_self->l_velo);
   __Pyx_DECREF(((PyObject *)__pyx_v_self->l_velo));
   __pyx_v_self->l_velo = ((PyArrayObject *)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "pyart/correct/_fast_edge_finder.pyx":157
+  /* "pyart/correct/_fast_edge_finder.pyx":161
  *         self.n_index = np.zeros(total_nodes * 4, dtype=np.int32)
  *         self.l_velo = np.zeros(total_nodes * 4, dtype=np.float64)
  *         self.n_velo = np.zeros(total_nodes * 4, dtype=np.float64)             # <<<<<<<<<<<<<<
  * 
  *         self.l_data = <np.int32_t *>np.PyArray_DATA(self.l_index)
  */
-  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 157; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 161; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_zeros); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 157; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_2, __pyx_n_s_zeros); if (unlikely(!__pyx_t_4)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 161; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_4);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  __pyx_t_2 = PyNumber_Multiply(__pyx_v_total_nodes, __pyx_int_4); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 157; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = PyNumber_Multiply(__pyx_v_total_nodes, __pyx_int_4); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 161; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 157; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = PyTuple_New(1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 161; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
   PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_2);
   __Pyx_GIVEREF(__pyx_t_2);
   __pyx_t_2 = 0;
-  __pyx_t_2 = PyDict_New(); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 157; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = PyDict_New(); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 161; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_5 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 157; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_5 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_5)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 161; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_float64); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 157; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_float64); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 161; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_dtype, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 157; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyDict_SetItem(__pyx_t_2, __pyx_n_s_dtype, __pyx_t_1) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 161; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_3, __pyx_t_2); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 157; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_4, __pyx_t_3, __pyx_t_2); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 161; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-  if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 157; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 161; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GIVEREF(__pyx_t_1);
   __Pyx_GOTREF(__pyx_v_self->n_velo);
   __Pyx_DECREF(((PyObject *)__pyx_v_self->n_velo));
   __pyx_v_self->n_velo = ((PyArrayObject *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "pyart/correct/_fast_edge_finder.pyx":159
+  /* "pyart/correct/_fast_edge_finder.pyx":163
  *         self.n_velo = np.zeros(total_nodes * 4, dtype=np.float64)
  * 
  *         self.l_data = <np.int32_t *>np.PyArray_DATA(self.l_index)             # <<<<<<<<<<<<<<
@@ -3127,7 +3181,7 @@ static int __pyx_pf_5pyart_7correct_17_fast_edge_finder_14_EdgeCollector___init_
   __pyx_v_self->l_data = ((__pyx_t_5numpy_int32_t *)PyArray_DATA(((PyArrayObject *)__pyx_t_1)));
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "pyart/correct/_fast_edge_finder.pyx":160
+  /* "pyart/correct/_fast_edge_finder.pyx":164
  * 
  *         self.l_data = <np.int32_t *>np.PyArray_DATA(self.l_index)
  *         self.n_data = <np.int32_t *>np.PyArray_DATA(self.n_index)             # <<<<<<<<<<<<<<
@@ -3139,7 +3193,7 @@ static int __pyx_pf_5pyart_7correct_17_fast_edge_finder_14_EdgeCollector___init_
   __pyx_v_self->n_data = ((__pyx_t_5numpy_int32_t *)PyArray_DATA(((PyArrayObject *)__pyx_t_1)));
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "pyart/correct/_fast_edge_finder.pyx":161
+  /* "pyart/correct/_fast_edge_finder.pyx":165
  *         self.l_data = <np.int32_t *>np.PyArray_DATA(self.l_index)
  *         self.n_data = <np.int32_t *>np.PyArray_DATA(self.n_index)
  *         self.lv_data = <np.float64_t*>np.PyArray_DATA(self.l_velo)             # <<<<<<<<<<<<<<
@@ -3151,7 +3205,7 @@ static int __pyx_pf_5pyart_7correct_17_fast_edge_finder_14_EdgeCollector___init_
   __pyx_v_self->lv_data = ((__pyx_t_5numpy_float64_t *)PyArray_DATA(((PyArrayObject *)__pyx_t_1)));
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "pyart/correct/_fast_edge_finder.pyx":162
+  /* "pyart/correct/_fast_edge_finder.pyx":166
  *         self.n_data = <np.int32_t *>np.PyArray_DATA(self.n_index)
  *         self.lv_data = <np.float64_t*>np.PyArray_DATA(self.l_velo)
  *         self.nv_data = <np.float64_t*>np.PyArray_DATA(self.n_velo)             # <<<<<<<<<<<<<<
@@ -3163,7 +3217,7 @@ static int __pyx_pf_5pyart_7correct_17_fast_edge_finder_14_EdgeCollector___init_
   __pyx_v_self->nv_data = ((__pyx_t_5numpy_float64_t *)PyArray_DATA(((PyArrayObject *)__pyx_t_1)));
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "pyart/correct/_fast_edge_finder.pyx":164
+  /* "pyart/correct/_fast_edge_finder.pyx":168
  *         self.nv_data = <np.float64_t*>np.PyArray_DATA(self.n_velo)
  * 
  *         self.idx = 0             # <<<<<<<<<<<<<<
@@ -3172,7 +3226,7 @@ static int __pyx_pf_5pyart_7correct_17_fast_edge_finder_14_EdgeCollector___init_
  */
   __pyx_v_self->idx = 0;
 
-  /* "pyart/correct/_fast_edge_finder.pyx":152
+  /* "pyart/correct/_fast_edge_finder.pyx":156
  *     cdef int idx
  * 
  *     def __init__(self, total_nodes):             # <<<<<<<<<<<<<<
@@ -3196,7 +3250,7 @@ static int __pyx_pf_5pyart_7correct_17_fast_edge_finder_14_EdgeCollector___init_
   return __pyx_r;
 }
 
-/* "pyart/correct/_fast_edge_finder.pyx":166
+/* "pyart/correct/_fast_edge_finder.pyx":170
  *         self.idx = 0
  * 
  *     cdef int add_edge(_EdgeCollector self, int label, int neighbor,             # <<<<<<<<<<<<<<
@@ -3211,7 +3265,7 @@ static int __pyx_f_5pyart_7correct_17_fast_edge_finder_14_EdgeCollector_add_edge
   int __pyx_t_2;
   __Pyx_RefNannySetupContext("add_edge", 0);
 
-  /* "pyart/correct/_fast_edge_finder.pyx":169
+  /* "pyart/correct/_fast_edge_finder.pyx":173
  *                       float vel, float nvel):
  *         """ Add an edge. """
  *         if neighbor == label or neighbor == 0:             # <<<<<<<<<<<<<<
@@ -3229,7 +3283,7 @@ static int __pyx_f_5pyart_7correct_17_fast_edge_finder_14_EdgeCollector_add_edge
   __pyx_L4_bool_binop_done:;
   if (__pyx_t_1) {
 
-    /* "pyart/correct/_fast_edge_finder.pyx":172
+    /* "pyart/correct/_fast_edge_finder.pyx":176
  *             # Do not add edges between the same region (circular edges)
  *             # or edges to masked gates (indicated by a label of 0).
  *             return 0             # <<<<<<<<<<<<<<
@@ -3240,7 +3294,7 @@ static int __pyx_f_5pyart_7correct_17_fast_edge_finder_14_EdgeCollector_add_edge
     goto __pyx_L0;
   }
 
-  /* "pyart/correct/_fast_edge_finder.pyx":173
+  /* "pyart/correct/_fast_edge_finder.pyx":177
  *             # or edges to masked gates (indicated by a label of 0).
  *             return 0
  *         self.l_data[self.idx] = label             # <<<<<<<<<<<<<<
@@ -3249,7 +3303,7 @@ static int __pyx_f_5pyart_7correct_17_fast_edge_finder_14_EdgeCollector_add_edge
  */
   (__pyx_v_self->l_data[__pyx_v_self->idx]) = __pyx_v_label;
 
-  /* "pyart/correct/_fast_edge_finder.pyx":174
+  /* "pyart/correct/_fast_edge_finder.pyx":178
  *             return 0
  *         self.l_data[self.idx] = label
  *         self.n_data[self.idx] = neighbor             # <<<<<<<<<<<<<<
@@ -3258,7 +3312,7 @@ static int __pyx_f_5pyart_7correct_17_fast_edge_finder_14_EdgeCollector_add_edge
  */
   (__pyx_v_self->n_data[__pyx_v_self->idx]) = __pyx_v_neighbor;
 
-  /* "pyart/correct/_fast_edge_finder.pyx":175
+  /* "pyart/correct/_fast_edge_finder.pyx":179
  *         self.l_data[self.idx] = label
  *         self.n_data[self.idx] = neighbor
  *         self.lv_data[self.idx] = vel             # <<<<<<<<<<<<<<
@@ -3267,7 +3321,7 @@ static int __pyx_f_5pyart_7correct_17_fast_edge_finder_14_EdgeCollector_add_edge
  */
   (__pyx_v_self->lv_data[__pyx_v_self->idx]) = __pyx_v_vel;
 
-  /* "pyart/correct/_fast_edge_finder.pyx":176
+  /* "pyart/correct/_fast_edge_finder.pyx":180
  *         self.n_data[self.idx] = neighbor
  *         self.lv_data[self.idx] = vel
  *         self.nv_data[self.idx] = nvel             # <<<<<<<<<<<<<<
@@ -3276,7 +3330,7 @@ static int __pyx_f_5pyart_7correct_17_fast_edge_finder_14_EdgeCollector_add_edge
  */
   (__pyx_v_self->nv_data[__pyx_v_self->idx]) = __pyx_v_nvel;
 
-  /* "pyart/correct/_fast_edge_finder.pyx":177
+  /* "pyart/correct/_fast_edge_finder.pyx":181
  *         self.lv_data[self.idx] = vel
  *         self.nv_data[self.idx] = nvel
  *         self.idx += 1             # <<<<<<<<<<<<<<
@@ -3285,7 +3339,7 @@ static int __pyx_f_5pyart_7correct_17_fast_edge_finder_14_EdgeCollector_add_edge
  */
   __pyx_v_self->idx = (__pyx_v_self->idx + 1);
 
-  /* "pyart/correct/_fast_edge_finder.pyx":178
+  /* "pyart/correct/_fast_edge_finder.pyx":182
  *         self.nv_data[self.idx] = nvel
  *         self.idx += 1
  *         return 1             # <<<<<<<<<<<<<<
@@ -3295,7 +3349,7 @@ static int __pyx_f_5pyart_7correct_17_fast_edge_finder_14_EdgeCollector_add_edge
   __pyx_r = 1;
   goto __pyx_L0;
 
-  /* "pyart/correct/_fast_edge_finder.pyx":166
+  /* "pyart/correct/_fast_edge_finder.pyx":170
  *         self.idx = 0
  * 
  *     cdef int add_edge(_EdgeCollector self, int label, int neighbor,             # <<<<<<<<<<<<<<
@@ -3309,7 +3363,7 @@ static int __pyx_f_5pyart_7correct_17_fast_edge_finder_14_EdgeCollector_add_edge
   return __pyx_r;
 }
 
-/* "pyart/correct/_fast_edge_finder.pyx":180
+/* "pyart/correct/_fast_edge_finder.pyx":184
  *         return 1
  * 
  *     def get_indices_and_velocities(self):             # <<<<<<<<<<<<<<
@@ -3344,18 +3398,18 @@ static PyObject *__pyx_pf_5pyart_7correct_17_fast_edge_finder_14_EdgeCollector_2
   int __pyx_clineno = 0;
   __Pyx_RefNannySetupContext("get_indices_and_velocities", 0);
 
-  /* "pyart/correct/_fast_edge_finder.pyx":182
+  /* "pyart/correct/_fast_edge_finder.pyx":186
  *     def get_indices_and_velocities(self):
  *         """ Return the edge indices and velocities. """
  *         indices = (self.l_index[:self.idx], self.n_index[:self.idx])             # <<<<<<<<<<<<<<
  *         velocities = (self.l_velo[:self.idx], self.n_velo[:self.idx])
  *         return indices, velocities
  */
-  __pyx_t_1 = __Pyx_PyObject_GetSlice(((PyObject *)__pyx_v_self->l_index), 0, __pyx_v_self->idx, NULL, NULL, NULL, 0, 1, 1); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 182; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = __Pyx_PyObject_GetSlice(((PyObject *)__pyx_v_self->l_index), 0, __pyx_v_self->idx, NULL, NULL, NULL, 0, 1, 1); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 186; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_GetSlice(((PyObject *)__pyx_v_self->n_index), 0, __pyx_v_self->idx, NULL, NULL, NULL, 0, 1, 1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 182; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyObject_GetSlice(((PyObject *)__pyx_v_self->n_index), 0, __pyx_v_self->idx, NULL, NULL, NULL, 0, 1, 1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 186; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 182; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 186; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
   PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
@@ -3366,17 +3420,17 @@ static PyObject *__pyx_pf_5pyart_7correct_17_fast_edge_finder_14_EdgeCollector_2
   __pyx_v_indices = ((PyObject*)__pyx_t_3);
   __pyx_t_3 = 0;
 
-  /* "pyart/correct/_fast_edge_finder.pyx":183
+  /* "pyart/correct/_fast_edge_finder.pyx":187
  *         """ Return the edge indices and velocities. """
  *         indices = (self.l_index[:self.idx], self.n_index[:self.idx])
  *         velocities = (self.l_velo[:self.idx], self.n_velo[:self.idx])             # <<<<<<<<<<<<<<
  *         return indices, velocities
  */
-  __pyx_t_3 = __Pyx_PyObject_GetSlice(((PyObject *)__pyx_v_self->l_velo), 0, __pyx_v_self->idx, NULL, NULL, NULL, 0, 1, 1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 183; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_3 = __Pyx_PyObject_GetSlice(((PyObject *)__pyx_v_self->l_velo), 0, __pyx_v_self->idx, NULL, NULL, NULL, 0, 1, 1); if (unlikely(!__pyx_t_3)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 187; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_2 = __Pyx_PyObject_GetSlice(((PyObject *)__pyx_v_self->n_velo), 0, __pyx_v_self->idx, NULL, NULL, NULL, 0, 1, 1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 183; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_2 = __Pyx_PyObject_GetSlice(((PyObject *)__pyx_v_self->n_velo), 0, __pyx_v_self->idx, NULL, NULL, NULL, 0, 1, 1); if (unlikely(!__pyx_t_2)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 187; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 183; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 187; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_t_3);
   __Pyx_GIVEREF(__pyx_t_3);
@@ -3387,13 +3441,13 @@ static PyObject *__pyx_pf_5pyart_7correct_17_fast_edge_finder_14_EdgeCollector_2
   __pyx_v_velocities = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "pyart/correct/_fast_edge_finder.pyx":184
+  /* "pyart/correct/_fast_edge_finder.pyx":188
  *         indices = (self.l_index[:self.idx], self.n_index[:self.idx])
  *         velocities = (self.l_velo[:self.idx], self.n_velo[:self.idx])
  *         return indices, velocities             # <<<<<<<<<<<<<<
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 184; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  __pyx_t_1 = PyTuple_New(2); if (unlikely(!__pyx_t_1)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 188; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_INCREF(__pyx_v_indices);
   PyTuple_SET_ITEM(__pyx_t_1, 0, __pyx_v_indices);
@@ -3405,7 +3459,7 @@ static PyObject *__pyx_pf_5pyart_7correct_17_fast_edge_finder_14_EdgeCollector_2
   __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "pyart/correct/_fast_edge_finder.pyx":180
+  /* "pyart/correct/_fast_edge_finder.pyx":184
  *         return 1
  * 
  *     def get_indices_and_velocities(self):             # <<<<<<<<<<<<<<
@@ -17352,11 +17406,11 @@ PyMODINIT_FUNC PyInit__fast_edge_finder(void)
   /*--- Type init code ---*/
   __pyx_vtabptr_5pyart_7correct_17_fast_edge_finder__EdgeCollector = &__pyx_vtable_5pyart_7correct_17_fast_edge_finder__EdgeCollector;
   __pyx_vtable_5pyart_7correct_17_fast_edge_finder__EdgeCollector.add_edge = (int (*)(struct __pyx_obj_5pyart_7correct_17_fast_edge_finder__EdgeCollector *, int, int, float, float))__pyx_f_5pyart_7correct_17_fast_edge_finder_14_EdgeCollector_add_edge;
-  if (PyType_Ready(&__pyx_type_5pyart_7correct_17_fast_edge_finder__EdgeCollector) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 140; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyType_Ready(&__pyx_type_5pyart_7correct_17_fast_edge_finder__EdgeCollector) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 144; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_type_5pyart_7correct_17_fast_edge_finder__EdgeCollector.tp_print = 0;
   #if CYTHON_COMPILING_IN_CPYTHON
   {
-    PyObject *wrapper = PyObject_GetAttrString((PyObject *)&__pyx_type_5pyart_7correct_17_fast_edge_finder__EdgeCollector, "__init__"); if (unlikely(!wrapper)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 140; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+    PyObject *wrapper = PyObject_GetAttrString((PyObject *)&__pyx_type_5pyart_7correct_17_fast_edge_finder__EdgeCollector, "__init__"); if (unlikely(!wrapper)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 144; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
     if (Py_TYPE(wrapper) == &PyWrapperDescr_Type) {
       __pyx_wrapperbase_5pyart_7correct_17_fast_edge_finder_14_EdgeCollector___init__ = *((PyWrapperDescrObject *)wrapper)->d_base;
       __pyx_wrapperbase_5pyart_7correct_17_fast_edge_finder_14_EdgeCollector___init__.doc = __pyx_doc_5pyart_7correct_17_fast_edge_finder_14_EdgeCollector___init__;
@@ -17364,8 +17418,8 @@ PyMODINIT_FUNC PyInit__fast_edge_finder(void)
     }
   }
   #endif
-  if (__Pyx_SetVtable(__pyx_type_5pyart_7correct_17_fast_edge_finder__EdgeCollector.tp_dict, __pyx_vtabptr_5pyart_7correct_17_fast_edge_finder__EdgeCollector) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 140; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
-  if (PyObject_SetAttrString(__pyx_m, "_EdgeCollector", (PyObject *)&__pyx_type_5pyart_7correct_17_fast_edge_finder__EdgeCollector) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 140; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (__Pyx_SetVtable(__pyx_type_5pyart_7correct_17_fast_edge_finder__EdgeCollector.tp_dict, __pyx_vtabptr_5pyart_7correct_17_fast_edge_finder__EdgeCollector) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 144; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
+  if (PyObject_SetAttrString(__pyx_m, "_EdgeCollector", (PyObject *)&__pyx_type_5pyart_7correct_17_fast_edge_finder__EdgeCollector) < 0) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 144; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_ptype_5pyart_7correct_17_fast_edge_finder__EdgeCollector = &__pyx_type_5pyart_7correct_17_fast_edge_finder__EdgeCollector;
   if (PyType_Ready(&__pyx_type___pyx_array) < 0) {__pyx_filename = __pyx_f[2]; __pyx_lineno = 99; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   __pyx_type___pyx_array.tp_print = 0;
