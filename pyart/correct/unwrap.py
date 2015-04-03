@@ -81,7 +81,7 @@ def dealias_unwrap_phase(
     skip_checks : bool
         True to skip checks verifing that an appropiate unwrap_unit is
         selected, False retains these checked. Setting this parameter to True
-        is not recommended and is only offered as an option for extemem cases.
+        is not recommended and is only offered as an option for extreme cases.
 
     Returns
     -------
@@ -242,10 +242,14 @@ def _is_radar_sweep_aligned(radar, diff=0.1):
     before calling this function using the _is_radar_cubic function.
 
     """
+    if radar.nsweeps == 1:
+        return True     # all single sweep volume are sweep aligned
     if radar.scan_type == 'ppi':
         angles = radar.azimuth['data']
     elif radar.scan_type == 'rhi':
         angles = radar.elevation['data']
+    else:
+        raise ValueError('invalid scan_type: %s' % (radar.scan_type))
     starts = radar.sweep_start_ray_index['data']
     ends = radar.sweep_end_ray_index['data']
     ref_angles = angles[starts[0]:ends[0] + 1]
@@ -272,6 +276,10 @@ def _is_sweep_sequential(radar, sweep_number):
         angles = radar.azimuth['data'][start:end+1]
     elif radar.scan_type == 'rhi':
         angles = radar.elevation['data'][start:end+1]
+    elif radar.scan_type == 'vpt':
+        # for VPT scan time should not run backwards, so time is the
+        # equivalent variable to an angle.
+        angles = radar.time['data']
     else:
         raise ValueError('invalid scan_type: %s' % (radar.scan_type))
     rolled_angles = np.roll(angles, -np.argmin(angles))
