@@ -11,7 +11,7 @@ COMMON_MAP_TO_GRID_ARGS = {
     'grid_shape': (3, 9, 10),
     'grid_limits': ((-400.0, 400.0), (-900.0, 900.0), (-900, 900)),
     'fields': ['reflectivity'],
-    'roi_func': lambda x, y, z: 30, }
+    'roi_func': lambda z, y, x: 30, }
 
 
 def test_grid_from_radars():
