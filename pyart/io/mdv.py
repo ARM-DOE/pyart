@@ -692,7 +692,7 @@ class MdvFile:
         l=[0]*self.master_header_mapper[-1][2]
         for item in self.master_header_mapper:
             if item[3]:
-                l[item[1]:item[2]] = (list(d[item[0]])+['\x00']*(item[2]-item[1]))[0:item[2]-item[1]]#convert str to list of char and complet with zero
+                l[item[1]:item[2]] = (list(d[item[0]].encode("ASCII"))+['\x00']*(item[2]-item[1]))[0:item[2]-item[1]]#convert str to list of char and complet with zero
             else:
                 if item[2]==item[1]+1:
                     l[item[1]] = d[item[0]]
@@ -743,7 +743,7 @@ class MdvFile:
         l=[0]*self.field_header_mapper[-1][2]
         for item in self.field_header_mapper:
             if item[3]:
-                l[item[1]:item[2]] = (list(d[item[0]])+['\x00']*(item[2]-item[1]))[0:item[2]-item[1]]#convert str to list of char and complet with zero
+                l[item[1]:item[2]] = (list(d[item[0]].encode("ASCII"))+['\x00']*(item[2]-item[1]))[0:item[2]-item[1]]#convert str to list of char and complet with zero
             else:
                 if item[2]==item[1]+1:
                     l[item[1]] = d[item[0]]
@@ -793,7 +793,7 @@ class MdvFile:
         l=[0]*self.vlevel_header_mapper[-1][2]
         for item in self.vlevel_header_mapper:
             if item[3]:
-                l[item[1]:item[2]] = (list(d[item[0]])+['\x00']*(item[2]-item[1]))[0:item[2]-item[1]]#convert str to list of char and complet with zero
+                l[item[1]:item[2]] = (list(d[item[0]].encode("ASCII"))+['\x00']*(item[2]-item[1]))[0:item[2]-item[1]]#convert str to list of char and complet with zero
             else:
                 if item[2]==item[1]+1:
                     l[item[1]] = d[item[0]]
@@ -843,7 +843,7 @@ class MdvFile:
         l=[0]*self.chunk_header_mapper[-1][2]
         for item in self.chunk_header_mapper:
             if item[3]:
-                l[item[1]:item[2]] = (list(d[item[0]])+['\x00']*(item[2]-item[1]))[0:item[2]-item[1]]#convert str to list of char and complet with zero
+                l[item[1]:item[2]] = (list(d[item[0]].encode("ASCII"))+['\x00']*(item[2]-item[1]))[0:item[2]-item[1]]#convert str to list of char and complet with zero
             else:
                 if item[2]==item[1]+1:
                     l[item[1]] = d[item[0]]
@@ -936,7 +936,7 @@ class MdvFile:
         l=[0]*self.radar_info_mapper[-1][2]
         for item in self.radar_info_mapper:
             if item[3]:
-                l[item[1]:item[2]] = (list(d[item[0]])+['\x00']*(item[2]-item[1]))[0:item[2]-item[1]]#convert str to list of char and complet with zero
+                l[item[1]:item[2]] = (list(d[item[0]].encode("ASCII"))+['\x00']*(item[2]-item[1]))[0:item[2]-item[1]]#convert str to list of char and complet with zero
             else:
                 if item[2]==item[1]+1:
                     l[item[1]] = d[item[0]]
@@ -988,7 +988,7 @@ class MdvFile:
         l=[0]*self.calib_mapper[-1][2]
         for item in self.calib_mapper:
             if item[3]:
-                l[item[1]:item[2]] = (list(d[item[0]])+['\x00']*(item[2]-item[1]))[0:item[2]-item[1]]#convert str to list of char and complet with zero
+                l[item[1]:item[2]] = (list(d[item[0]].encode("ASCII"))+['\x00']*(item[2]-item[1]))[0:item[2]-item[1]]#convert str to list of char and complet with zero
             else:
                 if item[2]==item[1]+1:
                     l[item[1]] = d[item[0]]
@@ -1021,7 +1021,7 @@ class MdvFile:
         l=[0]*self.compression_info_mapper[-1][2]
         for item in self.compression_info_mapper:
             if item[3]:
-                l[item[1]:item[2]] = (list(d[item[0]])+['\x00']*(item[2]-item[1]))[0:item[2]-item[1]]#convert str to list of char and complet with zero
+                l[item[1]:item[2]] = (list(d[item[0]].encode("ASCII"))+['\x00']*(item[2]-item[1]))[0:item[2]-item[1]]#convert str to list of char and complet with zero
             else:
                 if item[2]==item[1]+1:
                     l[item[1]] = d[item[0]]
@@ -1088,9 +1088,9 @@ class MdvFile:
     def _time_dict_into_header(self):
         """ Complete time information in master_header from the time dict """
         t_base = datetime.datetime(1970, 1, 1, 00, 00)
-        self.master_header['time_begin'] = (self.times['time_begin']- t_base)/1000000
-        self.master_header['time_end'] = (self.times['time_end']- t_base)/1000000
-        self.master_header['time_centroid'] = (self.times['time_centroid']- t_base)/1000000
+        self.master_header['time_begin'] = (self.times['time_begin']- t_base).total_seconds()
+        self.master_header['time_end'] = (self.times['time_end']- t_base).total_seconds()
+        self.master_header['time_centroid'] = (self.times['time_centroid']- t_base).total_seconds()
 
 
 
