@@ -48,6 +48,7 @@ def _fast_edge_finder(
                 x_check = right     # wrap around
             if x_check != -1:
                 neighbor = labels[x_check, y_index]
+                nvel = data[x_check, y_index]
 
                 # if the left side gate is masked, keep looking to the left
                 # until we find a valid gate or reach the maximum gap size
@@ -60,11 +61,11 @@ def _fast_edge_finder(
                             else:
                                 break
                         neighbor = labels[x_check, y_index]
+                        nvel = data[x_check, y_index]
                         if neighbor != 0:
                             break
 
                 # add the edge to the collection (if valid)
-                nvel = data[x_check, y_index]
                 collector.add_edge(label, neighbor, vel, nvel)
 
             # right
@@ -73,6 +74,7 @@ def _fast_edge_finder(
                 x_check = 0     # wrap around
             if x_check != right+1:
                 neighbor = labels[x_check, y_index]
+                nvel = data[x_check, y_index]
 
                 # if the right side gate is masked, keep looking to the left
                 # until we find a valid gate or reach the maximum gap size
@@ -85,17 +87,18 @@ def _fast_edge_finder(
                             else:
                                 break
                         neighbor = labels[x_check, y_index]
+                        nvel = data[x_check, y_index]
                         if neighbor != 0:
                             break
 
                 # add the edge to the collection (if valid)
-                nvel = data[x_check, y_index]
                 collector.add_edge(label, neighbor, vel, nvel)
 
             # top
             y_check = y_index - 1
             if y_check != -1:
                 neighbor = labels[x_index, y_check]
+                nvel = data[x_index, y_check]
 
                 # if the top side gate is masked, keep looking up
                 # until we find a valid gate or reach the maximum gap size
@@ -105,17 +108,18 @@ def _fast_edge_finder(
                         if y_check == -1:
                             break
                         neighbor = labels[x_index, y_check]
+                        nvel = data[x_index, y_check]
                         if neighbor != 0:
                             break
 
                 # add the edge to the collection (if valid)
-                nvel = data[x_index, y_check]
                 collector.add_edge(label, neighbor, vel, nvel)
 
             # bottom
             y_check = y_index + 1
             if y_check != bottom + 1:
                 neighbor = labels[x_index, y_check]
+                nvel = data[x_index, y_check]
 
                 # if the top side gate is masked, keep looking up
                 # until we find a valid gate or reach the maximum gap size
@@ -125,11 +129,11 @@ def _fast_edge_finder(
                         if y_check == bottom + 1:
                             break
                         neighbor = labels[x_index, y_check]
+                        nvel = data[x_index, y_check]
                         if neighbor != 0:
                             break
 
                 # add the edge to the collection (if valid)
-                nvel = data[x_index, y_check]
                 collector.add_edge(label, neighbor, vel, nvel)
 
     indices, velocities = collector.get_indices_and_velocities()
