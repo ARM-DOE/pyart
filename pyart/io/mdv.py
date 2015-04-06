@@ -879,7 +879,7 @@ class MdvFile:
             else:
                 if debug:
                     print 'getting unknown chunk %i'%chunk_id
-                self.chunk_data[cnum] = 
+                self.chunk_data[cnum] = self._get_unknown_chunk(cnum)
 
         return radar_info, elevations, calib_info
 
@@ -904,6 +904,10 @@ class MdvFile:
                     print 'writing cal'
                 calib_info = self._write_calib(self.calib_info)
             
+            else:
+                if debug:
+                    print 'writing unknown chunk %i'%chunk_id
+                self._write_unknown_chunk(self,self.chunk_data[cnum])
             
     def _get_radar_info(self):
         """ Get the radar information, return dict. """
@@ -1026,6 +1030,16 @@ class MdvFile:
         string = struct.pack(self.compression_info_fmt, *l)
         self.fileptr.write(string)
 
+    def _get_unknown_chunk(self,cnum):
+        """ Get raw data from chunk """
+        # the file pointer must be set at the correct location prior to call
+        size = self.chunk_headers[cnum]['size']
+        return self.fileptr.read(size)
+
+    def _write_unknown_chunk(self,data):
+        """ Write raw data from chunk """
+        # the file pointer must be set at the correct location prior to call
+        self.fileptr.write(data)
 
     def _get_levels_info(self, nlevels):
         """ Get nlevel information, return a dict. """
@@ -1043,8 +1057,8 @@ class MdvFile:
     def _write_levels_info(self, nlevels,d):
         """ write levels information, return a dict. """
         # the file pointer must be set at the correct location prior to call
-        fmt = '>%iI %iI' % (nlevels, nlevels)
-        l=d['vlevel_offsets']+d['vlevel_nbytes']
+        fmt = '%iI %iI' % (nlevels, nlevels)
+        l= d['vlevel_offsets']+d['vlevel_nbytes']
         string = struct.pack(fmt, *l)
         self.fileptr.write(string)
 
