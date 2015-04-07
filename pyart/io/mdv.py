@@ -562,7 +562,7 @@ class MdvFile:
                 # 0xf3f3f3f3 : BZIP_COMPRESSED
                 # 0xf4f4f4f4 : BZIP_NOT_COMPRESSED
                 # 0xf6f6f6f6 : ZLIB_NOT_COMPRESSED
-            self.read_data[fnum][sw]=decompr_data
+            
             # read the decompressed data, reshape and mask
             sw_data = np.fromstring(decompr_data, np_form).astype('float32')
             sw_data.shape = (ny, nx)
