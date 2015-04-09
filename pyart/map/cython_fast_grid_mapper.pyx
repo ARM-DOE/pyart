@@ -1,15 +1,16 @@
 #!python
 #cython: boundscheck=False, wraparound=False, initializedcheck=False, cdivision=True
 from libc.math cimport *
+from libc.stdlib cimport malloc, free
 cimport numpy as np
 import numpy as np
 cimport cython
 
 
 
-def  cython_fast_map(z,y,x, double z_offset, double y_offset, double x_offset , double max_range,badval, sweeps,np.ndarray[np.int_t, ndim=1] sweeps_index, np.ndarray[np.int_t, ndim=2] ray_index, np.ndarray[np.int_t, ndim=2] gate_index, radars, fields):
+def  cython_fast_map(z,y,x, double z_offset, double y_offset, double x_offset , double max_range,double badval, int interp_opt, sweeps,np.ndarray[np.int_t, ndim=1] sweeps_index_down, np.ndarray[np.int_t, ndim=1] sweeps_index_up, np.ndarray[np.int_t, ndim=2] ray_index, np.ndarray[np.int_t, ndim=2] gate_index, radars, fields,int refl_filter_flag, double max_refl, double elev_res, double azi_res, double r_res):
     """
-    cython_fast_map(z,y,x, z_offset, y_offset, x_offset , max_range,badval, sweeps, sweeps_index, ray_index, gate_index, radars, fields):
+    cython_fast_map(z,y,x, z_offset, y_offset, x_offset , max_range,badval, interp_opt, sweeps, sweeps_index_down, sweeps_index_up, ray_index, gate_index, radars, fields, refl_filter_flag, max_refl, elev_res, azi_res, r_res):
     
     cython part of function fast_map_to_grid
     
@@ -24,59 +25,117 @@ def  cython_fast_map(z,y,x, double z_offset, double y_offset, double x_offset , 
     cdef double[:] cx = x
     cdef double rng,azi,elev
     cdef int temp_int
-    cdef int i,j,k,l,
+    cdef int elev_index
+    cdef int inside_loops
+    cdef int i,j,k,l,f,
     cdef double[:,:,:,:] grid_data_simple = np.empty((nz,ny,nx,nfields), dtype='double')
     grid_data_simple[:,:,:,:] = badval
     cdef int isweep,iray,iradar,igate
+    cdef double * values0 = <double*> malloc(sizeof(double)*nfields)
+    cdef double * values1 = <double*> malloc(sizeof(double)*nfields)
+    cdef double * out_values = <double*> malloc(sizeof(double)*nfields)
+    cdef double ** values = <double**> malloc(sizeof(double*)*2)
+    cdef double * interpol_elev = <double*> malloc(sizeof(double*)*2)
+    
+    if interp_opt==0:
+        inside_loops=1
+    else:
+        inside_loops=2
+    
+    values[0]=values0; values[1]=values1
+    
     size = radars[0].fields['DBZH']['data'].data.shape
-
+    
     # remove python overhead of getting the mask and array
     list_array=[range(nfields) for i in range(len(radars))] #list of lists
     list_mask=[range(nfields) for i in range(len(radars))] #list of lists
     
     for iradar in range(len(radars)):
-        for l in range(nfields):
-            list_array[iradar][l] = radars[iradar].fields[fields[l]]['data'].data
-            list_mask[iradar][l] = radars[iradar].fields[fields[l]]['data'].mask
-
+        for f in range(nfields):
+            list_array[iradar][f] = radars[iradar].fields[fields[f]]['data'].data
+            list_mask[iradar][f] = radars[iradar].fields[fields[f]]['data'].mask
+    
     for i in range(nz):
         for j in range(ny):
             for k in range(nx):
                 cart_to_radar_coords (cz[i],cy[j],cx[k],z_offset, y_offset, x_offset, &rng, &azi, &elev)
-                 
-                if rng<0 or rng>=max_range:
-#                    grid_data_simple[i,j,k,:] = badval
-                    continue
-                
-                temp_int = <int> ceil((elev+90)*2)
-                isweep = sweeps_index[temp_int]
-                if isweep<0: #no elevation, this offen happen
-#                    grid_data_simple[i,j,k,:] = badval
-                    continue
-                
-                temp_int = <int> ceil(azi)
-                iray = ray_index[isweep, temp_int]
-                if iray<0: #no ray, this almost does't happen
-#                    grid_data_simple[i,j,k,:] = badval
-                    continue
-                
-                temp_int = <int> ceil(rng/100)
-                iradar = sweeps[isweep][2]
-                igate = gate_index[iradar, temp_int ]
-                if igate<0:#no gate, this almost does't happen
-#                    grid_data_simple[i,j,k,:] = badval
-                    continue
-                
-                # we have data
-                for l in range(nfields):
-                    if list_mask[iradar][l][iray,igate]:
-                        grid_data_simple[i,j,k,l] = badval
-#                        pass
+                # calling any functions with arrays args has terible overhead, so we need to do every thing here!!!
+                # let's but one extra loop, so I can break out of it. Realy I see no other option (goto don't work)
+                for l in range(inside_loops):
+                    if rng<0 or rng>=max_range:
+                        for f in range(nfields):
+                            for l in range(inside_loops): values[l][f] = badval
+                        break
+                    
+                    elev_index = <int> ceil((elev+90)/elev_res)
+                    if l==0: isweep = sweeps_index_down[elev_index]
+                    if l==1: isweep = sweeps_index_up[elev_index]
+                    if isweep<0: #no sweep, this offen happen
+                        for f in range(nfields): values[l][f] = badval
+                        continue #maybe l==1 has a sweep
+                    
+                    temp_int = <int> ceil(azi/azi_res)
+                    iray = ray_index[isweep, temp_int]
+                    if iray<0: #no ray, this almost does't happen
+                        for f in range(nfields): 
+                            for l in range(inside_loops): values[l][f] = badval
+                        break
+                    
+                    temp_int = <int> ceil(rng/r_res)
+                    iradar = sweeps[isweep][2]
+                    igate = gate_index[iradar, temp_int ]
+                    if igate<0:#no gate, this almost does't happen
+                        for f in range(nfields): 
+                            for l in range(inside_loops): values[l][f] = badval
+                        break
+                    
+                    # we have data
+                    #just need to save elevation for interpolation if we have data
+                    interpol_elev[l] = sweeps[isweep][0] 
+                    # now process reflectivity
+                    
+                    f=nfields-1
+                    if list_mask[iradar][f][iray,igate]:
+                        values[l][f] = badval
                     else:
-                        grid_data_simple[i,j,k,l] = list_array[iradar][l][iray,igate] # radars[iradar].fields[fields[l]]['data'].data[iray,igate]
-    
+                        values[l][f] = list_array[iradar][f][iray,igate]
+                        if values[l][f] > max_refl:
+                            values[l][f] = badval
+                    
+                    for f in range(nfields-1):#last field is reflectivity, process separated
+                        if list_mask[iradar][f][iray,igate]:
+                            values[l][f] = badval
+                        elif refl_filter_flag and values[l][nfields-1] == badval:
+                            values[l][f] = badval
+                        else:
+                            values[l][f] = list_array[iradar][f][iray,igate]
+                
+                if interp_opt==0:
+                    for f in range(nfields): grid_data_simple[i,j,k,f] = values[0][f]
+                else:
+                    linear_interpolate(values, interpol_elev, elev_index*elev_res-90, nfields, badval, out_values)#I shall not use elev since it may be outside [elev_down,elev_up], but use instead the rounded elev_index
+                    for f in range(nfields): grid_data_simple[i,j,k,f] = out_values[f]
+    free(values0)
+    free(values1)
+    free(values)
+    free(interpol_elev)
+    free(out_values)
     return np.asarray(grid_data_simple)
 
+cdef void linear_interpolate(double ** values, double *elevs, double elev, int nfields, double badval, double * out):
+    cdef int f
+    for f in range(nfields):
+        if values[0][f]==badval and values[1][f]==badval:
+            out[f]=badval
+        elif values[0][f]==badval:
+            out[f]=values[1][f]
+        elif values[1][f]==badval:
+            out[f]=values[0][f]
+        else:
+            if elev<min(elevs[0],elevs[1]) or elev> max(elevs[0],elevs[1]):
+                print "elev error %f , %f , %f"%(elev,elevs[0],elevs[1])
+                exit()
+            out[f]=values[0][f]+(values[1][f]-values[0][f])*(elev-elevs[0])/(elevs[1]-elevs[0])
 
 cdef void cart_to_radar_coords( double z, double y, double x, double z_offset, double y_offset,double x_offset,double *rng,double *azi, double *elev):
     """
@@ -88,17 +147,11 @@ cdef void cart_to_radar_coords( double z, double y, double x, double z_offset, d
         Cartesian coordinates in meters.
     x_offset, y_offset, z_offset : double
         Posicion of the radar in Cartesian coordinates in meters.
-    rng : array
-        Distances to the center of the radar gates (bins) in kilometers.
-    az : array
-        Azimuth angle of the radar in degrees.
-    ele : array
-        Elevation angle of the radar in degrees.
 
     Returns
     -------
     rng : double
-        Distances to the center of the radar gates (bins) in kilometers.
+        Distances to the center of the radar gates (bins) in meters.
     azi : double
         Azimuth angle of the radar in degrees.
     elev : double
