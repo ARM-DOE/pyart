@@ -1,16 +1,15 @@
 #!python
 #cython: boundscheck=False, wraparound=False, initializedcheck=False, cdivision=True
 from libc.math cimport *
-from libc.stdlib cimport malloc, free
 cimport numpy as np
 import numpy as np
 cimport cython
 
 
 
-def  cython_fast_map(z,y,x, double z_offset, double y_offset, double x_offset , double max_range,badval, interpolation_array, sweeps,np.ndarray[np.int_t, ndim=1] sweeps_index, sweeps_index_up, np.ndarray[np.int_t, ndim=2] ray_index, np.ndarray[np.int_t, ndim=2] gate_index, radars, fields,int refl_filter_flag, double max_refl, double elev_res, double azi_res, double r_res):
+def  cython_fast_map(z,y,x, double z_offset, double y_offset, double x_offset , double max_range,badval, sweeps,np.ndarray[np.int_t, ndim=1] sweeps_index, np.ndarray[np.int_t, ndim=2] ray_index, np.ndarray[np.int_t, ndim=2] gate_index, radars, fields):
     """
-    cython_fast_map(z,y,x, z_offset, y_offset, x_offset , max_range,badval, interpolation_array, sweeps, sweeps_index_down, sweeps_index_up, ray_index, gate_index, radars, fields, refl_filter_flag, max_refl, elev_res, azi_res, r_res):
+    cython_fast_map(z,y,x, z_offset, y_offset, x_offset , max_range,badval, sweeps, sweeps_index, ray_index, gate_index, radars, fields):
     
     cython part of function fast_map_to_grid
     
@@ -25,23 +24,20 @@ def  cython_fast_map(z,y,x, double z_offset, double y_offset, double x_offset , 
     cdef double[:] cx = x
     cdef double rng,azi,elev
     cdef int temp_int
-    cdef int i,j,k,f,
+    cdef int i,j,k,l,
     cdef double[:,:,:,:] grid_data_simple = np.empty((nz,ny,nx,nfields), dtype='double')
     grid_data_simple[:,:,:,:] = badval
     cdef int isweep,iray,iradar,igate
-#    cdef double * values = <double*> malloc(sizeof(double)*nfields)
-    
     size = radars[0].fields['DBZH']['data'].data.shape
-    
-    
+
     # remove python overhead of getting the mask and array
     list_array=[range(nfields) for i in range(len(radars))] #list of lists
     list_mask=[range(nfields) for i in range(len(radars))] #list of lists
     
     for iradar in range(len(radars)):
-        for f in range(nfields):
-            list_array[iradar][f] = radars[iradar].fields[fields[f]]['data'].data
-            list_mask[iradar][f] = radars[iradar].fields[fields[f]]['data'].mask
+        for l in range(nfields):
+            list_array[iradar][l] = radars[iradar].fields[fields[l]]['data'].data
+            list_mask[iradar][l] = radars[iradar].fields[fields[l]]['data'].mask
 
     for i in range(nz):
         for j in range(ny):
@@ -49,26 +45,26 @@ def  cython_fast_map(z,y,x, double z_offset, double y_offset, double x_offset , 
                 cart_to_radar_coords (cz[i],cy[j],cx[k],z_offset, y_offset, x_offset, &rng, &azi, &elev)
                  
                 if rng<0 or rng>=max_range:
-                    #for f in range(nfields): values[f] = badval
+#                    grid_data_simple[i,j,k,:] = badval
                     continue
                 
                 temp_int = <int> ceil((elev+90)*2)
                 isweep = sweeps_index[temp_int]
                 if isweep<0: #no elevation, this offen happen
-                    #for f in range(nfields): values[f] = badval
+#                    grid_data_simple[i,j,k,:] = badval
                     continue
                 
                 temp_int = <int> ceil(azi)
                 iray = ray_index[isweep, temp_int]
                 if iray<0: #no ray, this almost does't happen
-                    #for f in range(nfields): values[f] = badval
+#                    grid_data_simple[i,j,k,:] = badval
                     continue
                 
-                temp_int = <int> ceil(rng/100.)
+                temp_int = <int> ceil(rng/100)
                 iradar = sweeps[isweep][2]
                 igate = gate_index[iradar, temp_int ]
                 if igate<0:#no gate, this almost does't happen
-                    #for f in range(nfields): values[f] = badval
+#                    grid_data_simple[i,j,k,:] = badval
                     continue
                 
                 # we have data
@@ -92,11 +88,17 @@ cdef void cart_to_radar_coords( double z, double y, double x, double z_offset, d
         Cartesian coordinates in meters.
     x_offset, y_offset, z_offset : double
         Posicion of the radar in Cartesian coordinates in meters.
+    rng : array
+        Distances to the center of the radar gates (bins) in kilometers.
+    az : array
+        Azimuth angle of the radar in degrees.
+    ele : array
+        Elevation angle of the radar in degrees.
 
     Returns
     -------
     rng : double
-        Distances to the center of the radar gates (bins) in meters.
+        Distances to the center of the radar gates (bins) in kilometers.
     azi : double
         Azimuth angle of the radar in degrees.
     elev : double
@@ -141,21 +143,6 @@ cdef void cart_to_radar_coords( double z, double y, double x, double z_offset, d
     cdef double h1 = h - (sqrt(r0*r0+R*R)-R)
     rng[0] = sqrt(r0*r0+h1*h1-2*r0*h1*cos(betha)) 
     elev[0] = asin(h1*sin(betha)/(rng[0]))*180./pi #in degrees
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 ### this function is deprecated, use full cython version above: cython_fast_map 
