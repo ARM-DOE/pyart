@@ -252,7 +252,7 @@ class GateFilter(object):
         if inclusive:
             marked = self._get_fdata(field) <= value
         else:
-            marked = self._get_fdate(field) < value
+            marked = self._get_fdata(field) < value
         return self._merge(marked, op, exclude_masked)
 
     def exclude_above(self, field, value, exclude_masked=True, op='or',
