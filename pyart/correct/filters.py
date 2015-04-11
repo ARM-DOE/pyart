@@ -227,8 +227,8 @@ class GateFilter(object):
             Name of field compared against the value.
         value : float
             Gates with a value below this value in the specified field will
-            be maked for exclusion in the filter.
-        filter_masked : bool, optional
+            be marked for exclusion in the filter.
+        exclude_masked : bool, optional
             True to filter masked values in the specified field if the data is
             a masked array, False to include any masked values.
         op : {'and', 'or', 'new'}
@@ -245,6 +245,8 @@ class GateFilter(object):
             conditions.  Note that the 'and' method MAY results in including
             gates which have peviously been excluded because they were masked
             or invalid.
+        inclusive : bool
+            Indicates whether the specified value should also be excluded.
 
         """
         if inclusive:
