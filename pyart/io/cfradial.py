@@ -630,24 +630,47 @@ def _create_ncvar(dic, dataset, name, dimensions):
     if data.dtype.char is 'U' and data.dtype != 'U1':
         data = stringarray_to_chararray(data)
 
-    # create the dataset variable
+    #retrieve virtual attributes, use kwargs
+    kwargs={
+        'zlib': True,
+         'dimensions': dimensions,
+        }
     if 'least_significant_digit' in dic:
-        lsd = dic['least_significant_digit']
+        kwargs['least_significant_digit'] = dic['least_significant_digit']
+    if '_DeflateLevel' in dic:
+        if dic['_DeflateLevel']==0:
+            kwargs['zlib']=False
+        else:
+            kwargs['zlib']=True
+            kwargs['complevel'] = dic['_DeflateLevel']
+    if '_Endianness' in dic:
+        kwargs['endian'] = dic['_Endianness']
+    if '_Fletcher32' in dic:
+        kwargs['fletcher32'] = dic['_Fletcher32']
+    if '_Shuffle' in dic:
+        kwargs['shuffle'] = dic['_Shuffle']
+    if '_ChunkSizes' in dic:
+        kwargs['chunksizes'] = dic['_ChunkSizes']
+    if '_FillValue' in dic:
+        kwargs['fill_value'] = dic['_FillValue']
+    scale=None;offset=None
+    if '_Write_as_dtype' in dic:
+        kwargs['datatype'] = dic['_Write_as_dtype']
+        #calculate scale and offset
+        #convert to dtype, this may fail
+        try:
+            dtype = np.dtype(dic['_Write_as_dtype'])
+        except:
+            dtype = None
+        if dtype!=None and np.issubdtype(dtype, np.integer):
+            if "scale_factor" not in dic and "add_offset" not in dic:
+                scale,offset,FillValue = _calculate_scale_and_offset(dic, dtype)
+                kwargs['fill_value'] = FillValue
     else:
-        lsd = None
-    if "_FillValue" in dic:
-        fill_value = dic['_FillValue']
-    else:
-        fill_value = None
+        kwargs['datatype'] = data.dtype
 
-    ncvar = dataset.createVariable(name, data.dtype, dimensions,
-                                   zlib=True, least_significant_digit=lsd,
-                                   fill_value=fill_value)
-
-    #as the variable type is controled by data.dtype, data must get here in the right type and therefore scaled
-    #we must prevent automatic scalling o re-scaling the data
-    if "scale_factor" in dic.keys() or "add_offset" in dic.keys(): 
-        ncvar.set_auto_maskandscale(False)
+    # create the dataset variable
+    ncvar = dataset.createVariable(name, **kwargs)
 
     # long_name attribute first if present, ARM standard
     if 'long_name' in dic.keys():
@@ -665,8 +688,13 @@ def _create_ncvar(dic, dataset, name, dimensions):
 
     # set all attributes
     for key, value in dic.iteritems():
-        if key not in ['data', '_FillValue', 'long_name', 'units']:
+        if key not in ['data', '_FillValue', 'long_name', 'units', '_DeflateLevel',
+            '_Endianness', '_Fletcher32', '_Shuffle','_ChunkSizes', '_Write_as_dtype']:
             ncvar.setncattr(key, value)
+
+    # if int '_Write_as_dtype' and not Scale and offset, calculate
+    if scale!=None: ncvar.setncattr('scale_factor', scale)
+    if offset!=None: ncvar.setncattr('add_offset', offset)
 
     # set the data
     if data.shape == ():
@@ -682,10 +710,10 @@ def _create_ncvar(dic, dataset, name, dimensions):
     else:
         ncvar[:] = data[:]
 
-def binarize_ncvar(dic, dtype=np.int8, minimum=None, maximum=None):
+def _calculate_scale_and_offset(dic, dtype, minimum=None, maximum=None):
     """
-    Binarize variable data in_place to int, allowing decreassing size need to write it.
-    Add atributes 'scale_factor' and 'add_offset' to scale it back to float
+    Calculate appropriated 'scale_factor' and 'add_offset' for nc variable in dic
+    in order to scaling to fit dtype range3.
     
     Parameters
     ----------
@@ -695,20 +723,10 @@ def binarize_ncvar(dic, dtype=np.int8, minimum=None, maximum=None):
         Integer numpy dtype to map to.
     minimum,maximum : float
         Greatest and Smallest values in the data, those values will be mapped to 
-        the smallest+1 and greates-1 values that dtype can hold. Anything outside
-        that range will be mapped to _Fillvalue. If equal to None will get it with
-        numpy.amin and numpy.amax.
+        the smallest+1 and greates values that dtype can hold. If equal to None 
+        will get it with numpy.amin and numpy.amax.
     
     """
-    
-    #test: dtype must be integer
-    if dtype in np.sctypes['int']:
-        pass
-    elif dtype in np.sctypes['uint']:
-        import warnings
-        warnings.warn("Warning: netcdf files may not store unsignet integers properly")
-    else:
-        raise ValueError('dtype: %s is not an integer type' % dtype)
     
     if "_FillValue" in dic:
         FillValue = dic["_FillValue"]
@@ -725,27 +743,19 @@ def binarize_ncvar(dic, dtype=np.int8, minimum=None, maximum=None):
         maximum=1.0*np.amax(data)
     
     if maximum<minimum:
-        raise ValueError('Maximum %f is smaller than Minimum %f' %(maximum,minimum))
+        raise ValueError('Error calculating variable scaling: Maximum %f is smaller than Minimum %f' %(maximum,minimum))
     elif maximum==minimum:
         import warnings
-        warnings.warn('Maximum %f is equal to Minimum %f' %(maximum,minimum))
+        warnings.warn('Calculate variable scaling: Maximum %f is equal to Minimum %f' %(maximum,minimum))
         maximum=minimum+1
     
-    data = np.ma.array(data,mask=(data.mask | (data<minimum) | (data > maximum) ))    
-    
-    #get max and min scaled, let extremes for fillvalues
-    maxi=1.0*(np.iinfo(dtype).max-1)
-    mini=1.0*(np.iinfo(dtype).min+1)
+    #get max and min scaled, 
+    maxi=1.0*(np.iinfo(dtype).max)
+    mini=1.0*(np.iinfo(dtype).min+1)# let min for fillvalue
     scale = (maximum-minimum)/(maxi-mini)
     offset = minimum-mini*scale
     
-    scaled_data=np.ma.where(data.mask,np.iinfo(dtype).min,((data-offset)/scale))
-    
-    dic["data"] = scaled_data.astype(dtype)
-    dic["_FillValue"] = np.array(np.iinfo(dtype).min,dtype=dtype)
-    dic["scale_factor"] = scale
-    dic["add_offset"] = offset
-    
+    return (scale,offset,np.iinfo(dtype).min)
 
 
 
