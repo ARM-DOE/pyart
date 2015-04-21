@@ -159,6 +159,8 @@ def dealias_region_based(
 
         # find regions in original data
         labels, nfeatures = _find_regions(sdata, sfilter, interval_limits)
+        if nfeatures == 0:  # skip sweep if all gates are masked.
+            continue
         bincount = np.bincount(labels.ravel())
         num_masked_gates = bincount[0]
         region_sizes = bincount[1:]
