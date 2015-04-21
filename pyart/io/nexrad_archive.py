@@ -162,10 +162,19 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
     elevation['data'] = nfile.get_elevation_angles().astype('float32')
     fixed_angle['data'] = nfile.get_target_angles()
 
+    # instrument_parameters
+    nyquist_velocity = filemetadata('nyquist_velocity')
+    unambiguous_range = filemetadata('unambiguous_range')
+    nyquist_velocity['data'] = nfile.get_nyquist_vel().astype('float32')
+    unambiguous_range['data'] = nfile.get_unambigous_range().astype('float32')
+
+    instrument_parameters = {'unambiguous_range': unambiguous_range,
+                             'nyquist_velocity': nyquist_velocity, }
+
     return Radar(
         time, _range, fields, metadata, scan_type,
         latitude, longitude, altitude,
         sweep_number, sweep_mode, fixed_angle, sweep_start_ray_index,
         sweep_end_ray_index,
         azimuth, elevation,
-        instrument_parameters=None)
+        instrument_parameters=instrument_parameters)
