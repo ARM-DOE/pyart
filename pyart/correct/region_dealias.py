@@ -57,7 +57,8 @@ from ._fast_edge_finder import _fast_edge_finder
 def dealias_region_based(
         radar, interval_splits=3, interval_limits=None,
         skip_between_rays=2, skip_along_ray=2, centered=True,
-        nyquist_vel=None, gatefilter=None, rays_wrap_around=None,
+        nyquist_vel=None, check_nyquist_uniform=True,
+        gatefilter=None, rays_wrap_around=None,
         keep_original=True, vel_field=None, corr_vel_field=None, **kwargs):
     """
     Dealias Doppler velocities using a region based algorithm.
@@ -93,10 +94,15 @@ def dealias_region_based(
         so that the average number of unfolding is near 0.  False does not
         apply centering which may results in individual sweeps under or over
         folded by the nyquist interval.
-    nyquist_velocity : float, optional
+    nyquist_velocity : array like or float, optional
         Nyquist velocity in unit identical to those stored in the radar's
-        velocity field.  None will attempt to determine this value from the
-        instrument_parameters attribute.
+        velocity field, either for each sweep or a single value which will be
+        used for all sweeps.  None will attempt to determine this value from
+        the Radar object.
+    check_nyquist_uniform : bool, optional
+        True to check if the Nyquist velocities are uniform for all rays
+        within a sweep, False will skip this check.  This parameter is ignored
+        when the nyquist_velocity parameter is not None.
     gatefilter : GateFilter, None or False, optional.
         A GateFilter instance which specified which gates should be
         ignored when performing de-aliasing.  A value of None, the default,
@@ -133,13 +139,7 @@ def dealias_region_based(
     vel_field, corr_vel_field = _parse_fields(vel_field, corr_vel_field)
     gatefilter = _parse_gatefilter(gatefilter, radar, **kwargs)
     rays_wrap_around = _parse_rays_wrap_around(rays_wrap_around, radar)
-    nyquist_vel = _parse_nyquist_vel(nyquist_vel, radar)
-    nyquist_interval = 2. * nyquist_vel
-
-    # find nyquist interval segmentation limits
-    if interval_limits is None:
-        interval_limits = np.linspace(
-            -nyquist_vel, nyquist_vel, interval_splits+1, endpoint=True)
+    nyquist_vel = _parse_nyquist_vel(nyquist_vel, radar, check_nyquist_uniform)
 
     # exclude masked and invalid velocity gates
     gatefilter.exclude_masked(vel_field)
@@ -150,15 +150,25 @@ def dealias_region_based(
     vdata = radar.fields[vel_field]['data'].view(np.ndarray)
     data = vdata.copy()     # dealiased velocities
 
-    for sweep_slice in radar.iter_slice():      # loop over sweeps
+    # loop over sweeps
+    for nsweep, sweep_slice in enumerate(radar.iter_slice()):
 
         # extract sweep data
         sdata = vdata[sweep_slice].copy()   # is a copy needed here?
         scorr = data[sweep_slice]
         sfilter = gfilter[sweep_slice]
 
+        # find nyquist velocity and interval segmentation limits
+        nyquist_interval = nyquist_vel[nsweep] * 2.
+        if interval_limits is None:
+            vel = nyquist_vel[nsweep]
+            s_interval_limits = np.linspace(
+                -vel, vel, interval_splits+1, endpoint=True)
+        else:
+            s_interval_limits = interval_limits
+
         # find regions in original data
-        labels, nfeatures = _find_regions(sdata, sfilter, interval_limits)
+        labels, nfeatures = _find_regions(sdata, sfilter, s_interval_limits)
         if nfeatures == 0:  # skip sweep if all gates are masked.
             continue
         bincount = np.bincount(labels.ravel())
