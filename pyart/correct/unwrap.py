@@ -34,8 +34,8 @@ from ._unwrap_3d import unwrap_3d
 
 def dealias_unwrap_phase(
         radar, unwrap_unit='sweep', nyquist_vel=None,
-        check_nyquist_uniform=True, gatefilter=None,
-        rays_wrap_around=None, keep_original=True, vel_field=None,
+        check_nyquist_uniform=True, gatefilter=False,
+        rays_wrap_around=None, keep_original=False, vel_field=None,
         corr_vel_field=None, skip_checks=False, **kwargs):
     """
     Dealias Doppler velocities using multi-dimensional phase unwrapping.
@@ -64,10 +64,10 @@ def dealias_unwrap_phase(
         when the nyquist_velocity parameter is not None.
     gatefilter : GateFilter, None or False, optional.
         A GateFilter instance which specified which gates should be
-        ignored when performing de-aliasing.  A value of None, the default,
-        created this filter from the radar moments using any additional
-        arguments by passing them to :py:func:`moment_based_gate_filter`.
-        False disables filtering including all gates in the dealiasing.
+        ignored when performing de-aliasing.  A value of None created this
+        filter from the radar moments using any additional arguments by
+        passing them to :py:func:`moment_based_gate_filter`.  False, the
+        default, disables filtering including all gates in the dealiasing.
     rays_wrap_around : bool or None, optional
         True when the rays at the beginning of the sweep and end of the sweep
         should be interpreted as connected when de-aliasing (PPI scans).
