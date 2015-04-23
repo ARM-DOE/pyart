@@ -369,6 +369,39 @@ class Radar(object):
         else:
             return elevation
 
+    def get_nyquist_vel(self, sweep, check_uniform=True):
+        """
+        Return the Nyquist velocity in meters per second for a given sweep.
+
+        Raises a LookupError if the Nyquist velocity is not available, an
+        Exception is raised if the velocities are not uniform in the sweep
+        unless check_uniform is set to False.
+
+        Parameters
+        ----------
+        sweep : int
+            Sweep number to retrieve data for, 0 based.
+        check_uniform : bool
+            True to check to perform a check on the Nyquist velocities that
+            they are uniform in the sweep, False will skip this check and
+            return the velocity of the first ray in the sweep.
+
+        Returns
+        -------
+        nyquist_velocity : float
+            Array containing the Nyquist velocity in m/s for a given sweep.
+
+        """
+        s = self.get_slice(sweep)
+        try:
+            nyq_vel = self.instrument_parameters['nyquist_velocity']['data'][s]
+        except:
+            raise LookupError('Nyquist velocity unavailable')
+        if check_uniform:
+            if np.any(nyq_vel != nyq_vel[0]):
+                raise Exception('Nyquist velocities are not uniform in sweep')
+        return float(nyq_vel[0])
+
     # Methods
 
     def info(self, level='standard', out=sys.stdout):

@@ -271,6 +271,14 @@ class NEXRADLevel2File():
         t = [self.msg31s[i]['msg31_header'][key] for i in msg_nums]
         return np.array(t)
 
+    def _msg31_rad_array(self, scans, key):
+        """
+        Return an array of msg31 RAD elements for all rays in scans.
+        """
+        msg_nums = self._msg_nums(scans)
+        t = [self.msg31s[i]['RAD'][key] for i in msg_nums]
+        return np.array(t)
+
     def get_times(self, scans=None):
         """
         Retrieve the times at which the rays were collected.
@@ -365,6 +373,48 @@ class NEXRADLevel2File():
         scale = 360. / 65536.
         return np.array([cp[i]['elevation_angle'] * scale for i in scans],
                         dtype='float32')
+
+    def get_nyquist_vel(self, scans=None):
+        """
+        Retrieve the Nyquist velocities of the requested scans.
+
+        Parameters
+        ----------
+        scans : list or None
+            Scans (0 based) for which the Nyquist velocities will be
+            retrieved. None (the default) will return the velocities for all
+            scans in the volume.
+
+        Returns
+        -------
+        velocities : ndarray
+            Nyquist velocities (in m/s) for the requested scans.
+
+        """
+        if scans is None:
+            scans = range(self.nscans)
+        return self._msg31_rad_array(scans, 'nyquist_vel') * 0.01
+
+    def get_unambigous_range(self, scans=None):
+        """
+        Retrieve the unambiguous range of the requested scans.
+
+        Parameters
+        ----------
+        scans : list or None
+            Scans (0 based) for which the unambiguous range will be retrieved.
+            None (the default) will return the range for all scans in the
+            volume.
+
+        Returns
+        -------
+        unambiguous_range : ndarray
+            Unambiguous range (in meters) for the requested scans.
+
+        """
+        if scans is None:
+            scans = range(self.nscans)
+        return self._msg31_rad_array(scans, 'unambig_range') * 0.1
 
     def get_data(self, moment, max_ngates, scans=None, raw_data=False):
         """

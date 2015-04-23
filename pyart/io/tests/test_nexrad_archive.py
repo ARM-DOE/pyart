@@ -158,7 +158,15 @@ def test_antenna_transition():
 
 # instrument_parameters attribute
 def test_instument_parameters():
-    assert radar.instrument_parameters is None
+    assert 'nyquist_velocity' in radar.instrument_parameters
+    nyq = radar.instrument_parameters['nyquist_velocity']['data']
+    assert round(nyq[0], 0) == 9
+    assert round(nyq[800], 0) == 35
+
+    assert 'unambiguous_range' in radar.instrument_parameters
+    unamb = radar.instrument_parameters['unambiguous_range']['data']
+    assert round(unamb[0], 0) == 466
+    assert round(unamb[800], 0) == 117
 
 
 # radar_calibration attribute
