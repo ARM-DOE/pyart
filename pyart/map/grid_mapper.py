@@ -133,10 +133,13 @@ def grid_from_radars(radars, grid_shape, grid_limits, **kwargs):
     if 'grid_origin' in kwargs:
         lat = np.array([kwargs['grid_origin'][0]])
         lon = np.array([kwargs['grid_origin'][1]])
-        alt = first_radar.altitude['data']
     else:
         lat = first_radar.latitude['data']
         lon = first_radar.longitude['data']
+
+    if 'grid_origin_alt' in kwargs:
+        alt = np.array([kwargs['grid_origin_alt']])
+    else:
         alt = first_radar.altitude['data']
 
     altorigin = {'data': alt,
@@ -256,6 +259,7 @@ class NNLocator:
 
 
 def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
+                grid_origin_alt = None,
                 fields=None, refl_filter_flag=True, refl_field=None,
                 max_refl=None, map_roi=True, weighting_function='Barnes',
                 toa=17000.0, copy_field_data=True, algorithm='kd_tree',
@@ -285,6 +289,9 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
         z, y, x coordinates.
     grid_origin : (float, float) or None
         Latitude and longitude of grid origin.  None sets the origin
+        to the location of the first radar.
+    grid_origin_alt: float or None
+        Altitude of grid origin, in meters. None sets the origin
         to the location of the first radar.
     fields : list or None
         List of fields within the radar objects which will be mapped to
@@ -398,6 +405,9 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
         lon = float(radars[0].longitude['data'])
         grid_origin = (lat, lon)
 
+    if grid_origin_alt is None:
+        grid_origin_alt = float(radars[0].altitude['data'])
+
     # fields which should be mapped, None for fields which are in all radars
     if fields is None:
         fields = set(radars[0].fields.keys())
@@ -442,7 +452,8 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
         radar_lat = float(radar.latitude['data'])
         radar_lon = float(radar.longitude['data'])
         x_disp, y_disp = corner_to_point(grid_origin, (radar_lat, radar_lon))
-        offsets.append((0, y_disp, x_disp))  # XXX should include z
+        z_disp = float(radar.altitude['data']) - grid_origin_alt
+        offsets.append((z_disp, y_disp, x_disp))  
 
         # calculate cartesian locations of gates
         rg, azg = np.meshgrid(radar.range['data'], radar.azimuth['data'])
@@ -452,7 +463,7 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
 
         # add gate locations to gate_locations array
         start, end = gate_offset[iradar], gate_offset[iradar + 1]
-        gate_locations[start:end, 0] = zg_loc.flat
+        gate_locations[start:end, 0] = (zg_loc + z_disp).flat
         gate_locations[start:end, 1] = (yg_loc + y_disp).flat
         gate_locations[start:end, 2] = (xg_loc + x_disp).flat
         del xg_loc, yg_loc
