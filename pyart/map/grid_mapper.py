@@ -259,13 +259,11 @@ class NNLocator:
 
 
 def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
-                grid_origin_alt = None,
-                fields=None, refl_filter_flag=True, refl_field=None,
-                max_refl=None, map_roi=True, weighting_function='Barnes',
-                toa=17000.0, copy_field_data=True, algorithm='kd_tree',
-                leafsize=10., roi_func='dist_beam',
-                constant_roi=500.,
-                z_factor=0.05, xy_factor=0.02, min_radius=500.0,
+                grid_origin_alt=None, fields=None, refl_filter_flag=True,
+                refl_field=None, max_refl=None, map_roi=True,
+                weighting_function='Barnes', toa=17000.0, copy_field_data=True,
+                algorithm='kd_tree', leafsize=10., roi_func='dist_beam',
+                constant_roi=500., z_factor=0.05, xy_factor=0.02, min_radius=500.0,
                 h_factor=1.0, nb=1.5, bsp=1.0):
     """
     Map one or more radars to a Cartesian grid.
@@ -453,7 +451,7 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
         radar_lon = float(radar.longitude['data'])
         x_disp, y_disp = corner_to_point(grid_origin, (radar_lat, radar_lon))
         z_disp = float(radar.altitude['data']) - grid_origin_alt
-        offsets.append((z_disp, y_disp, x_disp))  
+        offsets.append((z_disp, y_disp, x_disp))
 
         # calculate cartesian locations of gates
         rg, azg = np.meshgrid(radar.range['data'], radar.azimuth['data'])
@@ -585,7 +583,7 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
         if map_roi:
             roi[iz, iy, ix] = r
 
-        #find neighbors and distances
+        # find neighbors and distances
         ind, dist = nnlocator.find_neighbors_and_dists((z, y, x), r)
 
         if len(ind) == 0:
