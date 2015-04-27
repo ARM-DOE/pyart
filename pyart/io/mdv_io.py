@@ -25,6 +25,7 @@ from ..config import FileMetadata, get_fillvalue
 from ..core.grid import Grid
 from .common import make_time_unit_str
 
+
 def write_grid_mdv(filename, grid, ):
     """
     Write grid object to MDV file
@@ -33,63 +34,67 @@ def write_grid_mdv(filename, grid, ):
     ----------
     filename : str
         Filename of MDV file to write.
-    grid : Grid 
+    grid : Grid
         Grid object to write.
 
     ADD FUNCTION DESCRIPTION HERE
-    
+
     Notes
     -----
-    Doe to limitations of the MDV format, not all allowed grid objects are writible. 
+    Doe to limitations of the MDV format, not all allowed grid
+        objects are writible.
     In especial following condicion must be satisfied:
         XY grid must be regular (equal spacing), Z can be irregular.
         The number of Z levels must not exceed 122.
-        Fields must be pre-encoded as uint8, uint16 or float32, use "scale_factor" and
-            "add_offset" attributs to inform scaling.
+        Fields must be pre-encoded as uint8, uint16 or float32,
+            use "scale_factor" and "add_offset" attributs to inform scaling.
     """
-    #XXX proper encolding (uint8, uint16 or float32) should be done before calling this function
-    #first of all firm field list
-    fields=grid.fields.keys()
-    
-    #mount empty mdv file
+    # first of all firm field list
+    fields = grid.fields.keys()
+
+    # mount empty mdv file
     grid_shape = grid.fields[fields[0]]['data'].shape
     nz, ny, nx = grid_shape
     nfields = len(fields)
     if nz > MDV.MDV_MAX_VLEVELS:
         import warnings
-        warnings.warn('%i vlevels exceed MDV_MAX_VLEVELS = %i. Extra levels will be ignored'%(nz,MDV.MDV_MAX_VLEVELS))
+        warnings.warn('%i vlevels exceed MDV_MAX_VLEVELS = %i. Extra levels will be ignored' %
+            (nz, MDV.MDV_MAX_VLEVELS))
         nz = MDV.MDV_MAX_VLEVELS
-    mdv=MDV.MdvFile(None)
+    mdv = MDV.MdvFile(None)
     mdv.field_headers = mdv._get_field_headers(nfields)
     mdv.vlevel_headers = mdv._get_vlevel_headers(nfields)
-    mdv.fields_data = [None]*nfields
+    mdv.fields_data = [None] * nfields
     mdv.projection = 'flat'
-    
-    #fill headers
+
+    # fill headers
     d = mdv.master_header
     if "time" in grid.axes.keys():
         d["time_centroid"] = time_dict_to_unixtime(grid.axes["time"])
     if "time_start" in grid.axes.keys():
         d["time_begin"] = time_dict_to_unixtime(grid.axes["time_start"])
     else:
-        d["time_begin"] = d["time_centroid"] 
+        d["time_begin"] = d["time_centroid"]
     if "time_end" in grid.axes.keys():
         d["time_end"] = time_dict_to_unixtime(grid.axes["time_end"])
     else:
-        d["time_end"] = d["time_centroid"] 
-    
-    d["data_dimension"] = 3 #XXX are grid's always 3d?
+        d["time_end"] = d["time_centroid"]
+
+    d["data_dimension"] = 3  # XXX are grid's always 3d?
     d["data_collection_type"] = 3  # =DATA_SYNTHESIS, I don't realy know, so miscellaneous!
-    if grid.axes['z_disp']['units']=='m' or grid.axes['z_disp']['units']=='meters':
+    if (grid.axes['z_disp']['units'] == 'm' or
+        grid.axes['z_disp']['units'] == 'meters'):
         d["native_vlevel_type"] = 4
-    elif grid.axes['z_disp']['units']=='\xc2' or grid.axes['z_disp']['units']=='degree':
+    elif (grid.axes['z_disp']['units'] == '\xc2' or
+          grid.axes['z_disp']['units'] == 'degree'):
         d["native_vlevel_type"] = 9
     d["vlevel_type"] = d["native_vlevel_type"]
     d["nfields"] = nfields
     d["max_nx"] = nx
     d["max_ny"] = ny
     d["max_nz"] = nz
-    d["time_written"] = (datetime.datetime.utcnow()-datetime.datetime(1970, 1, 1, 00, 00)).total_seconds()
+    d["time_written"] = (datetime.datetime.utcnow() -
+                        datetime.datetime(1970, 1, 1, 00, 00)).total_seconds()
     #try metadata, if not use axes
     if "radar_0_lon" in grid.metadata.keys():
         d["sensor_lon"] = grid.metadata["radar_0_lon"]
@@ -100,18 +105,18 @@ def write_grid_mdv(filename, grid, ):
     elif 'lon' in grid.axes.keys:
         d["sensor_lat"] = grid.axes['lat']['data'][0]
     if "radar_0_alt" in grid.metadata.keys():
-        d["sensor_alt"] = grid.metadata["radar_0_alt"]/1000.
+        d["sensor_alt"] = grid.metadata["radar_0_alt"] / 1000.
     elif 'alt' in grid.axes.keys:
-        d["sensor_alt"] = grid.axes['alt']['data'][0]/1000.
-    
+        d["sensor_alt"] = grid.axes['alt']['data'][0] / 1000.
+
     for meta_key, mdv_key in MDV.MDV_METADATA_MAP.iteritems():
         d[mdv_key] = grid.metadata[meta_key]
-    
-    for ifield,field in enumerate(fields):
+
+    for ifield, field in enumerate(fields):
         d = mdv.field_headers[ifield]
         l = mdv.vlevel_headers[ifield]
-        
-        #fill fields_header
+
+        # fill fields_header
         d["nx"] = nx
         d["ny"] = ny
         d["nz"] = nz
@@ -127,24 +132,28 @@ def write_grid_mdv(filename, grid, ):
             d["encoding_type"] = MDV.ENCODING_FLOAT32
             d["data_element_nbytes"] = 4
         else:
-            raise TypeError("Unsuported encoding %s, please encode data as uint8, uint16 or float32 before calling this function"%dtype)
+            raise TypeError("Unsuported encoding %s, please encode data as "
+                            "uint8, uint16 or float32 "
+                            "before calling this function" % dtype)
         d["compression_type"] = 3 #zlib
         
-        d["scaling_type"] = 4 #SCALING_SPECIFIED (by the user)
+        d["scaling_type"] = 4  # SCALING_SPECIFIED (by the user)
         d["native_vlevel_type"] = mdv.master_header["vlevel_type"]
         d["vlevel_type"] = mdv.master_header["vlevel_type"]
-        d["data_dimension"] = 3 #XXX are grid's always 3d?
+        d["data_dimension"] = 3  # XXX are grid's always 3d?
         d["proj_origin_lat"] = grid.axes['lat']['data'][0]
         d["proj_origin_lon"] = grid.axes['lon']['data'][0]
-        d["grid_dx"] = (grid.axes["x_disp"]['data'][1]-grid.axes["x_disp"]['data'][0])/1000.
-        d["grid_dy"] = (grid.axes["y_disp"]['data'][1]-grid.axes["y_disp"]['data'][0])/1000.
-        d["grid_minx"] = (grid.axes["x_disp"]['data'][0])/1000.
-        d["grid_miny"] = (grid.axes["y_disp"]['data'][0])/1000.
+        d["grid_dx"] = (grid.axes["x_disp"]['data'][1] -
+                        grid.axes["x_disp"]['data'][0]) / 1000.
+        d["grid_dy"] = (grid.axes["y_disp"]['data'][1] -
+                        grid.axes["y_disp"]['data'][0]) / 1000.
+        d["grid_minx"] = (grid.axes["x_disp"]['data'][0]) / 1000.
+        d["grid_miny"] = (grid.axes["y_disp"]['data'][0]) / 1000.
         if "scale_factor" in grid.fields[field].keys():
             d["scale"] = grid.fields[field]["scale_factor"]
         if "add_offset" in grid.fields[field].keys():
             d["bias"] = grid.fields[field]["add_offset"]
-        
+
         # bad_data prioritise _FillValue
         if "_FillValue" in grid.fields[field].keys():
             d["bad_data_value"] = grid.fields[field]["_FillValue"]
@@ -155,33 +164,33 @@ def write_grid_mdv(filename, grid, ):
             d["missing_data_value"] = grid.fields[field]["missing_value"]
         elif "_FillValue" in grid.fields[field].keys():
             d["missing_data_value"] = grid.fields[field]["_FillValue"]
-        
+
         d["min_value"] = np.amax(grid.fields[field]['data'])
         d["max_value"] = np.amin(grid.fields[field]['data'])
         if "standard_name" in grid.fields[field].keys():
             d["field_name_long"] = grid.fields[field]["standard_name"].encode("ASCII")
-        elif "long_name" in  grid.fields[field].keys():
+        elif "long_name" in grid.fields[field].keys():
             d["field_name_long"] = grid.fields[field]["long_name"].encode("ASCII")
         d["field_name"] = field.encode("ASCII")
-        if "units" in  grid.fields[field].keys():
+        if "units" in grid.fields[field].keys():
             d["units"] = grid.fields[field]["units"].encode("ASCII")
-        d["transform"] = "none".encode("ASCII") #XXX not implemented
-        
+        d["transform"] = "none".encode("ASCII")  # XXX not implemented
+
         #fill vlevels_header
-        typ=[0]*122
-        level=[0]*122
+        typ = [0] * 122
+        level = [0] * 122
         for iz in range(nz):
             typ[iz] = d["vlevel_type"]
-            level[iz] = grid.axes["z_disp"]["data"][iz]/1000.
+            level[iz] = grid.axes["z_disp"]["data"][iz] / 1000.
         l["type"] = typ
         l["level"] = level
-        
+
         #put data to field
         mdv.fields_data[ifield] = grid.fields[field]["data"]
-    
+
     #write the file
     mdv.write(filename)
-    
+
 
 def read_grid_mdv(filename, field_names=None, additional_metadata=None,
              file_field_names=False, exclude_fields=None):
@@ -222,9 +231,9 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
     Notes
     -----
     This function can only read cartesian MDV files with fields
-    compressed with gzip or zlib. For polar files see 
+    compressed with gzip or zlib. For polar files see
     :py:function:`pyart.io.read_mdv`
-    
+
     MDV files and Grid object are not fully interchangeable, here is a list of
     known limitation:
         1. All fields must have the same shape and axes.
@@ -234,16 +243,15 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
         5. Correct unit in the Z axis are just availible for 'vlevel_type' equal
             VERT_TYPE_Z(4), VERT_TYPE_ELEV(9), VERT_TYPE_AZ(17), VERT_TYPE_PRESSURE(3)
             and VERT_TYPE_THETA(7).
-        6. Unknown behavior in case of 2D data, but it probably won't fail. 
+        6. Unknown behavior in case of 2D data, but it probably won't fail.
     """
     #XXX add test for conversion limitations
     # create metadata retrieval object
     filemetadata = FileMetadata('mdv', field_names, additional_metadata,
                                 file_field_names, exclude_fields)
 
-    
-    mdv=MDV.MdvFile(filename)
-    
+    mdv = MDV.MdvFile(filename)
+
     # time dictionaries
     units = make_time_unit_str(mdv.times['time_begin'])
     time = {
@@ -264,16 +272,18 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
         'data': np.array(date2num(mdv.times['time_end'], units)),
         'units': units,
         'calendar': 'gregorian',
-        'standard_name':'time',
+        'standard_name': 'time',
         'long_name': 'Time in seconds of volume end'}
-    
-    altorigin = {'data': np.array(mdv.master_header["sensor_alt"]*1000., dtype='float64'),
+
+    altorigin = {'data': np.array(mdv.master_header["sensor_alt"] * 1000.,
+                                  dtype='float64'),
                  'long_name': 'Altitude at grid origin',
                  'units': 'm',
                  'standard_name': 'altitude',
                  }
 
-    latorigin = {'data':  np.array(mdv.master_header["sensor_lat"], dtype='float64'),
+    latorigin = {'data':  np.array(mdv.master_header["sensor_lat"],
+                                   dtype='float64'),
                  'long_name': 'Latitude at grid origin',
                  'units': 'degree_N',
                  'standard_name': 'latitude',
@@ -281,7 +291,8 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
                  'valid_max': 90.
                  }
 
-    lonorigin = {'data': np.array(mdv.master_header["sensor_lon"], dtype='float64'),
+    lonorigin = {'data': np.array(mdv.master_header["sensor_lon"],
+                                  dtype='float64'),
                  'long_name': 'Longitude at grid origin',
                  'units': 'degree_E',
                  'standard_name': 'longitude',
@@ -294,36 +305,37 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
     ny = mdv.master_header["max_ny"]
     nx = mdv.master_header["max_nx"]
     z_line = mdv.vlevel_headers[0]["level"][0:nz]
-    y_start = mdv.field_headers[0]["grid_miny"]*1000.
-    x_start = mdv.field_headers[0]["grid_minx"]*1000.
-    y_step = mdv.field_headers[0]["grid_dy"]*1000.
-    x_step = mdv.field_headers[0]["grid_dx"]*1000.
-    
+    y_start = mdv.field_headers[0]["grid_miny"] * 1000.
+    x_start = mdv.field_headers[0]["grid_minx"] * 1000.
+    y_step = mdv.field_headers[0]["grid_dy"] * 1000.
+    x_step = mdv.field_headers[0]["grid_dx"] * 1000.
+
     if mdv.field_headers[0]["proj_type"] == MDV.PROJ_LATLON:
         xunits = 'degree_E'
         yunits = 'degree_N'
-    elif mdv.field_headers[0]["proj_type"] != MDV.PROJ_POLAR_RADAR and mdv.field_headers[0]["proj_type"] != MDV.PROJ_RHI_RADAR:
+    elif (mdv.field_headers[0]["proj_type"] != MDV.PROJ_POLAR_RADAR and
+          mdv.field_headers[0]["proj_type"] != MDV.PROJ_RHI_RADAR):
         xunits = 'm'
         yunits = 'm'
-    
-    if mdv.field_headers[0]["vlevel_type"] == 4: #VERT_TYPE_Z
-        zunits = 'm'
-        z_line = [e*1000. for e in z_line]
-    elif mdv.field_headers[0]["vlevel_type"] == 9: #VERT_TYPE_ELEV
-        zunits = 'degree' #elevation
-    elif mdv.field_headers[0]["vlevel_type"] == 17: #VERT_TYPE_AZ
-        zunits = 'degree' #azimuth
-    elif mdv.field_headers[0]["vlevel_type"] == 3: #VERT_TYPE_PRESSURE
-        zunits = 'mb' 
-    elif mdv.field_headers[0]["vlevel_type"] == 7: #VERT_TYPE_THETA
-        zunits = 'kelvin' 
 
-    xaxis = {'data':  np.linspace(x_start, x_start+x_step*(nx-1), nx),
+    if mdv.field_headers[0]["vlevel_type"] == 4:  # VERT_TYPE_Z
+        zunits = 'm'
+        z_line = [e * 1000. for e in z_line]
+    elif mdv.field_headers[0]["vlevel_type"] == 9:  # VERT_TYPE_ELEV
+        zunits = 'degree'  # elevation
+    elif mdv.field_headers[0]["vlevel_type"] == 17:  # VERT_TYPE_AZ
+        zunits = 'degree'  # azimuth
+    elif mdv.field_headers[0]["vlevel_type"] == 3:  # VERT_TYPE_PRESSURE
+        zunits = 'mb'
+    elif mdv.field_headers[0]["vlevel_type"] == 7:  # VERT_TYPE_THETA
+        zunits = 'kelvin'
+
+    xaxis = {'data':  np.linspace(x_start, x_start + x_step * (nx-1), nx),
              'long_name': 'X-coordinate in Cartesian system',
              'axis': 'X',
              'units': xunits}
 
-    yaxis = {'data': np.linspace(y_start, y_start+y_step*(ny-1), ny),
+    yaxis = {'data': np.linspace(y_start, y_start + y_step * (ny-1), ny),
              'long_name': 'Y-coordinate in Cartesian system',
              'axis': 'Y',
              'units': yunits}
@@ -333,7 +345,7 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
              'axis': 'Z',
              'units': zunits,
              'positive': 'up'}
-    
+
     # axes dictionary
     axes = {'time': time,
             'time_start': time_start,
@@ -344,15 +356,14 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
             'alt': altorigin,
             'lat': latorigin,
             'lon': lonorigin}
-    
+
     # metadata
     metadata = filemetadata('metadata')
-    metadata["Conventions"] = '' # the default is CF/Radial, but this is not right
+    metadata["Conventions"] = ''  # the default is CF/Radial, but this is not right
     metadata["version"] = ''
     for meta_key, mdv_key in MDV.MDV_METADATA_MAP.iteritems():
         metadata[meta_key] = mdv.master_header[mdv_key]
-    
-    
+
     nfields = mdv.master_header["nfields"]
     fields = {}
     mdv_fields = mdv._make_fields_list()
@@ -360,31 +371,32 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
         field_name = filemetadata.get_field_name(mdv_field)
         if field_name is None:
             continue
-        
+
         # grab data from MDV object, mask and reshape
         data = mdv.read_a_field(mdv_fields.index(mdv_field))
         data[np.where(np.isnan(data))] = get_fillvalue()
         data = np.ma.masked_equal(data, get_fillvalue())
-        
+
         # create and store the field dictionary
         field_dic = filemetadata(field_name)
         field_dic['data'] = data
         field_dic['_FillValue'] = get_fillvalue()
         fields[field_name] = field_dic
-    
+
     return Grid(fields, axes, metadata)
 
 
 #XXX move to some where alse, may be common
 def time_dict_to_unixtime(d):
-    """ convert a dict containing NetCDF style time information to unixtime, i.e second since 1st Jan 1970 00:00 """
+    """
+    convert a dict containing NetCDF style time information to unixtime,
+    i.e second since 1st Jan 1970 00:00
+    """
     if 'calendar' in d:
         calendar = d['calendar']
     else:
         calendar = 'standard'
-    
-    date = num2date(d['data'][0],d['units'],calendar)
-    epoch= datetime.datetime(1970, 1, 1, 00, 00)
-    return (date-epoch).total_seconds()
-    
- 
+
+    date = num2date(d['data'][0], d['units'], calendar)
+    epoch = datetime.datetime(1970, 1, 1, 00, 00)
+    return (date - epoch).total_seconds()
