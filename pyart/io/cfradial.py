@@ -6,6 +6,12 @@ Utilities for reading CF/Radial files.
 
 .. autosummary::
     :toctree: generated/
+    :template: dev_template.rst
+
+    _NetCDFVariableDataExtractor
+
+.. autosummary::
+    :toctree: generated/
 
     read_cfradial
     write_cfradial
@@ -26,6 +32,7 @@ import netCDF4
 from ..config import FileMetadata
 from .common import stringarray_to_chararray
 from ..core.radar import Radar
+from .lazydict import LazyLoadDict
 
 
 # Variables and dimensions in the instrument_parameter convention and
@@ -61,7 +68,8 @@ _INSTRUMENT_PARAMS_DIMS = {
 
 
 def read_cfradial(filename, field_names=None, additional_metadata=None,
-                  file_field_names=False, exclude_fields=None):
+                  file_field_names=False, exclude_fields=None,
+                  delay_field_loading=False):
     """
     Read a Cfradial netCDF file.
 
@@ -84,6 +92,11 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
     exclude_fields : list or None, optional
         List of fields to exclude from the radar object. This is applied
         after the `file_field_names` and `field_names` parameters.
+    delay_field_loading : bool
+        True to delay loading of field data from the file until the 'data'
+        key in a particular field dictionary is accessed.  In this case
+        the field attribute of the returned Radar object will contain
+        LazyLoadDict objects not dict objects.
 
     Returns
     -------
@@ -256,7 +269,7 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
             if exclude_fields is not None and key in exclude_fields:
                 continue
             field_name = key
-        fields[field_name] = _ncvar_to_dict(ncvars[key])
+        fields[field_name] = _ncvar_to_dict(ncvars[key], delay_field_loading)
 
     if 'ray_n_gates' in ncvars:
         shape = (len(ncvars['time']), len(ncvars['range']))
@@ -281,7 +294,9 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
     if radar_calibration == {}:
         radar_calibration = None
 
-    ncobj.close()
+    # do not close file is field loading is delayed
+    if not delay_field_loading:
+        ncobj.close()
     return Radar(
         time, _range, fields, metadata, scan_type,
         latitude, longitude, altitude,
@@ -307,18 +322,44 @@ def _find_all_meta_group_vars(ncvars, meta_group_name):
             and v.meta_group == meta_group_name]
 
 
-def _ncvar_to_dict(ncvar):
+def _ncvar_to_dict(ncvar, lazydict=False):
     """ Convert a NetCDF Dataset variable to a dictionary. """
     # copy all attribute except for scaling parameters
     d = dict((k, getattr(ncvar, k)) for k in ncvar.ncattrs()
              if k not in ['scale_factor', 'add_offset'])
-    d['data'] = ncvar[:]
-    if np.isscalar(d['data']):
-        # netCDF4 1.1.0+ returns a scalar for 0-dim array, we always want
-        # 1-dim+ arrays with a valid shape.
-        d['data'] = np.array(d['data'])
-        d['data'].shape = (1, )
+    data_extractor = _NetCDFVariableDataExtractor(ncvar)
+    if lazydict:
+        d = LazyLoadDict(d)
+        d.set_lazy('data', data_extractor)
+    else:
+        d['data'] = data_extractor()
     return d
+
+
+class _NetCDFVariableDataExtractor(object):
+    """
+    Class facilitating on demand extraction of data from a NetCDF variable.
+
+    Parameters
+    ----------
+    ncvar : netCDF4.Variable
+        NetCDF Variable from which data will be extracted.
+
+    """
+
+    def __init__(self, ncvar):
+        """ initialize the object. """
+        self.ncvar = ncvar
+
+    def __call__(self):
+        """ Return an array containing data from the stored variable. """
+        d = self.ncvar[:]
+        if np.isscalar(d):
+            # netCDF4 1.1.0+ returns a scalar for 0-dim array, we always want
+            # 1-dim+ arrays with a valid shape.
+            d = np.array(d)
+            d.shape = (1, )
+        return d
 
 
 def _unpack_variable_gate_field_dic(
