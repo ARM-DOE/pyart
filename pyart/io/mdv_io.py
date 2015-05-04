@@ -218,13 +218,13 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
         likely only have a 'data' key, unless the fields are defined in
         `additional_metadata`.
     exclude_fields : list or None, optional
-        List of fields to exclude from the radar object. This is applied
+        List of fields to exclude from the grid object. This is applied
         after the `file_field_names` and `field_names` parameters.
 
     Returns
     -------
-    radar : Radar
-        Radar object containing data from MDV file.
+    grid : Grid
+        Grid object containing data from MDV file.
 
     Notes
     -----
