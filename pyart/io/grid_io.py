@@ -53,8 +53,9 @@ def read_grid(filename, exclude_fields=None):
 
     # metadata
     metadata = dict([(k, getattr(ncobj, k)) for k in ncobj.ncattrs()])
-    
-    # fields are any thing with full shape, axes are anything with parcial shape
+
+    # fields are any thing with full shape
+    # axes are anything with parcial shape
     # first search for fields
     # determine the correct shape of the fields
     # ARM standard requires the left-most dimension to be time, so the shape
@@ -64,10 +65,10 @@ def read_grid(filename, exclude_fields=None):
     field_shape = tuple([len(ncobj.dimensions[k]) for k in dim_keys
                          if k in ncobj.dimensions])
     field_shape_with_time = (1, ) + field_shape
-    dimensions_allowed = set(dim_keys+['time']) #dimensions allowed for axes
-    dimension_to_axis = {'nz':'Z', 'ny':'Y', 'nx':'X', 'z':'Z', 'y':'Z', 'x':'X','time':'T'}
-                         
-                             
+    dimensions_allowed = set(dim_keys + ['time'])  # dimensions allowed
+    dimension_to_axis = {'nz': 'Z', 'ny': 'Y', 'nx': 'X',
+                         'z': 'Z', 'y': 'Z', 'x': 'X','time': 'T'}
+
     # check all variables, those with the correct shape
     # are added to the field dictionary, if a wrong sized add to axes
     var_keys = [k for k in ncobj.variables if k not in exclude_fields]
@@ -80,11 +81,11 @@ def read_grid(filename, exclude_fields=None):
             fields[field] = field_dic
         else:
             axes_key.append(field)
-    
+
     #search for axes with correct dimensions, if wrong warning is raised
     axes = {}
     for axis in axes_key:
-        dimensions = ncobj.variables[axis].dimensions 
+        dimensions = ncobj.variables[axis].dimensions
         if dimensions_allowed.issuperset(dimensions):
             axis_dic = _ncvar_to_dict(ncobj.variables[axis])
             if 'axis' not in axis_dic:
@@ -93,7 +94,7 @@ def read_grid(filename, exclude_fields=None):
             axes[axis] = axis_dic
         else:
             warn('Field %s skipped due to incorrect shape' % (axis))
-    
+
     return Grid(fields, axes, metadata)
 
 
@@ -129,23 +130,27 @@ def write_grid(filename, grid, format='NETCDF4', arm_time_variables=False):
     ncobj.createDimension('nx', nx)
 
     # axes variables
-    # allow writing all elements of axes to variables, so that the user may change the output netcdf by changing direct the grid object at the same time as Grid created by Pyart are still written in ARM format. We uses the 'axis' attribute to determine the dimension, one however should discuss adding this information direct in the grid object
+    # allow writing all elements of axes to variables
+    # so that the user may change the output netcdf by changing direct
+    # the grid object at the same time as Grid created by Pyart are still
+    # written in ARM format.
+    # We uses the 'axis' attribute to determine the dimension, one however
+    # should discuss adding this information direct in the grid object
     for key in grid.axes.keys():
         if "axis" in grid.axes[key].keys():
-            if 'X'==grid.axes[key]["axis"]:
-                dimension=('nx',)
-            elif 'Y'==grid.axes[key]["axis"]:
-                dimension=('ny',)
-            elif 'Z'==grid.axes[key]["axis"]:
-                dimension=('nz',)
-            elif 'YX'==grid.axes[key]["axis"]:
-                dimension=('ny','nx')
+            if 'X' == grid.axes[key]["axis"]:
+                dimension = ('nx',)
+            elif 'Y' == grid.axes[key]["axis"]:
+                dimension = ('ny',)
+            elif 'Z' == grid.axes[key]["axis"]:
+                dimension = ('nz',)
+            elif 'YX' == grid.axes[key]["axis"]:
+                dimension = ('ny', 'nx')
             else:
-                dimension=()
+                dimension = ()
         else:
-            dimension=('time',)
+            dimension = ('time',)
         _create_ncvar(grid.axes[key], ncobj, key, dimension)
-
 
     # create ARM time variables base_time and time_offset, if requested
     if arm_time_variables:
