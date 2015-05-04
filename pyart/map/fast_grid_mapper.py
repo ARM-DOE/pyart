@@ -1,6 +1,6 @@
 """
-pyart.io.fast_grid_mapper
-===============
+pyart.map.fast_grid_mapper
+==========================
 
 Highly optimized map_to_grid
 
@@ -29,7 +29,7 @@ def fast_map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
 
     Generate a Cartesian grid of points for the requested fields from the
     collected points from one or more radars. The field value for a grid
-    point is found calculating its corresponding elevation,azimuth and range,
+    point is found calculating its corresponding elevation, azimuth and range,
     and then rounded to a regular grid that indicates the coresponding bin.
     Collected points are filtered according to a number of criteria so that
     undesired points are not included in the interpolation.
@@ -44,9 +44,9 @@ def fast_map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
     grid_shape : 3-tuple of floats
         Number of points in the grid (z, y, x).
     grid_limits : 3-tuple of 2-tuples or numpy 1d-array
-        if 2-tuples: Minimum and maximum grid location (inclusive) in meters
+        If 2-tuples: Minimum and maximum grid location (inclusive) in meters
         for the z, y, x coordinates.
-        if numpy 1d-array: grid locations in meters for the z, y, x
+        If numpy 1d-array: grid locations in meters for the z, y, x
         coordinates, must agree in size with grid_shape
     grid_origin : (float, float) or None
         Latitude and longitude of grid origin.  None sets the origin
@@ -80,8 +80,8 @@ def fast_map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
     Other Parameters
     ----------------
     round_resolution: 3-tuple of float
-        Resolution for which data will be rounded in (elev,azi,range) grid,
-        values given in (angles,angles,meters).
+        Resolution for which data will be rounded in (elev, azi, range) grid,
+        values given in (angles, angles, meters).
 
     Returns
     -------
@@ -92,9 +92,8 @@ def fast_map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
 
     See Also
     --------
-    map_to_grid : Similar function with more complet interpolation options and
-    support to multiple radars
-
+    pyart.map.map_to_grid: Similar function with more complet interpolation
+                           options and support to multiple radars.
     """
     # unpack the grid parameters
     nz, ny, nx = grid_shape
@@ -133,7 +132,7 @@ def fast_map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
         raise ValueError("Known interpolation option: %s" % interpolation)
 
     badval = get_fillvalue()
-# find the grid origin if not given
+    # find the grid origin if not given
     if grid_origin is None:
         lat = float(radars[0].latitude['data'])
         lon = float(radars[0].longitude['data'])
@@ -146,7 +145,7 @@ def fast_map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
         x_disp, y_disp = corner_to_point(grid_origin, (radar_lat, radar_lon))
         offset = (radars[0].altitude['data'], y_disp, x_disp)
 
-# find max range if not given
+    # find max range if not given
     if max_range is None:
         max_range = np.sqrt(
             (grid_limits[0][1] - grid_limits[0][0]) ** 2
@@ -154,7 +153,7 @@ def fast_map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
             + (grid_limits[2][1] - grid_limits[2][0]) ** 2
             ) + 1
 
-# fields which should be mapped, None for fields which are in all radars
+    # fields which should be mapped, None for fields which are in all radars
     if fields is None:
         fields = set(radars[0].fields.keys())
         for radar in radars[1:]:
@@ -318,14 +317,6 @@ def thread_loop(thread, threads, array_indexes, grid_data_shared ,x,y,z,offset,m
 # XXX move this to another module
 # XXX not being used, cython version used instead
 def cart_to_radar_coords(z,y,x,z_offset,y_offset,x_offset):
-    """
-    
-    ADD FUNCTION DESCRIPTION HERE
-    copy radar_coords_to_cart
-    
-    verify math
-    
-    """
     R = 6371.0 * 1000.0 * 4.0 / 3.0     # effective radius of earth in meters.
     
     h = z-z_offset
