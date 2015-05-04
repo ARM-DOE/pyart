@@ -125,13 +125,13 @@ def add_2d_latlon_axis(grid, **kwargs):
     Add to Grid (in place) a 2-dimensional axes for latitude and longitude
     of every point in the y,x plane. If available conversion is done using
     basemap.pyproj, extra arguments in **kwargs are passed to pyproj.Proj
-    function. If not available internal implementation is used
+    function. If not available internal implementation is used.
 
     Parameters
     ----------
     grid: grid object
-        Cartesian grid object containing the 1d axes "x_disp","y_disp" and
-        scalar axes 'lat','lon'.
+        Cartesian grid object containing the 1d axes "x_disp", "y_disp" and
+        scalar axes 'lat', 'lon'.
     **kwargs: Pyproj options
         Options to be passed to Proj. If projection is not specified here it
         uses proj='aeqd' (azimuthal equidistant)
@@ -139,7 +139,7 @@ def add_2d_latlon_axis(grid, **kwargs):
     Returns
     -------
     grid: grid object
-        Cartesian grid with new axes "longitude","latitude"
+        Cartesian grid with new axes "longitude", "latitude"
 
     Notes
     -----
@@ -152,14 +152,14 @@ def add_2d_latlon_axis(grid, **kwargs):
 
         c = \\sqrt(x^2 + y^2)/R
 
-        azi = \\atan2(y,x) #from east to north
+        azi = \\arctan2(y,x) \\text{  # from east to north}
 
-        lat = \\asin(\\cos(c)*\\sin(lat0)+\\sin(azi)*\\sin(c)*\\cos(lat0))
+        lat = \\arcsin(\\cos(c)*\\sin(lat0)+\\sin(azi)*\\sin(c)*\\cos(lat0))
 
-        lon = \\atan2(\\cos(azi)*\\sin(c),\\cos(c)*\\cos(lat0)-\\sin(azi)*\\sin(c)*\\sin(lat0)) + lon0
+        lon = \\arctan2(\\cos(azi)*\\sin(c),\\cos(c)*\\cos(lat0)-\\sin(azi)*\\sin(c)*\\sin(lat0)) + lon0
 
-    Where x,y are the cartesian position from the center of projection;
-    lat,lon the corresponding latitude and longitude; lat0,lon0 the latitude
+    Where x, y are the cartesian position from the center of projection;
+    lat, lon the corresponding latitude and longitude; lat0, lon0 the latitude
     and longitude of the center of the projection; R the mean radius of the
     earth (6371 km)
 
