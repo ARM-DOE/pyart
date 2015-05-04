@@ -1,6 +1,6 @@
 """
 pyart.io.mdv_io
-============
+===============
 
 Utilities for reading and writing of MDV files.
 
@@ -9,7 +9,6 @@ Utilities for reading and writing of MDV files.
 
     write_grid_mdv
     read_grid_mdv
-
     time_dict_to_unixtime
 
 """
@@ -37,17 +36,16 @@ def write_grid_mdv(filename, grid, ):
     grid : Grid
         Grid object to write.
 
-    ADD FUNCTION DESCRIPTION HERE
-
     Notes
     -----
     Doe to limitations of the MDV format, not all allowed grid
-        objects are writible.
+    objects are writible.
     In especial following condicion must be satisfied:
-        XY grid must be regular (equal spacing), Z can be irregular.
-        The number of Z levels must not exceed 122.
-        Fields must be pre-encoded as uint8, uint16 or float32,
-            use "scale_factor" and "add_offset" attributs to inform scaling.
+
+    - XY grid must be regular (equal spacing), Z can be irregular.
+    - The number of Z levels must not exceed 122.
+    - Fields must be pre-encoded as uint8, uint16 or float32,
+      use "scale_factor" and "add_offset" attributs to inform scaling.
     """
     # first of all firm field list
     fields = grid.fields.keys()
@@ -232,18 +230,19 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
     -----
     This function can only read cartesian MDV files with fields
     compressed with gzip or zlib. For polar files see
-    :py:function:`pyart.io.read_mdv`
+    :py:func:`pyart.io.read_mdv`
 
     MDV files and Grid object are not fully interchangeable, here is a list of
     known limitation:
-        1. All fields must have the same shape and axes.
-        2. All fields must have the same projection.
-        3. Vlevels types must not vary.
-        4. Projection must be different than PROJ_POLAR_RADAR(9) and PROJ_RHI_RADAR(13).
-        5. Correct unit in the Z axis are just availible for 'vlevel_type' equal
-            VERT_TYPE_Z(4), VERT_TYPE_ELEV(9), VERT_TYPE_AZ(17), VERT_TYPE_PRESSURE(3)
-            and VERT_TYPE_THETA(7).
-        6. Unknown behavior in case of 2D data, but it probably won't fail.
+    
+    - All fields must have the same shape and axes.
+    - All fields must have the same projection.
+    - Vlevels types must not vary.
+    - Projection must be different than PROJ_POLAR_RADAR(9) and PROJ_RHI_RADAR(13).
+    - Correct unit in the Z axis are just availible for 'vlevel_type' equal
+      VERT_TYPE_Z(4), VERT_TYPE_ELEV(9), VERT_TYPE_AZ(17), VERT_TYPE_PRESSURE(3)
+      and VERT_TYPE_THETA(7).
+    - Unknown behavior in case of 2D data, but it probably won't fail.
     """
     #XXX add test for conversion limitations
     # create metadata retrieval object
