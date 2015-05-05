@@ -108,7 +108,7 @@ def write_grid_mdv(filename, grid, ):
         d["sensor_alt"] = grid.axes['alt']['data'][0] / 1000.
 
     for meta_key, mdv_key in MDV.MDV_METADATA_MAP.iteritems():
-        d[mdv_key] = grid.metadata[meta_key]
+        d[mdv_key] = grid.metadata[meta_key].encode("ASCII")
 
     for ifield, field in enumerate(fields):
         d = mdv.field_headers[ifield]
@@ -126,7 +126,7 @@ def write_grid_mdv(filename, grid, ):
         elif dtype == np.uint16:
             d["encoding_type"] = MDV.ENCODING_INT16
             d["data_element_nbytes"] = 2
-        elif dtype == np.float32:
+        elif dtype == np.float32 or dtype == np.float64:
             d["encoding_type"] = MDV.ENCODING_FLOAT32
             d["data_element_nbytes"] = 4
         else:
