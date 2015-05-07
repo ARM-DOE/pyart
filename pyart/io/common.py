@@ -173,44 +173,47 @@ def add_2d_latlon_axis(grid, **kwargs):
         from mpl_toolkits.basemap import pyproj
         if 'proj' not in kwargs:
             kwargs['proj'] = 'aeqd'
-        x,y=np.meshgrid(grid.axes["x_disp"]['data'],grid.axes["y_disp"]['data'])
-        b = pyproj.Proj(lat_0=grid.axes["lat"]['data'][0], 
+        x, y = np.meshgrid(
+            grid.axes["x_disp"]['data'], grid.axes["y_disp"]['data'])
+        b = pyproj.Proj(lat_0=grid.axes["lat"]['data'][0],
                         lon_0=grid.axes["lon"]['data'][0], **kwargs)
         lon, lat = b(x, y, inverse=True)
     except ImportError:
         import warnings
         warnings.warn('No basemap found, using internal implementation '
                       'for converting azimuthal equidistant to latlon')
-        #azimutal equidistant projetion to latlon
+        # azimutal equidistant projetion to latlon
         R = 6371.0 * 1000.0     # radius of earth in meters.
 
-        x,y = np.meshgrid(grid.axes["x_disp"]['data'],
-                          grid.axes["y_disp"]['data'])
+        x, y = np.meshgrid(grid.axes["x_disp"]['data'],
+                           grid.axes["y_disp"]['data'])
 
         c = np.sqrt(x*x + y*y) / R
         phi_0 = grid.axes["lat"]['data'] * np.pi / 180
-        azi = np.arctan2(y,x)  # from east to north
+        azi = np.arctan2(y, x)  # from east to north
 
-        lat = np.arcsin(np.cos(c) * np.sin(phi_0) + 
+        lat = np.arcsin(np.cos(c) * np.sin(phi_0) +
                         np.sin(azi) * np.sin(c) * np.cos(phi_0)) * 180 / np.pi
-        lon = (np.arctan2(np.cos(azi) * np.sin(c), np.cos(c) * np.cos(phi_0)
-                         - np.sin(azi) * np.sin(c) * np.sin(phi_0))
-               * 180 / np.pi+grid.axes["lon"]['data'])
+        lon = (np.arctan2(np.cos(azi) * np.sin(c), np.cos(c) * np.cos(phi_0) -
+               np.sin(azi) * np.sin(c) * np.sin(phi_0)) * 180 /
+               np.pi + grid.axes["lon"]['data'])
         lon = np.fmod(lon + 180, 360) - 180
 
-    lat_axis = {'data':  lat,
-             'long_name': 'Latitude for points in Cartesian system',
-             'axis': 'YX',
-             'units': 'degree_N',
-             'standard_name': 'latitude',
-             }
+    lat_axis = {
+        'data':  lat,
+        'long_name': 'Latitude for points in Cartesian system',
+        'axis': 'YX',
+        'units': 'degree_N',
+        'standard_name': 'latitude',
+    }
 
-    lon_axis = {'data': lon,
-             'long_name': 'Longitude for points in Cartesian system',
-             'axis': 'YX',
-             'units': 'degree_E',
-             'standard_name': 'longitude',
-             }
+    lon_axis = {
+        'data': lon,
+        'long_name': 'Longitude for points in Cartesian system',
+        'axis': 'YX',
+        'units': 'degree_E',
+        'standard_name': 'longitude',
+    }
 
     grid.axes["latitude"] = lat_axis
     grid.axes["longitude"] = lon_axis
