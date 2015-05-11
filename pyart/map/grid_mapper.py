@@ -34,13 +34,13 @@ from ..core.grid import Grid
 from ._load_nn_field_data import _load_nn_field_data
 from .ckdtree import cKDTree
 from .ball_tree import BallTree
+from .fast_grid_mapper import fast_map_to_grid
 
-
-def grid_from_radars(radars, grid_shape, grid_limits, **kwargs):
+def grid_from_radars(radars, grid_shape, grid_limits, grid_mapping_func='map_to_grid', **kwargs):
     """
     Map one or more radars to a Cartesian grid returning a Grid object.
 
-    Additional arguments are passed to :py:func:`map_to_grid`
+    Additional arguments are passed to :py:func: grid_mapping_func
 
     Parameters
     ----------
@@ -51,6 +51,10 @@ def grid_from_radars(radars, grid_shape, grid_limits, **kwargs):
     grid_limits : 3-tuple of 2-tuples
         Minimum and maximum grid location (inclusive) in meters for the
         z, x, y coordinates.
+    grid_mapping_func : 'map_to_grid' or 'fast_map_to_grid'
+        Define what grid mapping method will be used. 'map_to_grid' is the 
+        most versatil, but may be slow in some cases. 'fast_map_to_grid' is
+        faster but it has some limitations.
 
     Returns
     -------
@@ -64,8 +68,11 @@ def grid_from_radars(radars, grid_shape, grid_limits, **kwargs):
 
     """
     # map the radar(s) to a cartesian grid
-    grids = map_to_grid(radars, grid_shape, grid_limits, **kwargs)
-
+    if grid_mapping_func=='fast_map_to_grid':
+        grids = fast_map_to_grid(radars, grid_shape, grid_limits, **kwargs)
+    else:
+        grids = map_to_grid(radars, grid_shape, grid_limits, **kwargs)
+    
     # create and populate the field dictionary
     fields = {}
     first_radar = radars[0]

@@ -27,6 +27,10 @@ def configuration(parent_package='', top_path=None):
                          sources=['_load_nn_field_data.c'],
                          include_dirs=[numpy.get_include()])
 
+    config.add_extension('cython_fast_grid_mapper',
+                         sources=['cython_fast_grid_mapper.c'],
+                         include_dirs=[numpy.get_include()])
+
     return config
 
 if __name__ == '__main__':
