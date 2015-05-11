@@ -6,6 +6,12 @@ Python wrapper around the RSL library.
 
 .. autosummary::
     :toctree: generated/
+    :template: dev_template.rst
+
+    _RslVolumeDataExtractor
+
+.. autosummary::
+    :toctree: generated/
 
     read_rsl
     VOLUMENUM2RSLNAME
@@ -27,6 +33,7 @@ from .common import dms_to_d, make_time_unit_str
 
 def read_rsl(filename, field_names=None, additional_metadata=None,
              file_field_names=False, exclude_fields=None,
+             delay_field_loading=False,
              radar_format=None, callid=None, skip_range_check=False):
     """
     Read a file supported by RSL
@@ -55,6 +62,11 @@ def read_rsl(filename, field_names=None, additional_metadata=None,
     exclude_fields : list or None, optional
         List of fields to exclude from the radar object. This is applied
         after the `file_field_names` and `field_names` parameters.
+    delay_field_loading : bool
+        True to delay loading of field data from the file until the 'data'
+        key in a particular field dictionary is accessed.  In this case
+        the field attribute of the returned Radar object will contain
+        LazyLoadDict objects not dict objects.
     radar_format : str or None
         Format of the radar file.  Must be 'wsr88d' or None.
     callid : str or None
@@ -145,16 +157,16 @@ def read_rsl(filename, field_names=None, additional_metadata=None,
         if field_name is None:
             continue
 
-        # extract the field and mask
-        data = rslfile.get_volume_array(volume_num)
-        data[np.where(np.isnan(data))] = fillvalue
-        data[np.where(data == 131072)] = fillvalue
-        data = np.ma.masked_equal(data, fillvalue)
-
         # create the field dictionary
         field_dic = filemetadata(field_name)
-        field_dic['data'] = data
         field_dic['_FillValue'] = fillvalue
+        data_extractor = _RslVolumeDataExtractor(
+            rslfile, volume_num, fillvalue)
+        if delay_field_loading:
+            field_dic = LazyLoadDict(field_dic)
+            field_dic.set_lazy('data', data_extractor)
+        else:
+            field_dic['data'] = data_extractor()
         fields[field_name] = field_dic
 
     # metadata
@@ -230,6 +242,36 @@ def read_rsl(filename, field_names=None, additional_metadata=None,
         sweep_end_ray_index,
         azimuth, elevation,
         instrument_parameters=instrument_parameters)
+
+
+class _RslVolumeDataExtractor(object):
+    """
+    Class facilitating on demand extraction of data from a RSL file.
+
+    Parameters
+    ----------
+    rslfile : RslFile
+        Open RslFile object to extract data from.
+    volume_num : int
+        Volume number of data to be extracted.
+    fillvalue : int
+        Value used to fill masked values in the returned array.
+
+    """
+
+    def __init__(self, rslfile, volume_num, fillvalue):
+        """ initialize the object. """
+        self.rslfile = rslfile
+        self.volume_num = volume_num
+        self.fillvalue = fillvalue
+
+    def __call__(self):
+        """ Return an array containing data from the referenced volume. """
+        # extract the field and mask
+        data = self.rslfile.get_volume_array(self.volume_num)
+        data[np.where(np.isnan(data))] = self.fillvalue
+        data[np.where(data == 131072)] = self.fillvalue
+        return np.ma.masked_equal(data, self.fillvalue)
 
 
 VOLUMENUM2RSLNAME = {
