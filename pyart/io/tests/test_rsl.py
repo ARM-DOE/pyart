@@ -303,7 +303,8 @@ def check_field_first_point(field, value):
 #############
 
 if pyart.io._RSL_AVAILABLE:
-    RADAR_RHI = pyart.io.read_rsl(pyart.testing.SIGMET_RHI_FILE)
+    RADAR_RHI = pyart.io.read_rsl(pyart.testing.SIGMET_RHI_FILE,
+                                  delay_field_loading=True)
 
 
 # nsweeps attribute

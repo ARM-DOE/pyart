@@ -9,6 +9,7 @@ Input/Output routines.
 .. automodule:: pyart.io.chl
 .. automodule:: pyart.io.common
 .. automodule:: pyart.io.grid_io
+.. automodule:: pyart.io.lazydict
 .. automodule:: pyart.io.mdv
 .. automodule:: pyart.io.nexradl3_read
 .. automodule:: pyart.io.nexrad_archive

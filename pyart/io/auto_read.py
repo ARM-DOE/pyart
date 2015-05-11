@@ -67,6 +67,12 @@ def read(filename, use_rsl=False, **kwargs):
     exclude_fields : list or None, optional
         List of fields to exclude from the radar object. This is applied
         after the `file_field_names` and `field_names` parameters.
+    delay_field_loading : bool
+        True to delay loading of field data from the file until the 'data'
+        key in a particular field dictionary is accessed.  In this case
+        the field attribute of the returned Radar object will contain
+        LazyLoadDict objects not dict objects. Not all file types support this
+        parameter.
 
     Returns
     -------

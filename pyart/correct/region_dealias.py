@@ -16,7 +16,6 @@ Region based dealiasing using a dynamic network reduction for region joining.
     :toctree: generated/
     :template: dev_template.rst
 
-    _EdgeCollector
     _RegionTracker
     _EdgeTracker
 
