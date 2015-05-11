@@ -47,10 +47,12 @@ def test_autoread_cfradial():
 
 
 def test_autoread_nexrad_archive():
-    radar = pyart.io.read(pyart.testing.NEXRAD_ARCHIVE_COMPRESSED_FILE)
+    radar = pyart.io.read(pyart.testing.NEXRAD_ARCHIVE_COMPRESSED_FILE,
+                          delay_field_loading=True)
     assert radar.metadata['original_container'] == 'NEXRAD Level II'
 
-    radar = pyart.io.read(pyart.testing.NEXRAD_ARCHIVE_FILE)
+    radar = pyart.io.read(pyart.testing.NEXRAD_ARCHIVE_FILE,
+                          delay_field_loading=True)
     assert radar.metadata['original_container'] == 'NEXRAD Level II'
 
 
