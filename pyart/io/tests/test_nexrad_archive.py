@@ -268,8 +268,11 @@ def check_field_first_point(field, value):
 def test_compressed_archive():
     # the compressed archive only contains the first 120 radials
     radar = pyart.io.read_nexrad_archive(
-        pyart.testing.NEXRAD_ARCHIVE_COMPRESSED_FILE)
+        pyart.testing.NEXRAD_ARCHIVE_COMPRESSED_FILE,
+        delay_field_loading=True)
     assert 'reflectivity' in radar.fields.keys()
+    assert isinstance(radar.fields['reflectivity'],
+                      pyart.io.lazydict.LazyLoadDict)
     rdata = radar.fields['reflectivity']['data']
     assert rdata.shape == (120, 1832)
     assert round(rdata[0, 0], 1) == 10.5
