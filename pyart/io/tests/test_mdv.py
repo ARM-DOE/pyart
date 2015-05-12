@@ -52,7 +52,7 @@ def test_metadata():
 
 # scan_type attribute
 def test_scan_type():
-    assert radar.scan_type == 'ppi'
+    assert radar.projection == 'ppi'
 
 
 # latitude attribute
@@ -294,9 +294,9 @@ def test_master_header():
         'native_vlevel_type': 9,
         'nchunks': 3,
         'nfields': 1,
-        'ngates': 110,
-        'nrays': 360,
-        'nsweeps': 1,
+        'max_nx': 110,
+        'max_ny': 360,
+        'max_nz': 1,
         'num_data_times': 1,
         'record_len1': 1016,
         'record_len2': 1016,
@@ -334,7 +334,7 @@ def test_field_header():
     assert mdvfile.field_headers[0]['dz_constant'] == 0
     assert mdvfile.field_headers[0]['encoding_type'] == 2
     assert mdvfile.field_headers[0]['field_name'] == "DBZ_F"
-    assert mdvfile.field_headers[0]['nsweeps'] == 1
+    assert mdvfile.field_headers[0]['nz'] == 1
 
 
 def test_vlevel_headers():
@@ -491,11 +491,12 @@ def test_radar_info():
 
 def test_geometry():
     # test geometry attributes
-    assert np.all(mdvfile.az_deg == np.arange(360))
-    assert len(mdvfile.range_km) == 110
-    assert round(mdvfile.range_km[10], 2) == 1.32
-    assert len(mdvfile.el_deg) == 1
-    assert mdvfile.el_deg[0] == 0.75
+    az_deg, range_km, el_deg = mdvfile._calc_geometry()
+    assert np.all(az_deg == np.arange(360))
+    assert len(range_km) == 110
+    assert round(range_km[10], 2) == 1.32
+    assert len(el_deg) == 1
+    assert el_deg[0] == 0.75
 
 
 def test_mdv_time():
@@ -507,13 +508,14 @@ def test_mdv_time():
 
 def test_cart():
     # test cartography information
-    assert mdvfile.scan_type == 'ppi'
-    assert mdvfile.carts['x'].shape == (1, 360, 110)
-    assert mdvfile.carts['y'].shape == (1, 360, 110)
-    assert mdvfile.carts['z'].shape == (1, 360, 110)
-    assert round(mdvfile.carts['x'][0, 1, 2], 2) == 6.24
-    assert round(mdvfile.carts['y'][0, 1, 2], 2) == 357.63
-    assert round(mdvfile.carts['z'][0, 1, 2], 2) == 4.69
+    assert mdvfile.projection == 'ppi'
+    carts = mdvfile._make_carts_dict()
+    assert carts['x'].shape == (1, 360, 110)
+    assert carts['y'].shape == (1, 360, 110)
+    assert carts['z'].shape == (1, 360, 110)
+    assert round(carts['x'][0, 1, 2], 2) == 6.24
+    assert round(carts['y'][0, 1, 2], 2) == 357.63
+    assert round(carts['z'][0, 1, 2], 2) == 4.69
 
 
 def test_fields():

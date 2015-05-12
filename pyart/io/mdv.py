@@ -762,6 +762,8 @@ class MdvFile:
                 d[item[0]] = l[item[1]]
             else:
                 d[item[0]] = l[item[1]:item[2]]
+            if isinstance(d[item[0]], basestring):
+                d[item[0]] = d[item[0]].split('\x00', 1)[0]
         return d
 
     def _write_master_header(self):
@@ -812,6 +814,8 @@ class MdvFile:
                 d[item[0]] = l[item[1]]
             else:
                 d[item[0]] = l[item[1]:item[2]]
+            if isinstance(d[item[0]], basestring):
+                d[item[0]] = d[item[0]].split('\x00', 1)[0]
         return d
 
     def _write_field_header(self, d):
@@ -855,6 +859,8 @@ class MdvFile:
                 d[item[0]] = l[item[1]]
             else:
                 d[item[0]] = l[item[1]:item[2]]
+            if isinstance(d[item[0]], basestring):
+                d[item[0]] = d[item[0]].split('\x00', 1)[0]
         return d
 
     def _write_vlevel_header(self, d):
@@ -899,6 +905,8 @@ class MdvFile:
                 d[item[0]] = l[item[1]]
             else:
                 d[item[0]] = l[item[1]:item[2]]
+            if isinstance(d[item[0]], basestring):
+                d[item[0]] = d[item[0]].split('\x00', 1)[0]
         return d
 
     def _write_chunk_header(self, d):
@@ -987,6 +995,8 @@ class MdvFile:
                 d[item[0]] = l[item[1]]
             else:
                 d[item[0]] = l[item[1]:item[2]]
+            if isinstance(d[item[0]], basestring):
+                d[item[0]] = d[item[0]].split('\x00', 1)[0]
         return d
 
     def _write_radar_info(self, d):
@@ -1033,6 +1043,8 @@ class MdvFile:
                 d[item[0]] = l[item[1]]
             else:
                 d[item[0]] = l[item[1]:item[2]]
+            if isinstance(d[item[0]], basestring):
+                d[item[0]] = d[item[0]].split('\x00', 1)[0]
         return d
 
     def _write_calib(self, d):
@@ -1062,6 +1074,8 @@ class MdvFile:
                 d[item[0]] = l[item[1]]
             else:
                 d[item[0]] = l[item[1]:item[2]]
+            if isinstance(d[item[0]], basestring):
+                d[item[0]] = d[item[0]].split('\x00', 1)[0]
         return d
 
     def _write_compression_info(self, d):
@@ -1178,7 +1192,7 @@ class MdvFile:
         yy = np.empty([nsweeps, nrays, ngates], dtype=np.float32)
         zz = np.empty([nsweeps, nrays, ngates], dtype=np.float32)
 
-        if self.scan_type == 'rhi':
+        if self.projection == 'rhi':
             rg, ele = np.meshgrid(self.range_km, self.el_deg)
             rg = np.array(rg, dtype=np.float64)
             ele = np.array(ele, dtype=np.float64)
@@ -1189,7 +1203,7 @@ class MdvFile:
                 xx[aznum, :, :] = x
                 yy[aznum, :, :] = y
 
-        elif self.scan_type == 'ppi':
+        elif self.projection == 'ppi':
             rg, azg = np.meshgrid(self.range_km, self.az_deg)
             rg = np.array(rg, dtype=np.float64)
             azg = np.array(azg, dtype=np.float64)
