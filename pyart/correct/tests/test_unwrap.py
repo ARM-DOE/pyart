@@ -118,7 +118,7 @@ def test_dealias_unwrap_phase_raises():
     # no explicit nyquist
     radar = pyart.testing.make_velocity_aliased_radar()
     radar.instrument_parameters = None
-    assert_raises(ValueError, pyart.correct.dealias_unwrap_phase, radar)
+    assert_raises(LookupError, pyart.correct.dealias_unwrap_phase, radar)
 
     # non-sequential
     radar = pyart.testing.make_velocity_aliased_radar()

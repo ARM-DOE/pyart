@@ -123,7 +123,11 @@ def read_odim_h5(filename, field_names=None, additional_metadata=None,
     metadata['version'] = h_what['version']
     metadata['source'] = h_what['source']
 
-    ds1_how = hfile[datasets[0]]['how'].attrs
+    try:
+        ds1_how = hfile[datasets[0]]['how'].attrs
+    except KeyError:
+        # if no how group exists mock it with an empty dictionary
+        ds1_how = {}
     if 'system' in ds1_how:
         metadata['system'] = ds1_how['system']
     if 'software' in ds1_how:

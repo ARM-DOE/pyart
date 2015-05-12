@@ -99,6 +99,15 @@ def test_get_methods():
     assert_raises(IndexError, radar.get_elevation, -1)
     assert_raises(IndexError, radar.get_elevation, 20)
 
+    assert_raises(LookupError, radar.get_nyquist_vel, 0)
+    radar.instrument_parameters = {
+        'nyquist_velocity': {'data': np.ones((100,))}
+    }
+    assert round(radar.get_nyquist_vel(0)) == 1
+    assert_raises(IndexError, radar.get_nyquist_vel, -1)
+    radar.instrument_parameters['nyquist_velocity']['data'][0] = 2
+    assert_raises(Exception, radar.get_nyquist_vel, 0)
+
 
 def test_extract_sweeps():
     radar = pyart.testing.make_empty_ppi_radar(100, 360, 3)

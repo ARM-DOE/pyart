@@ -33,8 +33,9 @@ from ._unwrap_3d import unwrap_3d
 
 
 def dealias_unwrap_phase(
-        radar, unwrap_unit='sweep', nyquist_vel=None, gatefilter=None,
-        rays_wrap_around=None, keep_original=True, vel_field=None,
+        radar, unwrap_unit='sweep', nyquist_vel=None,
+        check_nyquist_uniform=True, gatefilter=False,
+        rays_wrap_around=None, keep_original=False, vel_field=None,
         corr_vel_field=None, skip_checks=False, **kwargs):
     """
     Dealias Doppler velocities using multi-dimensional phase unwrapping.
@@ -50,16 +51,23 @@ def dealias_unwrap_phase(
         results when the lower sweeps of the radar volume are contaminated by
         clutter. 'ray' does not use the gatefilter parameter and rays where
         gates ared masked will result in poor dealiasing for that ray.
-    nyquist_velocity : float, optional
+    nyquist_velocity : array like or float, optional
         Nyquist velocity in unit identical to those stored in the radar's
-        velocity field.  None will attempt to determine this value from the
-        instrument_parameters attribute.
+        velocity field, either for each sweep or a single value which will be
+        used for all sweeps.  None will attempt to determine this value from
+        the Radar object.  The Nyquist velocity of the first sweep is used
+        for all dealiasing unless the unwrap_unit is 'sweep' when the
+        velocities of each sweep are used.
+    check_nyquist_uniform : bool, optional
+        True to check if the Nyquist velocities are uniform for all rays
+        within a sweep, False will skip this check.  This parameter is ignored
+        when the nyquist_velocity parameter is not None.
     gatefilter : GateFilter, None or False, optional.
         A GateFilter instance which specified which gates should be
-        ignored when performing de-aliasing.  A value of None, the default,
-        created this filter from the radar moments using any additional
-        arguments by passing them to :py:func:`moment_based_gate_filter`.
-        False disables filtering including all gates in the dealiasing.
+        ignored when performing de-aliasing.  A value of None created this
+        filter from the radar moments using any additional arguments by
+        passing them to :py:func:`moment_based_gate_filter`.  False, the
+        default, disables filtering including all gates in the dealiasing.
     rays_wrap_around : bool or None, optional
         True when the rays at the beginning of the sweep and end of the sweep
         should be interpreted as connected when de-aliasing (PPI scans).
@@ -81,7 +89,7 @@ def dealias_unwrap_phase(
     skip_checks : bool
         True to skip checks verifing that an appropiate unwrap_unit is
         selected, False retains these checked. Setting this parameter to True
-        is not recommended and is only offered as an option for extemem cases.
+        is not recommended and is only offered as an option for extreme cases.
 
     Returns
     -------
@@ -105,7 +113,7 @@ def dealias_unwrap_phase(
     vel_field, corr_vel_field = _parse_fields(vel_field, corr_vel_field)
     gatefilter = _parse_gatefilter(gatefilter, radar, **kwargs)
     rays_wrap_around = _parse_rays_wrap_around(rays_wrap_around, radar)
-    nyquist_vel = _parse_nyquist_vel(nyquist_vel, radar)
+    nyquist_vel = _parse_nyquist_vel(nyquist_vel, radar, check_nyquist_uniform)
     if not skip_checks:
         _verify_unwrap_unit(radar, unwrap_unit)
 
@@ -153,6 +161,7 @@ def _dealias_unwrap_3d(radar, vdata, nyquist_vel, gfilter, rays_wrap_around):
     """ Dealias using 3D phase unwrapping (full volume at once). """
 
     # form cube and scale to phase units
+    nyquist_vel = nyquist_vel[0]   # must be uniform, not checked
     shape = (radar.nsweeps, -1, radar.ngates)
     scaled_cube = (np.pi * vdata / nyquist_vel).reshape(shape)
     filter_cube = gfilter.reshape(shape)
@@ -172,6 +181,9 @@ def _dealias_unwrap_3d(radar, vdata, nyquist_vel, gfilter, rays_wrap_around):
 
 def _dealias_unwrap_1d(vdata, nyquist_vel):
     """ Dealias using 1D phase unwrapping (ray-by-ray) """
+    # nyquist_vel is only available sweep by sweep which has been lost at
+    # this point.  Metioned in the documentation
+    nyquist_vel = nyquist_vel[0]
     data = np.empty_like(vdata)
     for i, ray in enumerate(vdata):
         # extract ray and scale to phase units
@@ -190,9 +202,10 @@ def _dealias_unwrap_1d(vdata, nyquist_vel):
 def _dealias_unwrap_2d(radar, vdata, nyquist_vel, gfilter, rays_wrap_around):
     """ Dealias using 2D phase unwrapping (sweep-by-sweep). """
     data = np.zeros_like(vdata)
-    for sweep_slice in radar.iter_slice():
+    for nsweep, sweep_slice in enumerate(radar.iter_slice()):
         # extract sweep and scale to phase units
-        scaled_sweep = vdata[sweep_slice] * np.pi / nyquist_vel
+        sweep_nyquist_vel = nyquist_vel[nsweep]
+        scaled_sweep = vdata[sweep_slice] * np.pi / sweep_nyquist_vel
         sweep_mask = gfilter[sweep_slice]
 
         # perform unwrapping
@@ -202,7 +215,7 @@ def _dealias_unwrap_2d(radar, vdata, nyquist_vel, gfilter, rays_wrap_around):
         unwrap_2d(wrapped, mask, unwrapped, [rays_wrap_around, False])
 
         # scale back into velocity units and store
-        data[sweep_slice, :] = unwrapped * nyquist_vel / np.pi
+        data[sweep_slice, :] = unwrapped * sweep_nyquist_vel / np.pi
     return data
 
 
@@ -242,10 +255,14 @@ def _is_radar_sweep_aligned(radar, diff=0.1):
     before calling this function using the _is_radar_cubic function.
 
     """
+    if radar.nsweeps == 1:
+        return True     # all single sweep volume are sweep aligned
     if radar.scan_type == 'ppi':
         angles = radar.azimuth['data']
     elif radar.scan_type == 'rhi':
         angles = radar.elevation['data']
+    else:
+        raise ValueError('invalid scan_type: %s' % (radar.scan_type))
     starts = radar.sweep_start_ray_index['data']
     ends = radar.sweep_end_ray_index['data']
     ref_angles = angles[starts[0]:ends[0] + 1]
@@ -272,6 +289,10 @@ def _is_sweep_sequential(radar, sweep_number):
         angles = radar.azimuth['data'][start:end+1]
     elif radar.scan_type == 'rhi':
         angles = radar.elevation['data'][start:end+1]
+    elif radar.scan_type == 'vpt':
+        # for VPT scan time should not run backwards, so time is the
+        # equivalent variable to an angle.
+        angles = radar.time['data']
     else:
         raise ValueError('invalid scan_type: %s' % (radar.scan_type))
     rolled_angles = np.roll(angles, -np.argmin(angles))

@@ -25,6 +25,7 @@ from .cfradial import read_cfradial
 from .sigmet import read_sigmet
 from .nexrad_archive import read_nexrad_archive
 from .nexrad_cdm import read_nexrad_cdm
+from .nexradl3_read import read_nexrad_level3
 from .chl import read_chl
 
 
@@ -66,6 +67,12 @@ def read(filename, use_rsl=False, **kwargs):
     exclude_fields : list or None, optional
         List of fields to exclude from the radar object. This is applied
         after the `file_field_names` and `field_names` parameters.
+    delay_field_loading : bool
+        True to delay loading of field data from the file until the 'data'
+        key in a particular field dictionary is accessed.  In this case
+        the field attribute of the returned Radar object will contain
+        LazyLoadDict objects not dict objects. Not all file types support this
+        parameter.
 
     Returns
     -------
@@ -115,6 +122,8 @@ def read(filename, use_rsl=False, **kwargs):
         return read_nexrad_archive(filename, **kwargs)
     if filetype == 'CHL':
         return read_chl(filename, **kwargs)
+    if filetype == 'NEXRADL3':
+        return read_nexrad_level3(filename, **kwargs)
 
     # RSL supported formats which are also supported natively in Py-ART
     if filetype == "SIGMET":
@@ -141,6 +150,7 @@ def determine_filetype(filename):
     * 'NETCDF3'
     * 'NETCDF4'
     * 'WSR88D'
+    * 'NEXRADL3'
     * 'UF'
     * 'HDF4'
     * 'RSL'
@@ -207,6 +217,11 @@ def determine_filetype(filename):
     hdf5_signature = '\x89\x48\x44\x46\x0d\x0a\x1a\x0a'
     if begin[:8] == hdf5_signature:
         return "NETCDF4"
+
+    # NEXRAD LEVEL 3 begin with SDUSXX KXXX
+    nexrad_l3_signature = 'SDUS'
+    if begin[:4] == 'SDUS':
+        return "NEXRADL3"
 
     # Other files should be read with read_rsl
     # WSR-88D begin with ARCHIVE2. or AR2V000
