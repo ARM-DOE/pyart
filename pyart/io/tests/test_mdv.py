@@ -52,7 +52,7 @@ def test_metadata():
 
 # scan_type attribute
 def test_scan_type():
-    assert radar.projection == 'ppi'
+    assert radar.scan_type == 'ppi'
 
 
 # latitude attribute
@@ -534,36 +534,34 @@ def test_read_one_field():
 
     mdvfile = pyart.io.mdv.MdvFile(pyart.testing.MDV_PPI_FILE)
     # extract a field
-    assert hasattr(mdvfile, 'DBZ_F') is False
+    assert len(mdvfile.fields_data) is 0
     sweeps = mdvfile.read_a_field(0)
     assert sweeps.shape == (1, 360, 110)
     assert round(sweeps[0, 1, 2], 2) == 13.19
-    assert hasattr(mdvfile, 'DBZ_F') is True
+    assert len(mdvfile.fields_data) is 1
 
     # reread, should be faster
     sweeps = mdvfile.read_a_field(0)
     assert sweeps.shape == (1, 360, 110)
     assert round(sweeps[0, 1, 2], 2) == 13.19
-    assert hasattr(mdvfile, 'DBZ_F') is True
-
-    delattr(mdvfile, 'DBZ_F')
+    assert len(mdvfile.fields_data) is 1
 
 
 def test_read_all_fields():
 
     mdvfile = pyart.io.mdv.MdvFile(pyart.testing.MDV_PPI_FILE)
     # read all fields
-    assert hasattr(mdvfile, 'DBZ_F') is False
+    assert len(mdvfile.fields_data) is 0
     mdvfile.read_all_fields()
-    assert hasattr(mdvfile, 'DBZ_F') is True
-    assert round(mdvfile.DBZ_F[0, 1, 2], 2) == 13.19
+    assert len(mdvfile.fields_data) is 1
+    assert round(mdvfile.fields_data[0][0, 1, 2], 2) == 13.19
 
 
 def test_read_all_fields_on_creation():
     mdvfile2 = pyart.io.mdv.MdvFile(pyart.testing.MDV_PPI_FILE,
                                     read_fields=True)
-    assert hasattr(mdvfile2, 'DBZ_F') is True
-    assert round(mdvfile2.DBZ_F[0, 1, 2], 2) == 13.19
+    assert len(mdvfile.fields_data) is 1
+    assert round(mdvfile2.fields_data[0][0, 1, 2], 2) == 13.19
     mdvfile2.close()
 
 

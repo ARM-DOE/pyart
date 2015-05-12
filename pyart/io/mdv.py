@@ -1183,7 +1183,7 @@ class MdvFile:
 
     def _make_carts_dict(self):
         """ Return a carts dictionary, distances in meters. """
-
+        az_deg, range_km, el_deg = self._calc_geometry()
         # simple calculation involving 4/3 earth radius
         nsweeps = self.master_header['max_nz']
         nrays = self.master_header['max_ny']
@@ -1193,22 +1193,22 @@ class MdvFile:
         zz = np.empty([nsweeps, nrays, ngates], dtype=np.float32)
 
         if self.projection == 'rhi':
-            rg, ele = np.meshgrid(self.range_km, self.el_deg)
+            rg, ele = np.meshgrid(range_km, el_deg)
             rg = np.array(rg, dtype=np.float64)
             ele = np.array(ele, dtype=np.float64)
             for aznum in xrange(nsweeps):
-                azg = np.ones(rg.shape, dtype=np.float64) * self.az_deg[aznum]
+                azg = np.ones(rg.shape, dtype=np.float64) * az_deg[aznum]
                 x, y, z = radar_coords_to_cart(rg, azg, ele)
                 zz[aznum, :, :] = z
                 xx[aznum, :, :] = x
                 yy[aznum, :, :] = y
 
         elif self.projection == 'ppi':
-            rg, azg = np.meshgrid(self.range_km, self.az_deg)
+            rg, azg = np.meshgrid(range_km, az_deg)
             rg = np.array(rg, dtype=np.float64)
             azg = np.array(azg, dtype=np.float64)
             for elnum in xrange(nsweeps):
-                ele = np.ones(rg.shape, dtype=np.float64) * self.el_deg[elnum]
+                ele = np.ones(rg.shape, dtype=np.float64) * el_deg[elnum]
                 x, y, z = radar_coords_to_cart(rg, azg, ele)
                 zz[elnum, :, :] = z
                 xx[elnum, :, :] = x
