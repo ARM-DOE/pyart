@@ -34,13 +34,16 @@ from ..core.grid import Grid
 from ._load_nn_field_data import _load_nn_field_data
 from .ckdtree import cKDTree
 from .ball_tree import BallTree
+from .gates_to_grid import map_gates_to_grid
 
 
-def grid_from_radars(radars, grid_shape, grid_limits, **kwargs):
+def grid_from_radars(radars, grid_shape, grid_limits,
+                     gridding_algo='map_to_grid', **kwargs):
     """
     Map one or more radars to a Cartesian grid returning a Grid object.
 
-    Additional arguments are passed to :py:func:`map_to_grid`
+    Additional arguments are passed to :py:func:`map_to_grid` or
+    :py:func:`map_gates_to_grid`.
 
     Parameters
     ----------
@@ -51,7 +54,10 @@ def grid_from_radars(radars, grid_shape, grid_limits, **kwargs):
     grid_limits : 3-tuple of 2-tuples
         Minimum and maximum grid location (inclusive) in meters for the
         z, x, y coordinates.
-
+    gridding_algo : 'map_to_grid' or 'map_gates_to_grid'
+        Algorithm to use for gridding.  'map_to_grid' finds all gates within
+        a radius of influence for each grid point, 'map_gates_to_grid' maps
+        each radar gate onto the grid using a radius of influence.
     Returns
     -------
     grid : Grid
@@ -60,11 +66,16 @@ def grid_from_radars(radars, grid_shape, grid_limits, **kwargs):
 
     See Also
     --------
-    map_to_grid : Map to grid and return a dictionary of radar fields
+    map_to_grid : Map to grid and return a dictionary of radar fields.
+    map_gates_to_grid : Map each gate onto a grid returning a dictionary of
+                        radar fields.
 
     """
     # map the radar(s) to a cartesian grid
-    grids = map_to_grid(radars, grid_shape, grid_limits, **kwargs)
+    if gridding_algo == 'map_to_grid':
+        grids = map_to_grid(radars, grid_shape, grid_limits, **kwargs)
+    elif gridding_algo == 'map_gates_to_grid':
+        grids = map_gates_to_grid(radars, grid_shape, grid_limits, **kwargs)
 
     # create and populate the field dictionary
     fields = {}
