@@ -23,7 +23,7 @@ import mdv as MDV
 from ..config import FileMetadata, get_fillvalue
 from ..core.grid import Grid
 from .common import make_time_unit_str
-
+from .lazydict import LazyLoadDict
 
 def write_grid_mdv(filename, grid, ):
     """
@@ -191,7 +191,8 @@ def write_grid_mdv(filename, grid, ):
 
 
 def read_grid_mdv(filename, field_names=None, additional_metadata=None,
-             file_field_names=False, exclude_fields=None):
+             file_field_names=False, exclude_fields=None,
+             delay_field_loading=False):
     """
     Read a MDV file in a Grid Object.
 
@@ -220,7 +221,11 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
     exclude_fields : list or None, optional
         List of fields to exclude from the grid object. This is applied
         after the `file_field_names` and `field_names` parameters.
-
+    delay_field_loading : bool
+        True to delay loading of field data from the file until the 'data'
+        key in a particular field dictionary is accessed.  In this case
+        the field attribute of the returned Radar object will contain
+        LazyLoadDict objects not dict objects.
     Returns
     -------
     grid : Grid
@@ -370,16 +375,15 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
         field_name = filemetadata.get_field_name(mdv_field)
         if field_name is None:
             continue
-
-        # grab data from MDV object, mask and reshape
-        data = mdv.read_a_field(mdv_fields.index(mdv_field))
-        data[np.where(np.isnan(data))] = get_fillvalue()
-        data = np.ma.masked_equal(data, get_fillvalue())
-
-        # create and store the field dictionary
         field_dic = filemetadata(field_name)
-        field_dic['data'] = data
+
         field_dic['_FillValue'] = get_fillvalue()
+        dataExtractor = MDV._MdvVolumeDataExtractor(mdvfile, mdvfile.fields.index(mdv_field), get_fillvalue())
+        if delay_field_loading:
+            field_dic = LazyLoadDict(field_dic)
+            field_dic.set_lazy('data', dataExtractor)
+        else:
+            field_dic['data'] = dataExtractor()
         fields[field_name] = field_dic
 
     return Grid(fields, axes, metadata)
