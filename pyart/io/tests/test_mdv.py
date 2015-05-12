@@ -534,33 +534,33 @@ def test_read_one_field():
 
     mdvfile = pyart.io.mdv.MdvFile(pyart.testing.MDV_PPI_FILE)
     # extract a field
-    assert len(mdvfile.fields_data) is 0
+    assert mdvfile.fields_data[0] is None
     sweeps = mdvfile.read_a_field(0)
     assert sweeps.shape == (1, 360, 110)
     assert round(sweeps[0, 1, 2], 2) == 13.19
-    assert len(mdvfile.fields_data) is 1
+    assert mdvfile.fields_data[0] is not None
 
     # reread, should be faster
     sweeps = mdvfile.read_a_field(0)
     assert sweeps.shape == (1, 360, 110)
     assert round(sweeps[0, 1, 2], 2) == 13.19
-    assert len(mdvfile.fields_data) is 1
+    assert mdvfile.fields_data[0] is not None
 
 
 def test_read_all_fields():
 
     mdvfile = pyart.io.mdv.MdvFile(pyart.testing.MDV_PPI_FILE)
     # read all fields
-    assert len(mdvfile.fields_data) is 0
+    assert mdvfile.fields_data[0] is None
     mdvfile.read_all_fields()
-    assert len(mdvfile.fields_data) is 1
+    assert mdvfile.fields_data[0] is not None
     assert round(mdvfile.fields_data[0][0, 1, 2], 2) == 13.19
 
 
 def test_read_all_fields_on_creation():
     mdvfile2 = pyart.io.mdv.MdvFile(pyart.testing.MDV_PPI_FILE,
                                     read_fields=True)
-    assert len(mdvfile.fields_data) is 1
+    assert mdvfile.fields_data[0] is not None
     assert round(mdvfile2.fields_data[0][0, 1, 2], 2) == 13.19
     mdvfile2.close()
 

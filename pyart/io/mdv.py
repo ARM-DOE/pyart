@@ -500,7 +500,7 @@ class MdvFile:
         self.fields = self._make_fields_list()
 
         self.fields_data = [None] * self.master_header["nfields"]
-        self.compr_data = [[None] * head['nz'] for head in self.field_headers]
+
         if read_fields:
             if debug:
                 print "Reading all fields"

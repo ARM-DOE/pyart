@@ -118,7 +118,7 @@ class MdvDisplay(RadarDisplay):
     def _get_x_y(self, field, sweep, edges, filter_transitions):
         """ Retrieve and return x and y coordinate in km. """
         # TODO perform interpolating if edges is True
-        cart = self.mdvfile._make_carts_dict()
+        carts = self.mdvfile._make_carts_dict()
         x = carts['x'][sweep] / 1000.0  # x coords in km
         y = carts['y'][sweep] / 1000.0  # y coords in km
         return x, y
@@ -126,7 +126,7 @@ class MdvDisplay(RadarDisplay):
     def _get_x_y_z(self, field, sweep, edges, filter_transitions):
         """ Retrieve and return x, y, and z coordinate in km. """
         # TODO perform interpolating if edges is True
-        cart = self.mdvfile._make_carts_dict()
+        carts = self.mdvfile._make_carts_dict()
         x = carts['x'][sweep] / 1000.0  # x coords in km
         y = carts['y'][sweep] / 1000.0  # y coords in km
         z = carts['z'][sweep] / 1000.0  # y coords in km
