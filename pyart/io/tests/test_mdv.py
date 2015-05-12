@@ -560,7 +560,7 @@ def test_read_all_fields():
 def test_read_all_fields_on_creation():
     mdvfile2 = pyart.io.mdv.MdvFile(pyart.testing.MDV_PPI_FILE,
                                     read_fields=True)
-    assert mdvfile.fields_data[0] is not None
+    assert mdvfile2.fields_data[0] is not None
     assert round(mdvfile2.fields_data[0][0, 1, 2], 2) == 13.19
     mdvfile2.close()
 
@@ -569,7 +569,8 @@ def test_read_all_fields_on_creation():
 # RHI tests #
 #############
 
-RADAR_RHI = pyart.io.read_mdv(pyart.testing.MDV_RHI_FILE)
+RADAR_RHI = pyart.io.read_mdv(pyart.testing.MDV_RHI_FILE,
+                              delay_field_loading=True)
 
 
 # nsweeps attribute

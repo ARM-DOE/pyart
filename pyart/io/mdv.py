@@ -31,10 +31,11 @@ from ..config import FileMetadata, get_fillvalue
 from ..core.radar import Radar
 from .common import make_time_unit_str
 from .common import radar_coords_to_cart
-
+from .lazydict import LazyLoadDict
 
 def read_mdv(filename, field_names=None, additional_metadata=None,
-             file_field_names=False, exclude_fields=None):
+             file_field_names=False, exclude_fields=None,
+             delay_field_loading=False):
     """
     Read a MDV file.
 
@@ -63,6 +64,12 @@ def read_mdv(filename, field_names=None, additional_metadata=None,
     exclude_fields : list or None, optional
         List of fields to exclude from the radar object. This is applied
         after the `file_field_names` and `field_names` parameters.
+    delay_field_loading : bool
+        True to delay loading of field data from the file until the 'data'
+        key in a particular field dictionary is accessed.  In this case
+        the field attribute of the returned Radar object will contain
+        LazyLoadDict objects not dict objects. Not all file types support this
+        parameter.
 
     Returns
     -------
@@ -111,18 +118,18 @@ def read_mdv(filename, field_names=None, additional_metadata=None,
         if field_name is None:
             continue
 
-        # grab data from MDV object, mask and reshape
-        data = mdvfile.read_a_field(mdvfile.fields.index(mdv_field))
-        data[np.where(np.isnan(data))] = get_fillvalue()
-        data[np.where(data == 131072)] = get_fillvalue()
-        data = np.ma.masked_equal(data, get_fillvalue())
-        data.shape = (data.shape[0] * data.shape[1], data.shape[2])
-
         # create and store the field dictionary
         field_dic = filemetadata(field_name)
-        field_dic['data'] = data
         field_dic['_FillValue'] = get_fillvalue()
+        dataExtractor = _MdvVolumeDataExtractor(mdvfile, mdvfile.fields.index(mdv_field), get_fillvalue())
+        if delay_field_loading:
+            field_dic = LazyLoadDict(field_dic)
+            field_dic.set_lazy('data', dataExtractor)
+        else:
+            field_dic['data'] = dataExtractor()
         fields[field_name] = field_dic
+
+
 
     # metadata
     metadata = filemetadata('metadata')
@@ -151,7 +158,7 @@ def read_mdv(filename, field_names=None, additional_metadata=None,
     sweep_end_ray_index = filemetadata('sweep_end_ray_index')
     len_time = len(time['data'])
 
-    if mdvfile.scan_type == 'ppi':
+    if scan_type == 'ppi':
         nsweeps = nele
         sweep_number['data'] = np.arange(nsweeps, dtype='int32')
         sweep_mode['data'] = np.array(nsweeps * ['azimuth_surveillance'])
@@ -161,7 +168,7 @@ def read_mdv(filename, field_names=None, additional_metadata=None,
         sweep_end_ray_index['data'] = np.arange(naz - 1, len_time, naz,
                                                 dtype='int32')
 
-    elif mdvfile.scan_type == 'rhi':
+    elif scan_type == 'rhi':
         nsweeps = naz
         sweep_number['data'] = np.arange(nsweeps, dtype='int32')
         sweep_mode['data'] = np.array(nsweeps * ['rhi'])
@@ -1170,12 +1177,10 @@ class MdvFile:
         range_km = grid_minx + np.arange(ngates) * grid_dx
 
         if self.field_headers[0]['proj_type'] == PROJ_RHI_RADAR:
-            self.scan_type = 'rhi'
             el_deg = grid_miny + np.arange(nrays) * grid_dy
             az_deg = self.vlevel_headers[0]['level'][0:nsweeps]
 
         if self.field_headers[0]['proj_type'] == PROJ_POLAR_RADAR:
-            self.scan_type = 'ppi'
             az_deg = grid_miny + np.arange(nrays) * grid_dy
             el_deg = self.vlevel_headers[0]['level'][0:nsweeps]
 
@@ -1220,3 +1225,34 @@ class MdvFile:
         """ Return a list of fields. """
         fh = self.field_headers
         return [fh[i]['field_name'] for i in range(len(fh))]
+
+
+class _MdvVolumeDataExtractor(object):
+    """
+    Class facilitating on demand extraction of data from a MDV file.
+
+    Parameters
+    ----------
+    mdvfile : MdvFile
+        Open MdvFile object to extract data from.
+    field_num : int
+        Field number of data to be extracted.
+    fillvalue : int
+        Value used to fill masked values in the returned array.
+    """
+
+    def __init__(self, mdvfile, field_num, fillvalue):
+        """ initialize the object. """
+        self.mdvfile = mdvfile
+        self.field_num = field_num
+        self.fillvalue = fillvalue
+
+    def __call__(self):
+        """ Return an array containing data from the referenced volume. """
+        # grab data from MDV object, mask and reshape
+        data = self.mdvfile.read_a_field(self.field_num)
+        data[np.where(np.isnan(data))] = self.fillvalue
+        data[np.where(data == 131072)] = self.fillvalue
+        data = np.ma.masked_equal(data, self.fillvalue)
+        data.shape = (data.shape[0] * data.shape[1], data.shape[2])
+        return data
