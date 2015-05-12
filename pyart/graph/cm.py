@@ -52,6 +52,7 @@ colormaps are available within matplotlib with names 'pyart_COLORMAP':
     * SymGray12
     * Theodore16
     * Wild25
+    * LangRainbow12
 
 """
 

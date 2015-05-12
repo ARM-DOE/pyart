@@ -57,6 +57,10 @@ def configuration(parent_package='', top_path=None):
     unwrap_sources_3d = ['_unwrap_3d.c', 'unwrap_3d_ljmu.c']
     config.add_extension('_unwrap_3d', sources=unwrap_sources_3d,
                          include_dirs=[get_include()])
+
+    # _fast_edge_finder extension
+    config.add_extension('_fast_edge_finder', sources=['_fast_edge_finder.c'],
+                         include_dirs=[get_include()])
     return config
 
 

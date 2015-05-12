@@ -237,10 +237,10 @@ def make_empty_grid(grid_shape, grid_limits):
     Parameters
     ----------
     grid_shape : 3-tuple of floats
-        Number of points in the grid (x, y, z).
+        Number of points in the grid (z, y, x).
     grid_limits : 3-tuple of 2-tuples
         Minimum and maximum grid location (inclusive) in meters for the
-        x, y, z coordinates.
+        z, y, x coordinates.
 
     Returns
     -------
@@ -270,8 +270,8 @@ def make_empty_grid(grid_shape, grid_limits):
         'long_name': 'Time in seconds since volume start'}
 
     # grid coordinate dictionaries
-    nx, ny, nz = grid_shape
-    (x0, x1), (y0, y1), (z0, z1) = grid_limits
+    nz, ny, nx = grid_shape
+    (z0, z1), (y0, y1), (x0, x1) = grid_limits
 
     xaxis = {'data': np.linspace(x0, x1, nx),
              'long_name': 'X-coordinate in Cartesian system',
@@ -328,8 +328,8 @@ def make_target_grid():
     """
     Make a sample Grid with a rectangular target.
     """
-    grid_shape = (320, 400, 2)
-    grid_limits = ((-300000, 300000), (-400000, 400000), (0, 500))
+    grid_shape = (2, 400, 320)
+    grid_limits = ((0, 500), (-400000, 400000), (-300000, 300000))
     grid = make_empty_grid(grid_shape, grid_limits)
 
     fdata = np.zeros((2, 400, 320), dtype='float32')
@@ -349,8 +349,8 @@ def make_storm_grid():
     """
     Make a sample Grid with a rectangular storm target.
     """
-    grid_shape = (40, 50, 2)
-    grid_limits = ((-300000, 300000), (-400000, 400000), (0, 500))
+    grid_shape = (2, 50, 40)
+    grid_limits = ((0, 500), (-400000, 400000), (-300000, 300000))
     grid = make_empty_grid(grid_shape, grid_limits)
 
     fdata = np.ma.zeros((2, 50, 40), dtype='float32')

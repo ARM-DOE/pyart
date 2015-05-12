@@ -33,6 +33,7 @@ else:
     from . import config
     from . import aux_io
     from . import retrieve
+    from . import bridge
 
     # root level functions
     from .config import load_config

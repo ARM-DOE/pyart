@@ -411,3 +411,14 @@ def test_auto_history_and_conventions():
     assert 'Conventions' in radar2.metadata
     assert 'history' in radar2.metadata
     os.remove(tmpfile)
+
+
+def test_delay_field_loading():
+    radar = pyart.io.read_cfradial(
+        pyart.testing.CFRADIAL_PPI_FILE, delay_field_loading=True)
+    assert isinstance(radar.fields['reflectivity_horizontal'],
+                      pyart.io.lazydict.LazyLoadDict)
+    data = radar.fields['reflectivity_horizontal']['data']
+    assert isinstance(data, MaskedArray)
+    assert data.shape == (40, 42)
+    assert round(data[0, 0]) == -6.0
