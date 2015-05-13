@@ -84,10 +84,11 @@ class MdvDisplay(RadarDisplay):
             Plot title.
 
         """
-        if self.mdvfile.scan_type == 'rhi':
-            fixed_angle = self.mdvfile.az_deg[sweep]
+        az_deg, range_km, el_deg = self.mdvfile._calc_geometry()
+        if self.mdvfile.projection == 'rhi':
+            fixed_angle = az_deg[sweep]
         else:
-            fixed_angle = self.mdvfile.el_deg[sweep]
+            fixed_angle = el_deg[sweep]
 
         time_str = self.time_begin.isoformat() + 'Z'
         l1 = "%s %.1f Deg. %s " % (self.radar_name, fixed_angle, time_str)
@@ -117,16 +118,18 @@ class MdvDisplay(RadarDisplay):
     def _get_x_y(self, field, sweep, edges, filter_transitions):
         """ Retrieve and return x and y coordinate in km. """
         # TODO perform interpolating if edges is True
-        x = self.mdvfile.carts['x'][sweep] / 1000.0  # x coords in km
-        y = self.mdvfile.carts['y'][sweep] / 1000.0  # y coords in km
+        carts = self.mdvfile._make_carts_dict()
+        x = carts['x'][sweep] / 1000.0  # x coords in km
+        y = carts['y'][sweep] / 1000.0  # y coords in km
         return x, y
 
     def _get_x_y_z(self, field, sweep, edges, filter_transitions):
         """ Retrieve and return x, y, and z coordinate in km. """
         # TODO perform interpolating if edges is True
-        x = self.mdvfile.carts['x'][sweep] / 1000.0  # x coords in km
-        y = self.mdvfile.carts['y'][sweep] / 1000.0  # y coords in km
-        z = self.mdvfile.carts['z'][sweep] / 1000.0  # y coords in km
+        carts = self.mdvfile._make_carts_dict()
+        x = carts['x'][sweep] / 1000.0  # x coords in km
+        y = carts['y'][sweep] / 1000.0  # y coords in km
+        z = carts['z'][sweep] / 1000.0  # y coords in km
         return x, y, z
 
     def _get_colorbar_label(self, field):
