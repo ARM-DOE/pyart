@@ -76,6 +76,8 @@ def grid_from_radars(radars, grid_shape, grid_limits,
         grids = map_to_grid(radars, grid_shape, grid_limits, **kwargs)
     elif gridding_algo == 'map_gates_to_grid':
         grids = map_gates_to_grid(radars, grid_shape, grid_limits, **kwargs)
+    else:
+        raise ValueError('invalid gridding_algo')
 
     # create and populate the field dictionary
     fields = {}
