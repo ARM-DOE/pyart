@@ -17,6 +17,7 @@ reported but fixing them will not be a priority.
 .. autosummary::
     :toctree: generated/
 
+    read_d3r_gcpex_nc
     read_gamic
     read_pattern
     read_radx

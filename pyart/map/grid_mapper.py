@@ -58,6 +58,7 @@ def grid_from_radars(radars, grid_shape, grid_limits,
         Algorithm to use for gridding.  'map_to_grid' finds all gates within
         a radius of influence for each grid point, 'map_gates_to_grid' maps
         each radar gate onto the grid using a radius of influence.
+
     Returns
     -------
     grid : Grid
