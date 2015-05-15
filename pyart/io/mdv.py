@@ -1114,17 +1114,17 @@ class MdvFile:
             if chunk_id == CHUNK_DSRADAR_PARAMS:
                 if debug:
                     print 'writing radar info'
-                radar_info = self._write_radar_info(self.radar_info)
+                self._write_radar_info(self.radar_info)
 
             elif chunk_id == CHUNK_DSRADAR_ELEVATIONS:
                 if debug:
                     print 'writing elevations'
-                elevations = self._write_elevs(self.elevations)
+                self._write_elevs(self.elevations)
 
             elif chunk_id == CHUNK_DSRADAR_CALIB:
                 if debug:
                     print 'writing cal'
-                calib_info = self._write_calib(self.calib_info)
+                self._write_calib(self.calib_info)
 
             else:
                 if debug:
