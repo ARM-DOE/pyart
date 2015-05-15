@@ -124,7 +124,7 @@ def add_2d_latlon_axis(grid, **kwargs):
     """
     Add to Grid (in place) a 2-dimensional axes for latitude and longitude
     of every point in the y,x plane. If available conversion is done using
-    basemap.pyproj, extra arguments in **kwargs are passed to pyproj.Proj
+    basemap.pyproj, extra arguments in kwargs are passed to pyproj.Proj
     function. If not available internal implementation is used.
 
     Parameters
@@ -132,7 +132,7 @@ def add_2d_latlon_axis(grid, **kwargs):
     grid: grid object
         Cartesian grid object containing the 1d axes "x_disp", "y_disp" and
         scalar axes 'lat', 'lon'.
-    **kwargs: Pyproj options
+    kwargs: Pyproj options
         Options to be passed to Proj. If projection is not specified here it
         uses proj='aeqd' (azimuthal equidistant)
 

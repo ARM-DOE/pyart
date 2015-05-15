@@ -132,6 +132,11 @@ def test_map_to_grid_errors():
                   roi_func='foo')
 
 
+def test_grid_from_radars_errors():
+    assert_raises(ValueError, pyart.map.grid_from_radars, (None, ), (1, 1, 1),
+                  ((-1, 1), (-1, 1), (-1, 1)), gridding_algo='foo')
+
+
 def test_grid_from_radars():
     radar = pyart.testing.make_target_radar()
     grid = pyart.map.grid_from_radars((radar,), **COMMON_MAP_TO_GRID_ARGS)
@@ -155,6 +160,7 @@ def test_grid_from_radars_grid_origin():
     radar = pyart.testing.make_target_radar()
     radar.metadata.pop('instrument_name')
     grid = pyart.map.grid_from_radars((radar,), grid_origin=(36.4, -97.6),
+                                      grid_origin_alt=200,
                                       **COMMON_MAP_TO_GRID_ARGS)
     print round(grid.axes['lat']['data'][0], 2)
     print round(grid.axes['lon']['data'][0], 2)

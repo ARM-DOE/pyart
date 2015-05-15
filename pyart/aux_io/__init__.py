@@ -17,6 +17,7 @@ reported but fixing them will not be a priority.
 .. autosummary::
     :toctree: generated/
 
+    read_d3r_gcpex_nc
     read_gamic
     read_pattern
     read_radx
@@ -25,6 +26,7 @@ reported but fixing them will not be a priority.
 
 from pattern import read_pattern
 from radx import read_radx
+from d3r_gcpex_nc import read_d3r_gcpex_nc
 try:
     from .gamic_hdf5 import read_gamic
     from .odim_h5 import read_odim_h5
