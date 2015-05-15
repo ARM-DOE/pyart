@@ -1,6 +1,6 @@
 """
 pyart.aux_io.d3r_gcpex_nc
-====================
+=========================
 
 Routines for reading GCPEX D3R files.
 
@@ -71,7 +71,6 @@ def read_d3r_gcpex_nc(filename, field_names=None, additional_metadata=None,
     exclude_fields : list or None, optional
         List of fields to exclude from the radar object. This is applied
         after the `file_field_names` and `field_names` parameters.
-
 
     Returns
     -------
