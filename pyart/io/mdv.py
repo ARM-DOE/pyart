@@ -33,6 +33,7 @@ from .common import make_time_unit_str
 from .common import radar_coords_to_cart
 from .lazydict import LazyLoadDict
 
+
 def read_mdv(filename, field_names=None, additional_metadata=None,
              file_field_names=False, exclude_fields=None,
              delay_field_loading=False):
@@ -121,15 +122,14 @@ def read_mdv(filename, field_names=None, additional_metadata=None,
         # create and store the field dictionary
         field_dic = filemetadata(field_name)
         field_dic['_FillValue'] = get_fillvalue()
-        dataExtractor = _MdvVolumeDataExtractor(mdvfile, mdvfile.fields.index(mdv_field), get_fillvalue())
+        dataExtractor = _MdvVolumeDataExtractor(
+            mdvfile, mdvfile.fields.index(mdv_field), get_fillvalue())
         if delay_field_loading:
             field_dic = LazyLoadDict(field_dic)
             field_dic.set_lazy('data', dataExtractor)
         else:
             field_dic['data'] = dataExtractor()
         fields[field_name] = field_dic
-
-
 
     # metadata
     metadata = filemetadata('metadata')
@@ -334,103 +334,247 @@ class MdvFile:
 
     """
     # ftm for use in the struct lib
-    # mapper are used to convert vector to dics, they are of the following type:
-    # (var_name,inicial pos, final pos)
+    # mapper are used to convert vector to dics, they are of the following
+    # type: (var_name,inicial pos, final pos)
     master_header_fmt = '>28i 8i i 5i 6f 3f 12f 512s 128s 128s i'
-    master_header_mapper = [("record_len1", 0, 1), ("struct_id", 1, 2),
-    ("revision_number", 2, 3), ("time_gen", 3, 4), ("user_time", 4, 5),
-    ("time_begin", 5, 6), ("time_end", 6, 7), ("time_centroid", 7, 8),
-    ("time_expire", 8, 9), ("num_data_times", 9, 10), ("index_number", 10, 11),
-    ("data_dimension", 11, 12), ("data_collection_type", 12, 13),
-    ("user_data", 13, 14), ("native_vlevel_type", 14, 15), ("vlevel_type", 15, 16),
-    ("vlevel_included", 16, 17), ("grid_orientation", 17, 18),
-    ("data_ordering", 18, 19), ("nfields", 19, 20), ("max_nx", 20, 21),
-    ("max_ny", 21, 22), ("max_nz", 22, 23), ("nchunks", 23, 24),
-    ("field_hdr_offset", 24, 25), ("vlevel_hdr_offset", 25, 26),
-    ("chunk_hdr_offset", 26, 27), ("field_grids_differ", 27, 28),
-    ("user_data_si328", 28, 36), ("time_written", 36, 37), ("unused_si325", 37, 42),
-    ("user_data_fl326", 42, 48), ("sensor_lon", 48, 49), ("sensor_lat", 49, 50),
-    ("sensor_alt", 50, 51), ("unused_fl3212", 51, 63), ("data_set_info", 63, 64),
-    ("data_set_name", 64, 65), ("data_set_source", 65, 66), ("record_len2", 66, 67)]
+    master_header_mapper = [
+        ("record_len1", 0, 1),
+        ("struct_id", 1, 2),
+        ("revision_number", 2, 3),
+        ("time_gen", 3, 4),
+        ("user_time", 4, 5),
+        ("time_begin", 5, 6),
+        ("time_end", 6, 7),
+        ("time_centroid", 7, 8),
+        ("time_expire", 8, 9),
+        ("num_data_times", 9, 10),
+        ("index_number", 10, 11),
+        ("data_dimension", 11, 12),
+        ("data_collection_type", 12, 13),
+        ("user_data", 13, 14),
+        ("native_vlevel_type", 14, 15),
+        ("vlevel_type", 15, 16),
+        ("vlevel_included", 16, 17),
+        ("grid_orientation", 17, 18),
+        ("data_ordering", 18, 19),
+        ("nfields", 19, 20),
+        ("max_nx", 20, 21),
+        ("max_ny", 21, 22),
+        ("max_nz", 22, 23),
+        ("nchunks", 23, 24),
+        ("field_hdr_offset", 24, 25),
+        ("vlevel_hdr_offset", 25, 26),
+        ("chunk_hdr_offset", 26, 27),
+        ("field_grids_differ", 27, 28),
+        ("user_data_si328", 28, 36),
+        ("time_written", 36, 37),
+        ("unused_si325", 37, 42),
+        ("user_data_fl326", 42, 48),
+        ("sensor_lon", 48, 49),
+        ("sensor_lat", 49, 50),
+        ("sensor_alt", 50, 51),
+        ("unused_fl3212", 51, 63),
+        ("data_set_info", 63, 64),
+        ("data_set_name", 64, 65),
+        ("data_set_source", 65, 66),
+        ("record_len2", 66, 67)
+    ]
 
     field_header_fmt = '>17i 10i 9i 4i f f 8f 12f 4f 5f 64s 16s 16s 16s 16s i'
-    field_header_mapper = [("record_len1", 0, 1), ("struct_id", 1, 2),
-    ("field_code", 2, 3), ("user_time1", 3, 4), ("forecast_delta", 4, 5),
-    ("user_time2", 5, 6), ("user_time3", 6, 7), ("forecast_time", 7, 8),
-    ("user_time4", 8, 9), ("nx", 9, 10), ("ny", 10, 11), ("nz", 11, 12),
-    ("proj_type", 12, 13), ("encoding_type", 13, 14), ("data_element_nbytes", 14, 15),
-    ("field_data_offset", 15, 16), ("volume_size", 16, 17), ("user_data_si32", 17, 27),
-    ("compression_type", 27, 28), ("transform_type", 28, 29), ("scaling_type", 29, 30),
-    ("native_vlevel_type", 30, 31), ("vlevel_type", 31, 32), ("dz_constant", 32, 33),
-    ("data_dimension", 33, 34), ("zoom_clipped", 34, 35), ("zoom_no_overlap", 35, 36),
-    ("unused_si32", 36, 40), ("proj_origin_lat", 40, 41), ("proj_origin_lon", 41, 42),
-    ("proj_param", 42, 50), ("vert_reference", 50, 51), ("grid_dx", 51, 52),
-    ("grid_dy", 52, 53), ("grid_dz", 53, 54), ("grid_minx", 54, 55),
-    ("grid_miny", 55, 56), ("grid_minz", 56, 57), ("scale", 57, 58), ("bias", 58, 59),
-    ("bad_data_value", 59, 60), ("missing_data_value", 60, 61),
-    ("proj_rotation", 61, 62), ("user_data_fl32", 62, 66), ("min_value", 66, 67),
-    ("max_value", 67, 68), ("min_value_orig_vol", 68, 69),
-    ("max_value_orig_vol", 69, 70), ("unused_fl32", 70, 71),
-    ("field_name_long", 71, 72), ("field_name", 72, 73), ("units", 73, 74),
-    ("transform", 74, 75), ("unused_char", 75, 76), ("record_len2", 76, 77)]
+    field_header_mapper = [
+        ("record_len1", 0, 1),
+        ("struct_id", 1, 2),
+        ("field_code", 2, 3),
+        ("user_time1", 3, 4),
+        ("forecast_delta", 4, 5),
+        ("user_time2", 5, 6),
+        ("user_time3", 6, 7),
+        ("forecast_time", 7, 8),
+        ("user_time4", 8, 9),
+        ("nx", 9, 10),
+        ("ny", 10, 11),
+        ("nz", 11, 12),
+        ("proj_type", 12, 13),
+        ("encoding_type", 13, 14),
+        ("data_element_nbytes", 14, 15),
+        ("field_data_offset", 15, 16),
+        ("volume_size", 16, 17),
+        ("user_data_si32", 17, 27),
+        ("compression_type", 27, 28),
+        ("transform_type", 28, 29),
+        ("scaling_type", 29, 30),
+        ("native_vlevel_type", 30, 31),
+        ("vlevel_type", 31, 32),
+        ("dz_constant", 32, 33),
+        ("data_dimension", 33, 34),
+        ("zoom_clipped", 34, 35),
+        ("zoom_no_overlap", 35, 36),
+        ("unused_si32", 36, 40),
+        ("proj_origin_lat", 40, 41),
+        ("proj_origin_lon", 41, 42),
+        ("proj_param", 42, 50),
+        ("vert_reference", 50, 51),
+        ("grid_dx", 51, 52),
+        ("grid_dy", 52, 53),
+        ("grid_dz", 53, 54),
+        ("grid_minx", 54, 55),
+        ("grid_miny", 55, 56),
+        ("grid_minz", 56, 57),
+        ("scale", 57, 58),
+        ("bias", 58, 59),
+        ("bad_data_value", 59, 60),
+        ("missing_data_value", 60, 61),
+        ("proj_rotation", 61, 62),
+        ("user_data_fl32", 62, 66),
+        ("min_value", 66, 67),
+        ("max_value", 67, 68),
+        ("min_value_orig_vol", 68, 69),
+        ("max_value_orig_vol", 69, 70),
+        ("unused_fl32", 70, 71),
+        ("field_name_long", 71, 72),
+        ("field_name", 72, 73),
+        ("units", 73, 74),
+        ("transform", 74, 75),
+        ("unused_char", 75, 76),
+        ("record_len2", 76, 77)
+    ]
 
     vlevel_header_fmt = '>i i 122i 4i 122f 5f i'
-    vlevel_header_mapper = [("record_len1", 0, 1), ("struct_id", 1, 2),
-    ("type", 2, 124), ("unused_si32", 124, 128), ("level", 128, 250),
-    ("unused_fl32", 250, 255), ("record_len2", 255, 256)]
+    vlevel_header_mapper = [
+        ("record_len1", 0, 1),
+        ("struct_id", 1, 2),
+        ("type", 2, 124),
+        ("unused_si32", 124, 128),
+        ("level", 128, 250),
+        ("unused_fl32", 250, 255),
+        ("record_len2", 255, 256)
+    ]
 
     chunk_header_fmt = '>5i 2i 480s i'
-    chunk_header_mapper = [("record_len1", 0, 1), ("struct_id", 1, 2),
-    ("chunk_id", 2, 3), ("chunk_data_offset", 3, 4), ("size", 4, 5),
-    ("unused_si32", 5, 7), ("info", 7, 8), ("record_len2", 8, 9)]
+    chunk_header_mapper = [
+        ("record_len1", 0, 1),
+        ("struct_id", 1, 2),
+        ("chunk_id", 2, 3),
+        ("chunk_data_offset", 3, 4),
+        ("size", 4, 5),
+        ("unused_si32", 5, 7),
+        ("info", 7, 8),
+        ("record_len2", 8, 9)
+    ]
 
     compression_info_fmt = '>I I I I 2I'
-    compression_info_mapper = [("magic_cookie", 0, 1),
-    ("nbytes_uncompressed", 1, 2), ("nbytes_compressed", 2, 3),
-    ("nbytes_coded", 3, 4), ("spare", 4, 6)]
+    compression_info_mapper = [
+        ("magic_cookie", 0, 1),
+        ("nbytes_uncompressed", 1, 2),
+        ("nbytes_compressed", 2, 3),
+        ("nbytes_coded", 3, 4),
+        ("spare", 4, 6)
+    ]
 
     radar_info_fmt = '>12i 2i 22f 4f 40s 40s'
-    radar_info_mapper = [("radar_id", 0, 1), ("radar_type", 1, 2), ("nfields", 2, 3),
-    ("ngates", 3, 4), ("samples_per_beam", 4, 5), ("scan_type", 5, 6),
-    ("scan_mode", 6, 7), ("nfields_current", 7, 8), ("field_flag", 8, 9),
-    ("polarization", 9, 10), ("follow_mode", 10, 11), ("prf_mode", 11, 12),
-    ("spare_ints", 12, 14), ("radar_constant", 14, 15), ("altitude_km", 15, 16),
-    ("latitude_deg", 16, 17), ("longitude_deg", 17, 18), ("gate_spacing_km", 18, 19),
-    ("start_range_km", 19, 20), ("horiz_beam_width_deg", 20, 21),
-    ("vert_beam_width_deg", 21, 22), ("pulse_width_us", 22, 23), ("prf_hz", 23, 24),
-    ("wavelength_cm", 24, 25), ("xmit_peak_pwr_watts", 25, 26),
-    ("receiver_mds_dbm", 26, 27), ("receiver_gain_db", 27, 28),
-    ("antenna_gain_db", 28, 29), ("system_gain_db", 29, 30),
-    ("unambig_vel_mps", 30, 31), ("unambig_range_km", 31, 32),
-    ("measXmitPowerDbmH_dbm", 32, 33), ("measXmitPowerDbmV_dbm", 33, 34),
-    ("prt_s", 34, 35), ("prt2_s", 35, 36), ("spare_floats", 36, 40),
-    ("radar_name", 40, 41), ("scan_type_name", 41, 42)]
+    radar_info_mapper = [
+        ("radar_id", 0, 1),
+        ("radar_type", 1, 2),
+        ("nfields", 2, 3),
+        ("ngates", 3, 4),
+        ("samples_per_beam", 4, 5),
+        ("scan_type", 5, 6),
+        ("scan_mode", 6, 7),
+        ("nfields_current", 7, 8),
+        ("field_flag", 8, 9),
+        ("polarization", 9, 10),
+        ("follow_mode", 10, 11),
+        ("prf_mode", 11, 12),
+        ("spare_ints", 12, 14),
+        ("radar_constant", 14, 15),
+        ("altitude_km", 15, 16),
+        ("latitude_deg", 16, 17),
+        ("longitude_deg", 17, 18),
+        ("gate_spacing_km", 18, 19),
+        ("start_range_km", 19, 20),
+        ("horiz_beam_width_deg", 20, 21),
+        ("vert_beam_width_deg", 21, 22),
+        ("pulse_width_us", 22, 23),
+        ("prf_hz", 23, 24),
+        ("wavelength_cm", 24, 25),
+        ("xmit_peak_pwr_watts", 25, 26),
+        ("receiver_mds_dbm", 26, 27),
+        ("receiver_gain_db", 27, 28),
+        ("antenna_gain_db", 28, 29),
+        ("system_gain_db", 29, 30),
+        ("unambig_vel_mps", 30, 31),
+        ("unambig_range_km", 31, 32),
+        ("measXmitPowerDbmH_dbm", 32, 33),
+        ("measXmitPowerDbmV_dbm", 33, 34),
+        ("prt_s", 34, 35),
+        ("prt2_s", 35, 36),
+        ("spare_floats", 36, 40),
+        ("radar_name", 40, 41),
+        ("scan_type_name", 41, 42)
+    ]
 
     calib_fmt = '>16s 6i 51f 14f'
-    calib_mapper = [("radar_name", 0, 1), ("year", 1, 2), ("month", 2, 3),
-    ("day", 3, 4), ("hour", 4, 5), ("minute", 5, 6), ("second", 6, 7),
-    ("wavelength_cm", 7, 8), ("beamwidth_h_deg", 8, 9), ("beamwidth_v_deg", 9, 10),
-    ("antenna_gain_h_db", 10, 11), ("antenna_gain_v_db", 11, 12),
-    ("pulse_width_us", 12, 13), ("xmit_power_h_dbm", 13, 14),
-    ("xmit_power_v_dbm", 14, 15), ("twoway_waveguide_loss_h_db", 15, 16),
-    ("twoway_waveguide_loss_v_db", 16, 17), ("twoway_radome_loss_h_db", 17, 18),
-    ("twoway_radome_loss_v_db", 18, 19), ("filter_loss_db", 19, 20),
-    ("radar_constant_h_db", 20, 21), ("radar_constant_v_db", 21, 22),
-    ("noise_h_co_dbm", 22, 23), ("noise_h_cx_dbm", 23, 24), ("noise_v_co_dbm", 24, 25),
-    ("noise_v_cx_dbm", 25, 26), ("rx_gain_h_co_dbm", 26, 27),
-    ("rx_gain_h_cx_dbm", 27, 28), ("rx_gain_v_co_dbm", 28, 29),
-    ("rx_gain_v_cx_dbm", 29, 30), ("zh1km_co_dbz", 30, 31), ("zh1km_cx_dbz", 31, 32),
-    ("zv1km_co_dbz", 32, 33), ("zv1km_cx_dbz", 33, 34), ("sun_h_co_dbm", 34, 35),
-    ("sun_h_cx_dbm", 35, 36), ("sun_v_co_dbm", 36, 37), ("sun_v_cx_dbm", 37, 38),
-    ("noise_source_h_dbm", 38, 39), ("noise_source_v_dbm", 39, 40),
-    ("power_meas_loss_h_db", 40, 41), ("power_meas_loss_v_db", 41, 42),
-    ("coupler_fwd_loss_h_db", 42, 43), ("coupler_fwd_loss_v_db", 43, 44),
-    ("zdr_bias_db", 44, 45), ("ldr_h_bias_db", 45, 46), ("ldr_v_bias_db", 46, 47),
-    ("system_phidp_deg", 47, 48), ("test_pulse_h_dbm", 48, 49),
-    ("test_pulse_v_dbm", 49, 50), ("rx_slope_h_co_db", 50, 51),
-    ("rx_slope_h_cx_db", 51, 52), ("rx_slope_v_co_db", 52, 53),
-    ("rx_slope_v_cx_db", 53, 54), ("I0_h_co_dbm", 54, 55), ("I0_h_cx_dbm", 55, 56),
-    ("I0_v_co_dbm", 56, 57), ("I0_v_cx_dbm", 57, 58), ("spare", 58, 72)]
+    calib_mapper = [
+        ("radar_name", 0, 1),
+        ("year", 1, 2),
+        ("month", 2, 3),
+        ("day", 3, 4),
+        ("hour", 4, 5),
+        ("minute", 5, 6),
+        ("second", 6, 7),
+        ("wavelength_cm", 7, 8),
+        ("beamwidth_h_deg", 8, 9),
+        ("beamwidth_v_deg", 9, 10),
+        ("antenna_gain_h_db", 10, 11),
+        ("antenna_gain_v_db", 11, 12),
+        ("pulse_width_us", 12, 13),
+        ("xmit_power_h_dbm", 13, 14),
+        ("xmit_power_v_dbm", 14, 15),
+        ("twoway_waveguide_loss_h_db", 15, 16),
+        ("twoway_waveguide_loss_v_db", 16, 17),
+        ("twoway_radome_loss_h_db", 17, 18),
+        ("twoway_radome_loss_v_db", 18, 19),
+        ("filter_loss_db", 19, 20),
+        ("radar_constant_h_db", 20, 21),
+        ("radar_constant_v_db", 21, 22),
+        ("noise_h_co_dbm", 22, 23),
+        ("noise_h_cx_dbm", 23, 24),
+        ("noise_v_co_dbm", 24, 25),
+        ("noise_v_cx_dbm", 25, 26),
+        ("rx_gain_h_co_dbm", 26, 27),
+        ("rx_gain_h_cx_dbm", 27, 28),
+        ("rx_gain_v_co_dbm", 28, 29),
+        ("rx_gain_v_cx_dbm", 29, 30),
+        ("zh1km_co_dbz", 30, 31),
+        ("zh1km_cx_dbz", 31, 32),
+        ("zv1km_co_dbz", 32, 33),
+        ("zv1km_cx_dbz", 33, 34),
+        ("sun_h_co_dbm", 34, 35),
+        ("sun_h_cx_dbm", 35, 36),
+        ("sun_v_co_dbm", 36, 37),
+        ("sun_v_cx_dbm", 37, 38),
+        ("noise_source_h_dbm", 38, 39),
+        ("noise_source_v_dbm", 39, 40),
+        ("power_meas_loss_h_db", 40, 41),
+        ("power_meas_loss_v_db", 41, 42),
+        ("coupler_fwd_loss_h_db", 42, 43),
+        ("coupler_fwd_loss_v_db", 43, 44),
+        ("zdr_bias_db", 44, 45),
+        ("ldr_h_bias_db", 45, 46),
+        ("ldr_v_bias_db", 46, 47),
+        ("system_phidp_deg", 47, 48),
+        ("test_pulse_h_dbm", 48, 49),
+        ("test_pulse_v_dbm", 49, 50),
+        ("rx_slope_h_co_db", 50, 51),
+        ("rx_slope_h_cx_db", 51, 52),
+        ("rx_slope_v_co_db", 52, 53),
+        ("rx_slope_v_cx_db", 53, 54),
+        ("I0_h_co_dbm", 54, 55),
+        ("I0_h_cx_dbm", 55, 56),
+        ("I0_v_co_dbm", 56, 57),
+        ("I0_v_cx_dbm", 57, 58),
+        ("spare", 58, 72)
+    ]
 
     def __init__(self, filename, debug=False, read_fields=False):
         """
@@ -440,7 +584,7 @@ class MdvFile:
         if debug:
             print "Opening file for reading: ", filename
         if filename is None:
-        # will creat empqty struct, for filling and writing after
+            # will creat empqty struct, for filling and writing after
             self.fileptr = None
         elif hasattr(filename, 'read'):
             self.fileptr = filename
@@ -469,7 +613,8 @@ class MdvFile:
             print "Getting Chunk Data"
         # will store raw chunk data, use for unkown chunk information
         self.chunk_data = [None] * self.master_header['nchunks']
-        self.radar_info, self.elevations, self.calib_info = self._get_chunks(debug)
+        self.radar_info, self.elevations, self.calib_info = self._get_chunks(
+            debug)
 
         if self.master_header['nfields'] > 0:
             if self.field_headers[0]['proj_type'] == PROJ_LATLON:
@@ -527,11 +672,11 @@ class MdvFile:
             self.fileptr = open(filename, 'wb')
         file_start = self.fileptr.tell()
 
-        #first write fields so one can calculate the offsets
-        #put zero in headers
+        # first write fields so one can calculate the offsets
+        # put zero in headers
 
-        headers_size = (1024 + (416 + 1024) * self.master_header["nfields"]
-                       + 512 * self.master_header["nchunks"])
+        headers_size = (1024 + (416 + 1024) * self.master_header["nfields"] +
+                        512 * self.master_header["nchunks"])
         self.fileptr.write("\x00" * headers_size)
 
         if debug:
@@ -539,14 +684,14 @@ class MdvFile:
         for ifield in range(self.master_header["nfields"]):
             self.write_a_field(ifield)
 
-        #write chunks
+        # write chunks
         if debug:
             print "Writing Chunk Data"
         self._write_chunks(debug)
-        #calculate offsets
+        # calculate offsets
         self._calc_file_offsets()
         self.fileptr.seek(file_start)
-        #write headers
+        # write headers
         if debug:
             print "Writing master header"
         self._write_master_header()
@@ -563,7 +708,7 @@ class MdvFile:
             print "Writing chunk headers"
         self._write_chunk_headers(self.master_header["nchunks"])
         # close file
-        #XXX should I really do that? what if it's a file-like struct?
+        # XXX should I really do that? what if it's a file-like struct?
         if debug:
             print "Closing file"
         self.fileptr.close()
@@ -671,12 +816,13 @@ class MdvFile:
         field_header = self.field_headers[fnum]
         if field_header['compression_type'] != 3:
             import warnings
-            warnings.warn("compression_type not implemented, converting to zlib")
+            warnings.warn(
+                "compression_type not implemented, converting to zlib")
             field_header['compression_type'] = 3
 
         field_data = self.fields_data[fnum]
         nz = field_header['nz']
-        #save file posicion
+        # save file posicion
         field_start = self.fileptr.tell()
         # write zeros to vlevel_offsets and vlevel_nbytes
         self.fileptr.write("\x00" * 4 * 2 * nz)
@@ -689,8 +835,8 @@ class MdvFile:
             bias = field_header['bias']
             sw_data = np.round((field_data[sw, :, :] - bias) / scale)
             if hasattr(sw_data, 'mask'):
-                sw_data = np.where(sw_data.mask, field_header['bad_data_value'],
-                                   sw_data)
+                sw_data = np.where(
+                    sw_data.mask, field_header['bad_data_value'], sw_data)
 
             encoding_type = field_header['encoding_type']
             if encoding_type == ENCODING_INT8:
@@ -720,7 +866,7 @@ class MdvFile:
             self.fileptr.write(compr_data)
             field_size = field_size + len(compr_data) + 24
             vlevel_nbytes[sw] = len(compr_data) + 24
-        #go back and rewrite vlevel_offsets and vlevel_nbytes
+        # go back and rewrite vlevel_offsets and vlevel_nbytes
         field_end = self.fileptr.tell()
         self.fileptr.seek(field_start)
         fmt = '>%iI %iI' % (nz, nz)
@@ -1131,13 +1277,13 @@ class MdvFile:
 
     def _calc_file_offsets(self):
         self.master_header["field_hdr_offset"] = 1024
-        self.master_header["vlevel_hdr_offset"] = (1024
-            + 416 * self.master_header["nfields"])
-        self.master_header["chunk_hdr_offset"] = (1024
-            + (416 + 1024) * self.master_header["nfields"])
+        self.master_header["vlevel_hdr_offset"] = (
+            1024 + 416 * self.master_header["nfields"])
+        self.master_header["chunk_hdr_offset"] = (
+            1024 + (416 + 1024) * self.master_header["nfields"])
 
-        file_pos = (self.master_header["chunk_hdr_offset"]
-                    + 512 * self.master_header["nchunks"])
+        file_pos = (self.master_header["chunk_hdr_offset"] +
+                    512 * self.master_header["nchunks"])
         for i in range(self.master_header["nfields"]):
             self.field_headers[i]["field_data_offset"] = file_pos
             file_pos = file_pos + self.field_headers[i]["volume_size"]
@@ -1158,12 +1304,15 @@ class MdvFile:
     def _time_dict_into_header(self):
         """ Complete time information in master_header from the time dict """
         t_base = datetime.datetime(1970, 1, 1, 00, 00)
-        self.master_header['time_begin'] = (self.times['time_begin'] - t_base).total_seconds()
-        self.master_header['time_end'] = (self.times['time_end'] - t_base).total_seconds()
-        self.master_header['time_centroid'] = (self.times['time_centroid'] - t_base).total_seconds()
+        self.master_header['time_begin'] = (
+            self.times['time_begin'] - t_base).total_seconds()
+        self.master_header['time_end'] = (
+            self.times['time_end'] - t_base).total_seconds()
+        self.master_header['time_centroid'] = (
+            self.times['time_centroid'] - t_base).total_seconds()
 
     # misc. methods
-    #XXX move some where else, there are not general mdv operations
+    # XXX move some where else, there are not general mdv operations
     def _calc_geometry(self):
         """ Calculate geometry, return az_deg, range_km, el_deg. """
         nsweeps = self.master_header['max_nz']
