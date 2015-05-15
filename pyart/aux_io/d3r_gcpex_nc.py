@@ -17,8 +17,8 @@ import datetime
 import numpy as np
 import netCDF4
 
-from ..config import FileMetadata, get_fillvalue
-from ..io.common import make_time_unit_str, radar_coords_to_cart
+from ..config import FileMetadata
+from ..io.common import make_time_unit_str
 from ..core.radar import Radar
 
 
@@ -90,9 +90,6 @@ def read_d3r_gcpex_nc(filename, field_names=None, additional_metadata=None,
     # create metadata retrieval object
     if field_names is None:
         field_names = D3R_FIELD_NAMES
-    filemetadata = FileMetadata('odim_h5', field_names, additional_metadata,
-                                file_field_names, exclude_fields)
-    # create metadata retrieval object
     filemetadata = FileMetadata('cfradial', field_names, additional_metadata,
                                 file_field_names, exclude_fields)
 
@@ -130,7 +127,6 @@ def read_d3r_gcpex_nc(filename, field_names=None, additional_metadata=None,
     sweep_end_ray_index = filemetadata('sweep_end_ray_index')
 
     rays_per_sweep = np.shape(ncvars['Azimuth'][:])
-    total_rays = sum(rays_per_sweep)
     ssri = np.cumsum(np.append([0], rays_per_sweep[:-1])).astype('int32')
     seri = np.cumsum(rays_per_sweep).astype('int32') - 1
     sweep_start_ray_index['data'] = ssri
@@ -185,13 +181,11 @@ def read_d3r_gcpex_nc(filename, field_names=None, additional_metadata=None,
     # time
     _time = filemetadata('time')
     start_time = datetime.datetime.utcfromtimestamp(ncobj.Time)
-    t_data = ncvars['Time']-ncobj.Time
-
     _time['units'] = make_time_unit_str(start_time)
     _time['data'] = (ncvars['Time']-ncobj.Time).astype('float32')
 
     # fields
-    # all variables with dimensions of 'time', 'range' are fields
+    # all variables with dimensions of 'Radial', 'Gate' are fields
     keys = [k for k, v in ncvars.iteritems()
             if v.dimensions == ('Radial', 'Gate')]
 
