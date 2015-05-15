@@ -1108,7 +1108,7 @@ class MdvFile:
     def _write_chunks(self, debug=False):
         """ write chunks data """
         # the file pointer must be set at the correct location prior to call
-        for curr_chunk_header in self.chunk_headers:
+        for cnum, curr_chunk_header in enumerate(self.chunk_headers):
             chunk_id = curr_chunk_header['chunk_id']
 
             if chunk_id == CHUNK_DSRADAR_PARAMS:
