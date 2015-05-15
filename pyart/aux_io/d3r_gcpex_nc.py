@@ -23,9 +23,12 @@ from ..core.radar import Radar
 
 
 D3R_FIELD_NAMES = {
-    'Reflectivity': 'reflectivity',     # corrected reflectivity, horizontal
-    'DBZV': 'reflectivity',     # corrected reflectivity, vertical
-    'DifferentialReflectivity': 'differential_reflectivity',     # differential reflectivity
+    # corrected reflectivity, horizontal
+    'Reflectivity': 'reflectivity',
+    # corrected reflectivity, vertical
+    'DBZV': 'reflectivity',
+    # differential reflectivity
+    'DifferentialReflectivity': 'differential_reflectivity',
     'CrossPolCorrelation': 'cross_correlation_ratio',
     'ClutterPowerH': 'clutter_power_h',
     'ClutterPowerV': 'clutter_power_v',
@@ -40,7 +43,7 @@ D3R_FIELD_NAMES = {
 
 
 def read_d3r_gcpex_nc(filename, field_names=None, additional_metadata=None,
-                 file_field_names=False, exclude_fields=None):
+                      file_field_names=False, exclude_fields=None):
     """
     Read a D3R GCPEX netCDF file.
 
@@ -97,7 +100,7 @@ def read_d3r_gcpex_nc(filename, field_names=None, additional_metadata=None,
     ncobj = netCDF4.Dataset(filename)
     ncvars = ncobj.variables
 
-    #One sweep per file
+    # One sweep per file
     nsweeps = 1
 
     # latitude, longitude and altitude
@@ -181,8 +184,8 @@ def read_d3r_gcpex_nc(filename, field_names=None, additional_metadata=None,
 
     # time
     _time = filemetadata('time')
-    start_time=datetime.datetime.utcfromtimestamp(ncobj.Time)
-    t_data=ncvars['Time']-ncobj.Time
+    start_time = datetime.datetime.utcfromtimestamp(ncobj.Time)
+    t_data = ncvars['Time']-ncobj.Time
 
     _time['units'] = make_time_unit_str(start_time)
     _time['data'] = (ncvars['Time']-ncobj.Time).astype('float32')
@@ -211,6 +214,7 @@ def read_d3r_gcpex_nc(filename, field_names=None, additional_metadata=None,
         sweep_end_ray_index,
         azimuth, elevation,
         instrument_parameters=instrument_parameters)
+
 
 def _ncvar_to_dict(ncvar):
     """ Convert a NetCDF Dataset variable to a dictionary. """
