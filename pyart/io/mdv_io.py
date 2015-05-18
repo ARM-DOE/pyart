@@ -57,8 +57,8 @@ def write_grid_mdv(filename, grid):
     nfields = len(fields)
     if nz > MDV.MDV_MAX_VLEVELS:
         import warnings
-        warnings.warn('%i vlevels exceed MDV_MAX_VLEVELS = %i. Extra ' +
-                      'levels will be ignored' % (nz, MDV.MDV_MAX_VLEVELS))
+        warnings.warn(('%i vlevels exceed MDV_MAX_VLEVELS = %i. Extra ' +
+                       'levels will be ignored') % (nz, MDV.MDV_MAX_VLEVELS))
         nz = MDV.MDV_MAX_VLEVELS
     mdv = MDV.MdvFile(None)
     mdv.field_headers = mdv._get_field_headers(nfields)
@@ -289,7 +289,7 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
                  'long_name': 'Altitude at grid origin',
                  'units': 'm',
                  'standard_name': 'altitude',
-                 }
+                }
 
     latorigin = {'data': np.array(mdv.master_header["sensor_lat"],
                                   dtype='float64'),
@@ -298,7 +298,7 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
                  'standard_name': 'latitude',
                  'valid_min': -90.,
                  'valid_max': 90.
-                 }
+                }
 
     lonorigin = {'data': np.array(mdv.master_header["sensor_lon"],
                                   dtype='float64'),
@@ -307,7 +307,7 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
                  'standard_name': 'longitude',
                  'valid_min': -180.,
                  'valid_max': 180.
-                 }
+                }
 
     # grid coordinate dictionaries
     nz = mdv.master_header["max_nz"]
@@ -374,7 +374,6 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
     for meta_key, mdv_key in MDV.MDV_METADATA_MAP.iteritems():
         metadata[meta_key] = mdv.master_header[mdv_key]
 
-    nfields = mdv.master_header["nfields"]
     fields = {}
     mdv_fields = mdv._make_fields_list()
     for mdv_field in set(mdv_fields):
@@ -384,13 +383,13 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
         field_dic = filemetadata(field_name)
 
         field_dic['_FillValue'] = get_fillvalue()
-        dataExtractor = MDV._MdvVolumeDataExtractor(
-            mdvfile, mdvfile.fields.index(mdv_field), get_fillvalue())
+        dataextractor = MDV._MdvVolumeDataExtractor(
+            mdv, mdv.fields.index(mdv_field), get_fillvalue())
         if delay_field_loading:
             field_dic = LazyLoadDict(field_dic)
-            field_dic.set_lazy('data', dataExtractor)
+            field_dic.set_lazy('data', dataextractor)
         else:
-            field_dic['data'] = dataExtractor()
+            field_dic['data'] = dataextractor()
         fields[field_name] = field_dic
 
     return Grid(fields, axes, metadata)
