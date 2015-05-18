@@ -25,7 +25,8 @@ from ..core.grid import Grid
 from .common import make_time_unit_str
 from .lazydict import LazyLoadDict
 
-def write_grid_mdv(filename, grid, ):
+
+def write_grid_mdv(filename, grid):
     """
     Write grid object to MDV file
 
@@ -56,8 +57,8 @@ def write_grid_mdv(filename, grid, ):
     nfields = len(fields)
     if nz > MDV.MDV_MAX_VLEVELS:
         import warnings
-        warnings.warn('%i vlevels exceed MDV_MAX_VLEVELS = %i. Extra levels will be ignored' %
-            (nz, MDV.MDV_MAX_VLEVELS))
+        warnings.warn('%i vlevels exceed MDV_MAX_VLEVELS = %i. Extra ' +
+                      'levels will be ignored' % (nz, MDV.MDV_MAX_VLEVELS))
         nz = MDV.MDV_MAX_VLEVELS
     mdv = MDV.MdvFile(None)
     mdv.field_headers = mdv._get_field_headers(nfields)
@@ -79,9 +80,10 @@ def write_grid_mdv(filename, grid, ):
         d["time_end"] = d["time_centroid"]
 
     d["data_dimension"] = 3  # XXX are grid's always 3d?
-    d["data_collection_type"] = 3  # =DATA_SYNTHESIS, I don't realy know, so miscellaneous!
+    # =DATA_SYNTHESIS, I don't realy know, so miscellaneous!
+    d["data_collection_type"] = 3
     if (grid.axes['z_disp']['units'] == 'm' or
-        grid.axes['z_disp']['units'] == 'meters'):
+            grid.axes['z_disp']['units'] == 'meters'):
         d["native_vlevel_type"] = 4
     elif (grid.axes['z_disp']['units'] == '\xc2' or
           grid.axes['z_disp']['units'] == 'degree'):
@@ -92,8 +94,8 @@ def write_grid_mdv(filename, grid, ):
     d["max_ny"] = ny
     d["max_nz"] = nz
     d["time_written"] = (datetime.datetime.utcnow() -
-                        datetime.datetime(1970, 1, 1, 00, 00)).total_seconds()
-    #try metadata, if not use axes
+                         datetime.datetime(1970, 1, 1, 00, 00)).total_seconds()
+    # try metadata, if not use axes
     if "radar_0_lon" in grid.metadata.keys():
         d["sensor_lon"] = grid.metadata["radar_0_lon"]
     elif 'lat' in grid.axes.keys:
@@ -133,8 +135,8 @@ def write_grid_mdv(filename, grid, ):
             raise TypeError("Unsuported encoding %s, please encode data as "
                             "uint8, uint16 or float32 "
                             "before calling this function" % dtype)
-        d["compression_type"] = 3 #zlib
-        
+        d["compression_type"] = 3   # zlib
+
         d["scaling_type"] = 4  # SCALING_SPECIFIED (by the user)
         d["native_vlevel_type"] = mdv.master_header["vlevel_type"]
         d["vlevel_type"] = mdv.master_header["vlevel_type"]
@@ -157,7 +159,7 @@ def write_grid_mdv(filename, grid, ):
             d["bad_data_value"] = grid.fields[field]["_FillValue"]
         elif "missing_value" in grid.fields[field].keys():
             d["bad_data_value"] = grid.fields[field]["missing_value"]
-         # missing_data prioritise missing_value
+        # missing_data prioritise missing_value
         if "missing_value" in grid.fields[field].keys():
             d["missing_data_value"] = grid.fields[field]["missing_value"]
         elif "_FillValue" in grid.fields[field].keys():
@@ -166,15 +168,17 @@ def write_grid_mdv(filename, grid, ):
         d["min_value"] = np.amax(grid.fields[field]['data'])
         d["max_value"] = np.amin(grid.fields[field]['data'])
         if "standard_name" in grid.fields[field].keys():
-            d["field_name_long"] = grid.fields[field]["standard_name"].encode("ASCII")
+            d["field_name_long"] = (
+                grid.fields[field]["standard_name"].encode("ASCII"))
         elif "long_name" in grid.fields[field].keys():
-            d["field_name_long"] = grid.fields[field]["long_name"].encode("ASCII")
+            d["field_name_long"] = (
+                grid.fields[field]["long_name"].encode("ASCII"))
         d["field_name"] = field.encode("ASCII")
         if "units" in grid.fields[field].keys():
             d["units"] = grid.fields[field]["units"].encode("ASCII")
         d["transform"] = "none".encode("ASCII")  # XXX not implemented
 
-        #fill vlevels_header
+        # fill vlevels_header
         typ = [0] * 122
         level = [0] * 122
         for iz in range(nz):
@@ -183,16 +187,16 @@ def write_grid_mdv(filename, grid, ):
         l["type"] = typ
         l["level"] = level
 
-        #put data to field
+        # put data to field
         mdv.fields_data[ifield] = grid.fields[field]["data"]
 
-    #write the file
+    # write the file
     mdv.write(filename)
 
 
 def read_grid_mdv(filename, field_names=None, additional_metadata=None,
-             file_field_names=False, exclude_fields=None,
-             delay_field_loading=False):
+                  file_field_names=False, exclude_fields=None,
+                  delay_field_loading=False):
     """
     Read a MDV file in a Grid Object.
 
@@ -239,17 +243,18 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
 
     MDV files and Grid object are not fully interchangeable, here is a list of
     known limitation:
-    
+
     - All fields must have the same shape and axes.
     - All fields must have the same projection.
     - Vlevels types must not vary.
-    - Projection must be different than PROJ_POLAR_RADAR(9) and PROJ_RHI_RADAR(13).
+    - Projection must be different than PROJ_POLAR_RADAR(9) and
+      PROJ_RHI_RADAR(13).
     - Correct unit in the Z axis are just availible for 'vlevel_type' equal
-      VERT_TYPE_Z(4), VERT_TYPE_ELEV(9), VERT_TYPE_AZ(17), VERT_TYPE_PRESSURE(3)
-      and VERT_TYPE_THETA(7).
+      VERT_TYPE_Z(4), VERT_TYPE_ELEV(9), VERT_TYPE_AZ(17),
+      VERT_TYPE_PRESSURE(3) and VERT_TYPE_THETA(7).
     - Unknown behavior in case of 2D data, but it probably won't fail.
     """
-    #XXX add test for conversion limitations
+    # XXX add test for conversion limitations
     # create metadata retrieval object
     filemetadata = FileMetadata('mdv', field_names, additional_metadata,
                                 file_field_names, exclude_fields)
@@ -286,8 +291,8 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
                  'standard_name': 'altitude',
                  }
 
-    latorigin = {'data':  np.array(mdv.master_header["sensor_lat"],
-                                   dtype='float64'),
+    latorigin = {'data': np.array(mdv.master_header["sensor_lat"],
+                                  dtype='float64'),
                  'long_name': 'Latitude at grid origin',
                  'units': 'degree_N',
                  'standard_name': 'latitude',
@@ -363,7 +368,8 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
 
     # metadata
     metadata = filemetadata('metadata')
-    metadata["Conventions"] = ''  # the default is CF/Radial, but this is not right
+    # the default is CF/Radial, but this is not right
+    metadata["Conventions"] = ''
     metadata["version"] = ''
     for meta_key, mdv_key in MDV.MDV_METADATA_MAP.iteritems():
         metadata[meta_key] = mdv.master_header[mdv_key]
@@ -378,7 +384,8 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
         field_dic = filemetadata(field_name)
 
         field_dic['_FillValue'] = get_fillvalue()
-        dataExtractor = MDV._MdvVolumeDataExtractor(mdvfile, mdvfile.fields.index(mdv_field), get_fillvalue())
+        dataExtractor = MDV._MdvVolumeDataExtractor(
+            mdvfile, mdvfile.fields.index(mdv_field), get_fillvalue())
         if delay_field_loading:
             field_dic = LazyLoadDict(field_dic)
             field_dic.set_lazy('data', dataExtractor)
@@ -389,7 +396,7 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
     return Grid(fields, axes, metadata)
 
 
-#XXX move to some where alse, may be common
+# XXX move to some where alse, may be common
 def time_dict_to_unixtime(d):
     """
     convert a dict containing NetCDF style time information to unixtime,
