@@ -17,7 +17,7 @@ a uniform grid.
 
 """
 
-from libc.math cimport sqrt, exp, ceil, floor, sin, cos, tan, asin, isfinite
+from libc.math cimport sqrt, exp, ceil, floor, sin, cos, tan, asin
 from cython.view cimport array as cvarray
 
 cimport cython
@@ -146,6 +146,23 @@ cdef class DistBeamRoI(RoIFunction):
                 min_roi = roi
         return min_roi
 
+cdef float dist_beam(float z, float y, float x):
+    cdef float min_roi, roi, z_offset, y_offset, x_offset
+    cdef int i
+
+    min_roi = 999999999.0
+    for i in range(1):
+        z_offset = 0
+        y_offset = 0
+        x_offset = 0
+        roi = (1.0 * ((z - z_offset) / 20.0) +
+               sqrt((y - y_offset)**2 + (x - x_offset)**2) *
+               0.02 + 500)
+        if roi < min_roi:
+            min_roi = roi
+    return min_roi
+
+
 
 cdef class GateToGridMapper:
     """
@@ -220,7 +237,8 @@ cdef class GateToGridMapper:
                     x = self.x_start + self.x_step * ix
                     y = self.y_start + self.y_step * iy
                     z = self.z_start + self.z_step * iz
-                    roi = roi_func.get_roi(z, y, x)
+                    roi = dist_beam(z, y, x)
+                    #roi = roi_func.get_roi(z, y, x)
                     roi_array[iz, iy, ix] = roi
         return
 
@@ -305,12 +323,13 @@ cdef class GateToGridMapper:
                 z += z_offset
 
                 # Region of influence
-                roi = roi_func.get_roi(z, y, x)
+                roi = dist_beam(z, y, x)
+                #roi = roi_func.get_roi(z, y, x)
 
                 # reflectivity filtering for non-finite and large values
                 if filter_flag:
                     value = field_data[nray, ngate, 0]
-                    if not isfinite(value):
+                    if not True: #I don't have isfinite !!?!!
                         continue
                     if value > max_refl:
                         continue
