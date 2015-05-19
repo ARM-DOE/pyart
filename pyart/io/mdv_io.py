@@ -47,6 +47,11 @@ def write_grid_mdv(filename, grid):
     - The number of Z levels must not exceed 122.
     - Fields must be pre-encoded as uint8, uint16 or float32,
       use "scale_factor" and "add_offset" attributs to inform scaling.
+
+    In addition, the field are written to the MDV file with the same name as
+    they are given in the grid object.  No attempt is made to map these field
+    names to standard MDV field names.
+
     """
     # first of all firm field list
     fields = grid.fields.keys()
