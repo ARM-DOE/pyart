@@ -93,8 +93,9 @@ def write_grid_mdv(filename, grid):
     d["max_nx"] = nx
     d["max_ny"] = ny
     d["max_nz"] = nz
-    d["time_written"] = (datetime.datetime.utcnow() -
-                         datetime.datetime(1970, 1, 1, 00, 00)).total_seconds()
+    d["time_written"] = int(round(
+        (datetime.datetime.utcnow() -
+         datetime.datetime(1970, 1, 1, 00, 00)).total_seconds()))
     # try metadata, if not use axes
     if "radar_0_lon" in grid.metadata.keys():
         d["sensor_lon"] = grid.metadata["radar_0_lon"]
