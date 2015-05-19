@@ -110,7 +110,8 @@ def write_grid_mdv(filename, grid):
         d["sensor_alt"] = grid.axes['alt']['data'][0] / 1000.
 
     for meta_key, mdv_key in MDV.MDV_METADATA_MAP.iteritems():
-        d[mdv_key] = grid.metadata[meta_key].encode("ASCII")
+        if meta_key in grid.metadata:
+            d[mdv_key] = grid.metadata[meta_key].encode("ASCII")
 
     for ifield, field in enumerate(fields):
         d = mdv.field_headers[ifield]
