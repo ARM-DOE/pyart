@@ -865,9 +865,9 @@ class MdvFile:
         # go back and rewrite vlevel_offsets and vlevel_nbytes
         field_end = self.fileptr.tell()
         self.fileptr.seek(field_start)
-        fmt = '>%iI %iI' % (nz, nz)
-        string = struct.pack(fmt, *(vlevel_offsets + vlevel_nbytes))
-        self.fileptr.write(string)
+        vlevels_dic = {'vlevel_offsets': vlevel_offsets,
+                       'vlevel_nbytes': vlevel_nbytes}
+        self._write_levels_info(nz, vlevels_dic)
         self.fileptr.seek(field_end)
         field_header["volume_size"] = field_size + 2 * 4 * nz
 
