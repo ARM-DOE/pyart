@@ -186,6 +186,7 @@ class Mdv_io_Tests(object):
             mdvfile_orig.read_all_fields()
 
             mdvfile_orig.write(self.tmpfile)
+            mdvfile_orig.close()
             # check that a UserWarning was issued since zlib compression used
             assert len(w) == 1
             assert issubclass(w[-1].category, UserWarning)
@@ -236,6 +237,7 @@ class Mdv_io_Tests(object):
         mdvfile = pyart.io.mdv.MdvFile(pyart.testing.MDV_RHI_FILE)
         mdvfile.read_all_fields()
         mdvfile.write(self.tmpfile)
+        mdvfile.close()
         mdvfile2 = pyart.io.mdv.MdvFile(self.tmpfile)
 
         # verify that the elevations are similar

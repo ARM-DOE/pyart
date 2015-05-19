@@ -122,13 +122,13 @@ def read_mdv(filename, field_names=None, additional_metadata=None,
         # create and store the field dictionary
         field_dic = filemetadata(field_name)
         field_dic['_FillValue'] = get_fillvalue()
-        dataExtractor = _MdvVolumeDataExtractor(
+        dataextractor = _MdvVolumeDataExtractor(
             mdvfile, mdvfile.fields.index(mdv_field), get_fillvalue())
         if delay_field_loading:
             field_dic = LazyLoadDict(field_dic)
-            field_dic.set_lazy('data', dataExtractor)
+            field_dic.set_lazy('data', dataextractor)
         else:
-            field_dic['data'] = dataExtractor()
+            field_dic['data'] = dataextractor()
         fields[field_name] = field_dic
 
     # metadata
@@ -304,7 +304,7 @@ DS_RADAR_CALIB_NAME_LEN = 16
 DS_RADAR_CALIB_MISSING = -9999.0
 
 
-class MdvFile:
+class MdvFile(object):
     """
     A file object for MDV data.
 
@@ -317,9 +317,10 @@ class MdvFile:
 
     Parameters
     ----------
-    filename : str or file-like
+    filename : str, file-like or None.
         Name of MDV file to read or file-like object pointing to the
-        beginning of such a file.
+        beginning of such a file.  None can be used to initalize an object
+        which can be used for writing mdv files.
     debug : bool
         True to print out debugging information, False to supress
     read_fields : bool
@@ -328,14 +329,14 @@ class MdvFile:
 
     Notes
     -----
-    This Object is not stable enough to be considered a general MDV lib, nor is
-    that our intention, but with careful use it shall provide full read/write
-    capacity.
+    This class is not stable enough for general purpose MDV reading/writing,
+    nor is that the intention, but with care it can provide sufficient
+    read/write capacity.
 
     """
-    # ftm for use in the struct lib
-    # mapper are used to convert vector to dics, they are of the following
-    # type: (var_name,inicial pos, final pos)
+    # formats for use in the struct lib
+    # mapper are used to convert tuples to dics, the formats is as follows:
+    # (var_name, initial_position_in_tuple, final_position_in_tuple)
     master_header_fmt = '>28i 8i i 5i 6f 3f 12f 512s 128s 128s i'
     master_header_mapper = [
         ("record_len1", 0, 1),
@@ -577,14 +578,11 @@ class MdvFile:
     ]
 
     def __init__(self, filename, debug=False, read_fields=False):
-        """
-        initalize MdvFile from filename (str).
-        If filename=None create empty object
-        """
+        """ initalize """
         if debug:
             print "Opening file for reading: ", filename
         if filename is None:
-            # will creat empqty struct, for filling and writing after
+            # will creat empty structures, to be filled and written later
             self.fileptr = None
         elif hasattr(filename, 'read'):
             self.fileptr = filename
@@ -611,7 +609,7 @@ class MdvFile:
 
         if debug:
             print "Getting Chunk Data"
-        # will store raw chunk data, use for unkown chunk information
+        # store raw chunk data, used for unknown chunk information
         self.chunk_data = [None] * self.master_header['nchunks']
         self.radar_info, self.elevations, self.calib_info = self._get_chunks(
             debug)
@@ -628,20 +626,9 @@ class MdvFile:
             }
             self.projection = projections[self.field_headers[0]['proj_type']]
 
-#        if debug:
-#            print "Calculating Radar coordinates"
-#        az_deg, range_km, el_deg = self._calc_geometry()
-#        self.az_deg = np.array(az_deg, dtype='float32')
-#        self.range_km = np.array(range_km, dtype='float32')
-#        self.el_deg = np.array(el_deg, dtype='float32')
-
         if debug:
             print "Making usable time objects"
         self.times = self._make_time_dict()
-
-#        if debug:
-#            print "Calculating cartesian coordinates"
-#        self.carts = self._make_carts_dict()
 
         if debug:
             print "indexing fields"
@@ -659,7 +646,20 @@ class MdvFile:
     # public methods #
     ##################
     def write(self, filename, debug=False):
-        """ Write a MdvFile to filename (stg) """
+        """
+        Write object data to a MDV file.
+
+        Note that the file is not explicitly closes, use x.close() to
+        close file object when complete.
+
+        Parameters
+        ----------
+        filename : str or file-like
+            Filename or open file object to which data will be written.
+        debug : bool, options
+            True to print out debugging information, False to supress.
+
+        """
         if debug:
             print "Opening file for writing:", filename
         if hasattr(filename, 'write'):
@@ -668,9 +668,8 @@ class MdvFile:
             self.fileptr = open(filename, 'wb')
         file_start = self.fileptr.tell()
 
-        # first write fields so one can calculate the offsets
-        # put zero in headers
-
+        # write fields and chunk so that offsets can be calculated
+        # headers are initially zeros
         headers_size = (1024 + (416 + 1024) * self.master_header["nfields"] +
                         512 * self.master_header["nchunks"])
         self.fileptr.write("\x00" * headers_size)
@@ -678,15 +677,17 @@ class MdvFile:
         if debug:
             print "Writing Fields Data"
         for ifield in range(self.master_header["nfields"]):
-            self.write_a_field(ifield)
+            self._write_a_field(ifield)
 
         # write chunks
         if debug:
             print "Writing Chunk Data"
         self._write_chunks(debug)
+
         # calculate offsets
         self._calc_file_offsets()
         self.fileptr.seek(file_start)
+
         # write headers
         if debug:
             print "Writing master header"
@@ -703,11 +704,6 @@ class MdvFile:
         if debug:
             print "Writing chunk headers"
         self._write_chunk_headers(self.master_header["nchunks"])
-        # close file
-        # XXX should I really do that? what if it's a file-like struct?
-        if debug:
-            print "Closing file"
-        self.fileptr.close()
 
     def read_a_field(self, fnum, debug=False):
         """
@@ -808,7 +804,20 @@ class MdvFile:
         self.fields_data[fnum] = field_data
         return field_data
 
-    def write_a_field(self, fnum, debug=False):
+    def read_all_fields(self):
+        """ Read all fields, storing data to field name attributes. """
+        for i in xrange(self.master_header['nfields']):
+            self.read_a_field(i)
+
+    def close(self):
+        """ Close the MDV file. """
+        self.fileptr.close()
+
+    ###################
+    # private methods #
+    ###################
+
+    def _write_a_field(self, fnum, debug=False):
         """ write field number 'fnum' to mdv file """
         # the file pointer must be set at the correct location prior to call
         field_header = self.field_headers[fnum]
@@ -820,9 +829,10 @@ class MdvFile:
 
         field_data = self.fields_data[fnum]
         nz = field_header['nz']
-        # save file posicion
+        # save file position
         field_start = self.fileptr.tell()
-        # write zeros to vlevel_offsets and vlevel_nbytes
+        # write zeros to vlevel_offsets and vlevel_nbytes, these will
+        # replaced by the correct data later
         self.fileptr.write("\x00" * 4 * 2 * nz)
         field_size = 0
         vlevel_offsets = [0] * nz
@@ -864,7 +874,7 @@ class MdvFile:
             self.fileptr.write(compr_data)
             field_size = field_size + len(compr_data) + 24
             vlevel_nbytes[sw] = len(compr_data) + 24
-        # go back and rewrite vlevel_offsets and vlevel_nbytes
+        # rewrite vlevel_offsets and vlevel_nbytes with corrected data
         field_end = self.fileptr.tell()
         self.fileptr.seek(field_start)
         vlevels_dic = {'vlevel_offsets': vlevel_offsets,
@@ -872,19 +882,6 @@ class MdvFile:
         self._write_levels_info(nz, vlevels_dic)
         self.fileptr.seek(field_end)
         field_header["volume_size"] = field_size + 2 * 4 * nz
-
-    def read_all_fields(self):
-        """ Read all fields, storing data to field name attributes. """
-        for i in xrange(self.master_header['nfields']):
-            self.read_a_field(i)
-
-    def close(self):
-        """ Close the MDV file. """
-        self.fileptr.close()
-
-    ###################
-    # private methods #
-    ###################
 
     # get_ methods for reading headers
 
@@ -1274,6 +1271,7 @@ class MdvFile:
         self.fileptr.write(string)
 
     def _calc_file_offsets(self):
+        """ Calculate file offsets. """
         self.master_header["field_hdr_offset"] = 1024
         self.master_header["vlevel_hdr_offset"] = (
             1024 + 416 * self.master_header["nfields"])
