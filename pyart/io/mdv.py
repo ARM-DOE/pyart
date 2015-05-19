@@ -780,6 +780,9 @@ class MdvFile:
                 gzip_file_handle.close()
             elif compr_info['magic_cookie'] == 0xf5f5f5f5:
                 decompr_data = zlib.decompress(compr_data)
+            elif compr_info['magic_cookie'] == 0xf6f6f6f6:
+                # ZLIB_NOT_COMPRESSED
+                decompr_data = compr_data
             else:
                 raise NotImplementedError('unsupported compression mode')
                 # With sample data it should be possible to write
@@ -789,7 +792,6 @@ class MdvFile:
                 # 0xf8f8f8f8 : GZIP_NOT_COMPRSSED
                 # 0xf3f3f3f3 : BZIP_COMPRESSED
                 # 0xf4f4f4f4 : BZIP_NOT_COMPRESSED
-                # 0xf6f6f6f6 : ZLIB_NOT_COMPRESSED
 
             # read the decompressed data, reshape and mask
             sw_data = np.fromstring(decompr_data, np_form).astype('float32')
