@@ -98,15 +98,15 @@ def write_grid_mdv(filename, grid):
     # try metadata, if not use axes
     if "radar_0_lon" in grid.metadata.keys():
         d["sensor_lon"] = grid.metadata["radar_0_lon"]
-    elif 'lat' in grid.axes.keys:
+    elif 'lat' in grid.axes.keys():
         d["sensor_lon"] = grid.axes['lon']['data'][0]
     if "radar_0_lat" in grid.metadata.keys():
         d["sensor_lat"] = grid.metadata["radar_0_lat"]
-    elif 'lon' in grid.axes.keys:
+    elif 'lon' in grid.axes.keys():
         d["sensor_lat"] = grid.axes['lat']['data'][0]
     if "radar_0_alt" in grid.metadata.keys():
         d["sensor_alt"] = grid.metadata["radar_0_alt"] / 1000.
-    elif 'alt' in grid.axes.keys:
+    elif 'alt' in grid.axes.keys():
         d["sensor_alt"] = grid.axes['alt']['data'][0] / 1000.
 
     for meta_key, mdv_key in MDV.MDV_METADATA_MAP.iteritems():
