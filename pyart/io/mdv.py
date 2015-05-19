@@ -617,20 +617,16 @@ class MdvFile:
             debug)
 
         if self.master_header['nfields'] > 0:
-            if self.field_headers[0]['proj_type'] == PROJ_LATLON:
-                self.projection = 'latlon'
-            elif self.field_headers[0]['proj_type'] == PROJ_LAMBERT_CONF:
-                self.projection = 'lambert_conform'
-            elif self.field_headers[0]['proj_type'] == PROJ_POLAR_STEREO:
-                self.projection = 'polar_stereographic'
-            elif self.field_headers[0]['proj_type'] == PROJ_FLAT:
-                self.projection = 'flat'
-            elif self.field_headers[0]['proj_type'] == PROJ_POLAR_RADAR:
-                self.projection = 'ppi'
-            elif self.field_headers[0]['proj_type'] == PROJ_OBLIQUE_STEREO:
-                self.projection = 'oblique_stereographic'
-            elif self.field_headers[0]['proj_type'] == PROJ_RHI_RADAR:
-                self.projection = 'rhi'
+            projections = {
+                PROJ_LATLON: 'latlon',
+                PROJ_LAMBERT_CONF: 'lambert_conform',
+                PROJ_POLAR_STEREO: 'polar_stereographic',
+                PROJ_FLAT: 'flat',
+                PROJ_POLAR_RADAR: 'ppi',
+                PROJ_OBLIQUE_STEREO: 'oblique_stereographic',
+                PROJ_RHI_RADAR: 'rhi',
+            }
+            self.projection = projections[self.field_headers[0]['proj_type']]
 
 #        if debug:
 #            print "Calculating Radar coordinates"
