@@ -161,11 +161,15 @@ def write_grid_mdv(filename, grid):
             d["bad_data_value"] = grid.fields[field]["_FillValue"]
         elif "missing_value" in grid.fields[field].keys():
             d["bad_data_value"] = grid.fields[field]["missing_value"]
+        else:
+            d["bad_data_value"] = get_fillvalue()
         # missing_data prioritise missing_value
         if "missing_value" in grid.fields[field].keys():
             d["missing_data_value"] = grid.fields[field]["missing_value"]
         elif "_FillValue" in grid.fields[field].keys():
             d["missing_data_value"] = grid.fields[field]["_FillValue"]
+        else:
+            d["missing_data_value"] = get_fillvalue()
 
         d["min_value"] = np.amax(grid.fields[field]['data'])
         d["max_value"] = np.amin(grid.fields[field]['data'])
