@@ -296,8 +296,8 @@ ENCODING_FLOAT32 = 5  # 32 bit IEEE floating point
 
 #  ***************** CHUNK HEADER and DATA *******************
 CHUNK_DSRADAR_PARAMS = 3
-CHUNK_DSRADAR_ELEVATIONS = 10
-CHUNK_DSRADAR_CALIB = 7
+CHUNK_DSRADAR_ELEVATIONS = 7
+CHUNK_DSRADAR_CALIB = 10
 DS_LABEL_LEN = 40
 NCHAR_DS_RADAR_PARAMS = 2 * DS_LABEL_LEN
 DS_RADAR_CALIB_NAME_LEN = 16
@@ -1084,12 +1084,12 @@ class MdvFile:
                     print 'Getting radar info'
                 radar_info = self._get_radar_info()
 
-            elif chunk_id == CHUNK_DSRADAR_CALIB:
+            elif chunk_id == CHUNK_DSRADAR_ELEVATIONS:
                 if debug:
                     print 'getting elevations'
                 elevations = self._get_elevs(curr_chunk_header['size'])
 
-            elif chunk_id == CHUNK_DSRADAR_ELEVATIONS:
+            elif chunk_id == CHUNK_DSRADAR_CALIB:
                 if debug:
                     print 'getting cal'
                 calib_info = self._get_calib()
