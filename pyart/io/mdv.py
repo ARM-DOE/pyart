@@ -885,6 +885,28 @@ class MdvFile(object):
 
     # get_ methods for reading headers
 
+    def _unpack_mapped_tuple(self, l, mapper):
+        """ Create a dictionary from a tuple using a mapper. """
+        d = {}
+        for item in mapper:
+            if item[2] == item[1] + 1:
+                d[item[0]] = l[item[1]]
+            else:
+                d[item[0]] = l[item[1]:item[2]]
+            if isinstance(d[item[0]], basestring):
+                d[item[0]] = d[item[0]].split('\x00', 1)[0]
+        return d
+
+    def _pack_mapped(self, d, mapper, fmt):
+        """ Create a packed string using a mapper and format. """
+        l = [0] * mapper[-1][2]
+        for item in mapper:
+            if item[2] == item[1] + 1:
+                l[item[1]] = d[item[0]]
+            else:
+                l[item[1]:item[2]] = d[item[0]]
+        return struct.pack(fmt, *l)
+
     def _get_master_header(self):
         """ Read the MDV master header, return a dict. """
         # the file pointer must be set at the correct location prior to call
@@ -904,15 +926,7 @@ class MdvFile(object):
             l = struct.unpack(
                 self.master_header_fmt,
                 self.fileptr.read(struct.calcsize(self.master_header_fmt)))
-        d = {}
-        for item in self.master_header_mapper:
-            if item[2] == item[1] + 1:
-                d[item[0]] = l[item[1]]
-            else:
-                d[item[0]] = l[item[1]:item[2]]
-            if isinstance(d[item[0]], basestring):
-                d[item[0]] = d[item[0]].split('\x00', 1)[0]
-        return d
+        return self._unpack_mapped_tuple(l, self.master_header_mapper)
 
     def _write_master_header(self):
         """ Write the MDV master header. """
@@ -956,26 +970,13 @@ class MdvFile(object):
             l = struct.unpack(
                 self.field_header_fmt,
                 self.fileptr.read(struct.calcsize(self.field_header_fmt)))
-        d = {}
-        for item in self.field_header_mapper:
-            if item[2] == item[1] + 1:
-                d[item[0]] = l[item[1]]
-            else:
-                d[item[0]] = l[item[1]:item[2]]
-            if isinstance(d[item[0]], basestring):
-                d[item[0]] = d[item[0]].split('\x00', 1)[0]
-        return d
+        return self._unpack_mapped_tuple(l, self.field_header_mapper)
 
     def _write_field_header(self, d):
         """ Write the a single field header. """
         # the file pointer must be set at the correct location prior to call
-        l = [0] * self.field_header_mapper[-1][2]
-        for item in self.field_header_mapper:
-            if item[2] == item[1] + 1:
-                l[item[1]] = d[item[0]]
-            else:
-                l[item[1]:item[2]] = d[item[0]]
-        string = struct.pack(self.field_header_fmt, *l)
+        string = self._pack_mapped(
+            d, self.field_header_mapper, self.field_header_fmt)
         self.fileptr.write(string)
 
     def _get_vlevel_headers(self, nfields):
@@ -1001,26 +1002,13 @@ class MdvFile(object):
             l = struct.unpack(
                 self.vlevel_header_fmt,
                 self.fileptr.read(struct.calcsize(self.vlevel_header_fmt)))
-        d = {}
-        for item in self.vlevel_header_mapper:
-            if item[2] == item[1] + 1:
-                d[item[0]] = l[item[1]]
-            else:
-                d[item[0]] = l[item[1]:item[2]]
-            if isinstance(d[item[0]], basestring):
-                d[item[0]] = d[item[0]].split('\x00', 1)[0]
-        return d
+        return self._unpack_mapped_tuple(l, self.vlevel_header_mapper)
 
     def _write_vlevel_header(self, d):
         """  Write the a single vfield header. """
         # the file pointer must be set at the correct location prior to call
-        l = [0] * self.vlevel_header_mapper[-1][2]
-        for item in self.vlevel_header_mapper:
-            if item[2] == item[1] + 1:
-                l[item[1]] = d[item[0]]
-            else:
-                l[item[1]:item[2]] = d[item[0]]
-        string = struct.pack(self.vlevel_header_fmt, *l)
+        string = self._pack_mapped(
+            d, self.vlevel_header_mapper, self.vlevel_header_fmt)
         self.fileptr.write(string)
 
     def _get_chunk_headers(self, nchunks):
@@ -1047,26 +1035,13 @@ class MdvFile(object):
             l = struct.unpack(
                 self.chunk_header_fmt,
                 self.fileptr.read(struct.calcsize(self.chunk_header_fmt)))
-        d = {}
-        for item in self.chunk_header_mapper:
-            if item[2] == item[1] + 1:
-                d[item[0]] = l[item[1]]
-            else:
-                d[item[0]] = l[item[1]:item[2]]
-            if isinstance(d[item[0]], basestring):
-                d[item[0]] = d[item[0]].split('\x00', 1)[0]
-        return d
+        return self._unpack_mapped_tuple(l, self.chunk_header_mapper)
 
     def _write_chunk_header(self, d):
         """  Write the a single chunk header. """
         # the file pointer must be set at the correct location prior to call
-        l = [0] * self.chunk_header_mapper[-1][2]
-        for item in self.chunk_header_mapper:
-            if item[2] == item[1] + 1:
-                l[item[1]] = d[item[0]]
-            else:
-                l[item[1]:item[2]] = d[item[0]]
-        string = struct.pack(self.chunk_header_fmt, *l)
+        string = self._pack_mapped(
+            d, self.chunk_header_mapper, self.chunk_header_fmt)
         self.fileptr.write(string)
 
     def _get_chunks(self, debug=False):
@@ -1137,26 +1112,13 @@ class MdvFile(object):
             l = struct.unpack(
                 self.radar_info_fmt,
                 self.fileptr.read(struct.calcsize(self.radar_info_fmt)))
-        d = {}
-        for item in self.radar_info_mapper:
-            if item[2] == item[1] + 1:
-                d[item[0]] = l[item[1]]
-            else:
-                d[item[0]] = l[item[1]:item[2]]
-            if isinstance(d[item[0]], basestring):
-                d[item[0]] = d[item[0]].split('\x00', 1)[0]
-        return d
+        return self._unpack_mapped_tuple(l, self.radar_info_mapper)
 
     def _write_radar_info(self, d):
         """  Write radar information. """
         # the file pointer must be set at the correct location prior to call
-        l = [0] * self.radar_info_mapper[-1][2]
-        for item in self.radar_info_mapper:
-            if item[2] == item[1] + 1:
-                l[item[1]] = d[item[0]]
-            else:
-                l[item[1]:item[2]] = d[item[0]]
-        string = struct.pack(self.radar_info_fmt, *l)
+        string = self._pack_mapped(
+            d, self.radar_info_mapper, self.radar_info_fmt)
         self.fileptr.write(string)
 
     def _get_elevs(self, nbytes):
@@ -1185,26 +1147,13 @@ class MdvFile(object):
             l = struct.unpack(
                 self.calib_fmt,
                 self.fileptr.read(struct.calcsize(self.calib_fmt)))
-        d = {}
-        for item in self.calib_mapper:
-            if item[2] == item[1] + 1:
-                d[item[0]] = l[item[1]]
-            else:
-                d[item[0]] = l[item[1]:item[2]]
-            if isinstance(d[item[0]], basestring):
-                d[item[0]] = d[item[0]].split('\x00', 1)[0]
-        return d
+        return self._unpack_mapped_tuple(l, self.calib_mapper)
 
     def _write_calib(self, d):
         """  Write calibration information. """
         # the file pointer must be set at the correct location prior to call
-        l = [0] * self.calib_mapper[-1][2]
-        for item in self.calib_mapper:
-            if item[2] == item[1] + 1:
-                l[item[1]] = d[item[0]]
-            else:
-                l[item[1]:item[2]] = d[item[0]]
-        string = struct.pack(self.calib_fmt, *l)
+        string = self._pack_mapped(
+            d, self.calib_mapper, self.calib_fmt)
         self.fileptr.write(string)
 
     def _get_compression_info(self):
@@ -1216,26 +1165,13 @@ class MdvFile(object):
             l = struct.unpack(
                 self.compression_info_fmt,
                 self.fileptr.read(struct.calcsize(self.compression_info_fmt)))
-        d = {}
-        for item in self.compression_info_mapper:
-            if item[2] == item[1] + 1:
-                d[item[0]] = l[item[1]]
-            else:
-                d[item[0]] = l[item[1]:item[2]]
-            if isinstance(d[item[0]], basestring):
-                d[item[0]] = d[item[0]].split('\x00', 1)[0]
-        return d
+        return self._unpack_mapped_tuple(l, self.compression_info_mapper)
 
     def _write_compression_info(self, d):
         """ Write compression infomation"""
         # the file pointer must be set at the correct location prior to call
-        l = [0] * self.compression_info_mapper[-1][2]
-        for item in self.compression_info_mapper:
-            if item[2] == item[1] + 1:
-                l[item[1]] = d[item[0]]
-            else:
-                l[item[1]:item[2]] = d[item[0]]
-        string = struct.pack(self.compression_info_fmt, *l)
+        string = self._pack_mapped(
+            d, self.compression_info_mapper, self.compression_info_fmt)
         self.fileptr.write(string)
 
     def _get_unknown_chunk(self, cnum):
