@@ -270,34 +270,34 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
     # time dictionaries
     units = make_time_unit_str(mdv.times['time_begin'])
     time = {
-        'data': np.array(date2num(mdv.times['time_centroid'], units)),
+        'data': np.array([date2num(mdv.times['time_centroid'], units)]),
         'units': units,
         'calendar': 'gregorian',
         'standard_name': 'time',
         'long_name': 'Time in seconds since volume start'}
 
     time_start = {
-        'data': np.array(date2num(mdv.times['time_begin'], units)),
+        'data': np.array([date2num(mdv.times['time_begin'], units)]),
         'units': units,
         'calendar': 'gregorian',
         'standard_name': 'time',
         'long_name': 'Time in seconds of volume start'}
 
     time_end = {
-        'data': np.array(date2num(mdv.times['time_end'], units)),
+        'data': np.array([date2num(mdv.times['time_end'], units)]),
         'units': units,
         'calendar': 'gregorian',
         'standard_name': 'time',
         'long_name': 'Time in seconds of volume end'}
 
-    altorigin = {'data': np.array(mdv.master_header["sensor_alt"] * 1000.,
+    altorigin = {'data': np.array([mdv.master_header["sensor_alt"] * 1000.],
                                   dtype='float64'),
                  'long_name': 'Altitude at grid origin',
                  'units': 'm',
                  'standard_name': 'altitude',
                 }
 
-    latorigin = {'data': np.array(mdv.master_header["sensor_lat"],
+    latorigin = {'data': np.array([mdv.master_header["sensor_lat"]],
                                   dtype='float64'),
                  'long_name': 'Latitude at grid origin',
                  'units': 'degree_N',
@@ -306,7 +306,7 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
                  'valid_max': 90.
                 }
 
-    lonorigin = {'data': np.array(mdv.master_header["sensor_lon"],
+    lonorigin = {'data': np.array([mdv.master_header["sensor_lon"]],
                                   dtype='float64'),
                  'long_name': 'Longitude at grid origin',
                  'units': 'degree_E',
