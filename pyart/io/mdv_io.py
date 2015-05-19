@@ -386,7 +386,7 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
 
         field_dic['_FillValue'] = get_fillvalue()
         dataextractor = MDV._MdvVolumeDataExtractor(
-            mdv, mdv.fields.index(mdv_field), get_fillvalue())
+            mdv, mdv.fields.index(mdv_field), get_fillvalue(), two_dims=False)
         if delay_field_loading:
             field_dic = LazyLoadDict(field_dic)
             field_dic.set_lazy('data', dataextractor)

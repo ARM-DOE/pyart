@@ -1388,13 +1388,18 @@ class _MdvVolumeDataExtractor(object):
         Field number of data to be extracted.
     fillvalue : int
         Value used to fill masked values in the returned array.
+    two_dims : bool.
+        True to combine the first and second dimension of the array when
+        returning the data, False will return a three dimensional array.
+
     """
 
-    def __init__(self, mdvfile, field_num, fillvalue):
+    def __init__(self, mdvfile, field_num, fillvalue, two_dims=True):
         """ initialize the object. """
         self.mdvfile = mdvfile
         self.field_num = field_num
         self.fillvalue = fillvalue
+        self.two_dims = two_dims
 
     def __call__(self):
         """ Return an array containing data from the referenced volume. """
@@ -1403,5 +1408,6 @@ class _MdvVolumeDataExtractor(object):
         data[np.where(np.isnan(data))] = self.fillvalue
         data[np.where(data == 131072)] = self.fillvalue
         data = np.ma.masked_equal(data, self.fillvalue)
-        data.shape = (data.shape[0] * data.shape[1], data.shape[2])
+        if self.two_dims:
+            data.shape = (data.shape[0] * data.shape[1], data.shape[2])
         return data
