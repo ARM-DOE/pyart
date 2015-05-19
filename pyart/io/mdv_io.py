@@ -69,13 +69,13 @@ def write_grid_mdv(filename, grid):
     # fill headers
     d = mdv.master_header
     if "time" in grid.axes.keys():
-        d["time_centroid"] = time_dict_to_unixtime(grid.axes["time"])
+        d["time_centroid"] = int(time_dict_to_unixtime(grid.axes["time"]))
     if "time_start" in grid.axes.keys():
-        d["time_begin"] = time_dict_to_unixtime(grid.axes["time_start"])
+        d["time_begin"] = int(time_dict_to_unixtime(grid.axes["time_start"]))
     else:
         d["time_begin"] = d["time_centroid"]
     if "time_end" in grid.axes.keys():
-        d["time_end"] = time_dict_to_unixtime(grid.axes["time_end"])
+        d["time_end"] = int(time_dict_to_unixtime(grid.axes["time_end"]))
     else:
         d["time_end"] = d["time_centroid"]
 
