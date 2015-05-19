@@ -770,7 +770,7 @@ class MdvFile:
                 fmt = '>%if' % (nx * ny)
                 np_form = '>f'
             else:
-                raise ValueError('unknown encoding: ', encoding_type)
+                raise NotImplementedError('encoding: ', encoding_type)
 
             # decompress the level data
             if compr_info['magic_cookie'] == 0xf7f7f7f7:
@@ -842,7 +842,7 @@ class MdvFile:
             elif encoding_type == ENCODING_FLOAT32:
                 np_form = '>f'
             else:
-                raise ValueError('unknown encoding: ', encoding_type)
+                raise NotImplementedError('encoding: ', encoding_type)
             uncompr_data = np.array(sw_data, dtype=np_form).tostring()
             compr_data = zlib.compress(uncompr_data)
             if len(compr_data) > len(uncompr_data):
