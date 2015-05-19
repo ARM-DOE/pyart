@@ -1129,7 +1129,7 @@ class MdvFile:
             else:
                 if debug:
                     print 'writing unknown chunk %i' % chunk_id
-                self._write_unknown_chunk(self, self.chunk_data[cnum])
+                self._write_unknown_chunk(self.chunk_data[cnum])
 
     def _get_radar_info(self):
         """ Get the radar information, return dict. """
