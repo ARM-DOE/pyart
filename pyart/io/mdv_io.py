@@ -28,7 +28,7 @@ from .lazydict import LazyLoadDict
 
 def write_grid_mdv(filename, grid):
     """
-    Write grid object to MDV file
+    Write grid object to MDV file.
 
     Parameters
     ----------
@@ -39,14 +39,13 @@ def write_grid_mdv(filename, grid):
 
     Notes
     -----
-    Doe to limitations of the MDV format, not all allowed grid
-    objects are writible.
-    In especial following condicion must be satisfied:
+    Do to limitations of the MDV format, not all grid objects are writable.
+    To write a grid the following conditions must be satisfied:
 
-    - XY grid must be regular (equal spacing), Z can be irregular.
-    - The number of Z levels must not exceed 122.
-    - Fields must be pre-encoded as uint8, uint16 or float32,
-      use "scale_factor" and "add_offset" attributs to inform scaling.
+        * XY grid must be regular (equal spacing), Z can be irregular.
+        * The number of Z levels must not exceed 122.
+        * Fields must be pre-encoded as uint8, uint16 or float32,
+          use "scale_factor" and "add_offset" attributs to inform scaling.
 
     In addition, the field are written to the MDV file with the same name as
     they are given in the grid object.  No attempt is made to map these field
@@ -147,7 +146,7 @@ def write_grid_mdv(filename, grid):
         d["scaling_type"] = 4  # SCALING_SPECIFIED (by the user)
         d["native_vlevel_type"] = mdv.master_header["vlevel_type"]
         d["vlevel_type"] = mdv.master_header["vlevel_type"]
-        d["data_dimension"] = 3  # XXX are grid's always 3d?
+        d["data_dimension"] = 3
         d["proj_origin_lat"] = grid.axes['lat']['data'][0]
         d["proj_origin_lon"] = grid.axes['lon']['data'][0]
         d["grid_dx"] = (grid.axes["x_disp"]['data'][1] -
@@ -209,7 +208,7 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
                   file_field_names=False, exclude_fields=None,
                   delay_field_loading=False):
     """
-    Read a MDV file in a Grid Object.
+    Read a MDV file to a Grid Object.
 
     Parameters
     ----------
@@ -241,6 +240,7 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
         key in a particular field dictionary is accessed.  In this case
         the field attribute of the returned Radar object will contain
         LazyLoadDict objects not dict objects.
+
     Returns
     -------
     grid : Grid
@@ -252,24 +252,24 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
     compressed with gzip or zlib. For polar files see
     :py:func:`pyart.io.read_mdv`
 
-    MDV files and Grid object are not fully interchangeable, here is a list of
-    known limitation:
+    MDV files and Grid object are not fully interchangeable.  Specific
+    limitation include:
 
-    - All fields must have the same shape and axes.
-    - All fields must have the same projection.
-    - Vlevels types must not vary.
-    - Projection must be different than PROJ_POLAR_RADAR(9) and
-      PROJ_RHI_RADAR(13).
-    - Correct unit in the Z axis are just availible for 'vlevel_type' equal
-      VERT_TYPE_Z(4), VERT_TYPE_ELEV(9), VERT_TYPE_AZ(17),
-      VERT_TYPE_PRESSURE(3) and VERT_TYPE_THETA(7).
-    - Unknown behavior in case of 2D data, but it probably won't fail.
+        * All fields must have the same shape and axes.
+        * All fields must have the same projection.
+        * Vlevels types must not vary.
+        * Projection must not be PROJ_POLAR_RADAR (9) or PROJ_RHI_RADAR (13).
+        * Correct unit in the Z axis are just availible for 'vlevel_type'
+          equal to VERT_TYPE_Z(4), VERT_TYPE_ELEV(9), VERT_TYPE_AZ(17),
+          VERT_TYPE_PRESSURE(3) and VERT_TYPE_THETA(7).
+        * The behavior in cases of 2D data is unknown but most likely will not
+          fail.
+
     """
-    # XXX add test for conversion limitations
+    # XXX add tests for conversion limitations
     # create metadata retrieval object
     filemetadata = FileMetadata('mdv', field_names, additional_metadata,
                                 file_field_names, exclude_fields)
-
     mdv = MDV.MdvFile(filename)
 
     # time dictionaries
@@ -295,30 +295,30 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
         'standard_name': 'time',
         'long_name': 'Time in seconds of volume end'}
 
-    altorigin = {'data': np.array([mdv.master_header["sensor_alt"] * 1000.],
-                                  dtype='float64'),
-                 'long_name': 'Altitude at grid origin',
-                 'units': 'm',
-                 'standard_name': 'altitude',
-                }
+    altorigin = {
+        'data': np.array([mdv.master_header["sensor_alt"] * 1000.],
+                         dtype='float64'),
+        'long_name': 'Altitude at grid origin',
+        'units': 'm',
+        'standard_name': 'altitude', }
 
-    latorigin = {'data': np.array([mdv.master_header["sensor_lat"]],
-                                  dtype='float64'),
-                 'long_name': 'Latitude at grid origin',
-                 'units': 'degree_N',
-                 'standard_name': 'latitude',
-                 'valid_min': -90.,
-                 'valid_max': 90.
-                }
+    latorigin = {
+        'data': np.array([mdv.master_header["sensor_lat"]],
+                         dtype='float64'),
+        'long_name': 'Latitude at grid origin',
+        'units': 'degree_N',
+        'standard_name': 'latitude',
+        'valid_min': -90.,
+        'valid_max': 90., }
 
-    lonorigin = {'data': np.array([mdv.master_header["sensor_lon"]],
-                                  dtype='float64'),
-                 'long_name': 'Longitude at grid origin',
-                 'units': 'degree_E',
-                 'standard_name': 'longitude',
-                 'valid_min': -180.,
-                 'valid_max': 180.
-                }
+    lonorigin = {
+        'data': np.array([mdv.master_header["sensor_lon"]],
+                         dtype='float64'),
+        'long_name': 'Longitude at grid origin',
+        'units': 'degree_E',
+        'standard_name': 'longitude',
+        'valid_min': -180.,
+        'valid_max': 180., }
 
     # grid coordinate dictionaries
     nz = mdv.master_header["max_nz"]
@@ -379,12 +379,10 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
 
     # metadata
     metadata = filemetadata('metadata')
-    # the default is CF/Radial, but this is not right
-    metadata["Conventions"] = ''
-    metadata["version"] = ''
     for meta_key, mdv_key in MDV.MDV_METADATA_MAP.iteritems():
         metadata[meta_key] = mdv.master_header[mdv_key]
 
+    # fields
     fields = {}
     mdv_fields = mdv._make_fields_list()
     for mdv_field in set(mdv_fields):
@@ -409,7 +407,7 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
 # XXX move to some where alse, may be common
 def time_dict_to_unixtime(d):
     """
-    convert a dict containing NetCDF style time information to unixtime,
+    Convert a dict containing NetCDF style time information to unixtime,
     i.e second since 1st Jan 1970 00:00
     """
     if 'calendar' in d:
