@@ -356,9 +356,11 @@ class _NetCDFVariableDataExtractor(object):
     def __call__(self):
         """ Return an array containing data from the stored variable. """
         d = self.ncvar[:]
-        if np.isscalar(d):
+        if np.isscalar(d) or d.ndim == 0:
             # netCDF4 1.1.0+ returns a scalar for 0-dim array, we always want
             # 1-dim+ arrays with a valid shape.
+            # netCDF4 1.1.8 changed to returning a "scalar array" which
+            # is an array with 0 dimensions, fix this also.
             d = np.array(d)
             d.shape = (1, )
         return d
