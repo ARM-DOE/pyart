@@ -674,8 +674,8 @@ def convert_sigmet_data(data_type, data, nbins):
     elif data_type_name[-1] != 2:
         # make a view of left half of the data as uint8,
         # this is the actual ray data collected, the right half is blank.
-        nrays, nbins = data.shape
-        ndata = data.view('(2,) uint8').reshape(nrays, -1)[:, :nbins]
+        nrays, nbin = data.shape
+        ndata = data.view('(2,) uint8').reshape(nrays, -1)[:, :nbin]
 
         if data_type_name in like_dbt:
             # DB_DBT, 1, Total Power (1 byte)

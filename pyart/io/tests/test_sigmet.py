@@ -349,3 +349,17 @@ def test_rhi_elevation():
     assert 'axis' in RADAR_RHI.elevation
     assert RADAR_RHI.elevation['data'].shape == (20, )
     assert round(RADAR_RHI.elevation['data'][1], 2) == 9.00
+
+#########
+# 1byte #
+#########
+
+# Test 1byte sigmet format. github issue #299
+def test_1byte_datatype():
+    data_type = 1   # Sigmet type for for a DBT field 
+    data = np.ones((2, 2), dtype=np.int16) * 257
+    nbins = np.ones((2,), dtype=np.int16) * 2
+    result = pyart.io._sigmetfile.convert_sigmet_data(data_type, data, nbins)
+    assert np.all(result == -31.5)
+    assert result.shape == (2, 2)
+
