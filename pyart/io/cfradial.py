@@ -96,7 +96,9 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
         True to delay loading of field data from the file until the 'data'
         key in a particular field dictionary is accessed.  In this case
         the field attribute of the returned Radar object will contain
-        LazyLoadDict objects not dict objects.
+        LazyLoadDict objects not dict objects.  Delayed field loading will not
+        provide any speedup in file where the number of gates vary between
+        rays (ngates_vary=True) and is not recommended.
 
     Returns
     -------
