@@ -1026,13 +1026,20 @@ class MdvFile(object):
 
     def _time_dict_into_header(self):
         """ Complete time information in master_header from the time dict """
-        t_base = datetime.datetime(1970, 1, 1, 00, 00)
-        self.master_header['time_begin'] = (
-            self.times['time_begin'] - t_base).total_seconds()
-        self.master_header['time_end'] = (
-            self.times['time_end'] - t_base).total_seconds()
-        self.master_header['time_centroid'] = (
-            self.times['time_centroid'] - t_base).total_seconds()
+        self.master_header['time_begin'] = self._secs_since_epoch(
+            self.times['time_begin'])
+        self.master_header['time_end'] = self._secs_since_epoch(
+            self.times['time_end'])
+        self.master_header['time_centroid'] = self._secs_since_epoch(
+            self.times['time_centroid'])
+
+    def _secs_since_epoch(self, dt):
+        """ Return the number of seconds since the epoch for a datetime. """
+        epoch = datetime.datetime(1970, 1, 1, 0, 0)
+        td = dt - epoch
+        # use td.total_seconds() in Python 2.7+
+        return (td.microseconds + (td.seconds + td.days * 24 * 3600) *
+                10**6) / 10**6
 
     # misc. methods
     # XXX move some where else, there are not general mdv operations

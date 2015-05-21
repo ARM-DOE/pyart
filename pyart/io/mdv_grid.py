@@ -98,9 +98,10 @@ def write_grid_mdv(filename, grid):
     d["max_nx"] = nx
     d["max_ny"] = ny
     d["max_nz"] = nz
-    d["time_written"] = int(round(
-        (datetime.datetime.utcnow() -
-         datetime.datetime(1970, 1, 1, 00, 00)).total_seconds()))
+    td = datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1, 0, 0)
+    d["time_written"] = int(round(td.microseconds + (td.seconds + td.days *
+                                  24 * 3600) * 10**6) / 10**6)
+
     # try metadata, if not use axes
     if "radar_0_lon" in grid.metadata.keys():
         d["sensor_lon"] = grid.metadata["radar_0_lon"]
@@ -418,4 +419,7 @@ def time_dict_to_unixtime(d):
 
     date = num2date(d['data'][0], d['units'], calendar)
     epoch = datetime.datetime(1970, 1, 1, 00, 00)
-    return (date - epoch).total_seconds()
+    td = date - epoch
+    # use td.total_seconds() in Python 2.7+
+    return (td.microseconds + (td.seconds + td.days * 24 * 3600) *
+            10**6) / 10**6
