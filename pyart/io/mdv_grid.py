@@ -9,7 +9,7 @@ Utilities for reading and writing of MDV grid files.
 
     write_grid_mdv
     read_grid_mdv
-    time_dict_to_unixtime
+    _time_dic_to_datetime
 
 """
 
@@ -73,16 +73,18 @@ def write_grid_mdv(filename, grid):
 
     # fill headers
     d = mdv.master_header
+    times = mdv.times
     if "time" in grid.axes.keys():
-        d["time_centroid"] = int(time_dict_to_unixtime(grid.axes["time"]))
+        times['time_centroid'] = _time_dic_to_datetime(grid.axes['time'])
     if "time_start" in grid.axes.keys():
-        d["time_begin"] = int(time_dict_to_unixtime(grid.axes["time_start"]))
+        times["time_begin"] = _time_dic_to_datetime(grid.axes["time_start"])
     else:
-        d["time_begin"] = d["time_centroid"]
+        times["time_begin"] = mdv.times['time_centroid']
     if "time_end" in grid.axes.keys():
-        d["time_end"] = int(time_dict_to_unixtime(grid.axes["time_end"]))
+        times["time_end"] = _time_dic_to_datetime(grid.axes["time_end"])
     else:
-        d["time_end"] = d["time_centroid"]
+        times["time_end"] = mdv.times['time_centroid']
+    mdv._time_dict_into_header()
 
     d["data_dimension"] = 3  # XXX are grid's always 3d?
     # =DATA_SYNTHESIS, I don't realy know, so miscellaneous!
@@ -406,20 +408,11 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
     return Grid(fields, axes, metadata)
 
 
-# XXX move to some where alse, may be common
-def time_dict_to_unixtime(d):
-    """
-    Convert a dict containing NetCDF style time information to unixtime,
-    i.e second since 1st Jan 1970 00:00
-    """
-    if 'calendar' in d:
-        calendar = d['calendar']
+# This function may be helpful in other cases and could be moved in common
+def _time_dic_to_datetime(dic):
+    """ Return a datetime for the first element in a time dictionary. """
+    if 'calendar' in dic:
+        calendar = dic['calendar']
     else:
         calendar = 'standard'
-
-    date = num2date(d['data'][0], d['units'], calendar)
-    epoch = datetime.datetime(1970, 1, 1, 00, 00)
-    td = date - epoch
-    # use td.total_seconds() in Python 2.7+
-    return (td.microseconds + (td.seconds + td.days * 24 * 3600) *
-            10**6) / 10**6
+    return num2date(dic['data'][0], dic['units'], calendar)

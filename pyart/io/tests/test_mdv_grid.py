@@ -2,6 +2,7 @@
 
 import os
 import tempfile
+import datetime
 
 import numpy as np
 from numpy.testing import assert_raises, assert_warns
@@ -177,7 +178,12 @@ class Mdv_grid_Tests(object):
             TypeError, pyart.io.write_grid_mdv, self.tmpfile, grid)
 
 
-def test_time_dic_to_unixtime():
-    r = pyart.io.mdv_grid.time_dict_to_unixtime(
+def test_time_dic_to_datetime():
+    dt = pyart.io.mdv_grid._time_dic_to_datetime(
         {'data': [20], 'units': 'seconds since 1970-01-01 00:00:00'})
-    assert abs(r - 20.) <= 0.01
+    assert dt == datetime.datetime(1970, 1, 1, 0, 0, 20)
+
+    dt = pyart.io.mdv_grid._time_dic_to_datetime(
+        {'data': [20], 'units': 'seconds since 1970-01-01 00:00:00',
+         'calendar': 'standard'})
+    assert dt == datetime.datetime(1970, 1, 1, 0, 0, 20)

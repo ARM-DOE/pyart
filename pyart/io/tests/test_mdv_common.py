@@ -329,12 +329,6 @@ def test_rhi_cart():
     assert round(carts['z'][0, 1, 2], 2) == 121.47
 
 
-def test_mdv_methods():
-    mdvfile = pyart.io.mdv_common.MdvFile(pyart.testing.MDV_PPI_FILE)
-    # XXX why are this available
-    mdvfile._time_dict_into_header()
-
-
 class Mdv_common_Tests(object):
     """
     Class for declaring unit tests for the io/mdv_common.py module which
