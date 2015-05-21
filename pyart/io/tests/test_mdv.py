@@ -274,7 +274,7 @@ def check_field_first_point(field, value):
 #################
 
 
-mdvfile = pyart.io.mdv.MdvFile(pyart.testing.MDV_PPI_FILE)
+mdvfile = pyart.io.mdv_common.MdvFile(pyart.testing.MDV_PPI_FILE)
 
 
 def test_master_header():
@@ -532,7 +532,7 @@ def test_fileptr():
 
 def test_read_one_field():
 
-    mdvfile = pyart.io.mdv.MdvFile(pyart.testing.MDV_PPI_FILE)
+    mdvfile = pyart.io.mdv_common.MdvFile(pyart.testing.MDV_PPI_FILE)
     # extract a field
     assert mdvfile.fields_data[0] is None
     sweeps = mdvfile.read_a_field(0)
@@ -549,7 +549,7 @@ def test_read_one_field():
 
 def test_read_all_fields():
 
-    mdvfile = pyart.io.mdv.MdvFile(pyart.testing.MDV_PPI_FILE)
+    mdvfile = pyart.io.mdv_common.MdvFile(pyart.testing.MDV_PPI_FILE)
     # read all fields
     assert mdvfile.fields_data[0] is None
     mdvfile.read_all_fields()
@@ -558,7 +558,7 @@ def test_read_all_fields():
 
 
 def test_read_all_fields_on_creation():
-    mdvfile2 = pyart.io.mdv.MdvFile(pyart.testing.MDV_PPI_FILE,
+    mdvfile2 = pyart.io.mdv_common.MdvFile(pyart.testing.MDV_PPI_FILE,
                                     read_fields=True)
     assert mdvfile2.fields_data[0] is not None
     assert round(mdvfile2.fields_data[0][0, 1, 2], 2) == 13.19

@@ -1,8 +1,8 @@
 """
-pyart.io.mdv_io
-===============
+pyart.io.mdv_grid
+==================
 
-Utilities for reading and writing of MDV files.
+Utilities for reading and writing of MDV grid files.
 
 .. autosummary::
     :toctree: generated/
@@ -15,15 +15,16 @@ Utilities for reading and writing of MDV files.
 
 
 import datetime
+import warnings
+
 from netCDF4 import num2date, date2num
 import numpy as np
-
-import mdv as MDV
 
 from ..config import FileMetadata, get_fillvalue
 from ..core.grid import Grid
 from .common import make_time_unit_str
 from .lazydict import LazyLoadDict
+from . import mdv_common
 
 
 def write_grid_mdv(filename, grid):
@@ -59,12 +60,12 @@ def write_grid_mdv(filename, grid):
     grid_shape = grid.fields[fields[0]]['data'].shape
     nz, ny, nx = grid_shape
     nfields = len(fields)
-    if nz > MDV.MDV_MAX_VLEVELS:
-        import warnings
+    if nz > mdv_common.MDV_MAX_VLEVELS:
         warnings.warn(('%i vlevels exceed MDV_MAX_VLEVELS = %i. Extra ' +
-                       'levels will be ignored') % (nz, MDV.MDV_MAX_VLEVELS))
-        nz = MDV.MDV_MAX_VLEVELS
-    mdv = MDV.MdvFile(None)
+                       'levels will be ignored') %
+                      (nz, mdv_common.MDV_MAX_VLEVELS))
+        nz = mdv_common.MDV_MAX_VLEVELS
+    mdv = mdv_common.MdvFile(None)
     mdv.field_headers = mdv._get_field_headers(nfields)
     mdv.vlevel_headers = mdv._get_vlevel_headers(nfields)
     mdv.fields_data = [None] * nfields
@@ -114,7 +115,7 @@ def write_grid_mdv(filename, grid):
     elif 'alt' in grid.axes.keys():
         d["sensor_alt"] = grid.axes['alt']['data'][0] / 1000.
 
-    for meta_key, mdv_key in MDV.MDV_METADATA_MAP.iteritems():
+    for meta_key, mdv_key in mdv_common.MDV_METADATA_MAP.iteritems():
         if meta_key in grid.metadata:
             d[mdv_key] = grid.metadata[meta_key].encode("ASCII")
 
@@ -126,16 +127,16 @@ def write_grid_mdv(filename, grid):
         d["nx"] = nx
         d["ny"] = ny
         d["nz"] = nz
-        d["proj_type"] = MDV.PROJ_FLAT
+        d["proj_type"] = mdv_common.PROJ_FLAT
         dtype = grid.fields[field]['data'].dtype
         if dtype == np.uint8:
-            d["encoding_type"] = MDV.ENCODING_INT8
+            d["encoding_type"] = mdv_common.ENCODING_INT8
             d["data_element_nbytes"] = 1
         elif dtype == np.uint16:
-            d["encoding_type"] = MDV.ENCODING_INT16
+            d["encoding_type"] = mdv_common.ENCODING_INT16
             d["data_element_nbytes"] = 2
         elif dtype == np.float32 or dtype == np.float64:
-            d["encoding_type"] = MDV.ENCODING_FLOAT32
+            d["encoding_type"] = mdv_common.ENCODING_FLOAT32
             d["data_element_nbytes"] = 4
         else:
             raise TypeError("Unsuported encoding %s, please encode data as "
@@ -270,7 +271,7 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
     # create metadata retrieval object
     filemetadata = FileMetadata('mdv', field_names, additional_metadata,
                                 file_field_names, exclude_fields)
-    mdv = MDV.MdvFile(filename)
+    mdv = mdv_common.MdvFile(filename)
 
     # time dictionaries
     units = make_time_unit_str(mdv.times['time_begin'])
@@ -330,11 +331,11 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
     y_step = mdv.field_headers[0]["grid_dy"] * 1000.
     x_step = mdv.field_headers[0]["grid_dx"] * 1000.
 
-    if mdv.field_headers[0]["proj_type"] == MDV.PROJ_LATLON:
+    if mdv.field_headers[0]["proj_type"] == mdv_common.PROJ_LATLON:
         xunits = 'degree_E'
         yunits = 'degree_N'
-    elif (mdv.field_headers[0]["proj_type"] != MDV.PROJ_POLAR_RADAR and
-          mdv.field_headers[0]["proj_type"] != MDV.PROJ_RHI_RADAR):
+    elif (mdv.field_headers[0]["proj_type"] != mdv_common.PROJ_POLAR_RADAR and
+          mdv.field_headers[0]["proj_type"] != mdv_common.PROJ_RHI_RADAR):
         xunits = 'm'
         yunits = 'm'
 
@@ -379,7 +380,7 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
 
     # metadata
     metadata = filemetadata('metadata')
-    for meta_key, mdv_key in MDV.MDV_METADATA_MAP.iteritems():
+    for meta_key, mdv_key in mdv_common.MDV_METADATA_MAP.iteritems():
         metadata[meta_key] = mdv.master_header[mdv_key]
 
     # fields
@@ -392,7 +393,7 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
         field_dic = filemetadata(field_name)
 
         field_dic['_FillValue'] = get_fillvalue()
-        dataextractor = MDV._MdvVolumeDataExtractor(
+        dataextractor = mdv_common._MdvVolumeDataExtractor(
             mdv, mdv.fields.index(mdv_field), get_fillvalue(), two_dims=False)
         if delay_field_loading:
             field_dic = LazyLoadDict(field_dic)

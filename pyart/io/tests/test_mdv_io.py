@@ -182,7 +182,8 @@ class Mdv_io_Tests(object):
 
     def test_mdv_file_read_write_radar(self):
         with warnings.catch_warnings(record=True) as w:
-            mdvfile_orig = pyart.io.mdv.MdvFile(pyart.testing.MDV_PPI_FILE)
+            mdvfile_orig = pyart.io.mdv_common.MdvFile(
+                pyart.testing.MDV_PPI_FILE)
             mdvfile_orig.read_all_fields()
 
             mdvfile_orig.write(self.tmpfile)
@@ -191,13 +192,13 @@ class Mdv_io_Tests(object):
             assert len(w) == 1
             assert issubclass(w[-1].category, UserWarning)
 
-            mdvfile = pyart.io.mdv.MdvFile(self.tmpfile)
+            mdvfile = pyart.io.mdv_common.MdvFile(self.tmpfile)
             self.check_mdvfile_ppi(mdvfile)
 
     def test_read_write_file_objects(self):
         # read from and write two a file object
         f = open(pyart.testing.MDV_PPI_FILE)
-        mdvfile = pyart.io.mdv.MdvFile(f)
+        mdvfile = pyart.io.mdv_common.MdvFile(f)
         mdvfile.read_all_fields()
         self.check_mdvfile_ppi(mdvfile)
 
@@ -208,7 +209,7 @@ class Mdv_io_Tests(object):
         f2.close()
 
         # re-read and check object
-        mdvfile = pyart.io.mdv.MdvFile(self.tmpfile)
+        mdvfile = pyart.io.mdv_common.MdvFile(self.tmpfile)
         self.check_mdvfile_ppi(mdvfile)
 
     @staticmethod
@@ -234,11 +235,11 @@ class Mdv_io_Tests(object):
 
     def test_mdv_file_read_write_radar_rhi(self):
         # write and read the RHI file which contains a elevation chunk
-        mdvfile = pyart.io.mdv.MdvFile(pyart.testing.MDV_RHI_FILE)
+        mdvfile = pyart.io.mdv_common.MdvFile(pyart.testing.MDV_RHI_FILE)
         mdvfile.read_all_fields()
         mdvfile.write(self.tmpfile)
         mdvfile.close()
-        mdvfile2 = pyart.io.mdv.MdvFile(self.tmpfile)
+        mdvfile2 = pyart.io.mdv_common.MdvFile(self.tmpfile)
 
         # verify that the elevations are similar
         assert len(mdvfile2.elevations) == len(mdvfile.elevations)
@@ -246,13 +247,13 @@ class Mdv_io_Tests(object):
 
 
 def test_time_dic_to_unixtime():
-    r = pyart.io.mdv_io.time_dict_to_unixtime(
+    r = pyart.io.mdv_grid.time_dict_to_unixtime(
         {'data': [20], 'units': 'seconds since 1970-01-01 00:00:00'})
     assert abs(r - 20.) <= 0.01
 
 
 def test_empty_mdvfile():
-    mdvfile = pyart.io.mdv.MdvFile(None)
+    mdvfile = pyart.io.mdv_common.MdvFile(None)
     # XXX why are the following defined if they are never called?
     # Should they raise a NotImplemented or other Error rather than returning
     # incorrect data?
@@ -264,7 +265,7 @@ def test_empty_mdvfile():
 
 
 def test_mdv_methods():
-    mdvfile = pyart.io.mdv.MdvFile(pyart.testing.MDV_PPI_FILE)
+    mdvfile = pyart.io.mdv_common.MdvFile(pyart.testing.MDV_PPI_FILE)
     # XXX why are this available
     mdvfile._time_dict_into_header()
 
@@ -277,7 +278,7 @@ def test_radar_exclude_fields():
 
 
 def test_rhi_cart():
-    mdvfile = pyart.io.mdv.MdvFile(pyart.testing.MDV_RHI_FILE)
+    mdvfile = pyart.io.mdv_common.MdvFile(pyart.testing.MDV_RHI_FILE)
     assert mdvfile.projection == 'rhi'
     carts = mdvfile._make_carts_dict()
     assert carts['x'].shape == (1, 283, 125)
