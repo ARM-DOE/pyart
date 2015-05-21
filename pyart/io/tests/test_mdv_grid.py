@@ -1,9 +1,7 @@
-""" Unit Tests for Py-ART's io/mdv_io.py module. """
+""" Unit Tests for Py-ART's io/mdv_grid.py module. """
 
 import os
 import tempfile
-import warnings
-from datetime import datetime
 
 import numpy as np
 from numpy.testing import assert_raises, assert_warns
@@ -11,12 +9,10 @@ from numpy.testing import assert_raises, assert_warns
 import pyart
 
 
-class Mdv_io_Tests(object):
+class Mdv_grid_Tests(object):
     """
-    Class for declaring unit tests for the io/mdv_io.py module.
-
-    self.tmpfile is a temporary file which will be removed at the end
-    of the test if the file exists.
+    Class for declaring unit tests for the io/mdv_grid.py module which
+    require a temporary file which will be removed at the end of the test.
     """
 
     def setUp(self):
@@ -180,110 +176,8 @@ class Mdv_io_Tests(object):
         assert_raises(
             TypeError, pyart.io.write_grid_mdv, self.tmpfile, grid)
 
-    def test_mdv_file_read_write_radar(self):
-        with warnings.catch_warnings(record=True) as w:
-            mdvfile_orig = pyart.io.mdv_common.MdvFile(
-                pyart.testing.MDV_PPI_FILE)
-            mdvfile_orig.read_all_fields()
-
-            mdvfile_orig.write(self.tmpfile)
-            mdvfile_orig.close()
-            # check that a UserWarning was issued since zlib compression used
-            assert len(w) == 1
-            assert issubclass(w[-1].category, UserWarning)
-
-            mdvfile = pyart.io.mdv_common.MdvFile(self.tmpfile)
-            self.check_mdvfile_ppi(mdvfile)
-
-    def test_read_write_file_objects(self):
-        # read from and write two a file object
-        f = open(pyart.testing.MDV_PPI_FILE)
-        mdvfile = pyart.io.mdv_common.MdvFile(f)
-        mdvfile.read_all_fields()
-        self.check_mdvfile_ppi(mdvfile)
-
-        # write out the file using an file handler
-        f2 = open(self.tmpfile, 'w')
-        mdvfile.write(f2)
-        f.close()
-        f2.close()
-
-        # re-read and check object
-        mdvfile = pyart.io.mdv_common.MdvFile(self.tmpfile)
-        self.check_mdvfile_ppi(mdvfile)
-
-    @staticmethod
-    def check_mdvfile_ppi(mdvfile):
-        # check some parameters
-        assert mdvfile.master_header['time_end'] == 1305889595
-        assert mdvfile.master_header['chunk_hdr_offset'] == 2464
-        assert len(mdvfile.field_headers) == 1
-        assert mdvfile.field_headers[0]['bad_data_value'] == 0.0
-        assert len(mdvfile.vlevel_headers) == 1
-        assert mdvfile.vlevel_headers[0]['record_len1'] == 1016
-        assert mdvfile.chunk_headers[0]['chunk_id'] == 3
-        assert mdvfile.calib_info['day'] == 15
-        assert mdvfile.radar_info['scan_mode'] == 8
-        az_deg, range_km, el_deg = mdvfile._calc_geometry()
-        assert np.all(az_deg == np.arange(360))
-        assert len(range_km) == 110
-        assert round(range_km[10], 2) == 1.32
-        assert len(el_deg) == 1
-        assert el_deg[0] == 0.75
-        assert mdvfile.times['time_begin'] == datetime(2011, 5, 20, 11, 1)
-        assert len(mdvfile.elevations) == 0
-
-    def test_mdv_file_read_write_radar_rhi(self):
-        # write and read the RHI file which contains a elevation chunk
-        mdvfile = pyart.io.mdv_common.MdvFile(pyart.testing.MDV_RHI_FILE)
-        mdvfile.read_all_fields()
-        mdvfile.write(self.tmpfile)
-        mdvfile.close()
-        mdvfile2 = pyart.io.mdv_common.MdvFile(self.tmpfile)
-
-        # verify that the elevations are similar
-        assert len(mdvfile2.elevations) == len(mdvfile.elevations)
-        assert mdvfile2.elevations[0] == mdvfile.elevations[0]
-
 
 def test_time_dic_to_unixtime():
     r = pyart.io.mdv_grid.time_dict_to_unixtime(
         {'data': [20], 'units': 'seconds since 1970-01-01 00:00:00'})
     assert abs(r - 20.) <= 0.01
-
-
-def test_empty_mdvfile():
-    mdvfile = pyart.io.mdv_common.MdvFile(None)
-    # XXX why are the following defined if they are never called?
-    # Should they raise a NotImplemented or other Error rather than returning
-    # incorrect data?
-    mdvfile._get_chunk_header()
-    mdvfile._get_radar_info()
-    mdvfile._get_calib()
-    mdvfile._get_compression_info()
-    mdvfile._get_levels_info(10)
-
-
-def test_mdv_methods():
-    mdvfile = pyart.io.mdv_common.MdvFile(pyart.testing.MDV_PPI_FILE)
-    # XXX why are this available
-    mdvfile._time_dict_into_header()
-
-
-def test_radar_exclude_fields():
-    # skip fields
-    radar = pyart.io.read_mdv(
-        pyart.testing.MDV_PPI_FILE, exclude_fields=['reflectivity'])
-    assert 'reflectivity' not in radar.fields
-
-
-def test_rhi_cart():
-    mdvfile = pyart.io.mdv_common.MdvFile(pyart.testing.MDV_RHI_FILE)
-    assert mdvfile.projection == 'rhi'
-    carts = mdvfile._make_carts_dict()
-    assert carts['x'].shape == (1, 283, 125)
-    assert carts['y'].shape == (1, 283, 125)
-    assert carts['z'].shape == (1, 283, 125)
-    assert round(carts['x'][0, 1, 2], 2) == -52.63
-    assert round(carts['y'][0, 1, 2], 2) == -332.31
-    assert round(carts['z'][0, 1, 2], 2) == 121.47
