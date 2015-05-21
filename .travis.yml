@@ -1,7 +1,13 @@
+sudo: false    # Use container-based infrastructure
 # Travis CI build script
 # This is a modified version of the .travis.yml file from the scikit-learn
 # project: https://github.com/scikit-learn/scikit-learn
 language: python
+
+addons:
+    apt:
+        packages:
+        - gfortran
 
 env:
   global:
