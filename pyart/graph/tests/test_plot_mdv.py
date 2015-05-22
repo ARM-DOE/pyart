@@ -15,7 +15,7 @@ import pyart
 
 
 def test_plot_mdv_rhi(outfile=None):
-    mdvfile = pyart.io.mdv.MdvFile(pyart.testing.MDV_RHI_FILE)
+    mdvfile = pyart.io.mdv_common.MdvFile(pyart.testing.MDV_RHI_FILE)
     display = pyart.graph.MdvDisplay(mdvfile)
     fig = plt.figure()
     ax = fig.add_subplot(111)
@@ -25,7 +25,7 @@ def test_plot_mdv_rhi(outfile=None):
 
 
 def test_plot_mdv_rhi_masked(outfile=None):
-    mdvfile = pyart.io.mdv.MdvFile(pyart.testing.MDV_RHI_FILE)
+    mdvfile = pyart.io.mdv_common.MdvFile(pyart.testing.MDV_RHI_FILE)
     display = pyart.graph.MdvDisplay(mdvfile)
     fig = plt.figure()
     ax = fig.add_subplot(111)
@@ -35,7 +35,7 @@ def test_plot_mdv_rhi_masked(outfile=None):
 
 
 def test_plot_mdv_ppi(outfile=None):
-    mdvfile = pyart.io.mdv.MdvFile(pyart.testing.MDV_PPI_FILE)
+    mdvfile = pyart.io.mdv_common.MdvFile(pyart.testing.MDV_PPI_FILE)
     display = pyart.graph.MdvDisplay(mdvfile)
     fig = plt.figure()
     ax = fig.add_subplot(111)
