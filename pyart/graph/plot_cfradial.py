@@ -12,6 +12,8 @@ Routines for plotting radar data from CF/Radial netCDF files.
 
 """
 
+import warnings
+
 import numpy as np
 import netCDF4
 
@@ -22,6 +24,9 @@ from .common import radar_coords_to_cart
 class CFRadialDisplay(RadarDisplay):
     """
     A display object for creating plots from data in NetCDF4 Dataset objects.
+
+    This class has been deprecated and will be removed in the next release of
+    Py-ART.
 
     Parameters
     ----------
@@ -67,6 +72,9 @@ class CFRadialDisplay(RadarDisplay):
     # missing scan_type and fields attributes
     def __init__(self, dataset, shift=(0.0, 0.0)):
         """ Initialize the object. """
+        warnings.warn(
+            ('This class has been deprecated and will be removed in the '
+             'next release of Py-ART'), DeprecationWarning)
 
         # populate attributes from dataset
         self.dataset = dataset

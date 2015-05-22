@@ -12,6 +12,8 @@ Routines for plotting radar data from files readable by RSL.
 
 """
 
+import warnings
+
 # Nothing from this module is imported into pyart.graph is RSL is not
 # installed.
 import numpy as np
@@ -26,6 +28,9 @@ from .radardisplay import RadarDisplay
 class RslDisplay(RadarDisplay):
     """
     A display object for creating plots from data in a RslFile object.
+
+    This class has been deprecated and will be removed in the next release of
+    Py-ART.
 
     Parameters
     ----------
@@ -55,6 +60,9 @@ class RslDisplay(RadarDisplay):
 
     def __init__(self, rslfile):
         """ Initialize the object. """
+        warnings.warn(
+            ('This class has been deprecated and will be removed in the '
+             'next release of Py-ART'), DeprecationWarning)
         self.plots = []
         self.plot_vars = []
         self.cbs = []
