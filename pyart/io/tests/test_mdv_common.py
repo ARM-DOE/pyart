@@ -305,16 +305,30 @@ def test_read_all_fields_on_creation():
     mdvfile2.close()
 
 
-def test_empty_mdvfile():
+def test_mdvfile_radar_stubs():
     mdvfile = pyart.io.mdv_common.MdvFile(None)
-    # XXX why are the following defined if they are never called?
-    # Should they raise a NotImplemented or other Error rather than returning
-    # incorrect data?
-    mdvfile._get_chunk_header()
-    mdvfile._get_radar_info()
-    mdvfile._get_calib()
-    mdvfile._get_compression_info()
-    mdvfile._get_levels_info(10)
+    # These methods are included in MdvFile as a stub for a future
+    # write_radar_mdv function, test that the dictionaries they return have the
+    # correct length.
+    dic = mdvfile._get_chunk_header()
+    assert len(dic) == 8
+    assert isinstance(dic, dict)
+
+    dic = mdvfile._get_radar_info()
+    assert len(dic) == 38
+    assert isinstance(dic, dict)
+
+    dic = mdvfile._get_calib()
+    assert len(dic) == 59
+    assert isinstance(dic, dict)
+
+    dic = mdvfile._get_compression_info()
+    assert len(dic) == 5
+    assert isinstance(dic, dict)
+
+    dic = mdvfile._get_levels_info(10)
+    assert len(dic) == 2
+    assert isinstance(dic, dict)
 
 
 def test_rhi_cart():
