@@ -1,19 +1,15 @@
 """
-pyart.io.mdv
-============
+pyart.io.mdv_common
+===================
 
-Utilities for reading of MDV files.
+Functions and classes common between MDV grid and radar files.
 
 .. autosummary::
     :toctree: generated/
     :template: dev_template.rst
 
     MdvFile
-
-.. autosummary::
-    :toctree: generated/
-
-    read_mdv
+    _MdvVolumeDataExtractor
 
 """
 # Code is adapted from Nitin Bharadwaj's Matlab code
@@ -25,218 +21,8 @@ import StringIO
 import datetime
 
 import numpy as np
-from netCDF4 import date2num
 
-from ..config import FileMetadata, get_fillvalue
-from ..core.radar import Radar
-from .common import make_time_unit_str
 from .common import radar_coords_to_cart
-from .lazydict import LazyLoadDict
-
-
-def read_mdv(filename, field_names=None, additional_metadata=None,
-             file_field_names=False, exclude_fields=None,
-             delay_field_loading=False):
-    """
-    Read a MDV file.
-
-    Parameters
-    ----------
-    filename : str
-        Name of MDV file to read or file-like object pointing to the
-        beginning of such a file.
-    field_names : dict, optional
-        Dictionary mapping MDV data type names to radar field names. If a
-        data type found in the file does not appear in this dictionary or has
-        a value of None it will not be placed in the radar.fields dictionary.
-        A value of None, the default, will use the mapping defined in the
-        Py-ART configuration file.
-    additional_metadata : dict of dicts, optional
-        Dictionary of dictionaries to retrieve metadata from during this read.
-        This metadata is not used during any successive file reads unless
-        explicitly included.  A value of None, the default, will not
-        introduct any addition metadata and the file specific or default
-        metadata as specified by the Py-ART configuration file will be used.
-    file_field_names : bool, optional
-        True to use the MDV data type names for the field names. If this
-        case the field_names parameter is ignored. The field dictionary will
-        likely only have a 'data' key, unless the fields are defined in
-        `additional_metadata`.
-    exclude_fields : list or None, optional
-        List of fields to exclude from the radar object. This is applied
-        after the `file_field_names` and `field_names` parameters.
-    delay_field_loading : bool
-        True to delay loading of field data from the file until the 'data'
-        key in a particular field dictionary is accessed.  In this case
-        the field attribute of the returned Radar object will contain
-        LazyLoadDict objects not dict objects. Not all file types support this
-        parameter.
-
-    Returns
-    -------
-    radar : Radar
-        Radar object containing data from MDV file.
-
-    Notes
-    -----
-    Currently this function can only read polar MDV files with fields
-    compressed with gzip or zlib.
-
-    """
-    # create metadata retrieval object
-    filemetadata = FileMetadata('mdv', field_names, additional_metadata,
-                                file_field_names, exclude_fields)
-
-    mdvfile = MdvFile(filename)
-
-    # value attributes
-    az_deg, range_km, el_deg = mdvfile._calc_geometry()
-    naz = len(az_deg)
-    nele = len(el_deg)
-    scan_type = mdvfile.projection
-
-    if scan_type not in ['ppi', 'rhi']:
-        raise NotImplementedError('No support for scan_type %s.' % scan_type)
-
-    # time
-    time = filemetadata('time')
-    units = make_time_unit_str(mdvfile.times['time_begin'])
-    time['units'] = units
-    time_start = date2num(mdvfile.times['time_begin'], units)
-    time_end = date2num(mdvfile.times['time_end'], units)
-    time['data'] = np.linspace(time_start, time_end, naz * nele)
-
-    # range
-    _range = filemetadata('range')
-    _range['data'] = np.array(range_km * 1000.0, dtype='float32')
-    _range['meters_to_center_of_first_gate'] = _range['data'][0]
-    _range['meters_between_gates'] = (_range['data'][1] - _range['data'][0])
-
-    # fields
-    fields = {}
-    for mdv_field in set(mdvfile.fields):
-        field_name = filemetadata.get_field_name(mdv_field)
-        if field_name is None:
-            continue
-
-        # create and store the field dictionary
-        field_dic = filemetadata(field_name)
-        field_dic['_FillValue'] = get_fillvalue()
-        dataExtractor = _MdvVolumeDataExtractor(
-            mdvfile, mdvfile.fields.index(mdv_field), get_fillvalue())
-        if delay_field_loading:
-            field_dic = LazyLoadDict(field_dic)
-            field_dic.set_lazy('data', dataExtractor)
-        else:
-            field_dic['data'] = dataExtractor()
-        fields[field_name] = field_dic
-
-    # metadata
-    metadata = filemetadata('metadata')
-    for meta_key, mdv_key in MDV_METADATA_MAP.iteritems():
-        metadata[meta_key] = mdvfile.master_header[mdv_key]
-
-    # latitude
-    latitude = filemetadata('latitude')
-    latitude['data'] = np.array([mdvfile.radar_info['latitude_deg']],
-                                dtype='float64')
-    # longitude
-    longitude = filemetadata('longitude')
-    longitude['data'] = np.array([mdvfile.radar_info['longitude_deg']],
-                                 dtype='float64')
-    # altitude
-    altitude = filemetadata('altitude')
-    altitude['data'] = np.array([mdvfile.radar_info['altitude_km'] * 1000.0],
-                                dtype='float64')
-
-    # sweep_number, sweep_mode, fixed_angle, sweep_start_ray_index,
-    # sweep_end_ray_index
-    sweep_number = filemetadata('sweep_number')
-    sweep_mode = filemetadata('sweep_mode')
-    fixed_angle = filemetadata('fixed_angle')
-    sweep_start_ray_index = filemetadata('sweep_start_ray_index')
-    sweep_end_ray_index = filemetadata('sweep_end_ray_index')
-    len_time = len(time['data'])
-
-    if scan_type == 'ppi':
-        nsweeps = nele
-        sweep_number['data'] = np.arange(nsweeps, dtype='int32')
-        sweep_mode['data'] = np.array(nsweeps * ['azimuth_surveillance'])
-        fixed_angle['data'] = np.array(el_deg, dtype='float32')
-        sweep_start_ray_index['data'] = np.arange(0, len_time, naz,
-                                                  dtype='int32')
-        sweep_end_ray_index['data'] = np.arange(naz - 1, len_time, naz,
-                                                dtype='int32')
-
-    elif scan_type == 'rhi':
-        nsweeps = naz
-        sweep_number['data'] = np.arange(nsweeps, dtype='int32')
-        sweep_mode['data'] = np.array(nsweeps * ['rhi'])
-        fixed_angle['data'] = np.array(az_deg, dtype='float32')
-        sweep_start_ray_index['data'] = np.arange(0, len_time, nele,
-                                                  dtype='int32')
-        sweep_end_ray_index['data'] = np.arange(nele - 1, len_time, nele,
-                                                dtype='int32')
-
-    # azimuth, elevation
-    azimuth = filemetadata('azimuth')
-    elevation = filemetadata('elevation')
-
-    if scan_type == 'ppi':
-        azimuth['data'] = np.tile(az_deg, nele)
-        elevation['data'] = np.array(el_deg).repeat(naz)
-
-    elif scan_type == 'rhi':
-        azimuth['data'] = np.array(az_deg).repeat(nele)
-        elevation['data'] = np.tile(el_deg, naz)
-
-    # instrument parameters
-    # we will set 4 parameters in the instrument_parameters dict
-    # prt, prt_mode, unambiguous_range, and nyquist_velocity
-
-    # TODO prt mode: Need to fix this.. assumes dual if two prts
-    if mdvfile.radar_info['prt2_s'] == 0.0:
-        prt_mode_str = 'fixed'
-    else:
-        prt_mode_str = 'dual'
-
-    prt_mode = filemetadata('prt_mode')
-    prt = filemetadata('prt')
-    unambiguous_range = filemetadata('unambiguous_range')
-    nyquist_velocity = filemetadata('nyquist_velocity')
-    beam_width_h = filemetadata('radar_beam_width_h')
-    beam_width_v = filemetadata('radar_beam_width_v')
-
-    prt_mode['data'] = np.array([prt_mode_str] * nsweeps)
-    prt['data'] = np.array([mdvfile.radar_info['prt_s']] * nele * naz,
-                           dtype='float32')
-
-    urange_m = mdvfile.radar_info['unambig_range_km'] * 1000.0
-    unambiguous_range['data'] = np.array([urange_m] * naz * nele,
-                                         dtype='float32')
-
-    uvel_mps = mdvfile.radar_info['unambig_vel_mps']
-    nyquist_velocity['data'] = np.array([uvel_mps] * naz * nele,
-                                        dtype='float32')
-    beam_width_h['data'] = np.array(
-        [mdvfile.radar_info['horiz_beam_width_deg']], dtype='float32')
-    beam_width_v['data'] = np.array(
-        [mdvfile.radar_info['vert_beam_width_deg']], dtype='float32')
-
-    instrument_parameters = {'prt_mode': prt_mode, 'prt': prt,
-                             'unambiguous_range': unambiguous_range,
-                             'nyquist_velocity': nyquist_velocity,
-                             'radar_beam_width_h': beam_width_h,
-                             'radar_beam_width_v': beam_width_v}
-
-    return Radar(
-        time, _range, fields, metadata, scan_type,
-        latitude, longitude, altitude,
-        sweep_number, sweep_mode, fixed_angle, sweep_start_ray_index,
-        sweep_end_ray_index,
-        azimuth, elevation,
-        instrument_parameters=instrument_parameters)
-
 
 # mapping from MDV name space to CF-Radial name space
 MDV_METADATA_MAP = {'instrument_name': 'data_set_source',
@@ -296,15 +82,15 @@ ENCODING_FLOAT32 = 5  # 32 bit IEEE floating point
 
 #  ***************** CHUNK HEADER and DATA *******************
 CHUNK_DSRADAR_PARAMS = 3
-CHUNK_DSRADAR_ELEVATIONS = 10
-CHUNK_DSRADAR_CALIB = 7
+CHUNK_DSRADAR_ELEVATIONS = 7
+CHUNK_DSRADAR_CALIB = 10
 DS_LABEL_LEN = 40
 NCHAR_DS_RADAR_PARAMS = 2 * DS_LABEL_LEN
 DS_RADAR_CALIB_NAME_LEN = 16
 DS_RADAR_CALIB_MISSING = -9999.0
 
 
-class MdvFile:
+class MdvFile(object):
     """
     A file object for MDV data.
 
@@ -317,9 +103,10 @@ class MdvFile:
 
     Parameters
     ----------
-    filename : str or file-like
+    filename : str, file-like or None.
         Name of MDV file to read or file-like object pointing to the
-        beginning of such a file.
+        beginning of such a file.  None can be used to initalize an object
+        which can be used for writing mdv files.
     debug : bool
         True to print out debugging information, False to supress
     read_fields : bool
@@ -328,14 +115,14 @@ class MdvFile:
 
     Notes
     -----
-    This Object is not stable enough to be considered a general MDV lib, nor is
-    that our intention, but with careful use it shall provide full read/write
-    capacity.
+    This class is not stable enough for general purpose MDV reading/writing,
+    nor is that the intention, but with care it can provide sufficient
+    read/write capacity.
 
     """
-    # ftm for use in the struct lib
-    # mapper are used to convert vector to dics, they are of the following
-    # type: (var_name,inicial pos, final pos)
+    # formats for use in the struct lib
+    # mapper are used to convert tuples to dics, the formats is as follows:
+    # (var_name, initial_position_in_tuple, final_position_in_tuple)
     master_header_fmt = '>28i 8i i 5i 6f 3f 12f 512s 128s 128s i'
     master_header_mapper = [
         ("record_len1", 0, 1),
@@ -577,14 +364,11 @@ class MdvFile:
     ]
 
     def __init__(self, filename, debug=False, read_fields=False):
-        """
-        initalize MdvFile from filename (str).
-        If filename=None create empty object
-        """
+        """ initalize """
         if debug:
             print "Opening file for reading: ", filename
         if filename is None:
-            # will creat empqty struct, for filling and writing after
+            # will creat empty structures, to be filled and written later
             self.fileptr = None
         elif hasattr(filename, 'read'):
             self.fileptr = filename
@@ -611,41 +395,26 @@ class MdvFile:
 
         if debug:
             print "Getting Chunk Data"
-        # will store raw chunk data, use for unkown chunk information
+        # store raw chunk data, used for unknown chunk information
         self.chunk_data = [None] * self.master_header['nchunks']
         self.radar_info, self.elevations, self.calib_info = self._get_chunks(
             debug)
 
         if self.master_header['nfields'] > 0:
-            if self.field_headers[0]['proj_type'] == PROJ_LATLON:
-                self.projection = 'latlon'
-            elif self.field_headers[0]['proj_type'] == PROJ_LAMBERT_CONF:
-                self.projection = 'lambert_conform'
-            elif self.field_headers[0]['proj_type'] == PROJ_POLAR_STEREO:
-                self.projection = 'polar_stereographic'
-            elif self.field_headers[0]['proj_type'] == PROJ_FLAT:
-                self.projection = 'flat'
-            elif self.field_headers[0]['proj_type'] == PROJ_POLAR_RADAR:
-                self.projection = 'ppi'
-            elif self.field_headers[0]['proj_type'] == PROJ_OBLIQUE_STEREO:
-                self.projection = 'oblique_stereographic'
-            elif self.field_headers[0]['proj_type'] == PROJ_RHI_RADAR:
-                self.projection = 'rhi'
-
-#        if debug:
-#            print "Calculating Radar coordinates"
-#        az_deg, range_km, el_deg = self._calc_geometry()
-#        self.az_deg = np.array(az_deg, dtype='float32')
-#        self.range_km = np.array(range_km, dtype='float32')
-#        self.el_deg = np.array(el_deg, dtype='float32')
+            projections = {
+                PROJ_LATLON: 'latlon',
+                PROJ_LAMBERT_CONF: 'lambert_conform',
+                PROJ_POLAR_STEREO: 'polar_stereographic',
+                PROJ_FLAT: 'flat',
+                PROJ_POLAR_RADAR: 'ppi',
+                PROJ_OBLIQUE_STEREO: 'oblique_stereographic',
+                PROJ_RHI_RADAR: 'rhi',
+            }
+            self.projection = projections[self.field_headers[0]['proj_type']]
 
         if debug:
             print "Making usable time objects"
         self.times = self._make_time_dict()
-
-#        if debug:
-#            print "Calculating cartesian coordinates"
-#        self.carts = self._make_carts_dict()
 
         if debug:
             print "indexing fields"
@@ -663,7 +432,20 @@ class MdvFile:
     # public methods #
     ##################
     def write(self, filename, debug=False):
-        """ Write a MdvFile to filename (stg) """
+        """
+        Write object data to a MDV file.
+
+        Note that the file is not explicitly closes, use x.close() to
+        close file object when complete.
+
+        Parameters
+        ----------
+        filename : str or file-like
+            Filename or open file object to which data will be written.
+        debug : bool, options
+            True to print out debugging information, False to supress.
+
+        """
         if debug:
             print "Opening file for writing:", filename
         if hasattr(filename, 'write'):
@@ -672,9 +454,8 @@ class MdvFile:
             self.fileptr = open(filename, 'wb')
         file_start = self.fileptr.tell()
 
-        # first write fields so one can calculate the offsets
-        # put zero in headers
-
+        # write fields and chunk so that offsets can be calculated
+        # headers are initially zeros
         headers_size = (1024 + (416 + 1024) * self.master_header["nfields"] +
                         512 * self.master_header["nchunks"])
         self.fileptr.write("\x00" * headers_size)
@@ -682,15 +463,17 @@ class MdvFile:
         if debug:
             print "Writing Fields Data"
         for ifield in range(self.master_header["nfields"]):
-            self.write_a_field(ifield)
+            self._write_a_field(ifield)
 
         # write chunks
         if debug:
             print "Writing Chunk Data"
         self._write_chunks(debug)
+
         # calculate offsets
         self._calc_file_offsets()
         self.fileptr.seek(file_start)
+
         # write headers
         if debug:
             print "Writing master header"
@@ -707,11 +490,6 @@ class MdvFile:
         if debug:
             print "Writing chunk headers"
         self._write_chunk_headers(self.master_header["nchunks"])
-        # close file
-        # XXX should I really do that? what if it's a file-like struct?
-        if debug:
-            print "Closing file"
-        self.fileptr.close()
 
     def read_a_field(self, fnum, debug=False):
         """
@@ -774,7 +552,7 @@ class MdvFile:
                 fmt = '>%if' % (nx * ny)
                 np_form = '>f'
             else:
-                raise ValueError('unknown encoding: ', encoding_type)
+                raise NotImplementedError('encoding: ', encoding_type)
 
             # decompress the level data
             if compr_info['magic_cookie'] == 0xf7f7f7f7:
@@ -784,6 +562,9 @@ class MdvFile:
                 gzip_file_handle.close()
             elif compr_info['magic_cookie'] == 0xf5f5f5f5:
                 decompr_data = zlib.decompress(compr_data)
+            elif compr_info['magic_cookie'] == 0xf6f6f6f6:
+                # ZLIB_NOT_COMPRESSED
+                decompr_data = compr_data
             else:
                 raise NotImplementedError('unsupported compression mode')
                 # With sample data it should be possible to write
@@ -793,7 +574,6 @@ class MdvFile:
                 # 0xf8f8f8f8 : GZIP_NOT_COMPRSSED
                 # 0xf3f3f3f3 : BZIP_COMPRESSED
                 # 0xf4f4f4f4 : BZIP_NOT_COMPRESSED
-                # 0xf6f6f6f6 : ZLIB_NOT_COMPRESSED
 
             # read the decompressed data, reshape and mask
             sw_data = np.fromstring(decompr_data, np_form).astype('float32')
@@ -810,7 +590,20 @@ class MdvFile:
         self.fields_data[fnum] = field_data
         return field_data
 
-    def write_a_field(self, fnum, debug=False):
+    def read_all_fields(self):
+        """ Read all fields, storing data to field name attributes. """
+        for i in xrange(self.master_header['nfields']):
+            self.read_a_field(i)
+
+    def close(self):
+        """ Close the MDV file. """
+        self.fileptr.close()
+
+    ###################
+    # private methods #
+    ###################
+
+    def _write_a_field(self, fnum, debug=False):
         """ write field number 'fnum' to mdv file """
         # the file pointer must be set at the correct location prior to call
         field_header = self.field_headers[fnum]
@@ -822,31 +615,37 @@ class MdvFile:
 
         field_data = self.fields_data[fnum]
         nz = field_header['nz']
-        # save file posicion
+        # save file position
         field_start = self.fileptr.tell()
-        # write zeros to vlevel_offsets and vlevel_nbytes
+        # write zeros to vlevel_offsets and vlevel_nbytes, these will
+        # replaced by the correct data later
         self.fileptr.write("\x00" * 4 * 2 * nz)
         field_size = 0
         vlevel_offsets = [0] * nz
         vlevel_nbytes = [0] * nz
         for sw in xrange(nz):
             vlevel_offsets[sw] = field_size
+            # apply scaling, offset and masking to field data
             scale = field_header['scale']
             bias = field_header['bias']
-            sw_data = np.round((field_data[sw, :, :] - bias) / scale)
+            sw_data = (field_data[sw, :, :] - bias) / scale
             if hasattr(sw_data, 'mask'):
                 sw_data = np.where(
                     sw_data.mask, field_header['bad_data_value'], sw_data)
 
+            # encode field data to the correct type, round when necessary
             encoding_type = field_header['encoding_type']
             if encoding_type == ENCODING_INT8:
+                sw_data = np.round(sw_data).astype(np.uint8)
                 np_form = '>B'
             elif encoding_type == ENCODING_INT16:
+                sw_data = np.round(sw_data).astype(np.uint16)
                 np_form = '>H'
             elif encoding_type == ENCODING_FLOAT32:
+                sw_data = sw_data.astype(np.float32)
                 np_form = '>f'
             else:
-                raise ValueError('unknown encoding: ', encoding_type)
+                raise NotImplementedError('encoding: ', encoding_type)
             uncompr_data = np.array(sw_data, dtype=np_form).tostring()
             compr_data = zlib.compress(uncompr_data)
             if len(compr_data) > len(uncompr_data):
@@ -866,29 +665,38 @@ class MdvFile:
             self.fileptr.write(compr_data)
             field_size = field_size + len(compr_data) + 24
             vlevel_nbytes[sw] = len(compr_data) + 24
-        # go back and rewrite vlevel_offsets and vlevel_nbytes
+        # rewrite vlevel_offsets and vlevel_nbytes with corrected data
         field_end = self.fileptr.tell()
         self.fileptr.seek(field_start)
-        fmt = '>%iI %iI' % (nz, nz)
-        string = struct.pack(fmt, *(vlevel_offsets + vlevel_nbytes))
-        self.fileptr.write(string)
+        vlevels_dic = {'vlevel_offsets': vlevel_offsets,
+                       'vlevel_nbytes': vlevel_nbytes}
+        self._write_levels_info(nz, vlevels_dic)
         self.fileptr.seek(field_end)
         field_header["volume_size"] = field_size + 2 * 4 * nz
 
-    def read_all_fields(self):
-        """ Read all fields, storing data to field name attributes. """
-        for i in xrange(self.master_header['nfields']):
-            self.read_a_field(i)
-
-    def close(self):
-        """ Close the MDV file. """
-        self.fileptr.close()
-
-    ###################
-    # private methods #
-    ###################
-
     # get_ methods for reading headers
+
+    def _unpack_mapped_tuple(self, l, mapper):
+        """ Create a dictionary from a tuple using a mapper. """
+        d = {}
+        for item in mapper:
+            if item[2] == item[1] + 1:
+                d[item[0]] = l[item[1]]
+            else:
+                d[item[0]] = l[item[1]:item[2]]
+            if isinstance(d[item[0]], basestring):
+                d[item[0]] = d[item[0]].split('\x00', 1)[0]
+        return d
+
+    def _pack_mapped(self, d, mapper, fmt):
+        """ Create a packed string using a mapper and format. """
+        l = [0] * mapper[-1][2]
+        for item in mapper:
+            if item[2] == item[1] + 1:
+                l[item[1]] = d[item[0]]
+            else:
+                l[item[1]:item[2]] = d[item[0]]
+        return struct.pack(fmt, *l)
 
     def _get_master_header(self):
         """ Read the MDV master header, return a dict. """
@@ -909,15 +717,7 @@ class MdvFile:
             l = struct.unpack(
                 self.master_header_fmt,
                 self.fileptr.read(struct.calcsize(self.master_header_fmt)))
-        d = {}
-        for item in self.master_header_mapper:
-            if item[2] == item[1] + 1:
-                d[item[0]] = l[item[1]]
-            else:
-                d[item[0]] = l[item[1]:item[2]]
-            if isinstance(d[item[0]], basestring):
-                d[item[0]] = d[item[0]].split('\x00', 1)[0]
-        return d
+        return self._unpack_mapped_tuple(l, self.master_header_mapper)
 
     def _write_master_header(self):
         """ Write the MDV master header. """
@@ -961,26 +761,13 @@ class MdvFile:
             l = struct.unpack(
                 self.field_header_fmt,
                 self.fileptr.read(struct.calcsize(self.field_header_fmt)))
-        d = {}
-        for item in self.field_header_mapper:
-            if item[2] == item[1] + 1:
-                d[item[0]] = l[item[1]]
-            else:
-                d[item[0]] = l[item[1]:item[2]]
-            if isinstance(d[item[0]], basestring):
-                d[item[0]] = d[item[0]].split('\x00', 1)[0]
-        return d
+        return self._unpack_mapped_tuple(l, self.field_header_mapper)
 
     def _write_field_header(self, d):
         """ Write the a single field header. """
         # the file pointer must be set at the correct location prior to call
-        l = [0] * self.field_header_mapper[-1][2]
-        for item in self.field_header_mapper:
-            if item[2] == item[1] + 1:
-                l[item[1]] = d[item[0]]
-            else:
-                l[item[1]:item[2]] = d[item[0]]
-        string = struct.pack(self.field_header_fmt, *l)
+        string = self._pack_mapped(
+            d, self.field_header_mapper, self.field_header_fmt)
         self.fileptr.write(string)
 
     def _get_vlevel_headers(self, nfields):
@@ -1006,26 +793,13 @@ class MdvFile:
             l = struct.unpack(
                 self.vlevel_header_fmt,
                 self.fileptr.read(struct.calcsize(self.vlevel_header_fmt)))
-        d = {}
-        for item in self.vlevel_header_mapper:
-            if item[2] == item[1] + 1:
-                d[item[0]] = l[item[1]]
-            else:
-                d[item[0]] = l[item[1]:item[2]]
-            if isinstance(d[item[0]], basestring):
-                d[item[0]] = d[item[0]].split('\x00', 1)[0]
-        return d
+        return self._unpack_mapped_tuple(l, self.vlevel_header_mapper)
 
     def _write_vlevel_header(self, d):
         """  Write the a single vfield header. """
         # the file pointer must be set at the correct location prior to call
-        l = [0] * self.vlevel_header_mapper[-1][2]
-        for item in self.vlevel_header_mapper:
-            if item[2] == item[1] + 1:
-                l[item[1]] = d[item[0]]
-            else:
-                l[item[1]:item[2]] = d[item[0]]
-        string = struct.pack(self.vlevel_header_fmt, *l)
+        string = self._pack_mapped(
+            d, self.vlevel_header_mapper, self.vlevel_header_fmt)
         self.fileptr.write(string)
 
     def _get_chunk_headers(self, nchunks):
@@ -1052,26 +826,13 @@ class MdvFile:
             l = struct.unpack(
                 self.chunk_header_fmt,
                 self.fileptr.read(struct.calcsize(self.chunk_header_fmt)))
-        d = {}
-        for item in self.chunk_header_mapper:
-            if item[2] == item[1] + 1:
-                d[item[0]] = l[item[1]]
-            else:
-                d[item[0]] = l[item[1]:item[2]]
-            if isinstance(d[item[0]], basestring):
-                d[item[0]] = d[item[0]].split('\x00', 1)[0]
-        return d
+        return self._unpack_mapped_tuple(l, self.chunk_header_mapper)
 
     def _write_chunk_header(self, d):
         """  Write the a single chunk header. """
         # the file pointer must be set at the correct location prior to call
-        l = [0] * self.chunk_header_mapper[-1][2]
-        for item in self.chunk_header_mapper:
-            if item[2] == item[1] + 1:
-                l[item[1]] = d[item[0]]
-            else:
-                l[item[1]:item[2]] = d[item[0]]
-        string = struct.pack(self.chunk_header_fmt, *l)
+        string = self._pack_mapped(
+            d, self.chunk_header_mapper, self.chunk_header_fmt)
         self.fileptr.write(string)
 
     def _get_chunks(self, debug=False):
@@ -1088,12 +849,12 @@ class MdvFile:
                     print 'Getting radar info'
                 radar_info = self._get_radar_info()
 
-            elif chunk_id == CHUNK_DSRADAR_CALIB:
+            elif chunk_id == CHUNK_DSRADAR_ELEVATIONS:
                 if debug:
                     print 'getting elevations'
                 elevations = self._get_elevs(curr_chunk_header['size'])
 
-            elif chunk_id == CHUNK_DSRADAR_ELEVATIONS:
+            elif chunk_id == CHUNK_DSRADAR_CALIB:
                 if debug:
                     print 'getting cal'
                 calib_info = self._get_calib()
@@ -1129,7 +890,7 @@ class MdvFile:
             else:
                 if debug:
                     print 'writing unknown chunk %i' % chunk_id
-                self._write_unknown_chunk(self, self.chunk_data[cnum])
+                self._write_unknown_chunk(self.chunk_data[cnum])
 
     def _get_radar_info(self):
         """ Get the radar information, return dict. """
@@ -1142,26 +903,13 @@ class MdvFile:
             l = struct.unpack(
                 self.radar_info_fmt,
                 self.fileptr.read(struct.calcsize(self.radar_info_fmt)))
-        d = {}
-        for item in self.radar_info_mapper:
-            if item[2] == item[1] + 1:
-                d[item[0]] = l[item[1]]
-            else:
-                d[item[0]] = l[item[1]:item[2]]
-            if isinstance(d[item[0]], basestring):
-                d[item[0]] = d[item[0]].split('\x00', 1)[0]
-        return d
+        return self._unpack_mapped_tuple(l, self.radar_info_mapper)
 
     def _write_radar_info(self, d):
         """  Write radar information. """
         # the file pointer must be set at the correct location prior to call
-        l = [0] * self.radar_info_mapper[-1][2]
-        for item in self.radar_info_mapper:
-            if item[2] == item[1] + 1:
-                l[item[1]] = d[item[0]]
-            else:
-                l[item[1]:item[2]] = d[item[0]]
-        string = struct.pack(self.radar_info_fmt, *l)
+        string = self._pack_mapped(
+            d, self.radar_info_mapper, self.radar_info_fmt)
         self.fileptr.write(string)
 
     def _get_elevs(self, nbytes):
@@ -1190,26 +938,13 @@ class MdvFile:
             l = struct.unpack(
                 self.calib_fmt,
                 self.fileptr.read(struct.calcsize(self.calib_fmt)))
-        d = {}
-        for item in self.calib_mapper:
-            if item[2] == item[1] + 1:
-                d[item[0]] = l[item[1]]
-            else:
-                d[item[0]] = l[item[1]:item[2]]
-            if isinstance(d[item[0]], basestring):
-                d[item[0]] = d[item[0]].split('\x00', 1)[0]
-        return d
+        return self._unpack_mapped_tuple(l, self.calib_mapper)
 
     def _write_calib(self, d):
         """  Write calibration information. """
         # the file pointer must be set at the correct location prior to call
-        l = [0] * self.calib_mapper[-1][2]
-        for item in self.calib_mapper:
-            if item[2] == item[1] + 1:
-                l[item[1]] = d[item[0]]
-            else:
-                l[item[1]:item[2]] = d[item[0]]
-        string = struct.pack(self.calib_fmt, *l)
+        string = self._pack_mapped(
+            d, self.calib_mapper, self.calib_fmt)
         self.fileptr.write(string)
 
     def _get_compression_info(self):
@@ -1221,26 +956,13 @@ class MdvFile:
             l = struct.unpack(
                 self.compression_info_fmt,
                 self.fileptr.read(struct.calcsize(self.compression_info_fmt)))
-        d = {}
-        for item in self.compression_info_mapper:
-            if item[2] == item[1] + 1:
-                d[item[0]] = l[item[1]]
-            else:
-                d[item[0]] = l[item[1]:item[2]]
-            if isinstance(d[item[0]], basestring):
-                d[item[0]] = d[item[0]].split('\x00', 1)[0]
-        return d
+        return self._unpack_mapped_tuple(l, self.compression_info_mapper)
 
     def _write_compression_info(self, d):
         """ Write compression infomation"""
         # the file pointer must be set at the correct location prior to call
-        l = [0] * self.compression_info_mapper[-1][2]
-        for item in self.compression_info_mapper:
-            if item[2] == item[1] + 1:
-                l[item[1]] = d[item[0]]
-            else:
-                l[item[1]:item[2]] = d[item[0]]
-        string = struct.pack(self.compression_info_fmt, *l)
+        string = self._pack_mapped(
+            d, self.compression_info_mapper, self.compression_info_fmt)
         self.fileptr.write(string)
 
     def _get_unknown_chunk(self, cnum):
@@ -1276,6 +998,7 @@ class MdvFile:
         self.fileptr.write(string)
 
     def _calc_file_offsets(self):
+        """ Calculate file offsets. """
         self.master_header["field_hdr_offset"] = 1024
         self.master_header["vlevel_hdr_offset"] = (
             1024 + 416 * self.master_header["nfields"])
@@ -1303,13 +1026,20 @@ class MdvFile:
 
     def _time_dict_into_header(self):
         """ Complete time information in master_header from the time dict """
-        t_base = datetime.datetime(1970, 1, 1, 00, 00)
-        self.master_header['time_begin'] = (
-            self.times['time_begin'] - t_base).total_seconds()
-        self.master_header['time_end'] = (
-            self.times['time_end'] - t_base).total_seconds()
-        self.master_header['time_centroid'] = (
-            self.times['time_centroid'] - t_base).total_seconds()
+        self.master_header['time_begin'] = self._secs_since_epoch(
+            self.times['time_begin'])
+        self.master_header['time_end'] = self._secs_since_epoch(
+            self.times['time_end'])
+        self.master_header['time_centroid'] = self._secs_since_epoch(
+            self.times['time_centroid'])
+
+    def _secs_since_epoch(self, dt):
+        """ Return the number of seconds since the epoch for a datetime. """
+        epoch = datetime.datetime(1970, 1, 1, 0, 0)
+        td = dt - epoch
+        # use td.total_seconds() in Python 2.7+
+        return (td.microseconds + (td.seconds + td.days * 24 * 3600) *
+                10**6) / 10**6
 
     # misc. methods
     # XXX move some where else, there are not general mdv operations
@@ -1388,13 +1118,18 @@ class _MdvVolumeDataExtractor(object):
         Field number of data to be extracted.
     fillvalue : int
         Value used to fill masked values in the returned array.
+    two_dims : bool.
+        True to combine the first and second dimension of the array when
+        returning the data, False will return a three dimensional array.
+
     """
 
-    def __init__(self, mdvfile, field_num, fillvalue):
+    def __init__(self, mdvfile, field_num, fillvalue, two_dims=True):
         """ initialize the object. """
         self.mdvfile = mdvfile
         self.field_num = field_num
         self.fillvalue = fillvalue
+        self.two_dims = two_dims
 
     def __call__(self):
         """ Return an array containing data from the referenced volume. """
@@ -1403,5 +1138,6 @@ class _MdvVolumeDataExtractor(object):
         data[np.where(np.isnan(data))] = self.fillvalue
         data[np.where(data == 131072)] = self.fillvalue
         data = np.ma.masked_equal(data, self.fillvalue)
-        data.shape = (data.shape[0] * data.shape[1], data.shape[2])
+        if self.two_dims:
+            data.shape = (data.shape[0] * data.shape[1], data.shape[2])
         return data
