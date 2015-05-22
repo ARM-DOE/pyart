@@ -26,7 +26,7 @@ display.plot('reflectivity', 0, vmin=-16, vmax=64.0)
 plt.show()
 
 # create the plot using MdvDisplay
-mdvfile = pyart.io.mdv.MdvFile(filename)
+mdvfile = pyart.io.mdv_common.MdvFile(filename)
 display = pyart.graph.MdvDisplay(mdvfile)
 fig = plt.figure(figsize=[5, 5])
 ax = fig.add_subplot(111)

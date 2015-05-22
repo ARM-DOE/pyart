@@ -31,7 +31,7 @@ fig.subplots_adjust(left=0, bottom=0, right=1, top=1, wspace=0, hspace=0)
 plt.show()
 
 # create the plot using MdvDisplay
-mdvfile = pyart.io.mdv.MdvFile(filename)
+mdvfile = pyart.io.mdv_common.MdvFile(filename)
 display = pyart.graph.MdvDisplay(mdvfile)
 fig = plt.figure(figsize=[5, 5])
 ax = fig.add_subplot(111, frameon=False)
