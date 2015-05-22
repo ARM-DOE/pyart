@@ -630,19 +630,24 @@ class MdvFile(object):
         vlevel_nbytes = [0] * nz
         for sw in xrange(nz):
             vlevel_offsets[sw] = field_size
+            # apply scaling, offset and masking to field data
             scale = field_header['scale']
             bias = field_header['bias']
-            sw_data = np.round((field_data[sw, :, :] - bias) / scale)
+            sw_data = (field_data[sw, :, :] - bias) / scale
             if hasattr(sw_data, 'mask'):
                 sw_data = np.where(
                     sw_data.mask, field_header['bad_data_value'], sw_data)
 
+            # encode field data to the correct type, round when necessary
             encoding_type = field_header['encoding_type']
             if encoding_type == ENCODING_INT8:
+                sw_data = np.round(sw_data).astype(np.uint8)
                 np_form = '>B'
             elif encoding_type == ENCODING_INT16:
+                sw_data = np.round(sw_data).astype(np.uint16)
                 np_form = '>H'
             elif encoding_type == ENCODING_FLOAT32:
+                sw_data = sw_data.astype(np.float32)
                 np_form = '>f'
             else:
                 raise NotImplementedError('encoding: ', encoding_type)

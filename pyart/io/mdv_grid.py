@@ -45,8 +45,11 @@ def write_grid_mdv(filename, grid):
 
         * XY grid must be regular (equal spacing), Z can be irregular.
         * The number of Z levels must not exceed 122.
-        * Fields must be pre-encoded as uint8, uint16 or float32,
-          use "scale_factor" and "add_offset" attributs to inform scaling.
+        * Fields can be encoded in the file using the '_Write_as_dtype' key
+          specifying one of 'uint8', 'uint16' or 'float32'.  Use the
+          'scale_factor' and 'add_offset' keys to specify scaling.  Field
+          data in the Grid object should be uncompressed, that is to say
+          it has had the scaling applied.
 
     In addition, the field are written to the MDV file with the same name as
     they are given in the grid object.  No attempt is made to map these field
@@ -131,7 +134,10 @@ def write_grid_mdv(filename, grid):
         d["ny"] = ny
         d["nz"] = nz
         d["proj_type"] = mdv_common.PROJ_FLAT
-        dtype = grid.fields[field]['data'].dtype
+        try:
+            dtype = np.dtype(grid.fields[field]['_Write_as_dtype'])
+        except KeyError:    # default to float32 encoding
+            dtype = np.float32
         if dtype == np.uint8:
             d["encoding_type"] = mdv_common.ENCODING_INT8
             d["data_element_nbytes"] = 1
@@ -142,9 +148,9 @@ def write_grid_mdv(filename, grid):
             d["encoding_type"] = mdv_common.ENCODING_FLOAT32
             d["data_element_nbytes"] = 4
         else:
-            raise TypeError("Unsuported encoding %s, please encode data as "
-                            "uint8, uint16 or float32 "
-                            "before calling this function" % dtype)
+            raise TypeError("Unsuported encoding %s, encoding must be "
+                            "uint8, uint16 or float32 as specfied by"
+                            "the '_Write_as_dtype key" % dtype)
         d["compression_type"] = 3   # zlib
 
         d["scaling_type"] = 4  # SCALING_SPECIFIED (by the user)

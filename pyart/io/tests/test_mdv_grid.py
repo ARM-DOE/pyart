@@ -133,49 +133,55 @@ class Mdv_grid_Tests(object):
         # Write various data types
         original_grid = pyart.testing.make_empty_grid(
             (2, 2, 2), ((0, 1), (0, 1), (0, 1)))
+
+        uint8_data = np.ones((2, 2, 2), dtype=np.float32) * 100. + 5
         original_grid.fields['field_one'] = {
-            'data': np.zeros((2, 2, 2), dtype=np.uint8),
+            'data': uint8_data,
             'scale_factor': 10.,
             'add_offset': 5.,
+            '_Write_as_dtype': 'uint8',
             '_FillValue': 128, }
+
+        uint16_data = np.ones((2, 2, 2), dtype=np.float32) * 22.
         original_grid.fields['field_two'] = {
-            'data': np.zeros((2, 2, 2), dtype=np.uint16),
+            'data': uint16_data,
+            '_Write_as_dtype': 'uint16',
             'missing_value': 256, }
+
+        float32_data = np.ones((2, 2, 2), dtype=np.float32) * 98. + 2.
         original_grid.fields['field_three'] = {
-            'data': np.zeros((2, 2, 2), dtype=np.float32)}
-        pyart.io.write_grid_mdv(self.tmpfile, original_grid)
-        grid = pyart.io.read_grid_mdv(self.tmpfile, file_field_names=True)
-        # XXX how should other dtypes and scale/offset be treated, where
-        # should the conversion be done?
-        assert np.all(grid.fields['field_one']['data'] == 5)
-        assert np.all(grid.fields['field_two']['data'] == 0)
-        assert np.all(grid.fields['field_three']['data'] == 0)
-
-    def test_write_types2(self):
-        # Write various data types and verify
-        original_grid = pyart.testing.make_empty_grid(
-            (20, 20, 20), ((0, 1), (0, 1), (0, 1)))
-        original_grid.fields['field_one'] = {
-            'data': np.ones((20, 20, 20), dtype=np.uint8)*1,
+            'data': float32_data,
             'scale_factor': 10.,
-            'add_offset': 5.,
-            '_FillValue': 128, }
+            'add_offset': 2.,
+            }
         pyart.io.write_grid_mdv(self.tmpfile, original_grid)
-        grid = pyart.io.read_grid_mdv(self.tmpfile, file_field_names=True)
-        # XXX how should other dtypes and scale/offset be treated, where
-        # should the conversion be done?
-        assert np.all(grid.fields['field_one']['data'] == 5)
 
-    def test_raise_errors(self):
-        # XXX how should other dtypes and scale/offset be treated, where
-        # should the conversion be done?
-        # Odd dtyped field data should raise a TypeError
+        # verify that the data get read in correctly
+        grid = pyart.io.read_grid_mdv(self.tmpfile, file_field_names=True)
+        assert np.all(grid.fields['field_one']['data'] == 105)
+        assert np.all(grid.fields['field_two']['data'] == 22)
+        assert np.all(grid.fields['field_three']['data'] == 100)
+
+        # vertify that the data is encoded to the correct type in the file
+        mdvfile = pyart.io.mdv_common.MdvFile(self.tmpfile)
+        field_name = [h['field_name'] for h in mdvfile.field_headers]
+        field_one = field_name.index('field_one')
+        field_two = field_name.index('field_two')
+        field_three = field_name.index('field_three')
+        encoding = [h['encoding_type'] for h in mdvfile.field_headers]
+        assert encoding[field_one] == pyart.io.mdv_common.ENCODING_INT8
+        assert encoding[field_two] == pyart.io.mdv_common.ENCODING_INT16
+        assert encoding[field_three] == pyart.io.mdv_common.ENCODING_FLOAT32
+        mdvfile.close()
+
+    def test_raise_error_on_invalid_dtype(self):
+        #  Unsupported dtyped field should raise a TypeError
         grid = pyart.testing.make_empty_grid(
             (2, 2, 2), ((0, 1), (0, 1), (0, 1)))
         grid.fields['reflectivity'] = {
-            'data': np.zeros((2, 2, 2), dtype=np.float16)}
-        assert_raises(
-            TypeError, pyart.io.write_grid_mdv, self.tmpfile, grid)
+            'data': np.zeros((2, 2, 2), dtype=np.float32),
+            '_Write_as_dtype': 'float16'}
+        assert_raises(TypeError, pyart.io.write_grid_mdv, self.tmpfile, grid)
 
 
 def test_time_dic_to_datetime():
