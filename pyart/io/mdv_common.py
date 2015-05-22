@@ -11,11 +11,6 @@ Functions and classes common between MDV grid and radar files.
     MdvFile
     _MdvVolumeDataExtractor
 
-.. autosummary::
-    :toctree: generated/
-
-    read_mdv
-
 """
 # Code is adapted from Nitin Bharadwaj's Matlab code
 
