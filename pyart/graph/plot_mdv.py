@@ -17,6 +17,8 @@ Routines for plotting radar data from MDV file.
 
 """
 
+import warnings
+
 import numpy as np
 
 from .radardisplay import RadarDisplay
@@ -25,6 +27,9 @@ from .radardisplay import RadarDisplay
 class MdvDisplay(RadarDisplay):
     """
     A display object for creating plots from data in a MdvFile objects.
+
+    This class has been deprecated and will be removed in the next release of
+    Py-ART.
 
     Parameters
     ----------
@@ -54,6 +59,9 @@ class MdvDisplay(RadarDisplay):
 
     def __init__(self, mdvfile):
         """ Initialize the object. """
+        warnings.warn(
+            ('This class has been deprecated and will be removed in the '
+             'next release of Py-ART'), DeprecationWarning)
         self.plots = []
         self.plot_vars = []
         self.cbs = []
