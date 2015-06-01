@@ -20,16 +20,18 @@ import numpy as np
 from ..config import get_field_name, get_fillvalue, get_metadata
 from ..io import _rsl_interface
 from . import _fourdd_interface
+from ._common_dealias import _parse_gatefilter
 from ..util import datetime_utils
 
 
 def dealias_fourdd(radar, last_radar=None, sounding_heights=None,
                    sounding_wind_speeds=None, sounding_wind_direction=None,
-                   prep=1, filt=1, rsl_badval=131072.0, keep_original=False,
-                   extra_prep=False, ncp_min=0.3, rhv_min=0.7,
-                   refl_field=None, vel_field=None, corr_vel_field=None,
-                   last_vel_field=None, ncp_field=None, rhv_field=None,
-                   debug=False, max_shear=0.05, sign=1, **kwargs):
+                   gatefilter=False, prep=1, filt=1, rsl_badval=131072.0,
+                   keep_original=False, extra_prep=False, ncp_min=0.3,
+                   rhv_min=0.7, refl_field=None, vel_field=None,
+                   corr_vel_field=None, last_vel_field=None, ncp_field=None,
+                   rhv_field=None, debug=False, max_shear=0.05, sign=1,
+                   **kwargs):
     """
     Dealias Doppler velocities using the 4DD algorithm.
 
@@ -68,6 +70,12 @@ def dealias_fourdd(radar, last_radar=None, sounding_heights=None,
 
     Other Parameters
     ----------------
+    gatefilter : GateFilter, optional.
+        A GateFilter instance which specifies which gates should be
+        ignored when performing velocity dealiasing.  A value of None will
+        create this filter from the radar moments using any additional
+        arguments by passing them to :py:func:`moment_based_gate_filter`. The
+        default value assumes all gates are valid.
     prep : int
         Flag controlling thresholding, 1 = yes, 0 = no.
     filt : int
@@ -82,13 +90,16 @@ def dealias_fourdd(radar, last_radar=None, sounding_heights=None,
         True to use extra volume preperation, which will use the normalized
         coherent power and cross correlation ratio fields to further remove
         bad gates. Set this to False (default) if those fields are not
-        available.
+        available. This argument has become deprecated with the introduction of
+        the radar gate filter class.
     ncp_min : float
         Minimum normalized coherent power allowed for any gate. Only
-        applicable when extra_prep is True.
+        applicable when extra_prep is True. This threshold has become
+        deprecated with the introduction of the radar gate filter class.
     rhv_min : float
         Minimum cross correlation ratio allowed for any gate. Only
-        applicable when extra_prep is True.
+        applicable when extra_prep is True. This threshold has become
+        deprecated with the introduction of the radar gate filter class.
     refl_field : str
         Field in radar to use as the reflectivity during dealiasing.
         None will use the default field name from the Py-ART configuration
@@ -107,7 +118,8 @@ def dealias_fourdd(radar, last_radar=None, sounding_heights=None,
         Fields in radar to use as the normalized coherent power and cross
         correlation ratio, respectively. None will use the default field name
         from the Py-ART configuration file. Only applicable when extra_prep
-        is True.
+        is True. These fields are deprecated with the introduction of the
+        radar gate filter class.
     maxshear : float
         Maximum vertical shear which will be incorperated into the created
         volume from the sounding data.  Parameter not used when no
@@ -167,6 +179,8 @@ def dealias_fourdd(radar, last_radar=None, sounding_heights=None,
     fill_value = get_fillvalue()
 
     # check extra volume preparation inputs
+    # this functionality has become deprecated with the introduction of the
+    # radar gate filter class
     if extra_prep:
         if ncp_field not in radar.fields and rhv_field not in radar.fields:
             raise KeyError(('Radar does not have necessary fields for'
@@ -175,6 +189,8 @@ def dealias_fourdd(radar, last_radar=None, sounding_heights=None,
     # extra volume preparation
     # this assumes the radar has a normalized coherent power field and a
     # cross correlation ratio field
+    # this functionality has become deprecated with the introduction of the
+    # radar gate filter class
     if prep and extra_prep:
         not_coherent = np.logical_or(
             radar.fields[ncp_field]['data'] < ncp_min,
@@ -183,6 +199,11 @@ def dealias_fourdd(radar, last_radar=None, sounding_heights=None,
         fdata[not_coherent] = fill_value
     else:
         fdata = None
+
+    # parse radar gate filter
+    gatefilter = _parse_gatefilter(gatefilter, radar, **kwargs)
+    fdata = radar.fields[refl_field]['data'].copy().astype(np.float32)
+    fdata[gatefilter.gate_excluded] = fill_value
 
     # create RSL volumes containing the reflectivity, doppler velocity, and
     # doppler velocity in the last radar (if provided)
