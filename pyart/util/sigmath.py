@@ -6,6 +6,8 @@ Put more stuff in here
 
 """
 
+from __future__ import print_function
+
 import numpy as np
 
 
@@ -22,7 +24,7 @@ def texture(myradar, var):
     texarray=texture(pyradarobj, field)
     """
     fld = myradar.fields[var]['data']
-    print fld.shape
+    print(fld.shape)
     tex = np.ma.zeros(fld.shape)
     for timestep in range(tex.shape[0]):
         ray = np.ma.std(rolling_window(fld[timestep, :], 11), 1)

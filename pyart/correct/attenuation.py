@@ -131,7 +131,7 @@ def calculate_attenuation(radar, z_offset, debug=False, doc=15, fzl=4000.0,
     for sweep in xrange(nsweeps):
         # loop over the sweeps
         if debug:
-            print "Doing ", sweep
+            print("Doing ", sweep)
         end_gate, start_ray, end_ray = phase_proc.det_process_range(
             radar, sweep, fzl, doc=doc)
 

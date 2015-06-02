@@ -661,7 +661,7 @@ def _create_ncvar(dic, dataset, name, dimensions):
     # create array from list, etc.
     data = dic['data']
     if isinstance(data, np.ndarray) is not True:
-        print "Warning, converting non-array to array:", name
+        print("Warning, converting non-array to array:", name)
         data = np.array(data)
 
     # convert string array to character arrays
