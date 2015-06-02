@@ -135,7 +135,7 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
                    'primary_axis': 'axis_z'}
     # ignore time_* global variables, these are calculated from the time
     # variable when the file is written.
-    for var, default_value in global_vars.iteritems():
+    for var, default_value in global_vars.items():
         if var in ncvars:
             metadata[var] = str(netCDF4.chartostring(ncvars[var][:]))
         else:
@@ -257,11 +257,11 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
     # 4.10 Moments field data variables -> field attribute dictionary
     if 'ray_n_gates' in ncvars:
         # all variables with dimensions of n_points are fields.
-        keys = [k for k, v in ncvars.iteritems()
+        keys = [k for k, v in ncvars.items()
                 if v.dimensions == ('n_points', )]
     else:
         # all variables with dimensions of 'time', 'range' are fields
-        keys = [k for k, v in ncvars.iteritems()
+        keys = [k for k, v in ncvars.items()
                 if v.dimensions == ('time', 'range')]
 
     fields = {}
@@ -320,7 +320,7 @@ def _find_all_meta_group_vars(ncvars, meta_group_name):
     """
     Return a list of all variables which are in a given meta_group.
     """
-    return [k for k, v in ncvars.iteritems() if 'meta_group' in v.ncattrs()
+    return [k for k, v in ncvars.items() if 'meta_group' in v.ncattrs()
             and v.meta_group == meta_group_name]
 
 
@@ -488,7 +488,7 @@ def write_cfradial(filename, radar, format='NETCDF4', time_reference=None,
                       'antenna_transition', ('time', ))
 
     # fields
-    for field, dic in radar.fields.iteritems():
+    for field, dic in radar.fields.items():
         _create_ncvar(dic, dataset, field, ('time', 'range'))
 
     # sweep parameters
@@ -699,7 +699,7 @@ def _create_ncvar(dic, dataset, name, dimensions):
         ncvar.setncattr('_FillValue', fv)
 
     # set all attributes
-    for key, value in dic.iteritems():
+    for key, value in dic.items():
         if key not in ['data', '_FillValue', 'long_name', 'units']:
             ncvar.setncattr(key, value)
 

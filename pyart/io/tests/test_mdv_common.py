@@ -63,7 +63,7 @@ def test_master_header():
         'vlevel_included': 1,
         'vlevel_type': 9}
 
-    for k, v in ref_master_header.iteritems():
+    for k, v in ref_master_header.items():
         print "checking key:", k
         assert mdvfile.master_header[k] == v
 
@@ -108,7 +108,7 @@ def test_chunk_headers():
         'size': 240,
         'struct_id': 14145,
         'unused_si32': (0, 0)}
-    for k, v in ref_chunk_header_0.iteritems():
+    for k, v in ref_chunk_header_0.items():
         print "checking key:", k
         assert mdvfile.chunk_headers[0][k] == v
 
@@ -177,7 +177,7 @@ def test_calib_info():
         'zv1km_co_dbz': -34.11470031738281,
         'zv1km_cx_dbz': -34.11470031738281}
 
-    for k, v in ref_calib_info.iteritems():
+    for k, v in ref_calib_info.items():
         print "checking key:", k
         assert mdvfile.calib_info[k] == v
 
@@ -225,7 +225,7 @@ def test_radar_info():
         'wavelength_cm': 5.330544471740723,
         'xmit_peak_pwr_watts': 231739552.0}
 
-    for k, v in ref_radar_info.iteritems():
+    for k, v in ref_radar_info.items():
         print "checking key:", k
         assert mdvfile.radar_info[k] == v
 

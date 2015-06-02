@@ -283,7 +283,7 @@ def test_field_first_points():
         'velocity': -14.0,
         'spectrum_width': np.ma.masked,
         'differential_reflectivity': np.ma.masked}
-    for field, field_value in fields.iteritems():
+    for field, field_value in fields.items():
         description = "field : %s, first point" % field
         check_field_first_point.description = description
         yield check_field_first_point, field, field_value

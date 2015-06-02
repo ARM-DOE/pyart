@@ -120,7 +120,7 @@ def read_mdv(filename, field_names=None, additional_metadata=None,
 
     # metadata
     metadata = filemetadata('metadata')
-    for meta_key, mdv_key in mdv_common.MDV_METADATA_MAP.iteritems():
+    for meta_key, mdv_key in mdv_common.MDV_METADATA_MAP.items():
         metadata[meta_key] = mdvfile.master_header[mdv_key]
 
     # latitude

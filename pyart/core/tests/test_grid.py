@@ -23,14 +23,14 @@ def test_grid_from_radars():
     grid2 = pyart.io.read_grid(tmpfile)
 
     # check metadata
-    for k, v in grid.metadata.iteritems():
+    for k, v in grid.metadata.items():
         print "Checking key:", k, "should have value:", v
         print grid2.metadata
         assert grid2.metadata[k] == v
 
     # check axes
     for axes_key in grid.axes.keys():
-        for k, v in grid.axes[axes_key].iteritems():
+        for k, v in grid.axes[axes_key].items():
             print "Checking axes_key:", axes_key, "key:", k
             if k == 'data':
                 assert np.all(grid.axes[axes_key][k] == v)
@@ -39,7 +39,7 @@ def test_grid_from_radars():
 
     # check fields
     for field in grid.fields.keys():
-        for k, v in grid.fields[field].iteritems():
+        for k, v in grid.fields[field].items():
             print "Checking field:", field, "key:", k
             if k == 'data':
                 assert np.all(grid.fields[field][k] == v)

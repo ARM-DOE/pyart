@@ -291,7 +291,7 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
 
     # fields
     fields = {}
-    for data_type_name, fdata in sigmet_data.iteritems():
+    for data_type_name, fdata in sigmet_data.items():
         if data_type_name == 'XHDR_FULL':
             continue
         field_name = filemetadata.get_field_name(data_type_name)

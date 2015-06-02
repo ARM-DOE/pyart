@@ -121,7 +121,7 @@ def write_grid_mdv(filename, grid):
     elif 'alt' in grid.axes.keys():
         d["sensor_alt"] = grid.axes['alt']['data'][0] / 1000.
 
-    for meta_key, mdv_key in mdv_common.MDV_METADATA_MAP.iteritems():
+    for meta_key, mdv_key in mdv_common.MDV_METADATA_MAP.items():
         if meta_key in grid.metadata:
             d[mdv_key] = grid.metadata[meta_key].encode("ASCII")
 
@@ -389,7 +389,7 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
 
     # metadata
     metadata = filemetadata('metadata')
-    for meta_key, mdv_key in mdv_common.MDV_METADATA_MAP.iteritems():
+    for meta_key, mdv_key in mdv_common.MDV_METADATA_MAP.items():
         metadata[meta_key] = mdv.master_header[mdv_key]
 
     # fields

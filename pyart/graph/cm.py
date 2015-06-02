@@ -83,7 +83,7 @@ def _reverser(f):
 def revcmap(data):
     """Can only handle specification *data* in dictionary format."""
     data_r = {}
-    for key, val in data.iteritems():
+    for key, val in data.items():
         if callable(val):
             valnew = _reverser(val)
                 # This doesn't work: lambda x: val(1-x)

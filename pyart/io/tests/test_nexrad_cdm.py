@@ -236,7 +236,7 @@ def test_field_types():
         'reflectivity': MaskedArray,
         'differential_reflectivity': MaskedArray,
         'velocity': MaskedArray}
-    for field, field_type in fields.iteritems():
+    for field, field_type in fields.items():
         description = "field : %s, type" % field
         check_field_type.description = description
         yield check_field_type, field, field_type
@@ -255,7 +255,7 @@ def test_field_first_points():
               'reflectivity': -32.0,
               'differential_reflectivity': -8.0,
               'velocity': np.ma.masked}
-    for field, field_value in fields.iteritems():
+    for field, field_value in fields.items():
         description = "field : %s, first point" % field
         check_field_first_point.description = description
         yield check_field_first_point, field, field_value

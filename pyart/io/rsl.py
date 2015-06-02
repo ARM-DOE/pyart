@@ -177,7 +177,7 @@ def read_rsl(filename, field_names=None, additional_metadata=None,
     need_from_rsl_header = {
         'name': 'instrument_name', 'project': 'project', 'state': 'state',
         'country': 'country'}  # rsl_name : radar_metadata_name
-    for rsl_key, metadata_key in need_from_rsl_header.iteritems():
+    for rsl_key, metadata_key in need_from_rsl_header.items():
         metadata[metadata_key] = rsl_dict[rsl_key]
 
     # latitude
@@ -322,4 +322,4 @@ VOLUMENUM2RSLNAME = {
     43: 'EZ',
 }
 
-RSLNAME2VOLUMENUM = dict([(v, k) for k, v in VOLUMENUM2RSLNAME.iteritems()])
+RSLNAME2VOLUMENUM = dict([(v, k) for k, v in VOLUMENUM2RSLNAME.items()])

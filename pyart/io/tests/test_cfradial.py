@@ -235,7 +235,7 @@ def check_field_shape(field):
 
 def test_field_types():
     fields = {'reflectivity_horizontal': MaskedArray, }
-    for field, field_type in fields.iteritems():
+    for field, field_type in fields.items():
         description = "field : %s, type" % field
         check_field_type.description = description
         yield check_field_type, field, field_type
@@ -249,7 +249,7 @@ def test_field_first_points():
     # these values can be found using:
     # [round(radar.fields[f]['data'][0,0]) for f in radar.fields]
     fields = {'reflectivity_horizontal': -6.0, }
-    for field, field_value in fields.iteritems():
+    for field, field_value in fields.items():
         description = "field : %s, first point" % field
         check_field_first_point.description = description
         yield check_field_first_point, field, field_value
