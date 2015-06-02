@@ -139,9 +139,9 @@ class NEXRADLevel2File():
 
         # read the records in the file, decompressing as needed
         s = slice(CONTROL_WORD_SIZE, CONTROL_WORD_SIZE + 2)
-        if compression_record[s] == 'BZ':
+        if compression_record[s] == b'BZ':
             buf = _decompress_records(fh)
-        elif compression_record[s] == '\x00\x00':
+        elif compression_record[s] == b'\x00\x00':
             buf = fh.read()
         else:
             raise IOError('unknown compression record')
@@ -510,7 +510,7 @@ def _get_record_from_buf(buf, pos):
         new_pos = pos + msg_header_size + msg_size
         mbuf = buf[pos + msg_header_size:new_pos]
         msg_31_header = _unpack_from_buf(mbuf, 0, MSG_31)
-        block_pointers = [v for k, v in msg_31_header.iteritems()
+        block_pointers = [v for k, v in msg_31_header.items()
                           if k.startswith('block_pointer') and v > 0]
         for block_pointer in block_pointers:
             block_name, block_dic = _get_msg31_data_block(mbuf, block_pointer)
