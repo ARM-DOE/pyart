@@ -486,9 +486,14 @@ def _is_time_ordered_by_roll(data, metadata, rays_per_sweep):
         if nrays == 0 or nrays == 1:
             continue    # Do not attempt to order sweeps with no rays
         s = slice(start, start + nrays)     # slice which selects sweep
+        first = ref_time[start]
+        last = ref_time[start + nrays - 1]
         start += nrays
         sweep_time_diff = np.diff(ref_time[s])
         count = np.count_nonzero(sweep_time_diff < 0)
+        # compare the first and last times for continuity
+        if (first - last) < 0:
+            count += 1
         if count != 0 and count != 1:
             return False
     return True
@@ -509,10 +514,16 @@ def _is_time_ordered_by_reverse_roll(data, metadata, rays_per_sweep):
         if nrays == 0 or nrays == 1:
             continue    # Do not attempt to order sweeps with no rays
         s = slice(start, start + nrays)     # slice which selects sweep
+        first = ref_time[start]
+        last = ref_time[start + nrays - 1]
         start += nrays
         sweep_time_diff = np.diff(ref_time[s])
         if sweep_time_diff.min() < 0:   # optional reverse
             sweep_time_diff = np.diff(ref_time[s][::-1])
+            first, last = last, first
+        # compare the first and last times for continuity
+        if (first - last) < 0:
+            count += 1
         count = np.count_nonzero(sweep_time_diff < 0)
         if count != 0 and count != 1:
             return False
