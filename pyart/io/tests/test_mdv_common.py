@@ -272,7 +272,7 @@ def test_fields():
 
 def test_fileptr():
     # test fileptr
-    assert isinstance(mdvfile.fileptr, IOBase)
+    assert hasattr(mdvfile.fileptr, 'read')
 
 
 def test_read_one_field():

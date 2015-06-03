@@ -697,7 +697,7 @@ class MdvFile(object):
         for item in mapper:
             if item[2] == item[1] + 1:
                 l[item[1]] = d[item[0]]
-                if isinstance(l[item[1]], str):
+                if hasattr(l[item[1]], 'encode'):   # encode str/unicode
                     l[item[1]] = l[item[1]].encode('ascii')
             else:
                 l[item[1]:item[2]] = d[item[0]]
@@ -732,7 +732,7 @@ class MdvFile(object):
         for item in self.master_header_mapper:
             if item[2] == item[1] + 1:
                 l[item[1]] = d[item[0]]
-                if isinstance(l[item[1]], str):
+                if hasattr(l[item[1]], 'encode'):   # encode str/unicode
                     l[item[1]] = l[item[1]].encode('ascii')
             else:
                 l[item[1]:item[2]] = d[item[0]]
