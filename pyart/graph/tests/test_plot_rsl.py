@@ -15,7 +15,8 @@ import pyart
 
 @skipif(not pyart.io._RSL_AVAILABLE)
 def test_plot_rsl_rhi(outfile=None):
-    rslfile = pyart.io._rsl_interface.RslFile(pyart.testing.SIGMET_RHI_FILE)
+    rslfile = pyart.io._rsl_interface.RslFile(
+        pyart.testing.SIGMET_RHI_FILE.encode('ascii'))
     display = pyart.graph.RslDisplay(rslfile)
     fig = plt.figure()
     ax = fig.add_subplot(111)
@@ -26,7 +27,8 @@ def test_plot_rsl_rhi(outfile=None):
 
 @skipif(not pyart.io._RSL_AVAILABLE)
 def test_plot_rsl_ppi(outfile=None):
-    rslfile = pyart.io._rsl_interface.RslFile(pyart.testing.SIGMET_PPI_FILE)
+    rslfile = pyart.io._rsl_interface.RslFile(
+        pyart.testing.SIGMET_PPI_FILE.encode('ascii'))
     display = pyart.graph.RslDisplay(rslfile)
     fig = plt.figure()
     ax = fig.add_subplot(111)

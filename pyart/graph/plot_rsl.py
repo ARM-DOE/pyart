@@ -158,8 +158,8 @@ class RslDisplay(RadarDisplay):
         ray = sweep.get_ray(0)
         ranges = ray.range_bin1 + ray.gate_size * np.arange(ray.nbins)
         ranges = ranges / 1000.0
-        elevs = [sweep.get_ray(i).elev for i in xrange(sweep.nrays)]
-        azimuths = [sweep.get_ray(i).azimuth for i in xrange(sweep.nrays)]
+        elevs = [sweep.get_ray(i).elev for i in range(sweep.nrays)]
+        azimuths = [sweep.get_ray(i).azimuth for i in range(sweep.nrays)]
         rg, ele = np.meshgrid(ranges, elevs)
         rg, azg = np.meshgrid(ranges, azimuths)
         x, y, z = radar_coords_to_cart(rg, azg, ele)
