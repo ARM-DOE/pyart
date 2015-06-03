@@ -4,4 +4,4 @@ Utilities
 
 __all__ = ['met']
 
-import met
+from . import met
