@@ -240,7 +240,7 @@ class ChlFile(object):
         self.first_gate_offset = None
 
         # private attributes
-        self._dstring = ''      # string containing field data.
+        self._dstring = b''     # string containing field data.
         self._bit_mask = None   # bit mask specifying fields present in file.
         self._dtype = None      # NumPy dtype for a single gate (all fields).
         self._ray_bsize = None  # size in bytes of a single ray (all fields).
@@ -268,7 +268,7 @@ class ChlFile(object):
     def _read_block(self):
         """ Read a block from an open CHL file """
         pld = self._fh.read(8)
-        if pld == '':
+        if pld == b'':
             return None
         block_id, length = struct.unpack("<2i", pld)
         payload = self._fh.read(length - 8)
@@ -302,16 +302,17 @@ class ChlFile(object):
     def _parse_field_scale_block(self, payload):
         """ Parse a field_scale block. Add scale to field_info attr. """
         packet = _unpack_structure(payload, FIELD_SCALE_T)
-        packet['name'] = packet['name'].rstrip('\x00')
-        packet['units'] = packet['units'].rstrip('\x00')
-        packet['descr'] = packet['descr'].rstrip('\x00')
+        packet['name'] = packet['name'].decode('utf-8').rstrip('\x00')
+        packet['units'] = packet['units'].decode('utf-8').rstrip('\x00')
+        packet['descr'] = packet['descr'].decode('utf-8').rstrip('\x00')
         self.field_info[packet['bit_mask_pos']] = packet
         return packet
 
     def _parse_radar_info_block(self, payload):
         """ Parse a radar_info block. Update metadata attribute. """
         packet = _unpack_structure(payload, RADAR_INFO_T)
-        packet['radar_name'] = packet['radar_name'].rstrip('\x00')
+        packet['radar_name'] = (
+            packet['radar_name'].decode('utf-8').rstrip('\x00'))
         self.radar_info = packet.copy()
         return packet
 

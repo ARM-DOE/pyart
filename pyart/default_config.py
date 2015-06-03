@@ -930,9 +930,9 @@ chl_field_mapping = {
     'ZDR': differential_reflectivity,
     'LDRH': linear_depolarization_ratio_h,
     'LDRV': linear_depolarization_ratio_v,
-    '\xce\xa8 DP': differential_phase,
+    b'\xce\xa8 DP'.decode('utf-8'): differential_phase,
     'KDP': specific_differential_phase,
-    '\xcf\x81 HV': cross_correlation_ratio,
+    b'\xcf\x81 HV'.decode('utf-8'): cross_correlation_ratio,
     'NCP': normalized_coherent_power,
     # These fields are not mapped by default
     'H Re(lag 1)': None,    # Real part of lag-1 correlation, H Channel
@@ -956,8 +956,8 @@ chl_field_mapping = {
                             # lag-0
     'VAvgI': None,          # Average I, V Channel
     'HAvgI': None,          # Average I, H Channel
-    '\xcf\x81 HCX': None,   # H Co to Cross Correlation
-    '\xcf\x81 VCX': None,   # V Co to Cross Correlation
+    b'\xcf\x81 HCX'.decode('utf-8'): None,   # H Co to Cross Correlation
+    b'\xcf\x81 VCX'.decode('utf-8'): None,   # V Co to Cross Correlation
 }
 
 # GAMIC HDF5 files
