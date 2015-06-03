@@ -1,7 +1,11 @@
 """ Unit Tests for Py-ART's core/radar.py module. """
 
 import sys
-from io import StringIO
+# we need a class which excepts str for writing in Python 2 and 3
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
 import inspect
 
 import numpy as np
