@@ -57,7 +57,7 @@ def write_grid_mdv(filename, grid):
 
     """
     # first of all firm field list
-    fields = grid.fields.keys()
+    fields = list(grid.fields.keys())
 
     # mount empty mdv file
     grid_shape = grid.fields[fields[0]]['data'].shape

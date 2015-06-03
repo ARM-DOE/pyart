@@ -20,10 +20,7 @@ from __future__ import print_function
 import struct
 import gzip
 import zlib
-try:
-    import StringIO
-except ImportError:
-    from io import StringIO
+from io import BytesIO
 import datetime
 
 import numpy as np
@@ -464,7 +461,7 @@ class MdvFile(object):
         # headers are initially zeros
         headers_size = (1024 + (416 + 1024) * self.master_header["nfields"] +
                         512 * self.master_header["nchunks"])
-        self.fileptr.write("\x00" * headers_size)
+        self.fileptr.write(b"\x00" * headers_size)
 
         if debug:
             print("Writing Fields Data")
@@ -540,7 +537,7 @@ class MdvFile(object):
         self.fileptr.seek(field_header['field_data_offset'])
         self._get_levels_info(nz)  # dict not used, but need to seek.
 
-        for sw in xrange(nz):
+        for sw in range(nz):
             if debug:
                 print("doing levels ", sw)
 
@@ -562,7 +559,7 @@ class MdvFile(object):
 
             # decompress the level data
             if compr_info['magic_cookie'] == 0xf7f7f7f7:
-                cd_fobj = StringIO.StringIO(compr_data)
+                cd_fobj = BytesIO(compr_data)
                 gzip_file_handle = gzip.GzipFile(fileobj=cd_fobj)
                 decompr_data = gzip_file_handle.read(struct.calcsize(fmt))
                 gzip_file_handle.close()
@@ -598,7 +595,7 @@ class MdvFile(object):
 
     def read_all_fields(self):
         """ Read all fields, storing data to field name attributes. """
-        for i in xrange(self.master_header['nfields']):
+        for i in range(self.master_header['nfields']):
             self.read_a_field(i)
 
     def close(self):
@@ -625,11 +622,11 @@ class MdvFile(object):
         field_start = self.fileptr.tell()
         # write zeros to vlevel_offsets and vlevel_nbytes, these will
         # replaced by the correct data later
-        self.fileptr.write("\x00" * 4 * 2 * nz)
+        self.fileptr.write(b"\x00" * 4 * 2 * nz)
         field_size = 0
         vlevel_offsets = [0] * nz
         vlevel_nbytes = [0] * nz
-        for sw in xrange(nz):
+        for sw in range(nz):
             vlevel_offsets[sw] = field_size
             # apply scaling, offset and masking to field data
             scale = field_header['scale']
@@ -690,8 +687,8 @@ class MdvFile(object):
                 d[item[0]] = l[item[1]]
             else:
                 d[item[0]] = l[item[1]:item[2]]
-            if isinstance(d[item[0]], basestring):
-                d[item[0]] = d[item[0]].split('\x00', 1)[0]
+            if isinstance(d[item[0]], bytes):
+                d[item[0]] = d[item[0]].decode('ascii').split('\x00', 1)[0]
         return d
 
     def _pack_mapped(self, d, mapper, fmt):
@@ -700,6 +697,8 @@ class MdvFile(object):
         for item in mapper:
             if item[2] == item[1] + 1:
                 l[item[1]] = d[item[0]]
+                if isinstance(l[item[1]], str):
+                    l[item[1]] = l[item[1]].encode('ascii')
             else:
                 l[item[1]:item[2]] = d[item[0]]
         return struct.pack(fmt, *l)
@@ -733,6 +732,8 @@ class MdvFile(object):
         for item in self.master_header_mapper:
             if item[2] == item[1] + 1:
                 l[item[1]] = d[item[0]]
+                if isinstance(l[item[1]], str):
+                    l[item[1]] = l[item[1]].encode('ascii')
             else:
                 l[item[1]:item[2]] = d[item[0]]
         string = struct.pack(self.master_header_fmt, *l)
@@ -1044,8 +1045,8 @@ class MdvFile(object):
         epoch = datetime.datetime(1970, 1, 1, 0, 0)
         td = dt - epoch
         # use td.total_seconds() in Python 2.7+
-        return (td.microseconds + (td.seconds + td.days * 24 * 3600) *
-                10**6) / 10**6
+        return int((td.microseconds + (td.seconds + td.days * 24 * 3600) *
+                    10**6) / 10**6)
 
     # misc. methods
     # XXX move some where else, there are not general mdv operations
@@ -1086,7 +1087,7 @@ class MdvFile(object):
             rg, ele = np.meshgrid(range_km, el_deg)
             rg = np.array(rg, dtype=np.float64)
             ele = np.array(ele, dtype=np.float64)
-            for aznum in xrange(nsweeps):
+            for aznum in range(nsweeps):
                 azg = np.ones(rg.shape, dtype=np.float64) * az_deg[aznum]
                 x, y, z = radar_coords_to_cart(rg, azg, ele)
                 zz[aznum, :, :] = z
@@ -1097,7 +1098,7 @@ class MdvFile(object):
             rg, azg = np.meshgrid(range_km, az_deg)
             rg = np.array(rg, dtype=np.float64)
             azg = np.array(azg, dtype=np.float64)
-            for elnum in xrange(nsweeps):
+            for elnum in range(nsweeps):
                 ele = np.ones(rg.shape, dtype=np.float64) * el_deg[elnum]
                 x, y, z = radar_coords_to_cart(rg, azg, ele)
                 zz[elnum, :, :] = z
