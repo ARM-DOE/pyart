@@ -1,5 +1,7 @@
 """ Unit Tests for Py-ART's map/gates_to_grid.py. """
 
+from __future__ import print_function
+
 import numpy as np
 from numpy.testing import assert_array_equal, assert_raises
 
@@ -93,7 +95,7 @@ def test_map_to_grid_tiny_grid():
         grid_limits=((-400.0, 400.0), (-900.0, 900.0), (-900, 900)),
         fields=['reflectivity'])
     assert grids['reflectivity'].shape == (1, 1, 1)
-    assert abs(round(grids['reflectivity'][0]) - 40.0) < 0.01
+    assert abs(np.round(grids['reflectivity'][0]) - 40.0) < 0.01
 
 
 def test_grid_from_radars_gates_to_grid():
@@ -159,8 +161,8 @@ def test_grid_from_radars_grid_origin():
     radar.metadata.pop('instrument_name')
     grid = pyart.map.grid_from_radars((radar,), grid_origin=(36.4, -97.6),
                                       **COMMON_MAP_TO_GRID_ARGS)
-    print round(grid.axes['lat']['data'][0], 2)
-    print round(grid.axes['lon']['data'][0], 2)
+    print(round(grid.axes['lat']['data'][0], 2))
+    print(round(grid.axes['lon']['data'][0], 2))
     assert round(grid.axes['lat']['data'][0], 2) == 36.4
     assert round(grid.axes['lon']['data'][0], 2) == -97.6
 
