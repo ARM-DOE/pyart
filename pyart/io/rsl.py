@@ -91,7 +91,8 @@ def read_rsl(filename, field_names=None, additional_metadata=None,
 
     # read the file, determine common parameters
     fillvalue = get_fillvalue()
-    rslfile = _rsl_interface.RslFile(filename, radar_format, callid)
+    rslfile = _rsl_interface.RslFile(
+        filename.encode('ascii'), radar_format, callid)
     available_vols = rslfile.available_moments()
     first_volume = rslfile.get_volume(available_vols[0])
     first_sweep = first_volume.get_sweep(0)
