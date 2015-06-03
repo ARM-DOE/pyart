@@ -539,7 +539,7 @@ def _get_record_from_buf(buf, pos):
 
 def _get_msg31_data_block(buf, ptr):
     """ Unpack a msg_31 data block into a dictionary. """
-    block_name = buf[ptr + 1: ptr + 4].strip()
+    block_name = buf[ptr + 1: ptr + 4].decode('ascii').strip()
 
     if block_name == 'VOL':
         dic = _unpack_from_buf(buf, ptr, VOLUME_DATA_BLOCK)
