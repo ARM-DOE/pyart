@@ -567,10 +567,10 @@ def write_cfradial(filename, radar, format='NETCDF4', time_reference=None,
         # round up to next second
         end_dt += (datetime.timedelta(seconds=1) -
                    datetime.timedelta(microseconds=end_dt.microsecond))
-    start_dic = {'data': np.array(start_dt.isoformat() + 'Z'),
+    start_dic = {'data': np.array(start_dt.isoformat() + 'Z', dtype='S'),
                  'long_name': 'UTC time of first ray in the file',
                  'units': 'unitless'}
-    end_dic = {'data': np.array(end_dt.isoformat() + 'Z'),
+    end_dic = {'data': np.array(end_dt.isoformat() + 'Z', dtype='S'),
                'long_name': 'UTC time of last ray in the file',
                'units': 'unitless'}
     _create_ncvar(start_dic, dataset, 'time_coverage_start', time_dim)
@@ -601,19 +601,19 @@ def write_cfradial(filename, radar, format='NETCDF4', time_reference=None,
     # platform_type, optional
     if 'platform_type' in radar.metadata:
         dic = {'long_name': 'Platform type',
-               'data': np.array(radar.metadata['platform_type'])}
+               'data': np.array(radar.metadata['platform_type'], dtype='S')}
         _create_ncvar(dic, dataset, 'platform_type', ('string_length', ))
 
     # instrument_type, optional
     if 'instrument_type' in radar.metadata:
         dic = {'long_name': 'Instrument type',
-               'data': np.array(radar.metadata['instrument_type'])}
+               'data': np.array(radar.metadata['instrument_type'], dtype='S')}
         _create_ncvar(dic, dataset, 'instrument_type', ('string_length', ))
 
     # primary_axis, optional
     if 'primary_axis' in radar.metadata:
         dic = {'long_name': 'Primary axis',
-               'data': np.array(radar.metadata['primary_axis'])}
+               'data': np.array(radar.metadata['primary_axis'], dtype='S')}
         _create_ncvar(dic, dataset, 'primary_axis', ('string_length', ))
 
     # moving platform geo-reference variables
