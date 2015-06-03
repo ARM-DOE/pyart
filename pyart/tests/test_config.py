@@ -3,6 +3,7 @@
 import pyart
 import os
 import warnings
+from imp import reload
 
 dirname = os.path.dirname(__file__)
 CUSTOM_CONFIG_FILE = os.path.join(dirname, 'custom_config.py')
@@ -78,7 +79,7 @@ def test_init_load():
     # starting up with an invalid config file raises a warning and
     # loads the default config
     os.environ['PYART_CONFIG'] = 'nullnullnull'
-    with warnings.catch_warnings(True) as w:
+    with warnings.catch_warnings(record=True) as w:
         reload(pyart.config)
         assert len(w) > 0
     assert pyart.config.get_field_name('reflectivity') == 'reflectivity'

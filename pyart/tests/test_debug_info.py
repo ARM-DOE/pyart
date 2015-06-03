@@ -1,7 +1,10 @@
 """ Unit Tests for Py-ART's config.py module. """
 
 import pyart
-from StringIO import StringIO
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
 
 
 def test_debug_info():
@@ -9,4 +12,4 @@ def test_debug_info():
     # we don't care what is written, just that something is.
     buf = StringIO()
     pyart._debug_info(buf)
-    assert buf.len > 0
+    assert len(buf.getvalue()) > 0
