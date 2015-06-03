@@ -114,7 +114,7 @@ def write_grid(filename, grid, format='NETCDF4', arm_time_variables=False):
     ncobj.createDimension('time', None)
 
     # create additional dimensions
-    grid_shape = grid.fields[grid.fields.keys()[0]]['data'].shape
+    grid_shape = grid.fields[list(grid.fields.keys())[0]]['data'].shape
     nz, ny, nx = grid_shape
     ncobj.createDimension('nz', nz)
     ncobj.createDimension('ny', ny)

@@ -1,7 +1,7 @@
 """ Unit Tests for Py-ART's core/radar.py module. """
 
 import sys
-from io import BytesIO
+from io import StringIO
 import inspect
 
 import numpy as np
@@ -254,7 +254,7 @@ def test_info_nonstandard():
 
 
 def check_info(level, radar=None):
-    out = BytesIO()
+    out = StringIO()
     get_info(level, out, radar)
     # don't check the output, just that something was printed.
     assert len(out.getvalue()) != 0

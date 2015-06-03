@@ -1,5 +1,7 @@
 """ Unit Tests for Py-ART's core/grid.py module. """
 
+from __future__ import print_function
+
 import tempfile
 import os
 
@@ -24,14 +26,14 @@ def test_grid_from_radars():
 
     # check metadata
     for k, v in grid.metadata.items():
-        print "Checking key:", k, "should have value:", v
-        print grid2.metadata
+        print("Checking key:", k, "should have value:", v)
+        print(grid2.metadata)
         assert grid2.metadata[k] == v
 
     # check axes
     for axes_key in grid.axes.keys():
         for k, v in grid.axes[axes_key].items():
-            print "Checking axes_key:", axes_key, "key:", k
+            print("Checking axes_key:", axes_key, "key:", k)
             if k == 'data':
                 assert np.all(grid.axes[axes_key][k] == v)
             else:
@@ -40,7 +42,7 @@ def test_grid_from_radars():
     # check fields
     for field in grid.fields.keys():
         for k, v in grid.fields[field].items():
-            print "Checking field:", field, "key:", k
+            print("Checking field:", field, "key:", k)
             if k == 'data':
                 assert np.all(grid.fields[field][k] == v)
             else:
