@@ -435,7 +435,7 @@ class Radar(object):
         self._dic_info('elevation', level, out)
 
         print('fields:', file=out)
-        for field_name, field_dic in self.fields.iteritems():
+        for field_name, field_dic in self.fields.items():
             self._dic_info(field_name, level, out, field_dic, 1)
 
         self._dic_info('fixed_angle', level, out)
@@ -444,7 +444,7 @@ class Radar(object):
             print('instrument_parameters: None', file=out)
         else:
             print('instrument_parameters:', file=out)
-            for name, dic in self.instrument_parameters.iteritems():
+            for name, dic in self.instrument_parameters.items():
                 self._dic_info(name, level, out, dic, 1)
 
         self._dic_info('latitude', level, out)
@@ -458,7 +458,7 @@ class Radar(object):
             print('radar_calibration: None', file=out)
         else:
             print('radar_calibration:', file=out)
-            for name, dic in self.radar_calibration.iteritems():
+            for name, dic in self.radar_calibration.items():
                 self._dic_info(name, level, out, dic, 1)
 
         self._dic_info('range', level, out)
@@ -520,7 +520,7 @@ class Radar(object):
         elif level == 'standard':
             print(ilvl0 + attr + ':', file=out)
             print(ilvl1 + 'data:', d_str, file=out)
-            for key, val in dic.iteritems():
+            for key, val in dic.items():
                 if key == 'data':
                     continue
                 print(ilvl1 + key + ':', val, file=out)
@@ -530,7 +530,7 @@ class Radar(object):
             print(attr + ':', file=out)
             if 'data' in dic:
                 print(ilvl1 + 'data:', dic['data'], file=out)
-            for key, val in dic.iteritems():
+            for key, val in dic.items():
                 if key == 'data':
                     continue
                 print(ilvl1 + key + ':', val, file=out)
@@ -650,7 +650,7 @@ class Radar(object):
         _range = mkdic(self.range, None)
 
         fields = {}
-        for field_name, dic in self.fields.iteritems():
+        for field_name, dic in self.fields.items():
             fields[field_name] = mkdic(dic, rays)
         metadata = mkdic(self.metadata, None)
         scan_type = str(self.scan_type)
@@ -682,7 +682,7 @@ class Radar(object):
             instrument_parameters = None
         else:
             instrument_parameters = {}
-            for key, dic in self.instrument_parameters.iteritems():
+            for key, dic in self.instrument_parameters.items():
                 if dic['data'].ndim != 0:
                     dim0_size = dic['data'].shape[0]
                 else:
@@ -704,7 +704,7 @@ class Radar(object):
             radar_calibration = None
         else:
             radar_calibration = {}
-            for key, dic in self.radar_calibration.iteritems():
+            for key, dic in self.radar_calibration.items():
                 if key == 'r_calib_index':
                     radar_calibration[key] = mkdic(dic, rays)
                 else:

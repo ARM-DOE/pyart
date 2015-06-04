@@ -537,7 +537,7 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
 
         # for radars 1 to N-1 add total_gates to the lookup table and
         # subtract the number of gates in all ealier radars.
-        for i in xrange(1, nradars):
+        for i in range(1, nradars):
             l_start = filtered_gate_offset[i]
             l_end = filtered_gate_offset[i + 1]
             gates_before = gate_offset[i]

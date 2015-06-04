@@ -30,8 +30,7 @@ Important Links
 Dependencies
 ============
 
-Py-ART is tested to work under Python 2.6+, support for Python 3 has not
-yet been completed.
+Py-ART is tested to work under Python 2.6, 2.7, 3.3, and 3.4.
 
 The required dependencies to install Py-ART in addition to Python are:
 

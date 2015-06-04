@@ -178,7 +178,7 @@ def read_nexrad_cdm(filename, field_names=None, additional_metadata=None,
 
     # fields
     fields = {}
-    for moment_name, moment_data in fdata.iteritems():
+    for moment_name, moment_data in fdata.items():
         field_name = filemetadata.get_field_name(moment_name)
         field_dic = filemetadata(field_name)
         field_dic['_FillValue'] = get_fillvalue()

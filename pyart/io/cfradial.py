@@ -135,7 +135,7 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
                    'primary_axis': 'axis_z'}
     # ignore time_* global variables, these are calculated from the time
     # variable when the file is written.
-    for var, default_value in global_vars.iteritems():
+    for var, default_value in global_vars.items():
         if var in ncvars:
             metadata[var] = str(netCDF4.chartostring(ncvars[var][:]))
         else:
@@ -257,11 +257,11 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
     # 4.10 Moments field data variables -> field attribute dictionary
     if 'ray_n_gates' in ncvars:
         # all variables with dimensions of n_points are fields.
-        keys = [k for k, v in ncvars.iteritems()
+        keys = [k for k, v in ncvars.items()
                 if v.dimensions == ('n_points', )]
     else:
         # all variables with dimensions of 'time', 'range' are fields
-        keys = [k for k, v in ncvars.iteritems()
+        keys = [k for k, v in ncvars.items()
                 if v.dimensions == ('time', 'range')]
 
     fields = {}
@@ -320,7 +320,7 @@ def _find_all_meta_group_vars(ncvars, meta_group_name):
     """
     Return a list of all variables which are in a given meta_group.
     """
-    return [k for k, v in ncvars.iteritems() if 'meta_group' in v.ncattrs()
+    return [k for k, v in ncvars.items() if 'meta_group' in v.ncattrs()
             and v.meta_group == meta_group_name]
 
 
@@ -488,7 +488,7 @@ def write_cfradial(filename, radar, format='NETCDF4', time_reference=None,
                       'antenna_transition', ('time', ))
 
     # fields
-    for field, dic in radar.fields.iteritems():
+    for field, dic in radar.fields.items():
         _create_ncvar(dic, dataset, field, ('time', 'range'))
 
     # sweep parameters
@@ -567,10 +567,10 @@ def write_cfradial(filename, radar, format='NETCDF4', time_reference=None,
         # round up to next second
         end_dt += (datetime.timedelta(seconds=1) -
                    datetime.timedelta(microseconds=end_dt.microsecond))
-    start_dic = {'data': np.array(start_dt.isoformat() + 'Z'),
+    start_dic = {'data': np.array(start_dt.isoformat() + 'Z', dtype='S'),
                  'long_name': 'UTC time of first ray in the file',
                  'units': 'unitless'}
-    end_dic = {'data': np.array(end_dt.isoformat() + 'Z'),
+    end_dic = {'data': np.array(end_dt.isoformat() + 'Z', dtype='S'),
                'long_name': 'UTC time of last ray in the file',
                'units': 'unitless'}
     _create_ncvar(start_dic, dataset, 'time_coverage_start', time_dim)
@@ -601,19 +601,19 @@ def write_cfradial(filename, radar, format='NETCDF4', time_reference=None,
     # platform_type, optional
     if 'platform_type' in radar.metadata:
         dic = {'long_name': 'Platform type',
-               'data': np.array(radar.metadata['platform_type'])}
+               'data': np.array(radar.metadata['platform_type'], dtype='S')}
         _create_ncvar(dic, dataset, 'platform_type', ('string_length', ))
 
     # instrument_type, optional
     if 'instrument_type' in radar.metadata:
         dic = {'long_name': 'Instrument type',
-               'data': np.array(radar.metadata['instrument_type'])}
+               'data': np.array(radar.metadata['instrument_type'], dtype='S')}
         _create_ncvar(dic, dataset, 'instrument_type', ('string_length', ))
 
     # primary_axis, optional
     if 'primary_axis' in radar.metadata:
         dic = {'long_name': 'Primary axis',
-               'data': np.array(radar.metadata['primary_axis'])}
+               'data': np.array(radar.metadata['primary_axis'], dtype='S')}
         _create_ncvar(dic, dataset, 'primary_axis', ('string_length', ))
 
     # moving platform geo-reference variables
@@ -661,7 +661,7 @@ def _create_ncvar(dic, dataset, name, dimensions):
     # create array from list, etc.
     data = dic['data']
     if isinstance(data, np.ndarray) is not True:
-        print "Warning, converting non-array to array:", name
+        print("Warning, converting non-array to array:", name)
         data = np.array(data)
 
     # convert string array to character arrays
@@ -699,7 +699,7 @@ def _create_ncvar(dic, dataset, name, dimensions):
         ncvar.setncattr('_FillValue', fv)
 
     # set all attributes
-    for key, value in dic.iteritems():
+    for key, value in dic.items():
         if key not in ['data', '_FillValue', 'long_name', 'units']:
             ncvar.setncattr(key, value)
 

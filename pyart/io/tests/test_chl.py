@@ -1,6 +1,7 @@
 """ Unit Tests for Py-ART's io/chl.py module. """
 
 import numpy as np
+from numpy.testing import assert_almost_equal
 from numpy.ma.core import MaskedArray
 
 import pyart
@@ -23,7 +24,7 @@ def test_time():
     assert 'data' in radar.time.keys()
     assert radar.time['units'] == 'seconds since 2012-07-05T23:01:23Z'
     assert radar.time['data'].shape == (2, )
-    assert round(radar.time['data'][1]) == 22.
+    assert_almost_equal(radar.time['data'][1], 22, 0)
 
 
 # range attribute
@@ -38,7 +39,7 @@ def test_range():
     assert 'axis' in radar.range
     assert 'comment' in radar.range
     assert radar.range['data'].shape == (800, )
-    assert round(radar.range['data'][1]) == 3230.
+    assert_almost_equal(radar.range['data'][1], 3230, 0)
 
 
 # fields attribute is tested later
@@ -63,7 +64,7 @@ def test_latitude():
     assert 'standard_name' in radar.latitude
     assert 'units' in radar.latitude
     assert radar.latitude['data'].shape == (1, )
-    assert round(radar.latitude['data']) == 40.
+    assert_almost_equal(radar.latitude['data'], 40, 0)
 
 
 # longitude attribute
@@ -72,7 +73,7 @@ def test_longitude():
     assert 'standard_name' in radar.longitude
     assert 'units' in radar.longitude
     assert radar.longitude['data'].shape == (1, )
-    assert round(radar.longitude['data']) == -105.0
+    assert_almost_equal(radar.longitude['data'], -105, 0)
 
 
 # altitude attribute
@@ -82,7 +83,7 @@ def test_altitude():
     assert 'units' in radar.altitude
     assert 'positive' in radar.altitude
     assert radar.altitude['data'].shape == (1, )
-    assert round(radar.altitude['data']) == 1432.0
+    assert_almost_equal(radar.altitude['data'], 1432, 0)
 
 
 # altitude_agl attribute
@@ -110,21 +111,21 @@ def test_fixed_angle():
     assert 'data' in radar.fixed_angle
     assert 'units' in radar.fixed_angle
     assert radar.fixed_angle['data'].shape == (2, )
-    assert round(radar.fixed_angle['data'][0], 2) == 259.
+    assert_almost_equal(radar.fixed_angle['data'][0], 259, 2)
 
 
 # sweep_start_ray_index attribute
 def test_sweep_start_ray_index():
     assert 'long_name' in radar.sweep_start_ray_index
     assert radar.sweep_start_ray_index['data'].shape == (2, )
-    assert round(radar.sweep_start_ray_index['data'][0]) == 0
+    assert_almost_equal(radar.sweep_start_ray_index['data'][0], 0, 0)
 
 
 # sweep_end_ray_index attribute
 def test_sweep_end_ray_index():
     assert 'long_name' in radar.sweep_end_ray_index
     assert radar.sweep_end_ray_index['data'].shape == (2, )
-    assert round(radar.sweep_end_ray_index['data'][0]) == 0
+    assert_almost_equal(radar.sweep_end_ray_index['data'][0], 0, 0)
 
 
 # target_scan_rate attribute
@@ -141,8 +142,8 @@ def test_azimuth():
     assert 'comment' in radar.azimuth
     assert 'data' in radar.azimuth
     assert radar.azimuth['data'].shape == (2, )
-    assert round(radar.azimuth['data'][0]) == 259.0
-    assert round(radar.azimuth['data'][1]) == 261.0
+    assert_almost_equal(radar.azimuth['data'][0], 259, 0)
+    assert_almost_equal(radar.azimuth['data'][1], 261, 0)
 
 
 # elevation attribute
@@ -152,8 +153,8 @@ def test_elevation():
     assert 'units' in radar.elevation
     assert 'axis' in radar.elevation
     assert radar.elevation['data'].shape == (2, )
-    assert round(radar.elevation['data'][0]) == 0.
-    assert round(radar.elevation['data'][1]) == 30.
+    assert_almost_equal(radar.elevation['data'][0], 0, 0)
+    assert_almost_equal(radar.elevation['data'][1], 30, 0)
 
 
 # scan_rate attribute
@@ -283,7 +284,7 @@ def test_field_first_points():
         'velocity': -14.0,
         'spectrum_width': np.ma.masked,
         'differential_reflectivity': np.ma.masked}
-    for field, field_value in fields.iteritems():
+    for field, field_value in fields.items():
         description = "field : %s, first point" % field
         check_field_first_point.description = description
         yield check_field_first_point, field, field_value
@@ -293,7 +294,7 @@ def check_field_first_point(field, value):
     if np.ma.is_masked(value):
         assert np.ma.is_masked(radar.fields[field]['data'][0, 0])
     else:
-        assert round(radar.fields[field]['data'][0, 0]) == value
+        assert_almost_equal(radar.fields[field]['data'][0, 0], value, 0)
 
 
 def test_read_open_file():
@@ -303,7 +304,7 @@ def test_read_open_file():
 def test_read_chl_time():
     # with and without ns_time
     cfile = pyart.io.chl.ChlFile(pyart.testing.CHL_RHI_FILE, ns_time=True)
-    assert round(cfile.time[1]) == 1341529305
+    assert_almost_equal(cfile.time[1], 1341529305, 0)
 
     cfile = pyart.io.chl.ChlFile(pyart.testing.CHL_RHI_FILE, ns_time=False)
     assert cfile.time[1] == 1341529304

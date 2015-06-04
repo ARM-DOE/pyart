@@ -1,11 +1,15 @@
 """ Unit Tests for Py-ART's io/mdv_common.py module. """
 
+from __future__ import print_function
+
 import os
 import tempfile
 import warnings
 from datetime import datetime
+from io import IOBase
 
 import numpy as np
+from numpy.testing import assert_almost_equal
 
 import pyart
 from pyart.io.mdv_common import MdvFile
@@ -63,8 +67,8 @@ def test_master_header():
         'vlevel_included': 1,
         'vlevel_type': 9}
 
-    for k, v in ref_master_header.iteritems():
-        print "checking key:", k
+    for k, v in ref_master_header.items():
+        print("checking key:", k)
         assert mdvfile.master_header[k] == v
 
 
@@ -108,8 +112,8 @@ def test_chunk_headers():
         'size': 240,
         'struct_id': 14145,
         'unused_si32': (0, 0)}
-    for k, v in ref_chunk_header_0.iteritems():
-        print "checking key:", k
+    for k, v in ref_chunk_header_0.items():
+        print("checking key:", k)
         assert mdvfile.chunk_headers[0][k] == v
 
 
@@ -177,8 +181,8 @@ def test_calib_info():
         'zv1km_co_dbz': -34.11470031738281,
         'zv1km_cx_dbz': -34.11470031738281}
 
-    for k, v in ref_calib_info.iteritems():
-        print "checking key:", k
+    for k, v in ref_calib_info.items():
+        print("checking key:", k)
         assert mdvfile.calib_info[k] == v
 
 
@@ -225,8 +229,8 @@ def test_radar_info():
         'wavelength_cm': 5.330544471740723,
         'xmit_peak_pwr_watts': 231739552.0}
 
-    for k, v in ref_radar_info.iteritems():
-        print "checking key:", k
+    for k, v in ref_radar_info.items():
+        print("checking key:", k)
         assert mdvfile.radar_info[k] == v
 
 
@@ -235,7 +239,7 @@ def test_geometry():
     az_deg, range_km, el_deg = mdvfile._calc_geometry()
     assert np.all(az_deg == np.arange(360))
     assert len(range_km) == 110
-    assert round(range_km[10], 2) == 1.32
+    assert_almost_equal(range_km[10], 1.32, 2)
     assert len(el_deg) == 1
     assert el_deg[0] == 0.75
 
@@ -254,9 +258,9 @@ def test_cart():
     assert carts['x'].shape == (1, 360, 110)
     assert carts['y'].shape == (1, 360, 110)
     assert carts['z'].shape == (1, 360, 110)
-    assert round(carts['x'][0, 1, 2], 2) == 6.24
-    assert round(carts['y'][0, 1, 2], 2) == 357.63
-    assert round(carts['z'][0, 1, 2], 2) == 4.69
+    assert_almost_equal(carts['x'][0, 1, 2], 6.24, 2)
+    assert_almost_equal(carts['y'][0, 1, 2], 357.63, 2)
+    assert_almost_equal(carts['z'][0, 1, 2], 4.69, 2)
 
 
 def test_fields():
@@ -268,7 +272,7 @@ def test_fields():
 
 def test_fileptr():
     # test fileptr
-    assert type(mdvfile.fileptr) == file
+    assert hasattr(mdvfile.fileptr, 'read')
 
 
 def test_read_one_field():
@@ -278,13 +282,13 @@ def test_read_one_field():
     assert mdvfile.fields_data[0] is None
     sweeps = mdvfile.read_a_field(0)
     assert sweeps.shape == (1, 360, 110)
-    assert round(sweeps[0, 1, 2], 2) == 13.19
+    assert_almost_equal(sweeps[0, 1, 2], 13.19, 2)
     assert mdvfile.fields_data[0] is not None
 
     # reread, should be faster
     sweeps = mdvfile.read_a_field(0)
     assert sweeps.shape == (1, 360, 110)
-    assert round(sweeps[0, 1, 2], 2) == 13.19
+    assert_almost_equal(sweeps[0, 1, 2], 13.19, 2)
     assert mdvfile.fields_data[0] is not None
 
 
@@ -295,13 +299,13 @@ def test_read_all_fields():
     assert mdvfile.fields_data[0] is None
     mdvfile.read_all_fields()
     assert mdvfile.fields_data[0] is not None
-    assert round(mdvfile.fields_data[0][0, 1, 2], 2) == 13.19
+    assert_almost_equal(mdvfile.fields_data[0][0, 1, 2], 13.19, 2)
 
 
 def test_read_all_fields_on_creation():
     mdvfile2 = MdvFile(pyart.testing.MDV_PPI_FILE, read_fields=True)
     assert mdvfile2.fields_data[0] is not None
-    assert round(mdvfile2.fields_data[0][0, 1, 2], 2) == 13.19
+    assert_almost_equal(mdvfile2.fields_data[0][0, 1, 2], 13.19, 2)
     mdvfile2.close()
 
 
@@ -338,9 +342,9 @@ def test_rhi_cart():
     assert carts['x'].shape == (1, 283, 125)
     assert carts['y'].shape == (1, 283, 125)
     assert carts['z'].shape == (1, 283, 125)
-    assert round(carts['x'][0, 1, 2], 2) == -52.63
-    assert round(carts['y'][0, 1, 2], 2) == -332.31
-    assert round(carts['z'][0, 1, 2], 2) == 121.47
+    assert_almost_equal(carts['x'][0, 1, 2], -52.63, 2)
+    assert_almost_equal(carts['y'][0, 1, 2], -332.31, 2)
+    assert_almost_equal(carts['z'][0, 1, 2], 121.47, 2)
 
 
 class Mdv_common_Tests(object):
@@ -373,13 +377,13 @@ class Mdv_common_Tests(object):
 
     def test_read_write_file_objects(self):
         # read from and write two a file object
-        f = open(pyart.testing.MDV_PPI_FILE)
+        f = open(pyart.testing.MDV_PPI_FILE, 'rb')
         mdvfile = pyart.io.mdv_common.MdvFile(f)
         mdvfile.read_all_fields()
         self.check_mdvfile_ppi(mdvfile)
 
         # write out the file using an file handler
-        f2 = open(self.tmpfile, 'w')
+        f2 = open(self.tmpfile, 'wb')
         mdvfile.write(f2)
         f.close()
         f2.close()
@@ -403,7 +407,7 @@ class Mdv_common_Tests(object):
         az_deg, range_km, el_deg = mdvfile._calc_geometry()
         assert np.all(az_deg == np.arange(360))
         assert len(range_km) == 110
-        assert round(range_km[10], 2) == 1.32
+        assert_almost_equal(range_km[10], 1.32, 2)
         assert len(el_deg) == 1
         assert el_deg[0] == 0.75
         assert mdvfile.times['time_begin'] == datetime(2011, 5, 20, 11, 1)

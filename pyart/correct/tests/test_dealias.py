@@ -9,7 +9,7 @@ import datetime
 import netCDF4
 import pyart
 import numpy as np
-from numpy.testing import assert_allclose
+from numpy.testing import assert_allclose, assert_almost_equal
 from numpy.testing.decorators import skipif
 from numpy.testing import assert_raises
 
@@ -29,9 +29,9 @@ def test_find_time_in_interp_sounde():
     assert speed.dtype == 'float32'
     assert direction.dtype == 'float32'
 
-    assert round(height[100], 2) == 2.32
-    assert round(speed[100], 2) == 15.54
-    assert round(direction[100], 2) == 231.8
+    assert_almost_equal(height[100], 2.32, 2)
+    assert_almost_equal(speed[100], 15.54, 2) == 15.54
+    assert_almost_equal(direction[100], 231.8, 2) == 231.8
 
 
 @skipif(not pyart.io._RSL_AVAILABLE)

@@ -1,5 +1,7 @@
 """ Unit Tests for Py-ART's io/mdv_grid.py module. """
 
+from __future__ import print_function
+
 import os
 import tempfile
 import datetime
@@ -56,7 +58,7 @@ class Mdv_grid_Tests(object):
 
     @staticmethod
     def check_axes_dic(axes, axes2, key):
-        print "Checking:", key
+        print("Checking:", key)
         # check that the data and units keys are similar
         assert np.allclose(axes[key]['data'], axes2[key]['data'])
         assert axes[key]['data'].shape == axes2[key]['data'].shape
