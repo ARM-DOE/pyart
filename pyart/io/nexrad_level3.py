@@ -113,9 +113,15 @@ class NEXRADLevel3File(object):
     def __init__(self, filename):
         """ initalize the object. """
         # read the entire file into memory
-        fhandle = open(filename, 'rb')
+        try:
+            fhandle = open(filename, 'rb')
+            close = True
+        except:
+            fhandle = filename
+            close = False
         buf = fhandle.read()    # string buffer containing file data
-        fhandle.close()
+        if close:
+            fhandle.close()
 
         # Text header
         # Format of Text header is SDUSXX KYYYY DDHHMM\r\r\nAAABBB\r\r\n

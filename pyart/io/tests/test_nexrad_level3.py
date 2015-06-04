@@ -127,3 +127,14 @@ def test_nexrad_level3_msg161():
     assert radar.fields[field_name]['data'].shape == (360, 1200)
     assert type(radar.fields[field_name]['data']) is MaskedArray
     assert round(radar.fields[field_name]['data'][103, 170]) == 2.
+
+
+def test_nexrad_level3_msg161_fileobj():
+    fh = open(pyart.testing.NEXRAD_LEVEL3_MSG163, 'rb')
+    radar = pyart.io.read_nexrad_level3(fh)
+    fh.close()
+    field_name = 'specific_differential_phase'
+    assert field_name in radar.fields.keys()
+    assert radar.fields[field_name]['data'].shape == (360, 1200)
+    assert type(radar.fields[field_name]['data']) is MaskedArray
+    assert round(radar.fields[field_name]['data'][103, 170]) == 2.
