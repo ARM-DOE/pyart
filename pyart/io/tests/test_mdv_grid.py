@@ -7,7 +7,7 @@ import tempfile
 import datetime
 
 import numpy as np
-from numpy.testing import assert_raises, assert_warns
+from numpy.testing import assert_raises, assert_warns, assert_almost_equal
 
 import pyart
 
@@ -195,3 +195,19 @@ def test_time_dic_to_datetime():
         {'data': [20], 'units': 'seconds since 1970-01-01 00:00:00',
          'calendar': 'standard'})
     assert dt == datetime.datetime(1970, 1, 1, 0, 0, 20)
+
+
+def test_mdv_degree_grid():
+    grid = pyart.io.read_grid_mdv(
+        pyart.testing.MDV_GRID_FILE, file_field_names=True)
+
+    assert 'refl' in grid.fields.keys()
+    fdata = grid.fields['refl']['data']
+    assert fdata.shape == (1, 1837, 3661)
+    assert np.ma.is_masked(fdata[0, 0, 0])
+    assert_almost_equal(fdata[0, 130, 2536], 20.0, 1)
+
+    assert grid.axes['x_disp']['units'] == 'degree_E'
+    assert_almost_equal(grid.axes['x_disp']['data'][0], -129.99, 2)
+    assert grid.axes['y_disp']['units'] == 'degree_N'
+    assert_almost_equal(grid.axes['y_disp']['data'][0], 20.01, 2)

@@ -543,7 +543,14 @@ class MdvFile(object):
 
             # get the compressed level data
             compr_info = self._get_compression_info()
-            compr_data = self.fileptr.read(compr_info['nbytes_coded'])
+            if compr_info['magic_cookie'] == 0xfe0103fd:
+                # Run length encoding only has 20 bytes of compression
+                # information with slightly different order, back up
+                # 4 bytes to read all of the compressed data.
+                self.fileptr.seek(-4, 1)
+                compr_data = self.fileptr.read(compr_info['spare'][0])
+            else:
+                compr_data = self.fileptr.read(compr_info['nbytes_coded'])
             encoding_type = field_header['encoding_type']
             if encoding_type == ENCODING_INT8:
                 fmt = '>%iB' % (nx * ny)
@@ -568,6 +575,17 @@ class MdvFile(object):
             elif compr_info['magic_cookie'] == 0xf6f6f6f6:
                 # ZLIB_NOT_COMPRESSED
                 decompr_data = compr_data
+            elif compr_info['magic_cookie'] == 0xfe0103fd:
+                # Run length encoding of 8-bit data
+                # Compression info is in a different order, namely
+                # int32 : RL8_FLAG (0xfe0103fd)
+                # int32 : key
+                # int32 : nbytes_array (bytes of encoded data with header)
+                # int32 : nbytes_full (bytes of unencoded data, no header)
+                # int32 : nbytes_coded (bytes of encoded data, no header)
+                key = compr_info['nbytes_uncompressed']
+                decompr_size = compr_info['nbytes_coded']
+                decompr_data = _decode_rle8(compr_data, key, decompr_size)
             else:
                 raise NotImplementedError('unsupported compression mode')
                 # With sample data it should be possible to write
@@ -1111,6 +1129,30 @@ class MdvFile(object):
         """ Return a list of fields. """
         fh = self.field_headers
         return [fh[i]['field_name'] for i in range(len(fh))]
+
+
+def _decode_rle8(compr_data, key, decompr_size):
+    """ Decode 8-bit MDV run length encoding. """
+    # Encoding is described in section 7 of:
+    # http://rap.ucar.edu/projects/IHL/RalHtml/protocols/mdv_file/
+    # This function would benefit greate by being rewritten in Cython
+    data = np.fromstring(compr_data, dtype='>B')
+    out = np.empty((decompr_size, ), dtype='uint8')
+    data_ptr = 0
+    out_ptr = 0
+    while data_ptr != len(data):
+        v = data[data_ptr]
+        if v != key:  # not encoded
+            out[out_ptr] = v
+            data_ptr += 1
+            out_ptr += 1
+        else:   # run length encoded
+            count = data[data_ptr+1]
+            value = data[data_ptr+2]
+            out[out_ptr:out_ptr+count] = value
+            data_ptr += 3
+            out_ptr += count
+    return out.tostring()
 
 
 class _MdvVolumeDataExtractor(object):
