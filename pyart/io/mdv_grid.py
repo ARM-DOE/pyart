@@ -341,8 +341,13 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
     x_step = mdv.field_headers[0]["grid_dx"] * 1000.
 
     if mdv.field_headers[0]["proj_type"] == mdv_common.PROJ_LATLON:
+        # x and y axes have units of degrees
         xunits = 'degree_E'
         yunits = 'degree_N'
+        y_start = mdv.field_headers[0]["grid_miny"]
+        x_start = mdv.field_headers[0]["grid_minx"]
+        y_step = mdv.field_headers[0]["grid_dy"]
+        x_step = mdv.field_headers[0]["grid_dx"]
     elif (mdv.field_headers[0]["proj_type"] != mdv_common.PROJ_POLAR_RADAR and
           mdv.field_headers[0]["proj_type"] != mdv_common.PROJ_RHI_RADAR):
         xunits = 'm'
