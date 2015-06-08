@@ -521,10 +521,10 @@ def _is_time_ordered_by_reverse_roll(data, metadata, rays_per_sweep):
         if sweep_time_diff.min() < 0:   # optional reverse
             sweep_time_diff = np.diff(ref_time[s][::-1])
             first, last = last, first
+        count = np.count_nonzero(sweep_time_diff < 0)
         # compare the first and last times for continuity
         if (first - last) < 0:
             count += 1
-        count = np.count_nonzero(sweep_time_diff < 0)
         if count != 0 and count != 1:
             return False
     return True
