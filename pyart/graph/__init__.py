@@ -11,17 +11,12 @@ Graphing (:mod:`pyart.graph`)
     RadarDisplay
     RadarMapDisplay
     GridMapDisplay
-    MdvDisplay
-    RslDisplay
-    CFRadialDisplay
     RadarDisplay_Airborne
 
 
 """
 
 from .radardisplay import RadarDisplay
-from .plot_mdv import MdvDisplay
-from .plot_cfradial import CFRadialDisplay
 from . import cm
 from .radardisplay_airborne import RadarDisplay_Airborne
 
@@ -36,10 +31,5 @@ try:
 except ImportError:
     import warnings
     warnings.warn('No grid plotting support, requires basemap.')
-
-try:
-    from .plot_rsl import RslDisplay
-except ImportError:
-    pass
 
 __all__ = [s for s in dir() if not s.startswith('_')]
