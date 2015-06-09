@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.3.0',
+        VERSION:     '1.4.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,8 +26,8 @@
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="Py-ART Documentation" href="../../index.html" />
     <link rel="up" title="Examples" href="../index.html" />
-    <link rel="next" title="Create a plot of multiple moments from a NEXRAD file" href="plot_nexrad_multiple_moments.html" />
-    <link rel="prev" title="Create a RHI plot from a MDV file" href="plot_rhi_mdv.html" /> 
+    <link rel="next" title="Create a RHI plot from a Sigmet file" href="plot_rhi_sigmet.html" />
+    <link rel="prev" title="Create a plot of NEXRAD reflectivity" href="plot_nexrad_reflectivity.html" /> 
   </head>
   <body>
     <div class="related">
@@ -43,10 +43,10 @@
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="plot_nexrad_multiple_moments.html" title="Create a plot of multiple moments from a NEXRAD file"
+          <a href="plot_rhi_sigmet.html" title="Create a RHI plot from a Sigmet file"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="plot_rhi_mdv.html" title="Create a RHI plot from a MDV file"
+          <a href="plot_nexrad_reflectivity.html" title="Create a plot of NEXRAD reflectivity"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
           <li><a href="../index.html" accesskey="U">Examples</a> &raquo;</li> 
@@ -60,14 +60,8 @@
             
   <div class="section" id="create-a-ppi-plot-from-a-mdv-file">
 <span id="example-plotting-plot-ppi-mdv-py"></span><h1>Create a PPI plot from a MDV file<a class="headerlink" href="#create-a-ppi-plot-from-a-mdv-file" title="Permalink to this headline">¶</a></h1>
-<p>An example which creates a PPI plot of a MDV file using both a MdvDisplay
-and a RadarDisplay object.</p>
-<ul class="horizontal">
-<li><a class="first reference internal image-reference" href="../../_images/plot_ppi_mdv_1.png"><img alt="../../_images/plot_ppi_mdv_1.png" src="../../_images/plot_ppi_mdv_1.png" style="width: 235.0px; height: 235.0px;" /></a>
-</li>
-<li><a class="first reference internal image-reference" href="../../_images/plot_ppi_mdv_2.png"><img alt="../../_images/plot_ppi_mdv_2.png" src="../../_images/plot_ppi_mdv_2.png" style="width: 235.0px; height: 235.0px;" /></a>
-</li>
-</ul>
+<p>An example which creates a PPI plot of a MDV file using a RadarDisplay object.</p>
+<img alt="../../_images/plot_ppi_mdv_1.png" class="align-center" src="../../_images/plot_ppi_mdv_1.png" />
 <p><strong>Python source code:</strong> <a class="reference download internal" href="../../_downloads/plot_ppi_mdv.py"><tt class="xref download docutils literal"><span class="pre">plot_ppi_mdv.py</span></tt></a></p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">print</span><span class="p">(</span><span class="n">__doc__</span><span class="p">)</span>
 
@@ -79,7 +73,7 @@ and a RadarDisplay object.</p>
 
 <span class="n">filename</span> <span class="o">=</span> <span class="s">&#39;110635.mdv&#39;</span>
 
-<span class="c"># create the plot using RadarDisplay (the preferred method)</span>
+<span class="c"># create the plot using RadarDisplay</span>
 <span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_mdv</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
 <span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
@@ -91,21 +85,9 @@ and a RadarDisplay object.</p>
 <span class="n">display</span><span class="o">.</span><span class="n">set_limits</span><span class="p">(</span><span class="n">ylim</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">120</span><span class="p">,</span> <span class="mi">120</span><span class="p">],</span> <span class="n">xlim</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">120</span><span class="p">,</span> <span class="mi">120</span><span class="p">])</span>
 <span class="n">fig</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">wspace</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">hspace</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-
-<span class="c"># create the plot using MdvDisplay</span>
-<span class="n">mdvfile</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">mdv</span><span class="o">.</span><span class="n">MdvFile</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
-<span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">MdvDisplay</span><span class="p">(</span><span class="n">mdvfile</span><span class="p">)</span>
-<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
-<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">frameon</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-<span class="n">display</span><span class="o">.</span><span class="n">plot_ppi</span><span class="p">(</span><span class="s">&#39;DBZ_F&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">mask_tuple</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;NCP_F&#39;</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span>
-                 <span class="n">colorbar_flag</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">title_flag</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
-                 <span class="n">axislabels_flag</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
-<span class="n">display</span><span class="o">.</span><span class="n">set_limits</span><span class="p">(</span><span class="n">ylim</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">120</span><span class="p">,</span> <span class="mi">120</span><span class="p">],</span> <span class="n">xlim</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">120</span><span class="p">,</span> <span class="mi">120</span><span class="p">])</span>
-<span class="n">fig</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">wspace</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">hspace</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the example:</strong>  4.57 seconds</p>
+<p><strong>Total running time of the example:</strong>  3.57 seconds</p>
 </div>
 
 
@@ -115,11 +97,11 @@ and a RadarDisplay object.</p>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="plot_rhi_mdv.html"
-                        title="previous chapter">Create a RHI plot from a MDV file</a></p>
+  <p class="topless"><a href="plot_nexrad_reflectivity.html"
+                        title="previous chapter">Create a plot of NEXRAD reflectivity</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="plot_nexrad_multiple_moments.html"
-                        title="next chapter">Create a plot of multiple moments from a NEXRAD file</a></p>
+  <p class="topless"><a href="plot_rhi_sigmet.html"
+                        title="next chapter">Create a RHI plot from a Sigmet file</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/auto_examples/plotting/plot_ppi_mdv.txt"
@@ -155,10 +137,10 @@ and a RadarDisplay object.</p>
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="plot_nexrad_multiple_moments.html" title="Create a plot of multiple moments from a NEXRAD file"
+          <a href="plot_rhi_sigmet.html" title="Create a RHI plot from a Sigmet file"
              >next</a> |</li>
         <li class="right" >
-          <a href="plot_rhi_mdv.html" title="Create a RHI plot from a MDV file"
+          <a href="plot_nexrad_reflectivity.html" title="Create a plot of NEXRAD reflectivity"
              >previous</a> |</li>
         <li><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
           <li><a href="../index.html" >Examples</a> &raquo;</li> 
@@ -166,7 +148,7 @@ and a RadarDisplay object.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Feb 19, 2015.
+      Last updated on Jun 09, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>

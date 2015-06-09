@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.3.0',
+        VERSION:     '1.4.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -68,19 +68,22 @@ coordinates to Cartesian coordinates.</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.map.grid_from_radars.html#pyart.map.grid_from_radars" title="pyart.map.grid_from_radars"><tt class="xref py py-obj docutils literal"><span class="pre">grid_from_radars</span></tt></a>(radars,&nbsp;grid_shape,&nbsp;...)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.map.grid_from_radars.html#pyart.map.grid_from_radars" title="pyart.map.grid_from_radars"><tt class="xref py py-obj docutils literal"><span class="pre">grid_from_radars</span></tt></a>(radars,&nbsp;grid_shape,&nbsp;grid_limits)</td>
 <td>Map one or more radars to a Cartesian grid returning a Grid object.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pyart.map.map_to_grid.html#pyart.map.map_to_grid" title="pyart.map.map_to_grid"><tt class="xref py py-obj docutils literal"><span class="pre">map_to_grid</span></tt></a>(radars,&nbsp;grid_shape,&nbsp;grid_limits)</td>
 <td>Map one or more radars to a Cartesian grid.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.map.example_roi_func_constant.html#pyart.map.example_roi_func_constant" title="pyart.map.example_roi_func_constant"><tt class="xref py py-obj docutils literal"><span class="pre">example_roi_func_constant</span></tt></a>(zg,&nbsp;yg,&nbsp;xg)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.map.map_gates_to_grid.html#pyart.map.map_gates_to_grid" title="pyart.map.map_gates_to_grid"><tt class="xref py py-obj docutils literal"><span class="pre">map_gates_to_grid</span></tt></a>(radars,&nbsp;grid_shape,&nbsp;...[,&nbsp;...])</td>
+<td>Map gates from one or more radars to a Cartesian grid.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.map.example_roi_func_constant.html#pyart.map.example_roi_func_constant" title="pyart.map.example_roi_func_constant"><tt class="xref py py-obj docutils literal"><span class="pre">example_roi_func_constant</span></tt></a>(zg,&nbsp;yg,&nbsp;xg)</td>
 <td>Example RoI function which returns a constant radius.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.map.example_roi_func_dist.html#pyart.map.example_roi_func_dist" title="pyart.map.example_roi_func_dist"><tt class="xref py py-obj docutils literal"><span class="pre">example_roi_func_dist</span></tt></a>(zg,&nbsp;yg,&nbsp;xg)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.map.example_roi_func_dist.html#pyart.map.example_roi_func_dist" title="pyart.map.example_roi_func_dist"><tt class="xref py py-obj docutils literal"><span class="pre">example_roi_func_dist</span></tt></a>(zg,&nbsp;yg,&nbsp;xg)</td>
 <td>Example RoI function which returns a radius which grows with distance.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.map.example_roi_func_dist_beam.html#pyart.map.example_roi_func_dist_beam" title="pyart.map.example_roi_func_dist_beam"><tt class="xref py py-obj docutils literal"><span class="pre">example_roi_func_dist_beam</span></tt></a>(zg,&nbsp;yg,&nbsp;xg)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.map.example_roi_func_dist_beam.html#pyart.map.example_roi_func_dist_beam" title="pyart.map.example_roi_func_dist_beam"><tt class="xref py py-obj docutils literal"><span class="pre">example_roi_func_dist_beam</span></tt></a>(zg,&nbsp;yg,&nbsp;xg)</td>
 <td>Example RoI function which returns a radius which grows with distance and whose parameters are based on virtual beam size.</td>
 </tr>
 </tbody>
@@ -145,7 +148,7 @@ coordinates to Cartesian coordinates.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Feb 19, 2015.
+      Last updated on Jun 09, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>

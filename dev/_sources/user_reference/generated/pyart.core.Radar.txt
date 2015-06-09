@@ -19,6 +19,7 @@ pyart.core.Radar
          Radar.get_elevation
          Radar.get_end
          Radar.get_field
+         Radar.get_nyquist_vel
          Radar.get_slice
          Radar.get_start
          Radar.get_start_end

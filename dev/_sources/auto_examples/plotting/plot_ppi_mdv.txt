@@ -7,24 +7,13 @@
 Create a PPI plot from a MDV file
 =================================
 
-An example which creates a PPI plot of a MDV file using both a MdvDisplay
-and a RadarDisplay object.
+An example which creates a PPI plot of a MDV file using a RadarDisplay object.
 
 
 
 
-.. rst-class:: horizontal
-
-
-    *
-
-      .. image:: images/plot_ppi_mdv_1.png
-            :scale: 47
-
-    *
-
-      .. image:: images/plot_ppi_mdv_2.png
-            :scale: 47
+.. image:: images/plot_ppi_mdv_1.png
+    :align: center
 
 
 
@@ -32,7 +21,7 @@ and a RadarDisplay object.
 **Python source code:** :download:`plot_ppi_mdv.py <plot_ppi_mdv.py>`
 
 .. literalinclude:: plot_ppi_mdv.py
-    :lines: 10-
+    :lines: 9-
 
-**Total running time of the example:**  4.57 seconds
+**Total running time of the example:**  3.57 seconds
     

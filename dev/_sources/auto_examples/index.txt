@@ -338,6 +338,34 @@ Plotting real world radar data with Py-ART.
         <div class="docstringWrapper">
 
 
+.. figure:: plotting/images/thumb/plot_rhi_mdv.png
+   :target: ./plotting/plot_rhi_mdv.html
+
+   :ref:`example_plotting_plot_rhi_mdv.py`
+
+
+.. raw:: html
+
+
+    <p>An example which creates a RHI plot of a MDV file using a RadarDisplay object.
+    </p></div>
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   plotting/plot_rhi_mdv
+
+
+
+.. raw:: html
+
+
+    <div class="thumbnailContainer">
+        <div class="docstringWrapper">
+
+
 .. figure:: plotting/images/thumb/plot_ppi_sigmet.png
    :target: ./plotting/plot_ppi_sigmet.html
 
@@ -394,16 +422,16 @@ Plotting real world radar data with Py-ART.
         <div class="docstringWrapper">
 
 
-.. figure:: plotting/images/thumb/plot_rhi_mdv.png
-   :target: ./plotting/plot_rhi_mdv.html
+.. figure:: plotting/images/thumb/plot_ppi_mdv.png
+   :target: ./plotting/plot_ppi_mdv.html
 
-   :ref:`example_plotting_plot_rhi_mdv.py`
+   :ref:`example_plotting_plot_ppi_mdv.py`
 
 
 .. raw:: html
 
 
-    <p>An example which creates a RHI plot of a MDV file using both a MdvDisplay and a RadarDisplay ob...
+    <p>An example which creates a PPI plot of a MDV file using a RadarDisplay object.
     </p></div>
     </div>
 
@@ -411,7 +439,7 @@ Plotting real world radar data with Py-ART.
 .. toctree::
    :hidden:
 
-   plotting/plot_rhi_mdv
+   plotting/plot_ppi_mdv
 
 
 
@@ -422,16 +450,16 @@ Plotting real world radar data with Py-ART.
         <div class="docstringWrapper">
 
 
-.. figure:: plotting/images/thumb/plot_ppi_mdv.png
-   :target: ./plotting/plot_ppi_mdv.html
+.. figure:: plotting/images/thumb/plot_rhi_sigmet.png
+   :target: ./plotting/plot_rhi_sigmet.html
 
-   :ref:`example_plotting_plot_ppi_mdv.py`
+   :ref:`example_plotting_plot_rhi_sigmet.py`
 
 
 .. raw:: html
 
 
-    <p>An example which creates a PPI plot of a MDV file using both a MdvDisplay and a RadarDisplay ob...
+    <p>An example which creates a RHI plot of a Sigmet file using a RadarDisplay object.
     </p></div>
     </div>
 
@@ -439,7 +467,7 @@ Plotting real world radar data with Py-ART.
 .. toctree::
    :hidden:
 
-   plotting/plot_ppi_mdv
+   plotting/plot_rhi_sigmet
 
 
 
@@ -506,6 +534,34 @@ Plotting real world radar data with Py-ART.
         <div class="docstringWrapper">
 
 
+.. figure:: plotting/images/thumb/plot_rhi_cfradial.png
+   :target: ./plotting/plot_rhi_cfradial.html
+
+   :ref:`example_plotting_plot_rhi_cfradial.py`
+
+
+.. raw:: html
+
+
+    <p>An example which creates a multiple panel RHI plot of a CF/Radial file using a RadarDisplay obj...
+    </p></div>
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   plotting/plot_rhi_cfradial
+
+
+
+.. raw:: html
+
+
+    <div class="thumbnailContainer">
+        <div class="docstringWrapper">
+
+
 .. figure:: plotting/images/thumb/plot_rhi_two_panel.png
    :target: ./plotting/plot_rhi_two_panel.html
 
@@ -524,62 +580,6 @@ Plotting real world radar data with Py-ART.
    :hidden:
 
    plotting/plot_rhi_two_panel
-
-
-
-.. raw:: html
-
-
-    <div class="thumbnailContainer">
-        <div class="docstringWrapper">
-
-
-.. figure:: plotting/images/thumb/plot_rhi_sigmet.png
-   :target: ./plotting/plot_rhi_sigmet.html
-
-   :ref:`example_plotting_plot_rhi_sigmet.py`
-
-
-.. raw:: html
-
-
-    <p>An example which creates a RHI plot of a Sigmet file using both a RslDisplay and a RadarDisplay...
-    </p></div>
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   plotting/plot_rhi_sigmet
-
-
-
-.. raw:: html
-
-
-    <div class="thumbnailContainer">
-        <div class="docstringWrapper">
-
-
-.. figure:: plotting/images/thumb/plot_rhi_cfradial.png
-   :target: ./plotting/plot_rhi_cfradial.html
-
-   :ref:`example_plotting_plot_rhi_cfradial.py`
-
-
-.. raw:: html
-
-
-    <p>An example which creates a multiple panel RHI plot of a CF/Radial file using both a CFRadialDis...
-    </p></div>
-    </div>
-
-
-.. toctree::
-   :hidden:
-
-   plotting/plot_rhi_cfradial
 
 
 

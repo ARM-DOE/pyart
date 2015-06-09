@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.3.0',
+        VERSION:     '1.4.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,7 +27,7 @@
     <link rel="top" title="Py-ART Documentation" href="../../index.html" />
     <link rel="up" title="Input and output (pyart.io)" href="../io.html" />
     <link rel="next" title="pyart.io.read_grid" href="pyart.io.read_grid.html" />
-    <link rel="prev" title="pyart.io.read_nexrad_cdm" href="pyart.io.read_nexrad_cdm.html" /> 
+    <link rel="prev" title="pyart.io.read_nexrad_level3" href="pyart.io.read_nexrad_level3.html" /> 
   </head>
   <body>
     <div class="related">
@@ -46,7 +46,7 @@
           <a href="pyart.io.read_grid.html" title="pyart.io.read_grid"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="pyart.io.read_nexrad_cdm.html" title="pyart.io.read_nexrad_cdm"
+          <a href="pyart.io.read_nexrad_level3.html" title="pyart.io.read_nexrad_level3"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
           <li><a href="../index.html" >User Reference Manual</a> &raquo;</li>
@@ -63,7 +63,7 @@
 <h1>pyart.io.write_cfradial<a class="headerlink" href="#pyart-io-write-cfradial" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pyart.io.write_cfradial">
-<tt class="descclassname">pyart.io.</tt><tt class="descname">write_cfradial</tt><big>(</big><em>filename</em>, <em>radar</em>, <em>format='NETCDF4'</em>, <em>time_reference=None</em>, <em>arm_time_variables=False</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/io/cfradial.py#L333"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.io.write_cfradial" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">pyart.io.</tt><tt class="descname">write_cfradial</tt><big>(</big><em>filename</em>, <em>radar</em>, <em>format='NETCDF4'</em>, <em>time_reference=None</em>, <em>arm_time_variables=False</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/io/cfradial.py#L375"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.io.write_cfradial" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write a Radar object to a CF/Radial compliant netCDF file.</p>
 <p>The files produced by this routine follow the <a class="reference external" href="http://www.ral.ucar.edu/projects/titan/docs/radial_formats/cfradial.html">CF/Radial standard</a>.
 Attempts are also made to to meet many of the standards outlined in the
@@ -112,8 +112,8 @@ time_offset, False will not create these variables.</p>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="pyart.io.read_nexrad_cdm.html"
-                        title="previous chapter">pyart.io.read_nexrad_cdm</a></p>
+  <p class="topless"><a href="pyart.io.read_nexrad_level3.html"
+                        title="previous chapter">pyart.io.read_nexrad_level3</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="pyart.io.read_grid.html"
                         title="next chapter">pyart.io.read_grid</a></p>
@@ -155,7 +155,7 @@ time_offset, False will not create these variables.</p>
           <a href="pyart.io.read_grid.html" title="pyart.io.read_grid"
              >next</a> |</li>
         <li class="right" >
-          <a href="pyart.io.read_nexrad_cdm.html" title="pyart.io.read_nexrad_cdm"
+          <a href="pyart.io.read_nexrad_level3.html" title="pyart.io.read_nexrad_level3"
              >previous</a> |</li>
         <li><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
           <li><a href="../index.html" >User Reference Manual</a> &raquo;</li>
@@ -164,7 +164,7 @@ time_offset, False will not create these variables.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Feb 19, 2015.
+      Last updated on Jun 09, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>

@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.3.0',
+        VERSION:     '1.4.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -63,7 +63,7 @@
 <h1>pyart.io.read_nexrad_archive<a class="headerlink" href="#pyart-io-read-nexrad-archive" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pyart.io.read_nexrad_archive">
-<tt class="descclassname">pyart.io.</tt><tt class="descname">read_nexrad_archive</tt><big>(</big><em>filename</em>, <em>field_names=None</em>, <em>additional_metadata=None</em>, <em>file_field_names=False</em>, <em>exclude_fields=None</em>, <em>bzip=None</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/io/nexrad_archive.py#L22"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.io.read_nexrad_archive" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">pyart.io.</tt><tt class="descname">read_nexrad_archive</tt><big>(</big><em>filename</em>, <em>field_names=None</em>, <em>additional_metadata=None</em>, <em>file_field_names=False</em>, <em>exclude_fields=None</em>, <em>delay_field_loading=False</em>, <em>bzip=None</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/io/nexrad_archive.py#L29"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.io.read_nexrad_archive" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read a NEXRAD Level 2 Archive file.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -72,8 +72,8 @@
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
 <blockquote>
 <div><p>Filename of NEXRAD Level 2 Archive file.  The files hosted by
-at the NOAA National Climate Data Center <a class="reference internal" href="#r33" id="id1">[R33]</a> as well as on the
-UCAR THREDDS Data Server <a class="reference internal" href="#r34" id="id2">[R34]</a> have been tested.  Other NEXRAD
+at the NOAA National Climate Data Center <a class="reference internal" href="#r40" id="id1">[R40]</a> as well as on the
+UCAR THREDDS Data Server <a class="reference internal" href="#r41" id="id2">[R41]</a> have been tested.  Other NEXRAD
 Level 2 Archive files may or may not work.  Message type 1 file
 at not yet supported, only message type 31.</p>
 </div></blockquote>
@@ -105,6 +105,13 @@ likely only have a &#8216;data&#8217; key, unless the fields are defined in
 <div><p>List of fields to exclude from the radar object. This is applied
 after the <cite>file_field_names</cite> and <cite>field_names</cite> parameters.</p>
 </div></blockquote>
+<p><strong>delay_field_loading</strong> : bool</p>
+<blockquote>
+<div><p>True to delay loading of field data from the file until the &#8216;data&#8217;
+key in a particular field dictionary is accessed.  In this case
+the field attribute of the returned Radar object will contain
+LazyLoadDict objects not dict objects.</p>
+</div></blockquote>
 <p><strong>bzip</strong> : bool or None</p>
 <blockquote>
 <div><p>True if the file is compressed as a bzip2 file, False otherwise.
@@ -122,16 +129,16 @@ Gates not collected are masked in the field data.</p>
 </tbody>
 </table>
 <p class="rubric">References</p>
-<table class="docutils citation" frame="void" id="r33" rules="none">
+<table class="docutils citation" frame="void" id="r40" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label">[R33]</td><td><em>(<a class="fn-backref" href="#id1">1</a>, <a class="fn-backref" href="#id3">2</a>)</em> <a class="reference external" href="http://www.ncdc.noaa.gov/">http://www.ncdc.noaa.gov/</a></td></tr>
+<tr><td class="label">[R40]</td><td><em>(<a class="fn-backref" href="#id1">1</a>, <a class="fn-backref" href="#id3">2</a>)</em> <a class="reference external" href="http://www.ncdc.noaa.gov/">http://www.ncdc.noaa.gov/</a></td></tr>
 </tbody>
 </table>
-<table class="docutils citation" frame="void" id="r34" rules="none">
+<table class="docutils citation" frame="void" id="r41" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label">[R34]</td><td><em>(<a class="fn-backref" href="#id2">1</a>, <a class="fn-backref" href="#id4">2</a>)</em> <a class="reference external" href="http://thredds.ucar.edu/thredds/catalog.html">http://thredds.ucar.edu/thredds/catalog.html</a></td></tr>
+<tr><td class="label">[R41]</td><td><em>(<a class="fn-backref" href="#id2">1</a>, <a class="fn-backref" href="#id4">2</a>)</em> <a class="reference external" href="http://thredds.ucar.edu/thredds/catalog.html">http://thredds.ucar.edu/thredds/catalog.html</a></td></tr>
 </tbody>
 </table>
 </dd></dl>
@@ -197,7 +204,7 @@ Gates not collected are masked in the field data.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Feb 19, 2015.
+      Last updated on Jun 09, 2015.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>

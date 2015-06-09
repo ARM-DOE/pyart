@@ -7,24 +7,14 @@
 Create a RHI plot from a Sigmet file
 ====================================
 
-An example which creates a RHI plot of a Sigmet file using both a RslDisplay
-and a RadarDisplay object.
+An example which creates a RHI plot of a Sigmet file using a RadarDisplay
+object.
 
 
 
 
-.. rst-class:: horizontal
-
-
-    *
-
-      .. image:: images/plot_rhi_sigmet_1.png
-            :scale: 47
-
-    *
-
-      .. image:: images/plot_rhi_sigmet_2.png
-            :scale: 47
+.. image:: images/plot_rhi_sigmet_1.png
+    :align: center
 
 
 
@@ -34,5 +24,5 @@ and a RadarDisplay object.
 .. literalinclude:: plot_rhi_sigmet.py
     :lines: 10-
 
-**Total running time of the example:**  2.03 seconds
+**Total running time of the example:**  1.40 seconds
     

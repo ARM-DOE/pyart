@@ -19,6 +19,7 @@ pyart.io._rsl_interface._RslVolume
          _RslVolume.get_sweep_azimuths
          _RslVolume.get_sweep_elevs
          _RslVolume.get_sweep_fix_angles
+         _RslVolume.is_range_bins_uniform
          _RslVolume.total_rays
 
    |
