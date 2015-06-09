@@ -29,7 +29,7 @@ def configuration(parent_package='', top_path=None):
 
     config.add_extension('_gate_to_grid_map',
                          sources=['_gate_to_grid_map.c'],
-                         libraries=['m'])
+                         libraries=libraries)
 
     return config
 
