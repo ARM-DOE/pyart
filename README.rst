@@ -22,7 +22,7 @@ Important Links
 ===============
 
 - Official source code repository: https://github.com/ARM-DOE/pyart
-- HTML documentation: http://arm-doe.github.io/pyart/dev/index.html
+- HTML documentation: http://arm-doe.github.io/pyart-docs-travis/
 - Examples: http://arm-doe.github.io/pyart/dev/auto_examples/index.html
 - Mailing List: http://groups.google.com/group/pyart-users/
 - Issue Tracker: https://github.com/ARM-DOE/pyart/issues
@@ -72,6 +72,9 @@ functionality is available of the the following modules are installed.
 
 * `Basemap <http://matplotlib.org/basemap/>`_. If installed the ability to 
   plot grids on geographic maps is available.
+
+* `wradlib <http://wradlib.bitbucket.org/>`_.  Needed to calculate the texture
+  of a differential phase field.
 
 * `nose <http://nose.readthedocs.org/en/latest/>`_.  
   Required to run the Py-ART unit tests.
