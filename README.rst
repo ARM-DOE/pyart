@@ -73,6 +73,9 @@ functionality is available of the the following modules are installed.
 * `Basemap <http://matplotlib.org/basemap/>`_. If installed the ability to 
   plot grids on geographic maps is available.
 
+* `wradlib <http://wradlib.bitbucket.org/>`_.  Needed to calculate the texture
+  of a differential phase field.
+
 * `nose <http://nose.readthedocs.org/en/latest/>`_.  
   Required to run the Py-ART unit tests.
  
