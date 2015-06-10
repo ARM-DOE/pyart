@@ -1,5 +1,7 @@
 """ Unit Tests for Py-ART's map/grid_mapper.py module. """
 
+from __future__ import print_function
+
 import numpy as np
 from numpy.testing import assert_array_equal, assert_raises
 
@@ -162,8 +164,8 @@ def test_grid_from_radars_grid_origin():
     grid = pyart.map.grid_from_radars((radar,), grid_origin=(36.4, -97.6),
                                       grid_origin_alt=200,
                                       **COMMON_MAP_TO_GRID_ARGS)
-    print round(grid.axes['lat']['data'][0], 2)
-    print round(grid.axes['lon']['data'][0], 2)
+    print(round(grid.axes['lat']['data'][0], 2))
+    print(round(grid.axes['lon']['data'][0], 2))
     assert round(grid.axes['lat']['data'][0], 2) == 36.4
     assert round(grid.axes['lon']['data'][0], 2) == -97.6
 

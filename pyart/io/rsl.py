@@ -91,7 +91,8 @@ def read_rsl(filename, field_names=None, additional_metadata=None,
 
     # read the file, determine common parameters
     fillvalue = get_fillvalue()
-    rslfile = _rsl_interface.RslFile(filename, radar_format, callid)
+    rslfile = _rsl_interface.RslFile(
+        filename.encode('ascii'), radar_format, callid)
     available_vols = rslfile.available_moments()
     first_volume = rslfile.get_volume(available_vols[0])
     first_sweep = first_volume.get_sweep(0)
@@ -177,7 +178,7 @@ def read_rsl(filename, field_names=None, additional_metadata=None,
     need_from_rsl_header = {
         'name': 'instrument_name', 'project': 'project', 'state': 'state',
         'country': 'country'}  # rsl_name : radar_metadata_name
-    for rsl_key, metadata_key in need_from_rsl_header.iteritems():
+    for rsl_key, metadata_key in need_from_rsl_header.items():
         metadata[metadata_key] = rsl_dict[rsl_key]
 
     # latitude
@@ -322,4 +323,4 @@ VOLUMENUM2RSLNAME = {
     43: 'EZ',
 }
 
-RSLNAME2VOLUMENUM = dict([(v, k) for k, v in VOLUMENUM2RSLNAME.iteritems()])
+RSLNAME2VOLUMENUM = dict([(v, k) for k, v in VOLUMENUM2RSLNAME.items()])

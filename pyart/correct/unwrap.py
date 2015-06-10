@@ -275,7 +275,7 @@ def _is_radar_sweep_aligned(radar, diff=0.1):
 
 def _is_radar_sequential(radar):
     """ Test if all sweeps in radar are sequentially ordered. """
-    for i in xrange(radar.nsweeps):
+    for i in range(radar.nsweeps):
         if not _is_sweep_sequential(radar, i):
             return False
     return True

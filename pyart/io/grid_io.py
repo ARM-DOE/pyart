@@ -114,7 +114,7 @@ def write_grid(filename, grid, format='NETCDF4', arm_time_variables=False):
     ncobj.createDimension('time', None)
 
     # create additional dimensions
-    grid_shape = grid.fields[grid.fields.keys()[0]]['data'].shape
+    grid_shape = grid.fields[list(grid.fields.keys())[0]]['data'].shape
     nz, ny, nx = grid_shape
     ncobj.createDimension('nz', nz)
     ncobj.createDimension('ny', ny)
@@ -157,14 +157,14 @@ def write_grid(filename, grid, format='NETCDF4', arm_time_variables=False):
         _create_ncvar(time_offset, ncobj, 'time_offset', ('time', ))
 
     # field variables
-    for field, field_dic in grid.fields.iteritems():
+    for field, field_dic in grid.fields.items():
         # append 1, to the shape of all data to indicate the time var.
         field_dic['data'].shape = (1, ) + field_dic['data'].shape
         _create_ncvar(field_dic, ncobj, field, ('time', 'nz', 'ny', 'nx'))
         field_dic['data'].shape = field_dic['data'].shape[1:]
 
     # metadata
-    for k, v in grid.metadata.iteritems():
+    for k, v in grid.metadata.items():
         setattr(ncobj, k, v)
 
     ncobj.close()

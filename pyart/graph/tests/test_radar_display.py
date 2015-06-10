@@ -5,6 +5,8 @@
 # in baseline_images directory. Current this test only determines if files can
 # be created, not that they are correct.
 
+from __future__ import print_function
+
 import matplotlib.pyplot as plt
 import pyart
 from numpy.testing import assert_raises
@@ -173,13 +175,13 @@ def test_radardisplay_get_colorbar_label():
 
     # use the field if standard_name and long_name missing
     del display.fields['reflectivity_horizontal']['long_name']
-    print display._get_colorbar_label('reflectivity_horizontal')
+    print(display._get_colorbar_label('reflectivity_horizontal'))
     assert (display._get_colorbar_label('reflectivity_horizontal') ==
             'reflectivity horizontal (dBZ)')
 
     # no units if key is missing
     del display.fields['reflectivity_horizontal']['units']
-    print display._get_colorbar_label('reflectivity_horizontal')
+    print(display._get_colorbar_label('reflectivity_horizontal'))
     assert (display._get_colorbar_label('reflectivity_horizontal') ==
             'reflectivity horizontal (?)')
     plt.close()

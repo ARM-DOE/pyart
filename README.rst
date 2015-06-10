@@ -22,7 +22,7 @@ Important Links
 ===============
 
 - Official source code repository: https://github.com/ARM-DOE/pyart
-- HTML documentation: http://arm-doe.github.io/pyart/dev/index.html
+- HTML documentation: http://arm-doe.github.io/pyart-docs-travis/
 - Examples: http://arm-doe.github.io/pyart/dev/auto_examples/index.html
 - Mailing List: http://groups.google.com/group/pyart-users/
 - Issue Tracker: https://github.com/ARM-DOE/pyart/issues
@@ -30,8 +30,7 @@ Important Links
 Dependencies
 ============
 
-Py-ART is tested to work under Python 2.6+, support for Python 3 has not
-yet been completed.
+Py-ART is tested to work under Python 2.6, 2.7, 3.3, and 3.4.
 
 The required dependencies to install Py-ART in addition to Python are:
 
@@ -73,6 +72,9 @@ functionality is available of the the following modules are installed.
 
 * `Basemap <http://matplotlib.org/basemap/>`_. If installed the ability to 
   plot grids on geographic maps is available.
+
+* `wradlib <http://wradlib.bitbucket.org/>`_.  Needed to calculate the texture
+  of a differential phase field.
 
 * `nose <http://nose.readthedocs.org/en/latest/>`_.  
   Required to run the Py-ART unit tests.

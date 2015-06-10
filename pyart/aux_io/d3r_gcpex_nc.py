@@ -185,7 +185,7 @@ def read_d3r_gcpex_nc(filename, field_names=None, additional_metadata=None,
 
     # fields
     # all variables with dimensions of 'Radial', 'Gate' are fields
-    keys = [k for k, v in ncvars.iteritems()
+    keys = [k for k, v in ncvars.items()
             if v.dimensions == ('Radial', 'Gate')]
 
     fields = {}
