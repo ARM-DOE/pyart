@@ -58,8 +58,6 @@ def cython_fast_map(
     values[0] = values0
     values[1] = values1
 
-    size = radars[0].fields['DBZH']['data'].data.shape
-
     # remove python overhead of getting the mask and array
     list_array = [range(nfields) for i in range(len(radars))]  # list of lists
     list_mask = [range(nfields) for i in range(len(radars))]  # list of lists
