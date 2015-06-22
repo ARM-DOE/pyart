@@ -22,7 +22,7 @@ import numpy as np
 
 from ..config import FileMetadata, get_fillvalue
 from ..core.grid import Grid
-from .common import make_time_unit_str
+from .common import make_time_unit_str, _test_arguments
 from .lazydict import LazyLoadDict
 from . import mdv_common
 
@@ -216,7 +216,7 @@ def write_grid_mdv(filename, grid):
 
 def read_grid_mdv(filename, field_names=None, additional_metadata=None,
                   file_field_names=False, exclude_fields=None,
-                  delay_field_loading=False):
+                  delay_field_loading=False, **kwargs):
     """
     Read a MDV file to a Grid Object.
 
@@ -276,6 +276,9 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
           fail.
 
     """
+    #test for non empty kwargs
+    _test_arguments(kwargs)
+
     # XXX add tests for conversion limitations
     # create metadata retrieval object
     filemetadata = FileMetadata('mdv', field_names, additional_metadata,

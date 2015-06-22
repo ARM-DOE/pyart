@@ -25,7 +25,7 @@ import warnings
 import numpy as np
 
 from ..config import FileMetadata, get_fillvalue
-from ..io.common import make_time_unit_str
+from ..io.common import make_time_unit_str, _test_arguments
 from ..core.radar import Radar
 from .gamicfile import GAMICFile
 
@@ -35,7 +35,7 @@ LIGHT_SPEED = 2.99792458e8  # speed of light in meters per second
 
 def read_gamic(filename, field_names=None, additional_metadata=None,
                file_field_names=False, exclude_fields=None,
-               valid_range_from_file=True, units_from_file=True):
+               valid_range_from_file=True, units_from_file=True, **kwargs):
     """
     Read a GAMIC hdf5 file.
 
@@ -72,6 +72,9 @@ def read_gamic(filename, field_names=None, additional_metadata=None,
         Radar object.
 
     """
+    #test for non empty kwargs
+    _test_arguments(kwargs)
+
     # create metadata retrieval object
     filemetadata = FileMetadata('gamic', field_names, additional_metadata,
                                 file_field_names, exclude_fields)
