@@ -23,9 +23,10 @@ import datetime
 
 from ..core.grid import Grid
 from .cfradial import _ncvar_to_dict, _create_ncvar
+from .common import _test_arguments
 
 
-def read_grid(filename, exclude_fields=None):
+def read_grid(filename, exclude_fields=None, **kwargs):
     """
     Read a netCDF grid file
 
@@ -45,6 +46,8 @@ def read_grid(filename, exclude_fields=None):
         Grid object containing gridded data.
 
     """
+    #test for non empty kwargs
+    _test_arguments(kwargs)
 
     if exclude_fields is None:
         exclude_fields = []

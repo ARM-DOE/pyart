@@ -30,7 +30,7 @@ import numpy as np
 import netCDF4
 
 from ..config import FileMetadata
-from .common import stringarray_to_chararray
+from .common import stringarray_to_chararray, _test_arguments
 from ..core.radar import Radar
 from .lazydict import LazyLoadDict
 
@@ -69,7 +69,7 @@ _INSTRUMENT_PARAMS_DIMS = {
 
 def read_cfradial(filename, field_names=None, additional_metadata=None,
                   file_field_names=False, exclude_fields=None,
-                  delay_field_loading=False):
+                  delay_field_loading=False, **kwargs):
     """
     Read a Cfradial netCDF file.
 
@@ -110,6 +110,9 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
     This function has not been tested on "stream" Cfradial files.
 
     """
+    #test for non empty kwargs
+    _test_arguments(kwargs)
+
     # create metadata retrieval object
     filemetadata = FileMetadata('cfradial', field_names, additional_metadata,
                                 file_field_names, exclude_fields)

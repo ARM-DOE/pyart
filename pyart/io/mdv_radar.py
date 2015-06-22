@@ -16,14 +16,14 @@ from netCDF4 import date2num
 
 from ..config import FileMetadata, get_fillvalue
 from ..core.radar import Radar
-from .common import make_time_unit_str
+from .common import make_time_unit_str, _test_arguments
 from .lazydict import LazyLoadDict
 from . import mdv_common
 
 
 def read_mdv(filename, field_names=None, additional_metadata=None,
              file_field_names=False, exclude_fields=None,
-             delay_field_loading=False):
+             delay_field_loading=False, **kwargs):
     """
     Read a MDV file.
 
@@ -70,6 +70,9 @@ def read_mdv(filename, field_names=None, additional_metadata=None,
     compressed with gzip or zlib.
 
     """
+    #test for non empty kwargs
+    _test_arguments(kwargs)
+
     # create metadata retrieval object
     filemetadata = FileMetadata('mdv', field_names, additional_metadata,
                                 file_field_names, exclude_fields)

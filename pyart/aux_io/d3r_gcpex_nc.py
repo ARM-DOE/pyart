@@ -18,7 +18,7 @@ import numpy as np
 import netCDF4
 
 from ..config import FileMetadata
-from ..io.common import make_time_unit_str
+from ..io.common import make_time_unit_str, _test_arguments
 from ..core.radar import Radar
 
 
@@ -43,7 +43,7 @@ D3R_FIELD_NAMES = {
 
 
 def read_d3r_gcpex_nc(filename, field_names=None, additional_metadata=None,
-                      file_field_names=False, exclude_fields=None):
+                      file_field_names=False, exclude_fields=None, **kwargs):
     """
     Read a D3R GCPEX netCDF file.
 
@@ -85,6 +85,9 @@ def read_d3r_gcpex_nc(filename, field_names=None, additional_metadata=None,
     # * instrument parameters
     # * add additional checks for HOW attributes
     # * support for other objects (SCAN, XSEC)
+
+    #test for non empty kwargs
+    _test_arguments(kwargs)
 
     # create metadata retrieval object
     if field_names is None:

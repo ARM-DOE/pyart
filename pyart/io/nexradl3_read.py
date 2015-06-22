@@ -15,12 +15,12 @@ import numpy as np
 
 from ..config import FileMetadata, get_fillvalue
 from ..core.radar import Radar
-from .common import make_time_unit_str
+from .common import make_time_unit_str, _test_arguments
 from .nexrad_level3 import NEXRADLevel3File
 
 
 def read_nexrad_level3(filename, field_names=None, additional_metadata=None,
-                       file_field_names=False, exclude_fields=None):
+                       file_field_names=False, exclude_fields=None, **kwargs):
     """
     Read a NEXRAD Level 3 product.
 
@@ -66,6 +66,9 @@ def read_nexrad_level3(filename, field_names=None, additional_metadata=None,
     .. [2] http://www.roc.noaa.gov/wsr88d/Level_III/Level3Info.asp
 
     """
+    #test for non empty kwargs
+    _test_arguments(kwargs)
+
     # create metadata retrieval object
     filemetadata = FileMetadata('nexrad_level3', field_names,
                                 additional_metadata, file_field_names,

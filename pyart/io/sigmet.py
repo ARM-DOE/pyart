@@ -26,7 +26,7 @@ import numpy as np
 
 from ..config import FileMetadata, get_fillvalue
 from ..core.radar import Radar
-from .common import make_time_unit_str
+from .common import make_time_unit_str, _test_arguments
 from ._sigmetfile import SigmetFile, bin4_to_angle, bin2_to_angle
 from . import _sigmet_noaa_hh
 
@@ -36,7 +36,8 @@ SPEED_OF_LIGHT = 299793000.0
 def read_sigmet(filename, field_names=None, additional_metadata=None,
                 file_field_names=False, exclude_fields=None,
                 time_ordered='none', full_xhdr=None, noaa_hh_hdr=None,
-                debug=False, ignore_xhdr=False, ignore_sweep_start_ms=None):
+                debug=False, ignore_xhdr=False, ignore_sweep_start_ms=None,
+                **kwargs):
     """
     Read a Sigmet (IRIS) product file.
 
@@ -113,6 +114,9 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
         Radar object
 
     """
+    #test for non empty kwargs
+    _test_arguments(kwargs)
+
     # create metadata retrieval object
     filemetadata = FileMetadata('sigmet', field_names, additional_metadata,
                                 file_field_names, exclude_fields)
