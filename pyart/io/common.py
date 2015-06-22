@@ -9,6 +9,7 @@ Input/output routines common to many file formats.
 
     dms_to_d
     stringarray_to_chararray
+    _test_arguments
     radar_coords_to_cart
     make_time_unit_str
     add_2d_latlon_axis
@@ -55,6 +56,13 @@ def stringarray_to_chararray(arr, numchars=None):
     chararr = np.zeros(arr.shape + (numchars, ), dtype='S1')
     chararr[..., :arr_numchars] = carr[:]
     return chararr
+
+
+def _test_arguments(dic):
+    """ Issue a warning if receive non-empty argument dict """
+    if dic:
+        import warnings
+        warnings.warn('Unexpected arguments: %s' % dic.keys())
 
 
 # XXX move this to another module

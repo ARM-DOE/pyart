@@ -25,12 +25,12 @@ import numpy as np
 
 from ..config import FileMetadata, get_fillvalue
 from ..core.radar import Radar
-from .common import make_time_unit_str
+from .common import make_time_unit_str, _test_arguments
 
 
 def read_chl(filename, field_names=None, additional_metadata=None,
              file_field_names=None, exclude_fields=None,
-             use_file_field_attributes=True):
+             use_file_field_attributes=True, **kwargs):
     """
     Read a CSU-CHILL CHL file.
 
@@ -75,6 +75,9 @@ def read_chl(filename, field_names=None, additional_metadata=None,
         Radar object containing data from CHL file.
 
     """
+    #test for non empty kwargs
+    _test_arguments(kwargs)
+
     # create metadata retrival object
     filemetadata = FileMetadata('chl', field_names, additional_metadata,
                                 file_field_names, exclude_fields)

@@ -21,14 +21,14 @@ import numpy as np
 
 from ..config import FileMetadata, get_fillvalue
 from ..core.radar import Radar
-from .common import make_time_unit_str
+from .common import make_time_unit_str, _test_arguments
 from .nexrad_level2 import NEXRADLevel2File
 from .lazydict import LazyLoadDict
 
 
 def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
                         file_field_names=False, exclude_fields=None,
-                        delay_field_loading=False, bzip=None):
+                        delay_field_loading=False, bzip=None, **kwargs):
     """
     Read a NEXRAD Level 2 Archive file.
 
@@ -81,6 +81,9 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
     .. [2] http://thredds.ucar.edu/thredds/catalog.html
 
     """
+    #test for non empty kwargs
+    _test_arguments(kwargs)
+
     # create metadata retrieval object
     filemetadata = FileMetadata('nexrad_archive', field_names,
                                 additional_metadata, file_field_names,

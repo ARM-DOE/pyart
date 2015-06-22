@@ -18,6 +18,7 @@ import h5py
 
 from ..config import FileMetadata, get_fillvalue
 from ..io.common import make_time_unit_str, radar_coords_to_cart
+from ..io.common import _test_arguments
 from ..core.radar import Radar
 
 
@@ -40,7 +41,7 @@ ODIM_H5_FIELD_NAMES = {
 
 
 def read_odim_h5(filename, field_names=None, additional_metadata=None,
-                 file_field_names=False, exclude_fields=None):
+                 file_field_names=False, exclude_fields=None, **kwargs):
     """
     Read a ODIM_H5 file.
 
@@ -83,6 +84,9 @@ def read_odim_h5(filename, field_names=None, additional_metadata=None,
     # * instrument parameters
     # * add additional checks for HOW attributes
     # * support for other objects (SCAN, XSEC)
+
+    #test for non empty kwargs
+    _test_arguments(kwargs)
 
     # create metadata retrieval object
     if field_names is None:
