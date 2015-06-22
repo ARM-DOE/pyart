@@ -72,7 +72,7 @@ def read_gamic(filename, field_names=None, additional_metadata=None,
         Radar object.
 
     """
-    #test for non empty kwargs
+    # test for non empty kwargs
     _test_arguments(kwargs)
 
     # create metadata retrieval object

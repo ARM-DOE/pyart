@@ -276,7 +276,7 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
           fail.
 
     """
-    #test for non empty kwargs
+    # test for non empty kwargs
     _test_arguments(kwargs)
 
     # XXX add tests for conversion limitations

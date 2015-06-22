@@ -34,7 +34,7 @@ def read_radx(filename, **kwargs):
         Radar object.
 
     """
-    #test for non empty kwargs
+    # test for non empty kwargs
     _test_arguments(kwargs)
 
     tmpfile = tempfile.mkstemp(suffix='.nc', dir='.')[1]

@@ -85,7 +85,7 @@ def read_odim_h5(filename, field_names=None, additional_metadata=None,
     # * add additional checks for HOW attributes
     # * support for other objects (SCAN, XSEC)
 
-    #test for non empty kwargs
+    # test for non empty kwargs
     _test_arguments(kwargs)
 
     # create metadata retrieval object

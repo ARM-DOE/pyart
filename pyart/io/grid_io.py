@@ -46,7 +46,7 @@ def read_grid(filename, exclude_fields=None, **kwargs):
         Grid object containing gridded data.
 
     """
-    #test for non empty kwargs
+    # test for non empty kwargs
     _test_arguments(kwargs)
 
     if exclude_fields is None:

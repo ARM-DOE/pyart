@@ -86,7 +86,7 @@ def read_d3r_gcpex_nc(filename, field_names=None, additional_metadata=None,
     # * add additional checks for HOW attributes
     # * support for other objects (SCAN, XSEC)
 
-    #test for non empty kwargs
+    # test for non empty kwargs
     _test_arguments(kwargs)
 
     # create metadata retrieval object

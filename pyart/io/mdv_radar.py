@@ -70,7 +70,7 @@ def read_mdv(filename, field_names=None, additional_metadata=None,
     compressed with gzip or zlib.
 
     """
-    #test for non empty kwargs
+    # test for non empty kwargs
     _test_arguments(kwargs)
 
     # create metadata retrieval object

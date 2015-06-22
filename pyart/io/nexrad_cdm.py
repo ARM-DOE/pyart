@@ -80,7 +80,7 @@ def read_nexrad_cdm(filename, field_names=None, additional_metadata=None,
     .. [2] http://thredds.ucar.edu/thredds/catalog.html
 
     """
-    #test for non empty kwargs
+    # test for non empty kwargs
     _test_arguments(kwargs)
 
     # create metadata retrieval object

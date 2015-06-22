@@ -66,7 +66,7 @@ def read_nexrad_level3(filename, field_names=None, additional_metadata=None,
     .. [2] http://www.roc.noaa.gov/wsr88d/Level_III/Level3Info.asp
 
     """
-    #test for non empty kwargs
+    # test for non empty kwargs
     _test_arguments(kwargs)
 
     # create metadata retrieval object

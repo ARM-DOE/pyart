@@ -75,7 +75,7 @@ def read_chl(filename, field_names=None, additional_metadata=None,
         Radar object containing data from CHL file.
 
     """
-    #test for non empty kwargs
+    # test for non empty kwargs
     _test_arguments(kwargs)
 
     # create metadata retrival object
