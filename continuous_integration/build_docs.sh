@@ -1,7 +1,7 @@
 #!/bin/bash
 # Adapted from the ci/build_docs.sh file from the pandas project
 # https://github.com/pydata/pandas
-set +e
+set -e
 
 cd "$TRAVIS_BUILD_DIR"
 
