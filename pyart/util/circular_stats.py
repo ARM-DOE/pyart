@@ -29,7 +29,7 @@ def angular_mean(angles):
     Compute the mean of a distribution of angles in radians.
 
     Parameters
-    ---------
+    ----------
     angles : array like
         Distribution of angles in radians.
 
@@ -37,6 +37,7 @@ def angular_mean(angles):
     -------
     mean : float
         The mean angle of the distribution in radians.
+
     """
     angles = np.asanyarray(angles)
     x = np.cos(angles)
@@ -49,13 +50,15 @@ def angular_std(angles):
     Compute the standard deviation of a distribution of angles in radians.
 
     Parameters
-    ---------
+    ----------
     angles : array like
         Distribution of angles in radians.
 
     Returns
     -------
     std : float
+        Standard deviation of the distribution.
+
     """
     angles = np.asanyarray(angles)
     x = np.cos(angles)
@@ -69,7 +72,7 @@ def angular_mean_deg(angles):
     Compute the mean of a distribution of angles in degrees.
 
     Parameters
-    ---------
+    ----------
     angles : array like
         Distribution of angles in degrees.
 
@@ -77,6 +80,7 @@ def angular_mean_deg(angles):
     -------
     mean : float
         The mean angle of the distribution in degrees.
+
     """
     return np.rad2deg(angular_mean(np.deg2rad(angles)))
 
@@ -86,13 +90,15 @@ def angular_std_deg(angles):
     Compute the standard deviation of a distribution of angles in degrees.
 
     Parameters
-    ---------
+    ----------
     angles : array like
         Distribution of angles in degrees.
 
     Returns
     -------
     std : float
+        Standard deviation of the distribution.
+
     """
     return np.rad2deg(angular_std(np.deg2rad(angles)))
 

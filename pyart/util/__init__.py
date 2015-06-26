@@ -3,8 +3,10 @@
 Utilities (:mod:`pyart.util`)
 =============================
 
-Utility functions.  The location and names of these functions within
-Py-ART may change between versions without depeciation, use with caution.
+Miscellaneous utility functions.
+
+The location and names of these functions within Py-ART may change between
+versions without depeciation, use with caution.
 
 .. currentmodule:: pyart.util
 
