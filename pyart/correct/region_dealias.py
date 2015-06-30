@@ -180,6 +180,10 @@ def dealias_region_based(
             labels, num_masked_gates, sdata, rays_wrap_around,
             skip_between_rays, skip_along_ray)
 
+        # no unfolding required if no edges exist between regions
+        if len(edge_count) == 0:
+            continue
+
         # find the number of folds in the regions
         region_tracker = _RegionTracker(region_sizes)
         edge_tracker = _EdgeTracker(indices, edge_count, velos,
@@ -279,6 +283,10 @@ def _edge_sum_and_count(labels, num_masked_gates, data,
     index1, index2 = indices
     vel1, vel2 = velocities
     count = np.ones_like(vel1, dtype=np.int32)
+
+    # return early if not edges were found
+    if len(vel1) == 0:
+        return ([], []), [], ([], [])
 
     # find the unique edges, procedure based on method in
     # scipy.sparse.coo_matrix.sum_duplicates
