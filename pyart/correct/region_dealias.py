@@ -168,7 +168,8 @@ def dealias_region_based(
 
         # find regions in original data
         labels, nfeatures = _find_regions(sdata, sfilter, s_interval_limits)
-        if nfeatures == 0:  # skip sweep if all gates are masked.
+        # skip sweep if all gates are masked or only a single region
+        if nfeatures < 2:
             continue
         bincount = np.bincount(labels.ravel())
         num_masked_gates = bincount[0]
@@ -178,6 +179,10 @@ def dealias_region_based(
         indices, edge_count, velos = _edge_sum_and_count(
             labels, num_masked_gates, sdata, rays_wrap_around,
             skip_between_rays, skip_along_ray)
+
+        # no unfolding required if no edges exist between regions
+        if len(edge_count) == 0:
+            continue
 
         # find the number of folds in the regions
         region_tracker = _RegionTracker(region_sizes)
@@ -278,6 +283,10 @@ def _edge_sum_and_count(labels, num_masked_gates, data,
     index1, index2 = indices
     vel1, vel2 = velocities
     count = np.ones_like(vel1, dtype=np.int32)
+
+    # return early if not edges were found
+    if len(vel1) == 0:
+        return ([], []), [], ([], [])
 
     # find the unique edges, procedure based on method in
     # scipy.sparse.coo_matrix.sum_duplicates
