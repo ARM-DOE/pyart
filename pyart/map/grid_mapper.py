@@ -31,6 +31,7 @@ from ..config import get_fillvalue, get_field_name
 from ..graph.common import corner_to_point
 from ..io.common import radar_coords_to_cart
 from ..core.grid import Grid
+from ..core.radar import Radar
 from ._load_nn_field_data import _load_nn_field_data
 from .ckdtree import cKDTree
 from .ball_tree import BallTree
@@ -47,7 +48,7 @@ def grid_from_radars(radars, grid_shape, grid_limits,
 
     Parameters
     ----------
-    radars : tuple of Radar objects.
+    radars : Radar or tuple of Radar objects.
         Radar objects which will be mapped to the Cartesian grid.
     grid_shape : 3-tuple of floats
         Number of points in the grid (z, y, x).
@@ -72,6 +73,10 @@ def grid_from_radars(radars, grid_shape, grid_limits,
                         radar fields.
 
     """
+    # make a tuple if passed a radar object as the first argument
+    if isinstance(radars, Radar):
+        radars = (radars, )
+
     # map the radar(s) to a cartesian grid
     if gridding_algo == 'map_to_grid':
         grids = map_to_grid(radars, grid_shape, grid_limits, **kwargs)
@@ -292,7 +297,7 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
 
     Parameters
     ----------
-    radars : tuple of Radar objects.
+    radars : Radar or tuple of Radar objects.
         Radar objects which will be mapped to the Cartesian grid.
     grid_shape : 3-tuple of floats
         Number of points in the grid (z, y, x).
@@ -404,6 +409,10 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
     grid_from_radars : Map to grid and return a Grid object.
 
     """
+    # make a tuple if passed a radar object as the first argument
+    if isinstance(radars, Radar):
+        radars = (radars, )
+
     # check the parameters
     if weighting_function.upper() not in ['CRESSMAN', 'BARNES']:
         raise ValueError('unknown weighting_function')

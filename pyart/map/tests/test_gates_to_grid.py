@@ -17,6 +17,14 @@ COMMON_MAP_TO_GRID_ARGS = {
     'constant_roi': 30., }
 
 
+def test_map_to_grid_non_tuple():
+    radar = pyart.testing.make_target_radar()
+    grids = pyart.map.map_gates_to_grid(radar,
+                                        **COMMON_MAP_TO_GRID_ARGS)
+    center_slice = grids['reflectivity'][1, 4, :]
+    assert_array_equal(np.round(center_slice), EXPECTED_CENTER_SLICE)
+
+
 def test_map_to_grid_default():
     radar = pyart.testing.make_target_radar()
     grids = pyart.map.map_gates_to_grid((radar,),
