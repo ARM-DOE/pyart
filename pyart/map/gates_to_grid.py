@@ -19,6 +19,7 @@ Generate a Cartesian grid by mapping from radar gates onto the grid.
 
 import numpy as np
 from ..config import get_field_name
+from ..core.radar import Radar
 from ..graph.common import corner_to_point
 
 from ._gate_to_grid_map import GateToGridMapper
@@ -78,6 +79,10 @@ def map_gates_to_grid(
                   grid point.
 
     """
+    # make a tuple if passed a radar object as the first argument
+    if isinstance(radars, Radar):
+        radars = (radars, )
+
     if max_refl is None:    # parse max_refl
         max_refl = np.finfo('float32').max
     if grid_origin_alt is None:

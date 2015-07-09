@@ -16,6 +16,14 @@ COMMON_MAP_TO_GRID_ARGS = {
     'roi_func': lambda z, y, x: 30, }
 
 
+def test_map_to_grid_non_tuple():
+    radar = pyart.testing.make_target_radar()
+    grids = pyart.map.map_to_grid(radar,
+                                  **COMMON_MAP_TO_GRID_ARGS)
+    center_slice = grids['reflectivity'][1, 4, :]
+    assert_array_equal(np.round(center_slice), EXPECTED_CENTER_SLICE)
+
+
 def test_map_to_grid_default():
     radar = pyart.testing.make_target_radar()
     grids = pyart.map.map_to_grid((radar,),
@@ -142,6 +150,25 @@ def test_grid_from_radars_errors():
 def test_grid_from_radars():
     radar = pyart.testing.make_target_radar()
     grid = pyart.map.grid_from_radars((radar,), **COMMON_MAP_TO_GRID_ARGS)
+
+    # check field data
+    center_slice = grid.fields['reflectivity']['data'][1, 4, :]
+    assert_array_equal(np.round(center_slice), EXPECTED_CENTER_SLICE)
+
+    # check other Grid object attributes
+    assert 'ROI' in grid.fields
+    assert np.all(grid.fields['ROI']['data'] == 30.)
+    assert_array_equal(grid.axes['x_disp']['data'],
+                       np.linspace(-900, 900, 10))
+    assert_array_equal(grid.axes['y_disp']['data'],
+                       np.linspace(-900, 900, 9).astype('float64'))
+    assert_array_equal(grid.axes['z_disp']['data'],
+                       np.linspace(-400, 400, 3).astype('float64'))
+
+
+def test_grid_from_radars_non_tuple():
+    radar = pyart.testing.make_target_radar()
+    grid = pyart.map.grid_from_radars(radar, **COMMON_MAP_TO_GRID_ARGS)
 
     # check field data
     center_slice = grid.fields['reflectivity']['data'][1, 4, :]
