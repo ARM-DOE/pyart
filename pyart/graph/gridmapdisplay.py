@@ -147,7 +147,7 @@ class GridMapDisplay():
         field : str
             Field to be plotted.
         level : int
-            Index of the z level to be plotted.
+            Index corresponding to the height level to be plotted.
         vmin, vmax : float
             Lower and upper range for the colormesh.  If either parameter is
             None, a value will be determined from the field attributes (if
