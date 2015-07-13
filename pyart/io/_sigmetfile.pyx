@@ -616,6 +616,13 @@ def convert_sigmet_data(data_type, data, nbins):
         'DBZE16',   # Clutter corrected reflectivity enhanced, 2-byte
     ]
 
+    like_sqi = [
+		'RHOH',     # 1-byte Rho Format, section 4.3.21
+		'RHOV',     # " " 
+		'RHOHV',    # 1-byte RhoHV Format, section 4.3.23
+		'SQI',      # 1-byte Signal Quality Index Format, section 4.3.26
+    ]
+
     like_sqi2 = [
         'RHOV2',    # 2-byte Rho Format, section 4.3.22
         'RHOH2',    # " "
@@ -671,7 +678,7 @@ def convert_sigmet_data(data_type, data, nbins):
         return data[..., :2].copy().view('i4')
 
     # one byte data types
-    elif data_type_name[-1] != 2:
+    elif data_type_name[-1] != '2':
         # make a view of left half of the data as uint8,
         # this is the actual ray data collected, the right half is blank.
         nrays, nbin = data.shape
@@ -683,6 +690,14 @@ def convert_sigmet_data(data_type, data, nbins):
             out[:] = (ndata - 64.) / 2.
             mask[ndata == 0] = True
 
+	    elif data_type_name in like_sqi:
+	        # value = sqrt((N - 1) / 253)
+	        # 0 : no data available (mask)
+	        # 255 Area not scanned
+            out[:] = np.sqrt((ndata - 1.) / 253.)
+            mask[ndata == 0] = True
+            mask[ndata == 255] = True
+			
         elif data_type_name == 'VEL':
             # VEL, 3, Velocity (1 byte)
             # 1-byte Velocity Format, section 4.3.29
@@ -730,12 +745,12 @@ def convert_sigmet_data(data_type, data, nbins):
             mask[ndata == 0] = True
             mask[ndata == 255] = True
 
-        elif data_type_name == 'RHOHV':
-            # RHOHV, 19, RhoHV (1 byte)
-            # 1-bytes RhoHV format, section 4.3.23
-            out[:] = np.sqrt((ndata - 1.) / 253.)
-            mask[ndata == 0] = True
-            mask[ndata == 255] = True
+        # elif data_type_name == 'RHOHV':
+        #     # RHOHV, 19, RhoHV (1 byte)
+        #     # 1-bytes RhoHV format, section 4.3.23
+        #     out[:] = np.sqrt((ndata - 1.) / 253.)
+        #     mask[ndata == 0] = True
+        #     mask[ndata == 255] = True
 
         else:
             # TODO implement conversions for addition 1-byte formats
