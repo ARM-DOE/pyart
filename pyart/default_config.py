@@ -1096,3 +1096,105 @@ FIELD_MAPPINGS = {                  # Required variable
     'chl': chl_field_mapping,
     'gamic': gamic_field_mapping,
 }
+
+
+def velocity_limit(container=None, selection=0):
+    import pyart
+    if isinstance(container, pyart.core.Radar):
+        try:
+            if selection >= 0 and selection < container.nsweeps:
+                vel = container.get_nyquist_vel(selection,
+                                                check_uniform=False)
+            else:
+                vel = container.get_nyquist_vel(0, check_uniform=False)
+            return (-vel, vel)
+        except LookupError:
+            return (-30., 30.)
+    else:
+        return (-30., 30.)
+
+
+def spectrum_width_limit(container=None, selection=0):
+    import pyart
+    if isinstance(container, pyart.core.Radar):
+        try:
+            if selection >= 0 and selection < container.nsweeps:
+                vel = container.get_nyquist_vel(selection,
+                                                check_uniform=False)
+            else:
+                vel = container.get_nyquist_vel(0, check_uniform=False)
+            return (0, vel)
+        except LookupError:
+            return (0, 30.)
+    else:
+        return (0, 30.)
+
+# map each field to a colormap
+
+DEFAULT_FIELD_COLORMAP = {
+    # field name : colormap
+    'reflectivity': 'pyart_NWSRef',
+    'corrected_reflectivity': 'pyart_NWSRef',
+    'total_power': 'pyart_StepSeq25',
+    'velocity': 'pyart_NWSVel',
+    'corrected_velocity': 'pyart_NWSVel',
+    'spectrum_width': 'pyart_Carbone17',
+    'differential_reflectivity': 'pyart_BrBu12',
+    'corrected_differential_reflectivity': 'pyart_BrBu12',
+    'cross_correlation_ratio': 'pyart_BrBu12',
+    'normalized_coherent_power': 'pyart_Carbone17',
+    'differential_phase': 'hsv',
+    'unfolded_differential_phase': 'pyart_BlueBrown11',
+    'corrected_differential_phase': 'pyart_BlueBrown11',
+    'specific_differential_phase': 'pyart_BrBu12',
+    'corrected_specific_differential_phase': 'pyart_BrBu12',
+    'linear_depolarization_ratio': 'pyart_Carbone17',
+    'linear_depolarization_ratio_h': 'pyart_Carbone17',
+    'linear_depolarization_ratio_v': 'pyart_Carbone17',
+    'signal_to_noise_ratio': 'pyart_Carbone17',
+    'rain_rate': 'Rrait12',
+    'radar_estimated_rain_rate': 'Rrait12',
+    'radar_echo_classification': 'pyart_EWilson17',
+    'specific_attenuation': 'pyart_NWSVel',
+    'differential_phase_texture': 'pyart_BlueBrown11',
+    'eastward_wind_component': 'pyart_NWSVel',
+    'northward_wind_component': 'pyart_NWSVel',
+    'vertical_wind_component': 'pyart_NWSVel',
+    'height': 'pyart_SCook18',
+    'interpolated_profile': 'pyart_SCook18',
+}
+
+# map each field to a limit or a limit function
+
+DEFAULT_FIELD_LIMITS = {
+    # field name : limits
+    'reflectivity': (-10., 65.),
+    'corrected_reflectivity': (-10., 65.),
+    'total_power': (-200., 100.),
+    'velocity': velocity_limit,
+    'corrected_velocity': velocity_limit,
+    'spectrum_width': spectrum_width_limit,
+    'differential_reflectivity': (-5., 5.),
+    'corrected_differential_reflectivity': (-5., 5.),
+    'cross_correlation_ratio': (0.8, 1.),
+    'normalized_coherent_power': (0., 1.),
+    'differential_phase': (-180, 180.),
+    'unfolded_differential_phase': (-360, 360.),
+    'corrected_differential_phase': (-360, 360.),
+    'specific_differential_phase': (-2., 5.),
+    'corrected_specific_differential_phase': (-2., 5.),
+    'linear_depolarization_ratio': (-40., 0.),
+    'linear_depolarization_ratio_h': (-40., 0.),
+    'linear_depolarization_ratio_v': (-40., 0.),
+    'signal_to_noise_ratio': (-0, 90.),
+    'rain_rate': (0., 150.),
+    'radar_estimated_rain_rate': (0., 150.),
+    'radar_echo_classification': (0, 12),
+    'specific_attenuation': (-10., 65.),
+    'differential_phase_texture': (-180, 180.),
+    'eastward_wind_component': velocity_limit,
+    'northward_wind_component': velocity_limit,
+    'vertical_wind_component': velocity_limit,
+    'height': (0, 20000),
+    'interpolated_profile': (0, 10000),
+}
