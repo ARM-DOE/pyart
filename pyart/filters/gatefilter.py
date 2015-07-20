@@ -320,6 +320,40 @@ class GateFilter(object):
         marked = ~np.isfinite(self._get_fdata(field))
         return self._merge(marked, op, exclude_masked)
 
+    def exclude_gates(self, mask, exclude_masked=True, op='or'):
+        """
+        Exclude gates where a given mask is equal True.
+
+        Parameters
+        ----------
+        mask : numpy array
+            Boolean numpy array with same shape as a field array.
+        exclude_masked : bool, optional
+            True to filter masked values in the specified mask if it is
+            a masked array, False to include any masked values.
+        op : {'and', 'or', 'new'}
+            Operation to perform when merging the existing set of excluded
+            gates with the excluded gates from the current operation.
+            'and' will perform a logical AND operation, 'or' a logical OR,
+            and 'new' will replace the existing excluded gates with the one
+            generated here. 'or', the default for exclude methods, is
+            typically desired when building up a set of conditions for
+            excluding gates where the desired effect is to exclude gates which
+            meet any of the conditions. 'and', the default for include
+            methods, is typically desired when building up a set of conditions
+            where the desired effect is to include gates which meet any of the
+            conditions.  Note that the 'and' method MAY results in including
+            gates which have peviously been excluded because they were masked
+            or invalid.
+
+        """
+        fdata = self._radar.fields.values()[0]['data']
+        if mask.shape != fdata.shape:
+            raise ValueError("mask array must be the same size as a field.")
+        marked = (mask == True)
+        return self._merge(marked, op, exclude_masked)
+
+
     ####################
     # include_ methods #
     ####################
@@ -395,3 +429,37 @@ class GateFilter(object):
         """
         marked = np.isfinite(self._get_fdata(field))
         return self._merge(~marked, op, exclude_masked)
+
+    def include_gates(self, mask, exclude_masked=True, op='or'):
+        """
+        Include gates where a given mask is equal True.
+
+        Parameters
+        ----------
+        mask : numpy array
+            Boolean numpy array with same shape as a field array.
+        exclude_masked : bool, optional
+            True to filter masked values in the specified mask if it is
+            a masked array, False to include any masked values.
+        op : {'and', 'or', 'new'}
+            Operation to perform when merging the existing set of excluded
+            gates with the excluded gates from the current operation.
+            'and' will perform a logical AND operation, 'or' a logical OR,
+            and 'new' will replace the existing excluded gates with the one
+            generated here. 'or', the default for exclude methods, is
+            typically desired when building up a set of conditions for
+            excluding gates where the desired effect is to exclude gates which
+            meet any of the conditions. 'and', the default for include
+            methods, is typically desired when building up a set of conditions
+            where the desired effect is to include gates which meet any of the
+            conditions.  Note that the 'and' method MAY results in including
+            gates which have peviously been excluded because they were masked
+            or invalid.
+
+        """
+        fdata = self._radar.fields.values()[0]['data']
+        if mask.shape != fdata.shape:
+            raise ValueError("Mask array must be the same size as a field.")
+        marked = ~(mask == True)
+        return self._merge(marked, op, exclude_masked)
+
