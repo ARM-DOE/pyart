@@ -1152,7 +1152,7 @@ DEFAULT_FIELD_COLORMAP = {
     'linear_depolarization_ratio_h': 'pyart_Carbone17',
     'linear_depolarization_ratio_v': 'pyart_Carbone17',
     'signal_to_noise_ratio': 'pyart_Carbone17',
-    'rain_rate': 'Rrait12',
+    'rain_rate': 'Rrait11',
     'radar_estimated_rain_rate': 'Rrait12',
     'radar_echo_classification': 'pyart_EWilson17',
     'specific_attenuation': 'pyart_NWSVel',
