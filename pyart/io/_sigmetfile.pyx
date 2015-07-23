@@ -6,7 +6,7 @@ A class and supporting functions for reading Sigmet (raw format) files.
 
 .. autosummary::
     :toctree: generated/
-    
+
     SigmetFile
     convert_sigmet_data
     bin2_to_angle
@@ -38,12 +38,12 @@ RECORD_SIZE = 6144      # Raw product file blocked into 6144 byte records
 cdef class SigmetFile:
     """
     A class for accessing data from Sigmet (IRIS) product files.
-    
+
     Parameters
     ----------
     filename : str
         Filename or file-like object.
-    
+
     Attributes
     ----------
     debug : bool
@@ -66,42 +66,42 @@ cdef class SigmetFile:
     _raw_product_bhdrs : list
         List of raw_product_bhdr structure dictionaries seperated by sweep.
         None when data has not yet been read.
-    
+
     """
     cdef public debug, product_hdr, ingest_header, ingest_data_headers, \
         data_types, data_type_names, ndata_types,
     cdef public _fh, _raw_product_bhdrs
-    
+
     cdef np.ndarray _rbuf
     cdef np.int16_t * _rbuf_p   # hack for fast indexing of _rbuf
     cdef public int _rbuf_pos, _record_number
-    
+
     def __init__(self, filename, debug=False):
         """ initalize the object. """
-        
+
         self.debug = debug
-        
+
         # open the file
         try:
             fh = open(filename, 'rb')
         except TypeError:
             fh = filename
-        
+
         # read the headers from the first 2 records.
         self.product_hdr = _unpack_product_hdr(fh.read(RECORD_SIZE))
         self.ingest_header = _unpack_ingest_header(fh.read(RECORD_SIZE))
-        
+
         # determine data types contained in the file
         self.data_types = self._determine_data_types()
         self.ndata_types = len(self.data_types)
         self.data_type_names = [SIGMET_DATA_TYPES[i] for i in self.data_types]
-        
+
         # set attributes
         self.ingest_data_headers = None
         self._fh = fh
         self._record_number = 2
         self._raw_product_bhdrs = []
-    
+
     def _determine_data_types(self):
         """ Determine the available data types in the file. """
         # determine the available fields
@@ -112,15 +112,15 @@ cdef class SigmetFile:
         word2 = task_dsp_info['current_data_type_mask']['mask_word_2']
         word3 = task_dsp_info['current_data_type_mask']['mask_word_3']
         return _data_types_from_mask(word0, word1, word2, word3)
-    
+
     def close(self):
         """ Close the file. """
         self._fh.close()
-    
+
     def read_data(self, full_xhdr=False):
         """
         Read all data from the file.
-        
+
         Parameters
         ----------
         full_xhdr : bool
@@ -128,7 +128,7 @@ cdef class SigmetFile:
             ones.  False will return a length 1 extended header converted to
             int32.  This is useful when the file contains a customer specified
             extended header (for example aircraft radar).
-        
+
         Returns
         -------
         data : dict of ndarrays
@@ -139,16 +139,16 @@ cdef class SigmetFile:
             'nbins', and 'time' for each data type.  Indexed by data type name
             (str).  Rays which were not collected are marked with a value of
             -1 in the 'nbins' array.
-        
+
         """
-        
+
         # determine size of data
         nsweeps = self.ingest_header['task_configuration'][
             'task_scan_info']['number_sweeps']
         nbins = self.product_hdr['product_end']['number_bins']
         nrays = self.ingest_header['ingest_configuration'][
             'number_rays_sweep']
-        
+
         # create empty outputs
         shape = (nsweeps, nrays, nbins)
         data = dict([(name, np.ma.empty(shape, dtype='float32'))
@@ -158,7 +158,7 @@ cdef class SigmetFile:
                 data['XHDR'] = np.ones(shape, dtype='int16')
             else:
                 data['XHDR'] = np.ones((nsweeps, nrays, 1), dtype='int32')
-        
+
         metadata = {}
         for name in self.data_type_names:
             header_dic = {
@@ -169,33 +169,33 @@ cdef class SigmetFile:
                 'nbins': np.empty((nsweeps, nrays), dtype='int16'),
                 'time': np.empty((nsweeps, nrays), dtype='uint16')}
             metadata[name] = header_dic
-        
+
         self.ingest_data_headers = dict([(name, []) for name in
                                          self.data_type_names])
-        
+
         self._raw_product_bhdrs = []
-        
+
         # read in data sweep by sweep
         for i in xrange(nsweeps):
             ingest_data_hdrs, sweep_data, sweep_metadata = self._get_sweep(
                 full_xhdr=full_xhdr)
-            
+
             # check for a truncated file, return sweep(s) read up until error
             if ingest_data_hdrs is None:
-                
+
                 mess = ('File truncated or corrupt, %i of %i sweeps read' %
                         (i, nsweeps))
                 warnings.warn(mess)
-                
+
                 for name in self.data_type_names:
                     data[name] = data[name][:i]
                     for k in metadata[name]:
                         metadata[name][k] = metadata[name][k][:i]
                 return data, metadata
-            
+
             for j, name in enumerate(self.data_type_names):
                 az0, el0, az1, el1, ray_nbins, ray_time = sweep_metadata[j]
-                
+
                 data[name][i] = sweep_data[j]
                 metadata[name]['azimuth_0'][i] = az0
                 metadata[name]['azimuth_1'][i] = az1
@@ -204,7 +204,7 @@ cdef class SigmetFile:
                 metadata[name]['nbins'][i] = ray_nbins
                 metadata[name]['time'][i] = ray_time
                 self.ingest_data_headers[name].append(ingest_data_hdrs[j])
-        
+
         # scale 1-byte velocity by the Nyquist
         # this conversion is kept in this method so that the
         # product_hdr does not need to be accessed at lower abstraction
@@ -214,15 +214,15 @@ cdef class SigmetFile:
             prt_value = 1. / self.product_hdr['product_end']['prf']
             nyquist = wavelength_cm / (10000.0 * 4.0 * prt_value)
             data['VEL'] *= nyquist
-        
+
         return data, metadata
-    
+
     def _get_sweep(self, full_xhdr=False, raw_data=False):
         """
         Get the data and metadata from the next sweep.
-        
+
         If the file ends early None is returned for all values.
-        
+
         Parameters
         ----------
         full_xhdr : bool
@@ -233,7 +233,7 @@ cdef class SigmetFile:
         raw_data : bool, optional
             True to return the raw_data for the given sweep, False to
             convert the data to floating point representation.
-        
+
         Returns
         -------
         ingest_data_headers : list of dict
@@ -243,17 +243,17 @@ cdef class SigmetFile:
             file.
         sweep_metadata : list of tuples
             Sweep metadata for each data type in the same order as sweep_data.
-        
+
         """
-        
+
         # get the next record
         lead_record = self._fh.read(RECORD_SIZE)
         self._record_number += 1
-        
+
         # check if the file ended early, if so return Nones
         if len(lead_record) != RECORD_SIZE:
             return None, None, None
-        
+
         # unpack structures
         raw_prod_bhdr = _unpack_raw_prod_bhdr(lead_record)
         self._raw_product_bhdrs.append([raw_prod_bhdr])
@@ -261,13 +261,13 @@ cdef class SigmetFile:
             lead_record, self.ndata_types)
         if ingest_data_headers is None:
             return None, None, None
-        
+
         # determine size of data
         nray_data_types = [d['number_rays_file_expected']
                            for d in ingest_data_headers]
         nrays = sum(nray_data_types)    # total rays
         nbins = self.product_hdr['product_end']['number_bins']
-        
+
         # prepare to read rays
         self._rbuf = np.fromstring(lead_record, dtype='int16')
         self._rbuf_p = <np.int16_t*>self._rbuf.data
@@ -275,7 +275,7 @@ cdef class SigmetFile:
         # set data initially to ones so that missing data can be better
         # seen when debugging
         raw_sweep_data = np.ones((nrays, nbins + 6), dtype='int16')
-        
+
         # get the raw data ray-by-ray
         for ray_i in xrange(nrays):
             if self.debug:
@@ -283,11 +283,11 @@ cdef class SigmetFile:
                 print "self._rbuf_pos is", self._rbuf_pos
             if self._get_ray(nbins, raw_sweep_data[ray_i]):
                 return None, None, None
-        
+
         # return raw data if requested
         if raw_data:
             return ingest_data_headers, raw_sweep_data
-        
+
         # convert the data and parse the metadata
         sweep_data = []
         sweep_metadata = []
@@ -301,40 +301,40 @@ cdef class SigmetFile:
             sweep_metadata.append(_parse_ray_headers(
                 raw_sweep_data[i::self.ndata_types, :6]))
         return ingest_data_headers, sweep_data, sweep_metadata
-    
+
     @cython.wraparound(False)
     cdef int _get_ray(self, int nbins, np.ndarray[np.int16_t, ndim=1] out):
         """
         Get the next ray, loading new records as needed.
-        
+
         Parameters
         ----------
         nbins : int
             Number of bins in the ray.
         out : ndarray
             Array to load ray data into.
-        
+
         Returns
         -------
         status : int
             0 on success, -1 if failed.
-        
+
         """
         cdef short compression_code
         cdef int words, remain, out_pos, first_end, i
-        
+
         if self._incr_rbuf_pos():
             return -1   # failed read
         compression_code = self._rbuf_p[self._rbuf_pos]
         out_pos = 0
-        
+
         if compression_code == 1:
             # mark ray as missing by setting numbers of bins to -1
             out[4] = -1
             return 0
-        
+
         while compression_code != 1:
-            
+
             if self._incr_rbuf_pos():
                 return -1   # failed read
             if compression_code < 0:
@@ -353,12 +353,12 @@ cdef class SigmetFile:
                     first_end = out_pos + words - remain
                     for i in range(first_end - out_pos):
                         out[out_pos + i] = self._rbuf_p[self._rbuf_pos + i]
-                    
+
                     # read data from next record and store
                     self._load_record()
                     for i in range(out_pos + words - first_end):
                         out[first_end + i] = self._rbuf_p[self._rbuf_pos + i]
-                    
+
                     if self._incr_rbuf_pos(remain):
                         return -1   # failed read
                     out_pos += words
@@ -370,9 +370,9 @@ cdef class SigmetFile:
                     out[out_pos + i] = 0
                 out_pos += compression_code
             compression_code = self._rbuf_p[self._rbuf_pos]
-        
+
         return 0
-    
+
     cdef int _incr_rbuf_pos(self, int incr=1):
         """
         Increment the record buffer position, load a new record if needed.
@@ -382,7 +382,7 @@ cdef class SigmetFile:
             if self._load_record():
                 return -1   # failed read
         return 0
-    
+
     cdef int _load_record(self):
         """ Load the next record. returns -1 on fail, 0 if success. """
         record = self._fh.read(RECORD_SIZE)
@@ -419,12 +419,12 @@ def _is_bit_set(number, bit):
 def _parse_ray_headers(ray_headers):
     """
     Parse the metadata from Sigmet ray headers.
-    
+
     Parameters
     ----------
     ray_headers : array, shape=(..., 6)
         Ray headers to parse.
-    
+
     Returns
     -------
     az0 : array
@@ -439,7 +439,7 @@ def _parse_ray_headers(ray_headers):
         Number of bins in the rays.
     time : array
         Seconds since the start of the sweep for the rays.
-    
+
     """
     az0 = bin2_to_angle(ray_headers.view('uint16')[..., 0])
     el0 = bin2_to_angle(ray_headers.view('uint16')[..., 1])
@@ -595,7 +595,7 @@ def convert_sigmet_data(data_type, data, nbins):
     """ Convert sigmet data. """
     out = np.empty_like(data, dtype='float32')
     mask = np.zeros_like(data, dtype=np.bool8)
-    
+
     data_type_name = SIGMET_DATA_TYPES[data_type]
 
     like_dbt2 = [
@@ -615,21 +615,21 @@ def convert_sigmet_data(data_type, data, nbins):
         'DBTE16',   # Total Power Enhanced, 2-byte
         'DBZE16',   # Clutter corrected reflectivity enhanced, 2-byte
     ]
-    
+
     like_sqi = [
 		'RHOH',     # 1-byte Rho Format, section 4.3.21
 		'RHOV',     # " "
 		'RHOHV',    # 1-byte RhoHV Format, section 4.3.23
 		'SQI',      # 1-byte Signal Quality Index Format, section 4.3.26
     ]
-    
+
     like_sqi2 = [
         'RHOV2',    # 2-byte Rho Format, section 4.3.22
         'RHOH2',    # " "
         'RHOHV2',   # 2-byte RhoHV Format, section 4.3.24
         'SQI2',     # 2-byte Signal Quality Index Format, section 4.3.27
     ]
-    
+
     like_dbt = [
         'DBT',      # 1-bytes Reflectivity Format, section 4.3.3
         'DBZ',      # " "
@@ -639,57 +639,57 @@ def convert_sigmet_data(data_type, data, nbins):
         'DBTE8',    # Total power enhanced, 1-byte
         'DBZE8',    # Clutter corrected reflectivity enhanced, 1-byte
     ]
-    
+
     if data_type_name in like_dbt2:
         # value = (N - 32768) / 100.
         # 0 : no data available (mask)
         # 65535 Reserved for area not scanned in product file (nothing)
         out[:] = (data.view('uint16') - 32768.) / 100.
         mask[data.view('uint16') == 0] = True
-    
+
     elif data_type_name in like_sqi2:
         # value = (N - 1) / 65533
         # 0 : no data available (mask)
         # 65535 Area not scanned
         out[:] = (data.view('uint16') - 1.) / 65533.
         mask[data.view('uint16') == 0] = True
-    
+
     elif data_type_name == 'WIDTH2':
         # DB_WIDTH2, 11, Width (2 byte)
         # 2-byte Width Format, section 4.3.36
         out[:] = data.view('uint16') / 100.
         mask[data.view('uint16') == 0] = True
-    
+
     elif data_type_name == 'PHIDP2':
         # DB_PHIDP2, 24, PhiDP (Differential Phase) (2 byte)
         # 2-byte PhiDP format, section 4.3.19
         out[:] = 360. * (data.view('uint16') - 1.) / 65534.
         mask[data.view('uint16') == 0] = True
-    
+
     elif data_type_name == 'HCLASS2':
         # DB_HCLASS2, 56, Hydrometeor class (2 byte)
         # 2-byte HydroClass Format, section 4.3.9
         out[:] = data.view('uint16')
-    
+
     elif data_type_name == 'XHDR':
         # Extended Headers, 0
         # extended_header_v0, _v1, _v2, section 4.2.8-4.2.10
         # Here we return an array with the times in milliseconds.
         return data[..., :2].copy().view('i4')
-    
+
     # one byte data types
     elif data_type_name[-1] != '2':
         # make a view of left half of the data as uint8,
         # this is the actual ray data collected, the right half is blank.
         nrays, nbin = data.shape
         ndata = data.view('(2,) uint8').reshape(nrays, -1)[:, :nbin]
-        
+
         if data_type_name in like_dbt:
             # DB_DBT, 1, Total Power (1 byte)
             # 1-byte Reflectivity Format, section 4.3.3
             out[:] = (ndata - 64.) / 2.
             mask[ndata == 0] = True
-	    
+
         elif data_type_name in like_sqi:
             # value = sqrt((N - 1) / 253)
             # 0 : no data available (mask)
@@ -697,7 +697,7 @@ def convert_sigmet_data(data_type, data, nbins):
             out[:] = np.sqrt((ndata - 1.) / 253.)
             mask[ndata == 0] = True
             mask[ndata == 255] = True
-        
+
         elif data_type_name == 'VEL':
             # VEL, 3, Velocity (1 byte)
             # 1-byte Velocity Format, section 4.3.29
@@ -705,7 +705,7 @@ def convert_sigmet_data(data_type, data, nbins):
             # this is done in the get_data method of the SigmetFile class.
             out[:] = (ndata - 128.) / 127.
             mask[ndata == 0] = True
-        
+
         elif data_type_name == 'WIDTH':
             # WIDTH, 4, Width (1 byte)
             # 1-byte Width format, section 4.3.25
@@ -713,19 +713,19 @@ def convert_sigmet_data(data_type, data, nbins):
             # velocity
             out[:] = ndata / 256.
             mask[ndata == 0] = True
-        
+
         elif data_type_name == 'ZDR':
             # ZDR, 5, Differential reflectivity (1 byte)
             # 1-byte ZDR format, section 4.3.37
             out[:] = (ndata - 128.) / 16.
             mask[ndata == 0] = True
-        
+
         elif data_type_name == 'KDP':
             # KDP, 14, KDP (Differential phase) (1 byte)
             # 1-byte KDP format, section 4.3.12
             # Note that this data should be divided by the wavelength in cm
             # as is the units are deg * cm / km
-            
+
             # above 128 use positive value equation
             exp = np.power(600., (ndata[ndata > 128] - 129.) / 126.)
             out[ndata > 128] = 0.25 * exp
@@ -734,17 +734,17 @@ def convert_sigmet_data(data_type, data, nbins):
             out[ndata < 128] = -0.25 * exp
             # equal to 128, zero
             out[ndata == 128] = 0
-            
+
             mask[ndata == 0] = True
             mask[ndata == 255] = True
-        
+
         elif data_type_name == 'PHIDP':
             # PHIDP, 16, PhiDP(Differential phase) (1 byte)
             # 1-byte PhiDP format, section 4.3.18
             out[:] = 180. * ((ndata - 1.) / 254.)
             mask[ndata == 0] = True
             mask[ndata == 255] = True
-                
+
         else:
             # TODO implement conversions for addition 1-byte formats
             warnings.warn('Unknown type: %s, returning raw data' % data_type)
@@ -755,10 +755,10 @@ def convert_sigmet_data(data_type, data, nbins):
         warnings.warn('Unknown type: %s, returning raw data' % data_type)
         out[:] = data
         return np.ma.masked_array(out)
-    
+
     # mask any gates which are beyond the number of gates in that ray.
     _mask_gates_not_collected(mask.view(np.uint8), nbins)
-    
+
     return np.ma.masked_array(out, mask=mask, fill_value=-9999.0,
                               shrink=False)
 
@@ -808,9 +808,9 @@ def _unpack_key(dic, key, structure):
 def _unpack_ingest_data_headers(record, ndata_types):
     """
     Unpack one or more ingest_data_header from a record.
-    
+
     Returns a list of dictionaries or None when an error occurs.
-    
+
     """
     idh = [_unpack_ingest_data_header(record, i) for i in range(ndata_types)]
     if None in idh:
@@ -842,16 +842,16 @@ def _unpack_product_hdr(record):
     """
     Return a dict with the unpacked product_hdr from the first record.
     """
-    
+
     # unpack the product_hdr structure from the first record
     product_hdr = _unpack_structure(record[:640], PRODUCT_HDR)
-    
+
     # product_hdr substructure
     _unpack_key(product_hdr, 'structure_header', STRUCTURE_HEADER)
     _unpack_key(product_hdr, 'product_configuration',
                 PRODUCT_CONFIGURATION)
     _unpack_key(product_hdr, 'product_end', PRODUCT_END)
-    
+
     # product_config substructure
     product_config = product_hdr['product_configuration']
     _unpack_key(product_config, 'structure_header', STRUCTURE_HEADER)
@@ -859,11 +859,11 @@ def _unpack_product_hdr(record):
     _unpack_key(product_config, 'sweep_ingest_time', YMDS_TIME)
     _unpack_key(product_config, 'file_ingest_time', YMDS_TIME)
     _unpack_key(product_config, 'color_scale_def', COLOR_SCALE_DEF)
-    
+
     # product_end substructure
     product_end = product_hdr['product_end']
     _unpack_key(product_end, 'ingest_time', YMDS_TIME)
-    
+
     return product_hdr
 
 
@@ -871,20 +871,20 @@ def _unpack_ingest_header(record):
     """
     Return a dict with the unpacked ingest_header from the second record.
     """
-    
+
     # unpack the ingest_header structure from the second_record
     ingest_header = _unpack_structure(record[:4884], INGEST_HEADER)
-    
+
     # ingest_header substructure
     _unpack_key(ingest_header, 'structure_header', STRUCTURE_HEADER)
     _unpack_key(ingest_header, 'ingest_configuration',
                 INGEST_CONFIGURATION)
     _unpack_key(ingest_header, 'task_configuration', TASK_CONFIGURATION)
-    
+
     # ingest_configuration substructure
     ingest_configuration = ingest_header['ingest_configuration']
     _unpack_key(ingest_configuration, 'volume_scan_start_time', YMDS_TIME)
-    
+
     # task_configuration substructure
     task_configuration = ingest_header['task_configuration']
     _unpack_key(task_configuration, 'structure_header', STRUCTURE_HEADER)
@@ -895,24 +895,24 @@ def _unpack_ingest_header(record):
     _unpack_key(task_configuration, 'task_scan_info', TASK_SCAN_INFO)
     _unpack_key(task_configuration, 'task_misc_info', TASK_MISC_INFO)
     _unpack_key(task_configuration, 'task_end_info', TASK_END_INFO)
-    
+
     # task_dsp_info substructure
     task_dsp_info = task_configuration['task_dsp_info']
     _unpack_key(task_dsp_info, 'current_data_type_mask', DSP_DATA_MASK)
     _unpack_key(task_dsp_info, 'original_data_type_mask', DSP_DATA_MASK)
     _unpack_key(task_dsp_info, 'task_dsp_mode', TASK_DSP_MODE_BATCH)
-    
+
     # task_scan_info substructure
     # TODO unpack task_scan_type_scan_info based on scan type
     # task_scan_info = task_configuration['task_scan_info']
     #    scan_type_struct =
     # _unpack_key(task_scan_info, 'task_scan_type_scan_info',
     #            scan_type_struct)
-    
+
     # task_end_info substructure
     task_end_info = task_configuration['task_end_info']
     _unpack_key(task_end_info, 'task_data_time', YMDS_TIME)
-    
+
     return ingest_header
 
 
