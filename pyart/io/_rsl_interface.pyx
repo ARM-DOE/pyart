@@ -31,6 +31,94 @@ from datetime import datetime
 
 _RSL_VERSION_STR = _rsl_h._RSL_VERSION_STR
 
+cdef (float (*)(_rsl_h.Range)) RSL_F_LIST[42]
+RSL_F_LIST[0] = _rsl_h.DZ_F
+RSL_F_LIST[1] = _rsl_h.VR_F
+RSL_F_LIST[2] = _rsl_h.SW_F
+RSL_F_LIST[3] = _rsl_h.CZ_F
+RSL_F_LIST[4] = _rsl_h.ZT_F
+RSL_F_LIST[5] = _rsl_h.DR_F
+RSL_F_LIST[6] = _rsl_h.LR_F
+RSL_F_LIST[7] = _rsl_h.ZD_F
+RSL_F_LIST[8] = _rsl_h.DM_F
+RSL_F_LIST[9] = _rsl_h.RH_F
+RSL_F_LIST[10] = _rsl_h.PH_F
+RSL_F_LIST[11] = _rsl_h.XZ_F
+RSL_F_LIST[12] = _rsl_h.CD_F
+RSL_F_LIST[13] = _rsl_h.MZ_F
+RSL_F_LIST[14] = _rsl_h.MD_F
+RSL_F_LIST[15] = _rsl_h.ZE_F
+RSL_F_LIST[16] = _rsl_h.VE_F
+RSL_F_LIST[17] = _rsl_h.KD_F
+RSL_F_LIST[18] = _rsl_h.TI_F
+RSL_F_LIST[19] = _rsl_h.DX_F
+RSL_F_LIST[20] = _rsl_h.CH_F
+RSL_F_LIST[21] = _rsl_h.AH_F
+RSL_F_LIST[22] = _rsl_h.CV_F
+RSL_F_LIST[23] = _rsl_h.AV_F
+RSL_F_LIST[24] = _rsl_h.SQ_F
+RSL_F_LIST[25] = _rsl_h.VS_F
+RSL_F_LIST[26] = _rsl_h.VL_F
+RSL_F_LIST[27] = _rsl_h.VG_F
+RSL_F_LIST[28] = _rsl_h.VT_F
+RSL_F_LIST[29] = _rsl_h.NP_F
+RSL_F_LIST[30] = _rsl_h.HC_F
+RSL_F_LIST[31] = _rsl_h.VC_F
+RSL_F_LIST[32] = _rsl_h.VR_F
+RSL_F_LIST[33] = _rsl_h.SW_F
+RSL_F_LIST[34] = _rsl_h.VR_F
+RSL_F_LIST[35] = _rsl_h.SW_F
+RSL_F_LIST[36] = _rsl_h.DZ_F
+RSL_F_LIST[37] = _rsl_h.CZ_F
+RSL_F_LIST[38] = _rsl_h.PH_F
+RSL_F_LIST[39] = _rsl_h.SD_F
+RSL_F_LIST[40] = _rsl_h.DZ_F
+RSL_F_LIST[41] = _rsl_h.DZ_F
+
+cdef (_rsl_h.Range (*)(float)) RSL_INVF_LIST[42]
+RSL_INVF_LIST[0] = _rsl_h.DZ_INVF
+RSL_INVF_LIST[1] = _rsl_h.VR_INVF
+RSL_INVF_LIST[2] = _rsl_h.SW_INVF
+RSL_INVF_LIST[3] = _rsl_h.CZ_INVF
+RSL_INVF_LIST[4] = _rsl_h.ZT_INVF
+RSL_INVF_LIST[5] = _rsl_h.DR_INVF
+RSL_INVF_LIST[6] = _rsl_h.LR_INVF
+RSL_INVF_LIST[7] = _rsl_h.ZD_INVF
+RSL_INVF_LIST[8] = _rsl_h.DM_INVF
+RSL_INVF_LIST[9] = _rsl_h.RH_INVF
+RSL_INVF_LIST[10] = _rsl_h.PH_INVF
+RSL_INVF_LIST[11] = _rsl_h.XZ_INVF
+RSL_INVF_LIST[12] = _rsl_h.CD_INVF
+RSL_INVF_LIST[13] = _rsl_h.MZ_INVF
+RSL_INVF_LIST[14] = _rsl_h.MD_INVF
+RSL_INVF_LIST[15] = _rsl_h.ZE_INVF
+RSL_INVF_LIST[16] = _rsl_h.VE_INVF
+RSL_INVF_LIST[17] = _rsl_h.KD_INVF
+RSL_INVF_LIST[18] = _rsl_h.TI_INVF
+RSL_INVF_LIST[19] = _rsl_h.DX_INVF
+RSL_INVF_LIST[20] = _rsl_h.CH_INVF
+RSL_INVF_LIST[21] = _rsl_h.AH_INVF
+RSL_INVF_LIST[22] = _rsl_h.CV_INVF
+RSL_INVF_LIST[23] = _rsl_h.AV_INVF
+RSL_INVF_LIST[24] = _rsl_h.SQ_INVF
+RSL_INVF_LIST[25] = _rsl_h.VS_INVF
+RSL_INVF_LIST[26] = _rsl_h.VL_INVF
+RSL_INVF_LIST[27] = _rsl_h.VG_INVF
+RSL_INVF_LIST[28] = _rsl_h.VT_INVF
+RSL_INVF_LIST[29] = _rsl_h.NP_INVF
+RSL_INVF_LIST[30] = _rsl_h.HC_INVF
+RSL_INVF_LIST[31] = _rsl_h.VC_INVF
+RSL_INVF_LIST[32] = _rsl_h.VR_INVF
+RSL_INVF_LIST[33] = _rsl_h.SW_INVF
+RSL_INVF_LIST[34] = _rsl_h.VR_INVF
+RSL_INVF_LIST[35] = _rsl_h.SW_INVF
+RSL_INVF_LIST[36] = _rsl_h.DZ_INVF
+RSL_INVF_LIST[37] = _rsl_h.CZ_INVF
+RSL_INVF_LIST[38] = _rsl_h.PH_INVF
+RSL_INVF_LIST[39] = _rsl_h.SD_INVF
+RSL_INVF_LIST[40] = _rsl_h.DZ_INVF
+RSL_INVF_LIST[41] = _rsl_h.DZ_INVF
+
 
 cpdef copy_volume(_RslVolume volume):
     """
@@ -85,32 +173,6 @@ cpdef create_volume(
         _RslVolume containing array data.
 
     """
-    # the next two variables will not work at the module level, see:
-    # http://trac.cython.org/cython_trac/ticket/113
-    cdef (float (*)(_rsl_h.Range)) * RSL_f_list = [
-        _rsl_h.DZ_F, _rsl_h.VR_F, _rsl_h.SW_F, _rsl_h.CZ_F, _rsl_h.ZT_F,
-        _rsl_h.DR_F, _rsl_h.LR_F, _rsl_h.ZD_F, _rsl_h.DM_F, _rsl_h.RH_F,
-        _rsl_h.PH_F, _rsl_h.XZ_F, _rsl_h.CD_F, _rsl_h.MZ_F, _rsl_h.MD_F,
-        _rsl_h.ZE_F, _rsl_h.VE_F, _rsl_h.KD_F, _rsl_h.TI_F, _rsl_h.DX_F,
-        _rsl_h.CH_F, _rsl_h.AH_F, _rsl_h.CV_F, _rsl_h.AV_F, _rsl_h.SQ_F,
-        _rsl_h.VS_F, _rsl_h.VL_F, _rsl_h.VG_F, _rsl_h.VT_F, _rsl_h.NP_F,
-        _rsl_h.HC_F, _rsl_h.VC_F, _rsl_h.VR_F, _rsl_h.SW_F, _rsl_h.VR_F,
-        _rsl_h.SW_F, _rsl_h.DZ_F, _rsl_h.CZ_F, _rsl_h.PH_F, _rsl_h.SD_F,
-        _rsl_h.DZ_F, _rsl_h.DZ_F]
-
-    cdef (_rsl_h.Range (*)(float)) * RSL_invf_list = [
-        _rsl_h.DZ_INVF, _rsl_h.VR_INVF, _rsl_h.SW_INVF, _rsl_h.CZ_INVF,
-        _rsl_h.ZT_INVF, _rsl_h.DR_INVF, _rsl_h.LR_INVF, _rsl_h.ZD_INVF,
-        _rsl_h.DM_INVF, _rsl_h.RH_INVF, _rsl_h.PH_INVF, _rsl_h.XZ_INVF,
-        _rsl_h.CD_INVF, _rsl_h.MZ_INVF, _rsl_h.MD_INVF, _rsl_h.ZE_INVF,
-        _rsl_h.VE_INVF, _rsl_h.KD_INVF, _rsl_h.TI_INVF, _rsl_h.DX_INVF,
-        _rsl_h.CH_INVF, _rsl_h.AH_INVF, _rsl_h.CV_INVF, _rsl_h.AV_INVF,
-        _rsl_h.SQ_INVF, _rsl_h.VS_INVF, _rsl_h.VL_INVF, _rsl_h.VG_INVF,
-        _rsl_h.VT_INVF, _rsl_h.NP_INVF, _rsl_h.HC_INVF, _rsl_h.VC_INVF,
-        _rsl_h.VR_INVF, _rsl_h.SW_INVF, _rsl_h.VR_INVF, _rsl_h.SW_INVF,
-        _rsl_h.DZ_INVF, _rsl_h.CZ_INVF, _rsl_h.PH_INVF, _rsl_h.SD_INVF,
-        _rsl_h.DZ_INVF, _rsl_h.DZ_INVF]
-
     cdef _rsl_h.Volume * volume
     cdef _rsl_h.Sweep * sweep
     cdef _rsl_h.Ray * ray
@@ -132,8 +194,8 @@ cpdef create_volume(
             ray = _rsl_h.RSL_new_ray(nbins)
             sweep.ray[nray] = ray
             ray.h.nbins = nbins
-            ray.h.f = RSL_f_list[vol_num]
-            ray.h.invf = RSL_invf_list[vol_num]
+            ray.h.f = RSL_F_LIST[vol_num]
+            ray.h.invf = RSL_INVF_LIST[vol_num]
             for nbin in range(nbins):
                 ray.range[nbin] = ray.h.invf(arr[ray_index, nbin])
             ray_index += 1
