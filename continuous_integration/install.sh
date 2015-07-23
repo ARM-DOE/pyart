@@ -29,7 +29,7 @@ source activate testenv
 
 # Install Py-ART dependencies
 conda install --yes numpy scipy matplotlib netcdf4 nose
-conda install --yes -c http://conda.binstar.org/jjhelmus trmm_rsl=1.47=0
+conda install --yes -c http://conda.binstar.org/jjhelmus trmm_rsl
 
 if [[ $PYTHON_VERSION == '2.7' ]]; then
     conda install --yes basemap 
