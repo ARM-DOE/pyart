@@ -46,7 +46,7 @@ def read_noxp_iphex_nc(filename, field_names=None, additional_metadata=None,
     filename : str
         Name of the netCDF file to read.
     field_names : dict, optional
-        Dictionary mapping ODIM_H5 field names to radar field names. If a
+        Dictionary mapping netCDF field names to radar field names. If a
         data type found in the file does not appear in this dictionary or has
         a value of None it will not be placed in the radar.fields dictionary.
         A value of None, the default, will use the mapping defined in the
@@ -58,7 +58,7 @@ def read_noxp_iphex_nc(filename, field_names=None, additional_metadata=None,
         introduct any addition metadata and the file specific or default
         metadata as specified by the Py-ART configuration file will be used.
     file_field_names : bool, optional
-        True to use the MDV data type names for the field names. If this
+        True to use the netCDF data type names for the field names. If this
         case the field_names parameter is ignored. The field dictionary will
         likely only have a 'data' key, unless the fields are defined in
         `additional_metadata`.
