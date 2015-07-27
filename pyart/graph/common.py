@@ -152,3 +152,178 @@ def _interpolate_azimuth_edges(azimuths):
     edges[-1] = np.angle(az[-1] - (az[-2] - az[-1]) / 2., deg=True)
     edges[edges < 0] += 360     # range from [-180, 180] to [0, 360]
     return edges
+
+########################
+# Common radar methods #
+########################
+
+def parse_ax(ax):
+    """ Parse and return ax parameter. """
+    if ax is None:
+        ax = plt.gca()
+    return ax
+
+def parse_ax_fig(ax, fig):
+    """ Parse and return ax and fig parameters. """
+    if ax is None:
+        ax = plt.gca()
+    if fig is None:
+        fig = plt.gcf()
+    return ax, fig
+
+def generate_colorbar_label(standard_name, units):
+    """ Generate and return a label for a colorbar. """
+    return standard_name.replace('_', ' ') + ' (' + units + ')'
+
+def generate_field_name(radar, field):
+    """ Return a nice field name for a particular field. """
+    if 'standard_name' in radar.fields[field]:
+        field_name = radar.fields[field]['standard_name']
+    elif 'long_name' in radar.fields[field]:
+        field_name = radar.fields[field]['long_name']
+    else:
+        field_name = str(field)
+    field_name = field_name.replace('_', ' ')
+    field_name = field_name[0].upper() + field_name[1:]
+    return field_name
+
+def generate_radar_name(radar):
+    """ Return radar name. """
+    if 'instrument_name' in radar.metadata:
+        return radar.metadata['instrument_name']
+    else:
+        return ''
+
+def generate_time_begin(radar):
+    """ Return time begin in datetime instance. """
+    # datetime object describing first sweep time
+    times = radar.time['data'][0]
+    units = radar.time['units']
+    calendar = radar.time['calendar']
+    return netCDF4.num2date(times, units, calendar)
+
+
+def generate_filename(radar, field, sweep, ext='png'):
+    """
+    Generate a filename for a plot.
+
+    Generated filename has form:
+        radar_name_field_sweep_time.ext
+
+    Parameters
+    ----------
+    radar : Radar
+        Radar structure.
+    field : str
+        Field plotted.
+    sweep : int
+        Sweep plotted.
+    ext : str
+        Filename extension.
+
+    Returns
+    -------
+    filename : str
+        Filename suitable for saving a plot.
+
+    """
+    name_s = generate_radar_name(radar).replace(' ', '_')
+    field_s = field.replace(' ', '_')
+    time_s = generate_time_begin(radar).strftime('%Y%m%d%H%M%S')
+    sweep_s = str(sweep).zfill(2)
+    return '%s_%s_%s_%s.%s' % (name_s, field_s, sweep_s, time_s, ext)
+
+def generate_title(radar, field, sweep):
+    """
+    Generate a title for a plot.
+
+    Parameters
+    ----------
+    radar : Radar
+        Radar structure.
+    field : str
+        Field plotted.
+    sweep : int
+        Sweep plotted.
+
+    Returns
+    -------
+    title : str
+        Plot title.
+
+    """
+    time_str = generate_time_begin(radar).isoformat() + 'Z'
+    fixed_angle = radar.fixed_angle['data'][sweep]
+    l1 = "%s %.1f Deg. %s " % (generate_radar_name(radar), fixed_angle, time_str)
+    field_name = generate_field_name(radar, field)
+    return l1 + '\n' + field_name
+
+def generate_vpt_title(radar, field):
+    """
+    Generate a title for a VPT plot.
+
+    Parameters
+    ----------
+    radar : Radar
+        Radar structure.
+    field : str
+        Field plotted.
+
+    Returns
+    -------
+    title : str
+        Plot title.
+
+    """
+    time_str = generate_time_begin(radar).isoformat() + 'Z'
+    l1 = "%s %s " % (generate_radar_name(radar), time_str)
+    field_name = generate_field_name(radar, field)
+    return l1 + '\n' + field_name
+
+def generate_ray_title(radar, field, ray):
+    """
+    Generate a title for a ray plot.
+
+    Parameters
+    ----------
+    radar : Radar
+        Radar structure.
+    field : str
+        Field plotted.
+    ray : int
+        Ray plotted.
+
+    Returns
+    -------
+    title : str
+        Plot title.
+
+    """
+    time_str = generate_time_begin(radar).isoformat() + 'Z'
+    l1 = "%s %s" % (generate_radar_name(radar), time_str)
+    azim = radar.azimuth['data'][ray]
+    elev = radar.elevation['data'][ray]
+    l2 = "Ray: %i  Elevation: %.1f Azimuth: %.1f" % (ray, azim, elev)
+    field_name = generate_field_name(radar, field)
+    return l1 + '\n' + l2 + '\n' + field_name
+
+def set_limits(self, xlim=None, ylim=None, ax=None):
+    """
+    Set the display limits.
+
+    Parameters
+    ----------
+    xlim : tuple, optional
+        2-Tuple containing y-axis limits in km. None uses default limits.
+    ylim : tuple, optional
+        2-Tuple containing x-axis limits in km. None uses default limits.
+    ax : Axis
+        Axis to adjust.  None will adjust the current axis.
+
+    """
+    if ax is None:
+        ax = plt.gca()
+    if ylim is not None:
+        ax.set_ylim(ylim)
+    if xlim is not None:
+        ax.set_xlim(xlim)
