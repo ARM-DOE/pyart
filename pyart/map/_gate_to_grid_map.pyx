@@ -287,7 +287,7 @@ cdef class GateToGridMapper:
             azimuth = azimuths[nray] * PI / 180.0
             for ngate in range(ngates):
 
-                if field_mask[nray, ngate, 0]:
+                if filter_flag and field_mask[nray, ngate, 0]:
                     continue
 
                 # calculate cartesian coordinate assuming 4/3 earth radius
