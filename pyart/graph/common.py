@@ -12,6 +12,19 @@ Common graphing routines.
     corner_to_point
     ax_radius
     sweep_coords_to_cart
+    parse_ax
+    parse_ax_fig
+    parse_vmin_vmax
+    generate_colorbar_label
+    generate_field_name
+    generate_radar_name
+    generate_time_begin
+    generate_filename
+    generate_title
+    generate_vpt_title
+    generate_ray_title
+    generate_colorbar_label
+    set_limits
     _interpolate_range_edges
     _interpolate_elevation_edges
     _interpolate_azimuth_edges
@@ -23,6 +36,7 @@ import numpy as np
 PI = 3.141592653589793
 
 from ..io.common import dms_to_d, radar_coords_to_cart
+from netCDF4 import num2date
 
 
 def corner_to_point(corner, point):
@@ -46,7 +60,7 @@ def corner_to_point(corner, point):
     """
     Re = 6371.0 * 1000.0
     Rc = ax_radius(point[0], units='degrees')
-    #print Rc/Re
+    # print Rc/Re
     y = ((point[0] - corner[0]) / 360.0) * PI * 2.0 * Re
     x = ((point[1] - corner[1]) / 360.0) * PI * 2.0 * Rc
     return x, y
@@ -157,11 +171,13 @@ def _interpolate_azimuth_edges(azimuths):
 # Common radar methods #
 ########################
 
+
 def parse_ax(ax):
     """ Parse and return ax parameter. """
     if ax is None:
         ax = plt.gca()
     return ax
+
 
 def parse_ax_fig(ax, fig):
     """ Parse and return ax and fig parameters. """
@@ -171,9 +187,27 @@ def parse_ax_fig(ax, fig):
         fig = plt.gcf()
     return ax, fig
 
+
+def parse_vmin_vmax(radar, field, vmin, vmax):
+    """ Parse and return vmin and vmax parameters. """
+    field_dict = radar.fields[field]
+    if vmin is None:
+        if 'valid_min' in field_dict:
+            vmin = field_dict['valid_min']
+        else:
+            vmin = -6   # default value
+    if vmax is None:
+        if 'valid_max' in field_dict:
+            vmax = field_dict['valid_max']
+        else:
+            vmax = 100
+    return vmin, vmax
+
+
 def generate_colorbar_label(standard_name, units):
     """ Generate and return a label for a colorbar. """
     return standard_name.replace('_', ' ') + ' (' + units + ')'
+
 
 def generate_field_name(radar, field):
     """ Return a nice field name for a particular field. """
@@ -187,6 +221,7 @@ def generate_field_name(radar, field):
     field_name = field_name[0].upper() + field_name[1:]
     return field_name
 
+
 def generate_radar_name(radar):
     """ Return radar name. """
     if 'instrument_name' in radar.metadata:
@@ -194,13 +229,14 @@ def generate_radar_name(radar):
     else:
         return ''
 
+
 def generate_time_begin(radar):
     """ Return time begin in datetime instance. """
     # datetime object describing first sweep time
     times = radar.time['data'][0]
     units = radar.time['units']
     calendar = radar.time['calendar']
-    return netCDF4.num2date(times, units, calendar)
+    return num2date(times, units, calendar)
 
 
 def generate_filename(radar, field, sweep, ext='png'):
@@ -233,6 +269,7 @@ def generate_filename(radar, field, sweep, ext='png'):
     sweep_s = str(sweep).zfill(2)
     return '%s_%s_%s_%s.%s' % (name_s, field_s, sweep_s, time_s, ext)
 
+
 def generate_title(radar, field, sweep):
     """
     Generate a title for a plot.
@@ -254,9 +291,11 @@ def generate_title(radar, field, sweep):
     """
     time_str = generate_time_begin(radar).isoformat() + 'Z'
     fixed_angle = radar.fixed_angle['data'][sweep]
-    l1 = "%s %.1f Deg. %s " % (generate_radar_name(radar), fixed_angle, time_str)
+    l1 = "%s %.1f Deg. %s " % (generate_radar_name(radar), fixed_angle,
+                               time_str)
     field_name = generate_field_name(radar, field)
     return l1 + '\n' + field_name
+
 
 def generate_vpt_title(radar, field):
     """
@@ -279,6 +318,7 @@ def generate_vpt_title(radar, field):
     l1 = "%s %s " % (generate_radar_name(radar), time_str)
     field_name = generate_field_name(radar, field)
     return l1 + '\n' + field_name
+
 
 def generate_ray_title(radar, field, ray):
     """
@@ -307,7 +347,13 @@ def generate_ray_title(radar, field, ray):
     field_name = generate_field_name(radar, field)
     return l1 + '\n' + l2 + '\n' + field_name
 
-def set_limits(self, xlim=None, ylim=None, ax=None):
+
+def generate_colorbar_label(standard_name, units):
+    """ Generate and return a label for a colorbar. """
+    return standard_name.replace('_', ' ') + ' (' + units + ')'
+
+
+def set_limits(xlim=None, ylim=None, ax=None):
     """
     Set the display limits.
 

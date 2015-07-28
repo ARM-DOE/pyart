@@ -18,7 +18,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 import netCDF4
 
-from .common import corner_to_point, radar_coords_to_cart, sweep_coords_to_cart
+from .common import (
+    corner_to_point, radar_coords_to_cart, sweep_coords_to_cart, set_limits,
+    generate_filename, generate_title, generate_vpt_title, generate_ray_title,
+    generate_colorbar_label, parse_ax_fig, parse_ax, parse_vmin_vmax
+    )
 
 
 class RadarDisplay:
@@ -76,6 +80,9 @@ class RadarDisplay:
 
     def __init__(self, radar, shift=(0.0, 0.0)):
         """ Initialize the object. """
+        # save radar object
+        self._radar = radar
+
         # populate attributes from radar object
         self.fields = radar.fields
         self.scan_type = radar.scan_type
@@ -230,7 +237,7 @@ class RadarDisplay:
 
         """
         # parse parameters
-        ax, fig = self._parse_ax_fig(ax, fig)
+        ax, fig = parse_ax_fig(ax, fig)
 
         # get the data and mask
         data = self._get_ray_data(field, ray, mask_tuple, filter_transitions)
@@ -321,8 +328,8 @@ class RadarDisplay:
 
         """
         # parse parameters
-        ax, fig = self._parse_ax_fig(ax, fig)
-        vmin, vmax = self._parse_vmin_vmax(field, vmin, vmax)
+        ax, fig = parse_ax_fig(ax, fig)
+        vmin, vmax = parse_vmin_vmax(self._radar, field, vmin, vmax)
 
         # get data for the plot
         data = self._get_data(field, sweep, mask_tuple, filter_transitions)
@@ -418,8 +425,8 @@ class RadarDisplay:
 
         """
         # parse parameters
-        ax, fig = self._parse_ax_fig(ax, fig)
-        vmin, vmax = self._parse_vmin_vmax(field, vmin, vmax)
+        ax, fig = parse_ax_fig(ax, fig)
+        vmin, vmax = parse_vmin_vmax(self._radar, field, vmin, vmax)
 
         # get data for the plot
         data = self._get_data(field, sweep, mask_tuple, filter_transitions)
@@ -518,8 +525,8 @@ class RadarDisplay:
 
         """
         # parse parameters
-        ax, fig = self._parse_ax_fig(ax, fig)
-        vmin, vmax = self._parse_vmin_vmax(field, vmin, vmax)
+        ax, fig = parse_ax_fig(ax, fig)
+        vmin, vmax = parse_vmin_vmax(self._radar, field, vmin, vmax)
 
         # get data for the plot
         data = self._get_vpt_data(field, mask_tuple, filter_transitions)
@@ -570,7 +577,7 @@ class RadarDisplay:
             Axis to plot on.  None will use the current axis.
 
         """
-        ax = self._parse_ax(ax)
+        ax = parse_ax(ax)
         for range_ring_location_km in range_rings:
             self.plot_range_ring(range_ring_location_km, ax=ax)
 
@@ -588,7 +595,7 @@ class RadarDisplay:
             Axis to plot on.  None will use the current axis.
 
         """
-        ax = self._parse_ax(ax)
+        ax = parse_ax(ax)
         theta = np.linspace(0, 2 * np.pi, npts)
         r = np.ones([npts], dtype=np.float32) * range_ring_location_km
         x = r * np.sin(theta)
@@ -617,7 +624,7 @@ class RadarDisplay:
             Axis to plot on.  None will use the current axis.
 
         """
-        ax = self._parse_ax(ax)
+        ax = parse_ax(ax)
 
         if type(symbols) is str:
             symbols = [symbols] * len(labels)
@@ -650,7 +657,7 @@ class RadarDisplay:
             Axis to plot on.  None will use the current axis.
 
         """
-        ax = self._parse_ax(ax)
+        ax = parse_ax(ax)
         loc_x, loc_y = corner_to_point(self.loc, location)
         loc_x /= 1000.0
         loc_y /= 1000.0
@@ -671,7 +678,7 @@ class RadarDisplay:
             Axis to plot on.  None will use the current axis.
 
         """
-        ax = self._parse_ax(ax)
+        ax = parse_ax(ax)
         x = np.zeros(npts, dtype=np.float32)
         y = np.linspace(-size, size, npts)
         ax.plot(x, y, 'k-')  # verticle
@@ -730,41 +737,36 @@ class RadarDisplay:
             Axis to adjust.  None will adjust the current axis.
 
         """
-        if ax is None:
-            ax = plt.gca()
-        if ylim is not None:
-            ax.set_ylim(ylim)
-        if xlim is not None:
-            ax.set_xlim(xlim)
+        set_limits(xlim, ylim, ax)
 
     def label_xaxis_x(self, ax=None):
         """ Label the xaxis with the default label for x units. """
-        ax = self._parse_ax(ax)
+        ax = parse_ax(ax)
         ax.set_xlabel('East West distance from ' + self.origin + ' (km)')
 
     def label_yaxis_y(self, ax=None):
         """ Label the yaxis with the default label for y units. """
-        ax = self._parse_ax(ax)
+        ax = parse_ax(ax)
         ax.set_ylabel('North South distance from ' + self.origin + ' (km)')
 
     def label_xaxis_r(self, ax=None):
         """ Label the xaxis with the default label for r units. """
-        ax = self._parse_ax(ax)
+        ax = parse_ax(ax)
         ax.set_xlabel('Distance from ' + self.origin + ' (km)')
 
     def label_yaxis_z(self, ax=None):
         """ Label the yaxis with the default label for z units. """
-        ax = self._parse_ax(ax)
+        ax = parse_ax(ax)
         ax.set_ylabel('Distance Above ' + self.origin + '  (km)')
 
     def label_xaxis_rays(self, ax=None):
         """ Label the yaxis with the default label for rays. """
-        ax = self._parse_ax(ax)
+        ax = parse_ax(ax)
         ax.set_xlabel('Ray number (unitless)')
 
     def label_yaxis_field(self, field, ax=None):
         """ Label the yaxis with the default label for a field units. """
-        ax = self._parse_ax(ax)
+        ax = parse_ax(ax)
         ax.set_ylabel(self._get_colorbar_label(field))
 
     def _set_title(self, field, sweep, title, ax):
@@ -862,11 +864,7 @@ class RadarDisplay:
             Filename suitable for saving a plot.
 
         """
-        name_s = self.radar_name.replace(' ', '_')
-        field_s = field.replace(' ', '_')
-        time_s = self.time_begin.strftime('%Y%m%d%H%M%S')
-        sweep_s = str(sweep).zfill(2)
-        return '%s_%s_%s_%s.%s' % (name_s, field_s, sweep_s, time_s, ext)
+        return generate_filename(self._radar, field, sweep)
 
     def generate_title(self, field, sweep):
         """
@@ -885,11 +883,7 @@ class RadarDisplay:
             Plot title.
 
         """
-        time_str = self.time_begin.isoformat() + 'Z'
-        fixed_angle = self.fixed_angle[sweep]
-        l1 = "%s %.1f Deg. %s " % (self.radar_name, fixed_angle, time_str)
-        field_name = self._generate_field_name(field)
-        return l1 + '\n' + field_name
+        return generate_title(self._radar, field, sweep)
 
     def generate_vpt_title(self, field):
         """
@@ -906,10 +900,7 @@ class RadarDisplay:
             Plot title.
 
         """
-        time_str = self.time_begin.isoformat() + 'Z'
-        l1 = "%s %s " % (self.radar_name, time_str)
-        field_name = self._generate_field_name(field)
-        return l1 + '\n' + field_name
+        return generate_vpt_title(self._radar, field)
 
     def generate_ray_title(self, field, ray):
         """
@@ -928,62 +919,7 @@ class RadarDisplay:
             Plot title.
 
         """
-        time_str = self.time_begin.isoformat() + 'Z'
-        l1 = "%s %s" % (self.radar_name, time_str)
-        azim = self.azimuths[ray]
-        elev = self.elevations[ray]
-        l2 = "Ray: %i  Elevation: %.1f Azimuth: %.1f" % (ray, azim, elev)
-        field_name = self._generate_field_name(field)
-        return l1 + '\n' + l2 + '\n' + field_name
-
-    def _generate_field_name(self, field):
-        """ Return a nice field name for a particular field. """
-        if 'standard_name' in self.fields[field]:
-            field_name = self.fields[field]['standard_name']
-        elif 'long_name' in self.fields[field]:
-            field_name = self.fields[field]['long_name']
-        else:
-            field_name = str(field)
-        field_name = field_name.replace('_', ' ')
-        field_name = field_name[0].upper() + field_name[1:]
-        return field_name
-
-    def _generate_colorbar_label(self, standard_name, units):
-        """ Generate and return a label for a colorbar. """
-        return standard_name.replace('_', ' ') + ' (' + units + ')'
-
-    ####################
-    # Parseing methods #
-    ####################
-
-    def _parse_ax(self, ax):
-        """ Parse and return ax parameter. """
-        if ax is None:
-            ax = plt.gca()
-        return ax
-
-    def _parse_ax_fig(self, ax, fig):
-        """ Parse and return ax and fig parameters. """
-        if ax is None:
-            ax = plt.gca()
-        if fig is None:
-            fig = plt.gcf()
-        return ax, fig
-
-    def _parse_vmin_vmax(self, field, vmin, vmax):
-        """ Parse and return vmin and vmax parameters. """
-        field_dict = self.fields[field]
-        if vmin is None:
-            if 'valid_min' in field_dict:
-                vmin = field_dict['valid_min']
-            else:
-                vmin = -6   # default value
-        if vmax is None:
-            if 'valid_max' in field_dict:
-                vmax = field_dict['valid_max']
-            else:
-                vmax = 100
-        return vmin, vmax
+        return generate_ray_title(self._radar, field, ray)
 
     ###############
     # Get methods #
@@ -1081,4 +1017,4 @@ class RadarDisplay:
             units = last_field_dict['units']
         else:
             units = '?'
-        return self._generate_colorbar_label(standard_name, units)
+        return generate_colorbar_label(standard_name, units)
