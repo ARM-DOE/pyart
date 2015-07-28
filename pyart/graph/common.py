@@ -32,11 +32,13 @@ Common graphing routines.
 """
 
 import numpy as np
+import matplotlib.pyplot as plt
+from netCDF4 import num2date
+
 
 PI = 3.141592653589793
 
 from ..io.common import dms_to_d, radar_coords_to_cart
-from netCDF4 import num2date
 
 
 def corner_to_point(corner, point):
