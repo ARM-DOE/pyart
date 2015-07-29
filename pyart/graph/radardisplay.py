@@ -780,7 +780,7 @@ class RadarDisplay:
             orient = 'vertical'
 
         # Find the axes locations to set colorbar
-        if cax = None:
+        if cax is None:
             ax = parse_ax(ax)
             box = make_axes_locatable(ax)
             if orient == 'vertical':
