@@ -107,7 +107,6 @@ class RadarDisplay_Airborne(RadarDisplay):
     def _calculateLocalization(self, radar):
         """ Calculate self.x, self.y, self.z and self.loc. """
         # x, y, z attributes: cartesian location for a sweep in km.
-        self.shift = shift
 
         if radar.metadata['platform_type'] == 'aircraft_belly':
             rg, azg = np.meshgrid(self.ranges, self.azimuths)
