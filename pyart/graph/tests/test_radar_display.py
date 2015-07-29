@@ -146,15 +146,15 @@ def test_radardisplay_misc():
     assert ax.get_title() == 'title_string'
 
     # _generate_field_name method
-    fn = display._generate_field_name('reflectivity_horizontal')
+    fn = pyart.graph.common.generate_field_name(radar, 'reflectivity_horizontal')
     assert fn == 'Equivalent reflectivity factor'
 
     display.fields['reflectivity_horizontal'].pop('standard_name')
-    fn = display._generate_field_name('reflectivity_horizontal')
+    fn = pyart.graph.common.generate_field_name(radar, 'reflectivity_horizontal')
     assert fn == 'Equivalent reflectivity factor'
 
     display.fields['reflectivity_horizontal'].pop('long_name')
-    fn = display._generate_field_name('reflectivity_horizontal')
+    fn = pyart.graph.common.generate_field_name(radar, 'reflectivity_horizontal')
     assert fn == 'Reflectivity horizontal'
 
     plt.close()

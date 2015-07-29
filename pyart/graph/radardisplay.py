@@ -17,6 +17,7 @@ import warnings
 import matplotlib.pyplot as plt
 import numpy as np
 import netCDF4
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 from .common import (
     corner_to_point, radar_coords_to_cart, sweep_coords_to_cart, set_limits,
@@ -105,10 +106,30 @@ class RadarDisplay:
         else:
             self.origin = 'radar'
 
+        self.shift = shift
+        self._calculateLocalization(radar)
+
+        # datetime object describing first sweep time
+        times = radar.time['data'][0]
+        units = radar.time['units']
+        calendar = radar.time['calendar']
+        self.time_begin = netCDF4.num2date(times, units, calendar)
+
+        # sweep start and end indices
+        self.starts = radar.sweep_start_ray_index['data']
+        self.ends = radar.sweep_end_ray_index['data']
+
+        # list to hold plots, plotted fields and plotted colorbars
+        self.plots = []
+        self.plot_vars = []
+        self.cbs = []
+
+    def _calculateLocalization(self, radar):
+        """ Calculate self.x, self.y, self.z and self.loc. """
         # x, y, z attributes: cartesian location for a sweep in km.
         rg, azg = np.meshgrid(self.ranges, self.azimuths)
         rg, eleg = np.meshgrid(self.ranges, self.elevations)
-        self.shift = shift
+
         self.x, self.y, self.z = radar_coords_to_cart(rg / 1000.0, azg, eleg)
         self.x = self.x + self.shift[0]
         self.y = self.y + self.shift[1]
@@ -128,21 +149,6 @@ class RadarDisplay:
             lon = np.median(radar.longitude['data'])
             warnings.warn('RadarDisplay does not correct for moving platforms')
         self.loc = (lat, lon)
-
-        # datetime object describing first sweep time
-        times = radar.time['data'][0]
-        units = radar.time['units']
-        calendar = radar.time['calendar']
-        self.time_begin = netCDF4.num2date(times, units, calendar)
-
-        # sweep start and end indices
-        self.starts = radar.sweep_start_ray_index['data']
-        self.ends = radar.sweep_end_ray_index['data']
-
-        # list to hold plots, plotted fields and plotted colorbars
-        self.plots = []
-        self.plot_vars = []
-        self.cbs = []
 
     ####################
     # Plotting methods #
@@ -263,9 +269,8 @@ class RadarDisplay:
     def plot_ppi(self, field, sweep=0, mask_tuple=None, vmin=None, vmax=None,
                  cmap='jet', mask_outside=True, title=None, title_flag=True,
                  axislabels=(None, None), axislabels_flag=True,
-                 colorbar_flag=True, colorbar_label=None, edges=True,
-                 filter_transitions=True,
-                 ax=None, fig=None):
+                 colorbar_flag=True, colorbar_label=None, colorbar_orient=None,
+                 edges=True, filter_transitions=True, ax=None, fig=None):
         """
         Plot a PPI.
 
@@ -309,13 +314,16 @@ class RadarDisplay:
         colorbar_label : str
             Colorbar label, None will use a default label generated from the
             field information.
+        colorbar_orient : str
+            Colorbar orientation, None will use default orientation of
+            vertical.
         edges : bool
             True will interpolate and extrapolate the gate edges from the
             range, azimuth and elevations in the radar, treating these
             as specifying the center of each gate.  False treats these
             coordinates themselved as the gate edges, resulting in a plot
             in which the last gate in each ray and the entire last ray are not
-            not plotted.
+            plotted.
         filter_transitions : bool
             True to remove rays where the antenna was in transition between
             sweeps from the plot.  False will include these rays in the plot.
@@ -355,13 +363,15 @@ class RadarDisplay:
 
         if colorbar_flag:
             self.plot_colorbar(mappable=pm, label=colorbar_label,
+                               orient=colorbar_orient,
                                field=field, ax=ax, fig=fig)
 
     def plot_rhi(self, field, sweep=0, mask_tuple=None, vmin=None, vmax=None,
                  cmap='jet', mask_outside=True, title=None, title_flag=True,
                  axislabels=(None, None), axislabels_flag=True,
                  reverse_xaxis=None, colorbar_flag=True, colorbar_label=None,
-                 edges=True, filter_transitions=True, ax=None, fig=None):
+                 colorbar_orient=None, edges=True, filter_transitions=True,
+                 ax=None, fig=None):
         """
         Plot a RHI.
 
@@ -406,6 +416,9 @@ class RadarDisplay:
         colorbar_label : str
             Colorbar label, None will use a default label generated from the
             field information.
+        colorbar_orient : str
+            Colorbar orientation, None will use default orientation of
+            vertical.
         edges : bool
             True will interpolate and extrapolate the gate edges from the
             range, azimuth and elevations in the radar, treating these
@@ -458,12 +471,13 @@ class RadarDisplay:
 
         if colorbar_flag:
             self.plot_colorbar(mappable=pm, label=colorbar_label,
+                               orient=colorbar_orient,
                                field=field, ax=ax, fig=fig)
 
     def plot_vpt(self, field, mask_tuple=None, vmin=None, vmax=None,
                  cmap='jet', mask_outside=True, title=None, title_flag=True,
                  axislabels=(None, None), axislabels_flag=True,
-                 colorbar_flag=True, colorbar_label=None,
+                 colorbar_flag=True, colorbar_label=None, colorbar_orient=None,
                  edges=True, filter_transitions=True, ax=None, fig=None):
         """
         Plot a VPT scan.
@@ -506,6 +520,9 @@ class RadarDisplay:
         colorbar_label : str
             Colorbar label, None will use a default label generated from the
             field information.
+        colorbar_orient : str
+            Colorbar orientation, None will use default orientation of
+            vertical.
         edges : bool
             True will interpolate and extrapolate the gate edges from the
             range, azimuth and elevations in the radar, treating these
@@ -563,9 +580,11 @@ class RadarDisplay:
 
         if colorbar_flag:
             self.plot_colorbar(mappable=pm, label=colorbar_label,
+                               orient=colorbar_orient,
                                field=field, ax=ax, fig=fig)
 
-    def plot_range_rings(self, range_rings, ax=None):
+    def plot_range_rings(self, range_rings, ax=None, col=None, ls=None,
+                         lw=None):
         """
         Plot a series of range rings.
 
@@ -575,13 +594,19 @@ class RadarDisplay:
             List of locations in km to draw range rings.
         ax : Axis
             Axis to plot on.  None will use the current axis.
+        col : str or value
+            Color to use for range rings.
+        ls : str
+            Linestyle to use for range rings.
 
         """
         ax = parse_ax(ax)
         for range_ring_location_km in range_rings:
-            self.plot_range_ring(range_ring_location_km, ax=ax)
+            self.plot_range_ring(range_ring_location_km, ax=ax, col=col,
+                                 ls=ls, lw=lw)
 
-    def plot_range_ring(self, range_ring_location_km, npts=100, ax=None):
+    def plot_range_ring(self, range_ring_location_km, npts=100, ax=None,
+                        col=None, ls=None, lw=None):
         """
         Plot a single range ring.
 
@@ -593,6 +618,10 @@ class RadarDisplay:
             Number of points in the ring, higher for better resolution.
         ax : Axis
             Axis to plot on.  None will use the current axis.
+        col : str or value
+            Color to use for range rings.
+        ls : str
+            Linestyle to use for range rings.
 
         """
         ax = parse_ax(ax)
@@ -600,7 +629,36 @@ class RadarDisplay:
         r = np.ones([npts], dtype=np.float32) * range_ring_location_km
         x = r * np.sin(theta)
         y = r * np.cos(theta)
-        ax.plot(x, y, 'k-')
+        if lw is None:
+            lw = 2
+        if ls is None:
+            ls = '-'
+        if col is None:
+            col = 'k'
+        ax.plot(x, y, c=col, ls=ls, lw=lw)
+
+    def plot_grid_lines(self, ax=None, col=None, ls=None, lw=None):
+        """
+        Plot grid lines.
+
+        Parameters
+        ----------
+        ax : Axis
+            Axis to plot on.  None will use the current axis.
+        col : str or value
+            Color to use for grid lines.
+        ls : str
+            Linestyle to use for grid lines.
+
+        """
+        ax = parse_ax(ax)
+        if lw is None:
+            lw = 2
+        if ls is None:
+            ls = ':'
+        if col is None:
+            col = 'k'
+        ax.grid(c=col, ls=ls)
 
     def plot_labels(self, labels, locations, symbols='r+', text_color='k',
                     ax=None):
@@ -684,8 +742,8 @@ class RadarDisplay:
         ax.plot(x, y, 'k-')  # verticle
         ax.plot(y, x, 'k-')  # horizontal
 
-    def plot_colorbar(self, mappable=None, field=None, label=None, cax=None,
-                      ax=None, fig=None):
+    def plot_colorbar(self, mappable=None, field=None, label=None, orient=None,
+                      cax=None, ax=None, fig=None):
         """
         Plot a colorbar.
 
@@ -696,9 +754,11 @@ class RadarDisplay:
             last mappable object will be used.
         field : str
             Field to label colorbar with.
-        label :
+        label : str
             Colorbar label.  None will use a default value from the last field
             plotted.
+        orient : str
+            Colorbar orientation, either 'vertical' [default] or 'horizontal'.
         cax : Axis
             Axis onto which the colorbar will be drawn.  None is also valid.
         ax : Axes
@@ -715,7 +775,16 @@ class RadarDisplay:
             if field is None:
                 field = self.plot_vars[-1]
             label = self._get_colorbar_label(field)
-        cb = fig.colorbar(mappable, ax=ax, cax=cax)
+        # Find the axes locations to set colorbar
+        box = make_axes_locatable(ax)
+
+        if orient is None:
+            orient = 'vertical'
+        if orient == 'vertical':
+            cax = box.append_axes("right", size="3%", pad=0.05)
+        if orient == 'horizontal':
+            cax = box.append_axes("bottom", size="6%", pad=0.50)
+        cb = fig.colorbar(mappable, orientation=orient, ax=ax, cax=cax)
         cb.set_label(label)
         self.cbs.append(cb)
 
@@ -768,6 +837,14 @@ class RadarDisplay:
         """ Label the yaxis with the default label for a field units. """
         ax = parse_ax(ax)
         ax.set_ylabel(self._get_colorbar_label(field))
+
+    def set_aspect_ratio(self, aratio=None, ax=None):
+        """ Set the aspect ratio for plot area. """
+        ax = parse_ax(ax)
+        if aratio is None:
+            ax.set_aspect(0.75)
+        else:
+            ax.set_aspect(aratio)
 
     def _set_title(self, field, sweep, title, ax):
         """ Set the figure title using a default title. """
@@ -976,6 +1053,12 @@ class RadarDisplay:
             data = data[in_trans == 0]
 
         return data
+
+    def _get_x_z(self, field, sweep, edges, filter_transitions):
+        """ Retrieve and return x and y coordinate in km. """
+        x, y, z = self._get_x_y_z(field, sweep, edges,
+                                  filter_transitions=filter_transitions)
+        return x, z
 
     def _get_x_y(self, field, sweep, edges, filter_transitions):
         """ Retrieve and return x and y coordinate in km. """
