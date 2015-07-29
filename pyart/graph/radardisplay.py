@@ -600,7 +600,7 @@ class RadarDisplay:
             Linestyle to use for range rings.
 
         """
-        ax = parse_ax(ax)
+        c
         for range_ring_location_km in range_rings:
             self.plot_range_ring(range_ring_location_km, ax=ax, col=col,
                                  ls=ls, lw=lw)
@@ -775,15 +775,18 @@ class RadarDisplay:
             if field is None:
                 field = self.plot_vars[-1]
             label = self._get_colorbar_label(field)
-        # Find the axes locations to set colorbar
-        box = make_axes_locatable(ax)
 
         if orient is None:
             orient = 'vertical'
-        if orient == 'vertical':
-            cax = box.append_axes("right", size="3%", pad=0.05)
-        if orient == 'horizontal':
-            cax = box.append_axes("bottom", size="6%", pad=0.50)
+
+        # Find the axes locations to set colorbar
+        if cax = None:
+            ax = parse_ax(ax)
+            box = make_axes_locatable(ax)
+            if orient == 'vertical':
+                cax = box.append_axes("right", size="3%", pad=0.05)
+            if orient == 'horizontal':
+                cax = box.append_axes("bottom", size="6%", pad=0.50)
         cb = fig.colorbar(mappable, orientation=orient, ax=ax, cax=cax)
         cb.set_label(label)
         self.cbs.append(cb)
