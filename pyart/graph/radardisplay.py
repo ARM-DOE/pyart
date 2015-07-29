@@ -600,7 +600,6 @@ class RadarDisplay:
             Linestyle to use for range rings.
 
         """
-        c
         for range_ring_location_km in range_rings:
             self.plot_range_ring(range_ring_location_km, ax=ax, col=col,
                                  ls=ls, lw=lw)
