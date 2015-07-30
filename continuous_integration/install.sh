@@ -70,6 +70,7 @@ if [[ "$FROM_RECIPE" == "true" ]]; then
    
     export CONDA_PACKAGE=`conda build --output conda_recipe/`
     conda install --yes $CONDA_PACKAGE
+    conda update --yes libnetcdf   # KLUDGE to upgrade downgraded libnetcdf
     mkdir foo   # required so source directory not picked up during tests
     cd foo
 else
