@@ -38,7 +38,7 @@ if [[ $PYTHON_VERSION == '2.7' ]]; then
     conda install --yes -c http://conda.binstar.org/jjhelmus cvxopt_glpk
 
     # wradlib and dependencies
-    conda install --yes sphinx gdal numpydoc h5py=2.4.0
+    conda install --yes sphinx gdal numpydoc h5py
     pip install sphinx-rtd-theme
     pip install sphinxcontrib-bibtex
     pip install xmltodict
@@ -70,6 +70,7 @@ if [[ "$FROM_RECIPE" == "true" ]]; then
    
     export CONDA_PACKAGE=`conda build --output conda_recipe/`
     conda install --yes $CONDA_PACKAGE
+    conda update --yes libnetcdf   # KLUDGE to upgrade downgraded libnetcdf
     mkdir foo   # required so source directory not picked up during tests
     cd foo
 else
