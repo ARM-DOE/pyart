@@ -102,7 +102,7 @@ class RadarDisplay_Airborne(RadarDisplay):
         self.heading = radar.heading['data']
         self.pitch = radar.pitch['data']
         self.altitude = radar.altitude['data']
-        super(RadarDisplay, self).__init__(radar, shift)
+        super(RadarDisplay_Airborne, self).__init__(radar, shift)
 
     def _calculateLocalization(self, radar):
         """ Calculate self.x, self.y, self.z and self.loc. """

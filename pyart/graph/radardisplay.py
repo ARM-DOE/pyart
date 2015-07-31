@@ -26,7 +26,7 @@ from .common import (
     )
 
 
-class RadarDisplay:
+class RadarDisplay(object):
     """
     A display object for creating plots from data in a radar object.
 
