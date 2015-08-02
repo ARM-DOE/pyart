@@ -19,9 +19,11 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 from .radardisplay import RadarDisplay
 from .common import (
-    corner_to_point, radar_coords_to_cart, set_limits,
-    generate_filename, generate_title, generate_vpt_title, generate_ray_title,
-    generate_colorbar_label, parse_ax_fig, parse_ax, parse_vmin_vmax
+    _interpolate_range_edges, _interpolate_elevation_edges,
+    _interpolate_azimuth_edges, corner_to_point, radar_coords_to_cart,
+    set_limits, generate_filename, generate_title, generate_vpt_title,
+    generate_ray_title, generate_colorbar_label, parse_ax_fig, parse_ax,
+    parse_vmin_vmax
     )
 from .coord_transform import radar_coords_to_cart_track_relative
 from .coord_transform import radar_coords_to_cart_earth_relative
@@ -262,7 +264,7 @@ class RadarDisplay_Airborne(RadarDisplay):
             self._set_title(field, sweep, title, ax)
 
         if axislabels_flag:
-            self._label_axes_ppi(axislabels, ax)
+            self._label_axes_rhi(axislabels, ax)
 
         # add plot and field to lists
         self.plots.append(pm)
@@ -285,6 +287,75 @@ class RadarDisplay_Airborne(RadarDisplay):
         ax.set_ylabel('Horizontal distance from ' + self.origin + ' (km)')
 
     def label_yaxis_z(self, ax=None):
-        """ Label the yaxis with the default label for y units. """
+        """ Label the yaxis with the default label for z units. """
         ax = parse_ax(ax)
-        ax.set_ylabel('Altitude (km)')
+        ax.set_ylabel('Distance Above ' + self.origin + '  (km)')
+
+    def _get_x_y_z(self, field, sweep, edges, filter_transitions):
+        """ Retrieve and return x, y, and z coordinate in km. """
+        start = self.starts[sweep]
+        end = self.ends[sweep] + 1
+
+        if self._radar.metadata['platform_type'] == 'aircraft_belly':
+            if filter_transitions and self.antenna_transition is not None:
+                in_trans = self.antenna_transition[start:end]
+                ranges = self.ranges
+                azimuths = self.azimuths[in_trans == 0]
+                elevations = self.elevations[in_trans == 0]
+            else:
+                ranges = self.ranges
+                azimuths = self.azimuths[start:end]
+                elevations = self.elevations[start:end]
+
+            if edges:
+                if len(ranges) != 1:
+                    ranges = _interpolate_range_edges(ranges)
+                if len(elevations) != 1:
+                    elevations = _interpolate_elevation_edges(elevations)
+                if len(azimuths) != 1:
+                    azimuths = _interpolate_azimuth_edges(azimuths)
+
+            rg, azg = np.meshgrid(ranges, azimuths)
+            rg, eleg = np.meshgrid(ranges, elevations)
+            x, y, z = radar_coords_to_cart(rg / 1000., azg, eleg)
+
+        else:
+            if filter_transitions and self.antenna_transition is not None:
+                in_trans = self.antenna_transition[start:end]
+                ranges = self.ranges
+                rotation = self.rotation[in_trans == 0]
+                roll = self.roll[in_trans == 0]
+                drift = self.drift[in_trans == 0]
+                tilt = self.tilt[in_trans == 0]
+                pitch = self.pitch[in_trans == 0]
+            else:
+                ranges = self.ranges
+                rotation = self.rotation[start:end]
+                roll = self.roll[start:end]
+                drift = self.drift[start:end]
+                tilt = self.tilt[start:end]
+                pitch = self.pitch[start:end]
+
+            if edges:
+                if len(ranges) != 1:
+                    ranges = _interpolate_range_edges(ranges)
+                if len(rotation) != 1:
+                    rotation = _interpolate_azimuth_edges(rotation)
+                    roll = _interpolate_azimuth_edges(roll)
+                    drift = _interpolate_azimuth_edges(drift)
+                    tilt = _interpolate_azimuth_edges(tilt)
+                    pitch = _interpolate_azimuth_edges(pitch)
+
+            rg, rotg = np.meshgrid(ranges, rotation)
+            rg, rollg = np.meshgrid(ranges, roll)
+            rg, driftg = np.meshgrid(ranges, drift)
+            rg, tiltg = np.meshgrid(ranges, tilt)
+            rg, pitchg = np.meshgrid(ranges, pitch)
+
+            x, y, z = radar_coords_to_cart_track_relative(
+                rg / 1000.0, rotg, rollg, driftg, tiltg, pitchg)
+
+        x = (x + self.shift[0]) / 1000.0
+        y = (y + self.shift[1]) / 1000.0
+        z = z / 1000.0
+        return x, y, z

@@ -881,6 +881,18 @@ class RadarDisplay(object):
         else:
             ax.set_ylabel(y_label)
 
+    def _label_axes_ppi(self, axis_labels, ax):
+        """ Set the x and y axis labels for a PPI plot. """
+        x_label, y_label = axis_labels
+        if x_label is None:
+            self.label_xaxis_x(ax)
+        else:
+            ax.set_xlabel(x_label)
+        if y_label is None:
+            self.label_yaxis_y(ax)
+        else:
+            ax.set_ylabel(y_label)
+
     def _label_axes_rhi(self, axis_labels, ax):
         """ Set the x and y axis labels for a RHI plot. """
         x_label, y_label = axis_labels
