@@ -171,8 +171,8 @@ class RadarDisplay_Airborne(RadarDisplay):
             raise ValueError('unknown scan_type % s' % (self.scan_type))
         return
 
-    def plot_sweep_grid(self, field, sweep=0, mask_tuple=None, vmin=None, vmax=None,
-                        cmap='jet', mask_outside=True, title=None,
+    def plot_sweep_grid(self, field, sweep=0, mask_tuple=None, vmin=None,
+                        vmax=None, cmap='jet', mask_outside=True, title=None,
                         title_flag=True, axislabels=(None, None),
                         axislabels_flag=True, colorbar_flag=True,
                         colorbar_label=None, colorbar_orient=None, edges=True,
