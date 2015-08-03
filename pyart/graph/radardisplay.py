@@ -578,8 +578,8 @@ class RadarDisplay(object):
                                orient=colorbar_orient,
                                field=field, ax=ax, fig=fig)
 
-    def plot_range_rings(self, range_rings, ax=None, col=None, ls=None,
-                         lw=None):
+    def plot_range_rings(self, range_rings, ax=None, col='k', ls='-',
+                         lw=2):
         """
         Plot a series of range rings.
 
