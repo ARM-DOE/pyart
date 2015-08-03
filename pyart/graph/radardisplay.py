@@ -19,11 +19,7 @@ import numpy as np
 import netCDF4
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
-from .common import (
-    corner_to_point, radar_coords_to_cart, sweep_coords_to_cart, set_limits,
-    generate_filename, generate_title, generate_vpt_title, generate_ray_title,
-    generate_colorbar_label, parse_ax_fig, parse_ax, parse_vmin_vmax
-    )
+from . import common
 
 
 class RadarDisplay(object):
@@ -107,7 +103,7 @@ class RadarDisplay(object):
             self.origin = 'radar'
 
         self.shift = shift
-        self._calculateLocalization(radar)
+        self._calculate_localization(radar)
 
         # datetime object describing first sweep time
         times = radar.time['data'][0]
@@ -124,13 +120,13 @@ class RadarDisplay(object):
         self.plot_vars = []
         self.cbs = []
 
-    def _calculateLocalization(self, radar):
+    def _calculate_localization(self, radar):
         """ Calculate self.x, self.y, self.z and self.loc. """
         # x, y, z attributes: cartesian location for a sweep in km.
         rg, azg = np.meshgrid(self.ranges, self.azimuths)
         rg, eleg = np.meshgrid(self.ranges, self.elevations)
 
-        self.x, self.y, self.z = radar_coords_to_cart(rg / 1000.0, azg, eleg)
+        self.x, self.y, self.z = common.radar_coords_to_cart(rg / 1000.0, azg, eleg)
         self.x = self.x + self.shift[0]
         self.y = self.y + self.shift[1]
 
@@ -243,7 +239,7 @@ class RadarDisplay(object):
 
         """
         # parse parameters
-        ax, fig = parse_ax_fig(ax, fig)
+        ax, fig = common.parse_ax_fig(ax, fig)
 
         # get the data and mask
         data = self._get_ray_data(field, ray, mask_tuple, filter_transitions)
@@ -269,8 +265,9 @@ class RadarDisplay(object):
     def plot_ppi(self, field, sweep=0, mask_tuple=None, vmin=None, vmax=None,
                  cmap='jet', mask_outside=True, title=None, title_flag=True,
                  axislabels=(None, None), axislabels_flag=True,
-                 colorbar_flag=True, colorbar_label=None, colorbar_orient=None,
-                 edges=True, filter_transitions=True, ax=None, fig=None):
+                 colorbar_flag=True, colorbar_label=None,
+                 colorbar_orient='vertical', edges=True,
+                 filter_transitions=True, ax=None, fig=None):
         """
         Plot a PPI.
 
@@ -313,10 +310,8 @@ class RadarDisplay(object):
             the colorbar.
         colorbar_label : str
             Colorbar label, None will use a default label generated from the
-            field information.
-        colorbar_orient : str
-            Colorbar orientation, None will use default orientation of
-            vertical.
+        colorbar_orient : 'vertical' or 'horizontal'
+            Colorbar orientation.
         edges : bool
             True will interpolate and extrapolate the gate edges from the
             range, azimuth and elevations in the radar, treating these
@@ -336,8 +331,8 @@ class RadarDisplay(object):
 
         """
         # parse parameters
-        ax, fig = parse_ax_fig(ax, fig)
-        vmin, vmax = parse_vmin_vmax(self._radar, field, vmin, vmax)
+        ax, fig = common.parse_ax_fig(ax, fig)
+        vmin, vmax = common.parse_vmin_vmax(self._radar, field, vmin, vmax)
 
         # get data for the plot
         data = self._get_data(field, sweep, mask_tuple, filter_transitions)
@@ -370,8 +365,8 @@ class RadarDisplay(object):
                  cmap='jet', mask_outside=True, title=None, title_flag=True,
                  axislabels=(None, None), axislabels_flag=True,
                  reverse_xaxis=None, colorbar_flag=True, colorbar_label=None,
-                 colorbar_orient=None, edges=True, filter_transitions=True,
-                 ax=None, fig=None):
+                 colorbar_orient='vertical', edges=True,
+                 filter_transitions=True, ax=None, fig=None):
         """
         Plot a RHI.
 
@@ -416,9 +411,8 @@ class RadarDisplay(object):
         colorbar_label : str
             Colorbar label, None will use a default label generated from the
             field information.
-        colorbar_orient : str
-            Colorbar orientation, None will use default orientation of
-            vertical.
+        colorbar_orient : 'vertical' or 'horizontal'
+            Colorbar orientation.
         edges : bool
             True will interpolate and extrapolate the gate edges from the
             range, azimuth and elevations in the radar, treating these
@@ -438,8 +432,8 @@ class RadarDisplay(object):
 
         """
         # parse parameters
-        ax, fig = parse_ax_fig(ax, fig)
-        vmin, vmax = parse_vmin_vmax(self._radar, field, vmin, vmax)
+        ax, fig = common.parse_ax_fig(ax, fig)
+        vmin, vmax = common.parse_vmin_vmax(self._radar, field, vmin, vmax)
 
         # get data for the plot
         data = self._get_data(field, sweep, mask_tuple, filter_transitions)
@@ -477,8 +471,9 @@ class RadarDisplay(object):
     def plot_vpt(self, field, mask_tuple=None, vmin=None, vmax=None,
                  cmap='jet', mask_outside=True, title=None, title_flag=True,
                  axislabels=(None, None), axislabels_flag=True,
-                 colorbar_flag=True, colorbar_label=None, colorbar_orient=None,
-                 edges=True, filter_transitions=True, ax=None, fig=None):
+                 colorbar_flag=True, colorbar_label=None,
+                 colorbar_orient='vertical', edges=True,
+                 filter_transitions=True, ax=None, fig=None):
         """
         Plot a VPT scan.
 
@@ -520,9 +515,8 @@ class RadarDisplay(object):
         colorbar_label : str
             Colorbar label, None will use a default label generated from the
             field information.
-        colorbar_orient : str
-            Colorbar orientation, None will use default orientation of
-            vertical.
+        colorbar_orient : 'vertical' or 'horizontal'
+            Colorbar orientation.
         edges : bool
             True will interpolate and extrapolate the gate edges from the
             range, azimuth and elevations in the radar, treating these
@@ -542,8 +536,8 @@ class RadarDisplay(object):
 
         """
         # parse parameters
-        ax, fig = parse_ax_fig(ax, fig)
-        vmin, vmax = parse_vmin_vmax(self._radar, field, vmin, vmax)
+        ax, fig = common.parse_ax_fig(ax, fig)
+        vmin, vmax = common.parse_vmin_vmax(self._radar, field, vmin, vmax)
 
         # get data for the plot
         data = self._get_vpt_data(field, mask_tuple, filter_transitions)
@@ -605,7 +599,7 @@ class RadarDisplay(object):
                                  ls=ls, lw=lw)
 
     def plot_range_ring(self, range_ring_location_km, npts=100, ax=None,
-                        col=None, ls=None, lw=None):
+                        col='k', ls='-', lw=2):
         """
         Plot a single range ring.
 
@@ -623,20 +617,14 @@ class RadarDisplay(object):
             Linestyle to use for range rings.
 
         """
-        ax = parse_ax(ax)
+        ax = common.parse_ax(ax)
         theta = np.linspace(0, 2 * np.pi, npts)
         r = np.ones([npts], dtype=np.float32) * range_ring_location_km
         x = r * np.sin(theta)
         y = r * np.cos(theta)
-        if lw is None:
-            lw = 2
-        if ls is None:
-            ls = '-'
-        if col is None:
-            col = 'k'
         ax.plot(x, y, c=col, ls=ls, lw=lw)
 
-    def plot_grid_lines(self, ax=None, col=None, ls=None, lw=None):
+    def plot_grid_lines(self, ax=None, col='k', ls=':', lw=2):
         """
         Plot grid lines.
 
@@ -650,13 +638,7 @@ class RadarDisplay(object):
             Linestyle to use for grid lines.
 
         """
-        ax = parse_ax(ax)
-        if lw is None:
-            lw = 2
-        if ls is None:
-            ls = ':'
-        if col is None:
-            col = 'k'
+        ax = common.parse_ax(ax)
         ax.grid(c=col, ls=ls)
 
     def plot_labels(self, labels, locations, symbols='r+', text_color='k',
@@ -681,7 +663,7 @@ class RadarDisplay(object):
             Axis to plot on.  None will use the current axis.
 
         """
-        ax = parse_ax(ax)
+        ax = common.parse_ax(ax)
 
         if type(symbols) is str:
             symbols = [symbols] * len(labels)
@@ -714,8 +696,8 @@ class RadarDisplay(object):
             Axis to plot on.  None will use the current axis.
 
         """
-        ax = parse_ax(ax)
-        loc_x, loc_y = corner_to_point(self.loc, location)
+        ax = common.parse_ax(ax)
+        loc_x, loc_y = common.corner_to_point(self.loc, location)
         loc_x /= 1000.0
         loc_y /= 1000.0
         ax.plot([loc_x], [loc_y], symbol)
@@ -735,14 +717,14 @@ class RadarDisplay(object):
             Axis to plot on.  None will use the current axis.
 
         """
-        ax = parse_ax(ax)
+        ax = common.parse_ax(ax)
         x = np.zeros(npts, dtype=np.float32)
         y = np.linspace(-size, size, npts)
         ax.plot(x, y, 'k-')  # verticle
         ax.plot(y, x, 'k-')  # horizontal
 
-    def plot_colorbar(self, mappable=None, field=None, label=None, orient=None,
-                      cax=None, ax=None, fig=None):
+    def plot_colorbar(self, mappable=None, field=None, label=None,
+                      orient='vertical', cax=None, ax=None, fig=None):
         """
         Plot a colorbar.
 
@@ -775,17 +757,6 @@ class RadarDisplay(object):
                 field = self.plot_vars[-1]
             label = self._get_colorbar_label(field)
 
-        if orient is None:
-            orient = 'vertical'
-
-        # Find the axes locations to set colorbar
-        if cax is None:
-            ax = parse_ax(ax)
-            box = make_axes_locatable(ax)
-            if orient == 'vertical':
-                cax = box.append_axes("right", size="3%", pad=0.05)
-            if orient == 'horizontal':
-                cax = box.append_axes("bottom", size="6%", pad=0.50)
         cb = fig.colorbar(mappable, orientation=orient, ax=ax, cax=cax)
         cb.set_label(label)
         self.cbs.append(cb)
@@ -808,45 +779,42 @@ class RadarDisplay(object):
             Axis to adjust.  None will adjust the current axis.
 
         """
-        set_limits(xlim, ylim, ax)
+        common.set_limits(xlim, ylim, ax)
 
     def label_xaxis_x(self, ax=None):
         """ Label the xaxis with the default label for x units. """
-        ax = parse_ax(ax)
+        ax = common.parse_ax(ax)
         ax.set_xlabel('East West distance from ' + self.origin + ' (km)')
 
     def label_yaxis_y(self, ax=None):
         """ Label the yaxis with the default label for y units. """
-        ax = parse_ax(ax)
+        ax = common.parse_ax(ax)
         ax.set_ylabel('North South distance from ' + self.origin + ' (km)')
 
     def label_xaxis_r(self, ax=None):
         """ Label the xaxis with the default label for r units. """
-        ax = parse_ax(ax)
+        ax = common.parse_ax(ax)
         ax.set_xlabel('Distance from ' + self.origin + ' (km)')
 
     def label_yaxis_z(self, ax=None):
         """ Label the yaxis with the default label for z units. """
-        ax = parse_ax(ax)
+        ax = common.parse_ax(ax)
         ax.set_ylabel('Distance Above ' + self.origin + '  (km)')
 
     def label_xaxis_rays(self, ax=None):
         """ Label the yaxis with the default label for rays. """
-        ax = parse_ax(ax)
+        ax = common.parse_ax(ax)
         ax.set_xlabel('Ray number (unitless)')
 
     def label_yaxis_field(self, field, ax=None):
         """ Label the yaxis with the default label for a field units. """
-        ax = parse_ax(ax)
+        ax = common.parse_ax(ax)
         ax.set_ylabel(self._get_colorbar_label(field))
 
-    def set_aspect_ratio(self, aratio=None, ax=None):
+    def set_aspect_ratio(self, aspect_ratio=0.75, ax=None):
         """ Set the aspect ratio for plot area. """
-        ax = parse_ax(ax)
-        if aratio is None:
-            ax.set_aspect(0.75)
-        else:
-            ax.set_aspect(aratio)
+        ax = common.parse_ax(ax)
+        ax.set_aspect(aspect_ratio)
 
     def _set_title(self, field, sweep, title, ax):
         """ Set the figure title using a default title. """
@@ -868,18 +836,6 @@ class RadarDisplay(object):
             ax.set_title(self.generate_ray_title(field, ray))
         else:
             ax.set_title(title)
-
-    def _label_axes_ppi(self, axis_labels, ax):
-        """ Set the x and y axis labels for a PPI plot. """
-        x_label, y_label = axis_labels
-        if x_label is None:
-            self.label_xaxis_x(ax)
-        else:
-            ax.set_xlabel(x_label)
-        if y_label is None:
-            self.label_yaxis_y(ax)
-        else:
-            ax.set_ylabel(y_label)
 
     def _label_axes_ppi(self, axis_labels, ax):
         """ Set the x and y axis labels for a PPI plot. """
@@ -955,7 +911,7 @@ class RadarDisplay(object):
             Filename suitable for saving a plot.
 
         """
-        return generate_filename(self._radar, field, sweep)
+        return common.generate_filename(self._radar, field, sweep)
 
     def generate_title(self, field, sweep):
         """
@@ -974,7 +930,7 @@ class RadarDisplay(object):
             Plot title.
 
         """
-        return generate_title(self._radar, field, sweep)
+        return common.generate_title(self._radar, field, sweep)
 
     def generate_vpt_title(self, field):
         """
@@ -991,7 +947,7 @@ class RadarDisplay(object):
             Plot title.
 
         """
-        return generate_vpt_title(self._radar, field)
+        return common.generate_vpt_title(self._radar, field)
 
     def generate_ray_title(self, field, ray):
         """
@@ -1010,7 +966,7 @@ class RadarDisplay(object):
             Plot title.
 
         """
-        return generate_ray_title(self._radar, field, ray)
+        return common.generate_ray_title(self._radar, field, ray)
 
     ###############
     # Get methods #
@@ -1092,7 +1048,7 @@ class RadarDisplay(object):
             azimuths = azimuths[in_trans == 0]
             elevations = elevations[in_trans == 0]
 
-        x, y, z = sweep_coords_to_cart(
+        x, y, z = common.sweep_coords_to_cart(
             self.ranges, azimuths, elevations, edges=edges)
         x = (x + self.shift[0]) / 1000.0
         y = (y + self.shift[1]) / 1000.0
@@ -1114,4 +1070,4 @@ class RadarDisplay(object):
             units = last_field_dict['units']
         else:
             units = '?'
-        return generate_colorbar_label(standard_name, units)
+        return common.generate_colorbar_label(standard_name, units)
