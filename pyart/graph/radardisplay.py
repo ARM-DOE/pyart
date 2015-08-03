@@ -310,6 +310,7 @@ class RadarDisplay(object):
             the colorbar.
         colorbar_label : str
             Colorbar label, None will use a default label generated from the
+            field information.
         colorbar_orient : 'vertical' or 'horizontal'
             Colorbar orientation.
         edges : bool
