@@ -18,6 +18,7 @@ reported but fixing them will not be a priority.
     :toctree: generated/
 
     read_gamic
+    read_kazr
     read_pattern
     read_radx
 
