@@ -18,19 +18,20 @@ reported but fixing them will not be a priority.
     :toctree: generated/
 
     read_d3r_gcpex_nc
-    read_noxp_iphex_nc
     read_gamic
     read_kazr
+    read_noxp_iphex_nc
+    read_odim_h5
     read_pattern
     read_radx
 
 """
 
-from pattern import read_pattern
-from radx import read_radx
+from .pattern import read_pattern
+from .radx import read_radx
 from .d3r_gcpex_nc import read_d3r_gcpex_nc
 from .noxp_iphex_nc import read_noxp_iphex_nc
-from arm_vpt import read_kazr
+from .arm_vpt import read_kazr
 try:
     from .gamic_hdf5 import read_gamic
     from .odim_h5 import read_odim_h5
