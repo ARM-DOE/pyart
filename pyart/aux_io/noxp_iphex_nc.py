@@ -1,6 +1,6 @@
 """
 pyart.aux_io.noxp_iphex_nc
-=========================
+==========================
 
 Routines for reading IPHEx NOXP files.
 
