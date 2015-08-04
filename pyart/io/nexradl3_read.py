@@ -15,12 +15,12 @@ import numpy as np
 
 from ..config import FileMetadata, get_fillvalue
 from ..core.radar import Radar
-from .common import make_time_unit_str
+from .common import make_time_unit_str, _test_arguments
 from .nexrad_level3 import NEXRADLevel3File
 
 
 def read_nexrad_level3(filename, field_names=None, additional_metadata=None,
-                       file_field_names=False, exclude_fields=None):
+                       file_field_names=False, exclude_fields=None, **kwargs):
     """
     Read a NEXRAD Level 3 product.
 
@@ -31,6 +31,8 @@ def read_nexrad_level3(filename, field_names=None, additional_metadata=None,
         at the NOAA National Climate Data Center [1]_ as well as on the
         NWS WSR-88D Level III Data Collection and Distribution Network
         have been tests. Other NEXRAD Level 3 files may or may not work.
+        A file-like object pointing to the beginning of such a file is also
+        supported.
     field_names : dict, optional
         Dictionary mapping NEXRAD level 3 product number to radar field names.
         If the product number of the file does not appear in this dictionary
@@ -64,6 +66,9 @@ def read_nexrad_level3(filename, field_names=None, additional_metadata=None,
     .. [2] http://www.roc.noaa.gov/wsr88d/Level_III/Level3Info.asp
 
     """
+    # test for non empty kwargs
+    _test_arguments(kwargs)
+
     # create metadata retrieval object
     filemetadata = FileMetadata('nexrad_level3', field_names,
                                 additional_metadata, file_field_names,

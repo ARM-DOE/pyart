@@ -30,6 +30,7 @@ DATA_PATH = os.path.join(os.path.dirname(__file__), 'data')
 
 MDV_PPI_FILE = os.path.join(DATA_PATH, 'example_mdv_ppi.mdv')
 MDV_RHI_FILE = os.path.join(DATA_PATH, 'example_mdv_rhi.mdv')
+MDV_GRID_FILE = os.path.join(DATA_PATH, 'example_mdv_grid.mdv')
 CFRADIAL_PPI_FILE = os.path.join(DATA_PATH, 'example_cfradial_ppi.nc')
 CFRADIAL_RHI_FILE = os.path.join(DATA_PATH, 'example_cfradial_rhi.nc')
 CHL_RHI_FILE = os.path.join(DATA_PATH, 'example_chl_rhi.chl')

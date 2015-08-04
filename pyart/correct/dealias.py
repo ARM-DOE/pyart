@@ -287,8 +287,8 @@ def find_time_in_interp_sonde(interp_sonde, target, debug=False):
     idx = np.abs(sonde_datetimes - target).argmin()
 
     if debug:
-        print 'Target time is %s' % (target)
-        print 'Interpolated sounding time is %s' % (sonde_datetimes[idx])
+        print('Target time is %s' % (target))
+        print('Interpolated sounding time is %s' % (sonde_datetimes[idx]))
 
     return (interp_sonde.variables['height'][:],
             interp_sonde.variables['wspd'][idx, :],

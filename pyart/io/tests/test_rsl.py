@@ -2,6 +2,7 @@
 
 import numpy as np
 from numpy.ma.core import MaskedArray
+from numpy.testing import assert_almost_equal
 from numpy.testing.decorators import skipif
 
 import pyart
@@ -26,7 +27,7 @@ def test_time():
     assert 'data' in radar.time.keys()
     assert radar.time['units'] == 'seconds since 2011-05-20T10:54:08Z'
     assert radar.time['data'].shape == (20, )
-    assert round(radar.time['data'][1]) == 1.
+    assert_almost_equal(radar.time['data'][1], 1, 0)
 
 
 # range attribute
@@ -40,7 +41,7 @@ def test_range():
     assert 'data' in radar.range
     assert 'spacing_is_constant' in radar.range
     assert radar.range['data'].shape == (25, )
-    assert round(radar.range['data'][1]) == 62.
+    assert_almost_equal(radar.range['data'][1], 62, 0)
 
 
 # fields attribute is tested later
@@ -66,7 +67,7 @@ def test_latitude():
     assert 'standard_name' in radar.latitude
     assert 'units' in radar.latitude
     assert radar.latitude['data'].shape == (1, )
-    assert round(radar.latitude['data']) == 36.
+    assert_almost_equal(radar.latitude['data'], 36, 0)
 
 
 # longitude attribute
@@ -76,7 +77,7 @@ def test_longitude():
     assert 'standard_name' in radar.longitude
     assert 'units' in radar.longitude
     assert radar.longitude['data'].shape == (1, )
-    assert round(radar.longitude['data']) == -98.0
+    assert_almost_equal(radar.longitude['data'], -98, 0)
 
 
 # altitude attribute
@@ -87,7 +88,7 @@ def test_altitude():
     assert 'units' in radar.altitude
     assert 'positive' in radar.altitude
     assert radar.altitude['data'].shape == (1, )
-    assert round(radar.altitude['data']) == 214.0
+    assert_almost_equal(radar.altitude['data'], 214, 0)
 
 
 # altitude_agl attribute
@@ -117,7 +118,7 @@ def test_fixed_angle():
     assert 'standard_name' in radar.fixed_angle
     assert 'units' in radar.fixed_angle
     assert radar.fixed_angle['data'].shape == (1, )
-    assert round(radar.fixed_angle['data'][0], 2) == 0.50
+    assert_almost_equal(radar.fixed_angle['data'][0], 0.50, 2)
 
 
 # sweep_start_ray_index attribute
@@ -125,7 +126,7 @@ def test_fixed_angle():
 def test_sweep_start_ray_index():
     assert 'long_name' in radar.sweep_start_ray_index
     assert radar.sweep_start_ray_index['data'].shape == (1, )
-    assert round(radar.sweep_start_ray_index['data'][0]) == 0.0
+    assert_almost_equal(radar.sweep_start_ray_index['data'][0], 0, 0)
 
 
 # sweep_end_ray_index attribute
@@ -133,7 +134,7 @@ def test_sweep_start_ray_index():
 def test_sweep_end_ray_index():
     assert 'long_name' in radar.sweep_end_ray_index
     assert radar.sweep_end_ray_index['data'].shape == (1, )
-    assert round(radar.sweep_end_ray_index['data'][0]) == 19.0
+    assert_almost_equal(radar.sweep_end_ray_index['data'][0], 19.0, 0)
 
 
 # target_scan_rate attribute
@@ -149,8 +150,8 @@ def test_azimuth():
     assert 'long_name' in radar.azimuth
     assert 'units' in radar.azimuth
     assert 'axis' in radar.azimuth
-    assert round(radar.azimuth['data'][0]) == 0.0
-    assert round(radar.azimuth['data'][10]) == 180.0
+    assert_almost_equal(radar.azimuth['data'][0], 0, 0)
+    assert_almost_equal(radar.azimuth['data'][10], 180, 0)
 
 
 # elevation attribute
@@ -161,7 +162,7 @@ def test_elevation():
     assert 'units' in radar.elevation
     assert 'axis' in radar.elevation
     assert radar.elevation['data'].shape == (20, )
-    assert round(radar.elevation['data'][0], 2) == 0.50
+    assert_almost_equal(radar.elevation['data'][0], 0.50, 2)
 
 
 # scan_rate attribute
@@ -273,7 +274,7 @@ def check_field_shape(field):
 @skipif(not pyart.io._RSL_AVAILABLE)
 def test_field_types():
     fields = {'reflectivity': MaskedArray, }
-    for field, field_type in fields.iteritems():
+    for field, field_type in fields.items():
         description = "field : %s, type" % field
         check_field_type.description = description
         yield check_field_type, field, field_type
@@ -288,14 +289,14 @@ def test_field_first_points():
     # these values can be found using:
     # [round(radar.fields[f]['data'][0,0]) for f in radar.fields]
     fields = {'reflectivity': 0.0}
-    for field, field_value in fields.iteritems():
+    for field, field_value in fields.items():
         description = "field : %s, first point" % field
         check_field_first_point.description = description
         yield check_field_first_point, field, field_value
 
 
 def check_field_first_point(field, value):
-    assert round(radar.fields[field]['data'][0, 0]) == value
+    assert_almost_equal(radar.fields[field]['data'][0, 0], value, 0)
 
 
 #############
@@ -303,7 +304,8 @@ def check_field_first_point(field, value):
 #############
 
 if pyart.io._RSL_AVAILABLE:
-    RADAR_RHI = pyart.io.read_rsl(pyart.testing.SIGMET_RHI_FILE)
+    RADAR_RHI = pyart.io.read_rsl(pyart.testing.SIGMET_RHI_FILE,
+                                  delay_field_loading=True)
 
 
 # nsweeps attribute
@@ -333,7 +335,7 @@ def test_rhi_fixed_angle():
     assert 'standard_name' in RADAR_RHI.fixed_angle
     assert 'units' in RADAR_RHI.fixed_angle
     assert RADAR_RHI.fixed_angle['data'].shape == (1, )
-    assert round(RADAR_RHI.fixed_angle['data'][0], 2) == 37.30
+    assert_almost_equal(RADAR_RHI.fixed_angle['data'][0], 37.30, 2)
 
 
 # sweep_start_ray_index attribute
@@ -341,7 +343,7 @@ def test_rhi_fixed_angle():
 def test_rhi_sweep_start_ray_index():
     assert 'long_name' in RADAR_RHI.sweep_start_ray_index
     assert RADAR_RHI.sweep_start_ray_index['data'].shape == (1, )
-    assert round(RADAR_RHI.sweep_start_ray_index['data'][0]) == 0.0
+    assert_almost_equal(RADAR_RHI.sweep_start_ray_index['data'][0], 0, 0)
 
 
 # sweep_end_ray_index attribute
@@ -349,7 +351,7 @@ def test_rhi_sweep_start_ray_index():
 def test_rhi_sweep_end_ray_index():
     assert 'long_name' in RADAR_RHI.sweep_end_ray_index
     assert RADAR_RHI.sweep_end_ray_index['data'].shape == (1, )
-    assert round(RADAR_RHI.sweep_end_ray_index['data'][0]) == 19.0
+    assert_almost_equal(RADAR_RHI.sweep_end_ray_index['data'][0], 19, 0)
 
 
 # azimuth attribute
@@ -359,8 +361,8 @@ def test_rhi_azimuth():
     assert 'long_name' in RADAR_RHI.azimuth
     assert 'units' in RADAR_RHI.azimuth
     assert 'axis' in RADAR_RHI.azimuth
-    assert round(RADAR_RHI.azimuth['data'][0]) == 37.0
-    assert round(RADAR_RHI.azimuth['data'][10]) == 37.0
+    assert_almost_equal(RADAR_RHI.azimuth['data'][0], 37, 0)
+    assert_almost_equal(RADAR_RHI.azimuth['data'][10], 37, 0)
 
 
 # elevation attribute
@@ -371,4 +373,4 @@ def test_rhi_elevation():
     assert 'units' in RADAR_RHI.elevation
     assert 'axis' in RADAR_RHI.elevation
     assert RADAR_RHI.elevation['data'].shape == (20, )
-    assert round(RADAR_RHI.elevation['data'][1], 2) == 9.00
+    assert_almost_equal(RADAR_RHI.elevation['data'][1], 9, 2)

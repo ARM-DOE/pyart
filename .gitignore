@@ -102,6 +102,7 @@ pyart/retrieve/_echo_steinermodule.c
 # full sized sample data files
 pyart/testing/data/110041.mdv
 pyart/testing/data/110635.mdv
+pyart/testing/data/000000.mdv
 pyart/testing/data/XSW110520105408.RAW7HHF
 pyart/testing/data/XSW110520113537.RAW7HHL
 pyart/testing/data/KATX20130717_195021_V06

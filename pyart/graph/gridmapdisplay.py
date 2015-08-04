@@ -12,6 +12,8 @@ A class for plotting grid objects with a basemap.
 
 """
 
+from __future__ import print_function
+
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.basemap import Basemap
@@ -64,7 +66,7 @@ class GridMapDisplay():
                                 lat_0=lat0, lon_0=lon0,
                                 x_0=0.0, y_0=0.0)
 
-       # determine grid latitudes and longitudes.
+        # determine grid latitudes and longitudes.
         x_1d = grid.axes['x_disp']['data']
         y_1d = grid.axes['y_disp']['data']
         x_2d, y_2d = np.meshgrid(x_1d, y_1d)
@@ -120,10 +122,10 @@ class GridMapDisplay():
             min_lon = self.grid_lons.min()
 
         if self.debug:
-            print "Maximum latitude: ", max_lat
-            print "Maximum longitude: ", max_lon
-            print "Minimum latitude: ", min_lat
-            print "Minimum longitute: ", min_lon
+            print("Maximum latitude: ", max_lat)
+            print("Maximum longitude: ", max_lon)
+            print("Minimum latitude: ", min_lat)
+            print("Minimum longitute: ", min_lon)
 
         # plot the basemap
         basemap = Basemap(llcrnrlon=min_lon, llcrnrlat=min_lat,
@@ -145,7 +147,7 @@ class GridMapDisplay():
         field : str
             Field to be plotted.
         level : int
-            Index of the z level to be plotted.
+            Index corresponding to the height level to be plotted.
         vmin, vmax : float
             Lower and upper range for the colormesh.  If either parameter is
             None, a value will be determined from the field attributes (if
@@ -334,15 +336,15 @@ class GridMapDisplay():
         x_cut, y_cut = self.proj(lon, lat)
 
         if self.debug:
-            print "x_cut: ", x_cut,
-            print "y_cut: ", y_cut
+            print("x_cut: ", x_cut)
+            print("y_cut: ", y_cut)
 
         x_index = np.abs(self.grid.axes['x_disp']['data'] - x_cut).argmin()
         y_index = np.abs(self.grid.axes['y_disp']['data'] - y_cut).argmin()
 
         if self.debug:
-            print "x_index", x_index
-            print "y_index", y_index
+            print("x_index", x_index)
+            print("y_index", y_index)
 
         return x_index, y_index
 
