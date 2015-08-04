@@ -23,7 +23,6 @@ Common graphing routines.
     generate_title
     generate_vpt_title
     generate_ray_title
-    generate_colorbar_label
     set_limits
     _interpolate_range_edges
     _interpolate_elevation_edges
@@ -348,11 +347,6 @@ def generate_ray_title(radar, field, ray):
     l2 = "Ray: %i  Elevation: %.1f Azimuth: %.1f" % (ray, azim, elev)
     field_name = generate_field_name(radar, field)
     return l1 + '\n' + l2 + '\n' + field_name
-
-
-def generate_colorbar_label(standard_name, units):
-    """ Generate and return a label for a colorbar. """
-    return standard_name.replace('_', ' ') + ' (' + units + ')'
 
 
 def set_limits(xlim=None, ylim=None, ax=None):

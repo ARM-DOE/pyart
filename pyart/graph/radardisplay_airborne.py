@@ -12,15 +12,12 @@ Class for creating plots from Airborne Radar objects.
 
 """
 
-import matplotlib.pyplot as plt
 import numpy as np
 import netCDF4
-from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 from .radardisplay import RadarDisplay
 from . import common
 from .coord_transform import radar_coords_to_cart_track_relative
-from .coord_transform import radar_coords_to_cart_earth_relative
 
 
 class RadarDisplay_Airborne(RadarDisplay):
