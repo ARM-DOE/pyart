@@ -66,7 +66,7 @@ class GridMapDisplay():
                                 lat_0=lat0, lon_0=lon0,
                                 x_0=0.0, y_0=0.0)
 
-       # determine grid latitudes and longitudes.
+        # determine grid latitudes and longitudes.
         x_1d = grid.axes['x_disp']['data']
         y_1d = grid.axes['y_disp']['data']
         x_2d, y_2d = np.meshgrid(x_1d, y_1d)
