@@ -7,12 +7,16 @@ from numpy import get_include
 def guess_rsl_path():
     return {'darwin': '/usr/local/trmm',
             'linux2': '/usr/local/trmm',
+            'linux': '/usr/local/trmm',
             'win32': 'XXX'}[sys.platform]
 
 
 def check_rsl_path(rsl_lib_path, rsl_include_path):
 
-    ext = {'darwin': 'dylib', 'linux2': 'so', 'win32': 'DLL'}[sys.platform]
+    ext = {'darwin': 'dylib',
+           'linux2': 'so',
+           'linux': 'so',
+           'win32': 'DLL'}[sys.platform]
     lib_file = os.path.join(rsl_lib_path, 'librsl.' + ext)
     if os.path.isfile(lib_file) is False:
         return False
@@ -56,6 +60,10 @@ def configuration(parent_package='', top_path=None):
                          include_dirs=[get_include()])
     unwrap_sources_3d = ['_unwrap_3d.c', 'unwrap_3d_ljmu.c']
     config.add_extension('_unwrap_3d', sources=unwrap_sources_3d,
+                         include_dirs=[get_include()])
+
+    # _fast_edge_finder extension
+    config.add_extension('_fast_edge_finder', sources=['_fast_edge_finder.c'],
                          include_dirs=[get_include()])
     return config
 

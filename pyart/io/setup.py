@@ -27,12 +27,16 @@ rebuild and reinstall Py-ART after verifying:
 def guess_rsl_path():
     return {'darwin': '/usr/local/trmm',
             'linux2': '/usr/local/trmm',
+            'linux': '/usr/local/trmm',
             'win32': 'XXX'}[sys.platform]
 
 
 def check_rsl_path(rsl_lib_path, rsl_include_path):
     """ check if the rsl path is valid, return False if invalid. """
-    ext = {'darwin': 'dylib', 'linux2': 'so', 'win32': 'DLL'}[sys.platform]
+    ext = {'darwin': 'dylib',
+           'linux2': 'so',
+           'linux': 'so',
+           'win32': 'DLL'}[sys.platform]
     lib_file = os.path.join(rsl_lib_path, 'librsl.' + ext)
     if os.path.isfile(lib_file) is False:
         return False

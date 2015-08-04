@@ -6,6 +6,7 @@ import os
 
 import numpy as np
 from numpy.testing import assert_array_equal, assert_raises
+from numpy.testing import assert_almost_equal
 
 import pyart
 import pyart.io.nexrad_level2 as nexrad_level2
@@ -35,9 +36,9 @@ def test_scan_msgs():
 
 def test_volume_header():
     assert nfile.volume_header['date'] == 15904
-    assert nfile.volume_header['extension'] == '501'
-    assert nfile.volume_header['icao'] == 'KATX'
-    assert nfile.volume_header['tape'] == 'AR2V0006.'
+    assert nfile.volume_header['extension'] == b'501'
+    assert nfile.volume_header['icao'] == b'KATX'
+    assert nfile.volume_header['tape'] == b'AR2V0006.'
     assert nfile.volume_header['time'] == 71424000
 
 
@@ -87,7 +88,7 @@ def test_get_data_phi():
 def test_get_data_rho():
     data = nfile.get_data('RHO', 1192, [0, 2])
     assert data.shape == (1440, 1192)
-    assert round(data[0, 0], 3) == 0.208
+    assert_almost_equal(data[0, 0], 0.208, 3)
 
 
 def test_get_data_ref_raw():
@@ -227,9 +228,9 @@ def test_compressed_attributes():
     assert len(cfile.scan_msgs) == 1
     assert len(cfile.scan_msgs[0]) == 120
     assert cfile.volume_header['date'] == 15904
-    assert cfile.volume_header['extension'] == '501'
-    assert cfile.volume_header['icao'] == 'KATX'
-    assert cfile.volume_header['tape'] == 'AR2V0006.'
+    assert cfile.volume_header['extension'] == b'501'
+    assert cfile.volume_header['icao'] == b'KATX'
+    assert cfile.volume_header['tape'] == b'AR2V0006.'
     assert cfile.volume_header['time'] == 71424000
 
 
@@ -252,7 +253,7 @@ def test_compressed_get_data():
 
     data = cfile.get_data('RHO', 1192, [0])
     assert data.shape == (120, 1192)
-    assert round(data[0, 0], 3) == 0.688
+    assert_almost_equal(data[0, 0], 0.688, 3)
 
     data = cfile.get_data('ZDR', 1192, [0])
     assert data.shape == (120, 1192)
@@ -325,7 +326,7 @@ def test_bad_compression_header():
     f.close()
 
     # corrupt the compression header and write to disk
-    head = head[:28] + 'XX' + head[30:]
+    head = head[:28] + b'XX' + head[30:]
     tmpfile = tempfile.mkstemp(dir='.')[1]
     corrupt_file = open(tmpfile, 'wb')
     corrupt_file.write(head)

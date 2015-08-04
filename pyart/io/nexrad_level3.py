@@ -23,6 +23,8 @@ Class for reading data from NEXRAD Level 3 files.
 
 """
 
+from __future__ import division
+
 # This file is part of the Py-ART, the Python ARM Radar Toolkit
 # https://github.com/ARM-DOE/pyart
 
@@ -111,9 +113,15 @@ class NEXRADLevel3File(object):
     def __init__(self, filename):
         """ initalize the object. """
         # read the entire file into memory
-        fhandle = open(filename, 'rb')
+        try:
+            fhandle = open(filename, 'rb')
+            close = True
+        except:
+            fhandle = filename
+            close = False
         buf = fhandle.read()    # string buffer containing file data
-        fhandle.close()
+        if close:
+            fhandle.close()
 
         # Text header
         # Format of Text header is SDUSXX KYYYY DDHHMM\r\r\nAAABBB\r\r\n
@@ -133,7 +141,7 @@ class NEXRADLevel3File(object):
         bpos += 102
 
         # uncompressed symbology block if necessary
-        if buf[bpos:bpos+2] == 'BZ':
+        if buf[bpos:bpos+2] == b'BZ':
             buf2 = bz2.decompress(buf[bpos:])
         else:
             buf2 = buf[bpos:]
@@ -170,7 +178,7 @@ class NEXRADLevel3File(object):
                 rle_size = radial_header['nbytes'] * 2
                 rle = np.fromstring(buf2[pos:pos+rle_size], dtype='>u1')
                 colors = np.bitwise_and(rle, 0b00001111)
-                runs = np.bitwise_and(rle, 0b11110000) / 16
+                runs = np.bitwise_and(rle, 0b11110000) // 16
                 radial[:] = np.repeat(colors, runs)
                 pos += rle_size
             self.radial_headers.append(radial_header)
@@ -344,7 +352,7 @@ def _int16_to_float16(val):
     """ Convert a 16 bit interger into a 16 bit float. """
     # NEXRAD Level III float16 format defined on page 3-33.
     # Differs from IEEE 768-2008 format so np.float16 cannot be used.
-    sign = (val & 0b1000000000000000) / 0b1000000000000000
+    sign = (val & b0b1000000000000000) / 0b1000000000000000
     exponent = (val & 0b0111110000000000) / 0b0000010000000000
     fraction = (val & 0b0000001111111111)
     if exponent == 0:

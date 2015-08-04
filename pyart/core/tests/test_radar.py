@@ -1,7 +1,11 @@
 """ Unit Tests for Py-ART's core/radar.py module. """
 
 import sys
-from io import BytesIO
+# we need a class which excepts str for writing in Python 2 and 3
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
 import inspect
 
 import numpy as np
@@ -98,6 +102,15 @@ def test_get_methods():
     assert radar.get_elevation(0).shape == (20, )
     assert_raises(IndexError, radar.get_elevation, -1)
     assert_raises(IndexError, radar.get_elevation, 20)
+
+    assert_raises(LookupError, radar.get_nyquist_vel, 0)
+    radar.instrument_parameters = {
+        'nyquist_velocity': {'data': np.ones((100,))}
+    }
+    assert round(radar.get_nyquist_vel(0)) == 1
+    assert_raises(IndexError, radar.get_nyquist_vel, -1)
+    radar.instrument_parameters['nyquist_velocity']['data'][0] = 2
+    assert_raises(Exception, radar.get_nyquist_vel, 0)
 
 
 def test_extract_sweeps():
@@ -245,7 +258,7 @@ def test_info_nonstandard():
 
 
 def check_info(level, radar=None):
-    out = BytesIO()
+    out = StringIO()
     get_info(level, out, radar)
     # don't check the output, just that something was printed.
     assert len(out.getvalue()) != 0

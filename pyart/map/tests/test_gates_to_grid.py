@@ -1,4 +1,6 @@
-""" Unit Tests for Py-ART's map/grid_mapper.py module. """
+""" Unit Tests for Py-ART's map/gates_to_grid.py. """
+
+from __future__ import print_function
 
 import numpy as np
 from numpy.testing import assert_array_equal, assert_raises
@@ -11,20 +13,29 @@ COMMON_MAP_TO_GRID_ARGS = {
     'grid_shape': (3, 9, 10),
     'grid_limits': ((-400.0, 400.0), (-900.0, 900.0), (-900, 900)),
     'fields': None,
-    'roi_func': lambda x, y, z: 30, }
+    'roi_func': 'constant',
+    'constant_roi': 30., }
+
+
+def test_map_to_grid_non_tuple():
+    radar = pyart.testing.make_target_radar()
+    grids = pyart.map.map_gates_to_grid(radar,
+                                        **COMMON_MAP_TO_GRID_ARGS)
+    center_slice = grids['reflectivity'][1, 4, :]
+    assert_array_equal(np.round(center_slice), EXPECTED_CENTER_SLICE)
 
 
 def test_map_to_grid_default():
     radar = pyart.testing.make_target_radar()
-    grids = pyart.map.map_to_grid((radar,),
-                                  **COMMON_MAP_TO_GRID_ARGS)
+    grids = pyart.map.map_gates_to_grid((radar,),
+                                        **COMMON_MAP_TO_GRID_ARGS)
     center_slice = grids['reflectivity'][1, 4, :]
     assert_array_equal(np.round(center_slice), EXPECTED_CENTER_SLICE)
 
 
 def test_map_to_grid_cressman():
     radar = pyart.testing.make_target_radar()
-    grids = pyart.map.map_to_grid(
+    grids = pyart.map.map_gates_to_grid(
         (radar,), (3, 9, 10), ((-400.0, 400.0), (-900.0, 900.0), (-900, 900)),
         roi_func='constant', constant_roi=30., weighting_function='CRESSMAN')
     center_slice = grids['reflectivity'][1, 4, :]
@@ -33,7 +44,7 @@ def test_map_to_grid_cressman():
 
 def test_map_to_grid_constant_roi():
     radar = pyart.testing.make_target_radar()
-    grids = pyart.map.map_to_grid(
+    grids = pyart.map.map_gates_to_grid(
         (radar,), (3, 9, 10), ((-400.0, 400.0), (-900.0, 900.0), (-900, 900)),
         roi_func='constant', constant_roi=30.)
     center_slice = grids['reflectivity'][1, 4, :]
@@ -42,7 +53,7 @@ def test_map_to_grid_constant_roi():
 
 def test_map_to_grid_dist_roi():
     radar = pyart.testing.make_target_radar()
-    grids = pyart.map.map_to_grid(
+    grids = pyart.map.map_gates_to_grid(
         (radar,), (3, 9, 10), ((-400.0, 400.0), (-900.0, 900.0), (-900, 900)),
         roi_func='dist', z_factor=0, xy_factor=0, min_radius=30.)
     center_slice = grids['reflectivity'][1, 4, :]
@@ -51,7 +62,7 @@ def test_map_to_grid_dist_roi():
 
 def test_map_to_grid_dist_beam_roi():
     radar = pyart.testing.make_target_radar()
-    grids = pyart.map.map_to_grid(
+    grids = pyart.map.map_gates_to_grid(
         (radar,),
         grid_shape=(3, 9, 10),
         grid_limits=((-400.0, 400.0), (-900.0, 900.0), (-900, 900)),
@@ -63,8 +74,8 @@ def test_map_to_grid_dist_beam_roi():
 
 def test_map_to_grid_default_two_radars():
     radar = pyart.testing.make_target_radar()
-    grids = pyart.map.map_to_grid((radar, radar),
-                                  **COMMON_MAP_TO_GRID_ARGS)
+    grids = pyart.map.map_gates_to_grid((radar, radar),
+                                        **COMMON_MAP_TO_GRID_ARGS)
     center_slice = grids['reflectivity'][1, 4, :]
     assert_array_equal(np.round(center_slice), EXPECTED_CENTER_SLICE)
 
@@ -78,58 +89,60 @@ def test_map_to_grid_masked_refl_field():
     fdata.mask[0, -1] = True
     radar.fields['reflectivity']['data'] = fdata
 
-    grids = pyart.map.map_to_grid((radar,),
-                                  **COMMON_MAP_TO_GRID_ARGS)
-    center_slice = grids['reflectivity'][1, 4, :]
-    assert_array_equal(np.round(center_slice), EXPECTED_CENTER_SLICE)
-
-
-def test_map_to_grid_no_copy():
-    radar = pyart.testing.make_target_radar()
-    grids = pyart.map.map_to_grid((radar,), copy_field_data=False,
-                                  **COMMON_MAP_TO_GRID_ARGS)
-    center_slice = grids['reflectivity'][1, 4, :]
-    assert_array_equal(np.round(center_slice), EXPECTED_CENTER_SLICE)
-
-
-def test_map_to_grid_no_copy_two_radars():
-    radar = pyart.testing.make_target_radar()
-    grids = pyart.map.map_to_grid((radar, radar), copy_field_data=False,
-                                  **COMMON_MAP_TO_GRID_ARGS)
-    center_slice = grids['reflectivity'][1, 4, :]
-    assert_array_equal(np.round(center_slice), EXPECTED_CENTER_SLICE)
-
-
-def test_map_to_grid_balltree():
-    radar = pyart.testing.make_target_radar()
-    grids = pyart.map.map_to_grid((radar,), algorithm='ball_tree',
-                                  **COMMON_MAP_TO_GRID_ARGS)
+    grids = pyart.map.map_gates_to_grid((radar,),
+                                        **COMMON_MAP_TO_GRID_ARGS)
     center_slice = grids['reflectivity'][1, 4, :]
     assert_array_equal(np.round(center_slice), EXPECTED_CENTER_SLICE)
 
 
 def test_map_to_grid_tiny_grid():
     radar = pyart.testing.make_target_radar()
-    grids = pyart.map.map_to_grid(
+    grids = pyart.map.map_gates_to_grid(
         (radar,),
         grid_shape=(1, 1, 1),
         grid_limits=((-400.0, 400.0), (-900.0, 900.0), (-900, 900)),
         fields=['reflectivity'])
     assert grids['reflectivity'].shape == (1, 1, 1)
-    assert int(grids['reflectivity'][0]) == 40
+    assert abs(np.round(grids['reflectivity'][0]) - 40.0) < 0.01
+
+
+def test_grid_from_radars_gates_to_grid():
+    radar = pyart.testing.make_target_radar()
+    grid = pyart.map.grid_from_radars(
+        (radar,), gridding_algo='map_gates_to_grid', **COMMON_MAP_TO_GRID_ARGS)
+
+    # check field data
+    center_slice = grid.fields['reflectivity']['data'][1, 4, :]
+    assert_array_equal(np.round(center_slice), EXPECTED_CENTER_SLICE)
+
+    # check other Grid object attributes
+    assert 'ROI' in grid.fields
+    assert np.all(grid.fields['ROI']['data'] == 30.)
+    assert_array_equal(grid.axes['x_disp']['data'],
+                       np.linspace(-900, 900, 10))
+    assert_array_equal(grid.axes['y_disp']['data'],
+                       np.linspace(-900, 900, 9).astype('float64'))
+    assert_array_equal(grid.axes['z_disp']['data'],
+                       np.linspace(-400, 400, 3).astype('float64'))
 
 
 def test_map_to_grid_errors():
-    assert_raises(ValueError, pyart.map.map_to_grid, (None, ), (1, 1, 1),
-                  ((-1, 1), (-1, 1), (-1, 1)),
-                  weighting_function='foo')
-    assert_raises(ValueError, pyart.map.map_to_grid, (None, ), (1, 1, 1),
-                  ((-1, 1), (-1, 1), (-1, 1)),
-                  algorithm='foo')
     radar = pyart.testing.make_target_radar()
-    assert_raises(ValueError, pyart.map.map_to_grid, (radar, ), (1, 1, 1),
-                  ((-1, 1), (-1, 1), (-1, 1)),
+
+    # invalid weighting_function
+    assert_raises(ValueError, pyart.map.map_gates_to_grid, (radar, ),
+                  (1, 1, 1), ((-1, 1), (-1, 1), (-1, 1)),
+                  weighting_function='foo')
+
+    # invalid roi_func
+    assert_raises(ValueError, pyart.map.map_gates_to_grid, (radar, ),
+                  (1, 1, 1), ((-1, 1), (-1, 1), (-1, 1)),
                   roi_func='foo')
+
+    # missing reflectivity field
+    radar.fields.pop('reflectivity')
+    assert_raises(ValueError, pyart.map.map_gates_to_grid, (radar, ),
+                  (1, 1, 1), ((-1, 1), (-1, 1), (-1, 1)))
 
 
 def test_grid_from_radars():
@@ -156,8 +169,8 @@ def test_grid_from_radars_grid_origin():
     radar.metadata.pop('instrument_name')
     grid = pyart.map.grid_from_radars((radar,), grid_origin=(36.4, -97.6),
                                       **COMMON_MAP_TO_GRID_ARGS)
-    print round(grid.axes['lat']['data'][0], 2)
-    print round(grid.axes['lon']['data'][0], 2)
+    print(round(grid.axes['lat']['data'][0], 2))
+    print(round(grid.axes['lon']['data'][0], 2))
     assert round(grid.axes['lat']['data'][0], 2) == 36.4
     assert round(grid.axes['lon']['data'][0], 2) == -97.6
 

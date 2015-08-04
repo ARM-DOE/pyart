@@ -52,6 +52,7 @@ colormaps are available within matplotlib with names 'pyart_COLORMAP':
     * SymGray12
     * Theodore16
     * Wild25
+    * LangRainbow12
 
 """
 
@@ -82,7 +83,7 @@ def _reverser(f):
 def revcmap(data):
     """Can only handle specification *data* in dictionary format."""
     data_r = {}
-    for key, val in data.iteritems():
+    for key, val in data.items():
         if callable(val):
             valnew = _reverser(val)
                 # This doesn't work: lambda x: val(1-x)
@@ -123,7 +124,8 @@ def _generate_cmap(name, lutsize):
 
 LUTSIZE = mpl.rcParams['image.lut']
 
-_cmapnames = datad.keys()  # need this list because datad is changed in loop
+# need this list because datad is changed in loop
+_cmapnames = list(datad.keys())
 
 # Generate the reversed specifications ...
 
@@ -135,7 +137,7 @@ for cmapname in _cmapnames:
 # Precache the cmaps with ``lutsize = LUTSIZE`` ...
 
 # Use datad.keys() to also add the reversed ones added in the section above:
-for cmapname in datad.iterkeys():
+for cmapname in datad.keys():
     cmap_d[cmapname] = _generate_cmap(cmapname, LUTSIZE)
 
 locals().update(cmap_d)

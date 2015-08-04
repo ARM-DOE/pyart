@@ -6,6 +6,12 @@ Utilities for reading CF/Radial files.
 
 .. autosummary::
     :toctree: generated/
+    :template: dev_template.rst
+
+    _NetCDFVariableDataExtractor
+
+.. autosummary::
+    :toctree: generated/
 
     read_cfradial
     write_cfradial
@@ -24,8 +30,9 @@ import numpy as np
 import netCDF4
 
 from ..config import FileMetadata
-from .common import stringarray_to_chararray
+from .common import stringarray_to_chararray, _test_arguments
 from ..core.radar import Radar
+from .lazydict import LazyLoadDict
 
 
 # Variables and dimensions in the instrument_parameter convention and
@@ -61,7 +68,8 @@ _INSTRUMENT_PARAMS_DIMS = {
 
 
 def read_cfradial(filename, field_names=None, additional_metadata=None,
-                  file_field_names=False, exclude_fields=None):
+                  file_field_names=False, exclude_fields=None,
+                  delay_field_loading=False, **kwargs):
     """
     Read a Cfradial netCDF file.
 
@@ -84,6 +92,13 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
     exclude_fields : list or None, optional
         List of fields to exclude from the radar object. This is applied
         after the `file_field_names` and `field_names` parameters.
+    delay_field_loading : bool
+        True to delay loading of field data from the file until the 'data'
+        key in a particular field dictionary is accessed.  In this case
+        the field attribute of the returned Radar object will contain
+        LazyLoadDict objects not dict objects.  Delayed field loading will not
+        provide any speedup in file where the number of gates vary between
+        rays (ngates_vary=True) and is not recommended.
 
     Returns
     -------
@@ -95,6 +110,9 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
     This function has not been tested on "stream" Cfradial files.
 
     """
+    # test for non empty kwargs
+    _test_arguments(kwargs)
+
     # create metadata retrieval object
     filemetadata = FileMetadata('cfradial', field_names, additional_metadata,
                                 file_field_names, exclude_fields)
@@ -120,7 +138,7 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
                    'primary_axis': 'axis_z'}
     # ignore time_* global variables, these are calculated from the time
     # variable when the file is written.
-    for var, default_value in global_vars.iteritems():
+    for var, default_value in global_vars.items():
         if var in ncvars:
             metadata[var] = str(netCDF4.chartostring(ncvars[var][:]))
         else:
@@ -242,11 +260,11 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
     # 4.10 Moments field data variables -> field attribute dictionary
     if 'ray_n_gates' in ncvars:
         # all variables with dimensions of n_points are fields.
-        keys = [k for k, v in ncvars.iteritems()
+        keys = [k for k, v in ncvars.items()
                 if v.dimensions == ('n_points', )]
     else:
         # all variables with dimensions of 'time', 'range' are fields
-        keys = [k for k, v in ncvars.iteritems()
+        keys = [k for k, v in ncvars.items()
                 if v.dimensions == ('time', 'range')]
 
     fields = {}
@@ -256,7 +274,7 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
             if exclude_fields is not None and key in exclude_fields:
                 continue
             field_name = key
-        fields[field_name] = _ncvar_to_dict(ncvars[key])
+        fields[field_name] = _ncvar_to_dict(ncvars[key], delay_field_loading)
 
     if 'ray_n_gates' in ncvars:
         shape = (len(ncvars['time']), len(ncvars['range']))
@@ -281,7 +299,9 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
     if radar_calibration == {}:
         radar_calibration = None
 
-    ncobj.close()
+    # do not close file is field loading is delayed
+    if not delay_field_loading:
+        ncobj.close()
     return Radar(
         time, _range, fields, metadata, scan_type,
         latitude, longitude, altitude,
@@ -303,22 +323,45 @@ def _find_all_meta_group_vars(ncvars, meta_group_name):
     """
     Return a list of all variables which are in a given meta_group.
     """
-    return [k for k, v in ncvars.iteritems() if 'meta_group' in v.ncattrs()
+    return [k for k, v in ncvars.items() if 'meta_group' in v.ncattrs()
             and v.meta_group == meta_group_name]
 
 
-def _ncvar_to_dict(ncvar):
+def _ncvar_to_dict(ncvar, lazydict=False):
     """ Convert a NetCDF Dataset variable to a dictionary. """
     # copy all attribute except for scaling parameters
     d = dict((k, getattr(ncvar, k)) for k in ncvar.ncattrs()
              if k not in ['scale_factor', 'add_offset'])
-    d['data'] = ncvar[:]
-    if np.isscalar(d['data']):
-        # netCDF4 1.1.0+ returns a scalar for 0-dim array, we always want
-        # 1-dim+ arrays with a valid shape.
-        d['data'] = np.array(d['data'])
-        d['data'].shape = (1, )
+    data_extractor = _NetCDFVariableDataExtractor(ncvar)
+    if lazydict:
+        d = LazyLoadDict(d)
+        d.set_lazy('data', data_extractor)
+    else:
+        d['data'] = data_extractor()
     return d
+
+
+class _NetCDFVariableDataExtractor(object):
+    """
+    Class facilitating on demand extraction of data from a NetCDF variable.
+
+    Parameters
+    ----------
+    ncvar : netCDF4.Variable
+        NetCDF Variable from which data will be extracted.
+
+    """
+
+    def __init__(self, ncvar):
+        """ initialize the object. """
+        self.ncvar = ncvar
+
+    def __call__(self):
+        """ Return an array containing data from the stored variable. """
+        # Use atleast_1d to force the array to be at minimum one dimensional,
+        # some version of netCDF return scalar or scalar arrays for scalar
+        # NetCDF variables.
+        return np.atleast_1d(self.ncvar[:])
 
 
 def _unpack_variable_gate_field_dic(
@@ -448,7 +491,7 @@ def write_cfradial(filename, radar, format='NETCDF4', time_reference=None,
                       'antenna_transition', ('time', ))
 
     # fields
-    for field, dic in radar.fields.iteritems():
+    for field, dic in radar.fields.items():
         _create_ncvar(dic, dataset, field, ('time', 'range'))
 
     # sweep parameters
@@ -527,10 +570,10 @@ def write_cfradial(filename, radar, format='NETCDF4', time_reference=None,
         # round up to next second
         end_dt += (datetime.timedelta(seconds=1) -
                    datetime.timedelta(microseconds=end_dt.microsecond))
-    start_dic = {'data': np.array(start_dt.isoformat() + 'Z'),
+    start_dic = {'data': np.array(start_dt.isoformat() + 'Z', dtype='S'),
                  'long_name': 'UTC time of first ray in the file',
                  'units': 'unitless'}
-    end_dic = {'data': np.array(end_dt.isoformat() + 'Z'),
+    end_dic = {'data': np.array(end_dt.isoformat() + 'Z', dtype='S'),
                'long_name': 'UTC time of last ray in the file',
                'units': 'unitless'}
     _create_ncvar(start_dic, dataset, 'time_coverage_start', time_dim)
@@ -561,19 +604,19 @@ def write_cfradial(filename, radar, format='NETCDF4', time_reference=None,
     # platform_type, optional
     if 'platform_type' in radar.metadata:
         dic = {'long_name': 'Platform type',
-               'data': np.array(radar.metadata['platform_type'])}
+               'data': np.array(radar.metadata['platform_type'], dtype='S')}
         _create_ncvar(dic, dataset, 'platform_type', ('string_length', ))
 
     # instrument_type, optional
     if 'instrument_type' in radar.metadata:
         dic = {'long_name': 'Instrument type',
-               'data': np.array(radar.metadata['instrument_type'])}
+               'data': np.array(radar.metadata['instrument_type'], dtype='S')}
         _create_ncvar(dic, dataset, 'instrument_type', ('string_length', ))
 
     # primary_axis, optional
     if 'primary_axis' in radar.metadata:
         dic = {'long_name': 'Primary axis',
-               'data': np.array(radar.metadata['primary_axis'])}
+               'data': np.array(radar.metadata['primary_axis'], dtype='S')}
         _create_ncvar(dic, dataset, 'primary_axis', ('string_length', ))
 
     # moving platform geo-reference variables
@@ -621,7 +664,7 @@ def _create_ncvar(dic, dataset, name, dimensions):
     # create array from list, etc.
     data = dic['data']
     if isinstance(data, np.ndarray) is not True:
-        print "Warning, converting non-array to array:", name
+        print("Warning, converting non-array to array:", name)
         data = np.array(data)
 
     # convert string array to character arrays
@@ -659,7 +702,7 @@ def _create_ncvar(dic, dataset, name, dimensions):
         ncvar.setncattr('_FillValue', fv)
 
     # set all attributes
-    for key, value in dic.iteritems():
+    for key, value in dic.items():
         if key not in ['data', '_FillValue', 'long_name', 'units']:
             ncvar.setncattr(key, value)
 

@@ -128,14 +128,14 @@ def calculate_attenuation(radar, z_offset, debug=False, doc=15, fzl=4000.0,
     specific_atten = np.zeros(reflectivity_horizontal.shape, dtype='float32')
     atten = np.zeros(reflectivity_horizontal.shape, dtype='float32')
 
-    for sweep in xrange(nsweeps):
+    for sweep in range(nsweeps):
         # loop over the sweeps
         if debug:
-            print "Doing ", sweep
+            print("Doing ", sweep)
         end_gate, start_ray, end_ray = phase_proc.det_process_range(
             radar, sweep, fzl, doc=doc)
 
-        for i in xrange(start_ray, end_ray):
+        for i in range(start_ray, end_ray):
             # perform attenuation calculation on a single ray
 
             # extract the ray's phase shift and init. refl. correction
