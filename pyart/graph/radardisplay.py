@@ -911,7 +911,7 @@ class RadarDisplay(object):
             Filename suitable for saving a plot.
 
         """
-        return common.generate_filename(self._radar, field, sweep)
+        return common.generate_filename(self._radar, field, sweep, ext)
 
     def generate_title(self, field, sweep):
         """
