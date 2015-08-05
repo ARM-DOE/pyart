@@ -4,10 +4,12 @@ from __future__ import print_function
 
 import tempfile
 import os
+import warnings
 
 import numpy as np
 from numpy.ma.core import MaskedArray
 from numpy.testing import assert_array_equal, assert_almost_equal
+from numpy.testing import assert_raises
 import netCDF4
 
 import pyart
@@ -424,3 +426,64 @@ def test_delay_field_loading():
     assert isinstance(data, MaskedArray)
     assert data.shape == (40, 42)
     assert_almost_equal(data[0, 0], -6.0, 0)
+
+
+def test_create_ncvar_different_dtype():
+    # test _Write_as_dtype key handling in _create_ncvar
+    tmpfile = tempfile.mkstemp(suffix='.nc', dir='.')[1]
+    dset = netCDF4.Dataset(tmpfile, mode='w')
+    dset.createDimension('x', 256)
+    dic = {
+        'data': np.arange(256, dtype='float32') * 0.5 + 100.,
+        '_Write_as_dtype': 'u1',
+        '_FillValue': 100.,
+    }
+    assert 'add_offset' not in dic
+    assert 'scale_factor' not in dic
+
+    pyart.io.cfradial._create_ncvar(dic, dset, 'foo', ('x'))
+
+    assert 'add_offset' in dic
+    assert 'scale_factor' in dic
+    assert '_FillValue' in dic
+
+    foo = dset.variables['foo']
+    assert foo.dtype == np.dtype('uint8')
+    assert_almost_equal(foo.scale_factor, 0.5)
+    assert_almost_equal(foo.add_offset, 100)
+    assert foo[0] is np.ma.masked
+    assert_almost_equal(foo[1], 100.5)
+    assert_almost_equal(foo[-1], 227.5)
+
+    dset.close()
+    os.remove(tmpfile)
+
+
+def test_calculate_scale_and_offset():
+    data = np.arange(128, dtype='float32')
+    scale, offset, fill = pyart.io.cfradial._calculate_scale_and_offset(
+        {'data': data}, np.dtype('u1'))
+
+    assert_almost_equal(scale, 0.5)
+    assert_almost_equal(offset, -0.5)
+    assert_almost_equal(fill, 0)
+
+    # check that nans and infs are ignored
+    data[5] = np.nan
+    data[6] = np.inf
+    scale, offset, fill = pyart.io.cfradial._calculate_scale_and_offset(
+        {'data': data}, np.dtype('u1'))
+    assert_almost_equal(scale, 0.5)
+    assert_almost_equal(offset, -0.5)
+    assert_almost_equal(fill, 0)
+
+    # maximum < minimum raises ValueError
+    assert_raises(ValueError, pyart.io.cfradial._calculate_scale_and_offset,
+                  {'data': data}, np.dtype('u1'), 100., 99)
+
+    # maximum == minimum issues warning
+    with warnings.catch_warnings(record=True) as w:
+        assert len(w) == 0
+        pyart.io.cfradial._calculate_scale_and_offset(
+            {'data': data}, np.dtype('u1'), 100, 100)
+        assert len(w) == 1

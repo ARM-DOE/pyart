@@ -25,6 +25,7 @@ Utilities for reading CF/Radial files.
 import getpass
 import datetime
 import platform
+import warnings
 
 import numpy as np
 import netCDF4
@@ -673,19 +674,42 @@ def _create_ncvar(dic, dataset, name, dimensions):
     if data.dtype.char is 'U' and data.dtype != 'U1':
         data = stringarray_to_chararray(data)
 
-    # create the dataset variable
-    if 'least_significant_digit' in dic:
-        lsd = dic['least_significant_digit']
-    else:
-        lsd = None
-    if "_FillValue" in dic:
-        fill_value = dic['_FillValue']
-    else:
-        fill_value = None
+    # determine netCDF variable arguments
+    special_keys = {
+        # dictionary keys which can be used to change the default values of
+        # createVariable arguments, some of these map to netCDF special
+        # attributes, other are Py-ART conventions.
+        '_Zlib': 'zlib',
+        '_DeflateLevel': 'complevel',
+        '_Shuffle': 'shuffle',
+        '_Fletcher32': 'fletcher32',
+        '_Continguous': 'contiguous',
+        '_ChunkSizes': 'chunksizes',
+        '_Endianness': 'endian',
+        '_Least_significant_digit': 'least_significant_digit',
+        '_FillValue': 'fill_value',
+    }
+    kwargs = {'zlib': True}  # default is to use compression
+    for dic_key, kwargs_key in special_keys.items():
+        if dic_key in dic:
+            kwargs[kwargs_key] = dic[dic_key]
 
-    ncvar = dataset.createVariable(name, data.dtype, dimensions,
-                                   zlib=True, least_significant_digit=lsd,
-                                   fill_value=fill_value)
+    # the _Write_as_dtype key can be used to specify the netCDF dtype
+    if '_Write_as_dtype' in dic:
+        dtype = np.dtype(dic['_Write_as_dtype'])
+        if np.issubdtype(dtype, np.integer):
+            if 'scale_factor' not in dic and 'add_offset' not in dic:
+                # calculate scale and offset
+                scale, offset, fill = _calculate_scale_and_offset(dic, dtype)
+                dic['scale_factor'] = scale
+                dic['add_offset'] = offset
+                dic['_FillValue'] = fill
+                kwargs['fill_value'] = fill
+    else:
+        dtype = data.dtype
+
+    # create the dataset variable
+    ncvar = dataset.createVariable(name, dtype, dimensions, **kwargs)
 
     # long_name attribute first if present, ARM standard
     if 'long_name' in dic.keys():
@@ -703,8 +727,11 @@ def _create_ncvar(dic, dataset, name, dimensions):
 
     # set all attributes
     for key, value in dic.items():
-        if key not in ['data', '_FillValue', 'long_name', 'units']:
-            ncvar.setncattr(key, value)
+        if key in special_keys.keys():
+            continue
+        if key in ['data', 'long_name', 'units']:
+            continue
+        ncvar.setncattr(key, value)
 
     # set the data
     if data.shape == ():
@@ -719,3 +746,53 @@ def _create_ncvar(dic, dataset, name, dimensions):
             ncvar[..., :data.shape[-1]] = data[:]
     else:
         ncvar[:] = data[:]
+
+
+def _calculate_scale_and_offset(dic, dtype, minimum=None, maximum=None):
+    """
+    Calculate appropriated 'scale_factor' and 'add_offset' for nc variable in
+    dic in order to scaling to fit dtype range.
+
+    Parameters
+    ----------
+    dic : dict
+        Radar dictionary containing variable data and meta-data
+    dtype : Numpy Dtype
+        Integer numpy dtype to map to.
+    minimum, maximum : float
+        Greatest and smallest values in the data, those values will be mapped
+        to the smallest+1 and greates values that dtype can hold.
+        If equal to None, numpy.amin and numpy.amax will be used on the data
+        contained in dic to determine these values.
+
+    """
+    if "_FillValue" in dic:
+        fillvalue = dic["_FillValue"]
+    else:
+        fillvalue = np.NaN
+
+    data = dic['data'].copy()
+    data = np.ma.array(data, mask=(~np.isfinite(data) | (data == fillvalue)))
+
+    if minimum is None:
+        minimum = np.amin(data)
+    if maximum is None:
+        maximum = np.amax(data)
+
+    if maximum < minimum:
+        raise ValueError(
+            'Error calculating variable scaling: '
+            'maximum: %f is smaller than minimum: %f' % (maximum, minimum))
+    elif maximum == minimum:
+        warnings.warn(
+            'While calculating variable scaling: '
+            'maximum: %f is equal to minimum: %f' % (maximum, minimum))
+        maximum = minimum + 1
+
+    # get max and min scaled,
+    maxi = np.iinfo(dtype).max
+    mini = np.iinfo(dtype).min + 1  # +1 since min will serve as the fillvalue
+    scale = float(maximum - minimum) / float(maxi - mini)
+    offset = minimum - mini * scale
+
+    return scale, offset, np.iinfo(dtype).min
