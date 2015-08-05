@@ -216,7 +216,8 @@ class GateFilter(object):
     # exclude methods #
     ###################
 
-    def exclude_below(self, field, value, exclude_masked=True, op='or'):
+    def exclude_below(self, field, value, exclude_masked=True, op='or',
+                      inclusive=False):
         """
         Exclude gates where a given field is below a given value.
 
@@ -226,8 +227,8 @@ class GateFilter(object):
             Name of field compared against the value.
         value : float
             Gates with a value below this value in the specified field will
-            be maked for exclusion in the filter.
-        filter_masked : bool, optional
+            be marked for exclusion in the filter.
+        exclude_masked : bool, optional
             True to filter masked values in the specified field if the data is
             a masked array, False to include any masked values.
         op : {'and', 'or', 'new'}
@@ -244,30 +245,47 @@ class GateFilter(object):
             conditions.  Note that the 'and' method MAY results in including
             gates which have peviously been excluded because they were masked
             or invalid.
+        inclusive : bool
+            Indicates whether the specified value should also be excluded.
 
         """
-        marked = np.ma.less(self._get_fdata(field), value)
+        if inclusive:
+            marked = self._get_fdata(field) <= value
+        else:
+            marked = self._get_fdata(field) < value
         return self._merge(marked, op, exclude_masked)
 
-    def exclude_above(self, field, value, exclude_masked=True, op='or'):
+    def exclude_above(self, field, value, exclude_masked=True, op='or',
+                      inclusive=False):
         """ Exclude gates where a given field is above a given value. """
-        marked = self._get_fdata(field) > value
+        if inclusive:
+            marked = self._get_fdata(field) >= value
+        else:
+            marked = self._get_fdata(field) > value
         return self._merge(marked, op, exclude_masked)
 
-    def exclude_inside(self, field, v1, v2, exclude_masked=True, op='or'):
+    def exclude_inside(self, field, v1, v2, exclude_masked=True, op='or',
+                       inclusive=True):
         """ Exclude gates where a given field is inside a given interval. """
         if v2 < v1:
             (v1, v2) = (v2, v1)
         fdata = self._get_fdata(field)
-        marked = (fdata >= v1) & (fdata <= v2)
+        if inclusive:
+            marked = (fdata >= v1) & (fdata <= v2)
+        else:
+            marked = (fdata > v1) & (fdata < v2)
         return self._merge(marked, op, exclude_masked)
 
-    def exclude_outside(self, field, v1, v2, exclude_masked=True, op='or'):
+    def exclude_outside(self, field, v1, v2, exclude_masked=True, op='or',
+                        inclusive=False):
         """ Exclude gates where a given field is outside a given interval. """
         if v2 < v1:
             (v1, v2) = (v2, v1)
         fdata = self._get_fdata(field)
-        marked = (fdata < v1) | (fdata > v2)
+        if inclusive:
+            marked = (fdata <= v1) | (fdata >= v2)
+        else:
+            marked = (fdata < v1) | (fdata > v2)
         return self._merge(marked, op, exclude_masked)
 
     def exclude_equal(self, field, value, exclude_masked=True, op='or'):
@@ -306,30 +324,46 @@ class GateFilter(object):
     # include_ methods #
     ####################
 
-    def include_below(self, field, value, exclude_masked=True, op='and'):
+    def include_below(self, field, value, exclude_masked=True, op='and',
+                      inclusive=False):
         """ Include gates where a given field is below a given value. """
-        marked = self._get_fdata(field) < value
+        if inclusive:
+            marked = self._get_fdata(field) <= value
+        else:
+            marked = self._get_fdata(field) < value
         self._merge(~marked, op, exclude_masked)
 
-    def include_above(self, field, value, exclude_masked=True, op='and'):
+    def include_above(self, field, value, exclude_masked=True, op='and',
+                      inclusive=False):
         """ Include gates where a given field is above a given value. """
-        marked = self._get_fdata(field) > value
+        if inclusive:
+            marked = self._get_fdata(field) >= value
+        else:
+            marked = self._get_fdata(field) > value
         self._merge(~marked, op, exclude_masked)
 
-    def include_inside(self, field, v1, v2, exclude_masked=True, op='and'):
+    def include_inside(self, field, v1, v2, exclude_masked=True, op='and',
+                       inclusive=True):
         """ Include gates where a given field is inside a given interval. """
         if v2 < v1:
             (v1, v2) = (v2, v1)
         fdata = self._get_fdata(field)
-        marked = (fdata >= v1) & (fdata <= v2)
+        if inclusive:
+            marked = (fdata >= v1) & (fdata <= v2)
+        else:
+            marked = (fdata > v1) & (fdata < v2)
         return self._merge(~marked, op, exclude_masked)
 
-    def include_outside(self, field, v1, v2, exclude_masked=True, op='and'):
+    def include_outside(self, field, v1, v2, exclude_masked=True, op='and',
+                        inclusive=False):
         """ Include gates where a given field is outside a given interval. """
         if v2 < v1:
             (v1, v2) = (v2, v1)
         fdata = self._get_fdata(field)
-        marked = (fdata < v1) | (fdata > v2)
+        if inclusive:
+            marked = (fdata <= v1) | (fdata >= v2)
+        else:
+            marked = (fdata < v1) | (fdata > v2)
         return self._merge(~marked, op, exclude_masked)
 
     def include_equal(self, field, value, exclude_masked=True, op='and'):

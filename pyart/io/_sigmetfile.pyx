@@ -183,7 +183,8 @@ cdef class SigmetFile:
             # check for a truncated file, return sweep(s) read up until error
             if ingest_data_hdrs is None:
 
-                mess = 'File truncated, %i of %i sweeps read' % (i, nsweeps)
+                mess = ('File truncated or corrupt, %i of %i sweeps read' %
+                        (i, nsweeps))
                 warnings.warn(mess)
 
                 for name in self.data_type_names:
@@ -258,6 +259,8 @@ cdef class SigmetFile:
         self._raw_product_bhdrs.append([raw_prod_bhdr])
         ingest_data_headers = _unpack_ingest_data_headers(
             lead_record, self.ndata_types)
+        if ingest_data_headers is None:
+            return None, None, None
 
         # determine size of data
         nray_data_types = [d['number_rays_file_expected']
@@ -613,6 +616,13 @@ def convert_sigmet_data(data_type, data, nbins):
         'DBZE16',   # Clutter corrected reflectivity enhanced, 2-byte
     ]
 
+    like_sqi = [
+		'RHOH',     # 1-byte Rho Format, section 4.3.21
+		'RHOV',     # " "
+		'RHOHV',    # 1-byte RhoHV Format, section 4.3.23
+		'SQI',      # 1-byte Signal Quality Index Format, section 4.3.26
+    ]
+
     like_sqi2 = [
         'RHOV2',    # 2-byte Rho Format, section 4.3.22
         'RHOH2',    # " "
@@ -668,17 +678,25 @@ def convert_sigmet_data(data_type, data, nbins):
         return data[..., :2].copy().view('i4')
 
     # one byte data types
-    elif data_type_name[-1] != 2:
+    elif data_type_name[-1] != '2':
         # make a view of left half of the data as uint8,
         # this is the actual ray data collected, the right half is blank.
-        nrays, nbins = data.shape
-        ndata = data.view('(2,) uint8').reshape(nrays, -1)[:, :nbins]
+        nrays, nbin = data.shape
+        ndata = data.view('(2,) uint8').reshape(nrays, -1)[:, :nbin]
 
         if data_type_name in like_dbt:
             # DB_DBT, 1, Total Power (1 byte)
             # 1-byte Reflectivity Format, section 4.3.3
             out[:] = (ndata - 64.) / 2.
             mask[ndata == 0] = True
+
+        elif data_type_name in like_sqi:
+            # value = sqrt((N - 1) / 253)
+            # 0 : no data available (mask)
+            # 255 Area not scanned
+            out[:] = np.sqrt((ndata - 1.) / 253.)
+            mask[ndata == 0] = True
+            mask[ndata == 255] = True
 
         elif data_type_name == 'VEL':
             # VEL, 3, Velocity (1 byte)
@@ -724,13 +742,6 @@ def convert_sigmet_data(data_type, data, nbins):
             # PHIDP, 16, PhiDP(Differential phase) (1 byte)
             # 1-byte PhiDP format, section 4.3.18
             out[:] = 180. * ((ndata - 1.) / 254.)
-            mask[ndata == 0] = True
-            mask[ndata == 255] = True
-
-        elif data_type_name == 'RHOHV':
-            # RHOHV, 19, RhoHV (1 byte)
-            # 1-bytes RhoHV format, section 4.3.23
-            out[:] = np.sqrt((ndata - 1.) / 253.)
             mask[ndata == 0] = True
             mask[ndata == 255] = True
 
@@ -798,16 +809,19 @@ def _unpack_ingest_data_headers(record, ndata_types):
     """
     Unpack one or more ingest_data_header from a record.
 
-    Returns a list of dictionaries.
+    Returns a list of dictionaries or None when an error occurs.
 
     """
-    return [_unpack_ingest_data_header(record, i) for i in range(ndata_types)]
+    idh = [_unpack_ingest_data_header(record, i) for i in range(ndata_types)]
+    if None in idh:
+        return None
+    else:
+        return idh
 
 
 def _unpack_ingest_data_header(record, number):
     """
-    Unpack a single ingest_data_header from record.
-
+    Unpack a single ingest_data_header from record.  Return None on error.
     """
     offset = 12 + 76 * number
     string = record[offset:offset + 76]
@@ -815,7 +829,7 @@ def _unpack_ingest_data_header(record, number):
     _unpack_key(idh, 'structure_header', STRUCTURE_HEADER)
     _unpack_key(idh, 'sweep_start_time', YMDS_TIME)
     if idh['structure_header']['structure_identifier'] != 24:
-        raise ValueError
+        return None
     return idh
 
 

@@ -139,9 +139,9 @@ class NEXRADLevel2File():
 
         # read the records in the file, decompressing as needed
         s = slice(CONTROL_WORD_SIZE, CONTROL_WORD_SIZE + 2)
-        if compression_record[s] == 'BZ':
+        if compression_record[s] == b'BZ':
             buf = _decompress_records(fh)
-        elif compression_record[s] == '\x00\x00':
+        elif compression_record[s] == b'\x00\x00':
             buf = fh.read()
         else:
             raise IOError('unknown compression record')
@@ -271,6 +271,14 @@ class NEXRADLevel2File():
         t = [self.msg31s[i]['msg31_header'][key] for i in msg_nums]
         return np.array(t)
 
+    def _msg31_rad_array(self, scans, key):
+        """
+        Return an array of msg31 RAD elements for all rays in scans.
+        """
+        msg_nums = self._msg_nums(scans)
+        t = [self.msg31s[i]['RAD'][key] for i in msg_nums]
+        return np.array(t)
+
     def get_times(self, scans=None):
         """
         Retrieve the times at which the rays were collected.
@@ -366,6 +374,48 @@ class NEXRADLevel2File():
         return np.array([cp[i]['elevation_angle'] * scale for i in scans],
                         dtype='float32')
 
+    def get_nyquist_vel(self, scans=None):
+        """
+        Retrieve the Nyquist velocities of the requested scans.
+
+        Parameters
+        ----------
+        scans : list or None
+            Scans (0 based) for which the Nyquist velocities will be
+            retrieved. None (the default) will return the velocities for all
+            scans in the volume.
+
+        Returns
+        -------
+        velocities : ndarray
+            Nyquist velocities (in m/s) for the requested scans.
+
+        """
+        if scans is None:
+            scans = range(self.nscans)
+        return self._msg31_rad_array(scans, 'nyquist_vel') * 0.01
+
+    def get_unambigous_range(self, scans=None):
+        """
+        Retrieve the unambiguous range of the requested scans.
+
+        Parameters
+        ----------
+        scans : list or None
+            Scans (0 based) for which the unambiguous range will be retrieved.
+            None (the default) will return the range for all scans in the
+            volume.
+
+        Returns
+        -------
+        unambiguous_range : ndarray
+            Unambiguous range (in meters) for the requested scans.
+
+        """
+        if scans is None:
+            scans = range(self.nscans)
+        return self._msg31_rad_array(scans, 'unambig_range') * 0.1
+
     def get_data(self, moment, max_ngates, scans=None, raw_data=False):
         """
         Retrieve moment data for a given set of scans.
@@ -460,7 +510,7 @@ def _get_record_from_buf(buf, pos):
         new_pos = pos + msg_header_size + msg_size
         mbuf = buf[pos + msg_header_size:new_pos]
         msg_31_header = _unpack_from_buf(mbuf, 0, MSG_31)
-        block_pointers = [v for k, v in msg_31_header.iteritems()
+        block_pointers = [v for k, v in msg_31_header.items()
                           if k.startswith('block_pointer') and v > 0]
         for block_pointer in block_pointers:
             block_name, block_dic = _get_msg31_data_block(mbuf, block_pointer)
@@ -489,7 +539,7 @@ def _get_record_from_buf(buf, pos):
 
 def _get_msg31_data_block(buf, ptr):
     """ Unpack a msg_31 data block into a dictionary. """
-    block_name = buf[ptr + 1: ptr + 4].strip()
+    block_name = buf[ptr + 1: ptr + 4].decode('ascii').strip()
 
     if block_name == 'VOL':
         dic = _unpack_from_buf(buf, ptr, VOLUME_DATA_BLOCK)

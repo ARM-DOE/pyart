@@ -3,7 +3,7 @@
 import tempfile
 import os
 import bz2
-from StringIO import StringIO
+from io import BytesIO
 
 from numpy.testing.decorators import skipif
 from numpy.testing import assert_raises
@@ -47,10 +47,12 @@ def test_autoread_cfradial():
 
 
 def test_autoread_nexrad_archive():
-    radar = pyart.io.read(pyart.testing.NEXRAD_ARCHIVE_COMPRESSED_FILE)
+    radar = pyart.io.read(pyart.testing.NEXRAD_ARCHIVE_COMPRESSED_FILE,
+                          delay_field_loading=True)
     assert radar.metadata['original_container'] == 'NEXRAD Level II'
 
-    radar = pyart.io.read(pyart.testing.NEXRAD_ARCHIVE_FILE)
+    radar = pyart.io.read(pyart.testing.NEXRAD_ARCHIVE_FILE,
+                          delay_field_loading=True)
     assert radar.metadata['original_container'] == 'NEXRAD Level II'
 
 
@@ -64,24 +66,30 @@ def test_autoread_nexrad_cdm():
     assert radar.metadata['original_container'] == 'NEXRAD Level II'
 
 
+def test_autoread_nexrad_level3():
+    radar = pyart.io.read(pyart.testing.NEXRAD_LEVEL3_MSG19)
+    assert radar.metadata['original_container'] == 'NEXRAD Level 3'
+
+
 def test_autoread_raises():
-    f = StringIO('0000000000000000000')
+    f = BytesIO(b'0000000000000000000')
     assert_raises(TypeError, pyart.io.read, f)
 
 
 def test_determine_filetype():
     headers = [
-        ('\x00\x00\x03\xf8\x00\x007>\x00\x00\x00\x01', 'MDV'),
-        ('\x89HDF\r\n\x1a\n\x02\x08\x08\x00', 'NETCDF4'),
-        ('CDF', 'NETCDF3'),
-        ('AR2V0006.501', 'WSR88D'),
-        ('\x1b\x00\x08\x00\x00\x08\xb7\x07\x00\x00\x00\x00', 'SIGMET'),
-        ('BZh91AY&SY\xbd\x12', 'BZ2'),
-        ('UF', 'UF'),                   # not from a real file
-        ('SSWB', 'DORADE'),             # not from a real file
-        ('RSL', 'RSL'),                 # not from a real file
-        ('\x0e\x03\x13\x01', 'HDF4'),   # not from a real file
-        ('000000000000', 'UNKNOWN'),
+        (b'\x00\x00\x03\xf8\x00\x007>\x00\x00\x00\x01', 'MDV'),
+        (b'\x89HDF\r\n\x1a\n\x02\x08\x08\x00', 'NETCDF4'),
+        (b'CDF', 'NETCDF3'),
+        (b'AR2V0006.501', 'WSR88D'),
+        (b'SDUS54 KBMX ', 'NEXRADL3'),
+        (b'\x1b\x00\x08\x00\x00\x08\xb7\x07\x00\x00\x00\x00', 'SIGMET'),
+        (b'BZh91AY&SY\xbd\x12', 'BZ2'),
+        (b'UF', 'UF'),                   # not from a real file
+        (b'SSWB', 'DORADE'),             # not from a real file
+        (b'RSL', 'RSL'),                 # not from a real file
+        (b'\x0e\x03\x13\x01', 'HDF4'),   # not from a real file
+        (b'000000000000', 'UNKNOWN'),
     ]
     for i in headers:
         string, filetype = i
@@ -90,5 +98,5 @@ def test_determine_filetype():
 
 
 def check_filetype(string, filetype):
-    f = StringIO(string)
+    f = BytesIO(string)
     assert pyart.io.auto_read.determine_filetype(f) == filetype

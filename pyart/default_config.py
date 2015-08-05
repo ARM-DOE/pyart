@@ -82,10 +82,17 @@ radar_estimated_rain_rate = 'radar_estimated_rain_rate'
 radar_echo_classification = 'radar_echo_classification'
 specific_attenuation = 'specific_attenuation'
 
+# Textures
+differential_phase_texture = 'differential_phase_texture'
+
 # Wind retrieval fields
 eastward_wind_component = 'eastward_wind_component'
 northward_wind_component = 'northward_wind_component'
 vertical_wind_component = 'vertical_wind_component'
+
+# profile variables
+height = 'height'
+interpolated_profile = 'interpolated_profile'
 
 # End of Simple Configuration section
 
@@ -156,9 +163,12 @@ DEFAULT_FIELD_NAMES = {
     'radar_estimated_rain_rate': radar_estimated_rain_rate,
     'radar_echo_classification': radar_echo_classification,
     'specific_attenuation': specific_attenuation,
+    'differential_phase_texture': differential_phase_texture,
     'eastward_wind_component': eastward_wind_component,
     'northward_wind_component': northward_wind_component,
     'vertical_wind_component': vertical_wind_component,
+    'height': height,
+    'interpolated_profile': interpolated_profile,
 }
 
 
@@ -542,6 +552,13 @@ DEFAULT_METADATA = {
         'valid_max': 1.0,
         'coordinates': 'elevation azimuth range'},
 
+    # Textures
+    differential_phase_texture: {
+        'units': 'degrees',
+        'standard_name': 'differential_phase_hv_texture',
+        'long_name': 'Texture of differential phase (PhiDP)',
+        'coordinates': 'elevation azimuth range'},
+
     # Wind retrieval fields
     eastward_wind_component: {
         'units': 'meters_per_second',
@@ -557,6 +574,18 @@ DEFAULT_METADATA = {
         'units': 'meters_per_second',
         'standard_name': 'vertical_wind_component',
         'long_name': 'Vertical wind component'},
+
+    # profile variables
+    height: {
+        'long_name': 'Height of radar beam',
+        'standard_name': 'height',
+        'units': 'meters'},
+
+    interpolated_profile: {
+        'long_name': 'Interpolated profile',
+        'standard_name':  'interpolated_profile',
+        'units': 'unknown'},
+
 }
 
 
@@ -624,6 +653,35 @@ nexrad_metadata = {
         'coordinates': 'elevation azimuth range'},
 }
 
+# Metadata for NEXRAD Level 3 Products
+nexrad_level3_metadata = {
+
+    radar_estimated_rain_rate: {
+        'units': 'inches',
+        'standard_name': 'radar_estimated_rain_rate',
+        'long_name': 'Radar estimated rain rate',
+        'coordinates': 'elevation azimuth range'},
+
+    radar_echo_classification: {
+        'units': 'legend',
+        'standard_name': 'radar_echo_classification',
+        'long_name': 'Radar echo classification',
+        'options': ('0: Below Threshold (ND), '
+                    '10: Biological (BI), '
+                    '20: Anomalous Propagation/Group Clutter (GC), '
+                    '30: Ice Crystals (IC), '
+                    '40: Dry Snow (DS), '
+                    '50: Wet Snow (WS), '
+                    '60: Light and/or Moderate Rain (RA), '
+                    '70: Heavy Rain (HR), '
+                    '80: Big Drops (rain) (BD), '
+                    '90: Graupel (GR), '
+                    '100: Hail, possibly with rain (HA), '
+                    '140: Unknown Classification (UK), '
+                    '150: Range Folded (RH)'),
+        'coordinates': 'elevation azimuth range'},
+}
+
 # Metadata for CF/Radial files
 cfradial_metadata = {}
 
@@ -640,6 +698,7 @@ FILE_SPECIFIC_METADATA = {      # Required
     'sigmet': sigmet_metadata,
     'nexrad_archive': nexrad_metadata,
     'nexrad_cdm': nexrad_metadata,
+    'nexrad_level3': nexrad_level3_metadata,
     'cfradial': cfradial_metadata,
     'mdv': mdv_metadata,
     'rsl': rsl_metadata,
@@ -753,6 +812,43 @@ nexrad_cdm_field_mapping = {
     'CorrelationCoefficient': cross_correlation_ratio
 }
 
+# NEXRAD Level 3 Product files.
+nexrad_level3_mapping = {
+    # Message code : field name         # Product name
+    19: reflectivity,                   # Base Reflectivity
+    20: reflectivity,                   # Base Reflectivity
+    25: velocity,                       # Base Velocity
+    27: velocity,                       # Base Velocity
+    28: spectrum_width,                 # Base Spectrum Width
+    30: spectrum_width,                 # Base Spectrum Width
+    32: reflectivity,                   # Digital Hybrid Scan Reflectivity
+    34: None,                           # Clutter Filter Control
+    56: velocity,                       # Storm Relative Mean Radial Velocity
+    78: radar_estimated_rain_rate,      # Surface Rainfall Accum. (1 hr)
+    79: radar_estimated_rain_rate,      # Surface Rainfall Accum. (3 hr)
+    80: radar_estimated_rain_rate,      # Storm Total Rainfall Accumulation
+    94: reflectivity,                   # Base Reflectivity Data Array
+    99: velocity,                       # Base Velocity Data Array
+    134: None,                          # High Resolution VIL
+    135: None,                          # Enhanced Echo Tops
+    138: radar_estimated_rain_rate,     # Digital Storm Total Precipitation
+    159: differential_reflectivity,     # Digital Differential Reflectivity
+    161: cross_correlation_ratio,       # Digital Correlation Coefficient
+    163: specific_differential_phase,   # Digital Specific Differential Phase
+    165: radar_echo_classification,     # Digital Hydrometeor Classification
+    169: radar_estimated_rain_rate,     # One Hour Accumulation
+    170: radar_estimated_rain_rate,     # Digital Accumulation Array
+    171: radar_estimated_rain_rate,     # Storm Total Accumulation
+    172: radar_estimated_rain_rate,     # Digital Storm Total Accumulation
+    173: radar_estimated_rain_rate,     # Digital User-Selectable Accum.
+    174: radar_estimated_rain_rate,     # Digital 1 hr Diff. Accum.
+    175: radar_estimated_rain_rate,     # Digital Storm Total Diff. Accum.
+    177: radar_echo_classification,     # Hybrid Hydrometeor Classification
+    181: reflectivity,                  # Base Reflectivity
+    182: velocity,                      # Base Velocity
+    186: reflectivity,                  # Base Reflectivity
+}
+
 # MDV files
 mdv_field_mapping = {
     # MDV moment: radar field name
@@ -834,9 +930,9 @@ chl_field_mapping = {
     'ZDR': differential_reflectivity,
     'LDRH': linear_depolarization_ratio_h,
     'LDRV': linear_depolarization_ratio_v,
-    '\xce\xa8 DP': differential_phase,
+    b'\xce\xa8 DP'.decode('utf-8'): differential_phase,
     'KDP': specific_differential_phase,
-    '\xcf\x81 HV': cross_correlation_ratio,
+    b'\xcf\x81 HV'.decode('utf-8'): cross_correlation_ratio,
     'NCP': normalized_coherent_power,
     # These fields are not mapped by default
     'H Re(lag 1)': None,    # Real part of lag-1 correlation, H Channel
@@ -860,8 +956,8 @@ chl_field_mapping = {
                             # lag-0
     'VAvgI': None,          # Average I, V Channel
     'HAvgI': None,          # Average I, H Channel
-    '\xcf\x81 HCX': None,   # H Co to Cross Correlation
-    '\xcf\x81 VCX': None,   # V Co to Cross Correlation
+    b'\xcf\x81 HCX'.decode('utf-8'): None,   # H Co to Cross Correlation
+    b'\xcf\x81 VCX'.decode('utf-8'): None,   # V Co to Cross Correlation
 }
 
 # GAMIC HDF5 files
@@ -993,9 +1089,112 @@ FIELD_MAPPINGS = {                  # Required variable
     'sigmet': sigmet_field_mapping,
     'nexrad_archive': nexrad_archive_field_mapping,
     'nexrad_cdm': nexrad_cdm_field_mapping,
+    'nexrad_level3': nexrad_level3_mapping,
     'cfradial': cfradial_field_mapping,
     'mdv': mdv_field_mapping,
     'rsl': rsl_field_mapping,
     'chl': chl_field_mapping,
     'gamic': gamic_field_mapping,
+}
+
+
+def velocity_limit(container=None, selection=0):
+    import pyart
+    if isinstance(container, pyart.core.Radar):
+        try:
+            if selection >= 0 and selection < container.nsweeps:
+                vel = container.get_nyquist_vel(selection,
+                                                check_uniform=False)
+            else:
+                vel = container.get_nyquist_vel(0, check_uniform=False)
+            return (-vel, vel)
+        except LookupError:
+            return (-30., 30.)
+    else:
+        return (-30., 30.)
+
+
+def spectrum_width_limit(container=None, selection=0):
+    import pyart
+    if isinstance(container, pyart.core.Radar):
+        try:
+            if selection >= 0 and selection < container.nsweeps:
+                vel = container.get_nyquist_vel(selection,
+                                                check_uniform=False)
+            else:
+                vel = container.get_nyquist_vel(0, check_uniform=False)
+            return (0, vel)
+        except LookupError:
+            return (0, 30.)
+    else:
+        return (0, 30.)
+
+# map each field to a colormap
+
+DEFAULT_FIELD_COLORMAP = {
+    # field name : colormap
+    reflectivity: 'pyart_NWSRef',
+    corrected_reflectivity: 'pyart_NWSRef',
+    total_power: 'pyart_NWSRef',
+    velocity: 'pyart_NWSVel',
+    corrected_velocity: 'pyart_NWSVel',
+    spectrum_width: 'pyart_NWS_SPW',
+    differential_reflectivity: 'pyart_BrBu12',
+    corrected_differential_reflectivity: 'pyart_BrBu12',
+    cross_correlation_ratio: 'pyart_BrBu12',
+    normalized_coherent_power: 'pyart_Carbone17',
+    differential_phase: 'hsv',
+    unfolded_differential_phase: 'pyart_BlueBrown11',
+    corrected_differential_phase: 'pyart_BlueBrown11',
+    specific_differential_phase: 'pyart_BrBu12',
+    corrected_specific_differential_phase: 'pyart_BrBu12',
+    linear_depolarization_ratio: 'pyart_Carbone17',
+    linear_depolarization_ratio_h: 'pyart_Carbone17',
+    linear_depolarization_ratio_v: 'pyart_Carbone17',
+    signal_to_noise_ratio: 'pyart_Carbone17',
+    rain_rate: 'pyart_RRate11',
+    radar_estimated_rain_rate: 'pyart_RRate11',
+    radar_echo_classification: 'pyart_EWilson17',
+    specific_attenuation: 'pyart_NWSVel',
+    differential_phase_texture: 'pyart_BlueBrown11',
+    eastward_wind_component: 'pyart_NWSVel',
+    northward_wind_component: 'pyart_NWSVel',
+    vertical_wind_component: 'pyart_NWSVel',
+    height: 'pyart_SCook18',
+    interpolated_profile: 'pyart_SCook18',
+}
+
+# map each field to a limit or a limit function
+
+DEFAULT_FIELD_LIMITS = {
+    # field name : limits
+    reflectivity: (-10., 65.),
+    corrected_reflectivity: (-10., 65.),
+    total_power: (-200., 100.),
+    velocity: velocity_limit,
+    corrected_velocity: velocity_limit,
+    spectrum_width: spectrum_width_limit,
+    differential_reflectivity: (-5., 5.),
+    corrected_differential_reflectivity: (-5., 5.),
+    cross_correlation_ratio: (0.8, 1.),
+    normalized_coherent_power: (0., 1.),
+    differential_phase: (-180, 180.),
+    unfolded_differential_phase: (-360, 360.),
+    corrected_differential_phase: (-360, 360.),
+    specific_differential_phase: (-2., 5.),
+    corrected_specific_differential_phase: (-2., 5.),
+    linear_depolarization_ratio: (-40., 0.),
+    linear_depolarization_ratio_h: (-40., 0.),
+    linear_depolarization_ratio_v: (-40., 0.),
+    signal_to_noise_ratio: (-0, 90.),
+    rain_rate: (0., 150.),
+    radar_estimated_rain_rate: (0., 150.),
+    radar_echo_classification: (0, 12),
+    specific_attenuation: (-10., 65.),
+    differential_phase_texture: (-180, 180.),
+    eastward_wind_component: velocity_limit,
+    northward_wind_component: velocity_limit,
+    vertical_wind_component: velocity_limit,
+    height: (0, 20000),
+    interpolated_profile: (0, 10000),
 }

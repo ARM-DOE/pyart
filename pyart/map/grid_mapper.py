@@ -31,26 +31,34 @@ from ..config import get_fillvalue, get_field_name
 from ..graph.common import corner_to_point
 from ..io.common import radar_coords_to_cart
 from ..core.grid import Grid
+from ..core.radar import Radar
 from ._load_nn_field_data import _load_nn_field_data
 from .ckdtree import cKDTree
 from .ball_tree import BallTree
+from .gates_to_grid import map_gates_to_grid
 
 
-def grid_from_radars(radars, grid_shape, grid_limits, **kwargs):
+def grid_from_radars(radars, grid_shape, grid_limits,
+                     gridding_algo='map_to_grid', **kwargs):
     """
     Map one or more radars to a Cartesian grid returning a Grid object.
 
-    Additional arguments are passed to :py:func:`map_to_grid`
+    Additional arguments are passed to :py:func:`map_to_grid` or
+    :py:func:`map_gates_to_grid`.
 
     Parameters
     ----------
-    radars : tuple of Radar objects.
+    radars : Radar or tuple of Radar objects.
         Radar objects which will be mapped to the Cartesian grid.
     grid_shape : 3-tuple of floats
         Number of points in the grid (z, y, x).
     grid_limits : 3-tuple of 2-tuples
         Minimum and maximum grid location (inclusive) in meters for the
         z, x, y coordinates.
+    gridding_algo : 'map_to_grid' or 'map_gates_to_grid'
+        Algorithm to use for gridding.  'map_to_grid' finds all gates within
+        a radius of influence for each grid point, 'map_gates_to_grid' maps
+        each radar gate onto the grid using a radius of influence.
 
     Returns
     -------
@@ -60,11 +68,22 @@ def grid_from_radars(radars, grid_shape, grid_limits, **kwargs):
 
     See Also
     --------
-    map_to_grid : Map to grid and return a dictionary of radar fields
+    map_to_grid : Map to grid and return a dictionary of radar fields.
+    map_gates_to_grid : Map each gate onto a grid returning a dictionary of
+                        radar fields.
 
     """
+    # make a tuple if passed a radar object as the first argument
+    if isinstance(radars, Radar):
+        radars = (radars, )
+
     # map the radar(s) to a cartesian grid
-    grids = map_to_grid(radars, grid_shape, grid_limits, **kwargs)
+    if gridding_algo == 'map_to_grid':
+        grids = map_to_grid(radars, grid_shape, grid_limits, **kwargs)
+    elif gridding_algo == 'map_gates_to_grid':
+        grids = map_gates_to_grid(radars, grid_shape, grid_limits, **kwargs)
+    else:
+        raise ValueError('invalid gridding_algo')
 
     # create and populate the field dictionary
     fields = {}
@@ -133,10 +152,13 @@ def grid_from_radars(radars, grid_shape, grid_limits, **kwargs):
     if 'grid_origin' in kwargs:
         lat = np.array([kwargs['grid_origin'][0]])
         lon = np.array([kwargs['grid_origin'][1]])
-        alt = first_radar.altitude['data']
     else:
         lat = first_radar.latitude['data']
         lon = first_radar.longitude['data']
+
+    if 'grid_origin_alt' in kwargs:
+        alt = np.array([kwargs['grid_origin_alt']])
+    else:
         alt = first_radar.altitude['data']
 
     altorigin = {'data': alt,
@@ -256,13 +278,12 @@ class NNLocator:
 
 
 def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
-                fields=None, refl_filter_flag=True, refl_field=None,
-                max_refl=None, map_roi=True, weighting_function='Barnes',
-                toa=17000.0, copy_field_data=True, algorithm='kd_tree',
-                leafsize=10., roi_func='dist_beam',
-                constant_roi=500.,
-                z_factor=0.05, xy_factor=0.02, min_radius=500.0,
-                h_factor=1.0, nb=1.5, bsp=1.0):
+                grid_origin_alt=None, fields=None, refl_filter_flag=True,
+                refl_field=None, max_refl=None, map_roi=True,
+                weighting_function='Barnes', toa=17000.0, copy_field_data=True,
+                algorithm='kd_tree', leafsize=10., roi_func='dist_beam',
+                constant_roi=500., z_factor=0.05, xy_factor=0.02,
+                min_radius=500.0, h_factor=1.0, nb=1.5, bsp=1.0):
     """
     Map one or more radars to a Cartesian grid.
 
@@ -276,7 +297,7 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
 
     Parameters
     ----------
-    radars : tuple of Radar objects.
+    radars : Radar or tuple of Radar objects.
         Radar objects which will be mapped to the Cartesian grid.
     grid_shape : 3-tuple of floats
         Number of points in the grid (z, y, x).
@@ -285,6 +306,9 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
         z, y, x coordinates.
     grid_origin : (float, float) or None
         Latitude and longitude of grid origin.  None sets the origin
+        to the location of the first radar.
+    grid_origin_alt: float or None
+        Altitude of grid origin, in meters. None sets the origin
         to the location of the first radar.
     fields : list or None
         List of fields within the radar objects which will be mapped to
@@ -385,6 +409,10 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
     grid_from_radars : Map to grid and return a Grid object.
 
     """
+    # make a tuple if passed a radar object as the first argument
+    if isinstance(radars, Radar):
+        radars = (radars, )
+
     # check the parameters
     if weighting_function.upper() not in ['CRESSMAN', 'BARNES']:
         raise ValueError('unknown weighting_function')
@@ -397,6 +425,9 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
         lat = float(radars[0].latitude['data'])
         lon = float(radars[0].longitude['data'])
         grid_origin = (lat, lon)
+
+    if grid_origin_alt is None:
+        grid_origin_alt = float(radars[0].altitude['data'])
 
     # fields which should be mapped, None for fields which are in all radars
     if fields is None:
@@ -442,7 +473,8 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
         radar_lat = float(radar.latitude['data'])
         radar_lon = float(radar.longitude['data'])
         x_disp, y_disp = corner_to_point(grid_origin, (radar_lat, radar_lon))
-        offsets.append((0, y_disp, x_disp))  # XXX should include z
+        z_disp = float(radar.altitude['data']) - grid_origin_alt
+        offsets.append((z_disp, y_disp, x_disp))
 
         # calculate cartesian locations of gates
         rg, azg = np.meshgrid(radar.range['data'], radar.azimuth['data'])
@@ -452,7 +484,7 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
 
         # add gate locations to gate_locations array
         start, end = gate_offset[iradar], gate_offset[iradar + 1]
-        gate_locations[start:end, 0] = zg_loc.flat
+        gate_locations[start:end, 0] = (zg_loc + z_disp).flat
         gate_locations[start:end, 1] = (yg_loc + y_disp).flat
         gate_locations[start:end, 2] = (xg_loc + x_disp).flat
         del xg_loc, yg_loc
@@ -514,7 +546,7 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
 
         # for radars 1 to N-1 add total_gates to the lookup table and
         # subtract the number of gates in all ealier radars.
-        for i in xrange(1, nradars):
+        for i in range(1, nradars):
             l_start = filtered_gate_offset[i]
             l_end = filtered_gate_offset[i + 1]
             gates_before = gate_offset[i]
@@ -574,7 +606,7 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
         if map_roi:
             roi[iz, iy, ix] = r
 
-        #find neighbors and distances
+        # find neighbors and distances
         ind, dist = nnlocator.find_neighbors_and_dists((z, y, x), r)
 
         if len(ind) == 0:

@@ -16,6 +16,7 @@ import numpy as np
 from mpl_toolkits.basemap import Basemap
 
 from .radardisplay import RadarDisplay
+from .common import parse_ax_fig, parse_vmin_vmax
 
 
 class RadarMapDisplay(RadarDisplay):
@@ -197,8 +198,8 @@ class RadarMapDisplay(RadarDisplay):
 
         """
         # parse parameters
-        ax, fig = self._parse_ax_fig(ax, fig)
-        vmin, vmax = self._parse_vmin_vmax(field, vmin, vmax)
+        ax, fig = parse_ax_fig(ax, fig)
+        vmin, vmax = parse_vmin_vmax(self._radar, field, vmin, vmax)
         if lat_lines is None:
             lat_lines = np.arange(30, 46, 1)
         if lon_lines is None:
@@ -236,11 +237,13 @@ class RadarMapDisplay(RadarDisplay):
                               resolution=resolution, ax=ax, **kwargs)
 
         # add embelishments
-        if embelish == True:
+        if embelish is True:
             basemap.drawcoastlines(linewidth=1.25)
             basemap.drawstates()
-            basemap.drawparallels(lat_lines, labels=[True, False, False, False])
-            basemap.drawmeridians(lon_lines, labels=[False, False, False, True])
+            basemap.drawparallels(lat_lines,
+                                  labels=[True, False, False, False])
+            basemap.drawmeridians(lon_lines,
+                                  labels=[False, False, False, True])
         self.basemap = basemap
         self._x0, self._y0 = basemap(self.loc[1], self.loc[0])
 
