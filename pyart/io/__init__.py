@@ -27,7 +27,6 @@ from and write data to a number of file formats.
     write_grid_mdv
     add_2d_latlon_axis
 
-
 """
 
 try:

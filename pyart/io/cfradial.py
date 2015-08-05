@@ -673,18 +673,18 @@ def _create_ncvar(dic, dataset, name, dimensions):
     if data.dtype.char is 'U' and data.dtype != 'U1':
         data = stringarray_to_chararray(data)
 
-    #retrieve virtual attributes, use kwargs
-    kwargs={
+    # retrieve virtual attributes, use kwargs
+    kwargs = {
         'zlib': True,
-         'dimensions': dimensions,
-        }
+        'dimensions': dimensions,
+    }
     if 'least_significant_digit' in dic:
         kwargs['least_significant_digit'] = dic['least_significant_digit']
     if '_DeflateLevel' in dic:
-        if dic['_DeflateLevel']==0:
-            kwargs['zlib']=False
+        if dic['_DeflateLevel'] == 0:
+            kwargs['zlib'] = False
         else:
-            kwargs['zlib']=True
+            kwargs['zlib'] = True
             kwargs['complevel'] = dic['_DeflateLevel']
     if '_Endianness' in dic:
         kwargs['endian'] = dic['_Endianness']
@@ -696,18 +696,20 @@ def _create_ncvar(dic, dataset, name, dimensions):
         kwargs['chunksizes'] = dic['_ChunkSizes']
     if '_FillValue' in dic:
         kwargs['fill_value'] = dic['_FillValue']
-    scale=None;offset=None
+    scale = None
+    offset = None
     if '_Write_as_dtype' in dic:
         kwargs['datatype'] = dic['_Write_as_dtype']
-        #calculate scale and offset
-        #convert to dtype, this may fail
+        # calculate scale and offset
+        # convert to dtype, this may fail
         try:
             dtype = np.dtype(dic['_Write_as_dtype'])
         except:
             dtype = None
-        if dtype!=None and np.issubdtype(dtype, np.integer):
+        if dtype is not None and np.issubdtype(dtype, np.integer):
             if "scale_factor" not in dic and "add_offset" not in dic:
-                scale,offset,FillValue = _calculate_scale_and_offset(dic, dtype)
+                scale, offset, FillValue = _calculate_scale_and_offset(
+                    dic, dtype)
                 kwargs['fill_value'] = FillValue
     else:
         kwargs['datatype'] = data.dtype
@@ -731,13 +733,16 @@ def _create_ncvar(dic, dataset, name, dimensions):
 
     # set all attributes
     for key, value in dic.iteritems():
-        if key not in ['data', '_FillValue', 'long_name', 'units', '_DeflateLevel',
-            '_Endianness', '_Fletcher32', '_Shuffle','_ChunkSizes', '_Write_as_dtype']:
+        if key not in ['data', '_FillValue', 'long_name', 'units',
+                       '_DeflateLevel', '_Endianness', '_Fletcher32',
+                       '_Shuffle', '_ChunkSizes', '_Write_as_dtype']:
             ncvar.setncattr(key, value)
 
     # if int '_Write_as_dtype' and not Scale and offset, calculate
-    if scale!=None: ncvar.setncattr('scale_factor', scale)
-    if offset!=None: ncvar.setncattr('add_offset', offset)
+    if scale is not None:
+        ncvar.setncattr('scale_factor', scale)
+    if offset is not None:
+        ncvar.setncattr('add_offset', offset)
 
     # set the data
     if data.shape == ():
@@ -753,10 +758,11 @@ def _create_ncvar(dic, dataset, name, dimensions):
     else:
         ncvar[:] = data[:]
 
+
 def _calculate_scale_and_offset(dic, dtype, minimum=None, maximum=None):
     """
-    Calculate appropriated 'scale_factor' and 'add_offset' for nc variable in dic
-    in order to scaling to fit dtype range3.
+    Calculate appropriated 'scale_factor' and 'add_offset' for nc variable in
+    dic in order to scaling to fit dtype range3.
 
     Parameters
     ----------
@@ -765,9 +771,9 @@ def _calculate_scale_and_offset(dic, dtype, minimum=None, maximum=None):
     dtype : Numpy Dtype
         Integer numpy dtype to map to.
     minimum,maximum : float
-        Greatest and Smallest values in the data, those values will be mapped to
-        the smallest+1 and greates values that dtype can hold. If equal to None
-        will get it with numpy.amin and numpy.amax.
+        Greatest and Smallest values in the data, those values will be mapped
+        to the smallest+1 and greates values that dtype can hold.
+        If equal to None will get it with numpy.amin and numpy.amax.
 
     """
 
@@ -775,31 +781,32 @@ def _calculate_scale_and_offset(dic, dtype, minimum=None, maximum=None):
         FillValue = dic["_FillValue"]
     else:
         FillValue = np.NaN
-    #mask fill value
+    # mask fill value
     data = dic['data'].copy()
 
-    data = np.ma.array(dic['data'].copy(),mask=(~np.isfinite(data) | (data == FillValue) ))
+    data = np.ma.array(
+        dic['data'].copy(), mask=(~np.isfinite(data) | (data == FillValue)))
 
     if not minimum:
-        minimum=1.0*np.amin(data)
+        minimum = 1.0 * np.amin(data)
     if not maximum:
-        maximum=1.0*np.amax(data)
+        maximum = 1.0 * np.amax(data)
 
-    if maximum<minimum:
-        raise ValueError('Error calculating variable scaling: Maximum %f is smaller than Minimum %f' %(maximum,minimum))
-    elif maximum==minimum:
+    if maximum < minimum:
+        raise ValueError(
+            'Error calculating variable scaling: '
+            'Maximum %f is smaller than Minimum %f' % (maximum, minimum))
+    elif maximum == minimum:
         import warnings
-        warnings.warn('Calculate variable scaling: Maximum %f is equal to Minimum %f' %(maximum,minimum))
-        maximum=minimum+1
+        warnings.warn(
+            'Calculate variable scaling: '
+            'Maximum %f is equal to Minimum %f' % (maximum, minimum))
+        maximum = minimum + 1
 
-    #get max and min scaled,
-    maxi=1.0*(np.iinfo(dtype).max)
-    mini=1.0*(np.iinfo(dtype).min+1)# let min for fillvalue
-    scale = (maximum-minimum)/(maxi-mini)
-    offset = minimum-mini*scale
+    # get max and min scaled,
+    maxi = 1.0 * (np.iinfo(dtype).max)
+    mini = 1.0 * (np.iinfo(dtype).min + 1)  # let min for fillvalue
+    scale = (maximum - minimum) / (maxi - mini)
+    offset = minimum - mini * scale
 
-    return (scale,offset,np.iinfo(dtype).min)
-
-
-
-
+    return (scale, offset, np.iinfo(dtype).min)
