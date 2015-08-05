@@ -11,8 +11,6 @@ set -e
 # use next line to debug this script
 #set -x
 
-sudo apt-get update -qq
-
 # Use Miniconda to provide a Python environment.  This allows us to perform
 # a conda based install of the SciPy stack on multiple versions of Python
 # as well as use conda and binstar to install additional modules which are not
@@ -32,14 +30,25 @@ source activate testenv
 # Install Py-ART dependencies
 conda install --yes numpy scipy matplotlib netcdf4 nose
 conda install --yes -c http://conda.binstar.org/jjhelmus trmm_rsl
-sudo apt-get install -qq libglpk-dev
-conda install --yes -c http://conda.binstar.org/jjhelmus pyglpk
 
 if [[ $PYTHON_VERSION == '2.7' ]]; then
-    sudo apt-get install -qq gfortran
     conda install --yes basemap 
     conda install --yes -c http://conda.binstar.org/jjhelmus cbc cylp
+    conda install --yes -c http://conda.binstar.org/jjhelmus glpk pyglpk
     conda install --yes -c http://conda.binstar.org/jjhelmus cvxopt_glpk
+
+    # wradlib and dependencies
+    conda install --yes sphinx gdal numpydoc h5py
+    pip install sphinx-rtd-theme
+    pip install sphinxcontrib-bibtex
+    pip install xmltodict
+    pip install wradlib
+fi
+if [[ $PYTHON_VERSION == '3.3' ]]; then
+    conda install --yes basemap 
+fi
+if [[ $PYTHON_VERSION == '3.4' ]]; then
+    conda install --yes basemap 
 fi
 
 # install coverage modules
@@ -61,6 +70,7 @@ if [[ "$FROM_RECIPE" == "true" ]]; then
    
     export CONDA_PACKAGE=`conda build --output conda_recipe/`
     conda install --yes $CONDA_PACKAGE
+    conda update --yes libnetcdf   # KLUDGE to upgrade downgraded libnetcdf
     mkdir foo   # required so source directory not picked up during tests
     cd foo
 else

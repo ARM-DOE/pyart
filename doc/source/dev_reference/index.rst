@@ -25,5 +25,7 @@ Documentation is broken down by directory and module.
     retrieve
     graph
     map
+    util
+    bridge
     testing
     _debug_info

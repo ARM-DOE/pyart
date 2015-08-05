@@ -26,7 +26,7 @@ import numpy as np
 
 from ..config import FileMetadata, get_fillvalue
 from ..core.radar import Radar
-from .common import make_time_unit_str
+from .common import make_time_unit_str, _test_arguments
 from ._sigmetfile import SigmetFile, bin4_to_angle, bin2_to_angle
 from . import _sigmet_noaa_hh
 
@@ -36,7 +36,8 @@ SPEED_OF_LIGHT = 299793000.0
 def read_sigmet(filename, field_names=None, additional_metadata=None,
                 file_field_names=False, exclude_fields=None,
                 time_ordered='none', full_xhdr=None, noaa_hh_hdr=None,
-                debug=False, ignore_xhdr=False, ignore_sweep_start_ms=None):
+                debug=False, ignore_xhdr=False, ignore_sweep_start_ms=None,
+                **kwargs):
     """
     Read a Sigmet (IRIS) product file.
 
@@ -113,6 +114,9 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
         Radar object
 
     """
+    # test for non empty kwargs
+    _test_arguments(kwargs)
+
     # create metadata retrieval object
     filemetadata = FileMetadata('sigmet', field_names, additional_metadata,
                                 file_field_names, exclude_fields)
@@ -291,7 +295,7 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
 
     # fields
     fields = {}
-    for data_type_name, fdata in sigmet_data.iteritems():
+    for data_type_name, fdata in sigmet_data.items():
         if data_type_name == 'XHDR_FULL':
             continue
         field_name = filemetadata.get_field_name(data_type_name)
@@ -459,7 +463,7 @@ def _is_time_ordered_by_reversal(data, metadata, rays_per_sweep):
         ref_time = metadata[metadata.keys()[0]]['time'].astype('int32')
     start = 0
     for nrays in rays_per_sweep:
-        if nrays == 0:
+        if nrays == 0 or nrays == 1:
             continue    # Do not attempt to order sweeps with no rays
         s = slice(start, start + nrays)     # slice which selects sweep
         start += nrays
@@ -483,12 +487,17 @@ def _is_time_ordered_by_roll(data, metadata, rays_per_sweep):
         ref_time = metadata[metadata.keys()[0]]['time'].astype('int32')
     start = 0
     for nrays in rays_per_sweep:
-        if nrays == 0:
+        if nrays == 0 or nrays == 1:
             continue    # Do not attempt to order sweeps with no rays
         s = slice(start, start + nrays)     # slice which selects sweep
+        first = ref_time[start]
+        last = ref_time[start + nrays - 1]
         start += nrays
         sweep_time_diff = np.diff(ref_time[s])
         count = np.count_nonzero(sweep_time_diff < 0)
+        # compare the first and last times for continuity
+        if (first - last) < 0:
+            count += 1
         if count != 0 and count != 1:
             return False
     return True
@@ -506,14 +515,20 @@ def _is_time_ordered_by_reverse_roll(data, metadata, rays_per_sweep):
         ref_time = metadata[metadata.keys()[0]]['time'].astype('int32')
     start = 0
     for nrays in rays_per_sweep:
-        if nrays == 0:
+        if nrays == 0 or nrays == 1:
             continue    # Do not attempt to order sweeps with no rays
         s = slice(start, start + nrays)     # slice which selects sweep
+        first = ref_time[start]
+        last = ref_time[start + nrays - 1]
         start += nrays
         sweep_time_diff = np.diff(ref_time[s])
         if sweep_time_diff.min() < 0:   # optional reverse
             sweep_time_diff = np.diff(ref_time[s][::-1])
+            first, last = last, first
         count = np.count_nonzero(sweep_time_diff < 0)
+        # compare the first and last times for continuity
+        if (first - last) < 0:
+            count += 1
         if count != 0 and count != 1:
             return False
     return True
@@ -538,7 +553,7 @@ def _time_order_data_and_metadata_roll(data, metadata, rays_per_sweep):
 
     start = 0
     for nrays in rays_per_sweep:
-        if nrays == 0:
+        if nrays == 0 or nrays == 1:
             continue    # Do not attempt to order sweeps with no rays
 
         s = slice(start, start + nrays)     # slice which selects sweep
@@ -577,8 +592,8 @@ def _time_order_data_and_metadata_reverse(data, metadata, rays_per_sweep):
 
     start = 0
     for nrays in rays_per_sweep:
-        if nrays == 0:
-            continue    # Do not attempt to order sweeps with no rays
+        if nrays == 0 or nrays == 1:
+            continue    # Do not attempt to order sweeps with to few rays
 
         s = slice(start, start + nrays)     # slice which selects sweep
         start += nrays
@@ -616,7 +631,7 @@ def _time_order_data_and_metadata_full(data, metadata, rays_per_sweep):
 
     start = 0
     for nrays in rays_per_sweep:
-        if nrays == 0:
+        if nrays == 0 or nrays == 1:
             continue    # Do not attempt to order sweeps with no rays
 
         s = slice(start, start + nrays)     # slice which selects sweep

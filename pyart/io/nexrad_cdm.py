@@ -23,12 +23,12 @@ import numpy as np
 from .nexrad_common import get_nexrad_location
 from ..config import FileMetadata, get_fillvalue
 from ..core.radar import Radar
-from .common import make_time_unit_str
+from .common import make_time_unit_str, _test_arguments
 
 
 def read_nexrad_cdm(filename, field_names=None, additional_metadata=None,
                     file_field_names=False, exclude_fields=None,
-                    station=None):
+                    station=None, **kwargs):
     """
     Read a Common Data Model (CDM) NEXRAD Level 2 file.
 
@@ -80,6 +80,9 @@ def read_nexrad_cdm(filename, field_names=None, additional_metadata=None,
     .. [2] http://thredds.ucar.edu/thredds/catalog.html
 
     """
+    # test for non empty kwargs
+    _test_arguments(kwargs)
+
     # create metadata retrieval object
     filemetadata = FileMetadata('nexrad_cdm', field_names,
                                 additional_metadata, file_field_names,
@@ -178,7 +181,7 @@ def read_nexrad_cdm(filename, field_names=None, additional_metadata=None,
 
     # fields
     fields = {}
-    for moment_name, moment_data in fdata.iteritems():
+    for moment_name, moment_data in fdata.items():
         field_name = filemetadata.get_field_name(moment_name)
         field_dic = filemetadata(field_name)
         field_dic['_FillValue'] = get_fillvalue()

@@ -27,16 +27,16 @@ def _parse_fields(vel_field, corr_vel_field):
     return vel_field, corr_vel_field
 
 
-def _parse_nyquist_vel(nyquist_vel, radar):
+def _parse_nyquist_vel(nyquist_vel, radar, check_uniform):
     """ Parse the nyquist_vel parameter, extract from the radar if needed. """
     if nyquist_vel is None:
-        if (radar.instrument_parameters is None) or (
-                'nyquist_velocity' not in radar.instrument_parameters):
-            message = ('Nyquist velocity not specified in radar object, '
-                       'provide this value explicitly in the function call.')
-            raise ValueError(message)
-        nyquist_vel = radar.instrument_parameters[
-            'nyquist_velocity']['data'][0]
+        nyquist_vel = [radar.get_nyquist_vel(i, check_uniform) for i in
+                       range(radar.nsweeps)]
+    else:   # Nyquist velocity explicitly provided
+        try:
+            len(nyquist_vel)
+        except:   # expand single value.
+            nyquist_vel = [nyquist_vel for i in range(radar.nsweeps)]
     return nyquist_vel
 
 

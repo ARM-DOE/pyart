@@ -11,6 +11,8 @@ Py-ART configuration.
     get_metadata
     get_fillvalue
     get_field_name
+    get_field_colormap
+    get_field_limits
     FileMetadata
 
 """
@@ -69,6 +71,8 @@ def load_config(filename=None):
     global _FIELD_MAPPINGS
     global _FILL_VALUE
     global _DEFAULT_FIELD_NAMES
+    global _DEFAULT_FIELD_COLORMAP
+    global _DEFAULT_FIELD_LIMITS
 
     cfile = imp.load_source('metadata_config', filename)
     _DEFAULT_METADATA = cfile.DEFAULT_METADATA
@@ -76,6 +80,8 @@ def load_config(filename=None):
     _FIELD_MAPPINGS = cfile.FIELD_MAPPINGS
     _FILL_VALUE = cfile.FILL_VALUE
     _DEFAULT_FIELD_NAMES = cfile.DEFAULT_FIELD_NAMES
+    _DEFAULT_FIELD_COLORMAP = cfile.DEFAULT_FIELD_COLORMAP
+    _DEFAULT_FIELD_LIMITS = cfile.DEFAULT_FIELD_LIMITS
     return
 
 # load the configuration from the enviromental parameter if it is set
@@ -122,6 +128,48 @@ def get_field_name(field):
     Return the field name from the configuration file for a given field.
     """
     return str(_DEFAULT_FIELD_NAMES[field])
+
+
+def get_field_colormap(field):
+    """
+    Return the colormap name from the configuration file for a field name.
+    """
+    if field in _DEFAULT_FIELD_COLORMAP:
+        return _DEFAULT_FIELD_COLORMAP[field]
+    else:
+        import matplotlib.cm
+        return matplotlib.cm.get_cmap()
+
+
+def get_field_limits(field, container=None, selection=0):
+    """
+    Return the data limits from the configuration file for a given field,
+    radar and sweep
+
+    Parameters
+    ----------
+    field: str
+        Field name.
+    container: Radar, Grid or None
+        This is an optional parameter that will be use to get informations
+        related to the field, like for instace nyquist velocity.
+    selection: int
+        selection of the data in the container, case container is a Radar this
+        is the sweep to be considered
+
+    Returns
+    -------
+    vmin, vmax: 2-tuplet of float
+        Minimun and Maximun teorical value for field, if field is not
+        in the configuration file returns (None, None).
+    """
+    if field in _DEFAULT_FIELD_LIMITS:
+        limits = _DEFAULT_FIELD_LIMITS[field]
+        if callable(limits):
+            limits = limits(container, selection)
+        return limits
+    else:
+        return None, None
 
 
 class FileMetadata():

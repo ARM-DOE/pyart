@@ -20,11 +20,11 @@ import numpy as np
 import netCDF4
 
 from ..config import FileMetadata
-from ..io.common import make_time_unit_str
+from ..io.common import make_time_unit_str, _test_arguments
 from ..core.radar import Radar
 
 
-def read_pattern(filename):
+def read_pattern(filename, **kwargs):
     """
     Read a netCDF file from a PATTERN project X-band radar.
 
@@ -39,6 +39,9 @@ def read_pattern(filename):
         Radar object.
 
     """
+    # test for non empty kwargs
+    _test_arguments(kwargs)
+
     # create metadata retrieval object
     filemetadata = FileMetadata('pattern')
 

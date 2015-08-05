@@ -6,6 +6,12 @@ Functions for reading NEXRAD Level II Archive files.
 
 .. autosummary::
     :toctree: generated/
+    :template: dev_template.rst
+
+    _NEXRADLevel2StagedField
+
+.. autosummary::
+    :toctree: generated/
 
     read_nexrad_archive
 
@@ -15,13 +21,14 @@ import numpy as np
 
 from ..config import FileMetadata, get_fillvalue
 from ..core.radar import Radar
-from .common import make_time_unit_str
+from .common import make_time_unit_str, _test_arguments
 from .nexrad_level2 import NEXRADLevel2File
+from .lazydict import LazyLoadDict
 
 
 def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
                         file_field_names=False, exclude_fields=None,
-                        bzip=None):
+                        delay_field_loading=False, bzip=None, **kwargs):
     """
     Read a NEXRAD Level 2 Archive file.
 
@@ -53,6 +60,11 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
     exclude_fields : list or None, optional
         List of fields to exclude from the radar object. This is applied
         after the `file_field_names` and `field_names` parameters.
+    delay_field_loading : bool
+        True to delay loading of field data from the file until the 'data'
+        key in a particular field dictionary is accessed.  In this case
+        the field attribute of the returned Radar object will contain
+        LazyLoadDict objects not dict objects.
     bzip : bool or None
         True if the file is compressed as a bzip2 file, False otherwise.
         None will examine the filename for a bzip extension.
@@ -69,6 +81,9 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
     .. [2] http://thredds.ucar.edu/thredds/catalog.html
 
     """
+    # test for non empty kwargs
+    _test_arguments(kwargs)
+
     # create metadata retrieval object
     filemetadata = FileMetadata('nexrad_archive', field_names,
                                 additional_metadata, file_field_names,
@@ -116,7 +131,12 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
             continue
         dic = filemetadata(field_name)
         dic['_FillValue'] = get_fillvalue()
-        dic['data'] = nfile.get_data(moment, max_ngates)
+        if delay_field_loading:
+            dic = LazyLoadDict(dic)
+            data_call = _NEXRADLevel2StagedField(nfile, moment, max_ngates)
+            dic.set_lazy('data', data_call)
+        else:
+            dic['data'] = nfile.get_data(moment, max_ngates)
         fields[field_name] = dic
 
     # metadata
@@ -162,10 +182,35 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
     elevation['data'] = nfile.get_elevation_angles().astype('float32')
     fixed_angle['data'] = nfile.get_target_angles()
 
+    # instrument_parameters
+    nyquist_velocity = filemetadata('nyquist_velocity')
+    unambiguous_range = filemetadata('unambiguous_range')
+    nyquist_velocity['data'] = nfile.get_nyquist_vel().astype('float32')
+    unambiguous_range['data'] = nfile.get_unambigous_range().astype('float32')
+
+    instrument_parameters = {'unambiguous_range': unambiguous_range,
+                             'nyquist_velocity': nyquist_velocity, }
+
     return Radar(
         time, _range, fields, metadata, scan_type,
         latitude, longitude, altitude,
         sweep_number, sweep_mode, fixed_angle, sweep_start_ray_index,
         sweep_end_ray_index,
         azimuth, elevation,
-        instrument_parameters=None)
+        instrument_parameters=instrument_parameters)
+
+
+class _NEXRADLevel2StagedField(object):
+    """
+    A class to facilitate on demand loading of field data from a Level 2 file.
+    """
+
+    def __init__(self, nfile, moment, max_ngates):
+        """ initialize. """
+        self.nfile = nfile
+        self.moment = moment
+        self.max_ngates = max_ngates
+
+    def __call__(self):
+        """ Return the array containing the field data. """
+        return self.nfile.get_data(self.moment, self.max_ngates)

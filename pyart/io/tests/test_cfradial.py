@@ -1,11 +1,15 @@
 """ Unit Tests for Py-ART's io/cfradial.py module. """
 
+from __future__ import print_function
+
 import tempfile
 import os
+import warnings
 
 import numpy as np
 from numpy.ma.core import MaskedArray
-from numpy.testing import assert_array_equal
+from numpy.testing import assert_array_equal, assert_almost_equal
+from numpy.testing import assert_raises
 import netCDF4
 
 import pyart
@@ -28,7 +32,7 @@ def test_time():
     assert 'data' in radar.time.keys()
     assert radar.time['units'] == 'seconds since 2011-05-20T10:54:16Z'
     assert radar.time['data'].shape == (40, )
-    assert round(radar.time['data'][38]) == 14.
+    assert_almost_equal(radar.time['data'][38], 14, 0)
 
 
 # range attribute
@@ -41,7 +45,7 @@ def test_range():
     assert 'data' in radar.range
     assert 'spacing_is_constant' in radar.range
     assert radar.range['data'].shape == (42, )
-    assert round(radar.range['data'][0]) == 0.0
+    assert_almost_equal(radar.range['data'][0], 0, 0)
 
 
 # fields attribute is tested later
@@ -75,7 +79,7 @@ def test_latitude():
     assert 'standard_name' in radar.latitude
     assert 'units' in radar.latitude
     assert radar.latitude['data'].shape == (1, )
-    assert round(radar.latitude['data']) == 36.0
+    assert_almost_equal(radar.latitude['data'], 36.0, 0)
 
 
 # longitude attribute
@@ -84,7 +88,7 @@ def test_longitude():
     assert 'standard_name' in radar.longitude
     assert 'units' in radar.longitude
     assert radar.longitude['data'].shape == (1, )
-    assert round(radar.longitude['data']) == -98.0
+    assert_almost_equal(radar.longitude['data'], -98, 0)
 
 
 # altitude attribute
@@ -94,7 +98,7 @@ def test_altitude():
     assert 'units' in radar.altitude
     assert 'positive' in radar.altitude
     assert radar.altitude['data'].shape == (1, )
-    assert round(radar.altitude['data']) == 214.0
+    assert_almost_equal(radar.altitude['data'], 214, 0)
 
 
 # altitude_agl attribute
@@ -113,7 +117,7 @@ def test_sweep_mode():
     assert 'standard_name' in radar.sweep_mode
     assert radar.sweep_mode['data'].shape == (1, 32)
     str_array = netCDF4.chartostring(radar.sweep_mode['data'])
-    assert np.all(str_array == ['azimuth_surveillance'])
+    assert np.all(str_array == [b'azimuth_surveillance'])
 
 
 # fixed_angle attribute
@@ -121,21 +125,21 @@ def test_fixed_angle():
     assert 'standard_name' in radar.fixed_angle
     assert 'units' in radar.fixed_angle
     assert radar.fixed_angle['data'].shape == (1, )
-    assert round(radar.fixed_angle['data'][0], 2) == 0.50
+    assert_almost_equal(radar.fixed_angle['data'][0], 0.50, 2)
 
 
 # sweep_start_ray_index attribute
 def test_sweep_start_ray_index():
     assert 'long_name' in radar.sweep_start_ray_index
     assert radar.sweep_start_ray_index['data'].shape == (1, )
-    assert round(radar.sweep_start_ray_index['data'][0]) == 0.0
+    assert_almost_equal(radar.sweep_start_ray_index['data'][0], 0, 0)
 
 
 # sweep_end_ray_index attribute
 def test_sweep_end_ray_index():
     assert 'long_name' in radar.sweep_end_ray_index
     assert radar.sweep_end_ray_index['data'].shape == (1, )
-    assert round(radar.sweep_end_ray_index['data'][0]) == 399.0
+    assert_almost_equal(radar.sweep_end_ray_index['data'][0], 399, 0)
 
 
 # target_scan_rate attribute
@@ -147,8 +151,8 @@ def test_target_scan_rate():
 def test_azimuth():
     assert 'standard_name' in radar.azimuth
     assert 'units' in radar.azimuth
-    assert round(radar.azimuth['data'][0]) == 360.
-    assert round(radar.azimuth['data'][10]) == 90.0
+    assert_almost_equal(radar.azimuth['data'][0], 360, 0)
+    assert_almost_equal(radar.azimuth['data'][10], 90., 0)
 
 
 # elevation attribute
@@ -156,7 +160,7 @@ def test_elevation():
     assert 'standard_name' in radar.elevation
     assert 'units' in radar.elevation
     assert radar.elevation['data'].shape == (40, )
-    assert round(radar.elevation['data'][0], 2) == 0.48
+    assert_almost_equal(radar.elevation['data'][0], 0.48,  2)
 
 
 # scan_rate attribute
@@ -235,7 +239,7 @@ def check_field_shape(field):
 
 def test_field_types():
     fields = {'reflectivity_horizontal': MaskedArray, }
-    for field, field_type in fields.iteritems():
+    for field, field_type in fields.items():
         description = "field : %s, type" % field
         check_field_type.description = description
         yield check_field_type, field, field_type
@@ -249,14 +253,14 @@ def test_field_first_points():
     # these values can be found using:
     # [round(radar.fields[f]['data'][0,0]) for f in radar.fields]
     fields = {'reflectivity_horizontal': -6.0, }
-    for field, field_value in fields.iteritems():
+    for field, field_value in fields.items():
         description = "field : %s, first point" % field
         check_field_first_point.description = description
         yield check_field_first_point, field, field_value
 
 
 def check_field_first_point(field, value):
-    assert round(radar.fields[field]['data'][0, 0]) == value
+    assert_almost_equal(radar.fields[field]['data'][0, 0], value, 0)
 
 ########################################################################
 # write_cfradial tests (verify data in written netCDF matches original #
@@ -300,7 +304,7 @@ def test_write_ppi_arm_time_vars():
 
     time_offset = dset.variables['time_offset']
     assert time_offset.units == 'seconds since 2011-05-20 10:54:16'
-    assert round(time_offset[10]) == 4
+    assert_almost_equal(time_offset[10], 4, 0)
     dset.close()
     os.remove(tmpfile)
 
@@ -316,32 +320,32 @@ def check_dataset_to_ref(dset, ref):
     ref_attributes = ref.ncattrs()
 
     for attr in dset_attributes:
-        print "Global attribute:", attr
+        print("Global attribute:", attr)
         assert attr in ref_attributes
         attribute_equal(dset, ref, attr, allow_str_case_diff=True)
 
     # cmptypes, expected to be empty
-    print "Checking cmptypes..."
+    print("Checking cmptypes...")
     assert dset.cmptypes == ref.cmptypes
 
     # groups, expected to be empty
-    print "Checking groups..."
+    print("Checking groups...")
     assert dset.groups == ref.groups
 
     # dimensions (these are not expected to match)
-    print "Checking dimensions"
+    print("Checking dimensions")
     for dim in dset.dimensions.keys():
-        print "Dimension", dim
+        print("Dimension", dim)
         assert dim in ref.dimensions.keys()
 
     # variables
-    print "Checking variables..."
+    print("Checking variables...")
     dset_vars = dset.variables
     ref_vars = ref.variables
     for v in dset_vars.keys():
         if v in ['platform_type', 'instrument_type', 'primary_axis']:
             continue    # default value created by pyart.
-        print "Variable", v
+        print("Variable", v)
         check_variable_to_ref(dset_vars[v], ref_vars[v])
 
 
@@ -349,7 +353,7 @@ def check_variable_to_ref(var, ref_var):
     """ Check that the data/metadata in var matches the ref. variable. """
     # check variable attributes
     for attr in var.ncattrs():
-        print "Checking attribute", attr
+        print("Checking attribute", attr)
         assert attr in ref_var.ncattrs()
         attribute_equal(var, ref_var, attr)
 
@@ -392,7 +396,7 @@ def attribute_equal(class1, class2, key, allow_str_case_diff=True):
 
     assert type(a1) == type(a2)
 
-    if type(a1) is unicode and allow_str_case_diff:
+    if type(a1) is str and allow_str_case_diff:
         assert a1.upper() == a2.upper()
     else:
         assert a1 == a2
@@ -411,3 +415,75 @@ def test_auto_history_and_conventions():
     assert 'Conventions' in radar2.metadata
     assert 'history' in radar2.metadata
     os.remove(tmpfile)
+
+
+def test_delay_field_loading():
+    radar = pyart.io.read_cfradial(
+        pyart.testing.CFRADIAL_PPI_FILE, delay_field_loading=True)
+    assert isinstance(radar.fields['reflectivity_horizontal'],
+                      pyart.io.lazydict.LazyLoadDict)
+    data = radar.fields['reflectivity_horizontal']['data']
+    assert isinstance(data, MaskedArray)
+    assert data.shape == (40, 42)
+    assert_almost_equal(data[0, 0], -6.0, 0)
+
+
+def test_create_ncvar_different_dtype():
+    # test _Write_as_dtype key handling in _create_ncvar
+    tmpfile = tempfile.mkstemp(suffix='.nc', dir='.')[1]
+    dset = netCDF4.Dataset(tmpfile, mode='w')
+    dset.createDimension('x', 256)
+    dic = {
+        'data': np.arange(256, dtype='float32') * 0.5 + 100.,
+        '_Write_as_dtype': 'u1',
+        '_FillValue': 100.,
+    }
+    assert 'add_offset' not in dic
+    assert 'scale_factor' not in dic
+
+    pyart.io.cfradial._create_ncvar(dic, dset, 'foo', ('x'))
+
+    assert 'add_offset' in dic
+    assert 'scale_factor' in dic
+    assert '_FillValue' in dic
+
+    foo = dset.variables['foo']
+    assert foo.dtype == np.dtype('uint8')
+    assert_almost_equal(foo.scale_factor, 0.5)
+    assert_almost_equal(foo.add_offset, 100)
+    assert foo[0] is np.ma.masked
+    assert_almost_equal(foo[1], 100.5)
+    assert_almost_equal(foo[-1], 227.5)
+
+    dset.close()
+    os.remove(tmpfile)
+
+
+def test_calculate_scale_and_offset():
+    data = np.arange(128, dtype='float32')
+    scale, offset, fill = pyart.io.cfradial._calculate_scale_and_offset(
+        {'data': data}, np.dtype('u1'))
+
+    assert_almost_equal(scale, 0.5)
+    assert_almost_equal(offset, -0.5)
+    assert_almost_equal(fill, 0)
+
+    # check that nans and infs are ignored
+    data[5] = np.nan
+    data[6] = np.inf
+    scale, offset, fill = pyart.io.cfradial._calculate_scale_and_offset(
+        {'data': data}, np.dtype('u1'))
+    assert_almost_equal(scale, 0.5)
+    assert_almost_equal(offset, -0.5)
+    assert_almost_equal(fill, 0)
+
+    # maximum < minimum raises ValueError
+    assert_raises(ValueError, pyart.io.cfradial._calculate_scale_and_offset,
+                  {'data': data}, np.dtype('u1'), 100., 99)
+
+    # maximum == minimum issues warning
+    with warnings.catch_warnings(record=True) as w:
+        assert len(w) == 0
+        pyart.io.cfradial._calculate_scale_and_offset(
+            {'data': data}, np.dtype('u1'), 100, 100)
+        assert len(w) == 1

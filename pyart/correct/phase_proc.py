@@ -33,6 +33,8 @@ Adapted by Scott Collis and Scott Giangrande, refactored by Jonathan Helmus
 
 """
 
+from __future__ import print_function
+
 import copy
 from time import time
 
@@ -485,7 +487,7 @@ def get_phidp_unf(radar, ncp_lev=0.4, rhohv_lev=0.6, debug=False, ncpts=20,
         else:
             cordata[radial, :] = np.zeros(my_rhv.shape[1])
     if debug:
-        print "Exec time: ", time() - t
+        print("Exec time: ", time() - t)
     return cordata
 
 
@@ -1063,7 +1065,7 @@ def phase_proc_lp(radar, offset, debug=False, self_const=60000.0,
     St_Gorlv_differential_5pts = [-.2, -.1, 0, .1, .2]
     for sweep in range(len(radar.sweep_start_ray_index['data'])):
         if debug:
-            print "Doing ", sweep
+            print("Doing ", sweep)
         end_gate, start_ray, end_ray = det_process_range(
             radar, sweep, fzl, doc=15)
         start_gate = 0
