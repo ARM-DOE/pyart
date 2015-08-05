@@ -121,14 +121,16 @@ class GridMapDisplay():
 
         self.basemap.drawcoastlines(linewidth=1.25)
         self.basemap.drawstates()
-        self.basemap.drawparallels(lat_lines, labels=[True, False, False, False])
-        self.basemap.drawmeridians(lon_lines, labels=[False, False, False, True])
+        self.basemap.drawparallels(lat_lines,
+                                   labels=[True, False, False, False])
+        self.basemap.drawmeridians(lon_lines,
+                                   labels=[False, False, False, True])
 
     def plot_grid(self, field, level=0, vmin=None, vmax=None, cmap='jet',
-                 mask_outside=True, title=None, title_flag=True,
-                 axislabels=(None, None), axislabels_flag=False,
-                 colorbar_flag=True, colorbar_label=None,
-                 colorbar_orient='vertical', edges=True, ax=None, fig=None):
+                  mask_outside=True, title=None, title_flag=True,
+                  axislabels=(None, None), axislabels_flag=False,
+                  colorbar_flag=True, colorbar_label=None,
+                  colorbar_orient='vertical', edges=True, ax=None, fig=None):
         """
         Plot the grid onto the current basemap.
 
@@ -288,8 +290,8 @@ class GridMapDisplay():
             masking.
         title : str
             Title to label plot with, None to use default title generated from
-            the field and lat,lon parameters. Parameter is ignored if title_flag
-            is False.
+            the field and lat,lon parameters. Parameter is ignored if
+            title_flag is False.
         title_flag : bool
             True to add a title to the plot, False does not add a title.
         axislabels : (str, str)
@@ -330,12 +332,12 @@ class GridMapDisplay():
             colorbar_orient=colorbar_orient, edges=edges, ax=ax, fig=fig)
 
     def plot_latitudinal_level(self, field, y_index,
-                            vmin=None, vmax=None, cmap='jet',
-                            mask_outside=True, title=None, title_flag=True,
-                            axislabels=(None, None), axislabels_flag=True,
-                            colorbar_flag=True, colorbar_label=None,
-                            colorbar_orient='vertical', edges=True, ax=None,
-                            fig=None):
+                               vmin=None, vmax=None, cmap='jet',
+                               mask_outside=True, title=None, title_flag=True,
+                               axislabels=(None, None), axislabels_flag=True,
+                               colorbar_flag=True, colorbar_label=None,
+                               colorbar_orient='vertical', edges=True,
+                               ax=None, fig=None):
         """
         Plot a slice along a given latitude.
 
@@ -356,8 +358,8 @@ class GridMapDisplay():
             masking.
         title : str
             Title to label plot with, None to use default title generated from
-            the field and lat,lon parameters. Parameter is ignored if title_flag
-            is False.
+            the field and lat,lon parameters. Parameter is ignored if
+            title_flag is False.
         title_flag : bool
             True to add a title to the plot, False does not add a title.
         axislabels : (str, str)
@@ -415,7 +417,8 @@ class GridMapDisplay():
 
         if title_flag:
             if title is None:
-                ax.set_title(self.generate_latitudinal_level_title(field, y_index))
+                ax.set_title(self.generate_latitudinal_level_title(field,
+                                                                   y_index))
             else:
                 ax.set_title(title)
 
@@ -427,7 +430,6 @@ class GridMapDisplay():
                                orientation=colorbar_orient,
                                field=field, ax=ax, fig=fig)
         return
-
 
     def plot_longitude_slice(self, field, lon=None, lat=None,
                              vmin=None, vmax=None, cmap='jet',
@@ -457,8 +459,8 @@ class GridMapDisplay():
             masking.
         title : str
             Title to label plot with, None to use default title generated from
-            the field and lat,lon parameters. Parameter is ignored if title_flag
-            is False.
+            the field and lat,lon parameters. Parameter is ignored if
+            title_flag is False.
         title_flag : bool
             True to add a title to the plot, False does not add a title.
         axislabels : (str, str)
@@ -497,11 +499,13 @@ class GridMapDisplay():
             colorbar_orient=colorbar_orient, edges=edges, ax=ax, fig=fig)
 
     def plot_longitudinal_level(self, field, x_index,
-                             vmin=None, vmax=None, cmap='jet',
-                             mask_outside=True, title=None, title_flag=True,
-                             axislabels=(None, None), axislabels_flag=True,
-                             colorbar_flag=True, colorbar_label=None,
-                             colorbar_orient='vertical', edges=True, ax=None, fig=None):
+                                vmin=None, vmax=None, cmap='jet',
+                                mask_outside=True, title=None,
+                                title_flag=True, axislabels=(None, None),
+                                axislabels_flag=True, colorbar_flag=True,
+                                colorbar_label=None,
+                                colorbar_orient='vertical', edges=True,
+                                ax=None, fig=None):
         """
         Plot a slice along a given longitude.
 
@@ -522,8 +526,8 @@ class GridMapDisplay():
             masking.
         title : str
             Title to label plot with, None to use default title generated from
-            the field and lat,lon parameters. Parameter is ignored if title_flag
-            is False.
+            the field and lat,lon parameters. Parameter is ignored if
+            title_flag is False.
         title_flag : bool
             True to add a title to the plot, False does not add a title.
         axislabels : (str, str)
@@ -581,7 +585,8 @@ class GridMapDisplay():
 
         if title_flag:
             if title is None:
-                ax.set_title(self.generate_longitudinal_level_title(field, x_index))
+                ax.set_title(self.generate_longitudinal_level_title(field,
+                                                                    x_index))
             else:
                 ax.set_title(title)
 
@@ -594,8 +599,8 @@ class GridMapDisplay():
                                field=field, ax=ax, fig=fig)
         return
 
-    def plot_colorbar(self, mappable=None, orientation='horizontal', label=None,
-                      cax=None, ax=None, fig=None, field=None):
+    def plot_colorbar(self, mappable=None, orientation='horizontal',
+                      label=None, cax=None, ax=None, fig=None, field=None):
         """
         Plot a colorbar.
 

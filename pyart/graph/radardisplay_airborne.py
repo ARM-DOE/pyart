@@ -302,7 +302,8 @@ class RadarDisplay_Airborne(RadarDisplay):
                 if len(ranges) != 1:
                     ranges = common._interpolate_range_edges(ranges)
                 if len(elevations) != 1:
-                    elevations = common._interpolate_elevation_edges(elevations)
+                    elevations = common._interpolate_elevation_edges(
+                        elevations)
                 if len(azimuths) != 1:
                     azimuths = common._interpolate_azimuth_edges(azimuths)
 

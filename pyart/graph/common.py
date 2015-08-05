@@ -222,6 +222,7 @@ def parse_vmin_vmax(container, field, vmin, vmax):
             vmax = 100
     return vmin, vmax
 
+
 def parse_lon_lat(grid, lon, lat):
     """ Parse lat and lon parameters """
     if lat is None:
@@ -229,6 +230,7 @@ def parse_lon_lat(grid, lon, lat):
     if lon is None:
         lon = grid.axes['lon']['data'][0]
     return lon, lat
+
 
 def generate_colorbar_label(standard_name, units):
     """ Generate and return a label for a colorbar. """
@@ -376,6 +378,7 @@ def generate_title(radar, field, sweep):
     field_name = generate_field_name(radar, field)
     return l1 + '\n' + field_name
 
+
 def generate_grid_title(grid, field, level):
     """
     Generate a title for a plot.
@@ -399,7 +402,7 @@ def generate_grid_title(grid, field, level):
     time_str = generate_grid_time_begin(grid).isoformat() + 'Z'
     height = grid.axes["z_disp"]['data'][level] / 1000.
     l1 = "%s %.1f km %s " % (generate_grid_name(grid), height,
-                               time_str)
+                             time_str)
     field_name = generate_field_name(grid, field)
     return l1 + '\n' + field_name
 
@@ -426,13 +429,13 @@ def generate_longitudinal_level_title(grid, field, level):
     """
     time_str = generate_grid_time_begin(grid).isoformat() + 'Z'
     disp = grid.axes["x_disp"]['data'][level] / 1000.
-    if disp>= 0:
+    if disp >= 0:
         direction = "east"
     else:
         direction = "west"
         disp = - disp
     l1 = "%s %.1f km %s of origin %s " % (generate_grid_name(grid), disp,
-                               direction, time_str)
+                                          direction, time_str)
     field_name = generate_field_name(grid, field)
     return l1 + '\n' + field_name
 
@@ -459,13 +462,13 @@ def generate_latitudinal_level_title(grid, field, level):
     """
     time_str = generate_grid_time_begin(grid).isoformat() + 'Z'
     disp = grid.axes["y_disp"]['data'][level] / 1000.
-    if disp>= 0:
+    if disp >= 0:
         direction = "north"
     else:
         direction = "south"
         disp = - disp
     l1 = "%s %.1f km %s of origin %s " % (generate_grid_name(grid), disp,
-                               direction, time_str)
+                                          direction, time_str)
     field_name = generate_field_name(grid, field)
     return l1 + '\n' + field_name
 
