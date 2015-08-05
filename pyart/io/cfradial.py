@@ -726,7 +726,7 @@ def _create_ncvar(dic, dataset, name, dimensions):
         ncvar.setncattr('_FillValue', fv)
 
     # set all attributes
-    for key, value in dic.iteritems():
+    for key, value in dic.items():
         if key in special_keys.keys():
             continue
         if key in ['data', 'long_name', 'units']:
