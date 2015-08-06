@@ -404,7 +404,7 @@ class GridMapDisplay():
 
         # plot the grid
         x_1d = self.grid.axes['x_disp']['data'] / 1000.
-        y_1d = self.grid.axes['z_disp']['data'] / 1000.
+        z_1d = self.grid.axes['z_disp']['data'] / 1000.
         if edges:
             if len(x_1d) > 1:
                 x_1d = common._interpolate_axes_edges(x_1d)
@@ -417,7 +417,8 @@ class GridMapDisplay():
 
         if title_flag:
             if title is None:
-                ax.set_title(self.generate_latitudinal_level_title(field,
+                ax.set_title(
+                    common.generate_latitudinal_level_title(self.grid, field,
                                                                    y_index))
             else:
                 ax.set_title(title)
@@ -585,7 +586,8 @@ class GridMapDisplay():
 
         if title_flag:
             if title is None:
-                ax.set_title(self.generate_longitudinal_level_title(field,
+                ax.set_title(
+                    common.generate_longitudinal_level_title(self.grid, field,
                                                                     x_index))
             else:
                 ax.set_title(title)
@@ -820,7 +822,7 @@ class GridMapDisplay():
         """
         return common.generate_grid_title(self.grid, field, level)
 
-    def generate_longitude_slice_title(self, field, level):
+    def generate_longitudinal_level_title(self, field, level):
         """
         Generate a title for a plot.
 
@@ -837,9 +839,10 @@ class GridMapDisplay():
             Plot title.
 
         """
-        return common.generate_longitude_slice_title(self.grid, field, level)
+        return common.generate_longitudinal_level_title(self.grid, field,
+                                                        level)
 
-    def generate_latitude_slice_title(self, field, level):
+    def generate_latitudinal_level_title(self, field, level):
         """
         Generate a title for a plot.
 
@@ -856,7 +859,8 @@ class GridMapDisplay():
             Plot title.
 
         """
-        return common.generate_latitude_slice_title(self.grid, field, level)
+        return common.generate_latitudinal_level_title(self.grid, field,
+                                                       level)
 
     ##########################
     #      get methods       #
