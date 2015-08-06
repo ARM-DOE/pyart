@@ -197,8 +197,8 @@ class GridMapDisplay():
 
         # plot the grid
         if edges:
-            x_1d = self.grid.axes['x_disp']['data'] / 1000.
-            y_1d = self.grid.axes['y_disp']['data'] / 1000.
+            x_1d = self.grid.axes['x_disp']['data']
+            y_1d = self.grid.axes['y_disp']['data']
             if len(x_1d) > 1:
                 x_1d = common._interpolate_axes_edges(x_1d)
             if len(y_1d) > 1:
@@ -572,8 +572,8 @@ class GridMapDisplay():
             data = np.ma.masked_outside(data, vmin, vmax)
 
         # plot the grid
-        y_1d = self.grid.axes['y_disp']['data']
-        z_1d = self.grid.axes['z_disp']['data']
+        y_1d = self.grid.axes['y_disp']['data'] / 1000.
+        z_1d = self.grid.axes['z_disp']['data'] / 1000.
         if edges:
             if len(y_1d) > 1:
                 y_1d = common._interpolate_axes_edges(y_1d)
