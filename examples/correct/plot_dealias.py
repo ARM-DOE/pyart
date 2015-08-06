@@ -29,10 +29,16 @@ interp_sounde = netCDF4.Dataset(SOND_NAME)
 t = pyart.correct.find_time_in_interp_sonde(interp_sounde, target)
 height, speed, direction = t
 
+# create a gate filter which specifies gates to exclude from dealiasing
+gatefilter = pyart.correct.GateFilter(radar)
+gatefilter.exclude_invalid('velocity')
+gatefilter.exclude_invalid('reflectivity')
+gatefilter.exclude_outside('reflectivity', 0, 80)
+
 # perform dealiasing
 dealias_data = pyart.correct.dealias_fourdd(
     radar, sounding_heights=height * 1000.0, sounding_wind_speeds=speed,
-    sounding_wind_direction=direction)
+    sounding_wind_direction=direction, gatefilter=gatefilter)
 radar.add_field('corrected_velocity', dealias_data)
 
 # create a plot of the first and sixth sweeps

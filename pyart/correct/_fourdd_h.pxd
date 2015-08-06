@@ -15,12 +15,6 @@ cdef extern from "dealias_fourdd.h":
                        int ba_edgecount)
 
 
-cdef extern from "filter_by_reflectivity.h":
-
-    int filter_by_reflectivity(
-        _rsl_h.Volume* DBZVolume, _rsl_h.Volume* rvVolume, float missingVal,
-        float lowdbz, float highdbz, int rm_missing)
-
 cdef extern from "sounding_to_volume.h":
     
     int sounding_to_volume(_rsl_h.Volume* soundVolume, float missingVal,

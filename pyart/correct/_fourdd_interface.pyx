@@ -43,12 +43,12 @@ cpdef create_soundvolume(radialVelVolume,
         one-dimensional float32 array.
     maxshear : float
         Maximum vertical shear which will be incorperated into the created
-        volume.  
+        volume.
     sign : int
         Sign convention which the radial velocities in the created volume
-        will follow.  A value of 1 represents when positive values 
-        velocities are towards the radar, -1 represents when negative 
-        velocities are towards the radar. 
+        will follow.  A value of 1 represents when positive values
+        velocities are towards the radar, -1 represents when negative
+        velocities are towards the radar.
 
     Returns
     -------
@@ -72,19 +72,18 @@ cpdef create_soundvolume(radialVelVolume,
 
 cpdef fourdd_dealias(
     _RslVolume radialVelVolume, _RslVolume lastVelVolume,
-    _RslVolume soundVolume,_RslVolume DZvolume,
-    prep, filt, 
-    lowdbz=0.0, highdbz=80.0, rm_missing=0, compthresh=0.25, compthresh2=0.49,
+    _RslVolume soundVolume, filt,
+    compthresh=0.25, compthresh2=0.49,
     thresh=0.4, ckval=1.0, stdthresh=0.8, epsilon=0.00001, maxcount=10,
-    pass2=1, rm=0, proximity=5, mingood=5, ba_mincount=5, ba_edgecount=3, 
+    pass2=1, rm=0, proximity=5, mingood=5, ba_mincount=5, ba_edgecount=3,
     debug=False):
     """
     fourdd_dealias(
-        radialVelVolume, lastVelVolume, soundVolume, DZvolume, prep, filt, 
-        lowdbz=0.0, highdbz=80.0, rm_missing=0, compthresh=0.25,
-        compthresh2=0.49, thresh=0.4, epsilon=0.00001, ckval=1.0,
-        stdthresh=0.8, maxcount=10, pass2=1, rm=0, proximity=5, mingood=5,
-        ba_mincount=5, ba_edgecount=3, debug=False)
+        radialVelVolume, lastVelVolume, soundVolume, filt,
+        compthresh=0.25, compthresh2=0.49, thresh=0.4,
+        epsilon=0.00001, ckval=1.0, stdthresh=0.8, maxcount=10, pass2=1,
+        rm=0, proximity=5, mingood=5, ba_mincount=5, ba_edgecount=3,
+        debug=False)
 
     Dealias using the FourDD algorithm.
 
@@ -99,32 +98,18 @@ cpdef fourdd_dealias(
     soundVolume : _RslVolume or None
         Volume created from sounding data.  If unavailable, set this to None.
         soundVolume and lastVelVolume cannot both be None.
-    DZvolume : _RslVolume or None
-        Reflectivity to use when thresholding is selected.  This parameter
-        is not used when prep is 0 and can then be set to None.
-    prep : int
-        Flag controlling thresholding of DZvolume, 1 = yes, 0 = no.
     filt : int
         Flag controlling Bergen and Albers filter, 1 = yes, 0 = no.
-    
+
     Other Parameters
     ----------------
-    lowdbz : float
-        Lowest allowed reflectivity.  Gates with reflectivities below this
-        value are filtered and not included in the dealiasing.
-    highdbz : float 
-        Highest allowed reflectivity.  Gates with reflectivities above this
-        value are filtered and not included in the dealiasing.
-    rm_missing : int
-        Flag to remove gates where the reflectivity is missing.  A value of 1
-        will remove the gates, a value of 0 will retain them.
     compthresh : float
         Fraction of the Nyquist velocity to use as a threshold when performing
         continity (initial) dealiasing.  Velocities differences above this
-        threshold will not be marked as gate from which to begin unfolding 
+        threshold will not be marked as gate from which to begin unfolding
         during spatial dealiasing.
     compthresh2 : float
-        The same as compthresh but the value used during the second pass of 
+        The same as compthresh but the value used during the second pass of
         dealasing.  This second pass is only performed in both a sounding
         and last volume are provided.
     thresh : float
@@ -149,7 +134,7 @@ cpdef fourdd_dealias(
         or retained for unfolding during the second pass (a value of 1) when
         both a sounding volume and last volume are provided.
     rm : int
-        Determines what should be done with gates that are left unfolded 
+        Determines what should be done with gates that are left unfolded
         after the first pass of dealiasing.  A value of 1 will remove these
         gates, a value of 0 sets these gates to their initial velocity.  If
         both a sounding volume and last volume are provided this parameter is
@@ -157,7 +142,7 @@ cpdef fourdd_dealias(
     proximity : int
         Number of gates and rays to include of either side of the current gate
         during window dealiasing.  This value may be doubled in cases where
-        a standard sized window does not capture a sufficient number of 
+        a standard sized window does not capture a sufficient number of
         good valued gates.
     mingood : int
         Number of good valued gates required within the window before the
@@ -166,12 +151,11 @@ cpdef fourdd_dealias(
         Number of neighbors required during Bergen and Albers filter for
         a given gate to be included, must be between 1 and 8, 5 recommended.
     ba_edgecount : int
-        Same as ba_mincount but used at ray edges, must be between 1 and 5, 
+        Same as ba_mincount but used at ray edges, must be between 1 and 5,
         3 recommended.
     debug : bool
         True to return RSL Volume objects for debugging:
-        usuccess, radialVelVolume, lastVelVolume, soundVolume, DZvolume,
-        unfoldedVolume
+        usuccess, radialVelVolume, lastVelVolume, soundVolume, unfoldedVolume
 
     Returns
     -------
@@ -198,21 +182,10 @@ cpdef fourdd_dealias(
     # copy the radial velocity data to unfoldedVolume
     unfoldedVolume = _rsl_interface.copy_volume(radialVelVolume)
 
-    if prep:
-        if DZvolume is None:
-            raise ValueError('DZvolume must be defined if prep is True')
-        # remove any bins where reflectivity is missing or outside
-        # the accepted interval.
-        flag = _fourdd_h.filter_by_reflectivity(
-            DZvolume._Volume, unfoldedVolume._Volume, MISSINGVEL, 
-            lowdbz, highdbz, rm_missing)
-        if flag == 0:
-            raise ValueError('Reflectivity filtering failed')
-
     # unfold the velocity fields in unfoldedVolume
     if lastVelVolume is None:   # only soundVolume
         usuccess  = _fourdd_h.dealias_fourdd(
-            unfoldedVolume._Volume, soundVolume._Volume, NULL, 
+            unfoldedVolume._Volume, soundVolume._Volume, NULL,
             MISSINGVEL, compthresh, compthresh2, thresh,
             ckval, stdthresh, epsilon,
             maxcount, pass2, rm, proximity, mingood,
@@ -222,18 +195,18 @@ cpdef fourdd_dealias(
             unfoldedVolume._Volume, NULL, lastVelVolume._Volume,
             MISSINGVEL, compthresh, compthresh2, thresh,
             ckval, stdthresh, epsilon,
-            maxcount, pass2, rm, proximity, mingood, 
+            maxcount, pass2, rm, proximity, mingood,
             filt, ba_mincount, ba_edgecount)
     else:   # both soundVolume and lastVelVolume
         usuccess = _fourdd_h.dealias_fourdd(
             unfoldedVolume._Volume, soundVolume._Volume, lastVelVolume._Volume,
             MISSINGVEL, compthresh, compthresh2, thresh,
-            ckval, stdthresh, epsilon, 
-            maxcount, pass2, rm, proximity, mingood,  
+            ckval, stdthresh, epsilon,
+            maxcount, pass2, rm, proximity, mingood,
             filt, ba_mincount, ba_edgecount)
     if debug:
         return (usuccess, radialVelVolume, lastVelVolume, soundVolume,
-                DZvolume, unfoldedVolume)
+                unfoldedVolume)
 
     data = unfoldedVolume.get_data()
     return usuccess, data
