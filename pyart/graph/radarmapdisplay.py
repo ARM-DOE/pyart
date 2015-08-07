@@ -218,23 +218,18 @@ class RadarMapDisplay(RadarDisplay):
             data = np.ma.masked_outside(data, vmin, vmax)
 
         # plot the basemap
-        using_corners = (None not in [min_lon, min_lat, max_lon, max_lat])
-        if using_corners:
-            basemap = Basemap(llcrnrlon=min_lon, llcrnrlat=min_lat,
-                              urcrnrlon=max_lon, urcrnrlat=max_lat,
-                              lat_0=lat_0, lon_0=lon_0,
-                              projection=projection, area_thresh=area_thresh,
-                              resolution=resolution, ax=ax, **kwargs)
-        else:   # using width and height
-            # map domain determined from location of radar gates
-            if width is None:
-                width = (x.max() - y.min()) * 1000.
-            if height is None:
-                height = (y.max() - y.min()) * 1000.
-            basemap = Basemap(width=width, height=height,
-                              lon_0=lon_0, lat_0=lat_0,
-                              projection=projection, area_thresh=area_thresh,
-                              resolution=resolution, ax=ax, **kwargs)
+        # using width and height
+        # map domain determined from location of radar gates
+        if width is None:
+            width = (x.max() - x.min()) * 1000.
+        if height is None:
+            height = (y.max() - y.min()) * 1000.
+        basemap = Basemap(llcrnrlon=min_lon, llcrnrlat=min_lat,
+                          urcrnrlon=max_lon, urcrnrlat=max_lat,
+                          width=width, height=height,
+                          lon_0=lon_0, lat_0=lat_0,
+                          projection=projection, area_thresh=area_thresh,
+                          resolution=resolution, ax=ax, **kwargs)
 
         # add embelishments
         if embelish is True:

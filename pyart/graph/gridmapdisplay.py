@@ -108,13 +108,13 @@ class GridMapDisplay():
         ax : axes or None.
             Axis to add the basemap to, if None the current axis is used.
         kwargs: Basemap options
-            Options to be passed to Basemap. If projection is not specified here it
-            uses proj='tmerc' (transverse mercator).
+            Options to be passed to Basemap. If projection is not specified
+            here it uses proj='merc' (mercator).
 
         """
         # make basemap
         self._make_basemap(resolution, area_thresh, auto_range,
-                           min_lon, max_lon, min_lat, max_lat, ax)
+                           min_lon, max_lon, min_lat, max_lat, ax, **kwargs)
 
         # parse the parameters
         if lat_lines is None:
@@ -676,8 +676,8 @@ class GridMapDisplay():
         ax : axes or None.
             Axis to add the basemap to, if None the current axis is used.
         kwargs: Basemap options
-            Options to be passed to Basemap. If projection is not specified here it
-            uses proj='tmerc' (transverse mercator).
+            Options to be passed to Basemap. If projection is not specified
+            here it uses proj='merc' (mercator).
         """
         # parse the parameters
         ax = common.parse_ax(ax)
@@ -699,9 +699,16 @@ class GridMapDisplay():
         lat_0 = self.grid.axes['lat']['data'][0]
         lon_0 = self.grid.axes['lon']['data'][0]
 
+        # determine width and height of the plot
+        x = self.grid.axes['x_disp']['data'][0]
+        y = self.grid.axes['y_disp']['data'][0]
+        width = (x.max() - x.min())
+        height = (y.max() - y.min())
+
         default_args = {
             'llcrnrlon': min_lon, 'llcrnrlat': min_lat,
             'urcrnrlon': max_lon, 'urcrnrlat': max_lat,
+            'width': width, 'height': height,
             'lat_0': lat_0, 'lon_0': lon_0, 'lat_ts':lat_0,
             'projection': 'merc', 'area_thresh': area_thresh,
             'resolution': resolution, 'ax': ax}
