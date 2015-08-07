@@ -699,19 +699,23 @@ class GridMapDisplay():
         lat_0 = self.grid.axes['lat']['data'][0]
         lon_0 = self.grid.axes['lon']['data'][0]
 
-        # determine width and height of the plot
-        x = self.grid.axes['x_disp']['data'][0]
-        y = self.grid.axes['y_disp']['data'][0]
-        width = (x.max() - x.min())
-        height = (y.max() - y.min())
-
         default_args = {
-            'llcrnrlon': min_lon, 'llcrnrlat': min_lat,
-            'urcrnrlon': max_lon, 'urcrnrlat': max_lat,
-            'width': width, 'height': height,
             'lat_0': lat_0, 'lon_0': lon_0, 'lat_ts':lat_0,
             'projection': 'merc', 'area_thresh': area_thresh,
             'resolution': resolution, 'ax': ax}
+
+        using_corners = (None not in [min_lon, min_lat, max_lon, max_lat])
+        if using_corners:
+            default_args['llcrnrlon'] = min_lon
+            default_args['llcrnrlat'] = min_lat
+            default_args['urcrnrlon'] = max_lon
+            default_args['urcrnrlat'] = max_lat
+        else:
+            # determine width and height of the plot
+            x = self.grid.axes['x_disp']['data'][0]
+            y = self.grid.axes['y_disp']['data'][0]
+            default_args['width'] = (x.max() - x.min())
+            default_args['height'] = (y.max() - y.min())
 
         for key in default_args.keys():
             if key not in kwargs:
