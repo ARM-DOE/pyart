@@ -83,7 +83,7 @@ class GridMapDisplay():
                      resolution='l', area_thresh=10000,
                      auto_range=True,
                      min_lon=-92, max_lon=-86, min_lat=40, max_lat=44,
-                     ax=None):
+                     ax=None, **kwargs):
         """
         Plot a basemap.
 
@@ -107,6 +107,9 @@ class GridMapDisplay():
             Basemap area_thresh parameter. See Basemap documentation.
         ax : axes or None.
             Axis to add the basemap to, if None the current axis is used.
+        kwargs: Basemap options
+            Options to be passed to Basemap. If projection is not specified here it
+            uses proj='tmerc' (transverse mercator).
 
         """
         # make basemap
@@ -196,18 +199,18 @@ class GridMapDisplay():
             data = np.ma.masked_outside(data, vmin, vmax)
 
         # plot the grid
+        x_1d = self.grid.axes['x_disp']['data']
+        y_1d = self.grid.axes['y_disp']['data']
+
         if edges:
-            x_1d = self.grid.axes['x_disp']['data']
-            y_1d = self.grid.axes['y_disp']['data']
             if len(x_1d) > 1:
                 x_1d = common._interpolate_axes_edges(x_1d)
             if len(y_1d) > 1:
                 y_1d = common._interpolate_axes_edges(y_1d)
-            x_2d, y_2d = np.meshgrid(x_1d, y_1d)
-            grid_lons, grid_lats = self.proj(x_2d, y_2d, inverse=True)
-            xd, yd = basemap(self.grid_lons, self.grid_lats)
-        else:
-            xd, yd = basemap(self.grid_lons, self.grid_lats)
+
+        x_2d, y_2d = np.meshgrid(x_1d, y_1d)
+        grid_lons, grid_lats = self.proj(x_2d, y_2d, inverse=True)
+        xd, yd = basemap(grid_lons, grid_lats)
         pm = basemap.pcolormesh(xd, yd, data, vmin=vmin, vmax=vmax, cmap=cmap)
         self.mappables.append(pm)
         self.fields.append(field)
@@ -249,14 +252,14 @@ class GridMapDisplay():
         # parse the parameters
         ax = common.parse_ax(ax)
         lon, lat = common.parse_lon_lat(self.grid, lon, lat)
-        self._check_basemap()
+        basemap = self.get_basemap()
 
         # add crosshairs.
-        x_lon, y_lon = self.basemap(
+        x_lon, y_lon = basemap(
             np.array([lon, lon]),
-            np.array([self.basemap.latmin, self.basemap.latmax]))
-        x_lat, y_lat = self.basemap(
-            np.array([self.basemap.lonmin, self.basemap.lonmax]),
+            np.array([basemap.latmin, basemap.latmax]))
+        x_lat, y_lat = basemap(
+            np.array([basemap.lonmin, basemap.lonmax]),
             np.array([lat, lat]))
         ax.plot(x_lon, y_lon, line_style, linewidth=linewidth)
         ax.plot(x_lat, y_lat, line_style, linewidth=linewidth)
@@ -650,14 +653,9 @@ class GridMapDisplay():
 
         return
 
-    def _check_basemap(self):
-        """ Check that basemap is not None, raise ValueError if it is. """
-        if self.basemap is None:
-            raise ValueError('no basemap plotted')
-
     def _make_basemap(self, resolution='l', area_thresh=10000,
                       auto_range=True, min_lon=-92, max_lon=-86,
-                      min_lat=40, max_lat=44, ax=None):
+                      min_lat=40, max_lat=44, ax=None, **kwargs):
         """
         Make a basemap.
 
@@ -677,7 +675,9 @@ class GridMapDisplay():
             Basemap area_thresh parameter. See Basemap documentation.
         ax : axes or None.
             Axis to add the basemap to, if None the current axis is used.
-
+        kwargs: Basemap options
+            Options to be passed to Basemap. If projection is not specified here it
+            uses proj='tmerc' (transverse mercator).
         """
         # parse the parameters
         ax = common.parse_ax(ax)
@@ -699,15 +699,21 @@ class GridMapDisplay():
         lat_0 = self.grid.axes['lat']['data'][0]
         lon_0 = self.grid.axes['lon']['data'][0]
 
-        # plot the basemap
-        basemap = Basemap(llcrnrlon=min_lon, llcrnrlat=min_lat,
-                          urcrnrlon=max_lon, urcrnrlat=max_lat,
-                          lat_0=lat_0, lon_0=lon_0,
-                          projection='tmerc', area_thresh=area_thresh,
-                          resolution=resolution, ax=ax)
+        default_args = {
+            'llcrnrlon': min_lon, 'llcrnrlat': min_lat,
+            'urcrnrlon': max_lon, 'urcrnrlat': max_lat,
+            'lat_0': lat_0, 'lon_0': lon_0, 'lat_ts':lat_0,
+            'projection': 'merc', 'area_thresh': area_thresh,
+            'resolution': resolution, 'ax': ax}
 
-        self.basemap = basemap
-        return basemap
+        for key in default_args.keys():
+            if key not in kwargs:
+                kwargs[key] = default_args[key]
+
+        # plot the basemap
+        self.basemap = Basemap(**kwargs)
+
+        return self.basemap
 
     def _find_nearest_grid_indices(self, lon, lat):
         """
