@@ -15,18 +15,26 @@ Common graphing routines.
     parse_ax
     parse_ax_fig
     parse_vmin_vmax
+    parse_lon_lat
     generate_colorbar_label
     generate_field_name
     generate_radar_name
-    generate_time_begin
+    generate_grid_name
+    generate_radar_time_begin
+    generate_grid_time_begin
     generate_filename
+    generate_grid_filename
     generate_title
+    generate_grid_title
+    generate_longitudinal_level_title
+    generate_latitudinal_level_title
     generate_vpt_title
     generate_ray_title
     set_limits
     _interpolate_range_edges
     _interpolate_elevation_edges
     _interpolate_azimuth_edges
+    _interpolate_axes_edges
 
 """
 
@@ -168,6 +176,16 @@ def _interpolate_azimuth_edges(azimuths):
     edges[edges < 0] += 360     # range from [-180, 180] to [0, 360]
     return edges
 
+
+def _interpolate_axes_edges(axes):
+    """ Interpolate the edges of the axes gates from their centers. """
+    edges = np.empty((axes.shape[0] + 1, ), dtype=axes.dtype)
+    edges[1:-1] = (axes[:-1] + axes[1:]) / 2.
+    edges[0] = axes[0] - (axes[1] - axes[0]) / 2.
+    edges[-1] = axes[-1] - (axes[-2] - axes[-1]) / 2.
+    return edges
+
+
 ########################
 # Common radar methods #
 ########################
@@ -189,9 +207,9 @@ def parse_ax_fig(ax, fig):
     return ax, fig
 
 
-def parse_vmin_vmax(radar, field, vmin, vmax):
+def parse_vmin_vmax(container, field, vmin, vmax):
     """ Parse and return vmin and vmax parameters. """
-    field_dict = radar.fields[field]
+    field_dict = container.fields[field]
     if vmin is None:
         if 'valid_min' in field_dict:
             vmin = field_dict['valid_min']
@@ -205,17 +223,26 @@ def parse_vmin_vmax(radar, field, vmin, vmax):
     return vmin, vmax
 
 
+def parse_lon_lat(grid, lon, lat):
+    """ Parse lat and lon parameters """
+    if lat is None:
+        lat = grid.axes['lat']['data'][0]
+    if lon is None:
+        lon = grid.axes['lon']['data'][0]
+    return lon, lat
+
+
 def generate_colorbar_label(standard_name, units):
     """ Generate and return a label for a colorbar. """
     return standard_name.replace('_', ' ') + ' (' + units + ')'
 
 
-def generate_field_name(radar, field):
+def generate_field_name(container, field):
     """ Return a nice field name for a particular field. """
-    if 'standard_name' in radar.fields[field]:
-        field_name = radar.fields[field]['standard_name']
-    elif 'long_name' in radar.fields[field]:
-        field_name = radar.fields[field]['long_name']
+    if 'standard_name' in container.fields[field]:
+        field_name = container.fields[field]['standard_name']
+    elif 'long_name' in container.fields[field]:
+        field_name = container.fields[field]['long_name']
     else:
         field_name = str(field)
     field_name = field_name.replace('_', ' ')
@@ -231,12 +258,35 @@ def generate_radar_name(radar):
         return ''
 
 
-def generate_time_begin(radar):
+def generate_grid_name(grid):
+    """ Return grid name. """
+    if 'instrument_name' in grid.metadata:
+        return grid.metadata['instrument_name']
+    else:
+        return ''
+
+
+def generate_radar_time_begin(radar):
     """ Return time begin in datetime instance. """
     # datetime object describing first sweep time
     times = radar.time['data'][0]
     units = radar.time['units']
     calendar = radar.time['calendar']
+    return num2date(times, units, calendar)
+
+
+def generate_grid_time_begin(grid):
+    """ Return time begin in datetime instance. """
+    # datetime object describing time
+    if "time_start" in grid.axes:
+        time = "time_start"
+    elif 'time' in grid.axes:
+        time = 'time'
+    elif 'time_end' in grid.axes:
+        time = 'time_end'
+    times = grid.axes[time]['data'][0]
+    units = grid.axes[time]['units']
+    calendar = grid.axes[time]['calendar']
     return num2date(times, units, calendar)
 
 
@@ -266,9 +316,40 @@ def generate_filename(radar, field, sweep, ext='png'):
     """
     name_s = generate_radar_name(radar).replace(' ', '_')
     field_s = field.replace(' ', '_')
-    time_s = generate_time_begin(radar).strftime('%Y%m%d%H%M%S')
+    time_s = generate_radar_time_begin(radar).strftime('%Y%m%d%H%M%S')
     sweep_s = str(sweep).zfill(2)
     return '%s_%s_%s_%s.%s' % (name_s, field_s, sweep_s, time_s, ext)
+
+
+def generate_grid_filename(grid, field, level, ext='png'):
+    """
+    Generate a filename for a plot.
+
+    Generated filename has form:
+        grid_name_field_level_time.ext
+
+    Parameters
+    ----------
+    grid : Grid
+        Grid structure.
+    field : str
+        Field plotted.
+    level : int
+        Level plotted.
+    ext : str
+        Filename extension.
+
+    Returns
+    -------
+    filename : str
+        Filename suitable for saving a plot.
+
+    """
+    name_s = generate_grid_name(grid).replace(' ', '_')
+    field_s = field.replace(' ', '_')
+    time_s = generate_grid_time_begin(grid).strftime('%Y%m%d%H%M%S')
+    level_s = str(level).zfill(2)
+    return '%s_%s_%s_%s.%s' % (name_s, field_s, level_s, time_s, ext)
 
 
 def generate_title(radar, field, sweep):
@@ -290,11 +371,105 @@ def generate_title(radar, field, sweep):
         Plot title.
 
     """
-    time_str = generate_time_begin(radar).isoformat() + 'Z'
+    time_str = generate_radar_time_begin(radar).isoformat() + 'Z'
     fixed_angle = radar.fixed_angle['data'][sweep]
     l1 = "%s %.1f Deg. %s " % (generate_radar_name(radar), fixed_angle,
                                time_str)
     field_name = generate_field_name(radar, field)
+    return l1 + '\n' + field_name
+
+
+def generate_grid_title(grid, field, level):
+    """
+    Generate a title for a plot.
+
+    Parameters
+    ----------
+    grid : Grid
+        Radar structure.
+    field : str
+        Field plotted.
+    level : int
+        Verical level plotted.
+
+
+    Returns
+    -------
+    title : str
+        Plot title.
+
+    """
+    time_str = generate_grid_time_begin(grid).isoformat() + 'Z'
+    height = grid.axes["z_disp"]['data'][level] / 1000.
+    l1 = "%s %.1f km %s " % (generate_grid_name(grid), height,
+                             time_str)
+    field_name = generate_field_name(grid, field)
+    return l1 + '\n' + field_name
+
+
+def generate_longitudinal_level_title(grid, field, level):
+    """
+    Generate a title for a plot.
+
+    Parameters
+    ----------
+    grid : Grid
+        Radar structure.
+    field : str
+        Field plotted.
+    level : int
+        Longitudinal level plotted.
+
+
+    Returns
+    -------
+    title : str
+        Plot title.
+
+    """
+    time_str = generate_grid_time_begin(grid).isoformat() + 'Z'
+    disp = grid.axes["x_disp"]['data'][level] / 1000.
+    if disp >= 0:
+        direction = "east"
+    else:
+        direction = "west"
+        disp = - disp
+    l1 = "%s %.1f km %s of origin %s " % (generate_grid_name(grid), disp,
+                                          direction, time_str)
+    field_name = generate_field_name(grid, field)
+    return l1 + '\n' + field_name
+
+
+def generate_latitudinal_level_title(grid, field, level):
+    """
+    Generate a title for a plot.
+
+    Parameters
+    ----------
+    grid : Grid
+        Radar structure.
+    field : str
+        Field plotted.
+    level : int
+        Latitudinal level plotted.
+
+
+    Returns
+    -------
+    title : str
+        Plot title.
+
+    """
+    time_str = generate_grid_time_begin(grid).isoformat() + 'Z'
+    disp = grid.axes["y_disp"]['data'][level] / 1000.
+    if disp >= 0:
+        direction = "north"
+    else:
+        direction = "south"
+        disp = - disp
+    l1 = "%s %.1f km %s of origin %s " % (generate_grid_name(grid), disp,
+                                          direction, time_str)
+    field_name = generate_field_name(grid, field)
     return l1 + '\n' + field_name
 
 
@@ -315,7 +490,7 @@ def generate_vpt_title(radar, field):
         Plot title.
 
     """
-    time_str = generate_time_begin(radar).isoformat() + 'Z'
+    time_str = generate_radar_time_begin(radar).isoformat() + 'Z'
     l1 = "%s %s " % (generate_radar_name(radar), time_str)
     field_name = generate_field_name(radar, field)
     return l1 + '\n' + field_name
@@ -340,7 +515,7 @@ def generate_ray_title(radar, field, ray):
         Plot title.
 
     """
-    time_str = generate_time_begin(radar).isoformat() + 'Z'
+    time_str = generate_radar_time_begin(radar).isoformat() + 'Z'
     l1 = "%s %s" % (generate_radar_name(radar), time_str)
     azim = radar.azimuth['data'][ray]
     elev = radar.elevation['data'][ray]

@@ -125,7 +125,8 @@ class RadarDisplay(object):
         rg, azg = np.meshgrid(self.ranges, self.azimuths)
         rg, eleg = np.meshgrid(self.ranges, self.elevations)
 
-        self.x, self.y, self.z = common.radar_coords_to_cart(rg / 1000.0, azg, eleg)
+        self.x, self.y, self.z = common.radar_coords_to_cart(rg / 1000.0, azg,
+                                                             eleg)
         self.x = self.x + self.shift[0]
         self.y = self.y + self.shift[1]
 
@@ -911,7 +912,7 @@ class RadarDisplay(object):
             Filename suitable for saving a plot.
 
         """
-        return common.generate_filename(self._radar, field, sweep)
+        return common.generate_filename(self._radar, field, sweep, ext)
 
     def generate_title(self, field, sweep):
         """
