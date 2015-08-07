@@ -47,7 +47,8 @@ lon = -98.5
 # panel 1, basemap, radar reflectivity and NARR overlay
 ax1 = fig.add_axes(map_panel_axes)
 display.plot_basemap()
-display.plot_grid('REF', level=level, vmin=vmin, vmax=vmax)
+display.plot_grid('REF', level=level, vmin=vmin, vmax=vmax, title_flag=False,
+                  colorbar_flag=False)
 display.plot_crosshairs(lon=lon, lat=lat)
 
 # fetch NCEP NARR data
@@ -81,12 +82,17 @@ display.plot_colorbar(cax=cbax)
 
 # panel 2, longitude slice.
 ax2 = fig.add_axes(x_cut_panel_axes)
-display.plot_longitude_slice('REF', lon=lon, lat=lat)
-ax2.set_xlabel('Distance from SGP CF (km)')
+display.plot_longitude_slice(
+    'REF', lon=lon, lat=lat, vmin=vmin, vmax=vmax, title_flag=False,
+    colorbar_flag=False, edges=False,
+    axislabels=('Distance from SGP CF (km)', 'Height (km)'))
 
 # panel 3, latitude slice
 ax3 = fig.add_axes(y_cut_panel_axes)
-display.plot_latitude_slice('REF', lon=lon, lat=lat)
+display.plot_latitude_slice(
+    'REF', lon=lon, lat=lat, vmin=vmin, vmax=vmax, title_flag=False,
+    colorbar_flag=False, edges=False,
+    axislabels=('', 'Height (km)'))
 
 # add a title
 slc_height = grid.axes['z_disp']['data'][level]
