@@ -263,7 +263,7 @@ class RadarDisplay(object):
         self.plot_vars.append(field)
 
     def plot_ppi(self, field, sweep=0, mask_tuple=None, vmin=None, vmax=None,
-                 cmap='jet', mask_outside=True, title=None, title_flag=True,
+                 cmap='jet', mask_outside=False, title=None, title_flag=True,
                  axislabels=(None, None), axislabels_flag=True,
                  colorbar_flag=True, colorbar_label=None,
                  colorbar_orient='vertical', edges=True,
@@ -363,7 +363,7 @@ class RadarDisplay(object):
                                field=field, ax=ax, fig=fig)
 
     def plot_rhi(self, field, sweep=0, mask_tuple=None, vmin=None, vmax=None,
-                 cmap='jet', mask_outside=True, title=None, title_flag=True,
+                 cmap='jet', mask_outside=False, title=None, title_flag=True,
                  axislabels=(None, None), axislabels_flag=True,
                  reverse_xaxis=None, colorbar_flag=True, colorbar_label=None,
                  colorbar_orient='vertical', edges=True,
@@ -470,7 +470,7 @@ class RadarDisplay(object):
                                field=field, ax=ax, fig=fig)
 
     def plot_vpt(self, field, mask_tuple=None, vmin=None, vmax=None,
-                 cmap='jet', mask_outside=True, title=None, title_flag=True,
+                 cmap='jet', mask_outside=False, title=None, title_flag=True,
                  axislabels=(None, None), axislabels_flag=True,
                  colorbar_flag=True, colorbar_label=None,
                  colorbar_orient='vertical', edges=True,

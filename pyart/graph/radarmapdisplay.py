@@ -97,7 +97,7 @@ class RadarMapDisplay(RadarDisplay):
             raise ValueError('no basemap plotted')
 
     def plot_ppi_map(self, field, sweep=0, mask_tuple=None,
-                     vmin=None, vmax=None, cmap='jet', mask_outside=True,
+                     vmin=None, vmax=None, cmap='jet', mask_outside=False,
                      title=None, title_flag=True,
                      colorbar_flag=True, colorbar_label=None,
                      ax=None, fig=None,
