@@ -163,7 +163,7 @@ class RadarDisplay_Airborne(RadarDisplay):
         return
 
     def plot_sweep_grid(self, field, sweep=0, mask_tuple=None, vmin=None,
-                        vmax=None, cmap='jet', mask_outside=True, title=None,
+                        vmax=None, cmap='jet', mask_outside=False, title=None,
                         title_flag=True, axislabels=(None, None),
                         axislabels_flag=True, colorbar_flag=True,
                         colorbar_label=None, colorbar_orient='vertical',

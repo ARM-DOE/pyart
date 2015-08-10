@@ -130,7 +130,7 @@ class GridMapDisplay():
                                    labels=[False, False, False, True])
 
     def plot_grid(self, field, level=0, vmin=None, vmax=None, cmap='jet',
-                  mask_outside=True, title=None, title_flag=True,
+                  mask_outside=False, title=None, title_flag=True,
                   axislabels=(None, None), axislabels_flag=False,
                   colorbar_flag=True, colorbar_label=None,
                   colorbar_orient='vertical', edges=True, ax=None, fig=None):
@@ -267,7 +267,7 @@ class GridMapDisplay():
 
     def plot_latitude_slice(self, field, lon=None, lat=None,
                             vmin=None, vmax=None, cmap='jet',
-                            mask_outside=True, title=None, title_flag=True,
+                            mask_outside=False, title=None, title_flag=True,
                             axislabels=(None, None), axislabels_flag=True,
                             colorbar_flag=True, colorbar_label=None,
                             colorbar_orient='vertical', edges=True, ax=None,
@@ -336,7 +336,7 @@ class GridMapDisplay():
 
     def plot_latitudinal_level(self, field, y_index,
                                vmin=None, vmax=None, cmap='jet',
-                               mask_outside=True, title=None, title_flag=True,
+                               mask_outside=False, title=None, title_flag=True,
                                axislabels=(None, None), axislabels_flag=True,
                                colorbar_flag=True, colorbar_label=None,
                                colorbar_orient='vertical', edges=True,
@@ -437,7 +437,7 @@ class GridMapDisplay():
 
     def plot_longitude_slice(self, field, lon=None, lat=None,
                              vmin=None, vmax=None, cmap='jet',
-                             mask_outside=True, title=None, title_flag=True,
+                             mask_outside=False, title=None, title_flag=True,
                              axislabels=(None, None), axislabels_flag=True,
                              colorbar_flag=True, colorbar_label=None,
                              colorbar_orient='vertical', edges=True, ax=None,
@@ -504,7 +504,7 @@ class GridMapDisplay():
 
     def plot_longitudinal_level(self, field, x_index,
                                 vmin=None, vmax=None, cmap='jet',
-                                mask_outside=True, title=None,
+                                mask_outside=False, title=None,
                                 title_flag=True, axislabels=(None, None),
                                 axislabels_flag=True, colorbar_flag=True,
                                 colorbar_label=None,
