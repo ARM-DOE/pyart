@@ -5,6 +5,7 @@ pyart.aux_io
 Input/Output routines.
 
 .. automodule:: pyart.aux_io.d3r_gcpex_nc
+.. automodule:: pyart.aux_io.edge_netcdf
 .. automodule:: pyart.aux_io.gamic_hdf5
 .. automodule:: pyart.aux_io.gamicfile
 .. automodule:: pyart.aux_io.odim_h5
