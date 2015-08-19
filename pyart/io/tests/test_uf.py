@@ -17,8 +17,8 @@ def test_time():
 
 
 def test_range():
-    assert np.allclose(radar.range['data'], np.arange(667) * 60)
-    assert radar.range['meters_to_center_of_first_gate'] == 0
+    assert np.allclose(radar.range['data'], np.arange(667) * 60 + 30)
+    assert radar.range['meters_to_center_of_first_gate'] == 30
     assert radar.range['meters_between_gates'] == 60
 
 
