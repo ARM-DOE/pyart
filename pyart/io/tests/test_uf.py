@@ -1,6 +1,9 @@
 """ Unit Tests for Py-ART's io/uf.py and io/uffile.py modules. """
 
-import StringIO
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
 
 import numpy as np
 from numpy.testing import assert_raises, assert_almost_equal
@@ -76,7 +79,7 @@ def check_field(field, value):
 
 
 def test_raises_ioerror():
-    fake_bad_file = StringIO.StringIO('XXXXXXXX')
+    fake_bad_file = StringIO('XXXXXXXX')
     assert_raises(IOError, pyart.io.read_uf, fake_bad_file)
 
 
