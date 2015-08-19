@@ -352,7 +352,7 @@ class UFRay(object):
         data_offset = (field_header['data_offset'] - 1) * 2
 
         # read in field specific parameters
-        if position['data_type'] in ['VF', 'VE', 'VR', 'VT', 'VP']:
+        if position['data_type'] in [b'VF', b'VE', b'VR', b'VT', b'VP']:
             if (data_offset - offset) == 42:
                 vel_header = _unpack_from_buf(self._buf, offset+38, UF_FSI_VEL)
                 field_header.update(vel_header)

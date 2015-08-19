@@ -3,7 +3,7 @@
 try:
     from StringIO import StringIO
 except ImportError:
-    from io import StringIO
+    from io import BytesIO as StringIO
 
 import numpy as np
 from numpy.testing import assert_raises, assert_almost_equal
@@ -79,7 +79,7 @@ def check_field(field, value):
 
 
 def test_raises_ioerror():
-    fake_bad_file = StringIO('XXXXXXXX')
+    fake_bad_file = StringIO(b'XXXXXXXX')
     assert_raises(IOError, pyart.io.read_uf, fake_bad_file)
 
 

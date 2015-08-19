@@ -161,7 +161,7 @@ def read_uf(filename, field_names=None, additional_metadata=None,
     # fields
     fields = {}
     for uf_field_number, uf_field_dic in enumerate(first_ray.field_positions):
-        uf_field_name = uf_field_dic['data_type']
+        uf_field_name = uf_field_dic['data_type'].decode('ascii')
         field_name = filemetadata.get_field_name(uf_field_name)
         if field_name is None:
             continue
