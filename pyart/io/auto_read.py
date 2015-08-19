@@ -26,6 +26,7 @@ from .sigmet import read_sigmet
 from .nexrad_archive import read_nexrad_archive
 from .nexrad_cdm import read_nexrad_cdm
 from .nexradl3_read import read_nexrad_level3
+from .uf import read_uf
 from .chl import read_chl
 
 
@@ -131,9 +132,14 @@ def read(filename, use_rsl=False, **kwargs):
             return read_rsl(filename, **kwargs)
         else:
             return read_sigmet(filename, **kwargs)
+    if filetype == "UF":
+        if use_rsl:
+            return read_rsl(filename, **kwargs)
+        else:
+            return read_uf(filename, **kwargs)
 
     # RSL only supported file formats
-    rsl_formats = ['UF', 'HDF4', 'RSL', 'DORAD', 'LASSEN']
+    rsl_formats = ['HDF4', 'RSL', 'DORAD', 'LASSEN']
     if filetype in rsl_formats and _RSL_AVAILABLE:
         return read_rsl(filename, **kwargs)
 

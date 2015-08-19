@@ -1085,6 +1085,28 @@ gamic_field_mapping = {
     'ULDR': None,       # Linear depolarization ratio  from uncorr. t.s.
 }
 
+# UF field mappings
+uf_field_mapping = {
+    # UF 2 letter field: radar field
+    'DZ': reflectivity,
+    'CZ': corrected_reflectivity,
+    'ZE': corrected_reflectivity,
+    'ZT': total_power,
+    'UZ': total_power,
+    'VR': velocity,
+    'VE': corrected_velocity,
+    'SW': spectrum_width,
+    'ZD': differential_reflectivity,
+    'DR': corrected_differential_reflectivity,
+    'CD': corrected_differential_reflectivity,
+    'LR': linear_depolarization_ratio,
+    'PH': differential_phase,
+    'KD': specific_differential_phase,
+    'RH': cross_correlation_ratio,
+    'SQ': normalized_coherent_power,
+    'NP': normalized_coherent_power,
+}
+
 FIELD_MAPPINGS = {                  # Required variable
     'sigmet': sigmet_field_mapping,
     'nexrad_archive': nexrad_archive_field_mapping,
@@ -1095,6 +1117,7 @@ FIELD_MAPPINGS = {                  # Required variable
     'rsl': rsl_field_mapping,
     'chl': chl_field_mapping,
     'gamic': gamic_field_mapping,
+    'uf': uf_field_mapping,
 }
 
 

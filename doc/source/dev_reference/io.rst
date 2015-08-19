@@ -21,6 +21,8 @@ Input/Output routines.
 .. automodule:: pyart.io.nexrad_level3
 .. automodule:: pyart.io.rsl
 .. automodule:: pyart.io.sigmet
+.. automodule:: pyart.io.uf
+.. automodule:: pyart.io.uffile
 .. automodule:: pyart.io._rsl_interface
 .. automodule:: pyart.io._sigmet_noaa_hh
 .. automodule:: pyart.io._sigmetfile
