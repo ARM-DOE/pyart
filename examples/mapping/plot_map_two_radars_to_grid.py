@@ -21,15 +21,19 @@ XSAPR_SE_FILE = 'sex_20120520_0641.nc'
 radar_sw = pyart.io.read_cfradial(XSAPR_SW_FILE)
 radar_se = pyart.io.read_cfradial(XSAPR_SE_FILE)
 
+# filter out gates with reflectivity > 100 from both radars
+gatefilter_se = pyart.filters.GateFilter(radar_se)
+gatefilter_se.exclude_above('corrected_reflectivity_horizontal', 100)
+gatefilter_sw = pyart.filters.GateFilter(radar_sw)
+gatefilter_sw.exclude_above('corrected_reflectivity_horizontal', 100)
+
 # perform Cartesian mapping, limit to the reflectivity field.
 grid = pyart.map.grid_from_radars(
-    (radar_se, radar_sw),
+    (radar_se, radar_sw), gatefilters=(gatefilter_se, gatefilter_sw),
     grid_shape=(1, 201, 201),
     grid_limits=((1000, 1000), (-50000, 40000), (-60000, 40000)),
     grid_origin = (36.57861, -97.363611),
-    fields=['corrected_reflectivity_horizontal'],
-    refl_field='corrected_reflectivity_horizontal',
-    max_refl=100.)
+    fields=['corrected_reflectivity_horizontal'])
 
 # create the plot
 fig = plt.figure()
