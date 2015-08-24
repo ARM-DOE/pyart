@@ -17,6 +17,25 @@ COMMON_MAP_TO_GRID_ARGS = {
     'constant_roi': 30., }
 
 
+def test_map_to_grid_filter():
+
+    # simulate a radar with bad gates which reports huge reflectivities
+    radar = pyart.testing.make_target_radar()
+    radar.fields['reflectivity']['data'][0:100, 25] = 99999.0
+
+    # without filtering bad gates leaks through
+    grids = pyart.map.map_gates_to_grid(
+        (radar,), refl_filter_flag=False, max_refl=50.,
+        **COMMON_MAP_TO_GRID_ARGS)
+    assert grids['reflectivity'].max() > 41.0
+
+    # with filtering bad gates is supressed
+    grids = pyart.map.map_gates_to_grid(
+        (radar,), refl_filter_flag=True, max_refl=50.,
+        **COMMON_MAP_TO_GRID_ARGS)
+    assert grids['reflectivity'].max() < 41.0
+
+
 def test_map_to_grid_non_tuple():
     radar = pyart.testing.make_target_radar()
     grids = pyart.map.map_gates_to_grid(radar,
