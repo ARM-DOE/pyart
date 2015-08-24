@@ -30,7 +30,7 @@ t = pyart.correct.find_time_in_interp_sonde(interp_sounde, target)
 height, speed, direction = t
 
 # create a gate filter which specifies gates to exclude from dealiasing
-gatefilter = pyart.correct.GateFilter(radar)
+gatefilter = pyart.filters.GateFilter(radar)
 gatefilter.exclude_invalid('velocity')
 gatefilter.exclude_invalid('reflectivity')
 gatefilter.exclude_outside('reflectivity', 0, 80)
