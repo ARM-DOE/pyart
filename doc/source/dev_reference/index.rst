@@ -24,6 +24,7 @@ Documentation is broken down by directory and module.
     correct
     retrieve
     graph
+    filters
     map
     util
     bridge

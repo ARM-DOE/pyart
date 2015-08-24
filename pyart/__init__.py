@@ -29,6 +29,7 @@ else:
     from . import correct
     from . import graph
     from . import map
+    from . import filters
     from . import util
     from . import testing
     from . import config
