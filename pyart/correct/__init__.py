@@ -16,8 +16,6 @@ moments and data.
     dealias_region_based
     calculate_attenuation
     phase_proc_lp
-    GateFilter
-    moment_based_gate_filter
     find_time_in_interp_sonde
 
 """
@@ -28,7 +26,8 @@ except ImportError:
     pass
 from .attenuation import calculate_attenuation
 from .phase_proc import phase_proc_lp
-from .filters import GateFilter, moment_based_gate_filter
+# for backwards compatibility GateFilter available in the correct namespace
+from ..filters.gatefilter import GateFilter, moment_based_gate_filter
 from .unwrap import dealias_unwrap_phase
 from .region_dealias import dealias_region_based
 
