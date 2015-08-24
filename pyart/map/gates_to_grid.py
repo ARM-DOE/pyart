@@ -10,6 +10,7 @@ Generate a Cartesian grid by mapping from radar gates onto the grid.
     map_gates_to_grid
     _detemine_cy_weighting_func
     _parse_grid_origin
+    _parse_gatefilters
     _determine_fields
     _find_offsets
     _find_grid_params
