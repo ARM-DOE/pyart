@@ -17,7 +17,7 @@ a uniform grid.
 
 """
 
-from libc.math cimport sqrt, exp, ceil, floor, sin, cos, tan, asin, isfinite
+from libc.math cimport sqrt, exp, ceil, floor, sin, cos, tan, asin
 from cython.view cimport array as cvarray
 
 cimport cython
