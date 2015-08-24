@@ -27,11 +27,12 @@ Utilities for mapping radar objects to Cartesian grids.
 import numpy as np
 import scipy.spatial
 
-from ..config import get_fillvalue, get_field_name
+from ..config import get_fillvalue
 from ..graph.common import corner_to_point
 from ..io.common import radar_coords_to_cart
 from ..core.grid import Grid
 from ..core.radar import Radar
+from ..filters import GateFilter, moment_based_gate_filter
 from ._load_nn_field_data import _load_nn_field_data
 from .ckdtree import cKDTree
 from .ball_tree import BallTree
@@ -278,12 +279,12 @@ class NNLocator:
 
 
 def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
-                grid_origin_alt=None, fields=None, refl_filter_flag=True,
-                refl_field=None, max_refl=None, map_roi=True,
-                weighting_function='Barnes', toa=17000.0, copy_field_data=True,
-                algorithm='kd_tree', leafsize=10., roi_func='dist_beam',
-                constant_roi=500., z_factor=0.05, xy_factor=0.02,
-                min_radius=500.0, h_factor=1.0, nb=1.5, bsp=1.0):
+                grid_origin_alt=None, fields=None, gatefilters=False,
+                map_roi=True, weighting_function='Barnes', toa=17000.0,
+                copy_field_data=True, algorithm='kd_tree', leafsize=10.,
+                roi_func='dist_beam', constant_roi=500.,
+                z_factor=0.05, xy_factor=0.02, min_radius=500.0,
+                h_factor=1.0, nb=1.5, bsp=1.0, **kwargs):
     """
     Map one or more radars to a Cartesian grid.
 
@@ -314,20 +315,16 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
         List of fields within the radar objects which will be mapped to
         the cartesian grid. None, the default, will map the fields which are
         present in all the radar objects.
-    refl_filter_flag : bool
-        True to filter the collected points based on the reflectivity field.
-        False to perform no filtering.  Gates where the reflectivity field,
-        specified by the `refl_field` parameter, is not-finited, masked or
-        has a value above the `max_refl` parameter are excluded from the
-        grid interpolation.
-    refl_field : str
-        Name of the field which will be used to filter the collected points.
-        A value of None will use the default field name as defined in the
-        Py-ART configuration file.
-    max_refl : float
-        Maximum allowable reflectivity.  Points in the `refl_field` which are
-        above is value are not included in the interpolation. None will
-        include skip this filtering.
+    gatefilters : GateFilter, tuple of GateFilter objects, optional
+        Specify what gates from each radar will be included in the
+        interpolation onto the grid.  Only gates specified in each gatefilters
+        will be included in the mapping to the grid.  A single GateFilter can
+        be used if a single Radar is being mapped.  A value of False for a
+        specific element or the entire parameter will apply no filtering of
+        gates for a specific radar or all radars (the default).
+        Similarily a value of None will create a GateFilter from the
+        radar moments using any additional arguments by passing them to
+        :py:func:`moment_based_gate_filter`.
     roi_func : str or function
         Radius of influence function.  A functions which takes an
         z, y, x grid location, in meters, and returns a radius (in meters)
@@ -413,6 +410,16 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
     if isinstance(radars, Radar):
         radars = (radars, )
 
+    # parse the gatefilters argument
+    if isinstance(gatefilters, GateFilter):
+        gatefilters = (gatefilters, )  # make tuple if single filter passed
+    if gatefilters is False:
+        gatefilters = (False, ) * len(radars)
+    if gatefilters is None:
+        gatefilters = (None, ) * len(radars)
+    if len(gatefilters) != len(radars):
+        raise ValueError('Length of gatefilters must match length of radars')
+
     # check the parameters
     if weighting_function.upper() not in ['CRESSMAN', 'BARNES']:
         raise ValueError('unknown weighting_function')
@@ -467,7 +474,7 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
         filtered_gates_per_radar = []
 
     # loop over the radars finding gate locations, field data, and offset
-    for iradar, radar in enumerate(radars):
+    for iradar, (radar, gatefilter) in enumerate(zip(radars, gatefilters)):
 
         # calculate radar offset from the origin
         radar_lat = float(radar.latitude['data'])
@@ -492,22 +499,12 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
         # determine which gates should be included in the interpolation
         gflags = zg_loc < toa      # include only those below toa
 
-        if refl_filter_flag:
-            if refl_field is None:
-                refl_field = get_field_name('reflectivity')
+        if gatefilter is not False:
+            # excluded gates marked by the gatefilter
+            if gatefilter is None:
+                gatefilter = moment_based_gate_filter(radar, **kwargs)
+            gflags = np.logical_and(gflags, gatefilter.gate_included)
 
-            refl_data = radar.fields[refl_field]['data']
-            gflags = np.logical_and(gflags, np.isfinite(refl_data))
-
-            if max_refl is not None:
-                gflags = np.logical_and(gflags, refl_data < max_refl)
-
-            if np.ma.is_masked(refl_data):
-                gflags = np.logical_and(gflags,
-                                        np.logical_not(refl_data.mask))
-                gflags = gflags.data
-
-            del refl_data
         include_gate[start:end] = gflags.flat
 
         if not copy_field_data:
