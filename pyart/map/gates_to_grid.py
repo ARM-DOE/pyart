@@ -21,6 +21,7 @@ import numpy as np
 from ..config import get_field_name
 from ..core.radar import Radar
 from ..graph.common import corner_to_point
+from ..filters import GateFilter, moment_based_gate_filter
 
 from ._gate_to_grid_map import GateToGridMapper
 from ._gate_to_grid_map import RoIFunction, ConstantRoI, DistBeamRoI, DistRoI
@@ -28,11 +29,10 @@ from ._gate_to_grid_map import RoIFunction, ConstantRoI, DistBeamRoI, DistRoI
 
 def map_gates_to_grid(
         radars, grid_shape, grid_limits, grid_origin=None,
-        grid_origin_alt=None, fields=None, refl_filter_flag=True,
-        refl_field=None, max_refl=None, map_roi=True,
+        grid_origin_alt=None, fields=None, gatefilters=False, map_roi=True,
         weighting_function='Barnes', toa=17000.0, roi_func='dist_beam',
         constant_roi=500., z_factor=0.05, xy_factor=0.02, min_radius=500.0,
-        h_factor=1.0, nb=1.5, bsp=1.0):
+        h_factor=1.0, nb=1.5, bsp=1.0, **kwargs):
     """
     Map gates from one or more radars to a Cartesian grid.
 
@@ -83,14 +83,13 @@ def map_gates_to_grid(
     if isinstance(radars, Radar):
         radars = (radars, )
 
-    if max_refl is None:    # parse max_refl
-        max_refl = np.finfo('float32').max
     if grid_origin_alt is None:
         grid_origin_alt = float(radars[0].altitude['data'])
 
+    gatefilters = _parse_gatefilters(gatefilters, radars)
     cy_weighting_function = _detemine_cy_weighting_func(weighting_function)
     grid_origin = _parse_grid_origin(grid_origin, radars)
-    fields = _determine_fields(fields, radars, refl_field)
+    fields = _determine_fields(fields, radars)
     offsets = _find_offsets(radars, grid_origin, grid_origin_alt)
     grid_starts, grid_steps = _find_grid_params(grid_shape, grid_limits)
     roi_func = _parse_roi_func(roi_func, constant_roi, z_factor, xy_factor,
@@ -104,7 +103,7 @@ def map_gates_to_grid(
         grid_shape, grid_starts, grid_steps, grid_sum, grid_wsum)
 
     # project gates from each radar onto the grid
-    for radar, radar_offset in zip(radars, offsets):
+    for radar, radar_offset, gatefilter in zip(radars, offsets, gatefilters):
 
         # Copy the field data and masks.
         # TODO method that does not copy field data into new array
@@ -116,13 +115,20 @@ def map_gates_to_grid(
             field_data[:, :, i] = np.ma.getdata(fdata)
             field_mask[:, :, i] = np.ma.getmaskarray(fdata)
 
+        # find excluded gates from the gatefilter
+        if gatefilter is False:
+            gatefilter = GateFilter(radar)  # include all gates
+        elif gatefilter is None:
+            gatefilter = moment_based_gate_filter(radar, **kwargs)
+        excluded_gates = gatefilter.gate_excluded.astype('uint8')
+
         # map the gates onto the grid
         gatemapper.map_gates_to_grid(
             radar.elevation['data'].astype('float32'),
             radar.azimuth['data'].astype('float32'),
             radar.range['data'].astype('float32'),
-            field_data, field_mask, radar_offset, toa, roi_func,
-            refl_filter_flag, max_refl, cy_weighting_function)
+            field_data, field_mask, excluded_gates,
+            radar_offset, toa, roi_func, cy_weighting_function)
 
     # create and return the grid dictionary
     mweight = np.ma.masked_equal(grid_wsum, 0)
@@ -156,21 +162,26 @@ def _parse_grid_origin(grid_origin, radars):
     return grid_origin
 
 
-def _determine_fields(fields, radars, refl_field):
+def _parse_gatefilters(gatefilters, radars):
+    """ Parse the gatefilters parameter. """
+    if isinstance(gatefilters, GateFilter):
+        gatefilters = (gatefilters, )  # make tuple if single filter passed
+    if gatefilters is False:
+        gatefilters = (False, ) * len(radars)
+    if gatefilters is None:
+        gatefilters = (None, ) * len(radars)
+    if len(gatefilters) != len(radars):
+        raise ValueError('Length of gatefilters must match length of radars')
+    return gatefilters
+
+
+def _determine_fields(fields, radars):
     """ Determine which field should be mapped to the grid. """
     if fields is None:
         fields = set(radars[0].fields.keys())
         for radar in radars[1:]:
             fields = fields.intersection(radar.fields.keys())
         fields = list(fields)
-
-    # find the reflectivity field, check that it is mapped and
-    # move it to the front of the fields list
-    if refl_field is None:
-        refl_field = get_field_name('reflectivity')
-    if refl_field not in fields:
-        raise ValueError('reflectivity field not mapped')
-    fields.insert(0, fields.pop(fields.index(refl_field)))
     return fields
 
 
