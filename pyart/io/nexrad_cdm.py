@@ -243,6 +243,7 @@ def read_nexrad_cdm(filename, field_names=None, additional_metadata=None,
     elevation['data'] = elev_data
     fixed_angle['data'] = fixed_agl_data
 
+    dataset.close()
     return Radar(
         time, _range, fields, metadata, scan_type,
         latitude, longitude, altitude,
