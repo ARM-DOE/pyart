@@ -1,8 +1,6 @@
 """ Unit Tests for Py-ART's io/nexrad_cdm.py module. """
 
 import bz2
-import tempfile
-import os
 
 import numpy as np
 from numpy.testing import assert_almost_equal
@@ -15,13 +13,13 @@ import pyart
 ###################################################
 
 # read in the sample file and create the radar objects
-# We need to decompress the bz2 file for this making a tempfile
-tmpfile = tempfile.mkstemp(suffix='.nc', dir='.')[1]
-f = open(tmpfile, 'wb')
-f.write(bz2.BZ2File(pyart.testing.NEXRAD_CDM_FILE).read())
-f.close()
-radar = pyart.io.read_nexrad_cdm(tmpfile)
-os.remove(tmpfile)
+# We need to decompress the bz2 file which contains this data
+with pyart.testing.InTemporaryDirectory():
+    tmpfile = 'tmp_nexrad.nc'
+    f = open(tmpfile, 'wb')
+    f.write(bz2.BZ2File(pyart.testing.NEXRAD_CDM_FILE).read())
+    f.close()
+    radar = pyart.io.read_nexrad_cdm(tmpfile)
 
 
 # time attribute
