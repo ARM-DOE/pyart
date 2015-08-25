@@ -623,6 +623,8 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
             # the field data object array.  This is done in Cython for speed.
             r_nums, e_nums = divmod(lookup[ind], total_gates)
             npoints = r_nums.size
+            r_nums = r_nums.astype(np.intc)
+            e_nums = e_nums.astype(np.intc)
             nn_field_data = np.empty((npoints, nfields), np.float64)
             _load_nn_field_data(field_data_objs, nfields, npoints, r_nums,
                                 e_nums, nn_field_data)

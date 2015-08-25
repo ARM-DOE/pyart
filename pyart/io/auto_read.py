@@ -116,8 +116,10 @@ def read(filename, use_rsl=False, **kwargs):
     if filetype == "NETCDF3" or filetype == "NETCDF4":
         dset = netCDF4.Dataset(filename)
         if 'cdm_data_type' in dset.ncattrs():   # NEXRAD CDM
+            dset.close()
             return read_nexrad_cdm(filename, **kwargs)
         else:
+            dset.close()
             return read_cfradial(filename, **kwargs)    # CF/Radial
     if filetype == 'WSR88D':
         return read_nexrad_archive(filename, **kwargs)

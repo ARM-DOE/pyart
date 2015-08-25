@@ -1,8 +1,6 @@
 """ Unit Tests for Py-ART's io/nexrad_level2.py module. """
 
 import datetime
-import tempfile
-import os
 
 import numpy as np
 from numpy.testing import assert_array_equal, assert_raises
@@ -325,13 +323,11 @@ def test_bad_compression_header():
     head = f.read(36)
     f.close()
 
-    # corrupt the compression header and write to disk
+    # corrupt the compression header and write to in memory file
     head = head[:28] + b'XX' + head[30:]
-    tmpfile = tempfile.mkstemp(dir='.')[1]
-    corrupt_file = open(tmpfile, 'wb')
+    corrupt_file = pyart.testing.InMemoryFile()
     corrupt_file.write(head)
-    corrupt_file.close()
+    corrupt_file.seek(0)
 
     # should raise IOError
-    assert_raises(IOError, nexrad_level2.NEXRADLevel2File, tmpfile)
-    os.remove(tmpfile)
+    assert_raises(IOError, nexrad_level2.NEXRADLevel2File, corrupt_file)

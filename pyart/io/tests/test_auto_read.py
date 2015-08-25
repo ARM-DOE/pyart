@@ -1,7 +1,5 @@
 """ Unit Tests for Py-ART's io/mdv.py module. """
 
-import tempfile
-import os
 import bz2
 from io import BytesIO
 
@@ -57,13 +55,13 @@ def test_autoread_nexrad_archive():
 
 
 def test_autoread_nexrad_cdm():
-    tmpfile = tempfile.mkstemp(suffix='.nc', dir='.')[1]
-    f = open(tmpfile, 'wb')
-    f.write(bz2.BZ2File(pyart.testing.NEXRAD_CDM_FILE).read())
-    f.close()
-    radar = pyart.io.read(tmpfile)
-    os.remove(tmpfile)
-    assert radar.metadata['original_container'] == 'NEXRAD Level II'
+    with pyart.testing.InTemporaryDirectory():
+        tmpfile = 'tmp_nexrad.nc'
+        f = open(tmpfile, 'wb')
+        f.write(bz2.BZ2File(pyart.testing.NEXRAD_CDM_FILE).read())
+        f.close()
+        radar = pyart.io.read(tmpfile)
+        assert radar.metadata['original_container'] == 'NEXRAD Level II'
 
 
 def test_autoread_nexrad_level3():
