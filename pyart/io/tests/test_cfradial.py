@@ -2,8 +2,6 @@
 
 from __future__ import print_function
 
-import tempfile
-import os
 import warnings
 
 import numpy as np
@@ -160,7 +158,7 @@ def test_elevation():
     assert 'standard_name' in radar.elevation
     assert 'units' in radar.elevation
     assert radar.elevation['data'].shape == (40, )
-    assert_almost_equal(radar.elevation['data'][0], 0.48,  2)
+    assert_almost_equal(radar.elevation['data'][0], 0.48, 2)
 
 
 # scan_rate attribute
@@ -269,44 +267,46 @@ def check_field_first_point(field, value):
 
 def test_write_ppi():
     # CF/Radial example file -> Radar object -> netCDF file
-    tmpfile = tempfile.mkstemp(suffix='.nc', dir='.')[1]
-    radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
-    pyart.io.write_cfradial(tmpfile, radar)
-    ref = netCDF4.Dataset(pyart.testing.CFRADIAL_PPI_FILE)
-    dset = netCDF4.Dataset(tmpfile)
-    check_dataset_to_ref(dset, ref)
-    os.remove(tmpfile)
+    with pyart.testing.InTemporaryDirectory():
+        tmpfile = 'tmp_ppi.nc'
+        radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
+        pyart.io.write_cfradial(tmpfile, radar)
+        ref = netCDF4.Dataset(pyart.testing.CFRADIAL_PPI_FILE)
+        dset = netCDF4.Dataset(tmpfile)
+        check_dataset_to_ref(dset, ref)
+        dset.close()
 
 
 def test_write_rhi():
     # CF/Radial example file -> Radar object -> netCDF file
-    tmpfile = tempfile.mkstemp(suffix='.nc', dir='.')[1]
-    radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_RHI_FILE)
-    pyart.io.write_cfradial(tmpfile, radar)
-    ref = netCDF4.Dataset(pyart.testing.CFRADIAL_RHI_FILE)
-    dset = netCDF4.Dataset(tmpfile)
-    check_dataset_to_ref(dset, ref)
-    os.remove(tmpfile)
+    with pyart.testing.InTemporaryDirectory():
+        tmpfile = 'tmp_rhi.nc'
+        radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_RHI_FILE)
+        pyart.io.write_cfradial(tmpfile, radar)
+        ref = netCDF4.Dataset(pyart.testing.CFRADIAL_RHI_FILE)
+        dset = netCDF4.Dataset(tmpfile)
+        check_dataset_to_ref(dset, ref)
+        dset.close()
 
 
 def test_write_ppi_arm_time_vars():
     # CF/Radial example file -> Radar object -> netCDF file
-    tmpfile = tempfile.mkstemp(suffix='.nc', dir='.')[1]
-    radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
-    pyart.io.write_cfradial(tmpfile, radar, arm_time_variables=True)
-    dset = netCDF4.Dataset(tmpfile)
-    assert 'base_time' in dset.variables
-    assert 'time_offset' in dset.variables
+    with pyart.testing.InTemporaryDirectory():
+        tmpfile = 'tmp_arm_time_vars.nc'
+        radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
+        pyart.io.write_cfradial(tmpfile, radar, arm_time_variables=True)
+        dset = netCDF4.Dataset(tmpfile)
+        assert 'base_time' in dset.variables
+        assert 'time_offset' in dset.variables
 
-    base_time = dset.variables['base_time']
-    assert base_time[:] == 1305888856
-    assert base_time.string == '20-May-2011,10:54:16 GMT'
+        base_time = dset.variables['base_time']
+        assert base_time[:] == 1305888856
+        assert base_time.string == '20-May-2011,10:54:16 GMT'
 
-    time_offset = dset.variables['time_offset']
-    assert time_offset.units == 'seconds since 2011-05-20 10:54:16'
-    assert_almost_equal(time_offset[10], 4, 0)
-    dset.close()
-    os.remove(tmpfile)
+        time_offset = dset.variables['time_offset']
+        assert time_offset.units == 'seconds since 2011-05-20 10:54:16'
+        assert_almost_equal(time_offset[10], 4, 0)
+        dset.close()
 
 
 def check_dataset_to_ref(dset, ref):
@@ -406,15 +406,15 @@ def attribute_equal(class1, class2, key, allow_str_case_diff=True):
 def test_auto_history_and_conventions():
     # history and Conventions metadata should be created on write if
     # they do not exist in the original radar object
-    tmpfile = tempfile.mkstemp(suffix='.nc', dir='.')[1]
-    radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_RHI_FILE)
-    radar.metadata.pop('Conventions')
-    radar.metadata.pop('history')
-    pyart.io.write_cfradial(tmpfile, radar)
-    radar2 = pyart.io.read_cfradial(tmpfile)
-    assert 'Conventions' in radar2.metadata
-    assert 'history' in radar2.metadata
-    os.remove(tmpfile)
+    with pyart.testing.InTemporaryDirectory():
+        tmpfile = 'tmp_auto_history.nc'
+        radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_RHI_FILE)
+        radar.metadata.pop('Conventions')
+        radar.metadata.pop('history')
+        pyart.io.write_cfradial(tmpfile, radar)
+        radar2 = pyart.io.read_cfradial(tmpfile)
+        assert 'Conventions' in radar2.metadata
+        assert 'history' in radar2.metadata
 
 
 def test_delay_field_loading():
@@ -430,33 +430,33 @@ def test_delay_field_loading():
 
 def test_create_ncvar_different_dtype():
     # test _Write_as_dtype key handling in _create_ncvar
-    tmpfile = tempfile.mkstemp(suffix='.nc', dir='.')[1]
-    dset = netCDF4.Dataset(tmpfile, mode='w')
-    dset.createDimension('x', 256)
-    dic = {
-        'data': np.arange(256, dtype='float32') * 0.5 + 100.,
-        '_Write_as_dtype': 'u1',
-        '_FillValue': 100.,
-    }
-    assert 'add_offset' not in dic
-    assert 'scale_factor' not in dic
+    with pyart.testing.InTemporaryDirectory():
+        tmpfile = 'tmp_nvcar_different_dtype.nc'
+        dset = netCDF4.Dataset(tmpfile, mode='w')
+        dset.createDimension('x', 256)
+        dic = {
+            'data': np.arange(256, dtype='float32') * 0.5 + 100.,
+            '_Write_as_dtype': 'u1',
+            '_FillValue': 100.,
+        }
+        assert 'add_offset' not in dic
+        assert 'scale_factor' not in dic
 
-    pyart.io.cfradial._create_ncvar(dic, dset, 'foo', ('x'))
+        pyart.io.cfradial._create_ncvar(dic, dset, 'foo', ('x'))
 
-    assert 'add_offset' in dic
-    assert 'scale_factor' in dic
-    assert '_FillValue' in dic
+        assert 'add_offset' in dic
+        assert 'scale_factor' in dic
+        assert '_FillValue' in dic
 
-    foo = dset.variables['foo']
-    assert foo.dtype == np.dtype('uint8')
-    assert_almost_equal(foo.scale_factor, 0.5)
-    assert_almost_equal(foo.add_offset, 100)
-    assert foo[0] is np.ma.masked
-    assert_almost_equal(foo[1], 100.5)
-    assert_almost_equal(foo[-1], 227.5)
+        foo = dset.variables['foo']
+        assert foo.dtype == np.dtype('uint8')
+        assert_almost_equal(foo.scale_factor, 0.5)
+        assert_almost_equal(foo.add_offset, 100)
+        assert foo[0] is np.ma.masked
+        assert_almost_equal(foo[1], 100.5)
+        assert_almost_equal(foo[-1], 227.5)
 
-    dset.close()
-    os.remove(tmpfile)
+        dset.close()
 
 
 def test_calculate_scale_and_offset():
