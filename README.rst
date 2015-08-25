@@ -1,9 +1,12 @@
 .. -*- mode: rst -*-
 
-|Travis|_
+|Travis|_ |AppVeyor|_
 
 .. |Travis| image:: https://api.travis-ci.org/ARM-DOE/pyart.png?branch=master
 .. _Travis: https://travis-ci.org/ARM-DOE/pyart
+
+.. |AppVeyor| image:: https://ci.appveyor.com/api/projects/status/9do57qycha65j4v9/branch/master?svg=true
+.. _AppVeyor: https://ci.appveyor.com/project/JonathanHelmus/pyart-l711v/branch/master
 
 The Python ARM Radar Toolkit (Py-ART)
 =====================================
