@@ -2,11 +2,8 @@
 
 from __future__ import print_function
 
-import os
-import tempfile
 import warnings
 from datetime import datetime
-from io import IOBase
 
 import numpy as np
 from numpy.testing import assert_almost_equal
@@ -353,26 +350,20 @@ class Mdv_common_Tests(object):
     require a temporary file which will be removed at the end of the test.
     """
 
-    def setUp(self):
-        self.tmpfile = tempfile.mkstemp(suffix='.mdv', dir='.')[1]
-
-    def tearDown(self):
-        if os.path.isfile(self.tmpfile):
-            os.remove(self.tmpfile)
-
     def test_mdv_file_read_write_radar(self):
         with warnings.catch_warnings(record=True) as w:
             mdvfile_orig = pyart.io.mdv_common.MdvFile(
                 pyart.testing.MDV_PPI_FILE)
             mdvfile_orig.read_all_fields()
 
-            mdvfile_orig.write(self.tmpfile)
-            mdvfile_orig.close()
+            inmemfile = pyart.testing.InMemoryFile()
+            mdvfile_orig.write(inmemfile)
+            inmemfile.seek(0)
             # check that a UserWarning was issued since zlib compression used
             assert len(w) == 1
             assert issubclass(w[-1].category, UserWarning)
 
-            mdvfile = pyart.io.mdv_common.MdvFile(self.tmpfile)
+            mdvfile = pyart.io.mdv_common.MdvFile(inmemfile)
             self.check_mdvfile_ppi(mdvfile)
 
     def test_read_write_file_objects(self):
@@ -383,13 +374,13 @@ class Mdv_common_Tests(object):
         self.check_mdvfile_ppi(mdvfile)
 
         # write out the file using an file handler
-        f2 = open(self.tmpfile, 'wb')
+        f2 = pyart.testing.InMemoryFile()
         mdvfile.write(f2)
         f.close()
-        f2.close()
+        f2.seek(0)
 
         # re-read and check object
-        mdvfile = pyart.io.mdv_common.MdvFile(self.tmpfile)
+        mdvfile = pyart.io.mdv_common.MdvFile(f2)
         self.check_mdvfile_ppi(mdvfile)
 
     @staticmethod
@@ -417,9 +408,10 @@ class Mdv_common_Tests(object):
         # write and read the RHI file which contains a elevation chunk
         mdvfile = pyart.io.mdv_common.MdvFile(pyart.testing.MDV_RHI_FILE)
         mdvfile.read_all_fields()
-        mdvfile.write(self.tmpfile)
-        mdvfile.close()
-        mdvfile2 = pyart.io.mdv_common.MdvFile(self.tmpfile)
+        inmemfile = pyart.testing.InMemoryFile()
+        mdvfile.write(inmemfile)
+        inmemfile.seek(0)
+        mdvfile2 = pyart.io.mdv_common.MdvFile(inmemfile)
 
         # verify that the elevations are similar
         assert len(mdvfile2.elevations) == len(mdvfile.elevations)

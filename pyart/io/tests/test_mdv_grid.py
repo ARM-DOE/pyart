@@ -2,8 +2,6 @@
 
 from __future__ import print_function
 
-import os
-import tempfile
 import datetime
 
 import numpy as np
@@ -18,18 +16,13 @@ class Mdv_grid_Tests(object):
     require a temporary file which will be removed at the end of the test.
     """
 
-    def setUp(self):
-        self.tmpfile = tempfile.mkstemp(suffix='.mdv', dir='.')[1]
-
-    def tearDown(self):
-        if os.path.isfile(self.tmpfile):
-            os.remove(self.tmpfile)
-
     def test_write_read_target(self):
         # write and read in target grid
         original_grid = pyart.testing.make_target_grid()
-        pyart.io.write_grid_mdv(self.tmpfile, original_grid)
-        grid = pyart.io.read_grid_mdv(self.tmpfile, file_field_names=True)
+        tmpfile = pyart.testing.InMemoryFile()
+        pyart.io.write_grid_mdv(tmpfile, original_grid)
+        tmpfile.seek(0)
+        grid = pyart.io.read_grid_mdv(tmpfile, file_field_names=True)
 
         # check the contents of the grid which was read
         self.check_target_reflectivity_field(grid)
@@ -69,8 +62,10 @@ class Mdv_grid_Tests(object):
     def test_write_read_target_delay(self):
         # write and read in the target grid with delayed field loading
         original_grid = pyart.testing.make_target_grid()
-        pyart.io.write_grid_mdv(self.tmpfile, original_grid)
-        grid = pyart.io.read_grid_mdv(self.tmpfile, file_field_names=True,
+        tmpfile = pyart.testing.InMemoryFile()
+        pyart.io.write_grid_mdv(tmpfile, original_grid)
+        tmpfile.seek(0)
+        grid = pyart.io.read_grid_mdv(tmpfile, file_field_names=True,
                                       delay_field_loading=True)
 
         # check the contents of the grid which was read
@@ -89,8 +84,10 @@ class Mdv_grid_Tests(object):
         original_grid.metadata['radar_0_alt'] = 300.
         original_grid.metadata['instrument_name'] = 'testtesttest'
         original_grid.fields['reflectivity']['standard_name'] = 'fieldname'
-        pyart.io.write_grid_mdv(self.tmpfile, original_grid)
-        grid = pyart.io.read_grid_mdv(self.tmpfile, file_field_names=True)
+        tmpfile = pyart.testing.InMemoryFile()
+        pyart.io.write_grid_mdv(tmpfile, original_grid)
+        tmpfile.seek(0)
+        grid = pyart.io.read_grid_mdv(tmpfile, file_field_names=True)
 
         # check the contents of the grid which was read
         self.check_target_reflectivity_field(grid)
@@ -107,10 +104,12 @@ class Mdv_grid_Tests(object):
         fdata = np.ma.ones((20, 20, 20), dtype=np.float32)
         fdata[0, 0, 1] = np.ma.masked
         original_grid.fields['field_one'] = {'data': fdata}
-        pyart.io.write_grid_mdv(self.tmpfile, original_grid)
+        tmpfile = pyart.testing.InMemoryFile()
+        pyart.io.write_grid_mdv(tmpfile, original_grid)
+        tmpfile.seek(0)
 
         # check the new grid object
-        grid = pyart.io.read_grid_mdv(self.tmpfile, file_field_names=True)
+        grid = pyart.io.read_grid_mdv(tmpfile, file_field_names=True)
         assert 'field_one' in grid.fields
         fdata = grid.fields['field_one']['data']
         assert fdata.dtype == np.float32
@@ -125,9 +124,11 @@ class Mdv_grid_Tests(object):
         grid = pyart.testing.make_empty_grid(
             (123, 2, 2), ((0, 1), (0, 1), (0, 1)))
         grid.fields['reflectivity'] = {'data': np.zeros((123, 2, 2))}
+        tmpfile = pyart.testing.InMemoryFile()
         assert_warns(
-            UserWarning, pyart.io.write_grid_mdv, self.tmpfile, grid)
-        rgrid = pyart.io.read_grid_mdv(self.tmpfile)
+            UserWarning, pyart.io.write_grid_mdv, tmpfile, grid)
+        tmpfile.seek(0)
+        rgrid = pyart.io.read_grid_mdv(tmpfile)
         assert len(grid.axes['z_disp']['data']) == 123
         assert len(rgrid.axes['z_disp']['data']) == 122
 
@@ -156,16 +157,19 @@ class Mdv_grid_Tests(object):
             'scale_factor': 10.,
             'add_offset': 2.,
             }
-        pyart.io.write_grid_mdv(self.tmpfile, original_grid)
+        tmpfile = pyart.testing.InMemoryFile()
+        pyart.io.write_grid_mdv(tmpfile, original_grid)
+        tmpfile.seek(0)
 
         # verify that the data get read in correctly
-        grid = pyart.io.read_grid_mdv(self.tmpfile, file_field_names=True)
+        grid = pyart.io.read_grid_mdv(tmpfile, file_field_names=True)
         assert np.all(grid.fields['field_one']['data'] == 105)
         assert np.all(grid.fields['field_two']['data'] == 22)
         assert np.all(grid.fields['field_three']['data'] == 100)
+        tmpfile.seek(0)
 
         # vertify that the data is encoded to the correct type in the file
-        mdvfile = pyart.io.mdv_common.MdvFile(self.tmpfile)
+        mdvfile = pyart.io.mdv_common.MdvFile(tmpfile)
         field_name = [h['field_name'] for h in mdvfile.field_headers]
         field_one = field_name.index('field_one')
         field_two = field_name.index('field_two')
@@ -183,7 +187,8 @@ class Mdv_grid_Tests(object):
         grid.fields['reflectivity'] = {
             'data': np.zeros((2, 2, 2), dtype=np.float32),
             '_Write_as_dtype': 'float16'}
-        assert_raises(TypeError, pyart.io.write_grid_mdv, self.tmpfile, grid)
+        tmpfile = pyart.testing.InMemoryFile()
+        assert_raises(TypeError, pyart.io.write_grid_mdv, tmpfile, grid)
 
 
 def test_time_dic_to_datetime():
