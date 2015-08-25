@@ -17,6 +17,7 @@ unit tests.
     make_velocity_aliased_radar
     make_empty_grid
     make_target_grid
+    InTemporaryDirectory
 
 """
 
@@ -34,6 +35,7 @@ from .sample_objects import make_empty_grid
 from .sample_objects import make_target_grid, make_storm_grid
 from .sample_objects import make_empty_rhi_radar
 from .sample_objects import make_velocity_aliased_rhi_radar
+from .tmpdirs import InTemporaryDirectory
 
 # Python 2/3 StringIO object, not documented as numpydoc does not like
 # docstring and has issues finding/including methods.
