@@ -267,6 +267,7 @@ class RadarDisplay(object):
                  axislabels=(None, None), axislabels_flag=True,
                  colorbar_flag=True, colorbar_label=None,
                  colorbar_orient='vertical', edges=True,
+                 gatefilter=None,
                  filter_transitions=True, ax=None, fig=None):
         """
         Plot a PPI.
@@ -336,7 +337,7 @@ class RadarDisplay(object):
         vmin, vmax = common.parse_vmin_vmax(self._radar, field, vmin, vmax)
 
         # get data for the plot
-        data = self._get_data(field, sweep, mask_tuple, filter_transitions)
+        data = self._get_data(field, sweep, mask_tuple, filter_transitions, gatefilter)
         x, y = self._get_x_y(field, sweep, edges, filter_transitions)
 
         # mask the data where outside the limits
@@ -367,6 +368,7 @@ class RadarDisplay(object):
                  axislabels=(None, None), axislabels_flag=True,
                  reverse_xaxis=None, colorbar_flag=True, colorbar_label=None,
                  colorbar_orient='vertical', edges=True,
+                 gatefilter=None,
                  filter_transitions=True, ax=None, fig=None):
         """
         Plot a RHI.
@@ -437,7 +439,7 @@ class RadarDisplay(object):
         vmin, vmax = common.parse_vmin_vmax(self._radar, field, vmin, vmax)
 
         # get data for the plot
-        data = self._get_data(field, sweep, mask_tuple, filter_transitions)
+        data = self._get_data(field, sweep, mask_tuple, filter_transitions, gatefilter)
         x, y, z = self._get_x_y_z(field, sweep, edges, filter_transitions)
 
         # mask the data where outside the limits
@@ -973,7 +975,8 @@ class RadarDisplay(object):
     # Get methods #
     ###############
 
-    def _get_data(self, field, sweep, mask_tuple, filter_transitions):
+    def _get_data(self, field, sweep, mask_tuple, filter_transitions, 
+                  gatefilter):
         """ Retrieve and return data from a plot function. """
         start = self.starts[sweep]
         end = self.ends[sweep] + 1
@@ -984,6 +987,11 @@ class RadarDisplay(object):
             mask_field, mask_value = mask_tuple
             mdata = self.fields[mask_field]['data'][start:end]
             data = np.ma.masked_where(mdata < mask_value, data)
+            
+        # mask data if gatefilter provided
+        if gatefilter is not None:
+            mask_filter = gatefilter[start:end]
+            data.mask = mask_filter
 
         # filter out antenna transitions
         if filter_transitions and self.antenna_transition is not None:
