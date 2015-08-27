@@ -154,17 +154,24 @@ class NEXRADLevel2File(object):
 
         # pull out msg31 records which contain the moment data.
         self.msg31s = [r for r in self._records if r['header']['type'] == 31]
+        self._msg_type = '31'
         if len(self.msg31s) == 0:
-            raise ValueError('No MSG31 records found, cannot read file')
-        elev_nums = np.array([m['msg31_header']['elevation_number']
+            self.msg31s = [r for r in self._records if r['header']['type'] == 1]
+            self._msg_type = '1'
+            if len(self.msg31s) == 0:
+                raise ValueError('No MSG31 records found, cannot read file')
+        elev_nums = np.array([m['msg_header']['elevation_number']
                              for m in self.msg31s])
         self.scan_msgs = [np.where(elev_nums == i + 1)[0]
                           for i in range(elev_nums.max())]
         self.nscans = len(self.scan_msgs)
 
         # pull out the vcp record
-        self.vcp = [r for r in self._records if r['header']['type'] == 5][0]
-
+        msg_5 = [r for r in self._records if r['header']['type'] == 5]
+        if len(msg_5):
+            self.vcp = msg_5[0]
+        else:
+            self.vcp = None
         return
 
     def close(self):
@@ -185,8 +192,11 @@ class NEXRADLevel2File(object):
             Height of radar and feedhorn in meters above mean sea level.
 
         """
-        dic = self.msg31s[0]['VOL']
-        return dic['lat'], dic['lon'], dic['height'] + dic['feedhorn_height']
+        if self._msg_type == '31':
+            dic = self.msg31s[0]['VOL']
+            return dic['lat'], dic['lon'], dic['height'] + dic['feedhorn_height']
+        else:
+            return 0.0, 0.0, 0.0
 
     def scan_info(self):
         """
@@ -213,9 +223,13 @@ class NEXRADLevel2File(object):
             nexrad_moments = ['REF', 'VEL', 'SW', 'ZDR', 'PHI', 'RHO']
             moments = [f for f in nexrad_moments if f in msg]
             ngates = [msg[f]['ngates'] for f in moments]
+            gate_spacing = [msg[f]['gate_spacing'] for f in moments]
+            first_gate = [msg[f]['first_gate'] for f in moments]
             info.append({
                 'nrays': nrays,
                 'ngates': ngates,
+                'gate_spacing': gate_spacing,
+                'first_gate': first_gate,
                 'moments': moments})
         return info
 
@@ -269,7 +283,7 @@ class NEXRADLevel2File(object):
         Return an array of msg31 header elements for all rays in scans.
         """
         msg_nums = self._msg_nums(scans)
-        t = [self.msg31s[i]['msg31_header'][key] for i in msg_nums]
+        t = [self.msg31s[i]['msg_header'][key] for i in msg_nums]
         return np.array(t)
 
     def _msg31_rad_array(self, scans, key):
@@ -277,7 +291,10 @@ class NEXRADLevel2File(object):
         Return an array of msg31 RAD elements for all rays in scans.
         """
         msg_nums = self._msg_nums(scans)
-        t = [self.msg31s[i]['RAD'][key] for i in msg_nums]
+        if self._msg_type == '31':
+            t = [self.msg31s[i]['RAD'][key] for i in msg_nums]
+        else:
+            t = [self.msg31s[i]['msg_header'][key] for i in msg_nums]
         return np.array(t)
 
     def get_times(self, scans=None):
@@ -328,7 +345,11 @@ class NEXRADLevel2File(object):
         """
         if scans is None:
             scans = range(self.nscans)
-        return self._msg31_array(scans, 'azimuth_angle')
+        if self._msg_type == '1':
+            scale = 180 / (4096 * 8.)
+        else:
+            scale = 1.
+        return self._msg31_array(scans, 'azimuth_angle') * scale
 
     def get_elevation_angles(self, scans=None):
         """
@@ -349,7 +370,11 @@ class NEXRADLevel2File(object):
         """
         if scans is None:
             scans = range(self.nscans)
-        return self._msg31_array(scans, 'elevation_angle')
+        if self._msg_type == '1':
+            scale = 180 / (4096 * 8.)
+        else:
+            scale = 1.
+        return self._msg31_array(scans, 'elevation_angle') * scale
 
     def get_target_angles(self, scans=None):
         """
@@ -370,10 +395,17 @@ class NEXRADLevel2File(object):
         """
         if scans is None:
             scans = range(self.nscans)
-        cp = self.vcp['cut_parameters']
-        scale = 360. / 65536.
-        return np.array([cp[i]['elevation_angle'] * scale for i in scans],
-                        dtype='float32')
+        if self._msg_type == '31':
+            cp = self.vcp['cut_parameters']
+            scale = 360. / 65536.
+            return np.array([cp[i]['elevation_angle'] * scale for i in scans],
+                            dtype='float32')
+        else:
+            scale = 180 / (4096 * 8.)
+            msgs = [self.msg31s[self.scan_msgs[i][0]] for i in scans]
+            return np.round(np.array(
+                [m['msg_header']['elevation_angle'] * scale for m in msgs],
+                dtype='float32'), 1)
 
     def get_nyquist_vel(self, scans=None):
         """
@@ -518,7 +550,7 @@ def _get_record_from_buf(buf, pos):
             block_name, block_dic = _get_msg31_data_block(mbuf, block_pointer)
             dic[block_name] = block_dic
 
-        dic['msg31_header'] = msg_31_header
+        dic['msg_header'] = msg_31_header
 
     elif msg_type == 5:
         msg_header_size = _structure_size(MSG_HEADER)
@@ -531,6 +563,60 @@ def _get_record_from_buf(buf, pos):
         for i in range(dic['msg5_header']['num_cuts']):
             p = pos + msg_header_size + msg5_header_size + msg5_elev_size * i
             dic['cut_parameters'].append(_unpack_from_buf(buf, p, MSG_5_ELEV))
+
+        new_pos = pos + RECORD_SIZE
+    elif msg_type == 1:
+        msg_header_size = _structure_size(MSG_HEADER)
+        msg1_header = _unpack_from_buf(buf, pos + msg_header_size, MSG_1)
+        dic['msg_header'] = msg1_header
+
+        sur_nbins = int(msg1_header['sur_nbins'])
+        doppler_nbins = int(msg1_header['doppler_nbins'])
+
+        sur_step = int(msg1_header['sur_range_step'])
+        doppler_step = int(msg1_header['doppler_range_step'])
+
+        sur_first = int(msg1_header['sur_range_first'])
+        doppler_first = int(msg1_header['doppler_range_first'])
+        if doppler_first > 2**15:
+            doppler_first = doppler_first - 2**16
+
+        if msg1_header['sur_pointer']:
+            offset = pos + msg_header_size + msg1_header['sur_pointer']
+            data = np.fromstring(buf[offset:offset+sur_nbins], '>u1')
+            dic['REF'] = {
+                'ngates': sur_nbins,
+                'gate_spacing': sur_step,
+                'first_gate': sur_first,
+                'data': data,
+                'scale': 2.,
+                'offset': 66.,
+            }
+        if msg1_header['vel_pointer']:
+            offset = pos + msg_header_size + msg1_header['vel_pointer']
+            data = np.fromstring(buf[offset:offset+doppler_nbins], '>u1')
+            dic['VEL'] = {
+                'ngates': doppler_nbins,
+                'gate_spacing': doppler_step,
+                'first_gate': doppler_first,
+                'data': data,
+                'scale': 2.,
+                'offset': 129.0,
+            }
+            if msg1_header['doppler_resolution'] == 4:
+                # 1 m/s resolution velocity, offset remains 129.
+                dic['VEL']['scale'] = 1.
+        if msg1_header['width_pointer']:
+            offset = pos + msg_header_size + msg1_header['width_pointer']
+            data = np.fromstring(buf[offset:offset+doppler_nbins], '>u1')
+            dic['SW'] = {
+                'ngates': doppler_nbins,
+                'gate_spacing': doppler_step,
+                'first_gate': doppler_first,
+                'data': data,
+                'scale': 2.,
+                'offset': 129.0,
+            }
 
         new_pos = pos + RECORD_SIZE
     else:   # not message 31 or 1, no decoding performed
@@ -660,6 +746,42 @@ MSG_31 = (
     ('block_pointer_9', INT4),      # 64-67  Moment "RHO"
 )
 
+
+# Table III Digital Radar Data (Message Type 1)
+# pages 3-7 to
+MSG_1 = (
+    ('collect_ms', INT4),           # 0-3
+    ('collect_date', INT2),         # 4-5
+    ('unambig_range', SINT2),       # 6-7
+    ('azimuth_angle', CODE2),       # 8-9
+    ('azimuth_number', INT2),       # 10-11
+    ('radial_status', CODE2),       # 12-13
+    ('elevation_angle', INT2),      # 14-15
+    ('elevation_number', INT2),     # 16-17
+    ('sur_range_first', CODE2),     # 18-19
+    ('doppler_range_first', CODE2), # 20-21
+    ('sur_range_step', CODE2),      # 22-23
+    ('doppler_range_step', CODE2),  # 24-25
+    ('sur_nbins', INT2),            # 26-27
+    ('doppler_nbins', INT2),        # 28-29
+    ('cut_sector_num', INT2),       # 30-31
+    ('calib_const', REAL4),         # 32-35
+    ('sur_pointer', INT2),          # 36-37
+    ('vel_pointer', INT2),          # 38-39
+    ('width_pointer', INT2),        # 40-41
+    ('doppler_resolution', CODE2),  # 42-43
+    ('vcp', INT2),                  # 44-45
+    ('spare_1', '8s'),              # 46-53
+    ('spare_2', '2s'),              # 54-55
+    ('spare_3', '2s'),              # 56-57
+    ('spare_4', '2s'),              # 58-59
+    ('nyquist_vel', SINT2),         # 60-61
+    ('atmos_attenuation', SINT2),   # 62-63
+    ('threshold', SINT2),           # 64-65
+    ('spot_blank_status', INT2),    # 66-67
+    ('spare_5', '32s'),             # 68-99
+    # 100+  reflectivity, velocity and/or spectral width data, CODE1
+)
 
 # Table XI Volume Coverage Pattern Data (Message Type 5 & 7)
 # pages 3-51 to 3-54
