@@ -89,6 +89,7 @@ def read_grid(filename, exclude_fields=None, **kwargs):
             bad_shape = field_dic['data'].shape
             warn('Field %s skipped due to incorrect shape' % (field))
 
+    ncobj.close()
     return Grid(fields, axes, metadata)
 
 

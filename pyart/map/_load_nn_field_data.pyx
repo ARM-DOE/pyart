@@ -3,7 +3,7 @@ cimport cython
 
 @cython.boundscheck(False)
 def _load_nn_field_data(object[:, :] data, int nfields, int npoints,
-                        long[:] r_nums, long[:] e_nums, double[:, :] sdata):
+                        int[:] r_nums, int[:] e_nums, double[:, :] sdata):
     """
     _load_nn_field_data(data, nfields, npoints, r_nums, e_nums, sdata)
 

@@ -12,17 +12,15 @@ Class for creating plots from Airborne Radar objects.
 
 """
 
-import matplotlib.pyplot as plt
 import numpy as np
 import netCDF4
-from mpl_toolkits.axes_grid1 import make_axes_locatable
 
-from .common import corner_to_point, radar_coords_to_cart
+from .radardisplay import RadarDisplay
+from . import common
 from .coord_transform import radar_coords_to_cart_track_relative
-from .coord_transform import radar_coords_to_cart_earth_relative
 
 
-class RadarDisplay_Airborne:
+class RadarDisplay_Airborne(RadarDisplay):
     """
     A display object for creating plots from data in a airborne radar object.
 
@@ -86,16 +84,9 @@ class RadarDisplay_Airborne:
 
 
     """
-    # TODO this class could likely be made a subclass of RadarDisplay.
 
     def __init__(self, radar, shift=(0.0, 0.0)):
         """ Initialize the object. """
-        # populate attributes from radar object
-        self.fields = radar.fields
-        self.scan_type = radar.scan_type
-        self.ranges = radar.range['data']
-        self.azimuths = radar.azimuth['data']
-        self.elevations = radar.elevation['data']
         self.fixed_angle = radar.fixed_angle['data'][0]
         self.rotation = radar.rotation['data']
         self.roll = radar.roll['data']
@@ -104,24 +95,16 @@ class RadarDisplay_Airborne:
         self.heading = radar.heading['data']
         self.pitch = radar.pitch['data']
         self.altitude = radar.altitude['data']
-        if 'instrument_name' in radar.metadata:
-            self.radar_name = radar.metadata['instrument_name']
-        else:
-            self.radar_name = ''
+        super(RadarDisplay_Airborne, self).__init__(radar, shift)
 
-        # origin
-        if shift != (0.0, 0.0):
-            self.origin = 'origin'
-        else:
-            self.origin = 'radar'
-
+    def _calculate_localization(self, radar):
+        """ Calculate self.x, self.y, self.z and self.loc. """
         # x, y, z attributes: cartesian location for a sweep in km.
-        self.shift = shift
 
         if radar.metadata['platform_type'] == 'aircraft_belly':
             rg, azg = np.meshgrid(self.ranges, self.azimuths)
             rg, eleg = np.meshgrid(self.ranges, self.elevations)
-            self.x, self.y, self.z = radar_coords_to_cart(
+            self.x, self.y, self.z = common.radar_coords_to_cart(
                 rg / 1000.0, azg, eleg)
             self.x = self.x + self.shift[0]
             self.y = self.y + self.shift[1]
@@ -143,26 +126,11 @@ class RadarDisplay_Airborne:
         lon = float(radar.longitude['data'][middle_lon])
         self.loc = (lat, lon)
 
-        # datetime object describing first sweep time
-        times = radar.time['data'][0]
-        units = radar.time['units']
-        calendar = radar.time['calendar']
-        self.time_begin = netCDF4.num2date(times, units, calendar)
-
-        # sweep start and end indices
-        self.starts = radar.sweep_start_ray_index['data']
-        self.ends = radar.sweep_end_ray_index['data']
-
-        # list to hold plots, plotted fields and plotted colorbars
-        self.plots = []
-        self.plot_vars = []
-        self.cbs = []
-
     ####################
     # Plotting methods #
     ####################
 
-    def plot(self, field, **kwargs):
+    def plot(self, field, sweep=0, **kwargs):
         """
         Create a plot appropiate for the radar.
 
@@ -175,6 +143,8 @@ class RadarDisplay_Airborne:
         ----------
         field : str
             Field to plot.
+        sweep : int
+            Sweep number to plot, not used for VPT scans.
 
         See Also
         --------
@@ -183,183 +153,24 @@ class RadarDisplay_Airborne:
 
         """
         if self.scan_type == 'ppi':
-            self.plot_sweep_ppi(field, **kwargs)
+            self.plot_ppi(field, sweep, **kwargs)
         elif self.scan_type == 'rhi':
-            self.plot_sweep_grid(field, **kwargs)
+            self.plot_sweep_grid(field, sweep, **kwargs)
         elif self.scan_type == 'vpt':
-            self.plot_sweep_grid(field, **kwargs)
+            self.plot_sweep_grid(field, sweep, **kwargs)
         else:
             raise ValueError('unknown scan_type % s' % (self.scan_type))
         return
 
-    def plot_ray(self, field, ray, format_str='k-', mask_tuple=None,
-                 ray_min=None, ray_max=None, mask_outside=False, title=None,
-                 title_flag=True, axislabels=(None, None),
-                 axislabels_flag=True, ax=None, fig=None):
-        """
-        Plot a single ray.
-
-        Parameters
-        ----------
-        field : str
-            Field to plot.
-        ray : int
-            Ray number to plot.
-
-        Other Parameters
-        ----------------
-        format_str : str
-            Format string defining the line style and marker.
-        mask_tuple : (str, float)
-            Tuple containing the field name and value below which to mask
-            field prior to plotting, for example to mask all data where
-            NCP < 0.5 set mask_tuple to ['NCP', 0.5]. None performs no masking.
-        ray_min : float
-            Minimum ray value, None for default value, ignored if mask_outside
-            is False.
-        ray_max : float
-            Maximum ray value, None for default value, ignored if mask_outside
-            is False.
-        mask_outside : bool
-            True to mask data outside of vmin, vmax.  False performs no
-            masking.
-        title : str
-            Title to label plot with, None to use default title generated from
-            the field and ray parameters. Parameter is ignored if title_flag
-            is False.
-        title_flag : bool
-            True to add a title to the plot, False does not add a title.
-        axislabels : (str, str)
-            2-tuple of x-axis, y-axis labels.  None for either label will use
-            the default axis label.  Parameter is ignored if axislabels_flag is
-            False.
-        axislabel_flag : bool
-            True to add label the axes, False does not label the axes.
-        ax : Axis
-            Axis to plot on. None will use the current axis.
-        fig : Figure
-            Figure to add the colorbar to. None will use the current figure.
-
-        """
-        # parse parameters
-        ax, fig = self._parse_ax_fig(ax, fig)
-
-        # get the data and mask
-        data = self._get_ray_data(field, ray, mask_tuple)
-
-         # mask the data where outside the limits
-        if mask_outside:
-            data = np.ma.masked_outside(data, ray_min, ray_max)
-
-        # plot the data
-        line, = ax.plot(self.ranges / 1000., data, format_str)
-
-        if title_flag:
-            self._set_ray_title(field, ray, title, ax)
-
-        if axislabels_flag:
-            self._label_axes_ray(axislabels, field, ax)
-
-        # add plot and field to attribute lists
-        self.plots.append(line)
-        self.plot_vars.append(field)
-
-    def plot_sweep_grid(self, field, mask_tuple=None, vmin=None, vmax=None,
-                        cmap='jet', mask_outside=True, title=None,
+    def plot_sweep_grid(self, field, sweep=0, mask_tuple=None, vmin=None,
+                        vmax=None, cmap='jet', mask_outside=False, title=None,
                         title_flag=True, axislabels=(None, None),
                         axislabels_flag=True, colorbar_flag=True,
-                        colorbar_label=None, colorbar_orient=None,
-                        ax=None, fig=None):
+                        colorbar_label=None, colorbar_orient='vertical',
+                        edges=True, filter_transitions=True, ax=None,
+                        fig=None):
         """
         Plot a sweep as a grid.
-
-        Parameters
-        ----------
-        field : str
-            Field to plot.
-
-        Other Parameters
-        ----------------
-        mask_tuple : (str, float)
-            Tuple containing the field name and value below which to mask
-            field prior to plotting, for example to mask all data where
-            NCP < 0.5 set mask_tuple to ['NCP', 0.5]. None performs no masking.
-        vmin : float
-            Luminance minimum value, None for default value.
-        vmax : float
-            Luminance maximum value, None for default value.
-        cmap : str
-            Matplotlib colormap name.
-        mask_outside : bool
-            True to mask data outside of vmin, vmax.  False performs no
-            masking.
-        title : str
-            Title to label plot with, None to use default title generated from
-            the field and sweep parameters. Parameter is ignored if title_flag
-            is False.
-        title_flag : bool
-            True to add a title to the plot, False does not add a title.
-        axislabels : (str, str)
-            2-tuple of x-axis, y-axis labels.  None for either label will use
-            the default axis label.  Parameter is ignored if axislabels_flag is
-            False.
-        axislabel_flag : bool
-            True to add label the axes, False does not label the axes.
-        colorbar_flag : bool
-            True to add a colorbar with label to the axis.  False leaves off
-            the colorbar.
-        colorbar_label : str
-            Colorbar label, None will use a default label generated from the
-            field information.
-        colorbar_orient : str
-            Colorbar orientation, None will use default orientation of
-            vertical.
-        ax : Axis
-            Axis to plot on. None will use the current axis.
-        fig : Figure
-            Figure to add the colorbar to. None will use the current figure.
-
-        """
-        # parse parameters
-        ax, fig = self._parse_ax_fig(ax, fig)
-        vmin, vmax = self._parse_vmin_vmax(field, vmin, vmax)
-
-        # get data for the plot
-        data = self._get_data(field, mask_tuple=mask_tuple)
-        x, z = self._get_x_z(field)
-
-        # mask the data where outside the limits
-        if mask_outside:
-            data = np.ma.masked_outside(data, vmin, vmax)
-
-        # plot the data
-        pm = ax.pcolormesh(x, z, data, vmin=vmin, vmax=vmax, cmap=cmap)
-
-        # Set the aspcet ratio
-        # ax.axis('scaled')
-
-        if title_flag:
-            self._set_title(field, title, ax)
-
-        if axislabels_flag:
-            self._label_axes_sweep(axislabels, ax)
-
-        # add plot and field to lists
-        self.plots.append(pm)
-        self.plot_vars.append(field)
-
-        # colorbar options
-        if colorbar_flag:
-            self.plot_colorbar(mappable=pm, label=colorbar_label,
-                               orient=colorbar_orient,
-                               field=field, ax=ax, fig=fig)
-
-    def plot_ppi(self, field, sweep=0, mask_tuple=None, vmin=None, vmax=None,
-                 cmap='jet', mask_outside=True, title=None, title_flag=True,
-                 axislabels=(None, None), axislabels_flag=True,
-                 colorbar_flag=True, colorbar_label=None, ax=None, fig=None):
-        """
-        Plot a PPI.
 
         Parameters
         ----------
@@ -401,6 +212,20 @@ class RadarDisplay_Airborne:
         colorbar_label : str
             Colorbar label, None will use a default label generated from the
             field information.
+        colorbar_orient : 'vertical' or 'horizontal'
+            Colorbar orientation.
+        edges : bool
+            True will interpolate and extrapolate the gate edges from the
+            range, azimuth and elevations in the radar, treating these
+            as specifying the center of each gate.  False treats these
+            coordinates themselved as the gate edges, resulting in a plot
+            in which the last gate in each ray and the entire last ray are not
+            plotted.
+        filter_transitions : bool
+            True to remove rays where the antenna was in transition between
+            sweeps from the plot.  False will include these rays in the plot.
+            No rays are filtered when the antenna_transition attribute of the
+            underlying radar is not present.
         ax : Axis
             Axis to plot on. None will use the current axis.
         fig : Figure
@@ -408,540 +233,121 @@ class RadarDisplay_Airborne:
 
         """
         # parse parameters
-        ax, fig = self._parse_ax_fig(ax, fig)
-        vmin, vmax = self._parse_vmin_vmax(field, vmin, vmax)
+        ax, fig = common.parse_ax_fig(ax, fig)
+        vmin, vmax = common.parse_vmin_vmax(self._radar, field, vmin, vmax)
 
         # get data for the plot
-        data = self._get_data(field, mask_tuple)
-        x, y = self._get_x_y(field)
+        data = self._get_data(field, sweep, mask_tuple, filter_transitions)
+        x, z = self._get_x_z(field, sweep, edges, filter_transitions)
 
         # mask the data where outside the limits
         if mask_outside:
+            data = np.ma.masked_invalid(data)
             data = np.ma.masked_outside(data, vmin, vmax)
 
         # plot the data
-        pm = ax.pcolormesh(x, y, data, vmin=vmin, vmax=vmax, cmap=cmap)
+        pm = ax.pcolormesh(x, z, data, vmin=vmin, vmax=vmax, cmap=cmap)
+
+        # Set the aspcet ratio
+        # ax.axis('scaled')
 
         if title_flag:
-            self._set_title(field, title, ax)
+            self._set_title(field, sweep, title, ax)
 
         if axislabels_flag:
-            self._label_axes_ppi(axislabels, ax)
+            self._label_axes_rhi(axislabels, ax)
 
         # add plot and field to lists
         self.plots.append(pm)
         self.plot_vars.append(field)
 
+        # colorbar options
         if colorbar_flag:
             self.plot_colorbar(mappable=pm, label=colorbar_label,
+                               orient=colorbar_orient,
                                field=field, ax=ax, fig=fig)
-
-    def plot_range_rings(self, range_rings, ax=None, col=None, ls=None,
-                         lw=None):
-        """
-        Plot a series of range rings.
-
-        Parameters
-        ----------
-        range_rings : list
-            List of locations in km to draw range rings.
-        ax : Axis
-            Axis to plot on.  None will use the current axis.
-        col : str or value
-            Color to use for range rings.
-        ls : str
-            Linestyle to use for range rings.
-
-        """
-        ax = self._parse_ax(ax)
-        for range_ring_location_km in range_rings:
-            self.plot_range_ring(range_ring_location_km, ax=ax, col=col,
-                                 ls=ls, lw=lw)
-
-    def plot_range_ring(self, range_ring_location_km, npts=100, ax=None,
-                        col=None, ls=None, lw=None):
-        """
-        Plot a single range ring.
-
-        Parameters
-        ----------
-        range_ring_location_km : float
-            Location of range ring in km.
-        npts: int
-            Number of points in the ring, higher for better resolution.
-        ax : Axis
-            Axis to plot on.  None will use the current axis.
-        col : str or value
-            Color to use for range rings.
-        ls : str
-            Linestyle to use for range rings.
-
-        """
-        ax = self._parse_ax(ax)
-        theta = np.linspace(0, 2 * np.pi, npts)
-        r = np.ones([npts], dtype=np.float32) * range_ring_location_km
-        x = r * np.sin(theta)
-        y = r * np.cos(theta)
-        if lw is None:
-            lw = 2
-        if ls is None:
-            ls = '-'
-        if col is None:
-            col = 'k'
-        ax.plot(x, y, c=col, ls=ls, lw=lw)
-
-    def plot_grid_lines(self, ax=None, col=None, ls=None, lw=None):
-        """
-        Plot grid lines.
-
-        Parameters
-        ----------
-        ax : Axis
-            Axis to plot on.  None will use the current axis.
-        col : str or value
-            Color to use for grid lines.
-        ls : str
-            Linestyle to use for grid lines.
-
-        """
-        ax = self._parse_ax(ax)
-        if lw is None:
-            lw = 2
-        if ls is None:
-            ls = ':'
-        if col is None:
-            col = 'k'
-        ax.grid(c=col, ls=ls)
-
-    def plot_labels(self, labels, locations, symbols='r+', text_color='k',
-                    ax=None):
-        """
-        Plot symbols and labels at given locations.
-
-        Parameters
-        ----------
-        labels : list of str
-            List of labels to place just above symbols.
-        locations : list of 2-tuples
-            List of latitude, longitude (in degrees) tuples at which symbols
-            will be place.  Labels are placed just above the symbols.
-        symbols : list of str or str
-            List of matplotlib color+marker strings defining symbols to place
-            at given locations.  If a single string is provided, that symbol
-            will be placed at all locations.
-        text_color : str
-            Matplotlib color defining the color of the label text.
-        ax : Axis
-            Axis to plot on.  None will use the current axis.
-
-        """
-        ax = self._parse_ax(ax)
-        if type(symbols) is str:
-            symbols = [symbols] * len(labels)
-        if len(labels) != len(locations):
-            raise ValueError('length of labels and locations must match')
-        if len(labels) != len(symbols):
-            raise ValueError('length of labels and symbols must match')
-
-        for loc, label, sym in zip(locations, labels, symbols):
-            self.plot_label(label, loc, sym, text_color, ax)
-
-    def plot_label(self, label, location, symbol='r+', text_color='k',
-                   ax=None):
-        """
-        Plot a single symbol and label at a given location.
-
-        Parameters
-        ----------
-        label : str
-            Label text to place just above symbol.
-        location : 2-tuples
-            Tuple of latitude, longitude (in degrees) at which the symbol
-            will be place.  The label is placed just above the symbol.
-        symbol : str
-            Matplotlib color+marker strings defining the symbol to place
-            at the given location.
-        text_color : str
-            Matplotlib color defining the color of the label text.
-        ax : Axis
-            Axis to plot on.  None will use the current axis.
-
-        """
-        ax = self._parse_ax(ax)
-        loc_x, loc_y = corner_to_point(self.loc, location)
-        loc_x /= 1000.0
-        loc_y /= 1000.0
-        ax.plot([loc_x], [loc_y], symbol)
-        ax.text(loc_x - 5.0, loc_y, label, color=text_color)
-
-    def plot_cross_hair(self, size, npts=100, ax=None):
-        """
-        Plot a cross-hair on a ppi plot.
-
-        Parameters
-        ----------
-        size : float
-            Size of cross-hair in km.
-        npts: int
-            Number of points in the cross-hair, higher for better resolution.
-        ax : Axis
-            Axis to plot on.  None will use the current axis.
-
-        """
-        ax = self._parse_ax(ax)
-        x = np.zeros(npts, dtype=np.float32)
-        y = np.linspace(-size, size, npts)
-        ax.plot(x, y, 'k-')  # verticle
-        ax.plot(y, x, 'k-')  # horizontal
-
-    def plot_colorbar(self, mappable=None, field=None, label=None, orient=None,
-                      cax=None, ax=None, fig=None):
-        """
-        Plot a colorbar.
-
-        Parameters
-        ----------
-        mappable : Image, ContourSet, etc.
-            Image, ContourSet, etc to which the colorbar applied.  If None the
-            last mappable object will be used.
-        field : str
-            Field to label colorbar with.
-        label : str
-            Colorbar label.  None will use a default value from the last field
-            plotted.
-        orient : str
-            Colorbar orientation, either 'vertical' [default] or 'horizontal'.
-        cax : Axis
-            Axis onto which the colorbar will be drawn.  None is also valid.
-        ax : Axes
-            Axis onto which the colorbar will be drawn. None is also valid.
-        fig : Figure
-            Figure to place colorbar on.  None will use the current figure.
-
-        """
-        if fig is None:
-            fig = plt.gcf()
-        if mappable is None:
-            mappable = self.plots[-1]
-        if label is None:
-            if field is None:
-                field = self.plot_vars[-1]
-            label = self._get_colorbar_label(field)
-        # Find the axes locations to set colorbar
-        box = make_axes_locatable(ax)
-
-        if orient is None:
-            orient = 'vertical'
-        if orient == 'vertical':
-            cax = box.append_axes("right", size="3%", pad=0.05)
-        if orient == 'horizontal':
-            cax = box.append_axes("bottom", size="6%", pad=0.50)
-        cb = fig.colorbar(mappable, orientation=orient, ax=ax, cax=cax)
-        cb.set_label(label)
-
-    ##########################
-    # Plot adjusting methods #
-    ##########################
-
-    def set_limits(self, xlim=None, ylim=None, ax=None):
-        """
-        Set the display limits.
-
-        Parameters
-        ----------
-        xlim : tuple, optional
-            2-Tuple containing y-axis limits in km. None uses default limits.
-        ylim : tuple, optional
-            2-Tuple containing x-axis limits in km. None uses default limits.
-        ax : Axis
-            Axis to adjust.  None will adjust the current axis.
-
-        """
-        if ax is None:
-            ax = plt.gca()
-        if ylim is not None:
-            ax.set_ylim(ylim)
-        if xlim is not None:
-            ax.set_xlim(xlim)
 
     def label_xaxis_x(self, ax=None):
         """ Label the xaxis with the default label for x units. """
-        ax = self._parse_ax(ax)
+        ax = common.parse_ax(ax)
         ax.set_xlabel('Horizontal distance from ' + self.origin + ' (km)')
 
     def label_yaxis_y(self, ax=None):
         """ Label the yaxis with the default label for y units. """
-        ax = self._parse_ax(ax)
+        ax = common.parse_ax(ax)
         ax.set_ylabel('Horizontal distance from ' + self.origin + ' (km)')
 
     def label_yaxis_z(self, ax=None):
-        """ Label the yaxis with the default label for y units. """
-        ax = self._parse_ax(ax)
-        ax.set_ylabel('Altitude (km)')
+        """ Label the yaxis with the default label for z units. """
+        ax = common.parse_ax(ax)
+        ax.set_ylabel('Distance Above ' + self.origin + '  (km)')
 
-    def label_xaxis_r(self, ax=None):
-        """ Label the xaxis with the default label for r units. """
-        ax = self._parse_ax(ax)
-        ax.set_xlabel('Distance from ' + self.origin + ' (km)')
-
-    def label_xaxis_rays(self, ax=None):
-        """ Label the yaxis with the default label for rays. """
-        ax = self._parse_ax(ax)
-        ax.set_xlabel('Ray number (unitless)')
-
-    def label_yaxis_field(self, field, ax=None):
-        """ Label the yaxis with the default label for a field units. """
-        ax = self._parse_ax(ax)
-        ax.set_ylabel(self._get_colorbar_label(field))
-
-    def set_aspect_ratio(self, aratio=None, ax=None):
-        """ Set the aspect ratio for plot area. """
-        ax = self._parse_ax(ax)
-        if aratio is None:
-            ax.set_aspect(0.75)
-        else:
-            ax.set_aspect(aratio)
-
-    def _set_title(self, field, title, ax):
-        """ Set the figure title using a default title. """
-        if title is None:
-            ax.set_title(self.generate_title(field))
-        else:
-            ax.set_title(title)
-
-    def _set_ray_title(self, field, ray, title, ax):
-        """ Set the figure title for a ray plot using a default title. """
-        if title is None:
-            ax.set_title(self.generate_ray_title(field, ray))
-        else:
-            ax.set_title(title)
-
-    def _label_axes_sweep(self, axis_labels, ax):
-        """ Set the x and y axis labels for a PPI plot. """
-        x_label, y_label = axis_labels
-        if x_label is None:
-            self.label_xaxis_x(ax)
-        else:
-            ax.set_xlabel(x_label)
-        if y_label is None:
-            self.label_yaxis_y(ax)
-        else:
-            ax.set_ylabel(y_label)
-
-    def _label_axes_ppi(self, axis_labels, ax):
-        """ Set the x and y axis labels for a PPI plot. """
-        x_label, y_label = axis_labels
-        if x_label is None:
-            self.label_xaxis_x(ax)
-        else:
-            ax.set_xlabel(x_label)
-        if y_label is None:
-            self.label_yaxis_y(ax)
-        else:
-            ax.set_ylabel(y_label)
-
-    def _label_axes_rhi(self, axis_labels, ax):
-        """ Set the x and y axis labels for a RHI plot. """
-        x_label, y_label = axis_labels
-        if x_label is None:
-            self.label_xaxis_r(ax)
-        else:
-            ax.set_xlabel(x_label)
-        if y_label is None:
-            self.label_yaxis_z(ax)
-        else:
-            ax.set_ylabel(y_label)
-
-    def _label_axes_ray(self, axis_labels, field, ax):
-        """ Set the x and y axis labels for a ray plot. """
-        x_label, y_label = axis_labels
-        if x_label is None:
-            self.label_xaxis_r(ax)
-        else:
-            ax.set_xlabel(x_label)
-        if y_label is None:
-            self.label_yaxis_field(field, ax)
-        else:
-            ax.set_ylabel(y_label)
-
-    ##########################
-    # name generator methods #
-    ##########################
-
-    def generate_filename(self, field, sweep, ext='png'):
-        """
-        Generate a filename for a plot.
-
-        Generated filename has form:
-            radar_name_field_time.ext
-
-        Parameters
-        ----------
-        field : str
-            Field plotted.
-        sweep : int
-            Sweep plotted.
-        ext : str
-            Filename extension.
-
-        Returns
-        -------
-        filename : str
-            Filename suitable for saving a plot.
-
-        """
-        name_s = self.radar_name.replace(' ', '_')
-        field_s = field.replace(' ', '_')
-        time_s = self.time_begin.strftime('%Y%m%d%H%M%S')
-        time_s = time_s.replace('-', ':')
-        return '%s_%s_%s.%s' % (name_s, field_s, time_s, ext)
-
-    def generate_title(self, field):
-        """
-        Generate a title for a plot.
-
-        Parameters
-        ----------
-        field : str
-            Field plotted.
-
-        Returns
-        -------
-        title : str
-            Plot title.
-
-        """
-        time_str = self.time_begin.isoformat() + 'Z'
-        fixed_angle = self.fixed_angle
-        l1 = "%s %.1f Deg. %s " % (self.radar_name, fixed_angle, time_str)
-        field_name = self._generate_field_name(field)
-        return l1 + '\n' + field_name
-
-    def generate_ray_title(self, field, ray):
-        """
-        Generate a title for a ray plot.
-
-        Parameters
-        ----------
-        field : str
-            Field plotted.
-        ray : int
-            Ray plotted.
-
-        Returns
-        -------
-        title : str
-            Plot title.
-
-        """
-        time_str = self.time_begin.isoformat() + 'Z'
-        l1 = "%s %s" % (self.radar_name, time_str)
-        azim = self.azimuths[ray]
-        elev = self.elevations[ray]
-        l2 = "Ray: %i  Elevation: %.1f Azimuth: %.1f" % (ray, azim, elev)
-        field_name = self._generate_field_name(field)
-        return l1 + '\n' + l2 + '\n' + field_name
-
-    def _generate_field_name(self, field):
-        """ Return a nice field name for a particular field. """
-        if 'standard_name' in self.fields[field]:
-            field_name = self.fields[field]['standard_name']
-        elif 'long_name' in self.fields[field]:
-            field_name = self.fields[field]['long_name']
-        else:
-            field_name = str(field)
-        field_name = field_name.replace('_', ' ')
-        field_name = field_name[0].upper() + field_name[1:]
-        return field_name
-
-    def _generate_colorbar_label(self, standard_name, units):
-        """ Generate and return a label for a colorbar. """
-        return standard_name.replace('_', ' ') + ' (' + units + ')'
-
-    ####################
-    # Parseing methods #
-    ####################
-
-    def _parse_ax(self, ax):
-        """ Parse and return ax parameter. """
-        if ax is None:
-            ax = plt.gca()
-        return ax
-
-    def _parse_ax_fig(self, ax, fig):
-        """ Parse and return ax and fig parameters. """
-        if ax is None:
-            ax = plt.gca()
-        if fig is None:
-            fig = plt.gcf()
-        return ax, fig
-
-    def _parse_vmin_vmax(self, field, vmin, vmax):
-        """ Parse and return vmin and vmax parameters. """
-        field_dict = self.fields[field]
-        if vmin is None:
-            if 'valid_min' in field_dict:
-                vmin = field_dict['valid_min']
-            else:
-                vmin = -6   # default value
-        if vmax is None:
-            if 'valid_max' in field_dict:
-                vmax = field_dict['valid_max']
-            else:
-                vmax = 100
-        return vmin, vmax
-
-    ###############
-    # Get methods #
-    ###############
-
-    def _get_data(self, field, mask_tuple):
-        """ Retrieve and return data from a plot function. """
-        data = self.fields[field]['data'][:]
-
-        if mask_tuple is not None:  # mask data if mask_tuple provided
-            mask_field, mask_value = mask_tuple
-            mdata = self.fields[mask_field]['data'][:]
-            data = np.ma.masked_where(mdata < mask_value, data)
-        return data
-
-    def _get_ray_data(self, field, ray, mask_tuple):
-        """ Retrieve and return ray data from a plot function. """
-        data = self.fields[field]['data'][ray]
-
-        if mask_tuple is not None:
-            mask_field, mask_value = mask_tuple
-            mdata = self.fields[mask_field]['data'][ray]
-            data = np.ma.masked_where(mdata < mask_value, data)
-        return data
-
-    def _get_x_z(self, field):
-        """ Retrieve and return x and y coordinate in km. """
-        return self.x/1000., self.z/1000.
-
-    def _get_x_y(self, field):
-        """ Retrieve and return x and y coordinate in km. """
-        return self.x/1000.0, self.y/1000.0
-
-    def _get_x_y_z(self, field):
+    def _get_x_y_z(self, field, sweep, edges, filter_transitions):
         """ Retrieve and return x, y, and z coordinate in km. """
-        x = self.x / 1000.0
-        y = self.y / 1000.0
-        z = self.z / 1000.0
+        start = self.starts[sweep]
+        end = self.ends[sweep] + 1
+
+        if self._radar.metadata['platform_type'] == 'aircraft_belly':
+            if filter_transitions and self.antenna_transition is not None:
+                in_trans = self.antenna_transition[start:end]
+                ranges = self.ranges
+                azimuths = self.azimuths[in_trans == 0]
+                elevations = self.elevations[in_trans == 0]
+            else:
+                ranges = self.ranges
+                azimuths = self.azimuths[start:end]
+                elevations = self.elevations[start:end]
+
+            if edges:
+                if len(ranges) != 1:
+                    ranges = common._interpolate_range_edges(ranges)
+                if len(elevations) != 1:
+                    elevations = common._interpolate_elevation_edges(
+                        elevations)
+                if len(azimuths) != 1:
+                    azimuths = common._interpolate_azimuth_edges(azimuths)
+
+            rg, azg = np.meshgrid(ranges, azimuths)
+            rg, eleg = np.meshgrid(ranges, elevations)
+            x, y, z = common.radar_coords_to_cart(rg / 1000., azg, eleg)
+
+        else:
+            if filter_transitions and self.antenna_transition is not None:
+                in_trans = self.antenna_transition[start:end]
+                ranges = self.ranges
+                rotation = self.rotation[in_trans == 0]
+                roll = self.roll[in_trans == 0]
+                drift = self.drift[in_trans == 0]
+                tilt = self.tilt[in_trans == 0]
+                pitch = self.pitch[in_trans == 0]
+            else:
+                ranges = self.ranges
+                rotation = self.rotation[start:end]
+                roll = self.roll[start:end]
+                drift = self.drift[start:end]
+                tilt = self.tilt[start:end]
+                pitch = self.pitch[start:end]
+
+            if edges:
+                if len(ranges) != 1:
+                    ranges = common._interpolate_range_edges(ranges)
+                if len(rotation) != 1:
+                    rotation = common._interpolate_azimuth_edges(rotation)
+                    roll = common._interpolate_azimuth_edges(roll)
+                    drift = common._interpolate_azimuth_edges(drift)
+                    tilt = common._interpolate_azimuth_edges(tilt)
+                    pitch = common._interpolate_azimuth_edges(pitch)
+
+            rg, rotg = np.meshgrid(ranges, rotation)
+            rg, rollg = np.meshgrid(ranges, roll)
+            rg, driftg = np.meshgrid(ranges, drift)
+            rg, tiltg = np.meshgrid(ranges, tilt)
+            rg, pitchg = np.meshgrid(ranges, pitch)
+
+            x, y, z = radar_coords_to_cart_track_relative(
+                rg / 1000.0, rotg, rollg, driftg, tiltg, pitchg)
+
+        x = (x + self.shift[0]) / 1000.0
+        y = (y + self.shift[1]) / 1000.0
+        z = z / 1000.0
         return x, y, z
-
-    def _get_colorbar_label(self, field):
-        """ Return a colorbar label for a given field. """
-        last_field_dict = self.fields[field]
-        if 'standard_name' in last_field_dict:
-            standard_name = last_field_dict['standard_name']
-        elif 'long_name' in last_field_dict:
-            standard_name = last_field_dict['long_name']
-        else:
-            standard_name = field
-
-        if 'units' in last_field_dict:
-            units = last_field_dict['units']
-        else:
-            units = '?'
-        return self._generate_colorbar_label(standard_name, units)

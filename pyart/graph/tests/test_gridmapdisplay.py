@@ -61,8 +61,6 @@ def test_gridmapdisplay_fancy(outfile=None):
 def test_error_raising():
     grid = pyart.testing.make_target_grid()
     display = pyart.graph.GridMapDisplay(grid)
-    # no basemap
-    assert_raises(ValueError, display.plot_grid, 'reflectivity')
 
     # no mappable
     assert_raises(ValueError, display.plot_colorbar)

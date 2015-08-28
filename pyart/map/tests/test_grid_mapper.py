@@ -16,6 +16,28 @@ COMMON_MAP_TO_GRID_ARGS = {
     'roi_func': lambda z, y, x: 30, }
 
 
+def test_map_to_grid_filter():
+
+    # simulate a radar with bad gates which reports huge reflectivities
+    radar = pyart.testing.make_target_radar()
+    radar.fields['reflectivity']['data'][0:100, 25] = 99999.0
+
+    # without filtering bad gates leaks through
+    gatefilter = pyart.filters.GateFilter(radar)
+    grids = pyart.map.map_to_grid(
+        (radar,), gatefilters=(gatefilter, ),
+        **COMMON_MAP_TO_GRID_ARGS)
+    assert grids['reflectivity'].max() > 41.0
+
+    # with filtering bad gates is supressed
+    gatefilter = pyart.filters.GateFilter(radar)
+    gatefilter.exclude_above('reflectivity', 41.0)
+    grids = pyart.map.map_to_grid(
+        (radar,), gatefilters=(gatefilter, ),
+        **COMMON_MAP_TO_GRID_ARGS)
+    assert grids['reflectivity'].max() < 41.0
+
+
 def test_map_to_grid_non_tuple():
     radar = pyart.testing.make_target_radar()
     grids = pyart.map.map_to_grid(radar,
@@ -66,7 +88,7 @@ def test_map_to_grid_dist_beam_roi():
         grid_shape=(3, 9, 10),
         grid_limits=((-400.0, 400.0), (-900.0, 900.0), (-900, 900)),
         fields=['reflectivity'],
-        min_radius=30, bsp=0., h_factor=0., max_refl=100)
+        min_radius=30, bsp=0., h_factor=0.)
     center_slice = grids['reflectivity'][1, 4, :]
     assert_array_equal(np.round(center_slice), EXPECTED_CENTER_SLICE)
 

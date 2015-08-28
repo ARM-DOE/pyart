@@ -17,7 +17,7 @@ a uniform grid.
 
 """
 
-from libc.math cimport sqrt, exp, ceil, floor, sin, cos, tan, asin, isfinite
+from libc.math cimport sqrt, exp, ceil, floor, sin, cos, tan, asin
 from cython.view cimport array as cvarray
 
 cimport cython
@@ -230,9 +230,8 @@ cdef class GateToGridMapper:
     def map_gates_to_grid(
             self, float[::1] elevations, float[::1] azimuths,
             float[::1] ranges, float[:, :, ::1] field_data,
-            char[:, :, ::1] field_mask, offset, float toa,
-            RoIFunction roi_func, int filter_flag, float max_refl,
-            int weighting_function):
+            char[:, :, ::1] field_mask, char[:, ::1] excluded_gates,
+            offset, float toa, RoIFunction roi_func, int weighting_function):
         """
         Map radar gates unto the regular grid.
 
@@ -251,6 +250,9 @@ cdef class GateToGridMapper:
         field_mask : 3D uint8 array
             Array containing masking of the field data for the radar,
             dimension are ordered as nrays, ngates, nfields.
+        excluded_gates : 2D uint8 array
+            Array containing gate masking information.  Gates with non-zero
+            values will not be included in the mapping.
         offset : tuple of floats
             Offset of the radar from the grid origin.  Dimension are ordered
             as z, y, x.
@@ -258,12 +260,6 @@ cdef class GateToGridMapper:
             Top of atmosphere.  Gates above this level are considered.
         roi_func : RoIFunction
             Object whose get_roi method returns the radius of influence.
-        filter_flag : int
-            True to filter gates, removing those with reflectivity greater
-            than max_refl or non-finite values. False performs no reflectivity
-            based filtering.
-        max_refl : float
-            Maximum valid reflectivity, not used if filter_flag is False.
         weighting_function : int
             Function to use for weighting gates based upon distance.
             0 for Barnes, 1 for Cressman weighting.
@@ -287,7 +283,8 @@ cdef class GateToGridMapper:
             azimuth = azimuths[nray] * PI / 180.0
             for ngate in range(ngates):
 
-                if field_mask[nray, ngate, 0]:
+                # continue if gate excluded
+                if excluded_gates[nray, ngate]:
                     continue
 
                 # calculate cartesian coordinate assuming 4/3 earth radius
@@ -306,14 +303,6 @@ cdef class GateToGridMapper:
 
                 # Region of influence
                 roi = roi_func.get_roi(z, y, x)
-
-                # reflectivity filtering for non-finite and large values
-                if filter_flag:
-                    value = field_data[nray, ngate, 0]
-                    if not isfinite(value):
-                        continue
-                    if value > max_refl:
-                        continue
 
                 values = field_data[nray, ngate]
                 masks = field_mask[nray, ngate]

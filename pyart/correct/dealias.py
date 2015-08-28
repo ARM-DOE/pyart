@@ -20,16 +20,17 @@ import numpy as np
 from ..config import get_field_name, get_fillvalue, get_metadata
 from ..io import _rsl_interface
 from . import _fourdd_interface
+from ._common_dealias import _parse_gatefilter
 from ..util import datetime_utils
 
 
 def dealias_fourdd(radar, last_radar=None, sounding_heights=None,
                    sounding_wind_speeds=None, sounding_wind_direction=None,
-                   prep=1, filt=1, rsl_badval=131072.0, keep_original=False,
-                   extra_prep=False, ncp_min=0.3, rhv_min=0.7,
-                   refl_field=None, vel_field=None, corr_vel_field=None,
-                   last_vel_field=None, ncp_field=None, rhv_field=None,
-                   debug=False, max_shear=0.05, sign=1, **kwargs):
+                   gatefilter=False, filt=1, rsl_badval=131072.0,
+                   keep_original=False,
+                   vel_field=None, corr_vel_field=None, last_vel_field=None,
+                   debug=False, max_shear=0.05, sign=1,
+                   **kwargs):
     """
     Dealias Doppler velocities using the 4DD algorithm.
 
@@ -43,7 +44,9 @@ def dealias_fourdd(radar, last_radar=None, sounding_heights=None,
     Additional arguments are passed to
     :py:func:`_fourdd_interface.fourdd_dealias`.
     These can be used to fine tune the behavior of the FourDD algorithm.
-    See the documentation of Other Parameters for details.
+    See the documentation of Other Parameters for details.  For the default
+    values of these parameters see the documentation of
+    :py:func:`_fourdd_interface.fourdd_dealias`.
 
     Parameters
     ----------
@@ -68,59 +71,93 @@ def dealias_fourdd(radar, last_radar=None, sounding_heights=None,
 
     Other Parameters
     ----------------
-    prep : int
-        Flag controlling thresholding, 1 = yes, 0 = no.
-    filt : int
+    gatefilter : GateFilter, optional.
+        A GateFilter instance which specifies which gates should be
+        ignored when performing velocity dealiasing.  A value of None will
+        create this filter from the radar moments using any additional
+        arguments by passing them to :py:func:`moment_based_gate_filter`. The
+        default value assumes all gates are valid.
+    filt : int, optional
         Flag controlling Bergen and Albers filter, 1 = yes, 0 = no.
-    rsl_badval : float
+    rsl_badval : float, optional
         Value which represents a bad value in RSL.
-    keep_original : bool
+    keep_original : bool, optional
         True to keep original doppler velocity values when the dealiasing
-        procedure fails, otherwises these gates will be masked.  NaN values
+        procedure fails, otherwise these gates will be masked.  NaN values
         are still masked.
-    extra_prep : bool
-        True to use extra volume preperation, which will use the normalized
-        coherent power and cross correlation ratio fields to further remove
-        bad gates. Set this to False (default) if those fields are not
-        available.
-    ncp_min : float
-        Minimum normalized coherent power allowed for any gate. Only
-        applicable when extra_prep is True.
-    rhv_min : float
-        Minimum cross correlation ratio allowed for any gate. Only
-        applicable when extra_prep is True.
-    refl_field : str
-        Field in radar to use as the reflectivity during dealiasing.
-        None will use the default field name from the Py-ART configuration
-        file.
-    vel_field : str
+    vel_field : str, optional
         Field in radar to use as the Doppler velocities during dealiasing.
         None will use the default field name from the Py-ART configuration
         file.
-    corr_vel_field : str
+    corr_vel_field : str, optional
         Name to use for the dealiased Doppler velocity field metadata.  None
         will use the default field name from the Py-ART configuration file.
-    last_vel_field : str
+    last_vel_field : str, optional
         Name to use for the dealiased Doppler velocity field metadata in
         last_radar.  None will use the corr_vel_field name.
-    ncp_field, rhv_field : str
-        Fields in radar to use as the normalized coherent power and cross
-        correlation ratio, respectively. None will use the default field name
-        from the Py-ART configuration file. Only applicable when extra_prep
-        is True.
-    maxshear : float
-        Maximum vertical shear which will be incorperated into the created
+    maxshear : float, optional
+        Maximum vertical shear which will be incorporated into the created
         volume from the sounding data.  Parameter not used when no
         sounding data is provided.
-    sign : int
+    sign : int, optional
         Sign convention which the radial velocities in the volume created
         from the sounding data will will. This should match the convention
         used in the radar data. A value of 1 represents when positive values
         velocities are towards the radar, -1 represents when negative
         velocities are towards the radar.
-    debug : bool
+    compthresh : float, optional
+        Fraction of the Nyquist velocity to use as a threshold when performing
+        continuity (initial) dealiasing.  Velocities differences above this
+        threshold will not be marked as gate from which to begin unfolding
+        during spatial dealiasing.
+    compthresh2 : float, optional
+        The same as compthresh but the value used during the second pass of
+        dealiasing.  This second pass is only performed in both a sounding
+        and last volume are provided.
+    thresh : float, optional
+        Fraction of the Nyquist velocity to use as a threshold when performing
+        spatial dealiasing.  Horizontally adjacent gates with velocities above
+        this threshold will count against assigning the gate in question the
+        velocity value being tested.
+    ckval : float, optional
+        When the absolute value of the velocities are below this value they
+        will not be marked as gates from which to begin unfolding during
+        spatial dealiasing.
+    stdthresh : float, optional
+       Fraction of the Nyquist velocity to use as a standard deviation
+       threshold in the window dealiasing portion of the algorithm.
+    epsilon : float, optional
+        Difference used when comparing a value to missing value, changing this
+        from the default is not recommended.
+    maxcount : int, optional
+        Maximum allowed number of fold allowed when unfolding velocities.
+    pass2 : int, optional
+        Controls weather unfolded gates should be removed (a value of 0)
+        or retained for unfolding during the second pass (a value of 1) when
+        both a sounding volume and last volume are provided.
+    rm : int, optional
+        Determines what should be done with gates that are left unfolded
+        after the first pass of dealiasing.  A value of 1 will remove these
+        gates, a value of 0 sets these gates to their initial velocity.  If
+        both a sounding volume and last volume are provided this parameter is
+        ignored.
+    proximity : int, optional
+        Number of gates and rays to include of either side of the current gate
+        during window dealiasing.  This value may be doubled in cases where
+        a standard sized window does not capture a sufficient number of
+        good valued gates.
+    mingood : int, optional
+        Number of good valued gates required within the window before the
+        current gate will be unfolded.
+    ba_mincount : int, optional
+        Number of neighbors required during Bergen and Albers filter for
+        a given gate to be included, must be between 1 and 8, 5 recommended.
+    ba_edgecount : int, optional
+        Same as ba_mincount but used at ray edges, must be between 1 and 5,
+        3 recommended.
+    debug : bool, optional
         Set True to return RSL Volume objects for debugging:
-        usuccess, DZvolume, radialVelVolume, unfoldedVolume, sondVolume
+        usuccess, radialVelVolume, lastVelVolume, unfoldedVolume, sondVolume
 
     Returns
     -------
@@ -150,44 +187,23 @@ def dealias_fourdd(radar, last_radar=None, sounding_heights=None,
         raise ValueError('sounding data or last_radar must be provided')
 
     # parse the field parameters
-    if refl_field is None:
-        refl_field = get_field_name('reflectivity')
     if vel_field is None:
         vel_field = get_field_name('velocity')
     if corr_vel_field is None:
         corr_vel_field = get_field_name('corrected_velocity')
     if last_vel_field is None:
         last_vel_field = get_field_name('corrected_velocity')
-    if ncp_field is None:
-        ncp_field = get_field_name('normalized_coherent_power')
-    if rhv_field is None:
-        rhv_field = get_field_name('cross_correlation_ratio')
 
     # get fill value
     fill_value = get_fillvalue()
 
-    # check extra volume preparation inputs
-    if extra_prep:
-        if ncp_field not in radar.fields and rhv_field not in radar.fields:
-            raise KeyError(('Radar does not have necessary fields for'
-                            'extra volume preparation'))
+    # parse radar gate filter
+    gatefilter = _parse_gatefilter(gatefilter, radar, **kwargs)
+    excluded = gatefilter.gate_excluded
 
-    # extra volume preparation
-    # this assumes the radar has a normalized coherent power field and a
-    # cross correlation ratio field
-    if prep and extra_prep:
-        not_coherent = np.logical_or(
-            radar.fields[ncp_field]['data'] < ncp_min,
-            radar.fields[rhv_field]['data'] < rhv_min)
-        fdata = np.copy(radar.fields[refl_field]['data']).astype(np.float32)
-        fdata[not_coherent] = fill_value
-    else:
-        fdata = None
-
-    # create RSL volumes containing the reflectivity, doppler velocity, and
+    # create RSL volumes containing the doppler velocity and
     # doppler velocity in the last radar (if provided)
-    refl_volume = _create_rsl_volume(radar, refl_field, 0, rsl_badval, fdata)
-    vel_volume = _create_rsl_volume(radar, vel_field, 1, rsl_badval)
+    vel_volume = _create_rsl_volume(radar, vel_field, 1, rsl_badval, excluded)
 
     if last_radar is not None:
         last_vel_volume = _create_rsl_volume(
@@ -203,7 +219,7 @@ def dealias_fourdd(radar, last_radar=None, sounding_heights=None,
         dc = np.ascontiguousarray(sounding_wind_direction, dtype=np.float32)
 
         success, sound_volume = _fourdd_interface.create_soundvolume(
-            refl_volume, hc, sc, dc, sign, max_shear)
+            vel_volume, hc, sc, dc, sign, max_shear)
         if success == 0:
             raise ValueError('Error when loading sounding data')
     else:
@@ -212,12 +228,11 @@ def dealias_fourdd(radar, last_radar=None, sounding_heights=None,
     # perform dealiasing
     if debug:
         return _fourdd_interface.fourdd_dealias(
-            vel_volume, last_vel_volume, sound_volume, refl_volume,
-            prep, filt, debug=True, **kwargs)
+            vel_volume, last_vel_volume, sound_volume,
+            filt, debug=True, **kwargs)
 
     flag, data = _fourdd_interface.fourdd_dealias(
-        vel_volume, last_vel_volume, sound_volume, refl_volume, prep, filt,
-        debug=False, **kwargs)
+        vel_volume, last_vel_volume, sound_volume, filt, debug=False, **kwargs)
 
     # prepare data for output, set bad values and mask data
     is_bad_data = np.logical_or(np.isnan(data), data == rsl_badval)
@@ -235,16 +250,17 @@ def dealias_fourdd(radar, last_radar=None, sounding_heights=None,
     return vr_corr
 
 
-def _create_rsl_volume(radar, field_name, vol_num, rsl_badval, fdata=None):
+def _create_rsl_volume(radar, field_name, vol_num, rsl_badval, excluded=None):
     """
     Create a RSLVolume containing data from a field in radar.
     """
     fill_value = get_fillvalue()
-    if fdata is None:
-        fdata = np.copy(radar.fields[field_name]['data']).astype(np.float32)
+    fdata = np.copy(radar.fields[field_name]['data']).astype(np.float32)
     fdata = np.ma.filled(fdata, fill_value)
     is_bad = np.logical_or(fdata == fill_value, np.isnan(fdata))
     fdata[is_bad] = rsl_badval
+    if excluded is not None:
+        fdata[excluded] = rsl_badval
     rays_per_sweep = (radar.sweep_end_ray_index['data'] -
                       radar.sweep_start_ray_index['data'] + 1)
     rays_per_sweep = rays_per_sweep.astype(np.int32)

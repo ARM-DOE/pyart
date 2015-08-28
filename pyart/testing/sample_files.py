@@ -20,6 +20,7 @@ are incomplete, they should only be used for testing, not production.
     NEXRAD_LEVEL3_MSG19
     NEXRAD_LEVEL3_MSG163
     NEXRAD_CDM_FILE
+    UF_FILE
     INTERP_SOUNDE_FILE
 
 """
@@ -45,5 +46,6 @@ NEXRAD_ARCHIVE_COMPRESSED_FILE = os.path.join(
 NEXRAD_LEVEL3_MSG19 = os.path.join(DATA_PATH, 'example_nexrad_level3_msg19')
 NEXRAD_LEVEL3_MSG163 = os.path.join(DATA_PATH, 'example_nexrad_level3_msg163')
 NEXRAD_CDM_FILE = os.path.join(DATA_PATH, 'example_nexrad_cdm.bz2')
+UF_FILE = os.path.join(DATA_PATH, 'example_uf_ppi.uf')
 INTERP_SOUNDE_FILE = os.path.join(DATA_PATH, 'example_interpolatedsonde.cdf')
 _EXAMPLE_RAYS_FILE = os.path.join(DATA_PATH, 'example_rays.npz')
