@@ -106,6 +106,7 @@ class RadarMapDisplay(RadarDisplay):
                      min_lon=None, max_lon=None, min_lat=None, max_lat=None,
                      width=None, height=None, lon_0=None, lat_0=None,
                      resolution='h', shapefile=None, edges=True,
+                     gatefilter=None,
                      filter_transitions=True, embelish=True, **kwargs):
         """
         Plot a PPI volume sweep onto a geographic map.
@@ -180,6 +181,9 @@ class RadarMapDisplay(RadarDisplay):
         resolution : 'c', 'l', 'i', 'h', or 'f'.
             Resolution of boundary database to use. See Basemap documentation
             for details.
+        gatefilter : GateFilter Instance
+            pyart.correct.filters.GateFilter instance. None will result in no
+            gatefilter mask being applied to data.
         filter_transitions : bool
             True to remove rays where the antenna was in transition between
             sweeps from the plot.  False will include these rays in the plot.
@@ -210,7 +214,8 @@ class RadarMapDisplay(RadarDisplay):
             lon_0 = self.loc[1]
 
         # get data for the plot
-        data = self._get_data(field, sweep, mask_tuple, filter_transitions)
+        data = self._get_data(field, sweep, mask_tuple, filter_transitions,
+                              gatefilter)
         x, y = self._get_x_y(field, sweep, edges, filter_transitions)
 
         # mask the data where outside the limits
