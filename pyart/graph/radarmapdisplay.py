@@ -181,9 +181,9 @@ class RadarMapDisplay(RadarDisplay):
         resolution : 'c', 'l', 'i', 'h', or 'f'.
             Resolution of boundary database to use. See Basemap documentation
             for details.
-        gatefilter : GateFilter Instance
-            pyart.correct.filters.GateFilter instance. None will result in no
-            gatefilter mask being applied to data.
+        gatefilter : GateFilter 
+            GateFilter instance. None will result in no gatefilter mask being
+            applied to data.
         filter_transitions : bool
             True to remove rays where the antenna was in transition between
             sweeps from the plot.  False will include these rays in the plot.
