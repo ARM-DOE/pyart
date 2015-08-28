@@ -321,6 +321,9 @@ class RadarDisplay(object):
             coordinates themselved as the gate edges, resulting in a plot
             in which the last gate in each ray and the entire last ray are not
             plotted.
+        gatefilter : GateFilter Instance
+            pyart.correct.GateFilter instance. None will result in no
+            gatefilter mask being applied to data.
         filter_transitions : bool
             True to remove rays where the antenna was in transition between
             sweeps from the plot.  False will include these rays in the plot.
@@ -423,6 +426,9 @@ class RadarDisplay(object):
             coordinates themselved as the gate edges, resulting in a plot
             in which the last gate in each ray and the entire last ray are not
             not plotted.
+        gatefilter : GateFilter Instance
+            pyart.correct.GateFilter instance. None will result in no
+            gatefilter mask being applied to data.
         filter_transitions : bool
             True to remove rays where the antenna was in transition between
             sweeps from the plot.  False will include these rays in the plot.
@@ -989,9 +995,12 @@ class RadarDisplay(object):
             data = np.ma.masked_where(mdata < mask_value, data)
             
         # mask data if gatefilter provided
+#        if gatefilter is not None:
+#            mask_filter = gatefilter[start:end]
+#            data.mask = mask_filter
         if gatefilter is not None:
-            mask_filter = gatefilter[start:end]
-            data.mask = mask_filter
+            mask_filter = gatefilter.gate_excluded[start:end]
+            data = np.ma.masked_array(data, mask_filter)
 
         # filter out antenna transitions
         if filter_transitions and self.antenna_transition is not None:
