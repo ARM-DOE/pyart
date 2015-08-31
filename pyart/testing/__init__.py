@@ -37,11 +37,4 @@ from .sample_objects import make_empty_rhi_radar
 from .sample_objects import make_velocity_aliased_rhi_radar
 from .tmpdirs import InTemporaryDirectory
 
-# Python 2/3 StringIO object, not documented as numpydoc does not like
-# docstring and has issues finding/including methods.
-try:
-    from StringIO import StringIO as InMemoryFile
-except ImportError:
-    from io import BytesIO as InMemoryFile
-
 __all__ = [s for s in dir() if not s.startswith('_')]
