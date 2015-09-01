@@ -81,7 +81,7 @@ from datetime import datetime, timedelta
 import numpy as np
 
 
-class NEXRADLevel2File():
+class NEXRADLevel2File(object):
     """
     Class for accessing data in a NEXRAD (WSR-88D) Level II file.
 
@@ -96,8 +96,6 @@ class NEXRADLevel2File():
     ----------
     filename : str
         Filename of Archive II file to read.
-    bzip : bool
-        True if the file is a compressed bzip2 file.
 
     Attributes
     ----------
@@ -125,16 +123,13 @@ class NEXRADLevel2File():
 
 
     """
-    def __init__(self, filename, bzip=False):
+    def __init__(self, filename):
         """ initalize the object. """
         # read in the volume header and compression_record
-        if bzip:
-            fh = bz2.BZ2File(filename)
+        if hasattr(filename, 'read'):
+            fh = filename
         else:
-            if hasattr(filename, 'read'):
-                fh = filename
-            else:
-                fh = open(filename, 'rb')
+            fh = open(filename, 'rb')
         size = _structure_size(VOLUME_HEADER)
         self.volume_header = _unpack_structure(fh.read(size), VOLUME_HEADER)
         compression_record = fh.read(COMPRESSION_RECORD_SIZE)

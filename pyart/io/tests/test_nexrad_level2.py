@@ -1,6 +1,7 @@
 """ Unit Tests for Py-ART's io/nexrad_level2.py module. """
 
 import datetime
+import bz2
 from io import BytesIO
 
 import numpy as np
@@ -12,8 +13,9 @@ import pyart.io.nexrad_level2 as nexrad_level2
 
 # create a NEXRADLevel2File from a UNCOMPRESSED dummy file
 # pyart/testing/data/example_nexrad_archive.bz2
-UNCOMPRESSED_FILE = pyart.testing.NEXRAD_ARCHIVE_FILE
-nfile = nexrad_level2.NEXRADLevel2File(UNCOMPRESSED_FILE, bzip=True)
+UNCOMPRESSED_FILE = bz2.BZ2File(pyart.testing.NEXRAD_ARCHIVE_FILE, 'rb')
+nfile = nexrad_level2.NEXRADLevel2File(UNCOMPRESSED_FILE)
+nfile.close()
 
 
 # attributes
