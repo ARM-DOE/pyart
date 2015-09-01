@@ -113,12 +113,12 @@ class NEXRADLevel3File(object):
     def __init__(self, filename):
         """ initalize the object. """
         # read the entire file into memory
-        try:
-            fhandle = open(filename, 'rb')
-            close = True
-        except:
+        if hasattr(filename, 'read'):
             fhandle = filename
             close = False
+        else:
+            fhandle = open(filename, 'rb')
+            close = True
         buf = fhandle.read()    # string buffer containing file data
         if close:
             fhandle.close()
