@@ -1,0 +1,6 @@
+pyart.core.is_vpt
+=================
+
+.. currentmodule:: pyart.core
+
+.. autofunction:: is_vpt

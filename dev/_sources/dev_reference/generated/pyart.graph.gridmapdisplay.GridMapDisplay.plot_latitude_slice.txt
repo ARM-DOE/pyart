@@ -1,0 +1,6 @@
+pyart.graph.gridmapdisplay.GridMapDisplay.plot_latitude_slice
+=============================================================
+
+.. currentmodule:: pyart.graph.gridmapdisplay
+
+.. automethod:: GridMapDisplay.plot_latitude_slice

@@ -1,0 +1,6 @@
+pyart.correct.region_dealias._RegionTracker.merge_nodes
+=======================================================
+
+.. currentmodule:: pyart.correct.region_dealias
+
+.. automethod:: _RegionTracker.merge_nodes

@@ -1,0 +1,6 @@
+pyart.core.Radar.check_field_exists
+===================================
+
+.. currentmodule:: pyart.core
+
+.. automethod:: Radar.check_field_exists

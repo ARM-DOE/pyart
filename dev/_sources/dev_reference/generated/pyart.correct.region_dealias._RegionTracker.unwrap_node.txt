@@ -1,0 +1,6 @@
+pyart.correct.region_dealias._RegionTracker.unwrap_node
+=======================================================
+
+.. currentmodule:: pyart.correct.region_dealias
+
+.. automethod:: _RegionTracker.unwrap_node

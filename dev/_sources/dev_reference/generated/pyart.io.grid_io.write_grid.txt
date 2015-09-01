@@ -1,0 +1,6 @@
+pyart.io.grid_io.write_grid
+===========================
+
+.. currentmodule:: pyart.io.grid_io
+
+.. autofunction:: write_grid

@@ -1,0 +1,6 @@
+pyart.aux_io.gamic_hdf5.read_gamic
+==================================
+
+.. currentmodule:: pyart.aux_io.gamic_hdf5
+
+.. autofunction:: read_gamic

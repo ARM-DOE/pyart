@@ -1,0 +1,6 @@
+pyart.io.nexrad_level2._unpack_structure
+========================================
+
+.. currentmodule:: pyart.io.nexrad_level2
+
+.. autofunction:: _unpack_structure

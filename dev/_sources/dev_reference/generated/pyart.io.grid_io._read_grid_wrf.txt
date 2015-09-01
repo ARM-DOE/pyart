@@ -1,0 +1,6 @@
+pyart.io.grid_io._read_grid_wrf
+===============================
+
+.. currentmodule:: pyart.io.grid_io
+
+.. autofunction:: _read_grid_wrf

@@ -1,0 +1,6 @@
+pyart.filters.GateFilter.exclude_masked
+=======================================
+
+.. currentmodule:: pyart.filters
+
+.. automethod:: GateFilter.exclude_masked

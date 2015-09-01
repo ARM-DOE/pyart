@@ -1,0 +1,6 @@
+pyart.filters.gatefilter.GateFilter.include_below
+=================================================
+
+.. currentmodule:: pyart.filters.gatefilter
+
+.. automethod:: GateFilter.include_below
