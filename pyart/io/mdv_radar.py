@@ -16,7 +16,7 @@ from netCDF4 import date2num
 
 from ..config import FileMetadata, get_fillvalue
 from ..core.radar import Radar
-from .common import make_time_unit_str, _test_arguments
+from .common import make_time_unit_str, _test_arguments, prepare_for_read
 from .lazydict import LazyLoadDict
 from . import mdv_common
 
@@ -77,7 +77,7 @@ def read_mdv(filename, field_names=None, additional_metadata=None,
     filemetadata = FileMetadata('mdv', field_names, additional_metadata,
                                 file_field_names, exclude_fields)
 
-    mdvfile = mdv_common.MdvFile(filename)
+    mdvfile = mdv_common.MdvFile(prepare_for_read(filename))
 
     # value attributes
     az_deg, range_km, el_deg = mdvfile._calc_geometry()

@@ -21,7 +21,7 @@ import numpy as np
 
 from ..config import FileMetadata, get_fillvalue
 from ..core.radar import Radar
-from .common import make_time_unit_str, _test_arguments
+from .common import make_time_unit_str, _test_arguments, prepare_for_read
 from .nexrad_level2 import NEXRADLevel2File
 from .lazydict import LazyLoadDict
 
@@ -99,7 +99,7 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
             bzip = False
 
     # open the file and retrieve scan information
-    nfile = NEXRADLevel2File(filename, bzip)
+    nfile = NEXRADLevel2File(prepare_for_read(filename), bzip)
     scan_info = nfile.scan_info()
 
     # time

@@ -17,7 +17,7 @@ from netCDF4 import date2num
 
 from ..config import FileMetadata, get_fillvalue
 from ..core.radar import Radar
-from .common import make_time_unit_str, _test_arguments
+from .common import make_time_unit_str, _test_arguments, prepare_for_read
 from .uffile import UFFile
 
 _LIGHT_SPEED = 2.99792458e8  # speed of light in meters per second
@@ -91,7 +91,7 @@ def read_uf(filename, field_names=None, additional_metadata=None,
                                 file_field_names, exclude_fields)
 
     # Open UF file and get handle
-    ufile = UFFile(filename)
+    ufile = UFFile(prepare_for_read(filename))
     first_ray = ufile.rays[0]
 
     # time

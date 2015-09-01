@@ -15,7 +15,7 @@ import numpy as np
 
 from ..config import FileMetadata, get_fillvalue
 from ..core.radar import Radar
-from .common import make_time_unit_str, _test_arguments
+from .common import make_time_unit_str, _test_arguments, prepare_for_read
 from .nexrad_level3 import NEXRADLevel3File
 
 
@@ -75,7 +75,7 @@ def read_nexrad_level3(filename, field_names=None, additional_metadata=None,
                                 exclude_fields)
 
     # open the file
-    nfile = NEXRADLevel3File(filename)
+    nfile = NEXRADLevel3File(prepare_for_read(filename))
     nradials = nfile.packet_header['nradials']
     msg_code = nfile.msg_header['code']
 

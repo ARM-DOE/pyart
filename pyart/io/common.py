@@ -7,6 +7,7 @@ Input/output routines common to many file formats.
 .. autosummary::
     :toctree: generated/
 
+    prepare_for_read
     dms_to_d
     stringarray_to_chararray
     _test_arguments
@@ -16,8 +17,48 @@ Input/output routines common to many file formats.
 
 """
 
+import bz2
+import gzip
+
 import numpy as np
 import netCDF4
+
+
+def prepare_for_read(filename):
+    """
+    Return a file like object read for reading.
+
+    Open a file for reading in binary mode with transparent decompression of
+    Gzip and BZip2 files.  The resulting file-like object should be closed.
+
+    Parameters
+    ----------
+    filename : str or file-like object
+        Filename or file-like object which will be opened.  File-like objects
+        will not be examined for compressed data.
+
+    Returns
+    -------
+    file_like : file-like object
+        File like object from which data can be read.
+
+    """
+    # if a file-like object was provided, return
+    if hasattr(filename, 'read'):   # file-like object
+        return filename
+
+    # look for compressed data by examining the first few bytes
+    fh = open(filename, 'rb')
+    magic = fh.read(3)
+    fh.close()
+
+    if magic.startswith(b'\x1f\x8b'):
+        return gzip.GzipFile(filename, 'rb')
+
+    if magic.startswith(b'BZh'):
+        return bz2.BZ2File(filename, 'rb')
+
+    return open(filename, 'rb')
 
 
 def dms_to_d(dms):
