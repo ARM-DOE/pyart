@@ -82,10 +82,10 @@ cdef class SigmetFile:
         self.debug = debug
 
         # open the file
-        try:
-            fh = open(filename, 'rb')
-        except TypeError:
+        if hasattr(filename, 'read'):
             fh = filename
+        else:
+            fh = open(filename, 'rb')
 
         # read the headers from the first 2 records.
         self.product_hdr = _unpack_product_hdr(fh.read(RECORD_SIZE))

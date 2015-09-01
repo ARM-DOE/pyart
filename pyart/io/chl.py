@@ -25,7 +25,7 @@ import numpy as np
 
 from ..config import FileMetadata, get_fillvalue
 from ..core.radar import Radar
-from .common import make_time_unit_str, _test_arguments
+from .common import make_time_unit_str, _test_arguments, prepare_for_read
 
 
 def read_chl(filename, field_names=None, additional_metadata=None,
@@ -83,7 +83,7 @@ def read_chl(filename, field_names=None, additional_metadata=None,
                                 file_field_names, exclude_fields)
 
     # read data
-    chl_file = ChlFile(filename)
+    chl_file = ChlFile(prepare_for_read(filename))
 
     # time
     time = filemetadata('time')
@@ -163,6 +163,7 @@ def read_chl(filename, field_names=None, additional_metadata=None,
     # instrument parameters
     instrument_parameters = None
 
+    chl_file.close()
     return Radar(
         time, _range, fields, metadata, scan_type,
         latitude, longitude, altitude,
@@ -263,10 +264,13 @@ class ChlFile(object):
             packet = self._read_block()
             if debug:
                 self._packets.append(packet)
-        self._fh.close()
 
         self._extract_fields()
         self.rays_per_sweep.append(self._rays_in_current_sweep)
+
+    def close(self):
+        """ Close the file. """
+        self._fh.close()
 
     def _read_block(self):
         """ Read a block from an open CHL file """

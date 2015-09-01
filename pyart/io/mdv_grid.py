@@ -22,7 +22,7 @@ import numpy as np
 
 from ..config import FileMetadata, get_fillvalue
 from ..core.grid import Grid
-from .common import make_time_unit_str, _test_arguments
+from .common import make_time_unit_str, _test_arguments, prepare_for_read
 from .lazydict import LazyLoadDict
 from . import mdv_common
 
@@ -283,7 +283,7 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
     # create metadata retrieval object
     filemetadata = FileMetadata('mdv', field_names, additional_metadata,
                                 file_field_names, exclude_fields)
-    mdv = mdv_common.MdvFile(filename)
+    mdv = mdv_common.MdvFile(prepare_for_read(filename))
 
     # time dictionaries
     units = make_time_unit_str(mdv.times['time_begin'])
@@ -419,6 +419,8 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
             field_dic['data'] = dataextractor()
         fields[field_name] = field_dic
 
+    if not delay_field_loading:
+        mdv.close()
     return Grid(fields, axes, metadata)
 
 

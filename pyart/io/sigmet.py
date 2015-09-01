@@ -26,7 +26,7 @@ import numpy as np
 
 from ..config import FileMetadata, get_fillvalue
 from ..core.radar import Radar
-from .common import make_time_unit_str, _test_arguments
+from .common import make_time_unit_str, _test_arguments, prepare_for_read
 from ._sigmetfile import SigmetFile, bin4_to_angle, bin2_to_angle
 from . import _sigmet_noaa_hh
 
@@ -122,7 +122,7 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
                                 file_field_names, exclude_fields)
 
     # open the file
-    sigmetfile = SigmetFile(filename, debug=debug)
+    sigmetfile = SigmetFile(prepare_for_read(filename), debug=debug)
     ingest_config = sigmetfile.ingest_header['ingest_configuration']
     task_config = sigmetfile.ingest_header['task_configuration']
 
