@@ -177,6 +177,7 @@ def read_uf(filename, field_names=None, additional_metadata=None,
     scan_rate = filemetadata('scan_rate')
     scan_rate['data'] = ufile.get_sweep_rates()
 
+    ufile.close()
     return Radar(
         time, _range, fields, metadata, scan_type,
         latitude, longitude, altitude,

@@ -191,6 +191,7 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
     instrument_parameters = {'unambiguous_range': unambiguous_range,
                              'nyquist_velocity': nyquist_velocity, }
 
+    nfile.close()
     return Radar(
         time, _range, fields, metadata, scan_type,
         latitude, longitude, altitude,

@@ -141,6 +141,7 @@ def read_nexrad_level3(filename, field_names=None, additional_metadata=None,
     elevation['data'] = np.ones((nradials, ), dtype='float32') * elev
     fixed_angle['data'] = np.array([elev], dtype='float32')
 
+    nfile.close()
     return Radar(
         time, _range, fields, metadata, scan_type,
         latitude, longitude, altitude,

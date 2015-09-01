@@ -114,6 +114,8 @@ class NEXRADLevel2File():
         VCP information dictionary.
     _records : list
         A list of all records (message) in the file.
+    _fh : file-like
+        File like object from which data is read.
 
     References
     ----------
@@ -145,7 +147,7 @@ class NEXRADLevel2File():
             buf = fh.read()
         else:
             raise IOError('unknown compression record')
-        fh.close()
+        self._fh = fh
 
         # read the records from the buffer
         self._records = []
@@ -169,6 +171,10 @@ class NEXRADLevel2File():
         self.vcp = [r for r in self._records if r['header']['type'] == 5][0]
 
         return
+
+    def close(self):
+        """ Close the file. """
+        self._fh.close()
 
     def location(self):
         """
