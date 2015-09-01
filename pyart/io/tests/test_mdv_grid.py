@@ -163,7 +163,9 @@ class Mdv_grid_Tests(object):
         tmpfile.seek(0)
 
         # verify that the data get read in correctly
-        grid = pyart.io.read_grid_mdv(tmpfile, file_field_names=True)
+        # use delay_field_loading to prevent closing of tmpfile
+        grid = pyart.io.read_grid_mdv(
+            tmpfile, file_field_names=True, delay_field_loading=True)
         assert np.all(grid.fields['field_one']['data'] == 105)
         assert np.all(grid.fields['field_two']['data'] == 22)
         assert np.all(grid.fields['field_three']['data'] == 100)

@@ -419,6 +419,8 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
             field_dic['data'] = dataextractor()
         fields[field_name] = field_dic
 
+    if not delay_field_loading:
+        mdv.close()
     return Grid(fields, axes, metadata)
 
 

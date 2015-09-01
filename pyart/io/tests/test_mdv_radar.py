@@ -336,6 +336,12 @@ def test_rhi_elevation():
     assert_almost_equal(RADAR_RHI.elevation['data'][0], 19.6, 2)
 
 
+# field data
+def test_rhi_elevation():
+    assert_almost_equal(RADAR_RHI.fields['reflectivity']['data'][0, 0],
+                        23.93, 2)
+
+
 def test_open_from_file_obj():
     fh = open(pyart.testing.MDV_PPI_FILE, 'rb')
     radar = pyart.io.read_mdv(pyart.testing.MDV_PPI_FILE)

@@ -219,6 +219,8 @@ def read_mdv(filename, field_names=None, additional_metadata=None,
                              'radar_beam_width_h': beam_width_h,
                              'radar_beam_width_v': beam_width_v}
 
+    if not delay_field_loading:
+        mdvfile.close()
     return Radar(
         time, _range, fields, metadata, scan_type,
         latitude, longitude, altitude,
