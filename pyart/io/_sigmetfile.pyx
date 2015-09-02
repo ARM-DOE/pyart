@@ -214,6 +214,12 @@ cdef class SigmetFile:
             prt_value = 1. / self.product_hdr['product_end']['prf']
             nyquist = wavelength_cm / (10000.0 * 4.0 * prt_value)
             data['VEL'] *= nyquist
+        # scale 1-byte width by the unambiguous range
+        if 'WIDTH' in self.data_type_names:
+            wavelength_cm = self.product_hdr['product_end']['wavelength']
+            prt_value = 1. / self.product_hdr['product_end']['prf']
+            unambiguous_velocity = wavelength_cm / (10000.0 * 2.0 * prt_value)
+            data['WIDTH'] *= unambiguous_velocity
 
         return data, metadata
 
