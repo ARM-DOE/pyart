@@ -12,3 +12,4 @@ exclude_lines =
     if self.debug:
     if debug:
     raise NotImplementedError
+    if __name__ == .__main__.:
