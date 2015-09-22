@@ -350,9 +350,8 @@ class GateFilter(object):
         fdata = self._radar.fields.values()[0]['data']
         if mask.shape != fdata.shape:
             raise ValueError("mask array must be the same size as a field.")
-        marked = (mask == True)
+        marked = np.array(mask, dtype='bool')
         return self._merge(marked, op, exclude_masked)
-
 
     ####################
     # include_ methods #
@@ -430,7 +429,7 @@ class GateFilter(object):
         marked = np.isfinite(self._get_fdata(field))
         return self._merge(~marked, op, exclude_masked)
 
-    def include_gates(self, mask, exclude_masked=True, op='or'):
+    def include_gates(self, mask, exclude_masked=True, op='and'):
         """
         Include gates where a given mask is equal True.
 
@@ -452,14 +451,12 @@ class GateFilter(object):
             meet any of the conditions. 'and', the default for include
             methods, is typically desired when building up a set of conditions
             where the desired effect is to include gates which meet any of the
-            conditions.  Note that the 'and' method MAY results in including
-            gates which have peviously been excluded because they were masked
-            or invalid.
+            conditions.  Note that the 'or' method MAY results in excluding
+            gates which have peviously been included.
 
         """
         fdata = self._radar.fields.values()[0]['data']
         if mask.shape != fdata.shape:
             raise ValueError("Mask array must be the same size as a field.")
-        marked = ~(mask == True)
+        marked = ~np.array(mask, dtype='bool')
         return self._merge(marked, op, exclude_masked)
-
