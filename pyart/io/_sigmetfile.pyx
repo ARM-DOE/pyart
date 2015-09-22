@@ -82,10 +82,10 @@ cdef class SigmetFile:
         self.debug = debug
 
         # open the file
-        try:
-            fh = open(filename, 'rb')
-        except TypeError:
+        if hasattr(filename, 'read'):
             fh = filename
+        else:
+            fh = open(filename, 'rb')
 
         # read the headers from the first 2 records.
         self.product_hdr = _unpack_product_hdr(fh.read(RECORD_SIZE))
@@ -214,6 +214,17 @@ cdef class SigmetFile:
             prt_value = 1. / self.product_hdr['product_end']['prf']
             nyquist = wavelength_cm / (10000.0 * 4.0 * prt_value)
             data['VEL'] *= nyquist
+        # scale 1-byte width by the Nyquist
+        if 'WIDTH' in self.data_type_names:
+            # The IRIS Programmer's Manual indicates 1-byte width format data
+            # should be scaled by the unambiguous velocity, twice the nyquist,
+            # (section 4.3.35) but both RSL and RadX scale this data by the
+            # nyquist.  Therefore to agree with these two packages the width
+            # is scaled by the nyquist.
+            wavelength_cm = self.product_hdr['product_end']['wavelength']
+            prt_value = 1. / self.product_hdr['product_end']['prf']
+            nyquist = wavelength_cm / (10000.0 * 4.0 * prt_value)
+            data['WIDTH'] *= nyquist
 
         return data, metadata
 

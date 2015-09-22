@@ -4,6 +4,7 @@ from __future__ import print_function
 
 import warnings
 from datetime import datetime
+from io import BytesIO
 
 import numpy as np
 from numpy.testing import assert_almost_equal
@@ -356,7 +357,7 @@ class Mdv_common_Tests(object):
                 pyart.testing.MDV_PPI_FILE)
             mdvfile_orig.read_all_fields()
 
-            inmemfile = pyart.testing.InMemoryFile()
+            inmemfile = BytesIO()
             mdvfile_orig.write(inmemfile)
             inmemfile.seek(0)
             # check that a UserWarning was issued since zlib compression used
@@ -374,7 +375,7 @@ class Mdv_common_Tests(object):
         self.check_mdvfile_ppi(mdvfile)
 
         # write out the file using an file handler
-        f2 = pyart.testing.InMemoryFile()
+        f2 = BytesIO()
         mdvfile.write(f2)
         f.close()
         f2.seek(0)
@@ -408,7 +409,7 @@ class Mdv_common_Tests(object):
         # write and read the RHI file which contains a elevation chunk
         mdvfile = pyart.io.mdv_common.MdvFile(pyart.testing.MDV_RHI_FILE)
         mdvfile.read_all_fields()
-        inmemfile = pyart.testing.InMemoryFile()
+        inmemfile = BytesIO()
         mdvfile.write(inmemfile)
         inmemfile.seek(0)
         mdvfile2 = pyart.io.mdv_common.MdvFile(inmemfile)

@@ -107,21 +107,20 @@ class NEXRADLevel3File(object):
         Raw unscaled, unmasked data.
     data : array
         Scaled, masked radial data.
+    _fh : file-like
+        File like object from which data is read.
 
     """
 
     def __init__(self, filename):
         """ initalize the object. """
         # read the entire file into memory
-        try:
-            fhandle = open(filename, 'rb')
-            close = True
-        except:
+        if hasattr(filename, 'read'):
             fhandle = filename
-            close = False
+        else:
+            fhandle = open(filename, 'rb')
         buf = fhandle.read()    # string buffer containing file data
-        if close:
-            fhandle.close()
+        self._fh = fhandle
 
         # Text header
         # Format of Text header is SDUSXX KYYYY DDHHMM\r\r\nAAABBB\r\r\n
@@ -147,6 +146,10 @@ class NEXRADLevel3File(object):
             buf2 = buf[bpos:]
 
         self._read_symbology_block(buf2)
+
+    def close(self):
+        """ Close the file. """
+        self._fh.close()
 
     def _read_symbology_block(self, buf2):
         """ Read symbology block. """

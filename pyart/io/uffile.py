@@ -107,10 +107,9 @@ class UFFile(object):
         # open the file if file object not passed
         if hasattr(filename, 'read'):
             fobj = filename
-            close_fobj = False
         else:
             fobj = open(filename, 'rb')
-            close_fobj = True
+        self._fh = fobj
 
         # UF files come in three 'flavors' depending upon the size of the
         # padding around each record.  True UF files contain no padding
@@ -158,8 +157,9 @@ class UFFile(object):
         self.first_ray_in_sweep = first_ray_in_sweep
         self.last_ray_in_sweep = last_ray_in_sweep
 
-        if close_fobj:
-            fobj.close()
+    def close(self):
+        """ Close the file. """
+        self._fh.close()
 
     def _get_ray_sweep_numbers(self):
         """ Return an array of the sweep_number stored in each ray. """

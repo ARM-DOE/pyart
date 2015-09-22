@@ -27,6 +27,7 @@ from and write data to a number of file formats.
     write_grid
     write_grid_mdv
     add_2d_latlon_axis
+    prepare_for_read
 
 """
 
@@ -46,6 +47,6 @@ from .uf import read_uf
 from .grid_io import read_grid, write_grid
 from .auto_read import read
 from .mdv_grid import write_grid_mdv, read_grid_mdv
-from .common import add_2d_latlon_axis
+from .common import add_2d_latlon_axis, prepare_for_read
 
 __all__ = [s for s in dir() if not s.startswith('_')]

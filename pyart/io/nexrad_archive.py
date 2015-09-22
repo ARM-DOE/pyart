@@ -21,14 +21,14 @@ import numpy as np
 
 from ..config import FileMetadata, get_fillvalue
 from ..core.radar import Radar
-from .common import make_time_unit_str, _test_arguments
+from .common import make_time_unit_str, _test_arguments, prepare_for_read
 from .nexrad_level2 import NEXRADLevel2File
 from .lazydict import LazyLoadDict
 
 
 def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
                         file_field_names=False, exclude_fields=None,
-                        delay_field_loading=False, bzip=None, **kwargs):
+                        delay_field_loading=False, **kwargs):
     """
     Read a NEXRAD Level 2 Archive file.
 
@@ -65,9 +65,6 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
         key in a particular field dictionary is accessed.  In this case
         the field attribute of the returned Radar object will contain
         LazyLoadDict objects not dict objects.
-    bzip : bool or None
-        True if the file is compressed as a bzip2 file, False otherwise.
-        None will examine the filename for a bzip extension.
 
     Returns
     -------
@@ -88,18 +85,9 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
     filemetadata = FileMetadata('nexrad_archive', field_names,
                                 additional_metadata, file_field_names,
                                 exclude_fields)
-    # parse bzip parameter
-    if bzip is None:
-        try:
-            if filename.endswith('.bz2') or filename.endswith('bzip2'):
-                bzip = True
-            else:
-                bzip = False
-        except:
-            bzip = False
 
     # open the file and retrieve scan information
-    nfile = NEXRADLevel2File(filename, bzip)
+    nfile = NEXRADLevel2File(prepare_for_read(filename))
     scan_info = nfile.scan_info()
 
     # time
@@ -191,6 +179,7 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
     instrument_parameters = {'unambiguous_range': unambiguous_range,
                              'nyquist_velocity': nyquist_velocity, }
 
+    nfile.close()
     return Radar(
         time, _range, fields, metadata, scan_type,
         latitude, longitude, altitude,
