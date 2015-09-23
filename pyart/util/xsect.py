@@ -105,4 +105,8 @@ def _copy_dic(orig_dic, excluded_keys=None):
     """ Return a copy of the original dictionary copying each element. """
     if excluded_keys is None:
         excluded_keys = []
-    return {k: copy(v) for k, v in orig_dic.items() if k not in excluded_keys}
+    dic = {}
+    for k, v in orig_dic.items():
+        if k not in excluded_keys:
+            dic[k] = copy(v)
+    return dic
