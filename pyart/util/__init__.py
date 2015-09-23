@@ -13,6 +13,7 @@ versions without depeciation, use with caution.
 .. autosummary::
     :toctree: generated/
 
+    cross_section_ppi
     angular_mean
     angular_std
     angular_mean_deg
@@ -25,5 +26,6 @@ versions without depeciation, use with caution.
 from .circular_stats import angular_mean, angular_std
 from .circular_stats import angular_mean_deg, angular_std_deg
 from .circular_stats import interval_mean, interval_std
+from .xsect import cross_section_ppi
 
 __all__ = [s for s in dir() if not s.startswith('_')]
