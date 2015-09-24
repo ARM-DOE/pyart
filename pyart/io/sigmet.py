@@ -388,7 +388,7 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
 
     # TODO Multi PRF mode when
     # task_config['task_dsp_info']['multi_prf_flag'] != 0
-    prt_mode['data'] = np.array(nsweeps * ['fixed'])
+    prt_mode['data'] = np.array(nsweeps * ['fixed'], dtype='S')
 
     wavelength_cm = sigmetfile.product_hdr['product_end']['wavelength']
     nv_value = wavelength_cm / (10000.0 * 4.0 * prt_value)
@@ -437,9 +437,10 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
     # sweep_mode
     sweep_mode = filemetadata('sweep_mode')
     if scan_type == 'ppi':
-        sweep_mode['data'] = np.array(nsweeps * ['azimuth_surveillance'])
+        sweep_mode['data'] = np.array(
+            nsweeps * ['azimuth_surveillance'], dtype='S')
     else:
-        sweep_mode['data'] = np.array(nsweeps * ['rhi'])
+        sweep_mode['data'] = np.array(nsweeps * ['rhi'], dtype='S')
 
     return Radar(
         time, _range, fields, metadata, scan_type,
