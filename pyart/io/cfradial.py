@@ -324,8 +324,8 @@ def _find_all_meta_group_vars(ncvars, meta_group_name):
     """
     Return a list of all variables which are in a given meta_group.
     """
-    return [k for k, v in ncvars.items() if 'meta_group' in v.ncattrs()
-            and v.meta_group == meta_group_name]
+    return [k for k, v in ncvars.items() if 'meta_group' in v.ncattrs() and
+            v.meta_group == meta_group_name]
 
 
 def _ncvar_to_dict(ncvar, lazydict=False):
@@ -668,10 +668,10 @@ def _create_ncvar(dic, dataset, name, dimensions):
         print("Warning, converting non-array to array:", name)
         data = np.array(data)
 
-    # convert string array to character arrays
+    # convert string/unicode arrays to character arrays
+    if data.dtype.char is 'U':  # cast unicode arrays to char arrays
+        data = data.astype('S')
     if data.dtype.char is 'S' and data.dtype != 'S1':
-        data = stringarray_to_chararray(data)
-    if data.dtype.char is 'U' and data.dtype != 'U1':
         data = stringarray_to_chararray(data)
 
     # determine netCDF variable arguments
