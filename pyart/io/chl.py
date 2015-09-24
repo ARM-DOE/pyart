@@ -146,7 +146,7 @@ def read_chl(filename, field_names=None, additional_metadata=None,
     sweep_end_ray_index = filemetadata('sweep_end_ray_index')
     sweep_number['data'] = np.arange(chl_file.num_sweeps, dtype='int32')
     sweep_mode['data'] = np.array(
-        [SCAN_MODE_NAMES[i] for i in chl_file.scan_types])
+        [SCAN_MODE_NAMES[i] for i in chl_file.scan_types], dtype='S')
     fixed_angle['data'] = np.array(chl_file.fixed_angle, dtype='float32')
 
     ray_count = chl_file.rays_per_sweep
