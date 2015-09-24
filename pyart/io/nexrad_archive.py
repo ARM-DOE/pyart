@@ -153,7 +153,8 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
 
     nsweeps = int(nfile.nscans)
     sweep_number['data'] = np.arange(nsweeps, dtype='int32')
-    sweep_mode['data'] = np.array(nsweeps * ['azimuth_surveillance'])
+    sweep_mode['data'] = np.array(
+        nsweeps * ['azimuth_surveillance'], dtype='S')
 
     rays_per_scan = [s['nrays'] for s in scan_info]
     sweep_end_ray_index['data'] = np.cumsum(rays_per_scan, dtype='int32') - 1
