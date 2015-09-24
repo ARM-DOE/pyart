@@ -668,10 +668,10 @@ def _create_ncvar(dic, dataset, name, dimensions):
         print("Warning, converting non-array to array:", name)
         data = np.array(data)
 
-    # convert string array to character arrays
+    # convert string/unicode arrays to character arrays
+    if data.dtype.char is 'U':  # cast unicode arrays to char arrays
+        data = data.astype('S')
     if data.dtype.char is 'S' and data.dtype != 'S1':
-        data = stringarray_to_chararray(data)
-    if data.dtype.char is 'U' and data.dtype != 'U1':
         data = stringarray_to_chararray(data)
 
     # determine netCDF variable arguments
