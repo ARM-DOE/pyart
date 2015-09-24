@@ -43,6 +43,10 @@ def read_radx(filename, **kwargs):
         subprocess.check_call(
             ['RadxConvert', '-const_ngates',
              '-outdir', head, '-outname', tail, '-f', filename])
+        if not os.path.isfile(tmpfile):
+            raise IOError(
+                'RadxConvert failed to create a file, upgrading to the '
+                ' latest version of Radx may be necessary.')
         radar = read_cfradial(tmpfile)
     finally:
         os.remove(tmpfile)
