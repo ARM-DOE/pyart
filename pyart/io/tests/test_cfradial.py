@@ -277,6 +277,37 @@ def test_write_ppi():
         dset.close()
 
 
+def test_write_ppi_unicode():
+    # GitHub issue #381, unicode dtypes cause write to fail
+    # CF/Radial example file -> Radar object -> netCDF file
+    with pyart.testing.InTemporaryDirectory():
+        tmpfile = 'tmp_ppi_unicode.nc'
+        radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
+        # force the sweep mode array to be of unicode
+        radar.sweep_mode['data'] = np.array(
+            ['azimuth_surveillance'], dtype='U')
+        pyart.io.write_cfradial(tmpfile, radar)
+        ref = netCDF4.Dataset(pyart.testing.CFRADIAL_PPI_FILE)
+        dset = netCDF4.Dataset(tmpfile)
+        check_dataset_to_ref(dset, ref)
+        dset.close()
+
+
+def test_write_ppi_U1():
+    # GitHub issue #381, unicode dtypes cause write to fail
+    # CF/Radial example file -> Radar object -> netCDF file
+    with pyart.testing.InTemporaryDirectory():
+        tmpfile = 'tmp_ppi_unicode.nc'
+        radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
+        # force the sweep mode array to be a masked U1 array
+        radar.sweep_mode['data'] = radar.sweep_mode['data'].astype('U')
+        pyart.io.write_cfradial(tmpfile, radar)
+        ref = netCDF4.Dataset(pyart.testing.CFRADIAL_PPI_FILE)
+        dset = netCDF4.Dataset(tmpfile)
+        check_dataset_to_ref(dset, ref)
+        dset.close()
+
+
 def test_write_rhi():
     # CF/Radial example file -> Radar object -> netCDF file
     with pyart.testing.InTemporaryDirectory():
