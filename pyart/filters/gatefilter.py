@@ -243,7 +243,7 @@ class GateFilter(object):
             methods, is typically desired when building up a set of conditions
             where the desired effect is to include gates which meet any of the
             conditions.  Note that the 'and' method MAY results in including
-            gates which have peviously been excluded because they were masked
+            gates which have previously been excluded because they were masked
             or invalid.
         inclusive : bool
             Indicates whether the specified value should also be excluded.
@@ -343,11 +343,11 @@ class GateFilter(object):
             methods, is typically desired when building up a set of conditions
             where the desired effect is to include gates which meet any of the
             conditions.  Note that the 'and' method MAY results in including
-            gates which have peviously been excluded because they were masked
+            gates which have previously been excluded because they were masked
             or invalid.
 
         """
-        fdata = self._radar.fields.values()[0]['data']
+        fdata = next(iter(self._radar.fields.values()))['data']
         if mask.shape != fdata.shape:
             raise ValueError("mask array must be the same size as a field.")
         marked = np.array(mask, dtype='bool')
@@ -452,10 +452,10 @@ class GateFilter(object):
             methods, is typically desired when building up a set of conditions
             where the desired effect is to include gates which meet any of the
             conditions.  Note that the 'or' method MAY results in excluding
-            gates which have peviously been included.
+            gates which have previously been included.
 
         """
-        fdata = self._radar.fields.values()[0]['data']
+        fdata = next(iter(self._radar.fields.values()))['data']
         if mask.shape != fdata.shape:
             raise ValueError("Mask array must be the same size as a field.")
         marked = ~np.array(mask, dtype='bool')
