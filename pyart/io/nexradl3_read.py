@@ -127,7 +127,7 @@ def read_nexrad_level3(filename, field_names=None, additional_metadata=None,
     sweep_end_ray_index = filemetadata('sweep_end_ray_index')
 
     sweep_number['data'] = np.array([0], dtype='int32')
-    sweep_mode['data'] = np.array(1 * ['azimuth_surveillance'])
+    sweep_mode['data'] = np.array(1 * ['azimuth_surveillance'], dtype='S')
 
     sweep_start_ray_index['data'] = np.array([0], dtype='int32')
     sweep_end_ray_index['data'] = np.array([nradials - 1], dtype='int32')

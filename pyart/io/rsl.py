@@ -108,10 +108,11 @@ def read_rsl(filename, field_names=None, additional_metadata=None,
 
     if rslfile.scan_mode == 0:      # 0 = PPI, 1 = RHI
         scan_type = 'ppi'
-        sweep_mode['data'] = np.array(nsweeps * ['azimuth_surveillance'])
+        sweep_mode['data'] = np.array(
+            nsweeps * ['azimuth_surveillance'], dtype='S')
     else:
         scan_type = 'rhi'
-        sweep_mode['data'] = np.array(nsweeps * ['rhi'])
+        sweep_mode['data'] = np.array(nsweeps * ['rhi'], dtype='S')
 
     # time
     time = filemetadata('time')
@@ -223,7 +224,7 @@ def read_rsl(filename, field_names=None, additional_metadata=None,
 
     pm_data, nv_data, pr_data, ur_data = first_volume.get_instr_params()
     prt['data'] = pr_data
-    prt_mode['data'] = pm_data
+    prt_mode['data'] = pm_data.astype('S')
     nyquist_velocity['data'] = nv_data
     unambiguous_range['data'] = ur_data
     beam_width_h['data'] = np.array([first_sweep.horz_half_bw * 2.],

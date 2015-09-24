@@ -48,7 +48,8 @@ def test_scan_type():
 
 
 def test_sweep_mode():
-    assert radar.sweep_mode['data'] == np.array(['azimuth_surveillance'])
+    assert radar.sweep_mode['data'].dtype.char == 'S'
+    assert radar.sweep_mode['data'] == np.array([b'azimuth_surveillance'])
 
 
 def test_fixed_angle():

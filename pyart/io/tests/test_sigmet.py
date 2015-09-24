@@ -97,7 +97,8 @@ def test_sweep_number():
 def test_sweep_mode():
     assert 'standard_name' in radar.sweep_mode
     assert radar.sweep_mode['data'].shape == (1, )
-    assert np.all(radar.sweep_mode['data'] == ['azimuth_surveillance'])
+    assert radar.sweep_mode['data'].dtype.char == 'S'
+    assert np.all(radar.sweep_mode['data'] == [b'azimuth_surveillance'])
 
 
 # fixed_angle attribute
@@ -172,6 +173,10 @@ def check_instrument_parameter(param):
     assert param in radar.instrument_parameters
     param_dic = radar.instrument_parameters[param]
     assert param_dic['meta_group'] == 'instrument_parameters'
+
+
+def test_prt_mode_dtype():
+    assert radar.instrument_parameters['prt_mode']['data'].dtype.char == 'S'
 
 
 # radar_parameters attribute
@@ -307,7 +312,7 @@ def test_rhi_sweep_number():
 def test_rhi_sweep_mode():
     assert 'standard_name' in RADAR_RHI.sweep_mode
     assert RADAR_RHI.sweep_mode['data'].shape == (1, )
-    assert np.all(RADAR_RHI.sweep_mode['data'] == ['rhi'])
+    assert np.all(RADAR_RHI.sweep_mode['data'] == [b'rhi'])
 
 
 # fixed_angle attribute

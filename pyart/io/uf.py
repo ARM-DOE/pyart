@@ -144,7 +144,8 @@ def read_uf(filename, field_names=None, additional_metadata=None,
 
     # sweep_mode
     sweep_mode = filemetadata('sweep_mode')
-    sweep_mode['data'] = np.array(ufile.nsweeps * [_SWEEP_MODE_STR[scan_type]])
+    sweep_mode['data'] = np.array(
+        ufile.nsweeps * [_SWEEP_MODE_STR[scan_type]], dtype='S')
 
     # elevation
     elevation = filemetadata('elevation')
