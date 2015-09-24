@@ -324,8 +324,8 @@ def _find_all_meta_group_vars(ncvars, meta_group_name):
     """
     Return a list of all variables which are in a given meta_group.
     """
-    return [k for k, v in ncvars.items() if 'meta_group' in v.ncattrs()
-            and v.meta_group == meta_group_name]
+    return [k for k, v in ncvars.items() if 'meta_group' in v.ncattrs() and
+            v.meta_group == meta_group_name]
 
 
 def _ncvar_to_dict(ncvar, lazydict=False):
