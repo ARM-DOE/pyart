@@ -101,7 +101,8 @@ def test_sweep_number():
 def test_sweep_mode():
     assert 'standard_name' in radar.sweep_mode
     assert radar.sweep_mode['data'].shape == (2, )
-    assert np.all(radar.sweep_mode['data'] == ['rhi'])
+    assert radar.sweep_mode['data'].dtype.char == 'S'
+    assert np.all(radar.sweep_mode['data'] == [b'rhi'])
 
 
 # fixed_angle attribute
