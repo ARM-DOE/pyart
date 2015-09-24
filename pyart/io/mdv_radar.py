@@ -151,7 +151,8 @@ def read_mdv(filename, field_names=None, additional_metadata=None,
     if scan_type == 'ppi':
         nsweeps = nele
         sweep_number['data'] = np.arange(nsweeps, dtype='int32')
-        sweep_mode['data'] = np.array(nsweeps * ['azimuth_surveillance'])
+        sweep_mode['data'] = np.array(
+            nsweeps * ['azimuth_surveillance'], dtype='S')
         fixed_angle['data'] = np.array(el_deg, dtype='float32')
         sweep_start_ray_index['data'] = np.arange(0, len_time, naz,
                                                   dtype='int32')
@@ -161,7 +162,7 @@ def read_mdv(filename, field_names=None, additional_metadata=None,
     elif scan_type == 'rhi':
         nsweeps = naz
         sweep_number['data'] = np.arange(nsweeps, dtype='int32')
-        sweep_mode['data'] = np.array(nsweeps * ['rhi'])
+        sweep_mode['data'] = np.array(nsweeps * ['rhi'], dtype='S')
         fixed_angle['data'] = np.array(az_deg, dtype='float32')
         sweep_start_ray_index['data'] = np.arange(0, len_time, nele,
                                                   dtype='int32')
@@ -197,7 +198,7 @@ def read_mdv(filename, field_names=None, additional_metadata=None,
     beam_width_h = filemetadata('radar_beam_width_h')
     beam_width_v = filemetadata('radar_beam_width_v')
 
-    prt_mode['data'] = np.array([prt_mode_str] * nsweeps)
+    prt_mode['data'] = np.array([prt_mode_str] * nsweeps, dtype='S')
     prt['data'] = np.array([mdvfile.radar_info['prt_s']] * nele * naz,
                            dtype='float32')
 
