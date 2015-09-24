@@ -33,7 +33,8 @@ def test_nexrad_level3_msg19():
     assert radar.sweep_number['data'][0] == 0
 
     assert radar.sweep_mode['data'].shape == (1, )
-    assert np.all(radar.sweep_mode['data'] == ['azimuth_surveillance'])
+    assert radar.sweep_mode['data'].dtype.char == 'S'
+    assert np.all(radar.sweep_mode['data'] == [b'azimuth_surveillance'])
 
     assert radar.fixed_angle['data'].shape == (1, )
     assert round(radar.fixed_angle['data'][0], 2) == 0.50
@@ -94,7 +95,7 @@ def test_nexrad_level3_msg161():
     assert radar.sweep_number['data'][0] == 0
 
     assert radar.sweep_mode['data'].shape == (1, )
-    assert np.all(radar.sweep_mode['data'] == ['azimuth_surveillance'])
+    assert np.all(radar.sweep_mode['data'] == [b'azimuth_surveillance'])
 
     assert radar.fixed_angle['data'].shape == (1, )
     assert round(radar.fixed_angle['data'][0], 2) == 0.50
