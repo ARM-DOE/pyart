@@ -22,6 +22,7 @@ from and write data to a number of file formats.
     read_nexrad_level3
     read_uf
     write_cfradial
+    write_uf
     read_grid
     read_grid_mdv
     write_grid
@@ -44,6 +45,7 @@ from .nexrad_archive import read_nexrad_archive
 from .nexrad_cdm import read_nexrad_cdm
 from .nexradl3_read import read_nexrad_level3
 from .uf import read_uf
+from .uf_write import write_uf
 from .grid_io import read_grid, write_grid
 from .auto_read import read
 from .mdv_grid import write_grid_mdv, read_grid_mdv
