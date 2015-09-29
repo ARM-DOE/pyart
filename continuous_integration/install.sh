@@ -15,7 +15,7 @@ set -e
 # a conda based install of the SciPy stack on multiple versions of Python
 # as well as use conda and binstar to install additional modules which are not
 # in the default repository.
-wget http://repo.continuum.io/miniconda/Miniconda-3.5.2-Linux-x86_64.sh \
+wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh \
     -O miniconda.sh
 chmod +x miniconda.sh
 ./miniconda.sh -b
@@ -29,13 +29,13 @@ source activate testenv
 
 # Install Py-ART dependencies
 conda install --yes numpy scipy matplotlib netcdf4 nose
-conda install --yes -c http://conda.binstar.org/jjhelmus trmm_rsl
+conda install --yes -c http://conda.anaconda.org/jjhelmus trmm_rsl
 
 if [[ $PYTHON_VERSION == '2.7' ]]; then
     conda install --yes basemap 
-    conda install --yes -c http://conda.binstar.org/jjhelmus cbc cylp
-    conda install --yes -c http://conda.binstar.org/jjhelmus glpk pyglpk
-    conda install --yes -c http://conda.binstar.org/jjhelmus cvxopt_glpk
+    conda install --yes -c http://conda.anaconda.org/jjhelmus cbc cylp
+    conda install --yes -c http://conda.anaconda.org/jjhelmus glpk pyglpk
+    conda install --yes -c http://conda.anaconda.org/jjhelmus cvxopt_glpk
 
     # wradlib and dependencies
     conda install --yes sphinx gdal numpydoc h5py
@@ -64,7 +64,7 @@ if [[ "$FROM_RECIPE" == "true" ]]; then
     source deactivate
     conda install --yes conda-build
     conda install --yes jinja2 setuptools
-    conda config --add channels http://conda.binstar.org/jjhelmus
+    conda config --add channels http://conda.anaconda.org/jjhelmus
     source activate testenv
     conda build --no-test -q conda_recipe/
    
