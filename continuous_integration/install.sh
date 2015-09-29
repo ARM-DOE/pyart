@@ -39,7 +39,7 @@ if [[ $PYTHON_VERSION == '2.7' ]]; then
 
     # wradlib and dependencies
     conda install --yes sphinx gdal numpydoc h5py
-    pip install sphinx-rtd-theme
+    conda install --yes sphinx_rtd_theme
     pip install sphinxcontrib-bibtex
     pip install xmltodict
     pip install wradlib
