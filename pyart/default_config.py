@@ -1105,6 +1105,26 @@ uf_field_mapping = {
     'RH': cross_correlation_ratio,
     'SQ': normalized_coherent_power,
     'NP': normalized_coherent_power,
+    'HC': radar_echo_classification,
+}
+
+# Mapping used when writing UF files
+write_uf_mapping = {
+    # UF 2 letter field: radar field
+    reflectivity: 'DZ',
+    corrected_reflectivity: 'CZ',
+    total_power: 'ZT',
+    velocity: 'VR',
+    corrected_velocity: 'VE',
+    spectrum_width: 'SW',
+    differential_reflectivity: 'ZD',
+    corrected_differential_reflectivity: 'DR',
+    linear_depolarization_ratio: 'LR',
+    differential_phase: 'PH',
+    specific_differential_phase: 'KD',
+    cross_correlation_ratio: 'RH',
+    normalized_coherent_power: 'SQ',
+    radar_echo_classification: 'HC',
 }
 
 FIELD_MAPPINGS = {                  # Required variable
@@ -1118,6 +1138,7 @@ FIELD_MAPPINGS = {                  # Required variable
     'chl': chl_field_mapping,
     'gamic': gamic_field_mapping,
     'uf': uf_field_mapping,
+    'write_uf': write_uf_mapping,
 }
 
 
