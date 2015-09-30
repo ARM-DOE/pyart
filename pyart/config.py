@@ -13,6 +13,7 @@ Py-ART configuration.
     get_field_name
     get_field_colormap
     get_field_limits
+    get_field_mapping
     FileMetadata
 
 """
@@ -170,6 +171,23 @@ def get_field_limits(field, container=None, selection=0):
         return limits
     else:
         return None, None
+
+
+def get_field_mapping(filetype):
+    """
+    Return a copy of the default field mapping for a given file type.
+
+    Parameters
+    ----------
+    filetype : str
+        Filetype to return field mappings for.
+
+    Returns
+    -------
+    field_mappings : dict
+        Dictionary mapping field names from one type to another.
+    """
+    return _FIELD_MAPPINGS[filetype].copy()
 
 
 class FileMetadata():

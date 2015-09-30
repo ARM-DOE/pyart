@@ -23,6 +23,7 @@ Input/Output routines.
 .. automodule:: pyart.io.sigmet
 .. automodule:: pyart.io.uf
 .. automodule:: pyart.io.uffile
+.. automodule:: pyart.io.uf_write
 .. automodule:: pyart.io._rsl_interface
 .. automodule:: pyart.io._sigmet_noaa_hh
 .. automodule:: pyart.io._sigmetfile
