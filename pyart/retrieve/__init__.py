@@ -5,15 +5,18 @@ Radar Retrievals (:mod:`pyart.retrieve`)
 
 .. currentmodule:: pyart.retrieve
 
-Functions for performing radar retrievals.
+Radar retrievals.
+
+Radar retrievals
+================
 
 .. autosummary::
     :toctree: generated/
 
+    calculate_snr_from_reflectivity
     fetch_radar_time_profile
     map_profile_to_gates
     steiner_conv_strat
-    calculate_snr_from_reflectivity
     texture_of_complex_phase
 
 """

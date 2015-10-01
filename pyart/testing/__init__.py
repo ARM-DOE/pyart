@@ -5,8 +5,10 @@ Testing Utilities (:mod:`pyart.testing`)
 
 .. currentmodule:: pyart.testing
 
-Py-ART comes with a number of utilities helpful when writing and running
-unit tests.
+Utilities helpful when writing and running unit tests.
+
+Testing functions
+=================
 
 .. autosummary::
     :toctree: generated/
@@ -17,6 +19,13 @@ unit tests.
     make_velocity_aliased_radar
     make_empty_grid
     make_target_grid
+
+Testing classes
+===============
+
+.. autosummary::
+    :toctree: generated/
+
     InTemporaryDirectory
 
 """

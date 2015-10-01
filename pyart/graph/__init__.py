@@ -5,14 +5,25 @@ Graphing (:mod:`pyart.graph`)
 
 .. currentmodule:: pyart.graph
 
+Creating plots of Radar and Grid fields.
+
+Plotting radar data
+===================
+
 .. autosummary::
     :toctree: generated/
 
     RadarDisplay
     RadarMapDisplay
-    GridMapDisplay
     RadarDisplay_Airborne
 
+Plotting grid data
+==================
+
+.. autosummary::
+    :toctree: generated/
+
+    GridMapDisplay
 
 """
 
