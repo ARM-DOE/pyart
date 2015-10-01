@@ -93,7 +93,7 @@ def _det_sys_phase(ncp, rhv, phidp, last_ray_idx, ncp_lev=0.4,
     """ Determine the system phase, see :py:func:`det_sys_phase`. """
     good = False
     phases = []
-    for radial in xrange(last_ray_idx + 1):
+    for radial in range(last_ray_idx + 1):
         meteo = np.logical_and(ncp[radial, :] > ncp_lev,
                                rhv[radial, :] > rhv_lev)
         mpts = np.where(meteo)
@@ -761,7 +761,7 @@ def solve_cylp(model, B_vectors, weights, ray, chunksize):
     s.logLevel = 0
 
     i = 0
-    for raynum in xrange(ray, ray + chunksize):
+    for raynum in range(ray, ray + chunksize):
         # set new B_vector values for actual ray
         s.setRowLowerArray(np.squeeze(np.asarray(B_vectors[raynum])))
         # set new weights (objectives) for actual ray
@@ -851,7 +851,7 @@ def LP_solver_cylp_mp(A_Matrix, B_vectors, weights, really_verbose=False,
     procs = []
 
     # fire off worker processes
-    for raynum in xrange(0, n_rays, chunksize):
+    for raynum in range(0, n_rays, chunksize):
         p = mp.Process(target=worker, args=(
             model, B_vectors, weights, raynum, chunksize, out_q))
         procs.append(p)
@@ -859,7 +859,7 @@ def LP_solver_cylp_mp(A_Matrix, B_vectors, weights, really_verbose=False,
 
     # collecting results
     resultdict = {}
-    for raynum in xrange(0, n_rays, chunksize):
+    for raynum in range(0, n_rays, chunksize):
         resultdict.update(out_q.get())
 
     # Wait for all worker processes to finish
@@ -867,7 +867,7 @@ def LP_solver_cylp_mp(A_Matrix, B_vectors, weights, really_verbose=False,
         p.join()
 
     # copy results in output array
-    for raynum in xrange(0, int(n_rays / chunksize)):
+    for raynum in range(0, int(n_rays / chunksize)):
         soln[raynum * chunksize:raynum * chunksize + chunksize, :] = (
             resultdict[raynum])
 
@@ -927,7 +927,7 @@ def LP_solver_cylp(A_Matrix, B_vectors, weights, really_verbose=False):
     if not really_verbose:
             s.logLevel = 0
 
-    for raynum in xrange(n_rays):
+    for raynum in range(n_rays):
 
         # set new B_vector values for actual ray
         s.setRowLowerArray(np.squeeze(np.asarray(B_vectors[raynum])))
