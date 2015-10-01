@@ -97,6 +97,21 @@ def write_grid(filename, grid, format='NETCDF4', arm_time_variables=False):
     """
     Write a Grid object to a CF-1.5 and ARM standard netcdf file
 
+    To control how the netCDF variables are created, set any of the following
+    keys in the grid attribute dictionaries.
+
+        * _Zlib
+        * _DeflateLevel
+        * _Shuffle
+        * _Fletcher32
+        * _Continguous
+        * _ChunkSizes
+        * _Endianness
+        * _Least_significant_digit
+        * _FillValue
+
+    See the netCDF4 documentation for details on these settings.
+
     Parameters
     ----------
     filename : str

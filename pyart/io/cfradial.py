@@ -388,6 +388,21 @@ def write_cfradial(filename, radar, format='NETCDF4', time_reference=None,
     .. _CF/Radial standard: http://www.ral.ucar.edu/projects/titan/docs/radial_formats/cfradial.html
     .. _ARM Data File Standards: https://docs.google.com/document/d/1gBMw4Kje6v8LBlsrjaGFfSLoU0jRx-07TIazpthZGt0/edit?pli=1
 
+    To control how the netCDF variables are created, set any of the following
+    keys in the radar attribute dictionaries.
+
+        * _Zlib
+        * _DeflateLevel
+        * _Shuffle
+        * _Fletcher32
+        * _Continguous
+        * _ChunkSizes
+        * _Endianness
+        * _Least_significant_digit
+        * _FillValue
+
+    See the netCDF4 documentation for details on these settings.
+
     Parameters
     ----------
     filename : str
