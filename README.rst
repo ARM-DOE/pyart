@@ -54,6 +54,16 @@ to use the latest, unreleased version of Py-ART see the section below on
 **Installing from source**.
 
 
+Configuration
+=============
+
+The configuration file in Py-ART specifies the default metadata, field names,
+colormaps and plot limits.  A custom configuration can be loaded
+automatically be setting the environmental variable **PYART_CONFIG** to point
+to a custom configuration file.  For additional details on this process see the
+documentation on the `pyart.load_config` function.
+
+
 Extensions and related software
 ===============================
 

@@ -7,13 +7,23 @@ Core (:mod:`pyart.core`)
 
 Core Py-ART classes and function for interacting with weather radar data.
 
+Core classes
+============
+
 .. autosummary::
     :toctree: generated/
 
     Radar
+    Grid
+
+Core functions
+==============
+
+.. autosummary::
+    :toctree: generated/
+
     is_vpt
     to_vpt
-    Grid
 
 """
 

@@ -9,7 +9,7 @@ Bleeding Edge Documentation
 
 This documentation was build automatically from the
 `Py-ART GitHub repository <https://github.com/ARM-DOE/pyart>`_ and may contain
-errors which will be fixed before the next release.  See the next section
+errors which will be fixed before the next release.  See the section below for
 links to documentation and examples from the latest release.
 
 .. toctree::
@@ -18,6 +18,16 @@ links to documentation and examples from the latest release.
     user_reference/index
     dev_reference/index
 
+Short Courses
+=============
+
+Various short courses on Py-ART and open source radar software have been given
+which contain tutorial like materials and additional examples.
+
+* `2015 AMS, Open Source Radar Short Course <https://github.com/openradar/AMS-Short-Course-on-Open-Source-Radar-Software>`_
+* `2015 ARM/ASR Meeting, PyART, the Python ARM Radar Toolkit  <https://github.com/ARM-DOE/notebooks/tree/master/ASR_PI_2015>`_
+* `2014 ARM/ASM Meeting, Py-ART tutorial <https://github.com/ARM-DOE/notebooks/tree/master/ASR_PI_2014>`_
+* `2014 ERAD, Open Source Radar Short Course <https://github.com/openradar/open_source_radar_short_course>`_
 
 Latest Release
 ==============

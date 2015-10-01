@@ -10,16 +10,26 @@ versions without depeciation, use with caution.
 
 .. currentmodule:: pyart.util
 
+Direction statistics
+====================
+
 .. autosummary::
     :toctree: generated/
 
-    cross_section_ppi
     angular_mean
     angular_std
     angular_mean_deg
     angular_std_deg
     interval_mean
     interval_std
+
+Miscellaneous functions
+=======================
+
+.. autosummary::
+    :toctree: generated/
+
+    cross_section_ppi
 
 """
 

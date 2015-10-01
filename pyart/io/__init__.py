@@ -5,8 +5,15 @@ Input and output (:mod:`pyart.io`)
 
 .. currentmodule:: pyart.io
 
-Py-ART has modules, classes and functions which are able to read data
-from and write data to a number of file formats.
+Functions to read and write radar and grid data to and from a number of file
+formats.
+
+Reading radar data
+==================
+
+In most cases the :py:func:`pyart.io.read` function should be used to read
+in radar data from a file.  In certain cases the function the read function
+for the format in question should be used.
 
 .. autosummary::
     :toctree: generated/
@@ -21,12 +28,40 @@ from and write data to a number of file formats.
     read_nexrad_cdm
     read_nexrad_level3
     read_uf
+
+Writing radar data
+==================
+
+.. autosummary::
+    :toctree: generated/
+
     write_cfradial
     write_uf
+
+Reading grid data
+=================
+
+.. autosummary::
+    :toctree: generated/
+
     read_grid
     read_grid_mdv
+
+Writing grid data
+=================
+
+.. autosummary::
+    :toctree: generated/
+
     write_grid
     write_grid_mdv
+
+Special use
+===========
+
+.. autosummary::
+    :toctree: generated/
+
     add_2d_latlon_axis
     prepare_for_read
 

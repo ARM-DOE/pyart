@@ -59,7 +59,8 @@ def write_uf(filename, radar, uf_field_names=None, radar_field_names=False,
         * nyquist_velocity
 
     If any of these parameter are not present a default or sentinel value
-    will be written in the UF file in the place of the parameter.
+    will be written in the UF file in the place of the parameter. This is also
+    true for the data in the scan_rate attribute.
 
     Radar fields will be scaled and rounded to integer values when writing to
     UF files.  The scale factor for each field can be specified in the

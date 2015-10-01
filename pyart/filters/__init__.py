@@ -7,6 +7,9 @@ Filters (:mod:`pyart.filters`)
 
 Classes for specifying what gates are included and excluded from routines.
 
+Filtering radar data
+====================
+
 .. autosummary::
     :toctree: generated/
 

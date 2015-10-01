@@ -5,8 +5,10 @@ Radar Corrections (:mod:`pyart.correct`)
 
 .. currentmodule:: pyart.correct
 
-Py-ART has the ability to perform a number of common corrections on radar
-moments and data.
+Correct radar fields.
+
+Velocity unfolding
+==================
 
 .. autosummary::
     :toctree: generated/
@@ -14,8 +16,22 @@ moments and data.
     dealias_fourdd
     dealias_unwrap_phase
     dealias_region_based
+
+Other corrections
+=================
+
+.. autosummary::
+    :toctree: generated/
+
     calculate_attenuation
     phase_proc_lp
+
+Helper functions
+================
+
+.. autosummary::
+    :toctree: generated/
+
     find_time_in_interp_sonde
 
 """

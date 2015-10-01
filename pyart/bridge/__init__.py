@@ -5,10 +5,12 @@ Bridging to other toolkits (:mod:`pyart.bridge`)
 
 .. currentmodule:: pyart.bridge
 
-Py-ART as a bridge to other community software projects.
+Py-ART can act as bridge to other community software projects.
 
-The functionality in this namespace is also available in other
-pyart namespaces.
+The functionality in this namespace is available in other pyart namespaces.
+
+Phase functions
+===============
 
 .. autosummary::
     :toctree: generated/
