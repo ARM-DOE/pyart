@@ -171,10 +171,16 @@ def make_time_unit_str(dtobj):
 
 def add_2d_latlon_axis(grid, **kwargs):
     """
-    Add to Grid (in place) a 2-dimensional axes for latitude and longitude
-    of every point in the y,x plane. If available conversion is done using
-    basemap.pyproj, extra arguments in kwargs are passed to pyproj.Proj
-    function. If not available internal implementation is used.
+    Add the latitude and longitude for grid points in the y, x plane.
+
+    Adds a **latitude** and **longitude** dictionary to the axes attribute
+    of a provided grid.  Addition is done in-place, nothing is returned from
+    this function.  These dictionaries contain 2D arrays which specify the
+    latitude and longitude of every point in the y, x plane.
+
+    If available, the conversion is done using basemap.pyproj, extra arguments
+    are passed to pyproj.Proj. If not available, an internal spherical
+    azimuthal equidistant transformation is is used.
 
     Parameters
     ----------
@@ -185,16 +191,10 @@ def add_2d_latlon_axis(grid, **kwargs):
         Options to be passed to Proj. If projection is not specified here it
         uses proj='aeqd' (azimuthal equidistant)
 
-    Returns
-    -------
-    grid: grid object
-        Cartesian grid with new axes "longitude", "latitude"
-
     Notes
     -----
-    If Basemap is not available calculation of latitude, longitude is done
-    by converting spherical azimuthal equidistant projection to latlon
-    projection [1].
+    If Basemap is not available, calculation of the latitude, longitude is
+    done using a azimuthal equidistant projection projection [1].
     It uses the mean radius of earth (6371 km)
 
     .. math::
@@ -205,9 +205,10 @@ def add_2d_latlon_axis(grid, **kwargs):
 
         lat = \\arcsin(\\cos(c)*\\sin(lat0)+\\sin(azi)*\\sin(c)*\\cos(lat0))
 
-        lon = \\arctan2(\\cos(azi)*\\sin(c),\\cos(c)*\\cos(lat0)-\\sin(azi)*\\sin(c)*\\sin(lat0)) + lon0
+        lon = \\arctan2(\\cos(azi)*\\sin(c),\\cos(c)*\\cos(lat0)-
+                        \\sin(azi)*\\sin(c)*\\sin(lat0)) + lon0
 
-    Where x, y are the cartesian position from the center of projection;
+    Where x, y are the Cartesian position from the center of projection;
     lat, lon the corresponding latitude and longitude; lat0, lon0 the latitude
     and longitude of the center of the projection; R the mean radius of the
     earth (6371 km)
@@ -216,8 +217,8 @@ def add_2d_latlon_axis(grid, **kwargs):
     ----------
     .. [1] Snyder, J. P. Map Projections--A Working Manual. U. S. Geological
         Survey Professional Paper 1395, 1987, pp. 191-202.
+
     """
-    import sys
     try:
         from mpl_toolkits.basemap import pyproj
         if 'proj' not in kwargs:
