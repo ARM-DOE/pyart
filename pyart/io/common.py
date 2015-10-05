@@ -217,8 +217,8 @@ def add_2d_latlon_axis(grid, **kwargs):
     ----------
     .. [1] Snyder, J. P. Map Projections--A Working Manual. U. S. Geological
         Survey Professional Paper 1395, 1987, pp. 191-202.
+
     """
-    import sys
     try:
         from mpl_toolkits.basemap import pyproj
         if 'proj' not in kwargs:
