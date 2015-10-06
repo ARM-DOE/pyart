@@ -23,6 +23,7 @@ A class and supporting functions for reading Sigmet (raw format) files.
     _unpack_ingest_header
 
 """
+from __future__ import print_function
 
 import struct
 import datetime
@@ -167,7 +168,8 @@ cdef class SigmetFile:
                 'azimuth_1': np.empty((nsweeps, nrays), dtype='float32'),
                 'elevation_1': np.empty((nsweeps, nrays), dtype='float32'),
                 'nbins': np.empty((nsweeps, nrays), dtype='int16'),
-                'time': np.empty((nsweeps, nrays), dtype='uint16')}
+                'time': np.empty((nsweeps, nrays), dtype='uint16'),
+                'prf_flag': np.empty((nsweeps, nrays), dtype='int16')}
             metadata[name] = header_dic
 
         self.ingest_data_headers = dict([(name, []) for name in
@@ -194,7 +196,8 @@ cdef class SigmetFile:
                 return data, metadata
 
             for j, name in enumerate(self.data_type_names):
-                az0, el0, az1, el1, ray_nbins, ray_time = sweep_metadata[j]
+                temp = sweep_metadata[j]
+                (az0, el0, az1, el1, ray_nbins, ray_time, prf_flag) = temp
 
                 data[name][i] = sweep_data[j]
                 metadata[name]['azimuth_0'][i] = az0
@@ -203,16 +206,20 @@ cdef class SigmetFile:
                 metadata[name]['elevation_1'][i] = el1
                 metadata[name]['nbins'][i] = ray_nbins
                 metadata[name]['time'][i] = ray_time
+                metadata[name]['prf_flag'][i] = prf_flag
                 self.ingest_data_headers[name].append(ingest_data_hdrs[j])
 
-        # scale 1-byte velocity by the Nyquist
+        # scale 1-byte velocity by the Nyquist (section 4.3.29)
         # this conversion is kept in this method so that the
         # product_hdr does not need to be accessed at lower abstraction
         # layers.
         if 'VEL' in self.data_type_names:
             wavelength_cm = self.product_hdr['product_end']['wavelength']
             prt_value = 1. / self.product_hdr['product_end']['prf']
-            nyquist = wavelength_cm / (10000.0 * 4.0 * prt_value)
+            task_config = self.ingest_header['task_configuration']
+            multi_prf_flag = task_config['task_dsp_info']['multi_prf_flag']
+            multiplier = [1, 2, 3, 4][multi_prf_flag]
+            nyquist = wavelength_cm / (10000.0 * 4.0 * prt_value) * multiplier
             data['VEL'] *= nyquist
         # scale 1-byte width by the Nyquist
         if 'WIDTH' in self.data_type_names:
@@ -290,8 +297,8 @@ cdef class SigmetFile:
         # get the raw data ray-by-ray
         for ray_i in xrange(nrays):
             if self.debug:
-                print "Reading ray: %i of %i" % (ray_i, nrays),
-                print "self._rbuf_pos is", self._rbuf_pos
+                print("Reading ray: %i of %i" % (ray_i, nrays), end='')
+                print("self._rbuf_pos is", self._rbuf_pos)
             if self._get_ray(nbins, raw_sweep_data[ray_i]):
                 return None, None, None
 
@@ -401,7 +408,7 @@ cdef class SigmetFile:
             return -1   # failed read
         self._record_number += 1
         if self.debug:
-            print "Finished loading record:", self._record_number
+            print("Finished loading record:", self._record_number)
         self._raw_product_bhdrs[-1].append(_unpack_raw_prod_bhdr(record))
         self._rbuf = np.fromstring(record, dtype='int16')
         self._rbuf_pos = 6
@@ -450,6 +457,9 @@ def _parse_ray_headers(ray_headers):
         Number of bins in the rays.
     time : array
         Seconds since the start of the sweep for the rays.
+    prf_flag : array
+        Numerical indication of what PRF was used, 0 for high, 1 for low.
+        Not applicable if dual-PRF is not used during collection.
 
     """
     az0 = bin2_to_angle(ray_headers.view('uint16')[..., 0])
@@ -458,7 +468,8 @@ def _parse_ray_headers(ray_headers):
     el1 = bin2_to_angle(ray_headers.view('uint16')[..., 3])
     nbins = ray_headers.view('int16')[..., 4]
     time = ray_headers.view('uint16')[..., 5]
-    return (az0, el0, az1, el1, nbins, time)
+    prf_flag = np.mod(ray_headers.view('int16')[..., 0], 2)
+    return (az0, el0, az1, el1, nbins, time, prf_flag)
 
 
 ###################

@@ -379,6 +379,7 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
     beam_width_h = filemetadata('radar_beam_width_h')
     beam_width_v = filemetadata('radar_beam_width_v')
     pulse_width = filemetadata('pulse_width')
+    prt_ratio = filemetadata('prt_ratio')
 
     prt_value = 1. / sigmetfile.product_hdr['product_end']['prf']
     prt['data'] = prt_value * np.ones(total_rays, dtype='float32')
@@ -386,12 +387,18 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
     ur_value = SPEED_OF_LIGHT * prt_value / 2.
     unambiguous_range['data'] = ur_value * np.ones(total_rays, dtype='float32')
 
-    # TODO Multi PRF mode when
-    # task_config['task_dsp_info']['multi_prf_flag'] != 0
-    prt_mode['data'] = np.array(nsweeps * ['fixed'], dtype='S')
+    multi_prf_flag = task_config['task_dsp_info']['multi_prf_flag']
+    prf_multiplier = [1, 2, 3, 4][multi_prf_flag]
+    if prf_multiplier != 1:
+        prt_mode['data'] = np.array(nsweeps * ['dual'], dtype='S')
+        ratio = (prf_multiplier + 1) / (prf_multiplier)  # N+1/N
+        prt_ratio['data'] = ratio * np.ones(total_rays, dtype='float32')
+    else:
+        prt_mode['data'] = np.array(nsweeps * ['fixed'], dtype='S')
+        prt_ratio['data'] = np.ones(total_rays, dtype='float32')
 
     wavelength_cm = sigmetfile.product_hdr['product_end']['wavelength']
-    nv_value = wavelength_cm / (10000.0 * 4.0 * prt_value)
+    nv_value = wavelength_cm / (10000.0 * 4.0 * prt_value) * prf_multiplier
     nyquist_velocity['data'] = nv_value * np.ones(total_rays, dtype='float32')
     beam_width_h['data'] = np.array([bin4_to_angle(
         task_config['task_misc_info']['horizontal_beamwidth'])],
@@ -404,11 +411,17 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
         len(time['data']), dtype='float32')
 
     instrument_parameters = {'unambiguous_range': unambiguous_range,
-                             'prt_mode': prt_mode, 'prt': prt,
+                             'prt_mode': prt_mode,
+                             'prt': prt,
+                             'prt_ratio': prt_ratio,
                              'nyquist_velocity': nyquist_velocity,
                              'radar_beam_width_h': beam_width_h,
                              'radar_beam_width_v': beam_width_v,
                              'pulse_width': pulse_width}
+    if prf_multiplier != 1:
+        prf_flag = filemetadata('prf_flag')
+        prf_flag['data'] = sigmet_metadata[first_data_type]['prf_flag']
+        instrument_parameters['prf_flag'] = prf_flag
 
     # decode extended headers
     extended_header_params = {}

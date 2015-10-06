@@ -335,7 +335,7 @@ DEFAULT_METADATA = {
         'long_name': 'Pulse width'},
 
     'prt_ratio': {
-        'units': 'seconds',
+        'units': 'unitless',
         'meta_group': 'instrument_parameters',
         'long_name': 'Pulse repetition frequency ratio'},
 
@@ -348,6 +348,13 @@ DEFAULT_METADATA = {
         'units': 'unitless',
         'meta_group': 'instrument_parameters',
         'long_name': 'Number of samples used to compute moments'},
+
+    # non-standard parameter for specifying the PRF high/low for each ray
+    'prf_flag': {
+        'units': 'unitless',
+        'comments': "PRF used to collect ray. 0 for high PRF, 1 for low PRF.",
+        'meta_group': 'instrument_parameters',
+        'long_name': 'PRF flag'},
 
     # Metadata for radar_parameter sub-convention
     'radar_beam_width_h': {
