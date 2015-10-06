@@ -335,7 +335,7 @@ DEFAULT_METADATA = {
         'long_name': 'Pulse width'},
 
     'prt_ratio': {
-        'units': 'seconds',
+        'units': 'unitless',
         'meta_group': 'instrument_parameters',
         'long_name': 'Pulse repetition frequency ratio'},
 
