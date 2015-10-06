@@ -206,14 +206,17 @@ cdef class SigmetFile:
                 metadata[name]['time'][i] = ray_time
                 self.ingest_data_headers[name].append(ingest_data_hdrs[j])
 
-        # scale 1-byte velocity by the Nyquist
+        # scale 1-byte velocity by the Nyquist (section 4.3.29)
         # this conversion is kept in this method so that the
         # product_hdr does not need to be accessed at lower abstraction
         # layers.
         if 'VEL' in self.data_type_names:
             wavelength_cm = self.product_hdr['product_end']['wavelength']
             prt_value = 1. / self.product_hdr['product_end']['prf']
-            nyquist = wavelength_cm / (10000.0 * 4.0 * prt_value)
+            task_config = self.ingest_header['task_configuration']
+            multi_prf_flag = task_config['task_dsp_info']['multi_prf_flag']
+            multiplier = [1, 2, 3, 4][multi_prf_flag]
+            nyquist = wavelength_cm / (10000.0 * 4.0 * prt_value) * multiplier
             data['VEL'] *= nyquist
         # scale 1-byte width by the Nyquist
         if 'WIDTH' in self.data_type_names:
