@@ -23,6 +23,7 @@ A class and supporting functions for reading Sigmet (raw format) files.
     _unpack_ingest_header
 
 """
+from __future__ import print_function
 
 import struct
 import datetime
@@ -290,8 +291,8 @@ cdef class SigmetFile:
         # get the raw data ray-by-ray
         for ray_i in xrange(nrays):
             if self.debug:
-                print "Reading ray: %i of %i" % (ray_i, nrays),
-                print "self._rbuf_pos is", self._rbuf_pos
+                print("Reading ray: %i of %i" % (ray_i, nrays), end='')
+                print("self._rbuf_pos is", self._rbuf_pos)
             if self._get_ray(nbins, raw_sweep_data[ray_i]):
                 return None, None, None
 
@@ -401,7 +402,7 @@ cdef class SigmetFile:
             return -1   # failed read
         self._record_number += 1
         if self.debug:
-            print "Finished loading record:", self._record_number
+            print("Finished loading record:", self._record_number)
         self._raw_product_bhdrs[-1].append(_unpack_raw_prod_bhdr(record))
         self._rbuf = np.fromstring(record, dtype='int16')
         self._rbuf_pos = 6
