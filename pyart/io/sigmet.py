@@ -418,6 +418,10 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
                              'radar_beam_width_h': beam_width_h,
                              'radar_beam_width_v': beam_width_v,
                              'pulse_width': pulse_width}
+    if prf_multiplier != 1:
+        prf_flag = filemetadata('prf_flag')
+        prf_flag['data'] = sigmet_metadata[first_data_type]['prf_flag']
+        instrument_parameters['prf_flag'] = prf_flag
 
     # decode extended headers
     extended_header_params = {}
