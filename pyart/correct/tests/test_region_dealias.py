@@ -6,9 +6,11 @@
 
 from __future__ import print_function
 
+import warnings
+
 import pyart
 import numpy as np
-from numpy.testing import assert_allclose
+from numpy.testing import assert_allclose, assert_almost_equal
 
 REF_DATA = [0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 9.5, 10.5, 11.5,
             12.5, 13.5, 12.5, 11.5, 10.5, 9.5, 8.5, 7.5, 6.5, 5.5, 4.5, 3.5,
@@ -70,6 +72,21 @@ def perform_dealias(**kwargs):
     dealias_vel = pyart.correct.dealias_region_based(
         radar, **kwargs)
     return radar, dealias_vel
+
+
+def test_dealias_outside():
+    # unwrap when the velocity field contains gates with values outside of
+    # the interval limit, but a warnings should be raised
+    radar = pyart.testing.make_velocity_aliased_radar()
+    radar.fields['velocity']['data'][250, 25] = 20.1
+    radar.fields['velocity']['data'][270, 25] = -20.1
+    with warnings.catch_warnings(record=True) as w:
+        dealias_vel = pyart.correct.dealias_region_based(radar)
+        assert len(w) == 1
+    assert_allclose(dealias_vel['data'][13, :27], REF_DATA)
+    assert np.ma.is_masked(dealias_vel['data'][13]) is False
+    assert_almost_equal(dealias_vel['data'][250, 25], 0.10, 2)
+    assert_almost_equal(dealias_vel['data'][270, 25], -0.10, 2)
 
 
 def main():

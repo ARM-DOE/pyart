@@ -9,6 +9,7 @@ Region based dealiasing using a dynamic network reduction for region joining.
 
     dealias_region_based
     _find_regions
+    _find_sweep_interval_splits
     _combine_regions
     _edge_sum_and_count
 
@@ -20,6 +21,8 @@ Region based dealiasing using a dynamic network reduction for region joining.
     _EdgeTracker
 
 """
+
+import warnings
 
 import numpy as np
 import scipy.ndimage as ndimage
@@ -160,9 +163,10 @@ def dealias_region_based(
         # find nyquist velocity and interval segmentation limits
         nyquist_interval = nyquist_vel[nsweep] * 2.
         if interval_limits is None:
-            vel = nyquist_vel[nsweep]
-            s_interval_limits = np.linspace(
-                -vel, vel, interval_splits+1, endpoint=True)
+            nvel = nyquist_vel[nsweep]
+            valid_sdata = sdata[~sfilter]
+            s_interval_limits = _find_sweep_interval_splits(
+                nvel, interval_splits, valid_sdata, nsweep)
         else:
             s_interval_limits = interval_limits
 
@@ -218,6 +222,33 @@ def dealias_region_based(
     corr_vel = get_metadata(corr_vel_field)
     corr_vel['data'] = data
     return corr_vel
+
+
+def _find_sweep_interval_splits(nyquist, interval_splits, velocities, nsweep):
+    """ Return the interval limits for a given sweep. """
+    # The Nyquist interval is split into interval_splits  equal sized areas.
+    # If velocities outside the Nyquist are present the number and
+    # limits of the interval splits must be adjusted so that theses
+    # velocities are included in one of the splits.
+    add_start = add_end = 0
+    interval = (2. * nyquist) / (interval_splits)
+    # no change from default if all gates filtered
+    if len(velocities) != 0:
+        max_vel = velocities.max()
+        min_vel = velocities.min()
+        if max_vel > nyquist or min_vel < -nyquist:
+            msg = ("Velocities outside of the Nyquist interval found in "
+                   "sweep %i." % (nsweep))
+            warnings.warn(msg, UserWarning)
+            # additional intervals must be added to capture the velocities
+            # outside the nyquist limits
+            add_start = int(np.ceil((max_vel - nyquist) / (interval)))
+            add_end = int(np.ceil(-(min_vel + nyquist) / (interval)))
+
+    start = -nyquist - add_start * interval
+    end = nyquist + add_end * interval
+    num = interval_splits + 1 + add_start + add_end
+    return np.linspace(start, end, num, endpoint=True)
 
 
 def _find_regions(vel, gfilter, limits):
