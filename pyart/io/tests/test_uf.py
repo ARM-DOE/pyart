@@ -126,3 +126,15 @@ def test_skip_field():
     test_radar = pyart.io.read_uf(
         pyart.testing.UF_FILE, exclude_fields=['DZ'], file_field_names=True)
     assert 'DZ' not in test_radar.fields.keys()
+
+
+def test_range_start_nonzero():
+    radar = pyart.io.read_uf(pyart.testing.UF_FILE)
+    radar.range['meters_to_center_of_first_gate'] += 1500.
+    in_mem = StringIO()
+    pyart.io.write_uf(in_mem, radar)
+
+    in_mem.seek(0)
+    radar2 = pyart.io.read_uf(in_mem)
+    assert_almost_equal(radar2.range['meters_to_center_of_first_gate'], 1530)
+    assert_almost_equal(radar2.range['data'][0], 1530)
