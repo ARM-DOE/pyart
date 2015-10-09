@@ -572,6 +572,15 @@ class Radar(object):
         """
         Add a field to the object with metadata from a existing field.
 
+        Note that the data parameter is not copied by this method.
+        If data refers to a 'data' array from an existing field dictionary, a
+        copy should be made within or prior to using this method.  If this is
+        not done the 'data' key in both field dictionaries will point to the
+        same NumPy array and modification of one will change the second.  To
+        copy NumPy arrays use the copy() method.  See the Examples section
+        for how to create a copy of the 'reflectivity' field as a field named
+        'reflectivity_copy'.
+
         Parameters
         ----------
         existing_field_name : str
@@ -580,11 +589,16 @@ class Radar(object):
         field_name : str
             Name of the field to add to the dictionary of fields.
         data : array
-            Field data.
+            Field data. A copy of this data is not made, see the note above.
         replace_existing : bool
             True to replace the existing field with key field_name if it
             exists, loosing any existing data.  False will raise a ValueError
             when the field already exists.
+
+        Examples
+        --------
+        >>> radar.add_field_like('reflectivity', 'reflectivity_copy',
+        ...                      radar.fields['reflectivity']['data'].copy())
 
         """
         if existing_field_name not in self.fields:
