@@ -109,7 +109,8 @@ def read_uf(filename, field_names=None, additional_metadata=None,
     ngates = field_header['nbins']
     step = field_header['range_spacing_m']
     # this gives distances to the center of each gate, remove step/2 for start
-    start = field_header['range_start_m'] + step / 2.
+    start = (field_header['range_start_km'] * 1000. +
+             field_header['range_start_m'] + step / 2.)
     _range['data'] = np.arange(ngates, dtype='float32') * step + start
     _range['meters_to_center_of_first_gate'] = start
     _range['meters_between_gates'] = step

@@ -372,3 +372,28 @@ def test_map_field_to_none():
     }
     write_uf(in_mem, radar, uf_field_names=uf_field_names)
     assert in_mem.tell() == 15272   # 15727 = 16648 - (667+2+19) * 2
+
+
+def test_map_field_missing():
+    radar = pyart.io.read_uf(pyart.testing.UF_FILE)
+    in_mem = StringIO()
+    uf_field_names = {
+        'reflectivity': 'DZ',
+        'velocity': 'VR',
+        'spectrum_width': 'SW',
+    }
+    write_uf(in_mem, radar, uf_field_names=uf_field_names)
+    assert in_mem.tell() == 4264   # 4264 = 16648 - (667+2+19) * 2 * 9
+
+
+def test_range_start():
+    radar = pyart.io.read_uf(pyart.testing.UF_FILE)
+    radar.range['meters_to_center_of_first_gate'] += 1500.
+    in_mem = StringIO()
+    write_uf(in_mem, radar)
+
+    in_mem.seek(0)
+    ufile = UFFile(in_mem)
+    field_header = ufile.rays[0].field_headers[0]
+    assert field_header['range_start_km'] == 1
+    assert field_header['range_start_m'] == 500
