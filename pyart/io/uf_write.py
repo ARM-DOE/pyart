@@ -264,8 +264,9 @@ class UFRayCreator(object):
         range_step = self.radar.range['meters_between_gates']
         range_start = self.radar.range['meters_to_center_of_first_gate']
         range_start -= (range_step / 2.)  # range bin center to edge
-        header['range_start_km'] = int(round(range_start)) * 1000
-        header['range_start_m'] = int(round(range_start))
+        range_start_km, range_start_m = divmod(range_start, 1000)
+        header['range_start_km'] = int(range_start_km)
+        header['range_start_m'] = int(round(range_start_m))
         header['range_spacing_m'] = int(round(range_step))
 
         iparams = self.radar.instrument_parameters
