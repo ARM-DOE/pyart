@@ -372,3 +372,15 @@ def test_map_field_to_none():
     }
     write_uf(in_mem, radar, uf_field_names=uf_field_names)
     assert in_mem.tell() == 15272   # 15727 = 16648 - (667+2+19) * 2
+
+
+def test_map_field_missing():
+    radar = pyart.io.read_uf(pyart.testing.UF_FILE)
+    in_mem = StringIO()
+    uf_field_names = {
+        'reflectivity': 'DZ',
+        'velocity': 'VR',
+        'spectrum_width': 'SW',
+    }
+    write_uf(in_mem, radar, uf_field_names=uf_field_names)
+    assert in_mem.tell() == 4264   # 4264 = 16648 - (667+2+19) * 2 * 9

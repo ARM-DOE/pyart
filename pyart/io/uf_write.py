@@ -76,8 +76,8 @@ def write_uf(filename, radar, uf_field_names=None, radar_field_names=False,
         Radar object from which to create UF file.
     uf_field_names : dict or None, optional
         Mapping between radar fields and two character UF data type names.
-        Field names mapped to None will be excluded from writing.  If None,
-        the default mappings for UF files will be used.
+        Field names mapped to None or with no mapping will be excluded from
+        writing.  If None, the default mappings for UF files will be used.
     radar_field_names : bool, optional
         True to use the radar field names as the field names of the UF
         fields.  False to use the uf_field_names mapping to generate UF field
@@ -147,6 +147,8 @@ def _find_field_mapping(
         if radar_field_names:
             data_type = radar_field
         else:
+            if radar_field not in uf_field_names:
+                continue
             data_type = uf_field_names[radar_field]
 
         if data_type is None:
