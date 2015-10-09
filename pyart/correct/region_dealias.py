@@ -26,7 +26,6 @@ import warnings
 
 import numpy as np
 import scipy.ndimage as ndimage
-import scipy.sparse as sparse
 
 from ..config import get_metadata
 from ._common_dealias import _parse_fields, _parse_gatefilter
