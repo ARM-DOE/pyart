@@ -33,8 +33,8 @@ def write_grid_mdv(filename, grid, mdv_field_names=None,
     Write grid object to MDV file.
 
     Create a MDV file containing data from the provided grid instance.
-    The MDV file will contain instrument parameters from the following
-    dictionaries if they contained in grid.metadata:
+    The MDV file will contain parameters from the following keys if they are
+    contained in grid.metadata:
 
         * instrument_name
         * source
@@ -42,7 +42,7 @@ def write_grid_mdv(filename, grid, mdv_field_names=None,
         * radar_0_lat
         * radar_0_alt
 
-    If any of these parameter are not present a default or sentinel value
+    If any of these keys are not present a default or sentinel value
     will be written in the MDV file in the place of the parameter.
 
     Grid fields will be saved in float32 unless the `_Write_as_dtype` key is
@@ -56,11 +56,11 @@ def write_grid_mdv(filename, grid, mdv_field_names=None,
     grid : Grid
         Grid object from which to create MDV file.
     mdv_field_names : dict or None, optional
-        Mapping between radar fields and MDV data type names. Field names
+        Mapping between grid fields and MDV data type names. Field names
         mapped to None or with no mapping will be excluded from
         writing.  If None, the same field names will be used.
     field_write_order : list or None, optional
-        Order in which radar fields should be written out in the MDV file.
+        Order in which grid fields should be written out in the MDV file.
         None, the default, will determine a valid order automatically.
 
     Notes
