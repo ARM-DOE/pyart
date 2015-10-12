@@ -27,16 +27,41 @@ from .lazydict import LazyLoadDict
 from . import mdv_common
 
 
-def write_grid_mdv(filename, grid):
+def write_grid_mdv(filename, grid, mdv_field_names=None,
+                   field_write_order=None):
     """
     Write grid object to MDV file.
 
+    Create a MDV file containing data from the provided grid instance.
+    The MDV file will contain parameters from the following keys if they are
+    contained in grid.metadata:
+
+        * instrument_name
+        * source
+        * radar_0_lon
+        * radar_0_lat
+        * radar_0_alt
+
+    If any of these keys are not present a default or sentinel value
+    will be written in the MDV file in the place of the parameter.
+
+    Grid fields will be saved in float32 unless the `_Write_as_dtype` key is
+    present.
+
     Parameters
     ----------
-    filename : str
-        Filename of MDV file to write.
+    filename : str or file-like object.
+        Filename of MDV file to create.  If a file-like object is specified
+        data will be written using the write method.
     grid : Grid
-        Grid object to write.
+        Grid object from which to create MDV file.
+    mdv_field_names : dict or None, optional
+        Mapping between grid fields and MDV data type names. Field names
+        mapped to None or with no mapping will be excluded from
+        writing.  If None, the same field names will be used.
+    field_write_order : list or None, optional
+        Order in which grid fields should be written out in the MDV file.
+        None, the default, will determine a valid order automatically.
 
     Notes
     -----
@@ -51,18 +76,21 @@ def write_grid_mdv(filename, grid):
           data in the Grid object should be uncompressed, that is to say
           it has had the scaling applied.
 
-    In addition, the field are written to the MDV file with the same name as
-    they are given in the grid object.  No attempt is made to map these field
-    names to standard MDV field names.
-
     """
     # first of all firm field list
-    fields = list(grid.fields.keys())
+    if field_write_order is None:
+        field_write_order = list(grid.fields.keys())
+
+    # remove fields not in mdv_field_names
+    if mdv_field_names is not None:
+        for ifield, field in enumerate(field_write_order):
+            if field not in mdv_field_names or mdv_field_names[field] is None:
+                field_write_order.pop(ifield)
 
     # mount empty mdv file
-    grid_shape = grid.fields[fields[0]]['data'].shape
+    grid_shape = grid.fields[field_write_order[0]]['data'].shape
     nz, ny, nx = grid_shape
-    nfields = len(fields)
+    nfields = len(field_write_order)
     if nz > mdv_common.MDV_MAX_VLEVELS:
         warnings.warn(('%i vlevels exceed MDV_MAX_VLEVELS = %i. Extra ' +
                        'levels will be ignored') %
@@ -125,7 +153,7 @@ def write_grid_mdv(filename, grid):
         if meta_key in grid.metadata:
             d[mdv_key] = grid.metadata[meta_key].encode("ASCII")
 
-    for ifield, field in enumerate(fields):
+    for ifield, field in enumerate(field_write_order):
         d = mdv.field_headers[ifield]
         l = mdv.vlevel_headers[ifield]
 
@@ -193,7 +221,10 @@ def write_grid_mdv(filename, grid):
         elif "long_name" in grid.fields[field].keys():
             d["field_name_long"] = (
                 grid.fields[field]["long_name"].encode("ASCII"))
-        d["field_name"] = field.encode("ASCII")
+        if mdv_field_names is not None:
+            d["field_name"] = mdv_field_names[field].encode("ASCII")
+        else:
+            d["field_name"] = field.encode("ASCII")
         if "units" in grid.fields[field].keys():
             d["units"] = grid.fields[field]["units"].encode("ASCII")
         d["transform"] = "none".encode("ASCII")  # XXX not implemented
