@@ -172,7 +172,7 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
         nsweeps = len(sweep_start_ray_index['data'])
         sweep_number = filemetadata('sweep_number')
         sweep_number['data'] = np.arange(nsweeps, dtype='float32')
-        print("Warning: File violates CF/Radial convention. Missing sweep_number variable")
+        warnings.warn("Warning: File violates CF/Radial convention. Missing sweep_number variable")
 
     if 'target_scan_rate' in ncvars:
         target_scan_rate = _ncvar_to_dict(ncvars['target_scan_rate'])
@@ -688,7 +688,7 @@ def _create_ncvar(dic, dataset, name, dimensions):
     # create array from list, etc.
     data = dic['data']
     if isinstance(data, np.ndarray) is not True:
-        print("Warning, converting non-array to array:", name)
+        warnings.warn("Warning, converting non-array to array:", name)
         data = np.array(data)
 
     # convert string/unicode arrays to character arrays
