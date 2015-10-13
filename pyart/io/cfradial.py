@@ -161,11 +161,19 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
         altitude_agl = None
 
     # 4.7 Sweep variables -> create atrribute dictionaries
-    sweep_number = _ncvar_to_dict(ncvars['sweep_number'])
     sweep_mode = _ncvar_to_dict(ncvars['sweep_mode'])
     fixed_angle = _ncvar_to_dict(ncvars['fixed_angle'])
     sweep_start_ray_index = _ncvar_to_dict(ncvars['sweep_start_ray_index'])
     sweep_end_ray_index = _ncvar_to_dict(ncvars['sweep_end_ray_index'])
+ 
+    if 'sweep_number' in ncvars:
+        sweep_number = _ncvar_to_dict(ncvars['sweep_number'])
+    else:
+        nsweeps = len(sweep_start_ray_index['data'])
+        sweep_number = filemetadata('sweep_number')
+        sweep_number['data'] = np.arange(nsweeps, dtype='float32')
+        print("Warning: File violates CF/Radial convention. Missing sweep_number variable")
+
     if 'target_scan_rate' in ncvars:
         target_scan_rate = _ncvar_to_dict(ncvars['target_scan_rate'])
     else:
