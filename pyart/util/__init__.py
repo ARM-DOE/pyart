@@ -22,6 +22,7 @@ Direction statistics
     angular_std_deg
     interval_mean
     interval_std
+    estimate_noise_hs74
 
 Miscellaneous functions
 =======================
@@ -37,5 +38,6 @@ from .circular_stats import angular_mean, angular_std
 from .circular_stats import angular_mean_deg, angular_std_deg
 from .circular_stats import interval_mean, interval_std
 from .xsect import cross_section_ppi
+from .hildebrand_sekhon import estimate_noise_hs74
 
 __all__ = [s for s in dir() if not s.startswith('_')]
