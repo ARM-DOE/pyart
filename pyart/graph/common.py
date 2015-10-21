@@ -524,6 +524,32 @@ def generate_ray_title(radar, field, ray):
     return l1 + '\n' + l2 + '\n' + field_name
 
 
+def generate_az_rhi_title(radar, field, azimuth):
+    """
+    Generate a title for a pseudo-RHI from PPI azimuth plot.
+
+    Parameters
+    ----------
+    radar : Radar
+        Radar structure.
+    field : str
+        Field plotted.
+    azimuth : float
+        Azimuth plotted.
+
+    Returns
+    -------
+    title : str
+        Plot title.
+
+    """
+    time_str = generate_radar_time_begin(radar).isoformat() + 'Z'
+    l1 = "%s %s " % (generate_radar_name(radar), time_str)
+    l2 = "Azimuth: %.1f deg" % azimuth
+    field_name = generate_field_name(radar, field)
+    return l1 + '\n' + l2 + '\n' + field_name
+
+
 def set_limits(xlim=None, ylim=None, ax=None):
     """
     Set the display limits.

@@ -39,7 +39,7 @@ def cross_section_ppi(radar, target_azimuths):
 
     """
 
-    # detemine which rays from the ppi radar make up the pseudo RHI
+    # determine which rays from the ppi radar make up the pseudo RHI
     prhi_rays = []
     rhi_nsweeps = len(target_azimuths)
     ppi_nsweeps = radar.nsweeps
