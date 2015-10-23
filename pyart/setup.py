@@ -13,6 +13,7 @@ def configuration(parent_package='', top_path=None):
     config.add_subpackage('filters')
     config.add_subpackage('testing')
     config.add_subpackage('util')
+    config.add_subpackage('pkg_util')
     config.add_subpackage('aux_io')
     config.add_subpackage('bridge')
 
