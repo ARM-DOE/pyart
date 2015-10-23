@@ -141,6 +141,10 @@ functionality is available of the following modules are installed.
   should point to the location where RSL was installed if RSL was not
   installed in the default location (/usr/local/trmm).
 
+* In order to read files which are stored in HDF5 files the
+  `h5py <http://www.h5py.org/`_ package and related libraries must be
+  installed.
+
 * A linear programming solver and Python wrapper to use the LP phase
   processing method. `CyLP <https://github.com/mpy/CyLP>`_ is recommended as
   it gives the fastest results, but 
