@@ -321,7 +321,7 @@ class RadarDisplay(object):
             coordinates themselved as the gate edges, resulting in a plot
             in which the last gate in each ray and the entire last ray are not
             plotted.
-        gatefilter : GateFilter 
+        gatefilter : GateFilter
             GateFilter instance. None will result in no gatefilter mask being
             applied to data.
         filter_transitions : bool
@@ -427,7 +427,7 @@ class RadarDisplay(object):
             coordinates themselved as the gate edges, resulting in a plot
             in which the last gate in each ray and the entire last ray are not
             not plotted.
-        gatefilter : GateFilter 
+        gatefilter : GateFilter
             GateFilter instance. None will result in no gatefilter mask being
             applied to data.
         filter_transitions : bool
@@ -578,6 +578,120 @@ class RadarDisplay(object):
 
         if axislabels_flag:
             self._label_axes_vpt(axislabels, ax)
+
+        # add plot and field to lists
+        self.plots.append(pm)
+        self.plot_vars.append(field)
+
+        if colorbar_flag:
+            self.plot_colorbar(mappable=pm, label=colorbar_label,
+                               orient=colorbar_orient,
+                               field=field, ax=ax, fig=fig)
+
+    def plot_azimuth_to_rhi(self, field, target_azimuth,
+                            mask_tuple=None, vmin=None, vmax=None,
+                            cmap='jet', mask_outside=False,
+                            title=None, title_flag=True,
+                            axislabels=(None, None), axislabels_flag=True,
+                            reverse_xaxis=None, colorbar_flag=True,
+                            colorbar_label=None, colorbar_orient='vertical',
+                            edges=True, gatefilter=None,
+                            filter_transitions=True, ax=None, fig=None):
+        """
+        Plot pseudo-RHI scan by extracting the vertical field associated
+        with the given azimuth.
+
+        Parameters
+        ----------
+        field : str
+            Field to plot.
+        target_azimuth : integer
+            Azimuthal angle in degrees where cross section will be taken.
+
+        Other Parameters
+        ----------------
+        mask_tuple : (str, float)
+            2-Tuple containing the field name and value below which to mask
+            field prior to plotting, for example to mask all data where
+            NCP < 0.5 set mask to ['NCP', 0.5]. None performs no masking.
+        vmin : float
+            Luminance minimum value, None for default value.
+        vmax : float
+            Luminance maximum value, None for default value.
+        cmap : str
+            Matplotlib colormap name.
+        title : str
+            Title to label plot with, None to use default title generated from
+            the field and sweep parameters. Parameter is ignored if title_flag
+            is False.
+        title_flag : bool
+            True to add a title to the plot, False does not add a title.
+        axislabels : (str, str)
+            2-tuple of x-axis, y-axis labels.  None for either label will use
+            the default axis label.  Parameter is ignored if axislabels_flag is
+            False.
+        axislabel_flag : bool
+            True to add label the axes, False does not label the axes.
+        reverse_xaxis : bool or None
+            True to reverse the x-axis so the plot reads east to west, False
+            to have east to west.  None (the default) will reverse the axis
+            only when all the distances are negative.
+        colorbar_flag : bool
+            True to add a colorbar with label to the axis.  False leaves off
+            the colorbar.
+        colorbar_label : str
+            Colorbar label, None will use a default label generated from the
+            field information.
+        colorbar_orient : 'vertical' or 'horizontal'
+            Colorbar orientation.
+        edges : bool
+            True will interpolate and extrapolate the gate edges from the
+            range, azimuth and elevations in the radar, treating these
+            as specifying the center of each gate.  False treats these
+            coordinates themselved as the gate edges, resulting in a plot
+            in which the last gate in each ray and the entire last ray are not
+            not plotted.
+        gatefilter : GateFilter
+            GateFilter instance. None will result in no gatefilter mask being
+            applied to data.
+        filter_transitions : bool
+            True to remove rays where the antenna was in transition between
+            sweeps from the plot.  False will include these rays in the plot.
+            No rays are filtered when the antenna_transition attribute of the
+            underlying radar is not present.
+        ax : Axis
+            Axis to plot on. None will use the current axis.
+        fig : Figure
+            Figure to add the colorbar to. None will use the current figure.
+
+        """
+        # parse parameters
+        ax, fig = common.parse_ax_fig(ax, fig)
+        vmin, vmax = common.parse_vmin_vmax(self._radar, field, vmin, vmax)
+
+        data, x, y, z = self._get_azimuth_rhi_data_x_y_z(
+              field, target_azimuth, edges, mask_tuple,
+              filter_transitions, gatefilter)
+
+        # mask the data where outside the limits
+        if mask_outside:
+            data = np.ma.masked_invalid(data)
+            data = np.ma.masked_outside(data, vmin, vmax)
+
+        # plot the data
+        R = np.sqrt(x ** 2 + y ** 2) * np.sign(y)
+        if reverse_xaxis is None:
+            # reverse if all distances (nearly, up to 1 m) negative.
+            reverse_xaxis = np.all(R < 1.)
+        if reverse_xaxis:
+            R = -R
+        pm = ax.pcolormesh(R, z, data, vmin=vmin, vmax=vmax, cmap=cmap)
+
+        if title_flag:
+            self._set_az_rhi_title(field, target_azimuth, title, ax)
+
+        if axislabels_flag:
+            self._label_axes_rhi(axislabels, ax)
 
         # add plot and field to lists
         self.plots.append(pm)
@@ -848,6 +962,13 @@ class RadarDisplay(object):
         else:
             ax.set_title(title)
 
+    def _set_az_rhi_title(self, field, azimuth, title, ax):
+        """ Set the figure title for a ray plot using a default title. """
+        if title is None:
+            ax.set_title(self.generate_az_rhi_title(field, azimuth))
+        else:
+            ax.set_title(title)
+
     def _label_axes_ppi(self, axis_labels, ax):
         """ Set the x and y axis labels for a PPI plot. """
         x_label, y_label = axis_labels
@@ -979,11 +1100,30 @@ class RadarDisplay(object):
         """
         return common.generate_ray_title(self._radar, field, ray)
 
+    def generate_az_rhi_title(self, field, azimuth):
+        """
+        Generate a title for a ray plot.
+
+        Parameters
+        ----------
+        field : str
+            Field plotted.
+        azimuth : float
+            Azimuth plotted.
+
+        Returns
+        -------
+        title : str
+            Plot title.
+
+        """
+        return common.generate_az_rhi_title(self._radar, field, azimuth)
+
     ###############
     # Get methods #
     ###############
 
-    def _get_data(self, field, sweep, mask_tuple, filter_transitions, 
+    def _get_data(self, field, sweep, mask_tuple, filter_transitions,
                   gatefilter):
         """ Retrieve and return data from a plot function. """
         start = self.starts[sweep]
@@ -995,7 +1135,7 @@ class RadarDisplay(object):
             mask_field, mask_value = mask_tuple
             mdata = self.fields[mask_field]['data'][start:end]
             data = np.ma.masked_where(mdata < mask_value, data)
-            
+
         # mask data if gatefilter provided
         if gatefilter is not None:
             mask_filter = gatefilter.gate_excluded[start:end]
@@ -1040,6 +1180,46 @@ class RadarDisplay(object):
             data = data[in_trans == 0]
 
         return data
+
+    def _get_azimuth_rhi_data_x_y_z(self, field, target_azimuth,
+                                    edges, mask_tuple,
+                                    filter_transitions, gatefilter):
+        """Retrieve and return pseudo-RHI data from a plot function. """
+        # determine which rays from the ppi radar make up the pseudo RHI
+        data = self.fields[field]['data']
+
+        if mask_tuple is not None:
+            mask_field, mask_value = mask_tuple
+            mdata = self.fields[mask_field]['data']
+            data = np.ma.masked_where(mdata < mask_value, data)
+
+        # mask data if gatefilter provided
+        if gatefilter is not None:
+            mask_filter = gatefilter.gate_excluded
+            data = np.ma.masked_array(data, mask_filter)
+
+        # filter out antenna transitions
+        if filter_transitions and self.antenna_transition is not None:
+            in_trans = self.antenna_transition
+            data = data[in_trans == 0]
+
+        prhi_rays = []
+        for sweep_slice in self._radar.iter_slice():
+            sweep_azimuths = self.azimuths[sweep_slice]
+            ray_number = np.argmin(np.abs(sweep_azimuths - target_azimuth))
+            prhi_rays.append(ray_number + sweep_slice.start)
+
+        azimuth = self.azimuths[prhi_rays]
+        elevation = self.elevations[prhi_rays]
+
+        data = data[prhi_rays]
+
+        x, y, z = common.sweep_coords_to_cart(
+            self.ranges, azimuth, elevation, edges=edges)
+        x = (x + self.shift[0]) / 1000.0
+        y = (y + self.shift[1]) / 1000.0
+        z = z / 1000.0
+        return data, x, y, z
 
     def _get_x_z(self, field, sweep, edges, filter_transitions):
         """ Retrieve and return x and y coordinate in km. """

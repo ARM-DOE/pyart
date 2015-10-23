@@ -69,6 +69,17 @@ def test_radardisplay_vpt(outfile=None):
         fig.savefig(outfile)
     plt.close()
 
+def test_radardisplay_azimuth_to_rhi(outfile=None):
+    radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
+    display = pyart.graph.RadarDisplay(radar)
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    display.plot_azimuth_to_rhi('reflectivity_horizontal', 45.,
+                                colorbar_flag=True, ax=ax,
+                                mask_tuple=('reflectivity_horizontal', -100))
+    if outfile:
+        fig.savefig(outfile)
+    plt.close()
 
 # Tests of methods, these tests do not generate figures
 
