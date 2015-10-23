@@ -14,12 +14,17 @@ Routines for reading ODIM_H5 files.
 import datetime
 
 import numpy as np
-import h5py
+try:
+    import h5py
+    _HDF5_AVAILABLE = True
+except ImportError:
+    _HDF5_AVAILABLE = False
 
 from ..config import FileMetadata, get_fillvalue
 from ..io.common import make_time_unit_str, radar_coords_to_cart
 from ..io.common import _test_arguments
 from ..core.radar import Radar
+from ..pkg_util.requires_decorator import requires
 
 
 ODIM_H5_FIELD_NAMES = {
@@ -40,6 +45,7 @@ ODIM_H5_FIELD_NAMES = {
 }
 
 
+@requires('h5py', _HDF5_AVAILABLE)
 def read_odim_h5(filename, field_names=None, additional_metadata=None,
                  file_field_names=False, exclude_fields=None, **kwargs):
     """
