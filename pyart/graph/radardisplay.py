@@ -321,7 +321,7 @@ class RadarDisplay(object):
             coordinates themselved as the gate edges, resulting in a plot
             in which the last gate in each ray and the entire last ray are not
             plotted.
-        gatefilter : GateFilter 
+        gatefilter : GateFilter
             GateFilter instance. None will result in no gatefilter mask being
             applied to data.
         filter_transitions : bool
@@ -427,7 +427,7 @@ class RadarDisplay(object):
             coordinates themselved as the gate edges, resulting in a plot
             in which the last gate in each ray and the entire last ray are not
             not plotted.
-        gatefilter : GateFilter 
+        gatefilter : GateFilter
             GateFilter instance. None will result in no gatefilter mask being
             applied to data.
         filter_transitions : bool
@@ -588,13 +588,13 @@ class RadarDisplay(object):
                                orient=colorbar_orient,
                                field=field, ax=ax, fig=fig)
 
-    def plot_azimuth_to_rhi(self, field, target_azimuth, 
+    def plot_azimuth_to_rhi(self, field, target_azimuth,
                             mask_tuple=None, vmin=None, vmax=None,
-                            cmap='jet', mask_outside=False, 
+                            cmap='jet', mask_outside=False,
                             title=None, title_flag=True,
                             axislabels=(None, None), axislabels_flag=True,
-                            reverse_xaxis=None, colorbar_flag=True, 
-                            colorbar_label=None, colorbar_orient='vertical', 
+                            reverse_xaxis=None, colorbar_flag=True,
+                            colorbar_label=None, colorbar_orient='vertical',
                             edges=True, gatefilter=None,
                             filter_transitions=True, ax=None, fig=None):
         """
@@ -651,7 +651,7 @@ class RadarDisplay(object):
             coordinates themselved as the gate edges, resulting in a plot
             in which the last gate in each ray and the entire last ray are not
             not plotted.
-        gatefilter : GateFilter 
+        gatefilter : GateFilter
             GateFilter instance. None will result in no gatefilter mask being
             applied to data.
         filter_transitions : bool
@@ -670,7 +670,8 @@ class RadarDisplay(object):
         vmin, vmax = common.parse_vmin_vmax(self._radar, field, vmin, vmax)
 
         data, x, y, z = self._get_azimuth_rhi_data_x_y_z(
-              field, target_azimuth, edges, mask_tuple)
+              field, target_azimuth, edges, mask_tuple,
+              filter_transitions, gatefilter)
 
         # mask the data where outside the limits
         if mask_outside:
@@ -1122,7 +1123,7 @@ class RadarDisplay(object):
     # Get methods #
     ###############
 
-    def _get_data(self, field, sweep, mask_tuple, filter_transitions, 
+    def _get_data(self, field, sweep, mask_tuple, filter_transitions,
                   gatefilter):
         """ Retrieve and return data from a plot function. """
         start = self.starts[sweep]
@@ -1134,7 +1135,7 @@ class RadarDisplay(object):
             mask_field, mask_value = mask_tuple
             mdata = self.fields[mask_field]['data'][start:end]
             data = np.ma.masked_where(mdata < mask_value, data)
-            
+
         # mask data if gatefilter provided
         if gatefilter is not None:
             mask_filter = gatefilter.gate_excluded[start:end]
@@ -1181,15 +1182,26 @@ class RadarDisplay(object):
         return data
 
     def _get_azimuth_rhi_data_x_y_z(self, field, target_azimuth,
-                               edges,mask_tuple):
+                                    edges, mask_tuple,
+                                    filter_transitions, gatefilter):
         """Retrieve and return pseudo-RHI data from a plot function. """
         # determine which rays from the ppi radar make up the pseudo RHI
         data = self.fields[field]['data']
 
         if mask_tuple is not None:
             mask_field, mask_value = mask_tuple
-            mdata = self.fields[mask_field]['data'][ray]
+            mdata = self.fields[mask_field]['data']
             data = np.ma.masked_where(mdata < mask_value, data)
+
+        # mask data if gatefilter provided
+        if gatefilter is not None:
+            mask_filter = gatefilter.gate_excluded
+            data = np.ma.masked_array(data, mask_filter)
+
+        # filter out antenna transitions
+        if filter_transitions and self.antenna_transition is not None:
+            in_trans = self.antenna_transition
+            data = data[in_trans == 0]
 
         prhi_rays = []
         for sweep_slice in self._radar.iter_slice():
