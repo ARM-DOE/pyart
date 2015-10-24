@@ -83,7 +83,7 @@ class Grid(object):
         """
 
         # grid fields should have dimensions of (nz, ny, nx)
-        nz, ny, nx = self.fields[self.fields.keys[0]]['data'].shape
+        nz, ny, nx = self.fields[self.fields.keys()[0]]['data'].shape
 
         # checks to make sure input field dictionary is valid
         if 'data' not in field_dict:
