@@ -499,6 +499,8 @@ def _pack_structure(dic, structure):
     """ Pack a structure from a dictionary """
     fmt = '>' + ''.join([i[1] for i in structure])  # UF is big-endian
     values = [dic[i[0]] for i in structure]
+    # cast to string as Python 2.7 pack does not except unicode before 2.7.7
+    fmt = str(fmt)
     return struct.pack(fmt, *values)
 
 
