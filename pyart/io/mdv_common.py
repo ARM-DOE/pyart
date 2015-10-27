@@ -126,7 +126,7 @@ class MdvFile(object):
     # formats for use in the struct lib
     # mapper are used to convert tuples to dics, the formats is as follows:
     # (var_name, initial_position_in_tuple, final_position_in_tuple)
-    master_header_fmt = '>28i 8i i 5i 6f 3f 12f 512s 128s 128s i'
+    master_header_fmt = b'>28i 8i i 5i 6f 3f 12f 512s 128s 128s i'
     master_header_mapper = [
         ("record_len1", 0, 1),
         ("struct_id", 1, 2),
@@ -719,6 +719,8 @@ class MdvFile(object):
                     l[item[1]] = l[item[1]].encode('ascii')
             else:
                 l[item[1]:item[2]] = d[item[0]]
+        # cast to string as Python < 2.7.7 pack does not except unicode
+        fmt = str(fmt)
         return struct.pack(fmt, *l)
 
     def _get_master_header(self):
@@ -950,6 +952,8 @@ class MdvFile(object):
         """ Write an array of elevation. """
         # the file pointer must be set at the correct location prior to call
         fmt = '>%df' % (len(l))
+        # cast to string as Python < 2.7.7 pack does not except unicode
+        fmt = str(fmt)
         string = struct.pack(fmt, *l)
         self.fileptr.write(string)
 
@@ -1019,6 +1023,8 @@ class MdvFile(object):
         # the file pointer must be set at the correct location prior to call
         fmt = '%iI %iI' % (nlevels, nlevels)
         l = d['vlevel_offsets'] + d['vlevel_nbytes']
+        # cast to string as Python < 2.7.7 pack does not except unicode
+        fmt = str(fmt)
         string = struct.pack(fmt, *l)
         self.fileptr.write(string)
 
