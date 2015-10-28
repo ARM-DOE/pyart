@@ -14,9 +14,15 @@ steiner_conv_strat
 import numpy as np
 
 from ..config import get_fillvalue, get_field_name
-from . import _echo_steiner
+from ..pkg_util.decorators import requires
+try:
+    from . import _echo_steiner
+    _F90_EXTENSIONS_AVAILABLE = True
+except ImportError:
+    _F90_EXTENSIONS_AVAILABLE = False
 
 
+@requires('Fortran 90 extensions', _F90_EXTENSIONS_AVAILABLE)
 def steiner_conv_strat(grid, dx=None, dy=None, intense=42.0,
                        work_level=3000.0, peak_relation='default',
                        area_relation='medium', bkg_rad=11000.0,
@@ -109,7 +115,7 @@ def steiner_conv_strat(grid, dx=None, dy=None, intense=42.0,
             'valid_min': 0,
             'valid_max': 2,
             'comment_1': ('Convective-stratiform echo '
-                         'classification based on '
-                         'Steiner et al. (1995)'),
+                          'classification based on '
+                          'Steiner et al. (1995)'),
             'comment_2': ('0 = Undefined, 1 = Stratiform, '
                           '2 = Convective')}
