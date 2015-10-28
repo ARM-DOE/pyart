@@ -1,9 +1,8 @@
 """
-pyart.pkg_util.requires_decorator
-=================================
+pyart.pkg_util.decorators
+=========================
 
-Decorator for indicating a function or method requires that an optional
-dependecy by installed.
+Various decorators.
 
 .. autosummary::
     :toctree: generated/
@@ -12,13 +11,11 @@ dependecy by installed.
 
 """
 
-
-class MissingOptionalDepedency(Exception):
-    """ Exception raised when a optional depency is needed by not found. """
-    pass
+from .exceptions import MissingOptionalDepedency
 
 
-_MESSAGE = "The use of '%s' requires that the package %s be installed."
+_REQUIRES_MESSAGE = (
+    "The use of '%s' requires that the package %s be installed.")
 
 
 def requires(requirement_name, requirement_check):
@@ -49,7 +46,7 @@ def requires(requirement_name, requirement_check):
             """ Actual wrapper around the function/method. """
             if not requirement_check:
                 raise MissingOptionalDepedency(
-                    _MESSAGE % (func.__name__, requirement_name))
+                    _REQUIRES_MESSAGE % (func.__name__, requirement_name))
             return func(*args, **kwargs)
         return wrapper
     return wrap_with_requirement

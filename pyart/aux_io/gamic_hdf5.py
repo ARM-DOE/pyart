@@ -32,7 +32,7 @@ try:
     _HDF5_AVAILABLE = True
 except ImportError:
     _HDF5_AVAILABLE = False
-from ..pkg_util.requires_decorator import requires
+from ..pkg_util.decorators import requires
 
 
 LIGHT_SPEED = 2.99792458e8  # speed of light in meters per second

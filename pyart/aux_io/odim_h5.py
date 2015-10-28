@@ -24,7 +24,7 @@ from ..config import FileMetadata, get_fillvalue
 from ..io.common import make_time_unit_str, radar_coords_to_cart
 from ..io.common import _test_arguments
 from ..core.radar import Radar
-from ..pkg_util.requires_decorator import requires
+from ..pkg_util.decorators import requires
 
 
 ODIM_H5_FIELD_NAMES = {

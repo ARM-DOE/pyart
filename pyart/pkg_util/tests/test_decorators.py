@@ -1,9 +1,9 @@
-""" Unit tests for the requires_decorator module. """
+""" Unit tests for the decorators module. """
 
 from numpy.testing import assert_raises
 
-from pyart.pkg_util.requires_decorator import requires
-from pyart.pkg_util.requires_decorator import MissingOptionalDepedency
+from pyart.pkg_util.decorators import requires
+from pyart.pkg_util.exceptions import MissingOptionalDepedency
 
 
 HAS_PACKAGE1 = True     # package 1 is installed
