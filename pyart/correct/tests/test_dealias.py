@@ -14,7 +14,7 @@ from numpy.testing.decorators import skipif
 from numpy.testing import assert_raises
 
 
-@skipif(not pyart.io._RSL_AVAILABLE)
+@skipif(not pyart.correct.dealias._FOURDD_AVAILABLE)
 def test_find_time_in_interp_sounde():
     target = datetime.datetime(2011, 5, 10, 11, 30, 8)
     interp_sounde = netCDF4.Dataset(pyart.testing.INTERP_SOUNDE_FILE)
@@ -34,7 +34,7 @@ def test_find_time_in_interp_sounde():
     assert_almost_equal(direction[100], 231.8, 2) == 231.8
 
 
-@skipif(not pyart.io._RSL_AVAILABLE)
+@skipif(not pyart.correct.dealias._FOURDD_AVAILABLE)
 def test_dealias_sounding():
     radar, dealias_vel = perform_dealias()
     assert_allclose(
@@ -46,7 +46,7 @@ def test_dealias_sounding():
     assert dealias_vel['data'][13, 47] is np.ma.masked
 
 
-@skipif(not pyart.io._RSL_AVAILABLE)
+@skipif(not pyart.correct.dealias._FOURDD_AVAILABLE)
 def test_dealias_sounding_keep_original():
     radar, dealias_vel = perform_dealias(True)
     assert_allclose(
@@ -72,7 +72,7 @@ def perform_dealias(keep_original=False):
     return radar, dealias_vel
 
 
-@skipif(not pyart.io._RSL_AVAILABLE)
+@skipif(not pyart.correct.dealias._FOURDD_AVAILABLE)
 def test_dealias_last_radar_and_sounding():
     radar = pyart.testing.make_velocity_aliased_radar()
     last_radar = pyart.testing.make_velocity_aliased_radar(False)
@@ -91,7 +91,7 @@ def test_dealias_last_radar_and_sounding():
     return
 
 
-@skipif(not pyart.io._RSL_AVAILABLE)
+@skipif(not pyart.correct.dealias._FOURDD_AVAILABLE)
 def test_dealias_last_radar_and_sounding():
     radar = pyart.testing.make_velocity_aliased_radar()
     last_radar = pyart.testing.make_velocity_aliased_radar(False)
@@ -105,7 +105,7 @@ def test_dealias_last_radar_and_sounding():
     return
 
 
-@skipif(not pyart.io._RSL_AVAILABLE)
+@skipif(not pyart.correct.dealias._FOURDD_AVAILABLE)
 def test_error_raising():
 
     # ValueError when no sounding or last_radar provided

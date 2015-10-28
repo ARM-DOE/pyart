@@ -13,7 +13,7 @@ from numpy.testing.decorators import skipif
 RESOLUTION = 'c'    # crude resolution to speed up tests
 
 
-@skipif('GridMapDisplay' not in dir(pyart.graph))
+@skipif(not pyart.graph.gridmapdisplay._BASEMAP_AVAILABLE)
 def test_gridmapdisplay_simple(outfile=None):
     # test basic GridMapDisplay functionality
     grid = pyart.testing.make_target_grid()
@@ -26,7 +26,7 @@ def test_gridmapdisplay_simple(outfile=None):
         fig.savefig(outfile)
 
 
-@skipif('GridMapDisplay' not in dir(pyart.graph))
+@skipif(not pyart.graph.gridmapdisplay._BASEMAP_AVAILABLE)
 def test_gridmapdisplay_fancy(outfile=None):
     # test a bunch of GridMapDisplay functionality
     grid = pyart.testing.make_target_grid()
@@ -57,7 +57,7 @@ def test_gridmapdisplay_fancy(outfile=None):
         fig.savefig(outfile)
 
 
-@skipif('GridMapDisplay' not in dir(pyart.graph))
+@skipif(not pyart.graph.gridmapdisplay._BASEMAP_AVAILABLE)
 def test_error_raising():
     grid = pyart.testing.make_target_grid()
     display = pyart.graph.GridMapDisplay(grid)

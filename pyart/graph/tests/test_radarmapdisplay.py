@@ -13,7 +13,7 @@ from numpy.testing.decorators import skipif
 
 
 # Top level Figure generating tests
-@skipif('RadarMapDisplay' not in dir(pyart.graph))
+@skipif(not pyart.graph.radarmapdisplay._BASEMAP_AVAILABLE)
 def test_radarmapdisplay_ppi(outfile=None):
     radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
     display = pyart.graph.RadarMapDisplay(radar, shift=(0.1, 0.0))
@@ -32,7 +32,7 @@ def test_radarmapdisplay_ppi(outfile=None):
 
 
 # Tests of methods, these tests do not generate figures
-@skipif('RadarMapDisplay' not in dir(pyart.graph))
+@skipif(not pyart.graph.radarmapdisplay._BASEMAP_AVAILABLE)
 def test_radarmapdisplay_auto_range():
     # test the auto_range=True function
     radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
@@ -47,7 +47,7 @@ def test_radarmapdisplay_auto_range():
     plt.close()
 
 
-@skipif('RadarMapDisplay' not in dir(pyart.graph))
+@skipif(not pyart.graph.radarmapdisplay._BASEMAP_AVAILABLE)
 def test_error_raising():
     radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
     display = pyart.graph.RadarMapDisplay(radar, shift=(0.1, 0.0))

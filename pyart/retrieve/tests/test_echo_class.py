@@ -6,7 +6,7 @@ from numpy.testing.decorators import skipif
 import pyart
 
 
-@skipif(not pyart.retrieve._F90_EXTENSIONS_AVAILABLE)
+@skipif(not pyart.retrieve.echo_class._F90_EXTENSIONS_AVAILABLE)
 def test_steiner_conv_strat():
     grid = pyart.testing.make_storm_grid()
     eclass = pyart.retrieve.steiner_conv_strat(grid)
