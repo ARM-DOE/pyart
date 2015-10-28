@@ -13,12 +13,18 @@ Class for creating plots on a geographic map using a Radar object.
 """
 
 import numpy as np
-from mpl_toolkits.basemap import Basemap
+try:
+    from mpl_toolkits.basemap import Basemap
+    _BASEMAP_AVAILABLE = True
+except ImportError:
+    _BASEMAP_AVAILABLE = False
 
 from .radardisplay import RadarDisplay
 from .common import parse_ax_fig, parse_vmin_vmax
+from ..pkg_util.decorators import requires
 
 
+@requires('basemap', _BASEMAP_AVAILABLE)
 class RadarMapDisplay(RadarDisplay):
     """
     A display object for creating plots on a geographic map from data in a
@@ -181,7 +187,7 @@ class RadarMapDisplay(RadarDisplay):
         resolution : 'c', 'l', 'i', 'h', or 'f'.
             Resolution of boundary database to use. See Basemap documentation
             for details.
-        gatefilter : GateFilter 
+        gatefilter : GateFilter
             GateFilter instance. None will result in no gatefilter mask being
             applied to data.
         filter_transitions : bool

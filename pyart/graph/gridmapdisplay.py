@@ -16,12 +16,18 @@ from __future__ import print_function
 
 import numpy as np
 import matplotlib.pyplot as plt
-from mpl_toolkits.basemap import Basemap
-from mpl_toolkits.basemap import pyproj
+try:
+    from mpl_toolkits.basemap import Basemap
+    from mpl_toolkits.basemap import pyproj
+    _BASEMAP_AVAILABLE = True
+except ImportError:
+    _BASEMAP_AVAILABLE = False
 
 from . import common
+from ..pkg_util.decorators import requires
 
 
+@requires('basemap', _BASEMAP_AVAILABLE)
 class GridMapDisplay():
     """
     A class for creating plots from a grid object on top of a Basemap.

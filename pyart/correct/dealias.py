@@ -12,18 +12,22 @@ Front end to the University of Washington 4DD code for Doppler dealiasing.
     _create_rsl_volume
 
 """
-# Nothing from this module is imported to pyart.correct if RSL is not
-# installed.
 
 import numpy as np
 
 from ..config import get_field_name, get_fillvalue, get_metadata
-from ..io import _rsl_interface
-from . import _fourdd_interface
+try:
+    from ..io import _rsl_interface
+    from . import _fourdd_interface
+    _FOURDD_AVAILABLE = True
+except ImportError:
+    _FOURDD_AVAILABLE = False
 from ._common_dealias import _parse_gatefilter
 from ..util import datetime_utils
+from ..pkg_util.decorators import requires
 
 
+@requires('TRMM RSL', _FOURDD_AVAILABLE)
 def dealias_fourdd(radar, last_radar=None, sounding_heights=None,
                    sounding_wind_speeds=None, sounding_wind_direction=None,
                    gatefilter=False, filt=1, rsl_badval=131072.0,

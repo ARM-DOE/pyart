@@ -67,11 +67,7 @@ Special use
 
 """
 
-try:
-    from .rsl import read_rsl
-    _RSL_AVAILABLE = True
-except ImportError:
-    _RSL_AVAILABLE = False
+from .rsl import read_rsl
 from .mdv_radar import read_mdv
 from .sigmet import read_sigmet
 from .chl import read_chl

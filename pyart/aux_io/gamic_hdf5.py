@@ -27,12 +27,18 @@ import numpy as np
 from ..config import FileMetadata, get_fillvalue
 from ..io.common import make_time_unit_str, _test_arguments
 from ..core.radar import Radar
-from .gamicfile import GAMICFile
+try:
+    from .gamicfile import GAMICFile
+    _HDF5_AVAILABLE = True
+except ImportError:
+    _HDF5_AVAILABLE = False
+from ..pkg_util.decorators import requires
 
 
 LIGHT_SPEED = 2.99792458e8  # speed of light in meters per second
 
 
+@requires('h5py', _HDF5_AVAILABLE)
 def read_gamic(filename, field_names=None, additional_metadata=None,
                file_field_names=False, exclude_fields=None,
                valid_range_from_file=True, units_from_file=True, **kwargs):

@@ -7,7 +7,7 @@ from numpy.testing.decorators import skipif
 import pyart
 
 
-@skipif(not pyart.bridge._WRADLIB_AVAILABLE)
+@skipif(not pyart.bridge.wradlib_bridge._WRADLIB_AVAILABLE)
 def test_texture_of_complex_phase():
     test_radar = pyart.testing.make_empty_ppi_radar(100, 360, 5)
     foo_field = {'data': np.zeros([360*5, 100])}

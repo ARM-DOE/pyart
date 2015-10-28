@@ -11,13 +11,18 @@ Py-ART methods linking to wradlib functions, http://wradlib.bitbucket.org/
 
 """
 
-
-import wradlib
+try:
+    import wradlib
+    _WRADLIB_AVAILABLE = True
+except ImportError:
+    _WRADLIB_AVAILABLE = False
 import numpy as np
 
 from ..config import get_metadata, get_field_name
+from ..pkg_util.decorators import requires
 
 
+@requires('wradlib', _WRADLIB_AVAILABLE)
 def texture_of_complex_phase(radar, phidp_field=None,
                              phidp_texture_field=None):
     """

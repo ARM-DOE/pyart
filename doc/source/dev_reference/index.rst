@@ -27,6 +27,7 @@ Documentation is broken down by directory and module.
     filters
     map
     util
+    pkg_util
     bridge
     testing
     _debug_info
