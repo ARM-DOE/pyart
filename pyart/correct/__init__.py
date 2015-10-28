@@ -36,10 +36,7 @@ Helper functions
 
 """
 
-try:
-    from .dealias import dealias_fourdd, find_time_in_interp_sonde
-except ImportError:
-    pass
+from .dealias import dealias_fourdd, find_time_in_interp_sonde
 from .attenuation import calculate_attenuation
 from .phase_proc import phase_proc_lp
 # for backwards compatibility GateFilter available in the correct namespace

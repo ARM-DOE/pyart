@@ -17,9 +17,7 @@ import gzip
 
 import netCDF4
 
-from . import _RSL_AVAILABLE
-if _RSL_AVAILABLE:
-    from .rsl import read_rsl
+from .rsl import read_rsl
 from .mdv_radar import read_mdv
 from .cfradial import read_cfradial
 from .sigmet import read_sigmet

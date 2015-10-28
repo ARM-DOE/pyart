@@ -19,19 +19,24 @@ Python wrapper around the RSL library.
 
 """
 
-# Nothing from this module is imported into pyart.io if RSL is not installed.
 import sys
 import numpy as np
 import warnings
 import datetime
 
 from ..config import FileMetadata, get_fillvalue
-from . import _rsl_interface
+try:
+    from . import _rsl_interface
+    _RSL_AVAILABLE = True
+except ImportError:
+    _RSL_AVAILABLE = False
 from ..core.radar import Radar
 from .common import dms_to_d, make_time_unit_str
 from .lazydict import LazyLoadDict
+from ..pkg_util.decorators import requires
 
 
+@requires('TRMM RSL', _RSL_AVAILABLE)
 def read_rsl(filename, field_names=None, additional_metadata=None,
              file_field_names=False, exclude_fields=None,
              delay_field_loading=False,
