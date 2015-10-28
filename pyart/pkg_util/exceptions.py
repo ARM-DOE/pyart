@@ -7,7 +7,7 @@ Various exceptions.
 .. autosummary::
     :toctree: generated/
 
-    requires
+    MissingOptionalDepedency
 
 """
 
