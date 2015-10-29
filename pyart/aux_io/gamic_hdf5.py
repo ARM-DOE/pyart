@@ -32,13 +32,12 @@ try:
     _HDF5_AVAILABLE = True
 except ImportError:
     _HDF5_AVAILABLE = False
-from ..pkg_util.decorators import requires
+from ..exceptions import MissingOptionalDependency
 
 
 LIGHT_SPEED = 2.99792458e8  # speed of light in meters per second
 
 
-@requires('h5py', _HDF5_AVAILABLE)
 def read_gamic(filename, field_names=None, additional_metadata=None,
                file_field_names=False, exclude_fields=None,
                valid_range_from_file=True, units_from_file=True, **kwargs):
@@ -78,6 +77,11 @@ def read_gamic(filename, field_names=None, additional_metadata=None,
         Radar object.
 
     """
+    # check that h5py is available
+    if not _H5PY_AVAILABLE:
+        raise MissingOptionalDependency(
+            "h5py is required to use read_gamic but is not installed")
+
     # test for non empty kwargs
     _test_arguments(kwargs)
 

@@ -19,10 +19,9 @@ except ImportError:
 import numpy as np
 
 from ..config import get_metadata, get_field_name
-from ..pkg_util.decorators import requires
+from ..exceptions import MissingOptionalDependency
 
 
-@requires('wradlib', _WRADLIB_AVAILABLE)
 def texture_of_complex_phase(radar, phidp_field=None,
                              phidp_texture_field=None):
     """
@@ -56,6 +55,12 @@ def texture_of_complex_phase(radar, phidp_field=None,
     Journal of Atmospheric and Oceanic Technology 24 (8), 1439-1451
 
     """
+    # check that wradlib is available
+    if not _WRADLIB_AVAILABLE:
+        raise MissingOptionalDependency(
+            "wradlib is required to use texture_of_complex_phase but is " +
+            "not installed")
+
     # parse field names
     if phidp_field is None:
         phidp_field = get_field_name('differential_phase')
