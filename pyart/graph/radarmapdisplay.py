@@ -22,9 +22,9 @@ except ImportError:
 from .radardisplay import RadarDisplay
 from .common import parse_ax_fig, parse_vmin_vmax
 from ..pkg_util.decorators import requires
+from ..exceptions import MissingOptionalDependency
 
 
-@requires('basemap', _BASEMAP_AVAILABLE)
 class RadarMapDisplay(RadarDisplay):
     """
     A display object for creating plots on a geographic map from data in a
@@ -87,6 +87,11 @@ class RadarMapDisplay(RadarDisplay):
 
     def __init__(self, radar, shift=(0.0, 0.0)):
         """ Initialize the object. """
+        # check that basemap is available
+        if not _BASEMAP_AVAILABLE:
+            raise MissingOptionalDependency(
+                "Basemap is required to use RadarMapDisplay but is not " +
+                "installed")
 
         # initalize the base class
         RadarDisplay.__init__(self, radar, shift=shift)

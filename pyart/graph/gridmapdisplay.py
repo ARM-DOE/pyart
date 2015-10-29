@@ -24,10 +24,9 @@ except ImportError:
     _BASEMAP_AVAILABLE = False
 
 from . import common
-from ..pkg_util.decorators import requires
+from ..exceptions import MissingOptionalDependency
 
 
-@requires('basemap', _BASEMAP_AVAILABLE)
 class GridMapDisplay():
     """
     A class for creating plots from a grid object on top of a Basemap.
@@ -64,6 +63,12 @@ class GridMapDisplay():
 
     def __init__(self, grid, debug=False):
         """ initalize the object. """
+        # check that basemap is available
+        if not _BASEMAP_AVAILABLE:
+            raise MissingOptionalDependency(
+                "Basemap is required to use GridMapDisplay but is not " +
+                "installed")
+
         self.grid = grid
         self.debug = debug
 

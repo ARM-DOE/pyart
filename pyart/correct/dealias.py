@@ -24,10 +24,9 @@ except ImportError:
     _FOURDD_AVAILABLE = False
 from ._common_dealias import _parse_gatefilter
 from ..util import datetime_utils
-from ..pkg_util.decorators import requires
+from ..exceptions import MissingOptionalDependency
 
 
-@requires('TRMM RSL', _FOURDD_AVAILABLE)
 def dealias_fourdd(radar, last_radar=None, sounding_heights=None,
                    sounding_wind_speeds=None, sounding_wind_direction=None,
                    gatefilter=False, filt=1, rsl_badval=131072.0,
@@ -182,6 +181,12 @@ def dealias_fourdd(radar, last_radar=None, sounding_heights=None,
 
     """
     # TODO test with RHI radar scan
+
+    # check that FourDD is available (requires TRMM RSL)
+    if not _FOURDD_AVAILABLE:
+        raise MissingOptionalDependency(
+            "Py-ART must be build with support for TRMM RSL to use" +
+            "the dealias_fourdd function.")
 
     # verify that sounding data or last_volume is provided
     sounding_available = ((sounding_heights is not None) and
