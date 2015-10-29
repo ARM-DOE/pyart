@@ -22,6 +22,7 @@ Documentation is broken down by directory and module.
     aux_io
     config
     correct
+    exceptions
     retrieve
     graph
     filters

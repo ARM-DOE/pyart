@@ -11,7 +11,7 @@ Various decorators.
 
 """
 
-from .exceptions import MissingOptionalDepedency
+from ..exceptions import MissingOptionalDependency
 
 
 _REQUIRES_MESSAGE = (
@@ -25,7 +25,7 @@ def requires(requirement_name, requirement_check):
     Use this function as a decorator to a function or method which requires
     that a optional depency be installed.  The function can then be imported
     into the package namespace.  When called the decorated function or method
-    will raise a MissingOptionalDepedency error with a helpful message to
+    will raise a MissingOptionalDependency error with a helpful message to
     providing information about what package must be installed to use the
     particular function or method in question
 
@@ -45,7 +45,7 @@ def requires(requirement_name, requirement_check):
         def wrapper(*args, **kwargs):
             """ Actual wrapper around the function/method. """
             if not requirement_check:
-                raise MissingOptionalDepedency(
+                raise MissingOptionalDependency(
                     _REQUIRES_MESSAGE % (func.__name__, requirement_name))
             return func(*args, **kwargs)
         return wrapper

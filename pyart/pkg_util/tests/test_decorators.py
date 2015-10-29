@@ -3,7 +3,7 @@
 from numpy.testing import assert_raises
 
 from pyart.pkg_util.decorators import requires
-from pyart.pkg_util.exceptions import MissingOptionalDepedency
+from pyart.exceptions import MissingOptionalDependency
 
 
 HAS_PACKAGE1 = True     # package 1 is installed
@@ -49,5 +49,5 @@ def test_requires_unmet():
     example = ExampleClass()
     assert hasattr(example.method2, '__call__')
 
-    assert_raises(MissingOptionalDepedency, function_that_requires_package2)
-    assert_raises(MissingOptionalDepedency, example.method2)
+    assert_raises(MissingOptionalDependency, function_that_requires_package2)
+    assert_raises(MissingOptionalDependency, example.method2)
