@@ -21,7 +21,6 @@ except ImportError:
 
 from .radardisplay import RadarDisplay
 from .common import parse_ax_fig, parse_vmin_vmax
-from ..pkg_util.decorators import requires
 from ..exceptions import MissingOptionalDependency
 
 
