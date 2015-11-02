@@ -28,9 +28,9 @@ def test_time():
     assert 'units' in radar.time.keys()
     assert 'calendar' in radar.time.keys()
     assert 'data' in radar.time.keys()
-    assert radar.time['units'] == 'seconds since 2011-05-20T10:54:16Z'
+    assert radar.time['units'] == 'seconds since 2011-05-20T10:54:08Z'
     assert radar.time['data'].shape == (40, )
-    assert_almost_equal(radar.time['data'][38], 14, 0)
+    assert_almost_equal(radar.time['data'][38], 7, 0)
 
 
 # range attribute
@@ -138,7 +138,7 @@ def test_sweep_start_ray_index():
 def test_sweep_end_ray_index():
     assert 'long_name' in radar.sweep_end_ray_index
     assert radar.sweep_end_ray_index['data'].shape == (1, )
-    assert_almost_equal(radar.sweep_end_ray_index['data'][0], 399, 0)
+    assert_almost_equal(radar.sweep_end_ray_index['data'][0], 39, 0)
 
 
 # target_scan_rate attribute
@@ -336,8 +336,8 @@ def test_write_ppi_arm_time_vars():
         assert base_time.string == '20-May-2011,10:54:16 GMT'
 
         time_offset = dset.variables['time_offset']
-        assert time_offset.units == 'seconds since 2011-05-20 10:54:16'
-        assert_almost_equal(time_offset[10], 4, 0)
+        assert time_offset.units == 'seconds since 2011-05-20 10:54:08'
+        assert_almost_equal(time_offset[10], 11, 0)
         dset.close()
 
 
@@ -447,6 +447,13 @@ def test_auto_history_and_conventions():
         radar2 = pyart.io.read_cfradial(tmpfile)
         assert 'Conventions' in radar2.metadata
         assert 'history' in radar2.metadata
+
+
+def test_rhi_sweep_end_ray_index():
+    radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_RHI_FILE)
+    assert 'long_name' in radar.sweep_end_ray_index
+    assert radar.sweep_end_ray_index['data'].shape == (1, )
+    assert_almost_equal(radar.sweep_end_ray_index['data'][0], 39, 0)
 
 
 def test_delay_field_loading():
