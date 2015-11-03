@@ -32,7 +32,7 @@ except ImportError:
     _RSL_AVAILABLE = False
 from ..core.radar import Radar
 from .common import dms_to_d, make_time_unit_str
-from .lazydict import LazyLoadDict
+from ..lazydict import LazyLoadDict
 from ..exceptions import MissingOptionalDependency
 
 

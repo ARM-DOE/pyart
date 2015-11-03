@@ -23,7 +23,7 @@ import numpy as np
 from ..config import FileMetadata, get_fillvalue
 from ..core.grid import Grid
 from .common import make_time_unit_str, _test_arguments, prepare_for_read
-from .lazydict import LazyLoadDict
+from ..lazydict import LazyLoadDict
 from . import mdv_common
 
 

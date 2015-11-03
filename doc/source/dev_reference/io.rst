@@ -9,7 +9,6 @@ Input/Output routines.
 .. automodule:: pyart.io.chl
 .. automodule:: pyart.io.common
 .. automodule:: pyart.io.grid_io
-.. automodule:: pyart.io.lazydict
 .. automodule:: pyart.io.mdv_common
 .. automodule:: pyart.io.mdv_radar
 .. automodule:: pyart.io.mdv_grid
