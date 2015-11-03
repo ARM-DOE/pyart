@@ -10,6 +10,7 @@ A general central radial scanning (or dwelling) instrument class.
     join_radar
     is_vpt
     to_vpt
+    _rays_per_sweep_data_factory
 
 .. autosummary::
     :toctree: generated/
@@ -27,6 +28,7 @@ import sys
 import numpy as np
 
 from ..config import get_metadata
+from ..lazydict import LazyLoadDict
 
 
 class Radar(object):
@@ -81,11 +83,12 @@ class Radar(object):
     sweep_end_ray_index : dict
         Index of the last ray in each sweep relative to the start of the
         volume, 0-based.
-    rays_per_sweep : dict
-        Number of rays in each sweep.  This is a read only attribute,
-        attempting to set the attribute will raise a AttributeError and any
-        changes to the dictionary keys will be lost when the attribute is
-        accessed again.
+    rays_per_sweep : LazyLoadDict
+        Number of rays in each sweep.  The data key of this attribute is
+        create upon first access from the data in the sweep_start_ray_index and
+        sweep_end_ray_index attributes.  If the sweep locations needs to be
+        modified, do this prior to accessing this attribute or else the data in
+        this attribute will not properly reflect the new sweep locations.
     target_scan_rate : dict or None
         Intended scan rate for each sweep.  If not provided this attribute is
         set to None, indicating this parameter is not available.
@@ -182,6 +185,12 @@ class Radar(object):
         self.fixed_angle = fixed_angle
         self.sweep_start_ray_index = sweep_start_ray_index
         self.sweep_end_ray_index = sweep_end_ray_index
+
+        # rays_per_sweep LazyLoadDict
+        lazydic = LazyLoadDict(get_metadata('rays_per_sweep'))
+        lazydic.set_lazy('data', _rays_per_sweep_data_factory(self))
+        self.rays_per_sweep = lazydic
+
         self.target_scan_rate = target_scan_rate  # optional
         self.rays_are_indexed = rays_are_indexed    # optional
         self.ray_angle_res = ray_angle_res  # optional
@@ -204,13 +213,6 @@ class Radar(object):
         self.ngates = len(_range['data'])
         self.nrays = len(time['data'])
         self.nsweeps = len(sweep_number['data'])
-
-    @property
-    def rays_per_sweep(self):
-        dic = get_metadata('rays_per_sweep')
-        dic['data'] = (self.sweep_end_ray_index['data'] -
-                       self.sweep_start_ray_index['data'] + 1)
-        return dic
 
     # private functions for checking limits, etc.
     def _check_sweep_in_range(self, sweep):
@@ -735,6 +737,15 @@ class Radar(object):
                      antenna_transition=antenna_transition,
                      instrument_parameters=instrument_parameters,
                      radar_calibration=radar_calibration)
+
+
+def _rays_per_sweep_data_factory(radar):
+    """ Return a function which returns the number of rays per sweep. """
+    def _rays_per_sweep_data():
+        """ The function which returns the number of rays per sweep. """
+        return (radar.sweep_end_ray_index['data'] -
+                radar.sweep_start_ray_index['data'] + 1)
+    return _rays_per_sweep_data
 
 
 def is_vpt(radar, offset=0.5):

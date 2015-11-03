@@ -11,12 +11,13 @@ import inspect
 import numpy as np
 from numpy.testing import assert_raises
 import pyart
+from pyart.lazydict import LazyLoadDict
 
 
 def test_rays_per_sweep_attribute():
     radar = pyart.testing.make_target_radar()
     rays_per_sweep = radar.rays_per_sweep
-    assert isinstance(rays_per_sweep, dict)
+    assert isinstance(rays_per_sweep, LazyLoadDict)
     assert rays_per_sweep['data'].shape == (1, )
     assert rays_per_sweep['data'][0] == 360
 
