@@ -15,8 +15,6 @@ from numpy.testing import assert_raises
 # Top level Figure generating tests
 def test_radardisplay_rhi(outfile=None):
     radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_RHI_FILE)
-    del radar.fields['reflectivity_horizontal']['valid_min']
-    del radar.fields['reflectivity_horizontal']['valid_max']
     display = pyart.graph.RadarDisplay(radar)
     fig = plt.figure()
     ax = fig.add_subplot(111)
@@ -162,7 +160,7 @@ def test_radardisplay_misc():
 
     display.fields['reflectivity_horizontal'].pop('standard_name')
     fn = pyart.graph.common.generate_field_name(radar, 'reflectivity_horizontal')
-    assert fn == 'Equivalent reflectivity factor'
+    assert fn == 'Reflectivity'
 
     display.fields['reflectivity_horizontal'].pop('long_name')
     fn = pyart.graph.common.generate_field_name(radar, 'reflectivity_horizontal')
@@ -182,7 +180,7 @@ def test_radardisplay_get_colorbar_label():
     # next is to look at the long_name
     del display.fields['reflectivity_horizontal']['standard_name']
     assert (display._get_colorbar_label('reflectivity_horizontal') ==
-            'equivalent reflectivity factor (dBZ)')
+            'Reflectivity (dBZ)')
 
     # use the field if standard_name and long_name missing
     del display.fields['reflectivity_horizontal']['long_name']

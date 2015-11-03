@@ -16,15 +16,15 @@ import datetime
 import numpy as np
 try:
     import h5py
-    _HDF5_AVAILABLE = True
+    _H5PY_AVAILABLE = True
 except ImportError:
-    _HDF5_AVAILABLE = False
+    _H5PY_AVAILABLE = False
 
 from ..config import FileMetadata, get_fillvalue
 from ..io.common import make_time_unit_str, radar_coords_to_cart
 from ..io.common import _test_arguments
 from ..core.radar import Radar
-from ..pkg_util.decorators import requires
+from ..exceptions import MissingOptionalDependency
 
 
 ODIM_H5_FIELD_NAMES = {
@@ -45,7 +45,6 @@ ODIM_H5_FIELD_NAMES = {
 }
 
 
-@requires('h5py', _HDF5_AVAILABLE)
 def read_odim_h5(filename, field_names=None, additional_metadata=None,
                  file_field_names=False, exclude_fields=None, **kwargs):
     """
@@ -90,6 +89,11 @@ def read_odim_h5(filename, field_names=None, additional_metadata=None,
     # * instrument parameters
     # * add additional checks for HOW attributes
     # * support for other objects (SCAN, XSEC)
+
+    # check that h5py is available
+    if not _H5PY_AVAILABLE:
+        raise MissingOptionalDependency(
+            "h5py is required to use read_odim_h5 but is not installed")
 
     # test for non empty kwargs
     _test_arguments(kwargs)

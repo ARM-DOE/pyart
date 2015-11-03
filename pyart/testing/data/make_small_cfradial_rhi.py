@@ -10,11 +10,11 @@ import pyart
 radar = pyart.io.read_rsl('XSW110520113537.RAW7HHL')
 
 time_slice = slice(None, 713, 18)
-range_slice = slice(None, None, 12)
+range_slice = slice(None, None, 15)
 sweep_slice = slice(None, 1)
 
 # remove all but the reflectivity_horizontal fields
-rf_field = radar.fields['reflectivity_horizontal']
+rf_field = radar.fields['reflectivity']
 rf_data = rf_field['data']
 rf_field['data'] = rf_data[time_slice, range_slice]
 radar.fields = {'reflectivity_horizontal': rf_field}
@@ -46,6 +46,7 @@ radar.sweep_start_ray_index['data'] = \
     radar.sweep_start_ray_index['data'][sweep_slice]
 radar.sweep_end_ray_index['data'] = \
     radar.sweep_end_ray_index['data'][sweep_slice]
+radar.sweep_end_ray_index['data'][0] = 39
 radar.sweep_mode['data'] = radar.sweep_mode['data'][sweep_slice]
 
 radar.sweep_number['data'] = radar.sweep_number['data'][sweep_slice]

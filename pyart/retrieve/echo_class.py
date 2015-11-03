@@ -14,7 +14,7 @@ steiner_conv_strat
 import numpy as np
 
 from ..config import get_fillvalue, get_field_name
-from ..pkg_util.decorators import requires
+from ..exceptions import MissingOptionalDependency
 try:
     from . import _echo_steiner
     _F90_EXTENSIONS_AVAILABLE = True
@@ -22,7 +22,6 @@ except ImportError:
     _F90_EXTENSIONS_AVAILABLE = False
 
 
-@requires('Fortran 90 extensions', _F90_EXTENSIONS_AVAILABLE)
 def steiner_conv_strat(grid, dx=None, dy=None, intense=42.0,
                        work_level=3000.0, peak_relation='default',
                        area_relation='medium', bkg_rad=11000.0,
@@ -78,6 +77,11 @@ def steiner_conv_strat(grid, dx=None, dy=None, intense=42.0,
     Characterization of Three-Dimensional Storm Structure from Operational
     Radar and Rain Gauge Data. J. Appl. Meteor., 34, 1978-2007.
     """
+    # check that Fortran extensions is available
+    if not _F90_EXTENSIONS_AVAILABLE:
+        raise MissingOptionalDependency(
+            "Py-ART must be build on a system with a Fortran compiler to use" +
+            "the steiner_conv_strat function.")
 
     # Get fill value
     if fill_value is None:

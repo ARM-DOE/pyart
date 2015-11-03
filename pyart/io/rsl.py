@@ -33,10 +33,9 @@ except ImportError:
 from ..core.radar import Radar
 from .common import dms_to_d, make_time_unit_str
 from .lazydict import LazyLoadDict
-from ..pkg_util.decorators import requires
+from ..exceptions import MissingOptionalDependency
 
 
-@requires('TRMM RSL', _RSL_AVAILABLE)
 def read_rsl(filename, field_names=None, additional_metadata=None,
              file_field_names=False, exclude_fields=None,
              delay_field_loading=False,
@@ -90,6 +89,12 @@ def read_rsl(filename, field_names=None, additional_metadata=None,
         Radar object.
 
     """
+    # check that TRMM RSL is available
+    if not _RSL_AVAILABLE:
+        raise MissingOptionalDependency(
+            "Py-ART must be build with support for TRMM RSL to use the " +
+            "read_rsl function.")
+
     # create metadata retrieval object
     filemetadata = FileMetadata('rsl', field_names, additional_metadata,
                                 file_field_names, exclude_fields)
