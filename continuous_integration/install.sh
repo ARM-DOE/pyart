@@ -58,7 +58,7 @@ if [[ "$COVERALLS" == "true" ]]; then
 fi
 
 # install Py-ART
-export RSL_PATH=~/miniconda/envs/testenv
+export RSL_PATH=~/miniconda2/envs/testenv
 
 if [[ "$FROM_RECIPE" == "true" ]]; then
     source deactivate
