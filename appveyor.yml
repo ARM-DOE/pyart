@@ -11,17 +11,14 @@ environment:
       PYTHON_ARCH: "32"
 
 # Test only two environments to speed up CI time
-#    - PYTHON: "C:\\Python34_32"
 #      PYTHON_VERSION: "3.4"
 #      PYTHON_ARCH: "32"
 
-#    - PYTHON: "C:\\Python27_64"
 #      PYTHON_VERSION: "2.7"
 #      PYTHON_ARCH: "64"
 
-#    - PYTHON: "C:\\Python35_64"
-#      PYTHON_VERSION: "3.5"
-#      PYTHON_ARCH: "64"
+    - PYTHON_VERSION: "3.4"
+      PYTHON_ARCH: "64"
 
 install:
   # Use the pre-installed Miniconda for the desired arch
