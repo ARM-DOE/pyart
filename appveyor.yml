@@ -31,10 +31,10 @@ install:
 
   # DEBUGGING
   #- "SET PATH"
-  - "python --version"
-  - "python -c \"import struct; print(struct.calcsize('P') * 8)\""
-  - "conda info"
-  - "conda list"
+  #- "python --version"
+  #- "python -c \"import struct; print(struct.calcsize('P') * 8)\""
+  #- "conda info"
+  #- "conda list"
 
   # Create and activate a conda environment with the desired Python version
   - "conda update --yes --quiet conda"
