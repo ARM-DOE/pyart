@@ -29,9 +29,9 @@ from ..io.common import make_time_unit_str, _test_arguments
 from ..core.radar import Radar
 try:
     from .gamicfile import GAMICFile
-    _HDF5_AVAILABLE = True
+    _H5PY_AVAILABLE = True
 except ImportError:
-    _HDF5_AVAILABLE = False
+    _H5PY_AVAILABLE = False
 from ..exceptions import MissingOptionalDependency
 
 
