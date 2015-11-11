@@ -1213,6 +1213,19 @@ DEFAULT_FIELD_COLORMAP = {
     vertical_wind_component: 'pyart_NWSVel',
     height: 'pyart_SCook18',
     interpolated_profile: 'pyart_SCook18',
+    # Additional reflectivity like fields
+    'CZ': 'pyart_NWSRef',
+    'DZ': 'pyart_NWSRef',
+    'AZ': 'pyart_NWSRef',
+    'Z': 'pyart_NWSRef',
+    'dbz': 'pyart_NWSRef',
+    'DBZ': 'pyart_NWSRef',
+    'dBZ': 'pyart_NWSRef',
+    'DBZH': 'pyart_NWSRef',
+    'DBZ_S': 'pyart_NWSRef',
+    'DBZ_K': 'pyart_NWSRef',
+    'reflectivity_horizontal': 'pyart_NWSRef',
+    'corr_reflectivity': 'pyart_NWSRef',
 }
 
 # map each field to a limit or a limit function
@@ -1248,4 +1261,17 @@ DEFAULT_FIELD_LIMITS = {
     vertical_wind_component: velocity_limit,
     height: (0, 20000),
     interpolated_profile: (0, 10000),
+    # Additional reflectivity like fields
+    'CZ': (-10., 65.),
+    'DZ': (-10., 65.),
+    'AZ': (-10., 65.),
+    'Z': (-10., 65.),
+    'dbz': (-10., 65.),
+    'DBZ': (-10., 65.),
+    'dBZ': (-10., 65.),
+    'DBZH': (-10., 65.),
+    'DBZ_S': (-10., 65.),
+    'DBZ_K': (-10., 65.),
+    'reflectivity_horizontal': (-10., 65.),
+    'corr_reflectivity': (-10., 65.),
 }
