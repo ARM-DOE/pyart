@@ -13,6 +13,8 @@ Functions for computing statistics on circular (directional) distributions.
     angular_std_deg
     interval_mean
     interval_std
+    mean_of_two_angles
+    mean_of_two_angles_deg
 
 """
 
@@ -22,6 +24,51 @@ import numpy as np
 # For details on these computation see:
 # https://en.wikipedia.org/wiki/Directional_statistics
 # https://en.wikipedia.org/wiki/Mean_of_circular_quantities
+
+
+def mean_of_two_angles(angles1, angles2):
+    """
+    Compute the element by element mean of two sets of angles.
+
+    Parameters
+    ----------
+    angles1 : array
+        First set of angles in radians.
+    angles2 : array
+        Second set of angles in radians.
+
+    Returns
+    -------
+    mean : array
+        Elements by element angular mean of the two sets of angles in radians.
+
+    """
+    angles1 = np.asanyarray(angles1)
+    angles2 = np.asanyarray(angles2)
+    x = (np.cos(angles1) + np.cos(angles2)) / 2.
+    y = (np.sin(angles1) + np.sin(angles2)) / 2.
+    return np.arctan2(y, x)
+
+
+def mean_of_two_angles_deg(angle1, angle2):
+    """
+    Compute the element by element mean of two sets of angles in degrees.
+
+    Parameters
+    ----------
+    angle1 : array
+        First set of angles in degrees.
+    angle2 : array
+        Second set of angles in degrees.
+
+    Returns
+    -------
+    mean : array
+        Elements by element angular mean of the two sets of angles in degrees.
+
+    """
+    return np.rad2deg(
+        mean_of_two_angles(np.deg2rad(angle1), np.deg2rad(angle2)))
 
 
 def angular_mean(angles):
