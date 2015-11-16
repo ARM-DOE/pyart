@@ -29,6 +29,7 @@ from ..core.radar import Radar
 from .common import make_time_unit_str, _test_arguments, prepare_for_read
 from ._sigmetfile import SigmetFile, bin4_to_angle, bin2_to_angle
 from . import _sigmet_noaa_hh
+from ..util import mean_of_two_angles_deg
 
 SPEED_OF_LIGHT = 299793000.0
 
@@ -356,20 +357,16 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
     fixed_angle['data'] = bin2_to_angle(np.array(fa)).astype('float32')
 
     # azimuth
+    azimuth = filemetadata('azimuth')
     az0 = sigmet_metadata[first_data_type]['azimuth_0']
     az1 = sigmet_metadata[first_data_type]['azimuth_1']
-    el0 = sigmet_metadata[first_data_type]['elevation_0']
-    el1 = sigmet_metadata[first_data_type]['elevation_1']
-
-    azimuth = filemetadata('azimuth')
-    az = (az0 + az1) / 2.
-    az[np.where(np.abs(az0 - az1) > 180.0)] += 180.
-    az[az > 360.0] -= 360.
-    azimuth['data'] = az.astype('float32')
+    azimuth['data'] = mean_of_two_angles_deg(az0, az1).astype('float32')
 
     # elevation
     elevation = filemetadata('elevation')
-    elevation['data'] = ((el0 + el1) / 2.).astype('float32')
+    el0 = sigmet_metadata[first_data_type]['elevation_0']
+    el1 = sigmet_metadata[first_data_type]['elevation_1']
+    elevation['data'] = mean_of_two_angles_deg(el0, el1).astype('float32')
 
     # instrument_parameters
     prt = filemetadata('prt')
