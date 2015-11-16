@@ -360,7 +360,9 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
     azimuth = filemetadata('azimuth')
     az0 = sigmet_metadata[first_data_type]['azimuth_0']
     az1 = sigmet_metadata[first_data_type]['azimuth_1']
-    azimuth['data'] = mean_of_two_angles_deg(az0, az1).astype('float32')
+    az_data = mean_of_two_angles_deg(az0, az1).astype('float32')
+    az_data[az_data < 0] += 360.0
+    azimuth['data'] = az_data
 
     # elevation
     elevation = filemetadata('elevation')
