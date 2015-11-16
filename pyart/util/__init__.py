@@ -22,7 +22,8 @@ Direction statistics
     angular_std_deg
     interval_mean
     interval_std
-    estimate_noise_hs74
+    mean_of_two_angles
+    mean_of_two_angles_deg
 
 Miscellaneous functions
 =======================
@@ -31,12 +32,14 @@ Miscellaneous functions
     :toctree: generated/
 
     cross_section_ppi
+    estimate_noise_hs74
 
 """
 
 from .circular_stats import angular_mean, angular_std
 from .circular_stats import angular_mean_deg, angular_std_deg
 from .circular_stats import interval_mean, interval_std
+from .circular_stats import mean_of_two_angles, mean_of_two_angles_deg
 from .xsect import cross_section_ppi
 from .hildebrand_sekhon import estimate_noise_hs74
 
