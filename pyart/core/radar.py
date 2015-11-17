@@ -29,7 +29,7 @@ import numpy as np
 
 from ..config import get_metadata
 from ..lazydict import LazyLoadDict
-from .transforms import sweep_to_cartesian
+from .transforms import antenna_vectors_to_cartesian
 
 
 class Radar(object):
@@ -782,7 +782,7 @@ def _gate_data_factory(radar, coordinate):
         ranges = radar.range['data']
         azimuths = radar.azimuth['data']
         elevations = radar.elevation['data']
-        cartesian_coords = sweep_to_cartesian(
+        cartesian_coords = antenna_vectors_to_cartesian(
             ranges, azimuths, elevations, edges=False)
         # load x, y, and z data except for the coordinate in question
         if coordinate != 0:

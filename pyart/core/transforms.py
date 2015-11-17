@@ -10,7 +10,7 @@ Cartesian (x, y, z), cartographic (latitude, longitude, altitude) and antenna
     :toctree: generated/
 
     antenna_to_cartesian
-    sweep_to_cartesian
+    antenna_vectors_to_cartesian
     antenna_to_cartesian_track_relative
     antenna_to_cartesian_earth_relative
     antenna_to_cartesian_aircraft_relative
@@ -87,23 +87,23 @@ def antenna_to_cartesian(ranges, azimuths, elevations, debug=False):
     return x, y, z
 
 
-def sweep_to_cartesian(ranges, azimuths, elevations, edges=False):
+def antenna_vectors_to_cartesian(ranges, azimuths, elevations, edges=False):
     """
-    Calculate Cartesian coordinate for the gates in a single radar sweep.
+    Calculate Cartesian coordinate for gates from antenna coordinate vectors.
 
     Calculates the Cartesian coordinates for the gate centers or edges for
-    all gates in a single sweep assuming a standard atmosphere (4/3 Earth's
-    radius model). See :py:func:`pyart.util.antenna_to_cartesian` for
-    details.
+    all gates from antenna coordinate vectors assuming a standard atmosphere
+    (4/3 Earth's radius model). See :py:func:`pyart.util.antenna_to_cartesian`
+    for details.
 
     Parameters
     ----------
     ranges : array, 1D.
         Distances to the center of the radar gates (bins) in meters.
     azimuths : array, 1D.
-        Azimuth angles of the sweep in degrees.
+        Azimuth angles of the rays in degrees.
     elevations : array, 1D.
-        Elevation angles of the sweep in degrees.
+        Elevation angles of the rays in degrees.
     edges : bool, optional
         True to calculate the coordinates of the gate edges by interpolating
         between gates and extrapolating at the boundaries.  False to

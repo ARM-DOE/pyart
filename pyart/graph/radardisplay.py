@@ -19,7 +19,8 @@ import numpy as np
 import netCDF4
 
 from . import common
-from ..core.transforms import antenna_to_cartesian, sweep_to_cartesian
+from ..core.transforms import antenna_to_cartesian
+from ..core.transforms import antenna_vectors_to_cartesian
 from ..core.transforms import corner_to_point
 
 
@@ -1215,7 +1216,7 @@ class RadarDisplay(object):
 
         data = data[prhi_rays]
 
-        x, y, z = sweep_to_cartesian(
+        x, y, z = antenna_vectors_to_cartesian(
             self.ranges, azimuth, elevation, edges=edges)
         x = (x + self.shift[0]) / 1000.0
         y = (y + self.shift[1]) / 1000.0
@@ -1246,7 +1247,7 @@ class RadarDisplay(object):
             azimuths = azimuths[in_trans == 0]
             elevations = elevations[in_trans == 0]
 
-        x, y, z = sweep_to_cartesian(
+        x, y, z = antenna_vectors_to_cartesian(
             self.ranges, azimuths, elevations, edges=edges)
         x = (x + self.shift[0]) / 1000.0
         y = (y + self.shift[1]) / 1000.0
