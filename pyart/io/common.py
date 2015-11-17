@@ -8,7 +8,6 @@ Input/output routines common to many file formats.
     :toctree: generated/
 
     prepare_for_read
-    dms_to_d
     stringarray_to_chararray
     _test_arguments
     make_time_unit_str
@@ -57,11 +56,6 @@ def prepare_for_read(filename):
         return bz2.BZ2File(filename, 'rb')
 
     return open(filename, 'rb')
-
-
-def dms_to_d(dms):
-    """ Degrees, minutes, seconds to degrees """
-    return dms[0] + (dms[1] + dms[2] / 60.0) / 60.0
 
 
 def stringarray_to_chararray(arr, numchars=None):

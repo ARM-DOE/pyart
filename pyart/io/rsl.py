@@ -31,7 +31,7 @@ try:
 except ImportError:
     _RSL_AVAILABLE = False
 from ..core.radar import Radar
-from .common import dms_to_d, make_time_unit_str
+from .common import make_time_unit_str
 from ..lazydict import LazyLoadDict
 from ..exceptions import MissingOptionalDependency
 
@@ -194,12 +194,12 @@ def read_rsl(filename, field_names=None, additional_metadata=None,
 
     # latitude
     latitude = filemetadata('latitude')
-    lat = dms_to_d((rsl_dict['latd'], rsl_dict['latm'], rsl_dict['lats']))
+    lat = _dms_to_d((rsl_dict['latd'], rsl_dict['latm'], rsl_dict['lats']))
     latitude['data'] = np.array([lat], dtype='float64')
 
     # longitude
     longitude = filemetadata('longitude')
-    lon = dms_to_d((rsl_dict['lond'], rsl_dict['lonm'], rsl_dict['lons']))
+    lon = _dms_to_d((rsl_dict['lond'], rsl_dict['lonm'], rsl_dict['lons']))
     longitude['data'] = np.array([lon], dtype='float64')
 
     # altitude
@@ -255,6 +255,11 @@ def read_rsl(filename, field_names=None, additional_metadata=None,
         sweep_end_ray_index,
         azimuth, elevation,
         instrument_parameters=instrument_parameters)
+
+
+def _dms_to_d(dms):
+    """ Degrees, minutes, seconds to degrees """
+    return dms[0] + (dms[1] + dms[2] / 60.0) / 60.0
 
 
 class _RslVolumeDataExtractor(object):

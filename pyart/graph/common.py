@@ -7,7 +7,6 @@ Common graphing routines.
 .. autosummary::
     :toctree: generated/
 
-    dms_to_d
     parse_ax
     parse_ax_fig
     parse_vmin_vmax
@@ -32,8 +31,6 @@ Common graphing routines.
 
 import matplotlib.pyplot as plt
 from netCDF4 import num2date
-
-from ..io.common import dms_to_d
 
 
 ########################
