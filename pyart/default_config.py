@@ -313,6 +313,18 @@ DEFAULT_METADATA = {
         'long_name': 'Cartesian z location of gate with origin at the radar',
         'units': 'meters'},
 
+    'gate_edge_x': {
+        'long_name': 'Cartesian x location of the edges of each gate',
+        'units': 'meters'},
+
+    'gate_edge_y': {
+        'long_name': 'Cartesian y location of the edges of each gate',
+        'units': 'meters'},
+
+    'gate_edge_z': {
+        'long_name': 'Cartesian z location of the edges of each gate',
+        'units': 'meters'},
+
     # Metadata for instrument_parameter dictionary
     'prt_mode': {
         'comments': ('Pulsing mode Options are: "fixed", "staggered", '
