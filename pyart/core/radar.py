@@ -29,6 +29,7 @@ import numpy as np
 
 from ..config import get_metadata
 from ..lazydict import LazyLoadDict
+from .transforms import sweep_to_cartesian
 
 
 class Radar(object):
@@ -104,6 +105,12 @@ class Radar(object):
         Azimuth of antenna, relative to true North.
     elevation : dict
         Elevation of antenna, relative to the horizontal plane.
+    gate_x, gate_y, gate_z : LazyLoadDict
+        Location of each gate in a Cartesian coordinate system assuming a
+        standard atmosphere with a 4/3 Earth's radius model. The data keys of
+        these attributes are create upon first access from the data in the
+        range, azimuth and elevation attributes. If these attributes are
+        changed use :py:func:`init_gate_x_y_z` to reset the attributes.
     scan_rate : dict or None
         Actual antenna scan rate.  If not provided this attribute is set to
         None, indicating this parameter is not available.
@@ -209,7 +216,9 @@ class Radar(object):
         self.nrays = len(time['data'])
         self.nsweeps = len(sweep_number['data'])
 
+        # initalize attributes with lazy load dictionaries
         self.init_rays_per_sweep()
+        self.init_gate_x_y_z()
 
     # Attribute init/reset method
     def init_rays_per_sweep(self):
@@ -217,6 +226,20 @@ class Radar(object):
         lazydic = LazyLoadDict(get_metadata('rays_per_sweep'))
         lazydic.set_lazy('data', _rays_per_sweep_data_factory(self))
         self.rays_per_sweep = lazydic
+
+    def init_gate_x_y_z(self):
+        """ Initalize or reset the gate_{x, y, z} attributes. """
+        gate_x = LazyLoadDict(get_metadata('gate_x'))
+        gate_x.set_lazy('data', _gate_data_factory(self, 0))
+        self.gate_x = gate_x
+
+        gate_y = LazyLoadDict(get_metadata('gate_y'))
+        gate_y.set_lazy('data', _gate_data_factory(self, 1))
+        self.gate_y = gate_y
+
+        gate_z = LazyLoadDict(get_metadata('gate_z'))
+        gate_z.set_lazy('data', _gate_data_factory(self, 2))
+        self.gate_z = gate_z
 
     # private functions for checking limits, etc.
     def _check_sweep_in_range(self, sweep):
@@ -750,6 +773,26 @@ def _rays_per_sweep_data_factory(radar):
         return (radar.sweep_end_ray_index['data'] -
                 radar.sweep_start_ray_index['data'] + 1)
     return _rays_per_sweep_data
+
+
+def _gate_data_factory(radar, coordinate):
+    """ Return a function which returns the Cartesian locations of gates. """
+    def _gate_data_factory():
+        """ The function which returns the Cartesian locations of gates. """
+        ranges = radar.range['data']
+        azimuths = radar.azimuth['data']
+        elevations = radar.elevation['data']
+        cartesian_coords = sweep_to_cartesian(
+            ranges, azimuths, elevations, edges=False)
+        # load x, y, and z data except for the coordinate in question
+        if coordinate != 0:
+            radar.gate_x['data'] = cartesian_coords[0]
+        if coordinate != 1:
+            radar.gate_y['data'] = cartesian_coords[1]
+        if coordinate != 2:
+            radar.gate_z['data'] = cartesian_coords[2]
+        return cartesian_coords[coordinate]
+    return _gate_data_factory
 
 
 def is_vpt(radar, offset=0.5):
