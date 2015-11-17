@@ -20,6 +20,7 @@ Cartesian (x, y, z), cartographic (latitude, longitude, altitude) and antenna
     _interpolate_azimuth_edges
     _interpolate_elevation_edges
     _interpolate_range_edges
+    _ax_radius
 
 
 """
@@ -29,17 +30,17 @@ import numpy as np
 PI = np.pi
 
 
-def antenna_to_cartesian(rng, az, ele, debug=False):
+def antenna_to_cartesian(ranges, azimuths, elevations, debug=False):
     """
     Return cartesian coordinates from antenna coordinates.
 
     Parameters
     ----------
-    rng : array
+    ranges : array
         Distances to the center of the radar gates (bins) in kilometers.
-    az : array
+    azimuths : array
         Azimuth angle of the radar in degrees.
-    ele : array
+    elevations : array
         Elevation angle of the radar in degrees.
 
     Returns
@@ -74,10 +75,10 @@ def antenna_to_cartesian(rng, az, ele, debug=False):
         Edition, 1993, p. 21.
 
     """
-    theta_e = ele * np.pi / 180.0       # elevation angle in radians.
-    theta_a = az * np.pi / 180.0        # azimuth angle in radians.
+    theta_e = elevations * np.pi / 180.0    # elevation angle in radians.
+    theta_a = azimuths * np.pi / 180.0      # azimuth angle in radians.
     R = 6371.0 * 1000.0 * 4.0 / 3.0     # effective radius of earth in meters.
-    r = rng * 1000.0                    # distances to gates in meters.
+    r = ranges * 1000.0                 # distances to gates in meters.
 
     z = (r ** 2 + R ** 2 + 2.0 * r * R * np.sin(theta_e)) ** 0.5 - R
     s = R * np.arcsin(r * np.cos(theta_e) / (R + z))  # arc length in m.
@@ -153,10 +154,13 @@ def _interpolate_azimuth_edges(azimuths):
     edges = np.empty((azimuths.shape[0]+1, ), dtype=azimuths.dtype)
     # perform interpolation and extrapolation in complex plane to
     # account for periodic nature of azimuth angle.
-    az = np.exp(1.j*np.deg2rad(azimuths))
-    edges[1:-1] = np.angle((az[1:] + az[:-1]) / 2., deg=True)
-    edges[0] = np.angle(az[0] - (az[1] - az[0]) / 2., deg=True)
-    edges[-1] = np.angle(az[-1] - (az[-2] - az[-1]) / 2., deg=True)
+    azimuths = np.exp(1.j*np.deg2rad(azimuths))
+    edges[1:-1] = np.angle(
+        (azimuths[1:] + azimuths[:-1]) / 2., deg=True)
+    edges[0] = np.angle(
+        azimuths[0] - (azimuths[1] - azimuths[0]) / 2., deg=True)
+    edges[-1] = np.angle(
+        azimuths[-1] - (azimuths[-2] - azimuths[-1]) / 2., deg=True)
     edges[edges < 0] += 360     # range from [-180, 180] to [0, 360]
     return edges
 
@@ -170,13 +174,13 @@ def _interpolate_axes_edges(axes):
     return edges
 
 
-def antenna_to_cartesian_track_relative(rng, rot, roll, drift, tilt, pitch):
+def antenna_to_cartesian_track_relative(ranges, rot, roll, drift, tilt, pitch):
     """
     Calculate track-relative Cartesian coordinates from radar coordinates.
 
     Parameters
     ----------
-    rng : array
+    ranges : array
         Distances to the center of the radar gates (bins) in kilometers.
     rot : array
         Rotation angle of the radar in degrees.
@@ -209,7 +213,7 @@ def antenna_to_cartesian_track_relative(rng, rot, roll, drift, tilt, pitch):
     drift = np.radians(drift)           # drift angle in radians.
     tilt = np.radians(tilt)             # tilt angle in radians.
     pitch = np.radians(pitch)           # pitch angle in radians.
-    r = rng * 1000.0                    # distances to gates in meters.
+    r = ranges * 1000.0                 # distances to gates in meters.
 
     x = r * (np.cos(rot + roll) * np.sin(drift) * np.cos(tilt) *
              np.sin(pitch) + np.cos(drift) * np.sin(rot + roll) *
@@ -222,13 +226,14 @@ def antenna_to_cartesian_track_relative(rng, rot, roll, drift, tilt, pitch):
     return x, y, z
 
 
-def antenna_to_cartesian_earth_relative(rng, rot, roll, heading, tilt, pitch):
+def antenna_to_cartesian_earth_relative(
+        ranges, rot, roll, heading, tilt, pitch):
     """
     Calculate earth-relative Cartesian coordinates from radar coordinates
 
     Parameters
     ----------
-    rng : array
+    ranges : array
         Distances to the center of the radar gates (bins) in kilometers.
     rot : array
         Rotation angle of the radar in degrees.
@@ -261,7 +266,7 @@ def antenna_to_cartesian_earth_relative(rng, rot, roll, heading, tilt, pitch):
     heading = np.radians(heading)       # drift angle in radians.
     tilt = np.radians(tilt)             # tilt angle in radians.
     pitch = np.radians(pitch)           # pitch angle in radians.
-    r = rng * 1000.0                    # distances to gates in meters.
+    r = ranges * 1000.0                 # distances to gates in meters.
 
     x = r * (-1. * np.cos(rot + roll) * np.sin(heading) * np.cos(tilt) *
              np.sin(pitch) + np.cos(heading) * np.sin(rot + roll) *
@@ -274,13 +279,13 @@ def antenna_to_cartesian_earth_relative(rng, rot, roll, heading, tilt, pitch):
     return x, y, z
 
 
-def antenna_to_cartesian_aircraft_relative(rng, rot, tilt):
+def antenna_to_cartesian_aircraft_relative(ranges, rot, tilt):
     """
     Calculate aircraft-relative Cartesian coordinates from radar coordinates.
 
     Parameters
     ----------
-    rng : array
+    ranges : array
         Distances to the center of the radar gates (bins) in kilometers.
     rot : array
         Rotation angle of the radar in degrees.
@@ -304,7 +309,7 @@ def antenna_to_cartesian_aircraft_relative(rng, rot, tilt):
     """
     rot = np.radians(rot)               # rotation angle in radians.
     tilt = np.radians(tilt)             # tilt angle in radians.
-    r = rng * 1000.0                    # distances to gates in meters.
+    r = ranges * 1000.0                 # distances to gates in meters.
     x = r * np.cos(tilt) * np.sin(rot)
     y = r * np.sin(tilt)
     z = r * np.cos(rot) * np.cos(tilt)
