@@ -80,6 +80,8 @@ from .uf_write import write_uf
 from .grid_io import read_grid, write_grid
 from .auto_read import read
 from .mdv_grid import write_grid_mdv, read_grid_mdv
-from .common import add_2d_latlon_axis, prepare_for_read
+from .common import prepare_for_read
+# This function will be depreciated shortly
+from ..util.transforms import add_2d_latlon_axis
 
 __all__ = [s for s in dir() if not s.startswith('_')]
