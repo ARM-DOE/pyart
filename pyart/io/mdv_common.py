@@ -25,7 +25,7 @@ import datetime
 
 import numpy as np
 
-from ..util.transforms import antenna_to_cartesian
+from ..core.transforms import antenna_to_cartesian
 
 # mapping from MDV name space to CF-Radial name space
 MDV_METADATA_MAP = {'instrument_name': 'data_set_source',

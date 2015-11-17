@@ -82,6 +82,6 @@ from .auto_read import read
 from .mdv_grid import write_grid_mdv, read_grid_mdv
 from .common import prepare_for_read
 # This function will be depreciated shortly
-from ..util.transforms import add_2d_latlon_axis
+from ..core.transforms import add_2d_latlon_axis
 
 __all__ = [s for s in dir() if not s.startswith('_')]

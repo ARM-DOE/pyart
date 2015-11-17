@@ -15,7 +15,7 @@ import netCDF4
 from scipy import interpolate
 
 from ..config import get_fillvalue, get_metadata, get_field_name
-from ..util.transforms import antenna_to_cartesian
+from ..core.transforms import antenna_to_cartesian
 
 
 def map_profile_to_gates(profile, heights, radar, toa=None,

@@ -19,8 +19,8 @@ import numpy as np
 import netCDF4
 
 from . import common
-from ..util.transforms import antenna_to_cartesian, sweep_to_cartesian
-from ..util.transforms import corner_to_point
+from ..core.transforms import antenna_to_cartesian, sweep_to_cartesian
+from ..core.transforms import corner_to_point
 
 
 class RadarDisplay(object):

@@ -14,7 +14,7 @@ Simple moment calculations.
 import numpy as np
 
 from ..config import get_metadata, get_field_name
-from ..util.transforms import antenna_to_cartesian
+from ..core.transforms import antenna_to_cartesian
 
 
 def calculate_snr_from_reflectivity(

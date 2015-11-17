@@ -25,7 +25,7 @@ except ImportError:
 
 from . import common
 from ..exceptions import MissingOptionalDependency
-from ..util.transforms import _interpolate_axes_edges
+from ..core.transforms import _interpolate_axes_edges
 
 
 class GridMapDisplay():

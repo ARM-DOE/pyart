@@ -1,5 +1,5 @@
 """
-pyart.util.transforms
+pyart.core.transforms
 =====================
 
 Transformations between coordinate systems. Routines for converting between

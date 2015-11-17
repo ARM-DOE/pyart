@@ -1,6 +1,6 @@
-""" Unit Tests for Py-ART's util/transforms.py module. """
+""" Unit Tests for Py-ART's core/transforms.py module. """
 
-from pyart.util import transforms
+from pyart.core import transforms
 
 
 def test_corner_to_point():
