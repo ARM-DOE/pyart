@@ -21,7 +21,7 @@ Generate a Cartesian grid by mapping from radar gates onto the grid.
 import numpy as np
 from ..config import get_field_name
 from ..core.radar import Radar
-from ..graph.common import corner_to_point
+from ..util.transforms import corner_to_point
 from ..filters import GateFilter, moment_based_gate_filter
 
 from ._gate_to_grid_map import GateToGridMapper

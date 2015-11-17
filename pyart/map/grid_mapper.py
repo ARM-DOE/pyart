@@ -28,7 +28,7 @@ import numpy as np
 import scipy.spatial
 
 from ..config import get_fillvalue
-from ..graph.common import corner_to_point
+from ..util.transforms import corner_to_point
 from ..util.transforms import antenna_to_cartesian
 from ..core.grid import Grid
 from ..core.radar import Radar

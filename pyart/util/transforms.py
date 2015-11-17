@@ -15,6 +15,7 @@ Cartesian (x, y, z), cartographic (latitude, longitude, altitude) and antenna
     antenna_to_cartesian_earth_relative
     antenna_to_cartesian_aircraft_relative
     add_2d_latlon_axis
+    corner_to_point
     _interpolate_axes_edges
     _interpolate_azimuth_edges
     _interpolate_elevation_edges
@@ -24,6 +25,8 @@ Cartesian (x, y, z), cartographic (latitude, longitude, altitude) and antenna
 """
 
 import numpy as np
+
+PI = np.pi
 
 
 def antenna_to_cartesian(rng, az, ele, debug=False):
@@ -406,3 +409,57 @@ def add_2d_latlon_axis(grid, **kwargs):
 
     grid.axes["latitude"] = lat_axis
     grid.axes["longitude"] = lon_axis
+
+
+def corner_to_point(corner, point):
+    """
+    Return the x, y distances in meters from a corner to a point.
+
+    Assumes a spherical earth model.
+
+    Parameters
+    ----------
+    corner : (float, float)
+        Latitude and longitude in degrees of the corner.
+    point : (float, float)
+        Latitude and longitude in degrees of the point.
+
+    Returns
+    -------
+    x, y : floats
+        Distances from the corner to the point in meters.
+
+    """
+    Re = 6371.0 * 1000.0
+    Rc = _ax_radius(point[0], units='degrees')
+    # print Rc/Re
+    y = ((point[0] - corner[0]) / 360.0) * PI * 2.0 * Re
+    x = ((point[1] - corner[1]) / 360.0) * PI * 2.0 * Rc
+    return x, y
+
+
+def _ax_radius(lat, units='radians'):
+    """
+    Return the radius of a constant latitude circle for a given latitude.
+
+    Parameters
+    ----------
+    lat : float
+        Latitude at which to calculate constant latitude circle (parallel)
+        radius.
+    units : 'radians' or 'degrees'
+        Units of lat, either 'radians' or 'degrees'.
+
+    Returns
+    -------
+    R : float
+        Radius in meters of a constant latitude circle (parallel).
+
+    """
+    Re = 6371.0 * 1000.0
+    if units == 'degrees':
+        const = PI / 180.0
+    else:
+        const = 1.0
+    R = Re * np.sin(PI / 2.0 - abs(lat * const))
+    return R

@@ -20,6 +20,7 @@ import netCDF4
 
 from . import common
 from ..util.transforms import antenna_to_cartesian, sweep_to_cartesian
+from ..util.transforms import corner_to_point
 
 
 class RadarDisplay(object):
@@ -822,7 +823,7 @@ class RadarDisplay(object):
 
         """
         ax = common.parse_ax(ax)
-        loc_x, loc_y = common.corner_to_point(self.loc, location)
+        loc_x, loc_y = corner_to_point(self.loc, location)
         loc_x /= 1000.0
         loc_y /= 1000.0
         ax.plot([loc_x], [loc_y], symbol)
