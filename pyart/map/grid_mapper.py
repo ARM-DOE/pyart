@@ -29,7 +29,7 @@ import scipy.spatial
 
 from ..config import get_fillvalue
 from ..graph.common import corner_to_point
-from ..io.common import radar_coords_to_cart
+from ..util.transforms import antenna_to_cartesian
 from ..core.grid import Grid
 from ..core.radar import Radar
 from ..filters import GateFilter, moment_based_gate_filter
@@ -486,7 +486,7 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
         # calculate cartesian locations of gates
         rg, azg = np.meshgrid(radar.range['data'], radar.azimuth['data'])
         rg, eleg = np.meshgrid(radar.range['data'], radar.elevation['data'])
-        xg_loc, yg_loc, zg_loc = radar_coords_to_cart(rg / 1000., azg, eleg)
+        xg_loc, yg_loc, zg_loc = antenna_to_cartesian(rg / 1000., azg, eleg)
         del rg, azg, eleg
 
         # add gate locations to gate_locations array

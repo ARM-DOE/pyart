@@ -15,7 +15,7 @@ import netCDF4
 from scipy import interpolate
 
 from ..config import get_fillvalue, get_metadata, get_field_name
-from ..io.common import radar_coords_to_cart
+from ..util.transforms import antenna_to_cartesian
 
 
 def map_profile_to_gates(profile, heights, radar, toa=None,
@@ -51,7 +51,7 @@ def map_profile_to_gates(profile, heights, radar, toa=None,
     # retrieve the Z coordinates of the radar gates
     rg, azg = np.meshgrid(radar.range['data'], radar.azimuth['data'])
     rg, eleg = np.meshgrid(radar.range['data'], radar.elevation['data'])
-    _, _, z = radar_coords_to_cart(rg / 1000.0, azg, eleg)
+    _, _, z = antenna_to_cartesian(rg / 1000.0, azg, eleg)
 
     # find toa is not provided
     if toa is None:

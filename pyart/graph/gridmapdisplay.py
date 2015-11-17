@@ -25,6 +25,7 @@ except ImportError:
 
 from . import common
 from ..exceptions import MissingOptionalDependency
+from ..util.transforms import _interpolate_axes_edges
 
 
 class GridMapDisplay():
@@ -215,9 +216,9 @@ class GridMapDisplay():
 
         if edges:
             if len(x_1d) > 1:
-                x_1d = common._interpolate_axes_edges(x_1d)
+                x_1d = _interpolate_axes_edges(x_1d)
             if len(y_1d) > 1:
-                y_1d = common._interpolate_axes_edges(y_1d)
+                y_1d = _interpolate_axes_edges(y_1d)
 
         x_2d, y_2d = np.meshgrid(x_1d, y_1d)
         grid_lons, grid_lats = self.proj(x_2d, y_2d, inverse=True)
@@ -421,9 +422,9 @@ class GridMapDisplay():
         z_1d = self.grid.axes['z_disp']['data'] / 1000.
         if edges:
             if len(x_1d) > 1:
-                x_1d = common._interpolate_axes_edges(x_1d)
+                x_1d = _interpolate_axes_edges(x_1d)
             if len(z_1d) > 1:
-                z_1d = common._interpolate_axes_edges(z_1d)
+                z_1d = _interpolate_axes_edges(z_1d)
         xd, yd = np.meshgrid(x_1d, z_1d)
         pm = ax.pcolormesh(xd, yd, data, vmin=vmin, vmax=vmax, cmap=cmap)
         self.mappables.append(pm)
@@ -431,9 +432,8 @@ class GridMapDisplay():
 
         if title_flag:
             if title is None:
-                ax.set_title(
-                    common.generate_latitudinal_level_title(self.grid, field,
-                                                                   y_index))
+                ax.set_title(common.generate_latitudinal_level_title(
+                    self.grid, field, y_index))
             else:
                 ax.set_title(title)
 
@@ -590,9 +590,9 @@ class GridMapDisplay():
         z_1d = self.grid.axes['z_disp']['data'] / 1000.
         if edges:
             if len(y_1d) > 1:
-                y_1d = common._interpolate_axes_edges(y_1d)
+                y_1d = _interpolate_axes_edges(y_1d)
             if len(z_1d) > 1:
-                z_1d = common._interpolate_axes_edges(z_1d)
+                z_1d = _interpolate_axes_edges(z_1d)
         xd, yd = np.meshgrid(y_1d, z_1d)
         pm = ax.pcolormesh(xd, yd, data, vmin=vmin, vmax=vmax, cmap=cmap)
         self.mappables.append(pm)
@@ -600,9 +600,8 @@ class GridMapDisplay():
 
         if title_flag:
             if title is None:
-                ax.set_title(
-                    common.generate_longitudinal_level_title(self.grid, field,
-                                                                    x_index))
+                ax.set_title(common.generate_longitudinal_level_title(
+                    self.grid, field, x_index))
             else:
                 ax.set_title(title)
 
@@ -711,7 +710,7 @@ class GridMapDisplay():
         lon_0 = self.grid.axes['lon']['data'][0]
 
         default_args = {
-            'lat_0': lat_0, 'lon_0': lon_0, 'lat_ts':lat_0,
+            'lat_0': lat_0, 'lon_0': lon_0, 'lat_ts': lat_0,
             'projection': 'merc', 'area_thresh': area_thresh,
             'resolution': resolution, 'ax': ax}
 

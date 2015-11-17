@@ -17,7 +17,9 @@ import netCDF4
 
 from .radardisplay import RadarDisplay
 from . import common
-from .coord_transform import radar_coords_to_cart_track_relative
+from ..util.transforms import antenna_to_cartesian
+from ..util.transforms import antenna_to_cartesian_track_relative
+from ..util import transforms
 
 
 class RadarDisplay_Airborne(RadarDisplay):
@@ -104,7 +106,7 @@ class RadarDisplay_Airborne(RadarDisplay):
         if radar.metadata['platform_type'] == 'aircraft_belly':
             rg, azg = np.meshgrid(self.ranges, self.azimuths)
             rg, eleg = np.meshgrid(self.ranges, self.elevations)
-            self.x, self.y, self.z = common.radar_coords_to_cart(
+            self.x, self.y, self.z = antenna_to_cartesian(
                 rg / 1000.0, azg, eleg)
             self.x = self.x + self.shift[0]
             self.y = self.y + self.shift[1]
@@ -114,7 +116,7 @@ class RadarDisplay_Airborne(RadarDisplay):
             rg, driftg = np.meshgrid(self.ranges, self.drift)
             rg, tiltg = np.meshgrid(self.ranges, self.tilt)
             rg, pitchg = np.meshgrid(self.ranges, self.pitch)
-            self.x, self.y, self.z = radar_coords_to_cart_track_relative(
+            self.x, self.y, self.z = antenna_to_cartesian_track_relative(
                 rg / 1000.0, rotg, rollg, driftg, tiltg, pitchg)
             self.x = self.x + self.shift[0]
             self.y = self.y + self.shift[1]
@@ -304,16 +306,16 @@ class RadarDisplay_Airborne(RadarDisplay):
 
             if edges:
                 if len(ranges) != 1:
-                    ranges = common._interpolate_range_edges(ranges)
+                    ranges = transforms._interpolate_range_edges(ranges)
                 if len(elevations) != 1:
-                    elevations = common._interpolate_elevation_edges(
+                    elevations = transforms._interpolate_elevation_edges(
                         elevations)
                 if len(azimuths) != 1:
-                    azimuths = common._interpolate_azimuth_edges(azimuths)
+                    azimuths = transforms._interpolate_azimuth_edges(azimuths)
 
             rg, azg = np.meshgrid(ranges, azimuths)
             rg, eleg = np.meshgrid(ranges, elevations)
-            x, y, z = common.radar_coords_to_cart(rg / 1000., azg, eleg)
+            x, y, z = antenna_to_cartesian(rg / 1000., azg, eleg)
 
         else:
             if filter_transitions and self.antenna_transition is not None:
@@ -334,13 +336,13 @@ class RadarDisplay_Airborne(RadarDisplay):
 
             if edges:
                 if len(ranges) != 1:
-                    ranges = common._interpolate_range_edges(ranges)
+                    ranges = transforms._interpolate_range_edges(ranges)
                 if len(rotation) != 1:
-                    rotation = common._interpolate_azimuth_edges(rotation)
-                    roll = common._interpolate_azimuth_edges(roll)
-                    drift = common._interpolate_azimuth_edges(drift)
-                    tilt = common._interpolate_azimuth_edges(tilt)
-                    pitch = common._interpolate_azimuth_edges(pitch)
+                    rotation = transforms._interpolate_azimuth_edges(rotation)
+                    roll = transforms._interpolate_azimuth_edges(roll)
+                    drift = transforms._interpolate_azimuth_edges(drift)
+                    tilt = transforms._interpolate_azimuth_edges(tilt)
+                    pitch = transforms._interpolate_azimuth_edges(pitch)
 
             rg, rotg = np.meshgrid(ranges, rotation)
             rg, rollg = np.meshgrid(ranges, roll)
@@ -348,7 +350,7 @@ class RadarDisplay_Airborne(RadarDisplay):
             rg, tiltg = np.meshgrid(ranges, tilt)
             rg, pitchg = np.meshgrid(ranges, pitch)
 
-            x, y, z = radar_coords_to_cart_track_relative(
+            x, y, z = antenna_to_cartesian_track_relative(
                 rg / 1000.0, rotg, rollg, driftg, tiltg, pitchg)
 
         x = (x + self.shift[0]) / 1000.0

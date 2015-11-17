@@ -25,7 +25,7 @@ import datetime
 
 import numpy as np
 
-from .common import radar_coords_to_cart
+from ..util.transforms import antenna_to_cartesian
 
 # mapping from MDV name space to CF-Radial name space
 MDV_METADATA_MAP = {'instrument_name': 'data_set_source',
@@ -1113,7 +1113,7 @@ class MdvFile(object):
             ele = np.array(ele, dtype=np.float64)
             for aznum in range(nsweeps):
                 azg = np.ones(rg.shape, dtype=np.float64) * az_deg[aznum]
-                x, y, z = radar_coords_to_cart(rg, azg, ele)
+                x, y, z = antenna_to_cartesian(rg, azg, ele)
                 zz[aznum, :, :] = z
                 xx[aznum, :, :] = x
                 yy[aznum, :, :] = y
@@ -1124,7 +1124,7 @@ class MdvFile(object):
             azg = np.array(azg, dtype=np.float64)
             for elnum in range(nsweeps):
                 ele = np.ones(rg.shape, dtype=np.float64) * el_deg[elnum]
-                x, y, z = radar_coords_to_cart(rg, azg, ele)
+                x, y, z = antenna_to_cartesian(rg, azg, ele)
                 zz[elnum, :, :] = z
                 xx[elnum, :, :] = x
                 yy[elnum, :, :] = y

@@ -14,7 +14,7 @@ Simple moment calculations.
 import numpy as np
 
 from ..config import get_metadata, get_field_name
-from ..io.common import radar_coords_to_cart
+from ..util.transforms import antenna_to_cartesian
 
 
 def calculate_snr_from_reflectivity(
@@ -58,7 +58,7 @@ def calculate_snr_from_reflectivity(
     # we could get undone by AP though.. also sun
     rg, azg = np.meshgrid(radar.range['data'], radar.azimuth['data'])
     rg, eleg = np.meshgrid(radar.range['data'], radar.elevation['data'])
-    x, y, z = radar_coords_to_cart(rg / 1000.0, azg, eleg)  # XXX: need to fix
+    x, y, z = antenna_to_cartesian(rg / 1000.0, azg, eleg)  # XXX: need to fix
 
     points_above = np.where(z > toa)
     noise_floor_estimate = pseudo_power[points_above].mean()

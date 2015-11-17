@@ -19,6 +19,7 @@ import numpy as np
 import netCDF4
 
 from . import common
+from ..util.transforms import antenna_to_cartesian, sweep_to_cartesian
 
 
 class RadarDisplay(object):
@@ -125,8 +126,7 @@ class RadarDisplay(object):
         rg, azg = np.meshgrid(self.ranges, self.azimuths)
         rg, eleg = np.meshgrid(self.ranges, self.elevations)
 
-        self.x, self.y, self.z = common.radar_coords_to_cart(rg / 1000.0, azg,
-                                                             eleg)
+        self.x, self.y, self.z = antenna_to_cartesian(rg / 1000.0, azg, eleg)
         self.x = self.x + self.shift[0]
         self.y = self.y + self.shift[1]
 
@@ -670,8 +670,8 @@ class RadarDisplay(object):
         vmin, vmax = common.parse_vmin_vmax(self._radar, field, vmin, vmax)
 
         data, x, y, z = self._get_azimuth_rhi_data_x_y_z(
-              field, target_azimuth, edges, mask_tuple,
-              filter_transitions, gatefilter)
+            field, target_azimuth, edges, mask_tuple,
+            filter_transitions, gatefilter)
 
         # mask the data where outside the limits
         if mask_outside:
@@ -1214,7 +1214,7 @@ class RadarDisplay(object):
 
         data = data[prhi_rays]
 
-        x, y, z = common.sweep_coords_to_cart(
+        x, y, z = sweep_to_cartesian(
             self.ranges, azimuth, elevation, edges=edges)
         x = (x + self.shift[0]) / 1000.0
         y = (y + self.shift[1]) / 1000.0
@@ -1245,7 +1245,7 @@ class RadarDisplay(object):
             azimuths = azimuths[in_trans == 0]
             elevations = elevations[in_trans == 0]
 
-        x, y, z = common.sweep_coords_to_cart(
+        x, y, z = sweep_to_cartesian(
             self.ranges, azimuths, elevations, edges=edges)
         x = (x + self.shift[0]) / 1000.0
         y = (y + self.shift[1]) / 1000.0
