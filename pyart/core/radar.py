@@ -87,8 +87,8 @@ class Radar(object):
         Number of rays in each sweep.  The data key of this attribute is
         create upon first access from the data in the sweep_start_ray_index and
         sweep_end_ray_index attributes.  If the sweep locations needs to be
-        modified, do this prior to accessing this attribute or else the data in
-        this attribute will not properly reflect the new sweep locations.
+        modified, do this prior to accessing this attribute or use
+        :py:func:`init_rays_per_sweep` to reset the attribute.
     target_scan_rate : dict or None
         Intended scan rate for each sweep.  If not provided this attribute is
         set to None, indicating this parameter is not available.
@@ -186,11 +186,6 @@ class Radar(object):
         self.sweep_start_ray_index = sweep_start_ray_index
         self.sweep_end_ray_index = sweep_end_ray_index
 
-        # rays_per_sweep LazyLoadDict
-        lazydic = LazyLoadDict(get_metadata('rays_per_sweep'))
-        lazydic.set_lazy('data', _rays_per_sweep_data_factory(self))
-        self.rays_per_sweep = lazydic
-
         self.target_scan_rate = target_scan_rate  # optional
         self.rays_are_indexed = rays_are_indexed    # optional
         self.ray_angle_res = ray_angle_res  # optional
@@ -213,6 +208,15 @@ class Radar(object):
         self.ngates = len(_range['data'])
         self.nrays = len(time['data'])
         self.nsweeps = len(sweep_number['data'])
+
+        self.init_rays_per_sweep()
+
+    # Attribute init/reset method
+    def init_rays_per_sweep(self):
+        """ Initialize or reset the rays_per_sweep attribute. """
+        lazydic = LazyLoadDict(get_metadata('rays_per_sweep'))
+        lazydic.set_lazy('data', _rays_per_sweep_data_factory(self))
+        self.rays_per_sweep = lazydic
 
     # private functions for checking limits, etc.
     def _check_sweep_in_range(self, sweep):
