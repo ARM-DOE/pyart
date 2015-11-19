@@ -3,8 +3,8 @@ pyart.core.transforms
 =====================
 
 Transformations between coordinate systems. Routines for converting between
-Cartesian (x, y, z), cartographic (latitude, longitude, altitude) and antenna
-(azimuth, elevation, range) coordinate systems.
+Cartesian/Cartographic (x, y, z), Geographic (latitude, longitude, altitude)
+and antenna (azimuth, elevation, range) coordinate systems.
 
 .. autosummary::
     :toctree: generated/
@@ -14,6 +14,7 @@ Cartesian (x, y, z), cartographic (latitude, longitude, altitude) and antenna
     antenna_to_cartesian_track_relative
     antenna_to_cartesian_earth_relative
     antenna_to_cartesian_aircraft_relative
+    cartesian_to_geographic_aeqd
     add_2d_latlon_axis
     corner_to_point
     _interpolate_axes_edges
@@ -340,6 +341,80 @@ def antenna_to_cartesian_aircraft_relative(ranges, rot, tilt):
     y = r * np.sin(tilt)
     z = r * np.cos(rot) * np.cos(tilt)
     return x, y, z
+
+
+def cartesian_to_geographic_aeqd(x, y, lon_0, lat_0, R=6370997.):
+    """
+    Azimuthal equidistant Cartesian to geographic coordinate transform.
+
+    Transform a set of Cartesian/Cartographic coordinates (x, y) to
+    geographic coordinate system (lat, lon) using a azimuthal equidistant
+    map projection [1].
+
+    .. math::
+
+        lat = \\arcsin(\\cos(c) * \\sin(lat_0) +
+                       (y * \\sin(c) * \\cos(lat_0) / \\rho))
+
+        lon = lon_0 + \\arctan2(
+            x * \\sin(c),
+            \\rho * \\cos(lat_0) * \\cos(c) - y * \\sin(lat_0) * \\sin(c))
+
+        \\rho = \\sqrt(x^2 + y^2)
+
+        c = \\rho / R
+
+    Where x, y are the Cartesian position from the center of projection;
+    lat, lon the corresponding latitude and longitude; lat_0, lon_0 are the
+    latitude and longitude of the center of the projection; R is the radius of
+    the earth (defaults to ~6371 km). lon is adjusted to be between -180 and
+    180.
+
+    Parameters
+    ----------
+    x, y : array-like
+        Cartesian coordinates in the same units as R, typically meters.
+    lon_0, lat_0 : float
+        Longitude and latitude, in degrees, of the center of the projection.
+    R : float, optional
+        Earth radius in the same units as x and y.  The default value is in
+        units of meters.
+
+    Returns
+    -------
+    lon, lat : array
+        Longitude and latitude of Cartesian coordinates in degrees.
+
+    References
+    ----------
+    .. [1] Snyder, J. P. Map Projections--A Working Manual. U. S. Geological
+        Survey Professional Paper 1395, 1987, pp. 191-202.
+
+    """
+    x = np.atleast_1d(np.asarray(x))
+    y = np.atleast_1d(np.asarray(y))
+
+    lat_0_rad = np.deg2rad(lat_0)
+    lon_0_rad = np.deg2rad(lon_0)
+
+    rho = np.sqrt(x*x + y*y)
+    c = rho / R
+
+    lat_rad = np.arcsin(np.cos(c) * np.sin(lat_0_rad) +
+                        y * np.sin(c) * np.cos(lat_0_rad) / rho)
+    lat_deg = np.rad2deg(lat_rad)
+    # fix cases where the distance from the center of the projection is zero
+    lat_deg[rho == 0] = lat_0
+
+    x1 = x * np.sin(c)
+    x2 = rho*np.cos(lat_0_rad)*np.cos(c) - y*np.sin(lat_0_rad)*np.sin(c)
+    lon_rad = lon_0_rad + np.arctan2(x1, x2)
+    lon_deg = np.rad2deg(lon_rad)
+    # Longitudes should be from -180 to 180 degrees
+    lon_deg[lon_deg > 180] -= 360.
+    lon_deg[lon_deg < -180] += 360.
+
+    return lon_deg, lat_deg
 
 
 def add_2d_latlon_axis(grid, **kwargs):
