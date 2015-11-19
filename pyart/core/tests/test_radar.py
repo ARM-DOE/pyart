@@ -9,9 +9,122 @@ except ImportError:
 import inspect
 
 import numpy as np
-from numpy.testing import assert_raises
+from numpy.testing import assert_raises, assert_allclose
 import pyart
 from pyart.lazydict import LazyLoadDict
+
+
+def test_gate_x_y_z():
+    radar = pyart.testing.make_empty_ppi_radar(5, 4, 2)
+    radar.azimuth['data'][:] = [0, 90, 180, 270, 0, 90, 180, 270]
+    radar.elevation['data'][:] = [0, 0, 0, 0, 10, 10, 10, 10]
+    radar.range['data'][:] = [5, 15, 25, 35, 45]
+
+    assert radar.gate_x['data'].shape == (8, 5)
+    assert_allclose(radar.gate_x['data'][0], [0, 0, 0, 0, 0], atol=1e-14)
+    assert_allclose(radar.gate_x['data'][1], [5, 15, 25, 35, 45], atol=1e-14)
+    assert_allclose(radar.gate_x['data'][2], [0, 0, 0, 0, 0], atol=1e-14)
+    assert_allclose(
+        radar.gate_x['data'][3], [-5, -15, -25, -35, -45], atol=1e-14)
+
+    assert radar.gate_y['data'].shape == (8, 5)
+    assert_allclose(radar.gate_y['data'][0], [5, 15, 25, 35, 45], atol=1e-14)
+    assert_allclose(radar.gate_y['data'][1], [0, 0, 0, 0, 0], atol=1e-14)
+    assert_allclose(
+        radar.gate_y['data'][2], [-5, -15, -25, -35, -45], atol=1e-14)
+    assert_allclose(radar.gate_y['data'][3], [0, 0, 0, 0, 0], atol=1e-14)
+
+    assert radar.gate_z['data'].shape == (8, 5)
+    z_sweep0 = np.array([1.47e-6, 1.324e-5, 3.679e-5, 7.210e-5, 1.1919e-4])
+    assert_allclose(radar.gate_z['data'][0], z_sweep0, atol=1e-8)
+    assert_allclose(radar.gate_z['data'][1], z_sweep0, atol=1e-8)
+    assert_allclose(radar.gate_z['data'][2], z_sweep0, atol=1e-8)
+    assert_allclose(radar.gate_z['data'][3], z_sweep0, atol=1e-8)
+
+
+def test_gate_edge_x_y_z():
+    radar = pyart.testing.make_empty_ppi_radar(5, 4, 1)
+    radar.azimuth['data'][:] = [315., 45, 135., 225.]
+    radar.elevation['data'][:] = [0, 0, 0, 0]
+    radar.range['data'][:] = [5, 15, 25, 35, 45]
+
+    zeros = np.array([0, 0, 0, 0, 0, 0])
+    even = np.array([0, 10, 20, 30, 40, 50])
+
+    assert radar.gate_edge_x['data'].shape == (5, 6)
+    assert_allclose(radar.gate_edge_x['data'][1], zeros, atol=1e-12)
+    assert_allclose(radar.gate_edge_x['data'][2], even, atol=1e-12)
+    assert_allclose(radar.gate_edge_x['data'][3], zeros, atol=1e-12)
+
+    assert radar.gate_edge_y['data'].shape == (5, 6)
+    assert_allclose(radar.gate_edge_y['data'][1], even, atol=1e-12)
+    assert_allclose(radar.gate_edge_y['data'][2], zeros, atol=1e-12)
+    assert_allclose(radar.gate_edge_y['data'][3], -even, atol=1e-12)
+
+    assert radar.gate_edge_z['data'].shape == (5, 6)
+    z_sweep0 = np.array([0, 5.89e-6, 2.354e-5, 5.297e-5, 9.418e-5, 1.4715e-4])
+    assert_allclose(radar.gate_edge_z['data'][0], z_sweep0, atol=1e-8)
+    assert_allclose(radar.gate_edge_z['data'][1], z_sweep0, atol=1e-8)
+    assert_allclose(radar.gate_edge_z['data'][2], z_sweep0, atol=1e-8)
+    assert_allclose(radar.gate_edge_z['data'][3], z_sweep0, atol=1e-8)
+    assert_allclose(radar.gate_edge_z['data'][4], z_sweep0, atol=1e-8)
+
+
+def test_init_gate_x_y_z():
+    radar = pyart.testing.make_empty_ppi_radar(5, 4, 1)
+    radar.azimuth['data'][:] = [0, 90, 180, 270]
+    radar.elevation['data'][:] = [0, 0, 0, 0]
+    radar.range['data'][:] = [5, 15, 25, 35, 45]
+
+    # access and check initial gate locations
+    assert_allclose(radar.gate_x['data'][1], [5, 15, 25, 35, 45], atol=1e-14)
+    assert_allclose(radar.gate_y['data'][0], [5, 15, 25, 35, 45], atol=1e-14)
+    z_sweep0 = np.array([1.47e-6, 1.324e-5, 3.679e-5, 7.210e-5, 1.1919e-4])
+    assert_allclose(radar.gate_z['data'][0], z_sweep0, atol=1e-8)
+
+    # change range, gate_x, y, z are not updated
+    radar.range['data'][:] = [15, 25, 35, 45, 55]
+    assert_allclose(radar.gate_x['data'][1], [5, 15, 25, 35, 45], atol=1e-14)
+    assert_allclose(radar.gate_y['data'][0], [5, 15, 25, 35, 45], atol=1e-14)
+    z_sweep0 = np.array([1.47e-6, 1.324e-5, 3.679e-5, 7.210e-5, 1.1919e-4])
+    assert_allclose(radar.gate_z['data'][0], z_sweep0, atol=1e-8)
+
+    # call init_gate_x_y_z, now the attributes are updated
+    radar.init_gate_x_y_z()
+    assert_allclose(radar.gate_x['data'][1], [15, 25, 35, 45, 55], atol=1e-14)
+    assert_allclose(radar.gate_y['data'][0], [15, 25, 35, 45, 55], atol=1e-14)
+    z_sweep0 = np.array([1.324e-5, 3.679e-5, 7.210e-5, 1.1919e-4, 1.7805e-4])
+    assert_allclose(radar.gate_z['data'][0], z_sweep0, atol=1e-8)
+
+
+def test_init_gate_edge_x_y_z():
+    radar = pyart.testing.make_empty_ppi_radar(5, 4, 1)
+    radar.azimuth['data'][:] = [315., 45, 135., 225.]
+    radar.elevation['data'][:] = [0, 0, 0, 0]
+    radar.range['data'][:] = [5, 15, 25, 35, 45]
+
+    even = np.array([0, 10, 20, 30, 40, 50])
+    assert_allclose(radar.gate_edge_x['data'][2], even, atol=1e-12)
+    assert_allclose(radar.gate_edge_y['data'][1], even, atol=1e-12)
+    z_sweep0 = np.array([0, 5.89e-6, 2.354e-5, 5.297e-5, 9.418e-5, 1.4715e-4])
+    assert_allclose(radar.gate_edge_z['data'][0], z_sweep0, atol=1e-8)
+
+    # change range, gate_edhe_x, y, z are not updated
+    radar.range['data'][:] = [15, 25, 35, 45, 55]
+    even = np.array([0, 10, 20, 30, 40, 50])
+    assert_allclose(radar.gate_edge_x['data'][2], even, atol=1e-12)
+    assert_allclose(radar.gate_edge_y['data'][1], even, atol=1e-12)
+    z_sweep0 = np.array([0, 5.89e-6, 2.354e-5, 5.297e-5, 9.418e-5, 1.4715e-4])
+    assert_allclose(radar.gate_edge_z['data'][0], z_sweep0, atol=1e-8)
+
+    # call init_gate_edge_x_y_z, now the attributes are updated
+    radar.init_gate_edge_x_y_z()
+    even = np.array([10, 20, 30, 40, 50, 60])
+    assert_allclose(radar.gate_edge_x['data'][2], even, atol=1e-12)
+    assert_allclose(radar.gate_edge_y['data'][1], even, atol=1e-12)
+    z_sweep0 = np.array(
+        [5.89e-6, 2.354e-5, 5.297e-5, 9.418e-5, 1.4715e-4, 2.1190e-4])
+    assert_allclose(radar.gate_edge_z['data'][0], z_sweep0, atol=1e-8)
 
 
 def test_rays_per_sweep_attribute():
