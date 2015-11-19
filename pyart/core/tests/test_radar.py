@@ -50,16 +50,21 @@ def test_gate_edge_x_y_z():
 
     zeros = np.array([0, 0, 0, 0, 0, 0])
     even = np.array([0, 10, 20, 30, 40, 50])
+    atol = 1e-4
 
     assert radar.gate_edge_x['data'].shape == (5, 6)
-    assert_allclose(radar.gate_edge_x['data'][1], zeros, atol=1e-12)
-    assert_allclose(radar.gate_edge_x['data'][2], even, atol=1e-12)
-    assert_allclose(radar.gate_edge_x['data'][3], zeros, atol=1e-12)
+    assert_allclose(radar.gate_edge_x['data'][0], -even, atol=atol)
+    assert_allclose(radar.gate_edge_x['data'][1], zeros, atol=atol)
+    assert_allclose(radar.gate_edge_x['data'][2], even, atol=atol)
+    assert_allclose(radar.gate_edge_x['data'][3], zeros, atol=atol)
+    assert_allclose(radar.gate_edge_x['data'][4], -even, atol=atol)
 
     assert radar.gate_edge_y['data'].shape == (5, 6)
-    assert_allclose(radar.gate_edge_y['data'][1], even, atol=1e-12)
-    assert_allclose(radar.gate_edge_y['data'][2], zeros, atol=1e-12)
-    assert_allclose(radar.gate_edge_y['data'][3], -even, atol=1e-12)
+    assert_allclose(radar.gate_edge_y['data'][0], zeros, atol=atol)
+    assert_allclose(radar.gate_edge_y['data'][1], even, atol=atol)
+    assert_allclose(radar.gate_edge_y['data'][2], zeros, atol=atol)
+    assert_allclose(radar.gate_edge_y['data'][3], -even, atol=atol)
+    assert_allclose(radar.gate_edge_y['data'][4], zeros, atol=atol)
 
     assert radar.gate_edge_z['data'].shape == (5, 6)
     z_sweep0 = np.array([0, 5.89e-6, 2.354e-5, 5.297e-5, 9.418e-5, 1.4715e-4])

@@ -20,6 +20,7 @@ Cartesian (x, y, z), cartographic (latitude, longitude, altitude) and antenna
     _interpolate_azimuth_edges
     _interpolate_elevation_edges
     _interpolate_range_edges
+    _half_angle_complex
     _ax_radius
 
 
@@ -155,14 +156,39 @@ def _interpolate_azimuth_edges(azimuths):
     # perform interpolation and extrapolation in complex plane to
     # account for periodic nature of azimuth angle.
     azimuths = np.exp(1.j*np.deg2rad(azimuths))
-    edges[1:-1] = np.angle(
-        (azimuths[1:] + azimuths[:-1]) / 2., deg=True)
-    edges[0] = np.angle(
-        azimuths[0] - (azimuths[1] - azimuths[0]) / 2., deg=True)
-    edges[-1] = np.angle(
-        azimuths[-1] - (azimuths[-2] - azimuths[-1]) / 2., deg=True)
+
+    edges[1:-1] = np.angle(azimuths[1:] + azimuths[:-1], deg=True)
+
+    half_angle = _half_angle_complex(azimuths[0], azimuths[1])
+    edges[0] = (np.angle(azimuths[0], deg=True) - half_angle) % 360.
+
+    half_angle = _half_angle_complex(azimuths[-1], azimuths[-2])
+    edges[-1] = (np.angle(azimuths[-1], deg=True) + half_angle) % 360.
+
     edges[edges < 0] += 360     # range from [-180, 180] to [0, 360]
     return edges
+
+
+def _half_angle_complex(complex_angle1, complex_angle2):
+    """
+    Return half the angle between complex numbers on the unit circle.
+
+    Parameters
+    ----------
+    complex_angle1, complex_angle2 : complex
+        Complex numbers represeting unit vectors on the unit circle
+
+    Returns
+    -------
+    half_angle : float
+        Half the angle between the unit vectors in degrees.
+
+    """
+    dot_product = np.real(complex_angle1 * np.conj(complex_angle2))
+    full_angle_rad = np.arccos(dot_product)
+    half_angle_rad = full_angle_rad / 2.
+    half_angle_deg = np.rad2deg(half_angle_rad)
+    return half_angle_deg
 
 
 def _interpolate_axes_edges(axes):
