@@ -383,7 +383,7 @@ def geographic_to_cartesian_aeqd(lon, lat, lon_0, lat_0, R=6370997.):
 
     Returns
     -------
-    lon, lat : array
+    x, y : array
         Cartesian coordinates in the same units as R, typically meters.
 
     References
