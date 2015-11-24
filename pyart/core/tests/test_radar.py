@@ -25,9 +25,8 @@ def test_gate_longitude_latitude():
     assert_almost_equal(radar.gate_longitude['data'][0, 0], -97.5, 1)
     assert_almost_equal(radar.gate_latitude['data'][0, 0], 36.5, 1)
 
-    # reset and try again with a non-default projection/lat_0/lon_0
+    # reset and try again with a non-default lat_0/lon_0
     radar.init_gate_longitude_latitude()
-    radar.projection['proj'] = 'aeqd'
     radar.projection.pop('_include_lon_0_lat_0')
     radar.projection['lat_0'] = 20.0
     radar.projection['lon_0'] = 60.0
