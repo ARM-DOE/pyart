@@ -13,6 +13,8 @@ A general central radial scanning (or dwelling) instrument class.
     _rays_per_sweep_data_factory
     _gate_data_factory
     _gate_edge_data_factory
+    _gate_lon_lat_data_factory
+    _gate_altitude_data_factory
 
 .. autosummary::
     :toctree: generated/
@@ -261,7 +263,7 @@ class Radar(object):
         self.rays_per_sweep = lazydic
 
     def init_gate_x_y_z(self):
-        """ Initalize or reset the gate_{x, y, z} attributes. """
+        """ Initialize or reset the gate_{x, y, z} attributes. """
         gate_x = LazyLoadDict(get_metadata('gate_x'))
         gate_x.set_lazy('data', _gate_data_factory(self, 0))
         self.gate_x = gate_x
@@ -275,7 +277,7 @@ class Radar(object):
         self.gate_z = gate_z
 
     def init_gate_edge_x_y_z(self):
-        """ Initalize or reset the gate_edge_{x, y, z} attributes. """
+        """ Initialize or reset the gate_edge_{x, y, z} attributes. """
         gate_edge_x = LazyLoadDict(get_metadata('gate_edge_x'))
         gate_edge_x.set_lazy('data', _gate_edge_data_factory(self, 0))
         self.gate_edge_x = gate_edge_x
@@ -842,7 +844,7 @@ def _rays_per_sweep_data_factory(radar):
 
 def _gate_data_factory(radar, coordinate):
     """ Return a function which returns the Cartesian locations of gates. """
-    def _gate_data_factory():
+    def _gate_data():
         """ The function which returns the Cartesian locations of gates. """
         ranges = radar.range['data']
         azimuths = radar.azimuth['data']
@@ -857,12 +859,12 @@ def _gate_data_factory(radar, coordinate):
         if coordinate != 2:
             radar.gate_z['data'] = cartesian_coords[2]
         return cartesian_coords[coordinate]
-    return _gate_data_factory
+    return _gate_data
 
 
 def _gate_edge_data_factory(radar, coordinate):
     """ Return a function which returns the locations of gate edges. """
-    def _gate_edge_data_factory():
+    def _gate_edge_data():
         """ The function which returns the locations of gate edges. """
         ranges = radar.range['data']
         azimuths = radar.azimuth['data']
@@ -877,7 +879,7 @@ def _gate_edge_data_factory(radar, coordinate):
         if coordinate != 2:
             radar.gate_edge_z['data'] = cartesian_coords[2]
         return cartesian_coords[coordinate]
-    return _gate_edge_data_factory
+    return _gate_edge_data
 
 
 def _gate_lon_lat_data_factory(radar, coordinate):
