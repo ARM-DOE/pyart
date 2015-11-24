@@ -47,6 +47,14 @@ def test_geographic_to_cartesian_aeqd():
     assert_almost_equal(x, 0.0, 5)
     assert_almost_equal(y, 0.0, 5)
 
+    # edge case, sin(c) is zero
+    with warnings.catch_warnings():  # invalid divide is handled by code
+        warnings.simplefilter("ignore")
+        x, y = transforms.geographic_to_cartesian_aeqd(
+            10.0, 90.0, 20.0, 90.0, 3.0)
+    assert_almost_equal(x, 0.0, 5)
+    assert_almost_equal(y, 0.0, 5)
+
 
 def test_cartesian_to_geographic_aeqd():
     # Example taken from:

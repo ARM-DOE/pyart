@@ -14,8 +14,10 @@ and antenna (azimuth, elevation, range) coordinate systems.
     antenna_to_cartesian_track_relative
     antenna_to_cartesian_earth_relative
     antenna_to_cartesian_aircraft_relative
+
     cartesian_to_geographic_aeqd
     geographic_to_cartesian_aeqd
+
     add_2d_latlon_axis
     corner_to_point
     _interpolate_axes_edges
@@ -403,6 +405,8 @@ def geographic_to_cartesian_aeqd(lon, lat, lon_0, lat_0, R=6370997.):
     c = np.arccos(np.sin(lat_0_rad) * np.sin(lat_rad) +
                   np.cos(lat_0_rad) * np.cos(lat_rad) * np.cos(lon_diff_rad))
     k = c / np.sin(c)
+    # fix cases where k is undefined (c is zero), k should be 1
+    k[c == 0] = 1
 
     x = R * k * np.cos(lat_rad) * np.sin(lon_diff_rad)
     y = R * k * (np.cos(lat_0_rad) * np.sin(lat_rad) -
