@@ -25,6 +25,29 @@ def test_ax_radius_radians():
     assert round(R) == 5121372.
 
 
+def test_geographic_to_cartesian_aeqd():
+    # Example taken from:
+    # Snyder, J.P. Map Projections A Working Manual, 1987, page 338.
+    R = 3.0
+    lat_0 = 40.0        # 40 degrees North latitude
+    lon_0 = -100.       # 100 degrees West longitude
+    lat = -20.0         # 20 degrees S latitude
+    lon = 100.0         # 100.0 E longitude
+    x = -5.8311398
+    y = 5.5444634
+
+    x, y = transforms.geographic_to_cartesian_aeqd(lon, lat, lon_0, lat_0, R)
+    assert_almost_equal(x, -5.8311398, 7)
+    assert_almost_equal(y, 5.5444634, 7)
+
+    # edge case, distance from projection center is zero
+    lat = 40.0
+    lon = -100.
+    x, y = transforms.geographic_to_cartesian_aeqd(lon, lat, lon_0, lat_0, R)
+    assert_almost_equal(x, 0.0, 5)
+    assert_almost_equal(y, 0.0, 5)
+
+
 def test_cartesian_to_geographic_aeqd():
     # Example taken from:
     # Snyder, J.P. Map Projections A Working Manual, 1987, page 338.
