@@ -9,9 +9,45 @@ except ImportError:
 import inspect
 
 import numpy as np
-from numpy.testing import assert_raises, assert_allclose
+from numpy.testing import assert_raises, assert_allclose, assert_almost_equal
 import pyart
 from pyart.lazydict import LazyLoadDict
+
+
+def test_gate_longitude_latitude():
+    radar = pyart.testing.make_empty_ppi_radar(5, 4, 2)
+    radar.azimuth['data'][:] = [0, 90, 180, 270, 0, 90, 180, 270]
+    radar.elevation['data'][:] = [0, 0, 0, 0, 10, 10, 10, 10]
+    radar.range['data'][:] = [5, 15, 25, 35, 45]
+
+    assert radar.gate_longitude['data'].shape == (8, 5)
+    assert radar.gate_latitude['data'].shape == (8, 5)
+    assert_almost_equal(radar.gate_longitude['data'][0, 0], -97.5, 1)
+    assert_almost_equal(radar.gate_latitude['data'][0, 0], 36.5, 1)
+
+    # reset and try again with a non-default projection/lat_0/lon_0
+    radar.init_gate_longitude_latitude()
+    radar.projection['proj'] = 'aeqd'
+    radar.projection.pop('_include_lon_0_lat_0')
+    radar.projection['lat_0'] = 20.0
+    radar.projection['lon_0'] = 60.0
+
+    assert_almost_equal(radar.gate_longitude['data'][0, 0], 60.0, 1)
+    assert_almost_equal(radar.gate_latitude['data'][0, 0], 20.0, 1)
+
+
+def test_gate_altitude():
+    radar = pyart.testing.make_empty_ppi_radar(5, 4, 2)
+    radar.azimuth['data'][:] = [0, 90, 180, 270, 0, 90, 180, 270]
+    radar.elevation['data'][:] = [0, 0, 0, 0, 10, 10, 10, 10]
+    radar.range['data'][:] = [5, 15, 25, 35, 45]
+
+    assert radar.gate_altitude['data'].shape == (8, 5)
+    assert_almost_equal(radar.gate_altitude['data'][0, 0], 200.0, 1)
+
+    radar.init_gate_altitude()
+    radar.altitude['data'][0] = 150.
+    assert_almost_equal(radar.gate_altitude['data'][0, 0], 150.0, 1)
 
 
 def test_gate_x_y_z():
