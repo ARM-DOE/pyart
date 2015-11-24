@@ -4,6 +4,7 @@ import warnings
 
 from pyart.core import transforms
 from numpy.testing import assert_almost_equal
+from numpy.testing.decorators import skipif
 
 
 def test_corner_to_point():
@@ -54,6 +55,53 @@ def test_geographic_to_cartesian_aeqd():
             10.0, 90.0, 20.0, 90.0, 3.0)
     assert_almost_equal(x, 0.0, 5)
     assert_almost_equal(y, 0.0, 5)
+
+
+def test_cartesian_to_geographic():
+    # Example taken from:
+    # Snyder, J.P. Map Projections A Working Manual, 1987, page 338.
+    R = 3.0
+    lon_0 = -100.        # 100 degrees West longitude
+    lat_0 = 40.0        # 40 degrees North latitude
+    x = -5.8311398
+    y = 5.5444634
+
+    projparams = {
+        'proj': 'pyart_aeqd',
+        'lat_0': lat_0,
+        'lon_0': lon_0,
+        'R': R,
+    }
+    lon, lat = transforms.cartesian_to_geographic(x, y, projparams)
+    assert_almost_equal(lat, -20.0, 3)  # 20.0 S latitude
+    assert_almost_equal(lon, 100.0, 3)  # 100.0 E longitude
+
+    # Use the default R value
+    x *= 6370997. / 3.
+    y *= 6370997. / 3.
+    projparams.pop('R')
+    lon, lat = transforms.cartesian_to_geographic(x, y, projparams)
+    assert_almost_equal(lat, -20.0, 3)  # 20.0 S latitude
+    assert_almost_equal(lon, 100.0, 3)  # 100.0 E longitude
+
+
+@skipif(not transforms._PYPROJ_AVAILABLE)
+def test_cartesian_to_geographic_pyproj():
+    R = 3.0
+    lon_0 = -100.        # 100 degrees West longitude
+    lat_0 = 40.0        # 40 degrees North latitude
+    x = -5.8311398
+    y = 5.5444634
+    projparams = {
+        'proj': 'aeqd',
+        'lat_0': lat_0,
+        'lon_0': lon_0,
+        'R': R,
+    }
+    projparams['proj'] = 'aeqd'
+    lon, lat = transforms.cartesian_to_geographic(x, y, projparams)
+    assert_almost_equal(lat, -20.0, 3)  # 20.0 S latitude
+    assert_almost_equal(lon, 100.0, 3)  # 100.0 E longitude
 
 
 def test_cartesian_to_geographic_aeqd():
