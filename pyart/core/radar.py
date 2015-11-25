@@ -10,6 +10,11 @@ A general central radial scanning (or dwelling) instrument class.
     join_radar
     is_vpt
     to_vpt
+    _rays_per_sweep_data_factory
+    _gate_data_factory
+    _gate_edge_data_factory
+    _gate_lon_lat_data_factory
+    _gate_altitude_data_factory
 
 .. autosummary::
     :toctree: generated/
@@ -28,6 +33,8 @@ import numpy as np
 from netCDF4 import num2date, date2num
 
 from ..config import get_metadata
+from ..lazydict import LazyLoadDict
+from .transforms import antenna_vectors_to_cartesian, cartesian_to_geographic
 
 
 class Radar(object):
@@ -82,11 +89,12 @@ class Radar(object):
     sweep_end_ray_index : dict
         Index of the last ray in each sweep relative to the start of the
         volume, 0-based.
-    rays_per_sweep : dict
-        Number of rays in each sweep.  This is a read only attribute,
-        attempting to set the attribute will raise a AttributeError and any
-        changes to the dictionary keys will be lost when the attribute is
-        accessed again.
+    rays_per_sweep : LazyLoadDict
+        Number of rays in each sweep.  The data key of this attribute is
+        create upon first access from the data in the sweep_start_ray_index and
+        sweep_end_ray_index attributes.  If the sweep locations needs to be
+        modified, do this prior to accessing this attribute or use
+        :py:func:`init_rays_per_sweep` to reset the attribute.
     target_scan_rate : dict or None
         Intended scan rate for each sweep.  If not provided this attribute is
         set to None, indicating this parameter is not available.
@@ -102,6 +110,39 @@ class Radar(object):
         Azimuth of antenna, relative to true North.
     elevation : dict
         Elevation of antenna, relative to the horizontal plane.
+    gate_x, gate_y, gate_z : LazyLoadDict
+        Location of each gate in a Cartesian coordinate system assuming a
+        standard atmosphere with a 4/3 Earth's radius model. The data keys of
+        these attributes are create upon first access from the data in the
+        range, azimuth and elevation attributes. If these attributes are
+        changed use :py:func:`init_gate_x_y_z` to reset.
+    gate_edge_x, gate_edge_y, gate_edge_z : LazyLoadDict
+        Location of the edges of each gate in a Cartesian coordinate system
+        assuming a standard atmosphere with a 4/3 Earth's radius model.
+        The data keys of these attributes are create upon first access from
+        the data in the range, azimuth and elevation attributes. If these
+        attributes are changed use :py:func:`init_gate_edge_x_y_z` to reset
+        the attributes.
+    gate_longitude, gate_latitude : LazyLoadDict
+        Geographic location of each gate.  The projection parameter(s) defined
+        in the `projection` attribute are used to perform an inverse map
+        projection from the Cartesian gate locations relative to the radar
+        location to longitudes and latitudes. If these attributes are changed
+        use :py:func:`init_gate_longitude_latitude` to reset the attributes.
+    projection : dic or str
+        Projection parameters defining the map projection used to transform
+        from Cartesian to geographic coordinates.  The default dictionary sets
+        the 'proj' key to 'pyart_aeqd' indicating that the native Py-ART
+        azimuthal equidistant projection is used. This can be modified to
+        specify a valid pyproj.Proj projparams dictionary or string.
+        The special key '_include_lon_0_lat_0' is removed when interpreting
+        this dictionary. If this key is present and set to True, which is
+        required when proj='pyart_aeqd', then the radar longitude and
+        latitude will be added to the dictionary as 'lon_0' and 'lat_0'.
+    gate_altitude : LazyLoadDict
+        The altitude of each radar gate as calculated from the altitude of the
+        radar and the Cartesian z location of each gate.  If this attribute
+        is changed use :py:func:`init_gate_altitude` to reset the attribute.
     scan_rate : dict or None
         Actual antenna scan rate.  If not provided this attribute is set to
         None, indicating this parameter is not available.
@@ -183,6 +224,7 @@ class Radar(object):
         self.fixed_angle = fixed_angle
         self.sweep_start_ray_index = sweep_start_ray_index
         self.sweep_end_ray_index = sweep_end_ray_index
+
         self.target_scan_rate = target_scan_rate  # optional
         self.rays_are_indexed = rays_are_indexed    # optional
         self.ray_angle_res = ray_angle_res  # optional
@@ -205,13 +247,67 @@ class Radar(object):
         self.ngates = len(_range['data'])
         self.nrays = len(time['data'])
         self.nsweeps = len(sweep_number['data'])
+        self.projection = {'proj': 'pyart_aeqd', '_include_lon_0_lat_0': True}
 
-    @property
-    def rays_per_sweep(self):
-        dic = get_metadata('rays_per_sweep')
-        dic['data'] = (self.sweep_end_ray_index['data'] -
-                       self.sweep_start_ray_index['data'] + 1)
-        return dic
+        # initalize attributes with lazy load dictionaries
+        self.init_rays_per_sweep()
+        self.init_gate_x_y_z()
+        self.init_gate_edge_x_y_z()
+        self.init_gate_longitude_latitude()
+        self.init_gate_altitude()
+
+    # Attribute init/reset method
+    def init_rays_per_sweep(self):
+        """ Initialize or reset the rays_per_sweep attribute. """
+        lazydic = LazyLoadDict(get_metadata('rays_per_sweep'))
+        lazydic.set_lazy('data', _rays_per_sweep_data_factory(self))
+        self.rays_per_sweep = lazydic
+
+    def init_gate_x_y_z(self):
+        """ Initialize or reset the gate_{x, y, z} attributes. """
+        gate_x = LazyLoadDict(get_metadata('gate_x'))
+        gate_x.set_lazy('data', _gate_data_factory(self, 0))
+        self.gate_x = gate_x
+
+        gate_y = LazyLoadDict(get_metadata('gate_y'))
+        gate_y.set_lazy('data', _gate_data_factory(self, 1))
+        self.gate_y = gate_y
+
+        gate_z = LazyLoadDict(get_metadata('gate_z'))
+        gate_z.set_lazy('data', _gate_data_factory(self, 2))
+        self.gate_z = gate_z
+
+    def init_gate_edge_x_y_z(self):
+        """ Initialize or reset the gate_edge_{x, y, z} attributes. """
+        gate_edge_x = LazyLoadDict(get_metadata('gate_edge_x'))
+        gate_edge_x.set_lazy('data', _gate_edge_data_factory(self, 0))
+        self.gate_edge_x = gate_edge_x
+
+        gate_edge_y = LazyLoadDict(get_metadata('gate_edge_y'))
+        gate_edge_y.set_lazy('data', _gate_edge_data_factory(self, 1))
+        self.gate_edge_y = gate_edge_y
+
+        gate_edge_z = LazyLoadDict(get_metadata('gate_edge_z'))
+        gate_edge_z.set_lazy('data', _gate_edge_data_factory(self, 2))
+        self.gate_edge_z = gate_edge_z
+
+    def init_gate_longitude_latitude(self):
+        """
+        Initialize or reset the gate_longitude and gate_latitude attributes.
+        """
+        gate_longitude = LazyLoadDict(get_metadata('gate_longitude'))
+        gate_longitude.set_lazy('data', _gate_lon_lat_data_factory(self, 0))
+        self.gate_longitude = gate_longitude
+
+        gate_latitude = LazyLoadDict(get_metadata('gate_latitude'))
+        gate_latitude.set_lazy('data', _gate_lon_lat_data_factory(self, 1))
+        self.gate_latitude = gate_latitude
+
+    def init_gate_altitude(self):
+        """ Initialize the gate_altitude attribute. """
+        gate_altitude = LazyLoadDict(get_metadata('gate_altitude'))
+        gate_altitude.set_lazy('data', _gate_altitude_data_factory(self))
+        self.gate_altitude = gate_altitude
 
     # private functions for checking limits, etc.
     def _check_sweep_in_range(self, sweep):
@@ -736,6 +832,83 @@ class Radar(object):
                      antenna_transition=antenna_transition,
                      instrument_parameters=instrument_parameters,
                      radar_calibration=radar_calibration)
+
+
+def _rays_per_sweep_data_factory(radar):
+    """ Return a function which returns the number of rays per sweep. """
+    def _rays_per_sweep_data():
+        """ The function which returns the number of rays per sweep. """
+        return (radar.sweep_end_ray_index['data'] -
+                radar.sweep_start_ray_index['data'] + 1)
+    return _rays_per_sweep_data
+
+
+def _gate_data_factory(radar, coordinate):
+    """ Return a function which returns the Cartesian locations of gates. """
+    def _gate_data():
+        """ The function which returns the Cartesian locations of gates. """
+        ranges = radar.range['data']
+        azimuths = radar.azimuth['data']
+        elevations = radar.elevation['data']
+        cartesian_coords = antenna_vectors_to_cartesian(
+            ranges, azimuths, elevations, edges=False)
+        # load x, y, and z data except for the coordinate in question
+        if coordinate != 0:
+            radar.gate_x['data'] = cartesian_coords[0]
+        if coordinate != 1:
+            radar.gate_y['data'] = cartesian_coords[1]
+        if coordinate != 2:
+            radar.gate_z['data'] = cartesian_coords[2]
+        return cartesian_coords[coordinate]
+    return _gate_data
+
+
+def _gate_edge_data_factory(radar, coordinate):
+    """ Return a function which returns the locations of gate edges. """
+    def _gate_edge_data():
+        """ The function which returns the locations of gate edges. """
+        ranges = radar.range['data']
+        azimuths = radar.azimuth['data']
+        elevations = radar.elevation['data']
+        cartesian_coords = antenna_vectors_to_cartesian(
+            ranges, azimuths, elevations, edges=True)
+        # load x, y, and z data except for the coordinate in question
+        if coordinate != 0:
+            radar.gate_edge_x['data'] = cartesian_coords[0]
+        if coordinate != 1:
+            radar.gate_edge_y['data'] = cartesian_coords[1]
+        if coordinate != 2:
+            radar.gate_edge_z['data'] = cartesian_coords[2]
+        return cartesian_coords[coordinate]
+    return _gate_edge_data
+
+
+def _gate_lon_lat_data_factory(radar, coordinate):
+    """ Return a function which returns the geographic locations of gates. """
+    def _gate_lon_lat_data():
+        """ The function which returns the geographic locations gates. """
+        x = radar.gate_x['data']
+        y = radar.gate_y['data']
+        projparams = radar.projection.copy()
+        if projparams.pop('_include_lon_0_lat_0', False):
+            projparams['lon_0'] = radar.longitude['data'][0]
+            projparams['lat_0'] = radar.latitude['data'][0]
+        geographic_coords = cartesian_to_geographic(x, y, projparams)
+        # set the other geographic coordinate
+        if coordinate == 0:
+            radar.gate_latitude['data'] = geographic_coords[1]
+        else:
+            radar.gate_longitude['data'] = geographic_coords[0]
+        return geographic_coords[coordinate]
+    return _gate_lon_lat_data
+
+
+def _gate_altitude_data_factory(radar):
+    """ Return a function which returns the gate altitudes. """
+    def _gate_altitude_data():
+        """ The function which returns the gate altitudes. """
+        return radar.altitude['data'] + radar.gate_z['data']
+    return _gate_altitude_data
 
 
 def is_vpt(radar, offset=0.5):

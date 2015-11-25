@@ -21,8 +21,7 @@ except ImportError:
     _H5PY_AVAILABLE = False
 
 from ..config import FileMetadata, get_fillvalue
-from ..io.common import make_time_unit_str, radar_coords_to_cart
-from ..io.common import _test_arguments
+from ..io.common import make_time_unit_str, _test_arguments
 from ..core.radar import Radar
 from ..exceptions import MissingOptionalDependency
 

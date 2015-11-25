@@ -274,7 +274,7 @@ def test_compressed_archive():
         delay_field_loading=True)
     assert 'reflectivity' in radar.fields.keys()
     assert isinstance(radar.fields['reflectivity'],
-                      pyart.io.lazydict.LazyLoadDict)
+                      pyart.lazydict.LazyLoadDict)
     rdata = radar.fields['reflectivity']['data']
     assert rdata.shape == (120, 1832)
     assert_almost_equal(rdata[0, 0], 10.5, 1)

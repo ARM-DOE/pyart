@@ -8,12 +8,9 @@ Input/output routines common to many file formats.
     :toctree: generated/
 
     prepare_for_read
-    dms_to_d
     stringarray_to_chararray
     _test_arguments
-    radar_coords_to_cart
     make_time_unit_str
-    add_2d_latlon_axis
 
 """
 
@@ -61,11 +58,6 @@ def prepare_for_read(filename):
     return open(filename, 'rb')
 
 
-def dms_to_d(dms):
-    """ Degrees, minutes, seconds to degrees """
-    return dms[0] + (dms[1] + dms[2] / 60.0) / 60.0
-
-
 def stringarray_to_chararray(arr, numchars=None):
     """
     Convert an string array to a character array with one extra dimension.
@@ -106,164 +98,6 @@ def _test_arguments(dic):
         warnings.warn('Unexpected arguments: %s' % dic.keys())
 
 
-# XXX move this to another module
-def radar_coords_to_cart(rng, az, ele, debug=False):
-    """
-    Calculate Cartesian coordinate from radar coordinates
-
-    Parameters
-    ----------
-    rng : array
-        Distances to the center of the radar gates (bins) in kilometers.
-    az : array
-        Azimuth angle of the radar in degrees.
-    ele : array
-        Elevation angle of the radar in degrees.
-
-    Returns
-    -------
-    x, y, z : array
-        Cartesian coordinates in meters from the radar.
-
-    Notes
-    -----
-    The calculation for Cartesian coordinate is adapted from equations
-    2.28(b) and 2.28(c) of Doviak and Zrnic [1]_ assuming a
-    standard atmosphere (4/3 Earth's radius model).
-
-    .. math::
-
-        z = \\sqrt{r^2+R^2+r*R*sin(\\theta_e)} - R
-
-        s = R * arcsin(\\frac{r*cos(\\theta_e)}{R+z})
-
-        x = s * sin(\\theta_a)
-
-        y = s * cos(\\theta_a)
-
-    Where r is the distance from the radar to the center of the gate,
-    :math:`\\theta_a` is the azimuth angle, :math:`\\theta_e` is the
-    elevation angle, s is the arc length, and R is the effective radius
-    of the earth, taken to be 4/3 the mean radius of earth (6371 km).
-
-    References
-    ----------
-    .. [1] Doviak and Zrnic, Doppler Radar and Weather Observations, Second
-        Edition, 1993, p. 21.
-
-    """
-    theta_e = ele * np.pi / 180.0       # elevation angle in radians.
-    theta_a = az * np.pi / 180.0        # azimuth angle in radians.
-    R = 6371.0 * 1000.0 * 4.0 / 3.0     # effective radius of earth in meters.
-    r = rng * 1000.0                    # distances to gates in meters.
-
-    z = (r ** 2 + R ** 2 + 2.0 * r * R * np.sin(theta_e)) ** 0.5 - R
-    s = R * np.arcsin(r * np.cos(theta_e) / (R + z))  # arc length in m.
-    x = s * np.sin(theta_a)
-    y = s * np.cos(theta_a)
-    return x, y, z
-
-
 def make_time_unit_str(dtobj):
     """ Return a time unit string from a datetime object. """
     return "seconds since " + dtobj.strftime("%Y-%m-%dT%H:%M:%SZ")
-
-
-def add_2d_latlon_axis(grid, **kwargs):
-    """
-    Add the latitude and longitude for grid points in the y, x plane.
-
-    Adds a **latitude** and **longitude** dictionary to the axes attribute
-    of a provided grid.  Addition is done in-place, nothing is returned from
-    this function.  These dictionaries contain 2D arrays which specify the
-    latitude and longitude of every point in the y, x plane.
-
-    If available, the conversion is done using basemap.pyproj, extra arguments
-    are passed to pyproj.Proj. If not available, an internal spherical
-    azimuthal equidistant transformation is is used.
-
-    Parameters
-    ----------
-    grid: grid object
-        Cartesian grid object containing the 1d axes "x_disp", "y_disp" and
-        scalar axes 'lat', 'lon'.
-    kwargs: Pyproj options
-        Options to be passed to Proj. If projection is not specified here it
-        uses proj='aeqd' (azimuthal equidistant)
-
-    Notes
-    -----
-    If Basemap is not available, calculation of the latitude, longitude is
-    done using a azimuthal equidistant projection projection [1].
-    It uses the mean radius of earth (6371 km)
-
-    .. math::
-
-        c = \\sqrt(x^2 + y^2)/R
-
-        azi = \\arctan2(y,x) \\text{  # from east to north}
-
-        lat = \\arcsin(\\cos(c)*\\sin(lat0)+\\sin(azi)*\\sin(c)*\\cos(lat0))
-
-        lon = \\arctan2(\\cos(azi)*\\sin(c),\\cos(c)*\\cos(lat0)-
-                        \\sin(azi)*\\sin(c)*\\sin(lat0)) + lon0
-
-    Where x, y are the Cartesian position from the center of projection;
-    lat, lon the corresponding latitude and longitude; lat0, lon0 the latitude
-    and longitude of the center of the projection; R the mean radius of the
-    earth (6371 km)
-
-    References
-    ----------
-    .. [1] Snyder, J. P. Map Projections--A Working Manual. U. S. Geological
-        Survey Professional Paper 1395, 1987, pp. 191-202.
-
-    """
-    try:
-        from mpl_toolkits.basemap import pyproj
-        if 'proj' not in kwargs:
-            kwargs['proj'] = 'aeqd'
-        x, y = np.meshgrid(
-            grid.axes["x_disp"]['data'], grid.axes["y_disp"]['data'])
-        b = pyproj.Proj(lat_0=grid.axes["lat"]['data'][0],
-                        lon_0=grid.axes["lon"]['data'][0], **kwargs)
-        lon, lat = b(x, y, inverse=True)
-    except ImportError:
-        import warnings
-        warnings.warn('No basemap found, using internal implementation '
-                      'for converting azimuthal equidistant to latlon')
-        # azimutal equidistant projetion to latlon
-        R = 6371.0 * 1000.0     # radius of earth in meters.
-
-        x, y = np.meshgrid(grid.axes["x_disp"]['data'],
-                           grid.axes["y_disp"]['data'])
-
-        c = np.sqrt(x*x + y*y) / R
-        phi_0 = grid.axes["lat"]['data'] * np.pi / 180
-        azi = np.arctan2(y, x)  # from east to north
-
-        lat = np.arcsin(np.cos(c) * np.sin(phi_0) +
-                        np.sin(azi) * np.sin(c) * np.cos(phi_0)) * 180 / np.pi
-        lon = (np.arctan2(np.cos(azi) * np.sin(c), np.cos(c) * np.cos(phi_0) -
-               np.sin(azi) * np.sin(c) * np.sin(phi_0)) * 180 /
-               np.pi + grid.axes["lon"]['data'])
-        lon = np.fmod(lon + 180, 360) - 180
-
-    lat_axis = {
-        'data':  lat,
-        'long_name': 'Latitude for points in Cartesian system',
-        'axis': 'YX',
-        'units': 'degree_N',
-        'standard_name': 'latitude',
-    }
-
-    lon_axis = {
-        'data': lon,
-        'long_name': 'Longitude for points in Cartesian system',
-        'axis': 'YX',
-        'units': 'degree_E',
-        'standard_name': 'longitude',
-    }
-
-    grid.axes["latitude"] = lat_axis
-    grid.axes["longitude"] = lon_axis

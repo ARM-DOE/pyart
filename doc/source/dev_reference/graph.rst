@@ -6,7 +6,6 @@ Radar data graphing routines.
 
 .. automodule:: pyart.graph.cm
 .. automodule:: pyart.graph.common
-.. automodule:: pyart.graph.coord_transform
 .. automodule:: pyart.graph.gridmapdisplay
 .. automodule:: pyart.graph.radardisplay_airborne
 .. automodule:: pyart.graph.radardisplay
