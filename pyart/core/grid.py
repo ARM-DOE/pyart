@@ -79,6 +79,8 @@ class Grid(object):
         this dictionary. If this key is present and set to True, which is
         required when proj='pyart_aeqd', then the radar longitude and
         latitude will be added to the dictionary as 'lon_0' and 'lat_0'.
+    nx, ny, nz : int
+        Number of grid points along the given Cartesian dimension.
     axes : dict
         Dictionary of axes dictionaries.
         This attribute is Depreciated, it will be removed in the next Py-ART
@@ -99,6 +101,9 @@ class Grid(object):
         self.regular_x = regular_x
         self.regular_y = regular_y
         self.regular_z = regular_z
+        self.nx = len(regular_x['data'])
+        self.ny = len(regular_y['data'])
+        self.nz = len(regular_z['data'])
         self.projection = {'proj': 'pyart_aeqd', '_include_lon_0_lat_0': True}
 
         # initialize attributes with Lazy load dictionaries

@@ -56,6 +56,10 @@ def test_grid_class():
     ny = 400
     nx = 320
 
+    assert grid.nx == nx
+    assert grid.ny == ny
+    assert grid.nz == nz
+
     assert isinstance(grid.metadata, dict)
     assert isinstance(grid.fields, dict)
     assert isinstance(grid.fields['reflectivity'], dict)
