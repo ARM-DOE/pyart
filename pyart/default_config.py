@@ -629,6 +629,20 @@ DEFAULT_METADATA = {
         'standard_name':  'interpolated_profile',
         'units': 'unknown'},
 
+    # Grid metadata
+    'point_x': {
+        'long_name': 'Cartesian x distance of each grid point from the origin',
+        'units': 'meters'},
+
+    'point_y': {
+        'long_name': 'Cartesian y distance of each grid point from the origin',
+        'units': 'meters'},
+
+    'point_z': {
+        'long_name': 'Cartesian z distance of each grid point from the origin',
+        'positive': 'up',
+        'units': 'meters'},
+
 }
 
 

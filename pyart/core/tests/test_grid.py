@@ -3,8 +3,10 @@
 from __future__ import print_function
 
 import numpy as np
+from numpy.testing import assert_almost_equal
 
 import pyart
+from pyart.lazydict import LazyLoadDict
 
 COMMON_MAP_TO_GRID_ARGS = {
     'grid_shape': (3, 9, 10),
@@ -79,6 +81,40 @@ def test_grid_class():
 
     assert isinstance(grid.regular_z, dict)
     assert grid.regular_z['data'].shape == (nz, )
+
+    assert isinstance(grid.point_x, LazyLoadDict)
+    assert grid.point_x['data'].shape == (nz, ny, nx)
+    assert_almost_equal(
+        grid.point_x['data'][0, 0, :], grid.regular_x['data'][:])
+    assert_almost_equal(
+        grid.point_x['data'][1, 1, :], grid.regular_x['data'][:])
+
+    assert isinstance(grid.point_y, LazyLoadDict)
+    assert grid.point_y['data'].shape == (nz, ny, nx)
+    assert_almost_equal(
+        grid.point_y['data'][0, :, 0], grid.regular_y['data'][:])
+    assert_almost_equal(
+        grid.point_y['data'][1, :, 1], grid.regular_y['data'][:])
+
+    assert isinstance(grid.point_z, LazyLoadDict)
+    assert grid.point_z['data'].shape == (nz, ny, nx)
+    assert_almost_equal(
+        grid.point_z['data'][:, 0, 0], grid.regular_z['data'][:])
+    assert_almost_equal(
+        grid.point_z['data'][:, 1, 1], grid.regular_z['data'][:])
+
+
+def test_init_point_x_y_z():
+    grid = pyart.testing.make_target_grid()
+    assert isinstance(grid.point_x, LazyLoadDict)
+    assert grid.point_x['data'].shape == (2, 400, 320)
+    assert grid.point_x['data'][0, 0, 0] == grid.regular_x['data'][0]
+
+    grid.regular_x['data'][0] = -500000.
+    assert grid.point_x['data'][0, 0, 0] != grid.regular_x['data'][0]
+
+    grid.init_point_x_y_z()
+    assert grid.point_x['data'][0, 0, 0] == grid.regular_x['data'][0]
 
 
 def test_grid_axes_attribute():

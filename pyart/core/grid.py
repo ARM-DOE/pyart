@@ -10,7 +10,17 @@ An class for holding gridded Radar data.
 
     Grid
 
+.. autosummary::
+    :toctree: generated/
+
+    _point_data_factory
+
 """
+
+import numpy as np
+
+from ..config import get_metadata
+from ..lazydict import LazyLoadDict
 
 
 class Grid(object):
@@ -39,6 +49,12 @@ class Grid(object):
     regular_x, regular_y, regular_z : dict
         Regular locations of grid points from the origin in the three
         Cartesian coordinates.
+    point_x, point_y, point_z : LazyLoadDict
+        The Cartesian locations of all grid points from the origin in the
+        three Cartesian coordinates.  The three dimensional data arrays
+        contained these attributes are calculated from the regular_x,
+        regular_y, and regular_z attributes.  If these attributes are changed
+        use :py:func:`init_point_x_y_z` to reset the attributes.
     axes : dict
         Dictionary of axes dictionaries.
         This attribute is Depreciated, it will be removed in the next Py-ART
@@ -60,6 +76,9 @@ class Grid(object):
         self.regular_y = regular_y
         self.regular_z = regular_z
 
+        # initialize attributes with Lazy load dictionaries
+        self.init_point_x_y_z()
+
         # Depreciated axes attribute
         axes = {'time': time,
                 'time_start': time,  # incorrect metadata
@@ -73,6 +92,18 @@ class Grid(object):
         self.axes = axes
 
         return
+
+    # Attribute init/reset methods
+    def init_point_x_y_z(self):
+        """ Initialize or reset the point_{x, y, z} attributes. """
+        self.point_x = LazyLoadDict(get_metadata('point_x'))
+        self.point_x.set_lazy('data', _point_data_factory(self, 'x'))
+
+        self.point_y = LazyLoadDict(get_metadata('point_y'))
+        self.point_y.set_lazy('data', _point_data_factory(self, 'y'))
+
+        self.point_z = LazyLoadDict(get_metadata('point_z'))
+        self.point_z.set_lazy('data', _point_data_factory(self, 'z'))
 
     def write(self, filename, format='NETCDF4', arm_time_variables=False):
         """
@@ -127,3 +158,20 @@ class Grid(object):
         self.fields[field_name] = field_dict
 
         return
+
+
+def _point_data_factory(grid, coordinate):
+    """ Return a function which returns the locations of all points.  """
+    def _point_data():
+        """ The function which returns the locations of all points. """
+        reg_x = grid.regular_x['data']
+        reg_y = grid.regular_y['data']
+        reg_z = grid.regular_z['data']
+        if coordinate == 'x':
+            return np.tile(reg_x, (len(reg_z), len(reg_y), 1)).swapaxes(2, 2)
+        elif coordinate == 'y':
+            return np.tile(reg_y, (len(reg_z), len(reg_x), 1)).swapaxes(1, 2)
+        else:
+            assert coordinate == 'z'
+            return np.tile(reg_z, (len(reg_x), len(reg_y), 1)).swapaxes(0, 2)
+    return _point_data
