@@ -10,9 +10,6 @@ Reading and writing Grid objects.
     read_grid
     write_grid
 
-    _read_grid_cf
-    _read_grid_wrf
-
 """
 
 from warnings import warn
@@ -192,71 +189,3 @@ def write_grid(filename, grid, format='NETCDF4', arm_time_variables=False):
     ncobj.close()
 
     return
-
-
-def _read_grid_cf(filename):
-    """
-    Read a CF compliant netCDF file containing a grid.
-
-    Parameters
-    ----------
-    filename : str
-        Filename of the netCDF file.
-
-    Returns
-    -------
-    grid : Grid
-        Grid object containing gridded data.
-
-    Notes
-    -----
-    This function does only the most basic variable checking.  The resulting
-    Grid object is most likely not writable.
-
-    """
-    ncobj = netCDF4.Dataset(filename)
-    ncvars = ncobj.variables
-    fields = {}
-    axes = {}
-    for var in ncvars:
-        if len(ncvars[var].shape) > 1:
-            # dimensionality of 2+ are fields variables
-            fields[var] = _ncvar_to_dict(ncvars[var])
-        else:
-            # dimensionality of 1 are axes variables
-            axes[var] = _ncvar_to_dict(ncvars[var])
-    return Grid(fields, axes, {})
-
-
-def _read_grid_wrf(filename):
-    """
-    Read a WRF netCDF file containing a grid.
-
-    Parameters
-    ----------
-    filename : str
-        Filename of the WRF netCDF file.
-
-    Returns
-    -------
-    grid : Grid
-        Grid object containing data.
-
-    Notes
-    -----
-    This function does only the most basic variable checking.  The resulting
-    Grid object is most likely not writable.
-
-    """
-    ncobj = netCDF4.Dataset(filename)
-    ncvars = ncobj.variables
-    fields = {}
-    axes = {}
-    for var in ncvars:
-        if len(ncvars[var].shape) > 1:
-            # dimensionality of 2+ are fields variables
-            fields[var] = _ncvar_to_dict(ncvars[var])
-        else:
-            # dimensionality of 1 are axes variables
-            axes[var] = _ncvar_to_dict(ncvars[var])
-    return Grid(fields, axes, {})
