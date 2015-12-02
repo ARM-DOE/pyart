@@ -79,3 +79,54 @@ def test_grid_class():
 
     assert isinstance(grid.regular_z, dict)
     assert grid.regular_z['data'].shape == (nz, )
+
+
+def test_grid_axes_attribute():
+    # test the depreciated axes Grid attribute
+    grid = pyart.testing.make_target_grid()
+
+    nz = 2
+    ny = 400
+    nx = 320
+
+    axes = grid.axes
+
+    assert isinstance(axes, dict)
+
+    assert isinstance(axes['time'], dict)
+    assert axes['time']['data'].shape == (1, )
+
+    assert isinstance(axes['time_start'], dict)
+    assert axes['time_start']['data'].shape == (1, )
+
+    assert isinstance(axes['time_end'], dict)
+    assert axes['time_end']['data'].shape == (1, )
+
+    assert isinstance(axes['lat'], dict)
+    assert axes['lat']['data'].shape == (1, )
+
+    assert isinstance(axes['lon'], dict)
+    assert axes['lon']['data'].shape == (1, )
+
+    assert isinstance(axes['alt'], dict)
+    assert axes['alt']['data'].shape == (1, )
+
+    assert isinstance(axes['x_disp'], dict)
+    assert axes['x_disp']['data'].shape == (nx, )
+
+    assert isinstance(axes['y_disp'], dict)
+    assert axes['y_disp']['data'].shape == (ny, )
+
+    assert isinstance(axes['z_disp'], dict)
+    assert axes['z_disp']['data'].shape == (nz, )
+
+    assert 'latitude' not in axes
+    assert 'longitude' not in axes
+
+    pyart.io.add_2d_latlon_axis(grid)
+
+    assert isinstance(axes['latitude'], dict)
+    assert axes['latitude']['data'].shape == (ny, nx)
+
+    assert isinstance(axes['longitude'], dict)
+    assert axes['longitude']['data'].shape == (ny, nx)
