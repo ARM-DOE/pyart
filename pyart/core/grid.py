@@ -45,21 +45,31 @@ class Grid(object):
         release.
 
     """
-    def __init__(self, fields, axes, metadata):
+    def __init__(self, time, fields, metadata,
+                 origin_latitude, origin_longitude, origin_altitude,
+                 regular_x, regular_y, regular_z):
         """ Initalize object. """
+
+        self.time = time
         self.fields = fields
         self.metadata = metadata
-
-        # unpack axes dictionary
-        self.time = axes['time']
-        self.origin_longitude = axes['lat']
-        self.origin_latitude = axes['lon']
-        self.origin_altitude = axes['alt']
-        self.regular_x = axes['x_disp']
-        self.regular_y = axes['y_disp']
-        self.regular_z = axes['z_disp']
+        self.origin_latitude = origin_latitude
+        self.origin_longitude = origin_longitude
+        self.origin_altitude = origin_altitude
+        self.regular_x = regular_x
+        self.regular_y = regular_y
+        self.regular_z = regular_z
 
         # Depreciated axes attribute
+        axes = {'time': time,
+                'time_start': time,  # incorrect metadata
+                'time_end': time,    # incorrect metadata
+                'z_disp': regular_z,
+                'y_disp': regular_y,
+                'x_disp': regular_x,
+                'alt': origin_altitude,
+                'lat': origin_latitude,
+                'lon': origin_longitude}
         self.axes = axes
 
         return

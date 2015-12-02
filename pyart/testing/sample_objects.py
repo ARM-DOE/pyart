@@ -255,73 +255,60 @@ def make_empty_grid(grid_shape, grid_limits):
         'standard_name': 'time',
         'long_name': 'Time in seconds since volume start'}
 
-    time_start = {
-        'data': np.array([0.0]),
-        'units': 'seconds since 2000-01-01T00:00:00Z',
-        'calendar': 'gregorian',
-        'standard_name': 'time',
-        'long_name': 'Time in seconds since volume start'}
-
-    time_end = {
-        'data': np.array([0.0]),
-        'units': 'seconds since 2000-01-01T00:00:00Z',
-        'calendar': 'gregorian',
-        'standard_name': 'time',
-        'long_name': 'Time in seconds since volume start'}
-
     # grid coordinate dictionaries
     nz, ny, nx = grid_shape
     (z0, z1), (y0, y1), (x0, x1) = grid_limits
 
-    xaxis = {'data': np.linspace(x0, x1, nx),
-             'long_name': 'X-coordinate in Cartesian system',
-             'axis': 'X',
-             'units': 'm'}
+    regular_x = {
+        'data': np.linspace(x0, x1, nx),
+        'long_name': 'X-coordinate in Cartesian system',
+        'axis': 'X',
+        'units': 'm'}
 
-    yaxis = {'data': np.linspace(y0, y1, ny),
-             'long_name': 'Y-coordinate in Cartesian system',
-             'axis': 'Y',
-             'units': 'm'}
+    regular_y = {
+        'data': np.linspace(y0, y1, ny),
+        'long_name': 'Y-coordinate in Cartesian system',
+        'axis': 'Y',
+        'units': 'm'}
 
-    zaxis = {'data': np.linspace(z0, z1, nz),
-             'long_name': 'Z-coordinate in Cartesian system',
-             'axis': 'Z',
-             'units': 'm',
-             'positive': 'up'}
+    regular_z = {
+        'data': np.linspace(z0, z1, nz),
+        'long_name': 'Z-coordinate in Cartesian system',
+        'axis': 'Z',
+        'units': 'm',
+        'positive': 'up'}
 
-    altorigin = {'data': np.array([300.]),
-                 'long_name': 'Altitude at grid origin',
-                 'units': 'm',
-                 'standard_name': 'altitude',
-                 }
+    origin_altitude = {
+        'data': np.array([300.]),
+        'long_name': 'Altitude at grid origin',
+        'units': 'm',
+        'standard_name': 'altitude',
+    }
 
-    latorigin = {'data': np.array([36.74]),
-                 'long_name': 'Latitude at grid origin',
-                 'units': 'degree_N',
-                 'standard_name': 'latitude',
-                 'valid_min': -90.,
-                 'valid_max': 90.
-                 }
+    origin_latitude = {
+        'data': np.array([36.74]),
+        'long_name': 'Latitude at grid origin',
+        'units': 'degree_N',
+        'standard_name': 'latitude',
+        'valid_min': -90.,
+        'valid_max': 90.
+    }
 
-    lonorigin = {'data': np.array([-98.1]),
-                 'long_name': 'Longitude at grid origin',
-                 'units': 'degree_E',
-                 'standard_name': 'longitude',
-                 'valid_min': -180.,
-                 'valid_max': 180.
-                 }
+    origin_longitude = {
+        'data': np.array([-98.1]),
+        'long_name': 'Longitude at grid origin',
+        'units': 'degree_E',
+        'standard_name': 'longitude',
+        'valid_min': -180.,
+        'valid_max': 180.
+    }
 
-    axes = {'time': time,
-            'time_start': time_start,
-            'time_end': time_end,
-            'z_disp': zaxis,
-            'y_disp': yaxis,
-            'x_disp': xaxis,
-            'alt': altorigin,
-            'lat': latorigin,
-            'lon': lonorigin}
+    fields = {}
+    metadata = {}
 
-    return Grid({}, axes, {})
+    return Grid(time, fields, metadata,
+                origin_latitude, origin_longitude, origin_altitude,
+                regular_x, regular_y, regular_z)
 
 
 def make_target_grid():
