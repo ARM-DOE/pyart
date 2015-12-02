@@ -21,6 +21,7 @@ import numpy as np
 
 from ..config import get_metadata
 from ..lazydict import LazyLoadDict
+from .transforms import cartesian_to_geographic
 
 
 class Grid(object):
@@ -55,6 +56,22 @@ class Grid(object):
         contained these attributes are calculated from the regular_x,
         regular_y, and regular_z attributes.  If these attributes are changed
         use :py:func:`init_point_x_y_z` to reset the attributes.
+    point_longitude, point_latitude : LazyLoadDict
+        Geographic location of each grid point. The projection parameter(s)
+        defined in the `projection` attribute are used to perform an inverse
+        map projection from the Cartesian grid point locations relative to
+        the grid origin. If these attributes are changed use
+        :py:func:`init_point_longitude_latitude` to reset the attributes.
+    projection : dic or str
+        Projection parameters defining the map projection used to transform
+        from Cartesian to geographic coordinates.  The default dictionary sets
+        the 'proj' key to 'pyart_aeqd' indicating that the native Py-ART
+        azimuthal equidistant projection is used. This can be modified to
+        specify a valid pyproj.Proj projparams dictionary or string.
+        The special key '_include_lon_0_lat_0' is removed when interpreting
+        this dictionary. If this key is present and set to True, which is
+        required when proj='pyart_aeqd', then the radar longitude and
+        latitude will be added to the dictionary as 'lon_0' and 'lat_0'.
     axes : dict
         Dictionary of axes dictionaries.
         This attribute is Depreciated, it will be removed in the next Py-ART
@@ -75,9 +92,11 @@ class Grid(object):
         self.regular_x = regular_x
         self.regular_y = regular_y
         self.regular_z = regular_z
+        self.projection = {'proj': 'pyart_aeqd', '_include_lon_0_lat_0': True}
 
         # initialize attributes with Lazy load dictionaries
         self.init_point_x_y_z()
+        self.init_point_longitude_latitude()
 
         # Depreciated axes attribute
         axes = {'time': time,
@@ -104,6 +123,18 @@ class Grid(object):
 
         self.point_z = LazyLoadDict(get_metadata('point_z'))
         self.point_z.set_lazy('data', _point_data_factory(self, 'z'))
+
+    def init_point_longitude_latitude(self):
+        """
+        Initialize or reset the point_{longitude, latitudes} attributes.
+        """
+        point_longitude = LazyLoadDict(get_metadata('point_longitude'))
+        point_longitude.set_lazy('data', _point_lon_lat_data_factory(self, 0))
+        self.point_longitude = point_longitude
+
+        point_latitude = LazyLoadDict(get_metadata('point_latitude'))
+        point_latitude.set_lazy('data', _point_lon_lat_data_factory(self, 1))
+        self.point_latitude = point_latitude
 
     def write(self, filename, format='NETCDF4', arm_time_variables=False):
         """
@@ -175,3 +206,23 @@ def _point_data_factory(grid, coordinate):
             assert coordinate == 'z'
             return np.tile(reg_z, (len(reg_x), len(reg_y), 1)).swapaxes(0, 2)
     return _point_data
+
+
+def _point_lon_lat_data_factory(grid, coordinate):
+    """ Return a function which returns the geographic locations of points. """
+    def _gate_lon_lat_data():
+        """ The function which returns the geographic point locations. """
+        x = grid.point_x['data']
+        y = grid.point_y['data']
+        projparams = grid.projection.copy()
+        if projparams.pop('_include_lon_0_lat_0', False):
+            projparams['lon_0'] = grid.origin_longitude['data'][0]
+            projparams['lat_0'] = grid.origin_latitude['data'][0]
+        geographic_coords = cartesian_to_geographic(x, y, projparams)
+        # set the other geographic coordinate
+        if coordinate == 0:
+            grid.point_latitude['data'] = geographic_coords[1]
+        else:
+            grid.point_longitude['data'] = geographic_coords[0]
+        return geographic_coords[coordinate]
+    return _gate_lon_lat_data

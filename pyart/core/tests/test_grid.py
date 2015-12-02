@@ -103,6 +103,30 @@ def test_grid_class():
     assert_almost_equal(
         grid.point_z['data'][:, 1, 1], grid.regular_z['data'][:])
 
+    assert isinstance(grid.point_longitude, LazyLoadDict)
+    assert grid.point_longitude['data'].shape == (nz, ny, nx)
+    assert_almost_equal(grid.point_longitude['data'][0, 0, 159], -98.1, 1)
+
+    assert isinstance(grid.point_latitude, LazyLoadDict)
+    assert grid.point_latitude['data'].shape == (nz, ny, nx)
+    assert_almost_equal(grid.point_latitude['data'][0, 200, 0], 36.7, 1)
+
+
+def test_init_point_longitude_latitude():
+    grid = pyart.testing.make_target_grid()
+
+    assert_almost_equal(grid.point_longitude['data'][0, 0, 159], -98.1, 1)
+    assert_almost_equal(grid.point_latitude['data'][0, 200, 0], 36.7, 1)
+
+    grid.origin_longitude['data'][0] = -80.0
+    grid.origin_latitude['data'][0] = 40.0
+    assert_almost_equal(grid.point_longitude['data'][0, 0, 159], -98.1, 1)
+    assert_almost_equal(grid.point_latitude['data'][0, 200, 0], 36.7, 1)
+
+    grid.init_point_longitude_latitude()
+    assert_almost_equal(grid.point_longitude['data'][0, 0, 159], -80.0, 1)
+    assert_almost_equal(grid.point_latitude['data'][0, 200, 0], 40.0, 1)
+
 
 def test_init_point_x_y_z():
     grid = pyart.testing.make_target_grid()

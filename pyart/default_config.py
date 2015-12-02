@@ -643,6 +643,14 @@ DEFAULT_METADATA = {
         'positive': 'up',
         'units': 'meters'},
 
+    'point_longitude': {
+        'long_name': 'Longitude of each grid point',
+        'units': 'degrees_north'},
+
+    'point_latitude': {
+        'long_name': 'Latitude of each grid point',
+        'units': 'degrees_east'},
+
 }
 
 
