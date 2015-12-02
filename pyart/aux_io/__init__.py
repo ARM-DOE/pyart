@@ -41,5 +41,6 @@ from .arm_vpt import read_kazr
 from .edge_netcdf import read_edge_netcdf
 from .odim_h5 import read_odim_h5
 from .gamic_hdf5 import read_gamic
+from .sinarame_h5 import read_sinarame_h5
 
 __all__ = [s for s in dir() if not s.startswith('_')]
