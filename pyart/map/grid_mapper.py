@@ -115,39 +115,28 @@ def grid_from_radars(radars, grid_shape, grid_limits,
         'standard_name': first_radar.time['standard_name'],
         'long_name': 'Time in seconds since volume start'}
 
-    time_start = {
-        'data': np.array([first_radar.time['data'][0]]),
-        'units': first_radar.time['units'],
-        'calendar': first_radar.time['calendar'],
-        'standard_name': first_radar.time['standard_name'],
-        'long_name': 'Time in seconds of volume start'}
-
-    time_end = {
-        'data': np.array([first_radar.time['data'][-1]]),
-        'units': first_radar.time['units'],
-        'calendar': first_radar.time['calendar'],
-        'standard_name': first_radar.time['standard_name'],
-        'long_name': 'Time in seconds of volume end'}
-
     # grid coordinate dictionaries
     nz, ny, nx = grid_shape
     (z0, z1), (y0, y1), (x0, x1) = grid_limits
 
-    xaxis = {'data':  np.linspace(x0, x1, nx),
-             'long_name': 'X-coordinate in Cartesian system',
-             'axis': 'X',
-             'units': 'm'}
+    regular_x = {
+        'data':  np.linspace(x0, x1, nx),
+        'long_name': 'X-coordinate in Cartesian system',
+        'axis': 'X',
+        'units': 'm'}
 
-    yaxis = {'data': np.linspace(y0, y1, ny),
-             'long_name': 'Y-coordinate in Cartesian system',
-             'axis': 'Y',
-             'units': 'm'}
+    regular_y = {
+        'data': np.linspace(y0, y1, ny),
+        'long_name': 'Y-coordinate in Cartesian system',
+        'axis': 'Y',
+        'units': 'm'}
 
-    zaxis = {'data': np.linspace(z0, z1, nz),
-             'long_name': 'Z-coordinate in Cartesian system',
-             'axis': 'Z',
-             'units': 'm',
-             'positive': 'up'}
+    regular_z = {
+        'data': np.linspace(z0, z1, nz),
+        'long_name': 'Z-coordinate in Cartesian system',
+        'axis': 'Z',
+        'units': 'm',
+        'positive': 'up'}
 
     # grid origin location dictionaries
     if 'grid_origin' in kwargs:
@@ -162,38 +151,30 @@ def grid_from_radars(radars, grid_shape, grid_limits,
     else:
         alt = first_radar.altitude['data']
 
-    altorigin = {'data': alt,
-                 'long_name': 'Altitude at grid origin',
-                 'units': 'm',
-                 'standard_name': 'altitude',
-                 }
+    origin_altitude = {
+        'data': alt,
+        'long_name': 'Altitude at grid origin',
+        'units': 'm',
+        'standard_name': 'altitude',
+    }
 
-    latorigin = {'data': lat,
-                 'long_name': 'Latitude at grid origin',
-                 'units': 'degree_N',
-                 'standard_name': 'latitude',
-                 'valid_min': -90.,
-                 'valid_max': 90.
-                 }
+    origin_latitude = {
+        'data': lat,
+        'long_name': 'Latitude at grid origin',
+        'units': 'degree_N',
+        'standard_name': 'latitude',
+        'valid_min': -90.,
+        'valid_max': 90.
+    }
 
-    lonorigin = {'data': lon,
-                 'long_name': 'Longitude at grid origin',
-                 'units': 'degree_E',
-                 'standard_name': 'longitude',
-                 'valid_min': -180.,
-                 'valid_max': 180.
-                 }
-
-    # axes dictionary
-    axes = {'time': time,
-            'time_start': time_start,
-            'time_end': time_end,
-            'z_disp': zaxis,
-            'y_disp': yaxis,
-            'x_disp': xaxis,
-            'alt': altorigin,
-            'lat': latorigin,
-            'lon': lonorigin}
+    origin_longitude = {
+        'data': lon,
+        'long_name': 'Longitude at grid origin',
+        'units': 'degree_E',
+        'standard_name': 'longitude',
+        'valid_min': -180.,
+        'valid_max': 180.
+    }
 
     # metadata dictionary
     metadata = dict(first_radar.metadata)
@@ -211,7 +192,9 @@ def grid_from_radars(radars, grid_shape, grid_limits,
             i_name = ''
         metadata['radar_{0:d}_instrument_name'.format(i)] = i_name
 
-    return Grid(fields, axes, metadata)
+    return Grid(time, fields, metadata,
+                origin_latitude, origin_longitude, origin_altitude,
+                regular_x, regular_y, regular_z)
 
 
 class NNLocator:

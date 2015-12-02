@@ -77,8 +77,8 @@ def read_grid(filename, exclude_fields=None, **kwargs):
     # check all non-axes variables, those with the correct shape
     # are added to the field dictionary, if a wrong sized field is
     # detected a warning is raised
-    field_keys = [k for k in ncobj.variables if k not in axes_keys
-                  and k not in exclude_fields]
+    field_keys = [k for k in ncobj.variables if k not in axes_keys and
+                  k not in exclude_fields]
     fields = {}
     for field in field_keys:
         field_dic = _ncvar_to_dict(ncobj.variables[field])
@@ -90,7 +90,10 @@ def read_grid(filename, exclude_fields=None, **kwargs):
             warn('Field %s skipped due to incorrect shape' % (field))
 
     ncobj.close()
-    return Grid(fields, axes, metadata)
+
+    return Grid(axes['time'], fields, metadata,
+                axes['lat'], axes['lon'], axes['alt'],
+                axes['x_disp'], axes['y_disp'], axes['z_disp'])
 
 
 def write_grid(filename, grid, format='NETCDF4', arm_time_variables=False):

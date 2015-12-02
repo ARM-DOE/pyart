@@ -325,28 +325,14 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
         'standard_name': 'time',
         'long_name': 'Time in seconds since volume start'}
 
-    time_start = {
-        'data': np.array([date2num(mdv.times['time_begin'], units)]),
-        'units': units,
-        'calendar': 'gregorian',
-        'standard_name': 'time',
-        'long_name': 'Time in seconds of volume start'}
-
-    time_end = {
-        'data': np.array([date2num(mdv.times['time_end'], units)]),
-        'units': units,
-        'calendar': 'gregorian',
-        'standard_name': 'time',
-        'long_name': 'Time in seconds of volume end'}
-
-    altorigin = {
+    origin_altitude = {
         'data': np.array([mdv.master_header["sensor_alt"] * 1000.],
                          dtype='float64'),
         'long_name': 'Altitude at grid origin',
         'units': 'm',
         'standard_name': 'altitude', }
 
-    latorigin = {
+    origin_latitude = {
         'data': np.array([mdv.master_header["sensor_lat"]],
                          dtype='float64'),
         'long_name': 'Latitude at grid origin',
@@ -355,7 +341,7 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
         'valid_min': -90.,
         'valid_max': 90., }
 
-    lonorigin = {
+    origin_longitude = {
         'data': np.array([mdv.master_header["sensor_lon"]],
                          dtype='float64'),
         'long_name': 'Longitude at grid origin',
@@ -399,32 +385,24 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
     elif mdv.field_headers[0]["vlevel_type"] == 7:  # VERT_TYPE_THETA
         zunits = 'kelvin'
 
-    xaxis = {'data':  np.linspace(x_start, x_start + x_step * (nx-1), nx),
-             'long_name': 'X-coordinate in Cartesian system',
-             'axis': 'X',
-             'units': xunits}
+    regular_x = {
+        'data':  np.linspace(x_start, x_start + x_step * (nx-1), nx),
+        'long_name': 'X-coordinate in Cartesian system',
+        'axis': 'X',
+        'units': xunits}
 
-    yaxis = {'data': np.linspace(y_start, y_start + y_step * (ny-1), ny),
-             'long_name': 'Y-coordinate in Cartesian system',
-             'axis': 'Y',
-             'units': yunits}
+    regular_y = {
+        'data': np.linspace(y_start, y_start + y_step * (ny-1), ny),
+        'long_name': 'Y-coordinate in Cartesian system',
+        'axis': 'Y',
+        'units': yunits}
 
-    zaxis = {'data': np.array(z_line, dtype='float64'),
-             'long_name': 'Z-coordinate in Cartesian system',
-             'axis': 'Z',
-             'units': zunits,
-             'positive': 'up'}
-
-    # axes dictionary
-    axes = {'time': time,
-            'time_start': time_start,
-            'time_end': time_end,
-            'z_disp': zaxis,
-            'y_disp': yaxis,
-            'x_disp': xaxis,
-            'alt': altorigin,
-            'lat': latorigin,
-            'lon': lonorigin}
+    regular_z = {
+        'data': np.array(z_line, dtype='float64'),
+        'long_name': 'Z-coordinate in Cartesian system',
+        'axis': 'Z',
+        'units': zunits,
+        'positive': 'up'}
 
     # metadata
     metadata = filemetadata('metadata')
@@ -452,7 +430,9 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
 
     if not delay_field_loading:
         mdv.close()
-    return Grid(fields, axes, metadata)
+    return Grid(time, fields, metadata,
+                origin_latitude, origin_longitude, origin_altitude,
+                regular_x, regular_y, regular_z)
 
 
 # This function may be helpful in other cases and could be moved in common
