@@ -651,6 +651,10 @@ DEFAULT_METADATA = {
         'long_name': 'Latitude of each grid point',
         'units': 'degrees_east'},
 
+    'point_altitude': {
+        'long_name': 'Altitude of each grid point',
+        'units': 'meters'},
+
 }
 
 

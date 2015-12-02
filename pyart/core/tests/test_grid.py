@@ -111,6 +111,25 @@ def test_grid_class():
     assert grid.point_latitude['data'].shape == (nz, ny, nx)
     assert_almost_equal(grid.point_latitude['data'][0, 200, 0], 36.7, 1)
 
+    assert isinstance(grid.point_altitude, LazyLoadDict)
+    assert grid.point_altitude['data'].shape == (nz, ny, nx)
+    assert_almost_equal(grid.point_altitude['data'][0, 0, 0], 300, 0)
+    assert_almost_equal(grid.point_altitude['data'][1, 0, 0], 800, 0)
+
+
+def test_init_point_altitude():
+    grid = pyart.testing.make_target_grid()
+    assert_almost_equal(grid.point_altitude['data'][0, 0, 0], 300, 0)
+    assert_almost_equal(grid.point_altitude['data'][1, 0, 0], 800, 0)
+
+    grid.origin_altitude['data'][0] = 555.
+    assert_almost_equal(grid.point_altitude['data'][0, 0, 0], 300, 0)
+    assert_almost_equal(grid.point_altitude['data'][1, 0, 0], 800, 0)
+
+    grid.init_point_altitude()
+    assert_almost_equal(grid.point_altitude['data'][0, 0, 0], 555, 0)
+    assert_almost_equal(grid.point_altitude['data'][1, 0, 0], 1055, 0)
+
 
 def test_init_point_longitude_latitude():
     grid = pyart.testing.make_target_grid()

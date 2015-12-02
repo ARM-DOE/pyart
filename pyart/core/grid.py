@@ -14,6 +14,8 @@ An class for holding gridded Radar data.
     :toctree: generated/
 
     _point_data_factory
+    _point_lon_lat_data_factory
+    _point_altitude_data_factory
 
 """
 
@@ -62,6 +64,11 @@ class Grid(object):
         map projection from the Cartesian grid point locations relative to
         the grid origin. If these attributes are changed use
         :py:func:`init_point_longitude_latitude` to reset the attributes.
+    point_altitude : LazyLoadDict
+        The altitude of each grid point as calculated from the altitude of the
+        grid origin and the Cartesian z location of each grid point.  If this
+        attribute is changed use :py:func:`init_gate_altitude` to reset the
+        attribute.
     projection : dic or str
         Projection parameters defining the map projection used to transform
         from Cartesian to geographic coordinates.  The default dictionary sets
@@ -97,6 +104,7 @@ class Grid(object):
         # initialize attributes with Lazy load dictionaries
         self.init_point_x_y_z()
         self.init_point_longitude_latitude()
+        self.init_point_altitude()
 
         # Depreciated axes attribute
         axes = {'time': time,
@@ -135,6 +143,12 @@ class Grid(object):
         point_latitude = LazyLoadDict(get_metadata('point_latitude'))
         point_latitude.set_lazy('data', _point_lon_lat_data_factory(self, 1))
         self.point_latitude = point_latitude
+
+    def init_point_altitude(self):
+        """ Initialize the point_altitude attribute. """
+        point_altitude = LazyLoadDict(get_metadata('point_altitude'))
+        point_altitude.set_lazy('data', _point_altitude_data_factory(self))
+        self.point_altitude = point_altitude
 
     def write(self, filename, format='NETCDF4', arm_time_variables=False):
         """
@@ -210,7 +224,7 @@ def _point_data_factory(grid, coordinate):
 
 def _point_lon_lat_data_factory(grid, coordinate):
     """ Return a function which returns the geographic locations of points. """
-    def _gate_lon_lat_data():
+    def _point_lon_lat_data():
         """ The function which returns the geographic point locations. """
         x = grid.point_x['data']
         y = grid.point_y['data']
@@ -225,4 +239,12 @@ def _point_lon_lat_data_factory(grid, coordinate):
         else:
             grid.point_longitude['data'] = geographic_coords[0]
         return geographic_coords[coordinate]
-    return _gate_lon_lat_data
+    return _point_lon_lat_data
+
+
+def _point_altitude_data_factory(grid):
+    """ Return a function which returns the point altitudes. """
+    def _point_altitude_data():
+        """ The function which returns the point altitudes. """
+        return grid.origin_altitude['data'][0] + grid.point_z['data']
+    return _point_altitude_data
