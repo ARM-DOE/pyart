@@ -15,32 +15,53 @@ An class for holding gridded Radar data.
 
 class Grid(object):
     """
-    An object for holding gridded Radar data.
+    A class for storing rectilinear gridded radar data in Cartesian coordinate.
 
     Parameters
     ----------
     fields : dict
         Dictionary of field dictionaries.
-    axes : dict
-        Dictionary of axes dictionaries.
     metadata : dict
         Dictionary of metadata.
+    axes : dict
+        Dictionary of axes dictionaries.
 
     Attributes
     ----------
-    fields: dict
-        Dictionary of field dictionaries.
-    axes: dict
-        Dictionary of axes dictionaries.
+    fields: dict of dicts
+        Moments from radars or other variables.
     metadata: dict
-        Dictionary of metadata.
+        Metadata describing the grid.
+    time : dict
+        Time of the grid.
+    origin_longitude, origin_latitude, origin_altitude : dict
+        Geographic coordinate of the origin of the grid.
+    regular_x, regular_y, regular_z : dict
+        Regular locations of grid points from the origin in the three
+        Cartesian coordinates.
+    axes : dict
+        Dictionary of axes dictionaries.
+        This attribute is Depreciated, it will be removed in the next Py-ART
+        release.
 
     """
     def __init__(self, fields, axes, metadata):
         """ Initalize object. """
         self.fields = fields
         self.metadata = metadata
+
+        # unpack axes dictionary
+        self.time = axes['time']
+        self.origin_longitude = axes['lat']
+        self.origin_latitude = axes['lon']
+        self.origin_altitude = axes['alt']
+        self.regular_x = axes['x_disp']
+        self.regular_y = axes['y_disp']
+        self.regular_z = axes['z_disp']
+
+        # Depreciated axes attribute
         self.axes = axes
+
         return
 
     def write(self, filename, format='NETCDF4', arm_time_variables=False):

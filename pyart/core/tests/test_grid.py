@@ -45,3 +45,37 @@ def test_grid_from_radars():
                     assert np.all(grid.fields[field][k] == v)
                 else:
                     assert grid2.fields[field][k] == v
+
+
+def test_grid_class():
+    grid = pyart.testing.make_target_grid()
+
+    nz = 2
+    ny = 400
+    nx = 320
+
+    assert isinstance(grid.metadata, dict)
+    assert isinstance(grid.fields, dict)
+    assert isinstance(grid.fields['reflectivity'], dict)
+    assert grid.fields['reflectivity']['data'].shape == (nz, ny, nx)
+
+    assert isinstance(grid.time, dict)
+    assert grid.time['data'].shape == (1, )
+
+    assert isinstance(grid.origin_longitude, dict)
+    assert grid.origin_longitude['data'].shape == (1, )
+
+    assert isinstance(grid.origin_latitude, dict)
+    assert grid.origin_latitude['data'].shape == (1, )
+
+    assert isinstance(grid.origin_altitude, dict)
+    assert grid.origin_altitude['data'].shape == (1, )
+
+    assert isinstance(grid.regular_x, dict)
+    assert grid.regular_x['data'].shape == (nx, )
+
+    assert isinstance(grid.regular_y, dict)
+    assert grid.regular_y['data'].shape == (ny, )
+
+    assert isinstance(grid.regular_z, dict)
+    assert grid.regular_z['data'].shape == (nz, )
