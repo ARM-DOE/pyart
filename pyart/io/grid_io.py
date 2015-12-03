@@ -141,7 +141,8 @@ def read_grid(filename, exclude_fields=None, **kwargs):
     return grid
 
 
-def write_grid(filename, grid, format='NETCDF4', arm_time_variables=False):
+def write_grid(filename, grid, format='NETCDF4', arm_time_variables=False,
+               write_point_x_y_z=False, write_point_lon_lat_alt=False):
     """
     Write a Grid object to a CF-1.5 and ARM standard netcdf file
 
@@ -170,9 +171,15 @@ def write_grid(filename, grid, format='NETCDF4', arm_time_variables=False):
         NetCDF format, one of 'NETCDF4', 'NETCDF4_CLASSIC',
         'NETCDF3_CLASSIC' or 'NETCDF3_64BIT'. See netCDF4 documentation for
         details.
-    arm_time_variables : bool
+    arm_time_variables : bool, optional
         True to write the ARM standard time variables base_time and
         time_offset. False will not write these variables.
+    write_point_x_y_z : bool, optional
+        True to include the point_x, point_y and point_z variables in the
+        written file, False will not write these variables.
+    write_point_lon_lat_alt : bool, optional
+        True to include the point_longitude, point_latitude and point_altitude
+        variables in the written file, False will not write these variables.
 
     """
     dset = netCDF4.Dataset(filename, mode='w', format=format)
@@ -242,6 +249,17 @@ def write_grid(filename, grid, format='NETCDF4', arm_time_variables=False):
             'calendar': 'gregorian',
         }
         _create_ncvar(time_offset, dset, 'time_offset', ('time', ))
+
+    # optionally write point_ variables
+    if write_point_x_y_z:
+        _create_ncvar(grid.point_x, dset, 'point_x', ('nz', 'nx', 'ny'))
+        _create_ncvar(grid.point_y, dset, 'point_y', ('nz', 'nx', 'ny'))
+        _create_ncvar(grid.point_z, dset, 'point_z', ('nz', 'nx', 'ny'))
+    if write_point_lon_lat_alt:
+        dims = ('nz', 'ny', 'nx')
+        _create_ncvar(grid.point_latitude, dset, 'point_latitude', dims)
+        _create_ncvar(grid.point_longitude, dset, 'point_longitude', dims)
+        _create_ncvar(grid.point_altitude, dset, 'point_altitude', dims)
 
     # field variables
     for field, field_dic in grid.fields.items():

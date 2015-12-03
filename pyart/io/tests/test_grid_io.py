@@ -2,6 +2,7 @@
 
 from __future__ import print_function
 
+import netCDF4
 from numpy.testing import assert_almost_equal
 
 import pyart
@@ -15,7 +16,7 @@ def test_grid_write_read():
 
     with pyart.testing.InTemporaryDirectory():
         tmpfile = 'tmp_grid.nc'
-        grid1.write(tmpfile)
+        pyart.io.write_grid(tmpfile, grid1)
         grid2 = pyart.io.read_grid(tmpfile)
 
         # check fields
@@ -75,3 +76,21 @@ def _check_dicts_similar(dic1, dic2):
                 assert_almost_equal(v, dic2[k])
         else:
             assert dic2[k] == v
+
+
+def test_grid_write_point_vars():
+    grid1 = pyart.testing.make_target_grid()
+
+    with pyart.testing.InTemporaryDirectory():
+        tmpfile = 'tmp_grid.nc'
+        pyart.io.write_grid(tmpfile, grid1, write_point_x_y_z=True,
+                            write_point_lon_lat_alt=True)
+        dset = netCDF4.Dataset(tmpfile, 'r')
+
+        assert 'point_x' in dset.variables
+        assert 'point_y' in dset.variables
+        assert 'point_z' in dset.variables
+        assert 'point_latitude' in dset.variables
+        assert 'point_longitude' in dset.variables
+        assert 'point_altitude' in dset.variables
+        dset.close()
