@@ -115,6 +115,7 @@ def test_grid_class():
     assert grid.point_longitude['data'].shape == (nz, ny, nx)
     assert_almost_equal(grid.point_longitude['data'][0, 0, 159], -98.1, 1)
 
+    grid.init_point_longitude_latitude()
     assert isinstance(grid.point_latitude, LazyLoadDict)
     assert grid.point_latitude['data'].shape == (nz, ny, nx)
     assert_almost_equal(grid.point_latitude['data'][0, 200, 0], 36.7, 1)
@@ -138,6 +139,36 @@ def test_grid_class():
 
     assert isinstance(grid.radar_name, dict)
     assert grid.radar_name['data'].shape == (nradar, )
+
+
+def test_add_field():
+    grid = pyart.testing.make_target_grid()
+
+    assert 'velocity' not in grid.fields
+    field_dict = {'data': np.ones((2, 400, 320))}
+    grid.add_field('velocity', field_dict)
+    assert 'velocity' in grid.fields
+    assert grid.fields['velocity']['data'].shape == (2, 400, 320)
+
+    # Existing fields can be replaced if requested
+    assert_almost_equal(grid.fields['reflectivity']['data'][0, 0, 0], 0)
+    grid.add_field('reflectivity', field_dict, replace_existing=True)
+    assert_almost_equal(grid.fields['reflectivity']['data'][0, 0, 0], 1)
+
+
+def test_add_field_raises():
+    grid = pyart.testing.make_target_grid()
+
+    # No 'data' key in field_dict raises a KeyError
+    assert_raises(KeyError, grid.add_field, 'field_name', {})
+
+    # Adding a field which already exists raises a ValueError
+    field_dict = {'data': np.ones((2, 400, 320))}
+    assert_raises(ValueError, grid.add_field, 'reflectivity', field_dict)
+
+    # Incorrect field_shapes raise a ValueError
+    field_dict = {'data': np.ones((1, 1, 1))}
+    assert_raises(ValueError, grid.add_field, 'field_name', field_dict)
 
 
 def test_inconsistent_radar_arguments():
