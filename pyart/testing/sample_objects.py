@@ -278,7 +278,7 @@ def make_empty_grid(grid_shape, grid_limits):
     metadata = {}
 
     radar_latitude = get_metadata('radar_latitude')
-    radar_latitude['data'] = np.array([-36.71])
+    radar_latitude['data'] = np.array([36.74])
 
     radar_longitude = get_metadata('radar_longitude')
     radar_longitude['data'] = np.array([-98.1])
