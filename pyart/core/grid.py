@@ -249,21 +249,15 @@ class Grid(object):
             raised if field_name already exists.
 
         """
-
-        # grid fields should have dimensions of (nz, ny, nx)
-        nz, ny, nx = self.fields[self.fields.keys()[0]]['data'].shape
-
         # checks to make sure input field dictionary is valid
         if 'data' not in field_dict:
             raise KeyError('Field dictionary must contain a "data" key')
         if field_name in self.fields and replace_existing is False:
             raise ValueError('A field named %s already exists' % (field_name))
-        if field_dict['data'].shape != (nz, ny, nx):
+        if field_dict['data'].shape != (self.nz, self.ny, self.nx):
             raise ValueError('Field has invalid shape')
 
         self.fields[field_name] = field_dict
-
-        return
 
 
 def _point_data_factory(grid, coordinate):
