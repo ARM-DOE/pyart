@@ -10,45 +10,62 @@ from numpy.testing import assert_almost_equal, assert_raises
 import pyart
 from pyart.lazydict import LazyLoadDict
 
-COMMON_MAP_TO_GRID_ARGS = {
-    'grid_shape': (3, 9, 10),
-    'grid_limits': ((-400.0, 400.0), (-900.0, 900.0), (-900, 900)),
-    'fields': ['reflectivity'],
-    'roi_func': lambda z, y, x: 30, }
 
-
-def test_grid_from_radars():
-    radar = pyart.testing.make_target_radar()
-    grid = pyart.map.grid_from_radars((radar,), **COMMON_MAP_TO_GRID_ARGS)
+def test_grid_write_method():
+    grid1 = pyart.testing.make_target_grid()
 
     with pyart.testing.InTemporaryDirectory():
         tmpfile = 'tmp_grid.nc'
-        grid.write(tmpfile)
+        grid1.write(tmpfile)
         grid2 = pyart.io.read_grid(tmpfile)
 
-        # check metadata
-        for k, v in grid.metadata.items():
-            print("Checking key:", k, "should have value:", v)
-            print(grid2.metadata)
-            assert grid2.metadata[k] == v
-
-        # check axes
-        for axes_key in grid.axes.keys():
-            for k, v in grid.axes[axes_key].items():
-                print("Checking axes_key:", axes_key, "key:", k)
-                if k == 'data':
-                    assert np.all(grid.axes[axes_key][k] == v)
-                else:
-                    assert grid2.axes[axes_key][k] == v
-
         # check fields
-        for field in grid.fields.keys():
-            for k, v in grid.fields[field].items():
-                print("Checking field:", field, "key:", k)
-                if k == 'data':
-                    assert np.all(grid.fields[field][k] == v)
-                else:
-                    assert grid2.fields[field][k] == v
+        for field in grid1.fields.keys():
+            _check_dicts_similar(grid1.fields[field], grid2.fields[field])
+
+        # check attributes
+        _check_dicts_similar(grid1.metadata, grid2.metadata)
+
+        _check_dicts_similar(grid1.time, grid2.time)
+
+        _check_dicts_similar(grid1.origin_latitude, grid2.origin_latitude)
+        _check_dicts_similar(grid1.origin_longitude, grid2.origin_longitude)
+        _check_dicts_similar(grid1.origin_altitude, grid2.origin_altitude)
+
+        _check_dicts_similar(grid1.regular_x, grid2.regular_x)
+        _check_dicts_similar(grid1.regular_y, grid2.regular_y)
+        _check_dicts_similar(grid1.regular_z, grid2.regular_z)
+
+        _check_dicts_similar(grid1.point_x, grid2.point_x)
+        _check_dicts_similar(grid1.point_y, grid2.point_y)
+        _check_dicts_similar(grid1.point_z, grid2.point_z)
+
+        _check_dicts_similar(grid1.projection, grid2.projection)
+
+        _check_dicts_similar(grid1.point_latitude, grid2.point_latitude)
+        _check_dicts_similar(grid1.point_longitude, grid2.point_longitude)
+        _check_dicts_similar(grid1.point_altitude, grid2.point_altitude)
+
+        assert grid1.nx == grid2.nx
+        assert grid1.ny == grid2.ny
+        assert grid1.nz == grid2.nz
+
+        # XXX not written at the moment
+        # _check_dicts_similar(grid1.radar_latitude, grid2.radar_latitude)
+        # _check_dicts_similar(grid1.radar_longitude, grid2.radar_longitude)
+        # _check_dicts_similar(grid1.radar_altitude, grid2.radar_altitude)
+        # _check_dicts_similar(grid1.radar_time, grid2.radar_time)
+        # _check_dicts_similar(grid1.radar_name, grid2.radar_name)
+        #  assert grid1.nradar == grid2.nradar
+
+
+def _check_dicts_similar(dic1, dic2):
+    for k, v in dic1.items():
+        print("Checking key:", k)
+        if k == 'data':
+            assert_almost_equal(v, dic2[k])
+        else:
+            assert dic2[k] == v
 
 
 def test_grid_class():
