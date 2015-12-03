@@ -6,6 +6,7 @@ import netCDF4
 from numpy.testing import assert_almost_equal, assert_warns
 
 import pyart
+from pyart.io.common import stringarray_to_chararray
 
 
 def test_grid_write_read():
@@ -71,8 +72,16 @@ def _check_dicts_similar(dic1, dic2):
     for k, v in dic1.items():
         print("Checking key:", k)
         if k == 'data':
-            if v.dtype.char == 'S':
-                assert ''.join(*v) == ''.join(*dic2[k])
+            if v.dtype.char == 'S' or v.dtype.char == 'U':
+                s1 = v.astype('S')
+                if s1.ndim == 1:
+                    s1 = stringarray_to_chararray(s1)
+
+                s2 = dic2[k].astype('S')
+                if s1.ndim == 1:
+                    s2 = stringarray_to_chararray(s2)
+
+                assert b''.join(*s1) == b''.join(*s2)
             else:
                 assert_almost_equal(v, dic2[k])
         else:
