@@ -4,6 +4,7 @@ from __future__ import print_function
 
 import numpy as np
 from numpy.testing import assert_array_equal, assert_raises
+from numpy.testing import assert_almost_equal
 
 import pyart
 
@@ -186,6 +187,36 @@ def test_grid_from_radars():
                        np.linspace(-900, 900, 9).astype('float64'))
     assert_array_equal(grid.axes['z_disp']['data'],
                        np.linspace(-400, 400, 3).astype('float64'))
+
+    # check that grid.radar_ attributes set correctly
+    assert isinstance(grid.radar_latitude, dict)
+    assert_almost_equal(grid.radar_latitude['data'][0], 36.5)
+
+    assert isinstance(grid.radar_longitude, dict)
+    assert_almost_equal(grid.radar_longitude['data'][0], -97.5)
+
+    assert isinstance(grid.radar_altitude, dict)
+    assert_almost_equal(grid.radar_altitude['data'][0], 200)
+
+    assert isinstance(grid.radar_time, dict)
+    assert_almost_equal(grid.radar_time['data'][0], 0.0)
+    assert grid.radar_time['units'] == radar.time['units']
+
+    assert isinstance(grid.radar_name, dict)
+    assert grid.radar_name['data'][0] == 'fake_radar'
+
+    assert grid.nradar == 1
+
+
+def test_unify_times_for_radars():
+    radar1 = pyart.testing.make_target_radar()
+    radar2 = pyart.testing.make_target_radar()
+    radar2.time['units'] = 'seconds since 1989-01-01T00:00:02Z'
+    radars = (radar1, radar2)
+    times, units = pyart.map.grid_mapper._unify_times_for_radars(radars)
+    assert_almost_equal(times[0], 0)
+    assert_almost_equal(times[1], 1)
+    assert units == 'seconds since 1989-01-01T00:00:01Z'
 
 
 def test_grid_from_radars_non_tuple():
