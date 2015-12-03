@@ -85,11 +85,19 @@ class Grid(object):
         Dictionary of axes dictionaries.
         This attribute is Depreciated, it will be removed in the next Py-ART
         release.
+    radar_longitude, radar_latitude, radar_altitude : dict or None, optional
+        Geographic location of the radars which make up the grid.
+    radar_time : dict or None, optional
+        Start of collection for the radar which make up the grid.
+    radar_name : dict or None, optional
+        Names of the radars which make up the grid.
 
     """
     def __init__(self, time, fields, metadata,
                  origin_latitude, origin_longitude, origin_altitude,
-                 regular_x, regular_y, regular_z):
+                 regular_x, regular_y, regular_z,
+                 radar_latitude=None, radar_longitude=None,
+                 radar_altitude=None, radar_time=None, radar_name=None):
         """ Initalize object. """
 
         self.time = time
@@ -105,6 +113,13 @@ class Grid(object):
         self.ny = len(regular_y['data'])
         self.nz = len(regular_z['data'])
         self.projection = {'proj': 'pyart_aeqd', '_include_lon_0_lat_0': True}
+
+        self.radar_latitude = radar_latitude
+        self.radar_longitude = radar_longitude
+        self.radar_altitude = radar_altitude
+        self.radar_time = radar_time
+        self.radar_name = radar_name
+        self.nradar = self._find_and_check_nradar()
 
         # initialize attributes with Lazy load dictionaries
         self.init_point_x_y_z()
@@ -124,6 +139,47 @@ class Grid(object):
         self.axes = axes
 
         return
+
+    def _find_and_check_nradar(self):
+        """
+        Return the number of radars which were used to create the grid.
+
+        Examine the radar_ attributes to determine the number of radars which
+        were used to create the grid.  If the size of the radar_ attributes
+        are inconsistent a ValueError is raised by this method.
+        """
+        nradar_set = False
+        nradar = 0
+
+        if self.radar_latitude is not None:
+            nradar = len(self.radar_latitude['data'])
+            nradar_set = True
+
+        if self.radar_longitude is not None:
+            if nradar_set and len(self.radar_longitude['data']) != nradar:
+                raise ValueError("Inconsistent length of radar_ arguments.")
+            nradar = len(self.radar_longitude['data'])
+            nradar_set = True
+
+        if self.radar_altitude is not None:
+            if nradar_set and len(self.radar_altitude['data']) != nradar:
+                raise ValueError("Inconsistent length of radar_ arguments.")
+            nradar = len(self.radar_altitude['data'])
+            nradar_set = True
+
+        if self.radar_time is not None:
+            if nradar_set and len(self.radar_time['data']) != nradar:
+                raise ValueError("Inconsistent length of radar_ arguments.")
+            nradar = len(self.radar_time['data'])
+            nradar_set = True
+
+        if self.radar_name is not None:
+            if nradar_set and len(self.radar_name['data']) != nradar:
+                raise ValueError("Inconsistent length of radar_ arguments.")
+            nradar = len(self.radar_name['data'])
+            nradar_set = True
+
+        return nradar
 
     # Attribute init/reset methods
     def init_point_x_y_z(self):

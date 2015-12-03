@@ -2,8 +2,10 @@
 
 from __future__ import print_function
 
+import functools
+
 import numpy as np
-from numpy.testing import assert_almost_equal
+from numpy.testing import assert_almost_equal, assert_raises
 
 import pyart
 from pyart.lazydict import LazyLoadDict
@@ -55,10 +57,12 @@ def test_grid_class():
     nz = 2
     ny = 400
     nx = 320
+    nradar = 1
 
     assert grid.nx == nx
     assert grid.ny == ny
     assert grid.nz == nz
+    assert grid.nradar == nradar
 
     assert isinstance(grid.metadata, dict)
     assert isinstance(grid.fields, dict)
@@ -119,6 +123,39 @@ def test_grid_class():
     assert grid.point_altitude['data'].shape == (nz, ny, nx)
     assert_almost_equal(grid.point_altitude['data'][0, 0, 0], 300, 0)
     assert_almost_equal(grid.point_altitude['data'][1, 0, 0], 800, 0)
+
+    assert isinstance(grid.radar_latitude, dict)
+    assert grid.radar_latitude['data'].shape == (nradar, )
+
+    assert isinstance(grid.radar_longitude, dict)
+    assert grid.radar_longitude['data'].shape == (nradar, )
+
+    assert isinstance(grid.radar_altitude, dict)
+    assert grid.radar_altitude['data'].shape == (nradar, )
+
+    assert isinstance(grid.radar_time, dict)
+    assert grid.radar_time['data'].shape == (nradar, )
+
+    assert isinstance(grid.radar_name, dict)
+    assert grid.radar_name['data'].shape == (nradar, )
+
+
+def test_inconsistent_radar_arguments():
+
+    #  partially instantiate a Grid class with fake data and a radar_latitude
+    # argument indicating a single radar
+    partial_grid = functools.partial(
+        pyart.core.Grid, time={}, fields={}, metadata={},
+        origin_latitude={}, origin_longitude={}, origin_altitude={},
+        regular_x={'data': [1]}, regular_y={'data': [1]},
+        regular_z={'data': [1]}, radar_latitude={'data': [1]})
+
+    # radar_ arguments indicating 2 radars should raise a ValueError
+    bad = {'data': [1, 2]}
+    assert_raises(ValueError, partial_grid, radar_longitude=bad)
+    assert_raises(ValueError, partial_grid, radar_altitude=bad)
+    assert_raises(ValueError, partial_grid, radar_time=bad)
+    assert_raises(ValueError, partial_grid, radar_name=bad)
 
 
 def test_init_point_altitude():

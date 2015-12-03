@@ -306,9 +306,41 @@ def make_empty_grid(grid_shape, grid_limits):
     fields = {}
     metadata = {}
 
+    radar_latitude = {
+        'data': np.array([-36.71]),
+        'long_name': 'Latitude of radars used to make the grid.',
+        'units': 'degree_N',
+    }
+
+    radar_longitude = {
+        'data': np.array([-98.1]),
+        'long_name': 'Longitude of radars used to make the grid.',
+        'units': 'degree_E',
+    }
+
+    radar_altitude = {
+        'data': np.array([300.]),
+        'long_name': 'Altitude of radars used to make the grid.',
+        'units': 'm',
+    }
+
+    radar_time = {
+        'data': np.array([0.0]),
+        'units': 'seconds since 2000-01-01T00:00:00Z',
+        'calendar': 'gregorian',
+        'long_name': 'Time in seconds since volume start for each radar'}
+
+    radar_name = {
+        'data': np.array(['ExampleRadar']),
+        'long_name': 'Name of radar used to make the grid',
+    }
+
     return Grid(time, fields, metadata,
                 origin_latitude, origin_longitude, origin_altitude,
-                regular_x, regular_y, regular_z)
+                regular_x, regular_y, regular_z,
+                radar_latitude=radar_latitude, radar_longitude=radar_longitude,
+                radar_altitude=radar_altitude, radar_time=radar_time,
+                radar_name=radar_name)
 
 
 def make_target_grid():
