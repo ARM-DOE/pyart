@@ -104,27 +104,19 @@ def write_grid_mdv(filename, grid, mdv_field_names=None,
 
     # fill headers
     d = mdv.master_header
-    times = mdv.times
-    if "time" in grid.axes.keys():
-        times['time_centroid'] = _time_dic_to_datetime(grid.axes['time'])
-    if "time_start" in grid.axes.keys():
-        times["time_begin"] = _time_dic_to_datetime(grid.axes["time_start"])
-    else:
-        times["time_begin"] = mdv.times['time_centroid']
-    if "time_end" in grid.axes.keys():
-        times["time_end"] = _time_dic_to_datetime(grid.axes["time_end"])
-    else:
-        times["time_end"] = mdv.times['time_centroid']
+    grid_datetime = _time_dic_to_datetime(grid.time)
+    mdv.times['time_centroid'] = grid_datetime
+    mdv.times["time_begin"] = grid_datetime
+    mdv.times["time_end"] = grid_datetime
     mdv._time_dict_into_header()
 
     d["data_dimension"] = 3  # XXX are grid's always 3d?
     # =DATA_SYNTHESIS, I don't realy know, so miscellaneous!
     d["data_collection_type"] = 3
-    if (grid.axes['z_disp']['units'] == 'm' or
-            grid.axes['z_disp']['units'] == 'meters'):
+    if (grid.regular_z['units'] == 'm' or grid.regular_z['units'] == 'meters'):
         d["native_vlevel_type"] = 4
-    elif (grid.axes['z_disp']['units'] == '\xc2' or
-          grid.axes['z_disp']['units'] == 'degree'):
+    elif (grid.regular_z['units'] == '\xc2' or
+          grid.regular_z['units'] == 'degree'):
         d["native_vlevel_type"] = 9
     d["vlevel_type"] = d["native_vlevel_type"]
     d["nfields"] = nfields
@@ -135,19 +127,21 @@ def write_grid_mdv(filename, grid, mdv_field_names=None,
     d["time_written"] = int(round(td.microseconds + (td.seconds + td.days *
                                   24 * 3600) * 10**6) / 10**6)
 
-    # try metadata, if not use axes
-    if "radar_0_lon" in grid.metadata.keys():
-        d["sensor_lon"] = grid.metadata["radar_0_lon"]
-    elif 'lat' in grid.axes.keys():
-        d["sensor_lon"] = grid.axes['lon']['data'][0]
-    if "radar_0_lat" in grid.metadata.keys():
-        d["sensor_lat"] = grid.metadata["radar_0_lat"]
-    elif 'lon' in grid.axes.keys():
-        d["sensor_lat"] = grid.axes['lat']['data'][0]
-    if "radar_0_alt" in grid.metadata.keys():
-        d["sensor_alt"] = grid.metadata["radar_0_alt"] / 1000.
-    elif 'alt' in grid.axes.keys():
-        d["sensor_alt"] = grid.axes['alt']['data'][0] / 1000.
+    # sensor location using radar_ attribute or origin_ if not available
+    if grid.radar_longitude is not None and grid.nradar != 0:
+        d["sensor_lon"] = grid.radar_longitude['data'][0]
+    else:
+        d["sensor_lon"] = grid.origin_longitude['data'][0]
+
+    if grid.radar_latitude is not None and grid.nradar != 0:
+        d["sensor_lat"] = grid.radar_latitude['data'][0]
+    else:
+        d["sensor_lat"] = grid.origin_latitude['data'][0]
+
+    if grid.radar_altitude is not None and grid.nradar != 0:
+        d["sensor_alt"] = grid.radar_altitude['data'][0] / 1000.
+    else:
+        d["sensor_alt"] = grid.origin_altitude['data'][0] / 1000.
 
     for meta_key, mdv_key in mdv_common.MDV_METADATA_MAP.items():
         if meta_key in grid.metadata:
@@ -185,14 +179,14 @@ def write_grid_mdv(filename, grid, mdv_field_names=None,
         d["native_vlevel_type"] = mdv.master_header["vlevel_type"]
         d["vlevel_type"] = mdv.master_header["vlevel_type"]
         d["data_dimension"] = 3
-        d["proj_origin_lat"] = grid.axes['lat']['data'][0]
-        d["proj_origin_lon"] = grid.axes['lon']['data'][0]
-        d["grid_dx"] = (grid.axes["x_disp"]['data'][1] -
-                        grid.axes["x_disp"]['data'][0]) / 1000.
-        d["grid_dy"] = (grid.axes["y_disp"]['data'][1] -
-                        grid.axes["y_disp"]['data'][0]) / 1000.
-        d["grid_minx"] = (grid.axes["x_disp"]['data'][0]) / 1000.
-        d["grid_miny"] = (grid.axes["y_disp"]['data'][0]) / 1000.
+        d["proj_origin_lat"] = grid.origin_latitude['data'][0]
+        d["proj_origin_lon"] = grid.origin_longitude['data'][0]
+        d["grid_dx"] = (grid.regular_x['data'][1] -
+                        grid.regular_x['data'][0]) / 1000.
+        d["grid_dy"] = (grid.regular_y['data'][1] -
+                        grid.regular_y['data'][0]) / 1000.
+        d["grid_minx"] = (grid.regular_x['data'][0]) / 1000.
+        d["grid_miny"] = (grid.regular_y['data'][0]) / 1000.
         if "scale_factor" in grid.fields[field].keys():
             d["scale"] = grid.fields[field]["scale_factor"]
         if "add_offset" in grid.fields[field].keys():
@@ -234,7 +228,7 @@ def write_grid_mdv(filename, grid, mdv_field_names=None,
         level = [0] * 122
         for iz in range(nz):
             typ[iz] = d["vlevel_type"]
-            level[iz] = grid.axes["z_disp"]["data"][iz] / 1000.
+            level[iz] = grid.regular_z["data"][iz] / 1000.
         l["type"] = typ
         l["level"] = level
 
@@ -296,7 +290,7 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
     MDV files and Grid object are not fully interchangeable.  Specific
     limitation include:
 
-        * All fields must have the same shape and axes.
+        * All fields must have the same shape and dimensions.
         * All fields must have the same projection.
         * Vlevels types must not vary.
         * Projection must not be PROJ_POLAR_RADAR (9) or PROJ_RHI_RADAR (13).
@@ -346,7 +340,7 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
     x_step = mdv.field_headers[0]["grid_dx"] * 1000.
 
     if mdv.field_headers[0]["proj_type"] == mdv_common.PROJ_LATLON:
-        # x and y axes have units of degrees
+        # x and y dimensions have units of degrees
         xunits = 'degree_E'
         yunits = 'degree_N'
         y_start = mdv.field_headers[0]["grid_miny"]
