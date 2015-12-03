@@ -248,92 +248,50 @@ def make_empty_grid(grid_shape, grid_limits):
         Empty Grid object, centered near the ARM SGP site (Oklahoma).
 
     """
-    time = {
-        'data': np.array([0.0]),
-        'units': 'seconds since 2000-01-01T00:00:00Z',
-        'calendar': 'gregorian',
-        'standard_name': 'time',
-        'long_name': 'Time in seconds since volume start'}
+    time = get_metadata('grid_time')
+    time['data'] = np.array([0.0])
+    time['units'] = 'seconds since 2000-01-01T00:00:00Z'
 
     # grid coordinate dictionaries
     nz, ny, nx = grid_shape
     (z0, z1), (y0, y1), (x0, x1) = grid_limits
 
-    regular_x = {
-        'data': np.linspace(x0, x1, nx),
-        'long_name': 'X-coordinate in Cartesian system',
-        'axis': 'X',
-        'units': 'm'}
+    regular_x = get_metadata('regular_x')
+    regular_x['data'] = np.linspace(x0, x1, nx)
 
-    regular_y = {
-        'data': np.linspace(y0, y1, ny),
-        'long_name': 'Y-coordinate in Cartesian system',
-        'axis': 'Y',
-        'units': 'm'}
+    regular_y = get_metadata('regular_y')
+    regular_y['data'] = np.linspace(y0, y1, ny)
 
-    regular_z = {
-        'data': np.linspace(z0, z1, nz),
-        'long_name': 'Z-coordinate in Cartesian system',
-        'axis': 'Z',
-        'units': 'm',
-        'positive': 'up'}
+    regular_z = get_metadata('regular_z')
+    regular_z['data'] = np.linspace(z0, z1, nz)
 
-    origin_altitude = {
-        'data': np.array([300.]),
-        'long_name': 'Altitude at grid origin',
-        'units': 'm',
-        'standard_name': 'altitude',
-    }
+    origin_altitude = get_metadata('origin_altitude')
+    origin_altitude['data'] = np.array([300.])
 
-    origin_latitude = {
-        'data': np.array([36.74]),
-        'long_name': 'Latitude at grid origin',
-        'units': 'degree_N',
-        'standard_name': 'latitude',
-        'valid_min': -90.,
-        'valid_max': 90.
-    }
+    origin_latitude = get_metadata('origin_latitude')
+    origin_latitude['data'] = np.array([36.74])
 
-    origin_longitude = {
-        'data': np.array([-98.1]),
-        'long_name': 'Longitude at grid origin',
-        'units': 'degree_E',
-        'standard_name': 'longitude',
-        'valid_min': -180.,
-        'valid_max': 180.
-    }
+    origin_longitude = get_metadata('origin_longitude')
+    origin_longitude['data'] = np.array([-98.1])
 
     fields = {}
     metadata = {}
 
-    radar_latitude = {
-        'data': np.array([-36.71]),
-        'long_name': 'Latitude of radars used to make the grid.',
-        'units': 'degree_N',
-    }
+    radar_latitude = get_metadata('radar_latitude')
+    radar_latitude['data'] = np.array([-36.71])
 
-    radar_longitude = {
-        'data': np.array([-98.1]),
-        'long_name': 'Longitude of radars used to make the grid.',
-        'units': 'degree_E',
-    }
+    radar_longitude = get_metadata('radar_longitude')
+    radar_longitude['data'] = np.array([-98.1])
 
-    radar_altitude = {
-        'data': np.array([300.]),
-        'long_name': 'Altitude of radars used to make the grid.',
-        'units': 'm',
-    }
+    radar_altitude = get_metadata('radar_altitude')
+    radar_altitude['data'] = np.array([300.])
 
-    radar_time = {
-        'data': np.array([0.0]),
-        'units': 'seconds since 2000-01-01T00:00:00Z',
-        'calendar': 'gregorian',
-        'long_name': 'Time in seconds since volume start for each radar'}
+    radar_time = get_metadata('radar_time')
+    radar_time['data'] = np.array([0.0])
+    radar_time['units'] = 'seconds since 2000-01-01T00:00:00Z'
 
-    radar_name = {
-        'data': np.array(['ExampleRadar']),
-        'long_name': 'Name of radar used to make the grid',
-    }
+    radar_name = get_metadata('radar_name')
+    radar_name['data'] = np.array(['ExampleRadar'])
 
     return Grid(time, fields, metadata,
                 origin_latitude, origin_longitude, origin_altitude,

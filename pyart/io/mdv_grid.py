@@ -20,7 +20,7 @@ import warnings
 from netCDF4 import num2date, date2num
 import numpy as np
 
-from ..config import FileMetadata, get_fillvalue
+from ..config import FileMetadata, get_fillvalue, get_metadata
 from ..core.grid import Grid
 from .common import make_time_unit_str, _test_arguments, prepare_for_read
 from ..lazydict import LazyLoadDict
@@ -318,37 +318,22 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
 
     # time dictionaries
     units = make_time_unit_str(mdv.times['time_begin'])
-    time = {
-        'data': np.array([date2num(mdv.times['time_centroid'], units)]),
-        'units': units,
-        'calendar': 'gregorian',
-        'standard_name': 'time',
-        'long_name': 'Time in seconds since volume start'}
+    time = get_metadata('grid_time')
+    time['data'] = np.array([date2num(mdv.times['time_centroid'], units)])
+    time['units'] = units
 
-    origin_altitude = {
-        'data': np.array([mdv.master_header["sensor_alt"] * 1000.],
-                         dtype='float64'),
-        'long_name': 'Altitude at grid origin',
-        'units': 'm',
-        'standard_name': 'altitude', }
+    # origin dictionaries
+    origin_altitude = get_metadata('origin_altitude')
+    origin_altitude['data'] = np.array(
+        [mdv.master_header["sensor_alt"] * 1000.], dtype='float64')
 
-    origin_latitude = {
-        'data': np.array([mdv.master_header["sensor_lat"]],
-                         dtype='float64'),
-        'long_name': 'Latitude at grid origin',
-        'units': 'degree_N',
-        'standard_name': 'latitude',
-        'valid_min': -90.,
-        'valid_max': 90., }
+    origin_latitude = get_metadata('origin_latitude')
+    origin_latitude['data'] = np.array(
+        [mdv.master_header["sensor_lat"]], dtype='float64')
 
-    origin_longitude = {
-        'data': np.array([mdv.master_header["sensor_lon"]],
-                         dtype='float64'),
-        'long_name': 'Longitude at grid origin',
-        'units': 'degree_E',
-        'standard_name': 'longitude',
-        'valid_min': -180.,
-        'valid_max': 180., }
+    origin_longitude = get_metadata('origin_longitude')
+    origin_longitude['data'] = np.array(
+        [mdv.master_header["sensor_lon"]], dtype='float64')
 
     # grid coordinate dictionaries
     nz = mdv.master_header["max_nz"]
@@ -385,24 +370,17 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
     elif mdv.field_headers[0]["vlevel_type"] == 7:  # VERT_TYPE_THETA
         zunits = 'kelvin'
 
-    regular_x = {
-        'data':  np.linspace(x_start, x_start + x_step * (nx-1), nx),
-        'long_name': 'X-coordinate in Cartesian system',
-        'axis': 'X',
-        'units': xunits}
+    regular_x = get_metadata('regular_x')
+    regular_x['data'] = np.linspace(x_start, x_start + x_step * (nx-1), nx)
+    regular_x['units'] = xunits
 
-    regular_y = {
-        'data': np.linspace(y_start, y_start + y_step * (ny-1), ny),
-        'long_name': 'Y-coordinate in Cartesian system',
-        'axis': 'Y',
-        'units': yunits}
+    regular_y = get_metadata('regular_y')
+    regular_y['data'] = np.linspace(y_start, y_start + y_step * (ny-1), ny)
+    regular_y['units'] = yunits
 
-    regular_z = {
-        'data': np.array(z_line, dtype='float64'),
-        'long_name': 'Z-coordinate in Cartesian system',
-        'axis': 'Z',
-        'units': zunits,
-        'positive': 'up'}
+    regular_z = get_metadata('regular_z')
+    regular_z['data'] = np.array(z_line, dtype='float64')
+    regular_z['units'] = zunits
 
     # metadata
     metadata = filemetadata('metadata')

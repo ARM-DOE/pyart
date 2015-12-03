@@ -123,8 +123,8 @@ interpolated_profile = 'interpolated_profile'
 # Various parameters used in Py-ART.
 ##############################################################################
 
-FILL_VALUE = fill_value     # the default fill value for masked arrays and
-                            # the _FillValue key.
+# the default fill value for masked arrays and the _FillValue key
+FILL_VALUE = fill_value
 
 # The DEFAULT_FIELD_NAMES controls the field names which are used in the
 # correction and retrieval algorithms in Py-ART. The keys of the dictionary
@@ -630,6 +630,48 @@ DEFAULT_METADATA = {
         'units': 'unknown'},
 
     # Grid metadata
+
+    'grid_time': {
+        'units': 'seconds',
+        'standard_name': 'time',
+        'long_name': 'Time of grid',
+        'calendar': 'gregorian'},
+
+    'origin_longitude': {
+        'long_name': 'Longitude at grid origin',
+        'units': 'degrees_east',
+        'standard_name': 'longitude',
+        'valid_min': -180.,
+        'valid_max': 180.},
+
+    'origin_latitude': {
+        'long_name': 'Latitude at grid origin',
+        'units': 'degrees_north',
+        'standard_name': 'latitude',
+        'valid_min': -90.,
+        'valid_max': 90.},
+
+    'origin_altitude': {
+        'long_name': 'Altitude at grid origin',
+        'units': 'm',
+        'standard_name': 'altitude'},
+
+    'regular_x': {
+        'long_name': 'X-coordinate in Cartesian system',
+        'axis': 'X',
+        'units': 'm'},
+
+    'regular_y': {
+        'long_name': 'Y-coordinate in Cartesian system',
+        'axis': 'Y',
+        'units': 'm'},
+
+    'regular_z': {
+        'long_name': 'Z-coordinate in Cartesian system',
+        'axis': 'Z',
+        'units': 'm',
+        'positive': 'up'},
+
     'point_x': {
         'long_name': 'Cartesian x distance of each grid point from the origin',
         'units': 'meters'},
@@ -654,6 +696,25 @@ DEFAULT_METADATA = {
     'point_altitude': {
         'long_name': 'Altitude of each grid point',
         'units': 'meters'},
+
+    'radar_latitude': {
+        'long_name': 'Latitude of radars used to make the grid.',
+        'units': 'degrees_north', },
+
+    'radar_longitude': {
+        'long_name': 'Longitude of radars used to make the grid.',
+        'units': 'degrees_east', },
+
+    'radar_altitude': {
+        'long_name': 'Altitude of radars used to make the grid.',
+        'units': 'm', },
+
+    'radar_time': {
+        'calendar': 'gregorian',
+        'long_name': 'Time in seconds of the volume start for each radar'},
+
+    'radar_name': {
+        'long_name': 'Name of radar used to make the grid', },
 
 }
 

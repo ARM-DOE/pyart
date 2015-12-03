@@ -29,7 +29,7 @@ import numpy as np
 import scipy.spatial
 import netCDF4
 
-from ..config import get_fillvalue
+from ..config import get_fillvalue, get_metadata
 from ..core.transforms import corner_to_point
 from ..core.transforms import antenna_to_cartesian
 from ..core.grid import Grid
@@ -111,109 +111,61 @@ def grid_from_radars(radars, grid_shape, grid_limits,
                 fields[field][key] = first_radar.fields[field][key]
 
     # time dictionaries
-    time = {
-        'data': np.array([first_radar.time['data'][0]]),
-        'units': first_radar.time['units'],
-        'calendar': first_radar.time['calendar'],
-        'standard_name': first_radar.time['standard_name'],
-        'long_name': 'Time in seconds since volume start'}
+    time = get_metadata('grid_time')
+    time['data'] = np.array([first_radar.time['data'][0]])
+    time['units'] = first_radar.time['units']
 
     # grid coordinate dictionaries
     nz, ny, nx = grid_shape
     (z0, z1), (y0, y1), (x0, x1) = grid_limits
 
-    regular_x = {
-        'data':  np.linspace(x0, x1, nx),
-        'long_name': 'X-coordinate in Cartesian system',
-        'axis': 'X',
-        'units': 'm'}
+    regular_x = get_metadata('regular_x')
+    regular_x['data'] = np.linspace(x0, x1, nx)
 
-    regular_y = {
-        'data': np.linspace(y0, y1, ny),
-        'long_name': 'Y-coordinate in Cartesian system',
-        'axis': 'Y',
-        'units': 'm'}
+    regular_y = get_metadata('regular_y')
+    regular_y['data'] = np.linspace(y0, y1, ny)
 
-    regular_z = {
-        'data': np.linspace(z0, z1, nz),
-        'long_name': 'Z-coordinate in Cartesian system',
-        'axis': 'Z',
-        'units': 'm',
-        'positive': 'up'}
+    regular_z = get_metadata('regular_z')
+    regular_z['data'] = np.linspace(z0, z1, nz)
 
     # grid origin location dictionaries
+    origin_latitude = get_metadata('origin_latitude')
+    origin_longitude = get_metadata('origin_longitude')
     if 'grid_origin' in kwargs:
-        lat = np.array([kwargs['grid_origin'][0]])
-        lon = np.array([kwargs['grid_origin'][1]])
+        origin_latitude['data'] = np.array([kwargs['grid_origin'][0]])
+        origin_longitude['data'] = np.array([kwargs['grid_origin'][1]])
     else:
-        lat = first_radar.latitude['data']
-        lon = first_radar.longitude['data']
+        origin_latitude['data'] = first_radar.latitude['data']
+        origin_longitude['data'] = first_radar.longitude['data']
 
+    origin_altitude = get_metadata('origin_altitude')
     if 'grid_origin_alt' in kwargs:
-        alt = np.array([kwargs['grid_origin_alt']])
+        origin_altitude['data'] = np.array([kwargs['grid_origin_alt']])
     else:
-        alt = first_radar.altitude['data']
-
-    origin_altitude = {
-        'data': alt,
-        'long_name': 'Altitude at grid origin',
-        'units': 'm',
-        'standard_name': 'altitude',
-    }
-
-    origin_latitude = {
-        'data': lat,
-        'long_name': 'Latitude at grid origin',
-        'units': 'degree_N',
-        'standard_name': 'latitude',
-        'valid_min': -90.,
-        'valid_max': 90.
-    }
-
-    origin_longitude = {
-        'data': lon,
-        'long_name': 'Longitude at grid origin',
-        'units': 'degree_E',
-        'standard_name': 'longitude',
-        'valid_min': -180.,
-        'valid_max': 180.
-    }
+        origin_altitude['data'] = first_radar.altitude['data']
 
     # metadata dictionary
     metadata = dict(first_radar.metadata)
 
     # create radar_ dictionaries
-    radar_latitude = {
-        'long_name': 'Latitude of radars used to make the grid.',
-        'units': 'degree_N',
-    }
+    radar_latitude = get_metadata('radar_latitude')
     radar_latitude['data'] = np.array(
-        [radar.latitude['data'][0] for radar in radars])
+        [r.latitude['data'][0] for r in radars])
 
-    radar_longitude = {
-        'long_name': 'Longitude of radars used to make the grid.',
-        'units': 'degree_E',
-    }
+    radar_longitude = get_metadata('radar_longitude')
     radar_longitude['data'] = np.array(
         [radar.longitude['data'][0] for radar in radars])
 
-    radar_altitude = {
-        'long_name': 'Altitude of radars used to make the grid.',
-        'units': 'm',
-    }
+    radar_altitude = get_metadata('radar_altitude')
     radar_altitude['data'] = np.array(
         [radar.altitude['data'][0] for radar in radars])
 
-    radar_time = {
-        'calendar': 'gregorian',
-        'long_name': 'Time in seconds since volume start for each radar'}
+    radar_time = get_metadata('radar_time')
     times, units = _unify_times_for_radars(radars)
     radar_time['units'] = units
     radar_time['data'] = times
 
-    radar_name = {
-        'long_name': 'Name of radar used to make the grid',
-    }
+    radar_name = get_metadata('radar_name')
     name_key = 'instrument_name'
     names = [radar.metadata[name_key] if name_key in radar.metadata else ''
              for radar in radars]
