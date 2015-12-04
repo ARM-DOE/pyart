@@ -179,8 +179,8 @@ class Grid(object):
         """
         Return the number of radars which were used to create the grid.
 
-        Examine the radar_ attributes to determine the number of radars which
-        were used to create the grid.  If the size of the radar_ attributes
+        Examine the radar attributes to determine the number of radars which
+        were used to create the grid.  If the size of the radar attributes
         are inconsistent a ValueError is raised by this method.
         """
         nradar_set = False
