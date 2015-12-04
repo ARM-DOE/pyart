@@ -27,9 +27,11 @@ class Mdv_grid_Tests(object):
 
         # check the contents of the grid which was read
         self.check_target_reflectivity_field(grid)
-        keys_to_check = grid.axes.keys()
-        for key in keys_to_check:
-            self.check_axes_dic(grid.axes, original_grid.axes, key)
+        attrs_to_check = [
+            'time', 'origin_latitude', 'origin_longitude', 'origin_altitude',
+            'regular_x', 'regular_y', 'regular_z']
+        for attr in attrs_to_check:
+            self.check_attr_dics(grid, original_grid, attr)
 
     @staticmethod
     def check_target_reflectivity_field(grid):
@@ -51,14 +53,16 @@ class Mdv_grid_Tests(object):
         assert np.abs(fdata[1, 160, 130] - 35.) <= 0.01
 
     @staticmethod
-    def check_axes_dic(axes, axes2, key):
-        print("Checking:", key)
+    def check_attr_dics(grid1, grid2, attr_name):
+        print("Checking:", attr_name)
+        dic1 = getattr(grid1, attr_name)
+        dic2 = getattr(grid2, attr_name)
         # check that the data and units keys are similar
-        assert np.allclose(axes[key]['data'], axes2[key]['data'])
-        assert axes[key]['data'].shape == axes2[key]['data'].shape
-        assert axes[key]['data'].dtype == axes2[key]['data'].dtype
-        if 'units' in axes[key]:
-            assert axes[key]['units'] == axes2[key]['units']
+        assert np.allclose(dic1['data'], dic2['data'])
+        assert dic1['data'].shape == dic2['data'].shape
+        assert dic1['data'].dtype == dic2['data'].dtype
+        if 'units' in dic1:
+            assert dic1['units'] == dic2['units']
 
     def test_write_read_target_delay(self):
         # write and read in the target grid with delayed field loading
@@ -71,15 +75,15 @@ class Mdv_grid_Tests(object):
 
         # check the contents of the grid which was read
         self.check_target_reflectivity_field(grid)
-        keys_to_check = grid.axes.keys()
-        for key in keys_to_check:
-            self.check_axes_dic(grid.axes, original_grid.axes, key)
+        attrs_to_check = [
+            'time', 'origin_latitude', 'origin_longitude', 'origin_altitude',
+            'regular_x', 'regular_y', 'regular_z']
+        for attr in attrs_to_check:
+            self.check_attr_dics(grid, original_grid, attr)
 
     def test_write_read_target_modified(self):
         # write and read in target grid with modifications
         original_grid = pyart.testing.make_target_grid()
-        del original_grid.axes['time_start']
-        del original_grid.axes['time_end']
         original_grid.metadata['radar_0_lon'] = -98.1
         original_grid.metadata['radar_0_lat'] = 36.74
         original_grid.metadata['radar_0_alt'] = 300.
@@ -92,10 +96,11 @@ class Mdv_grid_Tests(object):
 
         # check the contents of the grid which was read
         self.check_target_reflectivity_field(grid)
-        keys_to_check = ['time', 'x_disp', 'y_disp', 'z_disp', 'lat', 'lon',
-                         'alt']
-        for key in keys_to_check:
-            self.check_axes_dic(grid.axes, original_grid.axes, key)
+        attrs_to_check = [
+            'time', 'origin_latitude', 'origin_longitude', 'origin_altitude',
+            'regular_x', 'regular_y', 'regular_z']
+        for attr in attrs_to_check:
+            self.check_attr_dics(grid, original_grid, attr)
         assert grid.metadata['instrument_name'] == 'testtesttest'
 
     def test_read_write_mask(self):
@@ -130,8 +135,8 @@ class Mdv_grid_Tests(object):
             UserWarning, pyart.io.write_grid_mdv, tmpfile, grid)
         tmpfile.seek(0)
         rgrid = pyart.io.read_grid_mdv(tmpfile)
-        assert len(grid.axes['z_disp']['data']) == 123
-        assert len(rgrid.axes['z_disp']['data']) == 122
+        assert len(grid.regular_z['data']) == 123
+        assert len(rgrid.regular_z['data']) == 122
 
     def test_write_types(self):
         # Write various data types
@@ -215,7 +220,7 @@ def test_mdv_degree_grid():
     assert np.ma.is_masked(fdata[0, 0, 0])
     assert_almost_equal(fdata[0, 130, 2536], 20.0, 1)
 
-    assert grid.axes['x_disp']['units'] == 'degree_E'
-    assert_almost_equal(grid.axes['x_disp']['data'][0], -129.99, 2)
-    assert grid.axes['y_disp']['units'] == 'degree_N'
-    assert_almost_equal(grid.axes['y_disp']['data'][0], 20.01, 2)
+    assert grid.regular_x['units'] == 'degree_E'
+    assert_almost_equal(grid.regular_x['data'][0], -129.99, 2)
+    assert grid.regular_y['units'] == 'degree_N'
+    assert_almost_equal(grid.regular_y['data'][0], 20.01, 2)

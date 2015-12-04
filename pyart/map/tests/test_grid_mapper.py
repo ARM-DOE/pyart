@@ -3,8 +3,7 @@
 from __future__ import print_function
 
 import numpy as np
-from numpy.testing import assert_array_equal, assert_raises
-from numpy.testing import assert_almost_equal
+from numpy.testing import assert_almost_equal, assert_raises
 
 import pyart
 
@@ -26,33 +25,29 @@ def test_map_to_grid_filter():
     # without filtering bad gates leaks through
     gatefilter = pyart.filters.GateFilter(radar)
     grids = pyart.map.map_to_grid(
-        (radar,), gatefilters=(gatefilter, ),
-        **COMMON_MAP_TO_GRID_ARGS)
+        (radar,), gatefilters=(gatefilter, ), **COMMON_MAP_TO_GRID_ARGS)
     assert grids['reflectivity'].max() > 41.0
 
     # with filtering bad gates is supressed
     gatefilter = pyart.filters.GateFilter(radar)
     gatefilter.exclude_above('reflectivity', 41.0)
     grids = pyart.map.map_to_grid(
-        (radar,), gatefilters=(gatefilter, ),
-        **COMMON_MAP_TO_GRID_ARGS)
+        (radar,), gatefilters=(gatefilter, ), **COMMON_MAP_TO_GRID_ARGS)
     assert grids['reflectivity'].max() < 41.0
 
 
 def test_map_to_grid_non_tuple():
     radar = pyart.testing.make_target_radar()
-    grids = pyart.map.map_to_grid(radar,
-                                  **COMMON_MAP_TO_GRID_ARGS)
+    grids = pyart.map.map_to_grid(radar, **COMMON_MAP_TO_GRID_ARGS)
     center_slice = grids['reflectivity'][1, 4, :]
-    assert_array_equal(np.round(center_slice), EXPECTED_CENTER_SLICE)
+    assert_almost_equal(center_slice, EXPECTED_CENTER_SLICE)
 
 
 def test_map_to_grid_default():
     radar = pyart.testing.make_target_radar()
-    grids = pyart.map.map_to_grid((radar,),
-                                  **COMMON_MAP_TO_GRID_ARGS)
+    grids = pyart.map.map_to_grid((radar,), **COMMON_MAP_TO_GRID_ARGS)
     center_slice = grids['reflectivity'][1, 4, :]
-    assert_array_equal(np.round(center_slice), EXPECTED_CENTER_SLICE)
+    assert_almost_equal(center_slice, EXPECTED_CENTER_SLICE)
 
 
 def test_map_to_grid_cressman():
@@ -61,7 +56,7 @@ def test_map_to_grid_cressman():
         (radar,), (3, 9, 10), ((-400.0, 400.0), (-900.0, 900.0), (-900, 900)),
         roi_func='constant', constant_roi=30., weighting_function='CRESSMAN')
     center_slice = grids['reflectivity'][1, 4, :]
-    assert_array_equal(np.round(center_slice), EXPECTED_CENTER_SLICE)
+    assert_almost_equal(center_slice, EXPECTED_CENTER_SLICE)
 
 
 def test_map_to_grid_constant_roi():
@@ -70,7 +65,7 @@ def test_map_to_grid_constant_roi():
         (radar,), (3, 9, 10), ((-400.0, 400.0), (-900.0, 900.0), (-900, 900)),
         roi_func='constant', constant_roi=30.)
     center_slice = grids['reflectivity'][1, 4, :]
-    assert_array_equal(np.round(center_slice), EXPECTED_CENTER_SLICE)
+    assert_almost_equal(center_slice, EXPECTED_CENTER_SLICE)
 
 
 def test_map_to_grid_dist_roi():
@@ -79,7 +74,7 @@ def test_map_to_grid_dist_roi():
         (radar,), (3, 9, 10), ((-400.0, 400.0), (-900.0, 900.0), (-900, 900)),
         roi_func='dist', z_factor=0, xy_factor=0, min_radius=30.)
     center_slice = grids['reflectivity'][1, 4, :]
-    assert_array_equal(np.round(center_slice), EXPECTED_CENTER_SLICE)
+    assert_almost_equal(center_slice, EXPECTED_CENTER_SLICE)
 
 
 def test_map_to_grid_dist_beam_roi():
@@ -91,15 +86,14 @@ def test_map_to_grid_dist_beam_roi():
         fields=['reflectivity'],
         min_radius=30, bsp=0., h_factor=0.)
     center_slice = grids['reflectivity'][1, 4, :]
-    assert_array_equal(np.round(center_slice), EXPECTED_CENTER_SLICE)
+    assert_almost_equal(center_slice, EXPECTED_CENTER_SLICE)
 
 
 def test_map_to_grid_default_two_radars():
     radar = pyart.testing.make_target_radar()
-    grids = pyart.map.map_to_grid((radar, radar),
-                                  **COMMON_MAP_TO_GRID_ARGS)
+    grids = pyart.map.map_to_grid((radar, radar), **COMMON_MAP_TO_GRID_ARGS)
     center_slice = grids['reflectivity'][1, 4, :]
-    assert_array_equal(np.round(center_slice), EXPECTED_CENTER_SLICE)
+    assert_almost_equal(center_slice, EXPECTED_CENTER_SLICE)
 
 
 def test_map_to_grid_masked_refl_field():
@@ -111,34 +105,33 @@ def test_map_to_grid_masked_refl_field():
     fdata.mask[0, -1] = True
     radar.fields['reflectivity']['data'] = fdata
 
-    grids = pyart.map.map_to_grid((radar,),
-                                  **COMMON_MAP_TO_GRID_ARGS)
+    grids = pyart.map.map_to_grid((radar,), **COMMON_MAP_TO_GRID_ARGS)
     center_slice = grids['reflectivity'][1, 4, :]
-    assert_array_equal(np.round(center_slice), EXPECTED_CENTER_SLICE)
+    assert_almost_equal(center_slice, EXPECTED_CENTER_SLICE)
 
 
 def test_map_to_grid_no_copy():
     radar = pyart.testing.make_target_radar()
-    grids = pyart.map.map_to_grid((radar,), copy_field_data=False,
-                                  **COMMON_MAP_TO_GRID_ARGS)
+    grids = pyart.map.map_to_grid(
+        (radar,), copy_field_data=False, **COMMON_MAP_TO_GRID_ARGS)
     center_slice = grids['reflectivity'][1, 4, :]
-    assert_array_equal(np.round(center_slice), EXPECTED_CENTER_SLICE)
+    assert_almost_equal(center_slice, EXPECTED_CENTER_SLICE)
 
 
 def test_map_to_grid_no_copy_two_radars():
     radar = pyart.testing.make_target_radar()
-    grids = pyart.map.map_to_grid((radar, radar), copy_field_data=False,
-                                  **COMMON_MAP_TO_GRID_ARGS)
+    grids = pyart.map.map_to_grid(
+        (radar, radar), copy_field_data=False, **COMMON_MAP_TO_GRID_ARGS)
     center_slice = grids['reflectivity'][1, 4, :]
-    assert_array_equal(np.round(center_slice), EXPECTED_CENTER_SLICE)
+    assert_almost_equal(center_slice, EXPECTED_CENTER_SLICE)
 
 
 def test_map_to_grid_balltree():
     radar = pyart.testing.make_target_radar()
-    grids = pyart.map.map_to_grid((radar,), algorithm='ball_tree',
-                                  **COMMON_MAP_TO_GRID_ARGS)
+    grids = pyart.map.map_to_grid(
+        (radar,), algorithm='ball_tree', **COMMON_MAP_TO_GRID_ARGS)
     center_slice = grids['reflectivity'][1, 4, :]
-    assert_array_equal(np.round(center_slice), EXPECTED_CENTER_SLICE)
+    assert_almost_equal(center_slice, EXPECTED_CENTER_SLICE)
 
 
 def test_map_to_grid_tiny_grid():
@@ -176,17 +169,14 @@ def test_grid_from_radars():
 
     # check field data
     center_slice = grid.fields['reflectivity']['data'][1, 4, :]
-    assert_array_equal(np.round(center_slice), EXPECTED_CENTER_SLICE)
+    assert_almost_equal(center_slice, EXPECTED_CENTER_SLICE)
 
     # check other Grid object attributes
     assert 'ROI' in grid.fields
     assert np.all(grid.fields['ROI']['data'] == 30.)
-    assert_array_equal(grid.axes['x_disp']['data'],
-                       np.linspace(-900, 900, 10))
-    assert_array_equal(grid.axes['y_disp']['data'],
-                       np.linspace(-900, 900, 9).astype('float64'))
-    assert_array_equal(grid.axes['z_disp']['data'],
-                       np.linspace(-400, 400, 3).astype('float64'))
+    assert_almost_equal(grid.regular_x['data'], np.linspace(-900, 900, 10))
+    assert_almost_equal(grid.regular_y['data'], np.linspace(-900, 900, 9))
+    assert_almost_equal(grid.regular_z['data'], np.linspace(-400, 400, 3))
 
     # check that grid.radar_ attributes set correctly
     assert isinstance(grid.radar_latitude, dict)
@@ -225,17 +215,14 @@ def test_grid_from_radars_non_tuple():
 
     # check field data
     center_slice = grid.fields['reflectivity']['data'][1, 4, :]
-    assert_array_equal(np.round(center_slice), EXPECTED_CENTER_SLICE)
+    assert_almost_equal(center_slice, EXPECTED_CENTER_SLICE)
 
     # check other Grid object attributes
     assert 'ROI' in grid.fields
     assert np.all(grid.fields['ROI']['data'] == 30.)
-    assert_array_equal(grid.axes['x_disp']['data'],
-                       np.linspace(-900, 900, 10))
-    assert_array_equal(grid.axes['y_disp']['data'],
-                       np.linspace(-900, 900, 9).astype('float64'))
-    assert_array_equal(grid.axes['z_disp']['data'],
-                       np.linspace(-400, 400, 3).astype('float64'))
+    assert_almost_equal(grid.regular_x['data'], np.linspace(-900, 900, 10))
+    assert_almost_equal(grid.regular_y['data'], np.linspace(-900, 900, 9))
+    assert_almost_equal(grid.regular_z['data'], np.linspace(-400, 400, 3))
 
 
 def test_grid_from_radars_grid_origin():
@@ -244,10 +231,8 @@ def test_grid_from_radars_grid_origin():
     grid = pyart.map.grid_from_radars((radar,), grid_origin=(36.4, -97.6),
                                       grid_origin_alt=200,
                                       **COMMON_MAP_TO_GRID_ARGS)
-    print(round(grid.axes['lat']['data'][0], 2))
-    print(round(grid.axes['lon']['data'][0], 2))
-    assert round(grid.axes['lat']['data'][0], 2) == 36.4
-    assert round(grid.axes['lon']['data'][0], 2) == -97.6
+    assert_almost_equal(grid.origin_latitude['data'][0], 36.4, 1)
+    assert_almost_equal(grid.origin_longitude['data'], -97.6, 1)
 
 
 def test_example_roi_funcs():
