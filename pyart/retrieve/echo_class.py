@@ -93,14 +93,14 @@ def steiner_conv_strat(grid, dx=None, dy=None, intense=42.0,
 
     # parse dx and dy
     if dx is None:
-        dx = grid.axes['x_disp']['data'][1] - grid.axes['x_disp']['data'][0]
+        dx = grid.regular_x['data'][1] - grid.regular_x['data'][0]
     if dy is None:
-        dy = grid.axes['y_disp']['data'][1] - grid.axes['y_disp']['data'][0]
+        dy = grid.regular_y['data'][1] - grid.regular_y['data'][0]
 
-    # Get axes
-    x = grid.axes['x_disp']['data']
-    y = grid.axes['y_disp']['data']
-    z = grid.axes['z_disp']['data']
+    # Get coordinates
+    x = grid.regular_x['data']
+    y = grid.regular_y['data']
+    z = grid.regular_z['data']
 
     # Get reflectivity data
     ze = np.ma.copy(grid.fields[refl_field]['data'])
