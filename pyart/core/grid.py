@@ -19,6 +19,8 @@ An class for holding gridded Radar data.
 
 """
 
+import warnings
+
 import numpy as np
 
 from ..config import get_metadata
@@ -79,8 +81,8 @@ class Grid(object):
     nx, ny, nz : int
         Number of grid points along the given Cartesian dimension.
     axes : dict
-        Dictionary of axes dictionaries.  This attribute is Depreciated,
-        it will be removed in the next Py-ART release.
+        Dictionary of axes dictionaries.  This attribute is depreciated,
+        it will be removed in future versions of Py-ART.
     radar_longitude, radar_latitude, radar_altitude : dict or None, optional
         Geographic location of the radars which make up the grid.
     radar_time : dict or None, optional
@@ -156,6 +158,9 @@ class Grid(object):
             A Grid object.
 
         """
+        warnings.warn(
+            "from_legacy_parameters is depreciated and will be removed in a " +
+            "future version of Py-ART", DeprecationWarning)
         time = axes['time']
         fields = fields
         metadata = metadata

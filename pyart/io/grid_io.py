@@ -13,7 +13,7 @@ Reading and writing Grid objects.
 
 """
 
-from warnings import warn
+import warnings
 
 import numpy as np
 import netCDF4
@@ -101,7 +101,7 @@ def read_grid(filename, exclude_fields=None, **kwargs):
             fields[field] = field_dic
         else:
             bad_shape = field_dic['data'].shape
-            warn('Field %s skipped due to incorrect shape' % (field))
+            warnings.warn('Field %s skipped due to incorrect shape' % (field))
 
     # radar_ variables
     if 'radar_latitude' in dset.variables:
@@ -299,6 +299,9 @@ def read_legacy_grid(filename, exclude_fields=None, **kwargs):
         Grid object containing gridded data.
 
     """
+    warnings.warn(
+        "read_legacy_grid is depreciated and will be removed in a future " +
+        "version of Py-ART", DeprecationWarning)
     # test for non empty kwargs
     _test_arguments(kwargs)
 
