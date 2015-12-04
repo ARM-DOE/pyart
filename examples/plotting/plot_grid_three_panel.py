@@ -22,8 +22,8 @@ import pyart
 
 
 # read in the NEXRAD data, create the display
-fname = '20110520100000_nex_3d.nc'
-grid = pyart.io.read_legacy_grid(fname)
+fname = '20110520100000_nexrad_grid.nc'
+grid = pyart.io.read_grid(fname)
 display = pyart.graph.GridMapDisplay(grid)
 
 # create the figure
