@@ -73,9 +73,9 @@ def parse_vmin_vmax(container, field, vmin, vmax):
 def parse_lon_lat(grid, lon, lat):
     """ Parse lat and lon parameters """
     if lat is None:
-        lat = grid.axes['lat']['data'][0]
+        lat = grid.origin_latitude['data'][0]
     if lon is None:
-        lon = grid.axes['lon']['data'][0]
+        lon = grid.origin_latitude['data'][0]
     return lon, lat
 
 
@@ -124,16 +124,12 @@ def generate_radar_time_begin(radar):
 
 def generate_grid_time_begin(grid):
     """ Return time begin in datetime instance. """
-    # datetime object describing time
-    if "time_start" in grid.axes:
-        time = "time_start"
-    elif 'time' in grid.axes:
-        time = 'time'
-    elif 'time_end' in grid.axes:
-        time = 'time_end'
-    times = grid.axes[time]['data'][0]
-    units = grid.axes[time]['units']
-    calendar = grid.axes[time]['calendar']
+    times = grid.time['data'][0]
+    units = grid.time['units']
+    if 'calendar' in grid.time:
+        calendar = grid.time['calendar']
+    else:
+        calendar = 'standard'
     return num2date(times, units, calendar)
 
 
@@ -247,7 +243,7 @@ def generate_grid_title(grid, field, level):
 
     """
     time_str = generate_grid_time_begin(grid).isoformat() + 'Z'
-    height = grid.axes["z_disp"]['data'][level] / 1000.
+    height = grid.regular_z['data'][level] / 1000.
     l1 = "%s %.1f km %s " % (generate_grid_name(grid), height,
                              time_str)
     field_name = generate_field_name(grid, field)
@@ -275,7 +271,7 @@ def generate_longitudinal_level_title(grid, field, level):
 
     """
     time_str = generate_grid_time_begin(grid).isoformat() + 'Z'
-    disp = grid.axes["x_disp"]['data'][level] / 1000.
+    disp = grid.regular_x['data'][level] / 1000.
     if disp >= 0:
         direction = "east"
     else:
@@ -308,7 +304,7 @@ def generate_latitudinal_level_title(grid, field, level):
 
     """
     time_str = generate_grid_time_begin(grid).isoformat() + 'Z'
-    disp = grid.axes["y_disp"]['data'][level] / 1000.
+    disp = grid.regular_y['data'][level] / 1000.
     if disp >= 0:
         direction = "north"
     else:

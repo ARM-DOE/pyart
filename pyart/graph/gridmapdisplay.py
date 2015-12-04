@@ -74,14 +74,14 @@ class GridMapDisplay():
         self.debug = debug
 
         # set up the projection
-        lat0 = grid.axes['lat']['data'][0]
-        lon0 = grid.axes['lon']['data'][0]
+        lat0 = grid.origin_latitude['data'][0]
+        lon0 = grid.origin_longitude['data'][0]
         self.proj = pyproj.Proj(proj='aeqd', datum='NAD83',
                                 lat_0=lat0, lon_0=lon0)
 
         # determine grid latitudes and longitudes.
-        x_1d = grid.axes['x_disp']['data']
-        y_1d = grid.axes['y_disp']['data']
+        x_1d = grid.regular_x['data']
+        y_1d = grid.regular_y['data']
         x_2d, y_2d = np.meshgrid(x_1d, y_1d)
         self.grid_lons, self.grid_lats = self.proj(x_2d, y_2d, inverse=True)
 
@@ -211,8 +211,8 @@ class GridMapDisplay():
             data = np.ma.masked_outside(data, vmin, vmax)
 
         # plot the grid
-        x_1d = self.grid.axes['x_disp']['data']
-        y_1d = self.grid.axes['y_disp']['data']
+        x_1d = self.grid.regular_x['data']
+        y_1d = self.grid.regular_y['data']
 
         if edges:
             if len(x_1d) > 1:
@@ -418,8 +418,8 @@ class GridMapDisplay():
             data = np.ma.masked_outside(data, vmin, vmax)
 
         # plot the grid
-        x_1d = self.grid.axes['x_disp']['data'] / 1000.
-        z_1d = self.grid.axes['z_disp']['data'] / 1000.
+        x_1d = self.grid.regular_x['data'] / 1000.
+        z_1d = self.grid.regular_z['data'] / 1000.
         if edges:
             if len(x_1d) > 1:
                 x_1d = _interpolate_axes_edges(x_1d)
@@ -586,8 +586,8 @@ class GridMapDisplay():
             data = np.ma.masked_outside(data, vmin, vmax)
 
         # plot the grid
-        y_1d = self.grid.axes['y_disp']['data'] / 1000.
-        z_1d = self.grid.axes['z_disp']['data'] / 1000.
+        y_1d = self.grid.regular_y['data'] / 1000.
+        z_1d = self.grid.regular_z['data'] / 1000.
         if edges:
             if len(y_1d) > 1:
                 y_1d = _interpolate_axes_edges(y_1d)
@@ -706,8 +706,8 @@ class GridMapDisplay():
             print("Minimum longitute: ", min_lon)
 
         # determine plot center
-        lat_0 = self.grid.axes['lat']['data'][0]
-        lon_0 = self.grid.axes['lon']['data'][0]
+        lat_0 = self.grid.origin_latitude['data'][0]
+        lon_0 = self.grid.origin_longitude['data'][0]
 
         default_args = {
             'lat_0': lat_0, 'lon_0': lon_0, 'lat_ts': lat_0,
@@ -722,8 +722,8 @@ class GridMapDisplay():
             default_args['urcrnrlat'] = max_lat
         else:
             # determine width and height of the plot
-            x = self.grid.axes['x_disp']['data'][0]
-            y = self.grid.axes['y_disp']['data'][0]
+            x = self.grid.regular_x['data'][0]
+            y = self.grid.regular_y['data'][0]
             default_args['width'] = (x.max() - x.min())
             default_args['height'] = (y.max() - y.min())
 
@@ -747,8 +747,8 @@ class GridMapDisplay():
             print("x_cut: ", x_cut)
             print("y_cut: ", y_cut)
 
-        x_index = np.abs(self.grid.axes['x_disp']['data'] - x_cut).argmin()
-        y_index = np.abs(self.grid.axes['y_disp']['data'] - y_cut).argmin()
+        x_index = np.abs(self.grid.regular_x['data'] - x_cut).argmin()
+        y_index = np.abs(self.grid.regular_y['data'] - y_cut).argmin()
 
         if self.debug:
             print("x_index", x_index)
