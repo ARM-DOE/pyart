@@ -66,7 +66,7 @@ class Grid(object):
     point_altitude : LazyLoadDict
         The altitude of each grid point as calculated from the altitude of the
         grid origin and the Cartesian z location of each grid point.  If this
-        attribute is changed use :py:func:`init_gate_altitude` to reset the
+        attribute is changed use :py:func:`init_point_altitude` to reset the
         attribute.
     projection : dic or str
         Projection parameters defining the map projection used to transform
