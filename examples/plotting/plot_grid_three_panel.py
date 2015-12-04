@@ -52,8 +52,7 @@ display.plot_grid('REF', level=level, vmin=vmin, vmax=vmax, title_flag=False,
 display.plot_crosshairs(lon=lon, lat=lat)
 
 # fetch NCEP NARR data
-grid_time = display.grid.axes['time']
-grid_date = num2date(grid_time['data'], grid_time['units'])[0]
+grid_date = num2date(grid.time['data'], grid.time['units'])[0]
 y_m_d = grid_date.strftime('%Y%m%d')
 y_m = grid_date.strftime('%Y%m')
 url = ('http://nomads.ncdc.noaa.gov/dods/NCEP_NARR_DAILY/' + y_m + '/' +
@@ -95,8 +94,8 @@ display.plot_latitude_slice(
     axislabels=('', 'Height (km)'))
 
 # add a title
-slc_height = grid.axes['z_disp']['data'][level]
-dts = num2date(grid.axes['time']['data'], grid.axes['time']['units'])
+slc_height = grid.regular_z['data'][level]
+dts = num2date(grid.time['data'], grid.time['units'])
 datestr = dts[0].strftime('%H:%M Z on %Y-%m-%d')
 title = 'Sliced at ' + str(slc_height) + ' meters at ' + datestr
 fig.text(0.5, 0.9, title)
