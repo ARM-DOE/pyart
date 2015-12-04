@@ -30,14 +30,11 @@ class Grid(object):
     """
     A class for storing rectilinear gridded radar data in Cartesian coordinate.
 
-    Parameters
-    ----------
-    fields : dict
-        Dictionary of field dictionaries.
-    metadata : dict
-        Dictionary of metadata.
-    axes : dict
-        Dictionary of axes dictionaries.
+    Refer to the attribute section for information on the parameters.
+
+    To create a Grid object using legacy parameters present in Py-ART version
+    1.5 and before, use :py:func:`from_legacy_parameters`,
+    grid = Grid.from_legacy_parameters(fields, axes, metadata).
 
     Attributes
     ----------
@@ -82,9 +79,8 @@ class Grid(object):
     nx, ny, nz : int
         Number of grid points along the given Cartesian dimension.
     axes : dict
-        Dictionary of axes dictionaries.
-        This attribute is Depreciated, it will be removed in the next Py-ART
-        release.
+        Dictionary of axes dictionaries.  This attribute is Depreciated,
+        it will be removed in the next Py-ART release.
     radar_longitude, radar_latitude, radar_altitude : dict or None, optional
         Geographic location of the radars which make up the grid.
     radar_time : dict or None, optional
@@ -139,6 +135,40 @@ class Grid(object):
         self.axes = axes
 
         return
+
+    @classmethod
+    def from_legacy_parameters(cls, fields, axes, metadata):
+        """
+        Return a Grid class using legacy parameters.
+
+        Parameters
+        ----------
+        fields : dict
+            Dictionary of field dictionaries.
+        metadata : dict
+            Dictionary of metadata.
+        axes : dict
+            Dictionary of axes dictionaries.
+
+        Returns
+        --------
+        grid : Grid
+            A Grid object.
+
+        """
+        time = axes['time']
+        fields = fields
+        metadata = metadata
+        origin_latitude = axes['lat']
+        origin_longitude = axes['lon']
+        origin_altitude = axes['alt']
+        regular_x = axes['x_disp']
+        regular_y = axes['y_disp']
+        regular_z = axes['z_disp']
+        grid = cls(time, fields, metadata,
+                   origin_latitude, origin_longitude, origin_altitude,
+                   regular_x, regular_y, regular_z)
+        return grid
 
     def _find_and_check_nradar(self):
         """

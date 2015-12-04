@@ -249,6 +249,7 @@ def test_init_point_x_y_z():
     assert grid.point_x['data'][0, 0, 0] == grid.regular_x['data'][0]
 
 
+# Remove this test when Grid.axes is Depreciated
 def test_grid_axes_attribute():
     # test the depreciated axes Grid attribute
     grid = pyart.testing.make_target_grid()
@@ -298,3 +299,108 @@ def test_grid_axes_attribute():
 
     assert isinstance(axes['longitude'], dict)
     assert axes['longitude']['data'].shape == (ny, nx)
+
+
+# Remove this function when Grid.from_legacy_parameters is Depreciated
+def make_empty_grid(grid_shape, grid_limits):
+    """
+    Make an empty grid object without any fields or metadata.
+
+    Parameters
+    ----------
+    grid_shape : 3-tuple of floats
+        Number of points in the grid (z, y, x).
+    grid_limits : 3-tuple of 2-tuples
+        Minimum and maximum grid location (inclusive) in meters for the
+        z, y, x coordinates.
+
+    Returns
+    -------
+    grid : Grid
+        Empty Grid object, centered near the ARM SGP site (Oklahoma).
+
+    """
+    time = {
+        'data': np.array([0.0]),
+        'units': 'seconds since 2000-01-01T00:00:00Z',
+        'calendar': 'gregorian',
+        'standard_name': 'time',
+        'long_name': 'Time in seconds since volume start'}
+
+    time_start = {
+        'data': np.array([0.0]),
+        'units': 'seconds since 2000-01-01T00:00:00Z',
+        'calendar': 'gregorian',
+        'standard_name': 'time',
+        'long_name': 'Time in seconds since volume start'}
+
+    time_end = {
+        'data': np.array([0.0]),
+        'units': 'seconds since 2000-01-01T00:00:00Z',
+        'calendar': 'gregorian',
+        'standard_name': 'time',
+        'long_name': 'Time in seconds since volume start'}
+
+    # grid coordinate dictionaries
+    nz, ny, nx = grid_shape
+    (z0, z1), (y0, y1), (x0, x1) = grid_limits
+
+    xaxis = {'data': np.linspace(x0, x1, nx),
+             'long_name': 'X-coordinate in Cartesian system',
+             'axis': 'X',
+             'units': 'm'}
+
+    yaxis = {'data': np.linspace(y0, y1, ny),
+             'long_name': 'Y-coordinate in Cartesian system',
+             'axis': 'Y',
+             'units': 'm'}
+
+    zaxis = {'data': np.linspace(z0, z1, nz),
+             'long_name': 'Z-coordinate in Cartesian system',
+             'axis': 'Z',
+             'units': 'm',
+             'positive': 'up'}
+
+    altorigin = {'data': np.array([300.]),
+                 'long_name': 'Altitude at grid origin',
+                 'units': 'm',
+                 'standard_name': 'altitude',
+                 }
+
+    latorigin = {'data': np.array([36.74]),
+                 'long_name': 'Latitude at grid origin',
+                 'units': 'degree_N',
+                 'standard_name': 'latitude',
+                 'valid_min': -90.,
+                 'valid_max': 90.
+                 }
+
+    lonorigin = {'data': np.array([-98.1]),
+                 'long_name': 'Longitude at grid origin',
+                 'units': 'degree_E',
+                 'standard_name': 'longitude',
+                 'valid_min': -180.,
+                 'valid_max': 180.
+                 }
+
+    axes = {'time': time,
+            'time_start': time_start,
+            'time_end': time_end,
+            'z_disp': zaxis,
+            'y_disp': yaxis,
+            'x_disp': xaxis,
+            'alt': altorigin,
+            'lat': latorigin,
+            'lon': lonorigin}
+
+    return pyart.core.Grid.from_legacy_parameters({}, axes, {})
+
+
+# Remove this test when Grid.from_legacy_parameters is Depreciated
+def test_grid_from_legacy_parameters():
+    grid_shape = (2, 3, 4)
+    grid_limits = ((0, 500), (-400000, 400000), (-300000, 300000))
+    grid = make_empty_grid(grid_shape, grid_limits)
+    assert grid.nx == 4
+    assert grid.ny == 3
+    assert grid.nz == 2
