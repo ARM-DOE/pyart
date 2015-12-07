@@ -75,7 +75,7 @@ def parse_lon_lat(grid, lon, lat):
     if lat is None:
         lat = grid.origin_latitude['data'][0]
     if lon is None:
-        lon = grid.origin_latitude['data'][0]
+        lon = grid.origin_longitude['data'][0]
     return lon, lat
 
 
