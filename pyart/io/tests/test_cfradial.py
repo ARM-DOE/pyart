@@ -460,7 +460,7 @@ def test_delay_field_loading():
     radar = pyart.io.read_cfradial(
         pyart.testing.CFRADIAL_PPI_FILE, delay_field_loading=True)
     assert isinstance(radar.fields['reflectivity_horizontal'],
-                      pyart.io.lazydict.LazyLoadDict)
+                      pyart.lazydict.LazyLoadDict)
     data = radar.fields['reflectivity_horizontal']['data']
     assert isinstance(data, MaskedArray)
     assert data.shape == (40, 42)

@@ -1,6 +1,6 @@
 """
-pyart.io.lazydict
-=================
+pyart.lazydict
+==============
 
 A dictionary-like class supporting lazy loading of specified keys.
 

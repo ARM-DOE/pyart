@@ -33,7 +33,7 @@ import netCDF4
 from ..config import FileMetadata
 from .common import stringarray_to_chararray, _test_arguments
 from ..core.radar import Radar
-from .lazydict import LazyLoadDict
+from ..lazydict import LazyLoadDict
 
 
 # Variables and dimensions in the instrument_parameter convention and

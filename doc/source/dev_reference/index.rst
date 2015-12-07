@@ -26,6 +26,7 @@ Documentation is broken down by directory and module.
     retrieve
     graph
     filters
+    lazydict
     map
     util
     bridge
