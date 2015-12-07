@@ -323,7 +323,10 @@ def _point_lon_lat_data_factory(grid, coordinate):
             projparams['lon_0'] = grid.origin_longitude['data'][0]
             projparams['lat_0'] = grid.origin_latitude['data'][0]
         geographic_coords = cartesian_to_geographic(x, y, projparams)
-        # set the other geographic coordinate
+        # Set point_latitude['data'] when point_longitude['data'] is evaluated
+        # and vice-versa.  This ensures that both attributes contain data from
+        # the same map projection and that the map projection only needs to be
+        # evaluated once.
         if coordinate == 0:
             grid.point_latitude['data'] = geographic_coords[1]
         else:
