@@ -12,4 +12,3 @@ Latest Release
 
     user_reference/index
     dev_reference/index
-    auto_examples/index

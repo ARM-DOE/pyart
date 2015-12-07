@@ -15,7 +15,7 @@ print __doc__
 import matplotlib.pyplot as plt
 import pyart
 
-RADAR_NAME = 'sgpcsaprsurcmacI7.c0.20110520.095101.nc'
+RADAR_NAME = './data/sgpcsaprsurcmacI7.c0.20110520.095101.nc'
 
 # read in the data
 radar = pyart.io.read_cfradial(RADAR_NAME)

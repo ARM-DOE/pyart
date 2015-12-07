@@ -17,7 +17,7 @@ import matplotlib.pyplot as plt
 import pyart
 
 # read in the file, create a RadarMapDisplay object
-filename = 'nsaxsaprppiC1.a1.20140201.184802.nc'
+filename = 'data/nsaxsaprppiC1.a1.20140201.184802.nc'
 radar = pyart.io.read(filename)
 display = pyart.graph.RadarMapDisplay(radar)
 
