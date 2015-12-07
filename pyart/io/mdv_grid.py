@@ -33,16 +33,10 @@ def write_grid_mdv(filename, grid, mdv_field_names=None,
     Write grid object to MDV file.
 
     Create a MDV file containing data from the provided grid instance.
-    The MDV file will contain parameters from the following keys if they are
-    contained in grid.metadata:
 
-        * instrument_name
-        * source
-        * radar_0_lon
-        * radar_0_lat
-        * radar_0_alt
-
-    If any of these keys are not present a default or sentinel value
+    The MDV file will contain parameters from the 'source' key if contained
+    in grid.metadata.  If this key or parameters related to the radar location
+    and name are not present in the grid a default or sentinel value.
     will be written in the MDV file in the place of the parameter.
 
     Grid fields will be saved in float32 unless the `_Write_as_dtype` key is
