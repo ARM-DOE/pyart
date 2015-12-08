@@ -188,6 +188,16 @@ def test_add_field_raises():
     assert_raises(ValueError, grid.add_field, 'field_name', field_dict)
 
 
+def test_projection_argument():
+    grid = pyart.core.Grid(
+        time={}, fields={}, metadata={},
+        origin_latitude={}, origin_longitude={}, origin_altitude={},
+        regular_x={'data': [1]}, regular_y={'data': [1]},
+        regular_z={'data': [1]}, radar_latitude={'data': [1]},
+        projection={})
+    assert grid.projection == {}
+
+
 def test_inconsistent_radar_arguments():
 
     #  partially instantiate a Grid class with fake data and a radar_latitude

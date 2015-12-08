@@ -131,15 +131,13 @@ def read_grid(filename, exclude_fields=None, **kwargs):
 
     dset.close()
 
-    grid = Grid(
+    return Grid(
         time, fields, metadata,
         origin_latitude, origin_longitude, origin_altitude,
-        regular_x, regular_y, regular_z,
+        regular_x, regular_y, regular_z, projection=projection,
         radar_latitude=radar_latitude, radar_longitude=radar_longitude,
         radar_altitude=radar_altitude, radar_name=radar_name,
         radar_time=radar_time)
-    grid.projection = projection
-    return grid
 
 
 def write_grid(filename, grid, format='NETCDF4', arm_time_variables=False,

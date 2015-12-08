@@ -70,13 +70,13 @@ class Grid(object):
         attribute.
     projection : dic or str
         Projection parameters defining the map projection used to transform
-        from Cartesian to geographic coordinates.  The default dictionary sets
-        the 'proj' key to 'pyart_aeqd' indicating that the native Py-ART
-        azimuthal equidistant projection is used. This can be modified to
-        specify a valid pyproj.Proj projparams dictionary or string.
-        The special key '_include_lon_0_lat_0' is removed when interpreting
-        this dictionary. If this key is present and set to True, which is
-        required when proj='pyart_aeqd', then the radar longitude and
+        from Cartesian to geographic coordinates.  None will use the default
+        dictionary with the 'proj' key set to 'pyart_aeqd' indicating that
+        the native Py-ART azimuthal equidistant projection is used. Other
+        values should specify a valid pyproj.Proj projparams dictionary or
+        string.  The special key '_include_lon_0_lat_0' is removed when
+        interpreting this dictionary. If this key is present and set to True,
+        which is required when proj='pyart_aeqd', then the radar longitude and
         latitude will be added to the dictionary as 'lon_0' and 'lat_0'.
     nx, ny, nz : int
         Number of grid points along the given Cartesian dimension.
@@ -94,7 +94,7 @@ class Grid(object):
     def __init__(self, time, fields, metadata,
                  origin_latitude, origin_longitude, origin_altitude,
                  regular_x, regular_y, regular_z,
-                 radar_latitude=None, radar_longitude=None,
+                 projection=None, radar_latitude=None, radar_longitude=None,
                  radar_altitude=None, radar_time=None, radar_name=None):
         """ Initalize object. """
 
@@ -110,7 +110,11 @@ class Grid(object):
         self.nx = len(regular_x['data'])
         self.ny = len(regular_y['data'])
         self.nz = len(regular_z['data'])
-        self.projection = {'proj': 'pyart_aeqd', '_include_lon_0_lat_0': True}
+        if projection is None:
+            self.projection = {
+                'proj': 'pyart_aeqd', '_include_lon_0_lat_0': True}
+        else:
+            self.projection = projection
 
         self.radar_latitude = radar_latitude
         self.radar_longitude = radar_longitude
