@@ -23,6 +23,12 @@ import warnings
 
 import numpy as np
 
+try:
+    from mpl_toolkits.basemap import pyproj
+    _PYPROJ_AVAILABLE = True
+except ImportError:
+    _PYPROJ_AVAILABLE = False
+
 from ..config import get_metadata
 from ..lazydict import LazyLoadDict
 from .transforms import cartesian_to_geographic
@@ -64,6 +70,8 @@ class Grid(object):
         interpreting this dictionary. If this key is present and set to True,
         which is required when proj='pyart_aeqd', then the radar longitude and
         latitude will be added to the dictionary as 'lon_0' and 'lat_0'.
+        Use the :py:func:`get_projparams` method to retrieve a copy of this
+        attribute dictionary with this special key evaluated.
     radar_longitude, radar_latitude, radar_altitude : dict or None, optional
         Geographic location of the radars which make up the grid.
     radar_time : dict or None, optional
@@ -72,6 +80,10 @@ class Grid(object):
         Names of the radars which make up the grid.
     nradar : int
         Number of radars whose data was used to make the grid.
+    projection_proj : Proj
+        pyproj.Proj instance for the projection specified by the projection
+        attribute.  If the 'pyart_aeqd' projection is specified accessing this
+        attribute will raise a ValueError.
     point_x, point_y, point_z : LazyLoadDict
         The Cartesian locations of all grid points from the origin in the
         three Cartesian coordinates.  The three dimensional data arrays
@@ -180,6 +192,32 @@ class Grid(object):
                    origin_latitude, origin_longitude, origin_altitude,
                    x, y, z)
         return grid
+
+    @property
+    def projection_proj(self):
+        """
+        Proj instance as specified by the projection attribute.
+
+        Raises a ValueError if the pyart_aeqd projection is specified.
+        """
+        projparams = self.get_projparams()
+        if projparams['proj'] == 'pyart_aeqd':
+            raise ValueError(
+                'Proj instance can not be made for the pyart_aeqd projection')
+        if not _PYPROJ_AVAILABLE:
+            raise MissingOptionalDependency(
+                "Basemap is required to create a Proj instance but it " +
+                "is not installed")
+        proj = pyproj.Proj(projparams)
+        return proj
+
+    def get_projparams(self):
+        """ Return a projparam dict from the projection attribute. """
+        projparams = self.projection.copy()
+        if projparams.pop('_include_lon_0_lat_0', False):
+            projparams['lon_0'] = self.origin_longitude['data'][0]
+            projparams['lat_0'] = self.origin_latitude['data'][0]
+        return projparams
 
     def _find_and_check_nradar(self):
         """
@@ -324,10 +362,7 @@ def _point_lon_lat_data_factory(grid, coordinate):
         """ The function which returns the geographic point locations. """
         x = grid.point_x['data']
         y = grid.point_y['data']
-        projparams = grid.projection.copy()
-        if projparams.pop('_include_lon_0_lat_0', False):
-            projparams['lon_0'] = grid.origin_longitude['data'][0]
-            projparams['lat_0'] = grid.origin_latitude['data'][0]
+        projparams = grid.get_projparams()
         geographic_coords = cartesian_to_geographic(x, y, projparams)
         # Set point_latitude['data'] when point_longitude['data'] is evaluated
         # and vice-versa.  This ensures that both attributes contain data from

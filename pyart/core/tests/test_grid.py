@@ -6,6 +6,13 @@ import functools
 
 import numpy as np
 from numpy.testing import assert_almost_equal, assert_raises
+from numpy.testing.decorators import skipif
+
+try:
+    from mpl_toolkits.basemap import pyproj
+    _PYPROJ_AVAILABLE = True
+except ImportError:
+    _PYPROJ_AVAILABLE = False
 
 import pyart
 from pyart.lazydict import LazyLoadDict
@@ -243,6 +250,22 @@ def test_init_point_longitude_latitude():
     grid.init_point_longitude_latitude()
     assert_almost_equal(grid.point_longitude['data'][0, 0, 159], -80.0, 1)
     assert_almost_equal(grid.point_latitude['data'][0, 200, 0], 40.0, 1)
+
+
+@skipif(not _PYPROJ_AVAILABLE)
+def test_projection_proj():
+    grid = pyart.testing.make_target_grid()
+    grid.projection['proj'] = 'aeqd'
+    assert isinstance(grid.projection_proj, pyproj.Proj)
+
+
+def test_projection_proj_raised():
+    grid = pyart.testing.make_target_grid()
+
+    def access_projection_proj():
+        grid.projection_proj
+
+    assert_raises(ValueError, access_projection_proj)
 
 
 def test_init_point_x_y_z():
