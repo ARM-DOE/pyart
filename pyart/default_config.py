@@ -656,18 +656,21 @@ DEFAULT_METADATA = {
         'units': 'm',
         'standard_name': 'altitude'},
 
-    'regular_x': {
-        'long_name': 'X-coordinate in Cartesian system',
+    'x': {
+        'standard_name': 'projection_x_coordinate',
+        'long_name': 'X distance on the projection plane from the origin',
         'axis': 'X',
         'units': 'm'},
 
-    'regular_y': {
-        'long_name': 'Y-coordinate in Cartesian system',
+    'y': {
+        'standard_name': 'projection_y_coordinate',
+        'long_name': 'Y distance on the projection plane from the origin',
         'axis': 'Y',
         'units': 'm'},
 
-    'regular_z': {
-        'long_name': 'Z-coordinate in Cartesian system',
+    'z': {
+        'standard_name': 'projection_z_coordinate',
+        'long_name': 'Z distance on the projection plane from the origin',
         'axis': 'Z',
         'units': 'm',
         'positive': 'up'},

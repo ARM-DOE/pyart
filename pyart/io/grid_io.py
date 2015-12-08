@@ -51,7 +51,7 @@ def read_grid(filename, exclude_fields=None, **kwargs):
         exclude_fields = []
 
     reserved_variables = [
-        'time', 'regular_x', 'regular_y', 'regular_z',
+        'time', 'x', 'y', 'z',
         'origin_latitude', 'origin_longitude', 'origin_altitude',
         'point_x', 'point_y', 'point_z', 'projection',
         'point_latitude', 'point_longitude', 'point_altitude',
@@ -68,9 +68,9 @@ def read_grid(filename, exclude_fields=None, **kwargs):
     origin_latitude = _ncvar_to_dict(dset.variables['origin_latitude'])
     origin_longitude = _ncvar_to_dict(dset.variables['origin_longitude'])
     origin_altitude = _ncvar_to_dict(dset.variables['origin_altitude'])
-    regular_x = _ncvar_to_dict(dset.variables['regular_x'])
-    regular_y = _ncvar_to_dict(dset.variables['regular_y'])
-    regular_z = _ncvar_to_dict(dset.variables['regular_z'])
+    x = _ncvar_to_dict(dset.variables['x'])
+    y = _ncvar_to_dict(dset.variables['y'])
+    z = _ncvar_to_dict(dset.variables['z'])
 
     # projection
     projection = _ncvar_to_dict(dset.variables['projection'])
@@ -133,8 +133,8 @@ def read_grid(filename, exclude_fields=None, **kwargs):
 
     return Grid(
         time, fields, metadata,
-        origin_latitude, origin_longitude, origin_altitude,
-        regular_x, regular_y, regular_z, projection=projection,
+        origin_latitude, origin_longitude, origin_altitude, x, y, z,
+        projection=projection,
         radar_latitude=radar_latitude, radar_longitude=radar_longitude,
         radar_altitude=radar_altitude, radar_name=radar_name,
         radar_time=radar_time)
@@ -196,9 +196,9 @@ def write_grid(filename, grid, format='NETCDF4', arm_time_variables=False,
 
     # required variables
     _create_ncvar(grid.time, dset, 'time', ('time', ))
-    _create_ncvar(grid.regular_x, dset, 'regular_x', ('nx', ))
-    _create_ncvar(grid.regular_y, dset, 'regular_y', ('ny', ))
-    _create_ncvar(grid.regular_z, dset, 'regular_z', ('nz', ))
+    _create_ncvar(grid.x, dset, 'x', ('nx', ))
+    _create_ncvar(grid.y, dset, 'y', ('ny', ))
+    _create_ncvar(grid.z, dset, 'z', ('nz', ))
     _create_ncvar(grid.origin_latitude, dset, 'origin_latitude', ('time', ))
     _create_ncvar(grid.origin_longitude, dset, 'origin_longitude', ('time', ))
     _create_ncvar(grid.origin_altitude, dset, 'origin_altitude', ('time', ))

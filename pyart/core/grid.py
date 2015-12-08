@@ -48,15 +48,16 @@ class Grid(object):
         Time of the grid.
     origin_longitude, origin_latitude, origin_altitude : dict
         Geographic coordinate of the origin of the grid.
-    regular_x, regular_y, regular_z : dict
-        Regular locations of grid points from the origin in the three
-        Cartesian coordinates.
+    x, y, z : dict, 1D
+        Distance from the grid origin for each Cartesian coordinate axis in a
+        one dimensional array.  Defines the spacing along the three grid axes
+        which is repeated throughout the grid, making a rectilinear grid.
     point_x, point_y, point_z : LazyLoadDict
         The Cartesian locations of all grid points from the origin in the
         three Cartesian coordinates.  The three dimensional data arrays
-        contained these attributes are calculated from the regular_x,
-        regular_y, and regular_z attributes.  If these attributes are changed
-        use :py:func:`init_point_x_y_z` to reset the attributes.
+        contained these attributes are calculated from the x, y, and z
+        attributes.  If these attributes are changed use :py:func:
+        `init_point_x_y_z` to reset the attributes.
     point_longitude, point_latitude : LazyLoadDict
         Geographic location of each grid point. The projection parameter(s)
         defined in the `projection` attribute are used to perform an inverse
@@ -92,8 +93,7 @@ class Grid(object):
 
     """
     def __init__(self, time, fields, metadata,
-                 origin_latitude, origin_longitude, origin_altitude,
-                 regular_x, regular_y, regular_z,
+                 origin_latitude, origin_longitude, origin_altitude, x, y, z,
                  projection=None, radar_latitude=None, radar_longitude=None,
                  radar_altitude=None, radar_time=None, radar_name=None):
         """ Initalize object. """
@@ -104,12 +104,12 @@ class Grid(object):
         self.origin_latitude = origin_latitude
         self.origin_longitude = origin_longitude
         self.origin_altitude = origin_altitude
-        self.regular_x = regular_x
-        self.regular_y = regular_y
-        self.regular_z = regular_z
-        self.nx = len(regular_x['data'])
-        self.ny = len(regular_y['data'])
-        self.nz = len(regular_z['data'])
+        self.x = x
+        self.y = y
+        self.z = z
+        self.nx = len(x['data'])
+        self.ny = len(y['data'])
+        self.nz = len(z['data'])
         if projection is None:
             self.projection = {
                 'proj': 'pyart_aeqd', '_include_lon_0_lat_0': True}
@@ -132,9 +132,9 @@ class Grid(object):
         axes = {'time': time,
                 'time_start': time,  # incorrect metadata
                 'time_end': time,    # incorrect metadata
-                'z_disp': regular_z,
-                'y_disp': regular_y,
-                'x_disp': regular_x,
+                'z_disp': z,
+                'y_disp': y,
+                'x_disp': x,
                 'alt': origin_altitude,
                 'lat': origin_latitude,
                 'lon': origin_longitude}
@@ -171,12 +171,12 @@ class Grid(object):
         origin_latitude = axes['lat']
         origin_longitude = axes['lon']
         origin_altitude = axes['alt']
-        regular_x = axes['x_disp']
-        regular_y = axes['y_disp']
-        regular_z = axes['z_disp']
+        x = axes['x_disp']
+        y = axes['y_disp']
+        z = axes['z_disp']
         grid = cls(time, fields, metadata,
                    origin_latitude, origin_longitude, origin_altitude,
-                   regular_x, regular_y, regular_z)
+                   x, y, z)
         return grid
 
     def _find_and_check_nradar(self):
@@ -303,9 +303,9 @@ def _point_data_factory(grid, coordinate):
     """ Return a function which returns the locations of all points.  """
     def _point_data():
         """ The function which returns the locations of all points. """
-        reg_x = grid.regular_x['data']
-        reg_y = grid.regular_y['data']
-        reg_z = grid.regular_z['data']
+        reg_x = grid.x['data']
+        reg_y = grid.y['data']
+        reg_z = grid.z['data']
         if coordinate == 'x':
             return np.tile(reg_x, (len(reg_z), len(reg_y), 1)).swapaxes(2, 2)
         elif coordinate == 'y':

@@ -138,9 +138,9 @@ def test_grid_from_radars_gates_to_grid():
     # check other Grid object attributes
     assert 'ROI' in grid.fields
     assert np.all(grid.fields['ROI']['data'] == 30.)
-    assert_almost_equal(grid.regular_x['data'], np.linspace(-900, 900, 10))
-    assert_almost_equal(grid.regular_y['data'], np.linspace(-900, 900, 9))
-    assert_almost_equal(grid.regular_z['data'], np.linspace(-400, 400, 3))
+    assert_almost_equal(grid.x['data'], np.linspace(-900, 900, 10))
+    assert_almost_equal(grid.y['data'], np.linspace(-900, 900, 9))
+    assert_almost_equal(grid.z['data'], np.linspace(-400, 400, 3))
 
 
 def test_map_to_grid_errors():
@@ -173,9 +173,9 @@ def test_grid_from_radars():
     # check other Grid object attributes
     assert 'ROI' in grid.fields
     assert np.all(grid.fields['ROI']['data'] == 30.)
-    assert_almost_equal(grid.regular_x['data'], np.linspace(-900, 900, 10))
-    assert_almost_equal(grid.regular_y['data'], np.linspace(-900, 900, 9))
-    assert_almost_equal(grid.regular_z['data'], np.linspace(-400, 400, 3))
+    assert_almost_equal(grid.x['data'], np.linspace(-900, 900, 10))
+    assert_almost_equal(grid.y['data'], np.linspace(-900, 900, 9))
+    assert_almost_equal(grid.z['data'], np.linspace(-400, 400, 3))
 
 
 def test_grid_from_radars_grid_origin():

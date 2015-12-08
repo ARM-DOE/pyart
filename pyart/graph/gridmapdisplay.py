@@ -80,8 +80,8 @@ class GridMapDisplay():
                                 lat_0=lat0, lon_0=lon0)
 
         # determine grid latitudes and longitudes.
-        x_1d = grid.regular_x['data']
-        y_1d = grid.regular_y['data']
+        x_1d = grid.x['data']
+        y_1d = grid.y['data']
         x_2d, y_2d = np.meshgrid(x_1d, y_1d)
         self.grid_lons, self.grid_lats = self.proj(x_2d, y_2d, inverse=True)
 
@@ -211,8 +211,8 @@ class GridMapDisplay():
             data = np.ma.masked_outside(data, vmin, vmax)
 
         # plot the grid
-        x_1d = self.grid.regular_x['data']
-        y_1d = self.grid.regular_y['data']
+        x_1d = self.grid.x['data']
+        y_1d = self.grid.y['data']
 
         if edges:
             if len(x_1d) > 1:
@@ -418,8 +418,8 @@ class GridMapDisplay():
             data = np.ma.masked_outside(data, vmin, vmax)
 
         # plot the grid
-        x_1d = self.grid.regular_x['data'] / 1000.
-        z_1d = self.grid.regular_z['data'] / 1000.
+        x_1d = self.grid.x['data'] / 1000.
+        z_1d = self.grid.z['data'] / 1000.
         if edges:
             if len(x_1d) > 1:
                 x_1d = _interpolate_axes_edges(x_1d)
@@ -586,8 +586,8 @@ class GridMapDisplay():
             data = np.ma.masked_outside(data, vmin, vmax)
 
         # plot the grid
-        y_1d = self.grid.regular_y['data'] / 1000.
-        z_1d = self.grid.regular_z['data'] / 1000.
+        y_1d = self.grid.y['data'] / 1000.
+        z_1d = self.grid.z['data'] / 1000.
         if edges:
             if len(y_1d) > 1:
                 y_1d = _interpolate_axes_edges(y_1d)
@@ -722,8 +722,8 @@ class GridMapDisplay():
             default_args['urcrnrlat'] = max_lat
         else:
             # determine width and height of the plot
-            x = self.grid.regular_x['data'][0]
-            y = self.grid.regular_y['data'][0]
+            x = self.grid.x['data'][0]
+            y = self.grid.y['data'][0]
             default_args['width'] = (x.max() - x.min())
             default_args['height'] = (y.max() - y.min())
 
@@ -747,8 +747,8 @@ class GridMapDisplay():
             print("x_cut: ", x_cut)
             print("y_cut: ", y_cut)
 
-        x_index = np.abs(self.grid.regular_x['data'] - x_cut).argmin()
-        y_index = np.abs(self.grid.regular_y['data'] - y_cut).argmin()
+        x_index = np.abs(self.grid.x['data'] - x_cut).argmin()
+        y_index = np.abs(self.grid.y['data'] - y_cut).argmin()
 
         if self.debug:
             print("x_index", x_index)

@@ -243,7 +243,7 @@ def generate_grid_title(grid, field, level):
 
     """
     time_str = generate_grid_time_begin(grid).isoformat() + 'Z'
-    height = grid.regular_z['data'][level] / 1000.
+    height = grid.z['data'][level] / 1000.
     l1 = "%s %.1f km %s " % (generate_grid_name(grid), height,
                              time_str)
     field_name = generate_field_name(grid, field)
@@ -271,7 +271,7 @@ def generate_longitudinal_level_title(grid, field, level):
 
     """
     time_str = generate_grid_time_begin(grid).isoformat() + 'Z'
-    disp = grid.regular_x['data'][level] / 1000.
+    disp = grid.x['data'][level] / 1000.
     if disp >= 0:
         direction = "east"
     else:
@@ -304,7 +304,7 @@ def generate_latitudinal_level_title(grid, field, level):
 
     """
     time_str = generate_grid_time_begin(grid).isoformat() + 'Z'
-    disp = grid.regular_y['data'][level] / 1000.
+    disp = grid.y['data'][level] / 1000.
     if disp >= 0:
         direction = "north"
     else:

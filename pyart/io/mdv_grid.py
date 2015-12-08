@@ -107,10 +107,9 @@ def write_grid_mdv(filename, grid, mdv_field_names=None,
     d["data_dimension"] = 3  # XXX are grid's always 3d?
     # =DATA_SYNTHESIS, I don't realy know, so miscellaneous!
     d["data_collection_type"] = 3
-    if (grid.regular_z['units'] == 'm' or grid.regular_z['units'] == 'meters'):
+    if (grid.z['units'] == 'm' or grid.z['units'] == 'meters'):
         d["native_vlevel_type"] = 4
-    elif (grid.regular_z['units'] == '\xc2' or
-          grid.regular_z['units'] == 'degree'):
+    elif (grid.z['units'] == '\xc2' or grid.z['units'] == 'degree'):
         d["native_vlevel_type"] = 9
     d["vlevel_type"] = d["native_vlevel_type"]
     d["nfields"] = nfields
@@ -175,12 +174,10 @@ def write_grid_mdv(filename, grid, mdv_field_names=None,
         d["data_dimension"] = 3
         d["proj_origin_lat"] = grid.origin_latitude['data'][0]
         d["proj_origin_lon"] = grid.origin_longitude['data'][0]
-        d["grid_dx"] = (grid.regular_x['data'][1] -
-                        grid.regular_x['data'][0]) / 1000.
-        d["grid_dy"] = (grid.regular_y['data'][1] -
-                        grid.regular_y['data'][0]) / 1000.
-        d["grid_minx"] = (grid.regular_x['data'][0]) / 1000.
-        d["grid_miny"] = (grid.regular_y['data'][0]) / 1000.
+        d["grid_dx"] = (grid.x['data'][1] - grid.x['data'][0]) / 1000.
+        d["grid_dy"] = (grid.y['data'][1] - grid.y['data'][0]) / 1000.
+        d["grid_minx"] = (grid.x['data'][0]) / 1000.
+        d["grid_miny"] = (grid.y['data'][0]) / 1000.
         if "scale_factor" in grid.fields[field].keys():
             d["scale"] = grid.fields[field]["scale_factor"]
         if "add_offset" in grid.fields[field].keys():
@@ -222,7 +219,7 @@ def write_grid_mdv(filename, grid, mdv_field_names=None,
         level = [0] * 122
         for iz in range(nz):
             typ[iz] = d["vlevel_type"]
-            level[iz] = grid.regular_z["data"][iz] / 1000.
+            level[iz] = grid.z["data"][iz] / 1000.
         l["type"] = typ
         l["level"] = level
 
@@ -358,17 +355,17 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
     elif mdv.field_headers[0]["vlevel_type"] == 7:  # VERT_TYPE_THETA
         zunits = 'kelvin'
 
-    regular_x = get_metadata('regular_x')
-    regular_x['data'] = np.linspace(x_start, x_start + x_step * (nx-1), nx)
-    regular_x['units'] = xunits
+    x = get_metadata('x')
+    x['data'] = np.linspace(x_start, x_start + x_step * (nx-1), nx)
+    x['units'] = xunits
 
-    regular_y = get_metadata('regular_y')
-    regular_y['data'] = np.linspace(y_start, y_start + y_step * (ny-1), ny)
-    regular_y['units'] = yunits
+    y = get_metadata('y')
+    y['data'] = np.linspace(y_start, y_start + y_step * (ny-1), ny)
+    y['units'] = yunits
 
-    regular_z = get_metadata('regular_z')
-    regular_z['data'] = np.array(z_line, dtype='float64')
-    regular_z['units'] = zunits
+    z = get_metadata('z')
+    z['data'] = np.array(z_line, dtype='float64')
+    z['units'] = zunits
 
     # metadata
     metadata = filemetadata('metadata')
@@ -397,8 +394,7 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
     if not delay_field_loading:
         mdv.close()
     return Grid(time, fields, metadata,
-                origin_latitude, origin_longitude, origin_altitude,
-                regular_x, regular_y, regular_z)
+                origin_latitude, origin_longitude, origin_altitude, x, y, z)
 
 
 # This function may be helpful in other cases and could be moved in common

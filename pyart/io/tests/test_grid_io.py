@@ -34,9 +34,9 @@ def test_grid_write_read():
         _check_attrs_similar(grid1, grid2, 'origin_longitude')
         _check_attrs_similar(grid1, grid2, 'origin_altitude')
 
-        _check_attrs_similar(grid1, grid2, 'regular_x')
-        _check_attrs_similar(grid1, grid2, 'regular_y')
-        _check_attrs_similar(grid1, grid2, 'regular_z')
+        _check_attrs_similar(grid1, grid2, 'x')
+        _check_attrs_similar(grid1, grid2, 'y')
+        _check_attrs_similar(grid1, grid2, 'z')
 
         _check_attrs_similar(grid1, grid2, 'point_x')
         _check_attrs_similar(grid1, grid2, 'point_y')

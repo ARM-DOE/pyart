@@ -119,14 +119,14 @@ def grid_from_radars(radars, grid_shape, grid_limits,
     nz, ny, nx = grid_shape
     (z0, z1), (y0, y1), (x0, x1) = grid_limits
 
-    regular_x = get_metadata('regular_x')
-    regular_x['data'] = np.linspace(x0, x1, nx)
+    x = get_metadata('x')
+    x['data'] = np.linspace(x0, x1, nx)
 
-    regular_y = get_metadata('regular_y')
-    regular_y['data'] = np.linspace(y0, y1, ny)
+    y = get_metadata('y')
+    y['data'] = np.linspace(y0, y1, ny)
 
-    regular_z = get_metadata('regular_z')
-    regular_z['data'] = np.linspace(z0, z1, nz)
+    z = get_metadata('z')
+    z['data'] = np.linspace(z0, z1, nz)
 
     # grid origin location dictionaries
     origin_latitude = get_metadata('origin_latitude')
@@ -173,8 +173,7 @@ def grid_from_radars(radars, grid_shape, grid_limits,
 
     return Grid(
         time, fields, metadata,
-        origin_latitude, origin_longitude, origin_altitude,
-        regular_x, regular_y, regular_z,
+        origin_latitude, origin_longitude, origin_altitude, x, y, z,
         radar_latitude=radar_latitude, radar_longitude=radar_longitude,
         radar_altitude=radar_altitude, radar_name=radar_name,
         radar_time=radar_time)

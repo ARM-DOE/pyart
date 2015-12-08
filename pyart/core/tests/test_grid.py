@@ -32,9 +32,9 @@ def test_grid_write_method():
         _check_dicts_similar(grid1.origin_longitude, grid2.origin_longitude)
         _check_dicts_similar(grid1.origin_altitude, grid2.origin_altitude)
 
-        _check_dicts_similar(grid1.regular_x, grid2.regular_x)
-        _check_dicts_similar(grid1.regular_y, grid2.regular_y)
-        _check_dicts_similar(grid1.regular_z, grid2.regular_z)
+        _check_dicts_similar(grid1.x, grid2.x)
+        _check_dicts_similar(grid1.y, grid2.y)
+        _check_dicts_similar(grid1.z, grid2.z)
 
         _check_dicts_similar(grid1.point_x, grid2.point_x)
         _check_dicts_similar(grid1.point_y, grid2.point_y)
@@ -98,35 +98,35 @@ def test_grid_class():
     assert isinstance(grid.origin_altitude, dict)
     assert grid.origin_altitude['data'].shape == (1, )
 
-    assert isinstance(grid.regular_x, dict)
-    assert grid.regular_x['data'].shape == (nx, )
+    assert isinstance(grid.x, dict)
+    assert grid.x['data'].shape == (nx, )
 
-    assert isinstance(grid.regular_y, dict)
-    assert grid.regular_y['data'].shape == (ny, )
+    assert isinstance(grid.y, dict)
+    assert grid.y['data'].shape == (ny, )
 
-    assert isinstance(grid.regular_z, dict)
-    assert grid.regular_z['data'].shape == (nz, )
+    assert isinstance(grid.z, dict)
+    assert grid.z['data'].shape == (nz, )
 
     assert isinstance(grid.point_x, LazyLoadDict)
     assert grid.point_x['data'].shape == (nz, ny, nx)
     assert_almost_equal(
-        grid.point_x['data'][0, 0, :], grid.regular_x['data'][:])
+        grid.point_x['data'][0, 0, :], grid.x['data'][:])
     assert_almost_equal(
-        grid.point_x['data'][1, 1, :], grid.regular_x['data'][:])
+        grid.point_x['data'][1, 1, :], grid.x['data'][:])
 
     assert isinstance(grid.point_y, LazyLoadDict)
     assert grid.point_y['data'].shape == (nz, ny, nx)
     assert_almost_equal(
-        grid.point_y['data'][0, :, 0], grid.regular_y['data'][:])
+        grid.point_y['data'][0, :, 0], grid.y['data'][:])
     assert_almost_equal(
-        grid.point_y['data'][1, :, 1], grid.regular_y['data'][:])
+        grid.point_y['data'][1, :, 1], grid.y['data'][:])
 
     assert isinstance(grid.point_z, LazyLoadDict)
     assert grid.point_z['data'].shape == (nz, ny, nx)
     assert_almost_equal(
-        grid.point_z['data'][:, 0, 0], grid.regular_z['data'][:])
+        grid.point_z['data'][:, 0, 0], grid.z['data'][:])
     assert_almost_equal(
-        grid.point_z['data'][:, 1, 1], grid.regular_z['data'][:])
+        grid.point_z['data'][:, 1, 1], grid.z['data'][:])
 
     assert isinstance(grid.point_longitude, LazyLoadDict)
     assert grid.point_longitude['data'].shape == (nz, ny, nx)
@@ -192,9 +192,8 @@ def test_projection_argument():
     grid = pyart.core.Grid(
         time={}, fields={}, metadata={},
         origin_latitude={}, origin_longitude={}, origin_altitude={},
-        regular_x={'data': [1]}, regular_y={'data': [1]},
-        regular_z={'data': [1]}, radar_latitude={'data': [1]},
-        projection={})
+        x={'data': [1]}, y={'data': [1]}, z={'data': [1]},
+        radar_latitude={'data': [1]}, projection={})
     assert grid.projection == {}
 
 
@@ -205,8 +204,8 @@ def test_inconsistent_radar_arguments():
     partial_grid = functools.partial(
         pyart.core.Grid, time={}, fields={}, metadata={},
         origin_latitude={}, origin_longitude={}, origin_altitude={},
-        regular_x={'data': [1]}, regular_y={'data': [1]},
-        regular_z={'data': [1]}, radar_latitude={'data': [1]})
+        x={'data': [1]}, y={'data': [1]}, z={'data': [1]},
+        radar_latitude={'data': [1]})
 
     # radar_ arguments indicating 2 radars should raise a ValueError
     bad = {'data': [1, 2]}
@@ -250,13 +249,13 @@ def test_init_point_x_y_z():
     grid = pyart.testing.make_target_grid()
     assert isinstance(grid.point_x, LazyLoadDict)
     assert grid.point_x['data'].shape == (2, 400, 320)
-    assert grid.point_x['data'][0, 0, 0] == grid.regular_x['data'][0]
+    assert grid.point_x['data'][0, 0, 0] == grid.x['data'][0]
 
-    grid.regular_x['data'][0] = -500000.
-    assert grid.point_x['data'][0, 0, 0] != grid.regular_x['data'][0]
+    grid.x['data'][0] = -500000.
+    assert grid.point_x['data'][0, 0, 0] != grid.x['data'][0]
 
     grid.init_point_x_y_z()
-    assert grid.point_x['data'][0, 0, 0] == grid.regular_x['data'][0]
+    assert grid.point_x['data'][0, 0, 0] == grid.x['data'][0]
 
 
 # Remove this test when Grid.axes is Depreciated

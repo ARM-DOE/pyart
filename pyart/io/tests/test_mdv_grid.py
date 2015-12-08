@@ -29,7 +29,7 @@ class Mdv_grid_Tests(object):
         self.check_target_reflectivity_field(grid)
         attrs_to_check = [
             'time', 'origin_latitude', 'origin_longitude', 'origin_altitude',
-            'regular_x', 'regular_y', 'regular_z']
+            'x', 'y', 'z']
         for attr in attrs_to_check:
             self.check_attr_dics(grid, original_grid, attr)
 
@@ -77,7 +77,7 @@ class Mdv_grid_Tests(object):
         self.check_target_reflectivity_field(grid)
         attrs_to_check = [
             'time', 'origin_latitude', 'origin_longitude', 'origin_altitude',
-            'regular_x', 'regular_y', 'regular_z']
+            'x', 'y', 'z']
         for attr in attrs_to_check:
             self.check_attr_dics(grid, original_grid, attr)
 
@@ -98,7 +98,7 @@ class Mdv_grid_Tests(object):
         self.check_target_reflectivity_field(grid)
         attrs_to_check = [
             'time', 'origin_latitude', 'origin_longitude', 'origin_altitude',
-            'regular_x', 'regular_y', 'regular_z']
+            'x', 'y', 'z']
         for attr in attrs_to_check:
             self.check_attr_dics(grid, original_grid, attr)
         assert grid.metadata['instrument_name'] == 'testtesttest'
@@ -135,8 +135,8 @@ class Mdv_grid_Tests(object):
             UserWarning, pyart.io.write_grid_mdv, tmpfile, grid)
         tmpfile.seek(0)
         rgrid = pyart.io.read_grid_mdv(tmpfile)
-        assert len(grid.regular_z['data']) == 123
-        assert len(rgrid.regular_z['data']) == 122
+        assert len(grid.z['data']) == 123
+        assert len(rgrid.z['data']) == 122
 
     def test_write_types(self):
         # Write various data types
@@ -220,7 +220,7 @@ def test_mdv_degree_grid():
     assert np.ma.is_masked(fdata[0, 0, 0])
     assert_almost_equal(fdata[0, 130, 2536], 20.0, 1)
 
-    assert grid.regular_x['units'] == 'degree_E'
-    assert_almost_equal(grid.regular_x['data'][0], -129.99, 2)
-    assert grid.regular_y['units'] == 'degree_N'
-    assert_almost_equal(grid.regular_y['data'][0], 20.01, 2)
+    assert grid.x['units'] == 'degree_E'
+    assert_almost_equal(grid.x['data'][0], -129.99, 2)
+    assert grid.y['units'] == 'degree_N'
+    assert_almost_equal(grid.y['data'][0], 20.01, 2)
