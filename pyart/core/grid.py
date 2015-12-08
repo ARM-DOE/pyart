@@ -40,18 +40,38 @@ class Grid(object):
 
     Attributes
     ----------
+    time : dict
+        Time of the grid.
     fields: dict of dicts
         Moments from radars or other variables.
     metadata: dict
         Metadata describing the grid.
-    time : dict
-        Time of the grid.
     origin_longitude, origin_latitude, origin_altitude : dict
         Geographic coordinate of the origin of the grid.
     x, y, z : dict, 1D
         Distance from the grid origin for each Cartesian coordinate axis in a
         one dimensional array.  Defines the spacing along the three grid axes
         which is repeated throughout the grid, making a rectilinear grid.
+    nx, ny, nz : int
+        Number of grid points along the given Cartesian dimension.
+    projection : dic or str
+        Projection parameters defining the map projection used to transform
+        from Cartesian to geographic coordinates.  None will use the default
+        dictionary with the 'proj' key set to 'pyart_aeqd' indicating that
+        the native Py-ART azimuthal equidistant projection is used. Other
+        values should specify a valid pyproj.Proj projparams dictionary or
+        string.  The special key '_include_lon_0_lat_0' is removed when
+        interpreting this dictionary. If this key is present and set to True,
+        which is required when proj='pyart_aeqd', then the radar longitude and
+        latitude will be added to the dictionary as 'lon_0' and 'lat_0'.
+    radar_longitude, radar_latitude, radar_altitude : dict or None, optional
+        Geographic location of the radars which make up the grid.
+    radar_time : dict or None, optional
+        Start of collection for the radar which make up the grid.
+    radar_name : dict or None, optional
+        Names of the radars which make up the grid.
+    nradar : int
+        Number of radars whose data was used to make the grid.
     point_x, point_y, point_z : LazyLoadDict
         The Cartesian locations of all grid points from the origin in the
         three Cartesian coordinates.  The three dimensional data arrays
@@ -69,27 +89,9 @@ class Grid(object):
         grid origin and the Cartesian z location of each grid point.  If this
         attribute is changed use :py:func:`init_point_altitude` to reset the
         attribute.
-    projection : dic or str
-        Projection parameters defining the map projection used to transform
-        from Cartesian to geographic coordinates.  None will use the default
-        dictionary with the 'proj' key set to 'pyart_aeqd' indicating that
-        the native Py-ART azimuthal equidistant projection is used. Other
-        values should specify a valid pyproj.Proj projparams dictionary or
-        string.  The special key '_include_lon_0_lat_0' is removed when
-        interpreting this dictionary. If this key is present and set to True,
-        which is required when proj='pyart_aeqd', then the radar longitude and
-        latitude will be added to the dictionary as 'lon_0' and 'lat_0'.
-    nx, ny, nz : int
-        Number of grid points along the given Cartesian dimension.
     axes : dict
         Dictionary of axes dictionaries.  This attribute is depreciated,
         it will be removed in future versions of Py-ART.
-    radar_longitude, radar_latitude, radar_altitude : dict or None, optional
-        Geographic location of the radars which make up the grid.
-    radar_time : dict or None, optional
-        Start of collection for the radar which make up the grid.
-    radar_name : dict or None, optional
-        Names of the radars which make up the grid.
 
     """
     def __init__(self, time, fields, metadata,
