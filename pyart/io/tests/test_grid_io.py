@@ -26,6 +26,8 @@ def test_grid_write_read():
             _check_dicts_similar(grid1.fields[field], grid2.fields[field])
 
         # check attributes
+        assert 'Conventions' in grid2.metadata
+        grid2.metadata.pop('Conventions')
         _check_attrs_similar(grid1, grid2, 'metadata')
 
         _check_attrs_similar(grid1, grid2, 'time')

@@ -300,6 +300,10 @@ def write_grid(filename, grid, format='NETCDF4',
     for k, v in grid.metadata.items():
         setattr(dset, k, v)
 
+    # Add Conventions if not already present
+    if 'Conventions' not in dset.ncattrs():
+        dset.setncattr('Conventions', 'PyART_GRID-1.1')
+
     dset.close()
     return
 
