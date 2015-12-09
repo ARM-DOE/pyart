@@ -94,7 +94,7 @@ display.plot_latitude_slice(
     axislabels=('', 'Height (km)'))
 
 # add a title
-slc_height = grid.regular_z['data'][level]
+slc_height = grid.z['data'][level]
 dts = num2date(grid.time['data'], grid.time['units'])
 datestr = dts[0].strftime('%H:%M Z on %Y-%m-%d')
 title = 'Sliced at ' + str(slc_height) + ' meters at ' + datestr
