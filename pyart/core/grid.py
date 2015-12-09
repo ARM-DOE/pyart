@@ -195,11 +195,8 @@ class Grid(object):
 
     @property
     def projection_proj(self):
-        """
-        Proj instance as specified by the projection attribute.
-
-        Raises a ValueError if the pyart_aeqd projection is specified.
-        """
+        # Proj instance as specified by the projection attribute.
+        # Raises a ValueError if the pyart_aeqd projection is specified.
         projparams = self.get_projparams()
         if projparams['proj'] == 'pyart_aeqd':
             raise ValueError(

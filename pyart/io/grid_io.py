@@ -10,6 +10,7 @@ Reading and writing Grid objects.
     read_grid
     write_grid
     read_legacy_grid
+    _make_coordinatesystem_dict
 
 """
 
