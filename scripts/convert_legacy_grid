@@ -8,9 +8,11 @@ import warnings
 import netCDF4
 
 
-def _transfer_var(dset, name, var):
+def _transfer_var(dset, name, var, dimensions=None):
     """ Copy the a variable to a different Dataset with a given name. """
-    new_var = dset.createVariable(name, var.dtype, var.dimensions)
+    if dimensions is None:
+        dimensions = var.dimensions
+    new_var = dset.createVariable(name, var.dtype, dimensions)
     for ncattr in var.ncattrs():
         new_var.setncattr(ncattr, var.getncattr(ncattr))
     new_var[:] = var[:]
@@ -39,25 +41,31 @@ def main():
 
     # transfer dimensions
     dset_modern.createDimension('time', None)
-    dset_modern.createDimension('nz', len(dset_legacy.dimensions['nz']))
-    dset_modern.createDimension('ny', len(dset_legacy.dimensions['ny']))
-    dset_modern.createDimension('nx', len(dset_legacy.dimensions['nx']))
+    dset_modern.createDimension('z', len(dset_legacy.dimensions['nz']))
+    dset_modern.createDimension('y', len(dset_legacy.dimensions['ny']))
+    dset_modern.createDimension('x', len(dset_legacy.dimensions['nx']))
 
     # transfer axes variables
     variable_mappings = {
         'time': 'time',
-        'x_disp': 'regular_x',
-        'y_disp': 'regular_y',
-        'z_disp': 'regular_z',
+        'x_disp': 'x',
+        'y_disp': 'y',
+        'z_disp': 'z',
         'lat': 'origin_latitude',
         'lon': 'origin_longitude',
         'alt': 'origin_altitude'
     }
+    dim_mapping = {
+        'nx': 'x',
+        'ny': 'y',
+        'nz': 'z',
+        'time': 'time'}
     for legacy_varname, modern_varname in variable_mappings.items():
         if args.verbose:
             print("Variable:", legacy_varname, "->", modern_varname)
         legacy_var = dset_legacy.variables[legacy_varname]
-        _transfer_var(dset_modern, modern_varname, legacy_var)
+        dims = [dim_mapping[dim] for dim in legacy_var.dimensions]
+        _transfer_var(dset_modern, modern_varname, legacy_var, dims)
 
     # transfer fields
     field_shape = tuple(
@@ -73,13 +81,31 @@ def main():
         if legacy_var.shape != field_shape_with_time:
             warnings.warn('Field %s skipped due to incorrect shape' % (field))
             continue
-        _transfer_var(dset_modern, field, legacy_var)
+        _transfer_var(dset_modern, field, legacy_var, ('time', 'z', 'y', 'x'))
 
     # set a default projections variable
-    projection_var = dset_modern.createVariable('projection', 'int32', ())
+    projection_var = dset_modern.createVariable('projection', 'c', ())
     projection_var.setncattr('_include_lon_0_lat_0', 'true')
     projection_var.setncattr('proj', 'pyart_aeqd')
-    projection_var[:] = 1
+
+    # set a default projection coordinate system
+    proj = dset_modern.createVariable('ProjectionCoordinateSystem', 'c', ())
+    proj.setncattr('grid_mapping_name', "azimuthal_equidistant")
+    proj.setncattr('semi_major_axis', 6370997.0)
+    proj.setncattr('inverse_flattening', 298.25)
+    proj.setncattr('longitude_of_prime_meridian', 0.0)
+    proj.setncattr('false_easting', 0.0)
+    proj.setncattr('false_northing', 0.0)
+
+    lat = dset_legacy.variables['lat'][0]
+    proj.setncattr('latitude_of_projection_origin', lat)
+
+    lon = dset_legacy.variables['lon'][0]
+    proj.setncattr('longitude_of_projection_origin', lon)
+
+    proj.setncattr('_CoordinateTransformType', 'Projection')
+    proj.setncattr('_CoordinateAxes', 'x y z time')
+    proj.setncattr('_CoordinateAxesTypes', 'GeoX GeoY Height Time')
 
     # close files
     dset_legacy.close()
