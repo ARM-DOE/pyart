@@ -85,7 +85,7 @@ def read_grid(filename, exclude_fields=None, **kwargs):
 
     # fields in the file has a shape of (1, nz, ny, nx) with the leading 1
     # indicating time but should shaped (nz, ny, nx) in the Grid object
-    field_shape = tuple([len(dset.dimensions[d]) for d in ['nz', 'ny', 'nx']])
+    field_shape = tuple([len(dset.dimensions[d]) for d in ['z', 'y', 'x']])
     field_shape_with_time = (1, ) + field_shape
 
     # check all non-reserved variables, those with the correct shape
@@ -185,9 +185,9 @@ def write_grid(filename, grid, format='NETCDF4', arm_time_variables=False,
 
     # create dimensions
     dset.createDimension('time', None)
-    dset.createDimension('nz', grid.nz)
-    dset.createDimension('ny', grid.ny)
-    dset.createDimension('nx', grid.nx)
+    dset.createDimension('z', grid.nz)
+    dset.createDimension('y', grid.ny)
+    dset.createDimension('x', grid.nx)
     if grid.nradar != 0:
         dset.createDimension('nradar', grid.nradar)
         if grid.radar_name is not None:
@@ -196,9 +196,9 @@ def write_grid(filename, grid, format='NETCDF4', arm_time_variables=False,
 
     # required variables
     _create_ncvar(grid.time, dset, 'time', ('time', ))
-    _create_ncvar(grid.x, dset, 'x', ('nx', ))
-    _create_ncvar(grid.y, dset, 'y', ('ny', ))
-    _create_ncvar(grid.z, dset, 'z', ('nz', ))
+    _create_ncvar(grid.x, dset, 'x', ('x', ))
+    _create_ncvar(grid.y, dset, 'y', ('y', ))
+    _create_ncvar(grid.z, dset, 'z', ('z', ))
     _create_ncvar(grid.origin_latitude, dset, 'origin_latitude', ('time', ))
     _create_ncvar(grid.origin_longitude, dset, 'origin_longitude', ('time', ))
     _create_ncvar(grid.origin_altitude, dset, 'origin_altitude', ('time', ))
@@ -251,11 +251,11 @@ def write_grid(filename, grid, format='NETCDF4', arm_time_variables=False,
 
     # optionally write point_ variables
     if write_point_x_y_z:
-        _create_ncvar(grid.point_x, dset, 'point_x', ('nz', 'nx', 'ny'))
-        _create_ncvar(grid.point_y, dset, 'point_y', ('nz', 'nx', 'ny'))
-        _create_ncvar(grid.point_z, dset, 'point_z', ('nz', 'nx', 'ny'))
+        _create_ncvar(grid.point_x, dset, 'point_x', ('z', 'x', 'y'))
+        _create_ncvar(grid.point_y, dset, 'point_y', ('z', 'x', 'y'))
+        _create_ncvar(grid.point_z, dset, 'point_z', ('z', 'x', 'y'))
     if write_point_lon_lat_alt:
-        dims = ('nz', 'ny', 'nx')
+        dims = ('z', 'y', 'x')
         _create_ncvar(grid.point_latitude, dset, 'point_latitude', dims)
         _create_ncvar(grid.point_longitude, dset, 'point_longitude', dims)
         _create_ncvar(grid.point_altitude, dset, 'point_altitude', dims)
@@ -264,7 +264,7 @@ def write_grid(filename, grid, format='NETCDF4', arm_time_variables=False,
     for field, field_dic in grid.fields.items():
         # append 1, to the shape of all data to indicate the time var.
         field_dic['data'].shape = (1, ) + field_dic['data'].shape
-        _create_ncvar(field_dic, dset, field, ('time', 'nz', 'ny', 'nx'))
+        _create_ncvar(field_dic, dset, field, ('time', 'z', 'y', 'x'))
         field_dic['data'].shape = field_dic['data'].shape[1:]
 
     # metadata
