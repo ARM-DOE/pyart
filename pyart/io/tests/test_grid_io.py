@@ -159,3 +159,151 @@ def test_bad_shaped_field():
 
         # warning should be raised about incorrect shape of bad_field var
         assert_warns(UserWarning, pyart.io.read_grid, tmpfile)
+
+
+def test_write_projection_coordinate_system():
+    grid_shape = (2, 3, 4)
+    grid_limits = ((0, 500), (-400000, 400000), (-300000, 300000))
+    grid = pyart.testing.make_empty_grid(grid_shape, grid_limits)
+
+    with pyart.testing.InTemporaryDirectory():
+
+        # standard projection
+        grid.projection['proj'] = 'pyart_aeqd'
+        tmpfile = 'tmp_grid1.nc'
+        pyart.io.write_grid(tmpfile, grid, write_proj_coord_sys=True)
+        dset = netCDF4.Dataset(tmpfile, 'r')
+        assert 'ProjectionCoordinateSystem' in dset.variables
+        dset.close()
+
+        # explicit proj_coord_sys
+        proj_coord_sys = {'foo': 'bar'}
+        tmpfile = 'tmp_grid2.nc'
+        pyart.io.write_grid(tmpfile, grid, write_proj_coord_sys=True,
+                            proj_coord_sys=proj_coord_sys)
+        dset = netCDF4.Dataset(tmpfile, 'r')
+        assert 'ProjectionCoordinateSystem' in dset.variables
+        assert dset.variables['ProjectionCoordinateSystem'].foo == 'bar'
+        dset.close()
+
+        # explicit proj_coord_sys
+        proj_coord_sys = {'foo': 'bar'}
+        tmpfile = 'tmp_grid3.nc'
+        pyart.io.write_grid(tmpfile, grid, write_proj_coord_sys=False)
+        dset = netCDF4.Dataset(tmpfile, 'r')
+        assert 'ProjectionCoordinateSystem' not in dset.variables
+        dset.close()
+
+
+def test_unknown_projection():
+    grid_shape = (2, 3, 4)
+    grid_limits = ((0, 500), (-400000, 400000), (-300000, 300000))
+    grid = pyart.testing.make_empty_grid(grid_shape, grid_limits)
+
+    with pyart.testing.InTemporaryDirectory():
+
+        # standard projection
+        grid.projection['proj'] = 'null'
+        tmpfile = 'tmp_grid.nc'
+        assert_warns(UserWarning, pyart.io.write_grid, tmpfile, grid,
+                     write_proj_coord_sys=True)
+        dset = netCDF4.Dataset(tmpfile, 'r')
+        assert 'ProjectionCoordinateSystem' not in dset.variables
+        dset.close()
+
+
+def test_make_coordinate_system_dict():
+    grid_shape = (2, 3, 4)
+    grid_limits = ((0, 500), (-400000, 400000), (-300000, 300000))
+    grid = pyart.testing.make_empty_grid(grid_shape, grid_limits)
+
+    # pyart_aeqd
+    grid.projection['proj'] = 'pyart_aeqd'
+    dic = pyart.io.grid_io._make_coordinatesystem_dict(grid)
+    assert dic['grid_mapping_name'] == 'azimuthal_equidistant'
+    assert 'semi_major_axis' in dic
+    assert 'inverse_flattening' in dic
+    assert 'longitude_of_prime_meridian' in dic
+    assert 'false_easting' in dic
+    assert 'false_northing' in dic
+    assert 'longitude_of_projection_origin' in dic
+    assert 'latitude_of_projection_origin' in dic
+
+    # aeqd
+    grid.projection['proj'] = 'aeqd'
+    dic = pyart.io.grid_io._make_coordinatesystem_dict(grid)
+    assert dic['grid_mapping_name'] == 'azimuthal_equidistant'
+    assert 'semi_major_axis' in dic
+    assert 'inverse_flattening' in dic
+    assert 'longitude_of_prime_meridian' in dic
+    assert 'false_easting' in dic
+    assert 'false_northing' in dic
+    assert 'longitude_of_projection_origin' in dic
+    assert 'latitude_of_projection_origin' in dic
+
+    # tmerc
+    grid.projection['proj'] = 'tmerc'
+    dic = pyart.io.grid_io._make_coordinatesystem_dict(grid)
+    assert dic['grid_mapping_name'] == 'transverse_mercator'
+    assert 'longitude_of_central_meridian' in dic
+    assert 'latitude_of_projection_origin' in dic
+    assert 'scale_factor_at_central_meridian' in dic
+
+    # lcc
+    grid.projection['proj'] = 'lcc'
+    dic = pyart.io.grid_io._make_coordinatesystem_dict(grid)
+    assert dic['grid_mapping_name'] == 'lambert_conformal_conic'
+    assert 'standard_parallel' in dic
+    assert 'longitude_of_projection_origin' in dic
+    assert 'latitude_of_projection_origin' in dic
+
+    # laea
+    grid.projection['proj'] = 'laea'
+    dic = pyart.io.grid_io._make_coordinatesystem_dict(grid)
+    assert dic['grid_mapping_name'] == 'lambert_azimuthal_equal_area'
+    assert 'longitude_of_projection_origin' in dic
+    assert 'latitude_of_projection_origin' in dic
+
+    # aea
+    grid.projection['proj'] = 'aea'
+    dic = pyart.io.grid_io._make_coordinatesystem_dict(grid)
+    assert dic['grid_mapping_name'] == 'albers_conical_equal_area'
+    assert 'standard_parallel' in dic
+    assert 'longitude_of_central_meridian' in dic
+    assert 'latitude_of_projection_origin' in dic
+
+    # stere
+    grid.projection['proj'] = 'stere'
+    dic = pyart.io.grid_io._make_coordinatesystem_dict(grid)
+    assert dic['grid_mapping_name'] == 'stereographic'
+    assert 'longitude_of_projection_origin' in dic
+    assert 'latitude_of_projection_origin' in dic
+    assert 'scale_factor_at_projection_origin' in dic
+
+    # npstere
+    grid.projection['proj'] = 'npstere'
+    dic = pyart.io.grid_io._make_coordinatesystem_dict(grid)
+    assert dic['grid_mapping_name'] == 'polar_stereographic'
+    assert 'longitude_of_projection_origin' in dic
+    assert 'latitude_of_projection_origin' in dic
+    assert 'standard_parallel' in dic
+
+    # spstere
+    grid.projection['proj'] = 'npstere'
+    dic = pyart.io.grid_io._make_coordinatesystem_dict(grid)
+    assert dic['grid_mapping_name'] == 'polar_stereographic'
+    assert 'longitude_of_projection_origin' in dic
+    assert 'latitude_of_projection_origin' in dic
+    assert 'standard_parallel' in dic
+
+    # ortho
+    grid.projection['proj'] = 'ortho'
+    dic = pyart.io.grid_io._make_coordinatesystem_dict(grid)
+    assert dic['grid_mapping_name'] == 'orthographic'
+    assert 'longitude_of_projection_origin' in dic
+    assert 'latitude_of_projection_origin' in dic
+
+    # projection that does not map to a CDM transform
+    grid.projection['proj'] = 'null'
+    dic = pyart.io.grid_io._make_coordinatesystem_dict(grid)
+    assert dic is None

@@ -56,7 +56,8 @@ def read_grid(filename, exclude_fields=None, **kwargs):
         'point_x', 'point_y', 'point_z', 'projection',
         'point_latitude', 'point_longitude', 'point_altitude',
         'radar_latitude', 'radar_longitude', 'radar_altitude',
-        'radar_name', 'radar_time', 'base_time', 'time_offset']
+        'radar_name', 'radar_time', 'base_time', 'time_offset',
+        'ProjectionCoordinateSystem']
 
     dset = netCDF4.Dataset(filename, mode='r')
 
@@ -140,7 +141,9 @@ def read_grid(filename, exclude_fields=None, **kwargs):
         radar_time=radar_time)
 
 
-def write_grid(filename, grid, format='NETCDF4', arm_time_variables=False,
+def write_grid(filename, grid, format='NETCDF4',
+               write_proj_coord_sys=True, proj_coord_sys=None,
+               arm_time_variables=False,
                write_point_x_y_z=False, write_point_lon_lat_alt=False):
     """
     Write a Grid object to a CF-1.5 and ARM standard netcdf file
@@ -170,6 +173,18 @@ def write_grid(filename, grid, format='NETCDF4', arm_time_variables=False,
         NetCDF format, one of 'NETCDF4', 'NETCDF4_CLASSIC',
         'NETCDF3_CLASSIC' or 'NETCDF3_64BIT'. See netCDF4 documentation for
         details.
+    write_proj_coord_sys bool, optional
+        True to write a information on the coordinate transform used in the map
+        projection to the ProjectionCoordinateSystem variable following the CDM
+        Object Model.  The resulting file should be intepreted as containing
+        geographic grids by tools which use the Java NetCDF library
+        (THREDDS, toolsUI, etc).
+    proj_coord_sys : dict or None, optional
+        Dictionary of parameters which will be written to the
+        ProjectionCoordinateSystem NetCDF variable if write_proj_coord_sys is
+        True.  A value of None will attempt to generate an appropiate
+        dictionary by examining the projection attribute of the grid object.
+        If the projection is not understood a warnings will be issued.
     arm_time_variables : bool, optional
         True to write the ARM standard time variables base_time and
         time_offset. False will not write these variables.
@@ -211,6 +226,19 @@ def write_grid(filename, grid, format='NETCDF4', arm_time_variables=False,
         include = projection['_include_lon_0_lat_0']
         projection['_include_lon_0_lat_0'] = ['false', 'true'][include]
     _create_ncvar(projection, dset, 'projection', ())
+
+    # set the default projection coordinate system if requested
+    if write_proj_coord_sys:
+        if proj_coord_sys is None:
+            # determine coordinate system automatically
+            proj_coord_sys = _make_coordinatesystem_dict(grid)
+
+        if proj_coord_sys is None:
+            warnings.warn('Foo')
+        else:
+            proj_coord_sys['data'] = np.array(1, dtype='int32')
+            _create_ncvar(
+                proj_coord_sys, dset, 'ProjectionCoordinateSystem', ())
 
     # radar_ attributes
     radar_attr_names = [
@@ -273,6 +301,76 @@ def write_grid(filename, grid, format='NETCDF4', arm_time_variables=False,
 
     dset.close()
     return
+
+
+def _make_coordinatesystem_dict(grid):
+    """
+    Return a dictionary containing parameters for a coordinate transform.
+
+    Examine the grid projection attribute and other attributes and
+    return a dictionary containing parameters which can be written to a netCDF
+    variable to specify a Horizontal coordinate transform recognized by
+    Unidata's CDM. Return None when the projection defined in the grid
+    cannot be mapped to a CDM coordinate tranform.
+    """
+    projection = grid.projection
+    origin_latitude = grid.origin_latitude['data'][0]
+    origin_longitude = grid.origin_longitude['data'][0]
+    cdm_transform = {
+        'latitude_of_projection_origin': origin_latitude,
+        'longitude_of_projection_origin': origin_longitude,
+        '_CoordinateTransformType': 'Projection',
+        '_CoordinateAxes': 'x y z time',
+        '_CoordinateAxesTypes': 'GeoX GeoY Height Time',
+    }
+
+    if projection['proj'] == 'ortho':
+        cdm_transform['grid_mapping_name'] = 'orthographic'
+
+    elif projection['proj'] == 'laea':
+        cdm_transform['grid_mapping_name'] = 'lambert_azimuthal_equal_area'
+
+    elif projection['proj'] in ['aeqd', 'pyart_aeqd']:
+        cdm_transform['grid_mapping_name'] = 'azimuthal_equidistant'
+        # CDM uses a ellipsoid where as PyProj uses a sphere by default,
+        # therefore there will be slight differences in these transforms
+        cdm_transform['semi_major_axis'] = 6370997.0
+        cdm_transform['inverse_flattening'] = 298.25  # proj uses a sphere
+        cdm_transform['longitude_of_prime_meridian'] = 0.0
+        cdm_transform['false_easting'] = 0.0
+        cdm_transform['false_northing'] = 0.0
+
+    elif projection['proj'] == 'tmerc':
+        cdm_transform['grid_mapping_name'] = 'transverse_mercator'
+        cdm_transform['longitude_of_central_meridian'] = origin_longitude
+        cdm_transform['scale_factor_at_central_meridian'] = 1.00
+
+    elif projection['proj'] == 'lcc':
+        cdm_transform['grid_mapping_name'] = 'lambert_conformal_conic'
+        cdm_transform['standard_parallel'] = origin_latitude
+        cdm_transform['longitude_of_central_meridian'] = origin_longitude
+
+    elif projection['proj'] == 'aea':
+        cdm_transform['grid_mapping_name'] = 'albers_conical_equal_area'
+        cdm_transform['standard_parallel'] = origin_latitude
+        cdm_transform['longitude_of_central_meridian'] = origin_longitude
+
+    elif projection['proj'] == 'stere':
+        cdm_transform['grid_mapping_name'] = 'stereographic'
+        cdm_transform['scale_factor_at_projection_origin'] = 1.00
+
+    elif projection['proj'] in ['npstere', 'spstere']:
+        cdm_transform['grid_mapping_name'] = 'polar_stereographic'
+        cdm_transform['standard_parallel'] = origin_latitude
+
+    # 'cea' may be able to map to 'lambert_cylindrical_equal_area' and
+    # 'merc' to 'mercator' but both projections seems to always be
+    # centered at the equator regardless of the value of the
+    # standard_parallel parameter
+    else:
+        cdm_transform = None
+
+    return cdm_transform
 
 
 def read_legacy_grid(filename, exclude_fields=None, **kwargs):
