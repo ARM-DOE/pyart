@@ -199,11 +199,9 @@ def test_unknown_projection():
     grid_shape = (2, 3, 4)
     grid_limits = ((0, 500), (-400000, 400000), (-300000, 300000))
     grid = pyart.testing.make_empty_grid(grid_shape, grid_limits)
+    grid.projection['proj'] = 'null'
 
     with pyart.testing.InTemporaryDirectory():
-
-        # standard projection
-        grid.projection['proj'] = 'null'
         tmpfile = 'tmp_grid.nc'
         assert_warns(UserWarning, pyart.io.write_grid, tmpfile, grid,
                      write_proj_coord_sys=True)
