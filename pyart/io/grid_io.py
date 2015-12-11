@@ -235,7 +235,11 @@ def write_grid(filename, grid, format='NETCDF4',
             proj_coord_sys = _make_coordinatesystem_dict(grid)
 
         if proj_coord_sys is None:
-            warnings.warn('Foo')
+            warnings.warn(
+                'Cannot determine ProjectionCoordinateSystem parameter for ' +
+                'the given projection, the file will not be written ' +
+                ' without this information')
+
         else:
             proj_coord_sys['data'] = np.array(1, dtype='int32')
             _create_ncvar(
