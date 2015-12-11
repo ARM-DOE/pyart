@@ -248,80 +248,56 @@ def make_empty_grid(grid_shape, grid_limits):
         Empty Grid object, centered near the ARM SGP site (Oklahoma).
 
     """
-    time = {
-        'data': np.array([0.0]),
-        'units': 'seconds since 2000-01-01T00:00:00Z',
-        'calendar': 'gregorian',
-        'standard_name': 'time',
-        'long_name': 'Time in seconds since volume start'}
-
-    time_start = {
-        'data': np.array([0.0]),
-        'units': 'seconds since 2000-01-01T00:00:00Z',
-        'calendar': 'gregorian',
-        'standard_name': 'time',
-        'long_name': 'Time in seconds since volume start'}
-
-    time_end = {
-        'data': np.array([0.0]),
-        'units': 'seconds since 2000-01-01T00:00:00Z',
-        'calendar': 'gregorian',
-        'standard_name': 'time',
-        'long_name': 'Time in seconds since volume start'}
+    time = get_metadata('grid_time')
+    time['data'] = np.array([0.0])
+    time['units'] = 'seconds since 2000-01-01T00:00:00Z'
 
     # grid coordinate dictionaries
     nz, ny, nx = grid_shape
     (z0, z1), (y0, y1), (x0, x1) = grid_limits
 
-    xaxis = {'data': np.linspace(x0, x1, nx),
-             'long_name': 'X-coordinate in Cartesian system',
-             'axis': 'X',
-             'units': 'm'}
+    x = get_metadata('x')
+    x['data'] = np.linspace(x0, x1, nx)
 
-    yaxis = {'data': np.linspace(y0, y1, ny),
-             'long_name': 'Y-coordinate in Cartesian system',
-             'axis': 'Y',
-             'units': 'm'}
+    y = get_metadata('y')
+    y['data'] = np.linspace(y0, y1, ny)
 
-    zaxis = {'data': np.linspace(z0, z1, nz),
-             'long_name': 'Z-coordinate in Cartesian system',
-             'axis': 'Z',
-             'units': 'm',
-             'positive': 'up'}
+    z = get_metadata('z')
+    z['data'] = np.linspace(z0, z1, nz)
 
-    altorigin = {'data': np.array([300.]),
-                 'long_name': 'Altitude at grid origin',
-                 'units': 'm',
-                 'standard_name': 'altitude',
-                 }
+    origin_altitude = get_metadata('origin_altitude')
+    origin_altitude['data'] = np.array([300.])
 
-    latorigin = {'data': np.array([36.74]),
-                 'long_name': 'Latitude at grid origin',
-                 'units': 'degree_N',
-                 'standard_name': 'latitude',
-                 'valid_min': -90.,
-                 'valid_max': 90.
-                 }
+    origin_latitude = get_metadata('origin_latitude')
+    origin_latitude['data'] = np.array([36.74])
 
-    lonorigin = {'data': np.array([-98.1]),
-                 'long_name': 'Longitude at grid origin',
-                 'units': 'degree_E',
-                 'standard_name': 'longitude',
-                 'valid_min': -180.,
-                 'valid_max': 180.
-                 }
+    origin_longitude = get_metadata('origin_longitude')
+    origin_longitude['data'] = np.array([-98.1])
 
-    axes = {'time': time,
-            'time_start': time_start,
-            'time_end': time_end,
-            'z_disp': zaxis,
-            'y_disp': yaxis,
-            'x_disp': xaxis,
-            'alt': altorigin,
-            'lat': latorigin,
-            'lon': lonorigin}
+    fields = {}
+    metadata = {}
 
-    return Grid({}, axes, {})
+    radar_latitude = get_metadata('radar_latitude')
+    radar_latitude['data'] = np.array([36.74])
+
+    radar_longitude = get_metadata('radar_longitude')
+    radar_longitude['data'] = np.array([-98.1])
+
+    radar_altitude = get_metadata('radar_altitude')
+    radar_altitude['data'] = np.array([300.])
+
+    radar_time = get_metadata('radar_time')
+    radar_time['data'] = np.array([0.0])
+    radar_time['units'] = 'seconds since 2000-01-01T00:00:00Z'
+
+    radar_name = get_metadata('radar_name')
+    radar_name['data'] = np.array(['ExampleRadar'])
+
+    return Grid(time, fields, metadata,
+                origin_latitude, origin_longitude, origin_altitude, x, y, z,
+                radar_latitude=radar_latitude, radar_longitude=radar_longitude,
+                radar_altitude=radar_altitude, radar_time=radar_time,
+                radar_name=radar_name)
 
 
 def make_target_grid():

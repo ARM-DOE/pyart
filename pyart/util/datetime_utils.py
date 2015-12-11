@@ -27,5 +27,4 @@ def datetimes_from_dataset(dataset):
 
 def datetime_from_grid(grid):
     """ Return a datetime for the volume start in a Grid. """
-    return num2date(grid.axes['time_start']['data'][0],
-                    grid.axes['time_start']['units'])
+    return num2date(grid.time['data'][0], grid.time['units'])
