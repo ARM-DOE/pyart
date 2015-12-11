@@ -16,6 +16,10 @@ if __PYART_SETUP__:
     del _sys
 else:
 
+    # Make sure that deprecation warnings get printed by default
+    import warnings as _warnings
+    _warnings.simplefilter("always", DeprecationWarning)
+
     # print out helpful message if build fails or importing from source tree
     from . import __check_build
 
