@@ -10,7 +10,7 @@ import pyart
 radar = pyart.io.read_rsl('XSW110520113537.RAW7HHL')
 
 time_slice = slice(None, 713, 18)
-range_slice = slice(None, None, 15)
+range_slice = slice(None, None, 12)
 sweep_slice = slice(None, 1)
 
 # remove all but the reflectivity_horizontal fields
