@@ -289,7 +289,7 @@ def smooth_and_trim(x, window_len=11, window='hanning'):
 
     y = np.convolve(w / w.sum(), s, mode='valid')
 
-    return y[window_len / 2:len(x) + window_len / 2]
+    return y[int(window_len / 2):len(x) + int(window_len / 2)]
 
 
 # adapted smooth and trim function to work with 2dimensional arrays
