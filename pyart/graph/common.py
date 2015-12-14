@@ -32,6 +32,18 @@ Common graphing routines.
 import matplotlib.pyplot as plt
 from netCDF4 import num2date
 
+# Depreciated function names in this name space
+from ..exceptions import _depreciated_alias
+from ..core import transforms as _transforms
+radar_coords_to_cart = _depreciated_alias(
+    _transforms.antenna_to_cartesian,
+    'pyart.graph.common.radar_coords_to_cart',
+    'pyart.core.transforms.antenna_to_cartesian')
+sweep_coords_to_cart = _depreciated_alias(
+    _transforms.antenna_vectors_to_cartesian,
+    'pyart.graph.common.sweep_coords_to_cart',
+    'pyart.core.transforms.antenna_vectors_to_cartesian')
+
 
 ########################
 # Common radar methods #

@@ -429,7 +429,7 @@ class _EdgeTracker(object):
                  nnodes):
         """ initialize """
 
-        nedges = len(indices[0]) / 2
+        nedges = int(len(indices[0]) / 2)
 
         # node number and different in sum for each edge
         self.node_alpha = np.zeros(nedges, dtype=np.int32)

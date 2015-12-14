@@ -376,7 +376,10 @@ class Mdv_common_Tests(object):
 
         # write out the file using an file handler
         f2 = BytesIO()
-        mdvfile.write(f2)
+        with warnings.catch_warnings():
+            # ignore the UserWarning about the non-implement compression_type
+            warnings.simplefilter("ignore", category=UserWarning)
+            mdvfile.write(f2)
         f.close()
         f2.seek(0)
 
@@ -410,7 +413,10 @@ class Mdv_common_Tests(object):
         mdvfile = pyart.io.mdv_common.MdvFile(pyart.testing.MDV_RHI_FILE)
         mdvfile.read_all_fields()
         inmemfile = BytesIO()
-        mdvfile.write(inmemfile)
+        with warnings.catch_warnings():
+            # ignore the UserWarning about the non-implement compression_type
+            warnings.simplefilter("ignore", category=UserWarning)
+            mdvfile.write(inmemfile)
         inmemfile.seek(0)
         mdvfile2 = pyart.io.mdv_common.MdvFile(inmemfile)
 
