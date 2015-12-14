@@ -3,6 +3,7 @@
 from __future__ import print_function
 
 import functools
+import warnings
 
 import numpy as np
 from numpy.testing import assert_almost_equal, assert_raises
@@ -324,7 +325,9 @@ def test_grid_axes_attribute():
     assert 'latitude' not in axes
     assert 'longitude' not in axes
 
-    pyart.io.add_2d_latlon_axis(grid)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", category=DeprecationWarning)
+        pyart.io.add_2d_latlon_axis(grid)
 
     assert isinstance(axes['latitude'], dict)
     assert axes['latitude']['data'].shape == (ny, nx)
@@ -425,7 +428,9 @@ def make_empty_grid(grid_shape, grid_limits):
             'lat': latorigin,
             'lon': lonorigin}
 
-    return pyart.core.Grid.from_legacy_parameters({}, axes, {})
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", category=DeprecationWarning)
+        return pyart.core.Grid.from_legacy_parameters({}, axes, {})
 
 
 # Remove this test when Grid.from_legacy_parameters is Depreciated
