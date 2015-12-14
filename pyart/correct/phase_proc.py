@@ -281,7 +281,7 @@ def smooth_and_trim(x, window_len=11, window='hanning'):
     s = np.r_[x[window_len - 1:0:-1], x, x[-1:-window_len:-1]]
 
     if window == 'flat':  # moving average
-        w = np.ones(window_len, 'd')
+        w = np.ones(int(window_len), 'd')
     elif window == 'sg_smooth':
         w = np.array([0.1, .25, .3, .25, .1])
     else:
@@ -334,7 +334,7 @@ def smooth_and_trim_scan(x, window_len=11, window='hanning'):
         raise ValueError("Window is on of " + ' '.join(valid_windows))
 
     if window == 'flat':  # moving average
-        w = np.ones(window_len, 'd')
+        w = np.ones(int(window_len), 'd')
     elif window == 'sg_smooth':
         w = np.array([0.1, .25, .3, .25, .1])
     else:
@@ -534,8 +534,8 @@ def construct_A_matrix(n_gates, filt):
                        filter_length)
     for diag in range(filter_length):
         M_matrix_middle = M_matrix_middle + np.diag(np.ones(
-            n_gates - filter_length + 1 - np.abs(posn[diag])),
-            k=posn[diag]) * filt[diag]
+            int(n_gates - filter_length + 1 - np.abs(posn[diag]))),
+            k=int(posn[diag])) * filt[diag]
     side_pad = (filter_length - 1) / 2
     M_matrix = np.bmat(
         [np.zeros([n_gates-filter_length + 1, side_pad], dtype=float),
