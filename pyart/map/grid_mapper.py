@@ -609,11 +609,9 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
 
         if weighting_function.upper() == 'CRESSMAN':
             weights = (r2 - dist2) / (r2 + dist2)
-            value = np.ma.average(nn_field_data, weights=weights, axis=0)
         elif weighting_function.upper() == 'BARNES':
-            w = np.exp(-dist2 / (2.0 * r2)) + 1e-5
-            w /= np.sum(w)
-            value = np.ma.dot(w, nn_field_data)
+            weights = np.exp(-dist2 / (2.0 * r2)) + 1e-5
+        value = np.ma.average(nn_field_data, weights=weights, axis=0)
 
         grid_data[iz, iy, ix] = value
 
