@@ -110,6 +110,27 @@ def test_map_to_grid_masked_refl_field():
     assert_almost_equal(center_slice, EXPECTED_CENTER_SLICE)
 
 
+def test_map_to_grid_barnes_filter_masked():
+
+    radar = pyart.testing.make_target_radar()
+
+    # mask and replace with non-sense values a region of radar volume
+    fdata = radar.fields['reflectivity']['data']
+    fdata = np.ma.array(fdata)
+    fdata[100:120, 20:40] = -9999.
+    fdata[100:120, 20:40] = np.ma.masked
+    radar.fields['reflectivity']['data'] = fdata
+
+    # check that non-sense values are masked
+    assert radar.fields['reflectivity']['data'].min() > -1.
+
+    grids = pyart.map.map_to_grid(
+        (radar,), weighting_function='Barnes', **COMMON_MAP_TO_GRID_ARGS)
+
+    # check that no masked values were included in the interpolation
+    assert grids['reflectivity'].min() > -1.
+
+
 def test_map_to_grid_no_copy():
     radar = pyart.testing.make_target_radar()
     grids = pyart.map.map_to_grid(
