@@ -415,7 +415,8 @@ class NEXRADLevel2File(object):
         """
         if scans is None:
             scans = range(self.nscans)
-        return self._msg31_rad_array(scans, 'unambig_range') * 0.1
+        # unambiguous range is stored in tenths of km, x100 for meters
+        return self._msg31_rad_array(scans, 'unambig_range') * 100.
 
     def get_data(self, moment, max_ngates, scans=None, raw_data=False):
         """

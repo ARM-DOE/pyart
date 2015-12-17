@@ -167,8 +167,8 @@ def test_instument_parameters():
 
     assert 'unambiguous_range' in radar.instrument_parameters
     unamb = radar.instrument_parameters['unambiguous_range']['data']
-    assert_almost_equal(unamb[0], 466, 0)
-    assert_almost_equal(unamb[800], 117, 0)
+    assert_almost_equal(unamb[0], 466000, 0)
+    assert_almost_equal(unamb[800], 117000, 0)
 
 
 # radar_calibration attribute
