@@ -14,9 +14,13 @@ Functions for reading NEXRAD Level II Archive files.
     :toctree: generated/
 
     read_nexrad_archive
-    _find_max_range
+    _find_range_params
+    _find_scans_to_interp
+    _interpolate_scan
 
 """
+
+import warnings
 
 import numpy as np
 
@@ -30,7 +34,8 @@ from .nexrad_common import get_nexrad_location
 
 def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
                         file_field_names=False, exclude_fields=None,
-                        delay_field_loading=False, station=None, **kwargs):
+                        delay_field_loading=False, station=None,
+                        linear_interp=True, **kwargs):
     """
     Read a NEXRAD Level 2 Archive file.
 
@@ -62,16 +67,22 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
     exclude_fields : list or None, optional
         List of fields to exclude from the radar object. This is applied
         after the `file_field_names` and `field_names` parameters.
-    delay_field_loading : bool
+    delay_field_loading : bool, optional
         True to delay loading of field data from the file until the 'data'
         key in a particular field dictionary is accessed.  In this case
         the field attribute of the returned Radar object will contain
         LazyLoadDict objects not dict objects.
-    station : str or None
+    station : str or None, optional
         Four letter ICAO name of the NEXRAD station used to determine the
         location in the returned radar object.  This parameter is only
         used when the location is not contained in the file, which occur
         in older NEXRAD files.
+    linear_interp : bool, optional
+        True (the default) to perform linear interpolation between valid pairs
+        of gates in low resolution rays in files mixed resolution rays.
+        False will perform a nearest neighbor interpolation.  This parameter is
+        not used if the resolution of all rays in the file or requested sweeps
+        is constant.
 
     Returns
     -------
@@ -105,31 +116,10 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
 
     # range
     _range = filemetadata('range')
-    _range['data'] = _find_max_range(nfile, scan_info)
-    _range['meters_to_center_of_first_gate'] = _range['data'][0]
-    _range['meters_between_gates'] = _range['data'][1] - _range['data'][0]
-
-    # fields
-    max_ngates = len(_range['data'])
-    available_moments = set([])
-    for info in scan_info:
-        for moment in info['moments']:
-            available_moments.add(moment)
-
-    fields = {}
-    for moment in available_moments:
-        field_name = filemetadata.get_field_name(moment)
-        if field_name is None:
-            continue
-        dic = filemetadata(field_name)
-        dic['_FillValue'] = get_fillvalue()
-        if delay_field_loading:
-            dic = LazyLoadDict(dic)
-            data_call = _NEXRADLevel2StagedField(nfile, moment, max_ngates)
-            dic.set_lazy('data', data_call)
-        else:
-            dic['data'] = nfile.get_data(moment, max_ngates)
-        fields[field_name] = dic
+    first_gate, gate_spacing, last_gate = _find_range_params(scan_info)
+    _range['data'] = np.arange(first_gate, last_gate, gate_spacing, 'float32')
+    _range['meters_to_center_of_first_gate'] = float(first_gate)
+    _range['meters_between_gates'] = float(gate_spacing)
 
     # metadata
     metadata = filemetadata('metadata')
@@ -178,6 +168,41 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
     elevation['data'] = nfile.get_elevation_angles().astype('float32')
     fixed_angle['data'] = nfile.get_target_angles()
 
+    # fields
+    max_ngates = len(_range['data'])
+    available_moments = set([m for scan in scan_info for m in scan['moments']])
+    interpolate = _find_scans_to_interp(scan_info, first_gate, gate_spacing)
+
+    fields = {}
+    for moment in available_moments:
+        field_name = filemetadata.get_field_name(moment)
+        if field_name is None:
+            continue
+        dic = filemetadata(field_name)
+        dic['_FillValue'] = get_fillvalue()
+        if delay_field_loading and moment not in interpolate:
+            dic = LazyLoadDict(dic)
+            data_call = _NEXRADLevel2StagedField(nfile, moment, max_ngates)
+            dic.set_lazy('data', data_call)
+        else:
+            mdata = nfile.get_data(moment, max_ngates)
+            dic['data'] = nfile.get_data(moment, max_ngates)
+            if moment in interpolate:
+                scans = interpolate[moment]
+                warnings.warn(
+                    "Gate spacing is not constant, interpolating data in " +
+                    "scans %s for moment %s." % (interp_scans, moment),
+                    UserWarning)
+                for scan in scans:
+                    idx = scan_info[scan]['moments'].index(moment)
+                    moment_ngates = scan_info[scan]['ngates'][idx]
+                    start = sweep_start_ray_index['data'][scan]
+                    end = sweep_end_ray_index['data'][scan]
+                    _interpolate_scan(mdata, start, end, moment_ngates,
+                                      linear_interp)
+            dic['data'] = mdata
+        fields[field_name] = dic
+
     # instrument_parameters
     nyquist_velocity = filemetadata('nyquist_velocity')
     unambiguous_range = filemetadata('unambiguous_range')
@@ -197,16 +222,82 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
         instrument_parameters=instrument_parameters)
 
 
-def _find_max_range(nfile, scan_info):
-    """ Return a range array with highest resolution and longest range. """
+def _find_range_params(scan_info):
+    """ Return range parameters, first_gate, gate_spacing, last_gate. """
     min_first_gate = min([min(s['first_gate']) for s in scan_info])
     min_gate_spacing = min([min(s['gate_spacing']) for s in scan_info])
-    max_range = max(
-        [np.max(np.array(s['first_gate']) +
-         np.array(s['gate_spacing']) * (np.array(s['ngates']) - 0.5))
-         for s in scan_info])
-    return np.arange(
-        min_first_gate, max_range, min_gate_spacing).astype('int64')
+    last_gates = [np.array(s['first_gate']) +
+                  np.array(s['gate_spacing']) * (np.array(s['ngates']) - 0.5)
+                  for s in scan_info]
+    max_last_gate = max([max(last_gate) for last_gate in last_gates])
+    return min_first_gate, min_gate_spacing, max_last_gate
+
+
+def _find_scans_to_interp(scan_info, first_gate, gate_spacing):
+    """ Return a dict indicating what moments/scans need interpolation.  """
+    moments = set([m for scan in scan_info for m in scan['moments']])
+    interpolate = dict([(moment, []) for moment in moments])
+    for scan_num, scan in enumerate(scan_info):
+        for moment in moments:
+            if moment not in scan['moments']:
+                continue
+            index = scan['moments'].index(moment)
+            first = scan['first_gate'][index]
+            spacing = scan['gate_spacing'][index]
+            if first != first_gate or spacing != gate_spacing:
+                interpolate[moment].append(scan_num)
+                # for proper interpolation the gate spacing of the scan to be
+                # interpolated should be 1/4th the spacing of the radar
+                assert spacing == gate_spacing * 4
+                # and the first gate for the scan should be one and half times
+                # the radar spacing past the radar first gate
+                assert first_gate + 1.5 * gate_spacing == first
+    # remove moments with no scans needing interpolation
+    interpolate = dict([(k, v) for k, v in interpolate.items() if len(v) != 0])
+    return interpolate
+
+
+def _interpolate_scan(mdata, start, end, moment_ngates, linear_interp=True):
+    """ Interpolate a single NEXRAD moment scan from 1000 m to 250 m. """
+    # This interpolation scheme is only valid for NEXRAD data where a 4:1
+    # (1000 m : 250 m) interpolation is needed.
+    #
+    # The scheme here performs a linear interpolation between pairs of gates
+    # in a ray when the both of the gates are not masked (below threshold).
+    # When one of the gates is masked the interpolation changes to a nearest
+    # neighbor interpolation. Nearest neighbor is also performed at the end
+    # points until the new range bin would be centered beyond half of the range
+    # spacing of the original range.
+    #
+    # Nearest neighbor interpolation is performed when linear_interp is False,
+    # this is equivalent to repeating each gate four times in each ray.
+    #
+    # No transformation of the raw data is performed prior to interpolation, so
+    # reflectivity will be interpolated in dB units, velocity in m/s, etc,
+    # this may not be the best method for interpolation.
+    #
+    # This method was adapted from Radx
+    for ray_num in range(start, end+1):
+        ray = mdata[ray_num].copy()
+
+        # repeat each gate value 4 times
+        interp_ngates = 4 * moment_ngates
+        ray[:interp_ngates] = np.repeat(ray[:moment_ngates], 4)
+
+        if linear_interp:
+            # linear interpolate
+            for i in range(2, interp_ngates - 4, 4):
+                gate_val = ray[i]
+                next_val = ray[i+4]
+                if np.ma.is_masked(gate_val) or np.ma.is_masked(next_val):
+                    continue
+                delta = (next_val - gate_val) / 4.
+                ray[i+0] = gate_val + delta * 0.5
+                ray[i+1] = gate_val + delta * 1.5
+                ray[i+2] = gate_val + delta * 2.5
+                ray[i+3] = gate_val + delta * 3.5
+
+        mdata[ray_num] = ray[:]
 
 
 class _NEXRADLevel2StagedField(object):
