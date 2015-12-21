@@ -119,7 +119,8 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
 
     # range
     _range = filemetadata('range')
-    first_gate, gate_spacing, last_gate = _find_range_params(scan_info)
+    first_gate, gate_spacing, last_gate = _find_range_params(
+        scan_info, filemetadata)
     _range['data'] = np.arange(first_gate, last_gate, gate_spacing, 'float32')
     _range['meters_to_center_of_first_gate'] = float(first_gate)
     _range['meters_between_gates'] = float(gate_spacing)
@@ -177,7 +178,8 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
     # fields
     max_ngates = len(_range['data'])
     available_moments = set([m for scan in scan_info for m in scan['moments']])
-    interpolate = _find_scans_to_interp(scan_info, first_gate, gate_spacing)
+    interpolate = _find_scans_to_interp(
+        scan_info, first_gate, gate_spacing, filemetadata)
 
     fields = {}
     for moment in available_moments:
@@ -229,24 +231,37 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
         instrument_parameters=instrument_parameters)
 
 
-def _find_range_params(scan_info):
+def _find_range_params(scan_info, filemetadata):
     """ Return range parameters, first_gate, gate_spacing, last_gate. """
-    min_first_gate = min([min(s['first_gate']) for s in scan_info])
-    min_gate_spacing = min([min(s['gate_spacing']) for s in scan_info])
-    last_gates = [np.array(s['first_gate']) +
-                  np.array(s['gate_spacing']) * (np.array(s['ngates']) - 0.5)
-                  for s in scan_info]
-    max_last_gate = max([max(last_gate) for last_gate in last_gates])
+    min_first_gate = 999999
+    min_gate_spacing = 999999
+    max_last_gate = 0
+    for scan_params in scan_info:
+        ngates = scan_params['ngates'][0]
+        for i, moment in enumerate(scan_params['moments']):
+            if filemetadata.get_field_name(moment) is None:
+                # moment is not read, skip
+                continue
+            first_gate = scan_params['first_gate'][i]
+            gate_spacing = scan_params['gate_spacing'][i]
+            last_gate = first_gate + gate_spacing * (ngates - 0.5)
+
+            min_first_gate = min(min_first_gate, first_gate)
+            min_gate_spacing = min(min_gate_spacing, gate_spacing)
+            max_last_gate = max(max_last_gate, last_gate)
     return min_first_gate, min_gate_spacing, max_last_gate
 
 
-def _find_scans_to_interp(scan_info, first_gate, gate_spacing):
+def _find_scans_to_interp(scan_info, first_gate, gate_spacing, filemetadata):
     """ Return a dict indicating what moments/scans need interpolation.  """
     moments = set([m for scan in scan_info for m in scan['moments']])
     interpolate = dict([(moment, []) for moment in moments])
     for scan_num, scan in enumerate(scan_info):
         for moment in moments:
             if moment not in scan['moments']:
+                continue
+            if filemetadata.get_field_name(moment) is None:
+                # moment is not read, skip
                 continue
             index = scan['moments'].index(moment)
             first = scan['first_gate'][index]
