@@ -198,13 +198,20 @@ class NEXRADLevel2File(object):
         else:
             return 0.0, 0.0, 0.0
 
-    def scan_info(self):
+    def scan_info(self, scans=None):
         """
         Return a list of dictionaries with scan information.
 
+        Parameters
+        ----------
+        scans : list ot None
+            Scans (0 based) for which ray (radial) azimuth angles will be
+            retrieved.  None (the default) will return the angles for all
+            scans in the volume.
+
         Returns
         -------
-        scan_info : list
+        scan_info : list, optional
             A list of the scan performed with a dictionary with keys
             'moments', 'ngates', and 'nrays' for each scan.  The 'moments'
             and 'ngates' keys are lists of the NEXRAD moments and number
@@ -214,7 +221,9 @@ class NEXRADLevel2File(object):
 
         """
         info = []
-        for scan in range(self.nscans):
+        if scans is None:
+            scans = range(self.nscans)
+        for scan in scans:
             nrays = self.get_nrays(scan)
 
             msg31_number = self.scan_msgs[scan][0]

@@ -34,7 +34,7 @@ from .nexrad_common import get_nexrad_location
 
 def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
                         file_field_names=False, exclude_fields=None,
-                        delay_field_loading=False, station=None,
+                        delay_field_loading=False, station=None, scans=None,
                         linear_interp=True, **kwargs):
     """
     Read a NEXRAD Level 2 Archive file.
@@ -77,6 +77,9 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
         location in the returned radar object.  This parameter is only
         used when the location is not contained in the file, which occur
         in older NEXRAD files.
+    scans : list or None, optional
+        Read only specified scans from the file.  None (the default) will read
+        all scans.
     linear_interp : bool, optional
         True (the default) to perform linear interpolation between valid pairs
         of gates in low resolution rays in files mixed resolution rays.
@@ -106,11 +109,11 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
 
     # open the file and retrieve scan information
     nfile = NEXRADLevel2File(prepare_for_read(filename))
-    scan_info = nfile.scan_info()
+    scan_info = nfile.scan_info(scans)
 
     # time
     time = filemetadata('time')
-    time_start, _time = nfile.get_times()
+    time_start, _time = nfile.get_times(scans)
     time['data'] = _time
     time['units'] = make_time_unit_str(time_start)
 
@@ -148,7 +151,10 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
     sweep_start_ray_index = filemetadata('sweep_start_ray_index')
     sweep_end_ray_index = filemetadata('sweep_end_ray_index')
 
-    nsweeps = int(nfile.nscans)
+    if scans is None:
+        nsweeps = int(nfile.nscans)
+    else:
+        nsweeps = len(scans)
     sweep_number['data'] = np.arange(nsweeps, dtype='int32')
     sweep_mode['data'] = np.array(
         nsweeps * ['azimuth_surveillance'], dtype='S')
@@ -164,9 +170,9 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
     azimuth = filemetadata('azimuth')
     elevation = filemetadata('elevation')
     fixed_angle = filemetadata('fixed_angle')
-    azimuth['data'] = nfile.get_azimuth_angles()
-    elevation['data'] = nfile.get_elevation_angles().astype('float32')
-    fixed_angle['data'] = nfile.get_target_angles()
+    azimuth['data'] = nfile.get_azimuth_angles(scans)
+    elevation['data'] = nfile.get_elevation_angles(scans).astype('float32')
+    fixed_angle['data'] = nfile.get_target_angles(scans)
 
     # fields
     max_ngates = len(_range['data'])
@@ -182,18 +188,18 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
         dic['_FillValue'] = get_fillvalue()
         if delay_field_loading and moment not in interpolate:
             dic = LazyLoadDict(dic)
-            data_call = _NEXRADLevel2StagedField(nfile, moment, max_ngates)
+            data_call = _NEXRADLevel2StagedField(
+                nfile, moment, max_ngates, scans)
             dic.set_lazy('data', data_call)
         else:
-            mdata = nfile.get_data(moment, max_ngates)
-            dic['data'] = nfile.get_data(moment, max_ngates)
+            mdata = nfile.get_data(moment, max_ngates, scans=scans)
             if moment in interpolate:
-                scans = interpolate[moment]
+                interp_scans = interpolate[moment]
                 warnings.warn(
                     "Gate spacing is not constant, interpolating data in " +
                     "scans %s for moment %s." % (interp_scans, moment),
                     UserWarning)
-                for scan in scans:
+                for scan in interp_scans:
                     idx = scan_info[scan]['moments'].index(moment)
                     moment_ngates = scan_info[scan]['ngates'][idx]
                     start = sweep_start_ray_index['data'][scan]
@@ -206,8 +212,9 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
     # instrument_parameters
     nyquist_velocity = filemetadata('nyquist_velocity')
     unambiguous_range = filemetadata('unambiguous_range')
-    nyquist_velocity['data'] = nfile.get_nyquist_vel().astype('float32')
-    unambiguous_range['data'] = nfile.get_unambigous_range().astype('float32')
+    nyquist_velocity['data'] = nfile.get_nyquist_vel(scans).astype('float32')
+    unambiguous_range['data'] = (
+        nfile.get_unambigous_range(scans).astype('float32'))
 
     instrument_parameters = {'unambiguous_range': unambiguous_range,
                              'nyquist_velocity': nyquist_velocity, }
@@ -305,12 +312,14 @@ class _NEXRADLevel2StagedField(object):
     A class to facilitate on demand loading of field data from a Level 2 file.
     """
 
-    def __init__(self, nfile, moment, max_ngates):
+    def __init__(self, nfile, moment, max_ngates, scans):
         """ initialize. """
         self.nfile = nfile
         self.moment = moment
         self.max_ngates = max_ngates
+        self.scans = scans
 
     def __call__(self):
         """ Return the array containing the field data. """
-        return self.nfile.get_data(self.moment, self.max_ngates)
+        return self.nfile.get_data(
+            self.moment, self.max_ngates, scans=self.scans)
