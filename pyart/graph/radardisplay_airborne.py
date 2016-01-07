@@ -22,7 +22,7 @@ from ..core.transforms import antenna_to_cartesian_track_relative
 from ..core import transforms
 
 
-class RadarDisplay_Airborne(RadarDisplay):
+class AirborneRadarDisplay(RadarDisplay):
     """
     A display object for creating plots from data in a airborne radar object.
 
@@ -97,7 +97,7 @@ class RadarDisplay_Airborne(RadarDisplay):
         self.heading = radar.heading['data']
         self.pitch = radar.pitch['data']
         self.altitude = radar.altitude['data']
-        super(RadarDisplay_Airborne, self).__init__(radar, shift)
+        super(AirborneRadarDisplay, self).__init__(radar, shift)
 
     def _calculate_localization(self, radar):
         """ Calculate self.x, self.y, self.z and self.loc. """

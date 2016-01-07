@@ -29,7 +29,8 @@ Plotting grid data
 
 from .radardisplay import RadarDisplay
 from . import cm
-from .radardisplay_airborne import RadarDisplay_Airborne
+from .radardisplay_airborne import AirborneRadarDisplay
+from .radardisplay_airborne import  AirborneRadarDisplay as RadarDisplay_Airborne
 from .gridmapdisplay import GridMapDisplay
 from .radarmapdisplay import RadarMapDisplay
 
