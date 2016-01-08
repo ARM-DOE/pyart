@@ -8,7 +8,7 @@ Class for creating plots from Airborne Radar objects.
     :toctree: generated/
     :template: dev_template.rst
 
-    RadarDisplay_Airborne
+    AirborneRadarDisplay
 
 """
 
@@ -20,7 +20,6 @@ from . import common
 from ..core.transforms import antenna_to_cartesian
 from ..core.transforms import antenna_to_cartesian_track_relative
 from ..core import transforms
-
 
 class AirborneRadarDisplay(RadarDisplay):
     """
