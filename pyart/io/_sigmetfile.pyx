@@ -767,6 +767,13 @@ def convert_sigmet_data(data_type, data, nbins):
             mask[ndata == 0] = True
             mask[ndata == 255] = True
 
+        elif data_type_name == "HCLASS":
+            # HCLASS, 55, Hydrometeor class (1 byte)
+            # 1-byte HydroClass format, section 4.3.8
+            out[:] = ndata[:]
+            mask[ndata == 0] = True     # No data available
+            mask[ndata == 255] = True   # Area not scanned
+
         else:
             # TODO implement conversions for addition 1-byte formats
             warnings.warn('Unknown type: %s, returning raw data' % data_type)

@@ -37,20 +37,27 @@ def test_geographic_to_cartesian_aeqd():
     x = -5.8311398
     y = 5.5444634
 
-    x, y = transforms.geographic_to_cartesian_aeqd(lon, lat, lon_0, lat_0, R)
+    with warnings.catch_warnings():  # invalid divide is handled by code
+        warnings.simplefilter("ignore", category=RuntimeWarning)
+        x, y = transforms.geographic_to_cartesian_aeqd(
+            lon, lat, lon_0, lat_0, R)
     assert_almost_equal(x, -5.8311398, 7)
     assert_almost_equal(y, 5.5444634, 7)
 
     # edge case, distance from projection center is zero
     lat = 40.0
     lon = -100.
-    x, y = transforms.geographic_to_cartesian_aeqd(lon, lat, lon_0, lat_0, R)
+    with warnings.catch_warnings():  # invalid divide is handled by code
+        # ignore division runtime warning
+        warnings.simplefilter("ignore", category=RuntimeWarning)
+        x, y = transforms.geographic_to_cartesian_aeqd(
+            lon, lat, lon_0, lat_0, R)
     assert_almost_equal(x, 0.0, 5)
     assert_almost_equal(y, 0.0, 5)
 
     # edge case, sin(c) is zero
     with warnings.catch_warnings():  # invalid divide is handled by code
-        warnings.simplefilter("ignore")
+        warnings.simplefilter("ignore", category=RuntimeWarning)
         x, y = transforms.geographic_to_cartesian_aeqd(
             10.0, 90.0, 20.0, 90.0, 3.0)
     assert_almost_equal(x, 0.0, 5)

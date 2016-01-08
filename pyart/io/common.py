@@ -20,6 +20,13 @@ import gzip
 import numpy as np
 import netCDF4
 
+# Depreciated function names in this name space
+from ..exceptions import _depreciated_alias
+from ..core import transforms as _transforms
+radar_coords_to_cart = _depreciated_alias(
+    _transforms.antenna_to_cartesian, 'pyart.io.common.radar_coords_to_cart',
+    'pyart.core.transforms.antenna_to_cartesian')
+
 
 def prepare_for_read(filename):
     """

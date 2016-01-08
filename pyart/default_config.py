@@ -123,8 +123,8 @@ interpolated_profile = 'interpolated_profile'
 # Various parameters used in Py-ART.
 ##############################################################################
 
-FILL_VALUE = fill_value     # the default fill value for masked arrays and
-                            # the _FillValue key.
+# the default fill value for masked arrays and the _FillValue key
+FILL_VALUE = fill_value
 
 # The DEFAULT_FIELD_NAMES controls the field names which are used in the
 # correction and retrieval algorithms in Py-ART. The keys of the dictionary
@@ -628,6 +628,96 @@ DEFAULT_METADATA = {
         'long_name': 'Interpolated profile',
         'standard_name':  'interpolated_profile',
         'units': 'unknown'},
+
+    # Grid metadata
+
+    'grid_time': {
+        'units': 'seconds',
+        'standard_name': 'time',
+        'long_name': 'Time of grid',
+        'calendar': 'gregorian'},
+
+    'origin_longitude': {
+        'long_name': 'Longitude at grid origin',
+        'units': 'degrees_east',
+        'standard_name': 'longitude',
+        'valid_min': -180.,
+        'valid_max': 180.},
+
+    'origin_latitude': {
+        'long_name': 'Latitude at grid origin',
+        'units': 'degrees_north',
+        'standard_name': 'latitude',
+        'valid_min': -90.,
+        'valid_max': 90.},
+
+    'origin_altitude': {
+        'long_name': 'Altitude at grid origin',
+        'units': 'm',
+        'standard_name': 'altitude'},
+
+    'x': {
+        'standard_name': 'projection_x_coordinate',
+        'long_name': 'X distance on the projection plane from the origin',
+        'axis': 'X',
+        'units': 'm'},
+
+    'y': {
+        'standard_name': 'projection_y_coordinate',
+        'long_name': 'Y distance on the projection plane from the origin',
+        'axis': 'Y',
+        'units': 'm'},
+
+    'z': {
+        'standard_name': 'projection_z_coordinate',
+        'long_name': 'Z distance on the projection plane from the origin',
+        'axis': 'Z',
+        'units': 'm',
+        'positive': 'up'},
+
+    'point_x': {
+        'long_name': 'Cartesian x distance of each grid point from the origin',
+        'units': 'meters'},
+
+    'point_y': {
+        'long_name': 'Cartesian y distance of each grid point from the origin',
+        'units': 'meters'},
+
+    'point_z': {
+        'long_name': 'Cartesian z distance of each grid point from the origin',
+        'positive': 'up',
+        'units': 'meters'},
+
+    'point_longitude': {
+        'long_name': 'Longitude of each grid point',
+        'units': 'degrees_north'},
+
+    'point_latitude': {
+        'long_name': 'Latitude of each grid point',
+        'units': 'degrees_east'},
+
+    'point_altitude': {
+        'long_name': 'Altitude of each grid point',
+        'units': 'meters'},
+
+    'radar_latitude': {
+        'long_name': 'Latitude of radars used to make the grid.',
+        'units': 'degrees_north', },
+
+    'radar_longitude': {
+        'long_name': 'Longitude of radars used to make the grid.',
+        'units': 'degrees_east', },
+
+    'radar_altitude': {
+        'long_name': 'Altitude of radars used to make the grid.',
+        'units': 'm', },
+
+    'radar_time': {
+        'calendar': 'gregorian',
+        'long_name': 'Time in seconds of the volume start for each radar'},
+
+    'radar_name': {
+        'long_name': 'Name of radar used to make the grid', },
 
 }
 

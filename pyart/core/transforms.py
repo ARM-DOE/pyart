@@ -31,6 +31,8 @@ and antenna (azimuth, elevation, range) coordinate systems.
 
 """
 
+import warnings
+
 from ..exceptions import MissingOptionalDependency
 
 import numpy as np
@@ -595,6 +597,9 @@ def add_2d_latlon_axis(grid, **kwargs):
         Survey Professional Paper 1395, 1987, pp. 191-202.
 
     """
+    warnings.warn(
+        "add_2d_latlon_axis is depreciated and will be removed in a " +
+        "future version of Py-ART", DeprecationWarning)
     try:
         from mpl_toolkits.basemap import pyproj
         if 'proj' not in kwargs:
@@ -605,7 +610,6 @@ def add_2d_latlon_axis(grid, **kwargs):
                         lon_0=grid.axes["lon"]['data'][0], **kwargs)
         lon, lat = b(x, y, inverse=True)
     except ImportError:
-        import warnings
         warnings.warn('No basemap found, using internal implementation '
                       'for converting azimuthal equidistant to latlon')
         # azimutal equidistant projetion to latlon

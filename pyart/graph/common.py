@@ -32,6 +32,18 @@ Common graphing routines.
 import matplotlib.pyplot as plt
 from netCDF4 import num2date
 
+# Depreciated function names in this name space
+from ..exceptions import _depreciated_alias
+from ..core import transforms as _transforms
+radar_coords_to_cart = _depreciated_alias(
+    _transforms.antenna_to_cartesian,
+    'pyart.graph.common.radar_coords_to_cart',
+    'pyart.core.transforms.antenna_to_cartesian')
+sweep_coords_to_cart = _depreciated_alias(
+    _transforms.antenna_vectors_to_cartesian,
+    'pyart.graph.common.sweep_coords_to_cart',
+    'pyart.core.transforms.antenna_vectors_to_cartesian')
+
 
 ########################
 # Common radar methods #
@@ -73,9 +85,9 @@ def parse_vmin_vmax(container, field, vmin, vmax):
 def parse_lon_lat(grid, lon, lat):
     """ Parse lat and lon parameters """
     if lat is None:
-        lat = grid.axes['lat']['data'][0]
+        lat = grid.origin_latitude['data'][0]
     if lon is None:
-        lon = grid.axes['lon']['data'][0]
+        lon = grid.origin_longitude['data'][0]
     return lon, lat
 
 
@@ -124,16 +136,12 @@ def generate_radar_time_begin(radar):
 
 def generate_grid_time_begin(grid):
     """ Return time begin in datetime instance. """
-    # datetime object describing time
-    if "time_start" in grid.axes:
-        time = "time_start"
-    elif 'time' in grid.axes:
-        time = 'time'
-    elif 'time_end' in grid.axes:
-        time = 'time_end'
-    times = grid.axes[time]['data'][0]
-    units = grid.axes[time]['units']
-    calendar = grid.axes[time]['calendar']
+    times = grid.time['data'][0]
+    units = grid.time['units']
+    if 'calendar' in grid.time:
+        calendar = grid.time['calendar']
+    else:
+        calendar = 'standard'
     return num2date(times, units, calendar)
 
 
@@ -247,7 +255,7 @@ def generate_grid_title(grid, field, level):
 
     """
     time_str = generate_grid_time_begin(grid).isoformat() + 'Z'
-    height = grid.axes["z_disp"]['data'][level] / 1000.
+    height = grid.z['data'][level] / 1000.
     l1 = "%s %.1f km %s " % (generate_grid_name(grid), height,
                              time_str)
     field_name = generate_field_name(grid, field)
@@ -275,7 +283,7 @@ def generate_longitudinal_level_title(grid, field, level):
 
     """
     time_str = generate_grid_time_begin(grid).isoformat() + 'Z'
-    disp = grid.axes["x_disp"]['data'][level] / 1000.
+    disp = grid.x['data'][level] / 1000.
     if disp >= 0:
         direction = "east"
     else:
@@ -308,7 +316,7 @@ def generate_latitudinal_level_title(grid, field, level):
 
     """
     time_str = generate_grid_time_begin(grid).isoformat() + 'Z'
-    disp = grid.axes["y_disp"]['data'][level] / 1000.
+    disp = grid.y['data'][level] / 1000.
     if disp >= 0:
         direction = "north"
     else:

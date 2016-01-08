@@ -116,7 +116,7 @@ class RadarMapDisplay(RadarDisplay):
                      min_lon=None, max_lon=None, min_lat=None, max_lat=None,
                      width=None, height=None, lon_0=None, lat_0=None,
                      resolution='h', shapefile=None, edges=True,
-                     gatefilter=None,
+                     gatefilter=None, basemap=None,
                      filter_transitions=True, embelish=True, **kwargs):
         """
         Plot a PPI volume sweep onto a geographic map.
@@ -209,6 +209,9 @@ class RadarMapDisplay(RadarDisplay):
         embelish: bool
             True by default. Set to false to supress drawing of coastlines
             etc.. Use for speedup when specifying shapefiles.
+        basemap: Basemap instance
+            If None, create basemap instance using other keyword info.
+            If not None, use the user-specifed basemap instance.
 
         """
         # parse parameters
@@ -232,24 +235,25 @@ class RadarMapDisplay(RadarDisplay):
         if mask_outside:
             data = np.ma.masked_outside(data, vmin, vmax)
 
-        # plot the basemap
-        using_corners = (None not in [min_lon, min_lat, max_lon, max_lat])
-        if using_corners:
-            basemap = Basemap(llcrnrlon=min_lon, llcrnrlat=min_lat,
-                              urcrnrlon=max_lon, urcrnrlat=max_lat,
-                              lat_0=lat_0, lon_0=lon_0,
-                              projection=projection, area_thresh=area_thresh,
-                              resolution=resolution, ax=ax, **kwargs)
-        else:   # using width and height
-            # map domain determined from location of radar gates
-            if width is None:
-                width = (x.max() - y.min()) * 1000.
-            if height is None:
-                height = (y.max() - y.min()) * 1000.
-            basemap = Basemap(width=width, height=height,
-                              lon_0=lon_0, lat_0=lat_0,
-                              projection=projection, area_thresh=area_thresh,
-                              resolution=resolution, ax=ax, **kwargs)
+        # create the basemap if not provided
+        if type(basemap) != Basemap:
+            using_corners = (None not in [min_lon, min_lat, max_lon, max_lat])
+            if using_corners:
+                basemap = Basemap(llcrnrlon=min_lon, llcrnrlat=min_lat,
+                                  urcrnrlon=max_lon, urcrnrlat=max_lat,
+                                  lat_0=lat_0, lon_0=lon_0,
+                                  projection=projection, area_thresh=area_thresh,
+                                  resolution=resolution, ax=ax, **kwargs)
+            else:   # using width and height
+                # map domain determined from location of radar gates
+                if width is None:
+                    width = (x.max() - y.min()) * 1000.
+                if height is None:
+                    height = (y.max() - y.min()) * 1000.
+                basemap = Basemap(width=width, height=height,
+                                  lon_0=lon_0, lat_0=lat_0,
+                                  projection=projection, area_thresh=area_thresh,
+                                  resolution=resolution, ax=ax, **kwargs)
 
         # add embelishments
         if embelish is True:
