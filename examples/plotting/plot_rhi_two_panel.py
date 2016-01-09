@@ -17,7 +17,7 @@ import pyart
 
 
 # read the data and create the display object
-filename = 'XSW110520113537.RAW7HHL'
+filename = 'data/XSW110520113537.RAW7HHL'
 radar = pyart.io.read_rsl(filename)
 display = pyart.graph.RadarDisplay(radar)
 

@@ -15,7 +15,7 @@ print(__doc__)
 import matplotlib.pyplot as plt
 import pyart
 
-filename = 'XSW110520113537.RAW7HHL'
+filename = 'data/XSW110520113537.RAW7HHL'
 
 # create the plot using RadarDisplay
 radar = pyart.io.read_rsl(filename)

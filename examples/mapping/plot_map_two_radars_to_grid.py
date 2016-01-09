@@ -16,8 +16,8 @@ import matplotlib.pyplot as plt
 import pyart
 
 # read in the data from both XSAPR radars
-XSAPR_SW_FILE = 'swx_20120520_0641.nc'
-XSAPR_SE_FILE = 'sex_20120520_0641.nc'
+XSAPR_SW_FILE = 'data/swx_20120520_0641.nc'
+XSAPR_SE_FILE = 'data/sex_20120520_0641.nc'
 radar_sw = pyart.io.read_cfradial(XSAPR_SW_FILE)
 radar_se = pyart.io.read_cfradial(XSAPR_SE_FILE)
 

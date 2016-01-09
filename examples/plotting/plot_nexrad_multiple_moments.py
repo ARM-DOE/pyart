@@ -15,7 +15,7 @@ print(__doc__)
 import matplotlib.pyplot as plt
 import pyart
 
-filename = 'KATX20130717_195021_V06'
+filename = 'data/KATX20130717_195021_V06'
 radar = pyart.io.read_nexrad_archive(filename)
 display = pyart.graph.RadarDisplay(radar)
 fig = plt.figure(figsize=(10, 10))

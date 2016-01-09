@@ -17,8 +17,8 @@ import matplotlib.pyplot as plt
 import netCDF4
 import pyart
 
-SOND_NAME = 'sgpinterpolatedsondeC1.c1.20110510.000000.cdf'
-RADAR_NAME = '095636.mdv'
+SOND_NAME = 'data/sgpinterpolatedsondeC1.c1.20110510.000000.cdf'
+RADAR_NAME = 'data/095636.mdv'
 
 # read in the data
 radar = pyart.io.read_mdv(RADAR_NAME)

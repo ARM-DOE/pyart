@@ -17,7 +17,7 @@ import matplotlib.pyplot as plt
 import pyart
 
 # read in the data
-RADAR_FILE = '110635.mdv'
+RADAR_FILE = 'data/110635.mdv'
 radar = pyart.io.read_mdv(RADAR_FILE)
 
 # mask out last 10 gates of each ray, this removes the "ring" around th radar.

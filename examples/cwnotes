@@ -1,0 +1,31 @@
+examples and problems with them:
+
+Example:
+correct/plot_lp_phase_proc.py
+
+Error:
+/home/cweber/.local/lib/python2.7/site-packages/pyart/correct/phase_proc.py:188: RuntimeWarning: invalid value encountered in sqrt
+  noise = smooth_and_trim(np.sqrt((line - signal) ** 2), window_len=wl)
+  Exec time:  3.78216910362
+  Doing  0
+  Traceback (most recent call last):
+    File "plot_lp_phase_proc.py", line 27, in <module>
+        phidp, kdp = pyart.correct.phase_proc_lp(radar, 0.0, debug=True)
+          File "/home/cweber/.local/lib/python2.7/site-packages/pyart/correct/phase_proc.py", line 1094, in phase_proc_lp
+              really_verbose=really_verbose)
+                File "/home/cweber/.local/lib/python2.7/site-packages/pyart/correct/phase_proc.py", line 907, in LP_solver_cylp
+                    from cylp.cy.CyClpSimplex import CyClpSimplex
+                    ImportError: No module named cylp.cy.CyClpSimplex
+      
+Example:
+plotting/plot_ppi_basemap_with_rings.py
+
+Error: the files needed to run example arn't in the archive provided
+data/nsaxsaprppiC1.a1.20140201.184802.nc
+
+Example:
+plotting/plot_rhi_cfradial.py
+
+Error: code ran fine, text labels were smashed on top of each other.
+May need minimum window size ajusted or something.
+
