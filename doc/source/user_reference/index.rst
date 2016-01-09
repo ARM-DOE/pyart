@@ -7,11 +7,11 @@ User Reference Manual
 :Release: |version|
 :Date: |today|
 
-This guide provides details on all public functions, modules and classes 
-included in Py-ART which a typical user will use on a regular basis.
 
-For a more detailed listing of all functions, module and classes (both public
-and private) aimed at developers please see the :ref:`developer`.
+This is the Py-ART user community’s reference guide, and it covers the most 
+commonly used public functions, modules and classes. 
+If more detail is required, the :ref:`developer` is an exhaustive listing of 
+all private and public functions, modules and classes.
 
 .. toctree::
     :maxdepth: 1
