@@ -15,7 +15,7 @@ Plotting radar data
 
     RadarDisplay
     RadarMapDisplay
-    RadarDisplay_Airborne
+    AirborneRadarDisplay
 
 Plotting grid data
 ==================
@@ -29,8 +29,21 @@ Plotting grid data
 
 from .radardisplay import RadarDisplay
 from . import cm
-from .radardisplay_airborne import RadarDisplay_Airborne
+from .radardisplay_airborne import AirborneRadarDisplay
 from .gridmapdisplay import GridMapDisplay
 from .radarmapdisplay import RadarMapDisplay
 
 __all__ = [s for s in dir() if not s.startswith('_')]
+
+
+import warnings as _warnings
+
+class RadarDisplay_Airborne(AirborneRadarDisplay):
+    """ Depreciated name for the AirborneRadarDisplay class. """
+
+    def __init__(self, *args, **kwargs):
+        _warnings.warn(
+            ("'RadarDisplay_Airborne' is depreciated and will be removed in"
+             "future versions of Py-ART, please use 'AirborneRadarDisplay'"),
+            DeprecationWarning)
+        AirborneRadarDisplay.__init__(self, *args, **kwargs)
