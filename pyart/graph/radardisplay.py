@@ -17,11 +17,15 @@ import warnings
 import matplotlib.pyplot as plt
 import numpy as np
 import netCDF4
+from matplotlib.dates import (
+    DateFormatter, SecondLocator, MinuteLocator,
+    HourLocator, DayLocator)
 
 from . import common
 from ..core.transforms import antenna_to_cartesian
 from ..core.transforms import antenna_vectors_to_cartesian
 from ..core.transforms import corner_to_point
+from ..util.datetime_utils import datetimes_from_radar
 
 
 class RadarDisplay(object):
@@ -112,6 +116,7 @@ class RadarDisplay(object):
         units = radar.time['units']
         calendar = radar.time['calendar']
         self.time_begin = netCDF4.num2date(times, units, calendar)
+        self.times = datetimes_from_radar(radar)
 
         # sweep start and end indices
         self.starts = radar.sweep_start_ray_index['data']
@@ -486,7 +491,10 @@ class RadarDisplay(object):
                  axislabels=(None, None), axislabels_flag=True,
                  colorbar_flag=True, colorbar_label=None,
                  colorbar_orient='vertical', edges=True,
-                 filter_transitions=True, ax=None, fig=None):
+                 filter_transitions=True,
+                 time_axis_flag=False,
+                 dForm=None, tz=None, date_MinTicker=None,
+                 ax=None, fig=None):
         """
         Plot a VPT scan.
 
@@ -542,6 +550,15 @@ class RadarDisplay(object):
             sweeps from the plot.  False will include these rays in the plot.
             No rays are filtered when the antenna_transition attribute of the
             underlying radar is not present.
+        time_axis_flag : bool
+            True to plot the x-axis as time. False uses the default of index number.
+        dForm : str
+            Format of the time string for x-axis labels.
+        tz : str
+            Time zone info to use when creating axis labels (see datetime).
+        date_MinTicker : str
+            Sting to set minor ticks of date axis,
+            'second','minute','hour','day' supported.
         ax : Axis
             Axis to plot on. None will use the current axis.
         fig : Figure
@@ -567,6 +584,12 @@ class RadarDisplay(object):
             x = np.arange(data.shape[1])
             y = self.ranges / 1000.
 
+        # set up the time axis
+        if time_axis_flag:
+            self._set_vpt_time_axis(ax, dForm=dForm, tz=tz,
+                               date_MinTicker=date_MinTicker)
+            x = self.times
+
         # mask the data where outside the limits
         if mask_outside:
             data = np.ma.masked_invalid(data)
@@ -579,7 +602,7 @@ class RadarDisplay(object):
             self._set_vpt_title(field, title, ax)
 
         if axislabels_flag:
-            self._label_axes_vpt(axislabels, ax)
+            self._label_axes_vpt(axislabels, time_axis_flag, ax)
 
         # add plot and field to lists
         self.plots.append(pm)
@@ -933,6 +956,11 @@ class RadarDisplay(object):
         ax = common.parse_ax(ax)
         ax.set_xlabel('Ray number (unitless)')
 
+    def label_xaxis_time(self, ax=None):
+        """ Label the yaxis with the default label for rays. """
+        ax = common.parse_ax(ax)
+        ax.set_xlabel('Time (HH:MM)')
+
     def label_yaxis_field(self, field, ax=None):
         """ Label the yaxis with the default label for a field units. """
         ax = common.parse_ax(ax)
@@ -1007,17 +1035,58 @@ class RadarDisplay(object):
         else:
             ax.set_ylabel(y_label)
 
-    def _label_axes_vpt(self, axis_labels, ax):
+    def _label_axes_vpt(self, axis_labels, time_axis_flag, ax):
         """ Set the x and y axis labels for a PPI plot. """
         x_label, y_label = axis_labels
         if x_label is None:
-            self.label_xaxis_rays(ax)
+            if time_axis_flag:
+                self.label_xaxis_time(ax)
+            else:
+                self.label_xaxis_rays(ax)
         else:
             ax.set_xlabel(x_label)
         if y_label is None:
             self.label_yaxis_z(ax)
         else:
             ax.set_ylabel(y_label)
+
+    def _set_vpt_time_axis(self, ax, dForm=None, tz=None,
+                           date_MinTicker=None):
+        """ Set the x axis as a time formatted axis.
+
+        Parameters
+        ----------
+        ax : Matplotlib axis instance
+            Axis to plot. None will use the current axis.
+        dForm : str
+            Format of the time string for x-axis labels.
+        tz : str
+            Time zone info to use when creating axis labels (see datetime).
+        date_MinTicker : str
+            Sting to set minor ticks of date axis,
+            'second','minute','hour','day' supported.
+        """
+        if dForm is None:
+            dForm = '%H:%M'
+        if date_MinTicker is None:
+            date_MinTicker = 'minute'
+
+        # Set the date format
+        date_Fmt = DateFormatter(dForm, tz=tz)
+
+        # Set x-axis and tick parameters
+        ax.xaxis.set_major_formatter(date_Fmt)
+        if date_MinTicker == 'second':
+            ax.xaxis.set_minor_locator(SecondLocator())
+        elif date_MinTicker == 'minute':
+            ax.xaxis.set_minor_locator(MinuteLocator())
+        elif date_MinTicker == 'hour':
+            ax.xaxis.set_minor_locator(HourLocator())
+        elif date_MinTicker == 'day':
+            ax.xaxis.set_minor_locator(DayLocator())
+
+        # Turn the tick marks outward
+        ax.tick_params(which='both', direction='out')
 
     ##########################
     # name generator methods #
