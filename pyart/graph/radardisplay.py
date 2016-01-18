@@ -493,7 +493,7 @@ class RadarDisplay(object):
                  colorbar_orient='vertical', edges=True,
                  filter_transitions=True,
                  time_axis_flag=False,
-                 dForm=None, tz=None,
+                 date_time_form=None, tz=None,
                  ax=None, fig=None):
         """
         Plot a VPT scan.
@@ -553,7 +553,7 @@ class RadarDisplay(object):
         time_axis_flag : bool
             True to plot the x-axis as time. False uses the index number.
             Default is False - index-based.
-        dForm : str, optional
+        date_time_form : str, optional
             Format of the time string for x-axis labels. Parameter is
             ignored if time_axis_flag is set to False.
         tz : str, optional
@@ -586,7 +586,7 @@ class RadarDisplay(object):
 
         # set up the time axis
         if time_axis_flag:
-            self._set_vpt_time_axis(ax, dForm=dForm, tz=tz)
+            self._set_vpt_time_axis(ax, date_time_form=date_time_form, tz=tz)
             x = self.times
 
         # mask the data where outside the limits
@@ -1049,25 +1049,25 @@ class RadarDisplay(object):
         else:
             ax.set_ylabel(y_label)
 
-    def _set_vpt_time_axis(self, ax, dForm=None, tz=None):
+    def _set_vpt_time_axis(self, ax, date_time_form=None, tz=None):
         """ Set the x axis as a time formatted axis.
 
         Parameters
         ----------
         ax : Matplotlib axis instance
             Axis to plot. None will use the current axis.
-        dForm : str
+        date_time_form : str
             Format of the time string for x-axis labels.
         tz : str
             Time zone info to use when creating axis labels (see datetime).
         """
-        if dForm is None:
-            dForm = '%H:%M'
+        if date_time_form is None:
+            date_time_form = '%H:%M'
         if date_MinTicker is None:
             date_MinTicker = 'minute'
 
         # Set the date format
-        date_Fmt = DateFormatter(dForm, tz=tz)
+        date_Fmt = DateFormatter(date_time_form, tz=tz)
 
         # Turn the tick marks outward
         ax.tick_params(which='both', direction='out')
