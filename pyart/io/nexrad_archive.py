@@ -46,7 +46,7 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
         at the NOAA National Climate Data Center [1]_ as well as on the
         UCAR THREDDS Data Server [2]_ have been tested.  Other NEXRAD
         Level 2 Archive files may or may not work.  Message type 1 file
-        at not yet supported, only message type 31.
+        and message type 31 files are supported.
     field_names : dict, optional
         Dictionary mapping NEXRAD moments to radar field names. If a
         data type found in the file does not appear in this dictionary or has
@@ -76,7 +76,7 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
         Four letter ICAO name of the NEXRAD station used to determine the
         location in the returned radar object.  This parameter is only
         used when the location is not contained in the file, which occur
-        in older NEXRAD files.
+        in older NEXRAD message 1 files.
     scans : list or None, optional
         Read only specified scans from the file.  None (the default) will read
         all scans.
@@ -164,8 +164,8 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
     sweep_end_ray_index['data'] = np.cumsum(rays_per_scan, dtype='int32') - 1
 
     rays_per_scan.insert(0, 0)
-    sweep_start_ray_index['data'] = np.cumsum(rays_per_scan[:-1],
-                                              dtype='int32')
+    sweep_start_ray_index['data'] = np.cumsum(
+        rays_per_scan[:-1], dtype='int32')
 
     # azimuth, elevation, fixed_angle
     azimuth = filemetadata('azimuth')

@@ -88,9 +88,8 @@ class NEXRADLevel2File(object):
     NEXRAD Level II files [1]_, also know as NEXRAD Archive Level II or
     WSR-88D Archive level 2, are available from the NOAA National Climate Data
     Center [2]_ as well as on the UCAR THREDDS Data Server [3]_.  Files with
-    uncompressed messages and compressed messages are supported.  Currently
-    only "message 31" type files are supported, "message 1" file cannot be
-    read using this class.
+    uncompressed messages and compressed messages are supported.  This class
+    supports reading both "message 31" and "message 1" type files.
 
     Parameters
     ----------
@@ -99,13 +98,13 @@ class NEXRADLevel2File(object):
 
     Attributes
     ----------
-    msg31s : list
-        Message 31 message in the file.
+    radial_records : list
+        Radial (1 or 31) messages in the file.
     nscans : int
         Number of scans in the file.
     scan_msgs : list of arrays
-        Each element specifies the indices of the message in msg31s which
-        belong to a given scan.
+        Each element specifies the indices of the message in the
+        radial_records attribute which belong to a given scan.
     volume_header : dict
         Volume header.
     vcp : dict
@@ -114,13 +113,14 @@ class NEXRADLevel2File(object):
         A list of all records (message) in the file.
     _fh : file-like
         File like object from which data is read.
+    _msg_type : '31' or '1':
+        Type of radial messages in file
 
     References
     ----------
     .. [1] http://www.roc.noaa.gov/WSR88D/Level_II/Level2Info.aspx
     .. [2] http://www.ncdc.noaa.gov/
     .. [3] http://thredds.ucar.edu/thredds/catalog.html
-
 
     """
     def __init__(self, filename):
@@ -135,10 +135,10 @@ class NEXRADLevel2File(object):
         compression_record = fh.read(COMPRESSION_RECORD_SIZE)
 
         # read the records in the file, decompressing as needed
-        s = slice(CONTROL_WORD_SIZE, CONTROL_WORD_SIZE + 2)
-        if compression_record[s] == b'BZ':
+        compression_slice = slice(CONTROL_WORD_SIZE, CONTROL_WORD_SIZE + 2)
+        if compression_record[compression_slice] == b'BZ':
             buf = _decompress_records(fh)
-        elif compression_record[s] == b'\x00\x00':
+        elif compression_record[compression_slice] == b'\x00\x00':
             buf = fh.read()
         else:
             raise IOError('unknown compression record')
@@ -152,16 +152,18 @@ class NEXRADLevel2File(object):
             pos, dic = _get_record_from_buf(buf, pos)
             self._records.append(dic)
 
-        # pull out msg31 records which contain the moment data.
-        self.msg31s = [r for r in self._records if r['header']['type'] == 31]
+        # pull out radial records (1 or 31) which contain the moment data.
+        self.radial_records = [r for r in self._records
+                               if r['header']['type'] == 31]
         self._msg_type = '31'
-        if len(self.msg31s) == 0:
-            self.msg31s = [r for r in self._records if r['header']['type'] == 1]
+        if len(self.radial_records) == 0:
+            self.radial_records = [r for r in self._records
+                                   if r['header']['type'] == 1]
             self._msg_type = '1'
-            if len(self.msg31s) == 0:
-                raise ValueError('No MSG31 records found, cannot read file')
+        if len(self.radial_records) == 0:
+            raise ValueError('No MSG31 records found, cannot read file')
         elev_nums = np.array([m['msg_header']['elevation_number']
-                             for m in self.msg31s])
+                              for m in self.radial_records])
         self.scan_msgs = [np.where(elev_nums == i + 1)[0]
                           for i in range(elev_nums.max())]
         self.nscans = len(self.scan_msgs)
@@ -182,6 +184,8 @@ class NEXRADLevel2File(object):
         """
         Find the location of the radar.
 
+        Returns all zeros if location is not available.
+
         Returns
         -------
         latitude: float
@@ -193,8 +197,9 @@ class NEXRADLevel2File(object):
 
         """
         if self._msg_type == '31':
-            dic = self.msg31s[0]['VOL']
-            return dic['lat'], dic['lon'], dic['height'] + dic['feedhorn_height']
+            dic = self.radial_records[0]['VOL']
+            height = dic['height'] + dic['feedhorn_height']
+            return dic['lat'], dic['lon'], height
         else:
             return 0.0, 0.0, 0.0
 
@@ -213,9 +218,10 @@ class NEXRADLevel2File(object):
         -------
         scan_info : list, optional
             A list of the scan performed with a dictionary with keys
-            'moments', 'ngates', and 'nrays' for each scan.  The 'moments'
-            and 'ngates' keys are lists of the NEXRAD moments and number
-            of gates for that moment collected during the specific scan.
+            'moments', 'ngates', 'nrays', 'first_gate' and 'gate_spacing'
+            for each scan.  The 'moments', 'ngates', 'first_gate', and
+            'gate_spacing' keys are lists of the NEXRAD moments and gate
+            information for that moment collected during the specific scan.
             The 'nrays' key provides the number of radials collected in the
             given scan.
 
@@ -227,7 +233,7 @@ class NEXRADLevel2File(object):
             nrays = self.get_nrays(scan)
 
             msg31_number = self.scan_msgs[scan][0]
-            msg = self.msg31s[msg31_number]
+            msg = self.radial_records[msg31_number]
 
             nexrad_moments = ['REF', 'VEL', 'SW', 'ZDR', 'PHI', 'RHO']
             moments = [f for f in nexrad_moments if f in msg]
@@ -276,7 +282,7 @@ class NEXRADLevel2File(object):
             Range in meters from the antenna to the center of gate (bin).
 
         """
-        dic = self.msg31s[self.scan_msgs[scan_num][0]][moment]
+        dic = self.radial_records[self.scan_msgs[scan_num][0]][moment]
         ngates = dic['ngates']
         first_gate = dic['first_gate']
         gate_spacing = dic['gate_spacing']
@@ -287,24 +293,24 @@ class NEXRADLevel2File(object):
         """ Find the all message number for a list of scans. """
         return np.concatenate([self.scan_msgs[i] for i in scans])
 
-    def _msg31_array(self, scans, key):
+    def _radial_array(self, scans, key):
         """
-        Return an array of msg31 header elements for all rays in scans.
+        Return an array of radial header elements for all rays in scans.
         """
         msg_nums = self._msg_nums(scans)
-        t = [self.msg31s[i]['msg_header'][key] for i in msg_nums]
-        return np.array(t)
+        temp = [self.radial_records[i]['msg_header'][key] for i in msg_nums]
+        return np.array(temp)
 
-    def _msg31_rad_array(self, scans, key):
+    def _radial_sub_array(self, scans, key):
         """
-        Return an array of msg31 RAD elements for all rays in scans.
+        Return an array of RAD or msg_header elements for all rays in scans.
         """
         msg_nums = self._msg_nums(scans)
         if self._msg_type == '31':
-            t = [self.msg31s[i]['RAD'][key] for i in msg_nums]
+            tmp = [self.radial_records[i]['RAD'][key] for i in msg_nums]
         else:
-            t = [self.msg31s[i]['msg_header'][key] for i in msg_nums]
-        return np.array(t)
+            tmp = [self.radial_records[i]['msg_header'][key] for i in msg_nums]
+        return np.array(tmp)
 
     def get_times(self, scans=None):
         """
@@ -328,8 +334,8 @@ class NEXRADLevel2File(object):
         """
         if scans is None:
             scans = range(self.nscans)
-        days = self._msg31_array(scans, 'collect_date')
-        secs = self._msg31_array(scans, 'collect_ms') / 1000.
+        days = self._radial_array(scans, 'collect_date')
+        secs = self._radial_array(scans, 'collect_ms') / 1000.
         offset = timedelta(days=int(days[0]) - 1, seconds=int(secs[0]))
         time_start = datetime(1970, 1, 1) + offset
         time = secs - int(secs[0]) + (days - days[0]) * 86400
@@ -358,7 +364,7 @@ class NEXRADLevel2File(object):
             scale = 180 / (4096 * 8.)
         else:
             scale = 1.
-        return self._msg31_array(scans, 'azimuth_angle') * scale
+        return self._radial_array(scans, 'azimuth_angle') * scale
 
     def get_elevation_angles(self, scans=None):
         """
@@ -383,7 +389,7 @@ class NEXRADLevel2File(object):
             scale = 180 / (4096 * 8.)
         else:
             scale = 1.
-        return self._msg31_array(scans, 'elevation_angle') * scale
+        return self._radial_array(scans, 'elevation_angle') * scale
 
     def get_target_angles(self, scans=None):
         """
@@ -405,13 +411,13 @@ class NEXRADLevel2File(object):
         if scans is None:
             scans = range(self.nscans)
         if self._msg_type == '31':
-            cp = self.vcp['cut_parameters']
+            cut_parameters = self.vcp['cut_parameters']
             scale = 360. / 65536.
-            return np.array([cp[i]['elevation_angle'] * scale for i in scans],
-                            dtype='float32')
+            return np.array([cut_parameters[i]['elevation_angle'] * scale
+                             for i in scans], dtype='float32')
         else:
             scale = 180 / (4096 * 8.)
-            msgs = [self.msg31s[self.scan_msgs[i][0]] for i in scans]
+            msgs = [self.radial_records[self.scan_msgs[i][0]] for i in scans]
             return np.round(np.array(
                 [m['msg_header']['elevation_angle'] * scale for m in msgs],
                 dtype='float32'), 1)
@@ -435,7 +441,7 @@ class NEXRADLevel2File(object):
         """
         if scans is None:
             scans = range(self.nscans)
-        return self._msg31_rad_array(scans, 'nyquist_vel') * 0.01
+        return self._radial_sub_array(scans, 'nyquist_vel') * 0.01
 
     def get_unambigous_range(self, scans=None):
         """
@@ -457,7 +463,7 @@ class NEXRADLevel2File(object):
         if scans is None:
             scans = range(self.nscans)
         # unambiguous range is stored in tenths of km, x100 for meters
-        return self._msg31_rad_array(scans, 'unambig_range') * 100.
+        return self._radial_sub_array(scans, 'unambig_range') * 100.
 
     def get_data(self, moment, max_ngates, scans=None, raw_data=False):
         """
@@ -501,7 +507,7 @@ class NEXRADLevel2File(object):
         else:
             data = np.ones((nrays, max_ngates), dtype='u2')
         for i, msg_num in enumerate(msg_nums):
-            msg = self.msg31s[msg_num]
+            msg = self.radial_records[msg_num]
             if moment not in msg.keys():
                 continue
             ngates = msg[moment]['ngates']
@@ -515,7 +521,7 @@ class NEXRADLevel2File(object):
         # are the same in all scans/gates
         for scan in scans:  # find a scan which contains the moment
             msg_num = self.scan_msgs[scan][0]
-            msg = self.msg31s[msg_num]
+            msg = self.radial_records[msg_num]
             if moment in msg.keys():
                 offset = np.float32(msg[moment]['offset'])
                 scale = np.float32(msg[moment]['scale'])
@@ -548,90 +554,32 @@ def _get_record_from_buf(buf, pos):
     msg_type = dic['header']['type']
 
     if msg_type == 31:
-        msg_size = dic['header']['size'] * 2 - 4
-        msg_header_size = _structure_size(MSG_HEADER)
-        new_pos = pos + msg_header_size + msg_size
-        mbuf = buf[pos + msg_header_size:new_pos]
-        msg_31_header = _unpack_from_buf(mbuf, 0, MSG_31)
-        block_pointers = [v for k, v in msg_31_header.items()
-                          if k.startswith('block_pointer') and v > 0]
-        for block_pointer in block_pointers:
-            block_name, block_dic = _get_msg31_data_block(mbuf, block_pointer)
-            dic[block_name] = block_dic
-
-        dic['msg_header'] = msg_31_header
-
+        new_pos = _get_msg31_from_buf(buf, pos, dic)
     elif msg_type == 5:
-        msg_header_size = _structure_size(MSG_HEADER)
-        msg5_header_size = _structure_size(MSG_5)
-        msg5_elev_size = _structure_size(MSG_5_ELEV)
-
-        dic['msg5_header'] = _unpack_from_buf(buf, pos + msg_header_size,
-                                              MSG_5)
-        dic['cut_parameters'] = []
-        for i in range(dic['msg5_header']['num_cuts']):
-            p = pos + msg_header_size + msg5_header_size + msg5_elev_size * i
-            dic['cut_parameters'].append(_unpack_from_buf(buf, p, MSG_5_ELEV))
-
-        new_pos = pos + RECORD_SIZE
+        new_pos = _get_msg5_from_buf(buf, pos, dic)
     elif msg_type == 1:
-        msg_header_size = _structure_size(MSG_HEADER)
-        msg1_header = _unpack_from_buf(buf, pos + msg_header_size, MSG_1)
-        dic['msg_header'] = msg1_header
-
-        sur_nbins = int(msg1_header['sur_nbins'])
-        doppler_nbins = int(msg1_header['doppler_nbins'])
-
-        sur_step = int(msg1_header['sur_range_step'])
-        doppler_step = int(msg1_header['doppler_range_step'])
-
-        sur_first = int(msg1_header['sur_range_first'])
-        doppler_first = int(msg1_header['doppler_range_first'])
-        if doppler_first > 2**15:
-            doppler_first = doppler_first - 2**16
-
-        if msg1_header['sur_pointer']:
-            offset = pos + msg_header_size + msg1_header['sur_pointer']
-            data = np.fromstring(buf[offset:offset+sur_nbins], '>u1')
-            dic['REF'] = {
-                'ngates': sur_nbins,
-                'gate_spacing': sur_step,
-                'first_gate': sur_first,
-                'data': data,
-                'scale': 2.,
-                'offset': 66.,
-            }
-        if msg1_header['vel_pointer']:
-            offset = pos + msg_header_size + msg1_header['vel_pointer']
-            data = np.fromstring(buf[offset:offset+doppler_nbins], '>u1')
-            dic['VEL'] = {
-                'ngates': doppler_nbins,
-                'gate_spacing': doppler_step,
-                'first_gate': doppler_first,
-                'data': data,
-                'scale': 2.,
-                'offset': 129.0,
-            }
-            if msg1_header['doppler_resolution'] == 4:
-                # 1 m/s resolution velocity, offset remains 129.
-                dic['VEL']['scale'] = 1.
-        if msg1_header['width_pointer']:
-            offset = pos + msg_header_size + msg1_header['width_pointer']
-            data = np.fromstring(buf[offset:offset+doppler_nbins], '>u1')
-            dic['SW'] = {
-                'ngates': doppler_nbins,
-                'gate_spacing': doppler_step,
-                'first_gate': doppler_first,
-                'data': data,
-                'scale': 2.,
-                'offset': 129.0,
-            }
-
-        new_pos = pos + RECORD_SIZE
+        new_pos = _get_msg1_from_buf(buf, pos, dic)
     else:   # not message 31 or 1, no decoding performed
         new_pos = pos + RECORD_SIZE
 
     return new_pos, dic
+
+
+def _get_msg31_from_buf(buf, pos, dic):
+    """ Retrieve and unpack a MSG31 record from a buffer. """
+    msg_size = dic['header']['size'] * 2 - 4
+    msg_header_size = _structure_size(MSG_HEADER)
+    new_pos = pos + msg_header_size + msg_size
+    mbuf = buf[pos + msg_header_size:new_pos]
+    msg_31_header = _unpack_from_buf(mbuf, 0, MSG_31)
+    block_pointers = [v for k, v in msg_31_header.items()
+                      if k.startswith('block_pointer') and v > 0]
+    for block_pointer in block_pointers:
+        block_name, block_dic = _get_msg31_data_block(mbuf, block_pointer)
+        dic[block_name] = block_dic
+
+    dic['msg_header'] = msg_31_header
+    return new_pos
 
 
 def _get_msg31_data_block(buf, ptr):
@@ -658,6 +606,76 @@ def _get_msg31_data_block(buf, ptr):
     return block_name, dic
 
 
+def _get_msg1_from_buf(buf, pos, dic):
+    """ Retrieve and unpack a MSG1 record from a buffer. """
+    msg_header_size = _structure_size(MSG_HEADER)
+    msg1_header = _unpack_from_buf(buf, pos + msg_header_size, MSG_1)
+    dic['msg_header'] = msg1_header
+
+    sur_nbins = int(msg1_header['sur_nbins'])
+    doppler_nbins = int(msg1_header['doppler_nbins'])
+
+    sur_step = int(msg1_header['sur_range_step'])
+    doppler_step = int(msg1_header['doppler_range_step'])
+
+    sur_first = int(msg1_header['sur_range_first'])
+    doppler_first = int(msg1_header['doppler_range_first'])
+    if doppler_first > 2**15:
+        doppler_first = doppler_first - 2**16
+
+    if msg1_header['sur_pointer']:
+        offset = pos + msg_header_size + msg1_header['sur_pointer']
+        data = np.fromstring(buf[offset:offset+sur_nbins], '>u1')
+        dic['REF'] = {
+            'ngates': sur_nbins,
+            'gate_spacing': sur_step,
+            'first_gate': sur_first,
+            'data': data,
+            'scale': 2.,
+            'offset': 66.,
+        }
+    if msg1_header['vel_pointer']:
+        offset = pos + msg_header_size + msg1_header['vel_pointer']
+        data = np.fromstring(buf[offset:offset+doppler_nbins], '>u1')
+        dic['VEL'] = {
+            'ngates': doppler_nbins,
+            'gate_spacing': doppler_step,
+            'first_gate': doppler_first,
+            'data': data,
+            'scale': 2.,
+            'offset': 129.0,
+        }
+        if msg1_header['doppler_resolution'] == 4:
+            # 1 m/s resolution velocity, offset remains 129.
+            dic['VEL']['scale'] = 1.
+    if msg1_header['width_pointer']:
+        offset = pos + msg_header_size + msg1_header['width_pointer']
+        data = np.fromstring(buf[offset:offset+doppler_nbins], '>u1')
+        dic['SW'] = {
+            'ngates': doppler_nbins,
+            'gate_spacing': doppler_step,
+            'first_gate': doppler_first,
+            'data': data,
+            'scale': 2.,
+            'offset': 129.0,
+        }
+    return pos + RECORD_SIZE
+
+
+def _get_msg5_from_buf(buf, pos, dic):
+    """ Retrieve and unpack a MSG1 record from a buffer. """
+    msg_header_size = _structure_size(MSG_HEADER)
+    msg5_header_size = _structure_size(MSG_5)
+    msg5_elev_size = _structure_size(MSG_5_ELEV)
+
+    dic['msg5_header'] = _unpack_from_buf(buf, pos + msg_header_size, MSG_5)
+    dic['cut_parameters'] = []
+    for i in range(dic['msg5_header']['num_cuts']):
+        pos2 = pos + msg_header_size + msg5_header_size + msg5_elev_size * i
+        dic['cut_parameters'].append(_unpack_from_buf(buf, pos2, MSG_5_ELEV))
+    return pos + RECORD_SIZE
+
+
 def _structure_size(structure):
     """ Find the size of a structure in bytes. """
     return struct.calcsize('>' + ''.join([i[1] for i in structure]))
@@ -672,8 +690,8 @@ def _unpack_from_buf(buf, pos, structure):
 def _unpack_structure(string, structure):
     """ Unpack a structure from a string """
     fmt = '>' + ''.join([i[1] for i in structure])  # NEXRAD is big-endian
-    l = struct.unpack(fmt, string)
-    return dict(zip([i[0] for i in structure], l))
+    lst = struct.unpack(fmt, string)
+    return dict(zip([i[0] for i in structure], lst))
 
 
 # NEXRAD Level II file structures and sizes
@@ -768,7 +786,7 @@ MSG_1 = (
     ('elevation_angle', INT2),      # 14-15
     ('elevation_number', INT2),     # 16-17
     ('sur_range_first', CODE2),     # 18-19
-    ('doppler_range_first', CODE2), # 20-21
+    ('doppler_range_first', CODE2),  # 20-21
     ('sur_range_step', CODE2),      # 22-23
     ('doppler_range_step', CODE2),  # 24-25
     ('sur_nbins', INT2),            # 26-27

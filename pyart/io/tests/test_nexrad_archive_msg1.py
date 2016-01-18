@@ -106,7 +106,7 @@ def test_sweep_number():
 def test_sweep_mode():
     assert 'standard_name' in radar.sweep_mode
     assert radar.sweep_mode['data'].shape == (7, )
-    assert np.all(radar.sweep_mode['data'] == ['azimuth_surveillance'])
+    assert np.all(radar.sweep_mode['data'] == [b'azimuth_surveillance'])
 
 
 # fixed_angle attribute

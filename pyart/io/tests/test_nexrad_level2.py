@@ -19,8 +19,8 @@ nfile.close()
 
 
 # attributes
-def test_msg31s():
-    assert len(nfile.msg31s) == 7200
+def test_radial_messages():
+    assert len(nfile.radial_records) == 7200
 
 
 def test_nscans():
@@ -231,7 +231,7 @@ cfile = nexrad_level2.NEXRADLevel2File(COMPRESSED_FILE)
 
 def test_compressed_attributes():
     # the compressed archive only contains the first 120 radials
-    assert len(cfile.msg31s) == 120
+    assert len(cfile.radial_records) == 120
     assert cfile.nscans == 1
     assert len(cfile.scan_msgs) == 1
     assert len(cfile.scan_msgs[0]) == 120
@@ -357,7 +357,7 @@ def test_msg1_missing_location():
 
 def test_invalid_msg31_block():
     # This should never happen with real NEXRAD files...
-    block_name, dic = nexrad_level2._get_msg31_data_block('aaa', 0)
+    block_name, dic = nexrad_level2._get_msg31_data_block(b'aaa', 0)
     assert len(dic) == 0
 
 
