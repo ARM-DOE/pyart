@@ -13,7 +13,7 @@ import pyart.io.nexrad_level2 as nexrad_level2
 
 # create a NEXRADLevel2File from a UNCOMPRESSED dummy file
 # pyart/testing/data/example_nexrad_archive.bz2
-UNCOMPRESSED_FILE = bz2.BZ2File(pyart.testing.NEXRAD_ARCHIVE_FILE, 'rb')
+UNCOMPRESSED_FILE = bz2.BZ2File(pyart.testing.NEXRAD_ARCHIVE_MSG31_FILE, 'rb')
 nfile = nexrad_level2.NEXRADLevel2File(UNCOMPRESSED_FILE)
 nfile.close()
 
@@ -218,7 +218,7 @@ def test_scan_info():
 
 # create a NEXRADLevel2File from a COMPRESSED file
 # pyart/testing/data/example_nexrad_archive_compressed.ar2v
-COMPRESSED_FILE = pyart.testing.NEXRAD_ARCHIVE_COMPRESSED_FILE
+COMPRESSED_FILE = pyart.testing.NEXRAD_ARCHIVE_MSG31_COMPRESSED_FILE
 cfile = nexrad_level2.NEXRADLevel2File(COMPRESSED_FILE)
 
 
