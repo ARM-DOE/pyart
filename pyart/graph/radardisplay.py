@@ -493,7 +493,7 @@ class RadarDisplay(object):
                  colorbar_orient='vertical', edges=True,
                  filter_transitions=True,
                  time_axis_flag=False,
-                 dForm=None, tz=None, date_MinTicker=None,
+                 dForm=None, tz=None,
                  ax=None, fig=None):
         """
         Plot a VPT scan.
@@ -551,14 +551,14 @@ class RadarDisplay(object):
             No rays are filtered when the antenna_transition attribute of the
             underlying radar is not present.
         time_axis_flag : bool
-            True to plot the x-axis as time. False uses the default of index number.
-        dForm : str
-            Format of the time string for x-axis labels.
-        tz : str
+            True to plot the x-axis as time. False uses the index number.
+            Default is False - index-based.
+        dForm : str, optional
+            Format of the time string for x-axis labels. Parameter is
+            ignored if time_axis_flag is set to False.
+        tz : str, optional
             Time zone info to use when creating axis labels (see datetime).
-        date_MinTicker : str
-            Sting to set minor ticks of date axis,
-            'second','minute','hour','day' supported.
+            Parameter is ignored if time_axis_flag is set to False.
         ax : Axis
             Axis to plot on. None will use the current axis.
         fig : Figure
@@ -586,8 +586,7 @@ class RadarDisplay(object):
 
         # set up the time axis
         if time_axis_flag:
-            self._set_vpt_time_axis(ax, dForm=dForm, tz=tz,
-                               date_MinTicker=date_MinTicker)
+            self._set_vpt_time_axis(ax, dForm=dForm, tz=tz)
             x = self.times
 
         # mask the data where outside the limits
@@ -1050,8 +1049,7 @@ class RadarDisplay(object):
         else:
             ax.set_ylabel(y_label)
 
-    def _set_vpt_time_axis(self, ax, dForm=None, tz=None,
-                           date_MinTicker=None):
+    def _set_vpt_time_axis(self, ax, dForm=None, tz=None):
         """ Set the x axis as a time formatted axis.
 
         Parameters
@@ -1062,9 +1060,6 @@ class RadarDisplay(object):
             Format of the time string for x-axis labels.
         tz : str
             Time zone info to use when creating axis labels (see datetime).
-        date_MinTicker : str
-            Sting to set minor ticks of date axis,
-            'second','minute','hour','day' supported.
         """
         if dForm is None:
             dForm = '%H:%M'
@@ -1073,17 +1068,6 @@ class RadarDisplay(object):
 
         # Set the date format
         date_Fmt = DateFormatter(dForm, tz=tz)
-
-        # Set x-axis and tick parameters
-        ax.xaxis.set_major_formatter(date_Fmt)
-        if date_MinTicker == 'second':
-            ax.xaxis.set_minor_locator(SecondLocator())
-        elif date_MinTicker == 'minute':
-            ax.xaxis.set_minor_locator(MinuteLocator())
-        elif date_MinTicker == 'hour':
-            ax.xaxis.set_minor_locator(HourLocator())
-        elif date_MinTicker == 'day':
-            ax.xaxis.set_minor_locator(DayLocator())
 
         # Turn the tick marks outward
         ax.tick_params(which='both', direction='out')

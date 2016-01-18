@@ -137,7 +137,7 @@ def test_radardisplay_user_specified_labels():
     assert ax.get_xlabel() == 'baz'
     assert ax.get_ylabel() == 'qux'
 
-    display._label_axes_vpt(('nick', 'nock'), ax)
+    display._label_axes_vpt(('nick', 'nock'), False, ax)
     assert ax.get_xlabel() == 'nick'
     assert ax.get_ylabel() == 'nock'
     plt.close()

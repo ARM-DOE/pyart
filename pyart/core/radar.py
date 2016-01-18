@@ -1019,7 +1019,7 @@ def join_radar(radar1, radar2):
 
     # to combine times we need to reference them to a standard
     # for this we'll use epoch time
-    ### NG THIS should use new updated datetime_utils if accepted
+    ### TODO Use new updated datetime_utils if accepted
     estring = "seconds since 1970-01-01T00:00:00Z"
     r1dt = num2date(radar1.time['data'], radar1.time['units'])
     r2dt = num2date(radar2.time['data'], radar2.time['units'])
