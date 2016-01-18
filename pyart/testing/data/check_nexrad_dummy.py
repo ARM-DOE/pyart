@@ -10,16 +10,9 @@ OUTPUT_FILE = 'KATX20130717_195021_V06_DUMMY'
 
 
 def test_dummy_similar():
-    radars = pyart.io.read_nexrad_archive(NEXRAD_FILE)
-    r_hi, d_hi, r_sd, d_sd = radars
-
-    radars = pyart.io.read_nexrad_archive(OUTPUT_FILE)
-    R_HI, D_HI, R_SD, D_SD = radars
-
-    assert radars_similar(r_hi, R_HI)
-    assert radars_similar(d_hi, D_HI)
-    assert radars_similar(r_sd, R_SD)
-    assert radars_similar(d_sd, D_SD)
+    radar1 = pyart.io.read_nexrad_archive(NEXRAD_FILE)
+    radar2 = pyart.io.read_nexrad_archive(OUTPUT_FILE)
+    assert radars_similar(radar1, radar2)
 
 
 def radars_similar(r1, r2):
@@ -31,7 +24,6 @@ def radars_similar(r1, r2):
     assert dics_similar(r1.target_scan_rate, r2.target_scan_rate)
     assert dics_similar(r1.scan_rate, r2.scan_rate)
     assert dics_similar(r1.antenna_transition, r2.antenna_transition)
-    assert dics_similar(r1.instrument_parameters, r2.instrument_parameters)
     assert dics_similar(r1.radar_calibration, r2.radar_calibration)
 
     #########################

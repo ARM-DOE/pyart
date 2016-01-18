@@ -15,8 +15,9 @@ are incomplete, they should only be used for testing, not production.
     CHL_RHI_FILE
     SIGMET_PPI_FILE
     SIGMET_RHI_FILE
-    NEXRAD_ARCHIVE_FILE
-    NEXRAD_ARCHIVE_COMPRESSED_FILE
+    NEXRAD_ARCHIVE_MSG31_FILE
+    NEXRAD_ARCHIVE_MSG31_COMPRESSED_FILE
+    NEXRAD_ARCHIVE_MSG1_FILE
     NEXRAD_LEVEL3_MSG19
     NEXRAD_LEVEL3_MSG163
     NEXRAD_CDM_FILE
@@ -37,9 +38,12 @@ CFRADIAL_RHI_FILE = os.path.join(DATA_PATH, 'example_cfradial_rhi.nc')
 CHL_RHI_FILE = os.path.join(DATA_PATH, 'example_chl_rhi.chl')
 SIGMET_PPI_FILE = os.path.join(DATA_PATH, 'example_sigmet_ppi.sigmet')
 SIGMET_RHI_FILE = os.path.join(DATA_PATH, 'example_sigmet_rhi.sigmet')
-NEXRAD_ARCHIVE_FILE = os.path.join(DATA_PATH, 'example_nexrad_archive.bz2')
-NEXRAD_ARCHIVE_COMPRESSED_FILE = os.path.join(
-    DATA_PATH, 'example_nexrad_archive_compressed.ar2v')
+NEXRAD_ARCHIVE_MSG31_FILE = os.path.join(
+    DATA_PATH, 'example_nexrad_archive_msg31.bz2')
+NEXRAD_ARCHIVE_MSG31_COMPRESSED_FILE = os.path.join(
+    DATA_PATH, 'example_nexrad_archive_msg31_compressed.ar2v')
+NEXRAD_ARCHIVE_MSG1_FILE = os.path.join(
+    DATA_PATH, 'example_nexrad_archive_msg1.bz2')
 # NEXRAD Level 3 file downloaded from NCDC with filenames:
 # KBMX_SDUS54_N0RBMX_201501020205
 # KBMX_SDUS84_N0KBMX_201501020205
