@@ -27,7 +27,8 @@ Core functions
 
 """
 
-from .radar import Radar, is_vpt, to_vpt
+from .radar import Radar
 from .grid import Grid
+from ..util.radar_utils import is_vpt, to_vpt
 
 __all__ = [s for s in dir() if not s.startswith('_')]
