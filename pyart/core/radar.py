@@ -1026,6 +1026,7 @@ def join_radar(radar1, radar2):
     r2num = date2num(r2dt, estring)
     new_radar.time['data'] = np.append(r1num, r2num)
     new_radar.time['units'] = estring
+    ### TODO Use new updated datetime_utils if accepted
 
     for var in new_radar.fields.keys():
         sh1 = radar1.fields[var]['data'].shape
