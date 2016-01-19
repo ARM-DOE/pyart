@@ -7,7 +7,7 @@ import copy
 import numpy as np
 from netCDF4 import num2date, date2num
 
-import .datetime_utils
+from . import datetime_utils
 
 
 
