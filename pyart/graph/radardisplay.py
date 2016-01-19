@@ -116,7 +116,6 @@ class RadarDisplay(object):
         units = radar.time['units']
         calendar = radar.time['calendar']
         self.time_begin = netCDF4.num2date(times, units, calendar)
-        self.times = datetimes_from_radar(radar)
 
         # sweep start and end indices
         self.starts = radar.sweep_start_ray_index['data']
@@ -587,7 +586,7 @@ class RadarDisplay(object):
         # set up the time axis
         if time_axis_flag:
             self._set_vpt_time_axis(ax, date_time_form=date_time_form, tz=tz)
-            x = self.times
+            x = datetimes_from_radar(radar)
 
         # mask the data where outside the limits
         if mask_outside:
@@ -1063,8 +1062,6 @@ class RadarDisplay(object):
         """
         if date_time_form is None:
             date_time_form = '%H:%M'
-        if date_MinTicker is None:
-            date_MinTicker = 'minute'
 
         # Set the date format
         date_Fmt = DateFormatter(date_time_form, tz=tz)

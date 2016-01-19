@@ -35,7 +35,6 @@ from netCDF4 import num2date, date2num
 from ..config import get_metadata
 from ..lazydict import LazyLoadDict
 from .transforms import antenna_vectors_to_cartesian, cartesian_to_geographic
-from ..util import datetime_utils
 
 
 class Radar(object):
@@ -1028,9 +1027,6 @@ def join_radar(radar1, radar2):
     new_radar.time['data'] = np.append(r1num, r2num)
     new_radar.time['units'] = estring
     ### TODO Use new updated datetime_utils if accepted
-    # r1num = datetime_utils.datetimes_from_radar(radar1, epoch=True)
-    # r2num = datetime_utils.datetimes_from_radar(radar2, epoch=True)
-    # new_radar.time['units'] = datetime_utils.get_epoch_units()
 
     for var in new_radar.fields.keys():
         sh1 = radar1.fields[var]['data'].shape
