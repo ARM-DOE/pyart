@@ -57,7 +57,3 @@ def datetime_from_grid(grid, epoch=False):
         return num2date(epnum, EPOCH_UNITS)
     else:
         return num2date(grid.time['data'][0], grid.time['units'])
-
-def get_epoch_units():
-    """ Return the units of the standard Unix epoch time. """
-    return EPOCH_UNITS
