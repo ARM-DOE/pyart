@@ -132,11 +132,6 @@ def join_radar(radar1, radar2):
     estring = "seconds since 1970-01-01T00:00:00Z"
     r1dt = num2date(radar1.time['data'], radar1.time['units'])
     r2dt = num2date(radar2.time['data'], radar2.time['units'])
-#    r1num = date2num(r1dt, estring)
-#    r2num = date2num(r2dt, estring)
-#    new_radar.time['data'] = np.append(r1num, r2num)
-#    new_radar.time['units'] = estring
-    ### TODO Use new updated datetime_utils if accepted
     r1num = datetime_utils.datetimes_from_radar(radar1, epoch=True)
     r2num = datetime_utils.datetimes_from_radar(radar2, epoch=True)
     new_radar.time['data'] = np.append(r1num, r2num)
@@ -146,7 +141,6 @@ def join_radar(radar1, radar2):
     for var in new_radar.fields.keys():
         sh1 = radar1.fields[var]['data'].shape
         sh2 = radar2.fields[var]['data'].shape
-#        print(sh1, sh2)
         new_field = np.ma.zeros([sh1[0] + sh2[0],
                                 max([sh1[1], sh2[1]])]) - 9999.0
         new_field[0:sh1[0], 0:sh1[1]] = radar1.fields[var]['data']
