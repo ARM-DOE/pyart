@@ -1,4 +1,16 @@
-""" Functions for working radar instances. """
+"""
+pyart.util.radar_utils
+======================
+
+Functions for working radar instances.
+
+.. autosummary::
+    :toctree: generated/
+
+    is_vpt
+    to_vpt
+    join_radar
+"""
 
 from __future__ import print_function
 
@@ -8,8 +20,6 @@ import numpy as np
 from netCDF4 import num2date, date2num
 
 from . import datetime_utils
-
-
 
 
 def is_vpt(radar, offset=0.5):
@@ -137,7 +147,6 @@ def join_radar(radar1, radar2):
     new_radar.time['data'] = np.append(r1num, r2num)
     new_radar.time['units'] = datetime_utils.EPOCH_UNITS
 
-
     for var in new_radar.fields.keys():
         sh1 = radar1.fields[var]['data'].shape
         sh2 = radar2.fields[var]['data'].shape
@@ -150,11 +159,11 @@ def join_radar(radar1, radar2):
     # radar locations
     # TODO moving platforms - any more?
     if (len(radar1.latitude['data']) == 1 &
-        len(radar2.latitude['data']) == 1 &
-        len(radar1.longitude['data']) == 1 &
-        len(radar2.longitude['data']) == 1 &
-        len(radar1.altitude['data']) == 1 &
-        len(radar2.altitude['data']) == 1):
+            len(radar2.latitude['data']) == 1 &
+            len(radar1.longitude['data']) == 1 &
+            len(radar2.longitude['data']) == 1 &
+            len(radar1.altitude['data']) == 1 &
+            len(radar2.altitude['data']) == 1):
 
         lat1 = float(radar1.latitude['data'])
         lon1 = float(radar1.longitude['data'])
@@ -178,7 +187,7 @@ def join_radar(radar1, radar2):
         new_radar.latitude['data'] = np.append(radar1.latitude['data'],
                                                radar2.latitude['data'])
         new_radar.longitude['data'] = np.append(radar1.longitude['data'],
-                                               radar2.longitude['data'])
+                                                radar2.longitude['data'])
         new_radar.altitude['data'] = np.append(radar1.altitude['data'],
                                                radar2.altitude['data'])
     return new_radar
