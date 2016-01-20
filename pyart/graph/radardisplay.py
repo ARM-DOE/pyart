@@ -586,7 +586,7 @@ class RadarDisplay(object):
         # set up the time axis
         if time_axis_flag:
             self._set_vpt_time_axis(ax, date_time_form=date_time_form, tz=tz)
-            x = datetimes_from_radar(radar)
+            x = datetimes_from_radar(self._radar)
 
         # mask the data where outside the limits
         if mask_outside:
