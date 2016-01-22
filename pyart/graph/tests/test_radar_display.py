@@ -67,6 +67,7 @@ def test_radardisplay_vpt(outfile=None):
         fig.savefig(outfile)
     plt.close()
 
+
 def test_radardisplay_vpt_time(outfile=None):
     radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
     pyart.util.to_vpt(radar)      # hack to make the data a VPT
@@ -79,6 +80,7 @@ def test_radardisplay_vpt_time(outfile=None):
     if outfile:
         fig.savefig(outfile)
     plt.close()
+
 
 def test_radardisplay_azimuth_to_rhi(outfile=None):
     radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
