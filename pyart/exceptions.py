@@ -48,8 +48,8 @@ def _depreciated_alias(func, old_name, new_name):
     """
     def wrapper(*args, **kwargs):
         warnings.warn(
-            ("{} has been depreciated and will be removed in future " +
-             "versions of Py-ART, pleases use {}. ").format(
+            ("{0} has been depreciated and will be removed in future " +
+             "versions of Py-ART, pleases use {1}. ").format(
                 old_name, new_name), category=DepreciatedFunctionName)
         return func(*args, **kwargs)
     return wrapper
