@@ -586,7 +586,7 @@ class RadarDisplay(object):
         # set up the time axis
         if time_axis_flag:
             self._set_vpt_time_axis(ax, date_time_form=date_time_form, tz=tz)
-            x = datetimes_from_radar(radar)
+            x = datetimes_from_radar(self._radar)
 
         # mask the data where outside the limits
         if mask_outside:
@@ -1065,6 +1065,7 @@ class RadarDisplay(object):
 
         # Set the date format
         date_Fmt = DateFormatter(date_time_form, tz=tz)
+        ax.xaxis.set_major_formatter(date_Fmt)
 
         # Turn the tick marks outward
         ax.tick_params(which='both', direction='out')
