@@ -639,10 +639,10 @@ def convert_sigmet_data(data_type, data, nbins):
     ]
 
     like_sqi = [
-		'RHOH',     # 1-byte Rho Format, section 4.3.21
-		'RHOV',     # " "
-		'RHOHV',    # 1-byte RhoHV Format, section 4.3.23
-		'SQI',      # 1-byte Signal Quality Index Format, section 4.3.26
+        'RHOH',     # 1-byte Rho Format, section 4.3.21
+        'RHOV',     # " "
+        'RHOHV',    # 1-byte RhoHV Format, section 4.3.23
+        'SQI',      # 1-byte Signal Quality Index Format, section 4.3.26
     ]
 
     like_sqi2 = [
