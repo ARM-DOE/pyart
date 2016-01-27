@@ -46,8 +46,6 @@ class RadarDisplay(object):
         List of fields plotted, order matches plot list.
     cbs : list
         List of colorbars created.
-    radar_name : str
-        Name of radar.
     origin : str
         'Origin' or 'Radar'.
     shift : (float, float)
@@ -90,10 +88,6 @@ class RadarDisplay(object):
             self.antenna_transition = None
         else:
             self.antenna_transition = radar.antenna_transition['data']
-        if 'instrument_name' in radar.metadata:
-            self.radar_name = radar.metadata['instrument_name']
-        else:
-            self.radar_name = ''
 
         # origin
         if shift != (0.0, 0.0):
@@ -136,6 +130,17 @@ class RadarDisplay(object):
         units = self._radar.time['units']
         calendar = self._radar.time['calendar']
         return netCDF4.num2date(times, units, calendar)
+
+    @property
+    def radar_name(self):
+        warnings.warn(
+            "The 'radar_name' attribute has been depreciated and will be "
+            "removed in future versions of Py-ART",
+            category=DepreciatedAttribute)
+        if 'instrument_name' in self._radar.metadata:
+            return self._radar.metadata['instrument_name']
+        else:
+            return ''
 
     def _calculate_localization(self, radar):
         """ Calculate self.x, self.y, self.z and self.loc. """

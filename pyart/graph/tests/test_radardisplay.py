@@ -120,11 +120,7 @@ def test_radardisplay_init():
     radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
     radar.antenna_transition = {'data': np.zeros((40, ))}
     display = pyart.graph.RadarDisplay(radar)
-    assert display.radar_name == 'xsapr-sgp'
     assert display.antenna_transition is not None
-    del radar.metadata['instrument_name']
-    display = pyart.graph.RadarDisplay(radar)
-    assert display.radar_name == ''
     plt.close()
 
 
@@ -294,6 +290,10 @@ def test_starts_ends():
         assert len(display.starts) == 1
         assert len(display.ends) == 1
         assert display.time_begin == datetime.datetime(1989, 1, 1, 0, 0, 1)
+        assert display.radar_name == 'fake_radar'
+
+        del radar.metadata['instrument_name']
+        assert display.radar_name == ''
 
 
 

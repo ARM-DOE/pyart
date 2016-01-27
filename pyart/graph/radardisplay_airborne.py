@@ -40,8 +40,6 @@ class AirborneRadarDisplay(RadarDisplay):
         List of fields plotted, order matches plot list.
     cbs : list
         List of colorbars created.
-    radar_name : str
-        Name of radar.
     origin : str
         'Origin' or 'Radar'.
     shift : (float, float)
