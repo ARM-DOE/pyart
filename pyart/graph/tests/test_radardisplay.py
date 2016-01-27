@@ -8,8 +8,11 @@
 from __future__ import print_function
 
 import matplotlib.pyplot as plt
+
+import numpy as np
+from numpy.testing import assert_raises, assert_almost_equal, assert_warns
+
 import pyart
-from numpy.testing import assert_raises
 
 
 # Top level Figure generating tests
@@ -18,7 +21,7 @@ def test_radardisplay_rhi(outfile=None):
     display = pyart.graph.RadarDisplay(radar)
     fig = plt.figure()
     ax = fig.add_subplot(111)
-    display.plot('reflectivity_horizontal', 0, ax=ax)
+    display.plot('reflectivity_horizontal', 0, ax=ax, mask_outside=True)
     if outfile:
         fig.savefig(outfile)
     plt.close()
@@ -26,16 +29,22 @@ def test_radardisplay_rhi(outfile=None):
 
 def test_radardisplay_ppi(outfile=None):
     radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
+    radar.antenna_transition = {'data': np.zeros(radar.nrays)}
     display = pyart.graph.RadarDisplay(radar, shift=(0.1, 0.0))
     fig = plt.figure()
     ax = fig.add_subplot(111)
+
+    gatefilter = pyart.filters.GateFilter(radar)
     display.plot('reflectivity_horizontal', 0, colorbar_flag=True,
-                 title="Fancy PPI Plot",
-                 mask_tuple=('reflectivity_horizontal', -100))
+                 title="Fancy PPI Plot", mask_outside=True,
+                 mask_tuple=('reflectivity_horizontal', -100),
+                 gatefilter=gatefilter)
     display.plot_colorbar()
     display.plot_range_rings([10, 20, 30, 40], ax=ax)
     display.plot_labels(['tree'], [(36.68, -97.62)], symbols='k+', ax=ax)
     display.plot_cross_hair(2)
+    display.plot_grid_lines()
+    display.set_aspect_ratio()
     display.set_limits(ylim=[-50, 50], xlim=[-50, 50])
     if outfile:
         fig.savefig(outfile)
@@ -47,9 +56,9 @@ def test_radardisplay_ray(outfile=None):
     display = pyart.graph.RadarDisplay(radar)
     fig = plt.figure()
     ax = fig.add_subplot(111)
-    display.plot_ray('reflectivity_horizontal', 0, ray_min=15, ray_max=40,
-                     mask_outside=True, ax=ax,
-                     mask_tuple=('reflectivity_horizontal', -10))
+    display.plot_ray(
+        'reflectivity_horizontal', 0, ray_min=15, ray_max=40,
+        mask_outside=True, ax=ax, mask_tuple=('reflectivity_horizontal', -10))
     if outfile:
         fig.savefig(outfile)
     plt.close()
@@ -57,12 +66,14 @@ def test_radardisplay_ray(outfile=None):
 
 def test_radardisplay_vpt(outfile=None):
     radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
+    radar.antenna_transition = {'data': np.zeros(radar.nrays)}
     pyart.util.to_vpt(radar)      # hack to make the data a VPT
     display = pyart.graph.RadarDisplay(radar)
     fig = plt.figure()
     ax = fig.add_subplot(111)
-    display.plot('reflectivity_horizontal', colorbar_flag=True,
-                 mask_tuple=('reflectivity_horizontal', -100), ax=ax)
+    display.plot(
+        'reflectivity_horizontal', colorbar_flag=True, mask_outside=True,
+        mask_tuple=('reflectivity_horizontal', -100), ax=ax)
     if outfile:
         fig.savefig(outfile)
     plt.close()
@@ -75,7 +86,7 @@ def test_radardisplay_vpt_time(outfile=None):
     fig = plt.figure()
     ax = fig.add_subplot(111)
     display.plot('reflectivity_horizontal', colorbar_flag=True,
-                 time_axis_flag=True,
+                 time_axis_flag=True, edges=False,
                  mask_tuple=('reflectivity_horizontal', -100), ax=ax)
     if outfile:
         fig.savefig(outfile)
@@ -84,12 +95,15 @@ def test_radardisplay_vpt_time(outfile=None):
 
 def test_radardisplay_azimuth_to_rhi(outfile=None):
     radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
+    radar.antenna_transition = {'data': np.zeros(radar.nrays)}
+    gatefilter = pyart.filters.GateFilter(radar)
     display = pyart.graph.RadarDisplay(radar)
     fig = plt.figure()
     ax = fig.add_subplot(111)
-    display.plot_azimuth_to_rhi('reflectivity_horizontal', 45.,
-                                colorbar_flag=True, ax=ax,
-                                mask_tuple=('reflectivity_horizontal', -100))
+    display.plot_azimuth_to_rhi(
+        'reflectivity_horizontal', 45., colorbar_flag=True, ax=ax,
+        mask_tuple=('reflectivity_horizontal', -100), mask_outside=True,
+        gatefilter=gatefilter)
     if outfile:
         fig.savefig(outfile)
     plt.close()
@@ -100,11 +114,32 @@ def test_radardisplay_azimuth_to_rhi(outfile=None):
 def test_radardisplay_init():
     # test that a display object can be created with and without
     radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
+    radar.antenna_transition = {'data': np.zeros((40, ))}
     display = pyart.graph.RadarDisplay(radar)
     assert display.radar_name == 'xsapr-sgp'
+    assert display.antenna_transition is not None
     del radar.metadata['instrument_name']
     display = pyart.graph.RadarDisplay(radar)
     assert display.radar_name == ''
+    plt.close()
+
+
+def test_radardisplay_plot_rhi_reverse():
+    radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_RHI_FILE)
+    display = pyart.graph.RadarDisplay(radar)
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    display.plot('reflectivity_horizontal', 0, ax=ax, reverse_xaxis=True)
+    plt.close()
+
+
+def test_radardisplay_plot_azimuth_to_rhi_reverse(outfile=None):
+    radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
+    display = pyart.graph.RadarDisplay(radar)
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    display.plot_azimuth_to_rhi(
+        'reflectivity_horizontal', 45., reverse_xaxis=True)
     plt.close()
 
 
@@ -158,6 +193,36 @@ def test_radardisplay_user_specified_labels():
     plt.close()
 
 
+def test_radardisplay_calculate_localization():
+    radar = pyart.testing.make_empty_ppi_radar(1, 1, 1)
+    display = pyart.graph.RadarDisplay(radar)
+
+    radar.latitude['data'] = np.array([35, 45])
+    radar.longitude['data'] = np.array([75, 85])
+    assert_warns(UserWarning, display._calculate_localization, radar)
+    assert_almost_equal(display.loc, (40, 80), 0)
+
+
+def test_radardisplay_get_x_z():
+    radar = pyart.testing.make_empty_ppi_radar(1, 1, 1)
+    display = pyart.graph.RadarDisplay(radar)
+    radar.fields['foo'] = {}
+    x, z = display._get_x_z('foo', 0, False, False)
+    assert x.shape == (1, 1)
+    assert z.shape == (1, 1)
+
+
+def test_set_title():
+    radar = pyart.testing.make_empty_ppi_radar(1, 1, 1)
+    radar.fields['foo'] = {}
+    display = pyart.graph.RadarDisplay(radar)
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+
+    display._set_az_rhi_title('foo', 0, 'special title', ax)
+    assert ax.get_title() == 'special title'
+
+
 def test_radardisplay_misc():
     # misc methods which are not tested above
     radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
@@ -170,15 +235,18 @@ def test_radardisplay_misc():
     assert ax.get_title() == 'title_string'
 
     # _generate_field_name method
-    fn = pyart.graph.common.generate_field_name(radar, 'reflectivity_horizontal')
+    fn = pyart.graph.common.generate_field_name(
+        radar, 'reflectivity_horizontal')
     assert fn == 'Equivalent reflectivity factor'
 
     display.fields['reflectivity_horizontal'].pop('standard_name')
-    fn = pyart.graph.common.generate_field_name(radar, 'reflectivity_horizontal')
+    fn = pyart.graph.common.generate_field_name(
+        radar, 'reflectivity_horizontal')
     assert fn == 'Reflectivity'
 
     display.fields['reflectivity_horizontal'].pop('long_name')
-    fn = pyart.graph.common.generate_field_name(radar, 'reflectivity_horizontal')
+    fn = pyart.graph.common.generate_field_name(
+        radar, 'reflectivity_horizontal')
     assert fn == 'Reflectivity horizontal'
 
     plt.close()
