@@ -298,8 +298,7 @@ class RadarDisplay(object):
                  cmap='jet', mask_outside=False, title=None, title_flag=True,
                  axislabels=(None, None), axislabels_flag=True,
                  colorbar_flag=True, colorbar_label=None,
-                 colorbar_orient='vertical', edges=True,
-                 gatefilter=None,
+                 colorbar_orient='vertical', edges=True, gatefilter=None,
                  filter_transitions=True, ax=None, fig=None):
         """
         Plot a PPI.
@@ -1293,14 +1292,12 @@ class RadarDisplay(object):
 
     def _get_x_z(self, field, sweep, edges, filter_transitions):
         """ Retrieve and return x and y coordinate in km. """
-        x, _, z = self._get_x_y_z(field, sweep, edges,
-                                  filter_transitions=filter_transitions)
+        x, _, z = self._get_x_y_z(field, sweep, edges, filter_transitions)
         return x, z
 
     def _get_x_y(self, field, sweep, edges, filter_transitions):
         """ Retrieve and return x and y coordinate in km. """
-        x, y, _ = self._get_x_y_z(field, sweep, edges,
-                                  filter_transitions=filter_transitions)
+        x, y, _ = self._get_x_y_z(field, sweep, edges, filter_transitions)
         return x, y
 
     def _get_x_y_z(self, field, sweep, edges, filter_transitions):
