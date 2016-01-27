@@ -28,7 +28,7 @@ from ..exceptions import MissingOptionalDependency
 from ..core.transforms import _interpolate_axes_edges
 
 
-class GridMapDisplay():
+class GridMapDisplay(object):
     """
     A class for creating plots from a grid object on top of a Basemap.
 
@@ -76,8 +76,8 @@ class GridMapDisplay():
         # set up the projection
         lat0 = grid.origin_latitude['data'][0]
         lon0 = grid.origin_longitude['data'][0]
-        self.proj = pyproj.Proj(proj='aeqd', datum='NAD83',
-                                lat_0=lat0, lon_0=lon0)
+        self.proj = pyproj.Proj(
+            proj='aeqd', datum='NAD83', lat_0=lat0, lon_0=lon0)
 
         # determine grid latitudes and longitudes.
         x_1d = grid.x['data']
@@ -91,11 +91,10 @@ class GridMapDisplay():
         self.origin = 'origin'
         self.basemap = None
 
-    def plot_basemap(self, lat_lines=None, lon_lines=None,
-                     resolution='l', area_thresh=10000,
-                     auto_range=True,
-                     min_lon=-92, max_lon=-86, min_lat=40, max_lat=44,
-                     ax=None, **kwargs):
+    def plot_basemap(
+            self, lat_lines=None, lon_lines=None, resolution='l',
+            area_thresh=10000, auto_range=True, min_lon=-92, max_lon=-86,
+            min_lat=40, max_lat=44, ax=None, **kwargs):
         """
         Plot a basemap.
 
@@ -136,16 +135,17 @@ class GridMapDisplay():
 
         self.basemap.drawcoastlines(linewidth=1.25)
         self.basemap.drawstates()
-        self.basemap.drawparallels(lat_lines,
-                                   labels=[True, False, False, False])
-        self.basemap.drawmeridians(lon_lines,
-                                   labels=[False, False, False, True])
+        self.basemap.drawparallels(
+            lat_lines, labels=[True, False, False, False])
+        self.basemap.drawmeridians(
+            lon_lines, labels=[False, False, False, True])
 
-    def plot_grid(self, field, level=0, vmin=None, vmax=None, cmap='jet',
-                  mask_outside=False, title=None, title_flag=True,
-                  axislabels=(None, None), axislabels_flag=False,
-                  colorbar_flag=True, colorbar_label=None,
-                  colorbar_orient='vertical', edges=True, ax=None, fig=None):
+    def plot_grid(
+            self, field, level=0, vmin=None, vmax=None, cmap='jet',
+            mask_outside=False, title=None, title_flag=True,
+            axislabels=(None, None), axislabels_flag=False,
+            colorbar_flag=True, colorbar_label=None,
+            colorbar_orient='vertical', edges=True, ax=None, fig=None):
         """
         Plot the grid onto the current basemap.
 
@@ -237,14 +237,14 @@ class GridMapDisplay():
             self._label_axes_grid(axislabels, ax)
 
         if colorbar_flag:
-            self.plot_colorbar(mappable=pm, label=colorbar_label,
-                               orientation=colorbar_orient,
-                               field=field, ax=ax, fig=fig)
+            self.plot_colorbar(
+                mappable=pm, label=colorbar_label, orientation=colorbar_orient,
+                field=field, ax=ax, fig=fig)
 
         return
 
-    def plot_crosshairs(self, lon=None, lat=None,
-                        line_style='r--', linewidth=2, ax=None):
+    def plot_crosshairs(
+            self, lon=None, lat=None, line_style='r--', linewidth=2, ax=None):
         """
         Plot crosshairs at a given longitude and latitude.
 
@@ -277,13 +277,12 @@ class GridMapDisplay():
         ax.plot(x_lat, y_lat, line_style, linewidth=linewidth)
         return
 
-    def plot_latitude_slice(self, field, lon=None, lat=None,
-                            vmin=None, vmax=None, cmap='jet',
-                            mask_outside=False, title=None, title_flag=True,
-                            axislabels=(None, None), axislabels_flag=True,
-                            colorbar_flag=True, colorbar_label=None,
-                            colorbar_orient='vertical', edges=True, ax=None,
-                            fig=None):
+    def plot_latitude_slice(
+            self, field, lon=None, lat=None, vmin=None, vmax=None, cmap='jet',
+            mask_outside=False, title=None, title_flag=True,
+            axislabels=(None, None), axislabels_flag=True, colorbar_flag=True,
+            colorbar_label=None, colorbar_orient='vertical', edges=True,
+            ax=None, fig=None):
         """
         Plot a slice along a given latitude.
 
@@ -337,8 +336,7 @@ class GridMapDisplay():
 
         """
         # parse parameters
-
-        x_index, y_index = self._find_nearest_grid_indices(lon, lat)
+        _, y_index = self._find_nearest_grid_indices(lon, lat)
         self.plot_latitudinal_level(
             field=field, y_index=y_index, vmin=vmin, vmax=vmax, cmap=cmap,
             mask_outside=mask_outside, title=title, title_flag=title_flag,
@@ -346,13 +344,12 @@ class GridMapDisplay():
             colorbar_flag=colorbar_flag, colorbar_label=colorbar_label,
             colorbar_orient=colorbar_orient, edges=edges, ax=ax, fig=fig)
 
-    def plot_latitudinal_level(self, field, y_index,
-                               vmin=None, vmax=None, cmap='jet',
-                               mask_outside=False, title=None, title_flag=True,
-                               axislabels=(None, None), axislabels_flag=True,
-                               colorbar_flag=True, colorbar_label=None,
-                               colorbar_orient='vertical', edges=True,
-                               ax=None, fig=None):
+    def plot_latitudinal_level(
+            self, field, y_index, vmin=None, vmax=None, cmap='jet',
+            mask_outside=False, title=None, title_flag=True,
+            axislabels=(None, None), axislabels_flag=True, colorbar_flag=True,
+            colorbar_label=None, colorbar_orient='vertical', edges=True,
+            ax=None, fig=None):
         """
         Plot a slice along a given latitude.
 
@@ -408,8 +405,6 @@ class GridMapDisplay():
         ax, fig = common.parse_ax_fig(ax, fig)
         vmin, vmax = common.parse_vmin_vmax(self.grid, field, vmin, vmax)
 
-        basemap = self.get_basemap()
-
         data = self.grid.fields[field]['data'][:, y_index, :]
 
         # mask the data where outside the limits
@@ -441,18 +436,17 @@ class GridMapDisplay():
             self._label_axes_latitude(axislabels, ax)
 
         if colorbar_flag:
-            self.plot_colorbar(mappable=pm, label=colorbar_label,
-                               orientation=colorbar_orient,
-                               field=field, ax=ax, fig=fig)
+            self.plot_colorbar(
+                mappable=pm, label=colorbar_label, orientation=colorbar_orient,
+                field=field, ax=ax, fig=fig)
         return
 
-    def plot_longitude_slice(self, field, lon=None, lat=None,
-                             vmin=None, vmax=None, cmap='jet',
-                             mask_outside=False, title=None, title_flag=True,
-                             axislabels=(None, None), axislabels_flag=True,
-                             colorbar_flag=True, colorbar_label=None,
-                             colorbar_orient='vertical', edges=True, ax=None,
-                             fig=None):
+    def plot_longitude_slice(
+            self, field, lon=None, lat=None, vmin=None, vmax=None, cmap='jet',
+            mask_outside=False, title=None, title_flag=True,
+            axislabels=(None, None), axislabels_flag=True, colorbar_flag=True,
+            colorbar_label=None, colorbar_orient='vertical', edges=True,
+            ax=None, fig=None):
         """
         Plot a slice along a given longitude.
 
@@ -505,7 +499,7 @@ class GridMapDisplay():
             Figure to add the colorbar to. None will use the current figure.
 
         """
-        x_index, y_index = self._find_nearest_grid_indices(lon, lat)
+        x_index, _ = self._find_nearest_grid_indices(lon, lat)
         self.plot_longitudinal_level(
             field=field, x_index=x_index, vmin=vmin, vmax=vmax, cmap=cmap,
             mask_outside=mask_outside, title=title, title_flag=title_flag,
@@ -513,14 +507,12 @@ class GridMapDisplay():
             colorbar_flag=colorbar_flag, colorbar_label=colorbar_label,
             colorbar_orient=colorbar_orient, edges=edges, ax=ax, fig=fig)
 
-    def plot_longitudinal_level(self, field, x_index,
-                                vmin=None, vmax=None, cmap='jet',
-                                mask_outside=False, title=None,
-                                title_flag=True, axislabels=(None, None),
-                                axislabels_flag=True, colorbar_flag=True,
-                                colorbar_label=None,
-                                colorbar_orient='vertical', edges=True,
-                                ax=None, fig=None):
+    def plot_longitudinal_level(
+            self, field, x_index, vmin=None, vmax=None, cmap='jet',
+            mask_outside=False, title=None, title_flag=True,
+            axislabels=(None, None), axislabels_flag=True, colorbar_flag=True,
+            colorbar_label=None, colorbar_orient='vertical', edges=True,
+            ax=None, fig=None):
         """
         Plot a slice along a given longitude.
 
@@ -576,8 +568,6 @@ class GridMapDisplay():
         ax, fig = common.parse_ax_fig(ax, fig)
         vmin, vmax = common.parse_vmin_vmax(self.grid, field, vmin, vmax)
 
-        basemap = self.get_basemap()
-
         data = self.grid.fields[field]['data'][:, :, x_index]
 
         # mask the data where outside the limits
@@ -609,13 +599,14 @@ class GridMapDisplay():
             self._label_axes_longitude(axislabels, ax)
 
         if colorbar_flag:
-            self.plot_colorbar(mappable=pm, label=colorbar_label,
-                               orientation=colorbar_orient,
-                               field=field, ax=ax, fig=fig)
+            self.plot_colorbar(
+                mappable=pm, label=colorbar_label, orientation=colorbar_orient,
+                field=field, ax=ax, fig=fig)
         return
 
-    def plot_colorbar(self, mappable=None, orientation='horizontal',
-                      label=None, cax=None, ax=None, fig=None, field=None):
+    def plot_colorbar(
+            self, mappable=None, orientation='horizontal', label=None,
+            cax=None, ax=None, fig=None, field=None):
         """
         Plot a colorbar.
 
@@ -663,9 +654,10 @@ class GridMapDisplay():
 
         return
 
-    def _make_basemap(self, resolution='l', area_thresh=10000,
-                      auto_range=True, min_lon=-92, max_lon=-86,
-                      min_lat=40, max_lat=44, ax=None, **kwargs):
+    def _make_basemap(
+            self, resolution='l', area_thresh=10000, auto_range=True,
+            min_lon=-92, max_lon=-86, min_lat=40, max_lat=44, ax=None,
+            **kwargs):
         """
         Make a basemap.
 
@@ -762,15 +754,15 @@ class GridMapDisplay():
 
     def _get_label_x(self):
         """ Get default label for x units. """
-        return ('East West distance from ' + self.origin + ' (km)')
+        return 'East West distance from ' + self.origin + ' (km)'
 
     def _get_label_y(self):
         """ Get default label for y units. """
-        return ('North South distance from ' + self.origin + ' (km)')
+        return 'North South distance from ' + self.origin + ' (km)'
 
     def _get_label_z(self):
         """ Get default label for z units. """
-        return ('Distance Above ' + self.origin + '  (km)')
+        return 'Distance Above ' + self.origin + '  (km)'
 
     def _label_axes_grid(self, axis_labels, ax):
         """ Set the x and y axis labels for a grid plot. """
@@ -866,8 +858,8 @@ class GridMapDisplay():
             Plot title.
 
         """
-        return common.generate_longitudinal_level_title(self.grid, field,
-                                                        level)
+        return common.generate_longitudinal_level_title(
+            self.grid, field, level)
 
     def generate_latitudinal_level_title(self, field, level):
         """
@@ -886,8 +878,8 @@ class GridMapDisplay():
             Plot title.
 
         """
-        return common.generate_latitudinal_level_title(self.grid, field,
-                                                       level)
+        return common.generate_latitudinal_level_title(
+            self.grid, field, level)
 
     ##########################
     #      get methods       #
