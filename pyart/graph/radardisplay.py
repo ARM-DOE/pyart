@@ -296,7 +296,7 @@ class RadarDisplay(object):
 
     def plot_ppi(
             self, field, sweep=0, mask_tuple=None,
-            vmin=None, vmax=None, norm=None, cmap='jet', mask_outside=False,
+            vmin=None, vmax=None, norm=None, cmap=None, mask_outside=False,
             title=None, title_flag=True,
             axislabels=(None, None), axislabels_flag=True,
             colorbar_flag=True, colorbar_label=None,
@@ -330,8 +330,9 @@ class RadarDisplay(object):
             matplotlib Normalize instance used to scale luminance data.  If not
             None the vmax and vmin parameters are ignored.  If None, vmin and
             vmax are used for luminance scaling.
-        cmap : str
-            Matplotlib colormap name.
+        cmap : str or None
+            Matplotlib colormap name. None will use the default colormap for
+            the field being plotted as specified by the Py-ART configuration.
         mask_outside : bool
             True to mask data outside of vmin, vmax.  False performs no
             masking.
@@ -380,6 +381,7 @@ class RadarDisplay(object):
         ax, fig = common.parse_ax_fig(ax, fig)
         norm, vmin, vmax = common.parse_norm_vmin_vmax(
             norm, self._radar, field, vmin, vmax)
+        cmap = common.parse_cmap(cmap, field)
 
         # get data for the plot
         data = self._get_data(
@@ -410,7 +412,7 @@ class RadarDisplay(object):
 
     def plot_rhi(
             self, field, sweep=0, mask_tuple=None,
-            vmin=None, vmax=None, norm=None, cmap='jet',
+            vmin=None, vmax=None, norm=None, cmap=None,
             mask_outside=False, title=None, title_flag=True,
             axislabels=(None, None), axislabels_flag=True,
             reverse_xaxis=None, colorbar_flag=True, colorbar_label=None,
@@ -444,8 +446,9 @@ class RadarDisplay(object):
             matplotlib Normalize instance used to scale luminance data.  If not
             None the vmax and vmin parameters are ignored.  If None, vmin and
             vmax are used for luminance scaling.
-        cmap : str
-            Matplotlib colormap name.
+        cmap : str or None
+            Matplotlib colormap name. None will use the default colormap for
+            the field being plotted as specified by the Py-ART configuration.
         title : str
             Title to label plot with, None to use default title generated from
             the field and sweep parameters. Parameter is ignored if title_flag
@@ -495,6 +498,7 @@ class RadarDisplay(object):
         ax, fig = common.parse_ax_fig(ax, fig)
         norm, vmin, vmax = common.parse_norm_vmin_vmax(
             norm, self._radar, field, vmin, vmax)
+        cmap = common.parse_cmap(cmap, field)
 
         # get data for the plot
         data = self._get_data(
@@ -531,7 +535,7 @@ class RadarDisplay(object):
 
     def plot_vpt(
             self, field, mask_tuple=None,
-            vmin=None, vmax=None, norm=None, cmap='jet', mask_outside=False,
+            vmin=None, vmax=None, norm=None, cmap=None, mask_outside=False,
             title=None, title_flag=True,
             axislabels=(None, None), axislabels_flag=True,
             colorbar_flag=True, colorbar_label=None,
@@ -564,8 +568,9 @@ class RadarDisplay(object):
             matplotlib Normalize instance used to scale luminance data.  If not
             None the vmax and vmin parameters are ignored.  If None, vmin and
             vmax are used for luminance scaling.
-        cmap : str
-            Matplotlib colormap name.
+        cmap : str or None
+            Matplotlib colormap name. None will use the default colormap for
+            the field being plotted as specified by the Py-ART configuration.
         mask_outside : bool
             True to mask data outside of vmin, vmax.  False performs no
             masking.
@@ -620,6 +625,7 @@ class RadarDisplay(object):
         ax, fig = common.parse_ax_fig(ax, fig)
         norm, vmin, vmax = common.parse_norm_vmin_vmax(
             norm, self._radar, field, vmin, vmax)
+        cmap = common.parse_cmap(cmap, field)
 
         # get data for the plot
         data = self._get_vpt_data(field, mask_tuple, filter_transitions)
@@ -664,7 +670,7 @@ class RadarDisplay(object):
 
     def plot_azimuth_to_rhi(
             self, field, target_azimuth, mask_tuple=None,
-            vmin=None, vmax=None, norm=None, cmap='jet', mask_outside=False,
+            vmin=None, vmax=None, norm=None, cmap=None, mask_outside=False,
             title=None, title_flag=True,
             axislabels=(None, None), axislabels_flag=True,
             colorbar_flag=True, colorbar_label=None,
@@ -700,8 +706,9 @@ class RadarDisplay(object):
             matplotlib Normalize instance used to scale luminance data.  If not
             None the vmax and vmin parameters are ignored.  If None, vmin and
             vmax are used for luminance scaling.
-        cmap : str
-            Matplotlib colormap name.
+        cmap : str or None
+            Matplotlib colormap name. None will use the default colormap for
+            the field being plotted as specified by the Py-ART configuration.
         title : str
             Title to label plot with, None to use default title generated from
             the field and sweep parameters. Parameter is ignored if title_flag
@@ -751,6 +758,7 @@ class RadarDisplay(object):
         ax, fig = common.parse_ax_fig(ax, fig)
         norm, vmin, vmax = common.parse_norm_vmin_vmax(
             norm, self._radar, field, vmin, vmax)
+        cmap = common.parse_cmap(cmap, field)
 
         data, x, y, z = self._get_azimuth_rhi_data_x_y_z(
             field, target_azimuth, edges, mask_tuple,

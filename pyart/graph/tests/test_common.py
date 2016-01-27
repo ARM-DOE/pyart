@@ -49,6 +49,11 @@ def test_parse_norm_vmin_vmax():
     assert norm is not None
 
 
+def test_parse_cmap():
+    assert common.parse_cmap('jet', 'foo') == 'jet'
+    assert common.parse_cmap(None, 'reflectivity') == 'pyart_NWSRef'
+
+
 def test_parse_vmin_vmax():
     radar = pyart.testing.make_empty_ppi_radar(1, 1, 1)
     radar.fields['foo'] = {}
