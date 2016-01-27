@@ -254,9 +254,7 @@ class RadarDisplay(object):
         data = self._get_ray_data(field, ray, mask_tuple)
 
         # mask the data where outside the limits
-        if mask_outside:
-            data = np.ma.masked_invalid(data)
-            data = np.ma.masked_outside(data, ray_min, ray_max)
+        _mask_outside(mask_outside, data, ray_min, ray_max)
 
         # plot the data
         line, = ax.plot(self.ranges / 1000., data, format_str)
@@ -349,14 +347,12 @@ class RadarDisplay(object):
         vmin, vmax = common.parse_vmin_vmax(self._radar, field, vmin, vmax)
 
         # get data for the plot
-        data = self._get_data(field, sweep, mask_tuple, filter_transitions,
-                              gatefilter)
+        data = self._get_data(
+            field, sweep, mask_tuple, filter_transitions, gatefilter)
         x, y = self._get_x_y(field, sweep, edges, filter_transitions)
 
         # mask the data where outside the limits
-        if mask_outside:
-            data = np.ma.masked_invalid(data)
-            data = np.ma.masked_outside(data, vmin, vmax)
+        _mask_outside(mask_outside, data, vmin, vmax)
 
         # plot the data
         pm = ax.pcolormesh(x, y, data, vmin=vmin, vmax=vmax, cmap=cmap)
@@ -460,9 +456,7 @@ class RadarDisplay(object):
         x, y, z = self._get_x_y_z(field, sweep, edges, filter_transitions)
 
         # mask the data where outside the limits
-        if mask_outside:
-            data = np.ma.masked_invalid(data)
-            data = np.ma.masked_outside(data, vmin, vmax)
+        _mask_outside(mask_outside, data, vmin, vmax)
 
         # plot the data
         R = np.sqrt(x ** 2 + y ** 2) * np.sign(y)
@@ -592,9 +586,7 @@ class RadarDisplay(object):
             x = datetimes_from_radar(self._radar)
 
         # mask the data where outside the limits
-        if mask_outside:
-            data = np.ma.masked_invalid(data)
-            data = np.ma.masked_outside(data, vmin, vmax)
+        _mask_outside(mask_outside, data, vmin, vmax)
 
         # plot the data
         pm = ax.pcolormesh(x, y, data, vmin=vmin, vmax=vmax, cmap=cmap)
@@ -700,9 +692,7 @@ class RadarDisplay(object):
             filter_transitions, gatefilter)
 
         # mask the data where outside the limits
-        if mask_outside:
-            data = np.ma.masked_invalid(data)
-            data = np.ma.masked_outside(data, vmin, vmax)
+        _mask_outside(mask_outside, data, vmin, vmax)
 
         # plot the data
         R = np.sqrt(x ** 2 + y ** 2) * np.sign(y)
@@ -1317,3 +1307,11 @@ class RadarDisplay(object):
         else:
             units = '?'
         return common.generate_colorbar_label(standard_name, units)
+
+
+def _mask_outside(flag, data, v1, v2):
+    """ Return the data masked outside of v1 and v2 when flag is True.  """
+    if flag:
+        data = np.ma.masked_invalid(data)
+        data = np.ma.masked_outside(data, v1, v2)
+    return data
