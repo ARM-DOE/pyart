@@ -739,8 +739,9 @@ class RadarDisplay(object):
             self.plot_range_ring(range_ring_location_km, ax=ax, col=col,
                                  ls=ls, lw=lw)
 
-    def plot_range_ring(self, range_ring_location_km, npts=100, ax=None,
-                        col='k', ls='-', lw=2):
+    @staticmethod
+    def plot_range_ring(
+            range_ring_location_km, npts=100, ax=None, col='k', ls='-', lw=2):
         """
         Plot a single range ring.
 
@@ -765,7 +766,8 @@ class RadarDisplay(object):
         y = r * np.cos(theta)
         ax.plot(x, y, c=col, ls=ls, lw=lw)
 
-    def plot_grid_lines(self, ax=None, col='k', ls=':', lw=2):
+    @staticmethod
+    def plot_grid_lines(ax=None, col='k', ls=':'):
         """
         Plot grid lines.
 
@@ -844,7 +846,8 @@ class RadarDisplay(object):
         ax.plot([loc_x], [loc_y], symbol)
         ax.text(loc_x - 5.0, loc_y, label, color=text_color)
 
-    def plot_cross_hair(self, size, npts=100, ax=None):
+    @staticmethod
+    def plot_cross_hair(size, npts=100, ax=None):
         """
         Plot a cross-hair on a ppi plot.
 
@@ -906,7 +909,8 @@ class RadarDisplay(object):
     # Plot adjusting methods #
     ##########################
 
-    def set_limits(self, xlim=None, ylim=None, ax=None):
+    @staticmethod
+    def set_limits(xlim=None, ylim=None, ax=None):
         """
         Set the display limits.
 
@@ -942,12 +946,14 @@ class RadarDisplay(object):
         ax = common.parse_ax(ax)
         ax.set_ylabel('Distance Above ' + self.origin + '  (km)')
 
-    def label_xaxis_rays(self, ax=None):
+    @staticmethod
+    def label_xaxis_rays(ax=None):
         """ Label the yaxis with the default label for rays. """
         ax = common.parse_ax(ax)
         ax.set_xlabel('Ray number (unitless)')
 
-    def label_xaxis_time(self, ax=None):
+    @staticmethod
+    def label_xaxis_time(ax=None):
         """ Label the yaxis with the default label for rays. """
         ax = common.parse_ax(ax)
         ax.set_xlabel('Time (HH:MM)')
@@ -957,7 +963,8 @@ class RadarDisplay(object):
         ax = common.parse_ax(ax)
         ax.set_ylabel(self._get_colorbar_label(field))
 
-    def set_aspect_ratio(self, aspect_ratio=0.75, ax=None):
+    @staticmethod
+    def set_aspect_ratio(aspect_ratio=0.75, ax=None):
         """ Set the aspect ratio for plot area. """
         ax = common.parse_ax(ax)
         ax.set_aspect(aspect_ratio)
@@ -1041,7 +1048,8 @@ class RadarDisplay(object):
         else:
             ax.set_ylabel(y_label)
 
-    def _set_vpt_time_axis(self, ax, date_time_form=None, tz=None):
+    @staticmethod
+    def _set_vpt_time_axis(ax, date_time_form=None, tz=None):
         """ Set the x axis as a time formatted axis.
 
         Parameters
