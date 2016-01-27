@@ -192,7 +192,6 @@ class RadarDisplay(object):
     def plot_ray(self, field, ray, format_str='k-', mask_tuple=None,
                  ray_min=None, ray_max=None, mask_outside=False, title=None,
                  title_flag=True, axislabels=(None, None),
-                 filter_transitions=True,
                  axislabels_flag=True, ax=None, fig=None):
         """
         Plot a single ray.
@@ -233,11 +232,6 @@ class RadarDisplay(object):
             False.
         axislabel_flag : bool
             True to add label the axes, False does not label the axes.
-        filter_transitions : bool
-            True to remove rays where the antenna was in transition between
-            sweeps from the plot.  False will include these rays in the plot.
-            No rays are filtered when the antenna_transition attribute of the
-            underlying radar is not present.
         ax : Axis
             Axis to plot on. None will use the current axis.
         fig : Figure
@@ -248,7 +242,7 @@ class RadarDisplay(object):
         ax, fig = common.parse_ax_fig(ax, fig)
 
         # get the data and mask
-        data = self._get_ray_data(field, ray, mask_tuple, filter_transitions)
+        data = self._get_ray_data(field, ray, mask_tuple)
 
         # mask the data where outside the limits
         if mask_outside:
@@ -1218,7 +1212,7 @@ class RadarDisplay(object):
 
         return data.T
 
-    def _get_ray_data(self, field, ray, mask_tuple, filter_transitions):
+    def _get_ray_data(self, field, ray, mask_tuple):
         """ Retrieve and return ray data from a plot function. """
         data = self.fields[field]['data'][ray]
 
@@ -1226,11 +1220,6 @@ class RadarDisplay(object):
             mask_field, mask_value = mask_tuple
             mdata = self.fields[mask_field]['data'][ray]
             data = np.ma.masked_where(mdata < mask_value, data)
-
-        # filter out antenna transitions
-        if filter_transitions and self.antenna_transition is not None:
-            in_trans = self.antenna_transition[ray]
-            data = data[in_trans == 0]
 
         return data
 
