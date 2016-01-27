@@ -15,11 +15,9 @@ Class for creating plots from Radar objects.
 import warnings
 
 import matplotlib.pyplot as plt
+from matplotlib.dates import DateFormatter
 import numpy as np
 import netCDF4
-from matplotlib.dates import (
-    DateFormatter, SecondLocator, MinuteLocator,
-    HourLocator, DayLocator)
 
 from . import common
 from ..exceptions import DepreciatedAttribute
@@ -106,7 +104,6 @@ class RadarDisplay(object):
         self.shift = shift
         self._calculate_localization(radar)
 
-
         # list to hold plots, plotted fields and plotted colorbars
         self.plots = []
         self.plot_vars = []
@@ -117,7 +114,7 @@ class RadarDisplay(object):
         """ Depreciated starts attribute. """
         warnings.warn(
             "The 'starts' attribute has been depreciated and will be removed"
-            "in future version of Py-ART", category=DepreciatedAttribute)
+            "in future versions of Py-ART", category=DepreciatedAttribute)
         return self._radar.sweep_start_ray_index['data']
 
     @property
@@ -125,7 +122,7 @@ class RadarDisplay(object):
         """ Depreciated starts attribute. """
         warnings.warn(
             "The 'ends' attribute has been depreciated and will be removed"
-            "in future version of Py-ART", category=DepreciatedAttribute)
+            "in future versions of Py-ART", category=DepreciatedAttribute)
         return self._radar.sweep_end_ray_index['data']
 
     @property
@@ -373,9 +370,9 @@ class RadarDisplay(object):
         self.plot_vars.append(field)
 
         if colorbar_flag:
-            self.plot_colorbar(mappable=pm, label=colorbar_label,
-                               orient=colorbar_orient,
-                               field=field, ax=ax, fig=fig)
+            self.plot_colorbar(
+                mappable=pm, label=colorbar_label, orient=colorbar_orient,
+                field=field, ax=ax, fig=fig)
 
     def plot_rhi(self, field, sweep=0, mask_tuple=None, vmin=None, vmax=None,
                  cmap='jet', mask_outside=False, title=None, title_flag=True,
@@ -456,8 +453,8 @@ class RadarDisplay(object):
         vmin, vmax = common.parse_vmin_vmax(self._radar, field, vmin, vmax)
 
         # get data for the plot
-        data = self._get_data(field, sweep, mask_tuple, filter_transitions,
-                              gatefilter)
+        data = self._get_data(
+            field, sweep, mask_tuple, filter_transitions, gatefilter)
         x, y, z = self._get_x_y_z(field, sweep, edges, filter_transitions)
 
         # mask the data where outside the limits
@@ -466,7 +463,7 @@ class RadarDisplay(object):
         # plot the data
         R = np.sqrt(x ** 2 + y ** 2) * np.sign(y)
         if reverse_xaxis is None:
-            # reverse if all distances (nearly, up to 1 m) negative.
+            # reverse if all distances are nearly negative (allow up to 1 m)
             reverse_xaxis = np.all(R < 1.)
         if reverse_xaxis:
             R = -R
@@ -483,19 +480,17 @@ class RadarDisplay(object):
         self.plot_vars.append(field)
 
         if colorbar_flag:
-            self.plot_colorbar(mappable=pm, label=colorbar_label,
-                               orient=colorbar_orient,
-                               field=field, ax=ax, fig=fig)
+            self.plot_colorbar(
+                mappable=pm, label=colorbar_label, orient=colorbar_orient,
+                field=field, ax=ax, fig=fig)
 
     def plot_vpt(self, field, mask_tuple=None, vmin=None, vmax=None,
                  cmap='jet', mask_outside=False, title=None, title_flag=True,
                  axislabels=(None, None), axislabels_flag=True,
                  colorbar_flag=True, colorbar_label=None,
                  colorbar_orient='vertical', edges=True,
-                 filter_transitions=True,
-                 time_axis_flag=False,
-                 date_time_form=None, tz=None,
-                 ax=None, fig=None):
+                 filter_transitions=True, time_axis_flag=False,
+                 date_time_form=None, tz=None, ax=None, fig=None):
         """
         Plot a VPT scan.
 
@@ -573,8 +568,7 @@ class RadarDisplay(object):
         # get data for the plot
         data = self._get_vpt_data(field, mask_tuple, filter_transitions)
         if edges:
-            y = np.empty((self.ranges.shape[0] + 1, ),
-                         dtype=self.ranges.dtype)
+            y = np.empty((self.ranges.shape[0] + 1, ), dtype=self.ranges.dtype)
             y[1:-1] = (self.ranges[:-1] + self.ranges[1:]) / 2.
             y[0] = self.ranges[0] - (self.ranges[1] - self.ranges[0]) / 2.
             y[-1] = self.ranges[-1] - (self.ranges[-2] - self.ranges[-1]) / 2.
@@ -607,9 +601,9 @@ class RadarDisplay(object):
         self.plot_vars.append(field)
 
         if colorbar_flag:
-            self.plot_colorbar(mappable=pm, label=colorbar_label,
-                               orient=colorbar_orient,
-                               field=field, ax=ax, fig=fig)
+            self.plot_colorbar(
+                mappable=pm, label=colorbar_label, orient=colorbar_orient,
+                field=field, ax=ax, fig=fig)
 
     def plot_azimuth_to_rhi(self, field, target_azimuth,
                             mask_tuple=None, vmin=None, vmax=None,
@@ -719,12 +713,11 @@ class RadarDisplay(object):
         self.plot_vars.append(field)
 
         if colorbar_flag:
-            self.plot_colorbar(mappable=pm, label=colorbar_label,
-                               orient=colorbar_orient,
-                               field=field, ax=ax, fig=fig)
+            self.plot_colorbar(
+                mappable=pm, label=colorbar_label, orient=colorbar_orient,
+                field=field, ax=ax, fig=fig)
 
-    def plot_range_rings(self, range_rings, ax=None, col='k', ls='-',
-                         lw=2):
+    def plot_range_rings(self, range_rings, ax=None, col='k', ls='-', lw=2):
         """
         Plot a series of range rings.
 
@@ -741,8 +734,8 @@ class RadarDisplay(object):
 
         """
         for range_ring_location_km in range_rings:
-            self.plot_range_ring(range_ring_location_km, ax=ax, col=col,
-                                 ls=ls, lw=lw)
+            self.plot_range_ring(
+                range_ring_location_km, ax=ax, col=col, ls=ls, lw=lw)
 
     @staticmethod
     def plot_range_ring(
@@ -789,8 +782,8 @@ class RadarDisplay(object):
         ax = common.parse_ax(ax)
         ax.grid(c=col, ls=ls)
 
-    def plot_labels(self, labels, locations, symbols='r+', text_color='k',
-                    ax=None):
+    def plot_labels(
+            self, labels, locations, symbols='r+', text_color='k', ax=None):
         """
         Plot symbols and labels at given locations.
 
@@ -823,8 +816,8 @@ class RadarDisplay(object):
         for loc, label, sym in zip(locations, labels, symbols):
             self.plot_label(label, loc, sym, text_color, ax)
 
-    def plot_label(self, label, location, symbol='r+', text_color='k',
-                   ax=None):
+    def plot_label(
+            self, label, location, symbol='r+', text_color='k', ax=None):
         """
         Plot a single symbol and label at a given location.
 
@@ -1065,6 +1058,7 @@ class RadarDisplay(object):
             Format of the time string for x-axis labels.
         tz : str
             Time zone info to use when creating axis labels (see datetime).
+
         """
         if date_time_form is None:
             date_time_form = '%H:%M'
@@ -1276,13 +1270,13 @@ class RadarDisplay(object):
 
     def _get_x_z(self, field, sweep, edges, filter_transitions):
         """ Retrieve and return x and y coordinate in km. """
-        x, y, z = self._get_x_y_z(field, sweep, edges,
+        x, _, z = self._get_x_y_z(field, sweep, edges,
                                   filter_transitions=filter_transitions)
         return x, z
 
     def _get_x_y(self, field, sweep, edges, filter_transitions):
         """ Retrieve and return x and y coordinate in km. """
-        x, y, z = self._get_x_y_z(field, sweep, edges,
+        x, y, _ = self._get_x_y_z(field, sweep, edges,
                                   filter_transitions=filter_transitions)
         return x, y
 
