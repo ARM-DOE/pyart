@@ -50,8 +50,6 @@ class AirborneRadarDisplay(RadarDisplay):
         Cartesian location of a sweep in meters.
     loc : (float, float)
         Latitude and Longitude of radar in degrees.
-    time_begin : datetime
-        Beginning time of first radar scan.
     starts : array
         Starting ray index for each sweep.
     ends : array

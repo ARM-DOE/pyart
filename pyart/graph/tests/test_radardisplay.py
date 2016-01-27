@@ -8,6 +8,7 @@
 from __future__ import print_function
 
 import warnings
+import datetime
 
 import matplotlib.pyplot as plt
 
@@ -292,6 +293,8 @@ def test_starts_ends():
         warnings.simplefilter("ignore", category=DepreciatedAttribute)
         assert len(display.starts) == 1
         assert len(display.ends) == 1
+        assert display.time_begin == datetime.datetime(1989, 1, 1, 0, 0, 1)
+
 
 
 if __name__ == "__main__":

@@ -58,8 +58,6 @@ class RadarDisplay(object):
         Cartesian location of a sweep in meters.
     loc : (float, float)
         Latitude and Longitude of radar in degrees.
-    time_begin : datetime
-        Beginning time of first radar scan.
     fields : dict
         Radar fields.
     scan_type : str
@@ -108,11 +106,6 @@ class RadarDisplay(object):
         self.shift = shift
         self._calculate_localization(radar)
 
-        # datetime object describing first sweep time
-        times = radar.time['data'][0]
-        units = radar.time['units']
-        calendar = radar.time['calendar']
-        self.time_begin = netCDF4.num2date(times, units, calendar)
 
         # list to hold plots, plotted fields and plotted colorbars
         self.plots = []
@@ -134,6 +127,18 @@ class RadarDisplay(object):
             "The 'ends' attribute has been depreciated and will be removed"
             "in future version of Py-ART", category=DepreciatedAttribute)
         return self._radar.sweep_end_ray_index['data']
+
+    @property
+    def time_begin(self):
+        """ Depeciated datetime object describing first sweep time. """
+        warnings.warn(
+            "The 'time_begin' attribute has been depreciated and will be "
+            "removed in future versions of Py-ART",
+            category=DepreciatedAttribute)
+        times = self._radar.time['data'][0]
+        units = self._radar.time['units']
+        calendar = self._radar.time['calendar']
+        return netCDF4.num2date(times, units, calendar)
 
     def _calculate_localization(self, radar):
         """ Calculate self.x, self.y, self.z and self.loc. """
