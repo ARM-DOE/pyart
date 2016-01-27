@@ -47,18 +47,12 @@ class RadarMapDisplay(RadarDisplay):
         List of fields plotted, order matches plot list.
     cbs : list
         List of colorbars created.
-    radar_name : str
-        Name of radar.
     origin : str
         'Origin' or 'Radar'.
     shift : (float, float)
         Shift in meters.
     loc : (float, float)
         Latitude and Longitude of radar in degrees.
-    starts : array
-        Starting ray index for each sweep.
-    ends : array
-        Ending ray index for each sweep.
     fields : dict
         Radar fields.
     scan_type : str
@@ -223,8 +217,8 @@ class RadarMapDisplay(RadarDisplay):
             lon_0 = self.loc[1]
 
         # get data for the plot
-        data = self._get_data(field, sweep, mask_tuple, filter_transitions,
-                              gatefilter)
+        data = self._get_data(
+            field, sweep, mask_tuple, filter_transitions, gatefilter)
         x, y = self._get_x_y(field, sweep, edges, filter_transitions)
 
         # mask the data where outside the limits
@@ -235,30 +229,31 @@ class RadarMapDisplay(RadarDisplay):
         if type(basemap) != Basemap:
             using_corners = (None not in [min_lon, min_lat, max_lon, max_lat])
             if using_corners:
-                basemap = Basemap(llcrnrlon=min_lon, llcrnrlat=min_lat,
-                                  urcrnrlon=max_lon, urcrnrlat=max_lat,
-                                  lat_0=lat_0, lon_0=lon_0,
-                                  projection=projection, area_thresh=area_thresh,
-                                  resolution=resolution, ax=ax, **kwargs)
+                basemap = Basemap(
+                    llcrnrlon=min_lon, llcrnrlat=min_lat,
+                    urcrnrlon=max_lon, urcrnrlat=max_lat,
+                    lat_0=lat_0, lon_0=lon_0, projection=projection,
+                    area_thresh=area_thresh, resolution=resolution, ax=ax,
+                    **kwargs)
             else:   # using width and height
                 # map domain determined from location of radar gates
                 if width is None:
                     width = (x.max() - y.min()) * 1000.
                 if height is None:
                     height = (y.max() - y.min()) * 1000.
-                basemap = Basemap(width=width, height=height,
-                                  lon_0=lon_0, lat_0=lat_0,
-                                  projection=projection, area_thresh=area_thresh,
-                                  resolution=resolution, ax=ax, **kwargs)
+                basemap = Basemap(
+                    width=width, height=height, lon_0=lon_0, lat_0=lat_0,
+                    projection=projection, area_thresh=area_thresh,
+                    resolution=resolution, ax=ax, **kwargs)
 
         # add embelishments
         if embelish is True:
             basemap.drawcoastlines(linewidth=1.25)
             basemap.drawstates()
-            basemap.drawparallels(lat_lines,
-                                  labels=[True, False, False, False])
-            basemap.drawmeridians(lon_lines,
-                                  labels=[False, False, False, True])
+            basemap.drawparallels(
+                lat_lines, labels=[True, False, False, False])
+            basemap.drawmeridians(
+                lon_lines, labels=[False, False, False, True])
         self.basemap = basemap
         self._x0, self._y0 = basemap(self.loc[1], self.loc[0])
 
@@ -280,8 +275,8 @@ class RadarMapDisplay(RadarDisplay):
         self.plot_vars.append(field)
 
         if colorbar_flag:
-            self.plot_colorbar(mappable=pm, label=colorbar_label,
-                               field=field, fig=fig)
+            self.plot_colorbar(
+                mappable=pm, label=colorbar_label, field=field, fig=fig)
         return
 
     def plot_point(self, lon, lat, symbol='ro', label_text=None,
@@ -317,8 +312,8 @@ class RadarMapDisplay(RadarDisplay):
         if label_text is not None:
             # basemap does not have a text method so we must determine
             # the x and y points and plot them on the basemap's axis.
-            x_text, y_text = self.basemap(lon + lon_offset,
-                                          lat + lat_offset)
+            x_text, y_text = self.basemap(
+                lon + lon_offset, lat + lat_offset)
             self.basemap.ax.text(x_text, y_text, label_text)
 
     def plot_line_geo(self, line_lons, line_lats, line_style='r-', **kwargs):
@@ -338,8 +333,8 @@ class RadarMapDisplay(RadarDisplay):
 
         """
         self._check_basemap()
-        self.basemap.plot(line_lons, line_lats, line_style, latlon=True,
-                          **kwargs)
+        self.basemap.plot(
+            line_lons, line_lats, line_style, latlon=True, **kwargs)
 
     def plot_line_xy(self, line_x, line_y, line_style='r-', **kwargs):
         """
