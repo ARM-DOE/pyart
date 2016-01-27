@@ -7,12 +7,15 @@
 
 from __future__ import print_function
 
+import warnings
+
 import matplotlib.pyplot as plt
 
 import numpy as np
 from numpy.testing import assert_raises, assert_almost_equal, assert_warns
 
 import pyart
+from pyart.exceptions import DepreciatedAttribute
 
 
 # Top level Figure generating tests
@@ -277,6 +280,18 @@ def test_radardisplay_get_colorbar_label():
     assert (display._get_colorbar_label('reflectivity_horizontal') ==
             'reflectivity horizontal (?)')
     plt.close()
+
+
+# These attribute have been Depreciated, remove this test when these
+# attribute are removed
+def test_starts_ends():
+    radar = pyart.testing.make_empty_ppi_radar(1, 1, 1)
+    display = pyart.graph.RadarDisplay(radar)
+
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", category=DepreciatedAttribute)
+        assert len(display.starts) == 1
+        assert len(display.ends) == 1
 
 
 if __name__ == "__main__":

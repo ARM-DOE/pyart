@@ -22,6 +22,7 @@ from matplotlib.dates import (
     HourLocator, DayLocator)
 
 from . import common
+from ..exceptions import DepreciatedAttribute
 from ..core.transforms import antenna_to_cartesian
 from ..core.transforms import antenna_vectors_to_cartesian
 from ..core.transforms import corner_to_point
@@ -59,10 +60,6 @@ class RadarDisplay(object):
         Latitude and Longitude of radar in degrees.
     time_begin : datetime
         Beginning time of first radar scan.
-    starts : array
-        Starting ray index for each sweep.
-    ends : array
-        Ending ray index for each sweep.
     fields : dict
         Radar fields.
     scan_type : str
@@ -117,14 +114,26 @@ class RadarDisplay(object):
         calendar = radar.time['calendar']
         self.time_begin = netCDF4.num2date(times, units, calendar)
 
-        # sweep start and end indices
-        self.starts = radar.sweep_start_ray_index['data']
-        self.ends = radar.sweep_end_ray_index['data']
-
         # list to hold plots, plotted fields and plotted colorbars
         self.plots = []
         self.plot_vars = []
         self.cbs = []
+
+    @property
+    def starts(self):
+        """ Depreciated starts attribute. """
+        warnings.warn(
+            "The 'starts' attribute has been depreciated and will be removed"
+            "in future version of Py-ART", category=DepreciatedAttribute)
+        return self._radar.sweep_start_ray_index['data']
+
+    @property
+    def ends(self):
+        """ Depreciated starts attribute. """
+        warnings.warn(
+            "The 'ends' attribute has been depreciated and will be removed"
+            "in future version of Py-ART", category=DepreciatedAttribute)
+        return self._radar.sweep_end_ray_index['data']
 
     def _calculate_localization(self, radar):
         """ Calculate self.x, self.y, self.z and self.loc. """
@@ -1173,24 +1182,23 @@ class RadarDisplay(object):
     def _get_data(self, field, sweep, mask_tuple, filter_transitions,
                   gatefilter):
         """ Retrieve and return data from a plot function. """
-        start = self.starts[sweep]
-        end = self.ends[sweep] + 1
-        data = self.fields[field]['data'][start:end]
+        sweep_slice = self._radar.get_slice(sweep)
+        data = self.fields[field]['data'][sweep_slice]
 
         # mask data if mask_tuple provided
         if mask_tuple is not None:
             mask_field, mask_value = mask_tuple
-            mdata = self.fields[mask_field]['data'][start:end]
+            mdata = self.fields[mask_field]['data'][sweep_slice]
             data = np.ma.masked_where(mdata < mask_value, data)
 
         # mask data if gatefilter provided
         if gatefilter is not None:
-            mask_filter = gatefilter.gate_excluded[start:end]
+            mask_filter = gatefilter.gate_excluded[sweep_slice]
             data = np.ma.masked_array(data, mask_filter)
 
         # filter out antenna transitions
         if filter_transitions and self.antenna_transition is not None:
-            in_trans = self.antenna_transition[start:end]
+            in_trans = self.antenna_transition[sweep_slice]
             data = data[in_trans == 0]
 
         return data
@@ -1277,13 +1285,12 @@ class RadarDisplay(object):
 
     def _get_x_y_z(self, field, sweep, edges, filter_transitions):
         """ Retrieve and return x, y, and z coordinate in km. """
-        start = self.starts[sweep]
-        end = self.ends[sweep] + 1
-        azimuths = self.azimuths[start:end]
-        elevations = self.elevations[start:end]
+        sweep_slice = self._radar.get_slice(sweep)
+        azimuths = self.azimuths[sweep_slice]
+        elevations = self.elevations[sweep_slice]
 
         if filter_transitions and self.antenna_transition is not None:
-            in_trans = self.antenna_transition[start:end]
+            in_trans = self.antenna_transition[sweep_slice]
             azimuths = azimuths[in_trans == 0]
             elevations = elevations[in_trans == 0]
 

@@ -289,19 +289,18 @@ class AirborneRadarDisplay(RadarDisplay):
 
     def _get_x_y_z(self, field, sweep, edges, filter_transitions):
         """ Retrieve and return x, y, and z coordinate in km. """
-        start = self.starts[sweep]
-        end = self.ends[sweep] + 1
+        sweep_slice = self._radar.get_slice(sweep)
 
         if self._radar.metadata['platform_type'] == 'aircraft_belly':
             if filter_transitions and self.antenna_transition is not None:
-                in_trans = self.antenna_transition[start:end]
+                in_trans = self.antenna_transition[sweep_slice]
                 ranges = self.ranges
                 azimuths = self.azimuths[in_trans == 0]
                 elevations = self.elevations[in_trans == 0]
             else:
                 ranges = self.ranges
-                azimuths = self.azimuths[start:end]
-                elevations = self.elevations[start:end]
+                azimuths = self.azimuths[sweep_slice]
+                elevations = self.elevations[sweep_slice]
 
             if edges:
                 if len(ranges) != 1:
@@ -318,7 +317,7 @@ class AirborneRadarDisplay(RadarDisplay):
 
         else:
             if filter_transitions and self.antenna_transition is not None:
-                in_trans = self.antenna_transition[start:end]
+                in_trans = self.antenna_transition[sweep_slice]
                 ranges = self.ranges
                 rotation = self.rotation[in_trans == 0]
                 roll = self.roll[in_trans == 0]
@@ -327,11 +326,11 @@ class AirborneRadarDisplay(RadarDisplay):
                 pitch = self.pitch[in_trans == 0]
             else:
                 ranges = self.ranges
-                rotation = self.rotation[start:end]
-                roll = self.roll[start:end]
-                drift = self.drift[start:end]
-                tilt = self.tilt[start:end]
-                pitch = self.pitch[start:end]
+                rotation = self.rotation[sweep_slice]
+                roll = self.roll[sweep_slice]
+                drift = self.drift[sweep_slice]
+                tilt = self.tilt[sweep_slice]
+                pitch = self.pitch[sweep_slice]
 
             if edges:
                 if len(ranges) != 1:
