@@ -13,13 +13,13 @@ Class for creating plots from Airborne Radar objects.
 """
 
 import numpy as np
-import netCDF4
 
 from .radardisplay import RadarDisplay
 from . import common
 from ..core.transforms import antenna_to_cartesian
 from ..core.transforms import antenna_to_cartesian_track_relative
 from ..core import transforms
+
 
 class AirborneRadarDisplay(RadarDisplay):
     """
@@ -46,10 +46,6 @@ class AirborneRadarDisplay(RadarDisplay):
         Shift in meters.
     loc : (float, float)
         Latitude and Longitude of radar in degrees.
-    starts : array
-        Starting ray index for each sweep.
-    ends : array
-        Ending ray index for each sweep.
     fields : dict
         Radar fields.
     scan_type : str
@@ -77,7 +73,6 @@ class AirborneRadarDisplay(RadarDisplay):
     altitude : array
         Altitude angle in meters.
 
-
     """
 
     def __init__(self, radar, shift=(0.0, 0.0)):
@@ -91,11 +86,7 @@ class AirborneRadarDisplay(RadarDisplay):
         self.pitch = radar.pitch['data']
         self.altitude = radar.altitude['data']
         super(AirborneRadarDisplay, self).__init__(radar, shift)
-
-    def _calculate_localization(self, radar):
-        """ Calculate self.x, self.y, self.z and self.loc. """
         # x, y, z attributes: cartesian location for a sweep in km.
-
         if radar.metadata['platform_type'] == 'aircraft_belly':
             rg, azg = np.meshgrid(self.ranges, self.azimuths)
             rg, eleg = np.meshgrid(self.ranges, self.elevations)
@@ -157,13 +148,12 @@ class AirborneRadarDisplay(RadarDisplay):
             raise ValueError('unknown scan_type % s' % (self.scan_type))
         return
 
-    def plot_sweep_grid(self, field, sweep=0, mask_tuple=None, vmin=None,
-                        vmax=None, cmap='jet', mask_outside=False, title=None,
-                        title_flag=True, axislabels=(None, None),
-                        axislabels_flag=True, colorbar_flag=True,
-                        colorbar_label=None, colorbar_orient='vertical',
-                        edges=True, filter_transitions=True, ax=None,
-                        fig=None, gatefilter=None):
+    def plot_sweep_grid(
+            self, field, sweep=0, mask_tuple=None, vmin=None, vmax=None,
+            cmap='jet', mask_outside=False, title=None, title_flag=True,
+            axislabels=(None, None), axislabels_flag=True, colorbar_flag=True,
+            colorbar_label=None, colorbar_orient='vertical', edges=True,
+            filter_transitions=True, ax=None, fig=None, gatefilter=None):
         """
         Plot a sweep as a grid.
 
@@ -235,8 +225,8 @@ class AirborneRadarDisplay(RadarDisplay):
         vmin, vmax = common.parse_vmin_vmax(self._radar, field, vmin, vmax)
 
         # get data for the plot
-        data = self._get_data(field, sweep, mask_tuple, filter_transitions,
-                              gatefilter)
+        data = self._get_data(
+            field, sweep, mask_tuple, filter_transitions, gatefilter)
         x, z = self._get_x_z(field, sweep, edges, filter_transitions)
 
         # mask the data where outside the limits
@@ -246,9 +236,6 @@ class AirborneRadarDisplay(RadarDisplay):
 
         # plot the data
         pm = ax.pcolormesh(x, z, data, vmin=vmin, vmax=vmax, cmap=cmap)
-
-        # Set the aspcet ratio
-        # ax.axis('scaled')
 
         if title_flag:
             self._set_title(field, sweep, title, ax)
@@ -262,9 +249,9 @@ class AirborneRadarDisplay(RadarDisplay):
 
         # colorbar options
         if colorbar_flag:
-            self.plot_colorbar(mappable=pm, label=colorbar_label,
-                               orient=colorbar_orient,
-                               field=field, ax=ax, fig=fig)
+            self.plot_colorbar(
+                mappable=pm, label=colorbar_label, orient=colorbar_orient,
+                field=field, ax=ax, fig=fig)
 
     def label_xaxis_x(self, ax=None):
         """ Label the xaxis with the default label for x units. """
