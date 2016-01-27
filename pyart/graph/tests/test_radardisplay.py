@@ -193,14 +193,16 @@ def test_radardisplay_user_specified_labels():
     plt.close()
 
 
-def test_radardisplay_calculate_localization():
+def test_radardisplay_loc_of_moving_radar():
     radar = pyart.testing.make_empty_ppi_radar(1, 1, 1)
-    display = pyart.graph.RadarDisplay(radar)
 
     radar.latitude['data'] = np.array([35, 45])
     radar.longitude['data'] = np.array([75, 85])
-    assert_warns(UserWarning, display._calculate_localization, radar)
-    assert_almost_equal(display.loc, (40, 80), 0)
+    assert_warns(UserWarning, pyart.graph.RadarDisplay, radar)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", category=UserWarning)
+        display = pyart.graph.RadarDisplay(radar)
+        assert_almost_equal(display.loc, (40, 80), 0)
 
 
 def test_radardisplay_get_x_z():
@@ -295,6 +297,9 @@ def test_starts_ends():
         del radar.metadata['instrument_name']
         assert display.radar_name == ''
 
+        assert display.x.shape == (1, 1)
+        assert display.y.shape == (1, 1)
+        assert display.z.shape == (1, 1)
 
 
 if __name__ == "__main__":

@@ -50,8 +50,6 @@ class RadarDisplay(object):
         'Origin' or 'Radar'.
     shift : (float, float)
         Shift in meters.
-    x, y, z : array
-        Cartesian location of a sweep in meters.
     loc : (float, float)
         Latitude and Longitude of radar in degrees.
     fields : dict
@@ -96,7 +94,22 @@ class RadarDisplay(object):
             self.origin = 'radar'
 
         self.shift = shift
-        self._calculate_localization(radar)
+
+        # radar location in latitude and longitude
+        if radar.latitude['data'].size == 1:
+            lat = float(radar.latitude['data'])
+            lon = float(radar.longitude['data'])
+        else:
+            # for moving platforms stores use the median location.
+            # The RadarDisplay object does not give a proper
+            # visualization for moving platform data as the origin
+            # of each ray changes and needs to be calculated individually or
+            # georeferences.  When that is not available the following
+            # gives acceptable results.
+            lat = np.median(radar.latitude['data'])
+            lon = np.median(radar.longitude['data'])
+            warnings.warn('RadarDisplay does not correct for moving platforms')
+        self.loc = (lat, lon)
 
         # list to hold plots, plotted fields and plotted colorbars
         self.plots = []
@@ -133,6 +146,7 @@ class RadarDisplay(object):
 
     @property
     def radar_name(self):
+        """ Depreciated radar_name attribute. """
         warnings.warn(
             "The 'radar_name' attribute has been depreciated and will be "
             "removed in future versions of Py-ART",
@@ -142,31 +156,35 @@ class RadarDisplay(object):
         else:
             return ''
 
-    def _calculate_localization(self, radar):
-        """ Calculate self.x, self.y, self.z and self.loc. """
-        # x, y, z attributes: cartesian location for a sweep in km.
+    @property
+    def x(self):
+        """ Depreciated x coordinate attribute. """
+        warnings.warn(
+            "The 'x' attribute has been depreciated and will be removed in "
+            "future versions of Py-ART", category=DepreciatedAttribute)
         rg, azg = np.meshgrid(self.ranges, self.azimuths)
         rg, eleg = np.meshgrid(self.ranges, self.elevations)
+        return antenna_to_cartesian(rg / 1000.0, azg, eleg)[0] + self.shift[0]
 
-        self.x, self.y, self.z = antenna_to_cartesian(rg / 1000.0, azg, eleg)
-        self.x = self.x + self.shift[0]
-        self.y = self.y + self.shift[1]
+    @property
+    def y(self):
+        """ Depreciated y coordinate attribute. """
+        warnings.warn(
+            "The 'z' attribute has been depreciated and will be removed in "
+            "future versions of Py-ART", category=DepreciatedAttribute)
+        rg, azg = np.meshgrid(self.ranges, self.azimuths)
+        rg, eleg = np.meshgrid(self.ranges, self.elevations)
+        return antenna_to_cartesian(rg / 1000.0, azg, eleg)[1] + self.shift[1]
 
-        # radar location in latitude and longitude
-        if radar.latitude['data'].size == 1:
-            lat = float(radar.latitude['data'])
-            lon = float(radar.longitude['data'])
-        else:
-            # for moving platforms stores use the median location.
-            # The RadarDisplay object does not give a proper
-            # visualization for moving platform data as the origin
-            # of each ray changes and needs to be calculated individually or
-            # georeferences.  When that is not available the following
-            # gives acceptable results.
-            lat = np.median(radar.latitude['data'])
-            lon = np.median(radar.longitude['data'])
-            warnings.warn('RadarDisplay does not correct for moving platforms')
-        self.loc = (lat, lon)
+    @property
+    def z(self):
+        """ Depreciated z coordinate attribute. """
+        warnings.warn(
+            "The 'z' attribute has been depreciated and will be removed in "
+            "future versions of Py-ART", category=DepreciatedAttribute)
+        rg, azg = np.meshgrid(self.ranges, self.azimuths)
+        rg, eleg = np.meshgrid(self.ranges, self.elevations)
+        return antenna_to_cartesian(rg / 1000.0, azg, eleg)[2]
 
     ####################
     # Plotting methods #
