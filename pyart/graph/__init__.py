@@ -33,10 +33,8 @@ from .radardisplay_airborne import AirborneRadarDisplay
 from .gridmapdisplay import GridMapDisplay
 from .radarmapdisplay import RadarMapDisplay
 
-__all__ = [s for s in dir() if not s.startswith('_')]
-
-
 import warnings as _warnings
+
 
 class RadarDisplay_Airborne(AirborneRadarDisplay):
     """ Depreciated name for the AirborneRadarDisplay class. """
@@ -47,3 +45,5 @@ class RadarDisplay_Airborne(AirborneRadarDisplay):
              "future versions of Py-ART, please use 'AirborneRadarDisplay'"),
             DeprecationWarning)
         AirborneRadarDisplay.__init__(self, *args, **kwargs)
+
+__all__ = [s for s in dir() if not s.startswith('_')]
