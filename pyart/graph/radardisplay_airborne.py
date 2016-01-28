@@ -86,24 +86,6 @@ class AirborneRadarDisplay(RadarDisplay):
         self.pitch = radar.pitch['data']
         self.altitude = radar.altitude['data']
         super(AirborneRadarDisplay, self).__init__(radar, shift)
-        # x, y, z attributes: cartesian location for a sweep in km.
-        if radar.metadata['platform_type'] == 'aircraft_belly':
-            rg, azg = np.meshgrid(self.ranges, self.azimuths)
-            rg, eleg = np.meshgrid(self.ranges, self.elevations)
-            self.x, self.y, self.z = antenna_to_cartesian(
-                rg / 1000.0, azg, eleg)
-            self.x = self.x + self.shift[0]
-            self.y = self.y + self.shift[1]
-        else:
-            rg, rotg = np.meshgrid(self.ranges, self.rotation)
-            rg, rollg = np.meshgrid(self.ranges, self.roll)
-            rg, driftg = np.meshgrid(self.ranges, self.drift)
-            rg, tiltg = np.meshgrid(self.ranges, self.tilt)
-            rg, pitchg = np.meshgrid(self.ranges, self.pitch)
-            self.x, self.y, self.z = antenna_to_cartesian_track_relative(
-                rg / 1000.0, rotg, rollg, driftg, tiltg, pitchg)
-            self.x = self.x + self.shift[0]
-            self.y = self.y + self.shift[1]
 
         # radar location in latitude and longitude
         middle_lat = int(radar.latitude['data'].shape[0] / 2)
