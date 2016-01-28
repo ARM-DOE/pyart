@@ -14,6 +14,8 @@ A class for plotting grid objects with a basemap.
 
 from __future__ import print_function
 
+import warnings
+
 import numpy as np
 import matplotlib.pyplot as plt
 try:
@@ -24,7 +26,7 @@ except ImportError:
     _BASEMAP_AVAILABLE = False
 
 from . import common
-from ..exceptions import MissingOptionalDependency
+from ..exceptions import MissingOptionalDependency, DepreciatedAttribute
 from ..core.transforms import _interpolate_axes_edges
 
 
@@ -48,10 +50,6 @@ class GridMapDisplay(object):
     proj : Proj
         Object for performing cartographic transformations specific to the
         grid.
-    grid_lons : array
-        Grid longitudes in degrees.
-    grid_lats : array
-        Grid latitudes in degress.
     basemap : Basemap
         Last plotted basemap, None when no basemap has been plotted.
     mappables : list
@@ -79,17 +77,29 @@ class GridMapDisplay(object):
         self.proj = pyproj.Proj(
             proj='aeqd', datum='NAD83', lat_0=lat0, lon_0=lon0)
 
-        # determine grid latitudes and longitudes.
-        x_1d = grid.x['data']
-        y_1d = grid.y['data']
-        x_2d, y_2d = np.meshgrid(x_1d, y_1d)
-        self.grid_lons, self.grid_lats = self.proj(x_2d, y_2d, inverse=True)
-
         # set attributes
         self.mappables = []
         self.fields = []
         self.origin = 'origin'
         self.basemap = None
+
+    @property
+    def grid_lats(self):
+        """ Depreciated grid_lats attribute. """
+        warnings.warn(
+            "The 'grid_lats' attribute has been depreciated and will be "
+            "removed in future versions of Py-ART",
+            category=DepreciatedAttribute)
+        return self.grid.point_latitude['data'][0]
+
+    @property
+    def grid_lons(self):
+        """ Depreciated grid_lons attribute. """
+        warnings.warn(
+            "The 'grid_lons' attribute has been depreciated and will be "
+            "removed in future versions of Py-ART",
+            category=DepreciatedAttribute)
+        return self.grid.point_latitude['data'][0]
 
     def plot_basemap(
             self, lat_lines=None, lon_lines=None, resolution='l',
@@ -105,9 +115,9 @@ class GridMapDisplay(object):
             None will use default values which are resonable for maps of
             North America.
         auto_range : bool
-            True to determine map ranges from the grid_lats and grid_lons
-            attribute.  False will use the min_lon, max_lon, min_lat, and
-            max_lat parameters for the map range.
+            True to determine map ranges from the latitude and longitude
+            limits of the grid. False will use the min_lon, max_lon, min_lat,
+            and max_lat parameters for the map range.
         min_lat, max_lat, min_lon, max_lon : float
             Latitude and longitude ranges for the map projection region in
             degrees.  These parameter are not used if auto_range is True.
@@ -664,8 +674,8 @@ class GridMapDisplay(object):
         Parameters
         ----------
         auto_range : bool
-            True to determine map ranges from the grid_lats and grid_lons
-            attribute.  False will use the min_lon, max_lon, min_lat, and
+            True to determine map ranges from the latitude and longitude limits
+            of the grid. False will use the min_lon, max_lon, min_lat, and
             max_lat parameters for the map range.
         min_lat, max_lat, min_lon, max_lon : float
             Latitude and longitude ranges for the map projection region in
@@ -686,10 +696,10 @@ class GridMapDisplay(object):
 
         # determine map region
         if auto_range:
-            max_lat = self.grid_lats.max()
-            max_lon = self.grid_lons.max()
-            min_lat = self.grid_lats.min()
-            min_lon = self.grid_lons.min()
+            max_lat = self.grid.point_latitude['data'][0].max()
+            max_lon = self.grid.point_longitude['data'][0].max()
+            min_lat = self.grid.point_latitude['data'][0].min()
+            min_lon = self.grid.point_longitude['data'][0].min()
 
         if self.debug:
             print("Maximum latitude: ", max_lat)
