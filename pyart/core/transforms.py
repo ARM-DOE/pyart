@@ -16,6 +16,7 @@ and antenna (azimuth, elevation, range) coordinate systems.
     antenna_to_cartesian_aircraft_relative
 
     cartesian_to_geographic
+    cartesian_vectors_to_geographic
     cartesian_to_geographic_aeqd
     geographic_to_cartesian_aeqd
 
@@ -430,7 +431,7 @@ def cartesian_to_geographic(x, y, projparams):
 
     Transform a set of Cartesian/Cartographic coordinates (x, y) to a
     geographic coordinate system (lat, lon) using pyproj or a build in
-    Azimuthal equidistance projection.
+    Azimuthal equidistant projection.
 
     Parameters
     ----------
@@ -471,6 +472,47 @@ def cartesian_to_geographic(x, y, projparams):
         proj = pyproj.Proj(projparams)
         lon, lat = proj(x, y, inverse=True)
     return lon, lat
+
+
+def cartesian_vectors_to_geographic(x, y, projparams, edges=False):
+    """
+    Cartesian vectors to Geographic coordinate transform.
+
+    Transform a set of Cartesian/Cartographic coordinate vectors (x, y) to a
+    geographic coordinate system (lat, lon) using pyproj or a build in
+    Azimuthal equidistant projection finding the coordinates edges in
+    Cartesian space if requested.
+
+    Parameters
+    ----------
+    x, y : array 1D.
+        Cartesian coordinate vectors in meters unless R is defined in
+        different units in the projparams parameter.
+    projparams : dict or str
+        Projection parameters passed to pyproj.Proj. If this parameter is a
+        dictionary with a 'proj' key equal to 'pyart_aeqd' then a azimuthal
+        equidistant projection will be used that is native to Py-ART and
+        does not require pyproj/basemap to be installed. In this case a
+        non-default value of R can be specified by setting the 'R' key to the
+        desired value.
+    edges : bool, optional
+        True to calculate the coordinates of the geographic edges by
+        interpolating between Cartesian points and extrapolating at the
+        boundaries. False to calculate the coordinate centers.
+
+    Returns
+    -------
+    lon, lat : array
+        Longitude and latitude of the Cartesian coordinates in degrees.
+
+    """
+    if edges:
+        if len(x) > 1:
+            x = _interpolate_axes_edges(x)
+        if len(y) > 1:
+            y = _interpolate_axes_edges(y)
+    x, y = np.meshgrid(x, y)
+    return cartesian_to_geographic(x, y, projparams)
 
 
 def cartesian_to_geographic_aeqd(x, y, lon_0, lat_0, R=6370997.):

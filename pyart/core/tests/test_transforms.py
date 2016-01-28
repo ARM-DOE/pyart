@@ -2,6 +2,8 @@
 
 import warnings
 
+import numpy as np
+
 from pyart.core import transforms
 from numpy.testing import assert_almost_equal
 from numpy.testing.decorators import skipif
@@ -90,6 +92,38 @@ def test_cartesian_to_geographic():
     lon, lat = transforms.cartesian_to_geographic(x, y, projparams)
     assert_almost_equal(lat, -20.0, 3)  # 20.0 S latitude
     assert_almost_equal(lon, 100.0, 3)  # 100.0 E longitude
+
+
+def test_cartesian_vectors_to_geographic():
+    # Example taken from:
+    # Snyder, J.P. Map Projections A Working Manual, 1987, page 338.
+    R = 3.0
+    lon_0 = -100.        # 100 degrees West longitude
+    lat_0 = 40.0        # 40 degrees North latitude
+    x = -5.8311398
+    y = 5.5444634
+
+    projparams = {
+        'proj': 'pyart_aeqd',
+        'lat_0': lat_0,
+        'lon_0': lon_0,
+        'R': R,
+    }
+    lon, lat = transforms.cartesian_vectors_to_geographic(
+        x, y, projparams, edges=False)
+    assert lon.shape == (1, 1)
+    assert lat.shape == (1, 1)
+    assert_almost_equal(lat, -20.0, 3)  # 20.0 S latitude
+    assert_almost_equal(lon, 100.0, 3)  # 100.0 E longitude
+
+    x = np.array([x - 1, x + 1])
+    y = np.array([y - 1, y + 1])
+    lon, lat = transforms.cartesian_vectors_to_geographic(
+        x, y, projparams, edges=True)
+    assert lon.shape == (3, 3)
+    assert lat.shape == (3, 3)
+    assert_almost_equal(lat[1, 1], -20.0, 3)  # 20.0 S latitude
+    assert_almost_equal(lon[1, 1], 100.0, 3)  # 100.0 E longitude
 
 
 @skipif(not transforms._PYPROJ_AVAILABLE)
