@@ -47,9 +47,6 @@ class GridMapDisplay(object):
         Grid object.
     debug : bool
         True to print debugging messages, False to supressed them.
-    proj : Proj
-        Object for performing cartographic transformations specific to the
-        grid.
     basemap : Basemap
         Last plotted basemap, None when no basemap has been plotted.
     mappables : list
@@ -68,20 +65,23 @@ class GridMapDisplay(object):
                 "Basemap is required to use GridMapDisplay but is not " +
                 "installed")
 
+        # set attributes
         self.grid = grid
         self.debug = debug
-
-        # set up the projection
-        lat0 = grid.origin_latitude['data'][0]
-        lon0 = grid.origin_longitude['data'][0]
-        self.proj = pyproj.Proj(
-            proj='aeqd', datum='NAD83', lat_0=lat0, lon_0=lon0)
-
-        # set attributes
         self.mappables = []
         self.fields = []
         self.origin = 'origin'
         self.basemap = None
+
+    @property
+    def proj(self):
+        """ Depreciated proj attribute. """
+        warnings.warn(
+            "The 'proj' attribute has been depreciated and will be removed "
+            "in future versions of Py-ART", category=DepreciatedAttribute)
+        lat0 = self.grid.origin_latitude['data'][0]
+        lon0 = self.grid.origin_longitude['data'][0]
+        return pyproj.Proj(proj='aeqd', datum='NAD83', lat_0=lat0, lon_0=lon0)
 
     @property
     def grid_lats(self):

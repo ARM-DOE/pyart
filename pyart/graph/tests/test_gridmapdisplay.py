@@ -133,6 +133,7 @@ def test_deprecated_attributes():
 
         assert display.grid_lons.ndim == 2
         assert display.grid_lats.ndim == 2
+        assert callable(display.proj)
 
 
 if __name__ == "__main__":
