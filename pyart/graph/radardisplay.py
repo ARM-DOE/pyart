@@ -1302,21 +1302,12 @@ class RadarDisplay(object):
 
     def _get_x_y_z(self, sweep, edges, filter_transitions):
         """ Retrieve and return x, y, and z coordinate in km. """
-        sweep_slice = self._radar.get_slice(sweep)
-        azimuths = self.azimuths[sweep_slice]
-        elevations = self.elevations[sweep_slice]
-
-        if filter_transitions and self.antenna_transition is not None:
-            in_trans = self.antenna_transition[sweep_slice]
-            azimuths = azimuths[in_trans == 0]
-            elevations = elevations[in_trans == 0]
-
-        x, y, z = antenna_vectors_to_cartesian(
-            self.ranges, azimuths, elevations, edges=edges)
+        x, y, z = self._radar.get_gate_x_y_z(
+            sweep, edges=edges, filter_transitions=filter_transitions)
+        # add shift and convert to km
         x = (x + self.shift[0]) / 1000.0
         y = (y + self.shift[1]) / 1000.0
         z = z / 1000.0
-
         return x, y, z
 
     def _get_colorbar_label(self, field):
