@@ -23,7 +23,7 @@ from . import common
 from ..exceptions import DepreciatedAttribute
 from ..core.transforms import antenna_to_cartesian
 from ..core.transforms import antenna_vectors_to_cartesian
-from ..core.transforms import corner_to_point
+from ..core.transforms import geographic_to_cartesian_aeqd
 from ..util.datetime_utils import datetimes_from_radar
 
 
@@ -843,6 +843,10 @@ class RadarDisplay(object):
         """
         Plot a single symbol and label at a given location.
 
+        Transforms of the symbol location in latitude and longitude units to
+        x and y plot units is performed using an azimuthal equidistance
+        map projection centered at the radar.
+
         Parameters
         ----------
         label : str
@@ -860,11 +864,14 @@ class RadarDisplay(object):
 
         """
         ax = common.parse_ax(ax)
-        loc_x, loc_y = corner_to_point(self.loc, location)
-        loc_x /= 1000.0
-        loc_y /= 1000.0
-        ax.plot([loc_x], [loc_y], symbol)
-        ax.text(loc_x - 5.0, loc_y, label, color=text_color)
+        location_lat, location_lon = location
+        radar_lat, radar_lon = self.loc
+        location_x, location_y = geographic_to_cartesian_aeqd(
+            location_lon, location_lat, radar_lon, radar_lat)
+        location_x /= 1000.0
+        location_y /= 1000.0
+        ax.plot([location_x], [location_y], symbol)
+        ax.text(location_x - 5.0, location_y, label, color=text_color)
 
     @staticmethod
     def plot_cross_hair(size, npts=100, ax=None):
