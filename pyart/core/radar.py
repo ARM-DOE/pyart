@@ -9,7 +9,6 @@ A general central radial scanning (or dwelling) instrument class.
 
     _rays_per_sweep_data_factory
     _gate_data_factory
-    _gate_edge_data_factory
     _gate_lon_lat_data_factory
     _gate_altitude_data_factory
 
@@ -113,13 +112,6 @@ class Radar(object):
         these attributes are create upon first access from the data in the
         range, azimuth and elevation attributes. If these attributes are
         changed use :py:func:`init_gate_x_y_z` to reset.
-    gate_edge_x, gate_edge_y, gate_edge_z : LazyLoadDict
-        Location of the edges of each gate in a Cartesian coordinate system
-        assuming a standard atmosphere with a 4/3 Earth's radius model.
-        The data keys of these attributes are create upon first access from
-        the data in the range, azimuth and elevation attributes. If these
-        attributes are changed use :py:func:`init_gate_edge_x_y_z` to reset
-        the attributes.
     gate_longitude, gate_latitude : LazyLoadDict
         Geographic location of each gate.  The projection parameter(s) defined
         in the `projection` attribute are used to perform an inverse map
@@ -249,7 +241,6 @@ class Radar(object):
         # initalize attributes with lazy load dictionaries
         self.init_rays_per_sweep()
         self.init_gate_x_y_z()
-        self.init_gate_edge_x_y_z()
         self.init_gate_longitude_latitude()
         self.init_gate_altitude()
 
@@ -273,20 +264,6 @@ class Radar(object):
         gate_z = LazyLoadDict(get_metadata('gate_z'))
         gate_z.set_lazy('data', _gate_data_factory(self, 2))
         self.gate_z = gate_z
-
-    def init_gate_edge_x_y_z(self):
-        """ Initialize or reset the gate_edge_{x, y, z} attributes. """
-        gate_edge_x = LazyLoadDict(get_metadata('gate_edge_x'))
-        gate_edge_x.set_lazy('data', _gate_edge_data_factory(self, 0))
-        self.gate_edge_x = gate_edge_x
-
-        gate_edge_y = LazyLoadDict(get_metadata('gate_edge_y'))
-        gate_edge_y.set_lazy('data', _gate_edge_data_factory(self, 1))
-        self.gate_edge_y = gate_edge_y
-
-        gate_edge_z = LazyLoadDict(get_metadata('gate_edge_z'))
-        gate_edge_z.set_lazy('data', _gate_edge_data_factory(self, 2))
-        self.gate_edge_z = gate_edge_z
 
     def init_gate_longitude_latitude(self):
         """
@@ -386,6 +363,10 @@ class Radar(object):
         """
         Return the field data for a given sweep.
 
+        When used with :py:func:`get_gate_x_y_z` this method can be used to
+        obtain the data needed for plotting a radar field with the correct
+        spatial context.
+
         Parameters
         ----------
         sweep : int
@@ -462,6 +443,53 @@ class Radar(object):
             return elevation.copy()
         else:
             return elevation
+
+    def get_gate_x_y_z(self, sweep, edges=False, filter_transitions=False):
+        """
+        Return the x, y and z gate locations in meters for a given sweep.
+
+        With the default parameter this method returns the same data as
+        contained in the gate_x, gate_y and gate_z attributes but this method
+        performs the gate location calculations only for the specified sweep
+        and therefore is more efficient than accessing this data through these
+        attribute.
+
+        When used with :py:func:`get_field` this method can be used to obtain
+        the data needed for plotting a radar field with the correct spatial
+        context.
+
+        Parameters
+        ----------
+        sweep : int
+            Sweep number to retrieve gate locations from, 0 based.
+        edges : bool, optional
+            True to return the locations of the gate edges calculated by
+            interpolating between the range, azimuths and elevations.
+            False (the default) will return the locations of the gate centers
+            with no interpolation.
+        filter_transitions : bool, optional
+            True to remove rays where the antenna was in transition between
+            sweeps. False will include these rays. No rays will be removed
+            if the antenna_transition attribute is not available (set to None).
+
+        Returns
+        -------
+        x, y, z : 2D array
+            Array containing the x, y and z, distances from the radar in
+            meters for the center (or edges) for all gates in the sweep.
+
+        """
+        azimuths = self.get_azimuth(sweep)
+        elevations = self.get_elevation(sweep)
+
+        if filter_transitions and self.antenna_transition is not None:
+            sweep_slice = self.get_slice(sweep)
+            valid = self.antenna_transition['data'][sweep_slice] == 0
+            azimuths = azimuths[valid]
+            elevations = elevations[valid]
+
+        return antenna_vectors_to_cartesian(
+            self.range['data'], azimuths, elevations, edges=edges)
 
     def get_nyquist_vel(self, sweep, check_uniform=True):
         """
@@ -858,26 +886,6 @@ def _gate_data_factory(radar, coordinate):
             radar.gate_z['data'] = cartesian_coords[2]
         return cartesian_coords[coordinate]
     return _gate_data
-
-
-def _gate_edge_data_factory(radar, coordinate):
-    """ Return a function which returns the locations of gate edges. """
-    def _gate_edge_data():
-        """ The function which returns the locations of gate edges. """
-        ranges = radar.range['data']
-        azimuths = radar.azimuth['data']
-        elevations = radar.elevation['data']
-        cartesian_coords = antenna_vectors_to_cartesian(
-            ranges, azimuths, elevations, edges=True)
-        # load x, y, and z data except for the coordinate in question
-        if coordinate != 0:
-            radar.gate_edge_x['data'] = cartesian_coords[0]
-        if coordinate != 1:
-            radar.gate_edge_y['data'] = cartesian_coords[1]
-        if coordinate != 2:
-            radar.gate_edge_z['data'] = cartesian_coords[2]
-        return cartesian_coords[coordinate]
-    return _gate_edge_data
 
 
 def _gate_lon_lat_data_factory(radar, coordinate):
