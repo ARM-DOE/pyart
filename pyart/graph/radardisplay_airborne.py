@@ -227,7 +227,7 @@ class AirborneRadarDisplay(RadarDisplay):
         # get data for the plot
         data = self._get_data(
             field, sweep, mask_tuple, filter_transitions, gatefilter)
-        x, z = self._get_x_z(field, sweep, edges, filter_transitions)
+        x, z = self._get_x_z(sweep, edges, filter_transitions)
 
         # mask the data where outside the limits
         if mask_outside:
@@ -268,7 +268,7 @@ class AirborneRadarDisplay(RadarDisplay):
         ax = common.parse_ax(ax)
         ax.set_ylabel('Distance Above ' + self.origin + '  (km)')
 
-    def _get_x_y_z(self, field, sweep, edges, filter_transitions):
+    def _get_x_y_z(self, sweep, edges, filter_transitions):
         """ Retrieve and return x, y, and z coordinate in km. """
         sweep_slice = self._radar.get_slice(sweep)
 

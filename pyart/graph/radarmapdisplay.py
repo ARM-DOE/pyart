@@ -219,7 +219,7 @@ class RadarMapDisplay(RadarDisplay):
         # get data for the plot
         data = self._get_data(
             field, sweep, mask_tuple, filter_transitions, gatefilter)
-        x, y = self._get_x_y(field, sweep, edges, filter_transitions)
+        x, y = self._get_x_y(sweep, edges, filter_transitions)
 
         # mask the data where outside the limits
         if mask_outside:

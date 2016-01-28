@@ -208,8 +208,7 @@ def test_radardisplay_loc_of_moving_radar():
 def test_radardisplay_get_x_z():
     radar = pyart.testing.make_empty_ppi_radar(1, 1, 1)
     display = pyart.graph.RadarDisplay(radar)
-    radar.fields['foo'] = {}
-    x, z = display._get_x_z('foo', 0, False, False)
+    x, z = display._get_x_z(0, False, False)
     assert x.shape == (1, 1)
     assert z.shape == (1, 1)
 

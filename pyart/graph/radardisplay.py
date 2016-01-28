@@ -373,7 +373,7 @@ class RadarDisplay(object):
         # get data for the plot
         data = self._get_data(
             field, sweep, mask_tuple, filter_transitions, gatefilter)
-        x, y = self._get_x_y(field, sweep, edges, filter_transitions)
+        x, y = self._get_x_y(sweep, edges, filter_transitions)
 
         # mask the data where outside the limits
         _mask_outside(mask_outside, data, vmin, vmax)
@@ -477,7 +477,7 @@ class RadarDisplay(object):
         # get data for the plot
         data = self._get_data(
             field, sweep, mask_tuple, filter_transitions, gatefilter)
-        x, y, z = self._get_x_y_z(field, sweep, edges, filter_transitions)
+        x, y, z = self._get_x_y_z(sweep, edges, filter_transitions)
 
         # mask the data where outside the limits
         _mask_outside(mask_outside, data, vmin, vmax)
@@ -1290,17 +1290,17 @@ class RadarDisplay(object):
         z = z / 1000.0
         return data, x, y, z
 
-    def _get_x_z(self, field, sweep, edges, filter_transitions):
+    def _get_x_z(self, sweep, edges, filter_transitions):
         """ Retrieve and return x and y coordinate in km. """
-        x, _, z = self._get_x_y_z(field, sweep, edges, filter_transitions)
+        x, _, z = self._get_x_y_z(sweep, edges, filter_transitions)
         return x, z
 
-    def _get_x_y(self, field, sweep, edges, filter_transitions):
+    def _get_x_y(self, sweep, edges, filter_transitions):
         """ Retrieve and return x and y coordinate in km. """
-        x, y, _ = self._get_x_y_z(field, sweep, edges, filter_transitions)
+        x, y, _ = self._get_x_y_z(sweep, edges, filter_transitions)
         return x, y
 
-    def _get_x_y_z(self, field, sweep, edges, filter_transitions):
+    def _get_x_y_z(self, sweep, edges, filter_transitions):
         """ Retrieve and return x, y, and z coordinate in km. """
         sweep_slice = self._radar.get_slice(sweep)
         azimuths = self.azimuths[sweep_slice]
