@@ -221,19 +221,9 @@ class GridMapDisplay(object):
             data = np.ma.masked_outside(data, vmin, vmax)
 
         # plot the grid
-        x_1d = self.grid.x['data']
-        y_1d = self.grid.y['data']
-
-        if edges:
-            if len(x_1d) > 1:
-                x_1d = _interpolate_axes_edges(x_1d)
-            if len(y_1d) > 1:
-                y_1d = _interpolate_axes_edges(y_1d)
-
-        x_2d, y_2d = np.meshgrid(x_1d, y_1d)
-        grid_lons, grid_lats = self.proj(x_2d, y_2d, inverse=True)
-        xd, yd = basemap(grid_lons, grid_lats)
-        pm = basemap.pcolormesh(xd, yd, data, vmin=vmin, vmax=vmax, cmap=cmap)
+        lons, lats = self.grid.get_point_longitude_latitude(edges=edges)
+        pm = basemap.pcolormesh(
+            lons, lats, data, vmin=vmin, vmax=vmax, cmap=cmap, latlon=True)
         self.mappables.append(pm)
         self.fields.append(field)
 
@@ -742,20 +732,11 @@ class GridMapDisplay(object):
         """
         Find the nearest x, y grid indices for a given latitude and longitude.
         """
+        # A similar method would make a good addition to the Grid class itself
         lon, lat = common.parse_lon_lat(self.grid, lon, lat)
-        x_cut, y_cut = self.proj(lon, lat)
-
-        if self.debug:
-            print("x_cut: ", x_cut)
-            print("y_cut: ", y_cut)
-
-        x_index = np.abs(self.grid.x['data'] - x_cut).argmin()
-        y_index = np.abs(self.grid.y['data'] - y_cut).argmin()
-
-        if self.debug:
-            print("x_index", x_index)
-            print("y_index", y_index)
-
+        grid_lons, grid_lats = self.grid.get_point_longitude_latitude()
+        diff = (grid_lats - lat)**2 + (grid_lons - lon)**2
+        y_index, x_index = np.unravel_index(diff.argmin(), diff.shape)
         return x_index, y_index
 
     ##########################
