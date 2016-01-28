@@ -426,7 +426,7 @@ def geographic_to_cartesian_aeqd(lon, lat, lon_0, lat_0, R=6370997.):
 
 def cartesian_to_geographic(x, y, projparams):
     """
-    Geographic to Cartesian coordinate transform.
+    Cartesian to Geographic coordinate transform.
 
     Transform a set of Cartesian/Cartographic coordinates (x, y) to a
     geographic coordinate system (lat, lon) using pyproj or a build in
