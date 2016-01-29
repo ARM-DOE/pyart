@@ -63,7 +63,6 @@ Special use
 .. autosummary::
     :toctree: generated/
 
-    add_2d_latlon_axis
     prepare_for_read
 
 """
