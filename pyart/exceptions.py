@@ -18,17 +18,17 @@ import warnings
 
 
 class MissingOptionalDependency(Exception):
-    """ Exception raised when a optional depency is needed by not found. """
+    """ Exception raised when a optional dependency is needed by not found. """
     pass
 
 
 class DeprecatedAttribute(DeprecationWarning):
-    """ Warning catagory for an attribute which has been renamed/moved.  """
+    """ Warning category for an attribute which has been renamed/moved.  """
     pass
 
 
 class DeprecatedFunctionName(DeprecationWarning):
-    """ Warning catagory for a function which has been renamed/moved. """
+    """ Warning category for a function which has been renamed/moved. """
     pass
 
 
