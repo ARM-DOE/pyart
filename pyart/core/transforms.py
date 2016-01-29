@@ -48,7 +48,7 @@ PI = np.pi
 
 def antenna_to_cartesian(ranges, azimuths, elevations, debug=False):
     """
-    Return cartesian coordinates from antenna coordinates.
+    Return Cartesian coordinates from antenna coordinates.
 
     Parameters
     ----------
@@ -191,7 +191,7 @@ def _half_angle_complex(complex_angle1, complex_angle2):
     Parameters
     ----------
     complex_angle1, complex_angle2 : complex
-        Complex numbers represeting unit vectors on the unit circle
+        Complex numbers representing unit vectors on the unit circle
 
     Returns
     -------
