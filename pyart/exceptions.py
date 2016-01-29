@@ -8,9 +8,9 @@ Custom Py-ART exceptions.
     :toctree: generated/
 
     MissingOptionalDependency
-    DepreciatedAttribute
-    DepreciatedFunctionName
-    _depreciated_alias
+    DeprecatedAttribute
+    DeprecatedFunctionName
+    _deprecated_alias
 
 """
 
@@ -22,17 +22,17 @@ class MissingOptionalDependency(Exception):
     pass
 
 
-class DepreciatedAttribute(DeprecationWarning):
+class DeprecatedAttribute(DeprecationWarning):
     """ Warning catagory for an attribute which has been renamed/moved.  """
     pass
 
 
-class DepreciatedFunctionName(DeprecationWarning):
+class DeprecatedFunctionName(DeprecationWarning):
     """ Warning catagory for a function which has been renamed/moved. """
     pass
 
 
-def _depreciated_alias(func, old_name, new_name):
+def _deprecated_alias(func, old_name, new_name):
     """
 
     A function for creating an alias to a renamed or moved function.
@@ -48,14 +48,14 @@ def _depreciated_alias(func, old_name, new_name):
     Returns
     -------
     wrapper : func
-        A wrapper version of func, which issues a DepreciatedFunctionName
+        A wrapper version of func, which issues a DeprecatedFunctionName
         warning when the called.
 
     """
     def wrapper(*args, **kwargs):
         warnings.warn(
-            ("{0} has been depreciated and will be removed in future " +
+            ("{0} has been deprecated and will be removed in future " +
              "versions of Py-ART, pleases use {1}. ").format(
-                old_name, new_name), category=DepreciatedFunctionName)
+                old_name, new_name), category=DeprecatedFunctionName)
         return func(*args, **kwargs)
     return wrapper

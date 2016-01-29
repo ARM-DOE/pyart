@@ -21,14 +21,14 @@ Core classes
 from .radar import Radar
 from .grid import Grid
 
-# Depreciated function names in this name space
-from ..exceptions import _depreciated_alias
+# Deprecated function names in this name space
+from ..exceptions import _deprecated_alias
 from ..util import radar_utils as _radar_utils
-is_vpt = _depreciated_alias(
+is_vpt = _deprecated_alias(
     _radar_utils.is_vpt,
     'pyart.core.radar.is_vpt',
     'pyart.util.radar_utils.is_vpt')
-to_vpt = _depreciated_alias(
+to_vpt = _deprecated_alias(
     _radar_utils.to_vpt,
     'pyart.core.radar.to_vpt',
     'pyart.util.radar_utils.to_vpt')

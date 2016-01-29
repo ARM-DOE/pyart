@@ -103,7 +103,7 @@ class Grid(object):
         attribute is changed use :py:func:`init_point_altitude` to reset the
         attribute.
     axes : dict
-        Dictionary of axes dictionaries.  This attribute is depreciated,
+        Dictionary of axes dictionaries.  This attribute is deprecated,
         it will be removed in future versions of Py-ART.
 
     """
@@ -143,7 +143,7 @@ class Grid(object):
         self.init_point_longitude_latitude()
         self.init_point_altitude()
 
-        # Depreciated axes attribute
+        # Deprecated axes attribute
         axes = {'time': time,
                 'time_start': time,  # incorrect metadata
                 'time_end': time,    # incorrect metadata
@@ -178,7 +178,7 @@ class Grid(object):
 
         """
         warnings.warn(
-            "from_legacy_parameters is depreciated and will be removed in a " +
+            "from_legacy_parameters is deprecated and will be removed in a " +
             "future version of Py-ART", DeprecationWarning)
         time = axes['time']
         fields = fields
