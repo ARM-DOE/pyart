@@ -41,7 +41,8 @@ for snum in radar.sweep_number['data']:
                  colorbar_label=colorbar_label, ax=ax)
     display.set_limits(ylim=[0, 15], ax=ax)
 
-figure_title = 'Time: ' + display.time_begin.isoformat() + 'Z'
+time_start = netCDF4.num2date(radar.time['data'][0], radar.time['units'])
+figure_title = 'Time: ' + time_start.isoformat() + 'Z'
 fig.text(0.35, 0.92, figure_title)
 
 plt.show()

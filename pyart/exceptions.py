@@ -8,6 +8,7 @@ Custom Py-ART exceptions.
     :toctree: generated/
 
     MissingOptionalDependency
+    DepreciatedAttribute
     DepreciatedFunctionName
     _depreciated_alias
 
@@ -18,6 +19,11 @@ import warnings
 
 class MissingOptionalDependency(Exception):
     """ Exception raised when a optional depency is needed by not found. """
+    pass
+
+
+class DepreciatedAttribute(DeprecationWarning):
+    """ Warning catagory for an attribute which has been renamed/moved.  """
     pass
 
 

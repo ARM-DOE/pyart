@@ -282,6 +282,22 @@ def test_init_point_x_y_z():
     assert grid.point_x['data'][0, 0, 0] == grid.x['data'][0]
 
 
+def test_get_point_longitude_latitude():
+    grid = pyart.testing.make_target_grid()
+
+    longitude, latitude = grid.get_point_longitude_latitude()
+    assert latitude.shape == (400, 320)
+    assert longitude.shape == (400, 320)
+    assert_almost_equal(latitude[200, 160], 36.75, 2)
+    assert_almost_equal(longitude[200, 160], -98.09, 2)
+
+    longitude, latitude = grid.get_point_longitude_latitude(edges=True)
+    assert latitude.shape == (401, 321)
+    assert longitude.shape == (401, 321)
+    assert_almost_equal(latitude[200, 160], 36.74, 2)
+    assert_almost_equal(longitude[200, 160], -98.10, 2)
+
+
 # Remove this test when Grid.axes is Depreciated
 def test_grid_axes_attribute():
     # test the depreciated axes Grid attribute
