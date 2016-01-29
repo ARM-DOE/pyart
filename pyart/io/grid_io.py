@@ -405,7 +405,7 @@ def read_legacy_grid(filename, exclude_fields=None, **kwargs):
 
     """
     warnings.warn(
-        "read_legacy_grid is depreciated and will be removed in a future " +
+        "read_legacy_grid is deprecated and will be removed in a future " +
         "version of Py-ART", DeprecationWarning)
     # test for non empty kwargs
     _test_arguments(kwargs)

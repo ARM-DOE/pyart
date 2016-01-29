@@ -298,9 +298,9 @@ def test_get_point_longitude_latitude():
     assert_almost_equal(longitude[200, 160], -98.10, 2)
 
 
-# Remove this test when Grid.axes is Depreciated
+# Remove this test when Grid.axes is Deprecated
 def test_grid_axes_attribute():
-    # test the depreciated axes Grid attribute
+    # test the deprecated axes Grid attribute
     grid = pyart.testing.make_target_grid()
 
     nz = 2
@@ -352,7 +352,7 @@ def test_grid_axes_attribute():
     assert axes['longitude']['data'].shape == (ny, nx)
 
 
-# Remove this function when Grid.from_legacy_parameters is Depreciated
+# Remove this function when Grid.from_legacy_parameters is Deprecated
 def make_empty_grid(grid_shape, grid_limits):
     """
     Make an empty grid object without any fields or metadata.
@@ -449,7 +449,7 @@ def make_empty_grid(grid_shape, grid_limits):
         return pyart.core.Grid.from_legacy_parameters({}, axes, {})
 
 
-# Remove this test when Grid.from_legacy_parameters is Depreciated
+# Remove this test when Grid.from_legacy_parameters is Deprecated
 def test_grid_from_legacy_parameters():
     grid_shape = (2, 3, 4)
     grid_limits = ((0, 500), (-400000, 400000), (-300000, 300000))

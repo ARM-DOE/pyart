@@ -20,7 +20,7 @@ import numpy as np
 import netCDF4
 
 from . import common
-from ..exceptions import DepreciatedAttribute
+from ..exceptions import DeprecatedAttribute
 from ..core.transforms import antenna_to_cartesian
 from ..core.transforms import antenna_vectors_to_cartesian
 from ..core.transforms import geographic_to_cartesian_aeqd
@@ -118,27 +118,27 @@ class RadarDisplay(object):
 
     @property
     def starts(self):
-        """ Depreciated starts attribute. """
+        """ Deprecated starts attribute. """
         warnings.warn(
-            "The 'starts' attribute has been depreciated and will be removed"
-            "in future versions of Py-ART", category=DepreciatedAttribute)
+            "The 'starts' attribute has been deprecated and will be removed"
+            "in future versions of Py-ART", category=DeprecatedAttribute)
         return self._radar.sweep_start_ray_index['data']
 
     @property
     def ends(self):
-        """ Depreciated starts attribute. """
+        """ Deprecated starts attribute. """
         warnings.warn(
-            "The 'ends' attribute has been depreciated and will be removed"
-            "in future versions of Py-ART", category=DepreciatedAttribute)
+            "The 'ends' attribute has been deprecated and will be removed"
+            "in future versions of Py-ART", category=DeprecatedAttribute)
         return self._radar.sweep_end_ray_index['data']
 
     @property
     def time_begin(self):
         """ Depeciated datetime object describing first sweep time. """
         warnings.warn(
-            "The 'time_begin' attribute has been depreciated and will be "
+            "The 'time_begin' attribute has been deprecated and will be "
             "removed in future versions of Py-ART",
-            category=DepreciatedAttribute)
+            category=DeprecatedAttribute)
         times = self._radar.time['data'][0]
         units = self._radar.time['units']
         calendar = self._radar.time['calendar']
@@ -146,11 +146,11 @@ class RadarDisplay(object):
 
     @property
     def radar_name(self):
-        """ Depreciated radar_name attribute. """
+        """ Deprecated radar_name attribute. """
         warnings.warn(
-            "The 'radar_name' attribute has been depreciated and will be "
+            "The 'radar_name' attribute has been deprecated and will be "
             "removed in future versions of Py-ART",
-            category=DepreciatedAttribute)
+            category=DeprecatedAttribute)
         if 'instrument_name' in self._radar.metadata:
             return self._radar.metadata['instrument_name']
         else:
@@ -158,30 +158,30 @@ class RadarDisplay(object):
 
     @property
     def x(self):
-        """ Depreciated x coordinate attribute. """
+        """ Deprecated x coordinate attribute. """
         warnings.warn(
-            "The 'x' attribute has been depreciated and will be removed in "
-            "future versions of Py-ART", category=DepreciatedAttribute)
+            "The 'x' attribute has been deprecated and will be removed in "
+            "future versions of Py-ART", category=DeprecatedAttribute)
         rg, azg = np.meshgrid(self.ranges, self.azimuths)
         rg, eleg = np.meshgrid(self.ranges, self.elevations)
         return antenna_to_cartesian(rg / 1000.0, azg, eleg)[0] + self.shift[0]
 
     @property
     def y(self):
-        """ Depreciated y coordinate attribute. """
+        """ Deprecated y coordinate attribute. """
         warnings.warn(
-            "The 'z' attribute has been depreciated and will be removed in "
-            "future versions of Py-ART", category=DepreciatedAttribute)
+            "The 'z' attribute has been deprecated and will be removed in "
+            "future versions of Py-ART", category=DeprecatedAttribute)
         rg, azg = np.meshgrid(self.ranges, self.azimuths)
         rg, eleg = np.meshgrid(self.ranges, self.elevations)
         return antenna_to_cartesian(rg / 1000.0, azg, eleg)[1] + self.shift[1]
 
     @property
     def z(self):
-        """ Depreciated z coordinate attribute. """
+        """ Deprecated z coordinate attribute. """
         warnings.warn(
-            "The 'z' attribute has been depreciated and will be removed in "
-            "future versions of Py-ART", category=DepreciatedAttribute)
+            "The 'z' attribute has been deprecated and will be removed in "
+            "future versions of Py-ART", category=DeprecatedAttribute)
         rg, azg = np.meshgrid(self.ranges, self.azimuths)
         rg, eleg = np.meshgrid(self.ranges, self.elevations)
         return antenna_to_cartesian(rg / 1000.0, azg, eleg)[2]

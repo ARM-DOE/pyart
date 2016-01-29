@@ -26,7 +26,7 @@ except ImportError:
     _BASEMAP_AVAILABLE = False
 
 from . import common
-from ..exceptions import MissingOptionalDependency, DepreciatedAttribute
+from ..exceptions import MissingOptionalDependency, DeprecatedAttribute
 from ..core.transforms import _interpolate_axes_edges
 
 
@@ -75,30 +75,30 @@ class GridMapDisplay(object):
 
     @property
     def proj(self):
-        """ Depreciated proj attribute. """
+        """ Deprecated proj attribute. """
         warnings.warn(
-            "The 'proj' attribute has been depreciated and will be removed "
-            "in future versions of Py-ART", category=DepreciatedAttribute)
+            "The 'proj' attribute has been deprecated and will be removed "
+            "in future versions of Py-ART", category=DeprecatedAttribute)
         lat0 = self.grid.origin_latitude['data'][0]
         lon0 = self.grid.origin_longitude['data'][0]
         return pyproj.Proj(proj='aeqd', datum='NAD83', lat_0=lat0, lon_0=lon0)
 
     @property
     def grid_lats(self):
-        """ Depreciated grid_lats attribute. """
+        """ Deprecated grid_lats attribute. """
         warnings.warn(
-            "The 'grid_lats' attribute has been depreciated and will be "
+            "The 'grid_lats' attribute has been deprecated and will be "
             "removed in future versions of Py-ART",
-            category=DepreciatedAttribute)
+            category=DeprecatedAttribute)
         return self.grid.point_latitude['data'][0]
 
     @property
     def grid_lons(self):
-        """ Depreciated grid_lons attribute. """
+        """ Deprecated grid_lons attribute. """
         warnings.warn(
-            "The 'grid_lons' attribute has been depreciated and will be "
+            "The 'grid_lons' attribute has been deprecated and will be "
             "removed in future versions of Py-ART",
-            category=DepreciatedAttribute)
+            category=DeprecatedAttribute)
         return self.grid.point_latitude['data'][0]
 
     def plot_basemap(

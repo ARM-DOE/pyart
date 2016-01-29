@@ -1,4 +1,4 @@
-""" Unit tests for depreciated Py-ART function names. """
+""" Unit tests for deprecated Py-ART function names. """
 
 import types
 

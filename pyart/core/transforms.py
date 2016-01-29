@@ -640,7 +640,7 @@ def add_2d_latlon_axis(grid, **kwargs):
 
     """
     warnings.warn(
-        "add_2d_latlon_axis is depreciated and will be removed in a " +
+        "add_2d_latlon_axis is deprecated and will be removed in a " +
         "future version of Py-ART", DeprecationWarning)
     try:
         from mpl_toolkits.basemap import pyproj

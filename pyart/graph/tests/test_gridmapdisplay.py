@@ -9,7 +9,7 @@ import warnings
 
 import matplotlib.pyplot as plt
 import pyart
-from pyart.exceptions import DepreciatedAttribute
+from pyart.exceptions import DeprecatedAttribute
 from numpy.testing import assert_raises
 from numpy.testing.decorators import skipif
 
@@ -129,7 +129,7 @@ def test_deprecated_attributes():
     display = pyart.graph.GridMapDisplay(grid)
 
     with warnings.catch_warnings():
-        warnings.simplefilter("ignore", category=DepreciatedAttribute)
+        warnings.simplefilter("ignore", category=DeprecatedAttribute)
 
         assert display.grid_lons.ndim == 2
         assert display.grid_lats.ndim == 2
