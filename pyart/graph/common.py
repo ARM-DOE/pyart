@@ -36,7 +36,7 @@ from netCDF4 import num2date
 
 # Deprecated function names in this name space
 from ..exceptions import _deprecated_alias
-from ..config import get_field_colormap
+from ..config import get_field_colormap, get_field_limits
 from ..core import transforms as _transforms
 radar_coords_to_cart = _deprecated_alias(
     _transforms.antenna_to_cartesian,
@@ -89,16 +89,17 @@ def parse_cmap(cmap, field=None):
 def parse_vmin_vmax(container, field, vmin, vmax):
     """ Parse and return vmin and vmax parameters. """
     field_dict = container.fields[field]
+    field_default_vmin, field_default_vmax = get_field_limits(field)
     if vmin is None:
         if 'valid_min' in field_dict:
             vmin = field_dict['valid_min']
         else:
-            vmin = -6   # default value
+            vmin = field_default_vmin
     if vmax is None:
         if 'valid_max' in field_dict:
             vmax = field_dict['valid_max']
         else:
-            vmax = 100
+            vmax = field_default_vmax
     return vmin, vmax
 
 
