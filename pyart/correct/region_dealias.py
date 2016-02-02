@@ -28,7 +28,7 @@ import numpy as np
 import scipy.ndimage as ndimage
 
 from ..config import get_metadata
-from ._common_dealias import _parse_fields, _parse_gatefilter
+from ._common_dealias import _parse_fields, _parse_gatefilter, _set_limits
 from ._common_dealias import _parse_rays_wrap_around, _parse_nyquist_vel
 from ._fast_edge_finder import _fast_edge_finder
 
@@ -58,9 +58,9 @@ from ._fast_edge_finder import _fast_edge_finder
 def dealias_region_based(
         radar, interval_splits=3, interval_limits=None,
         skip_between_rays=100, skip_along_ray=100, centered=True,
-        nyquist_vel=None, check_nyquist_uniform=True,
-        gatefilter=False, rays_wrap_around=None,
-        keep_original=False, vel_field=None, corr_vel_field=None, **kwargs):
+        nyquist_vel=None, check_nyquist_uniform=True, gatefilter=False,
+        rays_wrap_around=None, keep_original=False, set_limits=True,
+        vel_field=None, corr_vel_field=None, **kwargs):
     """
     Dealias Doppler velocities using a region based algorithm.
 
@@ -121,6 +121,9 @@ def dealias_region_based(
         where the dealiasing procedure fails or was not applied. False
         does not replacement and these gates will be masked in the corrected
         velocity field.
+    set_limits : bool, optional
+        True to set valid_min and valid_max elements in the returned
+        dictionary.  False will not set these dictionary elements.
     vel_field : str, optional
         Field in radar to use as the Doppler velocities during dealiasing.
         None will use the default field name from the Py-ART configuration
@@ -220,6 +223,11 @@ def dealias_region_based(
     # return field dictionary containing dealiased Doppler velocities
     corr_vel = get_metadata(corr_vel_field)
     corr_vel['data'] = data
+
+    if set_limits:
+        # set valid_min and valid_max in corr_vel
+        _set_limits(data, nyquist_vel, corr_vel)
+
     return corr_vel
 
 
