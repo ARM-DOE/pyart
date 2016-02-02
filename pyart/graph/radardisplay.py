@@ -301,9 +301,11 @@ class RadarDisplay(object):
             axislabels=(None, None), axislabels_flag=True,
             colorbar_flag=True, colorbar_label=None,
             colorbar_orient='vertical', edges=True, gatefilter=None,
-            filter_transitions=True, ax=None, fig=None):
+            filter_transitions=True, ax=None, fig=None, **kwargs):
         """
         Plot a PPI.
+
+        Additional arguments are passed to Matplotlib's pcolormesh function.
 
         Parameters
         ----------
@@ -389,7 +391,7 @@ class RadarDisplay(object):
 
         # plot the data
         pm = ax.pcolormesh(
-            x, y, data, vmin=vmin, vmax=vmax, cmap=cmap, norm=norm)
+            x, y, data, vmin=vmin, vmax=vmax, cmap=cmap, norm=norm, **kwargs)
 
         if title_flag:
             self._set_title(field, sweep, title, ax)
@@ -413,9 +415,11 @@ class RadarDisplay(object):
             axislabels=(None, None), axislabels_flag=True,
             reverse_xaxis=None, colorbar_flag=True, colorbar_label=None,
             colorbar_orient='vertical', edges=True, gatefilter=None,
-            filter_transitions=True, ax=None, fig=None):
+            filter_transitions=True, ax=None, fig=None, **kwargs):
         """
         Plot a RHI.
+
+        Additional arguments are passed to Matplotlib's pcolormesh function.
 
         Parameters
         ----------
@@ -508,7 +512,7 @@ class RadarDisplay(object):
         if reverse_xaxis:
             R = -R
         pm = ax.pcolormesh(
-            R, z, data, vmin=vmin, vmax=vmax, cmap=cmap, norm=norm)
+            R, z, data, vmin=vmin, vmax=vmax, cmap=cmap, norm=norm, **kwargs)
 
         if title_flag:
             self._set_title(field, sweep, title, ax)
@@ -533,9 +537,11 @@ class RadarDisplay(object):
             colorbar_flag=True, colorbar_label=None,
             colorbar_orient='vertical', edges=True,
             filter_transitions=True, time_axis_flag=False,
-            date_time_form=None, tz=None, ax=None, fig=None):
+            date_time_form=None, tz=None, ax=None, fig=None, **kwargs):
         """
         Plot a VPT scan.
+
+        Additional arguments are passed to Matplotlib's pcolormesh function.
 
         Parameters
         ----------
@@ -639,7 +645,7 @@ class RadarDisplay(object):
 
         # plot the data
         pm = ax.pcolormesh(
-            x, y, data, vmin=vmin, vmax=vmax, cmap=cmap, norm=norm)
+            x, y, data, vmin=vmin, vmax=vmax, cmap=cmap, norm=norm, **kwargs)
 
         if title_flag:
             self._set_vpt_title(field, title, ax)
@@ -663,10 +669,13 @@ class RadarDisplay(object):
             axislabels=(None, None), axislabels_flag=True,
             colorbar_flag=True, colorbar_label=None,
             colorbar_orient='vertical', edges=True, gatefilter=None,
-            reverse_xaxis=None, filter_transitions=True, ax=None, fig=None):
+            reverse_xaxis=None, filter_transitions=True,
+            ax=None, fig=None, **kwargs):
         """
         Plot pseudo-RHI scan by extracting the vertical field associated
         with the given azimuth.
+
+        Additional arguments are passed to Matplotlib's pcolormesh function.
 
         Parameters
         ----------
@@ -758,7 +767,7 @@ class RadarDisplay(object):
         if reverse_xaxis:
             R = -R
         pm = ax.pcolormesh(
-            R, z, data, vmin=vmin, vmax=vmax, cmap=cmap, norm=norm)
+            R, z, data, vmin=vmin, vmax=vmax, cmap=cmap, norm=norm, **kwargs)
 
         if title_flag:
             self._set_az_rhi_title(field, target_azimuth, title, ax)

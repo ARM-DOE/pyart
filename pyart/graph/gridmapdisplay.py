@@ -156,9 +156,12 @@ class GridMapDisplay(object):
             mask_outside=False, title=None, title_flag=True,
             axislabels=(None, None), axislabels_flag=False,
             colorbar_flag=True, colorbar_label=None,
-            colorbar_orient='vertical', edges=True, ax=None, fig=None):
+            colorbar_orient='vertical', edges=True,
+            ax=None, fig=None, **kwargs):
         """
         Plot the grid onto the current basemap.
+
+        Additional arguments are passed to Basemaps's pcolormesh function.
 
         Parameters
         ----------
@@ -231,7 +234,7 @@ class GridMapDisplay(object):
         lons, lats = self.grid.get_point_longitude_latitude(edges=edges)
         pm = basemap.pcolormesh(
             lons, lats, data, vmin=vmin, vmax=vmax, cmap=cmap, norm=norm,
-            latlon=True)
+            latlon=True, **kwargs)
         self.mappables.append(pm)
         self.fields.append(field)
 
@@ -285,14 +288,12 @@ class GridMapDisplay(object):
         ax.plot(x_lat, y_lat, line_style, linewidth=linewidth)
         return
 
-    def plot_latitude_slice(
-            self, field, lon=None, lat=None, vmin=None, vmax=None, cmap='jet',
-            mask_outside=False, title=None, title_flag=True,
-            axislabels=(None, None), axislabels_flag=True, colorbar_flag=True,
-            colorbar_label=None, colorbar_orient='vertical', edges=True,
-            ax=None, fig=None):
+    def plot_latitude_slice(self, field, lon=None, lat=None, **kwargs):
         """
         Plot a slice along a given latitude.
+
+        For documentation of additional arguments see
+        :py:func:`plot_latitudinal_level`.
 
         Parameters
         ----------
@@ -301,61 +302,11 @@ class GridMapDisplay(object):
         lon, lat : float
             Longitude and latitude (in degrees) specifying the slice.  If
             None the center of the grid is used.
-        vmin, vmax : float
-            Lower and upper range for the colormesh.  If either parameter is
-            None, a value will be determined from the field attributes (if
-            available) or the default values of -8, 64 will be used.
-            Parameters are ignored is norm is not None.
-        norm : Normalize or None, optional
-            matplotlib Normalize instance used to scale luminance data.  If not
-            None the vmax and vmin parameters are ignored.  If None, vmin and
-            vmax are used for luminance scaling.
-        cmap : str
-            Matplotlib colormap name or colormap object.
-        mask_outside : bool
-            True to mask data outside of vmin, vmax.  False performs no
-            masking.
-        title : str
-            Title to label plot with, None to use default title generated from
-            the field and lat,lon parameters. Parameter is ignored if
-            title_flag is False.
-        title_flag : bool
-            True to add a title to the plot, False does not add a title.
-        axislabels : (str, str)
-            2-tuple of x-axis, y-axis labels.  None for either label will use
-            the default axis label.  Parameter is ignored if axislabels_flag is
-            False.
-        axislabel_flag : bool
-            True to add label the axes, False does not label the axes.
-        colorbar_flag : bool
-            True to add a colorbar with label to the axis.  False leaves off
-            the colorbar.
-        colorbar_label : str
-            Colorbar label, None will use a default label generated from the
-            field information.
-        colorbar_orient : 'vertical' or 'horizontal'
-            Colorbar orientation.
-        edges : bool
-            True will interpolate and extrapolate the gate edges from the
-            range, azimuth and elevations in the radar, treating these
-            as specifying the center of each gate.  False treats these
-            coordinates themselved as the gate edges, resulting in a plot
-            in which the last gate in each ray and the entire last ray are not
-            not plotted.
-        ax : Axis
-            Axis to plot on. None will use the current axis.
-        fig : Figure
-            Figure to add the colorbar to. None will use the current figure.
 
         """
         # parse parameters
         _, y_index = self._find_nearest_grid_indices(lon, lat)
-        self.plot_latitudinal_level(
-            field=field, y_index=y_index, vmin=vmin, vmax=vmax, cmap=cmap,
-            mask_outside=mask_outside, title=title, title_flag=title_flag,
-            axislabels=axislabels, axislabels_flag=axislabels_flag,
-            colorbar_flag=colorbar_flag, colorbar_label=colorbar_label,
-            colorbar_orient=colorbar_orient, edges=edges, ax=ax, fig=fig)
+        self.plot_latitudinal_level(field=field, y_index=y_index, **kwargs)
 
     def plot_latitudinal_level(
             self, field, y_index,
@@ -363,9 +314,11 @@ class GridMapDisplay(object):
             mask_outside=False, title=None, title_flag=True,
             axislabels=(None, None), axislabels_flag=True, colorbar_flag=True,
             colorbar_label=None, colorbar_orient='vertical', edges=True,
-            ax=None, fig=None):
+            ax=None, fig=None, **kwargs):
         """
         Plot a slice along a given latitude.
+
+        Additional arguments are passed to Basemaps's pcolormesh function.
 
         Parameters
         ----------
@@ -442,7 +395,7 @@ class GridMapDisplay(object):
                 z_1d = _interpolate_axes_edges(z_1d)
         xd, yd = np.meshgrid(x_1d, z_1d)
         pm = ax.pcolormesh(
-            xd, yd, data, vmin=vmin, vmax=vmax, norm=norm, cmap=cmap)
+            xd, yd, data, vmin=vmin, vmax=vmax, norm=norm, cmap=cmap, **kwargs)
         self.mappables.append(pm)
         self.fields.append(field)
 
@@ -462,15 +415,12 @@ class GridMapDisplay(object):
                 field=field, ax=ax, fig=fig)
         return
 
-    def plot_longitude_slice(
-            self, field, lon=None, lat=None,
-            vmin=None, vmax=None, norm=None, cmap='jet',
-            mask_outside=False, title=None, title_flag=True,
-            axislabels=(None, None), axislabels_flag=True, colorbar_flag=True,
-            colorbar_label=None, colorbar_orient='vertical', edges=True,
-            ax=None, fig=None):
+    def plot_longitude_slice(self, field, lon=None, lat=None, **kwargs):
         """
         Plot a slice along a given longitude.
+
+        For documentation of additional arguments see
+        :py:func:`plot_longitudinal_level`.
 
         Parameters
         ----------
@@ -479,61 +429,10 @@ class GridMapDisplay(object):
         lon, lat : float
             Longitude and latitude (in degrees) specifying the slice.  If
             None the center of the grid is used.
-        vmin, vmax : float
-            Lower and upper range for the colormesh.  If either parameter is
-            None, a value will be determined from the field attributes (if
-            available) or the default values of -8, 64 will be used.
-            Parameters are ignored is norm is not None.
-        norm : Normalize or None, optional
-            matplotlib Normalize instance used to scale luminance data.  If not
-            None the vmax and vmin parameters are ignored.  If None, vmin and
-            vmax are used for luminance scaling.
-        cmap : str
-            Matplotlib colormap name or colormap object.
-        mask_outside : bool
-            True to mask data outside of vmin, vmax.  False performs no
-            masking.
-        title : str
-            Title to label plot with, None to use default title generated from
-            the field and lat,lon parameters. Parameter is ignored if
-            title_flag is False.
-        title_flag : bool
-            True to add a title to the plot, False does not add a title.
-        axislabels : (str, str)
-            2-tuple of x-axis, y-axis labels.  None for either label will use
-            the default axis label.  Parameter is ignored if axislabels_flag is
-            False.
-        axislabel_flag : bool
-            True to add label the axes, False does not label the axes.
-        colorbar_flag : bool
-            True to add a colorbar with label to the axis.  False leaves off
-            the colorbar.
-        colorbar_label : str
-            Colorbar label, None will use a default label generated from the
-            field information.
-        colorbar_orient : 'vertical' or 'horizontal'
-            Colorbar orientation.
-        edges : bool
-            True will interpolate and extrapolate the gate edges from the
-            range, azimuth and elevations in the radar, treating these
-            as specifying the center of each gate.  False treats these
-            coordinates themselved as the gate edges, resulting in a plot
-            in which the last gate in each ray and the entire last ray are not
-            not plotted.
-        ax : Axis
-            Axis to plot on. None will use the current axis.
-        fig : Figure
-            Figure to add the colorbar to. None will use the current figure.
 
         """
         x_index, _ = self._find_nearest_grid_indices(lon, lat)
-        self.plot_longitudinal_level(
-            field=field, x_index=x_index,
-            vmin=vmin, vmax=vmax, norm=norm, cmap=cmap,
-            mask_outside=mask_outside, title=title, title_flag=title_flag,
-            axislabels=axislabels, axislabels_flag=axislabels_flag,
-            colorbar_flag=colorbar_flag, colorbar_label=colorbar_label,
-            colorbar_orient=colorbar_orient, edges=edges, ax=ax, fig=fig)
+        self.plot_longitudinal_level(field=field, x_index=x_index, **kwargs)
 
     def plot_longitudinal_level(
             self, field, x_index,
@@ -541,9 +440,11 @@ class GridMapDisplay(object):
             mask_outside=False, title=None, title_flag=True,
             axislabels=(None, None), axislabels_flag=True, colorbar_flag=True,
             colorbar_label=None, colorbar_orient='vertical', edges=True,
-            ax=None, fig=None):
+            ax=None, fig=None, **kwargs):
         """
         Plot a slice along a given longitude.
+
+        Additional arguments are passed to Basemaps's pcolormesh function.
 
         Parameters
         ----------
@@ -620,7 +521,7 @@ class GridMapDisplay(object):
                 z_1d = _interpolate_axes_edges(z_1d)
         xd, yd = np.meshgrid(y_1d, z_1d)
         pm = ax.pcolormesh(
-            xd, yd, data, vmin=vmin, vmax=vmax, cmap=cmap, norm=norm)
+            xd, yd, data, vmin=vmin, vmax=vmax, cmap=cmap, norm=norm, **kwargs)
         self.mappables.append(pm)
         self.fields.append(field)
 
