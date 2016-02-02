@@ -120,6 +120,44 @@ def test_dealias_unwrap_phase_rhi_volume():
     assert np.ma.is_masked(dealias_vel['data'][13]) is False
 
 
+def test_dealias_keep_original():
+    radar = pyart.testing.make_velocity_aliased_radar()
+    radar.fields['velocity']['data'][180, 5] = 88
+    gf = pyart.filters.GateFilter(radar)
+    gf.exclude_above('velocity', 40)
+
+    dealias_vel = pyart.correct.dealias_unwrap_phase(
+        radar, gatefilter=gf, keep_original=False)
+    assert np.ma.is_masked(dealias_vel['data'][180, 5]) is True
+
+    dealias_vel = pyart.correct.dealias_unwrap_phase(
+        radar, gatefilter=gf, keep_original=True)
+    assert_almost_equal(dealias_vel['data'][180, 5], 88)
+    assert np.ma.is_masked(dealias_vel['data'][180, 5]) is False
+
+
+def test_is_radar_sweep_aligned():
+    radar = pyart.testing.make_empty_ppi_radar(3, 4, 2)
+    radar.scan_type = 'rhi'
+    radar.elevation['data'][:] = [1, 2, 3, 4, 1, 2, 3, 4]
+    assert pyart.correct.unwrap._is_radar_sweep_aligned(radar)
+
+    radar.elevation['data'][:] = [1, 2, 3, 4, 2, 3, 4, 5]
+    assert not pyart.correct.unwrap._is_radar_sweep_aligned(radar)
+
+    # raises ValueError
+    radar = pyart.testing.make_empty_ppi_radar(3, 4, 2)
+    radar.scan_type = 'fuzz'
+    assert_raises(
+        ValueError, pyart.correct.unwrap._is_radar_sweep_aligned, radar)
+
+
+def test_is_sweep_sequential():
+    radar = pyart.testing.make_empty_ppi_radar(3, 4, 2)
+    radar.scan_type = 'vpt'
+    assert pyart.correct.unwrap._is_sweep_sequential(radar, 0)
+
+
 def test_dealias_unwrap_phase_raises():
 
     # invalid unwrap_unit
@@ -150,6 +188,11 @@ def test_dealias_unwrap_phase_raises():
     radar.sweep_end_ray_index['data'][-1] = 18
     assert_raises(ValueError, pyart.correct.dealias_unwrap_phase, radar,
                   nyquist_vel=10, unwrap_unit='volume')
+
+    # invalid scan type
+    radar = pyart.testing.make_velocity_aliased_radar()
+    radar.scan_type = 'fuzz'
+    assert_raises(ValueError, pyart.correct.dealias_unwrap_phase, radar)
 
     # invalid scan type
     radar = pyart.testing.make_velocity_aliased_radar()
