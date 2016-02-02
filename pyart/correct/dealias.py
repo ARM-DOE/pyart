@@ -22,7 +22,7 @@ try:
     _FOURDD_AVAILABLE = True
 except ImportError:
     _FOURDD_AVAILABLE = False
-from ._common_dealias import _parse_gatefilter
+from ._common_dealias import _parse_gatefilter, _set_limits
 from ..util import datetime_utils
 from ..exceptions import MissingOptionalDependency
 
@@ -30,7 +30,7 @@ from ..exceptions import MissingOptionalDependency
 def dealias_fourdd(radar, last_radar=None, sounding_heights=None,
                    sounding_wind_speeds=None, sounding_wind_direction=None,
                    gatefilter=False, filt=1, rsl_badval=131072.0,
-                   keep_original=False,
+                   keep_original=False, set_limits=True,
                    vel_field=None, corr_vel_field=None, last_vel_field=None,
                    debug=False, max_shear=0.05, sign=1,
                    **kwargs):
@@ -88,6 +88,9 @@ def dealias_fourdd(radar, last_radar=None, sounding_heights=None,
         True to keep original doppler velocity values when the dealiasing
         procedure fails, otherwise these gates will be masked.  NaN values
         are still masked.
+    set_limits : bool, optional
+        True to set valid_min and valid_max elements in the returned
+        dictionary.  False will not set these dictionary elements.
     vel_field : str, optional
         Field in radar to use as the Doppler velocities during dealiasing.
         None will use the default field name from the Py-ART configuration
@@ -256,6 +259,10 @@ def dealias_fourdd(radar, last_radar=None, sounding_heights=None,
     vr_corr = get_metadata(corr_vel_field)
     vr_corr['data'] = data
     vr_corr['_FillValue'] = data.fill_value
+
+    if set_limits:
+        nyquist_vel = radar.instrument_parameters['nyquist_velocity']['data']
+        _set_limits(data, nyquist_vel, vr_corr)
     return vr_corr
 
 
