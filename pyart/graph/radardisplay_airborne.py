@@ -131,11 +131,13 @@ class AirborneRadarDisplay(RadarDisplay):
         return
 
     def plot_sweep_grid(
-            self, field, sweep=0, mask_tuple=None, vmin=None, vmax=None,
-            cmap='jet', mask_outside=False, title=None, title_flag=True,
-            axislabels=(None, None), axislabels_flag=True, colorbar_flag=True,
-            colorbar_label=None, colorbar_orient='vertical', edges=True,
-            filter_transitions=True, ax=None, fig=None, gatefilter=None):
+            self, field, sweep=0, mask_tuple=None,
+            vmin=None, vmax=None, cmap='jet', norm=None, mask_outside=False,
+            title=None, title_flag=True,
+            axislabels=(None, None), axislabels_flag=True,
+            colorbar_flag=True, colorbar_label=None,
+            colorbar_orient='vertical', edges=True, filter_transitions=True,
+            ax=None, fig=None, gatefilter=None):
         """
         Plot a sweep as a grid.
 
@@ -154,8 +156,14 @@ class AirborneRadarDisplay(RadarDisplay):
             NCP < 0.5 set mask_tuple to ['NCP', 0.5]. None performs no masking.
         vmin : float
             Luminance minimum value, None for default value.
+            Parameter is ignored is norm is not None.
         vmax : float
             Luminance maximum value, None for default value.
+            Parameter is ignored is norm is not None.
+        norm : Normalize or None, optional
+            matplotlib Normalize instance used to scale luminance data.  If not
+            None the vmax and vmin parameters are ignored.  If None, vmin and
+            vmax are used for luminance scaling.
         cmap : str
             Matplotlib colormap name.
         mask_outside : bool
@@ -204,7 +212,8 @@ class AirborneRadarDisplay(RadarDisplay):
         """
         # parse parameters
         ax, fig = common.parse_ax_fig(ax, fig)
-        vmin, vmax = common.parse_vmin_vmax(self._radar, field, vmin, vmax)
+        norm, vmin, vmax = common.parse_norm_vmin_vmax(
+            norm, self._radar, field, vmin, vmax)
 
         # get data for the plot
         data = self._get_data(
@@ -217,7 +226,8 @@ class AirborneRadarDisplay(RadarDisplay):
             data = np.ma.masked_outside(data, vmin, vmax)
 
         # plot the data
-        pm = ax.pcolormesh(x, z, data, vmin=vmin, vmax=vmax, cmap=cmap)
+        pm = ax.pcolormesh(
+            x, z, data, vmin=vmin, vmax=vmax, cmap=cmap, norm=norm)
 
         if title_flag:
             self._set_title(field, sweep, title, ax)

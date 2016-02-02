@@ -294,12 +294,14 @@ class RadarDisplay(object):
         self.plots.append(line)
         self.plot_vars.append(field)
 
-    def plot_ppi(self, field, sweep=0, mask_tuple=None, vmin=None, vmax=None,
-                 cmap='jet', mask_outside=False, title=None, title_flag=True,
-                 axislabels=(None, None), axislabels_flag=True,
-                 colorbar_flag=True, colorbar_label=None,
-                 colorbar_orient='vertical', edges=True, gatefilter=None,
-                 filter_transitions=True, ax=None, fig=None):
+    def plot_ppi(
+            self, field, sweep=0, mask_tuple=None,
+            vmin=None, vmax=None, norm=None, cmap='jet', mask_outside=False,
+            title=None, title_flag=True,
+            axislabels=(None, None), axislabels_flag=True,
+            colorbar_flag=True, colorbar_label=None,
+            colorbar_orient='vertical', edges=True, gatefilter=None,
+            filter_transitions=True, ax=None, fig=None):
         """
         Plot a PPI.
 
@@ -318,8 +320,14 @@ class RadarDisplay(object):
             NCP < 0.5 set mask_tuple to ['NCP', 0.5]. None performs no masking.
         vmin : float
             Luminance minimum value, None for default value.
+            Parameter is ignored is norm is not None.
         vmax : float
             Luminance maximum value, None for default value.
+            Parameter is ignored is norm is not None.
+        norm : Normalize or None, optional
+            matplotlib Normalize instance used to scale luminance data.  If not
+            None the vmax and vmin parameters are ignored.  If None, vmin and
+            vmax are used for luminance scaling.
         cmap : str
             Matplotlib colormap name.
         mask_outside : bool
@@ -368,7 +376,8 @@ class RadarDisplay(object):
         """
         # parse parameters
         ax, fig = common.parse_ax_fig(ax, fig)
-        vmin, vmax = common.parse_vmin_vmax(self._radar, field, vmin, vmax)
+        norm, vmin, vmax = common.parse_norm_vmin_vmax(
+            norm, self._radar, field, vmin, vmax)
 
         # get data for the plot
         data = self._get_data(
@@ -379,7 +388,8 @@ class RadarDisplay(object):
         _mask_outside(mask_outside, data, vmin, vmax)
 
         # plot the data
-        pm = ax.pcolormesh(x, y, data, vmin=vmin, vmax=vmax, cmap=cmap)
+        pm = ax.pcolormesh(
+            x, y, data, vmin=vmin, vmax=vmax, cmap=cmap, norm=norm)
 
         if title_flag:
             self._set_title(field, sweep, title, ax)
@@ -396,13 +406,14 @@ class RadarDisplay(object):
                 mappable=pm, label=colorbar_label, orient=colorbar_orient,
                 field=field, ax=ax, fig=fig)
 
-    def plot_rhi(self, field, sweep=0, mask_tuple=None, vmin=None, vmax=None,
-                 cmap='jet', mask_outside=False, title=None, title_flag=True,
-                 axislabels=(None, None), axislabels_flag=True,
-                 reverse_xaxis=None, colorbar_flag=True, colorbar_label=None,
-                 colorbar_orient='vertical', edges=True,
-                 gatefilter=None,
-                 filter_transitions=True, ax=None, fig=None):
+    def plot_rhi(
+            self, field, sweep=0, mask_tuple=None,
+            vmin=None, vmax=None, norm=None, cmap='jet',
+            mask_outside=False, title=None, title_flag=True,
+            axislabels=(None, None), axislabels_flag=True,
+            reverse_xaxis=None, colorbar_flag=True, colorbar_label=None,
+            colorbar_orient='vertical', edges=True, gatefilter=None,
+            filter_transitions=True, ax=None, fig=None):
         """
         Plot a RHI.
 
@@ -421,8 +432,14 @@ class RadarDisplay(object):
             NCP < 0.5 set mask to ['NCP', 0.5]. None performs no masking.
         vmin : float
             Luminance minimum value, None for default value.
+            Parameter is ignored is norm is not None.
         vmax : float
             Luminance maximum value, None for default value.
+            Parameter is ignored is norm is not None.
+        norm : Normalize or None, optional
+            matplotlib Normalize instance used to scale luminance data.  If not
+            None the vmax and vmin parameters are ignored.  If None, vmin and
+            vmax are used for luminance scaling.
         cmap : str
             Matplotlib colormap name.
         title : str
@@ -472,7 +489,8 @@ class RadarDisplay(object):
         """
         # parse parameters
         ax, fig = common.parse_ax_fig(ax, fig)
-        vmin, vmax = common.parse_vmin_vmax(self._radar, field, vmin, vmax)
+        norm, vmin, vmax = common.parse_norm_vmin_vmax(
+            norm, self._radar, field, vmin, vmax)
 
         # get data for the plot
         data = self._get_data(
@@ -489,7 +507,8 @@ class RadarDisplay(object):
             reverse_xaxis = np.all(R < 1.)
         if reverse_xaxis:
             R = -R
-        pm = ax.pcolormesh(R, z, data, vmin=vmin, vmax=vmax, cmap=cmap)
+        pm = ax.pcolormesh(
+            R, z, data, vmin=vmin, vmax=vmax, cmap=cmap, norm=norm)
 
         if title_flag:
             self._set_title(field, sweep, title, ax)
@@ -506,13 +525,15 @@ class RadarDisplay(object):
                 mappable=pm, label=colorbar_label, orient=colorbar_orient,
                 field=field, ax=ax, fig=fig)
 
-    def plot_vpt(self, field, mask_tuple=None, vmin=None, vmax=None,
-                 cmap='jet', mask_outside=False, title=None, title_flag=True,
-                 axislabels=(None, None), axislabels_flag=True,
-                 colorbar_flag=True, colorbar_label=None,
-                 colorbar_orient='vertical', edges=True,
-                 filter_transitions=True, time_axis_flag=False,
-                 date_time_form=None, tz=None, ax=None, fig=None):
+    def plot_vpt(
+            self, field, mask_tuple=None,
+            vmin=None, vmax=None, norm=None, cmap='jet', mask_outside=False,
+            title=None, title_flag=True,
+            axislabels=(None, None), axislabels_flag=True,
+            colorbar_flag=True, colorbar_label=None,
+            colorbar_orient='vertical', edges=True,
+            filter_transitions=True, time_axis_flag=False,
+            date_time_form=None, tz=None, ax=None, fig=None):
         """
         Plot a VPT scan.
 
@@ -529,8 +550,14 @@ class RadarDisplay(object):
             NCP < 0.5 set mask_tuple to ['NCP', 0.5]. None performs no masking.
         vmin : float
             Luminance minimum value, None for default value.
+            Parameter is ignored is norm is not None.
         vmax : float
             Luminance maximum value, None for default value.
+            Parameter is ignored is norm is not None.
+        norm : Normalize or None, optional
+            matplotlib Normalize instance used to scale luminance data.  If not
+            None the vmax and vmin parameters are ignored.  If None, vmin and
+            vmax are used for luminance scaling.
         cmap : str
             Matplotlib colormap name.
         mask_outside : bool
@@ -585,7 +612,8 @@ class RadarDisplay(object):
         """
         # parse parameters
         ax, fig = common.parse_ax_fig(ax, fig)
-        vmin, vmax = common.parse_vmin_vmax(self._radar, field, vmin, vmax)
+        norm, vmin, vmax = common.parse_norm_vmin_vmax(
+            norm, self._radar, field, vmin, vmax)
 
         # get data for the plot
         data = self._get_vpt_data(field, mask_tuple, filter_transitions)
@@ -610,7 +638,8 @@ class RadarDisplay(object):
         _mask_outside(mask_outside, data, vmin, vmax)
 
         # plot the data
-        pm = ax.pcolormesh(x, y, data, vmin=vmin, vmax=vmax, cmap=cmap)
+        pm = ax.pcolormesh(
+            x, y, data, vmin=vmin, vmax=vmax, cmap=cmap, norm=norm)
 
         if title_flag:
             self._set_vpt_title(field, title, ax)
@@ -627,15 +656,14 @@ class RadarDisplay(object):
                 mappable=pm, label=colorbar_label, orient=colorbar_orient,
                 field=field, ax=ax, fig=fig)
 
-    def plot_azimuth_to_rhi(self, field, target_azimuth,
-                            mask_tuple=None, vmin=None, vmax=None,
-                            cmap='jet', mask_outside=False,
-                            title=None, title_flag=True,
-                            axislabels=(None, None), axislabels_flag=True,
-                            reverse_xaxis=None, colorbar_flag=True,
-                            colorbar_label=None, colorbar_orient='vertical',
-                            edges=True, gatefilter=None,
-                            filter_transitions=True, ax=None, fig=None):
+    def plot_azimuth_to_rhi(
+            self, field, target_azimuth, mask_tuple=None,
+            vmin=None, vmax=None, norm=None, cmap='jet', mask_outside=False,
+            title=None, title_flag=True,
+            axislabels=(None, None), axislabels_flag=True,
+            colorbar_flag=True, colorbar_label=None,
+            colorbar_orient='vertical', edges=True, gatefilter=None,
+            reverse_xaxis=None, filter_transitions=True, ax=None, fig=None):
         """
         Plot pseudo-RHI scan by extracting the vertical field associated
         with the given azimuth.
@@ -655,8 +683,14 @@ class RadarDisplay(object):
             NCP < 0.5 set mask to ['NCP', 0.5]. None performs no masking.
         vmin : float
             Luminance minimum value, None for default value.
+            Parameter is ignored is norm is not None.
         vmax : float
             Luminance maximum value, None for default value.
+            Parameter is ignored is norm is not None.
+        norm : Normalize or None, optional
+            matplotlib Normalize instance used to scale luminance data.  If not
+            None the vmax and vmin parameters are ignored.  If None, vmin and
+            vmax are used for luminance scaling.
         cmap : str
             Matplotlib colormap name.
         title : str
@@ -706,7 +740,8 @@ class RadarDisplay(object):
         """
         # parse parameters
         ax, fig = common.parse_ax_fig(ax, fig)
-        vmin, vmax = common.parse_vmin_vmax(self._radar, field, vmin, vmax)
+        norm, vmin, vmax = common.parse_norm_vmin_vmax(
+            norm, self._radar, field, vmin, vmax)
 
         data, x, y, z = self._get_azimuth_rhi_data_x_y_z(
             field, target_azimuth, edges, mask_tuple,
@@ -722,7 +757,8 @@ class RadarDisplay(object):
             reverse_xaxis = np.all(R < 1.)
         if reverse_xaxis:
             R = -R
-        pm = ax.pcolormesh(R, z, data, vmin=vmin, vmax=vmax, cmap=cmap)
+        pm = ax.pcolormesh(
+            R, z, data, vmin=vmin, vmax=vmax, cmap=cmap, norm=norm)
 
         if title_flag:
             self._set_az_rhi_title(field, target_azimuth, title, ax)
