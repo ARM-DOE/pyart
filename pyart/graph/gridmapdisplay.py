@@ -156,9 +156,12 @@ class GridMapDisplay(object):
             mask_outside=False, title=None, title_flag=True,
             axislabels=(None, None), axislabels_flag=False,
             colorbar_flag=True, colorbar_label=None,
-            colorbar_orient='vertical', edges=True, ax=None, fig=None):
+            colorbar_orient='vertical', edges=True,
+            ax=None, fig=None, **kwargs):
         """
         Plot the grid onto the current basemap.
+
+        Additional arguments are passed to Basemaps's pcolormesh function.
 
         Parameters
         ----------
@@ -231,7 +234,7 @@ class GridMapDisplay(object):
         lons, lats = self.grid.get_point_longitude_latitude(edges=edges)
         pm = basemap.pcolormesh(
             lons, lats, data, vmin=vmin, vmax=vmax, cmap=cmap, norm=norm,
-            latlon=True)
+            latlon=True, **kwargs)
         self.mappables.append(pm)
         self.fields.append(field)
 
@@ -290,9 +293,11 @@ class GridMapDisplay(object):
             mask_outside=False, title=None, title_flag=True,
             axislabels=(None, None), axislabels_flag=True, colorbar_flag=True,
             colorbar_label=None, colorbar_orient='vertical', edges=True,
-            ax=None, fig=None):
+            ax=None, fig=None, **kwargs):
         """
         Plot a slice along a given latitude.
+
+        Additional arguments are passed to Basemaps's pcolormesh function.
 
         Parameters
         ----------
@@ -442,7 +447,7 @@ class GridMapDisplay(object):
                 z_1d = _interpolate_axes_edges(z_1d)
         xd, yd = np.meshgrid(x_1d, z_1d)
         pm = ax.pcolormesh(
-            xd, yd, data, vmin=vmin, vmax=vmax, norm=norm, cmap=cmap)
+            xd, yd, data, vmin=vmin, vmax=vmax, norm=norm, cmap=cmap, **kwargs)
         self.mappables.append(pm)
         self.fields.append(field)
 
@@ -468,9 +473,11 @@ class GridMapDisplay(object):
             mask_outside=False, title=None, title_flag=True,
             axislabels=(None, None), axislabels_flag=True, colorbar_flag=True,
             colorbar_label=None, colorbar_orient='vertical', edges=True,
-            ax=None, fig=None):
+            ax=None, fig=None, **kwargs):
         """
         Plot a slice along a given longitude.
+
+        Additional arguments are passed to Basemaps's pcolormesh function.
 
         Parameters
         ----------
@@ -620,7 +627,7 @@ class GridMapDisplay(object):
                 z_1d = _interpolate_axes_edges(z_1d)
         xd, yd = np.meshgrid(y_1d, z_1d)
         pm = ax.pcolormesh(
-            xd, yd, data, vmin=vmin, vmax=vmax, cmap=cmap, norm=norm)
+            xd, yd, data, vmin=vmin, vmax=vmax, cmap=cmap, norm=norm, **kwargs)
         self.mappables.append(pm)
         self.fields.append(field)
 
