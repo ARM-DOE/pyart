@@ -218,7 +218,10 @@ cdef class SigmetFile:
             prt_value = 1. / self.product_hdr['product_end']['prf']
             task_config = self.ingest_header['task_configuration']
             multi_prf_flag = task_config['task_dsp_info']['multi_prf_flag']
-            multiplier = [1, 2, 3, 4][multi_prf_flag]
+            if multi_prf_flag > 3 or multi_prf_flag < 0:
+                multiplier = 1  # multiplier not defined in IRIS manual
+            else:
+                multiplier = [1, 2, 3, 4][multi_prf_flag]
             nyquist = wavelength_cm / (10000.0 * 4.0 * prt_value) * multiplier
             data['VEL'] *= nyquist
         # scale 1-byte width by the Nyquist
@@ -639,10 +642,10 @@ def convert_sigmet_data(data_type, data, nbins):
     ]
 
     like_sqi = [
-		'RHOH',     # 1-byte Rho Format, section 4.3.21
-		'RHOV',     # " "
-		'RHOHV',    # 1-byte RhoHV Format, section 4.3.23
-		'SQI',      # 1-byte Signal Quality Index Format, section 4.3.26
+        'RHOH',     # 1-byte Rho Format, section 4.3.21
+        'RHOV',     # " "
+        'RHOHV',    # 1-byte RhoHV Format, section 4.3.23
+        'SQI',      # 1-byte Signal Quality Index Format, section 4.3.26
     ]
 
     like_sqi2 = [
