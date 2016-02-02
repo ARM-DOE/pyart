@@ -20,7 +20,7 @@ except ImportError:
     _BASEMAP_AVAILABLE = False
 
 from .radardisplay import RadarDisplay
-from .common import parse_ax_fig, parse_vmin_vmax
+from .common import parse_ax_fig, parse_norm_vmin_vmax
 from ..exceptions import MissingOptionalDependency
 
 
@@ -96,18 +96,17 @@ class RadarMapDisplay(RadarDisplay):
         if self.basemap is None:
             raise ValueError('no basemap plotted')
 
-    def plot_ppi_map(self, field, sweep=0, mask_tuple=None,
-                     vmin=None, vmax=None, cmap='jet', mask_outside=False,
-                     title=None, title_flag=True,
-                     colorbar_flag=True, colorbar_label=None,
-                     ax=None, fig=None,
-                     lat_lines=None, lon_lines=None,
-                     projection='lcc', area_thresh=10000,
-                     min_lon=None, max_lon=None, min_lat=None, max_lat=None,
-                     width=None, height=None, lon_0=None, lat_0=None,
-                     resolution='h', shapefile=None, edges=True,
-                     gatefilter=None, basemap=None,
-                     filter_transitions=True, embelish=True, **kwargs):
+    def plot_ppi_map(
+            self, field, sweep=0, mask_tuple=None,
+            vmin=None, vmax=None, cmap='jet', norm=None, mask_outside=False,
+            title=None, title_flag=True,
+            colorbar_flag=True, colorbar_label=None, ax=None, fig=None,
+            lat_lines=None, lon_lines=None,
+            projection='lcc', area_thresh=10000,
+            min_lon=None, max_lon=None, min_lat=None, max_lat=None,
+            width=None, height=None, lon_0=None, lat_0=None,
+            resolution='h', shapefile=None, edges=True, gatefilter=None,
+            basemap=None, filter_transitions=True, embelish=True, **kwargs):
         """
         Plot a PPI volume sweep onto a geographic map.
 
@@ -128,8 +127,14 @@ class RadarMapDisplay(RadarDisplay):
             NCP < 0.5 set mask_tuple to ['NCP', 0.5]. None performs no masking.
         vmin : float
             Luminance minimum value, None for default value.
+            Parameter is ignored is norm is not None.
         vmax : float
             Luminance maximum value, None for default value.
+            Parameter is ignored is norm is not None.
+        norm : Normalize or None, optional
+            matplotlib Normalize instance used to scale luminance data.  If not
+            None the vmax and vmin parameters are ignored.  If None, vmin and
+            vmax are used for luminance scaling.
         cmap : str
             Matplotlib colormap name.
         mask_outside : bool
@@ -206,7 +211,8 @@ class RadarMapDisplay(RadarDisplay):
         """
         # parse parameters
         ax, fig = parse_ax_fig(ax, fig)
-        vmin, vmax = parse_vmin_vmax(self._radar, field, vmin, vmax)
+        norm, vmin, vmax = parse_norm_vmin_vmax(
+            norm, self._radar, field, vmin, vmax)
         if lat_lines is None:
             lat_lines = np.arange(30, 46, 1)
         if lon_lines is None:
@@ -261,8 +267,9 @@ class RadarMapDisplay(RadarDisplay):
         # we need to convert the radar gate locations (x and y) which are in
         # km to meters as well as add the map coordiate radar location
         # which is given by self._x0, self._y0.
-        pm = basemap.pcolormesh(self._x0 + x * 1000., self._y0 + y * 1000.,
-                                data, vmin=vmin, vmax=vmax, cmap=cmap)
+        pm = basemap.pcolormesh(
+            self._x0 + x * 1000., self._y0 + y * 1000., data,
+            vmin=vmin, vmax=vmax, cmap=cmap, norm=norm)
 
         if shapefile is not None:
             basemap.readshapefile(shapefile, 'shapefile', ax=ax)

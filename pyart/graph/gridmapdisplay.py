@@ -151,7 +151,8 @@ class GridMapDisplay(object):
             lon_lines, labels=[False, False, False, True])
 
     def plot_grid(
-            self, field, level=0, vmin=None, vmax=None, cmap='jet',
+            self, field, level=0,
+            vmin=None, vmax=None, norm=None, cmap='jet',
             mask_outside=False, title=None, title_flag=True,
             axislabels=(None, None), axislabels_flag=False,
             colorbar_flag=True, colorbar_label=None,
@@ -169,6 +170,11 @@ class GridMapDisplay(object):
             Lower and upper range for the colormesh.  If either parameter is
             None, a value will be determined from the field attributes (if
             available) or the default values of -8, 64 will be used.
+            Parameters are ignored is norm is not None.
+        norm : Normalize or None, optional
+            matplotlib Normalize instance used to scale luminance data.  If not
+            None the vmax and vmin parameters are ignored.  If None, vmin and
+            vmax are used for luminance scaling.
         cmap : str
             Matplotlib colormap name or colormap object.
         mask_outside : bool
@@ -209,7 +215,8 @@ class GridMapDisplay(object):
         """
         # parse parameters
         ax, fig = common.parse_ax_fig(ax, fig)
-        vmin, vmax = common.parse_vmin_vmax(self.grid, field, vmin, vmax)
+        norm, vmin, vmax = common.parse_norm_vmin_vmax(
+            norm, self.grid, field, vmin, vmax)
 
         basemap = self.get_basemap()
 
@@ -223,7 +230,8 @@ class GridMapDisplay(object):
         # plot the grid
         lons, lats = self.grid.get_point_longitude_latitude(edges=edges)
         pm = basemap.pcolormesh(
-            lons, lats, data, vmin=vmin, vmax=vmax, cmap=cmap, latlon=True)
+            lons, lats, data, vmin=vmin, vmax=vmax, cmap=cmap, norm=norm,
+            latlon=True)
         self.mappables.append(pm)
         self.fields.append(field)
 
@@ -297,6 +305,11 @@ class GridMapDisplay(object):
             Lower and upper range for the colormesh.  If either parameter is
             None, a value will be determined from the field attributes (if
             available) or the default values of -8, 64 will be used.
+            Parameters are ignored is norm is not None.
+        norm : Normalize or None, optional
+            matplotlib Normalize instance used to scale luminance data.  If not
+            None the vmax and vmin parameters are ignored.  If None, vmin and
+            vmax are used for luminance scaling.
         cmap : str
             Matplotlib colormap name or colormap object.
         mask_outside : bool
@@ -345,7 +358,8 @@ class GridMapDisplay(object):
             colorbar_orient=colorbar_orient, edges=edges, ax=ax, fig=fig)
 
     def plot_latitudinal_level(
-            self, field, y_index, vmin=None, vmax=None, cmap='jet',
+            self, field, y_index,
+            vmin=None, vmax=None, norm=None, cmap='jet',
             mask_outside=False, title=None, title_flag=True,
             axislabels=(None, None), axislabels_flag=True, colorbar_flag=True,
             colorbar_label=None, colorbar_orient='vertical', edges=True,
@@ -363,6 +377,11 @@ class GridMapDisplay(object):
             Lower and upper range for the colormesh.  If either parameter is
             None, a value will be determined from the field attributes (if
             available) or the default values of -8, 64 will be used.
+            Parameters are ignored is norm is not None.
+        norm : Normalize or None, optional
+            matplotlib Normalize instance used to scale luminance data.  If not
+            None the vmax and vmin parameters are ignored.  If None, vmin and
+            vmax are used for luminance scaling.
         cmap : str
             Matplotlib colormap name or colormap object.
         mask_outside : bool
@@ -403,7 +422,8 @@ class GridMapDisplay(object):
         """
         # parse parameters
         ax, fig = common.parse_ax_fig(ax, fig)
-        vmin, vmax = common.parse_vmin_vmax(self.grid, field, vmin, vmax)
+        norm, vmin, vmax = common.parse_norm_vmin_vmax(
+            norm, self.grid, field, vmin, vmax)
 
         data = self.grid.fields[field]['data'][:, y_index, :]
 
@@ -421,7 +441,8 @@ class GridMapDisplay(object):
             if len(z_1d) > 1:
                 z_1d = _interpolate_axes_edges(z_1d)
         xd, yd = np.meshgrid(x_1d, z_1d)
-        pm = ax.pcolormesh(xd, yd, data, vmin=vmin, vmax=vmax, cmap=cmap)
+        pm = ax.pcolormesh(
+            xd, yd, data, vmin=vmin, vmax=vmax, norm=norm, cmap=cmap)
         self.mappables.append(pm)
         self.fields.append(field)
 
@@ -442,7 +463,8 @@ class GridMapDisplay(object):
         return
 
     def plot_longitude_slice(
-            self, field, lon=None, lat=None, vmin=None, vmax=None, cmap='jet',
+            self, field, lon=None, lat=None,
+            vmin=None, vmax=None, norm=None, cmap='jet',
             mask_outside=False, title=None, title_flag=True,
             axislabels=(None, None), axislabels_flag=True, colorbar_flag=True,
             colorbar_label=None, colorbar_orient='vertical', edges=True,
@@ -461,6 +483,11 @@ class GridMapDisplay(object):
             Lower and upper range for the colormesh.  If either parameter is
             None, a value will be determined from the field attributes (if
             available) or the default values of -8, 64 will be used.
+            Parameters are ignored is norm is not None.
+        norm : Normalize or None, optional
+            matplotlib Normalize instance used to scale luminance data.  If not
+            None the vmax and vmin parameters are ignored.  If None, vmin and
+            vmax are used for luminance scaling.
         cmap : str
             Matplotlib colormap name or colormap object.
         mask_outside : bool
@@ -501,14 +528,16 @@ class GridMapDisplay(object):
         """
         x_index, _ = self._find_nearest_grid_indices(lon, lat)
         self.plot_longitudinal_level(
-            field=field, x_index=x_index, vmin=vmin, vmax=vmax, cmap=cmap,
+            field=field, x_index=x_index,
+            vmin=vmin, vmax=vmax, norm=norm, cmap=cmap,
             mask_outside=mask_outside, title=title, title_flag=title_flag,
             axislabels=axislabels, axislabels_flag=axislabels_flag,
             colorbar_flag=colorbar_flag, colorbar_label=colorbar_label,
             colorbar_orient=colorbar_orient, edges=edges, ax=ax, fig=fig)
 
     def plot_longitudinal_level(
-            self, field, x_index, vmin=None, vmax=None, cmap='jet',
+            self, field, x_index,
+            vmin=None, vmax=None, norm=None, cmap='jet',
             mask_outside=False, title=None, title_flag=True,
             axislabels=(None, None), axislabels_flag=True, colorbar_flag=True,
             colorbar_label=None, colorbar_orient='vertical', edges=True,
@@ -526,6 +555,11 @@ class GridMapDisplay(object):
             Lower and upper range for the colormesh.  If either parameter is
             None, a value will be determined from the field attributes (if
             available) or the default values of -8, 64 will be used.
+            Parameters are ignored is norm is not None.
+        norm : Normalize or None, optional
+            matplotlib Normalize instance used to scale luminance data.  If not
+            None the vmax and vmin parameters are ignored.  If None, vmin and
+            vmax are used for luminance scaling.
         cmap : str
             Matplotlib colormap name or colormap object.
         mask_outside : bool
@@ -566,7 +600,8 @@ class GridMapDisplay(object):
         """
         # parse parameters
         ax, fig = common.parse_ax_fig(ax, fig)
-        vmin, vmax = common.parse_vmin_vmax(self.grid, field, vmin, vmax)
+        norm, vmin, vmax = common.parse_norm_vmin_vmax(
+            norm, self.grid, field, vmin, vmax)
 
         data = self.grid.fields[field]['data'][:, :, x_index]
 
@@ -584,7 +619,8 @@ class GridMapDisplay(object):
             if len(z_1d) > 1:
                 z_1d = _interpolate_axes_edges(z_1d)
         xd, yd = np.meshgrid(y_1d, z_1d)
-        pm = ax.pcolormesh(xd, yd, data, vmin=vmin, vmax=vmax, cmap=cmap)
+        pm = ax.pcolormesh(
+            xd, yd, data, vmin=vmin, vmax=vmax, cmap=cmap, norm=norm)
         self.mappables.append(pm)
         self.fields.append(field)
 
