@@ -747,6 +747,9 @@ def corner_to_point(corner, point):
 
     Assumes a spherical earth model.
 
+    This function is Deprecated, use the :py:func:`geographic_to_cartesian`
+    function as a replacement.
+
     Parameters
     ----------
     corner : (float, float)
@@ -760,6 +763,12 @@ def corner_to_point(corner, point):
         Distances from the corner to the point in meters.
 
     """
+    warnings.warn(
+        "corner_to_point is deprecated and will be removed in a future " +
+        "version of Py-ART.\n" +
+        "Additionally use of this function is discourage, the " +
+        "geographic_to_cartesian function produces similar results while " +
+        "allowing the map projection to be specified. ", DeprecationWarning)
     Re = 6371.0 * 1000.0
     Rc = _ax_radius(point[0], units='degrees')
     # print Rc/Re
