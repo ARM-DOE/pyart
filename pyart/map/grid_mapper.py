@@ -383,6 +383,10 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
     if isinstance(radars, Radar):
         radars = (radars, )
 
+    skip_transform = False
+    if len(radars) == 1 and grid_origin_alt is None and grid_origin is None:
+        skip_transform = True
+
     # parse the gatefilters argument
     if isinstance(gatefilters, GateFilter):
         gatefilters = (gatefilters, )  # make tuple if single filter passed
@@ -458,9 +462,13 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
         offsets.append((z_disp, float(y_disp), float(x_disp)))
 
         # calculate cartesian locations of gates
-        xg_loc, yg_loc = geographic_to_cartesian_aeqd(
-            radar.gate_longitude['data'], radar.gate_latitude['data'],
-            grid_origin_lon, grid_origin_lat)
+        if skip_transform:
+            xg_loc = radar.gate_x['data']
+            yg_loc = radar.gate_y['data']
+        else:
+            xg_loc, yg_loc = geographic_to_cartesian_aeqd(
+                radar.gate_longitude['data'], radar.gate_latitude['data'],
+                grid_origin_lon, grid_origin_lat)
         zg_loc = radar.gate_altitude['data'] - grid_origin_alt
 
         # add gate locations to gate_locations array

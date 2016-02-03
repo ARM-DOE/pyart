@@ -83,6 +83,10 @@ def map_gates_to_grid(
     if isinstance(radars, Radar):
         radars = (radars, )
 
+    skip_transform = False
+    if len(radars) == 1 and grid_origin_alt is None and grid_origin is None:
+        skip_transform = True
+
     if grid_origin_alt is None:
         grid_origin_alt = float(radars[0].altitude['data'])
 
@@ -124,11 +128,14 @@ def map_gates_to_grid(
         excluded_gates = gatefilter.gate_excluded.astype('uint8')
 
         # calculate gate locations relative to the grid origin
-        gate_latitude = radar.gate_latitude['data']
-        gate_longitude = radar.gate_longitude['data']
-        gate_x, gate_y = geographic_to_cartesian_aeqd(
-            gate_longitude, gate_latitude,
-            grid_origin_lon, grid_origin_lat)
+        if skip_transform:
+            # single radar, grid centered at radar location
+            gate_x = radar.gate_x['data']
+            gate_y = radar.gate_y['data']
+        else:
+            gate_x, gate_y = geographic_to_cartesian_aeqd(
+                radar.gate_longitude['data'], radar.gate_latitude['data'],
+                grid_origin_lon, grid_origin_lat)
         gate_z = radar.gate_altitude['data'] - grid_origin_alt
 
         # map the gates onto the grid
