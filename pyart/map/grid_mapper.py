@@ -30,8 +30,7 @@ import scipy.spatial
 import netCDF4
 
 from ..config import get_fillvalue, get_metadata
-from ..core.transforms import corner_to_point
-from ..core.transforms import antenna_to_cartesian
+from ..core.transforms import geographic_to_cartesian_aeqd
 from ..core.grid import Grid
 from ..core.radar import Radar
 from ..filters import GateFilter, moment_based_gate_filter
@@ -406,6 +405,7 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
         lat = float(radars[0].latitude['data'])
         lon = float(radars[0].longitude['data'])
         grid_origin = (lat, lon)
+    grid_origin_lat, grid_origin_lon = grid_origin
 
     if grid_origin_alt is None:
         grid_origin_alt = float(radars[0].altitude['data'])
@@ -451,23 +451,23 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
     for iradar, (radar, gatefilter) in enumerate(zip(radars, gatefilters)):
 
         # calculate radar offset from the origin
-        radar_lat = float(radar.latitude['data'])
-        radar_lon = float(radar.longitude['data'])
-        x_disp, y_disp = corner_to_point(grid_origin, (radar_lat, radar_lon))
+        x_disp, y_disp = geographic_to_cartesian_aeqd(
+            radar.longitude['data'], radar.latitude['data'],
+            grid_origin_lon, grid_origin_lat)
         z_disp = float(radar.altitude['data']) - grid_origin_alt
-        offsets.append((z_disp, y_disp, x_disp))
+        offsets.append((z_disp, float(y_disp), float(x_disp)))
 
         # calculate cartesian locations of gates
-        rg, azg = np.meshgrid(radar.range['data'], radar.azimuth['data'])
-        rg, eleg = np.meshgrid(radar.range['data'], radar.elevation['data'])
-        xg_loc, yg_loc, zg_loc = antenna_to_cartesian(rg / 1000., azg, eleg)
-        del rg, azg, eleg
+        xg_loc, yg_loc = geographic_to_cartesian_aeqd(
+            radar.gate_longitude['data'], radar.gate_latitude['data'],
+            grid_origin_lon, grid_origin_lat)
+        zg_loc = radar.gate_altitude['data'] - grid_origin_alt
 
         # add gate locations to gate_locations array
         start, end = gate_offset[iradar], gate_offset[iradar + 1]
-        gate_locations[start:end, 0] = (zg_loc + z_disp).flat
-        gate_locations[start:end, 1] = (yg_loc + y_disp).flat
-        gate_locations[start:end, 2] = (xg_loc + x_disp).flat
+        gate_locations[start:end, 0] = zg_loc.flat
+        gate_locations[start:end, 1] = yg_loc.flat
+        gate_locations[start:end, 2] = xg_loc.flat
         del xg_loc, yg_loc
 
         # determine which gates should be included in the interpolation
