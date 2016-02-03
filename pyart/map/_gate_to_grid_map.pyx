@@ -228,10 +228,12 @@ cdef class GateToGridMapper:
     @cython.boundscheck(False)
     @cython.wraparound(False)
     def map_gates_to_grid(
-            self, float[::1] elevations, float[::1] azimuths,
-            float[::1] ranges, float[:, :, ::1] field_data,
+            self, 
+            int ngates, int nrays,
+            float[:, ::1] gate_z, float[:, ::1] gate_y, float[:, ::1] gate_x, 
+            float[:, :, ::1] field_data,
             char[:, :, ::1] field_mask, char[:, ::1] excluded_gates,
-            offset, float toa, RoIFunction roi_func, int weighting_function):
+            float toa, RoIFunction roi_func, int weighting_function):
         """
         Map radar gates unto the regular grid.
 
@@ -240,10 +242,10 @@ cdef class GateToGridMapper:
 
         Parameters
         ----------
-        elevations, azimuths : 1D float32 array
-            Elevation and azimuth angles in degrees for each ray in the radar.
-        ranges : 1D float32 array
-            Gate ranges in meters for each bin in the radar.
+        ngates, nrays : int
+            Number of gates and rays in the radar volume.
+        gate_z, gate_y, gate_x : 2D float32 array
+            Cartesian locations of the gates in meters.
         field_data : 3D float32 array
             Array containing field data for the radar, dimension are ordered
             as nrays, ngates, nfields.
@@ -256,7 +258,6 @@ cdef class GateToGridMapper:
         offset : tuple of floats
             Offset of the radar from the grid origin.  Dimension are ordered
             as z, y, x.
-        toa : float
             Top of atmosphere.  Gates above this level are considered.
         roi_func : RoIFunction
             Object whose get_roi method returns the radius of influence.
@@ -266,46 +267,25 @@ cdef class GateToGridMapper:
 
         """
 
-        cdef int nrays, ngates
-        cdef float elevation, azimuth, r, s
-        cdef float value, roi
+        cdef float roi
         cdef float[:] values
         cdef char[:] masks
         cdef float x, y, z
-        cdef float x_offset, y_offset, z_offset
 
-        nrays = len(elevations)
-        ngates = len(ranges)
-        z_offset, y_offset, x_offset = offset
         for nray in range(nrays):
-            # elevation and azimuth angles in radians
-            elevation = elevations[nray] * PI / 180.0
-            azimuth = azimuths[nray] * PI / 180.0
             for ngate in range(ngates):
 
                 # continue if gate excluded
                 if excluded_gates[nray, ngate]:
                     continue
 
-                # calculate cartesian coordinate assuming 4/3 earth radius
-                r = ranges[ngate]
-                z = (r**2 + R**2 + 2.0*r*R*sin(elevation))**0.5 - R
-                if z + z_offset >= toa:
-                    continue    # above top of atmosphere
-                s = R * asin(r * cos(elevation) / (R + z))  # arc length in m.
-                x = s * sin(azimuth)
-                y = s * cos(azimuth)
-
-                # add offsets
-                x += x_offset
-                y += y_offset
-                z += z_offset
-
-                # Region of influence
+                x = gate_x[nray, ngate]
+                y = gate_y[nray, ngate]
+                z = gate_z[nray, ngate]
                 roi = roi_func.get_roi(z, y, x)
-
                 values = field_data[nray, ngate]
                 masks = field_mask[nray, ngate]
+
                 self.map_gate(x, y, z, roi, values, masks, weighting_function)
 
     @cython.initializedcheck(False)

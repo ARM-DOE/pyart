@@ -66,6 +66,55 @@ def test_geographic_to_cartesian_aeqd():
     assert_almost_equal(y, 0.0, 5)
 
 
+def test_geographic_to_cartesian():
+    # Example taken from:
+    # Snyder, J.P. Map Projections A Working Manual, 1987, page 338.
+    R = 3.0
+    lat_0 = 40.0        # 40 degrees North latitude
+    lon_0 = -100.       # 100 degrees West longitude
+    lat = -20.0         # 20 degrees S latitude
+    lon = 100.0         # 100.0 E longitude
+    x = -5.8311398
+    y = 5.5444634
+
+    with warnings.catch_warnings():  # invalid divide is handled by code
+        warnings.simplefilter("ignore", category=RuntimeWarning)
+        projparams = {
+            'proj': 'pyart_aeqd', 'lon_0': lon_0, 'lat_0': lat_0, 'R': R}
+        x, y = transforms.geographic_to_cartesian(lon, lat, projparams)
+    assert_almost_equal(x, -5.8311398, 7)
+    assert_almost_equal(y, 5.5444634, 7)
+
+    # Use the default R value
+    with warnings.catch_warnings():  # invalid divide is handled by code
+        warnings.simplefilter("ignore", category=RuntimeWarning)
+        projparams = {
+            'proj': 'pyart_aeqd', 'lon_0': lon_0, 'lat_0': lat_0}
+        x, y = transforms.geographic_to_cartesian(lon, lat, projparams)
+    x /= 6370997. / 3.
+    y /= 6370997. / 3.
+    assert_almost_equal(x, -5.8311398, 7)
+    assert_almost_equal(y, 5.5444634, 7)
+
+
+@skipif(not transforms._PYPROJ_AVAILABLE)
+def test_geographic_to_cartesian_pyproj():
+    # Example taken from:
+    # Snyder, J.P. Map Projections A Working Manual, 1987, page 338.
+    R = 3.0
+    lat_0 = 40.0        # 40 degrees North latitude
+    lon_0 = -100.       # 100 degrees West longitude
+    lat = -20.0         # 20 degrees S latitude
+    lon = 100.0         # 100.0 E longitude
+    x = -5.8311398
+    y = 5.5444634
+
+    projparams = {'proj': 'aeqd', 'lon_0': lon_0, 'lat_0': lat_0, 'R': R}
+    x, y = transforms.geographic_to_cartesian(lon, lat, projparams)
+    assert_almost_equal(x, -5.8311398, 7)
+    assert_almost_equal(y, 5.5444634, 7)
+
+
 def test_cartesian_to_geographic():
     # Example taken from:
     # Snyder, J.P. Map Projections A Working Manual, 1987, page 338.
