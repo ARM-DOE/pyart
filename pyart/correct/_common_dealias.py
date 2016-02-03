@@ -68,6 +68,9 @@ def _parse_rays_wrap_around(rays_wrap_around, radar):
 def _set_limits(data, nyquist_vel, dic):
     """ Set the valid_min and valid_max keys in dic from dealiased data. """
     max_abs_vel = np.ma.max(np.ma.abs(data))
+    if max_abs_vel is np.ma.masked:
+        # all velocities are masked, do not set valid_min and valid_max
+        return
     max_nyq_vel = np.ma.max(nyquist_vel)
     max_nyq_int = 2. * max_nyq_vel
     added_intervals = np.ceil((max_abs_vel - max_nyq_vel) / (max_nyq_int))

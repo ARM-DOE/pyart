@@ -36,6 +36,8 @@ def test_all_masked():
         radar.fields['velocity']['data'], mask=True)
     dealias_vel = pyart.correct.dealias_region_based(radar)
     assert np.all(np.ma.getmaskarray(dealias_vel['data']))
+    assert 'valid_min' not in dealias_vel
+    assert 'valid_max' not in dealias_vel
 
 
 def test_no_edges():
