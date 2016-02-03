@@ -17,6 +17,7 @@ and antenna (azimuth, elevation, range) coordinate systems.
 
     cartesian_to_geographic
     cartesian_vectors_to_geographic
+    geographic_to_cartesian
     cartesian_to_geographic_aeqd
     geographic_to_cartesian_aeqd
 
@@ -355,6 +356,55 @@ def antenna_to_cartesian_aircraft_relative(ranges, rot, tilt):
     y = r * np.sin(tilt)
     z = r * np.cos(rot) * np.cos(tilt)
     return x, y, z
+
+
+def geographic_to_cartesian(lon, lat, projparams):
+    """
+    Geographic to Cartesian coordinate transform.
+
+    Transform a set of Geographic coordinate (lat, lon) to a
+    Cartesian/Cartographic coordinate (x, y) using pyproj or a build in
+    Azimuthal equidistant projection.
+
+    Parameters
+    ----------
+    lon, lat : array-like
+        Geographic coordinates in degrees.
+    projparams : dict or str
+        Projection parameters passed to pyproj.Proj. If this parameter is a
+        dictionary with a 'proj' key equal to 'pyart_aeqd' then a azimuthal
+        equidistant projection will be used that is native to Py-ART and
+        does not require pyproj/basemap to be installed. In this case a
+        non-default value of R can be specified by setting the 'R' key to the
+        desired value.
+
+    Returns
+    -------
+    x, y : array-like
+        Cartesian coordinates in meters unless projparams defines a value for R
+        in different units
+
+    """
+    if isinstance(projparams, dict) and projparams.get('proj') == 'pyart_aeqd':
+        # Use Py-ART's Azimuthal equidistance projection
+        lon_0 = projparams['lon_0']
+        lat_0 = projparams['lat_0']
+        if 'R' in projparams:
+            R = projparams['R']
+            x, y = geographic_to_cartesian_aeqd(lon, lat, lon_0, lat_0, R)
+        else:
+            x, y = geographic_to_cartesian_aeqd(lon, lat, lon_0, lat_0)
+    else:
+        # Use pyproj for the projection
+        # check that pyproj is available
+        if not _PYPROJ_AVAILABLE:
+            raise MissingOptionalDependency(
+                "Basemap is required to use geographic_to_cartesian "
+                "with a projection other than pyart_aeqd but it is not "
+                "installed")
+        proj = pyproj.Proj(projparams)
+        x, y = proj(lon, lat, inverse=False)
+    return x, y
 
 
 def geographic_to_cartesian_aeqd(lon, lat, lon_0, lat_0, R=6370997.):

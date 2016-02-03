@@ -27,6 +27,7 @@ Coordinate transformations
     cartesian_to_geographic
     cartesian_vectors_to_geographic
     cartesian_to_geographic_aeqd
+    geographic_to_cartesian
     geographic_to_cartesian_aeqd
 
 """
