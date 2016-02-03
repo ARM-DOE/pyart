@@ -291,11 +291,11 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
         Projection parameters defining the map projection used to transform the
         locations of the radar gates in geographic coordinate to Cartesian
         coodinates.  None will use the default dictionary which uses a native
-        azimutal equidistance projection.  See :py:func:`Grid` for additional
-        details on this parameter.  The geographic coordinate of the radar
-        gates are calculated using the projection defined for each radar.
-        No transformation is used if a grid_origin and grid_origin_alt are None
-        and a single radar is specified.
+        azimutal equidistance projection.  See :py:func:`pyart.core.Grid` for
+        additional details on this parameter. The geographic coordinates of
+        the radar gates are calculated using the projection defined for each
+        radar.  No transformation is used if a grid_origin and grid_origin_alt
+        are None and a single radar is specified.
     fields : list or None
         List of fields within the radar objects which will be mapped to
         the cartesian grid. None, the default, will map the fields which are

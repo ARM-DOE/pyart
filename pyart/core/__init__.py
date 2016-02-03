@@ -40,6 +40,7 @@ from .transforms import antenna_vectors_to_cartesian
 from .transforms import cartesian_to_geographic
 from .transforms import cartesian_vectors_to_geographic
 from .transforms import cartesian_to_geographic_aeqd
+from .transforms import geographic_to_cartesian
 from .transforms import geographic_to_cartesian_aeqd
 
 # Deprecated function names in this name space
