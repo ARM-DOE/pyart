@@ -19,7 +19,6 @@ Generate a Cartesian grid by mapping from radar gates onto the grid.
 """
 
 import numpy as np
-from ..config import get_field_name
 from ..core.radar import Radar
 from ..core.transforms import corner_to_point
 from ..filters import GateFilter, moment_based_gate_filter
@@ -123,13 +122,17 @@ def map_gates_to_grid(
             gatefilter = moment_based_gate_filter(radar, **kwargs)
         excluded_gates = gatefilter.gate_excluded.astype('uint8')
 
+        z_offset, y_offset, x_offset = radar_offset
+        gate_x = (radar.gate_x['data'] + x_offset).astype('float32')
+        gate_y = (radar.gate_y['data'] + y_offset).astype('float32')
+        gate_z = (radar.gate_z['data'] + z_offset).astype('float32')
+        nrays, ngates = gate_x.shape
+
         # map the gates onto the grid
         gatemapper.map_gates_to_grid(
-            radar.elevation['data'].astype('float32'),
-            radar.azimuth['data'].astype('float32'),
-            radar.range['data'].astype('float32'),
+            ngates, nrays, gate_z, gate_y, gate_x,
             field_data, field_mask, excluded_gates,
-            radar_offset, toa, roi_func, cy_weighting_function)
+            toa, roi_func, cy_weighting_function)
 
     # create and return the grid dictionary
     mweight = np.ma.masked_equal(grid_wsum, 0)
