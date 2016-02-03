@@ -381,6 +381,11 @@ class RadarMapDisplay(RadarDisplay):
             style of the ring.
 
         """
+        # The RadarDisplay.plot_range_rings uses a col parameter to specify
+        # the line color, deal with this here.
+        if 'col' in kwargs:
+            color = kwargs.pop('col')
+            kwargs['c'] = color
         self._check_basemap()
         angle = np.linspace(0., 2.0 * np.pi, npts)
         xpts = range_ring_location_km * 1000. * np.sin(angle)
