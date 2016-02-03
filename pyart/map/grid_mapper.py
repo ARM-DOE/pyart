@@ -30,7 +30,7 @@ import scipy.spatial
 import netCDF4
 
 from ..config import get_fillvalue, get_metadata
-from ..core.transforms import geographic_to_cartesian_aeqd
+from ..core.transforms import geographic_to_cartesian
 from ..core.grid import Grid
 from ..core.radar import Radar
 from ..filters import GateFilter, moment_based_gate_filter
@@ -170,12 +170,14 @@ def grid_from_radars(radars, grid_shape, grid_limits,
              for radar in radars]
     radar_name['data'] = np.array(names)
 
+    projection = kwargs.pop('grid_projection', None)
+
     return Grid(
         time, fields, metadata,
         origin_latitude, origin_longitude, origin_altitude, x, y, z,
         radar_latitude=radar_latitude, radar_longitude=radar_longitude,
         radar_altitude=radar_altitude, radar_name=radar_name,
-        radar_time=radar_time)
+        radar_time=radar_time, projection=projection)
 
 
 def _unify_times_for_radars(radars):
@@ -252,7 +254,8 @@ class NNLocator:
 
 
 def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
-                grid_origin_alt=None, fields=None, gatefilters=False,
+                grid_origin_alt=None, grid_projection=None,
+                fields=None, gatefilters=False,
                 map_roi=True, weighting_function='Barnes', toa=17000.0,
                 copy_field_data=True, algorithm='kd_tree', leafsize=10.,
                 roi_func='dist_beam', constant_roi=500.,
@@ -284,6 +287,15 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
     grid_origin_alt: float or None
         Altitude of grid origin, in meters. None sets the origin
         to the location of the first radar.
+    grid_projection : dic or str
+        Projection parameters defining the map projection used to transform the
+        locations of the radar gates in geographic coordinate to Cartesian
+        coodinates.  None will use the default dictionary which uses a native
+        azimutal equidistance projection.  See :py:func:`Grid` for additional
+        details on this parameter.  The geographic coordinate of the radar
+        gates are calculated using the projection defined for each radar.
+        No transformation is used if a grid_origin and grid_origin_alt are None
+        and a single radar is specified.
     fields : list or None
         List of fields within the radar objects which will be mapped to
         the cartesian grid. None, the default, will map the fields which are
@@ -404,6 +416,11 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
         raise ValueError('unknow algorithm: %s' % algorithm)
     badval = get_fillvalue()
 
+    # parse the grid_projection
+    if grid_projection is None:
+            grid_projection = {
+                'proj': 'pyart_aeqd', '_include_lon_0_lat_0': True}
+
     # find the grid origin if not given
     if grid_origin is None:
         lat = float(radars[0].latitude['data'])
@@ -451,13 +468,17 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
         # in the NNLocator, the filtered_gates_per_radar list records this
         filtered_gates_per_radar = []
 
+    projparams = grid_projection.copy()
+    if projparams.pop('_include_lon_0_lat_0', False):
+        projparams['lon_0'] = grid_origin_lon
+        projparams['lat_0'] = grid_origin_lat
+
     # loop over the radars finding gate locations, field data, and offset
     for iradar, (radar, gatefilter) in enumerate(zip(radars, gatefilters)):
 
         # calculate radar offset from the origin
-        x_disp, y_disp = geographic_to_cartesian_aeqd(
-            radar.longitude['data'], radar.latitude['data'],
-            grid_origin_lon, grid_origin_lat)
+        x_disp, y_disp = geographic_to_cartesian(
+            radar.longitude['data'], radar.latitude['data'], projparams)
         z_disp = float(radar.altitude['data']) - grid_origin_alt
         offsets.append((z_disp, float(y_disp), float(x_disp)))
 
@@ -466,9 +487,9 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
             xg_loc = radar.gate_x['data']
             yg_loc = radar.gate_y['data']
         else:
-            xg_loc, yg_loc = geographic_to_cartesian_aeqd(
+            xg_loc, yg_loc = geographic_to_cartesian(
                 radar.gate_longitude['data'], radar.gate_latitude['data'],
-                grid_origin_lon, grid_origin_lat)
+                projparams)
         zg_loc = radar.gate_altitude['data'] - grid_origin_alt
 
         # add gate locations to gate_locations array
