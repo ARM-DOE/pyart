@@ -9,10 +9,14 @@ from numpy.testing import assert_almost_equal
 from numpy.testing.decorators import skipif
 
 
+# corner_to_proint has been Deprecated, remove this test when the function is
+# removed.
 def test_corner_to_point():
     corner = (36.5, -97.5)
     point = (36.4, -97.6)
-    x, y = transforms.corner_to_point(corner, point)
+    with warnings.catch_warnings():  # invalid divide is handled by code
+        warnings.simplefilter("ignore", category=DeprecationWarning)
+        x, y = transforms.corner_to_point(corner, point)
     assert round(x) == -8950.
     assert round(y) == -11119.0
 
