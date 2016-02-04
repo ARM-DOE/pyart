@@ -7,7 +7,7 @@ import warnings
 import numpy as np
 from numpy.ma.core import MaskedArray
 from numpy.testing import assert_array_equal, assert_almost_equal
-from numpy.testing import assert_raises
+from numpy.testing import assert_raises, assert_warns
 import netCDF4
 
 import pyart
@@ -303,6 +303,19 @@ def test_write_ppi_U1():
         # force the sweep mode array to be a masked U1 array
         radar.sweep_mode['data'] = radar.sweep_mode['data'].astype('U')
         pyart.io.write_cfradial(tmpfile, radar)
+        ref = netCDF4.Dataset(pyart.testing.CFRADIAL_PPI_FILE)
+        dset = netCDF4.Dataset(tmpfile)
+        check_dataset_to_ref(dset, ref)
+        dset.close()
+
+
+def test_write_ppi_unknown_instrument_parameter_element():
+    # CF/Radial example file -> Radar object -> netCDF file
+    with pyart.testing.InTemporaryDirectory():
+        tmpfile = 'tmp_ppi_unknonw_ip.nc'
+        radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
+        radar.instrument_parameters['foobar'] = {'data': np.zeros(40)}
+        assert_warns(UserWarning, pyart.io.write_cfradial, tmpfile, radar)
         ref = netCDF4.Dataset(pyart.testing.CFRADIAL_PPI_FILE)
         dset = netCDF4.Dataset(tmpfile)
         check_dataset_to_ref(dset, ref)
