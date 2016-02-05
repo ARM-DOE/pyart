@@ -47,10 +47,10 @@ if [[ $PYTHON_VERSION == '2.7' ]]; then
     pip install xmltodict
     pip install wradlib
 fi
-if [[ $PYTHON_VERSION == '3.3' ]]; then
+if [[ $PYTHON_VERSION == '3.4' ]]; then
     conda install --yes basemap 
 fi
-if [[ $PYTHON_VERSION == '3.4' ]]; then
+if [[ $PYTHON_VERSION == '3.5' ]]; then
     conda install --yes basemap 
 fi
 
