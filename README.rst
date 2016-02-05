@@ -109,14 +109,14 @@ Other related open source software for working with weather radar data:
 Dependencies
 ============
 
-Py-ART is tested to work under Python 2.6, 2.7, 3.3, and 3.4.
+Py-ART is tested to work under Python 2.7, 3.4, and 3.5.
 
 The required dependencies to install Py-ART in addition to Python are:
 
-* `NumPy <http://www.scipy.org>`_ 1.6+
-* `SciPy <http://www.scipy.org>`_ 0.10+
-* `matplotlib <http://matplotlib.org/>`_ 1.1.0+
-* `netCDF4 <https://github.com/Unidata/netcdf4-python>`_ 1.0.2+ 
+* `NumPy <http://www.scipy.org>`_
+* `SciPy <http://www.scipy.org>`_
+* `matplotlib <http://matplotlib.org/>`_
+* `netCDF4 <https://github.com/Unidata/netcdf4-python>`_
 
 As well as a working C/C++ compiler.  A Fortran compiler is required for some
 optional modules. An easy method to install these dependencies is by using a 

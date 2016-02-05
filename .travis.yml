@@ -27,17 +27,13 @@ matrix:
         - NOSE_ARGS="-v --with-cov --cov pyart --exe pyart"
         - FROM_RECIPE="true"
         - DOC_BUILD="true"
-    - python: 2.6
-      env:
-        - PYTHON_VERSION="2.6"
-        - NOSE_ARGS="-v --with-cov --cov pyart pyart"
-    - python: 3.3
-      env:
-        - PYTHON_VERSION="3.3"
-        - NOSE_ARGS="-v --with-cov --cov pyart pyart"
     - python: 3.4
       env:
         - PYTHON_VERSION="3.4"
+        - NOSE_ARGS="-v --with-cov --cov pyart pyart"
+    - python: 3.5
+      env:
+        - PYTHON_VERSION="3.5"
         - NOSE_ARGS="-v --with-cov --cov pyart pyart"
 install: source continuous_integration/install.sh
 script: xvfb-run nosetests $NOSE_ARGS
