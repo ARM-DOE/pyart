@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.5.0',
+        VERSION:     '1.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -68,7 +68,7 @@
 <p>Useful when you want to use <cite>InTemporaryDirectory</cite> for the final test, but
 you are still debugging.  For example, you may want to do this in the end:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">InTemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">tmpdir</span><span class="p">:</span>
-<span class="gp">... </span>    <span class="c"># do something complicated which might break</span>
+<span class="gp">... </span>    <span class="c1"># do something complicated which might break</span>
 <span class="gp">... </span>    <span class="k">pass</span>
 </pre></div>
 </div>
@@ -76,8 +76,8 @@ you are still debugging.  For example, you may want to do this in the end:</p>
 <tt class="docutils literal"><span class="pre">InTemporaryDirectory</span></tt> context manager wiped out the directory with the
 temporary files that you wanted for debugging.  So, while debugging, you
 replace with something like:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">InGivenDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">tmpdir</span><span class="p">:</span> <span class="c"># Use working directory by default</span>
-<span class="gp">... </span>    <span class="c"># do something complicated which might break</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">InGivenDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">tmpdir</span><span class="p">:</span> <span class="c1"># Use working directory by default</span>
+<span class="gp">... </span>    <span class="c1"># do something complicated which might break</span>
 <span class="gp">... </span>    <span class="k">pass</span>
 </pre></div>
 </div>
@@ -147,8 +147,8 @@ again.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Sep 01, 2015.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Last updated on Feb 05, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

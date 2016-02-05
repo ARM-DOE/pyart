@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.5.0',
+        VERSION:     '1.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -183,10 +183,13 @@ S. E. Giangrande et al, J. of Atmos. and Ocean. Tech., 2013, 30, 1716.</p>
 <tr class="row-even"><td><a class="reference internal" href="generated/pyart.correct.region_dealias._find_regions.html#pyart.correct.region_dealias._find_regions" title="pyart.correct.region_dealias._find_regions"><tt class="xref py py-obj docutils literal"><span class="pre">_find_regions</span></tt></a>(vel,&nbsp;gfilter,&nbsp;limits)</td>
 <td>Find regions of similar velocity.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.region_dealias._combine_regions.html#pyart.correct.region_dealias._combine_regions" title="pyart.correct.region_dealias._combine_regions"><tt class="xref py py-obj docutils literal"><span class="pre">_combine_regions</span></tt></a>(region_tracker,&nbsp;edge_tracker)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.region_dealias._find_sweep_interval_splits.html#pyart.correct.region_dealias._find_sweep_interval_splits" title="pyart.correct.region_dealias._find_sweep_interval_splits"><tt class="xref py py-obj docutils literal"><span class="pre">_find_sweep_interval_splits</span></tt></a>(nyquist,&nbsp;...)</td>
+<td>Return the interval limits for a given sweep.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.correct.region_dealias._combine_regions.html#pyart.correct.region_dealias._combine_regions" title="pyart.correct.region_dealias._combine_regions"><tt class="xref py py-obj docutils literal"><span class="pre">_combine_regions</span></tt></a>(region_tracker,&nbsp;edge_tracker)</td>
 <td>Returns True when done.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.correct.region_dealias._edge_sum_and_count.html#pyart.correct.region_dealias._edge_sum_and_count" title="pyart.correct.region_dealias._edge_sum_and_count"><tt class="xref py py-obj docutils literal"><span class="pre">_edge_sum_and_count</span></tt></a>(labels,&nbsp;...)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.region_dealias._edge_sum_and_count.html#pyart.correct.region_dealias._edge_sum_and_count" title="pyart.correct.region_dealias._edge_sum_and_count"><tt class="xref py py-obj docutils literal"><span class="pre">_edge_sum_and_count</span></tt></a>(labels,&nbsp;...)</td>
 <td>Find all edges between labels regions.</td>
 </tr>
 </tbody>
@@ -265,6 +268,9 @@ S. E. Giangrande et al, J. of Atmos. and Ocean. Tech., 2013, 30, 1716.</p>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pyart.correct._common_dealias._parse_rays_wrap_around.html#pyart.correct._common_dealias._parse_rays_wrap_around" title="pyart.correct._common_dealias._parse_rays_wrap_around"><tt class="xref py py-obj docutils literal"><span class="pre">_parse_rays_wrap_around</span></tt></a>(rays_wrap_around,&nbsp;radar)</td>
 <td>Parse the rays_wrap_around parameter.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct._common_dealias._set_limits.html#pyart.correct._common_dealias._set_limits" title="pyart.correct._common_dealias._set_limits"><tt class="xref py py-obj docutils literal"><span class="pre">_set_limits</span></tt></a>(data,&nbsp;nyquist_vel,&nbsp;dic)</td>
+<td>Set the valid_min and valid_max keys in dic from dealiased data.</td>
 </tr>
 </tbody>
 </table>
@@ -424,8 +430,8 @@ S. E. Giangrande et al, J. of Atmos. and Ocean. Tech., 2013, 30, 1716.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Sep 01, 2015.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Last updated on Feb 05, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

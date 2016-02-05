@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.5.0',
+        VERSION:     '1.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -63,7 +63,7 @@
 <h1>pyart.map.gates_to_grid.map_gates_to_grid<a class="headerlink" href="#pyart-map-gates-to-grid-map-gates-to-grid" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pyart.map.gates_to_grid.map_gates_to_grid">
-<tt class="descclassname">pyart.map.gates_to_grid.</tt><tt class="descname">map_gates_to_grid</tt><big>(</big><em>radars</em>, <em>grid_shape</em>, <em>grid_limits</em>, <em>grid_origin=None</em>, <em>grid_origin_alt=None</em>, <em>fields=None</em>, <em>gatefilters=False</em>, <em>map_roi=True</em>, <em>weighting_function='Barnes'</em>, <em>toa=17000.0</em>, <em>roi_func='dist_beam'</em>, <em>constant_roi=500.0</em>, <em>z_factor=0.05</em>, <em>xy_factor=0.02</em>, <em>min_radius=500.0</em>, <em>h_factor=1.0</em>, <em>nb=1.5</em>, <em>bsp=1.0</em>, <em>**kwargs</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/map/gates_to_grid.py#L31"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.map.gates_to_grid.map_gates_to_grid" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">pyart.map.gates_to_grid.</tt><tt class="descname">map_gates_to_grid</tt><big>(</big><em>radars</em>, <em>grid_shape</em>, <em>grid_limits</em>, <em>grid_origin=None</em>, <em>grid_origin_alt=None</em>, <em>grid_projection=None</em>, <em>fields=None</em>, <em>gatefilters=False</em>, <em>map_roi=True</em>, <em>weighting_function='Barnes'</em>, <em>toa=17000.0</em>, <em>roi_func='dist_beam'</em>, <em>constant_roi=500.0</em>, <em>z_factor=0.05</em>, <em>xy_factor=0.02</em>, <em>min_radius=500.0</em>, <em>h_factor=1.0</em>, <em>nb=1.5</em>, <em>bsp=1.0</em>, <em>**kwargs</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/map/gates_to_grid.py#L30"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.map.gates_to_grid.map_gates_to_grid" title="Permalink to this definition">¶</a></dt>
 <dd><p>Map gates from one or more radars to a Cartesian grid.</p>
 <p>Generate a Cartesian grid of points for the requested fields from the
 collected points from one or more radars. For each radar gate that is not
@@ -181,8 +181,8 @@ containing the interpolated grid for that field.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Sep 01, 2015.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Last updated on Feb 05, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.5.0',
+        VERSION:     '1.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="Py-ART Documentation" href="../../index.html" />
     <link rel="up" title="pyart.graph.gridmapdisplay.GridMapDisplay" href="pyart.graph.gridmapdisplay.GridMapDisplay.html" />
-    <link rel="next" title="pyart.graph.radardisplay_airborne.RadarDisplay_Airborne" href="pyart.graph.radardisplay_airborne.RadarDisplay_Airborne.html" />
+    <link rel="next" title="pyart.graph.radardisplay_airborne.AirborneRadarDisplay" href="pyart.graph.radardisplay_airborne.AirborneRadarDisplay.html" />
     <link rel="prev" title="pyart.graph.gridmapdisplay.GridMapDisplay._label_axes_longitude" href="pyart.graph.gridmapdisplay.GridMapDisplay._label_axes_longitude.html" /> 
   </head>
   <body>
@@ -43,7 +43,7 @@
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pyart.graph.radardisplay_airborne.RadarDisplay_Airborne.html" title="pyart.graph.radardisplay_airborne.RadarDisplay_Airborne"
+          <a href="pyart.graph.radardisplay_airborne.AirborneRadarDisplay.html" title="pyart.graph.radardisplay_airborne.AirborneRadarDisplay"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="pyart.graph.gridmapdisplay.GridMapDisplay._label_axes_longitude.html" title="pyart.graph.gridmapdisplay.GridMapDisplay._label_axes_longitude"
@@ -64,7 +64,7 @@
 <h1>pyart.graph.gridmapdisplay.GridMapDisplay._make_basemap<a class="headerlink" href="#pyart-graph-gridmapdisplay-gridmapdisplay-make-basemap" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="pyart.graph.gridmapdisplay.GridMapDisplay._make_basemap">
-<tt class="descclassname">GridMapDisplay.</tt><tt class="descname">_make_basemap</tt><big>(</big><em>resolution='l'</em>, <em>area_thresh=10000</em>, <em>auto_range=True</em>, <em>min_lon=-92</em>, <em>max_lon=-86</em>, <em>min_lat=40</em>, <em>max_lat=44</em>, <em>ax=None</em>, <em>**kwargs</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/graph/gridmapdisplay.py#L656"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.graph.gridmapdisplay.GridMapDisplay._make_basemap" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">GridMapDisplay.</tt><tt class="descname">_make_basemap</tt><big>(</big><em>resolution='l'</em>, <em>area_thresh=10000</em>, <em>auto_range=True</em>, <em>min_lon=-92</em>, <em>max_lon=-86</em>, <em>min_lat=40</em>, <em>max_lat=44</em>, <em>ax=None</em>, <em>**kwargs</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/graph/gridmapdisplay.py#L600"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.graph.gridmapdisplay.GridMapDisplay._make_basemap" title="Permalink to this definition">¶</a></dt>
 <dd><p>Make a basemap.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -72,8 +72,8 @@
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>auto_range</strong> : bool</p>
 <blockquote>
-<div><p>True to determine map ranges from the grid_lats and grid_lons
-attribute.  False will use the min_lon, max_lon, min_lat, and
+<div><p>True to determine map ranges from the latitude and longitude limits
+of the grid. False will use the min_lon, max_lon, min_lat, and
 max_lat parameters for the map range.</p>
 </div></blockquote>
 <p><strong>min_lat, max_lat, min_lon, max_lon</strong> : float</p>
@@ -117,8 +117,8 @@ here it uses proj=&#8217;merc&#8217; (mercator).</p>
   <p class="topless"><a href="pyart.graph.gridmapdisplay.GridMapDisplay._label_axes_longitude.html"
                         title="previous chapter">pyart.graph.gridmapdisplay.GridMapDisplay._label_axes_longitude</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="pyart.graph.radardisplay_airborne.RadarDisplay_Airborne.html"
-                        title="next chapter">pyart.graph.radardisplay_airborne.RadarDisplay_Airborne</a></p>
+  <p class="topless"><a href="pyart.graph.radardisplay_airborne.AirborneRadarDisplay.html"
+                        title="next chapter">pyart.graph.radardisplay_airborne.AirborneRadarDisplay</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/dev_reference/generated/pyart.graph.gridmapdisplay.GridMapDisplay._make_basemap.txt"
@@ -154,7 +154,7 @@ here it uses proj=&#8217;merc&#8217; (mercator).</p>
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pyart.graph.radardisplay_airborne.RadarDisplay_Airborne.html" title="pyart.graph.radardisplay_airborne.RadarDisplay_Airborne"
+          <a href="pyart.graph.radardisplay_airborne.AirborneRadarDisplay.html" title="pyart.graph.radardisplay_airborne.AirborneRadarDisplay"
              >next</a> |</li>
         <li class="right" >
           <a href="pyart.graph.gridmapdisplay.GridMapDisplay._label_axes_longitude.html" title="pyart.graph.gridmapdisplay.GridMapDisplay._label_axes_longitude"
@@ -167,8 +167,8 @@ here it uses proj=&#8217;merc&#8217; (mercator).</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Sep 01, 2015.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Last updated on Feb 05, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

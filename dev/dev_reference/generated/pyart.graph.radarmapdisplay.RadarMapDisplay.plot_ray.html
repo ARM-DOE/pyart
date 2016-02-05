@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.5.0',
+        VERSION:     '1.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -64,7 +64,7 @@
 <h1>pyart.graph.radarmapdisplay.RadarMapDisplay.plot_ray<a class="headerlink" href="#pyart-graph-radarmapdisplay-radarmapdisplay-plot-ray" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="pyart.graph.radarmapdisplay.RadarMapDisplay.plot_ray">
-<tt class="descclassname">RadarMapDisplay.</tt><tt class="descname">plot_ray</tt><big>(</big><em>field</em>, <em>ray</em>, <em>format_str='k-'</em>, <em>mask_tuple=None</em>, <em>ray_min=None</em>, <em>ray_max=None</em>, <em>mask_outside=False</em>, <em>title=None</em>, <em>title_flag=True</em>, <em>axislabels=(None</em>, <em>None)</em>, <em>filter_transitions=True</em>, <em>axislabels_flag=True</em>, <em>ax=None</em>, <em>fig=None</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/graph/radardisplay.py#L186"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.graph.radarmapdisplay.RadarMapDisplay.plot_ray" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">RadarMapDisplay.</tt><tt class="descname">plot_ray</tt><big>(</big><em>field</em>, <em>ray</em>, <em>format_str='k-'</em>, <em>mask_tuple=None</em>, <em>ray_min=None</em>, <em>ray_max=None</em>, <em>mask_outside=False</em>, <em>title=None</em>, <em>title_flag=True</em>, <em>axislabels=(None</em>, <em>None)</em>, <em>axislabels_flag=True</em>, <em>ax=None</em>, <em>fig=None</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/graph/radardisplay.py#L226"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.graph.radarmapdisplay.RadarMapDisplay.plot_ray" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot a single ray.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -125,13 +125,6 @@ False.</p>
 <p><strong>axislabel_flag</strong> : bool</p>
 <blockquote>
 <div><p>True to add label the axes, False does not label the axes.</p>
-</div></blockquote>
-<p><strong>filter_transitions</strong> : bool</p>
-<blockquote>
-<div><p>True to remove rays where the antenna was in transition between
-sweeps from the plot.  False will include these rays in the plot.
-No rays are filtered when the antenna_transition attribute of the
-underlying radar is not present.</p>
 </div></blockquote>
 <p><strong>ax</strong> : Axis</p>
 <blockquote>
@@ -209,8 +202,8 @@ underlying radar is not present.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Sep 01, 2015.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Last updated on Feb 05, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

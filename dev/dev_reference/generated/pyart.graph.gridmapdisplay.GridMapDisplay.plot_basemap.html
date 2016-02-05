@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.5.0',
+        VERSION:     '1.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -64,7 +64,7 @@
 <h1>pyart.graph.gridmapdisplay.GridMapDisplay.plot_basemap<a class="headerlink" href="#pyart-graph-gridmapdisplay-gridmapdisplay-plot-basemap" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="pyart.graph.gridmapdisplay.GridMapDisplay.plot_basemap">
-<tt class="descclassname">GridMapDisplay.</tt><tt class="descname">plot_basemap</tt><big>(</big><em>lat_lines=None</em>, <em>lon_lines=None</em>, <em>resolution='l'</em>, <em>area_thresh=10000</em>, <em>auto_range=True</em>, <em>min_lon=-92</em>, <em>max_lon=-86</em>, <em>min_lat=40</em>, <em>max_lat=44</em>, <em>ax=None</em>, <em>**kwargs</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/graph/gridmapdisplay.py#L82"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.graph.gridmapdisplay.GridMapDisplay.plot_basemap" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">GridMapDisplay.</tt><tt class="descname">plot_basemap</tt><big>(</big><em>lat_lines=None</em>, <em>lon_lines=None</em>, <em>resolution='l'</em>, <em>area_thresh=10000</em>, <em>auto_range=True</em>, <em>min_lon=-92</em>, <em>max_lon=-86</em>, <em>min_lat=40</em>, <em>max_lat=44</em>, <em>ax=None</em>, <em>**kwargs</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/graph/gridmapdisplay.py#L104"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.graph.gridmapdisplay.GridMapDisplay.plot_basemap" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot a basemap.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -78,9 +78,9 @@ North America.</p>
 </div></blockquote>
 <p><strong>auto_range</strong> : bool</p>
 <blockquote>
-<div><p>True to determine map ranges from the grid_lats and grid_lons
-attribute.  False will use the min_lon, max_lon, min_lat, and
-max_lat parameters for the map range.</p>
+<div><p>True to determine map ranges from the latitude and longitude
+limits of the grid. False will use the min_lon, max_lon, min_lat,
+and max_lat parameters for the map range.</p>
 </div></blockquote>
 <p><strong>min_lat, max_lat, min_lon, max_lon</strong> : float</p>
 <blockquote>
@@ -173,8 +173,8 @@ here it uses proj=&#8217;merc&#8217; (mercator).</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Sep 01, 2015.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Last updated on Feb 05, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

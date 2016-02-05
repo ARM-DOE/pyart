@@ -14,6 +14,7 @@ print(__doc__)
 
 import matplotlib.pyplot as plt
 import pyart
+import netCDF4
 
 
 # read the data and create the display object
@@ -39,9 +40,10 @@ for plot_num in xrange(nplots):
     display.set_limits(ylim=[0, 17])
 
 # set the figure title and show
-radar_name = display.radar_name
-time_text = ' ' + display.time_begin.isoformat() + 'Z '
+instrument_name = radar.metadata['instrument_name']
+time_start = netCDF4.num2date(radar.time['data'][0], radar.time['units'])
+time_text = ' ' + time_start.isoformat() + 'Z '
 azimuth = radar.fixed_angle['data'][0]
-title = 'RHI ' + radar_name + time_text + 'Azimuth %.2f' % (azimuth)
+title = 'RHI ' + instrument_name + time_text + 'Azimuth %.2f' % (azimuth)
 plt.suptitle(title)
 plt.show()

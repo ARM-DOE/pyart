@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.5.0',
+        VERSION:     '1.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -62,22 +62,23 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Release:</th><td class="field-body">1.5</td>
+<tr class="field-odd field"><th class="field-name">Release:</th><td class="field-body">1.6</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">September 01, 2015</td>
+<tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">February 05, 2016</td>
 </tr>
 </tbody>
 </table>
-<p>The intended audience of this guide is developers who use Py-ART, for a more
-generate introduction to Py-ART aimed at users see the <a class="reference internal" href="../user_reference/index.html#user"><em>User Reference Manual</em></a>.</p>
-<p>This guide provides  for all functions modules, and classes within Py-ART,
-both those in the public API and private functions, modules and classes.
-Documentation is broken down by directory and module.</p>
+<p>The intended audience of this guide is developers who use Py-ART. For a more
+general introduction to Py-ART aimed at users see the <a class="reference internal" href="../user_reference/index.html#user"><em>User Reference Manual</em></a>.</p>
+<p>This guide provides  documentation for all modules, function, methods,
+and classes within Py-ART, both those in the public API and private members.</p>
+<p>Documentation is broken down by directory and module.</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="core.html">pyart.core</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="core.html#pyart-core-grid">pyart.core.grid</a></li>
 <li class="toctree-l2"><a class="reference internal" href="core.html#pyart-core-radar">pyart.core.radar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="core.html#pyart-core-transforms">pyart.core.transforms</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="io.html">pyart.io</a><ul>
@@ -85,8 +86,7 @@ Documentation is broken down by directory and module.</p>
 <li class="toctree-l2"><a class="reference internal" href="io.html#pyart-io-cfradial">pyart.io.cfradial</a></li>
 <li class="toctree-l2"><a class="reference internal" href="io.html#pyart-io-chl">pyart.io.chl</a></li>
 <li class="toctree-l2"><a class="reference internal" href="io.html#pyart-io-common">pyart.io.common</a></li>
-<li class="toctree-l2"><a class="reference internal" href="io.html#pyart-io-grid">pyart.io.grid</a></li>
-<li class="toctree-l2"><a class="reference internal" href="io.html#pyart-io-lazydict">pyart.io.lazydict</a></li>
+<li class="toctree-l2"><a class="reference internal" href="io.html#pyart-io-grid-io">pyart.io.grid_io</a></li>
 <li class="toctree-l2"><a class="reference internal" href="io.html#pyart-io-mdv-common">pyart.io.mdv_common</a></li>
 <li class="toctree-l2"><a class="reference internal" href="io.html#pyart-io-mdv-radar">pyart.io.mdv_radar</a></li>
 <li class="toctree-l2"><a class="reference internal" href="io.html#pyart-io-mdv-grid">pyart.io.mdv_grid</a></li>
@@ -100,6 +100,7 @@ Documentation is broken down by directory and module.</p>
 <li class="toctree-l2"><a class="reference internal" href="io.html#pyart-io-sigmet">pyart.io.sigmet</a></li>
 <li class="toctree-l2"><a class="reference internal" href="io.html#pyart-io-uf">pyart.io.uf</a></li>
 <li class="toctree-l2"><a class="reference internal" href="io.html#pyart-io-uffile">pyart.io.uffile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="io.html#pyart-io-uf-write">pyart.io.uf_write</a></li>
 <li class="toctree-l2"><a class="reference internal" href="io.html#pyart-io-rsl-interface">pyart.io._rsl_interface</a></li>
 <li class="toctree-l2"><a class="reference internal" href="io.html#pyart-io-sigmet-noaa-hh">pyart.io._sigmet_noaa_hh</a></li>
 <li class="toctree-l2"><a class="reference internal" href="io.html#pyart-io-sigmetfile">pyart.io._sigmetfile</a></li>
@@ -134,6 +135,10 @@ Documentation is broken down by directory and module.</p>
 <li class="toctree-l2"><a class="reference internal" href="correct.html#pyart-correct-unwrap-3d">pyart.correct._unwrap_3d</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="exceptions.html">pyart.exceptions</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="exceptions.html#id1">pyart.exceptions</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="retrieve.html">pyart.retrieve</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="retrieve.html#pyart-retrieve-echo-class">pyart.retrieve.echo_class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="retrieve.html#pyart-retrieve-gate-id">pyart.retrieve.gate_id</a></li>
@@ -143,7 +148,6 @@ Documentation is broken down by directory and module.</p>
 <li class="toctree-l1"><a class="reference internal" href="graph.html">pyart.graph</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="graph.html#pyart-graph-cm">pyart.graph.cm</a></li>
 <li class="toctree-l2"><a class="reference internal" href="graph.html#pyart-graph-common">pyart.graph.common</a></li>
-<li class="toctree-l2"><a class="reference internal" href="graph.html#pyart-graph-coord-transform">pyart.graph.coord_transform</a></li>
 <li class="toctree-l2"><a class="reference internal" href="graph.html#pyart-graph-gridmapdisplay">pyart.graph.gridmapdisplay</a></li>
 <li class="toctree-l2"><a class="reference internal" href="graph.html#pyart-graph-radardisplay-airborne">pyart.graph.radardisplay_airborne</a></li>
 <li class="toctree-l2"><a class="reference internal" href="graph.html#pyart-graph-radardisplay">pyart.graph.radardisplay</a></li>
@@ -155,6 +159,10 @@ Documentation is broken down by directory and module.</p>
 <li class="toctree-l2"><a class="reference internal" href="filters.html#pyart-correct-filters">pyart.correct.filters</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="lazydict.html">pyart.lazydict</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="lazydict.html#id1">pyart.lazydict</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="map.html">pyart.map</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="map.html#pyart-map-gates-to-grid">pyart.map.gates_to_grid</a></li>
 <li class="toctree-l2"><a class="reference internal" href="map.html#pyart-map-grid-mapper">pyart.map.grid_mapper</a></li>
@@ -163,6 +171,9 @@ Documentation is broken down by directory and module.</p>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="util.html">pyart.util</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="util.html#pyart-util-circular-stats">pyart.util.circular_stats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.html#pyart-util-hildebrand-sekhon">pyart.util.hildebrand_sekhon</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.html#pyart-util-xsect">pyart.util.xsect</a></li>
+<li class="toctree-l2"><a class="reference internal" href="util.html#pyart-util-radar-utils">pyart.util.radar_utils</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="bridge.html">pyart.bridge</a><ul>
@@ -237,8 +248,8 @@ Documentation is broken down by directory and module.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Sep 01, 2015.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Last updated on Feb 05, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

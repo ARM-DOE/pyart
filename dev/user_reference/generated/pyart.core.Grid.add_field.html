@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.5.0',
+        VERSION:     '1.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="Py-ART Documentation" href="../../index.html" />
     <link rel="up" title="pyart.core.Grid" href="pyart.core.Grid.html" />
-    <link rel="next" title="pyart.core.Grid.write" href="pyart.core.Grid.write.html" />
+    <link rel="next" title="pyart.core.Grid.from_legacy_parameters" href="pyart.core.Grid.from_legacy_parameters.html" />
     <link rel="prev" title="pyart.core.Grid" href="pyart.core.Grid.html" /> 
   </head>
   <body>
@@ -43,7 +43,7 @@
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pyart.core.Grid.write.html" title="pyart.core.Grid.write"
+          <a href="pyart.core.Grid.from_legacy_parameters.html" title="pyart.core.Grid.from_legacy_parameters"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="pyart.core.Grid.html" title="pyart.core.Grid"
@@ -64,19 +64,25 @@
 <h1>pyart.core.Grid.add_field<a class="headerlink" href="#pyart-core-grid-add-field" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="pyart.core.Grid.add_field">
-<tt class="descclassname">Grid.</tt><tt class="descname">add_field</tt><big>(</big><em>field_name</em>, <em>field_dict</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/core/grid.py#L68"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.core.Grid.add_field" title="Permalink to this definition">¶</a></dt>
-<dd><p>Add field to Grid object.</p>
+<tt class="descclassname">Grid.</tt><tt class="descname">add_field</tt><big>(</big><em>field_name</em>, <em>field_dict</em>, <em>replace_existing=False</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/core/grid.py#L313"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.core.Grid.add_field" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a field to the object.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>field_name</strong> : str</p>
 <blockquote>
-<div><p>Name of field to add.</p>
+<div><p>Name of the field to the fields dictionary.</p>
 </div></blockquote>
 <p><strong>field_dict</strong> : dict</p>
-<blockquote class="last">
+<blockquote>
 <div><p>Dictionary containing field data and metadata.</p>
+</div></blockquote>
+<p><strong>replace_existing</strong> : bool, optional</p>
+<blockquote class="last">
+<div><p>True to replace the existing field with key field_name if it
+exists, overwriting the existing data. If False, a ValueError is
+raised if field_name already exists.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -96,8 +102,8 @@
   <p class="topless"><a href="pyart.core.Grid.html"
                         title="previous chapter">pyart.core.Grid</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="pyart.core.Grid.write.html"
-                        title="next chapter">pyart.core.Grid.write</a></p>
+  <p class="topless"><a href="pyart.core.Grid.from_legacy_parameters.html"
+                        title="next chapter">pyart.core.Grid.from_legacy_parameters</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/user_reference/generated/pyart.core.Grid.add_field.txt"
@@ -133,7 +139,7 @@
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pyart.core.Grid.write.html" title="pyart.core.Grid.write"
+          <a href="pyart.core.Grid.from_legacy_parameters.html" title="pyart.core.Grid.from_legacy_parameters"
              >next</a> |</li>
         <li class="right" >
           <a href="pyart.core.Grid.html" title="pyart.core.Grid"
@@ -146,8 +152,8 @@
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Sep 01, 2015.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Last updated on Feb 05, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

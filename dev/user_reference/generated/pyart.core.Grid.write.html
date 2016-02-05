@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.5.0',
+        VERSION:     '1.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,8 +26,8 @@
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="Py-ART Documentation" href="../../index.html" />
     <link rel="up" title="pyart.core.Grid" href="pyart.core.Grid.html" />
-    <link rel="next" title="Input and output (pyart.io)" href="../io.html" />
-    <link rel="prev" title="pyart.core.Grid.add_field" href="pyart.core.Grid.add_field.html" /> 
+    <link rel="next" title="pyart.core.antenna_to_cartesian" href="pyart.core.antenna_to_cartesian.html" />
+    <link rel="prev" title="pyart.core.Grid.init_point_x_y_z" href="pyart.core.Grid.init_point_x_y_z.html" /> 
   </head>
   <body>
     <div class="related">
@@ -43,10 +43,10 @@
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../io.html" title="Input and output (pyart.io)"
+          <a href="pyart.core.antenna_to_cartesian.html" title="pyart.core.antenna_to_cartesian"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="pyart.core.Grid.add_field.html" title="pyart.core.Grid.add_field"
+          <a href="pyart.core.Grid.init_point_x_y_z.html" title="pyart.core.Grid.init_point_x_y_z"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
           <li><a href="../index.html" >User Reference Manual</a> &raquo;</li>
@@ -64,7 +64,7 @@
 <h1>pyart.core.Grid.write<a class="headerlink" href="#pyart-core-grid-write" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="pyart.core.Grid.write">
-<tt class="descclassname">Grid.</tt><tt class="descname">write</tt><big>(</big><em>filename</em>, <em>format='NETCDF4'</em>, <em>arm_time_variables=False</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/core/grid.py#L46"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.core.Grid.write" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">Grid.</tt><tt class="descname">write</tt><big>(</big><em>filename</em>, <em>format='NETCDF4'</em>, <em>arm_time_variables=False</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/core/grid.py#L291"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.core.Grid.write" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write the the Grid object to a NetCDF file.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -99,11 +99,11 @@ time_offset. False will not write these variables.</p>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="pyart.core.Grid.add_field.html"
-                        title="previous chapter">pyart.core.Grid.add_field</a></p>
+  <p class="topless"><a href="pyart.core.Grid.init_point_x_y_z.html"
+                        title="previous chapter">pyart.core.Grid.init_point_x_y_z</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="../io.html"
-                        title="next chapter">Input and output (<tt class="docutils literal"><span class="pre">pyart.io</span></tt>)</a></p>
+  <p class="topless"><a href="pyart.core.antenna_to_cartesian.html"
+                        title="next chapter">pyart.core.antenna_to_cartesian</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/user_reference/generated/pyart.core.Grid.write.txt"
@@ -139,10 +139,10 @@ time_offset. False will not write these variables.</p>
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../io.html" title="Input and output (pyart.io)"
+          <a href="pyart.core.antenna_to_cartesian.html" title="pyart.core.antenna_to_cartesian"
              >next</a> |</li>
         <li class="right" >
-          <a href="pyart.core.Grid.add_field.html" title="pyart.core.Grid.add_field"
+          <a href="pyart.core.Grid.init_point_x_y_z.html" title="pyart.core.Grid.init_point_x_y_z"
              >previous</a> |</li>
         <li><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
           <li><a href="../index.html" >User Reference Manual</a> &raquo;</li>
@@ -152,8 +152,8 @@ time_offset. False will not write these variables.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Sep 01, 2015.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Last updated on Feb 05, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

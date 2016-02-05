@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.5.0',
+        VERSION:     '1.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -63,7 +63,7 @@
 <h1>pyart.correct.dealias.dealias_fourdd<a class="headerlink" href="#pyart-correct-dealias-dealias-fourdd" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pyart.correct.dealias.dealias_fourdd">
-<tt class="descclassname">pyart.correct.dealias.</tt><tt class="descname">dealias_fourdd</tt><big>(</big><em>radar</em>, <em>last_radar=None</em>, <em>sounding_heights=None</em>, <em>sounding_wind_speeds=None</em>, <em>sounding_wind_direction=None</em>, <em>gatefilter=False</em>, <em>filt=1</em>, <em>rsl_badval=131072.0</em>, <em>keep_original=False</em>, <em>vel_field=None</em>, <em>corr_vel_field=None</em>, <em>last_vel_field=None</em>, <em>debug=False</em>, <em>max_shear=0.05</em>, <em>sign=1</em>, <em>**kwargs</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/correct/dealias.py#L27"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.correct.dealias.dealias_fourdd" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">pyart.correct.dealias.</tt><tt class="descname">dealias_fourdd</tt><big>(</big><em>radar</em>, <em>last_radar=None</em>, <em>sounding_heights=None</em>, <em>sounding_wind_speeds=None</em>, <em>sounding_wind_direction=None</em>, <em>gatefilter=False</em>, <em>filt=1</em>, <em>rsl_badval=131072.0</em>, <em>keep_original=False</em>, <em>set_limits=True</em>, <em>vel_field=None</em>, <em>corr_vel_field=None</em>, <em>last_vel_field=None</em>, <em>debug=False</em>, <em>max_shear=0.05</em>, <em>sign=1</em>, <em>**kwargs</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/correct/dealias.py#L30"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.correct.dealias.dealias_fourdd" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dealias Doppler velocities using the 4DD algorithm.</p>
 <p>Dealias the Doppler velocities field using the University of Washington
 4DD algorithm utilizing information from a previous volume scan and/or
@@ -140,6 +140,11 @@ default value assumes all gates are valid.</p>
 <div><p>True to keep original doppler velocity values when the dealiasing
 procedure fails, otherwise these gates will be masked.  NaN values
 are still masked.</p>
+</div></blockquote>
+<p><strong>set_limits</strong> : bool, optional</p>
+<blockquote>
+<div><p>True to set valid_min and valid_max elements in the returned
+dictionary.  False will not set these dictionary elements.</p>
 </div></blockquote>
 <p><strong>vel_field</strong> : str, optional</p>
 <blockquote>
@@ -326,8 +331,8 @@ Dealising Scheme, Journal of Atmospheric and Oceanic Technology, 2001, 18,
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Sep 01, 2015.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Last updated on Feb 05, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

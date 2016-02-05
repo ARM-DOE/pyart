@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.5.0',
+        VERSION:     '1.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="Py-ART Documentation" href="../../index.html" />
     <link rel="up" title="pyart.graph.radardisplay.RadarDisplay" href="pyart.graph.radardisplay.RadarDisplay.html" />
-    <link rel="next" title="pyart.graph.radardisplay.RadarDisplay.plot_colorbar" href="pyart.graph.radardisplay.RadarDisplay.plot_colorbar.html" />
+    <link rel="next" title="pyart.graph.radardisplay.RadarDisplay.plot_azimuth_to_rhi" href="pyart.graph.radardisplay.RadarDisplay.plot_azimuth_to_rhi.html" />
     <link rel="prev" title="pyart.graph.radardisplay.RadarDisplay.label_yaxis_z" href="pyart.graph.radardisplay.RadarDisplay.label_yaxis_z.html" /> 
   </head>
   <body>
@@ -43,7 +43,7 @@
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pyart.graph.radardisplay.RadarDisplay.plot_colorbar.html" title="pyart.graph.radardisplay.RadarDisplay.plot_colorbar"
+          <a href="pyart.graph.radardisplay.RadarDisplay.plot_azimuth_to_rhi.html" title="pyart.graph.radardisplay.RadarDisplay.plot_azimuth_to_rhi"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="pyart.graph.radardisplay.RadarDisplay.label_yaxis_z.html" title="pyart.graph.radardisplay.RadarDisplay.label_yaxis_z"
@@ -64,7 +64,7 @@
 <h1>pyart.graph.radardisplay.RadarDisplay.plot<a class="headerlink" href="#pyart-graph-radardisplay-radardisplay-plot" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="pyart.graph.radardisplay.RadarDisplay.plot">
-<tt class="descclassname">RadarDisplay.</tt><tt class="descname">plot</tt><big>(</big><em>field</em>, <em>sweep=0</em>, <em>**kwargs</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/graph/radardisplay.py#L153"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.graph.radardisplay.RadarDisplay.plot" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">RadarDisplay.</tt><tt class="descname">plot</tt><big>(</big><em>field</em>, <em>sweep=0</em>, <em>**kwargs</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/graph/radardisplay.py#L193"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.graph.radardisplay.RadarDisplay.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a plot appropiate for the radar.</p>
 <p>This function calls the plotting function corresponding to
 the scan_type of the radar.  Additional keywords can be passed to
@@ -111,8 +111,8 @@ allowed keywords.</p>
   <p class="topless"><a href="pyart.graph.radardisplay.RadarDisplay.label_yaxis_z.html"
                         title="previous chapter">pyart.graph.radardisplay.RadarDisplay.label_yaxis_z</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="pyart.graph.radardisplay.RadarDisplay.plot_colorbar.html"
-                        title="next chapter">pyart.graph.radardisplay.RadarDisplay.plot_colorbar</a></p>
+  <p class="topless"><a href="pyart.graph.radardisplay.RadarDisplay.plot_azimuth_to_rhi.html"
+                        title="next chapter">pyart.graph.radardisplay.RadarDisplay.plot_azimuth_to_rhi</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/dev_reference/generated/pyart.graph.radardisplay.RadarDisplay.plot.txt"
@@ -148,7 +148,7 @@ allowed keywords.</p>
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pyart.graph.radardisplay.RadarDisplay.plot_colorbar.html" title="pyart.graph.radardisplay.RadarDisplay.plot_colorbar"
+          <a href="pyart.graph.radardisplay.RadarDisplay.plot_azimuth_to_rhi.html" title="pyart.graph.radardisplay.RadarDisplay.plot_azimuth_to_rhi"
              >next</a> |</li>
         <li class="right" >
           <a href="pyart.graph.radardisplay.RadarDisplay.label_yaxis_z.html" title="pyart.graph.radardisplay.RadarDisplay.label_yaxis_z"
@@ -161,8 +161,8 @@ allowed keywords.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Sep 01, 2015.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Last updated on Feb 05, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

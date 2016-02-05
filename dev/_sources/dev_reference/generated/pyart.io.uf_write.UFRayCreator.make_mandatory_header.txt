@@ -1,0 +1,6 @@
+pyart.io.uf_write.UFRayCreator.make_mandatory_header
+====================================================
+
+.. currentmodule:: pyart.io.uf_write
+
+.. automethod:: UFRayCreator.make_mandatory_header

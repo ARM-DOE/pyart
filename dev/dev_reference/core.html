@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.5.0',
+        VERSION:     '1.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -70,8 +70,25 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.core.grid.Grid.html#pyart.core.grid.Grid" title="pyart.core.grid.Grid"><tt class="xref py py-obj docutils literal"><span class="pre">Grid</span></tt></a>(fields,&nbsp;axes,&nbsp;metadata)</td>
-<td>An object for holding gridded Radar data.</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.core.grid.Grid.html#pyart.core.grid.Grid" title="pyart.core.grid.Grid"><tt class="xref py py-obj docutils literal"><span class="pre">Grid</span></tt></a>(time,&nbsp;fields,&nbsp;metadata,&nbsp;...[,&nbsp;...])</td>
+<td>A class for storing rectilinear gridded radar data in Cartesian coordinate.</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.core.grid._point_data_factory.html#pyart.core.grid._point_data_factory" title="pyart.core.grid._point_data_factory"><tt class="xref py py-obj docutils literal"><span class="pre">_point_data_factory</span></tt></a>(grid,&nbsp;coordinate)</td>
+<td>Return a function which returns the locations of all points.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.core.grid._point_lon_lat_data_factory.html#pyart.core.grid._point_lon_lat_data_factory" title="pyart.core.grid._point_lon_lat_data_factory"><tt class="xref py py-obj docutils literal"><span class="pre">_point_lon_lat_data_factory</span></tt></a>(grid,&nbsp;coordinate)</td>
+<td>Return a function which returns the geographic locations of points.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.core.grid._point_altitude_data_factory.html#pyart.core.grid._point_altitude_data_factory" title="pyart.core.grid._point_altitude_data_factory"><tt class="xref py py-obj docutils literal"><span class="pre">_point_altitude_data_factory</span></tt></a>(grid)</td>
+<td>Return a function which returns the point altitudes.</td>
 </tr>
 </tbody>
 </table>
@@ -85,14 +102,17 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.core.radar.join_radar.html#pyart.core.radar.join_radar" title="pyart.core.radar.join_radar"><tt class="xref py py-obj docutils literal"><span class="pre">join_radar</span></tt></a>(radar1,&nbsp;radar2)</td>
-<td></td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.core.radar._rays_per_sweep_data_factory.html#pyart.core.radar._rays_per_sweep_data_factory" title="pyart.core.radar._rays_per_sweep_data_factory"><tt class="xref py py-obj docutils literal"><span class="pre">_rays_per_sweep_data_factory</span></tt></a>(radar)</td>
+<td>Return a function which returns the number of rays per sweep.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.core.radar.is_vpt.html#pyart.core.radar.is_vpt" title="pyart.core.radar.is_vpt"><tt class="xref py py-obj docutils literal"><span class="pre">is_vpt</span></tt></a>(radar[,&nbsp;offset])</td>
-<td>Determine if a Radar appears to be a vertical pointing scan.</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.core.radar._gate_data_factory.html#pyart.core.radar._gate_data_factory" title="pyart.core.radar._gate_data_factory"><tt class="xref py py-obj docutils literal"><span class="pre">_gate_data_factory</span></tt></a>(radar,&nbsp;coordinate)</td>
+<td>Return a function which returns the Cartesian locations of gates.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.core.radar.to_vpt.html#pyart.core.radar.to_vpt" title="pyart.core.radar.to_vpt"><tt class="xref py py-obj docutils literal"><span class="pre">to_vpt</span></tt></a>(radar[,&nbsp;single_scan])</td>
-<td>Convert an existing Radar object to represent a vertical pointing scan.</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.core.radar._gate_lon_lat_data_factory.html#pyart.core.radar._gate_lon_lat_data_factory" title="pyart.core.radar._gate_lon_lat_data_factory"><tt class="xref py py-obj docutils literal"><span class="pre">_gate_lon_lat_data_factory</span></tt></a>(radar,&nbsp;coordinate)</td>
+<td>Return a function which returns the geographic locations of gates.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.core.radar._gate_altitude_data_factory.html#pyart.core.radar._gate_altitude_data_factory" title="pyart.core.radar._gate_altitude_data_factory"><tt class="xref py py-obj docutils literal"><span class="pre">_gate_altitude_data_factory</span></tt></a>(radar)</td>
+<td>Return a function which returns the gate altitudes.</td>
 </tr>
 </tbody>
 </table>
@@ -108,6 +128,74 @@
 </tbody>
 </table>
 </div>
+<span class="target" id="module-pyart.core.transforms"></span><div class="section" id="pyart-core-transforms">
+<h2>pyart.core.transforms<a class="headerlink" href="#pyart-core-transforms" title="Permalink to this headline">¶</a></h2>
+<p>Transformations between coordinate systems. Routines for converting between
+Cartesian/Cartographic (x, y, z), Geographic (latitude, longitude, altitude)
+and antenna (azimuth, elevation, range) coordinate systems.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.core.transforms.antenna_to_cartesian.html#pyart.core.transforms.antenna_to_cartesian" title="pyart.core.transforms.antenna_to_cartesian"><tt class="xref py py-obj docutils literal"><span class="pre">antenna_to_cartesian</span></tt></a>(ranges,&nbsp;azimuths,&nbsp;...)</td>
+<td>Return Cartesian coordinates from antenna coordinates.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.core.transforms.antenna_vectors_to_cartesian.html#pyart.core.transforms.antenna_vectors_to_cartesian" title="pyart.core.transforms.antenna_vectors_to_cartesian"><tt class="xref py py-obj docutils literal"><span class="pre">antenna_vectors_to_cartesian</span></tt></a>(ranges,&nbsp;...[,&nbsp;...])</td>
+<td>Calculate Cartesian coordinate for gates from antenna coordinate vectors.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.core.transforms.antenna_to_cartesian_track_relative.html#pyart.core.transforms.antenna_to_cartesian_track_relative" title="pyart.core.transforms.antenna_to_cartesian_track_relative"><tt class="xref py py-obj docutils literal"><span class="pre">antenna_to_cartesian_track_relative</span></tt></a>(ranges,&nbsp;...)</td>
+<td>Calculate track-relative Cartesian coordinates from radar coordinates.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.core.transforms.antenna_to_cartesian_earth_relative.html#pyart.core.transforms.antenna_to_cartesian_earth_relative" title="pyart.core.transforms.antenna_to_cartesian_earth_relative"><tt class="xref py py-obj docutils literal"><span class="pre">antenna_to_cartesian_earth_relative</span></tt></a>(ranges,&nbsp;...)</td>
+<td>Calculate earth-relative Cartesian coordinates from radar coordinates</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.core.transforms.antenna_to_cartesian_aircraft_relative.html#pyart.core.transforms.antenna_to_cartesian_aircraft_relative" title="pyart.core.transforms.antenna_to_cartesian_aircraft_relative"><tt class="xref py py-obj docutils literal"><span class="pre">antenna_to_cartesian_aircraft_relative</span></tt></a>(...)</td>
+<td>Calculate aircraft-relative Cartesian coordinates from radar coordinates.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.core.transforms.cartesian_to_geographic.html#pyart.core.transforms.cartesian_to_geographic" title="pyart.core.transforms.cartesian_to_geographic"><tt class="xref py py-obj docutils literal"><span class="pre">cartesian_to_geographic</span></tt></a>(x,&nbsp;y,&nbsp;projparams)</td>
+<td>Cartesian to Geographic coordinate transform.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.core.transforms.cartesian_vectors_to_geographic.html#pyart.core.transforms.cartesian_vectors_to_geographic" title="pyart.core.transforms.cartesian_vectors_to_geographic"><tt class="xref py py-obj docutils literal"><span class="pre">cartesian_vectors_to_geographic</span></tt></a>(x,&nbsp;y,&nbsp;projparams)</td>
+<td>Cartesian vectors to Geographic coordinate transform.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.core.transforms.geographic_to_cartesian.html#pyart.core.transforms.geographic_to_cartesian" title="pyart.core.transforms.geographic_to_cartesian"><tt class="xref py py-obj docutils literal"><span class="pre">geographic_to_cartesian</span></tt></a>(lon,&nbsp;lat,&nbsp;projparams)</td>
+<td>Geographic to Cartesian coordinate transform.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.core.transforms.cartesian_to_geographic_aeqd.html#pyart.core.transforms.cartesian_to_geographic_aeqd" title="pyart.core.transforms.cartesian_to_geographic_aeqd"><tt class="xref py py-obj docutils literal"><span class="pre">cartesian_to_geographic_aeqd</span></tt></a>(x,&nbsp;y,&nbsp;lon_0,&nbsp;lat_0)</td>
+<td>Azimuthal equidistant Cartesian to geographic coordinate transform.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.core.transforms.geographic_to_cartesian_aeqd.html#pyart.core.transforms.geographic_to_cartesian_aeqd" title="pyart.core.transforms.geographic_to_cartesian_aeqd"><tt class="xref py py-obj docutils literal"><span class="pre">geographic_to_cartesian_aeqd</span></tt></a>(lon,&nbsp;lat,&nbsp;...)</td>
+<td>Azimuthal equidistant geographic to Cartesian coordinate transform.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.core.transforms.add_2d_latlon_axis.html#pyart.core.transforms.add_2d_latlon_axis" title="pyart.core.transforms.add_2d_latlon_axis"><tt class="xref py py-obj docutils literal"><span class="pre">add_2d_latlon_axis</span></tt></a>(grid,&nbsp;**kwargs)</td>
+<td>Add the latitude and longitude for grid points in the y, x plane.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.core.transforms.corner_to_point.html#pyart.core.transforms.corner_to_point" title="pyart.core.transforms.corner_to_point"><tt class="xref py py-obj docutils literal"><span class="pre">corner_to_point</span></tt></a>(corner,&nbsp;point)</td>
+<td>Return the x, y distances in meters from a corner to a point.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.core.transforms._interpolate_axes_edges.html#pyart.core.transforms._interpolate_axes_edges" title="pyart.core.transforms._interpolate_axes_edges"><tt class="xref py py-obj docutils literal"><span class="pre">_interpolate_axes_edges</span></tt></a>(axes)</td>
+<td>Interpolate the edges of the axes gates from their centers.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.core.transforms._interpolate_azimuth_edges.html#pyart.core.transforms._interpolate_azimuth_edges" title="pyart.core.transforms._interpolate_azimuth_edges"><tt class="xref py py-obj docutils literal"><span class="pre">_interpolate_azimuth_edges</span></tt></a>(azimuths)</td>
+<td>Interpolate the edges of the azimuth angles from their centers.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.core.transforms._interpolate_elevation_edges.html#pyart.core.transforms._interpolate_elevation_edges" title="pyart.core.transforms._interpolate_elevation_edges"><tt class="xref py py-obj docutils literal"><span class="pre">_interpolate_elevation_edges</span></tt></a>(elevations)</td>
+<td>Interpolate the edges of the elevation angles from their centers.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.core.transforms._interpolate_range_edges.html#pyart.core.transforms._interpolate_range_edges" title="pyart.core.transforms._interpolate_range_edges"><tt class="xref py py-obj docutils literal"><span class="pre">_interpolate_range_edges</span></tt></a>(ranges)</td>
+<td>Interpolate the edges of the range gates from their centers.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.core.transforms._half_angle_complex.html#pyart.core.transforms._half_angle_complex" title="pyart.core.transforms._half_angle_complex"><tt class="xref py py-obj docutils literal"><span class="pre">_half_angle_complex</span></tt></a>(complex_angle1,&nbsp;...)</td>
+<td>Return half the angle between complex numbers on the unit circle.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.core.transforms._ax_radius.html#pyart.core.transforms._ax_radius" title="pyart.core.transforms._ax_radius"><tt class="xref py py-obj docutils literal"><span class="pre">_ax_radius</span></tt></a>(lat[,&nbsp;units])</td>
+<td>Return the radius of a constant latitude circle for a given latitude.</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 
 
@@ -119,10 +207,13 @@
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">pyart.core</a><ul>
-<li><a class="reference internal" href="#pyart-core-grid">pyart.core.grid</a></li>
+<li><a class="reference internal" href="#pyart-core-grid">pyart.core.grid</a><ul>
+</ul>
+</li>
 <li><a class="reference internal" href="#pyart-core-radar">pyart.core.radar</a><ul>
 </ul>
 </li>
+<li><a class="reference internal" href="#pyart-core-transforms">pyart.core.transforms</a></li>
 </ul>
 </li>
 </ul>
@@ -179,8 +270,8 @@
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Sep 01, 2015.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Last updated on Feb 05, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.5.0',
+        VERSION:     '1.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -63,7 +63,7 @@
 <h1>pyart.io.mdv_grid.read_grid_mdv<a class="headerlink" href="#pyart-io-mdv-grid-read-grid-mdv" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pyart.io.mdv_grid.read_grid_mdv">
-<tt class="descclassname">pyart.io.mdv_grid.</tt><tt class="descname">read_grid_mdv</tt><big>(</big><em>filename</em>, <em>field_names=None</em>, <em>additional_metadata=None</em>, <em>file_field_names=False</em>, <em>exclude_fields=None</em>, <em>delay_field_loading=False</em>, <em>**kwargs</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/io/mdv_grid.py#L217"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.io.mdv_grid.read_grid_mdv" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">pyart.io.mdv_grid.</tt><tt class="descname">read_grid_mdv</tt><big>(</big><em>filename</em>, <em>field_names=None</em>, <em>additional_metadata=None</em>, <em>file_field_names=False</em>, <em>exclude_fields=None</em>, <em>delay_field_loading=False</em>, <em>**kwargs</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/io/mdv_grid.py#L233"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.io.mdv_grid.read_grid_mdv" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read a MDV file to a Grid Object.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -127,7 +127,7 @@ compressed with gzip or zlib. For polar files see
 limitation include:</p>
 <blockquote>
 <div><ul class="simple">
-<li>All fields must have the same shape and axes.</li>
+<li>All fields must have the same shape and dimensions.</li>
 <li>All fields must have the same projection.</li>
 <li>Vlevels types must not vary.</li>
 <li>Projection must not be PROJ_POLAR_RADAR (9) or PROJ_RHI_RADAR (13).</li>
@@ -201,8 +201,8 @@ fail.</li>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Sep 01, 2015.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Last updated on Feb 05, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

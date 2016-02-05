@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.5.0',
+        VERSION:     '1.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,7 +27,7 @@
     <link rel="top" title="Py-ART Documentation" href="../index.html" />
     <link rel="up" title="Developer Reference Manual" href="index.html" />
     <link rel="next" title="pyart.io.auto_read.read" href="generated/pyart.io.auto_read.read.html" />
-    <link rel="prev" title="pyart.core.radar.Radar._dic_info" href="generated/pyart.core.radar.Radar._dic_info.html" /> 
+    <link rel="prev" title="pyart.core.transforms._ax_radius" href="generated/pyart.core.transforms._ax_radius.html" /> 
   </head>
   <body>
     <div class="related">
@@ -46,7 +46,7 @@
           <a href="generated/pyart.io.auto_read.read.html" title="pyart.io.auto_read.read"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="generated/pyart.core.radar.Radar._dic_info.html" title="pyart.core.radar.Radar._dic_info"
+          <a href="generated/pyart.core.transforms._ax_radius.html" title="pyart.core.transforms._ax_radius"
              accesskey="P">previous</a> |</li>
         <li><a href="../index.html">Py-ART Documentation</a> &raquo;</li>
           <li><a href="index.html" accesskey="U">Developer Reference Manual</a> &raquo;</li> 
@@ -161,29 +161,20 @@
 <tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.common.prepare_for_read.html#pyart.io.common.prepare_for_read" title="pyart.io.common.prepare_for_read"><tt class="xref py py-obj docutils literal"><span class="pre">prepare_for_read</span></tt></a>(filename)</td>
 <td>Return a file like object read for reading.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.common.dms_to_d.html#pyart.io.common.dms_to_d" title="pyart.io.common.dms_to_d"><tt class="xref py py-obj docutils literal"><span class="pre">dms_to_d</span></tt></a>(dms)</td>
-<td>Degrees, minutes, seconds to degrees</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.common.stringarray_to_chararray.html#pyart.io.common.stringarray_to_chararray" title="pyart.io.common.stringarray_to_chararray"><tt class="xref py py-obj docutils literal"><span class="pre">stringarray_to_chararray</span></tt></a>(arr[,&nbsp;numchars])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.common.stringarray_to_chararray.html#pyart.io.common.stringarray_to_chararray" title="pyart.io.common.stringarray_to_chararray"><tt class="xref py py-obj docutils literal"><span class="pre">stringarray_to_chararray</span></tt></a>(arr[,&nbsp;numchars])</td>
 <td>Convert an string array to a character array with one extra dimension.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.common._test_arguments.html#pyart.io.common._test_arguments" title="pyart.io.common._test_arguments"><tt class="xref py py-obj docutils literal"><span class="pre">_test_arguments</span></tt></a>(dic)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.common._test_arguments.html#pyart.io.common._test_arguments" title="pyart.io.common._test_arguments"><tt class="xref py py-obj docutils literal"><span class="pre">_test_arguments</span></tt></a>(dic)</td>
 <td>Issue a warning if receive non-empty argument dict</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.common.radar_coords_to_cart.html#pyart.io.common.radar_coords_to_cart" title="pyart.io.common.radar_coords_to_cart"><tt class="xref py py-obj docutils literal"><span class="pre">radar_coords_to_cart</span></tt></a>(rng,&nbsp;az,&nbsp;ele[,&nbsp;debug])</td>
-<td>Calculate Cartesian coordinate from radar coordinates</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.common.make_time_unit_str.html#pyart.io.common.make_time_unit_str" title="pyart.io.common.make_time_unit_str"><tt class="xref py py-obj docutils literal"><span class="pre">make_time_unit_str</span></tt></a>(dtobj)</td>
 <td>Return a time unit string from a datetime object.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.common.add_2d_latlon_axis.html#pyart.io.common.add_2d_latlon_axis" title="pyart.io.common.add_2d_latlon_axis"><tt class="xref py py-obj docutils literal"><span class="pre">add_2d_latlon_axis</span></tt></a>(grid,&nbsp;**kwargs)</td>
-<td>Add to Grid (in place) a 2-dimensional axes for latitude and longitude of every point in the y,x plane.</td>
-</tr>
 </tbody>
 </table>
 </div>
-<span class="target" id="module-pyart.io.grid_io"></span><div class="section" id="pyart-io-grid">
-<h2>pyart.io.grid<a class="headerlink" href="#pyart-io-grid" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-pyart.io.grid_io"></span><div class="section" id="pyart-io-grid-io">
+<h2>pyart.io.grid_io<a class="headerlink" href="#pyart-io-grid-io" title="Permalink to this headline">¶</a></h2>
 <p>Reading and writing Grid objects.</p>
 <table border="1" class="longtable docutils">
 <colgroup>
@@ -192,31 +183,16 @@
 </colgroup>
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.grid_io.read_grid.html#pyart.io.grid_io.read_grid" title="pyart.io.grid_io.read_grid"><tt class="xref py py-obj docutils literal"><span class="pre">read_grid</span></tt></a>(filename[,&nbsp;exclude_fields])</td>
-<td>Read a netCDF grid file</td>
+<td>Read a netCDF grid file produced by Py-ART.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.grid_io.write_grid.html#pyart.io.grid_io.write_grid" title="pyart.io.grid_io.write_grid"><tt class="xref py py-obj docutils literal"><span class="pre">write_grid</span></tt></a>(filename,&nbsp;grid[,&nbsp;format,&nbsp;...])</td>
-<td>Write a Grid object to a CF-1.5 and ARM standard netcdf file</td>
+<td>Write a Grid object to a CF-1.5 and ARM standard netCDF file</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.grid_io._read_grid_cf.html#pyart.io.grid_io._read_grid_cf" title="pyart.io.grid_io._read_grid_cf"><tt class="xref py py-obj docutils literal"><span class="pre">_read_grid_cf</span></tt></a>(filename)</td>
-<td>Read a CF compliant netCDF file containing a grid.</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.grid_io.read_legacy_grid.html#pyart.io.grid_io.read_legacy_grid" title="pyart.io.grid_io.read_legacy_grid"><tt class="xref py py-obj docutils literal"><span class="pre">read_legacy_grid</span></tt></a>(filename[,&nbsp;exclude_fields])</td>
+<td>Read a legacy netCDF grid file produced by Py-ART version 1.5 and prior.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.grid_io._read_grid_wrf.html#pyart.io.grid_io._read_grid_wrf" title="pyart.io.grid_io._read_grid_wrf"><tt class="xref py py-obj docutils literal"><span class="pre">_read_grid_wrf</span></tt></a>(filename)</td>
-<td>Read a WRF netCDF file containing a grid.</td>
-</tr>
-</tbody>
-</table>
-</div>
-<span class="target" id="module-pyart.io.lazydict"></span><div class="section" id="pyart-io-lazydict">
-<h2>pyart.io.lazydict<a class="headerlink" href="#pyart-io-lazydict" title="Permalink to this headline">¶</a></h2>
-<p>A dictionary-like class supporting lazy loading of specified keys.</p>
-<table border="1" class="longtable docutils">
-<colgroup>
-<col width="10%" />
-<col width="90%" />
-</colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.lazydict.LazyLoadDict.html#pyart.io.lazydict.LazyLoadDict" title="pyart.io.lazydict.LazyLoadDict"><tt class="xref py py-obj docutils literal"><span class="pre">LazyLoadDict</span></tt></a>(dic)</td>
-<td>A dictionary-like class supporting lazy loading of specified keys.</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.grid_io._make_coordinatesystem_dict.html#pyart.io.grid_io._make_coordinatesystem_dict" title="pyart.io.grid_io._make_coordinatesystem_dict"><tt class="xref py py-obj docutils literal"><span class="pre">_make_coordinatesystem_dict</span></tt></a>(grid)</td>
+<td>Return a dictionary containing parameters for a coordinate transform.</td>
 </tr>
 </tbody>
 </table>
@@ -263,7 +239,7 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.mdv_grid.write_grid_mdv.html#pyart.io.mdv_grid.write_grid_mdv" title="pyart.io.mdv_grid.write_grid_mdv"><tt class="xref py py-obj docutils literal"><span class="pre">write_grid_mdv</span></tt></a>(filename,&nbsp;grid)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.mdv_grid.write_grid_mdv.html#pyart.io.mdv_grid.write_grid_mdv" title="pyart.io.mdv_grid.write_grid_mdv"><tt class="xref py py-obj docutils literal"><span class="pre">write_grid_mdv</span></tt></a>(filename,&nbsp;grid[,&nbsp;...])</td>
 <td>Write grid object to MDV file.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.mdv_grid.read_grid_mdv.html#pyart.io.mdv_grid.read_grid_mdv" title="pyart.io.mdv_grid.read_grid_mdv"><tt class="xref py py-obj docutils literal"><span class="pre">read_grid_mdv</span></tt></a>(filename[,&nbsp;field_names,&nbsp;...])</td>
@@ -312,6 +288,15 @@
 <tbody valign="top">
 <tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.nexrad_archive.read_nexrad_archive.html#pyart.io.nexrad_archive.read_nexrad_archive" title="pyart.io.nexrad_archive.read_nexrad_archive"><tt class="xref py py-obj docutils literal"><span class="pre">read_nexrad_archive</span></tt></a>(filename[,&nbsp;field_names,&nbsp;...])</td>
 <td>Read a NEXRAD Level 2 Archive file.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.nexrad_archive._find_range_params.html#pyart.io.nexrad_archive._find_range_params" title="pyart.io.nexrad_archive._find_range_params"><tt class="xref py py-obj docutils literal"><span class="pre">_find_range_params</span></tt></a>(scan_info,&nbsp;filemetadata)</td>
+<td>Return range parameters, first_gate, gate_spacing, last_gate.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.nexrad_archive._find_scans_to_interp.html#pyart.io.nexrad_archive._find_scans_to_interp" title="pyart.io.nexrad_archive._find_scans_to_interp"><tt class="xref py py-obj docutils literal"><span class="pre">_find_scans_to_interp</span></tt></a>(scan_info,&nbsp;first_gate,&nbsp;...)</td>
+<td>Return a dict indicating what moments/scans need interpolation.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.nexrad_archive._interpolate_scan.html#pyart.io.nexrad_archive._interpolate_scan" title="pyart.io.nexrad_archive._interpolate_scan"><tt class="xref py py-obj docutils literal"><span class="pre">_interpolate_scan</span></tt></a>(mdata,&nbsp;start,&nbsp;end,&nbsp;...[,&nbsp;...])</td>
+<td>Interpolate a single NEXRAD moment scan from 1000 m to 250 m.</td>
 </tr>
 </tbody>
 </table>
@@ -557,6 +542,38 @@
 </tbody>
 </table>
 </div>
+<span class="target" id="module-pyart.io.uf_write"></span><div class="section" id="pyart-io-uf-write">
+<h2>pyart.io.uf_write<a class="headerlink" href="#pyart-io-uf-write" title="Permalink to this headline">¶</a></h2>
+<p>Functions for writing UF files.</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.uf_write.UFRayCreator.html#pyart.io.uf_write.UFRayCreator" title="pyart.io.uf_write.UFRayCreator"><tt class="xref py py-obj docutils literal"><span class="pre">UFRayCreator</span></tt></a>(radar,&nbsp;field_mapping,&nbsp;...[,&nbsp;...])</td>
+<td>A class for generating UF rays for writing UF file.</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.uf_write.write_uf.html#pyart.io.uf_write.write_uf" title="pyart.io.uf_write.write_uf"><tt class="xref py py-obj docutils literal"><span class="pre">write_uf</span></tt></a>(filename,&nbsp;radar[,&nbsp;uf_field_names,&nbsp;...])</td>
+<td>Write a Radar object to a UF file.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.io.uf_write._d_to_dms.html#pyart.io.uf_write._d_to_dms" title="pyart.io.uf_write._d_to_dms"><tt class="xref py py-obj docutils literal"><span class="pre">_d_to_dms</span></tt></a>(in_deg)</td>
+<td>Degrees to degree, minutes, seconds.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.io.uf_write._pack_structure.html#pyart.io.uf_write._pack_structure" title="pyart.io.uf_write._pack_structure"><tt class="xref py py-obj docutils literal"><span class="pre">_pack_structure</span></tt></a>(dic,&nbsp;structure)</td>
+<td>Pack a structure from a dictionary</td>
+</tr>
+</tbody>
+</table>
+</div>
 <span class="target" id="module-pyart.io._rsl_interface"></span><div class="section" id="pyart-io-rsl-interface">
 <h2>pyart.io._rsl_interface<a class="headerlink" href="#pyart-io-rsl-interface" title="Permalink to this headline">¶</a></h2>
 <p>Cython wrapper around the NASA TRMM RSL library.</p>
@@ -690,8 +707,7 @@ NOAA&#8217;s Hurricane Hunter aircraft.</p>
 </ul>
 </li>
 <li><a class="reference internal" href="#pyart-io-common">pyart.io.common</a></li>
-<li><a class="reference internal" href="#pyart-io-grid">pyart.io.grid</a></li>
-<li><a class="reference internal" href="#pyart-io-lazydict">pyart.io.lazydict</a></li>
+<li><a class="reference internal" href="#pyart-io-grid-io">pyart.io.grid_io</a></li>
 <li><a class="reference internal" href="#pyart-io-mdv-common">pyart.io.mdv_common</a></li>
 <li><a class="reference internal" href="#pyart-io-mdv-radar">pyart.io.mdv_radar</a></li>
 <li><a class="reference internal" href="#pyart-io-mdv-grid">pyart.io.mdv_grid</a></li>
@@ -715,6 +731,9 @@ NOAA&#8217;s Hurricane Hunter aircraft.</p>
 <li><a class="reference internal" href="#pyart-io-uffile">pyart.io.uffile</a><ul>
 </ul>
 </li>
+<li><a class="reference internal" href="#pyart-io-uf-write">pyart.io.uf_write</a><ul>
+</ul>
+</li>
 <li><a class="reference internal" href="#pyart-io-rsl-interface">pyart.io._rsl_interface</a><ul>
 </ul>
 </li>
@@ -725,8 +744,8 @@ NOAA&#8217;s Hurricane Hunter aircraft.</p>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="generated/pyart.core.radar.Radar._dic_info.html"
-                        title="previous chapter">pyart.core.radar.Radar._dic_info</a></p>
+  <p class="topless"><a href="generated/pyart.core.transforms._ax_radius.html"
+                        title="previous chapter">pyart.core.transforms._ax_radius</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="generated/pyart.io.auto_read.read.html"
                         title="next chapter">pyart.io.auto_read.read</a></p>
@@ -768,7 +787,7 @@ NOAA&#8217;s Hurricane Hunter aircraft.</p>
           <a href="generated/pyart.io.auto_read.read.html" title="pyart.io.auto_read.read"
              >next</a> |</li>
         <li class="right" >
-          <a href="generated/pyart.core.radar.Radar._dic_info.html" title="pyart.core.radar.Radar._dic_info"
+          <a href="generated/pyart.core.transforms._ax_radius.html" title="pyart.core.transforms._ax_radius"
              >previous</a> |</li>
         <li><a href="../index.html">Py-ART Documentation</a> &raquo;</li>
           <li><a href="index.html" >Developer Reference Manual</a> &raquo;</li> 
@@ -776,8 +795,8 @@ NOAA&#8217;s Hurricane Hunter aircraft.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Sep 01, 2015.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Last updated on Feb 05, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

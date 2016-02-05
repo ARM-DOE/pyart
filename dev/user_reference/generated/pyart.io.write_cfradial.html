@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.5.0',
+        VERSION:     '1.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="Py-ART Documentation" href="../../index.html" />
     <link rel="up" title="Input and output (pyart.io)" href="../io.html" />
-    <link rel="next" title="pyart.io.read_grid" href="pyart.io.read_grid.html" />
+    <link rel="next" title="pyart.io.write_uf" href="pyart.io.write_uf.html" />
     <link rel="prev" title="pyart.io.read_uf" href="pyart.io.read_uf.html" /> 
   </head>
   <body>
@@ -43,7 +43,7 @@
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pyart.io.read_grid.html" title="pyart.io.read_grid"
+          <a href="pyart.io.write_uf.html" title="pyart.io.write_uf"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="pyart.io.read_uf.html" title="pyart.io.read_uf"
@@ -63,11 +63,27 @@
 <h1>pyart.io.write_cfradial<a class="headerlink" href="#pyart-io-write-cfradial" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pyart.io.write_cfradial">
-<tt class="descclassname">pyart.io.</tt><tt class="descname">write_cfradial</tt><big>(</big><em>filename</em>, <em>radar</em>, <em>format='NETCDF4'</em>, <em>time_reference=None</em>, <em>arm_time_variables=False</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/io/cfradial.py#L379"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.io.write_cfradial" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">pyart.io.</tt><tt class="descname">write_cfradial</tt><big>(</big><em>filename</em>, <em>radar</em>, <em>format='NETCDF4'</em>, <em>time_reference=None</em>, <em>arm_time_variables=False</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/io/cfradial.py#L388"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.io.write_cfradial" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write a Radar object to a CF/Radial compliant netCDF file.</p>
 <p>The files produced by this routine follow the <a class="reference external" href="http://www.ral.ucar.edu/projects/titan/docs/radial_formats/cfradial.html">CF/Radial standard</a>.
 Attempts are also made to to meet many of the standards outlined in the
 <a class="reference external" href="https://docs.google.com/document/d/1gBMw4Kje6v8LBlsrjaGFfSLoU0jRx-07TIazpthZGt0/edit?pli=1">ARM Data File Standards</a>.</p>
+<p>To control how the netCDF variables are created, set any of the following
+keys in the radar attribute dictionaries.</p>
+<blockquote>
+<div><ul class="simple">
+<li>_Zlib</li>
+<li>_DeflateLevel</li>
+<li>_Shuffle</li>
+<li>_Fletcher32</li>
+<li>_Continguous</li>
+<li>_ChunkSizes</li>
+<li>_Endianness</li>
+<li>_Least_significant_digit</li>
+<li>_FillValue</li>
+</ul>
+</div></blockquote>
+<p>See the netCDF4 documentation for details on these settings.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -115,8 +131,8 @@ time_offset, False will not create these variables.</p>
   <p class="topless"><a href="pyart.io.read_uf.html"
                         title="previous chapter">pyart.io.read_uf</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="pyart.io.read_grid.html"
-                        title="next chapter">pyart.io.read_grid</a></p>
+  <p class="topless"><a href="pyart.io.write_uf.html"
+                        title="next chapter">pyart.io.write_uf</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/user_reference/generated/pyart.io.write_cfradial.txt"
@@ -152,7 +168,7 @@ time_offset, False will not create these variables.</p>
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pyart.io.read_grid.html" title="pyart.io.read_grid"
+          <a href="pyart.io.write_uf.html" title="pyart.io.write_uf"
              >next</a> |</li>
         <li class="right" >
           <a href="pyart.io.read_uf.html" title="pyart.io.read_uf"
@@ -164,8 +180,8 @@ time_offset, False will not create these variables.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Sep 01, 2015.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Last updated on Feb 05, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

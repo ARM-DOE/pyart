@@ -1,0 +1,6 @@
+pyart.io.uf_write.UFRayCreator.__subclasshook__
+===============================================
+
+.. currentmodule:: pyart.io.uf_write
+
+.. automethod:: UFRayCreator.__subclasshook__

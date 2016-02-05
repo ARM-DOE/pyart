@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.5.0',
+        VERSION:     '1.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -63,7 +63,7 @@
 <h1>pyart.correct.unwrap.dealias_unwrap_phase<a class="headerlink" href="#pyart-correct-unwrap-dealias-unwrap-phase" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pyart.correct.unwrap.dealias_unwrap_phase">
-<tt class="descclassname">pyart.correct.unwrap.</tt><tt class="descname">dealias_unwrap_phase</tt><big>(</big><em>radar</em>, <em>unwrap_unit='sweep'</em>, <em>nyquist_vel=None</em>, <em>check_nyquist_uniform=True</em>, <em>gatefilter=False</em>, <em>rays_wrap_around=None</em>, <em>keep_original=False</em>, <em>vel_field=None</em>, <em>corr_vel_field=None</em>, <em>skip_checks=False</em>, <em>**kwargs</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/correct/unwrap.py#L35"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.correct.unwrap.dealias_unwrap_phase" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">pyart.correct.unwrap.</tt><tt class="descname">dealias_unwrap_phase</tt><big>(</big><em>radar</em>, <em>unwrap_unit='sweep'</em>, <em>nyquist_vel=None</em>, <em>check_nyquist_uniform=True</em>, <em>gatefilter=False</em>, <em>rays_wrap_around=None</em>, <em>keep_original=False</em>, <em>set_limits=True</em>, <em>vel_field=None</em>, <em>corr_vel_field=None</em>, <em>skip_checks=False</em>, <em>**kwargs</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/correct/unwrap.py#L35"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.correct.unwrap.dealias_unwrap_phase" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dealias Doppler velocities using multi-dimensional phase unwrapping.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -120,6 +120,11 @@ where the dealiasing procedure fails or was not applied. False
 does not replacement and these gates will be masked in the corrected
 velocity field.</p>
 </div></blockquote>
+<p><strong>set_limits</strong> : bool, optional</p>
+<blockquote>
+<div><p>True to set valid_min and valid_max elements in the returned
+dictionary.  False will not set these dictionary elements.</p>
+</div></blockquote>
 <p><strong>vel_field</strong> : str, optional</p>
 <blockquote>
 <div><p>Field in radar to use as the Doppler velocities during dealiasing.
@@ -149,19 +154,19 @@ array is stored under the &#8216;data&#8217; key.</p>
 </tbody>
 </table>
 <p class="rubric">References</p>
-<table class="docutils citation" frame="void" id="r3" rules="none">
+<table class="docutils citation" frame="void" id="r17" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[R3]</a></td><td>Miguel Arevallilo Herraez, David R. Burton, Michael J. Lalor,
+<tr><td class="label"><a class="fn-backref" href="#id1">[R17]</a></td><td>Miguel Arevallilo Herraez, David R. Burton, Michael J. Lalor,
 and Munther A. Gdeisat, &#8220;Fast two-dimensional phase-unwrapping
 algorithm based on sorting by reliability following a noncontinuous
 path&#8221;, Journal Applied Optics, Vol. 41, No. 35 (2002) 7437,</td></tr>
 </tbody>
 </table>
-<table class="docutils citation" frame="void" id="r4" rules="none">
+<table class="docutils citation" frame="void" id="r18" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id2">[R4]</a></td><td>Abdul-Rahman, H., Gdeisat, M., Burton, D., &amp; Lalor, M., &#8220;Fast
+<tr><td class="label"><a class="fn-backref" href="#id2">[R18]</a></td><td>Abdul-Rahman, H., Gdeisat, M., Burton, D., &amp; Lalor, M., &#8220;Fast
 three-dimensional phase-unwrapping algorithm based on sorting by
 reliability following a non-continuous path. In W. Osten,
 C. Gorecki, &amp; E. L. Novak (Eds.), Optical Metrology (2005) 32&#8211;40,
@@ -231,8 +236,8 @@ International Society for Optics and Photonics.</td></tr>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Sep 01, 2015.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Last updated on Feb 05, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

@@ -33,7 +33,13 @@ pyart.graph.gridmapdisplay.GridMapDisplay
        :toctree:
 
     
+         ~GridMapDisplay.__format__
          ~GridMapDisplay.__init__
+         ~GridMapDisplay.__new__
+         ~GridMapDisplay.__reduce__
+         ~GridMapDisplay.__reduce_ex__
+         ~GridMapDisplay.__sizeof__
+         ~GridMapDisplay.__subclasshook__
          ~GridMapDisplay._find_nearest_grid_indices
          ~GridMapDisplay._get_label_x
          ~GridMapDisplay._get_label_y
@@ -47,4 +53,5 @@ pyart.graph.gridmapdisplay.GridMapDisplay
 
 
    
+
 

@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.5.0',
+        VERSION:     '1.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="Py-ART Documentation" href="../../index.html" />
     <link rel="up" title="pyart.graph.gridmapdisplay.GridMapDisplay" href="pyart.graph.gridmapdisplay.GridMapDisplay.html" />
-    <link rel="next" title="pyart.graph.gridmapdisplay.GridMapDisplay.__init__" href="pyart.graph.gridmapdisplay.GridMapDisplay.__init__.html" />
+    <link rel="next" title="pyart.graph.gridmapdisplay.GridMapDisplay.__format__" href="pyart.graph.gridmapdisplay.GridMapDisplay.__format__.html" />
     <link rel="prev" title="pyart.graph.gridmapdisplay.GridMapDisplay.plot_longitude_slice" href="pyart.graph.gridmapdisplay.GridMapDisplay.plot_longitude_slice.html" /> 
   </head>
   <body>
@@ -43,7 +43,7 @@
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pyart.graph.gridmapdisplay.GridMapDisplay.__init__.html" title="pyart.graph.gridmapdisplay.GridMapDisplay.__init__"
+          <a href="pyart.graph.gridmapdisplay.GridMapDisplay.__format__.html" title="pyart.graph.gridmapdisplay.GridMapDisplay.__format__"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="pyart.graph.gridmapdisplay.GridMapDisplay.plot_longitude_slice.html" title="pyart.graph.gridmapdisplay.GridMapDisplay.plot_longitude_slice"
@@ -64,8 +64,9 @@
 <h1>pyart.graph.gridmapdisplay.GridMapDisplay.plot_longitudinal_level<a class="headerlink" href="#pyart-graph-gridmapdisplay-gridmapdisplay-plot-longitudinal-level" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="pyart.graph.gridmapdisplay.GridMapDisplay.plot_longitudinal_level">
-<tt class="descclassname">GridMapDisplay.</tt><tt class="descname">plot_longitudinal_level</tt><big>(</big><em>field</em>, <em>x_index</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>cmap='jet'</em>, <em>mask_outside=False</em>, <em>title=None</em>, <em>title_flag=True</em>, <em>axislabels=(None</em>, <em>None)</em>, <em>axislabels_flag=True</em>, <em>colorbar_flag=True</em>, <em>colorbar_label=None</em>, <em>colorbar_orient='vertical'</em>, <em>edges=True</em>, <em>ax=None</em>, <em>fig=None</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/graph/gridmapdisplay.py#L505"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.graph.gridmapdisplay.GridMapDisplay.plot_longitudinal_level" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">GridMapDisplay.</tt><tt class="descname">plot_longitudinal_level</tt><big>(</big><em>field</em>, <em>x_index</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>norm=None</em>, <em>cmap=None</em>, <em>mask_outside=False</em>, <em>title=None</em>, <em>title_flag=True</em>, <em>axislabels=(None</em>, <em>None)</em>, <em>axislabels_flag=True</em>, <em>colorbar_flag=True</em>, <em>colorbar_label=None</em>, <em>colorbar_orient='vertical'</em>, <em>edges=True</em>, <em>ax=None</em>, <em>fig=None</em>, <em>**kwargs</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/graph/gridmapdisplay.py#L441"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.graph.gridmapdisplay.GridMapDisplay.plot_longitudinal_level" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot a slice along a given longitude.</p>
+<p>Additional arguments are passed to Basemaps&#8217;s pcolormesh function.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -82,11 +83,19 @@
 <blockquote>
 <div><p>Lower and upper range for the colormesh.  If either parameter is
 None, a value will be determined from the field attributes (if
-available) or the default values of -8, 64 will be used.</p>
+available) or the default values of -8, 64 will be used.
+Parameters are ignored is norm is not None.</p>
 </div></blockquote>
-<p><strong>cmap</strong> : str</p>
+<p><strong>norm</strong> : Normalize or None, optional</p>
 <blockquote>
-<div><p>Matplotlib colormap name or colormap object.</p>
+<div><p>matplotlib Normalize instance used to scale luminance data.  If not
+None the vmax and vmin parameters are ignored.  If None, vmin and
+vmax are used for luminance scaling.</p>
+</div></blockquote>
+<p><strong>cmap</strong> : str or None</p>
+<blockquote>
+<div><p>Matplotlib colormap name. None will use the default colormap for
+the field being plotted as specified by the Py-ART configuration.</p>
 </div></blockquote>
 <p><strong>mask_outside</strong> : bool</p>
 <blockquote>
@@ -162,8 +171,8 @@ not plotted.</p>
   <p class="topless"><a href="pyart.graph.gridmapdisplay.GridMapDisplay.plot_longitude_slice.html"
                         title="previous chapter">pyart.graph.gridmapdisplay.GridMapDisplay.plot_longitude_slice</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="pyart.graph.gridmapdisplay.GridMapDisplay.__init__.html"
-                        title="next chapter">pyart.graph.gridmapdisplay.GridMapDisplay.__init__</a></p>
+  <p class="topless"><a href="pyart.graph.gridmapdisplay.GridMapDisplay.__format__.html"
+                        title="next chapter">pyart.graph.gridmapdisplay.GridMapDisplay.__format__</a></p>
   <h3>This Page</h3>
   <ul class="this-page-menu">
     <li><a href="../../_sources/dev_reference/generated/pyart.graph.gridmapdisplay.GridMapDisplay.plot_longitudinal_level.txt"
@@ -199,7 +208,7 @@ not plotted.</p>
           <a href="../../np-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pyart.graph.gridmapdisplay.GridMapDisplay.__init__.html" title="pyart.graph.gridmapdisplay.GridMapDisplay.__init__"
+          <a href="pyart.graph.gridmapdisplay.GridMapDisplay.__format__.html" title="pyart.graph.gridmapdisplay.GridMapDisplay.__format__"
              >next</a> |</li>
         <li class="right" >
           <a href="pyart.graph.gridmapdisplay.GridMapDisplay.plot_longitude_slice.html" title="pyart.graph.gridmapdisplay.GridMapDisplay.plot_longitude_slice"
@@ -212,8 +221,8 @@ not plotted.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Sep 01, 2015.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Last updated on Feb 05, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

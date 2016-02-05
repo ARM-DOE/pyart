@@ -24,5 +24,5 @@ and range rings
 .. literalinclude:: plot_ppi_basemap_with_rings.py
     :lines: 10-
 
-**Total running time of the example:**  11.61 seconds
+**Total running time of the example:**  10.93 seconds
     

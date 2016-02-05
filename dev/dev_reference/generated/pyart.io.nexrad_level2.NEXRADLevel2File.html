@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.5.0',
+        VERSION:     '1.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -65,12 +65,11 @@
 <dt id="pyart.io.nexrad_level2.NEXRADLevel2File">
 <em class="property">class </em><tt class="descclassname">pyart.io.nexrad_level2.</tt><tt class="descname">NEXRADLevel2File</tt><big>(</big><em>filename</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/io/nexrad_level2.py#L84"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.io.nexrad_level2.NEXRADLevel2File" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class for accessing data in a NEXRAD (WSR-88D) Level II file.</p>
-<p>NEXRAD Level II files <a class="reference internal" href="#r15" id="id1">[R15]</a>, also know as NEXRAD Archive Level II or
+<p>NEXRAD Level II files <a class="reference internal" href="#r23" id="id1">[R23]</a>, also know as NEXRAD Archive Level II or
 WSR-88D Archive level 2, are available from the NOAA National Climate Data
-Center <a class="reference internal" href="#r16" id="id2">[R16]</a> as well as on the UCAR THREDDS Data Server <a class="reference internal" href="#r17" id="id3">[R17]</a>.  Files with
-uncompressed messages and compressed messages are supported.  Currently
-only &#8220;message 31&#8221; type files are supported, &#8220;message 1&#8221; file cannot be
-read using this class.</p>
+Center <a class="reference internal" href="#r24" id="id2">[R24]</a> as well as on the UCAR THREDDS Data Server <a class="reference internal" href="#r25" id="id3">[R25]</a>.  Files with
+uncompressed messages and compressed messages are supported.  This class
+supports reading both &#8220;message 31&#8221; and &#8220;message 1&#8221; type files.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -84,39 +83,39 @@ read using this class.</p>
 </tbody>
 </table>
 <p class="rubric">References</p>
-<table class="docutils citation" frame="void" id="r15" rules="none">
+<table class="docutils citation" frame="void" id="r23" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label">[R15]</td><td><em>(<a class="fn-backref" href="#id1">1</a>, <a class="fn-backref" href="#id4">2</a>)</em> <a class="reference external" href="http://www.roc.noaa.gov/WSR88D/Level_II/Level2Info.aspx">http://www.roc.noaa.gov/WSR88D/Level_II/Level2Info.aspx</a></td></tr>
+<tr><td class="label">[R23]</td><td><em>(<a class="fn-backref" href="#id1">1</a>, <a class="fn-backref" href="#id4">2</a>)</em> <a class="reference external" href="http://www.roc.noaa.gov/WSR88D/Level_II/Level2Info.aspx">http://www.roc.noaa.gov/WSR88D/Level_II/Level2Info.aspx</a></td></tr>
 </tbody>
 </table>
-<table class="docutils citation" frame="void" id="r16" rules="none">
+<table class="docutils citation" frame="void" id="r24" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label">[R16]</td><td><em>(<a class="fn-backref" href="#id2">1</a>, <a class="fn-backref" href="#id5">2</a>)</em> <a class="reference external" href="http://www.ncdc.noaa.gov/">http://www.ncdc.noaa.gov/</a></td></tr>
+<tr><td class="label">[R24]</td><td><em>(<a class="fn-backref" href="#id2">1</a>, <a class="fn-backref" href="#id5">2</a>)</em> <a class="reference external" href="http://www.ncdc.noaa.gov/">http://www.ncdc.noaa.gov/</a></td></tr>
 </tbody>
 </table>
-<table class="docutils citation" frame="void" id="r17" rules="none">
+<table class="docutils citation" frame="void" id="r25" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label">[R17]</td><td><em>(<a class="fn-backref" href="#id3">1</a>, <a class="fn-backref" href="#id6">2</a>)</em> <a class="reference external" href="http://thredds.ucar.edu/thredds/catalog.html">http://thredds.ucar.edu/thredds/catalog.html</a></td></tr>
+<tr><td class="label">[R25]</td><td><em>(<a class="fn-backref" href="#id3">1</a>, <a class="fn-backref" href="#id6">2</a>)</em> <a class="reference external" href="http://thredds.ucar.edu/thredds/catalog.html">http://thredds.ucar.edu/thredds/catalog.html</a></td></tr>
 </tbody>
 </table>
 <p class="rubric">Attributes</p>
 <table border="1" class="docutils">
 <colgroup>
-<col width="11%" />
-<col width="89%" />
+<col width="10%" />
+<col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td>msg31s</td>
-<td>(list) Message 31 message in the file.</td>
+<tr class="row-odd"><td>radial_records</td>
+<td>(list) Radial (1 or 31) messages in the file.</td>
 </tr>
 <tr class="row-even"><td>nscans</td>
 <td>(int) Number of scans in the file.</td>
 </tr>
 <tr class="row-odd"><td>scan_msgs</td>
-<td>(list of arrays) Each element specifies the indices of the message in msg31s which belong to a given scan.</td>
+<td>(list of arrays) Each element specifies the indices of the message in the radial_records attribute which belong to a given scan.</td>
 </tr>
 <tr class="row-even"><td>volume_header</td>
 <td>(dict) Volume header.</td>
@@ -129,6 +128,9 @@ read using this class.</p>
 </tr>
 <tr class="row-odd"><td>_fh</td>
 <td>(file-like) File like object from which data is read.</td>
+</tr>
+<tr class="row-even"><td>_msg_type</td>
+<td>(&#8216;31&#8217; or &#8216;1&#8217;:) Type of radial messages in file</td>
 </tr>
 </tbody>
 </table>
@@ -172,7 +174,7 @@ read using this class.</p>
 <tr class="row-odd"><td><a class="reference internal" href="pyart.io.nexrad_level2.NEXRADLevel2File.location.html#pyart.io.nexrad_level2.NEXRADLevel2File.location" title="pyart.io.nexrad_level2.NEXRADLevel2File.location"><tt class="xref py py-obj docutils literal"><span class="pre">location</span></tt></a>()</td>
 <td>Find the location of the radar.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.io.nexrad_level2.NEXRADLevel2File.scan_info.html#pyart.io.nexrad_level2.NEXRADLevel2File.scan_info" title="pyart.io.nexrad_level2.NEXRADLevel2File.scan_info"><tt class="xref py py-obj docutils literal"><span class="pre">scan_info</span></tt></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="pyart.io.nexrad_level2.NEXRADLevel2File.scan_info.html#pyart.io.nexrad_level2.NEXRADLevel2File.scan_info" title="pyart.io.nexrad_level2.NEXRADLevel2File.scan_info"><tt class="xref py py-obj docutils literal"><span class="pre">scan_info</span></tt></a>([scans])</td>
 <td>Return a list of dictionaries with scan information.</td>
 </tr>
 </tbody>
@@ -208,14 +210,14 @@ read using this class.</p>
 <tr class="row-odd"><td><a class="reference internal" href="pyart.io.nexrad_level2.NEXRADLevel2File.__subclasshook__.html#pyart.io.nexrad_level2.NEXRADLevel2File.__subclasshook__" title="pyart.io.nexrad_level2.NEXRADLevel2File.__subclasshook__"><tt class="xref py py-obj docutils literal"><span class="pre">__subclasshook__</span></tt></a></td>
 <td>Abstract classes can override this to customize issubclass().</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.io.nexrad_level2.NEXRADLevel2File._msg31_array.html#pyart.io.nexrad_level2.NEXRADLevel2File._msg31_array" title="pyart.io.nexrad_level2.NEXRADLevel2File._msg31_array"><tt class="xref py py-obj docutils literal"><span class="pre">_msg31_array</span></tt></a>(scans,&nbsp;key)</td>
-<td>Return an array of msg31 header elements for all rays in scans.</td>
-</tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.io.nexrad_level2.NEXRADLevel2File._msg31_rad_array.html#pyart.io.nexrad_level2.NEXRADLevel2File._msg31_rad_array" title="pyart.io.nexrad_level2.NEXRADLevel2File._msg31_rad_array"><tt class="xref py py-obj docutils literal"><span class="pre">_msg31_rad_array</span></tt></a>(scans,&nbsp;key)</td>
-<td>Return an array of msg31 RAD elements for all rays in scans.</td>
-</tr>
 <tr class="row-even"><td><a class="reference internal" href="pyart.io.nexrad_level2.NEXRADLevel2File._msg_nums.html#pyart.io.nexrad_level2.NEXRADLevel2File._msg_nums" title="pyart.io.nexrad_level2.NEXRADLevel2File._msg_nums"><tt class="xref py py-obj docutils literal"><span class="pre">_msg_nums</span></tt></a>(scans)</td>
 <td>Find the all message number for a list of scans.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pyart.io.nexrad_level2.NEXRADLevel2File._radial_array.html#pyart.io.nexrad_level2.NEXRADLevel2File._radial_array" title="pyart.io.nexrad_level2.NEXRADLevel2File._radial_array"><tt class="xref py py-obj docutils literal"><span class="pre">_radial_array</span></tt></a>(scans,&nbsp;key)</td>
+<td>Return an array of radial header elements for all rays in scans.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pyart.io.nexrad_level2.NEXRADLevel2File._radial_sub_array.html#pyart.io.nexrad_level2.NEXRADLevel2File._radial_sub_array" title="pyart.io.nexrad_level2.NEXRADLevel2File._radial_sub_array"><tt class="xref py py-obj docutils literal"><span class="pre">_radial_sub_array</span></tt></a>(scans,&nbsp;key)</td>
+<td>Return an array of RAD or msg_header elements for all rays in scans.</td>
 </tr>
 </tbody>
 </table>
@@ -282,8 +284,8 @@ read using this class.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Sep 01, 2015.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Last updated on Feb 05, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

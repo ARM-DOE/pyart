@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.5.0',
+        VERSION:     '1.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -63,6 +63,8 @@
 <p>Miscellaneous utility functions.</p>
 <p>The location and names of these functions within Py-ART may change between
 versions without depeciation, use with caution.</p>
+<div class="section" id="direction-statistics">
+<h2>Direction statistics<a class="headerlink" href="#direction-statistics" title="Permalink to this headline">¶</a></h2>
 <table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
@@ -87,8 +89,41 @@ versions without depeciation, use with caution.</p>
 <tr class="row-even"><td><a class="reference internal" href="generated/pyart.util.interval_std.html#pyart.util.interval_std" title="pyart.util.interval_std"><tt class="xref py py-obj docutils literal"><span class="pre">interval_std</span></tt></a>(dist,&nbsp;interval_min,&nbsp;interval_max)</td>
 <td>Compute the standard deviation of a distribution within an interval.</td>
 </tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.util.mean_of_two_angles.html#pyart.util.mean_of_two_angles" title="pyart.util.mean_of_two_angles"><tt class="xref py py-obj docutils literal"><span class="pre">mean_of_two_angles</span></tt></a>(angles1,&nbsp;angles2)</td>
+<td>Compute the element by element mean of two sets of angles.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.util.mean_of_two_angles_deg.html#pyart.util.mean_of_two_angles_deg" title="pyart.util.mean_of_two_angles_deg"><tt class="xref py py-obj docutils literal"><span class="pre">mean_of_two_angles_deg</span></tt></a>(angle1,&nbsp;angle2)</td>
+<td>Compute the element by element mean of two sets of angles in degrees.</td>
+</tr>
 </tbody>
 </table>
+</div>
+<div class="section" id="miscellaneous-functions">
+<h2>Miscellaneous functions<a class="headerlink" href="#miscellaneous-functions" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.util.cross_section_ppi.html#pyart.util.cross_section_ppi" title="pyart.util.cross_section_ppi"><tt class="xref py py-obj docutils literal"><span class="pre">cross_section_ppi</span></tt></a>(radar,&nbsp;target_azimuths)</td>
+<td>Extract cross sections from a PPI volume along one or more azimuth angles.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.util.estimate_noise_hs74.html#pyart.util.estimate_noise_hs74" title="pyart.util.estimate_noise_hs74"><tt class="xref py py-obj docutils literal"><span class="pre">estimate_noise_hs74</span></tt></a>(spectrum[,&nbsp;navg])</td>
+<td>Estimate noise parameters of a Doppler spectrum.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.util.is_vpt.html#pyart.util.is_vpt" title="pyart.util.is_vpt"><tt class="xref py py-obj docutils literal"><span class="pre">is_vpt</span></tt></a>(radar[,&nbsp;offset])</td>
+<td>Determine if a Radar appears to be a vertical pointing scan.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.util.to_vpt.html#pyart.util.to_vpt" title="pyart.util.to_vpt"><tt class="xref py py-obj docutils literal"><span class="pre">to_vpt</span></tt></a>(radar[,&nbsp;single_scan])</td>
+<td>Convert an existing Radar object to represent a vertical pointing scan.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.util.join_radar.html#pyart.util.join_radar" title="pyart.util.join_radar"><tt class="xref py py-obj docutils literal"><span class="pre">join_radar</span></tt></a>(radar1,&nbsp;radar2)</td>
+<td>Combine two radar instances into one.</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 
 
@@ -97,6 +132,15 @@ versions without depeciation, use with caution.</p>
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Utilities (<tt class="docutils literal"><span class="pre">pyart.util</span></tt>)</a><ul>
+<li><a class="reference internal" href="#direction-statistics">Direction statistics</a></li>
+<li><a class="reference internal" href="#miscellaneous-functions">Miscellaneous functions</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="generated/pyart.filters.moment_based_gate_filter.html"
                         title="previous chapter">pyart.filters.moment_based_gate_filter</a></p>
@@ -149,8 +193,8 @@ versions without depeciation, use with caution.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Sep 01, 2015.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Last updated on Feb 05, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

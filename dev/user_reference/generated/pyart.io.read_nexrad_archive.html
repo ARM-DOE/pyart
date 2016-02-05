@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.5.0',
+        VERSION:     '1.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -63,7 +63,7 @@
 <h1>pyart.io.read_nexrad_archive<a class="headerlink" href="#pyart-io-read-nexrad-archive" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pyart.io.read_nexrad_archive">
-<tt class="descclassname">pyart.io.</tt><tt class="descname">read_nexrad_archive</tt><big>(</big><em>filename</em>, <em>field_names=None</em>, <em>additional_metadata=None</em>, <em>file_field_names=False</em>, <em>exclude_fields=None</em>, <em>delay_field_loading=False</em>, <em>**kwargs</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/io/nexrad_archive.py#L29"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.io.read_nexrad_archive" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">pyart.io.</tt><tt class="descname">read_nexrad_archive</tt><big>(</big><em>filename</em>, <em>field_names=None</em>, <em>additional_metadata=None</em>, <em>file_field_names=False</em>, <em>exclude_fields=None</em>, <em>delay_field_loading=False</em>, <em>station=None</em>, <em>scans=None</em>, <em>linear_interp=True</em>, <em>**kwargs</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/io/nexrad_archive.py#L35"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.io.read_nexrad_archive" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read a NEXRAD Level 2 Archive file.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -72,10 +72,10 @@
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
 <blockquote>
 <div><p>Filename of NEXRAD Level 2 Archive file.  The files hosted by
-at the NOAA National Climate Data Center <a class="reference internal" href="#r40" id="id1">[R40]</a> as well as on the
-UCAR THREDDS Data Server <a class="reference internal" href="#r41" id="id2">[R41]</a> have been tested.  Other NEXRAD
+at the NOAA National Climate Data Center <a class="reference internal" href="#r47" id="id1">[R47]</a> as well as on the
+UCAR THREDDS Data Server <a class="reference internal" href="#r48" id="id2">[R48]</a> have been tested.  Other NEXRAD
 Level 2 Archive files may or may not work.  Message type 1 file
-at not yet supported, only message type 31.</p>
+and message type 31 files are supported.</p>
 </div></blockquote>
 <p><strong>field_names</strong> : dict, optional</p>
 <blockquote>
@@ -105,12 +105,32 @@ likely only have a &#8216;data&#8217; key, unless the fields are defined in
 <div><p>List of fields to exclude from the radar object. This is applied
 after the <cite>file_field_names</cite> and <cite>field_names</cite> parameters.</p>
 </div></blockquote>
-<p><strong>delay_field_loading</strong> : bool</p>
+<p><strong>delay_field_loading</strong> : bool, optional</p>
 <blockquote>
 <div><p>True to delay loading of field data from the file until the &#8216;data&#8217;
 key in a particular field dictionary is accessed.  In this case
 the field attribute of the returned Radar object will contain
 LazyLoadDict objects not dict objects.</p>
+</div></blockquote>
+<p><strong>station</strong> : str or None, optional</p>
+<blockquote>
+<div><p>Four letter ICAO name of the NEXRAD station used to determine the
+location in the returned radar object.  This parameter is only
+used when the location is not contained in the file, which occur
+in older NEXRAD message 1 files.</p>
+</div></blockquote>
+<p><strong>scans</strong> : list or None, optional</p>
+<blockquote>
+<div><p>Read only specified scans from the file.  None (the default) will read
+all scans.</p>
+</div></blockquote>
+<p><strong>linear_interp</strong> : bool, optional</p>
+<blockquote>
+<div><p>True (the default) to perform linear interpolation between valid pairs
+of gates in low resolution rays in files mixed resolution rays.
+False will perform a nearest neighbor interpolation.  This parameter is
+not used if the resolution of all rays in the file or requested sweeps
+is constant.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -124,16 +144,16 @@ Gates not collected are masked in the field data.</p>
 </tbody>
 </table>
 <p class="rubric">References</p>
-<table class="docutils citation" frame="void" id="r40" rules="none">
+<table class="docutils citation" frame="void" id="r47" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label">[R40]</td><td><em>(<a class="fn-backref" href="#id1">1</a>, <a class="fn-backref" href="#id3">2</a>)</em> <a class="reference external" href="http://www.ncdc.noaa.gov/">http://www.ncdc.noaa.gov/</a></td></tr>
+<tr><td class="label">[R47]</td><td><em>(<a class="fn-backref" href="#id1">1</a>, <a class="fn-backref" href="#id3">2</a>)</em> <a class="reference external" href="http://www.ncdc.noaa.gov/">http://www.ncdc.noaa.gov/</a></td></tr>
 </tbody>
 </table>
-<table class="docutils citation" frame="void" id="r41" rules="none">
+<table class="docutils citation" frame="void" id="r48" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label">[R41]</td><td><em>(<a class="fn-backref" href="#id2">1</a>, <a class="fn-backref" href="#id4">2</a>)</em> <a class="reference external" href="http://thredds.ucar.edu/thredds/catalog.html">http://thredds.ucar.edu/thredds/catalog.html</a></td></tr>
+<tr><td class="label">[R48]</td><td><em>(<a class="fn-backref" href="#id2">1</a>, <a class="fn-backref" href="#id4">2</a>)</em> <a class="reference external" href="http://thredds.ucar.edu/thredds/catalog.html">http://thredds.ucar.edu/thredds/catalog.html</a></td></tr>
 </tbody>
 </table>
 </dd></dl>
@@ -199,8 +219,8 @@ Gates not collected are masked in the field data.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Sep 01, 2015.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Last updated on Feb 05, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

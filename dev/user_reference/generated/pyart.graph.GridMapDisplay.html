@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.5.0',
+        VERSION:     '1.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -27,7 +27,7 @@
     <link rel="top" title="Py-ART Documentation" href="../../index.html" />
     <link rel="up" title="Graphing (pyart.graph)" href="../graph.html" />
     <link rel="next" title="pyart.graph.GridMapDisplay.generate_filename" href="pyart.graph.GridMapDisplay.generate_filename.html" />
-    <link rel="prev" title="pyart.graph.RadarMapDisplay.set_limits" href="pyart.graph.RadarMapDisplay.set_limits.html" /> 
+    <link rel="prev" title="pyart.graph.AirborneRadarDisplay.set_limits" href="pyart.graph.AirborneRadarDisplay.set_limits.html" /> 
   </head>
   <body>
     <div class="related">
@@ -46,7 +46,7 @@
           <a href="pyart.graph.GridMapDisplay.generate_filename.html" title="pyart.graph.GridMapDisplay.generate_filename"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="pyart.graph.RadarMapDisplay.set_limits.html" title="pyart.graph.RadarMapDisplay.set_limits"
+          <a href="pyart.graph.AirborneRadarDisplay.set_limits.html" title="pyart.graph.AirborneRadarDisplay.set_limits"
              accesskey="P">previous</a> |</li>
         <li><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
           <li><a href="../index.html" >User Reference Manual</a> &raquo;</li>
@@ -63,7 +63,7 @@
 <h1>pyart.graph.GridMapDisplay<a class="headerlink" href="#pyart-graph-gridmapdisplay" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="pyart.graph.GridMapDisplay">
-<em class="property">class </em><tt class="descclassname">pyart.graph.</tt><tt class="descname">GridMapDisplay</tt><big>(</big><em>grid</em>, <em>debug=False</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/graph/gridmapdisplay.py#L25"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.graph.GridMapDisplay" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">pyart.graph.</tt><tt class="descname">GridMapDisplay</tt><big>(</big><em>grid</em>, <em>debug=False</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/graph/gridmapdisplay.py#L33"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.graph.GridMapDisplay" title="Permalink to this definition">¶</a></dt>
 <dd><p>A class for creating plots from a grid object on top of a Basemap.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -94,22 +94,13 @@
 <tr class="row-even"><td>debug</td>
 <td>(bool) True to print debugging messages, False to supressed them.</td>
 </tr>
-<tr class="row-odd"><td>proj</td>
-<td>(Proj) Object for performing cartographic transformations specific to the grid.</td>
-</tr>
-<tr class="row-even"><td>grid_lons</td>
-<td>(array) Grid longitudes in degrees.</td>
-</tr>
-<tr class="row-odd"><td>grid_lats</td>
-<td>(array) Grid latitudes in degress.</td>
-</tr>
-<tr class="row-even"><td>basemap</td>
+<tr class="row-odd"><td>basemap</td>
 <td>(Basemap) Last plotted basemap, None when no basemap has been plotted.</td>
 </tr>
-<tr class="row-odd"><td>mappables</td>
+<tr class="row-even"><td>mappables</td>
 <td>(list) List of ContourSet, etc. which have been plotted, useful when adding colorbars.</td>
 </tr>
-<tr class="row-even"><td>fields</td>
+<tr class="row-odd"><td>fields</td>
 <td>(list) List of fields which have been plotted.</td>
 </tr>
 </tbody>
@@ -145,16 +136,16 @@
 <tr class="row-even"><td><a class="reference internal" href="pyart.graph.GridMapDisplay.plot_crosshairs.html#pyart.graph.GridMapDisplay.plot_crosshairs" title="pyart.graph.GridMapDisplay.plot_crosshairs"><tt class="xref py py-obj docutils literal"><span class="pre">plot_crosshairs</span></tt></a>([lon,&nbsp;lat,&nbsp;line_style,&nbsp;...])</td>
 <td>Plot crosshairs at a given longitude and latitude.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.graph.GridMapDisplay.plot_grid.html#pyart.graph.GridMapDisplay.plot_grid" title="pyart.graph.GridMapDisplay.plot_grid"><tt class="xref py py-obj docutils literal"><span class="pre">plot_grid</span></tt></a>(field[,&nbsp;level,&nbsp;vmin,&nbsp;vmax,&nbsp;cmap,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="pyart.graph.GridMapDisplay.plot_grid.html#pyart.graph.GridMapDisplay.plot_grid" title="pyart.graph.GridMapDisplay.plot_grid"><tt class="xref py py-obj docutils literal"><span class="pre">plot_grid</span></tt></a>(field[,&nbsp;level,&nbsp;vmin,&nbsp;vmax,&nbsp;norm,&nbsp;...])</td>
 <td>Plot the grid onto the current basemap.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.graph.GridMapDisplay.plot_latitude_slice.html#pyart.graph.GridMapDisplay.plot_latitude_slice" title="pyart.graph.GridMapDisplay.plot_latitude_slice"><tt class="xref py py-obj docutils literal"><span class="pre">plot_latitude_slice</span></tt></a>(field[,&nbsp;lon,&nbsp;lat,&nbsp;vmin,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="pyart.graph.GridMapDisplay.plot_latitude_slice.html#pyart.graph.GridMapDisplay.plot_latitude_slice" title="pyart.graph.GridMapDisplay.plot_latitude_slice"><tt class="xref py py-obj docutils literal"><span class="pre">plot_latitude_slice</span></tt></a>(field[,&nbsp;lon,&nbsp;lat])</td>
 <td>Plot a slice along a given latitude.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="pyart.graph.GridMapDisplay.plot_latitudinal_level.html#pyart.graph.GridMapDisplay.plot_latitudinal_level" title="pyart.graph.GridMapDisplay.plot_latitudinal_level"><tt class="xref py py-obj docutils literal"><span class="pre">plot_latitudinal_level</span></tt></a>(field,&nbsp;y_index[,&nbsp;...])</td>
 <td>Plot a slice along a given latitude.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.graph.GridMapDisplay.plot_longitude_slice.html#pyart.graph.GridMapDisplay.plot_longitude_slice" title="pyart.graph.GridMapDisplay.plot_longitude_slice"><tt class="xref py py-obj docutils literal"><span class="pre">plot_longitude_slice</span></tt></a>(field[,&nbsp;lon,&nbsp;lat,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="pyart.graph.GridMapDisplay.plot_longitude_slice.html#pyart.graph.GridMapDisplay.plot_longitude_slice" title="pyart.graph.GridMapDisplay.plot_longitude_slice"><tt class="xref py py-obj docutils literal"><span class="pre">plot_longitude_slice</span></tt></a>(field[,&nbsp;lon,&nbsp;lat])</td>
 <td>Plot a slice along a given longitude.</td>
 </tr>
 <tr class="row-odd"><td><a class="reference internal" href="pyart.graph.GridMapDisplay.plot_longitudinal_level.html#pyart.graph.GridMapDisplay.plot_longitudinal_level" title="pyart.graph.GridMapDisplay.plot_longitudinal_level"><tt class="xref py py-obj docutils literal"><span class="pre">plot_longitudinal_level</span></tt></a>(field,&nbsp;x_index[,&nbsp;...])</td>
@@ -173,8 +164,8 @@
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="pyart.graph.RadarMapDisplay.set_limits.html"
-                        title="previous chapter">pyart.graph.RadarMapDisplay.set_limits</a></p>
+  <p class="topless"><a href="pyart.graph.AirborneRadarDisplay.set_limits.html"
+                        title="previous chapter">pyart.graph.AirborneRadarDisplay.set_limits</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="pyart.graph.GridMapDisplay.generate_filename.html"
                         title="next chapter">pyart.graph.GridMapDisplay.generate_filename</a></p>
@@ -216,7 +207,7 @@
           <a href="pyart.graph.GridMapDisplay.generate_filename.html" title="pyart.graph.GridMapDisplay.generate_filename"
              >next</a> |</li>
         <li class="right" >
-          <a href="pyart.graph.RadarMapDisplay.set_limits.html" title="pyart.graph.RadarMapDisplay.set_limits"
+          <a href="pyart.graph.AirborneRadarDisplay.set_limits.html" title="pyart.graph.AirborneRadarDisplay.set_limits"
              >previous</a> |</li>
         <li><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
           <li><a href="../index.html" >User Reference Manual</a> &raquo;</li>
@@ -225,8 +216,8 @@
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Sep 01, 2015.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Last updated on Feb 05, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

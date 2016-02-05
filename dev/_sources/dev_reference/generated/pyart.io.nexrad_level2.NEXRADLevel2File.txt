@@ -39,9 +39,9 @@ pyart.io.nexrad_level2.NEXRADLevel2File
          ~NEXRADLevel2File.__reduce_ex__
          ~NEXRADLevel2File.__sizeof__
          ~NEXRADLevel2File.__subclasshook__
-         ~NEXRADLevel2File._msg31_array
-         ~NEXRADLevel2File._msg31_rad_array
          ~NEXRADLevel2File._msg_nums
+         ~NEXRADLevel2File._radial_array
+         ~NEXRADLevel2File._radial_sub_array
    
    
 

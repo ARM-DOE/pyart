@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.5.0',
+        VERSION:     '1.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -66,35 +66,39 @@ Cartesian grid.</p>
 <p><strong>Python source code:</strong> <a class="reference download internal" href="../../_downloads/plot_map_one_radar_to_grid.py"><tt class="xref download docutils literal"><span class="pre">plot_map_one_radar_to_grid.py</span></tt></a></p>
 <div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">__doc__</span>
 
-<span class="c"># Author: Jonathan J. Helmus (jhelmus@anl.gov)</span>
-<span class="c"># License: BSD 3 clause</span>
+<span class="c1"># Author: Jonathan J. Helmus (jhelmus@anl.gov)</span>
+<span class="c1"># License: BSD 3 clause</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">pyart</span>
 
-<span class="c"># read in the data</span>
-<span class="n">RADAR_FILE</span> <span class="o">=</span> <span class="s">&#39;110635.mdv&#39;</span>
+<span class="c1"># read in the data</span>
+<span class="n">RADAR_FILE</span> <span class="o">=</span> <span class="s1">&#39;110635.mdv&#39;</span>
 <span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_mdv</span><span class="p">(</span><span class="n">RADAR_FILE</span><span class="p">)</span>
 
-<span class="c"># mask out last 10 gates of each ray, this removes the &quot;ring&quot; around th radar.</span>
-<span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s">&#39;reflectivity&#39;</span><span class="p">][</span><span class="s">&#39;data&#39;</span><span class="p">][:,</span> <span class="o">-</span><span class="mi">10</span><span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked</span>
+<span class="c1"># mask out last 10 gates of each ray, this removes the &quot;ring&quot; around th radar.</span>
+<span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][:,</span> <span class="o">-</span><span class="mi">10</span><span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked</span>
 
-<span class="c"># perform Cartesian mapping, limit to the reflectivity field.</span>
+<span class="c1"># exclude masked gates from the gridding</span>
+<span class="n">gatefilter</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">GateFilter</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
+<span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_masked</span><span class="p">(</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">)</span>
+
+<span class="c1"># perform Cartesian mapping, limit to the reflectivity field.</span>
 <span class="n">grid</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">grid_from_radars</span><span class="p">(</span>
-    <span class="p">(</span><span class="n">radar</span><span class="p">,),</span>
+    <span class="p">(</span><span class="n">radar</span><span class="p">,),</span> <span class="n">gatefilters</span><span class="o">=</span><span class="p">(</span><span class="n">gatefilter</span><span class="p">,</span> <span class="p">),</span>
     <span class="n">grid_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">241</span><span class="p">,</span> <span class="mi">241</span><span class="p">),</span>
     <span class="n">grid_limits</span><span class="o">=</span><span class="p">((</span><span class="mi">2000</span><span class="p">,</span> <span class="mi">2000</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mf">123000.0</span><span class="p">,</span> <span class="mf">123000.0</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mf">123000.0</span><span class="p">,</span> <span class="mf">123000.0</span><span class="p">)),</span>
-    <span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;reflectivity&#39;</span><span class="p">])</span>
+    <span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">])</span>
 
-<span class="c"># create the plot</span>
+<span class="c1"># create the plot</span>
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s">&#39;reflectivity&#39;</span><span class="p">][</span><span class="s">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">origin</span><span class="o">=</span><span class="s">&#39;lower&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the example:</strong>  18.47 seconds</p>
+<p><strong>Total running time of the example:</strong>  34.28 seconds</p>
 </div>
 
 
@@ -155,8 +159,8 @@ Cartesian grid.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Sep 01, 2015.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Last updated on Feb 05, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

@@ -11,17 +11,20 @@ pyart.graph.radarmapdisplay.RadarMapDisplay
       .. autosummary::
          :toctree:
       
+         RadarMapDisplay.generate_az_rhi_title
          RadarMapDisplay.generate_filename
          RadarMapDisplay.generate_ray_title
          RadarMapDisplay.generate_title
          RadarMapDisplay.generate_vpt_title
          RadarMapDisplay.label_xaxis_r
          RadarMapDisplay.label_xaxis_rays
+         RadarMapDisplay.label_xaxis_time
          RadarMapDisplay.label_xaxis_x
          RadarMapDisplay.label_yaxis_field
          RadarMapDisplay.label_yaxis_y
          RadarMapDisplay.label_yaxis_z
          RadarMapDisplay.plot
+         RadarMapDisplay.plot_azimuth_to_rhi
          RadarMapDisplay.plot_colorbar
          RadarMapDisplay.plot_cross_hair
          RadarMapDisplay.plot_grid_lines
@@ -55,8 +58,8 @@ pyart.graph.radarmapdisplay.RadarMapDisplay
          ~RadarMapDisplay.__reduce_ex__
          ~RadarMapDisplay.__sizeof__
          ~RadarMapDisplay.__subclasshook__
-         ~RadarMapDisplay._calculate_localization
          ~RadarMapDisplay._check_basemap
+         ~RadarMapDisplay._get_azimuth_rhi_data_x_y_z
          ~RadarMapDisplay._get_colorbar_label
          ~RadarMapDisplay._get_data
          ~RadarMapDisplay._get_ray_data
@@ -68,12 +71,15 @@ pyart.graph.radarmapdisplay.RadarMapDisplay
          ~RadarMapDisplay._label_axes_ray
          ~RadarMapDisplay._label_axes_rhi
          ~RadarMapDisplay._label_axes_vpt
+         ~RadarMapDisplay._set_az_rhi_title
          ~RadarMapDisplay._set_ray_title
          ~RadarMapDisplay._set_title
+         ~RadarMapDisplay._set_vpt_time_axis
          ~RadarMapDisplay._set_vpt_title
    
    
 
 
    
+
 

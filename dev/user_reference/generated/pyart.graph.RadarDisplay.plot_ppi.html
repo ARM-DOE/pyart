@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.5.0',
+        VERSION:     '1.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -64,8 +64,9 @@
 <h1>pyart.graph.RadarDisplay.plot_ppi<a class="headerlink" href="#pyart-graph-radardisplay-plot-ppi" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="pyart.graph.RadarDisplay.plot_ppi">
-<tt class="descclassname">RadarDisplay.</tt><tt class="descname">plot_ppi</tt><big>(</big><em>field</em>, <em>sweep=0</em>, <em>mask_tuple=None</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>cmap='jet'</em>, <em>mask_outside=False</em>, <em>title=None</em>, <em>title_flag=True</em>, <em>axislabels=(None</em>, <em>None)</em>, <em>axislabels_flag=True</em>, <em>colorbar_flag=True</em>, <em>colorbar_label=None</em>, <em>colorbar_orient='vertical'</em>, <em>edges=True</em>, <em>gatefilter=None</em>, <em>filter_transitions=True</em>, <em>ax=None</em>, <em>fig=None</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/graph/radardisplay.py#L265"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.graph.RadarDisplay.plot_ppi" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">RadarDisplay.</tt><tt class="descname">plot_ppi</tt><big>(</big><em>field</em>, <em>sweep=0</em>, <em>mask_tuple=None</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>norm=None</em>, <em>cmap=None</em>, <em>mask_outside=False</em>, <em>title=None</em>, <em>title_flag=True</em>, <em>axislabels=(None</em>, <em>None)</em>, <em>axislabels_flag=True</em>, <em>colorbar_flag=True</em>, <em>colorbar_label=None</em>, <em>colorbar_orient='vertical'</em>, <em>edges=True</em>, <em>gatefilter=None</em>, <em>filter_transitions=True</em>, <em>ax=None</em>, <em>fig=None</em>, <em>**kwargs</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/graph/radardisplay.py#L297"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.graph.RadarDisplay.plot_ppi" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot a PPI.</p>
+<p>Additional arguments are passed to Matplotlib&#8217;s pcolormesh function.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -89,15 +90,24 @@ NCP &lt; 0.5 set mask_tuple to [&#8216;NCP&#8217;, 0.5]. None performs no maskin
 </div></blockquote>
 <p><strong>vmin</strong> : float</p>
 <blockquote>
-<div><p>Luminance minimum value, None for default value.</p>
+<div><p>Luminance minimum value, None for default value.
+Parameter is ignored is norm is not None.</p>
 </div></blockquote>
 <p><strong>vmax</strong> : float</p>
 <blockquote>
-<div><p>Luminance maximum value, None for default value.</p>
+<div><p>Luminance maximum value, None for default value.
+Parameter is ignored is norm is not None.</p>
 </div></blockquote>
-<p><strong>cmap</strong> : str</p>
+<p><strong>norm</strong> : Normalize or None, optional</p>
 <blockquote>
-<div><p>Matplotlib colormap name.</p>
+<div><p>matplotlib Normalize instance used to scale luminance data.  If not
+None the vmax and vmin parameters are ignored.  If None, vmin and
+vmax are used for luminance scaling.</p>
+</div></blockquote>
+<p><strong>cmap</strong> : str or None</p>
+<blockquote>
+<div><p>Matplotlib colormap name. None will use the default colormap for
+the field being plotted as specified by the Py-ART configuration.</p>
 </div></blockquote>
 <p><strong>mask_outside</strong> : bool</p>
 <blockquote>
@@ -235,8 +245,8 @@ underlying radar is not present.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Sep 01, 2015.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Last updated on Feb 05, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

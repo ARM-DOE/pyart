@@ -16,6 +16,7 @@ pyart.filters.gatefilter.GateFilter
          GateFilter.exclude_all
          GateFilter.exclude_below
          GateFilter.exclude_equal
+         GateFilter.exclude_gates
          GateFilter.exclude_inside
          GateFilter.exclude_invalid
          GateFilter.exclude_masked
@@ -26,6 +27,7 @@ pyart.filters.gatefilter.GateFilter
          GateFilter.include_all
          GateFilter.include_below
          GateFilter.include_equal
+         GateFilter.include_gates
          GateFilter.include_inside
          GateFilter.include_none
          GateFilter.include_not_equal

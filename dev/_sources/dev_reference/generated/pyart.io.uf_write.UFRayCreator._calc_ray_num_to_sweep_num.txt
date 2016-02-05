@@ -1,0 +1,6 @@
+pyart.io.uf_write.UFRayCreator._calc_ray_num_to_sweep_num
+=========================================================
+
+.. currentmodule:: pyart.io.uf_write
+
+.. automethod:: UFRayCreator._calc_ray_num_to_sweep_num

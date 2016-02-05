@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.5.0',
+        VERSION:     '1.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -63,7 +63,7 @@
 <h1>pyart.correct.dealias_region_based<a class="headerlink" href="#pyart-correct-dealias-region-based" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pyart.correct.dealias_region_based">
-<tt class="descclassname">pyart.correct.</tt><tt class="descname">dealias_region_based</tt><big>(</big><em>radar</em>, <em>interval_splits=3</em>, <em>interval_limits=None</em>, <em>skip_between_rays=100</em>, <em>skip_along_ray=100</em>, <em>centered=True</em>, <em>nyquist_vel=None</em>, <em>check_nyquist_uniform=True</em>, <em>gatefilter=False</em>, <em>rays_wrap_around=None</em>, <em>keep_original=False</em>, <em>vel_field=None</em>, <em>corr_vel_field=None</em>, <em>**kwargs</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/correct/region_dealias.py#L56"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.correct.dealias_region_based" title="Permalink to this definition">¶</a></dt>
+<tt class="descclassname">pyart.correct.</tt><tt class="descname">dealias_region_based</tt><big>(</big><em>radar</em>, <em>interval_splits=3</em>, <em>interval_limits=None</em>, <em>skip_between_rays=100</em>, <em>skip_along_ray=100</em>, <em>centered=True</em>, <em>nyquist_vel=None</em>, <em>check_nyquist_uniform=True</em>, <em>gatefilter=False</em>, <em>rays_wrap_around=None</em>, <em>keep_original=False</em>, <em>set_limits=True</em>, <em>vel_field=None</em>, <em>corr_vel_field=None</em>, <em>**kwargs</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/correct/region_dealias.py#L58"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.correct.dealias_region_based" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dealias Doppler velocities using a region based algorithm.</p>
 <p>Performs Doppler velocity dealiasing by finding regions of similar
 velocities and unfolding and merging pairs of regions until all
@@ -142,6 +142,11 @@ scan type.</p>
 where the dealiasing procedure fails or was not applied. False
 does not replacement and these gates will be masked in the corrected
 velocity field.</p>
+</div></blockquote>
+<p><strong>set_limits</strong> : bool, optional</p>
+<blockquote>
+<div><p>True to set valid_min and valid_max elements in the returned
+dictionary.  False will not set these dictionary elements.</p>
 </div></blockquote>
 <p><strong>vel_field</strong> : str, optional</p>
 <blockquote>
@@ -228,8 +233,8 @@ array is stored under the &#8216;data&#8217; key.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Sep 01, 2015.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Last updated on Feb 05, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

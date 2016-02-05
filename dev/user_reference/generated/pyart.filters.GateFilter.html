@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.5.0',
+        VERSION:     '1.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -91,10 +91,10 @@ a set of gates to include should be set using the include methods.</p>
 </table>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pyart</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s">&#39;radar_file.nc&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;radar_file.nc&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">gatefilter</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">correct</span><span class="o">.</span><span class="n">GateFilter</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_below</span><span class="p">(</span><span class="s">&#39;reflectivity&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_below</span><span class="p">(</span><span class="s">&#39;normalized_coherent_power&#39;</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_below</span><span class="p">(</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_below</span><span class="p">(</span><span class="s1">&#39;normalized_coherent_power&#39;</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">)</span>
 </pre></div>
 </div>
 <p class="rubric">Attributes</p>
@@ -134,35 +134,41 @@ a set of gates to include should be set using the include methods.</p>
 <tr class="row-odd"><td><a class="reference internal" href="pyart.filters.GateFilter.exclude_equal.html#pyart.filters.GateFilter.exclude_equal" title="pyart.filters.GateFilter.exclude_equal"><tt class="xref py py-obj docutils literal"><span class="pre">exclude_equal</span></tt></a>(field,&nbsp;value[,&nbsp;exclude_masked,&nbsp;op])</td>
 <td>Exclude gates where a given field is equal to a value.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.filters.GateFilter.exclude_inside.html#pyart.filters.GateFilter.exclude_inside" title="pyart.filters.GateFilter.exclude_inside"><tt class="xref py py-obj docutils literal"><span class="pre">exclude_inside</span></tt></a>(field,&nbsp;v1,&nbsp;v2[,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="pyart.filters.GateFilter.exclude_gates.html#pyart.filters.GateFilter.exclude_gates" title="pyart.filters.GateFilter.exclude_gates"><tt class="xref py py-obj docutils literal"><span class="pre">exclude_gates</span></tt></a>(mask[,&nbsp;exclude_masked,&nbsp;op])</td>
+<td>Exclude gates where a given mask is equal True.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pyart.filters.GateFilter.exclude_inside.html#pyart.filters.GateFilter.exclude_inside" title="pyart.filters.GateFilter.exclude_inside"><tt class="xref py py-obj docutils literal"><span class="pre">exclude_inside</span></tt></a>(field,&nbsp;v1,&nbsp;v2[,&nbsp;...])</td>
 <td>Exclude gates where a given field is inside a given interval.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.filters.GateFilter.exclude_invalid.html#pyart.filters.GateFilter.exclude_invalid" title="pyart.filters.GateFilter.exclude_invalid"><tt class="xref py py-obj docutils literal"><span class="pre">exclude_invalid</span></tt></a>(field[,&nbsp;exclude_masked,&nbsp;op])</td>
+<tr class="row-even"><td><a class="reference internal" href="pyart.filters.GateFilter.exclude_invalid.html#pyart.filters.GateFilter.exclude_invalid" title="pyart.filters.GateFilter.exclude_invalid"><tt class="xref py py-obj docutils literal"><span class="pre">exclude_invalid</span></tt></a>(field[,&nbsp;exclude_masked,&nbsp;op])</td>
 <td>Exclude gates where an invalid value occurs in a field (NaNs or infs).</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.filters.GateFilter.exclude_masked.html#pyart.filters.GateFilter.exclude_masked" title="pyart.filters.GateFilter.exclude_masked"><tt class="xref py py-obj docutils literal"><span class="pre">exclude_masked</span></tt></a>(field[,&nbsp;exclude_masked,&nbsp;op])</td>
+<tr class="row-odd"><td><a class="reference internal" href="pyart.filters.GateFilter.exclude_masked.html#pyart.filters.GateFilter.exclude_masked" title="pyart.filters.GateFilter.exclude_masked"><tt class="xref py py-obj docutils literal"><span class="pre">exclude_masked</span></tt></a>(field[,&nbsp;exclude_masked,&nbsp;op])</td>
 <td>Exclude gates where a given field is masked.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.filters.GateFilter.exclude_none.html#pyart.filters.GateFilter.exclude_none" title="pyart.filters.GateFilter.exclude_none"><tt class="xref py py-obj docutils literal"><span class="pre">exclude_none</span></tt></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="pyart.filters.GateFilter.exclude_none.html#pyart.filters.GateFilter.exclude_none" title="pyart.filters.GateFilter.exclude_none"><tt class="xref py py-obj docutils literal"><span class="pre">exclude_none</span></tt></a>()</td>
 <td>Exclude no gates, include all gates.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.filters.GateFilter.exclude_not_equal.html#pyart.filters.GateFilter.exclude_not_equal" title="pyart.filters.GateFilter.exclude_not_equal"><tt class="xref py py-obj docutils literal"><span class="pre">exclude_not_equal</span></tt></a>(field,&nbsp;value[,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="pyart.filters.GateFilter.exclude_not_equal.html#pyart.filters.GateFilter.exclude_not_equal" title="pyart.filters.GateFilter.exclude_not_equal"><tt class="xref py py-obj docutils literal"><span class="pre">exclude_not_equal</span></tt></a>(field,&nbsp;value[,&nbsp;...])</td>
 <td>Exclude gates where a given field is not equal to a value.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.filters.GateFilter.exclude_outside.html#pyart.filters.GateFilter.exclude_outside" title="pyart.filters.GateFilter.exclude_outside"><tt class="xref py py-obj docutils literal"><span class="pre">exclude_outside</span></tt></a>(field,&nbsp;v1,&nbsp;v2[,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="pyart.filters.GateFilter.exclude_outside.html#pyart.filters.GateFilter.exclude_outside" title="pyart.filters.GateFilter.exclude_outside"><tt class="xref py py-obj docutils literal"><span class="pre">exclude_outside</span></tt></a>(field,&nbsp;v1,&nbsp;v2[,&nbsp;...])</td>
 <td>Exclude gates where a given field is outside a given interval.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.filters.GateFilter.include_above.html#pyart.filters.GateFilter.include_above" title="pyart.filters.GateFilter.include_above"><tt class="xref py py-obj docutils literal"><span class="pre">include_above</span></tt></a>(field,&nbsp;value[,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="pyart.filters.GateFilter.include_above.html#pyart.filters.GateFilter.include_above" title="pyart.filters.GateFilter.include_above"><tt class="xref py py-obj docutils literal"><span class="pre">include_above</span></tt></a>(field,&nbsp;value[,&nbsp;...])</td>
 <td>Include gates where a given field is above a given value.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.filters.GateFilter.include_all.html#pyart.filters.GateFilter.include_all" title="pyart.filters.GateFilter.include_all"><tt class="xref py py-obj docutils literal"><span class="pre">include_all</span></tt></a>()</td>
+<tr class="row-even"><td><a class="reference internal" href="pyart.filters.GateFilter.include_all.html#pyart.filters.GateFilter.include_all" title="pyart.filters.GateFilter.include_all"><tt class="xref py py-obj docutils literal"><span class="pre">include_all</span></tt></a>()</td>
 <td>Include all gates.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.filters.GateFilter.include_below.html#pyart.filters.GateFilter.include_below" title="pyart.filters.GateFilter.include_below"><tt class="xref py py-obj docutils literal"><span class="pre">include_below</span></tt></a>(field,&nbsp;value[,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="pyart.filters.GateFilter.include_below.html#pyart.filters.GateFilter.include_below" title="pyart.filters.GateFilter.include_below"><tt class="xref py py-obj docutils literal"><span class="pre">include_below</span></tt></a>(field,&nbsp;value[,&nbsp;...])</td>
 <td>Include gates where a given field is below a given value.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.filters.GateFilter.include_equal.html#pyart.filters.GateFilter.include_equal" title="pyart.filters.GateFilter.include_equal"><tt class="xref py py-obj docutils literal"><span class="pre">include_equal</span></tt></a>(field,&nbsp;value[,&nbsp;exclude_masked,&nbsp;op])</td>
+<tr class="row-even"><td><a class="reference internal" href="pyart.filters.GateFilter.include_equal.html#pyart.filters.GateFilter.include_equal" title="pyart.filters.GateFilter.include_equal"><tt class="xref py py-obj docutils literal"><span class="pre">include_equal</span></tt></a>(field,&nbsp;value[,&nbsp;exclude_masked,&nbsp;op])</td>
 <td>Include gates where a given field is equal to a value.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pyart.filters.GateFilter.include_gates.html#pyart.filters.GateFilter.include_gates" title="pyart.filters.GateFilter.include_gates"><tt class="xref py py-obj docutils literal"><span class="pre">include_gates</span></tt></a>(mask[,&nbsp;exclude_masked,&nbsp;op])</td>
+<td>Include gates where a given mask is equal True.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="pyart.filters.GateFilter.include_inside.html#pyart.filters.GateFilter.include_inside" title="pyart.filters.GateFilter.include_inside"><tt class="xref py py-obj docutils literal"><span class="pre">include_inside</span></tt></a>(field,&nbsp;v1,&nbsp;v2[,&nbsp;...])</td>
 <td>Include gates where a given field is inside a given interval.</td>
@@ -247,8 +253,8 @@ a set of gates to include should be set using the include methods.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Sep 01, 2015.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Last updated on Feb 05, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

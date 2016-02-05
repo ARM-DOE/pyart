@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.5.0',
+        VERSION:     '1.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -72,13 +72,13 @@ are update with the mapped gate data.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>elevations, azimuths</strong> : 1D float32 array</p>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ngates, nrays</strong> : int</p>
 <blockquote>
-<div><p>Elevation and azimuth angles in degrees for each ray in the radar.</p>
+<div><p>Number of gates and rays in the radar volume.</p>
 </div></blockquote>
-<p><strong>ranges</strong> : 1D float32 array</p>
+<p><strong>gate_z, gate_y, gate_x</strong> : 2D float32 array</p>
 <blockquote>
-<div><p>Gate ranges in meters for each bin in the radar.</p>
+<div><p>Cartesian locations of the gates in meters.</p>
 </div></blockquote>
 <p><strong>field_data</strong> : 3D float32 array</p>
 <blockquote>
@@ -98,11 +98,8 @@ values will not be included in the mapping.</p>
 <p><strong>offset</strong> : tuple of floats</p>
 <blockquote>
 <div><p>Offset of the radar from the grid origin.  Dimension are ordered
-as z, y, x.</p>
-</div></blockquote>
-<p><strong>toa</strong> : float</p>
-<blockquote>
-<div><p>Top of atmosphere.  Gates above this level are considered.</p>
+as z, y, x.
+Top of atmosphere.  Gates above this level are considered.</p>
 </div></blockquote>
 <p><strong>roi_func</strong> : RoIFunction</p>
 <blockquote>
@@ -181,8 +178,8 @@ as z, y, x.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Sep 01, 2015.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Last updated on Feb 05, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

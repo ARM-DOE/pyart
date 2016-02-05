@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.5.0',
+        VERSION:     '1.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -63,7 +63,7 @@
 <h1>pyart.io.nexrad_archive._NEXRADLevel2StagedField<a class="headerlink" href="#pyart-io-nexrad-archive-nexradlevel2stagedfield" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="pyart.io.nexrad_archive._NEXRADLevel2StagedField">
-<em class="property">class </em><tt class="descclassname">pyart.io.nexrad_archive.</tt><tt class="descname">_NEXRADLevel2StagedField</tt><big>(</big><em>nfile</em>, <em>moment</em>, <em>max_ngates</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/io/nexrad_archive.py#L192"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.io.nexrad_archive._NEXRADLevel2StagedField" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">pyart.io.nexrad_archive.</tt><tt class="descname">_NEXRADLevel2StagedField</tt><big>(</big><em>nfile</em>, <em>moment</em>, <em>max_ngates</em>, <em>scans</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/io/nexrad_archive.py#L325"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.io.nexrad_archive._NEXRADLevel2StagedField" title="Permalink to this definition">¶</a></dt>
 <dd><p>A class to facilitate on demand loading of field data from a Level 2 file.</p>
 <p class="rubric">Methods</p>
 <table border="1" class="longtable docutils">
@@ -93,7 +93,7 @@
 <tr class="row-even"><td><a class="reference internal" href="pyart.io.nexrad_archive._NEXRADLevel2StagedField.__format__.html#pyart.io.nexrad_archive._NEXRADLevel2StagedField.__format__" title="pyart.io.nexrad_archive._NEXRADLevel2StagedField.__format__"><tt class="xref py py-obj docutils literal"><span class="pre">__format__</span></tt></a></td>
 <td>default object formatter</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.io.nexrad_archive._NEXRADLevel2StagedField.__init__.html#pyart.io.nexrad_archive._NEXRADLevel2StagedField.__init__" title="pyart.io.nexrad_archive._NEXRADLevel2StagedField.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">__init__</span></tt></a>(nfile,&nbsp;moment,&nbsp;max_ngates)</td>
+<tr class="row-odd"><td><a class="reference internal" href="pyart.io.nexrad_archive._NEXRADLevel2StagedField.__init__.html#pyart.io.nexrad_archive._NEXRADLevel2StagedField.__init__" title="pyart.io.nexrad_archive._NEXRADLevel2StagedField.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">__init__</span></tt></a>(nfile,&nbsp;moment,&nbsp;max_ngates,&nbsp;scans)</td>
 <td>initialize.</td>
 </tr>
 <tr class="row-even"><td><a class="reference internal" href="pyart.io.nexrad_archive._NEXRADLevel2StagedField.__new__.html#pyart.io.nexrad_archive._NEXRADLevel2StagedField.__new__" title="pyart.io.nexrad_archive._NEXRADLevel2StagedField.__new__"><tt class="xref py py-obj docutils literal"><span class="pre">__new__</span></tt></a>((S,&nbsp;...)</td>
@@ -176,8 +176,8 @@
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Sep 01, 2015.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Last updated on Feb 05, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

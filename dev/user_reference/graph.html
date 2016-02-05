@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.5.0',
+        VERSION:     '1.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -60,6 +60,9 @@
             
   <span class="target" id="module-pyart.graph"></span><div class="section" id="graphing-pyart-graph">
 <h1>Graphing (<a class="reference internal" href="#module-pyart.graph" title="pyart.graph"><tt class="xref py py-mod docutils literal"><span class="pre">pyart.graph</span></tt></a>)<a class="headerlink" href="#graphing-pyart-graph" title="Permalink to this headline">¶</a></h1>
+<p>Creating plots of Radar and Grid fields.</p>
+<div class="section" id="plotting-radar-data">
+<h2>Plotting radar data<a class="headerlink" href="#plotting-radar-data" title="Permalink to this headline">¶</a></h2>
 <table border="1" class="longtable docutils">
 <colgroup>
 <col width="10%" />
@@ -72,14 +75,26 @@
 <tr class="row-even"><td><a class="reference internal" href="generated/pyart.graph.RadarMapDisplay.html#pyart.graph.RadarMapDisplay" title="pyart.graph.RadarMapDisplay"><tt class="xref py py-obj docutils literal"><span class="pre">RadarMapDisplay</span></tt></a>(radar[,&nbsp;shift])</td>
 <td>A display object for creating plots on a geographic map from data in a Radar object.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.GridMapDisplay.html#pyart.graph.GridMapDisplay" title="pyart.graph.GridMapDisplay"><tt class="xref py py-obj docutils literal"><span class="pre">GridMapDisplay</span></tt></a>(grid[,&nbsp;debug])</td>
-<td>A class for creating plots from a grid object on top of a Basemap.</td>
-</tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.graph.RadarDisplay_Airborne.html#pyart.graph.RadarDisplay_Airborne" title="pyart.graph.RadarDisplay_Airborne"><tt class="xref py py-obj docutils literal"><span class="pre">RadarDisplay_Airborne</span></tt></a>(radar[,&nbsp;shift])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.AirborneRadarDisplay.html#pyart.graph.AirborneRadarDisplay" title="pyart.graph.AirborneRadarDisplay"><tt class="xref py py-obj docutils literal"><span class="pre">AirborneRadarDisplay</span></tt></a>(radar[,&nbsp;shift])</td>
 <td>A display object for creating plots from data in a airborne radar object.</td>
 </tr>
 </tbody>
 </table>
+</div>
+<div class="section" id="plotting-grid-data">
+<h2>Plotting grid data<a class="headerlink" href="#plotting-grid-data" title="Permalink to this headline">¶</a></h2>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.GridMapDisplay.html#pyart.graph.GridMapDisplay" title="pyart.graph.GridMapDisplay"><tt class="xref py py-obj docutils literal"><span class="pre">GridMapDisplay</span></tt></a>(grid[,&nbsp;debug])</td>
+<td>A class for creating plots from a grid object on top of a Basemap.</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 
 
@@ -88,6 +103,15 @@
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Graphing (<tt class="docutils literal"><span class="pre">pyart.graph</span></tt>)</a><ul>
+<li><a class="reference internal" href="#plotting-radar-data">Plotting radar data</a></li>
+<li><a class="reference internal" href="#plotting-grid-data">Plotting grid data</a></li>
+</ul>
+</li>
+</ul>
+
   <h4>Previous topic</h4>
   <p class="topless"><a href="generated/pyart.retrieve.texture_of_complex_phase.html"
                         title="previous chapter">pyart.retrieve.texture_of_complex_phase</a></p>
@@ -140,8 +164,8 @@
     </div>
     <div class="footer">
         &copy; Copyright 2013, Py-ART developers.
-      Last updated on Sep 01, 2015.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+      Last updated on Feb 05, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
 </html>

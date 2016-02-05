@@ -11,17 +11,20 @@ pyart.graph.radardisplay.RadarDisplay
       .. autosummary::
          :toctree:
       
+         RadarDisplay.generate_az_rhi_title
          RadarDisplay.generate_filename
          RadarDisplay.generate_ray_title
          RadarDisplay.generate_title
          RadarDisplay.generate_vpt_title
          RadarDisplay.label_xaxis_r
          RadarDisplay.label_xaxis_rays
+         RadarDisplay.label_xaxis_time
          RadarDisplay.label_xaxis_x
          RadarDisplay.label_yaxis_field
          RadarDisplay.label_yaxis_y
          RadarDisplay.label_yaxis_z
          RadarDisplay.plot
+         RadarDisplay.plot_azimuth_to_rhi
          RadarDisplay.plot_colorbar
          RadarDisplay.plot_cross_hair
          RadarDisplay.plot_grid_lines
@@ -51,7 +54,7 @@ pyart.graph.radardisplay.RadarDisplay
          ~RadarDisplay.__reduce_ex__
          ~RadarDisplay.__sizeof__
          ~RadarDisplay.__subclasshook__
-         ~RadarDisplay._calculate_localization
+         ~RadarDisplay._get_azimuth_rhi_data_x_y_z
          ~RadarDisplay._get_colorbar_label
          ~RadarDisplay._get_data
          ~RadarDisplay._get_ray_data
@@ -63,12 +66,15 @@ pyart.graph.radardisplay.RadarDisplay
          ~RadarDisplay._label_axes_ray
          ~RadarDisplay._label_axes_rhi
          ~RadarDisplay._label_axes_vpt
+         ~RadarDisplay._set_az_rhi_title
          ~RadarDisplay._set_ray_title
          ~RadarDisplay._set_title
+         ~RadarDisplay._set_vpt_time_axis
          ~RadarDisplay._set_vpt_title
    
    
 
 
    
+
 

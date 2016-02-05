@@ -12,6 +12,12 @@ pyart.core.grid.Grid
          :toctree:
       
          Grid.add_field
+         Grid.from_legacy_parameters
+         Grid.get_point_longitude_latitude
+         Grid.get_projparams
+         Grid.init_point_altitude
+         Grid.init_point_longitude_latitude
+         Grid.init_point_x_y_z
          Grid.write
 
    |
@@ -29,9 +35,11 @@ pyart.core.grid.Grid
          ~Grid.__reduce_ex__
          ~Grid.__sizeof__
          ~Grid.__subclasshook__
+         ~Grid._find_and_check_nradar
    
    
 
 
    
+
 
