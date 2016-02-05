@@ -152,7 +152,7 @@ class GridMapDisplay(object):
 
     def plot_grid(
             self, field, level=0,
-            vmin=None, vmax=None, norm=None, cmap='jet',
+            vmin=None, vmax=None, norm=None, cmap=None,
             mask_outside=False, title=None, title_flag=True,
             axislabels=(None, None), axislabels_flag=False,
             colorbar_flag=True, colorbar_label=None,
@@ -178,8 +178,9 @@ class GridMapDisplay(object):
             matplotlib Normalize instance used to scale luminance data.  If not
             None the vmax and vmin parameters are ignored.  If None, vmin and
             vmax are used for luminance scaling.
-        cmap : str
-            Matplotlib colormap name or colormap object.
+        cmap : str or None
+            Matplotlib colormap name. None will use the default colormap for
+            the field being plotted as specified by the Py-ART configuration.
         mask_outside : bool
             True to mask data outside of vmin, vmax.  False performs no
             masking.
@@ -220,6 +221,7 @@ class GridMapDisplay(object):
         ax, fig = common.parse_ax_fig(ax, fig)
         norm, vmin, vmax = common.parse_norm_vmin_vmax(
             norm, self.grid, field, vmin, vmax)
+        cmap = common.parse_cmap(cmap, field)
 
         basemap = self.get_basemap()
 
@@ -310,7 +312,7 @@ class GridMapDisplay(object):
 
     def plot_latitudinal_level(
             self, field, y_index,
-            vmin=None, vmax=None, norm=None, cmap='jet',
+            vmin=None, vmax=None, norm=None, cmap=None,
             mask_outside=False, title=None, title_flag=True,
             axislabels=(None, None), axislabels_flag=True, colorbar_flag=True,
             colorbar_label=None, colorbar_orient='vertical', edges=True,
@@ -335,8 +337,9 @@ class GridMapDisplay(object):
             matplotlib Normalize instance used to scale luminance data.  If not
             None the vmax and vmin parameters are ignored.  If None, vmin and
             vmax are used for luminance scaling.
-        cmap : str
-            Matplotlib colormap name or colormap object.
+        cmap : str or None
+            Matplotlib colormap name. None will use the default colormap for
+            the field being plotted as specified by the Py-ART configuration.
         mask_outside : bool
             True to mask data outside of vmin, vmax.  False performs no
             masking.
@@ -377,6 +380,7 @@ class GridMapDisplay(object):
         ax, fig = common.parse_ax_fig(ax, fig)
         norm, vmin, vmax = common.parse_norm_vmin_vmax(
             norm, self.grid, field, vmin, vmax)
+        cmap = common.parse_cmap(cmap, field)
 
         data = self.grid.fields[field]['data'][:, y_index, :]
 
@@ -436,7 +440,7 @@ class GridMapDisplay(object):
 
     def plot_longitudinal_level(
             self, field, x_index,
-            vmin=None, vmax=None, norm=None, cmap='jet',
+            vmin=None, vmax=None, norm=None, cmap=None,
             mask_outside=False, title=None, title_flag=True,
             axislabels=(None, None), axislabels_flag=True, colorbar_flag=True,
             colorbar_label=None, colorbar_orient='vertical', edges=True,
@@ -461,8 +465,9 @@ class GridMapDisplay(object):
             matplotlib Normalize instance used to scale luminance data.  If not
             None the vmax and vmin parameters are ignored.  If None, vmin and
             vmax are used for luminance scaling.
-        cmap : str
-            Matplotlib colormap name or colormap object.
+        cmap : str or None
+            Matplotlib colormap name. None will use the default colormap for
+            the field being plotted as specified by the Py-ART configuration.
         mask_outside : bool
             True to mask data outside of vmin, vmax.  False performs no
             masking.
@@ -503,6 +508,7 @@ class GridMapDisplay(object):
         ax, fig = common.parse_ax_fig(ax, fig)
         norm, vmin, vmax = common.parse_norm_vmin_vmax(
             norm, self.grid, field, vmin, vmax)
+        cmap = common.parse_cmap(cmap, field)
 
         data = self.grid.fields[field]['data'][:, :, x_index]
 

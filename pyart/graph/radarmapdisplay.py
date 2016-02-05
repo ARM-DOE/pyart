@@ -20,7 +20,7 @@ except ImportError:
     _BASEMAP_AVAILABLE = False
 
 from .radardisplay import RadarDisplay
-from .common import parse_ax_fig, parse_norm_vmin_vmax
+from .common import parse_ax_fig, parse_norm_vmin_vmax, parse_cmap
 from ..exceptions import MissingOptionalDependency
 
 
@@ -98,7 +98,7 @@ class RadarMapDisplay(RadarDisplay):
 
     def plot_ppi_map(
             self, field, sweep=0, mask_tuple=None,
-            vmin=None, vmax=None, cmap='jet', norm=None, mask_outside=False,
+            vmin=None, vmax=None, cmap=None, norm=None, mask_outside=False,
             title=None, title_flag=True,
             colorbar_flag=True, colorbar_label=None, ax=None, fig=None,
             lat_lines=None, lon_lines=None,
@@ -135,8 +135,9 @@ class RadarMapDisplay(RadarDisplay):
             matplotlib Normalize instance used to scale luminance data.  If not
             None the vmax and vmin parameters are ignored.  If None, vmin and
             vmax are used for luminance scaling.
-        cmap : str
-            Matplotlib colormap name.
+        cmap : str or None
+            Matplotlib colormap name. None will use the default colormap for
+            the field being plotted as specified by the Py-ART configuration.
         mask_outside : bool
             True to mask data outside of vmin, vmax.  False performs no
             masking.
@@ -213,6 +214,7 @@ class RadarMapDisplay(RadarDisplay):
         ax, fig = parse_ax_fig(ax, fig)
         norm, vmin, vmax = parse_norm_vmin_vmax(
             norm, self._radar, field, vmin, vmax)
+        cmap = parse_cmap(cmap, field)
         if lat_lines is None:
             lat_lines = np.arange(30, 46, 1)
         if lon_lines is None:
