@@ -123,8 +123,8 @@ interpolated_profile = 'interpolated_profile'
 # Various parameters used in Py-ART.
 ##############################################################################
 
-FILL_VALUE = fill_value     # the default fill value for masked arrays and
-                            # the _FillValue key.
+# the default fill value for masked arrays and the _FillValue key
+FILL_VALUE = fill_value
 
 # The DEFAULT_FIELD_NAMES controls the field names which are used in the
 # correction and retrieval algorithms in Py-ART. The keys of the dictionary
@@ -628,6 +628,96 @@ DEFAULT_METADATA = {
         'long_name': 'Interpolated profile',
         'standard_name':  'interpolated_profile',
         'units': 'unknown'},
+
+    # Grid metadata
+
+    'grid_time': {
+        'units': 'seconds',
+        'standard_name': 'time',
+        'long_name': 'Time of grid',
+        'calendar': 'gregorian'},
+
+    'origin_longitude': {
+        'long_name': 'Longitude at grid origin',
+        'units': 'degrees_east',
+        'standard_name': 'longitude',
+        'valid_min': -180.,
+        'valid_max': 180.},
+
+    'origin_latitude': {
+        'long_name': 'Latitude at grid origin',
+        'units': 'degrees_north',
+        'standard_name': 'latitude',
+        'valid_min': -90.,
+        'valid_max': 90.},
+
+    'origin_altitude': {
+        'long_name': 'Altitude at grid origin',
+        'units': 'm',
+        'standard_name': 'altitude'},
+
+    'x': {
+        'standard_name': 'projection_x_coordinate',
+        'long_name': 'X distance on the projection plane from the origin',
+        'axis': 'X',
+        'units': 'm'},
+
+    'y': {
+        'standard_name': 'projection_y_coordinate',
+        'long_name': 'Y distance on the projection plane from the origin',
+        'axis': 'Y',
+        'units': 'm'},
+
+    'z': {
+        'standard_name': 'projection_z_coordinate',
+        'long_name': 'Z distance on the projection plane from the origin',
+        'axis': 'Z',
+        'units': 'm',
+        'positive': 'up'},
+
+    'point_x': {
+        'long_name': 'Cartesian x distance of each grid point from the origin',
+        'units': 'meters'},
+
+    'point_y': {
+        'long_name': 'Cartesian y distance of each grid point from the origin',
+        'units': 'meters'},
+
+    'point_z': {
+        'long_name': 'Cartesian z distance of each grid point from the origin',
+        'positive': 'up',
+        'units': 'meters'},
+
+    'point_longitude': {
+        'long_name': 'Longitude of each grid point',
+        'units': 'degrees_north'},
+
+    'point_latitude': {
+        'long_name': 'Latitude of each grid point',
+        'units': 'degrees_east'},
+
+    'point_altitude': {
+        'long_name': 'Altitude of each grid point',
+        'units': 'meters'},
+
+    'radar_latitude': {
+        'long_name': 'Latitude of radars used to make the grid.',
+        'units': 'degrees_north', },
+
+    'radar_longitude': {
+        'long_name': 'Longitude of radars used to make the grid.',
+        'units': 'degrees_east', },
+
+    'radar_altitude': {
+        'long_name': 'Altitude of radars used to make the grid.',
+        'units': 'm', },
+
+    'radar_time': {
+        'calendar': 'gregorian',
+        'long_name': 'Time in seconds of the volume start for each radar'},
+
+    'radar_name': {
+        'long_name': 'Name of radar used to make the grid', },
 
 }
 
@@ -1223,32 +1313,45 @@ DEFAULT_FIELD_COLORMAP = {
     reflectivity: 'pyart_NWSRef',
     corrected_reflectivity: 'pyart_NWSRef',
     total_power: 'pyart_NWSRef',
-    velocity: 'pyart_NWSVel',
-    corrected_velocity: 'pyart_NWSVel',
-    spectrum_width: 'pyart_NWS_SPW',
-    differential_reflectivity: 'pyart_BrBu12',
-    corrected_differential_reflectivity: 'pyart_BrBu12',
-    cross_correlation_ratio: 'pyart_BrBu12',
-    normalized_coherent_power: 'pyart_Carbone17',
-    differential_phase: 'hsv',
-    unfolded_differential_phase: 'pyart_BlueBrown11',
-    corrected_differential_phase: 'pyart_BlueBrown11',
-    specific_differential_phase: 'pyart_BrBu12',
-    corrected_specific_differential_phase: 'pyart_BrBu12',
-    linear_depolarization_ratio: 'pyart_Carbone17',
-    linear_depolarization_ratio_h: 'pyart_Carbone17',
-    linear_depolarization_ratio_v: 'pyart_Carbone17',
     signal_to_noise_ratio: 'pyart_Carbone17',
+
+    velocity: 'pyart_BuDRd18',
+    corrected_velocity: 'pyart_BuDRd18',
+    eastward_wind_component: 'pyart_BuDRd18',
+    northward_wind_component: 'pyart_BuDRd18',
+    vertical_wind_component: 'pyart_BuDRd18',
+
+    spectrum_width: 'pyart_NWS_SPW',
+
+    normalized_coherent_power: 'pyart_Carbone17',
+
+    differential_reflectivity: 'pyart_RefDiff',
+    corrected_differential_reflectivity: 'pyart_RefDiff',
+
+    cross_correlation_ratio: 'pyart_RefDiff',
+
+    differential_phase: 'pyart_Wild25',
+    unfolded_differential_phase: 'pyart_Wild25',
+    corrected_differential_phase: 'pyart_Wild25',
+
+    specific_differential_phase: 'pyart_Theodore16',
+    corrected_specific_differential_phase: 'pyart_Theodore16',
+
+    linear_depolarization_ratio: 'pyart_SCook18',
+    linear_depolarization_ratio_h: 'pyart_SCook18',
+    linear_depolarization_ratio_v: 'pyart_SCook18',
+
     rain_rate: 'pyart_RRate11',
     radar_estimated_rain_rate: 'pyart_RRate11',
-    radar_echo_classification: 'pyart_EWilson17',
-    specific_attenuation: 'pyart_NWSVel',
+
+    radar_echo_classification: 'pyart_LangRainbow12',
+
+    specific_attenuation: 'pyart_Carbone17',
+
     differential_phase_texture: 'pyart_BlueBrown11',
-    eastward_wind_component: 'pyart_NWSVel',
-    northward_wind_component: 'pyart_NWSVel',
-    vertical_wind_component: 'pyart_NWSVel',
     height: 'pyart_SCook18',
     interpolated_profile: 'pyart_SCook18',
+
     # Additional reflectivity like fields
     'CZ': 'pyart_NWSRef',
     'DZ': 'pyart_NWSRef',
@@ -1268,35 +1371,49 @@ DEFAULT_FIELD_COLORMAP = {
 
 DEFAULT_FIELD_LIMITS = {
     # field name : limits
-    reflectivity: (-10., 65.),
-    corrected_reflectivity: (-10., 65.),
-    total_power: (-200., 100.),
+    reflectivity: (-30., 75.),
+    corrected_reflectivity: (-30., 75.),
+    total_power: (-30., 75.),
+    signal_to_noise_ratio: (-20, 30.),
+
     velocity: velocity_limit,
     corrected_velocity: velocity_limit,
-    spectrum_width: spectrum_width_limit,
-    differential_reflectivity: (-5., 5.),
-    corrected_differential_reflectivity: (-5., 5.),
-    cross_correlation_ratio: (0.8, 1.),
-    normalized_coherent_power: (0., 1.),
-    differential_phase: (-180, 180.),
-    unfolded_differential_phase: (-360, 360.),
-    corrected_differential_phase: (-360, 360.),
-    specific_differential_phase: (-2., 5.),
-    corrected_specific_differential_phase: (-2., 5.),
-    linear_depolarization_ratio: (-40., 0.),
-    linear_depolarization_ratio_h: (-40., 0.),
-    linear_depolarization_ratio_v: (-40., 0.),
-    signal_to_noise_ratio: (-0, 90.),
-    rain_rate: (0., 150.),
-    radar_estimated_rain_rate: (0., 150.),
-    radar_echo_classification: (0, 12),
-    specific_attenuation: (-10., 65.),
-    differential_phase_texture: (-180, 180.),
     eastward_wind_component: velocity_limit,
     northward_wind_component: velocity_limit,
     vertical_wind_component: velocity_limit,
+
+    spectrum_width: spectrum_width_limit,
+
+    normalized_coherent_power: (0., 1.),
+
+    differential_reflectivity: (-1., 8.),
+    corrected_differential_reflectivity: (-1., 8.),
+
+    cross_correlation_ratio: (0.5, 1.05),
+
+    differential_phase: (-180, 180.),
+    unfolded_differential_phase: (-360, 360.),
+    corrected_differential_phase: (-360, 360.),
+
+    specific_differential_phase: (-2., 5.),
+    corrected_specific_differential_phase: (-2., 5.),
+
+    linear_depolarization_ratio: (-40., 0.),
+    linear_depolarization_ratio_h: (-40., 0.),
+    linear_depolarization_ratio_v: (-40., 0.),
+
+    rain_rate: (0., 50.),
+    radar_estimated_rain_rate: (0., 50.),
+
+    radar_echo_classification: (0, 11),
+
+    specific_attenuation: (0., 10.),
+
+    differential_phase_texture: (0, 180.),
+
     height: (0, 20000),
     interpolated_profile: (0, 10000),
+
     # Additional reflectivity like fields
     'CZ': (-10., 65.),
     'DZ': (-10., 65.),

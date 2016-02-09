@@ -38,16 +38,19 @@ if [[ $PYTHON_VERSION == '2.7' ]]; then
     conda install --yes -c http://conda.anaconda.org/jjhelmus cvxopt_glpk
 
     # wradlib and dependencies
-    conda install --yes sphinx gdal numpydoc h5py
+    # KLUDGE libgdal does not report its version dependency on geos which
+    # causes either gdal or basemap to break, force the exact libgdal version
+    # see: https://github.com/ContinuumIO/anaconda-issues/issues/584
+    conda install --yes sphinx gdal numpydoc h5py basemap libgdal=2.0.0=0
     conda install --yes sphinx_rtd_theme
     pip install sphinxcontrib-bibtex
     pip install xmltodict
     pip install wradlib
 fi
-if [[ $PYTHON_VERSION == '3.3' ]]; then
+if [[ $PYTHON_VERSION == '3.4' ]]; then
     conda install --yes basemap 
 fi
-if [[ $PYTHON_VERSION == '3.4' ]]; then
+if [[ $PYTHON_VERSION == '3.5' ]]; then
     conda install --yes basemap 
 fi
 

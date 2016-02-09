@@ -22,9 +22,10 @@ def test_radarmapdisplay_ppi(outfile=None):
     display.plot_ppi_map(
         'reflectivity_horizontal', 0, colorbar_flag=True,
         title="Fancy PPI Map", mask_tuple=('reflectivity_horizontal', -100),
-        resolution='c', min_lon=-100, max_lon=-93, min_lat=33, max_lat=38)
+        resolution='c', min_lon=-100, max_lon=-93, min_lat=33, max_lat=38,
+        mask_outside=True)
     display.plot_point(-95, 35, label_text='TEXT')
-    display.plot_range_ring(30)
+    display.plot_range_rings([15, 30])
     display.plot_line_geo(np.array([-95, -95]), np.array([33, 38]))
     if outfile:
         fig.savefig(outfile)

@@ -9,4 +9,4 @@ rm KATX20130717_195021_V06_DUMMY.bz2
 bzip2 -z --best KATX20130717_195021_V06_DUMMY
 
 # rename the file
-mv KATX20130717_195021_V06_DUMMY.bz2 example_nexrad_archive.bz2
+mv KATX20130717_195021_V06_DUMMY.bz2 example_nexrad_archive_msg31.bz2

@@ -77,37 +77,91 @@ def test_gate_x_y_z():
     assert_allclose(radar.gate_z['data'][3], z_sweep0, atol=1e-8)
 
 
-def test_gate_edge_x_y_z():
+def test_get_gate_x_y_z():
+    radar = pyart.testing.make_empty_ppi_radar(5, 4, 2)
+    radar.azimuth['data'][:] = [0, 90, 180, 270, 0, 90, 180, 270]
+    radar.elevation['data'][:] = [0, 0, 0, 0, 10, 10, 10, 10]
+    radar.range['data'][:] = [5, 15, 25, 35, 45]
+
+    gate_x, gate_y, gate_z = radar.get_gate_x_y_z(0)
+    assert gate_x.shape == (4, 5)
+    assert_allclose(gate_x[0], [0, 0, 0, 0, 0], atol=1e-14)
+    assert_allclose(gate_x[1], [5, 15, 25, 35, 45], atol=1e-14)
+    assert_allclose(gate_x[2], [0, 0, 0, 0, 0], atol=1e-14)
+    assert_allclose(gate_x[3], [-5, -15, -25, -35, -45], atol=1e-14)
+
+    assert gate_y.shape == (4, 5)
+    assert_allclose(gate_y[0], [5, 15, 25, 35, 45], atol=1e-14)
+    assert_allclose(gate_y[1], [0, 0, 0, 0, 0], atol=1e-14)
+    assert_allclose(gate_y[2], [-5, -15, -25, -35, -45], atol=1e-14)
+    assert_allclose(gate_y[3], [0, 0, 0, 0, 0], atol=1e-14)
+
+    assert gate_z.shape == (4, 5)
+    z_sweep0 = np.array([1.47e-6, 1.324e-5, 3.679e-5, 7.210e-5, 1.1919e-4])
+    assert_allclose(gate_z[0], z_sweep0, atol=1e-8)
+    assert_allclose(gate_z[1], z_sweep0, atol=1e-8)
+    assert_allclose(gate_z[2], z_sweep0, atol=1e-8)
+    assert_allclose(gate_z[3], z_sweep0, atol=1e-8)
+
+
+def test_get_gate_x_y_z_edges():
     radar = pyart.testing.make_empty_ppi_radar(5, 4, 1)
     radar.azimuth['data'][:] = [315., 45, 135., 225.]
     radar.elevation['data'][:] = [0, 0, 0, 0]
     radar.range['data'][:] = [5, 15, 25, 35, 45]
 
+    gate_x, gate_y, gate_z = radar.get_gate_x_y_z(0, edges=True)
+
     zeros = np.array([0, 0, 0, 0, 0, 0])
     even = np.array([0, 10, 20, 30, 40, 50])
     atol = 1e-4
 
-    assert radar.gate_edge_x['data'].shape == (5, 6)
-    assert_allclose(radar.gate_edge_x['data'][0], -even, atol=atol)
-    assert_allclose(radar.gate_edge_x['data'][1], zeros, atol=atol)
-    assert_allclose(radar.gate_edge_x['data'][2], even, atol=atol)
-    assert_allclose(radar.gate_edge_x['data'][3], zeros, atol=atol)
-    assert_allclose(radar.gate_edge_x['data'][4], -even, atol=atol)
+    assert gate_x.shape == (5, 6)
+    assert_allclose(gate_x[0], -even, atol=atol)
+    assert_allclose(gate_x[1], zeros, atol=atol)
+    assert_allclose(gate_x[2], even, atol=atol)
+    assert_allclose(gate_x[3], zeros, atol=atol)
+    assert_allclose(gate_x[4], -even, atol=atol)
 
-    assert radar.gate_edge_y['data'].shape == (5, 6)
-    assert_allclose(radar.gate_edge_y['data'][0], zeros, atol=atol)
-    assert_allclose(radar.gate_edge_y['data'][1], even, atol=atol)
-    assert_allclose(radar.gate_edge_y['data'][2], zeros, atol=atol)
-    assert_allclose(radar.gate_edge_y['data'][3], -even, atol=atol)
-    assert_allclose(radar.gate_edge_y['data'][4], zeros, atol=atol)
+    assert gate_y.shape == (5, 6)
+    assert_allclose(gate_y[0], zeros, atol=atol)
+    assert_allclose(gate_y[1], even, atol=atol)
+    assert_allclose(gate_y[2], zeros, atol=atol)
+    assert_allclose(gate_y[3], -even, atol=atol)
+    assert_allclose(gate_y[4], zeros, atol=atol)
 
-    assert radar.gate_edge_z['data'].shape == (5, 6)
+    assert gate_z.shape == (5, 6)
     z_sweep0 = np.array([0, 5.89e-6, 2.354e-5, 5.297e-5, 9.418e-5, 1.4715e-4])
-    assert_allclose(radar.gate_edge_z['data'][0], z_sweep0, atol=1e-8)
-    assert_allclose(radar.gate_edge_z['data'][1], z_sweep0, atol=1e-8)
-    assert_allclose(radar.gate_edge_z['data'][2], z_sweep0, atol=1e-8)
-    assert_allclose(radar.gate_edge_z['data'][3], z_sweep0, atol=1e-8)
-    assert_allclose(radar.gate_edge_z['data'][4], z_sweep0, atol=1e-8)
+    assert_allclose(gate_z[0], z_sweep0, atol=1e-8)
+    assert_allclose(gate_z[1], z_sweep0, atol=1e-8)
+    assert_allclose(gate_z[2], z_sweep0, atol=1e-8)
+    assert_allclose(gate_z[3], z_sweep0, atol=1e-8)
+    assert_allclose(gate_z[4], z_sweep0, atol=1e-8)
+
+
+def test_get_gate_x_y_z_transitions():
+    radar = pyart.testing.make_empty_ppi_radar(5, 4, 2)
+    radar.azimuth['data'][:] = [0, 90, 180, 270, 0, 90, 180, 270]
+    radar.elevation['data'][:] = [0, 0, 0, 0, 10, 10, 10, 10]
+    radar.range['data'][:] = [5, 15, 25, 35, 45]
+    radar.antenna_transition = {'data': np.array([0, 0, 1, 0, 0, 0, 0, 0])}
+
+    gate_x, gate_y, gate_z = radar.get_gate_x_y_z(0, filter_transitions=True)
+    assert gate_x.shape == (3, 5)
+    assert_allclose(gate_x[0], [0, 0, 0, 0, 0], atol=1e-14)
+    assert_allclose(gate_x[1], [5, 15, 25, 35, 45], atol=1e-14)
+    assert_allclose(gate_x[2], [-5, -15, -25, -35, -45], atol=1e-14)
+
+    assert gate_y.shape == (3, 5)
+    assert_allclose(gate_y[0], [5, 15, 25, 35, 45], atol=1e-14)
+    assert_allclose(gate_y[1], [0, 0, 0, 0, 0], atol=1e-14)
+    assert_allclose(gate_y[2], [0, 0, 0, 0, 0], atol=1e-14)
+
+    assert gate_z.shape == (3, 5)
+    z_sweep0 = np.array([1.47e-6, 1.324e-5, 3.679e-5, 7.210e-5, 1.1919e-4])
+    assert_allclose(gate_z[0], z_sweep0, atol=1e-8)
+    assert_allclose(gate_z[1], z_sweep0, atol=1e-8)
+    assert_allclose(gate_z[2], z_sweep0, atol=1e-8)
 
 
 def test_init_gate_x_y_z():
@@ -135,36 +189,6 @@ def test_init_gate_x_y_z():
     assert_allclose(radar.gate_y['data'][0], [15, 25, 35, 45, 55], atol=1e-14)
     z_sweep0 = np.array([1.324e-5, 3.679e-5, 7.210e-5, 1.1919e-4, 1.7805e-4])
     assert_allclose(radar.gate_z['data'][0], z_sweep0, atol=1e-8)
-
-
-def test_init_gate_edge_x_y_z():
-    radar = pyart.testing.make_empty_ppi_radar(5, 4, 1)
-    radar.azimuth['data'][:] = [315., 45, 135., 225.]
-    radar.elevation['data'][:] = [0, 0, 0, 0]
-    radar.range['data'][:] = [5, 15, 25, 35, 45]
-
-    even = np.array([0, 10, 20, 30, 40, 50])
-    assert_allclose(radar.gate_edge_x['data'][2], even, atol=1e-12)
-    assert_allclose(radar.gate_edge_y['data'][1], even, atol=1e-12)
-    z_sweep0 = np.array([0, 5.89e-6, 2.354e-5, 5.297e-5, 9.418e-5, 1.4715e-4])
-    assert_allclose(radar.gate_edge_z['data'][0], z_sweep0, atol=1e-8)
-
-    # change range, gate_edhe_x, y, z are not updated
-    radar.range['data'][:] = [15, 25, 35, 45, 55]
-    even = np.array([0, 10, 20, 30, 40, 50])
-    assert_allclose(radar.gate_edge_x['data'][2], even, atol=1e-12)
-    assert_allclose(radar.gate_edge_y['data'][1], even, atol=1e-12)
-    z_sweep0 = np.array([0, 5.89e-6, 2.354e-5, 5.297e-5, 9.418e-5, 1.4715e-4])
-    assert_allclose(radar.gate_edge_z['data'][0], z_sweep0, atol=1e-8)
-
-    # call init_gate_edge_x_y_z, now the attributes are updated
-    radar.init_gate_edge_x_y_z()
-    even = np.array([10, 20, 30, 40, 50, 60])
-    assert_allclose(radar.gate_edge_x['data'][2], even, atol=1e-12)
-    assert_allclose(radar.gate_edge_y['data'][1], even, atol=1e-12)
-    z_sweep0 = np.array(
-        [5.89e-6, 2.354e-5, 5.297e-5, 9.418e-5, 1.4715e-4, 2.1190e-4])
-    assert_allclose(radar.gate_edge_z['data'][0], z_sweep0, atol=1e-8)
 
 
 def test_rays_per_sweep_attribute():
@@ -426,36 +450,3 @@ def get_info(level='standard', out=sys.stdout, radar=None):
 
 def test_info_errors():
     assert_raises(ValueError, check_info, 'foo')
-
-
-def test_is_vpt():
-    radar = pyart.testing.make_empty_ppi_radar(10, 36, 3)
-    assert not pyart.core.is_vpt(radar)
-    pyart.core.to_vpt(radar)
-    assert pyart.core.is_vpt(radar)
-
-
-def test_to_vpt():
-    # single scan
-    radar = pyart.testing.make_empty_ppi_radar(10, 36, 3)
-    radar.instrument_parameters = {
-        'prt_mode': {'data': np.array(['fixed'] * 3)}
-    }
-    pyart.core.to_vpt(radar)
-    assert pyart.core.is_vpt(radar)
-    assert radar.nsweeps == 1
-    assert radar.azimuth['data'][10] == 0.0
-    assert radar.elevation['data'][0] == 90.0
-    assert len(radar.instrument_parameters['prt_mode']['data']) == 1
-
-    # multiple scans
-    radar = pyart.testing.make_empty_ppi_radar(10, 36, 3)
-    radar.instrument_parameters = {
-        'prt_mode': {'data': np.array(['fixed'] * 3)}
-    }
-    pyart.core.to_vpt(radar, False)
-    assert pyart.core.is_vpt(radar)
-    assert radar.nsweeps == 108
-    assert radar.azimuth['data'][10] == 10.0
-    assert radar.elevation['data'][0] == 90.0
-    assert len(radar.instrument_parameters['prt_mode']['data']) == 108

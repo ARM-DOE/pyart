@@ -37,7 +37,7 @@ class DisableModules(object):
 
 def test_debug_info_all_disabled():
     modules = ['numpy', 'scipy', 'matplotlib', 'netCDF4', 'cylp', 'glpk',
-               'cvxopt', 'mpl_toolkits', 'nose', 'pyart', 'platform']
+               'cvxopt', 'mpl_toolkits', 'platform']
     for module in modules:
         if module in sys.modules:
             del sys.modules[module]
@@ -50,3 +50,5 @@ def test_debug_info_all_disabled():
         buf = StringIO()
         pyart._debug_info(buf)
         assert len(buf.getvalue()) > 0
+    # remove the Mocked ImportErrors
+    sys.meta_path.remove(fail_loader)

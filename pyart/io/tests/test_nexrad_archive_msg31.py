@@ -1,4 +1,4 @@
-""" Unit Tests for Py-ART's io/nexrad_archive.py module. """
+""" Unit Tests for Py-ART's io/nexrad_archive.py module using a MSG31 file. """
 
 import numpy as np
 from numpy.testing import assert_almost_equal
@@ -11,7 +11,7 @@ import pyart
 #######################################################
 
 # read in the sample file
-radar = pyart.io.read_nexrad_archive(pyart.testing.NEXRAD_ARCHIVE_FILE)
+radar = pyart.io.read_nexrad_archive(pyart.testing.NEXRAD_ARCHIVE_MSG31_FILE)
 
 
 # time attribute
@@ -167,8 +167,8 @@ def test_instument_parameters():
 
     assert 'unambiguous_range' in radar.instrument_parameters
     unamb = radar.instrument_parameters['unambiguous_range']['data']
-    assert_almost_equal(unamb[0], 466, 0)
-    assert_almost_equal(unamb[800], 117, 0)
+    assert_almost_equal(unamb[0], 466000, 0)
+    assert_almost_equal(unamb[800], 117000, 0)
 
 
 # radar_calibration attribute
@@ -270,7 +270,7 @@ def check_field_first_point(field, value):
 def test_compressed_archive():
     # the compressed archive only contains the first 120 radials
     radar = pyart.io.read_nexrad_archive(
-        pyart.testing.NEXRAD_ARCHIVE_COMPRESSED_FILE,
+        pyart.testing.NEXRAD_ARCHIVE_MSG31_COMPRESSED_FILE,
         delay_field_loading=True)
     assert 'reflectivity' in radar.fields.keys()
     assert isinstance(radar.fields['reflectivity'],

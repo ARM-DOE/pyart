@@ -16,6 +16,8 @@ and antenna (azimuth, elevation, range) coordinate systems.
     antenna_to_cartesian_aircraft_relative
 
     cartesian_to_geographic
+    cartesian_vectors_to_geographic
+    geographic_to_cartesian
     cartesian_to_geographic_aeqd
     geographic_to_cartesian_aeqd
 
@@ -31,6 +33,8 @@ and antenna (azimuth, elevation, range) coordinate systems.
 
 """
 
+import warnings
+
 from ..exceptions import MissingOptionalDependency
 
 import numpy as np
@@ -45,7 +49,7 @@ PI = np.pi
 
 def antenna_to_cartesian(ranges, azimuths, elevations, debug=False):
     """
-    Return cartesian coordinates from antenna coordinates.
+    Return Cartesian coordinates from antenna coordinates.
 
     Parameters
     ----------
@@ -188,7 +192,7 @@ def _half_angle_complex(complex_angle1, complex_angle2):
     Parameters
     ----------
     complex_angle1, complex_angle2 : complex
-        Complex numbers represeting unit vectors on the unit circle
+        Complex numbers representing unit vectors on the unit circle
 
     Returns
     -------
@@ -354,6 +358,55 @@ def antenna_to_cartesian_aircraft_relative(ranges, rot, tilt):
     return x, y, z
 
 
+def geographic_to_cartesian(lon, lat, projparams):
+    """
+    Geographic to Cartesian coordinate transform.
+
+    Transform a set of Geographic coordinate (lat, lon) to a
+    Cartesian/Cartographic coordinate (x, y) using pyproj or a build in
+    Azimuthal equidistant projection.
+
+    Parameters
+    ----------
+    lon, lat : array-like
+        Geographic coordinates in degrees.
+    projparams : dict or str
+        Projection parameters passed to pyproj.Proj. If this parameter is a
+        dictionary with a 'proj' key equal to 'pyart_aeqd' then a azimuthal
+        equidistant projection will be used that is native to Py-ART and
+        does not require pyproj/basemap to be installed. In this case a
+        non-default value of R can be specified by setting the 'R' key to the
+        desired value.
+
+    Returns
+    -------
+    x, y : array-like
+        Cartesian coordinates in meters unless projparams defines a value for R
+        in different units
+
+    """
+    if isinstance(projparams, dict) and projparams.get('proj') == 'pyart_aeqd':
+        # Use Py-ART's Azimuthal equidistance projection
+        lon_0 = projparams['lon_0']
+        lat_0 = projparams['lat_0']
+        if 'R' in projparams:
+            R = projparams['R']
+            x, y = geographic_to_cartesian_aeqd(lon, lat, lon_0, lat_0, R)
+        else:
+            x, y = geographic_to_cartesian_aeqd(lon, lat, lon_0, lat_0)
+    else:
+        # Use pyproj for the projection
+        # check that pyproj is available
+        if not _PYPROJ_AVAILABLE:
+            raise MissingOptionalDependency(
+                "Basemap is required to use geographic_to_cartesian "
+                "with a projection other than pyart_aeqd but it is not "
+                "installed")
+        proj = pyproj.Proj(projparams)
+        x, y = proj(lon, lat, inverse=False)
+    return x, y
+
+
 def geographic_to_cartesian_aeqd(lon, lat, lon_0, lat_0, R=6370997.):
     """
     Azimuthal equidistant geographic to Cartesian coordinate transform.
@@ -424,11 +477,11 @@ def geographic_to_cartesian_aeqd(lon, lat, lon_0, lat_0, R=6370997.):
 
 def cartesian_to_geographic(x, y, projparams):
     """
-    Geographic to Cartesian coordinate transform.
+    Cartesian to Geographic coordinate transform.
 
     Transform a set of Cartesian/Cartographic coordinates (x, y) to a
     geographic coordinate system (lat, lon) using pyproj or a build in
-    Azimuthal equidistance projection.
+    Azimuthal equidistant projection.
 
     Parameters
     ----------
@@ -469,6 +522,47 @@ def cartesian_to_geographic(x, y, projparams):
         proj = pyproj.Proj(projparams)
         lon, lat = proj(x, y, inverse=True)
     return lon, lat
+
+
+def cartesian_vectors_to_geographic(x, y, projparams, edges=False):
+    """
+    Cartesian vectors to Geographic coordinate transform.
+
+    Transform a set of Cartesian/Cartographic coordinate vectors (x, y) to a
+    geographic coordinate system (lat, lon) using pyproj or a build in
+    Azimuthal equidistant projection finding the coordinates edges in
+    Cartesian space if requested.
+
+    Parameters
+    ----------
+    x, y : array 1D.
+        Cartesian coordinate vectors in meters unless R is defined in
+        different units in the projparams parameter.
+    projparams : dict or str
+        Projection parameters passed to pyproj.Proj. If this parameter is a
+        dictionary with a 'proj' key equal to 'pyart_aeqd' then a azimuthal
+        equidistant projection will be used that is native to Py-ART and
+        does not require pyproj/basemap to be installed. In this case a
+        non-default value of R can be specified by setting the 'R' key to the
+        desired value.
+    edges : bool, optional
+        True to calculate the coordinates of the geographic edges by
+        interpolating between Cartesian points and extrapolating at the
+        boundaries. False to calculate the coordinate centers.
+
+    Returns
+    -------
+    lon, lat : array
+        Longitude and latitude of the Cartesian coordinates in degrees.
+
+    """
+    if edges:
+        if len(x) > 1:
+            x = _interpolate_axes_edges(x)
+        if len(y) > 1:
+            y = _interpolate_axes_edges(y)
+    x, y = np.meshgrid(x, y)
+    return cartesian_to_geographic(x, y, projparams)
 
 
 def cartesian_to_geographic_aeqd(x, y, lon_0, lat_0, R=6370997.):
@@ -595,6 +689,9 @@ def add_2d_latlon_axis(grid, **kwargs):
         Survey Professional Paper 1395, 1987, pp. 191-202.
 
     """
+    warnings.warn(
+        "add_2d_latlon_axis is deprecated and will be removed in a " +
+        "future version of Py-ART", DeprecationWarning)
     try:
         from mpl_toolkits.basemap import pyproj
         if 'proj' not in kwargs:
@@ -605,7 +702,6 @@ def add_2d_latlon_axis(grid, **kwargs):
                         lon_0=grid.axes["lon"]['data'][0], **kwargs)
         lon, lat = b(x, y, inverse=True)
     except ImportError:
-        import warnings
         warnings.warn('No basemap found, using internal implementation '
                       'for converting azimuthal equidistant to latlon')
         # azimutal equidistant projetion to latlon
@@ -651,6 +747,9 @@ def corner_to_point(corner, point):
 
     Assumes a spherical earth model.
 
+    This function is Deprecated, use the :py:func:`geographic_to_cartesian`
+    function as a replacement.
+
     Parameters
     ----------
     corner : (float, float)
@@ -664,6 +763,12 @@ def corner_to_point(corner, point):
         Distances from the corner to the point in meters.
 
     """
+    warnings.warn(
+        "corner_to_point is deprecated and will be removed in a future " +
+        "version of Py-ART.\n" +
+        "Additionally use of this function is discourage, the " +
+        "geographic_to_cartesian function produces similar results while " +
+        "allowing the map projection to be specified. ", DeprecationWarning)
     Re = 6371.0 * 1000.0
     Rc = _ax_radius(point[0], units='degrees')
     # print Rc/Re

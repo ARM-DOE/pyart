@@ -9,6 +9,8 @@ Common graphing routines.
 
     parse_ax
     parse_ax_fig
+    parse_norm_vmin_vmax
+    parse_cmap
     parse_vmin_vmax
     parse_lon_lat
     generate_colorbar_label
@@ -32,6 +34,19 @@ Common graphing routines.
 import matplotlib.pyplot as plt
 from netCDF4 import num2date
 
+# Deprecated function names in this name space
+from ..exceptions import _deprecated_alias
+from ..config import get_field_colormap, get_field_limits
+from ..core import transforms as _transforms
+radar_coords_to_cart = _deprecated_alias(
+    _transforms.antenna_to_cartesian,
+    'pyart.graph.common.radar_coords_to_cart',
+    'pyart.core.transforms.antenna_to_cartesian')
+sweep_coords_to_cart = _deprecated_alias(
+    _transforms.antenna_vectors_to_cartesian,
+    'pyart.graph.common.sweep_coords_to_cart',
+    'pyart.core.transforms.antenna_vectors_to_cartesian')
+
 
 ########################
 # Common radar methods #
@@ -54,28 +69,46 @@ def parse_ax_fig(ax, fig):
     return ax, fig
 
 
+def parse_norm_vmin_vmax(norm, container, field, vmin, vmax):
+    """ Parse and return norm, vmin and vmax parameters. """
+    if norm is None:
+        vmin, vmax = parse_vmin_vmax(container, field, vmin, vmax)
+    else:
+        vmin = None
+        vmax = None
+    return norm, vmin, vmax
+
+
+def parse_cmap(cmap, field=None):
+    """ Parse and return the cmap parameter. """
+    if cmap is None:
+        cmap = get_field_colormap(field)
+    return cmap
+
+
 def parse_vmin_vmax(container, field, vmin, vmax):
     """ Parse and return vmin and vmax parameters. """
     field_dict = container.fields[field]
+    field_default_vmin, field_default_vmax = get_field_limits(field)
     if vmin is None:
         if 'valid_min' in field_dict:
             vmin = field_dict['valid_min']
         else:
-            vmin = -6   # default value
+            vmin = field_default_vmin
     if vmax is None:
         if 'valid_max' in field_dict:
             vmax = field_dict['valid_max']
         else:
-            vmax = 100
+            vmax = field_default_vmax
     return vmin, vmax
 
 
 def parse_lon_lat(grid, lon, lat):
     """ Parse lat and lon parameters """
     if lat is None:
-        lat = grid.axes['lat']['data'][0]
+        lat = grid.origin_latitude['data'][0]
     if lon is None:
-        lon = grid.axes['lon']['data'][0]
+        lon = grid.origin_longitude['data'][0]
     return lon, lat
 
 
@@ -124,16 +157,12 @@ def generate_radar_time_begin(radar):
 
 def generate_grid_time_begin(grid):
     """ Return time begin in datetime instance. """
-    # datetime object describing time
-    if "time_start" in grid.axes:
-        time = "time_start"
-    elif 'time' in grid.axes:
-        time = 'time'
-    elif 'time_end' in grid.axes:
-        time = 'time_end'
-    times = grid.axes[time]['data'][0]
-    units = grid.axes[time]['units']
-    calendar = grid.axes[time]['calendar']
+    times = grid.time['data'][0]
+    units = grid.time['units']
+    if 'calendar' in grid.time:
+        calendar = grid.time['calendar']
+    else:
+        calendar = 'standard'
     return num2date(times, units, calendar)
 
 
@@ -247,7 +276,7 @@ def generate_grid_title(grid, field, level):
 
     """
     time_str = generate_grid_time_begin(grid).isoformat() + 'Z'
-    height = grid.axes["z_disp"]['data'][level] / 1000.
+    height = grid.z['data'][level] / 1000.
     l1 = "%s %.1f km %s " % (generate_grid_name(grid), height,
                              time_str)
     field_name = generate_field_name(grid, field)
@@ -275,7 +304,7 @@ def generate_longitudinal_level_title(grid, field, level):
 
     """
     time_str = generate_grid_time_begin(grid).isoformat() + 'Z'
-    disp = grid.axes["x_disp"]['data'][level] / 1000.
+    disp = grid.x['data'][level] / 1000.
     if disp >= 0:
         direction = "east"
     else:
@@ -308,7 +337,7 @@ def generate_latitudinal_level_title(grid, field, level):
 
     """
     time_str = generate_grid_time_begin(grid).isoformat() + 'Z'
-    disp = grid.axes["y_disp"]['data'][level] / 1000.
+    disp = grid.y['data'][level] / 1000.
     if disp >= 0:
         direction = "north"
     else:

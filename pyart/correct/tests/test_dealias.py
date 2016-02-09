@@ -47,6 +47,20 @@ def test_dealias_sounding():
 
 
 @skipif(not pyart.correct.dealias._FOURDD_AVAILABLE)
+def test_set_limits():
+
+    radar, dealias_vel = perform_dealias(set_limits=True)
+    assert 'valid_min' in dealias_vel
+    assert_almost_equal(dealias_vel['valid_min'], -30.0)
+    assert 'valid_max' in dealias_vel
+    assert_almost_equal(dealias_vel['valid_max'], 30.0)
+
+    radar, dealias_vel = perform_dealias(set_limits=False)
+    assert 'valid_min' not in dealias_vel
+    assert 'valid_max' not in dealias_vel
+
+
+@skipif(not pyart.correct.dealias._FOURDD_AVAILABLE)
 def test_dealias_sounding_keep_original():
     radar, dealias_vel = perform_dealias(True)
     assert_allclose(
@@ -58,7 +72,7 @@ def test_dealias_sounding_keep_original():
     assert dealias_vel['data'][13, 47] == 8.5
 
 
-def perform_dealias(keep_original=False):
+def perform_dealias(keep_original=False, **kwargs):
     """ Perform velocity dealiasing on reference data. """
     radar = pyart.testing.make_velocity_aliased_radar()
     # speckling that will not be dealiased.
@@ -68,7 +82,8 @@ def perform_dealias(keep_original=False):
     direction = np.ones((10), dtype='float32') * 5.
     dealias_vel = pyart.correct.dealias_fourdd(
         radar, sounding_heights=height, sounding_wind_speeds=speed,
-        sounding_wind_direction=direction, keep_original=keep_original)
+        sounding_wind_direction=direction, keep_original=keep_original,
+        **kwargs)
     return radar, dealias_vel
 
 
