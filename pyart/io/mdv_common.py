@@ -1089,10 +1089,14 @@ class MdvFile(object):
         if self.field_headers[0]['proj_type'] == PROJ_RHI_RADAR:
             el_deg = grid_miny + np.arange(nrays) * grid_dy
             az_deg = self.vlevel_headers[0]['level'][0:nsweeps]
-
-        if self.field_headers[0]['proj_type'] == PROJ_POLAR_RADAR:
+        elif self.field_headers[0]['proj_type'] == PROJ_POLAR_RADAR:
             az_deg = grid_miny + np.arange(nrays) * grid_dy
             el_deg = self.vlevel_headers[0]['level'][0:nsweeps]
+        else:
+            proj_type = self.field_headers[0]['proj_type']
+            message = ("Unsupported projection type: %i, " % (proj_type) +
+                       "is MDV file in antenna coordinates?")
+            raise NotImplementedError(message)
 
         return az_deg, range_km, el_deg
 
