@@ -46,7 +46,7 @@ SINARAME_H5_FIELD_NAMES = {
 
 
 def read_sinarame_h5(filename, field_names=None, additional_metadata=None,
-                 file_field_names=False, exclude_fields=None, **kwargs):
+                     file_field_names=False, exclude_fields=None, **kwargs):
     """
     Read a SINARAME_H5 file.
 
@@ -101,7 +101,8 @@ def read_sinarame_h5(filename, field_names=None, additional_metadata=None,
     # create metadata retrieval object
     if field_names is None:
         field_names = SINARAME_H5_FIELD_NAMES
-    filemetadata = FileMetadata('SINARAME_h5', field_names, additional_metadata,
+    filemetadata = FileMetadata('SINARAME_h5', field_names,
+                                additional_metadata,
                                 file_field_names, exclude_fields)
 
     # open the file
@@ -264,7 +265,7 @@ def read_sinarame_h5(filename, field_names=None, additional_metadata=None,
     fields = {}
     h_field_keys = [k for k in hfile['dataset1'] if k.startswith('data')]
     SINARAME_fields = [hfile['dataset1'][d]['what'].attrs['quantity'] for d in
-                   h_field_keys]
+                       h_field_keys]
     for SINARAME_field, h_field_key in zip(SINARAME_fields, h_field_keys):
         field_name = filemetadata.get_field_name(SINARAME_field)
         if field_name is None:
