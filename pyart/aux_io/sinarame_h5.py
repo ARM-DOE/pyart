@@ -1,13 +1,13 @@
 """
-pyart.aux_io.SINARAME_h5
-====================
+pyart.aux_io.sinarame_h5
+========================
 
-Routines for reading SINARAME_H5 files.
+Routines for reading sinarame_H5 files.
 
 .. autosummary::
     :toctree: generated/
 
-    read_SINARAME_h5
+    read_sinarame_h5
 
 """
 
