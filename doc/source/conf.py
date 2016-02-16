@@ -26,10 +26,10 @@ except:
     pass
 
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.mathjax',
-              'sphinx.ext.autosummary', 'numpydoc', 'gen_rst']
-# don't include examples in CI builds
-if 'CI' in os.environ and os.environ['CI'] == 'true':
-    extensions.remove('gen_rst')
+              'sphinx.ext.autosummary', 'numpydoc']
+# only include examples if the BUILD_PYART_EXAMPLES env. variable is set
+if 'BUILD_PYART_EXAMPLES' in os.environ:
+    extensions.append('gen_rst')
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
