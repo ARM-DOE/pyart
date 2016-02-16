@@ -1,5 +1,5 @@
-# script to rebuild documentation aftter removing intermediates
+# script to rebuild Py-ART example after removing intermediates
 rm -r build
 rm -r source/auto_examples/*
-make html
+BUILD_PYART_EXAMPLES=1 make html
 
