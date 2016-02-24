@@ -9,6 +9,7 @@ differential phase (DELTAHV), and the system phase offset.
 
 """
 
+import time
 import numpy as np
 
 from scipy import optimize, stats
@@ -37,6 +38,9 @@ from ..config import get_field_name, get_metadata, get_fillvalue
 #   retrieved KDP can become quite noisey and require more weight on the low-
 #   pass filter constraint. This may require further investigation and/or
 #   sensitivity testing.
+#
+# * The addition of an azimuthal low-pass filter (smoothness) constraint would
+#   be beneficial to the variational Maesaka et al. (2012) algorithm.
 
 
 def kdp_maesaka(radar, gatefilter=None, solver='CG', backscatter=None,
@@ -70,7 +74,10 @@ def kdp_maesaka(radar, gatefilter=None, solver='CG', backscatter=None,
         analysing differential phase measurements.
     solver : str, optional
         The type of SciPy solver to use when minimizing the cost functional.
-        The default solver uses a nonlinear conjugate gradient algorithm.
+        The default solver uses a nonlinear conjugate gradient algorithm. In
+        Maesaka et al. (2012) they use the Broyden-Fletcher-Goldfarb-Shanno
+        (BFGS) algorithm, however for large functional size this algorithm is
+        considerably slower than a conjugate gradient algorithm.
     backscatter : optional
         Define the backscatter differential phase. If None, the backscatter
         differential phase is set to zero for all range gates. Note that
@@ -217,11 +224,18 @@ def kdp_maesaka(radar, gatefilter=None, solver='CG', backscatter=None,
             finite_order, fill_value,
             proc, debug, verbose)
 
+    if debug:
+        start = time.time()
+
     # minimize the cost functional
     xopt = optimize.minimize(
         _cost_maesaka, x0, args=args, method=solver, jac=_jac_maesaka,
         hess=None, hessp=None, bounds=None, constraints=None, callback=None,
         options=options)
+
+    if debug:
+        elapsed = time.time() - start
+        print 'Elapsed time for minimization: {:.0f} sec'.format(elapsed)
 
     # parse control variables from optimized result
     k = xopt.x.reshape(psidp_o.shape)
@@ -238,22 +252,24 @@ def kdp_maesaka(radar, gatefilter=None, solver='CG', backscatter=None,
     kdp_dict = get_metadata(kdp_field)
     kdp_dict['data'] = kdp
     kdp_dict['valid_min'] = 0.0
+    kdp_dict['Clpf'] = Clpf
+    kdp_dict['comment'] = ''
 
     # compute forward and reverse direction propagation differential phase
     phidp_f, phidp_r = _forward_reverse_phidp(
-        k, [phi_near, phi_far], average=False, verbose=verbose)
+        k, [phi_near, phi_far], verbose=verbose)
 
     # create forward direction propagation differential phase field dictionary
     # and store data
     phidpf_dict = get_metadata(phidp_field)
     phidpf_dict['data'] = phidp_f
-    phidpf_dict['comment'] = 'Forward direction'
+    phidpf_dict['comment'] = 'Retrieved in forward direction'
 
     # create reverse direction propagation differential phase field dictionary
     # and store data
     phidpr_dict = get_metadata(phidp_field)
     phidpr_dict['data'] = phidp_r
-    phidpr_dict['comment'] = 'Reverse direction'
+    phidpr_dict['comment'] = 'Retrieved in reverse direction'
 
     return kdp_dict, phidpf_dict, phidpr_dict
 
@@ -265,7 +281,8 @@ def boundary_conditions_maesaka(
     Determine near range gate and far range gate propagation differential phase
     boundary conditions. This follows the method outlined in Maesaka et al.
     (2012), except instead of using the mean we use the median which is less
-    susceptible to outliers.
+    susceptible to outliers. This function can also be used to estimate the
+    system phase offset.
 
     Parameters
     ----------
@@ -280,7 +297,8 @@ def boundary_conditions_maesaka(
         this value is too small then a spurious spike in specific differential
         phase close to the radar may be retrieved.
     check_outliers : bool, optional
-        True to check for near range gate boundary condition outliers.
+        True to check for near range gate boundary condition outliers. Outliers
+        near the radar are primarily the result of ground clutter returns.
     psidp_field : str, optional
         Field name of total differential phase. If None, the default field name
         must be specified in the Py-ART configuration file.
@@ -292,9 +310,7 @@ def boundary_conditions_maesaka(
     Returns
     -------
     phi_near : ndarray
-        The near range differential phase boundary condition for each ray. This
-        boundary condition is related to the radar system offset phase and
-        should be relatively constant from ray to ray.
+        The near range differential phase boundary condition for each ray.
     phi_far : ndarray
         The far range differential phase boundary condition for each ray.
     range_near : ndarray
@@ -302,9 +318,9 @@ def boundary_conditions_maesaka(
     range_far : ndarray
         The far range gate in meters for each ray.
     idx_near : ndarray
-        Nearest range gate index for each ray.
+        Index of nearest range gate for each ray.
     idx_far : ndarray
-        Furthest range gate index for each ray.
+        Index of furthest range gate for each ray.
 
     """
 
@@ -394,10 +410,64 @@ def boundary_conditions_maesaka(
                 else:
                     continue
 
-    # check for outliers in the near range gate boundary conditions
+    # check for outliers in the near range boundary conditions, e.g., ground
+    # clutter can introduce spurious values in certain rays
     if check_outliers:
+
+        # do not include missing values in the analysis
+        phi_near_valid = phi_near[phi_near != 0.0]
+
+        # bin and count near range boundary condition values, i.e., create
+        # a distribution of values
+        # the default bin width is 5 deg
+        counts, edges = np.histogram(
+            phi_near_valid, bins=144, range=(-360, 360), density=False)
+
+        # assume that the maximum counts corresponds to the maximum in the
+        # system phase distribution
+        # this assumption breaks down if there are a significant amount of
+        # near range boundary conditions characterized by ground clutter
+        system_phase_peak_left = edges[counts.argmax()]
+        system_phase_peak_right = edges[counts.argmax() + 1]
+
+        if verbose:
+            print 'Peak of system phase distribution: {:.0f} deg'.format(
+                system_phase_peak_left)
+
+        # determine left edge location of system phase distribution
+        # we consider five counts or less to be insignificant
+        is_left_side = np.logical_and(
+            edges[:-1] < system_phase_peak_left, counts <= 5)
+        left_edge = edges[:-1][is_left_side][-1]
+
+        # determine right edge location of system phase distribution
+        # we consider five counts or less to be insignificant
+        is_right_side = np.logical_and(
+            edges[1:] > system_phase_peak_right, counts <= 5)
+        right_edge = edges[1:][is_right_side][0]
+
+        if verbose:
+            print 'Left edge of system phase distribution: {:.0f} deg'.format(
+                  left_edge)
+            print 'Right edge of system phase distribution: {:.0f} deg'.format(
+                  right_edge)
+
+        # define the system phase offset as the median value of the system
+        # phase distriubion
+        is_system_phase = np.logical_or(
+            phi_near_valid >= left_edge, phi_near_valid <= right_edge)
+        system_phase_offset = np.median(phi_near_valid[is_system_phase])
+
+        if verbose:
+            print('Estimated system phase offset: {:.0f} deg'.format(
+                  system_phase_offset))
+
         for ray, bc in enumerate(phi_near):
-            phi_near[ray] = bc
+
+            # if near range boundary condition does not draw from system phase
+            # distribution then set it to the system phase offset
+            if bc < left_edge or bc > right_edge:
+                phi_near[ray] = system_phase_offset
 
     # check for unphysical boundary conditions, i.e., propagation differential
     # phase should monotonically increase from the near boundary to the far
@@ -605,7 +675,7 @@ def _jac_maesaka(x, psidp_o, bcs, dhv, dr, Cobs, Clpf, finite_order,
     return jac
 
 
-def _forward_reverse_phidp(k, bcs, average=False, verbose=False):
+def _forward_reverse_phidp(k, bcs, verbose=False):
     """
 
     Parameters
@@ -615,13 +685,9 @@ def _forward_reverse_phidp(k, bcs, average=False, verbose=False):
         variable k is proportional to the square root of specific differential
         phase.
     bcs : array_like
-        The near and far range gate propagation differential phase boundary
-        conditions.
-    average : bool, optional
-        True to return the range-weighted average of both the forward and
-        reverse propagation differential phase retrievals.
+        The near and far range gate boundary conditions.
     verbose : bool, optional
-        True to print progress and relevant results, False to suppress.
+        True to print relevant information, False to suppress.
 
     Returns
     -------
@@ -648,15 +714,10 @@ def _forward_reverse_phidp(k, bcs, average=False, verbose=False):
 
     # check quality of retrieval by comparing forward and reverse directions
     if verbose:
-        phidp_mbe = np.mean(phidp_f - phidp_r)
-        phidp_mae = np.mean(np.abs(phidp_f - phidp_r))
+        phidp_mbe = np.ma.mean(phidp_f - phidp_r)
+        phidp_mae = np.ma.mean(np.abs(phidp_f - phidp_r))
         print 'Forward-reverse PHIDP MBE: {:.3f} deg'.format(phidp_mbe)
         print 'Forward-reverse PHIDP MAE: {:.3f} deg'.format(phidp_mae)
-
-    # compute range-weighted average
-    if average:
-
-        return phidp_f
 
     return phidp_f, phidp_r
 
@@ -684,9 +745,8 @@ def _parse_range_resolution(radar, check_uniform=True, verbose=False):
 
     """
 
-    # parse radar range gates and compute differences
-    _range = radar.range['data']
-    dr = np.diff(_range, n=1)
+    # parse radar range gate spacings
+    dr = np.diff(radar.range['data'], n=1)
 
     # check for uniform resolution
     if check_uniform and np.isclose(dr.std(), 0.0, atol=1.0e-5):
