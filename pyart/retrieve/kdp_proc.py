@@ -175,7 +175,7 @@ def kdp_maesaka(radar, gatefilter=None, solver='CG', backscatter=None,
 
     if debug:
         N = np.ma.count(psidp_o)
-        print 'Sample size before filtering: {}'.format(N)
+        print('Sample size before filtering: {}'.format(N))
 
     # mask radar gates indicated by the gate filter
     if gatefilter is not None:
@@ -189,7 +189,7 @@ def kdp_maesaka(radar, gatefilter=None, solver='CG', backscatter=None,
 
     if debug:
         N = np.ma.count(psidp_o)
-        print 'Sample size after filtering: {}'.format(N)
+        print('Sample size after filtering: {}'.format(N))
 
     # parse differential phase measurement weight
     Cobs = np.logical_not(np.ma.getmaskarray(psidp_o)).astype(psidp_o.dtype)
@@ -216,7 +216,7 @@ def kdp_maesaka(radar, gatefilter=None, solver='CG', backscatter=None,
     x0.fill(0.01)
 
     if verbose:
-        print 'Cost functional size: {}'.format(x0.size)
+        print('Cost functional size: {}'.format(x0.size))
 
     # define arguments for cost functional and its Jacobian (gradient)
     args = (psidp_o, [phi_near, phi_far],
@@ -235,7 +235,7 @@ def kdp_maesaka(radar, gatefilter=None, solver='CG', backscatter=None,
 
     if debug:
         elapsed = time.time() - start
-        print 'Elapsed time for minimization: {:.0f} sec'.format(elapsed)
+        print('Elapsed time for minimization: {:.0f} sec'.format(elapsed))
 
     # parse control variables from optimized result
     k = xopt.x.reshape(psidp_o.shape)
@@ -244,9 +244,9 @@ def kdp_maesaka(radar, gatefilter=None, solver='CG', backscatter=None,
     kdp = k**2 / (2.0 * dr) * 1000.0
 
     if debug:
-        print 'Min retrieved KDP: {:.2f} deg/km'.format(kdp.min())
-        print 'Max retrieved KDP: {:.2f} deg/km'.format(kdp.max())
-        print 'Mean retrieved KDP: {:.2f} deg/km'.format(kdp.mean())
+        print('Min retrieved KDP: {:.2f} deg/km'.format(kdp.min()))
+        print('Max retrieved KDP: {:.2f} deg/km'.format(kdp.max()))
+        print('Mean retrieved KDP: {:.2f} deg/km'.format(kdp.mean()))
 
     # create specific differential phase field dictionary and store data
     kdp_dict = get_metadata(kdp_field)
@@ -336,8 +336,8 @@ def boundary_conditions_maesaka(
     # find contiguous unmasked data along each ray
     slices = np.ma.notmasked_contiguous(psidp, axis=1)
     if debug:
-        unique = [len(slc) for slc in slices if slc is not None]
-        print 'Total number of unique regions: {}'.format(sum(unique))
+        N = sum([len(slc) for slc in slices if slc is not None])
+        print('Total number of unique regions: {}'.format(N))
 
     phi_near = np.zeros(radar.nrays, dtype=psidp.dtype)
     phi_far = np.zeros(radar.nrays, dtype=psidp.dtype)
@@ -431,8 +431,8 @@ def boundary_conditions_maesaka(
         system_phase_peak_right = edges[counts.argmax() + 1]
 
         if verbose:
-            print 'Peak of system phase distribution: {:.0f} deg'.format(
-                system_phase_peak_left)
+            print('Peak of system phase distribution: {:.0f} deg'.format(
+                  system_phase_peak_left))
 
         # determine left edge location of system phase distribution
         # we consider five counts or less to be insignificant
@@ -447,10 +447,10 @@ def boundary_conditions_maesaka(
         right_edge = edges[1:][is_right_side][0]
 
         if verbose:
-            print 'Left edge of system phase distribution: {:.0f} deg'.format(
-                  left_edge)
-            print 'Right edge of system phase distribution: {:.0f} deg'.format(
-                  right_edge)
+            print('Left edge of system phase distribution: {:.0f} deg'.format(
+                  left_edge))
+            print('Right edge of system phase distribution: {:.0f} deg'.format(
+                  right_edge))
 
         # define the system phase offset as the median value of the system
         # phase distriubion
@@ -476,7 +476,7 @@ def boundary_conditions_maesaka(
     phi_far[is_unphysical] = phi_near[is_unphysical]
     if verbose:
         N = is_unphysical.sum()
-        print 'Rays with unphysical boundary conditions: {}'.format(N)
+        print('Rays with unphysical boundary conditions: {}'.format(N))
 
     return phi_near, phi_far, range_near, range_far, idx_near, idx_far
 
@@ -567,10 +567,10 @@ def _cost_maesaka(x, psidp_o, bcs, dhv, dr, Cobs, Clpf, finite_order,
     J = Jof + Jor + Jlpf
 
     if verbose:
-        print 'Forward direction observation cost : {:1.3e}'.format(Jof)
-        print 'Reverse direction observation cost : {:1.3e}'.format(Jor)
-        print 'Low-pass filter cost ............. : {:1.3e}'.format(Jlpf)
-        print 'Total cost ....................... : {:1.3e}'.format(J)
+        print('Forward direction observation cost : {:1.3e}'.format(Jof))
+        print('Reverse direction observation cost : {:1.3e}'.format(Jor))
+        print('Low-pass filter cost ............. : {:1.3e}'.format(Jlpf))
+        print('Total cost ....................... : {:1.3e}'.format(J))
 
     return J
 
@@ -670,13 +670,16 @@ def _jac_maesaka(x, psidp_o, bcs, dhv, dr, Cobs, Clpf, finite_order,
     # compute the vector norm of the Jacobian
     if verbose:
         mag = np.linalg.norm(jac, ord=None, axis=None)
-        print 'Vector norm of Jacobian: {:1.3e}'.format(mag)
+        print('Vector norm of Jacobian: {:1.3e}'.format(mag))
 
     return jac
 
 
 def _forward_reverse_phidp(k, bcs, verbose=False):
     """
+    Compute the forward and reverse direction propagation differential phases
+    from the control variable k and boundary conditions following equations (1)
+    and (7) in Maesaka et al. (2012).
 
     Parameters
     ----------
@@ -704,7 +707,7 @@ def _forward_reverse_phidp(k, bcs, verbose=False):
 
     # compute forward direction propagation differential phase
     phi_f = np.zeros_like(k, subok=False)
-    phi_f[:,1:] = phi_f[:,1:] = np.cumsum(k[:,:-1]**2, axis=1)
+    phi_f[:,1:] = np.cumsum(k[:,:-1]**2, axis=1)
     phidp_f = phi_f + phi_near[:,np.newaxis].repeat(ng, axis=1)
 
     # compute reverse direction propagation differential phase
@@ -716,13 +719,14 @@ def _forward_reverse_phidp(k, bcs, verbose=False):
     if verbose:
         phidp_mbe = np.ma.mean(phidp_f - phidp_r)
         phidp_mae = np.ma.mean(np.abs(phidp_f - phidp_r))
-        print 'Forward-reverse PHIDP MBE: {:.3f} deg'.format(phidp_mbe)
-        print 'Forward-reverse PHIDP MAE: {:.3f} deg'.format(phidp_mae)
+        print('Forward-reverse PHIDP MBE: {:.2f} deg'.format(phidp_mbe))
+        print('Forward-reverse PHIDP MAE: {:.2f} deg'.format(phidp_mae))
 
     return phidp_f, phidp_r
 
 
-def _parse_range_resolution(radar, check_uniform=True, verbose=False):
+def _parse_range_resolution(
+        radar, check_uniform=True, atol=1.0, verbose=False):
     """
     Parse the radar range gate resolution.
 
@@ -734,6 +738,11 @@ def _parse_range_resolution(radar, check_uniform=True, verbose=False):
         True to check if all range gates are equally spaced, and if so return
         a scalar value for range resolution. If False, the resolution between
         each range gate is returned.
+    atol : float, optional
+        The absolute tolerance in meters allowed for discrepancies in range
+        gate spacings. Only applicable when check_uniform is True. This
+        parameter may be necessary to catch instances where range gate spacings
+        differ by a few meters or so.
     verbose : bool, optional
         True to print the range gate resolution. Only valid if check_uniform is
         True.
@@ -749,10 +758,10 @@ def _parse_range_resolution(radar, check_uniform=True, verbose=False):
     dr = np.diff(radar.range['data'], n=1)
 
     # check for uniform resolution
-    if check_uniform and np.isclose(dr.std(), 0.0, atol=1.0e-5):
+    if check_uniform and np.allclose(np.diff(dr), 0.0, atol=atol):
         dr = dr[0]
         if verbose:
-            print 'Range resolution: {:.2f} m'.format(dr)
+            print('Range resolution: {:.2f} m'.format(dr))
     else:
         raise ValueError('Radar gate spacing is not uniform')
 
