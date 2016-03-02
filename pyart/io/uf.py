@@ -12,6 +12,8 @@ Reading of Universal format (UF) files
 
 """
 
+import warnings
+
 import numpy as np
 from netCDF4 import date2num
 
@@ -205,7 +207,11 @@ def _get_instrument_parameters(ufile, filemetadata):
     beam_width_v = field_header['beam_width_v'] / 64.
     bandwidth = field_header['bandwidth'] / 16. * 1.e6
     wavelength_cm = field_header['wavelength_cm'] / 64.
-    wavelength_hz = _LIGHT_SPEED / (wavelength_cm / 100.)
+    if wavelength_cm == 0:
+        warnings.warn('Invalid wavelength, frequency set to default value.')
+        wavelength_hz = 9999.0
+    else:
+        wavelength_hz = _LIGHT_SPEED / (wavelength_cm / 100.)
 
     # radar_beam_width_h
     radar_beam_width_h = filemetadata('radar_beam_width_h')
