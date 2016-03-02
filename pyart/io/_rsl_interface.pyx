@@ -962,7 +962,10 @@ cdef class _RslVolume:
                     nv_data[ray_count + j] = (ray.h.wavelength *
                                               ray.h.prf / 4.0)
 
-                pr_data[ray_count + j] = 1. / ray.h.prf
+                if ray.h.prf == 0:
+                    pr_data[ray_count + j] = -999.
+                else:
+                    pr_data[ray_count + j] = 1. / ray.h.prf
                 ur_data[ray_count + j] = ray.h.unam_rng * 1000.0
             ray_count += nrays
         return pm_data, nv_data, pr_data, ur_data
