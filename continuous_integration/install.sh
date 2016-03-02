@@ -7,9 +7,9 @@
 # The behavior of the script is controlled by environment variabled defined
 # in the .travis.yml in the top level folder of the project.
 
-#set -e
+set -e
 # use next line to debug this script
-#set -x
+set -x
 
 # Use Miniconda to provide a Python environment.  This allows us to perform
 # a conda based install of the SciPy stack on multiple versions of Python
@@ -43,7 +43,7 @@ if [[ $PYTHON_VERSION == '2.7' ]]; then
     # causes either gdal or basemap to break, force the exact libgdal version
     # see: https://github.com/ContinuumIO/anaconda-issues/issues/584
     conda install --yes gdal basemap libgdal=2.0.0=0 krb5
-    conda install --yes -c http://conda.anaconda.org/jjhelmus --no-update-deps wradlib
+    conda install --no-update-dependencies --yes -c http://conda.anaconda.org/jjhelmus wradlib
 fi
 
 # install coverage modules
