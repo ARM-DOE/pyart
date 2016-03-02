@@ -43,7 +43,7 @@ if [[ $PYTHON_VERSION == '2.7' ]]; then
     # causes either gdal or basemap to break, force the exact libgdal version
     # see: https://github.com/ContinuumIO/anaconda-issues/issues/584
     conda install --yes gdal basemap libgdal=2.0.0=0 krb5
-    conda install --no-update-dependencies --yes -c http://conda.anaconda.org/jjhelmus wradlib
+    conda install --no-deps --yes -c http://conda.anaconda.org/jjhelmus wradlib
 fi
 
 # install coverage modules
