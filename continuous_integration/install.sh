@@ -9,7 +9,7 @@
 
 set -e
 # use next line to debug this script
-set -x
+#set -x
 
 # Use Miniconda to provide a Python environment.  This allows us to perform
 # a conda based install of the SciPy stack on multiple versions of Python
