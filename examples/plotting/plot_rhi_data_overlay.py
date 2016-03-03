@@ -40,8 +40,8 @@ display.plot('velocity', sweep=sweep, vmin=-20, vmax=20.0, fig=fig,
 # get data
 start = radar.get_start(sweep)
 end = radar.get_end(sweep) + 1
-data = radar.get_field(sweep,'reflectivity')
-x,y,z = radar.get_gate_x_y_z(sweep,edges=False)
+data = radar.get_field(sweep, 'reflectivity')
+x, y, z = radar.get_gate_x_y_z(sweep, edges=False)
 
 x /= 1000.0
 y /= 1000.0
