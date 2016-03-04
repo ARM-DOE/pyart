@@ -37,13 +37,15 @@ ax = fig.add_subplot(111)
 # linewidth=0.00015 makes lines between patches very small
 # antialiased=true removes moire patterns.
 
-# display.plot('reflectivity', sweep=sweep, vmin=-8, vmax=64.0, fig=fig,
-#               ax=ax, colorbar_label='Reflectivity (dB)', alpha=0.75,
-#               edgecolors=(0.5, 0.5, 0.5, 0.3), linewidth=0.001,
-#               antialiased=True)
-
 display.plot('reflectivity', sweep=sweep, vmin=-8, vmax=64.0, fig=fig,
-             ax=ax, colorbar_label='Reflectivity (dB)', antialiased=True)
+             ax=ax, colorbar_label='Reflectivity (dB)', alpha=0.75,
+             edgecolors=(0.5, 0.5, 0.5, 0.3), linewidth=0.001,
+             antialiased=True)
+
+# Normal no alpha
+# display.plot('reflectivity', sweep=sweep, vmin=-8, vmax=64.0, fig=fig,
+#             ax=ax, colorbar_label='Reflectivity (dB)', antialiased=True)
+
 # get data
 start = radar.get_start(sweep)
 end = radar.get_end(sweep) + 1
@@ -71,7 +73,6 @@ levels = np.arange(-3, 4, 0.25)
 levels_ice = np.arange(-2, -0, 0.5)
 levels_rain = [0.75]
 
-print(levels)
 # adds contours to plot
 contours = ax.contour(R, z, data, levels, linewidths=1, colors='k',
                       antialiased=True)
