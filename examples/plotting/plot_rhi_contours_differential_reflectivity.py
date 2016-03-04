@@ -14,7 +14,7 @@ print __doc__
 import matplotlib.pyplot as plt
 import pyart
 import numpy as np
-import scipy.ndimage as spyi
+import scipy.ndimage as ndimage
 
 filename = '220629.mdv'
 
@@ -59,7 +59,7 @@ z /= 1000.0
 # apply a gaussian blur to the data set for nice smooth lines:
 # sigma adjusts the distance effect of blending each cell,
 # 4 is arbirarly set for visual impact.
-data = spyi.gaussian_filter(data, sigma=4)
+data = ndimage.gaussian_filter(data, sigma=4)
 
 # calculate (R)ange
 R = np.sqrt(x ** 2 + y ** 2) * np.sign(y)
