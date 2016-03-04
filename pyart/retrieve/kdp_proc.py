@@ -552,13 +552,13 @@ def _cost_maesaka(x, psidp_o, bcs, dhv, dr, Cobs, Clpf, finite_order,
     # cost: reverse direction differential phase observations
     Jor = 0.5 * np.sum(Cobs * (phi_ra - phi_ro)**2)
 
-    # prepare control variable k for ingest into Fortran wrappers
-    k = np.asfortranarray(k, dtype=np.float64)
+    # prepare control variable k for Cython function
+    k = np.ascontiguousarray(k, dtype=np.float64)
 
     # compute low-pass filter term, i.e., second order derivative of k with
     # respect to range
-    d2kdr2 = kdp_brute.lowpass_maesaka_term(
-        k, dr=dr, finite_order=finite_order, fill_value=fill_value, proc=proc)
+    d2kdr2 = np.empty_like(k)
+    kdp_brute.lowpass_maesaka_term(k, dr, finite_order, d2kdr2)
 
     # cost: low-pass filter, i.e., radial smoothness
     Jlpf = 0.5 * np.sum(Clpf * (d2kdr2)**2)
@@ -640,8 +640,8 @@ def _jac_maesaka(x, psidp_o, bcs, dhv, dr, Cobs, Clpf, finite_order,
     phi_fo = psidp_o - dhv - phi_near[:,np.newaxis].repeat(ng, axis=1)
     phi_ro = phi_far[:,np.newaxis].repeat(ng, axis=1) - psidp_o + dhv
 
-    # prepare control variable k for ingest into Fortran wrappers
-    k = np.asfortranarray(k, dtype=np.float64)
+    # prepare control variable k for Cython functions
+    k = np.ascontiguousarray(k, dtype=np.float64)
 
     # cost: forward direction differential phase observations
     dJofdk = np.zeros_like(k, subok=False)
@@ -655,13 +655,12 @@ def _jac_maesaka(x, psidp_o, bcs, dhv, dr, Cobs, Clpf, finite_order,
 
     # compute low-pass filter term, i.e., second order derivative of k with
     # respect to range
-    d2kdr2 = kdp_brute.lowpass_maesaka_term(
-        k, dr=dr, finite_order=finite_order, fill_value=fill_value, proc=proc)
+    d2kdr2 = np.empty_like(k)
+    kdp_brute.lowpass_maesaka_term(k, dr, finite_order, d2kdr2)
 
     # compute gradients of Jlpf with respect to the control variable k
-    dJlpfdk = kdp_brute.lowpass_maesaka_jac(
-        d2kdr2, dr=dr, clpf=Clpf, finite_order=finite_order,
-        fill_value=fill_value, proc=proc)
+    dJlpfdk = np.empty_like(d2kdr2)
+    kdp_brute.lowpass_maesaka_jac(d2kdr2, dr, Clpf, finite_order, dJlpfdk)
 
     # sum control variable derivative components
     dJdk = dJofdk + dJordk + dJlpfdk
