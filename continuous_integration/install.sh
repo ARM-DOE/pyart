@@ -71,3 +71,10 @@ if [[ "$FROM_RECIPE" == "true" ]]; then
 else
     python setup.py build_ext --inplace
 fi
+
+# KLUDGE
+# cylp and cvxopt_glpk depend on BLAS and LAPACK which are provided by the
+# system and depend on the system libgfortran.  The conda libgfortran does not
+# export the symbols required for the system packages, so it must be removed.
+conda install --yes libgfortran
+conda remove --yes --force libgfortran
