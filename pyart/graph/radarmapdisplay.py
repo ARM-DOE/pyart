@@ -285,7 +285,8 @@ class RadarMapDisplay(RadarDisplay):
 
         if colorbar_flag:
             self.plot_colorbar(
-                mappable=pm, label=colorbar_label, field=field, fig=fig)
+                mappable=pm, label=colorbar_label, field=field, fig=fig,
+                ax=ax)
         return
 
     def plot_point(self, lon, lat, symbol='ro', label_text=None,
