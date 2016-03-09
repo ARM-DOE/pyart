@@ -106,7 +106,8 @@ class RadarMapDisplay(RadarDisplay):
             min_lon=None, max_lon=None, min_lat=None, max_lat=None,
             width=None, height=None, lon_0=None, lat_0=None,
             resolution='h', shapefile=None, edges=True, gatefilter=None,
-            basemap=None, filter_transitions=True, embelish=True, **kwargs):
+            basemap=None, filter_transitions=True, embelish=True,
+            ticks=None, ticklabs=None, **kwargs):
         """
         Plot a PPI volume sweep onto a geographic map.
 
@@ -150,6 +151,10 @@ class RadarMapDisplay(RadarDisplay):
         colorbar_flag : bool
             True to add a colorbar with label to the axis.  False leaves off
             the colorbar.
+        ticks : array
+            Colorbar custom tick label locations.
+        ticklabs : array
+                Colorbar custom tick labels.
         colorbar_label : str
             Colorbar label, None will use a default label generated from the
             field information.
@@ -285,7 +290,8 @@ class RadarMapDisplay(RadarDisplay):
 
         if colorbar_flag:
             self.plot_colorbar(
-                mappable=pm, label=colorbar_label, field=field, fig=fig)
+                mappable=pm, label=colorbar_label, field=field, fig=fig,
+                ax=ax, ticks=ticks, ticklabs=ticklabs)
         return
 
     def plot_point(self, lon, lat, symbol='ro', label_text=None,

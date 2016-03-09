@@ -301,7 +301,8 @@ class RadarDisplay(object):
             axislabels=(None, None), axislabels_flag=True,
             colorbar_flag=True, colorbar_label=None,
             colorbar_orient='vertical', edges=True, gatefilter=None,
-            filter_transitions=True, ax=None, fig=None, **kwargs):
+            filter_transitions=True, ax=None, fig=None,
+            ticks=None, ticklabs=None, **kwargs):
         """
         Plot a PPI.
 
@@ -356,6 +357,10 @@ class RadarDisplay(object):
             field information.
         colorbar_orient : 'vertical' or 'horizontal'
             Colorbar orientation.
+        ticks : array
+            Colorbar custom tick label locations.
+        ticklabs : array
+                Colorbar custom tick labels.
         edges : bool
             True will interpolate and extrapolate the gate edges from the
             range, azimuth and elevations in the radar, treating these
@@ -408,7 +413,7 @@ class RadarDisplay(object):
         if colorbar_flag:
             self.plot_colorbar(
                 mappable=pm, label=colorbar_label, orient=colorbar_orient,
-                field=field, ax=ax, fig=fig)
+                field=field, ax=ax, fig=fig, ticks=ticks, ticklabs=ticklabs)
 
     def plot_rhi(
             self, field, sweep=0, mask_tuple=None,
@@ -417,7 +422,8 @@ class RadarDisplay(object):
             axislabels=(None, None), axislabels_flag=True,
             reverse_xaxis=None, colorbar_flag=True, colorbar_label=None,
             colorbar_orient='vertical', edges=True, gatefilter=None,
-            filter_transitions=True, ax=None, fig=None, **kwargs):
+            filter_transitions=True, ax=None, fig=None,
+            ticks=None, ticklabs=None, **kwargs):
         """
         Plot a RHI.
 
@@ -473,6 +479,10 @@ class RadarDisplay(object):
             field information.
         colorbar_orient : 'vertical' or 'horizontal'
             Colorbar orientation.
+        ticks : array
+            Colorbar custom tick label locations.
+        ticklabs : array
+                Colorbar custom tick labels.
         edges : bool
             True will interpolate and extrapolate the gate edges from the
             range, azimuth and elevations in the radar, treating these
@@ -531,7 +541,7 @@ class RadarDisplay(object):
         if colorbar_flag:
             self.plot_colorbar(
                 mappable=pm, label=colorbar_label, orient=colorbar_orient,
-                field=field, ax=ax, fig=fig)
+                field=field, ax=ax, fig=fig, ticks=ticks, ticklabs=ticklabs)
 
     def plot_vpt(
             self, field, mask_tuple=None,
@@ -541,7 +551,8 @@ class RadarDisplay(object):
             colorbar_flag=True, colorbar_label=None,
             colorbar_orient='vertical', edges=True,
             filter_transitions=True, time_axis_flag=False,
-            date_time_form=None, tz=None, ax=None, fig=None, **kwargs):
+            date_time_form=None, tz=None, ax=None, fig=None,
+            ticks=None, ticklabs=None, **kwargs):
         """
         Plot a VPT scan.
 
@@ -592,6 +603,10 @@ class RadarDisplay(object):
         colorbar_label : str
             Colorbar label, None will use a default label generated from the
             field information.
+        ticks : array
+            Colorbar custom tick label locations.
+        ticklabs : array
+                Colorbar custom tick labels.
         colorbar_orient : 'vertical' or 'horizontal'
             Colorbar orientation.
         edges : bool
@@ -636,7 +651,7 @@ class RadarDisplay(object):
             y[-1] = self.ranges[-1] - (self.ranges[-2] - self.ranges[-1]) / 2.
             y[y < 0] = 0    # do not allow range to become negative
             y = y / 1000.
-            x = np.arange(data.shape[1]+1)
+            x = np.arange(data.shape[1] + 1)
         else:
             x = np.arange(data.shape[1])
             y = self.ranges / 1000.
@@ -666,7 +681,7 @@ class RadarDisplay(object):
         if colorbar_flag:
             self.plot_colorbar(
                 mappable=pm, label=colorbar_label, orient=colorbar_orient,
-                field=field, ax=ax, fig=fig)
+                field=field, ax=ax, fig=fig, ticks=ticks, ticklabs=ticklabs)
 
     def plot_azimuth_to_rhi(
             self, field, target_azimuth, mask_tuple=None,
@@ -676,7 +691,7 @@ class RadarDisplay(object):
             colorbar_flag=True, colorbar_label=None,
             colorbar_orient='vertical', edges=True, gatefilter=None,
             reverse_xaxis=None, filter_transitions=True,
-            ax=None, fig=None, **kwargs):
+            ax=None, fig=None, ticks=None, ticklabs=None, **kwargs):
         """
         Plot pseudo-RHI scan by extracting the vertical field associated
         with the given azimuth.
@@ -731,6 +746,10 @@ class RadarDisplay(object):
         colorbar_label : str
             Colorbar label, None will use a default label generated from the
             field information.
+        ticks : array
+            Colorbar custom tick label locations.
+        ticklabs : array
+                Colorbar custom tick labels.
         colorbar_orient : 'vertical' or 'horizontal'
             Colorbar orientation.
         edges : bool
@@ -790,7 +809,7 @@ class RadarDisplay(object):
         if colorbar_flag:
             self.plot_colorbar(
                 mappable=pm, label=colorbar_label, orient=colorbar_orient,
-                field=field, ax=ax, fig=fig)
+                field=field, ax=ax, fig=fig, ticks=ticks, ticklabs=ticklabs)
 
     def plot_range_rings(self, range_rings, ax=None, col='k', ls='-', lw=2):
         """
@@ -948,7 +967,8 @@ class RadarDisplay(object):
         ax.plot(y, x, 'k-')  # horizontal
 
     def plot_colorbar(self, mappable=None, field=None, label=None,
-                      orient='vertical', cax=None, ax=None, fig=None):
+                      orient='vertical', cax=None, ax=None, fig=None,
+                      ticks=None, ticklabs=None):
         """
         Plot a colorbar.
 
@@ -970,7 +990,10 @@ class RadarDisplay(object):
             Axis onto which the colorbar will be drawn. None is also valid.
         fig : Figure
             Figure to place colorbar on.  None will use the current figure.
-
+        ticks : array
+            Colorbar custom tick label locations.
+        ticklabs : array
+                Colorbar custom tick labels.
         """
         if fig is None:
             fig = plt.gcf()
@@ -982,7 +1005,12 @@ class RadarDisplay(object):
             label = self._get_colorbar_label(field)
 
         cb = fig.colorbar(mappable, orientation=orient, ax=ax, cax=cax)
+        if ticks is not None:
+            cb.set_ticks(ticks)
+        if ticklabs:
+            cb.set_ticklabels(ticklabs)
         cb.set_label(label)
+
         self.cbs.append(cb)
 
     ##########################
