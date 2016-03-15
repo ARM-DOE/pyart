@@ -625,7 +625,7 @@ def LP_solver_cvxopt(A_Matrix, B_vectors, weights, solver='glpk'):
 
     """
     from cvxopt import matrix, solvers
-    n_gates = weights.shape[1]/2
+    n_gates = weights.shape[1] // 2
     n_rays = B_vectors.shape[0]
     mysoln = np.zeros([n_rays, n_gates])
 
