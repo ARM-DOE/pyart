@@ -147,14 +147,6 @@ def test_map_to_grid_no_copy_two_radars():
     assert_almost_equal(center_slice, EXPECTED_CENTER_SLICE)
 
 
-def test_map_to_grid_balltree():
-    radar = pyart.testing.make_target_radar()
-    grids = pyart.map.map_to_grid(
-        (radar,), algorithm='ball_tree', **COMMON_MAP_TO_GRID_ARGS)
-    center_slice = grids['reflectivity'][1, 4, :]
-    assert_almost_equal(center_slice, EXPECTED_CENTER_SLICE)
-
-
 def test_map_to_grid_tiny_grid():
     radar = pyart.testing.make_target_radar()
     grids = pyart.map.map_to_grid(

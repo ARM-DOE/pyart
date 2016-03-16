@@ -37,7 +37,6 @@ from ..filters import GateFilter, moment_based_gate_filter
 from ..io.common import make_time_unit_str
 from ._load_nn_field_data import _load_nn_field_data
 from .ckdtree import cKDTree
-from .ball_tree import BallTree
 from .gates_to_grid import map_gates_to_grid
 
 
@@ -205,9 +204,9 @@ class NNLocator:
         The number of points at which the algorithm switches over to
         brute-force.  This can significantly impact the speed of the
         contruction and query of the tree.
-    algorithm : 'kd_tree' or 'ball_tree'
-        Algorithm used to compute the nearest neigbors.  'kd_tree' uses a
-        k-d tree, 'ball_tree' a Ball tree.
+    algorithm : 'kd_tree', optional.
+        Algorithm used to compute the nearest neigbors. 'kd_tree' uses a
+        k-d tree.
 
     """
 
@@ -215,11 +214,10 @@ class NNLocator:
         """ initalize. """
         self._algorithm = algorithm
 
-        # build the query tree
         if algorithm == 'kd_tree':
             self.tree = cKDTree(data, leafsize=leafsize)
-        elif algorithm == 'ball_tree':
-            self.tree = BallTree(data, leaf_size=leafsize)
+        else:
+            raise ValueError('invalid algorithm')
 
     def find_neighbors_and_dists(self, q, r):
         """
@@ -247,10 +245,6 @@ class NNLocator:
             dist = scipy.spatial.minkowski_distance(q, self.tree.data[ind])
 
             return ind, dist
-
-        elif self._algorithm == 'ball_tree':
-            ind, dist = self.tree.query_radius(q, r, return_distance=True)
-            return ind[0], dist[0]
 
 
 def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
@@ -368,10 +362,9 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
         to True or by gridding each field individually setting the
         `refl_field` parameter and the `fields` parameter to the field in
         question.  It is recommended to set this parameter to True.
-    algorithm : 'kd_tree' or 'ball_tree'
-        Algorithms to use for finding the nearest neighbors. 'kd_tree' tends
-        to be faster.  This value should only effects the speed of the
-        gridding, not the results.
+    algorithm : 'kd_tree'.
+        Algorithms to use for finding the nearest neighbors. 'kd_tree' is the
+        only valid option.
     leafsize : int
         Leaf size passed to the neighbor lookup tree. This can affect the
         speed of the construction and query, as well as the memory required
@@ -412,7 +405,7 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
     # check the parameters
     if weighting_function.upper() not in ['CRESSMAN', 'BARNES']:
         raise ValueError('unknown weighting_function')
-    if algorithm not in ['kd_tree', 'ball_tree']:
+    if algorithm not in ['kd_tree']:
         raise ValueError('unknow algorithm: %s' % algorithm)
     badval = get_fillvalue()
 
