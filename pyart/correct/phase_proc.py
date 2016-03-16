@@ -33,7 +33,7 @@ Adapted by Scott Collis and Scott Giangrande, refactored by Jonathan Helmus
 
 """
 
-from __future__ import print_function
+from __future__ import print_function, division
 
 import copy
 from time import time
@@ -536,7 +536,7 @@ def construct_A_matrix(n_gates, filt):
         M_matrix_middle = M_matrix_middle + np.diag(np.ones(
             int(n_gates - filter_length + 1 - np.abs(posn[diag]))),
             k=int(posn[diag])) * filt[diag]
-    side_pad = (filter_length - 1) / 2
+    side_pad = (filter_length - 1) // 2
     M_matrix = np.bmat(
         [np.zeros([n_gates-filter_length + 1, side_pad], dtype=float),
          M_matrix_middle, np.zeros(
@@ -572,7 +572,7 @@ def construct_B_vectors(phidp_mod, z_mod, filt, coef=0.914, dweight=60000.0):
     n_gates = phidp_mod.shape[1]
     n_rays = phidp_mod.shape[0]
     filter_length = len(filt)
-    side_pad = (filter_length - 1) / 2
+    side_pad = (filter_length - 1) // 2
     top_of_B_vectors = np.bmat([[-phidp_mod, phidp_mod]])
     data_edges = np.bmat([phidp_mod[:, 0:side_pad],
                          np.zeros([n_rays, n_gates-filter_length+1]),
@@ -690,7 +690,7 @@ def LP_solver_pyglpk(A_Matrix, B_vectors, weights, it_lim=7000, presolve=True,
         message_state = glpk.LPX.MSG_ON
     else:
         message_state = glpk.LPX.MSG_OFF
-    n_gates = weights.shape[1]/2
+    n_gates = weights.shape[1] // 2
     n_rays = B_vectors.shape[0]
     mysoln = np.zeros([n_rays, n_gates])
     lp = glpk.LPX()  # Create empty problem instance
@@ -750,7 +750,7 @@ def solve_cylp(model, B_vectors, weights, ray, chunksize):
     from cylp.cy.CyClpSimplex import CyClpSimplex
     from cylp.py.modeling.CyLPModel import CyLPModel, CyLPArray
 
-    n_gates = weights.shape[1]/2
+    n_gates = weights.shape[1] // 2
     n_rays = B_vectors.shape[0]
     soln = np.zeros([chunksize, n_gates])
 
@@ -811,7 +811,7 @@ def LP_solver_cylp_mp(A_Matrix, B_vectors, weights, really_verbose=False,
     from cylp.py.modeling.CyLPModel import CyLPModel, CyLPArray
     import multiprocessing as mp
 
-    n_gates = weights.shape[1]/2
+    n_gates = weights.shape[1] // 2
     n_rays = B_vectors.shape[0]
     soln = np.zeros([n_rays, n_gates])
 
@@ -907,7 +907,7 @@ def LP_solver_cylp(A_Matrix, B_vectors, weights, really_verbose=False):
     from cylp.cy.CyClpSimplex import CyClpSimplex
     from cylp.py.modeling.CyLPModel import CyLPModel, CyLPArray
 
-    n_gates = weights.shape[1]/2
+    n_gates = weights.shape[1] // 2
     n_rays = B_vectors.shape[0]
     soln = np.zeros([n_rays, n_gates])
 
