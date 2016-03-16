@@ -8,7 +8,7 @@ Washington FourDD algorithm implemented in Py-ART.  Sounding data is
 used for the initial condition of the dealiasing.
 
 """
-print __doc__
+print(__doc__)
 
 # Author: Jonathan J. Helmus (jhelmus@anl.gov)
 # License: BSD 3 clause

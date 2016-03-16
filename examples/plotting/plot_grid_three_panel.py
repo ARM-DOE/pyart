@@ -9,7 +9,7 @@ North American regional reanalysis (NARR) pressure is plotted on top of the
 grid.
 
 """
-print __doc__
+print(__doc__)
 
 # Author Jonathan J. Helmus
 # License: BSD 3 clause
