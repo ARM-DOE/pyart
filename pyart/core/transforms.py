@@ -622,8 +622,12 @@ def cartesian_to_geographic_aeqd(x, y, lon_0, lat_0, R=6370997.):
     rho = np.sqrt(x*x + y*y)
     c = rho / R
 
-    lat_rad = np.arcsin(np.cos(c) * np.sin(lat_0_rad) +
-                        y * np.sin(c) * np.cos(lat_0_rad) / rho)
+    with warnings.catch_warnings():
+        # division by zero may occur here but is properly addressed below so
+        # the warnings can be ignored
+        warnings.simplefilter("ignore", RuntimeWarning)
+        lat_rad = np.arcsin(np.cos(c) * np.sin(lat_0_rad) +
+                            y * np.sin(c) * np.cos(lat_0_rad) / rho)
     lat_deg = np.rad2deg(lat_rad)
     # fix cases where the distance from the center of the projection is zero
     lat_deg[rho == 0] = lat_0

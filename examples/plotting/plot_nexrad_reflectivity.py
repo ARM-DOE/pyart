@@ -7,7 +7,7 @@ An example which creates a plot containing the first collected scan from a
 NEXRAD file.
 
 """
-print __doc__
+print(__doc__)
 
 # Author: Jonathan J. Helmus (jhelmus@anl.gov)
 # License: BSD 3 clause
