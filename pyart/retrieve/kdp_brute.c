@@ -1493,8 +1493,8 @@ static PyObject *__pyx_pf_5pyart_8retrieve_9kdp_brute_lowpass_maesaka_term(CYTHO
  *     # Use a low order finite difference scheme to compute the second-order
  *     # range derivative
  *     if finite_order == 'low':             # <<<<<<<<<<<<<<
- *         for g in range(ng):
- *             for r in range(nr):
+ *         for r in range(nr):
+ *             for g in range(ng):
  */
   __pyx_t_3 = (__Pyx_PyString_Equals(__pyx_v_finite_order, __pyx_n_s_low, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 65; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   if (__pyx_t_3) {
@@ -1502,24 +1502,24 @@ static PyObject *__pyx_pf_5pyart_8retrieve_9kdp_brute_lowpass_maesaka_term(CYTHO
     /* "pyart/retrieve/kdp_brute.pyx":66
  *     # range derivative
  *     if finite_order == 'low':
- *         for g in range(ng):             # <<<<<<<<<<<<<<
- *             for r in range(nr):
+ *         for r in range(nr):             # <<<<<<<<<<<<<<
+ *             for g in range(ng):
  *                 # For interior range gates, i.e. g = [1, ng-1]
  */
-    __pyx_t_4 = __pyx_v_ng;
+    __pyx_t_4 = __pyx_v_nr;
     for (__pyx_t_5 = 0; __pyx_t_5 < __pyx_t_4; __pyx_t_5+=1) {
-      __pyx_v_g = __pyx_t_5;
+      __pyx_v_r = __pyx_t_5;
 
       /* "pyart/retrieve/kdp_brute.pyx":67
  *     if finite_order == 'low':
- *         for g in range(ng):
- *             for r in range(nr):             # <<<<<<<<<<<<<<
+ *         for r in range(nr):
+ *             for g in range(ng):             # <<<<<<<<<<<<<<
  *                 # For interior range gates, i.e. g = [1, ng-1]
  *                 # use a centered difference scheme where p = 2.
  */
-      __pyx_t_6 = __pyx_v_nr;
+      __pyx_t_6 = __pyx_v_ng;
       for (__pyx_t_7 = 0; __pyx_t_7 < __pyx_t_6; __pyx_t_7+=1) {
-        __pyx_v_r = __pyx_t_7;
+        __pyx_v_g = __pyx_t_7;
 
         /* "pyart/retrieve/kdp_brute.pyx":76
  * 
@@ -1629,8 +1629,8 @@ static PyObject *__pyx_pf_5pyart_8retrieve_9kdp_brute_lowpass_maesaka_term(CYTHO
  *     # Use a low order finite difference scheme to compute the second-order
  *     # range derivative
  *     if finite_order == 'low':             # <<<<<<<<<<<<<<
- *         for g in range(ng):
- *             for r in range(nr):
+ *         for r in range(nr):
+ *             for g in range(ng):
  */
     goto __pyx_L3;
   }
@@ -1893,8 +1893,8 @@ static PyObject *__pyx_pf_5pyart_8retrieve_9kdp_brute_2lowpass_maesaka_jac(CYTHO
  *     # The Jacobian of Jlpf when a low finite order has been used to compute the
  *     # second-order range derivative of the control variable k
  *     if finite_order == 'low':             # <<<<<<<<<<<<<<
- *         for g in range(ng):
- *             for r in range(nr):
+ *         for r in range(nr):
+ *             for g in range(ng):
  */
   __pyx_t_3 = (__Pyx_PyString_Equals(__pyx_v_finite_order, __pyx_n_s_low, Py_EQ)); if (unlikely(__pyx_t_3 < 0)) {__pyx_filename = __pyx_f[0]; __pyx_lineno = 133; __pyx_clineno = __LINE__; goto __pyx_L1_error;}
   if (__pyx_t_3) {
@@ -1902,28 +1902,28 @@ static PyObject *__pyx_pf_5pyart_8retrieve_9kdp_brute_2lowpass_maesaka_jac(CYTHO
     /* "pyart/retrieve/kdp_brute.pyx":134
  *     # second-order range derivative of the control variable k
  *     if finite_order == 'low':
- *         for g in range(ng):             # <<<<<<<<<<<<<<
- *             for r in range(nr):
+ *         for r in range(nr):             # <<<<<<<<<<<<<<
+ *             for g in range(ng):
  *                 if g > 2 and g < ng - 3:
  */
-    __pyx_t_4 = __pyx_v_ng;
+    __pyx_t_4 = __pyx_v_nr;
     for (__pyx_t_5 = 0; __pyx_t_5 < __pyx_t_4; __pyx_t_5+=1) {
-      __pyx_v_g = __pyx_t_5;
+      __pyx_v_r = __pyx_t_5;
 
       /* "pyart/retrieve/kdp_brute.pyx":135
  *     if finite_order == 'low':
- *         for g in range(ng):
- *             for r in range(nr):             # <<<<<<<<<<<<<<
+ *         for r in range(nr):
+ *             for g in range(ng):             # <<<<<<<<<<<<<<
  *                 if g > 2 and g < ng - 3:
  *                     dJlpfdk[r, g] = Clpf * (
  */
-      __pyx_t_6 = __pyx_v_nr;
+      __pyx_t_6 = __pyx_v_ng;
       for (__pyx_t_7 = 0; __pyx_t_7 < __pyx_t_6; __pyx_t_7+=1) {
-        __pyx_v_r = __pyx_t_7;
+        __pyx_v_g = __pyx_t_7;
 
         /* "pyart/retrieve/kdp_brute.pyx":136
- *         for g in range(ng):
- *             for r in range(nr):
+ *         for r in range(nr):
+ *             for g in range(ng):
  *                 if g > 2 and g < ng - 3:             # <<<<<<<<<<<<<<
  *                     dJlpfdk[r, g] = Clpf * (
  *                         d2kdr2[r, g-1] - 2.*d2kdr2[r, g] +
@@ -1962,7 +1962,7 @@ static PyObject *__pyx_pf_5pyart_8retrieve_9kdp_brute_2lowpass_maesaka_jac(CYTHO
           __pyx_t_14 = (__pyx_v_g + 1);
 
           /* "pyart/retrieve/kdp_brute.pyx":137
- *             for r in range(nr):
+ *             for g in range(ng):
  *                 if g > 2 and g < ng - 3:
  *                     dJlpfdk[r, g] = Clpf * (             # <<<<<<<<<<<<<<
  *                         d2kdr2[r, g-1] - 2.*d2kdr2[r, g] +
@@ -1973,8 +1973,8 @@ static PyObject *__pyx_pf_5pyart_8retrieve_9kdp_brute_2lowpass_maesaka_jac(CYTHO
           *((double *) ( /* dim=1 */ ((char *) (((double *) ( /* dim=0 */ (__pyx_v_dJlpfdk.data + __pyx_t_15 * __pyx_v_dJlpfdk.strides[0]) )) + __pyx_t_16)) )) = ((__pyx_v_Clpf * (((*((double *) ( /* dim=1 */ ((char *) (((double *) ( /* dim=0 */ (__pyx_v_d2kdr2.data + __pyx_t_9 * __pyx_v_d2kdr2.strides[0]) )) + __pyx_t_10)) ))) - (2. * (*((double *) ( /* dim=1 */ ((char *) (((double *) ( /* dim=0 */ (__pyx_v_d2kdr2.data + __pyx_t_11 * __pyx_v_d2kdr2.strides[0]) )) + __pyx_t_12)) ))))) + (*((double *) ( /* dim=1 */ ((char *) (((double *) ( /* dim=0 */ (__pyx_v_d2kdr2.data + __pyx_t_13 * __pyx_v_d2kdr2.strides[0]) )) + __pyx_t_14)) ))))) / __pyx_v_dr2);
 
           /* "pyart/retrieve/kdp_brute.pyx":136
- *         for g in range(ng):
- *             for r in range(nr):
+ *         for r in range(nr):
+ *             for g in range(ng):
  *                 if g > 2 and g < ng - 3:             # <<<<<<<<<<<<<<
  *                     dJlpfdk[r, g] = Clpf * (
  *                         d2kdr2[r, g-1] - 2.*d2kdr2[r, g] +
@@ -2289,8 +2289,8 @@ static PyObject *__pyx_pf_5pyart_8retrieve_9kdp_brute_2lowpass_maesaka_jac(CYTHO
  *     # The Jacobian of Jlpf when a low finite order has been used to compute the
  *     # second-order range derivative of the control variable k
  *     if finite_order == 'low':             # <<<<<<<<<<<<<<
- *         for g in range(ng):
- *             for r in range(nr):
+ *         for r in range(nr):
+ *             for g in range(ng):
  */
     goto __pyx_L3;
   }

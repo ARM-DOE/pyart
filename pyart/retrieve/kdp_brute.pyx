@@ -63,8 +63,8 @@ def lowpass_maesaka_term(
     # Use a low order finite difference scheme to compute the second-order
     # range derivative
     if finite_order == 'low':
-        for g in range(ng):
-            for r in range(nr):
+        for r in range(nr):
+            for g in range(ng):
                 # For interior range gates, i.e. g = [1, ng-1]
                 # use a centered difference scheme where p = 2.
 
@@ -131,8 +131,8 @@ def lowpass_maesaka_jac(
     # The Jacobian of Jlpf when a low finite order has been used to compute the
     # second-order range derivative of the control variable k
     if finite_order == 'low':
-        for g in range(ng):
-            for r in range(nr):
+        for r in range(nr):
+            for g in range(ng):
                 if g > 2 and g < ng - 3:
                     dJlpfdk[r, g] = Clpf * (
                         d2kdr2[r, g-1] - 2.*d2kdr2[r, g] +
