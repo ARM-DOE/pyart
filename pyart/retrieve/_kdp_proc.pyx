@@ -1,10 +1,8 @@
 """
-pyart.retrieve.kdp_brute
+pyart.retrieve._kdp_proc
 ========================
 
-Cython routines for specific differential phase retrievals when a brute force
-approachs is required, e.g., second-order derivatives for each radar range
-gate.
+Cython routines for specific differential phase retrievals.
 
 .. autosummary::
     :toctree: generated/
@@ -17,8 +15,8 @@ gate.
 # Necessary and/or potential future improvements to this module:
 #
 # * High order finite difference schemes still need to be added. Note that the
-#   value of using a higher order scheme has yet to be determined and may be
-#   fruitless in the end.
+#   added value of using a higher order scheme has yet to be determined and may
+#   be fruitless in the end.
 
 
 cimport cython
