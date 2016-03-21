@@ -169,7 +169,6 @@ def kdp_maesaka(radar, gatefilter=None, method='cg', backscatter=None,
 
     if debug:
         N = np.ma.count(psidp_o)
-        print('Functional size: {}'.format(psidp_o.size))
         print('Sample size before filtering: {}'.format(N))
 
     # mask radar gates indicated by the gate filter
