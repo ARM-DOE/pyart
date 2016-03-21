@@ -2,10 +2,10 @@
 pyart.retrieve.kdp_proc
 =======================
 
-Module for retrieving specific differential phase (KDP) from radar observed
-total differential phase (PSIDP) data. Radar observed total differential phase
-is a function of propagation differential phase (PHIDP), backscatter
-differential phase (DELTAHV), and the system phase offset.
+Module for retrieving specific differential phase (KDP) from radar total
+differential phase (PSIDP) measurements. Total differential phase is a function
+of propagation differential phase (PHIDP), backscatter differential phase
+(DELTAHV), and the system phase offset.
 
 """
 
@@ -14,7 +14,7 @@ import numpy as np
 
 from scipy import optimize, stats
 
-from . import kdp_brute
+from . import _kdp_proc
 from ..config import get_field_name, get_metadata, get_fillvalue
 
 # Necessary and/or potential future improvements to the KDP module:
@@ -31,19 +31,15 @@ from ..config import get_field_name, get_metadata, get_fillvalue
 # * The backscatter differential phase parameter will likely have to be updated
 #   in the future to handle various parameterizations.
 #
-# * The Maesaka et al. (2012) method appears to be quite sensitive to the
-#   maximum number of minimization iterations performed assuming convergence
-#   criteria are not met. In particular, when a large number of iterations are
-#   performed for the conjugate-gradient method (e.g., 50+ iterations), the
-#   retrieved KDP can become quite noisey and require more weight on the low-
-#   pass filter constraint. This may require further investigation and/or
-#   sensitivity testing.
-#
 # * The addition of an azimuthal low-pass filter (smoothness) constraint would
 #   be beneficial to the variational Maesaka et al. (2012) algorithm.
+#
+# * Add the ability to record and/or store minimization data, e.g., current
+#   iteration number, functional value and functional gradient norm value as a
+#   function of iteration.
 
 
-def kdp_maesaka(radar, gatefilter=None, solver='CG', backscatter=None,
+def kdp_maesaka(radar, gatefilter=None, method='cg', backscatter=None,
                 Clpf=1.0, length_scale=None, finite_order='low',
                 fill_value=None, proc=1, psidp_field=None, kdp_field=None,
                 phidp_field=None, debug=False, verbose=False, **kwargs):
@@ -72,12 +68,13 @@ def kdp_maesaka(radar, gatefilter=None, solver='CG', backscatter=None,
     gatefilter : GateFilter
         A GateFilter indicating radar gates that should be excluded when
         analysing differential phase measurements.
-    solver : str, optional
-        The type of SciPy solver to use when minimizing the cost functional.
-        The default solver uses a nonlinear conjugate gradient algorithm. In
-        Maesaka et al. (2012) they use the Broyden-Fletcher-Goldfarb-Shanno
-        (BFGS) algorithm, however for large functional size this algorithm is
-        considerably slower than a conjugate gradient algorithm.
+    method : str, optional
+        Type of scipy.optimize method to use when minimizing the cost
+        functional. The default method uses a nonlinear conjugate gradient
+        algorithm. In Maesaka et al. (2012) they use the Broyden-Fletcher-
+        Goldfarb-Shanno (BFGS) algorithm, however for large functional size
+        (e.g., 100K+ variables) this algorithm is considerably slower than a
+        conjugate gradient algorithm.
     backscatter : optional
         Define the backscatter differential phase. If None, the backscatter
         differential phase is set to zero for all range gates. Note that
@@ -100,34 +97,31 @@ def kdp_maesaka(radar, gatefilter=None, solver='CG', backscatter=None,
         criteria since the values of the cost functional and/or its gradient
         norm are somewhat arbitrary.
     fill_value : float, optional
-        Value indicating missing or bad data in radar field data.
+        Value indicating missing or bad data in differential phase field.
     proc : int, optional
-        The number of parallel threads (CPUs) to use. OpenMP flags must be
-        used during compilation of Fortran wrappers.
+        The number of parallel threads (CPUs) to use. Currently no
+        multiprocessing capability exists.
     psidp_field : str, optional
-        Field name of total differential phase. If None, the default field name
-        must be specified in the Py-ART configuration file.
+        Total differential phase field. If None, the default field name must be
+        specified in the Py-ART configuration file.
     kdp_field : str, optional
-        Field name of specific differential phase. If None, the default field
-        name must be specified in the Py-ART configuration file.
+        Specific differential phase field. If None, the default field name must
+        be specified in the Py-ART configuration file.
     phidp_field : str, optional
-        Field name of propagation differential phase. If None, the default
-        field name must be specified in the Py-ART configuration file.
+        Propagation differential phase field. If None, the default field name
+        must be specified in the Py-ART configuration file.
     debug : bool, optional
         True to print debugging information, False to suppress.
     verbose : bool, optional
-        True to print progress and relevant results, False to suppress.
+        True to print relevant information, False to suppress.
 
     Returns
     -------
     kdp_dict : dict
-        Retrieved specific differential phase data and associated metadata.
-    phidpf_dict : dict
-        Retrieved forward direction propagation differential phase data and
-        associated metadata.
-    phidpr_dict : dict
-        Retrieved reverse direction propagation differential phase data and
-        associated metadata.
+        Retrieved specific differential phase data and metadata.
+    phidpf_dict, phidpr_dict : dict
+        Retrieved forward and reverse direction propagation differential phase
+        data and metadata.
 
     References
     ----------
@@ -175,6 +169,7 @@ def kdp_maesaka(radar, gatefilter=None, solver='CG', backscatter=None,
 
     if debug:
         N = np.ma.count(psidp_o)
+        print('Functional size: {}'.format(psidp_o.size))
         print('Sample size before filtering: {}'.format(N))
 
     # mask radar gates indicated by the gate filter
@@ -206,7 +201,7 @@ def kdp_maesaka(radar, gatefilter=None, solver='CG', backscatter=None,
         'disp': verbose,
         }
     if debug:
-        optimize.show_options(solver='minimize', method=solver)
+        optimize.show_options(solver='minimize', method=method)
 
     # parse initial conditions (first guess)
     # assume specific differential phase is close to 0 deg/km everywhere but
@@ -229,7 +224,7 @@ def kdp_maesaka(radar, gatefilter=None, solver='CG', backscatter=None,
 
     # minimize the cost functional
     xopt = optimize.minimize(
-        _cost_maesaka, x0, args=args, method=solver, jac=_jac_maesaka,
+        _cost_maesaka, x0, args=args, method=method, jac=_jac_maesaka,
         hess=None, hessp=None, bounds=None, constraints=None, callback=None,
         options=options)
 
@@ -253,7 +248,6 @@ def kdp_maesaka(radar, gatefilter=None, solver='CG', backscatter=None,
     kdp_dict['data'] = kdp
     kdp_dict['valid_min'] = 0.0
     kdp_dict['Clpf'] = Clpf
-    kdp_dict['comment'] = ''
 
     # compute forward and reverse direction propagation differential phase
     phidp_f, phidp_r = _forward_reverse_phidp(
@@ -337,7 +331,7 @@ def boundary_conditions_maesaka(
     slices = np.ma.notmasked_contiguous(psidp, axis=1)
     if debug:
         N = sum([len(slc) for slc in slices if slc is not None])
-        print('Total number of unique regions: {}'.format(N))
+        print('Total number of unique non-masked regions: {}'.format(N))
 
     phi_near = np.zeros(radar.nrays, dtype=psidp.dtype)
     phi_far = np.zeros(radar.nrays, dtype=psidp.dtype)
@@ -552,13 +546,13 @@ def _cost_maesaka(x, psidp_o, bcs, dhv, dr, Cobs, Clpf, finite_order,
     # cost: reverse direction differential phase observations
     Jor = 0.5 * np.sum(Cobs * (phi_ra - phi_ro)**2)
 
-    # prepare control variable k for ingest into Fortran wrappers
-    k = np.asfortranarray(k, dtype=np.float64)
+    # prepare control variable k for Cython function
+    k = np.ascontiguousarray(k, dtype=np.float64)
 
     # compute low-pass filter term, i.e., second order derivative of k with
     # respect to range
-    d2kdr2 = kdp_brute.lowpass_maesaka_term(
-        k, dr=dr, finite_order=finite_order, fill_value=fill_value, proc=proc)
+    d2kdr2 = np.empty_like(k)
+    _kdp_proc.lowpass_maesaka_term(k, dr, finite_order, d2kdr2)
 
     # cost: low-pass filter, i.e., radial smoothness
     Jlpf = 0.5 * np.sum(Clpf * (d2kdr2)**2)
@@ -640,8 +634,8 @@ def _jac_maesaka(x, psidp_o, bcs, dhv, dr, Cobs, Clpf, finite_order,
     phi_fo = psidp_o - dhv - phi_near[:,np.newaxis].repeat(ng, axis=1)
     phi_ro = phi_far[:,np.newaxis].repeat(ng, axis=1) - psidp_o + dhv
 
-    # prepare control variable k for ingest into Fortran wrappers
-    k = np.asfortranarray(k, dtype=np.float64)
+    # prepare control variable k for Cython functions
+    k = np.ascontiguousarray(k, dtype=np.float64)
 
     # cost: forward direction differential phase observations
     dJofdk = np.zeros_like(k, subok=False)
@@ -655,13 +649,12 @@ def _jac_maesaka(x, psidp_o, bcs, dhv, dr, Cobs, Clpf, finite_order,
 
     # compute low-pass filter term, i.e., second order derivative of k with
     # respect to range
-    d2kdr2 = kdp_brute.lowpass_maesaka_term(
-        k, dr=dr, finite_order=finite_order, fill_value=fill_value, proc=proc)
+    d2kdr2 = np.empty_like(k)
+    _kdp_proc.lowpass_maesaka_term(k, dr, finite_order, d2kdr2)
 
     # compute gradients of Jlpf with respect to the control variable k
-    dJlpfdk = kdp_brute.lowpass_maesaka_jac(
-        d2kdr2, dr=dr, clpf=Clpf, finite_order=finite_order,
-        fill_value=fill_value, proc=proc)
+    dJlpfdk = np.empty_like(d2kdr2)
+    _kdp_proc.lowpass_maesaka_jac(d2kdr2, dr, Clpf, finite_order, dJlpfdk)
 
     # sum control variable derivative components
     dJdk = dJofdk + dJordk + dJlpfdk
