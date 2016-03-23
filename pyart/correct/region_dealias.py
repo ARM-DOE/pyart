@@ -27,7 +27,7 @@ import warnings
 import numpy as np
 import scipy.ndimage as ndimage
 
-from ..config import get_metadata
+from ..config import get_metadata, get_fillvalue
 from ._common_dealias import _parse_fields, _parse_gatefilter, _set_limits
 from ._common_dealias import _parse_rays_wrap_around, _parse_nyquist_vel
 from ._fast_edge_finder import _fast_edge_finder
@@ -212,9 +212,13 @@ def dealias_region_based(
         nwrap = np.take(region_tracker.unwrap_number, labels)
         scorr += nwrap * nyquist_interval
 
+    # fill_value from the velocity dictionary if present
+    fill_value = radar.fields[vel_field].get(
+        '_FillValue', get_fillvalue())
+
     # mask filtered gates
     if np.any(gfilter):
-        data = np.ma.array(data, mask=gfilter)
+        data = np.ma.array(data, mask=gfilter, fill_value=fill_value)
 
     # restore original values where dealiasing not applied
     if keep_original:
@@ -223,6 +227,7 @@ def dealias_region_based(
     # return field dictionary containing dealiased Doppler velocities
     corr_vel = get_metadata(corr_vel_field)
     corr_vel['data'] = data
+    corr_vel['_FillValue'] = fill_value
 
     if set_limits:
         # set valid_min and valid_max in corr_vel
