@@ -13,11 +13,6 @@ def configuration(parent_package='', top_path=None):
     if os.name == 'posix':
         libraries.append('m')
 
-    config.add_extension('ball_tree',
-                         sources=['ball_tree.c'],
-                         include_dirs=[numpy.get_include()],
-                         libraries=libraries)
-
     config.add_extension('ckdtree',
                          sources=['ckdtree.c'],
                          include_dirs=[numpy.get_include()],

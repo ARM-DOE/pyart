@@ -23,6 +23,65 @@ def test_dealias_region_based():
     assert np.ma.is_masked(dealias_vel['data'][13]) is False
 
 
+def test_dealias_interval_limits():
+    interval_limits = [-10, 0, 10]
+    radar, dealias_vel = perform_dealias(interval_limits=interval_limits)
+    assert_allclose(dealias_vel['data'][13, :27], REF_DATA)
+    assert np.ma.is_masked(dealias_vel['data'][13]) is False
+
+
+def test_all_masked():
+    radar = pyart.testing.make_velocity_aliased_radar()
+    radar.fields['velocity']['data'] = np.ma.array(
+        radar.fields['velocity']['data'], mask=True)
+    dealias_vel = pyart.correct.dealias_region_based(radar)
+    assert np.all(np.ma.getmaskarray(dealias_vel['data']))
+    assert 'valid_min' not in dealias_vel
+    assert 'valid_max' not in dealias_vel
+
+
+def test_no_edges():
+    # Dealiasing should work when there are no edges shared between
+    # regions found
+    radar = pyart.testing.make_velocity_aliased_radar()
+    radar.fields['velocity']['data'] = np.ma.array(
+        radar.fields['velocity']['data'], mask=True)
+    radar.fields['velocity']['data'][0, 40] = 0.0
+    radar.fields['velocity']['data'][180, 40] = 0.0
+    dealias_vel = pyart.correct.dealias_region_based(radar)
+    assert_almost_equal(dealias_vel['data'][0, 40], 0.0)
+    assert_almost_equal(dealias_vel['data'][180, 40], 0.0)
+
+
+def test_keep_original():
+    radar = pyart.testing.make_velocity_aliased_radar()
+    radar.fields['velocity']['data'][180, 5] = 88
+    gf = pyart.filters.GateFilter(radar)
+    gf.exclude_above('velocity', 40)
+
+    dealias_vel = pyart.correct.dealias_region_based(
+        radar, gatefilter=gf, keep_original=False)
+    assert np.ma.is_masked(dealias_vel['data'][180, 5]) is True
+
+    dealias_vel = pyart.correct.dealias_region_based(
+        radar, gatefilter=gf, keep_original=True)
+    assert_almost_equal(dealias_vel['data'][180, 5], 88)
+    assert np.ma.is_masked(dealias_vel['data'][180, 5]) is False
+
+
+def test_set_limits():
+
+    radar, dealias_vel = perform_dealias(set_limits=True)
+    assert 'valid_min' in dealias_vel
+    assert_almost_equal(dealias_vel['valid_min'], -30.0)
+    assert 'valid_max' in dealias_vel
+    assert_almost_equal(dealias_vel['valid_max'], 30.0)
+
+    radar, dealias_vel = perform_dealias(set_limits=False)
+    assert 'valid_min' not in dealias_vel
+    assert 'valid_max' not in dealias_vel
+
+
 def test_dealias_region_based_masked_wrap_around():
     radar = pyart.testing.make_velocity_aliased_radar()
     vdata = radar.fields['velocity']['data']

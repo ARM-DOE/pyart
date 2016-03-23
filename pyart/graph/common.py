@@ -9,6 +9,8 @@ Common graphing routines.
 
     parse_ax
     parse_ax_fig
+    parse_norm_vmin_vmax
+    parse_cmap
     parse_vmin_vmax
     parse_lon_lat
     generate_colorbar_label
@@ -32,6 +34,19 @@ Common graphing routines.
 import matplotlib.pyplot as plt
 from netCDF4 import num2date
 
+# Deprecated function names in this name space
+from ..exceptions import _deprecated_alias
+from ..config import get_field_colormap, get_field_limits
+from ..core import transforms as _transforms
+radar_coords_to_cart = _deprecated_alias(
+    _transforms.antenna_to_cartesian,
+    'pyart.graph.common.radar_coords_to_cart',
+    'pyart.core.transforms.antenna_to_cartesian')
+sweep_coords_to_cart = _deprecated_alias(
+    _transforms.antenna_vectors_to_cartesian,
+    'pyart.graph.common.sweep_coords_to_cart',
+    'pyart.core.transforms.antenna_vectors_to_cartesian')
+
 
 ########################
 # Common radar methods #
@@ -54,19 +69,37 @@ def parse_ax_fig(ax, fig):
     return ax, fig
 
 
+def parse_norm_vmin_vmax(norm, container, field, vmin, vmax):
+    """ Parse and return norm, vmin and vmax parameters. """
+    if norm is None:
+        vmin, vmax = parse_vmin_vmax(container, field, vmin, vmax)
+    else:
+        vmin = None
+        vmax = None
+    return norm, vmin, vmax
+
+
+def parse_cmap(cmap, field=None):
+    """ Parse and return the cmap parameter. """
+    if cmap is None:
+        cmap = get_field_colormap(field)
+    return cmap
+
+
 def parse_vmin_vmax(container, field, vmin, vmax):
     """ Parse and return vmin and vmax parameters. """
     field_dict = container.fields[field]
+    field_default_vmin, field_default_vmax = get_field_limits(field)
     if vmin is None:
         if 'valid_min' in field_dict:
             vmin = field_dict['valid_min']
         else:
-            vmin = -6   # default value
+            vmin = field_default_vmin
     if vmax is None:
         if 'valid_max' in field_dict:
             vmax = field_dict['valid_max']
         else:
-            vmax = 100
+            vmax = field_default_vmax
     return vmin, vmax
 
 

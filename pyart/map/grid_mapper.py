@@ -30,15 +30,13 @@ import scipy.spatial
 import netCDF4
 
 from ..config import get_fillvalue, get_metadata
-from ..core.transforms import corner_to_point
-from ..core.transforms import antenna_to_cartesian
+from ..core.transforms import geographic_to_cartesian
 from ..core.grid import Grid
 from ..core.radar import Radar
 from ..filters import GateFilter, moment_based_gate_filter
 from ..io.common import make_time_unit_str
 from ._load_nn_field_data import _load_nn_field_data
 from .ckdtree import cKDTree
-from .ball_tree import BallTree
 from .gates_to_grid import map_gates_to_grid
 
 
@@ -171,12 +169,14 @@ def grid_from_radars(radars, grid_shape, grid_limits,
              for radar in radars]
     radar_name['data'] = np.array(names)
 
+    projection = kwargs.pop('grid_projection', None)
+
     return Grid(
         time, fields, metadata,
         origin_latitude, origin_longitude, origin_altitude, x, y, z,
         radar_latitude=radar_latitude, radar_longitude=radar_longitude,
         radar_altitude=radar_altitude, radar_name=radar_name,
-        radar_time=radar_time)
+        radar_time=radar_time, projection=projection)
 
 
 def _unify_times_for_radars(radars):
@@ -204,9 +204,9 @@ class NNLocator:
         The number of points at which the algorithm switches over to
         brute-force.  This can significantly impact the speed of the
         contruction and query of the tree.
-    algorithm : 'kd_tree' or 'ball_tree'
-        Algorithm used to compute the nearest neigbors.  'kd_tree' uses a
-        k-d tree, 'ball_tree' a Ball tree.
+    algorithm : 'kd_tree', optional.
+        Algorithm used to compute the nearest neigbors. 'kd_tree' uses a
+        k-d tree.
 
     """
 
@@ -214,11 +214,10 @@ class NNLocator:
         """ initalize. """
         self._algorithm = algorithm
 
-        # build the query tree
         if algorithm == 'kd_tree':
             self.tree = cKDTree(data, leafsize=leafsize)
-        elif algorithm == 'ball_tree':
-            self.tree = BallTree(data, leaf_size=leafsize)
+        else:
+            raise ValueError('invalid algorithm')
 
     def find_neighbors_and_dists(self, q, r):
         """
@@ -247,13 +246,10 @@ class NNLocator:
 
             return ind, dist
 
-        elif self._algorithm == 'ball_tree':
-            ind, dist = self.tree.query_radius(q, r, return_distance=True)
-            return ind[0], dist[0]
-
 
 def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
-                grid_origin_alt=None, fields=None, gatefilters=False,
+                grid_origin_alt=None, grid_projection=None,
+                fields=None, gatefilters=False,
                 map_roi=True, weighting_function='Barnes', toa=17000.0,
                 copy_field_data=True, algorithm='kd_tree', leafsize=10.,
                 roi_func='dist_beam', constant_roi=500.,
@@ -285,6 +281,15 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
     grid_origin_alt: float or None
         Altitude of grid origin, in meters. None sets the origin
         to the location of the first radar.
+    grid_projection : dic or str
+        Projection parameters defining the map projection used to transform the
+        locations of the radar gates in geographic coordinate to Cartesian
+        coodinates.  None will use the default dictionary which uses a native
+        azimutal equidistance projection.  See :py:func:`pyart.core.Grid` for
+        additional details on this parameter. The geographic coordinates of
+        the radar gates are calculated using the projection defined for each
+        radar.  No transformation is used if a grid_origin and grid_origin_alt
+        are None and a single radar is specified.
     fields : list or None
         List of fields within the radar objects which will be mapped to
         the cartesian grid. None, the default, will map the fields which are
@@ -357,10 +362,9 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
         to True or by gridding each field individually setting the
         `refl_field` parameter and the `fields` parameter to the field in
         question.  It is recommended to set this parameter to True.
-    algorithm : 'kd_tree' or 'ball_tree'
-        Algorithms to use for finding the nearest neighbors. 'kd_tree' tends
-        to be faster.  This value should only effects the speed of the
-        gridding, not the results.
+    algorithm : 'kd_tree'.
+        Algorithms to use for finding the nearest neighbors. 'kd_tree' is the
+        only valid option.
     leafsize : int
         Leaf size passed to the neighbor lookup tree. This can affect the
         speed of the construction and query, as well as the memory required
@@ -384,6 +388,10 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
     if isinstance(radars, Radar):
         radars = (radars, )
 
+    skip_transform = False
+    if len(radars) == 1 and grid_origin_alt is None and grid_origin is None:
+        skip_transform = True
+
     # parse the gatefilters argument
     if isinstance(gatefilters, GateFilter):
         gatefilters = (gatefilters, )  # make tuple if single filter passed
@@ -397,15 +405,21 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
     # check the parameters
     if weighting_function.upper() not in ['CRESSMAN', 'BARNES']:
         raise ValueError('unknown weighting_function')
-    if algorithm not in ['kd_tree', 'ball_tree']:
+    if algorithm not in ['kd_tree']:
         raise ValueError('unknow algorithm: %s' % algorithm)
     badval = get_fillvalue()
+
+    # parse the grid_projection
+    if grid_projection is None:
+            grid_projection = {
+                'proj': 'pyart_aeqd', '_include_lon_0_lat_0': True}
 
     # find the grid origin if not given
     if grid_origin is None:
         lat = float(radars[0].latitude['data'])
         lon = float(radars[0].longitude['data'])
         grid_origin = (lat, lon)
+    grid_origin_lat, grid_origin_lon = grid_origin
 
     if grid_origin_alt is None:
         grid_origin_alt = float(radars[0].altitude['data'])
@@ -447,27 +461,35 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
         # in the NNLocator, the filtered_gates_per_radar list records this
         filtered_gates_per_radar = []
 
+    projparams = grid_projection.copy()
+    if projparams.pop('_include_lon_0_lat_0', False):
+        projparams['lon_0'] = grid_origin_lon
+        projparams['lat_0'] = grid_origin_lat
+
     # loop over the radars finding gate locations, field data, and offset
     for iradar, (radar, gatefilter) in enumerate(zip(radars, gatefilters)):
 
         # calculate radar offset from the origin
-        radar_lat = float(radar.latitude['data'])
-        radar_lon = float(radar.longitude['data'])
-        x_disp, y_disp = corner_to_point(grid_origin, (radar_lat, radar_lon))
+        x_disp, y_disp = geographic_to_cartesian(
+            radar.longitude['data'], radar.latitude['data'], projparams)
         z_disp = float(radar.altitude['data']) - grid_origin_alt
-        offsets.append((z_disp, y_disp, x_disp))
+        offsets.append((z_disp, float(y_disp), float(x_disp)))
 
         # calculate cartesian locations of gates
-        rg, azg = np.meshgrid(radar.range['data'], radar.azimuth['data'])
-        rg, eleg = np.meshgrid(radar.range['data'], radar.elevation['data'])
-        xg_loc, yg_loc, zg_loc = antenna_to_cartesian(rg / 1000., azg, eleg)
-        del rg, azg, eleg
+        if skip_transform:
+            xg_loc = radar.gate_x['data']
+            yg_loc = radar.gate_y['data']
+        else:
+            xg_loc, yg_loc = geographic_to_cartesian(
+                radar.gate_longitude['data'], radar.gate_latitude['data'],
+                projparams)
+        zg_loc = radar.gate_altitude['data'] - grid_origin_alt
 
         # add gate locations to gate_locations array
         start, end = gate_offset[iradar], gate_offset[iradar + 1]
-        gate_locations[start:end, 0] = (zg_loc + z_disp).flat
-        gate_locations[start:end, 1] = (yg_loc + y_disp).flat
-        gate_locations[start:end, 2] = (xg_loc + x_disp).flat
+        gate_locations[start:end, 0] = zg_loc.flat
+        gate_locations[start:end, 1] = yg_loc.flat
+        gate_locations[start:end, 2] = xg_loc.flat
         del xg_loc, yg_loc
 
         # determine which gates should be included in the interpolation
@@ -609,11 +631,9 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
 
         if weighting_function.upper() == 'CRESSMAN':
             weights = (r2 - dist2) / (r2 + dist2)
-            value = np.ma.average(nn_field_data, weights=weights, axis=0)
         elif weighting_function.upper() == 'BARNES':
-            w = np.exp(-dist2 / (2.0 * r2)) + 1e-5
-            w /= np.sum(w)
-            value = np.ma.dot(w, nn_field_data)
+            weights = np.exp(-dist2 / (2.0 * r2)) + 1e-5
+        value = np.ma.average(nn_field_data, weights=weights, axis=0)
 
         grid_data[iz, iy, ix] = value
 

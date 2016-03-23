@@ -3,6 +3,7 @@
 from __future__ import print_function
 
 import functools
+import warnings
 
 import numpy as np
 from numpy.testing import assert_almost_equal, assert_raises
@@ -281,9 +282,25 @@ def test_init_point_x_y_z():
     assert grid.point_x['data'][0, 0, 0] == grid.x['data'][0]
 
 
-# Remove this test when Grid.axes is Depreciated
+def test_get_point_longitude_latitude():
+    grid = pyart.testing.make_target_grid()
+
+    longitude, latitude = grid.get_point_longitude_latitude()
+    assert latitude.shape == (400, 320)
+    assert longitude.shape == (400, 320)
+    assert_almost_equal(latitude[200, 160], 36.75, 2)
+    assert_almost_equal(longitude[200, 160], -98.09, 2)
+
+    longitude, latitude = grid.get_point_longitude_latitude(edges=True)
+    assert latitude.shape == (401, 321)
+    assert longitude.shape == (401, 321)
+    assert_almost_equal(latitude[200, 160], 36.74, 2)
+    assert_almost_equal(longitude[200, 160], -98.10, 2)
+
+
+# Remove this test when Grid.axes is Deprecated
 def test_grid_axes_attribute():
-    # test the depreciated axes Grid attribute
+    # test the deprecated axes Grid attribute
     grid = pyart.testing.make_target_grid()
 
     nz = 2
@@ -324,7 +341,9 @@ def test_grid_axes_attribute():
     assert 'latitude' not in axes
     assert 'longitude' not in axes
 
-    pyart.io.add_2d_latlon_axis(grid)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", category=DeprecationWarning)
+        pyart.io.add_2d_latlon_axis(grid)
 
     assert isinstance(axes['latitude'], dict)
     assert axes['latitude']['data'].shape == (ny, nx)
@@ -333,7 +352,7 @@ def test_grid_axes_attribute():
     assert axes['longitude']['data'].shape == (ny, nx)
 
 
-# Remove this function when Grid.from_legacy_parameters is Depreciated
+# Remove this function when Grid.from_legacy_parameters is Deprecated
 def make_empty_grid(grid_shape, grid_limits):
     """
     Make an empty grid object without any fields or metadata.
@@ -425,10 +444,12 @@ def make_empty_grid(grid_shape, grid_limits):
             'lat': latorigin,
             'lon': lonorigin}
 
-    return pyart.core.Grid.from_legacy_parameters({}, axes, {})
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", category=DeprecationWarning)
+        return pyart.core.Grid.from_legacy_parameters({}, axes, {})
 
 
-# Remove this test when Grid.from_legacy_parameters is Depreciated
+# Remove this test when Grid.from_legacy_parameters is Deprecated
 def test_grid_from_legacy_parameters():
     grid_shape = (2, 3, 4)
     grid_limits = ((0, 500), (-400000, 400000), (-300000, 300000))

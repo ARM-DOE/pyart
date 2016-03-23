@@ -1313,32 +1313,45 @@ DEFAULT_FIELD_COLORMAP = {
     reflectivity: 'pyart_NWSRef',
     corrected_reflectivity: 'pyart_NWSRef',
     total_power: 'pyart_NWSRef',
-    velocity: 'pyart_NWSVel',
-    corrected_velocity: 'pyart_NWSVel',
-    spectrum_width: 'pyart_NWS_SPW',
-    differential_reflectivity: 'pyart_BrBu12',
-    corrected_differential_reflectivity: 'pyart_BrBu12',
-    cross_correlation_ratio: 'pyart_BrBu12',
-    normalized_coherent_power: 'pyart_Carbone17',
-    differential_phase: 'hsv',
-    unfolded_differential_phase: 'pyart_BlueBrown11',
-    corrected_differential_phase: 'pyart_BlueBrown11',
-    specific_differential_phase: 'pyart_BrBu12',
-    corrected_specific_differential_phase: 'pyart_BrBu12',
-    linear_depolarization_ratio: 'pyart_Carbone17',
-    linear_depolarization_ratio_h: 'pyart_Carbone17',
-    linear_depolarization_ratio_v: 'pyart_Carbone17',
     signal_to_noise_ratio: 'pyart_Carbone17',
+
+    velocity: 'pyart_BuDRd18',
+    corrected_velocity: 'pyart_BuDRd18',
+    eastward_wind_component: 'pyart_BuDRd18',
+    northward_wind_component: 'pyart_BuDRd18',
+    vertical_wind_component: 'pyart_BuDRd18',
+
+    spectrum_width: 'pyart_NWS_SPW',
+
+    normalized_coherent_power: 'pyart_Carbone17',
+
+    differential_reflectivity: 'pyart_RefDiff',
+    corrected_differential_reflectivity: 'pyart_RefDiff',
+
+    cross_correlation_ratio: 'pyart_RefDiff',
+
+    differential_phase: 'pyart_Wild25',
+    unfolded_differential_phase: 'pyart_Wild25',
+    corrected_differential_phase: 'pyart_Wild25',
+
+    specific_differential_phase: 'pyart_Theodore16',
+    corrected_specific_differential_phase: 'pyart_Theodore16',
+
+    linear_depolarization_ratio: 'pyart_SCook18',
+    linear_depolarization_ratio_h: 'pyart_SCook18',
+    linear_depolarization_ratio_v: 'pyart_SCook18',
+
     rain_rate: 'pyart_RRate11',
     radar_estimated_rain_rate: 'pyart_RRate11',
-    radar_echo_classification: 'pyart_EWilson17',
-    specific_attenuation: 'pyart_NWSVel',
+
+    radar_echo_classification: 'pyart_LangRainbow12',
+
+    specific_attenuation: 'pyart_Carbone17',
+
     differential_phase_texture: 'pyart_BlueBrown11',
-    eastward_wind_component: 'pyart_NWSVel',
-    northward_wind_component: 'pyart_NWSVel',
-    vertical_wind_component: 'pyart_NWSVel',
     height: 'pyart_SCook18',
     interpolated_profile: 'pyart_SCook18',
+
     # Additional reflectivity like fields
     'CZ': 'pyart_NWSRef',
     'DZ': 'pyart_NWSRef',
@@ -1358,35 +1371,49 @@ DEFAULT_FIELD_COLORMAP = {
 
 DEFAULT_FIELD_LIMITS = {
     # field name : limits
-    reflectivity: (-10., 65.),
-    corrected_reflectivity: (-10., 65.),
-    total_power: (-200., 100.),
+    reflectivity: (-30., 75.),
+    corrected_reflectivity: (-30., 75.),
+    total_power: (-30., 75.),
+    signal_to_noise_ratio: (-20, 30.),
+
     velocity: velocity_limit,
     corrected_velocity: velocity_limit,
-    spectrum_width: spectrum_width_limit,
-    differential_reflectivity: (-5., 5.),
-    corrected_differential_reflectivity: (-5., 5.),
-    cross_correlation_ratio: (0.8, 1.),
-    normalized_coherent_power: (0., 1.),
-    differential_phase: (-180, 180.),
-    unfolded_differential_phase: (-360, 360.),
-    corrected_differential_phase: (-360, 360.),
-    specific_differential_phase: (-2., 5.),
-    corrected_specific_differential_phase: (-2., 5.),
-    linear_depolarization_ratio: (-40., 0.),
-    linear_depolarization_ratio_h: (-40., 0.),
-    linear_depolarization_ratio_v: (-40., 0.),
-    signal_to_noise_ratio: (-0, 90.),
-    rain_rate: (0., 150.),
-    radar_estimated_rain_rate: (0., 150.),
-    radar_echo_classification: (0, 12),
-    specific_attenuation: (-10., 65.),
-    differential_phase_texture: (-180, 180.),
     eastward_wind_component: velocity_limit,
     northward_wind_component: velocity_limit,
     vertical_wind_component: velocity_limit,
+
+    spectrum_width: spectrum_width_limit,
+
+    normalized_coherent_power: (0., 1.),
+
+    differential_reflectivity: (-1., 8.),
+    corrected_differential_reflectivity: (-1., 8.),
+
+    cross_correlation_ratio: (0.5, 1.05),
+
+    differential_phase: (-180, 180.),
+    unfolded_differential_phase: (-360, 360.),
+    corrected_differential_phase: (-360, 360.),
+
+    specific_differential_phase: (-2., 5.),
+    corrected_specific_differential_phase: (-2., 5.),
+
+    linear_depolarization_ratio: (-40., 0.),
+    linear_depolarization_ratio_h: (-40., 0.),
+    linear_depolarization_ratio_v: (-40., 0.),
+
+    rain_rate: (0., 50.),
+    radar_estimated_rain_rate: (0., 50.),
+
+    radar_echo_classification: (0, 11),
+
+    specific_attenuation: (0., 10.),
+
+    differential_phase_texture: (0, 180.),
+
     height: (0, 20000),
     interpolated_profile: (0, 10000),
+
     # Additional reflectivity like fields
     'CZ': (-10., 65.),
     'DZ': (-10., 65.),

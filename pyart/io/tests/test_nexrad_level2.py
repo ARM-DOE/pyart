@@ -13,14 +13,14 @@ import pyart.io.nexrad_level2 as nexrad_level2
 
 # create a NEXRADLevel2File from a UNCOMPRESSED dummy file
 # pyart/testing/data/example_nexrad_archive.bz2
-UNCOMPRESSED_FILE = bz2.BZ2File(pyart.testing.NEXRAD_ARCHIVE_FILE, 'rb')
+UNCOMPRESSED_FILE = bz2.BZ2File(pyart.testing.NEXRAD_ARCHIVE_MSG31_FILE, 'rb')
 nfile = nexrad_level2.NEXRADLevel2File(UNCOMPRESSED_FILE)
 nfile.close()
 
 
 # attributes
-def test_msg31s():
-    assert len(nfile.msg31s) == 7200
+def test_radial_messages():
+    assert len(nfile.radial_records) == 7200
 
 
 def test_nscans():
@@ -136,6 +136,13 @@ def test_get_data_rho_raw():
     assert np.all(data == 2)
 
 
+def test_get_data_field_not_present():
+    # should return a masked array with all values masked
+    data = nfile.get_data('VEL', 1192, [0])
+    assert data.shape == (720, 1192)
+    assert np.all(data.mask)
+
+
 def test_get_elevation_angles():
     angles = nfile.get_elevation_angles([0, 1])
     assert angles.shape == (1440, )
@@ -218,13 +225,13 @@ def test_scan_info():
 
 # create a NEXRADLevel2File from a COMPRESSED file
 # pyart/testing/data/example_nexrad_archive_compressed.ar2v
-COMPRESSED_FILE = pyart.testing.NEXRAD_ARCHIVE_COMPRESSED_FILE
+COMPRESSED_FILE = pyart.testing.NEXRAD_ARCHIVE_MSG31_COMPRESSED_FILE
 cfile = nexrad_level2.NEXRADLevel2File(COMPRESSED_FILE)
 
 
 def test_compressed_attributes():
     # the compressed archive only contains the first 120 radials
-    assert len(cfile.msg31s) == 120
+    assert len(cfile.radial_records) == 120
     assert cfile.nscans == 1
     assert len(cfile.scan_msgs) == 1
     assert len(cfile.scan_msgs[0]) == 120
@@ -334,3 +341,50 @@ def test_bad_compression_header():
 
     # should raise IOError
     assert_raises(IOError, nexrad_level2.NEXRADLevel2File, corrupt_file)
+
+
+def test_msg1_missing_location():
+    # Message 1 files do not contain location information
+    uncompressed_file = bz2.BZ2File(
+        pyart.testing.NEXRAD_ARCHIVE_MSG1_FILE, 'rb')
+    nfile = nexrad_level2.NEXRADLevel2File(uncompressed_file)
+
+    latitude, longitude, height = nfile.location()
+    assert latitude == 0.0
+    assert longitude == 0.0
+    assert height == 0.0
+
+
+def test_invalid_msg31_block():
+    # This should never happen with real NEXRAD files...
+    block_name, dic = nexrad_level2._get_msg31_data_block(b'aaa', 0)
+    assert len(dic) == 0
+
+
+def test_broken_file():
+    uncompressed_file = bz2.BZ2File(
+        pyart.testing.NEXRAD_ARCHIVE_MSG1_FILE, 'rb')
+
+    broken_string = uncompressed_file.read(202)
+    broken_file = BytesIO()
+    broken_file.write(broken_string)
+    broken_file.seek(0)
+
+    # should raise ValueError
+    assert_raises(ValueError, nexrad_level2.NEXRADLevel2File, broken_file)
+
+
+def test_1ms_vel_message():
+    # read in a velocity message from a MSG1 file
+    uncompressed_file = bz2.BZ2File(
+        pyart.testing.NEXRAD_ARCHIVE_MSG1_FILE, 'rb')
+    # seek pack the volume header, compression header and reflectivity data
+    uncompressed_file.seek(24 + 12 + 897408)
+    buf = uncompressed_file.read(2432)  # read a record
+
+    # create a fake message with a 1 m/s velocity resolution
+    fake_buf = buf[:16+43] + b'\x04' + buf[16+44:]
+
+    # check the velocity scale
+    new_pos, dic = nexrad_level2._get_record_from_buf(fake_buf, 0)
+    assert dic['VEL']['scale'] == 1.0

@@ -32,6 +32,7 @@ except ImportError:
 from ..config import get_metadata
 from ..lazydict import LazyLoadDict
 from .transforms import cartesian_to_geographic
+from .transforms import cartesian_vectors_to_geographic
 
 
 class Grid(object):
@@ -102,7 +103,7 @@ class Grid(object):
         attribute is changed use :py:func:`init_point_altitude` to reset the
         attribute.
     axes : dict
-        Dictionary of axes dictionaries.  This attribute is depreciated,
+        Dictionary of axes dictionaries.  This attribute is deprecated,
         it will be removed in future versions of Py-ART.
 
     """
@@ -142,7 +143,7 @@ class Grid(object):
         self.init_point_longitude_latitude()
         self.init_point_altitude()
 
-        # Depreciated axes attribute
+        # Deprecated axes attribute
         axes = {'time': time,
                 'time_start': time,  # incorrect metadata
                 'time_end': time,    # incorrect metadata
@@ -177,7 +178,7 @@ class Grid(object):
 
         """
         warnings.warn(
-            "from_legacy_parameters is depreciated and will be removed in a " +
+            "from_legacy_parameters is deprecated and will be removed in a " +
             "future version of Py-ART", DeprecationWarning)
         time = axes['time']
         fields = fields
@@ -334,6 +335,34 @@ class Grid(object):
             raise ValueError('Field has invalid shape')
 
         self.fields[field_name] = field_dict
+
+    def get_point_longitude_latitude(self, level=0, edges=False):
+        """
+        Return arrays of longitude and latitude for a given grid height level.
+
+        Parameters
+        ----------
+        level : int, optional
+            Grid height level at which to determine latitudes and longitudes.
+            This is not currently used as all height level have the same
+            layout.
+        edges : bool, optional
+            True to calculate the latitude and longitudes of the edges by
+            interpolating between Cartesian coordinates points and
+            extrapolating at the boundaries. False to calculate the locations
+            at the centers.
+
+        Returns
+        -------
+        longitude, latitude : 2D array
+            Arrays containing the latitude and longitudes, in degrees, of the
+            grid points or edges between grid points for the given height.
+
+        """
+        x = self.x['data']
+        y = self.y['data']
+        projparams = self.get_projparams()
+        return cartesian_vectors_to_geographic(x, y, projparams, edges=edges)
 
 
 def _point_data_factory(grid, coordinate):

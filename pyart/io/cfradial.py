@@ -548,9 +548,13 @@ def write_cfradial(filename, radar, format='NETCDF4', time_reference=None,
         for k in radar.instrument_parameters.keys():
             if k in _INSTRUMENT_PARAMS_DIMS:
                 dim = _INSTRUMENT_PARAMS_DIMS[k]
+                _create_ncvar(radar.instrument_parameters[k], dataset, k, dim)
             else:
-                dim = ()
-            _create_ncvar(radar.instrument_parameters[k], dataset, k, dim)
+                # Do not try to write instrument parameter whose dimensions are
+                # not known, rather issue a warning and skip the parameter
+                message = ("Unknown instrument parameter: %s, " % (k) +
+                           "not written to file.")
+                warnings.warn(message)
 
     # radar_calibration variables
     if radar.radar_calibration is not None and radar.radar_calibration != {}:

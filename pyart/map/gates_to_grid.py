@@ -9,7 +9,7 @@ Generate a Cartesian grid by mapping from radar gates onto the grid.
 
     map_gates_to_grid
     _detemine_cy_weighting_func
-    _parse_grid_origin
+    _find_projparams
     _parse_gatefilters
     _determine_fields
     _find_offsets
@@ -19,9 +19,8 @@ Generate a Cartesian grid by mapping from radar gates onto the grid.
 """
 
 import numpy as np
-from ..config import get_field_name
 from ..core.radar import Radar
-from ..core.transforms import corner_to_point
+from ..core.transforms import geographic_to_cartesian
 from ..filters import GateFilter, moment_based_gate_filter
 
 from ._gate_to_grid_map import GateToGridMapper
@@ -30,7 +29,8 @@ from ._gate_to_grid_map import RoIFunction, ConstantRoI, DistBeamRoI, DistRoI
 
 def map_gates_to_grid(
         radars, grid_shape, grid_limits, grid_origin=None,
-        grid_origin_alt=None, fields=None, gatefilters=False, map_roi=True,
+        grid_origin_alt=None, grid_projection=None,
+        fields=None, gatefilters=False, map_roi=True,
         weighting_function='Barnes', toa=17000.0, roi_func='dist_beam',
         constant_roi=500., z_factor=0.05, xy_factor=0.02, min_radius=500.0,
         h_factor=1.0, nb=1.5, bsp=1.0, **kwargs):
@@ -84,15 +84,19 @@ def map_gates_to_grid(
     if isinstance(radars, Radar):
         radars = (radars, )
 
+    skip_transform = False
+    if len(radars) == 1 and grid_origin_alt is None and grid_origin is None:
+        skip_transform = True
+
     if grid_origin_alt is None:
         grid_origin_alt = float(radars[0].altitude['data'])
 
     gatefilters = _parse_gatefilters(gatefilters, radars)
     cy_weighting_function = _detemine_cy_weighting_func(weighting_function)
-    grid_origin = _parse_grid_origin(grid_origin, radars)
+    projparams = _find_projparams(grid_origin, radars, grid_projection)
     fields = _determine_fields(fields, radars)
-    offsets = _find_offsets(radars, grid_origin, grid_origin_alt)
     grid_starts, grid_steps = _find_grid_params(grid_shape, grid_limits)
+    offsets = _find_offsets(radars, projparams, grid_origin_alt)
     roi_func = _parse_roi_func(roi_func, constant_roi, z_factor, xy_factor,
                                min_radius, h_factor, nb, bsp, offsets)
 
@@ -104,7 +108,7 @@ def map_gates_to_grid(
         grid_shape, grid_starts, grid_steps, grid_sum, grid_wsum)
 
     # project gates from each radar onto the grid
-    for radar, radar_offset, gatefilter in zip(radars, offsets, gatefilters):
+    for radar, gatefilter in zip(radars, gatefilters):
 
         # Copy the field data and masks.
         # TODO method that does not copy field data into new array
@@ -123,13 +127,23 @@ def map_gates_to_grid(
             gatefilter = moment_based_gate_filter(radar, **kwargs)
         excluded_gates = gatefilter.gate_excluded.astype('uint8')
 
+        # calculate gate locations relative to the grid origin
+        if skip_transform:
+            # single radar, grid centered at radar location
+            gate_x = radar.gate_x['data']
+            gate_y = radar.gate_y['data']
+        else:
+            gate_x, gate_y = geographic_to_cartesian(
+                radar.gate_longitude['data'], radar.gate_latitude['data'],
+                projparams)
+        gate_z = radar.gate_altitude['data'] - grid_origin_alt
+
         # map the gates onto the grid
         gatemapper.map_gates_to_grid(
-            radar.elevation['data'].astype('float32'),
-            radar.azimuth['data'].astype('float32'),
-            radar.range['data'].astype('float32'),
+            radar.ngates, radar.nrays, gate_z.astype('float32'),
+            gate_y.astype('float32'), gate_x.astype('float32'),
             field_data, field_mask, excluded_gates,
-            radar_offset, toa, roi_func, cy_weighting_function)
+            toa, roi_func, cy_weighting_function)
 
     # create and return the grid dictionary
     mweight = np.ma.masked_equal(grid_wsum, 0)
@@ -154,13 +168,26 @@ def _detemine_cy_weighting_func(weighting_function):
     return cy_weighting_function
 
 
-def _parse_grid_origin(grid_origin, radars):
-    """ Parse the grid origin parameter, finding origin if not given. """
+def _find_projparams(grid_origin, radars, grid_projection):
+    """ Determine the projection parameter. """
+
+    # parse grid_origin
     if grid_origin is None:
         lat = float(radars[0].latitude['data'])
         lon = float(radars[0].longitude['data'])
         grid_origin = (lat, lon)
-    return grid_origin
+
+    grid_origin_lat, grid_origin_lon = grid_origin
+
+    # parse grid_projection
+    if grid_projection is None:
+            grid_projection = {
+                'proj': 'pyart_aeqd', '_include_lon_0_lat_0': True}
+    projparams = grid_projection.copy()
+    if projparams.pop('_include_lon_0_lat_0', False):
+        projparams['lon_0'] = grid_origin_lon
+        projparams['lat_0'] = grid_origin_lat
+    return projparams
 
 
 def _parse_gatefilters(gatefilters, radars):
@@ -186,16 +213,15 @@ def _determine_fields(fields, radars):
     return fields
 
 
-def _find_offsets(radars, grid_origin, grid_origin_alt):
+def _find_offsets(radars, projparams, grid_origin_alt):
     """ Find offset between radars and grid origin. """
     # loop over the radars finding offsets from the origin
     offsets = []    # offsets from the grid origin, in meters, for each radar
     for radar in radars:
-        radar_lat = float(radar.latitude['data'])
-        radar_lon = float(radar.longitude['data'])
-        x_disp, y_disp = corner_to_point(grid_origin, (radar_lat, radar_lon))
+        x_disp, y_disp = geographic_to_cartesian(
+            radar.longitude['data'], radar.latitude['data'], projparams)
         z_disp = float(radar.altitude['data']) - grid_origin_alt
-        offsets.append((z_disp, y_disp, x_disp))
+        offsets.append((z_disp, float(y_disp), float(x_disp)))
     return offsets
 
 

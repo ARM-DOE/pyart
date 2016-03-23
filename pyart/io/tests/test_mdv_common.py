@@ -7,7 +7,7 @@ from datetime import datetime
 from io import BytesIO
 
 import numpy as np
-from numpy.testing import assert_almost_equal
+from numpy.testing import assert_almost_equal, assert_raises
 
 import pyart
 from pyart.io.mdv_common import MdvFile
@@ -242,6 +242,11 @@ def test_geometry():
     assert el_deg[0] == 0.75
 
 
+def test_geometry_raises():
+    mdvfile = MdvFile(pyart.testing.MDV_GRID_FILE)
+    assert_raises(NotImplementedError, mdvfile._calc_geometry)
+
+
 def test_mdv_time():
     # test times attribute
     assert mdvfile.times['time_begin'] == datetime(2011, 5, 20, 11, 1)
@@ -376,7 +381,10 @@ class Mdv_common_Tests(object):
 
         # write out the file using an file handler
         f2 = BytesIO()
-        mdvfile.write(f2)
+        with warnings.catch_warnings():
+            # ignore the UserWarning about the non-implement compression_type
+            warnings.simplefilter("ignore", category=UserWarning)
+            mdvfile.write(f2)
         f.close()
         f2.seek(0)
 
@@ -410,7 +418,10 @@ class Mdv_common_Tests(object):
         mdvfile = pyart.io.mdv_common.MdvFile(pyart.testing.MDV_RHI_FILE)
         mdvfile.read_all_fields()
         inmemfile = BytesIO()
-        mdvfile.write(inmemfile)
+        with warnings.catch_warnings():
+            # ignore the UserWarning about the non-implement compression_type
+            warnings.simplefilter("ignore", category=UserWarning)
+            mdvfile.write(inmemfile)
         inmemfile.seek(0)
         mdvfile2 = pyart.io.mdv_common.MdvFile(inmemfile)
 

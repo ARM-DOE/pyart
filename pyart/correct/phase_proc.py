@@ -33,7 +33,7 @@ Adapted by Scott Collis and Scott Giangrande, refactored by Jonathan Helmus
 
 """
 
-from __future__ import print_function
+from __future__ import print_function, division
 
 import copy
 from time import time
@@ -281,7 +281,7 @@ def smooth_and_trim(x, window_len=11, window='hanning'):
     s = np.r_[x[window_len - 1:0:-1], x, x[-1:-window_len:-1]]
 
     if window == 'flat':  # moving average
-        w = np.ones(window_len, 'd')
+        w = np.ones(int(window_len), 'd')
     elif window == 'sg_smooth':
         w = np.array([0.1, .25, .3, .25, .1])
     else:
@@ -289,7 +289,7 @@ def smooth_and_trim(x, window_len=11, window='hanning'):
 
     y = np.convolve(w / w.sum(), s, mode='valid')
 
-    return y[window_len / 2:len(x) + window_len / 2]
+    return y[int(window_len / 2):len(x) + int(window_len / 2)]
 
 
 # adapted smooth and trim function to work with 2dimensional arrays
@@ -334,7 +334,7 @@ def smooth_and_trim_scan(x, window_len=11, window='hanning'):
         raise ValueError("Window is on of " + ' '.join(valid_windows))
 
     if window == 'flat':  # moving average
-        w = np.ones(window_len, 'd')
+        w = np.ones(int(window_len), 'd')
     elif window == 'sg_smooth':
         w = np.array([0.1, .25, .3, .25, .1])
     else:
@@ -534,9 +534,9 @@ def construct_A_matrix(n_gates, filt):
                        filter_length)
     for diag in range(filter_length):
         M_matrix_middle = M_matrix_middle + np.diag(np.ones(
-            n_gates - filter_length + 1 - np.abs(posn[diag])),
-            k=posn[diag]) * filt[diag]
-    side_pad = (filter_length - 1) / 2
+            int(n_gates - filter_length + 1 - np.abs(posn[diag]))),
+            k=int(posn[diag])) * filt[diag]
+    side_pad = (filter_length - 1) // 2
     M_matrix = np.bmat(
         [np.zeros([n_gates-filter_length + 1, side_pad], dtype=float),
          M_matrix_middle, np.zeros(
@@ -572,7 +572,7 @@ def construct_B_vectors(phidp_mod, z_mod, filt, coef=0.914, dweight=60000.0):
     n_gates = phidp_mod.shape[1]
     n_rays = phidp_mod.shape[0]
     filter_length = len(filt)
-    side_pad = (filter_length - 1) / 2
+    side_pad = (filter_length - 1) // 2
     top_of_B_vectors = np.bmat([[-phidp_mod, phidp_mod]])
     data_edges = np.bmat([phidp_mod[:, 0:side_pad],
                          np.zeros([n_rays, n_gates-filter_length+1]),
@@ -625,7 +625,7 @@ def LP_solver_cvxopt(A_Matrix, B_vectors, weights, solver='glpk'):
 
     """
     from cvxopt import matrix, solvers
-    n_gates = weights.shape[1]/2
+    n_gates = weights.shape[1] // 2
     n_rays = B_vectors.shape[0]
     mysoln = np.zeros([n_rays, n_gates])
 
@@ -690,7 +690,7 @@ def LP_solver_pyglpk(A_Matrix, B_vectors, weights, it_lim=7000, presolve=True,
         message_state = glpk.LPX.MSG_ON
     else:
         message_state = glpk.LPX.MSG_OFF
-    n_gates = weights.shape[1]/2
+    n_gates = weights.shape[1] // 2
     n_rays = B_vectors.shape[0]
     mysoln = np.zeros([n_rays, n_gates])
     lp = glpk.LPX()  # Create empty problem instance
@@ -750,7 +750,7 @@ def solve_cylp(model, B_vectors, weights, ray, chunksize):
     from cylp.cy.CyClpSimplex import CyClpSimplex
     from cylp.py.modeling.CyLPModel import CyLPModel, CyLPArray
 
-    n_gates = weights.shape[1]/2
+    n_gates = weights.shape[1] // 2
     n_rays = B_vectors.shape[0]
     soln = np.zeros([chunksize, n_gates])
 
@@ -811,7 +811,7 @@ def LP_solver_cylp_mp(A_Matrix, B_vectors, weights, really_verbose=False,
     from cylp.py.modeling.CyLPModel import CyLPModel, CyLPArray
     import multiprocessing as mp
 
-    n_gates = weights.shape[1]/2
+    n_gates = weights.shape[1] // 2
     n_rays = B_vectors.shape[0]
     soln = np.zeros([n_rays, n_gates])
 
@@ -907,7 +907,7 @@ def LP_solver_cylp(A_Matrix, B_vectors, weights, really_verbose=False):
     from cylp.cy.CyClpSimplex import CyClpSimplex
     from cylp.py.modeling.CyLPModel import CyLPModel, CyLPArray
 
-    n_gates = weights.shape[1]/2
+    n_gates = weights.shape[1] // 2
     n_rays = B_vectors.shape[0]
     soln = np.zeros([n_rays, n_gates])
 

@@ -26,10 +26,10 @@ except:
     pass
 
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.mathjax',
-              'sphinx.ext.autosummary', 'numpydoc', 'gen_rst']
-# don't include examples in CI builds
-if 'CI' in os.environ and os.environ['CI'] == 'true':
-    extensions.remove('gen_rst')
+              'sphinx.ext.autosummary', 'numpydoc']
+# only include examples if the BUILD_PYART_EXAMPLES env. variable is set
+if 'BUILD_PYART_EXAMPLES' in os.environ:
+    extensions.append('gen_rst')
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -42,7 +42,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Py-ART'
-copyright = u'2013, Py-ART developers'
+copyright = u'2013-2016, Py-ART developers'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -97,6 +97,7 @@ pygments_style = 'sphinx'
 # The style sheet to use for HTML and HTML Help pages. A file of that name
 # must exist either in Sphinx' static/ path, or in one of the custom paths
 # given in html_static_path.
+html_theme = 'classic'
 html_style = 'scipy.css'
 
 # The name for this set of Sphinx documents.  If None, it defaults to

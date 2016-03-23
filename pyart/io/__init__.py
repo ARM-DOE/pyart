@@ -63,7 +63,6 @@ Special use
 .. autosummary::
     :toctree: generated/
 
-    add_2d_latlon_axis
     prepare_for_read
 
 """
@@ -82,7 +81,7 @@ from .grid_io import read_grid, write_grid, read_legacy_grid
 from .auto_read import read
 from .mdv_grid import write_grid_mdv, read_grid_mdv
 from .common import prepare_for_read
-# This function will be depreciated shortly
+# This function will be deprecated shortly
 from ..core.transforms import add_2d_latlon_axis
 
 __all__ = [s for s in dir() if not s.startswith('_')]

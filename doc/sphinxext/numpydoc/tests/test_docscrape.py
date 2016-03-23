@@ -7,6 +7,12 @@ from numpydoc.docscrape import NumpyDocString, FunctionDoc, ClassDoc
 from numpydoc.docscrape_sphinx import SphinxDocString, SphinxClassDoc
 from nose.tools import *
 
+if sys.version_info[0] >= 3:
+    sixu = lambda s: s
+else:
+    sixu = lambda s: unicode(s, 'unicode_escape')
+
+
 doc_txt = '''\
   numpy.multivariate_normal(mean, cov, shape=None, spam=None)
 
@@ -41,6 +47,9 @@ doc_txt = '''\
 
       In other words, each entry ``out[i,j,...,:]`` is an N-dimensional
       value drawn from the distribution.
+  list of str
+      This is not a real return value.  It exists to test
+      anonymous return values.
 
   Other Parameters
   ----------------
@@ -113,6 +122,20 @@ doc_txt = '''\
   '''
 doc = NumpyDocString(doc_txt)
 
+doc_yields_txt = """
+Test generator
+
+Yields
+------
+a : int
+    The number of apples.
+b : int
+    The number of bananas.
+int
+    The number of unknowns.
+"""
+doc_yields = NumpyDocString(doc_yields_txt)
+
 
 def test_signature():
     assert doc['Signature'].startswith('numpy.multivariate_normal(')
@@ -130,7 +153,7 @@ def test_parameters():
     assert_equal([n for n,_,_ in doc['Parameters']], ['mean','cov','shape'])
 
     arg, arg_type, desc = doc['Parameters'][1]
-    assert_equal(arg_type, '(N,N) ndarray')
+    assert_equal(arg_type, '(N, N) ndarray')
     assert desc[0].startswith('Covariance matrix')
     assert doc['Parameters'][0][-1][-2] == '   (1+2+3)/3'
 
@@ -142,12 +165,49 @@ def test_other_parameters():
     assert desc[0].startswith('A parrot off its mortal coil')
 
 def test_returns():
-    assert_equal(len(doc['Returns']), 1)
+    assert_equal(len(doc['Returns']), 2)
     arg, arg_type, desc = doc['Returns'][0]
     assert_equal(arg, 'out')
     assert_equal(arg_type, 'ndarray')
     assert desc[0].startswith('The drawn samples')
     assert desc[-1].endswith('distribution.')
+
+    arg, arg_type, desc = doc['Returns'][1]
+    assert_equal(arg, 'list of str')
+    assert_equal(arg_type, '')
+    assert desc[0].startswith('This is not a real')
+    assert desc[-1].endswith('anonymous return values.')
+
+def test_yields():
+    section = doc_yields['Yields']
+    assert_equal(len(section), 3)
+    truth = [('a', 'int', 'apples.'),
+             ('b', 'int', 'bananas.'),
+             ('int', '', 'unknowns.')]
+    for (arg, arg_type, desc), (arg_, arg_type_, end) in zip(section, truth):
+        assert_equal(arg, arg_)
+        assert_equal(arg_type, arg_type_)
+        assert desc[0].startswith('The number of')
+        assert desc[0].endswith(end)
+
+def test_returnyield():
+    doc_text = """
+Test having returns and yields.
+
+Returns
+-------
+int
+    The number of apples.
+
+Yields
+------
+a : int
+    The number of apples.
+b : int
+    The number of bananas.
+
+"""
+    assert_raises(ValueError, NumpyDocString, doc_text)
 
 def test_notes():
     assert doc['Notes'][0].startswith('Instead')
@@ -170,14 +230,17 @@ def test_index():
 def non_blank_line_by_line_compare(a,b):
     a = textwrap.dedent(a)
     b = textwrap.dedent(b)
-    a = [l for l in a.split('\n') if l.strip()]
-    b = [l for l in b.split('\n') if l.strip()]
+    a = [l.rstrip() for l in a.split('\n') if l.strip()]
+    b = [l.rstrip() for l in b.split('\n') if l.strip()]
     for n,line in enumerate(a):
         if not line == b[n]:
             raise AssertionError("Lines %s of a and b differ: "
                                  "\n>>> %s\n<<< %s\n" %
                                  (n,line,b[n]))
 def test_str():
+    # doc_txt has the order of Notes and See Also sections flipped.
+    # This should be handled automatically, and so, one thing this test does
+    # is to make sure that See Also precedes Notes in the output.
     non_blank_line_by_line_compare(str(doc),
 """numpy.multivariate_normal(mean, cov, shape=None, spam=None)
 
@@ -212,6 +275,9 @@ out : ndarray
 
     In other words, each entry ``out[i,j,...,:]`` is an N-dimensional
     value drawn from the distribution.
+list of str
+    This is not a real return value.  It exists to test
+    anonymous return values.
 
 Other Parameters
 ----------------
@@ -220,12 +286,12 @@ spam : parrot
 
 Raises
 ------
-RuntimeError : 
+RuntimeError
     Some error
 
 Warns
 -----
-RuntimeWarning : 
+RuntimeWarning
     Some warning
 
 Warnings
@@ -284,6 +350,22 @@ standard deviation:
    :refguide: random;distributions, random;gauss""")
 
 
+def test_yield_str():
+    non_blank_line_by_line_compare(str(doc_yields),
+"""Test generator
+
+Yields
+------
+a : int
+    The number of apples.
+b : int
+    The number of bananas.
+int
+    The number of unknowns.
+
+.. index:: """)
+
+
 def test_sphinx_str():
     sphinx_doc = SphinxDocString(doc_txt)
     non_blank_line_by_line_compare(str(sphinx_doc),
@@ -307,7 +389,7 @@ of the one-dimensional normal distribution to higher dimensions.
 
            (1+2+3)/3
 
-    **cov** : (N,N) ndarray
+    **cov** : (N, N) ndarray
 
         Covariance matrix of the distribution.
 
@@ -324,25 +406,30 @@ of the one-dimensional normal distribution to higher dimensions.
         The drawn samples, arranged according to `shape`.  If the
         shape given is (m,n,...), then the shape of `out` is is
         (m,n,...,N).
-        
+
         In other words, each entry ``out[i,j,...,:]`` is an N-dimensional
         value drawn from the distribution.
+
+    list of str
+
+        This is not a real return value.  It exists to test
+        anonymous return values.
 
 :Other Parameters:
 
     **spam** : parrot
 
         A parrot off its mortal coil.
- 
+
 :Raises:
 
-    **RuntimeError** : 
+    **RuntimeError**
 
         Some error
 
 :Warns:
 
-    **RuntimeWarning** : 
+    **RuntimeWarning**
 
         Some warning
 
@@ -351,12 +438,12 @@ of the one-dimensional normal distribution to higher dimensions.
     Certain warnings apply.
 
 .. seealso::
-    
+
     :obj:`some`, :obj:`other`, :obj:`funcs`
-    
+
     :obj:`otherfunc`
         relationship
-    
+
 .. rubric:: Notes
 
 Instead of specifying the full covariance matrix, popular
@@ -403,7 +490,28 @@ standard deviation:
 [True, True]
 """)
 
-       
+
+def test_sphinx_yields_str():
+    sphinx_doc = SphinxDocString(doc_yields_txt)
+    non_blank_line_by_line_compare(str(sphinx_doc),
+"""Test generator
+
+:Yields:
+
+    **a** : int
+
+        The number of apples.
+
+    **b** : int
+
+        The number of bananas.
+
+    int
+
+        The number of unknowns.
+""")
+
+
 doc2 = NumpyDocString("""
     Returns array of indices of the maximum values of along the given axis.
 
@@ -427,6 +535,12 @@ doc3 = NumpyDocString("""
 def test_escape_stars():
     signature = str(doc3).split('\n')[0]
     assert_equal(signature, 'my_signature(\*params, \*\*kwds)')
+
+    def my_func(a, b, **kwargs):
+        pass
+
+    fdoc = FunctionDoc(func=my_func)
+    assert_equal(fdoc['Signature'], 'my_func(a, b, \*\*kwargs)')
 
 doc4 = NumpyDocString(
     """a.conj()
@@ -557,10 +671,7 @@ def test_unicode():
 
     """)
     assert isinstance(doc['Summary'][0], str)
-    if sys.version_info[0] >= 3:
-        assert doc['Summary'][0] == u'öäöäöäöäöåååå'
-    else:
-        assert doc['Summary'][0] == u'öäöäöäöäöåååå'.encode('utf-8')
+    assert doc['Summary'][0] == 'öäöäöäöäöåååå'
 
 def test_plot_examples():
     cfg = dict(use_plots=True)
@@ -578,7 +689,7 @@ def test_plot_examples():
     Examples
     --------
     .. plot::
-    
+
        import matplotlib.pyplot as plt
        plt.plot([1,2,3],[4,5,6])
        plt.show()
@@ -626,6 +737,46 @@ def test_class_members():
         else:
             assert 'Spammity index' in str(doc), str(doc)
 
+    class SubDummy(Dummy):
+        """
+        Subclass of Dummy class.
+
+        """
+        def ham(self, c, d):
+            """Cheese\n\nNo cheese.\nOverloaded Dummy.ham"""
+            pass
+
+        def bar(self, a, b):
+            """Bar\n\nNo bar"""
+            pass
+
+    for cls in (ClassDoc, SphinxClassDoc):
+        doc = cls(SubDummy, config=dict(show_class_members=True,
+                                        show_inherited_class_members=False))
+        assert 'Methods' in str(doc), (cls, str(doc))
+        assert 'spam' not in str(doc), (cls, str(doc))
+        assert 'ham' in str(doc), (cls, str(doc))
+        assert 'bar' in str(doc), (cls, str(doc))
+        assert 'spammity' not in str(doc), (cls, str(doc))
+
+        if cls is SphinxClassDoc:
+            assert '.. autosummary::' in str(doc), str(doc)
+        else:
+            assert 'Spammity index' not in str(doc), str(doc)
+
+        doc = cls(SubDummy, config=dict(show_class_members=True,
+                                        show_inherited_class_members=True))
+        assert 'Methods' in str(doc), (cls, str(doc))
+        assert 'spam' in str(doc), (cls, str(doc))
+        assert 'ham' in str(doc), (cls, str(doc))
+        assert 'bar' in str(doc), (cls, str(doc))
+        assert 'spammity' in str(doc), (cls, str(doc))
+
+        if cls is SphinxClassDoc:
+            assert '.. autosummary::' in str(doc), str(doc)
+        else:
+            assert 'Spammity index' in str(doc), str(doc)
+
 def test_duplicate_signature():
     # Duplicate function signatures occur e.g. in ufuncs, when the
     # automatic mechanism adds one, and a more detailed comes from the
@@ -657,6 +808,8 @@ class_doc_txt = """
         Current time.
     y : ndarray
         Current variable values.
+    x : float
+        Some parameter
 
     Methods
     -------
@@ -692,21 +845,29 @@ def test_class_members_doc():
         Current time.
     y : ndarray
         Current variable values.
+    x : float
+        Some parameter
 
     Methods
     -------
-    a : 
+    a
 
-    b : 
+    b
 
-    c : 
+    c
 
-    .. index:: 
+    .. index::
 
     """)
 
 def test_class_members_doc_sphinx():
-    doc = SphinxClassDoc(None, class_doc_txt)
+    class Foo:
+        @property
+        def x(self):
+            """Test attribute"""
+            return None
+
+    doc = SphinxClassDoc(Foo, class_doc_txt)
     non_blank_line_by_line_compare(str(doc),
     """
     Foo
@@ -727,17 +888,22 @@ def test_class_members_doc_sphinx():
 
     .. rubric:: Attributes
 
+    .. autosummary::
+       :toctree:
+
+       x
+
     ===  ==========
-      t  (float) Current time.  
-      y  (ndarray) Current variable values.  
+      t  (float) Current time.
+      y  (ndarray) Current variable values.
     ===  ==========
 
     .. rubric:: Methods
 
     ===  ==========
-      a    
-      b    
-      c    
+      a
+      b
+      c
     ===  ==========
 
     """)
@@ -745,4 +911,3 @@ def test_class_members_doc_sphinx():
 if __name__ == "__main__":
     import nose
     nose.run()
-

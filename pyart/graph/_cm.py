@@ -60,7 +60,7 @@ _NWSRef_data = {
         (0.78571429, 0.75294117647058822, 0.75294117647058822),
         (0.85714286, 1.0, 1.0),
         (0.92857143, 0.59999999999999998, 0.59999999999999998),
-    (1.0, 0.0, 0.0)]
+        (1.0, 0.0, 0.0)]
 }
 
 _NWSVel_data = {
@@ -1724,8 +1724,8 @@ _BuDRd12_data = {
         (1.0, 0.65000000000000002, 0.65000000000000002)]
 }
 
-#LangRainbow12 developed to be friendlier to color blindness and B&W printing
-#than most rainbow color scales.
+# LangRainbow12 developed to be friendlier to color blindness and B&W printing
+# than most rainbow color scales.
 _LangRainbow12_data = {
     'blue': [
         (0.0, 0.97000000000000008, 0.97000000000000008),

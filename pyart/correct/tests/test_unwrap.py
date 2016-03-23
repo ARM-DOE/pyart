@@ -8,8 +8,7 @@ from __future__ import print_function
 
 import pyart
 import numpy as np
-from numpy.testing import assert_allclose
-from numpy.testing import assert_raises
+from numpy.testing import assert_allclose, assert_raises, assert_almost_equal
 
 REF_DATA = [0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 9.5, 10.5, 11.5,
             12.5, 13.5, 12.5, 11.5, 10.5, 9.5, 8.5, 7.5, 6.5, 5.5, 4.5, 3.5,
@@ -32,6 +31,19 @@ def test_dealias_unwrap_phase_volume():
     radar, dealias_vel = perform_dealias('volume')
     assert_allclose(dealias_vel['data'][13, :27], REF_DATA)
     assert np.ma.is_masked(dealias_vel['data'][13]) is False
+
+
+def test_set_limits():
+
+    radar, dealias_vel = perform_dealias('ray', set_limits=True)
+    assert 'valid_min' in dealias_vel
+    assert_almost_equal(dealias_vel['valid_min'], -30.0)
+    assert 'valid_max' in dealias_vel
+    assert_almost_equal(dealias_vel['valid_max'], 30.0)
+
+    radar, dealias_vel = perform_dealias('ray', set_limits=False)
+    assert 'valid_min' not in dealias_vel
+    assert 'valid_max' not in dealias_vel
 
 
 def test_dealias_unwrap_phase_no_gatefilter():
@@ -108,6 +120,44 @@ def test_dealias_unwrap_phase_rhi_volume():
     assert np.ma.is_masked(dealias_vel['data'][13]) is False
 
 
+def test_dealias_keep_original():
+    radar = pyart.testing.make_velocity_aliased_radar()
+    radar.fields['velocity']['data'][180, 5] = 88
+    gf = pyart.filters.GateFilter(radar)
+    gf.exclude_above('velocity', 40)
+
+    dealias_vel = pyart.correct.dealias_unwrap_phase(
+        radar, gatefilter=gf, keep_original=False)
+    assert np.ma.is_masked(dealias_vel['data'][180, 5]) is True
+
+    dealias_vel = pyart.correct.dealias_unwrap_phase(
+        radar, gatefilter=gf, keep_original=True)
+    assert_almost_equal(dealias_vel['data'][180, 5], 88)
+    assert np.ma.is_masked(dealias_vel['data'][180, 5]) is False
+
+
+def test_is_radar_sweep_aligned():
+    radar = pyart.testing.make_empty_ppi_radar(3, 4, 2)
+    radar.scan_type = 'rhi'
+    radar.elevation['data'][:] = [1, 2, 3, 4, 1, 2, 3, 4]
+    assert pyart.correct.unwrap._is_radar_sweep_aligned(radar)
+
+    radar.elevation['data'][:] = [1, 2, 3, 4, 2, 3, 4, 5]
+    assert not pyart.correct.unwrap._is_radar_sweep_aligned(radar)
+
+    # raises ValueError
+    radar = pyart.testing.make_empty_ppi_radar(3, 4, 2)
+    radar.scan_type = 'fuzz'
+    assert_raises(
+        ValueError, pyart.correct.unwrap._is_radar_sweep_aligned, radar)
+
+
+def test_is_sweep_sequential():
+    radar = pyart.testing.make_empty_ppi_radar(3, 4, 2)
+    radar.scan_type = 'vpt'
+    assert pyart.correct.unwrap._is_sweep_sequential(radar, 0)
+
+
 def test_dealias_unwrap_phase_raises():
 
     # invalid unwrap_unit
@@ -138,6 +188,11 @@ def test_dealias_unwrap_phase_raises():
     radar.sweep_end_ray_index['data'][-1] = 18
     assert_raises(ValueError, pyart.correct.dealias_unwrap_phase, radar,
                   nyquist_vel=10, unwrap_unit='volume')
+
+    # invalid scan type
+    radar = pyart.testing.make_velocity_aliased_radar()
+    radar.scan_type = 'fuzz'
+    assert_raises(ValueError, pyart.correct.dealias_unwrap_phase, radar)
 
     # invalid scan type
     radar = pyart.testing.make_velocity_aliased_radar()

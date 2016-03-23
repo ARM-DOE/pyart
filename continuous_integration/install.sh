@@ -29,26 +29,21 @@ source activate testenv
 
 # Install Py-ART dependencies
 conda install --yes numpy scipy matplotlib netcdf4 nose
+conda install --yes basemap
 conda install --yes -c http://conda.anaconda.org/jjhelmus trmm_rsl
 
 if [[ $PYTHON_VERSION == '2.7' ]]; then
-    conda install --yes basemap 
     conda install --yes -c http://conda.anaconda.org/jjhelmus cbc cylp
     conda install --yes -c http://conda.anaconda.org/jjhelmus glpk pyglpk
     conda install --yes -c http://conda.anaconda.org/jjhelmus cvxopt_glpk
 
     # wradlib and dependencies
-    conda install --yes sphinx gdal numpydoc h5py
-    conda install --yes sphinx_rtd_theme
-    pip install sphinxcontrib-bibtex
-    pip install xmltodict
-    pip install wradlib
-fi
-if [[ $PYTHON_VERSION == '3.3' ]]; then
-    conda install --yes basemap 
-fi
-if [[ $PYTHON_VERSION == '3.4' ]]; then
-    conda install --yes basemap 
+    conda install --yes h5py
+    # KLUDGE libgdal does not report its version dependency on geos which
+    # causes either gdal or basemap to break, force the exact libgdal version
+    # see: https://github.com/ContinuumIO/anaconda-issues/issues/584
+    conda install --yes gdal basemap libgdal=2.0.0=0 krb5
+    conda install --no-deps --yes -c http://conda.anaconda.org/jjhelmus wradlib
 fi
 
 # install coverage modules
@@ -76,3 +71,10 @@ if [[ "$FROM_RECIPE" == "true" ]]; then
 else
     python setup.py build_ext --inplace
 fi
+
+# KLUDGE
+# cylp and cvxopt_glpk depend on BLAS and LAPACK which are provided by the
+# system and depend on the system libgfortran.  The conda libgfortran does not
+# export the symbols required for the system packages, so it must be removed.
+conda install --yes libgfortran
+conda remove --yes --force libgfortran

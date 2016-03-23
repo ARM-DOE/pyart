@@ -14,6 +14,7 @@ print(__doc__)
 
 import matplotlib.pyplot as plt
 import pyart
+import netCDF4
 
 filename = 'XSW110520113537.RAW7HHL'
 
@@ -24,10 +25,11 @@ display = pyart.graph.RadarDisplay(radar)
 fig = plt.figure(figsize=[10, 4])
 ax = fig.add_subplot(111)
 
-radar_name = radar.metadata['instrument_name']
-time_text = ' ' + display.time_begin.isoformat() + 'Z '
+instrument_name = radar.metadata['instrument_name'].decode('utf-8')
+time_start = netCDF4.num2date(radar.time['data'][0], radar.time['units'])
+time_text = ' ' + time_start.isoformat() + 'Z '
 azimuth = radar.fixed_angle['data'][0]
-title = 'RHI ' + radar_name + time_text + 'Azimuth %.2f' % (azimuth)
+title = 'RHI ' + instrument_name + time_text + 'Azimuth %.2f' % (azimuth)
 
 display.plot('reflectivity', 0, vmin=-32, vmax=64,
              title=title, colorbar_flag=False, ax=ax)

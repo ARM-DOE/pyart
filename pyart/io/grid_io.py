@@ -27,12 +27,13 @@ from .common import _test_arguments
 
 def read_grid(filename, exclude_fields=None, **kwargs):
     """
-    Read a netCDF grid file
+    Read a netCDF grid file produced by Py-ART.
 
     Parameters
     ----------
     filename : str
-        Filename of NetCDF grid file to read.
+        Filename of netCDF grid file to read.  This file must have been
+        produced by :py:func:`write_grid` or have identical layout.
 
     Other Parameters
     ----------------
@@ -147,7 +148,7 @@ def write_grid(filename, grid, format='NETCDF4',
                arm_time_variables=False,
                write_point_x_y_z=False, write_point_lon_lat_alt=False):
     """
-    Write a Grid object to a CF-1.5 and ARM standard netcdf file
+    Write a Grid object to a CF-1.5 and ARM standard netCDF file
 
     To control how the netCDF variables are created, set any of the following
     keys in the grid attribute dictionaries.
@@ -171,19 +172,19 @@ def write_grid(filename, grid, format='NETCDF4',
     grid : Grid
         Grid object to write.
     format : str, optional
-        NetCDF format, one of 'NETCDF4', 'NETCDF4_CLASSIC',
+        netCDF format, one of 'NETCDF4', 'NETCDF4_CLASSIC',
         'NETCDF3_CLASSIC' or 'NETCDF3_64BIT'. See netCDF4 documentation for
         details.
     write_proj_coord_sys bool, optional
-        True to write a information on the coordinate transform used in the map
+        True to write information on the coordinate transform used in the map
         projection to the ProjectionCoordinateSystem variable following the CDM
-        Object Model.  The resulting file should be intepreted as containing
+        Object Model.  The resulting file should be interpreted as containing
         geographic grids by tools which use the Java NetCDF library
         (THREDDS, toolsUI, etc).
     proj_coord_sys : dict or None, optional
         Dictionary of parameters which will be written to the
         ProjectionCoordinateSystem NetCDF variable if write_proj_coord_sys is
-        True.  A value of None will attempt to generate an appropiate
+        True. A value of None will attempt to generate an appropriate
         dictionary by examining the projection attribute of the grid object.
         If the projection is not understood a warnings will be issued.
     arm_time_variables : bool, optional
@@ -238,7 +239,7 @@ def write_grid(filename, grid, format='NETCDF4',
             warnings.warn(
                 'Cannot determine ProjectionCoordinateSystem parameter for ' +
                 'the given projection, the file will not be written ' +
-                ' without this information')
+                'without this information')
 
         else:
             proj_coord_sys['data'] = np.array(1, dtype='int32')
@@ -316,11 +317,11 @@ def _make_coordinatesystem_dict(grid):
     """
     Return a dictionary containing parameters for a coordinate transform.
 
-    Examine the grid projection attribute and other attributes and
+    Examine the grid projection attribute and other grid attributes to
     return a dictionary containing parameters which can be written to a netCDF
-    variable to specify a Horizontal coordinate transform recognized by
+    variable to specify a horizontal coordinate transform recognized by
     Unidata's CDM. Return None when the projection defined in the grid
-    cannot be mapped to a CDM coordinate tranform.
+    cannot be mapped to a CDM coordinate transform.
     """
     projection = grid.projection
     origin_latitude = grid.origin_latitude['data'][0]
@@ -384,14 +385,13 @@ def _make_coordinatesystem_dict(grid):
 
 def read_legacy_grid(filename, exclude_fields=None, **kwargs):
     """
-    Read a legacy netCDF grid file.
-
-    Legacy files were produced by Py-ART version 1.5 and before.
+    Read a legacy netCDF grid file produced by Py-ART version 1.5 and prior.
 
     Parameters
     ----------
     filename : str
-        Filename of NetCDF grid file to read.
+        Filename of netCDF grid file to read.  This should be a file produced
+        by :py:func:`write_grid` from Py-ART version 1.5 or prior.
 
     Other Parameters
     ----------------
@@ -405,7 +405,7 @@ def read_legacy_grid(filename, exclude_fields=None, **kwargs):
 
     """
     warnings.warn(
-        "read_legacy_grid is depreciated and will be removed in a future " +
+        "read_legacy_grid is deprecated and will be removed in a future " +
         "version of Py-ART", DeprecationWarning)
     # test for non empty kwargs
     _test_arguments(kwargs)

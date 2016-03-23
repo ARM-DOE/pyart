@@ -9,6 +9,7 @@
 # to recreate the reference_rays.npz and reference_ray_plot.png files
 
 import os
+import warnings
 
 import pyart
 import numpy as np
@@ -62,7 +63,10 @@ def test_phase_proc_lp_cvxopt():
 
 @skipif(not cylp_available)
 def test_phase_proc_lp_cylp():
-    radar, phidp, kdp = perform_phase_processing('cylp')
+    with warnings.catch_warnings():
+        # ignore FutureWarnings as CyLP emits a number of these
+        warnings.simplefilter("ignore", category=FutureWarning)
+        radar, phidp, kdp = perform_phase_processing('cylp')
     ref = np.load(REFERENCE_RAYS_FILE)
     assert _ratio(ref['reference_phidp'], phidp['data']) <= 0.01
     assert _ratio(ref['reference_kdp'], kdp['data']) <= 0.01
@@ -72,7 +76,10 @@ def test_phase_proc_lp_cylp():
 
 @skipif(not cylp_available)
 def test_phase_proc_lp_cylp_mp():
-    radar, phidp, kdp = perform_phase_processing('cylp_mp')
+    with warnings.catch_warnings():
+        # ignore FutureWarnings as CyLP emits a number of these
+        warnings.simplefilter("ignore", category=FutureWarning)
+        radar, phidp, kdp = perform_phase_processing('cylp_mp')
     ref = np.load(REFERENCE_RAYS_FILE)
     assert _ratio(ref['reference_phidp'], phidp['data']) <= 0.01
     assert _ratio(ref['reference_kdp'], kdp['data']) <= 0.01

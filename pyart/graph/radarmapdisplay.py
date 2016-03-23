@@ -20,7 +20,7 @@ except ImportError:
     _BASEMAP_AVAILABLE = False
 
 from .radardisplay import RadarDisplay
-from .common import parse_ax_fig, parse_vmin_vmax
+from .common import parse_ax_fig, parse_norm_vmin_vmax, parse_cmap
 from ..exceptions import MissingOptionalDependency
 
 
@@ -47,22 +47,12 @@ class RadarMapDisplay(RadarDisplay):
         List of fields plotted, order matches plot list.
     cbs : list
         List of colorbars created.
-    radar_name : str
-        Name of radar.
     origin : str
         'Origin' or 'Radar'.
     shift : (float, float)
         Shift in meters.
-    x, y, z : array
-        Cartesian location of a sweep in meters.
     loc : (float, float)
         Latitude and Longitude of radar in degrees.
-    time_begin : datetime
-        Beginning time of first radar scan.
-    starts : array
-        Starting ray index for each sweep.
-    ends : array
-        Ending ray index for each sweep.
     fields : dict
         Radar fields.
     scan_type : str
@@ -106,18 +96,18 @@ class RadarMapDisplay(RadarDisplay):
         if self.basemap is None:
             raise ValueError('no basemap plotted')
 
-    def plot_ppi_map(self, field, sweep=0, mask_tuple=None,
-                     vmin=None, vmax=None, cmap='jet', mask_outside=False,
-                     title=None, title_flag=True,
-                     colorbar_flag=True, colorbar_label=None,
-                     ax=None, fig=None,
-                     lat_lines=None, lon_lines=None,
-                     projection='lcc', area_thresh=10000,
-                     min_lon=None, max_lon=None, min_lat=None, max_lat=None,
-                     width=None, height=None, lon_0=None, lat_0=None,
-                     resolution='h', shapefile=None, edges=True,
-                     gatefilter=None, basemap=None,
-                     filter_transitions=True, embelish=True, **kwargs):
+    def plot_ppi_map(
+            self, field, sweep=0, mask_tuple=None,
+            vmin=None, vmax=None, cmap=None, norm=None, mask_outside=False,
+            title=None, title_flag=True,
+            colorbar_flag=True, colorbar_label=None, ax=None, fig=None,
+            lat_lines=None, lon_lines=None,
+            projection='lcc', area_thresh=10000,
+            min_lon=None, max_lon=None, min_lat=None, max_lat=None,
+            width=None, height=None, lon_0=None, lat_0=None,
+            resolution='h', shapefile=None, edges=True, gatefilter=None,
+            basemap=None, filter_transitions=True, embelish=True,
+            ticks=None, ticklabs=None, **kwargs):
         """
         Plot a PPI volume sweep onto a geographic map.
 
@@ -138,10 +128,17 @@ class RadarMapDisplay(RadarDisplay):
             NCP < 0.5 set mask_tuple to ['NCP', 0.5]. None performs no masking.
         vmin : float
             Luminance minimum value, None for default value.
+            Parameter is ignored is norm is not None.
         vmax : float
             Luminance maximum value, None for default value.
-        cmap : str
-            Matplotlib colormap name.
+            Parameter is ignored is norm is not None.
+        norm : Normalize or None, optional
+            matplotlib Normalize instance used to scale luminance data.  If not
+            None the vmax and vmin parameters are ignored.  If None, vmin and
+            vmax are used for luminance scaling.
+        cmap : str or None
+            Matplotlib colormap name. None will use the default colormap for
+            the field being plotted as specified by the Py-ART configuration.
         mask_outside : bool
             True to mask data outside of vmin, vmax.  False performs no
             masking.
@@ -154,6 +151,10 @@ class RadarMapDisplay(RadarDisplay):
         colorbar_flag : bool
             True to add a colorbar with label to the axis.  False leaves off
             the colorbar.
+        ticks : array
+            Colorbar custom tick label locations.
+        ticklabs : array
+                Colorbar custom tick labels.
         colorbar_label : str
             Colorbar label, None will use a default label generated from the
             field information.
@@ -216,7 +217,9 @@ class RadarMapDisplay(RadarDisplay):
         """
         # parse parameters
         ax, fig = parse_ax_fig(ax, fig)
-        vmin, vmax = parse_vmin_vmax(self._radar, field, vmin, vmax)
+        norm, vmin, vmax = parse_norm_vmin_vmax(
+            norm, self._radar, field, vmin, vmax)
+        cmap = parse_cmap(cmap, field)
         if lat_lines is None:
             lat_lines = np.arange(30, 46, 1)
         if lon_lines is None:
@@ -227,9 +230,9 @@ class RadarMapDisplay(RadarDisplay):
             lon_0 = self.loc[1]
 
         # get data for the plot
-        data = self._get_data(field, sweep, mask_tuple, filter_transitions,
-                              gatefilter)
-        x, y = self._get_x_y(field, sweep, edges, filter_transitions)
+        data = self._get_data(
+            field, sweep, mask_tuple, filter_transitions, gatefilter)
+        x, y = self._get_x_y(sweep, edges, filter_transitions)
 
         # mask the data where outside the limits
         if mask_outside:
@@ -239,30 +242,31 @@ class RadarMapDisplay(RadarDisplay):
         if type(basemap) != Basemap:
             using_corners = (None not in [min_lon, min_lat, max_lon, max_lat])
             if using_corners:
-                basemap = Basemap(llcrnrlon=min_lon, llcrnrlat=min_lat,
-                                  urcrnrlon=max_lon, urcrnrlat=max_lat,
-                                  lat_0=lat_0, lon_0=lon_0,
-                                  projection=projection, area_thresh=area_thresh,
-                                  resolution=resolution, ax=ax, **kwargs)
+                basemap = Basemap(
+                    llcrnrlon=min_lon, llcrnrlat=min_lat,
+                    urcrnrlon=max_lon, urcrnrlat=max_lat,
+                    lat_0=lat_0, lon_0=lon_0, projection=projection,
+                    area_thresh=area_thresh, resolution=resolution, ax=ax,
+                    **kwargs)
             else:   # using width and height
                 # map domain determined from location of radar gates
                 if width is None:
                     width = (x.max() - y.min()) * 1000.
                 if height is None:
                     height = (y.max() - y.min()) * 1000.
-                basemap = Basemap(width=width, height=height,
-                                  lon_0=lon_0, lat_0=lat_0,
-                                  projection=projection, area_thresh=area_thresh,
-                                  resolution=resolution, ax=ax, **kwargs)
+                basemap = Basemap(
+                    width=width, height=height, lon_0=lon_0, lat_0=lat_0,
+                    projection=projection, area_thresh=area_thresh,
+                    resolution=resolution, ax=ax, **kwargs)
 
         # add embelishments
         if embelish is True:
             basemap.drawcoastlines(linewidth=1.25)
             basemap.drawstates()
-            basemap.drawparallels(lat_lines,
-                                  labels=[True, False, False, False])
-            basemap.drawmeridians(lon_lines,
-                                  labels=[False, False, False, True])
+            basemap.drawparallels(
+                lat_lines, labels=[True, False, False, False])
+            basemap.drawmeridians(
+                lon_lines, labels=[False, False, False, True])
         self.basemap = basemap
         self._x0, self._y0 = basemap(self.loc[1], self.loc[0])
 
@@ -270,8 +274,9 @@ class RadarMapDisplay(RadarDisplay):
         # we need to convert the radar gate locations (x and y) which are in
         # km to meters as well as add the map coordiate radar location
         # which is given by self._x0, self._y0.
-        pm = basemap.pcolormesh(self._x0 + x * 1000., self._y0 + y * 1000.,
-                                data, vmin=vmin, vmax=vmax, cmap=cmap)
+        pm = basemap.pcolormesh(
+            self._x0 + x * 1000., self._y0 + y * 1000., data,
+            vmin=vmin, vmax=vmax, cmap=cmap, norm=norm)
 
         if shapefile is not None:
             basemap.readshapefile(shapefile, 'shapefile', ax=ax)
@@ -284,8 +289,9 @@ class RadarMapDisplay(RadarDisplay):
         self.plot_vars.append(field)
 
         if colorbar_flag:
-            self.plot_colorbar(mappable=pm, label=colorbar_label,
-                               field=field, fig=fig)
+            self.plot_colorbar(
+                mappable=pm, label=colorbar_label, field=field, fig=fig,
+                ax=ax, ticks=ticks, ticklabs=ticklabs)
         return
 
     def plot_point(self, lon, lat, symbol='ro', label_text=None,
@@ -321,8 +327,8 @@ class RadarMapDisplay(RadarDisplay):
         if label_text is not None:
             # basemap does not have a text method so we must determine
             # the x and y points and plot them on the basemap's axis.
-            x_text, y_text = self.basemap(lon + lon_offset,
-                                          lat + lat_offset)
+            x_text, y_text = self.basemap(
+                lon + lon_offset, lat + lat_offset)
             self.basemap.ax.text(x_text, y_text, label_text)
 
     def plot_line_geo(self, line_lons, line_lats, line_style='r-', **kwargs):
@@ -342,8 +348,8 @@ class RadarMapDisplay(RadarDisplay):
 
         """
         self._check_basemap()
-        self.basemap.plot(line_lons, line_lats, line_style, latlon=True,
-                          **kwargs)
+        self.basemap.plot(
+            line_lons, line_lats, line_style, latlon=True, **kwargs)
 
     def plot_line_xy(self, line_x, line_y, line_style='r-', **kwargs):
         """
@@ -383,6 +389,11 @@ class RadarMapDisplay(RadarDisplay):
             style of the ring.
 
         """
+        # The RadarDisplay.plot_range_rings uses a col parameter to specify
+        # the line color, deal with this here.
+        if 'col' in kwargs:
+            color = kwargs.pop('col')
+            kwargs['c'] = color
         self._check_basemap()
         angle = np.linspace(0., 2.0 * np.pi, npts)
         xpts = range_ring_location_km * 1000. * np.sin(angle)

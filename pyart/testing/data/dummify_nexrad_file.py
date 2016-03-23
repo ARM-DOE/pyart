@@ -2,7 +2,7 @@
 # dummify (replace all data with a single value) a NEXRAD Level II file.
 
 import numpy as np
-import pyart.io.nexradlevel2file as nexrad
+import pyart.io.nexrad_level2 as nexrad
 import struct
 
 NEXRAD_FILE = 'KATX20130717_195021_V06'
@@ -38,7 +38,7 @@ while pos < buf_length:
     # dummy out all moments
     for bp_number in [4, 5, 6, 7, 8, 9]:
         bp_str = 'block_pointer_' + str(bp_number)
-        block_pointer = record['msg31_header'][bp_str]
+        block_pointer = record['msg_header'][bp_str]
         if block_pointer != 0:
             bpos = pos + block_pointer + MSG_HEADER_SIZE
             d = nexrad._unpack_from_buf(buf, bpos, nexrad.GENERIC_DATA_BLOCK)

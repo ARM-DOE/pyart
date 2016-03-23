@@ -6,7 +6,7 @@ set -e
 cd "$TRAVIS_BUILD_DIR"
 
 echo "Building Docs"
-conda install --yes sphinx=1.2.3 pil
+conda install --yes sphinx pil
 
 mv "$TRAVIS_BUILD_DIR"/doc /tmp
 cd /tmp/doc
