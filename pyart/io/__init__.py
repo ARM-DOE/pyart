@@ -78,6 +78,7 @@ from .nexradl3_read import read_nexrad_level3
 from .uf import read_uf
 from .uf_write import write_uf
 from .grid_io import read_grid, write_grid, read_legacy_grid
+from .output_to_geotiff import write_grid_geotiff
 from .auto_read import read
 from .mdv_grid import write_grid_mdv, read_grid_mdv
 from .common import prepare_for_read
