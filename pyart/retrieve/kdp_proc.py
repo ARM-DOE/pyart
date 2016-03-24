@@ -177,9 +177,9 @@ def kdp_maesaka(radar, gatefilter=None, method='cg', backscatter=None,
 
     # mask any radar gates which are closer (further) than the near (far)
     # boundary condition ranges
-    for ray in xrange(radar.nrays):
-        psidp_o[ray,:idx_near[ray]] = np.ma.masked
-        psidp_o[ray,idx_far[ray]+1:] = np.ma.masked
+    for ray in range(radar.nrays):
+        psidp_o[ray, :idx_near[ray]] = np.ma.masked
+        psidp_o[ray, idx_far[ray]+1:] = np.ma.masked
 
     if debug:
         N = np.ma.count(psidp_o)
@@ -204,8 +204,8 @@ def kdp_maesaka(radar, gatefilter=None, method='cg', backscatter=None,
 
     # parse initial conditions (first guess)
     # assume specific differential phase is close to 0 deg/km everywhere but
-    # not exactly 0 deg/km since the minimization will return after the first
-    # iteration
+    # not exactly 0 deg/km since in order to avoid convergence criteria after
+    # the first iteration
     x0 = np.zeros_like(psidp_o, subok=False).flatten()
     x0.fill(0.01)
 
@@ -298,7 +298,7 @@ def boundary_conditions_maesaka(
     debug : bool, optional
         True to print debugging information, False to suppress.
     verbose : bool, optional
-        True to print progress and relevant results, False to suppress.
+        True to print relevant information, False to suppress.
 
     Returns
     -------
@@ -360,7 +360,7 @@ def boundary_conditions_maesaka(
 
                     # parse data for linear regression and compute slope
                     x = radar.range['data'][idx]
-                    y = psidp[ray,idx]
+                    y = psidp[ray, idx]
                     slope = stats.linregress(x, y)[0]
 
                     # if linear regression slope is positive, set near range
@@ -388,7 +388,7 @@ def boundary_conditions_maesaka(
 
                     # parse data for linear regression and compute slope
                     x = radar.range['data'][idx]
-                    y = psidp[ray,idx]
+                    y = psidp[ray, idx]
                     slope = stats.linregress(x, y)[0]
 
                     # if linear regression slope is positive, set far range
@@ -423,7 +423,7 @@ def boundary_conditions_maesaka(
         system_phase_peak_left = edges[counts.argmax()]
         system_phase_peak_right = edges[counts.argmax() + 1]
 
-        if verbose:
+        if debug:
             print('Peak of system phase distribution: {:.0f} deg'.format(
                   system_phase_peak_left))
 
@@ -439,7 +439,7 @@ def boundary_conditions_maesaka(
             edges[1:] > system_phase_peak_right, counts <= 5)
         right_edge = edges[1:][is_right_side][0]
 
-        if verbose:
+        if debug:
             print('Left edge of system phase distribution: {:.0f} deg'.format(
                   left_edge))
             print('Right edge of system phase distribution: {:.0f} deg'.format(
@@ -451,7 +451,7 @@ def boundary_conditions_maesaka(
             phi_near_valid >= left_edge, phi_near_valid <= right_edge)
         system_phase_offset = np.median(phi_near_valid[is_system_phase])
 
-        if verbose:
+        if debug:
             print('Estimated system phase offset: {:.0f} deg'.format(
                   system_phase_offset))
 
@@ -527,17 +527,17 @@ def _cost_maesaka(x, psidp_o, bcs, dhv, dr, Cobs, Clpf, finite_order,
     # compute forward direction propagation differential phase from control
     # variable k
     phi_fa = np.zeros_like(k, subok=False)
-    phi_fa[:,1:] = np.cumsum(k[:,:-1]**2, axis=1)
+    phi_fa[:, 1:] = np.cumsum(k[:, :-1]**2, axis=1)
 
     # compute reverse direction propagation differential phase from control
     # variable k
     phi_ra = np.zeros_like(k, subok=False)
-    phi_ra[:,:-1] = np.cumsum(k[:,:0:-1]**2, axis=1)[:,::-1]
+    phi_ra[:, :-1] = np.cumsum(k[:, :0:-1]**2, axis=1)[:, ::-1]
 
     # compute forward and reverse propagation differential phase
     # from total differential phase observations
-    phi_fo = psidp_o - dhv - phi_near[:,np.newaxis].repeat(ng, axis=1)
-    phi_ro = phi_far[:,np.newaxis].repeat(ng, axis=1) - psidp_o + dhv
+    phi_fo = psidp_o - dhv - phi_near[:, np.newaxis].repeat(ng, axis=1)
+    phi_ro = phi_far[:, np.newaxis].repeat(ng, axis=1) - psidp_o + dhv
 
     # cost: forward direction differential phase observations
     Jof = 0.5 * np.sum(Cobs * (phi_fa - phi_fo)**2)
@@ -621,30 +621,31 @@ def _jac_maesaka(x, psidp_o, bcs, dhv, dr, Cobs, Clpf, finite_order,
     # compute forward direction propagation differential phase from control
     # variable k
     phi_fa = np.zeros_like(k, subok=False)
-    phi_fa[:,1:] = np.cumsum(k[:,:-1]**2, axis=1)
+    phi_fa[:, 1:] = np.cumsum(k[:, :-1]**2, axis=1)
 
     # compute reverse direction propagation differential phase from control
     # variable k
     phi_ra = np.zeros_like(k, subok=False)
-    phi_ra[:,:-1] = np.cumsum(k[:,:0:-1]**2, axis=1)[:,::-1]
+    phi_ra[:, :-1] = np.cumsum(k[:, :0:-1]**2, axis=1)[:, ::-1]
 
     # compute forward and reverse propagation differential phase
     # from total differential phase observations
-    phi_fo = psidp_o - dhv - phi_near[:,np.newaxis].repeat(ng, axis=1)
-    phi_ro = phi_far[:,np.newaxis].repeat(ng, axis=1) - psidp_o + dhv
+    phi_fo = psidp_o - dhv - phi_near[:, np.newaxis].repeat(ng, axis=1)
+    phi_ro = phi_far[:, np.newaxis].repeat(ng, axis=1) - psidp_o + dhv
 
     # prepare control variable k for Cython functions
     k = np.ascontiguousarray(k, dtype=np.float64)
 
     # cost: forward direction differential phase observations
     dJofdk = np.zeros_like(k, subok=False)
-    dJofdk[:,:-1] = 2.0 * k[:,:-1] * np.cumsum(
-        (Cobs[:,1:] * (phi_fa[:,1:] - phi_fo[:,1:]))[:,::-1], axis=1)[:,::-1]
+    dJofdk[:, :-1] = 2.0 * k[:, :-1] * np.cumsum(
+        (Cobs[:, 1:] * (phi_fa[:, 1:] - phi_fo[:, 1:]))[:, ::-1],
+        axis=1)[:, ::-1]
 
     # cost: reverse direction differential phase observations
     dJordk = np.zeros_like(k, subok=False)
-    dJordk[:,1:] = 2.0 * k[:,1:] * np.cumsum(
-        (Cobs[:,:-1] * (phi_ra[:,:-1] - phi_ro[:,:-1])), axis=1)
+    dJordk[:, 1:] = 2.0 * k[:, 1:] * np.cumsum(
+        (Cobs[:, :-1] * (phi_ra[:, :-1] - phi_ro[:, :-1])), axis=1)
 
     # compute low-pass filter term, i.e., second order derivative of k with
     # respect to range
@@ -699,13 +700,13 @@ def _forward_reverse_phidp(k, bcs, verbose=False):
 
     # compute forward direction propagation differential phase
     phi_f = np.zeros_like(k, subok=False)
-    phi_f[:,1:] = np.cumsum(k[:,:-1]**2, axis=1)
-    phidp_f = phi_f + phi_near[:,np.newaxis].repeat(ng, axis=1)
+    phi_f[:, 1:] = np.cumsum(k[:, :-1]**2, axis=1)
+    phidp_f = phi_f + phi_near[:, np.newaxis].repeat(ng, axis=1)
 
     # compute reverse direction propagation differential phase
     phi_r = np.zeros_like(k, subok=False)
-    phi_r[:,:-1] = np.cumsum(k[:,:0:-1]**2, axis=1)[:,::-1]
-    phidp_r = phi_far[:,np.newaxis].repeat(ng, axis=1) - phi_r
+    phi_r[:, :-1] = np.cumsum(k[:, :0:-1]**2, axis=1)[:, ::-1]
+    phidp_r = phi_far[:, np.newaxis].repeat(ng, axis=1) - phi_r
 
     # check quality of retrieval by comparing forward and reverse directions
     if verbose:
