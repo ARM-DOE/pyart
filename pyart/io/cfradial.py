@@ -368,10 +368,20 @@ class _NetCDFVariableDataExtractor(object):
 
     def __call__(self):
         """ Return an array containing data from the stored variable. """
+        data = self.ncvar[:]
+        if data is np.ma.masked:
+            # If the data is a masked scalar, MaskedConstant is returned by
+            # NetCDF4 version 1.2.3+. This object does not preserve the dtype
+            # and fill_value of the original NetCDF variable and causes issues
+            # in Py-ART.
+            # Rather we create a masked array with a single masked value
+            # with the correct dtype and fill_value.
+            self.ncvar.set_auto_mask(False)
+            data = np.ma.masked_equal(self.ncvar[:], self.ncvar[0])
         # Use atleast_1d to force the array to be at minimum one dimensional,
         # some version of netCDF return scalar or scalar arrays for scalar
         # NetCDF variables.
-        return np.atleast_1d(self.ncvar[:])
+        return np.atleast_1d(data)
 
 
 def _unpack_variable_gate_field_dic(
