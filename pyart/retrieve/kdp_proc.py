@@ -40,9 +40,10 @@ from ..config import get_field_name, get_metadata, get_fillvalue
 
 
 def kdp_maesaka(radar, gatefilter=None, method='cg', backscatter=None,
-                Clpf=1.0, length_scale=None, finite_order='low',
-                fill_value=None, proc=1, psidp_field=None, kdp_field=None,
-                phidp_field=None, debug=False, verbose=False, **kwargs):
+                Clpf=1.0, length_scale=None, first_guess=0.001,
+                finite_order='low', fill_value=None, proc=1, psidp_field=None,
+                kdp_field=None, phidp_field=None, debug=False, verbose=False,
+                **kwargs):
     """
     Compute the specific differential phase (KDP) from corrected (e.g.,
     unfolded) total differential phase data based on the variational method
@@ -87,6 +88,12 @@ def kdp_maesaka(radar, gatefilter=None, method='cg', backscatter=None,
         Length scale in meters used to bring the dimension and magnitude of the
         low-pass filter cost functional in line with the observation cost
         functional. If None, the length scale is set to the range resolution.
+    first_guess : float, optional
+        First guess for control variable k. Since k is proportional to the
+        square root of KDP, the first guess should be close to zero to signify
+        a KDP field of 0 deg/km everywhere. However, the first guess should not
+        be exactly zero in order to avoid convergence criteria after the first
+        iteration.
     finite_order : 'low' or 'high', optional
         The finite difference accuracy to use when computing derivatives.
     maxiter : int, optional
@@ -160,7 +167,7 @@ def kdp_maesaka(radar, gatefilter=None, method='cg', backscatter=None,
     # conditions
     bcs = boundary_conditions_maesaka(
         radar, gatefilter=gatefilter, psidp_field=psidp_field, debug=debug,
-        verbose=verbose)
+        verbose=verbose, **kwargs)
     phi_near, phi_far = bcs[:2]
     idx_near, idx_far = bcs[4:]
 
@@ -169,7 +176,7 @@ def kdp_maesaka(radar, gatefilter=None, method='cg', backscatter=None,
 
     if debug:
         N = np.ma.count(psidp_o)
-        print('Sample size before filtering: {}'.format(N))
+        print 'Sample size before filtering: {}'.format(N)
 
     # mask radar gates indicated by the gate filter
     if gatefilter is not None:
@@ -183,7 +190,7 @@ def kdp_maesaka(radar, gatefilter=None, method='cg', backscatter=None,
 
     if debug:
         N = np.ma.count(psidp_o)
-        print('Sample size after filtering: {}'.format(N))
+        print 'Sample size after filtering: {}'.format(N)
 
     # parse differential phase measurement weight
     Cobs = np.logical_not(np.ma.getmaskarray(psidp_o)).astype(psidp_o.dtype)
@@ -203,14 +210,11 @@ def kdp_maesaka(radar, gatefilter=None, method='cg', backscatter=None,
         optimize.show_options(solver='minimize', method=method)
 
     # parse initial conditions (first guess)
-    # assume specific differential phase is close to 0 deg/km everywhere but
-    # not exactly 0 deg/km since in order to avoid convergence criteria after
-    # the first iteration
     x0 = np.zeros_like(psidp_o, subok=False).flatten()
-    x0.fill(0.01)
+    x0.fill(first_guess)
 
     if verbose:
-        print('Cost functional size: {}'.format(x0.size))
+        print 'Cost functional size: {}'.format(x0.size)
 
     # define arguments for cost functional and its Jacobian (gradient)
     args = (psidp_o, [phi_near, phi_far],
@@ -229,7 +233,7 @@ def kdp_maesaka(radar, gatefilter=None, method='cg', backscatter=None,
 
     if debug:
         elapsed = time.time() - start
-        print('Elapsed time for minimization: {:.0f} sec'.format(elapsed))
+        print 'Elapsed time for minimization: {:.0f} sec'.format(elapsed)
 
     # parse control variables from optimized result
     k = xopt.x.reshape(psidp_o.shape)
@@ -238,9 +242,9 @@ def kdp_maesaka(radar, gatefilter=None, method='cg', backscatter=None,
     kdp = k**2 / (2.0 * dr) * 1000.0
 
     if debug:
-        print('Min retrieved KDP: {:.2f} deg/km'.format(kdp.min()))
-        print('Max retrieved KDP: {:.2f} deg/km'.format(kdp.max()))
-        print('Mean retrieved KDP: {:.2f} deg/km'.format(kdp.mean()))
+        print 'Min retrieved KDP: {:.2f} deg/km'.format(kdp.min())
+        print 'Max retrieved KDP: {:.2f} deg/km'.format(kdp.max())
+        print 'Mean retrieved KDP: {:.2f} deg/km'.format(kdp.mean())
 
     # create specific differential phase field dictionary and store data
     kdp_dict = get_metadata(kdp_field)
@@ -268,8 +272,8 @@ def kdp_maesaka(radar, gatefilter=None, method='cg', backscatter=None,
 
 
 def boundary_conditions_maesaka(
-        radar, gatefilter=None, n=20, check_outliers=True, psidp_field=None,
-        debug=False, verbose=False):
+        radar, gatefilter=None, n=20, psidp_field=None, debug=False,
+        verbose=False, **kwargs):
     """
     Determine near range gate and far range gate propagation differential phase
     boundary conditions. This follows the method outlined in Maesaka et al.
@@ -329,8 +333,8 @@ def boundary_conditions_maesaka(
     # find contiguous unmasked data along each ray
     slices = np.ma.notmasked_contiguous(psidp, axis=1)
     if debug:
-        N = sum([len(slc) for slc in slices if slc is not None])
-        print('Total number of unique non-masked regions: {}'.format(N))
+        N = sum([len(slc) for slc in slices if hasattr(slc, '__len__')])
+        print 'Total number of unique non-masked regions: {}'.format(N)
 
     phi_near = np.zeros(radar.nrays, dtype=psidp.dtype)
     phi_far = np.zeros(radar.nrays, dtype=psidp.dtype)
@@ -345,67 +349,68 @@ def boundary_conditions_maesaka(
         if regions is None:
             continue
 
-        else:
+        # check if all range gates available, i.e., no masked data
+        if isinstance(regions, slice):
+            regions = [regions]
 
-            # near range gate boundary condition
-            for slc in regions:
+        # near range gate boundary condition
+        for slc in regions:
 
-                # check if enough samples exist in slice
-                if slc.stop - slc.start >= n:
+            # check if enough samples exist in slice
+            if slc.stop - slc.start >= n:
 
-                    # parse range gate indices and nearest range gate
-                    idx = slice(slc.start, slc.start + n)
-                    idx_near[ray] = idx.start
-                    range_near[ray] = radar.range['data'][idx][0]
+                # parse index and range of nearest range gate
+                idx = slice(slc.start, slc.start + n)
+                idx_near[ray] = idx.start
+                range_near[ray] = radar.range['data'][idx][0]
 
-                    # parse data for linear regression and compute slope
-                    x = radar.range['data'][idx]
-                    y = psidp[ray, idx]
-                    slope = stats.linregress(x, y)[0]
+                # parse data for linear regression and compute slope
+                x = radar.range['data'][idx]
+                y = psidp[ray, idx]
+                slope = stats.linregress(x, y)[0]
 
-                    # if linear regression slope is positive, set near range
-                    # gate boundary condition to first differential phase
-                    # measurement, otherwise use the median value
-                    if slope > 0.0:
-                        phi_near[ray] = y[0]
-                    else:
-                        phi_near[ray] = np.median(y)
-                    break
-
+                # if linear regression slope is positive, set near range gate
+                # boundary condition to first differential phase measurement,
+                # otherwise use the median value
+                if slope > 0.0:
+                    phi_near[ray] = y[0]
                 else:
-                    continue
+                    phi_near[ray] = np.median(y)
+                break
 
-            # far range gate boundary condition
-            for slc in reversed(regions):
+            else:
+                continue
 
-                if slc.stop - slc.start >= n:
+        # far range gate boundary condition
+        for slc in reversed(regions):
 
-                    # parse index of furthest range gate
-                    # parse range gate indices and furthest range gate
-                    idx = slice(slc.stop - n, slc.stop)
-                    idx_far[ray] = idx.stop
-                    range_far[ray] = radar.range['data'][idx][-1]
+            if slc.stop - slc.start >= n:
 
-                    # parse data for linear regression and compute slope
-                    x = radar.range['data'][idx]
-                    y = psidp[ray, idx]
-                    slope = stats.linregress(x, y)[0]
+                # parse index and range of furthest range gate
+                idx = slice(slc.stop - n, slc.stop)
+                idx_far[ray] = idx.stop
+                range_far[ray] = radar.range['data'][idx][-1]
 
-                    # if linear regression slope is positive, set far range
-                    # gate boundary condition to last differential phase
-                    # measurement, otherwise use the median value
-                    if slope > 0.0:
-                        phi_far[ray] = y[-1]
-                    else:
-                        phi_far[ray] = np.median(y)
-                    break
+                # parse data for linear regression and compute slope
+                x = radar.range['data'][idx]
+                y = psidp[ray, idx]
+                slope = stats.linregress(x, y)[0]
 
+                # if linear regression slope is positive, set far range gate
+                # boundary condition to last differential phase measurement,
+                # otherwise use the median value
+                if slope > 0.0:
+                    phi_far[ray] = y[-1]
                 else:
-                    continue
+                    phi_far[ray] = np.median(y)
+                break
+
+            else:
+                continue
 
     # check for outliers in the near range boundary conditions, e.g., ground
     # clutter can introduce spurious values in certain rays
-    if check_outliers:
+    if kwargs.get('check_outliers', True):
 
         # do not include missing values in the analysis
         phi_near_valid = phi_near[phi_near != 0.0]
@@ -424,8 +429,8 @@ def boundary_conditions_maesaka(
         system_phase_peak_right = edges[counts.argmax() + 1]
 
         if debug:
-            print('Peak of system phase distribution: {:.0f} deg'.format(
-                  system_phase_peak_left))
+            print 'Peak of system phase distribution: {:.0f} deg'.format(
+                  system_phase_peak_left)
 
         # determine left edge location of system phase distribution
         # we consider five counts or less to be insignificant
@@ -440,10 +445,10 @@ def boundary_conditions_maesaka(
         right_edge = edges[1:][is_right_side][0]
 
         if debug:
-            print('Left edge of system phase distribution: {:.0f} deg'.format(
-                  left_edge))
-            print('Right edge of system phase distribution: {:.0f} deg'.format(
-                  right_edge))
+            print 'Left edge of system phase distribution: {:.0f} deg'.format(
+                  left_edge)
+            print 'Right edge of system phase distribution: {:.0f} deg'.format(
+                  right_edge)
 
         # define the system phase offset as the median value of the system
         # phase distriubion
@@ -452,8 +457,8 @@ def boundary_conditions_maesaka(
         system_phase_offset = np.median(phi_near_valid[is_system_phase])
 
         if debug:
-            print('Estimated system phase offset: {:.0f} deg'.format(
-                  system_phase_offset))
+            print 'Estimated system phase offset: {:.0f} deg'.format(
+                  system_phase_offset)
 
         for ray, bc in enumerate(phi_near):
 
@@ -469,7 +474,7 @@ def boundary_conditions_maesaka(
     phi_far[is_unphysical] = phi_near[is_unphysical]
     if verbose:
         N = is_unphysical.sum()
-        print('Rays with unphysical boundary conditions: {}'.format(N))
+        print 'Rays with unphysical boundary conditions: {}'.format(N)
 
     return phi_near, phi_far, range_near, range_far, idx_near, idx_far
 
@@ -560,10 +565,10 @@ def _cost_maesaka(x, psidp_o, bcs, dhv, dr, Cobs, Clpf, finite_order,
     J = Jof + Jor + Jlpf
 
     if verbose:
-        print('Forward direction observation cost : {:1.3e}'.format(Jof))
-        print('Reverse direction observation cost : {:1.3e}'.format(Jor))
-        print('Low-pass filter cost ............. : {:1.3e}'.format(Jlpf))
-        print('Total cost ....................... : {:1.3e}'.format(J))
+        print 'Forward direction observation cost : {:1.3e}'.format(Jof)
+        print 'Reverse direction observation cost : {:1.3e}'.format(Jor)
+        print 'Low-pass filter cost ............. : {:1.3e}'.format(Jlpf)
+        print 'Total cost ....................... : {:1.3e}'.format(J)
 
     return J
 
@@ -663,7 +668,7 @@ def _jac_maesaka(x, psidp_o, bcs, dhv, dr, Cobs, Clpf, finite_order,
     # compute the vector norm of the Jacobian
     if verbose:
         mag = np.linalg.norm(jac, ord=None, axis=None)
-        print('Vector norm of Jacobian: {:1.3e}'.format(mag))
+        print 'Vector norm of Jacobian: {:1.3e}'.format(mag)
 
     return jac
 
@@ -712,8 +717,8 @@ def _forward_reverse_phidp(k, bcs, verbose=False):
     if verbose:
         phidp_mbe = np.ma.mean(phidp_f - phidp_r)
         phidp_mae = np.ma.mean(np.abs(phidp_f - phidp_r))
-        print('Forward-reverse PHIDP MBE: {:.2f} deg'.format(phidp_mbe))
-        print('Forward-reverse PHIDP MAE: {:.2f} deg'.format(phidp_mae))
+        print 'Forward-reverse PHIDP MBE: {:.2f} deg'.format(phidp_mbe)
+        print 'Forward-reverse PHIDP MAE: {:.2f} deg'.format(phidp_mae)
 
     return phidp_f, phidp_r
 
@@ -754,7 +759,7 @@ def _parse_range_resolution(
     if check_uniform and np.allclose(np.diff(dr), 0.0, atol=atol):
         dr = dr[0]
         if verbose:
-            print('Range resolution: {:.2f} m'.format(dr))
+            print 'Range resolution: {:.2f} m'.format(dr)
     else:
         raise ValueError('Radar gate spacing is not uniform')
 
