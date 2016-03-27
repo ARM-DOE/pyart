@@ -40,7 +40,7 @@ from ..config import get_field_name, get_metadata, get_fillvalue
 
 
 def kdp_maesaka(radar, gatefilter=None, method='cg', backscatter=None,
-                Clpf=1.0, length_scale=None, first_guess=0.001,
+                Clpf=1.0, length_scale=None, first_guess=0.01,
                 finite_order='low', fill_value=None, proc=1, psidp_field=None,
                 kdp_field=None, phidp_field=None, debug=False, verbose=False,
                 **kwargs):
@@ -91,9 +91,10 @@ def kdp_maesaka(radar, gatefilter=None, method='cg', backscatter=None,
     first_guess : float, optional
         First guess for control variable k. Since k is proportional to the
         square root of KDP, the first guess should be close to zero to signify
-        a KDP field of 0 deg/km everywhere. However, the first guess should not
-        be exactly zero in order to avoid convergence criteria after the first
-        iteration.
+        a KDP field close to 0 deg/km everywhere. However, the first guess
+        should not be exactly zero in order to avoid convergence criteria after
+        the first iteration. In fact it is recommended to use a value closer to
+        one than zero.
     finite_order : 'low' or 'high', optional
         The finite difference accuracy to use when computing derivatives.
     maxiter : int, optional
