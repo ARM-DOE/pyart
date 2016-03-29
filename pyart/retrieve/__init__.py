@@ -13,6 +13,7 @@ Radar retrievals
 .. autosummary::
     :toctree: generated/
 
+    kdp_maesaka
     calculate_snr_from_reflectivity
     fetch_radar_time_profile
     map_profile_to_gates

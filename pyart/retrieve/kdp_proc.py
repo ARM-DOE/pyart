@@ -7,6 +7,16 @@ differential phase (PSIDP) measurements. Total differential phase is a function
 of propagation differential phase (PHIDP), backscatter differential phase
 (DELTAHV), and the system phase offset.
 
+.. autosummary::
+    :toctree: generated/
+
+    kdp_maesaka
+    boundary_conditions_maesaka
+    _cost_maesaka
+    _jac_maesaka
+    _forward_reverse_phidp
+    _parse_range_resolution
+
 """
 
 import time
