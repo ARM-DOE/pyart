@@ -465,7 +465,11 @@ def geographic_to_cartesian_aeqd(lon, lat, lon_0, lat_0, R=6370997.):
     lon_diff_rad = lon_rad - lon_0_rad
     c = np.arccos(np.sin(lat_0_rad) * np.sin(lat_rad) +
                   np.cos(lat_0_rad) * np.cos(lat_rad) * np.cos(lon_diff_rad))
-    k = c / np.sin(c)
+    with warnings.catch_warnings():
+        # division by zero may occur here but is properly addressed below so
+        # the warnings can be ignored
+        warnings.simplefilter("ignore", RuntimeWarning)
+        k = c / np.sin(c)
     # fix cases where k is undefined (c is zero), k should be 1
     k[c == 0] = 1
 
