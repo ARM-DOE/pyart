@@ -165,7 +165,7 @@ def write_grid_geotiff(grid, filename, field, rgb=False, level=None,
     if warp:
         # Warps TIFF to lat/lon WGS84 projection that is more useful
         # for web mapping applications. Likely changes array shape.
-        os.system('gdalwarp -t_srs \'+proj=longlat +ellps=WGS84 ' +
+        os.system('gdalwarp -q -t_srs \'+proj=longlat +ellps=WGS84 ' +
                   '+datum=WGS84 +no_defs\' ' + ofile + ' ' +
                   ofile + '_tmp.tif')
         shutil.move(ofile+'_tmp.tif', ofile)
