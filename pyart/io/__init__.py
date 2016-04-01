@@ -56,6 +56,7 @@ Writing grid data
 
     write_grid
     write_grid_mdv
+    write_grid_geotiff
 
 Special use
 ===========

@@ -1,6 +1,6 @@
 """
 pyart.io.write_grid_geotiff
-====================
+===========================
 
 Write a Py-ART Grid object to a GeoTIFF file.
 
@@ -13,7 +13,7 @@ Write a Py-ART Grid object to a GeoTIFF file.
 
 """
 
-from __future__ import print_function, division
+from __future__ import division
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.colors as colors
@@ -52,20 +52,18 @@ def write_grid_geotiff(grid, filename, field, rgb=False, level=None,
     grid : pyart.core.Grid object
         Grid object to write to file.
     filename : str
-        Filename template for the GeoTIFF. The field name will be appended
-        prior to the suffix. For example, if the filename template given is
-        'radar.tif', and the field name is 'reflectivity', then
-        the final file will be called 'radar_reflectivity.tif'.
+        Filename for the GeoTIFF.
     field : str
-        Field name to output to file. This also will be used to create the
-        final GeoTIFF filename.
+        Field name to output to file.
 
     Other Parameters
     ----------------
     rbg : bool, optional
         True - Output 3-band RGB GeoTIFF
+
         False - Output single-channel, float-valued GeoTIFF. For display,
                 likely will need an SLD file to provide a color table.
+
     level: int or None, optional
         Index for z-axis plane to output. None gives composite values
         (i.e., max in each vertical column).
@@ -81,103 +79,96 @@ def write_grid_geotiff(grid, filename, field, rgb=False, level=None,
     warp : bool, optional
         True - Use gdalwarp (called from command line using os.system)
                to warp to a lat/lon WGS84 grid.
+
         False - No warping will be performed. Output will be Az. Equidistant.
+
     sld : bool, optional
         True - Create a Style Layer Descriptor file (SLD) mapped to vmin/vmax
                and cmap. File is named same as output TIFF, except for .sld
                extension.
-        False - Don't do this.
 
-    Returns
-    -------
-    None
+        False - Don't do this.
 
     """
     if not IMPORT_FLAG:
         raise MissingOptionalDependency(
             'GDAL not detected, GeoTIFF output failure!')
 
-    if field in grid.fields.keys():
-        # Determine whether filename template already contains a suffix
-        # If not, append an appropriate one.
-        if '.' in filename:
-            name, end = filename.split('.')
-        else:
-            name = filename
-            end = 'tif'
-        ofile = name + "_" + field + "." + end
-        nz, ny, nx = grid.fields[field]['data'].shape
-        dist = max(grid.x['data'])
-        rangestep = grid.x['data'][1] - grid.x['data'][2]
-        lat = grid.origin_latitude['data'][0]
-        lon = grid.origin_longitude['data'][0]
-        # Check if masked array; if so, fill missing data
-        if hasattr(grid.fields[field]['data'], 'mask'):
-            filled = grid.fields[field]['data'].filled(fill_value=-32768)
-        else:
-            filled = grid.fields[field]['data']
-        if level is None:
-            data = np.amax(filled, 0)
-        else:
-            data = filled[level]
-        data = data.astype(float)
-        try:
-            data[data == -32768] = np.nan
-        except:
-            pass
-
-        iproj = 'PROJCS["unnamed",GEOGCS["WGS 84",DATUM["unknown",' + \
-                'SPHEROID["WGS84",6378137,298.257223563]],' + \
-                'PRIMEM["Greenwich",0],' + \
-                'UNIT["degree",0.0174532925199433]],' + \
-                'PROJECTION["Azimuthal_Equidistant"],' + \
-                'PARAMETER["latitude_of_center",' + str(lat) + '],' + \
-                'PARAMETER["longitude_of_center",' + str(lon) + '],' + \
-                'PARAMETER["false_easting",0],' + \
-                'PARAMETER["false_northing",0],' + \
-                'UNIT["metre",1,AUTHORITY["EPSG","9001"]]]'
-        out_driver = gdal.GetDriverByName("GTiff")
-
-        # Output dataset depends on rgb flag
-        if not rgb:
-            # Single-channel, floating-point output
-            dst_options = ['COMPRESS=LZW', 'ALPHA=YES']
-            dst_ds = out_driver.Create(
-                ofile, data.shape[1], data.shape[0], 1,
-                gdal.GDT_Float32, dst_options)
-        else:
-            # Assign data RGB levels based on value relative to vmax/vmin
-            rarr, garr, barr = _get_rgb_values(
-                data, vmin, vmax, color_levels, cmap)
-            dst_ds = out_driver.Create(ofile, data.shape[1],
-                                       data.shape[0], 3, gdal.GDT_Byte)
-
-        # Common Projection and GeoTransform
-        dst_ds.SetGeoTransform([-dist, -rangestep, 0, dist, 0, rangestep])
-        dst_ds.SetProjection(iproj)
-
-        # Final output depends on rgb flag
-        if not rgb:
-            dst_ds.GetRasterBand(1).WriteArray(data[::-1, :])
-        else:
-            dst_ds.GetRasterBand(1).WriteArray(rarr[::-1, :])
-            dst_ds.GetRasterBand(2).WriteArray(garr[::-1, :])
-            dst_ds.GetRasterBand(3).WriteArray(barr[::-1, :])
-        dst_ds.FlushCache()
-        dst_ds = None
-
-        if sld:
-            _create_sld(cmap, vmin, vmax, ofile, color_levels)
-
-        if warp:
-            # Warps TIFF to lat/lon WGS84 projection that is more useful
-            # for web mapping applications. Likely changes array shape.
-            os.system('gdalwarp -t_srs \'+proj=longlat +ellps=WGS84 ' +
-                      '+datum=WGS84 +no_defs\' ' + ofile + ' ' +
-                      ofile + '_tmp.tif')
-            shutil.move(ofile+'_tmp.tif', ofile)
-    else:
+    if field not in grid.fields.keys():
         raise KeyError('Failed -', field, 'field not found in Grid object.')
+
+    # Determine whether filename template already contains a suffix
+    # If not, append an appropriate one.
+    if '.' not in filename:
+        name = filename
+        end = 'tif'
+        ofile = name + "." + end
+    else:
+        ofile = filename
+    nz, ny, nx = grid.fields[field]['data'].shape
+    dist = max(grid.x['data'])
+    rangestep = grid.x['data'][1] - grid.x['data'][2]
+    lat = grid.origin_latitude['data'][0]
+    lon = grid.origin_longitude['data'][0]
+    # Check if masked array; if so, fill missing data
+    filled = np.ma.filled(grid.fields[field]['data'], fill_value=-32768)
+    if level is None:
+        data = np.amax(filled, 0)
+    else:
+        data = filled[level]
+    data = data.astype(float)
+    data[data == -32768] = np.nan
+
+    iproj = 'PROJCS["unnamed",GEOGCS["WGS 84",DATUM["unknown",' + \
+        'SPHEROID["WGS84",6378137,298.257223563]],' + \
+        'PRIMEM["Greenwich",0],' + \
+        'UNIT["degree",0.0174532925199433]],' + \
+        'PROJECTION["Azimuthal_Equidistant"],' + \
+        'PARAMETER["latitude_of_center",' + str(lat) + '],' + \
+        'PARAMETER["longitude_of_center",' + str(lon) + '],' + \
+        'PARAMETER["false_easting",0],' + \
+        'PARAMETER["false_northing",0],' + \
+        'UNIT["metre",1,AUTHORITY["EPSG","9001"]]]'
+    out_driver = gdal.GetDriverByName("GTiff")
+
+    # Output dataset depends on rgb flag
+    if not rgb:
+        # Single-channel, floating-point output
+        dst_options = ['COMPRESS=LZW', 'ALPHA=YES']
+        dst_ds = out_driver.Create(
+            ofile, data.shape[1], data.shape[0], 1,
+            gdal.GDT_Float32, dst_options)
+    else:
+        # Assign data RGB levels based on value relative to vmax/vmin
+        rarr, garr, barr = _get_rgb_values(
+            data, vmin, vmax, color_levels, cmap)
+        dst_ds = out_driver.Create(ofile, data.shape[1],
+                                   data.shape[0], 3, gdal.GDT_Byte)
+
+    # Common Projection and GeoTransform
+    dst_ds.SetGeoTransform([-dist, -rangestep, 0, dist, 0, rangestep])
+    dst_ds.SetProjection(iproj)
+
+    # Final output depends on rgb flag
+    if not rgb:
+        dst_ds.GetRasterBand(1).WriteArray(data[::-1, :])
+    else:
+        dst_ds.GetRasterBand(1).WriteArray(rarr[::-1, :])
+        dst_ds.GetRasterBand(2).WriteArray(garr[::-1, :])
+        dst_ds.GetRasterBand(3).WriteArray(barr[::-1, :])
+    dst_ds.FlushCache()
+    dst_ds = None
+
+    if sld:
+        _create_sld(cmap, vmin, vmax, ofile, color_levels)
+
+    if warp:
+        # Warps TIFF to lat/lon WGS84 projection that is more useful
+        # for web mapping applications. Likely changes array shape.
+        os.system('gdalwarp -t_srs \'+proj=longlat +ellps=WGS84 ' +
+                  '+datum=WGS84 +no_defs\' ' + ofile + ' ' +
+                  ofile + '_tmp.tif')
+        shutil.move(ofile+'_tmp.tif', ofile)
 
 
 def _get_rgb_values(data, vmin, vmax, color_levels, cmap):
@@ -263,10 +254,6 @@ def _create_sld(cmap, vmin, vmax, filename, color_levels=None):
     color_levels : int or None, optional
         Number of color levels in cmap. Useful for categorical colormaps
         with steps << 255 (e.g., hydrometeor ID).
-
-    Returns
-    -------
-    None - Data written to SLD file instead.
 
     """
     cmap = plt.cm.get_cmap(cmap)
