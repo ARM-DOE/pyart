@@ -210,6 +210,24 @@ def perform_dealias(unwrap_unit='sweep', **kwargs):
     return radar, dealias_vel
 
 
+def test_fillvalue(**kwargs):
+    radar = pyart.testing.make_velocity_aliased_radar()
+    radar.fields['velocity']['_FillValue'] = 8888.0
+
+    # ensure that at least one gate is excluded and should be masked
+    radar.fields['velocity']['data'][100, 25] = 44
+    gf = pyart.filters.GateFilter(radar)
+    gf.exclude_above('velocity', 40)
+
+    dealias_vel = pyart.correct.dealias_unwrap_phase(radar, gatefilter=gf)
+    assert isinstance(dealias_vel['data'], np.ma.MaskedArray)
+    assert np.ma.is_masked(dealias_vel['data'][100, 25])
+
+    assert '_FillValue' in dealias_vel
+    assert dealias_vel['_FillValue'] == 8888.0
+    assert dealias_vel['data'].fill_value == 8888.0
+
+
 if __name__ == "__main__":
 
     radar, dealias_vel = perform_dealias()
