@@ -91,8 +91,9 @@ cdef class DistRoI(RoIFunction):
             y_offset = self.offsets[i, 1]
             x_offset = self.offsets[i, 2]
             roi = (self.z_factor * (z - z_offset) + self.xy_factor *
-                   sqrt((x - x_offset)**2 + (y - y_offset)**2) +
-                   self.min_radius)
+                   sqrt((x - x_offset)**2 + (y - y_offset)**2))
+            if roi < self.min_radius:
+                roi = self.min_radius
             if roi < min_roi:
                 min_roi = roi
         return min_roi
@@ -141,7 +142,9 @@ cdef class DistBeamRoI(RoIFunction):
             x_offset = self.offsets[i, 2]
             roi = (self.h_factor * ((z - z_offset) / 20.0) +
                    sqrt((y - y_offset)**2 + (x - x_offset)**2) *
-                   self.beam_factor + self.min_radius)
+                   self.beam_factor)
+            if roi < self.min_radius:
+                roi = self.min_radius
             if roi < min_roi:
                 min_roi = roi
         return min_roi

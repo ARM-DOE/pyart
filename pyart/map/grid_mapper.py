@@ -704,9 +704,9 @@ def example_roi_func_dist(zg, yg, xg):
     zg_off = offsets[:, 0]
     yg_off = offsets[:, 1]
     xg_off = offsets[:, 2]
-    r = (z_factor * (zg - zg_off) +
-         xy_factor * np.sqrt((xg - xg_off)**2 + (yg - yg_off)**2) +
-         min_radius)
+    r = np.maximum(z_factor * (zg - zg_off) +
+                   xy_factor * np.sqrt((xg - xg_off)**2 + (yg - yg_off)**2),
+                   min_radius)
     return min(r)
 
 
@@ -723,9 +723,10 @@ def _gen_roi_func_dist(z_factor, xy_factor, min_radius, offsets):
 
     def roi(zg, yg, xg):
         """ dist radius of influence function. """
-        r = (z_factor * (zg - zg_off) +
-             xy_factor * np.sqrt((xg - xg_off)**2 + (yg - yg_off)**2) +
-             min_radius)
+        r = np.maximum(
+            z_factor * (zg - zg_off) +
+            xy_factor * np.sqrt((xg - xg_off)**2 + (yg - yg_off)**2),
+            min_radius)
         return min(r)
 
     return roi
@@ -757,9 +758,10 @@ def example_roi_func_dist_beam(zg, yg, xg):
     zg_off = offsets[:, 0]
     yg_off = offsets[:, 1]
     xg_off = offsets[:, 2]
-    r = (h_factor * ((zg - zg_off) / 20.0) +
-         np.sqrt((yg - yg_off)**2 + (xg - xg_off)**2) *
-         np.tan(nb * bsp * np.pi / 180.0) + min_radius)
+    r = np.maximum(
+            h_factor * ((zg - zg_off) / 20.0) +
+            np.sqrt((yg - yg_off)**2 + (xg - xg_off)**2) *
+            np.tan(nb * bsp * np.pi / 180.0), min_radius)
     return min(r)
 
 
@@ -777,9 +779,10 @@ def _gen_roi_func_dist_beam(h_factor, nb, bsp, min_radius, offsets):
 
     def roi(zg, yg, xg):
         """ dist_beam radius of influence function. """
-        r = (h_factor * ((zg - zg_off) / 20.0) +
-             np.sqrt((yg - yg_off)**2 + (xg - xg_off)**2) *
-             np.tan(nb * bsp * np.pi / 180.0) + min_radius)
+        r = np.maximum(
+                h_factor * ((zg - zg_off) / 20.0) +
+                np.sqrt((yg - yg_off)**2 + (xg - xg_off)**2) *
+                np.tan(nb * bsp * np.pi / 180.0), min_radius)
         return min(r)
 
     return roi
