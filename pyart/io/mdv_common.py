@@ -18,6 +18,7 @@ from __future__ import print_function
 # Code is adapted from Nitin Bharadwaj's Matlab code
 
 import struct
+import bz2
 import gzip
 import zlib
 from io import BytesIO
@@ -575,6 +576,12 @@ class MdvFile(object):
             elif compr_info['magic_cookie'] == 0xf6f6f6f6:
                 # ZLIB_NOT_COMPRESSED
                 decompr_data = compr_data
+            elif compr_info['magic_cookie'] == 0xf3f3f3f3:
+                # BZIP_COMPRESSED
+                decompr_data = bz2.decompress(compr_data)
+            elif compr_info['magic_cookie'] == 0xf4f4f4f4:
+                # BZIP_NOT_COMPRESSED
+                decompr_data = compr_data
             elif compr_info['magic_cookie'] == 0xfe0103fd:
                 # Run length encoding of 8-bit data
                 # Compression info is in a different order, namely
@@ -593,8 +600,6 @@ class MdvFile(object):
                 # cookies for these modes are:
                 # 0x2f2f2f2f : TA_NOT_COMPRESSED
                 # 0xf8f8f8f8 : GZIP_NOT_COMPRSSED
-                # 0xf3f3f3f3 : BZIP_COMPRESSED
-                # 0xf4f4f4f4 : BZIP_NOT_COMPRESSED
 
             # read the decompressed data, reshape and mask
             sw_data = np.fromstring(decompr_data, np_form).astype('float32')
