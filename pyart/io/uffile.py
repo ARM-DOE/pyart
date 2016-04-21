@@ -373,6 +373,17 @@ class UFRay(object):
         hour = self.mandatory_header['hour']
         minute = self.mandatory_header['minute']
         second = self.mandatory_header['second']
+        if hour == 24:
+            # Some UF writers incorrectly specify midnight as 24:00:00
+            # rather than 00:00:00.  Handle this case explicitly
+            assert minute == 0
+            assert second == 0
+            hour = 23
+            minute = 59
+            second = 59
+            dt = datetime.datetime(year, month, day, hour, minute, second)
+            return dt + datetime.timedelta(seconds=1)
+
         return datetime.datetime(year, month, day, hour, minute, second)
 
     def get_location(self):

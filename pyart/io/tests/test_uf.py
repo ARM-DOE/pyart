@@ -1,5 +1,6 @@
 """ Unit Tests for Py-ART's io/uf.py and io/uffile.py modules. """
 
+from datetime import datetime
 try:
     from StringIO import StringIO
 except ImportError:
@@ -114,6 +115,18 @@ def test_nyquist_vel():
     ufile.rays.append(ray)
     ufile.nrays = 2
     assert ufile.get_nyquists() is None
+
+
+def test_datetime():
+    ufile = UFFile(pyart.testing.UF_FILE)
+    ray = ufile.rays[0]
+    assert ray.get_datetime() == datetime(2011, 5, 20, 10, 54, 16)
+
+    # test case where midnight is incorrectly represented as 24:00:00
+    ray.mandatory_header['hour'] = 24
+    ray.mandatory_header['minute'] = 0
+    ray.mandatory_header['second'] = 0
+    assert ray.get_datetime() == datetime(2011, 5, 21, 0, 0, 0)
 
 
 def test_polarization():
