@@ -15,7 +15,6 @@ Reading and writing Grid objects.
 """
 
 import warnings
-
 import numpy as np
 import netCDF4
 import datetime
@@ -448,7 +447,7 @@ def read_legacy_grid(filename, exclude_fields=None, **kwargs):
             fields[field] = field_dic
         else:
             bad_shape = field_dic['data'].shape
-            warn('Field %s skipped due to incorrect shape' % (field))
+            warnings.warn('Field %s skipped due to incorrect shape' % (field))
 
     ncobj.close()
     return Grid.from_legacy_parameters(fields, axes, metadata)
