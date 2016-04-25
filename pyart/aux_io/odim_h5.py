@@ -106,14 +106,14 @@ def read_odim_h5(filename, field_names=None, additional_metadata=None,
     # open the file
     hfile = h5py.File(filename, 'r')
     odim_object = hfile['what'].attrs['object']
-    if odim_object != 'PVOL':
+    if odim_object not in ['PVOL', 'SCAN', 'ELEV']:
         raise NotImplementedError(
             'object: %s not implemented.' % (odim_object))
 
     # determine the number of sweeps by the number of groups which
     # begin with dataset
     datasets = [k for k in hfile if k.startswith('dataset')]
-    datasets.sort()
+    datasets.sort(key=lambda x: int(x[7:]))
     nsweeps = len(datasets)
 
     # latitude, longitude and altitude
@@ -152,7 +152,12 @@ def read_odim_h5(filename, field_names=None, additional_metadata=None,
     sweep_start_ray_index = filemetadata('sweep_start_ray_index')
     sweep_end_ray_index = filemetadata('sweep_end_ray_index')
 
-    rays_per_sweep = [hfile[d]['where'].attrs['nrays'] for d in datasets]
+    if odim_object in ['SCAN', 'PVOL']:
+        rays_per_sweep = [
+            int(hfile[d]['where'].attrs['nrays']) for d in datasets]
+    elif odim_object == 'ELEV':
+        rays_per_sweep = [
+            int(hfile[d]['where'].attrs['angles'].size) for d in datasets]
     total_rays = sum(rays_per_sweep)
     ssri = np.cumsum(np.append([0], rays_per_sweep[:-1])).astype('int32')
     seri = np.cumsum(rays_per_sweep).astype('int32') - 1
@@ -172,7 +177,10 @@ def read_odim_h5(filename, field_names=None, additional_metadata=None,
 
     # fixed_angle
     fixed_angle = filemetadata('fixed_angle')
-    sweep_el = [hfile[d]['where'].attrs['elangle'] for d in datasets]
+    if odim_object == 'ELEV':
+        sweep_el = [hfile[d]['where'].attrs['az_angle'] for d in datasets]
+    else:
+        sweep_el = [hfile[d]['where'].attrs['elangle'] for d in datasets]
     fixed_angle['data'] = np.array(sweep_el, dtype='float32')
 
     # elevation
@@ -181,6 +189,11 @@ def read_odim_h5(filename, field_names=None, additional_metadata=None,
         edata = np.empty(total_rays, dtype='float32')
         for d, start, stop in zip(datasets, ssri, seri):
             edata[start:stop+1] = hfile[d]['how'].attrs['elangles'][:]
+        elevation['data'] = edata
+    elif odim_object == 'ELEV':
+        edata = np.empty(total_rays, dtype='float32')
+        for d, start, stop in zip(datasets, ssri, seri):
+            edata[start:stop+1] = hfile[d]['where'].attrs['angles'][:]
         elevation['data'] = edata
     else:
         elevation['data'] = np.repeat(sweep_el, rays_per_sweep)
@@ -195,7 +208,7 @@ def read_odim_h5(filename, field_names=None, additional_metadata=None,
     if any(rscale != rscale[0]):
         raise ValueError('range scale changes between sweeps')
 
-    nbins = hfile['dataset1']['where'].attrs['nbins']
+    nbins = int(hfile['dataset1']['where'].attrs['nbins'])
     _range['data'] = (np.arange(nbins, dtype='float32') * rscale[0] +
                       rstart[0] * 1000.)
     _range['meters_to_center_of_first_gate'] = rstart[0] * 1000.
@@ -272,8 +285,10 @@ def read_odim_h5(filename, field_names=None, additional_metadata=None,
         start = 0
         # loop over the sweeps, copy data into correct location in data array
         for dset, rays_in_sweep in zip(datasets, rays_per_sweep):
+            print(dset)
             sweep_data = _get_odim_h5_sweep_data(hfile[dset][h_field_key])
-            fdata[start:start + rays_in_sweep] = sweep_data[:]
+            sweep_nbins = sweep_data.shape[1]
+            fdata[start:start + rays_in_sweep, :sweep_nbins] = sweep_data[:]
             start += rays_in_sweep
         # create field dictionary
         field_dic = filemetadata(field_name)
