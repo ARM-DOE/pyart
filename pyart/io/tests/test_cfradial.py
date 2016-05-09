@@ -346,7 +346,12 @@ def test_write_ppi_arm_time_vars():
 
         base_time = dset.variables['base_time']
         assert base_time[:] == 1305888856
-        assert base_time.string == '20-May-2011,10:54:16 GMT'
+        # The month is abbreviated according to the current locale, for
+        # en_US the complete string is 20-May-2011,10:54:16 GMT.
+        # In order to support other locales test only the non-locale dependent
+        # portions of the string.
+        assert base_time.string.startswith('20-')
+        assert base_time.string.endswith('2011,10:54:16 GMT')
 
         time_offset = dset.variables['time_offset']
         assert time_offset.units == 'seconds since 2011-05-20 10:54:08'

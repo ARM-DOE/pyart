@@ -30,7 +30,7 @@ source activate testenv
 # Install Py-ART dependencies
 conda install --yes numpy scipy matplotlib netcdf4 nose
 conda install --yes basemap
-conda install --yes -c http://conda.anaconda.org/jjhelmus trmm_rsl
+conda install --yes -c jjhelmus trmm_rsl
 
 if [[ $PYTHON_VERSION == '2.7' ]]; then
     conda install --yes -c http://conda.anaconda.org/jjhelmus cbc cylp
@@ -43,7 +43,7 @@ if [[ $PYTHON_VERSION == '2.7' ]]; then
     # causes either gdal or basemap to break, force the exact libgdal version
     # see: https://github.com/ContinuumIO/anaconda-issues/issues/584
     conda install --yes gdal basemap libgdal=2.0.0=0 krb5 proj4
-    conda install --no-deps --yes -c http://conda.anaconda.org/jjhelmus wradlib
+    conda install --no-deps --yes -c conda-forge wradlib
 fi
 
 # install coverage modules
