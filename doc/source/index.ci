@@ -39,3 +39,7 @@ Latest Release
 .. _User Reference Manual: http://arm-doe.github.io/pyart/dev/user_reference/index.html
 .. _Developer Reference Manual: http://arm-doe.github.io/pyart/dev/dev_reference/index.html
 .. _Examples: http://arm-doe.github.io/pyart/dev/auto_examples/index.html
+
+The files used in the examples are available for download_.
+
+.. _download: https://engineering.arm.gov/~jhelmus/pyart_example_data/
