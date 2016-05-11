@@ -230,12 +230,12 @@ def read_odim_h5(filename, field_names=None, additional_metadata=None,
             az_data[start:stop+1] = sweep_az
         azimuth['data'] = az_data
     else:
-        # assume 1 degree per ray, starting at where/a1gate
+        # according to section 5.1 the first ray points north (0 degrees)
+        # and proceeds clockwise for a complete 360 rotation.
         az_data = np.ones((total_rays, ), dtype='float32')
         for dset, start, stop in zip(datasets, ssri, seri):
-            start_az = hfile[dset]['where'].attrs['a1gate']
             nrays = stop - start + 1
-            sweep_az = np.fmod(start_az + np.arange(nrays), 360.)
+            sweep_az = np.linspace(0, 360, nrays, endpoint=False)
             az_data[start:stop+1] = sweep_az
         azimuth['data'] = az_data
 
