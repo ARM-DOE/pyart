@@ -8,6 +8,8 @@ Routines for reading ODIM_H5 files.
     :toctree: generated/
 
     read_odim_h5
+    _to_str
+    _get_odim_h5_sweep_data
 
 """
 
@@ -105,7 +107,7 @@ def read_odim_h5(filename, field_names=None, additional_metadata=None,
 
     # open the file
     hfile = h5py.File(filename, 'r')
-    odim_object = hfile['what'].attrs['object']
+    odim_object = _to_str(hfile['what'].attrs['object'])
     if odim_object not in ['PVOL', 'SCAN', 'ELEV']:
         raise NotImplementedError(
             'object: %s not implemented.' % (odim_object))
@@ -128,13 +130,13 @@ def read_odim_h5(filename, field_names=None, additional_metadata=None,
 
     # metadata
     metadata = filemetadata('metadata')
-    metadata['source'] = hfile['what'].attrs['source']
+    metadata['source'] = _to_str(hfile['what'].attrs['source'])
     metadata['original_container'] = 'odim_h5'
-    metadata['odim_conventions'] = hfile.attrs['Conventions']
+    metadata['odim_conventions'] = _to_str(hfile.attrs['Conventions'])
 
     h_what = hfile['what'].attrs
-    metadata['version'] = h_what['version']
-    metadata['source'] = h_what['source']
+    metadata['version'] = _to_str(h_what['version'])
+    metadata['source'] = _to_str(h_what['source'])
 
     try:
         ds1_how = hfile[datasets[0]]['how'].attrs
@@ -255,8 +257,9 @@ def read_odim_h5(filename, field_names=None, additional_metadata=None,
         # interpolate between each sweep starting and ending time
         for dset, start, stop in zip(datasets, ssri, seri):
             dset_what = hfile[dset]['what'].attrs
-            start_str = dset_what['startdate'] + dset_what['starttime']
-            end_str = dset_what['enddate'] + dset_what['endtime']
+            start_str = _to_str(
+                dset_what['startdate'] + dset_what['starttime'])
+            end_str = _to_str(dset_what['enddate'] + dset_what['endtime'])
             start_dt = datetime.datetime.strptime(start_str, '%Y%m%d%H%M%S')
             end_dt = datetime.datetime.strptime(end_str, '%Y%m%d%H%M%S')
 
@@ -278,14 +281,13 @@ def read_odim_h5(filename, field_names=None, additional_metadata=None,
     odim_fields = [hfile['dataset1'][d]['what'].attrs['quantity'] for d in
                    h_field_keys]
     for odim_field, h_field_key in zip(odim_fields, h_field_keys):
-        field_name = filemetadata.get_field_name(odim_field)
+        field_name = filemetadata.get_field_name(_to_str(odim_field))
         if field_name is None:
             continue
         fdata = np.ma.zeros((total_rays, nbins), dtype='float32')
         start = 0
         # loop over the sweeps, copy data into correct location in data array
         for dset, rays_in_sweep in zip(datasets, rays_per_sweep):
-            print(dset)
             sweep_data = _get_odim_h5_sweep_data(hfile[dset][h_field_key])
             sweep_nbins = sweep_data.shape[1]
             fdata[start:start + rays_in_sweep, :sweep_nbins] = sweep_data[:]
@@ -306,6 +308,14 @@ def read_odim_h5(filename, field_names=None, additional_metadata=None,
         sweep_end_ray_index,
         azimuth, elevation,
         instrument_parameters=instrument_parameters)
+
+
+def _to_str(text):
+    """ Convert bytes to str if necessary. """
+    if hasattr(text, 'decode'):
+        return text.decode('utf-8')
+    else:
+        return text
 
 
 def _get_odim_h5_sweep_data(group):
