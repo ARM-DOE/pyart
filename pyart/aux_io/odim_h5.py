@@ -240,28 +240,23 @@ def read_odim_h5(filename, field_names=None, additional_metadata=None,
     # azimuth
     azimuth = filemetadata('azimuth')
     az_data = np.ones((total_rays, ), dtype='float32')
-    if ('startazA' in ds1_how) and ('stopazA' in ds1_how):
-        # average between start and stop azimuth angles
-        for dset, start, stop in zip(datasets, ssri, seri):
+    for dset, start, stop in zip(datasets, ssri, seri):
+        if odim_object == 'ELEV':
+            # all azimuth angles are the sweep azimuth angle
+            sweep_az = hfile[dset]['where'].attrs['az_angle']
+        elif ('startazA' in ds1_how) and ('stopazA' in ds1_how):
+            # average between start and stop azimuth angles
             startaz = hfile[dset]['how'].attrs['startazA']
             stopaz = hfile[dset]['how'].attrs['stopazA']
             sweep_az = np.angle(
                 (np.exp(1.j*np.deg2rad(startaz)) +
                  np.exp(1.j*np.deg2rad(stopaz))) / 2., deg=True)
-            az_data[start:stop+1] = sweep_az
-    else:
-        if odim_object == 'ELEV':
-            # all azimuth angles are the sweep azimuth angle
-            for dset, start, stop in zip(datasets, ssri, seri):
-                sweep_azimuth = hfile[dset]['where'].attrs['az_angle']
-                az_data[start:stop+1] = sweep_azimuth
         else:
             # according to section 5.1 the first ray points north (0 degrees)
             # and proceeds clockwise for a complete 360 rotation.
-            for dset, start, stop in zip(datasets, ssri, seri):
-                nrays = stop - start + 1
-                sweep_az = np.linspace(0, 360, nrays, endpoint=False)
-                az_data[start:stop+1] = sweep_az
+            nrays = stop - start + 1
+            sweep_az = np.linspace(0, 360, nrays, endpoint=False)
+        az_data[start:stop+1] = sweep_az
     azimuth['data'] = az_data
 
     # time
