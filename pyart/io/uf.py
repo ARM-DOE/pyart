@@ -8,6 +8,7 @@ Reading of Universal format (UF) files
     :toctree: generated/
 
     read_uf
+    _get_scan_type
     _get_instrument_parameters
 
 """
@@ -143,8 +144,8 @@ def read_uf(filename, field_names=None, additional_metadata=None,
     sweep_number = filemetadata('sweep_number')
     sweep_number['data'] = np.arange(ufile.nsweeps, dtype='int32')
 
-    # sweep_type
-    scan_type = _UF_SWEEP_MODES[first_ray.mandatory_header['sweep_mode']]
+    # scan_type
+    scan_type = _get_scan_type(first_ray)
 
     # sweep_mode
     sweep_mode = filemetadata('sweep_mode')
@@ -191,6 +192,16 @@ def read_uf(filename, field_names=None, additional_metadata=None,
         azimuth, elevation,
         scan_rate=scan_rate,
         instrument_parameters=instrument_parameters)
+
+
+def _get_scan_type(ufray):
+    """ Ruturn the scan type of a UF ray. """
+    uf_sweep_mode = ufray.mandatory_header['sweep_mode']
+    if uf_sweep_mode in _UF_SWEEP_MODES:
+        return _UF_SWEEP_MODES[uf_sweep_mode]
+    else:
+        warnings.warn('Unknown sweep mode, defaulting to ppi')
+        return 'ppi'
 
 
 def _get_instrument_parameters(ufile, filemetadata):
