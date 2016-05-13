@@ -149,6 +149,18 @@ def test_frequency():
                  pyart.io.uf._get_instrument_parameters, ufile, filemetadata)
 
 
+def test_scan_type():
+    ufile = UFFile(pyart.testing.UF_FILE)
+    ufray = ufile.rays[0]
+
+    scan_type = pyart.io.uf._get_scan_type(ufray)
+    assert scan_type == 'ppi'
+
+    # An invalid scan mode should throw a warning
+    ufray.mandatory_header['sweep_mode'] = 99
+    assert_warns(UserWarning, pyart.io.uf._get_scan_type, ufray)
+
+
 def test_skip_field():
     test_radar = pyart.io.read_uf(
         pyart.testing.UF_FILE, exclude_fields=['DZ'], file_field_names=True)
