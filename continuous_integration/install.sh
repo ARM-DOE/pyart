@@ -63,7 +63,7 @@ if [[ "$FROM_RECIPE" == "true" ]]; then
     source activate testenv
     conda build --no-test -q conda_recipe/
    
-    export CONDA_PACKAGE=`conda build --output conda_recipe/`
+    export CONDA_PACKAGE=`conda build --output conda_recipe/ | grep bz2`
     conda install --yes $CONDA_PACKAGE
     conda update --yes libnetcdf   # KLUDGE to upgrade downgraded libnetcdf
     mkdir foo   # required so source directory not picked up during tests
