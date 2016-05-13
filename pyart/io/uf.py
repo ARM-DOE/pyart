@@ -32,6 +32,7 @@ _UF_SWEEP_MODES = {
     5: 'target',
     6: 'manual',
     7: 'idle',
+    8: 'ppi',   # RadX used this to indicate surveillance PPI scans
 }
 
 _SWEEP_MODE_STR = {
