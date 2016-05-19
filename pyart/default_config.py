@@ -1116,11 +1116,15 @@ gamic_field_mapping = {
     'UZ': reflectivity,
                         # Uncorrected reflectivity
     'Zh': corrected_reflectivity,
+    'ZH': corrected_reflectivity,
                         # Corrected reflectivity, horizontal channel
-    'Zv': None,         # Corrected reflectivity, vertical channel
+    'Zv': None,
+    'ZV': None,         # Corrected reflectivity, vertical channel
     'UZh': reflectivity,
+    'UH': reflectivity,
                         # Uncorrected reflectivity, horizontal channel
-    'UZv': None,        # Uncorrected reflectivity, vertical channel
+    'UZv': None,
+    'UV': None,         # Uncorrected reflectivity, vertical channel
     'AZh': None,        # Refl., rainfall atten. & clutter corrected, h chan.
 
     # 'F' in velocity fields indicate folded velocities (no de-aliasing),
@@ -1131,8 +1135,10 @@ gamic_field_mapping = {
     'UV': None,         # Unfolded velocity from uncorrected timeseries
     'UVF': None,        # Folded velcity from uncorr. t.s.
     'Vh': corrected_velocity,
+    'VH': corrected_velocity,
                         # Velocity from corr. t.s., horizontal channel
-    'Vv': None,         # Velocity from corr. t.s., vertical channel
+    'Vv': None,
+    'VV': None,         # Velocity from corr. t.s., vertical channel
     'UVh': None,        # Velocity from uncorr. t.s., horizontal channel
     'UVv': None,        # Velocity from uncorr. t.s., vertical channel
     'VFh': velocity,
@@ -1150,8 +1156,10 @@ gamic_field_mapping = {
     'CW': None,         # Spec. width, antenna rotation corrected, corr. t.s.
     'UCW': None,        # Spec. width, antenna rotation corrected, uncorr t.s.
     'Wh': spectrum_width,
+    'WH': spectrum_width,
                         # Spectral width, corr t.s., horizontal channel
-    'Wv': None,         # Spectral width, corr t.s., vertical channel
+    'Wv': None,
+    'WV': None,         # Spectral width, corr t.s., vertical channel
     'UWh': None,        # Spectral width, uncorr t.s., horizontal channel
     'UWv': None,        # Spectral width, uncorr t.s., vertical channel
     'CWh': None,        # Spec. width, antenna rot. corr., horizontal channel

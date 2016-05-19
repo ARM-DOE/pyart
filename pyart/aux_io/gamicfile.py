@@ -129,6 +129,10 @@ class GAMICFile(object):
         """ Return a list of moment names for a list of scan0 groups. """
         return[self._hfile['/scan0'][k].attrs['moment'] for k in scan0_groups]
 
+    def is_field_in_ray_header(self, field):
+        """ True if field is present in ray_header, False otherwise. """
+        return field in self._hfile[self._scans[0]]['ray_header'].dtype.names
+
     def ray_header(self, field, dtype):
         """ Return an array containing a ray_header field for each sweep. """
         data = np.empty((self.total_rays, ), dtype=dtype)

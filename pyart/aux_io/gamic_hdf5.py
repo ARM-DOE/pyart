@@ -233,9 +233,19 @@ def read_gamic(filename, field_names=None, additional_metadata=None,
     # scan_rate
     scan_rate = filemetadata('scan_rate')
     if scan_type == 'ppi':
-        scan_rate['data'] = gfile.ray_header('az_speed', 'float32')
+        azs_names = ['az_speed', 'azimuth_speed']
+        azs_name = azs_names[0]
+        for azs_name in azs_names:
+            if gfile.is_field_in_ray_header(azs_name):
+                break
+        scan_rate['data'] = gfile.ray_header(azs_name, 'float32')
     elif scan_type == 'rhi':
-        scan_rate['data'] = gfile.ray_header('el_speed', 'float32')
+        els_names = ['el_speed', 'elevation_speed']
+        els_name = els_names[0]
+        for els_name in els_names:
+            if gfile.is_field_in_ray_header(els_name):
+                break
+        scan_rate['data'] = gfile.ray_header(els_name, 'float32')
     else:
         scan_rate = None
 
@@ -282,8 +292,12 @@ def _get_instrument_params(gfile, filemetadata):
     for pw_name in pw_names:
         if gfile.is_attr_in_group('/scan0/how', pw_name):
             break
-    dic['data'] = gfile.sweep_expand(
-        gfile.how_attrs(pw_name, 'float32') * 1e-6)
+    if pw_name == 'pulse_width':
+        dic['data'] = gfile.sweep_expand(
+        [0.2, 0.5, 1.0, 2.0][gfile.how_attrs(pw_name, 'int')] * 1e-6)
+    else:
+        dic['data'] = gfile.sweep_expand(
+            gfile.how_attrs(pw_name, 'float32') * 1e-6)
     instrument_params['pulse_width'] = dic
 
     dic = filemetadata('prt')
@@ -305,8 +319,9 @@ def _get_instrument_params(gfile, filemetadata):
     instrument_params['unambiguous_range'] = dic
 
     dic = filemetadata('nyquist_velocity')
-    dic['data'] = gfile.sweep_expand(gfile.how_ext_attrs('nyquist_velocity'))
-    instrument_params['nyquist_velocity'] = dic
+    if gfile.is_attr_in_group('/scan0/how/extended', 'nyquist_velocity'):
+        dic['data'] = gfile.sweep_expand(gfile.how_ext_attrs('nyquist_velocity'))
+        instrument_params['nyquist_velocity'] = dic
 
     dic = filemetadata('n_samples')
     dic['data'] = gfile.sweep_expand(
