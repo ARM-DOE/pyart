@@ -280,7 +280,7 @@ def _get_instrument_params(gfile, filemetadata):
     pw_names = ['pulse_width_us', 'pulse_width_mks', 'pulse_width']
     pw_name = 'pulse_width_us'
     for pw_name in pw_names:
-        if gfile.is_attr_in_group('how', pw_name):
+        if gfile.is_attr_in_group('/scan0/how', pw_name):
             break
     dic['data'] = gfile.sweep_expand(
         gfile.how_attrs(pw_name, 'float32') * 1e-6)
