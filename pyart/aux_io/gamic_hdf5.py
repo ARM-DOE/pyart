@@ -277,8 +277,13 @@ def _get_instrument_params(gfile, filemetadata):
     instrument_params['radar_beam_width_v'] = dic
 
     dic = filemetadata('pulse_width')
+    pw_names = ['pulse_width_us', 'pulse_width_mks', 'pulse_width']
+    pw_name = 'pulse_width_us'
+    for pw_name in pw_names:
+        if gfile.is_attr_in_group('how', pw_name):
+            break
     dic['data'] = gfile.sweep_expand(
-        gfile.how_attrs('pulse_width_us', 'float32') * 1e-6)
+        gfile.how_attrs(pw_name, 'float32') * 1e-6)
     instrument_params['pulse_width'] = dic
 
     dic = filemetadata('prt')
