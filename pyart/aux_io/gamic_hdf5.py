@@ -139,6 +139,7 @@ def read_gamic(filename, field_names=None, additional_metadata=None,
 
     # sweep_type
     scan_type = gfile.raw_scan0_group_attr('what', 'scan_type').lower()
+    scan_type = scan_type.decode('ascii')
     # check that all scans in the volume are the same type
     if not gfile.is_file_single_scan_type():
         raise NotImplementedError('Mixed scan_type volume.')
@@ -303,7 +304,7 @@ def _get_instrument_params(gfile, filemetadata, pulse_width):
                        "keyword argument")
             raise TypeError(message)
         dic['data'] = gfile.sweep_expand(
-        pulse_width[gfile.how_attrs(pw_name, 'int')[0]] * 1e-6)
+            pulse_width[gfile.how_attrs(pw_name, 'int')[0]] * 1e-6)
     else:
         dic['data'] = gfile.sweep_expand(
             gfile.how_attrs(pw_name, 'float32') * 1e-6)
