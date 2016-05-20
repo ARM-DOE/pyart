@@ -40,7 +40,8 @@ LIGHT_SPEED = 2.99792458e8  # speed of light in meters per second
 
 def read_gamic(filename, field_names=None, additional_metadata=None,
                file_field_names=False, exclude_fields=None,
-               valid_range_from_file=True, units_from_file=True, **kwargs):
+               valid_range_from_file=True, units_from_file=True,
+               pulse_width=None, **kwargs):
     """
     Read a GAMIC hdf5 file.
 
@@ -70,6 +71,9 @@ def read_gamic(filename, field_names=None, additional_metadata=None,
     units_from_file : bool, optional
         True to extract the units for all fields from the file when available.
         False will not extract units using the default units for the fields.
+    pulse_width : list or None,
+        Mandatory for gamic radar processors which have pulsewidth enums.
+        pulse_width should contain the pulsewidth' in us.
 
     Returns
     -------
@@ -233,14 +237,25 @@ def read_gamic(filename, field_names=None, additional_metadata=None,
     # scan_rate
     scan_rate = filemetadata('scan_rate')
     if scan_type == 'ppi':
-        scan_rate['data'] = gfile.ray_header('az_speed', 'float32')
+        azs_names = ['az_speed', 'azimuth_speed']
+        azs_name = azs_names[0]
+        for azs_name in azs_names:
+            if gfile.is_field_in_ray_header(azs_name):
+                break
+        scan_rate['data'] = gfile.ray_header(azs_name, 'float32')
     elif scan_type == 'rhi':
-        scan_rate['data'] = gfile.ray_header('el_speed', 'float32')
+        els_names = ['el_speed', 'elevation_speed']
+        els_name = els_names[0]
+        for els_name in els_names:
+            if gfile.is_field_in_ray_header(els_name):
+                break
+        scan_rate['data'] = gfile.ray_header(els_name, 'float32')
     else:
         scan_rate = None
 
     # instrument_parameters
-    instrument_parameters = _get_instrument_params(gfile, filemetadata)
+    instrument_parameters = _get_instrument_params(gfile, filemetadata,
+                                                   pulse_width)
 
     gfile.close()
 
@@ -257,7 +272,7 @@ def read_gamic(filename, field_names=None, additional_metadata=None,
         target_scan_rate=target_scan_rate)
 
 
-def _get_instrument_params(gfile, filemetadata):
+def _get_instrument_params(gfile, filemetadata, pulse_width):
     """ Return a dictionary containing instrument parameters. """
 
     instrument_params = {}
@@ -277,8 +292,21 @@ def _get_instrument_params(gfile, filemetadata):
     instrument_params['radar_beam_width_v'] = dic
 
     dic = filemetadata('pulse_width')
-    dic['data'] = gfile.sweep_expand(
-        gfile.how_attrs('pulse_width_us', 'float32') * 1e-6)
+    pw_names = ['pulse_width_us', 'pulse_width_mks', 'pulse_width']
+    pw_name = 'pulse_width_us'
+    for pw_name in pw_names:
+        if gfile.is_attr_in_group('/scan0/how', pw_name):
+            break
+    if pw_name == 'pulse_width':
+        if not pulse_width:
+            message = ("read_gamic() is missing 'pulse_width' "
+                       "keyword argument")
+            raise TypeError(message)
+        dic['data'] = gfile.sweep_expand(
+        pulse_width[gfile.how_attrs(pw_name, 'int')[0]] * 1e-6)
+    else:
+        dic['data'] = gfile.sweep_expand(
+            gfile.how_attrs(pw_name, 'float32') * 1e-6)
     instrument_params['pulse_width'] = dic
 
     dic = filemetadata('prt')
@@ -299,9 +327,11 @@ def _get_instrument_params(gfile, filemetadata):
     dic['data'] = gfile.sweep_expand(gfile.how_attrs('range', 'float32'))
     instrument_params['unambiguous_range'] = dic
 
-    dic = filemetadata('nyquist_velocity')
-    dic['data'] = gfile.sweep_expand(gfile.how_ext_attrs('nyquist_velocity'))
-    instrument_params['nyquist_velocity'] = dic
+    if gfile.is_attr_in_group('/scan0/how/extended', 'nyquist_velocity'):
+        dic = filemetadata('nyquist_velocity')
+        dic['data'] = gfile.sweep_expand(
+            gfile.how_ext_attrs('nyquist_velocity'))
+        instrument_params['nyquist_velocity'] = dic
 
     dic = filemetadata('n_samples')
     dic['data'] = gfile.sweep_expand(
