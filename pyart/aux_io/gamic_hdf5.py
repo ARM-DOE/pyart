@@ -40,7 +40,8 @@ LIGHT_SPEED = 2.99792458e8  # speed of light in meters per second
 
 def read_gamic(filename, field_names=None, additional_metadata=None,
                file_field_names=False, exclude_fields=None,
-               valid_range_from_file=True, units_from_file=True, **kwargs):
+               valid_range_from_file=True, units_from_file=True,
+               pulse_width=None, **kwargs):
     """
     Read a GAMIC hdf5 file.
 
@@ -70,6 +71,9 @@ def read_gamic(filename, field_names=None, additional_metadata=None,
     units_from_file : bool, optional
         True to extract the units for all fields from the file when available.
         False will not extract units using the default units for the fields.
+    pulse_width : list or None,
+        Mandatory for gamic radar processors which have pulsewidth enums.
+        pulse_width should contain the pulsewidth' in us.
 
     Returns
     -------
@@ -250,7 +254,8 @@ def read_gamic(filename, field_names=None, additional_metadata=None,
         scan_rate = None
 
     # instrument_parameters
-    instrument_parameters = _get_instrument_params(gfile, filemetadata)
+    instrument_parameters = _get_instrument_params(gfile, filemetadata,
+                                                   pulse_width)
 
     gfile.close()
 
@@ -267,7 +272,7 @@ def read_gamic(filename, field_names=None, additional_metadata=None,
         target_scan_rate=target_scan_rate)
 
 
-def _get_instrument_params(gfile, filemetadata):
+def _get_instrument_params(gfile, filemetadata, pulse_width):
     """ Return a dictionary containing instrument parameters. """
 
     instrument_params = {}
@@ -293,8 +298,12 @@ def _get_instrument_params(gfile, filemetadata):
         if gfile.is_attr_in_group('/scan0/how', pw_name):
             break
     if pw_name == 'pulse_width':
+        if not pulse_width:
+            message = ("read_gamic() is missing 'pulse_width' "
+                       "keyword argument")
+            raise TypeError(message)
         dic['data'] = gfile.sweep_expand(
-        [0.2, 0.5, 1.0, 2.0][gfile.how_attrs(pw_name, 'int')] * 1e-6)
+        pulse_width[gfile.how_attrs(pw_name, 'int')[0]] * 1e-6)
     else:
         dic['data'] = gfile.sweep_expand(
             gfile.how_attrs(pw_name, 'float32') * 1e-6)
@@ -318,9 +327,10 @@ def _get_instrument_params(gfile, filemetadata):
     dic['data'] = gfile.sweep_expand(gfile.how_attrs('range', 'float32'))
     instrument_params['unambiguous_range'] = dic
 
-    dic = filemetadata('nyquist_velocity')
     if gfile.is_attr_in_group('/scan0/how/extended', 'nyquist_velocity'):
-        dic['data'] = gfile.sweep_expand(gfile.how_ext_attrs('nyquist_velocity'))
+        dic = filemetadata('nyquist_velocity')
+        dic['data'] = gfile.sweep_expand(
+            gfile.how_ext_attrs('nyquist_velocity'))
         instrument_params['nyquist_velocity'] = dic
 
     dic = filemetadata('n_samples')
