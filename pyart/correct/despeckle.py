@@ -24,12 +24,8 @@ Find contiguous objects in scans and despeckle away ones that are too small.
 import numpy as np
 from ..exceptions import MissingOptionalDependency
 from ..filters.gatefilter import GateFilter
-try:
-    from scipy.ndimage import label
-    from scipy.signal import convolve2d
-    IMPORT_FLAG = True
-except:
-    IMPORT_FLAG = False
+from scipy.ndimage import label
+from scipy.signal import convolve2d
 
 BAD = 1e20  # Absurdly unphysical value, for easy thresholding
 DELTA = 5.0  # deg, allowable gap between PPI edges to be considered full 360
@@ -79,8 +75,6 @@ def find_objects(radar, field, threshold, sweeps=None, smooth=None,
         as a field.
 
     """
-    if not IMPORT_FLAG:
-        raise MissingOptionalDependency('Need to install SciPy!')
     if field not in radar.fields.keys():
         raise KeyError('Failed -', field, 'field not found in Radar object.')
     sweeps = _check_sweeps(sweeps, radar)
@@ -143,8 +137,6 @@ def despeckle(radar, field, label_dict=None, threshold=-100,
         Py-ART GateFilter object that includes the despeckling mask
 
     """
-    if not IMPORT_FLAG:
-        raise MissingOptionalDependency('Need to install SciPy!')
     if field not in radar.fields.keys():
         raise KeyError('Failed -', field, 'field not found in Radar object.')
     if label_dict is None:
