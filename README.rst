@@ -166,9 +166,6 @@ functionality is available of the following modules are installed.
 * `gdal <https://pypi.python.org/pypi/GDAL/>`_.
   Required to output GeoTIFFs from `Grid` objects.
  
-* `scipy <http://docs.scipy.org/doc/>`_.
-  Required to find contiguous echoes and perform despeckling on `Radar` objects.
-
 Installing from source
 ======================
 
