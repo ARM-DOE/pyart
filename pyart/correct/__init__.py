@@ -25,6 +25,7 @@ Other corrections
 
     calculate_attenuation
     phase_proc_lp
+    despeckle
 
 Helper functions
 ================
@@ -33,6 +34,7 @@ Helper functions
     :toctree: generated/
 
     find_time_in_interp_sonde
+    find_objects
 
 """
 
@@ -43,5 +45,6 @@ from .phase_proc import phase_proc_lp
 from ..filters.gatefilter import GateFilter, moment_based_gate_filter
 from .unwrap import dealias_unwrap_phase
 from .region_dealias import dealias_region_based
+from .despeckle import find_objects, despeckle
 
 __all__ = [s for s in dir() if not s.startswith('_')]
