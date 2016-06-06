@@ -267,7 +267,7 @@ class RadarDisplay(object):
             2-tuple of x-axis, y-axis labels.  None for either label will use
             the default axis label.  Parameter is ignored if axislabels_flag is
             False.
-        axislabel_flag : bool
+        axislabels_flag : bool
             True to add label the axes, False does not label the axes.
         ax : Axis
             Axis to plot on. None will use the current axis.
@@ -350,7 +350,7 @@ class RadarDisplay(object):
             2-tuple of x-axis, y-axis labels.  None for either label will use
             the default axis label.  Parameter is ignored if axislabels_flag is
             False.
-        axislabel_flag : bool
+        axislabels_flag : bool
             True to add label the axes, False does not label the axes.
         colorbar_flag : bool
             True to add a colorbar with label to the axis.  False leaves off
@@ -468,7 +468,7 @@ class RadarDisplay(object):
             2-tuple of x-axis, y-axis labels.  None for either label will use
             the default axis label.  Parameter is ignored if axislabels_flag is
             False.
-        axislabel_flag : bool
+        axislabels_flag : bool
             True to add label the axes, False does not label the axes.
         reverse_xaxis : bool or None
             True to reverse the x-axis so the plot reads east to west, False
@@ -598,7 +598,7 @@ class RadarDisplay(object):
             2-tuple of x-axis, y-axis labels.  None for either label will use
             the default axis label.  Parameter is ignored if axislabels_flag is
             False.
-        axislabel_flag : bool
+        axislabels_flag : bool
             True to add label the axes, False does not label the axes.
         colorbar_flag : bool
             True to add a colorbar with label to the axis.  False leaves off
@@ -737,7 +737,7 @@ class RadarDisplay(object):
             2-tuple of x-axis, y-axis labels.  None for either label will use
             the default axis label.  Parameter is ignored if axislabels_flag is
             False.
-        axislabel_flag : bool
+        axislabels_flag : bool
             True to add label the axes, False does not label the axes.
         reverse_xaxis : bool or None
             True to reverse the x-axis so the plot reads east to west, False
