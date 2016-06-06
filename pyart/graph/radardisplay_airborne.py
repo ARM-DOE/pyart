@@ -182,7 +182,7 @@ class AirborneRadarDisplay(RadarDisplay):
             2-tuple of x-axis, y-axis labels.  None for either label will use
             the default axis label.  Parameter is ignored if axislabels_flag is
             False.
-        axislabel_flag : bool
+        axislabels_flag : bool
             True to add label the axes, False does not label the axes.
         colorbar_flag : bool
             True to add a colorbar with label to the axis.  False leaves off
