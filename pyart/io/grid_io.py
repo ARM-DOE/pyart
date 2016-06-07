@@ -207,7 +207,8 @@ def write_grid(filename, grid, format='NETCDF4',
     if grid.nradar != 0:
         dset.createDimension('nradar', grid.nradar)
         if grid.radar_name is not None:
-            nradar_str_length = len(grid.radar_name['data'][0])
+            # a length of at least 1 is required for the dimension
+            nradar_str_length = max(len(grid.radar_name['data'][0]), 1)
             dset.createDimension('nradar_str_length', nradar_str_length)
 
     # required variables
