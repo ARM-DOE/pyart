@@ -56,6 +56,7 @@ def test_range():
 def test_metadata():
     assert 'instrument_name' in radar.metadata
     assert 'source' in radar.metadata
+    assert 'vcp_pattern' not in radar.metadata
 
 
 # scan_type attribute

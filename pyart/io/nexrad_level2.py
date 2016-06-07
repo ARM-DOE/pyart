@@ -248,6 +248,15 @@ class NEXRADLevel2File(object):
                 'moments': moments})
         return info
 
+    def get_vcp_pattern(self):
+        """
+        Return the numerical volume coverage pattern (VCP) or None if unknown.
+        """
+        if self.vcp is None:
+            return None
+        else:
+            return self.vcp['msg5_header']['pattern_number']
+
     def get_nrays(self, scan):
         """
         Return the number of rays in a given scan.
