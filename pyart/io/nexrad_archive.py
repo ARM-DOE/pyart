@@ -128,6 +128,9 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
     # metadata
     metadata = filemetadata('metadata')
     metadata['original_container'] = 'NEXRAD Level II'
+    vcp_pattern = nfile.get_vcp_pattern()
+    if vcp_pattern is not None:
+        metadata['vcp_pattern'] = vcp_pattern
 
     # scan_type
     scan_type = 'ppi'
