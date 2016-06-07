@@ -3,6 +3,7 @@
 from __future__ import print_function
 
 import netCDF4
+import numpy as np
 from numpy.testing import assert_almost_equal, assert_warns
 
 import pyart
@@ -307,3 +308,18 @@ def test_make_coordinate_system_dict():
     grid.projection['proj'] = 'null'
     dic = pyart.io.grid_io._make_coordinatesystem_dict(grid)
     assert dic is None
+
+
+def test_write_grid_empty_radar_names():
+    # GitHub issue #537
+    grid1 = pyart.testing.make_target_grid()
+    grid1.nradar = 2
+    grid1.radar_name['data'] = np.array(['', ''])
+    grid1.radar_latitude = None
+    grid1.radar_longitude = None
+    grid1.radar_altitude = None
+    grid1.radar_time = None
+
+    with pyart.testing.InTemporaryDirectory():
+        tmpfile = 'tmp_grid.nc'
+        pyart.io.write_grid(tmpfile, grid1)
