@@ -229,6 +229,11 @@ def determine_filetype(filename):
     if begin[:4] == b'SDUS':
         return "NEXRADL3"
 
+    # NEXRAD LEVEL 3 with NOAAPORT record seperator
+    # Start of heading (x01) \r\r\nXXX \r\r\nSDUSXX KXXX
+    if begin[:4] == b'\x01\r\r\n':
+        return "NEXRADL3"
+
     # Other files should be read with read_rsl
     # WSR-88D begin with ARCHIVE2. or AR2V000
     if begin[:9] == b'ARCHIVE2.' or begin[:7] == b'AR2V000':
