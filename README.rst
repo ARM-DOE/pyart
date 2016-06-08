@@ -162,8 +162,10 @@ functionality is available of the following modules are installed.
 
 * `nose <http://nose.readthedocs.org/en/latest/>`_.  
   Required to run the Py-ART unit tests.
- 
 
+* `gdal <https://pypi.python.org/pypi/GDAL/>`_.
+  Required to output GeoTIFFs from `Grid` objects.
+ 
 Installing from source
 ======================
 
