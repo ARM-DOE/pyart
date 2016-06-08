@@ -22,7 +22,6 @@ Find contiguous objects in scans and despeckle away ones that are too small.
 """
 
 import numpy as np
-from ..exceptions import MissingOptionalDependency
 from ..filters.gatefilter import GateFilter
 from scipy.ndimage import label
 from scipy.signal import convolve2d
@@ -98,8 +97,8 @@ def find_objects(radar, field, threshold, sweeps=None, smooth=None,
     return _generate_dict(label_storage)
 
 
-def despeckle(radar, field, label_dict=None, threshold=-100,
-              size=10, gatefilter=None, delta=DELTA):
+def despeckle_field(radar, field, label_dict=None, threshold=-100,
+                    size=10, gatefilter=None, delta=DELTA):
     """
     Despeckle a radar volume by identifying small objects in each scan and
     masking them out. User can define which field to investigate, as well as

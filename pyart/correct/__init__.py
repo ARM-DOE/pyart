@@ -45,6 +45,6 @@ from .phase_proc import phase_proc_lp
 from ..filters.gatefilter import GateFilter, moment_based_gate_filter
 from .unwrap import dealias_unwrap_phase
 from .region_dealias import dealias_region_based
-from .despeckle import find_objects, despeckle
+from .despeckle import find_objects, despeckle_field
 
 __all__ = [s for s in dir() if not s.startswith('_')]
