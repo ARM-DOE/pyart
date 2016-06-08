@@ -157,6 +157,25 @@ class Grid(object):
 
         return
 
+    def __getstate__(self):
+        """ Return object's state which can be pickled. """
+        state = self.__dict__.copy()  # copy the objects state
+        # Remove unpicklable entries (those which are lazily loaded
+        del state['point_x']
+        del state['point_y']
+        del state['point_z']
+        del state['point_latitude']
+        del state['point_longitude']
+        del state['point_altitude']
+        return state
+
+    def __setstate__(self, state):
+        """ Restore unpicklable entries from pickled object. """
+        self.__dict__.update(state)
+        self.init_point_x_y_z()
+        self.init_point_longitude_latitude()
+        self.init_point_altitude()
+
     @classmethod
     def from_legacy_parameters(cls, fields, axes, metadata):
         """

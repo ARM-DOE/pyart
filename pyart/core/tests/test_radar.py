@@ -1,5 +1,6 @@
 """ Unit Tests for Py-ART's core/radar.py module. """
 
+import pickle
 import sys
 # we need a class which excepts str for writing in Python 2 and 3
 try:
@@ -12,6 +13,15 @@ import numpy as np
 from numpy.testing import assert_raises, assert_allclose, assert_almost_equal
 import pyart
 from pyart.lazydict import LazyLoadDict
+
+
+def test_radar_picklable():
+    # verify that Radar instances are picklable
+    radar = pyart.testing.make_empty_ppi_radar(5, 4, 2)
+    picklestring = pickle.dumps(radar)
+    radar_new = pickle.loads(picklestring)
+    assert 'data' in radar.gate_x
+    assert 'data' in radar_new.gate_x
 
 
 def test_gate_longitude_latitude():
