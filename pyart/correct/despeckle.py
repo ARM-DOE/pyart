@@ -7,7 +7,7 @@ Find contiguous objects in scans and despeckle away ones that are too small.
 .. autosummary::
     :toctree: generated/
 
-    despeckle
+    despeckle_field
     find_objects
     _adjust_for_periodic_boundary
     _append_labels
