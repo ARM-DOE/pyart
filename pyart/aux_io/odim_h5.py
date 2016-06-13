@@ -108,7 +108,7 @@ def read_odim_h5(filename, field_names=None, additional_metadata=None,
     # open the file
     hfile = h5py.File(filename, 'r')
     odim_object = _to_str(hfile['what'].attrs['object'])
-    if odim_object not in ['PVOL', 'SCAN', 'ELEV']:
+    if odim_object not in ['PVOL', 'SCAN', 'ELEV', 'AZIM']:
         raise NotImplementedError(
             'object: %s not implemented.' % (odim_object))
 
@@ -154,7 +154,7 @@ def read_odim_h5(filename, field_names=None, additional_metadata=None,
     sweep_start_ray_index = filemetadata('sweep_start_ray_index')
     sweep_end_ray_index = filemetadata('sweep_end_ray_index')
 
-    if odim_object in ['SCAN', 'PVOL']:
+    if odim_object in ['AZIM', 'SCAN', 'PVOL']:
         rays_per_sweep = [
             int(hfile[d]['where'].attrs['nrays']) for d in datasets]
     elif odim_object == 'ELEV':
@@ -244,6 +244,14 @@ def read_odim_h5(filename, field_names=None, additional_metadata=None,
         if odim_object == 'ELEV':
             # all azimuth angles are the sweep azimuth angle
             sweep_az = hfile[dset]['where'].attrs['az_angle']
+        elif odim_object == 'AZIM':
+            # Sector azimuths are specified in the startaz and stopaz
+            # attribute of dataset/where.
+            # Assume that the azimuth angles do not pass through 0/360 degrees
+            startaz = hfile[dset]['where'].attrs['startaz']
+            stopaz = hfile[dset]['where'].attrs['stopaz']
+            nrays = stop - start + 1
+            sweep_az = np.linspace(startaz, stopaz, nrays, endpoint=True)
         elif ('startazA' in ds1_how) and ('stopazA' in ds1_how):
             # average between start and stop azimuth angles
             startaz = hfile[dset]['how'].attrs['startazA']
