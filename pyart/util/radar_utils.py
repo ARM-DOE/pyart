@@ -10,6 +10,7 @@ Functions for working radar instances.
     is_vpt
     to_vpt
     join_radar
+
 """
 
 from __future__ import print_function
@@ -19,6 +20,7 @@ import copy
 import numpy as np
 from netCDF4 import num2date, date2num
 
+from ..config import get_fillvalue
 from . import datetime_utils
 
 
@@ -124,34 +126,50 @@ def join_radar(radar1, radar2):
         Radar object.
     radar2 : Radar
         Radar object.
+
     """
     # must have same gate spacing
     new_radar = copy.deepcopy(radar1)
-    new_radar.azimuth['data'] = np.append(radar1.azimuth['data'],
-                                          radar2.azimuth['data'])
-    new_radar.elevation['data'] = np.append(radar1.elevation['data'],
-                                            radar2.elevation['data'])
+    new_radar.azimuth['data'] = np.append(
+        radar1.azimuth['data'], radar2.azimuth['data'])
+    new_radar.elevation['data'] = np.append(
+        radar1.elevation['data'], radar2.elevation['data'])
+    new_radar.fixed_angle['data'] = np.append(
+        radar1.fixed_angle['data'], radar2.fixed_angle['data'])
+    new_radar.sweep_number['data'] = np.append(
+        radar1.sweep_number['data'], radar2.sweep_number['data'])
+    new_radar.sweep_start_ray_index['data'] = np.append(
+        radar1.sweep_start_ray_index['data'],
+        radar2.sweep_start_ray_index['data'] + radar1.nrays)
+    new_radar.sweep_end_ray_index['data'] = np.append(
+        radar1.sweep_end_ray_index['data'],
+        radar2.sweep_end_ray_index['data'] + radar1.nrays)
+    new_radar.nsweeps += radar2.nsweeps
+    new_radar.sweep_mode['data'] = np.append(
+        radar1.sweep_mode['data'], radar2.sweep_mode['data'])
 
     if len(radar1.range['data']) >= len(radar2.range['data']):
         new_radar.range['data'] = radar1.range['data']
     else:
         new_radar.range['data'] = radar2.range['data']
+    new_radar.ngates = len(new_radar.range['data'])
 
     # to combine times we need to reference them to a standard
     # for this we'll use epoch time
-    estring = "seconds since 1970-01-01T00:00:00Z"
-    r1dt = num2date(radar1.time['data'], radar1.time['units'])
-    r2dt = num2date(radar2.time['data'], radar2.time['units'])
     r1num = datetime_utils.datetimes_from_radar(radar1, epoch=True)
     r2num = datetime_utils.datetimes_from_radar(radar2, epoch=True)
-    new_radar.time['data'] = np.append(r1num, r2num)
+    new_radar.time['data'] = date2num(
+        np.append(r1num, r2num), datetime_utils.EPOCH_UNITS)
     new_radar.time['units'] = datetime_utils.EPOCH_UNITS
+    new_radar.nrays = len(new_radar.time['data'])
 
     for var in new_radar.fields.keys():
         sh1 = radar1.fields[var]['data'].shape
         sh2 = radar2.fields[var]['data'].shape
-        new_field = np.ma.zeros([sh1[0] + sh2[0],
-                                max([sh1[1], sh2[1]])]) - 9999.0
+        new_field_shape = (sh1[0] + sh2[0], max(sh1[1], sh2[1]))
+        new_field = np.ma.zeros(new_field_shape)
+        new_field.set_fill_value = get_fillvalue()
+        new_field[:] = np.ma.masked
         new_field[0:sh1[0], 0:sh1[1]] = radar1.fields[var]['data']
         new_field[sh1[0]:, 0:sh2[1]] = radar2.fields[var]['data']
         new_radar.fields[var]['data'] = new_field
