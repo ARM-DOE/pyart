@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+from __future__ import print_function
 
 import argparse
 
@@ -93,9 +94,9 @@ if __name__ == '__main__':
     ax = fig.add_subplot(111)
 
     if args.field not in radar.fields:
-        print "Valid fields:"
+        print("Valid fields:")
         for f in radar.fields:
-            print '\t' + f
+            print('\t' + f)
         raise ValueError('invalid field: ' + args.field)
 
     display = pyart.graph.RadarDisplay(radar)
