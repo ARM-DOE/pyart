@@ -64,6 +64,8 @@ if [[ "$FROM_RECIPE" == "true" ]]; then
     conda build --no-test -q conda_recipe/
    
     export CONDA_PACKAGE=`conda build --output conda_recipe/ | grep bz2`
+    # KLUDGE conda 4.1.6 cannot install from local paths
+    conda install --yes conda=4.1.5
     conda install --yes $CONDA_PACKAGE
     conda update --yes libnetcdf   # KLUDGE to upgrade downgraded libnetcdf
     mkdir foo   # required so source directory not picked up during tests
