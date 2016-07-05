@@ -136,9 +136,15 @@ class NEXRADLevel2File(object):
 
         # read the records in the file, decompressing as needed
         compression_slice = slice(CONTROL_WORD_SIZE, CONTROL_WORD_SIZE + 2)
-        if compression_record[compression_slice] == b'BZ':
+        compression_or_ctm_info = compression_record[compression_slice]
+        if compression_or_ctm_info == b'BZ':
             buf = _decompress_records(fh)
-        elif compression_record[compression_slice] == b'\x00\x00':
+        # The 12-byte compression record previously held the Channel Terminal
+        # Manager (CTM) information. Bytes 4 through 6 contain the size of the
+        # record (2432) as a big endian unsigned short, which is encoded as
+        # b'\t\x80' == struct.pack('>H', 2432).
+        # Newer files zero out this section.
+        elif compression_or_ctm_info in {b'\x00\x00', b'\t\x80'}:
             buf = fh.read()
         else:
             raise IOError('unknown compression record')
