@@ -60,6 +60,8 @@ if [[ "$FROM_RECIPE" == "true" ]]; then
     conda install --yes conda-build
     conda install --yes jinja2 setuptools
     conda config --add channels http://conda.anaconda.org/jjhelmus
+    # KLUDGE conda 4.1.6 cannot install from local paths
+    conda install --yes conda=4.1.5
     source activate testenv
     conda build --no-test -q conda_recipe/
    
