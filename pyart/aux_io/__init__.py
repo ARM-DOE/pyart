@@ -30,6 +30,7 @@ Reading radar data
     read_odim_h5
     read_pattern
     read_radx
+    read_rainbow_wrl
 
 """
 

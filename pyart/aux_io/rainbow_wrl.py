@@ -4,6 +4,9 @@ pyart.aux_io.rainbow
 
 Routines for reading RAINBOW files (Used by SELEX) using the wradlib library
 
+.. autosummary::
+    :toctree: generated/
+
     read_rainbow_wrl
     _get_angle
     _get_data
