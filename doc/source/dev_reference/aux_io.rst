@@ -13,3 +13,4 @@ Input/Output routines.
 .. automodule:: pyart.aux_io.pattern
 .. automodule:: pyart.aux_io.radx
 .. automodule:: pyart.aux_io.noxp_iphex_nc
+.. automodule:: pyart.aux_io.rainbow_wrl
