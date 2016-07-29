@@ -129,8 +129,8 @@ def read_rainbow_wrl(filename, field_names=None, additional_metadata=None,
 
     # check if it is the right file. Open it and read it
     bfile = os.path.basename(filename)
-    supported_file = (bfile.endswith('.vol') or bfile.endswith('.azi')
-                      or bfile.endswith('.ele'))
+    supported_file = (bfile.endswith('.vol') or bfile.endswith('.azi') or
+                      bfile.endswith('.ele'))
     if not supported_file:
         raise ValueError(
             'Only data files with extension .vol, .azi or .ele are supported')
@@ -383,8 +383,8 @@ def get_angle(ray_info, angle_step=None, scan_type='ppi'):
             angle_start[ind] -= 360.
         angle_stop = angle_start+angle_step
 
-    moving_angle = np.angle((np.exp(1.j * np.deg2rad(angle_start))
-                            + np.exp(1.j * np.deg2rad(angle_stop))) / 2.,
+    moving_angle = np.angle((np.exp(1.j * np.deg2rad(angle_start)) +
+                            np.exp(1.j * np.deg2rad(angle_stop))) / 2.,
                             deg=True)
 
     return moving_angle, angle_start, angle_stop
@@ -470,8 +470,8 @@ def get_time(date_sweep, time_sweep, first_angle_start, last_angle_stop,
         datetime_sweep - datetime.datetime(1970, 1, 1)).total_seconds()
     if scan_type == 'ppi':
         if (last_angle_stop > first_angle_start) and (
-                (last_angle_stop-first_angle_start)
-                / nrays > angle_step):
+                (last_angle_stop-first_angle_start) /
+                nrays > angle_step):
             sweep_duration = (last_angle_stop - first_angle_start) / ant_speed
         else:
             sweep_duration = (
