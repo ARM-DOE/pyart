@@ -168,10 +168,12 @@ class RadarMapDisplay(RadarDisplay):
             North America.
         projection : str
             Map projection supported by basemap.  The use of cylindrical
-            projections (mill, merc, cyl, etc) is not recommended as they
+            projections (mill, merc, etc) is not recommended as they
             exhibit large distortions at high latitudes.  Equal area
             (aea, laea), conformal (lcc, tmerc, stere) or equidistant
             projection (aeqd, cass) work well even at high latitudes.
+            The cylindrical equidistant projection (cyl) is not supported as
+            coordinate transformations cannot be performed.
         area_thresh : float
             Coastline or lake with an area smaller than area_thresh in
             km^2 will not be plotted.
@@ -258,6 +260,13 @@ class RadarMapDisplay(RadarDisplay):
                     width=width, height=height, lon_0=lon_0, lat_0=lat_0,
                     projection=projection, area_thresh=area_thresh,
                     resolution=resolution, ax=ax, **kwargs)
+
+        # The cylindrical equidistant projection does not support conversions
+        # from geographic (lon/lat) to map projection (x/y) coordinates and
+        # therefore cannot be used.
+        if basemap.projection == 'cyl':
+            raise ValueError(
+                'The cylindrical equidistant projection is not supported')
 
         # add embelishments
         if embelish is True:
