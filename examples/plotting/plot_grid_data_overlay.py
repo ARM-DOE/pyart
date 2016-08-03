@@ -8,7 +8,7 @@ with latitude and NCEP North American regional reanalysis (NARR) pressure
 is plotted on top of the grid.
 
 """
-print __doc__
+print(__doc__)
 
 # Author Jonathan J. Helmus, Cory Weber
 # License: BSD 3 clause
