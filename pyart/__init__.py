@@ -4,6 +4,8 @@ Py-ART: The Python ARM Radar Toolkit
 
 """
 
+from __future__ import print_function
+
 # Detect if we're being called as part of Py-ART's setup procedure
 try:
     __PYART_SETUP__
@@ -15,6 +17,19 @@ if __PYART_SETUP__:
     _sys.stderr.write("Running from Py-ART source directory.\n")
     del _sys
 else:
+
+    # print information on citing Py-ART, this message can be suppressed by
+    # setting the PYART_QUIET environment variable
+    _citation_text = """
+## You are using the Python ARM Radar Toolkit (Py-ART), an open source
+## library for working with weather radar data.
+##
+## If you use this software to prepare a publication, please cite:
+##
+##     JJ Helmus and SM Collis, JORS 2016, doi: 10.5334/jors.119 """
+    from os import environ as _environ
+    if 'PYART_QUIET' not in _environ:
+        print(_citation_text)
 
     # Make sure that deprecation warnings get printed by default
     import warnings as _warnings
