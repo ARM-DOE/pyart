@@ -32,5 +32,6 @@ from . import cm
 from .radardisplay_airborne import AirborneRadarDisplay
 from .gridmapdisplay import GridMapDisplay
 from .radarmapdisplay import RadarMapDisplay
+from .radarmapdisplay_cartopy import RadarMapDisplayCartopy
 
 __all__ = [s for s in dir() if not s.startswith('_')]
