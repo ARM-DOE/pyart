@@ -41,7 +41,7 @@ from .gates_to_grid import map_gates_to_grid
 
 
 def grid_from_radars(radars, grid_shape, grid_limits,
-                     gridding_algo='map_to_grid', **kwargs):
+                     gridding_algo='map_gates_to_grid', **kwargs):
     """
     Map one or more radars to a Cartesian grid returning a Grid object.
 
@@ -60,7 +60,8 @@ def grid_from_radars(radars, grid_shape, grid_limits,
     gridding_algo : 'map_to_grid' or 'map_gates_to_grid'
         Algorithm to use for gridding.  'map_to_grid' finds all gates within
         a radius of influence for each grid point, 'map_gates_to_grid' maps
-        each radar gate onto the grid using a radius of influence.
+        each radar gate onto the grid using a radius of influence and is
+        typically significantly faster.
 
     Returns
     -------
