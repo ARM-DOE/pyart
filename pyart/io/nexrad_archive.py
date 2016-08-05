@@ -30,6 +30,7 @@ from .common import make_time_unit_str, _test_arguments, prepare_for_read
 from .nexrad_level2 import NEXRADLevel2File
 from ..lazydict import LazyLoadDict
 from .nexrad_common import get_nexrad_location
+from .nexrad_interpolate import _fast_interpolate_scan
 
 
 def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
@@ -284,45 +285,12 @@ def _find_scans_to_interp(scan_info, first_gate, gate_spacing, filemetadata):
 
 def _interpolate_scan(mdata, start, end, moment_ngates, linear_interp=True):
     """ Interpolate a single NEXRAD moment scan from 1000 m to 250 m. """
-    # This interpolation scheme is only valid for NEXRAD data where a 4:1
-    # (1000 m : 250 m) interpolation is needed.
-    #
-    # The scheme here performs a linear interpolation between pairs of gates
-    # in a ray when the both of the gates are not masked (below threshold).
-    # When one of the gates is masked the interpolation changes to a nearest
-    # neighbor interpolation. Nearest neighbor is also performed at the end
-    # points until the new range bin would be centered beyond half of the range
-    # spacing of the original range.
-    #
-    # Nearest neighbor interpolation is performed when linear_interp is False,
-    # this is equivalent to repeating each gate four times in each ray.
-    #
-    # No transformation of the raw data is performed prior to interpolation, so
-    # reflectivity will be interpolated in dB units, velocity in m/s, etc,
-    # this may not be the best method for interpolation.
-    #
-    # This method was adapted from Radx
-    for ray_num in range(start, end+1):
-        ray = mdata[ray_num].copy()
-
-        # repeat each gate value 4 times
-        interp_ngates = 4 * moment_ngates
-        ray[:interp_ngates] = np.repeat(ray[:moment_ngates], 4)
-
-        if linear_interp:
-            # linear interpolate
-            for i in range(2, interp_ngates - 4, 4):
-                gate_val = ray[i]
-                next_val = ray[i+4]
-                if np.ma.is_masked(gate_val) or np.ma.is_masked(next_val):
-                    continue
-                delta = (next_val - gate_val) / 4.
-                ray[i+0] = gate_val + delta * 0.5
-                ray[i+1] = gate_val + delta * 1.5
-                ray[i+2] = gate_val + delta * 2.5
-                ray[i+3] = gate_val + delta * 3.5
-
-        mdata[ray_num] = ray[:]
+    fill_value = -9999
+    data = mdata.filled(fill_value)
+    scratch_ray = np.empty((data.shape[1], ), dtype=data.dtype)
+    _fast_interpolate_scan(data, scratch_ray, fill_value,
+                           start, end, moment_ngates, linear_interp)
+    mdata[:] = np.ma.array(data, mask=(data == fill_value))
 
 
 class _NEXRADLevel2StagedField(object):
