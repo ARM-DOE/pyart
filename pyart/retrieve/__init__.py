@@ -27,4 +27,12 @@ from .echo_class import steiner_conv_strat
 from .gate_id import map_profile_to_gates, fetch_radar_time_profile
 from .simple_moment_calculations import calculate_snr_from_reflectivity
 
+try:
+    from .advection import  grid_displacememt_pc
+    _ADVECTION_AVAILABLE = True
+except:
+    _ADVECTION_AVAILABLE = False
+
+
+
 __all__ = [s for s in dir() if not s.startswith('_')]
