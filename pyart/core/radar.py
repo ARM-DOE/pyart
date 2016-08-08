@@ -244,6 +244,27 @@ class Radar(object):
         self.init_gate_longitude_latitude()
         self.init_gate_altitude()
 
+    def __getstate__(self):
+        """ Return object's state which can be pickled. """
+        state = self.__dict__.copy()  # copy the objects state
+        # Remove unpicklable entries (those which are lazily loaded
+        del state['rays_per_sweep']
+        del state['gate_x']
+        del state['gate_y']
+        del state['gate_z']
+        del state['gate_longitude']
+        del state['gate_latitude']
+        del state['gate_altitude']
+        return state
+
+    def __setstate__(self, state):
+        """ Restore unpicklable entries from pickled object. """
+        self.__dict__.update(state)
+        self.init_rays_per_sweep()
+        self.init_gate_x_y_z()
+        self.init_gate_longitude_latitude()
+        self.init_gate_altitude()
+
     # Attribute init/reset method
     def init_rays_per_sweep(self):
         """ Initialize or reset the rays_per_sweep attribute. """

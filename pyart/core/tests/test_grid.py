@@ -3,6 +3,7 @@
 from __future__ import print_function
 
 import functools
+import pickle
 import warnings
 
 import numpy as np
@@ -17,6 +18,14 @@ except ImportError:
 
 import pyart
 from pyart.lazydict import LazyLoadDict
+
+
+def test_grid_picklable():
+    grid = pyart.testing.make_target_grid()
+    picklestring = pickle.dumps(grid)
+    grid_new = pickle.loads(picklestring)
+    assert 'data' in grid.point_x
+    assert 'data' in grid_new.point_x
 
 
 def test_grid_write_method():

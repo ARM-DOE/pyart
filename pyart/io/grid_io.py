@@ -15,7 +15,6 @@ Reading and writing Grid objects.
 """
 
 import warnings
-
 import numpy as np
 import netCDF4
 import datetime
@@ -208,7 +207,8 @@ def write_grid(filename, grid, format='NETCDF4',
     if grid.nradar != 0:
         dset.createDimension('nradar', grid.nradar)
         if grid.radar_name is not None:
-            nradar_str_length = len(grid.radar_name['data'][0])
+            # a length of at least 1 is required for the dimension
+            nradar_str_length = max(len(grid.radar_name['data'][0]), 1)
             dset.createDimension('nradar_str_length', nradar_str_length)
 
     # required variables
@@ -448,7 +448,7 @@ def read_legacy_grid(filename, exclude_fields=None, **kwargs):
             fields[field] = field_dic
         else:
             bad_shape = field_dic['data'].shape
-            warn('Field %s skipped due to incorrect shape' % (field))
+            warnings.warn('Field %s skipped due to incorrect shape' % (field))
 
     ncobj.close()
     return Grid.from_legacy_parameters(fields, axes, metadata)

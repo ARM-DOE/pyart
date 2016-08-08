@@ -13,6 +13,7 @@ COMMON_MAP_TO_GRID_ARGS = {
     'grid_shape': (3, 9, 10),
     'grid_limits': ((-400.0, 400.0), (-900.0, 900.0), (-900, 900)),
     'fields': None,
+    'gridding_algo': 'map_to_grid',
     'roi_func': lambda z, y, x: 30, }
 
 

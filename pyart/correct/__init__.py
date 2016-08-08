@@ -25,7 +25,7 @@ Other corrections
 
     calculate_attenuation
     phase_proc_lp
-    despeckle
+    despeckle_field
 
 Helper functions
 ================

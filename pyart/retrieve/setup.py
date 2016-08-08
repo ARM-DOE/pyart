@@ -9,6 +9,9 @@ def configuration(parent_package='', top_path=None):
 
     # Conditionally add Steiner echo classifier extension.
     config.add_extension('_echo_steiner', sources=[steiner_echo_gen_source])
+
+    # KDP processing Cython extension
+    config.add_extension('_kdp_proc', sources=['_kdp_proc.c'])
     return config
 
 

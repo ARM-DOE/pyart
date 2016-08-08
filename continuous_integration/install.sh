@@ -30,7 +30,7 @@ source activate testenv
 # Install Py-ART dependencies
 conda install --yes numpy scipy matplotlib netcdf4 nose
 conda install --yes basemap
-conda install --yes -c http://conda.anaconda.org/jjhelmus trmm_rsl
+conda install --yes -c jjhelmus trmm_rsl
 
 if [[ $PYTHON_VERSION == '2.7' ]]; then
     conda install --yes -c http://conda.anaconda.org/jjhelmus cbc cylp
@@ -42,8 +42,8 @@ if [[ $PYTHON_VERSION == '2.7' ]]; then
     # KLUDGE libgdal does not report its version dependency on geos which
     # causes either gdal or basemap to break, force the exact libgdal version
     # see: https://github.com/ContinuumIO/anaconda-issues/issues/584
-    conda install --yes gdal basemap libgdal=2.0.0=0 krb5
-    conda install --no-deps --yes -c http://conda.anaconda.org/jjhelmus wradlib
+    conda install --yes gdal basemap libgdal=2.0.0=0 krb5 proj4
+    conda install --no-deps --yes -c conda-forge wradlib
 fi
 
 # install coverage modules
@@ -60,10 +60,12 @@ if [[ "$FROM_RECIPE" == "true" ]]; then
     conda install --yes conda-build
     conda install --yes jinja2 setuptools
     conda config --add channels http://conda.anaconda.org/jjhelmus
+    # KLUDGE conda 4.1.6 cannot install from local paths
+    conda install --yes conda=4.1.5
     source activate testenv
     conda build --no-test -q conda_recipe/
    
-    export CONDA_PACKAGE=`conda build --output conda_recipe/`
+    export CONDA_PACKAGE=`conda build --output conda_recipe/ | grep bz2`
     conda install --yes $CONDA_PACKAGE
     conda update --yes libnetcdf   # KLUDGE to upgrade downgraded libnetcdf
     mkdir foo   # required so source directory not picked up during tests

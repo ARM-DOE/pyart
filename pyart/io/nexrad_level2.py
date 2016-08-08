@@ -136,9 +136,15 @@ class NEXRADLevel2File(object):
 
         # read the records in the file, decompressing as needed
         compression_slice = slice(CONTROL_WORD_SIZE, CONTROL_WORD_SIZE + 2)
-        if compression_record[compression_slice] == b'BZ':
+        compression_or_ctm_info = compression_record[compression_slice]
+        if compression_or_ctm_info == b'BZ':
             buf = _decompress_records(fh)
-        elif compression_record[compression_slice] == b'\x00\x00':
+        # The 12-byte compression record previously held the Channel Terminal
+        # Manager (CTM) information. Bytes 4 through 6 contain the size of the
+        # record (2432) as a big endian unsigned short, which is encoded as
+        # b'\t\x80' == struct.pack('>H', 2432).
+        # Newer files zero out this section.
+        elif compression_or_ctm_info in {b'\x00\x00', b'\t\x80'}:
             buf = fh.read()
         else:
             raise IOError('unknown compression record')
@@ -247,6 +253,15 @@ class NEXRADLevel2File(object):
                 'first_gate': first_gate,
                 'moments': moments})
         return info
+
+    def get_vcp_pattern(self):
+        """
+        Return the numerical volume coverage pattern (VCP) or None if unknown.
+        """
+        if self.vcp is None:
+            return None
+        else:
+            return self.vcp['msg5_header']['pattern_number']
 
     def get_nrays(self, scan):
         """
@@ -525,7 +540,9 @@ class NEXRADLevel2File(object):
             if moment in msg.keys():
                 offset = np.float32(msg[moment]['offset'])
                 scale = np.float32(msg[moment]['scale'])
-                return (np.ma.masked_less_equal(data, 1) - offset) / (scale)
+                mask = data <= 1
+                scaled_data = (data - offset) / scale
+                return np.ma.array(scaled_data, mask=mask)
 
         # moment is not present in any scan, mask all values
         return np.ma.masked_less_equal(data, 1)

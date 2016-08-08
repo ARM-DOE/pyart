@@ -33,6 +33,22 @@ Important Links
 - Issue Tracker: https://github.com/ARM-DOE/pyart/issues
 
 
+Citing
+======
+
+If you use the Python ARM Radar Toolkit (Py-ART) to prepare a publication
+please cite:
+
+    Helmus, J.J. & Collis, S.M., (2016). The Python ARM Radar Toolkit
+    (Py-ART), a Library for Working with Weather Radar Data in the Python
+    Programming Language. Journal of Open Research Software. 4(1), p.e25.
+    DOI: http://doi.org/10.5334/jors.119
+
+Py-ART implements many published scientific methods which should *also* be
+cited if you make use of them.  Refer to the **References** section in the
+documentation of the functions used for information on these citations.
+
+
 Install
 =======
 

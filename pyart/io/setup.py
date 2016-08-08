@@ -77,6 +77,10 @@ def configuration(parent_package='', top_path=None):
                          sources=['_sigmetfile.c'],
                          include_dirs=[get_include()])
 
+    config.add_extension('nexrad_interpolate',
+                         sources=['nexrad_interpolate.c'],
+                         include_dirs=[get_include()])
+
     return config
 
 if __name__ == '__main__':

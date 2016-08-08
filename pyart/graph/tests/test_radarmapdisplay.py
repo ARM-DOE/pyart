@@ -56,5 +56,15 @@ def test_error_raising():
     assert_raises(ValueError, display.plot_range_ring, 10)
 
 
+@skipif(not pyart.graph.radarmapdisplay._BASEMAP_AVAILABLE)
+def test_radardisplay_cylindrical_proj_error():
+    radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
+    display = pyart.graph.RadarMapDisplay(radar)
+    assert_raises(
+        ValueError,
+        display.plot_ppi_map, 'reflectivity_horizontal', projection='cyl',
+        resolution='c')
+
+
 if __name__ == "__main__":
     test_radarmapdisplay_ppi('figure_radarmapdisplay_ppi.png')

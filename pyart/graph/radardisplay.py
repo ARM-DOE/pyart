@@ -225,7 +225,7 @@ class RadarDisplay(object):
 
     def plot_ray(self, field, ray, format_str='k-', mask_tuple=None,
                  ray_min=None, ray_max=None, mask_outside=False, title=None,
-                 title_flag=True, axislabels=(None, None),
+                 title_flag=True, axislabels=(None, None), gatefilter=None,
                  axislabels_flag=True, ax=None, fig=None):
         """
         Plot a single ray.
@@ -260,11 +260,14 @@ class RadarDisplay(object):
             is False.
         title_flag : bool
             True to add a title to the plot, False does not add a title.
+        gatefilter : GateFilter
+            GateFilter instance. None will result in no gatefilter mask being
+            applied to data.
         axislabels : (str, str)
             2-tuple of x-axis, y-axis labels.  None for either label will use
             the default axis label.  Parameter is ignored if axislabels_flag is
             False.
-        axislabel_flag : bool
+        axislabels_flag : bool
             True to add label the axes, False does not label the axes.
         ax : Axis
             Axis to plot on. None will use the current axis.
@@ -276,7 +279,7 @@ class RadarDisplay(object):
         ax, fig = common.parse_ax_fig(ax, fig)
 
         # get the data and mask
-        data = self._get_ray_data(field, ray, mask_tuple)
+        data = self._get_ray_data(field, ray, mask_tuple, gatefilter)
 
         # mask the data where outside the limits
         _mask_outside(mask_outside, data, ray_min, ray_max)
@@ -347,7 +350,7 @@ class RadarDisplay(object):
             2-tuple of x-axis, y-axis labels.  None for either label will use
             the default axis label.  Parameter is ignored if axislabels_flag is
             False.
-        axislabel_flag : bool
+        axislabels_flag : bool
             True to add label the axes, False does not label the axes.
         colorbar_flag : bool
             True to add a colorbar with label to the axis.  False leaves off
@@ -465,7 +468,7 @@ class RadarDisplay(object):
             2-tuple of x-axis, y-axis labels.  None for either label will use
             the default axis label.  Parameter is ignored if axislabels_flag is
             False.
-        axislabel_flag : bool
+        axislabels_flag : bool
             True to add label the axes, False does not label the axes.
         reverse_xaxis : bool or None
             True to reverse the x-axis so the plot reads east to west, False
@@ -595,7 +598,7 @@ class RadarDisplay(object):
             2-tuple of x-axis, y-axis labels.  None for either label will use
             the default axis label.  Parameter is ignored if axislabels_flag is
             False.
-        axislabel_flag : bool
+        axislabels_flag : bool
             True to add label the axes, False does not label the axes.
         colorbar_flag : bool
             True to add a colorbar with label to the axis.  False leaves off
@@ -734,7 +737,7 @@ class RadarDisplay(object):
             2-tuple of x-axis, y-axis labels.  None for either label will use
             the default axis label.  Parameter is ignored if axislabels_flag is
             False.
-        axislabel_flag : bool
+        axislabels_flag : bool
             True to add label the axes, False does not label the axes.
         reverse_xaxis : bool or None
             True to reverse the x-axis so the plot reads east to west, False
@@ -1327,7 +1330,7 @@ class RadarDisplay(object):
 
         return data.T
 
-    def _get_ray_data(self, field, ray, mask_tuple):
+    def _get_ray_data(self, field, ray, mask_tuple, gatefilter):
         """ Retrieve and return ray data from a plot function. """
         data = self.fields[field]['data'][ray]
 
@@ -1335,6 +1338,11 @@ class RadarDisplay(object):
             mask_field, mask_value = mask_tuple
             mdata = self.fields[mask_field]['data'][ray]
             data = np.ma.masked_where(mdata < mask_value, data)
+
+        # mask data if gatefilter provided
+        if gatefilter is not None:
+            mask_filter = gatefilter.gate_excluded[ray]
+            data = np.ma.masked_array(data, mask_filter)
 
         return data
 

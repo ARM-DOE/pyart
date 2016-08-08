@@ -1,6 +1,3 @@
-.. _general_examples:
+The files used in these examples are available for download_.
 
-General examples
-----------------
-
-General-purpose and introductory example for Py-ART.
+.. _download: https://engineering.arm.gov/~jhelmus/pyart_example_data/
