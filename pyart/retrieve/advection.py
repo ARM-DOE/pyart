@@ -6,6 +6,9 @@ pyart.retrieve.advection
 .. autosummary::
     :toctree: generated/
 
+    grid_displacement_pc
+    grid_shift
+
 """
 
 import numpy as np
