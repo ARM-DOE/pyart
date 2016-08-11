@@ -1,7 +1,8 @@
 """
 pyart.retrieve.advection
-=========================
+========================
 
+Advection calculations.
 
 .. autosummary::
     :toctree: generated/
@@ -11,179 +12,157 @@ pyart.retrieve.advection
 
 """
 
-import numpy as np
-from netCDF4 import datetime
-import scipy
 import copy
+
+import numpy as np
+from scipy.ndimage import interpolation
+from netCDF4 import num2date
+
 from ..config import get_fillvalue
 
 
 # Based off work by Christoph Gohlke <http://www.lfd.uci.edu/~gohlke/>
 
-def grid_displacement_pc(grid1, grid2, var, level, return_value='pixels'):
+
+def grid_displacement_pc(grid1, grid2, field, level, return_value='pixels'):
     """
-    Calculate the grid displacement using Phase correlation.
+    Calculate the grid displacement using phase correlation.
+
     See:
     http://en.wikipedia.org/wiki/Phase_correlation
-    implimentation inspired by Christoph Gohlke:
+
+    Implementation inspired by Christoph Gohlke:
     http://www.lfd.uci.edu/~gohlke/code/imreg.py.html
 
-    Notes: Make sure valid min is set to something sensible.
-    missing values are set to valid_min. Works best on fields which have
-    background areas set to a constant area, eg rain rate, correlation etc..
+    Note that the grid must have the same dimensions in x and y and assumed to
+    have constant spacing in these dimensions.
 
-     Parameters
+    Parameters
     ----------
-    grid1,grid2 : Grids
-        Py-ART Grid objects seperated in time and be square in x/y.
-    var : string
-        Variable to calculate advection from. var must be in both grid1
-        and grid2.fields.keys()
+    grid1, grid2 : Grid
+        Py-ART Grid objects separated in time and square in x/y.
+    field : string
+        Field to calculate advection from. Field must be in both grid1
+        and grid2.
     level : integer
-        The level of the 3D grid to use in the calculation
-    return_value : string
+        The vertical (z) level of the grid to use in the calculation.
+    return_value : str, optional
         'pixels', 'distance' or 'velocity'. Distance in pixels (default)
-        or meters or velocity vector in m/s
+        or meters or velocity vector in m/s.
 
     Returns
     -------
     displacement : two-tuple
-         integers if pixels, otherwise floats. Result of the calculation
-
+         Calculated displacement in units of y and x.  Value returned in
+         integers if pixels, otherwise floats.
 
     """
     # create copies of the data
+    field_data1 = grid1.fields[field]['data'][level].copy()
+    field_data2 = grid2.fields[field]['data'][level].copy()
 
-    ige1 = copy.deepcopy(grid2.fields[var]['data'][level, :, :])
-    ige2 = copy.deepcopy(grid1.fields[var]['data'][level, :, :])
+    # replace fill values with valid_min or minimum value in array
+    if 'valid_min' in grid1.fields[field]:
+        min_value1 = grid1.fields[field]['valid_min']
+    else:
+        min_value1 = field_data1.min()
+    field_data1 = np.ma.filled(field_data1, min_value1)
 
-    # set anything below valid min to valid min,
-    # this helps nuke _fill_values
+    if 'valid_min' in grid2.fields[field]:
+        min_value2 = grid2.fields[field]['valid_min']
+    else:
+        min_value2 = field_data2.min()
+    field_data2 = np.ma.filled(field_data2, min_value2)
 
-    try:
-        ige1[np.where(ige1 < grid1.fields[var]['valid_min'])] = \
-            grid1.fields[var]['valid_min']
-        ige2[np.where(ige2 < grid2.fields[var]['valid_min'])] = \
-            grid2.fields[var]['valid_min']
-    except KeyError:
-
-        # This could probably be done better
-        # Work out where we have fill values and fill with min
-
-        is_not_filled_1 = np.where(ige1 != get_fillvalue())
-        is_not_filled_2 = np.where(ige2 != get_fillvalue())
-        is_filled_1 = np.where(ige1 == get_fillvalue())
-        is_filled_2 = np.where(ige2 == get_fillvalue())
-
-        ige1_min = ige1[is_not_filled_1].min()
-        ige2_min = ige2[is_not_filled_2].min()
-
-        ige1[is_filled_1] = ige1_min
-        ige2[is_filled_2] = ige2_min
-
-    # discrete fast fourier transformation and
-    # complex conjugation of image 2
-
-    image1FFT = np.fft.fft2(ige1)
-    image2FFT = np.conjugate(np.fft.fft2(ige2))
+    # discrete fast fourier transformation and complex conjugation of field 2
+    image1fft = np.fft.fft2(field_data1)
+    image2fft = np.conjugate(np.fft.fft2(field_data2))
 
     # inverse fourier transformation of product -> equal to cross correlation
+    imageccor = np.real(np.fft.ifft2((image1fft*image2fft)))
 
-    imageCCor = np.real(np.fft.ifft2((image1FFT*image2FFT)))
+    # shift the zero-frequency component to the center of the spectrum
+    imageccorshift = np.fft.fftshift(imageccor)
 
-    # Shift the zero-frequency component to the center of the spectrum
-
-    imageCCorShift = np.fft.fftshift(imageCCor)
     # determine the distance of the maximum from the center
-
-    row, col = ige1.shape
-
     # find the peak in the correlation
+    row, col = field_data1.shape
+    yshift, xshift = np.unravel_index(np.argmax(imageccorshift), (row, col))
+    yshift -= int(row/2)
+    xshift -= int(col/2)
 
-    yShift, xShift = np.unravel_index(np.argmax(imageCCorShift), (row, col))
-
-    yShift -= int(row/2)
-    xShift -= int(col/2)
+    dx = grid1.x['data'][1] - grid1.x['data'][0]
+    dy = grid1.y['data'][1] - grid1.y['data'][0]
+    x_movement = xshift * dx
+    y_movement = yshift * dy
 
     if return_value == 'pixels':
-        tbr = (xShift, yShift)
+        displacement = (yshift, xshift)
     elif return_value == 'distance':
-        dx = grid1.axes['x_disp']['data'][1] - grid1.axes['x_disp']['data'][0]
-        dy = grid1.axes['y_disp']['data'][1] - grid1.axes['y_disp']['data'][0]
-        x_movement = xShift * dx
-        y_movement = yShift * dy
-        tbr = (x_movement, y_movement)
+        displacement = (y_movement, x_movement)
     elif return_value == 'velocity':
-        dx = grid1.axes['x_disp']['data'][1] - grid1.axes['x_disp']['data'][0]
-        dy = grid1.axes['y_disp']['data'][1] - grid1.axes['y_disp']['data'][0]
-        x_movement = xShift * dx
-        y_movement = yShift * dy
-        t1 = netCDF4.num2date(grid1.axes['time']['data'][0],
-                              grid1.axes['time']['units'])
-        t2 = netCDF4.num2date(grid2.axes['time']['data'][0],
-                              grid2.axes['time']['units'])
-        dt = (t2 - t1).seconds
+        t1 = num2date(grid1.time['data'][0], grid1.time['units'])
+        t2 = num2date(grid2.time['data'][0], grid2.time['units'])
+        dt = (t2 - t1).total_seconds()
         u = x_movement/dt
         v = y_movement/dt
-        tbr = (u, v)
+        displacement = (v, u)
     else:
-        tbr = (xShift, yShift)
-    return tbr
+        displacement = (yshift, xshift)
+    return displacement
 
 
-def grid_shift(grid, advection, trim_edges=0., field_list=None):
+def grid_shift(grid, advection, trim_edges=0, field_list=None):
     """
-    Use scipy.ndimage to shift a grid by a certain number of pixels
-     Parameters
+    Shift a grid by a certain number of pixels.
+
+    Parameters
     ----------
     grid: Grid
         Py-ART Grid object.
     advection : two-tuple of floats
-        Pixels to shift the image by.
-    trim_edges: integer
-        edges to cut off the grid and axes, both x and y. Defaults to zero.
+        Number of Pixels to shift the image by.
+    trim_edges: integer, optional
+        Edges to cut off the grid and axes, both x and y. Defaults to zero.
+    field_list : list, optional
+        List of fields to include in new grid. None, the default, includes all
+        fields from the input grid.
 
     Returns
     -------
-    return_grid : Grid
-         grid with fields shifted and, if requested, subset.
-    """
+    shifted_grid : Grid
+         Grid with fields shifted and, if requested, subset.
 
-    new_grid = copy.deepcopy(grid)
+    """
+    if trim_edges == 0:
+        trim_slice = slice(None, None)
+    else:
+        trim_slice = slice(int(trim_edges), -int(trim_edges))
+
+    shifted_grid = copy.deepcopy(grid)
 
     # grab the x and y axis and trim
+    shifted_grid.x['data'] = grid.x['data'][trim_slice].copy()
+    shifted_grid.y['data'] = grid.y['data'][trim_slice].copy()
 
-    x_g = grid.axes['x_disp']['data'].copy()
-    y_g = grid.axes['y_disp']['data'].copy()
-    if trim_edges != 0.:
-        new_grid.axes['x_disp']['data'] = x_g[trim_edges:-trim_edges]
-        new_grid.axes['y_disp']['data'] = y_g[trim_edges:-trim_edges]
-    else:
-        new_grid.axes['x_disp']['data'] = x_g
-        new_grid.axes['y_disp']['data'] = y_g
-
-    # now shift each field. Replacing masking is tricky..
-    # either use valid min and max or use  user set
+    # shift each field.
     if field_list is None:
         field_list = grid.fields.keys()
 
     for field in field_list:
-        image_data = grid.fields[field]['data'].copy()
-        try:
-            ndv = image_data.fill_value
-            image_data = image_data.filled(np.nan)
-        except:
-            ndv = get_fillvalue()
-        new_image = \
-            scipy.ndimage.interpolation.shift(image_data,
-                                              [0, advection[0], advection[1]],
-                                              prefilter=False)
-        image_masked = np.ma.fix_invalid(new_image, copy=False)
-        image_masked.set_fill_value(ndv)
-        if trim_edges != 0.:
-            new_grid.fields[field]['data'] = \
-                    image_masked[:, trim_edges:-trim_edges,
-                                 trim_edges:-trim_edges]
-        else:
-            new_grid.fields[field]['data'] = image_masked
-    return new_grid
+
+        # copy data and fill with nans
+        data = grid.fields[field]['data'].copy()
+        data = np.ma.filled(data, np.nan)
+
+        # shift the data
+        shifted_data = interpolation.shift(
+            data, [0, advection[0], advection[1]], prefilter=False)
+
+        # mask invalid, trim and place into grid
+        shifted_data = np.ma.fix_invalid(
+            shifted_data, copy=False, fill_value=get_fillvalue())
+        shifted_data = shifted_data[:, trim_slice, trim_slice]
+        shifted_grid.fields[field]['data'] = shifted_data
+
+    return shifted_grid

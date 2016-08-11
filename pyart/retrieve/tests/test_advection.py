@@ -1,40 +1,56 @@
 """ Unit Tests for Py-ART's retrieve/advection.py module. """
 
-import numpy as np
-from numpy.testing.decorators import skipif
-
+from numpy.testing import assert_almost_equal
 import pyart
 
+
 def test_grid_displacement_pc():
-    test_storm = pyart.testing.make_storm_grid()
-    test_storm.fields['reflectivity']['data'] =\
-            test_storm.fields['reflectivity']['data'][:, 5:-5, :]
-    test_storm_2 = pyart.testing.make_storm_grid()
-    test_storm_2.fields['reflectivity']['data'] =\
-            test_storm_2.fields['reflectivity']['data'][:, 0:-10, :]
-    test_storm_2.fields['reflectivity']['data'][:,:,4:-3] =\
-            test_storm_2.fields['reflectivity']['data'][:, :, 1:-6]
-    test_storm_2.fields['reflectivity']['valid_min']=0.0
-    test_storm.fields['reflectivity']['valid_min']=0.0
-    assert pyart.retrieve.grid_displacement_pc(test_storm,
-            test_storm_2, 'reflectivity', 0) == (3,5)
+    grid1 = pyart.testing.make_storm_grid()
+    data = grid1.fields['reflectivity']['data'].copy()
+    grid1.fields['reflectivity']['data'] = data[:, 5:-5, 3:-3].copy()
+
+    grid2 = pyart.testing.make_storm_grid()
+    grid2.fields['reflectivity']['data'] = data[:, 0:-10, 0:-6].copy()
+
+    # test pixels
+    displacement = pyart.retrieve.grid_displacement_pc(
+        grid1, grid2, 'reflectivity', 0)
+    assert displacement == (-5, -3)
+
+    # test distance
+    grid1.fields['reflectivity']['valid_min'] = 0
+    grid2.fields['reflectivity']['valid_min'] = 0
+    displacement = pyart.retrieve.grid_displacement_pc(
+        grid1, grid2, 'reflectivity', 0, return_value='distance')
+    dx = grid1.x['data'][1] - grid1.x['data'][0]
+    dy = grid1.y['data'][1] - grid1.y['data'][0]
+    assert_almost_equal(displacement[0], -5*dy, 0)
+    assert_almost_equal(displacement[1], -3*dx, 0)
+
+    # test velocity
+    grid2.time['data'] += 1
+    displacement = pyart.retrieve.grid_displacement_pc(
+        grid1, grid2, 'reflectivity', 0, return_value='velocity')
+    assert_almost_equal(displacement[0], -5*dy, 0)
+    assert_almost_equal(displacement[1], -3*dx, 0)
+
+    # test fallback
+    displacement = pyart.retrieve.grid_displacement_pc(
+        grid1, grid2, 'reflectivity', 0, return_value='foobar')
+    assert displacement == (-5, -3)
 
 
 def test_grid_shift():
-    #create two guassian storms
-    tgrid0 = pyart.testing.make_normal_storm(10.0, [0.0,0.0])
-    tgrid1 = pyart.testing.make_normal_storm(10.0, [5.0,5.0])
-    #trim one, trim and shift the other
-    tgrid1_reduced = pyart.retrieve.grid_shift(tgrid1, [0.0, 0.0],
-            trim_edges = 10)
-    tgrid0_shifted = pyart.retrieve.grid_shift(tgrid0, [5.0, 5.0],
-            trim_edges = 10)
-    #take the difference
-    diff = tgrid0_shifted.fields['reflectivity']['data'][0,:,:]\
-            - tgrid1_reduced.fields['reflectivity']['data'][0,:,:]
-    #Assert that the difference is basically digital noise.
-    #This actual value on my MB Air is -1.65633898546e-21
-    assert diff.mean() < 1.0e-10
 
+    # create two guassian storms
+    grid1 = pyart.testing.make_normal_storm(10.0, [0.0, 0.0])
+    grid2 = pyart.testing.make_normal_storm(10.0, [5.0, 5.0])
 
+    # trim one, trim and shift the other
+    trimmed_grid2 = pyart.retrieve.grid_shift(grid2, [0.0, 0.0], trim_edges=10)
+    shifted_grid1 = pyart.retrieve.grid_shift(grid1, [5.0, 5.0], trim_edges=10)
 
+    # The difference should be nearly zero
+    data1 = shifted_grid1.fields['reflectivity']['data'][0]
+    data2 = trimmed_grid2.fields['reflectivity']['data'][0]
+    assert (data1 - data2).mean() < 1.e-10
