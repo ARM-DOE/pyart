@@ -73,7 +73,7 @@ def antenna_to_cartesian(ranges, azimuths, elevations, debug=False):
 
     .. math::
 
-        z = \\sqrt{r^2+R^2+r*R*sin(\\theta_e)} - R
+        z = \\sqrt{r^2+R^2+2*r*R*sin(\\theta_e)} - R
 
         s = R * arcsin(\\frac{r*cos(\\theta_e)}{R+z})
 
