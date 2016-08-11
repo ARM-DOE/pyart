@@ -19,6 +19,7 @@ Testing functions
     make_velocity_aliased_radar
     make_empty_grid
     make_target_grid
+    make_normal_storm
 
 Testing classes
 ===============
@@ -46,5 +47,6 @@ from .sample_objects import make_target_grid, make_storm_grid
 from .sample_objects import make_empty_rhi_radar
 from .sample_objects import make_velocity_aliased_rhi_radar
 from .tmpdirs import InTemporaryDirectory
+from .sample_objects import make_normal_storm
 
 __all__ = [s for s in dir() if not s.startswith('_')]
