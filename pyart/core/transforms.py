@@ -39,10 +39,14 @@ from ..exceptions import MissingOptionalDependency
 
 import numpy as np
 try:
-    from mpl_toolkits.basemap import pyproj
+    import pyproj
     _PYPROJ_AVAILABLE = True
 except ImportError:
-    _PYPROJ_AVAILABLE = False
+    try:
+        from mpl_toolkits.basemap import pyproj
+        _PYPROJ_AVAILABLE = True
+    except ImportError:
+        _PYPROJ_AVAILABLE = False
 
 PI = np.pi
 
