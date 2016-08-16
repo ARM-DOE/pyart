@@ -19,5 +19,6 @@ Filtering radar data
 """
 
 from .gatefilter import GateFilter, moment_based_gate_filter
+from .gatefilter import moment_based_gate_filter2
 
 __all__ = [s for s in dir() if not s.startswith('_')]

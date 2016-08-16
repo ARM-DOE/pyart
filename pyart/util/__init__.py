@@ -46,5 +46,6 @@ from .circular_stats import mean_of_two_angles, mean_of_two_angles_deg
 from .xsect import cross_section_ppi
 from .hildebrand_sekhon import estimate_noise_hs74
 from .radar_utils import is_vpt, to_vpt, join_radar
+from .sigmath import texture_along_ray
 
 __all__ = [s for s in dir() if not s.startswith('_')]
