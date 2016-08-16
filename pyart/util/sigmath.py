@@ -32,3 +32,38 @@ def texture(myradar, var):
         tex[timestep, 0:4] = np.ones(4) * ray[0]
         tex[timestep, -5:] = np.ones(5) * ray[-1]
     return tex
+
+
+def texture_along_ray(myradar, var, wind_size=7, min_valid=3):
+    """
+    Compute field texture along ray using a user specified
+    window size. If the number of valid range bins within the
+    window is lower than min_valid the bin is set to invalid.
+
+    Parameters
+    ----------
+    myradar : radar object
+        The radar object where the field is
+    var : str
+        Name of the field which texture has to be computed
+    wind_size : int
+        Optional. Size of the rolling window used
+    min_valid : int
+        Optional. Minimum number of valid range bins to
+        compute the texture
+
+    Returns
+    -------
+    tex : radar field
+        the texture of the specified field
+
+    """
+    half_wind = int((wind_size-1)/2)
+    fld = myradar.fields[var]['data']
+    tex = np.ma.zeros(fld.shape)
+    for timestep in range(tex.shape[0]):
+        ray = np.ma.std(rolling_window(fld[timestep, :], wind_size), 1)
+        tex[timestep, half_wind:-half_wind] = ray
+        tex[timestep, 0:half_wind] = np.ones(half_wind) * ray[0]
+        tex[timestep, -half_wind:] = np.ones(half_wind) * ray[-1]
+    return tex
