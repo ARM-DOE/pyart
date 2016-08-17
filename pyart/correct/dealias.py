@@ -230,6 +230,9 @@ def dealias_fourdd(radar, last_radar=None, sounding_heights=None,
         sc = np.ascontiguousarray(sounding_wind_speeds, dtype=np.float32)
         dc = np.ascontiguousarray(sounding_wind_direction, dtype=np.float32)
 
+        if len(hc) > 999:
+            raise ValueError("Too many sounding heights, maximum is 999")
+
         success, sound_volume = _fourdd_interface.create_soundvolume(
             vel_volume, hc, sc, dc, sign, max_shear)
         if success == 0:

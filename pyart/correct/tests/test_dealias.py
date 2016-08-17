@@ -138,6 +138,22 @@ def test_error_raising():
     return
 
 
+@skipif(not pyart.correct.dealias._FOURDD_AVAILABLE)
+def test_segmentation_fault_error():
+    # See GitHub issue #571
+
+    # ValueError when sounding is > 999
+    radar = pyart.testing.make_velocity_aliased_radar()
+    height = np.arange(2000)
+    speed = np.zeros((2000, ))
+    direction = np.zeros((2000, ))
+    assert_raises(
+        ValueError, pyart.correct.dealias_fourdd, radar,
+        sounding_heights=height, sounding_wind_speeds=speed,
+        sounding_wind_direction=direction)
+    return
+
+
 if __name__ == "__main__":
 
     radar, dealias_vel = perform_dealias()
