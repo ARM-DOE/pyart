@@ -1334,6 +1334,7 @@ DEFAULT_FIELD_COLORMAP = {
 
     velocity: 'pyart_BuDRd18',
     corrected_velocity: 'pyart_BuDRd18',
+    simulated_velocity: 'pyart_BuDRd18',
     eastward_wind_component: 'pyart_BuDRd18',
     northward_wind_component: 'pyart_BuDRd18',
     vertical_wind_component: 'pyart_BuDRd18',
