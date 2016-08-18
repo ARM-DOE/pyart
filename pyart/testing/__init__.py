@@ -35,7 +35,7 @@ from .sample_files import MDV_PPI_FILE, MDV_RHI_FILE, MDV_GRID_FILE
 from .sample_files import CFRADIAL_PPI_FILE, CFRADIAL_RHI_FILE
 from .sample_files import CHL_RHI_FILE, UF_FILE
 from .sample_files import SIGMET_PPI_FILE, SIGMET_RHI_FILE
-from .sample_files import INTERP_SOUNDE_FILE
+from .sample_files import INTERP_SOUNDE_FILE, SONDE_FILE
 from .sample_files import NEXRAD_ARCHIVE_MSG31_FILE, NEXRAD_ARCHIVE_MSG1_FILE
 from .sample_files import NEXRAD_CDM_FILE
 from .sample_files import NEXRAD_ARCHIVE_MSG31_COMPRESSED_FILE

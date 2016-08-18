@@ -4,6 +4,7 @@ pyart.io
 
 Input/Output routines.
 
+.. automodule:: pyart.io.arm_sonde
 .. automodule:: pyart.io.auto_read
 .. automodule:: pyart.io.cfradial
 .. automodule:: pyart.io.chl

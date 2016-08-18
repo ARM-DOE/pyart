@@ -109,6 +109,7 @@ pyart/testing/data/KATX20130717_195021_V06
 pyart/testing/data/KLOT20030101_000921
 pyart/testing/data/Level2_KATX_20130717_1950.ar2v
 pyart/testing/data/sgpinterpolatedsondeC1.c1.20110510.000000.cdf
+pyart/testing/data/sgpsondewnpnC1.b1.20110520.082800.cdf
 pyart/testing/data/095636.mdv
 pyart/testing/data/CHL20120705_230123
 
