@@ -16,26 +16,6 @@ from numpy.testing import assert_raises
 
 
 @skipif(not pyart.correct.dealias._FOURDD_AVAILABLE)
-def test_find_time_in_interp_sounde():
-    target = datetime.datetime(2011, 5, 10, 11, 30, 8)
-    interp_sounde = netCDF4.Dataset(pyart.testing.INTERP_SOUNDE_FILE)
-    t = pyart.correct.dealias.find_time_in_interp_sonde(interp_sounde, target)
-    height, speed, direction = t
-
-    assert height.shape == (316,)
-    assert speed.shape == (316,)
-    assert direction.shape == (316,)
-
-    assert height.dtype == 'float32'
-    assert speed.dtype == 'float32'
-    assert direction.dtype == 'float32'
-
-    assert_almost_equal(height[100], 2.32, 2)
-    assert_almost_equal(speed[100], 15.54, 2) == 15.54
-    assert_almost_equal(direction[100], 231.8, 2) == 231.8
-
-
-@skipif(not pyart.correct.dealias._FOURDD_AVAILABLE)
 def test_dealias_sounding():
     radar, dealias_vel = perform_dealias()
     assert_allclose(
@@ -171,6 +151,30 @@ def test_dealias_deprecated_arguments():
          2.5, 1.5, 0.5])
     assert dealias_vel['data'][13, 46] is np.ma.masked
     assert dealias_vel['data'][13, 47] is np.ma.masked
+
+
+# Remove this test when the find_time_in_interp_sonde function is Deprecated
+@skipif(not pyart.correct.dealias._FOURDD_AVAILABLE)
+def test_find_time_in_interp_sounde():
+    target = datetime.datetime(2011, 5, 10, 11, 30, 8)
+    interp_sounde = netCDF4.Dataset(pyart.testing.INTERP_SOUNDE_FILE)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", category=DeprecationWarning)
+        t = pyart.correct.dealias.find_time_in_interp_sonde(
+            interp_sounde, target)
+    height, speed, direction = t
+
+    assert height.shape == (316,)
+    assert speed.shape == (316,)
+    assert direction.shape == (316,)
+
+    assert height.dtype == 'float32'
+    assert speed.dtype == 'float32'
+    assert direction.dtype == 'float32'
+
+    assert_almost_equal(height[100], 2.32, 2)
+    assert_almost_equal(speed[100], 15.54, 2) == 15.54
+    assert_almost_equal(direction[100], 231.8, 2) == 231.8
 
 
 if __name__ == "__main__":

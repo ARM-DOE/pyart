@@ -314,6 +314,10 @@ def find_time_in_interp_sonde(interp_sonde, target, debug=False):
     """
     Find the wind parameter for a given time in a ARM interpsonde file.
 
+    This function is Deprecated and will be removed in future versions of
+    Py-ART. Use the :py:func:`pyart.io.read_arm_sonde_vap` function for similar
+    functionality.
+
     Parameters
     ----------
     interp_sonde : netCDF4.Dataset
@@ -337,6 +341,9 @@ def find_time_in_interp_sonde(interp_sonde, target, debug=False):
         Wind direction at given height for the time closest to target.
 
     """
+    warnings.warn(
+        "find_time_in_interp_sonde is deprecated and will be removed in a "
+        "future version of Py-ART.\n", DeprecationWarning)
 
     sonde_datetimes = datetime_utils.datetimes_from_dataset(interp_sonde)
 
