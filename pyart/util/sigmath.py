@@ -34,11 +34,10 @@ def texture(myradar, var):
     return tex
 
 
-def texture_along_ray(myradar, var, wind_size=7, min_valid=3):
+def texture_along_ray(myradar, var, wind_size=7):
     """
     Compute field texture along ray using a user specified
-    window size. If the number of valid range bins within the
-    window is lower than min_valid the bin is set to invalid.
+    window size.
 
     Parameters
     ----------
@@ -48,9 +47,6 @@ def texture_along_ray(myradar, var, wind_size=7, min_valid=3):
         Name of the field which texture has to be computed
     wind_size : int
         Optional. Size of the rolling window used
-    min_valid : int
-        Optional. Minimum number of valid range bins to
-        compute the texture
 
     Returns
     -------

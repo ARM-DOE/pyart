@@ -9,6 +9,7 @@ corrections routines in Py-ART.
     :toctree: generated/
 
     moment_based_gate_filter
+    moment_and_texture_based_gate_filter
 
 .. autosummary::
     :toctree: generated/
@@ -108,11 +109,11 @@ def moment_based_gate_filter(
     return gatefilter
 
 
-def moment_based_gate_filter2(
+def moment_and_texture_based_gate_filter(
         radar, zdr_field=None, rhv_field=None, phi_field=None, refl_field=None,
         textzdr_field=None, textrhv_field=None, textphi_field=None,
-        textrefl_field=None, wind_size=7, min_valid=3, max_textphi=20.,
-        max_textrhv=0.3, max_textzdr=2.85, max_textrefl=8., min_rhv=0.6):
+        textrefl_field=None, wind_size=7, max_textphi=20., max_textrhv=0.3,
+        max_textzdr=2.85, max_textrefl=8., min_rhv=0.6):
     """
     Create a filter which removes undesired gates based on texture of moments.
 
@@ -144,8 +145,6 @@ def moment_based_gate_filter2(
         as defined in the Py-ART configuration file
     wind_size : int
         Size of the moving window used to compute the ray texture.
-    min_valid : int
-        Minimum number of valid range gates to compute the ray texture.
     max_textphi, max_textrhv, max_textzdr, max_textrefl : float
         Maximum value for the texture of the differential phase, texture of
         RhoHV, texture of Zdr and texture of reflectivity. Gates in these
@@ -194,29 +193,26 @@ def moment_based_gate_filter2(
 
     # compute the textures of the moments and add them into radar object
     if (max_textphi is not None) and (phi_field in radar_aux.fields):
-        textphi = texture_along_ray(radar_aux, phi_field,
-                                    wind_size=wind_size, min_valid=min_valid)
+        textphi = texture_along_ray(radar_aux, phi_field, wind_size=wind_size)
         tphi = get_metadata(textphi_field)
         tphi['data'] = textphi
         radar_aux.add_field(textphi_field, tphi)
 
     if (max_textrhv is not None) and (rhv_field in radar_aux.fields):
-        textrho = texture_along_ray(radar_aux, rhv_field,
-                                    wind_size=wind_size, min_valid=min_valid)
+        textrho = texture_along_ray(radar_aux, rhv_field, wind_size=wind_size)
         trhv = get_metadata(textrhv_field)
         trhv['data'] = textrho
         radar_aux.add_field(textrhv_field, trhv)
 
     if (max_textzdr is not None) and (zdr_field in radar_aux.fields):
-        textzdr = texture_along_ray(radar_aux, zdr_field,
-                                    wind_size=wind_size, min_valid=min_valid)
+        textzdr = texture_along_ray(radar_aux, zdr_field, wind_size=wind_size)
         tzdr = get_metadata(textzdr_field)
         tzdr['data'] = textzdr
         radar_aux.add_field(textzdr_field, tzdr)
 
     if (max_textrefl is not None) and (refl_field in radar_aux.fields):
         textrefl = texture_along_ray(radar_aux, refl_field,
-                                     wind_size=wind_size, min_valid=min_valid)
+            wind_size=wind_size)
         trefl = get_metadata(textrefl_field)
         trefl['data'] = textrefl
         radar_aux.add_field(textrefl_field, trefl)
