@@ -211,8 +211,8 @@ def moment_and_texture_based_gate_filter(
         radar_aux.add_field(textzdr_field, tzdr)
 
     if (max_textrefl is not None) and (refl_field in radar_aux.fields):
-        textrefl = texture_along_ray(radar_aux, refl_field,
-            wind_size=wind_size)
+        textrefl = texture_along_ray(
+            radar_aux, refl_field, wind_size=wind_size)
         trefl = get_metadata(textrefl_field)
         trefl['data'] = textrefl
         radar_aux.add_field(textrefl_field, trefl)
