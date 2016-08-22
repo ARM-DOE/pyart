@@ -28,6 +28,7 @@ dt, profile = pyart.io.read_arm_sonde_vap(SOND_NAME, radar=radar)
 
 # create a gate filter which specifies gates to exclude from dealiasing
 gatefilter = pyart.filters.GateFilter(radar)
+gatefilter.exclude_transition()
 gatefilter.exclude_invalid('velocity')
 gatefilter.exclude_invalid('reflectivity')
 gatefilter.exclude_outside('reflectivity', 0, 80)
