@@ -128,7 +128,7 @@ def moment_and_texture_based_gate_filter(
     * Gates where the ZDR texture is above max_textzdr
     * Gates where the reflectivity texture is above max_textrefl
     * If any of the thresholds is not set or the field (RhoHV, ZDR, PhiDP,
-    reflectivity) do not exist in the radar the filter is not applied.
+      reflectivity) do not exist in the radar the filter is not applied.
 
     Parameters
     ----------
