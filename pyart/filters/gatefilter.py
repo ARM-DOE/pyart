@@ -350,6 +350,48 @@ class GateFilter(object):
     # exclude methods #
     ###################
 
+    def exclude_transition(self, trans_value=1, exclude_masked=True, op='or'):
+        """
+        Exclude all gates in rays marked as in transition between sweeps.
+
+        Exclude all gates in rays marked as "in transition" by the
+        antenna_transition attribute of the radar used to construct the filter.
+        If no antenna transition information is available no gates are
+        excluded.
+
+        Parameters
+        ----------
+        trans_value : int, optional
+            Value used in the antenna transition data to indicate that the
+            instrument was between sweeps (in transition) during the collection
+            of a specific ray. Typically a value of 1 is used to indicate this
+            transition and the default can be used in these cases.
+        exclude_masked : bool, optional
+            True to filter masked values in antenna_transition if the data is
+            a masked array, False to include any masked values.
+        op : {'and', 'or', 'new'}
+            Operation to perform when merging the existing set of excluded
+            gates with the excluded gates from the current operation.
+            'and' will perform a logical AND operation, 'or' a logical OR,
+            and 'new' will replace the existing excluded gates with the one
+            generated here. 'or', the default for exclude methods, is
+            typically desired when building up a set of conditions for
+            excluding gates where the desired effect is to exclude gates which
+            meet any of the conditions. 'and', the default for include
+            methods, is typically desired when building up a set of conditions
+            where the desired effect is to include gates which meet any of the
+            conditions.  Note that the 'and' method MAY results in including
+            gates which have previously been excluded because they were masked
+            or invalid.
+
+        """
+        marked = np.zeros_like(self._gate_excluded)
+        if self._radar.antenna_transition is not None:
+            transition_data = self._radar.antenna_transition['data']
+            in_transition = transition_data == trans_value
+            marked[in_transition] = True
+        return self._merge(marked, op, exclude_masked)
+
     def exclude_below(self, field, value, exclude_masked=True, op='or',
                       inclusive=False):
         """
@@ -490,6 +532,50 @@ class GateFilter(object):
     ####################
     # include_ methods #
     ####################
+
+    def include_not_transition(
+            self, trans_value=0, exclude_masked=True, op='and'):
+        """
+        Include all gates in rays not marked as in transition between sweeps.
+
+        Include all gates in rays not marked as "in transition" by the
+        antenna_transition attribute of the radar used to construct the filter.
+        If no antenna transition information is available all gates are
+        included.
+
+        Parameters
+        ----------
+        trans_value : int, optional
+            Value used in the antenna transition data to indicate that the
+            instrument is not between sweeps (in transition) during the
+            collection of a specific ray. Typically a value of 0 is used to
+            indicate no transition and the default can be used in these cases.
+        exclude_masked : bool, optional
+            True to filter masked values in antenna_transition if the data is
+            a masked array, False to include any masked values.
+        op : {'and', 'or', 'new'}
+            Operation to perform when merging the existing set of excluded
+            gates with the excluded gates from the current operation.
+            'and' will perform a logical AND operation, 'or' a logical OR,
+            and 'new' will replace the existing excluded gates with the one
+            generated here. 'or', the default for exclude methods, is
+            typically desired when building up a set of conditions for
+            excluding gates where the desired effect is to exclude gates which
+            meet any of the conditions. 'and', the default for include
+            methods, is typically desired when building up a set of conditions
+            where the desired effect is to include gates which meet any of the
+            conditions.  Note that the 'or' method MAY results in excluding
+            gates which have previously been included.
+
+        """
+        if self._radar.antenna_transition is None:
+            include = np.ones_like(self._gate_excluded)  # include all gates
+        else:
+            include = np.zeros_like(self._gate_excluded)
+            transition_data = self._radar.antenna_transition['data']
+            not_in_transition = (transition_data == trans_value)
+            include[not_in_transition] = True
+        return self._merge(~include, op, exclude_masked)
 
     def include_below(self, field, value, exclude_masked=True, op='and',
                       inclusive=False):

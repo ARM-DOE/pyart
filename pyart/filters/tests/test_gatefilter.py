@@ -36,6 +36,44 @@ def test_gatefilter_copy():
     assert gfilter2.gate_excluded[0, -1] is np.False_
 
 
+def test_exclude_transition():
+
+    gfilter = pyart.correct.GateFilter(radar)
+    gfilter.exclude_transition()
+    assert np.all(gfilter.gate_excluded == np.False_)
+
+    trans_radar = pyart.testing.make_empty_ppi_radar(12, 5, 1)
+    trans_radar.antenna_transition = {'data': np.array([1, 0, 0, 0, 1])}
+    gfilter = pyart.correct.GateFilter(trans_radar)
+    gfilter.exclude_transition()
+
+    assert gfilter.gate_excluded[0, 0] is np.True_
+    assert gfilter.gate_excluded[0, 1] is np.True_
+    assert gfilter.gate_excluded[-1, 0] is np.True_
+    assert gfilter.gate_excluded[-1, 1] is np.True_
+    assert gfilter.gate_excluded[1, 0] is np.False_
+    assert gfilter.gate_excluded[1, 1] is np.False_
+
+
+def test_include_not_transition():
+
+    gfilter = pyart.correct.GateFilter(radar, exclude_based=False)
+    gfilter.include_not_transition()
+    assert np.all(gfilter.gate_excluded == np.False_)
+
+    trans_radar = pyart.testing.make_empty_ppi_radar(12, 5, 1)
+    trans_radar.antenna_transition = {'data': np.array([1, 0, 0, 0, 1])}
+    gfilter = pyart.correct.GateFilter(trans_radar, exclude_based=False)
+    gfilter.include_not_transition()
+
+    assert gfilter.gate_excluded[0, 0] is np.True_
+    assert gfilter.gate_excluded[0, 1] is np.True_
+    assert gfilter.gate_excluded[-1, 0] is np.True_
+    assert gfilter.gate_excluded[-1, 1] is np.True_
+    assert gfilter.gate_excluded[1, 0] is np.False_
+    assert gfilter.gate_excluded[1, 1] is np.False_
+
+
 def test_gatefilter_exclude_below():
     gfilter = pyart.correct.GateFilter(radar)
     gfilter.exclude_below('test_field', 5)
