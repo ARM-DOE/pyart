@@ -49,14 +49,8 @@ def simulated_vel_from_profile(
         sim_vel_field = get_field_name('simulated_velocity')
 
     # radar parameters
-    ngates = radar.ngates
-
-    azimuths = np.repeat(radar.azimuth['data'], ngates).reshape(-1, ngates)
-    azimuths = np.deg2rad(azimuths)
-
-    elevations = np.repeat(radar.elevation['data'], ngates).reshape(-1, ngates)
-    elevations = np.deg2rad(elevations)
-
+    azimuths = np.deg2rad(radar.azimuth['data']).reshape(-1, 1)
+    elevations = np.deg2rad(radar.elevation['data']).reshape(-1, 1)
     gate_altitudes = radar.gate_altitude['data']
 
     # prepare wind profile for interpolation
