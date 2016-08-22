@@ -32,6 +32,7 @@ def moment_based_gate_filter(
 
     Creates a gate filter in which the following gates are excluded:
 
+    * Gates where the instrument is transitioning between sweeps.
     * Gates where the reflectivity is outside the interval min_refl, max_refl.
     * Gates where the normalized coherent power is below min_ncp.
     * Gates where the cross correlation ratio is below min_rhi.  Using the
@@ -89,6 +90,7 @@ def moment_based_gate_filter(
 
     # filter gates based upon field parameters
     gatefilter = GateFilter(radar)
+    gatefilter.exclude_transition()
     if (min_ncp is not None) and (ncp_field in radar.fields):
         gatefilter.exclude_below(ncp_field, min_ncp)
         gatefilter.exclude_masked(ncp_field)
@@ -119,6 +121,7 @@ def moment_and_texture_based_gate_filter(
 
     Creates a gate filter in which the following gates are excluded:
 
+    * Gates where the instrument is transitioning between sweeps.
     * Gates where RhoHV is below min_rhv
     * Gates where the PhiDP texture is above max_textphi.
     * Gates where the RhoHV texture is above max_textrhv.
@@ -219,6 +222,7 @@ def moment_and_texture_based_gate_filter(
 
     # filter gates based upon field parameters
     gatefilter = GateFilter(radar_aux)
+    gatefilter.exclude_transition()
     if (min_rhv is not None) and (rhv_field in radar_aux.fields):
         gatefilter.exclude_below(rhv_field, min_rhv)
         gatefilter.exclude_masked(rhv_field)
