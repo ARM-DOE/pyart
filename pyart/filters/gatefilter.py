@@ -9,6 +9,7 @@ corrections routines in Py-ART.
     :toctree: generated/
 
     moment_based_gate_filter
+    moment_and_texture_based_gate_filter
 
 .. autosummary::
     :toctree: generated/
@@ -105,6 +106,139 @@ def moment_based_gate_filter(
             gatefilter.exclude_above(refl_field, max_refl)
             gatefilter.exclude_masked(refl_field)
             gatefilter.exclude_invalid(refl_field)
+    return gatefilter
+
+
+def moment_and_texture_based_gate_filter(
+        radar, zdr_field=None, rhv_field=None, phi_field=None, refl_field=None,
+        textzdr_field=None, textrhv_field=None, textphi_field=None,
+        textrefl_field=None, wind_size=7, max_textphi=20., max_textrhv=0.3,
+        max_textzdr=2.85, max_textrefl=8., min_rhv=0.6):
+    """
+    Create a filter which removes undesired gates based on texture of moments.
+
+    Creates a gate filter in which the following gates are excluded:
+
+    * Gates where RhoHV is below min_rhv
+    * Gates where the PhiDP texture is above max_textphi.
+    * Gates where the RhoHV texture is above max_textrhv.
+    * Gates where the ZDR texture is above max_textzdr
+    * Gates where the reflectivity texture is above max_textrefl
+    * If any of the thresholds is not set or the field (RhoHV, ZDR, PhiDP,
+    reflectivity) do not exist in the radar the filter is not applied.
+
+    Parameters
+    ----------
+    radar : Radar
+        Radar object from which the gate filter will be built.
+    zdr_field, rhv_field, phi_field, refl_field : str
+        Names of the radar fields which contain the differential reflectivity,
+        cross correlation ratio, differential phase and reflectivity from
+        which the textures will be computed. A value of None for any of these
+        parameters will use the default field name as defined in the Py-ART
+        configuration file.
+    textzdr_field, textrhv_field, textphi_field, textrefl_field : str
+        Names of the radar fields given to the texture of the
+        differential reflectivity, texture of the cross correlation ratio,
+        texture of differential phase and texture of reflectivity. A value
+        of None for any of these parameters will use the default field name
+        as defined in the Py-ART configuration file
+    wind_size : int
+        Size of the moving window used to compute the ray texture.
+    max_textphi, max_textrhv, max_textzdr, max_textrefl : float
+        Maximum value for the texture of the differential phase, texture of
+        RhoHV, texture of Zdr and texture of reflectivity. Gates in these
+        fields above these limits as well as gates which are masked or contain
+        invalid values will be excluded and not used in calculation which use
+        the filter.  A value of None will disable filtering based upon the
+        given field including removing masked or gates with an invalid value.
+        To disable the thresholding but retain the masked and invalid filter
+        set the parameter to a value above the highest value in the field.
+    min_rhv : float
+        Minimum value for the RhoHV. Gates below this limits as well as gates
+        which are masked or contain invalid values will be excluded and not
+        used in calculation which use the filter. A value of None will disable
+        filtering based upon the given field including removing masked or
+        gates with an invalid value. To disable the thresholding but retain
+        the masked and invalid filter set the parameter to a value below the
+        lowest value in the field.
+
+    Returns
+    -------
+    gatefilter : :py:class:`GateFilter`
+        A gate filter based upon the described criteria.  This can be
+        used as a gatefilter parameter to various functions in pyart.correct.
+
+    """
+    # parse the field parameters
+    if refl_field is None:
+        refl_field = get_field_name('reflectivity')
+    if zdr_field is None:
+        zdr_field = get_field_name('differential_reflectivity')
+    if rhv_field is None:
+        rhv_field = get_field_name('cross_correlation_ratio')
+    if phi_field is None:
+        phi_field = get_field_name('uncorrected_differential_phase')
+    if textrefl_field is None:
+        textrefl_field = get_field_name('reflectivity_texture')
+    if textzdr_field is None:
+        textzdr_field = get_field_name('differential_reflectivity_texture')
+    if textrhv_field is None:
+        textrhv_field = get_field_name('cross_correlation_ratio_texture')
+    if textphi_field is None:
+        textphi_field = get_field_name('differential_phase_texture')
+
+    # make deepcopy of input radar (we do not want to modify the original)
+    radar_aux = deepcopy(radar)
+
+    # compute the textures of the moments and add them into radar object
+    if (max_textphi is not None) and (phi_field in radar_aux.fields):
+        textphi = texture_along_ray(radar_aux, phi_field, wind_size=wind_size)
+        tphi = get_metadata(textphi_field)
+        tphi['data'] = textphi
+        radar_aux.add_field(textphi_field, tphi)
+
+    if (max_textrhv is not None) and (rhv_field in radar_aux.fields):
+        textrho = texture_along_ray(radar_aux, rhv_field, wind_size=wind_size)
+        trhv = get_metadata(textrhv_field)
+        trhv['data'] = textrho
+        radar_aux.add_field(textrhv_field, trhv)
+
+    if (max_textzdr is not None) and (zdr_field in radar_aux.fields):
+        textzdr = texture_along_ray(radar_aux, zdr_field, wind_size=wind_size)
+        tzdr = get_metadata(textzdr_field)
+        tzdr['data'] = textzdr
+        radar_aux.add_field(textzdr_field, tzdr)
+
+    if (max_textrefl is not None) and (refl_field in radar_aux.fields):
+        textrefl = texture_along_ray(radar_aux, refl_field,
+            wind_size=wind_size)
+        trefl = get_metadata(textrefl_field)
+        trefl['data'] = textrefl
+        radar_aux.add_field(textrefl_field, trefl)
+
+    # filter gates based upon field parameters
+    gatefilter = GateFilter(radar_aux)
+    if (min_rhv is not None) and (rhv_field in radar_aux.fields):
+        gatefilter.exclude_below(rhv_field, min_rhv)
+        gatefilter.exclude_masked(rhv_field)
+        gatefilter.exclude_invalid(rhv_field)
+    if (max_textphi is not None) and (textphi_field in radar_aux.fields):
+        gatefilter.exclude_above(textphi_field, max_textphi)
+        gatefilter.exclude_masked(textphi_field)
+        gatefilter.exclude_invalid(textphi_field)
+    if (max_textrhv is not None) and (textrhv_field in radar_aux.fields):
+        gatefilter.exclude_above(textrhv_field, max_textrhv)
+        gatefilter.exclude_masked(textrhv_field)
+        gatefilter.exclude_invalid(textrhv_field)
+    if (max_textzdr is not None) and (textzdr_field in radar_aux.fields):
+        gatefilter.exclude_above(textzdr_field, max_textzdr)
+        gatefilter.exclude_masked(textzdr_field)
+        gatefilter.exclude_invalid(textzdr_field)
+    if (max_textrefl is not None) and (textrefl_field in radar_aux.fields):
+        gatefilter.exclude_above(textrefl_field, max_textrefl)
+        gatefilter.exclude_masked(textrefl_field)
+        gatefilter.exclude_invalid(textrefl_field)
     return gatefilter
 
 
