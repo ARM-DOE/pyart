@@ -139,7 +139,7 @@ def read_gamic(filename, field_names=None, additional_metadata=None,
 
     # sweep_type
     scan_type = gfile.raw_scan0_group_attr('what', 'scan_type').lower()
-    scan_type = scan_type.decode('ascii')
+    scan_type = scan_type.decode('utf-8')
     # check that all scans in the volume are the same type
     if not gfile.is_file_single_scan_type():
         raise NotImplementedError('Mixed scan_type volume.')
@@ -210,14 +210,15 @@ def read_gamic(filename, field_names=None, additional_metadata=None,
             try:
                 valid_min = gfile.raw_scan0_group_attr(group, 'dyn_range_min')
                 valid_max = gfile.raw_scan0_group_attr(group, 'dyn_range_max')
-                field_dic['valid_min'] = valid_min
-                field_dic['valid_max'] = valid_max
+                field_dic['valid_min'] = valid_min.decode('utf-8')
+                field_dic['valid_max'] = valid_max.decode('utf-8')
             except:
                 pass
 
         if units_from_file:
             try:
-                field_dic['units'] = gfile.raw_scan0_group_attr(group, 'unit')
+                units = gfile.raw_scan0_group_attr(group, 'unit')
+                field_dic['units'] = units.decode('utf-8')
             except:
                 pass
         fields[field_name] = field_dic
