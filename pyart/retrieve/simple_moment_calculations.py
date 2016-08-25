@@ -8,6 +8,10 @@ Simple moment calculations.
     :toctree: generated/
 
     calculate_snr_from_reflectivity
+    compute_noisedBZ
+    compute_snr
+    compute_l
+    compute_cdr
 
 """
 
@@ -66,3 +70,200 @@ def calculate_snr_from_reflectivity(
     snr_dict = get_metadata(snr_field)
     snr_dict['data'] = pseudo_power - noise_floor_estimate
     return snr_dict
+
+
+def compute_noisedBZ(nrays, noisedBZ_val, range, ref_dist,
+                     noise_field=None):
+    """
+    Computes noise in dBZ from reference noise value.
+
+    Parameters
+    ----------
+    nrays: int
+        number of rays in the reflectivity field
+
+    noisedBZ_val: float
+        Estimated noise value in dBZ at reference distance
+
+    range: np array of floats
+        range vector in m
+
+    ref_dist: float
+        reference distance in Km
+
+    noise_field: str
+        name of the noise field to use
+
+    Returns
+    -------
+    noisedBZ : dictionary of dictionaries
+        the noise field
+
+    """
+    # parse the field parameters
+    if noise_field is None:
+        noise_field = get_field_name('noisedBZ_hh')
+
+    noisedBZ_vec = noisedBZ_val+20.*np.ma.log10(1e-3*range/ref_dist)
+
+    noisedBZ = get_metadata(noise_field)
+    noisedBZ['data'] = np.tile(noisedBZ_vec, (nrays, 1))
+
+    return noisedBZ
+
+
+def compute_snr(radar, refl_field=None, noise_field=None, snr_field=None):
+    """
+    Computes SNR from a reflectivity field and the noise in dBZ.
+
+    Parameters
+    ----------
+    radar : Radar
+        radar object
+
+    refl_field, noise_field : str
+        name of the reflectivity and noise field used for the calculations
+
+    snr_field : str
+        name of the SNR field
+
+    Returns
+    -------
+    snr : dictionary of dictionaries
+        the SNR field
+
+    """
+    # parse the field parameters
+    if refl_field is None:
+        refl_field = get_field_name('reflectivity')
+    if noise_field is None:
+        noise_field = get_field_name('noisedBZ_hh')
+    if snr_field is None:
+        snr_field = get_field_name('signal_to_noise_ratio')
+
+    # extract fields from radar
+    if refl_field in radar.fields:
+        refl = radar.fields[refl_field]['data']
+    else:
+        raise KeyError('Field not available: ' + refl_field)
+    if noise_field in radar.fields:
+        noisedBZ = radar.fields[noise_field]['data']
+    else:
+        raise KeyError('Field not available: ' + noise_field)
+
+    mask = np.ma.getmaskarray(refl)
+    fill_value = refl.get_fill_value()
+
+    snr_data = np.ma.masked_where(mask, refl-noisedBZ)
+    snr_data.set_fill_value(fill_value)
+    snr_data.data[mask.nonzero()] = fill_value
+
+    snr = get_metadata(snr_field)
+    snr['data'] = snr_data
+
+    return snr
+
+
+def compute_l(radar, rhohv_field=None, l_field=None):
+    """
+    Computes Rhohv in logarithmic scale according to L=-log10(1-RhoHV)
+
+    Parameters
+    ----------
+    radar : Radar
+        radar object
+
+    rhohv_field : str
+        name of the RhoHV field used for the calculation
+
+    l_field : str
+        name of the L field
+
+    Returns
+    -------
+    l : dictionary of dictionaries
+        L field
+
+    """
+    # parse the field parameters
+    if rhohv_field is None:
+        rhohv_field = get_field_name('cross_correlation_ratio')
+    if l_field is None:
+        l_field = get_field_name('logarithmic_cross_correlation_ratio')
+
+    # extract rhohv field from radar
+    if rhohv_field in radar.fields:
+        rhohv = radar.fields[rhohv_field]['data']
+    else:
+        raise KeyError('Field not available: ' + rhohv_field)
+
+    mask = np.ma.getmaskarray(rhohv)
+    fill_value = rhohv.get_fill_value()
+    is_one = rhohv >= 1.
+    rhohv[is_one.nonzero()] = 0.9999
+
+    l_data = np.ma.masked_where(mask, -np.ma.log10(1.-rhohv))
+    l_data.set_fill_value(fill_value)
+    l_data.data[mask.nonzero()] = fill_value
+
+    l = get_metadata(l_field)
+    l['data'] = l_data
+
+    return l
+
+
+def compute_cdr(radar, rhohv_field=None, zdr_field=None, cdr_field=None):
+    """
+    Computes the Circular Depolarization Ratio
+
+    Parameters
+    ----------
+    radar : Radar
+        radar object
+
+    rhohv_field, zdr_field : str
+        name of the input RhoHV and ZDR fields
+
+    cdr_field : str
+        name of the CDR field
+
+    Returns
+    -------
+    cdr : dictionary of dictionaries
+        CDR field
+
+    """
+    # parse the field parameters
+    if rhohv_field is None:
+        rhohv_field = get_field_name('cross_correlation_ratio')
+    if zdr_field is None:
+        zdr_field = get_field_name('differential_reflectivity')
+    if cdr_field is None:
+        cdr_field = get_field_name('circular_depolarization_ratio')
+
+    # extract fields from radar
+    if rhohv_field in radar.fields:
+        rhohv = radar.fields[rhohv_field]['data']
+    else:
+        raise KeyError('Field not available: ' + rhohv_field)
+    if zdr_field in radar.fields:
+        zdrdB = radar.fields[zdr_field]['data']
+    else:
+        raise KeyError('Field not available: ' + zdr_field)
+
+    zdr = np.ma.power(10., 0.1*zdrdB)
+
+    mask = np.ma.getmaskarray(rhohv)
+    fill_value = rhohv.get_fill_value()
+
+    cdr_data = np.ma.masked_where(
+        mask, 10.*np.ma.log10(
+            (1.+1./zdr-2.*rhohv*np.ma.sqrt(1./zdr)) /
+            (1.+1./zdr+2*rhohv*np.ma.sqrt(1./zdr))))
+    cdr_data.set_fill_value(fill_value)
+    cdr_data.data[mask.nonzero()] = fill_value
+
+    cdr = get_metadata(cdr_field)
+    cdr['data'] = cdr_data
+
+    return cdr
