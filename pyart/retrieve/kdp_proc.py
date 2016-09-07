@@ -12,6 +12,16 @@ of propagation differential phase (PHIDP), backscatter differential phase
 .. autosummary::
     :toctree: generated/
 
+    kdp_schneebeli
+    _kdp_estimation_backward_fixed
+    _kdp_estimation_backward_fixed
+    _kdp_kalman_profile
+    
+    kdp_vulpiani
+    _kdp_vulpiani_profile
+    
+    filter_psidp
+    
     kdp_maesaka
     boundary_conditions_maesaka
     _cost_maesaka
