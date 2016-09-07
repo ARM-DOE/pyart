@@ -39,7 +39,7 @@ from ..config import get_field_name, get_metadata, get_fillvalue
   
 def kdp_schneebeli(radar, gatefilter=None, fill_value = None, psidp_field=None,
                 kdp_field=None, phidp_field=None, band = 'C', rcov = 0, pcov = 0,
-                prefilter_psidp = False, filter_opt = None, parallel = True):
+                prefilter_psidp = False, filter_opt = {}, parallel = True):
                     
     """
     Estimates Kdp with the Kalman filter method by Schneebeli and al. (2014) for
@@ -397,7 +397,6 @@ def _kdp_estimation_forward_fixed(psidp_in, rcov, pcov_scale, f, f_transposed, h
        kdp_error[ii] = p[0,0]
        phidp[ii]     = s[2]
 
-      
     return kdp, phidp, kdp_error
 
 def _kdp_kalman_profile(psidp_in, dr, band = 'X', rcov = 0, pcov = 0):
@@ -593,7 +592,7 @@ def _kdp_kalman_profile(psidp_in, dr, band = 'X', rcov = 0, pcov = 0):
     kdp_std = np.nanstd(kdp_mat, axis=1)
     kdp_low_mean2 = np.nanmean(np.vstack((kdp002,kdp002f)).T,axis=1)
 
-    diff_mean_smooth = np.convolve(kdp_low_mean2, np.ones((4,))/4, mode='same')
+    diff_mean_smooth = np.convolve(kdp_low_mean2, np.ones((4,))/4., mode='same')
    
     #Backward estimate if diff_mean greater than a defined threshold
     condi = np.where(diff_mean_smooth > th2_comp)[0]
@@ -661,7 +660,7 @@ def _kdp_kalman_profile(psidp_in, dr, band = 'X', rcov = 0, pcov = 0):
 
 def kdp_vulpiani(radar, gatefilter=None, fill_value = None, psidp_field=None,
                 kdp_field=None, phidp_field=None, band = 'C', windsize = 10, 
-                n_iter = 10, interpolate = False, prefilter_psidp = False,
+                n_iter = 10, interp = False, prefilter_psidp = False,
                 filter_opt = {}, parallel = False):
                     
                     
@@ -697,7 +696,7 @@ def kdp_vulpiani(radar, gatefilter=None, fill_value = None, psidp_field=None,
         Size in # of gates of the range derivative window, should be even
     n_iter = int, optional
         Ǹumber of iterations of the method. Default is 10.
-    interpolate : bool, optional
+    interp : bool, optional
         If set all the nans are interpolated.The advantage is that less data 
         are lost (the iterations in fact are "eating the edges") but some
         non-linear errors may be introduced
@@ -761,7 +760,7 @@ def kdp_vulpiani(radar, gatefilter=None, fill_value = None, psidp_field=None,
         psidp_o = np.ma.masked_where(gatefilter.gate_excluded, psidp_o)
         
     func = partial(_kdp_vulpiani_profile,dr = dr,windsize = windsize,
-                   band = band, n_iter = n_iter, interpolate = interpolate)
+                   band = band, n_iter = n_iter, interp = interp)
                    
     all_psidp_prof = list(psidp_o)
     
@@ -804,7 +803,7 @@ def kdp_vulpiani(radar, gatefilter=None, fill_value = None, psidp_field=None,
     return kdp_dict, phidpr_dict
 
 
-def _kdp_vulpiani_profile(psidp_in,dr, windsize = 10,band = 'X', n_iter = 10, interpolate = False):
+def _kdp_vulpiani_profile(psidp_in,dr, windsize = 10,band = 'X', n_iter = 10, interp = False):
     
     """
     Estimates Kdp with the Vulpiani method for a single profile of psidp measurements
@@ -823,7 +822,7 @@ def _kdp_vulpiani_profile(psidp_in,dr, windsize = 10,band = 'X', n_iter = 10, in
         values of Kdp
     n_iter : int, optional
         Ǹumber of iterations of the method. Default is 10.
-    interpolate : bool, optional
+    interp : bool, optional
         If set all the nans are interpolated.The advantage is that less data 
         are lost (the iterations in fact are "eating the edges") but some
         non-linear errors may be introduced
@@ -863,15 +862,16 @@ def _kdp_vulpiani_profile(psidp_in,dr, windsize = 10,band = 'X', n_iter = 10, in
     #Get information of valid and non valid points in psidp the new psidp
     nonan = np.where(np.isfinite(psidp))[0]
     nan =  np.where(np.isnan(psidp))[0]
-    if interpolate:
+    if interp:
         ranged = np.arange(0,nn)
         psidp_interp = psidp
         # interpolate
         if len(nan):
-            interp = interpolate.interp1d(ranged[nonan],psidp[nonan],kind='zero')
+            interp = interpolate.interp1d(ranged[nonan],psidp[nonan],kind='zero',
+                                          bounds_error=False, fill_value=np.nan)
             psidp_interp[nan] = interp(ranged[nan])
             
-        psidp = psidp_interp, np.nan
+        psidp = psidp_interp
         
     psidp = np.ma.filled(psidp, np.nan)
     kdp_calc = np.zeros([nn]) * np.nan
@@ -955,17 +955,17 @@ def filter_psidp(radar,psidp_field=None,rhohv_field=None, minsize_seq = 5,
     psidp_o = radar.fields[psidp_field]['data']
     rhohv = radar.fields[rhohv_field]['data']
     
-    
-    # Filter with RHOHV
-    
+    if not isinstance(psidp_o,np.ma.masked_array):
+        psidp_o = np.ma.array(psidp_o,mask = np.isnan(psidp_o))
+        
+    # Initialize mask
     mask = np.ones(psidp_o.shape)*False
 
     # Condition on rhohv
     mask += rhohv<thresh_rhohv
+    # Get original mask
+    mask += psidp_o.mask
     
-    if not isinstance(psidp_o,np.ma.masked_array):
-        psidp_o = np.ma.array(psidp_o,mask = np.isnan(psidp_o))
-        
     # Remove short sequences and unwrap    
     psidp_filt = np.zeros(psidp_o.shape)    
     for i,psi_row in enumerate(psidp_o):
@@ -991,7 +991,7 @@ def filter_psidp(radar,psidp_field=None,rhohv_field=None, minsize_seq = 5,
                     
             # median filter
             psi_row = signal.medfilt(psi_row_with_nan,median_filter_size)
-            psidp_filt[i,0:len(psi_row[1:-1])] = psi_row_with_nan[1:-1]
+            psidp_filt[i,0:len(psi_row[1:-1])] = psi_row[1:-1]
 
     psidp_filt = np.ma.masked_array(psidp_filt,mask = mask, fill_value = psidp_o.fill_value)
 

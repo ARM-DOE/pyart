@@ -149,14 +149,14 @@ def compare_kdp_estimation_methods():
     
     # Vulpiani method (note windsize is just a guess here..)
     kdp_dict_vulp, phidp_dict_vulp = kdp_proc.kdp_vulpiani(prof_psidp,
-                                              windsize=20, band = 'X')
+                                              windsize=10, n_iter = 10, band = 'X')
     
     # Kalman filter method
     kdp_dict_schnee,kdp_std_dict_schnee,phidp_dict_schnee = \
                         kdp_proc.kdp_schneebeli(prof_psidp, band = 'X')
+                
  
- 
-    plt.figure()
+    plt.figure(figsize=(10,10))
     plt.subplot(2,1,1)
     plt.grid(True)
     plt.title('Kdp estimation')
@@ -169,7 +169,7 @@ def compare_kdp_estimation_methods():
     plt.plot(ranges,kdp_dict_schnee['data'][0])
     plt.xlabel('Range [m]')
     plt.ylabel(r'Kdp [deg/km]')
-    plt.legend(['Maesaka','Vulpiani','Schneebeli'])
+    plt.legend(['Maesaka','Vulpiani','Schneebeli'],loc=0)
     
     plt.subplot(2,1,2)
     plt.grid(True)
@@ -187,4 +187,6 @@ def compare_kdp_estimation_methods():
     
     plt.xlabel('Range [m]')
     plt.ylabel(r'Diff. phase [deg]')
-    plt.legend(['Maesaka','Vulpiani','Schneebeli','Real Psidp'])    
+    plt.legend(['Maesaka','Vulpiani','Schneebeli','Real Psidp'],loc=0)    
+
+compare_kdp_estimation_methods()
