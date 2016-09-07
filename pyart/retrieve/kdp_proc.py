@@ -635,7 +635,7 @@ def _kdp_kalman_profile(psidp_in, dr, band = 'X', rcov = 0, pcov = 0):
     upper_bound = np.maximum(upper_bound, 0)
 
     #Final selection of the ensemble members
-    for uu in range(0, (nrg - 2)+(1)):
+    for uu in range(0, nrg - 1):
        selection_vector = np.arange(upper_bound[uu] - lower_bound[uu] + 1) + lower_bound[uu]
        selection_vector = selection_vector.astype(int)
        kdp_filter_out[uu] = np.mean(kdp_sim[uu,selection_vector])
