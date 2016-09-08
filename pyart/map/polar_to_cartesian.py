@@ -34,7 +34,13 @@ def polar_to_carthesian(radar, sweep, variable_name, cart_res = 75,
     r = part.range['data']
     
     # Remap to ascending order of angles if necessary
-    theta_unwrap = np.unwrap(theta)
+    theta_unwrap = np.copy(theta)
+    shifts = theta_unwrap[1:]-theta_unwrap[0:-1]
+    shifts = np.insert(shifts,0,0)
+
+    if len(np.where(shifts<=0))>0:
+        theta_unwrap[np.where(shifts<=-180)[0][0]:] = theta_unwrap[np.where(shifts<=-180)[0][0]:]+360
+
     if (np.nanmean(theta_unwrap[1:] - theta_unwrap[0:-1]))< 0:
         theta = theta[::-1]
         var_field = var_field[::-1,:]
@@ -56,8 +62,7 @@ def polar_to_carthesian(radar, sweep, variable_name, cart_res = 75,
         delta = (t-theta_min)
         delta[delta<0] =  delta[delta<0] + 360
         return delta /theta_range * N
-    print(mapping_theta(theta))
-    print(N)
+ 
     # An array of polar coordinates is created stacking the previous arrays
     coords = np.vstack((mapping_theta(theta_grid).ravel(),mapping_r(r_grid).ravel()))
 
