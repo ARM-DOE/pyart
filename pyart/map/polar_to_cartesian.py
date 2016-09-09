@@ -5,84 +5,108 @@ import matplotlib.pyplot as plt
 from cosmo_pol.radar import pyart_wrapper
 from pyart.config import get_field_name
 from pyart.core import transforms
-from scipy import ndimage,interpolate
+from scipy import ndimage,interpolate,spatial
+
+KE = 4/3.
+
+def get_earth_radius(latitude):
+    # Two extreme earth radius
+    a=6378.1370*1000
+    b=6356.7523*1000
+
+    earth_radius=np.sqrt(((a**2*np.cos(latitude))**2+
+        (b**2*np.sin(latitude))**2)/((a*np.cos(latitude))**2+
+        (b*np.sin(latitude))**2))
+        
+    return earth_radius
 
 def polar_to_carthesian(radar, sweep, variable_name, cart_res = 75,
-                        max_range = 20000, max_height = None, transform = None,
+                        max_range = 20000, transform = None,
                         inverse_transform = None):  
 
-    # Get data to be interpolated
-    var_field = radar.get_field(sweep,variable_name)
-    var_field = np.ma.masked_values(var_field, np.nan)
-    
-    # Get dim of data
-    [N,M] = var_field.shape
-    
-    # Generate regular cartesian grid
-    x_vec = np.arange(-max_range-cart_res,max_range+cart_res,cart_res)
-    y_vec = np.arange(-max_range-cart_res,max_range+cart_res,cart_res)
+    is_ppi = radar.sweep_mode['data'][0] == 'ppi'
 
-    x_grid, y_grid = np.meshgrid(x_vec, y_vec)
-    theta_grid = np.degrees(np.arctan2(-x_grid, -y_grid)+np.pi)
-    r_grid = (np.sqrt(x_grid**2 + y_grid**2))
-    
-    # Get angles and distances of radar data
-    if part.sweep_mode['data'][0] == 'ppi':
+   # Get angles and distances of radar data
+    if is_ppi:
         theta = part.azimuth['data']
     else:
         theta = part.elevation['data']
-    r = part.range['data']
+        
+    r = radar.range['data']
     
-    # Remap to ascending order of angles if necessary
-    theta_unwrap = np.copy(theta)
-    shifts = theta_unwrap[1:]-theta_unwrap[0:-1]
-    shifts = np.insert(shifts,0,0)
-
-    if len(np.where(shifts<=0))>0:
-        theta_unwrap[np.where(shifts<=-180)[0][0]:] = theta_unwrap[np.where(shifts<=-180)[0][0]:]+360
-
-    if (np.nanmean(theta_unwrap[1:] - theta_unwrap[0:-1]))< 0:
-        theta = theta[::-1]
-        var_field = var_field[::-1,:]
-
-    # Get min value and range of angles and distances
-    theta_range = theta_unwrap[-1] - theta_unwrap[0]
-    theta_min = theta[0]
-
-    r_range = r[-1] - r[0]
-    r_min = r[0]
-
-    var_field = var_field[:,r<max_range]
+    # Get data to be interpolated
+    pol_data = radar.get_field(sweep,variable_name)
+    r = r[r<max_range]
     
-    # Create mapping functions for map_coordinates (mapping from range and 
-    # angles to img indexes)
-    mapping_r = lambda r : (r-r_min)/r_range * M
+    # Cut data at max_range
+    pol_data = pol_data[:,r<max_range]
     
-    def mapping_theta(t):
-        delta = (t-theta_min)
-        delta[delta<0] =  delta[delta<0] + 360
-        return delta /theta_range * N
- 
-    # An array of polar coordinates is created stacking the previous arrays
-    coords = np.vstack((mapping_theta(theta_grid).ravel(),mapping_r(r_grid).ravel()))
+    # If needed perform transform (linearize)
+    if transform:
+        pol_data = transform(pol_data)
+        
+    # Unmask array
+    pol_data = np.ma.masked_values(pol_data, np.nan)
 
-    # The data is mapped to the new coordinates
-    # Values outside range are substituted with nans
-    cart_data = ndimage.map_coordinates(var_field,
-                                        coords, order=0, mode='constant', cval=np.nan)
-    
-    # 1D output is remapped to original shape
-    cart_data = np.reshape(cart_data,x_grid.shape)
+    # One specificity of using the kd-tree is that we need to pad the array
+    # with nans at large ranges and angles smaller and larger
+    pol_data = np.pad(pol_data,pad_width=((1,1),(0,1)),
+                      mode='constant',constant_values=np.nan)
+    # Get dim of data
+    [N,M] = pol_data.shape
 
-    return (x_grid,y_grid), cart_data
+    # We need to pad theta and r as well    
+    theta = np.hstack([theta[0]-0.1,theta,theta[-1]+0.1])
+    r = np.hstack([r,r[-1]+0.1])
     
+    r_grid_p, theta_grid_p = np.meshgrid(r,theta)
+    
+    # Generate regular cartesian grid
+    if is_ppi:
+        x_vec = np.arange(-max_range-cart_res,max_range+cart_res,cart_res)
+        y_vec = np.arange(-max_range-cart_res,max_range+cart_res,cart_res)
+    else:
+        x_vec = np.arange((max_range-cart_res)*np.cos(np.radians(np.max(theta)))
+                          ,max_range+cart_res,cart_res)
+        y_vec = np.arange(0,max_range+cart_res,cart_res)
+        
+    x_grid_c, y_grid_c = np.meshgrid(x_vec, y_vec)
+    
+    if is_ppi:
+        theta_grid_c= np.degrees(np.arctan2(-x_grid_c, -y_grid_c)+np.pi)
+        r_grid_c = (np.sqrt(x_grid_c**2 + y_grid_c**2))
+    else:
+        theta_grid_c = np.degrees(-(np.arctan2(x_grid_c, y_grid_c)-np.pi/2))
+        E = get_earth_radius(radar.latitude['data'])
+        r_grid_c = -KE*E*np.sin(np.radians(theta_grid_c)) - \
+            np.sqrt(2*((y_grid_c + KE*E)**2 + (KE*E)**2))
+        print(r_grid_c)
+    
+    # Kd-tree triangulation
+
+    kdtree = spatial.cKDTree(np.vstack((r_grid_p.ravel(),theta_grid_p.ravel())).T)
+    _,idx_pts = kdtree.query(np.vstack((r_grid_c.ravel(),
+                                        theta_grid_c.ravel())).T, k=1)
+                                        
+    cart_data = pol_data.ravel()[idx_pts]
+    cart_data = np.reshape(cart_data,x_grid_c.shape)
+    
+    # If needed perform inverse transform
+    if inverse_transform:
+        cart_data = inverse_transform(cart_data)
+        
+    return (x_grid_c,y_grid_c), cart_data
+#    
 if __name__ == '__main__':
-    file_rad ='/ltedata/Payerne_2014/Radar/Proc_data/2014/03/22/MXPol-polar-20140322-123637-PPI-005_0.nc'
+    file_rad ='/home/daniel/MXPol-polar-20140322-120940-RHI-048_0.nc'
 
     part = pyart_wrapper.PyradMXPOL(file_rad)
-    coords, vals = polar_to_carthesian(part,0,variable_name = 'Zh',max_range=20000)
-    
-    plt.contourf(coords[0],coords[1],vals)
+    loc,c = polar_to_carthesian(part,0,'Zh',max_range=20000,transform = lambda x: 10**(0.1*x),
+                                inverse_transform = lambda x: 10*np.log10(x))
+    plt.contourf(loc[0],loc[1],c)
+#    coords, vals = polar_to_carthesian(part,0,variable_name = 'Zh',max_range=20000)
+#    plt.figure()
+
 #        if(variableName in ['Ph','Pv','SNRh','SNRv','Zh','Zv','MZh','MZv']):
 #            varLin=10**(0.1*var)
 #            if(typeInterp=='nearest'):
@@ -93,7 +117,7 @@ if __name__ == '__main__':
 
 
 #    
-#def projectRHI(varPol, listVariables, coords_radar, typeInterp='nearest', interp_res=75, maxRange=20000,maxHeight=-1, pol2cart=-1, cart2pol=-1):
+#def projectRHI(varPol, listVariables, coords_radar, typethetaInterp='nearest', interp_res=75, maxRange=20000,maxHeight=-1, pol2cart=-1, cart2pol=-1):
 #    # Projects a RHI in polar coordinates (range-elevation) on a Cartesian grid
 #    # inputs are the name of the NetCDF input file, a list of variables to project ['Zh','Rhohv'], for example, the resolution
 #    # (grid size) of the Cartesian grid, the maximum elevation angle to be projected,
