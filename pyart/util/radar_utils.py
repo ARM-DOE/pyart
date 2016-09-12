@@ -168,8 +168,8 @@ def join_radar(radar1, radar2):
         sh2 = radar2.fields[var]['data'].shape
         new_field_shape = (sh1[0] + sh2[0], max(sh1[1], sh2[1]))
         new_field = np.ma.zeros(new_field_shape)
-        new_field.set_fill_value = get_fillvalue()
         new_field[:] = np.ma.masked
+        new_field.set_fill_value(get_fillvalue())
         new_field[0:sh1[0], 0:sh1[1]] = radar1.fields[var]['data']
         new_field[sh1[0]:, 0:sh2[1]] = radar2.fields[var]['data']
         new_radar.fields[var]['data'] = new_field
