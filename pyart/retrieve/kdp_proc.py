@@ -44,9 +44,6 @@ from scipy import optimize, stats, interpolate, linalg, signal
 from . import _kdp_proc
 from ..config import get_field_name, get_metadata, get_fillvalue
 
-
-
-  
 def kdp_schneebeli(radar, gatefilter=None, fill_value = None, psidp_field=None,
                 kdp_field=None, phidp_field=None, band = 'C', rcov = 0, pcov = 0,
                 prefilter_psidp = False, filter_opt = {}, parallel = True):

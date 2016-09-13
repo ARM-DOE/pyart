@@ -55,7 +55,6 @@ else:
     from . import aux_io
     from . import retrieve
     from . import bridge
-    from . import wrapper
 
     # root level functions
     from .config import load_config
