@@ -1,5 +1,5 @@
 """
-pyart.correct.noise
+pyart.correct.bias_and_noise
 ===================
 
 Corrects polarimetric variables for noise
@@ -92,12 +92,11 @@ def correct_noise_rhohv(radar, urhohv_field=None, snr_field=None,
     alpha = np.ma.power(10., 0.1*(nh-nv))
 
     mask = np.ma.getmaskarray(urhohv)
-    fill_value = urhohv.get_fill_value()
 
     rhohv_data = urhohv*np.ma.sqrt((1.+1./snr_h)*(1.+zdr/(alpha*snr_h)))
     rhohv_data[rhohv_data > 1.] = 1.
-    rhohv_data.set_fill_value(fill_value)
-    rhohv_data.data[mask.nonzero()] = fill_value
+    rhohv_data[mask] = np.ma.masked
+    rhohv_data.set_fill_value(get_fillvalue())
 
     rhohv = get_metadata(rhohv_field)
     rhohv['data'] = rhohv_data
@@ -138,11 +137,10 @@ def correct_bias(radar, bias=0., field_name=None):
         raise KeyError('Field not available: ' + field_name)
 
     mask = np.ma.getmaskarray(field_data)
-    fill_value = field_data.get_fill_value()
 
     corr_field_data = field_data - bias
-    corr_field_data.set_fill_value(fill_value)
-    corr_field_data.data[mask] = fill_value
+    corr_field_data[mask] = np.ma.masked
+    corr_field_data.set_fill_value(get_fillvalue())
 
     if field_name.startswith('corrected_'):
         corr_field_name = field_name
