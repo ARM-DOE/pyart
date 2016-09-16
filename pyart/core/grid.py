@@ -102,9 +102,6 @@ class Grid(object):
         grid origin and the Cartesian z location of each grid point.  If this
         attribute is changed use :py:func:`init_point_altitude` to reset the
         attribute.
-    axes : dict
-        Dictionary of axes dictionaries.  This attribute is deprecated,
-        it will be removed in future versions of Py-ART.
 
     """
     def __init__(self, time, fields, metadata,
@@ -142,18 +139,6 @@ class Grid(object):
         self.init_point_x_y_z()
         self.init_point_longitude_latitude()
         self.init_point_altitude()
-
-        # Deprecated axes attribute
-        axes = {'time': time,
-                'time_start': time,  # incorrect metadata
-                'time_end': time,    # incorrect metadata
-                'z_disp': z,
-                'y_disp': y,
-                'x_disp': x,
-                'alt': origin_altitude,
-                'lat': origin_latitude,
-                'lon': origin_longitude}
-        self.axes = axes
 
         return
 
