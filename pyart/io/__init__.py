@@ -92,7 +92,5 @@ from .auto_read import read
 from .mdv_grid import write_grid_mdv, read_grid_mdv
 from .common import prepare_for_read
 from .arm_sonde import read_arm_sonde_vap, read_arm_sonde
-# This function will be deprecated shortly
-from ..core.transforms import add_2d_latlon_axis
 
 __all__ = [s for s in dir() if not s.startswith('_')]
