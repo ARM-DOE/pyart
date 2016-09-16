@@ -108,7 +108,6 @@ def compute_noisedBZ(nrays, noisedBZ_val, range, ref_dist,
 
     noisedBZ = get_metadata(noise_field)
     noisedBZ['data'] = np.tile(noisedBZ_vec, (nrays, 1))
-#    noisedBZ['data'].set_fill_value(get_fillvalue())
 
     return noisedBZ
 
@@ -153,7 +152,6 @@ def compute_snr(radar, refl_field=None, noise_field=None, snr_field=None):
         raise KeyError('Field not available: ' + noise_field)
 
     snr_data = refl-noisedBZ
-#    snr_data.set_fill_value(get_fillvalue())
 
     snr = get_metadata(snr_field)
     snr['data'] = snr_data
@@ -194,12 +192,8 @@ def compute_l(radar, rhohv_field=None, l_field=None):
     else:
         raise KeyError('Field not available: ' + rhohv_field)
 
-#    mask = np.ma.getmaskarray(rhohv)
-
     rhohv[rhohv >= 1.] = 0.9999
     l_data = -np.ma.log10(1.-rhohv)
-#    l_data.data[mask] = np.ma.masked
-#    l_data.set_fill_value(get_fillvalue())
 
     l = get_metadata(l_field)
     l['data'] = l_data
