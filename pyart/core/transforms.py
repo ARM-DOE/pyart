@@ -21,13 +21,11 @@ and antenna (azimuth, elevation, range) coordinate systems.
     cartesian_to_geographic_aeqd
     geographic_to_cartesian_aeqd
 
-    corner_to_point
     _interpolate_axes_edges
     _interpolate_azimuth_edges
     _interpolate_elevation_edges
     _interpolate_range_edges
     _half_angle_complex
-    _ax_radius
 
 
 """
@@ -653,66 +651,3 @@ def cartesian_to_geographic_aeqd(x, y, lon_0, lat_0, R=6370997.):
     lon_deg[lon_deg < -180] += 360.
 
     return lon_deg, lat_deg
-
-
-def corner_to_point(corner, point):
-    """
-    Return the x, y distances in meters from a corner to a point.
-
-    Assumes a spherical earth model.
-
-    This function is Deprecated, use the :py:func:`geographic_to_cartesian`
-    function as a replacement.
-
-    Parameters
-    ----------
-    corner : (float, float)
-        Latitude and longitude in degrees of the corner.
-    point : (float, float)
-        Latitude and longitude in degrees of the point.
-
-    Returns
-    -------
-    x, y : floats
-        Distances from the corner to the point in meters.
-
-    """
-    warnings.warn(
-        "corner_to_point is deprecated and will be removed in a future " +
-        "version of Py-ART.\n" +
-        "Additionally use of this function is discourage, the " +
-        "geographic_to_cartesian function produces similar results while " +
-        "allowing the map projection to be specified. ", DeprecationWarning)
-    Re = 6371.0 * 1000.0
-    Rc = _ax_radius(point[0], units='degrees')
-    # print Rc/Re
-    y = ((point[0] - corner[0]) / 360.0) * PI * 2.0 * Re
-    x = ((point[1] - corner[1]) / 360.0) * PI * 2.0 * Rc
-    return x, y
-
-
-def _ax_radius(lat, units='radians'):
-    """
-    Return the radius of a constant latitude circle for a given latitude.
-
-    Parameters
-    ----------
-    lat : float
-        Latitude at which to calculate constant latitude circle (parallel)
-        radius.
-    units : 'radians' or 'degrees'
-        Units of lat, either 'radians' or 'degrees'.
-
-    Returns
-    -------
-    R : float
-        Radius in meters of a constant latitude circle (parallel).
-
-    """
-    Re = 6371.0 * 1000.0
-    if units == 'degrees':
-        const = PI / 180.0
-    else:
-        const = 1.0
-    R = Re * np.sin(PI / 2.0 - abs(lat * const))
-    return R
