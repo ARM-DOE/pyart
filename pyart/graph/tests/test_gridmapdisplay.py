@@ -9,7 +9,6 @@ import warnings
 
 import matplotlib.pyplot as plt
 import pyart
-from pyart.exceptions import DeprecatedAttribute
 from numpy.testing import assert_raises
 from numpy.testing.decorators import skipif
 
@@ -120,20 +119,6 @@ def test_error_raising():
     # no field
     display.mappables.append(None)  # mock the mappable
     assert_raises(ValueError, display.plot_colorbar)
-
-
-@skipif(not pyart.graph.gridmapdisplay._BASEMAP_AVAILABLE)
-def test_deprecated_attributes():
-
-    grid = pyart.testing.make_target_grid()
-    display = pyart.graph.GridMapDisplay(grid)
-
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore", category=DeprecatedAttribute)
-
-        assert display.grid_lons.ndim == 2
-        assert display.grid_lats.ndim == 2
-        assert callable(display.proj)
 
 
 if __name__ == "__main__":

@@ -16,7 +16,6 @@ import numpy as np
 from numpy.testing import assert_raises, assert_almost_equal, assert_warns
 
 import pyart
-from pyart.exceptions import DeprecatedAttribute
 
 
 # Top level Figure generating tests
@@ -278,27 +277,6 @@ def test_radardisplay_get_colorbar_label():
     assert (display._get_colorbar_label('reflectivity_horizontal') ==
             'reflectivity horizontal (?)')
     plt.close()
-
-
-# These attribute have been Deprecated, remove this test when these
-# attribute are removed
-def test_starts_ends():
-    radar = pyart.testing.make_empty_ppi_radar(1, 1, 1)
-    display = pyart.graph.RadarDisplay(radar)
-
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore", category=DeprecatedAttribute)
-        assert len(display.starts) == 1
-        assert len(display.ends) == 1
-        assert display.time_begin == datetime.datetime(1989, 1, 1, 0, 0, 1)
-        assert display.radar_name == 'fake_radar'
-
-        del radar.metadata['instrument_name']
-        assert display.radar_name == ''
-
-        assert display.x.shape == (1, 1)
-        assert display.y.shape == (1, 1)
-        assert display.z.shape == (1, 1)
 
 
 if __name__ == "__main__":
