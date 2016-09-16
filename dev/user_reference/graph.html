@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.6.0',
+        VERSION:     '1.7.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,14 +23,14 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="Py-ART Documentation" href="../index.html" />
     <link rel="up" title="User Reference Manual" href="index.html" />
     <link rel="next" title="pyart.graph.RadarDisplay" href="generated/pyart.graph.RadarDisplay.html" />
-    <link rel="prev" title="pyart.retrieve.texture_of_complex_phase" href="generated/pyart.retrieve.texture_of_complex_phase.html" /> 
+    <link rel="prev" title="pyart.retrieve.grid_shift" href="generated/pyart.retrieve.grid_shift.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -40,26 +40,23 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="generated/pyart.graph.RadarDisplay.html" title="pyart.graph.RadarDisplay"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="generated/pyart.retrieve.texture_of_complex_phase.html" title="pyart.retrieve.texture_of_complex_phase"
+          <a href="generated/pyart.retrieve.grid_shift.html" title="pyart.retrieve.grid_shift"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Py-ART Documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">User Reference Manual</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">Py-ART Documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">User Reference Manual</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <span class="target" id="module-pyart.graph"></span><div class="section" id="graphing-pyart-graph">
-<h1>Graphing (<a class="reference internal" href="#module-pyart.graph" title="pyart.graph"><tt class="xref py py-mod docutils literal"><span class="pre">pyart.graph</span></tt></a>)<a class="headerlink" href="#graphing-pyart-graph" title="Permalink to this headline">¶</a></h1>
+<h1>Graphing (<a class="reference internal" href="#module-pyart.graph" title="pyart.graph"><code class="xref py py-mod docutils literal"><span class="pre">pyart.graph</span></code></a>)<a class="headerlink" href="#graphing-pyart-graph" title="Permalink to this headline">¶</a></h1>
 <p>Creating plots of Radar and Grid fields.</p>
 <div class="section" id="plotting-radar-data">
 <h2>Plotting radar data<a class="headerlink" href="#plotting-radar-data" title="Permalink to this headline">¶</a></h2>
@@ -69,13 +66,13 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.RadarDisplay.html#pyart.graph.RadarDisplay" title="pyart.graph.RadarDisplay"><tt class="xref py py-obj docutils literal"><span class="pre">RadarDisplay</span></tt></a>(radar[,&nbsp;shift])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.RadarDisplay.html#pyart.graph.RadarDisplay" title="pyart.graph.RadarDisplay"><code class="xref py py-obj docutils literal"><span class="pre">RadarDisplay</span></code></a>(radar[,&nbsp;shift])</td>
 <td>A display object for creating plots from data in a radar object.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.graph.RadarMapDisplay.html#pyart.graph.RadarMapDisplay" title="pyart.graph.RadarMapDisplay"><tt class="xref py py-obj docutils literal"><span class="pre">RadarMapDisplay</span></tt></a>(radar[,&nbsp;shift])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.graph.RadarMapDisplay.html#pyart.graph.RadarMapDisplay" title="pyart.graph.RadarMapDisplay"><code class="xref py py-obj docutils literal"><span class="pre">RadarMapDisplay</span></code></a>(radar[,&nbsp;shift])</td>
 <td>A display object for creating plots on a geographic map from data in a Radar object.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.AirborneRadarDisplay.html#pyart.graph.AirborneRadarDisplay" title="pyart.graph.AirborneRadarDisplay"><tt class="xref py py-obj docutils literal"><span class="pre">AirborneRadarDisplay</span></tt></a>(radar[,&nbsp;shift])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.AirborneRadarDisplay.html#pyart.graph.AirborneRadarDisplay" title="pyart.graph.AirborneRadarDisplay"><code class="xref py py-obj docutils literal"><span class="pre">AirborneRadarDisplay</span></code></a>(radar[,&nbsp;shift])</td>
 <td>A display object for creating plots from data in a airborne radar object.</td>
 </tr>
 </tbody>
@@ -89,7 +86,7 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.GridMapDisplay.html#pyart.graph.GridMapDisplay" title="pyart.graph.GridMapDisplay"><tt class="xref py py-obj docutils literal"><span class="pre">GridMapDisplay</span></tt></a>(grid[,&nbsp;debug])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.GridMapDisplay.html#pyart.graph.GridMapDisplay" title="pyart.graph.GridMapDisplay"><code class="xref py py-obj docutils literal"><span class="pre">GridMapDisplay</span></code></a>(grid[,&nbsp;debug])</td>
 <td>A class for creating plots from a grid object on top of a Basemap.</td>
 </tr>
 </tbody>
@@ -101,11 +98,11 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Graphing (<tt class="docutils literal"><span class="pre">pyart.graph</span></tt>)</a><ul>
+<li><a class="reference internal" href="#">Graphing (<code class="docutils literal"><span class="pre">pyart.graph</span></code>)</a><ul>
 <li><a class="reference internal" href="#plotting-radar-data">Plotting radar data</a></li>
 <li><a class="reference internal" href="#plotting-grid-data">Plotting grid data</a></li>
 </ul>
@@ -113,17 +110,19 @@
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="generated/pyart.retrieve.texture_of_complex_phase.html"
-                        title="previous chapter">pyart.retrieve.texture_of_complex_phase</a></p>
+  <p class="topless"><a href="generated/pyart.retrieve.grid_shift.html"
+                        title="previous chapter">pyart.retrieve.grid_shift</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="generated/pyart.graph.RadarDisplay.html"
                         title="next chapter">pyart.graph.RadarDisplay</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/user_reference/graph.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/user_reference/graph.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -140,7 +139,7 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -150,22 +149,19 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="generated/pyart.graph.RadarDisplay.html" title="pyart.graph.RadarDisplay"
              >next</a> |</li>
         <li class="right" >
-          <a href="generated/pyart.retrieve.texture_of_complex_phase.html" title="pyart.retrieve.texture_of_complex_phase"
+          <a href="generated/pyart.retrieve.grid_shift.html" title="pyart.retrieve.grid_shift"
              >previous</a> |</li>
-        <li><a href="../index.html">Py-ART Documentation</a> &raquo;</li>
-          <li><a href="index.html" >User Reference Manual</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">Py-ART Documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >User Reference Manual</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2013, Py-ART developers.
-      Last updated on Feb 05, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2013-2016, Py-ART developers.
+      Last updated on Sep 16, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>
 </html>

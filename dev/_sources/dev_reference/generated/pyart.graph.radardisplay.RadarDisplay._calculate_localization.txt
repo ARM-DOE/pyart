@@ -1,6 +1,0 @@
-pyart.graph.radardisplay.RadarDisplay._calculate_localization
-=============================================================
-
-.. currentmodule:: pyart.graph.radardisplay
-
-.. automethod:: RadarDisplay._calculate_localization

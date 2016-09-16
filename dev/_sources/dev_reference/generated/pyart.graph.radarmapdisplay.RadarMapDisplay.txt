@@ -51,6 +51,7 @@ pyart.graph.radarmapdisplay.RadarMapDisplay
        :toctree:
 
     
+         ~RadarMapDisplay.__dir__
          ~RadarMapDisplay.__format__
          ~RadarMapDisplay.__init__
          ~RadarMapDisplay.__new__

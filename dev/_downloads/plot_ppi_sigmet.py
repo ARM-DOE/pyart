@@ -6,7 +6,7 @@ Create a PPI plot from a Sigmet file
 An example which creates a PPI plot of a Sigmet file.
 
 """
-print __doc__
+print(__doc__)
 
 # Author: Jonathan J. Helmus (jhelmus@anl.gov)
 # License: BSD 3 clause

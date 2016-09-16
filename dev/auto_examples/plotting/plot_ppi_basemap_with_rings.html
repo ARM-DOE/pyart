@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.6.0',
+        VERSION:     '1.7.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,14 +23,14 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="Py-ART Documentation" href="../../index.html" />
     <link rel="up" title="Examples" href="../index.html" />
     <link rel="next" title="Create a multiple panel RHI plot from a CF/Radial file" href="plot_rhi_cfradial.html" />
     <link rel="prev" title="Create a plot of multiple moments from a NEXRAD file" href="plot_nexrad_multiple_moments.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -40,31 +40,28 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="plot_rhi_cfradial.html" title="Create a multiple panel RHI plot from a CF/Radial file"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="plot_nexrad_multiple_moments.html" title="Create a plot of multiple moments from a NEXRAD file"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
-          <li><a href="../index.html" accesskey="U">Examples</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Examples</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="create-a-ppi-plot-on-a-basemap">
 <span id="example-plotting-plot-ppi-basemap-with-rings-py"></span><h1>Create a PPI plot on a basemap<a class="headerlink" href="#create-a-ppi-plot-on-a-basemap" title="Permalink to this headline">¶</a></h1>
 <p>An example which creates a PPI plot of a file with a basemap background
 and range rings</p>
 <img alt="../../_images/plot_ppi_basemap_with_rings_1.png" class="align-center" src="../../_images/plot_ppi_basemap_with_rings_1.png" />
-<p><strong>Python source code:</strong> <a class="reference download internal" href="../../_downloads/plot_ppi_basemap_with_rings.py"><tt class="xref download docutils literal"><span class="pre">plot_ppi_basemap_with_rings.py</span></tt></a></p>
-<div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">__doc__</span>
+<p><strong>Python source code:</strong> <a class="reference download internal" href="../../_downloads/plot_ppi_basemap_with_rings.py"><code class="xref download docutils literal"><span class="pre">plot_ppi_basemap_with_rings.py</span></code></a></p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">print</span><span class="p">(</span><span class="n">__doc__</span><span class="p">)</span>
 
 <span class="c1"># Author: Scott Collis (scollis@anl.gov)</span>
 <span class="c1"># License: BSD 3 clause</span>
@@ -104,14 +101,14 @@ and range rings</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the example:</strong>  10.93 seconds</p>
+<p><strong>Total running time of the example:</strong>  22.13 seconds</p>
 </div>
 
 
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
   <p class="topless"><a href="plot_nexrad_multiple_moments.html"
@@ -119,12 +116,14 @@ and range rings</p>
   <h4>Next topic</h4>
   <p class="topless"><a href="plot_rhi_cfradial.html"
                         title="next chapter">Create a multiple panel RHI plot from a CF/Radial file</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../../_sources/auto_examples/plotting/plot_ppi_basemap_with_rings.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/auto_examples/plotting/plot_ppi_basemap_with_rings.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
@@ -141,7 +140,7 @@ and range rings</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -151,22 +150,19 @@ and range rings</p>
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="plot_rhi_cfradial.html" title="Create a multiple panel RHI plot from a CF/Radial file"
              >next</a> |</li>
         <li class="right" >
           <a href="plot_nexrad_multiple_moments.html" title="Create a plot of multiple moments from a NEXRAD file"
              >previous</a> |</li>
-        <li><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
-          <li><a href="../index.html" >Examples</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Examples</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2013, Py-ART developers.
-      Last updated on Feb 05, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2013-2016, Py-ART developers.
+      Last updated on Sep 16, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>
 </html>

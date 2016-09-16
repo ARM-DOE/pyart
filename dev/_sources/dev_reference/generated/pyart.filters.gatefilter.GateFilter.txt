@@ -23,6 +23,7 @@ pyart.filters.gatefilter.GateFilter
          GateFilter.exclude_none
          GateFilter.exclude_not_equal
          GateFilter.exclude_outside
+         GateFilter.exclude_transition
          GateFilter.include_above
          GateFilter.include_all
          GateFilter.include_below
@@ -32,6 +33,7 @@ pyart.filters.gatefilter.GateFilter
          GateFilter.include_none
          GateFilter.include_not_equal
          GateFilter.include_not_masked
+         GateFilter.include_not_transition
          GateFilter.include_outside
          GateFilter.include_valid
 
@@ -43,6 +45,7 @@ pyart.filters.gatefilter.GateFilter
        :toctree:
 
     
+         ~GateFilter.__dir__
          ~GateFilter.__format__
          ~GateFilter.__init__
          ~GateFilter.__new__

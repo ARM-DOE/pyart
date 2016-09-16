@@ -1,0 +1,6 @@
+pyart.core.grid.Grid.__dir__
+============================
+
+.. currentmodule:: pyart.core.grid
+
+.. automethod:: Grid.__dir__

@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.6.0',
+        VERSION:     '1.7.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,14 +23,14 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="Py-ART Documentation" href="../index.html" />
     <link rel="up" title="Developer Reference Manual" href="index.html" />
     <link rel="next" title="pyart.graph.cm.revcmap" href="generated/pyart.graph.cm.revcmap.html" />
-    <link rel="prev" title="pyart.retrieve.simple_moment_calculations.calculate_snr_from_reflectivity" href="generated/pyart.retrieve.simple_moment_calculations.calculate_snr_from_reflectivity.html" /> 
+    <link rel="prev" title="pyart.retrieve.simple_moment_calculations.compute_cdr" href="generated/pyart.retrieve.simple_moment_calculations.compute_cdr.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -40,23 +40,20 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="generated/pyart.graph.cm.revcmap.html" title="pyart.graph.cm.revcmap"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="generated/pyart.retrieve.simple_moment_calculations.calculate_snr_from_reflectivity.html" title="pyart.retrieve.simple_moment_calculations.calculate_snr_from_reflectivity"
+          <a href="generated/pyart.retrieve.simple_moment_calculations.compute_cdr.html" title="pyart.retrieve.simple_moment_calculations.compute_cdr"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Py-ART Documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Developer Reference Manual</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">Py-ART Documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Developer Reference Manual</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pyart-graph">
 <h1>pyart.graph<a class="headerlink" href="#pyart-graph" title="Permalink to this headline">¶</a></h1>
@@ -70,16 +67,16 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.cm.revcmap.html#pyart.graph.cm.revcmap" title="pyart.graph.cm.revcmap"><tt class="xref py py-obj docutils literal"><span class="pre">revcmap</span></tt></a>(data)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.cm.revcmap.html#pyart.graph.cm.revcmap" title="pyart.graph.cm.revcmap"><code class="xref py py-obj docutils literal"><span class="pre">revcmap</span></code></a>(data)</td>
 <td>Can only handle specification <em>data</em> in dictionary format.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.graph.cm._reverser.html#pyart.graph.cm._reverser" title="pyart.graph.cm._reverser"><tt class="xref py py-obj docutils literal"><span class="pre">_reverser</span></tt></a>(f)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.graph.cm._reverser.html#pyart.graph.cm._reverser" title="pyart.graph.cm._reverser"><code class="xref py py-obj docutils literal"><span class="pre">_reverser</span></code></a>(f)</td>
 <td>perform reversal.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.cm._reverse_cmap_spec.html#pyart.graph.cm._reverse_cmap_spec" title="pyart.graph.cm._reverse_cmap_spec"><tt class="xref py py-obj docutils literal"><span class="pre">_reverse_cmap_spec</span></tt></a>(spec)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.cm._reverse_cmap_spec.html#pyart.graph.cm._reverse_cmap_spec" title="pyart.graph.cm._reverse_cmap_spec"><code class="xref py py-obj docutils literal"><span class="pre">_reverse_cmap_spec</span></code></a>(spec)</td>
 <td>Reverses cmap specification <em>spec</em>, can handle both dict and tuple type specs.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.graph.cm._generate_cmap.html#pyart.graph.cm._generate_cmap" title="pyart.graph.cm._generate_cmap"><tt class="xref py py-obj docutils literal"><span class="pre">_generate_cmap</span></tt></a>(name,&nbsp;lutsize)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.graph.cm._generate_cmap.html#pyart.graph.cm._generate_cmap" title="pyart.graph.cm._generate_cmap"><code class="xref py py-obj docutils literal"><span class="pre">_generate_cmap</span></code></a>(name,&nbsp;lutsize)</td>
 <td>Generates the requested cmap from it&#8217;s name <em>name</em>.</td>
 </tr>
 </tbody>
@@ -137,67 +134,67 @@ colormaps are available within matplotlib with names &#8216;pyart_COLORMAP&#8217
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.common.parse_ax.html#pyart.graph.common.parse_ax" title="pyart.graph.common.parse_ax"><tt class="xref py py-obj docutils literal"><span class="pre">parse_ax</span></tt></a>(ax)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.common.parse_ax.html#pyart.graph.common.parse_ax" title="pyart.graph.common.parse_ax"><code class="xref py py-obj docutils literal"><span class="pre">parse_ax</span></code></a>(ax)</td>
 <td>Parse and return ax parameter.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.graph.common.parse_ax_fig.html#pyart.graph.common.parse_ax_fig" title="pyart.graph.common.parse_ax_fig"><tt class="xref py py-obj docutils literal"><span class="pre">parse_ax_fig</span></tt></a>(ax,&nbsp;fig)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.graph.common.parse_ax_fig.html#pyart.graph.common.parse_ax_fig" title="pyart.graph.common.parse_ax_fig"><code class="xref py py-obj docutils literal"><span class="pre">parse_ax_fig</span></code></a>(ax,&nbsp;fig)</td>
 <td>Parse and return ax and fig parameters.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.common.parse_norm_vmin_vmax.html#pyart.graph.common.parse_norm_vmin_vmax" title="pyart.graph.common.parse_norm_vmin_vmax"><tt class="xref py py-obj docutils literal"><span class="pre">parse_norm_vmin_vmax</span></tt></a>(norm,&nbsp;container,&nbsp;field,&nbsp;...)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.common.parse_norm_vmin_vmax.html#pyart.graph.common.parse_norm_vmin_vmax" title="pyart.graph.common.parse_norm_vmin_vmax"><code class="xref py py-obj docutils literal"><span class="pre">parse_norm_vmin_vmax</span></code></a>(norm,&nbsp;container,&nbsp;field,&nbsp;...)</td>
 <td>Parse and return norm, vmin and vmax parameters.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.graph.common.parse_cmap.html#pyart.graph.common.parse_cmap" title="pyart.graph.common.parse_cmap"><tt class="xref py py-obj docutils literal"><span class="pre">parse_cmap</span></tt></a>(cmap[,&nbsp;field])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.graph.common.parse_cmap.html#pyart.graph.common.parse_cmap" title="pyart.graph.common.parse_cmap"><code class="xref py py-obj docutils literal"><span class="pre">parse_cmap</span></code></a>(cmap[,&nbsp;field])</td>
 <td>Parse and return the cmap parameter.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.common.parse_vmin_vmax.html#pyart.graph.common.parse_vmin_vmax" title="pyart.graph.common.parse_vmin_vmax"><tt class="xref py py-obj docutils literal"><span class="pre">parse_vmin_vmax</span></tt></a>(container,&nbsp;field,&nbsp;vmin,&nbsp;vmax)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.common.parse_vmin_vmax.html#pyart.graph.common.parse_vmin_vmax" title="pyart.graph.common.parse_vmin_vmax"><code class="xref py py-obj docutils literal"><span class="pre">parse_vmin_vmax</span></code></a>(container,&nbsp;field,&nbsp;vmin,&nbsp;vmax)</td>
 <td>Parse and return vmin and vmax parameters.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.graph.common.parse_lon_lat.html#pyart.graph.common.parse_lon_lat" title="pyart.graph.common.parse_lon_lat"><tt class="xref py py-obj docutils literal"><span class="pre">parse_lon_lat</span></tt></a>(grid,&nbsp;lon,&nbsp;lat)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.graph.common.parse_lon_lat.html#pyart.graph.common.parse_lon_lat" title="pyart.graph.common.parse_lon_lat"><code class="xref py py-obj docutils literal"><span class="pre">parse_lon_lat</span></code></a>(grid,&nbsp;lon,&nbsp;lat)</td>
 <td>Parse lat and lon parameters</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.common.generate_colorbar_label.html#pyart.graph.common.generate_colorbar_label" title="pyart.graph.common.generate_colorbar_label"><tt class="xref py py-obj docutils literal"><span class="pre">generate_colorbar_label</span></tt></a>(standard_name,&nbsp;units)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.common.generate_colorbar_label.html#pyart.graph.common.generate_colorbar_label" title="pyart.graph.common.generate_colorbar_label"><code class="xref py py-obj docutils literal"><span class="pre">generate_colorbar_label</span></code></a>(standard_name,&nbsp;units)</td>
 <td>Generate and return a label for a colorbar.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.graph.common.generate_field_name.html#pyart.graph.common.generate_field_name" title="pyart.graph.common.generate_field_name"><tt class="xref py py-obj docutils literal"><span class="pre">generate_field_name</span></tt></a>(container,&nbsp;field)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.graph.common.generate_field_name.html#pyart.graph.common.generate_field_name" title="pyart.graph.common.generate_field_name"><code class="xref py py-obj docutils literal"><span class="pre">generate_field_name</span></code></a>(container,&nbsp;field)</td>
 <td>Return a nice field name for a particular field.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.common.generate_radar_name.html#pyart.graph.common.generate_radar_name" title="pyart.graph.common.generate_radar_name"><tt class="xref py py-obj docutils literal"><span class="pre">generate_radar_name</span></tt></a>(radar)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.common.generate_radar_name.html#pyart.graph.common.generate_radar_name" title="pyart.graph.common.generate_radar_name"><code class="xref py py-obj docutils literal"><span class="pre">generate_radar_name</span></code></a>(radar)</td>
 <td>Return radar name.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.graph.common.generate_grid_name.html#pyart.graph.common.generate_grid_name" title="pyart.graph.common.generate_grid_name"><tt class="xref py py-obj docutils literal"><span class="pre">generate_grid_name</span></tt></a>(grid)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.graph.common.generate_grid_name.html#pyart.graph.common.generate_grid_name" title="pyart.graph.common.generate_grid_name"><code class="xref py py-obj docutils literal"><span class="pre">generate_grid_name</span></code></a>(grid)</td>
 <td>Return grid name.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.common.generate_radar_time_begin.html#pyart.graph.common.generate_radar_time_begin" title="pyart.graph.common.generate_radar_time_begin"><tt class="xref py py-obj docutils literal"><span class="pre">generate_radar_time_begin</span></tt></a>(radar)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.common.generate_radar_time_begin.html#pyart.graph.common.generate_radar_time_begin" title="pyart.graph.common.generate_radar_time_begin"><code class="xref py py-obj docutils literal"><span class="pre">generate_radar_time_begin</span></code></a>(radar)</td>
 <td>Return time begin in datetime instance.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.graph.common.generate_grid_time_begin.html#pyart.graph.common.generate_grid_time_begin" title="pyart.graph.common.generate_grid_time_begin"><tt class="xref py py-obj docutils literal"><span class="pre">generate_grid_time_begin</span></tt></a>(grid)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.graph.common.generate_grid_time_begin.html#pyart.graph.common.generate_grid_time_begin" title="pyart.graph.common.generate_grid_time_begin"><code class="xref py py-obj docutils literal"><span class="pre">generate_grid_time_begin</span></code></a>(grid)</td>
 <td>Return time begin in datetime instance.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.common.generate_filename.html#pyart.graph.common.generate_filename" title="pyart.graph.common.generate_filename"><tt class="xref py py-obj docutils literal"><span class="pre">generate_filename</span></tt></a>(radar,&nbsp;field,&nbsp;sweep[,&nbsp;ext])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.common.generate_filename.html#pyart.graph.common.generate_filename" title="pyart.graph.common.generate_filename"><code class="xref py py-obj docutils literal"><span class="pre">generate_filename</span></code></a>(radar,&nbsp;field,&nbsp;sweep[,&nbsp;ext])</td>
 <td>Generate a filename for a plot.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.graph.common.generate_grid_filename.html#pyart.graph.common.generate_grid_filename" title="pyart.graph.common.generate_grid_filename"><tt class="xref py py-obj docutils literal"><span class="pre">generate_grid_filename</span></tt></a>(grid,&nbsp;field,&nbsp;level[,&nbsp;ext])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.graph.common.generate_grid_filename.html#pyart.graph.common.generate_grid_filename" title="pyart.graph.common.generate_grid_filename"><code class="xref py py-obj docutils literal"><span class="pre">generate_grid_filename</span></code></a>(grid,&nbsp;field,&nbsp;level[,&nbsp;ext])</td>
 <td>Generate a filename for a plot.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.common.generate_title.html#pyart.graph.common.generate_title" title="pyart.graph.common.generate_title"><tt class="xref py py-obj docutils literal"><span class="pre">generate_title</span></tt></a>(radar,&nbsp;field,&nbsp;sweep)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.common.generate_title.html#pyart.graph.common.generate_title" title="pyart.graph.common.generate_title"><code class="xref py py-obj docutils literal"><span class="pre">generate_title</span></code></a>(radar,&nbsp;field,&nbsp;sweep)</td>
 <td>Generate a title for a plot.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.graph.common.generate_grid_title.html#pyart.graph.common.generate_grid_title" title="pyart.graph.common.generate_grid_title"><tt class="xref py py-obj docutils literal"><span class="pre">generate_grid_title</span></tt></a>(grid,&nbsp;field,&nbsp;level)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.graph.common.generate_grid_title.html#pyart.graph.common.generate_grid_title" title="pyart.graph.common.generate_grid_title"><code class="xref py py-obj docutils literal"><span class="pre">generate_grid_title</span></code></a>(grid,&nbsp;field,&nbsp;level)</td>
 <td>Generate a title for a plot.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.common.generate_longitudinal_level_title.html#pyart.graph.common.generate_longitudinal_level_title" title="pyart.graph.common.generate_longitudinal_level_title"><tt class="xref py py-obj docutils literal"><span class="pre">generate_longitudinal_level_title</span></tt></a>(grid,&nbsp;...)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.common.generate_longitudinal_level_title.html#pyart.graph.common.generate_longitudinal_level_title" title="pyart.graph.common.generate_longitudinal_level_title"><code class="xref py py-obj docutils literal"><span class="pre">generate_longitudinal_level_title</span></code></a>(grid,&nbsp;...)</td>
 <td>Generate a title for a plot.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.graph.common.generate_latitudinal_level_title.html#pyart.graph.common.generate_latitudinal_level_title" title="pyart.graph.common.generate_latitudinal_level_title"><tt class="xref py py-obj docutils literal"><span class="pre">generate_latitudinal_level_title</span></tt></a>(grid,&nbsp;...)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.graph.common.generate_latitudinal_level_title.html#pyart.graph.common.generate_latitudinal_level_title" title="pyart.graph.common.generate_latitudinal_level_title"><code class="xref py py-obj docutils literal"><span class="pre">generate_latitudinal_level_title</span></code></a>(grid,&nbsp;...)</td>
 <td>Generate a title for a plot.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.common.generate_vpt_title.html#pyart.graph.common.generate_vpt_title" title="pyart.graph.common.generate_vpt_title"><tt class="xref py py-obj docutils literal"><span class="pre">generate_vpt_title</span></tt></a>(radar,&nbsp;field)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.common.generate_vpt_title.html#pyart.graph.common.generate_vpt_title" title="pyart.graph.common.generate_vpt_title"><code class="xref py py-obj docutils literal"><span class="pre">generate_vpt_title</span></code></a>(radar,&nbsp;field)</td>
 <td>Generate a title for a VPT plot.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.graph.common.generate_ray_title.html#pyart.graph.common.generate_ray_title" title="pyart.graph.common.generate_ray_title"><tt class="xref py py-obj docutils literal"><span class="pre">generate_ray_title</span></tt></a>(radar,&nbsp;field,&nbsp;ray)</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.graph.common.generate_ray_title.html#pyart.graph.common.generate_ray_title" title="pyart.graph.common.generate_ray_title"><code class="xref py py-obj docutils literal"><span class="pre">generate_ray_title</span></code></a>(radar,&nbsp;field,&nbsp;ray)</td>
 <td>Generate a title for a ray plot.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.common.set_limits.html#pyart.graph.common.set_limits" title="pyart.graph.common.set_limits"><tt class="xref py py-obj docutils literal"><span class="pre">set_limits</span></tt></a>([xlim,&nbsp;ylim,&nbsp;ax])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.common.set_limits.html#pyart.graph.common.set_limits" title="pyart.graph.common.set_limits"><code class="xref py py-obj docutils literal"><span class="pre">set_limits</span></code></a>([xlim,&nbsp;ylim,&nbsp;ax])</td>
 <td>Set the display limits.</td>
 </tr>
 </tbody>
@@ -212,7 +209,7 @@ colormaps are available within matplotlib with names &#8216;pyart_COLORMAP&#8217
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.gridmapdisplay.GridMapDisplay.html#pyart.graph.gridmapdisplay.GridMapDisplay" title="pyart.graph.gridmapdisplay.GridMapDisplay"><tt class="xref py py-obj docutils literal"><span class="pre">GridMapDisplay</span></tt></a>(grid[,&nbsp;debug])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.gridmapdisplay.GridMapDisplay.html#pyart.graph.gridmapdisplay.GridMapDisplay" title="pyart.graph.gridmapdisplay.GridMapDisplay"><code class="xref py py-obj docutils literal"><span class="pre">GridMapDisplay</span></code></a>(grid[,&nbsp;debug])</td>
 <td>A class for creating plots from a grid object on top of a Basemap.</td>
 </tr>
 </tbody>
@@ -227,7 +224,7 @@ colormaps are available within matplotlib with names &#8216;pyart_COLORMAP&#8217
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.radardisplay_airborne.AirborneRadarDisplay.html#pyart.graph.radardisplay_airborne.AirborneRadarDisplay" title="pyart.graph.radardisplay_airborne.AirborneRadarDisplay"><tt class="xref py py-obj docutils literal"><span class="pre">AirborneRadarDisplay</span></tt></a>(radar[,&nbsp;shift])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.radardisplay_airborne.AirborneRadarDisplay.html#pyart.graph.radardisplay_airborne.AirborneRadarDisplay" title="pyart.graph.radardisplay_airborne.AirborneRadarDisplay"><code class="xref py py-obj docutils literal"><span class="pre">AirborneRadarDisplay</span></code></a>(radar[,&nbsp;shift])</td>
 <td>A display object for creating plots from data in a airborne radar object.</td>
 </tr>
 </tbody>
@@ -242,7 +239,7 @@ colormaps are available within matplotlib with names &#8216;pyart_COLORMAP&#8217
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.radardisplay.RadarDisplay.html#pyart.graph.radardisplay.RadarDisplay" title="pyart.graph.radardisplay.RadarDisplay"><tt class="xref py py-obj docutils literal"><span class="pre">RadarDisplay</span></tt></a>(radar[,&nbsp;shift])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.radardisplay.RadarDisplay.html#pyart.graph.radardisplay.RadarDisplay" title="pyart.graph.radardisplay.RadarDisplay"><code class="xref py py-obj docutils literal"><span class="pre">RadarDisplay</span></code></a>(radar[,&nbsp;shift])</td>
 <td>A display object for creating plots from data in a radar object.</td>
 </tr>
 </tbody>
@@ -257,7 +254,7 @@ colormaps are available within matplotlib with names &#8216;pyart_COLORMAP&#8217
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.radarmapdisplay.RadarMapDisplay.html#pyart.graph.radarmapdisplay.RadarMapDisplay" title="pyart.graph.radarmapdisplay.RadarMapDisplay"><tt class="xref py py-obj docutils literal"><span class="pre">RadarMapDisplay</span></tt></a>(radar[,&nbsp;shift])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.graph.radarmapdisplay.RadarMapDisplay.html#pyart.graph.radarmapdisplay.RadarMapDisplay" title="pyart.graph.radarmapdisplay.RadarMapDisplay"><code class="xref py py-obj docutils literal"><span class="pre">RadarMapDisplay</span></code></a>(radar[,&nbsp;shift])</td>
 <td>A display object for creating plots on a geographic map from data in a Radar object.</td>
 </tr>
 </tbody>
@@ -273,7 +270,7 @@ colormaps are available within matplotlib with names &#8216;pyart_COLORMAP&#8217
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
@@ -290,17 +287,19 @@ colormaps are available within matplotlib with names &#8216;pyart_COLORMAP&#8217
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="generated/pyart.retrieve.simple_moment_calculations.calculate_snr_from_reflectivity.html"
-                        title="previous chapter">pyart.retrieve.simple_moment_calculations.calculate_snr_from_reflectivity</a></p>
+  <p class="topless"><a href="generated/pyart.retrieve.simple_moment_calculations.compute_cdr.html"
+                        title="previous chapter">pyart.retrieve.simple_moment_calculations.compute_cdr</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="generated/pyart.graph.cm.revcmap.html"
                         title="next chapter">pyart.graph.cm.revcmap</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/dev_reference/graph.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/dev_reference/graph.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -317,7 +316,7 @@ colormaps are available within matplotlib with names &#8216;pyart_COLORMAP&#8217
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -327,22 +326,19 @@ colormaps are available within matplotlib with names &#8216;pyart_COLORMAP&#8217
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="generated/pyart.graph.cm.revcmap.html" title="pyart.graph.cm.revcmap"
              >next</a> |</li>
         <li class="right" >
-          <a href="generated/pyart.retrieve.simple_moment_calculations.calculate_snr_from_reflectivity.html" title="pyart.retrieve.simple_moment_calculations.calculate_snr_from_reflectivity"
+          <a href="generated/pyart.retrieve.simple_moment_calculations.compute_cdr.html" title="pyart.retrieve.simple_moment_calculations.compute_cdr"
              >previous</a> |</li>
-        <li><a href="../index.html">Py-ART Documentation</a> &raquo;</li>
-          <li><a href="index.html" >Developer Reference Manual</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">Py-ART Documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Developer Reference Manual</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2013, Py-ART developers.
-      Last updated on Feb 05, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2013-2016, Py-ART developers.
+      Last updated on Sep 16, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>
 </html>

@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.6.0',
+        VERSION:     '1.7.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,14 +23,14 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="Py-ART Documentation" href="../../index.html" />
     <link rel="up" title="Input and output (pyart.io)" href="../io.html" />
     <link rel="next" title="pyart.io.write_grid" href="pyart.io.write_grid.html" />
     <link rel="prev" title="pyart.io.read_legacy_grid" href="pyart.io.read_legacy_grid.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -40,30 +40,27 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="pyart.io.write_grid.html" title="pyart.io.write_grid"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="pyart.io.read_legacy_grid.html" title="pyart.io.read_legacy_grid"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
-          <li><a href="../index.html" >User Reference Manual</a> &raquo;</li>
-          <li><a href="../io.html" accesskey="U">Input and output (<tt class="docutils literal"><span class="pre">pyart.io</span></tt>)</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >User Reference Manual</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../io.html" accesskey="U">Input and output (<code class="docutils literal"><span class="pre">pyart.io</span></code>)</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pyart-io-read-grid-mdv">
 <h1>pyart.io.read_grid_mdv<a class="headerlink" href="#pyart-io-read-grid-mdv" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pyart.io.read_grid_mdv">
-<tt class="descclassname">pyart.io.</tt><tt class="descname">read_grid_mdv</tt><big>(</big><em>filename</em>, <em>field_names=None</em>, <em>additional_metadata=None</em>, <em>file_field_names=False</em>, <em>exclude_fields=None</em>, <em>delay_field_loading=False</em>, <em>**kwargs</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/io/mdv_grid.py#L233"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.io.read_grid_mdv" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pyart.io.</code><code class="descname">read_grid_mdv</code><span class="sig-paren">(</span><em>filename</em>, <em>field_names=None</em>, <em>additional_metadata=None</em>, <em>file_field_names=False</em>, <em>exclude_fields=None</em>, <em>delay_field_loading=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/io/mdv_grid.py#L233"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.io.read_grid_mdv" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read a MDV file to a Grid Object.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -122,7 +119,7 @@ LazyLoadDict objects not dict objects.</p>
 <p class="rubric">Notes</p>
 <p>This function can only read cartesian MDV files with fields
 compressed with gzip or zlib. For polar files see
-<a class="reference internal" href="pyart.io.read_mdv.html#pyart.io.read_mdv" title="pyart.io.read_mdv"><tt class="xref py py-func docutils literal"><span class="pre">pyart.io.read_mdv</span></tt></a></p>
+<a class="reference internal" href="pyart.io.read_mdv.html#pyart.io.read_mdv" title="pyart.io.read_mdv"><code class="xref py py-func docutils literal"><span class="pre">pyart.io.read_mdv</span></code></a></p>
 <p>MDV files and Grid object are not fully interchangeable.  Specific
 limitation include:</p>
 <blockquote>
@@ -146,7 +143,7 @@ fail.</li>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
   <p class="topless"><a href="pyart.io.read_legacy_grid.html"
@@ -154,12 +151,14 @@ fail.</li>
   <h4>Next topic</h4>
   <p class="topless"><a href="pyart.io.write_grid.html"
                         title="next chapter">pyart.io.write_grid</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../../_sources/user_reference/generated/pyart.io.read_grid_mdv.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/user_reference/generated/pyart.io.read_grid_mdv.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
@@ -176,7 +175,7 @@ fail.</li>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -186,23 +185,20 @@ fail.</li>
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="pyart.io.write_grid.html" title="pyart.io.write_grid"
              >next</a> |</li>
         <li class="right" >
           <a href="pyart.io.read_legacy_grid.html" title="pyart.io.read_legacy_grid"
              >previous</a> |</li>
-        <li><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
-          <li><a href="../index.html" >User Reference Manual</a> &raquo;</li>
-          <li><a href="../io.html" >Input and output (<tt class="docutils literal"><span class="pre">pyart.io</span></tt>)</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >User Reference Manual</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../io.html" >Input and output (<code class="docutils literal"><span class="pre">pyart.io</span></code>)</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2013, Py-ART developers.
-      Last updated on Feb 05, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2013-2016, Py-ART developers.
+      Last updated on Sep 16, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>
 </html>

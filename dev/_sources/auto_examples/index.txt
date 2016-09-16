@@ -132,12 +132,9 @@ Examples
 
 
 
-.. _general_examples:
+The files used in these examples are available for download_.
 
-General examples
-----------------
-
-General-purpose and introductory example for Py-ART.
+.. _download: https://engineering.arm.gov/~jhelmus/pyart_example_data/
 
 
 
@@ -608,6 +605,90 @@ Plotting real world radar data with Py-ART.
    :hidden:
 
    plotting/plot_rhi_two_panel
+
+
+
+.. raw:: html
+
+
+    <div class="thumbnailContainer">
+        <div class="docstringWrapper">
+
+
+.. figure:: plotting/images/thumb/plot_grid_data_overlay.png
+   :target: ./plotting/plot_grid_data_overlay.html
+
+   :ref:`example_plotting_plot_grid_data_overlay.py`
+
+
+.. raw:: html
+
+
+    <p>An example which creates a plot of a gridded NEXRAD radar on a map with latitude and NCEP North...
+    </p></div>
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   plotting/plot_grid_data_overlay
+
+
+
+.. raw:: html
+
+
+    <div class="thumbnailContainer">
+        <div class="docstringWrapper">
+
+
+.. figure:: plotting/images/thumb/plot_rhi_data_overlay.png
+   :target: ./plotting/plot_rhi_data_overlay.html
+
+   :ref:`example_plotting_plot_rhi_data_overlay.py`
+
+
+.. raw:: html
+
+
+    <p>An example which creates an RHI plot of velocity using a RadarDisplay object and adding Reflect...
+    </p></div>
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   plotting/plot_rhi_data_overlay
+
+
+
+.. raw:: html
+
+
+    <div class="thumbnailContainer">
+        <div class="docstringWrapper">
+
+
+.. figure:: plotting/images/thumb/plot_rhi_contours_differential_reflectivity.png
+   :target: ./plotting/plot_rhi_contours_differential_reflectivity.html
+
+   :ref:`example_plotting_plot_rhi_contours_differential_reflectivity.py`
+
+
+.. raw:: html
+
+
+    <p>An example which creates an RHI plot of reflectivity using a RadarDisplay object and adding dif...
+    </p></div>
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   plotting/plot_rhi_contours_differential_reflectivity
 
 
 

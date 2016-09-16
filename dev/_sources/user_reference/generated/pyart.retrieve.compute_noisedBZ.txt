@@ -1,0 +1,6 @@
+pyart.retrieve.compute_noisedBZ
+===============================
+
+.. currentmodule:: pyart.retrieve
+
+.. autofunction:: compute_noisedBZ

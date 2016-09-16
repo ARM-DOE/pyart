@@ -1,0 +1,6 @@
+pyart.retrieve._kdp_proc.lowpass_maesaka_term
+=============================================
+
+.. currentmodule:: pyart.retrieve._kdp_proc
+
+.. autofunction:: lowpass_maesaka_term

@@ -22,6 +22,7 @@ pyart.io.cfradial._NetCDFVariableDataExtractor
 
     
          ~_NetCDFVariableDataExtractor.__call__
+         ~_NetCDFVariableDataExtractor.__dir__
          ~_NetCDFVariableDataExtractor.__format__
          ~_NetCDFVariableDataExtractor.__init__
          ~_NetCDFVariableDataExtractor.__new__

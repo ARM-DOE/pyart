@@ -7,7 +7,7 @@ Map the reflectivity field of a single radar from Antenna coordinates to a
 Cartesian grid.
 
 """
-print __doc__
+print(__doc__)
 
 # Author: Jonathan J. Helmus (jhelmus@anl.gov)
 # License: BSD 3 clause
@@ -25,6 +25,7 @@ radar.fields['reflectivity']['data'][:, -10:] = np.ma.masked
 
 # exclude masked gates from the gridding
 gatefilter = pyart.filters.GateFilter(radar)
+gatefilter.exclude_transition()
 gatefilter.exclude_masked('reflectivity')
 
 # perform Cartesian mapping, limit to the reflectivity field.

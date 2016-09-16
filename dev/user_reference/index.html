@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.6.0',
+        VERSION:     '1.7.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,13 +23,13 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="Py-ART Documentation" href="../index.html" />
     <link rel="next" title="Core (pyart.core)" href="core.html" />
     <link rel="prev" title="Py-ART documentation" href="../index.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -39,22 +39,19 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="core.html" title="Core (pyart.core)"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="../index.html" title="Py-ART documentation"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Py-ART Documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">Py-ART Documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="user-reference-manual">
 <span id="user"></span><h1>User Reference Manual<a class="headerlink" href="#user-reference-manual" title="Permalink to this headline">¶</a></h1>
@@ -62,29 +59,29 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Release:</th><td class="field-body">1.6</td>
+<tr class="field-odd field"><th class="field-name">Release:</th><td class="field-body">1.7</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">February 05, 2016</td>
+<tr class="field-even field"><th class="field-name">Date:</th><td class="field-body">September 16, 2016</td>
 </tr>
 </tbody>
 </table>
 <p>This is the Py-ART user community’s reference guide, and it covers the most
 commonly used public functions, modules and classes.
-If more detail is required, the <a class="reference internal" href="../dev_reference/index.html#developer"><em>Developer Reference Manual</em></a> is an exhaustive listing of
+If more detail is required, the <a class="reference internal" href="../dev_reference/index.html#developer"><span>Developer Reference Manual</span></a> is an exhaustive listing of
 all private and public functions, modules and classes.</p>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="core.html">Core (<tt class="docutils literal"><span class="pre">pyart.core</span></tt>)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="io.html">Input and output (<tt class="docutils literal"><span class="pre">pyart.io</span></tt>)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="aux_io.html">Auxiliary input and output (<tt class="docutils literal"><span class="pre">pyart.aux_io</span></tt>)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="correct.html">Radar Corrections (<tt class="docutils literal"><span class="pre">pyart.correct</span></tt>)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="retrieve.html">Radar Retrievals (<tt class="docutils literal"><span class="pre">pyart.retrieve</span></tt>)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="graph.html">Graphing (<tt class="docutils literal"><span class="pre">pyart.graph</span></tt>)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="map.html">Mapping (<tt class="docutils literal"><span class="pre">pyart.map</span></tt>)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="filters.html">Filters (<tt class="docutils literal"><span class="pre">pyart.filters</span></tt>)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="util.html">Utilities (<tt class="docutils literal"><span class="pre">pyart.util</span></tt>)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="bridge.html">Bridging to other toolkits (<tt class="docutils literal"><span class="pre">pyart.bridge</span></tt>)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Utilities (<tt class="docutils literal"><span class="pre">pyart.testing</span></tt>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core.html">Core (<code class="docutils literal"><span class="pre">pyart.core</span></code>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="io.html">Input and output (<code class="docutils literal"><span class="pre">pyart.io</span></code>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aux_io.html">Auxiliary input and output (<code class="docutils literal"><span class="pre">pyart.aux_io</span></code>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="correct.html">Radar Corrections (<code class="docutils literal"><span class="pre">pyart.correct</span></code>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="retrieve.html">Radar Retrievals (<code class="docutils literal"><span class="pre">pyart.retrieve</span></code>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="graph.html">Graphing (<code class="docutils literal"><span class="pre">pyart.graph</span></code>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="map.html">Mapping (<code class="docutils literal"><span class="pre">pyart.map</span></code>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="filters.html">Filters (<code class="docutils literal"><span class="pre">pyart.filters</span></code>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="util.html">Utilities (<code class="docutils literal"><span class="pre">pyart.util</span></code>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bridge.html">Bridging to other toolkits (<code class="docutils literal"><span class="pre">pyart.bridge</span></code>)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Utilities (<code class="docutils literal"><span class="pre">pyart.testing</span></code>)</a></li>
 </ul>
 </div>
 <p>Packages level functions:</p>
@@ -94,10 +91,10 @@ all private and public functions, modules and classes.</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.load_config.html#pyart.load_config" title="pyart.load_config"><tt class="xref py py-obj docutils literal"><span class="pre">load_config</span></tt></a>([filename])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.load_config.html#pyart.load_config" title="pyart.load_config"><code class="xref py py-obj docutils literal"><span class="pre">load_config</span></code></a>([filename])</td>
 <td>Load a Py-ART configuration from a config file.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.test.html#pyart.test" title="pyart.test"><tt class="xref py py-obj docutils literal"><span class="pre">test</span></tt></a>([verbose])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.test.html#pyart.test" title="pyart.test"><code class="xref py py-obj docutils literal"><span class="pre">test</span></code></a>([verbose])</td>
 <td>Invoke the Py-ART test suite.</td>
 </tr>
 </tbody>
@@ -108,20 +105,22 @@ all private and public functions, modules and classes.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
   <p class="topless"><a href="../index.html"
                         title="previous chapter">Py-ART documentation</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="core.html"
-                        title="next chapter">Core (<tt class="docutils literal"><span class="pre">pyart.core</span></tt>)</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/user_reference/index.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+                        title="next chapter">Core (<code class="docutils literal"><span class="pre">pyart.core</span></code>)</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/user_reference/index.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -138,7 +137,7 @@ all private and public functions, modules and classes.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -148,21 +147,18 @@ all private and public functions, modules and classes.</p>
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="core.html" title="Core (pyart.core)"
              >next</a> |</li>
         <li class="right" >
           <a href="../index.html" title="Py-ART documentation"
              >previous</a> |</li>
-        <li><a href="../index.html">Py-ART Documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">Py-ART Documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2013, Py-ART developers.
-      Last updated on Feb 05, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2013-2016, Py-ART developers.
+      Last updated on Sep 16, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>
 </html>

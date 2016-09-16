@@ -1,0 +1,6 @@
+pyart.correct.despeckle._get_data
+=================================
+
+.. currentmodule:: pyart.correct.despeckle
+
+.. autofunction:: _get_data

@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.6.0',
+        VERSION:     '1.7.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,14 +23,14 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="Py-ART Documentation" href="../../index.html" />
     <link rel="up" title="Mapping (pyart.map)" href="../map.html" />
     <link rel="next" title="pyart.map.map_gates_to_grid" href="pyart.map.map_gates_to_grid.html" />
     <link rel="prev" title="pyart.map.grid_from_radars" href="pyart.map.grid_from_radars.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -40,30 +40,27 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="pyart.map.map_gates_to_grid.html" title="pyart.map.map_gates_to_grid"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="pyart.map.grid_from_radars.html" title="pyart.map.grid_from_radars"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
-          <li><a href="../index.html" >User Reference Manual</a> &raquo;</li>
-          <li><a href="../map.html" accesskey="U">Mapping (<tt class="docutils literal"><span class="pre">pyart.map</span></tt>)</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >User Reference Manual</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../map.html" accesskey="U">Mapping (<code class="docutils literal"><span class="pre">pyart.map</span></code>)</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pyart-map-map-to-grid">
 <h1>pyart.map.map_to_grid<a class="headerlink" href="#pyart-map-map-to-grid" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pyart.map.map_to_grid">
-<tt class="descclassname">pyart.map.</tt><tt class="descname">map_to_grid</tt><big>(</big><em>radars</em>, <em>grid_shape</em>, <em>grid_limits</em>, <em>grid_origin=None</em>, <em>grid_origin_alt=None</em>, <em>grid_projection=None</em>, <em>fields=None</em>, <em>gatefilters=False</em>, <em>map_roi=True</em>, <em>weighting_function='Barnes'</em>, <em>toa=17000.0</em>, <em>copy_field_data=True</em>, <em>algorithm='kd_tree'</em>, <em>leafsize=10.0</em>, <em>roi_func='dist_beam'</em>, <em>constant_roi=500.0</em>, <em>z_factor=0.05</em>, <em>xy_factor=0.02</em>, <em>min_radius=500.0</em>, <em>h_factor=1.0</em>, <em>nb=1.5</em>, <em>bsp=1.0</em>, <em>**kwargs</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/map/grid_mapper.py#L256"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.map.map_to_grid" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pyart.map.</code><code class="descname">map_to_grid</code><span class="sig-paren">(</span><em>radars</em>, <em>grid_shape</em>, <em>grid_limits</em>, <em>grid_origin=None</em>, <em>grid_origin_alt=None</em>, <em>grid_projection=None</em>, <em>fields=None</em>, <em>gatefilters=False</em>, <em>map_roi=True</em>, <em>weighting_function='Barnes'</em>, <em>toa=17000.0</em>, <em>copy_field_data=True</em>, <em>algorithm='kd_tree'</em>, <em>leafsize=10.0</em>, <em>roi_func='dist_beam'</em>, <em>constant_roi=500.0</em>, <em>z_factor=0.05</em>, <em>xy_factor=0.02</em>, <em>min_radius=500.0</em>, <em>h_factor=1.0</em>, <em>nb=1.5</em>, <em>bsp=1.0</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/map/grid_mapper.py#L251"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.map.map_to_grid" title="Permalink to this definition">¶</a></dt>
 <dd><p>Map one or more radars to a Cartesian grid.</p>
 <p>Generate a Cartesian grid of points for the requested fields from the
 collected points from one or more radars.  The field value for a grid
@@ -94,7 +91,7 @@ z, y, x coordinates.</p>
 <div><p>Latitude and longitude of grid origin.  None sets the origin
 to the location of the first radar.</p>
 </div></blockquote>
-<p><strong>grid_origin_alt: float or None</strong> :</p>
+<p><strong>grid_origin_alt: float or None</strong></p>
 <blockquote>
 <div><p>Altitude of grid origin, in meters. None sets the origin
 to the location of the first radar.</p>
@@ -104,7 +101,7 @@ to the location of the first radar.</p>
 <div><p>Projection parameters defining the map projection used to transform the
 locations of the radar gates in geographic coordinate to Cartesian
 coodinates.  None will use the default dictionary which uses a native
-azimutal equidistance projection.  See <a class="reference internal" href="pyart.core.Grid.html#pyart.core.Grid" title="pyart.core.Grid"><tt class="xref py py-func docutils literal"><span class="pre">pyart.core.Grid</span></tt></a> for
+azimutal equidistance projection.  See <a class="reference internal" href="pyart.core.Grid.html#pyart.core.Grid" title="pyart.core.Grid"><code class="xref py py-func docutils literal"><span class="pre">pyart.core.Grid</span></code></a> for
 additional details on this parameter. The geographic coordinates of
 the radar gates are calculated using the projection defined for each
 radar.  No transformation is used if a grid_origin and grid_origin_alt
@@ -126,7 +123,7 @@ specific element or the entire parameter will apply no filtering of
 gates for a specific radar or all radars (the default).
 Similarily a value of None will create a GateFilter from the
 radar moments using any additional arguments by passing them to
-<tt class="xref py py-func docutils literal"><span class="pre">moment_based_gate_filter</span></tt>.</p>
+<code class="xref py py-func docutils literal"><span class="pre">moment_based_gate_filter</span></code>.</p>
 </div></blockquote>
 <p><strong>roi_func</strong> : str or function</p>
 <blockquote>
@@ -134,9 +131,9 @@ radar moments using any additional arguments by passing them to
 z, y, x grid location, in meters, and returns a radius (in meters)
 within which all collected points will be included in the weighting
 for that grid points. Examples can be found in the
-<a class="reference internal" href="pyart.map.example_roi_func_constant.html#pyart.map.example_roi_func_constant" title="pyart.map.example_roi_func_constant"><tt class="xref py py-func docutils literal"><span class="pre">example_roi_func_constant</span></tt></a>,
-<a class="reference internal" href="pyart.map.example_roi_func_dist.html#pyart.map.example_roi_func_dist" title="pyart.map.example_roi_func_dist"><tt class="xref py py-func docutils literal"><span class="pre">example_roi_func_dist</span></tt></a>, and
-<a class="reference internal" href="pyart.map.example_roi_func_dist_beam.html#pyart.map.example_roi_func_dist_beam" title="pyart.map.example_roi_func_dist_beam"><tt class="xref py py-func docutils literal"><span class="pre">example_roi_func_dist_beam</span></tt></a>.
+<a class="reference internal" href="pyart.map.example_roi_func_constant.html#pyart.map.example_roi_func_constant" title="pyart.map.example_roi_func_constant"><code class="xref py py-func docutils literal"><span class="pre">example_roi_func_constant</span></code></a>,
+<a class="reference internal" href="pyart.map.example_roi_func_dist.html#pyart.map.example_roi_func_dist" title="pyart.map.example_roi_func_dist"><code class="xref py py-func docutils literal"><span class="pre">example_roi_func_dist</span></code></a>, and
+<a class="reference internal" href="pyart.map.example_roi_func_dist_beam.html#pyart.map.example_roi_func_dist_beam" title="pyart.map.example_roi_func_dist_beam"><code class="xref py py-func docutils literal"><span class="pre">example_roi_func_dist_beam</span></code></a>.
 Alternatively the following strings can use to specify a built in
 radius of influence function:</p>
 <blockquote>
@@ -212,11 +209,10 @@ to True or by gridding each field individually setting the
 <cite>refl_field</cite> parameter and the <cite>fields</cite> parameter to the field in
 question.  It is recommended to set this parameter to True.</p>
 </div></blockquote>
-<p><strong>algorithm</strong> : &#8216;kd_tree&#8217; or &#8216;ball_tree&#8217;</p>
+<p><strong>algorithm</strong> : &#8216;kd_tree&#8217;.</p>
 <blockquote>
-<div><p>Algorithms to use for finding the nearest neighbors. &#8216;kd_tree&#8217; tends
-to be faster.  This value should only effects the speed of the
-gridding, not the results.</p>
+<div><p>Algorithms to use for finding the nearest neighbors. &#8216;kd_tree&#8217; is the
+only valid option.</p>
 </div></blockquote>
 <p><strong>leafsize</strong> : int</p>
 <blockquote class="last">
@@ -233,7 +229,7 @@ not the results.</p>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
 <dl class="last docutils">
-<dt><a class="reference internal" href="pyart.map.grid_from_radars.html#pyart.map.grid_from_radars" title="pyart.map.grid_from_radars"><tt class="xref py py-obj docutils literal"><span class="pre">grid_from_radars</span></tt></a></dt>
+<dt><a class="reference internal" href="pyart.map.grid_from_radars.html#pyart.map.grid_from_radars" title="pyart.map.grid_from_radars"><code class="xref py py-obj docutils literal"><span class="pre">grid_from_radars</span></code></a></dt>
 <dd>Map to grid and return a Grid object.</dd>
 </dl>
 </div>
@@ -245,7 +241,7 @@ not the results.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
   <p class="topless"><a href="pyart.map.grid_from_radars.html"
@@ -253,12 +249,14 @@ not the results.</p>
   <h4>Next topic</h4>
   <p class="topless"><a href="pyart.map.map_gates_to_grid.html"
                         title="next chapter">pyart.map.map_gates_to_grid</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../../_sources/user_reference/generated/pyart.map.map_to_grid.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/user_reference/generated/pyart.map.map_to_grid.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
@@ -275,7 +273,7 @@ not the results.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -285,23 +283,20 @@ not the results.</p>
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="pyart.map.map_gates_to_grid.html" title="pyart.map.map_gates_to_grid"
              >next</a> |</li>
         <li class="right" >
           <a href="pyart.map.grid_from_radars.html" title="pyart.map.grid_from_radars"
              >previous</a> |</li>
-        <li><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
-          <li><a href="../index.html" >User Reference Manual</a> &raquo;</li>
-          <li><a href="../map.html" >Mapping (<tt class="docutils literal"><span class="pre">pyart.map</span></tt>)</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >User Reference Manual</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../map.html" >Mapping (<code class="docutils literal"><span class="pre">pyart.map</span></code>)</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2013, Py-ART developers.
-      Last updated on Feb 05, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2013-2016, Py-ART developers.
+      Last updated on Sep 16, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>
 </html>

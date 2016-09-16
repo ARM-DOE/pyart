@@ -1,0 +1,6 @@
+pyart.util.xsect._construct_xsect_radar
+=======================================
+
+.. currentmodule:: pyart.util.xsect
+
+.. autofunction:: _construct_xsect_radar

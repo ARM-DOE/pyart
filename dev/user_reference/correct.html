@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '1.6.0',
+        VERSION:     '1.7.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,14 +23,14 @@
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="Py-ART Documentation" href="../index.html" />
     <link rel="up" title="User Reference Manual" href="index.html" />
     <link rel="next" title="pyart.correct.dealias_fourdd" href="generated/pyart.correct.dealias_fourdd.html" />
-    <link rel="prev" title="pyart.aux_io.read_radx" href="generated/pyart.aux_io.read_radx.html" /> 
+    <link rel="prev" title="pyart.aux_io.read_rainbow_wrl" href="generated/pyart.aux_io.read_rainbow_wrl.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -40,26 +40,23 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="generated/pyart.correct.dealias_fourdd.html" title="pyart.correct.dealias_fourdd"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="generated/pyart.aux_io.read_radx.html" title="pyart.aux_io.read_radx"
+          <a href="generated/pyart.aux_io.read_rainbow_wrl.html" title="pyart.aux_io.read_rainbow_wrl"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">Py-ART Documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">User Reference Manual</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">Py-ART Documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">User Reference Manual</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <span class="target" id="module-pyart.correct"></span><div class="section" id="radar-corrections-pyart-correct">
-<h1>Radar Corrections (<a class="reference internal" href="#module-pyart.correct" title="pyart.correct"><tt class="xref py py-mod docutils literal"><span class="pre">pyart.correct</span></tt></a>)<a class="headerlink" href="#radar-corrections-pyart-correct" title="Permalink to this headline">¶</a></h1>
+<h1>Radar Corrections (<a class="reference internal" href="#module-pyart.correct" title="pyart.correct"><code class="xref py py-mod docutils literal"><span class="pre">pyart.correct</span></code></a>)<a class="headerlink" href="#radar-corrections-pyart-correct" title="Permalink to this headline">¶</a></h1>
 <p>Correct radar fields.</p>
 <div class="section" id="velocity-unfolding">
 <h2>Velocity unfolding<a class="headerlink" href="#velocity-unfolding" title="Permalink to this headline">¶</a></h2>
@@ -69,13 +66,13 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.dealias_fourdd.html#pyart.correct.dealias_fourdd" title="pyart.correct.dealias_fourdd"><tt class="xref py py-obj docutils literal"><span class="pre">dealias_fourdd</span></tt></a>(radar[,&nbsp;last_radar,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.dealias_fourdd.html#pyart.correct.dealias_fourdd" title="pyart.correct.dealias_fourdd"><code class="xref py py-obj docutils literal"><span class="pre">dealias_fourdd</span></code></a>(radar[,&nbsp;last_radar,&nbsp;...])</td>
 <td>Dealias Doppler velocities using the 4DD algorithm.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.correct.dealias_unwrap_phase.html#pyart.correct.dealias_unwrap_phase" title="pyart.correct.dealias_unwrap_phase"><tt class="xref py py-obj docutils literal"><span class="pre">dealias_unwrap_phase</span></tt></a>(radar[,&nbsp;unwrap_unit,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.correct.dealias_unwrap_phase.html#pyart.correct.dealias_unwrap_phase" title="pyart.correct.dealias_unwrap_phase"><code class="xref py py-obj docutils literal"><span class="pre">dealias_unwrap_phase</span></code></a>(radar[,&nbsp;unwrap_unit,&nbsp;...])</td>
 <td>Dealias Doppler velocities using multi-dimensional phase unwrapping.</td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.dealias_region_based.html#pyart.correct.dealias_region_based" title="pyart.correct.dealias_region_based"><tt class="xref py py-obj docutils literal"><span class="pre">dealias_region_based</span></tt></a>(radar[,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.dealias_region_based.html#pyart.correct.dealias_region_based" title="pyart.correct.dealias_region_based"><code class="xref py py-obj docutils literal"><span class="pre">dealias_region_based</span></code></a>(radar[,&nbsp;ref_vel_field,&nbsp;...])</td>
 <td>Dealias Doppler velocities using a region based algorithm.</td>
 </tr>
 </tbody>
@@ -89,11 +86,20 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.calculate_attenuation.html#pyart.correct.calculate_attenuation" title="pyart.correct.calculate_attenuation"><tt class="xref py py-obj docutils literal"><span class="pre">calculate_attenuation</span></tt></a>(radar,&nbsp;z_offset[,&nbsp;...])</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.calculate_attenuation.html#pyart.correct.calculate_attenuation" title="pyart.correct.calculate_attenuation"><code class="xref py py-obj docutils literal"><span class="pre">calculate_attenuation</span></code></a>(radar,&nbsp;z_offset[,&nbsp;...])</td>
 <td>Calculate the attenuation from a polarimetric radar using Z-PHI method.</td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.correct.phase_proc_lp.html#pyart.correct.phase_proc_lp" title="pyart.correct.phase_proc_lp"><tt class="xref py py-obj docutils literal"><span class="pre">phase_proc_lp</span></tt></a>(radar,&nbsp;offset[,&nbsp;debug,&nbsp;...])</td>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.correct.phase_proc_lp.html#pyart.correct.phase_proc_lp" title="pyart.correct.phase_proc_lp"><code class="xref py py-obj docutils literal"><span class="pre">phase_proc_lp</span></code></a>(radar,&nbsp;offset[,&nbsp;debug,&nbsp;...])</td>
 <td>Phase process using a LP method [1].</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.despeckle_field.html#pyart.correct.despeckle_field" title="pyart.correct.despeckle_field"><code class="xref py py-obj docutils literal"><span class="pre">despeckle_field</span></code></a>(radar,&nbsp;field[,&nbsp;label_dict,&nbsp;...])</td>
+<td>Despeckle a radar volume by identifying small objects in each scan and masking them out.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.correct.correct_noise_rhohv.html#pyart.correct.correct_noise_rhohv" title="pyart.correct.correct_noise_rhohv"><code class="xref py py-obj docutils literal"><span class="pre">correct_noise_rhohv</span></code></a>(radar[,&nbsp;urhohv_field,&nbsp;...])</td>
+<td>Corrects RhoHV for noise according to eq.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.correct_bias.html#pyart.correct.correct_bias" title="pyart.correct.correct_bias"><code class="xref py py-obj docutils literal"><span class="pre">correct_bias</span></code></a>(radar[,&nbsp;bias,&nbsp;field_name])</td>
+<td>Corrects a radar data bias.</td>
 </tr>
 </tbody>
 </table>
@@ -106,8 +112,11 @@
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.find_time_in_interp_sonde.html#pyart.correct.find_time_in_interp_sonde" title="pyart.correct.find_time_in_interp_sonde"><tt class="xref py py-obj docutils literal"><span class="pre">find_time_in_interp_sonde</span></tt></a>(interp_sonde,&nbsp;target)</td>
+<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.correct.find_time_in_interp_sonde.html#pyart.correct.find_time_in_interp_sonde" title="pyart.correct.find_time_in_interp_sonde"><code class="xref py py-obj docutils literal"><span class="pre">find_time_in_interp_sonde</span></code></a>(interp_sonde,&nbsp;target)</td>
 <td>Find the wind parameter for a given time in a ARM interpsonde file.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="generated/pyart.correct.find_objects.html#pyart.correct.find_objects" title="pyart.correct.find_objects"><code class="xref py py-obj docutils literal"><span class="pre">find_objects</span></code></a>(radar,&nbsp;field,&nbsp;threshold[,&nbsp;...])</td>
+<td>Find objects (i.e., contiguous gates) in one or more sweeps that match thresholds.</td>
 </tr>
 </tbody>
 </table>
@@ -118,11 +127,11 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Radar Corrections (<tt class="docutils literal"><span class="pre">pyart.correct</span></tt>)</a><ul>
+<li><a class="reference internal" href="#">Radar Corrections (<code class="docutils literal"><span class="pre">pyart.correct</span></code>)</a><ul>
 <li><a class="reference internal" href="#velocity-unfolding">Velocity unfolding</a></li>
 <li><a class="reference internal" href="#other-corrections">Other corrections</a></li>
 <li><a class="reference internal" href="#helper-functions">Helper functions</a></li>
@@ -131,17 +140,19 @@
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="generated/pyart.aux_io.read_radx.html"
-                        title="previous chapter">pyart.aux_io.read_radx</a></p>
+  <p class="topless"><a href="generated/pyart.aux_io.read_rainbow_wrl.html"
+                        title="previous chapter">pyart.aux_io.read_rainbow_wrl</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="generated/pyart.correct.dealias_fourdd.html"
                         title="next chapter">pyart.correct.dealias_fourdd</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/user_reference/correct.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/user_reference/correct.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
@@ -158,7 +169,7 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -168,22 +179,19 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="generated/pyart.correct.dealias_fourdd.html" title="pyart.correct.dealias_fourdd"
              >next</a> |</li>
         <li class="right" >
-          <a href="generated/pyart.aux_io.read_radx.html" title="pyart.aux_io.read_radx"
+          <a href="generated/pyart.aux_io.read_rainbow_wrl.html" title="pyart.aux_io.read_rainbow_wrl"
              >previous</a> |</li>
-        <li><a href="../index.html">Py-ART Documentation</a> &raquo;</li>
-          <li><a href="index.html" >User Reference Manual</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">Py-ART Documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >User Reference Manual</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2013, Py-ART developers.
-      Last updated on Feb 05, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2013-2016, Py-ART developers.
+      Last updated on Sep 16, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>
 </html>

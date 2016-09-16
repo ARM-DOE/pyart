@@ -1,6 +1,0 @@
-pyart.graph.RadarDisplay_Airborne.set_aspect_ratio
-==================================================
-
-.. currentmodule:: pyart.graph
-
-.. automethod:: RadarDisplay_Airborne.set_aspect_ratio

@@ -22,6 +22,7 @@ pyart.io.mdv_common._MdvVolumeDataExtractor
 
     
          ~_MdvVolumeDataExtractor.__call__
+         ~_MdvVolumeDataExtractor.__dir__
          ~_MdvVolumeDataExtractor.__format__
          ~_MdvVolumeDataExtractor.__init__
          ~_MdvVolumeDataExtractor.__new__

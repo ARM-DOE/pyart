@@ -1,0 +1,6 @@
+pyart.correct.despeckle._append_labels
+======================================
+
+.. currentmodule:: pyart.correct.despeckle
+
+.. autofunction:: _append_labels

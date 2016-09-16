@@ -21,6 +21,7 @@ pyart.map._gate_to_grid_map.ConstantRoI
        :toctree:
 
     
+         ~ConstantRoI.__dir__
          ~ConstantRoI.__format__
          ~ConstantRoI.__new__
          ~ConstantRoI.__reduce__

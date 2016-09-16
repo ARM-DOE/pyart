@@ -1,6 +1,0 @@
-pyart.io.lazydict.LazyLoadDict.__reduce_ex__
-============================================
-
-.. currentmodule:: pyart.io.lazydict
-
-.. automethod:: LazyLoadDict.__reduce_ex__

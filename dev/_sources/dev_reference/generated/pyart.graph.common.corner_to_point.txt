@@ -1,6 +1,0 @@
-pyart.graph.common.corner_to_point
-==================================
-
-.. currentmodule:: pyart.graph.common
-
-.. autofunction:: corner_to_point

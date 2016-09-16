@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.6.0',
+        VERSION:     '1.7.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,14 +23,14 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="Py-ART Documentation" href="../../index.html" />
     <link rel="up" title="Radar Retrievals (pyart.retrieve)" href="../retrieve.html" />
-    <link rel="next" title="Graphing (pyart.graph)" href="../graph.html" />
+    <link rel="next" title="pyart.retrieve.grid_displacement_pc" href="pyart.retrieve.grid_displacement_pc.html" />
     <link rel="prev" title="pyart.retrieve.steiner_conv_strat" href="pyart.retrieve.steiner_conv_strat.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -40,30 +40,27 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="../graph.html" title="Graphing (pyart.graph)"
+          <a href="pyart.retrieve.grid_displacement_pc.html" title="pyart.retrieve.grid_displacement_pc"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="pyart.retrieve.steiner_conv_strat.html" title="pyart.retrieve.steiner_conv_strat"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
-          <li><a href="../index.html" >User Reference Manual</a> &raquo;</li>
-          <li><a href="../retrieve.html" accesskey="U">Radar Retrievals (<tt class="docutils literal"><span class="pre">pyart.retrieve</span></tt>)</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >User Reference Manual</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../retrieve.html" accesskey="U">Radar Retrievals (<code class="docutils literal"><span class="pre">pyart.retrieve</span></code>)</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pyart-retrieve-texture-of-complex-phase">
 <h1>pyart.retrieve.texture_of_complex_phase<a class="headerlink" href="#pyart-retrieve-texture-of-complex-phase" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pyart.retrieve.texture_of_complex_phase">
-<tt class="descclassname">pyart.retrieve.</tt><tt class="descname">texture_of_complex_phase</tt><big>(</big><em>radar</em>, <em>phidp_field=None</em>, <em>phidp_texture_field=None</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/bridge/wradlib_bridge.py#L25"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.retrieve.texture_of_complex_phase" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pyart.retrieve.</code><code class="descname">texture_of_complex_phase</code><span class="sig-paren">(</span><em>radar</em>, <em>phidp_field=None</em>, <em>phidp_texture_field=None</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/bridge/wradlib_bridge.py#L25"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.retrieve.texture_of_complex_phase" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the texture of the differential phase field.</p>
 <p>Calculate the texture of the real part of the complex differential
 phase field</p>
@@ -109,20 +106,22 @@ Journal of Atmospheric and Oceanic Technology 24 (8), 1439-1451</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
   <p class="topless"><a href="pyart.retrieve.steiner_conv_strat.html"
                         title="previous chapter">pyart.retrieve.steiner_conv_strat</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="../graph.html"
-                        title="next chapter">Graphing (<tt class="docutils literal"><span class="pre">pyart.graph</span></tt>)</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../../_sources/user_reference/generated/pyart.retrieve.texture_of_complex_phase.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <p class="topless"><a href="pyart.retrieve.grid_displacement_pc.html"
+                        title="next chapter">pyart.retrieve.grid_displacement_pc</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/user_reference/generated/pyart.retrieve.texture_of_complex_phase.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
@@ -139,7 +138,7 @@ Journal of Atmospheric and Oceanic Technology 24 (8), 1439-1451</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -149,23 +148,20 @@ Journal of Atmospheric and Oceanic Technology 24 (8), 1439-1451</p>
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="../graph.html" title="Graphing (pyart.graph)"
+          <a href="pyart.retrieve.grid_displacement_pc.html" title="pyart.retrieve.grid_displacement_pc"
              >next</a> |</li>
         <li class="right" >
           <a href="pyart.retrieve.steiner_conv_strat.html" title="pyart.retrieve.steiner_conv_strat"
              >previous</a> |</li>
-        <li><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
-          <li><a href="../index.html" >User Reference Manual</a> &raquo;</li>
-          <li><a href="../retrieve.html" >Radar Retrievals (<tt class="docutils literal"><span class="pre">pyart.retrieve</span></tt>)</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >User Reference Manual</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../retrieve.html" >Radar Retrievals (<code class="docutils literal"><span class="pre">pyart.retrieve</span></code>)</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2013, Py-ART developers.
-      Last updated on Feb 05, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2013-2016, Py-ART developers.
+      Last updated on Sep 16, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>
 </html>

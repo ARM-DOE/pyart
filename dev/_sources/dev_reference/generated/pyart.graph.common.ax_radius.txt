@@ -1,6 +1,0 @@
-pyart.graph.common.ax_radius
-============================
-
-.. currentmodule:: pyart.graph.common
-
-.. autofunction:: ax_radius

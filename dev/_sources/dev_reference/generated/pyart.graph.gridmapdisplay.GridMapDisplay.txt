@@ -33,6 +33,7 @@ pyart.graph.gridmapdisplay.GridMapDisplay
        :toctree:
 
     
+         ~GridMapDisplay.__dir__
          ~GridMapDisplay.__format__
          ~GridMapDisplay.__init__
          ~GridMapDisplay.__new__

@@ -1,6 +1,0 @@
-pyart.graph.RadarDisplay_Airborne.plot_cross_hair
-=================================================
-
-.. currentmodule:: pyart.graph
-
-.. automethod:: RadarDisplay_Airborne.plot_cross_hair

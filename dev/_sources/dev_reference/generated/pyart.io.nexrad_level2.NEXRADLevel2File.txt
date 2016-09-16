@@ -21,6 +21,7 @@ pyart.io.nexrad_level2.NEXRADLevel2File
          NEXRADLevel2File.get_target_angles
          NEXRADLevel2File.get_times
          NEXRADLevel2File.get_unambigous_range
+         NEXRADLevel2File.get_vcp_pattern
          NEXRADLevel2File.location
          NEXRADLevel2File.scan_info
 
@@ -32,6 +33,7 @@ pyart.io.nexrad_level2.NEXRADLevel2File
        :toctree:
 
     
+         ~NEXRADLevel2File.__dir__
          ~NEXRADLevel2File.__format__
          ~NEXRADLevel2File.__init__
          ~NEXRADLevel2File.__new__

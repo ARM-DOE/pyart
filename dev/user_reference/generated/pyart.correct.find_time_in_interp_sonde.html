@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.6.0',
+        VERSION:     '1.7.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,14 +23,14 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="Py-ART Documentation" href="../../index.html" />
     <link rel="up" title="Radar Corrections (pyart.correct)" href="../correct.html" />
-    <link rel="next" title="Radar Retrievals (pyart.retrieve)" href="../retrieve.html" />
-    <link rel="prev" title="pyart.correct.phase_proc_lp" href="pyart.correct.phase_proc_lp.html" /> 
+    <link rel="next" title="pyart.correct.find_objects" href="pyart.correct.find_objects.html" />
+    <link rel="prev" title="pyart.correct.correct_bias" href="pyart.correct.correct_bias.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -40,31 +40,31 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="../retrieve.html" title="Radar Retrievals (pyart.retrieve)"
+          <a href="pyart.correct.find_objects.html" title="pyart.correct.find_objects"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="pyart.correct.phase_proc_lp.html" title="pyart.correct.phase_proc_lp"
+          <a href="pyart.correct.correct_bias.html" title="pyart.correct.correct_bias"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
-          <li><a href="../index.html" >User Reference Manual</a> &raquo;</li>
-          <li><a href="../correct.html" accesskey="U">Radar Corrections (<tt class="docutils literal"><span class="pre">pyart.correct</span></tt>)</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >User Reference Manual</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../correct.html" accesskey="U">Radar Corrections (<code class="docutils literal"><span class="pre">pyart.correct</span></code>)</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pyart-correct-find-time-in-interp-sonde">
 <h1>pyart.correct.find_time_in_interp_sonde<a class="headerlink" href="#pyart-correct-find-time-in-interp-sonde" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pyart.correct.find_time_in_interp_sonde">
-<tt class="descclassname">pyart.correct.</tt><tt class="descname">find_time_in_interp_sonde</tt><big>(</big><em>interp_sonde</em>, <em>target</em>, <em>debug=False</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/correct/dealias.py#L288"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.correct.find_time_in_interp_sonde" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pyart.correct.</code><code class="descname">find_time_in_interp_sonde</code><span class="sig-paren">(</span><em>interp_sonde</em>, <em>target</em>, <em>debug=False</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/correct/dealias.py#L313"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.correct.find_time_in_interp_sonde" title="Permalink to this definition">¶</a></dt>
 <dd><p>Find the wind parameter for a given time in a ARM interpsonde file.</p>
+<p>This function is Deprecated and will be removed in future versions of
+Py-ART. Use the <a class="reference internal" href="pyart.io.read_arm_sonde_vap.html#pyart.io.read_arm_sonde_vap" title="pyart.io.read_arm_sonde_vap"><code class="xref py py-func docutils literal"><span class="pre">pyart.io.read_arm_sonde_vap</span></code></a> function for similar
+functionality.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -111,20 +111,22 @@ used.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="pyart.correct.phase_proc_lp.html"
-                        title="previous chapter">pyart.correct.phase_proc_lp</a></p>
+  <p class="topless"><a href="pyart.correct.correct_bias.html"
+                        title="previous chapter">pyart.correct.correct_bias</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="../retrieve.html"
-                        title="next chapter">Radar Retrievals (<tt class="docutils literal"><span class="pre">pyart.retrieve</span></tt>)</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../../_sources/user_reference/generated/pyart.correct.find_time_in_interp_sonde.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <p class="topless"><a href="pyart.correct.find_objects.html"
+                        title="next chapter">pyart.correct.find_objects</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/user_reference/generated/pyart.correct.find_time_in_interp_sonde.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
@@ -141,7 +143,7 @@ used.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -151,23 +153,20 @@ used.</p>
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="../retrieve.html" title="Radar Retrievals (pyart.retrieve)"
+          <a href="pyart.correct.find_objects.html" title="pyart.correct.find_objects"
              >next</a> |</li>
         <li class="right" >
-          <a href="pyart.correct.phase_proc_lp.html" title="pyart.correct.phase_proc_lp"
+          <a href="pyart.correct.correct_bias.html" title="pyart.correct.correct_bias"
              >previous</a> |</li>
-        <li><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
-          <li><a href="../index.html" >User Reference Manual</a> &raquo;</li>
-          <li><a href="../correct.html" >Radar Corrections (<tt class="docutils literal"><span class="pre">pyart.correct</span></tt>)</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >User Reference Manual</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../correct.html" >Radar Corrections (<code class="docutils literal"><span class="pre">pyart.correct</span></code>)</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2013, Py-ART developers.
-      Last updated on Feb 05, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2013-2016, Py-ART developers.
+      Last updated on Sep 16, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>
 </html>
