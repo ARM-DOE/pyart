@@ -1,0 +1,6 @@
+pyart.correct.region_dealias._EdgeTracker.merge_nodes
+=====================================================
+
+.. currentmodule:: pyart.correct.region_dealias
+
+.. automethod:: _EdgeTracker.merge_nodes

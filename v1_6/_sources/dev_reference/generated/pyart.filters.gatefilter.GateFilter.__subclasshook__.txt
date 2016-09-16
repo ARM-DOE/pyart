@@ -1,0 +1,6 @@
+pyart.filters.gatefilter.GateFilter.__subclasshook__
+====================================================
+
+.. currentmodule:: pyart.filters.gatefilter
+
+.. automethod:: GateFilter.__subclasshook__

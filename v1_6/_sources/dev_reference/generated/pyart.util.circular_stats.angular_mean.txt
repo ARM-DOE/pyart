@@ -1,0 +1,6 @@
+pyart.util.circular_stats.angular_mean
+======================================
+
+.. currentmodule:: pyart.util.circular_stats
+
+.. autofunction:: angular_mean

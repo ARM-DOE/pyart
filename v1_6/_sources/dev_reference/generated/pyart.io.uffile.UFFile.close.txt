@@ -1,0 +1,6 @@
+pyart.io.uffile.UFFile.close
+============================
+
+.. currentmodule:: pyart.io.uffile
+
+.. automethod:: UFFile.close

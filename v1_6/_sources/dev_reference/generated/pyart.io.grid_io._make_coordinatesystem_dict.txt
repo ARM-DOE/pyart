@@ -1,0 +1,6 @@
+pyart.io.grid_io._make_coordinatesystem_dict
+============================================
+
+.. currentmodule:: pyart.io.grid_io
+
+.. autofunction:: _make_coordinatesystem_dict

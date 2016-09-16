@@ -1,0 +1,6 @@
+pyart.util.circular_stats.interval_std
+======================================
+
+.. currentmodule:: pyart.util.circular_stats
+
+.. autofunction:: interval_std

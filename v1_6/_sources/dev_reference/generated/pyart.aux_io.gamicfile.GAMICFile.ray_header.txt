@@ -1,0 +1,6 @@
+pyart.aux_io.gamicfile.GAMICFile.ray_header
+===========================================
+
+.. currentmodule:: pyart.aux_io.gamicfile
+
+.. automethod:: GAMICFile.ray_header

@@ -1,0 +1,6 @@
+pyart.io.uf_write.UFRayCreator._set_field_header
+================================================
+
+.. currentmodule:: pyart.io.uf_write
+
+.. automethod:: UFRayCreator._set_field_header

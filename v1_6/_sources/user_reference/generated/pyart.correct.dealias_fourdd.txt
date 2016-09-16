@@ -1,0 +1,6 @@
+pyart.correct.dealias_fourdd
+============================
+
+.. currentmodule:: pyart.correct
+
+.. autofunction:: dealias_fourdd

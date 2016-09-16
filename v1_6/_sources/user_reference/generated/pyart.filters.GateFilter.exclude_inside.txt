@@ -1,0 +1,6 @@
+pyart.filters.GateFilter.exclude_inside
+=======================================
+
+.. currentmodule:: pyart.filters
+
+.. automethod:: GateFilter.exclude_inside

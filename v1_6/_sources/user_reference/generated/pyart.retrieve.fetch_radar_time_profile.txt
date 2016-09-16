@@ -1,0 +1,6 @@
+pyart.retrieve.fetch_radar_time_profile
+=======================================
+
+.. currentmodule:: pyart.retrieve
+
+.. autofunction:: fetch_radar_time_profile
