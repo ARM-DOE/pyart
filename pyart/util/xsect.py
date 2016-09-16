@@ -60,10 +60,10 @@ def cross_section_ppi(radar, target_azimuths, az_tol=None):
                 d_az_min = np.min(d_az)
                 if d_az_min > az_tol:
                     warn('WARNING: No azimuth found whithin tolerance ' +
-                          'for angle '+str(target_azimuth) +
-                          '. Minimum distance to radar azimuth ' +
-                          str(d_az_min)+' larger than tolerance '+
-                          str(az_tol))
+                         'for angle '+str(target_azimuth) +
+                         '. Minimum distance to radar azimuth ' +
+                         str(d_az_min) + ' larger than tolerance ' +
+                         str(az_tol))
                 else:
                     ray_number = np.argmin(d_az)
                     prhi_rays.append(ray_number + sweep_slice.start)
@@ -119,10 +119,10 @@ def cross_section_rhi(radar, target_elevations, el_tol=None):
                 d_el_min = np.min(d_el)
                 if d_el_min > el_tol:
                     warn('WARNING: No elevation found whithin tolerance ' +
-                          'for angle '+str(target_elevation) +
-                          '. Minimum distance to radar elevation ' +
-                          str(d_el_min)+' larger than tolerance '+
-                          str(el_tol))
+                         'for angle '+str(target_elevation) +
+                         '. Minimum distance to radar elevation ' +
+                         str(d_el_min) + ' larger than tolerance ' +
+                         str(el_tol))
                 else:
                     ray_number = np.argmin(d_el)
                     pppi_rays.append(ray_number + sweep_slice.start)
@@ -138,7 +138,8 @@ def cross_section_rhi(radar, target_elevations, el_tol=None):
     return radar_ppi
 
 
-def _construct_xsect_radar(radar, scan_type, pxsect_rays, xsect_nsweeps, target_angles):
+def _construct_xsect_radar(
+        radar, scan_type, pxsect_rays, xsect_nsweeps, target_angles):
     """
     Constructs a new radar object that contains cross-sections at fixed angles
     of a PPI or RHI volume scan.
