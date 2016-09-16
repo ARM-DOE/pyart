@@ -176,43 +176,6 @@ class Grid(object):
         self.init_point_longitude_latitude()
         self.init_point_altitude()
 
-    @classmethod
-    def from_legacy_parameters(cls, fields, axes, metadata):
-        """
-        Return a Grid class using legacy parameters.
-
-        Parameters
-        ----------
-        fields : dict
-            Dictionary of field dictionaries.
-        metadata : dict
-            Dictionary of metadata.
-        axes : dict
-            Dictionary of axes dictionaries.
-
-        Returns
-        --------
-        grid : Grid
-            A Grid object.
-
-        """
-        warnings.warn(
-            "from_legacy_parameters is deprecated and will be removed in a " +
-            "future version of Py-ART", DeprecationWarning)
-        time = axes['time']
-        fields = fields
-        metadata = metadata
-        origin_latitude = axes['lat']
-        origin_longitude = axes['lon']
-        origin_altitude = axes['alt']
-        x = axes['x_disp']
-        y = axes['y_disp']
-        z = axes['z_disp']
-        grid = cls(time, fields, metadata,
-                   origin_latitude, origin_longitude, origin_altitude,
-                   x, y, z)
-        return grid
-
     @property
     def projection_proj(self):
         # Proj instance as specified by the projection attribute.
