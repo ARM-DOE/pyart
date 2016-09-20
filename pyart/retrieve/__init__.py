@@ -23,6 +23,7 @@ Radar retrievals
     map_profile_to_gates
     steiner_conv_strat
     hydroclass_semisupervised
+    get_freq_band
     texture_of_complex_phase
     grid_displacement_pc
     grid_shift
