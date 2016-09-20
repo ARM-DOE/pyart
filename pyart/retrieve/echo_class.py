@@ -11,6 +11,10 @@ Functions for echo classification
     hydroclass_semisupervised
     _standardize
     _assign_to_class
+    _get_mass_centers
+    _mass_centers_table
+    _data_limits_table
+    get_freq_band
 
 """
 
@@ -145,10 +149,10 @@ def hydroclass_semisupervised(radar, mass_centers=None,
 
     Other Parameters
     ----------------
-    mass_centers : matrix
+    mass_centers : ndarray 2D
         The centroids for each variable and hydrometeor class in (nclasses,
         nvariables)
-    weights : vector
+    weights : ndarray 1D
         The weight given to each variable.
     refl_field, zdr_field, rhv_field, kdp_field, temp_field : str
         Inputs. Field names within the radar object which represent the
@@ -175,131 +179,16 @@ def hydroclass_semisupervised(radar, mass_centers=None,
     Atmos. Meas. Tech., 9, 4425-4445, doi:10.5194/amt-9-4425-2016, 2016
 
     """
-    nclasses = 9
-    nvariables = 5
     lapse_rate = -6.5
 
     # select the centroids as a function of frequency band
     if mass_centers is None:
-        mass_centers = np.zeros((nclasses, nvariables))
         # assign coefficients according to radar frequency
         if 'frequency' in radar.instrument_parameters:
-            freq = radar.instrument_parameters['frequency']['data'][0]
-            # C band
-            if freq >= 4e9 and freq < 8e9:
-                freq_band = 'C'
-                # centroids derived for MeteoSwiss Albis radar
-                #                     Zh      ZDR     kdp   RhoHV   delta_Z
-                mass_centers[0, :] = [
-                    13.5829,  0.4063, 0.0497, 0.9868,  1330.3]  # DS
-                mass_centers[1, :] = [
-                    02.8453,  0.2457, 0.0000, 0.9798,  0653.8]  # CR
-                mass_centers[2, :] = [
-                    07.6597,  0.2180, 0.0019, 0.9799, -1426.5]  # LR
-                mass_centers[3, :] = [
-                    31.6815,  0.3926, 0.0828, 0.9978,  0535.3]  # GR
-                mass_centers[4, :] = [
-                    39.4703,  1.0734, 0.4919, 0.9876, -1036.3]  # RN
-                mass_centers[5, :] = [
-                    04.8267, -0.5690, 0.0000, 0.9691,  0869.8]  # VI
-                mass_centers[6, :] = [
-                    30.8613,  0.9819, 0.1998, 0.9845, -0066.1]  # WS
-                mass_centers[7, :] = [
-                    52.3969,  2.1094, 2.4675, 0.9730, -1550.2]  # MH
-                mass_centers[8, :] = [
-                    50.6186, -0.0649, 0.0946, 0.9904,  1179.9]  # IH/HDG
-            # X band
-            elif freq >= 8e9 and freq <= 12e9:
-                freq_band = 'X'
-                # centroids derived for MeteoSwiss DX50 radar
-                #      Zh      ZDR     kdp   RhoHV   delta_Z
-                mass_centers[0, :] = [
-                    19.0770,  0.4139, 0.0099, 0.9841,  1061.7]  # DS
-                mass_centers[1, :] = [
-                    03.9877,  0.5040, 0.0000, 0.9642,  0856.6]  # CR
-                mass_centers[2, :] = [
-                    20.7982,  0.3177, 0.0004, 0.9858, -1375.1]  # LR
-                mass_centers[3, :] = [
-                    34.7124, -0.3748, 0.0988, 0.9828,  1224.2]  # GR
-                mass_centers[4, :] = [
-                    33.0134,  0.6614, 0.0819, 0.9802, -1169.8]  # RN
-                mass_centers[5, :] = [
-                    08.2610, -0.4681, 0.0000, 0.9722,  1100.7]  # VI
-                mass_centers[6, :] = [
-                    35.1801,  1.2830, 0.1322, 0.9162, -0159.8]  # WS
-                mass_centers[7, :] = [
-                    52.4539,  2.3714, 1.1120, 0.9382, -1618.5]  # MH
-                mass_centers[8, :] = [
-                    44.2216, -0.3419, 0.0687, 0.9683,  1272.7]  # IH/HDG
-            else:
-                if freq < 4e9:
-                    freq_band = 'C'
-                    # centroids derived for MeteoSwiss Albis radar
-                    #       Zh      ZDR     kdp   RhoHV   delta_Z
-                    mass_centers[0, :] = [
-                        13.5829,  0.4063, 0.0497, 0.9868,  1330.3]  # DS
-                    mass_centers[1, :] = [
-                        02.8453,  0.2457, 0.0000, 0.9798,  0653.8]  # CR
-                    mass_centers[2, :] = [
-                        07.6597,  0.2180, 0.0019, 0.9799, -1426.5]  # LR
-                    mass_centers[3, :] = [
-                        31.6815,  0.3926, 0.0828, 0.9978,  0535.3]  # GR
-                    mass_centers[4, :] = [
-                        39.4703,  1.0734, 0.4919, 0.9876, -1036.3]  # RN
-                    mass_centers[5, :] = [
-                        04.8267, -0.5690, 0.0000, 0.9691,  0869.8]  # VI
-                    mass_centers[6, :] = [
-                        30.8613,  0.9819, 0.1998, 0.9845, -0066.1]  # WS
-                    mass_centers[7, :] = [
-                        52.3969,  2.1094, 2.4675, 0.9730, -1550.2]  # MH
-                    mass_centers[8, :] = [
-                        50.6186, -0.0649, 0.0946, 0.9904,  1179.9]  # IH/HDG
-                else:
-                    freq_band = 'X'
-                    # centroids derived for MeteoSwiss DX50 radar
-                    #       Zh      ZDR     kdp   RhoHV   delta_Z
-                    mass_centers[0, :] = [
-                        19.0770,  0.4139, 0.0099, 0.9841,  1061.7]  # DS
-                    mass_centers[1, :] = [
-                        03.9877,  0.5040, 0.0000, 0.9642,  0856.6]  # CR
-                    mass_centers[2, :] = [
-                        20.7982,  0.3177, 0.0004, 0.9858, -1375.1]  # LR
-                    mass_centers[3, :] = [
-                        34.7124, -0.3748, 0.0988, 0.9828,  1224.2]  # GR
-                    mass_centers[4, :] = [
-                        33.0134,  0.6614, 0.0819, 0.9802, -1169.8]  # RN
-                    mass_centers[5, :] = [
-                        08.2610, -0.4681, 0.0000, 0.9722,  1100.7]  # VI
-                    mass_centers[6, :] = [
-                        35.1801,  1.2830, 0.1322, 0.9162, -0159.8]  # WS
-                    mass_centers[7, :] = [
-                        52.4539,  2.3714, 1.1120, 0.9382, -1618.5]  # MH
-                    mass_centers[8, :] = [
-                        44.2216, -0.3419, 0.0687, 0.9683,  1272.7]  # IH/HDG
-                warn('Radar frequency out of range. ' +
-                     'Centroids only valid for C or X band. ' +
-                     freq_band + ' band centroids will be applied')
+            mass_centers = _get_mass_centers(
+                radar.instrument_parameters['frequency']['data'][0])
         else:
-            # centroids derived for MeteoSwiss Albis radar
-            #       Zh      ZDR     kdp   RhoHV   delta_Z
-            mass_centers[0, :] = [
-                13.5829,  0.4063, 0.0497, 0.9868,  1330.3]  # DS
-            mass_centers[1, :] = [
-                02.8453,  0.2457, 0.0000, 0.9798,  0653.8]  # CR
-            mass_centers[2, :] = [
-                07.6597,  0.2180, 0.0019, 0.9799, -1426.5]  # LR
-            mass_centers[3, :] = [
-                31.6815,  0.3926, 0.0828, 0.9978,  0535.3]  # GR
-            mass_centers[4, :] = [
-                39.4703,  1.0734, 0.4919, 0.9876, -1036.3]  # RN
-            mass_centers[5, :] = [
-                04.8267, -0.5690, 0.0000, 0.9691,  0869.8]  # VI
-            mass_centers[6, :] = [
-                30.8613,  0.9819, 0.1998, 0.9845, -0066.1]  # WS
-            mass_centers[7, :] = [
-                52.3969,  2.1094, 2.4675, 0.9730, -1550.2]  # MH
-            mass_centers[8, :] = [
-                50.6186, -0.0649, 0.0946, 0.9904,  1179.9]  # IH/HDG
+            mass_centers = _mass_centers_table()['C']
             warn('Radar frequency unknown. ' +
                  'Default coefficients for C band will be applied')
 
@@ -318,32 +207,20 @@ def hydroclass_semisupervised(radar, mass_centers=None,
         hydro_field = get_field_name('radar_echo_classification')
 
     # extract fields and parameters from radar
-    if refl_field in radar.fields:
-        refl = radar.fields[refl_field]['data']
-    else:
-        raise KeyError('Field not available: ' + refl_field)
-    if zdr_field in radar.fields:
-        zdr = radar.fields[zdr_field]['data']
-    else:
-        raise KeyError('Field not available: ' + zdr_field)
-    if rhv_field in radar.fields:
-        rhohv = radar.fields[rhv_field]['data']
-    else:
-        raise KeyError('Field not available: ' + rhv_field)
-    if kdp_field in radar.fields:
-        kdp = radar.fields[kdp_field]['data']
-    else:
-        raise KeyError('Field not available: ' + kdp_field)
-    if temp_field in radar.fields:
-        temp = radar.fields[temp_field]['data']
-    else:
-        raise KeyError('Field not available: ' + temp_field)
+    radar.check_field_exists(refl_field)
+    radar.check_field_exists(zdr_field)
+    radar.check_field_exists(rhv_field)
+    radar.check_field_exists(kdp_field)
+    radar.check_field_exists(temp_field)
+
+    refl = radar.fields[refl_field]['data']
+    zdr = radar.fields[zdr_field]['data']
+    rhohv = radar.fields[rhv_field]['data']
+    kdp = radar.fields[kdp_field]['data']
+    temp = radar.fields[temp_field]['data']
 
     # convert temp in relative height respect to iso0
     relh = temp*(1000./lapse_rate)
-
-    # data mask
-    # mask_zh = refl.mask
 
     # standardize data
     refl_std = _standardize(refl, 'Zh')
@@ -353,7 +230,7 @@ def hydroclass_semisupervised(radar, mass_centers=None,
     relh_std = _standardize(relh, 'relH')
 
     # standardize centroids
-    mc_std = np.zeros((nclasses, nvariables))
+    mc_std = np.zeros(np.shape(mass_centers))
     mc_std[:, 0] = _standardize(mass_centers[:, 0], 'Zh')
     mc_std[:, 1] = _standardize(mass_centers[:, 1], 'ZDR')
     mc_std[:, 2] = _standardize(mass_centers[:, 2], 'KDP')
@@ -372,7 +249,7 @@ def hydroclass_semisupervised(radar, mass_centers=None,
     return hydro
 
 
-def _standardize(data, field_name):
+def _standardize(data, field_name, mx=None, mn=None):
     """
     Streches the radar data to -1 to 1 interval
 
@@ -393,21 +270,19 @@ def _standardize(data, field_name):
         field_std = 2./(1.+np.ma.exp(-0.005*data))-1.
         return field_std
 
-    if field_name == 'Zh':
-        mx = 60.
-        mn = -10.
-    elif field_name == 'ZDR':
-        mx = 5.
-        mn = -5.
-    elif field_name == 'KDP':
-        mx = 7.
-        mn = -10.
+    if (mx is None) or (mn is None):
+        dlimits_dict = _data_limits_table()
+        if field_name not in dlimits_dict:
+            raise ValueError(
+                'Field '+field_name+' unknown. ' +
+                'Valid field names for standardizing are: ' +
+                'relH, Zh, ZDR, KDP and RhoHV')
+        mx, mn = dlimits_dict[field_name]
 
+    if field_name == 'KDP':
         data[data < -0.5] = -0.5
         data = 10.*np.ma.log10(data+0.6)
     elif field_name == 'RhoHV':
-        mx = -5.23
-        mn = -50.
         data = 10.*np.ma.log10(1.-data)
 
     mask = np.ma.getmaskarray(data)
@@ -478,3 +353,130 @@ def _assign_to_class(zh, zdr, kdp, rhohv, relh, mass_centers,
     hydroclass[mask] = 0
 
     return hydroclass, min_dist
+
+
+def _get_mass_centers(freq):
+    """
+    get mass centers for a particular frequency
+
+    Parameters
+    ----------
+    freq : float
+        radar frequency [Hz]
+
+    Returns
+    -------
+    mass_centers : ndarray 2D
+        The centroids for each variable and hydrometeor class in (nclasses,
+        nvariables)
+
+    """
+    mass_centers_dict = _mass_centers_table()
+
+    freq_band = get_freq_band(freq)
+    if (freq_band is not None) and (freq_band in mass_centers_dict):
+        return mass_centers_dict[freq_band]
+
+    if freq < 4e9:
+        freq_band_aux = 'C'
+    elif freq > 12e9:
+        freq_band_aux = 'X'
+
+    mass_centers = mass_centers_dict[freq_band_aux]
+    warn('Radar frequency out of range. ' +
+         'Centroids only valid for C or X band. ' +
+         freq_band_aux + ' band centroids will be applied')
+
+    return mass_centers
+
+
+def _mass_centers_table():
+    """
+    defines the mass centers look up table for each frequency band.
+
+    Returns
+    -------
+    mass_centers_dict : dict
+        A dictionary with the mass centers for each frequency band
+
+    """
+    nclasses = 9
+    nvariables = 5
+    mass_centers = np.zeros((nclasses, nvariables))
+
+    mass_centers_dict = dict()
+    # C-band centroids derived for MeteoSwiss Albis radar
+    #                       Zh        ZDR     kdp   RhoHV    delta_Z
+    mass_centers[0, :] = [13.5829,  0.4063, 0.0497, 0.9868,  1330.3]  # DS
+    mass_centers[1, :] = [02.8453,  0.2457, 0.0000, 0.9798,  0653.8]  # CR
+    mass_centers[2, :] = [07.6597,  0.2180, 0.0019, 0.9799, -1426.5]  # LR
+    mass_centers[3, :] = [31.6815,  0.3926, 0.0828, 0.9978,  0535.3]  # GR
+    mass_centers[4, :] = [39.4703,  1.0734, 0.4919, 0.9876, -1036.3]  # RN
+    mass_centers[5, :] = [04.8267, -0.5690, 0.0000, 0.9691,  0869.8]  # VI
+    mass_centers[6, :] = [30.8613,  0.9819, 0.1998, 0.9845, -0066.1]  # WS
+    mass_centers[7, :] = [52.3969,  2.1094, 2.4675, 0.9730, -1550.2]  # MH
+    mass_centers[8, :] = [50.6186, -0.0649, 0.0946, 0.9904,  1179.9]  # IH/HDG
+
+    mass_centers_dict.update({'C': mass_centers})
+
+    # X-band centroids derived for MeteoSwiss DX50 radar
+    #                       Zh        ZDR     kdp    RhoHV   delta_Z
+    mass_centers[0, :] = [19.0770,  0.4139, 0.0099, 0.9841,  1061.7]  # DS
+    mass_centers[1, :] = [03.9877,  0.5040, 0.0000, 0.9642,  0856.6]  # CR
+    mass_centers[2, :] = [20.7982,  0.3177, 0.0004, 0.9858, -1375.1]  # LR
+    mass_centers[3, :] = [34.7124, -0.3748, 0.0988, 0.9828,  1224.2]  # GR
+    mass_centers[4, :] = [33.0134,  0.6614, 0.0819, 0.9802, -1169.8]  # RN
+    mass_centers[5, :] = [08.2610, -0.4681, 0.0000, 0.9722,  1100.7]  # VI
+    mass_centers[6, :] = [35.1801,  1.2830, 0.1322, 0.9162, -0159.8]  # WS
+    mass_centers[7, :] = [52.4539,  2.3714, 1.1120, 0.9382, -1618.5]  # MH
+    mass_centers[8, :] = [44.2216, -0.3419, 0.0687, 0.9683,  1272.7]  # IH/HDG
+
+    mass_centers_dict.update({'X': mass_centers})
+
+    return mass_centers_dict
+
+
+def _data_limits_table():
+    """
+    defines the data limits used in the standardization.
+
+    Returns
+    -------
+    dlimits_dict : dict
+        A dictionary with the limits for each variable
+
+    """
+    dlimits_dict = dict()
+    dlimits_dict.update({'Zh': (60., -10.)})
+    dlimits_dict.update({'ZDR': (5., -5.)})
+    dlimits_dict.update({'KDP': (7., -10.)})
+    dlimits_dict.update({'RhoHV': (-5.23, -50.)})
+
+    return dlimits_dict
+
+
+def get_freq_band(freq):
+    """
+    returns the frequency band name (S, C, X, ...)
+
+    Parameters
+    ----------
+    freq : float
+        radar frequency [Hz]
+
+    Returns
+    -------
+    freq_band : str
+        frequency band name
+
+    """
+    if freq >= 2e9 and freq < 4e9:
+        return 'S'
+    if freq >= 4e9 and freq < 8e9:
+        return 'C'
+    if freq >= 8e9 and freq <= 12e9:
+        return 'X'
+
+    warn('Unknown frequency band')
+
+    return None

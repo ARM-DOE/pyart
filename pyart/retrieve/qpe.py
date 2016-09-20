@@ -7,39 +7,29 @@ Functions for rainfall rate estimation
 .. autosummary::
     :toctree: generated/
 
-    get_lowest_elevation
-    rr_zpoly
-    rr_z
-    rr_kdp
-    rr_a
-    rr_zkdp
-    rr_za
-    rr_hydro
+    est_rain_rate_zpoly
+    est_rain_rate_z
+    est_rain_rate_kdp
+    est_rain_rate_a
+    est_rain_rate_zkdp
+    est_rain_rate_za
+    est_rain_rate_hydro
+    _get_coeff_rkdp
+    _coeff_rkdp_table
+    _get_coeff_ra
+    _coeff_ra_table
 
 """
 
-
-import os
-import sys
-from time import time
 from warnings import warn
 
 import numpy as np
-import netCDF4
-import matplotlib as mpl
-import pylab as pl
 
-from ..util import met
 from ..config import get_metadata, get_field_name, get_fillvalue
-# import ballsy_masked as ballsy
+from .echo_class import get_freq_band
 
 
-def get_lowest_elevation(mmcg_ncf, req_moments, corrections):
-    pass
-    # for each of the moments in req_moments fetch the lowest valid return
-
-
-def rr_zpoly(radar, refl_field=None, rr_field=None):
+def est_rain_rate_zpoly(radar, refl_field=None, rr_field=None):
     """
     Estimates rainfall rate from reflectivity using a polynomial Z-R relation
     developed at McGill University
@@ -68,10 +58,8 @@ def rr_zpoly(radar, refl_field=None, rr_field=None):
     if rr_field is None:
         rr_field = get_field_name('radar_estimated_rain_rate')
 
-    if refl_field in radar.fields:
-        refl = radar.fields[refl_field]['data']
-    else:
-        raise KeyError('Field not available: ' + refl_field)
+    radar.check_field_exists(refl_field)
+    refl = radar.fields[refl_field]['data']
 
     refl2 = refl*refl
     refl3 = refl*refl2
@@ -86,7 +74,8 @@ def rr_zpoly(radar, refl_field=None, rr_field=None):
     return rain
 
 
-def rr_z(radar, alpha=0.0376, beta=0.6112, refl_field=None, rr_field=None):
+def est_rain_rate_z(radar, alpha=0.0376, beta=0.6112, refl_field=None,
+                    rr_field=None):
     """
     Estimates rainfall rate from reflectivity using a power law
 
@@ -117,10 +106,8 @@ def rr_z(radar, alpha=0.0376, beta=0.6112, refl_field=None, rr_field=None):
     if rr_field is None:
         rr_field = get_field_name('radar_estimated_rain_rate')
 
-    if refl_field in radar.fields:
-        refl = radar.fields[refl_field]['data']
-    else:
-        raise KeyError('Field not available: ' + refl_field)
+    radar.check_field_exists(refl_field)
+    refl = radar.fields[refl_field]['data']
 
     rr_data = alpha*np.ma.power(np.ma.power(10., 0.1*refl), beta)
 
@@ -130,7 +117,8 @@ def rr_z(radar, alpha=0.0376, beta=0.6112, refl_field=None, rr_field=None):
     return rain
 
 
-def rr_kdp(radar, alpha=None, beta=None, kdp_field=None, rr_field=None):
+def est_rain_rate_kdp(radar, alpha=None, beta=None, kdp_field=None,
+                      rr_field=None):
     """
     Estimates rainfall rate from kdp using alpha power law
 
@@ -160,38 +148,12 @@ def rr_kdp(radar, alpha=None, beta=None, kdp_field=None, rr_field=None):
     if alpha is None or beta is None:
         # assign coefficients according to radar frequency
         if 'frequency' in radar.instrument_parameters:
-            freq = radar.instrument_parameters['frequency']['data'][0]
-            # S band: Beard and Chuang coefficients
-            if freq >= 2e9 and freq < 4e9:
-                freq_band = 'S'
-                alpha = 50.7
-                beta = 0.85
-            # C band: Beard and Chuang coefficients
-            elif freq >= 4e9 and freq < 8e9:
-                freq_band = 'C'
-                alpha = 29.7
-                beta = 0.85
-            # X band: Brandes coefficients
-            elif freq >= 8e9 and freq <= 12e9:
-                freq_band = 'X'
-                alpha = 15.810
-                beta = 0.7992
-            else:
-                if freq < 2e9:
-                    freq_band = 'S'
-                    alpha = 50.7
-                    beta = 0.85
-                else:
-                    freq_band = 'X'
-                    alpha = 15.810
-                    beta = 0.7992
-                warn('Radar frequency out of range. ' +
-                     'Coefficients only applied to S, C or X band. ' +
-                     freq_band + ' band coefficients will be used')
+            alpha, beta = _get_coeff_rkdp(
+                radar.instrument_parameters['frequency']['data'][0])
         else:
-            freq_band = 'C'
-            alpha = 29.7
-            beta = 0.85
+            coeff_rkdp = _coeff_rkdp_table()['C']
+            alpha = coeff_rkdp[0]
+            beta = coeff_rkdp[1]
             warn('Radar frequency unknown. ' +
                  'Default coefficients for C band will be applied')
 
@@ -201,10 +163,8 @@ def rr_kdp(radar, alpha=None, beta=None, kdp_field=None, rr_field=None):
     if rr_field is None:
         rr_field = get_field_name('radar_estimated_rain_rate')
 
-    if kdp_field in radar.fields:
-        kdp = radar.fields[kdp_field]['data']
-    else:
-        raise KeyError('Field not available: ' + kdp_field)
+    radar.check_field_exists(kdp_field)
+    kdp = radar.fields[kdp_field]['data']
 
     kdp[kdp < 0] = 0.
     rr_data = alpha*np.ma.power(kdp, beta)
@@ -215,7 +175,8 @@ def rr_kdp(radar, alpha=None, beta=None, kdp_field=None, rr_field=None):
     return rain
 
 
-def rr_a(radar, alpha=None, beta=None, a_field=None, rr_field=None):
+def est_rain_rate_a(radar, alpha=None, beta=None, a_field=None,
+                    rr_field=None):
     """
     Estimates rainfall rate from specific attenuation using alpha power law
 
@@ -257,41 +218,12 @@ def rr_a(radar, alpha=None, beta=None, a_field=None, rr_field=None):
     if alpha is None or beta is None:
         # assign coefficients according to radar frequency
         if 'frequency' in radar.instrument_parameters:
-            freq = radar.instrument_parameters['frequency']['data'][0]
-            # S band: at 10°C according to tables from
-            # Ryzhkov et al. 2014
-            if freq >= 2e9 and freq < 4e9:
-                freq_band = 'S'
-                alpha = 3100.
-                beta = 1.03
-            # C band: at 10°C according to tables from
-            # Diederich et al. 2015
-            elif freq >= 4e9 and freq < 8e9:
-                freq_band = 'C'
-                alpha = 250.
-                beta = 0.91
-            # X band: at 10°C according to tables from
-            # Diederich et al. 2015
-            elif freq >= 8e9 and freq <= 12e9:
-                freq_band = 'X'
-                alpha = 45.5
-                beta = 0.83
-            else:
-                if freq < 2e9:
-                    freq_band = 'S'
-                    alpha = 3100.
-                    beta = 1.03
-                else:
-                    freq_band = 'X'
-                    alpha = 45.5
-                    beta = 0.83
-                warn('Radar frequency out of range. ' +
-                     'Coefficients only applied to S, C or X band. ' +
-                      freq_band + ' band coefficients will be used')
+            alpha, beta = _get_coeff_ra(
+                radar.instrument_parameters['frequency']['data'][0])
         else:
-            freq_band = 'C'
-            alpha = 250.
-            beta = 0.91
+            coeff_ra = _coeff_ra_table()['C']
+            alpha = coeff_ra[0]
+            beta = coeff_ra[1]
             warn('Radar frequency unknown. ' +
                  'Default coefficients for C band will be applied')
 
@@ -301,10 +233,8 @@ def rr_a(radar, alpha=None, beta=None, a_field=None, rr_field=None):
     if rr_field is None:
         rr_field = get_field_name('radar_estimated_rain_rate')
 
-    if a_field in radar.fields:
-        att = radar.fields[a_field]['data']
-    else:
-        raise KeyError('Field not available: ' + a_field)
+    radar.check_field_exists(a_field)
+    att = radar.fields[a_field]['data']
 
     rr_data = alpha*np.ma.power(att, beta)
 
@@ -314,9 +244,10 @@ def rr_a(radar, alpha=None, beta=None, a_field=None, rr_field=None):
     return rain
 
 
-def rr_zkdp(radar, alphaz=0.0376, betaz=0.6112, alphakdp=None, betakdp=None,
-            refl_field=None, kdp_field=None, rr_field=None,
-            master_field=None, thresh=None, thresh_max=True):
+def est_rain_rate_zkdp(radar, alphaz=0.0376, betaz=0.6112, alphakdp=None,
+                       betakdp=None, refl_field=None, kdp_field=None,
+                       rr_field=None, master_field=None, thresh=None,
+                       thresh_max=True):
     """
     Estimates rainfall rate from a blending of power law r-kdp and r-z
     relations.
@@ -367,10 +298,12 @@ def rr_zkdp(radar, alphaz=0.0376, betaz=0.6112, alphakdp=None, betakdp=None,
     if rr_field is None:
         rr_field = get_field_name('radar_estimated_rain_rate')
 
-    rain_z = rr_z(radar, alpha=alphaz, beta=betaz, refl_field=refl_field,
-                  rr_field=rr_field)
-    rain_kdp = rr_kdp(radar, alpha=alphakdp, beta=betakdp,
-                      kdp_field=kdp_field, rr_field=rr_field)
+    rain_z = est_rain_rate_z(
+        radar, alpha=alphaz, beta=betaz, refl_field=refl_field,
+        rr_field=rr_field)
+    rain_kdp = est_rain_rate_kdp(
+        radar, alpha=alphakdp, beta=betakdp, kdp_field=kdp_field,
+        rr_field=rr_field)
 
     if master_field == refl_field:
         slave_field = kdp_field
@@ -400,14 +333,14 @@ def rr_zkdp(radar, alphaz=0.0376, betaz=0.6112, alphakdp=None, betakdp=None,
     else:
         is_slave = rain_master['data'] < thresh
     rain_master['data'][is_slave] = (
-        rain_slave['data'][is_slave()])
+        rain_slave['data'][is_slave])
 
     return rain_master
 
 
-def rr_za(radar, alphaz=0.0376, betaz=0.6112, alphaa=None, betaa=None,
-          refl_field=None, a_field=None, rr_field=None,
-          master_field=None, thresh=None, thresh_max=False):
+def est_rain_rate_za(radar, alphaz=0.0376, betaz=0.6112, alphaa=None,
+                     betaa=None, refl_field=None, a_field=None, rr_field=None,
+                     master_field=None, thresh=None, thresh_max=False):
     """
     Estimates rainfall rate from a blending of power law r-alpha and r-z
     relations.
@@ -458,10 +391,11 @@ def rr_za(radar, alphaz=0.0376, betaz=0.6112, alphaa=None, betaa=None,
     if rr_field is None:
         rr_field = get_field_name('radar_estimated_rain_rate')
 
-    rain_z = rr_z(radar, alpha=alphaz, beta=betaz, refl_field=refl_field,
-                  rr_field=rr_field)
-    rain_a = rr_a(radar, alpha=alphaa, beta=betaa, a_field=a_field,
-                  rr_field=rr_field)
+    rain_z = est_rain_rate_z(
+        radar, alpha=alphaz, beta=betaz, refl_field=refl_field,
+        rr_field=rr_field)
+    rain_a = est_rain_rate_a(
+        radar, alpha=alphaa, beta=betaa, a_field=a_field, rr_field=rr_field)
 
     if master_field == refl_field:
         slave_field = a_field
@@ -497,10 +431,11 @@ def rr_za(radar, alphaz=0.0376, betaz=0.6112, alphaa=None, betaa=None,
     return rain_master
 
 
-def rr_hydro(radar, alphazr=0.0376, betazr=0.6112, alphazs=0.1, betazs=0.5,
-             alphaa=None, betaa=None, mp_factor=0.6, refl_field=None,
-             a_field=None, hydro_field=None, rr_field=None, master_field=None,
-             thresh=None, thresh_max=False):
+def est_rain_rate_hydro(radar, alphazr=0.0376, betazr=0.6112, alphazs=0.1,
+                        betazs=0.5, alphaa=None, betaa=None, mp_factor=0.6,
+                        refl_field=None, a_field=None, hydro_field=None,
+                        rr_field=None, master_field=None, thresh=None,
+                        thresh_max=False):
     """
     Estimates rainfall rate using different relations between R and the
     polarimetric variables depending on the hydrometeor type
@@ -580,12 +515,14 @@ def rr_hydro(radar, alphazr=0.0376, betazr=0.6112, alphazs=0.1, betazs=0.5,
     is_ih = hydroclass == 9
 
     # compute z-r (in rain) z-r in snow and z-a relations
-    rain_z = rr_z(radar, alpha=alphazr, beta=betazr,
-                  refl_field=refl_field, rr_field=rr_field)
-    snow_z = rr_z(radar, alpha=alphazs, beta=betazs,
-                  refl_field=refl_field, rr_field=rr_field)
-    rain_a = rr_a(radar, alpha=alphaa, beta=betaa,
-                  a_field=a_field, rr_field=rr_field)
+    rain_z = est_rain_rate_z(
+        radar, alpha=alphazr, beta=betazr, refl_field=refl_field,
+        rr_field=rr_field)
+    snow_z = est_rain_rate_z(
+        radar, alpha=alphazs, beta=betazs, refl_field=refl_field,
+        rr_field=rr_field)
+    rain_a = est_rain_rate_a(
+        radar, alpha=alphaa, beta=betaa, a_field=a_field, rr_field=rr_field)
 
     # initialize rainfall rate field
     rr_data = np.ma.zeros(hydroclass.shape, dtype='float32')
@@ -642,3 +579,117 @@ def rr_hydro(radar, alphazr=0.0376, betazr=0.6112, alphazs=0.1, betazs=0.5,
     rain['data'] = rr_data
 
     return rain
+
+
+def _get_coeff_rkdp(freq):
+    """
+    get the R(kdp) power law coefficients for a particular frequency
+
+    Parameters
+    ----------
+    freq : float
+        radar frequency [Hz]
+
+    Returns
+    -------
+    alpha, beta : floats
+        the coefficient and exponent of the power law
+
+    """
+    coeff_rkdp_dict = _coeff_rkdp_table()
+
+    freq_band = get_freq_band(freq)
+    if (freq_band is not None) and (freq_band in coeff_rkdp_dict):
+        return coeff_rkdp_dict[freq_band]
+
+    if freq < 2e9:
+        freq_band_aux = 'S'
+    elif freq > 12e9:
+        freq_band_aux = 'X'
+
+    warn('Radar frequency out of range. ' +
+         'Coefficients only applied to S, C or X band. ' +
+         freq_band + ' band coefficients will be used')
+
+    return coeff_rkdp_dict[freq_band_aux]
+
+
+def _coeff_rkdp_table():
+    """
+    defines the R(kdp) power law coefficients for each frequency band.
+
+    Returns
+    -------
+    coeff_rkdp_dict : dict
+        A dictionary with the coefficients at each band
+
+    """
+    coeff_rkdp_dict = dict()
+
+    # S band: Beard and Chuang coefficients
+    coeff_rkdp_dict.update({'S': (50.70, 0.8500)})
+
+    # C band: Beard and Chuang coefficients
+    coeff_rkdp_dict.update({'C': (29.70, 0.8500)})
+
+    # X band: Brandes coefficients
+    coeff_rkdp_dict.update({'X': (15.81, 0.7992)})
+
+    return coeff_rkdp_dict
+
+
+def _get_coeff_ra(freq):
+    """
+    get the R(A) power law coefficients for a particular frequency
+
+    Parameters
+    ----------
+    freq : float
+        radar frequency [Hz]
+
+    Returns
+    -------
+    alpha, beta : floats
+        the coefficient and exponent of the power law
+
+    """
+    coeff_ra_dict = _coeff_ra_table()
+
+    freq_band = get_freq_band(freq)
+    if (freq_band is not None) and (freq_band in coeff_ra_dict):
+        return coeff_ra_dict[freq_band]
+
+    if freq < 2e9:
+        freq_band_aux = 'S'
+    elif freq > 12e9:
+        freq_band_aux = 'X'
+
+    warn('Radar frequency out of range. ' +
+         'Coefficients only applied to S, C or X band. ' +
+         freq_band + ' band coefficients will be used')
+
+    return coeff_ra_dict[freq_band_aux]
+
+
+def _coeff_ra_table():
+    """
+    defines the R(A) power law coefficients for each frequency band.
+
+    Returns
+    -------
+    coeff_ra_dict : dict
+        A dictionary with the coefficients at each band
+
+    """
+    coeff_ra_dict = dict()
+
+    # S band: at 10°C according to tables from Ryzhkov et al. 2014
+    coeff_ra_dict.update({'S': (3100., 1.03)})
+
+    # C band: at 10°C according to tables from Diederich et al. 2015
+    coeff_ra_dict.update({'C': (250., 0.91)})
+
+    # X band: at 10°C according to tables from Diederich et al. 2015
+    coeff_ra_dict.update({'X': (45.5, 0.83)})
+
+    return coeff_ra_dict
