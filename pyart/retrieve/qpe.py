@@ -151,9 +151,7 @@ def est_rain_rate_kdp(radar, alpha=None, beta=None, kdp_field=None,
             alpha, beta = _get_coeff_rkdp(
                 radar.instrument_parameters['frequency']['data'][0])
         else:
-            coeff_rkdp = _coeff_rkdp_table()['C']
-            alpha = coeff_rkdp[0]
-            beta = coeff_rkdp[1]
+            alpha, beta = _coeff_rkdp_table()['C']
             warn('Radar frequency unknown. ' +
                  'Default coefficients for C band will be applied')
 
@@ -221,9 +219,7 @@ def est_rain_rate_a(radar, alpha=None, beta=None, a_field=None,
             alpha, beta = _get_coeff_ra(
                 radar.instrument_parameters['frequency']['data'][0])
         else:
-            coeff_ra = _coeff_ra_table()['C']
-            alpha = coeff_ra[0]
-            beta = coeff_ra[1]
+            alpha, beta = _coeff_ra_table()['C']
             warn('Radar frequency unknown. ' +
                  'Default coefficients for C band will be applied')
 
@@ -683,13 +679,13 @@ def _coeff_ra_table():
     """
     coeff_ra_dict = dict()
 
-    # S band: at 10°C according to tables from Ryzhkov et al. 2014
+    # S band: at 10 deg C according to tables from Ryzhkov et al. 2014
     coeff_ra_dict.update({'S': (3100., 1.03)})
 
-    # C band: at 10°C according to tables from Diederich et al. 2015
+    # C band: at 10 deg C according to tables from Diederich et al. 2015
     coeff_ra_dict.update({'C': (250., 0.91)})
 
-    # X band: at 10°C according to tables from Diederich et al. 2015
+    # X band: at 10 deg C according to tables from Diederich et al. 2015
     coeff_ra_dict.update({'X': (45.5, 0.83)})
 
     return coeff_ra_dict
