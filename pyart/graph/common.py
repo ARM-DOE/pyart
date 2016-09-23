@@ -34,18 +34,7 @@ Common graphing routines.
 import matplotlib.pyplot as plt
 from netCDF4 import num2date
 
-# Deprecated function names in this name space
-from ..exceptions import _deprecated_alias
 from ..config import get_field_colormap, get_field_limits
-from ..core import transforms as _transforms
-radar_coords_to_cart = _deprecated_alias(
-    _transforms.antenna_to_cartesian,
-    'pyart.graph.common.radar_coords_to_cart',
-    'pyart.core.transforms.antenna_to_cartesian')
-sweep_coords_to_cart = _deprecated_alias(
-    _transforms.antenna_vectors_to_cartesian,
-    'pyart.graph.common.sweep_coords_to_cart',
-    'pyart.core.transforms.antenna_vectors_to_cartesian')
 
 
 ########################

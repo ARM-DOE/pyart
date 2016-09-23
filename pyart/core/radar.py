@@ -164,7 +164,7 @@ class Radar(object):
         Instrument calibration parameters.  If not provided this attribute is
         set to None, indicating these parameters are not available
     ngates : int
-        Number of gates (bins) in the volume.
+        Number of gates (bins) in a ray.
     nrays : int
         Number of rays in the volume.
     nsweeps : int

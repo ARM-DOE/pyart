@@ -56,7 +56,7 @@ def grid_from_radars(radars, grid_shape, grid_limits,
         Number of points in the grid (z, y, x).
     grid_limits : 3-tuple of 2-tuples
         Minimum and maximum grid location (inclusive) in meters for the
-        z, x, y coordinates.
+        z, y, x coordinates.
     gridding_algo : 'map_to_grid' or 'map_gates_to_grid'
         Algorithm to use for gridding.  'map_to_grid' finds all gates within
         a radius of influence for each grid point, 'map_gates_to_grid' maps

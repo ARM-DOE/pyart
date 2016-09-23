@@ -23,8 +23,10 @@ radar_se = pyart.io.read_cfradial(XSAPR_SE_FILE)
 
 # filter out gates with reflectivity > 100 from both radars
 gatefilter_se = pyart.filters.GateFilter(radar_se)
+gatefilter_se.exclude_transition()
 gatefilter_se.exclude_above('corrected_reflectivity_horizontal', 100)
 gatefilter_sw = pyart.filters.GateFilter(radar_sw)
+gatefilter_sw.exclude_transition()
 gatefilter_sw.exclude_above('corrected_reflectivity_horizontal', 100)
 
 # perform Cartesian mapping, limit to the reflectivity field.
