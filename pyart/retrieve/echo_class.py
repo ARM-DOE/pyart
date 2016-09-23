@@ -80,8 +80,8 @@ def steiner_conv_strat(grid, dx=None, dy=None, intense=42.0,
     # check that Fortran extensions is available
     if not _F90_EXTENSIONS_AVAILABLE:
         raise MissingOptionalDependency(
-            "Py-ART must be build on a system with a Fortran compiler to use" +
-            "the steiner_conv_strat function.")
+            "Py-ART must be built on a system with a Fortran compiler to "
+            "use the steiner_conv_strat function.")
 
     # Get fill value
     if fill_value is None:
