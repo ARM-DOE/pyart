@@ -47,6 +47,7 @@ total_power = 'total_power'
 # Mean Doppler velocity fields, VEL
 velocity = 'velocity'
 corrected_velocity = 'corrected_velocity'
+simulated_velocity = 'simulated_velocity'
 
 # Spectral width fields, SW
 spectrum_width = 'spectrum_width'
@@ -143,6 +144,7 @@ DEFAULT_FIELD_NAMES = {
     'total_power': total_power,
     'velocity': velocity,
     'corrected_velocity': corrected_velocity,
+    'simulated_velocity': simulated_velocity,
     'spectrum_width': spectrum_width,
     'differential_reflectivity': differential_reflectivity,
     'corrected_differential_reflectivity':
@@ -471,6 +473,13 @@ DEFAULT_METADATA = {
         'standard_name': (
             'corrected_radial_velocity_of_scatterers_away_from_instrument'),
         'long_name': 'Corrected mean doppler velocity',
+        'coordinates': 'elevation azimuth range'},
+
+    simulated_velocity: {
+        'units': 'meters_per_second',
+        'standard_name': (
+            'radial_velocity_of_scatterers_away_from_instrument'),
+        'long_name': 'Simulated mean doppler velocity',
         'coordinates': 'elevation azimuth range'},
 
     # Spectrum width fields
@@ -1325,6 +1334,7 @@ DEFAULT_FIELD_COLORMAP = {
 
     velocity: 'pyart_BuDRd18',
     corrected_velocity: 'pyart_BuDRd18',
+    simulated_velocity: 'pyart_BuDRd18',
     eastward_wind_component: 'pyart_BuDRd18',
     northward_wind_component: 'pyart_BuDRd18',
     vertical_wind_component: 'pyart_BuDRd18',

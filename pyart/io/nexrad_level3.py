@@ -264,7 +264,7 @@ class NEXRADLevel3File(object):
 
         elif msg_code in [135]:
             mdata = np.ma.array(self.raw_data - 2, mask=self.raw_data <= 1)
-            mdata[self.raw_data >= 128] -= 128
+            mdata[self.raw_data >= 128] -= np.uint8(128)
 
         else:
             assert msg_code in [34]
