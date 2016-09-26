@@ -103,10 +103,10 @@ class RadarMapDisplayCartopy(RadarDisplay):
             title=None, title_flag=True,
             colorbar_flag=True, colorbar_label=None, ax=None, fig=None,
             lat_lines=None, lon_lines=None,
-            projection='lcc', area_thresh=10000,
+            projection=None, area_thresh=10000,
             min_lon=None, max_lon=None, min_lat=None, max_lat=None,
             width=None, height=None, lon_0=None, lat_0=None,
-            resolution='h', shapefile=None, edges=True, gatefilter=None,
+            resolution='110m', shapefile=None, edges=True, gatefilter=None,
             basemap=None, filter_transitions=True, embelish=True,
             ticks=None, ticklabs=None, **kwargs):
         """
@@ -155,26 +155,20 @@ class RadarMapDisplayCartopy(RadarDisplay):
         ticks : array
             Colorbar custom tick label locations.
         ticklabs : array
-                Colorbar custom tick labels.
+            Colorbar custom tick labels.
         colorbar_label : str
             Colorbar label, None will use a default label generated from the
             field information.
         ax : Axis
-            Axis to plot on. None will use the current axis.
+            Axis to plot on. If provided, must have a Cartopy crs projection.
         fig : Figure
             Figure to add the colorbar to. None will use the current figure.
         lat_lines, lon_lines : array or None
             Locations at which to draw latitude and longitude lines.
             None will use default values which are resonable for maps of
             North America.
-        projection : str
-            Map projection supported by basemap.  The use of cylindrical
-            projections (mill, merc, etc) is not recommended as they
-            exhibit large distortions at high latitudes.  Equal area
-            (aea, laea), conformal (lcc, tmerc, stere) or equidistant
-            projection (aeqd, cass) work well even at high latitudes.
-            The cylindrical equidistant projection (cyl) is not supported as
-            coordinate transformations cannot be performed.
+        projection : cartopy.crs class
+            Map projection supported by cartopy.
         area_thresh : float
             Coastline or lake with an area smaller than area_thresh in
             km^2 will not be plotted.
@@ -192,9 +186,9 @@ class RadarMapDisplayCartopy(RadarDisplay):
             the latitude and longitude of the radar will be used.
         shapefile : str
             Filename for a ESRI shapefile as background (untested).
-        resolution : 'c', 'l', 'i', 'h', or 'f'.
-            Resolution of boundary database to use. See Basemap documentation
-            for details.
+        resolution : '10m', '50m', '110m'.
+            Resolution of NaturalEarthFeatures to use. See Cartopy
+            documentation for details.
         gatefilter : GateFilter
             GateFilter instance. None will result in no gatefilter mask being
             applied to data.
@@ -213,8 +207,8 @@ class RadarMapDisplayCartopy(RadarDisplay):
         embelish: bool
             True by default. Set to false to supress drawing of coastlines
             etc.. Use for speedup when specifying shapefiles.
-        basemap: Basemap instance
-            If None, create basemap instance using other keyword info.
+        basemap: Cartopy GeoAxes instance
+            If None, create GeoAxes instance using other keyword info.
             If not None, use the user-specifed basemap instance.
 
         """
@@ -241,30 +235,68 @@ class RadarMapDisplayCartopy(RadarDisplay):
         if mask_outside:
             data = np.ma.masked_outside(data, vmin, vmax)
 
-        # create the basemap if not provided
         proj = cartopy.crs.LambertConformal(
             central_longitude=lon_0, central_latitude=lat_0,
             standard_parallels=(lat_0, ))
+        self.proj = proj
 
+        # create the basemap if not provided
         import matplotlib.pyplot as plt
-        basemap = plt.axes(projection=proj)
+
+        if hasattr(ax, 'projection'):
+            basemap = ax
+        elif hasattr(ax, 'projection'):
+            basemap = basemap
+        else:
+            if projection is None:
+                basemap = plt.axes(projection=proj)
+            else:
+                basemap = plt.axes(projection=projection)
         self.basemap = basemap
-        basemap.set_extent([min_lon, max_lon, min_lat, max_lat])
+        if min_lon:
+            basemap.set_extent([min_lon, max_lon, min_lat, max_lat],
+                               crs=cartopy.crs.PlateCarree())
 
         # add embelishments
         if embelish is True:
-            shpfile = cartopy.io.shapereader.gshhs(resolution)
-            shp = cartopy.io.shapereader.Reader(shpfile)
-            basemap.add_geometries(
-                shp.geometries(), cartopy.crs.PlateCarree(), edgecolor='black',
-                facecolor='none')
+            # shpfile = cartopy.io.shapereader.gshhs(resolution)
+            # shp = cartopy.io.shapereader.Reader(shpfile)
+            # basemap.add_geometries(
+            #    shp.geometries(), cartopy.crs.PlateCarree(), edgecolor='black',
+            #    facecolor='none')
             #basemap.drawstates()
-            basemap.gridlines(xlocs=list(lon_lines), ylocs=list(lon_lines))
-            #basemap.drawparallels(
-            #    lat_lines, labels=[True, False, False, False])
-            #basemap.drawmeridians(
-            #    lon_lines, labels=[False, False, False, True])
+            if basemap.projection in [cartopy.crs.PlateCarree(),
+                                      cartopy.crs.Mercator()]:
+                gl = basemap.gridlines(xlocs=lon_lines, ylocs=lat_lines,
+                                       draw_labels=True)
+                gl.xlabels_top = False
+                gl.ylabels_right = False
 
+            elif basemap.projection == proj:
+                fig.canvas.draw()
+                basemap.gridlines(xlocs=lon_lines, ylocs=lat_lines)
+
+                # Label the end-points of the gridlines using the custom
+                # tick makers:
+                basemap.xaxis.set_major_formatter(
+                    cartopy.mpl.gridliner.LONGITUDE_FORMATTER)
+                basemap.yaxis.set_major_formatter(
+                    cartopy.mpl.gridliner.LATITUDE_FORMATTER)
+                lambert_xticks(basemap, lon_lines)
+                lambert_yticks(basemap, lat_lines)
+
+            else:
+                basemap.gridlines(xlocs=lon_lines, ylocs=lat_lines)
+
+            # Create a feature for States/Admin 1 regions at 1:resolution
+            # from Natural Earth
+            states_provinces = cartopy.feature.NaturalEarthFeature(
+                category='cultural',
+                name='admin_1_states_provinces_lines',
+                scale=resolution,
+                facecolor='none')
+            basemap.coastlines(resolution=resolution)
+            basemap.add_feature(states_provinces, edgecolor='gray')
 
         # plot the data and optionally the shape file
         # we need to convert the radar gate locations (x and y) which are in
@@ -272,13 +304,15 @@ class RadarMapDisplayCartopy(RadarDisplay):
         # which is given by self._x0, self._y0.
         pm = basemap.pcolormesh(
             x * 1000., y * 1000., data,
-            vmin=vmin, vmax=vmax, cmap=cmap, norm=norm)
+            vmin=vmin, vmax=vmax, cmap=cmap, norm=norm, transform=proj)
 
         if shapefile is not None:
-            basemap.readshapefile(shapefile, 'shapefile', ax=ax)
+            from cartopy.io.shapereader import Reader
+            basemap.add_geometries(Reader(shapefile).geometries(),
+                                   cartopy.crs.PlateCarree())
 
         if title_flag:
-            self._set_title(field, sweep, title, ax)
+            self._set_title(field, sweep, title, basemap)
 
         # add plot and field to lists
         self.plots.append(pm)
@@ -287,7 +321,7 @@ class RadarMapDisplayCartopy(RadarDisplay):
         if colorbar_flag:
             self.plot_colorbar(
                 mappable=pm, label=colorbar_label, field=field, fig=fig,
-                ax=ax, ticks=ticks, ticklabs=ticklabs)
+                ax=basemap, ticks=ticks, ticklabs=ticklabs)
         return
 
     def plot_point(self, lon, lat, symbol='ro', label_text=None,
@@ -319,13 +353,16 @@ class RadarMapDisplayCartopy(RadarDisplay):
             lon_offset = 0.01
         if lat_offset is None:
             lat_offset = 0.01
-        self.basemap.plot(lon, lat, symbol, **kwargs)
+        self.basemap.plot(lon, lat, symbol,
+                          transform=cartopy.crs.PlateCarree(), **kwargs)
         if label_text is not None:
-            # basemap does not have a text method so we must determine
-            # the x and y points and plot them on the basemap's axis.
-            x_text, y_text = self.basemap(
-                lon + lon_offset, lat + lat_offset)
-            self.basemap.ax.text(x_text, y_text, label_text)
+            # the "plt.annotate call" does not have a "transform=" keyword,
+            # so for this one we transform the coordinates with a Cartopy call.
+            x_text, y_text = self.basemap.projection.transform_point(
+                                            lon + lon_offset,
+                                            lat + lat_offset,
+                                            src_crs=cartopy.crs.PlateCarree())
+            self.basemap.annotate(label_text, xy=(x_text, y_text))
 
     def plot_line_geo(self, line_lons, line_lats, line_style='r-', **kwargs):
         """
@@ -345,7 +382,8 @@ class RadarMapDisplayCartopy(RadarDisplay):
         """
         self._check_basemap()
         self.basemap.plot(
-            line_lons, line_lats, line_style, latlon=True, **kwargs)
+            line_lons, line_lats, line_style,
+            transform=cartopy.crs.PlateCarree(), **kwargs)
 
     def plot_line_xy(self, line_x, line_y, line_style='r-', **kwargs):
         """
@@ -364,7 +402,8 @@ class RadarMapDisplayCartopy(RadarDisplay):
 
         """
         self._check_basemap()
-        self.basemap.plot(line_x, line_y, line_style, **kwargs)
+        self.basemap.plot(line_x, line_y, line_style, transform=self.proj,
+                          **kwargs)
 
     def plot_range_ring(self, range_ring_location_km, npts=360,
                         line_style='k-', **kwargs):
@@ -389,8 +428,83 @@ class RadarMapDisplayCartopy(RadarDisplay):
         if 'col' in kwargs:
             color = kwargs.pop('col')
             kwargs['c'] = color
+        if 'ax' in kwargs:
+            kwargs.pop('ax')
         self._check_basemap()
         angle = np.linspace(0., 2.0 * np.pi, npts)
         xpts = range_ring_location_km * 1000. * np.sin(angle)
         ypts = range_ring_location_km * 1000. * np.cos(angle)
         self.plot_line_xy(xpts, ypts, line_style=line_style, **kwargs)
+
+# Thses methods are a hack to allow gridlines when the projection is lambert
+# http://nbviewer.jupyter.org/gist/ajdawson/dd536f786741e987ae4e
+def find_side(ls, side):
+    """
+    Given a shapely LineString which is assumed to be rectangular, return the
+    line corresponding to a given side of the rectangle.
+
+    """
+    import shapely.geometry as sgeom
+    minx, miny, maxx, maxy = ls.bounds
+    points = {'left': [(minx, miny), (minx, maxy)],
+              'right': [(maxx, miny), (maxx, maxy)],
+              'bottom': [(minx, miny), (maxx, miny)],
+              'top': [(minx, maxy), (maxx, maxy)],}
+    return sgeom.LineString(points[side])
+
+
+def lambert_xticks(ax, ticks):
+    """Draw ticks on the bottom x-axis of a Lambert Conformal projection."""
+    te = lambda xy: xy[0]
+    lc = lambda t, n, b: np.vstack((np.zeros(n) + t,
+                                    np.linspace(b[2], b[3], n))).T
+    xticks, xticklabels = _lambert_ticks(ax, ticks, 'bottom', lc, te)
+    ax.xaxis.tick_bottom()
+    ax.set_xticks(xticks)
+    ax.set_xticklabels([ax.xaxis.get_major_formatter()(xtick) for
+                        xtick in xticklabels])
+
+
+def lambert_yticks(ax, ticks):
+    """Draw ricks on the left y-axis of a Lamber Conformal projection."""
+    te = lambda xy: xy[1]
+    lc = lambda t, n, b: np.vstack((np.linspace(b[0], b[1], n),
+                                    np.zeros(n) + t)).T
+    yticks, yticklabels = _lambert_ticks(ax, ticks, 'left', lc, te)
+    ax.yaxis.tick_left()
+    ax.set_yticks(yticks)
+    ax.set_yticklabels([ax.yaxis.get_major_formatter()(ytick) for
+                        ytick in yticklabels])
+
+def _lambert_ticks(ax, ticks, tick_location, line_constructor, tick_extractor):
+    """Get the tick locations and labels for a Lambert Conformal projection."""
+    import shapely.geometry as sgeom
+    from copy import copy
+    outline_patch = sgeom.LineString(
+                                ax.outline_patch.get_path().vertices.tolist())
+    axis = find_side(outline_patch, tick_location)
+    n_steps = 30
+    extent = ax.get_extent(cartopy.crs.PlateCarree())
+    _ticks = []
+    for t in ticks:
+        xy = line_constructor(t, n_steps, extent)
+        proj_xyz = ax.projection.transform_points(cartopy.crs.Geodetic(),
+                                                  xy[:, 0], xy[:, 1])
+        xyt = proj_xyz[..., :2]
+        ls = sgeom.LineString(xyt.tolist())
+        locs = axis.intersection(ls)
+        if not locs:
+            tick = [None]
+        else:
+            tick = tick_extractor(locs.xy)
+        _ticks.append(tick[0])
+    # Remove ticks that aren't visible:
+    ticklabels = copy(ticks)
+    while True:
+        try:
+            index = _ticks.index(None)
+        except ValueError:
+            break
+        _ticks.pop(index)
+        ticklabels = np.delete(ticklabels, index)
+    return _ticks, ticklabels
