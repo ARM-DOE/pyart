@@ -25,6 +25,7 @@ radar.fields['reflectivity']['data'][:, -10:] = np.ma.masked
 
 # exclude masked gates from the gridding
 gatefilter = pyart.filters.GateFilter(radar)
+gatefilter.exclude_transition()
 gatefilter.exclude_masked('reflectivity')
 
 # perform Cartesian mapping, limit to the reflectivity field.

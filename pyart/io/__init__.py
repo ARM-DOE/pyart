@@ -45,7 +45,6 @@ Reading grid data
     :toctree: generated/
 
     read_grid
-    read_legacy_grid
     read_grid_mdv
 
 Writing grid data
@@ -57,6 +56,15 @@ Writing grid data
     write_grid
     write_grid_mdv
     write_grid_geotiff
+
+Reading Sonde data
+==================
+
+.. autosummary::
+    :toctree: generated/
+
+    read_arm_sonde
+    read_arm_sonde_vap
 
 Special use
 ===========
@@ -78,12 +86,11 @@ from .nexrad_cdm import read_nexrad_cdm
 from .nexradl3_read import read_nexrad_level3
 from .uf import read_uf
 from .uf_write import write_uf
-from .grid_io import read_grid, write_grid, read_legacy_grid
+from .grid_io import read_grid, write_grid
 from .output_to_geotiff import write_grid_geotiff
 from .auto_read import read
 from .mdv_grid import write_grid_mdv, read_grid_mdv
 from .common import prepare_for_read
-# This function will be deprecated shortly
-from ..core.transforms import add_2d_latlon_axis
+from .arm_sonde import read_arm_sonde_vap, read_arm_sonde
 
 __all__ = [s for s in dir() if not s.startswith('_')]

@@ -21,14 +21,11 @@ and antenna (azimuth, elevation, range) coordinate systems.
     cartesian_to_geographic_aeqd
     geographic_to_cartesian_aeqd
 
-    add_2d_latlon_axis
-    corner_to_point
     _interpolate_axes_edges
     _interpolate_azimuth_edges
     _interpolate_elevation_edges
     _interpolate_range_edges
     _half_angle_complex
-    _ax_radius
 
 
 """
@@ -39,10 +36,14 @@ from ..exceptions import MissingOptionalDependency
 
 import numpy as np
 try:
-    from mpl_toolkits.basemap import pyproj
+    import pyproj
     _PYPROJ_AVAILABLE = True
 except ImportError:
-    _PYPROJ_AVAILABLE = False
+    try:
+        from mpl_toolkits.basemap import pyproj
+        _PYPROJ_AVAILABLE = True
+    except ImportError:
+        _PYPROJ_AVAILABLE = False
 
 PI = np.pi
 
@@ -73,7 +74,7 @@ def antenna_to_cartesian(ranges, azimuths, elevations, debug=False):
 
     .. math::
 
-        z = \\sqrt{r^2+R^2+r*R*sin(\\theta_e)} - R
+        z = \\sqrt{r^2+R^2+2*r*R*sin(\\theta_e)} - R
 
         s = R * arcsin(\\frac{r*cos(\\theta_e)}{R+z})
 
@@ -650,168 +651,3 @@ def cartesian_to_geographic_aeqd(x, y, lon_0, lat_0, R=6370997.):
     lon_deg[lon_deg < -180] += 360.
 
     return lon_deg, lat_deg
-
-
-def add_2d_latlon_axis(grid, **kwargs):
-    """
-    Add the latitude and longitude for grid points in the y, x plane.
-
-    Adds a **latitude** and **longitude** dictionary to the axes attribute
-    of a provided grid.  Addition is done in-place, nothing is returned from
-    this function.  These dictionaries contain 2D arrays which specify the
-    latitude and longitude of every point in the y, x plane.
-
-    If available, the conversion is done using basemap.pyproj, extra arguments
-    are passed to pyproj.Proj. If not available, an internal spherical
-    azimuthal equidistant transformation is is used.
-
-    Parameters
-    ----------
-    grid: grid object
-        Cartesian grid object containing the 1d axes "x_disp", "y_disp" and
-        scalar axes 'lat', 'lon'.
-    kwargs: Pyproj options
-        Options to be passed to Proj. If projection is not specified here it
-        uses proj='aeqd' (azimuthal equidistant)
-
-    Notes
-    -----
-    If Basemap is not available, calculation of the latitude, longitude is
-    done using a azimuthal equidistant projection projection [1].
-    It uses the mean radius of earth (6371 km)
-
-    .. math::
-
-        c = \\sqrt(x^2 + y^2)/R
-
-        azi = \\arctan2(y,x) \\text{  # from east to north}
-
-        lat = \\arcsin(\\cos(c)*\\sin(lat0)+\\sin(azi)*\\sin(c)*\\cos(lat0))
-
-        lon = \\arctan2(\\cos(azi)*\\sin(c),\\cos(c)*\\cos(lat0)-
-                        \\sin(azi)*\\sin(c)*\\sin(lat0)) + lon0
-
-    Where x, y are the Cartesian position from the center of projection;
-    lat, lon the corresponding latitude and longitude; lat0, lon0 the latitude
-    and longitude of the center of the projection; R the mean radius of the
-    earth (6371 km)
-
-    References
-    ----------
-    .. [1] Snyder, J. P. Map Projections--A Working Manual. U. S. Geological
-        Survey Professional Paper 1395, 1987, pp. 191-202.
-
-    """
-    warnings.warn(
-        "add_2d_latlon_axis is deprecated and will be removed in a " +
-        "future version of Py-ART", DeprecationWarning)
-    try:
-        from mpl_toolkits.basemap import pyproj
-        if 'proj' not in kwargs:
-            kwargs['proj'] = 'aeqd'
-        x, y = np.meshgrid(
-            grid.axes["x_disp"]['data'], grid.axes["y_disp"]['data'])
-        b = pyproj.Proj(lat_0=grid.axes["lat"]['data'][0],
-                        lon_0=grid.axes["lon"]['data'][0], **kwargs)
-        lon, lat = b(x, y, inverse=True)
-    except ImportError:
-        warnings.warn('No basemap found, using internal implementation '
-                      'for converting azimuthal equidistant to latlon')
-        # azimutal equidistant projetion to latlon
-        R = 6371.0 * 1000.0     # radius of earth in meters.
-
-        x, y = np.meshgrid(grid.axes["x_disp"]['data'],
-                           grid.axes["y_disp"]['data'])
-
-        c = np.sqrt(x*x + y*y) / R
-        phi_0 = grid.axes["lat"]['data'] * np.pi / 180
-        azi = np.arctan2(y, x)  # from east to north
-
-        lat = np.arcsin(np.cos(c) * np.sin(phi_0) +
-                        np.sin(azi) * np.sin(c) * np.cos(phi_0)) * 180 / np.pi
-        lon = (np.arctan2(np.cos(azi) * np.sin(c), np.cos(c) * np.cos(phi_0) -
-                          np.sin(azi) * np.sin(c) * np.sin(phi_0)) * 180 /
-               np.pi + grid.axes["lon"]['data'])
-        lon = np.fmod(lon + 180, 360) - 180
-
-    lat_axis = {
-        'data':  lat,
-        'long_name': 'Latitude for points in Cartesian system',
-        'axis': 'YX',
-        'units': 'degree_N',
-        'standard_name': 'latitude',
-    }
-
-    lon_axis = {
-        'data': lon,
-        'long_name': 'Longitude for points in Cartesian system',
-        'axis': 'YX',
-        'units': 'degree_E',
-        'standard_name': 'longitude',
-    }
-
-    grid.axes["latitude"] = lat_axis
-    grid.axes["longitude"] = lon_axis
-
-
-def corner_to_point(corner, point):
-    """
-    Return the x, y distances in meters from a corner to a point.
-
-    Assumes a spherical earth model.
-
-    This function is Deprecated, use the :py:func:`geographic_to_cartesian`
-    function as a replacement.
-
-    Parameters
-    ----------
-    corner : (float, float)
-        Latitude and longitude in degrees of the corner.
-    point : (float, float)
-        Latitude and longitude in degrees of the point.
-
-    Returns
-    -------
-    x, y : floats
-        Distances from the corner to the point in meters.
-
-    """
-    warnings.warn(
-        "corner_to_point is deprecated and will be removed in a future " +
-        "version of Py-ART.\n" +
-        "Additionally use of this function is discourage, the " +
-        "geographic_to_cartesian function produces similar results while " +
-        "allowing the map projection to be specified. ", DeprecationWarning)
-    Re = 6371.0 * 1000.0
-    Rc = _ax_radius(point[0], units='degrees')
-    # print Rc/Re
-    y = ((point[0] - corner[0]) / 360.0) * PI * 2.0 * Re
-    x = ((point[1] - corner[1]) / 360.0) * PI * 2.0 * Rc
-    return x, y
-
-
-def _ax_radius(lat, units='radians'):
-    """
-    Return the radius of a constant latitude circle for a given latitude.
-
-    Parameters
-    ----------
-    lat : float
-        Latitude at which to calculate constant latitude circle (parallel)
-        radius.
-    units : 'radians' or 'degrees'
-        Units of lat, either 'radians' or 'degrees'.
-
-    Returns
-    -------
-    R : float
-        Radius in meters of a constant latitude circle (parallel).
-
-    """
-    Re = 6371.0 * 1000.0
-    if units == 'degrees':
-        const = PI / 180.0
-    else:
-        const = 1.0
-    R = Re * np.sin(PI / 2.0 - abs(lat * const))
-    return R

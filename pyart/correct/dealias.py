@@ -13,8 +13,11 @@ Front end to the University of Washington 4DD code for Doppler dealiasing.
 
 """
 
+import warnings
+
 import numpy as np
 
+from ..core import HorizontalWindProfile
 from ..config import get_field_name, get_fillvalue, get_metadata
 try:
     from ..io import _rsl_interface
@@ -27,20 +30,19 @@ from ..util import datetime_utils
 from ..exceptions import MissingOptionalDependency
 
 
-def dealias_fourdd(radar, last_radar=None, sounding_heights=None,
-                   sounding_wind_speeds=None, sounding_wind_direction=None,
-                   gatefilter=False, filt=1, rsl_badval=131072.0,
-                   keep_original=False, set_limits=True,
-                   vel_field=None, corr_vel_field=None, last_vel_field=None,
-                   debug=False, max_shear=0.05, sign=1,
-                   **kwargs):
+def dealias_fourdd(
+        radar, last_radar=None, sonde_profile=None, gatefilter=False,
+        sounding_heights=None, sounding_wind_speeds=None,
+        sounding_wind_direction=None,
+        filt=1, rsl_badval=131072.0, keep_original=False, set_limits=True,
+        vel_field=None, corr_vel_field=None, last_vel_field=None,
+        debug=False, max_shear=0.05, sign=1, **kwargs):
     """
     Dealias Doppler velocities using the 4DD algorithm.
 
     Dealias the Doppler velocities field using the University of Washington
     4DD algorithm utilizing information from a previous volume scan and/or
-    sounding data. Either last_radar or sounding_heights,
-    sounding_wind_speeds and sounding_wind_direction must be provided.
+    sounding data. Either last_radar or sonde_profile must be provided.
     For best results provide both a previous volume scan and sounding data.
     Radar and last_radar must contain the same number of rays per sweep.
 
@@ -62,15 +64,9 @@ def dealias_fourdd(radar, last_radar=None, sounding_heights=None,
         dealiased. Using a previous volume as an initial condition can
         greatly improve the dealiasing, and represents the final dimension
         in the 4DD algorithm.
-    sounding_heights : ndarray, optional
-        Sounding heights is meters above mean sea level.  If altitude
-        attribute of the radar object if reference against something other
-        than mean sea level then this parameter should also be referenced in
-        that manner.
-    sounding_wind_speeds : ndarray, optional
-        Sounding wind speeds in m/s.
-    sounding_wind_direction : ndarray, optional
-        Sounding wind directions in degrees.
+    sonde_profile : HorizontalWindProfile
+        Profile of horizontal winds from a sonding used for the initial
+        condition of the dealiasing.
 
     Other Parameters
     ----------------
@@ -80,6 +76,18 @@ def dealias_fourdd(radar, last_radar=None, sounding_heights=None,
         create this filter from the radar moments using any additional
         arguments by passing them to :py:func:`moment_based_gate_filter`. The
         default value assumes all gates are valid.
+    sounding_heights : ndarray, optional
+        This argument is deprecated and should be specified using the
+        sonde_profile argument.  Sounding heights in meters above mean sea
+        level.  If altitude attribute of the radar object if reference against
+        something other than mean sea level then this parameter should also be
+        referenced in that manner.
+    sounding_wind_speeds : ndarray, optional
+        This argument is deprecated and should be specified using the
+        sonde_profile argument.  Sounding wind speeds in m/s.
+    sounding_wind_direction : ndarray, optional
+        This argument is deprecated and should be specified using the
+        sonde_profile argument.  Sounding wind directions in degrees.
     filt : int, optional
         Flag controlling Bergen and Albers filter, 1 = yes, 0 = no.
     rsl_badval : float, optional
@@ -183,20 +191,34 @@ def dealias_fourdd(radar, last_radar=None, sounding_heights=None,
     1674.
 
     """
-    # TODO test with RHI radar scan
-
     # check that FourDD is available (requires TRMM RSL)
     if not _FOURDD_AVAILABLE:
         raise MissingOptionalDependency(
             "Py-ART must be build with support for TRMM RSL to use" +
             "the dealias_fourdd function.")
 
+    # check for use of deprecated sonding_ arguments
+    deprecated_args_used = ((sounding_heights is not None) or
+                            (sounding_wind_speeds is not None) or
+                            (sounding_wind_direction is not None))
+    if deprecated_args_used:
+        msg = ("Sounding arguments are deprecated please use the "
+               "sonde_profile argument")
+        warnings.warn(msg, DeprecationWarning)
+        all_args_available = ((sounding_heights is not None) and
+                              (sounding_wind_speeds is not None) and
+                              (sounding_wind_direction is not None))
+        if all_args_available:
+            sonde_profile = HorizontalWindProfile(
+                sounding_heights, sounding_wind_speeds,
+                sounding_wind_direction)
+
     # verify that sounding data or last_volume is provided
     sounding_available = ((sounding_heights is not None) and
                           (sounding_wind_speeds is not None) and
                           (sounding_wind_direction is not None))
-    if (not sounding_available) and (last_radar is None):
-        raise ValueError('sounding data or last_radar must be provided')
+    if (sonde_profile is None) and (last_radar is None):
+        raise ValueError('sonde_profile or last_radar must be provided')
 
     # parse the field parameters
     if vel_field is None:
@@ -224,14 +246,17 @@ def dealias_fourdd(radar, last_radar=None, sounding_heights=None,
         last_vel_volume = None
 
     # create an RslVolume containing the sounding data if it available
-    if sounding_available:
+    if sonde_profile is not None:
         # convert the sounding data to 1D float32 arrays
-        hc = np.ascontiguousarray(sounding_heights, dtype=np.float32)
-        sc = np.ascontiguousarray(sounding_wind_speeds, dtype=np.float32)
-        dc = np.ascontiguousarray(sounding_wind_direction, dtype=np.float32)
+        height = np.ascontiguousarray(sonde_profile.height, dtype=np.float32)
+        speed = np.ascontiguousarray(sonde_profile.speed, dtype=np.float32)
+        wdir = np.ascontiguousarray(sonde_profile.direction, dtype=np.float32)
+
+        if len(height) > 999:
+            raise ValueError("Too many sounding heights, maximum is 999")
 
         success, sound_volume = _fourdd_interface.create_soundvolume(
-            vel_volume, hc, sc, dc, sign, max_shear)
+            vel_volume, height, speed, wdir, sign, max_shear)
         if success == 0:
             raise ValueError('Error when loading sounding data')
     else:
@@ -289,6 +314,10 @@ def find_time_in_interp_sonde(interp_sonde, target, debug=False):
     """
     Find the wind parameter for a given time in a ARM interpsonde file.
 
+    This function is Deprecated and will be removed in future versions of
+    Py-ART. Use the :py:func:`pyart.io.read_arm_sonde_vap` function for similar
+    functionality.
+
     Parameters
     ----------
     interp_sonde : netCDF4.Dataset
@@ -312,6 +341,9 @@ def find_time_in_interp_sonde(interp_sonde, target, debug=False):
         Wind direction at given height for the time closest to target.
 
     """
+    warnings.warn(
+        "find_time_in_interp_sonde is deprecated and will be removed in a "
+        "future version of Py-ART.\n", DeprecationWarning)
 
     sonde_datetimes = datetime_utils.datetimes_from_dataset(interp_sonde)
 

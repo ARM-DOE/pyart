@@ -53,6 +53,16 @@ def test_no_edges():
     assert_almost_equal(dealias_vel['data'][180, 40], 0.0)
 
 
+def test_dealias_reference_velocity_field():
+    radar = pyart.testing.make_velocity_aliased_radar()
+    ref_data = np.ones_like(radar.fields['velocity']['data']) * 20.
+    radar.add_field_like('velocity', 'ref_velocity', ref_data)
+    dealias_vel = pyart.correct.dealias_region_based(
+        radar, ref_vel_field='ref_velocity')
+    offset_ref_data = np.array(REF_DATA) + 20
+    assert_allclose(dealias_vel['data'][13, :27], offset_ref_data)
+
+
 def test_keep_original():
     radar = pyart.testing.make_velocity_aliased_radar()
     radar.fields['velocity']['data'][180, 5] = 88

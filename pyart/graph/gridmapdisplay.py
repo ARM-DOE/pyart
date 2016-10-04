@@ -26,7 +26,7 @@ except ImportError:
     _BASEMAP_AVAILABLE = False
 
 from . import common
-from ..exceptions import MissingOptionalDependency, DeprecatedAttribute
+from ..exceptions import MissingOptionalDependency
 from ..core.transforms import _interpolate_axes_edges
 
 
@@ -72,34 +72,6 @@ class GridMapDisplay(object):
         self.fields = []
         self.origin = 'origin'
         self.basemap = None
-
-    @property
-    def proj(self):
-        """ Deprecated proj attribute. """
-        warnings.warn(
-            "The 'proj' attribute has been deprecated and will be removed "
-            "in future versions of Py-ART", category=DeprecatedAttribute)
-        lat0 = self.grid.origin_latitude['data'][0]
-        lon0 = self.grid.origin_longitude['data'][0]
-        return pyproj.Proj(proj='aeqd', datum='NAD83', lat_0=lat0, lon_0=lon0)
-
-    @property
-    def grid_lats(self):
-        """ Deprecated grid_lats attribute. """
-        warnings.warn(
-            "The 'grid_lats' attribute has been deprecated and will be "
-            "removed in future versions of Py-ART",
-            category=DeprecatedAttribute)
-        return self.grid.point_latitude['data'][0]
-
-    @property
-    def grid_lons(self):
-        """ Deprecated grid_lons attribute. """
-        warnings.warn(
-            "The 'grid_lons' attribute has been deprecated and will be "
-            "removed in future versions of Py-ART",
-            category=DeprecatedAttribute)
-        return self.grid.point_latitude['data'][0]
 
     def plot_basemap(
             self, lat_lines=None, lon_lines=None, resolution='l',

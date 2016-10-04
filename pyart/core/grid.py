@@ -102,9 +102,6 @@ class Grid(object):
         grid origin and the Cartesian z location of each grid point.  If this
         attribute is changed use :py:func:`init_point_altitude` to reset the
         attribute.
-    axes : dict
-        Dictionary of axes dictionaries.  This attribute is deprecated,
-        it will be removed in future versions of Py-ART.
 
     """
     def __init__(self, time, fields, metadata,
@@ -143,18 +140,6 @@ class Grid(object):
         self.init_point_longitude_latitude()
         self.init_point_altitude()
 
-        # Deprecated axes attribute
-        axes = {'time': time,
-                'time_start': time,  # incorrect metadata
-                'time_end': time,    # incorrect metadata
-                'z_disp': z,
-                'y_disp': y,
-                'x_disp': x,
-                'alt': origin_altitude,
-                'lat': origin_latitude,
-                'lon': origin_longitude}
-        self.axes = axes
-
         return
 
     def __getstate__(self):
@@ -175,43 +160,6 @@ class Grid(object):
         self.init_point_x_y_z()
         self.init_point_longitude_latitude()
         self.init_point_altitude()
-
-    @classmethod
-    def from_legacy_parameters(cls, fields, axes, metadata):
-        """
-        Return a Grid class using legacy parameters.
-
-        Parameters
-        ----------
-        fields : dict
-            Dictionary of field dictionaries.
-        metadata : dict
-            Dictionary of metadata.
-        axes : dict
-            Dictionary of axes dictionaries.
-
-        Returns
-        --------
-        grid : Grid
-            A Grid object.
-
-        """
-        warnings.warn(
-            "from_legacy_parameters is deprecated and will be removed in a " +
-            "future version of Py-ART", DeprecationWarning)
-        time = axes['time']
-        fields = fields
-        metadata = metadata
-        origin_latitude = axes['lat']
-        origin_longitude = axes['lon']
-        origin_altitude = axes['alt']
-        x = axes['x_disp']
-        y = axes['y_disp']
-        z = axes['z_disp']
-        grid = cls(time, fields, metadata,
-                   origin_latitude, origin_longitude, origin_altitude,
-                   x, y, z)
-        return grid
 
     @property
     def projection_proj(self):

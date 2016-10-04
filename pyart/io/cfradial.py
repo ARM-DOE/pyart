@@ -377,7 +377,7 @@ class _NetCDFVariableDataExtractor(object):
             # Rather we create a masked array with a single masked value
             # with the correct dtype and fill_value.
             self.ncvar.set_auto_mask(False)
-            data = np.ma.masked_equal(self.ncvar[:], self.ncvar[0])
+            data = np.ma.array(self.ncvar[:], mask=True)
         # Use atleast_1d to force the array to be at minimum one dimensional,
         # some version of netCDF return scalar or scalar arrays for scalar
         # NetCDF variables.

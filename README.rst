@@ -59,11 +59,11 @@ the latest release.  To do this you must download and install
 Then use the following command in a terminal or command prompt to install
 the latest version of Py-ART::
 
-    conda install -c https://conda.anaconda.org/jjhelmus pyart
+    conda install -c conda-forge arm_pyart
 
 To update an older version of Py-ART to the latest release use::
 
-    conda update -c https://conda.anaconda.org/jjhelmus pyart
+    conda update -c conda-forge arm_pyart
 
 If you do not wish to use Anaconda or Miniconda as a Python environment or want
 to use the latest, unreleased version of Py-ART see the section below on 
