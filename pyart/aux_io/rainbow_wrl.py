@@ -192,7 +192,9 @@ def read_rainbow_wrl(filename, field_names=None, additional_metadata=None,
             [rbf['volume']['sensorinfo']['lon']], dtype='float64')
         altitude['data'] = np.array(
             [rbf['volume']['sensorinfo']['alt']], dtype='float64')
-        frequency['data'] = 3e8 / float(rbf['volume']['sensorinfo']['wavelen'])
+        frequency['data'] = np.array(
+            [3e8 / float(rbf['volume']['sensorinfo']['wavelen'])],
+            dtype='float64')
     elif 'radarinfo' in rbf['volume'].keys():
         latitude['data'] = np.array(
             [rbf['volume']['radarinfo']['@lat']], dtype='float64')
@@ -200,7 +202,9 @@ def read_rainbow_wrl(filename, field_names=None, additional_metadata=None,
             [rbf['volume']['radarinfo']['@lon']], dtype='float64')
         altitude['data'] = np.array(
             [rbf['volume']['radarinfo']['@alt']], dtype='float64')
-        frequency['data'] = 3e8 / float(rbf['volume']['radarinfo']['wavelen'])
+        frequency['data'] = np.array(
+            [3e8 / float(rbf['volume']['radarinfo']['wavelen'])],
+            dtype='float64')
 
     # antenna speed
     if 'antspeed' in common_slice_info:
@@ -389,6 +393,7 @@ def _get_angle(ray_info, angle_step=None, scan_type='ppi'):
     moving_angle = np.angle((np.exp(1.j * np.deg2rad(angle_start)) +
                             np.exp(1.j * np.deg2rad(angle_stop))) / 2.,
                             deg=True)
+    moving_angle[moving_angle < 0.] += 360.  # [0, 360]
 
     return moving_angle, angle_start, angle_stop
 

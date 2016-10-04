@@ -9,7 +9,6 @@ Reading and writing Grid objects.
 
     read_grid
     write_grid
-    read_legacy_grid
     _make_coordinatesystem_dict
 
 """
@@ -381,74 +380,3 @@ def _make_coordinatesystem_dict(grid):
         cdm_transform = None
 
     return cdm_transform
-
-
-def read_legacy_grid(filename, exclude_fields=None, **kwargs):
-    """
-    Read a legacy netCDF grid file produced by Py-ART version 1.5 and prior.
-
-    Parameters
-    ----------
-    filename : str
-        Filename of netCDF grid file to read.  This should be a file produced
-        by :py:func:`write_grid` from Py-ART version 1.5 or prior.
-
-    Other Parameters
-    ----------------
-    exclude_fields : list
-        A list of fields to exclude from the grid object.
-
-    Returns
-    -------
-    grid : Grid
-        Grid object containing gridded data.
-
-    """
-    warnings.warn(
-        "read_legacy_grid is deprecated and will be removed in a future " +
-        "version of Py-ART", DeprecationWarning)
-    # test for non empty kwargs
-    _test_arguments(kwargs)
-
-    if exclude_fields is None:
-        exclude_fields = []
-
-    ncobj = netCDF4.Dataset(filename, mode='r')
-
-    # metadata
-    metadata = dict([(k, getattr(ncobj, k)) for k in ncobj.ncattrs()])
-
-    # axes
-    axes_keys = ['time', 'time_start', 'time_end', 'base_time',
-                 'time_offset', 'z_disp', 'y_disp', 'x_disp',
-                 'alt', 'lat', 'lon', 'z', 'lev', 'y', 'x']
-    axes = dict((k, _ncvar_to_dict(ncobj.variables[k])) for k in axes_keys
-                if k in ncobj.variables)
-
-    # read in the fields
-    # determine the correct shape of the fields
-    # ARM standard requires the left-most dimension to be time, so the shape
-    # of the fields in the file is (1, nz, ny, nx) but the field data should
-    # be shaped (nz, ny, nx) in the Grid object
-    dim_keys = ['nz', 'ny', 'nx', 'z', 'y', 'x']
-    field_shape = tuple([len(ncobj.dimensions[k]) for k in dim_keys
-                         if k in ncobj.dimensions])
-    field_shape_with_time = (1, ) + field_shape
-
-    # check all non-axes variables, those with the correct shape
-    # are added to the field dictionary, if a wrong sized field is
-    # detected a warning is raised
-    field_keys = [k for k in ncobj.variables if k not in axes_keys and
-                  k not in exclude_fields]
-    fields = {}
-    for field in field_keys:
-        field_dic = _ncvar_to_dict(ncobj.variables[field])
-        if field_dic['data'].shape == field_shape_with_time:
-            field_dic['data'].shape = field_shape
-            fields[field] = field_dic
-        else:
-            bad_shape = field_dic['data'].shape
-            warnings.warn('Field %s skipped due to incorrect shape' % (field))
-
-    ncobj.close()
-    return Grid.from_legacy_parameters(fields, axes, metadata)
