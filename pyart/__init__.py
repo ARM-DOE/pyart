@@ -26,7 +26,15 @@ else:
 ##
 ## If you use this software to prepare a publication, please cite:
 ##
-##     JJ Helmus and SM Collis, JORS 2016, doi: 10.5334/jors.119 """
+##     JJ Helmus and SM Collis, JORS 2016, doi: 10.5334/jors.119
+##
+## And add to your paper Acknowledgements:
+##     The Python ARM Radar Toolkit (Py-ART) was in the preparation of
+##     this work. Py-ART is partly supported by the Office of Biological
+##     and Environmental Research of the U.S. Department of Energy as
+##     part of the Atmospheric Radiation Measurement (ARM) Climate
+##     Research Facility, an Office of Science user facility.
+"""
     from os import environ as _environ
     if 'PYART_QUIET' not in _environ:
         print(_citation_text)
