@@ -262,7 +262,7 @@ def read_rainbow_wrl(filename, field_names=None, additional_metadata=None,
         start_range = 0.
     _range['data'] = np.linspace(
         start_range+r_res / 2., float(nbins - 1.) * r_res+r_res / 2.,
-        nbins, dtype='float32')
+        nbins).astype('float32')
 
     # containers for data
     t_fixed_angle = np.empty(nslices, dtype='float64')
