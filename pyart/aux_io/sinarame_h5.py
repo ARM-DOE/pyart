@@ -8,12 +8,20 @@ Routines for reading sinarame_H5 files.
     :toctree: generated/
 
     read_sinarame_h5
+    write_sinarame_cfradial
     _to_str
     _get_SINARAME_h5_sweep_data
 
 """
 
-import datetime
+from __future__ import print_function
+
+from datetime import datetime
+import glob
+import os
+import sys
+
+from netcdftime import utime
 
 import numpy as np
 try:
@@ -24,6 +32,7 @@ except ImportError:
 
 from ..config import FileMetadata, get_fillvalue
 from ..io.common import make_time_unit_str, _test_arguments
+from ..io import write_cfradial
 from ..core.radar import Radar
 from ..exceptions import MissingOptionalDependency
 
@@ -279,7 +288,7 @@ def read_sinarame_h5(filename, field_names=None, additional_metadata=None,
             t_stop = hfile[dset]['how'].attrs['stopazT']
             t_data[start:stop+1] = (t_start + t_stop) / 2
         start_epoch = t_data.min()
-        start_time = datetime.datetime.utcfromtimestamp(start_epoch)
+        start_time = datetime.utcfromtimestamp(start_epoch)
         _time['units'] = make_time_unit_str(start_time)
         _time['data'] = t_data - start_epoch
     else:
@@ -290,18 +299,18 @@ def read_sinarame_h5(filename, field_names=None, additional_metadata=None,
             start_str = _to_str(
                 dset_what['startdate'] + dset_what['starttime'])
             end_str = _to_str(dset_what['enddate'] + dset_what['endtime'])
-            start_dt = datetime.datetime.strptime(start_str, '%Y%m%d%H%M%S')
-            end_dt = datetime.datetime.strptime(end_str, '%Y%m%d%H%M%S')
+            start_dt = datetime.strptime(start_str, '%Y%m%d%H%M%S')
+            end_dt = datetime.strptime(end_str, '%Y%m%d%H%M%S')
 
             time_delta = end_dt - start_dt
             delta_seconds = time_delta.seconds + time_delta.days * 3600 * 24
             rays = stop - start + 1
             sweep_start_epoch = (
-                start_dt - datetime.datetime(1970, 1, 1)).total_seconds()
+                start_dt - datetime(1970, 1, 1)).total_seconds()
             t_data[start:stop+1] = (sweep_start_epoch +
                                     np.linspace(0, delta_seconds, rays))
         start_epoch = t_data.min()
-        start_time = datetime.datetime.utcfromtimestamp(start_epoch)
+        start_time = datetime.utcfromtimestamp(start_epoch)
         _time['units'] = make_time_unit_str(start_time)
         _time['data'] = (t_data - start_epoch).astype('float32')
 
@@ -327,6 +336,7 @@ def read_sinarame_h5(filename, field_names=None, additional_metadata=None,
         field_dic['data'] = fdata
         field_dic['_FillValue'] = get_fillvalue()
         fields[field_name] = field_dic
+        # Add missing metadata
         if file_field_names:
             fields[field_name].update(
                 filemetadata.get_metadata(field_names[field_name]))
@@ -341,6 +351,106 @@ def read_sinarame_h5(filename, field_names=None, additional_metadata=None,
         sweep_end_ray_index,
         azimuth, elevation,
         instrument_parameters=instrument_parameters)
+
+
+def write_sinarame_cfradial(path):
+    """
+    This function takes SINARAME_H5 files (where every file has only one field
+    and one volume) from a folder and writes a CfRadial file for each volume
+    including all fields.
+
+    Parameters
+    ----------
+    path : str
+        Where the SINARAME_H5 files are.
+
+    """
+
+    path_user = os.path.expanduser(path)
+
+    TH_list = glob.glob(path_user + '/*_TH_*.H5')
+
+    file_date = [i.split('_')[-1][9:-4] for i in TH_list]
+    file_date.sort()
+
+    for i in file_date:
+        files = glob.glob(path_user + '/*' + i + 'Z.H5')
+
+        # I want it to start with TV or TH because of some range issue
+        files.sort(reverse=True)
+        files.sort(key=lambda x: len(x.split('_')[-2]))
+
+        for j in np.arange(len(files)):
+            basename = os.path.basename(files[j])
+            bs = basename.split('_')
+            base1 = '{b1}_{b2}_{b3}_{fn}_{b4}'.format(
+                b1=bs[0], b2=bs[1], b3=bs[2], fn=bs[3], b4=bs[4])
+            file = '{path}/{base1}'.format(path=path_user, base1=base1)
+
+            if j == 0:
+                try:
+                    radar = read_sinarame_h5(file, file_field_names=True)
+                    azi_shape, range_shape = radar.fields['TV']['data'].shape
+
+                except ValueError:
+                    print("x - this Radar wasn't created",
+                          base1, sep='\t')
+
+                # In case the H5 file was badly created with bbufr it
+                # throws a KeyError
+                except KeyError:
+                    print("x - Wrong BUFR conversion", base1, sep='\t')
+
+            else:
+                try:
+                    radar_tmp = read_sinarame_h5(file, file_field_names=True)
+
+                    field = radar_tmp.fields.keys()[0]
+
+                    # Add missing gates
+                    if radar_tmp.fields[field]['data'].shape[1] != range_shape:
+                        n_missing_gates = \
+                            (range_shape
+                             - radar_tmp.fields[field]['data'].shape[1])
+                        fill = np.ma.masked_all((azi_shape, n_missing_gates))
+                        data = np.ma.concatenate(
+                            [radar_tmp.fields[field]['data'], fill], 1)
+                        radar_tmp.fields[field]['data'] = data
+
+                    radar.fields.update(radar_tmp.fields)
+
+                # Same as above, bbufr conversion errors
+                except KeyError:
+                    print("x - Wrong BUFR conversion", base1, sep='\t')
+
+                except ValueError:
+                    print("x - this Radar wasn't created",
+                          base1, sep='\t')
+
+                # In case the first file didn't create a Radar object
+                except NameError:
+                    print("Radar didn't exist, creating")
+                    radar = read_sinarame_h5(file, file_field_names=True)
+
+        cal_temps = u"gregorian"
+        cdftime = utime(radar.time['units'])
+
+        time1 = cdftime.num2date(radar.time['data'][0]).strftime(
+            '%Y%m%d_%H%M%S')
+        time2 = cdftime.num2date(radar.time['data'][-1]).strftime(
+            '%Y%m%d_%H%M%S')
+
+        radar._DeflateLevel = 5
+
+        # cfrad.TIME1_to_TIME2_NAME_VCP_RANGE.nc
+        cffile = 'cfrad.{time1}.0000_to_{time2}.0000'\
+                 '_{b1}_{est}_{ran}'.format(time1=time1, time2=time2,
+                                            b1=bs[0], est=bs[1], ran=bs[2])
+
+        print('Writing to {path}{filename}.nc'.format(path=path_user,
+                                                      filename=cffile))
+        write_cfradial(path_user + '/' + cffile + '.nc',
+                       radar, format='NETCDF4_CLASSIC')
 
 
 def _to_str(text):
