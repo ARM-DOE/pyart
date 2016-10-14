@@ -40,24 +40,7 @@ def read_arm_sonde(filename):
     profile_datetime = netCDF4.num2date(
         dset.variables['time'][0], dset.variables['time'].units)
 
-    # extract wind profile
-    pressure = dset.variables['pres'][:]
-    # pressure to altitude:
-    # h = h_0 + T/L * [(P/P_0)**(-(R*L) / (g * M)) - 1]
-    #
-    # Where
-    # T = 288.15 K
-    # L = -0.0065 K/m
-    # P_0 = 1013.25 hPa
-    # g = 9.80665 m/s**2
-    # R = 8.31147 J / (mol * K)
-    # M = 0.0289644 kg / mol
-    #
-    # Then
-    # h = -44330.77 * ((P/1013.25)**(0.1902652) - 1)
-    # with h in meters and P in hPa
-    height = -44330.77 * ((pressure / 1013.25)**(0.1902652) - 1)
-
+    height = dset.variables['alt'][:]
     speed = dset.variables['wspd'][:]
     direction = dset.variables['deg'][:]
     profile = HorizontalWindProfile(height, speed, direction)
