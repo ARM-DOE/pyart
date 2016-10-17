@@ -28,7 +28,7 @@ if [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ $TRAVIS_SECURE_ENV_VARS == 'true' 
     git checkout gh-pages
     touch .nojekyll
     git add --all .
-    git commit -m "Version" --allow-empty
+    git commit -m "Version" --allow-empty -q
     git remote add origin https://$GH_TOKEN@github.com/ARM-DOE/pyart-docs-travis.git &> /dev/null
     git push origin gh-pages -fq &> /dev/null
 fi
