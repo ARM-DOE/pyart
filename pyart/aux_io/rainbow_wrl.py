@@ -384,7 +384,7 @@ def _get_angle(ray_info, angle_step=None, scan_type='ppi'):
     else:
         if angle_step is None:
             raise ValueError('Unknown angle step')
-        angle_start = np.array(ray_info['data']*bin_to_deg, dtype='float64')
+        angle_start = np.array(ray_info[0]['data']*bin_to_deg, dtype='float64')
         if scan_type == 'rhi':
             ind = (angle_start > 225.).nonzero()
             angle_start[ind] -= 360.
