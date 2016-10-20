@@ -20,30 +20,31 @@ wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh \
 chmod +x miniconda.sh
 ./miniconda.sh -b
 export PATH=/home/travis/miniconda2/bin:$PATH
-conda update --yes conda
-conda update --yes conda
+conda config --set always_yes yes
+conda update -q conda
+conda update -q conda
 
 # Create a testenv with the correct Python version
-conda create -n testenv --yes pip python=$PYTHON_VERSION
+conda create -n testenv -q pip python=$PYTHON_VERSION
 source activate testenv
 
 # Install Py-ART dependencies
-conda install --yes numpy scipy matplotlib netcdf4 nose
-conda install --yes basemap
-conda install --yes -c jjhelmus trmm_rsl
+conda install -q numpy scipy matplotlib netcdf4 nose
+conda install -q basemap
+conda install -q -c jjhelmus trmm_rsl
 
 if [[ $PYTHON_VERSION == '2.7' ]]; then
-    conda install --yes -c http://conda.anaconda.org/jjhelmus cbc cylp
-    conda install --yes -c http://conda.anaconda.org/jjhelmus glpk pyglpk
-    conda install --yes -c http://conda.anaconda.org/jjhelmus cvxopt_glpk
+    conda install -q -c http://conda.anaconda.org/jjhelmus cbc cylp
+    conda install -q -c http://conda.anaconda.org/jjhelmus glpk pyglpk
+    conda install -q -c http://conda.anaconda.org/jjhelmus cvxopt_glpk
 
     # wradlib and dependencies
-    conda install --yes h5py
+    conda install -q h5py
     # KLUDGE libgdal does not report its version dependency on geos which
     # causes either gdal or basemap to break, force the exact libgdal version
     # see: https://github.com/ContinuumIO/anaconda-issues/issues/584
-    conda install --yes gdal basemap libgdal=2.0.0=0 krb5 proj4
-    conda install --no-deps --yes -c conda-forge wradlib
+    conda install -q gdal basemap libgdal=2.0.0=0 krb5 proj4
+    conda install --no-deps -q -c conda-forge wradlib
 fi
 
 # install coverage modules
@@ -57,14 +58,14 @@ export RSL_PATH=~/miniconda2/envs/testenv
 
 if [[ "$FROM_RECIPE" == "true" ]]; then
     source deactivate
-    conda install --yes conda-build
-    conda install --yes jinja2 setuptools
+    conda install -q conda-build
+    conda install -q jinja2 setuptools
     conda config --add channels http://conda.anaconda.org/jjhelmus
     source activate testenv
     conda build --no-test -q conda_recipe/
    
     export CONDA_PACKAGE=`conda build --output conda_recipe/ | grep bz2`
-    conda install --yes $CONDA_PACKAGE
+    conda install -q $CONDA_PACKAGE
     mkdir foo   # required so source directory not picked up during tests
     cd foo
 else
@@ -75,5 +76,5 @@ fi
 # cylp and cvxopt_glpk depend on BLAS and LAPACK which are provided by the
 # system and depend on the system libgfortran.  The conda libgfortran does not
 # export the symbols required for the system packages, so it must be removed.
-conda install --yes libgfortran
-conda remove --yes --force libgfortran
+conda install -q libgfortran
+conda remove -q --force libgfortran
