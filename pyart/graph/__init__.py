@@ -16,6 +16,7 @@ Plotting radar data
     RadarDisplay
     RadarMapDisplay
     AirborneRadarDisplay
+    RadarMapDisplayCartopy
 
 Plotting grid data
 ==================

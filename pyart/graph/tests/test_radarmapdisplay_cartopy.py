@@ -17,8 +17,6 @@ from numpy.testing.decorators import skipif
 def test_radarmapdisplay_cartopy_ppi(outfile=None):
     radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
     display = pyart.graph.RadarMapDisplayCartopy(radar, shift=(0.1, 0.0))
-    fig = plt.figure()
-    ax = fig.add_subplot(111)
     display.plot_ppi_map(
         'reflectivity_horizontal', 0, colorbar_flag=True,
         title="Fancy PPI Map", mask_tuple=('reflectivity_horizontal', -100),
@@ -28,11 +26,12 @@ def test_radarmapdisplay_cartopy_ppi(outfile=None):
     display.plot_range_rings([15, 30])
     display.plot_line_geo(np.array([-95, -95]), np.array([33, 38]))
     if outfile:
-        fig.savefig(outfile)
+        plt.savefig(outfile)
     plt.close()
 
+
 @skipif(not pyart.graph.radarmapdisplay_cartopy._CARTOPY_AVAILABLE)
-def test_radarmapdisplay_cartopy_preexisting_basemap(outfile=None):
+def test_radarmapdisplay_cartopy_preexisting_ax(outfile=None):
     import cartopy
     from cartopy.io.img_tiles import StamenTerrain
     radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
@@ -45,6 +44,7 @@ def test_radarmapdisplay_cartopy_preexisting_basemap(outfile=None):
         fig.savefig(outfile)
     plt.close()
 
+
 # Tests of methods, these tests do not generate figures
 @skipif(not pyart.graph.radarmapdisplay_cartopy._CARTOPY_AVAILABLE)
 def test_radarmapdisplay_cartopy_auto_range():
@@ -52,10 +52,8 @@ def test_radarmapdisplay_cartopy_auto_range():
     import cartopy
     radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
     display = pyart.graph.RadarMapDisplayCartopy(radar, shift=(0.1, 0.0))
-    fig = plt.figure()
-    ax = fig.add_subplot(111)
     display.plot_ppi_map('reflectivity_horizontal')
-    extent = display.basemap.get_extent(cartopy.crs.PlateCarree())
+    extent = display.ax.get_extent(cartopy.crs.PlateCarree())
     assert round(extent[3], 2) == 36.85
     assert round(extent[2], 2) == 36.13
     assert round(extent[1], 2) == -97.15
@@ -67,8 +65,9 @@ def test_radarmapdisplay_cartopy_auto_range():
 def test_error_raising():
     radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
     display = pyart.graph.RadarMapDisplayCartopy(radar, shift=(0.1, 0.0))
-    # no basemap
+    # no cartopy
     assert_raises(ValueError, display.plot_range_ring, 10)
 
 if __name__ == "__main__":
-    test_radarmapdisplay_cartopy_ppi('figure_radarmapdisplay_cartopy_ppi.png')
+    test_radarmapdisplay_cartopy_ppi(
+                        'figure_radarmapdisplay_cartopy_ppi.png')
