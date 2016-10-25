@@ -39,7 +39,7 @@ def read_radx(filename, radx_dir = None, **kwargs):
     """
     # test for non empty kwargs
     _test_arguments(kwargs)
-    if radx_dir != None:
+    if radx_dir is not None:
         executable = os.path.join(radx_dir, 'RadxConvert')
     else:
         executable = 'RadxConvert'
