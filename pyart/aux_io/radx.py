@@ -19,7 +19,7 @@ from ..io.cfradial import read_cfradial
 from ..io.common import _test_arguments
 
 
-def read_radx(filename, radx_dir = None, **kwargs):
+def read_radx(filename, radx_dir=None, **kwargs):
     """
     Read a file by first converting it to Cf/Radial using RadxConvert.
 
