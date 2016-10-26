@@ -32,23 +32,6 @@ def test_parse_ax_fig():
     assert fig1 == fig2
 
 
-def test_parse_norm_vmin_vmax():
-    radar = pyart.testing.make_empty_ppi_radar(1, 1, 1)
-    radar.fields['foo'] = {}
-
-    norm, vmin, vmax = common.parse_norm_vmin_vmax(None, radar, 'foo', 10, 20)
-    assert vmin == 10
-    assert vmax == 20
-    assert norm is None
-
-    normalize = matplotlib.colors.Normalize()
-    norm, vmin, vmax = common.parse_norm_vmin_vmax(
-        normalize, radar, 'foo', 10, 20)
-    assert vmin is None
-    assert vmax is None
-    assert norm is not None
-
-
 def test_parse_cmap():
     assert common.parse_cmap('jet', 'foo') == 'jet'
     assert common.parse_cmap(None, 'reflectivity') == 'pyart_NWSRef'

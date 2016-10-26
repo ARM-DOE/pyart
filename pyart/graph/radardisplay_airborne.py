@@ -215,8 +215,7 @@ class AirborneRadarDisplay(RadarDisplay):
         """
         # parse parameters
         ax, fig = common.parse_ax_fig(ax, fig)
-        norm, vmin, vmax = common.parse_norm_vmin_vmax(
-            norm, self._radar, field, vmin, vmax)
+        vmin, vmax = common.parse_vmin_vmax(self._radar, field, vmin, vmax)
         cmap = common.parse_cmap(cmap, field)
 
         # get data for the plot
@@ -230,6 +229,8 @@ class AirborneRadarDisplay(RadarDisplay):
             data = np.ma.masked_outside(data, vmin, vmax)
 
         # plot the data
+        if norm is not None:  # if norm is set do not override with vmin/vmax
+            vmin = vmax = None
         pm = ax.pcolormesh(
             x, z, data, vmin=vmin, vmax=vmax, cmap=cmap, norm=norm, **kwargs)
 
