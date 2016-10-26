@@ -373,7 +373,7 @@ def generate_ray_title(radar, field, ray):
     l1 = "%s %s" % (generate_radar_name(radar), time_str)
     azim = radar.azimuth['data'][ray]
     elev = radar.elevation['data'][ray]
-    l2 = "Ray: %i  Elevation: %.1f Azimuth: %.1f" % (ray, azim, elev)
+    l2 = "Ray: %i  Elevation: %.1f Azimuth: %.1f" % (ray, elev, azim)
     field_name = generate_field_name(radar, field)
     return l1 + '\n' + l2 + '\n' + field_name
 

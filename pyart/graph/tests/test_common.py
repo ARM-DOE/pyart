@@ -219,7 +219,7 @@ def test_generate_ray_title():
 
     title = common.generate_ray_title(radar, 'foo', 0)
     assert title == ('fake_radar 1989-01-01T00:00:01Z\n' +
-                     'Ray: 0  Elevation: 0.0 Azimuth: 0.8\nFoo')
+                     'Ray: 0  Elevation: 0.8 Azimuth: 0.0\nFoo')
 
 
 def test_generate_az_rhi_title():
