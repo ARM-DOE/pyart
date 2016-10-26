@@ -9,7 +9,6 @@ Common graphing routines.
 
     parse_ax
     parse_ax_fig
-    parse_norm_vmin_vmax
     parse_cmap
     parse_vmin_vmax
     parse_lon_lat
@@ -56,16 +55,6 @@ def parse_ax_fig(ax, fig):
     if fig is None:
         fig = plt.gcf()
     return ax, fig
-
-
-def parse_norm_vmin_vmax(norm, container, field, vmin, vmax):
-    """ Parse and return norm, vmin and vmax parameters. """
-    if norm is None:
-        vmin, vmax = parse_vmin_vmax(container, field, vmin, vmax)
-    else:
-        vmin = None
-        vmax = None
-    return norm, vmin, vmax
 
 
 def parse_cmap(cmap, field=None):
