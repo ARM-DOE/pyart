@@ -29,25 +29,29 @@ def read_arm_sonde(filename):
 
     Return
     ------
-    profile_datetime : datetime
-        Date and time of the profile
+    launch_datetime : datetime
+        Date and time corresponding to radiosonde launch time, i.e., first
+        recorded time.
     profile : HorizontalWindProfile
         Profile of the horizontal winds
 
     """
     dset = netCDF4.Dataset(filename, 'r')
 
-    profile_datetime = netCDF4.num2date(
+    launch_datetime = netCDF4.num2date(
         dset.variables['time'][0], dset.variables['time'].units)
 
-    height = dset.variables['alt'][:]
-    speed = dset.variables['wspd'][:]
-    direction = dset.variables['deg'][:]
-    profile = HorizontalWindProfile(height, speed, direction)
+    height = dset.variables['alt'][:]  # meters above mean sea level
+    speed = dset.variables['wspd'][:]  # m s-1
+    direction = dset.variables['deg'][:]  # degrees clockwise from north
+    lat = dset.variables['lat'][:]  # degrees north
+    lon = dset.variables['lon'][:]  # degrees east
+    profile = HorizontalWindProfile(
+        height, speed, direction, latitude=lat, longitude=lon)
 
     dset.close()
 
-    return profile_datetime, profile
+    return launch_datetime, profile
 
 
 def read_arm_sonde_vap(filename, radar=None, target_datetime=None):
