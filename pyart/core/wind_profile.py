@@ -32,9 +32,9 @@ class HorizontalWindProfile(object):
 
     Other Parameters
     ----------------
-    latitude : array-like, 1D
+    latitude : array-like, 1D, optional
         Latitude in degrees north at each height sampled.
-    longitude : array-like, 1D
+    longitude : array-like, 1D, optional
         Longitude in degrees east at each height sampled.
 
     Attributes

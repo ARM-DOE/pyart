@@ -41,7 +41,7 @@ def read_arm_sonde(filename):
     launch_datetime = netCDF4.num2date(
         dset.variables['time'][0], dset.variables['time'].units)
 
-    height = dset.variables['alt'][:]
+    height = dset.variables['alt'][:]  # meters above mean sea level
     speed = dset.variables['wspd'][:]  # m s-1
     direction = dset.variables['deg'][:]  # degrees clockwise from north
     lat = dset.variables['lat'][:]  # degrees north
