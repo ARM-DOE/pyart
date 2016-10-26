@@ -211,7 +211,7 @@ class RadarDisplay(object):
         data = self._get_ray_data(field, ray, mask_tuple, gatefilter)
 
         # mask the data where outside the limits
-        _mask_outside(mask_outside, data, ray_min, ray_max)
+        data = _mask_outside(mask_outside, data, ray_min, ray_max)
 
         # plot the data
         line, = ax.plot(self.ranges / 1000., data, format_str)
@@ -325,7 +325,7 @@ class RadarDisplay(object):
         x, y = self._get_x_y(sweep, edges, filter_transitions)
 
         # mask the data where outside the limits
-        _mask_outside(mask_outside, data, vmin, vmax)
+        data = _mask_outside(mask_outside, data, vmin, vmax)
 
         # plot the data
         if norm is not None:  # if norm is set do not override with vmin/vmax
@@ -448,7 +448,7 @@ class RadarDisplay(object):
         x, y, z = self._get_x_y_z(sweep, edges, filter_transitions)
 
         # mask the data where outside the limits
-        _mask_outside(mask_outside, data, vmin, vmax)
+        data = _mask_outside(mask_outside, data, vmin, vmax)
 
         # plot the data
         R = np.sqrt(x ** 2 + y ** 2) * np.sign(y)
@@ -595,7 +595,7 @@ class RadarDisplay(object):
             x = datetimes_from_radar(self._radar)
 
         # mask the data where outside the limits
-        _mask_outside(mask_outside, data, vmin, vmax)
+        data = _mask_outside(mask_outside, data, vmin, vmax)
 
         # plot the data
         if norm is not None:  # if norm is set do not override with vmin/vmax
@@ -718,7 +718,7 @@ class RadarDisplay(object):
             filter_transitions, gatefilter)
 
         # mask the data where outside the limits
-        _mask_outside(mask_outside, data, vmin, vmax)
+        data = _mask_outside(mask_outside, data, vmin, vmax)
 
         # plot the data
         R = np.sqrt(x ** 2 + y ** 2) * np.sign(y)
