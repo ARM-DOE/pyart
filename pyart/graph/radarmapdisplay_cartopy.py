@@ -108,7 +108,8 @@ class RadarMapDisplayCartopy(RadarDisplay):
             lat_lines=None, lon_lines=None, projection=None,
             min_lon=None, max_lon=None, min_lat=None, max_lat=None,
             width=None, height=None, lon_0=None, lat_0=None,
-            resolution='110m', shapefile=None, edges=True, gatefilter=None,
+            resolution='110m', shapefile=None, shapefile_kwargs={},
+            edges=True, gatefilter=None,
             filter_transitions=True, embelish=True,
             ticks=None, ticklabs=None):
         """
