@@ -73,12 +73,12 @@ class RadarMapDisplayCartopy(RadarDisplay):
         Elevations in degrees.
     fixed_angle : array
         Scan angle in degrees.
-    proj : cartopy.crs
-        LambertConformal cartopy projection centered on radar.
+    grid_projection : cartopy.crs
+        AzimuthalEquidistant cartopy projection centered on radar.
         Used to transform points into map projection
     """
 
-    def __init__(self, radar, shift=(0.0, 0.0)):
+    def __init__(self, radar, shift=(0.0, 0.0), grid_projection=None):
         """ Initialize the object. """
         # check that cartopy is available
         if not _CARTOPY_AVAILABLE:
@@ -90,6 +90,16 @@ class RadarMapDisplayCartopy(RadarDisplay):
         RadarDisplay.__init__(self, radar, shift=shift)
 
         # additional attributes needed for plotting on a cartopy map.
+        if grid_projection is None:
+            lat_0 = self.loc[0]
+            lon_0 = self.loc[1]
+            grid_projection = cartopy.crs.AzimuthalEquidistant(
+                                                    central_longitude=lon_0,
+                                                    central_latitude=lat_0)
+        elif not isinstance(grid_projection, cartopy.crs.Projection):
+            raise TypeError("grid_projection keyword must " +
+                           "be a cartopy.crs object")
+        self.grid_projection = grid_projection
         self.ax = None
         self._x0 = None     # x axis radar location in map coords (meters)
         self._y0 = None     # y axis radar location in map coords (meters)
@@ -108,7 +118,7 @@ class RadarMapDisplayCartopy(RadarDisplay):
             lat_lines=None, lon_lines=None, projection=None,
             min_lon=None, max_lon=None, min_lat=None, max_lat=None,
             width=None, height=None, lon_0=None, lat_0=None,
-            resolution='110m', shapefile=None, shapefile_kwargs={},
+            resolution='110m', shapefile=None, shapefile_kwargs=None,
             edges=True, gatefilter=None,
             filter_transitions=True, embelish=True,
             ticks=None, ticklabs=None):
@@ -232,18 +242,15 @@ class RadarMapDisplayCartopy(RadarDisplay):
         if mask_outside:
             data = np.ma.masked_outside(data, vmin, vmax)
 
-        # set the original projection of the data as an attribute of class
-        self.proj = cartopy.crs.LambertConformal(central_longitude=lon_0,
-                                                 central_latitude=lat_0,
-                                                 standard_parallels=(lat_0, ))
-
         # initialize instance of GeoAxes if not provided
         if hasattr(ax, 'projection'):
             projection = ax.projection
         else:
             if projection is None:
                 # set map projection to LambertConformal if none is specified
-                projection = self.proj
+                projection = cartopy.crs.LambertConformal(
+                                                    central_longitude=lon_0,
+                                                    central_latitude=lat_0)
             ax = plt.axes(projection=projection)
 
         if min_lon:
@@ -251,12 +258,12 @@ class RadarMapDisplayCartopy(RadarDisplay):
                           crs=cartopy.crs.PlateCarree())
         elif width:
             ax.set_extent([-width/2., width/2., -height/2., height/2.],
-                          crs=self.proj)
+                          crs=self.grid_projection)
 
         # plot the data
         pm = ax.pcolormesh(x * 1000., y * 1000., data,
                            vmin=vmin, vmax=vmax, cmap=cmap,
-                           norm=norm, transform=self.proj)
+                           norm=norm, transform=self.grid_projection)
 
         # add embelishments
         if embelish is True:
@@ -298,10 +305,12 @@ class RadarMapDisplayCartopy(RadarDisplay):
         # plot the data and optionally the shape file
         # we need to convert the radar gate locations (x and y) which are in
         # km to meters we also need to give the original projection of the
-        # data which is stored in self.proj
+        # data which is stored in self.grid_projection
 
         if shapefile is not None:
             from cartopy.io.shapereader import Reader
+            if shapefile_kwargs is None:
+                shapefile_kwargs = {}
             if 'crs' not in shapefile_kwargs:
                 shapefile_kwargs['crs'] = cartopy.crs.PlateCarree()
             ax.add_geometries(Reader(shapefile).geometries(),
@@ -402,7 +411,7 @@ class RadarMapDisplayCartopy(RadarDisplay):
         """
         self._check_ax()
         if 'transform' not in kwargs.keys():
-            kwargs['transform'] = self.proj
+            kwargs['transform'] = self.grid_projection
         self.ax.plot(line_x, line_y, line_style, **kwargs)
 
     def plot_range_ring(self, range_ring_location_km, npts=360,
