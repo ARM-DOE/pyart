@@ -98,7 +98,7 @@ class RadarMapDisplayCartopy(RadarDisplay):
                                                     central_latitude=lat_0)
         elif not isinstance(grid_projection, cartopy.crs.Projection):
             raise TypeError("grid_projection keyword must " +
-                           "be a cartopy.crs object")
+                            "be a cartopy.crs object")
         self.grid_projection = grid_projection
         self.ax = None
         self._x0 = None     # x axis radar location in map coords (meters)
