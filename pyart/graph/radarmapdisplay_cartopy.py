@@ -28,7 +28,7 @@ except ImportError:
     _LAMBERT_GRIDLINES = False
 
 from .radardisplay import RadarDisplay
-from .common import parse_ax_fig, parse_norm_vmin_vmax, parse_cmap
+from .common import parse_ax_fig, parse_vmin_vmax, parse_cmap
 from ..exceptions import MissingOptionalDependency
 
 
@@ -223,8 +223,7 @@ class RadarMapDisplayCartopy(RadarDisplay):
         """
         # parse parameters
         ax, fig = parse_ax_fig(ax, fig)
-        norm, vmin, vmax = parse_norm_vmin_vmax(norm, self._radar,
-                                                field, vmin, vmax)
+        vmin, vmax = parse_vmin_vmax(self._radar, field, vmin, vmax)
         cmap = parse_cmap(cmap, field)
         if lat_lines is None:
             lat_lines = np.arange(30, 46, 1)
@@ -261,6 +260,8 @@ class RadarMapDisplayCartopy(RadarDisplay):
                           crs=self.grid_projection)
 
         # plot the data
+        if norm is not None:  # if norm is set do not override with vmin/vmax
+            vmin = vmax = None
         pm = ax.pcolormesh(x * 1000., y * 1000., data,
                            vmin=vmin, vmax=vmax, cmap=cmap,
                            norm=norm, transform=self.grid_projection)
