@@ -144,7 +144,7 @@ class NEXRADLevel2File(object):
         # record (2432) as a big endian unsigned short, which is encoded as
         # b'\t\x80' == struct.pack('>H', 2432).
         # Newer files zero out this section.
-        elif compression_or_ctm_info in {b'\x00\x00', b'\t\x80'}:
+        elif compression_or_ctm_info in (b'\x00\x00', b'\t\x80'):
             buf = fh.read()
         else:
             raise IOError('unknown compression record')
