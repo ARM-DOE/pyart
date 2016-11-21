@@ -5,28 +5,27 @@ Building and installing Py-ART
 Required Dependencies
 =====================
 
-Py-ART requires the following software, earlier version may work but have 
-not been extensively tested.
+Py-ART requires the following software.
 
-* Python__ 2.6.x or newer
+* Python__ 2.7.x, 3.4.x or 3.5.x
 
 __ http://www.python.org
 
-* NumPy__ 1.6.x or newer
+* NumPy__
 
 __ http://www.scipy.org
 
-* SciPy__ 0.10.x or newer
+* SciPy__
 
 __ http://www.scipy.org
 
-* matplotlib__ 1.1.0 or newer
+* matplotlib__
 
 __ http://matplotlib.org/
 
-* netCDF4__ 1.0.2 or newer
+* netCDF4__
 
-__ http://code.google.com/p/netcdf4-python/
+__ https://github.com/Unidata/netcdf4-python
 
 
 Optional Dependencies
@@ -36,7 +35,7 @@ The following packages are recommended for a fully-functional Py-ART
 installation, but the package will install and work with reduced functionality
 without these packages.
 
-* TRMM RSL__ 1.43 or newer
+* TRMM RSL__
 
 __ http://trmm-fc.gsfc.nasa.gov/trmm_gv/software/rsl/
 
