@@ -21,6 +21,7 @@ Radar retrievals
     texture_of_complex_phase
     grid_displacement_pc
     grid_shift
+    velocity_azimuth_display
 
 """
 
@@ -29,5 +30,6 @@ from .echo_class import steiner_conv_strat
 from .gate_id import map_profile_to_gates, fetch_radar_time_profile
 from .simple_moment_calculations import calculate_snr_from_reflectivity
 from .advection import grid_displacement_pc, grid_shift
+from .vad import velocity_azimuth_display
 
 __all__ = [s for s in dir() if not s.startswith('_')]
