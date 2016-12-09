@@ -190,10 +190,6 @@ def velocity_azimuth_display(radar, velocity=None,
             azimuth = radar.azimuth['data'][index_start:index_end]
             elevation = radar.fixed_angle['data'][i]
 
-            mask = velocity_field.mask
-            # crud = SQ < 0.5
-            velocity_field[np.where(mask)] = np.nan
-            # velocity_field[np.where(crud)] = np.nan
             one_level = vad_algorithm(velocity_field,
                                       azimuth, elevation)
             not_garbage = np.isfinite(one_level['speed'])
