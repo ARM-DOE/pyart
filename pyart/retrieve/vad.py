@@ -92,7 +92,7 @@ def velocity_azimuth_display(radar, velocity=None,
 
     def sd_to_uv(speed, direction):
         """ Takes speed and direction to create u_mean and v_mean."""
-        return (speed * -np.sin(direction), speed * -np.cos(direction))
+        return (speed * np.sin(direction), speed * np.cos(direction))
 
     def vad_algorithm(velocity_field, azimuth, elevation):
         """ Calculates VAD for a scan, returns speed and angle
@@ -151,7 +151,7 @@ def velocity_azimuth_display(radar, velocity=None,
         b_value = (sumcminu_msin - a_value*sumsincos) / sumsin2
         speed = np.sqrt(a_value**2 + b_value**2) / np.cos(
             np.deg2rad(elevation))
-        angle = np.arctan2(-a_value, -b_value)
+        angle = np.arctan2(a_value, b_value)
 
         #crv = np.empty((nrays, nbins))
         #for i in range(nbins):
