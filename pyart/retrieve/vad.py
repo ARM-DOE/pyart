@@ -112,6 +112,9 @@ def velocity_azimuth_display(radar, velocity=None,
         sumv = np.ma.sum(velocity_count, 2)
         vals = np.isnan(sumv)
         vals2 = np.vstack((vals, vals))
+        # Jonathan, `== False` to `is False` raises an error
+        # At the moment `== False` is `now == 0` on the line following
+        # this comment. 
         count = np.sum(np.isnan(sumv) == 0, 0)
         aa = count < 8
         vals[:, aa] = 0
