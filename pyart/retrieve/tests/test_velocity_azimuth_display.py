@@ -15,8 +15,8 @@ def test_velocity_azimuth_display():
     direction = np.array([0, 90, 180, 270, 45])
     profile = pyart.core.HorizontalWindProfile(height, speed, direction)
     sim_vel = pyart.util.simulated_vel_from_profile(test_radar, profile)
-    test_radar.add_field('velocity', sim_vel,
-                         replace_existing=True)
+    test_radar.add_field('velocity', sim_vel, replace_existing=True)
+
     velocity = 'velocity'
     z_start = 0
     z_end = 10
