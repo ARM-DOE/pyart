@@ -6,7 +6,7 @@ set -e
 cd "$TRAVIS_BUILD_DIR"
 
 echo "Building Docs"
-conda install --yes sphinx pil
+conda install -q sphinx pil
 
 mv "$TRAVIS_BUILD_DIR"/doc /tmp
 cd /tmp/doc
@@ -28,7 +28,7 @@ if [ "$TRAVIS_PULL_REQUEST" == "false" ] && [ $TRAVIS_SECURE_ENV_VARS == 'true' 
     git checkout gh-pages
     touch .nojekyll
     git add --all .
-    git commit -m "Version" --allow-empty
+    git commit -m "Version" --allow-empty -q
     git remote add origin https://$GH_TOKEN@github.com/ARM-DOE/pyart-docs-travis.git &> /dev/null
     git push origin gh-pages -fq &> /dev/null
 fi

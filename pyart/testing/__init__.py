@@ -19,6 +19,7 @@ Testing functions
     make_velocity_aliased_radar
     make_empty_grid
     make_target_grid
+    make_normal_storm
 
 Testing classes
 ===============
@@ -34,7 +35,7 @@ from .sample_files import MDV_PPI_FILE, MDV_RHI_FILE, MDV_GRID_FILE
 from .sample_files import CFRADIAL_PPI_FILE, CFRADIAL_RHI_FILE
 from .sample_files import CHL_RHI_FILE, UF_FILE
 from .sample_files import SIGMET_PPI_FILE, SIGMET_RHI_FILE
-from .sample_files import INTERP_SOUNDE_FILE
+from .sample_files import INTERP_SOUNDE_FILE, SONDE_FILE
 from .sample_files import NEXRAD_ARCHIVE_MSG31_FILE, NEXRAD_ARCHIVE_MSG1_FILE
 from .sample_files import NEXRAD_CDM_FILE
 from .sample_files import NEXRAD_ARCHIVE_MSG31_COMPRESSED_FILE
@@ -46,5 +47,6 @@ from .sample_objects import make_target_grid, make_storm_grid
 from .sample_objects import make_empty_rhi_radar
 from .sample_objects import make_velocity_aliased_rhi_radar
 from .tmpdirs import InTemporaryDirectory
+from .sample_objects import make_normal_storm
 
 __all__ = [s for s in dir() if not s.startswith('_')]

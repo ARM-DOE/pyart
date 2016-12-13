@@ -20,7 +20,6 @@ import numpy as np
 import netCDF4
 
 from . import common
-from ..exceptions import DeprecatedAttribute
 from ..core.transforms import antenna_to_cartesian
 from ..core.transforms import antenna_vectors_to_cartesian
 from ..core.transforms import geographic_to_cartesian_aeqd
@@ -115,76 +114,6 @@ class RadarDisplay(object):
         self.plots = []
         self.plot_vars = []
         self.cbs = []
-
-    @property
-    def starts(self):
-        """ Deprecated starts attribute. """
-        warnings.warn(
-            "The 'starts' attribute has been deprecated and will be removed"
-            "in future versions of Py-ART", category=DeprecatedAttribute)
-        return self._radar.sweep_start_ray_index['data']
-
-    @property
-    def ends(self):
-        """ Deprecated starts attribute. """
-        warnings.warn(
-            "The 'ends' attribute has been deprecated and will be removed"
-            "in future versions of Py-ART", category=DeprecatedAttribute)
-        return self._radar.sweep_end_ray_index['data']
-
-    @property
-    def time_begin(self):
-        """ Depeciated datetime object describing first sweep time. """
-        warnings.warn(
-            "The 'time_begin' attribute has been deprecated and will be "
-            "removed in future versions of Py-ART",
-            category=DeprecatedAttribute)
-        times = self._radar.time['data'][0]
-        units = self._radar.time['units']
-        calendar = self._radar.time['calendar']
-        return netCDF4.num2date(times, units, calendar)
-
-    @property
-    def radar_name(self):
-        """ Deprecated radar_name attribute. """
-        warnings.warn(
-            "The 'radar_name' attribute has been deprecated and will be "
-            "removed in future versions of Py-ART",
-            category=DeprecatedAttribute)
-        if 'instrument_name' in self._radar.metadata:
-            return self._radar.metadata['instrument_name']
-        else:
-            return ''
-
-    @property
-    def x(self):
-        """ Deprecated x coordinate attribute. """
-        warnings.warn(
-            "The 'x' attribute has been deprecated and will be removed in "
-            "future versions of Py-ART", category=DeprecatedAttribute)
-        rg, azg = np.meshgrid(self.ranges, self.azimuths)
-        rg, eleg = np.meshgrid(self.ranges, self.elevations)
-        return antenna_to_cartesian(rg / 1000.0, azg, eleg)[0] + self.shift[0]
-
-    @property
-    def y(self):
-        """ Deprecated y coordinate attribute. """
-        warnings.warn(
-            "The 'z' attribute has been deprecated and will be removed in "
-            "future versions of Py-ART", category=DeprecatedAttribute)
-        rg, azg = np.meshgrid(self.ranges, self.azimuths)
-        rg, eleg = np.meshgrid(self.ranges, self.elevations)
-        return antenna_to_cartesian(rg / 1000.0, azg, eleg)[1] + self.shift[1]
-
-    @property
-    def z(self):
-        """ Deprecated z coordinate attribute. """
-        warnings.warn(
-            "The 'z' attribute has been deprecated and will be removed in "
-            "future versions of Py-ART", category=DeprecatedAttribute)
-        rg, azg = np.meshgrid(self.ranges, self.azimuths)
-        rg, eleg = np.meshgrid(self.ranges, self.elevations)
-        return antenna_to_cartesian(rg / 1000.0, azg, eleg)[2]
 
     ####################
     # Plotting methods #
@@ -282,7 +211,7 @@ class RadarDisplay(object):
         data = self._get_ray_data(field, ray, mask_tuple, gatefilter)
 
         # mask the data where outside the limits
-        _mask_outside(mask_outside, data, ray_min, ray_max)
+        data = _mask_outside(mask_outside, data, ray_min, ray_max)
 
         # plot the data
         line, = ax.plot(self.ranges / 1000., data, format_str)
@@ -387,8 +316,7 @@ class RadarDisplay(object):
         """
         # parse parameters
         ax, fig = common.parse_ax_fig(ax, fig)
-        norm, vmin, vmax = common.parse_norm_vmin_vmax(
-            norm, self._radar, field, vmin, vmax)
+        vmin, vmax = common.parse_vmin_vmax(self._radar, field, vmin, vmax)
         cmap = common.parse_cmap(cmap, field)
 
         # get data for the plot
@@ -397,9 +325,11 @@ class RadarDisplay(object):
         x, y = self._get_x_y(sweep, edges, filter_transitions)
 
         # mask the data where outside the limits
-        _mask_outside(mask_outside, data, vmin, vmax)
+        data = _mask_outside(mask_outside, data, vmin, vmax)
 
         # plot the data
+        if norm is not None:  # if norm is set do not override with vmin/vmax
+            vmin = vmax = None
         pm = ax.pcolormesh(
             x, y, data, vmin=vmin, vmax=vmax, cmap=cmap, norm=norm, **kwargs)
 
@@ -509,8 +439,7 @@ class RadarDisplay(object):
         """
         # parse parameters
         ax, fig = common.parse_ax_fig(ax, fig)
-        norm, vmin, vmax = common.parse_norm_vmin_vmax(
-            norm, self._radar, field, vmin, vmax)
+        vmin, vmax = common.parse_vmin_vmax(self._radar, field, vmin, vmax)
         cmap = common.parse_cmap(cmap, field)
 
         # get data for the plot
@@ -519,7 +448,7 @@ class RadarDisplay(object):
         x, y, z = self._get_x_y_z(sweep, edges, filter_transitions)
 
         # mask the data where outside the limits
-        _mask_outside(mask_outside, data, vmin, vmax)
+        data = _mask_outside(mask_outside, data, vmin, vmax)
 
         # plot the data
         R = np.sqrt(x ** 2 + y ** 2) * np.sign(y)
@@ -528,6 +457,8 @@ class RadarDisplay(object):
             reverse_xaxis = np.all(R < 1.)
         if reverse_xaxis:
             R = -R
+        if norm is not None:  # if norm is set do not override with vmin/vmax
+            vmin = vmax = None
         pm = ax.pcolormesh(
             R, z, data, vmin=vmin, vmax=vmax, cmap=cmap, norm=norm, **kwargs)
 
@@ -641,8 +572,7 @@ class RadarDisplay(object):
         """
         # parse parameters
         ax, fig = common.parse_ax_fig(ax, fig)
-        norm, vmin, vmax = common.parse_norm_vmin_vmax(
-            norm, self._radar, field, vmin, vmax)
+        vmin, vmax = common.parse_vmin_vmax(self._radar, field, vmin, vmax)
         cmap = common.parse_cmap(cmap, field)
 
         # get data for the plot
@@ -665,9 +595,11 @@ class RadarDisplay(object):
             x = datetimes_from_radar(self._radar)
 
         # mask the data where outside the limits
-        _mask_outside(mask_outside, data, vmin, vmax)
+        data = _mask_outside(mask_outside, data, vmin, vmax)
 
         # plot the data
+        if norm is not None:  # if norm is set do not override with vmin/vmax
+            vmin = vmax = None
         pm = ax.pcolormesh(
             x, y, data, vmin=vmin, vmax=vmax, cmap=cmap, norm=norm, **kwargs)
 
@@ -778,8 +710,7 @@ class RadarDisplay(object):
         """
         # parse parameters
         ax, fig = common.parse_ax_fig(ax, fig)
-        norm, vmin, vmax = common.parse_norm_vmin_vmax(
-            norm, self._radar, field, vmin, vmax)
+        vmin, vmax = common.parse_vmin_vmax(self._radar, field, vmin, vmax)
         cmap = common.parse_cmap(cmap, field)
 
         data, x, y, z = self._get_azimuth_rhi_data_x_y_z(
@@ -787,7 +718,7 @@ class RadarDisplay(object):
             filter_transitions, gatefilter)
 
         # mask the data where outside the limits
-        _mask_outside(mask_outside, data, vmin, vmax)
+        data = _mask_outside(mask_outside, data, vmin, vmax)
 
         # plot the data
         R = np.sqrt(x ** 2 + y ** 2) * np.sign(y)
@@ -796,6 +727,8 @@ class RadarDisplay(object):
             reverse_xaxis = np.all(R < 1.)
         if reverse_xaxis:
             R = -R
+        if norm is not None:  # if norm is set do not override with vmin/vmax
+            vmin = vmax = None
         pm = ax.pcolormesh(
             R, z, data, vmin=vmin, vmax=vmax, cmap=cmap, norm=norm, **kwargs)
 

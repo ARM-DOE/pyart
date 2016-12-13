@@ -20,7 +20,7 @@ except ImportError:
     _BASEMAP_AVAILABLE = False
 
 from .radardisplay import RadarDisplay
-from .common import parse_ax_fig, parse_norm_vmin_vmax, parse_cmap
+from .common import parse_ax_fig, parse_vmin_vmax, parse_cmap
 from ..exceptions import MissingOptionalDependency
 
 
@@ -219,8 +219,7 @@ class RadarMapDisplay(RadarDisplay):
         """
         # parse parameters
         ax, fig = parse_ax_fig(ax, fig)
-        norm, vmin, vmax = parse_norm_vmin_vmax(
-            norm, self._radar, field, vmin, vmax)
+        vmin, vmax = parse_vmin_vmax(self._radar, field, vmin, vmax)
         cmap = parse_cmap(cmap, field)
         if lat_lines is None:
             lat_lines = np.arange(30, 46, 1)
@@ -283,6 +282,8 @@ class RadarMapDisplay(RadarDisplay):
         # we need to convert the radar gate locations (x and y) which are in
         # km to meters as well as add the map coordiate radar location
         # which is given by self._x0, self._y0.
+        if norm is not None:  # if norm is set do not override with vmin/vmax
+            vmin = vmax = None
         pm = basemap.pcolormesh(
             self._x0 + x * 1000., self._y0 + y * 1000., data,
             vmin=vmin, vmax=vmax, cmap=cmap, norm=norm)

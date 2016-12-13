@@ -9,7 +9,6 @@ Common graphing routines.
 
     parse_ax
     parse_ax_fig
-    parse_norm_vmin_vmax
     parse_cmap
     parse_vmin_vmax
     parse_lon_lat
@@ -34,18 +33,7 @@ Common graphing routines.
 import matplotlib.pyplot as plt
 from netCDF4 import num2date
 
-# Deprecated function names in this name space
-from ..exceptions import _deprecated_alias
 from ..config import get_field_colormap, get_field_limits
-from ..core import transforms as _transforms
-radar_coords_to_cart = _deprecated_alias(
-    _transforms.antenna_to_cartesian,
-    'pyart.graph.common.radar_coords_to_cart',
-    'pyart.core.transforms.antenna_to_cartesian')
-sweep_coords_to_cart = _deprecated_alias(
-    _transforms.antenna_vectors_to_cartesian,
-    'pyart.graph.common.sweep_coords_to_cart',
-    'pyart.core.transforms.antenna_vectors_to_cartesian')
 
 
 ########################
@@ -67,16 +55,6 @@ def parse_ax_fig(ax, fig):
     if fig is None:
         fig = plt.gcf()
     return ax, fig
-
-
-def parse_norm_vmin_vmax(norm, container, field, vmin, vmax):
-    """ Parse and return norm, vmin and vmax parameters. """
-    if norm is None:
-        vmin, vmax = parse_vmin_vmax(container, field, vmin, vmax)
-    else:
-        vmin = None
-        vmax = None
-    return norm, vmin, vmax
 
 
 def parse_cmap(cmap, field=None):
@@ -395,7 +373,7 @@ def generate_ray_title(radar, field, ray):
     l1 = "%s %s" % (generate_radar_name(radar), time_str)
     azim = radar.azimuth['data'][ray]
     elev = radar.elevation['data'][ray]
-    l2 = "Ray: %i  Elevation: %.1f Azimuth: %.1f" % (ray, azim, elev)
+    l2 = "Ray: %i  Elevation: %.1f Azimuth: %.1f" % (ray, elev, azim)
     field_name = generate_field_name(radar, field)
     return l1 + '\n' + l2 + '\n' + field_name
 

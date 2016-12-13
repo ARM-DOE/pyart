@@ -45,18 +45,12 @@ from ._fast_edge_finder import _fast_edge_finder
 #   excluded by the filter are unfolded using a more elemenary approach.  In
 #   this manner the filter could define only "good" gates which establish the
 #   folding pattern which is then applied to all gates.
-# * Either each sweep is assumed to be 'centered' or the largest region
-#   is assumed to not be folded.  In some cases this may not be true and
-#   all the gates in the corrected sweep should be unfolded after the routine
-#   completes.  By how much the sweep should be unfolded would need to be
-#   determined, perhapes by comparing against sweeps above and below the
-#   current sweep, or by comparing to an atmospheric sounding.
 # * Improve perfornace by implementing a priority queue in the _EdgeTracker
 #   object. See comments in the class for details.
 
 
 def dealias_region_based(
-        radar, interval_splits=3, interval_limits=None,
+        radar, ref_vel_field=None, interval_splits=3, interval_limits=None,
         skip_between_rays=100, skip_along_ray=100, centered=True,
         nyquist_vel=None, check_nyquist_uniform=True, gatefilter=False,
         rays_wrap_around=None, keep_original=False, set_limits=True,
@@ -73,6 +67,12 @@ def dealias_region_based(
     ----------
     radar : Radar
         Radar object containing Doppler velocities to dealias.
+    ref_vel_field : str or None, optional
+         Field in radar containing a reference velocity field used to anchor
+         the unfolded velocities once the algorithm completes. Typically this
+         field is created by simulating the radial velocities from wind data
+         from an atmospheric sonding using
+         :py:func:`pyart.util.simulated_vel_from_profile`.
     interval_splits : int, optional
         Number of segments to split the nyquist interval into when finding
         regions of similar velocity.  More splits creates a larger number of
@@ -145,6 +145,12 @@ def dealias_region_based(
     rays_wrap_around = _parse_rays_wrap_around(rays_wrap_around, radar)
     nyquist_vel = _parse_nyquist_vel(nyquist_vel, radar, check_nyquist_uniform)
 
+    # parse ref_vel_field
+    if ref_vel_field is None:
+        ref_vdata = None
+    else:
+        ref_vdata = radar.fields[ref_vel_field]['data']
+
     # exclude masked and invalid velocity gates
     gatefilter.exclude_masked(vel_field)
     gatefilter.exclude_invalid(vel_field)
@@ -212,9 +218,16 @@ def dealias_region_based(
         nwrap = np.take(region_tracker.unwrap_number, labels)
         scorr += nwrap * nyquist_interval
 
+        # anchor unfolded velocities against reference velocity
+        if ref_vdata is not None:
+            sref = ref_vdata[sweep_slice]
+            mean_diff = (sref - scorr).mean()
+            global_fold = round(mean_diff / nyquist_interval)
+            if global_fold != 0:
+                scorr += global_fold * nyquist_interval
+
     # fill_value from the velocity dictionary if present
-    fill_value = radar.fields[vel_field].get(
-        '_FillValue', get_fillvalue())
+    fill_value = radar.fields[vel_field].get('_FillValue', get_fillvalue())
 
     # mask filtered gates
     if np.any(gfilter):

@@ -27,6 +27,14 @@ if sys.version_info[0] < 3:
 else:
     import builtins
 
+# KLUDGE:
+# NumPy 1.11.2 contains a bug which prevents submodules from working correctly
+# on Python 3.4 unless importlib.machinery has been imported at some time.
+try:
+    import importlib.machinery
+except:
+    pass
+
 
 CLASSIFIERS = """\
 Development Status :: 5 - Production/Stable
@@ -61,7 +69,7 @@ LICENSE = 'BSD'
 CLASSIFIERS = filter(None, CLASSIFIERS.split('\n'))
 PLATFORMS = ["Linux", "Mac OS-X", "Unix"]
 MAJOR = 1
-MINOR = 7
+MINOR = 8
 MICRO = 0
 ISRELEASED = False
 VERSION = '%d.%d.%d' % (MAJOR, MINOR, MICRO)

@@ -19,7 +19,7 @@ from ..io.cfradial import read_cfradial
 from ..io.common import _test_arguments
 
 
-def read_radx(filename, **kwargs):
+def read_radx(filename, radx_dir=None, **kwargs):
     """
     Read a file by first converting it to Cf/Radial using RadxConvert.
 
@@ -27,6 +27,9 @@ def read_radx(filename, **kwargs):
     ----------
     filename : str
         Name of file to read using RadxConvert.
+
+    radx_dir : str, optional
+        path to the radx install
 
     Returns
     -------
@@ -36,12 +39,16 @@ def read_radx(filename, **kwargs):
     """
     # test for non empty kwargs
     _test_arguments(kwargs)
+    if radx_dir is not None:
+        executable = os.path.join(radx_dir, 'RadxConvert')
+    else:
+        executable = 'RadxConvert'
 
     tmpfile = tempfile.mkstemp(suffix='.nc', dir='.')[1]
     head, tail = os.path.split(tmpfile)
     try:
         subprocess.check_call(
-            ['RadxConvert', '-const_ngates',
+            [executable, '-const_ngates',
              '-outdir', head, '-outname', tail, '-f', filename])
         if not os.path.isfile(tmpfile):
             raise IOError(
