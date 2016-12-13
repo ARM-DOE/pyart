@@ -103,7 +103,6 @@ def velocity_azimuth_display(radar, velocity=None,
         """
         nrays, nbins = velocity_field.shape
         nrays2 = nrays / 2
-        # Vc possible mean velocity_count?
         velocity_count = np.empty((nrays2, nbins, 2))
         velocity_count[:, :, 0] = velocity_field[0:nrays2, :]
         velocity_count[:, :, 1] = velocity_field[nrays2:, :]
@@ -113,13 +112,11 @@ def velocity_azimuth_display(radar, velocity=None,
         vals = np.isnan(sumv)
         vals2 = np.vstack((vals, vals))
         count = np.sum(np.isnan(sumv) == 0, 0)
-        # Need to change aa name
         aa = count < 8
         vals[:, aa] = 0
         vals2[:, aa] = 0
         count = np.float_(count)
         count[aa] = np.nan
-        # Need to change U_m name
         u_m = np.array([np.nansum(sumv, 0) / (2 * count)])
         count[aa] = 0
 
