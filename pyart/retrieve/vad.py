@@ -66,7 +66,7 @@ def velocity_azimuth_display(radar, velocity=None,
     v_wind : array
         V-wind mean in meters per second.
 
-    References
+    Reference
     ----------
     Michelson, D. B., Andersson, T., Koistinen, J., Collier, C. G., Riedl, J.,
     Szturc, J., Gjertsen, U., Nielsen, A. and Overgaard, S. (2000) BALTEX Radar
@@ -101,9 +101,10 @@ def velocity_azimuth_display(radar, velocity=None,
         elevation is a number.
         All in degrees, m outdic contains speed, angle, variance.
         """
-        nrays, nbins = velocity_field.shape
+        # Possible name change nbins to ngates.
+        nrays, ngates = velocity_field.shape
         nrays2 = nrays / 2
-        velocity_count = np.empty((nrays2, nbins, 2))
+        velocity_count = np.empty((nrays2, ngates, 2))
         velocity_count[:, :, 0] = velocity_field[0:nrays2, :]
         velocity_count[:, :, 1] = velocity_field[nrays2:, :]
         sinaz = np.sin(np.deg2rad(azimuth))
@@ -120,13 +121,13 @@ def velocity_azimuth_display(radar, velocity=None,
         u_m = np.array([np.nansum(sumv, 0) / (2 * count)])
         count[aa] = 0
 
-        cminusu_mcos = np.zeros((nrays, nbins))
-        cminusu_msin = np.zeros((nrays, nbins))
-        sincos = np.zeros((nrays, nbins))
-        sin2 = np.zeros((nrays, nbins))
-        cos2 = np.zeros((nrays, nbins))
+        cminusu_mcos = np.zeros((nrays, ngates))
+        cminusu_msin = np.zeros((nrays, ngates))
+        sincos = np.zeros((nrays, ngates))
+        sin2 = np.zeros((nrays, ngates))
+        cos2 = np.zeros((nrays, ngates))
 
-        for i in range(nbins):
+        for i in range(ngates):
             cminusu_mcos[:, i] = cosaz * (velocity_field[:, i] - u_m[:, i])
             cminusu_msin[:, i] = sinaz * (velocity_field[:, i] - u_m[:, i])
             sincos[:, i] = sinaz * cosaz
@@ -150,14 +151,16 @@ def velocity_azimuth_display(radar, velocity=None,
             np.deg2rad(elevation))
         angle = np.arctan2(a_value, b_value)
 
-        #crv = np.empty((nrays, nbins))
-        #for i in range(nbins):
-            #crv[:, i] = np.sin(np.radians(azimuth) + angle[i])*speed[i]
+        # Took out code producing variance at the moment, not sure if needed.
+        # crv = np.empty((nrays, nbins))
+        # for i in range(nbins):
+            # crv[:, i] = np.sin(np.radians(azimuth) + angle[i])*speed[i]
         # Need to change Vn name.
-        #Vn = velocity_field.copy()
-        #Vn[vals2 == True] = np.nan
-        #var = np.nansum((crv - Vn)**2, 0) / (sum(np.isnan(Vn) == False) - 2)
-        #return {'speed': speed, 'angle': angle, 'variance': var}
+        # Vn = velocity_field.copy()
+        # Vn[vals2 == True] = np.nan
+        # var = np.nansum((crv - Vn)**2, 0) / (sum(np.isnan(Vn) == False) - 2)
+        # return {'speed': speed, 'angle': angle, 'variance': var}
+
         return {'speed': speed, 'angle': angle}
 
     def vad_calculation(radar):
