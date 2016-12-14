@@ -29,6 +29,7 @@ pyart.io.uf_write.UFRayCreator
        :toctree:
 
     
+         ~UFRayCreator.__dir__
          ~UFRayCreator.__format__
          ~UFRayCreator.__init__
          ~UFRayCreator.__new__

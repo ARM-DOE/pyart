@@ -22,6 +22,7 @@ pyart.io._rsl_interface._RslRay
        :toctree:
 
     
+         ~_RslRay.__dir__
          ~_RslRay.__format__
          ~_RslRay.__new__
          ~_RslRay.__reduce__

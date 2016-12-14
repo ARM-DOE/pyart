@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.6.0',
+        VERSION:     '1.7.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,14 +23,14 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="Py-ART Documentation" href="../../index.html" />
     <link rel="up" title="Radar Corrections (pyart.correct)" href="../correct.html" />
     <link rel="next" title="pyart.correct.dealias_unwrap_phase" href="pyart.correct.dealias_unwrap_phase.html" />
-    <link rel="prev" title="pyart.correct.find_time_in_interp_sonde" href="pyart.correct.find_time_in_interp_sonde.html" /> 
+    <link rel="prev" title="Radar Corrections (pyart.correct)" href="../correct.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -40,43 +40,39 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="pyart.correct.dealias_unwrap_phase.html" title="pyart.correct.dealias_unwrap_phase"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="pyart.correct.find_time_in_interp_sonde.html" title="pyart.correct.find_time_in_interp_sonde"
+          <a href="../correct.html" title="Radar Corrections (pyart.correct)"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
-          <li><a href="../index.html" >User Reference Manual</a> &raquo;</li>
-          <li><a href="../correct.html" accesskey="U">Radar Corrections (<tt class="docutils literal"><span class="pre">pyart.correct</span></tt>)</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >User Reference Manual</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../correct.html" accesskey="U">Radar Corrections (<code class="docutils literal"><span class="pre">pyart.correct</span></code>)</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pyart-correct-dealias-fourdd">
 <h1>pyart.correct.dealias_fourdd<a class="headerlink" href="#pyart-correct-dealias-fourdd" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pyart.correct.dealias_fourdd">
-<tt class="descclassname">pyart.correct.</tt><tt class="descname">dealias_fourdd</tt><big>(</big><em>radar</em>, <em>last_radar=None</em>, <em>sounding_heights=None</em>, <em>sounding_wind_speeds=None</em>, <em>sounding_wind_direction=None</em>, <em>gatefilter=False</em>, <em>filt=1</em>, <em>rsl_badval=131072.0</em>, <em>keep_original=False</em>, <em>set_limits=True</em>, <em>vel_field=None</em>, <em>corr_vel_field=None</em>, <em>last_vel_field=None</em>, <em>debug=False</em>, <em>max_shear=0.05</em>, <em>sign=1</em>, <em>**kwargs</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/correct/dealias.py#L30"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.correct.dealias_fourdd" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pyart.correct.</code><code class="descname">dealias_fourdd</code><span class="sig-paren">(</span><em>radar</em>, <em>last_radar=None</em>, <em>sonde_profile=None</em>, <em>gatefilter=False</em>, <em>sounding_heights=None</em>, <em>sounding_wind_speeds=None</em>, <em>sounding_wind_direction=None</em>, <em>filt=1</em>, <em>rsl_badval=131072.0</em>, <em>keep_original=False</em>, <em>set_limits=True</em>, <em>vel_field=None</em>, <em>corr_vel_field=None</em>, <em>last_vel_field=None</em>, <em>debug=False</em>, <em>max_shear=0.05</em>, <em>sign=1</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/correct/dealias.py#L33"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.correct.dealias_fourdd" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dealias Doppler velocities using the 4DD algorithm.</p>
 <p>Dealias the Doppler velocities field using the University of Washington
 4DD algorithm utilizing information from a previous volume scan and/or
-sounding data. Either last_radar or sounding_heights,
-sounding_wind_speeds and sounding_wind_direction must be provided.
+sounding data. Either last_radar or sonde_profile must be provided.
 For best results provide both a previous volume scan and sounding data.
 Radar and last_radar must contain the same number of rays per sweep.</p>
 <p>Additional arguments are passed to
-<a class="reference internal" href="../../dev_reference/generated/pyart.correct._fourdd_interface.fourdd_dealias.html#pyart.correct._fourdd_interface.fourdd_dealias" title="pyart.correct._fourdd_interface.fourdd_dealias"><tt class="xref py py-func docutils literal"><span class="pre">_fourdd_interface.fourdd_dealias</span></tt></a>.
+<a class="reference internal" href="../../dev_reference/generated/pyart.correct._fourdd_interface.fourdd_dealias.html#pyart.correct._fourdd_interface.fourdd_dealias" title="pyart.correct._fourdd_interface.fourdd_dealias"><code class="xref py py-func docutils literal"><span class="pre">_fourdd_interface.fourdd_dealias</span></code></a>.
 These can be used to fine tune the behavior of the FourDD algorithm.
 See the documentation of Other Parameters for details.  For the default
 values of these parameters see the documentation of
-<a class="reference internal" href="../../dev_reference/generated/pyart.correct._fourdd_interface.fourdd_dealias.html#pyart.correct._fourdd_interface.fourdd_dealias" title="pyart.correct._fourdd_interface.fourdd_dealias"><tt class="xref py py-func docutils literal"><span class="pre">_fourdd_interface.fourdd_dealias</span></tt></a>.</p>
+<a class="reference internal" href="../../dev_reference/generated/pyart.correct._fourdd_interface.fourdd_dealias.html#pyart.correct._fourdd_interface.fourdd_dealias" title="pyart.correct._fourdd_interface.fourdd_dealias"><code class="xref py py-func docutils literal"><span class="pre">_fourdd_interface.fourdd_dealias</span></code></a>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -94,20 +90,10 @@ dealiased. Using a previous volume as an initial condition can
 greatly improve the dealiasing, and represents the final dimension
 in the 4DD algorithm.</p>
 </div></blockquote>
-<p><strong>sounding_heights</strong> : ndarray, optional</p>
+<p><strong>sonde_profile</strong> : HorizontalWindProfile</p>
 <blockquote>
-<div><p>Sounding heights is meters above mean sea level.  If altitude
-attribute of the radar object if reference against something other
-than mean sea level then this parameter should also be referenced in
-that manner.</p>
-</div></blockquote>
-<p><strong>sounding_wind_speeds</strong> : ndarray, optional</p>
-<blockquote>
-<div><p>Sounding wind speeds in m/s.</p>
-</div></blockquote>
-<p><strong>sounding_wind_direction</strong> : ndarray, optional</p>
-<blockquote>
-<div><p>Sounding wind directions in degrees.</p>
+<div><p>Profile of horizontal winds from a sonding used for the initial
+condition of the dealiasing.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -124,8 +110,26 @@ array is stored under the &#8216;data&#8217; key.</p>
 <div><p>A GateFilter instance which specifies which gates should be
 ignored when performing velocity dealiasing.  A value of None will
 create this filter from the radar moments using any additional
-arguments by passing them to <tt class="xref py py-func docutils literal"><span class="pre">moment_based_gate_filter</span></tt>. The
+arguments by passing them to <code class="xref py py-func docutils literal"><span class="pre">moment_based_gate_filter</span></code>. The
 default value assumes all gates are valid.</p>
+</div></blockquote>
+<p><strong>sounding_heights</strong> : ndarray, optional</p>
+<blockquote>
+<div><p>This argument is deprecated and should be specified using the
+sonde_profile argument.  Sounding heights in meters above mean sea
+level.  If altitude attribute of the radar object if reference against
+something other than mean sea level then this parameter should also be
+referenced in that manner.</p>
+</div></blockquote>
+<p><strong>sounding_wind_speeds</strong> : ndarray, optional</p>
+<blockquote>
+<div><p>This argument is deprecated and should be specified using the
+sonde_profile argument.  Sounding wind speeds in m/s.</p>
+</div></blockquote>
+<p><strong>sounding_wind_direction</strong> : ndarray, optional</p>
+<blockquote>
+<div><p>This argument is deprecated and should be specified using the
+sonde_profile argument.  Sounding wind directions in degrees.</p>
 </div></blockquote>
 <p><strong>filt</strong> : int, optional</p>
 <blockquote>
@@ -276,20 +280,22 @@ Dealising Scheme, Journal of Atmospheric and Oceanic Technology, 2001, 18,
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="pyart.correct.find_time_in_interp_sonde.html"
-                        title="previous chapter">pyart.correct.find_time_in_interp_sonde</a></p>
+  <p class="topless"><a href="../correct.html"
+                        title="previous chapter">Radar Corrections (<code class="docutils literal"><span class="pre">pyart.correct</span></code>)</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="pyart.correct.dealias_unwrap_phase.html"
                         title="next chapter">pyart.correct.dealias_unwrap_phase</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../../_sources/user_reference/generated/pyart.correct.dealias_fourdd.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/user_reference/generated/pyart.correct.dealias_fourdd.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
@@ -306,7 +312,7 @@ Dealising Scheme, Journal of Atmospheric and Oceanic Technology, 2001, 18,
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -316,23 +322,20 @@ Dealising Scheme, Journal of Atmospheric and Oceanic Technology, 2001, 18,
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="pyart.correct.dealias_unwrap_phase.html" title="pyart.correct.dealias_unwrap_phase"
              >next</a> |</li>
         <li class="right" >
-          <a href="pyart.correct.find_time_in_interp_sonde.html" title="pyart.correct.find_time_in_interp_sonde"
+          <a href="../correct.html" title="Radar Corrections (pyart.correct)"
              >previous</a> |</li>
-        <li><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
-          <li><a href="../index.html" >User Reference Manual</a> &raquo;</li>
-          <li><a href="../correct.html" >Radar Corrections (<tt class="docutils literal"><span class="pre">pyart.correct</span></tt>)</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >User Reference Manual</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../correct.html" >Radar Corrections (<code class="docutils literal"><span class="pre">pyart.correct</span></code>)</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2013, Py-ART developers.
-      Last updated on Feb 05, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2013-2016, Py-ART developers.
+      Last updated on Sep 16, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>
 </html>

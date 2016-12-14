@@ -1,0 +1,6 @@
+pyart.testing.sample_objects.make_velocity_aliased_radar
+========================================================
+
+.. currentmodule:: pyart.testing.sample_objects
+
+.. autofunction:: make_velocity_aliased_radar

@@ -1,0 +1,6 @@
+pyart.correct.region_dealias._find_regions
+==========================================
+
+.. currentmodule:: pyart.correct.region_dealias
+
+.. autofunction:: _find_regions

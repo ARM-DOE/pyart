@@ -1,0 +1,6 @@
+pyart.graph.common.generate_ray_title
+=====================================
+
+.. currentmodule:: pyart.graph.common
+
+.. autofunction:: generate_ray_title

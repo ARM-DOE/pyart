@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.6.0',
+        VERSION:     '1.7.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,14 +23,14 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="Py-ART Documentation" href="../../index.html" />
     <link rel="up" title="pyart.map" href="../map.html" />
     <link rel="next" title="pyart.map.grid_mapper.NNLocator.find_neighbors_and_dists" href="pyart.map.grid_mapper.NNLocator.find_neighbors_and_dists.html" />
     <link rel="prev" title="pyart.map.grid_mapper._gen_roi_func_dist_beam" href="pyart.map.grid_mapper._gen_roi_func_dist_beam.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -40,30 +40,27 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="pyart.map.grid_mapper.NNLocator.find_neighbors_and_dists.html" title="pyart.map.grid_mapper.NNLocator.find_neighbors_and_dists"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="pyart.map.grid_mapper._gen_roi_func_dist_beam.html" title="pyart.map.grid_mapper._gen_roi_func_dist_beam"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
-          <li><a href="../index.html" >Developer Reference Manual</a> &raquo;</li>
-          <li><a href="../map.html" accesskey="U">pyart.map</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Developer Reference Manual</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../map.html" accesskey="U">pyart.map</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pyart-map-grid-mapper-nnlocator">
 <h1>pyart.map.grid_mapper.NNLocator<a class="headerlink" href="#pyart-map-grid-mapper-nnlocator" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="pyart.map.grid_mapper.NNLocator">
-<em class="property">class </em><tt class="descclassname">pyart.map.grid_mapper.</tt><tt class="descname">NNLocator</tt><big>(</big><em>data</em>, <em>leafsize=10</em>, <em>algorithm='kd_tree'</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/map/grid_mapper.py#L192"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.map.grid_mapper.NNLocator" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">pyart.map.grid_mapper.</code><code class="descname">NNLocator</code><span class="sig-paren">(</span><em>data</em>, <em>leafsize=10</em>, <em>algorithm='kd_tree'</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/map/grid_mapper.py#L192"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.map.grid_mapper.NNLocator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Nearest neighbor locator.</p>
 <p>Class for finding the neighbors of a points within a given distance.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -82,10 +79,10 @@ Othersize and internal copy will be made.</p>
 brute-force.  This can significantly impact the speed of the
 contruction and query of the tree.</p>
 </div></blockquote>
-<p><strong>algorithm</strong> : &#8216;kd_tree&#8217; or &#8216;ball_tree&#8217;</p>
+<p><strong>algorithm</strong> : &#8216;kd_tree&#8217;, optional.</p>
 <blockquote class="last">
-<div><p>Algorithm used to compute the nearest neigbors.  &#8216;kd_tree&#8217; uses a
-k-d tree, &#8216;ball_tree&#8217; a Ball tree.</p>
+<div><p>Algorithm used to compute the nearest neigbors. &#8216;kd_tree&#8217; uses a
+k-d tree.</p>
 </div></blockquote>
 </td>
 </tr>
@@ -98,7 +95,7 @@ k-d tree, &#8216;ball_tree&#8217; a Ball tree.</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="pyart.map.grid_mapper.NNLocator.find_neighbors_and_dists.html#pyart.map.grid_mapper.NNLocator.find_neighbors_and_dists" title="pyart.map.grid_mapper.NNLocator.find_neighbors_and_dists"><tt class="xref py py-obj docutils literal"><span class="pre">find_neighbors_and_dists</span></tt></a>(q,&nbsp;r)</td>
+<tr class="row-odd"><td><a class="reference internal" href="pyart.map.grid_mapper.NNLocator.find_neighbors_and_dists.html#pyart.map.grid_mapper.NNLocator.find_neighbors_and_dists" title="pyart.map.grid_mapper.NNLocator.find_neighbors_and_dists"><code class="xref py py-obj docutils literal"><span class="pre">find_neighbors_and_dists</span></code></a>(q,&nbsp;r)</td>
 <td>Find all neighbors and distances within a given distance.</td>
 </tr>
 </tbody>
@@ -113,8 +110,29 @@ k-d tree, &#8216;ball_tree&#8217; a Ball tree.</p>
 <col width="90%" />
 </colgroup>
 <tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="pyart.map.grid_mapper.NNLocator.__init__.html#pyart.map.grid_mapper.NNLocator.__init__" title="pyart.map.grid_mapper.NNLocator.__init__"><tt class="xref py py-obj docutils literal"><span class="pre">__init__</span></tt></a>(data[,&nbsp;leafsize,&nbsp;algorithm])</td>
+<tr class="row-odd"><td><a class="reference internal" href="pyart.map.grid_mapper.NNLocator.__dir__.html#pyart.map.grid_mapper.NNLocator.__dir__" title="pyart.map.grid_mapper.NNLocator.__dir__"><code class="xref py py-obj docutils literal"><span class="pre">__dir__</span></code></a>(()&nbsp;-&gt;&nbsp;list)</td>
+<td>default dir() implementation</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pyart.map.grid_mapper.NNLocator.__format__.html#pyart.map.grid_mapper.NNLocator.__format__" title="pyart.map.grid_mapper.NNLocator.__format__"><code class="xref py py-obj docutils literal"><span class="pre">__format__</span></code></a></td>
+<td>default object formatter</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pyart.map.grid_mapper.NNLocator.__init__.html#pyart.map.grid_mapper.NNLocator.__init__" title="pyart.map.grid_mapper.NNLocator.__init__"><code class="xref py py-obj docutils literal"><span class="pre">__init__</span></code></a>(data[,&nbsp;leafsize,&nbsp;algorithm])</td>
 <td>initalize.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pyart.map.grid_mapper.NNLocator.__new__.html#pyart.map.grid_mapper.NNLocator.__new__" title="pyart.map.grid_mapper.NNLocator.__new__"><code class="xref py py-obj docutils literal"><span class="pre">__new__</span></code></a></td>
+<td>Create and return a new object.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pyart.map.grid_mapper.NNLocator.__reduce__.html#pyart.map.grid_mapper.NNLocator.__reduce__" title="pyart.map.grid_mapper.NNLocator.__reduce__"><code class="xref py py-obj docutils literal"><span class="pre">__reduce__</span></code></a></td>
+<td>helper for pickle</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pyart.map.grid_mapper.NNLocator.__reduce_ex__.html#pyart.map.grid_mapper.NNLocator.__reduce_ex__" title="pyart.map.grid_mapper.NNLocator.__reduce_ex__"><code class="xref py py-obj docutils literal"><span class="pre">__reduce_ex__</span></code></a></td>
+<td>helper for pickle</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="pyart.map.grid_mapper.NNLocator.__sizeof__.html#pyart.map.grid_mapper.NNLocator.__sizeof__" title="pyart.map.grid_mapper.NNLocator.__sizeof__"><code class="xref py py-obj docutils literal"><span class="pre">__sizeof__</span></code></a>(()&nbsp;-&gt;&nbsp;int)</td>
+<td>size of object in memory, in bytes</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="pyart.map.grid_mapper.NNLocator.__subclasshook__.html#pyart.map.grid_mapper.NNLocator.__subclasshook__" title="pyart.map.grid_mapper.NNLocator.__subclasshook__"><code class="xref py py-obj docutils literal"><span class="pre">__subclasshook__</span></code></a></td>
+<td>Abstract classes can override this to customize issubclass().</td>
 </tr>
 </tbody>
 </table>
@@ -126,7 +144,7 @@ k-d tree, &#8216;ball_tree&#8217; a Ball tree.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
   <p class="topless"><a href="pyart.map.grid_mapper._gen_roi_func_dist_beam.html"
@@ -134,12 +152,14 @@ k-d tree, &#8216;ball_tree&#8217; a Ball tree.</p>
   <h4>Next topic</h4>
   <p class="topless"><a href="pyart.map.grid_mapper.NNLocator.find_neighbors_and_dists.html"
                         title="next chapter">pyart.map.grid_mapper.NNLocator.find_neighbors_and_dists</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../../_sources/dev_reference/generated/pyart.map.grid_mapper.NNLocator.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/dev_reference/generated/pyart.map.grid_mapper.NNLocator.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
@@ -156,7 +176,7 @@ k-d tree, &#8216;ball_tree&#8217; a Ball tree.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -166,23 +186,20 @@ k-d tree, &#8216;ball_tree&#8217; a Ball tree.</p>
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="pyart.map.grid_mapper.NNLocator.find_neighbors_and_dists.html" title="pyart.map.grid_mapper.NNLocator.find_neighbors_and_dists"
              >next</a> |</li>
         <li class="right" >
           <a href="pyart.map.grid_mapper._gen_roi_func_dist_beam.html" title="pyart.map.grid_mapper._gen_roi_func_dist_beam"
              >previous</a> |</li>
-        <li><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
-          <li><a href="../index.html" >Developer Reference Manual</a> &raquo;</li>
-          <li><a href="../map.html" >pyart.map</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Developer Reference Manual</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../map.html" >pyart.map</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2013, Py-ART developers.
-      Last updated on Feb 05, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2013-2016, Py-ART developers.
+      Last updated on Sep 16, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>
 </html>

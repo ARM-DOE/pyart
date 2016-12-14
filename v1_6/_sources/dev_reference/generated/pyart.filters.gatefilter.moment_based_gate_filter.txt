@@ -1,0 +1,6 @@
+pyart.filters.gatefilter.moment_based_gate_filter
+=================================================
+
+.. currentmodule:: pyart.filters.gatefilter
+
+.. autofunction:: moment_based_gate_filter

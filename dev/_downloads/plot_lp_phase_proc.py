@@ -7,7 +7,7 @@ An example of using linear processing to process the differential phase
 fields of a ARM C-SAPR radar.
 
 """
-print __doc__
+print(__doc__)
 
 # Author: Jonathan J. Helmus (jhelmus@anl.gov)
 # License: BSD 3 clause

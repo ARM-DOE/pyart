@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.6.0',
+        VERSION:     '1.7.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,14 +23,14 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="Py-ART Documentation" href="../../index.html" />
     <link rel="up" title="pyart.graph.RadarDisplay" href="pyart.graph.RadarDisplay.html" />
     <link rel="next" title="pyart.graph.RadarDisplay.plot_rhi" href="pyart.graph.RadarDisplay.plot_rhi.html" />
     <link rel="prev" title="pyart.graph.RadarDisplay.plot_range_rings" href="pyart.graph.RadarDisplay.plot_range_rings.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -40,31 +40,28 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="pyart.graph.RadarDisplay.plot_rhi.html" title="pyart.graph.RadarDisplay.plot_rhi"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="pyart.graph.RadarDisplay.plot_range_rings.html" title="pyart.graph.RadarDisplay.plot_range_rings"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
-          <li><a href="../index.html" >User Reference Manual</a> &raquo;</li>
-          <li><a href="../graph.html" >Graphing (<tt class="docutils literal"><span class="pre">pyart.graph</span></tt>)</a> &raquo;</li>
-          <li><a href="pyart.graph.RadarDisplay.html" accesskey="U">pyart.graph.RadarDisplay</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >User Reference Manual</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../graph.html" >Graphing (<code class="docutils literal"><span class="pre">pyart.graph</span></code>)</a> &raquo;</li>
+          <li class="nav-item nav-item-3"><a href="pyart.graph.RadarDisplay.html" accesskey="U">pyart.graph.RadarDisplay</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pyart-graph-radardisplay-plot-ray">
 <h1>pyart.graph.RadarDisplay.plot_ray<a class="headerlink" href="#pyart-graph-radardisplay-plot-ray" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="pyart.graph.RadarDisplay.plot_ray">
-<tt class="descclassname">RadarDisplay.</tt><tt class="descname">plot_ray</tt><big>(</big><em>field</em>, <em>ray</em>, <em>format_str='k-'</em>, <em>mask_tuple=None</em>, <em>ray_min=None</em>, <em>ray_max=None</em>, <em>mask_outside=False</em>, <em>title=None</em>, <em>title_flag=True</em>, <em>axislabels=(None</em>, <em>None)</em>, <em>axislabels_flag=True</em>, <em>ax=None</em>, <em>fig=None</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/graph/radardisplay.py#L226"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.graph.RadarDisplay.plot_ray" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">RadarDisplay.</code><code class="descname">plot_ray</code><span class="sig-paren">(</span><em>field</em>, <em>ray</em>, <em>format_str='k-'</em>, <em>mask_tuple=None</em>, <em>ray_min=None</em>, <em>ray_max=None</em>, <em>mask_outside=False</em>, <em>title=None</em>, <em>title_flag=True</em>, <em>axislabels=(None</em>, <em>None)</em>, <em>gatefilter=None</em>, <em>axislabels_flag=True</em>, <em>ax=None</em>, <em>fig=None</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/graph/radardisplay.py#L226"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.graph.RadarDisplay.plot_ray" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot a single ray.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -116,13 +113,18 @@ is False.</p>
 <blockquote>
 <div><p>True to add a title to the plot, False does not add a title.</p>
 </div></blockquote>
+<p><strong>gatefilter</strong> : GateFilter</p>
+<blockquote>
+<div><p>GateFilter instance. None will result in no gatefilter mask being
+applied to data.</p>
+</div></blockquote>
 <p><strong>axislabels</strong> : (str, str)</p>
 <blockquote>
 <div><p>2-tuple of x-axis, y-axis labels.  None for either label will use
 the default axis label.  Parameter is ignored if axislabels_flag is
 False.</p>
 </div></blockquote>
-<p><strong>axislabel_flag</strong> : bool</p>
+<p><strong>axislabels_flag</strong> : bool</p>
 <blockquote>
 <div><p>True to add label the axes, False does not label the axes.</p>
 </div></blockquote>
@@ -146,7 +148,7 @@ False.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
   <p class="topless"><a href="pyart.graph.RadarDisplay.plot_range_rings.html"
@@ -154,12 +156,14 @@ False.</p>
   <h4>Next topic</h4>
   <p class="topless"><a href="pyart.graph.RadarDisplay.plot_rhi.html"
                         title="next chapter">pyart.graph.RadarDisplay.plot_rhi</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../../_sources/user_reference/generated/pyart.graph.RadarDisplay.plot_ray.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/user_reference/generated/pyart.graph.RadarDisplay.plot_ray.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
@@ -176,7 +180,7 @@ False.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -186,24 +190,21 @@ False.</p>
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="pyart.graph.RadarDisplay.plot_rhi.html" title="pyart.graph.RadarDisplay.plot_rhi"
              >next</a> |</li>
         <li class="right" >
           <a href="pyart.graph.RadarDisplay.plot_range_rings.html" title="pyart.graph.RadarDisplay.plot_range_rings"
              >previous</a> |</li>
-        <li><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
-          <li><a href="../index.html" >User Reference Manual</a> &raquo;</li>
-          <li><a href="../graph.html" >Graphing (<tt class="docutils literal"><span class="pre">pyart.graph</span></tt>)</a> &raquo;</li>
-          <li><a href="pyart.graph.RadarDisplay.html" >pyart.graph.RadarDisplay</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >User Reference Manual</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../graph.html" >Graphing (<code class="docutils literal"><span class="pre">pyart.graph</span></code>)</a> &raquo;</li>
+          <li class="nav-item nav-item-3"><a href="pyart.graph.RadarDisplay.html" >pyart.graph.RadarDisplay</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2013, Py-ART developers.
-      Last updated on Feb 05, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2013-2016, Py-ART developers.
+      Last updated on Sep 16, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>
 </html>

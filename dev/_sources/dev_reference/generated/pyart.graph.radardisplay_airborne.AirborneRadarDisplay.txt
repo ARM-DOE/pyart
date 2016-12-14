@@ -48,6 +48,7 @@ pyart.graph.radardisplay_airborne.AirborneRadarDisplay
        :toctree:
 
     
+         ~AirborneRadarDisplay.__dir__
          ~AirborneRadarDisplay.__format__
          ~AirborneRadarDisplay.__init__
          ~AirborneRadarDisplay.__new__

@@ -1,0 +1,6 @@
+pyart.bridge.texture_of_complex_phase
+=====================================
+
+.. currentmodule:: pyart.bridge
+
+.. autofunction:: texture_of_complex_phase

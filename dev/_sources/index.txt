@@ -13,3 +13,7 @@ Latest Release
     user_reference/index
     dev_reference/index
     auto_examples/index
+
+The files used in the examples are available for download_.
+
+.. _download: https://engineering.arm.gov/~jhelmus/pyart_example_data/

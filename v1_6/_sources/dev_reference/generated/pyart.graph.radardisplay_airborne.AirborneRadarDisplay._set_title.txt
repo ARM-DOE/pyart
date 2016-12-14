@@ -1,0 +1,6 @@
+pyart.graph.radardisplay_airborne.AirborneRadarDisplay._set_title
+=================================================================
+
+.. currentmodule:: pyart.graph.radardisplay_airborne
+
+.. automethod:: AirborneRadarDisplay._set_title

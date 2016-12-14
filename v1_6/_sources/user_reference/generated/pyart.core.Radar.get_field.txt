@@ -1,0 +1,6 @@
+pyart.core.Radar.get_field
+==========================
+
+.. currentmodule:: pyart.core
+
+.. automethod:: Radar.get_field

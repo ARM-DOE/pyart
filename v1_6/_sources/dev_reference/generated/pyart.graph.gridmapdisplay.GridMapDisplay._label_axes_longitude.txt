@@ -1,0 +1,6 @@
+pyart.graph.gridmapdisplay.GridMapDisplay._label_axes_longitude
+===============================================================
+
+.. currentmodule:: pyart.graph.gridmapdisplay
+
+.. automethod:: GridMapDisplay._label_axes_longitude

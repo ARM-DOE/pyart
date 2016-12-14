@@ -1,0 +1,6 @@
+pyart.graph.cm._reverser
+========================
+
+.. currentmodule:: pyart.graph.cm
+
+.. autofunction:: _reverser

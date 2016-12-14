@@ -7,7 +7,7 @@ An example which creates a PPI plot of a file with a basemap background
 and range rings
 
 """
-print __doc__
+print(__doc__)
 
 # Author: Scott Collis (scollis@anl.gov)
 # License: BSD 3 clause

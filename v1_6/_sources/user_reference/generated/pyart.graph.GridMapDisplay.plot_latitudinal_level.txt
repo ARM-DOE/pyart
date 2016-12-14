@@ -1,0 +1,6 @@
+pyart.graph.GridMapDisplay.plot_latitudinal_level
+=================================================
+
+.. currentmodule:: pyart.graph
+
+.. automethod:: GridMapDisplay.plot_latitudinal_level

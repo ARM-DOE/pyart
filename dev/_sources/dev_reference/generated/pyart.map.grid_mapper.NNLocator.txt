@@ -21,7 +21,14 @@ pyart.map.grid_mapper.NNLocator
        :toctree:
 
     
+         ~NNLocator.__dir__
+         ~NNLocator.__format__
          ~NNLocator.__init__
+         ~NNLocator.__new__
+         ~NNLocator.__reduce__
+         ~NNLocator.__reduce_ex__
+         ~NNLocator.__sizeof__
+         ~NNLocator.__subclasshook__
    
    
 

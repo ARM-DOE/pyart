@@ -1,0 +1,6 @@
+pyart.filters.gatefilter.GateFilter.include_not_transition
+==========================================================
+
+.. currentmodule:: pyart.filters.gatefilter
+
+.. automethod:: GateFilter.include_not_transition

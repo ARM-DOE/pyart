@@ -22,6 +22,7 @@ pyart.io.rsl._RslVolumeDataExtractor
 
     
          ~_RslVolumeDataExtractor.__call__
+         ~_RslVolumeDataExtractor.__dir__
          ~_RslVolumeDataExtractor.__format__
          ~_RslVolumeDataExtractor.__init__
          ~_RslVolumeDataExtractor.__new__

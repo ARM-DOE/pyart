@@ -16,6 +16,7 @@ pyart.aux_io.gamicfile.GAMICFile
          GAMICFile.how_attrs
          GAMICFile.how_ext_attrs
          GAMICFile.is_attr_in_group
+         GAMICFile.is_field_in_ray_header
          GAMICFile.is_file_complete
          GAMICFile.is_file_single_scan_type
          GAMICFile.moment_data
@@ -36,6 +37,7 @@ pyart.aux_io.gamicfile.GAMICFile
        :toctree:
 
     
+         ~GAMICFile.__dir__
          ~GAMICFile.__format__
          ~GAMICFile.__init__
          ~GAMICFile.__new__

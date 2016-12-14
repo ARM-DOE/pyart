@@ -1,0 +1,6 @@
+pyart.io.uf_write.UFRayCreator._calc_record_length
+==================================================
+
+.. currentmodule:: pyart.io.uf_write
+
+.. automethod:: UFRayCreator._calc_record_length

@@ -1,0 +1,6 @@
+pyart.io.prepare_for_read
+=========================
+
+.. currentmodule:: pyart.io
+
+.. autofunction:: prepare_for_read

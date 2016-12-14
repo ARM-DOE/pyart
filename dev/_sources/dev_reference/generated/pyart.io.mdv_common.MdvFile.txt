@@ -24,6 +24,7 @@ pyart.io.mdv_common.MdvFile
        :toctree:
 
     
+         ~MdvFile.__dir__
          ~MdvFile.__format__
          ~MdvFile.__init__
          ~MdvFile.__new__

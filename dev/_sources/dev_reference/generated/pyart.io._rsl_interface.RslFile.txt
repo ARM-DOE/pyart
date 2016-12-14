@@ -24,6 +24,7 @@ pyart.io._rsl_interface.RslFile
        :toctree:
 
     
+         ~RslFile.__dir__
          ~RslFile.__format__
          ~RslFile.__new__
          ~RslFile.__reduce__

@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '1.6.0',
+        VERSION:     '1.7.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,14 +23,14 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <link rel="top" title="Py-ART Documentation" href="../../index.html" />
     <link rel="up" title="pyart.retrieve" href="../retrieve.html" />
     <link rel="next" title="pyart.retrieve.gate_id.map_profile_to_gates" href="pyart.retrieve.gate_id.map_profile_to_gates.html" />
-    <link rel="prev" title="pyart.retrieve.simple_moment_calculations.calculate_snr_from_reflectivity" href="pyart.retrieve.simple_moment_calculations.calculate_snr_from_reflectivity.html" /> 
+    <link rel="prev" title="pyart.retrieve._kdp_proc.lowpass_maesaka_jac" href="pyart.retrieve._kdp_proc.lowpass_maesaka_jac.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -40,30 +40,27 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="pyart.retrieve.gate_id.map_profile_to_gates.html" title="pyart.retrieve.gate_id.map_profile_to_gates"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="pyart.retrieve.simple_moment_calculations.calculate_snr_from_reflectivity.html" title="pyart.retrieve.simple_moment_calculations.calculate_snr_from_reflectivity"
+          <a href="pyart.retrieve._kdp_proc.lowpass_maesaka_jac.html" title="pyart.retrieve._kdp_proc.lowpass_maesaka_jac"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
-          <li><a href="../index.html" >Developer Reference Manual</a> &raquo;</li>
-          <li><a href="../retrieve.html" accesskey="U">pyart.retrieve</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Developer Reference Manual</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../retrieve.html" accesskey="U">pyart.retrieve</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="pyart-retrieve-echo-class-steiner-conv-strat">
 <h1>pyart.retrieve.echo_class.steiner_conv_strat<a class="headerlink" href="#pyart-retrieve-echo-class-steiner-conv-strat" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pyart.retrieve.echo_class.steiner_conv_strat">
-<tt class="descclassname">pyart.retrieve.echo_class.</tt><tt class="descname">steiner_conv_strat</tt><big>(</big><em>grid</em>, <em>dx=None</em>, <em>dy=None</em>, <em>intense=42.0</em>, <em>work_level=3000.0</em>, <em>peak_relation='default'</em>, <em>area_relation='medium'</em>, <em>bkg_rad=11000.0</em>, <em>use_intense=True</em>, <em>fill_value=None</em>, <em>refl_field=None</em><big>)</big><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/retrieve/echo_class.py#L25"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.retrieve.echo_class.steiner_conv_strat" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pyart.retrieve.echo_class.</code><code class="descname">steiner_conv_strat</code><span class="sig-paren">(</span><em>grid</em>, <em>dx=None</em>, <em>dy=None</em>, <em>intense=42.0</em>, <em>work_level=3000.0</em>, <em>peak_relation='default'</em>, <em>area_relation='medium'</em>, <em>bkg_rad=11000.0</em>, <em>use_intense=True</em>, <em>fill_value=None</em>, <em>refl_field=None</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/retrieve/echo_class.py#L25"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.retrieve.echo_class.steiner_conv_strat" title="Permalink to this definition">¶</a></dt>
 <dd><p>Partition reflectivity into convective-stratiform using the Steiner et
 al. (1995) algorithm.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -144,20 +141,22 @@ Radar and Rain Gauge Data. J. Appl. Meteor., 34, 1978-2007.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="pyart.retrieve.simple_moment_calculations.calculate_snr_from_reflectivity.html"
-                        title="previous chapter">pyart.retrieve.simple_moment_calculations.calculate_snr_from_reflectivity</a></p>
+  <p class="topless"><a href="pyart.retrieve._kdp_proc.lowpass_maesaka_jac.html"
+                        title="previous chapter">pyart.retrieve._kdp_proc.lowpass_maesaka_jac</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="pyart.retrieve.gate_id.map_profile_to_gates.html"
                         title="next chapter">pyart.retrieve.gate_id.map_profile_to_gates</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../../_sources/dev_reference/generated/pyart.retrieve.echo_class.steiner_conv_strat.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/dev_reference/generated/pyart.retrieve.echo_class.steiner_conv_strat.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
@@ -174,7 +173,7 @@ Radar and Rain Gauge Data. J. Appl. Meteor., 34, 1978-2007.</p>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -184,23 +183,20 @@ Radar and Rain Gauge Data. J. Appl. Meteor., 34, 1978-2007.</p>
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="../../np-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="pyart.retrieve.gate_id.map_profile_to_gates.html" title="pyart.retrieve.gate_id.map_profile_to_gates"
              >next</a> |</li>
         <li class="right" >
-          <a href="pyart.retrieve.simple_moment_calculations.calculate_snr_from_reflectivity.html" title="pyart.retrieve.simple_moment_calculations.calculate_snr_from_reflectivity"
+          <a href="pyart.retrieve._kdp_proc.lowpass_maesaka_jac.html" title="pyart.retrieve._kdp_proc.lowpass_maesaka_jac"
              >previous</a> |</li>
-        <li><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
-          <li><a href="../index.html" >Developer Reference Manual</a> &raquo;</li>
-          <li><a href="../retrieve.html" >pyart.retrieve</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">Py-ART Documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Developer Reference Manual</a> &raquo;</li>
+          <li class="nav-item nav-item-2"><a href="../retrieve.html" >pyart.retrieve</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2013, Py-ART developers.
-      Last updated on Feb 05, 2016.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2013-2016, Py-ART developers.
+      Last updated on Sep 16, 2016.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.5.
     </div>
   </body>
 </html>

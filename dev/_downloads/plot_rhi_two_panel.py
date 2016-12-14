@@ -31,7 +31,7 @@ nplots = len(fields_to_plot)
 plt.figure(figsize=[5 * nplots, 4])
 
 # plot each field
-for plot_num in xrange(nplots):
+for plot_num in range(nplots):
     field = fields_to_plot[plot_num]
     vmin, vmax = ranges[plot_num]
 
@@ -40,7 +40,7 @@ for plot_num in xrange(nplots):
     display.set_limits(ylim=[0, 17])
 
 # set the figure title and show
-instrument_name = radar.metadata['instrument_name']
+instrument_name = radar.metadata['instrument_name'].decode('utf-8')
 time_start = netCDF4.num2date(radar.time['data'][0], radar.time['units'])
 time_text = ' ' + time_start.isoformat() + 'Z '
 azimuth = radar.fixed_angle['data'][0]

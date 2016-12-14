@@ -1,0 +1,6 @@
+pyart.core.radar._gate_data_factory
+===================================
+
+.. currentmodule:: pyart.core.radar
+
+.. autofunction:: _gate_data_factory
