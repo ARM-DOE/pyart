@@ -30,6 +30,13 @@ class HorizontalWindProfile(object):
     direction : array-like, 1D
         Horizontal wind direction in degrees at each height sampled.
 
+    Other Parameters
+    ----------------
+    latitude : array-like, 1D, optional
+        Latitude in degrees north at each height sampled.
+    longitude : array-like, 1D, optional
+        Longitude in degrees east at each height sampled.
+
     Attributes
     ----------
     height : array, 1D
@@ -39,20 +46,22 @@ class HorizontalWindProfile(object):
         Horizontal wind speed in meters per second at each height.
     direction : array, 1D
         Horizontal wind direction in degrees at each height.
-    u : array, 1D
+    u_wind : array, 1D
         U component of horizontal winds in meters per second at each height.
-    v : array, 1D
+    v_wind : array, 1D
         V component of horizontal winds in meters per second at each height.
 
     """
 
-    def __init__(self, height, speed, direction):
+    def __init__(self, height, speed, direction, latitude=None,
+                 longitude=None):
         """ initialize """
         if len(height) != len(speed) or len(height) != len(direction):
             raise ValueError("Wind parameters must have the same length.")
         self.height = np.asanyarray(height)
         self.speed = np.asanyarray(speed)
         self.direction = np.asanyarray(direction)
+        self._parse_location_data(latitude, longitude)
 
     @classmethod
     def from_u_and_v(cls, height, u_wind, v_wind):
@@ -90,3 +99,14 @@ class HorizontalWindProfile(object):
         # V = -cos(direction) * speed
         v_wind = -np.cos(np.deg2rad(self.direction)) * self.speed
         return v_wind
+
+    def _parse_location_data(self, latitude, longitude):
+        """ Parse profile location data. """
+        if latitude is not None:
+            if len(self.height) != len(latitude):
+                raise ValueError('Latitude data must have same length.')
+            self.latitude = np.asanyarray(latitude)
+        if longitude is not None:
+            if len(self.height) != len(longitude):
+                raise ValueError('Longitude data must have same length.')
+            self.longitude = np.asanyarray(longitude)
