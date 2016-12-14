@@ -27,7 +27,6 @@ Radar retrievals
     texture_of_complex_phase
     grid_displacement_pc
     grid_shift
-    velocity_azimuth_display
     est_rain_rate_zpoly
     est_rain_rate_z
     est_rain_rate_kdp
