@@ -23,21 +23,17 @@ def test_velocity_azimuth_display():
     z_count = 5
 
     vad_height = ([0., 2.5, 5., 7.5, 10.])
-    vad_speed = [4.98665725, 4.94020686, 4.88107152,
-                 4.81939374, 4.75851962]
-    vad_direction = [359.84659496, 359.30240553, 358.58658589,
-                     357.81073051, 357.01353486]
-    u_wind = ([0.01335138, 0.06014712, 0.12039762,
-               0.18410404, 0.24791911])
-    v_wind = ([-4.98663937, -4.9398407, -4.87958641,
-               -4.81587601, -4.75205693])
+    vad_speed = ([4.986, 4.940, 4.881, 4.819, 4.758])
+    vad_direction = ([359.846, 359.302, 358.586, 357.810, 357.013])
+    u_wind = ([0.013, 0.060, 0.120, 0.184, 0.247])
+    v_wind = ([-4.986, -4.939, -4.879, -4.815, -4.752])
 
     vad = pyart.retrieve.velocity_azimuth_display(test_radar,
                                                   velocity,
                                                   z_start, z_end,
                                                   z_count)
-    assert_almost_equal(vad.height, vad_height, 8)
-    assert_almost_equal(vad.speed, vad_speed, 8)
-    assert_almost_equal(vad.direction, vad_direction, 8)
-    assert_almost_equal(vad.u_wind, u_wind, 8)
-    assert_almost_equal(vad.v_wind, v_wind, 8)
+    assert_almost_equal(vad.height, vad_height, 3)
+    assert_almost_equal(vad.speed, vad_speed, 3)
+    assert_almost_equal(vad.direction, vad_direction, 3)
+    assert_almost_equal(vad.u_wind, u_wind, 3)
+    assert_almost_equal(vad.v_wind, v_wind, 3)
