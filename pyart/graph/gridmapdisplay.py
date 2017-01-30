@@ -191,8 +191,7 @@ class GridMapDisplay(object):
         """
         # parse parameters
         ax, fig = common.parse_ax_fig(ax, fig)
-        norm, vmin, vmax = common.parse_norm_vmin_vmax(
-            norm, self.grid, field, vmin, vmax)
+        vmin, vmax = common.parse_vmin_vmax(self.grid, field, vmin, vmax)
         cmap = common.parse_cmap(cmap, field)
 
         basemap = self.get_basemap()
@@ -206,6 +205,8 @@ class GridMapDisplay(object):
 
         # plot the grid
         lons, lats = self.grid.get_point_longitude_latitude(edges=edges)
+        if norm is not None:  # if norm is set do not override with vmin/vmax
+            vmin = vmax = None
         pm = basemap.pcolormesh(
             lons, lats, data, vmin=vmin, vmax=vmax, cmap=cmap, norm=norm,
             latlon=True, **kwargs)
@@ -350,8 +351,7 @@ class GridMapDisplay(object):
         """
         # parse parameters
         ax, fig = common.parse_ax_fig(ax, fig)
-        norm, vmin, vmax = common.parse_norm_vmin_vmax(
-            norm, self.grid, field, vmin, vmax)
+        vmin, vmax = common.parse_vmin_vmax(self.grid, field, vmin, vmax)
         cmap = common.parse_cmap(cmap, field)
 
         data = self.grid.fields[field]['data'][:, y_index, :]
@@ -370,6 +370,8 @@ class GridMapDisplay(object):
             if len(z_1d) > 1:
                 z_1d = _interpolate_axes_edges(z_1d)
         xd, yd = np.meshgrid(x_1d, z_1d)
+        if norm is not None:  # if norm is set do not override with vmin/vmax
+            vmin = vmax = None
         pm = ax.pcolormesh(
             xd, yd, data, vmin=vmin, vmax=vmax, norm=norm, cmap=cmap, **kwargs)
         self.mappables.append(pm)
@@ -478,8 +480,7 @@ class GridMapDisplay(object):
         """
         # parse parameters
         ax, fig = common.parse_ax_fig(ax, fig)
-        norm, vmin, vmax = common.parse_norm_vmin_vmax(
-            norm, self.grid, field, vmin, vmax)
+        vmin, vmax = common.parse_vmin_vmax(self.grid, field, vmin, vmax)
         cmap = common.parse_cmap(cmap, field)
 
         data = self.grid.fields[field]['data'][:, :, x_index]
@@ -498,6 +499,8 @@ class GridMapDisplay(object):
             if len(z_1d) > 1:
                 z_1d = _interpolate_axes_edges(z_1d)
         xd, yd = np.meshgrid(y_1d, z_1d)
+        if norm is not None:  # if norm is set do not override with vmin/vmax
+            vmin = vmax = None
         pm = ax.pcolormesh(
             xd, yd, data, vmin=vmin, vmax=vmax, cmap=cmap, norm=norm, **kwargs)
         self.mappables.append(pm)

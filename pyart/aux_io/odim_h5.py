@@ -233,7 +233,7 @@ def read_odim_h5(filename, field_names=None, additional_metadata=None,
         # nbins is required
         nbins = hfile['dataset1/data1/data'].shape[1]
         _range['data'] = np.linspace(
-            0, max_range[0] * 1000., nbins, dtype='float32')
+            0, max_range[0] * 1000., nbins).astype('float32')
         _range['meters_to_center_of_first_gate'] = 0
         _range['meters_between_gates'] = max_range[0] * 1000. / nbins
 

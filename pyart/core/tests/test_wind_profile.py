@@ -39,3 +39,12 @@ def test_horizontalwindprofile_error():
     speed = [1, 1]
     direction = [1, 2, 3]
     assert_raises(ValueError, HorizontalWindProfile, height, speed, direction)
+
+
+def test_horizontalwindprofile_location_error():
+    height = [1, 2]
+    speed = [1, 1]
+    direction = [1, 2]
+    lat = [1]
+    assert_raises(ValueError, HorizontalWindProfile, height, speed, direction,
+                  latitude=lat, longitude=None)

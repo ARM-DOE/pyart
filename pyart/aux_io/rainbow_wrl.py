@@ -262,7 +262,7 @@ def read_rainbow_wrl(filename, field_names=None, additional_metadata=None,
         start_range = 0.
     _range['data'] = np.linspace(
         start_range+r_res / 2., float(nbins - 1.) * r_res+r_res / 2.,
-        nbins, dtype='float32')
+        nbins).astype('float32')
 
     # containers for data
     t_fixed_angle = np.empty(nslices, dtype='float64')
@@ -372,23 +372,22 @@ def _get_angle(ray_info, angle_step=None, scan_type='ppi'):
 
     """
     bin_to_deg = 360./65536.
-    if (len(ray_info) == 2):
-        angle_start = np.array(ray_info[0]['data']*bin_to_deg, dtype='float64')
+
+    def _extract_angles(data):
+        angle = np.array(data * bin_to_deg, dtype='float64')
         if scan_type == 'rhi':
-            ind = (angle_start > 225.).nonzero()
-            angle_start[ind] -= 360.
-        angle_stop = np.array(ray_info[1]['data']*bin_to_deg, dtype='float64')
-        if scan_type == 'rhi':
-            ind = (angle_stop > 225.).nonzero()
-            angle_stop[ind] -= 360.
-    else:
+            ind = (angle > 225.).nonzero()
+            angle[ind] -= 360.
+        return angle
+
+    try:
+        angle_start = _extract_angles(ray_info['data'])
         if angle_step is None:
             raise ValueError('Unknown angle step')
-        angle_start = np.array(ray_info['data']*bin_to_deg, dtype='float64')
-        if scan_type == 'rhi':
-            ind = (angle_start > 225.).nonzero()
-            angle_start[ind] -= 360.
-        angle_stop = angle_start+angle_step
+        angle_stop = angle_start + angle_step
+    except TypeError:
+        angle_start = _extract_angles(ray_info[0]['data'])
+        angle_stop = _extract_angles(ray_info[1]['data'])
 
     moving_angle = np.angle((np.exp(1.j * np.deg2rad(angle_start)) +
                             np.exp(1.j * np.deg2rad(angle_stop))) / 2.,

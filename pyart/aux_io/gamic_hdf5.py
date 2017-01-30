@@ -170,7 +170,9 @@ def read_gamic(filename, field_names=None, additional_metadata=None,
     _range = filemetadata('range')
     ngates = int(gfile.raw_scan0_group_attr('how', 'bin_count'))
     range_start = float(gfile.raw_scan0_group_attr('how', 'range_start'))
-    range_step = float(gfile.raw_scan0_group_attr('how', 'range_step'))
+    #n_samples insertion
+    range_samples = int(gfile.raw_scan0_group_attr('how', 'range_samples')) 
+    range_step = float(gfile.raw_scan0_group_attr('how', 'range_step'))*range_samples
     # range_step may need to be scaled by range_samples
     # XXX This gives distances to start of gates not center, this matches
     # Radx but may be incorrect, add range_step / 2. for center

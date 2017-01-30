@@ -53,7 +53,7 @@ def test_read_arm_sonde():
     profile_dt, hprofile = pyart.io.read_arm_sonde(pyart.testing.SONDE_FILE)
 
     assert profile_dt == datetime.datetime(2011, 5, 20, 8, 28)
-    assert_almost_equal(hprofile.height[:5], [371, 376, 384, 391, 399], 0)
+    assert_almost_equal(hprofile.height[:5], [315, 321, 328, 336, 344], 0)
     assert_almost_equal(hprofile.speed[:5], [5, 3.2, 3.7, 4.3, 4.8], 1)
     assert_almost_equal(
         hprofile.direction[:5], [215., 193., 191., 191., 189.], 1)

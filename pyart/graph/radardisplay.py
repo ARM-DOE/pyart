@@ -211,7 +211,7 @@ class RadarDisplay(object):
         data = self._get_ray_data(field, ray, mask_tuple, gatefilter)
 
         # mask the data where outside the limits
-        _mask_outside(mask_outside, data, ray_min, ray_max)
+        data = _mask_outside(mask_outside, data, ray_min, ray_max)
 
         # plot the data
         line, = ax.plot(self.ranges / 1000., data, format_str)
@@ -316,8 +316,7 @@ class RadarDisplay(object):
         """
         # parse parameters
         ax, fig = common.parse_ax_fig(ax, fig)
-        norm, vmin, vmax = common.parse_norm_vmin_vmax(
-            norm, self._radar, field, vmin, vmax)
+        vmin, vmax = common.parse_vmin_vmax(self._radar, field, vmin, vmax)
         cmap = common.parse_cmap(cmap, field)
 
         # get data for the plot
@@ -326,9 +325,11 @@ class RadarDisplay(object):
         x, y = self._get_x_y(sweep, edges, filter_transitions)
 
         # mask the data where outside the limits
-        _mask_outside(mask_outside, data, vmin, vmax)
+        data = _mask_outside(mask_outside, data, vmin, vmax)
 
         # plot the data
+        if norm is not None:  # if norm is set do not override with vmin/vmax
+            vmin = vmax = None
         pm = ax.pcolormesh(
             x, y, data, vmin=vmin, vmax=vmax, cmap=cmap, norm=norm, **kwargs)
 
@@ -438,8 +439,7 @@ class RadarDisplay(object):
         """
         # parse parameters
         ax, fig = common.parse_ax_fig(ax, fig)
-        norm, vmin, vmax = common.parse_norm_vmin_vmax(
-            norm, self._radar, field, vmin, vmax)
+        vmin, vmax = common.parse_vmin_vmax(self._radar, field, vmin, vmax)
         cmap = common.parse_cmap(cmap, field)
 
         # get data for the plot
@@ -448,7 +448,7 @@ class RadarDisplay(object):
         x, y, z = self._get_x_y_z(sweep, edges, filter_transitions)
 
         # mask the data where outside the limits
-        _mask_outside(mask_outside, data, vmin, vmax)
+        data = _mask_outside(mask_outside, data, vmin, vmax)
 
         # plot the data
         R = np.sqrt(x ** 2 + y ** 2) * np.sign(y)
@@ -457,6 +457,8 @@ class RadarDisplay(object):
             reverse_xaxis = np.all(R < 1.)
         if reverse_xaxis:
             R = -R
+        if norm is not None:  # if norm is set do not override with vmin/vmax
+            vmin = vmax = None
         pm = ax.pcolormesh(
             R, z, data, vmin=vmin, vmax=vmax, cmap=cmap, norm=norm, **kwargs)
 
@@ -570,8 +572,7 @@ class RadarDisplay(object):
         """
         # parse parameters
         ax, fig = common.parse_ax_fig(ax, fig)
-        norm, vmin, vmax = common.parse_norm_vmin_vmax(
-            norm, self._radar, field, vmin, vmax)
+        vmin, vmax = common.parse_vmin_vmax(self._radar, field, vmin, vmax)
         cmap = common.parse_cmap(cmap, field)
 
         # get data for the plot
@@ -594,9 +595,11 @@ class RadarDisplay(object):
             x = datetimes_from_radar(self._radar)
 
         # mask the data where outside the limits
-        _mask_outside(mask_outside, data, vmin, vmax)
+        data = _mask_outside(mask_outside, data, vmin, vmax)
 
         # plot the data
+        if norm is not None:  # if norm is set do not override with vmin/vmax
+            vmin = vmax = None
         pm = ax.pcolormesh(
             x, y, data, vmin=vmin, vmax=vmax, cmap=cmap, norm=norm, **kwargs)
 
@@ -707,8 +710,7 @@ class RadarDisplay(object):
         """
         # parse parameters
         ax, fig = common.parse_ax_fig(ax, fig)
-        norm, vmin, vmax = common.parse_norm_vmin_vmax(
-            norm, self._radar, field, vmin, vmax)
+        vmin, vmax = common.parse_vmin_vmax(self._radar, field, vmin, vmax)
         cmap = common.parse_cmap(cmap, field)
 
         data, x, y, z = self._get_azimuth_rhi_data_x_y_z(
@@ -716,7 +718,7 @@ class RadarDisplay(object):
             filter_transitions, gatefilter)
 
         # mask the data where outside the limits
-        _mask_outside(mask_outside, data, vmin, vmax)
+        data = _mask_outside(mask_outside, data, vmin, vmax)
 
         # plot the data
         R = np.sqrt(x ** 2 + y ** 2) * np.sign(y)
@@ -725,6 +727,8 @@ class RadarDisplay(object):
             reverse_xaxis = np.all(R < 1.)
         if reverse_xaxis:
             R = -R
+        if norm is not None:  # if norm is set do not override with vmin/vmax
+            vmin = vmax = None
         pm = ax.pcolormesh(
             R, z, data, vmin=vmin, vmax=vmax, cmap=cmap, norm=norm, **kwargs)
 
