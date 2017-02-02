@@ -1,0 +1,16 @@
+name: testenv
+channels:
+  - jjhelmus   # required until conda-forge trmm_rsl fixed
+  - conda-forge
+  - defaults
+dependencies:
+  - python=2.7
+  - numpy
+  - scipy
+  - matplotlib
+  - netcdf4
+  - nose
+  - basemap
+  - trmm_rsl
+  - wradlib
+  - cartopy
