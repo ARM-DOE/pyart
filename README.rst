@@ -125,7 +125,7 @@ Other related open source software for working with weather radar data:
 Dependencies
 ============
 
-Py-ART is tested to work under Python 2.7, 3.4, and 3.5.
+Py-ART is tested to work under Python 2.7, 3.4, 3.5, and 3.6.
 
 The required dependencies to install Py-ART in addition to Python are:
 
