@@ -119,7 +119,7 @@ Python File Setup
 
 In a new .py file, the top of the code should have the function's location, sphinx comments for template configuration, and public and private functions within the .py file. Public functions are listed first and then private functions with and underscore in front of the function. A space is needed between the last function and the closing docstring quotation.
 
-An example::
+.. code-block:: python
 	
 	"""
 	pyart.retrieve.velocity_azimuth_display
@@ -139,8 +139,9 @@ An example::
 
 Following the introduction code, modules are then added. Main imports come first, followed by 'from imports'.
 
-An example::
-
+For example:
+.. code-block:: python
+  
 	import numpy as np
         import numpy.ma as ma
         import pyart
@@ -150,13 +151,15 @@ An example::
 
 Following the main function def line, but before the code within it, a doc string is needed to explain parameters, returns, references if needed, and other helpful information.
 
-An example::
-        	
-	def velocity_azimuth_display(
-    	    radar, velocity=None, z_want=None, valid_ray_min=16,
+For example:
+.. code-block:: python
+
+        def velocity_azimuth_display(
+            radar, velocity=None, z_want=None, valid_ray_min=16,
             gatefilter=False, window=2):
-	    """
-  	    Velocity azimuth display.
+	
+            """
+   	    Velocity azimuth display.
 
             Note: If a specific sweep is desired, before using the
             velocity_azimuth_display function, use:
