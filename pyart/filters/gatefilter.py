@@ -19,9 +19,12 @@ corrections routines in Py-ART.
 
 """
 
+from copy import deepcopy
+
 import numpy as np
 
-from ..config import get_field_name
+from ..config import get_field_name, get_metadata
+from ..util import texture_along_ray
 
 
 def moment_based_gate_filter(
