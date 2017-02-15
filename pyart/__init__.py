@@ -22,11 +22,15 @@ else:
     # setting the PYART_QUIET environment variable
     _citation_text = """
 ## You are using the Python ARM Radar Toolkit (Py-ART), an open source
-## library for working with weather radar data.
+## library for working with weather radar data. Py-ART is partly
+## supported by the U.S. Department of Energy as part of the Atmospheric
+## Radiation Measurement (ARM) Climate Research Facility, an Office of
+## Science user facility.
 ##
 ## If you use this software to prepare a publication, please cite:
 ##
-##     JJ Helmus and SM Collis, JORS 2016, doi: 10.5334/jors.119 """
+##     JJ Helmus and SM Collis, JORS 2016, doi: 10.5334/jors.119
+"""
     from os import environ as _environ
     if 'PYART_QUIET' not in _environ:
         print(_citation_text)
