@@ -1,6 +1,14 @@
 Contributor's Guide
 ===================
 
+Note: This guide is still a work in progress.
+Note: When an example shows filename as such::
+	
+	nosetests filename
+
+filename is the filename and location, such as::
+
+	nosetests /home/zsherman/pyart/pyart/retrieve/tests/test_vad.py
 
 Py-ART Introduction and Information
 ===================================
@@ -66,15 +74,15 @@ Resources
 
 Pyart:
 
-	https://github.com/openradar/AMS­Short­Course­on­Open­Source­Radar­Software
-	https://github.com/EVS­ATMOS/pyart_short_course
-	https://www.youtube.com/watch?v=diiP­Q3bKZw
-	http://arm­doe.github.io/pyart/dev/auto_examples/index.html
+	- https://github.com/openradar/AMS­Short­Course­on­Open­Source­Radar­Software
+	- https://github.com/EVS­ATMOS/pyart_short_course
+	- https://www.youtube.com/watch?v=diiP­Q3bKZw
+	- http://arm­doe.github.io/pyart/dev/auto_examples/index.html
 
 Git:
 
-	https://git-scm.com/book/en/v2
-	https://docs.scipy.org/doc/numpy/dev/gitwash/development_workflow.html
+	- https://git-scm.com/book/en/v2
+	- https://docs.scipy.org/doc/numpy/dev/gitwash/development_workflow.html
 
 
 
@@ -93,17 +101,17 @@ To install pycodestyle::
 
 To use pycodestyle::
 
-        pycodestyle /home/user_name/documents/filename.py
+        pycodestyle filename
 
 pylint is also useful to check for pep8 compliance and should already be installed with python 3.5.
 
 To get a detailed pylint report::
 
-        pylint /home/user_name/documents/filename.py
+        pylint filename
 
 If you want to just see what line number and the issue, just use::
 
-        pylint -r n /home/user_name/documents/filename.py
+        pylint -r n filename
 
 
 Python File Setup
@@ -261,7 +269,7 @@ All test with in depth details::
 
 Just one file::
 
-		nosetests 'filename'
+		nosetests filename
 
 
 GitHub
