@@ -74,15 +74,15 @@ Resources
 
 Pyart:
 
-	- <https://github.com/openradar/AMS­Short­Course­on­Open­Source­Radar­Software>
-	- <https://github.com/EVS­ATMOS/pyart_short_course>
-	- <https://www.youtube.com/watch?v=diiP­Q3bKZw>
-	- <http://arm­doe.github.io/pyart/dev/auto_examples/index.html>
+	-  https://github.com/openradar/AMS-Short-Course-on-Open-Source-Radar-Software
+	-  https://github.com/EVS-ATMOS/pyart_short_course
+	-  https://www.youtube.com/watch?v=diiP-Q3bKZw
+	-  http://arm-doe.github.io/pyart/dev/auto_examples/index.html
 
 Git:
 
-	- <https://git-scm.com/book/en/v2>
-	- <https://docs.scipy.org/doc/numpy/dev/gitwash/development_workflow.html>
+	-  https://git-scm.com/book/en/v2
+	-  https://docs.scipy.org/doc/numpy/dev/gitwash/development_workflow.html
 
 
 
