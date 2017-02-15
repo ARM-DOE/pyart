@@ -119,7 +119,7 @@ Python File Setup
 
 In a new .py file, the top of the code should have the function's location, sphinx comments for template configuration, and public and private functions within the .py file. Public functions are listed first and then private functions with and underscore in front of the function. A space is needed between the last function and the closing docstring quotation.
 
-.. code-block:: python
+::
 	
 	"""
 	pyart.retrieve.velocity_azimuth_display
@@ -140,7 +140,7 @@ In a new .py file, the top of the code should have the function's location, sphi
 Following the introduction code, modules are then added. Main imports come first, followed by 'from imports'.
 
 For example:
-.. code-block:: python
+::
   
 	import numpy as np
         import numpy.ma as ma
