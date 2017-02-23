@@ -2,6 +2,7 @@ Contributor's Guide
 ===================
 
 Note: This guide is still a work in progress.
+
 Note: When an example shows filename as such::
 	
 	nosetests filename
@@ -12,6 +13,8 @@ filename is the filename and location, such as::
 
 Py-ART Introduction and Information
 ===================================
+
+From README.rst on Py-ART's Github Page
 
 The Python ARM Radar Toolkit (Py-ART)
 -------------------------------------
@@ -70,7 +73,7 @@ To update an older version of Py-ART to the latest release use::
     conda update -c conda-forge arm_pyart
 
 Resources
----------
+=========
 
 Pyart:
 
@@ -85,12 +88,11 @@ Git:
 - https://docs.scipy.org/doc/numpy/dev/gitwash/development_workflow.html
 
 
-
 Proper Code Style
 =================
 
 Py-ART follows pep8 coding standards. To make sure your code follows the pep8
-style, you can use a variety of modules that will check for you. Two popular
+style, you can use a variety of modules that can check for you. Two popular
 pep8 check modules are pycodestyle and pylint.
 
 For more on pep8 style:
@@ -147,7 +149,7 @@ For example:
         """
 
 Following the introduction code, modules are then added. Main imports come
-first, followed by 'from imports'.
+first, followed by 'from imports' and user's own modules.
 
 For example:
 
@@ -160,7 +162,7 @@ For example:
         from ..core import HorizontalWindProfile
 
 Following the main function def line, but before the code within it, a doc
-string is needed to explain parameters, returns, references if needed, and
+string is needed to explain arguments,  returns, references if needed, and
 other helpful information.
 
 For example:
@@ -173,10 +175,6 @@ For example:
 	
             """
    	    Velocity azimuth display.
-
-            Note: If a specific sweep is desired, before using the
-            velocity_azimuth_display function, use:
-            radar = radar.extract_sweeps([0])
 
             Parameters
             ----------
@@ -226,18 +224,31 @@ For example:
 	    Radar. J. Appl. Meteor., 7, 105–113
 
     	    """
-            
-As seen, each variable has what type of object it is, an explaination of what
-it is, mention of units, and if a variable has a default value, statement of
-what that default value is and why.
+
+Private or smaller functions can have a small explaination without in depth
+details. For example:
+
+.. code-block:: python
+
+        def _vad_calculation(velocities, azimuths,
+                             elevation, valid_ray_min):
+            """ Calculates VAD for a scan and returns u_mean and
+            v_mean. velocities is a 2D array, azimuths is a 1D
+            array, elevation is a number. """
+
+As seen, each argument has what type of object it is, an explaination of
+what it is, mention of units, and if a argument has a default value,
+statement of what that default value is and why.
 
 When adding a new function to pyart it is important to add your function to
-the _init.py file under the corresponding pyart folder.
+the __init__.py file under the corresponding pyart folder.
 
 Create a test for your function and have assert from numpy test the known
 values to the calculated values. If changes are made in the future to pyart,
 nose will use the test created to see if the function is still valid and
-produces the same values. 
+produces the same values. It works that, it takes known values that are
+obtained from the function, and when nosetests is ran, it takes the test
+function and reruns the function and compares the results to the original.
 
 An example:
 
@@ -274,11 +285,11 @@ An example:
                                                           z_start, z_end,
                                                           z_count)
 
-            assert_almost_equal(vad.height, vad_height, 8)
-            assert_almost_equal(vad.speed, vad_speed, 8)
-            assert_almost_equal(vad.direction, vad_direction, 8)
-            assert_almost_equal(vad.u_wind, u_wind, 8)
-            assert_almost_equal(vad.v_wind, v_wind, 8)
+            assert_almost_equal(vad.height, vad_height, 3)
+            assert_almost_equal(vad.speed, vad_speed, 3)
+            assert_almost_equal(vad.direction, vad_direction, 3)
+            assert_almost_equal(vad.u_wind, u_wind, 3)
+            assert_almost_equal(vad.v_wind, v_wind, 3)
 
 To install nose::
 
