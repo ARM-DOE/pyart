@@ -8,7 +8,6 @@ Front end to the University of Washington 4DD code for Doppler dealiasing.
     :toctree: generated/
 
     dealias_fourdd
-    find_time_in_interp_sonde
     _create_rsl_volume
 
 """
@@ -308,52 +307,3 @@ def _create_rsl_volume(radar, field_name, vol_num, rsl_badval, excluded=None):
     rsl_volume = _rsl_interface.create_volume(fdata, rays_per_sweep, vol_num)
     _rsl_interface._label_volume(rsl_volume, radar)
     return rsl_volume
-
-
-def find_time_in_interp_sonde(interp_sonde, target, debug=False):
-    """
-    Find the wind parameter for a given time in a ARM interpsonde file.
-
-    This function is Deprecated and will be removed in future versions of
-    Py-ART. Use the :py:func:`pyart.io.read_arm_sonde_vap` function for similar
-    functionality.
-
-    Parameters
-    ----------
-    interp_sonde : netCDF4.Dataset
-        netCDF4 object pointing to a ARM interpsonde file.
-    target : datetime
-        Target datetime, the closest time in the interpsonde file will be
-        used.
-
-    Other Parameters
-    ----------------
-    debug : bool
-        Print debugging information.
-
-    Returns
-    -------
-    height : np.ndarray
-        Heights above the ground for the time closest to target.
-    speed : np.ndarray
-        Wind speeds at given height for the time closest to taget.
-    direction : np.ndarray
-        Wind direction at given height for the time closest to target.
-
-    """
-    warnings.warn(
-        "find_time_in_interp_sonde is deprecated and will be removed in a "
-        "future version of Py-ART.\n", DeprecationWarning)
-
-    sonde_datetimes = datetime_utils.datetimes_from_dataset(interp_sonde)
-
-    # get closest time index to target
-    idx = np.abs(sonde_datetimes - target).argmin()
-
-    if debug:
-        print('Target time is %s' % (target))
-        print('Interpolated sounding time is %s' % (sonde_datetimes[idx]))
-
-    return (interp_sonde.variables['height'][:],
-            interp_sonde.variables['wspd'][idx, :],
-            interp_sonde.variables['wdir'][idx, :])
