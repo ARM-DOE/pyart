@@ -1,0 +1,6 @@
+pyart.filters.gatefilter.GateFilter.__reduce__
+==============================================
+
+.. currentmodule:: pyart.filters.gatefilter
+
+.. automethod:: GateFilter.__reduce__

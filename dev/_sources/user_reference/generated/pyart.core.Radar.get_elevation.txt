@@ -1,0 +1,6 @@
+pyart.core.Radar.get_elevation
+==============================
+
+.. currentmodule:: pyart.core
+
+.. automethod:: Radar.get_elevation

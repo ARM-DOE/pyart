@@ -1,0 +1,6 @@
+pyart.util.interval_std
+=======================
+
+.. currentmodule:: pyart.util
+
+.. autofunction:: interval_std

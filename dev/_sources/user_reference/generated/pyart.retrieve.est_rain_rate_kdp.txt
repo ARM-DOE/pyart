@@ -1,0 +1,6 @@
+pyart.retrieve.est_rain_rate_kdp
+================================
+
+.. currentmodule:: pyart.retrieve
+
+.. autofunction:: est_rain_rate_kdp

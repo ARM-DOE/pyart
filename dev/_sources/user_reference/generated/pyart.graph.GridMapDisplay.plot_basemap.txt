@@ -1,0 +1,6 @@
+pyart.graph.GridMapDisplay.plot_basemap
+=======================================
+
+.. currentmodule:: pyart.graph
+
+.. automethod:: GridMapDisplay.plot_basemap

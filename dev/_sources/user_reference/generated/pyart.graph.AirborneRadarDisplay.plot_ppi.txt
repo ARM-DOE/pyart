@@ -1,0 +1,6 @@
+pyart.graph.AirborneRadarDisplay.plot_ppi
+=========================================
+
+.. currentmodule:: pyart.graph
+
+.. automethod:: AirborneRadarDisplay.plot_ppi

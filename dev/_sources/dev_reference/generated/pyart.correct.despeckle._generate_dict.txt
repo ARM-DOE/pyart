@@ -1,0 +1,6 @@
+pyart.correct.despeckle._generate_dict
+======================================
+
+.. currentmodule:: pyart.correct.despeckle
+
+.. autofunction:: _generate_dict

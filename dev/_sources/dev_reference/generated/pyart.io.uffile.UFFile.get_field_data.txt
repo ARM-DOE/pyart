@@ -1,0 +1,6 @@
+pyart.io.uffile.UFFile.get_field_data
+=====================================
+
+.. currentmodule:: pyart.io.uffile
+
+.. automethod:: UFFile.get_field_data

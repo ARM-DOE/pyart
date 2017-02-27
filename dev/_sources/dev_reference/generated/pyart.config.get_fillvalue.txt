@@ -1,0 +1,6 @@
+pyart.config.get_fillvalue
+==========================
+
+.. currentmodule:: pyart.config
+
+.. autofunction:: get_fillvalue

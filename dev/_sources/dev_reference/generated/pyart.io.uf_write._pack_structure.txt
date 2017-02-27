@@ -1,0 +1,6 @@
+pyart.io.uf_write._pack_structure
+=================================
+
+.. currentmodule:: pyart.io.uf_write
+
+.. autofunction:: _pack_structure

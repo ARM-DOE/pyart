@@ -1,0 +1,6 @@
+pyart.core.Radar.iter_azimuth
+=============================
+
+.. currentmodule:: pyart.core
+
+.. automethod:: Radar.iter_azimuth

@@ -1,0 +1,6 @@
+pyart.correct.region_dealias.dealias_region_based
+=================================================
+
+.. currentmodule:: pyart.correct.region_dealias
+
+.. autofunction:: dealias_region_based

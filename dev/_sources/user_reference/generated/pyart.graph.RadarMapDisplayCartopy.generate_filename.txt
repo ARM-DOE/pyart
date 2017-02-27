@@ -1,0 +1,6 @@
+pyart.graph.RadarMapDisplayCartopy.generate_filename
+====================================================
+
+.. currentmodule:: pyart.graph
+
+.. automethod:: RadarMapDisplayCartopy.generate_filename

@@ -1,0 +1,6 @@
+pyart.map.grid_mapper.example_roi_func_constant
+===============================================
+
+.. currentmodule:: pyart.map.grid_mapper
+
+.. autofunction:: example_roi_func_constant

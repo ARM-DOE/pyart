@@ -1,0 +1,6 @@
+pyart.graph.gridmapdisplay.GridMapDisplay._find_nearest_grid_indices
+====================================================================
+
+.. currentmodule:: pyart.graph.gridmapdisplay
+
+.. automethod:: GridMapDisplay._find_nearest_grid_indices

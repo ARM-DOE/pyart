@@ -1,0 +1,6 @@
+pyart.io.read_sigmet
+====================
+
+.. currentmodule:: pyart.io
+
+.. autofunction:: read_sigmet

@@ -1,0 +1,6 @@
+pyart.correct.despeckle.despeckle_field
+=======================================
+
+.. currentmodule:: pyart.correct.despeckle
+
+.. autofunction:: despeckle_field

@@ -1,0 +1,6 @@
+pyart.graph.RadarMapDisplayCartopy.label_xaxis_time
+===================================================
+
+.. currentmodule:: pyart.graph
+
+.. automethod:: RadarMapDisplayCartopy.label_xaxis_time
