@@ -127,32 +127,6 @@ def test_segmentation_fault_error():
     return
 
 
-# Remove this test when the sounding_ parameters of dealias_fourdd are
-# Deprecated
-@skipif(not pyart.correct.dealias._FOURDD_AVAILABLE)
-def test_dealias_deprecated_arguments():
-
-    radar = pyart.testing.make_velocity_aliased_radar()
-    # speckling that will not be dealiased.
-    radar.fields['velocity']['data'][13, -4:] = [-7.5, 8.5, 0, 0]
-    height = np.linspace(150, 250, 10).astype('float32')
-    speed = np.ones((10), dtype='float32') * 0.5
-    direction = np.ones((10), dtype='float32') * 5.
-    profile = pyart.core.HorizontalWindProfile(height, speed, direction)
-    with warnings.catch_warnings():
-        warnings.simplefilter("ignore", category=DeprecationWarning)
-        dealias_vel = pyart.correct.dealias_fourdd(
-            radar, sounding_heights=height, sounding_wind_speeds=speed,
-            sounding_wind_direction=direction)
-    assert_allclose(
-        dealias_vel['data'][13, :27],
-        [0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 9.5, 10.5, 11.5,
-         12.5, 13.5, 12.5, 11.5, 10.5, 9.5, 8.5, 7.5, 6.5, 5.5, 4.5, 3.5,
-         2.5, 1.5, 0.5])
-    assert dealias_vel['data'][13, 46] is np.ma.masked
-    assert dealias_vel['data'][13, 47] is np.ma.masked
-
-
 if __name__ == "__main__":
 
     radar, dealias_vel = perform_dealias()
