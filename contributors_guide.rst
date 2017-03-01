@@ -331,7 +331,7 @@ For more on nose and nosetests:
 
 
 GitHub
-======
+------
 
 When contributing to pyart, the changes created should be in a new branch
 under your forked repository. Let's say the user is adding a new map display.
