@@ -120,9 +120,10 @@ location, sphinx comments for template configuration, and the public and
 private functions and classes within the .py file. Public functions and
 classes are listed first and then private functions and classes. Private
 functions and classes should have a underscore in front of the name. A space
-is needed between the last function and the closing docstring quotation.
+is needed between the last function or class and the closing docstring
+quotation.
 
-For example:
+An example:
 
 .. code-block:: python
 
