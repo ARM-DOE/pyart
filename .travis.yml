@@ -1,7 +1,4 @@
 sudo: false    # Use container-based infrastructure
-# Travis CI build script
-# This is a modified version of the .travis.yml file from the scikit-learn
-# project: https://github.com/scikit-learn/scikit-learn
 language: python
 
 addons:
@@ -34,6 +31,10 @@ matrix:
     - python: 3.5
       env:
         - PYTHON_VERSION="3.5"
+        - NOSE_ARGS="-v --with-cov --cov pyart pyart"
+    - python: 3.6
+      env:
+        - PYTHON_VERSION="3.6"
         - NOSE_ARGS="-v --with-cov --cov pyart pyart"
 install: source continuous_integration/install.sh
 script: eval xvfb-run nosetests $NOSE_ARGS
