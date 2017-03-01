@@ -162,7 +162,7 @@ For example:
         from ..core import HorizontalWindProfile
 
 Following the main function def line, but before the code within it, a doc
-string is needed to explain arguments,  returns, references if needed, and
+string is needed to explain arguments, returns, references if needed, and
 other helpful information.
 
 For example:
@@ -225,7 +225,7 @@ For example:
 
     	    """
 
-Private or smaller functions can have a small explaination without in depth
+Private or smaller functions can have a small explanation without in depth
 details. For example:
 
 .. code-block:: python
@@ -236,7 +236,7 @@ details. For example:
             v_mean. velocities is a 2D array, azimuths is a 1D
             array, elevation is a number. """
 
-As seen, each argument has what type of object it is, an explaination of
+As seen, each argument has what type of object it is, an explanation of
 what it is, mention of units, and if a argument has a default value,
 statement of what that default value is and why.
 
@@ -329,8 +329,11 @@ or in this case::
 		git branch -d cartopy_map
 
 
-To create a new branch, the command is `git checkout -b <branch_name>`.
-If you type `git status` it will inform you of the branch you are in.
+To create a new branch::
+                git checkout -b <branch_name>
+
+Typing `git status` will not only inform you on what files have been modified
+and untracked, it will also inform the user of which branch they are on.
 
 To switch between branches, simply type::
 
