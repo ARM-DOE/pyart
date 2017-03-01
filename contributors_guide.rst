@@ -1,20 +1,6 @@
 Contributor's Guide
 ===================
 
-Note: This guide is still a work in progress.
-
-Note: When an example shows filename as such::
-	
-	nosetests filename
-
-filename is the filename and location, such as::
-
-	nosetests /home/zsherman/pyart/pyart/retrieve/tests/test_vad.py
-
-Py-ART Introduction and Information
-===================================
-
-From README.rst on Py-ART's Github Page
 
 The Python ARM Radar Toolkit (Py-ART)
 -------------------------------------
@@ -72,8 +58,9 @@ To update an older version of Py-ART to the latest release use::
 
     conda update -c conda-forge arm_pyart
 
+
 Resources
-=========
+---------
 
 Pyart:
 
@@ -85,15 +72,14 @@ Pyart:
 Git:
 
 - https://git-scm.com/book/en/v2
-- https://docs.scipy.org/doc/numpy/dev/gitwash/development_workflow.html
 
 
-Proper Code Style
-=================
+Code Style
+----------
 
-Py-ART follows pep8 coding standards. To make sure your code follows the pep8
-style, you can use a variety of modules that can check for you. Two popular
-pep8 check modules are pycodestyle and pylint.
+Py-ART follows pep8 coding standards. To make sure your code follows the
+pep8 style, you can use a variety of tools that can check for you. Two
+popular pep8 check modules are pycodestyle and pylint.
 
 For more on pep8 style:
 
@@ -101,14 +87,15 @@ For more on pep8 style:
 
 To install pycodestyle::
 
-        pip install pycodestyle
+        conda install pycodestyle
 
 To use pycodestyle::
 
         pycodestyle filename
 
-pylint is also useful to check for pep8 compliance and should already be
-installed with python 3.5.
+To install pylint::
+
+        conda install pylint 
 
 To get a detailed pylint report::
 
@@ -118,15 +105,22 @@ If you want to just see what line number and the issue, just use::
 
         pylint -r n filename
 
+Both of these tools are highly configurable to suit a user's taste. Refer to
+the tools documentation for details on this process.
+
+- https://pycodestyle.readthedocs.io/en/latest/
+- https://www.pylint.org/
+
 
 Python File Setup
-=================
+-----------------
 
-In a new .py file, the top of the code should have the function's location,
-sphinx comments for template configuration, and public and private functions
-within the .py file. Public functions are listed first and then private
-functions with and underscore in front of the function. A space is needed
-between the last function and the closing docstring quotation.
+In a new .py file, the top of the code should have the function or class
+location, sphinx comments for template configuration, and the public and
+private functions and classes within the .py file. Public functions and
+classes are listed first and then private functions and classes. Private
+functions and classes should have a underscore in front of the name. A space
+is needed between the last function and the closing docstring quotation.
 
 For example:
 
@@ -163,9 +157,14 @@ For example:
 
 Following the main function def line, but before the code within it, a doc
 string is needed to explain arguments, returns, references if needed, and
-other helpful information.
+other helpful information. These documentation standards follow the NumPy
+documentation style.
 
-For example:
+For more on the NumPy documentation style:
+
+- https://github.com/numpy/numpy/blob/master/doc/HOWTO_DOCUMENT.rst.txt
+
+An example:
 
 .. code-block:: python
 
@@ -206,8 +205,8 @@ For example:
             Returns
             -------
     	    height : array
-        	Heights in meters above sea level at which horizontal winds were
-        	sampled.
+        	Heights in meters above sea level at which horizontal
+                winds were sampled.
     	    speed : array
         	Horizontal wind speed in meters per second at each height.
     	    direction : array
@@ -225,20 +224,22 @@ For example:
 
     	    """
 
-Private or smaller functions can have a small explanation without in depth
-details. For example:
+As seen, each argument has what type of object it is, an explanation of
+what it is, mention of units, and if an argument has a default value, a
+statement of what that default value is and why.
+
+Private or smaller functions and classes can have a single line explanation.
+
+An example:
 
 .. code-block:: python
 
-        def _vad_calculation(velocities, azimuths,
-                             elevation, valid_ray_min):
-            """ Calculates VAD for a scan and returns u_mean and
-            v_mean. velocities is a 2D array, azimuths is a 1D
-            array, elevation is a number. """
+        def u_wind(self):
+        """ U component of horizontal wind in meters per second. """
 
-As seen, each argument has what type of object it is, an explanation of
-what it is, mention of units, and if a argument has a default value,
-statement of what that default value is and why.
+
+Testing
+-------
 
 When adding a new function to pyart it is important to add your function to
 the __init__.py file under the corresponding pyart folder.
@@ -259,9 +260,11 @@ An example:
             height = np.arange(0, 1000, 200)
             speed = np.ones_like(height) * 5
             direction = np.array([0, 90, 180, 270, 45])
-            profile = pyart.core.HorizontalWindProfile(height, speed, direction)
-            sim_vel = pyart.util.simulated_vel_from_profile(test_radar, profile)
-            
+            profile = pyart.core.HorizontalWindProfile(
+                height, speed, direction)
+            sim_vel = pyart.util.simulated_vel_from_profile(
+                test_radar, profile)
+
             test_radar.add_field('velocity', sim_vel,
                                  replace_existing=True)
 
@@ -291,28 +294,47 @@ An example:
             assert_almost_equal(vad.u_wind, u_wind, 3)
             assert_almost_equal(vad.v_wind, v_wind, 3)
 
+Nosetests from nose are used to run tests in pyart.
+
 To install nose::
 
-   		conda install nose
+        conda install nose
 
 To run all tests in pyart with nose::
 
-		nosetests --exe pyart
+	nosetests --exe pyart
 
 All test with in depth details::
 
-		nosetests -v -s
+	nosetests -v -s
 
 Just one file::
 
-		nosetests filename
+	nosetests filename
+
+Note: When an example shows filename as such::
+
+        nosetests filename
+
+filename is the filename and location, such as::
+
+        nosetests /home/user/pyart/pyart/retrieve/tests/test_vad.py
+
+Relative paths can also be used::
+        
+        cd pyart
+        nosetests ./pyart/retrieve/tests/test_vad.py
+
+For more on nose and nosetests:
+
+- http://nose.readthedocs.io/en/latest/
 
 
 GitHub
 ======
 
 When contributing to pyart, the changes created should be in a new branch
-under your forked repository. Let’s say your adding a new map display.
+under your forked repository. Let's say the user is adding a new map display.
 Instead of creating that new function in your master branch. Create a new
 branch called ‘cartopy_map’. If everything checks out and the admin
 accepts the pull request, you can then merge the master branch and
@@ -330,10 +352,12 @@ or in this case::
 
 
 To create a new branch::
+
                 git checkout -b <branch_name>
 
-Typing `git status` will not only inform you on what files have been modified
-and untracked, it will also inform the user of which branch they are on.
+Typing `git status` will not only inform the user of what files have been
+modified and untracked, it will also inform the user of which branch they
+are currently on.
 
 To switch between branches, simply type::
 
@@ -344,7 +368,11 @@ When commiting to GitHub, start the statement with a acronym such as
 ‘BUG:’ or more. Then following should be a short statement such as
 “ADD: Adding cartopy map display.”, but after the short statement, before
 finishing the quotations, hit enter and in your terminal you can then type
-a more in depth description on what your commiting. 
+a more in depth description on what your commiting.
+
+A set of recommended acronymns can be found at:
+
+- https://docs.scipy.org/doc/numpy/dev/gitwash/development_workflow.html
 
 If you would like to type your commit in the terminal and skip the default
 editor::
@@ -362,15 +390,18 @@ This could be done by::
 
 	git fetch upstream
 
-After creating a pull request through GitHub, two outside code checkers,
-Appveyor and TravisCI will determine if the code past all checks. If the code
-fails either tests, as the pull request sits, make changes to fix the code
-and when pushed to GitHub, the pull request will automatically update and
-TravisCI and Appveyor will automatically rerun.
+After fetching, a git merge is needed to pull in the changes.
 
+This is done by::
 
-GitLab
-======
+        git merge upstream master
 
+To prevent a merge commit::
 
-                
+        git merge --ff-only upstream master
+
+After creating a pull request through GitHub, two outside checkers,
+Appveyor and TravisCI will determine if the code past all checks. If the
+code fails either tests, as the pull request sits, make changes to fix the
+code and when pushed to GitHub, the pull request will automatically update
+and TravisCI and Appveyor will automatically rerun.
