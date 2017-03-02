@@ -35,12 +35,11 @@ Helper functions
 .. autosummary::
     :toctree: generated/
 
-    find_time_in_interp_sonde
     find_objects
 
 """
 
-from .dealias import dealias_fourdd, find_time_in_interp_sonde
+from .dealias import dealias_fourdd
 from .attenuation import calculate_attenuation
 from .phase_proc import phase_proc_lp
 # for backwards compatibility GateFilter available in the correct namespace

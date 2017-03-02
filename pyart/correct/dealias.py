@@ -8,16 +8,12 @@ Front end to the University of Washington 4DD code for Doppler dealiasing.
     :toctree: generated/
 
     dealias_fourdd
-    find_time_in_interp_sonde
     _create_rsl_volume
 
 """
 
-import warnings
-
 import numpy as np
 
-from ..core import HorizontalWindProfile
 from ..config import get_field_name, get_fillvalue, get_metadata
 try:
     from ..io import _rsl_interface
@@ -26,14 +22,11 @@ try:
 except ImportError:
     _FOURDD_AVAILABLE = False
 from ._common_dealias import _parse_gatefilter, _set_limits
-from ..util import datetime_utils
 from ..exceptions import MissingOptionalDependency
 
 
 def dealias_fourdd(
         radar, last_radar=None, sonde_profile=None, gatefilter=False,
-        sounding_heights=None, sounding_wind_speeds=None,
-        sounding_wind_direction=None,
         filt=1, rsl_badval=131072.0, keep_original=False, set_limits=True,
         vel_field=None, corr_vel_field=None, last_vel_field=None,
         debug=False, max_shear=0.05, sign=1, **kwargs):
@@ -76,18 +69,6 @@ def dealias_fourdd(
         create this filter from the radar moments using any additional
         arguments by passing them to :py:func:`moment_based_gate_filter`. The
         default value assumes all gates are valid.
-    sounding_heights : ndarray, optional
-        This argument is deprecated and should be specified using the
-        sonde_profile argument.  Sounding heights in meters above mean sea
-        level.  If altitude attribute of the radar object if reference against
-        something other than mean sea level then this parameter should also be
-        referenced in that manner.
-    sounding_wind_speeds : ndarray, optional
-        This argument is deprecated and should be specified using the
-        sonde_profile argument.  Sounding wind speeds in m/s.
-    sounding_wind_direction : ndarray, optional
-        This argument is deprecated and should be specified using the
-        sonde_profile argument.  Sounding wind directions in degrees.
     filt : int, optional
         Flag controlling Bergen and Albers filter, 1 = yes, 0 = no.
     rsl_badval : float, optional
@@ -197,26 +178,7 @@ def dealias_fourdd(
             "Py-ART must be build with support for TRMM RSL to use" +
             "the dealias_fourdd function.")
 
-    # check for use of deprecated sonding_ arguments
-    deprecated_args_used = ((sounding_heights is not None) or
-                            (sounding_wind_speeds is not None) or
-                            (sounding_wind_direction is not None))
-    if deprecated_args_used:
-        msg = ("Sounding arguments are deprecated please use the "
-               "sonde_profile argument")
-        warnings.warn(msg, DeprecationWarning)
-        all_args_available = ((sounding_heights is not None) and
-                              (sounding_wind_speeds is not None) and
-                              (sounding_wind_direction is not None))
-        if all_args_available:
-            sonde_profile = HorizontalWindProfile(
-                sounding_heights, sounding_wind_speeds,
-                sounding_wind_direction)
-
     # verify that sounding data or last_volume is provided
-    sounding_available = ((sounding_heights is not None) and
-                          (sounding_wind_speeds is not None) and
-                          (sounding_wind_direction is not None))
     if (sonde_profile is None) and (last_radar is None):
         raise ValueError('sonde_profile or last_radar must be provided')
 
@@ -308,52 +270,3 @@ def _create_rsl_volume(radar, field_name, vol_num, rsl_badval, excluded=None):
     rsl_volume = _rsl_interface.create_volume(fdata, rays_per_sweep, vol_num)
     _rsl_interface._label_volume(rsl_volume, radar)
     return rsl_volume
-
-
-def find_time_in_interp_sonde(interp_sonde, target, debug=False):
-    """
-    Find the wind parameter for a given time in a ARM interpsonde file.
-
-    This function is Deprecated and will be removed in future versions of
-    Py-ART. Use the :py:func:`pyart.io.read_arm_sonde_vap` function for similar
-    functionality.
-
-    Parameters
-    ----------
-    interp_sonde : netCDF4.Dataset
-        netCDF4 object pointing to a ARM interpsonde file.
-    target : datetime
-        Target datetime, the closest time in the interpsonde file will be
-        used.
-
-    Other Parameters
-    ----------------
-    debug : bool
-        Print debugging information.
-
-    Returns
-    -------
-    height : np.ndarray
-        Heights above the ground for the time closest to target.
-    speed : np.ndarray
-        Wind speeds at given height for the time closest to taget.
-    direction : np.ndarray
-        Wind direction at given height for the time closest to target.
-
-    """
-    warnings.warn(
-        "find_time_in_interp_sonde is deprecated and will be removed in a "
-        "future version of Py-ART.\n", DeprecationWarning)
-
-    sonde_datetimes = datetime_utils.datetimes_from_dataset(interp_sonde)
-
-    # get closest time index to target
-    idx = np.abs(sonde_datetimes - target).argmin()
-
-    if debug:
-        print('Target time is %s' % (target))
-        print('Interpolated sounding time is %s' % (sonde_datetimes[idx]))
-
-    return (interp_sonde.variables['height'][:],
-            interp_sonde.variables['wspd'][idx, :],
-            interp_sonde.variables['wdir'][idx, :])
