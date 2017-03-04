@@ -17,8 +17,6 @@ conda update -q conda
 ## Create a testenv with the correct Python version
 conda env create -f continuous_integration/environment-$PYTHON_VERSION.yml
 source activate testenv
-# KLUDGE to replace unwanted packages from the jjhelmus channel
-conda install -c conda-forge pyproj wradlib
 # TODO install cbc, cylp, glpk, cvxopt_glpk in Python 2.7
 
 # install coverage modules
