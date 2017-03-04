@@ -17,7 +17,7 @@ conda update -q conda
 ## Create a testenv with the correct Python version
 conda env create -f continuous_integration/environment-$PYTHON_VERSION.yml
 source activate testenv
-# TODO install cbc, cylp, glpk, cvxopt_glpk in Python 2.7
+# TODO install cylp and  glpk in Python 2.7
 
 # install coverage modules
 pip install nose-cov
