@@ -1,6 +1,5 @@
 name: testenv
 channels:
-  - jjhelmus   # required until conda-forge trmm_rsl fixed
   - conda-forge
   - defaults
 dependencies:
