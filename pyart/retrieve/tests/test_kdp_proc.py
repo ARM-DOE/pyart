@@ -7,7 +7,24 @@ from pyart.filters import GateFilter
 from pyart.testing import sample_objects
 from pyart.config import get_field_name
 
+def test_kdp_vulpiani_linear_psidp(slope=0.002):
+    radar = _make_linear_psidp_radar(slope=slope)
+    kdp_dict, phidp_dict = kdp_proc.kdp_vulpiani(radar,windsize=10)
+    valid_kdp = kdp_dict['data'][0][np.isfinite(kdp_dict['data'][0])]
+    assert np.allclose(np.diff(valid_kdp), 0.0, atol=0.1)
+    assert np.allclose(valid_kdp, 1000.0 * slope / 2.0, atol=0.1)
 
+    return
+
+def test_kdp_kalman_linear_psidp(slope=0.002):
+    radar = _make_linear_psidp_radar(slope=slope)
+    kdp_dict, kdp_std_dict, phidp_dict = kdp_proc.kdp_schneebeli(radar,band='X')
+    valid_kdp = kdp_dict['data'][0][np.isfinite(kdp_dict['data'][0])]
+    assert np.allclose(np.diff(valid_kdp), 0.0, atol=0.1)
+    assert np.allclose(valid_kdp, 1000.0 * slope / 2.0, atol=0.1)
+
+    return
+    
 def test_kdp_maesaka_linear_psidp(slope=0.002, maxiter=100):
     radar = _make_linear_psidp_radar(slope=slope)
     kdp_dict, phidpf_dict, phidpr_dict = kdp_proc.kdp_maesaka(
@@ -30,7 +47,6 @@ def test_kdp_maesaka_all_excluded(first_guess=0.01, maxiter=100):
     assert np.allclose(kdp_dict['data'][0], 0.0, atol=first_guess)
 
     return
-
 
 def _make_linear_psidp_radar(slope=0.002):
     """
