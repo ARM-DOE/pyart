@@ -172,7 +172,7 @@ An example:
         def velocity_azimuth_display(
             radar, velocity=None, z_want=None, valid_ray_min=16,
             gatefilter=False, window=2):
-	
+
             """
    	    Velocity azimuth display.
 
@@ -356,6 +356,19 @@ To create a new branch::
 
                 git checkout -b <branch_name>
 
+If you have a branch with changes that have not been added to a pull request
+but you would like to start a new branch with a different task in mind. It
+is recommended that your new branch is based on your master. First::
+
+                git checkout master
+
+Then::
+
+                git checkout -b <branch_name>
+
+This way, your new branch is not a combination of your other task branch and
+the new task branch, but is based on the original master branch.
+
 Typing `git status` will not only inform the user of what files have been
 modified and untracked, it will also inform the user of which branch they
 are currently on.
@@ -378,7 +391,7 @@ A set of recommended acronymns can be found at:
 If you would like to type your commit in the terminal and skip the default
 editor::
 
-	git commit -m "PEP: Removing whitespace from vad.py."
+	git commit -m "STY: Removing whitespace from vad.py pep8."
 
 To use the default editor(in Linux, usually VIM), simply type::
 
@@ -395,11 +408,11 @@ After fetching, a git merge is needed to pull in the changes.
 
 This is done by::
 
-        git merge upstream master
+        git merge upstream/master
 
 To prevent a merge commit::
 
-        git merge --ff-only upstream master
+        git merge --ff-only upstream/master
 
 After creating a pull request through GitHub, two outside checkers,
 Appveyor and TravisCI will determine if the code past all checks. If the
