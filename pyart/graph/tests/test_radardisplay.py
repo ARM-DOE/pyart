@@ -74,9 +74,12 @@ def test_radardisplay_vpt(outfile=None):
     display = pyart.graph.RadarDisplay(radar)
     fig = plt.figure()
     ax = fig.add_subplot(111)
+
+    gatefilter = pyart.filters.GateFilter(radar)
     display.plot(
         'reflectivity_horizontal', colorbar_flag=True, mask_outside=True,
-        mask_tuple=('reflectivity_horizontal', -100), ax=ax)
+        mask_tuple=('reflectivity_horizontal', -100), ax=ax,
+        gatefilter=gatefilter)
     if outfile:
         fig.savefig(outfile)
     plt.close()
