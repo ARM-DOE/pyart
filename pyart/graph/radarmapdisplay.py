@@ -107,7 +107,7 @@ class RadarMapDisplay(RadarDisplay):
             width=None, height=None, lon_0=None, lat_0=None,
             resolution='h', shapefile=None, edges=True, gatefilter=None,
             basemap=None, filter_transitions=True, embelish=True,
-            ticks=None, ticklabs=None, **kwargs):
+            ticks=None, ticklabs=None, raster=False, **kwargs):
         """
         Plot a PPI volume sweep onto a geographic map.
 
@@ -215,6 +215,12 @@ class RadarMapDisplay(RadarDisplay):
         basemap: Basemap instance
             If None, create basemap instance using other keyword info.
             If not None, use the user-specifed basemap instance.
+        raster : bool
+            False by default.  Set to true to render the display as a raster
+            rather than a vector in call to pcolormesh.  Saves time in plotting
+            high resolution data over large areas.  Be sure to set the dpi
+            of the plot for your application if you save it as a vector format
+            (i.e., pdf, eps, svg).
 
         """
         # parse parameters
@@ -287,6 +293,9 @@ class RadarMapDisplay(RadarDisplay):
         pm = basemap.pcolormesh(
             self._x0 + x * 1000., self._y0 + y * 1000., data,
             vmin=vmin, vmax=vmax, cmap=cmap, norm=norm)
+
+        if raster is not None:
+            pm.set_rasterized(True)
 
         if shapefile is not None:
             basemap.readshapefile(shapefile, 'shapefile', ax=ax)
