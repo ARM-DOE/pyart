@@ -26,7 +26,7 @@ from ..filters.gatefilter import GateFilter
 from scipy.ndimage import label
 from scipy.signal import convolve2d
 
-BAD = 1e20  # Absurdly unphysical value, for easy thresholding
+BAD = 9999 # Absurdly unphysical value, for easy thresholding
 DELTA = 5.0  # deg, allowable gap between PPI edges to be considered full 360
 # To do:
 # Testing
