@@ -106,7 +106,11 @@ def read_odim_h5(filename, field_names=None, additional_metadata=None,
                                 file_field_names, exclude_fields)
 
     # open the file
-    hfile = h5py.File(filename, 'r')
+    try:
+        hfile = h5py.File(filename, 'r')
+    except OSError:
+        # Work around in case of "OSError: File close degree doesn't match"
+        hfile = h5py.File(filename, 'r+', fclose_degree=h5py.h5f.CLOSE_DEFAULT)        
     odim_object = _to_str(hfile['what'].attrs['object'])
     if odim_object not in ['PVOL', 'SCAN', 'ELEV', 'AZIM']:
         raise NotImplementedError(
