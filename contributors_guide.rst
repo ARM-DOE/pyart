@@ -412,7 +412,7 @@ This is done by::
 
 To prevent a merge commit::
 
-        git merge --ff-only upstream/master
+        git merge upstream/master --no-commit
 
 After creating a pull request through GitHub, two outside checkers,
 Appveyor and TravisCI will determine if the code past all checks. If the
