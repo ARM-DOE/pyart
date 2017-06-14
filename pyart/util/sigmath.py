@@ -45,8 +45,8 @@ def angular_texture_2d(image, N, interval):
     
     # Calculate convolution
     kernel = np.ones((N, N))
-    xs = signal.convolve2d(x, kernel, mode="same")
-    ys = signal.convolve2d(y, kernel, mode="same")
+    xs = signal.convolve2d(x, kernel, mode="same", boundary="symm")
+    ys = signal.convolve2d(y, kernel, mode="same", boundary="symm")
     ns = N**2
     
     # Calculate norm over specified window

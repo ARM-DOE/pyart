@@ -310,7 +310,8 @@ def calculate_velocity_texture(radar, vel_field=None, wind_size=4, nyq=None,
                                          nyq)
     vel_texture_field = get_metadata('velocity')
     vel_texture_field['long_name'] = 'Doppler velocity texture'
-    vel_texture_field['standard_name'] = 'texture_of_radial_velocity_of_scatters_away_from_instrument'
+    vel_texture_field['standard_name'] = ('texture_of_radial_velocity' + 
+                                          '_of_scatters_away_from_instrument')
     vel_texture_field['data'] = ndimage.filters.median_filter(vel_texture,
                                                               size=(wind_size,
                                                                     wind_size))
