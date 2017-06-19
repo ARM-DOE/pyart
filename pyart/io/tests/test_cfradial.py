@@ -116,7 +116,10 @@ def test_sweep_mode():
     assert radar.sweep_mode['data'].shape == (1, 32)
     assert radar.sweep_mode['data'].dtype.char == 'S'
     str_array = netCDF4.chartostring(radar.sweep_mode['data'])
-    assert np.all(str_array == [b'azimuth_surveillance'])
+    try:
+        assert np.all(str_array == ['azimuth_surveillance'])
+    except AssertionError:
+        assert np.all(str_array == [b'azimuth_surveillance'])
 
 
 # fixed_angle attribute
