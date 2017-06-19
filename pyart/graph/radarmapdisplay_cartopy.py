@@ -120,7 +120,7 @@ class RadarMapDisplayCartopy(RadarDisplay):
             width=None, height=None, lon_0=None, lat_0=None,
             resolution='110m', shapefile=None, shapefile_kwargs=None,
             edges=True, gatefilter=None,
-            filter_transitions=True, embelish=True,
+            filter_transitions=True, embelish=True, raster=False,
             ticks=None, ticklabs=None):
         """
         Plot a PPI volume sweep onto a geographic map.
@@ -220,6 +220,12 @@ class RadarMapDisplayCartopy(RadarDisplay):
             True by default. Set to False to supress drawing of coastlines
             etc.. Use for speedup when specifying shapefiles.
             Note that lat lon labels only work with certain projections.
+        raster : bool
+            False by default.  Set to true to render the display as a raster
+            rather than a vector in call to pcolormesh.  Saves time in plotting
+            high resolution data over large areas.  Be sure to set the dpi
+            of the plot for your application if you save it as a vector format
+            (i.e., pdf, eps, svg).
         """
         # parse parameters
         ax, fig = parse_ax_fig(ax, fig)
@@ -265,7 +271,9 @@ class RadarMapDisplayCartopy(RadarDisplay):
         pm = ax.pcolormesh(x * 1000., y * 1000., data,
                            vmin=vmin, vmax=vmax, cmap=cmap,
                            norm=norm, transform=self.grid_projection)
-
+        #plot as raster in vector graphics files
+        if raster is not None:
+            pm.set_rasterized(True)
         # add embelishments
         if embelish is True:
             # Create a feature for States/Admin 1 regions at 1:resolution
