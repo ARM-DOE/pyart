@@ -949,7 +949,7 @@ def phase_proc_lp(radar, offset, debug=False, self_const=60000.0,
                   overide_sys_phase=False, nowrap=None, really_verbose=False,
                   LP_solver='cylp', refl_field=None, ncp_field=None,
                   rhv_field=None, phidp_field=None, kdp_field=None,
-                  unf_field=None, window_len=35, proc=1):
+                  unf_field=None, window_len=35, proc=1, coef=0.914):
     """
     Phase process using a LP method [1].
 
@@ -1004,6 +1004,8 @@ def phase_proc_lp(radar, offset, debug=False, self_const=60000.0,
         calculating KDP.
     proc : int
         Number of worker processes, only used when `LP_solver` is 'cylp_mp'.
+    coef : float
+        Exponent linking Z to KDP in self consistency. kdp=(10**(0.1z))*coef
 
     Returns
     -------
@@ -1077,7 +1079,8 @@ def phase_proc_lp(radar, offset, debug=False, self_const=60000.0,
         B_vectors = construct_B_vectors(
             phidp_mod[start_ray:end_ray, start_gate:end_gate],
             z_mod[start_ray:end_ray, start_gate:end_gate],
-            St_Gorlv_differential_5pts, dweight=self_const)
+            St_Gorlv_differential_5pts, dweight=self_const,
+            coef=coef)
 
         weights = np.ones(
             phidp_mod[start_ray:end_ray, start_gate:end_gate].shape)

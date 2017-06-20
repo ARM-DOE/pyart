@@ -234,7 +234,7 @@ class RadarDisplay(object):
             colorbar_flag=True, colorbar_label=None,
             colorbar_orient='vertical', edges=True, gatefilter=None,
             filter_transitions=True, ax=None, fig=None,
-            ticks=None, ticklabs=None, **kwargs):
+            ticks=None, ticklabs=None, raster=None, **kwargs):
         """
         Plot a PPI.
 
@@ -312,6 +312,12 @@ class RadarDisplay(object):
             Axis to plot on. None will use the current axis.
         fig : Figure
             Figure to add the colorbar to. None will use the current figure.
+        raster : bool
+            False by default.  Set to true to render the display as a raster
+            rather than a vector in call to pcolormesh.  Saves time in plotting
+            high resolution data over large areas.  Be sure to set the dpi
+            of the plot for your application if you save it as a vector format
+            (i.e., pdf, eps, svg).
 
         """
         # parse parameters
@@ -332,6 +338,9 @@ class RadarDisplay(object):
             vmin = vmax = None
         pm = ax.pcolormesh(
             x, y, data, vmin=vmin, vmax=vmax, cmap=cmap, norm=norm, **kwargs)
+
+        if raster is not None:
+            pm.set_rasterized(True)
 
         if title_flag:
             self._set_title(field, sweep, title, ax)
@@ -356,7 +365,7 @@ class RadarDisplay(object):
             reverse_xaxis=None, colorbar_flag=True, colorbar_label=None,
             colorbar_orient='vertical', edges=True, gatefilter=None,
             filter_transitions=True, ax=None, fig=None,
-            ticks=None, ticklabs=None, **kwargs):
+            ticks=None, ticklabs=None, raster=False, **kwargs):
         """
         Plot a RHI.
 
@@ -435,6 +444,12 @@ class RadarDisplay(object):
             Axis to plot on. None will use the current axis.
         fig : Figure
             Figure to add the colorbar to. None will use the current figure.
+        raster : bool
+            False by default.  Set to true to render the display as a raster
+            rather than a vector in call to pcolormesh.  Saves time in plotting
+            high resolution data over large areas.  Be sure to set the dpi
+            of the plot for your application if you save it as a vector format
+            (i.e., pdf, eps, svg).
 
         """
         # parse parameters
@@ -462,6 +477,9 @@ class RadarDisplay(object):
         pm = ax.pcolormesh(
             R, z, data, vmin=vmin, vmax=vmax, cmap=cmap, norm=norm, **kwargs)
 
+        if raster is not None:
+            pm.set_rasterized(True)
+
         if title_flag:
             self._set_title(field, sweep, title, ax)
 
@@ -486,7 +504,7 @@ class RadarDisplay(object):
             colorbar_orient='vertical', edges=True, gatefilter=None,
             filter_transitions=True, time_axis_flag=False,
             date_time_form=None, tz=None, ax=None, fig=None,
-            ticks=None, ticklabs=None, **kwargs):
+            ticks=None, ticklabs=None, raster=None, **kwargs):
         """
         Plot a VPT scan.
 
@@ -571,6 +589,12 @@ class RadarDisplay(object):
             Axis to plot on. None will use the current axis.
         fig : Figure
             Figure to add the colorbar to. None will use the current figure.
+        raster : bool
+            False by default.  Set to true to render the display as a raster
+            rather than a vector in call to pcolormesh.  Saves time in plotting
+            high resolution data over large areas.  Be sure to set the dpi
+            of the plot for your application if you save it as a vector format
+            (i.e., pdf, eps, svg).
 
         """
         # parse parameters
@@ -607,6 +631,9 @@ class RadarDisplay(object):
         pm = ax.pcolormesh(
             x, y, data, vmin=vmin, vmax=vmax, cmap=cmap, norm=norm, **kwargs)
 
+        if raster is not None:
+            pm.set_rasterized(True)
+
         if title_flag:
             self._set_vpt_title(field, title, ax)
 
@@ -630,7 +657,8 @@ class RadarDisplay(object):
             colorbar_flag=True, colorbar_label=None,
             colorbar_orient='vertical', edges=True, gatefilter=None,
             reverse_xaxis=None, filter_transitions=True,
-            ax=None, fig=None, ticks=None, ticklabs=None, **kwargs):
+            ax=None, fig=None, ticks=None, ticklabs=None,
+            raster=None, **kwargs):
         """
         Plot pseudo-RHI scan by extracting the vertical field associated
         with the given azimuth.
@@ -710,6 +738,12 @@ class RadarDisplay(object):
             Axis to plot on. None will use the current axis.
         fig : Figure
             Figure to add the colorbar to. None will use the current figure.
+        raster : bool
+            False by default.  Set to True to render the display as a raster
+            rather than a vector in call to pcolormesh.  Saves time in plotting
+            high resolution data over large areas.  Be sure to set the dpi
+            of the plot for your application if you save it as a vector format
+            (i.e., pdf, eps, svg).
 
         """
         # parse parameters
@@ -735,6 +769,9 @@ class RadarDisplay(object):
             vmin = vmax = None
         pm = ax.pcolormesh(
             R, z, data, vmin=vmin, vmax=vmax, cmap=cmap, norm=norm, **kwargs)
+
+        if raster is not None:
+            pm.set_rasterized(True)
 
         if title_flag:
             self._set_az_rhi_title(field, target_azimuth, title, ax)
