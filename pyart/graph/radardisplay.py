@@ -501,7 +501,7 @@ class RadarDisplay(object):
             title=None, title_flag=True,
             axislabels=(None, None), axislabels_flag=True,
             colorbar_flag=True, colorbar_label=None,
-            colorbar_orient='vertical', edges=True,
+            colorbar_orient='vertical', edges=True, gatefilter=None,
             filter_transitions=True, time_axis_flag=False,
             date_time_form=None, tz=None, ax=None, fig=None,
             ticks=None, ticklabs=None, raster=None, **kwargs):
@@ -568,6 +568,9 @@ class RadarDisplay(object):
             coordinates themselved as the gate edges, resulting in a plot
             in which the last gate in each ray and the entire last ray are not
             not plotted.
+        gatefilter : GateFilter
+            GateFilter instance. None will result in no gatefilter mask being
+            applied to data.
         filter_transitions : bool
             True to remove rays where the antenna was in transition between
             sweeps from the plot.  False will include these rays in the plot.
@@ -600,7 +603,8 @@ class RadarDisplay(object):
         cmap = common.parse_cmap(cmap, field)
 
         # get data for the plot
-        data = self._get_vpt_data(field, mask_tuple, filter_transitions)
+        data = self._get_vpt_data(
+            field, mask_tuple, filter_transitions, gatefilter)
         if edges:
             y = np.empty((self.ranges.shape[0] + 1, ), dtype=self.ranges.dtype)
             y[1:-1] = (self.ranges[:-1] + self.ranges[1:]) / 2.
@@ -1283,7 +1287,8 @@ class RadarDisplay(object):
 
         return data
 
-    def _get_vpt_data(self, field, mask_tuple, filter_transitions):
+    def _get_vpt_data(self, field, mask_tuple, filter_transitions,
+                      gatefilter):
         """ Retrieve and return vpt data from a plot function. """
         data = self.fields[field]['data']
 
@@ -1293,6 +1298,11 @@ class RadarDisplay(object):
             mdata = self.fields[mask_field]['data']
             data = np.ma.masked_where(mdata < mask_value, data)
 
+        # mask data if gatefilter provided
+        if gatefilter is not None:
+            mask_filter = gatefilter.gate_excluded
+            data = np.ma.masked_array(data, mask_filter)
+ 
         # filter out antenna transitions
         if filter_transitions and self.antenna_transition is not None:
             in_trans = self.antenna_transition
