@@ -30,6 +30,7 @@ def angular_texture_2d(image, N, interval):
         radial coordinates, pi will be defined to be interval
         and -pi will be -interval. It is recommended that interval be
         set to the Nyquist velocity.
+
     """
 
     # transform distribution from original interval to [-pi, pi]
