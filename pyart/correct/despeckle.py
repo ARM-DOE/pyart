@@ -25,8 +25,9 @@ import numpy as np
 from ..filters.gatefilter import GateFilter
 from scipy.ndimage import label
 from scipy.signal import convolve2d
+from ..config import get_fillvalue
 
-BAD = 9999 # Absurdly unphysical value, for easy thresholding
+BAD = get_fillvalue() # Get default fill value.
 DELTA = 5.0  # deg, allowable gap between PPI edges to be considered full 360
 # To do:
 # Testing
