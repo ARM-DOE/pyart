@@ -405,17 +405,17 @@ def test_gatefilter_include_gates():
 def test_gatefilter_calculate_texture():
     vel_field = 'zero_field'
     texture_field = pyart.filters.calculate_velocity_texture(radar,
+                                                             vel_field,
                                                              wind_size=2,
-                                                             vel_field,
                                                              nyq=10)
     assert np.all(texture_field['data'] == 0)
     texture_field = pyart.filters.calculate_velocity_texture(radar,
+                                                             vel_field,
                                                              wind_size=3,
-                                                             vel_field,
                                                              nyq=10)
     assert np.all(texture_field['data'] == 0)
     texture_field = pyart.filters.calculate_velocity_texture(radar,
-                                                             wind_size=4,
                                                              vel_field,
+                                                             wind_size=4,
                                                              nyq=10)
     assert np.all(texture_field['data'] == 0)
