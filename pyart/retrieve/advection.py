@@ -26,7 +26,7 @@ from ..config import get_fillvalue
 
 def grid_displacement_pc(grid1, grid2, field, level, return_value='pixels'):
     """
-    Calculate the grid displacement using phase correlation.
+    Calculate  the grid displacement using phase correlation.
 
     See:
     http://en.wikipedia.org/wiki/Phase_correlation
