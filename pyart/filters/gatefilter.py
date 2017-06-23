@@ -268,7 +268,7 @@ def calculate_velocity_texture(radar, vel_field=None, wind_size=4, nyq=None,
         defined to be a square of size wind_size by wind_size.
     nyq : float
         The nyquist velocity of the radar. A value of None will force Py-ART
-        to try and determine this automatically
+        to try and determine this automatically.
     check_nyquist_uniform : bool, optional
         True to check if the Nyquist velocities are uniform for all rays
         within a sweep, False will skip this check. This parameter is ignored
@@ -278,7 +278,7 @@ def calculate_velocity_texture(radar, vel_field=None, wind_size=4, nyq=None,
     -------
     vel_dict: dict
         A dictionary containing the field entries for the radial velocity
-        texture
+        texture.
 
     """
 
@@ -289,11 +289,11 @@ def calculate_velocity_texture(radar, vel_field=None, wind_size=4, nyq=None,
     # Allocate memory for texture field
     vel_texture = np.zeros(radar.fields[vel_field]['data'].shape)
 
-    """
-    If an array of nyquist velocities is derived, use different
-    nyquist velocites for each sweep in texture calculation according to
-    the nyquist velocity in each sweep
-    """
+    
+    # If an array of nyquist velocities is derived, use different
+    # nyquist velocites for each sweep in texture calculation according to
+    # the nyquist velocity in each sweep.
+    
 
     if(nyq is None):
         # Find nyquist velocity if not specified
@@ -303,13 +303,11 @@ def calculate_velocity_texture(radar, vel_field=None, wind_size=4, nyq=None,
             start_ray, end_ray = radar.get_start_end(i)
             inds = range(start_ray, end_ray)
             vel_sweep = radar.fields[vel_field]['data'][inds]
-            vel_texture[inds] = angular_texture_2d(vel_sweep,
-                                                   wind_size,
-                                                   nyq[i])
+            vel_texture[inds] = angular_texture_2d(
+                vel_sweep, wind_size, nyq[i])
     else:
-        vel_texture = angular_texture_2d(radar.fields[vel_field]['data'],
-                                         wind_size,
-                                         nyq)
+        vel_texture = angular_texture_2d(
+            radar.fields[vel_field]['data'], wind_size, nyq)
     vel_texture_field = get_metadata('velocity')
     vel_texture_field['long_name'] = 'Doppler velocity texture'
     vel_texture_field['standard_name'] = ('texture_of_radial_velocity' +

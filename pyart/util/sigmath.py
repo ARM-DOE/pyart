@@ -22,14 +22,19 @@ def angular_texture_2d(image, N, interval):
     image : 2D array of floats
         The array containing the velocities in which to calculate
         texture from.
-    N : window size for calculating texture
-        The texture will be calculated from an N by N window centered
-        around the gate.
-    interval :
+    N : int
+        This is the window size for calculating texture. The texture will be 
+        calculated from an N by N window centered around the gate.
+    interval : float
         The absolute value of the maximum velocity. In conversion to
         radial coordinates, pi will be defined to be interval
         and -pi will be -interval. It is recommended that interval be
         set to the Nyquist velocity.
+
+    Returns
+    -------
+    std_dev : float array
+        Texture of the radial velocity field.
 
     """
 
@@ -40,8 +45,7 @@ def angular_texture_2d(image, N, interval):
     center = interval_min + half_width
 
     # Calculate parameters needed for angular std. dev
-    a = (np.asarray(image) - center) / (half_width) * np.pi
-    im = a
+    im = (np.asarray(image) - center) / (half_width) * np.pi
     x = np.cos(im)
     y = np.sin(im)
 
