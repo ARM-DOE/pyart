@@ -10,6 +10,7 @@ corrections routines in Py-ART.
 
     moment_based_gate_filter
     moment_and_texture_based_gate_filter
+    calculate_velocity_texture
 
 .. autosummary::
     :toctree: generated/
@@ -289,12 +290,10 @@ def calculate_velocity_texture(radar, vel_field=None, wind_size=4, nyq=None,
     # Allocate memory for texture field
     vel_texture = np.zeros(radar.fields[vel_field]['data'].shape)
 
-    
     # If an array of nyquist velocities is derived, use different
     # nyquist velocites for each sweep in texture calculation according to
     # the nyquist velocity in each sweep.
     
-
     if(nyq is None):
         # Find nyquist velocity if not specified
         nyq = [radar.get_nyquist_vel(i, check_nyq_uniform) for i in
