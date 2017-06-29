@@ -56,5 +56,3 @@ def _make_linear_psidp_radar(slope=0.002):
     radar.add_field(get_field_name('differential_phase'), psidp_dict)
 
     return radar
-
-    
