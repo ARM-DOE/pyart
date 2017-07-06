@@ -310,7 +310,7 @@ def _kdp_estimation_backward_fixed(
     n = len(kdp)
     dummy = np.copy(kdp)
     kdp[np.arange(SHIFT) + len(kdp) - SHIFT] = 0
-    kdp[range(n - 1 - SHIFT)] = dummy[range(n - 1 - SHIFT) + SHIFT]
+    kdp[np.arange(n - 1 - SHIFT)] = dummy[np.arange(n - 1 - SHIFT) + SHIFT]
 
     # Reverse the estimates (backward direction)
     kdp = kdp[::-1]
@@ -682,7 +682,7 @@ def _kdp_kalman_profile(psidp_in, dr, band='X', rcov=0, pcov=0):
 
         weight2 = np.tile(weight2, (len(SCALERS), 1)).T
 
-        kdp_dummy = (1 - weight2) * kdp_mat[:, range(len(SCALERS)) * 2 + 1] \
+        kdp_dummy = (1 - weight2) * kdp_mat[:, np.arange(len(SCALERS)) * 2 + 1] \
             + weight2 * kdp_mat[:, np.arange(len(SCALERS)) * 2]
         kdp_sim[condi, :] = kdp_dummy[condi, :]
 
