@@ -19,6 +19,10 @@ fdata2[4, 4] = np.PINF
 fdata2[5, 5] = np.NINF
 radar.add_field('test_field2', {'data': fdata2})
 
+# zero field
+fdata3 = np.zeros(fdata.shape)
+radar.add_field('zero_field', {'data': fdata3})
+
 
 def test_gatefilter_init():
     gfilter = pyart.correct.GateFilter(radar)
@@ -396,3 +400,16 @@ def test_gatefilter_include_gates():
     assert gfilter.gate_included[2, 0] is np.False_
     assert gfilter.gate_included[0, 2] is np.False_
     assert gfilter.gate_included[2, 2] is np.True_
+
+
+def test_gatefilter_calculate_texture():
+    vel_field = 'zero_field'
+    texture_field = pyart.filters.calculate_velocity_texture(
+        radar, vel_field, wind_size=2, nyq=10)
+    assert np.all(texture_field['data'] == 0)
+    texture_field = pyart.filters.calculate_velocity_texture(
+        radar, vel_field, wind_size=3, nyq=10)
+    assert np.all(texture_field['data'] == 0)
+    texture_field = pyart.filters.calculate_velocity_texture(
+        radar, vel_field, wind_size=4, nyq=10)
+    assert np.all(texture_field['data'] == 0)
