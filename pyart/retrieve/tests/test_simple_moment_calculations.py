@@ -17,7 +17,6 @@ def test_calculate_snr_from_reflectivity():
     assert snr['data'].mean() < 1e-6
 
 
-
 def test_calculate_velocity_texture():
     radar = pyart.testing.make_empty_ppi_radar(10, 36, 1)
 
@@ -36,4 +35,3 @@ def test_calculate_velocity_texture():
     texture_field = pyart.retrieve.calculate_velocity_texture(
         radar, vel_field, wind_size=4, nyq=10)
     assert np.all(texture_field['data'] == 0)
-

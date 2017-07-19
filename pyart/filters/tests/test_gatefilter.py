@@ -19,6 +19,7 @@ fdata2[4, 4] = np.PINF
 fdata2[5, 5] = np.NINF
 radar.add_field('test_field2', {'data': fdata2})
 
+
 def test_gatefilter_init():
     gfilter = pyart.correct.GateFilter(radar)
     assert np.all(gfilter.gate_excluded == np.False_)
