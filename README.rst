@@ -104,7 +104,7 @@ These include:
 
 Other related open source software for working with weather radar data:
 
-* `wradlib <http://wradlib.bitbucket.org/>`_ : 
+* `wradlib <http://wradlib.org/wradlib-docs/latest/>`_ : 
   An open source library for weather radar data processing.
   
 * `BALTRAD <http://baltrad.eu/>`_ : Community-based weather radar networking.
