@@ -12,7 +12,6 @@ Reading and writing Grid objects.
     _make_coordinatesystem_dict
 
 """
-
 import warnings
 import numpy as np
 import netCDF4
