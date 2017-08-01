@@ -19,7 +19,7 @@ Py-ART configuration.
 """
 
 import os
-import imp
+import sys
 import traceback
 import warnings
 
@@ -75,7 +75,12 @@ def load_config(filename=None):
     global _DEFAULT_FIELD_COLORMAP
     global _DEFAULT_FIELD_LIMITS
 
-    cfile = imp.load_source('metadata_config', filename)
+    if sys.version_info[:2] >= (3, 4):
+        from importlib.machinery import SourceFileLoader
+        cfile = SourceFileLoader('metadata_config', filename).load_module()
+    else:
+        import imp
+        cfile = imp.load_source('metadata_config', filename)
     _DEFAULT_METADATA = cfile.DEFAULT_METADATA
     _FILE_SPECIFIC_METADATA = cfile.FILE_SPECIFIC_METADATA
     _FIELD_MAPPINGS = cfile.FIELD_MAPPINGS

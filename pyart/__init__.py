@@ -65,20 +65,29 @@ else:
     from ._debug_info import _debug_info
 
     # test function setup based on scikit-image test function
-    import imp as _imp
     import os.path as _osp
     import functools as _functools
+    import sys as _sys
 
     try:
-        _imp.find_module('nose')
-    except ImportError:
+        if _sys.version_info[:2] >= (3, 4):
+            import importlib as _importlib
+            specs = _importlib.util.find_spec('nose')
+            specs.loader.load_module()
+        else:
+            import imp as _imp
+            _imp.find_module('nose')
+    except (AttributeError, ImportError) as error:
+        good_test = False
         def _test(verbose=False):
             """
-            This would invoke the Py-ART test suite, but nose couldn't be
-            imported so the test suite can not run.
+            This would invoke the Py-ART test suite, but nose couldn't
+            be imported so the test suite can not run.
             """
-            raise ImportError("Could not load nose. Unit tests not available.")
+            raise ImportError(
+                "Could not load nose. Unit tests not available.")
     else:
+        good_test = True
         def _test(verbose=False):
             """
             Invoke the Py-ART test suite.
@@ -92,6 +101,9 @@ else:
 
     # do not use `test` as function name as this leads to a recursion problem
     # with the nose test suite
-    test = _test
+    if good_test:
+        test = _test
+    else:
+        test = _test()
     test_verbose = _functools.partial(test, verbose=True)
     test_verbose.__doc__ = test.__doc__
