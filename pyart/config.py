@@ -28,7 +28,7 @@ import warnings
 _dirname = os.path.dirname(__file__)
 _DEFAULT_CONFIG_FILE = os.path.join(_dirname, 'default_config.py')
 
-
+foo = 'bar'
 def load_config(filename=None):
     """
     Load a Py-ART configuration from a config file.
