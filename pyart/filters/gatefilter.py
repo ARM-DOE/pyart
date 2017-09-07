@@ -10,6 +10,7 @@ corrections routines in Py-ART.
 
     moment_based_gate_filter
     moment_and_texture_based_gate_filter
+    calculate_velocity_texture
 
 .. autosummary::
     :toctree: generated/
