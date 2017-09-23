@@ -183,11 +183,11 @@ def _steiner_conv_strat(refl, x, y, dx, dy, intense=42, peak_relation=0,
     return sclass
 
 
-def steiner_conv_strat(ze, x, y, z, dx=dx, dy=dy, bkg_rad=bkg_rad,
-                       work_level=work_level, intense=intense, peak_relation=peak_relation,
-                       area_relation=area_relation, use_intense=use_intense,):
+def steiner_class_buff(ze, x, y, z, dx, dy, bkg_rad,
+                       work_level, intense, peak_relation,
+                       area_relation, use_intense,):
 
-    zslice = np.argmin(np.abs(z - worklevel))
+    zslice = np.argmin(np.abs(z - work_level))
     refl = ze[zslice, :, :]
 
     area_rel = {"small": 0, "medium": 1, "large": 2, "sgp": 3}
