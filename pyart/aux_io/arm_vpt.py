@@ -73,7 +73,7 @@ def read_kazr(filename, field_names=None, additional_metadata=None,
                    'primary_axis': 'axis_z'}
     # ignore time_* global variables, these are calculated from the time
     # variable when the file is written.
-    for var, default_value in global_vars.iteritems():
+    for var, default_value in global_vars.items():
         if var in ncvars:
             metadata[var] = str(netCDF4.chartostring(ncvars[var][:]))
         else:
@@ -131,7 +131,7 @@ def read_kazr(filename, field_names=None, additional_metadata=None,
 
     # 4.10 Moments field data variables -> field attribute dictionary
     # all variables with dimensions of 'time', 'range' are fields
-    keys = [k for k, v in ncvars.iteritems() if
+    keys = [k for k, v in ncvars.items() if
             v.dimensions == ('time', 'range')]
 
     fields = {}
