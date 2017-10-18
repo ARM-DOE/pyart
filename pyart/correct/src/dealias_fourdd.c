@@ -332,7 +332,7 @@ static void continuity_dealias(
             float azold = sweepc->rv->ray[ray_index]->h.azimuth;
             float diffaz_newold = fabs(aznew-azold);
             if(diffaz_newold > 180.0)
-                diffaz_newold = 360.0-diffaz_newold
+                diffaz_newold = 360.0-diffaz_newold;
             if(fabs(aznew-azold)>spacing/2){
                 valid_above_ray = 1;
             }
