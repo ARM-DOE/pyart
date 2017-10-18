@@ -271,13 +271,14 @@ static int findRay(Sweep *sweep1, Sweep *sweep2, int ray_index)
 {
     int numRays, rayIndex1;
     int minraynum; 
+    int i;
     float az0, az1, diffaz, currmaxdiffaz;
     currmaxdiffaz=99999999;
     
     numRays = sweep2->h.nrays;
     az0 = sweep1->ray[ray_index]->h.azimuth;
 
-    for(int i=0; i<numRays; i++){
+    for(i=0; i<numRays; i++){
         az1 = sweep2->ray[i]->h.azimuth;
         diffaz = fabs(az1-az0);
         if(diffaz>180.0){
