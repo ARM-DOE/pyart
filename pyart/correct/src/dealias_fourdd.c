@@ -323,10 +323,12 @@ static void continuity_dealias(
 
         if (sweepc->above != NULL){
             valid_above_ray = 0;
-            spacing = fabs(sweepc->rv->ray[0]->h.azimuth - sweepc->rv->ray[50]->h.azimuth);
+            //Checking to make sure that the above ray is actually *above*.
+            //This takes an average of the azimuthal spacing over the first four rays
+            spacing = fabs(sweepc->above->ray[0]->h.azimuth - sweepc->above->ray[4]->h.azimuth);
             if (spacing>180.0)
                 spacing = 360.0 - spacing;
-            spacing = spacing / 50.0;
+            spacing = spacing / 4.0;
 
             abIndex = findRay(sweepc->rv, sweepc->above, ray_index);
             float aznew = sweepc->above->ray[abIndex]->h.azimuth;
