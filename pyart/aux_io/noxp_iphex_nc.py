@@ -152,7 +152,7 @@ def read_noxp_iphex_nc(filename, field_names=None, additional_metadata=None,
     _range['meters_to_center_of_first_gate'] = np.mean(rng[0][0:2])
     # Gate spacing mostly but not completely constant
     _range['meters_between_gates'] = np.median(np.diff(_range['data']))
-    _range['spacing_is_constant'] = False
+    _range['spacing_is_constant'] = 0
 
     # azimuth
     azimuth = filemetadata('azimuth')
