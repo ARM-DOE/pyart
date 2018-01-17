@@ -35,6 +35,7 @@ from .transforms import antenna_vectors_to_cartesian, cartesian_to_geographic
 
 class Radar(object):
     """
+    foo = bar
     A class for storing antenna coordinate radar data.
 
     The structure of the Radar class is based on the CF/Radial Data file
