@@ -12,7 +12,6 @@ import inspect
 import numpy as np
 from numpy.testing import assert_raises, assert_allclose, assert_almost_equal
 import pyart
-from pyart.lazydict import LazyLoadDict
 
 
 def test_radar_picklable():
@@ -204,7 +203,7 @@ def test_init_gate_x_y_z():
 def test_rays_per_sweep_attribute():
     radar = pyart.testing.make_target_radar()
     rays_per_sweep = radar.rays_per_sweep
-    assert isinstance(rays_per_sweep, LazyLoadDict)
+    assert isinstance(rays_per_sweep, dict)
     assert rays_per_sweep['data'].shape == (1, )
     assert rays_per_sweep['data'][0] == 360
 

@@ -17,7 +17,6 @@ except ImportError:
     _PYPROJ_AVAILABLE = False
 
 import pyart
-from pyart.lazydict import LazyLoadDict
 
 
 def test_grid_picklable():
@@ -124,37 +123,37 @@ def test_grid_class():
     assert isinstance(grid.z, dict)
     assert grid.z['data'].shape == (nz, )
 
-    assert isinstance(grid.point_x, LazyLoadDict)
+    assert isinstance(grid.point_x, dict)
     assert grid.point_x['data'].shape == (nz, ny, nx)
     assert_almost_equal(
         grid.point_x['data'][0, 0, :], grid.x['data'][:])
     assert_almost_equal(
         grid.point_x['data'][1, 1, :], grid.x['data'][:])
 
-    assert isinstance(grid.point_y, LazyLoadDict)
+    assert isinstance(grid.point_y, dict)
     assert grid.point_y['data'].shape == (nz, ny, nx)
     assert_almost_equal(
         grid.point_y['data'][0, :, 0], grid.y['data'][:])
     assert_almost_equal(
         grid.point_y['data'][1, :, 1], grid.y['data'][:])
 
-    assert isinstance(grid.point_z, LazyLoadDict)
+    assert isinstance(grid.point_z, dict)
     assert grid.point_z['data'].shape == (nz, ny, nx)
     assert_almost_equal(
         grid.point_z['data'][:, 0, 0], grid.z['data'][:])
     assert_almost_equal(
         grid.point_z['data'][:, 1, 1], grid.z['data'][:])
 
-    assert isinstance(grid.point_longitude, LazyLoadDict)
+    assert isinstance(grid.point_longitude, dict)
     assert grid.point_longitude['data'].shape == (nz, ny, nx)
     assert_almost_equal(grid.point_longitude['data'][0, 0, 159], -98.1, 1)
 
     grid.init_point_longitude_latitude()
-    assert isinstance(grid.point_latitude, LazyLoadDict)
+    assert isinstance(grid.point_latitude, dict)
     assert grid.point_latitude['data'].shape == (nz, ny, nx)
     assert_almost_equal(grid.point_latitude['data'][0, 200, 0], 36.7, 1)
 
-    assert isinstance(grid.point_altitude, LazyLoadDict)
+    assert isinstance(grid.point_altitude, dict)
     assert grid.point_altitude['data'].shape == (nz, ny, nx)
     assert_almost_equal(grid.point_altitude['data'][0, 0, 0], 300, 0)
     assert_almost_equal(grid.point_altitude['data'][1, 0, 0], 800, 0)
@@ -280,7 +279,7 @@ def test_projection_proj_raised():
 
 def test_init_point_x_y_z():
     grid = pyart.testing.make_target_grid()
-    assert isinstance(grid.point_x, LazyLoadDict)
+    assert isinstance(grid.point_x, dict)
     assert grid.point_x['data'].shape == (2, 400, 320)
     assert grid.point_x['data'][0, 0, 0] == grid.x['data'][0]
 
