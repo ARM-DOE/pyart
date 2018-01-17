@@ -13,13 +13,9 @@ An class for holding gridded Radar data.
 .. autosummary::
     :toctree: generated/
 
-    _point_data_factory
-    _point_lon_lat_data_factory
-    _point_altitude_data_factory
 
 """
 
-import warnings
 
 import numpy as np
 
@@ -30,7 +26,6 @@ except ImportError:
     _PYPROJ_AVAILABLE = False
 
 from ..config import get_metadata
-from ..lazydict import LazyLoadDict
 from .transforms import cartesian_to_geographic
 from .transforms import cartesian_vectors_to_geographic
 
@@ -85,19 +80,19 @@ class Grid(object):
         pyproj.Proj instance for the projection specified by the projection
         attribute.  If the 'pyart_aeqd' projection is specified accessing this
         attribute will raise a ValueError.
-    point_x, point_y, point_z : LazyLoadDict
+    point_x, point_y, point_z : dict
         The Cartesian locations of all grid points from the origin in the
         three Cartesian coordinates.  The three dimensional data arrays
         contained these attributes are calculated from the x, y, and z
         attributes.  If these attributes are changed use :py:func:
         `init_point_x_y_z` to reset the attributes.
-    point_longitude, point_latitude : LazyLoadDict
+    point_longitude, point_latitude : dict
         Geographic location of each grid point. The projection parameter(s)
         defined in the `projection` attribute are used to perform an inverse
         map projection from the Cartesian grid point locations relative to
         the grid origin. If these attributes are changed use
         :py:func:`init_point_longitude_latitude` to reset the attributes.
-    point_altitude : LazyLoadDict
+    point_altitude : dict
         The altitude of each grid point as calculated from the altitude of the
         grid origin and the Cartesian z location of each grid point.  If this
         attribute is changed use :py:func:`init_point_altitude` to reset the
@@ -135,7 +130,7 @@ class Grid(object):
         self.radar_name = radar_name
         self.nradar = self._find_and_check_nradar()
 
-        # initialize attributes with Lazy load dictionaries
+        # initialize attributes
         self.init_point_x_y_z()
         self.init_point_longitude_latitude()
         self.init_point_altitude()
@@ -228,32 +223,42 @@ class Grid(object):
     # Attribute init/reset methods
     def init_point_x_y_z(self):
         """ Initialize or reset the point_{x, y, z} attributes. """
-        self.point_x = LazyLoadDict(get_metadata('point_x'))
-        self.point_x.set_lazy('data', _point_data_factory(self, 'x'))
 
-        self.point_y = LazyLoadDict(get_metadata('point_y'))
-        self.point_y.set_lazy('data', _point_data_factory(self, 'y'))
+        reg_x = self.x['data']
+        reg_y = self.y['data']
+        reg_z = self.z['data']
 
-        self.point_z = LazyLoadDict(get_metadata('point_z'))
-        self.point_z.set_lazy('data', _point_data_factory(self, 'z'))
+        self.point_x = get_metadata('point_x')
+        self.point_x['data'] = np.tile(
+            reg_x, (len(reg_z), len(reg_y), 1)).swapaxes(2, 2)
+
+        self.point_y = get_metadata('point_y')
+        self.point_y['data'] = np.tile(
+            reg_y, (len(reg_z), len(reg_x), 1)).swapaxes(1, 2)
+
+        self.point_z = get_metadata('point_z')
+        self.point_z['data'] = np.tile(
+            reg_z, (len(reg_x), len(reg_y), 1)).swapaxes(0, 2)
 
     def init_point_longitude_latitude(self):
         """
         Initialize or reset the point_{longitude, latitudes} attributes.
         """
-        point_longitude = LazyLoadDict(get_metadata('point_longitude'))
-        point_longitude.set_lazy('data', _point_lon_lat_data_factory(self, 0))
-        self.point_longitude = point_longitude
+        geographic_coords = cartesian_to_geographic(
+            self.point_x['data'], self.point_y['data'], self.get_projparams())
 
-        point_latitude = LazyLoadDict(get_metadata('point_latitude'))
-        point_latitude.set_lazy('data', _point_lon_lat_data_factory(self, 1))
-        self.point_latitude = point_latitude
+        self.point_longitude = get_metadata('point_longitude')
+        self.point_longitude['data'] = geographic_coords[0]
+
+        self.point_latitude = get_metadata('point_latitude')
+        self.point_latitude['data'] = geographic_coords[1]
+
 
     def init_point_altitude(self):
         """ Initialize the point_altitude attribute. """
-        point_altitude = LazyLoadDict(get_metadata('point_altitude'))
-        point_altitude.set_lazy('data', _point_altitude_data_factory(self))
-        self.point_altitude = point_altitude
+        self.point_altitude = get_metadata('point_altitude')
+        self.point_altitude['data'] = self.origin_altitude['data'][0] + \
+                                      self.point_z['data']
 
     def write(self, filename, format='NETCDF4', arm_time_variables=False):
         """
@@ -332,46 +337,4 @@ class Grid(object):
         return cartesian_vectors_to_geographic(x, y, projparams, edges=edges)
 
 
-def _point_data_factory(grid, coordinate):
-    """ Return a function which returns the locations of all points.  """
-    def _point_data():
-        """ The function which returns the locations of all points. """
-        reg_x = grid.x['data']
-        reg_y = grid.y['data']
-        reg_z = grid.z['data']
-        if coordinate == 'x':
-            return np.tile(reg_x, (len(reg_z), len(reg_y), 1)).swapaxes(2, 2)
-        elif coordinate == 'y':
-            return np.tile(reg_y, (len(reg_z), len(reg_x), 1)).swapaxes(1, 2)
-        else:
-            assert coordinate == 'z'
-            return np.tile(reg_z, (len(reg_x), len(reg_y), 1)).swapaxes(0, 2)
-    return _point_data
 
-
-def _point_lon_lat_data_factory(grid, coordinate):
-    """ Return a function which returns the geographic locations of points. """
-    def _point_lon_lat_data():
-        """ The function which returns the geographic point locations. """
-        x = grid.point_x['data']
-        y = grid.point_y['data']
-        projparams = grid.get_projparams()
-        geographic_coords = cartesian_to_geographic(x, y, projparams)
-        # Set point_latitude['data'] when point_longitude['data'] is evaluated
-        # and vice-versa.  This ensures that both attributes contain data from
-        # the same map projection and that the map projection only needs to be
-        # evaluated once.
-        if coordinate == 0:
-            grid.point_latitude['data'] = geographic_coords[1]
-        else:
-            grid.point_longitude['data'] = geographic_coords[0]
-        return geographic_coords[coordinate]
-    return _point_lon_lat_data
-
-
-def _point_altitude_data_factory(grid):
-    """ Return a function which returns the point altitudes. """
-    def _point_altitude_data():
-        """ The function which returns the point altitudes. """
-        return grid.origin_altitude['data'][0] + grid.point_z['data']
-    return _point_altitude_data
