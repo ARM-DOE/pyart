@@ -53,7 +53,7 @@ def _decode_noaa_hh_hdr(
         'tilt' and 'georefs_applied' dictionaries.
 
     """
-    xhdr = np.rec.fromstring(raw_extended_headers[..., :68].tostring(),
+    xhdr = np.rec.frombuffer(raw_extended_headers[..., :68].tostring(),
                              dtype=list(NOAA_HH_EXTENDED_HEADER))
 
     # rotation and tilt from azimuth/elevation angles
