@@ -283,13 +283,12 @@ class Radar(object):
         """
         Initialize or reset the gate_longitude and gate_latitude attributes.
         """
-        x = self.gate_x['data']
-        y = self.gate_y['data']
         projparams = self.projection.copy()
         if projparams.pop('_include_lon_0_lat_0', False):
             projparams['lon_0'] = self.longitude['data'][0]
             projparams['lat_0'] = self.latitude['data'][0]
-        geographic_coords = cartesian_to_geographic(x, y, projparams)
+        geographic_coords = cartesian_to_geographic(
+            self.gate_x['data'], self.gate_y['data'], projparams)
 
         self.gate_longitude = get_metadata('gate_longitude')
         self.gate_longitude['data'] = geographic_coords[0]
@@ -301,7 +300,6 @@ class Radar(object):
         """ Initialize the gate_altitude attribute. """
         self.gate_altitude = get_metadata('gate_altitude')
         self.gate_altitude['data'] = self.altitude['data'] + self.gate_z['data']
-
 
     # private functions for checking limits, etc.
     def _check_sweep_in_range(self, sweep):

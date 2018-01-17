@@ -253,7 +253,6 @@ class Grid(object):
         self.point_latitude = get_metadata('point_latitude')
         self.point_latitude['data'] = geographic_coords[1]
 
-
     def init_point_altitude(self):
         """ Initialize the point_altitude attribute. """
         self.point_altitude = get_metadata('point_altitude')
