@@ -22,7 +22,7 @@ out.write(fin.read(24 + 12 + RECORD_SIZE * 134))
 # read the rest of the file, and create a array of int8
 buf = fin.read()
 buf_length = len(buf)
-buf_data = np.fromstring(buf, dtype='i1')
+buf_data = np.frombuffer(buf, dtype='i1')
 fin.close()
 
 # replace all radial data with a single value so it compresses well

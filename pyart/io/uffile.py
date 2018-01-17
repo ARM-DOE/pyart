@@ -360,7 +360,7 @@ class UFRay(object):
                 field_header.update(vel_header)
 
         data_str = self._buf[data_offset:data_offset+field_header['nbins']*2]
-        raw_data = np.fromstring(data_str, dtype='>i2')
+        raw_data = np.frombuffer(data_str, dtype='>i2')
         return raw_data
 
     def get_datetime(self):

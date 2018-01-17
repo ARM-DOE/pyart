@@ -290,7 +290,7 @@ cdef class SigmetFile:
         nbins = self.product_hdr['product_end']['number_bins']
 
         # prepare to read rays
-        self._rbuf = np.fromstring(lead_record, dtype='int16')
+        self._rbuf = np.frombuffer(lead_record, dtype='int16')
         self._rbuf_p = <np.int16_t*>self._rbuf.data
         self._rbuf_pos = int((12 + 76 * self.ndata_types) / 2) - 1
         # set data initially to ones so that missing data can be better
@@ -413,7 +413,7 @@ cdef class SigmetFile:
         if self.debug:
             print("Finished loading record:", self._record_number)
         self._raw_product_bhdrs[-1].append(_unpack_raw_prod_bhdr(record))
-        self._rbuf = np.fromstring(record, dtype='int16')
+        self._rbuf = np.frombuffer(record, dtype='int16')
         self._rbuf_pos = 6
         self._rbuf_p = <np.int16_t*>self._rbuf.data
         return 0
