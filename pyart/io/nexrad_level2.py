@@ -614,9 +614,9 @@ def _get_msg31_data_block(buf, ptr):
         ngates = dic['ngates']
         ptr2 = ptr + _structure_size(GENERIC_DATA_BLOCK)
         if block_name == 'PHI':
-            data = np.fromstring(buf[ptr2: ptr2 + ngates * 2], '>u2')
+            data = np.frombuffer(buf[ptr2: ptr2 + ngates * 2], '>u2')
         else:
-            data = np.fromstring(buf[ptr2: ptr2 + ngates], '>u1')
+            data = np.frombuffer(buf[ptr2: ptr2 + ngates], '>u1')
         dic['data'] = data
     else:
         dic = {}
@@ -642,7 +642,7 @@ def _get_msg1_from_buf(buf, pos, dic):
 
     if msg1_header['sur_pointer']:
         offset = pos + msg_header_size + msg1_header['sur_pointer']
-        data = np.fromstring(buf[offset:offset+sur_nbins], '>u1')
+        data = np.frombuffer(buf[offset:offset+sur_nbins], '>u1')
         dic['REF'] = {
             'ngates': sur_nbins,
             'gate_spacing': sur_step,
@@ -653,7 +653,7 @@ def _get_msg1_from_buf(buf, pos, dic):
         }
     if msg1_header['vel_pointer']:
         offset = pos + msg_header_size + msg1_header['vel_pointer']
-        data = np.fromstring(buf[offset:offset+doppler_nbins], '>u1')
+        data = np.frombuffer(buf[offset:offset+doppler_nbins], '>u1')
         dic['VEL'] = {
             'ngates': doppler_nbins,
             'gate_spacing': doppler_step,
@@ -667,7 +667,7 @@ def _get_msg1_from_buf(buf, pos, dic):
             dic['VEL']['scale'] = 1.
     if msg1_header['width_pointer']:
         offset = pos + msg_header_size + msg1_header['width_pointer']
-        data = np.fromstring(buf[offset:offset+doppler_nbins], '>u1')
+        data = np.frombuffer(buf[offset:offset+doppler_nbins], '>u1')
         dic['SW'] = {
             'ngates': doppler_nbins,
             'gate_spacing': doppler_step,

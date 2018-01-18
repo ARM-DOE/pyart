@@ -177,13 +177,13 @@ class NEXRADLevel3File(object):
             radial_header = _unpack_from_buf(buf2, pos, RADIAL_HEADER)
             pos += 6
             if packet_code == 16:
-                radial[:] = np.fromstring(buf2[pos:pos+nbins], '>u1')
+                radial[:] = np.frombuffer(buf2[pos:pos+nbins], '>u1')
                 pos += radial_header['nbytes']
             else:
                 assert packet_code == AF1F
                 # decode run length encoding
                 rle_size = radial_header['nbytes'] * 2
-                rle = np.fromstring(buf2[pos:pos+rle_size], dtype='>u1')
+                rle = np.frombuffer(buf2[pos:pos+rle_size], dtype='>u1')
                 colors = np.bitwise_and(rle, 0b00001111)
                 runs = np.bitwise_and(rle, 0b11110000) // 16
                 radial[:] = np.repeat(colors, runs)
@@ -233,28 +233,28 @@ class NEXRADLevel3File(object):
             mdata = self._get_data_msg_134()
 
         elif msg_code in [94, 99, 182, 186]:
-            hw31, hw32 = np.fromstring(threshold_data[:4], '>i2')
+            hw31, hw32 = np.frombuffer(threshold_data[:4], '>i2')
             data = (self.raw_data - 2) * (hw32/10.) + hw31/10.
             mdata = np.ma.array(data, mask=self.raw_data < 2)
 
         elif msg_code in [32]:
-            hw31, hw32 = np.fromstring(threshold_data[:4], '>i2')
+            hw31, hw32 = np.frombuffer(threshold_data[:4], '>i2')
             data = (self.raw_data) * (hw32/10.) + hw31/10.
             mdata = np.ma.array(data, mask=self.raw_data < 2)
 
         elif msg_code in [138]:
-            hw31, hw32 = np.fromstring(threshold_data[:4], '>i2')
+            hw31, hw32 = np.frombuffer(threshold_data[:4], '>i2')
             data = self.raw_data * (hw32/100.) + hw31/100.
             mdata = np.ma.array(data)
 
         elif msg_code in [159, 161, 163]:
-            scale, offset = np.fromstring(threshold_data[:8], '>f4')
+            scale, offset = np.frombuffer(threshold_data[:8], '>f4')
             data = (self.raw_data - offset) / (scale)
             mdata = np.ma.array(data, mask=self.raw_data < 2)
 
         elif msg_code in [170, 172, 173, 174, 175]:
             # units are 0.01 inches
-            scale, offset = np.fromstring(threshold_data[:8], '>f4')
+            scale, offset = np.frombuffer(threshold_data[:8], '>f4')
             data = (self.raw_data - offset) / (scale) * 0.01
             mdata = np.ma.array(data, mask=self.raw_data < 1)
 
@@ -276,7 +276,7 @@ class NEXRADLevel3File(object):
 
     def _get_data_8_or_16_levels(self):
         """ Return a masked array for products with 8 or 16 data levels. """
-        thresh = np.fromstring(self.prod_descr['threshold_data'], '>B')
+        thresh = np.frombuffer(self.prod_descr['threshold_data'], '>B')
         flags = thresh[::2]
         values = thresh[1::2]
 
@@ -297,7 +297,7 @@ class NEXRADLevel3File(object):
 
     def _get_data_msg_134(self):
         """ Return a masked array for product with message code 134. """
-        hw31, hw32, hw33, hw34, hw35 = np.fromstring(
+        hw31, hw32, hw33, hw34, hw35 = np.frombuffer(
             self.prod_descr['threshold_data'][:10], '>i2')
         linear_scale = _int16_to_float16(hw31)
         linear_offset = _int16_to_float16(hw32)
