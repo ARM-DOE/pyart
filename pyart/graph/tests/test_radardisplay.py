@@ -150,6 +150,9 @@ def test_radardisplay_generate_filename():
     display = pyart.graph.RadarDisplay(radar, shift=(0.1, 0.0))
     filename = display.generate_filename('test', 0)
     assert filename == 'xsapr-sgp_test_00_20110520105416.png'
+
+    filename = display.generate_filename('test', 0, datetime_format='%Y%m%d')
+    assert filename == 'xsapr-sgp_test_00_20110520.png'
     plt.close()
 
 
