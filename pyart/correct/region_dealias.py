@@ -242,8 +242,8 @@ def dealias_region_based(
                                  nyquist_vel[nsweep], nfeatures)
 
             nyq_adjustments = fmin_l_bfgs_b(
-                cost_function, np.zeros((nfeatures+1)), disp=True,
-                fprime=gradient, bounds=bounds_list, maxiter=20)
+                cost_function, np.ones((nfeatures+1)), disp=True,
+                fprime=gradient, bounds=bounds_list, maxiter=40)
 
             i = 0
             for reg in np.unique(labels):
@@ -457,7 +457,7 @@ def _gradient(nyq_vector, regions, vels_slice, svels_slice, v_nyq_vel,
 
         if(add_value > 0):
             gradient_vector[i] = v_nyq_vel
-        else:
+        elif(add_value < 0):
             gradient_vector[i] = -v_nyq_vel
         i = i + 1
 
