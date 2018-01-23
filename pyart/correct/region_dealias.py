@@ -27,10 +27,13 @@ import warnings
 import numpy as np
 import scipy.ndimage as ndimage
 
+from scipy.optimize import fmin_l_bfgs_b
+
 from ..config import get_metadata, get_fillvalue
 from ._common_dealias import _parse_fields, _parse_gatefilter, _set_limits
 from ._common_dealias import _parse_rays_wrap_around, _parse_nyquist_vel
 from ._fast_edge_finder import _fast_edge_finder
+
 
 # Possible future improvements to the region based dealiasing algorithm:
 #
@@ -226,6 +229,28 @@ def dealias_region_based(
             if global_fold != 0:
                 scorr += global_fold * nyquist_interval
 
+            # Anchor specific regions against reference velocity
+            bounds_list = [(x, y) for (x, y) in zip(-5*np.ones(nfeatures+1),
+                           5*np.ones(nfeatures+1))]
+
+            def cost_function(x):
+                return _cost_function(x, labels, scorr, sref,
+                                      nyquist_vel[nsweep], nfeatures)
+
+            def gradient(x):
+                return _gradient(x, labels, scorr, sref,
+                                 nyquist_vel[nsweep], nfeatures)
+
+            nyq_adjustments = fmin_l_bfgs_b(
+                cost_function, np.ones((nfeatures+1)), disp=True,
+                fprime=gradient, bounds=bounds_list, maxiter=40)
+
+            i = 0
+            for reg in np.unique(labels):
+                scorr[labels == reg] += (nyquist_vel[nsweep] *
+                                         np.round(nyq_adjustments[0][i]))
+                i = i + 1
+
     # fill_value from the velocity dictionary if present
     fill_value = radar.fields[vel_field].get('_FillValue', get_fillvalue())
 
@@ -398,6 +423,45 @@ def _combine_regions(region_tracker, edge_tracker):
     edge_tracker.merge_nodes(base_node, merge_node, edge_number)
 
     return False
+
+
+# Minimize cost function that is sum of difference between regions and
+# sounding
+def _cost_function(nyq_vector, regions, vels_slice,
+                   svels_slice, v_nyq_vel, nfeatures):
+    """ Cost function for minimization in region based algorithm """
+    cost = 0
+    i = 0
+
+    for reg in range(nfeatures):
+        add_value = np.abs(np.ma.mean(vels_slice[regions == reg]) +
+                           nyq_vector[i]*v_nyq_vel -
+                           np.ma.mean(svels_slice[regions == reg]))
+
+        if(np.isfinite(add_value)):
+            cost += add_value
+        i = i + 1
+
+    return cost
+
+
+def _gradient(nyq_vector, regions, vels_slice, svels_slice, v_nyq_vel,
+              nfeatures):
+    """ Gradient of cost function for minimization
+        in region based algorithm """
+    gradient_vector = np.zeros(len(nyq_vector))
+    i = 0
+    for reg in range(nfeatures):
+        add_value = (np.ma.mean(vels_slice) + nyq_vector[i]*v_nyq_vel -
+                     np.ma.mean(svels_slice))
+
+        if(add_value > 0):
+            gradient_vector[i] = v_nyq_vel
+        elif(add_value < 0):
+            gradient_vector[i] = -v_nyq_vel
+        i = i + 1
+
+    return gradient_vector
 
 
 class _RegionTracker(object):
