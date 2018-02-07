@@ -15,8 +15,7 @@ of propagation differential phase (PHIDP), backscatter differential phase
     kdp_maesaka
     filter_psidp
     boundary_conditions_maesaka
-
-    _kdp_estimation_backward_fixed
+    
     _kdp_estimation_backward_fixed
     _kdp_kalman_profile
     _kdp_vulpiani_profile
@@ -35,6 +34,7 @@ from functools import partial
 from scipy import optimize, stats, interpolate, linalg, signal
 from . import _kdp_proc
 from ..config import get_field_name, get_metadata, get_fillvalue
+from ..util import rolling_window
 
 
 # Constants in the Kalman filter retrieval method (generally no need to
@@ -180,12 +180,12 @@ def kdp_schneebeli(radar, gatefilter=None, fill_value=None, psidp_field=None,
     # create specific differential phase field dictionary and store data
     kdp_dict = get_metadata(kdp_field)
     kdp_dict['data'] = kdp
-    kdp_dict['valid_min'] = -1.0
+    # kdp_dict['valid_min'] = -1.0
 
     # create reconstructed differential phase field dictionary and store data
     phidpr_dict = get_metadata(phidp_field)
     phidpr_dict['data'] = phidp_rec
-    phidpr_dict['valid_min'] = 0.0
+    # phidpr_dict['valid_min'] = 0.0
 
     # create specific phase stdev field dictionary and store data
     kdp_stdev_dict = {}
@@ -682,7 +682,7 @@ def _kdp_kalman_profile(psidp_in, dr, band='X', rcov=0, pcov=0):
 
         weight2 = np.tile(weight2, (len(SCALERS), 1)).T
 
-        kdp_dummy = (1 - weight2) * kdp_mat[:, np.arange(len(SCALERS)) * 2 + 1] \
+        kdp_dummy = (1-weight2)*kdp_mat[:, np.arange(len(SCALERS))*2+1] \
             + weight2 * kdp_mat[:, np.arange(len(SCALERS)) * 2]
         kdp_sim[condi, :] = kdp_dummy[condi, :]
 
@@ -856,11 +856,13 @@ def kdp_vulpiani(radar, gatefilter=None, fill_value=None, psidp_field=None,
     else:
         list_est = map(func, all_psidp_prof)
 
-    kdp = np.zeros(psidp_o.shape) * np.nan
-    kdp = np.ma.masked_array(kdp, fill_value=fill_value)
+    kdp = np.ma.zeros(psidp_o.shape)
+    kdp[:] = np.ma.masked
+    kdp.set_fill_value(fill_value)
 
-    phidp_rec = np.zeros(psidp_o.shape) * np.nan
-    phidp_rec = np.ma.masked_array(phidp_rec, fill_value=fill_value)
+    phidp_rec = np.ma.zeros(psidp_o.shape)
+    phidp_rec[:] = np.ma.masked
+    phidp_rec.set_fill_value(fill_value)
 
     for i, l in enumerate(list_est):
         kdp[i, 0:len(l[0])] = l[0]
@@ -876,12 +878,12 @@ def kdp_vulpiani(radar, gatefilter=None, fill_value=None, psidp_field=None,
     # create specific differential phase field dictionary and store data
     kdp_dict = get_metadata(kdp_field)
     kdp_dict['data'] = kdp
-    kdp_dict['valid_min'] = 0.0
+    # kdp_dict['valid_min'] = 0.0
 
     # create reconstructed differential phase field dictionary and store data
     phidpr_dict = get_metadata(phidp_field)
     phidpr_dict['data'] = phidp_rec
-    phidpr_dict['valid_min'] = 0.0
+    # phidpr_dict['valid_min'] = 0.0
 
     if parallel:
         pool.close()
@@ -923,22 +925,28 @@ def _kdp_vulpiani_profile(psidp_in, dr, windsize=10,
 
     """
 
-    if not np.isfinite(psidp_in).any(
-    ):  # Check if psidp has at least one finite value
-        return psidp_in, psidp_in, psidp_in  # Return the NaNs...
-
+    mask = np.ma.getmaskarray(psidp_in)
     l = windsize
+    l2 = int(l/2)
+    drm = dr/1000.
+
+    if mask.all() is True:
+        # Check if all elements are masked
+        return psidp_in, psidp_in, psidp_in  # Return the NaNs...
 
     # Thresholds in kdp calculation
     if band == 'X':
         th1 = -2.
-        th2 = 25.
+        th2 = 40.
+        std_th = 5.
     elif band == 'C':
-        th1 = -0.5
-        th2 = 15.
+        th1 = -2.
+        th2 = 20.
+        std_th = 5.
     elif band == 'S':
-        th1 = -0.5
-        th2 = 10.
+        th1 = -2.
+        th2 = 14.
+        std_th = 5.
     else:
         print('Unexpected value set for the band keyword ')
         print(band)
@@ -948,52 +956,65 @@ def _kdp_vulpiani_profile(psidp_in, dr, windsize=10,
     nn = len(psidp_in)
 
     # Get information of valid and non valid points in psidp the new psidp
-    nonan = np.where(np.isfinite(psidp))[0]
-    nan = np.where(np.isnan(psidp))[0]
+    valid = np.logical_not(mask)
     if interp:
         ranged = np.arange(0, nn)
         psidp_interp = psidp
         # interpolate
-        if len(nan):
-            interp = interpolate.interp1d(ranged[nonan], psidp[nonan],
+        if np.ma.is_masked(psidp):
+            interp = interpolate.interp1d(ranged[valid], psidp[valid],
                                           kind='zero', bounds_error=False,
                                           fill_value=np.nan)
-            psidp_interp[nan] = interp(ranged[nan])
+            psidp_interp[mask] = interp(ranged[mask])
 
         psidp = psidp_interp
 
     psidp = np.ma.filled(psidp, np.nan)
-    kdp_calc = np.zeros([nn]) * np.nan
+    kdp_calc = np.zeros([nn])
 
-    # Loop over range profile and iteration
-    for ii in range(0, n_iter):
+    # first guess
+    # In the core of the profile
+    kdp_calc[l2:nn-l2] = (psidp[l:nn]-psidp[0:nn-l])/(2.*l*drm)
+
+    # set ray extremes to 0
+    kdp_calc[0:l2] = 0.
+    kdp_calc[nn-l2:] = 0.
+
+    # apply thresholds
+    kdp_calc[kdp_calc <= th1] = 0.
+    kdp_calc[kdp_calc >= th2] = 0.
+
+    # set all non-valid data to 0
+    kdp_calc[np.isnan(kdp_calc)] = 0.
+
+    # Remove bins with texture higher than treshold
+    tex = np.ma.zeros(kdp_calc.shape)
+    # compute the local standard deviation
+    # (make sure that it is and odd window)
+    tex_aux = np.ma.std(rolling_window(kdp_calc, l2*2+1), -1)
+    tex[l2:-l2] = tex_aux
+    kdp_calc[tex > std_th] = 0.
+
+    # Loop over iterations
+    for i in range(0, n_iter):
+        phidp_rec = np.ma.cumsum(kdp_calc)*2.*drm
+
         # In the core of the profile
-        kdp_calc[int(l / 2):nn - int(l / 2)] = ((psidp[l:nn] -
-                                                psidp[0:nn - l]) /
-                                                (2. * l * dr / 1000.))
+        kdp_calc[l2:nn-l2] = (phidp_rec[l:nn]-phidp_rec[0:nn-l])/(2.*l*drm)
 
-        # In the beginnning of the profile: use all the available data on the
-        # RHS
-        kdp_calc[0:int(l / 2)] = (psidp[l] - psidp[0]) / (2. * l * dr)
+        # set ray extremes to 0
+        kdp_calc[0:l2] = 0.
+        kdp_calc[nn-l2:] = 0.
 
-        # In the end of the profile: use the  LHS available data
-        kdp_calc[nn - int(l / 2):] = ((psidp[nn - 1] - psidp[nn - l - 1]) /
-                                      (2. * l * dr / 1000.))
         # apply thresholds
-        kdp_calc[kdp_calc <= th1] = th1
-        kdp_calc[kdp_calc >= th2] = th2
-
-        # Erase first and last gate
-        kdp_calc[0] = np.nan
-        kdp_calc[nn - 1] = np.nan
-
-    kdp_calc = np.ma.masked_array(kdp_calc, mask=np.isnan(kdp_calc))
-    # Reconstruct Phidp from Kdp
-    phidp_rec = np.cumsum(kdp_calc) * 2. * dr / 1000.
+        kdp_calc[kdp_calc <= th1] = 0.
+        kdp_calc[kdp_calc >= th2] = 0.
 
     # Censor Kdp where Psidp was not defined
-    if len(nan):
-        kdp_calc[nan] = np.nan
+    kdp_calc = np.ma.masked_where(mask, kdp_calc)
+
+    # final reconstructed PhiDP from KDP
+    phidp_rec = np.ma.cumsum(kdp_calc)*2.*drm
 
     return kdp_calc, phidp_rec
 
@@ -1840,3 +1861,4 @@ def _parse_range_resolution(
         raise ValueError('Radar gate spacing is not uniform')
 
     return dr
+    
