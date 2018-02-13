@@ -250,7 +250,7 @@ class NNLocator:
 
 def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
                 grid_origin_alt=None, grid_projection=None,
-                fields=None, gatefilters=False, 
+                fields=None, gatefilters=False,
                 map_roi=True, weighting_function='Barnes', toa=17000.0,
                 copy_field_data=True, algorithm='kd_tree', leafsize=10.,
                 roi_func='dist_beam', constant_roi=500.,
@@ -404,10 +404,10 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
         raise ValueError('Length of gatefilters must match length of radars')
 
     # check the parameters
-    if weighting_function.upper() not in ['CRESSMAN', 'BARNES','NEAREST']:
+    if weighting_function.upper() not in ['CRESSMAN', 'BARNES', 'NEAREST']:
         raise ValueError('unknown weighting_function')
     if algorithm not in ['kd_tree']:
-        raise ValueError('unknow algorithm: %s' % algorithm)
+        raise ValueError('unknown algorithm: %s' % algorithm)
     badval = get_fillvalue()
 
     # parse the grid_projection
