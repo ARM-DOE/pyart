@@ -21,6 +21,7 @@ Find contiguous objects in scans and despeckle away ones that are too small.
 
 """
 
+from __future__ import division
 import numpy as np
 from ..filters.gatefilter import GateFilter
 from scipy.ndimage import label
@@ -198,7 +199,8 @@ def _adjust_for_periodic_boundary(data):
     data = np.append(data, data, axis=0)
     labels, nobj = _get_labels(data)
     i1 = 0
-    i2 = int(np.shape(labels)[0] / 2)
+    # i2 = int(np.shape(labels)[0] / 2)
+    i2 = labels.shape[0] // 2
     old_labs = np.unique(labels[i2][labels[i2] > 0])
     for i, lab in enumerate(old_labs):
         cond = labels == lab
