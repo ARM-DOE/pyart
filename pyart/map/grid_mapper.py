@@ -250,7 +250,7 @@ class NNLocator:
 
 def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
                 grid_origin_alt=None, grid_projection=None,
-                fields=None, gatefilters=False,
+                fields=None, gatefilters=False, 
                 map_roi=True, weighting_function='Barnes', toa=17000.0,
                 copy_field_data=True, algorithm='kd_tree', leafsize=10.,
                 roi_func='dist_beam', constant_roi=500.,
@@ -327,7 +327,7 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
         True to include a radius of influence field in the returned
         dictionary under the 'ROI' key.  This is the value of roi_func at all
         grid points.
-    weighting_function : 'Barnes' or 'Cressman'
+    weighting_function : 'Barnes' or 'Cressman' or 'Nearest'
         Functions used to weight nearby collected points when interpolating a
         grid point.
     toa : float
@@ -404,7 +404,7 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
         raise ValueError('Length of gatefilters must match length of radars')
 
     # check the parameters
-    if weighting_function.upper() not in ['CRESSMAN', 'BARNES']:
+    if weighting_function.upper() not in ['CRESSMAN', 'BARNES','NEAREST']:
         raise ValueError('unknown weighting_function')
     if algorithm not in ['kd_tree']:
         raise ValueError('unknow algorithm: %s' % algorithm)
@@ -630,11 +630,14 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
         dist2 = dist * dist
         r2 = r * r
 
-        if weighting_function.upper() == 'CRESSMAN':
-            weights = (r2 - dist2) / (r2 + dist2)
-        elif weighting_function.upper() == 'BARNES':
-            weights = np.exp(-dist2 / (2.0 * r2)) + 1e-5
-        value = np.ma.average(nn_field_data, weights=weights, axis=0)
+        if weighting_function.upper() == 'NEAREST':
+            value = nn_field_data[np.argmin(dist2)] 
+        else:
+            if weighting_function.upper() == 'CRESSMAN':
+                weights = (r2 - dist2) / (r2 + dist2)
+            elif weighting_function.upper() == 'BARNES':
+                weights = np.exp(-dist2 / (2.0 * r2)) + 1e-5
+            value = np.ma.average(nn_field_data, weights=weights, axis=0)
 
         grid_data[iz, iy, ix] = value
 
