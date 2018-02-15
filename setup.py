@@ -47,6 +47,7 @@ Programming Language :: Python :: 2.7
 Programming Language :: Python :: 3
 Programming Language :: Python :: 3.4
 Programming Language :: Python :: 3.5
+Programming Language :: Python :: 3.6
 Programming Language :: C
 Programming Language :: Cython
 Programming Language :: Fortran
@@ -60,7 +61,7 @@ Operating System :: Microsoft :: Windows
 
 NAME = 'arm_pyart'
 MAINTAINER = "Py-ART Developers"
-MAINTAINER_EMAIL = "jhelmus@anl.gov"
+MAINTAINER_EMAIL = "zsherman@anl.gov"
 DESCRIPTION = DOCLINES[0]
 LONG_DESCRIPTION = "\n".join(DOCLINES[2:])
 URL = "https://github.com/ARM-DOE/pyart"
