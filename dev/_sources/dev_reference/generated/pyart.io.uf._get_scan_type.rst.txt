@@ -1,0 +1,6 @@
+pyart.io.uf.\_get\_scan\_type
+=============================
+
+.. currentmodule:: pyart.io.uf
+
+.. autofunction:: _get_scan_type

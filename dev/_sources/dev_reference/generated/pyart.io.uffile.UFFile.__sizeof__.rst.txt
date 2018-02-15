@@ -1,0 +1,6 @@
+pyart.io.uffile.UFFile.\_\_sizeof\_\_
+=====================================
+
+.. currentmodule:: pyart.io.uffile
+
+.. automethod:: UFFile.__sizeof__

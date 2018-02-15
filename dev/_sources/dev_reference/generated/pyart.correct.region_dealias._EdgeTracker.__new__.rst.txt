@@ -1,0 +1,6 @@
+pyart.correct.region\_dealias.\_EdgeTracker.\_\_new\_\_
+=======================================================
+
+.. currentmodule:: pyart.correct.region_dealias
+
+.. automethod:: _EdgeTracker.__new__

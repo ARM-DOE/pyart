@@ -1,0 +1,6 @@
+pyart.core.grid.Grid.\_\_sizeof\_\_
+===================================
+
+.. currentmodule:: pyart.core.grid
+
+.. automethod:: Grid.__sizeof__

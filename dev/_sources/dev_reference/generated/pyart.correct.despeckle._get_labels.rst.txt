@@ -1,0 +1,6 @@
+pyart.correct.despeckle.\_get\_labels
+=====================================
+
+.. currentmodule:: pyart.correct.despeckle
+
+.. autofunction:: _get_labels

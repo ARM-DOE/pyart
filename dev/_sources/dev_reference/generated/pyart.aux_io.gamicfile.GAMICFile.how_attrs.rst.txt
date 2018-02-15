@@ -1,0 +1,6 @@
+pyart.aux\_io.gamicfile.GAMICFile.how\_attrs
+============================================
+
+.. currentmodule:: pyart.aux_io.gamicfile
+
+.. automethod:: GAMICFile.how_attrs

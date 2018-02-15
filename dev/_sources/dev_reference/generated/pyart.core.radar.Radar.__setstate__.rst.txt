@@ -1,0 +1,6 @@
+pyart.core.radar.Radar.\_\_setstate\_\_
+=======================================
+
+.. currentmodule:: pyart.core.radar
+
+.. automethod:: Radar.__setstate__

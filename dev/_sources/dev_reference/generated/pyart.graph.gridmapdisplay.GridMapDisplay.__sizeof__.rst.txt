@@ -1,0 +1,6 @@
+pyart.graph.gridmapdisplay.GridMapDisplay.\_\_sizeof\_\_
+========================================================
+
+.. currentmodule:: pyart.graph.gridmapdisplay
+
+.. automethod:: GridMapDisplay.__sizeof__

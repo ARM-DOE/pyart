@@ -1,0 +1,6 @@
+pyart.map.\_gate\_to\_grid\_map.GateToGridMapper.find\_roi\_for\_grid
+=====================================================================
+
+.. currentmodule:: pyart.map._gate_to_grid_map
+
+.. automethod:: GateToGridMapper.find_roi_for_grid

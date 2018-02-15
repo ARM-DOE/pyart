@@ -1,0 +1,6 @@
+pyart.io.uffile.UFRay.get\_datetime
+===================================
+
+.. currentmodule:: pyart.io.uffile
+
+.. automethod:: UFRay.get_datetime

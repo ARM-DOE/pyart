@@ -1,0 +1,6 @@
+pyart.testing.sample\_files.MDV\_RHI\_FILE
+==========================================
+
+.. currentmodule:: pyart.testing.sample_files
+
+.. autodata:: MDV_RHI_FILE

@@ -1,0 +1,6 @@
+pyart.graph.RadarMapDisplayCartopy.plot\_ppi
+============================================
+
+.. currentmodule:: pyart.graph
+
+.. automethod:: RadarMapDisplayCartopy.plot_ppi

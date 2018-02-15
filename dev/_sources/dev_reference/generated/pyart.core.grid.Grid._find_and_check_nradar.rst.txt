@@ -1,0 +1,6 @@
+pyart.core.grid.Grid.\_find\_and\_check\_nradar
+===============================================
+
+.. currentmodule:: pyart.core.grid
+
+.. automethod:: Grid._find_and_check_nradar

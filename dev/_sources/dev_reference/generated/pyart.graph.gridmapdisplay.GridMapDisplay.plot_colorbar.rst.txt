@@ -1,0 +1,6 @@
+pyart.graph.gridmapdisplay.GridMapDisplay.plot\_colorbar
+========================================================
+
+.. currentmodule:: pyart.graph.gridmapdisplay
+
+.. automethod:: GridMapDisplay.plot_colorbar

@@ -1,0 +1,6 @@
+pyart.aux\_io.gamicfile.\_get\_gamic\_sweep\_data
+=================================================
+
+.. currentmodule:: pyart.aux_io.gamicfile
+
+.. autofunction:: _get_gamic_sweep_data

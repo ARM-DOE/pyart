@@ -1,0 +1,6 @@
+pyart.filters.gatefilter.GateFilter.exclude\_invalid
+====================================================
+
+.. currentmodule:: pyart.filters.gatefilter
+
+.. automethod:: GateFilter.exclude_invalid

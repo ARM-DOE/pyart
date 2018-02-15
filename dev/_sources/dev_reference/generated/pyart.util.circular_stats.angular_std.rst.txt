@@ -1,0 +1,6 @@
+pyart.util.circular\_stats.angular\_std
+=======================================
+
+.. currentmodule:: pyart.util.circular_stats
+
+.. autofunction:: angular_std

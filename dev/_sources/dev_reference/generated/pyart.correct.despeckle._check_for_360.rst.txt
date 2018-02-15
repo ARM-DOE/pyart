@@ -1,0 +1,6 @@
+pyart.correct.despeckle.\_check\_for\_360
+=========================================
+
+.. currentmodule:: pyart.correct.despeckle
+
+.. autofunction:: _check_for_360

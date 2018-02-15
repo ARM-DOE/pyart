@@ -1,0 +1,6 @@
+pyart.graph.radardisplay.RadarDisplay.\_set\_title
+==================================================
+
+.. currentmodule:: pyart.graph.radardisplay
+
+.. automethod:: RadarDisplay._set_title

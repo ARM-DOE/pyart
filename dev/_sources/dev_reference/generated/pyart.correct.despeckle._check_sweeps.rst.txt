@@ -1,0 +1,6 @@
+pyart.correct.despeckle.\_check\_sweeps
+=======================================
+
+.. currentmodule:: pyart.correct.despeckle
+
+.. autofunction:: _check_sweeps
