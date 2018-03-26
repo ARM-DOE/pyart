@@ -60,15 +60,14 @@ def texture_of_complex_phase(radar, phidp_field=None,
         raise MissingOptionalDependency(
             "wradlib is required to use texture_of_complex_phase but is " +
             "not installed")
-            
+
     # parse field names
     if phidp_field is None:
         phidp_field = get_field_name('differential_phase')
-        
+
     if phidp_texture_field is None:
         phidp_texture_field = get_field_name('differential_phase')
 
-    
     # Grab the phase data
     phidp = radar.fields[phidp_field]['data']
 
