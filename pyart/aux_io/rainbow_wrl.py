@@ -18,10 +18,16 @@ Routines for reading RAINBOW files (Used by SELEX) using the wradlib library
 import os
 
 try:
-    import wradlib as wrl
+    import wradlib
     _WRADLIB_AVAILABLE = True
+    # `read_rainbow` as of wradlib version 1.0.0
+    try:
+        from wradlib.io import read_Rainbow as read_rainbow
+    except ImportError:
+        from wradlib.io import read_rainbow
 except:
     _WRADLIB_AVAILABLE = False
+
 
 import datetime
 
@@ -72,10 +78,10 @@ def read_rainbow_wrl(filename, field_names=None, additional_metadata=None,
     Read a RAINBOW file.
     This routine has been tested to read rainbow5 files version 5.22.3,
     5.34.16 and 5.35.1.
-    Since the rainbow file format is evolving constanly there is no guaranty
+    Since the rainbow file format is evolving constantly there is no guaranty
     that it can work with other versions.
     If necessary, the user should adapt to code according to its own
-    file version.
+    file version and raise an issue upstream.
 
     Data types read by this routine:
     Reflectivity: dBZ, dBuZ, dBZv, dBuZv
@@ -144,7 +150,7 @@ def read_rainbow_wrl(filename, field_names=None, additional_metadata=None,
     filemetadata = FileMetadata('RAINBOW', field_names, additional_metadata,
                                 file_field_names, exclude_fields)
 
-    rbf = wrl.io.read_Rainbow(filename, loaddata=True)
+    rbf = read_rainbow(filename, loaddata=True)
 
     # check the number of slices
     nslices = int(rbf['volume']['scan']['pargroup']['numele'])
