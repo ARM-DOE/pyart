@@ -2,7 +2,7 @@
 pyart.bridge.wradlib
 ====================
 
-Py-ART methods linking to wradlib functions, http://wradlib.bitbucket.org/
+Py-ART methods linking to wradlib functions, http://wradlib.org/
 
 .. autosummary::
     :toctree: generated/
