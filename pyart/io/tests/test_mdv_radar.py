@@ -338,7 +338,7 @@ def test_rhi_elevation():
 
 
 # field data
-def test_rhi_elevation():
+def test_rhi_field_data():
     assert_almost_equal(RADAR_RHI.fields['reflectivity']['data'][0, 0],
                         23.93, 2)
 
