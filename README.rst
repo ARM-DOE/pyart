@@ -230,10 +230,8 @@ Contributing
 
 We welcome contributions for all uses of Py-ART, provided the code can be
 distributed under the BSD 3-clause license.  A copy of this license is
-available in the **LICENSE.txt** file in this directory. For guidelines on
-contributing, see the
-`contributor's guide <https://github.com/ARM-DOE/pyart/blob/master/
-contributors_guide.rst>`_.
+available in the **LICENSE.txt** file in this directory. For more on
+contributing, see the **contributors_guide.rst** file in this directory.
 
 Testing
 -------
