@@ -1,12 +1,15 @@
 .. -*- mode: rst -*-
 
-|Travis|_ |AppVeyor|_
+|Travis|_ |AppVeyor|_ |CondaDownloads|_
 
 .. |Travis| image:: https://api.travis-ci.org/ARM-DOE/pyart.png?branch=master
 .. _Travis: https://travis-ci.org/ARM-DOE/pyart
 
 .. |AppVeyor| image:: https://ci.appveyor.com/api/projects/status/9do57qycha65j4v9/branch/master?svg=true
 .. _AppVeyor: https://ci.appveyor.com/project/JonathanHelmus/pyart-l711v/branch/master
+
+.. |CondaDownloads| image:: https://anaconda.org/conda-forge/arm_pyart/badges/downloads.svg
+.. _CondaDownloads: https://anaconda.org/conda-forge/arm_pyart
 
 
 The Python ARM Radar Toolkit (Py-ART)
@@ -222,9 +225,12 @@ forking the repository is highly recommended.
 Contributing
 -------------
 
-We welcome contributions for all used of Py-ART provided the code can be
+We welcome contributions for all uses of Py-ART, provided the code can be
 distributed under the BSD 3-clause license.  A copy of this license is
-available in the **LICENSE.txt** file in this directory.  
+available in the **LICENSE.txt** file in this directory. For guidelines on
+contributing, see the
+`contributor's guide <https://github.com/ARM-DOE/pyart/blob/master/
+contributors_guide.rst>`_.
 
 Testing
 -------
