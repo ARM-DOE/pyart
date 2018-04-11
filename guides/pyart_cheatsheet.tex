@@ -1,0 +1,580 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Python Cheat Sheet
+% baposter Landscape Poster
+% LaTeX Template
+% Version 1.0 (11/06/13)
+% baposter Class Created by:
+% Brian Amberg (baposter@brian-amberg.de)
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+% Edited by Zachary Sherman
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% NOTE
+% The class file needed with this .tex file can be found here:
+% http://www.brian-amberg.de/uni/poster/
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------
+%   PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------
+
+\documentclass[potrait,a0paper,fontscale=0.33]{baposter} % Adjust the font scale/size here
+\title{Python Cheat Sheet New}
+
+\usepackage[utf8]{inputenc}
+
+\usepackage{graphicx} % Required for including images
+\graphicspath{{figures/}} % Directory in which figures are stored
+
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{tabu}
+
+\usepackage{mathtools}
+%\usepackage{amsmath} % For typesetting math
+\usepackage{amssymb} % Adds new symbols to be used in math mode
+
+\usepackage{booktabs} % Top and bottom rules for tables
+\usepackage{enumitem} % Used to reduce itemize/enumerate spacing
+\usepackage{palatino} % Use the Palatino font
+\usepackage[font=small,labelfont=bf]{caption} % Required for specifying captions to tables and figures
+
+\usepackage{multicol} % Required for multiple columns
+\setlength{\columnsep}{1.5em} % Slightly increase the space between columns
+\setlength{\columnseprule}{0mm} % No horizontal rule between columns
+
+\usepackage{tikz} % Required for flow chart
+\usetikzlibrary{decorations.pathmorphing}
+\usetikzlibrary{shapes,arrows} % Tikz libraries required for the flow chart in the template
+
+\newcommand{\compresslist}{ % Define a command to reduce spacing within itemize/enumerate environments, this is used right after \begin{itemize} or \begin{enumerate}
+\setlength{\itemsep}{1pt}
+\setlength{\parskip}{0pt}
+\setlength{\parsep}{0pt}
+}
+
+\definecolor{lightblue}{rgb}{0.145,0.6666,1} % Defines the color used for content box headers
+
+\begin{document}
+
+\begin{poster}
+{
+headerborder=closed, % Adds a border around the header of content boxes
+colspacing=0.8em, % Column spacing
+bgColorOne=white, % Background color for the gradient on the left side of the poster
+bgColorTwo=white, % Background color for the gradient on the right side of the poster
+borderColor=lightblue, % Border color
+headerColorOne=black, % Background color for the header in the content boxes (left side)
+headerColorTwo=lightblue, % Background color for the header in the content boxes (right side)
+headerFontColor=white, % Text color for the header text in the content boxes
+boxColorOne=white, % Background color of the content boxes
+textborder=roundedleft, % Format of the border around content boxes, can be: none, bars, coils, triangles, rectangle, rounded, roundedsmall, roundedright or faded
+eyecatcher=true, % Set to false for ignoring the left logo in the title and move the title left
+headerheight=0.1\textheight, % Height of the header
+headershape=roundedright, % Specify the rounded corner in the content box headers, can be: rectangle, small-rounded, roundedright, roundedleft or rounded
+headerfont=\Large\bf\textsc, % Large, bold and sans serif font in the headers of content boxes
+textfont={\setlength{\parindent}{1.5em}}, % Uncomment for paragraph indentation
+linewidth=2pt % Width of the border lines around content boxes
+}
+%----------------------------------------------------------------
+%   Title
+%----------------------------------------------------------------
+{\bf\textsc{Py-ART Cheat Sheet}\vspace{0.5em}} % Poster title
+{\textsc{\ P y - A R T \ \ \ \ \ C h e a t \ \ \ \ \ S h e e t\ \hspace{12pt}}}
+{\textsc{Learn More About Py-ART[1] at http://arm-doe.github.io/pyart/ \hspace{12pt}}} 
+
+
+%------------------------------------------------
+% Py-ART Introduction
+%------------------------------------------------
+\headerbox{Py-ART Introduction}{name=introduction,column=0,row=0,span=1}{
+\begin{flushleft}
+The Python ARM Radar Toolkit, Py-ART, is a Python module containing a collection of weather radar algorithms and utilities. Py-ART is used by the Atmospheric Radiation Measurement (ARM) Climate Research Facility for working with data from a number of its precipitation and cloud radars, but has been designed so that it can be used by others in the radar and atmospheric communities. Py-ART has the ability to ingest (read) from a number of common weather radar formats. Radar data can be written to NetCDF files which conform to the CF/Radial convention. Py-ART also contains routines which can produce common radar plots including PPIs and RHIs. Algorithms in the module are able to performs a number of corrections on the radar moment data in antenna coordinate. A sophisticated mapping routines is able to efficiently create uniform Cartesian grids of radar fields from one or more radars.
+\end{flushleft}
+}
+
+%------------------------------------------------
+% Installation
+%------------------------------------------------
+\headerbox{Installation}{name=installation,column=0,row=.257,span=1}{
+
+\begin{flushleft}
+\begin{tabular}{@{}ll@{}}
+The recommended way to install Py-ART is by using\\
+Anaconda or Miniconda, then create an environment\\
+and activate it:\\
+\\
+\-\hspace{0.4cm} $\bullet$ First install Anaconda or Miniconda\\
+\\
+\-\hspace{0.4cm} $\bullet$ Then create a conda environment:\\
+\-\hspace{0.4cm} \$ conda create -n pyart python=3.6\\
+\\
+\-\hspace{0.4cm} $\bullet$ Activate the Py-ART environment:\\
+\-\hspace{0.4cm} \$ source activate pyart\\
+\\
+\-\hspace{0.4cm} $\bullet$ Then install Py-ART:\\
+\-\hspace{0.4cm} \$ conda install -c conda-forge arm\_pyart\\
+\\
+For the most recent Py-ART developments, you\\
+need to get the latest master branch from github.com\\
+\\
+\-\hspace{0.1cm} $\bullet$ Clone the Py-ART repository:\\
+\-\hspace{0.1cm} \$ git clone https://github.com/ARM-DOE/pyart.git\\
+\\
+\-\hspace{0.1cm} $\bullet$ Go into the Py-ART directory and then:\\
+\-\hspace{0.1cm} \$ python setup.py install\\
+\end{tabular}
+\end{flushleft}
+
+}
+
+%------------------------------------------------
+% Contact Information
+%------------------------------------------------
+\headerbox{Contact Information}{name=contact information,column=0,row=.578,span=1}{
+
+\begin{flushleft}
+\textbf{Google Groups:}
+https://groups.google.com/d/forum/pyart-users
+\end{flushleft}
+
+\begin{flushleft}
+\textbf{Email:}
+\\
+\-\hspace{0.4cm}scollis@anl.gov\\
+\-\hspace{0.4cm}zsherman@anl.gov
+\end{flushleft}
+
+\begin{flushleft}
+\textbf{Issues:}
+https://github.com/ARM-DOE/pyart/issues
+\end{flushleft}
+
+}
+
+%------------------------------------------------
+% Getting Started
+%------------------------------------------------
+
+\headerbox{Getting Started}{name=getting started,column=0,row=.72}{
+
+\begin{flushleft}
+\begin{tabular}{@{}ll@{}}
+$>$$>$$>$ import pyart & To import Py-ART.\\
+$>$$>$$>$ print(pyart.\_\_version\_\_) & Check version.
+\end{tabular}
+\end{flushleft}
+}
+
+%------------------------------------------------
+% Reading and Writing Data 1
+%------------------------------------------------
+
+\headerbox{Reading and Writing Data}{name=reading and writing data,column=0,row=.785}{
+
+\begin{flushleft}
+\begin{tabular}{@{}ll@{}}
+\multicolumn{2}{l}{\cellcolor[HTML]{DDFFFF}\bf Reading Data} \\
+\\
+$>$$>$$>$ radar = pyart.io.read(filename)\\
+\-\hspace{0.4cm} $\bullet$ Read a file supported by RSL.\\
+\-\hspace{0.4cm} $\bullet$ Read a MDV file.\\
+\-\hspace{0.4cm} $\bullet$ Read a Sigmet (IRIS) product file.\\
+\-\hspace{0.4cm} $\bullet$ Read a Cfradial netCDF file.\\
+\-\hspace{0.4cm} $\bullet$ Read a CSU-CHILL CHL file.\\
+\-\hspace{0.4cm} $\bullet$ Read a NEXRAD Level 2 Archive file.\\
+\-\hspace{0.4cm} $\bullet$ Read a Common Data Model NEXRAD 2 file.\\
+\-\hspace{0.4cm} $\bullet$ Read a NEXRAD Level 3 product.\\
+\-\hspace{0.4cm} $\bullet$ Read a UF File.\\
+$>$$>$$>$ radar = pyart.aux\_io.read\_d3r\_gcpex\_nc(file)\\
+\-\hspace{0.4cm} $\bullet$ Read a D3R GCPEX netCDF file.\\
+$>$$>$$>$ radar = pyart.aux\_io.read\_gamic(filename)\\
+\-\hspace{0.4cm} $\bullet$ Read a GAMIC hdf5 file.\\
+\end{tabular}
+\end{flushleft}
+}
+
+%------------------------------------------------
+% Reading and Writing Data 2
+%------------------------------------------------
+
+\headerbox{Reading and Writing Data}{name=reading and writing data,column=1,row=0}{
+
+\begin{flushleft}
+\begin{tabular}{@{}ll@{}}
+\\
+$>$$>$$>$ radar = pyart.aux\_io.read\_kazr(filename)\\
+\-\hspace{0.4cm} $\bullet$ Read K-band ARM Zenith Radar (KAZR) data.\\
+$>$$>$$>$ radar = pyart.aux\_io.read\_noxp\_iphex\_nc(file)\\
+\-\hspace{0.4cm} $\bullet$ Read a NOXP IPHEX netCDF file.\\
+$>$$>$$>$ radar = pyart.aux\_io.read\_odim\_h5(filename)\\
+\-\hspace{0.4cm} $\bullet$ Read a ODIM\_H5 file.\\
+$>$$>$$>$ radar = pyart.aux\_io.read\_radx(filename)\\
+\-\hspace{0.4cm} $\bullet$ Read a radx file by using RadxConvert.\\
+$>$$>$$>$ radar = pyart.aux\_io.read\_pattern(filename)\\
+\-\hspace{0.4cm} $\bullet$ Read PATTERN project X-band radar file.\\
+$>$$>$$>$ radar = pyart.aux\_io.read\_rainbow\_wrl(file)\\
+\-\hspace{0.4cm} $\bullet$ 	Read a RAINBOW file.\\
+
+\\
+\end{tabular}
+
+\begin{tabular}{@{}ll@{}}
+\multicolumn{2}{l}{\cellcolor[HTML]{DDFFFF}\bf Writing Radar Data} \\
+\\
+$>$$>$$>$ pyart.io.write\_cfradial(filename, radar)\\
+$>$$>$$>$ pyart.io.write\_uf(filename, radar)\\
+\\
+\end{tabular}
+
+\begin{tabular}{@{}ll@{}}
+\multicolumn{2}{l}{\cellcolor[HTML]{DDFFFF}\bf Reading Grid Data} \\
+\\
+$>$$>$$>$ grid = pyart.io.read\_grid(filename)\\
+$>$$>$$>$ grid = pyart.io.read\_grid\_mdv(filename)\\
+\\
+\end{tabular}
+
+\begin{tabular}{@{}ll@{}}
+\multicolumn{2}{l}{\cellcolor[HTML]{DDFFFF}\bf Writing Grid Data} \\
+\\
+$>$$>$$>$ pyart.io.write\_grid(filename, grid)\\
+$>$$>$$>$ pyart.io.write\_grid\_mdv(filename, grid)\\
+$>$$>$$>$ pyart.io.write\_grid\_geotiff(grid, filename)\\
+\\
+\end{tabular}
+
+\begin{tabular}{@{}ll@{}}
+\multicolumn{2}{l}{\cellcolor[HTML]{DDFFFF}\bf Reading Sonde Data} \\
+\\
+$>$$>$$>$ sonde = pyart.io.read\_sonde(filename)\\
+$>$$>$$>$ sonde = pyart.io.read\_sonde\_vap(\\
+\-\hspace{1.5cm} filename[, radar, …])\\
+
+\end{tabular}
+\end{flushleft}
+
+}
+
+%------------------------------------------------
+% Graphing Data
+%------------------------------------------------
+
+\headerbox{Graphing Data}{name=graphing data,column=1,row=.474}{
+\begin{flushleft}
+\begin{tabular}{@{}ll@{}}
+\multicolumn{2}{l}{\cellcolor[HTML]{DDFFFF}\bf Radar Data} \\
+\\
+$>$$>$$>$ pyart.graph.RadarDisplay(radar)\\
+\-\hspace{0.4cm} $\bullet$ Display object to plot data from a radar object.\\
+$>$$>$$>$ pyart.graph.RadarMapDisplay(radar)\\
+\-\hspace{0.4cm} $\bullet$ Plots data to a geographic map.\\
+$>$$>$$>$ pyart.graph.AirborneRadarDisplay(radar)\\
+\-\hspace{0.4cm} $\bullet$ Plots data from a airborne radar object.\\
+$>$$>$$>$ pyart.graph.RadarMapDisplayCartopy(radar)\\
+\-\hspace{0.4cm} $\bullet$ Plots data to a geographic map using Cartopy\\
+\\
+After defining the display objects above, each have\\
+specific functions for plots. For Example:\\
+\\
+$>$$>$$>$ display.plot(field[, sweep])\\
+$>$$>$$>$ display.plot\_ppi(field[, sweep, vmin, …])\\
+$>$$>$$>$ display.plot\_ppi\_map(field[, sweep, …])\\
+$>$$>$$>$ display.plot\_rhi(field[, sweep, vmin, …])\\
+$>$$>$$>$ display.plot\_vpt(field[, vmin, vmax, …])\\
+\end{tabular}
+
+\begin{tabular}{@{}ll@{}}
+\\
+\multicolumn{2}{l}{\cellcolor[HTML]{DDFFFF}\bf Grid Data} \\
+\\
+$>$$>$$>$ pyart.graph.GridMapDisplay(grid)\\
+$>$$>$$>$ display.plot\_grid(field[, level, vmin, vmax, …])\\
+$>$$>$$>$ display.plot\_latitudinal\_level(\\
+\-\hspace{1.5cm} field, y\_index[, ...])\\
+$>$$>$$>$ display.plot\_longitudinal\_level(\\
+\-\hspace{1.5cm} field, x\_index[, ...])\\
+\end{tabular}
+\end{flushleft}
+
+}
+
+%------------------------------------------------
+% Mapping Data
+%------------------------------------------------
+
+\headerbox{Mapping Data}{name=mapping data,column=1,row=.859}{
+\begin{flushleft}
+\begin{tabular}{@{}ll@{}}
+
+$>$$>$$>$ grid = pyart.map.grid\_from\_radars(\\
+\-\hspace{1.2cm} radars, grid\_shape, grid\_limits)\\
+\-\hspace{0.4cm} $\bullet$ Map one or more radars to a Cartesian grid\\
+\-\hspace{0.7cm} returning a grid object.\\
+$>$$>$$>$ grids = pyart.map.map\_to\_grid(\\
+\-\hspace{1.2cm} radars, grid\_shape, grid\_limits)\\
+\-\hspace{0.4cm} $\bullet$ Map one or more radars to a Cartesian grid.\\
+$>$$>$$>$ grids = pyart.map.map\_gates\_to\_grid(\\
+\-\hspace{1.2cm} radars, grid\_shape, grid\_limits)\\
+\-\hspace{0.4cm} $\bullet$ Map gates from radar(s) to a Cartesian grid.\\
+
+\end{tabular}
+\end{flushleft}
+
+}
+
+%------------------------------------------------
+% Corrections
+%------------------------------------------------
+
+\headerbox{Corrections}{name=corrections,column=2,span=1,row=0}{
+\begin{flushleft}
+
+\begin{tabular}{@{}ll@{}}
+\multicolumn{2}{l}{\cellcolor[HTML]{DDFFFF}\bf GateFilters} \\
+\\
+A class for building a boolean arrays for filtering gates\\
+based on a set of condition typically based on the\\
+values in the radar fields.\\
+\\
+$>$$>$$>$ gatefilter = pyart.correct.GateFilter(radar)\\
+$>$$>$$>$ gatefilter.exclude\_all()\\
+$>$$>$$>$ gatefilter.exclude\_below(field, 10)\\
+$>$$>$$>$ gatefilter.exclude\_masked(field)\\
+
+\end{tabular}
+
+\begin{tabular}{@{}ll@{}}
+\\
+\multicolumn{2}{l}{\cellcolor[HTML]{DDFFFF}\bf Velocity Unfolding} \\
+\\
+$>$$>$$>$ pyart.correct.dealias\_fourdd(radar[, ...])\\
+\-\hspace{0.4cm} $\bullet$ Dealias Doppler velocities using 4DD\\
+\-\hspace{0.7cm} algorithm [2].\\
+$>$$>$$>$ pyart.correct.dealias\_region\_based(radar[, ...])\\
+\-\hspace{0.4cm} $\bullet$ Dealias velocities using a region based algorithm.\\
+$>$$>$$>$ pyart.correct.dealias\_unwrap\_phase(radar[, ...])\\
+\-\hspace{0.4cm} $\bullet$ Dealias Doppler velocities using\\
+\-\hspace{0.7cm} multi-dimensional phase unwrapping.\\
+\end{tabular}
+
+\begin{tabular}{@{}ll@{}}
+\\
+\multicolumn{2}{l}{\cellcolor[HTML]{DDFFFF}\bf Other Corrections} \\
+\\
+$>$$>$$>$ pyart.correct.calculate\_attenuation(\\
+\-\hspace{1.5cm}radar, z\_offset[, ...])\\
+\-\hspace{0.4cm} $\bullet$ Calculate the attenuation from a polarimetric\\
+\-\hspace{0.7cm} radar using Z-PHI method.\\
+$>$$>$$>$ pyart.correct.phase\_proc\_lp(radar, offset[, ...])\\
+\-\hspace{0.4cm} $\bullet$ Phase process using a LP method [3].\\
+$>$$>$$>$ pyart.correct.despeckle\_field(radar, field[, ...])\\
+\-\hspace{0.4cm} $\bullet$ Despeckle a radar volume by identifying small\\
+\-\hspace{0.7cm} objects in each scan and masking them out.\\
+$>$$>$$>$ pyart.correct.correct\_noise\_rhohv(radar[, ...])\\
+\-\hspace{0.4cm} $\bullet$ Corrects RhoHV for noise [4].\\
+$>$$>$$>$ pyart.correct.correct\_bias(radar[, bias, ...])\\
+\-\hspace{0.4cm} $\bullet$ Corrects a radar data bias.\\
+
+\end{tabular}
+\end{flushleft}
+
+}
+
+%------------------------------------------------
+% Retrievals
+%------------------------------------------------
+
+\headerbox{Retrievals}{name=retrievals,column=2,span=1,row=.497}{
+\begin{flushleft}
+
+$>$$>$$>$ pyart.retrieve.kdp\_maesaka(radar[, ...])\\
+\-\hspace{0.4cm} $\bullet$ Computes the specific differential phase (KDP)\\
+\-\hspace{0.7cm} based on Maesaka et al [5].\\
+$>$$>$$>$ pyart.retrieve.compute\_snr(radar[, ...])\\
+\-\hspace{0.4cm} $\bullet$ Computes SNR from a reflectivity field and\\
+\-\hspace{0.7cm} the noise in dBZ.\\
+$>$$>$$>$ pyart.retrieve.compute\_l(radar[, ...])\\
+\-\hspace{0.4cm} $\bullet$ Computes Rhohv in logarithmic scale according\\
+\-\hspace{0.7cm} to L=-log10(1-RhoHV)\\
+$>$$>$$>$ pyart.retrieve.compute\_cdr(radar[, ...])\\
+\-\hspace{0.4cm} $\bullet$ Computes the Circular Depolarization Ratio.\\
+$>$$>$$>$ pyart.retrieve.steiner\_conv\_strat(grid[, ...])\\
+\-\hspace{0.4cm} $\bullet$ Partition reflectivity into convective-stratiform\\
+\-\hspace{0.7cm} using the Steiner et al. [6].\\
+$>$$>$$>$ pyart.retrieve.hydroclass\_semisupervised(\\
+\-\hspace{1.5cm} radar[, ...])\\
+\-\hspace{0.4cm} $\bullet$ Classifies precipitation echoes following the\\
+\-\hspace{0.7cm} approach by Besic et al. [7].\\
+$>$$>$$>$ pyart.retrieve.texture\_of\_complex\_phase(\\
+\-\hspace{1.5cm} radar[, ...])\\
+\-\hspace{0.4cm} $\bullet$ Calculate the texture of the differential phase.\\
+\-\hspace{0.7cm} field [8].\\
+$>$$>$$>$ pyart.retrieve.est\_rain\_rate\_z(\\
+\-\hspace{1.5cm} radar[, alpha, beta, ...])\\
+\-\hspace{0.4cm} $\bullet$ Estimates rainfall rate from reflectivity using a\\
+\-\hspace{0.7cm} power law.\\
+$>$$>$$>$ pyart.retrieve.est\_rain\_rate\_kdp(\\
+\-\hspace{1.5cm} radar[, alpha, beta, ...])\\
+\-\hspace{0.4cm} $\bullet$ Estimates rainfall rate from kdp using alpha\\
+\-\hspace{0.7cm} power law.\\
+$>$$>$$>$ pyart.retrieve.est\_rain\_rate\_a(\\
+\-\hspace{1.5cm} radar[, alpha, beta, ...])\\
+\-\hspace{0.4cm} $\bullet$ Estimates rainfall rate from specific attenuation\\
+\-\hspace{0.7cm} using alpha power law [9], [10].\\
+$>$$>$$>$ pyart.retrieve.est\_rain\_rate\_hydro(\\
+\-\hspace{1.5cm} radar[, alphazr, ...])\\
+\-\hspace{0.4cm} $\bullet$ Estimates rainfall rate using different relations\\
+\-\hspace{0.7cm} between R and the polarimetric variables\\
+\-\hspace{0.7cm} depending on the hydrometeor type.\\
+
+\end{flushleft}
+
+}
+
+\end{poster}
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%    SECOND PAGE    %%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{poster}
+{
+headerborder=closed, colspacing=0.8em, bgColorOne=white, bgColorTwo=white, borderColor=lightblue, headerColorOne=black, headerColorTwo=lightblue, 
+headerFontColor=white, boxColorOne=white, textborder=roundedleft, eyecatcher=true, headerheight=0.1\textheight, headershape=roundedright, headerfont=\Large\bf\textsc, linewidth=2pt 
+}
+%----------------------------------------------------------------
+%   TITLE SECTION 
+%----------------------------------------------------------------
+{\bf\textsc{Py-ART Cheat Sheet}\vspace{0.5em}} % Poster title
+{\textsc{\ P y - A R T \ \ \ \ \ C h e a t \ \ \ \ \ S h e e t\ \hspace{12pt}}}
+{\textsc{{\textsc{Learn More About Py-ART[1] at http://arm-doe.github.io/pyart/ \hspace{12pt}}} \hspace{12pt}}} 
+
+%------------------------------------------------
+% Utilities
+%------------------------------------------------
+
+\headerbox{Utilities}{name=utilities,column=0,span=1,row=0}{
+\begin{flushleft}
+\begin{tabular}{@{}ll@{}}
+\multicolumn{2}{l}{\cellcolor[HTML]{DDFFFF}\bf Direction Statistics} \\
+\\
+$>$$>$$>$ pyart.utils.angular\_mean(angles)\\
+\-\hspace{0.4cm} $\bullet$ Compute the mean of a distribution of angles in\\
+\-\hspace{0.7cm} radians.\\
+$>$$>$$>$ pyart.utils.angular\_std(angles)\\
+\-\hspace{0.4cm} $\bullet$ Compute the standard deviation of a distribution\\
+\-\hspace{0.7cm} of angles in radians.\\
+$>$$>$$>$ pyart.utils.angular\_mean\_deg(angles)\\
+\-\hspace{0.4cm} $\bullet$ Compute the mean of a distribution of angles in\\
+\-\hspace{0.7cm}  degrees.\\
+$>$$>$$>$ pyart.utils.angular\_std\_deg(angles)\\
+\-\hspace{0.4cm} $\bullet$ Compute the standard deviation of a distribution\\
+\-\hspace{0.7cm} of angles in degrees.\\
+$>$$>$$>$ pyart.utils.interval\_mean(\\
+\-\hspace{1.5cm} dist, interval\_min, interval\_max)\\
+\-\hspace{0.4cm} $\bullet$ Compute the mean of a distribution within an\\
+\-\hspace{0.7cm} interval.\\
+$>$$>$$>$ pyart.utils.interval\_std(\\
+\-\hspace{1.5cm} dist, interval\_min, interval\_max)\\
+\-\hspace{0.4cm} $\bullet$ Compute the standard deviation of a distribution\\
+\-\hspace{0.7cm} within an interval.\\
+$>$$>$$>$ pyart.utils.mean\_of\_two\_angles(\\
+\-\hspace{1.5cm} angles1, angles2)\\
+\-\hspace{0.4cm} $\bullet$ Compute the element by element mean of two\\
+\-\hspace{0.7cm} sets of angles.\\
+$>$$>$$>$ pyart.utils.mean\_of\_two\_angles\_deg(\\
+\-\hspace{1.5cm} angle1, angle2)\\
+\-\hspace{0.4cm} $\bullet$ Compute the element by element mean of two\\
+\-\hspace{0.7cm} sets of angles in degrees.\\
+\end{tabular}
+
+\begin{tabular}{@{}ll@{}}
+\\
+\multicolumn{2}{l}{\cellcolor[HTML]{DDFFFF}\bf Miscellaneous Utilities} \\
+\\
+$>$$>$$>$ pyart.utils.cross\_section\_ppi(\\
+\-\hspace{1.5cm} radar, target\_azimuths[, ...])\\
+\-\hspace{0.4cm} $\bullet$ Extract cross sections from a PPI volume along\\
+\-\hspace{0.7cm} one or more azimuth angles.\\
+$>$$>$$>$ pyart.utils.cross\_section\_rhi(\\
+\-\hspace{1.5cm} radar, target\_elevations)\\
+\-\hspace{0.4cm} $\bullet$ 	Extract cross sections from an RHI volume along\\
+\-\hspace{0.7cm} one or more elevation angles.\\
+$>$$>$$>$ pyart.utils.estimate\_noise\_hs74(\\
+\-\hspace{1.5cm} spectrum[, navg])\\
+\-\hspace{0.4cm} $\bullet$ Estimate noise parameters of a Doppler\\
+\-\hspace{0.7cm} spectrum [11].\\
+$>$$>$$>$ pyart.utils.to\_vpt(radar[, single\_scan])\\
+\-\hspace{0.4cm} $\bullet$ Convert an existing Radar object to represent\\
+\-\hspace{0.7cm} a vertical pointing scan.\\
+$>$$>$$>$ pyart.utils.join\_radar(radar1, radar2)\\
+\-\hspace{0.4cm} $\bullet$ Combine two radar instances into one.\\
+$>$$>$$>$ pyart.utils.simulated\_vel\_from\_profile(\\
+\-\hspace{1.5cm} radar, profile[, ...])\\
+\-\hspace{0.4cm} $\bullet$ Create simulated radial velocities from a\\
+\-\hspace{0.7cm} profile of horizontal winds.\\
+$>$$>$$>$ pyart.utils.texture\_along\_ray(\\
+\-\hspace{1.5cm} radar, var[, wind\_size])\\
+\-\hspace{0.4cm} $\bullet$ Compute field texture along ray using a user\\
+\-\hspace{0.7cm} specified window size.\\
+$>$$>$$>$ pyart.utils.rolling\_window(a, window)\\
+\-\hspace{0.4cm} $\bullet$ Create a rolling window object for application\\
+\-\hspace{0.7cm}  of functions.\\
+$>$$>$$>$ pyart.utils.angular\_texture\_2d(\\
+\-\hspace{1.5cm} image, N, interval)\\
+\-\hspace{0.4cm} $\bullet$ Compute the angular texture of an image.\\
+
+\end{tabular}
+\end{flushleft}
+
+}
+
+%------------------------------------------------
+% References
+%------------------------------------------------
+
+\headerbox{References}{name=references,column=1,row=0,span=1}{
+
+[1] Helmus, J.J.  Collis, S.M., 2016: The Python ARM Radar Toolkit (Py-ART), a Library for Working with
+Weather Radar Data in the Python Programming Language. \textit{Journal of Open Research Software}. \textbf{4(1)}, p.e25.
+\smallskip
+
+[2] C. N. James and R. A Houze Jr, 2001: A Real-Time Four-Dimensional Doppler Dealising Scheme. \textit{Journal of Atmospheric and Oceanic Technology}, \textbf{18}, 1674.
+\medskip
+
+[3] Giangrande, S.E., R. McGraw, and L. Lei., 2013: An Application of Linear Programming to Polarimetric Radar Differential Phase Processing. \textit{J. Atmos. and Oceanic Tech}, \textbf{30}, 1716.
+\medskip
+
+[4] Gourley et al., 2006: Data Quality of the Meteo-France C-Band Polarimetric Radar. \textit{JAOT}, \textbf{23}, 1340-1356
+\medskip
+
+[5] Maesaka, T., Iwanami, K. and Maki, M., 2012: Non-negative KDP Estimation by Monotone Increasing PHIDP Assumption below Melting Layer. \textit{The Seventh European Conference on Radar in Meteorology and Hydrology}.
+\medskip
+
+[6] Steiner, M. R., R. A. Houze Jr., and S. E. Yuter, 1995: Climatological Characterization of Three-Dimensional Storm Structure from Operational Radar and Rain Gauge Data. \textit{J. Appl. Meteor.}, \textbf{34}, 1978-2007.
+\medskip
+
+[7] Besic, N., Figueras i Ventura, J., Grazioli, J., Gabella, M., Germann, U., and Berne, A., 2016: Hydrometeor classification through statistical clustering of polarimetric radar measurements: a semi-supervised approach. \textit{Atmos. Meas. Tech.}, \textbf{9}, 4425-4445
+\medskip
+
+[8] Gourley, J. J., P. Tabary, and J. Parent du Chatelet, 2007: A fuzzy logic algorithm for the separation of precipitating from nonprecipitating echoes using polarimetric radar observations. \textit{Journal of Atmospheric and Oceanic Technology} \textbf{24(8)}, 1439-1451
+\medskip
+
+[9] Diederich M., Ryzhkov A., Simmer C., Zhang P. and Tromel S., 2015: Use of Specific Attenuation for Rainfall Measurement at X-Band Radar Wavelenghts. Part I: Radar Calibration and Partial Beam Blockage Estimation. \textit{Journal of Hydrometeorology}, \textbf{16}, 487-502.
+\medskip
+
+[10] Ryzhkov A., Diederich M., Zhang P. and Simmer C., 2014: Potential Utilization of Specific Attenuation for Rainfall Estimation, Mitigation of Partial Beam Blockage, and Radar Networking. \textit{Journal of Atmospheric and Oceanic Technology}, \textbf{31}, 599-619.
+\medskip
+
+[11] Hildebrand P.H., and R. S. Sekhon, 1974: Objective Determination of the Noise Level in Doppler Spectra. \textit{Journal of Applied Meteorology}, \textbf{13}, 808-811.
+
+}
+
+\end{poster}
+\end{document}
