@@ -1,18 +1,39 @@
 .. -*- mode: rst -*-
 
-|Travis|_ |AppVeyor|_ |AnacondaCloud|_ |CondaDownloads|_
+|Travis| |AppVeyor|
+
+|AnacondaCloud| |CondaDownloads|
+
+|DocsDev| |DocsUsers| |DocsGuides|
+
+|ARM| |Tweet|
 
 .. |Travis| image:: https://api.travis-ci.org/ARM-DOE/pyart.png?branch=master
-.. _Travis: https://travis-ci.org/ARM-DOE/pyart
+    :target: https://travis-ci.org/ARM-DOE/pyart
 
 .. |AppVeyor| image:: https://ci.appveyor.com/api/projects/status/9do57qycha65j4v9/branch/master?svg=true
-.. _AppVeyor: https://ci.appveyor.com/project/JonathanHelmus/pyart-l711v/branch/master
+    :target: https://ci.appveyor.com/project/JonathanHelmus/pyart-l711v/branch/master
 
 .. |AnacondaCloud| image:: https://anaconda.org/conda-forge/arm_pyart/badges/version.svg
-.. _AnacondaCloud: https://anaconda.org/conda-forge/arm_pyart
+    :target: https://anaconda.org/conda-forge/arm_pyart
 
 .. |CondaDownloads| image:: https://anaconda.org/conda-forge/arm_pyart/badges/downloads.svg
-.. _CondaDownloads: https://anaconda.org/conda-forge/arm_pyart/files
+    :target: https://anaconda.org/conda-forge/arm_pyart/files
+
+.. |DocsDev| image:: https://img.shields.io/badge/docs-developers-4088b8.svg
+    :target: http://arm-doe.github.io/pyart-docs-travis/dev_reference/index.html
+
+.. |DocsUsers| image:: https://img.shields.io/badge/docs-users-4088b8.svg
+    :target: http://arm-doe.github.io/pyart-docs-travis/user_reference/index.html
+
+.. |DocsGuides| image:: https://img.shields.io/badge/docs-guides-4088b8.svg
+    :target: https://github.com/ARM-DOE/pyart/tree/master/guides/
+
+.. |ARM| image:: https://img.shields.io/badge/Sponser-ARM-blue.svg?colorA=00c1de&colorB=00539c
+    :target: https://www.arm.gov/
+
+.. |Tweet| image:: https://img.shields.io/twitter/url/http/shields.io.svg?style=social
+    :target: https://twitter.com/Py_ART
 
 
 The Python ARM Radar Toolkit (Py-ART)
@@ -214,7 +235,7 @@ Development
 ===========
 
 Py-ART is an open source, community software project.  Contributions to
-the package are welcomed from all users.  
+the package are welcomed from all users.
 
 Code
 ----
@@ -231,7 +252,7 @@ Contributing
 We welcome contributions for all uses of Py-ART, provided the code can be
 distributed under the BSD 3-clause license.  A copy of this license is
 available in the **LICENSE.txt** file in this directory. For more on
-contributing, see the **contributors_guide.rst** file in this directory.
+contributing, see the `contributor's guide. <https://github.com/ARM-DOE/pyart/blob/master/guides/contributors_guide.rst>`_
 
 Testing
 -------
