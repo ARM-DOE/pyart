@@ -234,7 +234,8 @@ class RadarDisplay(object):
             colorbar_flag=True, colorbar_label=None,
             colorbar_orient='vertical', edges=True, gatefilter=None,
             filter_transitions=True, ax=None, fig=None,
-            ticks=None, ticklabs=None, raster=None, **kwargs):
+            ticks=None, ticklabs=None, raster=None,
+            title_datetime_format=None, title_use_sweep_time=True, **kwargs):
         """
         Plot a PPI.
 
@@ -273,6 +274,11 @@ class RadarDisplay(object):
             Title to label plot with, None to use default title generated from
             the field and sweep parameters. Parameter is ignored if title_flag
             is False.
+        title_datetime_format : str
+            Format of datetime in the title (using strftime format).
+        title_use_sweep_time : bool
+            True for the current sweep's beginning time to be used for the title.
+            False for the radar's beginning time.
         title_flag : bool
             True to add a title to the plot, False does not add a title.
         axislabels : (str, str)
@@ -343,7 +349,9 @@ class RadarDisplay(object):
             pm.set_rasterized(True)
 
         if title_flag:
-            self._set_title(field, sweep, title, ax)
+            self._set_title(
+                field, sweep, title, ax, datetime_format=title_datetime_format,
+                use_sweep_time=title_use_sweep_time)
 
         if axislabels_flag:
             self._label_axes_ppi(axislabels, ax)
@@ -365,7 +373,8 @@ class RadarDisplay(object):
             reverse_xaxis=None, colorbar_flag=True, colorbar_label=None,
             colorbar_orient='vertical', edges=True, gatefilter=None,
             filter_transitions=True, ax=None, fig=None,
-            ticks=None, ticklabs=None, raster=False, **kwargs):
+            ticks=None, ticklabs=None, raster=False,
+            title_datetime_format=None, title_use_sweep_time=True, **kwargs):
         """
         Plot a RHI.
 
@@ -401,6 +410,11 @@ class RadarDisplay(object):
             Title to label plot with, None to use default title generated from
             the field and sweep parameters. Parameter is ignored if title_flag
             is False.
+        title_datetime_format : str
+            Format of datetime in the title (using strftime format).
+        title_use_sweep_time : bool
+            True for the current sweep's beginning time to be used for the title.
+            False for the radar's beginning time.
         title_flag : bool
             True to add a title to the plot, False does not add a title.
         axislabels : (str, str)
@@ -481,7 +495,9 @@ class RadarDisplay(object):
             pm.set_rasterized(True)
 
         if title_flag:
-            self._set_title(field, sweep, title, ax)
+            self._set_title(
+                field, sweep, title, ax, datetime_format=title_datetime_format,
+                use_sweep_time=title_use_sweep_time)
 
         if axislabels_flag:
             self._label_axes_rhi(axislabels, ax)
@@ -1054,10 +1070,10 @@ class RadarDisplay(object):
         ax = common.parse_ax(ax)
         ax.set_aspect(aspect_ratio)
 
-    def _set_title(self, field, sweep, title, ax):
+    def _set_title(self, field, sweep, title, ax, datetime_format=None, use_sweep_time=True):
         """ Set the figure title using a default title. """
         if title is None:
-            ax.set_title(self.generate_title(field, sweep))
+            ax.set_title(self.generate_title(field, sweep, datetime_format, use_sweep_time))
         else:
             ax.set_title(title)
 
@@ -1161,7 +1177,7 @@ class RadarDisplay(object):
     # name generator methods #
     ##########################
 
-    def generate_filename(self, field, sweep, ext='png'):
+    def generate_filename(self, field, sweep, ext='png', datetime_format='%Y%m%d%H%M%S', use_sweep_time=False):
         """
         Generate a filename for a plot.
 
@@ -1176,6 +1192,10 @@ class RadarDisplay(object):
             Sweep plotted.
         ext : str
             Filename extension.
+        datetime_format : str
+            Format of datetime (using strftime format).
+        use_sweep_time : bool
+            If true, the current sweep's beginning time is used.
 
         Returns
         -------
@@ -1183,9 +1203,9 @@ class RadarDisplay(object):
             Filename suitable for saving a plot.
 
         """
-        return common.generate_filename(self._radar, field, sweep, ext)
+        return common.generate_filename(self._radar, field, sweep, ext, datetime_format, use_sweep_time)
 
-    def generate_title(self, field, sweep):
+    def generate_title(self, field, sweep, datetime_format=None, use_sweep_time=True):
         """
         Generate a title for a plot.
 
@@ -1195,6 +1215,10 @@ class RadarDisplay(object):
             Field plotted.
         sweep : int
             Sweep plotted.
+        datetime_format : str
+            Format of datetime (using strftime format).
+        use_sweep_time : bool
+            If true, the current sweep's beginning time is used.
 
         Returns
         -------
@@ -1202,7 +1226,7 @@ class RadarDisplay(object):
             Plot title.
 
         """
-        return common.generate_title(self._radar, field, sweep)
+        return common.generate_title(self._radar, field, sweep, datetime_format, use_sweep_time)
 
     def generate_vpt_title(self, field):
         """

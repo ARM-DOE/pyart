@@ -270,79 +270,28 @@ static void init_sweep(Sweep *sweep, float val)
 static int findRay(Sweep *sweep1, Sweep *sweep2, int ray_index) 
 {
     int numRays, rayIndex1;
-    float az0, az1, diffaz;
-    float spacing;
-    short direction, lastdir;
+    int minraynum; 
+    int i;
+    float az0, az1, diffaz, currmaxdiffaz;
+    currmaxdiffaz=99999999;
     
     numRays = sweep2->h.nrays;
-
-    if (ray_index < numRays) 
-        rayIndex1=ray_index;
-    else 
-        rayIndex1=numRays-1;
-    
     az0 = sweep1->ray[ray_index]->h.azimuth;
-    az1 = sweep2->ray[rayIndex1]->h.azimuth;
-    if (az0 == az1) {
-        return rayIndex1;
-    } else {
-        
-        /* Since the beamwidth is not necessarily the spacing between rays: */
-        spacing = fabs(sweep2->ray[0]->h.azimuth - sweep2->ray[50]->h.azimuth);
-        if (spacing>180)
-            spacing = 360.0 - spacing;
-        spacing = spacing / 50.0;
 
-        /* Compute the difference in azimuth between the two rays: */
-        diffaz=az0-az1;
-        if (diffaz>=180.0) 
-            diffaz=diffaz-360.0;
-        else if (diffaz<-180.0) 
-            diffaz=diffaz+360.0;
-       
-        /* Get close to the correct index: */
-        rayIndex1=rayIndex1+(int) (diffaz/spacing);
-        if (rayIndex1>=numRays) 
-            rayIndex1=rayIndex1-numRays;
-        if (rayIndex1<0) 
-            rayIndex1=numRays+rayIndex1;
-        az1=sweep2->ray[rayIndex1]->h.azimuth;
-        diffaz=az0-az1;
-        if (diffaz>=180.0)
-            diffaz=diffaz-360.0;
-        else if 
-            (diffaz<-180.0) diffaz=diffaz+360.0;
+    for(i=0; i<numRays; i++){
+        az1 = sweep2->ray[i]->h.azimuth;
+        diffaz = fabs(az1-az0);
+        if(diffaz>180.0){
+            diffaz = 360 - diffaz;
+        }
+        if(diffaz<currmaxdiffaz){
+            currmaxdiffaz = diffaz;
+            minraynum = i;
+        }
 
-        /* Now add or subtract indices until the nearest ray is found: */
-        if (diffaz>=0) 
-            lastdir=1;
-        else 
-            lastdir=-1;
-        while (fabs(diffaz)>spacing/2.0) {
-	        if (diffaz>=0) {
-	            rayIndex1++;
-	            direction=1;
-	        } else {
-	            rayIndex1--;
-	            direction=-1;
-	        }
-	        if (rayIndex1>=numRays) 
-                rayIndex1=rayIndex1-numRays;
-	        if (rayIndex1<0) 
-                rayIndex1=numRays+rayIndex1;
-	        az1=sweep2->ray[rayIndex1]->h.azimuth;
-	        diffaz=az0-az1;
-	        if (diffaz>=180.0) 
-                diffaz=diffaz-360.0;
-	        else if 
-                (diffaz<-180.0) diffaz=diffaz+360.0;
-	        if (direction!=lastdir) 
-                break;
-	        else 
-                lastdir=direction;
-       }
-       return rayIndex1;
-     }
+
+    }    
+    return minraynum;
 }
 
 
@@ -360,18 +309,40 @@ static void continuity_dealias(
     int i, prevIndex = 0, abIndex = 0; 
     float val;
     float prevval, soundval, abval, diff, thresh;
+    float spacing;
+    short valid_above_ray;
+    valid_above_ray = 1;
 
     thresh = dp->compthresh * sweepc->NyqVelocity;
 
     for (ray_index=0; ray_index < sweepc->nrays; ray_index++) { 
         
-        if (sweepc->last != NULL)
+        if (sweepc->last != NULL){
            prevIndex = findRay(sweepc->rv, sweepc->last, ray_index);
-        if (sweepc->above != NULL)
+        }
+
+        if (sweepc->above != NULL){
+            valid_above_ray = 0;
+            //Checking to make sure that the above ray is actually *above*.
+            //This takes an average of the azimuthal spacing over the first four rays
+            spacing = fabs(sweepc->above->ray[0]->h.azimuth - sweepc->above->ray[4]->h.azimuth);
+            if (spacing>180.0)
+                spacing = 360.0 - spacing;
+            spacing = spacing / 4.0;
+
             abIndex = findRay(sweepc->rv, sweepc->above, ray_index);
-        
+            float aznew = sweepc->above->ray[abIndex]->h.azimuth;
+            float azold = sweepc->rv->ray[ray_index]->h.azimuth;
+            float diffaz_newold = fabs(aznew-azold);
+            if(diffaz_newold > 180.0)
+                diffaz_newold = 360.0-diffaz_newold;
+            if(fabs(aznew-azold)>spacing/2){
+                valid_above_ray = 1;
+            }
+        }
         for (i=0; i < sweepc->nbins; i++) { 
-           
+
+
             if (get_mark(marks, ray_index, i) != 0) continue;
             val = ray_val(sweepc->vals->ray[ray_index], i);
             if (is_missing(val, dp)) continue;
@@ -383,7 +354,7 @@ static void continuity_dealias(
                 prevval=ray_val(sweepc->last->ray[prevIndex], i);
             if (sweepc->sound != NULL && sweepc->last == NULL)
                 soundval=ray_val(sweepc->sound->ray[ray_index], i);
-            if (sweepc->above != NULL)
+            if (sweepc->above != NULL && valid_above_ray==0)
                 abval=ray_val(sweepc->above->ray[abIndex], i);
             
             if (sweepc->last == NULL) {
@@ -410,6 +381,7 @@ static void continuity_dealias(
         }
     }
 }
+
 
 /* Mark gates where all neighbors are marked with a 0 as -1 */
 static void mark_neighborless(

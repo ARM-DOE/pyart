@@ -104,7 +104,7 @@ These include:
 
 Other related open source software for working with weather radar data:
 
-* `wradlib <http://wradlib.bitbucket.org/>`_ : 
+* `wradlib <http://wradlib.org>`_ :
   An open source library for weather radar data processing.
   
 * `BALTRAD <http://baltrad.eu/>`_ : Community-based weather radar networking.
@@ -173,7 +173,7 @@ functionality is available of the following modules are installed.
 * `Basemap <http://matplotlib.org/basemap/>`_. If installed the ability to 
   plot grids on geographic maps is available.
 
-* `wradlib <http://wradlib.bitbucket.org/>`_.  Needed to calculate the texture
+* `wradlib <http://docs.wradlib.org/en/latest/>`_.  Needed to calculate the texture
   of a differential phase field.
 
 * `nose <http://nose.readthedocs.org/en/latest/>`_.  
