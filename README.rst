@@ -1,4 +1,6 @@
 .. -*- mode: rst -*-
+The Python ARM Radar Toolkit (Py-ART)
+=====================================
 
 |Travis| |AppVeyor|
 
@@ -34,10 +36,6 @@
 
 .. |Tweet| image:: https://img.shields.io/twitter/url/http/shields.io.svg?style=social
     :target: https://twitter.com/Py_ART
-
-
-The Python ARM Radar Toolkit (Py-ART)
-=====================================
 
 The Python ARM Radar Toolkit, Py-ART, is an open source Python module 
 containing a growing collection of weather radar algorithms and utilities
