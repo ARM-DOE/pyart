@@ -359,7 +359,7 @@ def _int16_to_float16(val):
     """ Convert a 16 bit interger into a 16 bit float. """
     # NEXRAD Level III float16 format defined on page 3-33.
     # Differs from IEEE 768-2008 format so np.float16 cannot be used.
-    sign = (val & b0b1000000000000000) / 0b1000000000000000
+    sign = (val & 0b1000000000000000) / 0b1000000000000000
     exponent = (val & 0b0111110000000000) / 0b0000010000000000
     fraction = (val & 0b0000001111111111)
     if exponent == 0:
