@@ -661,11 +661,11 @@ class Radar(object):
 
         # compact, only data summary
         if level == 'compact':
-            print(ilvl0 + attr + ':', d_str, file=out)
+            print(ilvl0 + str(attr) + ':', d_str, file=out)
 
         # standard, all keys, only summary for data
         elif level == 'standard':
-            print(ilvl0 + attr + ':', file=out)
+            print(ilvl0 + str(attr) + ':', file=out)
             print(ilvl1 + 'data:', d_str, file=out)
             for key, val in dic.items():
                 if key == 'data':
@@ -674,7 +674,7 @@ class Radar(object):
 
         # full, all keys, full data
         elif level == 'full':
-            print(attr + ':', file=out)
+            print(str(attr) + ':', file=out)
             if 'data' in dic:
                 print(ilvl1 + 'data:', dic['data'], file=out)
             for key, val in dic.items():
