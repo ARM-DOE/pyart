@@ -21,7 +21,7 @@ import glob
 import os
 import sys
 
-from netcdftime import utime
+from cftime import utime
 
 import numpy as np
 try:
