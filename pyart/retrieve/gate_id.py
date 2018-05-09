@@ -124,7 +124,7 @@ def fetch_radar_time_profile(sonde_dset, radar, time_key='time',
 
     radar_start = num2date(radar.time['data'][0], radar.time['units'])
     radar_day_start = datetime(radar_start.year, radar_start.month,
-                                      radar_start.day)
+                               radar_start.day)
     seconds_since_start_of_day = (radar_start - radar_day_start).seconds
     time_index = abs(ncvars[time_key][:] - seconds_since_start_of_day).argmin()
 
