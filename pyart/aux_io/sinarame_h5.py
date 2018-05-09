@@ -22,7 +22,7 @@ import os
 import sys
 
 if sys.version_info[:2] == (3, 4):
-    from netCDF4 import utime
+    from netcdftime import utime
 else:
     from cftime import utime
 
