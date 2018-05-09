@@ -646,7 +646,7 @@ class Radar(object):
         ilvl1 = '\t' * (ident_level + 1)
 
         if dic is None:
-            print(attr + ': None', file=out)
+            print(str(attr) + ': None', file=out)
             return
 
         # make a string summary of the data key if it exists.
