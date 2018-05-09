@@ -10,7 +10,11 @@ pyart.retrieve.gate_id
 
 """
 
-import cftime
+if sys.version_info[:2] == (3, 4):
+    from netCDF4 import num2date, datetime
+else:
+    from cftime import num2date, datetime
+
 import numpy as np
 from scipy import interpolate
 
