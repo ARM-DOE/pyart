@@ -10,8 +10,8 @@ pyart.retrieve.gate_id
 
 """
 
+import cftime
 import numpy as np
-import netCDF4
 from scipy import interpolate
 
 from ..config import get_fillvalue, get_metadata, get_field_name
@@ -116,9 +116,9 @@ def fetch_radar_time_profile(sonde_dset, radar, time_key='time',
         time_height_shape = (len(ncvars[time_key]), len(ncvars[height_key]))
         nvars = [k for k, v in ncvars.items() if v.shape == time_height_shape]
 
-    radar_start = netCDF4.num2date(radar.time['data'][0], radar.time['units'])
-    radar_day_start = netCDF4.datetime(radar_start.year, radar_start.month,
-                                       radar_start.day)
+    radar_start = cftime.num2date(radar.time['data'][0], radar.time['units'])
+    radar_day_start = cftime.datetime(radar_start.year, radar_start.month,
+                                      radar_start.day)
     seconds_since_start_of_day = (radar_start - radar_day_start).seconds
     time_index = abs(ncvars[time_key][:] - seconds_since_start_of_day).argmin()
 
