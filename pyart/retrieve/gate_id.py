@@ -10,6 +10,8 @@ pyart.retrieve.gate_id
 
 """
 
+import sys
+
 if sys.version_info[:2] == (3, 4):
     from netCDF4 import num2date, datetime
 else:
