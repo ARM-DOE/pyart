@@ -8,7 +8,7 @@ environment:
 
   matrix:
     - PYTHON_VERSION: "2.7"
-      PYTHON_ARCH: "32"
+      PYTHON_ARCH: "64"
 
 # Test only two environments to speed up CI time
 #      PYTHON_VERSION: "3.4"
