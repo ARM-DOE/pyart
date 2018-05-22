@@ -26,6 +26,7 @@ Common graphing routines.
     generate_longitudinal_level_title
     generate_latitudinal_level_title
     generate_vpt_title
+    generate_crf_title
     generate_ray_title
     set_limits
 
@@ -377,6 +378,27 @@ def generate_vpt_title(radar, field):
     field_name = generate_field_name(radar, field)
     return l1 + '\n' + field_name
 
+def generate_crf_title(radar, field):
+    """
+    Generate a title for a CRF plot.
+
+    Parameters
+    ----------
+    radar : Radar
+        Radar structure.
+    field : str
+        Field plotted.
+
+    Returns
+    -------
+    title : str
+        Plot title.
+
+    """
+    time_str = generate_radar_time_begin(radar).isoformat() + 'Z'
+    l1 = "%s %s " % (generate_radar_name(radar), time_str)
+    field_name = field
+    return l1 + '\n' + field_name
 
 def generate_ray_title(radar, field, ray):
     """

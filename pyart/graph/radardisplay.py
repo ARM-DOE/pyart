@@ -20,6 +20,7 @@ import numpy as np
 import netCDF4
 
 from . import common
+from ..map import grid_from_radars
 from ..core.transforms import antenna_to_cartesian
 from ..core.transforms import antenna_vectors_to_cartesian
 from ..core.transforms import geographic_to_cartesian_aeqd
@@ -995,7 +996,10 @@ class RadarDisplay(object):
         if label is None:
             if field is None:
                 field = self.plot_vars[-1]
-            label = self._get_colorbar_label(field)
+            if field == 'composite reflectivity':
+                label = field + ' (dBZ)'
+            if field != 'composite reflectivity':
+                label = self._get_colorbar_label(field)
 
         cb = fig.colorbar(mappable, orientation=orient, ax=ax, cax=cax)
         if ticks is not None:
@@ -1074,6 +1078,13 @@ class RadarDisplay(object):
         """ Set the figure title using a default title. """
         if title is None:
             ax.set_title(self.generate_title(field, sweep, datetime_format, use_sweep_time))
+        else:
+            ax.set_title(title)
+
+    def _set_crf_title(self, field, title, ax):
+        """ Set the figure title using a default title. """
+        if title is None:
+            ax.set_title(self.generate_crf_title(field))
         else:
             ax.set_title(title)
 
@@ -1245,6 +1256,23 @@ class RadarDisplay(object):
         """
         return common.generate_vpt_title(self._radar, field)
 
+    def generate_crf_title(self, field):
+        """
+        Generate a title for a CRF plot.
+
+        Parameters
+        ----------
+        field : str
+            Field plotted.
+
+        Returns
+        -------
+        title : str
+            Plot title.
+
+        """
+        return common.generate_crf_title(self._radar, field)
+
     def generate_ray_title(self, field, ray):
         """
         Generate a title for a ray plot.
@@ -1349,6 +1377,18 @@ class RadarDisplay(object):
             data = np.ma.masked_array(data, mask_filter)
 
         return data
+
+    def _get_crf_data(
+                    self, field, gatefilter, grid_shape, grid_limits):
+        """ Retrieve and return crf data from a plot function. """
+        grid = grid_from_radars(
+                                (self._radar,),
+                                gatefilters=(gatefilter,),
+                                grid_shape=grid_shape,
+                                grid_limits=grid_limits,
+                                fields=[field])
+
+        return grid
 
     def _get_azimuth_rhi_data_x_y_z(self, field, target_azimuth,
                                     edges, mask_tuple,
