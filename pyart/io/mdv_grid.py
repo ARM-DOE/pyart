@@ -355,7 +355,8 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
     elif mdv.field_headers[0]["vlevel_type"] == 7:  # VERT_TYPE_THETA
         zunits = 'kelvin'
     else:
-        warnings.warn("While reading MDV found unknown 'vlevel_type': %i" %
+        warnings.warn(("While reading MDV found unexpected 'vlevel_type'" +
+                      " (%i), units in the z axis set to 'unknown'") %
                       mdv.field_headers[0]["vlevel_type"])
         zunits = 'unknown'
 
