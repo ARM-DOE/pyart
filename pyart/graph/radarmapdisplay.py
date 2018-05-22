@@ -261,7 +261,7 @@ class RadarMapDisplay(RadarDisplay):
             else:   # using width and height
                 # map domain determined from location of radar gates
                 if width is None:
-                    width = (x.max() - y.min()) * 1000.
+                    width = (x.max() - x.min()) * 1000.
                 if height is None:
                     height = (y.max() - y.min()) * 1000.
                 basemap = Basemap(
