@@ -274,9 +274,11 @@ class RadarMapDisplayCartopy(RadarDisplay):
         pm = ax.pcolormesh(x * 1000., y * 1000., data, alpha=alpha,
                            vmin=vmin, vmax=vmax, cmap=cmap,
                            norm=norm, transform=self.grid_projection)
+
         # plot as raster in vector graphics files
-        if raster is not None:
+        if raster:
             pm.set_rasterized(True)
+
         # add embelishments
         if embelish is True:
             # Create a feature for States/Admin 1 regions at 1:resolution

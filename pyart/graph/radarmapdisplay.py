@@ -297,7 +297,7 @@ class RadarMapDisplay(RadarDisplay):
             self._x0 + x * 1000., self._y0 + y * 1000., data,
             vmin=vmin, vmax=vmax, cmap=cmap, norm=norm, alpha=alpha)
 
-        if raster is not None:
+        if raster:
             pm.set_rasterized(True)
 
         if shapefile is not None:
