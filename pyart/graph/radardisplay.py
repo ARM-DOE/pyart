@@ -234,7 +234,7 @@ class RadarDisplay(object):
             colorbar_flag=True, colorbar_label=None,
             colorbar_orient='vertical', edges=True, gatefilter=None,
             filter_transitions=True, ax=None, fig=None,
-            ticks=None, ticklabs=None, raster=None,
+            ticks=None, ticklabs=None, raster=False,
             title_datetime_format=None, title_use_sweep_time=True, **kwargs):
         """
         Plot a PPI.
@@ -345,7 +345,7 @@ class RadarDisplay(object):
         pm = ax.pcolormesh(
             x, y, data, vmin=vmin, vmax=vmax, cmap=cmap, norm=norm, **kwargs)
 
-        if raster is not None:
+        if raster:
             pm.set_rasterized(True)
 
         if title_flag:
@@ -491,7 +491,7 @@ class RadarDisplay(object):
         pm = ax.pcolormesh(
             R, z, data, vmin=vmin, vmax=vmax, cmap=cmap, norm=norm, **kwargs)
 
-        if raster is not None:
+        if raster:
             pm.set_rasterized(True)
 
         if title_flag:
@@ -520,7 +520,7 @@ class RadarDisplay(object):
             colorbar_orient='vertical', edges=True, gatefilter=None,
             filter_transitions=True, time_axis_flag=False,
             date_time_form=None, tz=None, ax=None, fig=None,
-            ticks=None, ticklabs=None, raster=None, **kwargs):
+            ticks=None, ticklabs=None, raster=False, **kwargs):
         """
         Plot a VPT scan.
 
@@ -647,7 +647,7 @@ class RadarDisplay(object):
         pm = ax.pcolormesh(
             x, y, data, vmin=vmin, vmax=vmax, cmap=cmap, norm=norm, **kwargs)
 
-        if raster is not None:
+        if raster:
             pm.set_rasterized(True)
 
         if title_flag:
@@ -674,7 +674,7 @@ class RadarDisplay(object):
             colorbar_orient='vertical', edges=True, gatefilter=None,
             reverse_xaxis=None, filter_transitions=True,
             ax=None, fig=None, ticks=None, ticklabs=None,
-            raster=None, **kwargs):
+            raster=False, **kwargs):
         """
         Plot pseudo-RHI scan by extracting the vertical field associated
         with the given azimuth.
@@ -786,7 +786,7 @@ class RadarDisplay(object):
         pm = ax.pcolormesh(
             R, z, data, vmin=vmin, vmax=vmax, cmap=cmap, norm=norm, **kwargs)
 
-        if raster is not None:
+        if raster:
             pm.set_rasterized(True)
 
         if title_flag:
