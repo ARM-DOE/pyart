@@ -58,6 +58,10 @@ def map_profile_to_gates(profile, heights, radar, toa=None,
     rg, azg = np.meshgrid(radar.range['data'], radar.azimuth['data'])
     rg, eleg = np.meshgrid(radar.range['data'], radar.elevation['data'])
     _, _, z = antenna_to_cartesian(rg / 1000.0, azg, eleg)
+    
+    # Check that z is not a MaskedArray
+    if type(z) is np.ma.core.MaskedArray:
+        z = z.filled(np.NaN)
 
     # find toa is not provided
     if toa is None:
@@ -65,7 +69,7 @@ def map_profile_to_gates(profile, heights, radar, toa=None,
         if len(ismasked) == 0:
             toa = None
         else:
-            toa = ismasked.min()
+            toa = ismasked.min()            
 
     # interpolate
     f_interp = interpolate.interp1d(
