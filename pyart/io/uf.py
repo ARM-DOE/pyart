@@ -230,7 +230,7 @@ def _get_instrument_parameters(ufile, filemetadata):
     radar_beam_width_h['data'] = np.array([beam_width_h], dtype='float32')
 
     # radar_beam_width_v
-    radar_beam_width_v = filemetadata('radar_beam_width_w')
+    radar_beam_width_v = filemetadata('radar_beam_width_v')
     radar_beam_width_v['data'] = np.array([beam_width_v], dtype='float32')
 
     # radar_receiver_bandwidth
