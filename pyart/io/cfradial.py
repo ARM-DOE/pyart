@@ -59,7 +59,7 @@ _INSTRUMENT_PARAMS_DIMS = {
     'radar_antenna_gain_v': (),
     'radar_beam_width_h': (),
     'radar_beam_width_v': (),
-    'radar_reciever_bandwidth': (),
+    'radar_receiver_bandwidth': (),
     'radar_measured_transmit_power_h': ('time', ),
     'radar_measured_transmit_power_v': ('time', ),
     'radar_rx_bandwidth': (),           # non-standard
