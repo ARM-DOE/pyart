@@ -261,7 +261,7 @@ class RadarMapDisplay(RadarDisplay):
             else:   # using width and height
                 # map domain determined from location of radar gates
                 if width is None:
-                    width = (x.max() - y.min()) * 1000.
+                    width = (x.max() - x.min()) * 1000.
                 if height is None:
                     height = (y.max() - y.min()) * 1000.
                 basemap = Basemap(
@@ -297,7 +297,7 @@ class RadarMapDisplay(RadarDisplay):
             self._x0 + x * 1000., self._y0 + y * 1000., data,
             vmin=vmin, vmax=vmax, cmap=cmap, norm=norm, alpha=alpha)
 
-        if raster is not None:
+        if raster:
             pm.set_rasterized(True)
 
         if shapefile is not None:

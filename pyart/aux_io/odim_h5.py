@@ -40,7 +40,9 @@ ODIM_H5_FIELD_NAMES = {
     'KDP': 'specific_differential_phase',
     'SQI': 'normalized_coherent_power',
     'SNR': 'signal_to_noise_ratio',
-    'VRAD': 'velocity',
+    'VRAD': 'velocity', # radial velocity, marked for deprecation in ODIM HDF5 2.2
+    'VRADH': 'velocity', # radial velocity, horizontal polarisation
+    'VRADV': 'velocity', # radial velocity, vertical polarisation
     'WRAD': 'spectrum_width',
     'QIND': 'quality_index',
 }
