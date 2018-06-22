@@ -69,7 +69,7 @@ def map_profile_to_gates(profile, heights, radar, toa=None,
         if len(ismasked) == 0:
             toa = None
         else:
-            toa = ismasked.min()            
+            toa = ismasked.min()
 
     # interpolate
     f_interp = interpolate.interp1d(
