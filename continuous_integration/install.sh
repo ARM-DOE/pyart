@@ -20,7 +20,7 @@ source activate testenv
 # TODO install cylp and  glpk in Python 2.7
 
 # install coverage modules
-pip install nose-cov
+conda install -q pytest-cov
 if [[ "$COVERALLS" == "true" ]]; then
     pip install python-coveralls
 fi
