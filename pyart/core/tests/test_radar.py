@@ -11,6 +11,8 @@ import inspect
 
 import numpy as np
 from numpy.testing import assert_raises, assert_allclose, assert_almost_equal
+import pytest
+
 import pyart
 from pyart.lazydict import LazyLoadDict
 
@@ -431,9 +433,10 @@ def test_add_field_like_errors():
     assert_raises(ValueError, radar.add_field_like, 'foo', 'bar', [])
 
 
-def test_info_levels():
-    for level in ['standard', 's', 'compact', 'c', 'full', 'f']:
-        yield check_info, level
+@pytest.mark.parametrize(
+    "level", ['standard', 's', 'compact', 'c', 'full', 'f'])
+def test_info_levels(level):
+    check_info(level)
 
 
 def test_info_nonstandard():
