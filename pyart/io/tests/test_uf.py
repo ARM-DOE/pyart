@@ -82,7 +82,7 @@ def check_field(field, value):
 
 def test_raises_ioerror():
     fake_bad_file = StringIO(b'XXXXXXXX')
-    assert_raises(IOError, pyart.io.read_uf, fake_bad_file)
+    pytest.raises(IOError, pyart.io.read_uf, fake_bad_file)
 
 
 def test_read_fileobj():

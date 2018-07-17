@@ -7,7 +7,6 @@ import warnings
 import numpy as np
 from numpy.ma.core import MaskedArray
 from numpy.testing import assert_array_equal, assert_almost_equal
-from numpy.testing import assert_raises, assert_warns
 import netCDF4
 import pytest
 
@@ -319,7 +318,7 @@ def test_write_ppi_unknown_instrument_parameter_element():
         tmpfile = 'tmp_ppi_unknonw_ip.nc'
         radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
         radar.instrument_parameters['foobar'] = {'data': np.zeros(40)}
-        assert_warns(UserWarning, pyart.io.write_cfradial, tmpfile, radar)
+        pytest.warns(UserWarning, pyart.io.write_cfradial, tmpfile, radar)
         ref = netCDF4.Dataset(pyart.testing.CFRADIAL_PPI_FILE)
         dset = netCDF4.Dataset(tmpfile)
         check_dataset_to_ref(dset, ref)
@@ -539,7 +538,7 @@ def test_calculate_scale_and_offset():
     assert_almost_equal(fill, 0)
 
     # maximum < minimum raises ValueError
-    assert_raises(ValueError, pyart.io.cfradial._calculate_scale_and_offset,
+    pytest.raises(ValueError, pyart.io.cfradial._calculate_scale_and_offset,
                   {'data': data}, np.dtype('u1'), 100., 99)
 
     # maximum == minimum issues warning

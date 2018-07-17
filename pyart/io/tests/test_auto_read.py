@@ -3,8 +3,6 @@
 import bz2
 from io import BytesIO
 
-from numpy.testing.decorators import skipif
-from numpy.testing import assert_raises
 import pytest
 
 import pyart
@@ -28,7 +26,8 @@ def test_autoread_sigmet():
     assert radar.metadata['original_container'] == 'sigmet'
 
 
-@skipif(not pyart.io.rsl._RSL_AVAILABLE)
+@pytest.mark.skipif(not pyart.io.rsl._RSL_AVAILABLE,
+                    reason="TRMM RSL is not installed.")
 def test_autoread_sigmet_rsl():
     radar = pyart.io.read(pyart.testing.SIGMET_PPI_FILE, use_rsl=True)
     assert radar.metadata['original_container'] == 'rsl'
@@ -72,7 +71,7 @@ def test_autoread_nexrad_level3():
 
 def test_autoread_raises():
     f = BytesIO(b'0000000000000000000')
-    assert_raises(TypeError, pyart.io.read, f)
+    pytest.raises(TypeError, pyart.io.read, f)
 
 
 headers = [
