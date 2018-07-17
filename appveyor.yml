@@ -42,7 +42,7 @@ install:
   - "activate matrix_env"
 
   # Install Py-ART dependecies
-  - "conda install -y -q numpy scipy matplotlib netcdf4 nose"
+  - "conda install -y -q numpy scipy matplotlib netcdf4 pytest"
   - "if \"%PYTHON_VERSION%\"==\"2.7\" (conda install -y -q basemap)"
 
   # Check that we have the expected version and architecture for Python
@@ -58,4 +58,4 @@ build: false
 
 test_script:
   # run the unit tests
-  - "python -c \"import nose; nose.main()\" -v"
+  - "python -c \"import pytest; pytest.main()\" -v"
