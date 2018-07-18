@@ -21,7 +21,7 @@ matrix:
     - python: 2.7
       env:
         - PYTHON_VERSION="2.7"
-        - PYTEST_ARGS="-v"
+        - PYTEST_ARGS="-v --pyargs pyart"
         - FROM_RECIPE="true"
         - DOC_BUILD="true"
     - python: 3.4
