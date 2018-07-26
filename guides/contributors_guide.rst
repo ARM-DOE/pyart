@@ -307,7 +307,7 @@ Pytest is used to run unit tests in pyart.
 It is recommended to install pyart in “editable” mode for pytest testing.
 From within the main pyart directory::
 
-pip install -e .
+        pip install -e .
 
 This lets you change your source code and rerun tests at will.
 
@@ -317,15 +317,15 @@ To install pytest::
 
 To run all tests in pyart with pytest from outside the pyart directory::
 
-	pytest --pyargs pyart
+        pytest --pyargs pyart
 
 All test with increase verbosity::
 
-	pytest -v
+        pytest -v
 
 Just one file::
 
-	pytest filename
+        pytest filename
 
 Note: When an example shows filename as such::
 
