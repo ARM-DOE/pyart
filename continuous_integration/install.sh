@@ -19,8 +19,11 @@ conda env create -f continuous_integration/environment-$PYTHON_VERSION.yml
 source activate testenv
 # TODO install cylp and  glpk in Python 2.7
 
+# upgrade pip
+pip install --upgrade pip
+
 # install coverage modules
-pip install nose-cov
+conda install -q pytest-cov
 if [[ "$COVERALLS" == "true" ]]; then
     pip install python-coveralls
 fi
@@ -42,5 +45,5 @@ if [[ "$FROM_RECIPE" == "true" ]]; then
     mkdir foo   # required so source directory not picked up during tests
     cd foo
 else
-    python setup.py build_ext --inplace
+    pip install -e .
 fi

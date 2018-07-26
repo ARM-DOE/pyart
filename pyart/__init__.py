@@ -70,28 +70,29 @@ else:
     import functools as _functools
 
     try:
-        _imp.find_module('nose')
+        _imp.find_module('pytest')
     except ImportError:
         def _test(verbose=False):
             """
-            This would invoke the Py-ART test suite, but nose couldn't be
+            This would invoke the Py-ART test suite, but pytest couldn't be
             imported so the test suite can not run.
             """
-            raise ImportError("Could not load nose. Unit tests not available.")
+            raise ImportError(
+                "Could not load pytest. Unit tests not available.")
     else:
         def _test(verbose=False):
             """
             Invoke the Py-ART test suite.
             """
-            import nose
+            import pytest
             pkg_dir = _osp.abspath(_osp.dirname(__file__))
-            args = ['', pkg_dir, '--exe']
+            args = ['', pkg_dir, '--pyargs']
             if verbose:
                 args.extend(['-v', '-s'])
-            nose.run('pyart', argv=args)
+            pytest.run('pyart', argv=args)
 
     # do not use `test` as function name as this leads to a recursion problem
-    # with the nose test suite
+    # with the pytest test suite
     test = _test
     test_verbose = _functools.partial(test, verbose=True)
     test_verbose.__doc__ = test.__doc__

@@ -7,8 +7,8 @@ import warnings
 import numpy as np
 from numpy.ma.core import MaskedArray
 from numpy.testing import assert_array_equal, assert_almost_equal
-from numpy.testing import assert_raises, assert_warns
 import netCDF4
+import pytest
 
 import pyart
 
@@ -176,13 +176,13 @@ def test_antenna_transition():
 
 
 # instrument_parameters attribute
-def test_instument_parameters():
+@pytest.mark.parametrize(
+    "keys", ['prt_mode', 'prt', 'nyquist_velocity', 'unambiguous_range'])
+def test_instument_parameters(keys):
     # instrument_parameter sub-convention
-    keys = ['prt_mode', 'prt', 'nyquist_velocity', 'unambiguous_range']
-    for k in keys:
-        description = 'instrument_parameters: %s' % k
-        check_instrument_parameter.description = description
-        yield check_instrument_parameter, k
+    description = 'instrument_parameters: %s' % keys
+    check_instrument_parameter.description = description
+    check_instrument_parameter(keys)
 
 
 def check_instrument_parameter(param):
@@ -211,12 +211,11 @@ def test_nsweeps():
 ####################
 
 
-def test_field_dics():
-    fields = ['reflectivity_horizontal', ]
-    for field in fields:
-        description = "field : %s, dictionary" % field
-        check_field_dic.description = description
-        yield check_field_dic, field
+@pytest.mark.parametrize("field", ['reflectivity_horizontal', ])
+def test_field_dics(field):
+    description = "field : %s, dictionary" % field
+    check_field_dic.description = description
+    check_field_dic(field)
 
 
 def check_field_dic(field):
@@ -227,38 +226,39 @@ def check_field_dic(field):
     assert 'coordinates' in radar.fields[field]
 
 
-def test_field_shapes():
-    fields = ['reflectivity_horizontal', ]
-    for field in fields:
-        description = "field : %s, shape" % field
-        check_field_shape.description = description
-        yield check_field_shape, field
+@pytest.mark.parametrize("field", ['reflectivity_horizontal', ])
+def test_field_shapes(field):
+    description = "field : %s, shape" % field
+    check_field_shape.description = description
+    check_field_shape(field)
 
 
 def check_field_shape(field):
     assert radar.fields[field]['data'].shape == (40, 42)
 
 
-def test_field_types():
-    fields = {'reflectivity_horizontal': MaskedArray, }
-    for field, field_type in fields.items():
-        description = "field : %s, type" % field
-        check_field_type.description = description
-        yield check_field_type, field, field_type
+fields = {'reflectivity_horizontal': MaskedArray, }
+@pytest.mark.parametrize(
+    "field, field_type", fields.items(), ids=list(fields.keys()))
+def test_field_types(field, field_type):
+    description = "field : %s, type" % field
+    check_field_type.description = description
+    check_field_type(field, field_type)
 
 
 def check_field_type(field, field_type):
     assert type(radar.fields[field]['data']) is field_type
 
 
-def test_field_first_points():
+fields = {'reflectivity_horizontal': -6.0, }
+@pytest.mark.parametrize(
+    "field, field_value", fields.items(), ids=list(fields.keys()))
+def test_field_first_points(field, field_value):
     # these values can be found using:
     # [round(radar.fields[f]['data'][0,0]) for f in radar.fields]
-    fields = {'reflectivity_horizontal': -6.0, }
-    for field, field_value in fields.items():
-        description = "field : %s, first point" % field
-        check_field_first_point.description = description
-        yield check_field_first_point, field, field_value
+    description = "field : %s, first point" % field
+    check_field_first_point.description = description
+    check_field_first_point(field, field_value)
 
 
 def check_field_first_point(field, value):
@@ -318,7 +318,7 @@ def test_write_ppi_unknown_instrument_parameter_element():
         tmpfile = 'tmp_ppi_unknonw_ip.nc'
         radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
         radar.instrument_parameters['foobar'] = {'data': np.zeros(40)}
-        assert_warns(UserWarning, pyart.io.write_cfradial, tmpfile, radar)
+        pytest.warns(UserWarning, pyart.io.write_cfradial, tmpfile, radar)
         ref = netCDF4.Dataset(pyart.testing.CFRADIAL_PPI_FILE)
         dset = netCDF4.Dataset(tmpfile)
         check_dataset_to_ref(dset, ref)
@@ -538,7 +538,7 @@ def test_calculate_scale_and_offset():
     assert_almost_equal(fill, 0)
 
     # maximum < minimum raises ValueError
-    assert_raises(ValueError, pyart.io.cfradial._calculate_scale_and_offset,
+    pytest.raises(ValueError, pyart.io.cfradial._calculate_scale_and_offset,
                   {'data': data}, np.dtype('u1'), 100., 99)
 
     # maximum == minimum issues warning

@@ -6,14 +6,15 @@
 # be created, not that they are correct.
 
 import matplotlib.pyplot as plt
-import pyart
 import numpy as np
-from numpy.testing import assert_raises
-from numpy.testing.decorators import skipif
+import pytest
+
+import pyart
 
 
 # Top level Figure generating tests
-@skipif(not pyart.graph.radarmapdisplay_cartopy._CARTOPY_AVAILABLE)
+@pytest.mark.skipif(not pyart.graph.radarmapdisplay_cartopy._CARTOPY_AVAILABLE,
+                    reason="Cartopy is not installed.")
 def test_radarmapdisplay_cartopy_ppi(outfile=None):
     radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
     display = pyart.graph.RadarMapDisplayCartopy(radar, shift=(0.1, 0.0))
@@ -30,7 +31,8 @@ def test_radarmapdisplay_cartopy_ppi(outfile=None):
     plt.close()
 
 
-@skipif(not pyart.graph.radarmapdisplay_cartopy._CARTOPY_AVAILABLE)
+@pytest.mark.skipif(not pyart.graph.radarmapdisplay_cartopy._CARTOPY_AVAILABLE,
+                    reason="Cartopy is not installed.")
 def test_radarmapdisplay_cartopy_preexisting_ax(outfile=None):
     import cartopy
     from cartopy.io.img_tiles import StamenTerrain
@@ -47,7 +49,8 @@ def test_radarmapdisplay_cartopy_preexisting_ax(outfile=None):
 
 # Tests of methods, these tests do not generate figures
 """ XXX Determine why this is failing
-@skipif(not pyart.graph.radarmapdisplay_cartopy._CARTOPY_AVAILABLE)
+@pytest.mark.skipif(not pyart.graph.radarmapdisplay_cartopy._CARTOPY_AVAILABLE,
+                    reason="Cartopy is not installed.")
 def test_radarmapdisplay_cartopy_auto_range():
     # test the auto_range=True function
     import cartopy
@@ -63,13 +66,14 @@ def test_radarmapdisplay_cartopy_auto_range():
 """
 
 
-@skipif(not pyart.graph.radarmapdisplay_cartopy._CARTOPY_AVAILABLE)
+@pytest.mark.skipif(not pyart.graph.radarmapdisplay_cartopy._CARTOPY_AVAILABLE,
+                    reason="Cartopy is not installed.")
 def test_error_raising():
     radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
     display = pyart.graph.RadarMapDisplayCartopy(radar, shift=(0.1, 0.0))
     # no cartopy
-    assert_raises(ValueError, display.plot_range_ring, 10)
+    pytest.raises(ValueError, display.plot_range_ring, 10)
 
 if __name__ == "__main__":
     test_radarmapdisplay_cartopy_ppi(
-                        'figure_radarmapdisplay_cartopy_ppi.png')
+        'figure_radarmapdisplay_cartopy_ppi.png')

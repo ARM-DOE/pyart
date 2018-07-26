@@ -3,8 +3,7 @@
 import bz2
 from io import BytesIO
 
-from numpy.testing.decorators import skipif
-from numpy.testing import assert_raises
+import pytest
 
 import pyart
 
@@ -27,7 +26,8 @@ def test_autoread_sigmet():
     assert radar.metadata['original_container'] == 'sigmet'
 
 
-@skipif(not pyart.io.rsl._RSL_AVAILABLE)
+@pytest.mark.skipif(not pyart.io.rsl._RSL_AVAILABLE,
+                    reason="TRMM RSL is not installed.")
 def test_autoread_sigmet_rsl():
     radar = pyart.io.read(pyart.testing.SIGMET_PPI_FILE, use_rsl=True)
     assert radar.metadata['original_container'] == 'rsl'
@@ -71,28 +71,28 @@ def test_autoread_nexrad_level3():
 
 def test_autoread_raises():
     f = BytesIO(b'0000000000000000000')
-    assert_raises(TypeError, pyart.io.read, f)
+    pytest.raises(TypeError, pyart.io.read, f)
 
 
-def test_determine_filetype():
-    headers = [
-        (b'\x00\x00\x03\xf8\x00\x007>\x00\x00\x00\x01', 'MDV'),
-        (b'\x89HDF\r\n\x1a\n\x02\x08\x08\x00', 'NETCDF4'),
-        (b'CDF', 'NETCDF3'),
-        (b'AR2V0006.501', 'WSR88D'),
-        (b'SDUS54 KBMX ', 'NEXRADL3'),
-        (b'\x1b\x00\x08\x00\x00\x08\xb7\x07\x00\x00\x00\x00', 'SIGMET'),
-        (b'BZh91AY&SY\xbd\x12', 'BZ2'),
-        (b'UF', 'UF'),                   # not from a real file
-        (b'SSWB', 'DORADE'),             # not from a real file
-        (b'RSL', 'RSL'),                 # not from a real file
-        (b'\x0e\x03\x13\x01', 'HDF4'),   # not from a real file
-        (b'000000000000', 'UNKNOWN'),
+headers = [
+    (b'\x00\x00\x03\xf8\x00\x007>\x00\x00\x00\x01', 'MDV'),
+    (b'\x89HDF\r\n\x1a\n\x02\x08\x08\x00', 'NETCDF4'),
+    (b'CDF', 'NETCDF3'),
+    (b'AR2V0006.501', 'WSR88D'),
+    (b'SDUS54 KBMX ', 'NEXRADL3'),
+    (b'\x1b\x00\x08\x00\x00\x08\xb7\x07\x00\x00\x00\x00', 'SIGMET'),
+    (b'BZh91AY&SY\xbd\x12', 'BZ2'),
+    (b'UF', 'UF'),                   # not from a real file
+    (b'SSWB', 'DORADE'),             # not from a real file
+    (b'RSL', 'RSL'),                 # not from a real file
+    (b'\x0e\x03\x13\x01', 'HDF4'),   # not from a real file
+    (b'000000000000', 'UNKNOWN'),
     ]
-    for i in headers:
-        string, filetype = i
-        check_filetype.description = 'determine filetype: %s' % (filetype)
-        yield check_filetype, string, filetype
+@pytest.mark.parametrize("i", headers)
+def test_determine_filetype(i):
+    string, filetype = i
+    check_filetype.description = 'determine filetype: %s' % (filetype)
+    check_filetype(string, filetype)
 
 
 def check_filetype(string, filetype):

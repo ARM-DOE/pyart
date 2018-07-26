@@ -7,7 +7,8 @@ from datetime import datetime
 from io import BytesIO
 
 import numpy as np
-from numpy.testing import assert_almost_equal, assert_raises
+from numpy.testing import assert_almost_equal
+import pytest
 
 import pyart
 from pyart.io.mdv_common import MdvFile
@@ -244,7 +245,7 @@ def test_geometry():
 
 def test_geometry_raises():
     mdvfile = MdvFile(pyart.testing.MDV_GRID_FILE)
-    assert_raises(NotImplementedError, mdvfile._calc_geometry)
+    pytest.raises(NotImplementedError, mdvfile._calc_geometry)
 
 
 def test_mdv_time():

@@ -3,7 +3,8 @@
 import datetime
 
 import numpy as np
-from numpy.testing import assert_almost_equal, assert_raises
+from numpy.testing import assert_almost_equal
+from pytest import raises
 
 import pyart
 
@@ -36,14 +37,14 @@ def test_read_arm_sonde_vap_radar():
 def test_read_arm_sonde_vap_errors():
 
     # radar or target_datetime must be specified
-    assert_raises(
+    raises(
         ValueError, pyart.io.read_arm_sonde_vap,
         pyart.testing.INTERP_SOUNDE_FILE)
 
     # only one of radar or target_datetime can be specified
     radar = pyart.testing.make_empty_ppi_radar(1, 1, 1)
     target_datetime = datetime.datetime(2011, 5, 10, 11, 30, 5)
-    assert_raises(
+    raises(
         ValueError, pyart.io.read_arm_sonde_vap,
         pyart.testing.INTERP_SOUNDE_FILE,
         radar=radar, target_datetime=target_datetime)

@@ -252,11 +252,11 @@ Testing
 When adding a new function to pyart it is important to add your function to
 the __init__.py file under the corresponding pyart folder.
 
-Create a test for your function and have assert from numpy test the known
-values to the calculated values. If changes are made in the future to pyart,
-nose will use the test created to see if the function is still valid and
+Create a test for your function and have assert from numpy testing test the
+known values to the calculated values. If changes are made in the future to
+pyart, nose will use the test created to see if the function is still valid and
 produces the same values. It works that, it takes known values that are
-obtained from the function, and when nosetests is ran, it takes the test
+obtained from the function, and when pytest is ran, it takes the test
 function and reruns the function and compares the results to the original.
 
 An example:
@@ -302,44 +302,47 @@ An example:
             assert_almost_equal(vad.u_wind, u_wind, 3)
             assert_almost_equal(vad.v_wind, v_wind, 3)
 
-Nosetests from nose are used to run tests in pyart.
+Pytest is used to run unit tests in pyart.
 
-First pyart should be built inplace::
+It is recommended to install pyart in “editable” mode for pytest testing.
+From within the main pyart directory::
 
-        python setup.py build_ext --inplace
+        pip install -e .
 
-To install nose::
+This lets you change your source code and rerun tests at will.
 
-        conda install nose
+To install pytest::
 
-To run all tests in pyart with nose::
+        conda install pytest
 
-	nosetests --exe pyart
+To run all tests in pyart with pytest from outside the pyart directory::
 
-All test with in depth details::
+        pytest --pyargs pyart
 
-	nosetests -v -s
+All test with increase verbosity::
+
+        pytest -v
 
 Just one file::
 
-	nosetests filename
+        pytest filename
 
 Note: When an example shows filename as such::
 
-        nosetests filename
+        pytest filename
 
 filename is the filename and location, such as::
 
-        nosetests /home/user/pyart/pyart/retrieve/tests/test_vad.py
+        pytest /home/user/pyart/pyart/io/tests/test_cfradial.py
 
 Relative paths can also be used::
         
         cd pyart
-        nosetests ./pyart/retrieve/tests/test_vad.py
+        pytest ./pyart/retrieve/tests/test_vad.py
 
-For more on nose and nosetests:
+For more on pytest:
 
-- http://nose.readthedocs.io/en/latest/
+- https://docs.pytest.org/en/latest/
 
 
 GitHub
