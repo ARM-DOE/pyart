@@ -3,7 +3,8 @@
 from __future__ import print_function
 
 import numpy as np
-from numpy.testing import assert_almost_equal, assert_raises
+from numpy.testing import assert_almost_equal
+import pytest
 
 import pyart
 
@@ -147,18 +148,18 @@ def test_map_to_grid_errors():
     radar = pyart.testing.make_target_radar()
 
     # invalid weighting_function
-    assert_raises(ValueError, pyart.map.map_gates_to_grid, (radar, ),
+    pytest.raises(ValueError, pyart.map.map_gates_to_grid, (radar, ),
                   (1, 1, 1), ((-1, 1), (-1, 1), (-1, 1)),
                   weighting_function='foo')
 
     # invalid roi_func
-    assert_raises(ValueError, pyart.map.map_gates_to_grid, (radar, ),
+    pytest.raises(ValueError, pyart.map.map_gates_to_grid, (radar, ),
                   (1, 1, 1), ((-1, 1), (-1, 1), (-1, 1)),
                   roi_func='foo')
 
     # missing reflectivity field
     radar.fields.pop('reflectivity')
-    assert_raises(ValueError, pyart.map.map_gates_to_grid, (radar, ),
+    pytest.raises(ValueError, pyart.map.map_gates_to_grid, (radar, ),
                   (1, 1, 1), ((-1, 1), (-1, 1), (-1, 1)))
 
 

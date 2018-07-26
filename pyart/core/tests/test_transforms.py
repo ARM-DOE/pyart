@@ -3,10 +3,10 @@
 import warnings
 
 import numpy as np
+from numpy.testing import assert_almost_equal
+import pytest
 
 from pyart.core import transforms
-from numpy.testing import assert_almost_equal
-from numpy.testing.decorators import skipif
 
 
 def test_geographic_to_cartesian_aeqd():
@@ -78,7 +78,8 @@ def test_geographic_to_cartesian():
     assert_almost_equal(y, 5.5444634, 7)
 
 
-@skipif(not transforms._PYPROJ_AVAILABLE)
+@pytest.mark.skipif(not transforms._PYPROJ_AVAILABLE,
+                    reason="PyProj is not installed.")
 def test_geographic_to_cartesian_pyproj():
     # Example taken from:
     # Snyder, J.P. Map Projections A Working Manual, 1987, page 338.
@@ -156,7 +157,8 @@ def test_cartesian_vectors_to_geographic():
     assert_almost_equal(lon[1, 1], 100.0, 3)  # 100.0 E longitude
 
 
-@skipif(not transforms._PYPROJ_AVAILABLE)
+@pytest.mark.skipif(not transforms._PYPROJ_AVAILABLE,
+                    reason="PyProj is not installed.")
 def test_cartesian_to_geographic_pyproj():
     R = 3.0
     lon_0 = -100.        # 100 degrees West longitude

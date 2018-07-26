@@ -3,7 +3,8 @@
 from __future__ import print_function
 
 import numpy as np
-from numpy.testing import assert_almost_equal, assert_raises
+from numpy.testing import assert_almost_equal
+import pytest
 
 from pyart.core import HorizontalWindProfile
 
@@ -38,7 +39,7 @@ def test_horizontalwindprofile_error():
     height = [1, 2]
     speed = [1, 1]
     direction = [1, 2, 3]
-    assert_raises(ValueError, HorizontalWindProfile, height, speed, direction)
+    pytest.raises(ValueError, HorizontalWindProfile, height, speed, direction)
 
 
 def test_horizontalwindprofile_location_error():
@@ -46,5 +47,5 @@ def test_horizontalwindprofile_location_error():
     speed = [1, 1]
     direction = [1, 2]
     lat = [1]
-    assert_raises(ValueError, HorizontalWindProfile, height, speed, direction,
+    pytest.raises(ValueError, HorizontalWindProfile, height, speed, direction,
                   latitude=lat, longitude=None)

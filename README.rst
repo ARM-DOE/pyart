@@ -201,7 +201,7 @@ functionality is available of the following modules are installed.
 * `wradlib <http://docs.wradlib.org/en/latest/>`_.  Needed to calculate the texture
   of a differential phase field.
 
-* `nose <http://nose.readthedocs.org/en/latest/>`_.  
+* `pytest <https://docs.pytest.org/en/latest/>`_.
   Required to run the Py-ART unit tests.
 
 * `gdal <https://pypi.python.org/pypi/GDAL/>`_.
@@ -256,9 +256,9 @@ Testing
 -------
 
 After installation, you can launch the test suite from outside the
-source directory (you will need to have nosetests installed)::
+source directory (you will need to have pytest installed)::
 
-   $ nosetests --exe pyart
+   $ pytest --pyargs pyart
 
-In-place installs can be tested using the `nosetest` command from within
+In-place installs can be tested using the `pytest` command from within
 the source directory.

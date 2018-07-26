@@ -11,9 +11,8 @@
 import os
 import warnings
 
-import pyart
 import numpy as np
-from numpy.testing.decorators import skipif
+import pytest
 
 try:
     import cvxopt
@@ -34,12 +33,15 @@ try:
 except ImportError:
     cylp_available = False
 
+import pyart
+
 
 PATH = os.path.dirname(__file__)
 REFERENCE_RAYS_FILE = os.path.join(PATH, 'reference_rays.npz')
 
 
-@skipif(not glpk_available)
+@pytest.mark.skipif(not glpk_available,
+                    reason="GLPK is not installed.")
 def test_phase_proc_lp_glpk():
     radar, phidp, kdp = perform_phase_processing()
     ref = np.load(REFERENCE_RAYS_FILE)
@@ -49,7 +51,8 @@ def test_phase_proc_lp_glpk():
                   radar.fields['unfolded_differential_phase']['data']) <= 0.01
 
 
-@skipif(not cvxopt_available)
+@pytest.mark.skipif(not cvxopt_available,
+                    reason="CVXOPT is not installed.")
 def test_phase_proc_lp_cvxopt():
     from cvxopt import solvers
     solvers.options['LPX_K_MSGLEV'] = 0     # supress screen output
@@ -61,7 +64,8 @@ def test_phase_proc_lp_cvxopt():
                   radar.fields['unfolded_differential_phase']['data']) <= 0.01
 
 
-@skipif(not cylp_available)
+@pytest.mark.skipif(not cylp_available,
+                    reason="CyLP is not installed.")
 def test_phase_proc_lp_cylp():
     with warnings.catch_warnings():
         # ignore FutureWarnings as CyLP emits a number of these
@@ -74,7 +78,8 @@ def test_phase_proc_lp_cylp():
                   radar.fields['unfolded_differential_phase']['data']) <= 0.01
 
 
-@skipif(not cylp_available)
+@pytest.mark.skipif(not cylp_available,
+                    reason="CyLP is not installed.")
 def test_phase_proc_lp_cylp_mp():
     with warnings.catch_warnings():
         # ignore FutureWarnings as CyLP emits a number of these

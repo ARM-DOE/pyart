@@ -51,9 +51,9 @@ __ http://matplotlib.org/basemap/
 
 __ http://code.google.com/p/pyproj/
 
-* nose__
+* pytest__
 
-__ http://nose.readthedocs.org/en/latest/
+__ https://docs.pytest.org/en/latest/
 
 Obtaining the latest source
 ===========================
