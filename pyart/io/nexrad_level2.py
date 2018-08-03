@@ -179,14 +179,14 @@ class NEXRADLevel2File(object):
         # pull out the vcp record
         msg_5 = [r for r in self._records if r['header']['type'] == 5]
 
-        wstring1 = 'No MSG5 detected. Setting to meaningless data \n'
-        wstring2 = 'Rethink your life choices and be ready for errors'
-
         if len(msg_5):
             self.vcp = msg_5[0]
         else:
             # There is no VCP Data.. This is uber dodgy
-            warnings.warn(wstring1+wstring2)
+            warnings.warn("No MSG5 detected. Setting to meaningless data. "
+                          "Rethink your life choices and be ready for errors."
+                          "Specifically fixed angle data will be missing")
+            
             self.vcp = None
         return
 
@@ -437,7 +437,7 @@ class NEXRADLevel2File(object):
             if self.vcp is not None:
                 cut_parameters = self.vcp['cut_parameters']
             else:
-                cut_parameters = [{'elevation_angle' : 0.0}]*self.nscans
+                cut_parameters = [{'elevation_angle': 0.0}] * self.nscans
             scale = 360. / 65536.
             return np.array([cut_parameters[i]['elevation_angle'] * scale
                              for i in scans], dtype='float32')
