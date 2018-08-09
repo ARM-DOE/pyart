@@ -239,7 +239,8 @@ cdef class coo_entries:
         np.intp_t n, n_max
         np.ndarray i, j
         np.ndarray v
-        np.intp_t  *i_data, *j_data
+        np.intp_t *i_data
+        np.intp_t *j_data
         np.float64_t *v_data
     
     def __init__(self):
@@ -1245,7 +1246,8 @@ cdef class cKDTree:
         cdef np.ndarray[np.float64_t, ndim=2] xx
         cdef np.intp_t c, n, i, j
         x = np.asarray(x).astype(np.float64)
-        if np.shape(x)[-1] != self.m:
+        sh = np.shape(x)
+        if sh[len(sh)-1] != self.m:
             raise ValueError("x must consist of vectors of length %d but has"
                              "shape %s" % (int(self.m), np.shape(x)))
         if p < 1:
@@ -1255,7 +1257,8 @@ cdef class cKDTree:
             x = x[np.newaxis,:]
         else:
             single = False
-        retshape = np.shape(x)[:-1]
+        sh = np.shape(x)
+        retshape = sh[len(sh) - 1]
         n = <np.intp_t> np.prod(retshape)
         xx = np.reshape(x,(n,self.m))
         xx = np.ascontiguousarray(xx,dtype=np.float64)
@@ -1445,7 +1448,8 @@ cdef class cKDTree:
                                                     list results,
                                                     innernode* node1,
                                                     innernode* node2) except -1:
-        cdef leafnode *lnode1, *lnode2
+        cdef leafnode *lnode1
+        cdef leafnode *lnode2
         cdef list results_i
         cdef np.intp_t i, j
         
@@ -1478,7 +1482,8 @@ cdef class cKDTree:
                                                  innernode* node1,
                                                  innernode* node2,
                                                  RectRectDistanceTracker tracker) except -1:
-        cdef leafnode *lnode1, *lnode2
+        cdef leafnode *lnode1
+        cdef leafnode *lnode2
         cdef list results_i
         cdef np.float64_t d
         cdef np.intp_t i, j
@@ -1612,7 +1617,8 @@ cdef class cKDTree:
                                                 set results,
                                                 innernode* node1,
                                                 innernode* node2) except -1:
-        cdef leafnode *lnode1, *lnode2
+        cdef leafnode *lnode1
+        cdef leafnode *lnode2
         cdef list results_i
         cdef np.intp_t i, j, min_j
         
@@ -1658,7 +1664,8 @@ cdef class cKDTree:
                                              innernode* node1,
                                              innernode* node2,
                                              RectRectDistanceTracker tracker) except -1:
-        cdef leafnode *lnode1, *lnode2
+        cdef leafnode *lnode1
+        cdef leafnode *lnode2
         cdef list results_i
         cdef np.float64_t d
         cdef np.intp_t i, j, min_j
@@ -1799,7 +1806,8 @@ cdef class cKDTree:
                                         innernode* node1,
                                         innernode* node2,
                                         RectRectDistanceTracker tracker) except -1:
-        cdef leafnode *lnode1, *lnode2
+        cdef leafnode *lnode1
+        cdef leafnode *lnode2
         cdef np.float64_t d
         cdef np.intp_t *old_idx
         cdef np.intp_t old_n_queries, l, i, j
@@ -1984,7 +1992,8 @@ cdef class cKDTree:
                                                coo_entries results,
                                                innernode* node1, innernode* node2,
                                                RectRectDistanceTracker tracker) except -1:
-        cdef leafnode *lnode1, *lnode2
+        cdef leafnode *lnode1
+        cdef leafnode *lnode2
         cdef list results_i
         cdef np.float64_t d
         cdef np.intp_t i, j, min_j
