@@ -61,6 +61,7 @@ cdef class DistRoI(RoIFunction):
 
     def __init__(self, z_factor, xy_factor, min_radius, offsets):
         """ initalize. """
+        cdef int i
         self.z_factor = z_factor
         self.xy_factor = xy_factor
         self.min_radius = min_radius
@@ -110,6 +111,7 @@ cdef class DistBeamRoI(RoIFunction):
 
     def __init__(self, h_factor, nb, bsp, min_radius, offsets):
         """ initalize. """
+        cdef int i
         self.h_factor = h_factor
         self.min_radius = min_radius
         self.beam_factor = tan(nb * bsp * PI / 180.)
