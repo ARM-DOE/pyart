@@ -13,6 +13,8 @@ for drawing maps.
 
 """
 
+import warnings
+
 import numpy as np
 import matplotlib.pyplot as plt
 try:
@@ -30,8 +32,6 @@ except ImportError:
 from .radardisplay import RadarDisplay
 from .common import parse_ax_fig, parse_vmin_vmax, parse_cmap
 from ..exceptions import MissingOptionalDependency
-
-import warnings
 
 class RadarMapDisplayCartopy(RadarDisplay):
     """
