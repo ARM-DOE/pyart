@@ -94,10 +94,10 @@ else:
             """
             import pytest
             pkg_dir = _osp.abspath(_osp.dirname(__file__))
-            args = ['', pkg_dir, '--pyargs']
+            args = [pkg_dir, '--pyargs', 'pyart']
             if verbose:
                 args.extend(['-v', '-s'])
-            pytest.run('pyart', argv=args)
+            pytest.main(args=args)
 
     # Do not use `test` as function name as this leads to a recursion problem
     # with the pytest test suite.
