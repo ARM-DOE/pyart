@@ -13,7 +13,8 @@ import datetime
 import matplotlib.pyplot as plt
 
 import numpy as np
-from numpy.testing import assert_raises, assert_almost_equal, assert_warns
+from numpy.testing import assert_almost_equal
+import pytest
 
 import pyart
 
@@ -150,6 +151,9 @@ def test_radardisplay_generate_filename():
     display = pyart.graph.RadarDisplay(radar, shift=(0.1, 0.0))
     filename = display.generate_filename('test', 0)
     assert filename == 'xsapr-sgp_test_00_20110520105416.png'
+
+    filename = display.generate_filename('test', 0, datetime_format='%Y%m%d')
+    assert filename == 'xsapr-sgp_test_00_20110520.png'
     plt.close()
 
 
@@ -157,13 +161,13 @@ def test_radardisplay_plot_labels_errors():
     radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
     display = pyart.graph.RadarDisplay(radar)
     # len(labels) != len(locations)
-    assert_raises(ValueError, display.plot_labels, ['a', 'a'], [(0, 0)])
+    pytest.raises(ValueError, display.plot_labels, ['a', 'a'], [(0, 0)])
     # len(labels) != len(symbols)
-    assert_raises(ValueError, display.plot_labels, ['a'], [(0, 0)],
+    pytest.raises(ValueError, display.plot_labels, ['a'], [(0, 0)],
                   symbols=['r+', 'r+'])
     # unknown scan_type
     display.scan_type = 'foo'
-    assert_raises(ValueError, display.plot, 'fake_field')
+    pytest.raises(ValueError, display.plot, 'fake_field')
     plt.close()
 
 
@@ -200,7 +204,7 @@ def test_radardisplay_loc_of_moving_radar():
 
     radar.latitude['data'] = np.array([35, 45])
     radar.longitude['data'] = np.array([75, 85])
-    assert_warns(UserWarning, pyart.graph.RadarDisplay, radar)
+    pytest.warns(UserWarning, pyart.graph.RadarDisplay, radar)
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", category=UserWarning)
         display = pyart.graph.RadarDisplay(radar)

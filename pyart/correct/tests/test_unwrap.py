@@ -6,9 +6,12 @@
 
 from __future__ import print_function
 
-import pyart
 import numpy as np
-from numpy.testing import assert_allclose, assert_raises, assert_almost_equal
+from numpy.testing import assert_allclose, assert_almost_equal
+import pytest
+
+import pyart
+
 
 REF_DATA = [0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 9.5, 10.5, 11.5,
             12.5, 13.5, 12.5, 11.5, 10.5, 9.5, 8.5, 7.5, 6.5, 5.5, 4.5, 3.5,
@@ -148,7 +151,7 @@ def test_is_radar_sweep_aligned():
     # raises ValueError
     radar = pyart.testing.make_empty_ppi_radar(3, 4, 2)
     radar.scan_type = 'fuzz'
-    assert_raises(
+    pytest.raises(
         ValueError, pyart.correct.unwrap._is_radar_sweep_aligned, radar)
 
 
@@ -162,23 +165,23 @@ def test_dealias_unwrap_phase_raises():
 
     # invalid unwrap_unit
     radar = pyart.testing.make_velocity_aliased_radar()
-    assert_raises(ValueError, pyart.correct.dealias_unwrap_phase, radar,
+    pytest.raises(ValueError, pyart.correct.dealias_unwrap_phase, radar,
                   unwrap_unit='fuzz')
 
     # no explicit nyquist
     radar = pyart.testing.make_velocity_aliased_radar()
     radar.instrument_parameters = None
-    assert_raises(LookupError, pyart.correct.dealias_unwrap_phase, radar)
+    pytest.raises(LookupError, pyart.correct.dealias_unwrap_phase, radar)
 
     # non-sequential
     radar = pyart.testing.make_velocity_aliased_radar()
     radar.azimuth['data'][10] = 190.
-    assert_raises(ValueError, pyart.correct.dealias_unwrap_phase, radar)
+    pytest.raises(ValueError, pyart.correct.dealias_unwrap_phase, radar)
 
     # non-aligned sweeps
     radar = pyart.testing.make_empty_ppi_radar(1, 10, 2)
     radar.fields['velocity'] = {'data': np.zeros((20, 1))}
-    assert_raises(ValueError, pyart.correct.dealias_unwrap_phase, radar,
+    pytest.raises(ValueError, pyart.correct.dealias_unwrap_phase, radar,
                   nyquist_vel=10, unwrap_unit='volume')
 
     # non-cubic radar
@@ -186,18 +189,18 @@ def test_dealias_unwrap_phase_raises():
     radar.fields['velocity'] = {'data': np.zeros((20, 1))}
     radar.azimuth['data'][-10:] = range(10)
     radar.sweep_end_ray_index['data'][-1] = 18
-    assert_raises(ValueError, pyart.correct.dealias_unwrap_phase, radar,
+    pytest.raises(ValueError, pyart.correct.dealias_unwrap_phase, radar,
                   nyquist_vel=10, unwrap_unit='volume')
 
     # invalid scan type
     radar = pyart.testing.make_velocity_aliased_radar()
     radar.scan_type = 'fuzz'
-    assert_raises(ValueError, pyart.correct.dealias_unwrap_phase, radar)
+    pytest.raises(ValueError, pyart.correct.dealias_unwrap_phase, radar)
 
     # invalid scan type
     radar = pyart.testing.make_velocity_aliased_radar()
     radar.scan_type = 'fuzz'
-    assert_raises(ValueError, pyart.correct.dealias_unwrap_phase, radar)
+    pytest.raises(ValueError, pyart.correct.dealias_unwrap_phase, radar)
 
 
 def perform_dealias(unwrap_unit='sweep', **kwargs):

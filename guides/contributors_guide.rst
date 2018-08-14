@@ -143,13 +143,20 @@ An example:
 
         """
 
-Following the introduction code, modules are then added. Main imports come
-first, followed by 'from imports' and user's own modules.
+Following the introduction code, modules are then added. To follow pep8
+standards, modules should be added in the order of:
+
+        1. Standard library imports.
+        2. Related third party imports.
+        3. Local application/library specific imports.
 
 For example:
 
 .. code-block:: python
 
+        import glob
+        import os
+         
         import numpy as np
         import numpy.ma as ma
         from scipy.interpolate import interp1d
@@ -245,11 +252,11 @@ Testing
 When adding a new function to pyart it is important to add your function to
 the __init__.py file under the corresponding pyart folder.
 
-Create a test for your function and have assert from numpy test the known
-values to the calculated values. If changes are made in the future to pyart,
-nose will use the test created to see if the function is still valid and
+Create a test for your function and have assert from numpy testing test the
+known values to the calculated values. If changes are made in the future to
+pyart, nose will use the test created to see if the function is still valid and
 produces the same values. It works that, it takes known values that are
-obtained from the function, and when nosetests is ran, it takes the test
+obtained from the function, and when pytest is ran, it takes the test
 function and reruns the function and compares the results to the original.
 
 An example:
@@ -295,40 +302,47 @@ An example:
             assert_almost_equal(vad.u_wind, u_wind, 3)
             assert_almost_equal(vad.v_wind, v_wind, 3)
 
-Nosetests from nose are used to run tests in pyart.
+Pytest is used to run unit tests in pyart.
 
-To install nose::
+It is recommended to install pyart in “editable” mode for pytest testing.
+From within the main pyart directory::
 
-        conda install nose
+        pip install -e .
 
-To run all tests in pyart with nose::
+This lets you change your source code and rerun tests at will.
 
-	nosetests --exe pyart
+To install pytest::
 
-All test with in depth details::
+        conda install pytest
 
-	nosetests -v -s
+To run all tests in pyart with pytest from outside the pyart directory::
+
+        pytest --pyargs pyart
+
+All test with increase verbosity::
+
+        pytest -v
 
 Just one file::
 
-	nosetests filename
+        pytest filename
 
 Note: When an example shows filename as such::
 
-        nosetests filename
+        pytest filename
 
 filename is the filename and location, such as::
 
-        nosetests /home/user/pyart/pyart/retrieve/tests/test_vad.py
+        pytest /home/user/pyart/pyart/io/tests/test_cfradial.py
 
 Relative paths can also be used::
         
         cd pyart
-        nosetests ./pyart/retrieve/tests/test_vad.py
+        pytest ./pyart/retrieve/tests/test_vad.py
 
-For more on nose and nosetests:
+For more on pytest:
 
-- http://nose.readthedocs.io/en/latest/
+- https://docs.pytest.org/en/latest/
 
 
 GitHub
@@ -412,7 +426,7 @@ This is done by::
 
 To prevent a merge commit::
 
-        git merge upstream/master --no-commit
+        git merge --ff-only upstream/master
 
 After creating a pull request through GitHub, two outside checkers,
 Appveyor and TravisCI will determine if the code past all checks. If the

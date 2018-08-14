@@ -8,7 +8,7 @@ environment:
 
   matrix:
     - PYTHON_VERSION: "2.7"
-      PYTHON_ARCH: "32"
+      PYTHON_ARCH: "64"
 
 # Test only two environments to speed up CI time
 #      PYTHON_VERSION: "3.4"
@@ -42,7 +42,7 @@ install:
   - "activate matrix_env"
 
   # Install Py-ART dependecies
-  - "conda install -y -q numpy scipy matplotlib netcdf4 nose"
+  - "conda install -y -q numpy scipy matplotlib netcdf4 pytest pytest-cov cython"
   - "if \"%PYTHON_VERSION%\"==\"2.7\" (conda install -y -q basemap)"
 
   # Check that we have the expected version and architecture for Python
@@ -52,10 +52,11 @@ install:
   - "conda list"
 
   # build Py-ART
-  - "%CMD_IN_ENV% python setup.py build_ext -i"
+  - "%CMD_IN_ENV% pip install -e ."
 
 build: false
 
 test_script:
   # run the unit tests
-  - "python -c \"import nose; nose.main()\" -v"
+  - "if \"%PYTHON_VERSION%\"==\"2.7\" (pytest -v --cov pyart --ignore pyart/util)"
+  - "if \"%PYTHON_VERSION%\"==\"3.5\" (pytest -v --cov pyart)"

@@ -5,6 +5,7 @@ import warnings
 import numpy as np
 from numpy.testing import assert_almost_equal
 from numpy.ma.core import MaskedArray
+import pytest
 
 import pyart
 
@@ -208,11 +209,11 @@ def test_nsweeps():
 FIELDS = ['reflectivity', 'spectrum_width', 'velocity']
 
 
-def test_field_dics():
-    for field in FIELDS:
-        description = "field : %s, dictionary" % field
-        check_field_dic.description = description
-        yield check_field_dic, field
+@pytest.mark.parametrize("field", FIELDS)
+def test_field_dics(field):
+    description = "field : %s, dictionary" % field
+    check_field_dic.description = description
+    check_field_dic(field)
 
 
 def check_field_dic(field):
@@ -223,25 +224,26 @@ def check_field_dic(field):
     assert 'coordinates' in radar.fields[field]
 
 
-def test_field_shapes():
-    for field in FIELDS:
-        description = "field : %s, shape" % field
-        check_field_shape.description = description
-        yield check_field_shape, field
+@pytest.mark.parametrize("field", FIELDS)
+def test_field_shapes(field):
+    description = "field : %s, shape" % field
+    check_field_shape.description = description
+    check_field_shape(field)
 
 
 def check_field_shape(field):
     assert radar.fields[field]['data'].shape == (NRAYS, NGATES)
 
 
-def test_field_types():
-    fields = {'spectrum_width': MaskedArray,
-              'reflectivity': MaskedArray,
-              'velocity': MaskedArray}
-    for field, field_type in fields.items():
-        description = "field : %s, type" % field
-        check_field_type.description = description
-        yield check_field_type, field, field_type
+fields = {'spectrum_width': MaskedArray,
+          'reflectivity': MaskedArray,
+          'velocity': MaskedArray}
+@pytest.mark.parametrize(
+    "field, field_type", fields.items(), ids=list(fields.keys()))
+def test_field_types(field, field_type):
+    description = "field : %s, type" % field
+    check_field_type.description = description
+    check_field_type(field, field_type)
 
 
 def check_field_type(field, field_type):
@@ -262,18 +264,6 @@ def test_field_data_reflectivity():
     assert_almost_equal(
         radar.fields['reflectivity']['data'][0, 8:16],
         [1.0, 1.0, 0.4375, -0.6875, -1.8125, -2.9375, -3.5, -3.5])
-
-
-def test_field_data_nearest_neighbor():
-    # read in the sample file, ignore warnings
-    with warnings.catch_warnings():
-        warnings.simplefilter('ignore', category=UserWarning)
-        radar = pyart.io.read_nexrad_archive(
-            pyart.testing.NEXRAD_ARCHIVE_MSG1_FILE,
-            station='KLOT', linear_interp=False)
-    assert_almost_equal(
-        radar.fields['reflectivity']['data'][0, 8:16],
-        [1.0, 1.0, 1.0, 1.0, -3.5, -3.5, -3.5, -3.5])
 
 
 def test_field_data_nearest_neighbor():

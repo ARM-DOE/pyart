@@ -1,5 +1,6 @@
 # check that the dummy NEXRAD file is simlar to non-dummy file.
 
+from __future__ import print_function
 import numpy as np
 from numpy.testing import assert_array_equal, assert_allclose
 
@@ -59,12 +60,12 @@ def radars_similar(r1, r2):
     # fields #
     ##########
 
-    print r1.fields.keys()
-    print r2.fields.keys()
+    print(r1.fields.keys())
+    print(r2.fields.keys())
     assert set(r1.fields.keys()).difference(r2.fields.keys()) == set()
 
     for field in r1.fields:
-        print field
+        print(field)
         assert dics_similar(r1.fields[field], r2.fields[field])
 
     #radar1.fields
@@ -80,8 +81,8 @@ def dics_similar(dic1, dic2):
             return False
 
     # all keys in both dictionaries
-    print dic1.keys()
-    print dic2.keys()
+    print(dic1.keys())
+    print(dic2.keys())
     assert set(dic1.keys()).difference(dic2.keys()) == set()
 
     for key in dic1.keys():

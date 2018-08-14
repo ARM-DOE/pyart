@@ -123,6 +123,16 @@ def test_generate_radar_time_begin():
     assert time == datetime.datetime(1989, 1, 1, 0, 0, 1)
 
 
+def test_generate_radar_time_sweep():
+    radar = pyart.testing.make_empty_ppi_radar(1, 1, 2)
+
+    time = common.generate_radar_time_sweep(radar, 0)
+    assert time == datetime.datetime(1989, 1, 1, 0, 0, 1)
+
+    time = common.generate_radar_time_sweep(radar, 1)
+    assert time == datetime.datetime(1989, 1, 1, 0, 0, 2)
+
+
 def test_generate_grid_time_begin():
     grid_shape = (1, 1, 1)
     grid_limits = ((0, 1), (0, 1), (0, 1))
@@ -137,9 +147,18 @@ def test_generate_grid_time_begin():
 
 
 def test_generate_filename():
-    radar = pyart.testing.make_empty_ppi_radar(1, 1, 1)
+    radar = pyart.testing.make_empty_ppi_radar(1, 1, 2)
     filename = common.generate_filename(radar, 'foobar', 0)
     assert filename == 'fake_radar_foobar_00_19890101000001.png'
+
+    filename = common.generate_filename(radar, 'foobar', 1)
+    assert filename == 'fake_radar_foobar_01_19890101000001.png'
+
+    filename = common.generate_filename(radar, 'foobar', 1, datetime_format='%Y%m%d')
+    assert filename == 'fake_radar_foobar_01_19890101.png'
+
+    filename = common.generate_filename(radar, 'foobar', 1, use_sweep_time=True)
+    assert filename == 'fake_radar_foobar_01_19890101000002.png'
 
 
 def test_generate_grid_filename():
@@ -153,10 +172,19 @@ def test_generate_grid_filename():
 
 
 def test_generate_title():
-    radar = pyart.testing.make_empty_ppi_radar(1, 1, 1)
+    radar = pyart.testing.make_empty_ppi_radar(1, 1, 2)
     radar.fields['foo'] = {}
 
     title = common.generate_title(radar, 'foo', 0)
+    assert title == 'fake_radar 0.8 Deg. 1989-01-01T00:00:01Z \nFoo'
+
+    title = common.generate_title(radar, 'foo', 1)
+    assert title == 'fake_radar 0.8 Deg. 1989-01-01T00:00:02Z \nFoo'
+
+    title = common.generate_title(radar, 'foo', 1, datetime_format='%Y-%m-%d')
+    assert title == 'fake_radar 0.8 Deg. 1989-01-01 \nFoo'
+
+    title = common.generate_title(radar, 'foo', 1, use_sweep_time=False)
     assert title == 'fake_radar 0.8 Deg. 1989-01-01T00:00:01Z \nFoo'
 
 

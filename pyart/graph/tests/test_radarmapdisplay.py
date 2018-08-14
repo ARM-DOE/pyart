@@ -6,14 +6,15 @@
 # be created, not that they are correct.
 
 import matplotlib.pyplot as plt
-import pyart
 import numpy as np
-from numpy.testing import assert_raises
-from numpy.testing.decorators import skipif
+import pytest
+
+import pyart
 
 
 # Top level Figure generating tests
-@skipif(not pyart.graph.radarmapdisplay._BASEMAP_AVAILABLE)
+@pytest.mark.skipif(not pyart.graph.radarmapdisplay._BASEMAP_AVAILABLE,
+                    reason="Basemap is not installed.")
 def test_radarmapdisplay_ppi(outfile=None):
     radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
     display = pyart.graph.RadarMapDisplay(radar, shift=(0.1, 0.0))
@@ -33,7 +34,8 @@ def test_radarmapdisplay_ppi(outfile=None):
 
 
 # Tests of methods, these tests do not generate figures
-@skipif(not pyart.graph.radarmapdisplay._BASEMAP_AVAILABLE)
+@pytest.mark.skipif(not pyart.graph.radarmapdisplay._BASEMAP_AVAILABLE,
+                    reason="Basemap is not installed.")
 def test_radarmapdisplay_auto_range():
     # test the auto_range=True function
     radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
@@ -48,19 +50,21 @@ def test_radarmapdisplay_auto_range():
     plt.close()
 
 
-@skipif(not pyart.graph.radarmapdisplay._BASEMAP_AVAILABLE)
+@pytest.mark.skipif(not pyart.graph.radarmapdisplay._BASEMAP_AVAILABLE,
+                    reason="Basemap is not installed.")
 def test_error_raising():
     radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
     display = pyart.graph.RadarMapDisplay(radar, shift=(0.1, 0.0))
     # no basemap
-    assert_raises(ValueError, display.plot_range_ring, 10)
+    pytest.raises(ValueError, display.plot_range_ring, 10)
 
 
-@skipif(not pyart.graph.radarmapdisplay._BASEMAP_AVAILABLE)
+@pytest.mark.skipif(not pyart.graph.radarmapdisplay._BASEMAP_AVAILABLE,
+                    reason="Basemap is not installed.")
 def test_radardisplay_cylindrical_proj_error():
     radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
     display = pyart.graph.RadarMapDisplay(radar)
-    assert_raises(
+    pytest.raises(
         ValueError,
         display.plot_ppi_map, 'reflectivity_horizontal', projection='cyl',
         resolution='c')

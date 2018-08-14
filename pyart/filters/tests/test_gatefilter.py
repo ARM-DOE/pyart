@@ -1,7 +1,7 @@
 """ Unit tests for Py-ART's correct/filters.py module. """
 
 import numpy as np
-from numpy.testing import assert_raises
+import pytest
 
 import pyart
 
@@ -242,12 +242,12 @@ def test_gatefilter_ops():
 
 def test_gatefilter_raises():
     gfilter = pyart.correct.GateFilter(radar)
-    assert_raises(ValueError, gfilter.exclude_below, 'test_field', 0.5,
+    pytest.raises(ValueError, gfilter.exclude_below, 'test_field', 0.5,
                   op='fuzz')
-    assert_raises(ValueError, gfilter.exclude_below, 'test_field', 0.5,
+    pytest.raises(ValueError, gfilter.exclude_below, 'test_field', 0.5,
                   exclude_masked='fuzz')
-    assert_raises(ValueError, gfilter.exclude_gates, np.arange(2))
-    assert_raises(ValueError, gfilter.include_gates, np.arange(2))
+    pytest.raises(ValueError, gfilter.exclude_gates, np.arange(2))
+    pytest.raises(ValueError, gfilter.include_gates, np.arange(2))
 
 
 #################

@@ -3,6 +3,7 @@
 import numpy as np
 from numpy.testing import assert_almost_equal
 from numpy.ma.core import MaskedArray
+import pytest
 
 import pyart
 
@@ -159,13 +160,13 @@ def test_antenna_transition():
 
 
 # instrument_parameters attribute
-def test_instument_parameters():
+@pytest.mark.parametrize(
+    "keys", ['prt', 'unambiguous_range', 'prt_mode', 'nyquist_velocity'])
+def test_instument_parameters(keys):
     # instrument_parameter sub-convention
-    keys = ['prt', 'unambiguous_range', 'prt_mode', 'nyquist_velocity']
-    for k in keys:
-        description = 'instrument_parameters: %s' % k
-        check_instrument_parameter.description = description
-        yield check_instrument_parameter, k
+    description = 'instrument_parameters: %s' % keys
+    check_instrument_parameter.description = description
+    check_instrument_parameter(keys)
 
 
 def check_instrument_parameter(param):
@@ -175,13 +176,12 @@ def check_instrument_parameter(param):
 
 
 # radar_parameters attribute
-def test_radar_parameters():
+@pytest.mark.parametrize("keys", ['radar_beam_width_h', 'radar_beam_width_v'])
+def test_radar_parameters(keys):
     # radar_parameter sub-convention
-    keys = ['radar_beam_width_h', 'radar_beam_width_v']
-    for k in keys:
-        description = 'radar_parameters: %s' % k
-        check_radar_parameter.description = description
-        yield check_radar_parameter, k
+    description = 'radar_parameters: %s' % keys
+    check_radar_parameter.description = description
+    check_radar_parameter(keys)
 
 
 def check_radar_parameter(param):
@@ -215,12 +215,11 @@ def test_nsweeps():
 ####################
 
 
-def test_field_dics():
-    fields = ['reflectivity', ]
-    for field in fields:
-        description = "field : %s, dictionary" % field
-        check_field_dic.description = description
-        yield check_field_dic, field
+@pytest.mark.parametrize("field", ['reflectivity', ])
+def test_field_dics(field):
+    description = "field : %s, dictionary" % field
+    check_field_dic.description = description
+    check_field_dic(field)
 
 
 def check_field_dic(field):
@@ -231,38 +230,39 @@ def check_field_dic(field):
     assert 'coordinates' in radar.fields[field]
 
 
-def test_field_shapes():
-    fields = ['reflectivity', ]
-    for field in fields:
-        description = "field : %s, shape" % field
-        check_field_shape.description = description
-        yield check_field_shape, field
+@pytest.mark.parametrize("field", ['reflectivity', ])
+def test_field_shapes(field):
+    description = "field : %s, shape" % field
+    check_field_shape.description = description
+    check_field_shape(field)
 
 
 def check_field_shape(field):
     assert radar.fields[field]['data'].shape == (360, 110)
 
 
-def test_field_types():
-    fields = {'reflectivity': MaskedArray, }
-    for field, field_type in fields.items():
-        description = "field : %s, type" % field
-        check_field_type.description = description
-        yield check_field_type, field, field_type
+fields = {'reflectivity': MaskedArray, }
+@pytest.mark.parametrize(
+    "field, field_type", fields.items(), ids=list(fields.keys()))
+def test_field_types(field, field_type):
+    description = "field : %s, type" % field
+    check_field_type.description = description
+    check_field_type(field, field_type)
 
 
 def check_field_type(field, field_type):
     assert type(radar.fields[field]['data']) is field_type
 
 
-def test_field_first_points():
+fields = {'reflectivity': 24.0}
+@pytest.mark.parametrize(
+    "field, field_value", fields.items(), ids=list(fields.keys()))
+def test_field_first_points(field, field_value):
     # these values can be found using:
     # [round(radar.fields[f]['data'][0,0]) for f in radar.fields]
-    fields = {'reflectivity': 24.0}
-    for field, field_value in fields.items():
-        description = "field : %s, first point" % field
-        check_field_first_point.description = description
-        yield check_field_first_point, field, field_value
+    description = "field : %s, first point" % field
+    check_field_first_point.description = description
+    check_field_first_point(field, field_value)
 
 
 def check_field_first_point(field, value):
@@ -338,7 +338,7 @@ def test_rhi_elevation():
 
 
 # field data
-def test_rhi_elevation():
+def test_rhi_field_data():
     assert_almost_equal(RADAR_RHI.fields['reflectivity']['data'][0, 0],
                         23.93, 2)
 

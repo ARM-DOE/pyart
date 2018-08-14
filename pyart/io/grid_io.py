@@ -12,7 +12,6 @@ Reading and writing Grid objects.
     _make_coordinatesystem_dict
 
 """
-
 import warnings
 import numpy as np
 import netCDF4
@@ -207,7 +206,12 @@ def write_grid(filename, grid, format='NETCDF4',
         dset.createDimension('nradar', grid.nradar)
         if grid.radar_name is not None:
             # a length of at least 1 is required for the dimension
-            nradar_str_length = max(len(grid.radar_name['data'][0]), 1)
+            lenlist = []
+            for rname in grid.radar_name['data']:
+                lenlist.append(len(rname))
+            lenlist.append(1)
+            nradar_str_length = np.max(lenlist)
+            # nradar_str_length = max(len(grid.radar_name['data'][0]), 1)
             dset.createDimension('nradar_str_length', nradar_str_length)
 
     # required variables

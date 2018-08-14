@@ -4,18 +4,15 @@
 # to recreate a dealias_plot.png file showing the before and after doppler
 # velocities
 
-import datetime
-import warnings
-
-import netCDF4
-import pyart
 import numpy as np
 from numpy.testing import assert_allclose, assert_almost_equal
-from numpy.testing.decorators import skipif
-from numpy.testing import assert_raises
+import pytest
+
+import pyart
 
 
-@skipif(not pyart.correct.dealias._FOURDD_AVAILABLE)
+@pytest.mark.skipif(not pyart.correct.dealias._FOURDD_AVAILABLE,
+                    reason="TRMM RSL is not installed.")
 def test_dealias_sounding():
     radar, dealias_vel = perform_dealias()
     assert_allclose(
@@ -27,7 +24,8 @@ def test_dealias_sounding():
     assert dealias_vel['data'][13, 47] is np.ma.masked
 
 
-@skipif(not pyart.correct.dealias._FOURDD_AVAILABLE)
+@pytest.mark.skipif(not pyart.correct.dealias._FOURDD_AVAILABLE,
+                    reason="TRMM RSL is not installed.")
 def test_set_limits():
 
     radar, dealias_vel = perform_dealias(set_limits=True)
@@ -41,7 +39,8 @@ def test_set_limits():
     assert 'valid_max' not in dealias_vel
 
 
-@skipif(not pyart.correct.dealias._FOURDD_AVAILABLE)
+@pytest.mark.skipif(not pyart.correct.dealias._FOURDD_AVAILABLE,
+                    reason="TRMM RSL is not installed.")
 def test_dealias_sounding_keep_original():
     radar, dealias_vel = perform_dealias(True)
     assert_allclose(
@@ -68,8 +67,9 @@ def perform_dealias(keep_original=False, **kwargs):
     return radar, dealias_vel
 
 
-@skipif(not pyart.correct.dealias._FOURDD_AVAILABLE)
-def test_dealias_last_radar_and_sounding():
+@pytest.mark.skipif(not pyart.correct.dealias._FOURDD_AVAILABLE,
+                    reason="TRMM RSL is not installed.")
+def test_dealias_last_radar_and_sounding_with_profile():
     radar = pyart.testing.make_velocity_aliased_radar()
     last_radar = pyart.testing.make_velocity_aliased_radar(False)
     height = np.linspace(150, 250, 10).astype('float32')
@@ -87,7 +87,8 @@ def test_dealias_last_radar_and_sounding():
     return
 
 
-@skipif(not pyart.correct.dealias._FOURDD_AVAILABLE)
+@pytest.mark.skipif(not pyart.correct.dealias._FOURDD_AVAILABLE,
+                    reason="TRMM RSL is not installed.")
 def test_dealias_last_radar_and_sounding():
     radar = pyart.testing.make_velocity_aliased_radar()
     last_radar = pyart.testing.make_velocity_aliased_radar(False)
@@ -101,17 +102,18 @@ def test_dealias_last_radar_and_sounding():
     return
 
 
-@skipif(not pyart.correct.dealias._FOURDD_AVAILABLE)
+@pytest.mark.skipif(not pyart.correct.dealias._FOURDD_AVAILABLE,
+                    reason="TRMM RSL is not installed.")
 def test_error_raising():
-
     # ValueError when no sounding or last_radar provided
-    radar = pyart.testing.make_velocity_aliased_radar()
-    assert_raises(ValueError, pyart.correct.dealias_fourdd, radar)
 
+    radar = pyart.testing.make_velocity_aliased_radar()
+    pytest.raises(ValueError, pyart.correct.dealias_fourdd, radar)
     return
 
 
-@skipif(not pyart.correct.dealias._FOURDD_AVAILABLE)
+@pytest.mark.skipif(not pyart.correct.dealias._FOURDD_AVAILABLE,
+                    reason="TRMM RSL is not installed.")
 def test_segmentation_fault_error():
     # See GitHub issue #571
 
@@ -121,7 +123,7 @@ def test_segmentation_fault_error():
     speed = np.zeros((2000, ))
     direction = np.zeros((2000, ))
     profile = pyart.core.HorizontalWindProfile(height, speed, direction)
-    assert_raises(
+    pytest.raises(
         ValueError, pyart.correct.dealias_fourdd, radar,
         sonde_profile=profile)
     return

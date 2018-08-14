@@ -5,17 +5,16 @@
 # in baseline_images directory. Current this test only determines if files can
 # be created, not that they are correct.
 
-import warnings
-
 import matplotlib.pyplot as plt
+import pytest
+
 import pyart
-from numpy.testing import assert_raises
-from numpy.testing.decorators import skipif
 
 RESOLUTION = 'c'    # crude resolution to speed up tests
 
 
-@skipif(not pyart.graph.gridmapdisplay._BASEMAP_AVAILABLE)
+@pytest.mark.skipif(not pyart.graph.gridmapdisplay._BASEMAP_AVAILABLE,
+                    reason="Basemap is not installed.")
 def test_gridmapdisplay_simple(outfile=None):
     # test basic GridMapDisplay functionality
     grid = pyart.testing.make_target_grid()
@@ -28,7 +27,8 @@ def test_gridmapdisplay_simple(outfile=None):
         fig.savefig(outfile)
 
 
-@skipif(not pyart.graph.gridmapdisplay._BASEMAP_AVAILABLE)
+@pytest.mark.skipif(not pyart.graph.gridmapdisplay._BASEMAP_AVAILABLE,
+                    reason="Basemap is not installed.")
 def test_gridmapdisplay_fancy(outfile=None):
     # test a bunch of GridMapDisplay functionality
     grid = pyart.testing.make_target_grid()
@@ -71,7 +71,8 @@ def test_gridmapdisplay_fancy(outfile=None):
         fig.savefig(outfile)
 
 
-@skipif(not pyart.graph.gridmapdisplay._BASEMAP_AVAILABLE)
+@pytest.mark.skipif(not pyart.graph.gridmapdisplay._BASEMAP_AVAILABLE,
+                    reason="Basemap is not installed.")
 def test_plot_basemap_not_using_corners(outfile=None):
     grid = pyart.testing.make_target_grid()
     display = pyart.graph.GridMapDisplay(grid)
@@ -81,7 +82,8 @@ def test_plot_basemap_not_using_corners(outfile=None):
         ax=ax, resolution=RESOLUTION, max_lon=None, auto_range=False)
 
 
-@skipif(not pyart.graph.gridmapdisplay._BASEMAP_AVAILABLE)
+@pytest.mark.skipif(not pyart.graph.gridmapdisplay._BASEMAP_AVAILABLE,
+                    reason="Basemap is not installed.")
 def test_generate_filename():
     grid = pyart.testing.make_target_grid()
     display = pyart.graph.GridMapDisplay(grid)
@@ -89,7 +91,8 @@ def test_generate_filename():
     assert isinstance(filename, str)
 
 
-@skipif(not pyart.graph.gridmapdisplay._BASEMAP_AVAILABLE)
+@pytest.mark.skipif(not pyart.graph.gridmapdisplay._BASEMAP_AVAILABLE,
+                    reason="Basemap is not installed.")
 def test_generate_titles():
     grid = pyart.testing.make_target_grid()
     display = pyart.graph.GridMapDisplay(grid)
@@ -101,24 +104,26 @@ def test_generate_titles():
     assert isinstance(title, str)
 
 
-@skipif(not pyart.graph.gridmapdisplay._BASEMAP_AVAILABLE)
+@pytest.mark.skipif(not pyart.graph.gridmapdisplay._BASEMAP_AVAILABLE,
+                    reason="Basemap is not installed.")
 def test_get_basemap():
     grid = pyart.testing.make_target_grid()
     display = pyart.graph.GridMapDisplay(grid)
     basemap = display.get_basemap()
 
 
-@skipif(not pyart.graph.gridmapdisplay._BASEMAP_AVAILABLE)
+@pytest.mark.skipif(not pyart.graph.gridmapdisplay._BASEMAP_AVAILABLE,
+                    reason="Basemap is not installed.")
 def test_error_raising():
     grid = pyart.testing.make_target_grid()
     display = pyart.graph.GridMapDisplay(grid)
 
     # no mappable
-    assert_raises(ValueError, display.plot_colorbar)
+    pytest.raises(ValueError, display.plot_colorbar)
 
     # no field
     display.mappables.append(None)  # mock the mappable
-    assert_raises(ValueError, display.plot_colorbar)
+    pytest.raises(ValueError, display.plot_colorbar)
 
 
 if __name__ == "__main__":

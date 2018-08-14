@@ -21,9 +21,13 @@ import glob
 import os
 import sys
 
-from netcdftime import utime
+if sys.version_info[:2] == (3, 4):
+    from netcdftime import utime
+else:
+    from cftime import utime
 
 import numpy as np
+
 try:
     import h5py
     _H5PY_AVAILABLE = True

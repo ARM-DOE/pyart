@@ -21,6 +21,8 @@ pyart.io.nexrad_level2
 
 """
 
+
+
 # This file is part of the Py-ART, the Python ARM Radar Toolkit
 # https://github.com/ARM-DOE/pyart
 
@@ -79,7 +81,7 @@ import struct
 from datetime import datetime, timedelta
 
 import numpy as np
-
+import warnings
 
 class NEXRADLevel2File(object):
     """
@@ -176,9 +178,15 @@ class NEXRADLevel2File(object):
 
         # pull out the vcp record
         msg_5 = [r for r in self._records if r['header']['type'] == 5]
+
         if len(msg_5):
             self.vcp = msg_5[0]
         else:
+            # There is no VCP Data.. This is uber dodgy
+            warnings.warn("No MSG5 detected. Setting to meaningless data. "
+                          "Rethink your life choices and be ready for errors."
+                          "Specifically fixed angle data will be missing")
+            
             self.vcp = None
         return
 
@@ -426,7 +434,10 @@ class NEXRADLevel2File(object):
         if scans is None:
             scans = range(self.nscans)
         if self._msg_type == '31':
-            cut_parameters = self.vcp['cut_parameters']
+            if self.vcp is not None:
+                cut_parameters = self.vcp['cut_parameters']
+            else:
+                cut_parameters = [{'elevation_angle': 0.0}] * self.nscans
             scale = 360. / 65536.
             return np.array([cut_parameters[i]['elevation_angle'] * scale
                              for i in scans], dtype='float32')
@@ -614,9 +625,9 @@ def _get_msg31_data_block(buf, ptr):
         ngates = dic['ngates']
         ptr2 = ptr + _structure_size(GENERIC_DATA_BLOCK)
         if block_name == 'PHI':
-            data = np.fromstring(buf[ptr2: ptr2 + ngates * 2], '>u2')
+            data = np.frombuffer(buf[ptr2: ptr2 + ngates * 2], '>u2')
         else:
-            data = np.fromstring(buf[ptr2: ptr2 + ngates], '>u1')
+            data = np.frombuffer(buf[ptr2: ptr2 + ngates], '>u1')
         dic['data'] = data
     else:
         dic = {}
@@ -642,7 +653,7 @@ def _get_msg1_from_buf(buf, pos, dic):
 
     if msg1_header['sur_pointer']:
         offset = pos + msg_header_size + msg1_header['sur_pointer']
-        data = np.fromstring(buf[offset:offset+sur_nbins], '>u1')
+        data = np.frombuffer(buf[offset:offset+sur_nbins], '>u1')
         dic['REF'] = {
             'ngates': sur_nbins,
             'gate_spacing': sur_step,
@@ -653,7 +664,7 @@ def _get_msg1_from_buf(buf, pos, dic):
         }
     if msg1_header['vel_pointer']:
         offset = pos + msg_header_size + msg1_header['vel_pointer']
-        data = np.fromstring(buf[offset:offset+doppler_nbins], '>u1')
+        data = np.frombuffer(buf[offset:offset+doppler_nbins], '>u1')
         dic['VEL'] = {
             'ngates': doppler_nbins,
             'gate_spacing': doppler_step,
@@ -667,7 +678,7 @@ def _get_msg1_from_buf(buf, pos, dic):
             dic['VEL']['scale'] = 1.
     if msg1_header['width_pointer']:
         offset = pos + msg_header_size + msg1_header['width_pointer']
-        data = np.fromstring(buf[offset:offset+doppler_nbins], '>u1')
+        data = np.frombuffer(buf[offset:offset+doppler_nbins], '>u1')
         dic['SW'] = {
             'ngates': doppler_nbins,
             'gate_spacing': doppler_step,

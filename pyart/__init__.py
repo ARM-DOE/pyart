@@ -72,35 +72,35 @@ else:
     try:
         if _sys.version_info[:2] >= (3, 4):
             import importlib as _importlib
-            specs = _importlib.util.find_spec('nose')
+            specs = _importlib.util.find_spec('pytest')
             specs.loader.load_module()
         else:
             import imp as _imp
-            _imp.find_module('nose')
+            _imp.find_module('pytest')
     except (AttributeError, ImportError) as error:
         good_test = False
         def _test(verbose=False):
             """
-            This would invoke the Py-ART test suite, but nose couldn't
+            This would invoke the Py-ART test suite, but pytest couldn't
             be imported so the test suite can not run.
             """
             raise ImportError(
-                "Could not load nose. Unit tests not available.")
+                "Could not load pytest. Unit tests not available.")
     else:
         good_test = True
         def _test(verbose=False):
             """
             Invoke the Py-ART test suite.
             """
-            import nose
+            import pytest
             pkg_dir = _osp.abspath(_osp.dirname(__file__))
-            args = ['', pkg_dir, '--exe']
+            args = ['', pkg_dir, '--pyargs']
             if verbose:
                 args.extend(['-v', '-s'])
-            nose.run('pyart', argv=args)
+            pytest.run('pyart', argv=args)
 
-    # do not use `test` as function name as this leads to a recursion problem
-    # with the nose test suite
+    # Do not use `test` as function name as this leads to a recursion problem
+    # with the pytest test suite.
     if good_test:
         test = _test
     else:
