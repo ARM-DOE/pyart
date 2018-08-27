@@ -77,6 +77,19 @@ def test_phase_proc_lp_cylp():
     assert _ratio(ref['reference_unfolded_phidp'],
                   radar.fields['unfolded_differential_phase']['data']) <= 0.01
 
+@pytest.mark.skipif(not cylp_available,
+                    reason="CyLP is not installed.")
+def test_phase_proc_lp_gf_cylp():
+    with warnings.catch_warnings():
+        # ignore FutureWarnings as CyLP emits a number of these
+        warnings.simplefilter("ignore", category=FutureWarning)
+        radar, phidp, kdp = perform_phase_processing_gf('cylp')
+    ref = np.load(REFERENCE_RAYS_FILE)
+    assert _ratio(ref['reference_phidp'], phidp['data']) <= 0.05
+    assert _ratio(ref['reference_kdp'], kdp['data']) <= 0.05
+    assert _ratio(ref['reference_unfolded_phidp'],
+                  radar.fields['unfolded_differential_phase']['data']) <= 0.05
+
 
 @pytest.mark.skipif(not cylp_available,
                     reason="CyLP is not installed.")
@@ -103,6 +116,17 @@ def perform_phase_processing(LP_solver='pyglpk'):
     """ Perform LP phase processing on a single ray radar. """
     radar = pyart.testing.make_single_ray_radar()
     phidp, kdp = pyart.correct.phase_proc_lp(radar, 0.0, LP_solver=LP_solver)
+    return radar, phidp, kdp
+
+def perform_phase_processing_gf(LP_solver='pyglpk'):
+    """ Perform LP phase processing on a single ray radar. """
+    radar = pyart.testing.make_single_ray_radar()
+    my_gatefilter = pyart.filters.GateFilter(radar)
+    my_gatefilter.exclude_below('normalized_coherent_power', 0.5)
+    my_gatefilter.exclude_below('cross_correlation_ratio', 0.8)
+    phidp, kdp = pyart.correct.phase_proc_lp_gf(radar, gatefilter=my_gatefilter,
+                                                LP_solver=LP_solver, doc=15,
+                                                ncpts=20, system_phase=-140.1)
     return radar, phidp, kdp
 
 
