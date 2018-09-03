@@ -536,8 +536,8 @@ class NEXRADLevel2File(object):
             msg = self.radial_records[msg_num]
             if moment not in msg.keys():
                 continue
-            ngates = msg[moment]['ngates']
-            data[i, :ngates] = msg[moment]['data']
+            ngates = min(msg[moment]['ngates'], max_ngates, len(msg[moment]['data']))
+            data[i, :ngates] = msg[moment]['data'][:ngates]
 
         # return raw data if requested
         if raw_data:
