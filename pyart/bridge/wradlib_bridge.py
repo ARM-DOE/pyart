@@ -2,7 +2,7 @@
 pyart.bridge.wradlib
 ====================
 
-Py-ART methods linking to wradlib functions, http://wradlib.bitbucket.org/
+Py-ART methods linking to wradlib functions, http://wradlib.org/
 
 .. autosummary::
     :toctree: generated/
@@ -64,8 +64,9 @@ def texture_of_complex_phase(radar, phidp_field=None,
     # parse field names
     if phidp_field is None:
         phidp_field = get_field_name('differential_phase')
+
     if phidp_texture_field is None:
-        phidp_field = get_field_name('differential_phase')
+        phidp_texture_field = get_field_name('differential_phase')
 
     # Grab the phase data
     phidp = radar.fields[phidp_field]['data']
@@ -79,4 +80,6 @@ def texture_of_complex_phase(radar, phidp_field=None,
 
     texture_field = get_metadata(phidp_texture_field)
     texture_field['data'] = w_texture_complex
+    texture_field['standard_name'] = 'texture_of_differential_phase_hv'
+    texture_field['long_name'] = 'Texture of differential phase'
     return texture_field

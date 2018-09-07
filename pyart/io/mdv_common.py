@@ -604,7 +604,7 @@ class MdvFile(object):
                 raise NotImplementedError('unknown compression mode')
 
             # read the decompressed data, reshape and mask
-            sw_data = np.fromstring(decompr_data, np_form).astype('float32')
+            sw_data = np.frombuffer(decompr_data, np_form).astype('float32')
             sw_data.shape = (ny, nx)
             mask = sw_data == field_header['bad_data_value']
             np.putmask(sw_data, mask, [np.NaN])
@@ -1153,7 +1153,7 @@ def _decode_rle8(compr_data, key, decompr_size):
     # Encoding is described in section 7 of:
     # http://rap.ucar.edu/projects/IHL/RalHtml/protocols/mdv_file/
     # This function would benefit greate by being rewritten in Cython
-    data = np.fromstring(compr_data, dtype='>B')
+    data = np.frombuffer(compr_data, dtype='>B')
     out = np.empty((decompr_size, ), dtype='uint8')
     data_ptr = 0
     out_ptr = 0

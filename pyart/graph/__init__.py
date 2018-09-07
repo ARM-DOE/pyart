@@ -30,6 +30,7 @@ Plotting grid data
 
 from .radardisplay import RadarDisplay
 from . import cm
+from . import cm_colorblind
 from .radardisplay_airborne import AirborneRadarDisplay
 from .gridmapdisplay import GridMapDisplay
 from .radarmapdisplay import RadarMapDisplay

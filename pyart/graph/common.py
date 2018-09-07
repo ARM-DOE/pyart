@@ -17,6 +17,7 @@ Common graphing routines.
     generate_radar_name
     generate_grid_name
     generate_radar_time_begin
+    generate_radar_time_sweep
     generate_grid_time_begin
     generate_filename
     generate_grid_filename
@@ -92,7 +93,7 @@ def parse_lon_lat(grid, lon, lat):
 
 def generate_colorbar_label(standard_name, units):
     """ Generate and return a label for a colorbar. """
-    return standard_name.replace('_', ' ') + ' (' + units + ')'
+    return str(standard_name).replace('_', ' ') + ' (' + units + ')'
 
 
 def generate_field_name(container, field):
@@ -133,6 +134,15 @@ def generate_radar_time_begin(radar):
     return num2date(times, units, calendar)
 
 
+def generate_radar_time_sweep(radar, sweep):
+    """ Return time that a specific sweep began in a datetime instance. """
+    first_ray = radar.sweep_start_ray_index['data'][sweep]
+    times = radar.time['data'][first_ray]
+    units = radar.time['units']
+    calendar = radar.time['calendar']
+    return num2date(times, units, calendar)
+
+
 def generate_grid_time_begin(grid):
     """ Return time begin in datetime instance. """
     times = grid.time['data'][0]
@@ -144,7 +154,7 @@ def generate_grid_time_begin(grid):
     return num2date(times, units, calendar)
 
 
-def generate_filename(radar, field, sweep, ext='png'):
+def generate_filename(radar, field, sweep, ext='png', datetime_format='%Y%m%d%H%M%S', use_sweep_time=False):
     """
     Generate a filename for a plot.
 
@@ -161,6 +171,10 @@ def generate_filename(radar, field, sweep, ext='png'):
         Sweep plotted.
     ext : str
         Filename extension.
+    datetime_format : str
+        Format of datetime (using strftime format).
+    use_sweep_time : bool
+        If true, the current sweep's beginning time is used.
 
     Returns
     -------
@@ -170,7 +184,10 @@ def generate_filename(radar, field, sweep, ext='png'):
     """
     name_s = generate_radar_name(radar).replace(' ', '_')
     field_s = field.replace(' ', '_')
-    time_s = generate_radar_time_begin(radar).strftime('%Y%m%d%H%M%S')
+    if use_sweep_time:
+        time_s = generate_radar_time_sweep(radar, sweep).strftime(datetime_format)
+    else:
+        time_s = generate_radar_time_begin(radar).strftime(datetime_format)
     sweep_s = str(sweep).zfill(2)
     return '%s_%s_%s_%s.%s' % (name_s, field_s, sweep_s, time_s, ext)
 
@@ -206,7 +223,7 @@ def generate_grid_filename(grid, field, level, ext='png'):
     return '%s_%s_%s_%s.%s' % (name_s, field_s, level_s, time_s, ext)
 
 
-def generate_title(radar, field, sweep):
+def generate_title(radar, field, sweep, datetime_format=None, use_sweep_time=True):
     """
     Generate a title for a plot.
 
@@ -218,6 +235,10 @@ def generate_title(radar, field, sweep):
         Field plotted.
     sweep : int
         Sweep plotted.
+    datetime_format : str
+        Format of datetime (using strftime format).
+    use_sweep_time : bool
+        If true, the current sweep's beginning time is used.
 
     Returns
     -------
@@ -225,7 +246,14 @@ def generate_title(radar, field, sweep):
         Plot title.
 
     """
-    time_str = generate_radar_time_begin(radar).isoformat() + 'Z'
+    if use_sweep_time:
+        begin_time = generate_radar_time_sweep(radar, sweep)
+    else:
+        begin_time = generate_radar_time_begin(radar)
+    if datetime_format:
+        time_str = begin_time.strftime(datetime_format)
+    else:
+        time_str = begin_time.isoformat() + 'Z'
     fixed_angle = radar.fixed_angle['data'][sweep]
     l1 = "%s %.1f Deg. %s " % (generate_radar_name(radar), fixed_angle,
                                time_str)

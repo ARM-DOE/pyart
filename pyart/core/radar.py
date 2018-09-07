@@ -103,9 +103,13 @@ class Radar(object):
         of the grid.  If not provided or available this attribute is set to
         None.
     azimuth : dict
-        Azimuth of antenna, relative to true North.
+        Azimuth of antenna, relative to true North. Azimuth angles are
+        recommended to be expressed in the range of [0, 360], but other
+        representations are not forbidden.
     elevation : dict
-        Elevation of antenna, relative to the horizontal plane.
+        Elevation of antenna, relative to the horizontal plane. Elevation
+        angles are recommended to be expressed in the range of [-180, 180],
+        but other representations are not forbidden.
     gate_x, gate_y, gate_z : LazyLoadDict
         Location of each gate in a Cartesian coordinate system assuming a
         standard atmosphere with a 4/3 Earth's radius model. The data keys of
@@ -642,7 +646,7 @@ class Radar(object):
         ilvl1 = '\t' * (ident_level + 1)
 
         if dic is None:
-            print(attr + ': None', file=out)
+            print(str(attr) + ': None', file=out)
             return
 
         # make a string summary of the data key if it exists.
@@ -657,11 +661,11 @@ class Radar(object):
 
         # compact, only data summary
         if level == 'compact':
-            print(ilvl0 + attr + ':', d_str, file=out)
+            print(ilvl0 + str(attr) + ':', d_str, file=out)
 
         # standard, all keys, only summary for data
         elif level == 'standard':
-            print(ilvl0 + attr + ':', file=out)
+            print(ilvl0 + str(attr) + ':', file=out)
             print(ilvl1 + 'data:', d_str, file=out)
             for key, val in dic.items():
                 if key == 'data':
@@ -670,7 +674,7 @@ class Radar(object):
 
         # full, all keys, full data
         elif level == 'full':
-            print(attr + ':', file=out)
+            print(str(attr) + ':', file=out)
             if 'data' in dic:
                 print(ilvl1 + 'data:', dic['data'], file=out)
             for key, val in dic.items():

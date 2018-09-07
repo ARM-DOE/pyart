@@ -708,7 +708,7 @@ def check_cfradial_compliance(dataset, verb=False):
     rp_vars.opt_var('radar_antenna_gain_v', FLOAT, (), 'dB')
     rp_vars.opt_var('radar_beam_width_h', FLOAT, (), 'degrees')
     rp_vars.opt_var('radar_beam_width_v', FLOAT, (), 'degrees')
-    rp_vars.opt_var('radar_reciever_bandwidth', FLOAT, (), 's-1')
+    rp_vars.opt_var('radar_receiver_bandwidth', FLOAT, (), 's-1')
     rp_vars.opt_var('radar_measured_transmit_power_h', FLOAT, ('time', ),
                     'dBm')
     rp_vars.opt_var('radar_measured_transmit_power_b', FLOAT, ('time', ),
@@ -718,7 +718,7 @@ def check_cfradial_compliance(dataset, verb=False):
     valid_rp_vars = [
         'radar_antenna_gain_h', 'radar_antenna_gain_v',
         'radar_beam_width_h', 'radar_beam_width_v',
-        'radar_reciever_bandwidth',
+        'radar_receiver_bandwidth',
         'radar_measured_transmit_power_h', 'radar_measured_transmit_power_b']
     check_metagroup('5.2', dataset, 'radar_parameters', valid_rp_vars)
 

@@ -1,16 +1,41 @@
 .. -*- mode: rst -*-
-
-|Travis|_ |AppVeyor|_
-
-.. |Travis| image:: https://api.travis-ci.org/ARM-DOE/pyart.png?branch=master
-.. _Travis: https://travis-ci.org/ARM-DOE/pyart
-
-.. |AppVeyor| image:: https://ci.appveyor.com/api/projects/status/9do57qycha65j4v9/branch/master?svg=true
-.. _AppVeyor: https://ci.appveyor.com/project/JonathanHelmus/pyart-l711v/branch/master
-
-
 The Python ARM Radar Toolkit (Py-ART)
 =====================================
+
+|Travis| |AppVeyor|
+
+|AnacondaCloud| |CondaDownloads|
+
+|DocsDev| |DocsUsers| |DocsGuides|
+
+|ARM| |Tweet|
+
+.. |Travis| image:: https://api.travis-ci.org/ARM-DOE/pyart.png?branch=master
+    :target: https://travis-ci.org/ARM-DOE/pyart
+
+.. |AppVeyor| image:: https://ci.appveyor.com/api/projects/status/9do57qycha65j4v9/branch/master?svg=true
+    :target: https://ci.appveyor.com/project/JonathanHelmus/pyart-l711v/branch/master
+
+.. |AnacondaCloud| image:: https://anaconda.org/conda-forge/arm_pyart/badges/version.svg
+    :target: https://anaconda.org/conda-forge/arm_pyart
+
+.. |CondaDownloads| image:: https://anaconda.org/conda-forge/arm_pyart/badges/downloads.svg
+    :target: https://anaconda.org/conda-forge/arm_pyart/files
+
+.. |DocsDev| image:: https://img.shields.io/badge/docs-developers-4088b8.svg
+    :target: http://arm-doe.github.io/pyart-docs-travis/dev_reference/index.html
+
+.. |DocsUsers| image:: https://img.shields.io/badge/docs-users-4088b8.svg
+    :target: http://arm-doe.github.io/pyart-docs-travis/user_reference/index.html
+
+.. |DocsGuides| image:: https://img.shields.io/badge/docs-guides-4088b8.svg
+    :target: https://github.com/ARM-DOE/pyart/tree/master/guides/
+
+.. |ARM| image:: https://img.shields.io/badge/Sponsor-ARM-blue.svg?colorA=00c1de&colorB=00539c
+    :target: https://www.arm.gov/
+
+.. |Tweet| image:: https://img.shields.io/twitter/url/http/shields.io.svg?style=social
+    :target: https://twitter.com/Py_ART
 
 The Python ARM Radar Toolkit, Py-ART, is an open source Python module 
 containing a growing collection of weather radar algorithms and utilities
@@ -104,7 +129,7 @@ These include:
 
 Other related open source software for working with weather radar data:
 
-* `wradlib <http://wradlib.bitbucket.org/>`_ : 
+* `wradlib <http://wradlib.org>`_ :
   An open source library for weather radar data processing.
   
 * `BALTRAD <http://baltrad.eu/>`_ : Community-based weather radar networking.
@@ -173,7 +198,7 @@ functionality is available of the following modules are installed.
 * `Basemap <http://matplotlib.org/basemap/>`_. If installed the ability to 
   plot grids on geographic maps is available.
 
-* `wradlib <http://wradlib.bitbucket.org/>`_.  Needed to calculate the texture
+* `wradlib <http://docs.wradlib.org/en/latest/>`_.  Needed to calculate the texture
   of a differential phase field.
 
 * `nose <http://nose.readthedocs.org/en/latest/>`_.  
@@ -208,7 +233,7 @@ Development
 ===========
 
 Py-ART is an open source, community software project.  Contributions to
-the package are welcomed from all users.  
+the package are welcomed from all users.
 
 Code
 ----
@@ -222,9 +247,10 @@ forking the repository is highly recommended.
 Contributing
 -------------
 
-We welcome contributions for all used of Py-ART provided the code can be
+We welcome contributions for all uses of Py-ART, provided the code can be
 distributed under the BSD 3-clause license.  A copy of this license is
-available in the **LICENSE.txt** file in this directory.  
+available in the **LICENSE.txt** file in this directory. For more on
+contributing, see the `contributor's guide. <https://github.com/ARM-DOE/pyart/blob/master/guides/contributors_guide.rst>`_
 
 Testing
 -------

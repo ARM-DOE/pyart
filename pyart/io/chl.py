@@ -382,7 +382,7 @@ class ChlFile(object):
 
     def _extract_fields(self):
         """ Extract field data from _dstring attribute post read. """
-        all_data = np.fromstring(self._dstring, dtype=self._dtype)
+        all_data = np.frombuffer(self._dstring, dtype=self._dtype)
         all_data = all_data.reshape(-1, self.ngates)
         for i, field_num in enumerate(self._field_nums):
 

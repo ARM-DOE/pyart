@@ -137,7 +137,7 @@ class AirborneRadarDisplay(RadarDisplay):
             axislabels=(None, None), axislabels_flag=True,
             colorbar_flag=True, colorbar_label=None,
             colorbar_orient='vertical', edges=True, filter_transitions=True,
-            ax=None, fig=None, gatefilter=None, raster=True, **kwargs):
+            ax=None, fig=None, gatefilter=None, raster=False, **kwargs):
         """
         Plot a sweep as a grid.
 
@@ -240,7 +240,7 @@ class AirborneRadarDisplay(RadarDisplay):
         pm = ax.pcolormesh(
             x, z, data, vmin=vmin, vmax=vmax, cmap=cmap, norm=norm, **kwargs)
 
-        if raster is not None:
+        if raster:
             pm.set_rasterized(True)
 
         if title_flag:

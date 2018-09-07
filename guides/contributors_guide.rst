@@ -143,13 +143,20 @@ An example:
 
         """
 
-Following the introduction code, modules are then added. Main imports come
-first, followed by 'from imports' and user's own modules.
+Following the introduction code, modules are then added. To follow pep8
+standards, modules should be added in the order of:
+
+        1. Standard library imports.
+        2. Related third party imports.
+        3. Local application/library specific imports.
 
 For example:
 
 .. code-block:: python
 
+        import glob
+        import os
+         
         import numpy as np
         import numpy.ma as ma
         from scipy.interpolate import interp1d
@@ -297,6 +304,10 @@ An example:
 
 Nosetests from nose are used to run tests in pyart.
 
+First pyart should be built inplace::
+
+        python setup.py build_ext --inplace
+
 To install nose::
 
         conda install nose
@@ -412,7 +423,7 @@ This is done by::
 
 To prevent a merge commit::
 
-        git merge upstream/master --no-commit
+        git merge --ff-only upstream/master
 
 After creating a pull request through GitHub, two outside checkers,
 Appveyor and TravisCI will determine if the code past all checks. If the
