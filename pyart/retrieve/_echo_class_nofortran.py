@@ -1,10 +1,6 @@
-import numba
 import numpy as np
 
-from numba import jit
 
-
-@jit(nopython=True)
 def _steiner_conv_strat(refl, x, y, dx, dy, intense=42, peak_relation=0,
                         area_relation=1, bkg_rad=11000, use_intense=True):
     """
@@ -17,7 +13,6 @@ def _steiner_conv_strat(refl, x, y, dx, dy, intense=42, peak_relation=0,
     1 = Stratiform
     2 = Convective
     """
-
     def convective_radius(ze_bkg, area_relation):
         """
         Given a mean background reflectivity value, we determine via a step
@@ -102,13 +97,13 @@ def _steiner_conv_strat(refl, x, y, dx, dy, intense=42, peak_relation=0,
 
         return peak
 
-    sclass = np.zeros(refl.shape, dtype=numba.types.i4)
+    sclass = np.zeros(refl.shape, dtype=int)
     ny, nx = refl.shape
 
     for i in range(0, nx):
         # Get stencil of x grid points within the background radius
-        imin = np.max(np.array([1, (i - bkg_rad / dx)], dtype=numba.types.i4))
-        imax = np.min(np.array([nx, (i + bkg_rad / dx)], dtype=numba.types.i4))
+        imin = np.max(np.array([1, (i - bkg_rad / dx)], dtype=int))
+        imax = np.min(np.array([nx, (i + bkg_rad / dx)], dtype=int))
 
         for j in range(0, ny):
             # First make sure that the current grid point has not already been classified.
@@ -116,8 +111,8 @@ def _steiner_conv_strat(refl, x, y, dx, dy, intense=42, peak_relation=0,
             # grid point have also been classified
             if ~np.isnan(refl[j, i]) & (sclass[j, i] == 0):
                 # Get stencil of y grid points within the background radius
-                jmin = np.max(np.array([1, (j - bkg_rad / dy)], dtype=numba.types.i4))
-                jmax = np.min(np.array([ny, (j + bkg_rad / dy)], dtype=numba.types.i4))
+                jmin = np.max(np.array([1, (j - bkg_rad / dy)], dtype=int))
+                jmax = np.min(np.array([ny, (j + bkg_rad / dy)], dtype=int))
 
                 n = 0
                 sum_ze = 0
@@ -145,10 +140,10 @@ def _steiner_conv_strat(refl, x, y, dx, dy, intense=42, peak_relation=0,
                 # they too are convective, stratiform or undefined
 
                 # Get stencil of x and y grid points within the convective radius
-                lmin = np.max(np.array([1, int(i - conv_rad / dx)], dtype=numba.types.i4))
-                lmax = np.min(np.array([nx, int(i + conv_rad / dx)], dtype=numba.types.i4))
-                mmin = np.max(np.array([1, int(j - conv_rad / dy)], dtype=numba.types.i4))
-                mmax = np.min(np.array([ny, int(j + conv_rad / dy)], dtype=numba.types.i4))
+                lmin = np.max(np.array([1, int(i - conv_rad / dx)], dtype=int))
+                lmax = np.min(np.array([nx, int(i + conv_rad / dx)], dtype=int))
+                mmin = np.max(np.array([1, int(j - conv_rad / dy)], dtype=int))
+                mmax = np.min(np.array([ny, int(j + conv_rad / dy)], dtype=int))
 
                 if use_intense and (refl[j, i] >= intense):
                     sclass[j, i] = 2
