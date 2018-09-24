@@ -72,13 +72,20 @@ def velocity_azimuth_display(radar, vel_field=None, z_want=None,
     speeds = []
     angles = []
     heights = []
+
+    # Pulling z data from radar
     z_gate_data = radar.gate_z['data']
+
+    # Setting parameters
     if z_want is None:
         z_want = np.linspace(0, 1000, 100)
 
+    # Parse field parameters
     if vel_field is None:
+        check_field = radar.check_field_exists('velocity')
         vel_field = get_field_name('velocity')
 
+    # Selecting what velocity data to use based on gatefilter
     if gatefilter is not None:
         velocities = np.ma.masked_where(
             gatefilter.gate_excluded,
@@ -86,6 +93,7 @@ def velocity_azimuth_display(radar, vel_field=None, z_want=None,
     else:
         velocities = radar.fields[vel_field]['data']
 
+    # Getting radar sweep index values
     for i in range(len(radar.sweep_start_ray_index['data'])):
         index_start = radar.sweep_start_ray_index['data'][i]
         index_end = radar.sweep_end_ray_index['data'][i]
@@ -95,16 +103,20 @@ def velocity_azimuth_display(radar, vel_field=None, z_want=None,
         used_velocities = velocities[index_start:index_end]
         azimuth = radar.azimuth['data'][index_start:index_end]
         elevation = radar.fixed_angle['data'][i]
+
+        # Calculating speed and angle
         speed, angle = vad_calculation(
             used_velocities, azimuth, elevation)
 
-        bad = np.isnan(speed)
         print('max height', z_gate_data[index_start, :].max(),
               'meters')
-        speeds.append(speed[~bad])
-        angles.append(angle[~bad])
-        heights.append(z_gate_data[index_start, :][~bad])
 
+        # Filling empty arrays with data
+        speeds.append(speed)
+        angles.append(angle)
+        heights.append(z_gate_data[index_start, :])
+    
+    # Combining arrays and sorting 
     speed_array = np.concatenate(speeds)
     angle_array = np.concatenate(angles)
     height_array = np.concatenate(heights)
@@ -112,6 +124,8 @@ def velocity_azimuth_display(radar, vel_field=None, z_want=None,
     speed_ordered = speed_array[arg_order]
     height_ordered = height_array[arg_order]
     angle_ordered = angle_array[arg_order]
+
+    # Calculating U and V wind
     u_ordered, v_ordered = _sd_to_uv(speed_ordered, angle_ordered)
     u_mean = _interval_mean(u_ordered, height_ordered, z_want)
     v_mean = _interval_mean(v_ordered, height_ordered, z_want)
@@ -126,34 +140,36 @@ def vad_calculation(velocity_field, azimuth, elevation):
     velocity_field is a 2D array, azimuth is a 1D array,
     elevation is a number. All in degrees, m outdic contains
     speed and angle. """
+   
+    # Creating array with radar velocity data
     nrays, nbins = velocity_field.shape
     nrays2 = nrays // 2
     velocity_count = np.empty((nrays2, nbins, 2))
     velocity_count[:, :, 0] = velocity_field[0:nrays2, :]
     velocity_count[:, :, 1] = velocity_field[nrays2:, :]
+    
+    # Converting from degress to radians
     sinaz = np.sin(np.deg2rad(azimuth))
     cosaz = np.cos(np.deg2rad(azimuth))
+
+    # Masking array and testing for nan values
     sumv = np.ma.sum(velocity_count, 2)
     vals = np.isnan(sumv)
     vals2 = np.vstack((vals, vals))
 
-    # Line below needs to be changed to 'is not' expression.
+    # Summing non-nan data and creating new array with summed data
     count = np.sum(np.isnan(sumv) == False, 0)
-
-    aa = count < 8
-    vals[:, aa] = 0
-    vals2[:, aa] = 0
     count = np.float64(count)
-    count[aa] = np.nan
     u_m = np.array([np.nansum(sumv, 0) // (2 * count)])
-    count[aa] = 0
 
+    # Creating 0 value arrays
     cminusu_mcos = np.zeros((nrays, nbins))
     cminusu_msin = np.zeros((nrays, nbins))
     sincos = np.zeros((nrays, nbins))
     sin2 = np.zeros((nrays, nbins))
     cos2 = np.zeros((nrays, nbins))
 
+    # Summing all sin and cos and setting select entires to nan
     for i in range(nbins):
         cminusu_mcos[:, i] = cosaz * (velocity_field[:, i] - u_m[:, i])
         cminusu_msin[:, i] = sinaz * (velocity_field[:, i] - u_m[:, i])
@@ -171,6 +187,8 @@ def vad_calculation(velocity_field, azimuth, elevation):
     sumsincos = np.nansum(sincos, 0)
     sumsin2 = np.nansum(sin2, 0)
     sumcos2 = np.nansum(cos2, 0)
+
+    # Calculating speed and angle values
     b_value = (sumcminu_mcos - (sumsincos*sumcminu_msin / sumsin2)) / (
         sumcos2 - (sumsincos**2) / sumsin2)
     a_value = (sumcminu_msin - b_value*sumsincos) / sumsin2
