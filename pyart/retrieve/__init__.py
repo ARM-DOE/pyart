@@ -34,6 +34,7 @@ Radar retrievals
     est_rain_rate_zkdp
     est_rain_rate_za
     est_rain_rate_hydro
+    velocity_azimuth_display
 
 """
 
@@ -49,5 +50,6 @@ from .advection import grid_displacement_pc, grid_shift
 from .qpe import est_rain_rate_zpoly, est_rain_rate_z, est_rain_rate_kdp
 from .qpe import est_rain_rate_a, est_rain_rate_zkdp, est_rain_rate_za
 from .qpe import est_rain_rate_hydro
+from .vad import velocity_azimuth_display
 
 __all__ = [s for s in dir() if not s.startswith('_')]
