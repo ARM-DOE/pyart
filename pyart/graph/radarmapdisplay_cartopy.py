@@ -23,7 +23,8 @@ try:
     # Temporary fix for Cartopy issue #1120.
     from matplotlib.axes import Axes
     from cartopy.mpl.geoaxes import GeoAxes
-    GeoAxes._pcolormesh_patched = Axes.pcolormesh
+    if hasattr(GeoAxes, '_pcolormesh_patched'):
+        GeoAxes._pcolormesh_patched = Axes.pcolormesh
 
     _CARTOPY_AVAILABLE = True
 except ImportError:
