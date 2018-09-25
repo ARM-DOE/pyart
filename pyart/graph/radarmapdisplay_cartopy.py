@@ -19,6 +19,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 try:
     import cartopy
+
+    # Temporary fix for Cartopy issue #1120.
+    from matplotlib.axes import Axes
+    from cartopy.mpl.geoaxes import GeoAxes
+    if hasattr(GeoAxes, '_pcolormesh_patched'):
+        GeoAxes._pcolormesh_patched = Axes.pcolormesh
+
     _CARTOPY_AVAILABLE = True
 except ImportError:
     _CARTOPY_AVAILABLE = False
