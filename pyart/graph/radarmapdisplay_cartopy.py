@@ -19,6 +19,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 try:
     import cartopy
+
+    # Temporary fix for Cartopy issue #1120.
+    from matplotlib.axes import Axes
+    from cartopy.mpl.geoaxes import GeoAxes
+    GeoAxes._pcolormesh_patched = Axes.pcolormesh
+
     _CARTOPY_AVAILABLE = True
 except ImportError:
     _CARTOPY_AVAILABLE = False
@@ -28,11 +34,6 @@ try:
     _LAMBERT_GRIDLINES = True
 except ImportError:
     _LAMBERT_GRIDLINES = False
-
-# Temporary fix for Cartopy issue #1120.
-from matplotlib.axes import Axes
-from cartopy.mpl.geoaxes import GeoAxes
-GeoAxes._pcolormesh_patched = Axes.pcolormesh
 
 from .radardisplay import RadarDisplay
 from .common import parse_ax_fig, parse_vmin_vmax, parse_cmap
