@@ -1,37 +1,39 @@
 """ Unit Tests for Py-ART's retrieve/vad.py module. """
 
 import numpy as np
-from numpy.testing import assert_almost_equal
+from numpy.testing import assert_allclose
 
 import pyart
 
 
 def test_velocity_azimuth_display():
     test_radar = pyart.testing.make_target_radar()
-    height = np.arange(0, 1000, 200)
-    speed = np.ones_like(height) * 5
-    direction = np.array([0, 90, 180, 270, 45])
+    height = np.arange(0.0, 1000.0, 200.0)
+    speed = np.ones_like(height) * 5.0
+    direction = np.array([0.0, 90.0, 180.0, 270.0, 45.0])
     profile = pyart.core.HorizontalWindProfile(height, speed, direction)
     sim_vel = pyart.util.simulated_vel_from_profile(test_radar, profile)
     test_radar.add_field('velocity', sim_vel,
                          replace_existing=True)
 
     velocity = 'velocity'
-    z_want = np.linspace(0, 10, 5)
+    z_want = np.linspace(0.0, 10.0, 5)
 
-    vad_height = ([0., 2.5, 5., 7.5, 10.])
-    vad_speed = ([4.999, 4.944, 4.886,
-                  4.818, 4.749])
-    vad_direction = ([89.871, 90.511, 91.208,
-                      92.062, 92.956])
-    u_wind = ([-4.999, -4.944, -4.885, -4.815, -4.743])
-    v_wind = ([-0.011, 0.044, 0.103, 0.173, 0.245])
+    vad_height = ([0.0, 2.5, 5.0, 7.5, 10.0])
+    vad_speed = ([4.9997, 4.9445, 4.8865,
+                  4.8182, 4.7497])
+    vad_direction = ([89.8712, 90.5113, 91.2084,
+                      92.0622, 92.9569])
+    u_wind = ([-4.9997, -4.9443,
+               -4.8854, -4.8150, -4.7434])
+    v_wind = ([-0.0112, 0.0441,
+               0.1030, 0.1733, 0.2450])
 
     vad = pyart.retrieve.velocity_azimuth_display(
         test_radar, velocity, z_want)
 
-    assert_almost_equal(vad.height, vad_height, 3)
-    assert_almost_equal(vad.speed, vad_speed, 3)
-    assert_almost_equal(vad.direction, vad_direction, 3)
-    assert_almost_equal(vad.u_wind, u_wind, 3)
-    assert_almost_equal(vad.v_wind, v_wind, 3)
+    assert_allclose(vad.height, vad_height, rtol=1e-3, atol=1e-1)
+    assert_allclose(vad.speed, vad_speed, rtol=1e-3, atol=1e-1)
+    assert_allclose(vad.direction, vad_direction,rtol=1e-3, atol=1e-1)
+    assert_allclose(vad.u_wind, u_wind, rtol=1e-3, atol=1e-1)
+    assert_allclose(vad.v_wind, v_wind, rtol=1e-3, atol=1e-1)
