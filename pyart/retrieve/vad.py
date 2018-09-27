@@ -48,17 +48,9 @@ def velocity_azimuth_display(radar, vel_field=None, z_want=None,
 
     Returns
     -------
-    height : array
-        Heights in meters above sea level at which horizontal winds were
-        sampled.
-    speed : array
-        Horizontal wind speed in meters per second at each height.
-    direction : array
-        Horizontal wind direction in degrees at each height.
-    u_wind : array
-        U-wind mean in meters per second.
-    v_wind : array
-        V-wind mean in meters per second.
+    vad: HorizontalWindProfile
+	A velocity azimuth display object containing height, speed, direction,
+        u_wind, v_wind from a radar object. 
 
     Reference
     ---------
@@ -144,7 +136,7 @@ def vad_calculation(velocity_field, azimuth, elevation):
     # Creating array with radar velocity data
     nrays, nbins = velocity_field.shape
     nrays2 = nrays // 2
-    velocity_count = np.empty((nrays2, nbins, 2))
+    velocity_count = np.ma.empty((nrays2, nbins, 2))
     velocity_count[:, :, 0] = velocity_field[0:nrays2, :]
     velocity_count[:, :, 1] = velocity_field[nrays2:, :]
     
