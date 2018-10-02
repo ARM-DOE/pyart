@@ -937,5 +937,5 @@ def _gate_altitude_data_factory(radar):
     """ Return a function which returns the gate altitudes. """
     def _gate_altitude_data():
         """ The function which returns the gate altitudes. """
-        return radar.altitude['data'] + radar.gate_z['data']
+        return np.mean(radar.altitude['data']) + radar.gate_z['data']
     return _gate_altitude_data

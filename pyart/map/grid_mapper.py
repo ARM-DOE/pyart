@@ -417,13 +417,20 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
 
     # find the grid origin if not given
     if grid_origin is None:
-        lat = float(radars[0].latitude['data'])
-        lon = float(radars[0].longitude['data'])
+        try:
+            lat = float(radars[0].latitude['data'])
+            lon = float(radars[0].longitude['data'])
+        except:
+            lat = np.mean(radars[0].latitude['data'])
+            lon = np.mean(radars[0].longitude['data'])
         grid_origin = (lat, lon)
     grid_origin_lat, grid_origin_lon = grid_origin
 
     if grid_origin_alt is None:
-        grid_origin_alt = float(radars[0].altitude['data'])
+        try:
+            grid_origin_alt = float(radars[0].altitude['data'])
+        except:
+            grid_origin_alt = np.mean(radars[0].altitude['data'])
 
     # fields which should be mapped, None for fields which are in all radars
     if fields is None:
@@ -473,8 +480,12 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
         # calculate radar offset from the origin
         x_disp, y_disp = geographic_to_cartesian(
             radar.longitude['data'], radar.latitude['data'], projparams)
-        z_disp = float(radar.altitude['data']) - grid_origin_alt
-        offsets.append((z_disp, float(y_disp), float(x_disp)))
+        try:
+            z_disp = float(radar.altitude['data']) - grid_origin_alt
+            offsets.append((z_disp, float(y_disp), float(x_disp)))
+        except:
+            z_disp = np.mean(radar.altitude['data']) - grid_origin_alt
+            offsets.append((z_disp, np.mean(y_disp), np.mean(x_disp)))
 
         # calculate cartesian locations of gates
         if skip_transform:
@@ -484,7 +495,10 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
             xg_loc, yg_loc = geographic_to_cartesian(
                 radar.gate_longitude['data'], radar.gate_latitude['data'],
                 projparams)
-        zg_loc = radar.gate_altitude['data'] - grid_origin_alt
+        try:
+            zg_loc = radar.gate_altitude['data'] - grid_origin_alt
+        except ValueError:
+            zg_loc = np.mean(radar.gate_altitude['data'], axis=1) - grid_origin_alt
 
         # add gate locations to gate_locations array
         start, end = gate_offset[iradar], gate_offset[iradar + 1]
