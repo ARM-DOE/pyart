@@ -1327,9 +1327,9 @@ def spectrum_width_limit(container=None, selection=0):
 
 DEFAULT_FIELD_COLORMAP = {
     # field name : colormap
-    reflectivity: 'pyart_NWSRef',
-    corrected_reflectivity: 'pyart_NWSRef',
-    total_power: 'pyart_NWSRef',
+    reflectivity: 'pyart_HomeyerRainbow',
+    corrected_reflectivity: 'pyart_HomeyerRainbow',
+    total_power: 'pyart_HomeyerRainbow',
     signal_to_noise_ratio: 'pyart_Carbone17',
 
     velocity: 'pyart_BuDRd18',
@@ -1371,18 +1371,18 @@ DEFAULT_FIELD_COLORMAP = {
     interpolated_profile: 'pyart_SCook18',
 
     # Additional reflectivity like fields
-    'CZ': 'pyart_NWSRef',
-    'DZ': 'pyart_NWSRef',
-    'AZ': 'pyart_NWSRef',
-    'Z': 'pyart_NWSRef',
-    'dbz': 'pyart_NWSRef',
-    'DBZ': 'pyart_NWSRef',
-    'dBZ': 'pyart_NWSRef',
-    'DBZH': 'pyart_NWSRef',
-    'DBZ_S': 'pyart_NWSRef',
-    'DBZ_K': 'pyart_NWSRef',
-    'reflectivity_horizontal': 'pyart_NWSRef',
-    'corr_reflectivity': 'pyart_NWSRef',
+    'CZ': 'pyart_HomeyerRainbow',
+    'DZ': 'pyart_HomeyerRainbow',
+    'AZ': 'pyart_HomeyerRainbow',
+    'Z': 'pyart_HomeyerRainbow',
+    'dbz': 'pyart_HomeyerRainbow',
+    'DBZ': 'pyart_HomeyerRainbow',
+    'dBZ': 'pyart_HomeyerRainbow',
+    'DBZH': 'pyart_HomeyerRainbow',
+    'DBZ_S': 'pyart_HomeyerRainbow',
+    'DBZ_K': 'pyart_HomeyerRainbow',
+    'reflectivity_horizontal': 'pyart_HomeyerRainbow',
+    'corr_reflectivity': 'pyart_HomeyerRainbow',
 }
 
 # map each field to a limit or a limit function
