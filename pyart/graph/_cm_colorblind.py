@@ -5,6 +5,7 @@ Data for colorblind friendly radar colormaps
 
 """
 import numpy as np
+import os
 
 
 def yuv_rainbow_24(nc):
@@ -32,6 +33,18 @@ def yuv_rainbow_24(nc):
 
     return cmap_dict
 
-datad = {
-        'HomeyerRainbow': yuv_rainbow_24(15),
-}
+
+# balance colormap from cmocean project
+# courtesy Kristen Thyng
+
+# Thyng, K. M., Greene, C. A., Hetland, R. D., Zimmerle, H. M., & DiMarco, S. F. (2016).
+# True colors of oceanography. Oceanography, 29(3), 10.
+
+# HomeyerRainbow developed by Cameron Homeyer with assistance from Bobby Jackson
+
+
+data_dir = os.path.split(__file__)[0]
+bal_rgb_vals = np.genfromtxt(os.path.join(data_dir, 'balance-rgb.txt'))
+
+datad = {'HomeyerRainbow': yuv_rainbow_24(15),
+         'balance': bal_rgb_vals}
