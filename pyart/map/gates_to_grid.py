@@ -91,7 +91,7 @@ def map_gates_to_grid(
     if grid_origin_alt is None:
         try:
             grid_origin_alt = float(radars[0].altitude['data'])
-        except:
+        except TypeError:
             grid_origin_alt = np.mean(radars[0].altitude['data'])
 
     gatefilters = _parse_gatefilters(gatefilters, radars)
@@ -179,7 +179,7 @@ def _find_projparams(grid_origin, radars, grid_projection):
         try:
             lat = float(radars[0].latitude['data'])
             lon = float(radars[0].longitude['data'])
-        except:
+        except TypeError:
             lat = np.mean(radars[0].latitude['data'])
             lon = np.mean(radars[0].longitude['data'])
         grid_origin = (lat, lon)
@@ -230,7 +230,7 @@ def _find_offsets(radars, projparams, grid_origin_alt):
         try:
             z_disp = float(radar.altitude['data']) - grid_origin_alt
             offsets.append((z_disp, float(y_disp), float(x_disp)))
-        except:
+        except TypeError:
             z_disp = np.mean(radar.altitude['data']) - grid_origin_alt
             offsets.append((z_disp, np.mean(y_disp), np.mean(x_disp)))
     return offsets
