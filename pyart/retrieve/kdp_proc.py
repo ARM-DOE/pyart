@@ -15,7 +15,7 @@ of propagation differential phase (PHIDP), backscatter differential phase
     kdp_maesaka
     filter_psidp
     boundary_conditions_maesaka
-    
+
     _kdp_estimation_backward_fixed
     _kdp_kalman_profile
     _kdp_vulpiani_profile
@@ -26,12 +26,13 @@ of propagation differential phase (PHIDP), backscatter differential phase
 
 """
 
-import time
-import numpy as np
-import warnings
 from functools import partial
+import time
+import warnings
 
+import numpy as np
 from scipy import optimize, stats, interpolate, linalg, signal
+
 from . import _kdp_proc
 from ..config import get_field_name, get_metadata, get_fillvalue
 from ..util import rolling_window
@@ -280,7 +281,7 @@ def _kdp_estimation_backward_fixed(
         p_pred = np.dot(f, np.dot(p, f_transposed)) + \
             pcov_scale  # error prediction
 
-        if (s_pred[0] > kdp_th):
+        if s_pred[0] > kdp_th:
             h_plus[2, 0] = b2
             z[2] = c2
         else:
@@ -388,7 +389,7 @@ def _kdp_estimation_forward_fixed(
         p_pred = np.dot(f, np.dot(p, f_transposed)) + \
             pcov_scale  # error prediction
 
-        if (s_pred[0] > kdp_th):
+        if s_pred[0] > kdp_th:
             h_plus[2, 0] = b2
             z[2] = c2
         else:
@@ -744,10 +745,10 @@ def kdp_vulpiani(radar, gatefilter=None, fill_value=None, psidp_field=None,
                  n_iter=10, interp=False, prefilter_psidp=False,
                  filter_opt=None, parallel=False):
     """
-  Estimates Kdp with the Vulpiani method for a 2D array of psidp measurements
-  with the first dimension being the distance from radar and the second
-  dimension being the angles (azimuths for PPI, elev for RHI).The input psidp
-  is assumed to be pre-filtered (for ex. with the filter_psidp function)
+    Estimates Kdp with the Vulpiani method for a 2D array of psidp measurements
+    with the first dimension being the distance from radar and the second
+    dimension being the angles (azimuths for PPI, elev for RHI).The input psidp
+    is assumed to be pre-filtered (for ex. with the filter_psidp function)
 
     Parameters
     ----------
@@ -772,23 +773,23 @@ def kdp_vulpiani(radar, gatefilter=None, fill_value=None, psidp_field=None,
     band : char, optional
         Radar frequency band string. Accepted "X", "C", "S" (capital
         or not). It is used to set default boundaries for expected
-        values of Kdp
+        values of Kdp.
     windsize : int, optional
-        Size in # of gates of the range derivative window, should be even
+        Size in # of gates of the range derivative window. Should be even.
     n_iter : int, optional
         Number of iterations of the method. Default is 10.
     interp : bool, optional
         If True, all the nans are interpolated.The advantage is that less data
         are lost (the iterations in fact are "eating the edges") but some
-        non-linear errors may be introduced
+        non-linear errors may be introduced.
     prefilter_psidp : bool, optional
         If set, the psidp measurements will first be filtered with the
-        filter_psidp method, which can improve the quality of the final Kdp
+        filter_psidp method, which can improve the quality of the final Kdp.
     filter_opt : dict, optional
         The arguments for the prefilter_psidp method, if empty, the defaults
-        arguments of this method will be used
+        arguments of this method will be used.
     parallel : bool, optional
-        Flag to enable parallel computation (one core for every psidp profile)
+        Flag to enable parallel computation (one core for every psidp profile).
 
     Returns
     -------
@@ -805,10 +806,9 @@ def kdp_vulpiani(radar, gatefilter=None, fill_value=None, psidp_field=None,
     J. Appl. Meteor. Climatol., 51, 405-425, doi: 10.1175/JAMC-D-10-05024.1.
 
     """
-
     if np.mod(windsize, 2):
-        warnings.warn('In the Vulpiani method, the windsize should be even ' +
-                      '.Using default value, windsize = 10')
+        warnings.warn('In the Vulpiani method, the windsize should be even. '
+                      + 'Using default value, windsize = 10')
         windsize = 10
 
     if parallel:
@@ -924,7 +924,6 @@ def _kdp_vulpiani_profile(psidp_in, dr, windsize=10,
         Retrieved differential phase profile
 
     """
-
     mask = np.ma.getmaskarray(psidp_in)
     l = windsize
     l2 = int(l/2)
@@ -1032,7 +1031,6 @@ def filter_psidp(radar, psidp_field=None, rhohv_field=None, minsize_seq=5,
     ----------
     radar : Radar
         Radar containing differential phase field.
-
     psidp_field : str, optional
         Total differential phase field. If None, the default field name must be
         specified in the Py-ART configuration file.
@@ -1049,14 +1047,12 @@ def filter_psidp(radar, psidp_field=None, rhohv_field=None, minsize_seq=5,
     max_discont : int, optional
         Maximum discontinuity between psidp values, default is 90 deg
 
-
     Returns
     -------
     psidp_filt : ndarray
         Filtered psidp field
 
     """
-
     # parse field names
     if psidp_field is None:
         psidp_field = get_field_name('differential_phase')
@@ -1234,7 +1230,6 @@ def kdp_maesaka(radar, gatefilter=None, method='cg', backscatter=None,
     European Conference on Radar in Meteorology and Hydrology.
 
     """
-
     # parse fill value
     if fill_value is None:
         fill_value = get_fillvalue()
@@ -1417,7 +1412,6 @@ def boundary_conditions_maesaka(
         Index of furthest range gate for each ray.
 
     """
-
     # parse field names
     if psidp_field is None:
         psidp_field = get_field_name('differential_phase')
@@ -1507,10 +1501,12 @@ def boundary_conditions_maesaka(
 
     # check for outliers in the near range boundary conditions, e.g., ground
     # clutter can introduce spurious values in certain rays
-    if kwargs.get('check_outliers', True):
 
-        # do not include missing values in the analysis
-        phi_near_valid = phi_near[phi_near != 0.0]
+    # do not include missing values in the analysis
+    phi_near_valid = phi_near[phi_near != 0.0]
+
+    # skip the check if there are no valid values
+    if kwargs.get('check_outliers', True) and (phi_near_valid.size != 0):
 
         # bin and count near range boundary condition values, i.e., create
         # a distribution of values
@@ -1527,7 +1523,7 @@ def boundary_conditions_maesaka(
 
         if debug:
             print('Peak of system phase distribution: {:.0f} deg'.format(
-                  system_phase_peak_left))
+                system_phase_peak_left))
 
         # determine left edge location of system phase distribution
         # we consider five counts or less to be insignificant
@@ -1543,9 +1539,9 @@ def boundary_conditions_maesaka(
 
         if debug:
             print('Left edge of system phase distribution: {:.0f} deg'.format(
-                  left_edge))
+                left_edge))
             print('Right edge of system phase distribution: {:.0f} deg'.format(
-                  right_edge))
+                right_edge))
 
         # define the system phase offset as the median value of the system
         # phase distriubion
@@ -1555,7 +1551,7 @@ def boundary_conditions_maesaka(
 
         if debug:
             print('Estimated system phase offset: {:.0f} deg'.format(
-                  system_phase_offset))
+                system_phase_offset))
 
         for ray, bc in enumerate(phi_near):
 
@@ -1618,7 +1614,6 @@ def _cost_maesaka(x, psidp_o, bcs, dhv, dr, Cobs, Clpf, finite_order,
         Value of total cost functional.
 
     """
-
     # parse control variable k from analysis vector
     nr, ng = psidp_o.shape
     k = x.reshape(nr, ng)
@@ -1712,7 +1707,6 @@ def _jac_maesaka(x, psidp_o, bcs, dhv, dr, Cobs, Clpf, finite_order,
         Jacobian of the cost functional.
 
     """
-
     # parse control variable k from analysis vector
     nr, ng = psidp_o.shape
     k = x.reshape(nr, ng)
@@ -1795,7 +1789,6 @@ def _forward_reverse_phidp(k, bcs, verbose=False):
         Reverse direction propagation differential phase.
 
     """
-
     # parse near and far range gate boundary conditions
     nr, ng = k.shape
     phi_near, phi_far = bcs
@@ -1848,7 +1841,6 @@ def _parse_range_resolution(
         The radar range gate spacing in meters.
 
     """
-
     # parse radar range gate spacings
     dr = np.diff(radar.range['data'], n=1)
 
@@ -1861,4 +1853,3 @@ def _parse_range_resolution(
         raise ValueError('Radar gate spacing is not uniform')
 
     return dr
-    

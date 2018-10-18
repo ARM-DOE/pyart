@@ -8,6 +8,7 @@ except ImportError:
 
 import numpy as np
 from numpy.testing import assert_raises, assert_almost_equal, assert_warns
+import pytest
 
 import pyart
 from pyart.io.uffile import UFFile, UFRay
@@ -65,15 +66,14 @@ def test_azimuth():
     assert np.allclose(radar.azimuth['data'], np.array([359.9375]))
 
 
-def test_fields():
-    fields = ['KD', 'ZD', 'RH', 'SQ', 'SW', 'CZ', 'VR', 'DZ', 'ZT', 'HC',
-              'PH', 'DR']
-    first_values = {'CZ': 0.0, 'DR': 0.0, 'DZ': -6.0499999999999998,
-                    'HC': 1.0, 'KD': 0.0, 'PH': 90.0, 'RH': 1.0,
-                    'SQ': 1.0, 'SW': 0.01, 'VR': 0.0, 'ZD': 0.0,
-                    'ZT': -6.0499999999999998}
-    for field in fields:
-        yield check_field, field, first_values[field]
+fields = {'CZ': 0.0, 'DR': 0.0, 'DZ': -6.0499999999999998,
+          'HC': 1.0, 'KD': 0.0, 'PH': 90.0, 'RH': 1.0,
+          'SQ': 1.0, 'SW': 0.01, 'VR': 0.0, 'ZD': 0.0,
+          'ZT': -6.0499999999999998}
+@pytest.mark.parametrize(
+    "field, field_value", fields.items(), ids=list(fields.keys()))
+def test_fields(field, field_value):
+    check_field(field, field_value)
 
 
 def check_field(field, value):
@@ -82,7 +82,7 @@ def check_field(field, value):
 
 def test_raises_ioerror():
     fake_bad_file = StringIO(b'XXXXXXXX')
-    assert_raises(IOError, pyart.io.read_uf, fake_bad_file)
+    pytest.raises(IOError, pyart.io.read_uf, fake_bad_file)
 
 
 def test_read_fileobj():

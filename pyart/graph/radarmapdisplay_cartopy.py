@@ -13,10 +13,19 @@ for drawing maps.
 
 """
 
+import warnings
+
 import numpy as np
 import matplotlib.pyplot as plt
 try:
     import cartopy
+
+    # Temporary fix for Cartopy issue #1120.
+    from matplotlib.axes import Axes
+    from cartopy.mpl.geoaxes import GeoAxes
+    if hasattr(GeoAxes, '_pcolormesh_patched'):
+        GeoAxes._pcolormesh_patched = Axes.pcolormesh
+
     _CARTOPY_AVAILABLE = True
 except ImportError:
     _CARTOPY_AVAILABLE = False
@@ -30,7 +39,6 @@ except ImportError:
 from .radardisplay import RadarDisplay
 from .common import parse_ax_fig, parse_vmin_vmax, parse_cmap
 from ..exceptions import MissingOptionalDependency
-
 
 class RadarMapDisplayCartopy(RadarDisplay):
     """
@@ -259,6 +267,9 @@ class RadarMapDisplayCartopy(RadarDisplay):
                 # set map projection to LambertConformal if none is specified
                 projection = cartopy.crs.LambertConformal(
                     central_longitude=lon_0, central_latitude=lat_0)
+                warnings.warn("No projection was defined for the axes." + 
+                              " Overridding defined axes and using default axes.",
+                              UserWarning)
             ax = plt.axes(projection=projection)
 
         if min_lon:

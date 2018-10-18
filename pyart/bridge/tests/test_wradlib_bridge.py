@@ -2,12 +2,13 @@
 
 
 import numpy as np
-from numpy.testing.decorators import skipif
+import pytest
 
 import pyart
 
 
-@skipif(not pyart.bridge.wradlib_bridge._WRADLIB_AVAILABLE)
+@pytest.mark.skipif(not pyart.bridge.wradlib_bridge._WRADLIB_AVAILABLE,
+                    reason="Wradlib is not installed.")
 def test_texture_of_complex_phase():
     test_radar = pyart.testing.make_empty_ppi_radar(100, 360, 5)
     foo_field = {'data': np.zeros([360*5, 100])}

@@ -16,28 +16,28 @@ matrix:
     - python: 2.7
       env:
         - PYTHON_VERSION="2.7"
-        - NOSE_ARGS="-v --with-cov --cov pyart pyart"
+        - PYTEST_ARGS="-v --cov pyart --ignore=pyart/util"
         - COVERALLS="true"
-    - python: 2.7
-      env:
-        - PYTHON_VERSION="2.7"
-        - NOSE_ARGS="-v --with-cov --cov pyart --exe pyart"
-        - FROM_RECIPE="true"
         - DOC_BUILD="true"
     - python: 3.4
       env:
         - PYTHON_VERSION="3.4"
-        - NOSE_ARGS="-v --with-cov --cov pyart pyart"
+        - PYTEST_ARGS="-v --cov pyart"
     - python: 3.5
       env:
         - PYTHON_VERSION="3.5"
-        - NOSE_ARGS="-v --with-cov --cov pyart pyart"
+        - PYTEST_ARGS="-v --cov pyart"
     - python: 3.6
       env:
         - PYTHON_VERSION="3.6"
-        - NOSE_ARGS="-v --with-cov --cov pyart pyart"
+        - PYTEST_ARGS="-v --cov pyart"
+    - python: 3.6
+      env:
+        - PYTHON_VERSION="3.6"
+        - PYTEST_ARGS="-v --pyargs pyart"
+        - FROM_RECIPE="true"
 install: source continuous_integration/install.sh
-script: eval xvfb-run nosetests $NOSE_ARGS
+script: eval xvfb-run pytest $PYTEST_ARGS
 after_success:
     # Ignore coveralls failures as the coveralls server is not very reliable
     # but we don't want travis to report a failure in the github UI just

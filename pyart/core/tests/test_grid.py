@@ -4,11 +4,10 @@ from __future__ import print_function
 
 import functools
 import pickle
-import warnings
 
 import numpy as np
-from numpy.testing import assert_almost_equal, assert_raises
-from numpy.testing.decorators import skipif
+from numpy.testing import assert_almost_equal
+import pytest
 
 try:
     from mpl_toolkits.basemap import pyproj
@@ -194,15 +193,15 @@ def test_add_field_raises():
     grid = pyart.testing.make_target_grid()
 
     # No 'data' key in field_dict raises a KeyError
-    assert_raises(KeyError, grid.add_field, 'field_name', {})
+    pytest.raises(KeyError, grid.add_field, 'field_name', {})
 
     # Adding a field which already exists raises a ValueError
     field_dict = {'data': np.ones((2, 400, 320))}
-    assert_raises(ValueError, grid.add_field, 'reflectivity', field_dict)
+    pytest.raises(ValueError, grid.add_field, 'reflectivity', field_dict)
 
     # Incorrect field_shapes raise a ValueError
     field_dict = {'data': np.ones((1, 1, 1))}
-    assert_raises(ValueError, grid.add_field, 'field_name', field_dict)
+    pytest.raises(ValueError, grid.add_field, 'field_name', field_dict)
 
 
 def test_projection_argument():
@@ -226,10 +225,10 @@ def test_inconsistent_radar_arguments():
 
     # radar_ arguments indicating 2 radars should raise a ValueError
     bad = {'data': [1, 2]}
-    assert_raises(ValueError, partial_grid, radar_longitude=bad)
-    assert_raises(ValueError, partial_grid, radar_altitude=bad)
-    assert_raises(ValueError, partial_grid, radar_time=bad)
-    assert_raises(ValueError, partial_grid, radar_name=bad)
+    pytest.raises(ValueError, partial_grid, radar_longitude=bad)
+    pytest.raises(ValueError, partial_grid, radar_altitude=bad)
+    pytest.raises(ValueError, partial_grid, radar_time=bad)
+    pytest.raises(ValueError, partial_grid, radar_name=bad)
 
 
 def test_init_point_altitude():
@@ -262,7 +261,8 @@ def test_init_point_longitude_latitude():
     assert_almost_equal(grid.point_latitude['data'][0, 200, 0], 40.0, 1)
 
 
-@skipif(not _PYPROJ_AVAILABLE)
+@pytest.mark.skipif(not _PYPROJ_AVAILABLE,
+                    reason="PyProj is not installed.")
 def test_projection_proj():
     grid = pyart.testing.make_target_grid()
     grid.projection['proj'] = 'aeqd'
@@ -275,7 +275,7 @@ def test_projection_proj_raised():
     def access_projection_proj():
         grid.projection_proj
 
-    assert_raises(ValueError, access_projection_proj)
+    pytest.raises(ValueError, access_projection_proj)
 
 
 def test_init_point_x_y_z():

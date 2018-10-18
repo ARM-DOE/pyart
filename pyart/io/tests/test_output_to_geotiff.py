@@ -2,11 +2,10 @@
 
 import warnings
 
-import pyart
-
 import numpy as np
-from numpy.testing.decorators import skipif
-from numpy.testing import assert_raises
+import pytest
+
+import pyart
 
 
 # TODO : inspect the output file to verify their contents, currently only the
@@ -28,7 +27,7 @@ def test_raise_missingoptionaldepedency():
     backup = bool(pyart.io.output_to_geotiff.IMPORT_FLAG)
     pyart.io.output_to_geotiff.IMPORT_FLAG = False
     grid = make_tiny_grid()
-    assert_raises(
+    pytest.raises(
         pyart.exceptions.MissingOptionalDependency,
         pyart.io.write_grid_geotiff, grid, 'test.foo', 'reflectivity')
     pyart.io.output_to_geotiff.IMPORT_FLAG = backup
@@ -52,7 +51,8 @@ def make_tiny_grid():
     return grid
 
 
-@skipif(not pyart.io.output_to_geotiff.IMPORT_FLAG)
+@pytest.mark.skipif(not pyart.io.output_to_geotiff.IMPORT_FLAG,
+                    reason="GDAL is not installed.")
 def test_write_grid_geotiff_tif_single_channel():
     grid = make_tiny_grid()
     with pyart.testing.InTemporaryDirectory():
@@ -62,7 +62,8 @@ def test_write_grid_geotiff_tif_single_channel():
             assert len(f.read()) > 0
 
 
-@skipif(not pyart.io.output_to_geotiff.IMPORT_FLAG)
+@pytest.mark.skipif(not pyart.io.output_to_geotiff.IMPORT_FLAG,
+                    reason="GDAL is not installed.")
 def test_write_grid_geotiff_tif_rgb_with_missing():
     grid = make_tiny_grid()
     with pyart.testing.InTemporaryDirectory():
@@ -73,7 +74,8 @@ def test_write_grid_geotiff_tif_rgb_with_missing():
             assert len(f.read()) > 0
 
 
-@skipif(not pyart.io.output_to_geotiff.IMPORT_FLAG)
+@pytest.mark.skipif(not pyart.io.output_to_geotiff.IMPORT_FLAG,
+                    reason="GDAL is not installed.")
 def test_write_grid_geotiff_tif_level():
     grid = make_tiny_grid()
     with pyart.testing.InTemporaryDirectory():
@@ -83,7 +85,8 @@ def test_write_grid_geotiff_tif_level():
             assert len(f.read()) > 0
 
 
-@skipif(not pyart.io.output_to_geotiff.IMPORT_FLAG)
+@pytest.mark.skipif(not pyart.io.output_to_geotiff.IMPORT_FLAG,
+                    reason="GDAL is not installed.")
 def test_write_grid_geotiff_tif_warp():
     grid = make_tiny_grid()
     with pyart.testing.InTemporaryDirectory():
@@ -94,7 +97,8 @@ def test_write_grid_geotiff_tif_warp():
             assert len(f.read()) > 0
 
 
-@skipif(not pyart.io.output_to_geotiff.IMPORT_FLAG)
+@pytest.mark.skipif(not pyart.io.output_to_geotiff.IMPORT_FLAG,
+                    reason="GDAL is not installed.")
 def test_write_grid_geotiff_tif_missing_suffix():
     grid = make_tiny_grid()
     with pyart.testing.InTemporaryDirectory():
@@ -105,7 +109,8 @@ def test_write_grid_geotiff_tif_missing_suffix():
             assert len(f.read()) > 0
 
 
-@skipif(not pyart.io.output_to_geotiff.IMPORT_FLAG)
+@pytest.mark.skipif(not pyart.io.output_to_geotiff.IMPORT_FLAG,
+                    reason="GDAL is not installed.")
 def test_write_grid_geotiff_sld():
     grid = make_tiny_grid()
     with pyart.testing.InTemporaryDirectory():
@@ -116,8 +121,9 @@ def test_write_grid_geotiff_sld():
             assert len(f.read()) > 0
 
 
-@skipif(not pyart.io.output_to_geotiff.IMPORT_FLAG)
+@pytest.mark.skipif(not pyart.io.output_to_geotiff.IMPORT_FLAG,
+                    reason="GDAL is not installed.")
 def test_write_grid_geotiff_missing_field():
     grid = make_tiny_grid()
-    assert_raises(
+    pytest.raises(
         KeyError, pyart.io.write_grid_geotiff, grid, 'test.foo', 'foobar')
