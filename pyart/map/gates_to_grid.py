@@ -40,7 +40,7 @@ def map_gates_to_grid(
     Generate a Cartesian grid of points for the requested fields from the
     collected points from one or more radars. For each radar gate that is not
     filtered a radius of influence is calculated.  The weighted field values
-    for that gate are added to all grid points within that radius.  This
+    for that gate are added to all grid points within that radius. This
     routine scaled linearly with the number of radar gates and the effective
     grid size.
 
@@ -50,7 +50,7 @@ def map_gates_to_grid(
     Parameters
     ----------
     roi_func : str or RoIFunction
-        Radius of influence function.  A functions which takes an
+        Radius of influence function. A functions which takes an
         z, y, x grid location, in meters, and returns a radius (in meters)
         within which all collected points will be included in the weighting
         for that grid points. Examples can be found in the
@@ -63,14 +63,14 @@ def map_gates_to_grid(
               and parameter are based of virtual beam sizes.
 
         A custom RoIFunction can be defined using the RoIFunction class
-        and defining a get_roi method which returns the radius.  For efficient
+        and defining a get_roi method which returns the radius. For efficient
         mapping this class should be implemented in Cython.
 
     Returns
     -------
     grids : dict
-        Dictionary of mapped fields.  The keysof the dictionary are given by
-        parameter fields.  Each elements is a `grid_size` float64 array
+        Dictionary of mapped fields. The keys of the dictionary are given by
+        parameter fields. Each elements is a `grid_size` float64 array
         containing the interpolated grid for that field.
 
     See Also
@@ -159,7 +159,9 @@ def map_gates_to_grid(
 
 def _detemine_cy_weighting_func(weighting_function):
     """ Determine cython weight function value. """
-    if weighting_function.upper() == 'CRESSMAN':
+    if weighting_function.upper() == 'NEAREST':
+        cy_weighting_function = 2
+    elif weighting_function.upper() == 'CRESSMAN':
         cy_weighting_function = 1
     elif weighting_function.upper() == 'BARNES':
         cy_weighting_function = 0
