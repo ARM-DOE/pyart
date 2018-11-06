@@ -23,7 +23,7 @@ from . import mdv_common
 
 def read_mdv(filename, field_names=None, additional_metadata=None,
              file_field_names=False, exclude_fields=None,
-             delay_field_loading=False, **kwargs):
+             include_fields=None, delay_field_loading=False, **kwargs):
     """
     Read a MDV file.
 
@@ -51,7 +51,12 @@ def read_mdv(filename, field_names=None, additional_metadata=None,
         `additional_metadata`.
     exclude_fields : list or None, optional
         List of fields to exclude from the radar object. This is applied
-        after the `file_field_names` and `field_names` parameters.
+        after the `file_field_names` and `field_names` parameters. Set
+        to None to include all fields specified by include_fields.
+    include_fields : list or None, optional
+        List of fields to include from the radar object. This is applied
+        after the `file_field_names` and `field_names` parameters. Set
+        to None to include all fields not specified by exclude_fields.
     delay_field_loading : bool
         True to delay loading of field data from the file until the 'data'
         key in a particular field dictionary is accessed.  In this case
@@ -75,7 +80,8 @@ def read_mdv(filename, field_names=None, additional_metadata=None,
 
     # create metadata retrieval object
     filemetadata = FileMetadata('mdv', field_names, additional_metadata,
-                                file_field_names, exclude_fields)
+                                file_field_names, exclude_fields,
+                                include_fields)
 
     mdvfile = mdv_common.MdvFile(prepare_for_read(filename))
 

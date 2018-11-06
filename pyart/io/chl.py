@@ -30,7 +30,7 @@ from .common import make_time_unit_str, _test_arguments, prepare_for_read
 
 def read_chl(filename, field_names=None, additional_metadata=None,
              file_field_names=None, exclude_fields=None,
-             use_file_field_attributes=True, **kwargs):
+             include_fields=None, use_file_field_attributes=True, **kwargs):
     """
     Read a CSU-CHILL CHL file.
 
@@ -58,6 +58,10 @@ def read_chl(filename, field_names=None, additional_metadata=None,
     exclude_fields : list or None, optional
         List of fields to exclude from the radar object. This is applied
         after the `file_field_names` and `field_names` parameters.
+    include_fields : list or None, optional
+        List of fields to include from the radar object. This is applied
+        after the `field_file_names` and `field_names` parameters. Set to
+        None to include all fields not in exclude_fields.
     use_file_field_attributes : bool, optional
         True to use information provided by in the file to set the field
         attribute `long_name`, `units`, `valid_max`, and `valid_min`.  False
@@ -75,7 +79,8 @@ def read_chl(filename, field_names=None, additional_metadata=None,
 
     # create metadata retrival object
     filemetadata = FileMetadata('chl', field_names, additional_metadata,
-                                file_field_names, exclude_fields)
+                                file_field_names, exclude_fields,
+                                include_fields)
 
     # read data
     chl_file = ChlFile(prepare_for_read(filename))

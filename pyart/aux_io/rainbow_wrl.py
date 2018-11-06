@@ -73,7 +73,8 @@ RAINBOW_FIELD_NAMES = {
 
 
 def read_rainbow_wrl(filename, field_names=None, additional_metadata=None,
-                     file_field_names=False, exclude_fields=None, **kwargs):
+                     file_field_names=False, exclude_fields=None,
+                     include_fields=None, **kwargs):
     """
     Read a RAINBOW file.
     This routine has been tested to read rainbow5 files version 5.22.3,
@@ -118,7 +119,12 @@ def read_rainbow_wrl(filename, field_names=None, additional_metadata=None,
         `additional_metadata`.
     exclude_fields : list or None, optional
         List of fields to exclude from the radar object. This is applied
-        after the `file_field_names` and `field_names` parameters.
+        after the `file_field_names` and `field_names` parameters. Set
+        to None to include all fields specified by include_fields.
+    include_fields : list or None, optional
+        List of fields to include from the radar object. This is applied
+        after the `file_field_names` and `field_names` parameters. Set
+        to None to include all fields not specified by exclude_fields.
 
 
     Returns
@@ -148,7 +154,8 @@ def read_rainbow_wrl(filename, field_names=None, additional_metadata=None,
     if field_names is None:
         field_names = RAINBOW_FIELD_NAMES
     filemetadata = FileMetadata('RAINBOW', field_names, additional_metadata,
-                                file_field_names, exclude_fields)
+                                file_field_names, exclude_fields,
+                                include_fields)
 
     rbf = read_rainbow(filename, loaddata=True)
 

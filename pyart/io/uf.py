@@ -50,7 +50,7 @@ _SWEEP_MODE_STR = {
 
 def read_uf(filename, field_names=None, additional_metadata=None,
             file_field_names=False, exclude_fields=None,
-            delay_field_loading=False, **kwargs):
+            include_fields=None, delay_field_loading=False, **kwargs):
     """
     Read a UF File.
 
@@ -76,7 +76,12 @@ def read_uf(filename, field_names=None, additional_metadata=None,
         `field_names` parameter to rename fields.
     exclude_fields : list or None, optional
         List of fields to exclude from the radar object. This is applied
-        after the `file_field_names` and `field_names` parameters.
+        after the `file_field_names` and `field_names` parameters. Set
+        to None to include all fields specified by include_fields.
+    include_fields : list or None, optional
+        List of fields to include from the radar object. This is applied
+        after the `file_field_names` and `field_names` parameters. Set
+        to None to include all fields not specified by exclude_fields.
     delay_field_loading : bool
         This option is not implemented in the function but included for
         compatibility.
@@ -92,7 +97,8 @@ def read_uf(filename, field_names=None, additional_metadata=None,
 
     # create metadata retrieval object
     filemetadata = FileMetadata('uf', field_names, additional_metadata,
-                                file_field_names, exclude_fields)
+                                file_field_names, exclude_fields,
+                                include_fields)
 
     # Open UF file and get handle
     ufile = UFFile(prepare_for_read(filename))

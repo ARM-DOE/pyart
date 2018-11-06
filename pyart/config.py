@@ -211,11 +211,13 @@ class FileMetadata():
         True to keep the field names in the file.
     exclude_fields : list of strings
         Fields to exclude during readings.
-
+    include_fields : list of strings
+        Fields to include during readings.
     """
 
     def __init__(self, filetype, field_names=None, additional_metadata=None,
-                 file_field_names=False, exclude_fields=None):
+                 file_field_names=False, exclude_fields=None,
+                 include_fields=None):
         """
         Initialize.
         """
@@ -246,6 +248,11 @@ class FileMetadata():
             self._exclude_fields = []
         else:
             self._exclude_fields = exclude_fields
+ 
+        if include_fields is None:
+            self._include_fields = None
+        else:
+            self._include_fields = include_fields 
 
     def get_metadata(self, p):
         """
@@ -309,5 +316,10 @@ class FileMetadata():
 
         if field_name in self._exclude_fields:
             return None     # field is excluded
+        elif self._include_fields is not None:
+            if not field_name in self._include_fields:
+                return None
+            else:
+                return field_name
         else:
             return field_name

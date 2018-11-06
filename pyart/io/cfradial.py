@@ -70,7 +70,7 @@ _INSTRUMENT_PARAMS_DIMS = {
 
 def read_cfradial(filename, field_names=None, additional_metadata=None,
                   file_field_names=False, exclude_fields=None,
-                  delay_field_loading=False, **kwargs):
+                  include_fields=None, delay_field_loading=False, **kwargs):
     """
     Read a Cfradial netCDF file.
 
@@ -92,7 +92,12 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
         `field_names` parameter to rename fields.
     exclude_fields : list or None, optional
         List of fields to exclude from the radar object. This is applied
-        after the `file_field_names` and `field_names` parameters.
+        after the `file_field_names` and `field_names` parameters. Set
+        to None to include all fields specified by include_fields.
+    include_fields : list or None, optional
+        List of fields to include from the radar object. This is applied
+        after the `file_field_names` and `field_names` parameters. Set
+        to None to include all fields not specified by exclude_fields.
     delay_field_loading : bool
         True to delay loading of field data from the file until the 'data'
         key in a particular field dictionary is accessed.  In this case
@@ -195,7 +200,6 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
         # Python 3, all strings are already unicode.        
         mode = netCDF4.chartostring(sweep_mode['data'][0])[()]
 
-
     # options specified in the CF/Radial standard
     if mode == 'rhi':
         scan_type = 'rhi'
@@ -287,8 +291,12 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
         field_name = filemetadata.get_field_name(key)
         if field_name is None:
             if exclude_fields is not None and key in exclude_fields:
+                if key not in include_fields: 
+                    continue
+            if include_fields is None or key in include_fields:
+                field_name = key
+            else:
                 continue
-            field_name = key
         fields[field_name] = _ncvar_to_dict(ncvars[key], delay_field_loading)
 
     if 'ray_n_gates' in ncvars:
