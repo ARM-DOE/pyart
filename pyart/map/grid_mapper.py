@@ -420,7 +420,7 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
         try:
             lat = float(radars[0].latitude['data'])
             lon = float(radars[0].longitude['data'])
-        except:
+        except TypeError:
             lat = np.mean(radars[0].latitude['data'])
             lon = np.mean(radars[0].longitude['data'])
         grid_origin = (lat, lon)
@@ -429,7 +429,7 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
     if grid_origin_alt is None:
         try:
             grid_origin_alt = float(radars[0].altitude['data'])
-        except:
+        except TypeError:
             grid_origin_alt = np.mean(radars[0].altitude['data'])
 
     # fields which should be mapped, None for fields which are in all radars
@@ -483,7 +483,7 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
         try:
             z_disp = float(radar.altitude['data']) - grid_origin_alt
             offsets.append((z_disp, float(y_disp), float(x_disp)))
-        except:
+        except TypeError:
             z_disp = np.mean(radar.altitude['data']) - grid_origin_alt
             offsets.append((z_disp, np.mean(y_disp), np.mean(x_disp)))
 
@@ -495,16 +495,13 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
             xg_loc, yg_loc = geographic_to_cartesian(
                 radar.gate_longitude['data'], radar.gate_latitude['data'],
                 projparams)
-        try:
-            zg_loc = radar.gate_altitude['data'] - grid_origin_alt
-        except ValueError:
-            zg_loc = np.mean(radar.gate_altitude['data'], axis=1) - grid_origin_alt
+        zg_loc = radar.gate_altitude['data'] - grid_origin_alt
 
         # add gate locations to gate_locations array
         start, end = gate_offset[iradar], gate_offset[iradar + 1]
-        gate_locations[start:end, 0] = zg_loc.flat
-        gate_locations[start:end, 1] = yg_loc.flat
-        gate_locations[start:end, 2] = xg_loc.flat
+        gate_locations[start:end, 0] = zg_loc.flat[:]
+        gate_locations[start:end, 1] = yg_loc.flat[:]
+        gate_locations[start:end, 2] = xg_loc.flat[:]
         del xg_loc, yg_loc
 
         # determine which gates should be included in the interpolation
