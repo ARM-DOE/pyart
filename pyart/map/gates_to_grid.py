@@ -89,7 +89,10 @@ def map_gates_to_grid(
         skip_transform = True
 
     if grid_origin_alt is None:
-        grid_origin_alt = float(radars[0].altitude['data'])
+        try:
+            grid_origin_alt = float(radars[0].altitude['data'])
+        except TypeError:
+            grid_origin_alt = np.mean(radars[0].altitude['data'])
 
     gatefilters = _parse_gatefilters(gatefilters, radars)
     cy_weighting_function = _detemine_cy_weighting_func(weighting_function)
@@ -175,8 +178,12 @@ def _find_projparams(grid_origin, radars, grid_projection):
 
     # parse grid_origin
     if grid_origin is None:
-        lat = float(radars[0].latitude['data'])
-        lon = float(radars[0].longitude['data'])
+        try:
+            lat = float(radars[0].latitude['data'])
+            lon = float(radars[0].longitude['data'])
+        except TypeError:
+            lat = np.mean(radars[0].latitude['data'])
+            lon = np.mean(radars[0].longitude['data'])
         grid_origin = (lat, lon)
 
     grid_origin_lat, grid_origin_lon = grid_origin
@@ -222,8 +229,12 @@ def _find_offsets(radars, projparams, grid_origin_alt):
     for radar in radars:
         x_disp, y_disp = geographic_to_cartesian(
             radar.longitude['data'], radar.latitude['data'], projparams)
-        z_disp = float(radar.altitude['data']) - grid_origin_alt
-        offsets.append((z_disp, float(y_disp), float(x_disp)))
+        try:
+            z_disp = float(radar.altitude['data']) - grid_origin_alt
+            offsets.append((z_disp, float(y_disp), float(x_disp)))
+        except TypeError:
+            z_disp = np.mean(radar.altitude['data']) - grid_origin_alt
+            offsets.append((z_disp, np.mean(y_disp), np.mean(x_disp)))
     return offsets
 
 
