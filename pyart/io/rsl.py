@@ -38,7 +38,7 @@ from ..exceptions import MissingOptionalDependency
 
 def read_rsl(filename, field_names=None, additional_metadata=None,
              file_field_names=False, exclude_fields=None,
-             delay_field_loading=False,
+             delay_field_loading=False, include_fields=None,
              radar_format=None, callid=None, skip_range_check=False):
     """
     Read a file supported by RSL
