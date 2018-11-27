@@ -39,11 +39,7 @@ try:
     import pyproj
     _PYPROJ_AVAILABLE = True
 except ImportError:
-    try:
-        from mpl_toolkits.basemap import pyproj
-        _PYPROJ_AVAILABLE = True
-    except ImportError:
-        _PYPROJ_AVAILABLE = False
+    _PYPROJ_AVAILABLE = False
 
 PI = np.pi
 
@@ -378,9 +374,9 @@ def geographic_to_cartesian(lon, lat, projparams):
         Projection parameters passed to pyproj.Proj. If this parameter is a
         dictionary with a 'proj' key equal to 'pyart_aeqd' then a azimuthal
         equidistant projection will be used that is native to Py-ART and
-        does not require pyproj/basemap to be installed. In this case a
-        non-default value of R can be specified by setting the 'R' key to the
-        desired value.
+        does not require pyproj to be installed. In this case a non-default
+        value of R can be specified by setting the 'R' key to the desired
+        value.
 
     Returns
     -------
@@ -403,7 +399,7 @@ def geographic_to_cartesian(lon, lat, projparams):
         # check that pyproj is available
         if not _PYPROJ_AVAILABLE:
             raise MissingOptionalDependency(
-                "Basemap is required to use geographic_to_cartesian "
+                "PyProj is required to use geographic_to_cartesian "
                 "with a projection other than pyart_aeqd but it is not "
                 "installed")
         proj = pyproj.Proj(projparams)
@@ -505,9 +501,9 @@ def cartesian_to_geographic(x, y, projparams):
         Projection parameters passed to pyproj.Proj. If this parameter is a
         dictionary with a 'proj' key equal to 'pyart_aeqd' then a azimuthal
         equidistant projection will be used that is native to Py-ART and
-        does not require pyproj/basemap to be installed. In this case a
-        non-default value of R can be specified by setting the 'R' key to the
-        desired value.
+        does not require pyproj to be installed. In this case a non-default
+        value of R can be specified by setting the 'R' key to the desired
+        value.
 
     Returns
     -------
@@ -529,7 +525,7 @@ def cartesian_to_geographic(x, y, projparams):
         # check that pyproj is available
         if not _PYPROJ_AVAILABLE:
             raise MissingOptionalDependency(
-                "Basemap is required to use cartesian_to_geographic "
+                "PyProj is required to use cartesian_to_geographic "
                 "with a projection other than pyart_aeqd but it is not "
                 "installed")
         proj = pyproj.Proj(projparams)
@@ -555,7 +551,7 @@ def cartesian_vectors_to_geographic(x, y, projparams, edges=False):
         Projection parameters passed to pyproj.Proj. If this parameter is a
         dictionary with a 'proj' key equal to 'pyart_aeqd' then a azimuthal
         equidistant projection will be used that is native to Py-ART and
-        does not require pyproj/basemap to be installed. In this case a
+        does not require pyproj to be installed. In this case a
         non-default value of R can be specified by setting the 'R' key to the
         desired value.
     edges : bool, optional
