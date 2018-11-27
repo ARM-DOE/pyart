@@ -99,10 +99,10 @@ def _debug_info(stream=None):
         cvxopt_version = "MISSING"
 
     try:
-        from mpl_toolkits import basemap
-        basemap_version = basemap.__version__
+        import cartopy
+        cartopy_version = cartopy.__version__
     except:
-        basemap_version = "MISSING"
+        cartopy_version = "MISSING"
 
     try:
         import pytest
@@ -126,7 +126,7 @@ def _debug_info(stream=None):
     print("CyLP:", cylp_available, file=stream)
     print("PyGLPK version:", glpk_version, file=stream)
     print("CVXOPT version:", cvxopt_version, file=stream)
-    print("basemap version:", basemap_version, file=stream)
+    print("Cartopy version:", cartopy_version, file=stream)
     print("pytest version:", pytest_version, file=stream)
 
 if __name__ == "__main__":

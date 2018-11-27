@@ -10,7 +10,7 @@ from numpy.testing import assert_almost_equal
 import pytest
 
 try:
-    from mpl_toolkits.basemap import pyproj
+    import pyproj
     _PYPROJ_AVAILABLE = True
 except ImportError:
     _PYPROJ_AVAILABLE = False
