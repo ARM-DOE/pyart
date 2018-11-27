@@ -15,6 +15,7 @@ New code added by Meteo Swiss and inserted into Py-ART by Robert Jackson.
     _param_attzphi_table
     _get_param_attphilinear
     _param_attphilinear_table
+    calculate_attenuation
 """
 from copy import deepcopy
 from warnings import warn
@@ -122,7 +123,7 @@ def calculate_attenuation_zphi(radar, doc=None, fzl=None, smooth_window_len=5,
     if refl_field is None:
         refl_field = get_field_name('reflectivity')
     if zdr_field is None:
-        zdr_field = get_field_name('zdr')
+        zdr_field = get_field_name('differential_reflectivity')
     if phidp_field is None:
         # use corrrected_differential_phase or unfolded_differential_phase
         # fields if they are available, if not use differential_phase field
@@ -687,7 +688,7 @@ def _param_attphilinear_table():
     # X band:
     param_att_dict.update({'X': (0.28, 0.04)})
 
-return param_att_dict
+    return param_att_dict
 
 
 def calculate_attenuation(radar, z_offset, debug=False, doc=15, fzl=4000.0,

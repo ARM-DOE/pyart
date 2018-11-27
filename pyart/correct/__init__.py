@@ -24,6 +24,8 @@ Other corrections
     :toctree: generated/
 
     calculate_attenuation
+    calculate_attenuation_zphi
+    calculate_attenuation_philinear
     phase_proc_lp
     despeckle_field
     correct_noise_rhohv
@@ -41,6 +43,8 @@ Helper functions
 
 from .dealias import dealias_fourdd
 from .attenuation import calculate_attenuation
+from .attenuation import calculate_attenuation_zphi
+from .attenuation import calculate_attenuation_philinear
 from .phase_proc import phase_proc_lp
 # for backwards compatibility GateFilter available in the correct namespace
 from ..filters.gatefilter import GateFilter, moment_based_gate_filter

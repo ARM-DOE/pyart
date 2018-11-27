@@ -11,6 +11,8 @@ corrections routines in Py-ART.
     moment_based_gate_filter
     moment_and_texture_based_gate_filter
     calculate_velocity_texture
+    temp_based_gate_filter
+    iso0_based_gate_filter
 
 .. autosummary::
     :toctree: generated/
@@ -247,6 +249,186 @@ def moment_and_texture_based_gate_filter(
         gatefilter.exclude_above(textrefl_field, max_textrefl)
         gatefilter.exclude_masked(textrefl_field)
         gatefilter.exclude_invalid(textrefl_field)
+    return gatefilter
+
+
+def temp_based_gate_filter(radar, temp_field=None, min_temp=0.,
+                           thickness=400., beamwidth=None):
+    """
+    Create a filter which removes undesired gates based on temperature. Used
+    primarily to filter out the melting layer and gates above it.
+    Parameters
+    ----------
+    radar : Radar
+        Radar object from which the gate filter will be built.
+    temp_field : str
+        Name of the radar field which contains the temperature.
+        A value of None for will use the default field name as defined in
+        the Py-ART configuration file.
+    min_temp : float
+        Minimum value for the temperature in degrees. Gates below this limits
+        as well as gates which are masked or contain invalid values will be
+        excluded and not used in calculation which use the filter. A value of
+        None will disable filtering based upon the field including removing
+        masked or gates with an invalid value. To disable the thresholding but
+        retain the masked and invalid filter set the parameter to a value
+        below the lowest value in the field.
+    thickness : float
+        The estimated thickness of the melting layer in m
+    beamwidth : float
+        The radar antenna 3 dB beamwidth [deg]
+    Returns
+    -------
+    gatefilter : :py:class:`GateFilter`
+        A gate filter based upon the described criteria.  This can be
+        used as a gatefilter parameter to various functions in pyart.correct.
+    """
+    # parse the field parameters
+    if temp_field is None:
+        temp_field = get_field_name('temperature')
+
+    # make deepcopy of input radar (we do not want to modify the original)
+    radar_aux = deepcopy(radar)
+
+    # filter gates based upon field parameters
+    gatefilter = GateFilter(radar_aux)
+
+    if (min_temp is not None) and (temp_field in radar_aux.fields):
+        gatefilter.exclude_below(temp_field, min_temp)
+        gatefilter.exclude_masked(temp_field)
+        gatefilter.exclude_invalid(temp_field)
+
+    deltar = radar.range['data'][1]-radar.range['data'][0]
+    if beamwidth is not None:
+        beam_rad = beamwidth*np.pi/180.
+    if thickness is not None:
+        temp = radar_aux.fields[temp_field]
+        temp['data'] = np.ma.masked_where(
+            gatefilter.gate_excluded == 1, temp['data'])
+        for ray in range(radar_aux.nrays):
+            gate_h_ray = radar_aux.gate_altitude['data'][ray, :]
+            # index of first excluded gate
+            ind_r = np.where(gatefilter.gate_excluded[ray, :] == 1)[0]
+            if ind_r.size > 0:
+                # some gates are excluded: find the maximum height
+                ind_r = ind_r[0]
+                if beamwidth is None:
+                    hmax = gate_h_ray[ind_r]-thickness
+                else:
+                    # consider also the radar volume
+                    # maximum altitude at the end of the volume
+                    if ind_r < radar_aux.ngates-2:
+                        hmax = (
+                            (gate_h_ray[ind_r] + gate_h_ray[ind_r+1])/2. -
+                            thickness)
+                    else:
+                        hmax = gate_h_ray[ind_r]-thickness
+                    beam_radius = (
+                        (radar.range['data'][ind_r]+deltar/2.)*beam_rad/2.)
+                    delta_h = (
+                        beam_radius
+                        * np.cos(radar.elevation['data'][ray]*np.pi/180.))
+                    hmax -= delta_h
+
+                ind_hmax = np.where(
+                    radar_aux.gate_altitude['data'][ray, :] > hmax)[0]
+                if ind_hmax.size > 0:
+                    ind_hmax = ind_hmax[0]
+                    temp['data'][ray, ind_hmax:] = np.ma.masked
+        radar_aux.add_field(temp_field, temp, replace_existing=True)
+        gatefilter = GateFilter(radar_aux)
+        gatefilter.exclude_masked(temp_field)
+
+    return gatefilter
+
+
+def iso0_based_gate_filter(radar, iso0_field=None, max_h_iso0=0.,
+                           thickness=400., beamwidth=None):
+    """
+    Create a filter which removes undesired gates based height over the iso0.
+    Used primarily to filter out the melting layer and gates above it.
+    Parameters
+    ----------
+    radar : Radar
+        Radar object from which the gate filter will be built.
+    iso0_field : str
+        Name of the radar field which contains the height relative to the
+        iso0. A value of None for will use the default field name as defined
+        in the Py-ART configuration file.
+    max_h_iso0 : float
+        Maximum height relative to the iso0 in m. Gates below this limits
+        as well as gates which are masked or contain invalid values will be
+        excluded and not used in calculation which use the filter. A value of
+        None will disable filtering based upon the field including removing
+        masked or gates with an invalid value. To disable the thresholding but
+        retain the masked and invalid filter set the parameter to a value
+        below the lowest value in the field.
+    thickness : float
+        The estimated thickness of the melting layer in m
+    beamwidth : float
+        The radar antenna 3 dB beamwidth [deg]
+    Returns
+    -------
+    gatefilter : :py:class:`GateFilter`
+        A gate filter based upon the described criteria.  This can be
+        used as a gatefilter parameter to various functions in pyart.correct.
+    """
+    # parse the field parameters
+    if iso0_field is None:
+        iso0_field = get_field_name('height_over_iso0')
+
+    # make deepcopy of input radar (we do not want to modify the original)
+    radar_aux = deepcopy(radar)
+
+    # filter gates based upon field parameters
+    gatefilter = GateFilter(radar_aux)
+
+    if (max_h_iso0 is not None) and (iso0_field in radar_aux.fields):
+        gatefilter.exclude_above(iso0_field, max_h_iso0)
+        gatefilter.exclude_masked(iso0_field)
+        gatefilter.exclude_invalid(iso0_field)
+
+    deltar = radar.range['data'][1]-radar.range['data'][0]
+    if beamwidth is not None:
+        beam_rad = beamwidth*np.pi/180.
+    if thickness is not None:
+        iso0 = radar_aux.fields[iso0_field]
+        iso0['data'] = np.ma.masked_where(
+            gatefilter.gate_excluded == 1, iso0['data'])
+        for ray in range(radar_aux.nrays):
+            gate_h_ray = radar_aux.gate_altitude['data'][ray, :]
+            # index of first excluded gate
+            ind_r = np.where(gatefilter.gate_excluded[ray, :] == 1)[0]
+            if ind_r.size > 0:
+                # some gates are excluded: find the maximum height
+                ind_r = ind_r[0]
+                if beamwidth is None:
+                    hmax = gate_h_ray[ind_r]-thickness
+                else:
+                    # consider also the radar volume
+                    # maximum altitude at the end of the volume
+                    if ind_r < radar_aux.ngates-2:
+                        hmax = (
+                            (gate_h_ray[ind_r] + gate_h_ray[ind_r+1])/2. -
+                            thickness)
+                    else:
+                        hmax = gate_h_ray[ind_r]-thickness
+                    beam_radius = (
+                        (radar.range['data'][ind_r]+deltar/2.)*beam_rad/2.)
+                    delta_h = (
+                        beam_radius
+                        * np.cos(radar.elevation['data'][ray]*np.pi/180.))
+                    hmax -= delta_h
+
+                ind_hmax = np.where(
+                    radar_aux.gate_altitude['data'][ray, :] > hmax)[0]
+                if ind_hmax.size > 0:
+                    ind_hmax = ind_hmax[0]
+                    iso0['data'][ray, ind_hmax:] = np.ma.masked
+        radar_aux.add_field(iso0_field, iso0, replace_existing=True)
+        gatefilter = GateFilter(radar_aux)
+        gatefilter.exclude_masked(iso0_field)
+
     return gatefilter
 
 

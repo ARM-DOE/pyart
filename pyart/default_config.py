@@ -82,6 +82,7 @@ rain_rate = 'rain_rate'
 radar_estimated_rain_rate = 'radar_estimated_rain_rate'
 radar_echo_classification = 'radar_echo_classification'
 specific_attenuation = 'specific_attenuation'
+specific_differential_attenuation = 'specific_differential_attenuation'
 
 # Textures
 differential_phase_texture = 'differential_phase_texture'
@@ -94,6 +95,12 @@ vertical_wind_component = 'vertical_wind_component'
 # profile variables
 height = 'height'
 interpolated_profile = 'interpolated_profile'
+height_over_iso0 = 'height_over_iso0'
+
+# path integrated attenuation
+path_integrated_attenuation = 'path_integrated_attenuation'
+path_integrated_differential_attenuation = ('path_integrated' +
+                                            'differential_attenuation')
 
 # End of Simple Configuration section
 
@@ -170,7 +177,12 @@ DEFAULT_FIELD_NAMES = {
     'northward_wind_component': northward_wind_component,
     'vertical_wind_component': vertical_wind_component,
     'height': height,
+    'height_over_iso0': height_over_iso0,
     'interpolated_profile': interpolated_profile,
+    'path_integrated_attenuation': path_integrated_attenuation,
+    'specific_differential_attenuation': specific_differential_attenuation,
+    'path_integrated_differential_attenuation':
+    path_integrated_differential_attenuation
 }
 
 
