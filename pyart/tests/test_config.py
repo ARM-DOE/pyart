@@ -1,9 +1,15 @@
 """ Unit Tests for Py-ART's config.py module. """
 
-import pyart
 import os
+import sys
 import warnings
-from imp import reload
+
+import pyart
+
+if sys.version_info[:2] >= (3, 4):
+    from importlib import reload
+else:
+    from imp import reload
 
 dirname = os.path.dirname(__file__)
 CUSTOM_CONFIG_FILE = os.path.join(dirname, 'custom_config.py')

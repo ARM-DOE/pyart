@@ -1501,10 +1501,12 @@ def boundary_conditions_maesaka(
 
     # check for outliers in the near range boundary conditions, e.g., ground
     # clutter can introduce spurious values in certain rays
-    if kwargs.get('check_outliers', True):
 
-        # do not include missing values in the analysis
-        phi_near_valid = phi_near[phi_near != 0.0]
+    # do not include missing values in the analysis
+    phi_near_valid = phi_near[phi_near != 0.0]
+
+    # skip the check if there are no valid values
+    if kwargs.get('check_outliers', True) and (phi_near_valid.size != 0):
 
         # bin and count near range boundary condition values, i.e., create
         # a distribution of values
