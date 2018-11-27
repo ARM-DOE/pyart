@@ -24,7 +24,7 @@ import numpy as np
 from scipy.integrate import cumtrapz
 
 from ..config import get_metadata, get_field_name, get_fillvalue
-from .phase_proc import smooth_masked, det_process_range
+from .phase_proc import smooth_masked, det_process_range, smooth_and_trim
 from ..filters import temp_based_gate_filter, iso0_based_gate_filter
 from ..retrieve import get_freq_band
 
@@ -799,7 +799,7 @@ def calculate_attenuation(radar, z_offset, debug=False, doc=15, fzl=4000.0,
         # loop over the sweeps
         if debug:
             print("Doing ", sweep)
-        end_gate, start_ray, end_ray = phase_proc.det_process_range(
+        end_gate, start_ray, end_ray = det_process_range(
             radar, sweep, fzl, doc=doc)
 
         for i in range(start_ray, end_ray):
@@ -812,7 +812,7 @@ def calculate_attenuation(radar, z_offset, debug=False, doc=15, fzl=4000.0,
             # perform calculation
             last_six_good = np.where(is_good[i, 0:end_gate])[0][-6:]
             phidp_max = np.median(ray_phase_shift[last_six_good])
-            sm_refl = phase_proc.smooth_and_trim(ray_init_refl, window_len=5)
+            sm_refl = smooth_and_trim(ray_init_refl, window_len=5)
             reflectivity_linear = 10.0 ** (0.1 * beta * sm_refl)
             self_cons_number = 10.0 ** (0.1 * beta * a_coef * phidp_max) - 1.0
             I_indef = cumtrapz(0.46 * beta * dr * reflectivity_linear[::-1])
