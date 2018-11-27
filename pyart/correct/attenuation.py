@@ -352,7 +352,7 @@ def calculate_attenuation_philinear(
     if refl_field is None:
         refl_field = get_field_name('reflectivity')
     if zdr_field is None:
-        zdr_field = get_field_name('zdr')
+        zdr_field = get_field_name('differential_reflectivity')
     if phidp_field is None:
         # use corrrected_differential_phase or unfolded_differential_phase
         # fields if they are available, if not use differential_phase field
