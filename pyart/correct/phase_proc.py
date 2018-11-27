@@ -18,6 +18,7 @@ Adapted by Scott Collis and Scott Giangrande, refactored by Jonathan Helmus
     det_process_range
     snr
     unwrap_masked
+    smooth_masked
     smooth_and_trim
     smooth_and_trim_scan
     noise
@@ -47,6 +48,7 @@ import scipy.ndimage
 
 from ..config import get_fillvalue, get_field_name, get_metadata
 from ..filters import GateFilter
+from ..util import rolling_window
 
 
 def det_sys_phase(radar, ncp_lev=0.4, rhohv_lev=0.6,
@@ -191,6 +193,60 @@ def snr(line, wl=11):
     signal = smooth_and_trim(line, window_len=wl)
     noise = smooth_and_trim(np.sqrt((line - signal) ** 2), window_len=wl)
     return abs(signal) / noise
+
+
+def smooth_masked(raw_data, wind_len=11, min_valid=6, wind_type='median'):
+    """
+    smoothes the data using a rolling window.
+    data with less than n valid points is masked.
+    Parameters
+    ----------
+    raw_data : float masked array
+        The data to smooth.
+    window_len : float
+        Length of the moving window
+    min_valid : float
+        Minimum number of valid points for the smoothing to be valid
+    wind_type : str
+        type of window. Can be median or mean
+    Returns
+    -------
+    data_smooth : float masked array
+        smoothed data
+    """
+    valid_wind = ['median', 'mean']
+    if wind_type not in valid_wind:
+        raise ValueError(
+            "Window "+window+" is none of " + ' '.join(valid_windows))
+
+    # we want an odd window
+    if wind_len % 2 == 0:
+        wind_len += 1
+    half_wind = int((wind_len-1)/2)
+
+    # initialize smoothed data
+    nrays, nbins = np.shape(raw_data)
+    data_smooth = np.ma.zeros((nrays, nbins))
+    data_smooth[:] = np.ma.masked
+    data_smooth.set_fill_value(get_fillvalue())
+
+    mask = np.ma.getmaskarray(raw_data)
+    valid = np.logical_not(mask)
+
+    mask_wind = rolling_window(mask, wind_len)
+    valid_wind = np.logical_not(mask_wind).astype(int)
+    nvalid = np.sum(valid_wind, -1)
+
+    data_wind = rolling_window(raw_data, wind_len)
+
+    # check which gates are valid
+    ind_valid = np.logical_and(
+        nvalid >= min_valid, valid[:, half_wind:-half_wind]).nonzero()
+
+    data_smooth[ind_valid[0], ind_valid[1]+half_wind] = (
+        eval('np.ma.'+wind_type+'(data_wind, axis=-1)')[ind_valid])
+
+    return data_smooth
 
 
 def unwrap_masked(lon, centered=False, copy=True):
