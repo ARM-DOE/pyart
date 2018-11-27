@@ -32,8 +32,6 @@ and antenna (azimuth, elevation, range) coordinate systems.
 
 import warnings
 
-from ..exceptions import MissingOptionalDependency
-
 import numpy as np
 try:
     import pyproj
@@ -41,10 +39,12 @@ try:
 except ImportError:
     _PYPROJ_AVAILABLE = False
 
+from ..exceptions import MissingOptionalDependency
+
 PI = np.pi
 
 
-def antenna_to_cartesian(ranges, azimuths, elevations, debug=False):
+def antenna_to_cartesian(ranges, azimuths, elevations):
     """
     Return Cartesian coordinates from antenna coordinates.
 

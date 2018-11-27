@@ -30,6 +30,7 @@ except ImportError:
     _PYPROJ_AVAILABLE = False
 
 from ..config import get_metadata
+from ..exceptions import MissingOptionalDependency
 from ..lazydict import LazyLoadDict
 from .transforms import cartesian_to_geographic
 from .transforms import cartesian_vectors_to_geographic
