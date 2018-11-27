@@ -18,6 +18,7 @@ Adapted by Scott Collis and Scott Giangrande, refactored by Jonathan Helmus
     det_process_range
     snr
     unwrap_masked
+    smooth_masked
     smooth_and_trim
     smooth_and_trim_scan
     noise
@@ -47,6 +48,7 @@ import scipy.ndimage
 
 from ..config import get_fillvalue, get_field_name, get_metadata
 from ..filters import GateFilter
+from ..util import rolling_window
 
 
 def det_sys_phase(radar, ncp_lev=0.4, rhohv_lev=0.6,
@@ -193,6 +195,60 @@ def snr(line, wl=11):
     return abs(signal) / noise
 
 
+def smooth_masked(raw_data, wind_len=11, min_valid=6, wind_type='median'):
+    """
+    smoothes the data using a rolling window.
+    data with less than n valid points is masked.
+    Parameters
+    ----------
+    raw_data : float masked array
+        The data to smooth.
+    window_len : float
+        Length of the moving window
+    min_valid : float
+        Minimum number of valid points for the smoothing to be valid
+    wind_type : str
+        type of window. Can be median or mean
+    Returns
+    -------
+    data_smooth : float masked array
+        smoothed data
+    """
+    valid_wind = ['median', 'mean']
+    if wind_type not in valid_wind:
+        raise ValueError(
+            "Window "+window+" is none of " + ' '.join(valid_windows))
+
+    # we want an odd window
+    if wind_len % 2 == 0:
+        wind_len += 1
+    half_wind = int((wind_len-1)/2)
+
+    # initialize smoothed data
+    nrays, nbins = np.shape(raw_data)
+    data_smooth = np.ma.zeros((nrays, nbins))
+    data_smooth[:] = np.ma.masked
+    data_smooth.set_fill_value(get_fillvalue())
+
+    mask = np.ma.getmaskarray(raw_data)
+    valid = np.logical_not(mask)
+
+    mask_wind = rolling_window(mask, wind_len)
+    valid_wind = np.logical_not(mask_wind).astype(int)
+    nvalid = np.sum(valid_wind, -1)
+
+    data_wind = rolling_window(raw_data, wind_len)
+
+    # check which gates are valid
+    ind_valid = np.logical_and(
+        nvalid >= min_valid, valid[:, half_wind:-half_wind]).nonzero()
+
+    data_smooth[ind_valid[0], ind_valid[1]+half_wind] = (
+        eval('np.ma.'+wind_type+'(data_wind, axis=-1)')[ind_valid])
+
+    return data_smooth
+
+
 def unwrap_masked(lon, centered=False, copy=True):
     """
     Unwrap a sequence of longitudes or headings in degrees.
@@ -279,7 +335,7 @@ def smooth_and_trim(x, window_len=11, window='hanning'):
         return x
     valid_windows = ['flat', 'hanning', 'hamming', 'bartlett', 'blackman',
                      'sg_smooth']
-    if not window in valid_windows:
+    if window not in valid_windows:
         raise ValueError("Window is on of " + ' '.join(valid_windows))
 
     s = np.r_[x[window_len - 1:0:-1], x, x[-1:-window_len:-1]]
@@ -334,7 +390,7 @@ def smooth_and_trim_scan(x, window_len=11, window='hanning'):
         return x
     valid_windows = ['flat', 'hanning', 'hamming', 'bartlett', 'blackman',
                      'sg_smooth']
-    if not window in valid_windows:
+    if window not in valid_windows:
         raise ValueError("Window is on of " + ' '.join(valid_windows))
 
     if window == 'flat':  # moving average
@@ -464,7 +520,7 @@ def get_phidp_unf(radar, ncp_lev=0.4, rhohv_lev=0.6, debug=False, ncpts=20,
             unwrapped[nowrap::] = end_unwrap
         else:
             unwrapped = unwrap_masked(x_ma, centered=False)
-        #end so no clutter expected
+        # end so no clutter expected
         system_max = unwrapped[np.where(np.logical_not(
             notmeteo))][-10:-1].mean() - system_zero
         unwrapped_fixed = np.zeros(len(x_ma), dtype=float)
@@ -826,7 +882,6 @@ def LP_solver_cylp_mp(A_Matrix, B_vectors, weights, really_verbose=False,
     x = model.addVariable('x', G.shape[1])
     model.addConstraint(G * x >= h)
     c = CyLPArray(np.empty(weights.shape[1]))
-    #c = CyLPArray(np.squeeze(weights[0]))
     model.objective = c * x
 
     chunksize = int(n_rays/proc)
@@ -921,7 +976,6 @@ def LP_solver_cylp(A_Matrix, B_vectors, weights, really_verbose=False):
     h = CyLPArray(np.empty(B_vectors.shape[1]))
     x = model.addVariable('x', G.shape[1])
     model.addConstraint(G * x >= h)
-    #c = CyLPArray(np.empty(weights.shape[1]))
     c = CyLPArray(np.squeeze(weights[0]))
     model.objective = c * x
 
@@ -936,7 +990,6 @@ def LP_solver_cylp(A_Matrix, B_vectors, weights, really_verbose=False):
         # set new B_vector values for actual ray
         s.setRowLowerArray(np.squeeze(np.asarray(B_vectors[raynum])))
         # set new weights (objectives) for actual ray
-        #s.setObjectiveArray(np.squeeze(np.asarray(weights[raynum])))
         # solve with dual method, it is faster
         s.dual()
         # extract primal solution
@@ -1136,10 +1189,11 @@ def phase_proc_lp(radar, offset, debug=False, self_const=60000.0,
 
 def phase_proc_lp_gf(radar, gatefilter=None, debug=False, self_const=60000.0,
                      low_z=10.0, high_z=53.0, min_phidp=0.01, fzl=4000.0,
-                     system_phase = None, nowrap=None, really_verbose=False,
-                     LP_solver='cylp', refl_field=None, phidp_field=None, kdp_field=None,
-                     unf_field=None, window_len=35, proc=1, coef=0.914, ncpts=None,
-                     first_gate_sysp=None, offset=0.0, doc=0):
+                     system_phase=None, nowrap=None, really_verbose=False,
+                     LP_solver='cylp', refl_field=None, phidp_field=None,
+                     kdp_field=None, unf_field=None, window_len=35, proc=1,
+                     coef=0.914, ncpts=None, first_gate_sysp=None, offset=0.0,
+                     doc=0):
     """
     Phase process using a LP method [1] using Py-ART's Gatefilter.
     Parameters
@@ -1322,8 +1376,9 @@ def phase_proc_lp_gf(radar, gatefilter=None, debug=False, self_const=60000.0,
 
     return proc_ph, sob_kdp
 
+
 def get_phidp_unf_gf(radar, gatefilter, debug=False, ncpts=2, sys_phase=None,
-                  nowrap=None, phidp_field=None, first_gate_sysp=None):
+                     nowrap=None, phidp_field=None, first_gate_sysp=None):
     """
     Get Unfolded Phi differential phase in areas not gatefiltered
     Parameters
@@ -1369,7 +1424,7 @@ def get_phidp_unf_gf(radar, gatefilter, debug=False, ncpts=2, sys_phase=None,
                                        phidp_field=phidp_field,
                                        first_gate=first_gate_sysp)
         if system_zero is None:
-            system_zero = -135 #HElp! no idea
+            system_zero = -135
     cordata = np.zeros(my_phidp.shape, dtype=float)
     all_non_meteo = gatefilter.gate_excluded
     for radial in range(my_phidp.shape[0]):
@@ -1430,6 +1485,7 @@ def get_phidp_unf_gf(radar, gatefilter, debug=False, ncpts=2, sys_phase=None,
         print("Exec time: ", time() - t)
     return cordata
 
+
 def det_sys_phase_gf(radar, gatefilter, phidp_field=None, first_gate=30.):
     """
     Determine the system phase.
@@ -1451,6 +1507,7 @@ def det_sys_phase_gf(radar, gatefilter, phidp_field=None, first_gate=30.):
     last_ray_idx = radar.sweep_end_ray_index['data'][0]
     is_meteo = gatefilter.gate_included[:, first_gate:]
     return _det_sys_phase_gf(phidp, last_ray_idx, is_meteo)
+
 
 def _det_sys_phase_gf(phidp, last_ray_idx, radar_meteo):
     """ Determine the system phase, see :py:func:`det_sys_phase`. """

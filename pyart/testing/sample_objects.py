@@ -217,9 +217,9 @@ def make_single_ray_radar():
     Return a PPI radar with a single ray taken from a ARM C-SAPR Radar
 
     Radar object returned has 'reflectivity_horizontal',
-    'norm_coherent_power', 'copol_coeff', 'dp_phase_shift', and 'diff_phase'
-    fields with no metadata but a 'data' key.  This radar is used for unit
-    tests in correct modules.
+    'norm_coherent_power', 'copol_coeff', 'dp_phase_shift', 'diff_phase', and
+    'differential_reflectivity' fields with no metadata but a 'data' key.
+    This radar is used for unit tests in correct modules.
 
     """
     radar = make_empty_ppi_radar(983, 1, 1)
