@@ -195,8 +195,12 @@ functionality is available of the following modules are installed.
   `GLPK <http://www.gnu.org/software/glpk/>`_ will also be required depending
   on which wrapper is used.
 
-* `Basemap <http://matplotlib.org/basemap/>`_. If installed the ability to 
-  plot grids on geographic maps is available.
+* `Cartopy <https://scitools.org.uk/cartopy/docs/latest/>`_. If installed,
+  the ability to plot grids on geographic maps is available.
+
+* `Basemap <http://matplotlib.org/basemap/>`_. If installed, also gives the
+  ability to plot grids on geographic maps, but Cartopy is recommended over
+  Basemap.
 
 * `wradlib <http://docs.wradlib.org/en/latest/>`_.  Needed to calculate the texture
   of a differential phase field.

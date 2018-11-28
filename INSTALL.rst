@@ -43,7 +43,9 @@ __ http://trmm-fc.gsfc.nasa.gov/trmm_gv/software/rsl/
   `PyGLPK <http://tfinley.net/software/pyglpk/>`_ or
   `CVXOPT <http://cvxopt.org/>`_ and their dependencies.
 
-* `Basemap <http://matplotlib.org/basemap/>`_ or `Cartopy <https://scitools.org.uk/cartopy/docs/latest/>`_
+* `Cartopy <https://scitools.org.uk/cartopy/docs/latest/>`_ or
+* `Basemap <http://matplotlib.org/basemap/>`_ But Cartopy is recommended as
+  basemap will no longer have support.
 
 * pyproj__
 
@@ -95,6 +97,12 @@ in-place.
 ::
 
     $ python setup.py build_ext -i
+
+You can also install Py-ART in development mode by using
+
+::
+
+    $ pip install -e .
 
 Frequently asked questions
 ==========================
