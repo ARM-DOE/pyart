@@ -24,6 +24,7 @@ Plotting grid data
 .. autosummary::
     :toctree: generated/
 
+    GridMapDisplay
     GridMapDisplayBasemap
 
 """
@@ -32,6 +33,7 @@ from .radardisplay import RadarDisplay
 from . import cm
 from . import cm_colorblind
 from .radardisplay_airborne import AirborneRadarDisplay
+from .gridmapdisplay import GridMapDisplay
 from .gridmapdisplay_basemap import GridMapDisplayBasemap
 from .radarmapdisplay import RadarMapDisplay
 from .radarmapdisplay_basemap import RadarMapDisplayBasemap
