@@ -16,7 +16,7 @@ Plotting radar data
     RadarDisplay
     RadarMapDisplay
     AirborneRadarDisplay
-    RadarMapDisplayCartopy
+    RadarMapDisplayBasemap
 
 Plotting grid data
 ==================
@@ -24,7 +24,7 @@ Plotting grid data
 .. autosummary::
     :toctree: generated/
 
-    GridMapDisplay
+    GridMapDisplayBasemap
 
 """
 
@@ -32,8 +32,8 @@ from .radardisplay import RadarDisplay
 from . import cm
 from . import cm_colorblind
 from .radardisplay_airborne import AirborneRadarDisplay
-from .gridmapdisplay import GridMapDisplay
+from .gridmapdisplay_basemap import GridMapDisplayBasemap
 from .radarmapdisplay import RadarMapDisplay
-from .radarmapdisplay_cartopy import RadarMapDisplayCartopy
+from .radarmapdisplay_basemap import RadarMapDisplayBasemap
 
 __all__ = [s for s in dir() if not s.startswith('_')]

@@ -1,16 +1,18 @@
 """
-pyart.graph.radarmapdisplay
-===========================
+pyart.graph.radarmapdisplay_basemap
+===================================
 
-Class for creating plots on a geographic map using a Radar object.
+Class for creating plots on a geographic map using a Radar object and Basemap.
 
 .. autosummary::
     :toctree: generated/
     :template: dev_template.rst
 
-    RadarMapDisplay
+    RadarMapDisplayBasemap
 
 """
+
+import warnings
 
 import numpy as np
 try:
@@ -24,12 +26,12 @@ from .common import parse_ax_fig, parse_vmin_vmax, parse_cmap
 from ..exceptions import MissingOptionalDependency
 
 
-class RadarMapDisplay(RadarDisplay):
+class RadarMapDisplayBasemap(RadarDisplay):
     """
     A display object for creating plots on a geographic map from data in a
     Radar object.
 
-    This class is still a work in progress.  Some functionality may not work
+    This class is still a work in progress. Some functionality may not work
     correctly. Please report any problems to the Py-ART GitHub Issue Tracker.
 
     Parameters
@@ -79,8 +81,13 @@ class RadarMapDisplay(RadarDisplay):
         # check that basemap is available
         if not _BASEMAP_AVAILABLE:
             raise MissingOptionalDependency(
-                "Basemap is required to use RadarMapDisplay but is not " +
-                "installed")
+                "Basemap is required to use RadarMapDisplayBasemap but is not "
+                + "installed")
+
+        warnings.warn("RadarMapDisplayBasemap is deprecated in favor of "
+                      + "RadarMapDisplay. Basemap is still optional to use, "
+                      + "but there will be no support if an error appears.",
+                      DeprecationWarning)
 
         # initalize the base class
         RadarDisplay.__init__(self, radar, shift=shift)

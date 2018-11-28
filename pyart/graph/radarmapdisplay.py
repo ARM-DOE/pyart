@@ -1,6 +1,6 @@
 """
-pyart.graph.radarmapdisplay_cartopy
-===================================
+pyart.graph.radarmapdisplay
+===========================
 
 Class for creating plots on a geographic map using a Radar object using Cartopy
 for drawing maps.
@@ -9,7 +9,7 @@ for drawing maps.
     :toctree: generated/
     :template: dev_template.rst
 
-    RadarMapDisplayCartopy
+    RadarMapDisplay
 
 """
 
@@ -19,13 +19,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 try:
     import cartopy
-
-    # Temporary fix for Cartopy issue #1120.
-    from matplotlib.axes import Axes
-    from cartopy.mpl.geoaxes import GeoAxes
-    if hasattr(GeoAxes, '_pcolormesh_patched'):
-        GeoAxes._pcolormesh_patched = Axes.pcolormesh
-
     _CARTOPY_AVAILABLE = True
 except ImportError:
     _CARTOPY_AVAILABLE = False
@@ -40,12 +33,13 @@ from .radardisplay import RadarDisplay
 from .common import parse_ax_fig, parse_vmin_vmax, parse_cmap
 from ..exceptions import MissingOptionalDependency
 
-class RadarMapDisplayCartopy(RadarDisplay):
+
+class RadarMapDisplay(RadarDisplay):
     """
     A display object for creating plots on a geographic map from data in a
     Radar object.
 
-    This class is still a work in progress.  Some functionality may not work
+    This class is still a work in progress. Some functionality may not work
     correctly. Please report any problems to the Py-ART GitHub Issue Tracker.
 
     Parameters
@@ -84,6 +78,7 @@ class RadarMapDisplayCartopy(RadarDisplay):
     grid_projection : cartopy.crs
         AzimuthalEquidistant cartopy projection centered on radar.
         Used to transform points into map projection
+
     """
 
     def __init__(self, radar, shift=(0.0, 0.0), grid_projection=None):
@@ -91,7 +86,7 @@ class RadarMapDisplayCartopy(RadarDisplay):
         # check that cartopy is available
         if not _CARTOPY_AVAILABLE:
             raise MissingOptionalDependency(
-                "Cartopy is required to use RadarMapDisplayCartopy but is " +
+                "Cartopy is required to use RadarMapDisplay but is " +
                 "not installed")
 
         # initalize the base class
@@ -102,8 +97,8 @@ class RadarMapDisplayCartopy(RadarDisplay):
             lat_0 = self.loc[0]
             lon_0 = self.loc[1]
             grid_projection = cartopy.crs.AzimuthalEquidistant(
-                                                    central_longitude=lon_0,
-                                                    central_latitude=lat_0)
+                central_longitude=lon_0, central_latitude=lat_0)
+
         elif not isinstance(grid_projection, cartopy.crs.Projection):
             raise TypeError("grid_projection keyword must " +
                             "be a cartopy.crs object")
@@ -267,8 +262,9 @@ class RadarMapDisplayCartopy(RadarDisplay):
                 # set map projection to LambertConformal if none is specified
                 projection = cartopy.crs.LambertConformal(
                     central_longitude=lon_0, central_latitude=lat_0)
-                warnings.warn("No projection was defined for the axes." + 
-                              " Overridding defined axes and using default axes.",
+                warnings.warn("No projection was defined for the axes."
+                              + " Overridding defined axes and using default "
+                              + "axes.",
                               UserWarning)
             ax = plt.axes(projection=projection)
 
@@ -392,9 +388,8 @@ class RadarMapDisplayCartopy(RadarDisplay):
             # the "plt.annotate call" does not have a "transform=" keyword,
             # so for this one we transform the coordinates with a Cartopy call.
             x_text, y_text = self.ax.projection.transform_point(
-                                            lon + lon_offset,
-                                            lat + lat_offset,
-                                            src_crs=kwargs['transform'])
+                lon + lon_offset, lat + lat_offset,
+                src_crs=kwargs['transform'])
             self.ax.annotate(label_text, xy=(x_text, y_text))
 
     def plot_line_geo(self, line_lons, line_lats, line_style='r-', **kwargs):
@@ -520,7 +515,7 @@ def lambert_yticks(ax, ticks):
 def _lambert_ticks(ax, ticks, tick_location, line_constructor, tick_extractor):
     """Get the tick locations and labels for a Lambert Conformal projection."""
     outline_patch = sgeom.LineString(
-                                ax.outline_patch.get_path().vertices.tolist())
+        ax.outline_patch.get_path().vertices.tolist())
     axis = find_side(outline_patch, tick_location)
     n_steps = 30
     extent = ax.get_extent(cartopy.crs.PlateCarree())
