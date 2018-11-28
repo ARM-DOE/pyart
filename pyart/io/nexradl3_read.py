@@ -20,7 +20,8 @@ from .nexrad_level3 import NEXRADLevel3File
 
 
 def read_nexrad_level3(filename, field_names=None, additional_metadata=None,
-                       file_field_names=False, exclude_fields=None, **kwargs):
+                       file_field_names=False, exclude_fields=None, 
+                       include_fields=None, **kwargs):
     """
     Read a NEXRAD Level 3 product.
 
@@ -52,7 +53,12 @@ def read_nexrad_level3(filename, field_names=None, additional_metadata=None,
         `additional_metadata`.
     exclude_fields : list or None, optional
         List of fields to exclude from the radar object. This is applied
-        after the `file_field_names` and `field_names` parameters.
+        after the `file_field_names` and `field_names` parameters. Set
+        to None to include all fields specified by include_fields.
+    include_fields : list or None, optional
+        List of fields to include from the radar object. This is applied
+        after the `file_field_names` and `field_names` parameters. Set
+        to None to include all fields not specified by exclude_fields.
 
     Returns
     -------
@@ -72,7 +78,7 @@ def read_nexrad_level3(filename, field_names=None, additional_metadata=None,
     # create metadata retrieval object
     filemetadata = FileMetadata('nexrad_level3', field_names,
                                 additional_metadata, file_field_names,
-                                exclude_fields)
+                                exclude_fields, include_fields)
 
     # open the file
     nfile = NEXRADLevel3File(prepare_for_read(filename))

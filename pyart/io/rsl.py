@@ -38,7 +38,7 @@ from ..exceptions import MissingOptionalDependency
 
 def read_rsl(filename, field_names=None, additional_metadata=None,
              file_field_names=False, exclude_fields=None,
-             delay_field_loading=False,
+             delay_field_loading=False, include_fields=None,
              radar_format=None, callid=None, skip_range_check=False):
     """
     Read a file supported by RSL
@@ -66,7 +66,12 @@ def read_rsl(filename, field_names=None, additional_metadata=None,
         `additional_metadata`.
     exclude_fields : list or None, optional
         List of fields to exclude from the radar object. This is applied
-        after the `file_field_names` and `field_names` parameters.
+        after the `file_field_names` and `field_names` parameters. Set
+        to None to include all fields specified by include_fields.
+    include_fields : list or None, optional
+        List of fields to include from the radar object. This is applied
+        after the `file_field_names` and `field_names` parameters. Set
+        to None to include all fields not specified by exclude_fields.
     delay_field_loading : bool
         True to delay loading of field data from the file until the 'data'
         key in a particular field dictionary is accessed.  In this case
@@ -97,7 +102,8 @@ def read_rsl(filename, field_names=None, additional_metadata=None,
 
     # create metadata retrieval object
     filemetadata = FileMetadata('rsl', field_names, additional_metadata,
-                                file_field_names, exclude_fields)
+                                file_field_names, exclude_fields, 
+                                include_fields)
 
     # read the file, determine common parameters
     fillvalue = get_fillvalue()

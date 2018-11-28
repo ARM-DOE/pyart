@@ -40,8 +40,8 @@ LIGHT_SPEED = 2.99792458e8  # speed of light in meters per second
 
 def read_gamic(filename, field_names=None, additional_metadata=None,
                file_field_names=False, exclude_fields=None,
-               valid_range_from_file=True, units_from_file=True,
-               pulse_width=None, **kwargs):
+               include_fields=None, valid_range_from_file=True,
+               units_from_file=True, pulse_width=None, **kwargs):
     """
     Read a GAMIC hdf5 file.
 
@@ -63,7 +63,12 @@ def read_gamic(filename, field_names=None, additional_metadata=None,
         `field_names` parameter to rename fields.
     exclude_fields : list or None, optional
         List of fields to exclude from the radar object. This is applied
-        after the `file_field_names` and `field_names` parameters.
+        after the `file_field_names` and `field_names` parameters. Set
+        to None to include all fields specified by include_fields.
+    include_fields : list or None, optional
+        List of fields to include from the radar object. This is applied
+        after the `file_field_names` and `field_names` parameters. Set
+        to None to include all fields not specified by exclude_fields.
     valid_range_from_file : bool, optional
         True to extract valid range (valid_min and valid_max) for all
         field from the file when they are present.  False will not extract
@@ -91,7 +96,8 @@ def read_gamic(filename, field_names=None, additional_metadata=None,
 
     # create metadata retrieval object
     filemetadata = FileMetadata('gamic', field_names, additional_metadata,
-                                file_field_names, exclude_fields)
+                                file_field_names, exclude_fields,
+                                include_fields)
 
     # Open HDF5 file and get handle
     gfile = GAMICFile(filename)

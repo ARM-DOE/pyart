@@ -43,7 +43,8 @@ D3R_FIELD_NAMES = {
 
 
 def read_d3r_gcpex_nc(filename, field_names=None, additional_metadata=None,
-                      file_field_names=False, exclude_fields=None, **kwargs):
+                      file_field_names=False, exclude_fields=None,
+                      include_fields=None, **kwargs):
     """
     Read a D3R GCPEX netCDF file.
 
@@ -70,7 +71,12 @@ def read_d3r_gcpex_nc(filename, field_names=None, additional_metadata=None,
         `additional_metadata`.
     exclude_fields : list or None, optional
         List of fields to exclude from the radar object. This is applied
-        after the `file_field_names` and `field_names` parameters.
+        after the `file_field_names` and `field_names` parameters. Set
+        to None to include all fields specified by include_fields.
+    include_fields : list or None, optional
+        List of fields to include from the radar object. This is applied
+        after the `file_field_names` and `field_names` parameters. Set
+        to None to include all fields not specified by exclude_fields.
 
     Returns
     -------
@@ -93,7 +99,8 @@ def read_d3r_gcpex_nc(filename, field_names=None, additional_metadata=None,
     if field_names is None:
         field_names = D3R_FIELD_NAMES
     filemetadata = FileMetadata('cfradial', field_names, additional_metadata,
-                                file_field_names, exclude_fields)
+                                file_field_names, exclude_fields,
+                                include_fields)
 
     # read the data
     ncobj = netCDF4.Dataset(filename)
@@ -197,6 +204,9 @@ def read_d3r_gcpex_nc(filename, field_names=None, additional_metadata=None,
         if field_name is None:
             if exclude_fields is not None and key in exclude_fields:
                 continue
+            if include_fields is not None:
+                if not key in include_fields:
+                    continue
             field_name = key
         fields[field_name] = _ncvar_to_dict(ncvars[key])
 

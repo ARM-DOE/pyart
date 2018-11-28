@@ -28,7 +28,7 @@ from .common import make_time_unit_str, _test_arguments
 
 def read_nexrad_cdm(filename, field_names=None, additional_metadata=None,
                     file_field_names=False, exclude_fields=None,
-                    station=None, **kwargs):
+                    include_fields=None, station=None, **kwargs):
     """
     Read a Common Data Model (CDM) NEXRAD Level 2 file.
 
@@ -59,7 +59,12 @@ def read_nexrad_cdm(filename, field_names=None, additional_metadata=None,
         `additional_metadata`.
     exclude_fields : list or None, optional
         List of fields to exclude from the radar object. This is applied
-        after the `file_field_names` and `field_names` parameters.
+        after the `file_field_names` and `field_names` parameters. Set
+        to None to include all fields specified by include_fields.
+    include_fields : list or None, optional
+        List of fields to include from the radar object. This is applied
+        after the `file_field_names` and `field_names` parameters. Set
+        to None to include all fields not specified by exclude_fields.
     station : str
         Four letter ICAO name of the NEXRAD station used to determine the
         location in the returned radar object.  This parameter is only
@@ -86,7 +91,7 @@ def read_nexrad_cdm(filename, field_names=None, additional_metadata=None,
     # create metadata retrieval object
     filemetadata = FileMetadata('nexrad_cdm', field_names,
                                 additional_metadata, file_field_names,
-                                exclude_fields)
+                                exclude_fields, include_fields)
 
     # open the file
     dataset = netCDF4.Dataset(filename)

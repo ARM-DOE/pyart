@@ -22,7 +22,7 @@ from .cfradial import _ncvar_to_dict, _create_ncvar
 from .common import _test_arguments
 
 
-def read_grid(filename, exclude_fields=None, **kwargs):
+def read_grid(filename, exclude_fields=None, include_fields=None, **kwargs):
     """
     Read a netCDF grid file produced by Py-ART.
 
@@ -34,8 +34,14 @@ def read_grid(filename, exclude_fields=None, **kwargs):
 
     Other Parameters
     ----------------
-    exclude_fields : list
-        A list of fields to exclude from the grid object.
+    exclude_fields : list or None, optional
+        List of fields to exclude from the radar object. This is applied
+        after the `file_field_names` and `field_names` parameters. Set
+        to None to include all fields specified by include_fields.
+    include_fields : list or None, optional
+        List of fields to include from the radar object. This is applied
+        after the `file_field_names` and `field_names` parameters. Set
+        to None to include all fields not specified by exclude_fields.
 
     Returns
     -------
@@ -95,6 +101,9 @@ def read_grid(filename, exclude_fields=None, **kwargs):
     for field in field_keys:
         if field in exclude_fields:
             continue
+        if include_fields is not None:
+            if field not in include_fields:
+                continue
         field_dic = _ncvar_to_dict(dset.variables[field])
         if field_dic['data'].shape == field_shape_with_time:
             field_dic['data'].shape = field_shape
