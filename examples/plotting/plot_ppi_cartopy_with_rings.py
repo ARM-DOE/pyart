@@ -36,16 +36,16 @@ display.plot_ppi_map('reflectivity_horizontal', 1, vmin=-20, vmax=20,
                      lon_0=radar.longitude['data'][0])
 
 # Plot range rings at 10, 20, 30, 40km
-display.plot_range_rings(10., line_style='k-')
-display.plot_range_rings(20., line_style='k--')
-display.plot_range_rings(30., line_style='k-')
-display.plot_range_rings(40., line_style='k--')
+display.plot_range_ring(10., line_style='k-')
+display.plot_range_ring(20., line_style='k--')
+display.plot_range_ring(30., line_style='k-')
+display.plot_range_ring(40., line_style='k--')
 
 # Plot cross hairs
-display.plot_line_xy(np.array([-40000.0, 40000.0]), np.array([0.0. 0.0]),
+display.plot_line_xy(np.array([-40000.0, 40000.0]), np.array([0.0, 0.0]),
                      line_style='k-')
 display.plot_line_xy(np.array([0.0, 0.0]), np.array([-20000.0, 200000.0]),
-                     line_stye='k-')
+                     line_style='k-')
 
 # Indicate the radar location with a point
 display.plot_point(radar.longitude['data'][0], radar.latitude['data'][0])
