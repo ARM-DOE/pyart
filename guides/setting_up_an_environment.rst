@@ -11,7 +11,7 @@ keep dependencies separate from one another that might conflict if you had
 them all in your root environment. For example, if you had all the dependencies
 for a Pandas environment and all the dependencies for a Py-ART environment in
 your root environment, there might be conflicts between channels and packages.
-So Anaconda allows you to create multiple environments to avoid this issue.
+So Anaconda allows you to create multiple environments to avoid these issues.
 
 To download and install `Anaconda <https://www.anaconda.com/download/#>`_.
 
@@ -31,7 +31,7 @@ times, to use the conda-forge channel instead. Conda-Forge is a community led
 collection of packages, and typically contains the most recent versions of the
 packages required for Py-ART. Also Py-ART is on Conda-Forge. Having packages in
 an environment, within the same channel, helps avoid conflict issues. To add
-conda-forge ass the priority channel, simply do::
+conda-forge as the priority channel, simply do::
 
         conda config --add channels conda-forge
 
@@ -55,12 +55,12 @@ To create an environment using this file, use the command::
 
         conda env create -f environment.yml
 
-This will then create an environment called pyart_env that call be activated
+This will then create an environment called pyart_env that can be activated
 by::
 
         source activate pyart_env
 
-or deactivated after user::
+or deactivated after use::
 
         source deactivate pyart_env
 
@@ -77,7 +77,8 @@ is by doing it from scratch using the conda create command. An example of this::
         cartopy scipy numpy matplotlib
 
 This will also create an environment called pyart_env that can be activate the
-same way, as mentioned above. Within the environment, run in the command line::
+same way, as mentioned above. To then run your coding editor within the
+environment, run in the command line::
 
         python
 
@@ -100,13 +101,13 @@ Adding Optional Dependencies with setting Paths
 
 There are other optional dependencies that can enhance the use of Py-ART. One,
 such package is `CyLP <https://github.com/jjhelmus/CyLP>`_. To get CyLP to work,
-installing of the package `coincbc <https://projects.coin-or.org/Cbc>`_.
-Simply::
+installing of the package `coincbc <https://projects.coin-or.org/Cbc>`_ is
+needed as a dependency for CyLP. Simply do::
 
         conda install -c conda-forge coincbc
 
-Within your pyart_env. After that though, the coincbc path needs to be exported
-so CyLP knows were to find it, during its install. To this::
+within your pyart_env. After that though, the coincbc path needs to be exported
+so CyLP knows where to find it during its install. To do this::
 
         export COIN_INSTALL_DIR=/Users/yourusername/youranacondadir/envs/pyart_env
 
@@ -116,8 +117,8 @@ or real example on a Linux machine::
 
 CyLP was actually adapted by Jonathan Helmus to be Python 3 compatible, so we
 will install a specific CyLP branch after doing the export path step above.
-GitHub repositories can actually be pip installed. So to install the CyLP
-version we want::
+GitHub repositories can actually be pip installed within your environment. So
+to install the CyLP version we want::
 
         pip install git+https://github.com/jjhelmus/CyLP.git@py3
 
