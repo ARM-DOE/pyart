@@ -16,10 +16,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pyart
 
-# read in the file, create a RadarMapDisplay object
+# read in the file, create a RadarMapDisplayBasemap object
 filename = 'nsaxsaprppiC1.a1.20140201.184802.nc'
 radar = pyart.io.read(filename)
-display = pyart.graph.RadarMapDisplay(radar)
+display = pyart.graph.RadarMapDisplayBasemap(radar)
 
 # plot the second tilt
 display.plot_ppi_map('reflectivity_horizontal', 1, vmin=-20, vmax=20,
