@@ -1,40 +1,32 @@
 """
-pyart.graph.radarmapdisplay
-===========================
+pyart.graph.radarmapdisplay_basemap
+===================================
 
-Class for creating plots on a geographic map using a Radar object using Cartopy
-for drawing maps.
+Class for creating plots on a geographic map using a Radar object and Basemap.
 
 .. autosummary::
     :toctree: generated/
     :template: dev_template.rst
 
-    RadarMapDisplay
+    RadarMapDisplayBasemap
 
 """
 
 import warnings
 
 import numpy as np
-import matplotlib.pyplot as plt
 try:
-    import cartopy
-    _CARTOPY_AVAILABLE = True
+    from mpl_toolkits.basemap import Basemap
+    _BASEMAP_AVAILABLE = True
 except ImportError:
-    _CARTOPY_AVAILABLE = False
-try:
-    import shapely.geometry as sgeom
-    from copy import copy
-    _LAMBERT_GRIDLINES = True
-except ImportError:
-    _LAMBERT_GRIDLINES = False
+    _BASEMAP_AVAILABLE = False
 
 from .radardisplay import RadarDisplay
 from .common import parse_ax_fig, parse_vmin_vmax, parse_cmap
 from ..exceptions import MissingOptionalDependency
 
 
-class RadarMapDisplay(RadarDisplay):
+class RadarMapDisplayBasemap(RadarDisplay):
     """
     A display object for creating plots on a geographic map from data in a
     Radar object.
@@ -75,58 +67,58 @@ class RadarMapDisplay(RadarDisplay):
         Elevations in degrees.
     fixed_angle : array
         Scan angle in degrees.
-    grid_projection : cartopy.crs
-        AzimuthalEquidistant cartopy projection centered on radar.
-        Used to transform points into map projection
+    proj : Proj
+        Object for performing cartographic transformations specific to the
+        geographic map plotted.
+    basemap : Basemap
+        Last plotted basemap, None when no basemap has been plotted.
+
 
     """
 
-    def __init__(self, radar, shift=(0.0, 0.0), grid_projection=None):
+    def __init__(self, radar, shift=(0.0, 0.0)):
         """ Initialize the object. """
-        # check that cartopy is available
-        if not _CARTOPY_AVAILABLE:
+        # check that basemap is available
+        if not _BASEMAP_AVAILABLE:
             raise MissingOptionalDependency(
-                "Cartopy is required to use RadarMapDisplay but is " +
-                "not installed")
+                "Basemap is required to use RadarMapDisplayBasemap but is not "
+                + "installed")
+
+        warnings.warn("RadarMapDisplayBasemap is deprecated in favor of "
+                      + "RadarMapDisplay. Basemap is still optional to use, "
+                      + "but there will be no support if an error appears.",
+                      DeprecationWarning)
 
         # initalize the base class
         RadarDisplay.__init__(self, radar, shift=shift)
 
-        # additional attributes needed for plotting on a cartopy map.
-        if grid_projection is None:
-            lat_0 = self.loc[0]
-            lon_0 = self.loc[1]
-            grid_projection = cartopy.crs.AzimuthalEquidistant(
-                central_longitude=lon_0, central_latitude=lat_0)
-
-        elif not isinstance(grid_projection, cartopy.crs.Projection):
-            raise TypeError("grid_projection keyword must " +
-                            "be a cartopy.crs object")
-        self.grid_projection = grid_projection
-        self.ax = None
+        # additional attributes needed for plotting on a basemap.
+        self.basemap = None
         self._x0 = None     # x axis radar location in map coords (meters)
         self._y0 = None     # y axis radar location in map coords (meters)
         return
 
-    def _check_ax(self):
-        """ Check that a GeoAxes object exists, raise ValueError if not """
-        if self.ax is None:
-            raise ValueError('no GeoAxes plotted')
+    def _check_basemap(self):
+        """ Check that basemap is not None, raise ValueError if it is. """
+        if self.basemap is None:
+            raise ValueError('no basemap plotted')
 
     def plot_ppi_map(
             self, field, sweep=0, mask_tuple=None,
             vmin=None, vmax=None, cmap=None, norm=None, mask_outside=False,
             title=None, title_flag=True,
             colorbar_flag=True, colorbar_label=None, ax=None, fig=None,
-            lat_lines=None, lon_lines=None, projection=None,
+            lat_lines=None, lon_lines=None,
+            projection='lcc', area_thresh=10000,
             min_lon=None, max_lon=None, min_lat=None, max_lat=None,
             width=None, height=None, lon_0=None, lat_0=None,
-            resolution='110m', shapefile=None, shapefile_kwargs=None,
-            edges=True, gatefilter=None,
-            filter_transitions=True, embelish=True, raster=False,
-            ticks=None, ticklabs=None, alpha=None):
+            resolution='h', shapefile=None, edges=True, gatefilter=None,
+            basemap=None, filter_transitions=True, embelish=True,
+            ticks=None, ticklabs=None, raster=False, alpha=None, **kwargs):
         """
         Plot a PPI volume sweep onto a geographic map.
+
+        Additional arguments are passed to Basemap.
 
         Parameters
         ----------
@@ -169,24 +161,29 @@ class RadarMapDisplay(RadarDisplay):
         ticks : array
             Colorbar custom tick label locations.
         ticklabs : array
-            Colorbar custom tick labels.
+                Colorbar custom tick labels.
         colorbar_label : str
             Colorbar label, None will use a default label generated from the
             field information.
-        ax : Cartopy GeoAxes instance
-            If None, create GeoAxes instance using other keyword info.
-            If provided, ax must have a Cartopy crs projection and projection
-            kwarg below is ignored.
+        ax : Axis
+            Axis to plot on. None will use the current axis.
         fig : Figure
             Figure to add the colorbar to. None will use the current figure.
         lat_lines, lon_lines : array or None
             Locations at which to draw latitude and longitude lines.
             None will use default values which are resonable for maps of
             North America.
-        projection : cartopy.crs class
-            Map projection supported by cartopy. Used for all subsequent calls
-            to the GeoAxes object generated. Defaults to LambertConformal
-            centered on radar.
+        projection : str
+            Map projection supported by basemap.  The use of cylindrical
+            projections (mill, merc, etc) is not recommended as they
+            exhibit large distortions at high latitudes.  Equal area
+            (aea, laea), conformal (lcc, tmerc, stere) or equidistant
+            projection (aeqd, cass) work well even at high latitudes.
+            The cylindrical equidistant projection (cyl) is not supported as
+            coordinate transformations cannot be performed.
+        area_thresh : float
+            Coastline or lake with an area smaller than area_thresh in
+            km^2 will not be plotted.
         min_lat, max_lat, min_lon, max_lon : float
             Latitude and longitude ranges for the map projection region in
             degrees.
@@ -196,14 +193,14 @@ class RadarMapDisplay(RadarDisplay):
             (min_lat, max_lat, min_lon, max_lon) should be specified.
             If neither set is specified then the map domain will be determined
             from the extend of the radar gate locations.
+        lon_0, lat_0 : float
+            Center of the map domain in degrees.  If the default, None is used
+            the latitude and longitude of the radar will be used.
         shapefile : str
-            Filename for a shapefile to add to map.
-        shapefile_kwargs : dict
-            Key word arguments used to format shapefile. Projection defaults
-            to lat lon (cartopy.crs.PlateCarree())
-        resolution : '10m', '50m', '110m'.
-            Resolution of NaturalEarthFeatures to use. See Cartopy
-            documentation for details.
+            Filename for a ESRI shapefile as background (untested).
+        resolution : 'c', 'l', 'i', 'h', or 'f'.
+            Resolution of boundary database to use. See Basemap documentation
+            for details.
         gatefilter : GateFilter
             GateFilter instance. None will result in no gatefilter mask being
             applied to data.
@@ -220,9 +217,11 @@ class RadarMapDisplay(RadarDisplay):
             in which the last gate in each ray and the entire last ray are not
             not plotted.
         embelish: bool
-            True by default. Set to False to supress drawing of coastlines
+            True by default. Set to false to supress drawing of coastlines
             etc.. Use for speedup when specifying shapefiles.
-            Note that lat lon labels only work with certain projections.
+        basemap: Basemap instance
+            If None, create basemap instance using other keyword info.
+            If not None, use the user-specifed basemap instance.
         raster : bool
             False by default.  Set to true to render the display as a raster
             rather than a vector in call to pcolormesh.  Saves time in plotting
@@ -242,8 +241,10 @@ class RadarMapDisplay(RadarDisplay):
             lat_lines = np.arange(30, 46, 1)
         if lon_lines is None:
             lon_lines = np.arange(-110, -75, 1)
-        lat_0 = self.loc[0]
-        lon_0 = self.loc[1]
+        if lat_0 is None:
+            lat_0 = self.loc[0]
+        if lon_0 is None:
+            lon_0 = self.loc[1]
 
         # get data for the plot
         data = self._get_data(
@@ -254,88 +255,60 @@ class RadarMapDisplay(RadarDisplay):
         if mask_outside:
             data = np.ma.masked_outside(data, vmin, vmax)
 
-        # initialize instance of GeoAxes if not provided
-        if hasattr(ax, 'projection'):
-            projection = ax.projection
-        else:
-            if projection is None:
-                # set map projection to LambertConformal if none is specified
-                projection = cartopy.crs.LambertConformal(
-                    central_longitude=lon_0, central_latitude=lat_0)
-                warnings.warn("No projection was defined for the axes."
-                              + " Overridding defined axes and using default "
-                              + "axes.",
-                              UserWarning)
-            ax = plt.axes(projection=projection)
+        # create the basemap if not provided
+        if type(basemap) != Basemap:
+            using_corners = (None not in [min_lon, min_lat, max_lon, max_lat])
+            if using_corners:
+                basemap = Basemap(
+                    llcrnrlon=min_lon, llcrnrlat=min_lat,
+                    urcrnrlon=max_lon, urcrnrlat=max_lat,
+                    lat_0=lat_0, lon_0=lon_0, projection=projection,
+                    area_thresh=area_thresh, resolution=resolution, ax=ax,
+                    **kwargs)
+            else:   # using width and height
+                # map domain determined from location of radar gates
+                if width is None:
+                    width = (x.max() - x.min()) * 1000.
+                if height is None:
+                    height = (y.max() - y.min()) * 1000.
+                basemap = Basemap(
+                    width=width, height=height, lon_0=lon_0, lat_0=lat_0,
+                    projection=projection, area_thresh=area_thresh,
+                    resolution=resolution, ax=ax, **kwargs)
 
-        if min_lon:
-            ax.set_extent([min_lon, max_lon, min_lat, max_lat],
-                          crs=cartopy.crs.PlateCarree())
-        elif width:
-            ax.set_extent([-width/2., width/2., -height/2., height/2.],
-                          crs=self.grid_projection)
-
-        # plot the data
-        if norm is not None:  # if norm is set do not override with vmin/vmax
-            vmin = vmax = None
-        pm = ax.pcolormesh(x * 1000., y * 1000., data, alpha=alpha,
-                           vmin=vmin, vmax=vmax, cmap=cmap,
-                           norm=norm, transform=self.grid_projection)
-
-        # plot as raster in vector graphics files
-        if raster:
-            pm.set_rasterized(True)
+        # The cylindrical equidistant projection does not support conversions
+        # from geographic (lon/lat) to map projection (x/y) coordinates and
+        # therefore cannot be used.
+        if basemap.projection == 'cyl':
+            raise ValueError(
+                'The cylindrical equidistant projection is not supported')
 
         # add embelishments
         if embelish is True:
-            # Create a feature for States/Admin 1 regions at 1:resolution
-            # from Natural Earth
-            states_provinces = cartopy.feature.NaturalEarthFeature(
-                category='cultural',
-                name='admin_1_states_provinces_lines',
-                scale=resolution,
-                facecolor='none')
-            ax.coastlines(resolution=resolution)
-            ax.add_feature(states_provinces, edgecolor='gray')
-
-            # labeling gridlines poses some difficulties depending on the
-            # projection, so we need some projection-spectific methods
-            if ax.projection in [cartopy.crs.PlateCarree(),
-                                 cartopy.crs.Mercator()]:
-                gl = ax.gridlines(xlocs=lon_lines, ylocs=lat_lines,
-                                  draw_labels=True)
-                gl.xlabels_top = False
-                gl.ylabels_right = False
-
-            elif isinstance(ax.projection, cartopy.crs.LambertConformal):
-                fig.canvas.draw()
-                ax.gridlines(xlocs=lon_lines, ylocs=lat_lines)
-
-                # Label the end-points of the gridlines using the custom
-                # tick makers:
-                ax.xaxis.set_major_formatter(
-                    cartopy.mpl.gridliner.LONGITUDE_FORMATTER)
-                ax.yaxis.set_major_formatter(
-                    cartopy.mpl.gridliner.LATITUDE_FORMATTER)
-                if _LAMBERT_GRIDLINES:
-                    lambert_xticks(ax, lon_lines)
-                    lambert_yticks(ax, lat_lines)
-            else:
-                ax.gridlines(xlocs=lon_lines, ylocs=lat_lines)
+            basemap.drawcoastlines(linewidth=1.25)
+            basemap.drawstates()
+            basemap.drawparallels(
+                lat_lines, labels=[True, False, False, False])
+            basemap.drawmeridians(
+                lon_lines, labels=[False, False, False, True])
+        self.basemap = basemap
+        self._x0, self._y0 = basemap(self.loc[1], self.loc[0])
 
         # plot the data and optionally the shape file
         # we need to convert the radar gate locations (x and y) which are in
-        # km to meters we also need to give the original projection of the
-        # data which is stored in self.grid_projection
+        # km to meters as well as add the map coordiate radar location
+        # which is given by self._x0, self._y0.
+        if norm is not None:  # if norm is set do not override with vmin/vmax
+            vmin = vmax = None
+        pm = basemap.pcolormesh(
+            self._x0 + x * 1000., self._y0 + y * 1000., data,
+            vmin=vmin, vmax=vmax, cmap=cmap, norm=norm, alpha=alpha)
+
+        if raster:
+            pm.set_rasterized(True)
 
         if shapefile is not None:
-            from cartopy.io.shapereader import Reader
-            if shapefile_kwargs is None:
-                shapefile_kwargs = {}
-            if 'crs' not in shapefile_kwargs:
-                shapefile_kwargs['crs'] = cartopy.crs.PlateCarree()
-            ax.add_geometries(Reader(shapefile).geometries(),
-                              **shapefile_kwargs)
+            basemap.readshapefile(shapefile, 'shapefile', ax=ax)
 
         if title_flag:
             self._set_title(field, sweep, title, ax)
@@ -348,8 +321,6 @@ class RadarMapDisplay(RadarDisplay):
             self.plot_colorbar(
                 mappable=pm, label=colorbar_label, field=field, fig=fig,
                 ax=ax, ticks=ticks, ticklabs=ticklabs)
-        # keep track of this GeoAxes object for later
-        self.ax = ax
         return
 
     def plot_point(self, lon, lat, symbol='ro', label_text=None,
@@ -357,7 +328,7 @@ class RadarMapDisplay(RadarDisplay):
         """
         Plot a point on the current map.
 
-        Additional arguments are passed to ax.plot.
+        Additional arguments are passed to basemap.plot.
 
         Parameters
         ----------
@@ -372,31 +343,28 @@ class RadarMapDisplay(RadarDisplay):
             Text to label symbol with.  If None no label will be added.
         label_offset : [float, float]
             Offset in lon, lat degrees for the bottom left corner of the label
-            text relative to the point. A value of None will use 0.01.
+            text relative to the point. A value of None will use 0.01 de
 
         """
-        self._check_ax()
+        self._check_basemap()
         lon_offset, lat_offset = label_offset
         if lon_offset is None:
             lon_offset = 0.01
         if lat_offset is None:
             lat_offset = 0.01
-        if 'transform' not in kwargs.keys():
-            kwargs['transform'] = cartopy.crs.PlateCarree()
-        self.ax.plot(lon, lat, symbol, **kwargs)
+        self.basemap.plot(lon, lat, symbol, latlon=True, **kwargs)
         if label_text is not None:
-            # the "plt.annotate call" does not have a "transform=" keyword,
-            # so for this one we transform the coordinates with a Cartopy call.
-            x_text, y_text = self.ax.projection.transform_point(
-                lon + lon_offset, lat + lat_offset,
-                src_crs=kwargs['transform'])
-            self.ax.annotate(label_text, xy=(x_text, y_text))
+            # basemap does not have a text method so we must determine
+            # the x and y points and plot them on the basemap's axis.
+            x_text, y_text = self.basemap(
+                lon + lon_offset, lat + lat_offset)
+            self.basemap.ax.text(x_text, y_text, label_text)
 
     def plot_line_geo(self, line_lons, line_lats, line_style='r-', **kwargs):
         """
         Plot a line segments on the current map given values in lat and lon.
 
-        Additional arguments are passed to ax.plot.
+        Additional arguments are passed to basemap.plot.
 
         Parameters
         ----------
@@ -408,16 +376,15 @@ class RadarMapDisplay(RadarDisplay):
             Matplotlib compatible string which specifies the line style.
 
         """
-        self._check_ax()
-        if 'transform' not in kwargs.keys():
-            kwargs['transform'] = cartopy.crs.PlateCarree()
-        self.ax.plot(line_lons, line_lats, line_style, **kwargs)
+        self._check_basemap()
+        self.basemap.plot(
+            line_lons, line_lats, line_style, latlon=True, **kwargs)
 
     def plot_line_xy(self, line_x, line_y, line_style='r-', **kwargs):
         """
         Plot a line segments on the current map given radar x, y values.
 
-        Additional arguments are passed to ax.plot.
+        Additional arguments are passed to basemap.plot.
 
         Parameters
         ----------
@@ -429,17 +396,16 @@ class RadarMapDisplay(RadarDisplay):
             Matplotlib compatible string which specifies the line style.
 
         """
-        self._check_ax()
-        if 'transform' not in kwargs.keys():
-            kwargs['transform'] = self.grid_projection
-        self.ax.plot(line_x, line_y, line_style, **kwargs)
+        self._check_basemap()
+        self.basemap.plot(self._x0 + line_x, self._y0 + line_y, line_style,
+                          latlon=False, **kwargs)
 
     def plot_range_ring(self, range_ring_location_km, npts=360,
                         line_style='k-', **kwargs):
         """
         Plot a single range ring on the map.
 
-        Additional arguments are passed to ax.plot.
+        Additional arguments are passed to basemap.plot.
 
         Parameters
         ----------
@@ -457,88 +423,8 @@ class RadarMapDisplay(RadarDisplay):
         if 'col' in kwargs:
             color = kwargs.pop('col')
             kwargs['c'] = color
-        if 'ax' in kwargs:
-            kwargs.pop('ax')
-        self._check_ax()
+        self._check_basemap()
         angle = np.linspace(0., 2.0 * np.pi, npts)
         xpts = range_ring_location_km * 1000. * np.sin(angle)
         ypts = range_ring_location_km * 1000. * np.cos(angle)
         self.plot_line_xy(xpts, ypts, line_style=line_style, **kwargs)
-
-
-# These methods are a hack to allow gridlines when the projection is lambert
-# http://nbviewer.jupyter.org/gist/ajdawson/dd536f786741e987ae4e
-
-def find_side(ls, side):
-    """
-    Given a shapely LineString which is assumed to be rectangular, return the
-    line corresponding to a given side of the rectangle.
-    """
-    minx, miny, maxx, maxy = ls.bounds
-    points = {'left': [(minx, miny), (minx, maxy)],
-              'right': [(maxx, miny), (maxx, maxy)],
-              'bottom': [(minx, miny), (maxx, miny)],
-              'top': [(minx, maxy), (maxx, maxy)]}
-    return sgeom.LineString(points[side])
-
-
-def lambert_xticks(ax, ticks):
-    """Draw ticks on the bottom x-axis of a Lambert Conformal projection."""
-    def te(xy):
-        return xy[0]
-
-    def lc(t, n, b):
-        return np.vstack((np.zeros(n) + t, np.linspace(b[2], b[3], n))).T
-
-    xticks, xticklabels = _lambert_ticks(ax, ticks, 'bottom', lc, te)
-    ax.xaxis.tick_bottom()
-    ax.set_xticks(xticks)
-    ax.set_xticklabels([ax.xaxis.get_major_formatter()(xtick) for
-                        xtick in xticklabels])
-
-
-def lambert_yticks(ax, ticks):
-    """Draw ticks on the left y-axis of a Lambert Conformal projection."""
-    def te(xy):
-        return xy[1]
-
-    def lc(t, n, b):
-        return np.vstack((np.linspace(b[0], b[1], n), np.zeros(n) + t)).T
-
-    yticks, yticklabels = _lambert_ticks(ax, ticks, 'left', lc, te)
-    ax.yaxis.tick_left()
-    ax.set_yticks(yticks)
-    ax.set_yticklabels([ax.yaxis.get_major_formatter()(ytick) for
-                        ytick in yticklabels])
-
-
-def _lambert_ticks(ax, ticks, tick_location, line_constructor, tick_extractor):
-    """Get the tick locations and labels for a Lambert Conformal projection."""
-    outline_patch = sgeom.LineString(
-        ax.outline_patch.get_path().vertices.tolist())
-    axis = find_side(outline_patch, tick_location)
-    n_steps = 30
-    extent = ax.get_extent(cartopy.crs.PlateCarree())
-    _ticks = []
-    for t in ticks:
-        xy = line_constructor(t, n_steps, extent)
-        proj_xyz = ax.projection.transform_points(cartopy.crs.Geodetic(),
-                                                  xy[:, 0], xy[:, 1])
-        xyt = proj_xyz[..., :2]
-        ls = sgeom.LineString(xyt.tolist())
-        locs = axis.intersection(ls)
-        if not locs:
-            tick = [None]
-        else:
-            tick = tick_extractor(locs.xy)
-        _ticks.append(tick[0])
-    # Remove ticks that aren't visible:
-    ticklabels = copy(ticks)
-    while True:
-        try:
-            index = _ticks.index(None)
-        except ValueError:
-            break
-        _ticks.pop(index)
-        ticklabels = np.delete(ticklabels, index)
-    return _ticks, ticklabels

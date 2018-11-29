@@ -1,6 +1,6 @@
 """
-pyart.graph.gridmapdisplay
-==========================
+pyart.graph.gridmapdisplay_basemap
+==================================
 
 A class for plotting grid objects with a basemap.
 
@@ -8,7 +8,7 @@ A class for plotting grid objects with a basemap.
     :toctree: generated/
     :template: dev_template.rst
 
-    GridMapDisplay
+    GridMapDisplayBasemap
 
 """
 
@@ -30,7 +30,7 @@ from ..exceptions import MissingOptionalDependency
 from ..core.transforms import _interpolate_axes_edges
 
 
-class GridMapDisplay(object):
+class GridMapDisplayBasemap(object):
     """
     A class for creating plots from a grid object on top of a Basemap.
 
@@ -65,11 +65,6 @@ class GridMapDisplay(object):
                 "Basemap is required to use GridMapDisplay but is not " +
                 "installed")
 
-        warnings.warn("GridMapDisplay will be switching to Cartopy in the "
-                      + "next Py-ART release 1.11.0. Basemap is still optional "
-                      + "to use in GridMapDisplayBasemap but there will be no "
-                      + "support if an error appears.",
-                      DeprecationWarning)
         # set attributes
         self.grid = grid
         self.debug = debug
