@@ -1,0 +1,14 @@
+# Basic environment for Py-ART.
+name: pyart_env
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.6
+  - numpy
+  - scipy
+  - matplotlib
+  - netcdf4
+  - wradlib
+  - cartopy
+  - arm_pyart
