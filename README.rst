@@ -79,8 +79,8 @@ Install
 
 The easiest method for installing Py-ART is to use the conda packages from
 the latest release.  To do this you must download and install 
-`Anaconda <http://continuum.io/downloads>`_ or 
-`Miniconda <http://continuum.io/downloads>`_.  
+`Anaconda <https://www.anaconda.com/download/#>`_ or 
+`Miniconda <https://conda.io/miniconda.html>`_.  
 Then use the following command in a terminal or command prompt to install
 the latest version of Py-ART::
 
@@ -162,9 +162,9 @@ The required dependencies to install Py-ART in addition to Python are:
 As well as a working C/C++ compiler.  A Fortran compiler is required for some
 optional modules. An easy method to install these dependencies is by using a 
 `Scientific Python distributions <http://scipy.org/install.html>`_.
-`Anaconda <https://store.continuum.io/cshop/anaconda/>`_ will install all of
+`Anaconda <https://www.anaconda.com/distribution/>`_ will install all of
 the above packages by default on Windows, Linux and Mac computers and is
-provided free of charge by Continuum Analytics.
+provided free of charge by Anaconda.
 
 
 Optional Dependences

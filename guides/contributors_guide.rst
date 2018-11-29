@@ -47,8 +47,8 @@ Install
 
 The easiest method for installing Py-ART is to use the conda packages from
 the latest release.  To do this you must download and install 
-`Anaconda <http://continuum.io/downloads>`_ or 
-`Miniconda <http://continuum.io/downloads>`_.  
+`Anaconda <https://www.anaconda.com/download/#>`_ or 
+`Miniconda <https://conda.io/miniconda.html>`_.  
 Then use the following command in a terminal or command prompt to install
 the latest version of Py-ART::
 
