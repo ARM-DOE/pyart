@@ -21,9 +21,9 @@ import glob
 import os
 import sys
 
-if sys.version_info[:2] == (3, 4):
+try:
     from netcdftime import utime
-else:
+except ImportError:
     from cftime import utime
 
 import numpy as np
