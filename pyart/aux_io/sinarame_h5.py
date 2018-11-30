@@ -19,7 +19,6 @@ from __future__ import print_function
 from datetime import datetime
 import glob
 import os
-import sys
 
 try:
     from netcdftime import utime
