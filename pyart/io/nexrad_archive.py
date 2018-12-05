@@ -138,6 +138,8 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
     vcp_pattern = nfile.get_vcp_pattern()
     if vcp_pattern is not None:
         metadata['vcp_pattern'] = vcp_pattern
+    if 'icao' in nfile.volume_header.keys():
+        metadata['instrument_name'] = nfile.volume_header['icao'].decode()
 
     # scan_type
     scan_type = 'ppi'
