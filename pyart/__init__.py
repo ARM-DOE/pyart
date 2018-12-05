@@ -78,16 +78,14 @@ else:
             import imp as _imp
             _imp.find_module('pytest')
     except (AttributeError, ImportError) as error:
-        good_test = False
         def _test(verbose=False):
             """
             This would invoke the Py-ART test suite, but pytest couldn't
             be imported so the test suite can not run.
             """
-            raise ImportError(
-                "Could not load pytest. Unit tests not available.")
+            raise ImportError("Could not load pytest. Unit tests not available."
+                              " To run unit tests, please install pytest.")
     else:
-        good_test = True
         def _test(verbose=False):
             """
             Invoke the Py-ART test suite.
@@ -101,9 +99,6 @@ else:
 
     # Do not use `test` as function name as this leads to a recursion problem
     # with the pytest test suite.
-    if good_test:
-        test = _test
-    else:
-        test = _test()
+    test = _test
     test_verbose = _functools.partial(test, verbose=True)
     test_verbose.__doc__ = test.__doc__
