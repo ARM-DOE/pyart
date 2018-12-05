@@ -43,7 +43,6 @@ install:
 
   # Install Py-ART dependecies
   - "conda install -y -q -c conda-forge numpy scipy matplotlib netcdf4 pytest pytest-cov cython"
-  - "if \"%PYTHON_VERSION%\"==\"2.7\" (conda install -y -q -c conda-forge basemap)"
 
   # Check that we have the expected version and architecture for Python
   # in the conda environment
