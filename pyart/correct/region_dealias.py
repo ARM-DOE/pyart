@@ -224,19 +224,14 @@ def dealias_region_based(
         # anchor unfolded velocities against reference velocity
         if ref_vdata is not None:
             sref = ref_vdata[sweep_slice]
-            #mean_diff = np.ma.mean(sref - scorr)
-            
-            #global_fold = round(mean_diff / nyquist_interval)
-            #if global_fold != 0:            
-            #    scorr += global_fold * nyquist_interval
 
             # Anchor specific regions against reference velocity
             # Do this by constraining cost function due to difference
             # from reference velocity and to 2D continuity
             new_interval_limits = np.linspace(scorr.min(), scorr.max(), 10)
             labels_corr, nfeatures_corr = _find_regions(
-                scorr, sfilter, new_interval_limits) 
-            
+                scorr, sfilter, new_interval_limits)
+
             bounds_list = [(x, y) for (x, y) in zip(-6*np.ones(nfeatures_corr),
                            5*np.ones(nfeatures_corr))]
             scorr_means = np.zeros(nfeatures_corr)
@@ -255,15 +250,15 @@ def dealias_region_based(
 
             nyq_adjustments = fmin_l_bfgs_b(
                 cost_function, np.zeros((nfeatures_corr)), disp=True,
-                fprime=gradient, bounds=bounds_list, maxiter=200, 
+                fprime=gradient, bounds=bounds_list, maxiter=200,
                 pgtol=nyquist_interval**2)
-            
+
             i = 0
             for reg in range(1, nfeatures_corr):
                 scorr[labels == reg] += (2*nyquist_vel[nsweep] *
                                          np.round(nyq_adjustments[0][i]))
                 i = i + 1
-    
+
     # fill_value from the velocity dictionary if present
     fill_value = radar.fields[vel_field].get('_FillValue', get_fillvalue())
 
@@ -449,9 +444,9 @@ def _cost_function(nyq_vector, vels_slice_means,
     for reg in range(nfeatures):
         # Deviance from sounding
         add_value = 0.1*(vels_slice_means[reg] +
-                     np.round(nyq_vector[i])*v_nyq_vel -
-                     svels_slice_means[reg])**2
-        
+                         np.round(nyq_vector[i])*v_nyq_vel -
+                         svels_slice_means[reg])**2
+
         # Region continuity
         vels_without_cur = np.delete(vels_slice_means, reg)
         diffs = np.square(vels_slice_means[reg]-vels_without_cur)
@@ -476,11 +471,12 @@ def _gradient(nyq_vector, vels_slice_means, svels_slice_means,
     gradient_vector = np.zeros(len(nyq_vector))
     i = 0
     for reg in range(nfeatures):
-        add_value = (vels_slice_means[reg] + np.round(nyq_vector[i])*v_nyq_vel -
+        add_value = (vels_slice_means[reg] +
+                     np.round(nyq_vector[i])*v_nyq_vel -
                      svels_slice_means[reg])
         if(np.isfinite(add_value)):
             gradient_vector[i] = 0.1*2*add_value*v_nyq_vel
- 
+
         # Regional continuity
         vels_without_cur = np.delete(vels_slice_means, reg)
         diffs = np.square(vels_slice_means[reg]-vels_without_cur)
@@ -491,7 +487,7 @@ def _gradient(nyq_vector, vels_slice_means, svels_slice_means,
 
         if(np.isfinite(add_value2)):
             gradient_vector[i] += 2*add_value2*v_nyq_vel
-            
+
         i = i + 1
 
     return gradient_vector
