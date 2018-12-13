@@ -224,6 +224,8 @@ def dealias_region_based(
         # anchor unfolded velocities against reference velocity
         if ref_vdata is not None:
             sref = ref_vdata[sweep_slice]
+            gfold = (sref-scorr).mean()/nyquist_interval
+            gfold = round(gfold)
 
             # Anchor specific regions against reference velocity
             # Do this by constraining cost function due to difference
@@ -242,20 +244,20 @@ def dealias_region_based(
 
             def cost_function(x):
                 return _cost_function(x, scorr_means, sref_means,
-                                      2*nyquist_vel[nsweep], nfeatures_corr)
+                                      nyquist_interval, nfeatures_corr)
 
             def gradient(x):
                 return _gradient(x, scorr_means, sref_means,
-                                 2*nyquist_vel[nsweep], nfeatures_corr)
+                                 nyquist_interval, nfeatures_corr)
 
             nyq_adjustments = fmin_l_bfgs_b(
-                cost_function, np.zeros((nfeatures_corr)), disp=True,
+                cost_function, gfold*np.ones((nfeatures_corr)), disp=True,
                 fprime=gradient, bounds=bounds_list, maxiter=200,
-                pgtol=nyquist_interval**2)
+                )
 
             i = 0
             for reg in range(1, nfeatures_corr):
-                scorr[labels == reg] += (2*nyquist_vel[nsweep] *
+                scorr[labels == reg] += (nyquist_interval *
                                          np.round(nyq_adjustments[0][i]))
                 i = i + 1
 
@@ -442,10 +444,11 @@ def _cost_function(nyq_vector, vels_slice_means,
     i = 0
 
     for reg in range(nfeatures):
+        add_value = 0
         # Deviance from sounding
-        add_value = 0.1*(vels_slice_means[reg] +
-                         np.round(nyq_vector[i])*v_nyq_vel -
-                         svels_slice_means[reg])**2
+        add_value = 1*(vels_slice_means[reg] +
+                       np.round(nyq_vector[i])*v_nyq_vel -
+                       svels_slice_means[reg])**2
 
         # Region continuity
         vels_without_cur = np.delete(vels_slice_means, reg)
@@ -455,7 +458,7 @@ def _cost_function(nyq_vector, vels_slice_means,
                                np.round(nyq_vector[i])*v_nyq_vel -
                                vels_without_cur[the_min])
         if(np.isfinite(add_value2)):
-            add_value += add_value2
+            add_value += .1*add_value2
 
         if(np.isfinite(add_value)):
             cost += add_value
@@ -475,7 +478,7 @@ def _gradient(nyq_vector, vels_slice_means, svels_slice_means,
                      np.round(nyq_vector[i])*v_nyq_vel -
                      svels_slice_means[reg])
         if(np.isfinite(add_value)):
-            gradient_vector[i] = 0.1*2*add_value*v_nyq_vel
+            gradient_vector[i] = 2*add_value*v_nyq_vel
 
         # Regional continuity
         vels_without_cur = np.delete(vels_slice_means, reg)
@@ -486,7 +489,7 @@ def _gradient(nyq_vector, vels_slice_means, svels_slice_means,
                       vels_without_cur[the_min])
 
         if(np.isfinite(add_value2)):
-            gradient_vector[i] += 2*add_value2*v_nyq_vel
+            gradient_vector[i] += 2*.1*add_value2*v_nyq_vel
 
         i = i + 1
 
