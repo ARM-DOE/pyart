@@ -162,7 +162,7 @@ def dealias_region_based(
     # perform dealiasing
     vdata = radar.fields[vel_field]['data'].view(np.ndarray)
     data = vdata.copy()     # dealiased velocities
-    mean_vel_last = np.nan
+
     # loop over sweeps
     for nsweep, sweep_slice in enumerate(radar.iter_slice()):
 
@@ -457,10 +457,10 @@ def _cost_function(nyq_vector, vels_slice_means,
         add_value2 = np.square(vels_slice_means[reg] +
                                np.round(nyq_vector[i])*v_nyq_vel -
                                vels_without_cur[the_min])
-        if(np.isfinite(add_value2)):
+        if np.isfinite(add_value2):
             add_value += .1*add_value2
 
-        if(np.isfinite(add_value)):
+        if np.isfinite(add_value):
             cost += add_value
         i = i + 1
 
@@ -477,7 +477,7 @@ def _gradient(nyq_vector, vels_slice_means, svels_slice_means,
         add_value = (vels_slice_means[reg] +
                      np.round(nyq_vector[i])*v_nyq_vel -
                      svels_slice_means[reg])
-        if(np.isfinite(add_value)):
+        if np.isfinite(add_value):
             gradient_vector[i] = 2*add_value*v_nyq_vel
 
         # Regional continuity
@@ -488,7 +488,7 @@ def _gradient(nyq_vector, vels_slice_means, svels_slice_means,
                       np.round(nyq_vector[i])*v_nyq_vel -
                       vels_without_cur[the_min])
 
-        if(np.isfinite(add_value2)):
+        if np.isfinite(add_value2):
             gradient_vector[i] += 2*.1*add_value2*v_nyq_vel
 
         i = i + 1
