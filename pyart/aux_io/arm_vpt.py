@@ -18,7 +18,8 @@ from ..core.radar import Radar
 
 
 def read_kazr(filename, field_names=None, additional_metadata=None,
-              file_field_names=False, exclude_fields=None):
+              file_field_names=False, exclude_fields=None,
+              include_fields=None):
     """
     Read K-band ARM Zenith Radar (KAZR) NetCDF ingest data.
 
@@ -40,7 +41,12 @@ def read_kazr(filename, field_names=None, additional_metadata=None,
         `field_names` parameter to rename fields.
     exclude_fields : list or None, optional
         List of fields to exclude from the radar object. This is applied
-        after the `file_field_names` and `field_names` parameters.
+        after the `file_field_names` and `field_names` parameters. Set
+        to None to include all fields specified by include_fields.
+    include_fields : list or None, optional
+        List of fields to include from the radar object. This is applied
+        after the `file_field_names` and `field_names` parameters. Set
+        to None to include all fields not specified by exclude_fields.
 
     Returns
     -------
@@ -51,7 +57,7 @@ def read_kazr(filename, field_names=None, additional_metadata=None,
     # create metadata retrieval object
     filemetadata = FileMetadata(
         'cfradial', field_names, additional_metadata, file_field_names,
-        exclude_fields)
+        exclude_fields, include_fields)
 
     # read the data
     ncobj = netCDF4.Dataset(filename)
@@ -139,6 +145,8 @@ def read_kazr(filename, field_names=None, additional_metadata=None,
         field_name = filemetadata.get_field_name(key)
         if field_name is None:
             if exclude_fields is not None and key in exclude_fields:
+                continue
+            if include_fields is not None and not key in include_fields:
                 continue
             field_name = key
         fields[field_name] = cfradial._ncvar_to_dict(ncvars[key])

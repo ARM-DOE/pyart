@@ -24,12 +24,13 @@ import warnings
 import numpy as np
 
 try:
-    from mpl_toolkits.basemap import pyproj
+    import pyproj
     _PYPROJ_AVAILABLE = True
 except ImportError:
     _PYPROJ_AVAILABLE = False
 
 from ..config import get_metadata
+from ..exceptions import MissingOptionalDependency
 from ..lazydict import LazyLoadDict
 from .transforms import cartesian_to_geographic
 from .transforms import cartesian_vectors_to_geographic
@@ -171,7 +172,7 @@ class Grid(object):
                 'Proj instance can not be made for the pyart_aeqd projection')
         if not _PYPROJ_AVAILABLE:
             raise MissingOptionalDependency(
-                "Basemap is required to create a Proj instance but it " +
+                "PyProj is required to create a Proj instance but it " +
                 "is not installed")
         proj = pyproj.Proj(projparams)
         return proj

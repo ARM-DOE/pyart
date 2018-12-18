@@ -65,6 +65,11 @@ class GridMapDisplay(object):
                 "Basemap is required to use GridMapDisplay but is not " +
                 "installed")
 
+        warnings.warn("GridMapDisplay will be switching to Cartopy in the "
+                      + "next Py-ART release 1.11.0. Basemap is still optional "
+                      + "to use in GridMapDisplayBasemap but there will be no "
+                      + "support if an error appears.",
+                      DeprecationWarning)
         # set attributes
         self.grid = grid
         self.debug = debug

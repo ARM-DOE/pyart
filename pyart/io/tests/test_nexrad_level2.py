@@ -5,8 +5,9 @@ import bz2
 from io import BytesIO
 
 import numpy as np
-from numpy.testing import assert_array_equal, assert_raises
+from numpy.testing import assert_array_equal
 from numpy.testing import assert_almost_equal
+import pytest
 
 import pyart
 import pyart.io.nexrad_level2 as nexrad_level2
@@ -340,7 +341,7 @@ def test_bad_compression_header():
     corrupt_file.seek(0)
 
     # should raise IOError
-    assert_raises(IOError, nexrad_level2.NEXRADLevel2File, corrupt_file)
+    pytest.raises(IOError, nexrad_level2.NEXRADLevel2File, corrupt_file)
 
 
 def test_msg1_missing_location():
@@ -371,7 +372,7 @@ def test_broken_file():
     broken_file.seek(0)
 
     # should raise ValueError
-    assert_raises(ValueError, nexrad_level2.NEXRADLevel2File, broken_file)
+    pytest.raises(ValueError, nexrad_level2.NEXRADLevel2File, broken_file)
 
 
 def test_1ms_vel_message():

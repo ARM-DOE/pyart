@@ -12,11 +12,16 @@ A dictionary-like class supporting lazy loading of specified keys.
 
 """
 
-import collections
+try:
+    # Python 3
+    from collections.abc import MutableMapping
+except ImportError:
+    # Python 2.7, will be removed in next release after Py-ART Impressionism.
+    from collections import MutableMapping
 import itertools
 
 
-class LazyLoadDict(collections.MutableMapping):
+class LazyLoadDict(MutableMapping):
     """
     A dictionary-like class supporting lazy loading of specified keys.
 

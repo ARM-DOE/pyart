@@ -93,7 +93,7 @@ def parse_lon_lat(grid, lon, lat):
 
 def generate_colorbar_label(standard_name, units):
     """ Generate and return a label for a colorbar. """
-    return standard_name.replace('_', ' ') + ' (' + units + ')'
+    return str(standard_name).replace('_', ' ') + ' (' + units + ')'
 
 
 def generate_field_name(container, field):

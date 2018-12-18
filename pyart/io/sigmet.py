@@ -36,9 +36,9 @@ SPEED_OF_LIGHT = 299793000.0
 
 def read_sigmet(filename, field_names=None, additional_metadata=None,
                 file_field_names=False, exclude_fields=None,
-                time_ordered='none', full_xhdr=None, noaa_hh_hdr=None,
-                debug=False, ignore_xhdr=False, ignore_sweep_start_ms=None,
-                **kwargs):
+                include_fields=None, time_ordered='none', full_xhdr=None,
+                noaa_hh_hdr=None, debug=False, ignore_xhdr=False,
+                ignore_sweep_start_ms=None, **kwargs):
     """
     Read a Sigmet (IRIS) product file.
 
@@ -66,7 +66,12 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
         `additional_metadata`.
     exclude_fields : list or None, optional
         List of fields to exclude from the radar object. This is applied
-        after the `file_field_names` and `field_names` parameters.
+        after the `file_field_names` and `field_names` parameters. Set
+        to None to include all fields specified by include_fields.
+    include_fields : list or None, optional
+        List of fields to include from the radar object. This is applied
+        after the `file_field_names` and `field_names` parameters. Set
+        to None to include all fields not specified by exclude_fields.
     time_ordered : 'none', 'sequential', 'full', ...,  optional
         Parameter controlling if and how the rays are re-ordered by time.
         The default, 'none' keeps the rays ordered in the same manner as
@@ -120,7 +125,8 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
 
     # create metadata retrieval object
     filemetadata = FileMetadata('sigmet', field_names, additional_metadata,
-                                file_field_names, exclude_fields)
+                                file_field_names, exclude_fields,
+                                include_fields)
 
     # open the file
     sigmetfile = SigmetFile(prepare_for_read(filename), debug=debug)

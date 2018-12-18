@@ -73,6 +73,10 @@ MANIFEST
 *.patch
 *.diff
 
+# Unit test #
+#############
+.pytest_cache/
+
 # OS generated files #
 ######################
 .DS_Store*

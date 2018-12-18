@@ -3,7 +3,6 @@
 
 import matplotlib
 
-import pyart
 from pyart.graph import cm
 
 

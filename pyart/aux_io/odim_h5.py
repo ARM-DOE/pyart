@@ -40,14 +40,17 @@ ODIM_H5_FIELD_NAMES = {
     'KDP': 'specific_differential_phase',
     'SQI': 'normalized_coherent_power',
     'SNR': 'signal_to_noise_ratio',
-    'VRAD': 'velocity',
+    'VRAD': 'velocity', # radial velocity, marked for deprecation in ODIM HDF5 2.2
+    'VRADH': 'velocity', # radial velocity, horizontal polarisation
+    'VRADV': 'velocity', # radial velocity, vertical polarisation
     'WRAD': 'spectrum_width',
     'QIND': 'quality_index',
 }
 
 
 def read_odim_h5(filename, field_names=None, additional_metadata=None,
-                 file_field_names=False, exclude_fields=None, **kwargs):
+                 file_field_names=False, exclude_fields=None, 
+                 include_fields=None, **kwargs):
     """
     Read a ODIM_H5 file.
 
@@ -74,7 +77,12 @@ def read_odim_h5(filename, field_names=None, additional_metadata=None,
         `additional_metadata`.
     exclude_fields : list or None, optional
         List of fields to exclude from the radar object. This is applied
-        after the `file_field_names` and `field_names` parameters.
+        after the `file_field_names` and `field_names` parameters. Set
+        to None to include all fields specified by include_fields.
+    include_fields : list or None, optional
+        List of fields to include from the radar object. This is applied
+        after the `file_field_names` and `field_names` parameters. Set
+        to None to include all fields not specified by exclude_fields.
 
 
     Returns
@@ -103,7 +111,8 @@ def read_odim_h5(filename, field_names=None, additional_metadata=None,
     if field_names is None:
         field_names = ODIM_H5_FIELD_NAMES
     filemetadata = FileMetadata('odim_h5', field_names, additional_metadata,
-                                file_field_names, exclude_fields)
+                                file_field_names, exclude_fields,
+                                include_fields)
 
     # open the file
     try:

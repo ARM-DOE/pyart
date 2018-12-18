@@ -3,6 +3,7 @@
 import numpy as np
 from numpy.testing import assert_almost_equal
 from numpy.ma.core import MaskedArray
+import pytest
 
 import pyart
 
@@ -197,23 +198,24 @@ def test_nsweeps():
 # fields attribute #
 ####################
 
+fields = [
+    'differential_phase',
+    'cross_correlation_ratio',
+    'normalized_coherent_power',
+    'spectrum_width',
+    'reflectivity',
+    'linear_depolarization_ratio_h',
+    'differential_reflectivity',
+    'specific_differential_phase',
+    'velocity',
+    'linear_depolarization_ratio_v']
 
-def test_field_dics():
-    fields = [
-        'differential_phase',
-        'cross_correlation_ratio',
-        'normalized_coherent_power',
-        'spectrum_width',
-        'reflectivity',
-        'linear_depolarization_ratio_h',
-        'differential_reflectivity',
-        'specific_differential_phase',
-        'velocity',
-        'linear_depolarization_ratio_v']
-    for field in fields:
-        description = "field : %s, dictionary" % field
-        check_field_dic.description = description
-        yield check_field_dic, field
+
+@pytest.mark.parametrize("field", fields)
+def test_field_dics(field):
+    description = "field : %s, dictionary" % field
+    check_field_dic.description = description
+    check_field_dic(field)
 
 
 def check_field_dic(field):
@@ -227,68 +229,47 @@ def check_field_dic(field):
     assert 'coordinates' in radar.fields[field]
 
 
-def test_field_shapes():
-    fields = [
-        'differential_phase',
-        'cross_correlation_ratio',
-        'normalized_coherent_power',
-        'spectrum_width',
-        'reflectivity',
-        'linear_depolarization_ratio_h',
-        'differential_reflectivity',
-        'specific_differential_phase',
-        'velocity',
-        'linear_depolarization_ratio_v']
-    for field in fields:
-        description = "field : %s, shape" % field
-        check_field_shape.description = description
-        yield check_field_shape, field
+@pytest.mark.parametrize("field", fields)
+def test_field_shapes(field):
+    description = "field : %s, shape" % field
+    check_field_shape.description = description
+    check_field_shape(field)
 
 
 def check_field_shape(field):
     assert radar.fields[field]['data'].shape == (2, 800)
 
 
-def test_field_types():
-    fields = [
-        'differential_phase',
-        'cross_correlation_ratio',
-        'normalized_coherent_power',
-        'spectrum_width',
-        'reflectivity',
-        'linear_depolarization_ratio_h',
-        'differential_reflectivity',
-        'specific_differential_phase',
-        'velocity',
-        'linear_depolarization_ratio_v']
-    for field in fields:
-        description = "field : %s, type" % field
-        check_field_type.description = description
-        yield check_field_type, field, MaskedArray
+@pytest.mark.parametrize("field", fields)
+def test_field_types(field):
+    description = "field : %s, type" % field
+    check_field_type.description = description
+    check_field_type(field, MaskedArray)
 
 
 def check_field_type(field, field_type):
     assert type(radar.fields[field]['data']) is field_type
 
 
-def test_field_first_points():
+fields = {
+    'reflectivity': -32.0,
+    'specific_differential_phase': np.ma.masked,
+    'linear_depolarization_ratio_h': np.ma.masked,
+    'linear_depolarization_ratio_v': np.ma.masked,
+    'normalized_coherent_power': 0.0,
+    'differential_phase': 8.0,
+    'cross_correlation_ratio': 0.0,
+    'velocity': -14.0,
+    'spectrum_width': np.ma.masked,
+    'differential_reflectivity': np.ma.masked}
+@pytest.mark.parametrize(
+    "field, field_value", fields.items(), ids=list(fields.keys()))
+def test_field_first_points(field, field_value):
     # these values can be found using:
     # [round(radar.fields[f]['data'][0,0]) for f in radar.fields]
-    fields = {
-        'reflectivity': -32.0,
-        'specific_differential_phase': np.ma.masked,
-        'linear_depolarization_ratio_h': np.ma.masked,
-        'linear_depolarization_ratio_v': np.ma.masked,
-        'normalized_coherent_power': 0.0,
-        'differential_phase': 8.0,
-        'cross_correlation_ratio': 0.0,
-        'velocity': -14.0,
-        'spectrum_width': np.ma.masked,
-        'differential_reflectivity': np.ma.masked}
-    for field, field_value in fields.items():
-        description = "field : %s, first point" % field
-        check_field_first_point.description = description
-        yield check_field_first_point, field, field_value
+    description = "field : %s, first point" % field
+    check_field_first_point.description = description
+    check_field_first_point(field, field_value)
 
 
 def check_field_first_point(field, value):

@@ -64,7 +64,7 @@ def write_grid_geotiff(grid, filename, field, rgb=False, level=None,
         False - Output single-channel, float-valued GeoTIFF. For display,
                 likely will need an SLD file to provide a color table.
 
-    level: int or None, optional
+    level : int or None, optional
         Index for z-axis plane to output. None gives composite values
         (i.e., max in each vertical column).
     cmap : str or matplotlib.colors.Colormap object, optional

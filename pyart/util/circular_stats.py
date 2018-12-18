@@ -89,7 +89,7 @@ def angular_mean(angles):
     angles = np.asanyarray(angles)
     x = np.cos(angles)
     y = np.sin(angles)
-    return np.arctan2(y.mean(), x.mean())
+    return np.arctan2(np.mean(y), np.mean(x))
 
 
 def angular_std(angles):
@@ -110,7 +110,7 @@ def angular_std(angles):
     angles = np.asanyarray(angles)
     x = np.cos(angles)
     y = np.sin(angles)
-    norm = np.sqrt(x.mean()**2 + y.mean()**2)
+    norm = np.sqrt(np.mean(x)**2 + np.mean(y)**2)
     return np.sqrt(-2 * np.log(norm))
 
 

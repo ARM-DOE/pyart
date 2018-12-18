@@ -35,7 +35,8 @@ from .nexrad_interpolate import _fast_interpolate_scan
 
 def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
                         file_field_names=False, exclude_fields=None,
-                        delay_field_loading=False, station=None, scans=None,
+                        include_fields=None, delay_field_loading=False,
+                        station=None, scans=None,
                         linear_interp=True, **kwargs):
     """
     Read a NEXRAD Level 2 Archive file.
@@ -67,7 +68,12 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
         `additional_metadata`.
     exclude_fields : list or None, optional
         List of fields to exclude from the radar object. This is applied
-        after the `file_field_names` and `field_names` parameters.
+        after the `file_field_names` and `field_names` parameters. Set
+        to None to include all fields specified by include_fields.
+    include_fields : list or None, optional
+        List of fields to include from the radar object. This is applied
+        after the `file_field_names` and `field_names` parameters. Set
+        to None to include all fields not specified by exclude_fields.
     delay_field_loading : bool, optional
         True to delay loading of field data from the file until the 'data'
         key in a particular field dictionary is accessed.  In this case
@@ -106,7 +112,7 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
     # create metadata retrieval object
     filemetadata = FileMetadata('nexrad_archive', field_names,
                                 additional_metadata, file_field_names,
-                                exclude_fields)
+                                exclude_fields, include_fields)
 
     # open the file and retrieve scan information
     nfile = NEXRADLevel2File(prepare_for_read(filename))
@@ -132,6 +138,8 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
     vcp_pattern = nfile.get_vcp_pattern()
     if vcp_pattern is not None:
         metadata['vcp_pattern'] = vcp_pattern
+    if 'icao' in nfile.volume_header.keys():
+        metadata['instrument_name'] = nfile.volume_header['icao'].decode()
 
     # scan_type
     scan_type = 'ppi'

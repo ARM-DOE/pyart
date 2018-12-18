@@ -1,16 +1,41 @@
 .. -*- mode: rst -*-
-
-|Travis|_ |AppVeyor|_
-
-.. |Travis| image:: https://api.travis-ci.org/ARM-DOE/pyart.png?branch=master
-.. _Travis: https://travis-ci.org/ARM-DOE/pyart
-
-.. |AppVeyor| image:: https://ci.appveyor.com/api/projects/status/9do57qycha65j4v9/branch/master?svg=true
-.. _AppVeyor: https://ci.appveyor.com/project/JonathanHelmus/pyart-l711v/branch/master
-
-
 The Python ARM Radar Toolkit (Py-ART)
 =====================================
+
+|Travis| |AppVeyor|
+
+|AnacondaCloud| |CondaDownloads|
+
+|DocsDev| |DocsUsers| |DocsGuides|
+
+|ARM| |Tweet|
+
+.. |Travis| image:: https://api.travis-ci.org/ARM-DOE/pyart.png?branch=master
+    :target: https://travis-ci.org/ARM-DOE/pyart
+
+.. |AppVeyor| image:: https://ci.appveyor.com/api/projects/status/9do57qycha65j4v9/branch/master?svg=true
+    :target: https://ci.appveyor.com/project/JonathanHelmus/pyart-l711v/branch/master
+
+.. |AnacondaCloud| image:: https://anaconda.org/conda-forge/arm_pyart/badges/version.svg
+    :target: https://anaconda.org/conda-forge/arm_pyart
+
+.. |CondaDownloads| image:: https://anaconda.org/conda-forge/arm_pyart/badges/downloads.svg
+    :target: https://anaconda.org/conda-forge/arm_pyart/files
+
+.. |DocsDev| image:: https://img.shields.io/badge/docs-developers-4088b8.svg
+    :target: http://arm-doe.github.io/pyart-docs-travis/dev_reference/index.html
+
+.. |DocsUsers| image:: https://img.shields.io/badge/docs-users-4088b8.svg
+    :target: http://arm-doe.github.io/pyart-docs-travis/user_reference/index.html
+
+.. |DocsGuides| image:: https://img.shields.io/badge/docs-guides-4088b8.svg
+    :target: https://github.com/ARM-DOE/pyart/tree/master/guides/
+
+.. |ARM| image:: https://img.shields.io/badge/Sponsor-ARM-blue.svg?colorA=00c1de&colorB=00539c
+    :target: https://www.arm.gov/
+
+.. |Tweet| image:: https://img.shields.io/twitter/url/http/shields.io.svg?style=social
+    :target: https://twitter.com/Py_ART
 
 The Python ARM Radar Toolkit, Py-ART, is an open source Python module 
 containing a growing collection of weather radar algorithms and utilities
@@ -54,8 +79,8 @@ Install
 
 The easiest method for installing Py-ART is to use the conda packages from
 the latest release.  To do this you must download and install 
-`Anaconda <http://continuum.io/downloads>`_ or 
-`Miniconda <http://continuum.io/downloads>`_.  
+`Anaconda <https://www.anaconda.com/download/#>`_ or 
+`Miniconda <https://conda.io/miniconda.html>`_.  
 Then use the following command in a terminal or command prompt to install
 the latest version of Py-ART::
 
@@ -137,9 +162,9 @@ The required dependencies to install Py-ART in addition to Python are:
 As well as a working C/C++ compiler.  A Fortran compiler is required for some
 optional modules. An easy method to install these dependencies is by using a 
 `Scientific Python distributions <http://scipy.org/install.html>`_.
-`Anaconda <https://store.continuum.io/cshop/anaconda/>`_ will install all of
+`Anaconda <https://www.anaconda.com/distribution/>`_ will install all of
 the above packages by default on Windows, Linux and Mac computers and is
-provided free of charge by Continuum Analytics.
+provided free of charge by Anaconda.
 
 
 Optional Dependences
@@ -170,13 +195,17 @@ functionality is available of the following modules are installed.
   `GLPK <http://www.gnu.org/software/glpk/>`_ will also be required depending
   on which wrapper is used.
 
-* `Basemap <http://matplotlib.org/basemap/>`_. If installed the ability to 
-  plot grids on geographic maps is available.
+* `Cartopy <https://scitools.org.uk/cartopy/docs/latest/>`_. If installed,
+  the ability to plot grids on geographic maps is available.
+
+* `Basemap <http://matplotlib.org/basemap/>`_. If installed, also gives the
+  ability to plot grids on geographic maps, but Cartopy is recommended over
+  Basemap.
 
 * `wradlib <http://docs.wradlib.org/en/latest/>`_.  Needed to calculate the texture
   of a differential phase field.
 
-* `nose <http://nose.readthedocs.org/en/latest/>`_.  
+* `pytest <https://docs.pytest.org/en/latest/>`_.
   Required to run the Py-ART unit tests.
 
 * `gdal <https://pypi.python.org/pypi/GDAL/>`_.
@@ -208,7 +237,7 @@ Development
 ===========
 
 Py-ART is an open source, community software project.  Contributions to
-the package are welcomed from all users.  
+the package are welcomed from all users.
 
 Code
 ----
@@ -222,17 +251,18 @@ forking the repository is highly recommended.
 Contributing
 -------------
 
-We welcome contributions for all used of Py-ART provided the code can be
+We welcome contributions for all uses of Py-ART, provided the code can be
 distributed under the BSD 3-clause license.  A copy of this license is
-available in the **LICENSE.txt** file in this directory.  
+available in the **LICENSE.txt** file in this directory. For more on
+contributing, see the `contributor's guide. <https://github.com/ARM-DOE/pyart/blob/master/guides/contributors_guide.rst>`_
 
 Testing
 -------
 
 After installation, you can launch the test suite from outside the
-source directory (you will need to have nosetests installed)::
+source directory (you will need to have pytest installed)::
 
-   $ nosetests --exe pyart
+   $ pytest --pyargs pyart
 
-In-place installs can be tested using the `nosetest` command from within
+In-place installs can be tested using the `pytest` command from within
 the source directory.

@@ -57,8 +57,8 @@ def estimate_noise_hs74(spectrum, navg=1):
     nnoise = len(spectrum)  # default to all points in the spectrum as noise
     for npts in range(1, len(sorted_spectrum)+1):
         partial = sorted_spectrum[:npts]
-        mean = partial.mean()
-        var = partial.var()
+        mean = np.mean(partial)
+        var = np.var(partial)
         if var * navg < mean**2.:
             nnoise = npts
         else:
@@ -66,7 +66,7 @@ def estimate_noise_hs74(spectrum, navg=1):
             break
 
     noise_spectrum = sorted_spectrum[:nnoise]
-    mean = noise_spectrum.mean()
+    mean = np.mean(noise_spectrum)
     threshold = sorted_spectrum[nnoise-1]
-    var = noise_spectrum.var()
+    var = np.var(noise_spectrum)
     return mean, threshold, var, nnoise

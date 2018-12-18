@@ -224,30 +224,40 @@ def dealias_region_based(
         # anchor unfolded velocities against reference velocity
         if ref_vdata is not None:
             sref = ref_vdata[sweep_slice]
-            mean_diff = (sref - scorr).mean()
-            global_fold = round(mean_diff / nyquist_interval)
-            if global_fold != 0:
-                scorr += global_fold * nyquist_interval
+            gfold = (sref-scorr).mean()/nyquist_interval
+            gfold = round(gfold)
 
             # Anchor specific regions against reference velocity
-            bounds_list = [(x, y) for (x, y) in zip(-5*np.ones(nfeatures+1),
-                           5*np.ones(nfeatures+1))]
+            # Do this by constraining cost function due to difference
+            # from reference velocity and to 2D continuity
+            new_interval_limits = np.linspace(scorr.min(), scorr.max(), 10)
+            labels_corr, nfeatures_corr = _find_regions(
+                scorr, sfilter, new_interval_limits)
+
+            bounds_list = [(x, y) for (x, y) in zip(-6*np.ones(nfeatures_corr),
+                           5*np.ones(nfeatures_corr))]
+            scorr_means = np.zeros(nfeatures_corr)
+            sref_means = np.zeros(nfeatures_corr)
+            for reg in range(1, nfeatures_corr+1):
+                scorr_means[reg-1] = np.ma.mean(scorr[labels_corr == reg])
+                sref_means[reg-1] = np.ma.mean(sref[labels_corr == reg])
 
             def cost_function(x):
-                return _cost_function(x, labels, scorr, sref,
-                                      nyquist_vel[nsweep], nfeatures)
+                return _cost_function(x, scorr_means, sref_means,
+                                      nyquist_interval, nfeatures_corr)
 
             def gradient(x):
-                return _gradient(x, labels, scorr, sref,
-                                 nyquist_vel[nsweep], nfeatures)
+                return _gradient(x, scorr_means, sref_means,
+                                 nyquist_interval, nfeatures_corr)
 
             nyq_adjustments = fmin_l_bfgs_b(
-                cost_function, np.ones((nfeatures+1)), disp=True,
-                fprime=gradient, bounds=bounds_list, maxiter=40)
+                cost_function, gfold*np.ones((nfeatures_corr)), disp=True,
+                fprime=gradient, bounds=bounds_list, maxiter=200,
+                )
 
             i = 0
-            for reg in np.unique(labels):
-                scorr[labels == reg] += (nyquist_vel[nsweep] *
+            for reg in range(1, nfeatures_corr):
+                scorr[labels == reg] += (nyquist_interval *
                                          np.round(nyq_adjustments[0][i]))
                 i = i + 1
 
@@ -427,38 +437,60 @@ def _combine_regions(region_tracker, edge_tracker):
 
 # Minimize cost function that is sum of difference between regions and
 # sounding
-def _cost_function(nyq_vector, regions, vels_slice,
-                   svels_slice, v_nyq_vel, nfeatures):
+def _cost_function(nyq_vector, vels_slice_means,
+                   svels_slice_means, v_nyq_vel, nfeatures):
     """ Cost function for minimization in region based algorithm """
     cost = 0
     i = 0
 
     for reg in range(nfeatures):
-        add_value = np.abs(np.ma.mean(vels_slice[regions == reg]) +
-                           nyq_vector[i]*v_nyq_vel -
-                           np.ma.mean(svels_slice[regions == reg]))
+        add_value = 0
+        # Deviance from sounding
+        add_value = 1*(vels_slice_means[reg] +
+                       np.round(nyq_vector[i])*v_nyq_vel -
+                       svels_slice_means[reg])**2
 
-        if(np.isfinite(add_value)):
+        # Region continuity
+        vels_without_cur = np.delete(vels_slice_means, reg)
+        diffs = np.square(vels_slice_means[reg]-vels_without_cur)
+        the_min = np.argmin(diffs)
+        add_value2 = np.square(vels_slice_means[reg] +
+                               np.round(nyq_vector[i])*v_nyq_vel -
+                               vels_without_cur[the_min])
+        if np.isfinite(add_value2):
+            add_value += .1*add_value2
+
+        if np.isfinite(add_value):
             cost += add_value
         i = i + 1
 
     return cost
 
 
-def _gradient(nyq_vector, regions, vels_slice, svels_slice, v_nyq_vel,
-              nfeatures):
+def _gradient(nyq_vector, vels_slice_means, svels_slice_means,
+              v_nyq_vel, nfeatures):
     """ Gradient of cost function for minimization
         in region based algorithm """
     gradient_vector = np.zeros(len(nyq_vector))
     i = 0
     for reg in range(nfeatures):
-        add_value = (np.ma.mean(vels_slice) + nyq_vector[i]*v_nyq_vel -
-                     np.ma.mean(svels_slice))
+        add_value = (vels_slice_means[reg] +
+                     np.round(nyq_vector[i])*v_nyq_vel -
+                     svels_slice_means[reg])
+        if np.isfinite(add_value):
+            gradient_vector[i] = 2*add_value*v_nyq_vel
 
-        if(add_value > 0):
-            gradient_vector[i] = v_nyq_vel
-        elif(add_value < 0):
-            gradient_vector[i] = -v_nyq_vel
+        # Regional continuity
+        vels_without_cur = np.delete(vels_slice_means, reg)
+        diffs = np.square(vels_slice_means[reg]-vels_without_cur)
+        the_min = np.argmin(diffs)
+        add_value2 = (vels_slice_means[reg] +
+                      np.round(nyq_vector[i])*v_nyq_vel -
+                      vels_without_cur[the_min])
+
+        if np.isfinite(add_value2):
+            gradient_vector[i] += 2*.1*add_value2*v_nyq_vel
+
         i = i + 1
 
     return gradient_vector

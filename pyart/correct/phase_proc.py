@@ -18,6 +18,7 @@ Adapted by Scott Collis and Scott Giangrande, refactored by Jonathan Helmus
     det_process_range
     snr
     unwrap_masked
+    smooth_masked
     smooth_and_trim
     smooth_and_trim_scan
     noise
@@ -30,7 +31,10 @@ Adapted by Scott Collis and Scott Giangrande, refactored by Jonathan Helmus
     LP_solver_cylp_mp
     LP_solver_cylp
     phase_proc_lp
-
+    phase_proc_lp_gf
+    get_phidp_unf_gf
+    det_sys_phase_gf
+    _det_sys_phase_gf
 """
 
 from __future__ import print_function, division
@@ -43,6 +47,8 @@ from numpy import ma
 import scipy.ndimage
 
 from ..config import get_fillvalue, get_field_name, get_metadata
+from ..filters import GateFilter
+from ..util import rolling_window
 
 
 def det_sys_phase(radar, ncp_lev=0.4, rhohv_lev=0.6,
@@ -189,6 +195,60 @@ def snr(line, wl=11):
     return abs(signal) / noise
 
 
+def smooth_masked(raw_data, wind_len=11, min_valid=6, wind_type='median'):
+    """
+    smoothes the data using a rolling window.
+    data with less than n valid points is masked.
+    Parameters
+    ----------
+    raw_data : float masked array
+        The data to smooth.
+    window_len : float
+        Length of the moving window
+    min_valid : float
+        Minimum number of valid points for the smoothing to be valid
+    wind_type : str
+        type of window. Can be median or mean
+    Returns
+    -------
+    data_smooth : float masked array
+        smoothed data
+    """
+    valid_wind = ['median', 'mean']
+    if wind_type not in valid_wind:
+        raise ValueError(
+            "Window "+window+" is none of " + ' '.join(valid_windows))
+
+    # we want an odd window
+    if wind_len % 2 == 0:
+        wind_len += 1
+    half_wind = int((wind_len-1)/2)
+
+    # initialize smoothed data
+    nrays, nbins = np.shape(raw_data)
+    data_smooth = np.ma.zeros((nrays, nbins))
+    data_smooth[:] = np.ma.masked
+    data_smooth.set_fill_value(get_fillvalue())
+
+    mask = np.ma.getmaskarray(raw_data)
+    valid = np.logical_not(mask)
+
+    mask_wind = rolling_window(mask, wind_len)
+    valid_wind = np.logical_not(mask_wind).astype(int)
+    nvalid = np.sum(valid_wind, -1)
+
+    data_wind = rolling_window(raw_data, wind_len)
+
+    # check which gates are valid
+    ind_valid = np.logical_and(
+        nvalid >= min_valid, valid[:, half_wind:-half_wind]).nonzero()
+
+    data_smooth[ind_valid[0], ind_valid[1]+half_wind] = (
+        eval('np.ma.'+wind_type+'(data_wind, axis=-1)')[ind_valid])
+
+    return data_smooth
+
+
 def unwrap_masked(lon, centered=False, copy=True):
     """
     Unwrap a sequence of longitudes or headings in degrees.
@@ -275,7 +335,7 @@ def smooth_and_trim(x, window_len=11, window='hanning'):
         return x
     valid_windows = ['flat', 'hanning', 'hamming', 'bartlett', 'blackman',
                      'sg_smooth']
-    if not window in valid_windows:
+    if window not in valid_windows:
         raise ValueError("Window is on of " + ' '.join(valid_windows))
 
     s = np.r_[x[window_len - 1:0:-1], x, x[-1:-window_len:-1]]
@@ -330,7 +390,7 @@ def smooth_and_trim_scan(x, window_len=11, window='hanning'):
         return x
     valid_windows = ['flat', 'hanning', 'hamming', 'bartlett', 'blackman',
                      'sg_smooth']
-    if not window in valid_windows:
+    if window not in valid_windows:
         raise ValueError("Window is on of " + ' '.join(valid_windows))
 
     if window == 'flat':  # moving average
@@ -460,7 +520,7 @@ def get_phidp_unf(radar, ncp_lev=0.4, rhohv_lev=0.6, debug=False, ncpts=20,
             unwrapped[nowrap::] = end_unwrap
         else:
             unwrapped = unwrap_masked(x_ma, centered=False)
-        #end so no clutter expected
+        # end so no clutter expected
         system_max = unwrapped[np.where(np.logical_not(
             notmeteo))][-10:-1].mean() - system_zero
         unwrapped_fixed = np.zeros(len(x_ma), dtype=float)
@@ -822,7 +882,6 @@ def LP_solver_cylp_mp(A_Matrix, B_vectors, weights, really_verbose=False,
     x = model.addVariable('x', G.shape[1])
     model.addConstraint(G * x >= h)
     c = CyLPArray(np.empty(weights.shape[1]))
-    #c = CyLPArray(np.squeeze(weights[0]))
     model.objective = c * x
 
     chunksize = int(n_rays/proc)
@@ -917,7 +976,6 @@ def LP_solver_cylp(A_Matrix, B_vectors, weights, really_verbose=False):
     h = CyLPArray(np.empty(B_vectors.shape[1]))
     x = model.addVariable('x', G.shape[1])
     model.addConstraint(G * x >= h)
-    #c = CyLPArray(np.empty(weights.shape[1]))
     c = CyLPArray(np.squeeze(weights[0]))
     model.objective = c * x
 
@@ -932,7 +990,6 @@ def LP_solver_cylp(A_Matrix, B_vectors, weights, really_verbose=False):
         # set new B_vector values for actual ray
         s.setRowLowerArray(np.squeeze(np.asarray(B_vectors[raynum])))
         # set new weights (objectives) for actual ray
-        #s.setObjectiveArray(np.squeeze(np.asarray(weights[raynum])))
         # solve with dual method, it is faster
         s.dual()
         # extract primal solution
@@ -1128,3 +1185,341 @@ def phase_proc_lp(radar, offset, debug=False, self_const=60000.0,
     sob_kdp['_FillValue'] = get_fillvalue()
 
     return proc_ph, sob_kdp
+
+
+def phase_proc_lp_gf(radar, gatefilter=None, debug=False, self_const=60000.0,
+                     low_z=10.0, high_z=53.0, min_phidp=0.01, fzl=4000.0,
+                     system_phase=None, nowrap=None, really_verbose=False,
+                     LP_solver='cylp', refl_field=None, phidp_field=None,
+                     kdp_field=None, unf_field=None, window_len=35, proc=1,
+                     coef=0.914, ncpts=None, first_gate_sysp=None, offset=0.0,
+                     doc=0):
+    """
+    Phase process using a LP method [1] using Py-ART's Gatefilter.
+    Parameters
+    ----------
+    radar : Radar
+        Input radar.
+    gatefilter : Gatefilter, optional
+        Py-ART gatefilter object indicating where processing should be
+        carried out
+    debug : bool, optional
+        True to print debugging information.
+    self_const : float, optional
+        Self consistency factor.
+    low_z : float
+        Low limit for reflectivity. Reflectivity below this value is set to
+        this limit.
+    high_z : float
+        High limit for reflectivity.  Reflectivity above this value is set to
+        this limit.
+    fzl : float
+        Maximum altitude.
+    system_phase : float
+        System phase in degrees.
+    nowrap : int or None.
+        Gate number to begin phase unwrapping.  None will unwrap all phases.
+    really_verbose : bool
+        True to print LPX messaging. False to suppress.
+    LP_solver : 'pyglpk' or 'cvxopt', 'cylp', or 'cylp_mp'
+        Module to use to solve LP problem.
+    refl_field, ncp_field, rhv_field, phidp_field, kdp_field: str
+        Name of field in radar which contains the horizonal reflectivity,
+        normal coherent power, copolar coefficient, differential phase shift,
+        and differential phase. A value of None for any of these parameters
+        will use the default field name as defined in the Py-ART configuration
+        file.
+    unf_field : str
+        Name of field which will be added to the radar object which will
+        contain the unfolded differential phase.  Metadata for this field
+        will be taken from the phidp_field.  A value of None will use
+        the default field name as defined in the Py-ART configuration file.
+    window_len : int
+        Length of Sobel window applied to PhiDP field when prior to
+        calculating KDP.
+    proc : int
+        Number of worker processes, only used when `LP_solver` is 'cylp_mp'.
+    coef : float
+        Exponent linking Z to KDP in self consistency. kdp=(10**(0.1z))*coef
+    ncpts : int
+        Minimum number of points in a ray.  Regions within a ray smaller than
+        this or beginning before this gate number are excluded from unfolding.
+    offset : float
+        Reflectivity offset to add in dBz.
+    doc : int
+        Number of gates to "doc" off the end of a ray
+
+    Returns
+    -------
+    reproc_phase : dict
+        Field dictionary containing processed differential phase shifts.
+    sob_kdp : dict
+        Field dictionary containing recalculated differential phases.
+    References
+    ----------
+    [1] Giangrande, S.E., R. McGraw, and L. Lei. An Application of
+    Linear Programming to Polarimetric Radar Differential Phase Processing.
+    J. Atmos. and Oceanic Tech, 2013, 30, 1716.
+    """
+
+    # parse the field parameters
+    if refl_field is None:
+        refl_field = get_field_name('reflectivity')
+    if phidp_field is None:
+        phidp_field = get_field_name('differential_phase')
+    if kdp_field is None:
+        kdp_field = get_field_name('specific_differential_phase')
+    if unf_field is None:
+        unf_field = get_field_name('unfolded_differential_phase')
+
+    # if there is no gatefilter included, include all
+
+    if gatefilter is None:
+        gatefilter = GateFilter(radar)
+        gatefilter.include_all()
+
+    # prepare reflectivity field
+    refl = copy.deepcopy(radar.fields[refl_field]['data']) + offset
+    is_low_z = (refl) < low_z
+    is_high_z = (refl) > high_z
+    refl[np.where(is_high_z)] = high_z
+    refl[np.where(is_low_z)] = low_z
+    z_mod = refl
+
+    # unfold Phi_DP
+    if debug:
+        print('Unfolding')
+
+    my_unf = get_phidp_unf_gf(radar, gatefilter,
+                              debug=debug, ncpts=ncpts,
+                              sys_phase=system_phase, nowrap=nowrap,
+                              phidp_field=phidp_field,
+                              first_gate_sysp=first_gate_sysp)
+
+    my_new_ph = copy.deepcopy(radar.fields[phidp_field])
+    my_unf[:, -1] = my_unf[:, -2]
+    my_new_ph['data'] = my_unf
+    radar.fields.update({unf_field: my_new_ph})
+
+    phidp_mod = copy.deepcopy(radar.fields[unf_field]['data'])
+    phidp_neg = phidp_mod < min_phidp
+    phidp_mod[np.where(phidp_neg)] = min_phidp
+
+    # process
+    proc_ph = copy.deepcopy(radar.fields[phidp_field])
+    proc_ph['data'] = phidp_mod
+    St_Gorlv_differential_5pts = [-.2, -.1, 0, .1, .2]
+
+    for sweep in range(len(radar.sweep_start_ray_index['data'])):
+        if debug:
+            print("Doing ", sweep)
+
+        end_gate, start_ray, end_ray = det_process_range(
+            radar, sweep, fzl, doc=doc)
+
+        start_gate = 0
+
+        A_Matrix = construct_A_matrix(
+            len(radar.range['data'][start_gate:end_gate]),
+            St_Gorlv_differential_5pts)
+
+        B_vectors = construct_B_vectors(
+            phidp_mod[start_ray:end_ray, start_gate:end_gate],
+            z_mod[start_ray:end_ray, start_gate:end_gate],
+            St_Gorlv_differential_5pts, dweight=self_const,
+            coef=coef)
+
+        weights = np.ones(
+            phidp_mod[start_ray:end_ray, start_gate:end_gate].shape)
+
+        nw = np.bmat([weights, np.zeros(weights.shape)])
+
+        if LP_solver == 'pyglpk':
+            mysoln = LP_solver_pyglpk(A_Matrix, B_vectors, nw,
+                                      really_verbose=really_verbose)
+        elif LP_solver == 'cvxopt':
+            mysoln = LP_solver_cvxopt(A_Matrix, B_vectors, nw)
+        elif LP_solver == 'cylp':
+            mysoln = LP_solver_cylp(A_Matrix, B_vectors, nw,
+                                    really_verbose=really_verbose)
+        elif LP_solver == 'cylp_mp':
+            mysoln = LP_solver_cylp_mp(A_Matrix, B_vectors, nw,
+                                       really_verbose=really_verbose,
+                                       proc=proc)
+        else:
+            raise ValueError('unknown LP_solver:' + LP_solver)
+
+        proc_ph['data'][start_ray:end_ray, start_gate:end_gate] = mysoln
+
+    last_gates = proc_ph['data'][start_ray:end_ray, -16]
+    proc_ph['data'][start_ray:end_ray, -16:] = \
+        np.meshgrid(np.ones([16]), last_gates)[1]
+    proc_ph['valid_min'] = 0.0  # XXX is this correct?
+    proc_ph['valid_max'] = 400.0  # XXX is this correct?
+
+    # prepare output
+    sobel = 2. * np.arange(window_len) / (window_len - 1.0) - 1.0
+    sobel = sobel / (abs(sobel).sum())
+    sobel = sobel[::-1]
+    gate_spacing = (radar.range['data'][1] - radar.range['data'][0]) / 1000.
+    kdp = (scipy.ndimage.filters.convolve1d(proc_ph['data'], sobel, axis=1) /
+           ((window_len / 3.0) * 2.0 * gate_spacing))
+
+    # copy the KDP metadata from existing field or create anew
+    if kdp_field in radar.fields:
+        sob_kdp = copy.deepcopy(radar.fields[kdp_field])
+    else:
+        sob_kdp = get_metadata(kdp_field)
+
+    sob_kdp['data'] = kdp
+    sob_kdp['_FillValue'] = get_fillvalue()
+
+    return proc_ph, sob_kdp
+
+
+def get_phidp_unf_gf(radar, gatefilter, debug=False, ncpts=2, sys_phase=None,
+                     nowrap=None, phidp_field=None, first_gate_sysp=None):
+    """
+    Get Unfolded Phi differential phase in areas not gatefiltered
+    Parameters
+    ----------
+    radar : Radar
+        The input radar.
+    gatefilter : GateFilter
+        only apply on areas incuded in the gatefilter
+    debug : bool, optioanl
+        True to print debugging information, False to supress printing.
+    ncpts : int
+        Minimum number of points in a ray.  Regions within a ray smaller than
+        this or beginning before this gate number are excluded from
+        calculations.
+    doc : int or None.
+        Index of first gate not to include in field data, None include all.
+    sys_phase : float, optional
+        System phase overide.
+    nowrap : or None
+        Gate number where unwrapping should begin. `None` will unwrap all
+        gates.
+    refl_field ncp_field, rhv_field, phidp_field : str
+        Field names within the radar object which represent the horizonal
+        reflectivity, normal coherent power, the copolar coefficient, and the
+        differential phase shift. A value of None for any of these parameters
+        will use the default field name as defined in the Py-ART
+        configuration file.
+    Returns
+    -------
+    cordata : array
+        Unwrapped phi differential phase.
+    """
+    # parse the field parameters
+    if phidp_field is None:
+        phidp_field = get_field_name('differential_phase')
+
+    t = time()
+    my_phidp = radar.fields[phidp_field]['data']
+    if sys_phase is not None:
+        system_zero = sys_phase
+    else:
+        system_zero = det_sys_phase_gf(radar, gatefilter,
+                                       phidp_field=phidp_field,
+                                       first_gate=first_gate_sysp)
+        if system_zero is None:
+            system_zero = -135
+    cordata = np.zeros(my_phidp.shape, dtype=float)
+    all_non_meteo = gatefilter.gate_excluded
+    for radial in range(my_phidp.shape[0]):
+
+        # deterimine non meteo from gatefilter CHANGED
+        notmeteo = all_non_meteo[radial, :]
+        x_ma = ma.masked_where(notmeteo, my_phidp[radial, :])
+        try:
+            ma.notmasked_contiguous(x_ma)
+            for slc in ma.notmasked_contiguous(x_ma):
+                # so trying to get rid of clutter and small things that
+                # should not add to phidp anyway
+                if slc.stop - slc.start < ncpts or slc.start < ncpts:
+                    x_ma.mask[slc.start - 1:slc.stop + 1] = True
+            c = 0
+        except TypeError:  # non sequence, no valid regions
+            c = 1  # ie do nothing
+            x_ma.mask[:] = True
+        except AttributeError:
+            c = 1  # also do nothing
+            x_ma.mask = True
+        if 'nowrap' is not None:
+            # Start the unfolding a bit later in order to avoid false
+            # jumps based on clutter
+            unwrapped = copy.deepcopy(x_ma)
+            end_unwrap = unwrap_masked(x_ma[nowrap::], centered=False)
+            unwrapped[nowrap::] = end_unwrap
+        else:
+            unwrapped = unwrap_masked(x_ma, centered=False)
+
+        # end so no clutter expected
+        system_max = unwrapped[np.where(np.logical_not(
+            notmeteo))][-10:-1].mean() - system_zero
+        unwrapped_fixed = np.zeros(len(x_ma), dtype=float)
+        based = unwrapped-system_zero
+        based[0] = 0.0
+        notmeteo[0] = False
+        based[-1] = system_max
+        notmeteo[-1] = False
+        unwrapped_fixed[np.where(np.logical_not(based.mask))[0]] = \
+            based[np.where(np.logical_not(based.mask))[0]]
+        if len(based[np.where(np.logical_not(based.mask))[0]]) > 11:
+            unwrapped_fixed[np.where(based.mask)[0]] = \
+                np.interp(np.where(based.mask)[0],
+                          np.where(np.logical_not(based.mask))[0],
+                          smooth_and_trim(based[np.where(
+                              np.logical_not(based.mask))[0]]))
+        else:
+            unwrapped_fixed[np.where(based.mask)[0]] = \
+                np.interp(np.where(based.mask)[0],
+                          np.where(np.logical_not(based.mask))[0],
+                          based[np.where(np.logical_not(based.mask))[0]])
+        if c != 1:
+            cordata[radial, :] = unwrapped_fixed
+        else:
+            cordata[radial, :] = np.zeros(my_phidp.shape[1])
+    if debug:
+        print("Exec time: ", time() - t)
+    return cordata
+
+
+def det_sys_phase_gf(radar, gatefilter, phidp_field=None, first_gate=30.):
+    """
+    Determine the system phase.
+    Parameters
+    ----------
+    radar : Radar
+        Radar object for which to determine the system phase.
+    gatefilter : Gatefilter
+        Gatefilter object highlighting valid gates
+    Returns
+    -------
+    sys_phase : float or None
+        Estimate of the system phase.  None is not estimate can be made.
+    """
+    # parse the field parameters
+    if phidp_field is None:
+        phidp_field = get_field_name('differential_phase')
+    phidp = radar.fields[phidp_field]['data'][:, first_gate:]
+    last_ray_idx = radar.sweep_end_ray_index['data'][0]
+    is_meteo = gatefilter.gate_included[:, first_gate:]
+    return _det_sys_phase_gf(phidp, last_ray_idx, is_meteo)
+
+
+def _det_sys_phase_gf(phidp, last_ray_idx, radar_meteo):
+    """ Determine the system phase, see :py:func:`det_sys_phase`. """
+    good = False
+    phases = []
+    for radial in range(last_ray_idx + 1):
+        meteo = radar_meteo[radial, :]
+        mpts = np.where(meteo)
+        if len(mpts[0]) > 25:
+            good = True
+            msmth_phidp = smooth_and_trim(phidp[radial, mpts[0]], 9)
+            phases.append(msmth_phidp[0:25].min())
+    if not(good):
+        return None
+    return np.median(phases)

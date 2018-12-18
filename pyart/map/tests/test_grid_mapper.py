@@ -3,7 +3,8 @@
 from __future__ import print_function
 
 import numpy as np
-from numpy.testing import assert_almost_equal, assert_raises
+from numpy.testing import assert_almost_equal
+import pytest
 
 import pyart
 
@@ -160,20 +161,20 @@ def test_map_to_grid_tiny_grid():
 
 
 def test_map_to_grid_errors():
-    assert_raises(ValueError, pyart.map.map_to_grid, (None, ), (1, 1, 1),
+    pytest.raises(ValueError, pyart.map.map_to_grid, (None, ), (1, 1, 1),
                   ((-1, 1), (-1, 1), (-1, 1)),
                   weighting_function='foo')
-    assert_raises(ValueError, pyart.map.map_to_grid, (None, ), (1, 1, 1),
+    pytest.raises(ValueError, pyart.map.map_to_grid, (None, ), (1, 1, 1),
                   ((-1, 1), (-1, 1), (-1, 1)),
                   algorithm='foo')
     radar = pyart.testing.make_target_radar()
-    assert_raises(ValueError, pyart.map.map_to_grid, (radar, ), (1, 1, 1),
+    pytest.raises(ValueError, pyart.map.map_to_grid, (radar, ), (1, 1, 1),
                   ((-1, 1), (-1, 1), (-1, 1)),
                   roi_func='foo')
 
 
 def test_grid_from_radars_errors():
-    assert_raises(ValueError, pyart.map.grid_from_radars, (None, ), (1, 1, 1),
+    pytest.raises(ValueError, pyart.map.grid_from_radars, (None, ), (1, 1, 1),
                   ((-1, 1), (-1, 1), (-1, 1)), gridding_algo='foo')
 
 
