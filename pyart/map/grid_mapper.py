@@ -81,14 +81,14 @@ def grid_from_radars(radars, grid_shape, grid_limits,
     ----------
     Barnes S., 1964: A Technique for Maximizing Details in Numerical Weather
     Map Analysis. Journal of Applied Meteorology and Climatology, 3(4),
-    396–409.
+    396-409.
 
     Cressman G., 1959: An operational objective analysis system. Monthly
-    Weather Review, 87(10), 367–374.
+    Weather Review, 87(10), 367-374.
 
     Pauley, P. M. and X. Wu, 1990: The theoretical, discrete, and actual
     response of the Barnes objective analysis scheme for one- and
-    two-dimensional fields. Monthly Weather Review, 118, 1145–1164
+    two-dimensional fields. Monthly Weather Review, 118, 1145-1164
 
     """
     # make a tuple if passed a radar object as the first argument
