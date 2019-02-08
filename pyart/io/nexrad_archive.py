@@ -185,7 +185,18 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
     fixed_angle = filemetadata('fixed_angle')
     azimuth['data'] = nfile.get_azimuth_angles(scans)
     elevation['data'] = nfile.get_elevation_angles(scans).astype('float32')
-    fixed_angle['data'] = nfile.get_target_angles(scans)
+    fixed_agl = []
+    for i in nfile.get_target_angles(scans):
+        if i > 180:
+            i = i - 360.
+            warnings.warn("Fixed_angle(s) greater than 180 degrees present."
+                          + " Assuming angle to be negative so subtrating 360",
+                          UserWarning)
+        else: 
+            i = i
+        fixed_agl.append(i)
+    fixed_angles = np.array(fixed_agl, dtype='float32')
+    fixed_angle['data'] = fixed_angles
 
     # fields
     max_ngates = len(_range['data'])
