@@ -30,8 +30,8 @@ from ..retrieve import get_freq_band
 
 
 def calculate_attenuation_zphi(radar, doc=None, fzl=None, smooth_window_len=5,
-                               a_coef=None, beta=None, c=None, d=None,
-                               refl_field=None, phidp_field=None,
+                               gatefilter=None, a_coef=None, beta=None, c=None,
+                               d=None, refl_field=None, phidp_field=None,
                                zdr_field=None, temp_field=None,
                                iso0_field=None, spec_at_field=None,
                                pia_field=None, corr_refl_field=None,
@@ -54,6 +54,10 @@ def calculate_attenuation_zphi(radar, doc=None, fzl=None, smooth_window_len=5,
     fzl : float
         Freezing layer, gates above this point are not included in the
         correction.
+    gatefilter : GateFilter
+        The gates to exclude from the calculation. This, combined with
+        the gates above fzl, will be excluded from the correction. Set to
+        None to not use a gatefilter.
     smooth_window_len : int
         Size, in range bins, of the smoothing window
     a_coef : float
@@ -218,7 +222,12 @@ def calculate_attenuation_zphi(radar, doc=None, fzl=None, smooth_window_len=5,
         radar, fzl=fzl, doc=doc, min_temp=0, max_h_iso0=0., thickness=None,
         beamwidth=None, temp_field=temp_field, iso0_field=iso0_field,
         temp_ref=temp_ref)
-    mask = np.ma.getmaskarray(refl)
+
+    if(gatefilter is None):
+        mask = np.ma.getmaskarray(refl)
+    else
+        mask = gatefilter.gate_excluded
+        mask_fzl = np.logical_or(mask, mask_fzl)
 
     # prepare phidp: filter out values above freezing level and negative
     # makes sure phidp is monotonously increasing
@@ -333,6 +342,10 @@ def calculate_attenuation_philinear(
     fzl : float
         Freezing layer, gates above this point are not included in the
         correction.
+    gatefilter : GateFilter
+        The gates to exclude from the calculation. This, combined with
+        the gates above fzl, will be excluded from the correction. Set to
+        None to not use a gatefilter.
     pia_coef : float
         Coefficient in path integrated attenuation calculation
     pida_coeff : float
@@ -472,7 +485,12 @@ def calculate_attenuation_philinear(
         radar, fzl=fzl, doc=doc, min_temp=0, max_h_iso0=0., thickness=None,
         beamwidth=None, temp_field=temp_field, iso0_field=iso0_field,
         temp_ref=temp_ref)
-    mask = np.ma.getmaskarray(refl)
+
+    if(gatefilter is None):
+        mask = np.ma.getmaskarray(refl)
+    else
+        mask = gatefilter.gate_excluded
+        mask_fzl = np.logical_or(mask, mask_fzl)
 
     # prepare phidp: filter out values above freezing level and negative
     # makes sure phidp is monotonously increasing
