@@ -225,7 +225,7 @@ def calculate_attenuation_zphi(radar, doc=None, fzl=None, smooth_window_len=5,
 
     if(gatefilter is None):
         mask = np.ma.getmaskarray(refl)
-    else
+    else:
         mask = gatefilter.gate_excluded
         mask_fzl = np.logical_or(mask, mask_fzl)
 
@@ -287,29 +287,37 @@ def calculate_attenuation_zphi(radar, doc=None, fzl=None, smooth_window_len=5,
     # prepare output field dictionaries
     # for specific attenuation and corrected reflectivity
     spec_at = get_metadata(spec_at_field)
-    spec_at['data'] = np.ma.masked_where(mask, ah)
-    spec_at['_FillValue'] = get_fillvalue()
+    temp_array = np.ma.masked_where(mask, ah)
+    spec_at['data'] = temp_array
+    spec_at['_FillValue'] = temp_array.fill_value
 
+    pia_array = np.ma.masked_where(mask, pia)
     pia_dict = get_metadata(pia_field)
-    pia_dict['data'] = pia
+    pia_dict['data'] = pia_array
+    pia_dict['_FillValue'] = pia_array.fill_value
 
     cor_z = get_metadata(corr_refl_field)
-    cor_z['data'] = np.ma.masked_where(mask, pia + refl)
-    cor_z['_FillValue'] = get_fillvalue()
+    cor_z_array = np.ma.masked_where(mask, pia + refl)
+    cor_z['data'] = cor_z_array
+    cor_z['_FillValue'] = cor_z_array.fill_value
 
     # prepare output field dictionaries
     # for specific diff attenuation and corrected ZDR
     if zdr is not None:
+        sda = np.ma.masked_where(mask, adiff)
         spec_diff_at = get_metadata(spec_diff_at_field)
-        spec_diff_at['data'] = np.ma.masked_where(mask, adiff)
-        spec_diff_at['_FillValue'] = get_fillvalue()
-
+        spec_diff_at['data'] = sda
+        spec_diff_at['_FillValue'] = sda.fill_value
+        
+        pida_array = np.ma.masked_where(mask, pida)
         pida_dict = get_metadata(pida_field)
-        pida_dict['data'] = pida
+        pida_dict['data'] = pida_array
+        pida_dict['_FillValue'] = pida_array.fill_value
 
         cor_zdr = get_metadata(corr_zdr_field)
-        cor_zdr['data'] = np.ma.masked_where(mask, pida + zdr)
-        cor_zdr['_FillValue'] = get_fillvalue()
+        czdr = np.ma.masked_where(mask, pida + zdr)
+        cor_zdr['data'] = czdr
+        cor_zdr['_FillValue'] = czdr.fill_value
     else:
         spec_diff_at = None
         cor_zdr = None
@@ -319,9 +327,10 @@ def calculate_attenuation_zphi(radar, doc=None, fzl=None, smooth_window_len=5,
 
 
 def calculate_attenuation_philinear(
-        radar, doc=None, fzl=None, pia_coef=None, pida_coef=None,
-        refl_field=None, phidp_field=None, zdr_field=None, temp_field=None,
-        iso0_field=None, spec_at_field=None, pia_field=None,
+        radar, doc=None, fzl=None, pia_coef=None, gatefilter=None, 
+        pida_coef=None, refl_field=None, phidp_field=None, zdr_field=None, 
+        temp_field=None, iso0_field=None, spec_at_field=None, 
+        pia_field=None,
         corr_refl_field=None, spec_diff_at_field=None, pida_field=None,
         corr_zdr_field=None, temp_ref='temperature'):
     """
@@ -488,7 +497,7 @@ def calculate_attenuation_philinear(
 
     if(gatefilter is None):
         mask = np.ma.getmaskarray(refl)
-    else
+    else:
         mask = gatefilter.gate_excluded
         mask_fzl = np.logical_or(mask, mask_fzl)
 
@@ -503,13 +512,13 @@ def calculate_attenuation_philinear(
     # prepare output field dictionaries
     # for specific attenuation and corrected reflectivity
     spec_at = get_metadata(spec_at_field)
-    spec_at['data'] = np.ma.masked_where(mask, ah)
+    spec_at['data'] = np.ma.masked_where(mask, np.ma.array(ah))
 
     pia_dict = get_metadata(pia_field)
-    pia_dict['data'] = pia
+    pia_dict['data'] = np.ma.masked_where(mask, np.ma.array(pia))
 
     cor_z = get_metadata(corr_refl_field)
-    cor_z['data'] = np.ma.masked_where(mask, pia + refl)
+    cor_z['data'] = np.ma.masked_where(mask, np.ma.array(pia + refl))
 
     # prepare output field dictionaries
     # for specific diff attenuation and corrected ZDR
@@ -521,7 +530,7 @@ def calculate_attenuation_philinear(
         spec_diff_at['data'] = np.ma.masked_where(mask, adiff)
 
         pida_dict = get_metadata(pida_field)
-        pida_dict['data'] = pida
+        pida_dict['data'] = np.ma.masked_where(mask, pida)
 
         cor_zdr = get_metadata(corr_zdr_field)
         cor_zdr['data'] = np.ma.masked_where(mask, pida + zdr)
