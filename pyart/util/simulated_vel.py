@@ -53,12 +53,34 @@ def simulated_vel_from_profile(
     elevations = np.deg2rad(radar.elevation['data']).reshape(-1, 1)
     gate_altitudes = radar.gate_altitude['data']
 
+    if isinstance(gate_altitudes, np.ma.MaskedArray):
+        gate_altitudes = gate_altitudes.filled(np.nan)
+
     # prepare wind profile for interpolation
-    height = profile.height
+    if isinstance(profile.height, np.ma.MaskedArray):
+        height = profile.height.filled(np.nan)
+    else:
+        height = profile.height
+
+    height_is_not_nan = ~np.isnan(height)
     winds = np.empty((2, len(height)), dtype=np.float64)
-    winds[0] = profile.u_wind
-    winds[1] = profile.v_wind
-    wind_interp = interp1d(height, winds, kind=interp_kind, bounds_error=False)
+    if isinstance(profile.u_wind, np.ma.MaskedArray):
+        winds[0] = profile.u_wind.filled(np.nan)
+    else:
+        winds[0] = profile.u_wind
+    
+    if isinstance(profile.v_wind, np.ma.MaskedArray):
+        winds[1] = profile.v_wind.filled(np.nan)
+    else:
+        winds[1] = profile.v_wind
+    
+    wind_is_not_nan = np.logical_and(~np.isnan(winds[0]), ~np.isnan(winds[1]))
+    no_nans = np.logical_and(height_is_not_nan, wind_is_not_nan)
+    height = height[no_nans]
+    winds[0] = winds[0][no_nans]
+    winds[1] = winds[1][no_nans]
+    wind_interp = interp1d(
+        height, winds, kind=interp_kind, bounds_error=False)
 
     # interpolated wind speeds at all gates altitudes
     gate_winds = wind_interp(gate_altitudes)
