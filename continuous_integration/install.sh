@@ -23,7 +23,11 @@ source activate testenv
 pip install --upgrade pip
 
 # install coverage modules
-conda install -c conda-forge -q pytest-cov
+if [[ "$PYTHON_VERSION" == 3.4 ]]; then
+    conda install -c conda-forge -q "pytest-cov<2.6";
+else
+    conda install -c conda-forge -q pytest-cov;
+fi
 if [[ "$COVERALLS" == "true" ]]; then
     conda install -c conda-forge -q coveralls
 fi
