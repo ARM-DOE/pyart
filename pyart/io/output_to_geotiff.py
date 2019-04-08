@@ -29,7 +29,7 @@ except ImportError:
 
 def write_grid_geotiff(grid, filename, field, rgb=False, level=None,
                        cmap='viridis', vmin=0, vmax=75, color_levels=None,
-                       warp=False, sld=False):
+                       warp=False, sld=False, use_doublequotes=False):
     """
     Write a Py-ART Grid object to a GeoTIFF file.
 
@@ -88,6 +88,13 @@ def write_grid_geotiff(grid, filename, field, rgb=False, level=None,
                extension.
 
         False - Don't do this.
+
+    use_doublequotes : bool, optional
+        True - Use double quotes in the gdalwarp call (requires warp=True),
+               which may help if that command is producing and error like:
+               'Translating source or target SRS failed'
+
+        False - Use single quotes instead
 
     """
     if not IMPORT_FLAG:
@@ -165,9 +172,14 @@ def write_grid_geotiff(grid, filename, field, rgb=False, level=None,
     if warp:
         # Warps TIFF to lat/lon WGS84 projection that is more useful
         # for web mapping applications. Likely changes array shape.
-        os.system('gdalwarp -q -t_srs \'+proj=longlat +ellps=WGS84 ' +
-                  '+datum=WGS84 +no_defs\' ' + ofile + ' ' +
-                  ofile + '_tmp.tif')
+        if use_doublequotes:
+            os.system('gdalwarp -q -t_srs \"+proj=longlat +ellps=WGS84 ' +
+                      '+datum=WGS84 +no_defs\" ' + ofile + ' ' +
+                      ofile + '_tmp.tif')
+        else:
+            os.system('gdalwarp -q -t_srs \'+proj=longlat +ellps=WGS84 ' +
+                      '+datum=WGS84 +no_defs\' ' + ofile + ' ' +
+                      ofile + '_tmp.tif')
         shutil.move(ofile+'_tmp.tif', ofile)
 
 
