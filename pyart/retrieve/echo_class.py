@@ -22,13 +22,7 @@ import numpy as np
 
 from ..config import get_fillvalue, get_field_name, get_metadata
 from ..exceptions import MissingOptionalDependency
-try:
-    from . import _echo_steiner
-    _F90_EXTENSIONS_AVAILABLE = True
-except ImportError:
-    _F90_EXTENSIONS_AVAILABLE = False
-
-from ._echo_class_nofortran import steiner_class_buff
+from ._echo_class import steiner_class_buff
 
 from warnings import warn
 
@@ -110,24 +104,13 @@ def steiner_conv_strat(grid, dx=None, dy=None, intense=42.0,
     # Get reflectivity data
     ze = np.ma.copy(grid.fields[refl_field]['data'])
     # check that Fortran extensions is available
-    if not _F90_EXTENSIONS_AVAILABLE:
-        ze = ze.filled(np.NaN)
+    ze = ze.filled(np.NaN)
 
-        eclass = steiner_class_buff(ze, x, y, z, dx=dx, dy=dy, bkg_rad=bkg_rad,
-                                    work_level=work_level, intense=intense,
-                                    peak_relation=peak_relation,
-                                    area_relation=area_relation,
-                                    use_intense=use_intense,)
-
-    else:
-        ze = np.ma.filled(ze, fill_value).astype(np.float64)
-
-        # Call Fortran routine
-        eclass = _echo_steiner.classify(
-            ze, x, y, z, dx=dx, dy=dy, bkg_rad=bkg_rad, work_level=work_level,
-            intense=intense, peak_relation=peak_relation,
-            area_relation=area_relation, use_intense=use_intense,
-            fill_value=fill_value)
+    eclass = steiner_class_buff(ze, x, y, z, dx=dx, dy=dy, bkg_rad=bkg_rad,
+                                work_level=work_level, intense=intense,
+                                peak_relation=peak_relation,
+                                area_relation=area_relation,
+                                use_intense=use_intense,)
 
     return {'data': eclass.astype(np.int32),
             'standard_name': 'echo_classification',
