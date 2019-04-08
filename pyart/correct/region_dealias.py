@@ -453,10 +453,14 @@ def _cost_function(nyq_vector, vels_slice_means,
         # Region continuity
         vels_without_cur = np.delete(vels_slice_means, reg)
         diffs = np.square(vels_slice_means[reg]-vels_without_cur)
-        the_min = np.argmin(diffs)
+        if(len(diffs) > 0):
+            the_min = np.argmin(diffs)
+            vel_wo_cur = vels_without_cur[the_min]
+        else:
+            vel_wo_cur = vels_slice_means[reg]
         add_value2 = np.square(vels_slice_means[reg] +
                                np.round(nyq_vector[i])*v_nyq_vel -
-                               vels_without_cur[the_min])
+                               vel_wo_cur)
         if np.isfinite(add_value2):
             add_value += .1*add_value2
 
@@ -483,10 +487,15 @@ def _gradient(nyq_vector, vels_slice_means, svels_slice_means,
         # Regional continuity
         vels_without_cur = np.delete(vels_slice_means, reg)
         diffs = np.square(vels_slice_means[reg]-vels_without_cur)
-        the_min = np.argmin(diffs)
+        if(len(diffs) > 0):
+            the_min = np.argmin(diffs)
+            vel_wo_cur = vels_without_cur[the_min]
+        else:
+            vel_wo_cur = vels_slice_means[reg]
+
         add_value2 = (vels_slice_means[reg] +
                       np.round(nyq_vector[i])*v_nyq_vel -
-                      vels_without_cur[the_min])
+                      vel_wo_cur)
 
         if np.isfinite(add_value2):
             gradient_vector[i] += 2*.1*add_value2*v_nyq_vel

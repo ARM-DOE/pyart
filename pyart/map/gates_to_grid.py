@@ -18,7 +18,10 @@ Generate a Cartesian grid by mapping from radar gates onto the grid.
 
 """
 
+import warnings
+
 import numpy as np
+
 from ..core.radar import Radar
 from ..core.transforms import geographic_to_cartesian
 from ..filters import GateFilter, moment_based_gate_filter
@@ -39,7 +42,7 @@ def map_gates_to_grid(
 
     Generate a Cartesian grid of points for the requested fields from the
     collected points from one or more radars. For each radar gate that is not
-    filtered a radius of influence is calculated.  The weighted field values
+    filtered a radius of influence is calculated. The weighted field values
     for that gate are added to all grid points within that radius. This
     routine scaled linearly with the number of radar gates and the effective
     grid size.
@@ -162,11 +165,16 @@ def map_gates_to_grid(
 
 def _detemine_cy_weighting_func(weighting_function):
     """ Determine cython weight function value. """
-    if weighting_function.upper() == 'NEAREST':
+    if weighting_function.upper() == 'BARNES2':
+        cy_weighting_function = 3
+    elif weighting_function.upper() == 'NEAREST':
         cy_weighting_function = 2
     elif weighting_function.upper() == 'CRESSMAN':
         cy_weighting_function = 1
     elif weighting_function.upper() == 'BARNES':
+        warnings.warn("Barnes weighting function is deprecated."
+                      " Please use Barnes 2 to be consistent with"
+                      " Pauley and Wu 1990.", DeprecationWarning)
         cy_weighting_function = 0
     else:
         raise ValueError('unknown weighting_function')
@@ -190,8 +198,8 @@ def _find_projparams(grid_origin, radars, grid_projection):
 
     # parse grid_projection
     if grid_projection is None:
-            grid_projection = {
-                'proj': 'pyart_aeqd', '_include_lon_0_lat_0': True}
+        grid_projection = {
+            'proj': 'pyart_aeqd', '_include_lon_0_lat_0': True}
     projparams = grid_projection.copy()
     if projparams.pop('_include_lon_0_lat_0', False):
         projparams['lon_0'] = grid_origin_lon
