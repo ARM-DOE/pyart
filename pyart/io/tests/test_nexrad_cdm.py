@@ -17,9 +17,8 @@ import pyart
 # We need to decompress the bz2 file which contains this data
 with pyart.testing.InTemporaryDirectory():
     tmpfile = 'tmp_nexrad.nc'
-    f = open(tmpfile, 'wb')
-    f.write(bz2.BZ2File(pyart.testing.NEXRAD_CDM_FILE).read())
-    f.close()
+    with open(tmpfile, 'wb') as f:
+        f.write(bz2.BZ2File(pyart.testing.NEXRAD_CDM_FILE).read())
     radar = pyart.io.read_nexrad_cdm(tmpfile)
 
 
