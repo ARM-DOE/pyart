@@ -1,5 +1,6 @@
 sudo: false    # Use container-based infrastructure
 language: python
+dist: xenial
 
 addons:
     apt:
