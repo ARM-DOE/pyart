@@ -1,5 +1,5 @@
-sudo: false    # Use container-based infrastructure
 language: python
+dist: xenial
 
 addons:
     apt:
@@ -19,10 +19,6 @@ matrix:
         - PYTEST_ARGS="-v --cov pyart --ignore=pyart/util"
         - COVERALLS="true"
         - DOC_BUILD="true"
-    - python: 3.4
-      env:
-        - PYTHON_VERSION="3.4"
-        - PYTEST_ARGS="-v --cov pyart"
     - python: 3.5
       env:
         - PYTHON_VERSION="3.5"
@@ -31,9 +27,13 @@ matrix:
       env:
         - PYTHON_VERSION="3.6"
         - PYTEST_ARGS="-v --cov pyart"
-    - python: 3.6
+    - python: 3.7
       env:
-        - PYTHON_VERSION="3.6"
+        - PYTHON_VERSION="3.7"
+        - PYTEST_ARGS="-v --cov pyart"
+    - python: 3.7
+      env:
+        - PYTHON_VERSION="3.7"
         - PYTEST_ARGS="-v --pyargs pyart"
         - FROM_RECIPE="true"
 install: source continuous_integration/install.sh
