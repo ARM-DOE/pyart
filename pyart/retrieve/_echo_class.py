@@ -124,14 +124,16 @@ def _steiner_conv_strat(refl, x, y, dx, dy, intense=42, peak_relation=0,
 
                 for l in range(imin, imax):
                     for m in range(jmin, jmax):
-                        rad = np.sqrt((x[l] - x[i]) ** 2 + (y[m] - y[j]) ** 2)
+                        if not np.isnan(refl[m, l]):
+                            rad = np.sqrt(
+                                (x[l] - x[i]) ** 2 + (y[m] - y[j]) ** 2)
 
                         # The mean background reflectivity will first be
                         # computed in linear units, i.e. mm^6/m^3, then
                         # converted to decibel units.
-                        if rad <= bkg_rad:
-                            n += 1
-                            sum_ze += 10. ** (refl[m, l] / 10.)
+                            if rad <= bkg_rad:
+                                n += 1
+                                sum_ze += 10. ** (refl[m, l] / 10.)
 
                 if n == 0:
                     ze_bkg = np.inf
@@ -162,7 +164,7 @@ def _steiner_conv_strat(refl, x, y, dx, dy, intense=42, peak_relation=0,
 
                     for l in range(lmin, lmax):
                         for m in range(mmin, mmax):
-                            if not np.isnan(refl[j, i]):
+                            if not np.isnan(refl[m, l]):
                                 rad = np.sqrt(
                                     (x[l] - x[i]) ** 2
                                     + (y[m] - y[j]) ** 2)
@@ -178,7 +180,7 @@ def _steiner_conv_strat(refl, x, y, dx, dy, intense=42, peak_relation=0,
 
                         for l in range(imin, imax):
                             for m in range(jmin, jmax):
-                                if not np.isnan(refl[j, i]):
+                                if not np.isnan(refl[m, l]):
                                     rad = np.sqrt(
                                         (x[l] - x[i]) ** 2
                                         + (y[m] - y[j]) ** 2)
