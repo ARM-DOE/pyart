@@ -133,7 +133,10 @@ def _steiner_conv_strat(refl, x, y, dx, dy, intense=42, peak_relation=0,
                             n += 1
                             sum_ze += 10. ** (refl[m, l] / 10.)
 
-                ze_bkg = 10.0 * np.log10(sum_ze / n)
+                if n == 0:
+                    ze_bkg = np.inf
+                else:
+                    ze_bkg = 10.0 * np.log10(sum_ze / n)
 
                 # Now get the corresponding convective radius knowing the mean
                 # background reflectivity.
