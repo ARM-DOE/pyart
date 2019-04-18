@@ -1,12 +1,16 @@
 """
 pyart.correct.attenuation
 =========================
-Attenuation correction from polarimetric radars.
-Code adapted from method in Gu et al, JAMC 2011, 50, 39.
-Adapted by Scott Collis and Scott Giangrande, refactored by Jonathan Helmus.
-New code added by Meteo Swiss and inserted into Py-ART by Robert Jackson.
+
+Attenuation correction from polarimetric radars. Code adapted from method in
+Gu et al, JAMC 2011, 50, 39. Adapted by Scott Collis and Scott Giangrande,
+refactored by Jonathan Helmus. New code added by Meteo Swiss and inserted into
+Py-ART by Robert Jackson.
+
 .. autosummary::
     :toctree: generated/
+
+    calculate_attenuation
     calculate_attenuation_zphi
     calculate_attenuation_philinear
     get_mask_fzl
@@ -15,8 +19,9 @@ New code added by Meteo Swiss and inserted into Py-ART by Robert Jackson.
     _param_attzphi_table
     _get_param_attphilinear
     _param_attphilinear_table
-    calculate_attenuation
+
 """
+
 from copy import deepcopy
 from warnings import warn
 
@@ -43,10 +48,11 @@ def calculate_attenuation_zphi(radar, doc=None, fzl=None, smooth_window_len=5,
     The attenuation is computed up to a user defined freezing level height
     or up to where temperatures in a temperature field are positive.
     The coefficients are either user-defined or radar frequency dependent.
+
     Parameters
     ----------
     radar : Radar
-        Radar object to use for attenuation calculations.  Must have
+        Radar object to use for attenuation calculations. Must have
         phidp and refl fields.
     doc : float
         Number of gates at the end of each ray to to remove from the
@@ -150,6 +156,7 @@ def calculate_attenuation_zphi(radar, doc=None, fzl=None, smooth_window_len=5,
     Ryzhkov et al. Potential Utilization of Specific Attenuation for Rainfall
     Estimation, Mitigation of Partial Beam Blockage, and Radar Networking,
     JAOT, 2014, 31, 599-619.
+
     """
     # select the coefficients as a function of frequency band
     if (a_coef is None) or (beta is None) or (c is None) or (d is None):
@@ -340,10 +347,11 @@ def calculate_attenuation_philinear(
     where temperatures in a temperature field are positive or where the height
     relative to the iso0 is 0.
     The coefficients are either user-defined or radar frequency dependent.
+
     Parameters
     ----------
     radar : Radar
-        Radar object to use for attenuation calculations.  Must have
+        Radar object to use for attenuation calculations. Must have
         phidp and refl fields.
     doc : float
         Number of gates at the end of each ray to to remove from the
@@ -427,6 +435,7 @@ def calculate_attenuation_philinear(
         attenuation.
     cor_zdr : dict
         Field dictionary containing the corrected differential reflectivity.
+
     """
     # select the coefficients as a function of frequency band
     if (pia_coef is None) or (pida_coef is None):
@@ -543,7 +552,8 @@ def get_mask_fzl(radar, fzl=None, doc=None, min_temp=0., max_h_iso0=0.,
                  iso0_field=None, temp_ref='temperature'):
     """
     constructs a mask to mask data placed thickness m below data at min_temp
-    and beyond
+    and beyond.
+
     Parameters
     ----------
     radar : Radar
@@ -582,6 +592,7 @@ def get_mask_fzl(radar, fzl=None, doc=None, min_temp=0., max_h_iso0=0.,
         the values that should be masked
     end_gate_arr : 1D array
         the index of the last valid gate in the ray
+
     """
     if temp_ref == 'temperature':
         if temp_field is None:
@@ -662,17 +673,20 @@ def _prepare_phidp(phidp, mask_fzl):
     """
     Prepares phidp to be used in attenuation correction by masking values
     above freezing level setting negative values to 0 and make sure it is
-    monotously increasing
+    monotously increasing.
+
     Parameters
     ----------
     phidp : ndarray 2D
         The phidp field
     mask_fzl : ndarray 2D
         a mask of the data above freezing level height
+
     Returns
     -------
     corr_phidp: ndarray 2D
         the corrected PhiDP field
+
     """
     mask_phidp = np.ma.getmaskarray(phidp)
     mask_phidp = np.logical_or(mask_phidp, mask_fzl)
@@ -684,16 +698,19 @@ def _prepare_phidp(phidp, mask_fzl):
 
 def _get_param_attzphi(freq):
     """
-    get the parameters of Z-Phi attenuation estimation for a particular
-    frequency
+    Get the parameters of Z-Phi attenuation estimation for a particular
+    frequency.
+
     Parameters
     ----------
     freq : float
         radar frequency [Hz]
+
     Returns
     -------
     a_coeff, beta, c, d : floats
         the coefficient and exponent of the power law
+
     """
     param_att_dict = _param_attzphi_table()
 
@@ -715,12 +732,14 @@ def _get_param_attzphi(freq):
 
 def _param_attzphi_table():
     """
-    defines the parameters of Z-Phi attenuation estimation at each frequency
+    Defines the parameters of Z-Phi attenuation estimation at each frequency
     band.
+
     Returns
     -------
     param_att_dict : dict
         A dictionary with the coefficients at each band
+
     """
     param_att_dict = dict()
 
@@ -738,16 +757,19 @@ def _param_attzphi_table():
 
 def _get_param_attphilinear(freq):
     """
-    get the parameters of attenuation estimation based on phidp for a
-    particular frequency
+    Get the parameters of attenuation estimation based on phidp for a
+    particular frequency.
+
     Parameters
     ----------
     freq : float
         radar frequency [Hz]
+
     Returns
     -------
     a_coeff, beta, c, d : floats
         the coefficient and exponent of the power law
+
     """
     param_att_dict = _param_attphilinear_table()
 
@@ -769,12 +791,14 @@ def _get_param_attphilinear(freq):
 
 def _param_attphilinear_table():
     """
-    defines the parameters of attenuation estimation based on phidp at each
+    Defines the parameters of attenuation estimation based on phidp at each
     frequency band.
+
     Returns
     -------
     param_att_dict : dict
         A dictionary with the coefficients at each band
+
     """
     param_att_dict = dict()
 

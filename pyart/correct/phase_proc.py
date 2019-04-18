@@ -35,6 +35,7 @@ Adapted by Scott Collis and Scott Giangrande, refactored by Jonathan Helmus
     get_phidp_unf_gf
     det_sys_phase_gf
     _det_sys_phase_gf
+
 """
 
 from __future__ import print_function, division
@@ -202,7 +203,7 @@ def snr(line, wl=11):
 
 def smooth_masked(raw_data, wind_len=11, min_valid=6, wind_type='median'):
     """
-    smoothes the data using a rolling window.
+    Smoothes the data using a rolling window.
     data with less than n valid points is masked.
     Parameters
     ----------
@@ -214,10 +215,12 @@ def smooth_masked(raw_data, wind_len=11, min_valid=6, wind_type='median'):
         Minimum number of valid points for the smoothing to be valid
     wind_type : str
         type of window. Can be median or mean
+
     Returns
     -------
     data_smooth : float masked array
         smoothed data
+
     """
     valid_wind = ['median', 'mean']
     if wind_type not in valid_wind:
@@ -1201,6 +1204,7 @@ def phase_proc_lp_gf(radar, gatefilter=None, debug=False, self_const=60000.0,
                      doc=0):
     """
     Phase process using a LP method [1] using Py-ART's Gatefilter.
+
     Parameters
     ----------
     radar : Radar
@@ -1260,13 +1264,14 @@ def phase_proc_lp_gf(radar, gatefilter=None, debug=False, self_const=60000.0,
         Field dictionary containing processed differential phase shifts.
     sob_kdp : dict
         Field dictionary containing recalculated differential phases.
+
     References
     ----------
     [1] Giangrande, S.E., R. McGraw, and L. Lei. An Application of
     Linear Programming to Polarimetric Radar Differential Phase Processing.
     J. Atmos. and Oceanic Tech, 2013, 30, 1716.
-    """
 
+    """
     # parse the field parameters
     if refl_field is None:
         refl_field = get_field_name('reflectivity')
@@ -1385,7 +1390,8 @@ def phase_proc_lp_gf(radar, gatefilter=None, debug=False, self_const=60000.0,
 def get_phidp_unf_gf(radar, gatefilter, debug=False, ncpts=2, sys_phase=None,
                      nowrap=None, phidp_field=None, first_gate_sysp=None):
     """
-    Get Unfolded Phi differential phase in areas not gatefiltered
+    Get Unfolded Phi differential phase in areas not gatefiltered.
+
     Parameters
     ----------
     radar : Radar
@@ -1411,10 +1417,12 @@ def get_phidp_unf_gf(radar, gatefilter, debug=False, ncpts=2, sys_phase=None,
         differential phase shift. A value of None for any of these parameters
         will use the default field name as defined in the Py-ART
         configuration file.
+
     Returns
     -------
     cordata : array
         Unwrapped phi differential phase.
+
     """
     # parse the field parameters
     if phidp_field is None:
@@ -1494,16 +1502,19 @@ def get_phidp_unf_gf(radar, gatefilter, debug=False, ncpts=2, sys_phase=None,
 def det_sys_phase_gf(radar, gatefilter, phidp_field=None, first_gate=30.):
     """
     Determine the system phase.
+
     Parameters
     ----------
     radar : Radar
         Radar object for which to determine the system phase.
     gatefilter : Gatefilter
-        Gatefilter object highlighting valid gates
+        Gatefilter object highlighting valid gates.
+
     Returns
     -------
     sys_phase : float or None
-        Estimate of the system phase.  None is not estimate can be made.
+        Estimate of the system phase. None is not estimate can be made.
+
     """
     # parse the field parameters
     if phidp_field is None:
