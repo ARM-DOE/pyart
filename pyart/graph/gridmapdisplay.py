@@ -6,8 +6,8 @@ A class for plotting grid objects using xarray plotting
 and cartopy.
 
 .. autosummary::
-    :tocree: generated/
-    :template: dev_templated.rst
+    :toctree: generated/
+    :template: dev_template.rst
 
     GridMapDisplay
 
