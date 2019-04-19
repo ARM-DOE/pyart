@@ -65,7 +65,9 @@ class GridMapDisplay(object):
         Grid object
     debug : bool
         True to print debugging messages, False to supress them.
+
     """
+
     def __init__(self, grid, debug=False):
         """ initalize the object. """
         # check that cartopy and xarray are available
@@ -90,7 +92,11 @@ class GridMapDisplay(object):
         self.origin = 'origin'
 
     def get_dataset(self):
-        """ Creating an xarray dataset from a radar object"""
+        """ 
+        Creating an xarray dataset from a radar object
+
+	"""
+
         lon, lat = self.grid.get_point_longitude_latitude()
         height = self.grid.point_z['data'][:, 0, 0]
         time = np.array([netCDF4.num2date(self.grid.time['data'][0],
@@ -197,7 +203,9 @@ class GridMapDisplay(object):
             True by default. Set to False to supress drawinf of coastlines
             etc... Use for speedup when specifying shapefiles.
             Note that lat lon labels only work with certain projections
+
         """
+
         ds = self.get_dataset()
 
         # parse parameters
@@ -309,7 +317,9 @@ class GridMapDisplay(object):
             Width of markers in points.
         ax : axes or None.
             Axis to add the crosshairs to, if None the current axis is used.
+
         """
+
         #parse the parameters
         ax = common.parse_ax(ax)
         lon, lat = common.parse_lon_lat(self.grid, lon, lat)
@@ -332,7 +342,9 @@ class GridMapDisplay(object):
         lon, lat : float
             Longitude and latitude (in degrees) specifying the slice. If
             None the center of the grid is used.
+
         """
+
         # parse parameters
         _, y_index = self._find_nearest_grid_indices(lon, lat)
         self.plot_latitudinal_level(field=field, y_index=y_index, **kwargs)
@@ -401,7 +413,9 @@ class GridMapDisplay(object):
             Axis to plot on. None will use the current axis.
         fig : Figure
             Figure to add the colorbar to. None will use the current figure.
+
         """
+
         # parse parameters
         ax, fig = common.parse_ax_fig(ax, fig)
         vmin, vmax = common.parse_vmin_vmax(self.grid, field, vmin, vmax)
@@ -462,7 +476,9 @@ class GridMapDisplay(object):
         lon, lat : float
             Longitude and latitude (in degrees) specifying the slice.  If
             None the center of the grid is used.
+
         """
+
         # parse parameters
         x_index, _ = self._find_nearest_grid_indices(lon, lat)
         self.plot_longitudinal_level(field=field, x_index=x_index, **kwargs)
@@ -531,7 +547,9 @@ class GridMapDisplay(object):
             Axis to plot on. None will use the current axis.
         fig : Figure
             Figure to add the colorbar to. None will use the current figure.
+
         """
+
         # parse parameters
         ax, fig = common.parse_ax_fig(ax, fig)
         vmin, vmax = common.parse_vmin_vmax(self.grid, field, vmin, vmax)
@@ -601,7 +619,9 @@ class GridMapDisplay(object):
             Axis onto which the colorbar will be drawn. None is also valid.
         fig : Figure
             Figure to place colorbar on.  None will use the current figure.
+
         """
+
         if fig is None:
             fig = plt.gcf()
 
@@ -627,9 +647,8 @@ class GridMapDisplay(object):
         return
 
     def _find_nearest_grid_indices(self, lon, lat):
-        """
-        Find the nearest x, y grid indices for a given latitude and longitude.
-        """
+        """ Find the nearest x, y grid indices for a given latitude and longitude. """
+
         # A similat method would make a good addition to the Grid class itself
         lon, lat = common.parse_lon_lat(self.grid, lon, lat)
         grid_lons, grid_lats = self.grid.get_point_longitude_latitude()
@@ -643,6 +662,7 @@ class GridMapDisplay(object):
 
     def _get_label_x(self):
         """ Get default label for x units. """
+
         return 'East West distance from ' + self.origin + ' (km)'
 
     def _get_label_y(self):
@@ -707,7 +727,9 @@ class GridMapDisplay(object):
         -------
         filename : str
             Filename suitable for saving a plot.
+
         """
+
         return common.generate_grid_filename(self.grid, field, level, ext)
 
     def generate_grid_title(self, field, level):
@@ -743,7 +765,9 @@ class GridMapDisplay(object):
         -------
         title : str
             Plot title.
+
         """
+
         return common.generate_latitudinal_level_title(self.grid,
                                                        field, level)
 
@@ -762,7 +786,9 @@ class GridMapDisplay(object):
         -------
         title : str
             Plot title.
+
         """
+
         return common.generate_longitudinal_level_title(self.grid,
                                                         field, level)
 
@@ -805,7 +831,7 @@ def find_side(ls, side):
     return sgeom.LineString(points[side])
 
 def lambert_xticks(ax, ticks):
-    """Draw ticks on the bottom x-axis of a Lambert Conformal projection."""
+    """ Draw ticks on the bottom x-axis of a Lambert Conformal projection. """
     def te(xy):
         return xy[0]
 
@@ -819,7 +845,7 @@ def lambert_xticks(ax, ticks):
                         xtick in xticklabels])
 
 def lambert_yticks(ax, ticks):
-    """Draw ticks on the left y-axis of a Lambert Conformal projection."""
+    """ Draw ticks on the left y-axis of a Lambert Conformal projection. """
     def te(xy):
         return xy[1]
 
@@ -833,7 +859,7 @@ def lambert_yticks(ax, ticks):
                         ytick in yticklabels])
 
 def _lambert_ticks(ax, ticks, tick_location, line_constructor, tick_extractor):
-    """Get the tick locations and labels for a Lambert Conformal projection."""
+    """ Get the tick locations and labels for a Lambert Conformal projection. """
     outline_patch = sgeom.LineString(
         ax.outline_patch.get_path().vertices.tolist())
     axis = find_side(outline_patch, tick_location)
