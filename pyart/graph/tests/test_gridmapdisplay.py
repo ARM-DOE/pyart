@@ -87,7 +87,7 @@ def test_generate_titles():
 
 @pytest.mark.skipif(not pyart.graph.gridmapdisplay._XARRAY_AVAILABLE,
                     reason='Xarray is not installed')
-def test_eror_raising():
+def test_error_raising():
     grid = pyart.testing.make_target_grid()
     display = pyart.graph.GridMapDisplay(grid)
 
