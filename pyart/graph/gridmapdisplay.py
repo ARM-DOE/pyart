@@ -3,11 +3,11 @@ pyart.graph.gridmapdisplay
 ==========================
 
 A class for plotting grid objects using xarray plotting
-and cartopy
+and cartopy.
 
 .. autosummary::
-    :tocreee: generated/
-    : template: dev_templated.rst
+    :tocree: generated/
+    :template: dev_templated.rst
 
     GridMapDisplay
 
@@ -50,19 +50,19 @@ except ImportError:
 class GridMapDisplay(object):
     """
     A class for creating plots from a grid object using xarray
-    with a cartopy projection
+    with a cartopy projection.
 
-    Paramteres
+    Parameters
     ----------
     grid : Grid
         Grid with data which will be used to create plots.
     debug : bool
-        True to print debugging messages, False to supress them
+        True to print debugging messages, False to supress them.
 
     Attributes
     ----------
     grid : Grid
-        Grid object
+        Grid object.
     debug : bool
         True to print debugging messages, False to supress them.
 
@@ -73,16 +73,16 @@ class GridMapDisplay(object):
         # check that cartopy and xarray are available
         if not _CARTOPY_AVAILABLE:
             raise MissingOptionalDependency(
-                'Cartopy is required to use GridMapDisplay but is not ' +
-                'installed')
+                'Cartopy is required to use GridMapDisplay but is not '
+                + 'installed!')
         if not _XARRAY_AVAILABLE:
             raise MissingOptionalDependency(
-                'Xarray is required to use GridMapDisplay but is not ' +
-                'installed')
+                'Xarray is required to use GridMapDisplay but is not '
+                 + 'installed!')
         if not _NETCDF4_AVAILABLE:
             raise MissingOptionalDependency(
-                'netCDF4 is required to use GridMapDisplay but is not ' +
-                'installed')
+                'netCDF4 is required to use GridMapDisplay but is not '
+                + 'installed!')
 
         # set attributes
         self.grid = grid
@@ -93,10 +93,9 @@ class GridMapDisplay(object):
 
     def get_dataset(self):
         """ 
-        Creating an xarray dataset from a radar object
+        Creating an xarray dataset from a radar object.
 
 	"""
-
         lon, lat = self.grid.get_point_longitude_latitude()
         height = self.grid.point_z['data'][:, 0, 0]
         time = np.array([netCDF4.num2date(self.grid.time['data'][0],
@@ -178,15 +177,15 @@ class GridMapDisplay(object):
             2-tuple of x-axis, y-axis labels. None for either label will use
             the default axis label. Parameter is ignored if axislabels_flag is
             False.
-        axis_flag : bool
+        axislabels_flag : bool
             True to add label the axes, False does not label the axes.
         colorbar_flag : bool
-            True to add a colorbar with label to the axis. Flase leaves off
+            True to add a colorbar with label to the axis. False leaves off
             the colorbar.
         colorbar_label : str
             Colorbar label, None will use a default label generated from the
             field information.
-        colorbar_orient L 'vertical' or 'horizontal'
+        colorbar_orient : 'vertical' or 'horizontal'
             Colorbar orientation.
         ax : Axis
             Axis to plot on. None will use the current axis.
@@ -202,10 +201,9 @@ class GridMapDisplay(object):
         emblish : bool
             True by default. Set to False to supress drawinf of coastlines
             etc... Use for speedup when specifying shapefiles.
-            Note that lat lon labels only work with certain projections
+            Note that lat lon labels only work with certain projections.
 
         """
-
         ds = self.get_dataset()
 
         # parse parameters
@@ -299,6 +297,7 @@ class GridMapDisplay(object):
                                field=field, ax=ax, fig=fig)
 
         return
+
     def plot_crosshairs(self, lon=None, lat=None, linestyle='--', color='r',
                         linewidth=2, ax=None):
         """
@@ -315,12 +314,11 @@ class GridMapDisplay(object):
             Matplotlib string for color of the line.
         linewidth : float
             Width of markers in points.
-        ax : axes or None.
+        ax : axes or None
             Axis to add the crosshairs to, if None the current axis is used.
 
         """
-
-        #parse the parameters
+        # parse the parameters
         ax = common.parse_ax(ax)
         lon, lat = common.parse_lon_lat(self.grid, lon, lat)
 
@@ -344,7 +342,6 @@ class GridMapDisplay(object):
             None the center of the grid is used.
 
         """
-
         # parse parameters
         _, y_index = self._find_nearest_grid_indices(lon, lat)
         self.plot_latitudinal_level(field=field, y_index=y_index, **kwargs)
@@ -415,7 +412,6 @@ class GridMapDisplay(object):
             Figure to add the colorbar to. None will use the current figure.
 
         """
-
         # parse parameters
         ax, fig = common.parse_ax_fig(ax, fig)
         vmin, vmax = common.parse_vmin_vmax(self.grid, field, vmin, vmax)
@@ -453,14 +449,14 @@ class GridMapDisplay(object):
             else:
                 ax.set_title(title)
 
-            if axislabels_flag:
-                self._label_axes_latitude(axislabels, ax)
+        if axislabels_flag:
+            self._label_axes_latitude(axislabels, ax)
 
-            if colorbar_flag:
-                self.plot_colorbar(mappable=pm, label=colorbar_label,
-                                   orientation=colorbar_orient, field=field,
-                                   ax=ax, fig=fig)
-            return
+        if colorbar_flag:
+            self.plot_colorbar(mappable=pm, label=colorbar_label,
+                               orientation=colorbar_orient, field=field,
+                               ax=ax, fig=fig)
+        return
 
     def plot_longitude_slice(self, field, lon=None, lat=None, **kwargs):
         """
@@ -478,7 +474,6 @@ class GridMapDisplay(object):
             None the center of the grid is used.
 
         """
-
         # parse parameters
         x_index, _ = self._find_nearest_grid_indices(lon, lat)
         self.plot_longitudinal_level(field=field, x_index=x_index, **kwargs)
@@ -502,19 +497,19 @@ class GridMapDisplay(object):
         x_index : float
             Index of the longitudinal level to plot.
         vmin, vmax : float
-            Lower and upper range for the colormesh.  If either parameter is
+            Lower and upper range for the colormesh. If either parameter is
             None, a value will be determined from the field attributes (if
             available) or the default values of -8, 64 will be used.
             Parameters are ignored is norm is not None.
         norm : Normalize or None, optional
             matplotlib Normalize instance used to scale luminance data.  If not
-            None the vmax and vmin parameters are ignored.  If None, vmin and
+            None the vmax and vmin parameters are ignored. If None, vmin and
             vmax are used for luminance scaling.
         cmap : str or None
             Matplotlib colormap name. None will use the default colormap for
             the field being plotted as specified by the Py-ART configuration.
         mask_outside : bool
-            True to mask data outside of vmin, vmax.  False performs no
+            True to mask data outside of vmin, vmax. False performs no
             masking.
         title : str
             Title to label plot with, None to use default title generated from
@@ -523,13 +518,13 @@ class GridMapDisplay(object):
         title_flag : bool
             True to add a title to the plot, False does not add a title.
         axislabels : (str, str)
-            2-tuple of x-axis, y-axis labels.  None for either label will use
-            the default axis label.  Parameter is ignored if axislabels_flag is
+            2-tuple of x-axis, y-axis labels. None for either label will use
+            the default axis label. Parameter is ignored if axislabels_flag is
             False.
         axislabels_flag : bool
             True to add label the axes, False does not label the axes.
         colorbar_flag : bool
-            True to add a colorbar with label to the axis.  False leaves off
+            True to add a colorbar with label to the axis. False leaves off
             the colorbar.
         colorbar_label : str
             Colorbar label, None will use a default label generated from the
@@ -539,7 +534,7 @@ class GridMapDisplay(object):
         edges : bool
             True will interpolate and extrapolate the gate edges from the
             range, azimuth and elevations in the radar, treating these
-            as specifying the center of each gate.  False treats these
+            as specifying the center of each gate. False treats these
             coordinates themselved as the gate edges, resulting in a plot
             in which the last gate in each ray and the entire last ray are not
             not plotted.
@@ -549,7 +544,6 @@ class GridMapDisplay(object):
             Figure to add the colorbar to. None will use the current figure.
 
         """
-
         # parse parameters
         ax, fig = common.parse_ax_fig(ax, fig)
         vmin, vmax = common.parse_vmin_vmax(self.grid, field, vmin, vmax)
@@ -582,9 +576,9 @@ class GridMapDisplay(object):
 
         if title_flag:
             if title is None:
-                ax.set_title(common.generate_longitudinal_level_title(self.grid,
-                                                                      field,
-                                                                      x_index))
+                ax.set_title(
+                    common.generate_longitudinal_level_title(
+                        self.grid, field, x_index))
             else:
                 ax.set_title(title)
 
@@ -601,27 +595,27 @@ class GridMapDisplay(object):
                       cax=None, ax=None, fig=None, field=None):
         """
         Plot a colorbar.
+
         Parameters
         ----------
         mappable : Image, ContourSet, etc.
-            Image, ContourSet, etc to which the colorbar applied.  If None the
+            Image, ContourSet, etc to which the colorbar applied. If None the
             last mappable object will be used.
         field : str
             Field to label colorbar with.
         label : str
-            Colorbar label.  None will use a default value from the last field
+            Colorbar label. None will use a default value from the last field
             plotted.
         orient : str
             Colorbar orientation, either 'vertical' [default] or 'horizontal'.
         cax : Axis
-            Axis onto which the colorbar will be drawn.  None is also valid.
+            Axis onto which the colorbar will be drawn. None is also valid.
         ax : Axes
             Axis onto which the colorbar will be drawn. None is also valid.
         fig : Figure
-            Figure to place colorbar on.  None will use the current figure.
+            Figure to place colorbar on. None will use the current figure.
 
         """
-
         if fig is None:
             fig = plt.gcf()
 
@@ -633,7 +627,7 @@ class GridMapDisplay(object):
 
         if label is None:
             if len(self.fields) == 0:
-                raise ValueError('field must ne specifies.')
+                raise ValueError('field must be specified.')
 
             field = self.grid.fields[self.fields[-1]]
             if 'long_name' in field and 'units' in field:
@@ -649,7 +643,7 @@ class GridMapDisplay(object):
     def _find_nearest_grid_indices(self, lon, lat):
         """ Find the nearest x, y grid indices for a given latitude and longitude. """
 
-        # A similat method would make a good addition to the Grid class itself
+        # A similar method would make a good addition to the Grid class itself
         lon, lat = common.parse_lon_lat(self.grid, lon, lat)
         grid_lons, grid_lats = self.grid.get_point_longitude_latitude()
         diff = (grid_lats - lat)**2 + (grid_lons - lon)**2
@@ -729,7 +723,6 @@ class GridMapDisplay(object):
             Filename suitable for saving a plot.
 
         """
-
         return common.generate_grid_filename(self.grid, field, level, ext)
 
     def generate_grid_title(self, field, level):
@@ -754,12 +747,12 @@ class GridMapDisplay(object):
         """
         Generate a title for a plot.
 
-        Paramerter
+        Parameters
         ----------
         field : str
             Field plotted.
         level : int
-            Latitudinal level plotted
+            Latitudinal level plotted.
 
         Returns
         -------
@@ -767,7 +760,6 @@ class GridMapDisplay(object):
             Plot title.
 
         """
-
         return common.generate_latitudinal_level_title(self.grid,
                                                        field, level)
 
@@ -775,12 +767,12 @@ class GridMapDisplay(object):
         """
         Generate a title for a plot.
 
-        Parameter
-        ---------
-        field: str
+        Parameters
+        ---------_
+        field : str
             Field plotted.
         level : int
-            Longitudinal level plotted
+            Longitudinal level plotted.
 
         Returns
         -------
@@ -788,32 +780,26 @@ class GridMapDisplay(object):
             Plot title.
 
         """
-
         return common.generate_longitudinal_level_title(self.grid,
                                                         field, level)
 
     def cartopy_states(self):
         """ Get state boundaries using cartopy. """
-        return cartopy.feature.NaturalEarthFeature(category='cultural',
-                                                   name=('admin_1_states_' +
-                                                         'provinces_lines'),
-                                                   scale='50m',
-                                                   facecolor='none')
+        return cartopy.feature.NaturalEarthFeature(
+            category='cultural', name='admin_1_states_provinces_lines',
+            scale='50m', facecolor='none')
 
     def cartopy_political_boundaries(self):
         """ Get political boundaries using cartopy. """
-        return cartopy.feature.NaturalEarthFeature(category='cultural',
-                                                   name=('admin_0_boundary_' +
-                                                         'lines_land'),
-                                                   scale='50m',
-                                                   facecolor='none')
+        return cartopy.feature.NaturalEarthFeature(
+            category='cultural', name='admin_0_boundary_lines_land',
+            scale='50m', facecolor='none')
 
     def cartopy_coastlines(self):
         """ Get coastlines using cartopy. """
-        return cartopy.feature.NaturalEarthFeature(category='physical',
-                                                   name='coastline',
-                                                   scale='10m',
-                                                   facecolor='none')
+        return cartopy.feature.NaturalEarthFeature(
+            category='physical', name='coastline', scale='10m',
+            facecolor='none')
 
 # These methods are a hack to allow gridlines when the projection is lambert
 # https://nbviewer.jupyter.org/gist/ajdawson/dd536f786741e987ae4e
