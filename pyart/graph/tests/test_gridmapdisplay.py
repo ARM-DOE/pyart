@@ -67,8 +67,8 @@ def test_gridmapdisplay_fancy(outfile=None):
 
 @pytest.mark.skipif(not pyart.graph.gridmapdisplay._XARRAY_AVAILABLE,
                     reason='Xarray is not installed')
-def test_generate_titles():
-    gird = pyart.testing.make_target_grid()
+def test_generate_filename():
+    grid = pyart.testing.make_target_grid()
     display = pyart.graph.GridMapDisplay(grid)
     filename = display.generate_filename('reflectivity', 0)
     assert isinstance(filename, str)
