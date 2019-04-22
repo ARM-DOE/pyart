@@ -15,7 +15,7 @@ RESOLUTION = 'c'    # crude resolution to speed up tests
 
 @pytest.mark.skipif(not pyart.graph.gridmapdisplay_basemap._BASEMAP_AVAILABLE,
                     reason="Basemap is not installed.")
-def test_gridmapdisplay_simple(outfile=None):
+def test_gridmapdisplay_simple_basemap(outfile=None):
     # test basic GridMapDisplay functionality
     grid = pyart.testing.make_target_grid()
     display = pyart.graph.GridMapDisplayBasemap(grid)
@@ -29,7 +29,7 @@ def test_gridmapdisplay_simple(outfile=None):
 
 @pytest.mark.skipif(not pyart.graph.gridmapdisplay_basemap._BASEMAP_AVAILABLE,
                     reason="Basemap is not installed.")
-def test_gridmapdisplay_fancy(outfile=None):
+def test_gridmapdisplay_fancy_basemap(outfile=None):
     # test a bunch of GridMapDisplay functionality
     grid = pyart.testing.make_target_grid()
     display = pyart.graph.GridMapDisplayBasemap(grid)
@@ -84,7 +84,7 @@ def test_plot_basemap_not_using_corners(outfile=None):
 
 @pytest.mark.skipif(not pyart.graph.gridmapdisplay_basemap._BASEMAP_AVAILABLE,
                     reason="Basemap is not installed.")
-def test_generate_filename():
+def test_generate_filename_basemap():
     grid = pyart.testing.make_target_grid()
     display = pyart.graph.GridMapDisplayBasemap(grid)
     filename = display.generate_filename('reflectivity', 0)
@@ -93,7 +93,7 @@ def test_generate_filename():
 
 @pytest.mark.skipif(not pyart.graph.gridmapdisplay_basemap._BASEMAP_AVAILABLE,
                     reason="Basemap is not installed.")
-def test_generate_titles():
+def test_generate_titles_basemap():
     grid = pyart.testing.make_target_grid()
     display = pyart.graph.GridMapDisplayBasemap(grid)
 
@@ -114,7 +114,7 @@ def test_get_basemap():
 
 @pytest.mark.skipif(not pyart.graph.gridmapdisplay_basemap._BASEMAP_AVAILABLE,
                     reason="Basemap is not installed.")
-def test_error_raising():
+def test_error_raising_basemap():
     grid = pyart.testing.make_target_grid()
     display = pyart.graph.GridMapDisplayBasemap(grid)
 
@@ -127,5 +127,5 @@ def test_error_raising():
 
 
 if __name__ == "__main__":
-    test_gridmapdisplay_simple('figure_gridmapdisplay_simple.png')
-    test_gridmapdisplay_fancy('figure_gridmapdisplay_fancy.png')
+    test_gridmapdisplay_simple('figure_gridmapdisplay_simple_basemap.png')
+    test_gridmapdisplay_fancy('figure_gridmapdisplay_fancy_basemap.png')
