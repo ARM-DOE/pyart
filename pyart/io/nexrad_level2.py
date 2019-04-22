@@ -594,6 +594,9 @@ def _get_record_from_buf(buf, pos):
             warnings.warn("Encountered incomplete MSG5. File may be corrupt.",
                           RuntimeWarning)
             new_pos = pos + RECORD_SIZE
+    elif msg_type == 29:
+        new_pos = _get_msg29_from_buf(buf, pos, dic)
+        warnings.warn("Message 29 encountered, not parsing.", RuntimeWarning)
     elif msg_type == 1:
         new_pos = _get_msg1_from_buf(buf, pos, dic)       
     else:   # not message 31 or 1, no decoding performed
@@ -601,6 +604,13 @@ def _get_record_from_buf(buf, pos):
 
     return new_pos, dic
 
+def _get_msg29_from_buf(buf, pos, dic):
+    msg_size = dic['header']['size']
+    if msg_size == 65535:
+        msg_size = dic['header']['segments'] << 16 | dic['header']['seg_num']
+    msg_header_size = _structure_size(MSG_HEADER)
+    new_pos = pos + msg_header_size + msg_size
+    return new_pos
 
 def _get_msg31_from_buf(buf, pos, dic):
     """ Retrieve and unpack a MSG31 record from a buffer. """
