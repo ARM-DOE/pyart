@@ -31,7 +31,7 @@ install:
   - "activate matrix_env"
 
   # Install Py-ART dependecies
-  - "conda install -y -q numpy scipy matplotlib netcdf4 pytest pytest-cov cython"
+  - "conda install -y -q numpy scipy matplotlib netcdf4 pytest pytest-cov cython cartopy xarray"
 
   # Check that we have the expected version and architecture for Python
   # in the conda environment
