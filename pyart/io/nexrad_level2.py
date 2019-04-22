@@ -83,6 +83,7 @@ from datetime import datetime, timedelta
 import numpy as np
 import warnings
 
+
 class NEXRADLevel2File(object):
     """
     Class for accessing data in a NEXRAD (WSR-88D) Level II file.
@@ -186,7 +187,7 @@ class NEXRADLevel2File(object):
             warnings.warn("No MSG5 detected. Setting to meaningless data. "
                           "Rethink your life choices and be ready for errors."
                           "Specifically fixed angle data will be missing")
-            
+
             self.vcp = None
         return
 
@@ -241,14 +242,16 @@ class NEXRADLevel2File(object):
 
         """
         info = []
+
         if scans is None:
             scans = range(self.nscans)
         for scan in scans:
             nrays = self.get_nrays(scan)
-
-            msg31_number = self.scan_msgs[scan][0]
+            if nrays < 2:
+                self.nscans -= 1
+                continue
+            msg31_number = self.scan_msgs[scan][0]            
             msg = self.radial_records[msg31_number]
-
             nexrad_moments = ['REF', 'VEL', 'SW', 'ZDR', 'PHI', 'RHO']
             moments = [f for f in nexrad_moments if f in msg]
             ngates = [msg[f]['ngates'] for f in moments]
@@ -584,9 +587,15 @@ def _get_record_from_buf(buf, pos):
     if msg_type == 31:
         new_pos = _get_msg31_from_buf(buf, pos, dic)
     elif msg_type == 5:
-        new_pos = _get_msg5_from_buf(buf, pos, dic)
+        # Sometimes we encounter incomplete buffers
+        try:
+            new_pos = _get_msg5_from_buf(buf, pos, dic)
+        except struct.error:
+            warnings.warn("Encountered incomplete MSG5. File may be corrupt.",
+                          RuntimeWarning)
+            new_pos = pos + RECORD_SIZE
     elif msg_type == 1:
-        new_pos = _get_msg1_from_buf(buf, pos, dic)
+        new_pos = _get_msg1_from_buf(buf, pos, dic)       
     else:   # not message 31 or 1, no decoding performed
         new_pos = pos + RECORD_SIZE
 
