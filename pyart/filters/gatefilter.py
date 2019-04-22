@@ -10,7 +10,6 @@ corrections routines in Py-ART.
 
     moment_based_gate_filter
     moment_and_texture_based_gate_filter
-    calculate_velocity_texture
     temp_based_gate_filter
     iso0_based_gate_filter
 
@@ -257,6 +256,7 @@ def temp_based_gate_filter(radar, temp_field=None, min_temp=0.,
     """
     Create a filter which removes undesired gates based on temperature. Used
     primarily to filter out the melting layer and gates above it.
+
     Parameters
     ----------
     radar : Radar
@@ -274,14 +274,16 @@ def temp_based_gate_filter(radar, temp_field=None, min_temp=0.,
         retain the masked and invalid filter set the parameter to a value
         below the lowest value in the field.
     thickness : float
-        The estimated thickness of the melting layer in m
+        The estimated thickness of the melting layer in m.
     beamwidth : float
-        The radar antenna 3 dB beamwidth [deg]
+        The radar antenna 3 dB beamwidth [deg].
+
     Returns
     -------
     gatefilter : :py:class:`GateFilter`
-        A gate filter based upon the described criteria.  This can be
+        A gate filter based upon the described criteria. This can be
         used as a gatefilter parameter to various functions in pyart.correct.
+
     """
     # parse the field parameters
     if temp_field is None:
@@ -347,6 +349,7 @@ def iso0_based_gate_filter(radar, iso0_field=None, max_h_iso0=0.,
     """
     Create a filter which removes undesired gates based height over the iso0.
     Used primarily to filter out the melting layer and gates above it.
+
     Parameters
     ----------
     radar : Radar
@@ -364,14 +367,16 @@ def iso0_based_gate_filter(radar, iso0_field=None, max_h_iso0=0.,
         retain the masked and invalid filter set the parameter to a value
         below the lowest value in the field.
     thickness : float
-        The estimated thickness of the melting layer in m
+        The estimated thickness of the melting layer in m.
     beamwidth : float
-        The radar antenna 3 dB beamwidth [deg]
+        The radar antenna 3 dB beamwidth [deg].
+
     Returns
     -------
     gatefilter : :py:class:`GateFilter`
-        A gate filter based upon the described criteria.  This can be
+        A gate filter based upon the described criteria. This can be
         used as a gatefilter parameter to various functions in pyart.correct.
+
     """
     # parse the field parameters
     if iso0_field is None:

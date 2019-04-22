@@ -35,6 +35,7 @@ Adapted by Scott Collis and Scott Giangrande, refactored by Jonathan Helmus
     get_phidp_unf_gf
     det_sys_phase_gf
     _det_sys_phase_gf
+
 """
 
 from __future__ import print_function, division
@@ -180,7 +181,6 @@ def det_process_range(radar, sweep, fzl, doc=10):
         Ray index which defined the end of the region.
 
     """
-
     # determine the index of the last valid gate
     ranges = radar.range['data']
     elevation = radar.fixed_angle['data'][sweep]
@@ -202,22 +202,25 @@ def snr(line, wl=11):
 
 def smooth_masked(raw_data, wind_len=11, min_valid=6, wind_type='median'):
     """
-    smoothes the data using a rolling window.
+    Smoothes the data using a rolling window.
     data with less than n valid points is masked.
+
     Parameters
     ----------
     raw_data : float masked array
         The data to smooth.
     window_len : float
-        Length of the moving window
+        Length of the moving window.
     min_valid : float
-        Minimum number of valid points for the smoothing to be valid
+        Minimum number of valid points for the smoothing to be valid.
     wind_type : str
-        type of window. Can be median or mean
+        Type of window. Can be median or mean.
+
     Returns
     -------
     data_smooth : float masked array
-        smoothed data
+        Smoothed data.
+
     """
     valid_wind = ['median', 'mean']
     if wind_type not in valid_wind:
@@ -318,7 +321,7 @@ def smooth_and_trim(x, window_len=11, window='hanning'):
     Parameters
     ----------
     x : array
-        The input signal
+        The input signal.
     window_len: int
         The dimension of the smoothing window; should be an odd integer.
     window : str
@@ -370,7 +373,7 @@ def smooth_and_trim_scan(x, window_len=11, window='hanning'):
     Parameters
     ----------
     x : ndarray
-        The input signal
+        The input signal.
     window_len: int
         The dimension of the smoothing window; should be an odd integer.
     window : str
@@ -429,15 +432,15 @@ def get_phidp_unf(radar, ncp_lev=0.4, rhohv_lev=0.6, debug=False, ncpts=20,
     radar : Radar
         The input radar.
     ncp_lev :
-        Miminum normal coherent power level.  Regions below this value will
+        Miminum normal coherent power level. Regions below this value will
         not be included in the calculation.
     rhohv_lev :
-        Miminum copolar coefficient level.  Regions below this value will not
+        Miminum copolar coefficient level. Regions below this value will not
         be included in the calculation.
     debug : bool, optioanl
         True to print debugging information, False to supress printing.
     ncpts : int
-        Minimum number of points in a ray.  Regions within a ray smaller than
+        Minimum number of points in a ray. Regions within a ray smaller than
         this or beginning before this gate number are excluded from
         calculations.
     doc : int or None.
@@ -577,12 +580,12 @@ def construct_A_matrix(n_gates, filt):
     shape(:math:`\\bf{A}`) = (3 * n, 2 * n).
 
     Note that :math:`\\bf{M}` contains some side padding to deal with edge
-    issues
+    issues.
 
     Parameters
     ----------
     n_gates : int
-        Number of gates, determines size of identity matrix
+        Number of gates, determines size of identity matrix.
     filt : array
         Input filter.
 
@@ -1201,6 +1204,7 @@ def phase_proc_lp_gf(radar, gatefilter=None, debug=False, self_const=60000.0,
                      doc=0):
     """
     Phase process using a LP method [1] using Py-ART's Gatefilter.
+
     Parameters
     ----------
     radar : Radar
@@ -1252,7 +1256,7 @@ def phase_proc_lp_gf(radar, gatefilter=None, debug=False, self_const=60000.0,
     offset : float
         Reflectivity offset to add in dBz.
     doc : int
-        Number of gates to "doc" off the end of a ray
+        Number of gates to "doc" off the end of a ray.
 
     Returns
     -------
@@ -1260,13 +1264,14 @@ def phase_proc_lp_gf(radar, gatefilter=None, debug=False, self_const=60000.0,
         Field dictionary containing processed differential phase shifts.
     sob_kdp : dict
         Field dictionary containing recalculated differential phases.
+
     References
     ----------
     [1] Giangrande, S.E., R. McGraw, and L. Lei. An Application of
     Linear Programming to Polarimetric Radar Differential Phase Processing.
     J. Atmos. and Oceanic Tech, 2013, 30, 1716.
-    """
 
+    """
     # parse the field parameters
     if refl_field is None:
         refl_field = get_field_name('reflectivity')
@@ -1385,7 +1390,8 @@ def phase_proc_lp_gf(radar, gatefilter=None, debug=False, self_const=60000.0,
 def get_phidp_unf_gf(radar, gatefilter, debug=False, ncpts=2, sys_phase=None,
                      nowrap=None, phidp_field=None, first_gate_sysp=None):
     """
-    Get Unfolded Phi differential phase in areas not gatefiltered
+    Get Unfolded Phi differential phase in areas not gatefiltered.
+
     Parameters
     ----------
     radar : Radar
@@ -1411,10 +1417,12 @@ def get_phidp_unf_gf(radar, gatefilter, debug=False, ncpts=2, sys_phase=None,
         differential phase shift. A value of None for any of these parameters
         will use the default field name as defined in the Py-ART
         configuration file.
+
     Returns
     -------
     cordata : array
         Unwrapped phi differential phase.
+
     """
     # parse the field parameters
     if phidp_field is None:
@@ -1494,16 +1502,19 @@ def get_phidp_unf_gf(radar, gatefilter, debug=False, ncpts=2, sys_phase=None,
 def det_sys_phase_gf(radar, gatefilter, phidp_field=None, first_gate=30.):
     """
     Determine the system phase.
+
     Parameters
     ----------
     radar : Radar
         Radar object for which to determine the system phase.
     gatefilter : Gatefilter
-        Gatefilter object highlighting valid gates
+        Gatefilter object highlighting valid gates.
+
     Returns
     -------
     sys_phase : float or None
-        Estimate of the system phase.  None is not estimate can be made.
+        Estimate of the system phase. None is not estimate can be made.
+
     """
     # parse the field parameters
     if phidp_field is None:
