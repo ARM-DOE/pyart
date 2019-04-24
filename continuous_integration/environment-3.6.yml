@@ -13,3 +13,4 @@ dependencies:
   - trmm_rsl
   - wradlib
   - cartopy
+  - xarray
