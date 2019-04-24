@@ -826,9 +826,9 @@ class Radar(object):
         fixed_angle = mkdic(self.fixed_angle, sweeps)
         sweep_start_ray_index = mkdic(self.sweep_start_ray_index, None)
         sweep_start_ray_index['data'] = np.cumsum(np.append([0],
-                                                  ray_count[:-1]))
+                                                  ray_count[:-1]), dtype='int32')
         sweep_end_ray_index = mkdic(self.sweep_end_ray_index, None)
-        sweep_end_ray_index['data'] = np.cumsum(ray_count) - 1
+        sweep_end_ray_index['data'] = np.cumsum(ray_count, dtype='int32') - 1
         target_scan_rate = mkdic(self.target_scan_rate, sweeps)
 
         azimuth = mkdic(self.azimuth, rays)
