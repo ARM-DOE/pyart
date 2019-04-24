@@ -28,28 +28,24 @@ else:
     import builtins
 
 
-CLASSIFIERS = """\
-Development Status :: 5 - Production/Stable
-Intended Audience :: Science/Research
-Intended Audience :: Developers
-License :: OSI Approved :: BSD License
-Programming Language :: Python
-Programming Language :: Python :: 2
-Programming Language :: Python :: 2.7
-Programming Language :: Python :: 3
-Programming Language :: Python :: 3.5
-Programming Language :: Python :: 3.6
-Programming Language :: Python :: 3.7
-Programming Language :: C
-Programming Language :: Cython
-Programming Language :: Fortran
-Topic :: Scientific/Engineering
-Topic :: Scientific/Engineering :: Atmospheric Science
-Operating System :: POSIX :: Linux
-Operating System :: MacOS :: MacOS X
-Operating System :: Microsoft :: Windows
-"""
-
+CLASSIFIERS = [
+    'Development Status :: 5 - Production/Stable',
+    'Intended Audience :: Science/Research',
+    'Intended Audience :: Developers',
+    'License :: OSI Approved :: BSD License',
+    'Programming Language :: Python',
+    'Programming Language :: Python :: 2',
+    'Programming Language :: Python :: 2.7',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.6',
+    'Programming Language :: Python :: 3.7',
+    'Programming Language :: C',
+    'Programming Language :: Cython',
+    'Topic :: Scientific/Engineering',
+    'Topic :: Scientific/Engineering :: Atmospheric Science',
+    'Operating System :: POSIX :: Linux',
+    'Operating System :: MacOS :: MacOS X',
+    'Operating System :: Microsoft :: Windows']
 
 NAME = 'arm_pyart'
 MAINTAINER = "Py-ART Developers"
@@ -59,12 +55,11 @@ LONG_DESCRIPTION = "\n".join(DOCLINES[2:])
 URL = "https://github.com/ARM-DOE/pyart"
 DOWNLOAD_URL = "https://github.com/ARM-DOE/pyart"
 LICENSE = 'BSD'
-CLASSIFIERS = filter(None, CLASSIFIERS.split('\n'))
 PLATFORMS = ["Linux", "Mac OS-X", "Unix"]
 MAJOR = 1
 MINOR = 10
-MICRO = 0
-ISRELEASED = False
+MICRO = 1
+ISRELEASED = True
 VERSION = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 SCRIPTS = glob.glob('scripts/*')
 

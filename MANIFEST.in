@@ -1,7 +1,7 @@
 include *.rst
 recursive-include doc *
 recursive-include examples *.py *.txt
-recursive-include pyart *.c *.h *.pyx *.pxd *.f90 *.pyf
+recursive-include pyart *.c *.h *.pyx *.pxd
 include README.rst
 include LICENSE.txt
 include INSTALL.rst
