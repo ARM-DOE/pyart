@@ -1,19 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Core (pyart.core) &#8212; Py-ART Documentation</title>
     <link rel="stylesheet" href="../_static/scipy.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="../_static/documentation_options.js"></script>
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="pyart.core.Radar" href="generated/pyart.core.Radar.html" />
@@ -49,52 +50,52 @@
 <p>Core Py-ART classes and function for interacting with weather radar data.</p>
 <div class="section" id="core-classes">
 <h2>Core classes<a class="headerlink" href="#core-classes" title="Permalink to this headline">¶</a></h2>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-center">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.core.Radar.html#pyart.core.Radar" title="pyart.core.Radar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Radar</span></code></a>(time,&nbsp;_range,&nbsp;fields,&nbsp;metadata,&nbsp;…[,&nbsp;…])</td>
-<td>A class for storing antenna coordinate radar data.</td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyart.core.Radar.html#pyart.core.Radar" title="pyart.core.Radar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Radar</span></code></a>(time, _range, fields, metadata, …[, …])</p></td>
+<td><p>A class for storing antenna coordinate radar data.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.core.Grid.html#pyart.core.Grid" title="pyart.core.Grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Grid</span></code></a>(time,&nbsp;fields,&nbsp;metadata,&nbsp;…[,&nbsp;…])</td>
-<td>A class for storing rectilinear gridded radar data in Cartesian coordinate.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pyart.core.Grid.html#pyart.core.Grid" title="pyart.core.Grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Grid</span></code></a>(time, fields, metadata, …[, …])</p></td>
+<td><p>A class for storing rectilinear gridded radar data in Cartesian coordinate.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.core.HorizontalWindProfile.html#pyart.core.HorizontalWindProfile" title="pyart.core.HorizontalWindProfile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HorizontalWindProfile</span></code></a>(height,&nbsp;speed,&nbsp;direction)</td>
-<td>Horizontal wind profile.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyart.core.HorizontalWindProfile.html#pyart.core.HorizontalWindProfile" title="pyart.core.HorizontalWindProfile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HorizontalWindProfile</span></code></a>(height, speed, direction)</p></td>
+<td><p>Horizontal wind profile.</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="section" id="coordinate-transformations">
 <h2>Coordinate transformations<a class="headerlink" href="#coordinate-transformations" title="Permalink to this headline">¶</a></h2>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-center">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.core.antenna_to_cartesian.html#pyart.core.antenna_to_cartesian" title="pyart.core.antenna_to_cartesian"><code class="xref py py-obj docutils literal notranslate"><span class="pre">antenna_to_cartesian</span></code></a>(ranges,&nbsp;azimuths,&nbsp;…)</td>
-<td>Return Cartesian coordinates from antenna coordinates.</td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyart.core.antenna_to_cartesian.html#pyart.core.antenna_to_cartesian" title="pyart.core.antenna_to_cartesian"><code class="xref py py-obj docutils literal notranslate"><span class="pre">antenna_to_cartesian</span></code></a>(ranges, azimuths, …)</p></td>
+<td><p>Return Cartesian coordinates from antenna coordinates.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.core.antenna_vectors_to_cartesian.html#pyart.core.antenna_vectors_to_cartesian" title="pyart.core.antenna_vectors_to_cartesian"><code class="xref py py-obj docutils literal notranslate"><span class="pre">antenna_vectors_to_cartesian</span></code></a>(ranges,&nbsp;…[,&nbsp;…])</td>
-<td>Calculate Cartesian coordinate for gates from antenna coordinate vectors.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pyart.core.antenna_vectors_to_cartesian.html#pyart.core.antenna_vectors_to_cartesian" title="pyart.core.antenna_vectors_to_cartesian"><code class="xref py py-obj docutils literal notranslate"><span class="pre">antenna_vectors_to_cartesian</span></code></a>(ranges, …[, …])</p></td>
+<td><p>Calculate Cartesian coordinate for gates from antenna coordinate vectors.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.core.cartesian_to_geographic.html#pyart.core.cartesian_to_geographic" title="pyart.core.cartesian_to_geographic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cartesian_to_geographic</span></code></a>(x,&nbsp;y,&nbsp;projparams)</td>
-<td>Cartesian to Geographic coordinate transform.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyart.core.cartesian_to_geographic.html#pyart.core.cartesian_to_geographic" title="pyart.core.cartesian_to_geographic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cartesian_to_geographic</span></code></a>(x, y, projparams)</p></td>
+<td><p>Cartesian to Geographic coordinate transform.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.core.cartesian_vectors_to_geographic.html#pyart.core.cartesian_vectors_to_geographic" title="pyart.core.cartesian_vectors_to_geographic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cartesian_vectors_to_geographic</span></code></a>(x,&nbsp;y,&nbsp;projparams)</td>
-<td>Cartesian vectors to Geographic coordinate transform.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pyart.core.cartesian_vectors_to_geographic.html#pyart.core.cartesian_vectors_to_geographic" title="pyart.core.cartesian_vectors_to_geographic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cartesian_vectors_to_geographic</span></code></a>(x, y, projparams)</p></td>
+<td><p>Cartesian vectors to Geographic coordinate transform.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.core.cartesian_to_geographic_aeqd.html#pyart.core.cartesian_to_geographic_aeqd" title="pyart.core.cartesian_to_geographic_aeqd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cartesian_to_geographic_aeqd</span></code></a>(x,&nbsp;y,&nbsp;lon_0,&nbsp;lat_0)</td>
-<td>Azimuthal equidistant Cartesian to geographic coordinate transform.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyart.core.cartesian_to_geographic_aeqd.html#pyart.core.cartesian_to_geographic_aeqd" title="pyart.core.cartesian_to_geographic_aeqd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cartesian_to_geographic_aeqd</span></code></a>(x, y, lon_0, lat_0)</p></td>
+<td><p>Azimuthal equidistant Cartesian to geographic coordinate transform.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.core.geographic_to_cartesian.html#pyart.core.geographic_to_cartesian" title="pyart.core.geographic_to_cartesian"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geographic_to_cartesian</span></code></a>(lon,&nbsp;lat,&nbsp;projparams)</td>
-<td>Geographic to Cartesian coordinate transform.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pyart.core.geographic_to_cartesian.html#pyart.core.geographic_to_cartesian" title="pyart.core.geographic_to_cartesian"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geographic_to_cartesian</span></code></a>(lon, lat, projparams)</p></td>
+<td><p>Geographic to Cartesian coordinate transform.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.core.geographic_to_cartesian_aeqd.html#pyart.core.geographic_to_cartesian_aeqd" title="pyart.core.geographic_to_cartesian_aeqd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geographic_to_cartesian_aeqd</span></code></a>(lon,&nbsp;lat,&nbsp;…)</td>
-<td>Azimuthal equidistant geographic to Cartesian coordinate transform.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyart.core.geographic_to_cartesian_aeqd.html#pyart.core.geographic_to_cartesian_aeqd" title="pyart.core.geographic_to_cartesian_aeqd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">geographic_to_cartesian_aeqd</span></code></a>(lon, lat, …)</p></td>
+<td><p>Azimuthal equidistant geographic to Cartesian coordinate transform.</p></td>
 </tr>
 </tbody>
 </table>
@@ -107,9 +108,9 @@
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Core (<code class="docutils literal notranslate"><span class="pre">pyart.core</span></code>)</a><ul>
+<li><a class="reference internal" href="#">Core (<code class="xref py py-mod docutils literal notranslate"><span class="pre">pyart.core</span></code>)</a><ul>
 <li><a class="reference internal" href="#core-classes">Core classes</a></li>
 <li><a class="reference internal" href="#coordinate-transformations">Coordinate transformations</a></li>
 </ul>
@@ -135,8 +136,6 @@
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -165,9 +164,9 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2013-2016, Py-ART developers.
-      Last updated on Feb 15, 2018.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.0.
+        &#169; Copyright 2013-2019, Py-ART developers.
+      Last updated on Apr 24, 2019.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.
     </div>
   </body>
 </html>

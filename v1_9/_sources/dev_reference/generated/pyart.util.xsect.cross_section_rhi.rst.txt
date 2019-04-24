@@ -1,0 +1,6 @@
+pyart.util.xsect.cross\_section\_rhi
+====================================
+
+.. currentmodule:: pyart.util.xsect
+
+.. autofunction:: cross_section_rhi

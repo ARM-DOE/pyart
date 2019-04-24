@@ -1,19 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>pyart.io.output_to_geotiff._get_rgb_values &#8212; Py-ART Documentation</title>
     <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="../../_static/documentation_options.js"></script>
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="pyart.io.output_to_geotiff._create_sld" href="pyart.io.output_to_geotiff._create_sld.html" />
@@ -49,15 +50,13 @@
 <h1>pyart.io.output_to_geotiff._get_rgb_values<a class="headerlink" href="#pyart-io-output-to-geotiff-get-rgb-values" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pyart.io.output_to_geotiff._get_rgb_values">
-<code class="descclassname">pyart.io.output_to_geotiff.</code><code class="descname">_get_rgb_values</code><span class="sig-paren">(</span><em>data</em>, <em>vmin</em>, <em>vmax</em>, <em>color_levels</em>, <em>cmap</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/io/output_to_geotiff.py#L174"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.io.output_to_geotiff._get_rgb_values" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pyart.io.output_to_geotiff.</code><code class="descname">_get_rgb_values</code><span class="sig-paren">(</span><em>data</em>, <em>vmin</em>, <em>vmax</em>, <em>color_levels</em>, <em>cmap</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/io/output_to_geotiff.py#L186"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.io.output_to_geotiff._get_rgb_values" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get RGB values for later output to GeoTIFF, given a 2D data field,
 display min/max and color table info. Missing data get numpy.nan.
 Only called if rgb is True in write_grid_geotiff.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>data</strong> : numpy.ndarray object, dtype int or float</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> : numpy.ndarray object, dtype int or float</p>
 <blockquote>
 <div><p>Two-dimensional data array</p>
 </div></blockquote>
@@ -78,9 +77,9 @@ with steps &lt;&lt; 255 (e.g., hydrometeor ID).</p>
 <blockquote>
 <div><p>Colormap to use for RGB output or SLD file.</p>
 </div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>rarr</strong> : numpy.ndarray object, dtype int</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>rarr</strong> : numpy.ndarray object, dtype int</p>
 <blockquote>
 <div><p>Red channel indices (range = 0-255)</p>
 </div></blockquote>
@@ -89,13 +88,11 @@ with steps &lt;&lt; 255 (e.g., hydrometeor ID).</p>
 <div><p>Blue channel indices (range = 0-255)</p>
 </div></blockquote>
 <p><strong>garr</strong> : numpy.ndarray object, dtype int</p>
-<blockquote class="last">
+<blockquote>
 <div><p>Green channel indices (range = 0-255)</p>
 </div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -125,8 +122,6 @@ with steps &lt;&lt; 255 (e.g., hydrometeor ID).</p>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -156,9 +151,9 @@ with steps &lt;&lt; 255 (e.g., hydrometeor ID).</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2013-2016, Py-ART developers.
-      Last updated on Feb 15, 2018.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.0.
+        &#169; Copyright 2013-2019, Py-ART developers.
+      Last updated on Apr 24, 2019.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.
     </div>
   </body>
 </html>

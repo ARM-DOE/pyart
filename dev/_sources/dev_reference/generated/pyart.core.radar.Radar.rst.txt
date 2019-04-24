@@ -45,9 +45,11 @@ pyart.core.radar.Radar
        :toctree:
 
     
+         ~Radar.__dir__
          ~Radar.__format__
          ~Radar.__getstate__
          ~Radar.__init__
+         ~Radar.__init_subclass__
          ~Radar.__new__
          ~Radar.__reduce__
          ~Radar.__reduce_ex__

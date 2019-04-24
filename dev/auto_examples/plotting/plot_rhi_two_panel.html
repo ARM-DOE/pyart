@@ -1,22 +1,23 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Create a two panel RHI plot &#8212; Py-ART Documentation</title>
     <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="../../_static/documentation_options.js"></script>
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Create a grid plot with data overlay" href="plot_grid_data_overlay.html" />
+    <link rel="next" title="Create a PPI plot on a cartopy map" href="plot_ppi_cartopy_with_rings.html" />
     <link rel="prev" title="Create a multiple panel RHI plot from a CF/Radial file" href="plot_rhi_cfradial.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -29,7 +30,7 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="plot_grid_data_overlay.html" title="Create a grid plot with data overlay"
+          <a href="plot_ppi_cartopy_with_rings.html" title="Create a PPI plot on a cartopy map"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="plot_rhi_cfradial.html" title="Create a multiple panel RHI plot from a CF/Radial file"
@@ -49,7 +50,7 @@
 <p>An example which creates a two panel RHI plot of a Sigmet file.  The fields
 included in the two panels are reflectivity and doppler velocity.</p>
 <img alt="../../_images/plot_rhi_two_panel_1.png" class="align-center" src="../../_images/plot_rhi_two_panel_1.png" />
-<p><strong>Python source code:</strong> <a class="reference download internal" href="../../_downloads/plot_rhi_two_panel.py" download=""><code class="xref download docutils literal notranslate"><span class="pre">plot_rhi_two_panel.py</span></code></a></p>
+<p><strong>Python source code:</strong> <a class="reference download internal" download="" href="../../_downloads/38b00cabd1cabb86be0619204c7676b6/plot_rhi_two_panel.py"><code class="xref download docutils literal notranslate"><span class="pre">plot_rhi_two_panel.py</span></code></a></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
 
 <span class="c1"># Author: Jonathan J. Helmus (jhelmus@anl.gov)</span>
@@ -92,7 +93,7 @@ included in the two panels are reflectivity and doppler velocity.</p>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><strong>Total running time of the example:</strong>  1.52 seconds</p>
+<p><strong>Total running time of the example:</strong>  1.70 seconds</p>
 </div>
 
 
@@ -105,8 +106,8 @@ included in the two panels are reflectivity and doppler velocity.</p>
   <p class="topless"><a href="plot_rhi_cfradial.html"
                         title="previous chapter">Create a multiple panel RHI plot from a CF/Radial file</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="plot_grid_data_overlay.html"
-                        title="next chapter">Create a grid plot with data overlay</a></p>
+  <p class="topless"><a href="plot_ppi_cartopy_with_rings.html"
+                        title="next chapter">Create a PPI plot on a cartopy map</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -120,8 +121,6 @@ included in the two panels are reflectivity and doppler velocity.</p>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -140,7 +139,7 @@ included in the two panels are reflectivity and doppler velocity.</p>
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="plot_grid_data_overlay.html" title="Create a grid plot with data overlay"
+          <a href="plot_ppi_cartopy_with_rings.html" title="Create a PPI plot on a cartopy map"
              >next</a> |</li>
         <li class="right" >
           <a href="plot_rhi_cfradial.html" title="Create a multiple panel RHI plot from a CF/Radial file"
@@ -150,9 +149,9 @@ included in the two panels are reflectivity and doppler velocity.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2013-2016, Py-ART developers.
-      Last updated on Feb 15, 2018.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.0.
+        &#169; Copyright 2013-2019, Py-ART developers.
+      Last updated on Apr 24, 2019.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.
     </div>
   </body>
 </html>

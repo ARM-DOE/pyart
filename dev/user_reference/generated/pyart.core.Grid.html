@@ -1,19 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>pyart.core.Grid &#8212; Py-ART Documentation</title>
     <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="../../_static/documentation_options.js"></script>
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="pyart.core.Grid.add_field" href="pyart.core.Grid.add_field.html" />
@@ -36,7 +37,7 @@
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Py-ART Documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >User Reference Manual</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="../core.html" accesskey="U">Core (<code class="docutils literal notranslate"><span class="pre">pyart.core</span></code>)</a> &#187;</li> 
+          <li class="nav-item nav-item-2"><a href="../core.html" accesskey="U">Core (<code class="xref py py-mod docutils literal notranslate"><span class="pre">pyart.core</span></code>)</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -49,93 +50,93 @@
 <h1>pyart.core.Grid<a class="headerlink" href="#pyart-core-grid" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="pyart.core.Grid">
-<em class="property">class </em><code class="descclassname">pyart.core.</code><code class="descname">Grid</code><span class="sig-paren">(</span><em>time</em>, <em>fields</em>, <em>metadata</em>, <em>origin_latitude</em>, <em>origin_longitude</em>, <em>origin_altitude</em>, <em>x</em>, <em>y</em>, <em>z</em>, <em>projection=None</em>, <em>radar_latitude=None</em>, <em>radar_longitude=None</em>, <em>radar_altitude=None</em>, <em>radar_time=None</em>, <em>radar_name=None</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/core/grid.py#L38"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.core.Grid" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">pyart.core.</code><code class="descname">Grid</code><span class="sig-paren">(</span><em>time</em>, <em>fields</em>, <em>metadata</em>, <em>origin_latitude</em>, <em>origin_longitude</em>, <em>origin_altitude</em>, <em>x</em>, <em>y</em>, <em>z</em>, <em>projection=None</em>, <em>radar_latitude=None</em>, <em>radar_longitude=None</em>, <em>radar_altitude=None</em>, <em>radar_time=None</em>, <em>radar_name=None</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/core/grid.py#L39"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.core.Grid" title="Permalink to this definition">¶</a></dt>
 <dd><p>A class for storing rectilinear gridded radar data in Cartesian coordinate.</p>
 <p>Refer to the attribute section for information on the parameters.</p>
 <p>To create a Grid object using legacy parameters present in Py-ART version
 1.5 and before, use <code class="xref py py-func docutils literal notranslate"><span class="pre">from_legacy_parameters</span></code>,
 grid = Grid.from_legacy_parameters(fields, axes, metadata).</p>
 <p class="rubric">Attributes</p>
-<table border="1" class="docutils">
+<table class="docutils align-center">
 <colgroup>
-<col width="6%" />
-<col width="94%" />
+<col style="width: 6%" />
+<col style="width: 94%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>time</td>
-<td>(dict) Time of the grid.</td>
+<tbody>
+<tr class="row-odd"><td><p>time</p></td>
+<td><p>(dict) Time of the grid.</p></td>
 </tr>
-<tr class="row-even"><td>fields: dict of dicts</td>
-<td>Moments from radars or other variables.</td>
+<tr class="row-even"><td><p>fields: dict of dicts</p></td>
+<td><p>Moments from radars or other variables.</p></td>
 </tr>
-<tr class="row-odd"><td>metadata: dict</td>
-<td>Metadata describing the grid.</td>
+<tr class="row-odd"><td><p>metadata: dict</p></td>
+<td><p>Metadata describing the grid.</p></td>
 </tr>
-<tr class="row-even"><td>origin_longitude, origin_latitude, origin_altitude</td>
-<td>(dict) Geographic coordinate of the origin of the grid.</td>
+<tr class="row-even"><td><p>origin_longitude, origin_latitude, origin_altitude</p></td>
+<td><p>(dict) Geographic coordinate of the origin of the grid.</p></td>
 </tr>
-<tr class="row-odd"><td>x, y, z</td>
-<td>(dict, 1D) Distance from the grid origin for each Cartesian coordinate axis in a one dimensional array.  Defines the spacing along the three grid axes which is repeated throughout the grid, making a rectilinear grid.</td>
+<tr class="row-odd"><td><p>x, y, z</p></td>
+<td><p>(dict, 1D) Distance from the grid origin for each Cartesian coordinate axis in a one dimensional array.  Defines the spacing along the three grid axes which is repeated throughout the grid, making a rectilinear grid.</p></td>
 </tr>
-<tr class="row-even"><td>nx, ny, nz</td>
-<td>(int) Number of grid points along the given Cartesian dimension.</td>
+<tr class="row-even"><td><p>nx, ny, nz</p></td>
+<td><p>(int) Number of grid points along the given Cartesian dimension.</p></td>
 </tr>
-<tr class="row-odd"><td>projection</td>
-<td>(dic or str) Projection parameters defining the map projection used to transform from Cartesian to geographic coordinates.  None will use the default dictionary with the ‘proj’ key set to ‘pyart_aeqd’ indicating that the native Py-ART azimuthal equidistant projection is used. Other values should specify a valid pyproj.Proj projparams dictionary or string.  The special key ‘_include_lon_0_lat_0’ is removed when interpreting this dictionary. If this key is present and set to True, which is required when proj=’pyart_aeqd’, then the radar longitude and latitude will be added to the dictionary as ‘lon_0’ and ‘lat_0’. Use the <a class="reference internal" href="pyart.core.Grid.get_projparams.html#pyart.core.Grid.get_projparams" title="pyart.core.Grid.get_projparams"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_projparams</span></code></a> method to retrieve a copy of this attribute dictionary with this special key evaluated.</td>
+<tr class="row-odd"><td><p>projection</p></td>
+<td><p>(dic or str) Projection parameters defining the map projection used to transform from Cartesian to geographic coordinates.  None will use the default dictionary with the ‘proj’ key set to ‘pyart_aeqd’ indicating that the native Py-ART azimuthal equidistant projection is used. Other values should specify a valid pyproj.Proj projparams dictionary or string.  The special key ‘_include_lon_0_lat_0’ is removed when interpreting this dictionary. If this key is present and set to True, which is required when proj=’pyart_aeqd’, then the radar longitude and latitude will be added to the dictionary as ‘lon_0’ and ‘lat_0’. Use the <a class="reference internal" href="pyart.core.Grid.get_projparams.html#pyart.core.Grid.get_projparams" title="pyart.core.Grid.get_projparams"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_projparams</span></code></a> method to retrieve a copy of this attribute dictionary with this special key evaluated.</p></td>
 </tr>
-<tr class="row-even"><td>radar_longitude, radar_latitude, radar_altitude</td>
-<td>(dict or None, optional) Geographic location of the radars which make up the grid.</td>
+<tr class="row-even"><td><p>radar_longitude, radar_latitude, radar_altitude</p></td>
+<td><p>(dict or None, optional) Geographic location of the radars which make up the grid.</p></td>
 </tr>
-<tr class="row-odd"><td>radar_time</td>
-<td>(dict or None, optional) Start of collection for the radar which make up the grid.</td>
+<tr class="row-odd"><td><p>radar_time</p></td>
+<td><p>(dict or None, optional) Start of collection for the radar which make up the grid.</p></td>
 </tr>
-<tr class="row-even"><td>radar_name</td>
-<td>(dict or None, optional) Names of the radars which make up the grid.</td>
+<tr class="row-even"><td><p>radar_name</p></td>
+<td><p>(dict or None, optional) Names of the radars which make up the grid.</p></td>
 </tr>
-<tr class="row-odd"><td>nradar</td>
-<td>(int) Number of radars whose data was used to make the grid.</td>
+<tr class="row-odd"><td><p>nradar</p></td>
+<td><p>(int) Number of radars whose data was used to make the grid.</p></td>
 </tr>
-<tr class="row-even"><td>projection_proj</td>
-<td>(Proj) pyproj.Proj instance for the projection specified by the projection attribute.  If the ‘pyart_aeqd’ projection is specified accessing this attribute will raise a ValueError.</td>
+<tr class="row-even"><td><p>projection_proj</p></td>
+<td><p>(Proj) pyproj.Proj instance for the projection specified by the projection attribute.  If the ‘pyart_aeqd’ projection is specified accessing this attribute will raise a ValueError.</p></td>
 </tr>
-<tr class="row-odd"><td>point_x, point_y, point_z</td>
-<td>(LazyLoadDict) The Cartesian locations of all grid points from the origin in the three Cartesian coordinates.  The three dimensional data arrays contained these attributes are calculated from the x, y, and z attributes.  If these attributes are changed use :py:func: <cite>init_point_x_y_z</cite> to reset the attributes.</td>
+<tr class="row-odd"><td><p>point_x, point_y, point_z</p></td>
+<td><p>(LazyLoadDict) The Cartesian locations of all grid points from the origin in the three Cartesian coordinates.  The three dimensional data arrays contained these attributes are calculated from the x, y, and z attributes.  If these attributes are changed use :py:func: <cite>init_point_x_y_z</cite> to reset the attributes.</p></td>
 </tr>
-<tr class="row-even"><td>point_longitude, point_latitude</td>
-<td>(LazyLoadDict) Geographic location of each grid point. The projection parameter(s) defined in the <cite>projection</cite> attribute are used to perform an inverse map projection from the Cartesian grid point locations relative to the grid origin. If these attributes are changed use <a class="reference internal" href="pyart.core.Grid.init_point_longitude_latitude.html#pyart.core.Grid.init_point_longitude_latitude" title="pyart.core.Grid.init_point_longitude_latitude"><code class="xref py py-func docutils literal notranslate"><span class="pre">init_point_longitude_latitude</span></code></a> to reset the attributes.</td>
+<tr class="row-even"><td><p>point_longitude, point_latitude</p></td>
+<td><p>(LazyLoadDict) Geographic location of each grid point. The projection parameter(s) defined in the <cite>projection</cite> attribute are used to perform an inverse map projection from the Cartesian grid point locations relative to the grid origin. If these attributes are changed use <a class="reference internal" href="pyart.core.Grid.init_point_longitude_latitude.html#pyart.core.Grid.init_point_longitude_latitude" title="pyart.core.Grid.init_point_longitude_latitude"><code class="xref py py-func docutils literal notranslate"><span class="pre">init_point_longitude_latitude</span></code></a> to reset the attributes.</p></td>
 </tr>
-<tr class="row-odd"><td>point_altitude</td>
-<td>(LazyLoadDict) The altitude of each grid point as calculated from the altitude of the grid origin and the Cartesian z location of each grid point.  If this attribute is changed use <a class="reference internal" href="pyart.core.Grid.init_point_altitude.html#pyart.core.Grid.init_point_altitude" title="pyart.core.Grid.init_point_altitude"><code class="xref py py-func docutils literal notranslate"><span class="pre">init_point_altitude</span></code></a> to reset the attribute.</td>
+<tr class="row-odd"><td><p>point_altitude</p></td>
+<td><p>(LazyLoadDict) The altitude of each grid point as calculated from the altitude of the grid origin and the Cartesian z location of each grid point.  If this attribute is changed use <a class="reference internal" href="pyart.core.Grid.init_point_altitude.html#pyart.core.Grid.init_point_altitude" title="pyart.core.Grid.init_point_altitude"><code class="xref py py-func docutils literal notranslate"><span class="pre">init_point_altitude</span></code></a> to reset the attribute.</p></td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-center">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="pyart.core.Grid.add_field.html#pyart.core.Grid.add_field" title="pyart.core.Grid.add_field"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_field</span></code></a>(field_name,&nbsp;field_dict[,&nbsp;…])</td>
-<td>Add a field to the object.</td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.core.Grid.add_field.html#pyart.core.Grid.add_field" title="pyart.core.Grid.add_field"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_field</span></code></a>(field_name, field_dict[, …])</p></td>
+<td><p>Add a field to the object.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.core.Grid.get_point_longitude_latitude.html#pyart.core.Grid.get_point_longitude_latitude" title="pyart.core.Grid.get_point_longitude_latitude"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_point_longitude_latitude</span></code></a>([level,&nbsp;edges])</td>
-<td>Return arrays of longitude and latitude for a given grid height level.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.core.Grid.get_point_longitude_latitude.html#pyart.core.Grid.get_point_longitude_latitude" title="pyart.core.Grid.get_point_longitude_latitude"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_point_longitude_latitude</span></code></a>([level, edges])</p></td>
+<td><p>Return arrays of longitude and latitude for a given grid height level.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.core.Grid.get_projparams.html#pyart.core.Grid.get_projparams" title="pyart.core.Grid.get_projparams"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_projparams</span></code></a>()</td>
-<td>Return a projparam dict from the projection attribute.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.core.Grid.get_projparams.html#pyart.core.Grid.get_projparams" title="pyart.core.Grid.get_projparams"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_projparams</span></code></a>()</p></td>
+<td><p>Return a projparam dict from the projection attribute.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.core.Grid.init_point_altitude.html#pyart.core.Grid.init_point_altitude" title="pyart.core.Grid.init_point_altitude"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_point_altitude</span></code></a>()</td>
-<td>Initialize the point_altitude attribute.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.core.Grid.init_point_altitude.html#pyart.core.Grid.init_point_altitude" title="pyart.core.Grid.init_point_altitude"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_point_altitude</span></code></a>()</p></td>
+<td><p>Initialize the point_altitude attribute.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.core.Grid.init_point_longitude_latitude.html#pyart.core.Grid.init_point_longitude_latitude" title="pyart.core.Grid.init_point_longitude_latitude"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_point_longitude_latitude</span></code></a>()</td>
-<td>Initialize or reset the point_{longitude, latitudes} attributes.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.core.Grid.init_point_longitude_latitude.html#pyart.core.Grid.init_point_longitude_latitude" title="pyart.core.Grid.init_point_longitude_latitude"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_point_longitude_latitude</span></code></a>()</p></td>
+<td><p>Initialize or reset the point_{longitude, latitudes} attributes.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.core.Grid.init_point_x_y_z.html#pyart.core.Grid.init_point_x_y_z" title="pyart.core.Grid.init_point_x_y_z"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_point_x_y_z</span></code></a>()</td>
-<td>Initialize or reset the point_{x, y, z} attributes.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.core.Grid.init_point_x_y_z.html#pyart.core.Grid.init_point_x_y_z" title="pyart.core.Grid.init_point_x_y_z"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_point_x_y_z</span></code></a>()</p></td>
+<td><p>Initialize or reset the point_{x, y, z} attributes.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.core.Grid.write.html#pyart.core.Grid.write" title="pyart.core.Grid.write"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write</span></code></a>(filename[,&nbsp;format,&nbsp;arm_time_variables])</td>
-<td>Write the the Grid object to a NetCDF file.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.core.Grid.write.html#pyart.core.Grid.write" title="pyart.core.Grid.write"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write</span></code></a>(filename[, format, arm_time_variables])</p></td>
+<td><p>Write the the Grid object to a NetCDF file.</p></td>
 </tr>
 </tbody>
 </table>
@@ -168,8 +169,6 @@ grid = Grid.from_legacy_parameters(fields, axes, metadata).</p>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -195,13 +194,13 @@ grid = Grid.from_legacy_parameters(fields, axes, metadata).</p>
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Py-ART Documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >User Reference Manual</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="../core.html" >Core (<code class="docutils literal notranslate"><span class="pre">pyart.core</span></code>)</a> &#187;</li> 
+          <li class="nav-item nav-item-2"><a href="../core.html" >Core (<code class="xref py py-mod docutils literal notranslate"><span class="pre">pyart.core</span></code>)</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2013-2016, Py-ART developers.
-      Last updated on Feb 15, 2018.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.0.
+        &#169; Copyright 2013-2019, Py-ART developers.
+      Last updated on Apr 24, 2019.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.
     </div>
   </body>
 </html>

@@ -1,0 +1,6 @@
+pyart.correct.region\_dealias.\_RegionTracker.get\_node\_size
+=============================================================
+
+.. currentmodule:: pyart.correct.region_dealias
+
+.. automethod:: _RegionTracker.get_node_size

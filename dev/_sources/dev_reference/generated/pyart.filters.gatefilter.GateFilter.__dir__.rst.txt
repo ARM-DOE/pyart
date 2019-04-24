@@ -1,0 +1,6 @@
+pyart.filters.gatefilter.GateFilter.\_\_dir\_\_
+===============================================
+
+.. currentmodule:: pyart.filters.gatefilter
+
+.. automethod:: GateFilter.__dir__

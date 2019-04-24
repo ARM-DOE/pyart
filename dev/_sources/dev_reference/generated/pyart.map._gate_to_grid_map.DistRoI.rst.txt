@@ -21,10 +21,13 @@ pyart.map.\_gate\_to\_grid\_map.DistRoI
        :toctree:
 
     
+         ~DistRoI.__dir__
          ~DistRoI.__format__
+         ~DistRoI.__init_subclass__
          ~DistRoI.__new__
          ~DistRoI.__reduce__
          ~DistRoI.__reduce_ex__
+         ~DistRoI.__setstate__
          ~DistRoI.__sizeof__
          ~DistRoI.__subclasshook__
    

@@ -21,10 +21,13 @@ pyart.map.\_gate\_to\_grid\_map.RoIFunction
        :toctree:
 
     
+         ~RoIFunction.__dir__
          ~RoIFunction.__format__
+         ~RoIFunction.__init_subclass__
          ~RoIFunction.__new__
          ~RoIFunction.__reduce__
          ~RoIFunction.__reduce_ex__
+         ~RoIFunction.__setstate__
          ~RoIFunction.__sizeof__
          ~RoIFunction.__subclasshook__
    

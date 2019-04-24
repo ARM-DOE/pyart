@@ -1,0 +1,6 @@
+pyart.graph.radardisplay.RadarDisplay.\_\_init\_\_
+==================================================
+
+.. currentmodule:: pyart.graph.radardisplay
+
+.. automethod:: RadarDisplay.__init__

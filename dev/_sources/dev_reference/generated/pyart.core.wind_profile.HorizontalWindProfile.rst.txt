@@ -13,24 +13,6 @@ pyart.core.wind\_profile.HorizontalWindProfile
       
          HorizontalWindProfile.from_u_and_v
 
-   |
-
-   **Private methods**
-   
-   .. autosummary::
-       :toctree:
-
-    
-         ~HorizontalWindProfile.__format__
-         ~HorizontalWindProfile.__init__
-         ~HorizontalWindProfile.__new__
-         ~HorizontalWindProfile.__reduce__
-         ~HorizontalWindProfile.__reduce_ex__
-         ~HorizontalWindProfile.__sizeof__
-         ~HorizontalWindProfile.__subclasshook__
-         ~HorizontalWindProfile._parse_location_data
-   
-   
 
 
    

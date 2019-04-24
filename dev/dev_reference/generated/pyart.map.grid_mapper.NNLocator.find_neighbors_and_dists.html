@@ -1,22 +1,23 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>pyart.map.grid_mapper.NNLocator.find_neighbors_and_dists &#8212; Py-ART Documentation</title>
     <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="../../_static/documentation_options.js"></script>
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="pyart.map.grid_mapper.NNLocator.__init__" href="pyart.map.grid_mapper.NNLocator.__init__.html" />
+    <link rel="next" title="pyart.map.grid_mapper.NNLocator.__dir__" href="pyart.map.grid_mapper.NNLocator.__dir__.html" />
     <link rel="prev" title="pyart.map.grid_mapper.NNLocator" href="pyart.map.grid_mapper.NNLocator.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -29,7 +30,7 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pyart.map.grid_mapper.NNLocator.__init__.html" title="pyart.map.grid_mapper.NNLocator.__init__"
+          <a href="pyart.map.grid_mapper.NNLocator.__dir__.html" title="pyart.map.grid_mapper.NNLocator.__dir__"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="pyart.map.grid_mapper.NNLocator.html" title="pyart.map.grid_mapper.NNLocator"
@@ -50,13 +51,11 @@
 <h1>pyart.map.grid_mapper.NNLocator.find_neighbors_and_dists<a class="headerlink" href="#pyart-map-grid-mapper-nnlocator-find-neighbors-and-dists" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="pyart.map.grid_mapper.NNLocator.find_neighbors_and_dists">
-<code class="descclassname">NNLocator.</code><code class="descname">find_neighbors_and_dists</code><span class="sig-paren">(</span><em>q</em>, <em>r</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/map/grid_mapper.py#L223"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.map.grid_mapper.NNLocator.find_neighbors_and_dists" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">NNLocator.</code><code class="descname">find_neighbors_and_dists</code><span class="sig-paren">(</span><em>q</em>, <em>r</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/map/grid_mapper.py#L238"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.map.grid_mapper.NNLocator.find_neighbors_and_dists" title="Permalink to this definition">¶</a></dt>
 <dd><p>Find all neighbors and distances within a given distance.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>q</strong> : n_dimensional tuple</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>q</strong> : n_dimensional tuple</p>
 <blockquote>
 <div><p>Point to query</p>
 </div></blockquote>
@@ -64,20 +63,18 @@
 <blockquote>
 <div><p>Distance within which neighbors are returned.</p>
 </div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>ind</strong> : array of intergers</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>ind</strong> : array of intergers</p>
 <blockquote>
 <div><p>Indices of the neighbors.</p>
 </div></blockquote>
 <p><strong>dist</strong> : array of floats</p>
-<blockquote class="last">
+<blockquote>
 <div><p>Distances to the neighbors.</p>
 </div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -92,8 +89,8 @@
   <p class="topless"><a href="pyart.map.grid_mapper.NNLocator.html"
                         title="previous chapter">pyart.map.grid_mapper.NNLocator</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="pyart.map.grid_mapper.NNLocator.__init__.html"
-                        title="next chapter">pyart.map.grid_mapper.NNLocator.__init__</a></p>
+  <p class="topless"><a href="pyart.map.grid_mapper.NNLocator.__dir__.html"
+                        title="next chapter">pyart.map.grid_mapper.NNLocator.__dir__</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -107,8 +104,6 @@
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -127,7 +122,7 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pyart.map.grid_mapper.NNLocator.__init__.html" title="pyart.map.grid_mapper.NNLocator.__init__"
+          <a href="pyart.map.grid_mapper.NNLocator.__dir__.html" title="pyart.map.grid_mapper.NNLocator.__dir__"
              >next</a> |</li>
         <li class="right" >
           <a href="pyart.map.grid_mapper.NNLocator.html" title="pyart.map.grid_mapper.NNLocator"
@@ -139,9 +134,9 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2013-2016, Py-ART developers.
-      Last updated on Feb 15, 2018.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.0.
+        &#169; Copyright 2013-2019, Py-ART developers.
+      Last updated on Apr 24, 2019.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.
     </div>
   </body>
 </html>

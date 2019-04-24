@@ -1,19 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>pyart.retrieve.kdp_proc.filter_psidp &#8212; Py-ART Documentation</title>
     <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="../../_static/documentation_options.js"></script>
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="pyart.retrieve.kdp_proc.boundary_conditions_maesaka" href="pyart.retrieve.kdp_proc.boundary_conditions_maesaka.html" />
@@ -49,22 +50,19 @@
 <h1>pyart.retrieve.kdp_proc.filter_psidp<a class="headerlink" href="#pyart-retrieve-kdp-proc-filter-psidp" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pyart.retrieve.kdp_proc.filter_psidp">
-<code class="descclassname">pyart.retrieve.kdp_proc.</code><code class="descname">filter_psidp</code><span class="sig-paren">(</span><em>radar</em>, <em>psidp_field=None</em>, <em>rhohv_field=None</em>, <em>minsize_seq=5</em>, <em>median_filter_size=7</em>, <em>thresh_rhohv=0.65</em>, <em>max_discont=90</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/retrieve/kdp_proc.py#L1022"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.retrieve.kdp_proc.filter_psidp" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="docutils">
-<dt>Filter measured psidp to remove spurious data in four steps:</dt>
-<dd><ol class="first last arabic simple">
-<li>Censor it where Rhohv is lower than threshold</li>
-<li>Unravel angles when strong discontinuities are detected</li>
-<li>Remove very short sequences of valid data</li>
-<li>Apply a median filter on every profile</li>
+<code class="descclassname">pyart.retrieve.kdp_proc.</code><code class="descname">filter_psidp</code><span class="sig-paren">(</span><em>radar</em>, <em>psidp_field=None</em>, <em>rhohv_field=None</em>, <em>minsize_seq=5</em>, <em>median_filter_size=7</em>, <em>thresh_rhohv=0.65</em>, <em>max_discont=90</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/retrieve/kdp_proc.py#L1021"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.retrieve.kdp_proc.filter_psidp" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>Filter measured psidp to remove spurious data in four steps:</dt><dd><ol class="arabic simple">
+<li><p>Censor it where Rhohv is lower than threshold</p></li>
+<li><p>Unravel angles when strong discontinuities are detected</p></li>
+<li><p>Remove very short sequences of valid data</p></li>
+<li><p>Apply a median filter on every profile</p></li>
 </ol>
 </dd>
 </dl>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>radar</strong> : Radar</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>radar</strong> : Radar</p>
 <blockquote>
 <div><p>Radar containing differential phase field.</p>
 </div></blockquote>
@@ -95,16 +93,14 @@ will be rejected</p>
 <blockquote>
 <div><p>Maximum discontinuity between psidp values, default is 90 deg</p>
 </div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>psidp_filt</strong> : ndarray</p>
-<blockquote class="last">
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>psidp_filt</strong> : ndarray</p>
+<blockquote>
 <div><p>Filtered psidp field</p>
 </div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -134,8 +130,6 @@ will be rejected</p>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -165,9 +159,9 @@ will be rejected</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2013-2016, Py-ART developers.
-      Last updated on Feb 15, 2018.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.0.
+        &#169; Copyright 2013-2019, Py-ART developers.
+      Last updated on Apr 24, 2019.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.
     </div>
   </body>
 </html>

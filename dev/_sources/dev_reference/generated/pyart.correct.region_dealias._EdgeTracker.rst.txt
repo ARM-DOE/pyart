@@ -23,8 +23,10 @@ pyart.correct.region\_dealias.\_EdgeTracker
        :toctree:
 
     
+         ~_EdgeTracker.__dir__
          ~_EdgeTracker.__format__
          ~_EdgeTracker.__init__
+         ~_EdgeTracker.__init_subclass__
          ~_EdgeTracker.__new__
          ~_EdgeTracker.__reduce__
          ~_EdgeTracker.__reduce_ex__

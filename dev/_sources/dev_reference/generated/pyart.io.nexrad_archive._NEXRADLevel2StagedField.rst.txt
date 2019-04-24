@@ -22,8 +22,10 @@ pyart.io.nexrad\_archive.\_NEXRADLevel2StagedField
 
     
          ~_NEXRADLevel2StagedField.__call__
+         ~_NEXRADLevel2StagedField.__dir__
          ~_NEXRADLevel2StagedField.__format__
          ~_NEXRADLevel2StagedField.__init__
+         ~_NEXRADLevel2StagedField.__init_subclass__
          ~_NEXRADLevel2StagedField.__new__
          ~_NEXRADLevel2StagedField.__reduce__
          ~_NEXRADLevel2StagedField.__reduce_ex__

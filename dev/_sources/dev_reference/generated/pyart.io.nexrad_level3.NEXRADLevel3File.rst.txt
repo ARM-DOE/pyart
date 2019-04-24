@@ -27,8 +27,10 @@ pyart.io.nexrad\_level3.NEXRADLevel3File
        :toctree:
 
     
+         ~NEXRADLevel3File.__dir__
          ~NEXRADLevel3File.__format__
          ~NEXRADLevel3File.__init__
+         ~NEXRADLevel3File.__init_subclass__
          ~NEXRADLevel3File.__new__
          ~NEXRADLevel3File.__reduce__
          ~NEXRADLevel3File.__reduce_ex__

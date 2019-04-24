@@ -27,9 +27,11 @@ pyart.core.grid.Grid
        :toctree:
 
     
+         ~Grid.__dir__
          ~Grid.__format__
          ~Grid.__getstate__
          ~Grid.__init__
+         ~Grid.__init_subclass__
          ~Grid.__new__
          ~Grid.__reduce__
          ~Grid.__reduce_ex__

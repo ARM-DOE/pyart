@@ -1,0 +1,6 @@
+pyart.retrieve.velocity\_azimuth\_display
+=========================================
+
+.. currentmodule:: pyart.retrieve
+
+.. autofunction:: velocity_azimuth_display

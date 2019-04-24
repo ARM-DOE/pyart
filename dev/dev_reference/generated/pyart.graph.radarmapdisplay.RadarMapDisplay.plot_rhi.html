@@ -1,19 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>pyart.graph.radarmapdisplay.RadarMapDisplay.plot_rhi &#8212; Py-ART Documentation</title>
     <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="../../_static/documentation_options.js"></script>
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="pyart.graph.radarmapdisplay.RadarMapDisplay.plot_vpt" href="pyart.graph.radarmapdisplay.RadarMapDisplay.plot_vpt.html" />
@@ -53,11 +54,9 @@
 <code class="descclassname">RadarMapDisplay.</code><code class="descname">plot_rhi</code><span class="sig-paren">(</span><em>field</em>, <em>sweep=0</em>, <em>mask_tuple=None</em>, <em>vmin=None</em>, <em>vmax=None</em>, <em>norm=None</em>, <em>cmap=None</em>, <em>mask_outside=False</em>, <em>title=None</em>, <em>title_flag=True</em>, <em>axislabels=(None</em>, <em>None)</em>, <em>axislabels_flag=True</em>, <em>reverse_xaxis=None</em>, <em>colorbar_flag=True</em>, <em>colorbar_label=None</em>, <em>colorbar_orient='vertical'</em>, <em>edges=True</em>, <em>gatefilter=None</em>, <em>filter_transitions=True</em>, <em>ax=None</em>, <em>fig=None</em>, <em>ticks=None</em>, <em>ticklabs=None</em>, <em>raster=False</em>, <em>title_datetime_format=None</em>, <em>title_use_sweep_time=True</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/graph/radardisplay.py#L368"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.graph.radarmapdisplay.RadarMapDisplay.plot_rhi" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot a RHI.</p>
 <p>Additional arguments are passed to Matplotlib’s pcolormesh function.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>field</strong> : str</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>field</strong> : str</p>
 <blockquote>
 <div><p>Field to plot.</p>
 </div></blockquote>
@@ -65,10 +64,9 @@
 <blockquote>
 <div><p>Sweep number to plot.</p>
 </div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">Other Parameters:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body"><p class="first"><strong>mask_tuple</strong> : (str, float)</p>
+</dd>
+<dt class="field-even">Other Parameters</dt>
+<dd class="field-even"><p><strong>mask_tuple</strong> : (str, float)</p>
 <blockquote>
 <div><p>2-Tuple containing the field name and value below which to mask
 field prior to plotting, for example to mask all data where
@@ -182,17 +180,15 @@ underlying radar is not present.</p>
 <div><p>Figure to add the colorbar to. None will use the current figure.</p>
 </div></blockquote>
 <p><strong>raster</strong> : bool</p>
-<blockquote class="last">
+<blockquote>
 <div><p>False by default.  Set to true to render the display as a raster
 rather than a vector in call to pcolormesh.  Saves time in plotting
 high resolution data over large areas.  Be sure to set the dpi
 of the plot for your application if you save it as a vector format
 (i.e., pdf, eps, svg).</p>
 </div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -222,8 +218,6 @@ of the plot for your application if you save it as a vector format
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -254,9 +248,9 @@ of the plot for your application if you save it as a vector format
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2013-2016, Py-ART developers.
-      Last updated on Feb 15, 2018.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.0.
+        &#169; Copyright 2013-2019, Py-ART developers.
+      Last updated on Apr 24, 2019.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.
     </div>
   </body>
 </html>

@@ -24,5 +24,5 @@ and adding Reflectivity contours from the same MDV file.
 .. literalinclude:: plot_rhi_data_overlay.py
     :lines: 10-
 
-**Total running time of the example:**  0.70 seconds
+**Total running time of the example:**  0.59 seconds
     

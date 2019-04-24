@@ -22,10 +22,13 @@ pyart.map.\_gate\_to\_grid\_map.GateToGridMapper
        :toctree:
 
     
+         ~GateToGridMapper.__dir__
          ~GateToGridMapper.__format__
+         ~GateToGridMapper.__init_subclass__
          ~GateToGridMapper.__new__
          ~GateToGridMapper.__reduce__
          ~GateToGridMapper.__reduce_ex__
+         ~GateToGridMapper.__setstate__
          ~GateToGridMapper.__sizeof__
          ~GateToGridMapper.__subclasshook__
    

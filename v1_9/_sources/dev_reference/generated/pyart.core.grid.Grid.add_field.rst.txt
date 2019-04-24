@@ -1,0 +1,6 @@
+pyart.core.grid.Grid.add\_field
+===============================
+
+.. currentmodule:: pyart.core.grid
+
+.. automethod:: Grid.add_field

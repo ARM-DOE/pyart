@@ -21,10 +21,13 @@ pyart.map.\_gate\_to\_grid\_map.ConstantRoI
        :toctree:
 
     
+         ~ConstantRoI.__dir__
          ~ConstantRoI.__format__
+         ~ConstantRoI.__init_subclass__
          ~ConstantRoI.__new__
          ~ConstantRoI.__reduce__
          ~ConstantRoI.__reduce_ex__
+         ~ConstantRoI.__setstate__
          ~ConstantRoI.__sizeof__
          ~ConstantRoI.__subclasshook__
    

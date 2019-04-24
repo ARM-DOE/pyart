@@ -1,19 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>pyart.aux_io.gamicfile.GAMICFile &#8212; Py-ART Documentation</title>
     <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="../../_static/documentation_options.js"></script>
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="pyart.aux_io.gamicfile.GAMICFile.close" href="pyart.aux_io.gamicfile.GAMICFile.close.html" />
@@ -51,102 +52,98 @@
 <dt id="pyart.aux_io.gamicfile.GAMICFile">
 <em class="property">class </em><code class="descclassname">pyart.aux_io.gamicfile.</code><code class="descname">GAMICFile</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/aux_io/gamicfile.py#L25"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.aux_io.gamicfile.GAMICFile" title="Permalink to this definition">¶</a></dt>
 <dd><p>A class to read GAMIC files.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
-<blockquote class="last">
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> : str</p>
+<blockquote>
 <div><p>Filename of GAMIC HDF5 file.</p>
 </div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <p class="rubric">Attributes</p>
-<table border="1" class="docutils">
+<table class="docutils align-center">
 <colgroup>
-<col width="17%" />
-<col width="83%" />
+<col style="width: 17%" />
+<col style="width: 83%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>nsweeps</td>
-<td>(int) Number of sweeps (or scans) in the file.</td>
+<tbody>
+<tr class="row-odd"><td><p>nsweeps</p></td>
+<td><p>(int) Number of sweeps (or scans) in the file.</p></td>
 </tr>
-<tr class="row-even"><td>rays_per_sweep</td>
-<td>(array of int32) Number of rays in each sweep.</td>
+<tr class="row-even"><td><p>rays_per_sweep</p></td>
+<td><p>(array of int32) Number of rays in each sweep.</p></td>
 </tr>
-<tr class="row-odd"><td>total_rays</td>
-<td>(int) Total number of rays in all sweeps.</td>
+<tr class="row-odd"><td><p>total_rays</p></td>
+<td><p>(int) Total number of rays in all sweeps.</p></td>
 </tr>
-<tr class="row-even"><td>start_ray, end_ray</td>
-<td>(array of int32) Index of the first (start) and last (end) ray in each sweep, 0-based.</td>
+<tr class="row-even"><td><p>start_ray, end_ray</p></td>
+<td><p>(array of int32) Index of the first (start) and last (end) ray in each sweep, 0-based.</p></td>
 </tr>
-<tr class="row-odd"><td>_hfile</td>
-<td>(HDF5 file) Open HDF5 file object from which data is read.</td>
+<tr class="row-odd"><td><p>_hfile</p></td>
+<td><p>(HDF5 file) Open HDF5 file object from which data is read.</p></td>
 </tr>
-<tr class="row-even"><td>_scans</td>
-<td>(list) Name of the HDF5 group for each scan.</td>
+<tr class="row-even"><td><p>_scans</p></td>
+<td><p>(list) Name of the HDF5 group for each scan.</p></td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-center">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="pyart.aux_io.gamicfile.GAMICFile.close.html#pyart.aux_io.gamicfile.GAMICFile.close" title="pyart.aux_io.gamicfile.GAMICFile.close"><code class="xref py py-obj docutils literal notranslate"><span class="pre">close</span></code></a>()</td>
-<td>Close the file.</td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.aux_io.gamicfile.GAMICFile.close.html#pyart.aux_io.gamicfile.GAMICFile.close" title="pyart.aux_io.gamicfile.GAMICFile.close"><code class="xref py py-obj docutils literal notranslate"><span class="pre">close</span></code></a>()</p></td>
+<td><p>Close the file.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.aux_io.gamicfile.GAMICFile.how_attr.html#pyart.aux_io.gamicfile.GAMICFile.how_attr" title="pyart.aux_io.gamicfile.GAMICFile.how_attr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">how_attr</span></code></a>(attr,&nbsp;dtype)</td>
-<td>Return an array containing a attribute from the how group.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.aux_io.gamicfile.GAMICFile.how_attr.html#pyart.aux_io.gamicfile.GAMICFile.how_attr" title="pyart.aux_io.gamicfile.GAMICFile.how_attr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">how_attr</span></code></a>(attr, dtype)</p></td>
+<td><p>Return an array containing a attribute from the how group.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.aux_io.gamicfile.GAMICFile.how_attrs.html#pyart.aux_io.gamicfile.GAMICFile.how_attrs" title="pyart.aux_io.gamicfile.GAMICFile.how_attrs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">how_attrs</span></code></a>(attr,&nbsp;dtype)</td>
-<td>Return an array of an attribute for each scan’s how group.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.aux_io.gamicfile.GAMICFile.how_attrs.html#pyart.aux_io.gamicfile.GAMICFile.how_attrs" title="pyart.aux_io.gamicfile.GAMICFile.how_attrs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">how_attrs</span></code></a>(attr, dtype)</p></td>
+<td><p>Return an array of an attribute for each scan’s how group.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.aux_io.gamicfile.GAMICFile.how_ext_attrs.html#pyart.aux_io.gamicfile.GAMICFile.how_ext_attrs" title="pyart.aux_io.gamicfile.GAMICFile.how_ext_attrs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">how_ext_attrs</span></code></a>(attr)</td>
-<td>Return a list of an attribute in each scan’s how/extended group.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.aux_io.gamicfile.GAMICFile.how_ext_attrs.html#pyart.aux_io.gamicfile.GAMICFile.how_ext_attrs" title="pyart.aux_io.gamicfile.GAMICFile.how_ext_attrs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">how_ext_attrs</span></code></a>(attr)</p></td>
+<td><p>Return a list of an attribute in each scan’s how/extended group.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.aux_io.gamicfile.GAMICFile.is_attr_in_group.html#pyart.aux_io.gamicfile.GAMICFile.is_attr_in_group" title="pyart.aux_io.gamicfile.GAMICFile.is_attr_in_group"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_attr_in_group</span></code></a>(group,&nbsp;attr)</td>
-<td>True is attribute is present in the group, False otherwise.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.aux_io.gamicfile.GAMICFile.is_attr_in_group.html#pyart.aux_io.gamicfile.GAMICFile.is_attr_in_group" title="pyart.aux_io.gamicfile.GAMICFile.is_attr_in_group"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_attr_in_group</span></code></a>(group, attr)</p></td>
+<td><p>True is attribute is present in the group, False otherwise.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.aux_io.gamicfile.GAMICFile.is_field_in_ray_header.html#pyart.aux_io.gamicfile.GAMICFile.is_field_in_ray_header" title="pyart.aux_io.gamicfile.GAMICFile.is_field_in_ray_header"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_field_in_ray_header</span></code></a>(field)</td>
-<td>True if field is present in ray_header, False otherwise.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.aux_io.gamicfile.GAMICFile.is_field_in_ray_header.html#pyart.aux_io.gamicfile.GAMICFile.is_field_in_ray_header" title="pyart.aux_io.gamicfile.GAMICFile.is_field_in_ray_header"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_field_in_ray_header</span></code></a>(field)</p></td>
+<td><p>True if field is present in ray_header, False otherwise.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.aux_io.gamicfile.GAMICFile.is_file_complete.html#pyart.aux_io.gamicfile.GAMICFile.is_file_complete" title="pyart.aux_io.gamicfile.GAMICFile.is_file_complete"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_file_complete</span></code></a>()</td>
-<td>True if all scans in file, False otherwise.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.aux_io.gamicfile.GAMICFile.is_file_complete.html#pyart.aux_io.gamicfile.GAMICFile.is_file_complete" title="pyart.aux_io.gamicfile.GAMICFile.is_file_complete"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_file_complete</span></code></a>()</p></td>
+<td><p>True if all scans in file, False otherwise.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.aux_io.gamicfile.GAMICFile.is_file_single_scan_type.html#pyart.aux_io.gamicfile.GAMICFile.is_file_single_scan_type" title="pyart.aux_io.gamicfile.GAMICFile.is_file_single_scan_type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_file_single_scan_type</span></code></a>()</td>
-<td>True is all scans are the same scan type, False otherwise.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.aux_io.gamicfile.GAMICFile.is_file_single_scan_type.html#pyart.aux_io.gamicfile.GAMICFile.is_file_single_scan_type" title="pyart.aux_io.gamicfile.GAMICFile.is_file_single_scan_type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_file_single_scan_type</span></code></a>()</p></td>
+<td><p>True is all scans are the same scan type, False otherwise.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.aux_io.gamicfile.GAMICFile.moment_data.html#pyart.aux_io.gamicfile.GAMICFile.moment_data" title="pyart.aux_io.gamicfile.GAMICFile.moment_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">moment_data</span></code></a>(group,&nbsp;dtype)</td>
-<td>Read in moment data from all sweeps.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.aux_io.gamicfile.GAMICFile.moment_data.html#pyart.aux_io.gamicfile.GAMICFile.moment_data" title="pyart.aux_io.gamicfile.GAMICFile.moment_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">moment_data</span></code></a>(group, dtype)</p></td>
+<td><p>Read in moment data from all sweeps.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.aux_io.gamicfile.GAMICFile.moment_groups.html#pyart.aux_io.gamicfile.GAMICFile.moment_groups" title="pyart.aux_io.gamicfile.GAMICFile.moment_groups"><code class="xref py py-obj docutils literal notranslate"><span class="pre">moment_groups</span></code></a>()</td>
-<td>Return a list of groups under scan0 where moments are stored.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.aux_io.gamicfile.GAMICFile.moment_groups.html#pyart.aux_io.gamicfile.GAMICFile.moment_groups" title="pyart.aux_io.gamicfile.GAMICFile.moment_groups"><code class="xref py py-obj docutils literal notranslate"><span class="pre">moment_groups</span></code></a>()</p></td>
+<td><p>Return a list of groups under scan0 where moments are stored.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.aux_io.gamicfile.GAMICFile.moment_names.html#pyart.aux_io.gamicfile.GAMICFile.moment_names" title="pyart.aux_io.gamicfile.GAMICFile.moment_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">moment_names</span></code></a>(scan0_groups)</td>
-<td>Return a list of moment names for a list of scan0 groups.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.aux_io.gamicfile.GAMICFile.moment_names.html#pyart.aux_io.gamicfile.GAMICFile.moment_names" title="pyart.aux_io.gamicfile.GAMICFile.moment_names"><code class="xref py py-obj docutils literal notranslate"><span class="pre">moment_names</span></code></a>(scan0_groups)</p></td>
+<td><p>Return a list of moment names for a list of scan0 groups.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.aux_io.gamicfile.GAMICFile.raw_group_attr.html#pyart.aux_io.gamicfile.GAMICFile.raw_group_attr" title="pyart.aux_io.gamicfile.GAMICFile.raw_group_attr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">raw_group_attr</span></code></a>(group,&nbsp;attr)</td>
-<td>Return an attribute from a group with no reformatting.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.aux_io.gamicfile.GAMICFile.raw_group_attr.html#pyart.aux_io.gamicfile.GAMICFile.raw_group_attr" title="pyart.aux_io.gamicfile.GAMICFile.raw_group_attr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">raw_group_attr</span></code></a>(group, attr)</p></td>
+<td><p>Return an attribute from a group with no reformatting.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.aux_io.gamicfile.GAMICFile.raw_scan0_group_attr.html#pyart.aux_io.gamicfile.GAMICFile.raw_scan0_group_attr" title="pyart.aux_io.gamicfile.GAMICFile.raw_scan0_group_attr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">raw_scan0_group_attr</span></code></a>(group,&nbsp;attr)</td>
-<td>Return an attribute from the scan0 group with no reformatting.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.aux_io.gamicfile.GAMICFile.raw_scan0_group_attr.html#pyart.aux_io.gamicfile.GAMICFile.raw_scan0_group_attr" title="pyart.aux_io.gamicfile.GAMICFile.raw_scan0_group_attr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">raw_scan0_group_attr</span></code></a>(group, attr)</p></td>
+<td><p>Return an attribute from the scan0 group with no reformatting.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.aux_io.gamicfile.GAMICFile.ray_header.html#pyart.aux_io.gamicfile.GAMICFile.ray_header" title="pyart.aux_io.gamicfile.GAMICFile.ray_header"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ray_header</span></code></a>(field,&nbsp;dtype)</td>
-<td>Return an array containing a ray_header field for each sweep.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.aux_io.gamicfile.GAMICFile.ray_header.html#pyart.aux_io.gamicfile.GAMICFile.ray_header" title="pyart.aux_io.gamicfile.GAMICFile.ray_header"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ray_header</span></code></a>(field, dtype)</p></td>
+<td><p>Return an array containing a ray_header field for each sweep.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.aux_io.gamicfile.GAMICFile.sweep_expand.html#pyart.aux_io.gamicfile.GAMICFile.sweep_expand" title="pyart.aux_io.gamicfile.GAMICFile.sweep_expand"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sweep_expand</span></code></a>(arr[,&nbsp;dtype])</td>
-<td>Expand an sweep indexed array to be ray indexed</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.aux_io.gamicfile.GAMICFile.sweep_expand.html#pyart.aux_io.gamicfile.GAMICFile.sweep_expand" title="pyart.aux_io.gamicfile.GAMICFile.sweep_expand"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sweep_expand</span></code></a>(arr[, dtype])</p></td>
+<td><p>Expand an sweep indexed array to be ray indexed</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.aux_io.gamicfile.GAMICFile.what_attrs.html#pyart.aux_io.gamicfile.GAMICFile.what_attrs" title="pyart.aux_io.gamicfile.GAMICFile.what_attrs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">what_attrs</span></code></a>(attr,&nbsp;dtype)</td>
-<td>Return a list of an attribute for each scan’s what group.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.aux_io.gamicfile.GAMICFile.what_attrs.html#pyart.aux_io.gamicfile.GAMICFile.what_attrs" title="pyart.aux_io.gamicfile.GAMICFile.what_attrs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">what_attrs</span></code></a>(attr, dtype)</p></td>
+<td><p>Return a list of an attribute for each scan’s what group.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.aux_io.gamicfile.GAMICFile.where_attr.html#pyart.aux_io.gamicfile.GAMICFile.where_attr" title="pyart.aux_io.gamicfile.GAMICFile.where_attr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">where_attr</span></code></a>(attr,&nbsp;dtype)</td>
-<td>Return an array containing a attribute from the where group.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.aux_io.gamicfile.GAMICFile.where_attr.html#pyart.aux_io.gamicfile.GAMICFile.where_attr" title="pyart.aux_io.gamicfile.GAMICFile.where_attr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">where_attr</span></code></a>(attr, dtype)</p></td>
+<td><p>Return an array containing a attribute from the where group.</p></td>
 </tr>
 </tbody>
 </table>
@@ -154,32 +151,38 @@
 <div class="line"><br /></div>
 </div>
 <p><strong>Private methods</strong></p>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-center">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="pyart.aux_io.gamicfile.GAMICFile.__format__.html#pyart.aux_io.gamicfile.GAMICFile.__format__" title="pyart.aux_io.gamicfile.GAMICFile.__format__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__format__</span></code></a></td>
-<td>default object formatter</td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.aux_io.gamicfile.GAMICFile.__dir__.html#pyart.aux_io.gamicfile.GAMICFile.__dir__" title="pyart.aux_io.gamicfile.GAMICFile.__dir__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__dir__</span></code></a></p></td>
+<td><p>Default dir() implementation.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.aux_io.gamicfile.GAMICFile.__init__.html#pyart.aux_io.gamicfile.GAMICFile.__init__" title="pyart.aux_io.gamicfile.GAMICFile.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(filename)</td>
-<td>initialize object.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.aux_io.gamicfile.GAMICFile.__format__.html#pyart.aux_io.gamicfile.GAMICFile.__format__" title="pyart.aux_io.gamicfile.GAMICFile.__format__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__format__</span></code></a></p></td>
+<td><p>Default object formatter.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.aux_io.gamicfile.GAMICFile.__new__.html#pyart.aux_io.gamicfile.GAMICFile.__new__" title="pyart.aux_io.gamicfile.GAMICFile.__new__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__new__</span></code></a>(S,&nbsp;…)</td>
-<td></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.aux_io.gamicfile.GAMICFile.__init__.html#pyart.aux_io.gamicfile.GAMICFile.__init__" title="pyart.aux_io.gamicfile.GAMICFile.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(filename)</p></td>
+<td><p>initialize object.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.aux_io.gamicfile.GAMICFile.__reduce__.html#pyart.aux_io.gamicfile.GAMICFile.__reduce__" title="pyart.aux_io.gamicfile.GAMICFile.__reduce__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__reduce__</span></code></a></td>
-<td>helper for pickle</td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.aux_io.gamicfile.GAMICFile.__init_subclass__.html#pyart.aux_io.gamicfile.GAMICFile.__init_subclass__" title="pyart.aux_io.gamicfile.GAMICFile.__init_subclass__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init_subclass__</span></code></a></p></td>
+<td><p>This method is called when a class is subclassed.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.aux_io.gamicfile.GAMICFile.__reduce_ex__.html#pyart.aux_io.gamicfile.GAMICFile.__reduce_ex__" title="pyart.aux_io.gamicfile.GAMICFile.__reduce_ex__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__reduce_ex__</span></code></a></td>
-<td>helper for pickle</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.aux_io.gamicfile.GAMICFile.__new__.html#pyart.aux_io.gamicfile.GAMICFile.__new__" title="pyart.aux_io.gamicfile.GAMICFile.__new__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__new__</span></code></a></p></td>
+<td><p>Create and return a new object.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.aux_io.gamicfile.GAMICFile.__sizeof__.html#pyart.aux_io.gamicfile.GAMICFile.__sizeof__" title="pyart.aux_io.gamicfile.GAMICFile.__sizeof__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__sizeof__</span></code></a>()</td>
-<td>size of object in memory, in bytes</td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.aux_io.gamicfile.GAMICFile.__reduce__.html#pyart.aux_io.gamicfile.GAMICFile.__reduce__" title="pyart.aux_io.gamicfile.GAMICFile.__reduce__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__reduce__</span></code></a></p></td>
+<td><p>Helper for pickle.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.aux_io.gamicfile.GAMICFile.__subclasshook__.html#pyart.aux_io.gamicfile.GAMICFile.__subclasshook__" title="pyart.aux_io.gamicfile.GAMICFile.__subclasshook__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__subclasshook__</span></code></a></td>
-<td>Abstract classes can override this to customize issubclass().</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.aux_io.gamicfile.GAMICFile.__reduce_ex__.html#pyart.aux_io.gamicfile.GAMICFile.__reduce_ex__" title="pyart.aux_io.gamicfile.GAMICFile.__reduce_ex__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__reduce_ex__</span></code></a></p></td>
+<td><p>Helper for pickle.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.aux_io.gamicfile.GAMICFile.__sizeof__.html#pyart.aux_io.gamicfile.GAMICFile.__sizeof__" title="pyart.aux_io.gamicfile.GAMICFile.__sizeof__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__sizeof__</span></code></a></p></td>
+<td><p>Size of object in memory, in bytes.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.aux_io.gamicfile.GAMICFile.__subclasshook__.html#pyart.aux_io.gamicfile.GAMICFile.__subclasshook__" title="pyart.aux_io.gamicfile.GAMICFile.__subclasshook__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__subclasshook__</span></code></a></p></td>
+<td><p>Abstract classes can override this to customize issubclass().</p></td>
 </tr>
 </tbody>
 </table>
@@ -212,8 +215,6 @@
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -243,9 +244,9 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2013-2016, Py-ART developers.
-      Last updated on Feb 15, 2018.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.0.
+        &#169; Copyright 2013-2019, Py-ART developers.
+      Last updated on Apr 24, 2019.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.
     </div>
   </body>
 </html>

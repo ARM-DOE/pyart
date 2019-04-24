@@ -1,19 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>pyart.graph.RadarDisplay &#8212; Py-ART Documentation</title>
     <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="../../_static/documentation_options.js"></script>
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="pyart.graph.RadarDisplay.generate_az_rhi_title" href="pyart.graph.RadarDisplay.generate_az_rhi_title.html" />
@@ -36,7 +37,7 @@
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Py-ART Documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >User Reference Manual</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="../graph.html" accesskey="U">Graphing (<code class="docutils literal notranslate"><span class="pre">pyart.graph</span></code>)</a> &#187;</li> 
+          <li class="nav-item nav-item-2"><a href="../graph.html" accesskey="U">Graphing (<code class="xref py py-mod docutils literal notranslate"><span class="pre">pyart.graph</span></code>)</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -51,157 +52,153 @@
 <dt id="pyart.graph.RadarDisplay">
 <em class="property">class </em><code class="descclassname">pyart.graph.</code><code class="descname">RadarDisplay</code><span class="sig-paren">(</span><em>radar</em>, <em>shift=(0.0</em>, <em>0.0)</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/graph/radardisplay.py#L29"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.graph.RadarDisplay" title="Permalink to this definition">¶</a></dt>
 <dd><p>A display object for creating plots from data in a radar object.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>radar</strong> : Radar</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>radar</strong> : Radar</p>
 <blockquote>
 <div><p>Radar object to use for creating plots.</p>
 </div></blockquote>
 <p><strong>shift</strong> : (float, float)</p>
-<blockquote class="last">
+<blockquote>
 <div><p>Shifts in km to offset the calculated x and y locations.</p>
 </div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <p class="rubric">Attributes</p>
-<table border="1" class="docutils">
+<table class="docutils align-center">
 <colgroup>
-<col width="14%" />
-<col width="86%" />
+<col style="width: 14%" />
+<col style="width: 86%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>plots</td>
-<td>(list) List of plots created.</td>
+<tbody>
+<tr class="row-odd"><td><p>plots</p></td>
+<td><p>(list) List of plots created.</p></td>
 </tr>
-<tr class="row-even"><td>plot_vars</td>
-<td>(list) List of fields plotted, order matches plot list.</td>
+<tr class="row-even"><td><p>plot_vars</p></td>
+<td><p>(list) List of fields plotted, order matches plot list.</p></td>
 </tr>
-<tr class="row-odd"><td>cbs</td>
-<td>(list) List of colorbars created.</td>
+<tr class="row-odd"><td><p>cbs</p></td>
+<td><p>(list) List of colorbars created.</p></td>
 </tr>
-<tr class="row-even"><td>origin</td>
-<td>(str) ‘Origin’ or ‘Radar’.</td>
+<tr class="row-even"><td><p>origin</p></td>
+<td><p>(str) ‘Origin’ or ‘Radar’.</p></td>
 </tr>
-<tr class="row-odd"><td>shift</td>
-<td>((float, float)) Shift in meters.</td>
+<tr class="row-odd"><td><p>shift</p></td>
+<td><p>((float, float)) Shift in meters.</p></td>
 </tr>
-<tr class="row-even"><td>loc</td>
-<td>((float, float)) Latitude and Longitude of radar in degrees.</td>
+<tr class="row-even"><td><p>loc</p></td>
+<td><p>((float, float)) Latitude and Longitude of radar in degrees.</p></td>
 </tr>
-<tr class="row-odd"><td>fields</td>
-<td>(dict) Radar fields.</td>
+<tr class="row-odd"><td><p>fields</p></td>
+<td><p>(dict) Radar fields.</p></td>
 </tr>
-<tr class="row-even"><td>scan_type</td>
-<td>(str) Scan type.</td>
+<tr class="row-even"><td><p>scan_type</p></td>
+<td><p>(str) Scan type.</p></td>
 </tr>
-<tr class="row-odd"><td>ranges</td>
-<td>(array) Gate ranges in meters.</td>
+<tr class="row-odd"><td><p>ranges</p></td>
+<td><p>(array) Gate ranges in meters.</p></td>
 </tr>
-<tr class="row-even"><td>azimuths</td>
-<td>(array) Azimuth angle in degrees.</td>
+<tr class="row-even"><td><p>azimuths</p></td>
+<td><p>(array) Azimuth angle in degrees.</p></td>
 </tr>
-<tr class="row-odd"><td>elevations</td>
-<td>(array) Elevations in degrees.</td>
+<tr class="row-odd"><td><p>elevations</p></td>
+<td><p>(array) Elevations in degrees.</p></td>
 </tr>
-<tr class="row-even"><td>fixed_angle</td>
-<td>(array) Scan angle in degrees.</td>
+<tr class="row-even"><td><p>fixed_angle</p></td>
+<td><p>(array) Scan angle in degrees.</p></td>
 </tr>
-<tr class="row-odd"><td>antenna_transition</td>
-<td>(array or None) Antenna transition flag (1 in transition, 0 in transition) or None if no antenna transition.</td>
+<tr class="row-odd"><td><p>antenna_transition</p></td>
+<td><p>(array or None) Antenna transition flag (1 in transition, 0 in transition) or None if no antenna transition.</p></td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-center">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="pyart.graph.RadarDisplay.generate_az_rhi_title.html#pyart.graph.RadarDisplay.generate_az_rhi_title" title="pyart.graph.RadarDisplay.generate_az_rhi_title"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_az_rhi_title</span></code></a>(field,&nbsp;azimuth)</td>
-<td>Generate a title for a ray plot.</td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.graph.RadarDisplay.generate_az_rhi_title.html#pyart.graph.RadarDisplay.generate_az_rhi_title" title="pyart.graph.RadarDisplay.generate_az_rhi_title"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_az_rhi_title</span></code></a>(field, azimuth)</p></td>
+<td><p>Generate a title for a ray plot.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.graph.RadarDisplay.generate_filename.html#pyart.graph.RadarDisplay.generate_filename" title="pyart.graph.RadarDisplay.generate_filename"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_filename</span></code></a>(field,&nbsp;sweep[,&nbsp;ext,&nbsp;…])</td>
-<td>Generate a filename for a plot.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.graph.RadarDisplay.generate_filename.html#pyart.graph.RadarDisplay.generate_filename" title="pyart.graph.RadarDisplay.generate_filename"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_filename</span></code></a>(field, sweep[, ext, …])</p></td>
+<td><p>Generate a filename for a plot.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.graph.RadarDisplay.generate_ray_title.html#pyart.graph.RadarDisplay.generate_ray_title" title="pyart.graph.RadarDisplay.generate_ray_title"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_ray_title</span></code></a>(field,&nbsp;ray)</td>
-<td>Generate a title for a ray plot.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.graph.RadarDisplay.generate_ray_title.html#pyart.graph.RadarDisplay.generate_ray_title" title="pyart.graph.RadarDisplay.generate_ray_title"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_ray_title</span></code></a>(field, ray)</p></td>
+<td><p>Generate a title for a ray plot.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.graph.RadarDisplay.generate_title.html#pyart.graph.RadarDisplay.generate_title" title="pyart.graph.RadarDisplay.generate_title"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_title</span></code></a>(field,&nbsp;sweep[,&nbsp;…])</td>
-<td>Generate a title for a plot.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.graph.RadarDisplay.generate_title.html#pyart.graph.RadarDisplay.generate_title" title="pyart.graph.RadarDisplay.generate_title"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_title</span></code></a>(field, sweep[, …])</p></td>
+<td><p>Generate a title for a plot.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.graph.RadarDisplay.generate_vpt_title.html#pyart.graph.RadarDisplay.generate_vpt_title" title="pyart.graph.RadarDisplay.generate_vpt_title"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_vpt_title</span></code></a>(field)</td>
-<td>Generate a title for a VPT plot.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.graph.RadarDisplay.generate_vpt_title.html#pyart.graph.RadarDisplay.generate_vpt_title" title="pyart.graph.RadarDisplay.generate_vpt_title"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_vpt_title</span></code></a>(field)</p></td>
+<td><p>Generate a title for a VPT plot.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.graph.RadarDisplay.label_xaxis_r.html#pyart.graph.RadarDisplay.label_xaxis_r" title="pyart.graph.RadarDisplay.label_xaxis_r"><code class="xref py py-obj docutils literal notranslate"><span class="pre">label_xaxis_r</span></code></a>([ax])</td>
-<td>Label the xaxis with the default label for r units.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.graph.RadarDisplay.label_xaxis_r.html#pyart.graph.RadarDisplay.label_xaxis_r" title="pyart.graph.RadarDisplay.label_xaxis_r"><code class="xref py py-obj docutils literal notranslate"><span class="pre">label_xaxis_r</span></code></a>([ax])</p></td>
+<td><p>Label the xaxis with the default label for r units.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.graph.RadarDisplay.label_xaxis_rays.html#pyart.graph.RadarDisplay.label_xaxis_rays" title="pyart.graph.RadarDisplay.label_xaxis_rays"><code class="xref py py-obj docutils literal notranslate"><span class="pre">label_xaxis_rays</span></code></a>()</td>
-<td>Label the yaxis with the default label for rays.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.graph.RadarDisplay.label_xaxis_rays.html#pyart.graph.RadarDisplay.label_xaxis_rays" title="pyart.graph.RadarDisplay.label_xaxis_rays"><code class="xref py py-obj docutils literal notranslate"><span class="pre">label_xaxis_rays</span></code></a>([ax])</p></td>
+<td><p>Label the yaxis with the default label for rays.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.graph.RadarDisplay.label_xaxis_time.html#pyart.graph.RadarDisplay.label_xaxis_time" title="pyart.graph.RadarDisplay.label_xaxis_time"><code class="xref py py-obj docutils literal notranslate"><span class="pre">label_xaxis_time</span></code></a>()</td>
-<td>Label the yaxis with the default label for rays.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.graph.RadarDisplay.label_xaxis_time.html#pyart.graph.RadarDisplay.label_xaxis_time" title="pyart.graph.RadarDisplay.label_xaxis_time"><code class="xref py py-obj docutils literal notranslate"><span class="pre">label_xaxis_time</span></code></a>([ax])</p></td>
+<td><p>Label the yaxis with the default label for rays.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.graph.RadarDisplay.label_xaxis_x.html#pyart.graph.RadarDisplay.label_xaxis_x" title="pyart.graph.RadarDisplay.label_xaxis_x"><code class="xref py py-obj docutils literal notranslate"><span class="pre">label_xaxis_x</span></code></a>([ax])</td>
-<td>Label the xaxis with the default label for x units.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.graph.RadarDisplay.label_xaxis_x.html#pyart.graph.RadarDisplay.label_xaxis_x" title="pyart.graph.RadarDisplay.label_xaxis_x"><code class="xref py py-obj docutils literal notranslate"><span class="pre">label_xaxis_x</span></code></a>([ax])</p></td>
+<td><p>Label the xaxis with the default label for x units.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.graph.RadarDisplay.label_yaxis_field.html#pyart.graph.RadarDisplay.label_yaxis_field" title="pyart.graph.RadarDisplay.label_yaxis_field"><code class="xref py py-obj docutils literal notranslate"><span class="pre">label_yaxis_field</span></code></a>(field[,&nbsp;ax])</td>
-<td>Label the yaxis with the default label for a field units.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.graph.RadarDisplay.label_yaxis_field.html#pyart.graph.RadarDisplay.label_yaxis_field" title="pyart.graph.RadarDisplay.label_yaxis_field"><code class="xref py py-obj docutils literal notranslate"><span class="pre">label_yaxis_field</span></code></a>(field[, ax])</p></td>
+<td><p>Label the yaxis with the default label for a field units.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.graph.RadarDisplay.label_yaxis_y.html#pyart.graph.RadarDisplay.label_yaxis_y" title="pyart.graph.RadarDisplay.label_yaxis_y"><code class="xref py py-obj docutils literal notranslate"><span class="pre">label_yaxis_y</span></code></a>([ax])</td>
-<td>Label the yaxis with the default label for y units.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.graph.RadarDisplay.label_yaxis_y.html#pyart.graph.RadarDisplay.label_yaxis_y" title="pyart.graph.RadarDisplay.label_yaxis_y"><code class="xref py py-obj docutils literal notranslate"><span class="pre">label_yaxis_y</span></code></a>([ax])</p></td>
+<td><p>Label the yaxis with the default label for y units.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.graph.RadarDisplay.label_yaxis_z.html#pyart.graph.RadarDisplay.label_yaxis_z" title="pyart.graph.RadarDisplay.label_yaxis_z"><code class="xref py py-obj docutils literal notranslate"><span class="pre">label_yaxis_z</span></code></a>([ax])</td>
-<td>Label the yaxis with the default label for z units.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.graph.RadarDisplay.label_yaxis_z.html#pyart.graph.RadarDisplay.label_yaxis_z" title="pyart.graph.RadarDisplay.label_yaxis_z"><code class="xref py py-obj docutils literal notranslate"><span class="pre">label_yaxis_z</span></code></a>([ax])</p></td>
+<td><p>Label the yaxis with the default label for z units.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.graph.RadarDisplay.plot.html#pyart.graph.RadarDisplay.plot" title="pyart.graph.RadarDisplay.plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code></a>(field[,&nbsp;sweep])</td>
-<td>Create a plot appropiate for the radar.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.graph.RadarDisplay.plot.html#pyart.graph.RadarDisplay.plot" title="pyart.graph.RadarDisplay.plot"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot</span></code></a>(field[, sweep])</p></td>
+<td><p>Create a plot appropiate for the radar.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.graph.RadarDisplay.plot_azimuth_to_rhi.html#pyart.graph.RadarDisplay.plot_azimuth_to_rhi" title="pyart.graph.RadarDisplay.plot_azimuth_to_rhi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_azimuth_to_rhi</span></code></a>(field,&nbsp;target_azimuth[,&nbsp;…])</td>
-<td>Plot pseudo-RHI scan by extracting the vertical field associated with the given azimuth.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.graph.RadarDisplay.plot_azimuth_to_rhi.html#pyart.graph.RadarDisplay.plot_azimuth_to_rhi" title="pyart.graph.RadarDisplay.plot_azimuth_to_rhi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_azimuth_to_rhi</span></code></a>(field, target_azimuth[, …])</p></td>
+<td><p>Plot pseudo-RHI scan by extracting the vertical field associated with the given azimuth.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.graph.RadarDisplay.plot_colorbar.html#pyart.graph.RadarDisplay.plot_colorbar" title="pyart.graph.RadarDisplay.plot_colorbar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_colorbar</span></code></a>([mappable,&nbsp;field,&nbsp;label,&nbsp;…])</td>
-<td>Plot a colorbar.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.graph.RadarDisplay.plot_colorbar.html#pyart.graph.RadarDisplay.plot_colorbar" title="pyart.graph.RadarDisplay.plot_colorbar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_colorbar</span></code></a>([mappable, field, label, …])</p></td>
+<td><p>Plot a colorbar.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.graph.RadarDisplay.plot_cross_hair.html#pyart.graph.RadarDisplay.plot_cross_hair" title="pyart.graph.RadarDisplay.plot_cross_hair"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_cross_hair</span></code></a>([npts,&nbsp;ax])</td>
-<td>Plot a cross-hair on a ppi plot.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.graph.RadarDisplay.plot_cross_hair.html#pyart.graph.RadarDisplay.plot_cross_hair" title="pyart.graph.RadarDisplay.plot_cross_hair"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_cross_hair</span></code></a>(size[, npts, ax])</p></td>
+<td><p>Plot a cross-hair on a ppi plot.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.graph.RadarDisplay.plot_grid_lines.html#pyart.graph.RadarDisplay.plot_grid_lines" title="pyart.graph.RadarDisplay.plot_grid_lines"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_grid_lines</span></code></a>([col,&nbsp;ls])</td>
-<td>Plot grid lines.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.graph.RadarDisplay.plot_grid_lines.html#pyart.graph.RadarDisplay.plot_grid_lines" title="pyart.graph.RadarDisplay.plot_grid_lines"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_grid_lines</span></code></a>([ax, col, ls])</p></td>
+<td><p>Plot grid lines.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.graph.RadarDisplay.plot_label.html#pyart.graph.RadarDisplay.plot_label" title="pyart.graph.RadarDisplay.plot_label"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_label</span></code></a>(label,&nbsp;location[,&nbsp;symbol,&nbsp;…])</td>
-<td>Plot a single symbol and label at a given location.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.graph.RadarDisplay.plot_label.html#pyart.graph.RadarDisplay.plot_label" title="pyart.graph.RadarDisplay.plot_label"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_label</span></code></a>(label, location[, symbol, …])</p></td>
+<td><p>Plot a single symbol and label at a given location.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.graph.RadarDisplay.plot_labels.html#pyart.graph.RadarDisplay.plot_labels" title="pyart.graph.RadarDisplay.plot_labels"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_labels</span></code></a>(labels,&nbsp;locations[,&nbsp;symbols,&nbsp;…])</td>
-<td>Plot symbols and labels at given locations.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.graph.RadarDisplay.plot_labels.html#pyart.graph.RadarDisplay.plot_labels" title="pyart.graph.RadarDisplay.plot_labels"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_labels</span></code></a>(labels, locations[, symbols, …])</p></td>
+<td><p>Plot symbols and labels at given locations.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.graph.RadarDisplay.plot_ppi.html#pyart.graph.RadarDisplay.plot_ppi" title="pyart.graph.RadarDisplay.plot_ppi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_ppi</span></code></a>(field[,&nbsp;sweep,&nbsp;mask_tuple,&nbsp;vmin,&nbsp;…])</td>
-<td>Plot a PPI.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.graph.RadarDisplay.plot_ppi.html#pyart.graph.RadarDisplay.plot_ppi" title="pyart.graph.RadarDisplay.plot_ppi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_ppi</span></code></a>(field[, sweep, mask_tuple, vmin, …])</p></td>
+<td><p>Plot a PPI.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.graph.RadarDisplay.plot_range_ring.html#pyart.graph.RadarDisplay.plot_range_ring" title="pyart.graph.RadarDisplay.plot_range_ring"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_range_ring</span></code></a>([npts,&nbsp;ax,&nbsp;col,&nbsp;ls,&nbsp;lw])</td>
-<td>Plot a single range ring.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.graph.RadarDisplay.plot_range_ring.html#pyart.graph.RadarDisplay.plot_range_ring" title="pyart.graph.RadarDisplay.plot_range_ring"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_range_ring</span></code></a>(range_ring_location_km[, …])</p></td>
+<td><p>Plot a single range ring.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.graph.RadarDisplay.plot_range_rings.html#pyart.graph.RadarDisplay.plot_range_rings" title="pyart.graph.RadarDisplay.plot_range_rings"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_range_rings</span></code></a>(range_rings[,&nbsp;ax,&nbsp;col,&nbsp;ls,&nbsp;lw])</td>
-<td>Plot a series of range rings.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.graph.RadarDisplay.plot_range_rings.html#pyart.graph.RadarDisplay.plot_range_rings" title="pyart.graph.RadarDisplay.plot_range_rings"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_range_rings</span></code></a>(range_rings[, ax, col, ls, lw])</p></td>
+<td><p>Plot a series of range rings.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.graph.RadarDisplay.plot_ray.html#pyart.graph.RadarDisplay.plot_ray" title="pyart.graph.RadarDisplay.plot_ray"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_ray</span></code></a>(field,&nbsp;ray[,&nbsp;format_str,&nbsp;…])</td>
-<td>Plot a single ray.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.graph.RadarDisplay.plot_ray.html#pyart.graph.RadarDisplay.plot_ray" title="pyart.graph.RadarDisplay.plot_ray"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_ray</span></code></a>(field, ray[, format_str, …])</p></td>
+<td><p>Plot a single ray.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.graph.RadarDisplay.plot_rhi.html#pyart.graph.RadarDisplay.plot_rhi" title="pyart.graph.RadarDisplay.plot_rhi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_rhi</span></code></a>(field[,&nbsp;sweep,&nbsp;mask_tuple,&nbsp;vmin,&nbsp;…])</td>
-<td>Plot a RHI.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.graph.RadarDisplay.plot_rhi.html#pyart.graph.RadarDisplay.plot_rhi" title="pyart.graph.RadarDisplay.plot_rhi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_rhi</span></code></a>(field[, sweep, mask_tuple, vmin, …])</p></td>
+<td><p>Plot a RHI.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.graph.RadarDisplay.plot_vpt.html#pyart.graph.RadarDisplay.plot_vpt" title="pyart.graph.RadarDisplay.plot_vpt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_vpt</span></code></a>(field[,&nbsp;mask_tuple,&nbsp;vmin,&nbsp;vmax,&nbsp;…])</td>
-<td>Plot a VPT scan.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.graph.RadarDisplay.plot_vpt.html#pyart.graph.RadarDisplay.plot_vpt" title="pyart.graph.RadarDisplay.plot_vpt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_vpt</span></code></a>(field[, mask_tuple, vmin, vmax, …])</p></td>
+<td><p>Plot a VPT scan.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.graph.RadarDisplay.set_aspect_ratio.html#pyart.graph.RadarDisplay.set_aspect_ratio" title="pyart.graph.RadarDisplay.set_aspect_ratio"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_aspect_ratio</span></code></a>([ax])</td>
-<td>Set the aspect ratio for plot area.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.graph.RadarDisplay.set_aspect_ratio.html#pyart.graph.RadarDisplay.set_aspect_ratio" title="pyart.graph.RadarDisplay.set_aspect_ratio"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_aspect_ratio</span></code></a>([aspect_ratio, ax])</p></td>
+<td><p>Set the aspect ratio for plot area.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.graph.RadarDisplay.set_limits.html#pyart.graph.RadarDisplay.set_limits" title="pyart.graph.RadarDisplay.set_limits"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_limits</span></code></a>([ylim,&nbsp;ax])</td>
-<td>Set the display limits.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.graph.RadarDisplay.set_limits.html#pyart.graph.RadarDisplay.set_limits" title="pyart.graph.RadarDisplay.set_limits"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_limits</span></code></a>([xlim, ylim, ax])</p></td>
+<td><p>Set the display limits.</p></td>
 </tr>
 </tbody>
 </table>
@@ -217,7 +214,7 @@
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
   <p class="topless"><a href="../graph.html"
-                        title="previous chapter">Graphing (<code class="docutils literal notranslate"><span class="pre">pyart.graph</span></code>)</a></p>
+                        title="previous chapter">Graphing (<code class="xref py py-mod docutils literal notranslate"><span class="pre">pyart.graph</span></code>)</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="pyart.graph.RadarDisplay.generate_az_rhi_title.html"
                         title="next chapter">pyart.graph.RadarDisplay.generate_az_rhi_title</a></p>
@@ -234,8 +231,6 @@
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -261,13 +256,13 @@
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Py-ART Documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >User Reference Manual</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="../graph.html" >Graphing (<code class="docutils literal notranslate"><span class="pre">pyart.graph</span></code>)</a> &#187;</li> 
+          <li class="nav-item nav-item-2"><a href="../graph.html" >Graphing (<code class="xref py py-mod docutils literal notranslate"><span class="pre">pyart.graph</span></code>)</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2013-2016, Py-ART developers.
-      Last updated on Feb 15, 2018.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.0.
+        &#169; Copyright 2013-2019, Py-ART developers.
+      Last updated on Apr 24, 2019.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.
     </div>
   </body>
 </html>

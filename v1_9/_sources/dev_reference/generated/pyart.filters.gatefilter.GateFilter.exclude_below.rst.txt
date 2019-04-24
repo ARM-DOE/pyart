@@ -1,0 +1,6 @@
+pyart.filters.gatefilter.GateFilter.exclude\_below
+==================================================
+
+.. currentmodule:: pyart.filters.gatefilter
+
+.. automethod:: GateFilter.exclude_below

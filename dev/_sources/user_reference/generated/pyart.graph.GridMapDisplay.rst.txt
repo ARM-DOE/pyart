@@ -11,12 +11,14 @@ pyart.graph.GridMapDisplay
       .. autosummary::
          :toctree:
       
+         GridMapDisplay.cartopy_coastlines
+         GridMapDisplay.cartopy_political_boundaries
+         GridMapDisplay.cartopy_states
          GridMapDisplay.generate_filename
          GridMapDisplay.generate_grid_title
          GridMapDisplay.generate_latitudinal_level_title
          GridMapDisplay.generate_longitudinal_level_title
-         GridMapDisplay.get_basemap
-         GridMapDisplay.plot_basemap
+         GridMapDisplay.get_dataset
          GridMapDisplay.plot_colorbar
          GridMapDisplay.plot_crosshairs
          GridMapDisplay.plot_grid

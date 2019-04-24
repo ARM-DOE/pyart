@@ -1,19 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>pyart.io._sigmetfile.SigmetFile &#8212; Py-ART Documentation</title>
     <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="../../_static/documentation_options.js"></script>
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="pyart.io._sigmetfile.SigmetFile.close" href="pyart.io._sigmetfile.SigmetFile.close.html" />
@@ -51,66 +52,62 @@
 <dt id="pyart.io._sigmetfile.SigmetFile">
 <em class="property">class </em><code class="descclassname">pyart.io._sigmetfile.</code><code class="descname">SigmetFile</code><a class="headerlink" href="#pyart.io._sigmetfile.SigmetFile" title="Permalink to this definition">¶</a></dt>
 <dd><p>A class for accessing data from Sigmet (IRIS) product files.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
-<blockquote class="last">
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> : str</p>
+<blockquote>
 <div><p>Filename or file-like object.</p>
 </div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <p class="rubric">Attributes</p>
-<table border="1" class="docutils">
+<table class="docutils align-center">
 <colgroup>
-<col width="12%" />
-<col width="88%" />
+<col style="width: 12%" />
+<col style="width: 88%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>debug</td>
-<td>(bool) Set True to print out debugging information, False otherwise.</td>
+<tbody>
+<tr class="row-odd"><td><p>debug</p></td>
+<td><p>(bool) Set True to print out debugging information, False otherwise.</p></td>
 </tr>
-<tr class="row-even"><td>product_hdr</td>
-<td>(dict) Product_hdr structure.</td>
+<tr class="row-even"><td><p>product_hdr</p></td>
+<td><p>(dict) Product_hdr structure.</p></td>
 </tr>
-<tr class="row-odd"><td>ingest_header</td>
-<td>(dict) Ingest_header structure.</td>
+<tr class="row-odd"><td><p>ingest_header</p></td>
+<td><p>(dict) Ingest_header structure.</p></td>
 </tr>
-<tr class="row-even"><td>ingest_data_headers</td>
-<td>(list of dict) Ingest_data_header structures for each data type.  Indexed by the data type name (str).  None when data has not yet been read.</td>
+<tr class="row-even"><td><p>ingest_data_headers</p></td>
+<td><p>(list of dict) Ingest_data_header structures for each data type.  Indexed by the data type name (str).  None when data has not yet been read.</p></td>
 </tr>
-<tr class="row-odd"><td>data_types</td>
-<td>(list) List of data types (int) in the file.</td>
+<tr class="row-odd"><td><p>data_types</p></td>
+<td><p>(list) List of data types (int) in the file.</p></td>
 </tr>
-<tr class="row-even"><td>data_type_names</td>
-<td>(list) List of data type names (stR) in the file.</td>
+<tr class="row-even"><td><p>data_type_names</p></td>
+<td><p>(list) List of data type names (stR) in the file.</p></td>
 </tr>
-<tr class="row-odd"><td>ndata_types</td>
-<td>(int) Number of data types in the file.</td>
+<tr class="row-odd"><td><p>ndata_types</p></td>
+<td><p>(int) Number of data types in the file.</p></td>
 </tr>
-<tr class="row-even"><td>_fh</td>
-<td>(file) Open file being read.</td>
+<tr class="row-even"><td><p>_fh</p></td>
+<td><p>(file) Open file being read.</p></td>
 </tr>
-<tr class="row-odd"><td>_raw_product_bhdrs</td>
-<td>(list) List of raw_product_bhdr structure dictionaries seperated by sweep. None when data has not yet been read.</td>
+<tr class="row-odd"><td><p>_raw_product_bhdrs</p></td>
+<td><p>(list) List of raw_product_bhdr structure dictionaries seperated by sweep. None when data has not yet been read.</p></td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-center">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="pyart.io._sigmetfile.SigmetFile.close.html#pyart.io._sigmetfile.SigmetFile.close" title="pyart.io._sigmetfile.SigmetFile.close"><code class="xref py py-obj docutils literal notranslate"><span class="pre">close</span></code></a></td>
-<td>Close the file.</td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.io._sigmetfile.SigmetFile.close.html#pyart.io._sigmetfile.SigmetFile.close" title="pyart.io._sigmetfile.SigmetFile.close"><code class="xref py py-obj docutils literal notranslate"><span class="pre">close</span></code></a></p></td>
+<td><p>Close the file.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.io._sigmetfile.SigmetFile.read_data.html#pyart.io._sigmetfile.SigmetFile.read_data" title="pyart.io._sigmetfile.SigmetFile.read_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_data</span></code></a></td>
-<td>Read all data from the file.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.io._sigmetfile.SigmetFile.read_data.html#pyart.io._sigmetfile.SigmetFile.read_data" title="pyart.io._sigmetfile.SigmetFile.read_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_data</span></code></a></p></td>
+<td><p>Read all data from the file.</p></td>
 </tr>
 </tbody>
 </table>
@@ -143,8 +140,6 @@
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -174,9 +169,9 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2013-2016, Py-ART developers.
-      Last updated on Feb 15, 2018.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.0.
+        &#169; Copyright 2013-2019, Py-ART developers.
+      Last updated on Apr 24, 2019.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.
     </div>
   </body>
 </html>

@@ -1,19 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>pyart.io.uffile.UFRay &#8212; Py-ART Documentation</title>
     <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="../../_static/documentation_options.js"></script>
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="pyart.io.uffile.UFRay.get_datetime" href="pyart.io.uffile.UFRay.get_datetime.html" />
@@ -51,63 +52,59 @@
 <dt id="pyart.io.uffile.UFRay">
 <em class="property">class </em><code class="descclassname">pyart.io.uffile.</code><code class="descname">UFRay</code><span class="sig-paren">(</span><em>record</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/io/uffile.py#L284"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.io.uffile.UFRay" title="Permalink to this definition">¶</a></dt>
 <dd><p>A class for reading data from a single ray (record) in a UF file.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>record</strong> : str</p>
-<blockquote class="last">
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>record</strong> : str</p>
+<blockquote>
 <div><p>Byte string containing the binary data for a UF ray.</p>
 </div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <p class="rubric">Attributes</p>
-<table border="1" class="docutils">
+<table class="docutils align-center">
 <colgroup>
-<col width="16%" />
-<col width="84%" />
+<col style="width: 16%" />
+<col style="width: 84%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>mandatory_header</td>
-<td>(dic) Mandatory header.</td>
+<tbody>
+<tr class="row-odd"><td><p>mandatory_header</p></td>
+<td><p>(dic) Mandatory header.</p></td>
 </tr>
-<tr class="row-even"><td>optional_header</td>
-<td>(dic or None) Optional header or None if no optional header exists in the record.</td>
+<tr class="row-even"><td><p>optional_header</p></td>
+<td><p>(dic or None) Optional header or None if no optional header exists in the record.</p></td>
 </tr>
-<tr class="row-odd"><td>data_header</td>
-<td>(dic) Data header.</td>
+<tr class="row-odd"><td><p>data_header</p></td>
+<td><p>(dic) Data header.</p></td>
 </tr>
-<tr class="row-even"><td>field_positions</td>
-<td>(list) List of dictionaries containing the data type and data position.</td>
+<tr class="row-even"><td><p>field_positions</p></td>
+<td><p>(list) List of dictionaries containing the data type and data position.</p></td>
 </tr>
-<tr class="row-odd"><td>field_headers</td>
-<td>(list) List of field header dictionaries for all fields in the ray.</td>
+<tr class="row-odd"><td><p>field_headers</p></td>
+<td><p>(list) List of field header dictionaries for all fields in the ray.</p></td>
 </tr>
-<tr class="row-even"><td>field_raw_data</td>
-<td>(list) List containing array of raw field data for each field in the ray.</td>
+<tr class="row-even"><td><p>field_raw_data</p></td>
+<td><p>(list) List containing array of raw field data for each field in the ray.</p></td>
 </tr>
-<tr class="row-odd"><td>_buf</td>
-<td>(str) Bytes which make up the record.</td>
+<tr class="row-odd"><td><p>_buf</p></td>
+<td><p>(str) Bytes which make up the record.</p></td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-center">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="pyart.io.uffile.UFRay.get_datetime.html#pyart.io.uffile.UFRay.get_datetime" title="pyart.io.uffile.UFRay.get_datetime"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_datetime</span></code></a>()</td>
-<td>Return a datetime object for the ray.</td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.io.uffile.UFRay.get_datetime.html#pyart.io.uffile.UFRay.get_datetime" title="pyart.io.uffile.UFRay.get_datetime"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_datetime</span></code></a>()</p></td>
+<td><p>Return a datetime object for the ray.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.io.uffile.UFRay.get_field_data.html#pyart.io.uffile.UFRay.get_field_data" title="pyart.io.uffile.UFRay.get_field_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_field_data</span></code></a>(field_number)</td>
-<td>Return array of raw data for a particular field in the ray.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.io.uffile.UFRay.get_field_data.html#pyart.io.uffile.UFRay.get_field_data" title="pyart.io.uffile.UFRay.get_field_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_field_data</span></code></a>(field_number)</p></td>
+<td><p>Return array of raw data for a particular field in the ray.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.io.uffile.UFRay.get_location.html#pyart.io.uffile.UFRay.get_location" title="pyart.io.uffile.UFRay.get_location"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_location</span></code></a>()</td>
-<td>Return the latitude, longitude and height of the ray.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.io.uffile.UFRay.get_location.html#pyart.io.uffile.UFRay.get_location" title="pyart.io.uffile.UFRay.get_location"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_location</span></code></a>()</p></td>
+<td><p>Return the latitude, longitude and height of the ray.</p></td>
 </tr>
 </tbody>
 </table>
@@ -115,32 +112,38 @@
 <div class="line"><br /></div>
 </div>
 <p><strong>Private methods</strong></p>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-center">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="pyart.io.uffile.UFRay.__format__.html#pyart.io.uffile.UFRay.__format__" title="pyart.io.uffile.UFRay.__format__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__format__</span></code></a></td>
-<td>default object formatter</td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.io.uffile.UFRay.__dir__.html#pyart.io.uffile.UFRay.__dir__" title="pyart.io.uffile.UFRay.__dir__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__dir__</span></code></a></p></td>
+<td><p>Default dir() implementation.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.io.uffile.UFRay.__init__.html#pyart.io.uffile.UFRay.__init__" title="pyart.io.uffile.UFRay.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(record)</td>
-<td>Initalize the object.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.io.uffile.UFRay.__format__.html#pyart.io.uffile.UFRay.__format__" title="pyart.io.uffile.UFRay.__format__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__format__</span></code></a></p></td>
+<td><p>Default object formatter.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.io.uffile.UFRay.__new__.html#pyart.io.uffile.UFRay.__new__" title="pyart.io.uffile.UFRay.__new__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__new__</span></code></a>(S,&nbsp;…)</td>
-<td></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.io.uffile.UFRay.__init__.html#pyart.io.uffile.UFRay.__init__" title="pyart.io.uffile.UFRay.__init__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init__</span></code></a>(record)</p></td>
+<td><p>Initalize the object.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.io.uffile.UFRay.__reduce__.html#pyart.io.uffile.UFRay.__reduce__" title="pyart.io.uffile.UFRay.__reduce__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__reduce__</span></code></a></td>
-<td>helper for pickle</td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.io.uffile.UFRay.__init_subclass__.html#pyart.io.uffile.UFRay.__init_subclass__" title="pyart.io.uffile.UFRay.__init_subclass__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__init_subclass__</span></code></a></p></td>
+<td><p>This method is called when a class is subclassed.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.io.uffile.UFRay.__reduce_ex__.html#pyart.io.uffile.UFRay.__reduce_ex__" title="pyart.io.uffile.UFRay.__reduce_ex__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__reduce_ex__</span></code></a></td>
-<td>helper for pickle</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.io.uffile.UFRay.__new__.html#pyart.io.uffile.UFRay.__new__" title="pyart.io.uffile.UFRay.__new__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__new__</span></code></a></p></td>
+<td><p>Create and return a new object.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="pyart.io.uffile.UFRay.__sizeof__.html#pyart.io.uffile.UFRay.__sizeof__" title="pyart.io.uffile.UFRay.__sizeof__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__sizeof__</span></code></a>()</td>
-<td>size of object in memory, in bytes</td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.io.uffile.UFRay.__reduce__.html#pyart.io.uffile.UFRay.__reduce__" title="pyart.io.uffile.UFRay.__reduce__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__reduce__</span></code></a></p></td>
+<td><p>Helper for pickle.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="pyart.io.uffile.UFRay.__subclasshook__.html#pyart.io.uffile.UFRay.__subclasshook__" title="pyart.io.uffile.UFRay.__subclasshook__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__subclasshook__</span></code></a></td>
-<td>Abstract classes can override this to customize issubclass().</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.io.uffile.UFRay.__reduce_ex__.html#pyart.io.uffile.UFRay.__reduce_ex__" title="pyart.io.uffile.UFRay.__reduce_ex__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__reduce_ex__</span></code></a></p></td>
+<td><p>Helper for pickle.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.io.uffile.UFRay.__sizeof__.html#pyart.io.uffile.UFRay.__sizeof__" title="pyart.io.uffile.UFRay.__sizeof__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__sizeof__</span></code></a></p></td>
+<td><p>Size of object in memory, in bytes.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.io.uffile.UFRay.__subclasshook__.html#pyart.io.uffile.UFRay.__subclasshook__" title="pyart.io.uffile.UFRay.__subclasshook__"><code class="xref py py-obj docutils literal notranslate"><span class="pre">__subclasshook__</span></code></a></p></td>
+<td><p>Abstract classes can override this to customize issubclass().</p></td>
 </tr>
 </tbody>
 </table>
@@ -173,8 +176,6 @@
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -204,9 +205,9 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2013-2016, Py-ART developers.
-      Last updated on Feb 15, 2018.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.0.
+        &#169; Copyright 2013-2019, Py-ART developers.
+      Last updated on Apr 24, 2019.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.
     </div>
   </body>
 </html>

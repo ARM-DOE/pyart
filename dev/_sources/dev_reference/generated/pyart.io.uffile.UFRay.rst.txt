@@ -23,8 +23,10 @@ pyart.io.uffile.UFRay
        :toctree:
 
     
+         ~UFRay.__dir__
          ~UFRay.__format__
          ~UFRay.__init__
+         ~UFRay.__init_subclass__
          ~UFRay.__new__
          ~UFRay.__reduce__
          ~UFRay.__reduce_ex__

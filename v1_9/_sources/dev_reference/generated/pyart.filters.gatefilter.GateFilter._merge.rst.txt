@@ -1,0 +1,6 @@
+pyart.filters.gatefilter.GateFilter.\_merge
+===========================================
+
+.. currentmodule:: pyart.filters.gatefilter
+
+.. automethod:: GateFilter._merge

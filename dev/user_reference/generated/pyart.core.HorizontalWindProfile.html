@@ -1,19 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>pyart.core.HorizontalWindProfile &#8212; Py-ART Documentation</title>
     <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="../../_static/documentation_options.js"></script>
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="prev" title="pyart.core.Grid.write" href="pyart.core.Grid.write.html" /> 
@@ -32,7 +33,7 @@
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Py-ART Documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >User Reference Manual</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="../core.html" accesskey="U">Core (<code class="docutils literal notranslate"><span class="pre">pyart.core</span></code>)</a> &#187;</li> 
+          <li class="nav-item nav-item-2"><a href="../core.html" accesskey="U">Core (<code class="xref py py-mod docutils literal notranslate"><span class="pre">pyart.core</span></code>)</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -45,13 +46,11 @@
 <h1>pyart.core.HorizontalWindProfile<a class="headerlink" href="#pyart-core-horizontalwindprofile" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="pyart.core.HorizontalWindProfile">
-<em class="property">class </em><code class="descclassname">pyart.core.</code><code class="descname">HorizontalWindProfile</code><span class="sig-paren">(</span><em>height</em>, <em>speed</em>, <em>direction</em>, <em>latitude=None</em>, <em>longitude=None</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/core/wind_profile.py#L19"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.core.HorizontalWindProfile" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">pyart.core.</code><code class="descname">HorizontalWindProfile</code><span class="sig-paren">(</span><em>height</em>, <em>speed</em>, <em>direction</em>, <em>latitude=None</em>, <em>longitude=None</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/core/wind_profile.py#L18"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.core.HorizontalWindProfile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Horizontal wind profile.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>height</strong> : array-like, 1D</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>height</strong> : array-like, 1D</p>
 <blockquote>
 <div><p>Heights in meters above sea level at which horizontal winds were
 sampled.</p>
@@ -64,62 +63,59 @@ sampled.</p>
 <blockquote>
 <div><p>Horizontal wind direction in degrees at each height sampled.</p>
 </div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">Other Parameters:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body"><p class="first"><strong>latitude</strong> : array-like, 1D, optional</p>
+</dd>
+<dt class="field-even">Other Parameters</dt>
+<dd class="field-even"><p><strong>latitude</strong> : array-like, 1D, optional</p>
 <blockquote>
 <div><p>Latitude in degrees north at each height sampled.</p>
 </div></blockquote>
 <p><strong>longitude</strong> : array-like, 1D, optional</p>
-<blockquote class="last">
+<blockquote>
 <div><p>Longitude in degrees east at each height sampled.</p>
 </div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <p class="rubric">Attributes</p>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-center">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">u_wind</span></code></td>
-<td>U component of horizontal wind in meters per second.</td>
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">u_wind</span></code></p></td>
+<td><p>U component of horizontal wind in meters per second.</p></td>
 </tr>
-<tr class="row-even"><td><code class="xref py py-obj docutils literal notranslate"><span class="pre">v_wind</span></code></td>
-<td>V component of horizontal wind in meters per second.</td>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">v_wind</span></code></p></td>
+<td><p>V component of horizontal wind in meters per second.</p></td>
 </tr>
 </tbody>
 </table>
-<table border="1" class="docutils">
+<table class="docutils align-center">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td>height</td>
-<td>(array, 1D) Heights in meters above sea level at which horizontal winds were sampled.</td>
+<tbody>
+<tr class="row-odd"><td><p>height</p></td>
+<td><p>(array, 1D) Heights in meters above sea level at which horizontal winds were sampled.</p></td>
 </tr>
-<tr class="row-even"><td>speed</td>
-<td>(array, 1D) Horizontal wind speed in meters per second at each height.</td>
+<tr class="row-even"><td><p>speed</p></td>
+<td><p>(array, 1D) Horizontal wind speed in meters per second at each height.</p></td>
 </tr>
-<tr class="row-odd"><td>direction</td>
-<td>(array, 1D) Horizontal wind direction in degrees at each height.</td>
+<tr class="row-odd"><td><p>direction</p></td>
+<td><p>(array, 1D) Horizontal wind direction in degrees at each height.</p></td>
 </tr>
 </tbody>
 </table>
 <p class="rubric">Methods</p>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-center">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="pyart.core.HorizontalWindProfile.from_u_and_v.html#pyart.core.HorizontalWindProfile.from_u_and_v" title="pyart.core.HorizontalWindProfile.from_u_and_v"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_u_and_v</span></code></a>(height,&nbsp;u_wind,&nbsp;v_wind)</td>
-<td>Create a HorizontalWindProfile instance from U and V components.</td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.core.HorizontalWindProfile.from_u_and_v.html#pyart.core.HorizontalWindProfile.from_u_and_v" title="pyart.core.HorizontalWindProfile.from_u_and_v"><code class="xref py py-obj docutils literal notranslate"><span class="pre">from_u_and_v</span></code></a>(height, u_wind, v_wind)</p></td>
+<td><p>Create a HorizontalWindProfile instance from U and V components.</p></td>
 </tr>
 </tbody>
 </table>
@@ -149,8 +145,6 @@ sampled.</p>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -173,13 +167,13 @@ sampled.</p>
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Py-ART Documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >User Reference Manual</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="../core.html" >Core (<code class="docutils literal notranslate"><span class="pre">pyart.core</span></code>)</a> &#187;</li> 
+          <li class="nav-item nav-item-2"><a href="../core.html" >Core (<code class="xref py py-mod docutils literal notranslate"><span class="pre">pyart.core</span></code>)</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2013-2016, Py-ART developers.
-      Last updated on Feb 15, 2018.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.0.
+        &#169; Copyright 2013-2019, Py-ART developers.
+      Last updated on Apr 24, 2019.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.
     </div>
   </body>
 </html>

@@ -1,0 +1,6 @@
+pyart.graph.gridmapdisplay.GridMapDisplay.\_label\_axes\_grid
+=============================================================
+
+.. currentmodule:: pyart.graph.gridmapdisplay
+
+.. automethod:: GridMapDisplay._label_axes_grid

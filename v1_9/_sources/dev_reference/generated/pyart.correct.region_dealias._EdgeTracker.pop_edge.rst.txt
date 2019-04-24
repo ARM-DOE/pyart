@@ -1,0 +1,6 @@
+pyart.correct.region\_dealias.\_EdgeTracker.pop\_edge
+=====================================================
+
+.. currentmodule:: pyart.correct.region_dealias
+
+.. automethod:: _EdgeTracker.pop_edge

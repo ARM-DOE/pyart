@@ -1,19 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Filters (pyart.filters) &#8212; Py-ART Documentation</title>
     <link rel="stylesheet" href="../_static/scipy.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="../_static/documentation_options.js"></script>
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="pyart.filters.GateFilter" href="generated/pyart.filters.GateFilter.html" />
@@ -49,20 +50,26 @@
 <p>Classes for specifying what gates are included and excluded from routines.</p>
 <div class="section" id="filtering-radar-data">
 <h2>Filtering radar data<a class="headerlink" href="#filtering-radar-data" title="Permalink to this headline">¶</a></h2>
-<table border="1" class="longtable docutils">
+<table class="longtable docutils align-center">
 <colgroup>
-<col width="10%" />
-<col width="90%" />
+<col style="width: 10%" />
+<col style="width: 90%" />
 </colgroup>
-<tbody valign="top">
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.filters.GateFilter.html#pyart.filters.GateFilter" title="pyart.filters.GateFilter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GateFilter</span></code></a>(radar[,&nbsp;exclude_based])</td>
-<td>A class for building a boolean arrays for filtering gates based on a set of condition typically based on the values in the radar fields.</td>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyart.filters.GateFilter.html#pyart.filters.GateFilter" title="pyart.filters.GateFilter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GateFilter</span></code></a>(radar[, exclude_based])</p></td>
+<td><p>A class for building a boolean arrays for filtering gates based on a set of condition typically based on the values in the radar fields.</p></td>
 </tr>
-<tr class="row-even"><td><a class="reference internal" href="generated/pyart.filters.moment_based_gate_filter.html#pyart.filters.moment_based_gate_filter" title="pyart.filters.moment_based_gate_filter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">moment_based_gate_filter</span></code></a>(radar[,&nbsp;ncp_field,&nbsp;…])</td>
-<td>Create a filter which removes undesired gates based on moments.</td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pyart.filters.moment_based_gate_filter.html#pyart.filters.moment_based_gate_filter" title="pyart.filters.moment_based_gate_filter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">moment_based_gate_filter</span></code></a>(radar[, ncp_field, …])</p></td>
+<td><p>Create a filter which removes undesired gates based on moments.</p></td>
 </tr>
-<tr class="row-odd"><td><a class="reference internal" href="generated/pyart.filters.moment_and_texture_based_gate_filter.html#pyart.filters.moment_and_texture_based_gate_filter" title="pyart.filters.moment_and_texture_based_gate_filter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">moment_and_texture_based_gate_filter</span></code></a>(radar)</td>
-<td>Create a filter which removes undesired gates based on texture of moments.</td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyart.filters.moment_and_texture_based_gate_filter.html#pyart.filters.moment_and_texture_based_gate_filter" title="pyart.filters.moment_and_texture_based_gate_filter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">moment_and_texture_based_gate_filter</span></code></a>(radar)</p></td>
+<td><p>Create a filter which removes undesired gates based on texture of moments.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/pyart.filters.temp_based_gate_filter.html#pyart.filters.temp_based_gate_filter" title="pyart.filters.temp_based_gate_filter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">temp_based_gate_filter</span></code></a>(radar[, temp_field, …])</p></td>
+<td><p>Create a filter which removes undesired gates based on temperature.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/pyart.filters.iso0_based_gate_filter.html#pyart.filters.iso0_based_gate_filter" title="pyart.filters.iso0_based_gate_filter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">iso0_based_gate_filter</span></code></a>(radar[, iso0_field, …])</p></td>
+<td><p>Create a filter which removes undesired gates based height over the iso0.</p></td>
 </tr>
 </tbody>
 </table>
@@ -75,9 +82,9 @@
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Filters (<code class="docutils literal notranslate"><span class="pre">pyart.filters</span></code>)</a><ul>
+<li><a class="reference internal" href="#">Filters (<code class="xref py py-mod docutils literal notranslate"><span class="pre">pyart.filters</span></code>)</a><ul>
 <li><a class="reference internal" href="#filtering-radar-data">Filtering radar data</a></li>
 </ul>
 </li>
@@ -102,8 +109,6 @@
     <form class="search" action="../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -132,9 +137,9 @@
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2013-2016, Py-ART developers.
-      Last updated on Feb 15, 2018.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.0.
+        &#169; Copyright 2013-2019, Py-ART developers.
+      Last updated on Apr 24, 2019.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.
     </div>
   </body>
 </html>

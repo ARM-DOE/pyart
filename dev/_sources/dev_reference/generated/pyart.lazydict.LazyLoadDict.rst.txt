@@ -16,9 +16,6 @@ pyart.lazydict.LazyLoadDict
          LazyLoadDict.get
          LazyLoadDict.has_key
          LazyLoadDict.items
-         LazyLoadDict.iteritems
-         LazyLoadDict.iterkeys
-         LazyLoadDict.itervalues
          LazyLoadDict.keys
          LazyLoadDict.pop
          LazyLoadDict.popitem
@@ -37,13 +34,14 @@ pyart.lazydict.LazyLoadDict
     
          ~LazyLoadDict.__contains__
          ~LazyLoadDict.__delitem__
+         ~LazyLoadDict.__dir__
          ~LazyLoadDict.__eq__
          ~LazyLoadDict.__format__
          ~LazyLoadDict.__getitem__
          ~LazyLoadDict.__init__
+         ~LazyLoadDict.__init_subclass__
          ~LazyLoadDict.__iter__
          ~LazyLoadDict.__len__
-         ~LazyLoadDict.__ne__
          ~LazyLoadDict.__new__
          ~LazyLoadDict.__reduce__
          ~LazyLoadDict.__reduce_ex__

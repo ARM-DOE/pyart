@@ -23,8 +23,10 @@ pyart.correct.region\_dealias.\_RegionTracker
        :toctree:
 
     
+         ~_RegionTracker.__dir__
          ~_RegionTracker.__format__
          ~_RegionTracker.__init__
+         ~_RegionTracker.__init_subclass__
          ~_RegionTracker.__new__
          ~_RegionTracker.__reduce__
          ~_RegionTracker.__reduce_ex__

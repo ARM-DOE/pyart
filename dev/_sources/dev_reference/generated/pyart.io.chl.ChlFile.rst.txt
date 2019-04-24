@@ -21,8 +21,10 @@ pyart.io.chl.ChlFile
        :toctree:
 
     
+         ~ChlFile.__dir__
          ~ChlFile.__format__
          ~ChlFile.__init__
+         ~ChlFile.__init_subclass__
          ~ChlFile.__new__
          ~ChlFile.__reduce__
          ~ChlFile.__reduce_ex__

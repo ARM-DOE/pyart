@@ -21,10 +21,13 @@ pyart.map.\_gate\_to\_grid\_map.DistBeamRoI
        :toctree:
 
     
+         ~DistBeamRoI.__dir__
          ~DistBeamRoI.__format__
+         ~DistBeamRoI.__init_subclass__
          ~DistBeamRoI.__new__
          ~DistBeamRoI.__reduce__
          ~DistBeamRoI.__reduce_ex__
+         ~DistBeamRoI.__setstate__
          ~DistBeamRoI.__sizeof__
          ~DistBeamRoI.__subclasshook__
    

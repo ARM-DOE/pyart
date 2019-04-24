@@ -37,8 +37,10 @@ pyart.aux\_io.gamicfile.GAMICFile
        :toctree:
 
     
+         ~GAMICFile.__dir__
          ~GAMICFile.__format__
          ~GAMICFile.__init__
+         ~GAMICFile.__init_subclass__
          ~GAMICFile.__new__
          ~GAMICFile.__reduce__
          ~GAMICFile.__reduce_ex__

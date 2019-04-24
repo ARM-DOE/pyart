@@ -1,19 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>pyart.correct._fourdd_interface.fourdd_dealias &#8212; Py-ART Documentation</title>
     <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="../../_static/documentation_options.js"></script>
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="pyart.correct._fast_edge_finder._fast_edge_finder" href="pyart.correct._fast_edge_finder._fast_edge_finder.html" />
@@ -51,11 +52,9 @@
 <dt id="pyart.correct._fourdd_interface.fourdd_dealias">
 <code class="descclassname">pyart.correct._fourdd_interface.</code><code class="descname">fourdd_dealias</code><span class="sig-paren">(</span><em>radialVelVolume</em>, <em>lastVelVolume</em>, <em>soundVolume</em>, <em>filt</em>, <em>compthresh=0.25</em>, <em>compthresh2=0.49</em>, <em>thresh=0.4</em>, <em>epsilon=0.00001</em>, <em>ckval=1.0</em>, <em>stdthresh=0.8</em>, <em>maxcount=10</em>, <em>pass2=1</em>, <em>rm=0</em>, <em>proximity=5</em>, <em>mingood=5</em>, <em>ba_mincount=5</em>, <em>ba_edgecount=3</em>, <em>debug=False</em><span class="sig-paren">)</span><a class="headerlink" href="#pyart.correct._fourdd_interface.fourdd_dealias" title="Permalink to this definition">¶</a></dt>
 <dd><p>Dealias using the FourDD algorithm.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>radialVelVolume</strong> : _RslVolume</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>radialVelVolume</strong> : _RslVolume</p>
 <blockquote>
 <div><p>Radial velocities which will be dealiased.</p>
 </div></blockquote>
@@ -74,9 +73,9 @@ soundVolume and lastVelVolume cannot both be None.</p>
 <blockquote>
 <div><p>Flag controlling Bergen and Albers filter, 1 = yes, 0 = no.</p>
 </div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>usuccess</strong> : int</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>usuccess</strong> : int</p>
 <blockquote>
 <div><p>Flag indicating if the unfolding was successful, 1 = yes, 0 = no.</p>
 </div></blockquote>
@@ -84,10 +83,9 @@ soundVolume and lastVelVolume cannot both be None.</p>
 <blockquote>
 <div><p>Array of unfolded velocities.</p>
 </div></blockquote>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name" colspan="2">Other Parameters:</th></tr>
-<tr class="field-odd field"><td>&#160;</td><td class="field-body"><p class="first"><strong>compthresh</strong> : float</p>
+</dd>
+<dt class="field-odd">Other Parameters</dt>
+<dd class="field-odd"><p><strong>compthresh</strong> : float</p>
 <blockquote>
 <div><p>Fraction of the Nyquist velocity to use as a threshold when performing
 continity (initial) dealiasing.  Velocities differences above this
@@ -164,14 +162,12 @@ a given gate to be included, must be between 1 and 8, 5 recommended.</p>
 3 recommended.</p>
 </div></blockquote>
 <p><strong>debug</strong> : bool</p>
-<blockquote class="last">
+<blockquote>
 <div><p>True to return RSL Volume objects for debugging:
 usuccess, radialVelVolume, lastVelVolume, soundVolume, unfoldedVolume</p>
 </div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <p class="rubric">References</p>
 <p>C. N. James and R. A Houze Jr, A Real-Time Four-Dimensional Doppler
 Dealising Scheme, Journal of Atmospheric and Oceanic Technology, 2001, 18,
@@ -205,8 +201,6 @@ Dealising Scheme, Journal of Atmospheric and Oceanic Technology, 2001, 18,
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -236,9 +230,9 @@ Dealising Scheme, Journal of Atmospheric and Oceanic Technology, 2001, 18,
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2013-2016, Py-ART developers.
-      Last updated on Feb 15, 2018.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.0.
+        &#169; Copyright 2013-2019, Py-ART developers.
+      Last updated on Apr 24, 2019.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.
     </div>
   </body>
 </html>

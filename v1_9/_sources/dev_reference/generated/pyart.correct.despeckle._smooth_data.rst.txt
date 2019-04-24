@@ -1,0 +1,6 @@
+pyart.correct.despeckle.\_smooth\_data
+======================================
+
+.. currentmodule:: pyart.correct.despeckle
+
+.. autofunction:: _smooth_data

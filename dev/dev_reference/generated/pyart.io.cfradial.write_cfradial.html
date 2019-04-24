@@ -1,19 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>pyart.io.cfradial.write_cfradial &#8212; Py-ART Documentation</title>
     <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="../../_static/documentation_options.js"></script>
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="pyart.io.cfradial._find_all_meta_group_vars" href="pyart.io.cfradial._find_all_meta_group_vars.html" />
@@ -49,7 +50,7 @@
 <h1>pyart.io.cfradial.write_cfradial<a class="headerlink" href="#pyart-io-cfradial-write-cfradial" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pyart.io.cfradial.write_cfradial">
-<code class="descclassname">pyart.io.cfradial.</code><code class="descname">write_cfradial</code><span class="sig-paren">(</span><em>filename</em>, <em>radar</em>, <em>format='NETCDF4'</em>, <em>time_reference=None</em>, <em>arm_time_variables=False</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/io/cfradial.py#L403"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.io.cfradial.write_cfradial" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pyart.io.cfradial.</code><code class="descname">write_cfradial</code><span class="sig-paren">(</span><em>filename</em>, <em>radar</em>, <em>format='NETCDF4'</em>, <em>time_reference=None</em>, <em>arm_time_variables=False</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/io/cfradial.py#L411"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.io.cfradial.write_cfradial" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write a Radar object to a CF/Radial compliant netCDF file.</p>
 <p>The files produced by this routine follow the <a class="reference external" href="http://www.ral.ucar.edu/projects/titan/docs/radial_formats/cfradial.html">CF/Radial standard</a>.
 Attempts are also made to to meet many of the standards outlined in the
@@ -58,23 +59,21 @@ Attempts are also made to to meet many of the standards outlined in the
 keys in the radar attribute dictionaries.</p>
 <blockquote>
 <div><ul class="simple">
-<li>_Zlib</li>
-<li>_DeflateLevel</li>
-<li>_Shuffle</li>
-<li>_Fletcher32</li>
-<li>_Continguous</li>
-<li>_ChunkSizes</li>
-<li>_Endianness</li>
-<li>_Least_significant_digit</li>
-<li>_FillValue</li>
+<li><p>_Zlib</p></li>
+<li><p>_DeflateLevel</p></li>
+<li><p>_Shuffle</p></li>
+<li><p>_Fletcher32</p></li>
+<li><p>_Continguous</p></li>
+<li><p>_ChunkSizes</p></li>
+<li><p>_Endianness</p></li>
+<li><p>_Least_significant_digit</p></li>
+<li><p>_FillValue</p></li>
 </ul>
 </div></blockquote>
 <p>See the netCDF4 documentation for details on these settings.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> : str</p>
 <blockquote>
 <div><p>Filename to create.</p>
 </div></blockquote>
@@ -95,14 +94,12 @@ this variable. The default, None, will include the time_reference
 variable when the first time value is non-zero.</p>
 </div></blockquote>
 <p><strong>arm_time_variables</strong> : bool</p>
-<blockquote class="last">
+<blockquote>
 <div><p>True to create the ARM standard time variables base_time and
 time_offset, False will not create these variables.</p>
 </div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -132,8 +129,6 @@ time_offset, False will not create these variables.</p>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -163,9 +158,9 @@ time_offset, False will not create these variables.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2013-2016, Py-ART developers.
-      Last updated on Feb 15, 2018.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.0.
+        &#169; Copyright 2013-2019, Py-ART developers.
+      Last updated on Apr 24, 2019.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.
     </div>
   </body>
 </html>

@@ -45,8 +45,10 @@ pyart.filters.gatefilter.GateFilter
        :toctree:
 
     
+         ~GateFilter.__dir__
          ~GateFilter.__format__
          ~GateFilter.__init__
+         ~GateFilter.__init_subclass__
          ~GateFilter.__new__
          ~GateFilter.__reduce__
          ~GateFilter.__reduce_ex__

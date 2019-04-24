@@ -25,5 +25,5 @@ is plotted on top of the grid.
 .. literalinclude:: plot_grid_data_overlay.py
     :lines: 11-
 
-**Total running time of the example:**  7.57 seconds
+**Total running time of the example:**  4.49 seconds
     

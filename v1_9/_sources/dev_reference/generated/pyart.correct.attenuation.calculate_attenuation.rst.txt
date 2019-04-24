@@ -1,0 +1,6 @@
+pyart.correct.attenuation.calculate\_attenuation
+================================================
+
+.. currentmodule:: pyart.correct.attenuation
+
+.. autofunction:: calculate_attenuation

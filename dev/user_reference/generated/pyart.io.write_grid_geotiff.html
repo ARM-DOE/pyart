@@ -1,19 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>pyart.io.write_grid_geotiff &#8212; Py-ART Documentation</title>
     <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="../../_static/documentation_options.js"></script>
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="pyart.io.read_arm_sonde" href="pyart.io.read_arm_sonde.html" />
@@ -36,7 +37,7 @@
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Py-ART Documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >User Reference Manual</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="../io.html" accesskey="U">Input and output (<code class="docutils literal notranslate"><span class="pre">pyart.io</span></code>)</a> &#187;</li> 
+          <li class="nav-item nav-item-2"><a href="../io.html" accesskey="U">Input and output (<code class="xref py py-mod docutils literal notranslate"><span class="pre">pyart.io</span></code>)</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -49,7 +50,7 @@
 <h1>pyart.io.write_grid_geotiff<a class="headerlink" href="#pyart-io-write-grid-geotiff" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pyart.io.write_grid_geotiff">
-<code class="descclassname">pyart.io.</code><code class="descname">write_grid_geotiff</code><span class="sig-paren">(</span><em>grid</em>, <em>filename</em>, <em>field</em>, <em>rgb=False</em>, <em>level=None</em>, <em>cmap='viridis'</em>, <em>vmin=0</em>, <em>vmax=75</em>, <em>color_levels=None</em>, <em>warp=False</em>, <em>sld=False</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/io/output_to_geotiff.py#L30"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.io.write_grid_geotiff" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pyart.io.</code><code class="descname">write_grid_geotiff</code><span class="sig-paren">(</span><em>grid</em>, <em>filename</em>, <em>field</em>, <em>rgb=False</em>, <em>level=None</em>, <em>cmap='viridis'</em>, <em>vmin=0</em>, <em>vmax=75</em>, <em>color_levels=None</em>, <em>warp=False</em>, <em>sld=False</em>, <em>use_doublequotes=False</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/io/output_to_geotiff.py#L30"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.io.write_grid_geotiff" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write a Py-ART Grid object to a GeoTIFF file.</p>
 <p>The GeoTIFF can be the standard Azimuthal Equidistant projection used
 in Py-ART, or a lat/lon projection on a WGS84 sphere. The latter is
@@ -63,11 +64,9 @@ the 2D vertical level to be output. If this is not specified, a 2D
 composite is created. User also can specify the field to output.</p>
 <p>This function requires GDAL Python libraries to be installed. These are
 available via conda; e.g., ‘conda install gdal’</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>grid</strong> : pyart.core.Grid object</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>grid</strong> : pyart.core.Grid object</p>
 <blockquote>
 <div><p>Grid object to write to file.</p>
 </div></blockquote>
@@ -79,19 +78,17 @@ available via conda; e.g., ‘conda install gdal’</p>
 <blockquote>
 <div><p>Field name to output to file.</p>
 </div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name" colspan="2">Other Parameters:</th></tr>
-<tr class="field-even field"><td>&#160;</td><td class="field-body"><p class="first"><strong>rbg</strong> : bool, optional</p>
+</dd>
+<dt class="field-even">Other Parameters</dt>
+<dd class="field-even"><p><strong>rbg</strong> : bool, optional</p>
 <blockquote>
 <div><p>True - Output 3-band RGB GeoTIFF</p>
-<dl class="docutils">
-<dt>False - Output single-channel, float-valued GeoTIFF. For display,</dt>
-<dd><p class="first last">likely will need an SLD file to provide a color table.</p>
+<dl class="simple">
+<dt>False - Output single-channel, float-valued GeoTIFF. For display,</dt><dd><p>likely will need an SLD file to provide a color table.</p>
 </dd>
 </dl>
 </div></blockquote>
-<p><strong>level: int or None, optional</strong></p>
+<p><strong>level</strong> : int or None, optional</p>
 <blockquote>
 <div><p>Index for z-axis plane to output. None gives composite values
 (i.e., max in each vertical column).</p>
@@ -115,27 +112,32 @@ with steps &lt;&lt; 255 (e.g., hydrometeor ID).</p>
 </div></blockquote>
 <p><strong>warp</strong> : bool, optional</p>
 <blockquote>
-<div><dl class="docutils">
-<dt>True - Use gdalwarp (called from command line using os.system)</dt>
-<dd><p class="first last">to warp to a lat/lon WGS84 grid.</p>
+<div><dl class="simple">
+<dt>True - Use gdalwarp (called from command line using os.system)</dt><dd><p>to warp to a lat/lon WGS84 grid.</p>
 </dd>
 </dl>
 <p>False - No warping will be performed. Output will be Az. Equidistant.</p>
 </div></blockquote>
 <p><strong>sld</strong> : bool, optional</p>
-<blockquote class="last">
-<div><dl class="docutils">
-<dt>True - Create a Style Layer Descriptor file (SLD) mapped to vmin/vmax</dt>
-<dd><p class="first last">and cmap. File is named same as output TIFF, except for .sld
+<blockquote>
+<div><dl class="simple">
+<dt>True - Create a Style Layer Descriptor file (SLD) mapped to vmin/vmax</dt><dd><p>and cmap. File is named same as output TIFF, except for .sld
 extension.</p>
 </dd>
 </dl>
 <p>False - Don’t do this.</p>
 </div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+<p><strong>use_doublequotes</strong> : bool, optional</p>
+<blockquote>
+<div><dl class="simple">
+<dt>True - Use double quotes in the gdalwarp call (requires warp=True),</dt><dd><p>which may help if that command is producing and error like:
+‘Translating source or target SRS failed’</p>
+</dd>
+</dl>
+<p>False - Use single quotes instead</p>
+</div></blockquote>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -165,8 +167,6 @@ extension.</p>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -192,13 +192,13 @@ extension.</p>
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Py-ART Documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >User Reference Manual</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="../io.html" >Input and output (<code class="docutils literal notranslate"><span class="pre">pyart.io</span></code>)</a> &#187;</li> 
+          <li class="nav-item nav-item-2"><a href="../io.html" >Input and output (<code class="xref py py-mod docutils literal notranslate"><span class="pre">pyart.io</span></code>)</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2013-2016, Py-ART developers.
-      Last updated on Feb 15, 2018.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.0.
+        &#169; Copyright 2013-2019, Py-ART developers.
+      Last updated on Apr 24, 2019.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.
     </div>
   </body>
 </html>

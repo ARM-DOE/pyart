@@ -1,0 +1,6 @@
+pyart.correct.despeckle.\_check\_threshold
+==========================================
+
+.. currentmodule:: pyart.correct.despeckle
+
+.. autofunction:: _check_threshold

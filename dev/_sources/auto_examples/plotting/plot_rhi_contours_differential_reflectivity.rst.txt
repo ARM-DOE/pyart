@@ -24,5 +24,5 @@ and adding differnential Reflectivity contours from the same MDV file.
 .. literalinclude:: plot_rhi_contours_differential_reflectivity.py
     :lines: 10-
 
-**Total running time of the example:**  0.86 seconds
+**Total running time of the example:**  0.72 seconds
     

@@ -31,8 +31,10 @@ pyart.io.uffile.UFFile
        :toctree:
 
     
+         ~UFFile.__dir__
          ~UFFile.__format__
          ~UFFile.__init__
+         ~UFFile.__init_subclass__
          ~UFFile.__new__
          ~UFFile.__reduce__
          ~UFFile.__reduce_ex__

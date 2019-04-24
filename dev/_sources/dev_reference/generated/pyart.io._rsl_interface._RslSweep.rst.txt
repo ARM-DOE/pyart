@@ -22,10 +22,13 @@ pyart.io.\_rsl\_interface.\_RslSweep
        :toctree:
 
     
+         ~_RslSweep.__dir__
          ~_RslSweep.__format__
+         ~_RslSweep.__init_subclass__
          ~_RslSweep.__new__
          ~_RslSweep.__reduce__
          ~_RslSweep.__reduce_ex__
+         ~_RslSweep.__setstate__
          ~_RslSweep.__sizeof__
          ~_RslSweep.__subclasshook__
    

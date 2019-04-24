@@ -1,22 +1,23 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>pyart.io.nexrad_level2.NEXRADLevel2File.scan_info &#8212; Py-ART Documentation</title>
     <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="../../_static/documentation_options.js"></script>
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="pyart.io.nexrad_level2.NEXRADLevel2File.__format__" href="pyart.io.nexrad_level2.NEXRADLevel2File.__format__.html" />
+    <link rel="next" title="pyart.io.nexrad_level2.NEXRADLevel2File.__dir__" href="pyart.io.nexrad_level2.NEXRADLevel2File.__dir__.html" />
     <link rel="prev" title="pyart.io.nexrad_level2.NEXRADLevel2File.location" href="pyart.io.nexrad_level2.NEXRADLevel2File.location.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -29,7 +30,7 @@
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pyart.io.nexrad_level2.NEXRADLevel2File.__format__.html" title="pyart.io.nexrad_level2.NEXRADLevel2File.__format__"
+          <a href="pyart.io.nexrad_level2.NEXRADLevel2File.__dir__.html" title="pyart.io.nexrad_level2.NEXRADLevel2File.__dir__"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="pyart.io.nexrad_level2.NEXRADLevel2File.location.html" title="pyart.io.nexrad_level2.NEXRADLevel2File.location"
@@ -50,22 +51,20 @@
 <h1>pyart.io.nexrad_level2.NEXRADLevel2File.scan_info<a class="headerlink" href="#pyart-io-nexrad-level2-nexradlevel2file-scan-info" title="Permalink to this headline">¶</a></h1>
 <dl class="method">
 <dt id="pyart.io.nexrad_level2.NEXRADLevel2File.scan_info">
-<code class="descclassname">NEXRADLevel2File.</code><code class="descname">scan_info</code><span class="sig-paren">(</span><em>scans=None</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/io/nexrad_level2.py#L212"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.io.nexrad_level2.NEXRADLevel2File.scan_info" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">NEXRADLevel2File.</code><code class="descname">scan_info</code><span class="sig-paren">(</span><em>scans=None</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/io/nexrad_level2.py#L221"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.io.nexrad_level2.NEXRADLevel2File.scan_info" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a list of dictionaries with scan information.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>scans</strong> : list ot None</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>scans</strong> : list ot None</p>
 <blockquote>
 <div><p>Scans (0 based) for which ray (radial) azimuth angles will be
 retrieved.  None (the default) will return the angles for all
 scans in the volume.</p>
 </div></blockquote>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>scan_info</strong> : list, optional</p>
-<blockquote class="last">
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>scan_info</strong> : list, optional</p>
+<blockquote>
 <div><p>A list of the scan performed with a dictionary with keys
 ‘moments’, ‘ngates’, ‘nrays’, ‘first_gate’ and ‘gate_spacing’
 for each scan.  The ‘moments’, ‘ngates’, ‘first_gate’, and
@@ -74,10 +73,8 @@ information for that moment collected during the specific scan.
 The ‘nrays’ key provides the number of radials collected in the
 given scan.</p>
 </div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -92,8 +89,8 @@ given scan.</p>
   <p class="topless"><a href="pyart.io.nexrad_level2.NEXRADLevel2File.location.html"
                         title="previous chapter">pyart.io.nexrad_level2.NEXRADLevel2File.location</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="pyart.io.nexrad_level2.NEXRADLevel2File.__format__.html"
-                        title="next chapter">pyart.io.nexrad_level2.NEXRADLevel2File.__format__</a></p>
+  <p class="topless"><a href="pyart.io.nexrad_level2.NEXRADLevel2File.__dir__.html"
+                        title="next chapter">pyart.io.nexrad_level2.NEXRADLevel2File.__dir__</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -107,8 +104,6 @@ given scan.</p>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -127,7 +122,7 @@ given scan.</p>
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="pyart.io.nexrad_level2.NEXRADLevel2File.__format__.html" title="pyart.io.nexrad_level2.NEXRADLevel2File.__format__"
+          <a href="pyart.io.nexrad_level2.NEXRADLevel2File.__dir__.html" title="pyart.io.nexrad_level2.NEXRADLevel2File.__dir__"
              >next</a> |</li>
         <li class="right" >
           <a href="pyart.io.nexrad_level2.NEXRADLevel2File.location.html" title="pyart.io.nexrad_level2.NEXRADLevel2File.location"
@@ -139,9 +134,9 @@ given scan.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2013-2016, Py-ART developers.
-      Last updated on Feb 15, 2018.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.0.
+        &#169; Copyright 2013-2019, Py-ART developers.
+      Last updated on Apr 24, 2019.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.
     </div>
   </body>
 </html>

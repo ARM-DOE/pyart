@@ -1,19 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>pyart.io.write_grid_mdv &#8212; Py-ART Documentation</title>
     <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="../../_static/documentation_options.js"></script>
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="pyart.io.write_grid_geotiff" href="pyart.io.write_grid_geotiff.html" />
@@ -36,7 +37,7 @@
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Py-ART Documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >User Reference Manual</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="../io.html" accesskey="U">Input and output (<code class="docutils literal notranslate"><span class="pre">pyart.io</span></code>)</a> &#187;</li> 
+          <li class="nav-item nav-item-2"><a href="../io.html" accesskey="U">Input and output (<code class="xref py py-mod docutils literal notranslate"><span class="pre">pyart.io</span></code>)</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -58,11 +59,9 @@ and name are not present in the grid a default or sentinel value.
 will be written in the MDV file in the place of the parameter.</p>
 <p>Grid fields will be saved in float32 unless the <cite>_Write_as_dtype</cite> key is
 present.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filename</strong> : str or file-like object.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> : str or file-like object.</p>
 <blockquote>
 <div><p>Filename of MDV file to create.  If a file-like object is specified
 data will be written using the write method.</p>
@@ -78,26 +77,24 @@ mapped to None or with no mapping will be excluded from
 writing.  If None, the same field names will be used.</p>
 </div></blockquote>
 <p><strong>field_write_order</strong> : list or None, optional</p>
-<blockquote class="last">
+<blockquote>
 <div><p>Order in which grid fields should be written out in the MDV file.
 None, the default, will determine a valid order automatically.</p>
 </div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 <p class="rubric">Notes</p>
 <p>Do to limitations of the MDV format, not all grid objects are writable.
 To write a grid the following conditions must be satisfied:</p>
 <blockquote>
 <div><ul class="simple">
-<li>XY grid must be regular (equal spacing), Z can be irregular.</li>
-<li>The number of Z levels must not exceed 122.</li>
-<li>Fields can be encoded in the file using the ‘_Write_as_dtype’ key
+<li><p>XY grid must be regular (equal spacing), Z can be irregular.</p></li>
+<li><p>The number of Z levels must not exceed 122.</p></li>
+<li><p>Fields can be encoded in the file using the ‘_Write_as_dtype’ key
 specifying one of ‘uint8’, ‘uint16’ or ‘float32’.  Use the
 ‘scale_factor’ and ‘add_offset’ keys to specify scaling.  Field
 data in the Grid object should be uncompressed, that is to say
-it has had the scaling applied.</li>
+it has had the scaling applied.</p></li>
 </ul>
 </div></blockquote>
 </dd></dl>
@@ -129,8 +126,6 @@ it has had the scaling applied.</li>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -156,13 +151,13 @@ it has had the scaling applied.</li>
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Py-ART Documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >User Reference Manual</a> &#187;</li>
-          <li class="nav-item nav-item-2"><a href="../io.html" >Input and output (<code class="docutils literal notranslate"><span class="pre">pyart.io</span></code>)</a> &#187;</li> 
+          <li class="nav-item nav-item-2"><a href="../io.html" >Input and output (<code class="xref py py-mod docutils literal notranslate"><span class="pre">pyart.io</span></code>)</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2013-2016, Py-ART developers.
-      Last updated on Feb 15, 2018.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.0.
+        &#169; Copyright 2013-2019, Py-ART developers.
+      Last updated on Apr 24, 2019.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.
     </div>
   </body>
 </html>

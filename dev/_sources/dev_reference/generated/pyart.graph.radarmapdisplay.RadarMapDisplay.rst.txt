@@ -51,14 +51,16 @@ pyart.graph.radarmapdisplay.RadarMapDisplay
        :toctree:
 
     
+         ~RadarMapDisplay.__dir__
          ~RadarMapDisplay.__format__
          ~RadarMapDisplay.__init__
+         ~RadarMapDisplay.__init_subclass__
          ~RadarMapDisplay.__new__
          ~RadarMapDisplay.__reduce__
          ~RadarMapDisplay.__reduce_ex__
          ~RadarMapDisplay.__sizeof__
          ~RadarMapDisplay.__subclasshook__
-         ~RadarMapDisplay._check_basemap
+         ~RadarMapDisplay._check_ax
          ~RadarMapDisplay._get_azimuth_rhi_data_x_y_z
          ~RadarMapDisplay._get_colorbar_label
          ~RadarMapDisplay._get_data

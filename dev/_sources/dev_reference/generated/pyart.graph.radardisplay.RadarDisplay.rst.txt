@@ -47,8 +47,10 @@ pyart.graph.radardisplay.RadarDisplay
        :toctree:
 
     
+         ~RadarDisplay.__dir__
          ~RadarDisplay.__format__
          ~RadarDisplay.__init__
+         ~RadarDisplay.__init_subclass__
          ~RadarDisplay.__new__
          ~RadarDisplay.__reduce__
          ~RadarDisplay.__reduce_ex__

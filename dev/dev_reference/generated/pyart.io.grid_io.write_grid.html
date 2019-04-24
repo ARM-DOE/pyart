@@ -1,19 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>pyart.io.grid_io.write_grid &#8212; Py-ART Documentation</title>
     <link rel="stylesheet" href="../../_static/scipy.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" src="../../_static/documentation_options.js"></script>
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/javascript" src="../../_static/language_data.js"></script>
+    <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="pyart.io.grid_io._make_coordinatesystem_dict" href="pyart.io.grid_io._make_coordinatesystem_dict.html" />
@@ -49,29 +50,27 @@
 <h1>pyart.io.grid_io.write_grid<a class="headerlink" href="#pyart-io-grid-io-write-grid" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pyart.io.grid_io.write_grid">
-<code class="descclassname">pyart.io.grid_io.</code><code class="descname">write_grid</code><span class="sig-paren">(</span><em>filename</em>, <em>grid</em>, <em>format='NETCDF4'</em>, <em>write_proj_coord_sys=True</em>, <em>proj_coord_sys=None</em>, <em>arm_time_variables=False</em>, <em>write_point_x_y_z=False</em>, <em>write_point_lon_lat_alt=False</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/io/grid_io.py#L143"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.io.grid_io.write_grid" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">pyart.io.grid_io.</code><code class="descname">write_grid</code><span class="sig-paren">(</span><em>filename</em>, <em>grid</em>, <em>format='NETCDF4'</em>, <em>write_proj_coord_sys=True</em>, <em>proj_coord_sys=None</em>, <em>arm_time_variables=False</em>, <em>write_point_x_y_z=False</em>, <em>write_point_lon_lat_alt=False</em><span class="sig-paren">)</span><a class="reference external" href="http://github.com/ARM-DOE/pyart/blob/master/pyart/io/grid_io.py#L152"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.io.grid_io.write_grid" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write a Grid object to a CF-1.5 and ARM standard netCDF file</p>
 <p>To control how the netCDF variables are created, set any of the following
 keys in the grid attribute dictionaries.</p>
 <blockquote>
 <div><ul class="simple">
-<li>_Zlib</li>
-<li>_DeflateLevel</li>
-<li>_Shuffle</li>
-<li>_Fletcher32</li>
-<li>_Continguous</li>
-<li>_ChunkSizes</li>
-<li>_Endianness</li>
-<li>_Least_significant_digit</li>
-<li>_FillValue</li>
+<li><p>_Zlib</p></li>
+<li><p>_DeflateLevel</p></li>
+<li><p>_Shuffle</p></li>
+<li><p>_Fletcher32</p></li>
+<li><p>_Continguous</p></li>
+<li><p>_ChunkSizes</p></li>
+<li><p>_Endianness</p></li>
+<li><p>_Least_significant_digit</p></li>
+<li><p>_FillValue</p></li>
 </ul>
 </div></blockquote>
 <p>See the netCDF4 documentation for details on these settings.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> : str</p>
 <blockquote>
 <div><p>Filename to save grid to.</p>
 </div></blockquote>
@@ -112,14 +111,12 @@ time_offset. False will not write these variables.</p>
 written file, False will not write these variables.</p>
 </div></blockquote>
 <p><strong>write_point_lon_lat_alt</strong> : bool, optional</p>
-<blockquote class="last">
+<blockquote>
 <div><p>True to include the point_longitude, point_latitude and point_altitude
 variables in the written file, False will not write these variables.</p>
 </div></blockquote>
-</td>
-</tr>
-</tbody>
-</table>
+</dd>
+</dl>
 </dd></dl>
 
 </div>
@@ -149,8 +146,6 @@ variables in the written file, False will not write these variables.</p>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -180,9 +175,9 @@ variables in the written file, False will not write these variables.</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2013-2016, Py-ART developers.
-      Last updated on Feb 15, 2018.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.7.0.
+        &#169; Copyright 2013-2019, Py-ART developers.
+      Last updated on Apr 24, 2019.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.1.
     </div>
   </body>
 </html>

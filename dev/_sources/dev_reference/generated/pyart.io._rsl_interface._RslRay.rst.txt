@@ -22,10 +22,13 @@ pyart.io.\_rsl\_interface.\_RslRay
        :toctree:
 
     
+         ~_RslRay.__dir__
          ~_RslRay.__format__
+         ~_RslRay.__init_subclass__
          ~_RslRay.__new__
          ~_RslRay.__reduce__
          ~_RslRay.__reduce_ex__
+         ~_RslRay.__setstate__
          ~_RslRay.__sizeof__
          ~_RslRay.__subclasshook__
    

@@ -24,10 +24,13 @@ pyart.io.\_rsl\_interface.RslFile
        :toctree:
 
     
+         ~RslFile.__dir__
          ~RslFile.__format__
+         ~RslFile.__init_subclass__
          ~RslFile.__new__
          ~RslFile.__reduce__
          ~RslFile.__reduce_ex__
+         ~RslFile.__setstate__
          ~RslFile.__sizeof__
          ~RslFile.__subclasshook__
    

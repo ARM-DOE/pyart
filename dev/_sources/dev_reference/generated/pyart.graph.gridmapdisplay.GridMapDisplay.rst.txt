@@ -11,12 +11,14 @@ pyart.graph.gridmapdisplay.GridMapDisplay
       .. autosummary::
          :toctree:
       
+         GridMapDisplay.cartopy_coastlines
+         GridMapDisplay.cartopy_political_boundaries
+         GridMapDisplay.cartopy_states
          GridMapDisplay.generate_filename
          GridMapDisplay.generate_grid_title
          GridMapDisplay.generate_latitudinal_level_title
          GridMapDisplay.generate_longitudinal_level_title
-         GridMapDisplay.get_basemap
-         GridMapDisplay.plot_basemap
+         GridMapDisplay.get_dataset
          GridMapDisplay.plot_colorbar
          GridMapDisplay.plot_crosshairs
          GridMapDisplay.plot_grid
@@ -33,8 +35,10 @@ pyart.graph.gridmapdisplay.GridMapDisplay
        :toctree:
 
     
+         ~GridMapDisplay.__dir__
          ~GridMapDisplay.__format__
          ~GridMapDisplay.__init__
+         ~GridMapDisplay.__init_subclass__
          ~GridMapDisplay.__new__
          ~GridMapDisplay.__reduce__
          ~GridMapDisplay.__reduce_ex__
@@ -47,7 +51,6 @@ pyart.graph.gridmapdisplay.GridMapDisplay
          ~GridMapDisplay._label_axes_grid
          ~GridMapDisplay._label_axes_latitude
          ~GridMapDisplay._label_axes_longitude
-         ~GridMapDisplay._make_basemap
    
    
 

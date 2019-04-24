@@ -1,0 +1,6 @@
+pyart.core.radar.Radar.\_dic\_info
+==================================
+
+.. currentmodule:: pyart.core.radar
+
+.. automethod:: Radar._dic_info

@@ -1,0 +1,6 @@
+pyart.aux\_io.sinarame\_h5.write\_sinarame\_cfradial
+====================================================
+
+.. currentmodule:: pyart.aux_io.sinarame_h5
+
+.. autofunction:: write_sinarame_cfradial

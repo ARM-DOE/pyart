@@ -23,5 +23,5 @@ An example which creates a PPI plot of a MDV file using a RadarDisplay object.
 .. literalinclude:: plot_ppi_mdv.py
     :lines: 9-
 
-**Total running time of the example:**  4.13 seconds
+**Total running time of the example:**  3.65 seconds
     
