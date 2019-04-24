@@ -24,7 +24,7 @@ import pyart
 # read in the NEXRAD data, create the display
 fname = '20110520100000_nexrad_grid.nc'
 grid = pyart.io.read_grid(fname)
-display = pyart.graph.GridMapDisplay(grid)
+display = pyart.graph.GridMapDisplayBasemap(grid)
 
 # create the figure
 font = {'size': 16}
