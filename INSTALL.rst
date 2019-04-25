@@ -7,7 +7,7 @@ Required Dependencies
 
 Py-ART requires the following software.
 
-* Python__ 2.7.x, 3.4.x, 3.5.x or 3.6.x
+* Python__ 2.7.x, 3.6.x or 3.7.x
 
 __ http://www.python.org
 
@@ -71,12 +71,14 @@ The latest source can be checked out using
 Installing from Source
 ======================
 
-The path to the TRMM RSL library must be provided during install.  This can
-either be done by setting the ``RSL_PATH`` environmentation variable.  In bash
+The path to the TRMM RSL library must be provided during install. This can
+either be done by setting the ``RSL_PATH`` environmentation variable. In bash
 this can be done using ``export RSL_PATH=/path/to/rsl/``. If this location is
-not specified, some common locations will be searched.  Note that the location
+not specified, some common locations will be searched. Note that the location
 provided should be the root TRMM RSL path, under which both a `lib` and
 `include` directory are contained, the default location is ``/lib/local/trmm``.
+If using CyLP, a path for the coincbc directory is needed. This can be done
+using ``export COIN_INSTALL_DIR=/path/to/coincbc/``.
 
 After specifying the TRMM RSL path Py-ART can be installed globally using
 
@@ -106,6 +108,16 @@ You can also install Py-ART in development mode by using
 
 Frequently asked questions
 ==========================
+
+* I'm getting a no 'io' module after installing pyart with pip.
+
+  There is a pyart on pip that is a different package. Make sure to do::
+
+      pip install arm_pyart
+
+  and not::
+
+      pip install pyart
 
 * I'm getting a segfault or another error in python when using 
   ``pyart.io.read_rsl()`` with IRIS/other files.
