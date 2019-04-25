@@ -129,10 +129,10 @@ These include:
 
 Other related open source software for working with weather radar data:
 
-* `wradlib <http://wradlib.org>`_ :
+* `wradlib <https://wradlib.org>`_ :
   An open source library for weather radar data processing.
   
-* `BALTRAD <http://baltrad.eu/>`_ : Community-based weather radar networking.
+* `BALTRAD <https://baltrad.eu/>`_ : Community-based weather radar networking.
 
 * `MMM-Py <https://github.com/nasa/MMM-Py>`_ : 
   Marshall MRMS Mosaic Python Toolkit.
@@ -140,10 +140,10 @@ Other related open source software for working with weather radar data:
 * `CSU_RadarTools <https://github.com/CSU-Radarmet/CSU_RadarTools>`_ : 
   Colorado State University Radar Tools.
 
-* `TRMM RSL <http://trmm-fc.gsfc.nasa.gov/trmm_gv/software/rsl/>`_ :
+* `TRMM RSL <https://trmm-fc.gsfc.nasa.gov/trmm_gv/software/rsl/>`_ :
   TRMM Radar Software Library.
 
-* `RadX <http://www.ral.ucar.edu/projects/titan/docs/radial_formats/radx.html>`_: 
+* `RadX <https://www.ral.ucar.edu/projects/titan/docs/radial_formats/radx.html>`_: 
   Radx C++ Software Package for Radial Radar Data.
 
 
@@ -154,9 +154,9 @@ Py-ART is tested to work under Python 2.7, 3.4, 3.5, and 3.6.
 
 The required dependencies to install Py-ART in addition to Python are:
 
-* `NumPy <http://www.scipy.org>`_
-* `SciPy <http://www.scipy.org>`_
-* `matplotlib <http://matplotlib.org/>`_
+* `NumPy <https://www.numpy.org/>`_
+* `SciPy <https://www.scipy.org>`_
+* `matplotlib <https://matplotlib.org/>`_
 * `netCDF4 <https://github.com/Unidata/netcdf4-python>`_
 
 As well as a working C/C++ compiler.  A Fortran compiler is required for some
@@ -174,35 +174,41 @@ The above Python modules are require before installing Py-ART, additional
 functionality is available of the following modules are installed.
 
 * `TRMM Radar Software Library (RSL) 
-  <http://trmm-fc.gsfc.nasa.gov/trmm_gv/software/rsl/>`_.  
+  <https://trmm-fc.gsfc.nasa.gov/trmm_gv/software/rsl/>`_.  
   If installed Py-ART will be able to read in radar data in a number of 
   additional formats (Lassen, McGill, Universal Format, and RADTEC) and 
   perform automatic dealiasing of Doppler velocities.  RSL should be
   install prior to installing Py-ART. The environmental variable `RSL_PATH`
   should point to the location where RSL was installed if RSL was not
-  installed in the default location (/usr/local/trmm).
+  installed in the default location (/usr/local/trmm), such as a anaconda path
+  (/usr/anaconda3/envs/pyart_env/.
 
 * In order to read files which are stored in HDF5 files the
-  `h5py <http://www.h5py.org/>`_ package and related libraries must be
+  `h5py <https://www.h5py.org/>`_ package and related libraries must be
   installed.
 
 * A linear programming solver and Python wrapper to use the LP phase
   processing method. `CyLP <https://github.com/mpy/CyLP>`_ is recommended as
   it gives the fastest results, but 
-  `PyGLPK <http://tfinley.net/software/pyglpk/>`_ and 
-  `CVXOPT <http://cvxopt.org/>`_ are also supported. The underlying LP 
+  `PyGLPK <https://tfinley.net/software/pyglpk/>`_ and 
+  `CVXOPT <https://cvxopt.org/>`_ are also supported. The underlying LP 
   solvers `CBC <https://projects.coin-or.org/Cbc>`_ or 
-  `GLPK <http://www.gnu.org/software/glpk/>`_ will also be required depending
-  on which wrapper is used.
+  `GLPK <https://www.gnu.org/software/glpk/>`_ will also be required depending
+  on which wrapper is used. When using `CyLP <https://github.com/mpy/CyLP>`_
+  a path to coincbc is needed by setting the `COIN_INSTALL_DIR` path, such as
+  (/usr/anaconda3/envs/pyart_env/).
 
 * `Cartopy <https://scitools.org.uk/cartopy/docs/latest/>`_. If installed,
   the ability to plot grids on geographic maps is available.
 
-* `Basemap <http://matplotlib.org/basemap/>`_. If installed, also gives the
+* `xarray <https://xarray.pydata.org/en/stable/`_ If installed, gives the
+  ability to work with the grid dataset used in grid plotting.
+
+* `Basemap <https://matplotlib.org/basemap/>`_. If installed, also gives the
   ability to plot grids on geographic maps, but Cartopy is recommended over
   Basemap.
 
-* `wradlib <http://docs.wradlib.org/en/latest/>`_.  Needed to calculate the texture
+* `wradlib <https://docs.wradlib.org/en/latest/>`_.  Needed to calculate the texture
   of a differential phase field.
 
 * `pytest <https://docs.pytest.org/en/latest/>`_.

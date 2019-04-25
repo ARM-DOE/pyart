@@ -4,7 +4,7 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - python=3.6
+  - python=3.7
   - numpy
   - scipy
   - matplotlib
@@ -12,3 +12,4 @@ dependencies:
   - wradlib
   - cartopy
   - arm_pyart
+  - xarray
