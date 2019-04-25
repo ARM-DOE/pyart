@@ -740,6 +740,7 @@ class GridMapDisplay(object):
         -------
         title : str
             Plot title.
+
         """
         return common.generate_grid_title(self.grid, field, level)
 
@@ -768,7 +769,7 @@ class GridMapDisplay(object):
         Generate a title for a plot.
 
         Parameters
-        ---------_
+        ----------
         field : str
             Field plotted.
         level : int
