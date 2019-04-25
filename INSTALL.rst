@@ -35,25 +35,20 @@ The following packages are recommended for a fully-functional Py-ART
 installation, but the package will install and work with reduced functionality
 without these packages.
 
-* TRMM RSL__
-
-__ http://trmm-fc.gsfc.nasa.gov/trmm_gv/software/rsl/
+* `TRMM RSL <https://trmm-fc.gsfc.nasa.gov/trmm_gv/software/rsl/>`_
 
 * `CyLP <https://github.com/mpy/CyLP>`_ or 
-  `PyGLPK <http://tfinley.net/software/pyglpk/>`_ or
-  `CVXOPT <http://cvxopt.org/>`_ and their dependencies.
+  `PyGLPK <https://tfinley.net/software/pyglpk/>`_ or
+  `CVXOPT <https://cvxopt.org/>`_ and their dependencies.
 
 * `Cartopy <https://scitools.org.uk/cartopy/docs/latest/>`_ or
-* `Basemap <http://matplotlib.org/basemap/>`_ But Cartopy is recommended as
+* `Basemap <https://matplotlib.org/basemap/>`_ But Cartopy is recommended as
   basemap will no longer have support.
 
-* pyproj__
+* `xarray <https://xarray.pydata.org/en/stable/`_
+* `pyproj <https://code.google.com/p/pyproj/`_
 
-__ http://code.google.com/p/pyproj/
-
-* pytest__
-
-__ https://docs.pytest.org/en/latest/
+* `pytest <https://docs.pytest.org/en/latest/`_
 
 Obtaining the latest source
 ===========================
