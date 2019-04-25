@@ -1,10 +1,10 @@
 """
 ===========================================
-Create a 3 pannel plot using GridMapDisplay
+Create a 3 panel plot using GridMapDisplay
 ===========================================
 
-An example that creates a 3 pannel plot of a PPI, latitude slice,
-and longitude slice using xarray and a cartopy background
+An example that creates a 3 panel plot of a PPI, latitude slice,
+and longitude slice using xarray and a cartopy background.
 
 """
 
@@ -13,9 +13,10 @@ print(__doc__)
 # Author: Jason Hemedinger
 # License: BSD 3 clause
 
+import cartopy.crs as ccrs
 import numpy as np
 import matplotlib.pyplot as plt
-import cartopy.crs as ccrs
+
 import pyart
 
 # Read in the gridded file, create GridMapDisplay object
@@ -26,7 +27,7 @@ display = pyart.graph.GridMapDisplay(radar)
 # Setting projection, figure size, and panel sizes.
 projection = ccrs.PlateCarree()
 
-fig = plt.figure(figsize=[15,7])
+fig = plt.figure(figsize=[15, 7])
 
 map_panel_axes = [0.05, 0.05, .4, .80]
 x_cut_panel_axes = [0.55, 0.10, .4, .25]
@@ -55,13 +56,12 @@ display.plot_longitude_slice('REF', lon=lon, lat=lat,
 ax2.set_ylim([0, 15])
 ax2.set_xlim([-50, 50])
 
-#Panel 3: latitud slice
+# Panel 3: latitude slice
 ax3 = fig.add_axes(y_cut_panel_axes)
 display.plot_latitude_slice('REF', lon=lon, lat=lat,
-                           vmin=vmin, vmax=vmax,
-                        cmap='pyart_HomeyerRainbow')
+                            vmin=vmin, vmax=vmax,
+                            cmap='pyart_HomeyerRainbow')
 ax3.set_ylim([0, 15])
 ax3.set_xlim([-50, 50])
 
 plt.show()
-plt.close()
