@@ -335,7 +335,7 @@ def read_odim_h5(filename, field_names=None, additional_metadata=None,
             sweep_nbins = sweep_data.shape[1]
             fdata[start:start + rays_in_sweep, :sweep_nbins] = sweep_data[:]
             # set data to NaN if its beyond the range of this sweep
-            fdata[start:start + rays_in_sweep, sweep_nbins:max_nbins].data = np.nan
+            fdata[start:start + rays_in_sweep, sweep_nbins:max_nbins] = np.nan
             start += rays_in_sweep
         # create field dictionary
         field_dic = filemetadata(field_name)
