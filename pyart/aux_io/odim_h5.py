@@ -228,8 +228,10 @@ def read_odim_h5(filename, field_names=None, additional_metadata=None,
         rscale = [hfile[d]['where'].attrs['rscale'] for d in datasets]
         if any(rscale != rscale[0]):
             raise ValueError('range scale changes between sweeps')
-        nbins = int(hfile['dataset1']['where'].attrs['nbins'])
-        _range['data'] = (np.arange(nbins, dtype='float32') * rscale[0] +
+        all_sweeps_nbins = [hfile[d]['where'].attrs['nbins'] for d in datasets]
+        # check for max range off all sweeps
+        max_nbins = max(all_sweeps_nbins)
+        _range['data'] = (np.arange(max_nbins, dtype='float32') * rscale[0] +
                           rstart[0] * 1000.)
         _range['meters_to_center_of_first_gate'] = rstart[0] * 1000.
         _range['meters_between_gates'] = float(rscale[0])
@@ -325,13 +327,15 @@ def read_odim_h5(filename, field_names=None, additional_metadata=None,
         field_name = filemetadata.get_field_name(_to_str(odim_field))
         if field_name is None:
             continue
-        fdata = np.ma.zeros((total_rays, nbins), dtype='float32')
+        fdata = np.ma.zeros((total_rays, max_nbins), dtype='float32')
         start = 0
         # loop over the sweeps, copy data into correct location in data array
         for dset, rays_in_sweep in zip(datasets, rays_per_sweep):
             sweep_data = _get_odim_h5_sweep_data(hfile[dset][h_field_key])
             sweep_nbins = sweep_data.shape[1]
             fdata[start:start + rays_in_sweep, :sweep_nbins] = sweep_data[:]
+            # set data to NaN if its beyond the range of this sweep
+            fdata[start:start + rays_in_sweep, sweep_nbins:max_nbins] = np.nan
             start += rays_in_sweep
         # create field dictionary
         field_dic = filemetadata(field_name)
