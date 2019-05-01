@@ -37,7 +37,8 @@ from ..util.xsect import cross_section_rhi
 from ..util.datetime_utils import datetime_from_radar
 
 
-def quasi_vertical_profile(radar, desired_angle=None, fields=None, gatefilter=None):
+def quasi_vertical_profile(
+        radar, desired_angle=None, fields=None, gatefilter=None):
 
     """
     Quasi Vertical Profile.
@@ -53,19 +54,19 @@ def quasi_vertical_profile(radar, desired_angle=None, fields=None, gatefilter=No
         Radar field to use for QVP calculation.
     desired_angle : float
         Radar tilt angle to use for indexing radar field data.
-        None will result in wanted_angle = 20.0
+        None will result in wanted_angle = 20.0.
 
     Other Parameters
     ----------------
     gatefilter : GateFilter
         A GateFilter indicating radar gates that should be excluded
-        from the import qvp calculation
+        from the import qvp calculation.
 
     Returns
     -------
     qvp : Dictonary
         A quasi vertical profile object containing fields
-        from a radar object
+        from a radar object.
 
     References
     ----------
@@ -78,11 +79,10 @@ def quasi_vertical_profile(radar, desired_angle=None, fields=None, gatefilter=No
     Clim. 54, 2344 - 2359.
 
     Ryzhkov, A., P. Zhang, H. Reeves, M. Kumjian, T. Tschallener, S. Tromel,
-    C. Simmer, 2015: Quasi-vertical profiles - a new way to look at polarimetric
-    radar data. Submitted to J. Atmos. Oceanic Technol.
+    C. Simmer, 2015: Quasi-vertical profiles - a new way to look at
+    polarimetric radar data. Submitted to J. Atmos. Oceanic Technol.
 
     """
-
     # Creating an empty dictonary
     qvp = {}
 
@@ -107,8 +107,9 @@ def quasi_vertical_profile(radar, desired_angle=None, fields=None, gatefilter=No
             # If none is defined goes to else statement
             if gatefilter is not None:
                 get_fields = radar.get_field(index, field)
-                mask_fields = np.ma.masked_where(gatefilter.gate_excluded[radar_slice],
-                                                 get_fields)
+                mask_fields = np.ma.masked_where(
+                    gatefilter.gate_excluded[radar_slice],
+                    get_fields)
                 radar_fields = np.ma.mean(mask_fields, axis=0)
             else:
                 radar_fields = radar.get_field(index, field).mean(axis=0)
@@ -120,8 +121,9 @@ def quasi_vertical_profile(radar, desired_angle=None, fields=None, gatefilter=No
         # If none is defined goes to else statement
         if gatefilter is not None:
             get_field = radar.get_field(index, fields)
-            mask_field = np.ma.masked_where(gatefilter.gate_excluded[radar_slice],
-                                            get_field)
+            mask_field = np.ma.masked_where(
+                gatefilter.gate_excluded[radar_slice],
+                get_field)
             radar_field = np.ma.mean(mask_field, axis=0)
         else:
             radar_field = radar.get_field(index, fields).mean(axis=0)
@@ -147,42 +149,41 @@ def compute_qvp(radar, field_names, ref_time=None, angle=0., ang_tol=1.,
     radar : Radar
         Radar object used.
     field_names : list of str
-        list of field names to add to the QVP
+        List of field names to add to the QVP.
     ref_time : datetime object
-        reference time for current radar volume
+        Reference time for current radar volume.
     angle : int or float
         If the radar object contains a PPI volume, the sweep number to
         use, if it contains an RHI volume the elevation angle.
     ang_tol : float
         If the radar object contains an RHI volume, the tolerance in the
-        elevation angle for the conversion into PPI
+        elevation angle for the conversion into PPI.
     hmax : float
         The maximum height to plot [m].
     hres : float
         The height resolution [m].
     avg_type : str
-        The type of averaging to perform. Can be either "mean" or "median"
+        The type of averaging to perform. Can be either "mean" or "median".
     nvalid_min : int
         Minimum number of valid points to accept average.
     interp_kind : str
-        type of interpolation when projecting to vertical grid: 'none',
+        Type of interpolation when projecting to vertical grid: 'none',
         or 'nearest', etc.
         'none' will select from all data points within the regular grid
-        height bin the closest to the center of the bin.
+        height bin that is the closest to the center of the bin.
         'nearest' will select the closest data point to the center of the
         height bin regardless if it is within the height bin or not.
-        Data points can be masked values
+        Data points can be masked values.
         If another type of interpolation is selected masked values will be
-        eliminated from the data points before the interpolation
+        eliminated from the data points before the interpolation.
     qvp : QVP object or None
         If it is None this is the QVP object where to store the data from the
-        current time step. Otherwise a new QVP object will be created
-
+        current time step. Otherwise a new QVP object will be created.
 
     Returns
     -------
     qvp : qvp object
-        The computed QVP object
+        The computed QVP object.
 
     Reference
     ---------
@@ -192,7 +193,7 @@ def compute_qvp(radar, field_names, ref_time=None, angle=0., ang_tol=1.,
 
     """
     if avg_type not in ('mean', 'median'):
-        warn('Unsuported statistics '+avg_type)
+        warn('Unsuported statistics ' + avg_type)
         return None
 
     radar_aux = deepcopy(radar)
@@ -220,7 +221,7 @@ def compute_qvp(radar, field_names, ref_time=None, angle=0., ang_tol=1.,
     for field_name in field_names:
         # compute QVP data
         if field_name not in radar_aux.fields:
-            warn('Field '+field_name+' not in radar object')
+            warn('Field ' + field_name + ' not in radar object')
             qvp_data = np.ma.masked_all(qvp.ngates)
         else:
             values, _ = compute_directional_stats(
@@ -254,41 +255,40 @@ def compute_rqvp(radar, field_names, ref_time=None, hmax=10000., hres=2.,
     radar : Radar
         Radar object used.
     field_names : list of str
-        list of field names to add to the QVP
+        List of field names to add to the QVP.
     ref_time : datetime object
-        reference time for current radar volume
+        Reference time for current radar volume.
     hmax : float
         The maximum height to plot [m].
     hres : float
         The height resolution [m].
     avg_type : str
-        The type of averaging to perform. Can be either "mean" or "median"
+        The type of averaging to perform. Can be either "mean" or "median".
     nvalid_min : int
         Minimum number of valid points to accept average.
     interp_kind : str
-        type of interpolation when projecting to vertical grid: 'none',
+        Type of interpolation when projecting to vertical grid: 'none',
         or 'nearest', etc.
         'none' will select from all data points within the regular grid
-        height bin the closest to the center of the bin.
+        height bin that is the closest to the center of the bin.
         'nearest' will select the closest data point to the center of the
         height bin regardless if it is within the height bin or not.
-        Data points can be masked values
+        Data points can be masked values.
         If another type of interpolation is selected masked values will be
         eliminated from the data points before the interpolation
     rmax : float
-        ground range up to which the data is intended for use [m].
+        Ground range up to which the data is intended for use [m].
     weight_power : float
         Power p of the weighting function 1/abs(grng-(rmax-1))**p given to
         the data outside the desired range. -1 will set the weight to 0.
     qvp : QVP object or None
         If it is None this is the QVP object where to store the data from the
-        current time step. Otherwise a new QVP object will be created
-
+        current time step. Otherwise a new QVP object will be created.
 
     Returns
     -------
-    qvp : qvp object
-        The computed range defined quasi vertical profile
+    rqvp : qvp object
+        The computed range defined quasi vertical profile.
 
     Reference
     ---------
@@ -298,7 +298,7 @@ def compute_rqvp(radar, field_names, ref_time=None, hmax=10000., hres=2.,
 
     """
     if avg_type not in ('mean', 'median'):
-        warn('Unsuported statistics '+avg_type)
+        warn('Unsuported statistics ' + avg_type)
         return None
 
     radar_aux = deepcopy(radar)
@@ -314,23 +314,23 @@ def compute_rqvp(radar, field_names, ref_time=None, hmax=10000., hres=2.,
         return None
 
     if qvp is None:
-        qvp = _create_qvp_object(
+        rqvp = _create_qvp_object(
             radar_aux, field_names, qvp_type='rqvp',
             start_time=ref_time, hmax=hmax, hres=hres)
 
     # modify metadata
     if ref_time is None:
         ref_time = datetime_from_radar(radar_ppi)
-    qvp = _update_qvp_metadata(
-        qvp, ref_time, qvp.longitude['data'][0], qvp.latitude['data'][0],
+    rqvp = _update_qvp_metadata(
+        rqvp, ref_time, rqvp.longitude['data'][0], rqvp.latitude['data'][0],
         elev=90.)
 
     rmax_km = rmax/1000.
-    grng_interp = np.ma.masked_all((radar_ppi.nsweeps, qvp.ngates))
+    grng_interp = np.ma.masked_all((radar_ppi.nsweeps, rqvp.ngates))
     val_interp = dict()
     for field_name in field_names:
         val_interp.update({field_name: np.ma.masked_all(
-            (radar_ppi.nsweeps, qvp.ngates))})
+            (radar_ppi.nsweeps, rqvp.ngates))})
 
     for sweep in range(radar_ppi.nsweeps):
         radar_aux = deepcopy(radar_ppi)
@@ -346,11 +346,11 @@ def compute_rqvp(radar, field_names, ref_time=None, hmax=10000., hres=2.,
         f = interp1d(
             height, grng, kind=interp_kind, bounds_error=False,
             fill_value='extrapolate')
-        grng_interp[sweep, :] = f(qvp.range['data'])
+        grng_interp[sweep, :] = f(rqvp.range['data'])
 
         for field_name in field_names:
             if field_name not in radar_aux.fields:
-                warn('Field '+field_name+' not in radar object')
+                warn('Field ' + field_name + ' not in radar object')
                 continue
 
             # Compute QVP for this sweep
@@ -360,7 +360,7 @@ def compute_rqvp(radar, field_names, ref_time=None, hmax=10000., hres=2.,
 
             # Project to grid
             val_interp[field_name][sweep, :] = project_to_vertical(
-                values, height, qvp.range['data'], interp_kind=interp_kind)
+                values, height, rqvp.range['data'], interp_kind=interp_kind)
 
     # Compute weight
     weight = np.ma.abs(grng_interp-(rmax_km-1.))
@@ -380,19 +380,20 @@ def compute_rqvp(radar, field_names, ref_time=None, hmax=10000., hres=2.,
         weight_aux = np.ma.masked_where(mask, weight)
 
         # Weighted average
-        qvp_data = (
-            np.ma.sum(val_interp[field_name]*weight_aux, axis=0) /
-            np.ma.sum(weight_aux, axis=0))
+        rqvp_data = (
+            np.ma.sum(val_interp[field_name]*weight_aux, axis=0)
+            / np.ma.sum(weight_aux, axis=0))
 
         # Put data in radar object
-        if np.size(qvp.fields[field_name]['data']) == 0:
-            qvp.fields[field_name]['data'] = qvp_data.reshape(1, qvp.ngates)
+        if np.size(rqvp.fields[field_name]['data']) == 0:
+            rqvp.fields[field_name]['data'] = rqvp_data.reshape(
+                1, rqvp.ngates)
         else:
-            qvp.fields[field_name]['data'] = np.ma.concatenate(
-                (qvp.fields[field_name]['data'],
-                 qvp_data.reshape(1, qvp.ngates)))
+            rqvp.fields[field_name]['data'] = np.ma.concatenate(
+                (rqvp.fields[field_name]['data'],
+                 rqvp_data.reshape(1, rqvp.ngates)))
 
-    return qvp
+    return rqvp
 
 
 def compute_evp(radar, field_names, lon, lat, ref_time=None,
@@ -407,53 +408,52 @@ def compute_evp(radar, field_names, lon, lat, ref_time=None,
     radar : Radar
         Radar object used.
     field_names : list of str
-        list of field names to add to the QVP
+        List of field names to add to the QVP.
     lat, lon : float
-        latitude and longitude of the point of interest [deg]
+        Latitude and longitude of the point of interest [deg].
     ref_time : datetime object
-        reference time for current radar volume
+        Reference time for current radar volume.
     latlon_tol : float
-        tolerance in latitude and longitude in deg.
+        Tolerance in latitude and longitude in deg.
     delta_rng, delta_azi : float
-        maximum range distance [m] and azimuth distance [degree] from the
+        Maximum range distance [m] and azimuth distance [degree] from the
         central point of the evp containing data to average.
     hmax : float
         The maximum height to plot [m].
     hres : float
         The height resolution [m].
     avg_type : str
-        The type of averaging to perform. Can be either "mean" or "median"
+        The type of averaging to perform. Can be either "mean" or "median".
     nvalid_min : int
         Minimum number of valid points to accept average.
     interp_kind : str
-        type of interpolation when projecting to vertical grid: 'none',
+        Type of interpolation when projecting to vertical grid: 'none',
         or 'nearest', etc.
         'none' will select from all data points within the regular grid
         height bin the closest to the center of the bin.
         'nearest' will select the closest data point to the center of the
         height bin regardless if it is within the height bin or not.
-        Data points can be masked values
+        Data points can be masked values.
         If another type of interpolation is selected masked values will be
-        eliminated from the data points before the interpolation
+        eliminated from the data points before the interpolation.
     qvp : QVP object or None
         If it is None this is the QVP object where to store the data from the
-        current time step. Otherwise a new QVP object will be created
-
+        current time step. Otherwise a new QVP object will be created.
 
     Returns
     -------
-    qvp : qvp object
-        The computed enhanced vertical profile
+    evp : qvp object
+        The computed enhanced vertical profile.
 
     Reference
     ---------
     Kaltenboeck R., Ryzhkov A. 2016: A freezing rain storm explored with a
-    C-band polarimetric weather radar using the QVP methodology. Meteorologische
-    Zeitschrift vol. 26 pp 207-222
+    C-band polarimetric weather radar using the QVP methodology.
+    Meteorologische Zeitschrift vol. 26 pp 207-222
 
     """
     if avg_type not in ('mean', 'median'):
-        warn('Unsuported statistics '+avg_type)
+        warn('Unsuported statistics ' + avg_type)
         return None
 
     radar_aux = deepcopy(radar)
@@ -471,14 +471,14 @@ def compute_evp(radar, field_names, lon, lat, ref_time=None,
     radar_aux = radar_ppi.extract_sweeps([0])
 
     if qvp is None:
-        qvp = _create_qvp_object(
+        evp = _create_qvp_object(
             radar_aux, field_names, qvp_type='evp',
             start_time=ref_time, hmax=hmax, hres=hres)
 
     # modify metadata
     if ref_time is None:
         ref_time = datetime_from_radar(radar_aux)
-    qvp = _update_qvp_metadata(qvp, ref_time, lon, lat, elev=90.)
+    evp = _update_qvp_metadata(evp, ref_time, lon, lat, elev=90.)
 
     height = dict()
     values = dict()
@@ -503,7 +503,7 @@ def compute_evp(radar, field_names, lon, lat, ref_time=None,
 
         for field_name in field_names:
             if field_name not in radar_aux.fields:
-                warn('Field '+field_name+' not in radar object')
+                warn('Field ' + field_name + ' not in radar object')
                 continue
 
             height[field_name] = np.append(
@@ -520,19 +520,19 @@ def compute_evp(radar, field_names, lon, lat, ref_time=None,
 
     for field_name in field_names:
         # Project to vertical grid:
-        qvp_data = project_to_vertical(
-            values[field_name], height[field_name], qvp.range['data'],
+        evp_data = project_to_vertical(
+            values[field_name], height[field_name], evp.range['data'],
             interp_kind=interp_kind)
 
         # Put data in radar object
-        if np.size(qvp.fields[field_name]['data']) == 0:
-            qvp.fields[field_name]['data'] = qvp_data.reshape(1, qvp.ngates)
+        if np.size(evp.fields[field_name]['data']) == 0:
+            evp.fields[field_name]['data'] = evp_data.reshape(1, evp.ngates)
         else:
-            qvp.fields[field_name]['data'] = np.ma.concatenate(
-                (qvp.fields[field_name]['data'],
-                 qvp_data.reshape(1, qvp.ngates)))
+            evp.fields[field_name]['data'] = np.ma.concatenate(
+                (evp.fields[field_name]['data'],
+                 evp_data.reshape(1, evp.ngates)))
 
-    return qvp
+    return evp
 
 
 def compute_svp(radar, field_names, lon, lat, angle, ref_time=None,
@@ -547,48 +547,48 @@ def compute_svp(radar, field_names, lon, lat, angle, ref_time=None,
     radar : Radar
         Radar object used.
     field_names : list of str
-        list of field names to add to the QVP
+        List of field names to add to the QVP.
     lat, lon : float
-        latitude and longitude of the point of interest [deg]
+        Latitude and longitude of the point of interest [deg].
     angle : int or float
         If the radar object contains a PPI volume, the sweep number to
         use, if it contains an RHI volume the elevation angle.
     ref_time : datetime object
-        reference time for current radar volume
+        Reference time for current radar volume.
     ang_tol : float
         If the radar object contains an RHI volume, the tolerance in the
-        elevation angle for the conversion into PPI
+        elevation angle for the conversion into PPI.
     latlon_tol : float
-        tolerance in latitude and longitude in deg.
+        Tolerance in latitude and longitude in deg.
     delta_rng, delta_azi : float
-        maximum range distance [m] and azimuth distance [degree] from the
+        Maximum range distance [m] and azimuth distance [degree] from the
         central point of the evp containing data to average.
     hmax : float
         The maximum height to plot [m].
     hres : float
         The height resolution [m].
     avg_type : str
-        The type of averaging to perform. Can be either "mean" or "median"
+        The type of averaging to perform. Can be either "mean" or "median".
     nvalid_min : int
         Minimum number of valid points to accept average.
     interp_kind : str
-        type of interpolation when projecting to vertical grid: 'none',
+        Type of interpolation when projecting to vertical grid: 'none',
         or 'nearest', etc.
         'none' will select from all data points within the regular grid
         height bin the closest to the center of the bin.
         'nearest' will select the closest data point to the center of the
         height bin regardless if it is within the height bin or not.
-        Data points can be masked values
+        Data points can be masked values.
         If another type of interpolation is selected masked values will be
-        eliminated from the data points before the interpolation
+        eliminated from the data points before the interpolation.
     qvp : QVP object or None
         If it is None this is the QVP object where to store the data from the
-        current time step. Otherwise a new QVP object will be created
+        current time step. Otherwise a new QVP object will be created.
 
 
     Returns
     -------
-    qvp : qvp object
+    svp : qvp object
         The computed slanted vertical profile
 
     Reference
@@ -599,7 +599,7 @@ def compute_svp(radar, field_names, lon, lat, angle, ref_time=None,
 
     """
     if avg_type not in ('mean', 'median'):
-        warn('Unsuported statistics '+avg_type)
+        warn('Unsuported statistics ' + avg_type)
         return None
 
     radar_aux = deepcopy(radar)
@@ -614,15 +614,15 @@ def compute_svp(radar, field_names, lon, lat, angle, ref_time=None,
         return None
 
     if qvp is None:
-        qvp = _create_qvp_object(
+        svp = _create_qvp_object(
             radar_aux, field_names, qvp_type='svp',
             start_time=ref_time, hmax=hmax, hres=hres)
 
     # modify metadata
     if ref_time is None:
         ref_time = datetime_from_radar(radar_aux)
-    qvp = _update_qvp_metadata(
-        qvp, ref_time, lon, lat, elev=qvp.fixed_angle['data'][0])
+    svp = _update_qvp_metadata(
+        svp, ref_time, lon, lat, elev=svp.fixed_angle['data'][0])
 
     # find nearest gate to lat lon point
     ind_ray, _, azi, rng = find_nearest_gate(
@@ -630,18 +630,18 @@ def compute_svp(radar, field_names, lon, lat, angle, ref_time=None,
 
     if ind_ray is None:
         warn('No data in selected point')
-        qvp_data = np.ma.masked_all(qvp.ngates)
+        svp_data = np.ma.masked_all(svp.ngates)
 
         for field_name in field_names:
             # Put data in radar object
-            if np.size(qvp.fields[field_name]['data']) == 0:
-                qvp.fields[field_name]['data'] = qvp_data.reshape(
-                    1, qvp.ngates)
+            if np.size(svp.fields[field_name]['data']) == 0:
+                svp.fields[field_name]['data'] = svp_data.reshape(
+                    1, svp.ngates)
             else:
-                qvp.fields[field_name]['data'] = np.ma.concatenate(
-                    (qvp.fields[field_name]['data'],
-                     qvp_data.reshape(1, qvp.ngates)))
-        return qvp
+                svp.fields[field_name]['data'] = np.ma.concatenate(
+                    (svp.fields[field_name]['data'],
+                     svp_data.reshape(1, svp.ngates)))
+        return svp
 
     # find neighbouring gates to be selected
     inds_ray, inds_rng = find_neighbour_gates(
@@ -650,8 +650,8 @@ def compute_svp(radar, field_names, lon, lat, angle, ref_time=None,
 
     for field_name in field_names:
         if field_name not in radar_aux.fields:
-            warn('Field '+field_name+' not in radar object')
-            qvp_data = np.ma.masked_all(qvp.ngates)
+            warn('Field ' + field_name + ' not in radar object')
+            svp_data = np.ma.masked_all(svp.ngates)
         else:
             # keep only data we are interested in
             field = radar_aux.fields[field_name]['data'][:, inds_rng]
@@ -662,18 +662,18 @@ def compute_svp(radar, field_names, lon, lat, angle, ref_time=None,
                 field, avg_type=avg_type, nvalid_min=nvalid_min, axis=0)
 
             # Project to vertical grid:
-            qvp_data = project_to_vertical(
-                values, height, qvp.range['data'], interp_kind=interp_kind)
+            svp_data = project_to_vertical(
+                values, height, svp.range['data'], interp_kind=interp_kind)
 
         # Put data in radar object
-        if np.size(qvp.fields[field_name]['data']) == 0:
-            qvp.fields[field_name]['data'] = qvp_data.reshape(1, qvp.ngates)
+        if np.size(svp.fields[field_name]['data']) == 0:
+            svp.fields[field_name]['data'] = svp_data.reshape(1, svp.ngates)
         else:
-            qvp.fields[field_name]['data'] = np.ma.concatenate(
-                (qvp.fields[field_name]['data'],
-                 qvp_data.reshape(1, qvp.ngates)))
+            svp.fields[field_name]['data'] = np.ma.concatenate(
+                (svp.fields[field_name]['data'],
+                 svp_data.reshape(1, svp.ngates)))
 
-    return qvp
+    return svp
 
 
 def compute_vp(radar, field_names, lon, lat, ref_time=None,
@@ -687,35 +687,34 @@ def compute_vp(radar, field_names, lon, lat, ref_time=None,
     radar : Radar
         Radar object used.
     field_names : list of str
-        list of field names to add to the QVP
+        List of field names to add to the QVP.
     lat, lon : float
-        latitude and longitude of the point of interest [deg]
+        Latitude and longitude of the point of interest [deg].
     ref_time : datetime object
-        reference time for current radar volume
+        Reference time for current radar volume.
     latlon_tol : float
-        tolerance in latitude and longitude in deg.
+        Tolerance in latitude and longitude in deg.
     hmax : float
         The maximum height to plot [m].
     hres : float
         The height resolution [m].
     interp_kind : str
-        type of interpolation when projecting to vertical grid: 'none',
+        Type of interpolation when projecting to vertical grid: 'none',
         or 'nearest', etc.
         'none' will select from all data points within the regular grid
         height bin the closest to the center of the bin.
         'nearest' will select the closest data point to the center of the
         height bin regardless if it is within the height bin or not.
-        Data points can be masked values
+        Data points can be masked values.
         If another type of interpolation is selected masked values will be
-        eliminated from the data points before the interpolation
+        eliminated from the data points before the interpolation.
     qvp : QVP object or None
         If it is None this is the QVP object where to store the data from the
-        current time step. Otherwise a new QVP object will be created
-
+        current time step. Otherwise a new QVP object will be created.
 
     Returns
     -------
-    qvp : qvp object
+    vp : qvp object
         The computed vertical profile
 
     """
@@ -732,14 +731,14 @@ def compute_vp(radar, field_names, lon, lat, ref_time=None,
         return None
 
     if qvp is None:
-        qvp = _create_qvp_object(
+        vp = _create_qvp_object(
             radar_ppi, field_names, qvp_type='vp',
             start_time=ref_time, hmax=hmax, hres=hres)
 
     # modify metadata
     if ref_time is None:
         ref_time = datetime_from_radar(radar_ppi)
-    qvp = _update_qvp_metadata(qvp, ref_time, lon, lat, elev=90.)
+    vp = _update_qvp_metadata(vp, ref_time, lon, lat, elev=90.)
 
     height = dict()
     values = dict()
@@ -759,7 +758,7 @@ def compute_vp(radar, field_names, lon, lat, ref_time=None,
 
         for field_name in field_names:
             if field_name not in radar_aux.fields:
-                warn('Field '+field_name+' not in radar object')
+                warn('Field ' + field_name + ' not in radar object')
                 continue
             else:
                 height[field_name] = np.append(
@@ -771,42 +770,42 @@ def compute_vp(radar, field_names, lon, lat, ref_time=None,
 
     for field_name in field_names:
         # Project to vertical grid:
-        qvp_data = project_to_vertical(
-            values[field_name], height[field_name], qvp.range['data'],
+        vp_data = project_to_vertical(
+            values[field_name], height[field_name], vp.range['data'],
             interp_kind=interp_kind)
 
         # Put data in radar object
-        if np.size(qvp.fields[field_name]['data']) == 0:
-            qvp.fields[field_name]['data'] = qvp_data.reshape(1, qvp.ngates)
+        if np.size(vp.fields[field_name]['data']) == 0:
+            vp.fields[field_name]['data'] = vp_data.reshape(1, vp.ngates)
         else:
-            qvp.fields[field_name]['data'] = np.ma.concatenate(
-                (qvp.fields[field_name]['data'],
-                 qvp_data.reshape(1, qvp.ngates)))
+            vp.fields[field_name]['data'] = np.ma.concatenate(
+                (vp.fields[field_name]['data'],
+                 vp_data.reshape(1, vp.ngates)))
 
-    return qvp
+    return vp
 
 
 def compute_directional_stats(field, avg_type='mean', nvalid_min=1, axis=0):
     """
-    Computes the mean or the median along one of the axis (ray or range)
+    Computes the mean or the median along one of the axis (ray or range).
 
     Parameters
     ----------
     field : ndarray
-        the radar field
-    avg_type :str
-        the type of average: 'mean' or 'median'
+        The radar field.
+    avg_type : str
+        The type of average: 'mean' or 'median'.
     nvalid_min : int
-        the minimum number of points to consider the stats valid. Default 1
+        The minimum number of points to consider the stats valid. Default 1.
     axis : int
-        the axis along which to compute (0=ray, 1=range)
+        The axis along which to compute (0=ray, 1=range).
 
     Returns
     -------
     values : ndarray 1D
-        The resultant statistics
+        The resultant statistics.
     nvalid : ndarray 1D
-        The number of valid points used in the computation
+        The number of valid points used in the computation.
 
     """
     if avg_type == 'mean':
@@ -830,20 +829,20 @@ def project_to_vertical(data_in, data_height, grid_height, interp_kind='none',
     Parameters
     ----------
     data_in : ndarray 1D
-        the radar data to project
+        The radar data to project.
     data_height : ndarray 1D
-        the height of each radar point
+        The height of each radar point.
     grid_height : ndarray 1D
-        the regular vertical grid to project to
+        The regular vertical grid to project to.
     interp_kind : str
-        The type of interpolation to use: 'none' or 'nearest'
+        The type of interpolation to use: 'none' or 'nearest'.
     fill_value : float
-        The fill value used for interpolation
+        The fill value used for interpolation.
 
     Returns
     -------
     data_out : ndarray 1D
-        The projected data
+        The projected data.
 
     """
     if data_in.size == 0:
@@ -878,21 +877,21 @@ def project_to_vertical(data_in, data_height, grid_height, interp_kind='none',
 
 def find_rng_index(rng_vec, rng, rng_tol=0.):
     """
-    Find the range index corresponding to a particular range
+    Find the range index corresponding to a particular range.
 
     Parameters
     ----------
     rng_vec : float array
-        The range data array where to look for
+        The range data array where to look for.
     rng : float
-        The range to search
+        The range to search.
     rng_tol : float
-        Tolerance [m]
+        Tolerance [m].
 
     Returns
     -------
     ind_rng : int
-        The range index
+        The range index.
 
     """
     dist = np.abs(rng_vec-rng)
@@ -903,26 +902,27 @@ def find_rng_index(rng_vec, rng, rng_tol=0.):
     return ind_rng
 
 
-def get_target_elevations(radar_in):
+def get_target_elevations(radar):
     """
-    Gets RHI target elevations
+    Gets RHI target elevations.
 
     Parameters
     ----------
-    radar_in : Radar object
-        current radar object
+    radar : Radar object
+        Current radar object.
 
     Returns
     -------
     target_elevations : 1D-array
-        Azimuth angles
+        Azimuth angles.
     el_tol : float
-        azimuth tolerance
+        azimuth tolerance.
+
     """
-    sweep_start = radar_in.sweep_start_ray_index['data'][0]
-    sweep_end = radar_in.sweep_end_ray_index['data'][0]
+    sweep_start = radar.sweep_start_ray_index['data'][0]
+    sweep_end = radar.sweep_end_ray_index['data'][0]
     target_elevations = np.sort(
-        radar_in.elevation['data'][sweep_start:sweep_end+1])
+        radar.elevation['data'][sweep_start:sweep_end+1])
     el_tol = np.median(target_elevations[1:]-target_elevations[:-1])
 
     return target_elevations, el_tol
@@ -930,23 +930,23 @@ def get_target_elevations(radar_in):
 
 def find_nearest_gate(radar, lat, lon, latlon_tol=0.0005):
     """
-    Find the radar gate closest to a lat,lon point
+    Find the radar gate closest to a lat, lon point.
 
     Parameters
     ----------
     radar : radar object
-        the radar object
+        The radar object.
     lat, lon : float
-        The position of the point
+        The position of the point.
     latlon_tol : float
-        The tolerance around this point
+        The tolerance around this point.
 
     Returns
     -------
     ind_ray, ind_rng : int
-        The ray and range index
+        The ray and range index.
     azi, rng : float
-        the range and azimuth position of the gate
+        The range and azimuth position of the gate.
 
     """
     # find gates close to lat lon point
@@ -959,9 +959,9 @@ def find_nearest_gate(radar, lat, lon, latlon_tol=0.0005):
             radar.gate_longitude['data'] > lon-latlon_tol)))
 
     if inds_ray_aux.size == 0:
-        warn('No data found at point lat '+str(lat)+' +- ' +
-             str(latlon_tol)+' lon '+str(lon)+' +- ' +
-             str(latlon_tol)+' deg')
+        warn('No data found at point lat ' + str(lat) + ' +- '
+             + str(latlon_tol) + ' lon ' + str(lon) + ' +- '
+             + str(latlon_tol) + ' deg')
 
         return None, None, None, None
 
@@ -979,21 +979,21 @@ def find_nearest_gate(radar, lat, lon, latlon_tol=0.0005):
 
 def find_neighbour_gates(radar, azi, rng, delta_azi=None, delta_rng=None):
     """
-    Find the neighbouring gates within +-delta_azi and +-delta_rng
+    Find the neighbouring gates within +-delta_azi and +-delta_rng.
 
     Parameters
     ----------
     radar : radar object
-        the radar object
+        The radar object.
     azi, rng : float
-        The azimuth [deg] and range [m] of the central gate
+        The azimuth [deg] and range [m] of the central gate.
     delta_azi, delta_rng : float
-        The extend where to look for
+        The extend where to look for.
 
     Returns
     -------
     inds_ray_aux, ind_rng_aux : int
-        The indices (ray, rng) of the neighbouring gates
+        The indices (ray, rng) of the neighbouring gates.
 
     """
     # find gates close to lat lon point
@@ -1028,7 +1028,7 @@ def _create_qvp_object(radar, field_names, qvp_type='qvp', start_time=None,
                        hmax=10000., hres=200.):
     """
     Creates a QVP object containing fields from a radar object that can
-    be used to plot and produce the quasi vertical profile
+    be used to plot and produce the quasi vertical profile.
 
     Parameters
     ----------
@@ -1037,19 +1037,19 @@ def _create_qvp_object(radar, field_names, qvp_type='qvp', start_time=None,
     field_names : list of strings
         Radar fields to use for QVP calculation.
     qvp_type : str
-        Type of QVP. Can be qvp, rqvp, evp
+        Type of QVP. Can be qvp, rqvp, evp.
     start_time : datetime object
-        the QVP start time
+        The QVP start time.
     hmax : float
         The maximum height of the QVP [m]. Default 10000.
     hres : float
-        The QVP range resolution [m]. Default 50
+        The QVP range resolution [m]. Default 50.
 
     Returns
     -------
     qvp : Radar-like object
         A quasi vertical profile object containing fields
-        from a radar object
+        from a radar object.
 
     """
     qvp = deepcopy(radar)
@@ -1097,19 +1097,19 @@ def _create_qvp_object(radar, field_names, qvp_type='qvp', start_time=None,
 
 def _update_qvp_metadata(qvp, ref_time, lon, lat, elev=90.):
     """
-    updates a QVP object metadata with data from the current radar volume
+    updates a QVP object metadata with data from the current radar volume.
 
     Parameters
     ----------
     qvp : QVP object
-        QVP object
+        QVP object.
     ref_time : datetime object
-        the current radar volume reference time
+        The current radar volume reference time.
 
     Returns
     -------
     qvp : QVP object
-        The updated QVP object
+        The updated QVP object.
 
     """
     start_time = num2date(0, qvp.time['units'], qvp.time['calendar'])
