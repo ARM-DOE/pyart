@@ -168,7 +168,7 @@ def interval_mean(dist, interval_min, interval_max):
     Returns
     -------
     mean : float
-        The mean value of the distribution
+        The mean value of the distribution.
 
     """
     # transform distribution from original interval to [-pi, pi]
@@ -209,4 +209,4 @@ def interval_std(dist, interval_min, interval_max):
 
     # compute the angular standard dev. and convert back to original interval
     a_std = angular_std(a)
-    return (a_std * (half_width) / np.pi)
+    return a_std * half_width / np.pi

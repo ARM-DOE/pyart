@@ -11,8 +11,8 @@ Function for creating simulated velocity fields.
 
 """
 
-from scipy.interpolate import interp1d
 import numpy as np
+from scipy.interpolate import interp1d
 
 from ..config import get_metadata, get_field_name
 
@@ -31,11 +31,11 @@ def simulated_vel_from_profile(
         Profile of horizontal winds.
     interp_kind : str, optional
         Specifies the kind of interpolation used to determine the winds at a
-        given height.  Must be one of 'linear', 'nearest', 'zero', 'slinear',
-        'quadratic', or 'cubic'.  The the documentation for the SciPy
+        given height. Must be one of 'linear', 'nearest', 'zero', 'slinear',
+        'quadratic', or 'cubic'. The the documentation for the SciPy
         scipy.interpolate.interp1d function for descriptions.
     sim_vel_field : str, optional
-        Name to use for the simulated velocity field metadata.  None will use
+        Name to use for the simulated velocity field metadata. None will use
         the default field name from the Py-ART configuration file.
 
     Returns
@@ -68,12 +68,12 @@ def simulated_vel_from_profile(
         winds[0] = profile.u_wind.filled(np.nan)
     else:
         winds[0] = profile.u_wind
-    
+
     if isinstance(profile.v_wind, np.ma.MaskedArray):
         winds[1] = profile.v_wind.filled(np.nan)
     else:
         winds[1] = profile.v_wind
-    
+
     wind_is_not_nan = np.logical_and(~np.isnan(winds[0]), ~np.isnan(winds[1]))
     no_nans = np.logical_and(height_is_not_nan, wind_is_not_nan)
     height = height[no_nans]

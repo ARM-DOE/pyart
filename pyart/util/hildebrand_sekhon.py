@@ -36,10 +36,10 @@ def estimate_noise_hs74(spectrum, navg=1):
     mean : float-like
         Mean of points in the spectrum identified as noise.
     threshold : float-like
-        Threshold separating noise from signal.  The point in the spectrum with
+        Threshold separating noise from signal. The point in the spectrum with
         this value or below should be considered as noise, above this value
         signal. It is possible that all points in the spectrum are identified
-        as noise.  If a peak is required for moment calculation then the point
+        as noise. If a peak is required for moment calculation then the point
         with this value should be considered as signal.
     var : float-like
         Variance of the points in the spectrum identified as noise.

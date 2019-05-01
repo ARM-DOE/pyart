@@ -33,6 +33,11 @@ Miscellaneous functions
 
     cross_section_ppi
     cross_section_rhi
+    datetime_from_radar
+    datetimes_from_radar
+    datetime_from_dataset
+    datetimes_from_dataset
+    datetime_from_grid
     estimate_noise_hs74
     is_vpt
     to_vpt

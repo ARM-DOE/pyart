@@ -18,7 +18,7 @@ from __future__ import print_function
 import copy
 
 import numpy as np
-from netCDF4 import num2date, date2num
+from netCDF4 import date2num
 
 from ..config import get_fillvalue
 from . import datetime_utils
@@ -35,7 +35,7 @@ def is_vpt(radar, offset=0.5):
     Parameters
     ----------
     radar : Radar
-        Radar object to determine if
+        Radar object to determine if.
     offset : float
         Maximum offset of the elevation from 90 degrees to still consider
         to be vertically pointing.
