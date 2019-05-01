@@ -30,7 +30,7 @@ class DisableModules(object):
     def __init__(self, modules):
         self.modules = modules
 
-    def find_module(self, fullname, path=None):
+    def find_module(self, fullname):
         if fullname in self.modules:
             raise ImportError('Debug import failure for %s' % fullname)
 

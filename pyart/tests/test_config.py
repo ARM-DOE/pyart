@@ -1,14 +1,13 @@
 """ Unit Tests for Py-ART's config.py module. """
 
 import os
-import sys
 import warnings
 
 import pyart
 
-if sys.version_info[:2] >= (3, 4):
+try:
     from importlib import reload
-else:
+except ImportError:
     from imp import reload
 
 dirname = os.path.dirname(__file__)
