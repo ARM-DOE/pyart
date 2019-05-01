@@ -92,19 +92,19 @@ def texture(radar, var):
     return tex
 
 
-def texture_along_ray(myradar, var, wind_size=7):
+def texture_along_ray(radar, var, wind_size=7):
     """
     Compute field texture along ray using a user specified
     window size.
 
     Parameters
     ----------
-    myradar : radar object
-        The radar object where the field is
+    radar : radar object
+        The radar object where the field is.
     var : str
-        Name of the field which texture has to be computed
+        Name of the field which texture has to be computed.
     wind_size : int
-        Optional. Size of the rolling window used
+        Optional. Size of the rolling window used.
 
     Returns
     -------
@@ -113,7 +113,7 @@ def texture_along_ray(myradar, var, wind_size=7):
 
     """
     half_wind = int((wind_size-1)/2)
-    fld = myradar.fields[var]['data']
+    fld = radar.fields[var]['data']
     tex = np.ma.zeros(fld.shape)
     for timestep in range(tex.shape[0]):
         ray = np.ma.std(rolling_window(fld[timestep, :], wind_size), 1)
