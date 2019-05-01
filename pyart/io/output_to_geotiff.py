@@ -62,8 +62,10 @@ def write_grid_geotiff(grid, filename, field, rgb=False, level=None,
     ----------------
     rbg : bool, optional
         True - Output 3-band RGB GeoTIFF
+
         False - Output single-channel, float-valued GeoTIFF. For display,
                 likely will need an SLD file to provide a color table.
+
     level : int or None, optional
         Index for z-axis plane to output. None gives composite values
         (i.e., max in each vertical column).
@@ -79,16 +81,21 @@ def write_grid_geotiff(grid, filename, field, rgb=False, level=None,
     warp : bool, optional
         True - Use gdalwarp (called from command line using os.system)
                to warp to a lat/lon WGS84 grid.
+
         False - No warping will be performed. Output will be Az. Equidistant.
+
     sld : bool, optional
         True - Create a Style Layer Descriptor file (SLD) mapped to vmin/vmax
                and cmap. File is named same as output TIFF, except for .sld
                extension.
+
         False - Don't do this.
+
     use_doublequotes : bool, optional
         True - Use double quotes in the gdalwarp call (requires warp=True),
                which may help if that command is producing and error like:
-               'Translating source or target SRS failed'
+               'Translating source or target SRS failed'.
+
         False - Use single quotes instead.
 
     """
