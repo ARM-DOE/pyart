@@ -19,6 +19,7 @@ Testing functions
     make_velocity_aliased_radar
     make_empty_grid
     make_target_grid
+    make_storm_grid
     make_normal_storm
 
 Testing classes

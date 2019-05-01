@@ -13,6 +13,7 @@ Functions for creating sample Radar and Grid objects.
     make_single_ray_radar
     make_empty_grid
     make_target_grid
+    make_storm_grid
     make_normal_storm
 
 """
