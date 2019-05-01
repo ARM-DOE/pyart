@@ -34,11 +34,11 @@ def velocity_azimuth_display(radar, vel_field=None, z_want=None,
     ----------
     radar : Radar
         Radar object used.
-    velocity : string
-        Velocity field to use for VAD calculation.
 
     Other Parameters
     ----------------
+    vel_field : string
+        Velocity field to use for VAD calculation.
     z_want : array
         Heights for where to sample vads from.
         None will result in np.linespace(0, 10000, 100).
@@ -50,7 +50,7 @@ def velocity_azimuth_display(radar, vel_field=None, z_want=None,
     -------
     vad: HorizontalWindProfile
 	A velocity azimuth display object containing height, speed, direction,
-        u_wind, v_wind from a radar object. 
+        u_wind, v_wind from a radar object.
 
     Reference
     ---------
@@ -74,7 +74,7 @@ def velocity_azimuth_display(radar, vel_field=None, z_want=None,
 
     # Parse field parameters
     if vel_field is None:
-        check_field = radar.check_field_exists('velocity')
+        radar.check_field_exists('velocity')
         vel_field = get_field_name('velocity')
 
     # Selecting what velocity data to use based on gatefilter
@@ -107,8 +107,8 @@ def velocity_azimuth_display(radar, vel_field=None, z_want=None,
         speeds.append(speed)
         angles.append(angle)
         heights.append(z_gate_data[index_start, :])
-    
-    # Combining arrays and sorting 
+
+    # Combining arrays and sorting
     speed_array = np.concatenate(speeds)
     angle_array = np.concatenate(angles)
     height_array = np.concatenate(heights)
@@ -132,14 +132,14 @@ def vad_calculation(velocity_field, azimuth, elevation):
     velocity_field is a 2D array, azimuth is a 1D array,
     elevation is a number. All in degrees, m outdic contains
     speed and angle. """
-   
+
     # Creating array with radar velocity data
     nrays, nbins = velocity_field.shape
     nrays2 = nrays // 2
     velocity_count = np.ma.empty((nrays2, nbins, 2))
     velocity_count[:, :, 0] = velocity_field[0:nrays2, :]
     velocity_count[:, :, 1] = velocity_field[nrays2:, :]
-    
+
     # Converting from degress to radians
     sinaz = np.sin(np.deg2rad(azimuth))
     cosaz = np.cos(np.deg2rad(azimuth))
