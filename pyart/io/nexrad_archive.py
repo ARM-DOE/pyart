@@ -44,10 +44,10 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
     Parameters
     ----------
     filename : str
-        Filename of NEXRAD Level 2 Archive file.  The files hosted by
+        Filename of NEXRAD Level 2 Archive file. The files hosted by
         at the NOAA National Climate Data Center [1]_ as well as on the
-        UCAR THREDDS Data Server [2]_ have been tested.  Other NEXRAD
-        Level 2 Archive files may or may not work.  Message type 1 file
+        UCAR THREDDS Data Server [2]_ have been tested. Other NEXRAD
+        Level 2 Archive files may or may not work. Message type 1 file
         and message type 31 files are supported.
     field_names : dict, optional
         Dictionary mapping NEXRAD moments to radar field names. If a
@@ -58,7 +58,7 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
     additional_metadata : dict of dicts, optional
         Dictionary of dictionaries to retrieve metadata from during this read.
         This metadata is not used during any successive file reads unless
-        explicitly included.  A value of None, the default, will not
+        explicitly included. A value of None, the default, will not
         introduct any addition metadata and the file specific or default
         metadata as specified by the metadata configuration file will be used.
     file_field_names : bool, optional
@@ -76,21 +76,21 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
         to None to include all fields not specified by exclude_fields.
     delay_field_loading : bool, optional
         True to delay loading of field data from the file until the 'data'
-        key in a particular field dictionary is accessed.  In this case
+        key in a particular field dictionary is accessed. In this case
         the field attribute of the returned Radar object will contain
         LazyLoadDict objects not dict objects.
     station : str or None, optional
         Four letter ICAO name of the NEXRAD station used to determine the
-        location in the returned radar object.  This parameter is only
+        location in the returned radar object. This parameter is only
         used when the location is not contained in the file, which occur
         in older NEXRAD message 1 files.
     scans : list or None, optional
-        Read only specified scans from the file.  None (the default) will read
+        Read only specified scans from the file. None (the default) will read
         all scans.
     linear_interp : bool, optional
         True (the default) to perform linear interpolation between valid pairs
         of gates in low resolution rays in files mixed resolution rays.
-        False will perform a nearest neighbor interpolation.  This parameter is
+        False will perform a nearest neighbor interpolation. This parameter is
         not used if the resolution of all rays in the file or requested sweeps
         is constant.
 
@@ -192,7 +192,7 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
             warnings.warn("Fixed_angle(s) greater than 180 degrees present."
                           + " Assuming angle to be negative so subtrating 360",
                           UserWarning)
-        else: 
+        else:
             i = i
         fixed_agl.append(i)
     fixed_angles = np.array(fixed_agl, dtype='float32')

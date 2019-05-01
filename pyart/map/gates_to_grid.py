@@ -233,7 +233,7 @@ def _determine_fields(fields, radars):
 def _find_offsets(radars, projparams, grid_origin_alt):
     """ Find offset between radars and grid origin. """
     # loop over the radars finding offsets from the origin
-    offsets = []    # offsets from the grid origin, in meters, for each radar
+    offsets = [] # offsets from the grid origin, in meters, for each radar
     for radar in radars:
         x_disp, y_disp = geographic_to_cartesian(
             radar.longitude['data'], radar.latitude['data'], projparams)

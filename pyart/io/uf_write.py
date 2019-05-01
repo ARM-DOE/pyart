@@ -63,26 +63,26 @@ def write_uf(filename, radar, uf_field_names=None, radar_field_names=False,
     true for the data in the scan_rate attribute.
 
     Radar fields will be scaled and rounded to integer values when writing to
-    UF files.  The scale factor for each field can be specified in the
-    `_UF_scale_factor` key for each field dictionary.  If not specified the
+    UF files. The scale factor for each field can be specified in the
+    `_UF_scale_factor` key for each field dictionary. If not specified the
     default scaling (100) will be used.
 
     Parameters
     ----------
     filename : str or file-like object.
-        Filename of UF file to create.  If a file-like object is specified
+        Filename of UF file to create. If a file-like object is specified
         data will be written using the write method.
     radar : Radar
         Radar object from which to create UF file.
     uf_field_names : dict or None, optional
         Mapping between radar fields and two character UF data type names.
         Field names mapped to None or with no mapping will be excluded from
-        writing.  If None, the default mappings for UF files will be used.
+        writing. If None, the default mappings for UF files will be used.
     radar_field_names : bool, optional
         True to use the radar field names as the field names of the UF
-        fields.  False to use the uf_field_names mapping to generate UF field
-        names.  The `exclude_fields` argument can still be used to exclude
-        fields from the UF file when this parameter is True.  When reading a UF
+        fields. False to use the uf_field_names mapping to generate UF field
+        names. The `exclude_fields` argument can still be used to exclude
+        fields from the UF file when this parameter is True. When reading a UF
         file using `file_field_names=True` set this parameter to True to write
         a UF file with the same field names.
     exclude_fields : list or None, optional
@@ -496,7 +496,7 @@ def _d_to_dms(in_deg):
 
 
 def _pack_structure(dic, structure):
-    """ Pack a structure from a dictionary """
+    """ Pack a structure from a dictionary. """
     fmt = '>' + ''.join([i[1] for i in structure])  # UF is big-endian
     values = [dic[i[0]] for i in structure]
     # cast to string as Python 2.7 pack does not except unicode before 2.7.7

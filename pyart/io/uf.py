@@ -2,7 +2,7 @@
 pyart.io.uf
 ===========
 
-Reading of Universal format (UF) files
+Reading of Universal format (UF) files.
 
 .. autosummary::
     :toctree: generated/
@@ -67,7 +67,7 @@ def read_uf(filename, field_names=None, additional_metadata=None,
     additional_metadata : dict of dicts, optional
         Dictionary of dictionaries to retrieve metadata from during this read.
         This metadata is not used during any successive file reads unless
-        explicitly included.  A value of None, the default, will not
+        explicitly included. A value of None, the default, will not
         introduce any addition metadata and the file specific or default
         metadata as specified by the Py-ART configuration file will be used.
     file_field_names : bool, optional

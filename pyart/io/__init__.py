@@ -12,7 +12,7 @@ Reading radar data
 ==================
 
 In most cases the :py:func:`pyart.io.read` function should be used to read
-in radar data from a file.  In certain cases the function the read function
+in radar data from a file. In certain cases the function the read function
 for the format in question should be used.
 
 .. autosummary::

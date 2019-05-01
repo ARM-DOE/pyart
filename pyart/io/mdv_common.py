@@ -104,21 +104,21 @@ class MdvFile(object):
     """
     A file object for MDV data.
 
-    A `MdvFile` object stores metadata and data from a MDV file.  Metadata is
+    A `MdvFile` object stores metadata and data from a MDV file. Metadata is
     stored in dictionaries as attributes of the object, field data is
     stored as NumPy ndarrays as attributes with the field name. By default
     only metadata is read initially and field data must be read using the
-    `read_a_field` or `read_all_fields` methods.  This behavior can be changed
+    `read_a_field` or `read_all_fields` methods. This behavior can be changed
     by setting the `read_fields` parameter to True.
 
     Parameters
     ----------
     filename : str, file-like or None.
         Name of MDV file to read or file-like object pointing to the
-        beginning of such a file.  None can be used to initalize an object
+        beginning of such a file. None can be used to initalize an object
         which can be used for writing mdv files.
     debug : bool
-        True to print out debugging information, False to supress
+        True to print out debugging information, False to supress.
     read_fields : bool
         True to read all field during initalization, False (default) only
         reads metadata.
@@ -631,8 +631,8 @@ class MdvFile(object):
     # private methods #
     ###################
 
-    def _write_a_field(self, fnum, debug=False):
-        """ write field number 'fnum' to mdv file """
+    def _write_a_field(self, fnum):
+        """ write field number 'fnum' to mdv file. """
         # the file pointer must be set at the correct location prior to call
         field_header = self.field_headers[fnum]
         if field_header['compression_type'] != 3:
@@ -810,7 +810,7 @@ class MdvFile(object):
         return [self._get_vlevel_header() for i in range(nfields)]
 
     def _write_vlevel_headers(self, nfields):
-        """ Write nfields vlevel headers"""
+        """ Write nfields vlevel headers. """
         # the file pointer must be set at the correct location prior to call
         for i in range(nfields):
             self._write_vlevel_header(self.vlevel_headers[i])
@@ -995,20 +995,20 @@ class MdvFile(object):
         return self._unpack_mapped_tuple(l, self.compression_info_mapper)
 
     def _write_compression_info(self, d):
-        """ Write compression infomation"""
+        """ Write compression infomation. """
         # the file pointer must be set at the correct location prior to call
         string = self._pack_mapped(
             d, self.compression_info_mapper, self.compression_info_fmt)
         self.fileptr.write(string)
 
     def _get_unknown_chunk(self, cnum):
-        """ Get raw data from chunk """
+        """ Get raw data from chunk. """
         # the file pointer must be set at the correct location prior to call
         size = self.chunk_headers[cnum]['size']
         return self.fileptr.read(size)
 
     def _write_unknown_chunk(self, data):
-        """ Write raw data from chunk """
+        """ Write raw data from chunk. """
         # the file pointer must be set at the correct location prior to call
         self.fileptr.write(data)
 
@@ -1063,7 +1063,7 @@ class MdvFile(object):
                 'time_centroid': t_base + tc}
 
     def _time_dict_into_header(self):
-        """ Complete time information in master_header from the time dict """
+        """ Complete time information in master_header from the time dict. """
         self.master_header['time_begin'] = self._secs_since_epoch(
             self.times['time_begin'])
         self.master_header['time_end'] = self._secs_since_epoch(

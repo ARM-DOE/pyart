@@ -49,7 +49,7 @@ def _decode_noaa_hh_hdr(
         Dictionary containing altitude data and metadata.
     heading_params : dict
         Dictionary of dictionary containing aircraft heading data and
-        metadata.  Contains 'heading', 'roll', pitch', 'drift', 'rotation',
+        metadata. Contains 'heading', 'roll', pitch', 'drift', 'rotation',
         'tilt' and 'georefs_applied' dictionaries.
 
     """

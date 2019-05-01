@@ -12,10 +12,12 @@ Reading and writing Grid objects.
     _make_coordinatesystem_dict
 
 """
-import warnings
-import numpy as np
-import netCDF4
+
 import datetime
+import warnings
+
+import netCDF4
+import numpy as np
 
 from ..core.grid import Grid
 from .cfradial import _ncvar_to_dict, _create_ncvar
@@ -29,7 +31,7 @@ def read_grid(filename, exclude_fields=None, include_fields=None, **kwargs):
     Parameters
     ----------
     filename : str
-        Filename of netCDF grid file to read.  This file must have been
+        Filename of netCDF grid file to read. This file must have been
         produced by :py:func:`write_grid` or have identical layout.
 
     Other Parameters
@@ -110,7 +112,9 @@ def read_grid(filename, exclude_fields=None, include_fields=None, **kwargs):
             fields[field] = field_dic
         else:
             bad_shape = field_dic['data'].shape
-            warnings.warn('Field %s skipped due to incorrect shape' % (field))
+            warnings.warn(
+                'Field %s skipped due to incorrect shape %s'
+                % (field, bad_shape))
 
     # radar_ variables
     if 'radar_latitude' in dset.variables:
@@ -154,7 +158,7 @@ def write_grid(filename, grid, format='NETCDF4',
                arm_time_variables=False,
                write_point_x_y_z=False, write_point_lon_lat_alt=False):
     """
-    Write a Grid object to a CF-1.5 and ARM standard netCDF file
+    Write a Grid object to a CF-1.5 and ARM standard netCDF file.
 
     To control how the netCDF variables are created, set any of the following
     keys in the grid attribute dictionaries.
@@ -184,7 +188,7 @@ def write_grid(filename, grid, format='NETCDF4',
     write_proj_coord_sys bool, optional
         True to write information on the coordinate transform used in the map
         projection to the ProjectionCoordinateSystem variable following the CDM
-        Object Model.  The resulting file should be interpreted as containing
+        Object Model. The resulting file should be interpreted as containing
         geographic grids by tools which use the Java NetCDF library
         (THREDDS, toolsUI, etc).
     proj_coord_sys : dict or None, optional
@@ -251,7 +255,7 @@ def write_grid(filename, grid, format='NETCDF4',
             warnings.warn(
                 'Cannot determine ProjectionCoordinateSystem parameter for ' +
                 'the given projection, the file will not be written ' +
-                'without this information')
+                'without this information.')
 
         else:
             proj_coord_sys['data'] = np.array(1, dtype='int32')

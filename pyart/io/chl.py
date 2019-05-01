@@ -18,8 +18,8 @@ Utilities for reading CSU-CHILL CHL files.
 
 """
 
-import struct
 from datetime import datetime
+import struct
 
 import numpy as np
 
@@ -47,7 +47,7 @@ def read_chl(filename, field_names=None, additional_metadata=None,
     additional_metadata : dict of dicts, optional
         Dictionary of dictionaries to retrieve metadata from during this read.
         This metadata is not used during any successive file reads unless
-        explicitly included.  A value of None, the default, will not
+        explicitly included. A value of None, the default, will not
         introduct any addition metadata and the file specific or default
         metadata as specified by the Py-ART configuration file will be used.
     file_field_names : bool, optional
@@ -64,7 +64,7 @@ def read_chl(filename, field_names=None, additional_metadata=None,
         None to include all fields not in exclude_fields.
     use_file_field_attributes : bool, optional
         True to use information provided by in the file to set the field
-        attribute `long_name`, `units`, `valid_max`, and `valid_min`.  False
+        attribute `long_name`, `units`, `valid_max`, and `valid_min`. False
         will not set these unless they are defined in the configuration file
         or in `additional_metadata`.
 
@@ -220,7 +220,7 @@ class ChlFile(object):
     field_info : dict
         Field information (limits, name, etc.) recorded in the file.
     processor_info : dict
-        Porcessor information recorded in the file.
+        Processor information recorded in the file.
 
     """
 
@@ -273,7 +273,7 @@ class ChlFile(object):
         self._fh.close()
 
     def _read_block(self):
-        """ Read a block from an open CHL file """
+        """ Read a block from an open CHL file. """
         pld = self._fh.read(8)
         if pld == b'':
             return None
@@ -324,7 +324,7 @@ class ChlFile(object):
         return packet
 
     def _parse_processor_info_block(self, payload):
-        """ Parse a processor_info block.  Set dr attribute. """
+        """ Parse a processor_info block. Set dr attribute. """
         packet = _unpack_structure(payload, PROCESSOR_INFO)
         self.gate_spacing = packet['gate_spacing']
         self.first_gate_offset = packet['range_offset']
@@ -332,7 +332,7 @@ class ChlFile(object):
         return packet
 
     def _parse_scan_seg_block(self, payload):
-        """ Parse a scan_seg_block.  Update sweep attributes. """
+        """ Parse a scan_seg_block. Update sweep attributes. """
         packet = _unpack_structure(payload, SCAN_SEG)
         self.sweep_number.append(packet['sweep_num'])
         self.fixed_angle.append(packet['current_fixed_angle'])
@@ -423,7 +423,7 @@ DATA_FORMAT = ['uint8', 'uint64', 'float32', 'uint16']
 
 
 def _unpack_structure(string, structure):
-    """ Unpack a structure """
+    """ Unpack a structure. """
     fmt = ''.join([i[1] for i in structure])
     tpl = struct.unpack(fmt, string)
     return dict(zip([i[0] for i in structure], tpl))

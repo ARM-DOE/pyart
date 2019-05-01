@@ -14,11 +14,13 @@ Write a Py-ART Grid object to a GeoTIFF file.
 """
 
 from __future__ import division
+
+import os
+import shutil
+
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.colors as colors
-import os
-import shutil
 from ..exceptions import MissingOptionalDependency
 try:
     from osgeo import gdal
@@ -60,10 +62,8 @@ def write_grid_geotiff(grid, filename, field, rgb=False, level=None,
     ----------------
     rbg : bool, optional
         True - Output 3-band RGB GeoTIFF
-
         False - Output single-channel, float-valued GeoTIFF. For display,
                 likely will need an SLD file to provide a color table.
-
     level : int or None, optional
         Index for z-axis plane to output. None gives composite values
         (i.e., max in each vertical column).
@@ -79,22 +79,17 @@ def write_grid_geotiff(grid, filename, field, rgb=False, level=None,
     warp : bool, optional
         True - Use gdalwarp (called from command line using os.system)
                to warp to a lat/lon WGS84 grid.
-
         False - No warping will be performed. Output will be Az. Equidistant.
-
     sld : bool, optional
         True - Create a Style Layer Descriptor file (SLD) mapped to vmin/vmax
                and cmap. File is named same as output TIFF, except for .sld
                extension.
-
         False - Don't do this.
-
     use_doublequotes : bool, optional
         True - Use double quotes in the gdalwarp call (requires warp=True),
                which may help if that command is producing and error like:
                'Translating source or target SRS failed'
-
-        False - Use single quotes instead
+        False - Use single quotes instead.
 
     """
     if not IMPORT_FLAG:
@@ -192,7 +187,7 @@ def _get_rgb_values(data, vmin, vmax, color_levels, cmap):
     Parameters
     ----------
     data : numpy.ndarray object, dtype int or float
-        Two-dimensional data array
+        Two-dimensional data array.
     vmin : int or float
         Minimum value to color for RGB output or SLD file.
     vmax : int or float
@@ -206,11 +201,11 @@ def _get_rgb_values(data, vmin, vmax, color_levels, cmap):
     Returns
     -------
     rarr : numpy.ndarray object, dtype int
-        Red channel indices (range = 0-255)
+        Red channel indices (range = 0-255).
     barr : numpy.ndarray object, dtype int
-        Blue channel indices (range = 0-255)
+        Blue channel indices (range = 0-255).
     garr : numpy.ndarray object, dtype int
-        Green channel indices (range = 0-255)
+        Green channel indices (range = 0-255).
 
     """
     frac = (data - vmin) / np.float(vmax-vmin)
@@ -271,7 +266,7 @@ def _create_sld(cmap, vmin, vmax, filename, color_levels=None):
     cmap = plt.cm.get_cmap(cmap)
     if color_levels is None:
         color_levels = 255
-    name, end = filename.split('.')
+    name, _ = filename.split('.')
     ofile = name + '.sld'
     fileobj = open(ofile, 'w')
 
