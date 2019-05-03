@@ -15,6 +15,7 @@ Radar retrievals
 
     kdp_maesaka
     calculate_snr_from_reflectivity
+    calculate_velocity_texture
     compute_snr
     compute_l
     compute_cdr

@@ -9,9 +9,9 @@ Retrieval of VADs from a radar object.
     :template: dev_template.rst
 
     velocity_azimuth_display
+    _vad_calculation
     _interval_mean
     _sd_to_uv
-    _vad_calculation
 
 """
 
@@ -94,7 +94,7 @@ def velocity_azimuth_display(radar, vel_field=None, z_want=None,
         elevation = radar.fixed_angle['data'][i]
 
         # Calculating speed and angle
-        speed, angle = vad_calculation(
+        speed, angle = _vad_calculation(
             used_velocities, azimuth, elevation)
 
         print('max height', z_gate_data[index_start, :].max(),
@@ -123,7 +123,7 @@ def velocity_azimuth_display(radar, vel_field=None, z_want=None,
     return vad
 
 
-def vad_calculation(velocity_field, azimuth, elevation):
+def _vad_calculation(velocity_field, azimuth, elevation):
     """ Calculates VAD for a scan, returns speed and angle
     outdic = vad_algorithm(velocity_field, azimuth, elevation)
     velocity_field is a 2D array, azimuth is a 1D array,

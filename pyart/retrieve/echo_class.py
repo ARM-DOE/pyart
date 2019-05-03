@@ -9,12 +9,12 @@ Functions for echo classification.
 
     steiner_conv_strat
     hydroclass_semisupervised
+    get_freq_band
     _standardize
     _assign_to_class
     _get_mass_centers
     _mass_centers_table
     _data_limits_table
-    get_freq_band
 
 """
 
@@ -244,6 +244,8 @@ def _standardize(data, field_name, mx=None, mn=None):
         Radar field.
     field_name : str
         Type of field (relH, Zh, ZDR, KDP or RhoHV).
+    mx, mn : floats or None, optional
+        Data limits for array values.
 
     Returns
     -------
@@ -288,7 +290,7 @@ def _assign_to_class(zh, zdr, kdp, rhohv, relh, mass_centers,
     Parameters
     ----------
     zh, zdr, kdp, rhohv, relh : radar fields
-        Variables used for assigment normalized to [-1, 1] values.
+        Variables used for assignment normalized to [-1, 1] values.
     mass_centers : matrix
         Centroids normalized to [-1, 1] values.
     weights : array, optional

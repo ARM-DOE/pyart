@@ -12,6 +12,7 @@ Simple moment calculations.
     compute_snr
     compute_l
     compute_cdr
+    calculate_velocity_texture
 
 """
 
