@@ -1,5 +1,5 @@
 """
-general meteorological calculations useful to other modules
+General meteorological calculations useful to other modules.
 """
 
 import os

@@ -40,33 +40,30 @@ def steiner_conv_strat(grid, dx=None, dy=None, intense=42.0,
     ----------
     grid : Grid
         Grid containing reflectivity field to partition.
-
-    Other Parameters
-    ----------------
-    dx, dy : float
+    dx, dy : float, optional
         The x- and y-dimension resolutions in meters, respectively. If None
         the resolution is determined from the first two axes values.
-    intense : float
+    intense : float, optional
         The intensity value in dBZ. Grid points with a reflectivity
         value greater or equal to the intensity are automatically
         flagged as convective. See reference for more information.
-    work_level : float
+    work_level : float, optional
         The working level (separation altitude) in meters. This is the height
         at which the partitioning will be done, and should minimize bright band
         contamination. See reference for more information.
-    peak_relation : 'default' or 'sgp'
+    peak_relation : 'default' or 'sgp', optional
         The peakedness relation. See reference for more information.
-    area_relation : 'small', 'medium', 'large', or 'sgp'
+    area_relation : 'small', 'medium', 'large', or 'sgp', optional
         The convective area relation. See reference for more information.
-    bkg_rad : float
+    bkg_rad : float, optional
         The background radius in meters. See reference for more information.
-    use_intense : bool
+    use_intense : bool, optional
         True to use the intensity criteria.
-    fill_value : float
+    fill_value : float, optional
          Missing value used to signify bad data points. A value of None
          will use the default fill value as defined in the Py-ART
          configuration file.
-    refl_field : str
+    refl_field : str, optional
          Field in grid to use as the reflectivity during partitioning. None
          will use the default reflectivity field name from the Py-ART
          configuration file.
@@ -137,22 +134,19 @@ def hydroclass_semisupervised(radar, mass_centers=None,
     ----------
     radar : radar
         Radar object.
-
-    Other Parameters
-    ----------------
-    mass_centers : ndarray 2D
+    mass_centers : ndarray 2D, optional
         The centroids for each variable and hydrometeor class in (nclasses,
         nvariables).
-    weights : ndarray 1D
+    weights : ndarray 1D, optional
         The weight given to each variable.
-    refl_field, zdr_field, rhv_field, kdp_field, temp_field : str
+    refl_field, zdr_field, rhv_field, kdp_field, temp_field : str, optional
         Inputs. Field names within the radar object which represent the
         horizonal reflectivity, the differential reflectivity, the copolar
         correlation coefficient, the specific differential phase and the
         temperature field. A value of None for any of these parameters will
         use the default field name as defined in the Py-ART configuration
         file.
-    hydro_field : str
+    hydro_field : str, optional
         Output. Field name which represents the hydrometeor class field.
         A value of None will use the default field name as defined in the
         Py-ART configuration file.
@@ -297,10 +291,7 @@ def _assign_to_class(zh, zdr, kdp, rhohv, relh, mass_centers,
         Variables used for assigment normalized to [-1, 1] values.
     mass_centers : matrix
         Centroids normalized to [-1, 1] values.
-
-    Other Parameters
-    ----------------
-    weights : array
+    weights : array, optional
         The weight given to each variable.
 
     Returns

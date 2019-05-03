@@ -32,16 +32,13 @@ def calculate_snr_from_reflectivity(
     ----------
     radar : Radar
         Radar object from which to retrieve reflectivity field.
-
-    Other Parameters
-    ----------------
-    refl_field : str
+    refl_field : str, optional
         Name of field in radar which contains the reflectivity.
         None will use the default field name in the Py-ART configuration file.
-    snr_field : str
+    snr_field : str, optional
         Name to use for snr metadata. None will use the default field name
         in the Py-ART configuration file.
-    toa : float
+    toa : float, optional
         Height above which to take noise floor measurements, in meters.
 
     Returns
@@ -92,10 +89,7 @@ def compute_noisedBZ(nrays, noisedBZ_val, _range, ref_dist,
         Range vector in m.
     ref_dist : float
         Reference distance in Km.
-
-    Other Parameters
-    ----------------
-    noise_field : str
+    noise_field : str, optional
         Name of the noise field.
 
     Returns
@@ -124,14 +118,11 @@ def compute_snr(radar, refl_field=None, noise_field=None, snr_field=None):
     ----------
     radar : Radar
         Radar object
-
-    Other Parameters
-    ----------------
-    refl_field : str
+    refl_field : str, optional
         Name of the reflectivity field to use.
-    noise_field : str
+    noise_field : str, optional
         Name of the noise field to use.
-    snr_field : str
+    snr_field : str, optional
         Name of the SNR field.
 
     Returns
@@ -174,12 +165,9 @@ def compute_l(radar, rhohv_field=None, l_field=None):
     ----------
     radar : Radar
         Radar object.
-
-    Other Parameters
-    ----------------
-    rhohv_field : str
+    rhohv_field : str, optional
         Name of the RhoHV field to use.
-    l_field : str
+    l_field : str, optional
         Name of the L field.
 
     Returns
@@ -217,14 +205,11 @@ def compute_cdr(radar, rhohv_field=None, zdr_field=None, cdr_field=None):
     ----------
     radar : Radar
         Radar object.
-
-    Other Parameters
-    ----------------
-    rhohv_field : str
+    rhohv_field : str, optional
         Name of the RhoHV field.
-    zdr_field : str
+    zdr_field : str, optional
         Name of the ZDR field.
-    cdr_field : str
+    cdr_field : str, optional
         Name of the CDR field.
 
     Returns
@@ -273,16 +258,13 @@ def calculate_velocity_texture(radar, vel_field=None, wind_size=4, nyq=None,
     ----------
     radar: Radar
         Radar object from which velocity texture field will be made.
-
-    Other Parameters
-    ----------------
-    vel_field : str
+    vel_field : str, optional
         Name of the velocity field. A value of None will force Py-ART to
         automatically determine the name of the velocity field.
-    wind_size : int
+    wind_size : int, optional
         The size of the window to calculate texture from. The window is
         defined to be a square of size wind_size by wind_size.
-    nyq : float
+    nyq : float, optional
         The nyquist velocity of the radar. A value of None will force Py-ART
         to try and determine this automatically.
     check_nyquist_uniform : bool, optional

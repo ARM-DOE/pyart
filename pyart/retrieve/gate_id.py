@@ -35,16 +35,13 @@ def map_profile_to_gates(profile, heights, radar, toa=None,
         Monotonically increasing heights in meters with same shape as profile.
     radar : Radar
         Radar to map to.
-
-    Other Parameters
-    ----------------
-    toa : float
+    toa : float, optional
         Top of atmosphere, where to use profile up to. If None check for
         mask and use lowest element, if no mask uses whole profile.
-    height_field : str
+    height_field : str, optional
         Name to use for height field metadata. None will use the default field
         name from the Py-ART configuration file.
-    profile_field : str
+    profile_field : str, optional
         Name to use for interpolate profile field metadata. None will use the
         default field name from the Py-ART configuration file.
 
@@ -61,7 +58,7 @@ def map_profile_to_gates(profile, heights, radar, toa=None,
     _, _, z = antenna_to_cartesian(rg / 1000.0, azg, eleg)
 
     # Check that z is not a MaskedArray
-    if type(z) is np.ma.core.MaskedArray:
+    if isinstance(z, np.ma.MaskedArray):
         z = z.filled(np.NaN)
 
     # find toa is not provided
@@ -108,14 +105,11 @@ def fetch_radar_time_profile(sonde_dset, radar, time_key='time',
         Interpolate sonde Dataset.
     radar : Radar
         Radar object from which the nearest profile will be found.
-
-    Optional Parameters
-    -------------------
-    time_key : string
+    time_key : string, optional
         Key to find a CF startard time variable.
-    height_key : string
+    height_key : string, optional
         Key to find profile height data.
-    nvars : list
+    nvars : list, optional
         NetCDF variable to generated profiles for. If None (the default) all
         variables with dimension of time, height will be found in ncvars.
 

@@ -34,15 +34,12 @@ def velocity_azimuth_display(radar, vel_field=None, z_want=None,
     ----------
     radar : Radar
         Radar object used.
-
-    Other Parameters
-    ----------------
-    vel_field : string
+    vel_field : string, optional
         Velocity field to use for VAD calculation.
-    z_want : array
+    z_want : array, optional
         Heights for where to sample vads from.
         None will result in np.linespace(0, 10000, 100).
-    gatefilter : GateFilter
+    gatefilter : GateFilter, optional
         A GateFilter indicating radar gates that should be excluded
         from the import vad calculation.
 

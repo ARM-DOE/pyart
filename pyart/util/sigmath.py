@@ -103,7 +103,7 @@ def texture_along_ray(radar, var, wind_size=7):
         The radar object where the field is.
     var : str
         Name of the field which texture has to be computed.
-    wind_size : int
+    wind_size : int, optional
         Optional. Size of the rolling window used.
 
     Returns

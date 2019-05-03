@@ -38,12 +38,9 @@ def est_rain_rate_zpoly(radar, refl_field=None, rr_field=None):
     ----------
     radar : Radar
         Radar object.
-
-    Other Parameters
-    ----------------
-    refl_field : str
+    refl_field : str, optional
         Name of the reflectivity field to use.
-    rr_field : str
+    rr_field : str, optional
         Name of the rainfall rate field.
 
     Returns
@@ -83,14 +80,11 @@ def est_rain_rate_z(radar, alpha=0.0376, beta=0.6112, refl_field=None,
     ----------
     radar : Radar
         Radar object.
-
-    Other Parameters
-    ----------------
-    alpha, beta : floats
+    alpha, beta : floats, optional
         Factor (alpha) and exponent (beta) of the power law.
-    refl_field : str
+    refl_field : str, optional
         Name of the reflectivity field to use.
-    rr_field : str
+    rr_field : str, optional
         Name of the rainfall rate field.
 
     Returns
@@ -125,15 +119,12 @@ def est_rain_rate_kdp(radar, alpha=None, beta=None, kdp_field=None,
     ----------
     radar : Radar
         Radar object.
-
-    Other Parameters
-    ----------------
-    alpha, beta : floats
+    alpha, beta : floats, optional
         Factor (alpha) and exponent (beta) of the power law. If not set the
         factors are going to be determined according to the radar frequency.
-    kdp_field : str
+    kdp_field : str, optional
         Name of the specific differential phase field to use.
-    rr_field : str
+    rr_field : str, optional
         Name of the rainfall rate field.
 
     Returns
@@ -180,15 +171,12 @@ def est_rain_rate_a(radar, alpha=None, beta=None, a_field=None,
     ----------
     radar : Radar
         Radar object.
-
-    Other Parameters
-    ----------------
-    alpha, beta : floats
+    alpha, beta : floats, optional
         Factor (alpha) and exponent (beta) of the power law. If not set the
         factors are going to be determined according to the radar frequency.
-    a_field : str
+    a_field : str, optional
         Name of the specific attenuation field to use.
-    rr_field : str
+    rr_field : str, optional
         Name of the rainfall rate field.
 
     Returns
@@ -249,28 +237,25 @@ def est_rain_rate_zkdp(radar, alphaz=0.0376, betaz=0.6112, alphakdp=None,
     ----------
     radar : Radar
         Radar object.
-
-    Other Parameters
-    ----------------
-    alphaz, betaz : floats
+    alphaz, betaz : floats, optional
         Factor (alpha) and exponent (beta) of the z-r power law.
-    alphakdp, betakdp : floats
+    alphakdp, betakdp : floats, optional
         Factor (alpha) and exponent (beta) of the kdp-r power law.
         If not set the factors are going to be determined according
         to the radar frequency.
-    refl_field : str
+    refl_field : str, optional
         Name of the reflectivity field to use.
-    kdp_field : str
+    kdp_field : str, optional
         Name of the specific differential phase field to use.
-    rr_field : str
+    rr_field : str, optional
         Name of the rainfall rate field.
-    master_field : str
+    master_field : str, optional
         Name of the field that is going to act as master. Has to be
         either refl_field or kdp_field. Default is refl_field.
-    thresh : float
+    thresh : float, optional
         Value of the threshold that determines when to use the slave
         field.
-    thresh_max : Bool
+    thresh_max : Bool, optional
         If true the master field is used up to the thresh value maximum.
         Otherwise the master field is not used below thresh value.
 
@@ -339,27 +324,24 @@ def est_rain_rate_za(radar, alphaz=0.0376, betaz=0.6112, alphaa=None,
     ----------
     radar : Radar
         Radar object
-
-    Other Parameters
-    ----------------
-    alphaz, betaz : floats
+    alphaz, betaz : floats, optional
         Factor (alpha) and exponent (beta) of the z-r power law.
-    alphaa,betaa : floats
+    alphaa,betaa : floats, optional
         Factor (alpha) and exponent (beta) of the a-r power law. If not set
         the factors are going to be determined according to the radar frequency.
-    refl_field : str
+    refl_field : str, optional
         Name of the reflectivity field to use.
-    a_field : str
+    a_field : str, optional
         Name of the specific attenuation field to use.
-    rr_field : str
+    rr_field : str, optional
         Name of the rainfall rate field.
-    master_field : str
+    master_field : str, optional
         Name of the field that is going to act as master. Has to be
         either refl_field or kdp_field. Default is refl_field.
-    thresh : float
+    thresh : float, optional
         Value of the threshold that determines when to use the slave
         field.
-    thresh_max : Bool
+    thresh_max : Bool, optional
         If true the master field is used up to the thresh value maximum.
         Otherwise the master field is not used below thresh value.
 
@@ -430,34 +412,31 @@ def est_rain_rate_hydro(radar, alphazr=0.0376, betazr=0.6112, alphazs=0.1,
     ----------
     radar : Radar
         Radar object.
-
-    Other Parameters
-    ----------------
-    alphazr, betazr : floats
+    alphazr, betazr : floats, optional
         Factor (alpha) and exponent (beta) of the z-r power law for rain.
-    alphazs, betazs : floats
+    alphazs, betazs : floats, optional
         Factor (alpha) and exponent (beta) of the z-s power law for snow.
-    alphaa, betaa : floats
+    alphaa, betaa : floats, optional
         Factor (alpha) and exponent (beta) of the a-r power law.
         If not set the factors are going to be determined according
         to the radar frequency.
-    mp_factor : float
+    mp_factor : float, optional
         Factor applied to z-r relation in the melting layer.
-    refl_field : str
+    refl_field : str, optional
         Name of the reflectivity field to use.
-    a_field : str
+    a_field : str, optional
         Name of the specific attenuation field to use.
-    hydro_field : str
+    hydro_field : str, optional
         Name of the hydrometeor classification field to use.
-    rr_field : str
+    rr_field : str, optional
         Name of the rainfall rate field.
-    master_field : str
+    master_field : str, optional
         Name of the field that is going to act as master. Has to be
         either refl_field or kdp_field. Default is refl_field.
-    thresh : float
+    thresh : float, optional
         Value of the threshold that determines when to use the slave
         field.
-    thresh_max : Bool
+    thresh_max : Bool, optional
         If true the master field is used up to the thresh value maximum.
         Otherwise the master field is not used below thresh value.
 
