@@ -58,8 +58,8 @@ def texture_of_complex_phase(radar, phidp_field=None,
     # check that wradlib is available
     if not _WRADLIB_AVAILABLE:
         raise MissingOptionalDependency(
-            "wradlib is required to use texture_of_complex_phase but is " +
-            "not installed")
+            "wradlib is required to use texture_of_complex_phase but is "
+            + "not installed")
 
     # parse field names
     if phidp_field is None:
