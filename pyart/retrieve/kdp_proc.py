@@ -1565,7 +1565,7 @@ def boundary_conditions_maesaka(
 
 
 def _cost_maesaka(x, psidp_o, bcs, dhv, dr, Cobs, Clpf, finite_order,
-                  verbose=False):
+                  fill_value, proc, debug=False, verbose=False):
     """
     Compute the value of the cost functional similar to equations (12)-(15) in
     Maesaka et al. (2012).
@@ -1591,6 +1591,12 @@ def _cost_maesaka(x, psidp_o, bcs, dhv, dr, Cobs, Clpf, finite_order,
         equation (15) of Maesaka et al. (2012).
     finite_order : 'low' or 'high'
         The finite difference accuracy to use when computing derivatives.
+    fill_value : float
+        Value indicating missing or bad data in radar field data.
+    proc : int
+        The number of parallel threads (CPUs) to use.
+    debug : bool, optional
+        True to print debugging information, False to suppress.
     verbose : bool, optional
         True to print progress information, False to suppress.
 
@@ -1652,7 +1658,7 @@ def _cost_maesaka(x, psidp_o, bcs, dhv, dr, Cobs, Clpf, finite_order,
 
 
 def _jac_maesaka(x, psidp_o, bcs, dhv, dr, Cobs, Clpf, finite_order,
-                 verbose=False):
+                 fill_value, proc, debug=False, verbose=False):
     """
     Compute the Jacobian (gradient) of the cost functional similar to equations
     (16)-(18) in Maesaka et al. (2012).
@@ -1678,6 +1684,12 @@ def _jac_maesaka(x, psidp_o, bcs, dhv, dr, Cobs, Clpf, finite_order,
         equation (15) of Maesaka et al. (2012).
     finite_order : 'low' or 'high'
         The finite difference accuracy to use when computing derivatives.
+    fill_value : float
+        Value indicating missing or bad data in radar field data.
+    proc : int
+        The number of parallel threads (CPUs) to use.
+    debug : bool, optional
+        True to print debugging information, False to suppress.
     verbose : bool, optional
         True to print progress information, False to suppress.
 

@@ -244,13 +244,11 @@ def dealias_region_based(
                 scorr_means[reg-1] = np.ma.mean(scorr[labels_corr == reg])
                 sref_means[reg-1] = np.ma.mean(sref[labels_corr == reg])
 
-            def cost_function(x, scorr_means, sref_means,
-                              nyquist_interval, nfeatures_corr):
+            def cost_function(x):
                 return _cost_function(x, scorr_means, sref_means,
                                       nyquist_interval, nfeatures_corr)
 
-            def gradient(x, scorr_means, sref_means,
-                         nyquist_interval, nfeatures_corr):
+            def gradient(x):
                 return _gradient(x, scorr_means, sref_means,
                                  nyquist_interval, nfeatures_corr)
 
