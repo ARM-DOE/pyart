@@ -204,6 +204,7 @@ def smooth_masked(raw_data, wind_len=11, min_valid=6, wind_type='median'):
     """
     Smoothes the data using a rolling window.
     data with less than n valid points is masked.
+
     Parameters
     ----------
     raw_data : float masked array
