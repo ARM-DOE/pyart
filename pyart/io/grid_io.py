@@ -297,9 +297,9 @@ def write_grid(filename, grid, format='NETCDF4',
 
     # optionally write point_ variables
     if write_point_x_y_z:
-        _create_ncvar(grid.point_x, dset, 'point_x', ('z', 'x', 'y'))
-        _create_ncvar(grid.point_y, dset, 'point_y', ('z', 'x', 'y'))
-        _create_ncvar(grid.point_z, dset, 'point_z', ('z', 'x', 'y'))
+        _create_ncvar(grid.point_x, dset, 'point_x', ('z', 'y', 'x'))
+        _create_ncvar(grid.point_y, dset, 'point_y', ('z', 'y', 'x'))
+        _create_ncvar(grid.point_z, dset, 'point_z', ('z', 'y', 'x'))
     if write_point_lon_lat_alt:
         dims = ('z', 'y', 'x')
         _create_ncvar(grid.point_latitude, dset, 'point_latitude', dims)
