@@ -516,6 +516,46 @@ class Radar(object):
         return antenna_vectors_to_cartesian(
             self.range['data'], azimuths, elevations, edges=edges)
 
+    def get_gate_lat_lon_alt(self, sweep, filter_transitions=False):
+        """
+        Return the longitude, latitude and altitude gate locations.
+        Longitude and latitude are in degrees and altitude in meters.
+
+        With the default parameter this method returns the same data as
+        contained in the gate_latitude, gate_longitude and gate_altitude
+        attributes but this method performs the gate location calculations
+        only for the specified sweep and therefore is more efficient than
+        accessing this data through these attribute.
+
+        Parameters
+        ----------
+        sweep : int
+            Sweep number to retrieve gate locations from, 0 based.
+        filter_transitions : bool, optional
+            True to remove rays where the antenna was in transition between
+            sweeps. False will include these rays. No rays will be removed
+            if the antenna_transition attribute is not available (set to None).
+
+        Returns
+        -------
+        lat, lon, alt : 2D array
+            Array containing the latitude, longitude and altitude,
+            for all gates in the sweep.
+
+        """
+        s = self.get_slice(sweep)
+        lat = self.gate_latitude['data'][s]
+        lon = self.gate_longitude['data'][s]
+        alt = self.gate_altitude['data'][s]
+
+        if filter_transitions and self.antenna_transition is not None:
+            valid = self.antenna_transition['data'][s] == 0
+            lat = lat[valid]
+            lon = lon[valid]
+            alt = alt[valid]
+
+        return lat, lon, alt
+
     def get_nyquist_vel(self, sweep, check_uniform=True):
         """
         Return the Nyquist velocity in meters per second for a given sweep.
