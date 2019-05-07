@@ -154,12 +154,12 @@ def get_field_limits(field, container=None, selection=0):
 
     Parameters
     ----------
-    field: str
+    field : str
         Field name.
-    container: Radar, Grid or None
+    container : Radar, Grid or None, optional
         This is an optional parameter that will be use to get informations
         related to the field, like for instace nyquist velocity.
-    selection: int
+    selection : int, optional
         Selection of the data in the container, case container is a Radar this
         is the sweep to be considered.
 
@@ -314,10 +314,10 @@ class FileMetadata():
         elif file_field_name in self._field_names:
             field_name = self._field_names[file_field_name]
         else:
-            return None     # field is not mapped
+            return None # field is not mapped
 
         if field_name in self._exclude_fields:
-            return None     # field is excluded
+            return None # field is excluded
         elif self._include_fields is not None:
             if not field_name in self._include_fields:
                 return None
