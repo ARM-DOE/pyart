@@ -11,13 +11,13 @@ Data and functions common to all types of NEXRAD files.
 
 """
 # The functions in this module are intended to be used in other
-# nexrad related modules.  The functions are not and should not be
+# nexrad related modules. The functions are not and should not be
 # exported into the pyart.io namespace.
 
 
 def get_nexrad_location(station):
     """
-    Return the latitude, longitude and altitude of a NEXRAD station
+    Return the latitude, longitude and altitude of a NEXRAD station.
 
     Parameters
     ----------

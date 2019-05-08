@@ -14,11 +14,13 @@ Write a Py-ART Grid object to a GeoTIFF file.
 """
 
 from __future__ import division
+
+import os
+import shutil
+
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.colors as colors
-import os
-import shutil
 from ..exceptions import MissingOptionalDependency
 try:
     from osgeo import gdal
@@ -92,9 +94,9 @@ def write_grid_geotiff(grid, filename, field, rgb=False, level=None,
     use_doublequotes : bool, optional
         True - Use double quotes in the gdalwarp call (requires warp=True),
                which may help if that command is producing and error like:
-               'Translating source or target SRS failed'
+               'Translating source or target SRS failed'.
 
-        False - Use single quotes instead
+        False - Use single quotes instead.
 
     """
     if not IMPORT_FLAG:
@@ -192,7 +194,7 @@ def _get_rgb_values(data, vmin, vmax, color_levels, cmap):
     Parameters
     ----------
     data : numpy.ndarray object, dtype int or float
-        Two-dimensional data array
+        Two-dimensional data array.
     vmin : int or float
         Minimum value to color for RGB output or SLD file.
     vmax : int or float
@@ -206,11 +208,11 @@ def _get_rgb_values(data, vmin, vmax, color_levels, cmap):
     Returns
     -------
     rarr : numpy.ndarray object, dtype int
-        Red channel indices (range = 0-255)
+        Red channel indices (range = 0-255).
     barr : numpy.ndarray object, dtype int
-        Blue channel indices (range = 0-255)
+        Blue channel indices (range = 0-255).
     garr : numpy.ndarray object, dtype int
-        Green channel indices (range = 0-255)
+        Green channel indices (range = 0-255).
 
     """
     frac = (data - vmin) / np.float(vmax-vmin)
@@ -271,7 +273,7 @@ def _create_sld(cmap, vmin, vmax, filename, color_levels=None):
     cmap = plt.cm.get_cmap(cmap)
     if color_levels is None:
         color_levels = 255
-    name, end = filename.split('.')
+    name, _ = filename.split('.')
     ofile = name + '.sld'
     fileobj = open(ofile, 'w')
 

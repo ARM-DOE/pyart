@@ -18,7 +18,7 @@ from __future__ import print_function
 import copy
 
 import numpy as np
-from netCDF4 import num2date, date2num
+from netCDF4 import date2num
 
 from ..config import get_fillvalue
 from . import datetime_utils
@@ -35,8 +35,8 @@ def is_vpt(radar, offset=0.5):
     Parameters
     ----------
     radar : Radar
-        Radar object to determine if
-    offset : float
+        Radar object to determine if.
+    offset : float, optional
         Maximum offset of the elevation from 90 degrees to still consider
         to be vertically pointing.
 
@@ -56,17 +56,17 @@ def to_vpt(radar, single_scan=True):
     Convert an existing Radar object to represent a vertical pointing scan.
 
     This function does not verify that the Radar object contains a vertical
-    pointing scan.  To perform such a check use :py:func:`is_vpt`.
+    pointing scan. To perform such a check use :py:func:`is_vpt`.
 
     Parameters
     ----------
     radar : Radar
         Mislabeled vertical pointing scan Radar object to convert to be
-        properly labeled.  This object is converted in place, no copy of
+        properly labeled. This object is converted in place, no copy of
         the existing data is made.
     single_scan : bool, optional
         True to convert the volume to a single scan, any azimuth angle data
-        is lost.  False will convert the scan to contain the same number of
+        is lost. False will convert the scan to contain the same number of
         scans as rays, azimuth angles are retained.
 
     """

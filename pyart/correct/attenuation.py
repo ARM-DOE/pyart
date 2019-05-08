@@ -54,81 +54,81 @@ def calculate_attenuation_zphi(radar, doc=None, fzl=None, smooth_window_len=5,
     radar : Radar
         Radar object to use for attenuation calculations. Must have
         phidp and refl fields.
-    doc : float
+    doc : float, optional
         Number of gates at the end of each ray to to remove from the
         calculation.
-    fzl : float
+    fzl : float, optional
         Freezing layer, gates above this point are not included in the
         correction.
-    gatefilter : GateFilter
+    gatefilter : GateFilter, optional
         The gates to exclude from the calculation. This, combined with
         the gates above fzl, will be excluded from the correction. Set to
         None to not use a gatefilter.
-    smooth_window_len : int
+    smooth_window_len : int, optional
         Size, in range bins, of the smoothing window
-    a_coef : float
+    a_coef : float, optional
         A coefficient in attenuation calculation.
-    beta : float
+    beta : float, optional
         Beta parameter in attenuation calculation.
-    c, d : float
+    c, d : float, optional
         coefficient and exponent of the power law that relates attenuation
         with differential attenuation
-    refl_field: str
+    refl_field : str, optional
         Name of the reflectivity field used for the attenuation correction.
         A value of None for any of these parameters will use the default
         field name as defined in the Py-ART configuration file.
-    phidp_field: str
+    phidp_field : str, optional
         Name of the differential phase field used for the attenuation
         correction. A value of None for any of these parameters will use the
-        default field name as defined in the Py-ART configuration file.     
-    zdr_field: str
+        default field name as defined in the Py-ART configuration file.
+    zdr_field : str, optional
         Name of the differential reflectivity field used for the attenuation
         correction. A value of None for any of these parameters will use the
         default field name as defined in the Py-ART configuration file. This
         will only be used if it is available.
-    temp_field: str
-        Name of the temperature field used for the attenuation 
+    temp_field : str, optional
+        Name of the temperature field used for the attenuation
         correction. A value of None for any of these parameters will use the
-        default field name as defined in the Py-ART configuration file.     
-    iso0_field: str
-        Name of the field for the height above the 0C isotherm for the 
+        default field name as defined in the Py-ART configuration file.
+    iso0_field : str, optional
+        Name of the field for the height above the 0C isotherm for the
         attenuation correction. A value of None for any of these parameters
         will use the default field name as defined in the Py-ART configuration
         file. This will only be used if it is available.
-    spec_at_field: str
-        Name of the specific attenuation field that will be used to fill in 
+    spec_at_field : str, optional
+        Name of the specific attenuation field that will be used to fill in
         the metadata for the returned fields. A value of None for any of these
         parameters will use the default field names as defined in the Py-ART
         configuration file.
-    pia_field: str
+    pia_field : str, optional
         Name of the path integrated attenuation field that will be used to fill
-        in the metadata for the returned fields. A value of None for any of 
+        in the metadata for the returned fields. A value of None for any of
         these parameters will use the default field names as defined in the
         Py-ART configuration file.
-    corr_refl_field: str
+    corr_refl_field : str, optional
         Name of the corrected reflectivity field that will be used to fill in
         the metadata for the returned fields. A value of None for any of these
         parameters will use the default field names as defined in the Py-ART
         configuration file.
-    spec_diff_at_field: str
-        Name of the specific differential attenuation field that will be used 
-        to fill in the metadata for the returned fields. A value of None for 
-        any of these parameters will use the default field names as defined 
+    spec_diff_at_field : str, optional
+        Name of the specific differential attenuation field that will be used
+        to fill in the metadata for the returned fields. A value of None for
+        any of these parameters will use the default field names as defined
         in the Py-ART configuration file. This will only be calculated if ZDR
         is available.
-    pida_field: str
-        Name of the path integrated differential attenuation field that will 
-        be used to fill in the metadata for the returned fields. A value of 
-        None for any of these parameters will use the default field names as 
+    pida_field : str, optional
+        Name of the path integrated differential attenuation field that will
+        be used to fill in the metadata for the returned fields. A value of
+        None for any of these parameters will use the default field names as
         defined in the Py-ART configuration file. This will only be calculated
         if ZDR is available.
-    corr_zdr_field: str
-        Name of the corrected differential reflectivity field that will 
-        be used to fill in the metadata for the returned fields. A value of 
-        None for any of these parameters will use the default field names as 
+    corr_zdr_field : str, optional
+        Name of the corrected differential reflectivity field that will
+        be used to fill in the metadata for the returned fields. A value of
+        None for any of these parameters will use the default field names as
         defined in the Py-ART configuration file. This will only be calculated
         if ZDR is available.
-    temp_ref : str
+    temp_ref : str, optional
         the field use as reference for temperature. Can be either temperature,
         height_over_iso0 or fixed_fzl
 
@@ -165,8 +165,8 @@ def calculate_attenuation_zphi(radar, doc=None, fzl=None, smooth_window_len=5,
                 radar.instrument_parameters['frequency']['data'][0])
         else:
             a_coef, beta, c, d = _param_attzphi_table()['C']
-            warn('Radar frequency unknown. ' +
-                 'Default coefficients for C band will be applied')
+            warn("Radar frequency unknown. Default coefficients "
+                 + "for C band will be applied.")
 
     # parse the field parameters
     if refl_field is None:
@@ -230,7 +230,7 @@ def calculate_attenuation_zphi(radar, doc=None, fzl=None, smooth_window_len=5,
         beamwidth=None, temp_field=temp_field, iso0_field=iso0_field,
         temp_ref=temp_ref)
 
-    if(gatefilter is None):
+    if gatefilter is None:
         mask = np.ma.getmaskarray(refl)
     else:
         mask = gatefilter.gate_excluded
@@ -315,7 +315,7 @@ def calculate_attenuation_zphi(radar, doc=None, fzl=None, smooth_window_len=5,
         spec_diff_at = get_metadata(spec_diff_at_field)
         spec_diff_at['data'] = sda
         spec_diff_at['_FillValue'] = sda.fill_value
-        
+
         pida_array = np.ma.masked_where(mask, pida)
         pida_dict = get_metadata(pida_field)
         pida_dict['data'] = pida_array
@@ -334,12 +334,11 @@ def calculate_attenuation_zphi(radar, doc=None, fzl=None, smooth_window_len=5,
 
 
 def calculate_attenuation_philinear(
-        radar, doc=None, fzl=None, pia_coef=None, gatefilter=None, 
-        pida_coef=None, refl_field=None, phidp_field=None, zdr_field=None, 
-        temp_field=None, iso0_field=None, spec_at_field=None, 
-        pia_field=None,
-        corr_refl_field=None, spec_diff_at_field=None, pida_field=None,
-        corr_zdr_field=None, temp_ref='temperature'):
+        radar, doc=None, fzl=None, pia_coef=None, gatefilter=None,
+        pida_coef=None, refl_field=None, phidp_field=None, zdr_field=None,
+        temp_field=None, iso0_field=None, spec_at_field=None,
+        pia_field=None, corr_refl_field=None, spec_diff_at_field=None,
+        pida_field=None, corr_zdr_field=None, temp_ref='temperature'):
     """
     Calculate the attenuation and the differential attenuation from a
     polarimetric radar using linear dependece with PhiDP.
@@ -353,72 +352,72 @@ def calculate_attenuation_philinear(
     radar : Radar
         Radar object to use for attenuation calculations. Must have
         phidp and refl fields.
-    doc : float
+    doc : float, optional
         Number of gates at the end of each ray to to remove from the
         calculation.
-    fzl : float
+    fzl : float, optional
         Freezing layer, gates above this point are not included in the
         correction.
-    gatefilter : GateFilter
+    gatefilter : GateFilter, optional
         The gates to exclude from the calculation. This, combined with
         the gates above fzl, will be excluded from the correction. Set to
         None to not use a gatefilter.
-    pia_coef : float
+    pia_coef : float, optional
         Coefficient in path integrated attenuation calculation
-    pida_coeff : float
+    pida_coeff : float, optional
         Coefficient in path integrated differential attenuation calculation
-    refl_field: str
+    refl_field : str, optional
         Name of the reflectivity field used for the attenuation correction.
         A value of None for any of these parameters will use the default
         field name as defined in the Py-ART configuration file.
-    phidp_field: str
+    phidp_field : str, optional
         Name of the differential phase field used for the attenuation
         correction. A value of None for any of these parameters will use the
-        default field name as defined in the Py-ART configuration file.     
-    zdr_field: str
+        default field name as defined in the Py-ART configuration file.
+    zdr_field : str, optional
         Name of the differential reflectivity field used for the attenuation
         correction. A value of None for any of these parameters will use the
         default field name as defined in the Py-ART configuration file. This
         will only be used if it is available.
-    temp_field: str
-        Name of the temperature field used for the attenuation 
+    temp_field : str, optional
+        Name of the temperature field used for the attenuation
         correction. A value of None for any of these parameters will use the
-        default field name as defined in the Py-ART configuration file.     
-    iso0_field: str
-        Name of the field for the height above the 0C isotherm for the 
+        default field name as defined in the Py-ART configuration file.
+    iso0_field : str, optional
+        Name of the field for the height above the 0C isotherm for the
         attenuation correction. A value of None for any of these parameters
         will use the default field name as defined in the Py-ART configuration
         file. This will only be used if it is available.
-    spec_at_field: str
-        Name of the specific attenuation field that will be used to fill in 
+    spec_at_field : str, optional
+        Name of the specific attenuation field that will be used to fill in
         the metadata for the returned fields. A value of None for any of these
         parameters will use the default field names as defined in the Py-ART
         configuration file.
-    pia_field: str
+    pia_field : str, optional
         Name of the path integrated attenuation field that will be used to fill
-        in the metadata for the returned fields. A value of None for any of 
+        in the metadata for the returned fields. A value of None for any of
         these parameters will use the default field names as defined in the
         Py-ART configuration file.
-    corr_refl_field: str
+    corr_refl_field : str, optional
         Name of the corrected reflectivity field that will be used to fill in
         the metadata for the returned fields. A value of None for any of these
         parameters will use the default field names as defined in the Py-ART
         configuration file.
-    spec_diff_at_field: str
-        Name of the specific differential attenuation field that will be used 
-        to fill in the metadata for the returned fields. A value of None for 
-        any of these parameters will use the default field names as defined 
+    spec_diff_at_field : str, optional
+        Name of the specific differential attenuation field that will be used
+        to fill in the metadata for the returned fields. A value of None for
+        any of these parameters will use the default field names as defined
         in the Py-ART configuration file. This will only be calculated if ZDR
         is available.
-    corr_zdr_field: str
-        Name of the corrected differential reflectivity field that will 
-        be used to fill in the metadata for the returned fields. A value of 
-        None for any of these parameters will use the default field names as 
+    corr_zdr_field : str, optional
+        Name of the corrected differential reflectivity field that will
+        be used to fill in the metadata for the returned fields. A value of
+        None for any of these parameters will use the default field names as
         defined in the Py-ART configuration file. This will only be calculated
         if ZDR is available.
-    temp_ref : str
-        the field use as reference for temperature. Can be either temperature,
-        height_over_iso0 or fixed_fzl
+    temp_ref : str, optional
+        The field use as reference for temperature. Can be either temperature,
+        height_over_iso0 or fixed_fzl.
 
     Returns
     -------
@@ -444,8 +443,8 @@ def calculate_attenuation_philinear(
                 radar.instrument_parameters['frequency']['data'][0])
         else:
             pia_coef, pida_coef = _param_attphilinear_table()['C']
-            warn('Radar frequency unknown. ' +
-                 'Default coefficients for C band will be applied')
+            warn("Radar frequency unknown. Default "
+                 + "coefficients for C band will be applied.")
 
     # parse the field parameters
     if refl_field is None:
@@ -499,12 +498,12 @@ def calculate_attenuation_philinear(
         zdr = None
 
     # determine the valid data (i.e. data below freezing level)
-    mask_fzl, end_gate_arr = get_mask_fzl(
+    mask_fzl, _ = get_mask_fzl(
         radar, fzl=fzl, doc=doc, min_temp=0, max_h_iso0=0., thickness=None,
         beamwidth=None, temp_field=temp_field, iso0_field=iso0_field,
         temp_ref=temp_ref)
 
-    if(gatefilter is None):
+    if gatefilter is None:
         mask = np.ma.getmaskarray(refl)
     else:
         mask = gatefilter.gate_excluded
@@ -551,47 +550,47 @@ def get_mask_fzl(radar, fzl=None, doc=None, min_temp=0., max_h_iso0=0.,
                  thickness=None, beamwidth=None, temp_field=None,
                  iso0_field=None, temp_ref='temperature'):
     """
-    constructs a mask to mask data placed thickness m below data at min_temp
+    Constructs a mask to mask data placed thickness m below data at min_temp
     and beyond.
 
     Parameters
     ----------
     radar : Radar
-        the radar object
-    doc : float
-        Number of gates at the end of each ray to to remove from the
-        calculation.
-    fzl : float
+        The radar object.
+    fzl : float, optional
         Freezing layer, gates above this point are not included in the
         correction.
-    min_temp : float
-        minimum temperature below which the data is mask in degrees
-    max_h_iso0 : float
-        maximum height relative to the iso0 below which the data is mask in
-        m
-    thickness : float
-        extent of the layer below the first gate where min_temp is reached
-        that is going to be masked
-    beamwidth : float
-        the radar antenna 3 dB beamwidth
-    temp_field: str
+    doc : float, optional
+        Number of gates at the end of each ray to to remove from the
+        calculation.
+    min_temp : float, optional
+        Minimum temperature below which the data is mask in degrees.
+    max_h_iso0 : float, optional
+        Maximum height relative to the iso0 below which the data is mask in
+        meters.
+    thickness : float, optional
+        Extent of the layer below the first gate where min_temp is reached
+        that is going to be masked.
+    beamwidth : float, optional
+        The radar antenna 3 dB beamwidth.
+    temp_field: str, optional
         The temperature field. A value of None will use the default
         field name as defined in the Py-ART configuration file. It is going
         to be used only if available.
-    iso0_field: str
+    iso0_field: str, optional
         The field containing the height over the 0C isotherm. A value of None
         will use the default field name as defined in the Py-ART
         configuration file. It is going to be used only if available.
-    temp_ref : str
-        the field use as reference for temperature. Can be either temperature,
-        height_over_iso0 or fixed_fzl
+    temp_ref : str, optional
+        The field use as reference for temperature. Can be either temperature,
+        height_over_iso0 or fixed_fzl.
 
     Returns
     -------
     mask_fzl : 2D array
-        the values that should be masked
+        The values that should be masked.
     end_gate_arr : 1D array
-        the index of the last valid gate in the ray
+        The index of the last valid gate in the ray.
 
     """
     if temp_ref == 'temperature':
@@ -662,9 +661,9 @@ def get_mask_fzl(radar, fzl=None, doc=None, min_temp=0., max_h_iso0=0.,
         else:
             fzl = 4000.
             doc = 15
-            warn('Height over iso0 field not available.' +
-                 'Using default freezing level height ' +
-                 str(fzl) + ' [m].')
+            warn("Height over iso0 field not available."
+                 + "Using default freezing level height "
+                 + str(fzl) + " [m].")
 
     return mask_fzl, end_gate_arr
 
@@ -678,14 +677,14 @@ def _prepare_phidp(phidp, mask_fzl):
     Parameters
     ----------
     phidp : ndarray 2D
-        The phidp field
+        The phidp field.
     mask_fzl : ndarray 2D
-        a mask of the data above freezing level height
+        A mask of the data above freezing level height.
 
     Returns
     -------
     corr_phidp: ndarray 2D
-        the corrected PhiDP field
+        The corrected PhiDP field.
 
     """
     mask_phidp = np.ma.getmaskarray(phidp)
@@ -704,12 +703,12 @@ def _get_param_attzphi(freq):
     Parameters
     ----------
     freq : float
-        radar frequency [Hz]
+        Radar frequency [Hz].
 
     Returns
     -------
     a_coeff, beta, c, d : floats
-        the coefficient and exponent of the power law
+        The coefficient and exponent of the power law.
 
     """
     param_att_dict = _param_attzphi_table()
@@ -723,9 +722,9 @@ def _get_param_attzphi(freq):
     elif freq > 12e9:
         freq_band_aux = 'X'
 
-    warn('Radar frequency out of range. ' +
-         'Coefficients only applied to S, C or X band. ' +
-         freq_band + ' band coefficients will be used')
+    warn("Radar frequency out of range. "
+         + "Coefficients only applied to S, C or X band. "
+         + freq_band + " band coefficients will be used.")
 
     return param_att_dict[freq_band_aux]
 
@@ -738,7 +737,7 @@ def _param_attzphi_table():
     Returns
     -------
     param_att_dict : dict
-        A dictionary with the coefficients at each band
+        A dictionary with the coefficients at each band.
 
     """
     param_att_dict = dict()
@@ -763,12 +762,12 @@ def _get_param_attphilinear(freq):
     Parameters
     ----------
     freq : float
-        radar frequency [Hz]
+        Radar frequency [Hz].
 
     Returns
     -------
     a_coeff, beta, c, d : floats
-        the coefficient and exponent of the power law
+        The coefficient and exponent of the power law.
 
     """
     param_att_dict = _param_attphilinear_table()
@@ -782,9 +781,9 @@ def _get_param_attphilinear(freq):
     elif freq > 12e9:
         freq_band_aux = 'X'
 
-    warn('Radar frequency out of range. ' +
-         'Coefficients only applied to S, C or X band. ' +
-         freq_band + ' band coefficients will be used')
+    warn("Radar frequency out of range. "
+         + "Coefficients only applied to S, C or X band. "
+         + freq_band + " band coefficients will be used.")
 
     return param_att_dict[freq_band_aux]
 
@@ -797,7 +796,7 @@ def _param_attphilinear_table():
     Returns
     -------
     param_att_dict : dict
-        A dictionary with the coefficients at each band
+        A dictionary with the coefficients at each band.
 
     """
     param_att_dict = dict()
@@ -825,13 +824,54 @@ def calculate_attenuation(radar, z_offset, debug=False, doc=15, fzl=4000.0,
     Parameters
     ----------
     radar : Radar
-        Radar object to use for attenuation calculations.  Must have
+        Radar object to use for attenuation calculations. Must have
         copol_coeff, norm_coherent_power, proc_dp_phase_shift,
         reflectivity_horizontal fields.
     z_offset : float
         Horizontal reflectivity offset in dBZ.
-    debug : bool
+    debug : bool, optional
         True to print debugging information, False supressed this printing.
+    doc : float, optional
+        Number of gates at the end of each ray to to remove from the
+        calculation.
+    fzl : float, optional
+        Freezing layer, gates above this point are not included in the
+        correction.
+    rhv_min : float, optional
+        Minimum copol_coeff value to consider valid.
+    ncp_min : float, optional
+        Minimum norm_coherent_power to consider valid.
+    a_coef : float, optional
+        A coefficient in attenuation calculation.
+    beta : float, optional
+        Beta parameter in attenuation calculation.
+    refl_field : str, optional
+        Name of the reflectivity field used for the attenuation correction.
+        A value of None for any of these parameters will use the default
+        field name as defined in the Py-ART configuration file.
+    phidp_field : str, optional
+        Name of the differential phase field used for the attenuation
+        correction. A value of None for any of these parameters will use the
+        default field name as defined in the Py-ART configuration file.
+    ncp_field : str, optional
+        Name of the normalized coherent power field used for the attenuation
+        correction. A value of None for any of these parameters will use the
+        default field name as defined in the Py-ART configuration file.
+    zdr_field : str, optional
+        Name of the differential reflectivity field used for the attenuation
+        correction. A value of None for any of these parameters will use the
+        default field name as defined in the Py-ART configuration file. This
+        will only be used if it is available.
+    spec_at_field : str, optional
+        Name of the specific attenuation field that will be used to fill in
+        the metadata for the returned fields. A value of None for any of these
+        parameters will use the default field names as defined in the Py-ART
+        configuration file.
+    corr_refl_field : str, optional
+        Name of the corrected reflectivity field that will be used to fill in
+        the metadata for the returned fields. A value of None for any of these
+        parameters will use the default field names as defined in the Py-ART
+        configuration file.
 
     Returns
     -------
@@ -839,50 +879,6 @@ def calculate_attenuation(radar, z_offset, debug=False, doc=15, fzl=4000.0,
         Field dictionary containing the specific attenuation.
     cor_z : dict
         Field dictionary containing the corrected reflectivity.
-
-    Other Parameters
-    ----------------
-    doc : float
-        Number of gates at the end of each ray to to remove from the
-        calculation.
-    fzl : float
-        Freezing layer, gates above this point are not included in the
-        correction.
-    rhv_min : float
-        Minimum copol_coeff value to consider valid.
-    ncp_min : float
-        Minimum norm_coherent_power to consider valid.
-    a_coef : float
-        A coefficient in attenuation calculation.
-    beta : float
-        Beta parameter in attenuation calculation.
-    refl_field: str
-        Name of the reflectivity field used for the attenuation correction.
-        A value of None for any of these parameters will use the default
-        field name as defined in the Py-ART configuration file.
-    phidp_field: str
-        Name of the differential phase field used for the attenuation
-        correction. A value of None for any of these parameters will use the
-        default field name as defined in the Py-ART configuration file.     
-    ncp_field: str
-        Name of the normalized coherent power field used for the attenuation
-        correction. A value of None for any of these parameters will use the
-        default field name as defined in the Py-ART configuration file.
-    zdr_field: str
-        Name of the differential reflectivity field used for the attenuation
-        correction. A value of None for any of these parameters will use the
-        default field name as defined in the Py-ART configuration file. This
-        will only be used if it is available.
-    spec_at_field: str
-        Name of the specific attenuation field that will be used to fill in 
-        the metadata for the returned fields. A value of None for any of these
-        parameters will use the default field names as defined in the Py-ART
-        configuration file.
-    corr_refl_field: str
-        Name of the corrected reflectivity field that will be used to fill in
-        the metadata for the returned fields. A value of None for any of these
-        parameters will use the default field names as defined in the Py-ART
-        configuration file.
 
     References
     ----------

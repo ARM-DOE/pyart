@@ -20,7 +20,7 @@ from .nexrad_level3 import NEXRADLevel3File
 
 
 def read_nexrad_level3(filename, field_names=None, additional_metadata=None,
-                       file_field_names=False, exclude_fields=None, 
+                       file_field_names=False, exclude_fields=None,
                        include_fields=None, **kwargs):
     """
     Read a NEXRAD Level 3 product.
@@ -28,7 +28,7 @@ def read_nexrad_level3(filename, field_names=None, additional_metadata=None,
     Parameters
     ----------
     filename : str
-        Filename of NEXRAD Level 3 product file.  The files hosted by
+        Filename of NEXRAD Level 3 product file. The files hosted by
         at the NOAA National Climate Data Center [1]_ as well as on the
         NWS WSR-88D Level III Data Collection and Distribution Network
         have been tests. Other NEXRAD Level 3 files may or may not work.
@@ -38,12 +38,12 @@ def read_nexrad_level3(filename, field_names=None, additional_metadata=None,
         Dictionary mapping NEXRAD level 3 product number to radar field names.
         If the product number of the file does not appear in this dictionary
         or has a value of None it will not be placed in the radar.fields
-        dictionary.  A value of None, the default, will use the mapping
+        dictionary. A value of None, the default, will use the mapping
         defined in the metadata configuration file.
     additional_metadata : dict of dicts, optional
         Dictionary of dictionaries to retrieve metadata from during this read.
         This metadata is not used during any successive file reads unless
-        explicitly included.  A value of None, the default, will not
+        explicitly included. A value of None, the default, will not
         introduct any addition metadata and the file specific or default
         metadata as specified by the metadata configuration file will be used.
     file_field_names : bool, optional

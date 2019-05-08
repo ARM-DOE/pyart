@@ -35,7 +35,7 @@ def write_grid_mdv(filename, grid, mdv_field_names=None,
     Create a MDV file containing data from the provided grid instance.
 
     The MDV file will contain parameters from the 'source' key if contained
-    in grid.metadata.  If this key or parameters related to the radar location
+    in grid.metadata. If this key or parameters related to the radar location
     and name are not present in the grid a default or sentinel value.
     will be written in the MDV file in the place of the parameter.
 
@@ -45,14 +45,14 @@ def write_grid_mdv(filename, grid, mdv_field_names=None,
     Parameters
     ----------
     filename : str or file-like object.
-        Filename of MDV file to create.  If a file-like object is specified
+        Filename of MDV file to create. If a file-like object is specified
         data will be written using the write method.
     grid : Grid
         Grid object from which to create MDV file.
     mdv_field_names : dict or None, optional
         Mapping between grid fields and MDV data type names. Field names
         mapped to None or with no mapping will be excluded from
-        writing.  If None, the same field names will be used.
+        writing. If None, the same field names will be used.
     field_write_order : list or None, optional
         Order in which grid fields should be written out in the MDV file.
         None, the default, will determine a valid order automatically.
@@ -65,8 +65,8 @@ def write_grid_mdv(filename, grid, mdv_field_names=None,
         * XY grid must be regular (equal spacing), Z can be irregular.
         * The number of Z levels must not exceed 122.
         * Fields can be encoded in the file using the '_Write_as_dtype' key
-          specifying one of 'uint8', 'uint16' or 'float32'.  Use the
-          'scale_factor' and 'add_offset' keys to specify scaling.  Field
+          specifying one of 'uint8', 'uint16' or 'float32'. Use the
+          'scale_factor' and 'add_offset' keys to specify scaling. Field
           data in the Grid object should be uncompressed, that is to say
           it has had the scaling applied.
 
@@ -117,8 +117,10 @@ def write_grid_mdv(filename, grid, mdv_field_names=None,
     d["max_ny"] = ny
     d["max_nz"] = nz
     td = datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1, 0, 0)
-    d["time_written"] = int(round(td.microseconds + (td.seconds + td.days *
-                                  24 * 3600) * 10**6) / 10**6)
+    d["time_written"] = int(
+        round(
+            td.microseconds + (
+                td.seconds + td.days * 24 * 3600) * 10**6) / 10**6)
 
     # sensor location using radar_ attribute or origin_ if not available
     if grid.radar_longitude is not None and grid.nradar != 0:
@@ -164,7 +166,7 @@ def write_grid_mdv(filename, grid, mdv_field_names=None,
             d["data_element_nbytes"] = 4
         else:
             raise TypeError("Unsuported encoding %s, encoding must be "
-                            "uint8, uint16 or float32 as specfied by"
+                            "uint8, uint16 or float32 as specfied by "
                             "the '_Write_as_dtype key" % dtype)
         d["compression_type"] = 3   # zlib
 
@@ -250,7 +252,7 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
     additional_metadata : dict of dicts, optional
         Dictionary of dictionaries to retrieve metadata from during this read.
         This metadata is not used during any successive file reads unless
-        explicitly included.  A value of None, the default, will not
+        explicitly included. A value of None, the default, will not
         introduct any addition metadata and the file specific or default
         metadata as specified by the Py-ART configuration file will be used.
     file_field_names : bool, optional
@@ -263,7 +265,7 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
         after the `file_field_names` and `field_names` parameters.
     delay_field_loading : bool
         True to delay loading of field data from the file until the 'data'
-        key in a particular field dictionary is accessed.  In this case
+        key in a particular field dictionary is accessed. In this case
         the field attribute of the returned Radar object will contain
         LazyLoadDict objects not dict objects.
 
@@ -278,7 +280,7 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
     compressed with gzip or zlib. For polar files see
     :py:func:`pyart.io.read_mdv`
 
-    MDV files and Grid object are not fully interchangeable.  Specific
+    MDV files and Grid object are not fully interchangeable. Specific
     limitation include:
 
         * All fields must have the same shape and dimensions.
@@ -356,7 +358,7 @@ def read_grid_mdv(filename, field_names=None, additional_metadata=None,
         zunits = 'kelvin'
     else:
         warnings.warn(("While reading MDV found unexpected 'vlevel_type'" +
-                      " (%i), units in the z axis set to 'unknown'") %
+                       " (%i), units in the z axis set to 'unknown'") %
                       mdv.field_headers[0]["vlevel_type"])
         zunits = 'unknown'
 

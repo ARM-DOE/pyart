@@ -9,9 +9,9 @@ Retrieval of VADs from a radar object.
     :template: dev_template.rst
 
     velocity_azimuth_display
+    _vad_calculation
     _interval_mean
     _sd_to_uv
-    _vad_calculation
 
 """
 
@@ -34,15 +34,12 @@ def velocity_azimuth_display(radar, vel_field=None, z_want=None,
     ----------
     radar : Radar
         Radar object used.
-    velocity : string
+    vel_field : string, optional
         Velocity field to use for VAD calculation.
-
-    Other Parameters
-    ----------------
-    z_want : array
+    z_want : array, optional
         Heights for where to sample vads from.
         None will result in np.linespace(0, 10000, 100).
-    gatefilter : GateFilter
+    gatefilter : GateFilter, optional
         A GateFilter indicating radar gates that should be excluded
         from the import vad calculation.
 
@@ -50,7 +47,7 @@ def velocity_azimuth_display(radar, vel_field=None, z_want=None,
     -------
     vad: HorizontalWindProfile
 	A velocity azimuth display object containing height, speed, direction,
-        u_wind, v_wind from a radar object. 
+        u_wind, v_wind from a radar object.
 
     Reference
     ---------
@@ -74,7 +71,7 @@ def velocity_azimuth_display(radar, vel_field=None, z_want=None,
 
     # Parse field parameters
     if vel_field is None:
-        check_field = radar.check_field_exists('velocity')
+        radar.check_field_exists('velocity')
         vel_field = get_field_name('velocity')
 
     # Selecting what velocity data to use based on gatefilter
@@ -97,7 +94,7 @@ def velocity_azimuth_display(radar, vel_field=None, z_want=None,
         elevation = radar.fixed_angle['data'][i]
 
         # Calculating speed and angle
-        speed, angle = vad_calculation(
+        speed, angle = _vad_calculation(
             used_velocities, azimuth, elevation)
 
         print('max height', z_gate_data[index_start, :].max(),
@@ -107,8 +104,8 @@ def velocity_azimuth_display(radar, vel_field=None, z_want=None,
         speeds.append(speed)
         angles.append(angle)
         heights.append(z_gate_data[index_start, :])
-    
-    # Combining arrays and sorting 
+
+    # Combining arrays and sorting
     speed_array = np.concatenate(speeds)
     angle_array = np.concatenate(angles)
     height_array = np.concatenate(heights)
@@ -126,20 +123,20 @@ def velocity_azimuth_display(radar, vel_field=None, z_want=None,
     return vad
 
 
-def vad_calculation(velocity_field, azimuth, elevation):
+def _vad_calculation(velocity_field, azimuth, elevation):
     """ Calculates VAD for a scan, returns speed and angle
     outdic = vad_algorithm(velocity_field, azimuth, elevation)
     velocity_field is a 2D array, azimuth is a 1D array,
     elevation is a number. All in degrees, m outdic contains
     speed and angle. """
-   
+
     # Creating array with radar velocity data
     nrays, nbins = velocity_field.shape
     nrays2 = nrays // 2
     velocity_count = np.ma.empty((nrays2, nbins, 2))
     velocity_count[:, :, 0] = velocity_field[0:nrays2, :]
     velocity_count[:, :, 1] = velocity_field[nrays2:, :]
-    
+
     # Converting from degress to radians
     sinaz = np.sin(np.deg2rad(azimuth))
     cosaz = np.cos(np.deg2rad(azimuth))

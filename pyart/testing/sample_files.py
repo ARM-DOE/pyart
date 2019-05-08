@@ -2,7 +2,7 @@
 pyart.testing.sample_files
 ==========================
 
-Sample radar files in a number of formats.  Many of these files
+Sample radar files in a number of formats. Many of these files
 are incomplete, they should only be used for testing, not production.
 
 .. autosummary::

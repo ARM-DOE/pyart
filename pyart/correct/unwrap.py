@@ -45,34 +45,34 @@ def dealias_unwrap_phase(
     radar : Radar
         Radar object containing Doppler velocities to dealias.
     unwrap_unit : {'ray', 'sweep', 'volume'}, optional
-        Unit to unwrap independently.  'ray' will unwrap each ray
+        Unit to unwrap independently. 'ray' will unwrap each ray
         individually, 'sweep' each sweep, and 'volume' will unwrap the entire
-        volume in a single pass.  'sweep', the default, often gives superior
+        volume in a single pass. 'sweep', the default, often gives superior
         results when the lower sweeps of the radar volume are contaminated by
         clutter. 'ray' does not use the gatefilter parameter and rays where
         gates ared masked will result in poor dealiasing for that ray.
     nyquist_velocity : array like or float, optional
         Nyquist velocity in unit identical to those stored in the radar's
         velocity field, either for each sweep or a single value which will be
-        used for all sweeps.  None will attempt to determine this value from
-        the Radar object.  The Nyquist velocity of the first sweep is used
+        used for all sweeps. None will attempt to determine this value from
+        the Radar object. The Nyquist velocity of the first sweep is used
         for all dealiasing unless the unwrap_unit is 'sweep' when the
         velocities of each sweep are used.
     check_nyquist_uniform : bool, optional
         True to check if the Nyquist velocities are uniform for all rays
-        within a sweep, False will skip this check.  This parameter is ignored
+        within a sweep, False will skip this check. This parameter is ignored
         when the nyquist_velocity parameter is not None.
     gatefilter : GateFilter, None or False, optional.
         A GateFilter instance which specified which gates should be
-        ignored when performing de-aliasing.  A value of None created this
+        ignored when performing de-aliasing. A value of None created this
         filter from the radar moments using any additional arguments by
-        passing them to :py:func:`moment_based_gate_filter`.  False, the
+        passing them to :py:func:`moment_based_gate_filter`. False, the
         default, disables filtering including all gates in the dealiasing.
     rays_wrap_around : bool or None, optional
         True when the rays at the beginning of the sweep and end of the sweep
         should be interpreted as connected when de-aliasing (PPI scans).
         False if they edges should not be interpreted as connected (other scan
-        types).  None will determine the correct value from the radar
+        types). None will determine the correct value from the radar
         scan type.
     keep_original : bool, optional
         True to retain the original Doppler velocity values at gates
@@ -81,7 +81,7 @@ def dealias_unwrap_phase(
         velocity field.
     set_limits : bool, optional
         True to set valid_min and valid_max elements in the returned
-        dictionary.  False will not set these dictionary elements.
+        dictionary. False will not set these dictionary elements.
     vel_field : str, optional
         Field in radar to use as the Doppler velocities during dealiasing.
         None will use the default field name from the Py-ART configuration
@@ -142,8 +142,8 @@ def dealias_unwrap_phase(
         data = _dealias_unwrap_3d(
             radar, vdata, nyquist_vel, gfilter, rays_wrap_around)
     else:
-        message = ("Unknown `unwrap_unit` parameter, must be one of"
-                   "'ray', 'sweep', or 'volume'")
+        message = ("Unknown `unwrap_unit` parameter, must be one of "
+                   "'ray', 'sweep', or 'volume'.")
         raise ValueError(message)
 
     # fill_value from the velocity dictionary if present
@@ -192,7 +192,7 @@ def _dealias_unwrap_3d(radar, vdata, nyquist_vel, gfilter, rays_wrap_around):
 
 
 def _dealias_unwrap_1d(vdata, nyquist_vel):
-    """ Dealias using 1D phase unwrapping (ray-by-ray) """
+    """ Dealias using 1D phase unwrapping (ray-by-ray). """
     # nyquist_vel is only available sweep by sweep which has been lost at
     # this point.  Metioned in the documentation
     nyquist_vel = nyquist_vel[0]
@@ -248,7 +248,7 @@ def _verify_unwrap_unit(radar, unwrap_unit):
             raise ValueError(mess)
         if _is_radar_sweep_aligned(radar) is False:
             mess = ("Angle in sequential sweeps in radar volumes are not "
-                    "aligned, 'volume unwrap_unit invalid")
+                    "aligned, 'volume unwrap_unit invalid.")
             raise ValueError(mess)
 
 

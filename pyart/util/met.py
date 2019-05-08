@@ -1,5 +1,5 @@
 """
-general meteorological calculations useful to other modules
+General meteorological calculations useful to other modules.
 """
 
 import os
@@ -8,7 +8,7 @@ import heapq
 import numpy as np
 import netCDF4
 
-from pylab import datestr2num, date2num, num2date
+from pylab import datestr2num, date2num
 
 
 def nth_smallest(n, iter):
@@ -19,7 +19,7 @@ def get_best_sounding(target, sdir, minl, maxl):
     sondes = os.listdir(sdir)
     sondes.sort()
     offsets = [np.abs(datestr2num(s[18:33].replace('.', ' ')) -
-               date2num(target)) for s in sondes]
+                      date2num(target)) for s in sondes]
     cont = True
     n = 1
     while cont:

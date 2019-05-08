@@ -79,8 +79,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
 import bz2
-import struct
 from datetime import datetime, timedelta
+import struct
 
 import numpy as np
 
@@ -102,7 +102,7 @@ class NEXRADLevel3File(object):
     packet_header : dict
         Radial data array packet header.
     radial_headers : list of dicts
-        List of radials headers
+        List of radials headers.
     raw_data : array
         Raw unscaled, unmasked data.
     data : array
@@ -289,7 +289,7 @@ class NEXRADLevel3File(object):
             scale = 1/10.
 
         data_levels = values * sign * scale
-        data_levels[bad] = -999     # sentinal for bad data points
+        data_levels[bad] = -999 # sentinal for bad data points
 
         data = np.choose(self.raw_data, data_levels)
         mdata = np.ma.masked_equal(data, -999)
@@ -334,7 +334,7 @@ def _unpack_from_buf(buf, pos, structure):
 
 def _unpack_structure(string, structure):
     """ Unpack a structure from a string """
-    fmt = '>' + ''.join([i[1] for i in structure])  # NEXRAD is big-endian
+    fmt = '>' + ''.join([i[1] for i in structure]) # NEXRAD is big-endian
     lst = struct.unpack(fmt, string)
     return dict(zip([i[0] for i in structure], lst))
 

@@ -1,4 +1,18 @@
-""" Functions for converting date and time between various forms """
+"""
+pyart.util.datetime_utils
+=========================
+
+Functions for converting date and time between various forms.
+
+.. autosummary::
+    :toctree: generated/
+    datetime_from_radar
+    datetimes_from_radar
+    datetime_from_dataset
+    datetimes_from_dataset
+    datetime_from_grid
+
+"""
 
 from netCDF4 import num2date, date2num
 

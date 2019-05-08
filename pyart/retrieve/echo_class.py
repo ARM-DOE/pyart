@@ -2,19 +2,19 @@
 pyart.retrieve.echo_class
 =========================
 
-Functions for echo classification
+Functions for echo classification.
 
 .. autosummary::
     :toctree: generated/
 
     steiner_conv_strat
     hydroclass_semisupervised
+    get_freq_band
     _standardize
     _assign_to_class
     _get_mass_centers
     _mass_centers_table
     _data_limits_table
-    get_freq_band
 
 """
 
@@ -40,33 +40,30 @@ def steiner_conv_strat(grid, dx=None, dy=None, intense=42.0,
     ----------
     grid : Grid
         Grid containing reflectivity field to partition.
-
-    Other Parameters
-    ----------------
-    dx, dy : float
-        The x- and y-dimension resolutions in meters, respectively.  If None
+    dx, dy : float, optional
+        The x- and y-dimension resolutions in meters, respectively. If None
         the resolution is determined from the first two axes values.
-    intense : float
+    intense : float, optional
         The intensity value in dBZ. Grid points with a reflectivity
         value greater or equal to the intensity are automatically
         flagged as convective. See reference for more information.
-    work_level : float
+    work_level : float, optional
         The working level (separation altitude) in meters. This is the height
         at which the partitioning will be done, and should minimize bright band
         contamination. See reference for more information.
-    peak_relation : 'default' or 'sgp'
+    peak_relation : 'default' or 'sgp', optional
         The peakedness relation. See reference for more information.
-    area_relation : 'small', 'medium', 'large', or 'sgp'
+    area_relation : 'small', 'medium', 'large', or 'sgp', optional
         The convective area relation. See reference for more information.
-    bkg_rad : float
+    bkg_rad : float, optional
         The background radius in meters. See reference for more information.
-    use_intense : bool
+    use_intense : bool, optional
         True to use the intensity criteria.
-    fill_value : float
+    fill_value : float, optional
          Missing value used to signify bad data points. A value of None
          will use the default fill value as defined in the Py-ART
          configuration file.
-    refl_field : str
+    refl_field : str, optional
          Field in grid to use as the reflectivity during partitioning. None
          will use the default reflectivity field name from the Py-ART
          configuration file.
@@ -81,6 +78,7 @@ def steiner_conv_strat(grid, dx=None, dy=None, intense=42.0,
     Steiner, M. R., R. A. Houze Jr., and S. E. Yuter, 1995: Climatological
     Characterization of Three-Dimensional Storm Structure from Operational
     Radar and Rain Gauge Data. J. Appl. Meteor., 34, 1978-2007.
+
     """
     # Get fill value
     if fill_value is None:
@@ -129,29 +127,26 @@ def hydroclass_semisupervised(radar, mass_centers=None,
                               kdp_field=None, temp_field=None,
                               hydro_field=None):
     """
-    Classifies precipitation echoes following the approach by
-    Besic et al (2016)
+    Classifies precipitation echoes following the approach by Besic et al
+    (2016).
 
     Parameters
     ----------
     radar : radar
-        radar object
-
-    Other Parameters
-    ----------------
-    mass_centers : ndarray 2D
+        Radar object.
+    mass_centers : ndarray 2D, optional
         The centroids for each variable and hydrometeor class in (nclasses,
-        nvariables)
-    weights : ndarray 1D
+        nvariables).
+    weights : ndarray 1D, optional
         The weight given to each variable.
-    refl_field, zdr_field, rhv_field, kdp_field, temp_field : str
+    refl_field, zdr_field, rhv_field, kdp_field, temp_field : str, optional
         Inputs. Field names within the radar object which represent the
         horizonal reflectivity, the differential reflectivity, the copolar
         correlation coefficient, the specific differential phase and the
         temperature field. A value of None for any of these parameters will
         use the default field name as defined in the Py-ART configuration
         file.
-    hydro_field : str
+    hydro_field : str, optional
         Output. Field name which represents the hydrometeor class field.
         A value of None will use the default field name as defined in the
         Py-ART configuration file.
@@ -159,7 +154,7 @@ def hydroclass_semisupervised(radar, mass_centers=None,
     Returns
     -------
     hydro : dict
-        hydrometeor classification field
+        Hydrometeor classification field.
 
     References
     ----------
@@ -241,20 +236,22 @@ def hydroclass_semisupervised(radar, mass_centers=None,
 
 def _standardize(data, field_name, mx=None, mn=None):
     """
-    Streches the radar data to -1 to 1 interval
+    Streches the radar data to -1 to 1 interval.
 
     Parameters
     ----------
     data : array
-        radar field
-
+        Radar field.
     field_name : str
-        type of field (relH, Zh, ZDR, KDP or RhoHV)
+        Type of field (relH, Zh, ZDR, KDP or RhoHV).
+    mx, mn : floats or None, optional
+        Data limits for array values.
 
     Returns
     -------
     field_std : dict
-        standardized radar data
+        Standardized radar data.
+
     """
     if field_name == 'relH':
         field_std = 2./(1.+np.ma.exp(-0.005*data))-1.
@@ -264,9 +261,9 @@ def _standardize(data, field_name, mx=None, mn=None):
         dlimits_dict = _data_limits_table()
         if field_name not in dlimits_dict:
             raise ValueError(
-                'Field '+field_name+' unknown. ' +
-                'Valid field names for standardizing are: ' +
-                'relH, Zh, ZDR, KDP and RhoHV')
+                'Field ' + field_name + ' unknown. '
+                + 'Valid field names for standardizing are: '
+                + 'relH, Zh, ZDR, KDP and RhoHV')
         mx, mn = dlimits_dict[field_name]
 
     if field_name == 'KDP':
@@ -287,26 +284,25 @@ def _standardize(data, field_name, mx=None, mn=None):
 def _assign_to_class(zh, zdr, kdp, rhohv, relh, mass_centers,
                     weights=np.array([1., 1., 1., 0.75, 0.5])):
     """
-    assigns an hydrometeor class to a radar range bin computing
-    the distance between the radar variables an a centroid
+    Assigns an hydrometeor class to a radar range bin computing
+    the distance between the radar variables an a centroid.
 
     Parameters
     ----------
-    zh,zdr,kdp,rhohv,relh : radar field
-        variables used for assigment normalized to [-1, 1] values
-
+    zh, zdr, kdp, rhohv, relh : radar fields
+        Variables used for assignment normalized to [-1, 1] values.
     mass_centers : matrix
-        centroids normalized to [-1, 1] values
-
-    weights : array
-        optional. The weight given to each variable
+        Centroids normalized to [-1, 1] values.
+    weights : array, optional
+        The weight given to each variable.
 
     Returns
     -------
     hydroclass : int array
-        the index corresponding to the assigned class
+        The index corresponding to the assigned class.
     mind_dist : float array
-        the minimum distance to the centroids
+        The minimum distance to the centroids.
+
     """
     # prepare data
     nrays = zh.shape[0]
@@ -347,18 +343,18 @@ def _assign_to_class(zh, zdr, kdp, rhohv, relh, mass_centers,
 
 def _get_mass_centers(freq):
     """
-    get mass centers for a particular frequency
+    Get mass centers for a particular frequency.
 
     Parameters
     ----------
     freq : float
-        radar frequency [Hz]
+        Radar frequency [Hz].
 
     Returns
     -------
     mass_centers : ndarray 2D
         The centroids for each variable and hydrometeor class in (nclasses,
-        nvariables)
+        nvariables).
 
     """
     mass_centers_dict = _mass_centers_table()
@@ -382,12 +378,12 @@ def _get_mass_centers(freq):
 
 def _mass_centers_table():
     """
-    defines the mass centers look up table for each frequency band.
+    Defines the mass centers look up table for each frequency band.
 
     Returns
     -------
     mass_centers_dict : dict
-        A dictionary with the mass centers for each frequency band
+        A dictionary with the mass centers for each frequency band.
 
     """
     nclasses = 9
@@ -428,12 +424,12 @@ def _mass_centers_table():
 
 def _data_limits_table():
     """
-    defines the data limits used in the standardization.
+    Defines the data limits used in the standardization.
 
     Returns
     -------
     dlimits_dict : dict
-        A dictionary with the limits for each variable
+        A dictionary with the limits for each variable.
 
     """
     dlimits_dict = dict()
@@ -447,17 +443,17 @@ def _data_limits_table():
 
 def get_freq_band(freq):
     """
-    returns the frequency band name (S, C, X, ...)
+    Returns the frequency band name (S, C, X, ...).
 
     Parameters
     ----------
     freq : float
-        radar frequency [Hz]
+        Radar frequency [Hz].
 
     Returns
     -------
     freq_band : str
-        frequency band name
+        Frequency band name.
 
     """
     if freq >= 2e9 and freq < 4e9:

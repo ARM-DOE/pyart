@@ -26,7 +26,6 @@ import copy
 import sys
 
 import numpy as np
-from netCDF4 import num2date, date2num
 
 from ..config import get_metadata
 from ..lazydict import LazyLoadDict
@@ -38,14 +37,14 @@ class Radar(object):
     A class for storing antenna coordinate radar data.
 
     The structure of the Radar class is based on the CF/Radial Data file
-    format.  Global attributes and variables (section 4.1 and 4.3) are
-    represented as a dictionary in the metadata attribute.  Other required and
+    format. Global attributes and variables (section 4.1 and 4.3) are
+    represented as a dictionary in the metadata attribute. Other required and
     optional variables are represented as dictionaries in a attribute with the
-    same name as the variable in the CF/Radial standard.  When a optional
-    attribute not present the attribute has a value of None.  The data for a
-    given variable is stored in the dictionary under the 'data' key.  Moment
+    same name as the variable in the CF/Radial standard. When a optional
+    attribute not present the attribute has a value of None. The data for a
+    given variable is stored in the dictionary under the 'data' key. Moment
     field data is stored as a dictionary of dictionaries in the fields
-    attribute.  Sub-convention variables are stored as a dictionary of
+    attribute. Sub-convention variables are stored as a dictionary of
     dictionaries under the meta_group attribute.
 
     Refer to the attribute section for information on the parameters.
@@ -61,7 +60,7 @@ class Radar(object):
     metadata : dict
         Metadata describing the instrument and data.
     scan_type : str
-        Type of scan, one of 'ppi', 'rhi', 'sector' or 'other'.  If the scan
+        Type of scan, one of 'ppi', 'rhi', 'sector' or 'other'. If the scan
         volume contains multiple sweep modes this should be 'other'.
     latitude : dict
         Latitude of the instrument.
@@ -70,14 +69,14 @@ class Radar(object):
     altitude : dict
         Altitude of the instrument, above sea level.
     altitude_agl : dict or None
-        Altitude of the instrument above ground level.  If not provided this
+        Altitude of the instrument above ground level. If not provided this
         attribute is set to None, indicating this parameter not available.
     sweep_number : dict
         The number of the sweep in the volume scan, 0-based.
     sweep_mode : dict
         Sweep mode for each mode in the volume scan.
     fixed_angle : dict
-        Target angle for thr sweep.  Azimuth angle in RHI modes, elevation
+        Target angle for thr sweep. Azimuth angle in RHI modes, elevation
         angle in all other modes.
     sweep_start_ray_index : dict
         Index of the first ray in each sweep relative to the start of the
@@ -86,21 +85,21 @@ class Radar(object):
         Index of the last ray in each sweep relative to the start of the
         volume, 0-based.
     rays_per_sweep : LazyLoadDict
-        Number of rays in each sweep.  The data key of this attribute is
+        Number of rays in each sweep. The data key of this attribute is
         create upon first access from the data in the sweep_start_ray_index and
-        sweep_end_ray_index attributes.  If the sweep locations needs to be
+        sweep_end_ray_index attributes. If the sweep locations needs to be
         modified, do this prior to accessing this attribute or use
         :py:func:`init_rays_per_sweep` to reset the attribute.
     target_scan_rate : dict or None
-        Intended scan rate for each sweep.  If not provided this attribute is
+        Intended scan rate for each sweep. If not provided this attribute is
         set to None, indicating this parameter is not available.
     rays_are_indexed : dict or None
         Indication of whether ray angles are indexed to a regular grid in
-        each sweep.  If not provided this attribute is set to None, indicating
+        each sweep. If not provided this attribute is set to None, indicating
         ray angle spacing is not determined.
     ray_angle_res : dict or None
         If rays_are_indexed is not None, this provides the angular resolution
-        of the grid.  If not provided or available this attribute is set to
+        of the grid. If not provided or available this attribute is set to
         None.
     azimuth : dict
         Azimuth of antenna, relative to true North. Azimuth angles are
@@ -117,14 +116,14 @@ class Radar(object):
         range, azimuth and elevation attributes. If these attributes are
         changed use :py:func:`init_gate_x_y_z` to reset.
     gate_longitude, gate_latitude : LazyLoadDict
-        Geographic location of each gate.  The projection parameter(s) defined
+        Geographic location of each gate. The projection parameter(s) defined
         in the `projection` attribute are used to perform an inverse map
         projection from the Cartesian gate locations relative to the radar
         location to longitudes and latitudes. If these attributes are changed
         use :py:func:`init_gate_longitude_latitude` to reset the attributes.
     projection : dic or str
         Projection parameters defining the map projection used to transform
-        from Cartesian to geographic coordinates.  The default dictionary sets
+        from Cartesian to geographic coordinates. The default dictionary sets
         the 'proj' key to 'pyart_aeqd' indicating that the native Py-ART
         azimuthal equidistant projection is used. This can be modified to
         specify a valid pyproj.Proj projparams dictionary or string.
@@ -134,17 +133,17 @@ class Radar(object):
         latitude will be added to the dictionary as 'lon_0' and 'lat_0'.
     gate_altitude : LazyLoadDict
         The altitude of each radar gate as calculated from the altitude of the
-        radar and the Cartesian z location of each gate.  If this attribute
+        radar and the Cartesian z location of each gate. If this attribute
         is changed use :py:func:`init_gate_altitude` to reset the attribute.
     scan_rate : dict or None
-        Actual antenna scan rate.  If not provided this attribute is set to
+        Actual antenna scan rate. If not provided this attribute is set to
         None, indicating this parameter is not available.
     antenna_transition : dict or None
         Flag indicating if the antenna is in transition, 1 = yes, 0 = no.
         If not provided this attribute is set to None, indicating this
         parameter is not available.
     rotation : dict or None
-        The rotation angle of the antenna.  The angle about the aircraft
+        The rotation angle of the antenna. The angle about the aircraft
         longitudinal axis for a vertically scanning radar.
     tilt : dict or None
         The tilt angle with respect to the plane orthogonal (Z-axis) to
@@ -162,10 +161,10 @@ class Radar(object):
         applied.  Leading to Earth-centric azimuth and elevation angles.
     instrument_parameters : dict of dicts or None
         Instrument parameters, if not provided this attribute is set to None,
-        indicating these parameters are not avaiable.  This dictionary also
+        indicating these parameters are not avaiable. This dictionary also
         includes variables in the radar_parameters CF/Radial subconvention.
     radar_calibration : dict of dicts or None
-        Instrument calibration parameters.  If not provided this attribute is
+        Instrument calibration parameters. If not provided this attribute is
         set to None, indicating these parameters are not available
     ngates : int
         Number of gates (bins) in a ray.
@@ -366,7 +365,7 @@ class Radar(object):
     # get methods
 
     def get_start(self, sweep):
-        """ Return the starting ray index for a given sweep.  """
+        """ Return the starting ray index for a given sweep. """
         self._check_sweep_in_range(sweep)
         return self.sweep_start_ray_index['data'][sweep]
 
@@ -557,10 +556,10 @@ class Radar(object):
 
         Parameters
         ----------
-        level : {'compact', 'standard', 'full', 'c', 's', 'f'}
+        level : {'compact', 'standard', 'full', 'c', 's', 'f'}, optional
             Level of information on radar object to print, compact is
             minimal information, standard more and full everything.
-        out : file-like
+        out : file-like, optional
             Stream to direct output to, default is to print information
             to standard out (the screen).
 
@@ -694,9 +693,9 @@ class Radar(object):
             Name of the field to add to the dictionary of fields.
         dic : dict
             Dictionary contain field data and metadata.
-        replace_existing : bool
+        replace_existing : bool, optional
             True to replace the existing field with key field_name if it
-            exists, loosing any existing data.  False will raise a ValueError
+            exists, loosing any existing data. False will raise a ValueError
             when the field already exists.
 
         """
@@ -721,10 +720,10 @@ class Radar(object):
 
         Note that the data parameter is not copied by this method.
         If data refers to a 'data' array from an existing field dictionary, a
-        copy should be made within or prior to using this method.  If this is
+        copy should be made within or prior to using this method. If this is
         not done the 'data' key in both field dictionaries will point to the
-        same NumPy array and modification of one will change the second.  To
-        copy NumPy arrays use the copy() method.  See the Examples section
+        same NumPy array and modification of one will change the second. To
+        copy NumPy arrays use the copy() method. See the Examples section
         for how to create a copy of the 'reflectivity' field as a field named
         'reflectivity_copy'.
 
@@ -737,9 +736,9 @@ class Radar(object):
             Name of the field to add to the dictionary of fields.
         data : array
             Field data. A copy of this data is not made, see the note above.
-        replace_existing : bool
+        replace_existing : bool, optional
             True to replace the existing field with key field_name if it
-            exists, loosing any existing data.  False will raise a ValueError
+            exists, loosing any existing data. False will raise a ValueError
             when the field already exists.
 
         Examples
@@ -825,8 +824,8 @@ class Radar(object):
         sweep_mode = mkdic(self.sweep_mode, sweeps)
         fixed_angle = mkdic(self.fixed_angle, sweeps)
         sweep_start_ray_index = mkdic(self.sweep_start_ray_index, None)
-        sweep_start_ray_index['data'] = np.cumsum(np.append([0],
-                                                  ray_count[:-1]), dtype='int32')
+        sweep_start_ray_index['data'] = np.cumsum(
+            np.append([0], ray_count[:-1]), dtype='int32')
         sweep_end_ray_index = mkdic(self.sweep_end_ray_index, None)
         sweep_end_ray_index['data'] = np.cumsum(ray_count, dtype='int32') - 1
         target_scan_rate = mkdic(self.target_scan_rate, sweeps)

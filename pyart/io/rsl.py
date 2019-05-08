@@ -19,10 +19,10 @@ Python wrapper around the RSL library.
 
 """
 
-import sys
-import numpy as np
-import warnings
 import datetime
+import warnings
+
+import numpy as np
 
 from ..config import FileMetadata, get_fillvalue
 try:
@@ -41,7 +41,7 @@ def read_rsl(filename, field_names=None, additional_metadata=None,
              delay_field_loading=False, include_fields=None,
              radar_format=None, callid=None, skip_range_check=False):
     """
-    Read a file supported by RSL
+    Read a file supported by RSL.
 
     Parameters
     ----------
@@ -56,7 +56,7 @@ def read_rsl(filename, field_names=None, additional_metadata=None,
     additional_metadata : dict of dicts, optional
         Dictionary of dictionaries to retrieve metadata from during this read.
         This metadata is not used during any successive file reads unless
-        explicitly included.  A value of None, the default, will not
+        explicitly included. A value of None, the default, will not
         introduct any addition metadata and the file specific or default
         metadata as specified by the Py-ART configuration file will be used.
     file_field_names : bool, optional
@@ -74,17 +74,17 @@ def read_rsl(filename, field_names=None, additional_metadata=None,
         to None to include all fields not specified by exclude_fields.
     delay_field_loading : bool
         True to delay loading of field data from the file until the 'data'
-        key in a particular field dictionary is accessed.  In this case
+        key in a particular field dictionary is accessed. In this case
         the field attribute of the returned Radar object will contain
         LazyLoadDict objects not dict objects.
     radar_format : str or None
-        Format of the radar file.  Must be 'wsr88d' or None.
+        Format of the radar file. Must be 'wsr88d' or None.
     callid : str or None
         Four letter NEXRAD radar Call ID, only used when radar_format is
         'wsr88d'.
     skip_range_check : bool, optional
         True to skip check for uniform range bin location, the reported range
-        locations will only be verified true for the first ray.  False will
+        locations will only be verified true for the first ray. False will
         perform the check and raise a IOError when the locations of the gates
         change between rays.
 
@@ -102,7 +102,7 @@ def read_rsl(filename, field_names=None, additional_metadata=None,
 
     # create metadata retrieval object
     filemetadata = FileMetadata('rsl', field_names, additional_metadata,
-                                file_field_names, exclude_fields, 
+                                file_field_names, exclude_fields,
                                 include_fields)
 
     # read the file, determine common parameters

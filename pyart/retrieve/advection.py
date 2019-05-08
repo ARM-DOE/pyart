@@ -53,7 +53,7 @@ def grid_displacement_pc(grid1, grid2, field, level, return_value='pixels'):
     Returns
     -------
     displacement : two-tuple
-         Calculated displacement in units of y and x.  Value returned in
+         Calculated displacement in units of y and x. Value returned in
          integers if pixels, otherwise floats.
 
     """

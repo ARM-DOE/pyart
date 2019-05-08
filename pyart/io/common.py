@@ -26,12 +26,12 @@ def prepare_for_read(filename):
     Return a file like object read for reading.
 
     Open a file for reading in binary mode with transparent decompression of
-    Gzip and BZip2 files.  The resulting file-like object should be closed.
+    Gzip and BZip2 files. The resulting file-like object should be closed.
 
     Parameters
     ----------
     filename : str or file-like object
-        Filename or file-like object which will be opened.  File-like objects
+        Filename or file-like object which will be opened. File-like objects
         will not be examined for compressed data.
 
     Returns
@@ -69,8 +69,8 @@ def stringarray_to_chararray(arr, numchars=None):
         in the string.
 
     numchars : int
-        Number of characters used to represent the string.  If numchar > N
-        the results will be padded on the right with blanks.  The default,
+        Number of characters used to represent the string. If numchar > N
+        the results will be padded on the right with blanks. The default,
         None will use N.
 
     Returns
@@ -92,7 +92,7 @@ def stringarray_to_chararray(arr, numchars=None):
 
 
 def _test_arguments(dic):
-    """ Issue a warning if receive non-empty argument dict """
+    """ Issue a warning if receive non-empty argument dict. """
     if dic:
         import warnings
         warnings.warn('Unexpected arguments: %s' % dic.keys())

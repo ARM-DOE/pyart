@@ -13,6 +13,7 @@ Functions for creating sample Radar and Grid objects.
     make_single_ray_radar
     make_empty_grid
     make_target_grid
+    make_storm_grid
     make_normal_storm
 
 """
@@ -214,7 +215,7 @@ def make_velocity_aliased_rhi_radar(alias=True):
 
 def make_single_ray_radar():
     """
-    Return a PPI radar with a single ray taken from a ARM C-SAPR Radar
+    Return a PPI radar with a single ray taken from a ARM C-SAPR Radar.
 
     Radar object returned has 'reflectivity_horizontal',
     'norm_coherent_power', 'copol_coeff', 'dp_phase_shift', 'diff_phase', and

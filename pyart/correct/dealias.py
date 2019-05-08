@@ -49,7 +49,7 @@ def dealias_fourdd(
     Parameters
     ----------
     radar : Radar
-        Radar object to use for dealiasing.  Must have a Nyquist defined in
+        Radar object to use for dealiasing. Must have a Nyquist defined in
         the instrument_parameters attribute and have a
         reflectivity_horizontal and mean_doppler_velocity fields.
     last_radar : Radar, optional
@@ -57,7 +57,7 @@ def dealias_fourdd(
         dealiased. Using a previous volume as an initial condition can
         greatly improve the dealiasing, and represents the final dimension
         in the 4DD algorithm.
-    sonde_profile : HorizontalWindProfile
+    sonde_profile : HorizontalWindProfile, optional
         Profile of horizontal winds from a sonding used for the initial
         condition of the dealiasing.
 
@@ -65,7 +65,7 @@ def dealias_fourdd(
     ----------------
     gatefilter : GateFilter, optional.
         A GateFilter instance which specifies which gates should be
-        ignored when performing velocity dealiasing.  A value of None will
+        ignored when performing velocity dealiasing. A value of None will
         create this filter from the radar moments using any additional
         arguments by passing them to :py:func:`moment_based_gate_filter`. The
         default value assumes all gates are valid.
@@ -75,24 +75,24 @@ def dealias_fourdd(
         Value which represents a bad value in RSL.
     keep_original : bool, optional
         True to keep original doppler velocity values when the dealiasing
-        procedure fails, otherwise these gates will be masked.  NaN values
+        procedure fails, otherwise these gates will be masked. NaN values
         are still masked.
     set_limits : bool, optional
         True to set valid_min and valid_max elements in the returned
-        dictionary.  False will not set these dictionary elements.
+        dictionary. False will not set these dictionary elements.
     vel_field : str, optional
         Field in radar to use as the Doppler velocities during dealiasing.
         None will use the default field name from the Py-ART configuration
         file.
     corr_vel_field : str, optional
-        Name to use for the dealiased Doppler velocity field metadata.  None
+        Name to use for the dealiased Doppler velocity field metadata. None
         will use the default field name from the Py-ART configuration file.
     last_vel_field : str, optional
         Name to use for the dealiased Doppler velocity field metadata in
-        last_radar.  None will use the corr_vel_field name.
+        last_radar. None will use the corr_vel_field name.
     maxshear : float, optional
         Maximum vertical shear which will be incorporated into the created
-        volume from the sounding data.  Parameter not used when no
+        volume from the sounding data. Parameter not used when no
         sounding data is provided.
     sign : int, optional
         Sign convention which the radial velocities in the volume created
@@ -102,16 +102,16 @@ def dealias_fourdd(
         velocities are towards the radar.
     compthresh : float, optional
         Fraction of the Nyquist velocity to use as a threshold when performing
-        continuity (initial) dealiasing.  Velocities differences above this
+        continuity (initial) dealiasing. Velocities differences above this
         threshold will not be marked as gate from which to begin unfolding
         during spatial dealiasing.
     compthresh2 : float, optional
         The same as compthresh but the value used during the second pass of
-        dealiasing.  This second pass is only performed in both a sounding
+        dealiasing. This second pass is only performed in both a sounding
         and last volume are provided.
     thresh : float, optional
         Fraction of the Nyquist velocity to use as a threshold when performing
-        spatial dealiasing.  Horizontally adjacent gates with velocities above
+        spatial dealiasing. Horizontally adjacent gates with velocities above
         this threshold will count against assigning the gate in question the
         velocity value being tested.
     ckval : float, optional
@@ -132,13 +132,13 @@ def dealias_fourdd(
         both a sounding volume and last volume are provided.
     rm : int, optional
         Determines what should be done with gates that are left unfolded
-        after the first pass of dealiasing.  A value of 1 will remove these
+        after the first pass of dealiasing. A value of 1 will remove these
         gates, a value of 0 sets these gates to their initial velocity.  If
         both a sounding volume and last volume are provided this parameter is
         ignored.
     proximity : int, optional
         Number of gates and rays to include of either side of the current gate
-        during window dealiasing.  This value may be doubled in cases where
+        during window dealiasing. This value may be doubled in cases where
         a standard sized window does not capture a sufficient number of
         good valued gates.
     mingood : int, optional
@@ -157,7 +157,7 @@ def dealias_fourdd(
     Returns
     -------
     vr_corr : dict
-        Field dictionary containing dealiased Doppler velocities.  Dealiased
+        Field dictionary containing dealiased Doppler velocities. Dealiased
         array is stored under the 'data' key.
 
     Notes
@@ -175,12 +175,12 @@ def dealias_fourdd(
     # check that FourDD is available (requires TRMM RSL)
     if not _FOURDD_AVAILABLE:
         raise MissingOptionalDependency(
-            "Py-ART must be build with support for TRMM RSL to use" +
-            "the dealias_fourdd function.")
+            "Py-ART must be build with support for TRMM RSL to use"
+            + " the dealias_fourdd function.")
 
     # verify that sounding data or last_volume is provided
     if (sonde_profile is None) and (last_radar is None):
-        raise ValueError('sonde_profile or last_radar must be provided')
+        raise ValueError('sonde_profile or last_radar must be provided.')
 
     # parse the field parameters
     if vel_field is None:
@@ -220,7 +220,7 @@ def dealias_fourdd(
         success, sound_volume = _fourdd_interface.create_soundvolume(
             vel_volume, height, speed, wdir, sign, max_shear)
         if success == 0:
-            raise ValueError('Error when loading sounding data')
+            raise ValueError('Error when loading sounding data.')
     else:
         sound_volume = None
 
@@ -230,7 +230,7 @@ def dealias_fourdd(
             vel_volume, last_vel_volume, sound_volume,
             filt, debug=True, **kwargs)
 
-    flag, data = _fourdd_interface.fourdd_dealias(
+    _, data = _fourdd_interface.fourdd_dealias(
         vel_volume, last_vel_volume, sound_volume, filt, debug=False, **kwargs)
 
     # prepare data for output, set bad values and mask data

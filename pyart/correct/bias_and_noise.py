@@ -14,7 +14,7 @@ Corrects polarimetric variables for noise
 
 import numpy as np
 
-from ..config import get_metadata, get_field_name, get_fillvalue
+from ..config import get_metadata, get_field_name
 
 
 def correct_noise_rhohv(radar, urhohv_field=None, snr_field=None,
@@ -28,22 +28,19 @@ def correct_noise_rhohv(radar, urhohv_field=None, snr_field=None,
     Parameters
     ----------
     radar : Radar
-        radar object
-
-    urhohv_field : str
-        name of the RhoHV uncorrected for noise field
-
-    snr_field, zdr_field, nh_field, nv_field: str
-        names of the SNR, ZDR, horizontal channel noise in dBZ and vertical
-        channel noise in dBZ used to correct RhoHV
-
-    rhohv_field: str
-        name of the rhohv field to output
+        Radar object.
+    urhohv_field : str, optional
+        Name of the RhoHV uncorrected for noise field.
+    snr_field, zdr_field, nh_field, nv_field : str, optional
+        Names of the SNR, ZDR, horizontal channel noise in dBZ and vertical
+        channel noise in dBZ used to correct RhoHV.
+    rhohv_field : str, optional
+        Name of the rhohv field to output.
 
     Returns
     -------
     rhohv : dict
-        noise corrected RhoHV field
+        Noise corrected RhoHV field.
 
     References
     ----------
@@ -103,18 +100,16 @@ def correct_noise_rhohv(radar, urhohv_field=None, snr_field=None,
 def correct_bias(radar, bias=0., field_name=None):
     """
     Corrects a radar data bias. If field name is none the correction is
-    applied to horizontal reflectivity by default
+    applied to horizontal reflectivity by default.
 
     Parameters
     ----------
     radar : Radar
-        radar object
-
-    bias : float
-        the bias magnitude
-
-    field_name: str
-        names of the field to be corrected
+        Radar object.
+    bias : float, optional
+        The bias magnitude.
+    field_name: str, optional
+        Names of the field to be corrected.
 
     Returns
     -------

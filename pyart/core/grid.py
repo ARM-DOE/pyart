@@ -19,8 +19,6 @@ An class for holding gridded Radar data.
 
 """
 
-import warnings
-
 import numpy as np
 
 try:
@@ -50,25 +48,25 @@ class Grid(object):
     ----------
     time : dict
         Time of the grid.
-    fields: dict of dicts
+    fields : dict of dicts
         Moments from radars or other variables.
-    metadata: dict
+    metadata : dict
         Metadata describing the grid.
     origin_longitude, origin_latitude, origin_altitude : dict
         Geographic coordinate of the origin of the grid.
     x, y, z : dict, 1D
         Distance from the grid origin for each Cartesian coordinate axis in a
-        one dimensional array.  Defines the spacing along the three grid axes
+        one dimensional array. Defines the spacing along the three grid axes
         which is repeated throughout the grid, making a rectilinear grid.
     nx, ny, nz : int
         Number of grid points along the given Cartesian dimension.
     projection : dic or str
         Projection parameters defining the map projection used to transform
-        from Cartesian to geographic coordinates.  None will use the default
+        from Cartesian to geographic coordinates. None will use the default
         dictionary with the 'proj' key set to 'pyart_aeqd' indicating that
         the native Py-ART azimuthal equidistant projection is used. Other
         values should specify a valid pyproj.Proj projparams dictionary or
-        string.  The special key '_include_lon_0_lat_0' is removed when
+        string. The special key '_include_lon_0_lat_0' is removed when
         interpreting this dictionary. If this key is present and set to True,
         which is required when proj='pyart_aeqd', then the radar longitude and
         latitude will be added to the dictionary as 'lon_0' and 'lat_0'.
@@ -84,13 +82,13 @@ class Grid(object):
         Number of radars whose data was used to make the grid.
     projection_proj : Proj
         pyproj.Proj instance for the projection specified by the projection
-        attribute.  If the 'pyart_aeqd' projection is specified accessing this
+        attribute. If the 'pyart_aeqd' projection is specified accessing this
         attribute will raise a ValueError.
     point_x, point_y, point_z : LazyLoadDict
         The Cartesian locations of all grid points from the origin in the
-        three Cartesian coordinates.  The three dimensional data arrays
+        three Cartesian coordinates. The three dimensional data arrays
         contained these attributes are calculated from the x, y, and z
-        attributes.  If these attributes are changed use :py:func:
+        attributes. If these attributes are changed use :py:func:
         `init_point_x_y_z` to reset the attributes.
     point_longitude, point_latitude : LazyLoadDict
         Geographic location of each grid point. The projection parameter(s)
@@ -172,8 +170,8 @@ class Grid(object):
                 'Proj instance can not be made for the pyart_aeqd projection')
         if not _PYPROJ_AVAILABLE:
             raise MissingOptionalDependency(
-                "PyProj is required to create a Proj instance but it " +
-                "is not installed")
+                "PyProj is required to create a Proj instance but it "
+                + "is not installed")
         proj = pyproj.Proj(projparams)
         return proj
 
@@ -190,7 +188,7 @@ class Grid(object):
         Return the number of radars which were used to create the grid.
 
         Examine the radar attributes to determine the number of radars which
-        were used to create the grid.  If the size of the radar attributes
+        were used to create the grid. If the size of the radar attributes
         are inconsistent a ValueError is raised by this method.
         """
         nradar_set = False
@@ -267,7 +265,7 @@ class Grid(object):
         format : str, optional
             NetCDF format, one of 'NETCDF4', 'NETCDF4_CLASSIC',
             'NETCDF3_CLASSIC' or 'NETCDF3_64BIT'.
-        arm_time_variables : bool
+        arm_time_variables : bool, optional
             True to write the ARM standard time variables base_time and
             time_offset. False will not write these variables.
 
@@ -334,7 +332,7 @@ class Grid(object):
 
 
 def _point_data_factory(grid, coordinate):
-    """ Return a function which returns the locations of all points.  """
+    """ Return a function which returns the locations of all points. """
     def _point_data():
         """ The function which returns the locations of all points. """
         reg_x = grid.x['data']

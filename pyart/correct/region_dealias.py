@@ -12,6 +12,8 @@ Region based dealiasing using a dynamic network reduction for region joining.
     _find_sweep_interval_splits
     _combine_regions
     _edge_sum_and_count
+    _cost_function
+    _gradient
 
 .. autosummary::
     :toctree: generated/
@@ -63,7 +65,7 @@ def dealias_region_based(
 
     Performs Doppler velocity dealiasing by finding regions of similar
     velocities and unfolding and merging pairs of regions until all
-    regions are unfolded.  Unfolding and merging regions is accomplished by
+    regions are unfolded. Unfolding and merging regions is accomplished by
     modeling the problem as a dynamic network reduction.
 
     Parameters
@@ -78,38 +80,38 @@ def dealias_region_based(
          :py:func:`pyart.util.simulated_vel_from_profile`.
     interval_splits : int, optional
         Number of segments to split the nyquist interval into when finding
-        regions of similar velocity.  More splits creates a larger number of
+        regions of similar velocity. More splits creates a larger number of
         initial regions which takes longer to process but may result in better
-        dealiasing.  The default value of 3 seems to be a good compromise
-        between performance and artifact free dealiasing.  This value
+        dealiasing. The default value of 3 seems to be a good compromise
+        between performance and artifact free dealiasing. This value
         is not used if the interval_limits parameter is not None.
     interval_limits : array like or None, optional
-        Velocity limits used for finding regions of similar velocity.  Should
-        cover the entire nyquist interval.  None, the default value, will
+        Velocity limits used for finding regions of similar velocity. Should
+        cover the entire nyquist interval. None, the default value, will
         split the Nyquist interval into interval_splits equal sized
         intervals.
     skip_between_rays, skip_along_ray : int, optional
         Maximum number of filtered gates to skip over when joining regions,
-        gaps between region larger than this will not be connected.  Parameters
+        gaps between region larger than this will not be connected. Parameters
         specify the maximum number of filtered gates between and along a ray.
         Set these parameters to 0 to disable unfolding across filtered gates.
     centered : bool, optional
         True to apply centering to each sweep after the dealiasing algorithm
-        so that the average number of unfolding is near 0.  False does not
+        so that the average number of unfolding is near 0. False does not
         apply centering which may results in individual sweeps under or over
         folded by the nyquist interval.
     nyquist_velocity : array like or float, optional
         Nyquist velocity in unit identical to those stored in the radar's
         velocity field, either for each sweep or a single value which will be
-        used for all sweeps.  None will attempt to determine this value from
+        used for all sweeps. None will attempt to determine this value from
         the Radar object.
     check_nyquist_uniform : bool, optional
         True to check if the Nyquist velocities are uniform for all rays
-        within a sweep, False will skip this check.  This parameter is ignored
+        within a sweep, False will skip this check. This parameter is ignored
         when the nyquist_velocity parameter is not None.
     gatefilter : GateFilter, None or False, optional.
         A GateFilter instance which specified which gates should be
-        ignored when performing de-aliasing.  A value of None created this
+        ignored when performing de-aliasing. A value of None created this
         filter from the radar moments using any additional arguments by
         passing them to :py:func:`moment_based_gate_filter`. False, the
         default, disables filtering including all gates in the dealiasing.
@@ -117,7 +119,7 @@ def dealias_region_based(
         True when the rays at the beginning of the sweep and end of the sweep
         should be interpreted as connected when de-aliasing (PPI scans).
         False if they edges should not be interpreted as connected (other scan
-        types).  None will determine the correct value from the radar
+        types). None will determine the correct value from the radar
         scan type.
     keep_original : bool, optional
         True to retain the original Doppler velocity values at gates
@@ -126,19 +128,19 @@ def dealias_region_based(
         velocity field.
     set_limits : bool, optional
         True to set valid_min and valid_max elements in the returned
-        dictionary.  False will not set these dictionary elements.
+        dictionary. False will not set these dictionary elements.
     vel_field : str, optional
         Field in radar to use as the Doppler velocities during dealiasing.
         None will use the default field name from the Py-ART configuration
         file.
     corr_vel_field : str, optional
-        Name to use for the dealiased Doppler velocity field metadata.  None
+        Name to use for the dealiased Doppler velocity field metadata. None
         will use the default field name from the Py-ART configuration file.
 
     Returns
     -------
     corr_vel : dict
-        Field dictionary containing dealiased Doppler velocities.  Dealiased
+        Field dictionary containing dealiased Doppler velocities. Dealiased
         array is stored under the 'data' key.
 
     """
@@ -235,7 +237,7 @@ def dealias_region_based(
                 scorr, sfilter, new_interval_limits)
 
             bounds_list = [(x, y) for (x, y) in zip(-6*np.ones(nfeatures_corr),
-                           5*np.ones(nfeatures_corr))]
+                                                    5*np.ones(nfeatures_corr))]
             scorr_means = np.zeros(nfeatures_corr)
             sref_means = np.zeros(nfeatures_corr)
             for reg in range(1, nfeatures_corr+1):
@@ -323,17 +325,17 @@ def _find_regions(vel, gfilter, limits):
     vel : 2D ndarray
         Array containing velocity data for a single sweep.
     gfilter : 2D ndarray
-        Filter indicating if a particular gate should be masked.  True
+        Filter indicating if a particular gate should be masked. True
         indicates the gate should be masked (excluded).
     limits : array like
-        Velocity limits for region finding.  For each pair of limits, taken
+        Velocity limits for region finding. For each pair of limits, taken
         from elements i and i+1 of the array, all connected regions with
         velocities within these limits will be found.
 
     Returns
     -------
     label : ndarray
-        Interger array with each region labeled by a value.  The array
+        Interger array with each region labeled by a value. The array
         ranges from 0 to nfeatures, inclusive, where a value of 0 indicates
         masked gates and non-zero indicates a region of connected gates.
     nfeatures : int
@@ -439,7 +441,7 @@ def _combine_regions(region_tracker, edge_tracker):
 # sounding
 def _cost_function(nyq_vector, vels_slice_means,
                    svels_slice_means, v_nyq_vel, nfeatures):
-    """ Cost function for minimization in region based algorithm """
+    """ Cost function for minimization in region based algorithm. """
     cost = 0
     i = 0
 
@@ -453,7 +455,7 @@ def _cost_function(nyq_vector, vels_slice_means,
         # Region continuity
         vels_without_cur = np.delete(vels_slice_means, reg)
         diffs = np.square(vels_slice_means[reg]-vels_without_cur)
-        if(len(diffs) > 0):
+        if len(diffs) > 0:
             the_min = np.argmin(diffs)
             vel_wo_cur = vels_without_cur[the_min]
         else:
@@ -474,7 +476,7 @@ def _cost_function(nyq_vector, vels_slice_means,
 def _gradient(nyq_vector, vels_slice_means, svels_slice_means,
               v_nyq_vel, nfeatures):
     """ Gradient of cost function for minimization
-        in region based algorithm """
+        in region based algorithm. """
     gradient_vector = np.zeros(len(nyq_vector))
     i = 0
     for reg in range(nfeatures):
@@ -487,7 +489,7 @@ def _gradient(nyq_vector, vels_slice_means, svels_slice_means,
         # Regional continuity
         vels_without_cur = np.delete(vels_slice_means, reg)
         diffs = np.square(vels_slice_means[reg]-vels_without_cur)
-        if(len(diffs) > 0):
+        if len(diffs) > 0:
             the_min = np.argmin(diffs)
             vel_wo_cur = vels_without_cur[the_min]
         else:
@@ -706,7 +708,7 @@ class _EdgeTracker(object):
         return
 
     def pop_edge(self):
-        """ Pop edge with largest weight.  Return node numbers and diff """
+        """ Pop edge with largest weight. Return node numbers and diff. """
 
         # if len(priority_queue) == 0:
         #     return True, None

@@ -1,6 +1,3 @@
-from os.path import join
-
-
 def configuration(parent_package='', top_path=None):
     global config
     from numpy.distutils.misc_util import Configuration

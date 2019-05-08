@@ -55,18 +55,18 @@ from __future__ import division, print_function, absolute_import
 #   copyright and license terms.
 #
 ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ##
-''' Contexts for *with* statement providing temporary directories
-'''
+""" Contexts for *with* statement providing temporary directories. """
+
 import os
 import shutil
 from tempfile import template, mkdtemp
 
 
 class TemporaryDirectory(object):
-    """Create and return a temporary directory.  This has the same
+    """ Create and return a temporary directory. This has the same
     behavior as mkdtemp but can be used as a context manager.
 
-    Upon exiting the context, the directory and everthing contained
+    Upon exiting the context, the directory and everything contained
     in it are removed.
 
     Examples
@@ -97,7 +97,7 @@ class TemporaryDirectory(object):
 
 
 class InTemporaryDirectory(TemporaryDirectory):
-    ''' Create, return, and change directory to a temporary directory
+    """ Create, return, and change directory to a temporary directory.
 
     Examples
     --------
@@ -111,7 +111,7 @@ class InTemporaryDirectory(TemporaryDirectory):
     False
     >>> os.getcwd() == my_cwd
     True
-    '''
+    """
     def __enter__(self):
         self._pwd = os.getcwd()
         os.chdir(self.name)
@@ -123,10 +123,9 @@ class InTemporaryDirectory(TemporaryDirectory):
 
 
 class InGivenDirectory(object):
-    """ Change directory to given directory for duration of ``with`` block
-
+    """ Change directory to given directory for duration of ``with`` block.
     Useful when you want to use `InTemporaryDirectory` for the final test, but
-    you are still debugging.  For example, you may want to do this in the end:
+    you are still debugging. For example, you may want to do this in the end:
 
     >>> with InTemporaryDirectory() as tmpdir:
     ...     # do something complicated which might break
@@ -134,7 +133,7 @@ class InGivenDirectory(object):
 
     But indeed the complicated thing does break, and meanwhile the
     ``InTemporaryDirectory`` context manager wiped out the directory with the
-    temporary files that you wanted for debugging.  So, while debugging, you
+    temporary files that you wanted for debugging. So, while debugging, you
     replace with something like:
 
     >>> with InGivenDirectory() as tmpdir: # Use working directory by default
@@ -144,6 +143,7 @@ class InGivenDirectory(object):
     You can then look at the temporary file outputs to debug what is happening,
     fix, and finally replace ``InGivenDirectory`` with ``InTemporaryDirectory``
     again.
+
     """
     def __init__(self, path=None):
         """ Initialize directory context manager
@@ -152,7 +152,8 @@ class InGivenDirectory(object):
         ----------
         path : None or str, optional
             path to change directory to, for duration of ``with`` block.
-            Defaults to ``os.getcwd()`` if None
+            Defaults to ``os.getcwd()`` if None.
+
         """
         if path is None:
             path = os.getcwd()

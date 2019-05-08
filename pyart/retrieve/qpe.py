@@ -1,8 +1,8 @@
 """
 pyart.retrieve.qpe
-=========================================
+==================
 
-Functions for rainfall rate estimation
+Functions for rainfall rate estimation.
 
 .. autosummary::
     :toctree: generated/
@@ -32,18 +32,16 @@ from .echo_class import get_freq_band
 def est_rain_rate_zpoly(radar, refl_field=None, rr_field=None):
     """
     Estimates rainfall rate from reflectivity using a polynomial Z-R relation
-    developed at McGill University
+    developed at McGill University.
 
     Parameters
     ----------
     radar : Radar
-        Radar object
-
-    refl_field : str
-        name of the reflectivity field to use
-
-    rr_field : str
-        name of the rainfall rate field
+        Radar object.
+    refl_field : str, optional
+        Name of the reflectivity field to use.
+    rr_field : str, optional
+        Name of the rainfall rate field.
 
     Returns
     -------
@@ -51,7 +49,6 @@ def est_rain_rate_zpoly(radar, refl_field=None, rr_field=None):
         Field dictionary containing the rainfall rate.
 
     """
-
     # parse the field parameters
     if refl_field is None:
         refl_field = get_field_name('reflectivity')
@@ -77,21 +74,18 @@ def est_rain_rate_zpoly(radar, refl_field=None, rr_field=None):
 def est_rain_rate_z(radar, alpha=0.0376, beta=0.6112, refl_field=None,
                     rr_field=None):
     """
-    Estimates rainfall rate from reflectivity using a power law
+    Estimates rainfall rate from reflectivity using a power law.
 
     Parameters
     ----------
     radar : Radar
-        Radar object
-
-    alpha,beta : floats
-        factor (alpha) and exponent (beta) of the power law
-
-    refl_field : str
-        name of the reflectivity field to use
-
-    rr_field : str
-        name of the rainfall rate field
+        Radar object.
+    alpha, beta : floats, optional
+        Factor (alpha) and exponent (beta) of the power law.
+    refl_field : str, optional
+        Name of the reflectivity field to use.
+    rr_field : str, optional
+        Name of the rainfall rate field.
 
     Returns
     -------
@@ -99,7 +93,6 @@ def est_rain_rate_z(radar, alpha=0.0376, beta=0.6112, refl_field=None,
         Field dictionary containing the rainfall rate.
 
     """
-
     # parse the field parameters
     if refl_field is None:
         refl_field = get_field_name('reflectivity')
@@ -120,23 +113,19 @@ def est_rain_rate_z(radar, alpha=0.0376, beta=0.6112, refl_field=None,
 def est_rain_rate_kdp(radar, alpha=None, beta=None, kdp_field=None,
                       rr_field=None):
     """
-    Estimates rainfall rate from kdp using alpha power law
+    Estimates rainfall rate from kdp using alpha power law.
 
     Parameters
     ----------
     radar : Radar
-        Radar object
-
-    alpha,beta : floats
-        Optional. factor (alpha) and exponent (beta) of the power law.
-        If not set the factors are going to be determined according
-        to the radar frequency
-
-    kdp_field : str
-        name of the specific differential phase field to use
-
-    rr_field : str
-        name of the rainfall rate field
+        Radar object.
+    alpha, beta : floats, optional
+        Factor (alpha) and exponent (beta) of the power law. If not set the
+        factors are going to be determined according to the radar frequency.
+    kdp_field : str, optional
+        Name of the specific differential phase field to use.
+    rr_field : str, optional
+        Name of the rainfall rate field.
 
     Returns
     -------
@@ -152,8 +141,8 @@ def est_rain_rate_kdp(radar, alpha=None, beta=None, kdp_field=None,
                 radar.instrument_parameters['frequency']['data'][0])
         else:
             alpha, beta = _coeff_rkdp_table()['C']
-            warn('Radar frequency unknown. ' +
-                 'Default coefficients for C band will be applied')
+            warn('Radar frequency unknown. '
+                 + 'Default coefficients for C band will be applied.')
 
     # parse the field parameters
     if kdp_field is None:
@@ -176,23 +165,19 @@ def est_rain_rate_kdp(radar, alpha=None, beta=None, kdp_field=None,
 def est_rain_rate_a(radar, alpha=None, beta=None, a_field=None,
                     rr_field=None):
     """
-    Estimates rainfall rate from specific attenuation using alpha power law
+    Estimates rainfall rate from specific attenuation using alpha power law.
 
     Parameters
     ----------
     radar : Radar
-        Radar object
-
-    alpha,beta : floats
-        Optional. factor (alpha) and exponent (beta) of the power law.
-        If not set the factors are going to be determined according
-        to the radar frequency
-
-    a_field : str
-        name of the specific attenuation field to use
-
-    rr_field : str
-        name of the rainfall rate field
+        Radar object.
+    alpha, beta : floats, optional
+        Factor (alpha) and exponent (beta) of the power law. If not set the
+        factors are going to be determined according to the radar frequency.
+    a_field : str, optional
+        Name of the specific attenuation field to use.
+    rr_field : str, optional
+        Name of the rainfall rate field.
 
     Returns
     -------
@@ -220,8 +205,8 @@ def est_rain_rate_a(radar, alpha=None, beta=None, a_field=None,
                 radar.instrument_parameters['frequency']['data'][0])
         else:
             alpha, beta = _coeff_ra_table()['C']
-            warn('Radar frequency unknown. ' +
-                 'Default coefficients for C band will be applied')
+            warn('Radar frequency unknown. '
+                 + 'Default coefficients for C band will be applied.')
 
     # parse the field parameters
     if a_field is None:
@@ -251,32 +236,26 @@ def est_rain_rate_zkdp(radar, alphaz=0.0376, betaz=0.6112, alphakdp=None,
     Parameters
     ----------
     radar : Radar
-        Radar object
-
-    alphaz,betaz : floats
-        factor (alpha) and exponent (beta) of the z-r power law.
-
-    alphakdp, betakdp : floats
-        Optional. factor (alpha) and exponent (beta) of the kdp-r power law.
+        Radar object.
+    alphaz, betaz : floats, optional
+        Factor (alpha) and exponent (beta) of the z-r power law.
+    alphakdp, betakdp : floats, optional
+        Factor (alpha) and exponent (beta) of the kdp-r power law.
         If not set the factors are going to be determined according
-        to the radar frequency
-
-    refl_field : str
-        name of the reflectivity field to use
-
-    kdp_field : str
-        name of the specific differential phase field to use
-
-    rr_field : str
-        name of the rainfall rate field
-
-    master_field : str
-        name of the field that is going to act as master. Has to be
-        either refl_field or kdp_field. Default is refl_field
-    thresh : float
-        value of the threshold that determines when to use the slave
+        to the radar frequency.
+    refl_field : str, optional
+        Name of the reflectivity field to use.
+    kdp_field : str, optional
+        Name of the specific differential phase field to use.
+    rr_field : str, optional
+        Name of the rainfall rate field.
+    master_field : str, optional
+        Name of the field that is going to act as master. Has to be
+        either refl_field or kdp_field. Default is refl_field.
+    thresh : float, optional
+        Value of the threshold that determines when to use the slave
         field.
-    thresh_max : Boolean
+    thresh_max : Bool, optional
         If true the master field is used up to the thresh value maximum.
         Otherwise the master field is not used below thresh value.
 
@@ -321,8 +300,8 @@ def est_rain_rate_zkdp(radar, alphaz=0.0376, betaz=0.6112, alphakdp=None,
         rain_slave = rain_kdp
         thresh = 40.
         thresh_max = True
-        warn('Unknown master field. Using ' + refl_field +
-             ' with threshold '+str(thresh))
+        warn('Unknown master field. Using ' + refl_field
+             + ' with threshold ' + str(thresh))
 
     if thresh_max:
         is_slave = rain_master['data'] > thresh
@@ -345,31 +324,24 @@ def est_rain_rate_za(radar, alphaz=0.0376, betaz=0.6112, alphaa=None,
     ----------
     radar : Radar
         Radar object
-
-    alphaz,betaz : floats
-        factor (alpha) and exponent (beta) of the z-r power law.
-
-    alphaa,betaa : floats
-        Optional. factor (alpha) and exponent (beta) of the a-r power law.
-        If not set the factors are going to be determined according
-        to the radar frequency
-
-    refl_field : str
-        name of the reflectivity field to use
-
-    a_field : str
-        name of the specific attenuation field to use
-
-    rr_field : str
-        name of the rainfall rate field
-
-    master_field : str
-        name of the field that is going to act as master. Has to be
-        either refl_field or kdp_field. Default is refl_field
-    thresh : float
-        value of the threshold that determines when to use the slave
+    alphaz, betaz : floats, optional
+        Factor (alpha) and exponent (beta) of the z-r power law.
+    alphaa,betaa : floats, optional
+        Factor (alpha) and exponent (beta) of the a-r power law. If not set
+        the factors are going to be determined according to the radar frequency.
+    refl_field : str, optional
+        Name of the reflectivity field to use.
+    a_field : str, optional
+        Name of the specific attenuation field to use.
+    rr_field : str, optional
+        Name of the rainfall rate field.
+    master_field : str, optional
+        Name of the field that is going to act as master. Has to be
+        either refl_field or kdp_field. Default is refl_field.
+    thresh : float, optional
+        Value of the threshold that determines when to use the slave
         field.
-    thresh_max : Boolean
+    thresh_max : Bool, optional
         If true the master field is used up to the thresh value maximum.
         Otherwise the master field is not used below thresh value.
 
@@ -413,8 +385,8 @@ def est_rain_rate_za(radar, alphaz=0.0376, betaz=0.6112, alphaa=None,
         rain_slave = rain_z
         thresh = 0.04
         thresh_max = False
-        warn('Unknown master field. Using ' + a_field + ' with threshold ' +
-             str(thresh))
+        warn('Unknown master field. Using ' + a_field + ' with threshold '
+             + str(thresh))
 
     if thresh_max:
         is_slave = rain_master['data'] > thresh
@@ -434,46 +406,37 @@ def est_rain_rate_hydro(radar, alphazr=0.0376, betazr=0.6112, alphazs=0.1,
                         thresh_max=False):
     """
     Estimates rainfall rate using different relations between R and the
-    polarimetric variables depending on the hydrometeor type
+    polarimetric variables depending on the hydrometeor type.
 
     Parameters
     ----------
     radar : Radar
-        Radar object
-
-    alphazr,betazr : floats
-        factor (alpha) and exponent (beta) of the z-r power law for rain.
-
-    alphazs,betazs : floats
-        factor (alpha) and exponent (beta) of the z-s power law for snow.
-
-    alphaa,betaa : floats
-        Optional. factor (alpha) and exponent (beta) of the a-r power law.
+        Radar object.
+    alphazr, betazr : floats, optional
+        Factor (alpha) and exponent (beta) of the z-r power law for rain.
+    alphazs, betazs : floats, optional
+        Factor (alpha) and exponent (beta) of the z-s power law for snow.
+    alphaa, betaa : floats, optional
+        Factor (alpha) and exponent (beta) of the a-r power law.
         If not set the factors are going to be determined according
-        to the radar frequency
-
-    mp_factor : float
-        factor applied to z-r relation in the melting layer
-
-    refl_field : str
-        name of the reflectivity field to use
-
-    a_field : str
-        name of the specific attenuation field to use
-
-    hydro_field : str
-        name of the hydrometeor classification field to use
-
-    rr_field : str
-        name of the rainfall rate field
-
-    master_field : str
-        name of the field that is going to act as master. Has to be
-        either refl_field or kdp_field. Default is refl_field
-    thresh : float
-        value of the threshold that determines when to use the slave
+        to the radar frequency.
+    mp_factor : float, optional
+        Factor applied to z-r relation in the melting layer.
+    refl_field : str, optional
+        Name of the reflectivity field to use.
+    a_field : str, optional
+        Name of the specific attenuation field to use.
+    hydro_field : str, optional
+        Name of the hydrometeor classification field to use.
+    rr_field : str, optional
+        Name of the rainfall rate field.
+    master_field : str, optional
+        Name of the field that is going to act as master. Has to be
+        either refl_field or kdp_field. Default is refl_field.
+    thresh : float, optional
+        Value of the threshold that determines when to use the slave
         field.
-    thresh_max : Boolean
+    thresh_max : Bool, optional
         If true the master field is used up to the thresh value maximum.
         Otherwise the master field is not used below thresh value.
 
@@ -579,17 +542,17 @@ def est_rain_rate_hydro(radar, alphazr=0.0376, betazr=0.6112, alphazs=0.1,
 
 def _get_coeff_rkdp(freq):
     """
-    get the R(kdp) power law coefficients for a particular frequency
+    Get the R(kdp) power law coefficients for a particular frequency.
 
     Parameters
     ----------
     freq : float
-        radar frequency [Hz]
+        Radar frequency [Hz].
 
     Returns
     -------
     alpha, beta : floats
-        the coefficient and exponent of the power law
+        The coefficient and exponent of the power law.
 
     """
     coeff_rkdp_dict = _coeff_rkdp_table()
@@ -603,21 +566,21 @@ def _get_coeff_rkdp(freq):
     elif freq > 12e9:
         freq_band_aux = 'X'
 
-    warn('Radar frequency out of range. ' +
-         'Coefficients only applied to S, C or X band. ' +
-         freq_band + ' band coefficients will be used')
+    warn('Radar frequency out of range. '
+         + 'Coefficients only applied to S, C or X band. '
+         + freq_band + ' band coefficients will be used.')
 
     return coeff_rkdp_dict[freq_band_aux]
 
 
 def _coeff_rkdp_table():
     """
-    defines the R(kdp) power law coefficients for each frequency band.
+    Defines the R(kdp) power law coefficients for each frequency band.
 
     Returns
     -------
     coeff_rkdp_dict : dict
-        A dictionary with the coefficients at each band
+        A dictionary with the coefficients at each band.
 
     """
     coeff_rkdp_dict = dict()
@@ -636,17 +599,17 @@ def _coeff_rkdp_table():
 
 def _get_coeff_ra(freq):
     """
-    get the R(A) power law coefficients for a particular frequency
+    Get the R(A) power law coefficients for a particular frequency.
 
     Parameters
     ----------
     freq : float
-        radar frequency [Hz]
+        Radar frequency [Hz].
 
     Returns
     -------
     alpha, beta : floats
-        the coefficient and exponent of the power law
+        The coefficient and exponent of the power law.
 
     """
     coeff_ra_dict = _coeff_ra_table()
@@ -660,21 +623,21 @@ def _get_coeff_ra(freq):
     elif freq > 12e9:
         freq_band_aux = 'X'
 
-    warn('Radar frequency out of range. ' +
-         'Coefficients only applied to S, C or X band. ' +
-         freq_band + ' band coefficients will be used')
+    warn('Radar frequency out of range. '
+         + 'Coefficients only applied to S, C or X band. '
+         + freq_band + ' band coefficients will be used.')
 
     return coeff_ra_dict[freq_band_aux]
 
 
 def _coeff_ra_table():
     """
-    defines the R(A) power law coefficients for each frequency band.
+    Defines the R(A) power law coefficients for each frequency band.
 
     Returns
     -------
     coeff_ra_dict : dict
-        A dictionary with the coefficients at each band
+        A dictionary with the coefficients at each band.
 
     """
     coeff_ra_dict = dict()

@@ -23,10 +23,11 @@ Find contiguous objects in scans and despeckle away ones that are too small.
 
 from __future__ import division
 import numpy as np
-from ..filters.gatefilter import GateFilter
 from scipy.ndimage import label
 from scipy.signal import convolve2d
+
 from ..config import get_fillvalue
+from ..filters.gatefilter import GateFilter
 
 BAD = get_fillvalue() # Get default fill value.
 DELTA = 5.0  # deg, allowable gap between PPI edges to be considered full 360
@@ -59,7 +60,7 @@ def find_objects(radar, field, threshold, sweeps=None, smooth=None,
     smooth : int or None, optional
         Number of gates included in a smoothing box filter along a ray.
         If None, no smoothing is done prior to labeling objects.
-    gatefilter : None or pyart.filters.GateFilter object
+    gatefilter : None or pyart.filters.GateFilter object, optional
         Py-ART GateFilter object to apply before labeling objects.
         If None, no filtering will be performed. Note: Filtering always occurs
         before smoothing.
@@ -227,7 +228,7 @@ def _append_labels(labels, label_storage):
     Returns
     -------
     label_storage : 2D array of ints
-        Updated array of object labels
+        Updated array of object labels.
 
     """
     if len(label_storage) == 0:
@@ -253,7 +254,7 @@ def _check_for_360(az, delta):
     Returns
     -------
     Flag : bool
-        True - Sweep is a 360 PPI
+        True - Sweep is a 360 PPI.
 
         False - Sweep is not a 360 PPI.
 
@@ -292,7 +293,7 @@ def _check_sweeps(sweeps, radar):
     Returns
     -------
     sweeps : list of ints
-        Sweep numbers as an iterable list
+        Sweep numbers as an iterable list.
 
     """
     if sweeps is None:
@@ -349,12 +350,12 @@ def _generate_dict(label_storage):
     Parameters
     ----------
     label_storage : 2D array of ints
-        Object labels as a 2D array
+        Object labels as a 2D array.
 
     Returns
     -------
     label_dict : dict
-        Dictionary containing object labels and associated metadata
+        Dictionary containing object labels and associated metadata.
 
     """
     label_dict = {}
@@ -394,7 +395,7 @@ def _get_data(radar, iswp, field, tlo, thi, window, gatefilter=None):
 
     Other Parameters
     ----------------
-    gatefilter : None or pyart.filters.GateFilter object
+    gatefilter : None or pyart.filters.GateFilter object, optional
         Py-ART GateFilter object to apply before labeling objects.
         If None, no filtering will be performed.
 

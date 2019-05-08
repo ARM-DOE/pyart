@@ -37,10 +37,10 @@ def read(filename, use_rsl=False, **kwargs):
     Parameters
     ----------
     filename : str
-        Name of radar file to read
+        Name of radar file to read.
     use_rsl : bool
         True will use the TRMM RSL library to read files which are supported
-        both natively and by RSL.  False will choose the native read function.
+        both natively and by RSL. False will choose the native read function.
         RSL will always be used to read a file if it is not supported
         natively.
 
@@ -55,7 +55,7 @@ def read(filename, use_rsl=False, **kwargs):
     additional_metadata : dict of dicts, optional
         Dictionary of dictionaries to retrieve metadata from during this read.
         This metadata is not used during any successive file reads unless
-        explicitly included.  A value of None, the default, will not
+        explicitly included. A value of None, the default, will not
         introduct any addition metadata and the file specific or default
         metadata as specified by the metadata configuration file will be used.
     file_field_names : bool, optional
@@ -68,7 +68,7 @@ def read(filename, use_rsl=False, **kwargs):
         after the `file_field_names` and `field_names` parameters.
     delay_field_loading : bool
         True to delay loading of field data from the file until the 'data'
-        key in a particular field dictionary is accessed.  In this case
+        key in a particular field dictionary is accessed. In this case
         the field attribute of the returned Radar object will contain
         LazyLoadDict objects not dict objects. Not all file types support this
         parameter.
@@ -76,7 +76,7 @@ def read(filename, use_rsl=False, **kwargs):
     Returns
     -------
     radar : Radar
-        Radar object.  A TypeError is raised if the format cannot be
+        Radar object. A TypeError is raised if the format cannot be
         determined.
 
     """
@@ -226,7 +226,7 @@ def determine_filetype(filename):
 
     # NEXRAD LEVEL 3 begin with SDUSXX KXXX
     nexrad_l3_signature = b'SDUS'
-    if begin[:4] == b'SDUS':
+    if begin[:4] == nexrad_l3_signature:
         return "NEXRADL3"
 
     # NEXRAD LEVEL 3 with NOAAPORT record seperator

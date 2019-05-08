@@ -27,7 +27,7 @@ class LazyLoadDict(MutableMapping):
 
     Keys which are lazy loaded are specified using the set_lazy method.
     The callable object which produces the specified key is provided as the
-    second argument to this method.  This object gets called when the value
+    second argument to this method. This object gets called when the value
     of the key is loaded. After this initial call the results is cached
     in the traditional dictionary which is used for supplemental access to
     this key.
@@ -46,7 +46,7 @@ class LazyLoadDict(MutableMapping):
         Dictionary containing key, value pairs which will be stored and
         evaluated traditionally. This dictionary referenced not copied into
         the LazyLoadDictionary and hence changed to this dictionary may change
-        the original.  If this behavior is not desired copy dic in the
+        the original. If this behavior is not desired copy dic in the
         initalization.
 
     Examples
@@ -62,7 +62,6 @@ class LazyLoadDict(MutableMapping):
     999
 
     """
-
     def __init__(self, dic):
         """ initalize. """
         self._dic = dic

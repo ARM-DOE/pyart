@@ -56,7 +56,7 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
     additional_metadata : dict of dicts, optional
         Dictionary of dictionaries to retrieve metadata from during this read.
         This metadata is not used during any successive file reads unless
-        explicitly included.  A value of None, the default, will not
+        explicitly included. A value of None, the default, will not
         introduct any addition metadata and the file specific or default
         metadata as specified by the metadata configuration file will be used.
     file_field_names : bool, optional
@@ -75,11 +75,11 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
     time_ordered : 'none', 'sequential', 'full', ...,  optional
         Parameter controlling if and how the rays are re-ordered by time.
         The default, 'none' keeps the rays ordered in the same manner as
-        they appears in the Sigmet file.  'sequential' will determind and
+        they appears in the Sigmet file. 'sequential' will determind and
         apply an operation which maintains a sequential ray order in elevation
-        or azimuth yet orders the rays according to time.  If no operation can
+        or azimuth yet orders the rays according to time. If no operation can
         be found to accomplish this a warning is issue and the rays are
-        returned in their original order.  'roll', 'reverse', and
+        returned in their original order. 'roll', 'reverse', and
         'reverse_and_roll' will apply that operation to the rays in order to
         place them in time order, direct use of these is not recommended.
         'full' will order the rays in strictly time increasing order,
@@ -91,7 +91,7 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
         examining the extended header type.
     noaa_hh_hdr : bool or None
         Flag indicating if the extended header should be decoded as those
-        used by the NOAA Hurricane Hunters aircraft radars.  None will
+        used by the NOAA Hurricane Hunters aircraft radars. None will
         determine if the extended header is of this type automatically by
         examining the header. The `full_xhdr` parameter is set to True
         when this parameter is True.
@@ -105,7 +105,7 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
         each ray. None, the default, will ignore the millisecond sweep start
         timing only when the file does not contain extended headers or when
         the extended header has been explicity ignored using the `ignore_xhdr`
-        parameter.  The TRMM RSL library ignores these times so setting this
+        parameter. The TRMM RSL library ignores these times so setting this
         parameter to True is required to match the times determined when
         reading Sigmet files with :py:func:`pyart.io.read_rsl`.
         When there are not extended headers ignoring the millisecond sweep
@@ -117,7 +117,7 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
     Returns
     -------
     radar : Radar
-        Radar object
+        Radar object.
 
     """
     # test for non empty kwargs
@@ -134,7 +134,7 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
     task_config = sigmetfile.ingest_header['task_configuration']
 
     # determine if full extended headers should be read
-    if noaa_hh_hdr is True:
+    if noaa_hh_hdr:
         full_xhdr = True
     if full_xhdr is None:
         type_mask = task_config['task_dsp_info']['current_data_type_mask']
@@ -243,16 +243,16 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
     # header to millisecond percision.
     # The method below sets the volume starting time to the time of the first
     # sweep truncated to the nearest second so that values time['data'] are
-    # always positive.  The timing of each ray is then calculated from the
+    # always positive. The timing of each ray is then calculated from the
     # offset of the time of the sweep from this volume starting time
     # and the offset from the sweep start to the ray recorded in the ray
-    # header.  Additional, the user can select to trucate the sweep start
+    # header. Additional, the user can select to trucate the sweep start
     # times to second precision using the `ignore_sweep_start_ms` parameter.
     # This may be desired to match libraries such as TRMM RSL, which do not
-    # read the millisecond sweep start precision.  By default this
-    # trucation is applied when the file contains no extended header.  This
+    # read the millisecond sweep start precision. By default this
+    # trucation is applied when the file contains no extended header. This
     # ensures that the times listed occur BEFORE the ray was collected with an
-    # error from 0 to 2 seconds from the recorded time.  Other methods of
+    # error from 0 to 2 seconds from the recorded time. Other methods of
     # combining the mixed percision times would result in times which may have
     # a negative error which is undesired.
 
@@ -281,8 +281,9 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
         start = sweep_start_ray_index['data'][i]
         end = sweep_end_ray_index['data'][i]
         td = (dt - dt_start)    # time delta from volume start
-        tdata[start:end + 1] += (td.microseconds + (td.seconds + td.days *
-                                 24 * 3600) * 10**6) / 10**6
+        tdata[start:end + 1] += (
+            td.microseconds + (
+                td.seconds + td.days * 24 * 3600) * 10**6) / 10**6
 
     # stores this data in the time dictionary
     time = filemetadata('time')
@@ -407,10 +408,10 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
     nyquist_velocity['data'] = nv_value * np.ones(total_rays, dtype='float32')
     beam_width_h['data'] = np.array([bin4_to_angle(
         task_config['task_misc_info']['horizontal_beamwidth'])],
-        dtype='float32')
+                                    dtype='float32')
     beam_width_v['data'] = np.array([bin4_to_angle(
         task_config['task_misc_info']['vertical_beamwidth'])],
-        dtype='float32')
+                                    dtype='float32')
     pulse_width['data'] = np.array(
         [task_config['task_dsp_info']['pulse_width'] * 1e-8] *
         len(time['data']), dtype='float32')
@@ -525,7 +526,7 @@ def _is_time_ordered_by_roll(data, metadata, rays_per_sweep):
 def _is_time_ordered_by_reverse_roll(data, metadata, rays_per_sweep):
     """
     Returns if volume can be time ordered by reversing and rolling some or all
-    sweeps.  True if the volume can be time ordered, False if not.
+    sweeps. True if the volume can be time ordered, False if not.
     """
     if 'XHDR' in data:
         ref_time = data['XHDR'].copy()
