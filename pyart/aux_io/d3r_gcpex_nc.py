@@ -44,7 +44,7 @@ D3R_FIELD_NAMES = {
 
 def read_d3r_gcpex_nc(filename, field_names=None, additional_metadata=None,
                       file_field_names=False, exclude_fields=None,
-                      include_fields=None, **kwargs):
+                      include_fields=None, read_altitude_from_nc=False, **kwargs):
     """
     Read a D3R GCPEX netCDF file.
 
@@ -77,6 +77,9 @@ def read_d3r_gcpex_nc(filename, field_names=None, additional_metadata=None,
         List of fields to include from the radar object. This is applied
         after the `file_field_names` and `field_names` parameters. Set
         to None to include all fields not specified by exclude_fields.
+    read_altitude_from_nc : bool, optional
+        True if you want the altitude value to be read from the provider netCDF file.
+        False will default to the value np.array([295.], dtype='float64')
 
     Returns
     -------
@@ -116,7 +119,8 @@ def read_d3r_gcpex_nc(filename, field_names=None, additional_metadata=None,
 
     latitude['data'] = np.array([ncobj.Latitude], dtype='float64')
     longitude['data'] = np.array([ncobj.Longitude], dtype='float64')
-    altitude['data'] = np.array([295.], dtype='float64')
+    altitude_list = [ncobj.Altitude] if read_altitude_from_nc else [295.]
+    altitude['data'] = np.array(altitude_list, dtype='float64')
 
     # metadata
     metadata = filemetadata('metadata')
