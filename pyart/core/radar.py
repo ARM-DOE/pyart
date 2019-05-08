@@ -516,7 +516,8 @@ class Radar(object):
         return antenna_vectors_to_cartesian(
             self.range['data'], azimuths, elevations, edges=edges)
 
-    def get_gate_lat_lon_alt(self, sweep, filter_transitions=False):
+    def get_gate_lat_lon_alt(self, sweep, reset_gate_coords=False,
+                             filter_transitions=False):
         """
         Return the longitude, latitude and altitude gate locations.
         Longitude and latitude are in degrees and altitude in meters.
@@ -525,12 +526,18 @@ class Radar(object):
         contained in the gate_latitude, gate_longitude and gate_altitude
         attributes but this method performs the gate location calculations
         only for the specified sweep and therefore is more efficient than
-        accessing this data through these attribute.
+        accessing this data through these attribute. If coordinates have
+        at all, please use the reset_gate_coords parameter.
 
         Parameters
         ----------
         sweep : int
             Sweep number to retrieve gate locations from, 0 based.
+        reset_gate_coords : bool, optional
+            Optional to reset the gate latitude, gate longitude and gate
+            altitude attributes before using them in this function. This
+            is useful when the geographic coordinates have changed and gate
+            latitude, gate longitude and gate altitude need to be reset.
         filter_transitions : bool, optional
             True to remove rays where the antenna was in transition between
             sweeps. False will include these rays. No rays will be removed
@@ -544,6 +551,20 @@ class Radar(object):
 
         """
         s = self.get_slice(sweep)
+
+        if reset_gate_coords:
+            gate_latitude = LazyLoadDict(get_metadata('gate_latitude'))
+            gate_latitude.set_lazy('data', _gate_lon_lat_data_factory(self, 1))
+            self.gate_latitude = gate_latitude
+
+            gate_longitude = LazyLoadDict(get_metadata('gate_longitude'))
+            gate_longitude.set_lazy('data', _gate_lon_lat_data_factory(self, 0))
+            self.gate_longitude = gate_longitude
+
+            gate_altitude = LazyLoadDict(get_metadata('gate_altitude'))
+            gate_altitude.set_lazy('data', _gate_altitude_data_factory(self))
+            self.gate_altitude = gate_altitude
+
         lat = self.gate_latitude['data'][s]
         lon = self.gate_longitude['data'][s]
         alt = self.gate_altitude['data'][s]
