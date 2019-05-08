@@ -254,7 +254,7 @@ the __init__.py file under the corresponding pyart folder.
 
 Create a test for your function and have assert from numpy testing test the
 known values to the calculated values. If changes are made in the future to
-pyart, nose will use the test created to see if the function is still valid and
+pyart, pytest will use the test created to see if the function is still valid and
 produces the same values. It works that, it takes known values that are
 obtained from the function, and when pytest is ran, it takes the test
 function and reruns the function and compares the results to the original.
