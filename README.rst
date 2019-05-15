@@ -70,7 +70,7 @@ please cite:
     DOI: http://doi.org/10.5334/jors.119
 
 Py-ART implements many published scientific methods which should *also* be
-cited if you make use of them.  Refer to the **References** section in the
+cited if you make use of them. Refer to the **References** section in the
 documentation of the functions used for information on these citations.
 
 
@@ -78,11 +78,21 @@ Install
 =======
 
 The easiest method for installing Py-ART is to use the conda packages from
-the latest release.  To do this you must download and install 
+the latest release. To do this you must download and install 
 `Anaconda <https://www.anaconda.com/download/#>`_ or 
-`Miniconda <https://conda.io/miniconda.html>`_.  
-Then use the following command in a terminal or command prompt to install
-the latest version of Py-ART::
+`Miniconda <https://conda.io/miniconda.html>`_.
+With Anaconda or Miniconda install, it is recommended to create a new conda
+environment when using Py-ART or even other packages. To create a new
+environment based on the `environment.yml <https://github.com/ARM-DOE/pyart/blob/master/environment.yml>`_::
+
+    conda env create -f environment.yml
+
+Or for a basic environment and downloading optional dependencies as needed::
+
+    conda create -n pyart_env -c conda-forge python=3.7 arm_pyart
+
+Basic command in a terminal or command prompt to install the latest version of
+Py-ART::
 
     conda install -c conda-forge arm_pyart
 
@@ -99,9 +109,9 @@ Configuration
 =============
 
 The configuration file in Py-ART specifies the default metadata, field names,
-colormaps and plot limits.  A custom configuration can be loaded
+colormaps and plot limits. A custom configuration can be loaded
 automatically be setting the environmental variable **PYART_CONFIG** to point
-to a custom configuration file.  For additional details on this process see the
+to a custom configuration file. For additional details on this process see the
 documentation on the `pyart.load_config` function.
 
 
@@ -159,8 +169,8 @@ The required dependencies to install Py-ART in addition to Python are:
 * `matplotlib <https://matplotlib.org/>`_
 * `netCDF4 <https://github.com/Unidata/netcdf4-python>`_
 
-As well as a working C/C++ compiler.  A Fortran compiler is required for some
-optional modules. An easy method to install these dependencies is by using a 
+A working C/C++ compiler is required for some optional modules. An easy method
+to install these dependencies is by using a 
 `Scientific Python distributions <http://scipy.org/install.html>`_.
 `Anaconda <https://www.anaconda.com/distribution/>`_ will install all of
 the above packages by default on Windows, Linux and Mac computers and is
@@ -223,7 +233,7 @@ Installing from source
 Installing Py-ART from source is the only way to get the latest updates and
 enhancement to the software that have not yet made it into a release.
 The latest source code for Py-ART can be obtained from the GitHub repository,
-https://github.com/ARM-DOE/pyart.  Either download and unpack the 
+https://github.com/ARM-DOE/pyart. Either download and unpack the 
 `zip file <https://github.com/ARM-DOE/pyart/archive/master.zip>`_ of 
 the source code or use git to checkout the repository::
 
@@ -242,7 +252,7 @@ To install for all users on Unix/Linux::
 Development
 ===========
 
-Py-ART is an open source, community software project.  Contributions to
+Py-ART is an open source, community software project. Contributions to
 the package are welcomed from all users.
 
 Code
@@ -258,7 +268,7 @@ Contributing
 -------------
 
 We welcome contributions for all uses of Py-ART, provided the code can be
-distributed under the BSD 3-clause license.  A copy of this license is
+distributed under the BSD 3-clause license. A copy of this license is
 available in the **LICENSE.txt** file in this directory. For more on
 contributing, see the `contributor's guide. <https://github.com/ARM-DOE/pyart/blob/master/guides/contributors_guide.rst>`_
 
