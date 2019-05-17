@@ -155,7 +155,7 @@ def read_grid(filename, exclude_fields=None, include_fields=None, **kwargs):
 
 def write_grid(filename, grid, format='NETCDF4',
                write_proj_coord_sys=True, proj_coord_sys=None,
-               arm_time_variables=False,
+               arm_time_variables=False, arm_alt_lat_lon_variables=False,
                write_point_x_y_z=False, write_point_lon_lat_alt=False):
     """
     Write a Grid object to a CF-1.5 and ARM standard netCDF file.
@@ -200,6 +200,9 @@ def write_grid(filename, grid, format='NETCDF4',
     arm_time_variables : bool, optional
         True to write the ARM standard time variables base_time and
         time_offset. False will not write these variables.
+    arm_alt_lat_lon_variables : bool, optional
+        True to write the ARM standard alt, lat, lon variables.
+        False will not write these variables.
     write_point_x_y_z : bool, optional
         True to include the point_x, point_y and point_z variables in the
         written file, False will not write these variables.
@@ -298,6 +301,36 @@ def write_grid(filename, grid, format='NETCDF4',
             'calendar': 'gregorian',
         }
         _create_ncvar(time_offset, dset, 'time_offset', ('time', ))
+
+    # create ARM alt, lat, lon variables, if requested
+    if arm_alt_lat_lon_variables:
+        alt = {
+            'data': np.array([grid.origin_altitude['data']], dtype=np.float64),
+            'standard_name': 'Altitude',
+            'units': 'm',
+            'long_name': 'Altitude above mean sea level',
+        }
+        _create_ncvar(alt, dset, 'alt', ())
+
+        lat = {
+            'data': np.array([grid.origin_latitude['data']], dtype=np.float64),
+            'standard_name': 'Latitude',
+            'units': 'degree_N',
+            'long_name': 'North Latitude',
+            'valid_min': -90.,
+            'valid_max': 90.,
+        }
+        _create_ncvar(lat, dset, 'lat', ())
+
+        lon = {
+            'data': np.array([grid.origin_longitude['data']], dtype=np.float64),
+            'standard_name': 'Longitude',
+            'units': 'degree_E',
+            'long_name': 'East Longitude',
+            'valid_min': -180.,
+            'valid_max': 180.,
+        }
+        _create_ncvar(lon, dset, 'lon', ())
 
     # optionally write point_ variables
     if write_point_x_y_z:
