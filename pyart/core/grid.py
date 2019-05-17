@@ -254,7 +254,8 @@ class Grid(object):
         point_altitude.set_lazy('data', _point_altitude_data_factory(self))
         self.point_altitude = point_altitude
 
-    def write(self, filename, format='NETCDF4', arm_time_variables=False):
+    def write(self, filename, format='NETCDF4', arm_time_variables=False,
+              arm_alt_lat_lon_variables=False):
         """
         Write the the Grid object to a NetCDF file.
 
@@ -268,13 +269,17 @@ class Grid(object):
         arm_time_variables : bool, optional
             True to write the ARM standard time variables base_time and
             time_offset. False will not write these variables.
+        arm_alt_lat_lon_variables : bool, optional
+            True to write the ARM standard alt, lat, lon variables.
+            False will not write these variables.
 
         """
         # delayed import to avoid circular import
         from ..io.grid_io import write_grid
 
         write_grid(filename, self, format=format,
-                   arm_time_variables=arm_time_variables)
+                   arm_time_variables=arm_time_variables,
+                   arm_alt_lat_lon_variables=arm_alt_lat_lon_variables)
 
     def add_field(self, field_name, field_dict, replace_existing=False):
         """
