@@ -6,7 +6,7 @@ import functools
 import pickle
 
 import numpy as np
-from numpy.testing import assert_almost_equal
+from numpy.testing import assert_almost_equal, assert_equal
 import pytest
 
 try:
@@ -17,7 +17,8 @@ except ImportError:
 
 import pyart
 from pyart.lazydict import LazyLoadDict
-
+import netCDF4
+import datetime
 
 def test_grid_picklable():
     grid = pyart.testing.make_target_grid()
@@ -74,6 +75,23 @@ def test_grid_write_method():
         # _check_dicts_similar(grid1.radar_name, grid2.radar_name)
         #  assert grid1.nradar == grid2.nradar
 
+def test_grid_to_xarray():
+    grid = pyart.testing.make_target_grid()
+    ds = grid.to_xarray()
+
+    lon, lat = pyart.core.Grid.get_point_longitude_latitude(grid)
+    time = np.array([datetime.datetime.strftime(netCDF4.num2date(
+        grid.time['data'][0], grid.time['units']), '%Y-%m-%dT%H:%M:%S.%f')],
+                    dtype='datetime64[ns]')
+    x = lon[0, :]
+    y = lat[:, 0]
+    z = grid.z['data']
+    
+    assert_equal(ds.x.data, x)
+    assert_equal(ds.y.data, y)
+    assert_equal(ds.lon.data, lon)
+    assert_equal(ds.lat.data, lat)
+    assert_equal(ds.time.data, time)
 
 def _check_dicts_similar(dic1, dic2):
     for k, v in dic1.items():
