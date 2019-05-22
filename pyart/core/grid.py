@@ -20,6 +20,8 @@ An class for holding gridded Radar data.
 """
 
 import numpy as np
+from netCDF4 import num2date
+import xarray
 
 try:
     import pyproj
@@ -275,6 +277,60 @@ class Grid(object):
 
         write_grid(filename, self, format=format,
                    arm_time_variables=arm_time_variables)
+
+    def to_xarray(self):
+        """
+        Convert the Grid object to an xarray format.
+
+        Attributes
+        ----------
+        time : dict
+            Time of the grid.
+        fields : dict of dicts
+            Moments from radars or other variables.
+        longitude, latitude : dict, 2D
+            Arrays of latitude and longitude for the grid height level.
+        x, y, z : dict, 1D
+            Distance from the grid origin for each Cartesian coordinate axis
+            in a one dimensional array.
+            
+        """
+        lon, lat = self.get_point_longitude_latitude()
+        height = self.point_z['data'][:, 0, 0]
+        time = np.array([num2date(self.time['data'][0],
+                                  self.time['units'])])
+        
+        ds = xarray.Dataset()
+        for field in list(self.fields.keys()):
+            field_data = self.fields[field]['data']
+            data = xarray.DataArray(np.ma.expand_dims(field_data, 0),
+                                    dims=('time', 'z', 'y', 'x'),
+                                    coords={'time' : (['time'], time),
+                                            'z' : (['z'], height),
+                                            'lat' : (['y', 'x'], lat),
+                                            'lon' : (['y', 'x'], lon),
+                                            'y' : (['y'], lat[:, 0]),
+                                            'x' : (['x'], lon[0, :])})
+            for meta in list(self.fields[field].keys()):
+                if meta is not 'data':
+                    data.attrs.update({meta: self.fields[field][meta]})
+
+            ds[field] = data
+            ds.lon.attrs = [('long_name', 'longitude of grid cell center'),
+                            ('units', 'degree_E'),
+                            ('standard_name', 'Longitude')]
+            ds.lat.attrs = [('long_name', 'latitude of grid cell center'),
+                            ('units', 'degree_N'),
+                            ('standard_name', 'Latitude')]
+            ds.z.attrs = [('long_name', 'height above mean sea level'),
+                          ('units', 'm'),
+                          ('standard_name', 'Height')]
+            
+            ds.z.encoding['_FillValue'] = None
+            ds.lat.encoding['_FillValue'] = None
+            ds.lon.encoding['_FillValue'] = None
+            ds.close()
+        return ds
 
     def add_field(self, field_name, field_dict, replace_existing=False):
         """
