@@ -90,46 +90,7 @@ class GridMapDisplay(object):
         self.mappables = []
         self.fields = []
         self.origin = 'origin'
-
-    def get_dataset(self):
-        """ 
-        Creating an xarray dataset from a radar object.
-
-	"""
-        lon, lat = self.grid.get_point_longitude_latitude()
-        height = self.grid.point_z['data'][:, 0, 0]
-        time = np.array([netCDF4.num2date(self.grid.time['data'][0],
-                                          self.grid.time['units'])])
-
-        ds = xarray.Dataset()
-        for field in list(self.grid.fields.keys()):
-            field_data = self.grid.fields[field]['data']
-            data = xarray.DataArray(np.ma.expand_dims(field_data, 0),
-                                    dims=('time', 'z', 'y', 'x'),
-                                    coords={'time' : (['time'], time),
-                                            'z' : (['z'], height),
-                                            'lat' : (['y', 'x'], lat),
-                                            'lon' : (['y', 'x'], lon),
-                                            'y' : (['y'], lat[:, 0]),
-                                            'x' : (['x'], lon[0, :])})
-            for meta in list(self.grid.fields[field].keys()):
-                if meta is not 'data':
-                    data.attrs.update({meta: self.grid.fields[field][meta]})
-
-            ds[field] = data
-            ds.lon.attrs = [('long_name', 'longitude of grid cell center'),
-                            ('units', 'degrees_east')]
-            ds.lat.attrs = [('long_name', 'latitude of grid cell center'),
-                            ('units', 'degrees_north')]
-            ds.z.attrs['long_name'] = "height above sea sea level"
-            ds.z.attrs['units'] = "m"
-
-            ds.z.encoding['_FillValue'] = None
-            ds.lat.encoding['_FillValue'] = None
-            ds.lon.encoding['_FillValue'] = None
-            ds.close()
-        return ds
-
+ 
     def plot_grid(self, field, level=0, vmin=None, vmax=None,
                   norm=None, cmap=None, mask_outside=False,
                   title=None, title_flag=True, axislabels=(None, None),
@@ -204,7 +165,7 @@ class GridMapDisplay(object):
             Note that lat lon labels only work with certain projections.
 
         """
-        ds = self.get_dataset()
+        ds = self.grid.to_xarray()
 
         # parse parameters
         ax, fig = common.parse_ax_fig(ax, fig)
