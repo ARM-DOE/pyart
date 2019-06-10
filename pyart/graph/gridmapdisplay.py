@@ -474,7 +474,7 @@ class GridMapDisplay(object):
             available) or the default values of -8, 64 will be used.
             Parameters are ignored is norm is not None.
         norm : Normalize or None, optional
-            matplotlib Normalize instance used to scale luminance data.  If not
+            matplotlib Normalize instance used to scale luminance data. If not
             None the vmax and vmin parameters are ignored. If None, vmin and
             vmax are used for luminance scaling.
         cmap : str or None
@@ -568,7 +568,8 @@ class GridMapDisplay(object):
         return
 
     def plot_colorbar(self, mappable=None, orientation='horizontal', label=None,
-                      cax=None, ax=None, fig=None, field=None):
+                      cax=None, ax=None, fig=None, field=None, ticks=None,
+                      ticklabs=None):
         """
         Plot a colorbar.
 
