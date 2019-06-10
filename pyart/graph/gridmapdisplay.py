@@ -98,7 +98,7 @@ class GridMapDisplay(object):
                   colorbar_label=None, colorbar_orient='vertical',
                   ax=None, fig=None, lat_lines=None,
                   lon_lines=None, projection=None,
-                  embelish=True, **kwargs):
+                  embelish=True, ticks=None, ticklabs=None, **kwargs):
         """
         Plot the grid using xarray and cartopy.
 
@@ -130,8 +130,8 @@ class GridMapDisplay(object):
             masking.
         title : str
             Title to label plot with, None will use the default generated from
-            the field and level parameters. Parameter is ignored if the title_flag
-            is False.
+            the field and level parameters. Parameter is ignored if the
+            title_flag is False.
         title_flag : bool
             True to add title to plot, False does not add a title.
         axislabels : (str, str)
@@ -154,7 +154,7 @@ class GridMapDisplay(object):
             Figure to add the colorbar to. None will use the current figure.
         lat_lines, lon_lines : array or None
             Location at which to draw latitude and longitude lines.
-            None will use default values which are resonable for maps of
+            None will use default values which are reasonable for maps of
             North America.
         projection : cartopy.crs class
             Map projection supported by cartopy. Used for all subsequent calls
@@ -163,6 +163,10 @@ class GridMapDisplay(object):
             True by default. Set to False to supress drawinf of coastlines
             etc... Use for speedup when specifying shapefiles.
             Note that lat lon labels only work with certain projections.
+        ticks : array
+            Colorbar custom tick label locations.
+        ticklabs : array
+            Colorbar custom tick labels.
 
         """
         ds = self.grid.to_xarray()
@@ -254,8 +258,10 @@ class GridMapDisplay(object):
             self._label_axes_grid(axislabels, ax)
 
         if colorbar_flag:
-            self.plot_colorbar(mappable=pm, label=colorbar_label, orientation=colorbar_orient,
-                               field=field, ax=ax, fig=fig)
+            self.plot_colorbar(mappable=pm, label=colorbar_label,
+                               orientation=colorbar_orient,
+                               field=field, ax=ax, fig=fig,
+                               ticks=ticks, ticklabs=ticklabs)
 
         return
 
@@ -313,7 +319,7 @@ class GridMapDisplay(object):
                                axislabels=(None, None), axislabels_flag=True,
                                colorbar_flag=True, colorbar_label=None,
                                colorbar_orient='vertical', edges=True, ax=None,
-                               fig=None, **kwargs):
+                               fig=None, ticks=None, ticklabs=None, **kwargs):
         """
         Plot a slice along a given latitude.
 
@@ -326,19 +332,19 @@ class GridMapDisplay(object):
         y_index : float
             Index of the latitudinal level to plot.
         vmin, vmax : float
-            Lower and upper range for the colormesh.  If either parameter is
+            Lower and upper range for the colormesh. If either parameter is
             None, a value will be determined from the field attributes (if
             available) or the default values of -8, 64 will be used.
             Parameters are ignored is norm is not None.
         norm : Normalize or None, optional
-            matplotlib Normalize instance used to scale luminance data.  If not
-            None the vmax and vmin parameters are ignored.  If None, vmin and
+            matplotlib Normalize instance used to scale luminance data. If not
+            None the vmax and vmin parameters are ignored. If None, vmin and
             vmax are used for luminance scaling.
         cmap : str or None
             Matplotlib colormap name. None will use the default colormap for
             the field being plotted as specified by the Py-ART configuration.
         mask_outside : bool
-            True to mask data outside of vmin, vmax.  False performs no
+            True to mask data outside of vmin, vmax. False performs no
             masking.
         title : str
             Title to label plot with, None to use default title generated from
@@ -347,8 +353,8 @@ class GridMapDisplay(object):
         title_flag : bool
             True to add a title to the plot, False does not add a title.
         axislabels : (str, str)
-            2-tuple of x-axis, y-axis labels.  None for either label will use
-            the default axis label.  Parameter is ignored if axislabels_flag is
+            2-tuple of x-axis, y-axis labels. None for either label will use
+            the default axis label. Parameter is ignored if axislabels_flag is
             False.
         axislabels_flag : bool
             True to add label the axes, False does not label the axes.
@@ -363,7 +369,7 @@ class GridMapDisplay(object):
         edges : bool
             True will interpolate and extrapolate the gate edges from the
             range, azimuth and elevations in the radar, treating these
-            as specifying the center of each gate.  False treats these
+            as specifying the center of each gate. False treats these
             coordinates themselved as the gate edges, resulting in a plot
             in which the last gate in each ray and the entire last ray are not
             not plotted.
@@ -371,6 +377,10 @@ class GridMapDisplay(object):
             Axis to plot on. None will use the current axis.
         fig : Figure
             Figure to add the colorbar to. None will use the current figure.
+        ticks : array
+            Colorbar custom tick label locations.
+        ticklabs : array
+            Colorbar custom tick labels.
 
         """
         # parse parameters
@@ -416,7 +426,7 @@ class GridMapDisplay(object):
         if colorbar_flag:
             self.plot_colorbar(mappable=pm, label=colorbar_label,
                                orientation=colorbar_orient, field=field,
-                               ax=ax, fig=fig)
+                               ax=ax, fig=fig, ticks=ticks, ticklabs=ticklabs)
         return
 
     def plot_longitude_slice(self, field, lon=None, lat=None, **kwargs):
@@ -445,7 +455,8 @@ class GridMapDisplay(object):
                                 axislabels=(None, None), axislabels_flag=True,
                                 colorbar_flag=True, colorbar_label=None,
                                 colorbar_orient='vertical', edges=True,
-                                ax=None, fig=None, **kwargs):
+                                ax=None, fig=None, ticks=None,
+                                ticklabs=None, **kwargs):
         """
         Plot a slice along a given longitude.
 
@@ -503,6 +514,10 @@ class GridMapDisplay(object):
             Axis to plot on. None will use the current axis.
         fig : Figure
             Figure to add the colorbar to. None will use the current figure.
+        ticks : array
+            Colorbar custom tick label locations.
+        ticklabs : array
+            Colorbar custom tick labels.
 
         """
         # parse parameters
@@ -549,7 +564,7 @@ class GridMapDisplay(object):
         if colorbar_flag:
             self.plot_colorbar(mappable=pm, label=colorbar_label,
                                orientation=colorbar_orient, field=field,
-                               ax=ax, fig=fig)
+                               ax=ax, fig=fig, ticks=ticks, ticklabs=ticklabs)
         return
 
     def plot_colorbar(self, mappable=None, orientation='horizontal', label=None,
@@ -575,6 +590,10 @@ class GridMapDisplay(object):
             Axis onto which the colorbar will be drawn. None is also valid.
         fig : Figure
             Figure to place colorbar on. None will use the current figure.
+        ticks : array
+            Colorbar custom tick label locations.
+        ticklabs : array
+            Colorbar custom tick labels.
 
         """
         if fig is None:
@@ -598,6 +617,10 @@ class GridMapDisplay(object):
 
         # plot the colorbar and set the label.
         cb = fig.colorbar(mappable, orientation=orientation, ax=ax, cax=cax)
+        if ticks is not None:
+            cb.set_ticks(ticks)
+        if ticklabs is not None:
+            cb.set_ticklabels(ticklabs)
         cb.set_label(label)
         return
 

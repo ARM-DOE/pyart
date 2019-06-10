@@ -84,7 +84,7 @@ class GridMapDisplayBasemap(object):
         ----------
         lat_lines, lon_lines : array or None
             Locations at which to draw latitude and longitude lines.
-            None will use default values which are resonable for maps of
+            None will use default values which are reasonable for maps of
             North America.
         auto_range : bool
             True to determine map ranges from the latitude and longitude
@@ -129,7 +129,7 @@ class GridMapDisplayBasemap(object):
             axislabels=(None, None), axislabels_flag=False,
             colorbar_flag=True, colorbar_label=None,
             colorbar_orient='vertical', edges=True,
-            ax=None, fig=None, **kwargs):
+            ax=None, fig=None, ticks=None, ticklabs=None, **kwargs):
         """
         Plot the grid onto the current basemap.
 
@@ -142,19 +142,19 @@ class GridMapDisplayBasemap(object):
         level : int
             Index corresponding to the height level to be plotted.
         vmin, vmax : float
-            Lower and upper range for the colormesh.  If either parameter is
+            Lower and upper range for the colormesh. If either parameter is
             None, a value will be determined from the field attributes (if
             available) or the default values of -8, 64 will be used.
             Parameters are ignored is norm is not None.
         norm : Normalize or None, optional
             matplotlib Normalize instance used to scale luminance data.  If not
-            None the vmax and vmin parameters are ignored.  If None, vmin and
+            None the vmax and vmin parameters are ignored. If None, vmin and
             vmax are used for luminance scaling.
         cmap : str or None
             Matplotlib colormap name. None will use the default colormap for
             the field being plotted as specified by the Py-ART configuration.
         mask_outside : bool
-            True to mask data outside of vmin, vmax.  False performs no
+            True to mask data outside of vmin, vmax. False performs no
             masking.
         title : str
             Title to label plot with, None to use default title generated from
@@ -163,13 +163,13 @@ class GridMapDisplayBasemap(object):
         title_flag : bool
             True to add a title to the plot, False does not add a title.
         axislabels : (str, str)
-            2-tuple of x-axis, y-axis labels.  None for either label will use
-            the default axis label.  Parameter is ignored if axislabels_flag is
+            2-tuple of x-axis, y-axis labels. None for either label will use
+            the default axis label. Parameter is ignored if axislabels_flag is
             False.
         axislabels_flag : bool
             True to add label the axes, False does not label the axes.
         colorbar_flag : bool
-            True to add a colorbar with label to the axis.  False leaves off
+            True to add a colorbar with label to the axis. False leaves off
             the colorbar.
         colorbar_label : str
             Colorbar label, None will use a default label generated from the
@@ -179,7 +179,7 @@ class GridMapDisplayBasemap(object):
         edges : bool
             True will interpolate and extrapolate the gate edges from the
             range, azimuth and elevations in the radar, treating these
-            as specifying the center of each gate.  False treats these
+            as specifying the center of each gate. False treats these
             coordinates themselved as the gate edges, resulting in a plot
             in which the last gate in each ray and the entire last ray are not
             not plotted.
@@ -187,6 +187,10 @@ class GridMapDisplayBasemap(object):
             Axis to plot on. None will use the current axis.
         fig : Figure
             Figure to add the colorbar to. None will use the current figure.
+        ticks : array
+            Colorbar custom tick label locations.
+        ticklabs : array
+            Colorbar custom tick labels.
 
         """
         # parse parameters
@@ -225,7 +229,7 @@ class GridMapDisplayBasemap(object):
         if colorbar_flag:
             self.plot_colorbar(
                 mappable=pm, label=colorbar_label, orientation=colorbar_orient,
-                field=field, ax=ax, fig=fig)
+                field=field, ax=ax, fig=fig, ticks=ticks, ticklabs=ticklabs)
 
         return
 
@@ -275,7 +279,7 @@ class GridMapDisplayBasemap(object):
         field : str
             Field to be plotted.
         lon, lat : float
-            Longitude and latitude (in degrees) specifying the slice.  If
+            Longitude and latitude (in degrees) specifying the slice. If
             None the center of the grid is used.
 
         """
@@ -289,7 +293,7 @@ class GridMapDisplayBasemap(object):
             mask_outside=False, title=None, title_flag=True,
             axislabels=(None, None), axislabels_flag=True, colorbar_flag=True,
             colorbar_label=None, colorbar_orient='vertical', edges=True,
-            ax=None, fig=None, **kwargs):
+            ax=None, fig=None, ticks=None, ticklabs=None, **kwargs):
         """
         Plot a slice along a given latitude.
 
@@ -302,19 +306,19 @@ class GridMapDisplayBasemap(object):
         y_index : float
             Index of the latitudinal level to plot.
         vmin, vmax : float
-            Lower and upper range for the colormesh.  If either parameter is
+            Lower and upper range for the colormesh. If either parameter is
             None, a value will be determined from the field attributes (if
             available) or the default values of -8, 64 will be used.
             Parameters are ignored is norm is not None.
         norm : Normalize or None, optional
-            matplotlib Normalize instance used to scale luminance data.  If not
-            None the vmax and vmin parameters are ignored.  If None, vmin and
+            matplotlib Normalize instance used to scale luminance data. If not
+            None the vmax and vmin parameters are ignored. If None, vmin and
             vmax are used for luminance scaling.
         cmap : str or None
             Matplotlib colormap name. None will use the default colormap for
             the field being plotted as specified by the Py-ART configuration.
         mask_outside : bool
-            True to mask data outside of vmin, vmax.  False performs no
+            True to mask data outside of vmin, vmax. False performs no
             masking.
         title : str
             Title to label plot with, None to use default title generated from
@@ -323,8 +327,8 @@ class GridMapDisplayBasemap(object):
         title_flag : bool
             True to add a title to the plot, False does not add a title.
         axislabels : (str, str)
-            2-tuple of x-axis, y-axis labels.  None for either label will use
-            the default axis label.  Parameter is ignored if axislabels_flag is
+            2-tuple of x-axis, y-axis labels. None for either label will use
+            the default axis label. Parameter is ignored if axislabels_flag is
             False.
         axislabels_flag : bool
             True to add label the axes, False does not label the axes.
@@ -339,7 +343,7 @@ class GridMapDisplayBasemap(object):
         edges : bool
             True will interpolate and extrapolate the gate edges from the
             range, azimuth and elevations in the radar, treating these
-            as specifying the center of each gate.  False treats these
+            as specifying the center of each gate. False treats these
             coordinates themselved as the gate edges, resulting in a plot
             in which the last gate in each ray and the entire last ray are not
             not plotted.
@@ -347,6 +351,10 @@ class GridMapDisplayBasemap(object):
             Axis to plot on. None will use the current axis.
         fig : Figure
             Figure to add the colorbar to. None will use the current figure.
+        ticks : array
+            Colorbar custom tick label locations.
+        ticklabs : array
+            Colorbar custom tick labels.
 
         """
         # parse parameters
@@ -390,7 +398,7 @@ class GridMapDisplayBasemap(object):
         if colorbar_flag:
             self.plot_colorbar(
                 mappable=pm, label=colorbar_label, orientation=colorbar_orient,
-                field=field, ax=ax, fig=fig)
+                field=field, ax=ax, fig=fig, ticks=ticks, ticklabs=ticklabs)
         return
 
     def plot_longitude_slice(self, field, lon=None, lat=None, **kwargs):
@@ -405,7 +413,7 @@ class GridMapDisplayBasemap(object):
         field : str
             Field to be plotted.
         lon, lat : float
-            Longitude and latitude (in degrees) specifying the slice.  If
+            Longitude and latitude (in degrees) specifying the slice. If
             None the center of the grid is used.
 
         """
@@ -418,7 +426,7 @@ class GridMapDisplayBasemap(object):
             mask_outside=False, title=None, title_flag=True,
             axislabels=(None, None), axislabels_flag=True, colorbar_flag=True,
             colorbar_label=None, colorbar_orient='vertical', edges=True,
-            ax=None, fig=None, **kwargs):
+            ax=None, fig=None, ticks=None, ticklabs=None, **kwargs):
         """
         Plot a slice along a given longitude.
 
@@ -431,19 +439,19 @@ class GridMapDisplayBasemap(object):
         x_index : float
             Index of the longitudinal level to plot.
         vmin, vmax : float
-            Lower and upper range for the colormesh.  If either parameter is
+            Lower and upper range for the colormesh. If either parameter is
             None, a value will be determined from the field attributes (if
             available) or the default values of -8, 64 will be used.
             Parameters are ignored is norm is not None.
         norm : Normalize or None, optional
-            matplotlib Normalize instance used to scale luminance data.  If not
-            None the vmax and vmin parameters are ignored.  If None, vmin and
+            matplotlib Normalize instance used to scale luminance data. If not
+            None the vmax and vmin parameters are ignored. If None, vmin and
             vmax are used for luminance scaling.
         cmap : str or None
             Matplotlib colormap name. None will use the default colormap for
             the field being plotted as specified by the Py-ART configuration.
         mask_outside : bool
-            True to mask data outside of vmin, vmax.  False performs no
+            True to mask data outside of vmin, vmax. False performs no
             masking.
         title : str
             Title to label plot with, None to use default title generated from
@@ -452,13 +460,13 @@ class GridMapDisplayBasemap(object):
         title_flag : bool
             True to add a title to the plot, False does not add a title.
         axislabels : (str, str)
-            2-tuple of x-axis, y-axis labels.  None for either label will use
-            the default axis label.  Parameter is ignored if axislabels_flag is
+            2-tuple of x-axis, y-axis labels. None for either label will use
+            the default axis label. Parameter is ignored if axislabels_flag is
             False.
         axislabels_flag : bool
             True to add label the axes, False does not label the axes.
         colorbar_flag : bool
-            True to add a colorbar with label to the axis.  False leaves off
+            True to add a colorbar with label to the axis. False leaves off
             the colorbar.
         colorbar_label : str
             Colorbar label, None will use a default label generated from the
@@ -468,7 +476,7 @@ class GridMapDisplayBasemap(object):
         edges : bool
             True will interpolate and extrapolate the gate edges from the
             range, azimuth and elevations in the radar, treating these
-            as specifying the center of each gate.  False treats these
+            as specifying the center of each gate. False treats these
             coordinates themselved as the gate edges, resulting in a plot
             in which the last gate in each ray and the entire last ray are not
             not plotted.
@@ -476,6 +484,10 @@ class GridMapDisplayBasemap(object):
             Axis to plot on. None will use the current axis.
         fig : Figure
             Figure to add the colorbar to. None will use the current figure.
+        ticks : array
+            Colorbar custom tick label locations.
+        ticklabs : array
+            Colorbar custom tick labels.
 
         """
         # parse parameters
@@ -519,33 +531,38 @@ class GridMapDisplayBasemap(object):
         if colorbar_flag:
             self.plot_colorbar(
                 mappable=pm, label=colorbar_label, orientation=colorbar_orient,
-                field=field, ax=ax, fig=fig)
+                field=field, ax=ax, fig=fig, ticks=ticks, ticklabs=ticklabs)
         return
 
     def plot_colorbar(
             self, mappable=None, orientation='horizontal', label=None,
-            cax=None, ax=None, fig=None, field=None):
+            cax=None, ax=None, fig=None, field=None, ticks=None,
+            ticklabs=None):
         """
         Plot a colorbar.
 
         Parameters
         ----------
         mappable : Image, ContourSet, etc.
-            Image, ContourSet, etc to which the colorbar applied.  If None the
+            Image, ContourSet, etc to which the colorbar applied. If None the
             last mappable object will be used.
         field : str
             Field to label colorbar with.
         label : str
-            Colorbar label.  None will use a default value from the last field
+            Colorbar label. None will use a default value from the last field
             plotted.
         orient : str
             Colorbar orientation, either 'vertical' [default] or 'horizontal'.
         cax : Axis
-            Axis onto which the colorbar will be drawn.  None is also valid.
+            Axis onto which the colorbar will be drawn. None is also valid.
         ax : Axes
             Axis onto which the colorbar will be drawn. None is also valid.
         fig : Figure
-            Figure to place colorbar on.  None will use the current figure.
+            Figure to place colorbar on. None will use the current figure.
+        ticks : array
+            Colorbar custom tick label locations.
+        ticklabs : array
+            Colorbar custom tick labels.
 
         """
         if fig is None:
@@ -568,8 +585,11 @@ class GridMapDisplayBasemap(object):
 
         # plot the colorbar and set the label.
         cb = fig.colorbar(mappable, orientation=orientation, ax=ax, cax=cax)
+        if ticks is not None:
+            cb.set_ticks(ticks)
+        if ticklabs is not None:
+            cb.set_ticklabels(ticklabs)
         cb.set_label(label)
-
         return
 
     def _make_basemap(
@@ -595,9 +615,10 @@ class GridMapDisplayBasemap(object):
             Basemap area_thresh parameter. See Basemap documentation.
         ax : axes or None.
             Axis to add the basemap to, if None the current axis is used.
-        kwargs: Basemap options
+        kwargs : Basemap options
             Options to be passed to Basemap. If projection is not specified
             here it uses proj='merc' (mercator).
+
         """
         # parse the parameters
         ax = common.parse_ax(ax)

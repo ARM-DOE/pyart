@@ -103,7 +103,7 @@ class AirborneRadarDisplay(RadarDisplay):
         Create a plot appropiate for the radar.
 
         This function calls the plotting function corresponding to
-        the scan_type of the radar.  Additional keywords can be passed to
+        the scan_type of the radar. Additional keywords can be passed to
         customize the plot, see the appropiate plot function for the
         allowed keywords.
 
@@ -137,7 +137,8 @@ class AirborneRadarDisplay(RadarDisplay):
             axislabels=(None, None), axislabels_flag=True,
             colorbar_flag=True, colorbar_label=None,
             colorbar_orient='vertical', edges=True, filter_transitions=True,
-            ax=None, fig=None, gatefilter=None, raster=False, **kwargs):
+            ax=None, fig=None, gatefilter=None, raster=False, ticks=None,
+            ticklabs=None, **kwargs):
         """
         Plot a sweep as a grid.
 
@@ -163,14 +164,14 @@ class AirborneRadarDisplay(RadarDisplay):
             Luminance maximum value, None for default value.
             Parameter is ignored is norm is not None.
         norm : Normalize or None, optional
-            matplotlib Normalize instance used to scale luminance data.  If not
-            None the vmax and vmin parameters are ignored.  If None, vmin and
+            matplotlib Normalize instance used to scale luminance data. If not
+            None the vmax and vmin parameters are ignored. If None, vmin and
             vmax are used for luminance scaling.
         cmap : str or None
             Matplotlib colormap name. None will use the default colormap for
             the field being plotted as specified by the Py-ART configuration.
         mask_outside : bool
-            True to mask data outside of vmin, vmax.  False performs no
+            True to mask data outside of vmin, vmax. False performs no
             masking.
         title : str
             Title to label plot with, None to use default title generated from
@@ -179,13 +180,13 @@ class AirborneRadarDisplay(RadarDisplay):
         title_flag : bool
             True to add a title to the plot, False does not add a title.
         axislabels : (str, str)
-            2-tuple of x-axis, y-axis labels.  None for either label will use
-            the default axis label.  Parameter is ignored if axislabels_flag is
+            2-tuple of x-axis, y-axis labels. None for either label will use
+            the default axis label. Parameter is ignored if axislabels_flag is
             False.
         axislabels_flag : bool
             True to add label the axes, False does not label the axes.
         colorbar_flag : bool
-            True to add a colorbar with label to the axis.  False leaves off
+            True to add a colorbar with label to the axis. False leaves off
             the colorbar.
         colorbar_label : str
             Colorbar label, None will use a default label generated from the
@@ -195,7 +196,7 @@ class AirborneRadarDisplay(RadarDisplay):
         edges : bool
             True will interpolate and extrapolate the gate edges from the
             range, azimuth and elevations in the radar, treating these
-            as specifying the center of each gate.  False treats these
+            as specifying the center of each gate. False treats these
             coordinates themselved as the gate edges, resulting in a plot
             in which the last gate in each ray and the entire last ray are not
             plotted.
@@ -204,7 +205,7 @@ class AirborneRadarDisplay(RadarDisplay):
             applied to data.
         filter_transitions : bool
             True to remove rays where the antenna was in transition between
-            sweeps from the plot.  False will include these rays in the plot.
+            sweeps from the plot. False will include these rays in the plot.
             No rays are filtered when the antenna_transition attribute of the
             underlying radar is not present.
         ax : Axis
@@ -212,11 +213,15 @@ class AirborneRadarDisplay(RadarDisplay):
         fig : Figure
             Figure to add the colorbar to. None will use the current figure.
         raster : bool
-            False by default.  Set to true to render the display as a raster
-            rather than a vector in call to pcolormesh.  Saves time in plotting
-            high resolution data over large areas.  Be sure to set the dpi
+            False by default. Set to true to render the display as a raster
+            rather than a vector in call to pcolormesh. Saves time in plotting
+            high resolution data over large areas. Be sure to set the dpi
             of the plot for your application if you save it as a vector format
             (i.e., pdf, eps, svg).
+        ticks : array
+            Colorbar custom tick label locations.
+        ticklabs : array
+            Colorbar custom tick labels.
 
         """
         # parse parameters
@@ -257,7 +262,7 @@ class AirborneRadarDisplay(RadarDisplay):
         if colorbar_flag:
             self.plot_colorbar(
                 mappable=pm, label=colorbar_label, orient=colorbar_orient,
-                field=field, ax=ax, fig=fig)
+                field=field, ax=ax, fig=fig, ticks=ticks, ticklabs=ticklabs)
 
     def label_xaxis_x(self, ax=None):
         """ Label the xaxis with the default label for x units. """
