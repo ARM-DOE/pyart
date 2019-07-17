@@ -177,11 +177,11 @@ class GridMapDisplay(object):
         cmap = common.parse_cmap(cmap, field)
 
         if lon_lines is None:
-            lon_lines = np.linspace(np.around(ds.lon.max(), decimals=1),
-                                    np.around(ds.lon.min(), decimals=1), 5)
+            lon_lines = np.linspace(np.around(ds.lon.min()-.1, decimals=2),
+                                    np.around(ds.lon.max()+.1, decimals=2), 5)
         if lat_lines is None:
-            lat_lines = np.linspace(np.around(ds.lat.min(), decimals=0),
-                                    np.around(ds.lat.max(), decimals=0), 5)
+            lat_lines = np.linspace(np.around(ds.lat.min()-.1, decimals=2),
+                                    np.around(ds.lat.max()+.1, decimals=2), 5)
 
         data = ds[field].data[0, level]
 
