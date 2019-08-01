@@ -158,8 +158,6 @@ def _interpolate_elevation_edges(elevations):
     edges[1:-1] = (elevations[:-1] + elevations[1:]) / 2.
     edges[0] = elevations[0] - (elevations[1] - elevations[0]) / 2.
     edges[-1] = elevations[-1] - (elevations[-2] - elevations[-1]) / 2.
-    edges[edges > 180] = 180.   # prevent angles from going below horizon
-    edges[edges < 0] = 0.
     return edges
 
 
