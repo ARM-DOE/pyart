@@ -231,6 +231,12 @@ def read_odim_h5(filename, field_names=None, additional_metadata=None,
         all_sweeps_nbins = [hfile[d]['where'].attrs['nbins'] for d in datasets]
         # check for max range off all sweeps
         max_nbins = max(all_sweeps_nbins)
+
+        if isinstance(max_nbins, np.ndarray):
+            max_nbins = max_nbins[0]
+        else:
+            max_nbins = max(all_sweeps_nbins)
+
         _range['data'] = (np.arange(max_nbins, dtype='float32') * rscale[0] +
                           rstart[0] * 1000.)
         _range['meters_to_center_of_first_gate'] = rstart[0] * 1000.
