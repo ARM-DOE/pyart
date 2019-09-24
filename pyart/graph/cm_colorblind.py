@@ -32,7 +32,7 @@ def _generate_cmap(name, lutsize):
     # Generate the colormap object.
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", FutureWarning)
-        if 'red' in spec:
+        if isinstance(spec, dict) and 'red' in spec.keys():
             return colors.LinearSegmentedColormap(name, spec, lutsize)
         else:
             return colors.LinearSegmentedColormap.from_list(name, spec, lutsize)
