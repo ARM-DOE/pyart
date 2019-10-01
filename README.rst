@@ -174,7 +174,10 @@ to install these dependencies is by using a
 `Scientific Python distributions <http://scipy.org/install.html>`_.
 `Anaconda <https://www.anaconda.com/distribution/>`_ will install all of
 the above packages by default on Windows, Linux and Mac computers and is
-provided free of charge by Anaconda.
+provided free of charge by Anaconda. Anaconda also has their own compilers,
+which may be required for optional dependencies such as CyLP. These compilers
+can be found here:
+https://docs.conda.io/projects/conda-build/en/latest/resources/compiler-tools.html
 
 
 Optional Dependences

@@ -73,7 +73,9 @@ not specified, some common locations will be searched. Note that the location
 provided should be the root TRMM RSL path, under which both a `lib` and
 `include` directory are contained, the default location is ``/lib/local/trmm``.
 If using CyLP, a path for the coincbc directory is needed. This can be done
-using ``export COIN_INSTALL_DIR=/path/to/coincbc/``.
+using ``export COIN_INSTALL_DIR=/path/to/coincbc/``. When using CyLP, on some
+systems, installing the Anaconda compilers is needed. These can be found here:
+https://docs.conda.io/projects/conda-build/en/latest/resources/compiler-tools.html
 
 After specifying the TRMM RSL path Py-ART can be installed globally using
 
@@ -114,6 +116,13 @@ Frequently asked questions
 
       pip install pyart
 
+* I'm getting a segfault or compile error with CyLP in newer Python versions
+  when installing in an environment.
+
+  Anaconda has its own compilers now on conda-forge. Theres can be found here:
+  https://docs.conda.io/projects/conda-build/en/latest/resources/compiler-tools.html
+  Once the proper compilers are installed, reinstall CyLP.
+
 * I'm getting a segfault or another error in python when using 
   ``pyart.io.read_rsl()`` with IRIS/other files.
   
@@ -136,3 +145,12 @@ Frequently asked questions
       define_macros = macros, extra_compile_args=['-m64'], extra_link_args=['-m64'],
 
   Then build and install PyGLPK as recommended in the PYGLPK README.txt file.
+
+* When running basemap, I get an error 'KeyError: PROJ_LIB'.
+
+  Basemap is not being supported beyond 2020, some of these errors relate
+  to it not playing nicely with newer versions of packages. We recommend using
+  Cartopy instead, but some users have been able to use:
+  import os
+  os.environ['PROJ_LIB'] = 'C:/Users/xx Username xxx/Anaconda3/Lib/site-packages/mpl_toolkits/basemap'
+  To get basemap working, but again Cartopy should be used instead of Basemap.
