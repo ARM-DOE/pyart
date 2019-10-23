@@ -283,7 +283,7 @@ class Grid(object):
                    arm_time_variables=arm_time_variables,
                    arm_alt_lat_lon_variables=arm_alt_lat_lon_variables)
 
-    def to_xarray(self, edges=False):
+    def to_xarray(self):
         """
         Convert the Grid object to an xarray format.
 
