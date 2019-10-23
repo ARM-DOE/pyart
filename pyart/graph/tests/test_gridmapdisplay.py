@@ -25,6 +25,19 @@ def test_gridmapdisplay_simple(outfile=None):
 
 @pytest.mark.skipif(not pyart.graph.gridmapdisplay._XARRAY_AVAILABLE,
                     reason='Xarray is not installed')
+def test_gridmapdisplay_imshow(outfile=None):
+    # test basic GridMapDisplat functionally.
+    grid = pyart.testing.make_target_grid()
+    display = pyart.graph.GridMapDisplay(grid)
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    display.plot_grid('reflectivity', imshow=True,
+                      vmin=-5, vmax=35, ax=ax)
+    if outfile:
+        fig.savefig(outfile)
+
+@pytest.mark.skipif(not pyart.graph.gridmapdisplay._XARRAY_AVAILABLE,
+                    reason='Xarray is not installed')
 def test_gridmapdisplay_fancy(outfile=None):
     # test a bunch of GridMapDisplay functionaliy
     grid = pyart.testing.make_target_grid()
