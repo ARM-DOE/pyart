@@ -75,7 +75,8 @@ def test_grid_write_method():
         # _check_dicts_similar(grid1.radar_name, grid2.radar_name)
         #  assert grid1.nradar == grid2.nradar
 
-def test_grid_to_xarray():
+
+def test_grid_to_xarray():    
     grid = pyart.testing.make_target_grid()
     ds = grid.to_xarray()
 
@@ -83,15 +84,19 @@ def test_grid_to_xarray():
     time = np.array([datetime.datetime.strftime(netCDF4.num2date(
         grid.time['data'][0], grid.time['units']), '%Y-%m-%dT%H:%M:%S.%f')],
                     dtype='datetime64[ns]')
-    x = lon[0, :]
-    y = lat[:, 0]
+    lon = lon[0, :]
+    lat = lat[:, 0]
     z = grid.z['data']
-    
+    y = grid.y['data']
+    x = grid.x['data']
+
     assert_equal(ds.x.data, x)
     assert_equal(ds.y.data, y)
+    assert_equal(ds.z.data, z)
     assert_equal(ds.lon.data, lon)
     assert_equal(ds.lat.data, lat)
     assert_equal(ds.time.data, time)
+
 
 def _check_dicts_similar(dic1, dic2):
     for k, v in dic1.items():

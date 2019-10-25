@@ -301,7 +301,10 @@ class Grid(object):
             
         """
         lon, lat = self.get_point_longitude_latitude()
-        height = self.point_z['data'][:, 0, 0]
+        z = self.z['data']
+        y = self.y['data']
+        x = self.x['data']
+
         time = np.array([num2date(self.time['data'][0],
                                   self.time['units'])])
         
@@ -311,11 +314,11 @@ class Grid(object):
             data = xarray.DataArray(np.ma.expand_dims(field_data, 0),
                                     dims=('time', 'z', 'y', 'x'),
                                     coords={'time' : (['time'], time),
-                                            'z' : (['z'], height),
-                                            'lat' : (['y', 'x'], lat),
-                                            'lon' : (['y', 'x'], lon),
-                                            'y' : (['y'], lat[:, 0]),
-                                            'x' : (['x'], lon[0, :])})
+                                            'z' : (['z'], z),
+                                            'lat' : (['y'], lat[:, 0]),
+                                            'lon' : (['x'], lon[0, :]),
+                                            'y' : (['y'], y),
+                                            'x' : (['x'], x)})
             for meta in list(self.fields[field].keys()):
                 if meta is not 'data':
                     data.attrs.update({meta: self.fields[field][meta]})
@@ -327,9 +330,10 @@ class Grid(object):
             ds.lat.attrs = [('long_name', 'latitude of grid cell center'),
                             ('units', 'degree_N'),
                             ('standard_name', 'Latitude')]
-            ds.z.attrs = [('long_name', 'height above mean sea level'),
-                          ('units', 'm'),
-                          ('standard_name', 'Height')]
+
+            ds.z.attrs = get_metadata('z')
+            ds.y.attrs = get_metadata('y')
+            ds.x.attrs = get_metadata('x')
             
             ds.z.encoding['_FillValue'] = None
             ds.lat.encoding['_FillValue'] = None

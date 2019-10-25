@@ -98,7 +98,8 @@ class GridMapDisplay(object):
                   colorbar_label=None, colorbar_orient='vertical',
                   ax=None, fig=None, lat_lines=None,
                   lon_lines=None, projection=None,
-                  embelish=True, ticks=None, ticklabs=None, **kwargs):
+                  embelish=True, ticks=None, ticklabs=None,
+                  imshow=False, **kwargs):
         """
         Plot the grid using xarray and cartopy.
 
@@ -167,6 +168,9 @@ class GridMapDisplay(object):
             Colorbar custom tick label locations.
         ticklabs : array
             Colorbar custom tick labels.
+        imshow : bool
+            If used, plot uses ax.imshow instead of ax.pcolormesh.
+            Default is False.
 
         """
         ds = self.grid.to_xarray()
@@ -183,12 +187,12 @@ class GridMapDisplay(object):
             lat_lines = np.linspace(np.around(ds.lat.min()-.1, decimals=2),
                                     np.around(ds.lat.max()+.1, decimals=2), 5)
 
-        data = ds[field].data[0, level]
-
         # mask the data where outside the limits
         if mask_outside:
-            data = np.ma.masked_invalid(data)
-            data = np.ma.masked_outside(data, vmin, vmax)
+            data = ds[field].data
+            masked_data = np.ma.masked_invalid(data)
+            masked_data = np.ma.masked_outside(masked_data, vmin, vmax)
+            ds[field].data = masked_data
 
         if hasattr(ax, 'projection'):
             projection = ax.projection
@@ -203,9 +207,14 @@ class GridMapDisplay(object):
         if norm is not None: # if norm is set do not override with vmin/vmax
             vmin = vmax = None
 
-        pm = ds[field][0, level].plot.pcolormesh(x='lon', y='lat', cmap=cmap,
-                                                 vmin=vmin, vmax=vmax,
-                                                 add_colorbar=False, **kwargs)
+        if imshow:
+            pm = ds[field][0, level].plot.imshow(
+                x='lon', y='lat', cmap=cmap, vmin=vmin, vmax=vmax,
+                add_colorbar=False, **kwargs)
+        else:
+            pm = ds[field][0, level].plot.pcolormesh(
+                x='lon', y='lat', cmap=cmap, vmin=vmin, vmax=vmax,
+                add_colorbar=False, **kwargs)
 
         self.mappables.append(pm)
         self.fields.append(field)
@@ -319,7 +328,8 @@ class GridMapDisplay(object):
                                axislabels=(None, None), axislabels_flag=True,
                                colorbar_flag=True, colorbar_label=None,
                                colorbar_orient='vertical', edges=True, ax=None,
-                               fig=None, ticks=None, ticklabs=None, **kwargs):
+                               fig=None, ticks=None, ticklabs=None,
+                               **kwargs):
         """
         Plot a slice along a given latitude.
 
@@ -407,8 +417,11 @@ class GridMapDisplay(object):
         xd, yd = np.meshgrid(x_1d, z_1d)
         if norm is not None: # if norm is set do not override with vmin, vmax
             vmin = vmax = None
-        pm = ax.pcolormesh(xd, yd, data, vmin=vmin, vmax=vmax, norm=norm,
-                           cmap=cmap, **kwargs)
+
+        pm = ax.pcolormesh(
+            xd, yd, data, vmin=vmin, vmax=vmax, norm=norm,
+            cmap=cmap, **kwargs)
+
         self.mappables.append(pm)
         self.fields.append(field)
 
@@ -545,8 +558,11 @@ class GridMapDisplay(object):
 
         if norm is not None: # if norm is set do not override with vmin, vmax
             vmin = vmax = None
-        pm = ax.pcolormesh(xd, yd, data, vmin=vmin, vmax=vmax, norm=norm,
-                           cmap=cmap, **kwargs)
+
+        pm = ax.pcolormesh(
+            xd, yd, data, vmin=vmin, vmax=vmax, norm=norm,
+            cmap=cmap, **kwargs)
+
         self.mappables.append(pm)
         self.fields.append(field)
 
@@ -626,7 +642,8 @@ class GridMapDisplay(object):
         return
 
     def _find_nearest_grid_indices(self, lon, lat):
-        """ Find the nearest x, y grid indices for a given latitude and longitude. """
+        """ Find the nearest x, y grid indices for a given latitude and
+        longitude. """
 
         # A similar method would make a good addition to the Grid class itself
         lon, lat = common.parse_lon_lat(self.grid, lon, lat)
