@@ -770,12 +770,6 @@ def _create_ncvar(dic, dataset, name, dimensions):
     if 'units' in dic.keys():
         ncvar.setncattr('units', dic['units'])
 
-    # remove _FillValue and replace to make it the third attribute.
-    if '_FillValue' in ncvar.ncattrs():
-        fv = ncvar._FillValue
-        ncvar.delncattr('_FillValue')
-        ncvar.setncattr('_FillValue', fv)
-
     # set all attributes
     for key, value in dic.items():
         if key in special_keys.keys():
