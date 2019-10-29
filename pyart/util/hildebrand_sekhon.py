@@ -13,8 +13,7 @@ Estimation of noise in Doppler spectra using the Hildebrand Sekhon method.
 
 import numpy as np
 
-
-def estimate_noise_hs74(spectrum, navg=1):
+def estimate_noise_hs74(spectrum, navg=1, nnoise_min=1):
     """
     Estimate noise parameters of a Doppler spectrum.
 
@@ -28,8 +27,10 @@ def estimate_noise_hs74(spectrum, navg=1):
     navg : int, optional
         The number of spectral bins over which a moving average has been
         taken. Corresponds to the **p** variable from equation 9 of the
-        article.  The default value of 1 is appropiate when no moving
+        article. The default value of 1 is appropriate when no moving
         average has been applied to the spectrum.
+    nnoise_min : int, optional
+        Minimum number of noise samples to consider the estimation valid.
 
     Returns
     -------
@@ -55,18 +56,27 @@ def estimate_noise_hs74(spectrum, navg=1):
     """
     sorted_spectrum = np.sort(spectrum)
     nnoise = len(spectrum)  # default to all points in the spectrum as noise
-    for npts in range(1, len(sorted_spectrum)+1):
-        partial = sorted_spectrum[:npts]
-        mean = np.mean(partial)
-        var = np.var(partial)
-        if var * navg < mean**2.:
+
+    rtest = 1+1/navg
+    sum1 = 0.
+    sum2 = 0.
+    for i, pwr in enumerate(sorted_spectrum):
+        npts = i+1
+        sum1 += pwr
+        sum2 += pwr*pwr
+
+        if npts < nnoise_min:
+            continue
+
+        if npts*sum2 < sum1*sum1*rtest:
             nnoise = npts
         else:
-            # partial spectrum no longer has characteristics of white noise
+            # partial spectrum no longer has characteristics of white noise.
+            sum1 -= pwr
+            sum2 -= pwr*pwr
             break
 
-    noise_spectrum = sorted_spectrum[:nnoise]
-    mean = np.mean(noise_spectrum)
+    mean = sum1/nnoise
+    var = sum2/nnoise-mean*mean
     threshold = sorted_spectrum[nnoise-1]
-    var = np.var(noise_spectrum)
     return mean, threshold, var, nnoise
