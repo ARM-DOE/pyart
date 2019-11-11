@@ -9,7 +9,6 @@ dependencies:
   - matplotlib
   - netcdf4
   - pytest
-  - basemap
   - trmm_rsl
   - wradlib
   - cartopy
