@@ -235,33 +235,38 @@ def dealias_region_based(
             new_interval_limits = np.linspace(scorr.min(), scorr.max(), 10)
             labels_corr, nfeatures_corr = _find_regions(
                 scorr, sfilter, new_interval_limits)
+            
+            # If we only have one region, just adjust the whole sweep by
+            # x nyquist intervals
+            if nfeatures_corr < 2:
+                scorr = scorr + gfold * nyquist_interval
+            else:
+                bounds_list = [(x, y) for (x, y) in zip(
+                    -6*np.ones(nfeatures_corr), 5*np.ones(nfeatures_corr))]
+                scorr_means = np.zeros(nfeatures_corr)
+                sref_means = np.zeros(nfeatures_corr)
+                for reg in range(1, nfeatures_corr+1):
+                    scorr_means[reg-1] = np.ma.mean(scorr[labels_corr == reg])
+                    sref_means[reg-1] = np.ma.mean(sref[labels_corr == reg])
 
-            bounds_list = [(x, y) for (x, y) in zip(-6*np.ones(nfeatures_corr),
-                                                    5*np.ones(nfeatures_corr))]
-            scorr_means = np.zeros(nfeatures_corr)
-            sref_means = np.zeros(nfeatures_corr)
-            for reg in range(1, nfeatures_corr+1):
-                scorr_means[reg-1] = np.ma.mean(scorr[labels_corr == reg])
-                sref_means[reg-1] = np.ma.mean(sref[labels_corr == reg])
+                def cost_function(x):
+                    return _cost_function(x, scorr_means, sref_means,
+                                          nyquist_interval, nfeatures_corr)
 
-            def cost_function(x):
-                return _cost_function(x, scorr_means, sref_means,
-                                      nyquist_interval, nfeatures_corr)
+                def gradient(x):
+                    return _gradient(x, scorr_means, sref_means,
+                                     nyquist_interval, nfeatures_corr)
 
-            def gradient(x):
-                return _gradient(x, scorr_means, sref_means,
-                                 nyquist_interval, nfeatures_corr)
+                nyq_adjustments = fmin_l_bfgs_b(
+                    cost_function, gfold*np.ones((nfeatures_corr)), disp=True,
+                    fprime=gradient, bounds=bounds_list, maxiter=200,
+                    )
 
-            nyq_adjustments = fmin_l_bfgs_b(
-                cost_function, gfold*np.ones((nfeatures_corr)), disp=True,
-                fprime=gradient, bounds=bounds_list, maxiter=200,
-                )
-
-            i = 0
-            for reg in range(1, nfeatures_corr):
-                scorr[labels == reg] += (nyquist_interval *
-                                         np.round(nyq_adjustments[0][i]))
-                i = i + 1
+                i = 0
+                for reg in range(1, nfeatures_corr):
+                    scorr[labels == reg] += (nyquist_interval *
+                                             np.round(nyq_adjustments[0][i]))
+                    i = i + 1
 
     # fill_value from the velocity dictionary if present
     fill_value = radar.fields[vel_field].get('_FillValue', get_fillvalue())
