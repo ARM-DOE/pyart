@@ -77,7 +77,7 @@ class RadarMapDisplay(RadarDisplay):
         Scan angle in degrees.
     grid_projection : cartopy.crs
         AzimuthalEquidistant cartopy projection centered on radar.
-        Used to transform points into map projection
+        Used to transform points into map projection.
 
     """
 
@@ -148,14 +148,14 @@ class RadarMapDisplay(RadarDisplay):
             Luminance maximum value, None for default value.
             Parameter is ignored is norm is not None.
         norm : Normalize or None, optional
-            matplotlib Normalize instance used to scale luminance data.  If not
-            None the vmax and vmin parameters are ignored.  If None, vmin and
+            matplotlib Normalize instance used to scale luminance data. If not
+            None the vmax and vmin parameters are ignored. If None, vmin and
             vmax are used for luminance scaling.
         cmap : str or None
             Matplotlib colormap name. None will use the default colormap for
             the field being plotted as specified by the Py-ART configuration.
         mask_outside : bool
-            True to mask data outside of vmin, vmax.  False performs no
+            True to mask data outside of vmin, vmax. False performs no
             masking.
         title : str
             Title to label plot with, None to use default title generated from
@@ -164,7 +164,7 @@ class RadarMapDisplay(RadarDisplay):
         title_flag : bool
             True to add a title to the plot, False does not add a title.
         colorbar_flag : bool
-            True to add a colorbar with label to the axis.  False leaves off
+            True to add a colorbar with label to the axis. False leaves off
             the colorbar.
         ticks : array
             Colorbar custom tick label locations.
@@ -209,13 +209,13 @@ class RadarMapDisplay(RadarDisplay):
             applied to data.
         filter_transitions : bool
             True to remove rays where the antenna was in transition between
-            sweeps from the plot.  False will include these rays in the plot.
+            sweeps from the plot. False will include these rays in the plot.
             No rays are filtered when the antenna_transition attribute of the
             underlying radar is not present.
         edges : bool
             True will interpolate and extrapolate the gate edges from the
             range, azimuth and elevations in the radar, treating these
-            as specifying the center of each gate.  False treats these
+            as specifying the center of each gate. False treats these
             coordinates themselved as the gate edges, resulting in a plot
             in which the last gate in each ray and the entire last ray are not
             not plotted.
@@ -224,9 +224,9 @@ class RadarMapDisplay(RadarDisplay):
             etc.. Use for speedup when specifying shapefiles.
             Note that lat lon labels only work with certain projections.
         raster : bool
-            False by default.  Set to true to render the display as a raster
-            rather than a vector in call to pcolormesh.  Saves time in plotting
-            high resolution data over large areas.  Be sure to set the dpi
+            False by default. Set to true to render the display as a raster
+            rather than a vector in call to pcolormesh. Saves time in plotting
+            high resolution data over large areas. Be sure to set the dpi
             of the plot for your application if you save it as a vector format
             (i.e., pdf, eps, svg).
         alpha : float or None
@@ -264,8 +264,7 @@ class RadarMapDisplay(RadarDisplay):
                     central_longitude=lon_0, central_latitude=lat_0)
                 warnings.warn("No projection was defined for the axes."
                               + " Overridding defined axes and using default "
-                              + "axes.",
-                              UserWarning)
+                              + "axes.", UserWarning)
             ax = plt.axes(projection=projection)
 
         if min_lon:
@@ -369,7 +368,7 @@ class RadarMapDisplay(RadarDisplay):
             Matplotlib compatible string which specified the symbol of the
             point.
         label_text : str, optional.
-            Text to label symbol with.  If None no label will be added.
+            Text to label symbol with. If None no label will be added.
         label_offset : [float, float]
             Offset in lon, lat degrees for the bottom left corner of the label
             text relative to the point. A value of None will use 0.01.
@@ -445,7 +444,7 @@ class RadarMapDisplay(RadarDisplay):
         ----------
         range_ring_location_km : float
             Location of range ring in km.
-        npts: int
+        npts : int
             Number of points in the ring, higher for better resolution.
         line_style : str
             Matplotlib compatible string which specified the line
@@ -468,7 +467,6 @@ class RadarMapDisplay(RadarDisplay):
 
 # These methods are a hack to allow gridlines when the projection is lambert
 # http://nbviewer.jupyter.org/gist/ajdawson/dd536f786741e987ae4e
-
 def find_side(ls, side):
     """
     Given a shapely LineString which is assumed to be rectangular, return the
@@ -483,7 +481,7 @@ def find_side(ls, side):
 
 
 def lambert_xticks(ax, ticks):
-    """Draw ticks on the bottom x-axis of a Lambert Conformal projection."""
+    """ Draw ticks on the bottom x-axis of a Lambert Conformal projection. """
     def te(xy):
         return xy[0]
 
@@ -498,7 +496,7 @@ def lambert_xticks(ax, ticks):
 
 
 def lambert_yticks(ax, ticks):
-    """Draw ticks on the left y-axis of a Lambert Conformal projection."""
+    """ Draw ticks on the left y-axis of a Lambert Conformal projection. """
     def te(xy):
         return xy[1]
 
@@ -513,7 +511,7 @@ def lambert_yticks(ax, ticks):
 
 
 def _lambert_ticks(ax, ticks, tick_location, line_constructor, tick_extractor):
-    """Get the tick locations and labels for a Lambert Conformal projection."""
+    """ Get the tick locations and labels for a Lambert Conformal projection. """
     outline_patch = sgeom.LineString(
         ax.outline_patch.get_path().vertices.tolist())
     axis = find_side(outline_patch, tick_location)
@@ -530,8 +528,12 @@ def _lambert_ticks(ax, ticks, tick_location, line_constructor, tick_extractor):
         if not locs:
             tick = [None]
         else:
-            tick = tick_extractor(locs.xy)
+            try:
+                tick = tick_extractor(locs.xy)
+            except AttributeError:
+                tick = [None]
         _ticks.append(tick[0])
+
     # Remove ticks that aren't visible:
     ticklabels = copy(ticks)
     while True:
