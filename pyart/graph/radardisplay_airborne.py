@@ -131,7 +131,7 @@ class AirborneRadarDisplay(RadarDisplay):
         return
 
     def plot_sweep_grid(
-            self, field, sweep=0, mask_tuple=None,
+            self, field, sweep=0, ignoreTilt=False, mask_tuple=None,
             vmin=None, vmax=None, cmap=None, norm=None, mask_outside=False,
             title=None, title_flag=True,
             axislabels=(None, None), axislabels_flag=True,
@@ -153,6 +153,13 @@ class AirborneRadarDisplay(RadarDisplay):
 
         Other Parameters
         ----------------
+        ignoreTilt : bool
+            True to ignore tilt angle when running the 
+            antenna_to_cartesian_track_relative coordinate transformation (by 
+            setting tilt angle to 0), effectively plotting data relative to 
+            slant range (the same plotting method utilized by the NCAR 
+            soloii/3 software). False (default) plots relative to the aircraft 
+            longitudinal axis.
         mask_tuple : (str, float)
             Tuple containing the field name and value below which to mask
             field prior to plotting, for example to mask all data where
@@ -232,7 +239,7 @@ class AirborneRadarDisplay(RadarDisplay):
         # get data for the plot
         data = self._get_data(
             field, sweep, mask_tuple, filter_transitions, gatefilter)
-        x, z = self._get_x_z(sweep, edges, filter_transitions)
+        x, z = self._get_x_z(sweep, edges, filter_transitions, ignoreTilt=ignoreTilt)
 
         # mask the data where outside the limits
         if mask_outside:
@@ -278,8 +285,13 @@ class AirborneRadarDisplay(RadarDisplay):
         """ Label the yaxis with the default label for z units. """
         ax = common.parse_ax(ax)
         ax.set_ylabel('Distance Above ' + self.origin + '  (km)')
+        
+    def _get_x_z(self, sweep, edges, filter_transitions, ignoreTilt=False):
+        """ Retrieve and return x and z coordinate in km. """
+        x, _, z = self._get_x_y_z(sweep, edges, filter_transitions, ignoreTilt=ignoreTilt)
+        return x, z
 
-    def _get_x_y_z(self, sweep, edges, filter_transitions):
+    def _get_x_y_z(self, sweep, edges, filter_transitions, ignoreTilt=False):
         """ Retrieve and return x, y, and z coordinate in km. """
         sweep_slice = self._radar.get_slice(sweep)
 
@@ -323,7 +335,10 @@ class AirborneRadarDisplay(RadarDisplay):
                 drift = self.drift[sweep_slice]
                 tilt = self.tilt[sweep_slice]
                 pitch = self.pitch[sweep_slice]
-
+            
+            if ignoreTilt:
+                tilt = tilt * 0.0
+            
             if edges:
                 if len(ranges) != 1:
                     ranges = transforms._interpolate_range_edges(ranges)
