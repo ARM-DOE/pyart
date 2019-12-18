@@ -5,7 +5,7 @@ environment:
   matrix:
     - PYTHON_VERSION: "2.7"
 
-    - PYTHON_VERSION: "3.7"
+    - PYTHON_VERSION: "3.8"
 
 platform:
     - x64
@@ -47,4 +47,4 @@ build: false
 test_script:
   # run the unit tests
   - "if \"%PYTHON_VERSION%\"==\"2.7\" (pytest -v --cov pyart --ignore pyart/util)"
-  - "if \"%PYTHON_VERSION%\"==\"3.7\" (pytest -v --cov pyart)"
+  - "if \"%PYTHON_VERSION%\"==\"3.8\" (pytest -v --cov pyart)"

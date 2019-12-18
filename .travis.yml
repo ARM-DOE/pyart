@@ -25,11 +25,15 @@ matrix:
       env:
         - PYTHON_VERSION="3.7"
         - PYTEST_ARGS="-v --cov pyart"
+    - python: 3.8
+      env:
+        - PYTHON_VERSION="3.8"
+        - PYTEST_ARGS="-v --cov pyart"
         - DOC_BUILD="true"
         - COVERALLS="true"
-    - python: 3.7
+    - python: 3.8
       env:
-        - PYTHON_VERSION="3.7"
+        - PYTHON_VERSION="3.8"
         - PYTEST_ARGS="-v --pyargs pyart"
         - FROM_RECIPE="true"
 install: source continuous_integration/install.sh
