@@ -89,7 +89,7 @@ environment based on the `environment.yml <https://github.com/ARM-DOE/pyart/blob
 
 Or for a basic environment and downloading optional dependencies as needed::
 
-    conda create -n pyart_env -c conda-forge python=3.7 arm_pyart
+    conda create -n pyart_env -c conda-forge python=3.8 arm_pyart
 
 Basic command in a terminal or command prompt to install the latest version of
 Py-ART::
@@ -160,7 +160,7 @@ Other related open source software for working with weather radar data:
 Dependencies
 ============
 
-Py-ART is tested to work under Python 2.7, 3.6 and 3.7.
+Py-ART is tested to work under Python 3.6, 3.7 and 3.8
 
 The required dependencies to install Py-ART in addition to Python are:
 
