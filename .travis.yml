@@ -13,10 +13,6 @@ env:
 
 matrix:
     include:
-    - python: 2.7
-      env:
-        - PYTHON_VERSION="2.7"
-        - PYTEST_ARGS="-v --cov pyart --ignore=pyart/util"
     - python: 3.6
       env:
         - PYTHON_VERSION="3.6"
