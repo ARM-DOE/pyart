@@ -29,11 +29,10 @@ install:
   - cmd: conda config --set changeps1 no
   - cmd: conda config --add channels conda-forge
   - cmd: conda config --add channels conda-forge
-  - cmd: conda create --yes --quiet -n matrix_env python=%PYTHON_VERSION% pip
-  - cmd: activate matrix_env
 
   # Install Py-ART dependecies
-  - cmd: conda install -y -q numpy scipy matplotlib netcdf4 pytest pytest-cov cython cartopy xarray
+  - cmd: conda create -y -q -n matrix_env python=%PYTHON_VERSON% numpy scipy matplotlib netcdf4 pytest pytest-cov cython cartopy xarray
+  - cmd: activate matrix_env
 
   # Check that we have the expected version and architecture for Python
   # in the conda environment
