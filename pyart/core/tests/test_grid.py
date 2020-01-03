@@ -1,7 +1,5 @@
 """ Unit Tests for Py-ART's core/grid.py module. """
 
-from __future__ import print_function
-
 import functools
 import pickle
 

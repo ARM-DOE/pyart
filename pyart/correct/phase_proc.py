@@ -38,8 +38,6 @@ Adapted by Scott Collis and Scott Giangrande, refactored by Jonathan Helmus.
 
 """
 
-from __future__ import print_function, division
-
 import copy
 from time import time
 

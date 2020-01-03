@@ -1,7 +1,5 @@
 """ Unit Tests for Py-ART's uf_write module. """
 
-from __future__ import unicode_literals
-
 try:
     from StringIO import StringIO
 except ImportError:

@@ -14,8 +14,6 @@ Routines for reading sinarame_H5 files.
 
 """
 
-from __future__ import print_function
-
 from datetime import datetime
 import glob
 import os

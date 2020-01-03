@@ -23,8 +23,6 @@ Class for reading data from NEXRAD Level 3 files.
 
 """
 
-from __future__ import division
-
 # This file is part of the Py-ART, the Python ARM Radar Toolkit
 # https://github.com/ARM-DOE/pyart
 

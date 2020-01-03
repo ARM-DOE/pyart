@@ -1,6 +1,5 @@
 # check that the dummy NEXRAD file is simlar to non-dummy file.
 
-from __future__ import print_function
 import numpy as np
 from numpy.testing import assert_array_equal, assert_allclose
 
