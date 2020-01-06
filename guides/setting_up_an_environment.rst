@@ -73,7 +73,7 @@ if you want Jupyter Notebook to run in that enviroment with those packages::
 while that environment is activated. Another way to create a conda environment
 is by doing it from scratch using the conda create command. An example of this::
 
-        conda create -n pyart_env -c conda-forge python=3.6 arm_pyart netCDF4
+        conda create -n pyart_env -c conda-forge python=3.8 arm_pyart netCDF4
         cartopy scipy numpy matplotlib
 
 This will also create an environment called pyart_env that can be activate the
