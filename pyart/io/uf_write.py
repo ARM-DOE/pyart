@@ -19,8 +19,6 @@ Functions for writing UF files.
 
 """
 
-from __future__ import unicode_literals
-
 import math
 import struct
 import warnings
