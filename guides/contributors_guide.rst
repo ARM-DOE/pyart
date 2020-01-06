@@ -47,7 +47,8 @@ Install
 
 The easiest method for installing Py-ART is to use the conda packages from
 the latest release and use Python 3, as Python 2 support ended January 1st,
-2020. To do this you must download and install 
+2020 and many packages including Py-ART no longer support Python 2.
+To do this you must download and install 
 `Anaconda <https://www.anaconda.com/download/#>`_ or 
 `Miniconda <https://conda.io/miniconda.html>`_.  
 Then use the following command in a terminal or command prompt to install
