@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # Py-ART documentation configuration file
 
 import sys, os, re

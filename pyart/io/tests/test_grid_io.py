@@ -1,7 +1,5 @@
 """ Unit Tests for Py-ART's io/grid_io.py module. """
 
-from __future__ import print_function
-
 import netCDF4
 import numpy as np
 from numpy.testing import assert_almost_equal, assert_warns

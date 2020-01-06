@@ -12,12 +12,7 @@ A dictionary-like class supporting lazy loading of specified keys.
 
 """
 
-try:
-    # Python 3
-    from collections.abc import MutableMapping
-except ImportError:
-    # Python 2.7, will be removed in next release after Py-ART Impressionism.
-    from collections import MutableMapping
+from collections.abc import MutableMapping
 import itertools
 
 

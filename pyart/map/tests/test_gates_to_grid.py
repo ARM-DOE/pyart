@@ -1,7 +1,5 @@
 """ Unit Tests for Py-ART's map/gates_to_grid.py. """
 
-from __future__ import print_function
-
 import numpy as np
 from numpy.testing import assert_almost_equal
 import pytest

@@ -13,8 +13,6 @@ Functions for working radar instances.
 
 """
 
-from __future__ import print_function
-
 import copy
 
 import numpy as np

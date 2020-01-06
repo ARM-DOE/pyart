@@ -14,7 +14,6 @@ Function for mathematical, signal processing and numerical routines.
 
 """
 
-from __future__ import print_function
 import numpy as np
 from scipy import signal
 

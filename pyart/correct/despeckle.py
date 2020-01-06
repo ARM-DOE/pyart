@@ -21,7 +21,6 @@ Find contiguous objects in scans and despeckle away ones that are too small.
 
 """
 
-from __future__ import division
 import numpy as np
 from scipy.ndimage import label
 from scipy.signal import convolve2d

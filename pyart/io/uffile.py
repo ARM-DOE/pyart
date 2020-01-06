@@ -20,8 +20,6 @@ Low level class for reading Universal Format (UF) files.
 
 """
 
-from __future__ import division
-
 # This file is part of the Py-ART, the Python ARM Radar Toolkit
 # https://github.com/ARM-DOE/pyart
 

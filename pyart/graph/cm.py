@@ -60,7 +60,6 @@ colormaps are available within matplotlib with names 'pyart_COLORMAP':
 # http://matplotlib.org/.
 # Copyright (c) 2012-2013 Matplotlib Development Team; All Rights Reserved
 
-from __future__ import print_function, division
 import warnings
 
 import matplotlib as mpl

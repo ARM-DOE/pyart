@@ -13,8 +13,6 @@ Functions and classes common between MDV grid and radar files.
 
 """
 
-from __future__ import print_function
-
 # Code is adapted from Nitin Bharadwaj's Matlab code
 
 import struct

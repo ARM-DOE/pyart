@@ -12,8 +12,6 @@ A class for plotting grid objects with a basemap.
 
 """
 
-from __future__ import print_function
-
 import warnings
 
 import numpy as np

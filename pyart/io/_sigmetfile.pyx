@@ -23,8 +23,6 @@ A class and supporting functions for reading Sigmet (raw format) files.
     _unpack_ingest_header
 
 """
-from __future__ import print_function
-
 import struct
 import datetime
 import warnings

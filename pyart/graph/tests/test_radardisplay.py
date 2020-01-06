@@ -5,8 +5,6 @@
 # in baseline_images directory. Current this test only determines if files can
 # be created, not that they are correct.
 
-from __future__ import print_function
-
 import warnings
 import datetime
 
