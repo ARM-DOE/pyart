@@ -1,7 +1,5 @@
 """ Unit Tests for Py-ART's io/mdv_grid.py module. """
 
-from __future__ import print_function
-
 import datetime
 from io import BytesIO
 

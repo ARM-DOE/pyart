@@ -21,7 +21,12 @@ An class for holding gridded Radar data.
 
 import numpy as np
 from netCDF4 import num2date
-import xarray
+
+try:
+    import xarray
+    _XARRAY_AVAILABLE = True
+except ImportError:
+    _XARRAY_AVAILABLE = False
 
 try:
     import pyproj
@@ -300,6 +305,12 @@ class Grid(object):
             in a one dimensional array.
             
         """
+
+        if not _XARRAY_AVAILABLE:
+            raise MissingOptionalDependency(
+                'Xarray is required to use Grid.to_xarray but is not '
+                 + 'installed!')
+
         lon, lat = self.get_point_longitude_latitude()
         z = self.z['data']
         y = self.y['data']

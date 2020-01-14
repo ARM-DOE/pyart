@@ -20,7 +20,6 @@ A general central radial scanning (or dwelling) instrument class.
 
 
 """
-from __future__ import print_function
 
 import copy
 import sys

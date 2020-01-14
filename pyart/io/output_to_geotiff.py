@@ -13,8 +13,6 @@ Write a Py-ART Grid object to a GeoTIFF file.
 
 """
 
-from __future__ import division
-
 import os
 import shutil
 

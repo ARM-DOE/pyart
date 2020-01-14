@@ -6,7 +6,6 @@ build: python pyart/_debug_info.py
 
 """
 
-from __future__ import print_function
 import os
 import sys
 

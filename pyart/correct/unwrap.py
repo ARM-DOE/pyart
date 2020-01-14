@@ -19,8 +19,6 @@ Dealias using multidimensional phase unwrapping algorithms.
 
 """
 
-from __future__ import print_function
-
 import numpy as np
 
 from ..config import get_metadata, get_fillvalue

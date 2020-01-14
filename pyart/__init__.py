@@ -4,8 +4,6 @@ Py-ART: The Python ARM Radar Toolkit
 
 """
 
-from __future__ import print_function
-
 # Detect if we're being called as part of Py-ART's setup procedure
 try:
     __PYART_SETUP__

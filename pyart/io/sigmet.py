@@ -18,7 +18,6 @@ Reading and writing of Sigmet (raw format) files
 
 """
 
-from __future__ import division
 import datetime
 import warnings
 
