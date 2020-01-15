@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# Atmospheric data Community Toolkit documentation build configuration file, created by
+# Python ARM Radar Toolkit documentation build configuration file, created by
 # sphinx-quickstart on Thu Jun 28 12:35:56 2018.
 #
 # This file is execfile()d with the current directory set to its
@@ -46,13 +46,16 @@ extensions = [
     'matplotlib.sphinxext.plot_directive',
     'numpydoc',
     'sphinx_copybutton',
-    'sphinx_gallery.gen_gallery',
 ]
 
-sphinx_gallery_conf = {
-    'examples_dirs': '../../examples',
-    'gallery_dirs': 'source/auto_examples'
+# only include examples if the BUILD_PYART_EXAMPLES env. variable is set
+if 'BUILD_PYART_EXAMPLES' in os.environ:
+    extensions.append('sphinx_gallery.gen_gallery')
+    sphinx_gallery_conf = {
+        'examples_dirs': '../../examples',
+        'gallery_dirs': 'source/auto_examples'
 }
+
 
 # Configuration options for plot_directive. See:
 # https://github.com/matplotlib/matplotlib/blob/f3ed922d935751e08494e5fb5311d3050a3b637b/lib/matplotlib/sphinxext/plot_directive.py#L81
@@ -195,14 +198,11 @@ man_pages = [
      [author], 1)
 ]
 
-
 # -- Options for Texinfo output -------------------------------------------
 
 # Grouping the document tree into Texinfo files. List of tuples
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
-
-
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {

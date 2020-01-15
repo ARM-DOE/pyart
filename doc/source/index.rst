@@ -2,11 +2,9 @@
 The Python ARM Radar Toolkit - Py-ART
 =====================================
 
-Latest Release
-==============
-
 .. toctree::
-    :maxdepth: 4
+    :maxdepth: 1
+    :hidden:
 
     user_reference/index
     dev_reference/index
@@ -15,6 +13,12 @@ Latest Release
     INSTALL.rst
     setting_up_an_environment.rst
     contributors_guide.rst
+
+    Anaconda Cloud <https://anaconda.org/conda-forge/arm_pyart>
+    GitHub Repo <https://github.com/ARM-DOE/pyart>
+
+    Mailing List <https://groups.google.com/forum/#!forum/pyart-users>
+    Science Lead (Scott Collis) <https://www.anl.gov/profile/scott-m-collis>
 
     
 
@@ -74,6 +78,17 @@ and differential (PhiDP) phases.
 A sophisticated mapping routines is able to efficiently create uniform
 Cartesian grids of radar fields from one or more radars. Routines exist in
 Py-ART for plotting these grids as well as saving them to NetCDF files.
+
+Short Courses
+=============
+
+Various short courses on Py-ART and open source radar software have been given
+which contain tutorial like materials and additional examples.
+
+* `2015 AMS, Open Source Radar Short Course <https://github.com/openradar/AMS-Short-Course-on-Open-Source-Radar-Software>`_
+* `2015 ARM/ASR Meeting, PyART, the Python ARM Radar Toolkit  <https://github.com/ARM-DOE/notebooks/tree/master/ASR_PI_2015>`_
+* `2014 ARM/ASM Meeting, Py-ART tutorial <https://github.com/ARM-DOE/notebooks/tree/master/ASR_PI_2014>`_
+* `2014 ERAD, Open Source Radar Short Course <https://github.com/openradar/open_source_radar_short_course>`_
 
 Install
 =======
