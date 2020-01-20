@@ -82,7 +82,7 @@ master_doc = 'index'
 # General information about the project.
 project = 'Py-ART'
 copyright = '2013-2020, Py-ART developers'
-author = 'Py-ART develops'
+author = 'Py-ART developers'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -184,7 +184,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'pyart.tex', 'The Python ARM Radar Toolkit',
+    (master_doc, 'pyart.tex', 'Py-ART Documentation',
      'Contributors', 'manual'),
 ]
 
