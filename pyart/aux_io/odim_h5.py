@@ -279,10 +279,16 @@ def read_odim_h5(filename, field_names=None, additional_metadata=None,
                     (np.exp(1.j*np.deg2rad(startaz)) +
                     np.exp(1.j*np.deg2rad(stopaz))) / 2., deg=True)
             else:
-                # according to section 5.1 the first ray points north (0 deg.)
-                # and proceeds clockwise for a complete 360 rotation.
-                nrays = stop - start + 1
-                sweep_az = np.linspace(0, 360, nrays, endpoint=False)
+                # according to section 5.1 the first ray points to the
+                # northernmost direction and proceeds clockwise for a complete
+                # 360 rotation.
+                try:
+                    astart = hfile[dset]['how'].attrs['astart']
+                except KeyError:
+                    astart = 0.0
+                nrays = hfile[dset]['where'].attrs['nrays']
+                da = 360.0 / nrays
+                sweep_az = np.arange(astart + da / 2., 360., da, dtype='float32')
             az_data[start:stop+1] = sweep_az
         azimuth['data'] = az_data
 
