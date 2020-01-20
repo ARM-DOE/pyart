@@ -233,8 +233,10 @@ def read_odim_h5(filename, field_names=None, additional_metadata=None,
             else:
                 max_nbins = max(all_sweeps_nbins)
 
-            _range['data'] = (np.arange(max_nbins, dtype='float32') *
-                              rscale[0] + rstart[0] * 1000.)
+            rscenter = 1e3 * rstart[0] + rscale[0] / 2
+            _range['data'] = np.arange(rscenter,
+                                       rscenter + max_nbins * rscale[0],
+                                       rscale[0], dtype='float32')
             _range['meters_to_center_of_first_gate'] = rstart[0] * 1000.
             _range['meters_between_gates'] = float(rscale[0])
         else:
