@@ -35,7 +35,7 @@ def map_gates_to_grid(
         grid_origin_alt=None, grid_projection=None,
         fields=None, gatefilters=False, map_roi=True,
         weighting_function='Barnes', toa=17000.0, roi_func='dist_beam',
-        constant_roi=500., z_factor=0.05, xy_factor=0.02, min_radius=500.0,
+        constant_roi=None, z_factor=0.05, xy_factor=0.02, min_radius=500.0,
         h_factor=1.0, nb=1.5, bsp=1.0, **kwargs):
     """
     Map gates from one or more radars to a Cartesian grid.
@@ -53,7 +53,7 @@ def map_gates_to_grid(
     Parameters
     ----------
     roi_func : str or RoIFunction
-        Radius of influence function. A functions which takes an
+        Radius of influence function. A function which takes an
         z, y, x grid location, in meters, and returns a radius (in meters)
         within which all collected points will be included in the weighting
         for that grid points. Examples can be found in the
@@ -276,6 +276,10 @@ def _parse_roi_func(roi_func, constant_roi, z_factor, xy_factor, min_radius,
                     h_factor, nb, bsp, offsets):
     """ Return the Radius of influence object. """
     if not isinstance(roi_func, RoIFunction):
+        if constant_roi is not None:
+            roi_func = 'constant'
+        else:
+            constant_roi = 500.0
         if roi_func == 'constant':
             roi_func = ConstantRoI(constant_roi)
         elif roi_func == 'dist':

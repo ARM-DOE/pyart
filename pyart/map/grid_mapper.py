@@ -268,7 +268,7 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
                 fields=None, gatefilters=False,
                 map_roi=True, weighting_function='Barnes', toa=17000.0,
                 copy_field_data=True, algorithm='kd_tree', leafsize=10.,
-                roi_func='dist_beam', constant_roi=500.,
+                roi_func='dist_beam', constant_roi=None,
                 z_factor=0.05, xy_factor=0.02, min_radius=500.0,
                 h_factor=1.0, nb=1.5, bsp=1.0, **kwargs):
     """
@@ -354,7 +354,9 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
     constant_roi : float
         Radius of influence parameter for the built in 'constant' function.
         This parameter is the constant radius in meter for all grid points.
-        This parameter is only used when `roi_func` is `constant`.
+        This parameter is used when `roi_func` is `constant` or constant_roi
+        is not None. If constant_roi is not None, the constant roi_func is
+        used automatically.
     z_factor, xy_factor, min_radius : float
         Radius of influence parameters for the built in 'dist' function.
         The parameter correspond to the radius size increase, in meters,
@@ -598,6 +600,10 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
         x_step = (x_stop - x_start) / (nx - 1.)
 
     if not hasattr(roi_func, '__call__'):
+        if constant_roi is not None:
+            roi_func = 'constant'
+        else:
+            constant_roi = 500.0
         if roi_func == 'constant':
             roi_func = _gen_roi_func_constant(constant_roi)
         elif roi_func == 'dist':
