@@ -3,24 +3,41 @@ The Python ARM Radar Toolkit - Py-ART
 =====================================
 
 .. toctree::
-    :maxdepth: 1
-    :hidden:
+   :maxdepth: 1
+   :hidden:
+   :caption: Documentation
 
-    user_reference/index
-    dev_reference/index
-    auto_examples/index
-    source/auto_examples/index.rst
-    INSTALL.rst
-    setting_up_an_environment.rst
-    contributors_guide.rst
+   user_reference/index.rst
+   dev_reference/index.rst
+   auto_examples/index.rst
+   source/auto_examples/index.rst
+   INSTALL
+   setting_up_an_environment
+   contributors_guide
 
-    Anaconda Cloud <https://anaconda.org/conda-forge/arm_pyart>
-    GitHub Repo <https://github.com/ARM-DOE/pyart>
+.. toctree::
+   :maxdepth: 1
+   :hidden:
+   :caption: Downloads
 
-    Mailing List <https://groups.google.com/forum/#!forum/pyart-users>
-    Science Lead (Scott Collis) <https://www.anl.gov/profile/scott-m-collis>
+   Anaconda Cloud <https://anaconda.org/conda-forge/arm_pyart>
+   GitHub Repo <https://github.com/ARM-DOE/pyart>
+   Zip File of Repository <https://github.com/ARM-DOE/pyart/archive/master.zip>
 
-    
+.. toctree::
+   :maxdepth: 1
+   :hidden:
+   :caption: Getting Help
+
+   GitHub Issue Tracker <https://github.com/ARM-DOE/pyart/issues>
+   Mailing List <https://groups.google.com/forum/#!forum/pyart-users>
+
+.. toctree::
+   :maxdepth: 1
+   :hidden:
+   :caption: Science Lead
+
+   Scott Collis <https://www.anl.gov/profile/scott-m-collis>
 
 What is Py-ART?
 ===============

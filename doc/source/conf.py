@@ -44,7 +44,7 @@ extensions = [
     'IPython.sphinxext.ipython_directive',
     'IPython.sphinxext.ipython_console_highlighting',
     'matplotlib.sphinxext.plot_directive',
-    'numpydoc',
+    'sphinx.ext.napoleon',
     'sphinx_copybutton',
 ]
 
@@ -64,8 +64,12 @@ plot_html_show_formats = False
 
 # Generate the API documentation when building
 autosummary_generate = True
-numpydoc_show_class_members = False
 autoclass_content = "methods"
+
+# Otherwise, the Return parameter list looks different from the Parameters list
+napoleon_use_rtype = False
+# Otherwise, the Attributes parameter list looks different from the Parameters list
+napoleon_use_ivar = True
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -126,6 +130,7 @@ todo_include_todos = False
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
+
 html_theme = 'sphinx_rtd_theme'
 import sphinx_rtd_theme
 html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
@@ -138,7 +143,6 @@ html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
-# so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 
 # Custom sidebar templates, must be a dictionary that maps document names
