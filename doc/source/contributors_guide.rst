@@ -134,8 +134,7 @@ An example:
 	Retrieval of VADs from a radar object.
 
 	.. autosummary::
-    	    :toctreeL generated/
-    	    :template: dev_template.rst
+    	    :toctree generated/
 
 	    velocity_azimuth_display
             _inverse_dist_squared

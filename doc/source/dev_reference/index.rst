@@ -16,21 +16,23 @@ and classes within Py-ART, both those in the public API and private members.
 
 Documentation is broken down by directory and module.
 
-.. toctree::
-    :maxdepth: 2
+.. currentmodule:: pyart
+
+.. autosummary::
+   :toctree: generated/
     
-    core
-    io
-    aux_io
-    config
-    correct
-    exceptions
-    retrieve
-    graph
-    filters
-    lazydict
-    map
-    util
-    bridge
-    testing
-    _debug_info
+   pyart.core
+   pyart.io
+   pyart.aux_io
+   pyart.config
+   pyart.correct
+   pyart.exceptions
+   pyart.retrieve
+   pyart.graph
+   pyart.filters
+   pyart.lazydict
+   pyart.map
+   pyart.util
+   pyart.bridge
+   pyart.testing
+   pyart._debug_info
