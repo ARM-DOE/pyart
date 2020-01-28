@@ -63,13 +63,17 @@ plot_html_show_source_link = False
 plot_html_show_formats = False
 
 # Generate the API documentation when building
+autoclass_content = "both"
+
 autosummary_generate = True
-autoclass_content = "methods"
+autosummary_imported_members = True
 
 # Otherwise, the Return parameter list looks different from the Parameters list
 napoleon_use_rtype = False
 # Otherwise, the Attributes parameter list looks different from the Parameters list
 napoleon_use_ivar = True
+napoleon_include_init_with_doc = False
+napoleon_use_param = False
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -143,6 +147,7 @@ html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
+# so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 
 # Custom sidebar templates, must be a dictionary that maps document names
