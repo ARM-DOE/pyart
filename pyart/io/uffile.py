@@ -1,22 +1,5 @@
 """
-pyart.io.uffile
-===============
-
 Low level class for reading Universal Format (UF) files.
-
-.. autosummary::
-    :toctree: generated/
-    :template: dev_template.rst
-
-    UFFile
-    UFRay
-
-.. autosummary::
-    :toctree: generated/
-
-    _structure_size
-    _unpack_from_buf
-    _unpack_structure
 
 """
 

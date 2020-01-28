@@ -1,14 +1,3 @@
-"""
-pyart.correct._unwrap_3d
-========================
-
-.. autosummary::
-    :toctree: generated/
-    
-    unwrap_3d
-
-"""
-
 cdef extern void unwrap3D(double* wrapped_volume,
                      double* unwrapped_volume,
                      unsigned char* input_mask,
@@ -19,7 +8,7 @@ def unwrap_3d(double[:, :, ::1] image,
               unsigned char[:, :, ::1] mask,
               double[:, :, ::1] unwrapped_image,
               wrap_around):
-    """ 3D phase unwrapping. """
+    # 3D phase unwrapping.
     unwrap3D(&image[0, 0, 0],
              &unwrapped_image[0, 0, 0],
              &mask[0, 0, 0],

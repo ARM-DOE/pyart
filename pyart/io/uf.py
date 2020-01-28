@@ -1,15 +1,5 @@
 """
-pyart.io.uf
-===========
-
 Reading of Universal format (UF) files.
-
-.. autosummary::
-    :toctree: generated/
-
-    read_uf
-    _get_scan_type
-    _get_instrument_parameters
 
 """
 

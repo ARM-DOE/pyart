@@ -1,15 +1,5 @@
 """
-pyart.io.mdv_common
-===================
-
 Functions and classes common between MDV grid and radar files.
-
-.. autosummary::
-    :toctree: generated/
-    :template: dev_template.rst
-
-    MdvFile
-    _MdvVolumeDataExtractor
 
 """
 

@@ -1,25 +1,5 @@
 """
-pyart.io.nexrad_level3
-======================
-
 Class for reading data from NEXRAD Level 3 files.
-
-.. autosummary::
-    :toctree: generated/
-    :template: dev_template.rst
-
-    NEXRADLevel3File
-
-.. autosummary::
-    :toctree: generated/
-
-    nexrad_level3_message_code
-    _datetime_from_mdate_mtime
-    _structure_size
-    _unpack_from_buf
-    _unpack_structure
-    _int16_to_float16
-
 
 """
 

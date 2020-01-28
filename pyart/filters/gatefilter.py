@@ -1,23 +1,6 @@
 """
-pyart.correct.filters
-=====================
-
 Functions for creating gate filters (masks) which can be used it various
 corrections routines in Py-ART.
-
-.. autosummary::
-    :toctree: generated/
-
-    moment_based_gate_filter
-    moment_and_texture_based_gate_filter
-    temp_based_gate_filter
-    iso0_based_gate_filter
-
-.. autosummary::
-    :toctree: generated/
-    :template: dev_template.rst
-
-    GateFilter
 
 """
 
@@ -866,7 +849,7 @@ class GateFilter(object):
             meet any of the conditions. 'and', the default for include
             methods, is typically desired when building up a set of conditions
             where the desired effect is to include gates which meet any of the
-            conditions.  Note that the 'or' method MAY results in excluding
+            conditions. Note that the 'or' method MAY results in excluding
             gates which have previously been included.
 
         """

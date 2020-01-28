@@ -1,32 +1,7 @@
 """
-pyart.core.transforms
-=====================
-
 Transformations between coordinate systems. Routines for converting between
 Cartesian/Cartographic (x, y, z), Geographic (latitude, longitude, altitude)
 and antenna (azimuth, elevation, range) coordinate systems.
-
-.. autosummary::
-    :toctree: generated/
-
-    antenna_to_cartesian
-    antenna_vectors_to_cartesian
-    antenna_to_cartesian_track_relative
-    antenna_to_cartesian_earth_relative
-    antenna_to_cartesian_aircraft_relative
-
-    cartesian_to_geographic
-    cartesian_vectors_to_geographic
-    geographic_to_cartesian
-    cartesian_to_geographic_aeqd
-    geographic_to_cartesian_aeqd
-
-    _interpolate_axes_edges
-    _interpolate_azimuth_edges
-    _interpolate_elevation_edges
-    _interpolate_range_edges
-    _half_angle_complex
-
 
 """
 

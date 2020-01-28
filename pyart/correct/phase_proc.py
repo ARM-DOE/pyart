@@ -1,40 +1,10 @@
 """
-pyart.correct.phase_proc
-========================
-
 Utilities for working with phase data.
 
 Code based upon algorithm descriped in:
 S. E. Giangrande et al, J. of Atmos. and Ocean. Tech., 2013, 30, 1716.
 
 Adapted by Scott Collis and Scott Giangrande, refactored by Jonathan Helmus.
-
-.. autosummary::
-    :toctree: generated/
-
-    det_sys_phase
-    _det_sys_phase
-    fzl_index
-    det_process_range
-    snr
-    unwrap_masked
-    smooth_masked
-    smooth_and_trim
-    smooth_and_trim_scan
-    noise
-    get_phidp_unf
-    construct_A_matrix
-    construct_B_vectors
-    LP_solver_cvxopt
-    LP_solver_pyglpk
-    solve_cylp
-    LP_solver_cylp_mp
-    LP_solver_cylp
-    phase_proc_lp
-    phase_proc_lp_gf
-    get_phidp_unf_gf
-    det_sys_phase_gf
-    _det_sys_phase_gf
 
 """
 

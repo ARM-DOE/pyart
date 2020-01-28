@@ -1,16 +1,5 @@
 """
-pyart.aux_io.rainbow
-====================
-
 Routines for reading RAINBOW files (Used by SELEX) using the wradlib library
-
-.. autosummary::
-    :toctree: generated/
-
-    read_rainbow_wrl
-    _get_angle
-    _get_data
-    _get_time
 
 """
 
@@ -125,7 +114,6 @@ def read_rainbow_wrl(filename, field_names=None, additional_metadata=None,
         List of fields to include from the radar object. This is applied
         after the `file_field_names` and `field_names` parameters. Set
         to None to include all fields not specified by exclude_fields.
-
 
     Returns
     -------

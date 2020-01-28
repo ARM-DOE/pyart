@@ -1,22 +1,5 @@
 """
-pyart.io.nexrad_archive
-=======================
-
 Functions for reading NEXRAD Level II Archive files.
-
-.. autosummary::
-    :toctree: generated/
-    :template: dev_template.rst
-
-    _NEXRADLevel2StagedField
-
-.. autosummary::
-    :toctree: generated/
-
-    read_nexrad_archive
-    _find_range_params
-    _find_scans_to_interp
-    _interpolate_scan
 
 """
 

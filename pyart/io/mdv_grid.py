@@ -1,15 +1,5 @@
 """
-pyart.io.mdv_grid
-==================
-
 Utilities for reading and writing of MDV grid files.
-
-.. autosummary::
-    :toctree: generated/
-
-    write_grid_mdv
-    read_grid_mdv
-    _time_dic_to_datetime
 
 """
 

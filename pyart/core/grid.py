@@ -1,21 +1,5 @@
 """
-pyart.core.grid
-===============
-
 An class for holding gridded Radar data.
-
-.. autosummary::
-    :toctree: generated/
-    :template: dev_template.rst
-
-    Grid
-
-.. autosummary::
-    :toctree: generated/
-
-    _point_data_factory
-    _point_lon_lat_data_factory
-    _point_altitude_data_factory
 
 """
 

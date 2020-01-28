@@ -1,16 +1,5 @@
 """
-pyart.util.sigmath
-==================
-
 Function for mathematical, signal processing and numerical routines.
-
-.. autosummary::
-    :toctree: generated/
-
-    angular_texture_2d
-    rolling_window
-    texture
-    texture_along_ray
 
 """
 

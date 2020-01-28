@@ -1,13 +1,5 @@
 """
-pyart.io.mdv_radar
-==================
-
 Utilities for reading of MDV radar files.
-
-.. autosummary::
-    :toctree: generated/
-
-    read_mdv
 
 """
 

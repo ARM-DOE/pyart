@@ -1,13 +1,5 @@
 """
-pyart.bridge.wradlib
-====================
-
 Py-ART methods linking to wradlib functions, http://wradlib.org/
-
-.. autosummary::
-    :toctree: generated/
-
-     texture_of_complex_phase
 
 """
 

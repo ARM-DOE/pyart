@@ -1,15 +1,5 @@
 """
-pyart.io.write_grid_geotiff
-===========================
-
 Write a Py-ART Grid object to a GeoTIFF file.
-
-.. autosummary::
-    :toctree: generated/
-
-    write_grid_geotiff
-    _get_rgb_values
-    _create_sld
 
 """
 

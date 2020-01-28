@@ -1,16 +1,5 @@
 """
-pyart.aux_io.sinarame_h5
-========================
-
 Routines for reading sinarame_H5 files.
-
-.. autosummary::
-    :toctree: generated/
-
-    read_sinarame_h5
-    write_sinarame_cfradial
-    _to_str
-    _get_SINARAME_h5_sweep_data
 
 """
 

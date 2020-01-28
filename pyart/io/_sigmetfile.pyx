@@ -1,26 +1,5 @@
 """
-pyart.io._sigmetfile
-====================
-
 A class and supporting functions for reading Sigmet (raw format) files.
-
-.. autosummary::
-    :toctree: generated/
-
-    SigmetFile
-    convert_sigmet_data
-    bin2_to_angle
-    bin4_to_angle
-    _data_types_from_mask
-    _is_bit_set
-    _parse_ray_headers
-    _unpack_structure
-    _unpack_key
-    _unpack_ingest_data_headers
-    _unpack_ingest_data_header
-    _unpack_raw_prod_bhdr
-    _unpack_product_hdr
-    _unpack_ingest_header
 
 """
 import struct

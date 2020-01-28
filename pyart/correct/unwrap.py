@@ -1,21 +1,5 @@
 """
-pyart.correct.unwrap
-====================
-
 Dealias using multidimensional phase unwrapping algorithms.
-
-.. autosummary::
-    :toctree: generated/
-
-    dealias_unwrap_phase
-    _dealias_unwrap_3d
-    _dealias_unwrap_2d
-    _dealias_unwrap_1d
-    _verify_unwrap_unit
-    _is_radar_cubic
-    _is_radar_sweep_aligned
-    _is_radar_sequential
-    _is_sweep_sequential
 
 """
 

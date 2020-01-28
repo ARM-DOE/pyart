@@ -1,78 +1,10 @@
 """
-==================================
-Input and output (:mod:`pyart.io`)
-==================================
-
-.. currentmodule:: pyart.io
-
 Functions to read and write radar and grid data to and from a number of file
 formats.
-
-Reading radar data
-==================
 
 In most cases the :py:func:`pyart.io.read` function should be used to read
 in radar data from a file. In certain cases the function the read function
 for the format in question should be used.
-
-.. autosummary::
-    :toctree: generated/
-
-    read
-    read_rsl
-    read_mdv
-    read_sigmet
-    read_cfradial
-    read_chl
-    read_nexrad_archive
-    read_nexrad_cdm
-    read_nexrad_level3
-    read_uf
-
-Writing radar data
-==================
-
-.. autosummary::
-    :toctree: generated/
-
-    write_cfradial
-    write_uf
-
-Reading grid data
-=================
-
-.. autosummary::
-    :toctree: generated/
-
-    read_grid
-    read_grid_mdv
-
-Writing grid data
-=================
-
-.. autosummary::
-    :toctree: generated/
-
-    write_grid
-    write_grid_mdv
-    write_grid_geotiff
-
-Reading Sonde data
-==================
-
-.. autosummary::
-    :toctree: generated/
-
-    read_arm_sonde
-    read_arm_sonde_vap
-
-Special use
-===========
-
-.. autosummary::
-    :toctree: generated/
-
-    prepare_for_read
 
 """
 

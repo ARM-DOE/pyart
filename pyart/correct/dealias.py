@@ -1,14 +1,5 @@
 """
-pyart.correct.dealias
-=====================
-
 Front end to the University of Washington 4DD code for Doppler dealiasing.
-
-.. autosummary::
-    :toctree: generated/
-
-    dealias_fourdd
-    _create_rsl_volume
 
 """
 

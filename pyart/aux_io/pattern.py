@@ -1,16 +1,7 @@
 """
-pyart.aux_io.pattern
-====================
-
 Routines for reading files from the X-band radar from the PATTERN_ project.
 
 .. _PATTERN: http://www.mi.uni-hamburg.de/PATTERN-Pre.6763.0.html
-
-
-.. autosummary::
-    :toctree: generated/
-
-    read_pattern
 
 """
 

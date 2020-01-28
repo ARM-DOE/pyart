@@ -1,21 +1,5 @@
 """
-pyart.io.rsl
-============
-
 Python wrapper around the RSL library.
-
-.. autosummary::
-    :toctree: generated/
-    :template: dev_template.rst
-
-    _RslVolumeDataExtractor
-
-.. autosummary::
-    :toctree: generated/
-
-    read_rsl
-    VOLUMENUM2RSLNAME
-    RSLNAME2VOLUMENUM
 
 """
 

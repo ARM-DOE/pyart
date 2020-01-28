@@ -1,23 +1,5 @@
 """
-pyart.core.radar
-================
-
 A general central radial scanning (or dwelling) instrument class.
-
-.. autosummary::
-    :toctree: generated/
-
-    _rays_per_sweep_data_factory
-    _gate_data_factory
-    _gate_lon_lat_data_factory
-    _gate_altitude_data_factory
-
-.. autosummary::
-    :toctree: generated/
-    :template: dev_template.rst
-
-    Radar
-
 
 """
 

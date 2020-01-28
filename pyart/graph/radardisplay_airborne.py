@@ -1,14 +1,5 @@
 """
-pyart.graph.radardisplay_airborne
-=================================
-
 Class for creating plots from Airborne Radar objects.
-
-.. autosummary::
-    :toctree: generated/
-    :template: dev_template.rst
-
-    AirborneRadarDisplay
 
 """
 

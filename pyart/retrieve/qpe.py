@@ -1,23 +1,5 @@
 """
-pyart.retrieve.qpe
-==================
-
 Functions for rainfall rate estimation.
-
-.. autosummary::
-    :toctree: generated/
-
-    est_rain_rate_zpoly
-    est_rain_rate_z
-    est_rain_rate_kdp
-    est_rain_rate_a
-    est_rain_rate_zkdp
-    est_rain_rate_za
-    est_rain_rate_hydro
-    _get_coeff_rkdp
-    _coeff_rkdp_table
-    _get_coeff_ra
-    _coeff_ra_table
 
 """
 

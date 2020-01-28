@@ -1,13 +1,5 @@
 """
-pyart.io.nexradl3_read
-======================
-
 Functions for reading NEXRAD Level 3 products.
-
-.. autosummary::
-    :toctree: generated/
-
-    read_nexrad_level3
 
 """
 

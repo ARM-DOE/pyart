@@ -1,13 +1,5 @@
 """
-pyart.core.wind_profile
-=======================
-
 Storage of wind profiles.
-
-.. autosummary::
-    :toctree: generated/
-
-    HorizontalWindProfile
 
 """
 

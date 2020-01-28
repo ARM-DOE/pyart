@@ -1,17 +1,5 @@
 """
-pyart.graph.cm
-==============
-
 Radar related colormaps.
-
-.. autosummary::
-    :toctree: generated/
-
-    revcmap
-    _reverser
-    _reverse_cmap_spec
-    _generate_cmap
-
 
 Available colormaps, reversed versions (_r) are also provided, these
 colormaps are available within matplotlib with names 'pyart_COLORMAP':

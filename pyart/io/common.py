@@ -1,16 +1,5 @@
 """
-pyart.io.common
-===============
-
 Input/output routines common to many file formats.
-
-.. autosummary::
-    :toctree: generated/
-
-    prepare_for_read
-    stringarray_to_chararray
-    _test_arguments
-    make_time_unit_str
 
 """
 

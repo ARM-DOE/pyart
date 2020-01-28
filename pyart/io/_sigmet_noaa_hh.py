@@ -1,15 +1,6 @@
 """
-pyart.io._sigmet_noaa_hh
-========================
-
 Functions needed for reading Sigmet files from the airborne radar located on
 NOAA's Hurricane Hunter aircraft.
-
-.. autosummary::
-    :toctree: generated/
-
-    _decode_noaa_hh_hdr
-    _georeference_yprime
 
 """
 

@@ -1,19 +1,6 @@
 """
-pyart.map._gate_to_grid_map
-===========================
-
 Cython classes and functions for efficient mapping of radar gates to
 a uniform grid.
-
-.. autosummary::
-    :toctree: generated/
-    :template: dev_template.rst
-
-    GateToGridMapper
-    RoIFunction
-    ConstantRoI
-    DistRoI
-    DistBeamRoI
 
 """
 

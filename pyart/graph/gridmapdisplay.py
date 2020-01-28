@@ -1,15 +1,6 @@
 """
-pyart.graph.gridmapdisplay
-==========================
-
 A class for plotting grid objects using xarray plotting
 and cartopy.
-
-.. autosummary::
-    :toctree: generated/
-    :template: dev_template.rst
-
-    GridMapDisplay
 
 """
 

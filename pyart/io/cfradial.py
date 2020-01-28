@@ -1,24 +1,5 @@
 """
-pyart.io.cfradial
-=================
-
 Utilities for reading CF/Radial files.
-
-.. autosummary::
-    :toctree: generated/
-    :template: dev_template.rst
-
-    _NetCDFVariableDataExtractor
-
-.. autosummary::
-    :toctree: generated/
-
-    read_cfradial
-    write_cfradial
-    _find_all_meta_group_vars
-    _ncvar_to_dict
-    _unpack_variable_gate_field_dic
-    _create_ncvar
 
 """
 

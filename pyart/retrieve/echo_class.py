@@ -1,20 +1,5 @@
 """
-pyart.retrieve.echo_class
-=========================
-
 Functions for echo classification.
-
-.. autosummary::
-    :toctree: generated/
-
-    steiner_conv_strat
-    hydroclass_semisupervised
-    get_freq_band
-    _standardize
-    _assign_to_class
-    _get_mass_centers
-    _mass_centers_table
-    _data_limits_table
 
 """
 

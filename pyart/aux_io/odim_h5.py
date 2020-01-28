@@ -1,15 +1,5 @@
 """
-pyart.aux_io.odim_h5
-====================
-
 Routines for reading ODIM_H5 files.
-
-.. autosummary::
-    :toctree: generated/
-
-    read_odim_h5
-    _to_str
-    _get_odim_h5_sweep_data
 
 """
 

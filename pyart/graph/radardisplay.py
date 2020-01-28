@@ -1,14 +1,5 @@
 """
-pyart.graph.radardisplay
-=========================
-
 Class for creating plots from Radar objects.
-
-.. autosummary::
-    :toctree: generated/
-    :template: dev_template.rst
-
-    RadarDisplay
 
 """
 

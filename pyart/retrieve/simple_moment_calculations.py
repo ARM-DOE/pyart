@@ -1,18 +1,5 @@
 """
-pyart.retrieve.simple_moment_calculations
-=========================================
-
 Simple moment calculations.
-
-.. autosummary::
-    :toctree: generated/
-
-    calculate_snr_from_reflectivity
-    compute_noisedBZ
-    compute_snr
-    compute_l
-    compute_cdr
-    calculate_velocity_texture
 
 """
 

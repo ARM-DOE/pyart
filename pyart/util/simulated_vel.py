@@ -1,13 +1,5 @@
 """
-pyart.util.simulated_vel
-========================
-
 Function for creating simulated velocity fields.
-
-.. autosummary::
-    :toctree: generated/
-
-    simulated_vel_from_profile
 
 """
 

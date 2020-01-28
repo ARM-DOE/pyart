@@ -1,20 +1,5 @@
 """
-pyart.config
-============
-
 Py-ART configuration.
-
-.. autosummary::
-    :toctree: generated/
-
-    load_config
-    get_metadata
-    get_fillvalue
-    get_field_name
-    get_field_colormap
-    get_field_limits
-    get_field_mapping
-    FileMetadata
 
 """
 

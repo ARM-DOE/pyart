@@ -1,20 +1,5 @@
 """
-pyart.util.circular_stats
-=========================
-
 Functions for computing statistics on circular (directional) distributions.
-
-.. autosummary::
-    :toctree: generated/
-
-    angular_mean
-    angular_std
-    angular_mean_deg
-    angular_std_deg
-    interval_mean
-    interval_std
-    mean_of_two_angles
-    mean_of_two_angles_deg
 
 """
 

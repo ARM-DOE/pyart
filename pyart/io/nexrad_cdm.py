@@ -1,16 +1,5 @@
 """
-pyart.io.nexrad_cdm
-===================
-
 Functions for accessing Common Data Model (CDM) NEXRAD Level 2 files.
-
-.. autosummary::
-    :toctree: generated/
-
-    read_nexrad_cdm
-    _scan_info
-    _populate_scan_dic
-    _get_moment_data
 
 """
 

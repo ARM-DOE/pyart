@@ -1,13 +1,5 @@
 """
-pyart.io.nexrad_interpolate
-===========================
-
 Interpolation of NEXRAD moments from 1000 meter to 250 meter gate spacing.
-
-.. autosummary::
-    :toctree: generated/
-
-    _fast_interpolate_scan
 
 """
 

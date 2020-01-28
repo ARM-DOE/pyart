@@ -1,14 +1,5 @@
 """
-pyart.lazydict
-==============
-
 A dictionary-like class supporting lazy loading of specified keys.
-
-.. autosummary::
-    :toctree: generated/
-    :template: dev_template.rst
-
-    LazyLoadDict
 
 """
 

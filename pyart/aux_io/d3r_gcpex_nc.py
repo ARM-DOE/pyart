@@ -1,14 +1,5 @@
 """
-pyart.aux_io.d3r_gcpex_nc
-=========================
-
 Routines for reading GCPEX D3R files.
-
-.. autosummary::
-    :toctree: generated/
-
-    read_d3r_gcpex_nc
-    _ncvar_to_dict
 
 """
 

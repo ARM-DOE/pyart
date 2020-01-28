@@ -1,29 +1,8 @@
 """
-pyart.retrieve.kdp_proc
-=======================
-
 Module for retrieving specific differential phase (KDP) from radar total
 differential phase (PSIDP) measurements. Total differential phase is a function
 of propagation differential phase (PHIDP), backscatter differential phase
 (DELTAHV), and the system phase offset.
-
-.. autosummary::
-    :toctree: generated/
-
-    kdp_schneebeli
-    kdp_vulpiani
-    kdp_maesaka
-    filter_psidp
-    boundary_conditions_maesaka
-
-    _kdp_estimation_backward_fixed
-    _kdp_estimation_forward_fixed
-    _kdp_kalman_profile
-    _kdp_vulpiani_profile
-    _cost_maesaka
-    _jac_maesaka
-    _forward_reverse_phidp
-    _parse_range_resolution
 
 """
 

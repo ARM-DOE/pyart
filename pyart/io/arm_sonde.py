@@ -1,14 +1,5 @@
 """
-pyart.io.arm_sonde
-==================
-
 Utilities for ARM sonde NetCDF files.
-
-.. autosummary::
-    :toctree: generated/
-
-    read_arm_sonde
-    read_arm_sonde_vap
 
 """
 
