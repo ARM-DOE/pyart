@@ -1,8 +1,8 @@
-.. _developer:
+.. _API:
 
-##########################
-Developer Reference Manual
-##########################
+####################
+API Reference Manual
+####################
 
 :Release: |version|
 :Date: |today|
