@@ -61,7 +61,7 @@ def antenna_to_cartesian(ranges, azimuths, elevations):
     References
     ----------
     .. [1] Doviak and Zrnic, Doppler Radar and Weather Observations, Second
-    Edition, 1993, p. 21.
+        Edition, 1993, p. 21.
 
     """
     theta_e = elevations * np.pi / 180.0    # elevation angle in radians.
