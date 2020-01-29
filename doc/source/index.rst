@@ -8,7 +8,6 @@ The Python ARM Radar Toolkit - Py-ART
    :caption: Documentation
 
    API/index.rst
-   auto_examples/index.rst
    source/auto_examples/index.rst
    INSTALL
    setting_up_an_environment
@@ -157,8 +156,8 @@ The required dependencies to install Py-ART in addition to Python are:
 A working C/C++ compiler is required for some optional modules. An easy method
 to install these dependencies is by using a
 `Scientific Python distributions <http://scipy.org/install.html>`_.
-`Anaconda <https://www.anaconda.com/distribution/>`_ will install all of
-the above packages by default on Windows, Linux and Mac computers and is
+`Anaconda Compilers <https://www.anaconda.com/distribution/>`_ will install
+all of the above packages by default on Windows, Linux and Mac computers and is
 provided free of charge by Anaconda. Anaconda also has their own compilers,
 which may be required for optional dependencies such as CyLP. These compilers
 can be found here:
