@@ -440,23 +440,6 @@ class GateFilter(object):
         conditions. False will begin with all gates excluded from which
         a set of gates to include should be set using the include methods.
 
-    Attributes
-    ----------
-    gate_excluded : array, dtype=bool
-        Boolean array indicating if a gate should be excluded from a
-        calculation. Elements marked True indicate the corresponding gate
-        should be excluded. Those marked False should be included.
-        This is read-only attribute, any changes to the array will NOT
-        be reflected in gate_included and will be lost when the attribute is
-        accessed again.
-    gate_included : array, dtype=bool
-        Boolean array indicating if a gate should be included in a
-        calculation. Elements marked True indicate the corresponding gate
-        should be include. Those marked False should be excluded.
-        This is read-only attribute, any changes to the array will NOT
-        be reflected in gate_excluded and will be lost when the attribute is
-        accessed again.
-
     Examples
     --------
     >>> import pyart
@@ -492,10 +475,26 @@ class GateFilter(object):
 
     @property
     def gate_included(self):
+        """
+        Boolean array indicating if a gate should be included in a
+        calculation. Elements marked True indicate the corresponding gate
+        should be include. Those marked False should be excluded.
+        This is read-only attribute, any changes to the array will NOT
+        be reflected in gate_excluded and will be lost when the attribute is
+        accessed again.
+        """
         return ~self._gate_excluded.copy()
 
     @property
     def gate_excluded(self):
+        """
+        Boolean array indicating if a gate should be excluded from a
+        calculation. Elements marked True indicate the corresponding gate
+        should be excluded. Those marked False should be included.
+        This is read-only attribute, any changes to the array will NOT
+        be reflected in gate_included and will be lost when the attribute is
+        accessed again.
+        """
         return self._gate_excluded.copy()
 
     def _get_fdata(self, field):
@@ -696,7 +695,7 @@ class GateFilter(object):
             meet any of the conditions. 'and', the default for include
             methods, is typically desired when building up a set of conditions
             where the desired effect is to include gates which meet any of the
-            conditions.  Note that the 'and' method MAY results in including
+            conditions. Note that the 'and' method MAY results in including
             gates which have previously been excluded because they were masked
             or invalid.
 
@@ -742,7 +741,7 @@ class GateFilter(object):
             meet any of the conditions. 'and', the default for include
             methods, is typically desired when building up a set of conditions
             where the desired effect is to include gates which meet any of the
-            conditions.  Note that the 'or' method MAY results in excluding
+            conditions. Note that the 'or' method MAY results in excluding
             gates which have previously been included.
 
         """

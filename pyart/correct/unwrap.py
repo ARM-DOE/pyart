@@ -20,7 +20,8 @@ def dealias_unwrap_phase(
         rays_wrap_around=None, keep_original=False, set_limits=True,
         vel_field=None, corr_vel_field=None, skip_checks=False, **kwargs):
     """
-    Dealias Doppler velocities using multi-dimensional phase unwrapping.
+    Dealias Doppler velocities using multi-dimensional phase unwrapping
+    [1]_ and [2]_.
 
     Parameters
     ----------

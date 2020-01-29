@@ -25,7 +25,7 @@ def read_nexrad_level3(filename, field_names=None, additional_metadata=None,
         NWS WSR-88D Level III Data Collection and Distribution Network
         have been tests. Other NEXRAD Level 3 files may or may not work.
         A file-like object pointing to the beginning of such a file is also
-        supported.
+        supported [2]_.
     field_names : dict, optional
         Dictionary mapping NEXRAD level 3 product number to radar field names.
         If the product number of the file does not appear in this dictionary
