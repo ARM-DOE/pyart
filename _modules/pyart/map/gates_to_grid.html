@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyart.map.gates_to_grid &mdash; Py-ART 1.11.0.dev+48ea695 documentation</title>
+  <title>pyart.map.gates_to_grid &mdash; Py-ART 1.12.0.dev+ed36a91 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                1.11.dev
+                1.12.dev
               </div>
             
           
@@ -197,7 +197,7 @@
         <span class="n">grid_origin_alt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">grid_projection</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gatefilters</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">map_roi</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">weighting_function</span><span class="o">=</span><span class="s1">&#39;Barnes&#39;</span><span class="p">,</span> <span class="n">toa</span><span class="o">=</span><span class="mf">17000.0</span><span class="p">,</span> <span class="n">roi_func</span><span class="o">=</span><span class="s1">&#39;dist_beam&#39;</span><span class="p">,</span>
-        <span class="n">constant_roi</span><span class="o">=</span><span class="mf">500.</span><span class="p">,</span> <span class="n">z_factor</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">xy_factor</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span> <span class="n">min_radius</span><span class="o">=</span><span class="mf">500.0</span><span class="p">,</span>
+        <span class="n">constant_roi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">z_factor</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">xy_factor</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span> <span class="n">min_radius</span><span class="o">=</span><span class="mf">500.0</span><span class="p">,</span>
         <span class="n">h_factor</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">nb</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">bsp</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Map gates from one or more radars to a Cartesian grid.</span>
@@ -215,7 +215,7 @@
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    roi_func : str or RoIFunction</span>
-<span class="sd">        Radius of influence function. A functions which takes an</span>
+<span class="sd">        Radius of influence function. A function which takes an</span>
 <span class="sd">        z, y, x grid location, in meters, and returns a radius (in meters)</span>
 <span class="sd">        within which all collected points will be included in the weighting</span>
 <span class="sd">        for that grid points. Examples can be found in the</span>
@@ -438,6 +438,10 @@
                     <span class="n">h_factor</span><span class="p">,</span> <span class="n">nb</span><span class="p">,</span> <span class="n">bsp</span><span class="p">,</span> <span class="n">offsets</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; Return the Radius of influence object. &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">roi_func</span><span class="p">,</span> <span class="n">RoIFunction</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">constant_roi</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">roi_func</span> <span class="o">=</span> <span class="s1">&#39;constant&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">constant_roi</span> <span class="o">=</span> <span class="mf">500.0</span>
         <span class="k">if</span> <span class="n">roi_func</span> <span class="o">==</span> <span class="s1">&#39;constant&#39;</span><span class="p">:</span>
             <span class="n">roi_func</span> <span class="o">=</span> <span class="n">ConstantRoI</span><span class="p">(</span><span class="n">constant_roi</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">roi_func</span> <span class="o">==</span> <span class="s1">&#39;dist&#39;</span><span class="p">:</span>

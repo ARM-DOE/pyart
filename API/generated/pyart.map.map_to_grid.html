@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyart.map.map_to_grid &mdash; Py-ART 1.11.0.dev+48ea695 documentation</title>
+  <title>pyart.map.map_to_grid &mdash; Py-ART 1.12.0.dev+ed36a91 documentation</title>
   
 
   
@@ -66,7 +66,7 @@
             
             
               <div class="version">
-                1.11.dev
+                1.12.dev
               </div>
             
           
@@ -211,7 +211,7 @@
 <h1>pyart.map.map_to_grid<a class="headerlink" href="#pyart-map-map-to-grid" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="pyart.map.map_to_grid">
-<code class="sig-prename descclassname">pyart.map.</code><code class="sig-name descname">map_to_grid</code><span class="sig-paren">(</span><em class="sig-param">radars</em>, <em class="sig-param">grid_shape</em>, <em class="sig-param">grid_limits</em>, <em class="sig-param">grid_origin=None</em>, <em class="sig-param">grid_origin_alt=None</em>, <em class="sig-param">grid_projection=None</em>, <em class="sig-param">fields=None</em>, <em class="sig-param">gatefilters=False</em>, <em class="sig-param">map_roi=True</em>, <em class="sig-param">weighting_function='Barnes'</em>, <em class="sig-param">toa=17000.0</em>, <em class="sig-param">copy_field_data=True</em>, <em class="sig-param">algorithm='kd_tree'</em>, <em class="sig-param">leafsize=10.0</em>, <em class="sig-param">roi_func='dist_beam'</em>, <em class="sig-param">constant_roi=500.0</em>, <em class="sig-param">z_factor=0.05</em>, <em class="sig-param">xy_factor=0.02</em>, <em class="sig-param">min_radius=500.0</em>, <em class="sig-param">h_factor=1.0</em>, <em class="sig-param">nb=1.5</em>, <em class="sig-param">bsp=1.0</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyart/map/grid_mapper.html#map_to_grid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.map.map_to_grid" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">pyart.map.</code><code class="sig-name descname">map_to_grid</code><span class="sig-paren">(</span><em class="sig-param">radars</em>, <em class="sig-param">grid_shape</em>, <em class="sig-param">grid_limits</em>, <em class="sig-param">grid_origin=None</em>, <em class="sig-param">grid_origin_alt=None</em>, <em class="sig-param">grid_projection=None</em>, <em class="sig-param">fields=None</em>, <em class="sig-param">gatefilters=False</em>, <em class="sig-param">map_roi=True</em>, <em class="sig-param">weighting_function='Barnes'</em>, <em class="sig-param">toa=17000.0</em>, <em class="sig-param">copy_field_data=True</em>, <em class="sig-param">algorithm='kd_tree'</em>, <em class="sig-param">leafsize=10.0</em>, <em class="sig-param">roi_func='dist_beam'</em>, <em class="sig-param">constant_roi=None</em>, <em class="sig-param">z_factor=0.05</em>, <em class="sig-param">xy_factor=0.02</em>, <em class="sig-param">min_radius=500.0</em>, <em class="sig-param">h_factor=1.0</em>, <em class="sig-param">nb=1.5</em>, <em class="sig-param">bsp=1.0</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyart/map/grid_mapper.html#map_to_grid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyart.map.map_to_grid" title="Permalink to this definition">¶</a></dt>
 <dd><p>Map one or more radars to a Cartesian grid.</p>
 <p>Generate a Cartesian grid of points for the requested fields from the
 collected points from one or more radars. The field value for a grid
@@ -284,7 +284,9 @@ not included in the interpolation.</p></li>
 <dd class="field-even"><ul class="simple">
 <li><p><strong>constant_roi</strong> (<em>float</em>) – Radius of influence parameter for the built in ‘constant’ function.
 This parameter is the constant radius in meter for all grid points.
-This parameter is only used when <cite>roi_func</cite> is <cite>constant</cite>.</p></li>
+This parameter is used when <cite>roi_func</cite> is <cite>constant</cite> or constant_roi
+is not None. If constant_roi is not None, the constant roi_func is
+used automatically.</p></li>
 <li><p><strong>z_factor, xy_factor, min_radius</strong> (<em>float</em>) – Radius of influence parameters for the built in ‘dist’ function.
 The parameter correspond to the radius size increase, in meters,
 per meter increase in the z-dimension from the nearest radar,

@@ -40,7 +40,7 @@ fields of a ARM C-SAPR radar.
     Unfolding
     /home/zsherman/dev/pyart/pyart/correct/phase_proc.py:167: RuntimeWarning: invalid value encountered in sqrt
       _noise = smooth_and_trim(np.sqrt((line - signal) ** 2), window_len=wl)
-    Exec time:  0.5725758075714111
+    Exec time:  0.6398978233337402
     Doing  0
     /home/zsherman/dev/pyart/examples/correct/plot_lp_phase_proc.py:58: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
       plt.show()
@@ -144,7 +144,7 @@ fields of a ARM C-SAPR radar.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  25.362 seconds)
+   **Total running time of the script:** ( 0 minutes  25.899 seconds)
 
 
 .. _sphx_glr_download_source_auto_examples_correct_plot_lp_phase_proc.py:

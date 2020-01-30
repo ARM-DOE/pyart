@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyart.map.grid_mapper &mdash; Py-ART 1.11.0.dev+48ea695 documentation</title>
+  <title>pyart.map.grid_mapper &mdash; Py-ART 1.12.0.dev+ed36a91 documentation</title>
   
 
   
@@ -64,7 +64,7 @@
             
             
               <div class="version">
-                1.11.dev
+                1.12.dev
               </div>
             
           
@@ -423,7 +423,7 @@
                 <span class="n">fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gatefilters</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                 <span class="n">map_roi</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">weighting_function</span><span class="o">=</span><span class="s1">&#39;Barnes&#39;</span><span class="p">,</span> <span class="n">toa</span><span class="o">=</span><span class="mf">17000.0</span><span class="p">,</span>
                 <span class="n">copy_field_data</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="s1">&#39;kd_tree&#39;</span><span class="p">,</span> <span class="n">leafsize</span><span class="o">=</span><span class="mf">10.</span><span class="p">,</span>
-                <span class="n">roi_func</span><span class="o">=</span><span class="s1">&#39;dist_beam&#39;</span><span class="p">,</span> <span class="n">constant_roi</span><span class="o">=</span><span class="mf">500.</span><span class="p">,</span>
+                <span class="n">roi_func</span><span class="o">=</span><span class="s1">&#39;dist_beam&#39;</span><span class="p">,</span> <span class="n">constant_roi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                 <span class="n">z_factor</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">xy_factor</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span> <span class="n">min_radius</span><span class="o">=</span><span class="mf">500.0</span><span class="p">,</span>
                 <span class="n">h_factor</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">nb</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">bsp</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -509,7 +509,9 @@
 <span class="sd">    constant_roi : float</span>
 <span class="sd">        Radius of influence parameter for the built in &#39;constant&#39; function.</span>
 <span class="sd">        This parameter is the constant radius in meter for all grid points.</span>
-<span class="sd">        This parameter is only used when `roi_func` is `constant`.</span>
+<span class="sd">        This parameter is used when `roi_func` is `constant` or constant_roi</span>
+<span class="sd">        is not None. If constant_roi is not None, the constant roi_func is</span>
+<span class="sd">        used automatically.</span>
 <span class="sd">    z_factor, xy_factor, min_radius : float</span>
 <span class="sd">        Radius of influence parameters for the built in &#39;dist&#39; function.</span>
 <span class="sd">        The parameter correspond to the radius size increase, in meters,</span>
@@ -753,6 +755,10 @@
         <span class="n">x_step</span> <span class="o">=</span> <span class="p">(</span><span class="n">x_stop</span> <span class="o">-</span> <span class="n">x_start</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">nx</span> <span class="o">-</span> <span class="mf">1.</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">roi_func</span><span class="p">,</span> <span class="s1">&#39;__call__&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">constant_roi</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">roi_func</span> <span class="o">=</span> <span class="s1">&#39;constant&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">constant_roi</span> <span class="o">=</span> <span class="mf">500.0</span>
         <span class="k">if</span> <span class="n">roi_func</span> <span class="o">==</span> <span class="s1">&#39;constant&#39;</span><span class="p">:</span>
             <span class="n">roi_func</span> <span class="o">=</span> <span class="n">_gen_roi_func_constant</span><span class="p">(</span><span class="n">constant_roi</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">roi_func</span> <span class="o">==</span> <span class="s1">&#39;dist&#39;</span><span class="p">:</span>
