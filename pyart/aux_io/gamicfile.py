@@ -1,20 +1,5 @@
 """
-pyart.aux_io.gamicfile
-======================
-
 GAMICFile class and utility functions.
-
-.. autosummary::
-    :toctree: generated/
-    :template: dev_template.rst
-
-    GAMICFile
-
-.. autosummary::
-    :toctree: generated/
-
-    _get_gamic_sweep_data
-
 
 """
 

@@ -1,15 +1,6 @@
 """
-pyart.graph.radarmapdisplay
-===========================
-
 Class for creating plots on a geographic map using a Radar object using Cartopy
 for drawing maps.
-
-.. autosummary::
-    :toctree: generated/
-    :template: dev_template.rst
-
-    RadarMapDisplay
 
 """
 

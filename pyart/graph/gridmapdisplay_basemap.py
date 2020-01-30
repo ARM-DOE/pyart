@@ -1,14 +1,5 @@
 """
-pyart.graph.gridmapdisplay_basemap
-==================================
-
 A class for plotting grid objects with a basemap.
-
-.. autosummary::
-    :toctree: generated/
-    :template: dev_template.rst
-
-    GridMapDisplayBasemap
 
 """
 

@@ -1,14 +1,5 @@
 """
-pyart.io.auto_read
-==================
-
 Automatic reading of radar files by detecting format.
-
-.. autosummary::
-    :toctree: generated/
-
-    read
-    determine_filetype
 
 """
 

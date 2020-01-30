@@ -1,13 +1,5 @@
 """
-pyart.aux_io.radx
-=================
-
 Reading files using Radx to first convert the file to Cf.Radial format
-
-.. autosummary::
-    :toctree: generated/
-
-    read_radx
 
 """
 

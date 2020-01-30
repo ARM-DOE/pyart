@@ -1,21 +1,5 @@
 """
-pyart.io.uf_write
-=================
-
 Functions for writing UF files.
-
-.. autosummary::
-    :toctree: generated/
-    :template: dev_template.rst
-
-    UFRayCreator
-
-.. autosummary::
-    :toctree: generated/
-
-    write_uf
-    _d_to_dms
-    _pack_structure
 
 """
 

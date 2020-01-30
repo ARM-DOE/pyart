@@ -1,27 +1,5 @@
 """
-pyart.map.grid_mapper
-=====================
-
 Utilities for mapping radar objects to Cartesian grids.
-
-.. autosummary::
-    :toctree: generated/
-
-    grid_from_radars
-    map_to_grid
-    example_roi_func_constant
-    example_roi_func_dist
-    _unify_times_for_radars
-    _load_nn_field_data
-    _gen_roi_func_constant
-    _gen_roi_func_dist
-    _gen_roi_func_dist_beam
-
-.. autosummary::
-    :toctree: generated/
-    :template: dev_template.rst
-
-    NNLocator
 
 """
 

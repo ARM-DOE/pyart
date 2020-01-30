@@ -1,16 +1,5 @@
 """
-pyart.testing.tmpdirs
-=====================
-
 Classes for creating and cleaning temporary directories in unit tests.
-
-.. autosummary::
-    :toctree: generated/
-
-    TemporaryDirectory
-    InTemporaryDirectory
-    InGivenDirectory
-
 
 This module is taken from the nibable project.  The following license applies:
 

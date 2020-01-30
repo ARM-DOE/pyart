@@ -1,20 +1,5 @@
 """
-pyart.map.gates_to_grid
-=======================
-
 Generate a Cartesian grid by mapping from radar gates onto the grid.
-
-.. autosummary::
-    :toctree: generated/
-
-    map_gates_to_grid
-    _detemine_cy_weighting_func
-    _find_projparams
-    _parse_gatefilters
-    _determine_fields
-    _find_offsets
-    _find_grid_params
-    _parse_roi_func
 
 """
 

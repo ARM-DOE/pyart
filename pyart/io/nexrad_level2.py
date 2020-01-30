@@ -1,24 +1,5 @@
 """
-pyart.io.nexrad_level2
-======================
-
-.. autosummary::
-    :toctree: generated/
-    :template: dev_template.rst
-
-    NEXRADLevel2File
-
-.. autosummary::
-    :toctree: generated/
-
-    _decompress_records
-    _get_record_from_buf
-    _get_msg31_data_block
-    _structure_size
-    _unpack_from_buf
-    _unpack_structure
-
-
+Functions for reading NEXRAD level 2 files.
 """
 
 

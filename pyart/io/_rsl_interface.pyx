@@ -1,25 +1,5 @@
 """
-pyart.io._rsl_interface
-=======================
-
 Cython wrapper around the NASA TRMM RSL library.
-
-.. autosummary::
-    :toctree: generated/
-
-    copy_volume
-    create_volume
-    _label_volume
-
-.. autosummary::
-    :toctree: generated/
-    :template: dev_template.rst
-
-    RslFile
-    _RslVolume
-    _RslSweep
-    _RslRay
-
 
 """
 

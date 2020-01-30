@@ -1,16 +1,5 @@
 """
-pyart.exceptions
-================
-
 Custom Py-ART exceptions.
-
-.. autosummary::
-    :toctree: generated/
-
-    MissingOptionalDependency
-    DeprecatedAttribute
-    DeprecatedFunctionName
-    _deprecated_alias
 
 """
 

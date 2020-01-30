@@ -1,20 +1,5 @@
 """
-pyart.io.chl
-============
-
 Utilities for reading CSU-CHILL CHL files.
-
-.. autosummary::
-    :toctree: generated/
-    :template: dev_template.rst
-
-    ChlFile
-
-.. autosummary::
-    :toctree: generated/
-
-    read_chl
-    _unpack_structure
 
 """
 

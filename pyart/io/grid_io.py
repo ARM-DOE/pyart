@@ -1,15 +1,5 @@
 """
-pyart.io.grid_io
-================
-
 Reading and writing Grid objects.
-
-.. autosummary::
-    :toctree: generated/
-
-    read_grid
-    write_grid
-    _make_coordinatesystem_dict
 
 """
 

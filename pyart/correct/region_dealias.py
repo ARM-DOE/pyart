@@ -1,26 +1,5 @@
 """
-pyart.correct.region_dealias
-============================
-
 Region based dealiasing using a dynamic network reduction for region joining.
-
-.. autosummary::
-    :toctree: generated/
-
-    dealias_region_based
-    _find_regions
-    _find_sweep_interval_splits
-    _combine_regions
-    _edge_sum_and_count
-    _cost_function
-    _gradient
-
-.. autosummary::
-    :toctree: generated/
-    :template: dev_template.rst
-
-    _RegionTracker
-    _EdgeTracker
 
 """
 

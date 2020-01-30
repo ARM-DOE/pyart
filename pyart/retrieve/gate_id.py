@@ -1,12 +1,6 @@
 """
-pyart.retrieve.gate_id
-======================
-
-.. autosummary::
-    :toctree: generated/
-
-    map_profile_to_gates
-    fetch_radar_time_profile
+Functions that retrieve height of the gates and the profile interpolated
+onto the radar gates.
 
 """
 

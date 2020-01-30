@@ -1,23 +1,5 @@
 """
-pyart.correct.despeckle
-=======================
-
 Find contiguous objects in scans and despeckle away ones that are too small.
-
-.. autosummary::
-    :toctree: generated/
-
-    despeckle_field
-    find_objects
-    _adjust_for_periodic_boundary
-    _append_labels
-    _check_for_360
-    _check_sweeps
-    _check_threshold
-    _generate_dict
-    _get_data
-    _get_labels
-    _smooth_data
 
 """
 

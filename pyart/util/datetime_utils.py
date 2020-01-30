@@ -1,16 +1,5 @@
 """
-pyart.util.datetime_utils
-=========================
-
 Functions for converting date and time between various forms.
-
-.. autosummary::
-    :toctree: generated/
-    datetime_from_radar
-    datetimes_from_radar
-    datetime_from_dataset
-    datetimes_from_dataset
-    datetime_from_grid
 
 """
 

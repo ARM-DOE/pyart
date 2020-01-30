@@ -1,14 +1,5 @@
 """
-pyart.graph.radarmapdisplay_basemap
-===================================
-
 Class for creating plots on a geographic map using a Radar object and Basemap.
-
-.. autosummary::
-    :toctree: generated/
-    :template: dev_template.rst
-
-    RadarMapDisplayBasemap
 
 """
 

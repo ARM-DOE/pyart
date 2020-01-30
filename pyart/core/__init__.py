@@ -1,35 +1,5 @@
 """
-========================
-Core (:mod:`pyart.core`)
-========================
-
-.. currentmodule:: pyart.core
-
 Core Py-ART classes and function for interacting with weather radar data.
-
-Core classes
-============
-
-.. autosummary::
-    :toctree: generated/
-
-    Radar
-    Grid
-    HorizontalWindProfile
-
-Coordinate transformations
-==========================
-
-.. autosummary::
-    :toctree: generated/
-
-    antenna_to_cartesian
-    antenna_vectors_to_cartesian
-    cartesian_to_geographic
-    cartesian_vectors_to_geographic
-    cartesian_to_geographic_aeqd
-    geographic_to_cartesian
-    geographic_to_cartesian_aeqd
 
 """
 

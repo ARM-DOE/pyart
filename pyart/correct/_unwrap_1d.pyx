@@ -2,22 +2,12 @@
 #cython: boundscheck=False
 #cython: nonecheck=False
 #cython: wraparound=False
-"""
-pyart.correct._unwrap_1d
-========================
-
-.. autosummary::
-    :toctree: generated/
-    
-    unwrap_1d
-
-"""
 
 from libc.math cimport M_PI
 
 
 def unwrap_1d(double[::1] image, double[::1] unwrapped_image):
-    '''Phase unwrapping using the naive approach.'''
+    """ Phase unwrapping using the naive approach. """
     cdef:
         Py_ssize_t i
         double difference

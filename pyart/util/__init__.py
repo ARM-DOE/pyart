@@ -1,52 +1,8 @@
 """
-=============================
-Utilities (:mod:`pyart.util`)
-=============================
-
 Miscellaneous utility functions.
 
 The location and names of these functions within Py-ART may change between
-versions without depeciation, use with caution.
-
-.. currentmodule:: pyart.util
-
-Direction statistics
-====================
-
-.. autosummary::
-    :toctree: generated/
-
-    angular_mean
-    angular_std
-    angular_mean_deg
-    angular_std_deg
-    interval_mean
-    interval_std
-    mean_of_two_angles
-    mean_of_two_angles_deg
-
-Miscellaneous functions
-=======================
-
-.. autosummary::
-    :toctree: generated/
-
-    cross_section_ppi
-    cross_section_rhi
-    datetime_from_radar
-    datetimes_from_radar
-    datetime_from_dataset
-    datetimes_from_dataset
-    datetime_from_grid
-    estimate_noise_hs74
-    is_vpt
-    to_vpt
-    join_radar
-    simulated_vel_from_profile
-    texture_along_ray
-    texture
-    rolling_window
-    angular_texture_2d
+versions without depreciation, use with caution.
 
 """
 

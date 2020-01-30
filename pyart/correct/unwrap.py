@@ -1,21 +1,5 @@
 """
-pyart.correct.unwrap
-====================
-
 Dealias using multidimensional phase unwrapping algorithms.
-
-.. autosummary::
-    :toctree: generated/
-
-    dealias_unwrap_phase
-    _dealias_unwrap_3d
-    _dealias_unwrap_2d
-    _dealias_unwrap_1d
-    _verify_unwrap_unit
-    _is_radar_cubic
-    _is_radar_sweep_aligned
-    _is_radar_sequential
-    _is_sweep_sequential
 
 """
 
@@ -36,7 +20,8 @@ def dealias_unwrap_phase(
         rays_wrap_around=None, keep_original=False, set_limits=True,
         vel_field=None, corr_vel_field=None, skip_checks=False, **kwargs):
     """
-    Dealias Doppler velocities using multi-dimensional phase unwrapping.
+    Dealias Doppler velocities using multi-dimensional phase unwrapping
+    [1]_ and [2]_.
 
     Parameters
     ----------
@@ -101,14 +86,14 @@ def dealias_unwrap_phase(
     References
     ----------
     .. [1] Miguel Arevallilo Herraez, David R. Burton, Michael J. Lalor,
-           and Munther A. Gdeisat, "Fast two-dimensional phase-unwrapping
-           algorithm based on sorting by reliability following a noncontinuous
-           path", Journal Applied Optics, Vol. 41, No. 35 (2002) 7437,
+        and Munther A. Gdeisat, "Fast two-dimensional phase-unwrapping
+        algorithm based on sorting by reliability following a noncontinuous
+        path", Journal Applied Optics, Vol. 41, No. 35 (2002) 7437,
     .. [2] Abdul-Rahman, H., Gdeisat, M., Burton, D., & Lalor, M., "Fast
-           three-dimensional phase-unwrapping algorithm based on sorting by
-           reliability following a non-continuous path. In W. Osten,
-           C. Gorecki, & E. L. Novak (Eds.), Optical Metrology (2005) 32--40,
-           International Society for Optics and Photonics.
+        three-dimensional phase-unwrapping algorithm based on sorting by
+        reliability following a non-continuous path. In W. Osten,
+        C. Gorecki, & E. L. Novak (Eds.), Optical Metrology (2005) 32--40,
+        International Society for Optics and Photonics.
 
     """
     vel_field, corr_vel_field = _parse_fields(vel_field, corr_vel_field)

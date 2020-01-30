@@ -1,24 +1,8 @@
 """
-pyart.correct.attenuation
-=========================
-
 Attenuation correction from polarimetric radars. Code adapted from method in
 Gu et al, JAMC 2011, 50, 39. Adapted by Scott Collis and Scott Giangrande,
 refactored by Jonathan Helmus. New code added by Meteo Swiss and inserted into
 Py-ART by Robert Jackson.
-
-.. autosummary::
-    :toctree: generated/
-
-    calculate_attenuation
-    calculate_attenuation_zphi
-    calculate_attenuation_philinear
-    get_mask_fzl
-    _prepare_phidp
-    _get_param_attzphi
-    _param_attzphi_table
-    _get_param_attphilinear
-    _param_attphilinear_table
 
 """
 

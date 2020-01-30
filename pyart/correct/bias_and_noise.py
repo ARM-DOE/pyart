@@ -1,14 +1,5 @@
 """
-pyart.correct.bias_and_noise
-===================
-
 Corrects polarimetric variables for noise
-
-.. autosummary::
-    :toctree: generated/
-
-    correct_noise_rhohv
-    correct_bias
 
 """
 

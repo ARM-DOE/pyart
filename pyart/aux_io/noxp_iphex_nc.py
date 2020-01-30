@@ -1,14 +1,5 @@
 """
-pyart.aux_io.noxp_iphex_nc
-==========================
-
 Routines for reading IPHEx NOXP files.
-
-.. autosummary::
-    :toctree: generated/
-
-    read_noxp_iphex_nc
-    _ncvar_to_dict
 
 """
 

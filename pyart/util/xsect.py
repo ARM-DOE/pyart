@@ -1,16 +1,5 @@
 """
-pyart.util.xsect
-================
-
 Function for extracting cross sections from radar volumes.
-
-.. autosummary::
-    :toctree: generated/
-
-    cross_section_ppi
-    cross_section_rhi
-    _construct_xsect_radar
-    _copy_dic
 
 """
 

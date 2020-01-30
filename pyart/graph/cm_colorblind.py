@@ -1,13 +1,5 @@
 """
-pyart.graph.cm_colorblind
-=========================
-
 Colorblind friendly radar colormaps
-
-.. autosummary::
-    :toctree: generated/
-
-    _generate_cmap
 
 Available colormaps, reversed versions are also provided, these
 colormaps are available within matplotlib with names pyart_COLORMAP':

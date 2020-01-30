@@ -1,13 +1,5 @@
 ﻿"""
-pyart.retrieve.quasi_vertical_profile
-=====================================
-
 Retrieval of QVPs from a radar object
-
-.. autosummary::
-    :toctree: generated/
-
-    quasi_vertical_profile
 
 """
 

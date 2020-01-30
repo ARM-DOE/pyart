@@ -1,16 +1,5 @@
 """
-pyart.aux_io.read_gamic
-=======================
-
 Utilities for reading gamic hdf5 files.
-
-.. autosummary::
-    :toctree: generated/
-
-    read_gamic
-    _get_instrument_params
-    _avg_radial_angles
-    _prt_mode_from_unfolding
 
 """
 

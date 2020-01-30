@@ -1,13 +1,5 @@
 """
-pyart.io.nexrad_common
-======================
-
 Data and functions common to all types of NEXRAD files.
-
-.. autosummary::
-    :toctree: generated/
-
-    get_nexrad_location
 
 """
 # The functions in this module are intended to be used in other

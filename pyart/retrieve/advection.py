@@ -1,14 +1,5 @@
 """
-pyart.retrieve.advection
-========================
-
 Advection calculations.
-
-.. autosummary::
-    :toctree: generated/
-
-    grid_displacement_pc
-    grid_shift
 
 """
 

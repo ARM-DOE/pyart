@@ -1,13 +1,5 @@
 """
-pyart.util.hildebrand_sekhon
-============================
-
 Estimation of noise in Doppler spectra using the Hildebrand Sekhon method.
-
-.. autosummary::
-    :toctree: generated/
-
-    estimate_noise_hs74
 
 """
 

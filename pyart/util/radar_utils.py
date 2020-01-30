@@ -1,15 +1,5 @@
 """
-pyart.util.radar_utils
-======================
-
 Functions for working radar instances.
-
-.. autosummary::
-    :toctree: generated/
-
-    is_vpt
-    to_vpt
-    join_radar
 
 """
 

@@ -1,17 +1,5 @@
 """
-pyart.retrieve.velocity_azimuth_display
-=======================================
-
 Retrieval of VADs from a radar object.
-
-.. autosummary::
-    :toctreeL generated/
-    :template: dev_template.rst
-
-    velocity_azimuth_display
-    _vad_calculation
-    _interval_mean
-    _sd_to_uv
 
 """
 
