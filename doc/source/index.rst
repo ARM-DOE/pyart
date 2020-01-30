@@ -223,7 +223,5 @@ Py-ART is an open source software package distributed under the `New BSD License
 Source code for the package is available on `GitHub <https://github.com/ARM-DOE/pyart>`_. Feature requests and bug reports
 can be submitted to the `Issue tracker <https://github.com/ARM-DOE/pyart/issues>`_, posting to the pyart-users `mailing list <https://groups.google.com/forum/#!forum/pyart-users>`_.
 Contributions of source code, documentation or additional example are always
-appreciated from both developers and users. Developers looking for more
-detailed information on the inner workings of Py-ART should examine the
-`developer reference manual <http://arm-doe.github.io/pyart-docs-travis/dev_reference/index.html>`_. To learn more on contributing to Py-ART, see the
-contributor's guide.
+appreciated from both developers and users. To learn more on contributing to Py-ART, see
+the contributor's guide.
