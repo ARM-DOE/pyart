@@ -6,7 +6,7 @@ The Python ARM Radar Toolkit (Py-ART)
 
 |AnacondaCloud| |CondaDownloads|
 
-|DocsDev| |DocsUsers| |DocsGuides|
+|DocsUsers| |DocsGuides|
 
 |ARM| |Tweet|
 
@@ -22,11 +22,8 @@ The Python ARM Radar Toolkit (Py-ART)
 .. |CondaDownloads| image:: https://anaconda.org/conda-forge/arm_pyart/badges/downloads.svg
     :target: https://anaconda.org/conda-forge/arm_pyart/files
 
-.. |DocsDev| image:: https://img.shields.io/badge/docs-developers-4088b8.svg
-    :target: http://arm-doe.github.io/pyart-docs-travis/dev_reference/index.html
-
 .. |DocsUsers| image:: https://img.shields.io/badge/docs-users-4088b8.svg
-    :target: http://arm-doe.github.io/pyart-docs-travis/user_reference/index.html
+    :target: http://arm-doe.github.io/pyart-docs-travis/API/index.html
 
 .. |DocsGuides| image:: https://img.shields.io/badge/docs-guides-4088b8.svg
     :target: https://github.com/ARM-DOE/pyart/tree/master/guides/
