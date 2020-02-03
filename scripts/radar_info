@@ -3,8 +3,7 @@
 import pyart
 import argparse
 
-if __name__ == '__main__':
-
+def main():
     # parse the arguments
     parser = argparse.ArgumentParser(
         description='Print information on a radar file.')
@@ -61,3 +60,6 @@ if __name__ == '__main__':
 
     # print out information
     radar.info(args.level)
+
+if __name__ == '__main__':
+    main()

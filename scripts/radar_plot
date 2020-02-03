@@ -4,8 +4,7 @@ import argparse
 import matplotlib.pyplot as plt
 import pyart
 
-if __name__ == '__main__':
-
+def main():
     # parse the arguments
     parser = argparse.ArgumentParser(
         description='Plot a field from a radar file.')
@@ -139,3 +138,6 @@ if __name__ == '__main__':
         plt.show()
     else:
         fig.savefig(args.figname)
+
+if __name__ == '__main__':
+    main()

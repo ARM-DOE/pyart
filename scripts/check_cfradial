@@ -942,8 +942,7 @@ def check_cfradial_compliance(dataset, verb=False):
     return
 
 
-if __name__ == '__main__':
-
+def main():
     parser = argparse.ArgumentParser(
         description='Check a file for CF/Radial version 1.2 compliance.')
     parser.add_argument('filename', type=str, help='netcdf file to check')
@@ -953,3 +952,6 @@ if __name__ == '__main__':
 
     dataset = netCDF4.Dataset(args.filename, 'r')
     check_cfradial_compliance(dataset, args.verb)
+
+if __name__ == '__main__':
+    main()

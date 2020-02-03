@@ -15,12 +15,14 @@ of weather radars.
 
 DOCLINES = __doc__.split("\n")
 
-import os
-import shutil
-import sys
-import re
-import subprocess
 import glob
+import os
+import re
+import shutil
+import subprocess
+import sys
+
+from setuptools import setup, find_packages
 
 if sys.version_info[0] < 3:
     import __builtin__ as builtins
@@ -61,7 +63,6 @@ MINOR = 12
 MICRO = 0
 ISRELEASED = False
 VERSION = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
-SCRIPTS = glob.glob('scripts/*')
 
 
 # Return the git revision as a string
@@ -142,26 +143,10 @@ if not release:
         a.close()
 
 
-def configuration(parent_package='', top_path=None):
-    from numpy.distutils.misc_util import Configuration
-    config = Configuration(None, parent_package, top_path)
-    config.set_options(ignore_setup_xxx_py=True,
-                       assume_default_configuration=True,
-                       delegate_options_to_subpackages=True,
-                       quiet=True)
-
-    config.add_subpackage('pyart')
-    config.add_data_files(('pyart', '*.txt'))
-
-    return config
-
-
 def setup_package():
 
     # rewrite version file
     write_version_py()
-
-    from numpy.distutils.core import setup
 
     setup(
         name=NAME,
@@ -175,8 +160,12 @@ def setup_package():
         license=LICENSE,
         classifiers=CLASSIFIERS,
         platforms=PLATFORMS,
-        configuration=configuration,
-        scripts=SCRIPTS,
+        scripts=['scripts/anytocfradial',
+                 'scripts/check_cfradial',
+                 'scripts/convert_legacy_grid',
+                 'scripts/radar_info',
+                 'scripts/radar_plot'],
+        packages=find_packages()
     )
 
 if __name__ == '__main__':
