@@ -88,7 +88,6 @@ def kdp_schneebeli(radar, gatefilter=None, fill_value=None, psidp_field=None,
     5137-5149, doi:10.1109/TGRS.2013.2287017, 2014.
 
     """
-
     # create parallel computing instance
     if parallel:
         import multiprocessing as mp

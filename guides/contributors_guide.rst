@@ -117,31 +117,15 @@ the tools documentation for details on this process.
 Python File Setup
 -----------------
 
-In a new .py file, the top of the code should have the function or class
-location, sphinx comments for template configuration, and the public and
-private functions and classes within the .py file. Public functions and
-classes are listed first and then private functions and classes. Private
-functions and classes should have a underscore in front of the name. A space
-is needed between the last function or class and the closing docstring
-quotation.
+In a new .py file, the top of the code should have a brief introduction to
+the module.
 
 An example:
 
 .. code-block:: python
 
         """
-	pyart.retrieve.velocity_azimuth_display
-	=======================================
-	
-	Retrieval of VADs from a radar object.
-
-	.. autosummary::
-    	    :toctreeL generated/
-    	    :template: dev_template.rst
-
-	    velocity_azimuth_display
-            _inverse_dist_squared
-            _Average1D
+        Retrieval of VADs from a radar object.
 
         """
 

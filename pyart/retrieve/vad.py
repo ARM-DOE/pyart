@@ -33,12 +33,12 @@ def velocity_azimuth_display(radar, vel_field=None, z_want=None,
 
     Returns
     -------
-    vad: HorizontalWindProfile
+    vad : HorizontalWindProfile
 	A velocity azimuth display object containing height, speed, direction,
         u_wind, v_wind from a radar object.
 
-    Reference
-    ---------
+    References
+    ----------
     Michelson, D. B., Andersson, T., Koistinen, J., Collier, C. G., Riedl, J.,
     Szturc, J., Gjertsen, U., Nielsen, A. and Overgaard, S. (2000) BALTEX Radar
     Data Centre Products and their Methodologies. In SMHI Reports. Meteorology
