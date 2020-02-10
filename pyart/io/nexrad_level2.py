@@ -234,7 +234,7 @@ class NEXRADLevel2File(object):
                 continue
             msg31_number = self.scan_msgs[scan][0]
             msg = self.radial_records[msg31_number]
-            nexrad_moments = ['REF', 'VEL', 'SW', 'ZDR', 'PHI', 'RHO']
+            nexrad_moments = ['REF', 'VEL', 'SW', 'ZDR', 'PHI', 'RHO', 'CFP']
             moments = [f for f in nexrad_moments if f in msg]
             ngates = [msg[f]['ngates'] for f in moments]
             gate_spacing = [msg[f]['gate_spacing'] for f in moments]
@@ -281,7 +281,7 @@ class NEXRADLevel2File(object):
         ----------
         scan_num : int
             Scan number (0 based).
-        moment : 'REF', 'VEL', 'SW', 'ZDR', 'PHI', or 'RHO'
+        moment : 'REF', 'VEL', 'SW', 'ZDR', 'PHI', 'RHO', or 'CFP'
             Moment of interest.
 
         Returns
@@ -485,7 +485,7 @@ class NEXRADLevel2File(object):
 
         Parameters
         ----------
-        moment : 'REF', 'VEL', 'SW', 'ZDR', 'PHI', or 'RHO'
+        moment : 'REF', 'VEL', 'SW', 'ZDR', 'PHI', 'RHO', or 'CFP'
             Moment for which to to retrieve data.
         max_ngates : int
             Maximum number of gates (bins) in any ray.
@@ -513,7 +513,7 @@ class NEXRADLevel2File(object):
         nrays = len(msg_nums)
 
         # extract the data
-        if moment != 'PHI':
+        if moment != 'PHI' or moment != 'ZDR':
             data = np.ones((nrays, max_ngates), dtype='u1')
         else:
             data = np.ones((nrays, max_ngates), dtype='u2')
@@ -521,7 +521,8 @@ class NEXRADLevel2File(object):
             msg = self.radial_records[msg_num]
             if moment not in msg.keys():
                 continue
-            ngates = min(msg[moment]['ngates'], max_ngates, len(msg[moment]['data']))
+            ngates = min(msg[moment]['ngates'], max_ngates,
+                         len(msg[moment]['data']))
             data[i, :ngates] = msg[moment]['data'][:ngates]
 
         # return raw data if requested
@@ -621,11 +622,11 @@ def _get_msg31_data_block(buf, ptr):
         dic = _unpack_from_buf(buf, ptr, ELEVATION_DATA_BLOCK)
     elif block_name == 'RAD':
         dic = _unpack_from_buf(buf, ptr, RADIAL_DATA_BLOCK)
-    elif block_name in ['REF', 'VEL', 'SW', 'ZDR', 'PHI', 'RHO']:
+    elif block_name in ['REF', 'VEL', 'SW', 'ZDR', 'PHI', 'RHO', 'CFP']:
         dic = _unpack_from_buf(buf, ptr, GENERIC_DATA_BLOCK)
         ngates = dic['ngates']
         ptr2 = ptr + _structure_size(GENERIC_DATA_BLOCK)
-        if block_name == 'PHI':
+        if block_name == 'PHI' or block_name == 'ZDR':
             data = np.frombuffer(buf[ptr2: ptr2 + ngates * 2], '>u2')
         else:
             data = np.frombuffer(buf[ptr2: ptr2 + ngates], '>u1')
@@ -800,6 +801,7 @@ MSG_31 = (
     ('block_pointer_7', INT4),      # 56-59  Moment "ZDR"
     ('block_pointer_8', INT4),      # 60-63  Moment "PHI"
     ('block_pointer_9', INT4),      # 64-67  Moment "RHO"
+    ('block_pointer_10', INT4),     # Moment "CFP"
 )
 
 
