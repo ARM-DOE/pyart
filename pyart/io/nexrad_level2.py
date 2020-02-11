@@ -513,10 +513,10 @@ class NEXRADLevel2File(object):
         nrays = len(msg_nums)
 
         # extract the data
-        if moment != 'PHI' or moment != 'ZDR':
-            data = np.ones((nrays, max_ngates), dtype='u1')
-        else:
+        if moment == 'PHI' or moment == 'ZDR':
             data = np.ones((nrays, max_ngates), dtype='u2')
+        else:
+            data = np.ones((nrays, max_ngates), dtype='u1')
         for i, msg_num in enumerate(msg_nums):
             msg = self.radial_records[msg_num]
             if moment not in msg.keys():
