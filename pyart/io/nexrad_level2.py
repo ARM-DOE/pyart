@@ -511,20 +511,20 @@ class NEXRADLevel2File(object):
         # determine the number of rays
         msg_nums = self._msg_nums(scans)
         nrays = len(msg_nums)
-
         # extract the data
-        if moment == 'PHI' or moment == 'ZDR':
-            data = np.ones((nrays, max_ngates), dtype='u2')
-        else:
-            data = np.ones((nrays, max_ngates), dtype='u1')
+        set_datatype = False
+        data = np.ones((nrays, max_ngates), '>B')
         for i, msg_num in enumerate(msg_nums):
             msg = self.radial_records[msg_num]
             if moment not in msg.keys():
                 continue
+            if not set_datatype:
+                data = data.astype('>'+_bits_to_code(msg, moment))
+                set_datatype = True
+
             ngates = min(msg[moment]['ngates'], max_ngates,
                          len(msg[moment]['data']))
             data[i, :ngates] = msg[moment]['data'][:ngates]
-
         # return raw data if requested
         if raw_data:
             return data
@@ -543,6 +543,38 @@ class NEXRADLevel2File(object):
 
         # moment is not present in any scan, mask all values
         return np.ma.masked_less_equal(data, 1)
+
+
+def _bits_to_code(msg, moment):
+    """
+    Convert number of bits to the proper code for unpacking.
+    Based on the code found in MetPy:
+    https://github.com/Unidata/MetPy/blob/40d5c12ab341a449c9398508bd41
+    d010165f9eeb/src/metpy/io/_tools.py#L313-L321
+    """
+    if msg['header']['type'] == 1:
+        word_size = msg[moment]['data'].dtype
+        if word_size == 'uint16':
+            return 'H'
+        elif word_size == 'uint8':
+            return 'B'
+        else:
+            warnings.warn(
+                ('Unsupported bit size: %s. Returning "B"', word_size))
+            return 'B'
+
+    elif msg['header']['type'] == 31:
+        word_size = msg[moment]['word_size']
+        if word_size == 16:
+            return 'H'
+        elif word_size == 8:
+            return 'B'
+        else:
+            warnings.warn(
+                ('Unsupported bit size: %s. Returning "B"', word_size))
+            return 'B'
+    else:
+        raise TypeError("Unsupported msg type %s", msg['header']['type'])
 
 
 def _decompress_records(file_handler):
@@ -626,10 +658,14 @@ def _get_msg31_data_block(buf, ptr):
         dic = _unpack_from_buf(buf, ptr, GENERIC_DATA_BLOCK)
         ngates = dic['ngates']
         ptr2 = ptr + _structure_size(GENERIC_DATA_BLOCK)
-        if block_name == 'PHI' or block_name == 'ZDR':
+        if dic['word_size'] == 16:
             data = np.frombuffer(buf[ptr2: ptr2 + ngates * 2], '>u2')
-        else:
+        elif dic['word_size'] == 8:
             data = np.frombuffer(buf[ptr2: ptr2 + ngates], '>u1')
+        else:
+            warnings.warn(
+                'Unsupported bit size: %s. Returning array dtype "B"',
+                dic['word_size'])
         dic['data'] = data
     else:
         dic = {}
