@@ -767,7 +767,7 @@ def _get_param_attphilinear(freq):
 
     warn("Radar frequency out of range. "
          + "Coefficients only applied to S, C or X band. "
-         + freq_band + " band coefficients will be used.")
+         + freq_band_aux + " band coefficients will be used.")
 
     return param_att_dict[freq_band_aux]
 

@@ -154,7 +154,10 @@ def det_process_range(radar, sweep, fzl, doc=10):
     elevation = radar.fixed_angle['data'][sweep]
     radar_height = radar.altitude['data']
     gate_end = fzl_index(fzl, ranges, elevation, radar_height)
-    gate_end = min(gate_end, len(ranges) - doc)
+    if doc is not None:
+        gate_end = min(gate_end, len(ranges) - doc)
+    else:
+        gate_end = min(gate_end, len(ranges))
 
     ray_start = radar.sweep_start_ray_index['data'][sweep]
     ray_end = radar.sweep_end_ray_index['data'][sweep] + 1
@@ -1372,8 +1375,6 @@ def get_phidp_unf_gf(radar, gatefilter, debug=False, ncpts=2, sys_phase=None,
         Minimum number of points in a ray. Regions within a ray smaller than
         this or beginning before this gate number are excluded from
         calculations.
-    doc : int or None, optional
-        Index of first gate not to include in field data, None include all.
     sys_phase : float, optional
         System phase overide.
     nowrap : int or None, optional
