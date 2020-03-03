@@ -577,7 +577,7 @@ def _get_record_from_buf(buf, pos):
                           RuntimeWarning)
             new_pos = pos + RECORD_SIZE
     elif msg_type == 29:
-        new_pos = _get_msg29_from_buf(buf, pos, dic)
+        new_pos = _get_msg29_from_buf(pos, dic)
         warnings.warn("Message 29 encountered, not parsing.", RuntimeWarning)
     elif msg_type == 1:
         new_pos = _get_msg1_from_buf(buf, pos, dic)
