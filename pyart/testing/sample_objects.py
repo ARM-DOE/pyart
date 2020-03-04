@@ -14,7 +14,7 @@ try:
     import xarray as xr
     from ..core.radar_spectra import RadarSpectra
     _XARRAY_AVAILABLE = True
-except Import Error:
+except ImportError:
     _XARRAY_AVAILABLE = False
 
 
