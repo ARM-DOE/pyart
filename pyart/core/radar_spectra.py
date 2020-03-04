@@ -5,6 +5,7 @@ A general central radial scanning (or dwelling) instrument class.
 
 import copy
 import sys
+import warnings
 
 import numpy as np
 
@@ -171,6 +172,8 @@ class RadarSpectra(object):
                  instrument_parameters=None,
                  radar_calibration=None, georefs_applied=None
                 ):
+        warnings.warn("Radar Spectra object has not been unit tested yet, "
+                      "use at your own risk. ")
         if not _XARRAY_AVAILABLE:
             raise MissingOptionalDependency(
                 "Xarray is required to use RadarSpectra but is "
