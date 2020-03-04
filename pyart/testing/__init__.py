@@ -19,6 +19,8 @@ from .sample_objects import make_empty_grid
 from .sample_objects import make_target_grid, make_storm_grid
 from .sample_objects import make_empty_rhi_radar
 from .sample_objects import make_velocity_aliased_rhi_radar
+from .sample_objects import make_empty_spectra_radar
+from. sample_objects import make_target_spectra_radar
 from .tmpdirs import InTemporaryDirectory
 from .sample_objects import make_normal_storm
 
