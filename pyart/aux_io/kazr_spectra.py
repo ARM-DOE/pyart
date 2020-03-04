@@ -131,9 +131,9 @@ def read_kazr_spectra(filename, field_names=None, additional_metadata=None,
                              attrs=elevation_dict, dims='time')
 
     azimuth_dict = filemetadata('azimuth')
-    azimuth = xr.DataArray(np.array(360.0*np.ones(len(rng_array)),
+    azimuth = xr.DataArray(np.array(360.0*np.ones(len(time_array)),
                                     dtype='float32'),
-                           attrs=azimuth_dict, dims='range')
+                           attrs=azimuth_dict, dims='time')
 
     fix_agl_dict = filemetadata('fixed_angle')
     fixed_angle = xr.DataArray(np.array(90.0, dtype='float32'),
@@ -169,8 +169,8 @@ def read_kazr_spectra(filename, field_names=None, additional_metadata=None,
     
     return RadarSpectra(time, _range, spectras, metadata, scan_type,
                         latitude, longitude, altitude,
-                        sweep_number, sweep_mode, fixed_angle, sweep_start_ray_index,
-                        sweep_end_ray_index,
+                        sweep_number, sweep_mode, fixed_angle,
+                        sweep_start_ray_index, sweep_end_ray_index,
                         azimuth, elevation, npulses_max)
 
 

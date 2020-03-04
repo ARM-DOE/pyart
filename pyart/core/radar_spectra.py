@@ -9,7 +9,7 @@ import sys
 import numpy as np
 
 try:
-    import xarray
+    import xarray as xr
     _XARRAY_AVAILABLE = True
 except ImportError:
     _XARRAY_AVAILABLE = False
@@ -164,7 +164,7 @@ class RadarSpectra(object):
                  latitude, longitude, altitude,
                  sweep_number, sweep_mode, fixed_angle, sweep_start_ray_index,
                  sweep_end_ray_index,
-                 azimuth, elevation, altitude_agl=None,
+                 azimuth, elevation, npulses_max, altitude_agl=None,
                  target_scan_rate=None, rays_are_indexed=None,
                  ray_angle_res=None,
                  scan_rate=None, antenna_transition=None,
@@ -196,7 +196,8 @@ class RadarSpectra(object):
                     'npulses_max': npulses_max},
             attrs=metadata)
 
-        self.ds.attrs['projection'] = {'proj': 'pyart_aeqd', '_include_lon_0_lat_0': True}
+        self.ds.attrs['projection'] = {'proj': 'pyart_aeqd',
+                                       '_include_lon_0_lat_0': True}
 
         # initalize attributes with lazy load dictionaries
         self.init_rays_per_sweep()
