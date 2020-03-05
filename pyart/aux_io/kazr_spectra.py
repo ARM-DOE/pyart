@@ -151,7 +151,7 @@ def read_kazr_spectra(filename, field_names=None, additional_metadata=None,
     sweep_start_ray_index = xr.DataArray(np.array(0, dtype='int32'),
                                          attrs=sweep_start_ray_index_dict)
     sweep_end_ray_index_dict = filemetadata('sweep_end_ray_index')
-    sweep_end_ray_index = xr.DataArray(np.array(len(times), dtype='int32'),
+    sweep_end_ray_index = xr.DataArray(np.array(len(times)-1, dtype='int32'),
                                        attrs=sweep_end_ray_index_dict)
     spectra_array = [_get_spectra(xrobj, x) for x in xrobj.time.values]
     spectras = np.stack(spectra_array)

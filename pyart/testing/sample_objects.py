@@ -400,7 +400,10 @@ def make_empty_spectra_radar(nrays, ngates, npulses_max):
 
     fields = {}
     scan_type = 'vpt'
-    metadata = {'instrument_name': 'fake_spectra_radar'}
+    c = 299792458
+    wavelength = c/34.830*1e-9
+    metadata = {'instrument_name': 'fake_spectra_radar',
+                'wavelength': wavelength}
     time_dict['units'] = 'seconds since 1989-01-01T00:00:01Z'
     time = xr.DataArray(np.arange(nrays, dtype='float32'), attrs=time_dict,
                         dims='time')
@@ -420,8 +423,9 @@ def make_empty_spectra_radar(nrays, ngates, npulses_max):
                                attrs=fixed_angle_dict)
     sweep_start_ray_index = xr.DataArray(np.array(0, dtype='int32'),
                                          attrs=sweep_start_ray_index_dict)
-    sweep_end_ray_index = xr.DataArray(np.array(time.data[-1], dtype='int32'),
-                                               attrs=sweep_end_ray_index_dict)
+    sweep_end_ray_index = xr.DataArray(
+        np.array(len(time.values)-1, dtype='int32'),
+        attrs=sweep_end_ray_index_dict)
 
     azimuth = xr.DataArray(np.arange(nrays, dtype='float32'),
                            attrs=azimuth_dict, dims='time')

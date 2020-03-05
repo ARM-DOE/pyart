@@ -16,7 +16,6 @@ except ImportError:
     _XARRAY_AVAILABLE = False
 
 from ..config import get_metadata
-from ..lazydict import LazyLoadDict
 from .transforms import antenna_vectors_to_cartesian, cartesian_to_geographic
 
 
@@ -231,6 +230,10 @@ class RadarSpectra(object):
         return self.ds.npulses_max
 
     @property
+    def velocity_bins(self):
+        return self.ds.velocity_bins
+
+    @property
     def latitude(self):
         return self.ds.latitude
 
@@ -302,111 +305,86 @@ class RadarSpectra(object):
     def gate_altitude(self):
         return self.ds.gate_altitude
 
+    @property
+    def projection(self):
+        return self.ds.attrs['projection']
+
     def init_rays_per_sweep(self):
         """ Initialize or reset the rays_per_sweep attribute. """
-        lazydic = LazyLoadDict(get_metadata('rays_per_sweep'))
-        lazydic.set_lazy('data', _rays_per_sweep_data_factory(self.ds))
-        self.ds['rays_per_sweep'] = xr.DataArray(lazydic['data'], attrs=lazydic)
+        _rays_per_sweep_data_factory(self.ds)
 
     def init_gate_x_y_z(self):
         """ Initialize or reset the gate_{x, y, z} attributes. """
-        gate_x = LazyLoadDict(get_metadata('gate_x'))
-        gate_x.set_lazy('data', _gate_data_factory(self.ds, 0))
-        self.ds['gate_x'] = xr.DataArray(gate_x['data'], dims=('time', 'range'),
-                                         attrs=gate_x)
-
-        gate_y = LazyLoadDict(get_metadata('gate_y'))
-        gate_y.set_lazy('data', _gate_data_factory(self.ds, 1))
-        self.ds['gate_y'] = xr.DataArray(gate_y['data'], dims=('time', 'range'),
-                                         attrs=gate_y)
-
-        gate_z = LazyLoadDict(get_metadata('gate_z'))
-        gate_z.set_lazy('data', _gate_data_factory(self.ds, 2))
-        self.ds['gate_z'] = xr.DataArray(gate_z['data'], dims=('time', 'range'),
-                                         attrs=gate_z)
+        _gate_data_factory(self.ds)
 
     def init_gate_longitude_latitude(self):
         """
         Initialize or reset the gate_longitude and gate_latitude attributes.
         """
-        gate_longitude = LazyLoadDict(get_metadata('gate_longitude'))
-        gate_longitude.set_lazy('data', _gate_lon_lat_data_factory(self.ds, 0))
-        self.ds['gate_longitude'] = xr.DataArray(gate_longitude['data'],
-                                                 dims=('time', 'range'),
-                                                 attrs=gate_longitude)
-
-        gate_latitude = LazyLoadDict(get_metadata('gate_latitude'))
-        gate_latitude.set_lazy('data', _gate_lon_lat_data_factory(self.ds, 1))
-        self.ds['gate_latitude'] = xr.DataArray(gate_latitude['data'],
-                                                dims=('time', 'range'),
-                                                attrs=gate_latitude)
+        _gate_lon_lat_data_factory(self.ds)
 
     def init_gate_altitude(self):
         """ Initialize the gate_altitude attribute. """
-        gate_altitude = LazyLoadDict(get_metadata('gate_altitude'))
-        gate_altitude.set_lazy('data', _gate_altitude_data_factory(self.ds))
-        self.ds['gate_altitude'] = xr.DataArray(gate_altitude['data'],
-                                                dims=('time', 'range'),
-                                                attrs=gate_altitude)
+        _gate_altitude_data_factory(self.ds)
 
 def _rays_per_sweep_data_factory(radar):
     """ Return a function which returns the number of rays per sweep. """
-    def _rays_per_sweep_data():
-        """ The function which returns the number of rays per sweep. """
-        return (radar.sweep_end_ray_index.values -
-                radar.sweep_start_ray_index.values + 1)
-    return _rays_per_sweep_data
+    rays_per_sweep_dict = get_metadata('rays_per_sweep')
+    rays_per_sweep = (
+        radar.sweep_end_ray_index.values -
+        radar.sweep_start_ray_index.values + 1)
+    print(rays_per_sweep)
+    radar['rays_per_sweep'] = xr.DataArray(np.array(rays_per_sweep),
+                                           attrs=rays_per_sweep_dict)
+    
 
-def _gate_data_factory(radar, coordinate):
+def _gate_data_factory(radar):
     """ Return a function which returns the Cartesian locations of gates. """
-    def _gate_data():
-        """ The function which returns the Cartesian locations of gates. """
-        ranges = radar.range.values
-        azimuths = radar.azimuth.values
-        elevations = radar.elevation.values
-        cartesian_coords = antenna_vectors_to_cartesian(
-            ranges, azimuths, elevations, edges=False)
+    ranges = radar.range.values
+    azimuths = radar.azimuth.values
+    elevations = radar.elevation.values
+    cartesian_coords = antenna_vectors_to_cartesian(
+        ranges, azimuths, elevations, edges=False)
 
-        # load x, y, and z data except for the coordinate in question
-        if coordinate != 0:
-            radar['gate_x'] = xr.DataArray(cartesian_coords[0],
-                                           dims=('time', 'range'))
-        if coordinate != 1:
-            radar['gate_y'] = xr.DataArray(cartesian_coords[1],
-                                           dims=('time', 'range'))
-        if coordinate != 2:
-            radar['gate_z'] = xr.DataArray(cartesian_coords[2],
-                                           dims=('time', 'range'))
-        return cartesian_coords[coordinate]
-    return _gate_data
+    # load x, y, and z data except for the coordinate in question
+    gate_x_dict = get_metadata('gate_x')
+    radar['gate_x'] = xr.DataArray(cartesian_coords[0],
+                                   dims=('time', 'range'),
+                                   attrs=gate_x_dict)
+    gate_y_dict = get_metadata('gate_y')
+    radar['gate_y'] = xr.DataArray(cartesian_coords[1],
+                                   dims=('time', 'range'),
+                                   attrs=gate_y_dict)
+    gate_z_dict = get_metadata('gate_z')
+    radar['gate_z'] = xr.DataArray(cartesian_coords[2],
+                                   dims=('time', 'range'),
+                                   attrs=gate_z_dict)
 
-def _gate_lon_lat_data_factory(radar, coordinate):
+def _gate_lon_lat_data_factory(radar):
     """ Return a function which returns the geographic locations of gates. """
-    def _gate_lon_lat_data():
-        """ The function which returns the geographic locations gates. """
-        x = radar.gate_x.values
-        y = radar.gate_y.values
-        projparams = radar.projection.copy()
-        if projparams.pop('_include_lon_0_lat_0', False):
-            projparams['lon_0'] = radar.longitude.values
-            projparams['lat_0'] = radar.latitude.values
-        geographic_coords = cartesian_to_geographic(x, y, projparams)
-        # set the other geographic coordinate
-        if coordinate == 0:
-            radar['gate_latitude'] = xr.DataArray(geographic_coords[1],
-                                                  dims=('time', 'range'))
-        else:
-            radar['gate_longitude'] = xr.DataArray(geographic_coords[0],
-                                                   dims=('time', 'range'))
-        return geographic_coords[coordinate]
-    return _gate_lon_lat_data
+    x = radar.gate_x.values
+    y = radar.gate_y.values
+    projparams = radar.projection.copy()
+    if projparams.pop('_include_lon_0_lat_0', False):
+        projparams['lon_0'] = radar.longitude.values
+        projparams['lat_0'] = radar.latitude.values
+    geographic_coords = cartesian_to_geographic(x, y, projparams)
+    # set the other geographic coordinate
+    gate_latitude_dict = get_metadata('gate_latitude')
+    radar['gate_latitude'] = xr.DataArray(geographic_coords[1],
+                                          dims=('time', 'range'),
+                                          attrs=gate_latitude_dict)
+    gate_longitude_dict = get_metadata('gate_longitude')
+    radar['gate_longitude'] = xr.DataArray(geographic_coords[0],
+                                           dims=('time', 'range'),
+                                           attrs=gate_longitude_dict)
 
 def _gate_altitude_data_factory(radar):
     """ Return a function which returns the gate altitudes. """
-    def _gate_altitude_data():
-        """ The function which returns the gate altitudes. """
-        try:
-            return radar.altitude.values + radar.gate_z.values
-        except ValueError:
-            return np.mean(radar.altitude.values) + radar.gate_z.values
-    return _gate_altitude_data
+    try:
+         alt = radar.altitude.values + radar.gate_z.values
+    except ValueError:
+         alt = np.mean(radar.altitude.values) + radar.gate_z.values
+    gate_altitude_dict = get_metadata('gate_altitude')
+    radar['gate_altitude'] = xr.DataArray(alt, dims=('time', 'range'),
+                                          attrs=gate_altitude_dict)
