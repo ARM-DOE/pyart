@@ -428,6 +428,8 @@ def make_empty_spectra_radar(nrays, ngates, npulses_max):
     elevation = xr.DataArray(np.array([0.75] * nrays, dtype='float32'),
                              attrs=elevation_dict, dims='time')
     npulses_max = np.arange(npulses_max, dtype='float32')
+    velocity_bins = xr.DataArray(np.linspace(-10.0, 10.0, len(npulses_max)),
+                                 attrs={}, dims='npulses_max')
 
     fields = np.zeros(
         (len(time.values), len(_range.values), len(npulses_max)))
@@ -436,7 +438,7 @@ def make_empty_spectra_radar(nrays, ngates, npulses_max):
                         latitude, longitude, altitude,
                         sweep_number, sweep_mode, fixed_angle,
                         sweep_start_ray_index, sweep_end_ray_index,
-                        azimuth, elevation, npulses_max,
+                        azimuth, elevation, npulses_max, velocity_bins,
                         instrument_parameters=None)
 
 

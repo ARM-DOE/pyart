@@ -151,7 +151,7 @@ def read_kazr_spectra(filename, field_names=None, additional_metadata=None,
     sweep_start_ray_index = xr.DataArray(np.array(0, dtype='int32'),
                                          attrs=sweep_start_ray_index_dict)
     sweep_end_ray_index_dict = filemetadata('sweep_end_ray_index')
-    sweep_end_ray_index = xr.DataArray(np.array(1, dtype='int32'),
+    sweep_end_ray_index = xr.DataArray(np.array(len(times), dtype='int32'),
                                        attrs=sweep_end_ray_index_dict)
     spectra_array = [_get_spectra(xrobj, x) for x in xrobj.time.values]
     spectras = np.stack(spectra_array)
@@ -165,13 +165,17 @@ def read_kazr_spectra(filename, field_names=None, additional_metadata=None,
 
     metadata = xrobj.attrs
     metadata['wavelength'] = wavelength
+    velocity_dict = xrobj.velocity_bins.attrs
+    bins = xrobj.velocity_bins.values
+    velocity_bins = xr.DataArray(bins, attrs=velocity_dict,
+                                 dims='npulses_max')
     xrobj.close()
     
     return RadarSpectra(time, _range, spectras, metadata, scan_type,
                         latitude, longitude, altitude,
                         sweep_number, sweep_mode, fixed_angle,
                         sweep_start_ray_index, sweep_end_ray_index,
-                        azimuth, elevation, npulses_max)
+                        azimuth, elevation, npulses_max, velocity_bins)
 
 
 def _get_spectra(xrobj, time):

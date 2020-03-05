@@ -165,7 +165,8 @@ class RadarSpectra(object):
                  latitude, longitude, altitude,
                  sweep_number, sweep_mode, fixed_angle, sweep_start_ray_index,
                  sweep_end_ray_index,
-                 azimuth, elevation, npulses_max, altitude_agl=None,
+                 azimuth, elevation, npulses_max, velocity_bins,
+                 altitude_agl=None,
                  target_scan_rate=None, rays_are_indexed=None,
                  ray_angle_res=None,
                  scan_rate=None, antenna_transition=None,
@@ -183,6 +184,7 @@ class RadarSpectra(object):
         self.ds = xr.Dataset(
             data_vars={
                 'spectra': (('time', 'range', 'npulses_max'), fields),
+                'velocity_bins': velocity_bins,
                 'scan_type': scan_type,
                 'latitude': latitude,
                 'longitude': longitude,
