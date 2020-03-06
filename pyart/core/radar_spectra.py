@@ -348,6 +348,27 @@ class RadarSpectra(object):
             raise IndexError('Sweep out of range: ', sweep)
         return
 
+        # get methods
+
+    def get_start(self, sweep):
+        """ Return the starting ray index for a given sweep. """
+        self._check_sweep_in_range(sweep)
+        return self.sweep_start_ray_index.values[sweep]
+
+    def get_end(self, sweep):
+        """ Return the ending ray for a given sweep. """
+        self._check_sweep_in_range(sweep)
+        return self.sweep_end_ray_index.values[sweep]
+
+    def get_start_end(self, sweep):
+        """ Return the starting and ending ray for a given sweep. """
+        return self.get_start(sweep), self.get_end(sweep)
+
+    def get_slice(self, sweep):
+        """ Return a slice for selecting rays for a given sweep. """
+        start, end = self.get_start_end(sweep)
+        return slice(start, end+1)
+
     def check_field_exists(self, field_name):
         """
         Check that a field exists in the fields dictionary.
