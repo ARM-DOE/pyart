@@ -172,8 +172,8 @@ class RadarSpectra(object):
                  instrument_parameters=None,
                  radar_calibration=None, georefs_applied=None
                 ):
-        warnings.warn("Radar Spectra object has not been unit tested yet, "
-                      "use at your own risk. ")
+        warnings.warn("Radar Spectra object is in early development, "
+                      "errors may arise, use at your own risk! ")
         if not _XARRAY_AVAILABLE:
             raise MissingOptionalDependency(
                 "Xarray is required to use RadarSpectra but is "
@@ -200,6 +200,9 @@ class RadarSpectra(object):
                     'npulses_max': npulses_max},
             attrs=metadata)
 
+        self.ds['ngates'] = len(_range.values)
+        self.ds['nrays'] = len(time.values)
+        self.ds['nsweeps'] = len(sweep_number.values)
         self.ds.attrs['projection'] = {'proj': 'pyart_aeqd',
                                        '_include_lon_0_lat_0': True}
 
@@ -306,6 +309,18 @@ class RadarSpectra(object):
         return self.ds.gate_altitude
 
     @property
+    def ngates(self):
+        return self.ds.ngates
+
+    @property
+    def nrays(self):
+        return self.ds.nrays
+
+    @property
+    def nsweeps(self):
+        return self.ds.nsweeps
+
+    @property
     def projection(self):
         return self.ds.attrs['projection']
 
@@ -327,13 +342,63 @@ class RadarSpectra(object):
         """ Initialize the gate_altitude attribute. """
         _gate_altitude_data_factory(self.ds)
 
+    def _check_sweep_in_range(self, sweep):
+        """ Check that a sweep number is in range. """
+        if sweep < 0 or sweep >= self.nsweeps:
+            raise IndexError('Sweep out of range: ', sweep)
+        return
+
+    def check_field_exists(self, field_name):
+        """
+        Check that a field exists in the fields dictionary.
+        If the field does not exist raise a KeyError.
+
+        Parameters
+        ----------
+        field_name : str
+            Name of field to check.
+
+        """
+        if field_name not in self.fields.keys():
+            raise KeyError('Field not available: ' + field_name)
+        return
+
+    # Iterators
+    def iter_start(self):
+        """ Return an iterator over the sweep start indices. """
+        return (s for s in self.sweep_start_ray_index.values)
+
+    def iter_end(self):
+        """ Return an iterator over the sweep end indices. """
+        return (s for s in self.sweep_end_ray_index.values)
+
+    def iter_start_end(self):
+        """ Return an iterator over the sweep start and end indices. """
+        return ((s, e) for s, e in zip(self.iter_start(), self.iter_end()))
+
+    def iter_slice(self):
+        """ Return an iterator which returns sweep slice objects. """
+        return (slice(s, e+1) for s, e in self.iter_start_end())
+
+    def iter_field(self, field_name):
+        """ Return an iterator which returns sweep field data. """
+        self.check_field_exists(field_name)
+        return (self.fields[field_name].values[s] for s in self.iter_slice())
+
+    def iter_azimuth(self):
+        """ Return an iterator which returns sweep azimuth data. """
+        return (self.azimuth.values[s] for s in self.iter_slice())
+
+    def iter_elevation(self):
+        """ Return an iterator which returns sweep elevation data. """
+        return (self.elevation.values[s] for s in self.iter_slice())
+
 def _rays_per_sweep_data_factory(radar):
     """ Return a function which returns the number of rays per sweep. """
     rays_per_sweep_dict = get_metadata('rays_per_sweep')
     rays_per_sweep = (
         radar.sweep_end_ray_index.values -
         radar.sweep_start_ray_index.values + 1)
-    print(rays_per_sweep)
     radar['rays_per_sweep'] = xr.DataArray(np.array(rays_per_sweep),
                                            attrs=rays_per_sweep_dict)
     

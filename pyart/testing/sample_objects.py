@@ -421,10 +421,10 @@ def make_empty_spectra_radar(nrays, ngates, npulses_max):
     sweep_mode = xr.DataArray(np.array(['spectra'] * 1), attrs=sweep_mode_dict)
     fixed_angle = xr.DataArray(np.array([0.75] * 1, dtype='float32'),
                                attrs=fixed_angle_dict)
-    sweep_start_ray_index = xr.DataArray(np.array(0, dtype='int32'),
+    sweep_start_ray_index = xr.DataArray(np.array([0], dtype='int32'),
                                          attrs=sweep_start_ray_index_dict)
     sweep_end_ray_index = xr.DataArray(
-        np.array(len(time.values)-1, dtype='int32'),
+        np.array([len(time.values)-1], dtype='int32'),
         attrs=sweep_end_ray_index_dict)
 
     azimuth = xr.DataArray(np.arange(nrays, dtype='float32'),
