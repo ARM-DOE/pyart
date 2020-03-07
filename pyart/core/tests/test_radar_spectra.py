@@ -183,3 +183,17 @@ def test_iterators():
     assert inspect.isgenerator(radar.iter_elevation())
     for d in radar.iter_elevation():
         assert d.shape == (30, )
+
+
+@pytest.mark.skipif(not _XARRAY_AVAILABLE,
+                    reason="Xarray is not installed.")
+def test_vpt():
+    radar = pyart.testing.make_target_spectra_radar()
+    vpt = radar.to_vpt()
+    assert 'instrument_name' in vpt.metadata
+    assert vpt.fields['reflectivity']['data'].shape == (10, 20)
+    assert list(vpt.fields.keys()) == [
+        'reflectivity', 'velocity', 'spectrum_width',
+        'skewness', 'kurtosis']
+    assert vpt.range['data'].shape == (20,)
+    assert vpt.time['data'].shape == (10,)

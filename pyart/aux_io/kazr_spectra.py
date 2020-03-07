@@ -140,7 +140,7 @@ def read_kazr_spectra(filename, field_names=None, additional_metadata=None,
                                attrs=fix_agl_dict)
 
     sweep_number_dict = filemetadata('sweep_number')
-    sweep_number = xr.DataArray(np.array(1, dtype='int32'),
+    sweep_number = xr.DataArray(np.array([1], dtype='int32'),
                                 attrs=sweep_number_dict)
 
     sweep_mode_dict = filemetadata('sweep_mode')

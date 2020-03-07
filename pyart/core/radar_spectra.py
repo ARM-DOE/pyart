@@ -414,6 +414,34 @@ class RadarSpectra(object):
         """ Return an iterator which returns sweep elevation data. """
         return (self.elevation.values[s] for s in self.iter_slice())
 
+    def to_vpt(self):
+        """ Returns a simple Radar object in VPT scan type with spectra moments
+        such as reflectivity and mean velocity. """
+        from ..testing import make_empty_ppi_radar
+        from ..retrieve import spectra_moments
+        from ..util import to_vpt
+
+        rng_len = len(self.range.values)
+        time_len = len(self.time.values)
+        vpt_radar = make_empty_ppi_radar(
+            ngates=rng_len, rays_per_sweep=time_len, nsweeps=1)
+
+        fields = spectra_moments(self)
+
+        rng_dict = get_metadata('range')
+        rng_dict['data'] = self.range.values
+
+        time_dict = get_metadata('time')
+        time_dict['data'] = self.time.values
+
+        vpt_radar.range = rng_dict
+        vpt_radar.time = time_dict
+        vpt_radar.fields = fields
+        vpt_radar.metadata['instrument_name'] = 'KAZR'
+        to_vpt(vpt_radar)
+        return vpt_radar
+
+
 def _rays_per_sweep_data_factory(radar):
     """ Return a function which returns the number of rays per sweep. """
     rays_per_sweep_dict = get_metadata('rays_per_sweep')
