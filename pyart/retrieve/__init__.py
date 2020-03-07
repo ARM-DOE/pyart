@@ -11,6 +11,7 @@ from .simple_moment_calculations import calculate_snr_from_reflectivity
 from .simple_moment_calculations import calculate_velocity_texture
 from .simple_moment_calculations import compute_snr, compute_l, compute_cdr
 from .simple_moment_calculations import compute_noisedBZ
+from .spectra_calculations import spectra_moments, dealias_spectra
 from .advection import grid_displacement_pc, grid_shift
 from .qpe import est_rain_rate_zpoly, est_rain_rate_z, est_rain_rate_kdp
 from .qpe import est_rain_rate_a, est_rain_rate_zkdp, est_rain_rate_za
