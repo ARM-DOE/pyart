@@ -68,7 +68,6 @@ def test_gate_x_y_z():
     radar.ds['range'] = xr.DataArray(
         np.array([5, 15, 25, 35, 45]), dims='range')
     radar.init_gate_x_y_z()
-    print(radar.gate_x.values.shape) 
     assert radar.gate_x.values.shape == (5, 5)
     assert_allclose(radar.gate_x.values[0], [0, 0, 0, 0, 0], atol=1e-14)
     assert_allclose(radar.gate_x.values[1], [5, 15, 25, 35, 45], atol=1e-14)

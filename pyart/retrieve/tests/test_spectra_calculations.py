@@ -1,7 +1,6 @@
 """ Unit tests for spectra_calculations.py """
 
-import numpy as np
-from numpy.testing import assert_allclose, assert_almost_equal
+from numpy.testing import assert_allclose
 import pytest
 
 from pyart.retrieve import spectra_moments
