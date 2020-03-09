@@ -4,6 +4,7 @@ Functions for creating sample Radar and Grid objects.
 """
 
 import numpy as np
+import scipy
 
 from .sample_files import _EXAMPLE_RAYS_FILE
 from ..config import get_metadata
@@ -457,10 +458,7 @@ def make_target_spectra_radar():
 
     radar = make_empty_spectra_radar(10, 20, 50)
     fdata = np.zeros((10, 20, 50), dtype='float32')
-    fdata[:, :, 0:10] = -10.
-    fdata[:, :, 10:20] = -20.
-    fdata[:, :, 20:30] = -30.
-    fdata[:, :, 30:40] = -40.
-    fdata[:, :, 40:50] = -50.
+    max_value = 10**(-10/10)
+    fdata[:, :, :] = 10*np.log10(scipy.signal.gaussian(50, std=7) * max_value)
     radar.ds['spectra'].values = fdata
     return radar
