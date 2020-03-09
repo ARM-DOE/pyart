@@ -14,16 +14,16 @@ except ImportError:
     _XARRAY_AVAILABLE = False
 
 from ..config import FileMetadata
-from ..io.common import _test_arguments
 from ..core.radar_spectra import RadarSpectra
-from ..lazydict import LazyLoadDict
+from ..exceptions import MissingOptionalDependency
+from ..io.common import _test_arguments
 
 
 KAZR_SPECTRA_FIELD_NAMES = {'spectra': 'spectra'}
 
 def read_kazr_spectra(filename, field_names=None, additional_metadata=None,
-                     file_field_names=False, exclude_fields=None,
-                     include_fields=None, **kwargs):
+                      file_field_names=False, exclude_fields=None,
+                      include_fields=None, **kwargs):
     """
     Read a ARM KAZR spectra netCDF file.
 
@@ -98,8 +98,8 @@ def read_kazr_spectra(filename, field_names=None, additional_metadata=None,
                  for sec in ts]
     times = np.array(times)
     time_dict = filemetadata('time')
-    base_time = ('seconds since ' + datetime.datetime.strftime(times[0],
-                 '%Y-%m-%DT%H:%M:%SZ'))
+    base_time = ('seconds since ' + datetime.datetime.strftime(
+        times[0], '%Y-%m-%DT%H:%M:%SZ'))
     time_array = [(x-times[0]).seconds for x in times]
     time_dict['units'] = base_time
     time = xr.DataArray(np.array(time_array), attrs=time_dict, dims='time')
@@ -170,7 +170,7 @@ def read_kazr_spectra(filename, field_names=None, additional_metadata=None,
     velocity_bins = xr.DataArray(bins, attrs=velocity_dict,
                                  dims='npulses_max')
     xrobj.close()
-    
+
     return RadarSpectra(time, _range, spectras, metadata, scan_type,
                         latitude, longitude, altitude,
                         sweep_number, sweep_mode, fixed_angle,
@@ -185,8 +185,8 @@ def _get_spectra(xrobj, time):
                                 len(xrobj.speclength.values)))
     the_spectra_locs[np.isnan(the_spectra_locs)] = -9999.0
     for i, locs in enumerate(the_spectra_locs):
-        if(locs is not -9999.0):
-            the_spectra_loc[i, :] = xrobj.spectra.values[int(locs),:]
+        if locs is not -9999.0:
+            the_spectra_loc[i, :] = xrobj.spectra.values[int(locs), :]
         else:
             the_spectra_loc[i, :] = np.nan*np.ones(len(
                 xrobj.speclength.values))

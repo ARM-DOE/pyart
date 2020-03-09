@@ -22,10 +22,7 @@ def spectra_moments(radar):
     """
     field_list = {}
     times = len(radar.time.values)
-    spec_range = radar.range.values
     rng = len(radar.range.values)
-    left_lim = np.zeros((times, rng))
-    right_lim = np.zeros((times, rng))
     ref = np.zeros((times, rng))
     vel = np.zeros((times, rng))
     spec_width = np.zeros((times, rng))
@@ -86,7 +83,7 @@ def spectra_moments(radar):
     return field_list
 
 
-def dealias_spectra(the_spectra, vel_bins, wavelength, left, right):
+def dealias_spectra(the_spectra, vel_bins, wavelength, left_limit, right_limit):
     """ Dealias a spectra.
 
     Parameters
@@ -111,7 +108,6 @@ def dealias_spectra(the_spectra, vel_bins, wavelength, left, right):
     ref = _get_reflectivity(the_spectra, vel_bins, wavelength)
     mean_vel = _get_mean_velocity(the_spectra, vel_bins, wavelength, ref)
     mean_vel = np.array(mean_vel)
-    valid_vel = np.where(mean_vel > -9999.0)[0]
     new_bins = np.concatenate(
         [vel_bins-2*vel_bins[-1], vel_bins, vel_bins+2*vel_bins[-1]])
     # Expand interval to -3Vn, 3Vn
@@ -122,56 +118,56 @@ def dealias_spectra(the_spectra, vel_bins, wavelength, left, right):
     for i in range(the_spectra.shape[0]):
         # First test to dealias: peaks on both sides
         # Second test: Discontinuity in velocities
-        if(i > 1):
+        if i > 1:
             second_vel = mean_vel[i-1]
         else:
             second_vel = mean_vel[i]
-        if((np.isfinite(the_spectra[i,0]) and np.isfinite(the_spectra[i,-1]))):
+        if (np.isfinite(the_spectra[i, 0]) and np.isfinite(the_spectra[i, -1])):
             noise_region = np.where(np.isnan(the_spectra[i]))[0]
-            if(second_vel < 0):
+            if second_vel < 0:
                 right_tail_len = int(the_spectra.shape[1]-noise_region[-1])
-                new_spectra[i,n_pts-right_tail_len:n_pts] = the_spectra[
+                new_spectra[i, n_pts-right_tail_len:n_pts] = the_spectra[
                     i, n_pts-right_tail_len:n_pts]
-                new_spectra[i,n_pts:2*n_pts-right_tail_len] = the_spectra[
+                new_spectra[i, n_pts:2*n_pts-right_tail_len] = the_spectra[
                     i, 0:n_pts-right_tail_len]
             else:
                 left_tail_len = int(noise_region[0])
-                new_spectra[i,2*n_pts:2*n_pts+left_tail_len] = the_spectra[
+                new_spectra[i, 2*n_pts:2*n_pts+left_tail_len] = the_spectra[
                     i, 0:left_tail_len]
-                new_spectra[i,n_pts+left_tail_len:2*n_pts] = the_spectra[
+                new_spectra[i, n_pts+left_tail_len:2*n_pts] = the_spectra[
                     i, left_tail_len:]
             dealiased_already[i] = 1
 
     # Do a second check for continuity
     mean_vel = _get_mean_velocity(new_spectra, new_bins, wavelength, ref)
-                
+
     for i in range(new_spectra.shape[0]):
         # First test to dealias: peaks on both sides
         # Second test: Discontinuity in velocities
-        if(i > 1):
+        if i > 1:
             second_vel = mean_vel[i-1]
         else:
             second_vel = mean_vel[i]
         # Discontinuity = more than 1 Nyquist switch in mean velocity
         if(abs(mean_vel[i]-second_vel) > vel_bins[-1] and dealiased_already[i] == 0):
             noise_region = np.where(np.isnan(the_spectra[i]))[0]
-            if(mean_vel[i] > 0):
+            if mean_vel[i] > 0:
                 right_tail_len = int(the_spectra.shape[1]-noise_region[-1])
-                new_spectra[i,n_pts-right_tail_len:n_pts] = the_spectra[
+                new_spectra[i, n_pts-right_tail_len:n_pts] = the_spectra[
                     i, n_pts-right_tail_len:n_pts]
-                new_spectra[i,n_pts:2*n_pts-right_tail_len] = the_spectra[
+                new_spectra[i, n_pts:2*n_pts-right_tail_len] = the_spectra[
                     i, 0:n_pts-right_tail_len]
             else:
                 left_tail_len = int(noise_region[0])
-                new_spectra[i,2*n_pts:2*n_pts+left_tail_len] = the_spectra[
+                new_spectra[i, 2*n_pts:2*n_pts+left_tail_len] = the_spectra[
                     i, 0:left_tail_len]
-                new_spectra[i,n_pts+left_tail_len:2*n_pts] = the_spectra[
+                new_spectra[i, n_pts+left_tail_len:2*n_pts] = the_spectra[
                     i, left_tail_len:]
             mean_vel[i] = _get_mean_velocity(
                 new_spectra[i], new_bins, wavelength, ref[i])
             dealiased_already[i] = 1
-        elif(dealiased_already[i] == 0):
-            new_spectra[i,n_pts:2*n_pts] = the_spectra[i]
+        elif dealiased_already[i] == 0:
+            new_spectra[i, n_pts:2*n_pts] = the_spectra[i]
     return new_spectra, new_bins
 
 
@@ -184,11 +180,11 @@ def _get_limits_dealiased_spectra(the_spectra):
         try:
             peak = np.nanargmax(the_spectra[i])
             j = peak
-            while(j > 0 and np.isfinite(the_spectra[i,j])):
+            while(j > 0 and np.isfinite(the_spectra[i, j])):
                 j = j - 1
             left[i] = j
             j = peak
-            while(j < the_spectra.shape[1]-1 and np.isfinite(the_spectra[i,j])):
+            while(j < the_spectra.shape[1]-1 and np.isfinite(the_spectra[i, j])):
                 j = j + 1
             right[i] = j
             new_spec[i, 0:int(left[i])-1] = np.nan
@@ -205,14 +201,14 @@ def _get_reflectivity(spectra, bins, wavelength):
     radar_constant = 1e18*wavelength**4/(0.93*np.pi**5)
     if len(spectra_linear.shape) == 2:
         spec_med = radar_constant*(
-            spectra_linear[:, :-1]+spectra_linear[:, 1:])/2 
+            spectra_linear[:, :-1]+spectra_linear[:, 1:])/2
         diffs = np.tile(np.diff(bins), (spectra.shape[0], 1))
     elif len(spectra_linear.shape) == 3:
         spec_med = radar_constant*(
-            spectra_linear[:, :, :-1]+spectra_linear[:, :, 1:])/2 
+            spectra_linear[:, :, :-1]+spectra_linear[:, :, 1:])/2
         diffs = np.tile(np.diff(bins), (spectra.shape[0], spectra.shape[1], 1))
     else:
-        spec_med = radar_constant*(spectra_linear[:-1]+spectra_linear[1:])/2 
+        spec_med = radar_constant*(spectra_linear[:-1]+spectra_linear[1:])/2
         diffs = np.diff(bins)
     ref = np.nansum(spec_med*diffs, axis=-1)
     return 10*np.log10(ref)
@@ -225,14 +221,14 @@ def _get_mean_velocity(spectra, bins, wavelength, ref):
     ref = 10**(ref/10)
     if len(spectra_linear.shape) == 2:
         spec_med = radar_constant*(
-            spectra_linear[:, :-1]+spectra_linear[:, 1:])/2 
+            spectra_linear[:, :-1]+spectra_linear[:, 1:])/2
         diffs = np.tile(np.diff(bins), (spectra.shape[0], 1))
     elif len(spectra_linear.shape) == 3:
         spec_med = radar_constant*(
-            spectra_linear[:, :, :-1]+spectra_linear[:, :, 1:])/2 
+            spectra_linear[:, :, :-1]+spectra_linear[:, :, 1:])/2
         diffs = np.tile(np.diff(bins), (spectra.shape[0], spectra.shape[1], 1))
     else:
-        spec_med = radar_constant*(spectra_linear[:-1]+spectra_linear[1:])/2 
+        spec_med = radar_constant*(spectra_linear[:-1]+spectra_linear[1:])/2
         diffs = np.diff(bins)
     bins_med = (bins[:-1]+bins[1:])/2.0
     if len(spectra_linear.shape) == 2:
@@ -250,16 +246,16 @@ def _get_spectral_width(spectra, bins, wavelength, ref, mean_vel):
     ref = 10**(ref/10)
     if len(spectra_linear.shape) == 2:
         spec_med = radar_constant*(
-            spectra_linear[:, :-1]+spectra_linear[:, 1:])/2 
+            spectra_linear[:, :-1]+spectra_linear[:, 1:])/2
         diffs = np.tile(np.diff(bins), (spectra.shape[0], 1))
         mean_vel = np.tile(mean_vel, (len(bins)-1, 1)).T
     elif len(spectra_linear.shape) == 3:
         spec_med = radar_constant*(
-            spectra_linear[:, :, :-1]+spectra_linear[:, :, 1:])/2 
+            spectra_linear[:, :, :-1]+spectra_linear[:, :, 1:])/2
         diffs = np.tile(np.diff(bins), (spectra.shape[0], spectra.shape[1], 1))
         mean_vel = np.tile(mean_vel.T, (len(bins)-1, 1, 1)).T
     else:
-        spec_med = radar_constant*(spectra_linear[:-1]+spectra_linear[1:])/2 
+        spec_med = radar_constant*(spectra_linear[:-1]+spectra_linear[1:])/2
         diffs = np.diff(bins)
         diffs = np.tile(np.diff(bins), (spectra.shape[0], spectra.shape[1], 1))
     bins_med = (bins[:-1]+bins[1:])/2.0
@@ -278,23 +274,23 @@ def _get_skewness(spectra, bins, wavelength, ref, mean_vel, spec_width):
     ref = 10**(ref/10)
     if len(spectra_linear.shape) == 2:
         spec_med = radar_constant*(
-            spectra_linear[:, :-1]+spectra_linear[:, 1:])/2 
+            spectra_linear[:, :-1]+spectra_linear[:, 1:])/2
         diffs = np.tile(np.diff(bins), (spectra.shape[0], 1))
         mean_vel = np.tile(mean_vel, (len(bins)-1, 1)).T
     elif len(spectra_linear.shape) == 3:
         spec_med = radar_constant*(
-            spectra_linear[:, :, :-1]+spectra_linear[:, :, 1:])/2 
+            spectra_linear[:, :, :-1]+spectra_linear[:, :, 1:])/2
         diffs = np.tile(np.diff(bins), (spectra.shape[0], spectra.shape[1], 1))
         mean_vel = np.tile(mean_vel.T, (len(bins)-1, 1, 1)).T
     else:
-        spec_med = radar_constant*(spectra_linear[:-1]+spectra_linear[1:])/2 
+        spec_med = radar_constant*(spectra_linear[:-1]+spectra_linear[1:])/2
         diffs = np.diff(bins)
         diffs = np.tile(np.diff(bins), (spectra.shape[0], spectra.shape[1], 1))
     bins_med = (bins[:-1]+bins[1:])/2.0
     if len(spectra_linear.shape) == 2:
         bins_med = np.tile(bins_med, (spectra.shape[0], 1))
     elif len(spectra_linear.shape) == 3:
-        bins_med = np.tile(bins_med, (spectra.shape[0], spectra.shape[1],1))
+        bins_med = np.tile(bins_med, (spectra.shape[0], spectra.shape[1], 1))
     skew = np.nansum(spec_med*(bins_med-mean_vel)**3*diffs, axis=-1)/ref
     return skew/spec_width**3
 
@@ -306,22 +302,22 @@ def _get_kurtosis(spectra, bins, wavelength, ref, mean_vel, spec_width):
     ref = 10**(ref/10)
     if len(spectra_linear.shape) == 2:
         spec_med = radar_constant*(
-            spectra_linear[:, :-1]+spectra_linear[:, 1:])/2 
+            spectra_linear[:, :-1]+spectra_linear[:, 1:])/2
         diffs = np.tile(np.diff(bins), (spectra.shape[0], 1))
         mean_vel = np.tile(mean_vel, (len(bins)-1, 1)).T
     elif len(spectra_linear.shape) == 3:
         spec_med = radar_constant*(
-            spectra_linear[:, :, :-1]+spectra_linear[:, :, 1:])/2 
+            spectra_linear[:, :, :-1]+spectra_linear[:, :, 1:])/2
         diffs = np.tile(np.diff(bins), (spectra.shape[0], spectra.shape[1], 1))
         mean_vel = np.tile(mean_vel.T, (len(bins)-1, 1, 1)).T
     else:
-        spec_med = radar_constant*(spectra_linear[:-1]+spectra_linear[1:])/2 
+        spec_med = radar_constant*(spectra_linear[:-1]+spectra_linear[1:])/2
         diffs = np.diff(bins)
     bins_med = (bins[:-1]+bins[1:])/2.0
     if len(spectra_linear.shape) == 2:
         bins_med = np.tile(bins_med, (spectra.shape[0], 1))
     elif len(spectra_linear.shape) == 3:
-        bins_med = np.tile(bins_med, (spectra.shape[0], spectra.shape[1],1))
+        bins_med = np.tile(bins_med, (spectra.shape[0], spectra.shape[1], 1))
     kurt = np.nansum(spec_med*(bins_med - mean_vel)**4*diffs, axis=-1)/ref
     return kurt/spec_width**4
 
@@ -335,7 +331,7 @@ def _get_noise_floor_and_limits(the_spectra, avg_window=1):
                 lin_spectra[i], np.ones((avg_window))/avg_window,
                 mode='same')
     noise_floor_thresh = np.zeros((lin_spectra.shape[0],))
-    
+
     for i in range(lin_spectra.shape[0]):
         noise_floor = estimate_noise_hs74(
             lin_spectra[i], navg=avg_window)
@@ -345,7 +341,6 @@ def _get_noise_floor_and_limits(the_spectra, avg_window=1):
     left = np.nan*np.ones(the_spectra.shape[0])
     right = np.nan*np.ones(the_spectra.shape[0])
     for i in range(the_spectra.shape[0]):
-        above_floor = np.where(np.isfinite(the_spectra[i]))
         try:
             peak_loc = np.nanargmax(the_spectra[i])
             j = peak_loc
@@ -354,10 +349,10 @@ def _get_noise_floor_and_limits(the_spectra, avg_window=1):
             left[i] = j
             j = peak_loc
             while(
-                np.isfinite(the_spectra[i, j]) and j < the_spectra.shape[1]-1):
+                    np.isfinite(the_spectra[i, j]) and j < the_spectra.shape[1]-1):
                 j = j + 1
             right[i] = j
-        except(ValueError):
+        except ValueError:
             left[i] = np.nan
             right[i] = np.nan
     spectra = np.ma.masked_where(np.isnan(the_spectra), the_spectra)

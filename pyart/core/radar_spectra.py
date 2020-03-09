@@ -16,6 +16,7 @@ except ImportError:
     _XARRAY_AVAILABLE = False
 
 from ..config import get_metadata
+from ..exceptions import MissingOptionalDependency
 from .transforms import antenna_vectors_to_cartesian, cartesian_to_geographic
 
 
@@ -217,13 +218,13 @@ class RadarSpectra(object):
         field_dict = {}
         for key in self.field_names:
             if key in self.ds.variables.keys():
-                field_dict[key] = self.ds[key]  
+                field_dict[key] = self.ds[key]
         return xr.Dataset(field_dict)
 
     @property
     def time(self):
         return self.ds.time
-    
+
     @property
     def range(self):
         return self.ds.range
@@ -346,7 +347,6 @@ class RadarSpectra(object):
         """ Check that a sweep number is in range. """
         if sweep < 0 or sweep >= self.nsweeps:
             raise IndexError('Sweep out of range: ', sweep)
-        return
 
         # get methods
 
@@ -382,7 +382,6 @@ class RadarSpectra(object):
         """
         if field_name not in self.fields.keys():
             raise KeyError('Field not available: ' + field_name)
-        return
 
     # Iterators
     def iter_start(self):
@@ -450,7 +449,7 @@ def _rays_per_sweep_data_factory(radar):
         radar.sweep_start_ray_index.values + 1)
     radar['rays_per_sweep'] = xr.DataArray(np.array(rays_per_sweep),
                                            attrs=rays_per_sweep_dict)
-    
+
 
 def _gate_data_factory(radar):
     """ Return a function which returns the Cartesian locations of gates. """
@@ -496,9 +495,9 @@ def _gate_lon_lat_data_factory(radar):
 def _gate_altitude_data_factory(radar):
     """ Return a function which returns the gate altitudes. """
     try:
-         alt = radar.altitude.values + radar.gate_z.values
+        alt = radar.altitude.values + radar.gate_z.values
     except ValueError:
-         alt = np.mean(radar.altitude.values) + radar.gate_z.values
+        alt = np.mean(radar.altitude.values) + radar.gate_z.values
     gate_altitude_dict = get_metadata('gate_altitude')
     radar['gate_altitude'] = xr.DataArray(alt, dims=('time', 'range'),
                                           attrs=gate_altitude_dict)
