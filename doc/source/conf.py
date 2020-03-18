@@ -46,7 +46,10 @@ extensions = [
     'matplotlib.sphinxext.plot_directive',
     'sphinx.ext.napoleon',
     'sphinx_copybutton',
+    'nbsphinx',
 ]
+
+exclude_patterns = ['_build', '**.ipynb_checkpoints']
 
 # only include examples if the BUILD_PYART_EXAMPLES env. variable is set
 if 'BUILD_PYART_EXAMPLES' in os.environ:

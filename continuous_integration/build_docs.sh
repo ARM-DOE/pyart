@@ -8,6 +8,7 @@ conda install -q sphinx pillow ipython
 pip install sphinx_rtd_theme
 pip install sphinx_gallery
 pip install sphinx-copybutton
+pip install nbsphinx
 
 cd doc
 make clean
