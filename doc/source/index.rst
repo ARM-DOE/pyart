@@ -23,6 +23,13 @@ The Python ARM Radar Toolkit - Py-ART
    Zip File of Repository <https://github.com/ARM-DOE/pyart/archive/master.zip>
 
 .. toctree::
+   :maxdepth: 0
+   :hidden:
+   :caption: Notebooks
+
+   notebooks/basic_ingest_using_test_radar_object
+
+.. toctree::
    :maxdepth: 1
    :hidden:
    :caption: Getting Help

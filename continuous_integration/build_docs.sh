@@ -5,9 +5,11 @@ set -e
 
 echo "Building Docs"
 conda install -q sphinx pillow ipython
+conda install -c conda-forge pandoc
 pip install sphinx_rtd_theme
 pip install sphinx_gallery
 pip install sphinx-copybutton
+pip install nbsphinx
 
 cd doc
 make clean
