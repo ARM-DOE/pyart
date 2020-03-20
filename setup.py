@@ -45,7 +45,8 @@ CLASSIFIERS = [
     'Topic :: Scientific/Engineering :: Atmospheric Science',
     'Operating System :: POSIX :: Linux',
     'Operating System :: MacOS :: MacOS X',
-    'Operating System :: Microsoft :: Windows']
+    'Operating System :: Microsoft :: Windows',
+    'Framework :: Matplotlib']
 
 NAME = 'arm_pyart'
 MAINTAINER = "Py-ART Developers"
