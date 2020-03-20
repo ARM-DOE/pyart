@@ -469,7 +469,7 @@ def write_cfradial(filename, radar, format='NETCDF4', time_reference=None,
     else:
         user = getpass.getuser()
         node = platform.node()
-        time_str = datetime.datetime.now().isoformat()
+        time_str = datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ')
         t = (user, node, time_str)
         history = 'created by %s on %s at %s using Py-ART' % (t)
 
@@ -603,10 +603,12 @@ def write_cfradial(filename, radar, format='NETCDF4', time_reference=None,
         # round up to next second
         end_dt += (datetime.timedelta(seconds=1) -
                    datetime.timedelta(microseconds=end_dt.microsecond))
-    start_dic = {'data': np.array(start_dt.isoformat() + 'Z', dtype='S'),
+    start_dic = {'data': np.array(start_dt.strftime('%Y-%m-%dT%H:%M:%SZ'),
+                                  dtype='S'),
                  'long_name': 'UTC time of first ray in the file',
                  'units': 'unitless'}
-    end_dic = {'data': np.array(end_dt.isoformat() + 'Z', dtype='S'),
+    end_dic = {'data': np.array(end_dt.strftime('%Y-%m-%dT%H:%M:%SZ'),
+                                dtype='S'),
                'long_name': 'UTC time of last ray in the file',
                'units': 'unitless'}
     _create_ncvar(start_dic, dataset, 'time_coverage_start', time_dim)

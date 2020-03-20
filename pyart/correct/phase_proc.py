@@ -486,7 +486,7 @@ def get_phidp_unf(radar, ncp_lev=0.4, rhohv_lev=0.6, debug=False, ncpts=20,
             x_ma.mask[:] = True
         except AttributeError:
             # sys.stderr.write('No Valid Regions, ATTERR \n ')
-            # sys.stderr.write(myfile.times['time_end'].isoformat() + '\n')
+            # sys.stderr.write(myfile.times['time_end'].strftime('%Y-%m-%dT%H:%M:%SZ') + '\n')
             # print x_ma
             # print x_ma.mask
             c = 1  # also do nothing

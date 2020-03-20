@@ -12,8 +12,8 @@ print(__doc__)
 # Author: Jonathan J. Helmus (jhelmus@anl.gov)
 # License: BSD 3 clause
 
-import netCDF4
 import matplotlib.pyplot as plt
+import netCDF4
 import pyart
 
 filename = 'sgpxsaprrhicmacI5.c0.20110524.015604_NC4.nc'
@@ -42,7 +42,7 @@ for snum in radar.sweep_number['data']:
     display.set_limits(ylim=[0, 15], ax=ax)
 
 time_start = netCDF4.num2date(radar.time['data'][0], radar.time['units'])
-figure_title = 'Time: ' + time_start.isoformat() + 'Z'
+figure_title = 'Time: ' + time_start.strftime('%Y-%m-%dT%H:%M:%SZ')
 fig.text(0.35, 0.92, figure_title)
 
 plt.show()
