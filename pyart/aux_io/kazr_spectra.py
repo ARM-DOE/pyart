@@ -185,7 +185,7 @@ def _get_spectra(xrobj, time):
                                 len(xrobj.speclength.values)))
     the_spectra_locs[np.isnan(the_spectra_locs)] = -9999.0
     for i, locs in enumerate(the_spectra_locs):
-        if locs is not -9999.0:
+        if locs != -9999.0:
             the_spectra_loc[i, :] = xrobj.spectra.values[int(locs), :]
         else:
             the_spectra_loc[i, :] = np.nan*np.ones(len(

@@ -491,7 +491,7 @@ def get_phidp_unf(radar, ncp_lev=0.4, rhohv_lev=0.6, debug=False, ncpts=20,
             # print x_ma.mask
             c = 1  # also do nothing
             x_ma.mask = True
-        if 'nowrap' is not None:
+        if nowrap is not None:
             # Start the unfolding a bit later in order to avoid false
             # jumps based on clutter
             unwrapped = copy.deepcopy(x_ma)
@@ -1428,7 +1428,7 @@ def get_phidp_unf_gf(radar, gatefilter, debug=False, ncpts=2, sys_phase=None,
         except AttributeError:
             c = 1  # also do nothing
             x_ma.mask = True
-        if 'nowrap' is not None:
+        if nowrap is not None:
             # Start the unfolding a bit later in order to avoid false
             # jumps based on clutter
             unwrapped = copy.deepcopy(x_ma)
