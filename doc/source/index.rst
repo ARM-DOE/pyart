@@ -27,7 +27,7 @@ The Python ARM Radar Toolkit - Py-ART
    :hidden:
    :caption: Notebooks
 
-   notebooks/basic_ingest_using_test_radar_object
+   notebooks/basic_ingest_using_test_radar_object.ipynb
    notebooks/changing_fields_and_saving.ipynb
    notebooks/dealiasing_velocity.ipynb
    notebooks/mapping_data_to_a_cartesian_grid.ipynb
