@@ -1,0 +1,6 @@
+pyart.core.RadarSpectra.gate\_latitude
+======================================
+
+.. currentmodule:: pyart.core
+
+.. autoproperty:: RadarSpectra.gate_latitude

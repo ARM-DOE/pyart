@@ -1,0 +1,6 @@
+pyart.core.RadarSpectra.elevation
+=================================
+
+.. currentmodule:: pyart.core
+
+.. autoproperty:: RadarSpectra.elevation

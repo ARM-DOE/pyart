@@ -23,6 +23,8 @@ pyart.aux\_io
     
     read_kazr
     
+    read_kazr_spectra
+    
     read_noxp_iphex_nc
     
     read_odim_h5

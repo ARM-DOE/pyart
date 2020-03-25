@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyart.testing.sample_objects &mdash; Py-ART 1.12.0.dev+ed36a91 documentation</title>
+  <title>pyart.testing.sample_objects &mdash; Py-ART 1.12.0 documentation</title>
   
 
   
@@ -21,14 +21,15 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../../_static/language_data.js"></script>
-        <script type="text/javascript" src="../../../_static/clipboard.min.js"></script>
-        <script type="text/javascript" src="../../../_static/copybutton.js"></script>
-        <script type="text/javascript">var copybuttonSkipText = '>>> ';</script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script src="../../../_static/clipboard.min.js"></script>
+        <script src="../../../_static/copybutton.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -64,7 +65,7 @@
             
             
               <div class="version">
-                1.12.dev
+                1.12
               </div>
             
           
@@ -103,6 +104,15 @@
 <li class="toctree-l1"><a class="reference external" href="https://anaconda.org/conda-forge/arm_pyart">Anaconda Cloud</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/ARM-DOE/pyart">GitHub Repo</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/ARM-DOE/pyart/archive/master.zip">Zip File of Repository</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Notebooks</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebooks/basic_ingest_using_test_radar_object.html">Creating a basic ingest of a NetCDF file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebooks/changing_fields_and_saving.html">Field manipulation and Saving the Radar Object to a file.</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebooks/dealiasing_velocity.html">Dealiasing Velocity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebooks/mapping_data_to_a_cartesian_grid.html">Mapping Data to a Cartesian Grid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebooks/masking_data_with_gatefilters.html">Masking Data With Py-ART Gatefilters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebooks/the_pyart_radar_object_and_indexing.html">The Py-ART Radar object and indexing</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Getting Help</span></p>
 <ul>
@@ -181,11 +191,20 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy</span>
 
-<span class="kn">from</span> <span class="nn">.sample_files</span> <span class="k">import</span> <span class="n">_EXAMPLE_RAYS_FILE</span>
-<span class="kn">from</span> <span class="nn">..config</span> <span class="k">import</span> <span class="n">get_metadata</span>
-<span class="kn">from</span> <span class="nn">..core.radar</span> <span class="k">import</span> <span class="n">Radar</span>
-<span class="kn">from</span> <span class="nn">..core.grid</span> <span class="k">import</span> <span class="n">Grid</span>
+<span class="kn">from</span> <span class="nn">.sample_files</span> <span class="kn">import</span> <span class="n">_EXAMPLE_RAYS_FILE</span>
+<span class="kn">from</span> <span class="nn">..config</span> <span class="kn">import</span> <span class="n">get_metadata</span>
+<span class="kn">from</span> <span class="nn">..core.radar</span> <span class="kn">import</span> <span class="n">Radar</span>
+<span class="kn">from</span> <span class="nn">..core.grid</span> <span class="kn">import</span> <span class="n">Grid</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
+    <span class="kn">from</span> <span class="nn">..core.radar_spectra</span> <span class="kn">import</span> <span class="n">RadarSpectra</span>
+    <span class="n">_XARRAY_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">_XARRAY_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
+
 
 
 <div class="viewcode-block" id="make_empty_ppi_radar"><a class="viewcode-back" href="../../../API/generated/pyart.testing.make_empty_ppi_radar.html#pyart.testing.make_empty_ppi_radar">[docs]</a><span class="k">def</span> <span class="nf">make_empty_ppi_radar</span><span class="p">(</span><span class="n">ngates</span><span class="p">,</span> <span class="n">rays_per_sweep</span><span class="p">,</span> <span class="n">nsweeps</span><span class="p">):</span>
@@ -527,6 +546,109 @@
         <span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;dBz&#39;</span><span class="p">}</span>
     <span class="n">test_grid</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">:</span> <span class="n">rdic</span><span class="p">})</span>
     <span class="k">return</span> <span class="n">test_grid</span></div>
+
+
+<div class="viewcode-block" id="make_empty_spectra_radar"><a class="viewcode-back" href="../../../API/generated/pyart.testing.make_empty_spectra_radar.html#pyart.testing.make_empty_spectra_radar">[docs]</a><span class="k">def</span> <span class="nf">make_empty_spectra_radar</span><span class="p">(</span><span class="n">nrays</span><span class="p">,</span> <span class="n">ngates</span><span class="p">,</span> <span class="n">npulses_max</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return a Spectra Radar object.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    nrays : int</span>
+<span class="sd">        Number of rays in the object.</span>
+<span class="sd">    ngates : int</span>
+<span class="sd">        Number of gates per ray.</span>
+<span class="sd">    npulses_max : int</span>
+<span class="sd">        Number of pulses in each gate.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    radar : RadarSpectra</span>
+<span class="sd">        Radar spectra object with an empty spectra field, other parameters are</span>
+<span class="sd">        set to default values.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">_XARRAY_AVAILABLE</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">MissingOptionalDependency</span><span class="p">(</span>
+            <span class="s2">&quot;Xarray is required to use make_empty_spectra_radar &quot;</span>
+            <span class="s2">&quot;but is not installed!&quot;</span><span class="p">)</span>
+
+    <span class="n">time_dict</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>
+    <span class="n">_range_dict</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s1">&#39;range&#39;</span><span class="p">)</span>
+    <span class="n">latitude_dict</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s1">&#39;latitude&#39;</span><span class="p">)</span>
+    <span class="n">longitude_dict</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s1">&#39;longitude&#39;</span><span class="p">)</span>
+    <span class="n">altitude_dict</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s1">&#39;altitude&#39;</span><span class="p">)</span>
+    <span class="n">sweep_number_dict</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s1">&#39;sweep_number&#39;</span><span class="p">)</span>
+    <span class="n">sweep_mode_dict</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s1">&#39;sweep_mode&#39;</span><span class="p">)</span>
+    <span class="n">fixed_angle_dict</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s1">&#39;fixed_angle&#39;</span><span class="p">)</span>
+    <span class="n">sweep_start_ray_index_dict</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s1">&#39;sweep_start_ray_index&#39;</span><span class="p">)</span>
+    <span class="n">sweep_end_ray_index_dict</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s1">&#39;sweep_end_ray_index&#39;</span><span class="p">)</span>
+    <span class="n">azimuth_dict</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s1">&#39;azimuth&#39;</span><span class="p">)</span>
+    <span class="n">elevation_dict</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s1">&#39;elevation&#39;</span><span class="p">)</span>
+
+    <span class="n">fields</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">scan_type</span> <span class="o">=</span> <span class="s1">&#39;vpt&#39;</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="mi">299792458</span>
+    <span class="n">wavelength</span> <span class="o">=</span> <span class="n">c</span><span class="o">/</span><span class="mf">34.830</span><span class="o">*</span><span class="mf">1e-9</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;instrument_name&#39;</span><span class="p">:</span> <span class="s1">&#39;fake_spectra_radar&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;wavelength&#39;</span><span class="p">:</span> <span class="n">wavelength</span><span class="p">}</span>
+    <span class="n">time_dict</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;seconds since 1989-01-01T00:00:01Z&#39;</span>
+    <span class="n">time</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float32&#39;</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">time_dict</span><span class="p">,</span>
+                        <span class="n">dims</span><span class="o">=</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>
+    <span class="n">_range</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">ngates</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">),</span> 
+                          <span class="n">attrs</span><span class="o">=</span><span class="n">_range_dict</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="s1">&#39;range&#39;</span><span class="p">)</span>
+    <span class="n">latitude</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">36.5</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float64&#39;</span><span class="p">),</span>
+                            <span class="n">attrs</span><span class="o">=</span><span class="n">latitude_dict</span><span class="p">)</span>
+    <span class="n">longitude</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">97.5</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float64&#39;</span><span class="p">),</span>
+                             <span class="n">attrs</span><span class="o">=</span><span class="n">longitude_dict</span><span class="p">)</span>
+    <span class="n">altitude</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">200</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float64&#39;</span><span class="p">),</span>
+                            <span class="n">attrs</span><span class="o">=</span><span class="n">altitude_dict</span><span class="p">)</span>
+
+    <span class="n">sweep_number</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int32&#39;</span><span class="p">),</span>
+                                <span class="n">attrs</span><span class="o">=</span><span class="n">sweep_number_dict</span><span class="p">)</span>
+    <span class="n">sweep_mode</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">&#39;spectra&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">1</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">sweep_mode_dict</span><span class="p">)</span>
+    <span class="n">fixed_angle</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.75</span><span class="p">]</span> <span class="o">*</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float32&#39;</span><span class="p">),</span>
+                               <span class="n">attrs</span><span class="o">=</span><span class="n">fixed_angle_dict</span><span class="p">)</span>
+    <span class="n">sweep_start_ray_index</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int32&#39;</span><span class="p">),</span>
+                                         <span class="n">attrs</span><span class="o">=</span><span class="n">sweep_start_ray_index_dict</span><span class="p">)</span>
+    <span class="n">sweep_end_ray_index</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">values</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int32&#39;</span><span class="p">),</span>
+        <span class="n">attrs</span><span class="o">=</span><span class="n">sweep_end_ray_index_dict</span><span class="p">)</span>
+
+    <span class="n">azimuth</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float32&#39;</span><span class="p">),</span>
+                           <span class="n">attrs</span><span class="o">=</span><span class="n">azimuth_dict</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>
+    <span class="n">elevation</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.75</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float32&#39;</span><span class="p">),</span>
+                             <span class="n">attrs</span><span class="o">=</span><span class="n">elevation_dict</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>
+    <span class="n">npulses_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">npulses_max</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span>
+    <span class="n">velocity_bins</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">npulses_max</span><span class="p">)),</span>
+                                 <span class="n">attrs</span><span class="o">=</span><span class="p">{},</span> <span class="n">dims</span><span class="o">=</span><span class="s1">&#39;npulses_max&#39;</span><span class="p">)</span>
+
+    <span class="n">fields</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+        <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">values</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">_range</span><span class="o">.</span><span class="n">values</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">npulses_max</span><span class="p">)))</span>
+
+    <span class="k">return</span> <span class="n">RadarSpectra</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">_range</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">scan_type</span><span class="p">,</span>
+                        <span class="n">latitude</span><span class="p">,</span> <span class="n">longitude</span><span class="p">,</span> <span class="n">altitude</span><span class="p">,</span>
+                        <span class="n">sweep_number</span><span class="p">,</span> <span class="n">sweep_mode</span><span class="p">,</span> <span class="n">fixed_angle</span><span class="p">,</span>
+                        <span class="n">sweep_start_ray_index</span><span class="p">,</span> <span class="n">sweep_end_ray_index</span><span class="p">,</span>
+                        <span class="n">azimuth</span><span class="p">,</span> <span class="n">elevation</span><span class="p">,</span> <span class="n">npulses_max</span><span class="p">,</span> <span class="n">velocity_bins</span><span class="p">,</span>
+                        <span class="n">instrument_parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="make_target_spectra_radar"><a class="viewcode-back" href="../../../API/generated/pyart.testing.make_target_spectra_radar.html#pyart.testing.make_target_spectra_radar">[docs]</a><span class="k">def</span> <span class="nf">make_target_spectra_radar</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return a spectra radar with a target like spectra field.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">_XARRAY_AVAILABLE</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">MissingOptionalDependency</span><span class="p">(</span>
+            <span class="s2">&quot;Xarray is required to use make_target_spectra_radar &quot;</span>
+            <span class="s2">&quot;but is not installed!&quot;</span><span class="p">)</span>
+
+    <span class="n">radar</span> <span class="o">=</span> <span class="n">make_empty_spectra_radar</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+    <span class="n">fdata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span>
+    <span class="n">max_value</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="o">/</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">fdata</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">gaussian</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="n">std</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span> <span class="o">*</span> <span class="n">max_value</span><span class="p">)</span>
+    <span class="n">radar</span><span class="o">.</span><span class="n">ds</span><span class="p">[</span><span class="s1">&#39;spectra&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="n">fdata</span>
+    <span class="k">return</span> <span class="n">radar</span></div>
 </pre></div>
 
            </div>

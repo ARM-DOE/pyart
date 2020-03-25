@@ -30,6 +30,8 @@ pyart.testing
     
     make_empty_rhi_radar
     
+    make_empty_spectra_radar
+    
     make_normal_storm
     
     make_single_ray_radar
@@ -39,6 +41,8 @@ pyart.testing
     make_target_grid
     
     make_target_radar
+    
+    make_target_spectra_radar
     
     make_velocity_aliased_radar
     

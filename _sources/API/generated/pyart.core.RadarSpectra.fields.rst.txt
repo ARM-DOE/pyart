@@ -1,0 +1,6 @@
+pyart.core.RadarSpectra.fields
+==============================
+
+.. currentmodule:: pyart.core
+
+.. autoproperty:: RadarSpectra.fields

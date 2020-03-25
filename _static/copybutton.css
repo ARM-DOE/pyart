@@ -6,7 +6,8 @@ a.copybtn {
     width: 1em;
     height: 1em;
 	opacity: .3;
-	transition: opacity 0.5s;
+    transition: opacity 0.5s;
+    border: none;
 }
 
 div.highlight  {
@@ -15,6 +16,10 @@ div.highlight  {
 
 a.copybtn > img {
     vertical-align: top;
+    margin: 0;
+    top: 0;
+    left: 0;
+    position: absolute;
 }
 
 .highlight:hover .copybtn {

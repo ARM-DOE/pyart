@@ -27,6 +27,10 @@ and range rings
  .. code-block:: none
 
 
+    /home/zsherman/anaconda3/envs/pyart_env/lib/python3.8/site-packages/cartopy/mpl/geoaxes.py:782: MatplotlibDeprecationWarning: Passing the minor parameter of set_xticks() positionally is deprecated since Matplotlib 3.2; the parameter will become keyword-only two minor releases later.
+      return super(GeoAxes, self).set_xticks(xticks, minor)
+    /home/zsherman/anaconda3/envs/pyart_env/lib/python3.8/site-packages/cartopy/mpl/geoaxes.py:829: MatplotlibDeprecationWarning: Passing the minor parameter of set_yticks() positionally is deprecated since Matplotlib 3.2; the parameter will become keyword-only two minor releases later.
+      return super(GeoAxes, self).set_yticks(yticks, minor)
     /home/zsherman/dev/pyart/examples/plotting/plot_ppi_with_rings.py:53: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
       plt.show()
 
@@ -88,7 +92,7 @@ and range rings
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  3.804 seconds)
+   **Total running time of the script:** ( 0 minutes  5.411 seconds)
 
 
 .. _sphx_glr_download_source_auto_examples_plotting_plot_ppi_with_rings.py:

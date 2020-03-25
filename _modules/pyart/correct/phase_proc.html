@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyart.correct.phase_proc &mdash; Py-ART 1.12.0.dev+ed36a91 documentation</title>
+  <title>pyart.correct.phase_proc &mdash; Py-ART 1.12.0 documentation</title>
   
 
   
@@ -21,14 +21,15 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../../_static/language_data.js"></script>
-        <script type="text/javascript" src="../../../_static/clipboard.min.js"></script>
-        <script type="text/javascript" src="../../../_static/copybutton.js"></script>
-        <script type="text/javascript">var copybuttonSkipText = '>>> ';</script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script src="../../../_static/clipboard.min.js"></script>
+        <script src="../../../_static/copybutton.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     
     <script type="text/javascript" src="../../../_static/js/theme.js"></script>
 
@@ -64,7 +65,7 @@
             
             
               <div class="version">
-                1.12.dev
+                1.12
               </div>
             
           
@@ -103,6 +104,15 @@
 <li class="toctree-l1"><a class="reference external" href="https://anaconda.org/conda-forge/arm_pyart">Anaconda Cloud</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/ARM-DOE/pyart">GitHub Repo</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/ARM-DOE/pyart/archive/master.zip">Zip File of Repository</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Notebooks</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebooks/basic_ingest_using_test_radar_object.html">Creating a basic ingest of a NetCDF file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebooks/changing_fields_and_saving.html">Field manipulation and Saving the Radar Object to a file.</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebooks/dealiasing_velocity.html">Dealiasing Velocity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebooks/mapping_data_to_a_cartesian_grid.html">Mapping Data to a Cartesian Grid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebooks/masking_data_with_gatefilters.html">Masking Data With Py-ART Gatefilters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebooks/the_pyart_radar_object_and_indexing.html">The Py-ART Radar object and indexing</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Getting Help</span></p>
 <ul>
@@ -186,15 +196,15 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">copy</span>
-<span class="kn">from</span> <span class="nn">time</span> <span class="k">import</span> <span class="n">time</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">ma</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">ma</span>
 <span class="kn">import</span> <span class="nn">scipy.ndimage</span>
 
-<span class="kn">from</span> <span class="nn">..config</span> <span class="k">import</span> <span class="n">get_fillvalue</span><span class="p">,</span> <span class="n">get_field_name</span><span class="p">,</span> <span class="n">get_metadata</span>
-<span class="kn">from</span> <span class="nn">..filters</span> <span class="k">import</span> <span class="n">GateFilter</span>
-<span class="kn">from</span> <span class="nn">..util</span> <span class="k">import</span> <span class="n">rolling_window</span>
+<span class="kn">from</span> <span class="nn">..config</span> <span class="kn">import</span> <span class="n">get_fillvalue</span><span class="p">,</span> <span class="n">get_field_name</span><span class="p">,</span> <span class="n">get_metadata</span>
+<span class="kn">from</span> <span class="nn">..filters</span> <span class="kn">import</span> <span class="n">GateFilter</span>
+<span class="kn">from</span> <span class="nn">..util</span> <span class="kn">import</span> <span class="n">rolling_window</span>
 
 
 <span class="k">def</span> <span class="nf">det_sys_phase</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">ncp_lev</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">rhohv_lev</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span>
@@ -331,7 +341,10 @@
     <span class="n">elevation</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fixed_angle</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">sweep</span><span class="p">]</span>
     <span class="n">radar_height</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">altitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
     <span class="n">gate_end</span> <span class="o">=</span> <span class="n">fzl_index</span><span class="p">(</span><span class="n">fzl</span><span class="p">,</span> <span class="n">ranges</span><span class="p">,</span> <span class="n">elevation</span><span class="p">,</span> <span class="n">radar_height</span><span class="p">)</span>
-    <span class="n">gate_end</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">gate_end</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ranges</span><span class="p">)</span> <span class="o">-</span> <span class="n">doc</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">doc</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">gate_end</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">gate_end</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ranges</span><span class="p">)</span> <span class="o">-</span> <span class="n">doc</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">gate_end</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">gate_end</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ranges</span><span class="p">))</span>
 
     <span class="n">ray_start</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">sweep</span><span class="p">]</span>
     <span class="n">ray_end</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">sweep</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
@@ -532,7 +545,7 @@
 <span class="sd">        The smoothed signal with length equal to the input signal.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="kn">from</span> <span class="nn">scipy.ndimage.filters</span> <span class="k">import</span> <span class="n">convolve1d</span>
+    <span class="kn">from</span> <span class="nn">scipy.ndimage.filters</span> <span class="kn">import</span> <span class="n">convolve1d</span>
 
     <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;smooth only accepts 2 dimension arrays.&quot;</span><span class="p">)</span>
@@ -660,12 +673,12 @@
             <span class="n">x_ma</span><span class="o">.</span><span class="n">mask</span><span class="p">[:]</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
             <span class="c1"># sys.stderr.write(&#39;No Valid Regions, ATTERR \n &#39;)</span>
-            <span class="c1"># sys.stderr.write(myfile.times[&#39;time_end&#39;].isoformat() + &#39;\n&#39;)</span>
+            <span class="c1"># sys.stderr.write(myfile.times[&#39;time_end&#39;].strftime(&#39;%Y-%m-%dT%H:%M:%SZ&#39;) + &#39;\n&#39;)</span>
             <span class="c1"># print x_ma</span>
             <span class="c1"># print x_ma.mask</span>
             <span class="n">c</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># also do nothing</span>
             <span class="n">x_ma</span><span class="o">.</span><span class="n">mask</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="k">if</span> <span class="s1">&#39;nowrap&#39;</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">nowrap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># Start the unfolding a bit later in order to avoid false</span>
             <span class="c1"># jumps based on clutter</span>
             <span class="n">unwrapped</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">x_ma</span><span class="p">)</span>
@@ -837,7 +850,7 @@
 <span class="sd">                        using multi processes.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="kn">from</span> <span class="nn">cvxopt</span> <span class="k">import</span> <span class="n">matrix</span><span class="p">,</span> <span class="n">solvers</span>
+    <span class="kn">from</span> <span class="nn">cvxopt</span> <span class="kn">import</span> <span class="n">matrix</span><span class="p">,</span> <span class="n">solvers</span>
     <span class="n">n_gates</span> <span class="o">=</span> <span class="n">weights</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">//</span> <span class="mi">2</span>
     <span class="n">n_rays</span> <span class="o">=</span> <span class="n">B_vectors</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">mysoln</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">n_rays</span><span class="p">,</span> <span class="n">n_gates</span><span class="p">])</span>
@@ -960,8 +973,8 @@
 <span class="sd">    LP_solver_cylp : Single Process Solver.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="kn">from</span> <span class="nn">cylp.cy.CyClpSimplex</span> <span class="k">import</span> <span class="n">CyClpSimplex</span>
-    <span class="kn">from</span> <span class="nn">cylp.py.modeling.CyLPModel</span> <span class="k">import</span> <span class="n">CyLPModel</span><span class="p">,</span> <span class="n">CyLPArray</span>
+    <span class="kn">from</span> <span class="nn">cylp.cy.CyClpSimplex</span> <span class="kn">import</span> <span class="n">CyClpSimplex</span>
+    <span class="kn">from</span> <span class="nn">cylp.py.modeling.CyLPModel</span> <span class="kn">import</span> <span class="n">CyLPModel</span><span class="p">,</span> <span class="n">CyLPArray</span>
 
     <span class="n">n_gates</span> <span class="o">=</span> <span class="n">weights</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">//</span> <span class="mi">2</span>
     <span class="n">n_rays</span> <span class="o">=</span> <span class="n">B_vectors</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -1020,8 +1033,8 @@
 <span class="sd">                     process.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="kn">from</span> <span class="nn">cylp.cy.CyClpSimplex</span> <span class="k">import</span> <span class="n">CyClpSimplex</span>
-    <span class="kn">from</span> <span class="nn">cylp.py.modeling.CyLPModel</span> <span class="k">import</span> <span class="n">CyLPModel</span><span class="p">,</span> <span class="n">CyLPArray</span>
+    <span class="kn">from</span> <span class="nn">cylp.cy.CyClpSimplex</span> <span class="kn">import</span> <span class="n">CyClpSimplex</span>
+    <span class="kn">from</span> <span class="nn">cylp.py.modeling.CyLPModel</span> <span class="kn">import</span> <span class="n">CyLPModel</span><span class="p">,</span> <span class="n">CyLPArray</span>
     <span class="kn">import</span> <span class="nn">multiprocessing</span> <span class="k">as</span> <span class="nn">mp</span>
 
     <span class="n">n_gates</span> <span class="o">=</span> <span class="n">weights</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">//</span> <span class="mi">2</span>
@@ -1116,8 +1129,8 @@
 <span class="sd">    LP_solver_pyglpk : Solve LP problem using the PyGLPK module.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="kn">from</span> <span class="nn">cylp.cy.CyClpSimplex</span> <span class="k">import</span> <span class="n">CyClpSimplex</span>
-    <span class="kn">from</span> <span class="nn">cylp.py.modeling.CyLPModel</span> <span class="k">import</span> <span class="n">CyLPModel</span><span class="p">,</span> <span class="n">CyLPArray</span>
+    <span class="kn">from</span> <span class="nn">cylp.cy.CyClpSimplex</span> <span class="kn">import</span> <span class="n">CyClpSimplex</span>
+    <span class="kn">from</span> <span class="nn">cylp.py.modeling.CyLPModel</span> <span class="kn">import</span> <span class="n">CyLPModel</span><span class="p">,</span> <span class="n">CyLPArray</span>
 
     <span class="n">n_gates</span> <span class="o">=</span> <span class="n">weights</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">//</span> <span class="mi">2</span>
     <span class="n">n_rays</span> <span class="o">=</span> <span class="n">B_vectors</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -1549,8 +1562,6 @@
 <span class="sd">        Minimum number of points in a ray. Regions within a ray smaller than</span>
 <span class="sd">        this or beginning before this gate number are excluded from</span>
 <span class="sd">        calculations.</span>
-<span class="sd">    doc : int or None, optional</span>
-<span class="sd">        Index of first gate not to include in field data, None include all.</span>
 <span class="sd">    sys_phase : float, optional</span>
 <span class="sd">        System phase overide.</span>
 <span class="sd">    nowrap : int or None, optional</span>
@@ -1604,7 +1615,7 @@
         <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
             <span class="n">c</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># also do nothing</span>
             <span class="n">x_ma</span><span class="o">.</span><span class="n">mask</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="k">if</span> <span class="s1">&#39;nowrap&#39;</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">nowrap</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># Start the unfolding a bit later in order to avoid false</span>
             <span class="c1"># jumps based on clutter</span>
             <span class="n">unwrapped</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">x_ma</span><span class="p">)</span>

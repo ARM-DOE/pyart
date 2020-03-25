@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Contributor’s Guide &mdash; Py-ART 1.12.0.dev+ed36a91 documentation</title>
+  <title>Contributor’s Guide &mdash; Py-ART 1.12.0 documentation</title>
   
 
   
@@ -21,14 +21,15 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
-        <script type="text/javascript" src="_static/clipboard.min.js"></script>
-        <script type="text/javascript" src="_static/copybutton.js"></script>
-        <script type="text/javascript">var copybuttonSkipText = '>>> ';</script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     
     <script type="text/javascript" src="_static/js/theme.js"></script>
 
@@ -41,6 +42,7 @@
   <link rel="stylesheet" href="_static/gallery.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Creating a basic ingest of a NetCDF file" href="notebooks/basic_ingest_using_test_radar_object.html" />
     <link rel="prev" title="Setting up an Environment" href="setting_up_an_environment.html" /> 
 </head>
 
@@ -65,7 +67,7 @@
             
             
               <div class="version">
-                1.12.dev
+                1.12
               </div>
             
           
@@ -115,6 +117,15 @@
 <li class="toctree-l1"><a class="reference external" href="https://anaconda.org/conda-forge/arm_pyart">Anaconda Cloud</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/ARM-DOE/pyart">GitHub Repo</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/ARM-DOE/pyart/archive/master.zip">Zip File of Repository</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Notebooks</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/basic_ingest_using_test_radar_object.html">Creating a basic ingest of a NetCDF file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/changing_fields_and_saving.html">Field manipulation and Saving the Radar Object to a file.</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/dealiasing_velocity.html">Dealiasing Velocity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/mapping_data_to_a_cartesian_grid.html">Mapping Data to a Cartesian Grid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/masking_data_with_gatefilters.html">Masking Data With Py-ART Gatefilters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks/the_pyart_radar_object_and_indexing.html">The Py-ART Radar object and indexing</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Getting Help</span></p>
 <ul>
@@ -188,7 +199,31 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="contributor-s-guide">
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="contributor-s-guide">
 <h1>Contributor’s Guide<a class="headerlink" href="#contributor-s-guide" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="the-python-arm-radar-toolkit-py-art">
 <h2>The Python ARM Radar Toolkit (Py-ART)<a class="headerlink" href="#the-python-arm-radar-toolkit-py-art" title="Permalink to this headline">¶</a></h2>
@@ -293,26 +328,11 @@ the tools documentation for details on this process.</p>
 </div>
 <div class="section" id="python-file-setup">
 <h2>Python File Setup<a class="headerlink" href="#python-file-setup" title="Permalink to this headline">¶</a></h2>
-<p>In a new .py file, the top of the code should have the function or class
-location, sphinx comments for template configuration, and the public and
-private functions and classes within the .py file. Public functions and
-classes are listed first and then private functions and classes. Private
-functions and classes should have a underscore in front of the name. A space
-is needed between the last function or class and the closing docstring
-quotation.</p>
+<p>In a new .py file, the top of the code should have a brief introduction to
+the module.</p>
 <p>An example:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">pyart.retrieve.velocity_azimuth_display</span>
-<span class="sd">=======================================</span>
-
 <span class="sd">Retrieval of VADs from a radar object.</span>
-
-<span class="sd">.. autosummary::</span>
-<span class="sd">    :toctree generated/</span>
-
-<span class="sd">    velocity_azimuth_display</span>
-<span class="sd">    _inverse_dist_squared</span>
-<span class="sd">    _Average1D</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 </pre></div>
@@ -330,8 +350,8 @@ standards, modules should be added in the order of:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">glob</span>
 <span class="kn">import</span> <span class="nn">os</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">numpy.ma</span> <span class="kn">as</span> <span class="nn">ma</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">numpy.ma</span> <span class="k">as</span> <span class="nn">ma</span>
 <span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">interp1d</span>
 
 <span class="kn">from</span> <span class="nn">..core</span> <span class="kn">import</span> <span class="n">HorizontalWindProfile</span>
@@ -347,8 +367,8 @@ documentation style.</p>
 </ul>
 <p>An example:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">velocity_azimuth_display</span><span class="p">(</span>
-    <span class="n">radar</span><span class="p">,</span> <span class="n">velocity</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">z_want</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">valid_ray_min</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
-    <span class="n">gatefilter</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+    <span class="n">radar</span><span class="p">,</span> <span class="n">velocity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">z_want</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">valid_ray_min</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
+    <span class="n">gatefilter</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Velocity azimuth display.</span>
@@ -435,7 +455,7 @@ function and reruns the function and compares the results to the original.</p>
         <span class="n">test_radar</span><span class="p">,</span> <span class="n">profile</span><span class="p">)</span>
 
     <span class="n">test_radar</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">&#39;velocity&#39;</span><span class="p">,</span> <span class="n">sim_vel</span><span class="p">,</span>
-                         <span class="n">replace_existing</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+                         <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="n">velocity</span> <span class="o">=</span> <span class="s1">&#39;velocity&#39;</span>
     <span class="n">z_start</span> <span class="o">=</span> <span class="mi">0</span>
@@ -595,6 +615,8 @@ and TravisCI and Appveyor will automatically rerun.</p>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="notebooks/basic_ingest_using_test_radar_object.html" class="btn btn-neutral float-right" title="Creating a basic ingest of a NetCDF file" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="setting_up_an_environment.html" class="btn btn-neutral float-left" title="Setting up an Environment" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

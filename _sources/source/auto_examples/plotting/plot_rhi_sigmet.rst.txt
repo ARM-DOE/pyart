@@ -60,7 +60,7 @@ object.
 
     instrument_name = radar.metadata['instrument_name'].decode('utf-8')
     time_start = netCDF4.num2date(radar.time['data'][0], radar.time['units'])
-    time_text = ' ' + time_start.isoformat() + 'Z '
+    time_text = ' ' + time_start.strftime('%Y-%m-%dT%H:%M:%SZ')
     azimuth = radar.fixed_angle['data'][0]
     title = 'RHI ' + instrument_name + time_text + 'Azimuth %.2f' % (azimuth)
 
@@ -77,7 +77,7 @@ object.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  1.535 seconds)
+   **Total running time of the script:** ( 0 minutes  2.255 seconds)
 
 
 .. _sphx_glr_download_source_auto_examples_plotting_plot_rhi_sigmet.py:

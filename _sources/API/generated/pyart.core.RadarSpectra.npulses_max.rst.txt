@@ -1,0 +1,6 @@
+pyart.core.RadarSpectra.npulses\_max
+====================================
+
+.. currentmodule:: pyart.core
+
+.. autoproperty:: RadarSpectra.npulses_max

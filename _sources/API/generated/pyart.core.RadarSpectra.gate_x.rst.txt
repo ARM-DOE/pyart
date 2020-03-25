@@ -1,0 +1,6 @@
+pyart.core.RadarSpectra.gate\_x
+===============================
+
+.. currentmodule:: pyart.core
+
+.. autoproperty:: RadarSpectra.gate_x

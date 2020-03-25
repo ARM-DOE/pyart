@@ -1,0 +1,6 @@
+pyart.core.RadarSpectra.scan\_type
+==================================
+
+.. currentmodule:: pyart.core
+
+.. autoproperty:: RadarSpectra.scan_type

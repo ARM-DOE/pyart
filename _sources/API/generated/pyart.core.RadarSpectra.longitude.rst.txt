@@ -1,0 +1,6 @@
+pyart.core.RadarSpectra.longitude
+=================================
+
+.. currentmodule:: pyart.core
+
+.. autoproperty:: RadarSpectra.longitude

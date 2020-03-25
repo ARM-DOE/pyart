@@ -1,0 +1,6 @@
+pyart.core.RadarSpectra.sweep\_mode
+===================================
+
+.. currentmodule:: pyart.core
+
+.. autoproperty:: RadarSpectra.sweep_mode

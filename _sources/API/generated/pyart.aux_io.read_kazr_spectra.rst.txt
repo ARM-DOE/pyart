@@ -1,0 +1,6 @@
+pyart.aux\_io.read\_kazr\_spectra
+=================================
+
+.. currentmodule:: pyart.aux_io
+
+.. autofunction:: read_kazr_spectra

@@ -64,13 +64,40 @@ const temporarilyChangeTooltip = (el, newText) => {
 // should then grab the text and replace pieces of text that shouldn't be used in output
 var copyTargetText = (trigger) => {
   var target = document.querySelector(trigger.attributes['data-clipboard-target'].value);
-  var textContent = target.textContent.split('\n');
-  textContent.forEach((line, index) => {
-    if (line.startsWith(copybuttonSkipText)) {
-      textContent[index] = line.slice(copybuttonSkipText.length)
+  var textContent = target.innerText.split('\n');
+  var copybuttonPromptText = ''; // Inserted from config
+  var onlyCopyPromptLines = true; // Inserted from config
+  var removePrompts = true; // Inserted from config
+
+  // Text content line filtering based on prompts (if a prompt text is given)
+  if (copybuttonPromptText.length > 0) {
+    // If only copying prompt lines, remove all lines that don't start w/ prompt
+    if (onlyCopyPromptLines) {
+      linesWithPrompt = textContent.filter((line) => {
+        return line.startsWith(copybuttonPromptText) || (line.length == 0); // Keep newlines
+      });
+      // Check to make sure we have at least one non-empty line
+      var nonEmptyLines = linesWithPrompt.filter((line) => {return line.length > 0});
+      // If we detected lines w/ prompt, then overwrite textContent w/ those lines
+      if ((linesWithPrompt.length > 0) && (nonEmptyLines.length > 0)) {
+        textContent = linesWithPrompt;
+      }
     }
-  });
-  return textContent.join('\n')
+    // Remove the starting prompt from any remaining lines
+    if (removePrompts) {
+      textContent.forEach((line, index) => {
+        if (line.startsWith(copybuttonPromptText)) {
+          textContent[index] = line.slice(copybuttonPromptText.length);
+        }
+      });
+    }
+  }
+  textContent = textContent.join('\n');
+  // Remove a trailing newline to avoid auto-running when pasting
+  if (textContent.endsWith("\n")) {
+     textContent = textContent.slice(0, -1)
+  }
+  return textContent
 }
 
 const addCopyButtonToCodeCells = () => {

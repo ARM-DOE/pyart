@@ -27,7 +27,7 @@ for a polarimetric radar using a Z-PHI method implemented in Py-ART.
  .. code-block:: none
 
 
-    /home/zsherman/.conda/envs/pyart_env/lib/python3.7/site-packages/numpy/core/fromnumeric.py:734: UserWarning: Warning: 'partition' will ignore the 'mask' of the MaskedArray.
+    /home/zsherman/anaconda3/envs/pyart_env/lib/python3.8/site-packages/numpy/core/fromnumeric.py:746: UserWarning: Warning: 'partition' will ignore the 'mask' of the MaskedArray.
       a.partition(kth, axis=axis, kind=kind, order=order)
     /home/zsherman/dev/pyart/examples/correct/plot_attenuation.py:52: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
       plt.show()
@@ -89,7 +89,7 @@ for a polarimetric radar using a Z-PHI method implemented in Py-ART.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  8.267 seconds)
+   **Total running time of the script:** ( 0 minutes  9.822 seconds)
 
 
 .. _sphx_glr_download_source_auto_examples_correct_plot_attenuation.py:

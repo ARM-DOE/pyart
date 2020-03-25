@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>pyart.core.Radar &mdash; Py-ART 1.12.0.dev+ed36a91 documentation</title>
+  <title>pyart.core.Radar &mdash; Py-ART 1.12.0 documentation</title>
   
 
   
@@ -21,14 +21,15 @@
   
     
       <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
-        <script type="text/javascript" src="../../_static/jquery.js"></script>
-        <script type="text/javascript" src="../../_static/underscore.js"></script>
-        <script type="text/javascript" src="../../_static/doctools.js"></script>
-        <script type="text/javascript" src="../../_static/language_data.js"></script>
-        <script type="text/javascript" src="../../_static/clipboard.min.js"></script>
-        <script type="text/javascript" src="../../_static/copybutton.js"></script>
-        <script type="text/javascript">var copybuttonSkipText = '>>> ';</script>
-        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script src="../../_static/clipboard.min.js"></script>
+        <script src="../../_static/copybutton.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
     
     <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
@@ -66,7 +67,7 @@
             
             
               <div class="version">
-                1.12.dev
+                1.12
               </div>
             
           
@@ -125,6 +126,7 @@
 <li class="toctree-l4"><a class="reference internal" href="pyart.core.Radar.iter_start_end.html">pyart.core.Radar.iter_start_end</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="pyart.core.RadarSpectra.html">pyart.core.RadarSpectra</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.core.antenna_to_cartesian.html">pyart.core.antenna_to_cartesian</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.core.antenna_vectors_to_cartesian.html">pyart.core.antenna_vectors_to_cartesian</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.core.cartesian_to_geographic.html">pyart.core.cartesian_to_geographic</a></li>
@@ -162,6 +164,15 @@
 <li class="toctree-l1"><a class="reference external" href="https://anaconda.org/conda-forge/arm_pyart">Anaconda Cloud</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/ARM-DOE/pyart">GitHub Repo</a></li>
 <li class="toctree-l1"><a class="reference external" href="https://github.com/ARM-DOE/pyart/archive/master.zip">Zip File of Repository</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Notebooks</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/basic_ingest_using_test_radar_object.html">Creating a basic ingest of a NetCDF file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/changing_fields_and_saving.html">Field manipulation and Saving the Radar Object to a file.</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/dealiasing_velocity.html">Dealiasing Velocity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/mapping_data_to_a_cartesian_grid.html">Mapping Data to a Cartesian Grid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/masking_data_with_gatefilters.html">Masking Data With Py-ART Gatefilters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/the_pyart_radar_object_and_indexing.html">The Py-ART Radar object and indexing</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Getting Help</span></p>
 <ul>
@@ -239,7 +250,31 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="pyart-core-radar">
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="pyart-core-radar">
 <h1>pyart.core.Radar<a class="headerlink" href="#pyart-core-radar" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="pyart.core.Radar">
@@ -297,12 +332,12 @@ representations are not forbidden.</p></li>
 <li><p><strong>elevation</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.8)"><em>dict</em></a>) – Elevation of antenna, relative to the horizontal plane. Elevation
 angles are recommended to be expressed in the range of [-180, 180],
 but other representations are not forbidden.</p></li>
-<li><p><strong>gate_y</strong><strong>, </strong><strong>gate_z</strong> (<em>gate_x</em><em>,</em>) – Location of each gate in a Cartesian coordinate system assuming a
+<li><p><a class="reference internal" href="pyart.core.RadarSpectra.gate_y.html#pyart.core.RadarSpectra.gate_y" title="pyart.core.RadarSpectra.gate_y"><strong>gate_y</strong></a><strong>, </strong><a class="reference internal" href="pyart.core.RadarSpectra.gate_z.html#pyart.core.RadarSpectra.gate_z" title="pyart.core.RadarSpectra.gate_z"><strong>gate_z</strong></a> (<em>gate_x</em><em>,</em>) – Location of each gate in a Cartesian coordinate system assuming a
 standard atmosphere with a 4/3 Earth’s radius model. The data keys of
 these attributes are create upon first access from the data in the
 range, azimuth and elevation attributes. If these attributes are
 changed use <a class="reference internal" href="pyart.core.Radar.init_gate_x_y_z.html#pyart.core.Radar.init_gate_x_y_z" title="pyart.core.Radar.init_gate_x_y_z"><code class="xref py py-func docutils literal notranslate"><span class="pre">init_gate_x_y_z()</span></code></a> to reset.</p></li>
-<li><p><strong>gate_latitude</strong> (<em>gate_longitude</em><em>,</em>) – Geographic location of each gate. The projection parameter(s) defined
+<li><p><a class="reference internal" href="pyart.core.RadarSpectra.gate_latitude.html#pyart.core.RadarSpectra.gate_latitude" title="pyart.core.RadarSpectra.gate_latitude"><strong>gate_latitude</strong></a> (<em>gate_longitude</em><em>,</em>) – Geographic location of each gate. The projection parameter(s) defined
 in the <cite>projection</cite> attribute are used to perform an inverse map
 projection from the Cartesian gate locations relative to the radar
 location to longitudes and latitudes. If these attributes are changed
