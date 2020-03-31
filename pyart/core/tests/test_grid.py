@@ -79,9 +79,9 @@ def test_grid_to_xarray():
     ds = grid.to_xarray()
 
     lon, lat = pyart.core.Grid.get_point_longitude_latitude(grid)
-    time = np.array([datetime.datetime.strftime(netCDF4.num2date(
-        grid.time['data'][0], grid.time['units']), '%Y-%m-%dT%H:%M:%S.%f')],
-                    dtype='datetime64[ns]')
+    time = np.array(
+        [netCDF4.num2date(grid.time['data'][0],
+                          grid.time['units'])])
     lon = lon[0, :]
     lat = lat[:, 0]
     z = grid.z['data']

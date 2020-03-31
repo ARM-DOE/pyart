@@ -6,6 +6,7 @@ MDV_PPI_FILE
 MDV_RHI_FILE
 CFRADIAL_PPI_FILE
 CFRADIAL_RHI_FILE
+CFRADIAL_CR_RASTER_FILE
 CHL_RHI_FILE
 SIGMET_PPI_FILE
 SIGMET_RHI_FILE
@@ -29,6 +30,7 @@ MDV_RHI_FILE = os.path.join(DATA_PATH, 'example_mdv_rhi.mdv')
 MDV_GRID_FILE = os.path.join(DATA_PATH, 'example_mdv_grid.mdv')
 CFRADIAL_PPI_FILE = os.path.join(DATA_PATH, 'example_cfradial_ppi.nc')
 CFRADIAL_RHI_FILE = os.path.join(DATA_PATH, 'example_cfradial_rhi.nc')
+CFRADIAL_CR_RASTER_FILE = os.path.join(DATA_PATH, 'example_cfradial_cr_raster.nc')
 CHL_RHI_FILE = os.path.join(DATA_PATH, 'example_chl_rhi.chl')
 SIGMET_PPI_FILE = os.path.join(DATA_PATH, 'example_sigmet_ppi.sigmet')
 SIGMET_RHI_FILE = os.path.join(DATA_PATH, 'example_sigmet_rhi.sigmet')

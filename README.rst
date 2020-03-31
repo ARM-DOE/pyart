@@ -6,7 +6,7 @@ The Python ARM Radar Toolkit (Py-ART)
 
 |AnacondaCloud| |CondaDownloads|
 
-|DocsDev| |DocsUsers| |DocsGuides|
+|DocsUsers| |DocsGuides|
 
 |ARM| |Tweet|
 
@@ -22,11 +22,8 @@ The Python ARM Radar Toolkit (Py-ART)
 .. |CondaDownloads| image:: https://anaconda.org/conda-forge/arm_pyart/badges/downloads.svg
     :target: https://anaconda.org/conda-forge/arm_pyart/files
 
-.. |DocsDev| image:: https://img.shields.io/badge/docs-developers-4088b8.svg
-    :target: http://arm-doe.github.io/pyart-docs-travis/dev_reference/index.html
-
 .. |DocsUsers| image:: https://img.shields.io/badge/docs-users-4088b8.svg
-    :target: http://arm-doe.github.io/pyart-docs-travis/user_reference/index.html
+    :target: http://arm-doe.github.io/pyart-docs-travis/API/index.html
 
 .. |DocsGuides| image:: https://img.shields.io/badge/docs-guides-4088b8.svg
     :target: https://github.com/ARM-DOE/pyart/tree/master/guides/
@@ -52,9 +49,9 @@ Important Links
 ===============
 
 - Official source code repository: https://github.com/ARM-DOE/pyart
-- HTML documentation: http://arm-doe.github.io/pyart-docs-travis/
-- Examples: http://arm-doe.github.io/pyart/dev/auto_examples/index.html
-- Mailing List: http://groups.google.com/group/pyart-users/
+- HTML documentation: https://arm-doe.github.io/pyart-docs-travis/
+- Examples: https://arm-doe.github.io/pyart/source/auto_examples/index.html
+- Mailing List: https://groups.google.com/group/pyart-users/
 - Issue Tracker: https://github.com/ARM-DOE/pyart/issues
 
 

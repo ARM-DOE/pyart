@@ -5,7 +5,7 @@ and sample objects.
 """
 
 from .sample_files import MDV_PPI_FILE, MDV_RHI_FILE, MDV_GRID_FILE
-from .sample_files import CFRADIAL_PPI_FILE, CFRADIAL_RHI_FILE
+from .sample_files import CFRADIAL_PPI_FILE, CFRADIAL_RHI_FILE, CFRADIAL_CR_RASTER_FILE
 from .sample_files import CHL_RHI_FILE, UF_FILE
 from .sample_files import SIGMET_PPI_FILE, SIGMET_RHI_FILE
 from .sample_files import INTERP_SOUNDE_FILE, SONDE_FILE
@@ -19,6 +19,8 @@ from .sample_objects import make_empty_grid
 from .sample_objects import make_target_grid, make_storm_grid
 from .sample_objects import make_empty_rhi_radar
 from .sample_objects import make_velocity_aliased_rhi_radar
+from .sample_objects import make_empty_spectra_radar
+from. sample_objects import make_target_spectra_radar
 from .tmpdirs import InTemporaryDirectory
 from .sample_objects import make_normal_storm
 

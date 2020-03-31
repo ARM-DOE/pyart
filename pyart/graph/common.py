@@ -126,7 +126,8 @@ def generate_grid_time_begin(grid):
     return num2date(times, units, calendar)
 
 
-def generate_filename(radar, field, sweep, ext='png', datetime_format='%Y%m%d%H%M%S', use_sweep_time=False):
+def generate_filename(radar, field, sweep, ext='png',
+                      datetime_format='%Y%m%d%H%M%S', use_sweep_time=False):
     """
     Generate a filename for a plot.
 
@@ -225,7 +226,7 @@ def generate_title(radar, field, sweep, datetime_format=None, use_sweep_time=Tru
     if datetime_format:
         time_str = begin_time.strftime(datetime_format)
     else:
-        time_str = begin_time.isoformat() + 'Z'
+        time_str = begin_time.strftime('%Y-%m-%dT%H:%M:%SZ')
     fixed_angle = radar.fixed_angle['data'][sweep]
     l1 = "%s %.1f Deg. %s " % (generate_radar_name(radar), fixed_angle,
                                time_str)
@@ -253,7 +254,7 @@ def generate_grid_title(grid, field, level):
         Plot title.
 
     """
-    time_str = generate_grid_time_begin(grid).isoformat() + 'Z'
+    time_str = generate_grid_time_begin(grid).strftime('%Y-%m-%dT%H:%M:%SZ')
     height = grid.z['data'][level] / 1000.
     l1 = "%s %.1f km %s " % (generate_grid_name(grid), height,
                              time_str)
@@ -281,7 +282,7 @@ def generate_longitudinal_level_title(grid, field, level):
         Plot title.
 
     """
-    time_str = generate_grid_time_begin(grid).isoformat() + 'Z'
+    time_str = generate_grid_time_begin(grid).strftime('%Y-%m-%dT%H:%M:%SZ')
     disp = grid.x['data'][level] / 1000.
     if disp >= 0:
         direction = "east"
@@ -314,7 +315,7 @@ def generate_latitudinal_level_title(grid, field, level):
         Plot title.
 
     """
-    time_str = generate_grid_time_begin(grid).isoformat() + 'Z'
+    time_str = generate_grid_time_begin(grid).strftime('%Y-%m-%dT%H:%M:%SZ')
     disp = grid.y['data'][level] / 1000.
     if disp >= 0:
         direction = "north"
@@ -344,7 +345,7 @@ def generate_vpt_title(radar, field):
         Plot title.
 
     """
-    time_str = generate_radar_time_begin(radar).isoformat() + 'Z'
+    time_str = generate_radar_time_begin(radar).strftime('%Y-%m-%dT%H:%M:%SZ')
     l1 = "%s %s " % (generate_radar_name(radar), time_str)
     field_name = generate_field_name(radar, field)
     return l1 + '\n' + field_name
@@ -369,7 +370,7 @@ def generate_ray_title(radar, field, ray):
         Plot title.
 
     """
-    time_str = generate_radar_time_begin(radar).isoformat() + 'Z'
+    time_str = generate_radar_time_begin(radar).strftime('%Y-%m-%dT%H:%M:%SZ')
     l1 = "%s %s" % (generate_radar_name(radar), time_str)
     azim = radar.azimuth['data'][ray]
     elev = radar.elevation['data'][ray]
@@ -397,7 +398,7 @@ def generate_az_rhi_title(radar, field, azimuth):
         Plot title.
 
     """
-    time_str = generate_radar_time_begin(radar).isoformat() + 'Z'
+    time_str = generate_radar_time_begin(radar).strftime('%Y-%m-%dT%H:%M:%SZ')
     l1 = "%s %s " % (generate_radar_name(radar), time_str)
     l2 = "Azimuth: %.1f deg" % azimuth
     field_name = generate_field_name(radar, field)

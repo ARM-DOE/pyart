@@ -84,6 +84,17 @@ def test_radardisplay_vpt(outfile=None):
     plt.close()
 
 
+def test_radardisplay_cr_raster(outfile=None):
+    radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_CR_RASTER_FILE)
+    display = pyart.graph.RadarDisplay(radar)
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    display.plot_cr_raster(target_range=478., el_limits=[-0.5, 2.5])
+    if outfile:
+        fig.savefig(outfile)
+    plt.close()
+
+
 def test_radardisplay_vpt_time(outfile=None):
     radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
     pyart.util.to_vpt(radar)      # hack to make the data a VPT
@@ -289,3 +300,4 @@ if __name__ == "__main__":
     test_radardisplay_ppi('figure_radar_display_ppi.png')
     test_radardisplay_ray('figure_radar_display_ray.png')
     test_radardisplay_vpt('figure_radar_display_vpt.png')
+    test_radardisplay_cr_raster('figure_radar_display_cr_raster.png')

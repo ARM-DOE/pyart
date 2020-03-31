@@ -154,7 +154,10 @@ def det_process_range(radar, sweep, fzl, doc=10):
     elevation = radar.fixed_angle['data'][sweep]
     radar_height = radar.altitude['data']
     gate_end = fzl_index(fzl, ranges, elevation, radar_height)
-    gate_end = min(gate_end, len(ranges) - doc)
+    if doc is not None:
+        gate_end = min(gate_end, len(ranges) - doc)
+    else:
+        gate_end = min(gate_end, len(ranges))
 
     ray_start = radar.sweep_start_ray_index['data'][sweep]
     ray_end = radar.sweep_end_ray_index['data'][sweep] + 1
@@ -483,12 +486,12 @@ def get_phidp_unf(radar, ncp_lev=0.4, rhohv_lev=0.6, debug=False, ncpts=20,
             x_ma.mask[:] = True
         except AttributeError:
             # sys.stderr.write('No Valid Regions, ATTERR \n ')
-            # sys.stderr.write(myfile.times['time_end'].isoformat() + '\n')
+            # sys.stderr.write(myfile.times['time_end'].strftime('%Y-%m-%dT%H:%M:%SZ') + '\n')
             # print x_ma
             # print x_ma.mask
             c = 1  # also do nothing
             x_ma.mask = True
-        if 'nowrap' is not None:
+        if nowrap is not None:
             # Start the unfolding a bit later in order to avoid false
             # jumps based on clutter
             unwrapped = copy.deepcopy(x_ma)
@@ -1372,8 +1375,6 @@ def get_phidp_unf_gf(radar, gatefilter, debug=False, ncpts=2, sys_phase=None,
         Minimum number of points in a ray. Regions within a ray smaller than
         this or beginning before this gate number are excluded from
         calculations.
-    doc : int or None, optional
-        Index of first gate not to include in field data, None include all.
     sys_phase : float, optional
         System phase overide.
     nowrap : int or None, optional
@@ -1427,7 +1428,7 @@ def get_phidp_unf_gf(radar, gatefilter, debug=False, ncpts=2, sys_phase=None,
         except AttributeError:
             c = 1  # also do nothing
             x_ma.mask = True
-        if 'nowrap' is not None:
+        if nowrap is not None:
             # Start the unfolding a bit later in order to avoid false
             # jumps based on clutter
             unwrapped = copy.deepcopy(x_ma)

@@ -33,7 +33,7 @@ def velocity_azimuth_display(radar, vel_field=None, z_want=None,
 
     Returns
     -------
-    vad: HorizontalWindProfile
+    vad : HorizontalWindProfile
 	A velocity azimuth display object containing height, speed, direction,
         u_wind, v_wind from a radar object.
 

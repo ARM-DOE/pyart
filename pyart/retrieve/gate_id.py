@@ -5,9 +5,9 @@ onto the radar gates.
 """
 
 try:
-    from netCDF4 import num2date, datetime
+    from netCDF4 import num2date, datetime, DatetimeGregorian
 except ImportError:
-    from cftime import num2date, datetime
+    from cftime import num2date, datetime, DatetimeGregorian
 
 import numpy as np
 from scipy import interpolate
@@ -119,8 +119,8 @@ def fetch_radar_time_profile(sonde_dset, radar, time_key='time',
         nvars = [k for k, v in ncvars.items() if v.shape == time_height_shape]
 
     radar_start = num2date(radar.time['data'][0], radar.time['units'])
-    radar_day_start = datetime(radar_start.year, radar_start.month,
-                               radar_start.day)
+    radar_day_start = DatetimeGregorian(radar_start.year, radar_start.month,
+                                        radar_start.day)
     seconds_since_start_of_day = (radar_start - radar_day_start).seconds
     time_index = abs(ncvars[time_key][:] - seconds_since_start_of_day).argmin()
 

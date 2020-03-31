@@ -47,7 +47,8 @@ CLASSIFIERS = [
     'Topic :: Scientific/Engineering :: Atmospheric Science',
     'Operating System :: POSIX :: Linux',
     'Operating System :: MacOS :: MacOS X',
-    'Operating System :: Microsoft :: Windows']
+    'Operating System :: Microsoft :: Windows',
+    'Framework :: Matplotlib']
 
 NAME = 'arm_pyart'
 MAINTAINER = "Py-ART Developers"
@@ -61,7 +62,7 @@ PLATFORMS = ["Linux", "Mac OS-X", "Unix"]
 MAJOR = 1
 MINOR = 12
 MICRO = 0
-ISRELEASED = False
+ISRELEASED = True
 VERSION = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 
 

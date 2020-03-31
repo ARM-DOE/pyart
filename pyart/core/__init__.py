@@ -4,6 +4,7 @@ Core Py-ART classes and function for interacting with weather radar data.
 """
 
 from .radar import Radar
+from .radar_spectra import RadarSpectra
 from .grid import Grid
 from .wind_profile import HorizontalWindProfile
 

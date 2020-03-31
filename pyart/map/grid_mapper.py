@@ -275,7 +275,7 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
     grid_origin_alt: float or None
         Altitude of grid origin, in meters. None sets the origin
         to the location of the first radar.
-    grid_projection : dic or str
+    grid_projection : dict
         Projection parameters defining the map projection used to transform the
         locations of the radar gates in geographic coordinate to Cartesian
         coodinates. None will use the default dictionary which uses a native
