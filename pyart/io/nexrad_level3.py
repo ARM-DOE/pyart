@@ -214,7 +214,7 @@ class NEXRADLevel3File(object):
         if self.packet_header['packet_code'] == 28:
             azimuths = self.azimuths
         else:
-            azimuths = [d['angle_start'] for d in self.radial_headers] * 0.1
+            azimuths = [d['angle_start'] * 0.1 for d in self.radial_headers]
         return np.array(azimuths, dtype='float32')
 
     def get_range(self):
