@@ -686,7 +686,7 @@ RADIAL_HEADER = (
 GEN_DATA_PACK_HEADER = (
     ('packet_code', INT2),      # Packet Code, Type 28
     ('reserved', INT2),         # Reserved for future use. Should be set to 0.
-    ('num_bytes', LONG),        # Number of bytes to follow in this packet              # Number of bytes to follow in this packet
+    ('num_bytes', LONG),        # Number of bytes to follow in this packet
 )
 
 # A list of the NEXRAD Level 3 Product supported by this module taken
