@@ -148,7 +148,7 @@ def test_nexrad_level3_msg176():
     assert round(radar.time['data'][0]) == 0.
 
     assert radar.range['data'].shape == (920, )
-    assert round(radar.range['data'][100]) == 150000.
+    assert round(radar.range['data'][100]) == 25125.
 
     assert radar.scan_type == 'ppi'
 
