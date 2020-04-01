@@ -377,7 +377,11 @@ def nexrad_level3_message_code(filename):
 
 class Level3XDRParser(Unpacker):
     """Handle XDR-formatted Level 3 NEXRAD products.
-    Pro
+    
+    This class is virtually identical to the Metpy implementation. It has been
+    pulled into this module to avoid future changes to the Metpy package from
+    breaking something. The class may be imported from Metpy as a dependency
+    if someday the project has matured so that features breaking are unlikely.
     
     This class has been modified from MetPy
     Copyright (c) 2009,2015,2016,2017 MetPy Developers.

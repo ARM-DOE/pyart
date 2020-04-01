@@ -199,5 +199,5 @@ def test_nexrad_level3_msg176():
     assert field_name in radar.fields.keys()
     assert radar.fields[field_name]['data'].shape == (360, 920)
     assert type(radar.fields[field_name]['data']) is MaskedArray
-    assert round(radar.fields[field_name]['data'][14, 14],3) == 0.244.
+    assert round(radar.fields[field_name]['data'][14, 14],3) == 0.244
 
