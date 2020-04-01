@@ -159,7 +159,7 @@ def test_nexrad_level3_msg176():
     assert round(radar.longitude['data'][0]) == -88.0
 
     assert radar.altitude['data'].shape == (1, )
-    assert round(radar.altitude['data'][0]) == 760.
+    assert round(radar.altitude['data'][0]) == 232.
 
     assert radar.altitude_agl is None
 
@@ -168,9 +168,6 @@ def test_nexrad_level3_msg176():
 
     assert radar.sweep_mode['data'].shape == (1, )
     assert np.all(radar.sweep_mode['data'] == [b'azimuth_surveillance'])
-
-    assert radar.fixed_angle['data'].shape == (1, )
-    assert round(radar.fixed_angle['data'][0], 2) == 25.6
 
     assert radar.sweep_start_ray_index['data'].shape == (1, )
     assert round(radar.sweep_start_ray_index['data'][0]) == 0.0
@@ -182,9 +179,6 @@ def test_nexrad_level3_msg176():
 
     assert round(radar.azimuth['data'][0]) == 0.0
     assert round(radar.azimuth['data'][10]) == 10.0
-
-    assert radar.elevation['data'].shape == (360, )
-    assert round(radar.elevation['data'][0], 2) == 25.6
 
     assert radar.scan_rate is None
     assert radar.antenna_transition is None
