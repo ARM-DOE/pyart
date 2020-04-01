@@ -192,7 +192,7 @@ class NEXRADLevel3File(object):
         self.packet_header['nbins'] = self.gen_data_pack['components'].radials[0].num_bins
         nbins = self.packet_header['nbins']
         self.packet_header['first_bin'] = self.gen_data_pack['components'].first_gate
-        self.packet_header['range_scale'] = 1
+        self.packet_header['range_scale'] = 1000 # 1000m in 1 km
 
         # Read azimuths
         self.azimuths = [rad.azimuth for rad in self.gen_data_pack['components'].radials]
@@ -742,8 +742,6 @@ SUPPORTED_PRODUCTS = [
             # Difference Accumulation
     176,    # Digital Instantaneous
             # Precipitation Rate
-            # (Supported using Metpy
-            # implementation as dependency)
     177,    # Hybrid Hydrometeor
             # Classification
     181,    # Base Reflectivity
