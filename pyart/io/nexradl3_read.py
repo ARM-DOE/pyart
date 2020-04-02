@@ -113,7 +113,10 @@ def read_nexrad_level3(filename, field_names=None, additional_metadata=None,
     altitude = filemetadata('altitude')
 
     lat, lon, height = nfile.get_location()
-    height = height * 0.3048
+    # Nexrad altitude is in feet, convert to meters unless user's
+    # default config has units in feet.
+    if altitude['units'] == 'meters'
+        height = height * 0.3048
     latitude['data'] = np.array([lat], dtype='float64')
     longitude['data'] = np.array([lon], dtype='float64')
     altitude['data'] = np.array([height], dtype='float64')
