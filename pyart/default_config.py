@@ -831,6 +831,8 @@ nexrad_level3_metadata = {
                     '80: Big Drops (rain) (BD), '
                     '90: Graupel (GR), '
                     '100: Hail, possibly with rain (HA), '
+                    '110: Large Hail (LH), '
+                    '120: Giant Hail (GH), '
                     '140: Unknown Classification (UK), '
                     '150: Range Folded (RH)'),
         'coordinates': 'elevation azimuth range'},
