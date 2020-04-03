@@ -136,8 +136,12 @@ def read_nexrad_level3(filename, field_names=None, additional_metadata=None,
     fixed_angle = filemetadata('fixed_angle')
     azimuth['data'] = nfile.get_azimuth()
     elev = nfile.get_elevation()
-    elevation['data'] = np.ones((nradials, ), dtype='float32') * elev
-    fixed_angle['data'] = np.array([elev], dtype='float32')
+    if elev is not None:
+        elevation['data'] = np.ones((nradials, ), dtype='float32') * elev
+        fixed_angle['data'] = np.array([elev], dtype='float32')
+    else:
+        elevation['data'] = None
+        fixed_angle['data'] = None
 
     nfile.close()
     return Radar(

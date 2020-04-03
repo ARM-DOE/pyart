@@ -209,7 +209,10 @@ class NEXRADLevel3File(object):
     def get_elevation(self):
         """ Return the sweep elevation angle in degrees. """
         hw30 = self.prod_descr['halfwords_30']
-        elevation = struct.unpack('>h', hw30)[0] * 0.1
+        if self.msg_header['code'] in ELEVATION_ANGLE:
+            elevation = struct.unpack('>h', hw30)[0] * 0.1
+        else:
+            elevation = None
         return elevation
 
     def get_volume_start_datetime(self):
@@ -365,6 +368,10 @@ def _int16_to_float16(val):
 
 
 _8_OR_16_LEVELS = [19, 20, 25, 27, 28, 30, 56, 78, 79, 80, 169, 171, 181]
+
+# List of product numbers for which Halfword 30 corresponds to sweep elev angle
+# Per Table V of the ICD
+ELEVATION_ANGLE = [19, 20, 25, 27, 28, 30, 56, 94, 99, 159, 161, 163, 165]
 
 PRODUCT_RANGE_RESOLUTION = {
     19: 1.,     # 124 nm
