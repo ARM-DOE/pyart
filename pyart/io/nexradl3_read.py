@@ -3,6 +3,8 @@ Functions for reading NEXRAD Level 3 products.
 
 """
 
+import warnings
+
 import numpy as np
 
 from ..config import FileMetadata, get_fillvalue
@@ -144,6 +146,9 @@ def read_nexrad_level3(filename, field_names=None, additional_metadata=None,
         elevation['data'] = np.ones((nradials, ), dtype='float32') * elev
         fixed_angle['data'] = np.array([elev], dtype='float32')
     else:
+        warnings.warn("Elevation is not present per Halfword 30 Table V of "
+                      "the ICD. Elevation data is set to None. This may limit "
+                      "some Py-ART functionality such as RHI plotting. ")
         elevation['data'] = None
         fixed_angle['data'] = None
 
