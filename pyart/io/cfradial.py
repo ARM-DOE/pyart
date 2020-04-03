@@ -469,7 +469,7 @@ def write_cfradial(filename, radar, format='NETCDF4', time_reference=None,
     else:
         user = getpass.getuser()
         node = platform.node()
-        time_str = datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%SZ')
+        time_str = datetime.datetime.now().isoformat()
         t = (user, node, time_str)
         history = 'created by %s on %s at %s using Py-ART' % (t)
 
@@ -486,7 +486,9 @@ def write_cfradial(filename, radar, format='NETCDF4', time_reference=None,
 
     # arm time variables base_time and time_offset if requested
     if arm_time_variables:
-        dt = netCDF4.num2date(radar.time['data'][0], radar.time['units'])
+        dt = netCDF4.num2date(radar.time['data'][0], radar.time['units'],
+                              only_use_cftime_datetimes=False,
+                              only_use_python_datetimes=True)
         td = dt - datetime.datetime.utcfromtimestamp(0)
         base_time = {
             'data': np.array([td.seconds + td.days * 24 * 3600], 'int32'),
@@ -594,21 +596,23 @@ def write_cfradial(filename, radar, format='NETCDF4', time_reference=None,
     # time_coverage_start and time_coverage_end variables
     time_dim = ('string_length', )
     units = radar.time['units']
-    start_dt = netCDF4.num2date(radar.time['data'][0], units)
+    start_dt = netCDF4.num2date(
+        radar.time['data'][0], units, only_use_cftime_datetimes=False,
+        only_use_python_datetimes=True)
     if start_dt.microsecond != 0:
         # truncate to nearest second
         start_dt -= datetime.timedelta(microseconds=start_dt.microsecond)
-    end_dt = netCDF4.num2date(radar.time['data'][-1], units)
+    end_dt = netCDF4.num2date(
+        radar.time['data'][-1], units, only_use_cftime_datetimes=False,
+        only_use_python_datetimes=True)
     if end_dt.microsecond != 0:
         # round up to next second
         end_dt += (datetime.timedelta(seconds=1) -
                    datetime.timedelta(microseconds=end_dt.microsecond))
-    start_dic = {'data': np.array(start_dt.strftime('%Y-%m-%dT%H:%M:%SZ'),
-                                  dtype='S'),
+    start_dic = {'data': np.array(start_dt.isoformat() + 'Z', dtype='S'),
                  'long_name': 'UTC time of first ray in the file',
                  'units': 'unitless'}
-    end_dic = {'data': np.array(end_dt.strftime('%Y-%m-%dT%H:%M:%SZ'),
-                                dtype='S'),
+    end_dic = {'data': np.array(end_dt.isoformat() + 'Z', dtype='S'),
                'long_name': 'UTC time of last ray in the file',
                'units': 'unitless'}
     _create_ncvar(start_dic, dataset, 'time_coverage_start', time_dim)

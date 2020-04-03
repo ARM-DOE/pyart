@@ -26,8 +26,10 @@ fig = plt.figure(figsize=[10, 4])
 ax = fig.add_subplot(111)
 
 instrument_name = radar.metadata['instrument_name'].decode('utf-8')
-time_start = netCDF4.num2date(radar.time['data'][0], radar.time['units'])
-time_text = ' ' + time_start.strftime('%Y-%m-%dT%H:%M:%SZ')
+time_start = netCDF4.num2date(
+    radar.time['data'][0], radar.time['units'],
+    only_use_cftime_datetimes=False, only_use_python_datetimes=True)
+time_text = ' ' + time_start.isoformat() + 'Z'
 azimuth = radar.fixed_angle['data'][0]
 title = 'RHI ' + instrument_name + time_text + 'Azimuth %.2f' % (azimuth)
 
