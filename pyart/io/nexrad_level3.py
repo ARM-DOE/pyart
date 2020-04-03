@@ -13,6 +13,15 @@ Class for reading data from NEXRAD Level 3 files.
 # below is followed.  Keeping the above comment lines would also be helpful
 # to direct other back to the Py-ART project and the source of this file.
 
+# -----
+# This file has been last updated to include basic functionality for:
+# "INTERFACE CONTROL DOCUMENT FOR THE RPG TO CLASS 1 USER"
+# RPG Build 18.0
+# Document Number 2620001X
+# Build Date 18 January 2018
+# Future builds may require updates to this file.
+# -----
+
 
 LICENSE = """
 Copyright (c) 2013, UChicago Argonne, LLC
@@ -59,6 +68,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 import bz2
 from datetime import datetime, timedelta
 import struct
+import warnings
 
 import numpy as np
 
@@ -120,6 +130,14 @@ class NEXRADLevel3File(object):
         # Read and decode 102 byte Product Description Block
         self.prod_descr = _unpack_from_buf(buf, bpos, PRODUCT_DESCRIPTION)
         bpos += 102
+
+        # Check product version number
+        ver = self.prod_descr['version']
+        supp_ver = SUPPORTED_VERSION_NUMBERS[self.msg_header['code']]
+        if ver > supp_ver:
+            warnings.warn('Radar product version is %d. Py-ART implementation \
+            supports max version of %d. Most recent product version has not \
+            yet been implemented/tested.' % (ver,supp_ver), UserWarning)
 
         # uncompressed symbology block if necessary
         if buf[bpos:bpos+2] == b'BZ':
@@ -191,7 +209,10 @@ class NEXRADLevel3File(object):
     def get_elevation(self):
         """ Return the sweep elevation angle in degrees. """
         hw30 = self.prod_descr['halfwords_30']
-        elevation = struct.unpack('>h', hw30)[0] * 0.1
+        if self.msg_header['code'] in ELEVATION_ANGLE:
+            elevation = struct.unpack('>h', hw30)[0] * 0.1
+        else:
+            elevation = None
         return elevation
 
     def get_volume_start_datetime(self):
@@ -327,7 +348,7 @@ def nexrad_level3_message_code(filename):
 
 
 # NEXRAD Level III file structures, sizes, and static data
-# The deails on these structures are documented in:
+# The details on these structures are documented in:
 # "INTERFACE CONTROL DOCUMENT FOR THE RPG TO CLASS 1 USER" RPG Build 13.0
 # Document Number 2620001T
 # Tables and page number refer to those in this document.
@@ -347,6 +368,10 @@ def _int16_to_float16(val):
 
 
 _8_OR_16_LEVELS = [19, 20, 25, 27, 28, 30, 56, 78, 79, 80, 169, 171, 181]
+
+# List of product numbers for which Halfword 30 corresponds to sweep elev angle
+# Per Table V of the ICD
+ELEVATION_ANGLE = [19, 20, 25, 27, 28, 30, 56, 94, 99, 159, 161, 163, 165]
 
 PRODUCT_RANGE_RESOLUTION = {
     19: 1.,     # 124 nm
@@ -383,6 +408,42 @@ PRODUCT_RANGE_RESOLUTION = {
     186: 300.,
 }
 
+# Per "Products with Version Numbers" table in ICD
+SUPPORTED_VERSION_NUMBERS = {
+    19: 0,
+    20: 0,
+    25: 0,
+    27: 0,
+    28: 0,
+    30: 0,
+    32: 2,
+    34: 2,
+    56: 0,
+    78: 1,
+    79: 1,
+    80: 1,
+    94: 0,
+    99: 0,
+    134: 1,
+    135: 0,
+    138: 2,
+    159: 0,
+    161: 0,
+    163: 0,
+    165: 1,
+    169: 0,
+    170: 0,
+    171: 0,
+    172: 1,
+    173: 0,
+    174: 0,
+    175: 0,
+    176: 0,
+    177: 0,
+    181: 0,
+    182: 0,
+    186: 0,
+}
 
 # format of structure elements
 # Figure E-1, page E-1
