@@ -3,8 +3,6 @@ Functions for reading NEXRAD Level 3 products.
 
 """
 
-import warnings
-
 import numpy as np
 
 from ..config import FileMetadata, get_fillvalue
