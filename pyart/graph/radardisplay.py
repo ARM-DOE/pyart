@@ -882,6 +882,13 @@ class RadarDisplay(object):
         # Get data and coordinate information
         az = self._radar.azimuth['data']
         el = self._radar.elevation['data']
+        if el[0] is None:
+            raise ValueError(
+                "Elevation is set to None. CR raster plotting is unavailable "
+                "for this dataset. Elevation can be set to None due to not "
+                "being present per Halfword 30 Table V of the ICD for NEXRAD "
+                "level 3 data.")
+
         rng = self._radar.range['data']
         data = self._radar.fields[field]['data']
 
@@ -1531,6 +1538,12 @@ class RadarDisplay(object):
             prhi_rays.append(ray_number + sweep_slice.start)
 
         azimuth = self.azimuths[prhi_rays]
+        if self.elevations[0] is None:
+            raise ValueError(
+                "Elevation is set to None. RHI plotting is unavailable for this "
+                "dataset. Elevation can be set to None due to not being "
+                "present per Halfword 30 Table V of the ICD for NEXRAD level "
+                "3 data.")
         elevation = self.elevations[prhi_rays]
 
         data = data[prhi_rays]
