@@ -1033,6 +1033,8 @@ def filter_psidp(radar, psidp_field=None, rhohv_field=None, minsize_seq=5,
     psidp_o = radar.fields[psidp_field]['data']
     rhohv = radar.fields[rhohv_field]['data']
 
+    if np.isscalar(psidp_o.mask): # Ensure 2D mask
+        psidp_o.mask = np.zeros((psidp_o.shape)) + psidp_o.mask
     if not isinstance(psidp_o, np.ma.masked_array):
         psidp_o = np.ma.array(psidp_o, mask=np.isnan(psidp_o))
 
