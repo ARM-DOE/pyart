@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 from matplotlib.dates import DateFormatter
 import numpy as np
 import netCDF4
+from scipy.interpolate import griddata
 from pandas.plotting import register_matplotlib_converters
 register_matplotlib_converters()
 
@@ -804,6 +805,157 @@ class RadarDisplay(object):
                 mappable=pm, label=colorbar_label, orient=colorbar_orient,
                 field=field, ax=ax, fig=fig, ticks=ticks, ticklabs=ticklabs)
 
+    def plot_cr_raster(self, field='reflectivity', target_range=None, ax=None, fig=None,
+                       delta_x=None, delta_y=None, az_limits=None, el_limits=None,
+                       vmin=None, vmax=None, cmap=None, title=None, title_flag=True,
+                       axislabels=[None, None], axislabels_flag=True,
+                       colorbar_flag=True, colorbar_label=None,
+                       colorbar_orient='vertical', ticks=None, ticklabs=None, raster=False):
+        """
+        Plot a corner reflector raster scan
+
+        Parameters
+        ----------
+        field : String
+            Field to plot if other than reflectivity
+        target_range : Float
+            Estimated range of the corner reflector
+
+        Other Parameters
+        ----------------
+        ax : Axis
+            Axis to plot on. None will use the current axis.
+        fig : Figure
+            Figure to add the colorbar to. None will use the current figure.
+        delta_x : Float
+            Azimuth grid spacing for griddata
+        delta_y : Float
+            Elevation grid spacing for griddata
+        az_limits : list
+            Azimuth limits in form [min, max]
+        el_limits : list
+            Elevation limits in form [min, max]
+        vmin : float
+            Luminance minimum value, None for default value.
+            Parameter is ignored is norm is not None.
+        vmax : float
+            Luminance maximum value, None for default value.
+            Parameter is ignored is norm is not None.
+        cmap : str or None
+            Matplotlib colormap name. None will use the default colormap for
+            the field being plotted as specified by the Py-ART configuration.
+        title : str
+            Title to label plot with, None to use default title generated from
+            the field and sweep parameters. Parameter is ignored if title_flag
+            is False.
+        title_flag : bool
+            True to add a title to the plot, False does not add a title.
+        axislabels : (str, str)
+            2-tuple of x-axis, y-axis labels. None for either label will use
+            the default axis label. Parameter is ignored if axislabels_flag is
+            False.
+        axislabels_flag : bool
+            True to add label the axes, False does not label the axes.
+        colorbar_flag : bool
+            True to add a colorbar with label to the axis. False leaves off
+            the colorbar.
+        colorbar_label : str
+            Colorbar label, None will use a default label generated from the
+            field information.
+        ticks : array
+            Colorbar custom tick label locations.
+        ticklabs : array
+            Colorbar custom tick labels.
+        colorbar_orient : 'vertical' or 'horizontal'
+            Colorbar orientation.
+        raster : bool
+            False by default. Set to True to render the display as a raster
+            rather than a vector in call to pcolormesh. Saves time in plotting
+            high resolution data over large areas.  Be sure to set the dpi
+            of the plot for your application if you save it as a vector format
+            (i.e., pdf, eps, svg).
+
+        """
+
+        ax, fig = common.parse_ax_fig(ax, fig)
+
+        # Get data and coordinate information
+        az = self._radar.azimuth['data']
+        el = self._radar.elevation['data']
+        if el[0] is None:
+            raise ValueError(
+                "Elevation is set to None. CR raster plotting is unavailable "
+                "for this dataset. Elevation can be set to None due to not "
+                "being present per Halfword 30 Table V of the ICD for NEXRAD "
+                "level 3 data.")
+
+        rng = self._radar.range['data']
+        data = self._radar.fields[field]['data']
+
+        # Calculate delta for x and y
+        if az_limits is None:
+            min_az = np.nanmin(az)
+            max_az = np.nanmax(az)
+        else:
+            min_az = az_limits[0]
+            max_az = az_limits[1]
+
+        if el_limits is None:
+            min_el = np.nanmin(el)
+            max_el = np.nanmax(el)
+        else:
+            min_el = el_limits[0]
+            max_el = el_limits[1]
+
+        if delta_x is None:
+            delta_x = max_az-min_az
+        if delta_y is None:
+            delta_y = max_el-min_el
+
+        # Get range closest to target_range
+        if target_range is None:
+            target_index = 0
+        else:
+            target_index = np.argmin(np.abs(np.array(rng) - target_range))
+
+        data = data[:, target_index]
+
+        # Geet azimuth and elevation onto a meshgrid
+        xi, yi = np.meshgrid(np.linspace(min_az, max_az, int(delta_x/0.01)),
+                             np.linspace(min_el, max_el, int(delta_y/0.01)))
+
+        # Grid up the data for plotting
+        grid = griddata((az, el), data, (xi, yi), method='linear')
+
+        # Plot data using pcolormesh
+        pm = ax.pcolormesh(xi[0, :], yi[:, 0], grid, vmin=vmin, vmax=vmax, cmap=cmap)
+
+        if title_flag is True:
+            if title is None:
+                time_str = common.generate_radar_time_begin(self._radar)
+                title = ' '.join(['Corner Reflector', field.title(), time_str.strftime('%m/%d/%Y %H:%M:%S')])
+            ax.set_title(title)
+
+        if axislabels_flag is True:
+            if axislabels[0] is None:
+                axislabels[0] = 'Azimuth (deg)'
+            if axislabels[1] is None:
+                axislabels[1] = 'Elevation (deg)'
+            ax.set_xlabel(axislabels[0])
+            ax.set_ylabel(axislabels[1])
+
+        if raster:
+            pm.set_rasterized(True)
+
+        # add plot and field to lists
+        self.plots.append(pm)
+        self.plot_vars.append(field)
+
+        if colorbar_flag:
+            self.plot_colorbar(
+                mappable=pm, label=colorbar_label, orient=colorbar_orient,
+                field=field, ax=ax, fig=fig, ticks=ticks, ticklabs=ticklabs)
+
     def plot_range_rings(self, range_rings, ax=None, col='k', ls='-', lw=2):
         """
         Plot a series of range rings.
@@ -1333,7 +1485,7 @@ class RadarDisplay(object):
         if gatefilter is not None:
             mask_filter = gatefilter.gate_excluded
             data = np.ma.masked_array(data, mask_filter)
- 
+
         # filter out antenna transitions
         if filter_transitions and self.antenna_transition is not None:
             in_trans = self.antenna_transition
@@ -1386,6 +1538,12 @@ class RadarDisplay(object):
             prhi_rays.append(ray_number + sweep_slice.start)
 
         azimuth = self.azimuths[prhi_rays]
+        if self.elevations[0] is None:
+            raise ValueError(
+                "Elevation is set to None. RHI plotting is unavailable for this "
+                "dataset. Elevation can be set to None due to not being "
+                "present per Halfword 30 Table V of the ICD for NEXRAD level "
+                "3 data.")
         elevation = self.elevations[prhi_rays]
 
         data = data[prhi_rays]

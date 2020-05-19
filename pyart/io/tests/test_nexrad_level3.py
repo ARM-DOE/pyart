@@ -25,7 +25,7 @@ def test_nexrad_level3_msg19():
     assert round(radar.longitude['data'][0]) == -87.0
 
     assert radar.altitude['data'].shape == (1, )
-    assert round(radar.altitude['data'][0]) == 759.
+    assert round(radar.altitude['data'][0]) == 231.
 
     assert radar.altitude_agl is None
 
@@ -87,7 +87,7 @@ def test_nexrad_level3_msg161():
     assert round(radar.longitude['data'][0]) == -87.0
 
     assert radar.altitude['data'].shape == (1, )
-    assert round(radar.altitude['data'][0]) == 759.
+    assert round(radar.altitude['data'][0]) == 231.
 
     assert radar.altitude_agl is None
 

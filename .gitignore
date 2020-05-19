@@ -12,6 +12,7 @@
 .spyproject
 *.rej
 .settings/
+.spyproject
 .*.sw[nop]
 .sw[nop]
 *.tmp

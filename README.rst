@@ -49,9 +49,9 @@ Important Links
 ===============
 
 - Official source code repository: https://github.com/ARM-DOE/pyart
-- HTML documentation: http://arm-doe.github.io/pyart-docs-travis/
-- Examples: http://arm-doe.github.io/pyart/dev/auto_examples/index.html
-- Mailing List: http://groups.google.com/group/pyart-users/
+- HTML documentation: https://arm-doe.github.io/pyart-docs-travis/
+- Examples: https://arm-doe.github.io/pyart/source/auto_examples/index.html
+- Mailing List: https://groups.google.com/group/pyart-users/
 - Issue Tracker: https://github.com/ARM-DOE/pyart/issues
 
 

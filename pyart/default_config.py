@@ -83,6 +83,7 @@ radar_estimated_rain_rate = 'radar_estimated_rain_rate'
 radar_echo_classification = 'radar_echo_classification'
 specific_attenuation = 'specific_attenuation'
 specific_differential_attenuation = 'specific_differential_attenuation'
+clutter_filter_power_removed = 'clutter_filter_power_removed'
 
 # Textures
 differential_phase_texture = 'differential_phase_texture'
@@ -182,7 +183,8 @@ DEFAULT_FIELD_NAMES = {
     'path_integrated_attenuation': path_integrated_attenuation,
     'specific_differential_attenuation': specific_differential_attenuation,
     'path_integrated_differential_attenuation':
-    path_integrated_differential_attenuation
+    path_integrated_differential_attenuation,
+    'clutter_filter_power_removed': clutter_filter_power_removed,
 }
 
 
@@ -650,6 +652,12 @@ DEFAULT_METADATA = {
         'standard_name':  'interpolated_profile',
         'units': 'unknown'},
 
+    clutter_filter_power_removed: {
+        'units': 'dB',
+        'long_name': 'Clutter filter power removed',
+        'standard_name': 'clutter_filter_power_removed',
+        'coordinates': 'elevation azimuth range'},
+
     # Grid metadata
 
     'grid_time': {
@@ -805,6 +813,14 @@ nexrad_metadata = {
         'valid_max': 1.0,
         'valid_min': 0.0,
         'coordinates': 'elevation azimuth range'},
+
+    clutter_filter_power_removed: {
+        'units': 'dB',
+        'long_name': 'Clutter filter power removed',
+        'standard_name': 'clutter_filter_power_removed',
+        'valid_max': 73.0,
+        'valid_min': 0.0,
+        'coordinates': 'elevation azimuth range'},
 }
 
 # Metadata for NEXRAD Level 3 Products
@@ -831,6 +847,8 @@ nexrad_level3_metadata = {
                     '80: Big Drops (rain) (BD), '
                     '90: Graupel (GR), '
                     '100: Hail, possibly with rain (HA), '
+                    '110: Large Hail (LH), '
+                    '120: Giant Hail (GH), '
                     '140: Unknown Classification (UK), '
                     '150: Range Folded (RH)'),
         'coordinates': 'elevation azimuth range'},
@@ -952,7 +970,8 @@ nexrad_archive_field_mapping = {
     'SW': spectrum_width,
     'ZDR': differential_reflectivity,
     'PHI': differential_phase,
-    'RHO': cross_correlation_ratio
+    'RHO': cross_correlation_ratio,
+    'CFP': clutter_filter_power_removed
 }
 
 # NEXRAD Level II CDM files
@@ -1358,6 +1377,8 @@ DEFAULT_FIELD_COLORMAP = {
 
     differential_reflectivity: 'pyart_RefDiff',
     corrected_differential_reflectivity: 'pyart_RefDiff',
+
+    clutter_filter_power_removed: 'pyart_RefDiff',
 
     cross_correlation_ratio: 'pyart_RefDiff',
 
