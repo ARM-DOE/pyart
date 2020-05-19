@@ -139,3 +139,59 @@ def test_nexrad_level3_msg161_fileobj():
     assert radar.fields[field_name]['data'].shape == (360, 1200)
     assert type(radar.fields[field_name]['data']) is MaskedArray
     assert round(radar.fields[field_name]['data'][103, 170]) == 2.
+
+def test_nexrad_level3_msg176():
+    radar = pyart.io.read_nexrad_level3(pyart.testing.NEXRAD_LEVEL3_MSG176)
+
+    assert radar.time['units'] == 'seconds since 2020-03-19T18:01:43Z'
+    assert radar.time['data'].shape == (360, )
+    assert round(radar.time['data'][0]) == 0.
+
+    assert radar.range['data'].shape == (920, )
+    assert round(radar.range['data'][100]) == 25125.
+
+    assert radar.scan_type == 'ppi'
+
+    assert radar.latitude['data'].shape == (1, )
+    assert round(radar.latitude['data'][0]) == 42.0
+
+    assert radar.longitude['data'].shape == (1, )
+    assert round(radar.longitude['data'][0]) == -88.0
+
+    assert radar.altitude['data'].shape == (1, )
+    assert round(radar.altitude['data'][0]) == 232.
+
+    assert radar.altitude_agl is None
+
+    assert radar.sweep_number['data'].shape == (1, )
+    assert radar.sweep_number['data'][0] == 0
+
+    assert radar.sweep_mode['data'].shape == (1, )
+    assert np.all(radar.sweep_mode['data'] == [b'azimuth_surveillance'])
+
+    assert radar.sweep_start_ray_index['data'].shape == (1, )
+    assert round(radar.sweep_start_ray_index['data'][0]) == 0.0
+
+    assert radar.sweep_end_ray_index['data'].shape == (1, )
+    assert round(radar.sweep_end_ray_index['data'][0]) == 359.0
+
+    assert radar.target_scan_rate is None
+
+    assert round(radar.azimuth['data'][0]) == 0.0
+    assert round(radar.azimuth['data'][10]) == 10.0
+
+    assert radar.scan_rate is None
+    assert radar.antenna_transition is None
+    assert radar.instrument_parameters is None
+    assert radar.radar_calibration is None
+
+    assert radar.ngates == 920
+    assert radar.nrays == 360
+    assert radar.nsweeps == 1
+
+    field_name = 'radar_estimated_rain_rate'
+    assert field_name in radar.fields.keys()
+    assert radar.fields[field_name]['data'].shape == (360, 920)
+    assert type(radar.fields[field_name]['data']) is MaskedArray
+    assert round(radar.fields[field_name]['data'][14, 14],3) == 0.244
+
