@@ -65,7 +65,7 @@ def test_nexrad_level3_msg19():
     assert 'reflectivity' in radar.fields.keys()
     assert radar.fields['reflectivity']['data'].shape == (360, 230)
     assert type(radar.fields['reflectivity']['data']) is MaskedArray
-    assert round(radar.fields['reflectivity']['data'][10, 10]) == 25.
+    assert round(radar.fields['reflectivity']['data'][10, 10]) == np.float32(25)
 
 
 def test_nexrad_level3_msg161():
@@ -127,7 +127,7 @@ def test_nexrad_level3_msg161():
     assert field_name in radar.fields.keys()
     assert radar.fields[field_name]['data'].shape == (360, 1200)
     assert type(radar.fields[field_name]['data']) is MaskedArray
-    assert round(radar.fields[field_name]['data'][103, 170]) == 2.
+    assert round(radar.fields[field_name]['data'][103, 170]) == np.float32(2)
 
 
 def test_nexrad_level3_msg161_fileobj():
@@ -138,7 +138,7 @@ def test_nexrad_level3_msg161_fileobj():
     assert field_name in radar.fields.keys()
     assert radar.fields[field_name]['data'].shape == (360, 1200)
     assert type(radar.fields[field_name]['data']) is MaskedArray
-    assert round(radar.fields[field_name]['data'][103, 170]) == 2.
+    assert round(radar.fields[field_name]['data'][103, 170]) == np.float32(2)
 
 def test_nexrad_level3_msg176():
     radar = pyart.io.read_nexrad_level3(pyart.testing.NEXRAD_LEVEL3_MSG176)
@@ -193,5 +193,5 @@ def test_nexrad_level3_msg176():
     assert field_name in radar.fields.keys()
     assert radar.fields[field_name]['data'].shape == (360, 920)
     assert type(radar.fields[field_name]['data']) is MaskedArray
-    assert round(radar.fields[field_name]['data'][14, 14],3) == 0.244
+    assert round(radar.fields[field_name]['data'][14, 14],3) == np.float32(0.244)
 
