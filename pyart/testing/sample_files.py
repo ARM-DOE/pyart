@@ -45,6 +45,7 @@ NEXRAD_ARCHIVE_MSG1_FILE = os.path.join(
 # KBMX_SDUS84_N0KBMX_201501020205
 NEXRAD_LEVEL3_MSG19 = os.path.join(DATA_PATH, 'example_nexrad_level3_msg19')
 NEXRAD_LEVEL3_MSG163 = os.path.join(DATA_PATH, 'example_nexrad_level3_msg163')
+NEXRAD_LEVEL3_MSG176 = os.path.join(DATA_PATH, 'example_nexrad_level3_msg176')
 NEXRAD_CDM_FILE = os.path.join(DATA_PATH, 'example_nexrad_cdm.bz2')
 UF_FILE = os.path.join(DATA_PATH, 'example_uf_ppi.uf')
 INTERP_SOUNDE_FILE = os.path.join(DATA_PATH, 'example_interpolatedsonde.cdf')

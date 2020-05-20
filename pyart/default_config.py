@@ -1016,6 +1016,7 @@ nexrad_level3_mapping = {
     173: radar_estimated_rain_rate,     # Digital User-Selectable Accum.
     174: radar_estimated_rain_rate,     # Digital 1 hr Diff. Accum.
     175: radar_estimated_rain_rate,     # Digital Storm Total Diff. Accum.
+    176: radar_estimated_rain_rate,     # Digital Inst. Precipitation Rate
     177: radar_echo_classification,     # Hybrid Hydrometeor Classification
     181: reflectivity,                  # Base Reflectivity
     182: velocity,                      # Base Velocity

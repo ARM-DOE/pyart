@@ -66,8 +66,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
 import bz2
+from collections import namedtuple
 from datetime import datetime, timedelta
 import struct
+from xdrlib import Unpacker
 import warnings
 
 import numpy as np
@@ -139,26 +141,30 @@ class NEXRADLevel3File(object):
             supports max version of %d. Most recent product version has not \
             yet been implemented/tested.' % (ver,supp_ver), UserWarning)
 
-        # uncompressed symbology block if necessary
+        # Uncompress symbology block if necessary
         if buf[bpos:bpos+2] == b'BZ':
             buf2 = bz2.decompress(buf[bpos:])
         else:
             buf2 = buf[bpos:]
 
-        self._read_symbology_block(buf2)
+        # Read and decode symbology header
+        self.symbology_header = _unpack_from_buf(buf2, 0, SYMBOLOGY_HEADER)
+
+        packet_code = struct.unpack('>h', buf2[16:18])[0]
+        assert packet_code in SUPPORTED_PACKET_CODES
+
+        bpos = 16
+
+        if packet_code == 28:
+            self._read_symbology_block_28(buf2, bpos, packet_code)
+        else:
+            self._read_symbology_block(buf2, bpos, packet_code)
 
     def close(self):
         """ Close the file. """
         self._fh.close()
 
-    def _read_symbology_block(self, buf2):
-        """ Read symbology block. """
-        # Read and decode symbology header
-        self.symbology_header = _unpack_from_buf(buf2, 0, SYMBOLOGY_HEADER)
-
-        # Read radial packets
-        packet_code = struct.unpack('>h', buf2[16:18])[0]
-        assert packet_code in SUPPORTED_PACKET_CODES
+    def _read_symbology_block(self, buf2, pos, packet_code):
         self.packet_header = _unpack_from_buf(buf2, 16, RADIAL_PACKET_HEADER)
         self.radial_headers = []
         nbins = self.packet_header['nbins']
@@ -186,6 +192,34 @@ class NEXRADLevel3File(object):
                 pos += rle_size
             self.radial_headers.append(radial_header)
 
+    def _read_symbology_block_28(self, buf2, bpos, packet_code):
+        """ Read symbology block for Packet Code 28 (Product 176). """
+        self.packet_header = _unpack_from_buf(buf2, bpos, GEN_DATA_PACK_HEADER)
+        bpos += 8
+
+        # Read number of bytes (2 HW) and return
+        num_bytes = self.packet_header['num_bytes']
+        hunk = buf2[bpos : bpos+num_bytes]
+        xdrparser = Level3XDRParser(hunk)
+        self.gen_data_pack = xdrparser(packet_code)
+
+        # Rearrange some of the info so it matches the format of packet codes
+        # 16 and AF1F so method calls can be done properly
+        self.packet_header['nradials'] = len(self.gen_data_pack['components'].radials)
+        nradials = self.packet_header['nradials']
+        self.packet_header['nbins'] = self.gen_data_pack['components'].radials[0].num_bins
+        nbins = self.packet_header['nbins']
+        self.packet_header['first_bin'] = self.gen_data_pack['components'].first_gate
+        self.packet_header['range_scale'] = 1000 # 1000m in 1 km
+
+        # Read azimuths
+        self.azimuths = [rad.azimuth for rad in self.gen_data_pack['components'].radials]
+
+        # Pull each radial's data into an array
+        self.raw_data = np.empty((nradials, nbins), dtype='uint8')
+        for i in range(0,nradials):
+            self.raw_data[i,:] = self.gen_data_pack['components'].radials[i].data
+
     def get_location(self):
         """ Return the latitude, longitude and height of the radar. """
         latitude = self.prod_descr['latitude'] * 0.001
@@ -195,8 +229,11 @@ class NEXRADLevel3File(object):
 
     def get_azimuth(self):
         """ Return an array of starting azimuth angles in degrees. """
-        azimuths = [d['angle_start'] for d in self.radial_headers]
-        return np.array(azimuths, dtype='float32') * 0.1
+        if self.packet_header['packet_code'] == 28:
+            azimuths = self.azimuths
+        else:
+            azimuths = [d['angle_start'] * 0.1 for d in self.radial_headers]
+        return np.array(azimuths, dtype='float32')
 
     def get_range(self):
         """ Return an array of gate range spacing in meters. """
@@ -221,7 +258,7 @@ class NEXRADLevel3File(object):
                                           self.prod_descr['vol_scan_time'])
 
     def get_data(self):
-        """ Return an masked array containing the field data. """
+        """ Return a masked array containing the field data. """
         msg_code = self.msg_header['code']
         threshold_data = self.prod_descr['threshold_data']
 
@@ -255,6 +292,11 @@ class NEXRADLevel3File(object):
             # units are 0.01 inches
             scale, offset = np.frombuffer(threshold_data[:8], '>f4')
             data = (self.raw_data - offset) / (scale) * 0.01
+            mdata = np.ma.array(data, mask=self.raw_data < 1)
+            
+        elif msg_code in [176]:
+            scale, offset = np.frombuffer(threshold_data[:8], '>f4')
+            data = (self.raw_data - offset) / (scale)
             mdata = np.ma.array(data, mask=self.raw_data < 1)
 
         elif msg_code in [165, 177]:
@@ -354,6 +396,171 @@ def nexrad_level3_message_code(filename):
 # Tables and page number refer to those in this document.
 
 
+class Level3XDRParser(Unpacker):
+    """Handle XDR-formatted Level 3 NEXRAD products.
+    
+    This class is virtually identical to the Metpy implementation. It has been
+    pulled into this module to avoid future changes to the Metpy package from
+    breaking something. The class may be imported from Metpy as a dependency
+    if someday the project has matured so that features breaking are unlikely.
+    
+    This class has been modified from MetPy
+    Copyright (c) 2009,2015,2016,2017 MetPy Developers.
+    Distributed under the terms of the BSD 3-Clause License.
+    SPDX-License-Identifier: BSD-3-Clause
+    
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+
+        1. Redistributions of source code must retain the above copyright
+           notice, this list of conditions and the following disclaimer.
+
+        2. Redistributions in binary form must reproduce the above copyright
+           notice, this list of conditions and the following disclaimer in the
+           documentation and/or other materials provided with the distribution.
+
+        3. Neither the name of the copyright holder nor the names of its
+           contributors may be used to endorse or promote products derived
+           from this software without specific prior written permission.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+    ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+    POSSIBILITY OF SUCH DAMAGE.
+    """
+
+    def __call__(self, packet_code):
+        """Perform the actual unpacking."""
+        xdr = {}
+
+        if packet_code == 28:
+            xdr.update(self._unpack_prod_desc())
+        else:
+            raise NotImplementedError(
+                  'Unknown XDR Component: %d' % (packet_code))
+
+        # Check that we got it all
+        self.done()
+        return xdr
+
+    def unpack_string(self):
+        """Unpack the internal data as a string."""
+        return Unpacker.unpack_string(self).decode('ascii')
+
+    def _unpack_prod_desc(self):
+        xdr = {}
+
+        # NOTE: The ICD incorrectly lists op-mode, vcp, el_num, and
+        # spare as int*2. Changing to int*4 makes things parse correctly.
+        xdr['name'] = self.unpack_string()
+        xdr['description'] = self.unpack_string()
+        xdr['code'] = self.unpack_int()
+        xdr['type'] = self.unpack_int()
+        xdr['prod_time'] = self.unpack_uint()
+        xdr['radar_name'] = self.unpack_string()
+        xdr['latitude'] = self.unpack_float()
+        xdr['longitude'] = self.unpack_float()
+        xdr['height'] = self.unpack_float()
+        xdr['vol_time'] = self.unpack_uint()
+        xdr['el_time'] = self.unpack_uint()
+        xdr['el_angle'] = self.unpack_float()
+        xdr['vol_num'] = self.unpack_int()
+        xdr['op_mode'] = self.unpack_int()
+        xdr['vcp_num'] = self.unpack_int()
+        xdr['el_num'] = self.unpack_int()
+        xdr['compression'] = self.unpack_int()
+        xdr['uncompressed_size'] = self.unpack_int()
+        xdr['parameters'] = self._unpack_parameters()
+        xdr['components'] = self._unpack_components()
+
+        return xdr
+
+    def _unpack_parameters(self):
+        num = self.unpack_int()
+
+        # ICD documents a "pointer" here, that seems to be garbage. Just read
+        # and use the number, starting the list immediately.
+        self.unpack_int()
+
+        if num == 0:
+            return None
+
+        ret = []
+        for i in range(num):
+            ret.append((self.unpack_string(), self.unpack_string()))
+            if i < num - 1:
+                self.unpack_int()  # Another pointer for the 'list' ?
+
+        if num == 1:
+            ret = ret[0]
+
+        return ret
+
+    def _unpack_components(self):
+        num = self.unpack_int()
+
+        # ICD documents a "pointer" here, that seems to be garbage. Just read
+        # and use the number, starting the list immediately.
+        self.unpack_int()
+
+        ret = []
+        for i in range(num):
+            try:
+                code = self.unpack_int()
+                ret.append(self._component_lookup[code](self))
+                if i < num - 1:
+                    self.unpack_int()  # Another pointer for the 'list' ?
+            except KeyError:
+                raise NotImplementedError(
+                      'Unknown XDR Component: %d' % (code))
+                break
+
+        if num == 1:
+            ret = ret[0]
+
+        return ret
+
+    radial_fmt = namedtuple('RadialComponent', ['description', 'gate_width',
+                                                'first_gate', 'parameters',
+                                                'radials'])
+    radial_data_fmt = namedtuple('RadialData', ['azimuth', 'elevation', 'width',
+                                                'num_bins', 'attributes',
+                                                'data'])
+
+    def _unpack_radial(self):
+        ret = self.radial_fmt(description=self.unpack_string(),
+                              gate_width=self.unpack_float(),
+                              first_gate=self.unpack_float(),
+                              parameters=self._unpack_parameters(),
+                              radials=None)
+        num_rads = self.unpack_int()
+        rads = []
+        for _ in range(num_rads):
+            # ICD is wrong, says num_bins is float, should be int
+            rads.append(self.radial_data_fmt(azimuth=self.unpack_float(),
+                                             elevation=self.unpack_float(),
+                                             width=self.unpack_float(),
+                                             num_bins=self.unpack_int(),
+                                             attributes=self.unpack_string(),
+                                             data=self.unpack_array(self.unpack_int)))
+        return ret._replace(radials=rads)
+
+    text_fmt = namedtuple('TextComponent', ['parameters', 'text'])
+
+    def _unpack_text(self):
+        return self.text_fmt(parameters=self._unpack_parameters(),
+                             text=self.unpack_string())
+
+    _component_lookup = {1: _unpack_radial, 4: _unpack_text}
+
+
 def _int16_to_float16(val):
     """ Convert a 16 bit interger into a 16 bit float. """
     # NEXRAD Level III float16 format defined on page 3-33.
@@ -402,6 +609,7 @@ PRODUCT_RANGE_RESOLUTION = {
     173: 1.,
     174: 1.,
     175: 1.,
+    176: 0.25,
     177: 0.25,
     181: 150.,
     182: 150.,
@@ -452,6 +660,7 @@ INT2 = 'h'
 INT4 = 'i'
 UINT4 = 'I'
 REAL4 = 'f'
+LONG = 'l'
 
 # 3.3.1 Graphic Product Messages
 
@@ -513,13 +722,14 @@ SYMBOLOGY_HEADER = (
     # Display data packets
 )
 
+AF1F = -20705       # struct.unpack('>h', 'AF1F'.decode('hex'))
+SUPPORTED_PACKET_CODES = [16, AF1F, 28]
+
 # Digital Radial Data Array Packet - Packet Code 16 (Sheet 2)
-# Figure 3-11c (Sheet 1 and 2), page 3-120.
+# Figure 3-11c (Sheet 1 and 2), page 3-120
 # and
 # Radial Data Packet - Packet Code AF1F
-# Figure 3-10 (Sheet 1 and 2), page 3-113.
-AF1F = -20705       # struct.unpack('>h', 'AF1F'.decode('hex'))
-SUPPORTED_PACKET_CODES = [16, AF1F]       # elsewhere
+# Figure 3-10 (Sheet 1 and 2), page 3-113
 RADIAL_PACKET_HEADER = (
     ('packet_code', INT2),      # Packet Code, Type 16
     ('first_bin', INT2),        # Location of first range bin.
@@ -534,6 +744,14 @@ RADIAL_HEADER = (
     ('nbytes', INT2),           # Number of bytes in the radial.
     ('angle_start', INT2),      # Starting angle at which data was collected.
     ('angle_delta', INT2)       # Delta angle from previous radial.
+)
+
+# Generic Data Packet - Packet Code 28
+# Figure 3-15c (Sheet 1), page 3-132
+GEN_DATA_PACK_HEADER = (
+    ('packet_code', INT2),      # Packet Code, Type 28
+    ('reserved', INT2),         # Reserved for future use. Should be set to 0.
+    ('num_bytes', LONG),        # Number of bytes to follow in this packet
 )
 
 # A list of the NEXRAD Level 3 Product supported by this module taken
@@ -587,6 +805,8 @@ SUPPORTED_PRODUCTS = [
             # Difference Accumulation
     175,    # Digital Storm Total
             # Difference Accumulation
+    176,    # Digital Instantaneous
+            # Precipitation Rate
     177,    # Hybrid Hydrometeor
             # Classification
     181,    # Base Reflectivity
@@ -747,8 +967,6 @@ SUPPORTED_PRODUCTS = [
 #           # Confidence
 #   166,    # Melting Layer           Linked Contour Vectors/
 #           #                         Set Color Level
-#   176,    # Digital Instantaneous   Generic Radial Product Format
-#           # Precipitation Rate
 #   178-193,# Reserved for Future Products
 #   196-198,# Reserved for Future Products
 #   200-210,# Reserved for Future Products
