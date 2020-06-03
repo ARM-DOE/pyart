@@ -19,7 +19,7 @@ except ImportError:
 
 def write_grid_geotiff(grid, filename, field, rgb=False, level=None,
                        cmap='viridis', vmin=0, vmax=75, color_levels=None,
-                       warp=False, sld=False, use_doublequotes=False):
+                       warp=False, sld=False, use_doublequotes=True):
     """
     Write a Py-ART Grid object to a GeoTIFF file.
 
