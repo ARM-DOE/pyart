@@ -91,7 +91,7 @@ def test_write_grid_geotiff_tif_warp():
     grid = make_tiny_grid()
     with pyart.testing.InTemporaryDirectory():
         pyart.io.write_grid_geotiff(
-            grid, 'test.foo', 'reflectivity', warp=True)
+            grid, 'test.foo', 'reflectivity', warp=True, use_doublequotes=True)
         # check that something was written to the file
         with open('test.foo', 'rb') as f:
             assert len(f.read()) > 0

@@ -170,7 +170,7 @@ def write_grid_geotiff(grid, filename, field, rgb=False, level=None,
             os.system('gdalwarp -q -t_srs \'+proj=longlat +ellps=WGS84 ' +
                       '+datum=WGS84 +no_defs\' ' + ofile + ' ' +
                       ofile + '_tmp.tif')
-        os.rename(ofile+'_tmp.tif', ofile)
+        shutil.move(ofile+'_tmp.tif', ofile)
 
 
 def _get_rgb_values(data, vmin, vmax, color_levels, cmap):
