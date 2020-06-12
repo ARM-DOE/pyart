@@ -331,7 +331,10 @@ def read_odim_h5(filename, field_names=None, additional_metadata=None,
             start = 0
             # loop on the sweeps, copy data into correct location in data array
             for dset, rays_in_sweep in zip(datasets, rays_per_sweep):
-                sweep_data = _get_odim_h5_sweep_data(hfile[dset][h_field_key])
+                try:
+                    sweep_data = _get_odim_h5_sweep_data(hfile[dset][h_field_key])
+                except KeyError:
+                    sweep_data = np.zeros((rays_in_sweep, max_nbins)) + np.NaN
                 sweep_nbins = sweep_data.shape[1]
                 fdata[start:start + rays_in_sweep, :sweep_nbins] = sweep_data[:]
                 # set data to NaN if its beyond the range of this sweep
