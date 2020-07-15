@@ -483,7 +483,7 @@ def get_phidp_unf(radar, ncp_lev=0.4, rhohv_lev=0.6, debug=False, ncpts=20,
             c = 0
         except TypeError:  # non sequence, no valid regions
             c = 1  # ie do nothing
-            x_ma.mask[:] = True
+            x_ma.mask = True
         except AttributeError:
             # sys.stderr.write('No Valid Regions, ATTERR \n ')
             # sys.stderr.write(myfile.times['time_end'].strftime('%Y-%m-%dT%H:%M:%SZ') + '\n')
@@ -1424,7 +1424,7 @@ def get_phidp_unf_gf(radar, gatefilter, debug=False, ncpts=2, sys_phase=None,
             c = 0
         except TypeError:  # non sequence, no valid regions
             c = 1  # ie do nothing
-            x_ma.mask[:] = True
+            x_ma.mask = True
         except AttributeError:
             c = 1  # also do nothing
             x_ma.mask = True
