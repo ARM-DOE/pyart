@@ -56,7 +56,10 @@ def read_grid(filename, exclude_fields=None, include_fields=None, **kwargs):
         'radar_name', 'radar_time', 'base_time', 'time_offset',
         'ProjectionCoordinateSystem']
 
-    dset = netCDF4.Dataset(filename, mode='r')
+    try:
+        dset = netCDF4.Dataset(filename, mode='r')
+    except UnicodeDecodeError:
+        dset = netCDF4.Dataset(filename, mode='r', encoding='utf-8')
 
     # metadata
     metadata = dict([(k, getattr(dset, k)) for k in dset.ncattrs()])
