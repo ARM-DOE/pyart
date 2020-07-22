@@ -166,7 +166,8 @@ cdef class GateToGridMapper:
     cdef int nx, ny, nz, nfields
     cdef float[:, :, :, ::1] grid_sum
     cdef float[:, :, :, ::1] grid_wsum
-    cdef double[:, :, :] min_dist2
+    cdef double[:, :, :, :] min_dist2
+    
 
     def __init__(self, tuple grid_shape, tuple grid_starts, tuple grid_steps,
                  float[:, :, :, ::1] grid_sum, float[:, :, :, ::1] grid_wsum):
@@ -190,7 +191,7 @@ cdef class GateToGridMapper:
         self.nfields = grid_sum.shape[3]
         self.grid_sum = grid_sum
         self.grid_wsum = grid_wsum
-        self.min_dist2 = 1e30*np.ones((nz, ny, nx))
+        self.min_dist2 = 1e30*np.ones((nz, ny, nx, self.nfields))
         return
 
     @cython.boundscheck(False)
@@ -338,16 +339,21 @@ cdef class GateToGridMapper:
                         xg = self.x_step * xi
                         yg = self.y_step * yi
                         zg = self.z_step * zi
-                        dist2 = (xg-x)*(xg-x) + (yg-y)*(yg-y) + (zg-z)*(zg-z)
-                        if dist2 < roi2:
-                            if dist2 < self.min_dist2[zi, yi, xi]:
-                                for i in range(self.nfields):
-                                    if masks[i]:
-                                        continue
-                                    self.min_dist2[zi, yi, xi] = dist2
-                                    self.grid_wsum[zi, yi, xi, i] = 1
-                                    self.grid_sum[zi, yi, xi, i] = values[i]
-
+                        dist = ((xg - x)**2 + (yg - y)**2 + (zg - z)**2)
+                        if dist >= roi2:
+                            continue
+                        for i in range(self.nfields):
+                            if dist < self.min_dist2[zi, yi, xi, i]:
+                                self.min_dist2[zi, yi, xi, i] = dist
+                                x_argmin = xi
+                                y_argmin = yi
+                                z_argmin = zi
+                                if masks[i]:
+                                    self.grid_wsum[zi, yi, xi, i] = 0
+                                    self.grid_sum[zi, yi, xi, i] = 0
+                                else:
+                                    self.grid_wsum[z_argmin, y_argmin, x_argmin, i] = 1
+                                    self.grid_sum[z_argmin, y_argmin, x_argmin, i] = values[i]
         else:
             for xi in range(x_min, x_max+1):
                 for yi in range(y_min, y_max+1):
