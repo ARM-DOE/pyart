@@ -167,6 +167,7 @@ cdef class GateToGridMapper:
     cdef float[:, :, :, ::1] grid_sum
     cdef float[:, :, :, ::1] grid_wsum
     cdef double[:, :, :, :] min_dist2
+    
 
     def __init__(self, tuple grid_shape, tuple grid_starts, tuple grid_steps,
                  float[:, :, :, ::1] grid_sum, float[:, :, :, ::1] grid_wsum):
