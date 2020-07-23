@@ -496,6 +496,38 @@ class Radar(object):
         return antenna_vectors_to_cartesian(
             self.range['data'], azimuths, elevations, edges=edges)
 
+    def get_gate_area(self, sweep):
+        """
+        Return the area of each gate in a sweep. Units of area will be the 
+        same as those of the range variable, squared.
+
+        Assumptions:
+            1. Azimuth data is in degrees 
+
+        Parameters
+        ----------
+        sweep : int
+            Sweep number to retrieve gate locations from, 0 based.
+        
+        Returns
+        -------
+        area : 2D array of size (ngates - 1, nrays - 1)
+            Array containing the area (in m * m) of each gate in the sweep.
+        """
+        s = self.get_slice(sweep)
+        azimuths = self.azimuth['data'][s]
+        ranges = self.range['data']
+
+        circular_area = np.pi * ranges ** 2
+        annular_area = np.diff(circular_area)
+
+        d_azimuths = np.diff(azimuths) / 360. # Fraction of a full circle
+        
+        dca, daz = np.meshgrid(annular_area,d_azimuths)
+
+        area = dca * daz
+        return area
+
     def get_gate_lat_lon_alt(self, sweep, reset_gate_coords=False,
                              filter_transitions=False):
         """
