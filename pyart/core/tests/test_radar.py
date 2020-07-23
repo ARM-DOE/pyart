@@ -361,6 +361,16 @@ def test_get_methods():
     pytest.raises(Exception, radar.get_nyquist_vel, 0)
 
 
+def test_get_gate_area():
+    radar = pyart.testing.make_empty_ppi_radar(5, 4, 2)
+    radar.azimuth['data'][:] = [0, 90, 180, 270, 0, 90, 180, 270]
+    radar.elevation['data'][:] = [0, 0, 0, 0, 10, 10, 10, 10]
+    radar.range['data'][:] = [5, 15, 25, 35, 45]
+    area = radar.get_gate_area(0)
+    assert_allclose(
+        area[0], [157.07964, 314.1593, 471.23892, 628.3185], atol=1e-3)
+
+
 def test_extract_sweeps():
     radar = pyart.testing.make_empty_ppi_radar(100, 360, 3)
     radar.fields['reflectivity'] = {'data': np.zeros((1080, 100))}

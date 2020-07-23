@@ -502,17 +502,18 @@ class Radar(object):
         same as those of the range variable, squared.
 
         Assumptions:
-            1. Azimuth data is in degrees 
+            1. Azimuth data is in degrees.
 
         Parameters
         ----------
         sweep : int
             Sweep number to retrieve gate locations from, 0 based.
-        
+
         Returns
         -------
         area : 2D array of size (ngates - 1, nrays - 1)
             Array containing the area (in m * m) of each gate in the sweep.
+
         """
         s = self.get_slice(sweep)
         azimuths = self.azimuth['data'][s]
@@ -522,7 +523,7 @@ class Radar(object):
         annular_area = np.diff(circular_area)
 
         d_azimuths = np.diff(azimuths) / 360. # Fraction of a full circle
-        
+
         dca, daz = np.meshgrid(annular_area,d_azimuths)
 
         area = dca * daz
