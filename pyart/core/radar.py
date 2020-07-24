@@ -526,7 +526,7 @@ class Radar(object):
 
         dca, daz = np.meshgrid(annular_area,d_azimuths)
 
-        area = dca * daz
+        area = np.abs(dca * daz)
         return area
 
     def get_gate_lat_lon_alt(self, sweep, reset_gate_coords=False,
