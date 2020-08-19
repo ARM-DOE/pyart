@@ -105,8 +105,6 @@ def grid_from_radars(radars, grid_shape, grid_limits,
                 if key == 'data':
                     continue
                 fields[field][key] = first_radar.fields[field][key]
-    
-
 
     # time dictionaries
     time = get_metadata('grid_time')
@@ -171,6 +169,7 @@ def grid_from_radars(radars, grid_shape, grid_limits,
 
     projection = kwargs.pop('grid_projection', None)
 
+    # Copies radar field dtypes to grid field dtypes if True.
     if copy_field_dtypes:
         for field in fields.keys():
             if field == 'ROI':
