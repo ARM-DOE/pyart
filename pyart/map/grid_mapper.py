@@ -21,7 +21,8 @@ from .gates_to_grid import map_gates_to_grid
 
 
 def grid_from_radars(radars, grid_shape, grid_limits,
-                     gridding_algo='map_gates_to_grid', **kwargs):
+                     gridding_algo='map_gates_to_grid', copy_field_dtypes=True,
+                     **kwargs):
     """
     Map one or more radars to a Cartesian grid returning a Grid object.
 
@@ -42,6 +43,9 @@ def grid_from_radars(radars, grid_shape, grid_limits,
         a radius of influence for each grid point, 'map_gates_to_grid' maps
         each radar gate onto the grid using a radius of influence and is
         typically significantly faster.
+    copy_field_dtypes : bool
+        Whether or not to maintain the original dtypes found in the radar
+        fields, which will then be used in the grid fields.
 
     Returns
     -------
@@ -101,6 +105,8 @@ def grid_from_radars(radars, grid_shape, grid_limits,
                 if key == 'data':
                     continue
                 fields[field][key] = first_radar.fields[field][key]
+    
+
 
     # time dictionaries
     time = get_metadata('grid_time')
@@ -164,6 +170,14 @@ def grid_from_radars(radars, grid_shape, grid_limits,
     radar_name['data'] = np.array(names)
 
     projection = kwargs.pop('grid_projection', None)
+
+    if copy_field_dtypes:
+        for field in fields.keys():
+            if field == 'ROI':
+                continue
+            dtype = first_radar.fields[field]['data'].dtype
+            fields[
+                field]['data'] = fields[field]['data'].astype(dtype)
 
     return Grid(
         time, fields, metadata,
