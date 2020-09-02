@@ -58,9 +58,9 @@ DOWNLOAD_URL = "https://github.com/ARM-DOE/pyart"
 LICENSE = 'BSD'
 PLATFORMS = ["Linux", "Mac OS-X", "Unix"]
 MAJOR = 1
-MINOR = 11
-MICRO = 2
-ISRELEASED = True
+MINOR = 12
+MICRO = 0
+ISRELEASED = False
 VERSION = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 SCRIPTS = glob.glob('scripts/*')
 
