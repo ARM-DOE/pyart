@@ -249,7 +249,7 @@ class NEXRADLevel3File(object):
         if self.msg_header['code'] in ELEVATION_ANGLE:
             elevation = struct.unpack('>h', hw30)[0] * 0.1
         else:
-            elevation = None
+            elevation = 0.0
         return elevation
 
     def get_volume_start_datetime(self):
