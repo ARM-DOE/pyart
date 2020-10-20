@@ -664,7 +664,7 @@ DEFAULT_METADATA = {
 
     height_over_iso0: {
         'units': 'm',
-        'long_name': 'Height of radar beam'}
+        'long_name': 'Height of radar beam'},
 
     interpolated_profile: {
         'long_name': 'Interpolated profile',
