@@ -618,6 +618,24 @@ DEFAULT_METADATA = {
         'valid_max': 1.0,
         'coordinates': 'elevation azimuth range'},
 
+    specific_differential_attenuation: {
+        'units': 'dB/km',
+        'standard_name': 'specific_differential_attenuation',
+        'long_name': 'Specific Differential Attenuation',
+        'coordinates': 'elevation azimuth range'},
+
+    path_integrated_attenuation: {
+        'units': 'dB',
+        'standard_name': 'path_integrated_attenuation',
+        'long_name': 'Path Integrated Attenuation',
+        'coordinates': 'elevation azimuth range'},
+
+    path_integrated_differential_attenuation: {
+        'units': 'dB',
+        'standard_name': 'path_integrated_differential_attenuation',
+        'long_name': 'Path Integrated Differential Attenuation',
+        'coordinates': 'elevation azimuth range'},
+
     # Textures
     differential_phase_texture: {
         'units': 'degrees',
@@ -643,9 +661,14 @@ DEFAULT_METADATA = {
 
     # profile variables
     height: {
+        'units': 'm',
         'long_name': 'Height of radar beam',
-        'standard_name': 'height',
-        'units': 'meters'},
+        'standard_name': 'height'},
+
+    height_over_iso0: {
+        'units': 'm',
+        'long_name': 'Height of radar beam',
+        'standard_name': 'height_over_iso0'},
 
     interpolated_profile: {
         'long_name': 'Interpolated profile',
