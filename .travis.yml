@@ -36,7 +36,6 @@ matrix:
       env:
         - PYTHON_VERSION="3.9"
         - PYTEST_ARGS="-v --pyargs pyart"
-
 install: source continuous_integration/install.sh
 script: eval xvfb-run pytest $PYTEST_ARGS
 after_success:

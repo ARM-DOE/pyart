@@ -1,3 +1,4 @@
+#cython: language_level=3
 """
 A class and supporting functions for reading Sigmet (raw format) files.
 
@@ -31,8 +32,8 @@ cdef class SigmetFile:
     ingest_header : dict
         Ingest_header structure.
     ingest_data_headers : list of dict
-        Ingest_data_header structures for each data type.  Indexed by the
-        data type name (str).  None when data has not yet been read.
+        Ingest_data_header structures for each data type. Indexed by the
+        data type name (str). None when data has not yet been read.
     data_types : list
         List of data types (int) in the file.
     data_type_names : list
@@ -103,8 +104,8 @@ cdef class SigmetFile:
         ----------
         full_xhdr : bool
             True to return the full extended headers if they exist padded with
-            ones.  False will return a length 1 extended header converted to
-            int32.  This is useful when the file contains a customer specified
+            ones. False will return a length 1 extended header converted to
+            int32. This is useful when the file contains a customer specified
             extended header (for example aircraft radar).
 
         Returns
@@ -114,12 +115,11 @@ cdef class SigmetFile:
             Indexed by data type name (str).
         metadata : dict of dicts
             Arrays of 'azimuth_0', 'azimuth_1', 'elevation_0', 'elevation_1',
-            'nbins', and 'time' for each data type.  Indexed by data type name
-            (str).  Rays which were not collected are marked with a value of
+            'nbins', and 'time' for each data type. Indexed by data type name
+            (str). Rays which were not collected are marked with a value of
             -1 in the 'nbins' array.
 
         """
-
         # determine size of data
         nsweeps = self.ingest_header['task_configuration'][
             'task_scan_info']['number_sweeps']
@@ -225,8 +225,8 @@ cdef class SigmetFile:
         ----------
         full_xhdr : bool
             True to return the full extended headers if they exist padded with
-            ones.  False will return a length 1 extended header converted to
-            int32.  This is useful when the file contains a customer specified
+            ones. False will return a length 1 extended header converted to
+            int32. This is useful when the file contains a customer specified
             extended header (for example aircraft radar).
         raw_data : bool, optional
             True to return the raw_data for the given sweep, False to
@@ -243,7 +243,6 @@ cdef class SigmetFile:
             Sweep metadata for each data type in the same order as sweep_data.
 
         """
-
         # get the next record
         lead_record = self._fh.read(RECORD_SIZE)
         self._record_number += 1
