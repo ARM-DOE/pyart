@@ -33,6 +33,7 @@ matrix:
         - PYTEST_ARGS="-v --pyargs pyart"
         - FROM_RECIPE="true"
     - python: 3.9
+      env:
         - PYTHON_VERSION="3.9"
         - PYTEST_ARGS="-v --pyargs pyart"
 
