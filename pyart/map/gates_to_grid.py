@@ -103,6 +103,9 @@ def map_gates_to_grid(
 
         # Copy the field data and masks.
         # TODO method that does not copy field data into new array
+        if nfields == 0:
+            raise ValueError(
+                'There are 0 fields in the radar object to interpolate!')
         shape = (radar.nrays, radar.ngates, nfields)
         field_data = np.empty(shape, dtype='float32')
         field_mask = np.empty(shape, dtype='uint8')
