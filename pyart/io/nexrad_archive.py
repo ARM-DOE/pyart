@@ -13,7 +13,7 @@ from .common import make_time_unit_str, _test_arguments, prepare_for_read
 from .nexrad_level2 import NEXRADLevel2File
 from ..lazydict import LazyLoadDict
 from .nexrad_common import get_nexrad_location
-from .nexrad_interpolate import _fast_interpolate_scan
+from .nexrad_interpolate import _fast_interpolate_scan_4, _fast_interpolate_scan_2
 
 
 def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
@@ -134,6 +134,9 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
 
     if nfile._msg_type == '1' and station is not None:
         lat, lon, alt = get_nexrad_location(station)
+    elif 'icao' in nfile.volume_header.keys() and nfile.volume_header['icao'].decode()[0] == 'T':
+        lat, lon, alt = get_nexrad_location(
+            nfile.volume_header['icao'].decode())
     else:
         lat, lon, alt = nfile.location()
     latitude['data'] = np.array([lat], dtype='float64')
@@ -212,8 +215,12 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
                     moment_ngates = scan_info[scan]['ngates'][idx]
                     start = sweep_start_ray_index['data'][scan]
                     end = sweep_end_ray_index['data'][scan]
+                    if interpolate['multiplier'] == '4':
+                        multiplier = '4'
+                    else:
+                        multiplier = '2'
                     _interpolate_scan(mdata, start, end, moment_ngates,
-                                      linear_interp)
+                                      multiplier, linear_interp)
             dic['data'] = mdata
         fields[field_name] = dic
 
@@ -276,22 +283,30 @@ def _find_scans_to_interp(scan_info, first_gate, gate_spacing, filemetadata):
                 interpolate[moment].append(scan_num)
                 # for proper interpolation the gate spacing of the scan to be
                 # interpolated should be 1/4th the spacing of the radar
-                assert spacing == gate_spacing * 4
-                # and the first gate for the scan should be one and half times
-                # the radar spacing past the radar first gate
-                assert first_gate + 1.5 * gate_spacing == first
+                if spacing == gate_spacing * 4:
+                    interpolate['multiplier'] = '4'
+                elif spacing == gate_spacing * 2:
+                    interpolate['multiplier'] = '2'
+                else:
+                    raise ValueError('Gate spacing is neither 1/4 or 1/2')
+                #assert first_gate + 1.5 * gate_spacing == first
     # remove moments with no scans needing interpolation
     interpolate = dict([(k, v) for k, v in interpolate.items() if len(v) != 0])
     return interpolate
 
 
-def _interpolate_scan(mdata, start, end, moment_ngates, linear_interp=True):
+def _interpolate_scan(mdata, start, end, moment_ngates, multiplier,
+                      linear_interp=True):
     """ Interpolate a single NEXRAD moment scan from 1000 m to 250 m. """
     fill_value = -9999
     data = mdata.filled(fill_value)
     scratch_ray = np.empty((data.shape[1], ), dtype=data.dtype)
-    _fast_interpolate_scan(data, scratch_ray, fill_value,
-                           start, end, moment_ngates, linear_interp)
+    if multiplier == '4':
+        _fast_interpolate_scan_4(data, scratch_ray, fill_value,
+                                 start, end, moment_ngates, linear_interp)
+    else:
+        _fast_interpolate_scan_2(data, scratch_ray, fill_value,
+                                 start, end, moment_ngates, linear_interp)
     mdata[:] = np.ma.array(data, mask=(data == fill_value))
 
 
