@@ -457,11 +457,11 @@ class GateFilter(object):
         if exclude_based:
             # start with all gates included, exclude gates based on a set
             # of rules using the exclude_ methods.
-            self._gate_excluded = np.zeros(shape, dtype='bool')
+            self._gate_excluded = np.zeros(shape, dtype=np.bool_)
         else:
             # start with all gates excluded, include gates based on a set
             # of rules using the include_ methods.
-            self._gate_excluded = np.ones(shape, dtype='bool')
+            self._gate_excluded = np.ones(shape, dtype=np.bool_)
 
     # Implemetation is based on marking excluded gates stored in the private
     # _gate_excluded attribute. The gate_included attribute can be found
