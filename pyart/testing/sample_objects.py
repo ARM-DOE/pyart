@@ -10,6 +10,7 @@ from .sample_files import _EXAMPLE_RAYS_FILE
 from ..config import get_metadata
 from ..core.radar import Radar
 from ..core.grid import Grid
+from ..exceptions import MissingOptionalDependency
 
 try:
     import xarray as xr
