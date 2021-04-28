@@ -662,7 +662,8 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
             elif weighting_function.upper() == 'BARNES':
                 warnings.warn("Barnes weighting function is deprecated."
                               " Please use Barnes 2 to be consistent with"
-                              " Pauley and Wu 1990.", DeprecationWarning)
+                              " Pauley and Wu 1990. Default will be switched"
+                              " to Barnes2 on June 1st.", DeprecationWarning)
                 weights = np.exp(-dist2 / (2.0 * r2)) + 1e-5
             elif weighting_function.upper() == 'BARNES2':
                 weights = np.exp(-dist2 / (r2/4)) + 1e-5
