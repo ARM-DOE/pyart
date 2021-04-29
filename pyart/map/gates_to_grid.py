@@ -72,6 +72,9 @@ def map_gates_to_grid(
     if isinstance(radars, Radar):
         radars = (radars, )
 
+    if len(radars) == 0:
+        raise ValueError('Length of radars tuple cannot be zero')
+
     skip_transform = False
     if len(radars) == 1 and grid_origin_alt is None and grid_origin is None:
         skip_transform = True

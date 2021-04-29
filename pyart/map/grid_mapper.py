@@ -77,6 +77,9 @@ def grid_from_radars(radars, grid_shape, grid_limits,
     if isinstance(radars, Radar):
         radars = (radars, )
 
+    if len(radars) == 0:
+        raise ValueError('Length of radars tuple cannot be zero')
+
     # map the radar(s) to a cartesian grid
     if gridding_algo == 'map_to_grid':
         grids = map_to_grid(radars, grid_shape, grid_limits, **kwargs)
