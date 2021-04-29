@@ -399,6 +399,9 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
     # make a tuple if passed a radar object as the first argument
     if isinstance(radars, Radar):
         radars = (radars, )
+        
+    if len(radars) == 0:
+        raise ValueError('Length of radars tuple cannot be zero')
 
     skip_transform = False
     if len(radars) == 1 and grid_origin_alt is None and grid_origin is None:
