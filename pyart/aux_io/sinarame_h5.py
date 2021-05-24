@@ -8,9 +8,9 @@ import glob
 import os
 
 try:
-    from netcdftime import utime
+    from netcdftime import num2date
 except ImportError:
-    from cftime import utime
+    from cftime import num2date
 
 import numpy as np
 
@@ -430,11 +430,10 @@ def write_sinarame_cfradial(path):
                     radar = read_sinarame_h5(file, file_field_names=True)
 
         cal_temps = u"gregorian"
-        cdftime = utime(radar.time['units'])
 
-        time1 = cdftime.num2date(radar.time['data'][0]).strftime(
+        time1 = num2date(radar.time['data'][0], radar.time['units']).strftime(
             '%Y%m%d_%H%M%S')
-        time2 = cdftime.num2date(radar.time['data'][-1]).strftime(
+        time2 = num2date(radar.time['data'][-1], radar.time['units']).strftime(
             '%Y%m%d_%H%M%S')
 
         radar._DeflateLevel = 5
