@@ -432,11 +432,11 @@ def write_sinarame_cfradial(path):
         cal_temps = u"gregorian"
 
         time1 = num2date(radar.time['data'][0], radar.time['units'],
-                         only_use_cftime_datetimes=True,
+                         calendar='standard', only_use_cftime_datetimes=True,
                          only_use_python_datetimes=False).strftime(
             '%Y%m%d_%H%M%S')
         time2 = num2date(radar.time['data'][-1], radar.time['units'],
-                         only_use_cftime_datetimes=True,
+                         calendar='standard', only_use_cftime_datetimes=True,
                          only_use_python_datetimes=False).strftime(
             '%Y%m%d_%H%M%S')
 
