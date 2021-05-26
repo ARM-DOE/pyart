@@ -1111,7 +1111,7 @@ class RadarDisplay(object):
         ax.plot(x, y, 'k-')  # verticle
         ax.plot(y, x, 'k-')  # horizontal
 
-def plot_colorbar(self, mappable=None, field=None, label=None,
+    def plot_colorbar(self, mappable=None, field=None, label=None,
                       orient='vertical', cax=None, ax=None, fig=None,
                       **kwargs):
         """
