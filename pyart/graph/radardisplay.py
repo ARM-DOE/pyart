@@ -1113,7 +1113,7 @@ class RadarDisplay(object):
 
     def plot_colorbar(self, mappable=None, field=None, label=None,
                       orient='vertical', cax=None, ax=None, fig=None,
-                      ticks=None, ticklabs=None):
+                      **kwargs):
         """
         Plot a colorbar.
 
@@ -1139,8 +1139,8 @@ class RadarDisplay(object):
             Colorbar custom tick label locations.
         ticklabs : array
             Colorbar custom tick labels.
-
         """
+
         if fig is None:
             fig = plt.gcf()
         if mappable is None:
@@ -1150,7 +1150,8 @@ class RadarDisplay(object):
                 field = self.plot_vars[-1]
             label = self._get_colorbar_label(field)
 
-        cb = fig.colorbar(mappable, orientation=orient, ax=ax, cax=cax)
+        cb = fig.colorbar(mappable, orientation=orient, ax=ax, cax=cax, **kwargs)
+
         if ticks is not None:
             cb.set_ticks(ticks)
         if ticklabs:
@@ -1158,6 +1159,7 @@ class RadarDisplay(object):
         cb.set_label(label)
 
         self.cbs.append(cb)
+
 
     ##########################
     # Plot adjusting methods #
