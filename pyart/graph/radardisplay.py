@@ -1113,7 +1113,7 @@ class RadarDisplay(object):
 
     def plot_colorbar(self, mappable=None, field=None, label=None,
                       orient='vertical', cax=None, ax=None, fig=None,
-                      **kwargs):
+                      ticks=None, ticklabs=None, **kwargs):
         """
         Plot a colorbar.
 
