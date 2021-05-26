@@ -1111,10 +1111,9 @@ class RadarDisplay(object):
         ax.plot(x, y, 'k-')  # verticle
         ax.plot(y, x, 'k-')  # horizontal
 
-    def plot_colorbar(self, mappable=None, field=None, label=None,
+def plot_colorbar(self, mappable=None, field=None, label=None,
                       orient='vertical', cax=None, ax=None, fig=None,
-                      ticks=None, ticklabs=None, fraction=0.15, shrink=1.0,
-                      aspect=20, pad=0.05, anchor=(0.0, 0.5), panchor=(1.0, 0.5)):
+                      **kwargs):
         """
         Plot a colorbar.
 
@@ -1140,31 +1139,7 @@ class RadarDisplay(object):
             Colorbar custom tick label locations.
         ticklabs : array
             Colorbar custom tick labels.
-        fraction : float
-            Fraction of original axes to use for colorbar. default: 0.15
-        shrink : float
-            Fraction by which to multiply the size of the colorbar. default: 1.0
-        aspect : float
-            Ratio of long to short dimensions. default: 20
-        pad : float
-            Fraction of original axes between colorbar and new image axes. 0.05
-            if vertical, 0.15 if horizontal
-        anchor : (float, float)
-            The anchor point of the colorbar axes. Defaults to (0.0, 0.5) if
-            vertical; (0.5, 1.0) if horizontal.
-        panchor : (float, float), or False
-            The anchor point of the colorbar parent axes. If False, the parent
-            axes' anchor will be unchanged. Defaults to (1.0, 0.5) if vertical;
-            (0.5, 0.0) if horizontal.
         """
-
-        # Update defaults based on orient
-        if orient == 'horizontal' and pad == 0.05:
-            pad = 0.15
-        if orient == 'horizontal' and anchor == (0.0, 0.5):
-            anchor = (0.5, 1.0)
-        if orient == 'horizontal' and panchor == (1.0, 0.5):
-            panchor = (0.5, 0.0)
 
         if fig is None:
             fig = plt.gcf()
@@ -1175,9 +1150,7 @@ class RadarDisplay(object):
                 field = self.plot_vars[-1]
             label = self._get_colorbar_label(field)
 
-        cb = fig.colorbar(mappable, orientation=orient, ax=ax, cax=cax,
-                         fraction=fraction, shrink=shrink, aspect=aspect,
-                         pad=pad, anchor=anchor, panchor=panchor)
+        cb = fig.colorbar(mappable, orientation=orient, ax=ax, cax=cax, **kwargs)
 
         if ticks is not None:
             cb.set_ticks(ticks)
