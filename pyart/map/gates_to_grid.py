@@ -72,6 +72,9 @@ def map_gates_to_grid(
     if isinstance(radars, Radar):
         radars = (radars, )
 
+    if len(radars) == 0:
+        raise ValueError('Length of radars tuple cannot be zero')
+
     skip_transform = False
     if len(radars) == 1 and grid_origin_alt is None and grid_origin is None:
         skip_transform = True
@@ -162,7 +165,8 @@ def _detemine_cy_weighting_func(weighting_function):
     elif weighting_function.upper() == 'BARNES':
         warnings.warn("Barnes weighting function is deprecated."
                       " Please use Barnes 2 to be consistent with"
-                      " Pauley and Wu 1990.", DeprecationWarning)
+                      " Pauley and Wu 1990. Default will be switched"
+                      " to Barnes2 on June 1st.", DeprecationWarning)
         cy_weighting_function = 0
     else:
         raise ValueError('unknown weighting_function')

@@ -21,7 +21,8 @@ from .gates_to_grid import map_gates_to_grid
 
 
 def grid_from_radars(radars, grid_shape, grid_limits,
-                     gridding_algo='map_gates_to_grid', **kwargs):
+                     gridding_algo='map_gates_to_grid', copy_field_dtypes=True,
+                     **kwargs):
     """
     Map one or more radars to a Cartesian grid returning a Grid object.
 
@@ -42,6 +43,9 @@ def grid_from_radars(radars, grid_shape, grid_limits,
         a radius of influence for each grid point, 'map_gates_to_grid' maps
         each radar gate onto the grid using a radius of influence and is
         typically significantly faster.
+    copy_field_dtypes : bool
+        Whether or not to maintain the original dtypes found in the radar
+        fields, which will then be used in the grid fields.
 
     Returns
     -------
@@ -72,6 +76,9 @@ def grid_from_radars(radars, grid_shape, grid_limits,
     # make a tuple if passed a radar object as the first argument
     if isinstance(radars, Radar):
         radars = (radars, )
+
+    if len(radars) == 0:
+        raise ValueError('Length of radars tuple cannot be zero')
 
     # map the radar(s) to a cartesian grid
     if gridding_algo == 'map_to_grid':
@@ -164,6 +171,15 @@ def grid_from_radars(radars, grid_shape, grid_limits,
     radar_name['data'] = np.array(names)
 
     projection = kwargs.pop('grid_projection', None)
+
+    # Copies radar field dtypes to grid field dtypes if True.
+    if copy_field_dtypes:
+        for field in fields.keys():
+            if field == 'ROI':
+                continue
+            dtype = first_radar.fields[field]['data'].dtype
+            fields[
+                field]['data'] = fields[field]['data'].astype(dtype)
 
     return Grid(
         time, fields, metadata,
@@ -383,6 +399,9 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
     # make a tuple if passed a radar object as the first argument
     if isinstance(radars, Radar):
         radars = (radars, )
+        
+    if len(radars) == 0:
+        raise ValueError('Length of radars tuple cannot be zero')
 
     skip_transform = False
     if len(radars) == 1 and grid_origin_alt is None and grid_origin is None:
@@ -649,7 +668,8 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
             elif weighting_function.upper() == 'BARNES':
                 warnings.warn("Barnes weighting function is deprecated."
                               " Please use Barnes 2 to be consistent with"
-                              " Pauley and Wu 1990.", DeprecationWarning)
+                              " Pauley and Wu 1990. Default will be switched"
+                              " to Barnes2 on June 1st.", DeprecationWarning)
                 weights = np.exp(-dist2 / (2.0 * r2)) + 1e-5
             elif weighting_function.upper() == 'BARNES2':
                 weights = np.exp(-dist2 / (r2/4)) + 1e-5

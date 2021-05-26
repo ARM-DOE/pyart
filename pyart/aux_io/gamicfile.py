@@ -112,8 +112,12 @@ class GAMICFile(object):
 
     def moment_names(self, scan0_groups):
         """ Return a list of moment names for a list of scan0 groups. """
-        return [self._hfile['/scan0'][k].attrs['moment'].decode('utf-8') for
-                k in scan0_groups]
+        if hasattr(
+            self._hfile['/scan0'][scan0_groups[0]].attrs['moment'], 'decode'):
+            return [self._hfile['/scan0'][k].attrs['moment'].decode('utf-8') for
+                    k in scan0_groups]
+        else:
+            return [self._hfile['/scan0'][k].attrs['moment'] for k in scan0_groups]
 
     def is_field_in_ray_header(self, field):
         """ True if field is present in ray_header, False otherwise. """
@@ -149,14 +153,16 @@ def _get_gamic_sweep_data(group):
     dyn_range_max = group.attrs['dyn_range_max']
     raw_data = group[:]
     fmt = group.attrs['format']
-    if fmt == b'UV16':
+    if hasattr(fmt, 'decode'):
+        fmt.decode('UTF-8')
+    if fmt == 'UV16':
         # unsigned 16-bit integer data, 0 indicates a masked value
         assert raw_data.dtype == np.uint16
         scale = (dyn_range_max - dyn_range_min) / 65535.
         offset = dyn_range_min
         sweep_data = np.ma.masked_array(
             raw_data * scale + offset, mask=(raw_data == 0), dtype='float32')
-    elif fmt == b'UV8':
+    elif fmt == 'UV8':
         # unsigned 8-bit integer data, 0 indicates a masked value
         assert raw_data.dtype == np.uint8
         scale = (dyn_range_max - dyn_range_min) / 255.
