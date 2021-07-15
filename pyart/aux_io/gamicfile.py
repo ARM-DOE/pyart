@@ -154,7 +154,7 @@ def _get_gamic_sweep_data(group):
     raw_data = group[:]
     fmt = group.attrs['format']
     if hasattr(fmt, 'decode'):
-        fmt.decode('UTF-8')
+        fmt = fmt.decode('UTF-8')
     if fmt == 'UV16':
         # unsigned 16-bit integer data, 0 indicates a masked value
         assert raw_data.dtype == np.uint16
