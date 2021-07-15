@@ -169,6 +169,10 @@ def _get_gamic_sweep_data(group):
         offset = dyn_range_min
         sweep_data = np.ma.masked_array(
             raw_data * scale + offset, mask=(raw_data == 0), dtype='float32')
+    elif fmt == 'F':
+        assert raw_data.dtype.type == np.float32
+        sweep_data = np.ma.masked_array(
+            raw_data, mask=np.isnan(raw_data), dtype='float32')
     else:
         raise NotImplementedError('GAMIC data format: %s', fmt)
     return sweep_data
