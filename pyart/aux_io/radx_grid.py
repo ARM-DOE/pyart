@@ -1,16 +1,7 @@
 """
-pyart.io.grid_io
-================
+Reading and RadX Grid objects.
 
-Reading and writing Grid objects.
-
-.. autosummary::
-    :toctree: generated/
-
-    read_grid
-    write_grid
-    read_legacy_grid
-    _make_coordinatesystem_dict
+    read_radx_grid
 
 """
 
@@ -20,9 +11,9 @@ import numpy as np
 import netCDF4
 import datetime
 
-from ..core import Grid  #changed from relative path in grid_io to work in local dir
-from ..io.cfradial import _ncvar_to_dict, _create_ncvar  #changed from relative path in grid_io to work in local dir
-from ..io.common import _test_arguments  #changed from relative path in grid_io to work in local dir
+from ..core import Grid
+from ..io.cfradial import _ncvar_to_dict, _create_ncvar
+from ..io.common import _test_arguments
 
 
 def read_radx_grid(filename, exclude_fields=None, **kwargs):
