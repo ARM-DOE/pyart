@@ -315,7 +315,7 @@ class Grid(object):
                                             'y' : (['y'], y),
                                             'x' : (['x'], x)})
             for meta in list(self.fields[field].keys()):
-                if meta is not 'data':
+                if meta != 'data':
                     data.attrs.update({meta: self.fields[field][meta]})
 
             ds[field] = data
