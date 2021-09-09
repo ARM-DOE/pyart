@@ -181,6 +181,8 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
         # Python 3, all strings are already unicode.
         mode = netCDF4.chartostring(sweep_mode['data'][0])[()]
 
+    mode = mode.strip()
+
     # options specified in the CF/Radial standard
     if mode == 'rhi':
         scan_type = 'rhi'
