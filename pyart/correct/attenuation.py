@@ -591,7 +591,7 @@ def get_mask_fzl(radar, fzl=None, doc=None, min_temp=0., max_h_iso0=0.,
             warn('Freezing level height not specified. ' +
                  'Using default '+str(fzl)+' [m]')
         end_gate_arr = np.zeros(radar.nrays, dtype='int32')
-        mask_fzl = np.zeros((radar.nrays, radar.ngates), dtype=np.bool)
+        mask_fzl = np.zeros((radar.nrays, radar.ngates), dtype=np.bool_)
         for sweep in range(radar.nsweeps):
             end_gate, start_ray, end_ray = (
                 det_process_range(radar, sweep, fzl, doc=doc))
