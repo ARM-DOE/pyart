@@ -59,8 +59,8 @@ LICENSE = 'BSD'
 PLATFORMS = ["Linux", "Mac OS-X", "Unix"]
 MAJOR = 1
 MINOR = 11
-MICRO = 6
-ISRELEASED = True
+MICRO = 7
+ISRELEASED = False
 VERSION = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 SCRIPTS = glob.glob('scripts/*')
 
