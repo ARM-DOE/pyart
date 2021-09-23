@@ -19,7 +19,7 @@ def map_gates_to_grid(
         radars, grid_shape, grid_limits, grid_origin=None,
         grid_origin_alt=None, grid_projection=None,
         fields=None, gatefilters=False, map_roi=True,
-        weighting_function='Barnes', toa=17000.0, roi_func='dist_beam',
+        weighting_function='Barnes2', toa=17000.0, roi_func='dist_beam',
         constant_roi=None, z_factor=0.05, xy_factor=0.02, min_radius=500.0,
         h_factor=1.0, nb=1.5, bsp=1.0, **kwargs):
     """

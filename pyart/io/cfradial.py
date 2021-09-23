@@ -305,7 +305,7 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
     if radar_calibration == {}:
         radar_calibration = None
 
-    # do not close file is field loading is delayed
+    # do not close file if field loading is delayed
     if not delay_field_loading:
         ncobj.close()
     return Radar(
