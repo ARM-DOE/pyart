@@ -295,19 +295,16 @@ def _get_instrument_params(gfile, filemetadata, pulse_width):
     dic = filemetadata('pulse_width')
     pw_names = ['pulse_width_us', 'pulse_width_mks', 'pulse_width']
     pw_name = 'pulse_width_us'
+    dic['data'] = None
     for pw_name in pw_names:
         if gfile.is_attr_in_group('/scan0/how', pw_name):
+            if pw_name == 'pulse_width':
+                dic['data'] = gfile.sweep_expand(
+                    pulse_width[gfile.how_attrs(pw_name, 'int')[0]] * 1e-6)
+            else:
+                dic['data'] = gfile.sweep_expand(
+                    gfile.how_attrs(pw_name, 'float32') * 1e-6)
             break
-    if pw_name == 'pulse_width':
-        if not pulse_width:
-            message = ("read_gamic() is missing 'pulse_width' "
-                       "keyword argument")
-            raise TypeError(message)
-        dic['data'] = gfile.sweep_expand(
-            pulse_width[gfile.how_attrs(pw_name, 'int')[0]] * 1e-6)
-    else:
-        dic['data'] = gfile.sweep_expand(
-            gfile.how_attrs(pw_name, 'float32') * 1e-6)
     instrument_params['pulse_width'] = dic
 
     dic = filemetadata('prt')
