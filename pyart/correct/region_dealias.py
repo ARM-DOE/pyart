@@ -238,8 +238,7 @@ def dealias_region_based(
 
                 nyq_adjustments = fmin_l_bfgs_b(
                     cost_function, gfold*np.ones((nfeatures_corr)), disp=True,
-                    fprime=gradient, bounds=bounds_list, maxiter=200,
-                    )
+                    fprime=gradient, bounds=bounds_list, maxiter=200, pgtol=nyquist_interval)
 
                 i = 0
                 for reg in range(1, nfeatures_corr):
@@ -432,23 +431,9 @@ def _cost_function(nyq_vector, vels_slice_means,
     for reg in range(nfeatures):
         add_value = 0
         # Deviance from sounding
-        add_value = 1*(vels_slice_means[reg] +
-                       np.round(nyq_vector[i])*v_nyq_vel -
-                       svels_slice_means[reg])**2
-
-        # Region continuity
-        vels_without_cur = np.delete(vels_slice_means, reg)
-        diffs = np.square(vels_slice_means[reg]-vels_without_cur)
-        if len(diffs) > 0:
-            the_min = np.argmin(diffs)
-            vel_wo_cur = vels_without_cur[the_min]
-        else:
-            vel_wo_cur = vels_slice_means[reg]
-        add_value2 = np.square(vels_slice_means[reg] +
-                               np.round(nyq_vector[i])*v_nyq_vel -
-                               vel_wo_cur)
-        if np.isfinite(add_value2):
-            add_value += .1*add_value2
+        add_value = (vels_slice_means[reg] +
+                        np.round(nyq_vector[i]) * v_nyq_vel -
+                        svels_slice_means[reg])**2
 
         if np.isfinite(add_value):
             cost += add_value
@@ -472,19 +457,15 @@ def _gradient(nyq_vector, vels_slice_means, svels_slice_means,
 
         # Regional continuity
         vels_without_cur = np.delete(vels_slice_means, reg)
-        diffs = np.square(vels_slice_means[reg]-vels_without_cur)
+        diffs = np.square(vels_slice_means[reg] - vels_without_cur)
         if len(diffs) > 0:
             the_min = np.argmin(diffs)
             vel_wo_cur = vels_without_cur[the_min]
         else:
             vel_wo_cur = vels_slice_means[reg]
 
-        add_value2 = (vels_slice_means[reg] +
-                      np.round(nyq_vector[i])*v_nyq_vel -
-                      vel_wo_cur)
-
-        if np.isfinite(add_value2):
-            gradient_vector[i] += 2*.1*add_value2*v_nyq_vel
+        if the_min < v_nyq_vel:
+            gradient_vector[i] = 0
 
         i = i + 1
 
