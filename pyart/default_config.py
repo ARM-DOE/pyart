@@ -977,6 +977,12 @@ sigmet_field_mapping = {
     'UNKNOWN_64': None,                         # Unknown field
     'UNKNOWN_65': None,                         # Unknown field
     'UNKNOWN_66': None,                         # Unknown field
+    'PMI8': None,                               # (75) Polarimetric Meteo Index
+    'PMI16': None,                              # (76) Polarimetric Meteo Index
+    'LOG8': None,                               # (77) Log receiver SNR
+    'LOG16': None,                              # (78) Log receiver SNR
+    'CSP8': None,                               # (77) Doppler channel clutter power
+    'CSP16': None,                              # (78) Doppler channel clutter power
     # there may be more field, add as needed
 }
 
