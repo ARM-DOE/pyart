@@ -30,9 +30,9 @@ ODIM_H5_FIELD_NAMES = {
     'KDP': 'specific_differential_phase',
     'SQI': 'normalized_coherent_power',
     'SNR': 'signal_to_noise_ratio',
-    'VRAD': 'velocity', # radial velocity, marked for deprecation in ODIM HDF5 2.2
-    'VRADH': 'velocity', # radial velocity, horizontal polarisation
-    'VRADV': 'velocity', # radial velocity, vertical polarisation
+    'VRAD': 'velocity',  # radial velocity, marked for deprecation in ODIM HDF5 2.2
+    'VRADH': 'velocity',  # radial velocity, horizontal polarisation
+    'VRADV': 'velocity',  # radial velocity, vertical polarisation
     'WRAD': 'spectrum_width',
     'QIND': 'quality_index',
 }
@@ -40,7 +40,8 @@ ODIM_H5_FIELD_NAMES = {
 
 def read_odim_h5(filename, field_names=None, additional_metadata=None,
                  file_field_names=False, exclude_fields=None,
-                 include_fields=None, **kwargs):
+                 include_fields=None, include_datasets=None,
+                 exclude_datasets=None, **kwargs):
     """
     Read a ODIM_H5 file.
 
@@ -73,7 +74,14 @@ def read_odim_h5(filename, field_names=None, additional_metadata=None,
         List of fields to include from the radar object. This is applied
         after the `file_field_names` and `field_names` parameters. Set
         to None to include all fields not specified by exclude_fields.
-
+    include_datasets : list or None, optional
+        List of datasets to include from the HDF5 file, given
+        as ["dataset1", "dataset2", ...]. Set to None to include all datasets
+        not specified by exclude_datasets.
+    exclude_datasets : list or None, optional
+        List of datasets to exclude from the HDF5 file, given
+        as ["dataset1", "dataset2", ...]. Set to None to include all datasets
+        specified by include_datasets.
 
     Returns
     -------
@@ -113,7 +121,14 @@ def read_odim_h5(filename, field_names=None, additional_metadata=None,
 
         # determine the number of sweeps by the number of groups which
         # begin with dataset
-        datasets = [k for k in hfile if k.startswith('dataset')]
+        if include_datasets is not None:
+            datasets = [k for k in hfile if k.startswith('dataset')
+                        and k in include_datasets]
+        elif exclude_datasets is not None:
+            datasets = [k for k in hfile if k.startswith('dataset')
+                        and k not in exclude_datasets]
+        else:
+            datasets = [k for k in hfile if k.startswith('dataset')]
         datasets.sort(key=lambda x: int(x[7:]))
         nsweeps = len(datasets)
 
