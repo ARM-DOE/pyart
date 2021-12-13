@@ -9,5 +9,6 @@ from .grid_mapper import example_roi_func_constant
 from .grid_mapper import example_roi_func_dist
 from .grid_mapper import example_roi_func_dist_beam
 from .gates_to_grid import map_gates_to_grid
+from .gatemapper import GateMapper
 
 __all__ = [s for s in dir() if not s.startswith('_')]
