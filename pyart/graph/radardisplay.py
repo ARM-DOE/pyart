@@ -1549,9 +1549,13 @@ class RadarDisplay(object):
         elevation = self.elevations[prhi_rays]
 
         data = data[prhi_rays]
+        rng = self.ranges
+
+        if edges and len(prhi_rays) == 1:
+            rng = self.ranges[:-1]
 
         x, y, z = antenna_vectors_to_cartesian(
-            self.ranges, azimuth, elevation, edges=edges)
+            rng, azimuth, elevation, edges=edges)
         x = (x + self.shift[0]) / 1000.0
         y = (y + self.shift[1]) / 1000.0
         z = z / 1000.0
