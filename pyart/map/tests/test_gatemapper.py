@@ -12,6 +12,6 @@ def test_gatemapper():
     gate_mapper = pyart.map.GateMapper(new_radar, old_radar)
     mapped_radar = gate_mapper.mapped_radar(['reflectivity'])
     assert gate_mapper[20, 20] == (25, 27)
-    assert mapped_radar.fields['reflectivity']['data'][25, 27] == old_radar.fields['reflectivity']['data'][20, 20]
-
-
+    assert mapped_radar.fields[
+        'reflectivity']['data'][25, 27] == old_radar.fields[
+                'reflectivity']['data'][20, 20]
