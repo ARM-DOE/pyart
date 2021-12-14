@@ -4,6 +4,7 @@ coordinates to Cartesian coordinates.
 
 """
 
+from .gate_mapper import GateMapper
 from .grid_mapper import map_to_grid, grid_from_radars
 from .grid_mapper import example_roi_func_constant
 from .grid_mapper import example_roi_func_dist
