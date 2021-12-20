@@ -19,10 +19,10 @@ from ..exceptions import MissingOptionalDependency
 
 
 ODIM_H5_FIELD_NAMES = {
-    'TH': 'total_power',        # uncorrected reflectivity, horizontal
-    'TV': 'total_power',        # uncorrected reflectivity, vertical
-    'DBZH': 'reflectivity',     # corrected reflectivity, horizontal
-    'DBZV': 'reflectivity',     # corrected reflectivity, vertical
+    'TH': 'total_power_horizontal',        # uncorrected reflectivity, horizontal
+    'TV': 'total_power_vertical',        # uncorrected reflectivity, vertical
+    'DBZH': 'reflectivity_horizontal',     # corrected reflectivity, horizontal
+    'DBZV': 'reflectivity_vertical',     # corrected reflectivity, vertical
     'ZDR': 'differential_reflectivity',     # differential reflectivity
     'RHOHV': 'cross_correlation_ratio',
     'LDR': 'linear_polarization_ratio',
@@ -31,8 +31,8 @@ ODIM_H5_FIELD_NAMES = {
     'SQI': 'normalized_coherent_power',
     'SNR': 'signal_to_noise_ratio',
     'VRAD': 'velocity',  # radial velocity, marked for deprecation in ODIM HDF5 2.2
-    'VRADH': 'velocity',  # radial velocity, horizontal polarisation
-    'VRADV': 'velocity',  # radial velocity, vertical polarisation
+    'VRADH': 'velocity_horizontal',  # radial velocity, horizontal polarisation
+    'VRADV': 'velocity_vertical',  # radial velocity, vertical polarisation
     'WRAD': 'spectrum_width',
     'QIND': 'quality_index',
 }
