@@ -11,6 +11,7 @@ import numpy as np
 import netCDF4
 import datetime
 
+from ..config import get_metadata
 from ..core import Grid
 from ..io.cfradial import _ncvar_to_dict, _create_ncvar
 from ..io.common import _test_arguments
@@ -62,19 +63,32 @@ def read_radx_grid(filename, exclude_fields=None, **kwargs):
     
     # below is altered from original read_grid to read in origin info from radx file
     # Get dict information from lat array in radx file
-    origin_latitude = _ncvar_to_dict(dset.variables['lat0']) 
-    # set data single value from Grid info origin from radx file
-    origin_latitude['data'] = [dset.variables[
-        'grid_mapping_0'].latitude_of_projection_origin]
-    # Get dict information from lon array in radx file
-    origin_longitude = _ncvar_to_dict(dset.variables['lon0'])
-    # set data single value from Grid info origin from radx file
     try:
-        origin_longitude['data'] = [dset.variables[
-            'grid_mapping_0'].longitude_of_central_meridian]
-    except AttributeError:
-        origin_longitude['data'] = [dset.variables[
-            'grid_mapping_0'].longitude_of_projection_origin]
+        origin_latitude = _ncvar_to_dict(dset.variables['lat0']) 
+        # set data single value from Grid info origin from radx file
+        origin_latitude['data'] = [dset.variables[
+            'grid_mapping_0'].latitude_of_projection_origin]
+        # Get dict information from lon array in radx file
+        origin_longitude = _ncvar_to_dict(dset.variables['lon0'])
+        # set data single value from Grid info origin from radx file
+        try:
+            origin_longitude['data'] = [dset.variables[
+                'grid_mapping_0'].longitude_of_central_meridian]
+        except AttributeError:
+            origin_longitude['data'] = [dset.variables[
+                'grid_mapping_0'].longitude_of_projection_origin]
+    except KeyError:
+        origin_latitude = get_metadata('latitude')
+        origin_latitude['data'] = [dset.variables[
+            'grid_mapping_0'].latitude_of_projection_origin]
+
+        origin_longitude = get_metadata('longitude')
+        try:
+            origin_longitude['data'] = [dset.variables[
+                'grid_mapping_0'].longitude_of_central_meridian]
+        except AttributeError:
+            origin_longitude['data'] = [dset.variables[
+                'grid_mapping_0'].longitude_of_projection_origin]
 
     # only need first alt and it needs to be in meters
     origin_altitude = _ncvar_to_dict(dset.variables['z0'])
