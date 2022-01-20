@@ -10,7 +10,7 @@ The Python ARM Radar Toolkit (Py-ART)
 
 |ARM| |Tweet|
 
-.. |Travis| image:: https://www.travis-ci.com/ARM-DOE/pyart.svg?branch=master
+.. |Travis| image:: https://app.travis-ci.com/ARM-DOE/pyart.svg?branch=main
     :target: https://travis-ci.com/ARM-DOE/pyart
 
 .. |AppVeyor| image:: https://ci.appveyor.com/api/projects/status/9do57qycha65j4v9/branch/master?svg=true
