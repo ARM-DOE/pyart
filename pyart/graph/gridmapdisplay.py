@@ -167,7 +167,6 @@ class GridMapDisplay(object):
         ds = self.grid.to_xarray()
 
         # parse parameters
-        ax, fig = common.parse_ax_fig(ax, fig)
         vmin, vmax = common.parse_vmin_vmax(self.grid, field, vmin, vmax)
         cmap = common.parse_cmap(cmap, field)
 
@@ -185,13 +184,37 @@ class GridMapDisplay(object):
             masked_data = np.ma.masked_outside(masked_data, vmin, vmax)
             ds[field].data = masked_data
 
-        if hasattr(ax, 'projection'):
-            projection = ax.projection
+        # Define a figure if None is provided.
+        if fig is None:
+            fig = plt.gcf()
+
+        # initialize instance of GeoAxes if not provided
+        if ax is not None:
+            if hasattr(ax, 'projection'):
+                projection = ax.projection
+            else:
+                if projection is None:
+                    # set map projection to Mercator if none is
+                    # specified.
+                    projection = cartopy.crs.Mercator()
+                    warnings.warn(
+                        "No projection was defined for the axes."
+                        + " Overridding defined axes and using default "
+                        + "axes with projection Mercator.",
+                        UserWarning)
+                ax = plt.axes(projection=projection)
+
+        # Define GeoAxes if None is provided.
         else:
             if projection is None:
-                # set map projection to Mercator if none is specified
+                # set map projection to LambertConformal if none is
+                # specified.
                 projection = cartopy.crs.Mercator()
-
+                warnings.warn(
+                    "No projection was defined for the axes."
+                    + " Overridding defined axes and using default "
+                    + "axes with projection Mercator.",
+                    UserWarning)
             ax = plt.axes(projection=projection)
 
         # plot the grid using xarray
@@ -233,7 +256,7 @@ class GridMapDisplay(object):
                 ax.set_yticks(lat_lines, crs=projection)
 
             elif isinstance(ax.projection, cartopy.crs.LambertConformal):
-                fig.canvas.draw()
+                ax.figure.canvas.draw()
                 ax.gridlines(xlocs=lon_lines, ylocs=lat_lines)
 
                 # Label the end-points of the gridlines using the custom
@@ -841,7 +864,7 @@ def lambert_yticks(ax, ticks):
 def _lambert_ticks(ax, ticks, tick_location, line_constructor, tick_extractor):
     """ Get the tick locations and labels for a Lambert Conformal projection. """
     outline_patch = sgeom.LineString(
-        ax.outline_patch.get_path().vertices.tolist())
+        ax.spines['geo'].get_path().vertices.tolist())
     axis = find_side(outline_patch, tick_location)
     n_steps = 30
     extent = ax.get_extent(cartopy.crs.PlateCarree())

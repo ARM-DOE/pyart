@@ -21,7 +21,7 @@ except ImportError:
     _LAMBERT_GRIDLINES = False
 
 from .radardisplay import RadarDisplay
-from .common import parse_ax_fig, parse_vmin_vmax, parse_cmap
+from .common import parse_vmin_vmax, parse_cmap
 from ..exceptions import MissingOptionalDependency
 
 
@@ -226,7 +226,6 @@ class RadarMapDisplay(RadarDisplay):
 
         """
         # parse parameters
-        ax, fig = parse_ax_fig(ax, fig)
         vmin, vmax = parse_vmin_vmax(self._radar, field, vmin, vmax)
         cmap = parse_cmap(cmap, field)
         if lat_lines is None:
@@ -245,17 +244,39 @@ class RadarMapDisplay(RadarDisplay):
         if mask_outside:
             data = np.ma.masked_outside(data, vmin, vmax)
 
+        # Define a figure if None is provided.
+        if fig is None:
+            fig = plt.gcf()
+
         # initialize instance of GeoAxes if not provided
-        if hasattr(ax, 'projection'):
-            projection = ax.projection
+        if ax is not None:
+            if hasattr(ax, 'projection'):
+                projection = ax.projection
+            else:
+                if projection is None:
+                    # set map projection to LambertConformal if none is
+                    # specified.
+                    projection = cartopy.crs.LambertConformal(
+                        central_longitude=lon_0, central_latitude=lat_0)
+                    warnings.warn(
+                        "No projection was defined for the axes."
+                        + " Overridding defined axes and using default "
+                        + "axes with projection Lambert Conformal.",
+                        UserWarning)
+                ax = plt.axes(projection=projection)
+
+        # Define GeoAxes if None is provided.
         else:
             if projection is None:
-                # set map projection to LambertConformal if none is specified
+                # set map projection to LambertConformal if none is
+                # specified.
                 projection = cartopy.crs.LambertConformal(
                     central_longitude=lon_0, central_latitude=lat_0)
-                warnings.warn("No projection was defined for the axes."
-                              + " Overridding defined axes and using default "
-                              + "axes.", UserWarning)
+                warnings.warn(
+                    "No projection was defined for the axes."
+                    + " Overridding defined axes and using default "
+                    + "axes with projection Lambert Conformal.",
+                    UserWarning)
             ax = plt.axes(projection=projection)
 
         if min_lon:
@@ -298,7 +319,7 @@ class RadarMapDisplay(RadarDisplay):
                 gl.ylabels_right = False
 
             elif isinstance(ax.projection, cartopy.crs.LambertConformal):
-                fig.canvas.draw()
+                ax.figure.canvas.draw()
                 ax.gridlines(xlocs=lon_lines, ylocs=lat_lines)
 
                 # Label the end-points of the gridlines using the custom
@@ -504,7 +525,7 @@ def lambert_yticks(ax, ticks):
 def _lambert_ticks(ax, ticks, tick_location, line_constructor, tick_extractor):
     """ Get the tick locations and labels for a Lambert Conformal projection. """
     outline_patch = sgeom.LineString(
-        ax.outline_patch.get_path().vertices.tolist())
+        ax.spines['geo'].get_path().vertices.tolist())
     axis = find_side(outline_patch, tick_location)
     n_steps = 30
     extent = ax.get_extent(cartopy.crs.PlateCarree())
