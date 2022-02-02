@@ -174,12 +174,17 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
     else:
         ray_angle_res = None
 
-    # first sweep mode determines scan_type
-    try:
-        mode = netCDF4.chartostring(sweep_mode['data'][0])[()].decode('utf-8')
-    except AttributeError:
-        # Python 3, all strings are already unicode.
-        mode = netCDF4.chartostring(sweep_mode['data'][0])[()]
+    # Uses ARM scan name if present.
+    if hasattr(ncobj, 'scan_mode'):
+        mode = ncobj.scan_name
+    else:
+        # first sweep mode determines scan_type
+        try:
+            mode = netCDF4.chartostring(
+                sweep_mode['data'][0])[()].decode('utf-8')
+        except AttributeError:
+            # Python 3, all strings are already unicode.
+            mode = netCDF4.chartostring(sweep_mode['data'][0])[()]
 
     mode = mode.strip()
 
