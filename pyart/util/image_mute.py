@@ -1,5 +1,5 @@
 """
-Functions for manipulating data before plotting
+Functions for image muting radar objects before plotting
 """
 import numpy as np
 
@@ -7,6 +7,11 @@ import numpy as np
 def image_mute_radar(
         radar, field, mute_field, mute_threshold, field_threshold=None):
     """
+    This function will split a field based on thresholds from another field
+
+    Specifically, it was designed to separate areas of reflectivity where
+    the correlation coefficient is less than a certain threshold to discern
+    melting precipitation
 
     Parameters
     ----------
@@ -46,10 +51,13 @@ def image_mute_radar(
         field_filter = None
 
     # mute_filter will be the primary filter for determining muted regions
-    mute_filter = mute_field <= mute_threshold
+    mute_filter = data_mute_by <= mute_threshold
 
     # mute_mask is the combined filter
-    mute_mask = mute_filter & field_filter
+    if field_filter is None:
+        mute_mask = mute_filter
+    else:
+        mute_mask = mute_filter & field_filter
 
     # break up the field into muted regions and non muted regions
     non_muted_field = np.ma.masked_where(mute_mask, data_to_mute)
