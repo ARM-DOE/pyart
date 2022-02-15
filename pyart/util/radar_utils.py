@@ -264,13 +264,11 @@ def image_mute_radar(
     non_muted_dict = radar.fields[field].copy()
     non_muted_dict['data'] = non_muted_field
     non_muted_dict['long_name'] = 'Non-muted ' + field
-    non_muted_dict['standard_name'] = 'Non-muted ' + field
     radar.add_field('nonmuted_'+field, non_muted_dict)
 
     muted_dict = radar.fields[field].copy()
     muted_dict['data'] = muted_field
     muted_dict['long_name'] = 'Muted ' + field
-    muted_dict['standard_name'] = 'Muted ' + field
     radar.add_field('muted_'+field, muted_dict)
 
     return radar
