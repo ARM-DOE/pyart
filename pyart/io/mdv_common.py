@@ -1157,7 +1157,7 @@ def _decode_rle8(compr_data, key, decompr_size):
             out[out_ptr:out_ptr+count] = value
             data_ptr += 3
             out_ptr += count
-    return out.tostring()
+    return out.tobytes()
 
 
 class _MdvVolumeDataExtractor(object):

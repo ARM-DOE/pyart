@@ -203,7 +203,7 @@ def _get_rgb_values(data, vmin, vmax, color_levels, cmap):
         Green channel indices (range = 0-255).
 
     """
-    frac = (data - vmin) / np.float(vmax-vmin)
+    frac = (data - vmin) / float(vmax-vmin)
     if color_levels is None:
         color_levels = 255
     index = (frac * color_levels).ravel()
@@ -216,11 +216,11 @@ def _get_rgb_values(data, vmin, vmax, color_levels, cmap):
     cmap = plt.cm.get_cmap(cmap)
     for val in index:
         if not np.isnan(val):
-            ind = np.int(np.round(val))
+            ind = int(np.round(val))
             r, g, b, t = cmap(ind)
-            rarr.append(np.int(np.round(r * 255)))
-            garr.append(np.int(np.round(g * 255)))
-            barr.append(np.int(np.round(b * 255)))
+            rarr.append(int(np.round(r * 255)))
+            garr.append(int(np.round(g * 255)))
+            barr.append(int(np.round(b * 255)))
         else:
             rarr.append(np.nan)
             garr.append(np.nan)

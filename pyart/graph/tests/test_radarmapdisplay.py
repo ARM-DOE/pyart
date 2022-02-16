@@ -35,12 +35,12 @@ def test_radarmapdisplay_cartopy_ppi(outfile=None):
                     reason="Cartopy is not installed.")
 def test_radarmapdisplay_cartopy_preexisting_ax(outfile=None):
     import cartopy
-    from cartopy.io.img_tiles import StamenTerrain
+    from cartopy.io.img_tiles import Stamen
     radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
     display = pyart.graph.RadarMapDisplay(radar, shift=(0.1, 0.0))
     fig = plt.figure()
     ax = plt.axes(projection=cartopy.crs.PlateCarree())
-    ax.add_image(StamenTerrain(), 6)
+    ax.add_image(Stamen('terrain-background'), 6)
     display.plot_ppi_map('reflectivity_horizontal', 0, ax=ax, embelish=False)
     if outfile:
         fig.savefig(outfile)

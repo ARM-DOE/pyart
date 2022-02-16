@@ -326,7 +326,7 @@ class UFRayCreator(object):
 
             ray += field_header
             ray += vel_header
-            ray += data_array.tostring()
+            ray += data_array.tobytes()
 
         return ray
 
