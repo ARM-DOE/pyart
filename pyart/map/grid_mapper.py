@@ -464,7 +464,7 @@ def map_to_grid(radars, grid_shape, grid_limits, grid_origin=None,
     # create arrays to hold the gate locations and indicators if the gate
     # should be included in the interpolation.
     gate_locations = np.ma.empty((total_gates, 3), dtype=np.float64)
-    include_gate = np.ones((total_gates), dtype=np.bool)
+    include_gate = np.ones((total_gates), dtype=np.bool_)
 
     offsets = []    # offsets from the grid origin, in meters, for each radar
 

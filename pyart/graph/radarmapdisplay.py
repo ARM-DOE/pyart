@@ -424,7 +424,7 @@ class RadarMapDisplay(RadarDisplay):
             kwargs['transform'] = cartopy.crs.PlateCarree()
         self.ax.plot(line_lons, line_lats, line_style, **kwargs)
 
-    def plot_line_xy(self, line_x, line_y, line_style='r-', **kwargs):
+    def plot_line_xy(self, line_x, line_y, color='r', line_style='-', **kwargs):
         """
         Plot a line segments on the current map given radar x, y values.
 
@@ -436,6 +436,9 @@ class RadarMapDisplay(RadarDisplay):
             X location of points to plot in meters from the radar.
         line_y : array
             Y location of points to plot in meters from the radar.
+        color : str, optional
+            Matplotlib compatible string which specifies the color for the
+            line style.
         line_style : str, optional
             Matplotlib compatible string which specifies the line style.
 
@@ -443,10 +446,10 @@ class RadarMapDisplay(RadarDisplay):
         self._check_ax()
         if 'transform' not in kwargs.keys():
             kwargs['transform'] = self.grid_projection
-        self.ax.plot(line_x, line_y, line_style, **kwargs)
+        self.ax.plot(line_x, line_y, color, line_style, **kwargs)
 
     def plot_range_ring(self, range_ring_location_km, npts=360,
-                        line_style='k-', **kwargs):
+                        color='k', line_style='-', **kwargs):
         """
         Plot a single range ring on the map.
 
@@ -458,7 +461,10 @@ class RadarMapDisplay(RadarDisplay):
             Location of range ring in km.
         npts : int
             Number of points in the ring, higher for better resolution.
-        line_style : str
+        color : str, optional
+            Matplotlib compatible string which specifies the color for the
+            line style.
+        line_style : str, optional
             Matplotlib compatible string which specified the line
             style of the ring.
 
@@ -474,7 +480,8 @@ class RadarMapDisplay(RadarDisplay):
         angle = np.linspace(0., 2.0 * np.pi, npts)
         xpts = range_ring_location_km * 1000. * np.sin(angle)
         ypts = range_ring_location_km * 1000. * np.cos(angle)
-        self.plot_line_xy(xpts, ypts, line_style=line_style, **kwargs)
+        self.plot_line_xy(xpts, ypts, color=color, line_style=line_style,
+                          **kwargs)
 
 
 # These methods are a hack to allow gridlines when the projection is lambert

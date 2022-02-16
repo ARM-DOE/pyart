@@ -99,8 +99,8 @@ def test_ray_section_by_section():
 
     # DZ data buffer
     ref_dz_data_buf = uray._buf[210:1544]
-    assert ref_dz_data_buf == ref_dz_data.tostring()
-    assert ref_dz_data_buf == tst_dz_data.tostring()
+    assert ref_dz_data_buf == ref_dz_data.tobytes()
+    assert ref_dz_data_buf == tst_dz_data.tobytes()
 
     # VR field header
     ref_field_header = uray._buf[1544:1544+42]
@@ -116,8 +116,8 @@ def test_ray_section_by_section():
 
     # VR data buffer
     ref_vr_data_buf = uray._buf[1586:2920]
-    assert ref_vr_data_buf == ref_vr_data.tostring()
-    assert ref_vr_data_buf == tst_vr_data.tostring()
+    assert ref_vr_data_buf == ref_vr_data.tobytes()
+    assert ref_vr_data_buf == tst_vr_data.tobytes()
 
     # SW field header
     ref_field_header = uray._buf[2920:2920+38]
@@ -132,8 +132,8 @@ def test_ray_section_by_section():
 
     # SW data buffer
     ref_sw_data_buf = uray._buf[2958:4292]
-    assert ref_sw_data_buf == ref_sw_data.tostring()
-    assert ref_sw_data_buf == tst_sw_data.tostring()
+    assert ref_sw_data_buf == ref_sw_data.tobytes()
+    assert ref_sw_data_buf == tst_sw_data.tobytes()
 
     # ZT field header
     ref_field_header = uray._buf[5664:5664+38]
@@ -154,8 +154,8 @@ def test_ray_section_by_section():
 
     # PH data buffer
     ref_ph_data_buf = uray._buf[11152+38:12524]
-    assert ref_ph_data_buf == ref_ph_data.tostring()
-    assert ref_ph_data_buf == tst_ph_data.tostring()
+    assert ref_ph_data_buf == ref_ph_data.tobytes()
+    assert ref_ph_data_buf == tst_ph_data.tobytes()
 
 
 def test_ray_full():
