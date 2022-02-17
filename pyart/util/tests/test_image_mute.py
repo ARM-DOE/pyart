@@ -3,9 +3,12 @@
 import pyart
 import numpy as np
 
+# read in example file
+radar = pyart.io.read_nexrad_archive(pyart.testing.NEXRAD_ARCHIVE_MSG31_FILE)
+
 def test_image_mute_radar():
-    # read in example file and image mute
-    radar = pyart.io.read_nexrad_archive(pyart.testing.NEXRAD_ARCHIVE_MSG31_FILE)
+    
+    # image mute example file
     mute_radar = pyart.util.image_mute_radar(radar, field='reflectivity',
                                         mute_field='cross_correlation_ratio', mute_threshold=0.97)
 
