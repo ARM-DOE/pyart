@@ -201,44 +201,48 @@ def join_radar(radar1, radar2):
 def image_mute_radar(
         radar, field, mute_field, mute_threshold, field_threshold=None):
     """
-    This function will split a field based on thresholds from another field
+    This function will split a field based on thresholds from another field.
 
     Specifically, it was designed to separate areas of reflectivity where
     the correlation coefficient is less than a certain threshold to discern
-    melting precipitation
+    melting precipitation.
 
     Parameters
     ----------
     radar : Radar
-        Radar instance which provides the fields for muting
+        Radar instance which provides the fields for muting.
     field : str
-        Name of field to image mute
+        Name of field to image mute.
     mute_field : str
-        Name of field to image mute by
+        Name of field to image mute by.
     mute_threshold : float
-        Threshold value to mute by
+        Threshold value to mute by.
     field_threshold : float
-        Additional threshold to mask
+        Additional threshold to mask.
 
     Returns
     -------
     radar : Radar
-        Radar object with 2 new fields from input field, one muted and one not muted
-    """
+        Radar object with 2 new fields from input field, one muted and one not muted.
 
+    """
     # add checks for field availability
     if field not in radar.fields.keys():
-        raise KeyError('Failed - ', field, ' field to mute not found in Radar object.')
+        raise KeyError(
+            'Failed - ', field, ' field to mute not found in Radar object.')
 
     if mute_field not in radar.fields.keys():
-        raise KeyError('Failed - ', mute_field, ' field to mute by not found in Radar object.')
+        raise KeyError(
+            'Failed - ', mute_field,
+            ' field to mute by not found in Radar object.')
 
     # get data from fields
     data_to_mute = radar.fields[field]['data']
     data_mute_by = radar.fields[mute_field]['data']
 
     # create filters
-    # field_filter is used if user wants to use additional criteria in the original field
+    # field_filter is used if user wants to use additional criteria in the
+    # original field
     if field_threshold is not None:
         field_filter = data_to_mute >= field_threshold
     else:
@@ -270,5 +274,4 @@ def image_mute_radar(
     muted_dict['data'] = muted_field
     muted_dict['long_name'] = 'Muted ' + field
     radar.add_field('muted_'+field, muted_dict)
-
     return radar
