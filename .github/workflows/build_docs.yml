@@ -29,6 +29,10 @@ jobs:
           mamba-version: '*'
           use-mamba: true
           miniforge-variant: Mambaforge
+
+      - name: Install PyART
+        run: |
+          pip install -e .
       # Build the website
       - name: Build the site
         run: |
