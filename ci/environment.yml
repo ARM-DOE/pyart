@@ -15,3 +15,12 @@ dependencies:
   - cartopy
   - cvxopt
   - xarray
+  - sphinx
+  - ipython
+  - pandoc
+  - pip
+  - pip:
+      - sphinx_rtd_theme
+      - sphinx_gallery
+      - sphinx-copybutton
+      - nbsphinx

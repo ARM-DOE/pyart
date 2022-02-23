@@ -23,9 +23,12 @@ jobs:
       - name: Setup Conda Environment
         uses: conda-incubator/setup-miniconda@v2
         with:
-          environment-file: ci/environment_docs.yml
+          environment-file: ci/environment.yml
           activate-environment: pyart-docs
           auto-activate-base: false
+          mamba-version: '*'
+          use-mamba: true
+          miniforge-variant: Mambaforge
       # Build the website
       - name: Build the site
         run: |
