@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+      - use_github_actions_ci
   pull_request:
   schedule:
     - cron: '0 0 * * *' # Daily “At 00:00”
@@ -15,7 +16,7 @@ concurrency:
 jobs:
   build:
     name: python-${{ matrix.python-version }}
-    if: github.repository == 'mgrover1/pyart-xarray-sandbox'
+    if: github.repository == 'mgrover1/pyart'
     runs-on: ubuntu-latest
     defaults:
       run:
