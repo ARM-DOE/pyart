@@ -1,0 +1,48 @@
+name: Continuous Integration
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  schedule:
+    - cron: '0 0 * * *' # Daily “At 00:00”
+  workflow_dispatch: # allows you to trigger manually
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: python-${{ matrix.python-version }}
+    if: github.repository == 'mgrover1/pyart-xarray-sandbox'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -l {0}
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.6', '3.7', '3.8', '3.9']
+        os: [Windows, macos-latest]
+        include:
+          - os: macos-latest
+            PLAT: arm64
+            INTERFACE64: ''
+            platform: [x64]
+
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: conda-incubator/setup-miniconda@v2
+        id: conda
+        with:
+          channels: conda-forge
+          channel-priority: strict
+          activate-environment: pyart-dev
+          auto-update-conda: false
+          python-version: ${{ matrix.python-version }}
+          mamba-version: '*'
+          use-mamba: true
+          miniforge-variant: Mambaforge
+          environment-file: ci/environment.yml
