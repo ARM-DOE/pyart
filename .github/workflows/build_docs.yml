@@ -44,5 +44,5 @@ jobs:
         if: github.ref == 'refs/heads/use_github_actions_ci'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: docs/_build/dirhtml
+          publish_dir: doc/build/dirhtml
           cname: https://mgrover1.github.io/pyart/
