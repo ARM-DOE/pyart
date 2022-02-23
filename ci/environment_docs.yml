@@ -1,0 +1,14 @@
+name: pyart-docs
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - sphinx
+  - ipython
+  - pandoc
+  - pip
+  - pip:
+      - sphinx_rtd_theme
+      - sphinx_gallery
+      - sphinx-copybutton
+      - nbsphinx

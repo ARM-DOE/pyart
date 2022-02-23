@@ -1,0 +1,41 @@
+name: build-deploy-site
+
+on:
+  push:
+    branches:
+      - main
+      - use_github_actions_ci
+  pull_request:
+    branches:
+      - main
+
+# This job installs dependencies, build the website, and pushes it to `gh-pages`
+jobs:
+  deploy-website:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -l {0}
+    steps:
+      - uses: actions/checkout@v2
+
+      # Install dependencies
+      - name: Setup Conda Environment
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          environment-file: ci/environment_docs.yml
+          activate-environment: pyart-docs
+          auto-activate-base: false
+      # Build the website
+      - name: Build the site
+        run: |
+          cd docs
+          make dirhtml
+      # Push the book's HTML to github-pages
+      - name: GitHub Pages action
+        uses: peaceiris/actions-gh-pages@v3.8.0
+        if: github.ref == 'refs/heads/main'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/_build/dirhtml
+          cname: https://mgrover1.github.io/pyart/
