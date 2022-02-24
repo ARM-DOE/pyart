@@ -1,0 +1,47 @@
+name: build-deploy-site
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+# This job installs dependencies, build the website, and pushes it to `gh-pages`
+jobs:
+  deploy-website:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -l {0}
+    steps:
+      - uses: actions/checkout@v2
+
+      # Install dependencies
+      - name: Setup Conda Environment
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          environment-file: doc/environment.yml
+          activate-environment: pyart-docs
+          auto-activate-base: false
+          mamba-version: '*'
+          use-mamba: true
+          miniforge-variant: Mambaforge
+
+      - name: Install PyART
+        run: |
+          pip install -e .
+      # Build the website
+      - name: Build the site
+        run: |
+          cd doc
+          make dirhtml
+      # Push the book's HTML to github-pages
+      - name: GitHub Pages action
+        uses: peaceiris/actions-gh-pages@v3.8.0
+        if: github.ref == 'refs/heads/use_github_actions_ci'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: doc/build/dirhtml
+          cname: https://arm-doe.github.io/pyart/
