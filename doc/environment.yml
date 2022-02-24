@@ -1,4 +1,4 @@
-name: pyart-dev
+name: pyart-docs
 channels:
   - conda-forge
   - defaults
@@ -8,6 +8,7 @@ dependencies:
   - numpy
   - scipy
   - matplotlib
+  - pandas
   - netcdf4
   - pytest
   - trmm_rsl
@@ -18,6 +19,8 @@ dependencies:
   - sphinx
   - ipython
   - pandoc
+  - netcdf4
+  - pytest
   - pip
   - pip:
       - sphinx_rtd_theme

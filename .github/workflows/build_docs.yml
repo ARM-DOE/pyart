@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - use_github_actions_ci
   pull_request:
     branches:
       - main
@@ -23,7 +22,7 @@ jobs:
       - name: Setup Conda Environment
         uses: conda-incubator/setup-miniconda@v2
         with:
-          environment-file: ci/environment.yml
+          environment-file: doc/environment.yml
           activate-environment: pyart-docs
           auto-activate-base: false
           mamba-version: '*'
@@ -45,4 +44,4 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: doc/build/dirhtml
-          cname: https://mgrover1.github.io/pyart/
+          cname: https://arm-doe.github.io/pyart/
