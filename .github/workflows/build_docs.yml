@@ -40,7 +40,7 @@ jobs:
       # Push the book's HTML to github-pages
       - name: GitHub Pages action
         uses: peaceiris/actions-gh-pages@v3.8.0
-        if: github.ref == 'refs/heads/use_github_actions_ci'
+        if: github.ref == 'refs/heads/main'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: doc/build/dirhtml
