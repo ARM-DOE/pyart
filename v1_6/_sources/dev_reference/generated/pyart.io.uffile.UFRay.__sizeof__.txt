@@ -1,6 +1,0 @@
-pyart.io.uffile.UFRay.__sizeof__
-================================
-
-.. currentmodule:: pyart.io.uffile
-
-.. automethod:: UFRay.__sizeof__

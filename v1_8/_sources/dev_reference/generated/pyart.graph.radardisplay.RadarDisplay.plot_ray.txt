@@ -1,6 +1,0 @@
-pyart.graph.radardisplay.RadarDisplay.plot_ray
-==============================================
-
-.. currentmodule:: pyart.graph.radardisplay
-
-.. automethod:: RadarDisplay.plot_ray

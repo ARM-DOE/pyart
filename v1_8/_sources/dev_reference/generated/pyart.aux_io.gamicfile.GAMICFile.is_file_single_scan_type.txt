@@ -1,6 +1,0 @@
-pyart.aux_io.gamicfile.GAMICFile.is_file_single_scan_type
-=========================================================
-
-.. currentmodule:: pyart.aux_io.gamicfile
-
-.. automethod:: GAMICFile.is_file_single_scan_type

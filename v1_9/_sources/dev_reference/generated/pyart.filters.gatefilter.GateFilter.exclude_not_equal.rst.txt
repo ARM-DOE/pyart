@@ -1,6 +1,0 @@
-pyart.filters.gatefilter.GateFilter.exclude\_not\_equal
-=======================================================
-
-.. currentmodule:: pyart.filters.gatefilter
-
-.. automethod:: GateFilter.exclude_not_equal

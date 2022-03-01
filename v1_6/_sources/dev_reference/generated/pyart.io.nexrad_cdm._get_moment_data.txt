@@ -1,6 +1,0 @@
-pyart.io.nexrad_cdm._get_moment_data
-====================================
-
-.. currentmodule:: pyart.io.nexrad_cdm
-
-.. autofunction:: _get_moment_data

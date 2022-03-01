@@ -1,6 +1,0 @@
-pyart.io.\_sigmetfile.\_is\_bit\_set
-====================================
-
-.. currentmodule:: pyart.io._sigmetfile
-
-.. autofunction:: _is_bit_set

@@ -1,6 +1,0 @@
-pyart.io.mdv_common.MdvFile._make_carts_dict
-============================================
-
-.. currentmodule:: pyart.io.mdv_common
-
-.. automethod:: MdvFile._make_carts_dict

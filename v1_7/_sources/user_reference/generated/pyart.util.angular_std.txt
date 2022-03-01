@@ -1,6 +1,0 @@
-pyart.util.angular_std
-======================
-
-.. currentmodule:: pyart.util
-
-.. autofunction:: angular_std

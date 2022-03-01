@@ -1,6 +1,0 @@
-pyart.correct.phase_proc.smooth_and_trim
-========================================
-
-.. currentmodule:: pyart.correct.phase_proc
-
-.. autofunction:: smooth_and_trim

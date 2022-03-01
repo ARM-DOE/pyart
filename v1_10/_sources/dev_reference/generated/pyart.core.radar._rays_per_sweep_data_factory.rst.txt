@@ -1,6 +1,0 @@
-pyart.core.radar.\_rays\_per\_sweep\_data\_factory
-==================================================
-
-.. currentmodule:: pyart.core.radar
-
-.. autofunction:: _rays_per_sweep_data_factory

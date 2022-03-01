@@ -1,6 +1,0 @@
-pyart.testing.make_single_ray_radar
-===================================
-
-.. currentmodule:: pyart.testing
-
-.. autofunction:: make_single_ray_radar

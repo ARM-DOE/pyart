@@ -1,6 +1,0 @@
-pyart.graph.radar_display.RadarDisplay._generate_field_name
-===========================================================
-
-.. currentmodule:: pyart.graph.radar_display
-
-.. automethod:: RadarDisplay._generate_field_name

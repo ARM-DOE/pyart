@@ -1,6 +1,0 @@
-pyart.map.grid\_mapper.NNLocator.\_\_sizeof\_\_
-===============================================
-
-.. currentmodule:: pyart.map.grid_mapper
-
-.. automethod:: NNLocator.__sizeof__

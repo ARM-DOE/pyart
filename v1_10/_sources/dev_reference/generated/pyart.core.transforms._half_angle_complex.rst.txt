@@ -1,6 +1,0 @@
-pyart.core.transforms.\_half\_angle\_complex
-============================================
-
-.. currentmodule:: pyart.core.transforms
-
-.. autofunction:: _half_angle_complex

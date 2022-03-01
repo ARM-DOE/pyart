@@ -1,6 +1,0 @@
-pyart.filters.gatefilter.GateFilter.\_\_init\_subclass\_\_
-==========================================================
-
-.. currentmodule:: pyart.filters.gatefilter
-
-.. automethod:: GateFilter.__init_subclass__

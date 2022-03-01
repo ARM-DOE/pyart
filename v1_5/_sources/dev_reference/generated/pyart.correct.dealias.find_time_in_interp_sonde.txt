@@ -1,6 +1,0 @@
-pyart.correct.dealias.find_time_in_interp_sonde
-===============================================
-
-.. currentmodule:: pyart.correct.dealias
-
-.. autofunction:: find_time_in_interp_sonde

@@ -1,6 +1,0 @@
-pyart.graph.radarmapdisplay.RadarMapDisplay._parse_vmin_vmax
-============================================================
-
-.. currentmodule:: pyart.graph.radarmapdisplay
-
-.. automethod:: RadarMapDisplay._parse_vmin_vmax

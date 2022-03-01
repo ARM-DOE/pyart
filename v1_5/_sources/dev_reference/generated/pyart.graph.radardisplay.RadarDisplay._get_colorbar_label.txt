@@ -1,6 +1,0 @@
-pyart.graph.radardisplay.RadarDisplay._get_colorbar_label
-=========================================================
-
-.. currentmodule:: pyart.graph.radardisplay
-
-.. automethod:: RadarDisplay._get_colorbar_label

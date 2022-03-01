@@ -1,6 +1,0 @@
-pyart.correct.\_common\_dealias.\_set\_limits
-=============================================
-
-.. currentmodule:: pyart.correct._common_dealias
-
-.. autofunction:: _set_limits

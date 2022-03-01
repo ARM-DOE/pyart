@@ -1,6 +1,0 @@
-pyart.aux\_io.gamic\_hdf5.\_prt\_mode\_from\_unfolding
-======================================================
-
-.. currentmodule:: pyart.aux_io.gamic_hdf5
-
-.. autofunction:: _prt_mode_from_unfolding

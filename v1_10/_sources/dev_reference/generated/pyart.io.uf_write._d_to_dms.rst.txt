@@ -1,6 +1,0 @@
-pyart.io.uf\_write.\_d\_to\_dms
-===============================
-
-.. currentmodule:: pyart.io.uf_write
-
-.. autofunction:: _d_to_dms

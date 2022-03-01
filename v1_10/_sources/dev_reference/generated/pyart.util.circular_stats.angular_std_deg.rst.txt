@@ -1,6 +1,0 @@
-pyart.util.circular\_stats.angular\_std\_deg
-============================================
-
-.. currentmodule:: pyart.util.circular_stats
-
-.. autofunction:: angular_std_deg

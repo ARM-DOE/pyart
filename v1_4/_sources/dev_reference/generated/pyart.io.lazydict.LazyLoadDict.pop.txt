@@ -1,6 +1,0 @@
-pyart.io.lazydict.LazyLoadDict.pop
-==================================
-
-.. currentmodule:: pyart.io.lazydict
-
-.. automethod:: LazyLoadDict.pop

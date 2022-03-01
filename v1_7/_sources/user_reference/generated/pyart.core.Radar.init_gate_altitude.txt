@@ -1,6 +1,0 @@
-pyart.core.Radar.init_gate_altitude
-===================================
-
-.. currentmodule:: pyart.core
-
-.. automethod:: Radar.init_gate_altitude

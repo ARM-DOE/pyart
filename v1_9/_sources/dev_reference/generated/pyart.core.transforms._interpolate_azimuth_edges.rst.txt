@@ -1,6 +1,0 @@
-pyart.core.transforms.\_interpolate\_azimuth\_edges
-===================================================
-
-.. currentmodule:: pyart.core.transforms
-
-.. autofunction:: _interpolate_azimuth_edges

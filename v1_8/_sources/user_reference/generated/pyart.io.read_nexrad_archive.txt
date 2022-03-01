@@ -1,6 +1,0 @@
-pyart.io.read_nexrad_archive
-============================
-
-.. currentmodule:: pyart.io
-
-.. autofunction:: read_nexrad_archive

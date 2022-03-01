@@ -1,6 +1,0 @@
-pyart.io.rsl._RslVolumeDataExtractor.__subclasshook__
-=====================================================
-
-.. currentmodule:: pyart.io.rsl
-
-.. automethod:: _RslVolumeDataExtractor.__subclasshook__

@@ -1,6 +1,0 @@
-pyart.graph.plot_mdv.MdvDisplay.plot_cross_hair
-===============================================
-
-.. currentmodule:: pyart.graph.plot_mdv
-
-.. automethod:: MdvDisplay.plot_cross_hair

@@ -1,6 +1,0 @@
-pyart.testing.make_normal_storm
-===============================
-
-.. currentmodule:: pyart.testing
-
-.. autofunction:: make_normal_storm

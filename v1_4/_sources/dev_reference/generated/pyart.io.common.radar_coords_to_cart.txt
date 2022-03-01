@@ -1,6 +1,0 @@
-pyart.io.common.radar_coords_to_cart
-====================================
-
-.. currentmodule:: pyart.io.common
-
-.. autofunction:: radar_coords_to_cart

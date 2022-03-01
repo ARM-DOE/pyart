@@ -1,6 +1,0 @@
-pyart.io._sigmetfile.convert_sigmet_data
-========================================
-
-.. currentmodule:: pyart.io._sigmetfile
-
-.. autofunction:: convert_sigmet_data

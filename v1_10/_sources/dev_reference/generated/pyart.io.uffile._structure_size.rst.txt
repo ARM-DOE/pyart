@@ -1,6 +1,0 @@
-pyart.io.uffile.\_structure\_size
-=================================
-
-.. currentmodule:: pyart.io.uffile
-
-.. autofunction:: _structure_size

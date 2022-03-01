@@ -1,6 +1,0 @@
-pyart.correct.region_dealias._EdgeTracker.unwrap_node
-=====================================================
-
-.. currentmodule:: pyart.correct.region_dealias
-
-.. automethod:: _EdgeTracker.unwrap_node

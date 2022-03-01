@@ -1,6 +1,0 @@
-pyart.io.nexrad_cdm._radar_from_cdm
-===================================
-
-.. currentmodule:: pyart.io.nexrad_cdm
-
-.. autofunction:: _radar_from_cdm

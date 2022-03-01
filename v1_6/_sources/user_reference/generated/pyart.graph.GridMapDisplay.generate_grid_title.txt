@@ -1,6 +1,0 @@
-pyart.graph.GridMapDisplay.generate_grid_title
-==============================================
-
-.. currentmodule:: pyart.graph
-
-.. automethod:: GridMapDisplay.generate_grid_title

@@ -1,6 +1,0 @@
-pyart.graph.RadarMapDisplayCartopy.plot\_line\_xy
-=================================================
-
-.. currentmodule:: pyart.graph
-
-.. automethod:: RadarMapDisplayCartopy.plot_line_xy

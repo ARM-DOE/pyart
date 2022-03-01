@@ -1,6 +1,0 @@
-pyart.core.grid.Grid.\_\_init\_\_
-=================================
-
-.. currentmodule:: pyart.core.grid
-
-.. automethod:: Grid.__init__

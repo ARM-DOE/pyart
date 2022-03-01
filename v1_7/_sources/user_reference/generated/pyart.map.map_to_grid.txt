@@ -1,6 +1,0 @@
-pyart.map.map_to_grid
-=====================
-
-.. currentmodule:: pyart.map
-
-.. autofunction:: map_to_grid

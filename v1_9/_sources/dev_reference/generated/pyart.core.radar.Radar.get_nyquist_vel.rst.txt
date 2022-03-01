@@ -1,6 +1,0 @@
-pyart.core.radar.Radar.get\_nyquist\_vel
-========================================
-
-.. currentmodule:: pyart.core.radar
-
-.. automethod:: Radar.get_nyquist_vel

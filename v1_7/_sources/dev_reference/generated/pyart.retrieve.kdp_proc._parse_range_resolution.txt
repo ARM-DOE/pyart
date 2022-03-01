@@ -1,6 +1,0 @@
-pyart.retrieve.kdp_proc._parse_range_resolution
-===============================================
-
-.. currentmodule:: pyart.retrieve.kdp_proc
-
-.. autofunction:: _parse_range_resolution

@@ -1,6 +1,0 @@
-pyart.core.radar.Radar.iter_elevation
-=====================================
-
-.. currentmodule:: pyart.core.radar
-
-.. automethod:: Radar.iter_elevation

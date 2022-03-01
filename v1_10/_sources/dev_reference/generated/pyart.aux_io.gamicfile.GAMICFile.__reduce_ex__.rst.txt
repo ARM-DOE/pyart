@@ -1,6 +1,0 @@
-pyart.aux\_io.gamicfile.GAMICFile.\_\_reduce\_ex\_\_
-====================================================
-
-.. currentmodule:: pyart.aux_io.gamicfile
-
-.. automethod:: GAMICFile.__reduce_ex__

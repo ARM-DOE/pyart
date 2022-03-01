@@ -1,6 +1,0 @@
-pyart.core.grid.Grid.init\_point\_longitude\_latitude
-=====================================================
-
-.. currentmodule:: pyart.core.grid
-
-.. automethod:: Grid.init_point_longitude_latitude

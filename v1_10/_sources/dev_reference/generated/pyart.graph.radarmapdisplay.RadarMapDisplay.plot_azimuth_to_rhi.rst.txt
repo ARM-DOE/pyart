@@ -1,6 +1,0 @@
-pyart.graph.radarmapdisplay.RadarMapDisplay.plot\_azimuth\_to\_rhi
-==================================================================
-
-.. currentmodule:: pyart.graph.radarmapdisplay
-
-.. automethod:: RadarMapDisplay.plot_azimuth_to_rhi

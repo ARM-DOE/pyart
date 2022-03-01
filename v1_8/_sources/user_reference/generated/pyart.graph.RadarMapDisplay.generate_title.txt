@@ -1,6 +1,0 @@
-pyart.graph.RadarMapDisplay.generate_title
-==========================================
-
-.. currentmodule:: pyart.graph
-
-.. automethod:: RadarMapDisplay.generate_title

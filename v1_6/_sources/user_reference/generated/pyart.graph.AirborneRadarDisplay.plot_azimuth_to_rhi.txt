@@ -1,6 +1,0 @@
-pyart.graph.AirborneRadarDisplay.plot_azimuth_to_rhi
-====================================================
-
-.. currentmodule:: pyart.graph
-
-.. automethod:: AirborneRadarDisplay.plot_azimuth_to_rhi

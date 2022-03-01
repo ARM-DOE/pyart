@@ -1,6 +1,0 @@
-pyart.core.radar.Radar.__subclasshook__
-=======================================
-
-.. currentmodule:: pyart.core.radar
-
-.. automethod:: Radar.__subclasshook__

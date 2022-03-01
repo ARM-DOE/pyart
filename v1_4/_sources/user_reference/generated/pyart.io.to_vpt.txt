@@ -1,6 +1,0 @@
-pyart.io.to_vpt
-===============
-
-.. currentmodule:: pyart.io
-
-.. autofunction:: to_vpt

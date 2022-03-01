@@ -1,6 +1,0 @@
-pyart.aux\_io.gamicfile.GAMICFile.where\_attr
-=============================================
-
-.. currentmodule:: pyart.aux_io.gamicfile
-
-.. automethod:: GAMICFile.where_attr

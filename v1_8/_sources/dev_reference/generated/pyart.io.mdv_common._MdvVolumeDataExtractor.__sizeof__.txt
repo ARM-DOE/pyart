@@ -1,6 +1,0 @@
-pyart.io.mdv_common._MdvVolumeDataExtractor.__sizeof__
-======================================================
-
-.. currentmodule:: pyart.io.mdv_common
-
-.. automethod:: _MdvVolumeDataExtractor.__sizeof__

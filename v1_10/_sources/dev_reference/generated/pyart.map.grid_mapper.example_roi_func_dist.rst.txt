@@ -1,6 +1,0 @@
-pyart.map.grid\_mapper.example\_roi\_func\_dist
-===============================================
-
-.. currentmodule:: pyart.map.grid_mapper
-
-.. autofunction:: example_roi_func_dist

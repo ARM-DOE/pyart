@@ -1,6 +1,0 @@
-pyart.graph.common.generate\_longitudinal\_level\_title
-=======================================================
-
-.. currentmodule:: pyart.graph.common
-
-.. autofunction:: generate_longitudinal_level_title

@@ -1,6 +1,0 @@
-pyart.correct._unwrap_2d.unwrap_2d
-==================================
-
-.. currentmodule:: pyart.correct._unwrap_2d
-
-.. autofunction:: unwrap_2d

@@ -1,6 +1,0 @@
-pyart.graph.CFRadialDisplay.plot_colorbar
-=========================================
-
-.. currentmodule:: pyart.graph
-
-.. automethod:: CFRadialDisplay.plot_colorbar

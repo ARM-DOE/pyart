@@ -1,6 +1,0 @@
-pyart.graph.common._interpolate_range_edges
-===========================================
-
-.. currentmodule:: pyart.graph.common
-
-.. autofunction:: _interpolate_range_edges

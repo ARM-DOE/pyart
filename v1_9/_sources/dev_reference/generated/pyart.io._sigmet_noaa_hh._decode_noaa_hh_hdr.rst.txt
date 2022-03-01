@@ -1,6 +1,0 @@
-pyart.io.\_sigmet\_noaa\_hh.\_decode\_noaa\_hh\_hdr
-===================================================
-
-.. currentmodule:: pyart.io._sigmet_noaa_hh
-
-.. autofunction:: _decode_noaa_hh_hdr

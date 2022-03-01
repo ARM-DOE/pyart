@@ -1,6 +1,0 @@
-pyart.io.nexrad\_interpolate.\_fast\_interpolate\_scan
-======================================================
-
-.. currentmodule:: pyart.io.nexrad_interpolate
-
-.. autofunction:: _fast_interpolate_scan

@@ -1,6 +1,0 @@
-pyart.graph.radardisplay\_airborne.AirborneRadarDisplay.\_get\_azimuth\_rhi\_data\_x\_y\_z
-==========================================================================================
-
-.. currentmodule:: pyart.graph.radardisplay_airborne
-
-.. automethod:: AirborneRadarDisplay._get_azimuth_rhi_data_x_y_z

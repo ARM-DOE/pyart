@@ -1,6 +1,0 @@
-pyart.io.chl.ChlFile.\_\_init\_subclass\_\_
-===========================================
-
-.. currentmodule:: pyart.io.chl
-
-.. automethod:: ChlFile.__init_subclass__

@@ -1,6 +1,0 @@
-pyart.io.chl.ChlFile.__subclasshook__
-=====================================
-
-.. currentmodule:: pyart.io.chl
-
-.. automethod:: ChlFile.__subclasshook__

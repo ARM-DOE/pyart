@@ -1,6 +1,0 @@
-pyart.graph.gridmapdisplay.GridMapDisplay.get\_dataset
-======================================================
-
-.. currentmodule:: pyart.graph.gridmapdisplay
-
-.. automethod:: GridMapDisplay.get_dataset

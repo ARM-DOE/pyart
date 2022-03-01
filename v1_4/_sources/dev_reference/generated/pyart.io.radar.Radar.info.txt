@@ -1,6 +1,0 @@
-pyart.io.radar.Radar.info
-=========================
-
-.. currentmodule:: pyart.io.radar
-
-.. automethod:: Radar.info

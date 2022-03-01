@@ -1,6 +1,0 @@
-pyart.aux_io.gamic_hdf5._GAMICFileHelper.moment_data
-====================================================
-
-.. currentmodule:: pyart.aux_io.gamic_hdf5
-
-.. automethod:: _GAMICFileHelper.moment_data

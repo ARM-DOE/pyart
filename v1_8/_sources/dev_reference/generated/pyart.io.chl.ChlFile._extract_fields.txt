@@ -1,6 +1,0 @@
-pyart.io.chl.ChlFile._extract_fields
-====================================
-
-.. currentmodule:: pyart.io.chl
-
-.. automethod:: ChlFile._extract_fields

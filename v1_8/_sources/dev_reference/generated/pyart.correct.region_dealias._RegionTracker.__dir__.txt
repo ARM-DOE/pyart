@@ -1,6 +1,0 @@
-pyart.correct.region_dealias._RegionTracker.__dir__
-===================================================
-
-.. currentmodule:: pyart.correct.region_dealias
-
-.. automethod:: _RegionTracker.__dir__

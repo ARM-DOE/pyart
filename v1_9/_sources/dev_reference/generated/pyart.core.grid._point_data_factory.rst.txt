@@ -1,6 +1,0 @@
-pyart.core.grid.\_point\_data\_factory
-======================================
-
-.. currentmodule:: pyart.core.grid
-
-.. autofunction:: _point_data_factory

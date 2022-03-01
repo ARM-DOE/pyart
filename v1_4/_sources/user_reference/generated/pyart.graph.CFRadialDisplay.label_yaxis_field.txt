@@ -1,6 +1,0 @@
-pyart.graph.CFRadialDisplay.label_yaxis_field
-=============================================
-
-.. currentmodule:: pyart.graph
-
-.. automethod:: CFRadialDisplay.label_yaxis_field

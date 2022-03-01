@@ -1,6 +1,0 @@
-pyart.io.mdv\_radar.read\_mdv
-=============================
-
-.. currentmodule:: pyart.io.mdv_radar
-
-.. autofunction:: read_mdv

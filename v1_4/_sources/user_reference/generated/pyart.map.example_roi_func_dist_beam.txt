@@ -1,6 +1,0 @@
-pyart.map.example_roi_func_dist_beam
-====================================
-
-.. currentmodule:: pyart.map
-
-.. autofunction:: example_roi_func_dist_beam

@@ -1,6 +1,0 @@
-pyart.correct.region_dealias._EdgeTracker._combine_edges
-========================================================
-
-.. currentmodule:: pyart.correct.region_dealias
-
-.. automethod:: _EdgeTracker._combine_edges

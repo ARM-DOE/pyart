@@ -1,6 +1,0 @@
-pyart.graph.radarmapdisplay.RadarMapDisplay._get_data
-=====================================================
-
-.. currentmodule:: pyart.graph.radarmapdisplay
-
-.. automethod:: RadarMapDisplay._get_data

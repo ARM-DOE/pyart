@@ -1,6 +1,0 @@
-pyart.graph.common.parse_cmap
-=============================
-
-.. currentmodule:: pyart.graph.common
-
-.. autofunction:: parse_cmap

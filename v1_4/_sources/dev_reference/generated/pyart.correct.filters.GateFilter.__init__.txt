@@ -1,6 +1,0 @@
-pyart.correct.filters.GateFilter.__init__
-=========================================
-
-.. currentmodule:: pyart.correct.filters
-
-.. automethod:: GateFilter.__init__

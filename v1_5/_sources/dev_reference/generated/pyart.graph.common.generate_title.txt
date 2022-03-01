@@ -1,6 +1,0 @@
-pyart.graph.common.generate_title
-=================================
-
-.. currentmodule:: pyart.graph.common
-
-.. autofunction:: generate_title

@@ -1,6 +1,0 @@
-pyart.filters.gatefilter.temp\_based\_gate\_filter
-==================================================
-
-.. currentmodule:: pyart.filters.gatefilter
-
-.. autofunction:: temp_based_gate_filter

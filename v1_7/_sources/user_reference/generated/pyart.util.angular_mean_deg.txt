@@ -1,6 +1,0 @@
-pyart.util.angular_mean_deg
-===========================
-
-.. currentmodule:: pyart.util
-
-.. autofunction:: angular_mean_deg

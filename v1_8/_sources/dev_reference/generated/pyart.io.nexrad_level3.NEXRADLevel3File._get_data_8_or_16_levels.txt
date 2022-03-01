@@ -1,6 +1,0 @@
-pyart.io.nexrad_level3.NEXRADLevel3File._get_data_8_or_16_levels
-================================================================
-
-.. currentmodule:: pyart.io.nexrad_level3
-
-.. automethod:: NEXRADLevel3File._get_data_8_or_16_levels

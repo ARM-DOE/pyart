@@ -1,6 +1,0 @@
-pyart.io.uf\_write.UFRayCreator.make\_field\_position\_list
-===========================================================
-
-.. currentmodule:: pyart.io.uf_write
-
-.. automethod:: UFRayCreator.make_field_position_list

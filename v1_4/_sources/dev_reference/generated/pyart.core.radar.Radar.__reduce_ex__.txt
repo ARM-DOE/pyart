@@ -1,6 +1,0 @@
-pyart.core.radar.Radar.__reduce_ex__
-====================================
-
-.. currentmodule:: pyart.core.radar
-
-.. automethod:: Radar.__reduce_ex__

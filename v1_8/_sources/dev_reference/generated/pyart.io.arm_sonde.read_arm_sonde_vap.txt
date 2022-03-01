@@ -1,6 +1,0 @@
-pyart.io.arm_sonde.read_arm_sonde_vap
-=====================================
-
-.. currentmodule:: pyart.io.arm_sonde
-
-.. autofunction:: read_arm_sonde_vap

@@ -1,6 +1,0 @@
-pyart.io.common.get_metadata
-============================
-
-.. currentmodule:: pyart.io.common
-
-.. autofunction:: get_metadata

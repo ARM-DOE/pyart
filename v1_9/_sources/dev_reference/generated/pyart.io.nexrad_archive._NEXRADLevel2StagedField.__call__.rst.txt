@@ -1,6 +1,0 @@
-pyart.io.nexrad\_archive.\_NEXRADLevel2StagedField.\_\_call\_\_
-===============================================================
-
-.. currentmodule:: pyart.io.nexrad_archive
-
-.. automethod:: _NEXRADLevel2StagedField.__call__

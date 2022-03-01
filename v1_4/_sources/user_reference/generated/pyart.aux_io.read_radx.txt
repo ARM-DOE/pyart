@@ -1,6 +1,0 @@
-pyart.aux_io.read_radx
-======================
-
-.. currentmodule:: pyart.aux_io
-
-.. autofunction:: read_radx

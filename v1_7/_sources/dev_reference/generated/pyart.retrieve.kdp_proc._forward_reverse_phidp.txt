@@ -1,6 +1,0 @@
-pyart.retrieve.kdp_proc._forward_reverse_phidp
-==============================================
-
-.. currentmodule:: pyart.retrieve.kdp_proc
-
-.. autofunction:: _forward_reverse_phidp

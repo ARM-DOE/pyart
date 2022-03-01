@@ -1,6 +1,0 @@
-pyart.core.grid.Grid.__getstate__
-=================================
-
-.. currentmodule:: pyart.core.grid
-
-.. automethod:: Grid.__getstate__

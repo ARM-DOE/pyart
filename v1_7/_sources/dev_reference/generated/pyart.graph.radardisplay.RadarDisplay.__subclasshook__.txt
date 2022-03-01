@@ -1,6 +1,0 @@
-pyart.graph.radardisplay.RadarDisplay.__subclasshook__
-======================================================
-
-.. currentmodule:: pyart.graph.radardisplay
-
-.. automethod:: RadarDisplay.__subclasshook__

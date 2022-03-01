@@ -1,6 +1,0 @@
-pyart.config.FileMetadata.get_metadata
-======================================
-
-.. currentmodule:: pyart.config
-
-.. automethod:: FileMetadata.get_metadata

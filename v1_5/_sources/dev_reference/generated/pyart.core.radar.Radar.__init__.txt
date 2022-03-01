@@ -1,6 +1,0 @@
-pyart.core.radar.Radar.__init__
-===============================
-
-.. currentmodule:: pyart.core.radar
-
-.. automethod:: Radar.__init__

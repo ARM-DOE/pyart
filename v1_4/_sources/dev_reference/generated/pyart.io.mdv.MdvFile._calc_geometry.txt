@@ -1,6 +1,0 @@
-pyart.io.mdv.MdvFile._calc_geometry
-===================================
-
-.. currentmodule:: pyart.io.mdv
-
-.. automethod:: MdvFile._calc_geometry

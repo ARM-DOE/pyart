@@ -1,6 +1,0 @@
-pyart.graph.RslDisplay.plot_ray
-===============================
-
-.. currentmodule:: pyart.graph
-
-.. automethod:: RslDisplay.plot_ray

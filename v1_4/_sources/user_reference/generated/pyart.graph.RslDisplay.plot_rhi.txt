@@ -1,6 +1,0 @@
-pyart.graph.RslDisplay.plot_rhi
-===============================
-
-.. currentmodule:: pyart.graph
-
-.. automethod:: RslDisplay.plot_rhi

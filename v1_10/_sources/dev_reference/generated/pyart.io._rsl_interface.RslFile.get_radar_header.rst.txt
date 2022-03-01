@@ -1,6 +1,0 @@
-pyart.io.\_rsl\_interface.RslFile.get\_radar\_header
-====================================================
-
-.. currentmodule:: pyart.io._rsl_interface
-
-.. automethod:: RslFile.get_radar_header

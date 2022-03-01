@@ -1,6 +1,0 @@
-pyart.io.cfradial.\_find\_all\_meta\_group\_vars
-================================================
-
-.. currentmodule:: pyart.io.cfradial
-
-.. autofunction:: _find_all_meta_group_vars

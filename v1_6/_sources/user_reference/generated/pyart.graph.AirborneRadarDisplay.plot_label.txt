@@ -1,6 +1,0 @@
-pyart.graph.AirborneRadarDisplay.plot_label
-===========================================
-
-.. currentmodule:: pyart.graph
-
-.. automethod:: AirborneRadarDisplay.plot_label

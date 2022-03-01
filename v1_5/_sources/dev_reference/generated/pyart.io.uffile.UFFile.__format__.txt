@@ -1,6 +1,0 @@
-pyart.io.uffile.UFFile.__format__
-=================================
-
-.. currentmodule:: pyart.io.uffile
-
-.. automethod:: UFFile.__format__

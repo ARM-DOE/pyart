@@ -1,6 +1,0 @@
-pyart.graph.MdvDisplay.label_xaxis_x
-====================================
-
-.. currentmodule:: pyart.graph
-
-.. automethod:: MdvDisplay.label_xaxis_x

@@ -1,6 +1,0 @@
-pyart.testing.sample_files.NEXRAD_ARCHIVE_MSG31_COMPRESSED_FILE
-===============================================================
-
-.. currentmodule:: pyart.testing.sample_files
-
-.. autodata:: NEXRAD_ARCHIVE_MSG31_COMPRESSED_FILE

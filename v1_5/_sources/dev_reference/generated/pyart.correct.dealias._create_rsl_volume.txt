@@ -1,6 +1,0 @@
-pyart.correct.dealias._create_rsl_volume
-========================================
-
-.. currentmodule:: pyart.correct.dealias
-
-.. autofunction:: _create_rsl_volume

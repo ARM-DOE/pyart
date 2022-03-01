@@ -1,6 +1,0 @@
-pyart.correct.attenuation.\_prepare\_phidp
-==========================================
-
-.. currentmodule:: pyart.correct.attenuation
-
-.. autofunction:: _prepare_phidp

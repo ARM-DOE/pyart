@@ -1,6 +1,0 @@
-pyart.retrieve.kdp\_proc.\_cost\_maesaka
-========================================
-
-.. currentmodule:: pyart.retrieve.kdp_proc
-
-.. autofunction:: _cost_maesaka

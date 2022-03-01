@@ -1,6 +1,0 @@
-pyart.io.nexrad_common.NEXRAD_METADATA
-======================================
-
-.. currentmodule:: pyart.io.nexrad_common
-
-.. autodata:: NEXRAD_METADATA

@@ -1,6 +1,0 @@
-pyart.map._gate_to_grid_map.DistBeamRoI.__reduce_ex__
-=====================================================
-
-.. currentmodule:: pyart.map._gate_to_grid_map
-
-.. automethod:: DistBeamRoI.__reduce_ex__

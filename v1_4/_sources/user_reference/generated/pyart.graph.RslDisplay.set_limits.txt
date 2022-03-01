@@ -1,6 +1,0 @@
-pyart.graph.RslDisplay.set_limits
-=================================
-
-.. currentmodule:: pyart.graph
-
-.. automethod:: RslDisplay.set_limits

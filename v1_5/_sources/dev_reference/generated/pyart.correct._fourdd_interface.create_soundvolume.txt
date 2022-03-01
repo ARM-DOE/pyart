@@ -1,6 +1,0 @@
-pyart.correct._fourdd_interface.create_soundvolume
-==================================================
-
-.. currentmodule:: pyart.correct._fourdd_interface
-
-.. autofunction:: create_soundvolume

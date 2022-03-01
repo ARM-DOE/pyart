@@ -1,6 +1,0 @@
-pyart.core.transforms.antenna\_vectors\_to\_cartesian
-=====================================================
-
-.. currentmodule:: pyart.core.transforms
-
-.. autofunction:: antenna_vectors_to_cartesian

@@ -1,6 +1,0 @@
-pyart.io.nexradl3_read.read_nexrad_level3
-=========================================
-
-.. currentmodule:: pyart.io.nexradl3_read
-
-.. autofunction:: read_nexrad_level3

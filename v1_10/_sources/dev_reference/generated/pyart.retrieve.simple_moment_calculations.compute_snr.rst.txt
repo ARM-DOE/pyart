@@ -1,6 +1,0 @@
-pyart.retrieve.simple\_moment\_calculations.compute\_snr
-========================================================
-
-.. currentmodule:: pyart.retrieve.simple_moment_calculations
-
-.. autofunction:: compute_snr

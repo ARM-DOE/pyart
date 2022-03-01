@@ -1,6 +1,0 @@
-pyart.map.grid_mapper._load_nn_field_data
-=========================================
-
-.. currentmodule:: pyart.map.grid_mapper
-
-.. autofunction:: _load_nn_field_data

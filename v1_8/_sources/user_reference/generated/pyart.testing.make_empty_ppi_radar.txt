@@ -1,6 +1,0 @@
-pyart.testing.make_empty_ppi_radar
-==================================
-
-.. currentmodule:: pyart.testing
-
-.. autofunction:: make_empty_ppi_radar

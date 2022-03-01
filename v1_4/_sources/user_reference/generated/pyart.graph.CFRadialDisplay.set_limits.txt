@@ -1,6 +1,0 @@
-pyart.graph.CFRadialDisplay.set_limits
-======================================
-
-.. currentmodule:: pyart.graph
-
-.. automethod:: CFRadialDisplay.set_limits

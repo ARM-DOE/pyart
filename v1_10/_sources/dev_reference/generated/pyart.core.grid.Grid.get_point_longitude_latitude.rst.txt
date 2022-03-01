@@ -1,6 +1,0 @@
-pyart.core.grid.Grid.get\_point\_longitude\_latitude
-====================================================
-
-.. currentmodule:: pyart.core.grid
-
-.. automethod:: Grid.get_point_longitude_latitude

@@ -1,6 +1,0 @@
-pyart.io.\_rsl\_interface.\_RslVolume.is\_range\_bins\_uniform
-==============================================================
-
-.. currentmodule:: pyart.io._rsl_interface
-
-.. automethod:: _RslVolume.is_range_bins_uniform

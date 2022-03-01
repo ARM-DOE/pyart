@@ -1,6 +1,0 @@
-pyart.graph.CFRadialDisplay.label_xaxis_r
-=========================================
-
-.. currentmodule:: pyart.graph
-
-.. automethod:: CFRadialDisplay.label_xaxis_r

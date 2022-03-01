@@ -1,6 +1,0 @@
-pyart.map.\_gate\_to\_grid\_map.RoIFunction.\_\_init\_subclass\_\_
-==================================================================
-
-.. currentmodule:: pyart.map._gate_to_grid_map
-
-.. automethod:: RoIFunction.__init_subclass__

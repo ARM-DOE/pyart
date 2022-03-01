@@ -1,6 +1,0 @@
-pyart.io.\_rsl\_interface.\_RslRay.\_\_reduce\_\_
-=================================================
-
-.. currentmodule:: pyart.io._rsl_interface
-
-.. automethod:: _RslRay.__reduce__

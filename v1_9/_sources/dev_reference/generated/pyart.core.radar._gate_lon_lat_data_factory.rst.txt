@@ -1,6 +1,0 @@
-pyart.core.radar.\_gate\_lon\_lat\_data\_factory
-================================================
-
-.. currentmodule:: pyart.core.radar
-
-.. autofunction:: _gate_lon_lat_data_factory

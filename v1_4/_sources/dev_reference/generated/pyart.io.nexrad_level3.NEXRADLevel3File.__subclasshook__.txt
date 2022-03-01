@@ -1,6 +1,0 @@
-pyart.io.nexrad_level3.NEXRADLevel3File.__subclasshook__
-========================================================
-
-.. currentmodule:: pyart.io.nexrad_level3
-
-.. automethod:: NEXRADLevel3File.__subclasshook__

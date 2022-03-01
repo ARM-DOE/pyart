@@ -1,6 +1,0 @@
-pyart.aux\_io.gamic\_hdf5.\_get\_instrument\_params
-===================================================
-
-.. currentmodule:: pyart.aux_io.gamic_hdf5
-
-.. autofunction:: _get_instrument_params

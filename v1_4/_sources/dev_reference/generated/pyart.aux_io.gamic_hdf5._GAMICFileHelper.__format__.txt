@@ -1,6 +1,0 @@
-pyart.aux_io.gamic_hdf5._GAMICFileHelper.__format__
-===================================================
-
-.. currentmodule:: pyart.aux_io.gamic_hdf5
-
-.. automethod:: _GAMICFileHelper.__format__

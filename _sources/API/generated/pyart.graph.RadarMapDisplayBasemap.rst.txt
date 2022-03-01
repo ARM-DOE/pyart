@@ -28,6 +28,7 @@ pyart.graph.RadarMapDisplayBasemap
    ~RadarMapDisplayBasemap.plot
    ~RadarMapDisplayBasemap.plot_azimuth_to_rhi
    ~RadarMapDisplayBasemap.plot_colorbar
+   ~RadarMapDisplayBasemap.plot_cr_raster
    ~RadarMapDisplayBasemap.plot_cross_hair
    ~RadarMapDisplayBasemap.plot_grid_lines
    ~RadarMapDisplayBasemap.plot_label

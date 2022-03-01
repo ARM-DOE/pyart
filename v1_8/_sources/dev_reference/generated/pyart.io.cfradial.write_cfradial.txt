@@ -1,6 +1,0 @@
-pyart.io.cfradial.write_cfradial
-================================
-
-.. currentmodule:: pyart.io.cfradial
-
-.. autofunction:: write_cfradial

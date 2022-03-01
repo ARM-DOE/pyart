@@ -1,6 +1,0 @@
-pyart.graph.CFRadialDisplay.plot_ray
-====================================
-
-.. currentmodule:: pyart.graph
-
-.. automethod:: CFRadialDisplay.plot_ray

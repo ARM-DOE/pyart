@@ -1,6 +1,0 @@
-pyart.map._gate_to_grid_map.DistRoI.__reduce__
-==============================================
-
-.. currentmodule:: pyart.map._gate_to_grid_map
-
-.. automethod:: DistRoI.__reduce__

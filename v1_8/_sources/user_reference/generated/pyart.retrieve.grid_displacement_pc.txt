@@ -1,6 +1,0 @@
-pyart.retrieve.grid_displacement_pc
-===================================
-
-.. currentmodule:: pyart.retrieve
-
-.. autofunction:: grid_displacement_pc

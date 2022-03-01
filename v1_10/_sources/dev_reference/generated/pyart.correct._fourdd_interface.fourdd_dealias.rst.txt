@@ -1,6 +1,0 @@
-pyart.correct.\_fourdd\_interface.fourdd\_dealias
-=================================================
-
-.. currentmodule:: pyart.correct._fourdd_interface
-
-.. autofunction:: fourdd_dealias

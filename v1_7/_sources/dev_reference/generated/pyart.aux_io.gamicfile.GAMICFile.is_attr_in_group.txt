@@ -1,6 +1,0 @@
-pyart.aux_io.gamicfile.GAMICFile.is_attr_in_group
-=================================================
-
-.. currentmodule:: pyart.aux_io.gamicfile
-
-.. automethod:: GAMICFile.is_attr_in_group

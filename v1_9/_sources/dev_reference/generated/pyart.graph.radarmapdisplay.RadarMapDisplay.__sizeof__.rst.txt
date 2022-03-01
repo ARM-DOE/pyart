@@ -1,6 +1,0 @@
-pyart.graph.radarmapdisplay.RadarMapDisplay.\_\_sizeof\_\_
-==========================================================
-
-.. currentmodule:: pyart.graph.radarmapdisplay
-
-.. automethod:: RadarMapDisplay.__sizeof__

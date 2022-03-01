@@ -1,6 +1,0 @@
-pyart.io.uf\_write.UFRayCreator.\_set\_mandatory\_header\_location
-==================================================================
-
-.. currentmodule:: pyart.io.uf_write
-
-.. automethod:: UFRayCreator._set_mandatory_header_location

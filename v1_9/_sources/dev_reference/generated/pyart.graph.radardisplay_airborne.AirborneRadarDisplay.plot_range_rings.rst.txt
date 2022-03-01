@@ -1,6 +1,0 @@
-pyart.graph.radardisplay\_airborne.AirborneRadarDisplay.plot\_range\_rings
-==========================================================================
-
-.. currentmodule:: pyart.graph.radardisplay_airborne
-
-.. automethod:: AirborneRadarDisplay.plot_range_rings

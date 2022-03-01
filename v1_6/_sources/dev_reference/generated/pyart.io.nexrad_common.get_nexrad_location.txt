@@ -1,6 +1,0 @@
-pyart.io.nexrad_common.get_nexrad_location
-==========================================
-
-.. currentmodule:: pyart.io.nexrad_common
-
-.. autofunction:: get_nexrad_location

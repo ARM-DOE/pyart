@@ -1,6 +1,0 @@
-pyart.io.uffile.UFFile.get\_prts
-================================
-
-.. currentmodule:: pyart.io.uffile
-
-.. automethod:: UFFile.get_prts

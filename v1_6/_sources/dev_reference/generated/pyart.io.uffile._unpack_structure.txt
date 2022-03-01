@@ -1,6 +1,0 @@
-pyart.io.uffile._unpack_structure
-=================================
-
-.. currentmodule:: pyart.io.uffile
-
-.. autofunction:: _unpack_structure

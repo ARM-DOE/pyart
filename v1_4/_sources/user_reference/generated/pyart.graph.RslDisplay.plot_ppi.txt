@@ -1,6 +1,0 @@
-pyart.graph.RslDisplay.plot_ppi
-===============================
-
-.. currentmodule:: pyart.graph
-
-.. automethod:: RslDisplay.plot_ppi

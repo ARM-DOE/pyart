@@ -1,6 +1,0 @@
-pyart.aux\_io.rainbow\_wrl.read\_rainbow\_wrl
-=============================================
-
-.. currentmodule:: pyart.aux_io.rainbow_wrl
-
-.. autofunction:: read_rainbow_wrl

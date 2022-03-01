@@ -1,6 +1,0 @@
-pyart.io.uffile.UFRay.\_\_subclasshook\_\_
-==========================================
-
-.. currentmodule:: pyart.io.uffile
-
-.. automethod:: UFRay.__subclasshook__

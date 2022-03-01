@@ -1,6 +1,0 @@
-pyart.map.gates\_to\_grid.\_determine\_fields
-=============================================
-
-.. currentmodule:: pyart.map.gates_to_grid
-
-.. autofunction:: _determine_fields

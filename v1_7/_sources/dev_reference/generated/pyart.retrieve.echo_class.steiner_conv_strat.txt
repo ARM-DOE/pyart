@@ -1,6 +1,0 @@
-pyart.retrieve.echo_class.steiner_conv_strat
-============================================
-
-.. currentmodule:: pyart.retrieve.echo_class
-
-.. autofunction:: steiner_conv_strat

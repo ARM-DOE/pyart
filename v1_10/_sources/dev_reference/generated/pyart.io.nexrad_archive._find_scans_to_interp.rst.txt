@@ -1,6 +1,0 @@
-pyart.io.nexrad\_archive.\_find\_scans\_to\_interp
-==================================================
-
-.. currentmodule:: pyart.io.nexrad_archive
-
-.. autofunction:: _find_scans_to_interp

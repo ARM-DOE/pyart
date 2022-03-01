@@ -1,6 +1,0 @@
-pyart.graph.common.generate_field_name
-======================================
-
-.. currentmodule:: pyart.graph.common
-
-.. autofunction:: generate_field_name

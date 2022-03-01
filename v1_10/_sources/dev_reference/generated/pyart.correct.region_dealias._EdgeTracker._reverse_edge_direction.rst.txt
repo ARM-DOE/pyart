@@ -1,6 +1,0 @@
-pyart.correct.region\_dealias.\_EdgeTracker.\_reverse\_edge\_direction
-======================================================================
-
-.. currentmodule:: pyart.correct.region_dealias
-
-.. automethod:: _EdgeTracker._reverse_edge_direction

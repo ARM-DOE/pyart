@@ -1,6 +1,0 @@
-pyart.core.grid.Grid.init\_point\_altitude
-==========================================
-
-.. currentmodule:: pyart.core.grid
-
-.. automethod:: Grid.init_point_altitude

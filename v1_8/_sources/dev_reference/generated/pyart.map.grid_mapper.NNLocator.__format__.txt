@@ -1,6 +1,0 @@
-pyart.map.grid_mapper.NNLocator.__format__
-==========================================
-
-.. currentmodule:: pyart.map.grid_mapper
-
-.. automethod:: NNLocator.__format__

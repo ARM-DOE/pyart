@@ -1,6 +1,0 @@
-pyart.graph.RslDisplay.plot_colorbar
-====================================
-
-.. currentmodule:: pyart.graph
-
-.. automethod:: RslDisplay.plot_colorbar

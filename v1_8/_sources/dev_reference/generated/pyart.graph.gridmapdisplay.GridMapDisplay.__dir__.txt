@@ -1,6 +1,0 @@
-pyart.graph.gridmapdisplay.GridMapDisplay.__dir__
-=================================================
-
-.. currentmodule:: pyart.graph.gridmapdisplay
-
-.. automethod:: GridMapDisplay.__dir__

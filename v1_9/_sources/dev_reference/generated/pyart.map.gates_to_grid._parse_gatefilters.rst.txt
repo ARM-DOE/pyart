@@ -1,6 +1,0 @@
-pyart.map.gates\_to\_grid.\_parse\_gatefilters
-==============================================
-
-.. currentmodule:: pyart.map.gates_to_grid
-
-.. autofunction:: _parse_gatefilters

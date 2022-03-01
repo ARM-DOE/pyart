@@ -1,6 +1,0 @@
-pyart.io.read_mdv
-=================
-
-.. currentmodule:: pyart.io
-
-.. autofunction:: read_mdv

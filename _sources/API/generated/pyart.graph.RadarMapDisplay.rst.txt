@@ -28,6 +28,7 @@ pyart.graph.RadarMapDisplay
    ~RadarMapDisplay.plot
    ~RadarMapDisplay.plot_azimuth_to_rhi
    ~RadarMapDisplay.plot_colorbar
+   ~RadarMapDisplay.plot_cr_raster
    ~RadarMapDisplay.plot_cross_hair
    ~RadarMapDisplay.plot_grid_lines
    ~RadarMapDisplay.plot_label

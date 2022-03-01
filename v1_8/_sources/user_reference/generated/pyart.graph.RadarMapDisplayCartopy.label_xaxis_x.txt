@@ -1,6 +1,0 @@
-pyart.graph.RadarMapDisplayCartopy.label_xaxis_x
-================================================
-
-.. currentmodule:: pyart.graph
-
-.. automethod:: RadarMapDisplayCartopy.label_xaxis_x

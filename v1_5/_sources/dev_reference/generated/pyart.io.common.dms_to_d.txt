@@ -1,6 +1,0 @@
-pyart.io.common.dms_to_d
-========================
-
-.. currentmodule:: pyart.io.common
-
-.. autofunction:: dms_to_d

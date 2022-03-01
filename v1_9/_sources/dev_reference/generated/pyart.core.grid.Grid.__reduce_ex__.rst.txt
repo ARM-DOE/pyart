@@ -1,6 +1,0 @@
-pyart.core.grid.Grid.\_\_reduce\_ex\_\_
-=======================================
-
-.. currentmodule:: pyart.core.grid
-
-.. automethod:: Grid.__reduce_ex__

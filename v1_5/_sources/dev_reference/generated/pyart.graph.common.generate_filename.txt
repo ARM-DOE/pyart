@@ -1,6 +1,0 @@
-pyart.graph.common.generate_filename
-====================================
-
-.. currentmodule:: pyart.graph.common
-
-.. autofunction:: generate_filename

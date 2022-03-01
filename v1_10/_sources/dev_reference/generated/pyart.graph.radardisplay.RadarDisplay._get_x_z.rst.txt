@@ -1,6 +1,0 @@
-pyart.graph.radardisplay.RadarDisplay.\_get\_x\_z
-=================================================
-
-.. currentmodule:: pyart.graph.radardisplay
-
-.. automethod:: RadarDisplay._get_x_z

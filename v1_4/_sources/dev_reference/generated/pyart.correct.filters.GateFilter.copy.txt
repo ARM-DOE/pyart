@@ -1,6 +1,0 @@
-pyart.correct.filters.GateFilter.copy
-=====================================
-
-.. currentmodule:: pyart.correct.filters
-
-.. automethod:: GateFilter.copy

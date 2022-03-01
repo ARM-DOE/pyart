@@ -1,6 +1,0 @@
-pyart.map._gate_to_grid_map.DistRoI.get_roi
-===========================================
-
-.. currentmodule:: pyart.map._gate_to_grid_map
-
-.. automethod:: DistRoI.get_roi

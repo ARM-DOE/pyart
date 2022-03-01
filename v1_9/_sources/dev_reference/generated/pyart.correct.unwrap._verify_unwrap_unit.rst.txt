@@ -1,6 +1,0 @@
-pyart.correct.unwrap.\_verify\_unwrap\_unit
-===========================================
-
-.. currentmodule:: pyart.correct.unwrap
-
-.. autofunction:: _verify_unwrap_unit

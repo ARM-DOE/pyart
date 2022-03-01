@@ -1,6 +1,0 @@
-pyart.io.sigmet._is_time_ordered_by_reverse_roll
-================================================
-
-.. currentmodule:: pyart.io.sigmet
-
-.. autofunction:: _is_time_ordered_by_reverse_roll

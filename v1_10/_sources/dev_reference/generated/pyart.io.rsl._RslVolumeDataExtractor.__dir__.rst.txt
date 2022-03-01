@@ -1,6 +1,0 @@
-pyart.io.rsl.\_RslVolumeDataExtractor.\_\_dir\_\_
-=================================================
-
-.. currentmodule:: pyart.io.rsl
-
-.. automethod:: _RslVolumeDataExtractor.__dir__

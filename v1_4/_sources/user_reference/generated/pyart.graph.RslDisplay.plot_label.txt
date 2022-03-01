@@ -1,6 +1,0 @@
-pyart.graph.RslDisplay.plot_label
-=================================
-
-.. currentmodule:: pyart.graph
-
-.. automethod:: RslDisplay.plot_label

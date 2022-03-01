@@ -1,6 +1,0 @@
-pyart.aux_io.sinarame_h5._get_SINARAME_h5_sweep_data
-====================================================
-
-.. currentmodule:: pyart.aux_io.sinarame_h5
-
-.. autofunction:: _get_SINARAME_h5_sweep_data

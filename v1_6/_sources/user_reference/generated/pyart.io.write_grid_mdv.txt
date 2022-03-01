@@ -1,6 +1,0 @@
-pyart.io.write_grid_mdv
-=======================
-
-.. currentmodule:: pyart.io
-
-.. autofunction:: write_grid_mdv

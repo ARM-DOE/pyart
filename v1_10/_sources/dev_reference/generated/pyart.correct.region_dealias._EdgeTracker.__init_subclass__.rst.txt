@@ -1,6 +1,0 @@
-pyart.correct.region\_dealias.\_EdgeTracker.\_\_init\_subclass\_\_
-==================================================================
-
-.. currentmodule:: pyart.correct.region_dealias
-
-.. automethod:: _EdgeTracker.__init_subclass__

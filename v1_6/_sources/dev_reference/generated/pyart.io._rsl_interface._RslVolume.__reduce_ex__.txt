@@ -1,6 +1,0 @@
-pyart.io._rsl_interface._RslVolume.__reduce_ex__
-================================================
-
-.. currentmodule:: pyart.io._rsl_interface
-
-.. automethod:: _RslVolume.__reduce_ex__

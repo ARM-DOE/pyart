@@ -1,6 +1,0 @@
-pyart.util.radar\_utils.to\_vpt
-===============================
-
-.. currentmodule:: pyart.util.radar_utils
-
-.. autofunction:: to_vpt

@@ -1,6 +1,0 @@
-pyart.aux\_io.gamicfile.GAMICFile.\_\_subclasshook\_\_
-======================================================
-
-.. currentmodule:: pyart.aux_io.gamicfile
-
-.. automethod:: GAMICFile.__subclasshook__

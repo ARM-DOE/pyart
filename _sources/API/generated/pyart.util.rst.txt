@@ -1,4 +1,4 @@
-pyart.util
+﻿pyart.util
 ==========
 
 .. rubric:: Description
@@ -40,6 +40,8 @@ pyart.util
     datetimes_from_radar
     
     estimate_noise_hs74
+    
+    image_mute_radar
     
     interval_mean
     

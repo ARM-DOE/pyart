@@ -1,6 +1,0 @@
-pyart.graph.radardisplay_airborne.AirborneRadarDisplay._label_axes_rhi
-======================================================================
-
-.. currentmodule:: pyart.graph.radardisplay_airborne
-
-.. automethod:: AirborneRadarDisplay._label_axes_rhi

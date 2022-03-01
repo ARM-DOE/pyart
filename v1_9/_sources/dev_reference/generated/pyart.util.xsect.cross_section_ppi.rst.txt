@@ -1,6 +1,0 @@
-pyart.util.xsect.cross\_section\_ppi
-====================================
-
-.. currentmodule:: pyart.util.xsect
-
-.. autofunction:: cross_section_ppi

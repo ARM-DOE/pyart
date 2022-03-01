@@ -1,6 +1,0 @@
-pyart.graph.radarmapdisplay.RadarMapDisplay.plot\_cross\_hair
-=============================================================
-
-.. currentmodule:: pyart.graph.radarmapdisplay
-
-.. automethod:: RadarMapDisplay.plot_cross_hair

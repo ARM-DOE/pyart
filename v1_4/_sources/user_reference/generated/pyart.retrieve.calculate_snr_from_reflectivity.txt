@@ -1,6 +1,0 @@
-pyart.retrieve.calculate_snr_from_reflectivity
-==============================================
-
-.. currentmodule:: pyart.retrieve
-
-.. autofunction:: calculate_snr_from_reflectivity

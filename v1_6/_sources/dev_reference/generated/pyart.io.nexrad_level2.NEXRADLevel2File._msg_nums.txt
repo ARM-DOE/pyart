@@ -1,6 +1,0 @@
-pyart.io.nexrad_level2.NEXRADLevel2File._msg_nums
-=================================================
-
-.. currentmodule:: pyart.io.nexrad_level2
-
-.. automethod:: NEXRADLevel2File._msg_nums

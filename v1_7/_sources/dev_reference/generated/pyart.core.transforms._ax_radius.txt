@@ -1,6 +1,0 @@
-pyart.core.transforms._ax_radius
-================================
-
-.. currentmodule:: pyart.core.transforms
-
-.. autofunction:: _ax_radius

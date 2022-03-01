@@ -1,6 +1,0 @@
-pyart.graph.AirborneRadarDisplay.plot_sweep_grid
-================================================
-
-.. currentmodule:: pyart.graph
-
-.. automethod:: AirborneRadarDisplay.plot_sweep_grid

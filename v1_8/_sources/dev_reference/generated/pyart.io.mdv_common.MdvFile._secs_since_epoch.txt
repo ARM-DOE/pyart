@@ -1,6 +1,0 @@
-pyart.io.mdv_common.MdvFile._secs_since_epoch
-=============================================
-
-.. currentmodule:: pyart.io.mdv_common
-
-.. automethod:: MdvFile._secs_since_epoch

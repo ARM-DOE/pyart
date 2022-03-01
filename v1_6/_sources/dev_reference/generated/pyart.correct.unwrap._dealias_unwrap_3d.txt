@@ -1,6 +1,0 @@
-pyart.correct.unwrap._dealias_unwrap_3d
-=======================================
-
-.. currentmodule:: pyart.correct.unwrap
-
-.. autofunction:: _dealias_unwrap_3d

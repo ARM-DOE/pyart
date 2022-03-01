@@ -1,6 +1,0 @@
-pyart.io.uf_write.UFRayCreator.make_data_header
-===============================================
-
-.. currentmodule:: pyart.io.uf_write
-
-.. automethod:: UFRayCreator.make_data_header

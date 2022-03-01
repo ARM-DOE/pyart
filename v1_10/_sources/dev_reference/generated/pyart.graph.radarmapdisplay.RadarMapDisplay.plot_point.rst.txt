@@ -1,6 +1,0 @@
-pyart.graph.radarmapdisplay.RadarMapDisplay.plot\_point
-=======================================================
-
-.. currentmodule:: pyart.graph.radarmapdisplay
-
-.. automethod:: RadarMapDisplay.plot_point

@@ -1,6 +1,0 @@
-pyart.io.mdv\_common.MdvFile.\_write\_a\_field
-==============================================
-
-.. currentmodule:: pyart.io.mdv_common
-
-.. automethod:: MdvFile._write_a_field

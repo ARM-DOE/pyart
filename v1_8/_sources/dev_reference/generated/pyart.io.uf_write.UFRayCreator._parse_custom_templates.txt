@@ -1,6 +1,0 @@
-pyart.io.uf_write.UFRayCreator._parse_custom_templates
-======================================================
-
-.. currentmodule:: pyart.io.uf_write
-
-.. automethod:: UFRayCreator._parse_custom_templates

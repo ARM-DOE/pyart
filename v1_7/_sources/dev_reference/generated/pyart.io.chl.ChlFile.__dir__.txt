@@ -1,6 +1,0 @@
-pyart.io.chl.ChlFile.__dir__
-============================
-
-.. currentmodule:: pyart.io.chl
-
-.. automethod:: ChlFile.__dir__

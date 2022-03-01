@@ -1,6 +1,0 @@
-pyart.retrieve.echo\_class.\_assign\_to\_class
-==============================================
-
-.. currentmodule:: pyart.retrieve.echo_class
-
-.. autofunction:: _assign_to_class

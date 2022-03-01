@@ -1,6 +1,0 @@
-pyart.io.nexrad\_cdm.read\_nexrad\_cdm
-======================================
-
-.. currentmodule:: pyart.io.nexrad_cdm
-
-.. autofunction:: read_nexrad_cdm

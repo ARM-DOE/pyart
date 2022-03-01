@@ -1,6 +1,0 @@
-pyart.testing.sample_objects.make_normal_storm
-==============================================
-
-.. currentmodule:: pyart.testing.sample_objects
-
-.. autofunction:: make_normal_storm

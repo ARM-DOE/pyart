@@ -1,6 +1,0 @@
-pyart.core.grid.Grid.__format__
-===============================
-
-.. currentmodule:: pyart.core.grid
-
-.. automethod:: Grid.__format__

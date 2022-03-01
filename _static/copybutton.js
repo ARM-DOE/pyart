@@ -17,6 +17,30 @@ const messages = {
     'copy_to_clipboard': 'In die Zwischenablage kopieren',
     'copy_success': 'Kopiert!',
     'copy_failure': 'Fehler beim Kopieren',
+  },
+  'fr' : {
+    'copy': 'Copier',
+    'copy_to_clipboard': 'Copié dans le presse-papier',
+    'copy_success': 'Copié !',
+    'copy_failure': 'Échec de la copie',
+  },
+  'ru': {
+    'copy': 'Скопировать',
+    'copy_to_clipboard': 'Скопировать в буфер',
+    'copy_success': 'Скопировано!',
+    'copy_failure': 'Не удалось скопировать',
+  },
+  'zh-CN': {
+    'copy': '复制',
+    'copy_to_clipboard': '复制到剪贴板',
+    'copy_success': '复制成功!',
+    'copy_failure': '复制失败',
+  },
+  'it' : {
+    'copy': 'Copiare',
+    'copy_to_clipboard': 'Copiato negli appunti',
+    'copy_success': 'Copiato!',
+    'copy_failure': 'Errore durante la copia',
   }
 }
 
@@ -24,6 +48,31 @@ let locale = 'en'
 if( document.documentElement.lang !== undefined
     && messages[document.documentElement.lang] !== undefined ) {
   locale = document.documentElement.lang
+}
+
+let doc_url_root = DOCUMENTATION_OPTIONS.URL_ROOT;
+if (doc_url_root == '#') {
+    doc_url_root = '';
+}
+
+/**
+ * SVG files for our copy buttons
+ */
+let iconCheck = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-check" width="44" height="44" viewBox="0 0 24 24" stroke-width="2" stroke="#22863a" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <title>${messages[locale]['copy_success']}</title>
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M5 12l5 5l10 -10" />
+</svg>`
+
+// If the user specified their own SVG use that, otherwise use the default
+let iconCopy = ``;
+if (!iconCopy) {
+  iconCopy = `<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-copy" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#000000" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <title>${messages[locale]['copy_to_clipboard']}</title>
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <rect x="8" y="8" width="12" height="12" rx="2" />
+  <path d="M16 8v-2a2 2 0 0 0 -2 -2h-8a2 2 0 0 0 -2 2v8a2 2 0 0 0 2 2h2" />
+</svg>`
 }
 
 /**
@@ -54,50 +103,17 @@ const clearSelection = () => {
 }
 
 // Changes tooltip text for two seconds, then changes it back
-const temporarilyChangeTooltip = (el, newText) => {
-  const oldText = el.getAttribute('data-tooltip')
+const temporarilyChangeTooltip = (el, oldText, newText) => {
   el.setAttribute('data-tooltip', newText)
+  el.classList.add('success')
   setTimeout(() => el.setAttribute('data-tooltip', oldText), 2000)
+  setTimeout(() => el.classList.remove('success'), 2000)
 }
 
-// Callback when a copy button is clicked. Will be passed the node that was clicked
-// should then grab the text and replace pieces of text that shouldn't be used in output
-var copyTargetText = (trigger) => {
-  var target = document.querySelector(trigger.attributes['data-clipboard-target'].value);
-  var textContent = target.innerText.split('\n');
-  var copybuttonPromptText = ''; // Inserted from config
-  var onlyCopyPromptLines = true; // Inserted from config
-  var removePrompts = true; // Inserted from config
-
-  // Text content line filtering based on prompts (if a prompt text is given)
-  if (copybuttonPromptText.length > 0) {
-    // If only copying prompt lines, remove all lines that don't start w/ prompt
-    if (onlyCopyPromptLines) {
-      linesWithPrompt = textContent.filter((line) => {
-        return line.startsWith(copybuttonPromptText) || (line.length == 0); // Keep newlines
-      });
-      // Check to make sure we have at least one non-empty line
-      var nonEmptyLines = linesWithPrompt.filter((line) => {return line.length > 0});
-      // If we detected lines w/ prompt, then overwrite textContent w/ those lines
-      if ((linesWithPrompt.length > 0) && (nonEmptyLines.length > 0)) {
-        textContent = linesWithPrompt;
-      }
-    }
-    // Remove the starting prompt from any remaining lines
-    if (removePrompts) {
-      textContent.forEach((line, index) => {
-        if (line.startsWith(copybuttonPromptText)) {
-          textContent[index] = line.slice(copybuttonPromptText.length);
-        }
-      });
-    }
-  }
-  textContent = textContent.join('\n');
-  // Remove a trailing newline to avoid auto-running when pasting
-  if (textContent.endsWith("\n")) {
-     textContent = textContent.slice(0, -1)
-  }
-  return textContent
+// Changes the copy button icon for two seconds, then changes it back
+const temporarilyChangeIcon = (el) => {
+  el.innerHTML = iconCheck;
+  setTimeout(() => {el.innerHTML = iconCopy}, 2000)
 }
 
 const addCopyButtonToCodeCells = () => {
@@ -113,14 +129,78 @@ const addCopyButtonToCodeCells = () => {
   codeCells.forEach((codeCell, index) => {
     const id = codeCellId(index)
     codeCell.setAttribute('id', id)
-    const pre_bg = getComputedStyle(codeCell).backgroundColor;
 
     const clipboardButton = id =>
-    `<a class="copybtn o-tooltip--left" style="background-color: ${pre_bg}" data-tooltip="${messages[locale]['copy']}" data-clipboard-target="#${id}">
-      <img src="${DOCUMENTATION_OPTIONS.URL_ROOT}_static/copy-button.svg" alt="${messages[locale]['copy_to_clipboard']}">
-    </a>`
+    `<button class="copybtn o-tooltip--left" data-tooltip="${messages[locale]['copy']}" data-clipboard-target="#${id}">
+      ${iconCopy}
+    </button>`
     codeCell.insertAdjacentHTML('afterend', clipboardButton(id))
   })
+
+function escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+}
+
+// Callback when a copy button is clicked. Will be passed the node that was clicked
+// should then grab the text and replace pieces of text that shouldn't be used in output
+function formatCopyText(textContent, copybuttonPromptText, isRegexp = false, onlyCopyPromptLines = true, removePrompts = true, copyEmptyLines = true, lineContinuationChar = "", hereDocDelim = "") {
+
+    var regexp;
+    var match;
+
+    // Do we check for line continuation characters and "HERE-documents"?
+    var useLineCont = !!lineContinuationChar
+    var useHereDoc = !!hereDocDelim
+
+    // create regexp to capture prompt and remaining line
+    if (isRegexp) {
+        regexp = new RegExp('^(' + copybuttonPromptText + ')(.*)')
+    } else {
+        regexp = new RegExp('^(' + escapeRegExp(copybuttonPromptText) + ')(.*)')
+    }
+
+    const outputLines = [];
+    var promptFound = false;
+    var gotLineCont = false;
+    var gotHereDoc = false;
+    const lineGotPrompt = [];
+    for (const line of textContent.split('\n')) {
+        match = line.match(regexp)
+        if (match || gotLineCont || gotHereDoc) {
+            promptFound = regexp.test(line)
+            lineGotPrompt.push(promptFound)
+            if (removePrompts && promptFound) {
+                outputLines.push(match[2])
+            } else {
+                outputLines.push(line)
+            }
+            gotLineCont = line.endsWith(lineContinuationChar) & useLineCont
+            if (line.includes(hereDocDelim) & useHereDoc)
+                gotHereDoc = !gotHereDoc
+        } else if (!onlyCopyPromptLines) {
+            outputLines.push(line)
+        } else if (copyEmptyLines && line.trim() === '') {
+            outputLines.push(line)
+        }
+    }
+
+    // If no lines with the prompt were found then just use original lines
+    if (lineGotPrompt.some(v => v === true)) {
+        textContent = outputLines.join('\n');
+    }
+
+    // Remove a trailing newline to avoid auto-running when pasting
+    if (textContent.endsWith("\n")) {
+        textContent = textContent.slice(0, -1)
+    }
+    return textContent
+}
+
+
+var copyTargetText = (trigger) => {
+  var target = document.querySelector(trigger.attributes['data-clipboard-target'].value);
+  return formatCopyText(target.innerText, '', false, true, true, true, '', '')
+}
 
   // Initialize with a callback so we can modify the text before copy
   const clipboard = new ClipboardJS('.copybtn', {text: copyTargetText})
@@ -128,11 +208,12 @@ const addCopyButtonToCodeCells = () => {
   // Update UI with error/success messages
   clipboard.on('success', event => {
     clearSelection()
-    temporarilyChangeTooltip(event.trigger, messages[locale]['copy_success'])
+    temporarilyChangeTooltip(event.trigger, messages[locale]['copy'], messages[locale]['copy_success'])
+    temporarilyChangeIcon(event.trigger)
   })
 
   clipboard.on('error', event => {
-    temporarilyChangeTooltip(event.trigger, messages[locale]['copy_failure'])
+    temporarilyChangeTooltip(event.trigger, messages[locale]['copy'], messages[locale]['copy_failure'])
   })
 }
 

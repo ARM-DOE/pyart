@@ -1,6 +1,0 @@
-pyart.io.uf.\_get\_instrument\_parameters
-=========================================
-
-.. currentmodule:: pyart.io.uf
-
-.. autofunction:: _get_instrument_parameters

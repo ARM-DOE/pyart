@@ -1,6 +1,0 @@
-pyart.io.\_rsl\_interface.RslFile.\_\_init\_subclass\_\_
-========================================================
-
-.. currentmodule:: pyart.io._rsl_interface
-
-.. automethod:: RslFile.__init_subclass__

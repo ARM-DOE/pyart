@@ -1,6 +1,0 @@
-pyart.testing.tmpdirs.InTemporaryDirectory.cleanup
-==================================================
-
-.. currentmodule:: pyart.testing.tmpdirs
-
-.. automethod:: InTemporaryDirectory.cleanup

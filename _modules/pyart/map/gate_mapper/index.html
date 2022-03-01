@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pyart.map.gate_mapper &mdash; Py-ART 1.11.7.dev+d5db026 documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/plot_directive.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/copybutton.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/clipboard.min.js"></script>
+        <script src="../../../../_static/copybutton.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex/" />
+    <link rel="search" title="Search" href="../../../../search/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../../" class="icon icon-home"> Py-ART
+          </a>
+              <div class="version">
+                1.11.7.dev+d5db026
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../API/">API Reference Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../INSTALL/">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../setting_up_an_environment/">Setting up an Environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../contributors_guide/">Contributor’s Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Downloads</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://anaconda.org/conda-forge/arm_pyart">Anaconda Cloud</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/ARM-DOE/pyart">GitHub Repo</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/ARM-DOE/pyart/archive/master.zip">Zip File of Repository</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Notebooks</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../notebooks/basic_ingest_using_test_radar_object/">Creating a basic ingest of a NetCDF file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../notebooks/changing_fields_and_saving/">Field manipulation and Saving the Radar Object to a file.</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../notebooks/dealiasing_velocity/">Dealiasing Velocity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../notebooks/mapping_data_to_a_cartesian_grid/">Mapping Data to a Cartesian Grid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../notebooks/masking_data_with_gatefilters/">Masking Data With Py-ART Gatefilters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../notebooks/the_pyart_radar_object_and_indexing/">The Py-ART Radar object and indexing</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Help</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/ARM-DOE/pyart/issues">GitHub Issue Tracker</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://groups.google.com/forum/#!forum/pyart-users">Mailing List</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Science Lead</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://www.anl.gov/profile/scott-m-collis">Scott Collis</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../">Py-ART</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../../">Module code</a> &raquo;</li>
+      <li>pyart.map.gate_mapper</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pyart.map.gate_mapper</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Utilities for finding gates with equivalent locations between radars for easy</span>
+<span class="sd">comparison.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">scipy.spatial</span> <span class="kn">import</span> <span class="n">KDTree</span>
+
+<span class="kn">from</span> <span class="nn">..core</span> <span class="kn">import</span> <span class="n">Radar</span><span class="p">,</span> <span class="n">geographic_to_cartesian</span>
+
+
+<div class="viewcode-block" id="GateMapper"><a class="viewcode-back" href="../../../../API/generated/pyart.map.GateMapper/#pyart.map.GateMapper">[docs]</a><span class="k">class</span> <span class="nc">GateMapper</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The GateMapper class will, given one radar&#39;s gate, find the gate in another</span>
+<span class="sd">    radar&#39;s volume that is closest in location to the specified gate.</span>
+<span class="sd">    GateMapper will use a kd-tree in order to generate a mapping function that</span>
+<span class="sd">    provides the sweep and ray index in the other radar that is closest in</span>
+<span class="sd">    physical location to the first radar&#39;s gate. This functionality provides</span>
+<span class="sd">    easy mapping of equivalent locations between radar objects with simple</span>
+<span class="sd">    indexing. In addition, returning a mapped radar object is also supported.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; grid_mapper = pyart.map.GridMapper(src, dest)</span>
+<span class="sd">    &gt;&gt;&gt; # Get the destination radar&#39;s equivalent of (2, 2) in the source radar&#39;s</span>
+<span class="sd">    &gt;&gt;&gt; # coordinates</span>
+<span class="sd">    &gt;&gt;&gt; dest_index = grid_mapper[2, 2]</span>
+<span class="sd">    &gt;&gt;&gt; radar_mapped = grid_mapper.mapped_radar([&#39;reflectivity&#39;])</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    src_radar : pyart.core.Radar</span>
+<span class="sd">        The source radar data.</span>
+<span class="sd">    dest_radar : pyart.core.Radar</span>
+<span class="sd">        The destination radar to map the source radar data onto.</span>
+<span class="sd">    tol : float</span>
+<span class="sd">        The difference in meters between the source and destination gate allowed</span>
+<span class="sd">        for an adequate match.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">src_radar</span><span class="p">:</span> <span class="n">Radar</span><span class="p">,</span> <span class="n">dest_radar</span><span class="p">:</span> <span class="n">Radar</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">500.</span><span class="p">):</span>
+        <span class="n">gate_x</span> <span class="o">=</span> <span class="n">dest_radar</span><span class="o">.</span><span class="n">gate_x</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+        <span class="n">gate_y</span> <span class="o">=</span> <span class="n">dest_radar</span><span class="o">.</span><span class="n">gate_y</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+        <span class="n">gate_z</span> <span class="o">=</span> <span class="n">dest_radar</span><span class="o">.</span><span class="n">gate_altitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+        <span class="n">proj_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;proj&#39;</span><span class="p">:</span> <span class="s1">&#39;pyart_aeqd&#39;</span><span class="p">,</span> <span class="s1">&#39;lon_0&#39;</span><span class="p">:</span> <span class="n">dest_radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span>
+                     <span class="s1">&#39;lat_0&#39;</span><span class="p">:</span> <span class="n">dest_radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">src_radar_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">src_radar_y</span> <span class="o">=</span> <span class="n">geographic_to_cartesian</span><span class="p">(</span>
+            <span class="n">src_radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="n">src_radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span>
+            <span class="n">proj_dict</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">gate_x</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">gate_y</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">gate_z</span><span class="o">.</span><span class="n">flatten</span><span class="p">()],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_kdtree</span> <span class="o">=</span> <span class="n">KDTree</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tolerance</span> <span class="o">=</span> <span class="n">tol</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dest_radar</span> <span class="o">=</span> <span class="n">dest_radar</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">src_radar</span> <span class="o">=</span> <span class="n">src_radar</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_index_map</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">src_radar</span><span class="o">.</span><span class="n">gate_x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]),</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">nan</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">src_radar</span><span class="o">.</span><span class="n">gate_x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])],</span>
+                <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="n">new_points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">src_radar</span><span class="o">.</span><span class="n">gate_x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">src_radar_x</span><span class="p">,</span>
+             <span class="bp">self</span><span class="o">.</span><span class="n">src_radar</span><span class="o">.</span><span class="n">gate_y</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">src_radar_y</span><span class="p">,</span>
+             <span class="bp">self</span><span class="o">.</span><span class="n">src_radar</span><span class="o">.</span><span class="n">gate_altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">dists</span><span class="p">,</span> <span class="n">inds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_kdtree</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">new_points</span><span class="p">,</span> <span class="n">distance_upper_bound</span><span class="o">=</span><span class="n">tol</span><span class="p">)</span>
+        <span class="n">inds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">dists</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">tolerance</span><span class="p">,</span> <span class="n">inds</span><span class="p">[:],</span> <span class="o">-</span><span class="mi">32767</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="n">inds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">inds</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">src_radar</span><span class="o">.</span><span class="n">gate_x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_index_map</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">inds</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">dest_radar</span><span class="o">.</span><span class="n">gate_x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_index_map</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">inds</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">dest_radar</span><span class="o">.</span><span class="n">gate_x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span>
+            <span class="p">(</span><span class="n">inds</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">dest_radar</span><span class="o">.</span><span class="n">gate_x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Return the equivalent index in the destination radar&#39;s</span>
+<span class="sd">        coordinates. &quot;&quot;&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_index_map</span><span class="p">[</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]),</span>
+                 <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_index_map</span><span class="p">[</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">1</span><span class="p">]))</span>
+        <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">x</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="GateMapper.mapped_radar"><a class="viewcode-back" href="../../../../API/generated/pyart.map.GateMapper.mapped_radar/#pyart.map.GateMapper.mapped_radar">[docs]</a>    <span class="k">def</span> <span class="nf">mapped_radar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field_list</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This returns a version of the destination radar with the fields in</span>
+<span class="sd">        field_list from the source radar mapped into the destination radar&#39;s</span>
+<span class="sd">        coordinate system.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        field_list: list of str or str</span>
+<span class="sd">            The list of fields to map.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        mapped_radar:</span>
+<span class="sd">            The destination radar with the fields from the source radar mapped</span>
+<span class="sd">            into the destination radar&#39;s coordinate system.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">mapped_radar</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dest_radar</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field_list</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">field_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">field_list</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">field_list</span><span class="p">:</span>
+            <span class="n">mapped_radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span>
+                <span class="kc">True</span><span class="p">,</span> <span class="n">mapped_radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">src_radar</span><span class="o">.</span><span class="n">nrays</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">src_radar</span><span class="o">.</span><span class="n">ngates</span><span class="p">):</span>
+                <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">field_list</span><span class="p">:</span>
+                        <span class="n">mapped_radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span>
+                            <span class="n">field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">src_radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span>
+                                <span class="n">field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">mapped_radar</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2013-2020, Py-ART developers.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+    <!-- Theme Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-221367849-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-221367849-1', {
+          'anonymize_ip': false,
+      });
+    </script> 
+
+</body>
+</html>

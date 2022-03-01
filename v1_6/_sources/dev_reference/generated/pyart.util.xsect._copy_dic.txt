@@ -1,6 +1,0 @@
-pyart.util.xsect._copy_dic
-==========================
-
-.. currentmodule:: pyart.util.xsect
-
-.. autofunction:: _copy_dic

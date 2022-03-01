@@ -1,6 +1,0 @@
-pyart.correct.filters.GateFilter._get_fdata
-===========================================
-
-.. currentmodule:: pyart.correct.filters
-
-.. automethod:: GateFilter._get_fdata

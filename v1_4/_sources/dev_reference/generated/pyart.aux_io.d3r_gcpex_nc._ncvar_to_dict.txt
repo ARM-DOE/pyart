@@ -1,6 +1,0 @@
-pyart.aux_io.d3r_gcpex_nc._ncvar_to_dict
-========================================
-
-.. currentmodule:: pyart.aux_io.d3r_gcpex_nc
-
-.. autofunction:: _ncvar_to_dict

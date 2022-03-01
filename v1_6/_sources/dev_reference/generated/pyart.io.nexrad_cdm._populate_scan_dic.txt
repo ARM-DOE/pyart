@@ -1,6 +1,0 @@
-pyart.io.nexrad_cdm._populate_scan_dic
-======================================
-
-.. currentmodule:: pyart.io.nexrad_cdm
-
-.. autofunction:: _populate_scan_dic

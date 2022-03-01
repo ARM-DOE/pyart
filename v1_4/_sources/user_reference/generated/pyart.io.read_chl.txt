@@ -1,6 +1,0 @@
-pyart.io.read_chl
-=================
-
-.. currentmodule:: pyart.io
-
-.. autofunction:: read_chl

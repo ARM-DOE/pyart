@@ -1,4 +1,4 @@
-pyart.core
+﻿pyart.core
 ==========
 
 .. rubric:: Description

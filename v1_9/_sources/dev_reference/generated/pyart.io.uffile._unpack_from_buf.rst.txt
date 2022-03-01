@@ -1,6 +1,0 @@
-pyart.io.uffile.\_unpack\_from\_buf
-===================================
-
-.. currentmodule:: pyart.io.uffile
-
-.. autofunction:: _unpack_from_buf

@@ -1,6 +1,0 @@
-pyart.graph.radarmapdisplay.RadarMapDisplay._parse_ax
-=====================================================
-
-.. currentmodule:: pyart.graph.radarmapdisplay
-
-.. automethod:: RadarMapDisplay._parse_ax

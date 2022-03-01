@@ -1,6 +1,0 @@
-pyart.aux\_io.rainbow\_wrl.\_get\_angle
-=======================================
-
-.. currentmodule:: pyart.aux_io.rainbow_wrl
-
-.. autofunction:: _get_angle

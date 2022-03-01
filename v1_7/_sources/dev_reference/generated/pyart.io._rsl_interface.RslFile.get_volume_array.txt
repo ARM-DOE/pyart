@@ -1,6 +1,0 @@
-pyart.io._rsl_interface.RslFile.get_volume_array
-================================================
-
-.. currentmodule:: pyart.io._rsl_interface
-
-.. automethod:: RslFile.get_volume_array

@@ -1,6 +1,0 @@
-pyart.util.radar_utils.is_vpt
-=============================
-
-.. currentmodule:: pyart.util.radar_utils
-
-.. autofunction:: is_vpt

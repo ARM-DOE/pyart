@@ -1,6 +1,0 @@
-pyart.graph.plot_cfradial.CFRadialDisplay._set_ray_title
-========================================================
-
-.. currentmodule:: pyart.graph.plot_cfradial
-
-.. automethod:: CFRadialDisplay._set_ray_title

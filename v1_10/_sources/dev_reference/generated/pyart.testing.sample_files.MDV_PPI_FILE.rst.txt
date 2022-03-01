@@ -1,6 +1,0 @@
-pyart.testing.sample\_files.MDV\_PPI\_FILE
-==========================================
-
-.. currentmodule:: pyart.testing.sample_files
-
-.. autodata:: MDV_PPI_FILE

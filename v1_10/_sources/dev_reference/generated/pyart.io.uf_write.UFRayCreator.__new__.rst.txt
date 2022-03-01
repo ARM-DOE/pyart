@@ -1,6 +1,0 @@
-pyart.io.uf\_write.UFRayCreator.\_\_new\_\_
-===========================================
-
-.. currentmodule:: pyart.io.uf_write
-
-.. automethod:: UFRayCreator.__new__

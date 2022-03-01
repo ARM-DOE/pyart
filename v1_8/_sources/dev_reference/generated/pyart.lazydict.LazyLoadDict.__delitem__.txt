@@ -1,6 +1,0 @@
-pyart.lazydict.LazyLoadDict.__delitem__
-=======================================
-
-.. currentmodule:: pyart.lazydict
-
-.. automethod:: LazyLoadDict.__delitem__

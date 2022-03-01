@@ -21,6 +21,7 @@ pyart.core.Radar
    ~Radar.get_elevation
    ~Radar.get_end
    ~Radar.get_field
+   ~Radar.get_gate_area
    ~Radar.get_gate_lat_lon_alt
    ~Radar.get_gate_x_y_z
    ~Radar.get_nyquist_vel

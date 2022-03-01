@@ -1,6 +1,0 @@
-pyart.aux_io.odim_h5._get_odim_h5_sweep_data
-============================================
-
-.. currentmodule:: pyart.aux_io.odim_h5
-
-.. autofunction:: _get_odim_h5_sweep_data

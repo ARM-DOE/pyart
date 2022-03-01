@@ -1,6 +1,0 @@
-pyart.graph.gridmapdisplay.GridMapDisplay.cartopy\_political\_boundaries
-========================================================================
-
-.. currentmodule:: pyart.graph.gridmapdisplay
-
-.. automethod:: GridMapDisplay.cartopy_political_boundaries

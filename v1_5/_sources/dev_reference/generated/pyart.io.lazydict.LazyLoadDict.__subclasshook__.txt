@@ -1,6 +1,0 @@
-pyart.io.lazydict.LazyLoadDict.__subclasshook__
-===============================================
-
-.. currentmodule:: pyart.io.lazydict
-
-.. automethod:: LazyLoadDict.__subclasshook__

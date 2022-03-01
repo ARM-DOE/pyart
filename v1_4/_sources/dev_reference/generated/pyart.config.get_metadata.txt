@@ -1,6 +1,0 @@
-pyart.config.get_metadata
-=========================
-
-.. currentmodule:: pyart.config
-
-.. autofunction:: get_metadata

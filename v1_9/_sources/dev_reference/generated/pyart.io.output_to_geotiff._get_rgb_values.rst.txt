@@ -1,6 +1,0 @@
-pyart.io.output\_to\_geotiff.\_get\_rgb\_values
-===============================================
-
-.. currentmodule:: pyart.io.output_to_geotiff
-
-.. autofunction:: _get_rgb_values

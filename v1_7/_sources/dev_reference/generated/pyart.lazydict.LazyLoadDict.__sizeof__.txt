@@ -1,6 +1,0 @@
-pyart.lazydict.LazyLoadDict.__sizeof__
-======================================
-
-.. currentmodule:: pyart.lazydict
-
-.. automethod:: LazyLoadDict.__sizeof__

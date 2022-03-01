@@ -1,6 +1,0 @@
-pyart.io.mdv\_grid.\_time\_dic\_to\_datetime
-============================================
-
-.. currentmodule:: pyart.io.mdv_grid
-
-.. autofunction:: _time_dic_to_datetime

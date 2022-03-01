@@ -1,6 +1,0 @@
-pyart.graph.gridmapdisplay.GridMapDisplay.\_\_init\_subclass\_\_
-================================================================
-
-.. currentmodule:: pyart.graph.gridmapdisplay
-
-.. automethod:: GridMapDisplay.__init_subclass__

@@ -1,6 +1,0 @@
-pyart.io.\_rsl\_interface.\_RslVolume.get\_sweep\_azimuths
-==========================================================
-
-.. currentmodule:: pyart.io._rsl_interface
-
-.. automethod:: _RslVolume.get_sweep_azimuths

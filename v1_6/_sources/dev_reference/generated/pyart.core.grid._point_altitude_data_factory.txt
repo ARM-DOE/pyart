@@ -1,6 +1,0 @@
-pyart.core.grid._point_altitude_data_factory
-============================================
-
-.. currentmodule:: pyart.core.grid
-
-.. autofunction:: _point_altitude_data_factory

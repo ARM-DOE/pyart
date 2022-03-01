@@ -1,6 +1,0 @@
-pyart.graph.CFRadialDisplay.generate_vpt_title
-==============================================
-
-.. currentmodule:: pyart.graph
-
-.. automethod:: CFRadialDisplay.generate_vpt_title

@@ -1,6 +1,0 @@
-pyart.io.uf_write.UFRayCreator.make_fsi_vel
-===========================================
-
-.. currentmodule:: pyart.io.uf_write
-
-.. automethod:: UFRayCreator.make_fsi_vel

@@ -1,6 +1,0 @@
-pyart.graph.common.generate_grid_filename
-=========================================
-
-.. currentmodule:: pyart.graph.common
-
-.. autofunction:: generate_grid_filename

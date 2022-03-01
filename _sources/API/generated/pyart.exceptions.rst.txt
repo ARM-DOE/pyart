@@ -1,4 +1,4 @@
-pyart.exceptions
+﻿pyart.exceptions
 ================
 
 .. rubric:: Description

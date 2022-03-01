@@ -1,6 +1,0 @@
-pyart.io.nexrad_level2._decompress_records
-==========================================
-
-.. currentmodule:: pyart.io.nexrad_level2
-
-.. autofunction:: _decompress_records

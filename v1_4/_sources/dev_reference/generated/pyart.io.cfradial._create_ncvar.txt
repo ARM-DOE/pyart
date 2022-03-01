@@ -1,6 +1,0 @@
-pyart.io.cfradial._create_ncvar
-===============================
-
-.. currentmodule:: pyart.io.cfradial
-
-.. autofunction:: _create_ncvar

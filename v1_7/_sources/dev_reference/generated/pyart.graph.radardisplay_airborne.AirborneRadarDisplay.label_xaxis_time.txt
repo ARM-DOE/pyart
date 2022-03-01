@@ -1,6 +1,0 @@
-pyart.graph.radardisplay_airborne.AirborneRadarDisplay.label_xaxis_time
-=======================================================================
-
-.. currentmodule:: pyart.graph.radardisplay_airborne
-
-.. automethod:: AirborneRadarDisplay.label_xaxis_time

@@ -1,6 +1,0 @@
-pyart.io.grid_io.read_legacy_grid
-=================================
-
-.. currentmodule:: pyart.io.grid_io
-
-.. autofunction:: read_legacy_grid

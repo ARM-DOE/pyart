@@ -1,6 +1,0 @@
-pyart.io.sigmet.ymds_time_to_datetime
-=====================================
-
-.. currentmodule:: pyart.io.sigmet
-
-.. autofunction:: ymds_time_to_datetime

@@ -1,6 +1,0 @@
-pyart.testing.sample\_files.SIGMET\_PPI\_FILE
-=============================================
-
-.. currentmodule:: pyart.testing.sample_files
-
-.. autodata:: SIGMET_PPI_FILE

@@ -1,6 +1,0 @@
-pyart.io.cfradial._ncvar_to_dict
-================================
-
-.. currentmodule:: pyart.io.cfradial
-
-.. autofunction:: _ncvar_to_dict

@@ -1,6 +1,0 @@
-pyart.io.common.\_test\_arguments
-=================================
-
-.. currentmodule:: pyart.io.common
-
-.. autofunction:: _test_arguments

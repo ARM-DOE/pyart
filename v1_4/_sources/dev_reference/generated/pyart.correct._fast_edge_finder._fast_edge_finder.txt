@@ -1,6 +1,0 @@
-pyart.correct._fast_edge_finder._fast_edge_finder
-=================================================
-
-.. currentmodule:: pyart.correct._fast_edge_finder
-
-.. autofunction:: _fast_edge_finder

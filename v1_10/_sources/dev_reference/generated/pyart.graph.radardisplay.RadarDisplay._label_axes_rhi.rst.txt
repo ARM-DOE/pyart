@@ -1,6 +1,0 @@
-pyart.graph.radardisplay.RadarDisplay.\_label\_axes\_rhi
-========================================================
-
-.. currentmodule:: pyart.graph.radardisplay
-
-.. automethod:: RadarDisplay._label_axes_rhi

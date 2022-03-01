@@ -1,6 +1,0 @@
-pyart.io.uffile.UFRay.\_\_dir\_\_
-=================================
-
-.. currentmodule:: pyart.io.uffile
-
-.. automethod:: UFRay.__dir__

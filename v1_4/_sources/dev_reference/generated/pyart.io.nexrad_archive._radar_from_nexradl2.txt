@@ -1,6 +1,0 @@
-pyart.io.nexrad_archive._radar_from_nexradl2
-============================================
-
-.. currentmodule:: pyart.io.nexrad_archive
-
-.. autofunction:: _radar_from_nexradl2

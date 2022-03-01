@@ -1,6 +1,0 @@
-pyart.correct.despeckle.\_adjust\_for\_periodic\_boundary
-=========================================================
-
-.. currentmodule:: pyart.correct.despeckle
-
-.. autofunction:: _adjust_for_periodic_boundary

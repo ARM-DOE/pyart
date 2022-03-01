@@ -1,6 +1,0 @@
-pyart.io.mdv\_common.MdvFile.\_get\_chunk\_header
-=================================================
-
-.. currentmodule:: pyart.io.mdv_common
-
-.. automethod:: MdvFile._get_chunk_header

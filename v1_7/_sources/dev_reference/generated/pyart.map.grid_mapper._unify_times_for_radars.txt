@@ -1,6 +1,0 @@
-pyart.map.grid_mapper._unify_times_for_radars
-=============================================
-
-.. currentmodule:: pyart.map.grid_mapper
-
-.. autofunction:: _unify_times_for_radars

@@ -1,6 +1,0 @@
-pyart.correct.phase\_proc.det\_process\_range
-=============================================
-
-.. currentmodule:: pyart.correct.phase_proc
-
-.. autofunction:: det_process_range

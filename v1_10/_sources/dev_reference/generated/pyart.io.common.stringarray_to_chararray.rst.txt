@@ -1,6 +1,0 @@
-pyart.io.common.stringarray\_to\_chararray
-==========================================
-
-.. currentmodule:: pyart.io.common
-
-.. autofunction:: stringarray_to_chararray

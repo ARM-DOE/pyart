@@ -1,6 +1,0 @@
-pyart.retrieve.kdp\_proc.boundary\_conditions\_maesaka
-======================================================
-
-.. currentmodule:: pyart.retrieve.kdp_proc
-
-.. autofunction:: boundary_conditions_maesaka

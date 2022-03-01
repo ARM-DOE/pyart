@@ -1,6 +1,0 @@
-pyart.testing.sample\_files.CFRADIAL\_RHI\_FILE
-===============================================
-
-.. currentmodule:: pyart.testing.sample_files
-
-.. autodata:: CFRADIAL_RHI_FILE

@@ -1,6 +1,0 @@
-pyart.config.FileMetadata.__call__
-==================================
-
-.. currentmodule:: pyart.config
-
-.. automethod:: FileMetadata.__call__

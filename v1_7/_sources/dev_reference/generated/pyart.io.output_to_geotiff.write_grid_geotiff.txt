@@ -1,6 +1,0 @@
-pyart.io.output_to_geotiff.write_grid_geotiff
-=============================================
-
-.. currentmodule:: pyart.io.output_to_geotiff
-
-.. autofunction:: write_grid_geotiff

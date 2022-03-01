@@ -1,6 +1,0 @@
-pyart.graph.gridmapdisplay.GridMapDisplay.\_label\_axes\_latitude
-=================================================================
-
-.. currentmodule:: pyart.graph.gridmapdisplay
-
-.. automethod:: GridMapDisplay._label_axes_latitude

@@ -1,6 +1,0 @@
-pyart.aux\_io.noxp\_iphex\_nc.\_ncvar\_to\_dict
-===============================================
-
-.. currentmodule:: pyart.aux_io.noxp_iphex_nc
-
-.. autofunction:: _ncvar_to_dict

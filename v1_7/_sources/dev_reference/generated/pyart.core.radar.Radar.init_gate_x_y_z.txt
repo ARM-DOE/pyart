@@ -1,6 +1,0 @@
-pyart.core.radar.Radar.init_gate_x_y_z
-======================================
-
-.. currentmodule:: pyart.core.radar
-
-.. automethod:: Radar.init_gate_x_y_z

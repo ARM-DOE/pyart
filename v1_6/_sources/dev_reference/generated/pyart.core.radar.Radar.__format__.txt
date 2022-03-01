@@ -1,6 +1,0 @@
-pyart.core.radar.Radar.__format__
-=================================
-
-.. currentmodule:: pyart.core.radar
-
-.. automethod:: Radar.__format__

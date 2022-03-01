@@ -1,6 +1,0 @@
-pyart.aux_io.pattern.read_pattern
-=================================
-
-.. currentmodule:: pyart.aux_io.pattern
-
-.. autofunction:: read_pattern

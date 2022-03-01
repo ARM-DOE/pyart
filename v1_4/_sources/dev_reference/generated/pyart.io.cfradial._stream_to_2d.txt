@@ -1,6 +1,0 @@
-pyart.io.cfradial._stream_to_2d
-===============================
-
-.. currentmodule:: pyart.io.cfradial
-
-.. autofunction:: _stream_to_2d

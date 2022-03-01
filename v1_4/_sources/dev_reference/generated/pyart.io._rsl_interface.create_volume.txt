@@ -1,6 +1,0 @@
-pyart.io._rsl_interface.create_volume
-=====================================
-
-.. currentmodule:: pyart.io._rsl_interface
-
-.. autofunction:: create_volume

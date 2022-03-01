@@ -1,6 +1,0 @@
-pyart.graph.plot_mdv.MdvDisplay._get_ray_data
-=============================================
-
-.. currentmodule:: pyart.graph.plot_mdv
-
-.. automethod:: MdvDisplay._get_ray_data

@@ -1,6 +1,0 @@
-pyart.core.transforms.geographic\_to\_cartesian\_aeqd
-=====================================================
-
-.. currentmodule:: pyart.core.transforms
-
-.. autofunction:: geographic_to_cartesian_aeqd

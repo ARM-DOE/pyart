@@ -1,6 +1,0 @@
-pyart.io.nexrad\_level3.NEXRADLevel3File.\_read\_symbology\_block
-=================================================================
-
-.. currentmodule:: pyart.io.nexrad_level3
-
-.. automethod:: NEXRADLevel3File._read_symbology_block

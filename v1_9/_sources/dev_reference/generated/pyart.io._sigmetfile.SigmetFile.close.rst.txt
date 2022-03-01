@@ -1,6 +1,0 @@
-pyart.io.\_sigmetfile.SigmetFile.close
-======================================
-
-.. currentmodule:: pyart.io._sigmetfile
-
-.. automethod:: SigmetFile.close

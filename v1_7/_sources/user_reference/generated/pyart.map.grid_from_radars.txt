@@ -1,6 +1,0 @@
-pyart.map.grid_from_radars
-==========================
-
-.. currentmodule:: pyart.map
-
-.. autofunction:: grid_from_radars

@@ -1,6 +1,0 @@
-pyart.graph.MdvDisplay.label_yaxis_field
-========================================
-
-.. currentmodule:: pyart.graph
-
-.. automethod:: MdvDisplay.label_yaxis_field

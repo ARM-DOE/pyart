@@ -1,6 +1,0 @@
-pyart.graph.cm.\_reverse\_cmap\_spec
-====================================
-
-.. currentmodule:: pyart.graph.cm
-
-.. autofunction:: _reverse_cmap_spec

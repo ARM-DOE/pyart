@@ -1,6 +1,0 @@
-pyart.io.lazydict.LazyLoadDict.__eq__
-=====================================
-
-.. currentmodule:: pyart.io.lazydict
-
-.. automethod:: LazyLoadDict.__eq__

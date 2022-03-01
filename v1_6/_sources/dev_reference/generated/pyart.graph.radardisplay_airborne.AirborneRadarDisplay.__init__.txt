@@ -1,6 +1,0 @@
-pyart.graph.radardisplay_airborne.AirborneRadarDisplay.__init__
-===============================================================
-
-.. currentmodule:: pyart.graph.radardisplay_airborne
-
-.. automethod:: AirborneRadarDisplay.__init__

@@ -1,6 +1,0 @@
-pyart.testing.sample_files.NEXRAD_LEVEL3_MSG163
-===============================================
-
-.. currentmodule:: pyart.testing.sample_files
-
-.. autodata:: NEXRAD_LEVEL3_MSG163

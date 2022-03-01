@@ -1,6 +1,0 @@
-pyart.io._rsl_interface._label_volume
-=====================================
-
-.. currentmodule:: pyart.io._rsl_interface
-
-.. autofunction:: _label_volume

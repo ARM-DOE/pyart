@@ -1,6 +1,0 @@
-pyart.io.chl.ChlFile.close
-==========================
-
-.. currentmodule:: pyart.io.chl
-
-.. automethod:: ChlFile.close

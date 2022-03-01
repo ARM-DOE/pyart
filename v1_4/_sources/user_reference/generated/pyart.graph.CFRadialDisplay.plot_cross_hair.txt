@@ -1,6 +1,0 @@
-pyart.graph.CFRadialDisplay.plot_cross_hair
-===========================================
-
-.. currentmodule:: pyart.graph
-
-.. automethod:: CFRadialDisplay.plot_cross_hair

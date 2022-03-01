@@ -1,6 +1,0 @@
-pyart.graph.GridMapDisplay.generate_filename
-============================================
-
-.. currentmodule:: pyart.graph
-
-.. automethod:: GridMapDisplay.generate_filename

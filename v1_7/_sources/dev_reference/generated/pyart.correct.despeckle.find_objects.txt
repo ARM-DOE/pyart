@@ -1,6 +1,0 @@
-pyart.correct.despeckle.find_objects
-====================================
-
-.. currentmodule:: pyart.correct.despeckle
-
-.. autofunction:: find_objects

@@ -1,6 +1,0 @@
-pyart.retrieve.kdp_maesaka
-==========================
-
-.. currentmodule:: pyart.retrieve
-
-.. autofunction:: kdp_maesaka

@@ -1,6 +1,0 @@
-pyart.map.grid\_mapper.NNLocator.find\_neighbors\_and\_dists
-============================================================
-
-.. currentmodule:: pyart.map.grid_mapper
-
-.. automethod:: NNLocator.find_neighbors_and_dists

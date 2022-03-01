@@ -1,6 +1,0 @@
-pyart.core.radar.Radar._check_sweep_in_range
-============================================
-
-.. currentmodule:: pyart.core.radar
-
-.. automethod:: Radar._check_sweep_in_range

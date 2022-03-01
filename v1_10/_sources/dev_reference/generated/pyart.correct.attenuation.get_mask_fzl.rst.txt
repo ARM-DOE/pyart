@@ -1,6 +1,0 @@
-pyart.correct.attenuation.get\_mask\_fzl
-========================================
-
-.. currentmodule:: pyart.correct.attenuation
-
-.. autofunction:: get_mask_fzl

@@ -1,6 +1,0 @@
-pyart.retrieve.kdp\_proc.filter\_psidp
-======================================
-
-.. currentmodule:: pyart.retrieve.kdp_proc
-
-.. autofunction:: filter_psidp

@@ -1,6 +1,0 @@
-pyart.io.nexrad\_level2.\_get\_record\_from\_buf
-================================================
-
-.. currentmodule:: pyart.io.nexrad_level2
-
-.. autofunction:: _get_record_from_buf

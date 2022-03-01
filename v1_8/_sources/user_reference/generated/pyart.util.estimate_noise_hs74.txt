@@ -1,6 +1,0 @@
-pyart.util.estimate_noise_hs74
-==============================
-
-.. currentmodule:: pyart.util
-
-.. autofunction:: estimate_noise_hs74

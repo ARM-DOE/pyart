@@ -1,6 +1,0 @@
-pyart.io.nexrad_level2.NEXRADLevel2File.__new__
-===============================================
-
-.. currentmodule:: pyart.io.nexrad_level2
-
-.. automethod:: NEXRADLevel2File.__new__

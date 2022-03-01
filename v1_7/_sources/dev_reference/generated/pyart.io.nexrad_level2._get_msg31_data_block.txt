@@ -1,6 +1,0 @@
-pyart.io.nexrad_level2._get_msg31_data_block
-============================================
-
-.. currentmodule:: pyart.io.nexrad_level2
-
-.. autofunction:: _get_msg31_data_block

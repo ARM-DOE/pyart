@@ -1,6 +1,0 @@
-pyart.retrieve.echo_class.hydroclass_semisupervised
-===================================================
-
-.. currentmodule:: pyart.retrieve.echo_class
-
-.. autofunction:: hydroclass_semisupervised

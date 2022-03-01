@@ -1,6 +1,0 @@
-pyart.retrieve.steiner_conv_strat
-=================================
-
-.. currentmodule:: pyart.retrieve
-
-.. autofunction:: steiner_conv_strat

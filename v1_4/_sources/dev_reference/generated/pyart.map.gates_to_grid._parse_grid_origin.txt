@@ -1,6 +1,0 @@
-pyart.map.gates_to_grid._parse_grid_origin
-==========================================
-
-.. currentmodule:: pyart.map.gates_to_grid
-
-.. autofunction:: _parse_grid_origin

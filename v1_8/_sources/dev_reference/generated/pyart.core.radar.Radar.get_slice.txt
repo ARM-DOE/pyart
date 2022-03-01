@@ -1,6 +1,0 @@
-pyart.core.radar.Radar.get_slice
-================================
-
-.. currentmodule:: pyart.core.radar
-
-.. automethod:: Radar.get_slice

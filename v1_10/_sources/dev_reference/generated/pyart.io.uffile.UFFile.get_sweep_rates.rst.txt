@@ -1,6 +1,0 @@
-pyart.io.uffile.UFFile.get\_sweep\_rates
-========================================
-
-.. currentmodule:: pyart.io.uffile
-
-.. automethod:: UFFile.get_sweep_rates

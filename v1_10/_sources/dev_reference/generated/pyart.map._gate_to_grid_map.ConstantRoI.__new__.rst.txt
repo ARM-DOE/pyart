@@ -1,6 +1,0 @@
-pyart.map.\_gate\_to\_grid\_map.ConstantRoI.\_\_new\_\_
-=======================================================
-
-.. currentmodule:: pyart.map._gate_to_grid_map
-
-.. automethod:: ConstantRoI.__new__

@@ -1,6 +1,0 @@
-pyart.config.get_field_name
-===========================
-
-.. currentmodule:: pyart.config
-
-.. autofunction:: get_field_name

@@ -1,6 +1,0 @@
-pyart.graph.radarmapdisplay.RadarMapDisplay.plot_range_rings
-============================================================
-
-.. currentmodule:: pyart.graph.radarmapdisplay
-
-.. automethod:: RadarMapDisplay.plot_range_rings

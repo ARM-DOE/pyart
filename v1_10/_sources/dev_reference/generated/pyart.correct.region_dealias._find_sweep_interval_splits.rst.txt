@@ -1,6 +1,0 @@
-pyart.correct.region\_dealias.\_find\_sweep\_interval\_splits
-=============================================================
-
-.. currentmodule:: pyart.correct.region_dealias
-
-.. autofunction:: _find_sweep_interval_splits

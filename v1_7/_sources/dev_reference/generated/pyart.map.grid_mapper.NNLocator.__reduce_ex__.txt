@@ -1,6 +1,0 @@
-pyart.map.grid_mapper.NNLocator.__reduce_ex__
-=============================================
-
-.. currentmodule:: pyart.map.grid_mapper
-
-.. automethod:: NNLocator.__reduce_ex__

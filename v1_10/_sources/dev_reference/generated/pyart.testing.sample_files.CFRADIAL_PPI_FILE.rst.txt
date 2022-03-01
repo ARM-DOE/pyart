@@ -1,6 +1,0 @@
-pyart.testing.sample\_files.CFRADIAL\_PPI\_FILE
-===============================================
-
-.. currentmodule:: pyart.testing.sample_files
-
-.. autodata:: CFRADIAL_PPI_FILE

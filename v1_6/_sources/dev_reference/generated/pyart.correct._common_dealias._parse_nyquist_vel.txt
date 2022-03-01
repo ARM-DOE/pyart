@@ -1,6 +1,0 @@
-pyart.correct._common_dealias._parse_nyquist_vel
-================================================
-
-.. currentmodule:: pyart.correct._common_dealias
-
-.. autofunction:: _parse_nyquist_vel

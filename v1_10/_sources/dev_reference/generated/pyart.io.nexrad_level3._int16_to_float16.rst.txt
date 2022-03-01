@@ -1,6 +1,0 @@
-pyart.io.nexrad\_level3.\_int16\_to\_float16
-============================================
-
-.. currentmodule:: pyart.io.nexrad_level3
-
-.. autofunction:: _int16_to_float16

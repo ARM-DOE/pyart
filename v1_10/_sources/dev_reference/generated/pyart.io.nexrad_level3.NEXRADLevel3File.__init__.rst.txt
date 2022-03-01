@@ -1,6 +1,0 @@
-pyart.io.nexrad\_level3.NEXRADLevel3File.\_\_init\_\_
-=====================================================
-
-.. currentmodule:: pyart.io.nexrad_level3
-
-.. automethod:: NEXRADLevel3File.__init__

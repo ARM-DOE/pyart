@@ -1,6 +1,0 @@
-pyart.io.nexrad\_level3.NEXRADLevel3File.\_get\_data\_msg\_134
-==============================================================
-
-.. currentmodule:: pyart.io.nexrad_level3
-
-.. automethod:: NEXRADLevel3File._get_data_msg_134

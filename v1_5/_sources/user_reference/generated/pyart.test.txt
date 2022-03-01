@@ -1,6 +1,0 @@
-pyart.test
-==========
-
-.. currentmodule:: pyart
-
-.. autofunction:: test

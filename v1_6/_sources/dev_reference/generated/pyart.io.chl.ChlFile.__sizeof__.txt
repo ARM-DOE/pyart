@@ -1,6 +1,0 @@
-pyart.io.chl.ChlFile.__sizeof__
-===============================
-
-.. currentmodule:: pyart.io.chl
-
-.. automethod:: ChlFile.__sizeof__

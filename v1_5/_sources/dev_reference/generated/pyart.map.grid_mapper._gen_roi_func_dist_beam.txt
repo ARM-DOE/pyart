@@ -1,6 +1,0 @@
-pyart.map.grid_mapper._gen_roi_func_dist_beam
-=============================================
-
-.. currentmodule:: pyart.map.grid_mapper
-
-.. autofunction:: _gen_roi_func_dist_beam

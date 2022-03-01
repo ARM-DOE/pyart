@@ -1,6 +1,0 @@
-pyart.graph.common.generate\_radar\_time\_sweep
-===============================================
-
-.. currentmodule:: pyart.graph.common
-
-.. autofunction:: generate_radar_time_sweep

@@ -1,6 +1,0 @@
-pyart.core.wind_profile.HorizontalWindProfile._parse_location_data
-==================================================================
-
-.. currentmodule:: pyart.core.wind_profile
-
-.. automethod:: HorizontalWindProfile._parse_location_data

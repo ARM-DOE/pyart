@@ -1,6 +1,0 @@
-pyart.io.nexrad_cdm.NEXRAD_METADATA
-===================================
-
-.. currentmodule:: pyart.io.nexrad_cdm
-
-.. autodata:: NEXRAD_METADATA

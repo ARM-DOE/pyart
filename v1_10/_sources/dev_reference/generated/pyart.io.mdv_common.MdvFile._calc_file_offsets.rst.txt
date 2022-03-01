@@ -1,6 +1,0 @@
-pyart.io.mdv\_common.MdvFile.\_calc\_file\_offsets
-==================================================
-
-.. currentmodule:: pyart.io.mdv_common
-
-.. automethod:: MdvFile._calc_file_offsets

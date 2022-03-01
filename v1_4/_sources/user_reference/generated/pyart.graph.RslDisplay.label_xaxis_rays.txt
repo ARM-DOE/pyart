@@ -1,6 +1,0 @@
-pyart.graph.RslDisplay.label_xaxis_rays
-=======================================
-
-.. currentmodule:: pyart.graph
-
-.. automethod:: RslDisplay.label_xaxis_rays

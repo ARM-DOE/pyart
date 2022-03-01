@@ -1,6 +1,0 @@
-pyart.graph.gridmapdisplay.GridMapDisplay.\_get\_label\_x
-=========================================================
-
-.. currentmodule:: pyart.graph.gridmapdisplay
-
-.. automethod:: GridMapDisplay._get_label_x

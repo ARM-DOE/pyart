@@ -1,6 +1,0 @@
-pyart.io.nexrad_archive._NEXRADLevel2StagedField.__subclasshook__
-=================================================================
-
-.. currentmodule:: pyart.io.nexrad_archive
-
-.. automethod:: _NEXRADLevel2StagedField.__subclasshook__

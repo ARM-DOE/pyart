@@ -1,6 +1,0 @@
-pyart.io.lazydict.LazyLoadDict.__init__
-=======================================
-
-.. currentmodule:: pyart.io.lazydict
-
-.. automethod:: LazyLoadDict.__init__

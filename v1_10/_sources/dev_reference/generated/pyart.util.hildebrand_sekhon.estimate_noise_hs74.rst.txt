@@ -1,6 +1,0 @@
-pyart.util.hildebrand\_sekhon.estimate\_noise\_hs74
-===================================================
-
-.. currentmodule:: pyart.util.hildebrand_sekhon
-
-.. autofunction:: estimate_noise_hs74

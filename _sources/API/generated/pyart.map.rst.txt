@@ -1,4 +1,4 @@
-pyart.map
+﻿pyart.map
 =========
 
 .. rubric:: Description
@@ -6,6 +6,15 @@ pyart.map
 .. automodule:: pyart.map
 
 .. currentmodule:: pyart.map
+
+
+.. rubric:: Classes
+
+.. autosummary::
+    :toctree: .
+    
+    GateMapper
+    
 
 
 

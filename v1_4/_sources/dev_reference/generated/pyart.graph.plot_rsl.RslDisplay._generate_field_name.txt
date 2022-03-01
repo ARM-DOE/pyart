@@ -1,6 +1,0 @@
-pyart.graph.plot_rsl.RslDisplay._generate_field_name
-====================================================
-
-.. currentmodule:: pyart.graph.plot_rsl
-
-.. automethod:: RslDisplay._generate_field_name

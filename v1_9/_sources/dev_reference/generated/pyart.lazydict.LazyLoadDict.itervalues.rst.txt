@@ -1,6 +1,0 @@
-pyart.lazydict.LazyLoadDict.itervalues
-======================================
-
-.. currentmodule:: pyart.lazydict
-
-.. automethod:: LazyLoadDict.itervalues

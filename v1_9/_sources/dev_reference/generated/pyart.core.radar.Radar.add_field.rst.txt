@@ -1,6 +1,0 @@
-pyart.core.radar.Radar.add\_field
-=================================
-
-.. currentmodule:: pyart.core.radar
-
-.. automethod:: Radar.add_field

@@ -1,6 +1,0 @@
-pyart.io.auto_read.determine_filetype
-=====================================
-
-.. currentmodule:: pyart.io.auto_read
-
-.. autofunction:: determine_filetype

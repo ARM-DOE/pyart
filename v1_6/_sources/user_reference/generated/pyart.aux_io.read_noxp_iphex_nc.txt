@@ -1,6 +1,0 @@
-pyart.aux_io.read_noxp_iphex_nc
-===============================
-
-.. currentmodule:: pyart.aux_io
-
-.. autofunction:: read_noxp_iphex_nc

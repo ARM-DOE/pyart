@@ -1,6 +1,0 @@
-pyart.io.mdv_common.MdvFile._write_radar_info
-=============================================
-
-.. currentmodule:: pyart.io.mdv_common
-
-.. automethod:: MdvFile._write_radar_info

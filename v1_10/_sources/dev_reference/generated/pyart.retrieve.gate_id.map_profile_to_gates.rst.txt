@@ -1,6 +1,0 @@
-pyart.retrieve.gate\_id.map\_profile\_to\_gates
-===============================================
-
-.. currentmodule:: pyart.retrieve.gate_id
-
-.. autofunction:: map_profile_to_gates

@@ -1,6 +1,0 @@
-pyart.graph.gridmapdisplay.GridMapDisplay.plot\_crosshairs
-==========================================================
-
-.. currentmodule:: pyart.graph.gridmapdisplay
-
-.. automethod:: GridMapDisplay.plot_crosshairs

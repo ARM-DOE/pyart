@@ -1,6 +1,0 @@
-pyart.io.nexrad\_archive.\_NEXRADLevel2StagedField.\_\_sizeof\_\_
-=================================================================
-
-.. currentmodule:: pyart.io.nexrad_archive
-
-.. automethod:: _NEXRADLevel2StagedField.__sizeof__

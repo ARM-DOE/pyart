@@ -1,6 +1,0 @@
-pyart.core.wind_profile.HorizontalWindProfile.__subclasshook__
-==============================================================
-
-.. currentmodule:: pyart.core.wind_profile
-
-.. automethod:: HorizontalWindProfile.__subclasshook__

@@ -1,6 +1,0 @@
-pyart.io.grid.Grid.__init__
-===========================
-
-.. currentmodule:: pyart.io.grid
-
-.. automethod:: Grid.__init__

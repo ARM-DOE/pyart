@@ -1,6 +1,0 @@
-pyart.io.rsl.read_rsl
-=====================
-
-.. currentmodule:: pyart.io.rsl
-
-.. autofunction:: read_rsl

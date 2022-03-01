@@ -1,6 +1,0 @@
-pyart.io.mdv\_common.MdvFile.\_\_init\_subclass\_\_
-===================================================
-
-.. currentmodule:: pyart.io.mdv_common
-
-.. automethod:: MdvFile.__init_subclass__

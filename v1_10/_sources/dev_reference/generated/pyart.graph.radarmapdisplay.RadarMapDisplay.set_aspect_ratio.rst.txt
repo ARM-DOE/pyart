@@ -1,6 +1,0 @@
-pyart.graph.radarmapdisplay.RadarMapDisplay.set\_aspect\_ratio
-==============================================================
-
-.. currentmodule:: pyart.graph.radarmapdisplay
-
-.. automethod:: RadarMapDisplay.set_aspect_ratio

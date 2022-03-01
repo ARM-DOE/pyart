@@ -1,6 +1,0 @@
-pyart.core.radar.Radar.__getstate__
-===================================
-
-.. currentmodule:: pyart.core.radar
-
-.. automethod:: Radar.__getstate__

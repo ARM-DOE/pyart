@@ -1,6 +1,0 @@
-pyart.io.uffile.UFFile.get_elevations
-=====================================
-
-.. currentmodule:: pyart.io.uffile
-
-.. automethod:: UFFile.get_elevations

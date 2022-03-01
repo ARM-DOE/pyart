@@ -1,6 +1,0 @@
-pyart.graph.plot_rsl.RslDisplay._parse_vmin_vmax
-================================================
-
-.. currentmodule:: pyart.graph.plot_rsl
-
-.. automethod:: RslDisplay._parse_vmin_vmax

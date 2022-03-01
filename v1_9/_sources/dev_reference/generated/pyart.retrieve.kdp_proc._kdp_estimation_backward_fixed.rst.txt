@@ -1,6 +1,0 @@
-pyart.retrieve.kdp\_proc.\_kdp\_estimation\_backward\_fixed
-===========================================================
-
-.. currentmodule:: pyart.retrieve.kdp_proc
-
-.. autofunction:: _kdp_estimation_backward_fixed

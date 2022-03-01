@@ -1,4 +1,4 @@
-pyart.retrieve
+﻿pyart.retrieve
 ==============
 
 .. rubric:: Description
@@ -69,6 +69,8 @@ pyart.retrieve
     
     texture_of_complex_phase
     
-    velocity_azimuth_display
+    vad_browning
+    
+    vad_michelson
     
 

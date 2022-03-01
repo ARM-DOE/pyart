@@ -1,6 +1,0 @@
-pyart.graph.radardisplay.RadarDisplay.plot\_label
-=================================================
-
-.. currentmodule:: pyart.graph.radardisplay
-
-.. automethod:: RadarDisplay.plot_label

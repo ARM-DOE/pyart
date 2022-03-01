@@ -1,6 +1,0 @@
-pyart.core.radar.Radar.get_start_end
-====================================
-
-.. currentmodule:: pyart.core.radar
-
-.. automethod:: Radar.get_start_end

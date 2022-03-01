@@ -1,6 +1,0 @@
-pyart.retrieve.\_kdp\_proc.lowpass\_maesaka\_jac
-================================================
-
-.. currentmodule:: pyart.retrieve._kdp_proc
-
-.. autofunction:: lowpass_maesaka_jac

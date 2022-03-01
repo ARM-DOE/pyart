@@ -1,6 +1,0 @@
-pyart.io.lazydict.LazyLoadDict.has_key
-======================================
-
-.. currentmodule:: pyart.io.lazydict
-
-.. automethod:: LazyLoadDict.has_key

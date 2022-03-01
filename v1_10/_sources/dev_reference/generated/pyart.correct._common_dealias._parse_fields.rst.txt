@@ -1,6 +1,0 @@
-pyart.correct.\_common\_dealias.\_parse\_fields
-===============================================
-
-.. currentmodule:: pyart.correct._common_dealias
-
-.. autofunction:: _parse_fields

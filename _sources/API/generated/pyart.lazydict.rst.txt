@@ -1,4 +1,4 @@
-pyart.lazydict
+﻿pyart.lazydict
 ==============
 
 .. rubric:: Description

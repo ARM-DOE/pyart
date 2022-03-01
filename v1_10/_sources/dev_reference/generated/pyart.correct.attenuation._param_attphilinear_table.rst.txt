@@ -1,6 +1,0 @@
-pyart.correct.attenuation.\_param\_attphilinear\_table
-======================================================
-
-.. currentmodule:: pyart.correct.attenuation
-
-.. autofunction:: _param_attphilinear_table

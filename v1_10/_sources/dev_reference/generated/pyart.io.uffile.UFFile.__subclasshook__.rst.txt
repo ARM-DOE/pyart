@@ -1,6 +1,0 @@
-pyart.io.uffile.UFFile.\_\_subclasshook\_\_
-===========================================
-
-.. currentmodule:: pyart.io.uffile
-
-.. automethod:: UFFile.__subclasshook__

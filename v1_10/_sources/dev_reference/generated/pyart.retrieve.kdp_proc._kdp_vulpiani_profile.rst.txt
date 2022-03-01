@@ -1,6 +1,0 @@
-pyart.retrieve.kdp\_proc.\_kdp\_vulpiani\_profile
-=================================================
-
-.. currentmodule:: pyart.retrieve.kdp_proc
-
-.. autofunction:: _kdp_vulpiani_profile

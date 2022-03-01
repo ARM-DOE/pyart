@@ -1,6 +1,0 @@
-pyart.graph.coord_transform.radar_coords_to_cart_earth_relative
-===============================================================
-
-.. currentmodule:: pyart.graph.coord_transform
-
-.. autofunction:: radar_coords_to_cart_earth_relative

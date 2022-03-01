@@ -1,6 +1,0 @@
-pyart.retrieve.echo_class._get_mass_centers
-===========================================
-
-.. currentmodule:: pyart.retrieve.echo_class
-
-.. autofunction:: _get_mass_centers

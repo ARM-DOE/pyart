@@ -1,6 +1,0 @@
-pyart.correct.correct_bias
-==========================
-
-.. currentmodule:: pyart.correct
-
-.. autofunction:: correct_bias

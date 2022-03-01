@@ -1,6 +1,0 @@
-pyart.core.grid.\_point\_lon\_lat\_data\_factory
-================================================
-
-.. currentmodule:: pyart.core.grid
-
-.. autofunction:: _point_lon_lat_data_factory

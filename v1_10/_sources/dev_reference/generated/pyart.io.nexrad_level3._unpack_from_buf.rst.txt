@@ -1,6 +1,0 @@
-pyart.io.nexrad\_level3.\_unpack\_from\_buf
-===========================================
-
-.. currentmodule:: pyart.io.nexrad_level3
-
-.. autofunction:: _unpack_from_buf

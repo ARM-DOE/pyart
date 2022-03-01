@@ -1,6 +1,0 @@
-pyart.retrieve.simple_moment_calculations.compute_l
-===================================================
-
-.. currentmodule:: pyart.retrieve.simple_moment_calculations
-
-.. autofunction:: compute_l

@@ -1,6 +1,0 @@
-pyart.correct.correct_noise_rhohv
-=================================
-
-.. currentmodule:: pyart.correct
-
-.. autofunction:: correct_noise_rhohv

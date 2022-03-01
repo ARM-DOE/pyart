@@ -1,6 +1,0 @@
-pyart.io.radar.join_radar
-=========================
-
-.. currentmodule:: pyart.io.radar
-
-.. autofunction:: join_radar

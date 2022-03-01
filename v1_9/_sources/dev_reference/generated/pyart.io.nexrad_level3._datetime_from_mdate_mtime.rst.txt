@@ -1,6 +1,0 @@
-pyart.io.nexrad\_level3.\_datetime\_from\_mdate\_mtime
-======================================================
-
-.. currentmodule:: pyart.io.nexrad_level3
-
-.. autofunction:: _datetime_from_mdate_mtime

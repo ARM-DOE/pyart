@@ -1,6 +1,0 @@
-pyart.load_config
-=================
-
-.. currentmodule:: pyart
-
-.. autofunction:: load_config

@@ -1,6 +1,0 @@
-pyart.core.radar.Radar.\_\_init\_subclass\_\_
-=============================================
-
-.. currentmodule:: pyart.core.radar
-
-.. automethod:: Radar.__init_subclass__

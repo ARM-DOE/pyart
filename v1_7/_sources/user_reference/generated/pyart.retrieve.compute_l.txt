@@ -1,6 +1,0 @@
-pyart.retrieve.compute_l
-========================
-
-.. currentmodule:: pyart.retrieve
-
-.. autofunction:: compute_l

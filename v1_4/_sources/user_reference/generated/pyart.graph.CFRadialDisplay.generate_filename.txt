@@ -1,6 +1,0 @@
-pyart.graph.CFRadialDisplay.generate_filename
-=============================================
-
-.. currentmodule:: pyart.graph
-
-.. automethod:: CFRadialDisplay.generate_filename

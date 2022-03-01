@@ -1,6 +1,0 @@
-pyart.io.mdv_grid.read_grid_mdv
-===============================
-
-.. currentmodule:: pyart.io.mdv_grid
-
-.. autofunction:: read_grid_mdv

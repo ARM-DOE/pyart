@@ -1,6 +1,0 @@
-pyart.io.mdv\_common.MdvFile.\_make\_time\_dict
-===============================================
-
-.. currentmodule:: pyart.io.mdv_common
-
-.. automethod:: MdvFile._make_time_dict

@@ -1,6 +1,0 @@
-pyart.aux_io.read_gamic
-=======================
-
-.. currentmodule:: pyart.aux_io
-
-.. autofunction:: read_gamic

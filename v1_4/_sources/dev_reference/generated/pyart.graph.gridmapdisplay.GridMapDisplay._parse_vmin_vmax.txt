@@ -1,6 +1,0 @@
-pyart.graph.gridmapdisplay.GridMapDisplay._parse_vmin_vmax
-==========================================================
-
-.. currentmodule:: pyart.graph.gridmapdisplay
-
-.. automethod:: GridMapDisplay._parse_vmin_vmax

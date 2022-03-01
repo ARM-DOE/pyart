@@ -1,6 +1,0 @@
-pyart.graph.CFRadialDisplay.generate_title
-==========================================
-
-.. currentmodule:: pyart.graph
-
-.. automethod:: CFRadialDisplay.generate_title

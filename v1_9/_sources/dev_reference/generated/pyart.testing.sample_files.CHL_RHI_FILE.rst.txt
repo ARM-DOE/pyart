@@ -1,6 +1,0 @@
-pyart.testing.sample\_files.CHL\_RHI\_FILE
-==========================================
-
-.. currentmodule:: pyart.testing.sample_files
-
-.. autodata:: CHL_RHI_FILE

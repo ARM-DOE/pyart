@@ -1,6 +1,0 @@
-pyart.graph.plot_mdv.MdvDisplay.generate_ray_title
-==================================================
-
-.. currentmodule:: pyart.graph.plot_mdv
-
-.. automethod:: MdvDisplay.generate_ray_title

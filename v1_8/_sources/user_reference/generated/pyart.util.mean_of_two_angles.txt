@@ -1,6 +1,0 @@
-pyart.util.mean_of_two_angles
-=============================
-
-.. currentmodule:: pyart.util
-
-.. autofunction:: mean_of_two_angles

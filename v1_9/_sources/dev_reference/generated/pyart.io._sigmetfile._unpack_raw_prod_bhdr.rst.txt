@@ -1,6 +1,0 @@
-pyart.io.\_sigmetfile.\_unpack\_raw\_prod\_bhdr
-===============================================
-
-.. currentmodule:: pyart.io._sigmetfile
-
-.. autofunction:: _unpack_raw_prod_bhdr

@@ -1,6 +1,0 @@
-pyart.io.uffile.UFFile.\_get\_ray\_sweep\_numbers
-=================================================
-
-.. currentmodule:: pyart.io.uffile
-
-.. automethod:: UFFile._get_ray_sweep_numbers

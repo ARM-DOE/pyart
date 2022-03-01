@@ -1,6 +1,0 @@
-pyart.io.sigmet._time_order_data_and_metadata_reverse
-=====================================================
-
-.. currentmodule:: pyart.io.sigmet
-
-.. autofunction:: _time_order_data_and_metadata_reverse

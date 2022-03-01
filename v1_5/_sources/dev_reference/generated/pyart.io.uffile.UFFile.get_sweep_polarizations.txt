@@ -1,6 +1,0 @@
-pyart.io.uffile.UFFile.get_sweep_polarizations
-==============================================
-
-.. currentmodule:: pyart.io.uffile
-
-.. automethod:: UFFile.get_sweep_polarizations

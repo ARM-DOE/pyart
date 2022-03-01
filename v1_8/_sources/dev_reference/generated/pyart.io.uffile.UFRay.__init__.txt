@@ -1,6 +1,0 @@
-pyart.io.uffile.UFRay.__init__
-==============================
-
-.. currentmodule:: pyart.io.uffile
-
-.. automethod:: UFRay.__init__

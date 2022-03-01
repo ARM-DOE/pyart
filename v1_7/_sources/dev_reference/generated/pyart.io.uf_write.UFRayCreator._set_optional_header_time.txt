@@ -1,6 +1,0 @@
-pyart.io.uf_write.UFRayCreator._set_optional_header_time
-========================================================
-
-.. currentmodule:: pyart.io.uf_write
-
-.. automethod:: UFRayCreator._set_optional_header_time

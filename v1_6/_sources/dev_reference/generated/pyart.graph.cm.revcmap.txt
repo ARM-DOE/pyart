@@ -1,6 +1,0 @@
-pyart.graph.cm.revcmap
-======================
-
-.. currentmodule:: pyart.graph.cm
-
-.. autofunction:: revcmap

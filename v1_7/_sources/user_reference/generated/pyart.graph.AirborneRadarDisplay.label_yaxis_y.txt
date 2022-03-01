@@ -1,6 +1,0 @@
-pyart.graph.AirborneRadarDisplay.label_yaxis_y
-==============================================
-
-.. currentmodule:: pyart.graph
-
-.. automethod:: AirborneRadarDisplay.label_yaxis_y

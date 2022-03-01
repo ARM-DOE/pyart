@@ -1,6 +1,0 @@
-pyart.testing.sample\_objects.make\_target\_grid
-================================================
-
-.. currentmodule:: pyart.testing.sample_objects
-
-.. autofunction:: make_target_grid

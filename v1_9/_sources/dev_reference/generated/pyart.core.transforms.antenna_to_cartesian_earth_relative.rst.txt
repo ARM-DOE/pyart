@@ -1,6 +1,0 @@
-pyart.core.transforms.antenna\_to\_cartesian\_earth\_relative
-=============================================================
-
-.. currentmodule:: pyart.core.transforms
-
-.. autofunction:: antenna_to_cartesian_earth_relative

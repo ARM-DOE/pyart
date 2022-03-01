@@ -1,6 +1,0 @@
-pyart.graph.common.generate\_vpt\_title
-=======================================
-
-.. currentmodule:: pyart.graph.common
-
-.. autofunction:: generate_vpt_title

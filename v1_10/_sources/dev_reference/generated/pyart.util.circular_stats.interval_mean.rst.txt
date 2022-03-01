@@ -1,6 +1,0 @@
-pyart.util.circular\_stats.interval\_mean
-=========================================
-
-.. currentmodule:: pyart.util.circular_stats
-
-.. autofunction:: interval_mean

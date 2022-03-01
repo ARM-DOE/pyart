@@ -1,6 +1,0 @@
-pyart.correct.attenuation.\_get\_param\_attphilinear
-====================================================
-
-.. currentmodule:: pyart.correct.attenuation
-
-.. autofunction:: _get_param_attphilinear

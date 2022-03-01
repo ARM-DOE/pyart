@@ -1,6 +1,0 @@
-pyart.aux\_io.gamic\_hdf5.\_avg\_radial\_angles
-===============================================
-
-.. currentmodule:: pyart.aux_io.gamic_hdf5
-
-.. autofunction:: _avg_radial_angles

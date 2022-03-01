@@ -1,6 +1,0 @@
-pyart.core.radar.\_gate\_altitude\_data\_factory
-================================================
-
-.. currentmodule:: pyart.core.radar
-
-.. autofunction:: _gate_altitude_data_factory

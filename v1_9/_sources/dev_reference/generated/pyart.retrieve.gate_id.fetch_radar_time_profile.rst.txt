@@ -1,6 +1,0 @@
-pyart.retrieve.gate\_id.fetch\_radar\_time\_profile
-===================================================
-
-.. currentmodule:: pyart.retrieve.gate_id
-
-.. autofunction:: fetch_radar_time_profile

@@ -1,6 +1,0 @@
-pyart.graph.plot_cfradial.CFRadialDisplay.label_yaxis_y
-=======================================================
-
-.. currentmodule:: pyart.graph.plot_cfradial
-
-.. automethod:: CFRadialDisplay.label_yaxis_y

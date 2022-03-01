@@ -1,6 +1,0 @@
-pyart.io.nexrad_archive.ARCHIVE_MAPPING
-=======================================
-
-.. currentmodule:: pyart.io.nexrad_archive
-
-.. autodata:: ARCHIVE_MAPPING

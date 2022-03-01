@@ -1,6 +1,0 @@
-pyart.io.uffile.UFFile.get\_azimuths
-====================================
-
-.. currentmodule:: pyart.io.uffile
-
-.. automethod:: UFFile.get_azimuths

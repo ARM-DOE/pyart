@@ -1,6 +1,0 @@
-pyart.aux\_io.d3r\_gcpex\_nc.read\_d3r\_gcpex\_nc
-=================================================
-
-.. currentmodule:: pyart.aux_io.d3r_gcpex_nc
-
-.. autofunction:: read_d3r_gcpex_nc

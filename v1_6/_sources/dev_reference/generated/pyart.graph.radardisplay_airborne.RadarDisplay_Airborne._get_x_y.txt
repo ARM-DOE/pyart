@@ -1,6 +1,0 @@
-pyart.graph.radardisplay_airborne.RadarDisplay_Airborne._get_x_y
-================================================================
-
-.. currentmodule:: pyart.graph.radardisplay_airborne
-
-.. automethod:: RadarDisplay_Airborne._get_x_y

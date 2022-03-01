@@ -1,6 +1,0 @@
-pyart.aux\_io.gamicfile.GAMICFile.moment\_names
-===============================================
-
-.. currentmodule:: pyart.aux_io.gamicfile
-
-.. automethod:: GAMICFile.moment_names

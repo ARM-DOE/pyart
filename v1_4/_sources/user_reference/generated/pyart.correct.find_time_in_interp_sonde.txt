@@ -1,6 +1,0 @@
-pyart.correct.find_time_in_interp_sonde
-=======================================
-
-.. currentmodule:: pyart.correct
-
-.. autofunction:: find_time_in_interp_sonde

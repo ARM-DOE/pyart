@@ -1,6 +1,0 @@
-pyart.io.uf_write.write_uf
-==========================
-
-.. currentmodule:: pyart.io.uf_write
-
-.. autofunction:: write_uf

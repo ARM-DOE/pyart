@@ -1,6 +1,0 @@
-pyart.map.gates_to_grid.map_gates_to_grid
-=========================================
-
-.. currentmodule:: pyart.map.gates_to_grid
-
-.. autofunction:: map_gates_to_grid

@@ -1,6 +1,0 @@
-pyart.graph.radardisplay.RadarDisplay.\_set\_vpt\_time\_axis
-============================================================
-
-.. currentmodule:: pyart.graph.radardisplay
-
-.. automethod:: RadarDisplay._set_vpt_time_axis

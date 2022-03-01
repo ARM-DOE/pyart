@@ -1,6 +1,0 @@
-pyart.io.mdv.MdvFile.close
-==========================
-
-.. currentmodule:: pyart.io.mdv
-
-.. automethod:: MdvFile.close

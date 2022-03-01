@@ -1,6 +1,0 @@
-pyart.graph.plot_mdv.MdvDisplay.generate_filename
-=================================================
-
-.. currentmodule:: pyart.graph.plot_mdv
-
-.. automethod:: MdvDisplay.generate_filename

@@ -1,6 +1,0 @@
-pyart.io.nexrad\_archive.\_find\_range\_params
-==============================================
-
-.. currentmodule:: pyart.io.nexrad_archive
-
-.. autofunction:: _find_range_params

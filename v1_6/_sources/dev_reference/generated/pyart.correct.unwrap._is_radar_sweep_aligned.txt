@@ -1,6 +1,0 @@
-pyart.correct.unwrap._is_radar_sweep_aligned
-============================================
-
-.. currentmodule:: pyart.correct.unwrap
-
-.. autofunction:: _is_radar_sweep_aligned

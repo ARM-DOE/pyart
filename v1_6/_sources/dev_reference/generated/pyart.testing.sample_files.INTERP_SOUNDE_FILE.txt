@@ -1,6 +1,0 @@
-pyart.testing.sample_files.INTERP_SOUNDE_FILE
-=============================================
-
-.. currentmodule:: pyart.testing.sample_files
-
-.. autodata:: INTERP_SOUNDE_FILE

@@ -1,6 +1,0 @@
-pyart.filters.gatefilter.moment\_and\_texture\_based\_gate\_filter
-==================================================================
-
-.. currentmodule:: pyart.filters.gatefilter
-
-.. autofunction:: moment_and_texture_based_gate_filter

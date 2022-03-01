@@ -1,6 +1,0 @@
-pyart.io.uffile.UFRay.\_\_reduce\_ex\_\_
-========================================
-
-.. currentmodule:: pyart.io.uffile
-
-.. automethod:: UFRay.__reduce_ex__

@@ -1,6 +1,0 @@
-pyart.io.\_rsl\_interface.RslFile.available\_moments
-====================================================
-
-.. currentmodule:: pyart.io._rsl_interface
-
-.. automethod:: RslFile.available_moments

@@ -1,6 +1,0 @@
-pyart.correct.region_dealias._EdgeTracker.__reduce_ex__
-=======================================================
-
-.. currentmodule:: pyart.correct.region_dealias
-
-.. automethod:: _EdgeTracker.__reduce_ex__

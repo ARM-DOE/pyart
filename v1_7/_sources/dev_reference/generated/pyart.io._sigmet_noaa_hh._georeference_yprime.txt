@@ -1,6 +1,0 @@
-pyart.io._sigmet_noaa_hh._georeference_yprime
-=============================================
-
-.. currentmodule:: pyart.io._sigmet_noaa_hh
-
-.. autofunction:: _georeference_yprime

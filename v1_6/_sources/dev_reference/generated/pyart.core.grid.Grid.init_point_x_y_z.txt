@@ -1,6 +1,0 @@
-pyart.core.grid.Grid.init_point_x_y_z
-=====================================
-
-.. currentmodule:: pyart.core.grid
-
-.. automethod:: Grid.init_point_x_y_z

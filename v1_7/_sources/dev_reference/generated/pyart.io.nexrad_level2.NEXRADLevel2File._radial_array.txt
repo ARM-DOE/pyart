@@ -1,6 +1,0 @@
-pyart.io.nexrad_level2.NEXRADLevel2File._radial_array
-=====================================================
-
-.. currentmodule:: pyart.io.nexrad_level2
-
-.. automethod:: NEXRADLevel2File._radial_array

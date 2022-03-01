@@ -1,6 +1,0 @@
-pyart.core.transforms.cartesian\_to\_geographic
-===============================================
-
-.. currentmodule:: pyart.core.transforms
-
-.. autofunction:: cartesian_to_geographic

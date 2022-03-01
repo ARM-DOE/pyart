@@ -1,6 +1,0 @@
-pyart.io.Radar.add_field_like
-=============================
-
-.. currentmodule:: pyart.io
-
-.. automethod:: Radar.add_field_like

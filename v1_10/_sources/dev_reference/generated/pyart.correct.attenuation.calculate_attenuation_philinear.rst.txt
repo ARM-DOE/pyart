@@ -1,6 +1,0 @@
-pyart.correct.attenuation.calculate\_attenuation\_philinear
-===========================================================
-
-.. currentmodule:: pyart.correct.attenuation
-
-.. autofunction:: calculate_attenuation_philinear

@@ -1,6 +1,0 @@
-pyart.graph.AirborneRadarDisplay.generate_az_rhi_title
-======================================================
-
-.. currentmodule:: pyart.graph
-
-.. automethod:: AirborneRadarDisplay.generate_az_rhi_title

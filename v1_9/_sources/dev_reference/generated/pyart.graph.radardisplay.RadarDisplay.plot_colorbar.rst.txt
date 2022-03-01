@@ -1,6 +1,0 @@
-pyart.graph.radardisplay.RadarDisplay.plot\_colorbar
-====================================================
-
-.. currentmodule:: pyart.graph.radardisplay
-
-.. automethod:: RadarDisplay.plot_colorbar

@@ -1,6 +1,0 @@
-pyart.io.auto\_read.read
-========================
-
-.. currentmodule:: pyart.io.auto_read
-
-.. autofunction:: read

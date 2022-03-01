@@ -1,6 +1,0 @@
-pyart.io.uffile.UFRay.get_field_data
-====================================
-
-.. currentmodule:: pyart.io.uffile
-
-.. automethod:: UFRay.get_field_data

@@ -1,6 +1,0 @@
-pyart.map.gates\_to\_grid.\_find\_grid\_params
-==============================================
-
-.. currentmodule:: pyart.map.gates_to_grid
-
-.. autofunction:: _find_grid_params

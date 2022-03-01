@@ -1,6 +1,0 @@
-pyart.io.nexrad\_level2.NEXRADLevel2File.get\_vcp\_pattern
-==========================================================
-
-.. currentmodule:: pyart.io.nexrad_level2
-
-.. automethod:: NEXRADLevel2File.get_vcp_pattern

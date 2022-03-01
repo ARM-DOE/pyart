@@ -1,6 +1,0 @@
-pyart.io.chl.ChlFile.__reduce__
-===============================
-
-.. currentmodule:: pyart.io.chl
-
-.. automethod:: ChlFile.__reduce__

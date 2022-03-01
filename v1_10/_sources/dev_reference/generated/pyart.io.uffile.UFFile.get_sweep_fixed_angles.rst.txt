@@ -1,6 +1,0 @@
-pyart.io.uffile.UFFile.get\_sweep\_fixed\_angles
-================================================
-
-.. currentmodule:: pyart.io.uffile
-
-.. automethod:: UFFile.get_sweep_fixed_angles

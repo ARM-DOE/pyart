@@ -1,6 +1,0 @@
-pyart.correct.region_dealias._EdgeCollector.__sizeof__
-======================================================
-
-.. currentmodule:: pyart.correct.region_dealias
-
-.. automethod:: _EdgeCollector.__sizeof__

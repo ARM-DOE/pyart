@@ -1,6 +1,0 @@
-pyart.graph.GridMapDisplay.generate_longitudinal_level_title
-============================================================
-
-.. currentmodule:: pyart.graph
-
-.. automethod:: GridMapDisplay.generate_longitudinal_level_title

@@ -1,6 +1,0 @@
-pyart.core.radar.Radar.__sizeof__
-=================================
-
-.. currentmodule:: pyart.core.radar
-
-.. automethod:: Radar.__sizeof__

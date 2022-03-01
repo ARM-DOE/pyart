@@ -1,6 +1,0 @@
-pyart.filters.gatefilter.GateFilter.\_\_sizeof\_\_
-==================================================
-
-.. currentmodule:: pyart.filters.gatefilter
-
-.. automethod:: GateFilter.__sizeof__

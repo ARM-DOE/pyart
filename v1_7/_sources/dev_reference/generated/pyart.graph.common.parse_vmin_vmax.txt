@@ -1,6 +1,0 @@
-pyart.graph.common.parse_vmin_vmax
-==================================
-
-.. currentmodule:: pyart.graph.common
-
-.. autofunction:: parse_vmin_vmax

@@ -1,6 +1,0 @@
-pyart.io.\_rsl\_interface.\_RslSweep.\_\_init\_subclass\_\_
-===========================================================
-
-.. currentmodule:: pyart.io._rsl_interface
-
-.. automethod:: _RslSweep.__init_subclass__

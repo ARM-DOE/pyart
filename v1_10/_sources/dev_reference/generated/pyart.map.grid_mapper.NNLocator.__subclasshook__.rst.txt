@@ -1,6 +1,0 @@
-pyart.map.grid\_mapper.NNLocator.\_\_subclasshook\_\_
-=====================================================
-
-.. currentmodule:: pyart.map.grid_mapper
-
-.. automethod:: NNLocator.__subclasshook__

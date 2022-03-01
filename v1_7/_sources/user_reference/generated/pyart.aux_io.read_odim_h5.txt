@@ -1,6 +1,0 @@
-pyart.aux_io.read_odim_h5
-=========================
-
-.. currentmodule:: pyart.aux_io
-
-.. autofunction:: read_odim_h5

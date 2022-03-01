@@ -1,6 +1,0 @@
-pyart.graph.common._interpolate_axes_edges
-==========================================
-
-.. currentmodule:: pyart.graph.common
-
-.. autofunction:: _interpolate_axes_edges

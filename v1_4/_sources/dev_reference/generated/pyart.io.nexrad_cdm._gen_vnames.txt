@@ -1,6 +1,0 @@
-pyart.io.nexrad_cdm._gen_vnames
-===============================
-
-.. currentmodule:: pyart.io.nexrad_cdm
-
-.. autofunction:: _gen_vnames

@@ -1,6 +1,0 @@
-pyart.testing.sample_files.UF_FILE
-==================================
-
-.. currentmodule:: pyart.testing.sample_files
-
-.. autodata:: UF_FILE

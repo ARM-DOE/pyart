@@ -1,6 +1,0 @@
-pyart.io.mdv.MdvFile.read_all_fields
-====================================
-
-.. currentmodule:: pyart.io.mdv
-
-.. automethod:: MdvFile.read_all_fields

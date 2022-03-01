@@ -1,6 +1,0 @@
-pyart.io.nexrad\_level3.nexrad\_level3\_message\_code
-=====================================================
-
-.. currentmodule:: pyart.io.nexrad_level3
-
-.. autofunction:: nexrad_level3_message_code

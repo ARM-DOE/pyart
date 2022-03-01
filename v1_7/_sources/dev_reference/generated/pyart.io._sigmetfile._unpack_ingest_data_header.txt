@@ -1,6 +1,0 @@
-pyart.io._sigmetfile._unpack_ingest_data_header
-===============================================
-
-.. currentmodule:: pyart.io._sigmetfile
-
-.. autofunction:: _unpack_ingest_data_header

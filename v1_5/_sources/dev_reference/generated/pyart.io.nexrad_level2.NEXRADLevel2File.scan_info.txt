@@ -1,6 +1,0 @@
-pyart.io.nexrad_level2.NEXRADLevel2File.scan_info
-=================================================
-
-.. currentmodule:: pyart.io.nexrad_level2
-
-.. automethod:: NEXRADLevel2File.scan_info

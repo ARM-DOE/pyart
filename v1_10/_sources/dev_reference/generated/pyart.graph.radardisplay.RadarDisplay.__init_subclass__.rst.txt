@@ -1,6 +1,0 @@
-pyart.graph.radardisplay.RadarDisplay.\_\_init\_subclass\_\_
-============================================================
-
-.. currentmodule:: pyart.graph.radardisplay
-
-.. automethod:: RadarDisplay.__init_subclass__

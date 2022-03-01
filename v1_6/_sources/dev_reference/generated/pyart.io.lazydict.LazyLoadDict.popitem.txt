@@ -1,6 +1,0 @@
-pyart.io.lazydict.LazyLoadDict.popitem
-======================================
-
-.. currentmodule:: pyart.io.lazydict
-
-.. automethod:: LazyLoadDict.popitem

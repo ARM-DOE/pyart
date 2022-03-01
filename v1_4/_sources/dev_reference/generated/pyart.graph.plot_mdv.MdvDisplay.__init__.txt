@@ -1,6 +1,0 @@
-pyart.graph.plot_mdv.MdvDisplay.__init__
-========================================
-
-.. currentmodule:: pyart.graph.plot_mdv
-
-.. automethod:: MdvDisplay.__init__

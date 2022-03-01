@@ -1,6 +1,0 @@
-pyart.aux_io.gamicfile.GAMICFile.is_field_in_ray_header
-=======================================================
-
-.. currentmodule:: pyart.aux_io.gamicfile
-
-.. automethod:: GAMICFile.is_field_in_ray_header

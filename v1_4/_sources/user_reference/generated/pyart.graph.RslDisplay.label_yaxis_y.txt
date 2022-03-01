@@ -1,6 +1,0 @@
-pyart.graph.RslDisplay.label_yaxis_y
-====================================
-
-.. currentmodule:: pyart.graph
-
-.. automethod:: RslDisplay.label_yaxis_y

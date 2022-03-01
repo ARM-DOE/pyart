@@ -1,6 +1,0 @@
-pyart.io._rsl_interface._RslVolume.total_rays
-=============================================
-
-.. currentmodule:: pyart.io._rsl_interface
-
-.. automethod:: _RslVolume.total_rays

@@ -1,6 +1,0 @@
-pyart.correct.unwrap._is_radar_cubic
-====================================
-
-.. currentmodule:: pyart.correct.unwrap
-
-.. autofunction:: _is_radar_cubic

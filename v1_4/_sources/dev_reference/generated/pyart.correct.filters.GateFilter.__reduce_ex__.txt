@@ -1,6 +1,0 @@
-pyart.correct.filters.GateFilter.__reduce_ex__
-==============================================
-
-.. currentmodule:: pyart.correct.filters
-
-.. automethod:: GateFilter.__reduce_ex__

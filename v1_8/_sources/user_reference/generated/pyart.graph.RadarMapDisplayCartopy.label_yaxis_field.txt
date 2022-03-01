@@ -1,6 +1,0 @@
-pyart.graph.RadarMapDisplayCartopy.label_yaxis_field
-====================================================
-
-.. currentmodule:: pyart.graph
-
-.. automethod:: RadarMapDisplayCartopy.label_yaxis_field

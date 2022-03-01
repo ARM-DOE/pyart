@@ -1,6 +1,0 @@
-pyart.util.simulated\_vel.simulated\_vel\_from\_profile
-=======================================================
-
-.. currentmodule:: pyart.util.simulated_vel
-
-.. autofunction:: simulated_vel_from_profile

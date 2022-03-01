@@ -1,6 +1,0 @@
-pyart.aux_io.edge_netcdf.read_edge_netcdf
-=========================================
-
-.. currentmodule:: pyart.aux_io.edge_netcdf
-
-.. autofunction:: read_edge_netcdf

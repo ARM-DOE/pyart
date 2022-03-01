@@ -1,6 +1,0 @@
-pyart.io.common.make\_time\_unit\_str
-=====================================
-
-.. currentmodule:: pyart.io.common
-
-.. autofunction:: make_time_unit_str

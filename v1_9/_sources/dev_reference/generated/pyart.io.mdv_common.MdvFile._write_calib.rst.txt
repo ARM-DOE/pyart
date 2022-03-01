@@ -1,6 +1,0 @@
-pyart.io.mdv\_common.MdvFile.\_write\_calib
-===========================================
-
-.. currentmodule:: pyart.io.mdv_common
-
-.. automethod:: MdvFile._write_calib

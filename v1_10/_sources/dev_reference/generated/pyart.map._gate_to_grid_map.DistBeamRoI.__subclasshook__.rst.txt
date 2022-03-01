@@ -1,6 +1,0 @@
-pyart.map.\_gate\_to\_grid\_map.DistBeamRoI.\_\_subclasshook\_\_
-================================================================
-
-.. currentmodule:: pyart.map._gate_to_grid_map
-
-.. automethod:: DistBeamRoI.__subclasshook__

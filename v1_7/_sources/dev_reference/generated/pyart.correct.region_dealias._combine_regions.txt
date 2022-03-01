@@ -1,6 +1,0 @@
-pyart.correct.region_dealias._combine_regions
-=============================================
-
-.. currentmodule:: pyart.correct.region_dealias
-
-.. autofunction:: _combine_regions

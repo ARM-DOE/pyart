@@ -1,6 +1,0 @@
-pyart.io.output_to_geotiff._create_sld
-======================================
-
-.. currentmodule:: pyart.io.output_to_geotiff
-
-.. autofunction:: _create_sld

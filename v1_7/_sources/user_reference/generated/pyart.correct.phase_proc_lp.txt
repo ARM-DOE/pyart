@@ -1,6 +1,0 @@
-pyart.correct.phase_proc_lp
-===========================
-
-.. currentmodule:: pyart.correct
-
-.. autofunction:: phase_proc_lp

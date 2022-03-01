@@ -1,6 +1,0 @@
-pyart.io.cfradial._NetCDFVariableDataExtractor.__call__
-=======================================================
-
-.. currentmodule:: pyart.io.cfradial
-
-.. automethod:: _NetCDFVariableDataExtractor.__call__

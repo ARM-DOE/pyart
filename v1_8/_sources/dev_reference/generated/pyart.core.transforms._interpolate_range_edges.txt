@@ -1,6 +1,0 @@
-pyart.core.transforms._interpolate_range_edges
-==============================================
-
-.. currentmodule:: pyart.core.transforms
-
-.. autofunction:: _interpolate_range_edges

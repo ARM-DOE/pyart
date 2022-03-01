@@ -1,6 +1,0 @@
-pyart.io.nexrad\_level3.NEXRADLevel3File.get\_volume\_start\_datetime
-=====================================================================
-
-.. currentmodule:: pyart.io.nexrad_level3
-
-.. automethod:: NEXRADLevel3File.get_volume_start_datetime

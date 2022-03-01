@@ -1,6 +1,0 @@
-pyart.core.cartesian_vectors_to_geographic
-==========================================
-
-.. currentmodule:: pyart.core
-
-.. autofunction:: cartesian_vectors_to_geographic

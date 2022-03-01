@@ -1,6 +1,0 @@
-pyart.io.uffile.UFFile.get_nyquists
-===================================
-
-.. currentmodule:: pyart.io.uffile
-
-.. automethod:: UFFile.get_nyquists

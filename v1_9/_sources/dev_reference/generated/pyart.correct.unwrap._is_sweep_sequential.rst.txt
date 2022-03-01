@@ -1,6 +1,0 @@
-pyart.correct.unwrap.\_is\_sweep\_sequential
-============================================
-
-.. currentmodule:: pyart.correct.unwrap
-
-.. autofunction:: _is_sweep_sequential

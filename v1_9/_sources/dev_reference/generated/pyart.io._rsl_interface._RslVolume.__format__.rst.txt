@@ -1,6 +1,0 @@
-pyart.io.\_rsl\_interface.\_RslVolume.\_\_format\_\_
-====================================================
-
-.. currentmodule:: pyart.io._rsl_interface
-
-.. automethod:: _RslVolume.__format__

@@ -1,6 +1,0 @@
-pyart.aux\_io.odim\_h5.\_to\_str
-================================
-
-.. currentmodule:: pyart.aux_io.odim_h5
-
-.. autofunction:: _to_str

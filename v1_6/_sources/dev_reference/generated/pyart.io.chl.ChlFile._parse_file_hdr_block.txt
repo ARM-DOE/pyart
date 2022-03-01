@@ -1,6 +1,0 @@
-pyart.io.chl.ChlFile._parse_file_hdr_block
-==========================================
-
-.. currentmodule:: pyart.io.chl
-
-.. automethod:: ChlFile._parse_file_hdr_block

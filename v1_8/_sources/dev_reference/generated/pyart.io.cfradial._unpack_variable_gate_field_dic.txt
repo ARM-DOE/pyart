@@ -1,6 +1,0 @@
-pyart.io.cfradial._unpack_variable_gate_field_dic
-=================================================
-
-.. currentmodule:: pyart.io.cfradial
-
-.. autofunction:: _unpack_variable_gate_field_dic

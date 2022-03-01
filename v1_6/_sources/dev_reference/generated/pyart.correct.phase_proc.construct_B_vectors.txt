@@ -1,6 +1,0 @@
-pyart.correct.phase_proc.construct_B_vectors
-============================================
-
-.. currentmodule:: pyart.correct.phase_proc
-
-.. autofunction:: construct_B_vectors

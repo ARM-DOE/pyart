@@ -1,6 +1,0 @@
-pyart.lazydict.LazyLoadDict.__format__
-======================================
-
-.. currentmodule:: pyart.lazydict
-
-.. automethod:: LazyLoadDict.__format__

@@ -1,6 +1,0 @@
-pyart.graph.CFRadialDisplay.plot_range_ring
-===========================================
-
-.. currentmodule:: pyart.graph
-
-.. automethod:: CFRadialDisplay.plot_range_ring

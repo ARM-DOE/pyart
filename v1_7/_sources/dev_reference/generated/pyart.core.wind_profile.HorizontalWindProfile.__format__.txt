@@ -1,6 +1,0 @@
-pyart.core.wind_profile.HorizontalWindProfile.__format__
-========================================================
-
-.. currentmodule:: pyart.core.wind_profile
-
-.. automethod:: HorizontalWindProfile.__format__

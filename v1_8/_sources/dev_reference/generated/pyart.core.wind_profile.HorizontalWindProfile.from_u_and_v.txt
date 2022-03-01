@@ -1,6 +1,0 @@
-pyart.core.wind_profile.HorizontalWindProfile.from_u_and_v
-==========================================================
-
-.. currentmodule:: pyart.core.wind_profile
-
-.. automethod:: HorizontalWindProfile.from_u_and_v

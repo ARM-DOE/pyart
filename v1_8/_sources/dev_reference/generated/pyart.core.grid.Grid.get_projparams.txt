@@ -1,6 +1,0 @@
-pyart.core.grid.Grid.get_projparams
-===================================
-
-.. currentmodule:: pyart.core.grid
-
-.. automethod:: Grid.get_projparams

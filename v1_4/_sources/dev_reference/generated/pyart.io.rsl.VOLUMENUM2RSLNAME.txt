@@ -1,6 +1,0 @@
-pyart.io.rsl.VOLUMENUM2RSLNAME
-==============================
-
-.. currentmodule:: pyart.io.rsl
-
-.. autodata:: VOLUMENUM2RSLNAME

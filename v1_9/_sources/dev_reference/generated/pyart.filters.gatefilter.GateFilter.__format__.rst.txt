@@ -1,6 +1,0 @@
-pyart.filters.gatefilter.GateFilter.\_\_format\_\_
-==================================================
-
-.. currentmodule:: pyart.filters.gatefilter
-
-.. automethod:: GateFilter.__format__

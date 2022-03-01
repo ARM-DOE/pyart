@@ -1,6 +1,0 @@
-pyart.correct.filters.moment_based_gate_filter
-==============================================
-
-.. currentmodule:: pyart.correct.filters
-
-.. autofunction:: moment_based_gate_filter

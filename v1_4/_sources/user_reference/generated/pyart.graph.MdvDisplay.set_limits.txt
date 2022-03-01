@@ -1,6 +1,0 @@
-pyart.graph.MdvDisplay.set_limits
-=================================
-
-.. currentmodule:: pyart.graph
-
-.. automethod:: MdvDisplay.set_limits

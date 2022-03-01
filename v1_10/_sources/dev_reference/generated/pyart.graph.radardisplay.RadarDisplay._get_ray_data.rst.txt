@@ -1,6 +1,0 @@
-pyart.graph.radardisplay.RadarDisplay.\_get\_ray\_data
-======================================================
-
-.. currentmodule:: pyart.graph.radardisplay
-
-.. automethod:: RadarDisplay._get_ray_data

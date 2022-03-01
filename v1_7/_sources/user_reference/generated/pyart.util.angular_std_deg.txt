@@ -1,6 +1,0 @@
-pyart.util.angular_std_deg
-==========================
-
-.. currentmodule:: pyart.util
-
-.. autofunction:: angular_std_deg

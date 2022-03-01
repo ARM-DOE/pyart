@@ -1,6 +1,0 @@
-pyart.retrieve.echo\_class.get\_freq\_band
-==========================================
-
-.. currentmodule:: pyart.retrieve.echo_class
-
-.. autofunction:: get_freq_band

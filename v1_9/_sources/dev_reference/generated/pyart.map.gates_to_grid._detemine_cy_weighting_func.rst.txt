@@ -1,6 +1,0 @@
-pyart.map.gates\_to\_grid.\_detemine\_cy\_weighting\_func
-=========================================================
-
-.. currentmodule:: pyart.map.gates_to_grid
-
-.. autofunction:: _detemine_cy_weighting_func

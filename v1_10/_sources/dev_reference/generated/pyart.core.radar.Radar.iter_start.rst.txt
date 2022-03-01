@@ -1,6 +1,0 @@
-pyart.core.radar.Radar.iter\_start
-==================================
-
-.. currentmodule:: pyart.core.radar
-
-.. automethod:: Radar.iter_start

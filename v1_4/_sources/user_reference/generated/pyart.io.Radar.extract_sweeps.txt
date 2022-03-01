@@ -1,6 +1,0 @@
-pyart.io.Radar.extract_sweeps
-=============================
-
-.. currentmodule:: pyart.io
-
-.. automethod:: Radar.extract_sweeps

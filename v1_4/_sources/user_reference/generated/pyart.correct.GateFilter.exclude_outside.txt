@@ -1,6 +1,0 @@
-pyart.correct.GateFilter.exclude_outside
-========================================
-
-.. currentmodule:: pyart.correct
-
-.. automethod:: GateFilter.exclude_outside

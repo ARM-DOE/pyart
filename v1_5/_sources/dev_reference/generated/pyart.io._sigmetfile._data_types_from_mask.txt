@@ -1,6 +1,0 @@
-pyart.io._sigmetfile._data_types_from_mask
-==========================================
-
-.. currentmodule:: pyart.io._sigmetfile
-
-.. autofunction:: _data_types_from_mask

@@ -1,6 +1,0 @@
-pyart.graph.common.parse\_ax\_fig
-=================================
-
-.. currentmodule:: pyart.graph.common
-
-.. autofunction:: parse_ax_fig

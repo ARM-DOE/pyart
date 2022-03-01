@@ -1,6 +1,0 @@
-pyart.graph.radardisplay.RadarDisplay.label_xaxis_rays
-======================================================
-
-.. currentmodule:: pyart.graph.radardisplay
-
-.. automethod:: RadarDisplay.label_xaxis_rays

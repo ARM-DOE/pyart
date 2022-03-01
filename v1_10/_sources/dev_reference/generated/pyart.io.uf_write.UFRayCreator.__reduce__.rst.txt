@@ -1,6 +1,0 @@
-pyart.io.uf\_write.UFRayCreator.\_\_reduce\_\_
-==============================================
-
-.. currentmodule:: pyart.io.uf_write
-
-.. automethod:: UFRayCreator.__reduce__

@@ -1,6 +1,0 @@
-pyart.io.mdv.MdvFile._get_field_headers
-=======================================
-
-.. currentmodule:: pyart.io.mdv
-
-.. automethod:: MdvFile._get_field_headers

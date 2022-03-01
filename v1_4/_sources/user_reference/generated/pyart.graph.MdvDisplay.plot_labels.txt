@@ -1,6 +1,0 @@
-pyart.graph.MdvDisplay.plot_labels
-==================================
-
-.. currentmodule:: pyart.graph
-
-.. automethod:: MdvDisplay.plot_labels

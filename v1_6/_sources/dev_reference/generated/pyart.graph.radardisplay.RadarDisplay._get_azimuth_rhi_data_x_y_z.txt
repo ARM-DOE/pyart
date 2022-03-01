@@ -1,6 +1,0 @@
-pyart.graph.radardisplay.RadarDisplay._get_azimuth_rhi_data_x_y_z
-=================================================================
-
-.. currentmodule:: pyart.graph.radardisplay
-
-.. automethod:: RadarDisplay._get_azimuth_rhi_data_x_y_z

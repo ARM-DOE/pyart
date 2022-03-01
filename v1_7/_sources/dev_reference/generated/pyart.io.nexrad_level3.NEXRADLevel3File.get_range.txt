@@ -1,6 +1,0 @@
-pyart.io.nexrad_level3.NEXRADLevel3File.get_range
-=================================================
-
-.. currentmodule:: pyart.io.nexrad_level3
-
-.. automethod:: NEXRADLevel3File.get_range

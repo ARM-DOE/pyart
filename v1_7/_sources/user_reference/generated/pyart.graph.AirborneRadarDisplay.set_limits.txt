@@ -1,6 +1,0 @@
-pyart.graph.AirborneRadarDisplay.set_limits
-===========================================
-
-.. currentmodule:: pyart.graph
-
-.. automethod:: AirborneRadarDisplay.set_limits

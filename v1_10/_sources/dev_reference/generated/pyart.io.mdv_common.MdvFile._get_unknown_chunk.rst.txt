@@ -1,6 +1,0 @@
-pyart.io.mdv\_common.MdvFile.\_get\_unknown\_chunk
-==================================================
-
-.. currentmodule:: pyart.io.mdv_common
-
-.. automethod:: MdvFile._get_unknown_chunk

@@ -1,6 +1,0 @@
-pyart.retrieve.texture_of_complex_phase
-=======================================
-
-.. currentmodule:: pyart.retrieve
-
-.. autofunction:: texture_of_complex_phase

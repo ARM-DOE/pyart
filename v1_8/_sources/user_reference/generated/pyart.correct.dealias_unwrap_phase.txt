@@ -1,6 +1,0 @@
-pyart.correct.dealias_unwrap_phase
-==================================
-
-.. currentmodule:: pyart.correct
-
-.. autofunction:: dealias_unwrap_phase

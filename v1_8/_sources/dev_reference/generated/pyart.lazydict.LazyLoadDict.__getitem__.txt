@@ -1,6 +1,0 @@
-pyart.lazydict.LazyLoadDict.__getitem__
-=======================================
-
-.. currentmodule:: pyart.lazydict
-
-.. automethod:: LazyLoadDict.__getitem__

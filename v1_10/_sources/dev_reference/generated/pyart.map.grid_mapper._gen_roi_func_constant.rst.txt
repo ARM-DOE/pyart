@@ -1,6 +1,0 @@
-pyart.map.grid\_mapper.\_gen\_roi\_func\_constant
-=================================================
-
-.. currentmodule:: pyart.map.grid_mapper
-
-.. autofunction:: _gen_roi_func_constant

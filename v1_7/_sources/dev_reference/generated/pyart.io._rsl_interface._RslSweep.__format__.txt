@@ -1,6 +1,0 @@
-pyart.io._rsl_interface._RslSweep.__format__
-============================================
-
-.. currentmodule:: pyart.io._rsl_interface
-
-.. automethod:: _RslSweep.__format__

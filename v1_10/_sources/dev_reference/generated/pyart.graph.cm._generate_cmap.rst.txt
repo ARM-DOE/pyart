@@ -1,6 +1,0 @@
-pyart.graph.cm.\_generate\_cmap
-===============================
-
-.. currentmodule:: pyart.graph.cm
-
-.. autofunction:: _generate_cmap

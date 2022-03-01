@@ -1,6 +1,0 @@
-pyart.graph.plot_cfradial.CFRadialDisplay._label_axes_rhi
-=========================================================
-
-.. currentmodule:: pyart.graph.plot_cfradial
-
-.. automethod:: CFRadialDisplay._label_axes_rhi

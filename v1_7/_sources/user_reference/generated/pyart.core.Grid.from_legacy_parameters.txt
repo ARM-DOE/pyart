@@ -1,6 +1,0 @@
-pyart.core.Grid.from_legacy_parameters
-======================================
-
-.. currentmodule:: pyart.core
-
-.. automethod:: Grid.from_legacy_parameters

@@ -1,6 +1,0 @@
-pyart.io.mdv\_common.MdvFile.\_unpack\_mapped\_tuple
-====================================================
-
-.. currentmodule:: pyart.io.mdv_common
-
-.. automethod:: MdvFile._unpack_mapped_tuple

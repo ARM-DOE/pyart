@@ -1,6 +1,0 @@
-pyart.io.nexrad_cdm._scan_info
-==============================
-
-.. currentmodule:: pyart.io.nexrad_cdm
-
-.. autofunction:: _scan_info

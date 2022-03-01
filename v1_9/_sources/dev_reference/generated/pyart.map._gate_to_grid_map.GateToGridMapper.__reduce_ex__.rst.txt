@@ -1,6 +1,0 @@
-pyart.map.\_gate\_to\_grid\_map.GateToGridMapper.\_\_reduce\_ex\_\_
-===================================================================
-
-.. currentmodule:: pyart.map._gate_to_grid_map
-
-.. automethod:: GateToGridMapper.__reduce_ex__

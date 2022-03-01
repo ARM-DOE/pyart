@@ -1,6 +1,0 @@
-pyart.graph.radarmapdisplay.RadarMapDisplay._generate_colorbar_label
-====================================================================
-
-.. currentmodule:: pyart.graph.radarmapdisplay
-
-.. automethod:: RadarMapDisplay._generate_colorbar_label

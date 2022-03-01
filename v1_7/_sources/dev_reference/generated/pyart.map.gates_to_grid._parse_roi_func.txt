@@ -1,6 +1,0 @@
-pyart.map.gates_to_grid._parse_roi_func
-=======================================
-
-.. currentmodule:: pyart.map.gates_to_grid
-
-.. autofunction:: _parse_roi_func

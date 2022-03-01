@@ -1,6 +1,0 @@
-pyart.retrieve.compute_cdr
-==========================
-
-.. currentmodule:: pyart.retrieve
-
-.. autofunction:: compute_cdr

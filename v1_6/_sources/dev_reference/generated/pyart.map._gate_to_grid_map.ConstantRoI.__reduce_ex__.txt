@@ -1,6 +1,0 @@
-pyart.map._gate_to_grid_map.ConstantRoI.__reduce_ex__
-=====================================================
-
-.. currentmodule:: pyart.map._gate_to_grid_map
-
-.. automethod:: ConstantRoI.__reduce_ex__

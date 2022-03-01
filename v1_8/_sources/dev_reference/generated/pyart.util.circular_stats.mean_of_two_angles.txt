@@ -1,6 +1,0 @@
-pyart.util.circular_stats.mean_of_two_angles
-============================================
-
-.. currentmodule:: pyart.util.circular_stats
-
-.. autofunction:: mean_of_two_angles

@@ -1,6 +1,0 @@
-pyart.io.uffile.UFFile.\_\_reduce\_ex\_\_
-=========================================
-
-.. currentmodule:: pyart.io.uffile
-
-.. automethod:: UFFile.__reduce_ex__

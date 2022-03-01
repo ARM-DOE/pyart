@@ -1,6 +1,0 @@
-pyart.graph.radardisplay.RadarDisplay.plot\_grid\_lines
-=======================================================
-
-.. currentmodule:: pyart.graph.radardisplay
-
-.. automethod:: RadarDisplay.plot_grid_lines

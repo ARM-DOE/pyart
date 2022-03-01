@@ -1,6 +1,0 @@
-pyart.io.chl.\_unpack\_structure
-================================
-
-.. currentmodule:: pyart.io.chl
-
-.. autofunction:: _unpack_structure

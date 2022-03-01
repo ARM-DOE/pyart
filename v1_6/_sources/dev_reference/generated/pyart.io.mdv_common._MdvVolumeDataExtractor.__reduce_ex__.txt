@@ -1,6 +1,0 @@
-pyart.io.mdv_common._MdvVolumeDataExtractor.__reduce_ex__
-=========================================================
-
-.. currentmodule:: pyart.io.mdv_common
-
-.. automethod:: _MdvVolumeDataExtractor.__reduce_ex__

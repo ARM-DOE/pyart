@@ -1,6 +1,0 @@
-pyart.io.common.add_2d_latlon_axis
-==================================
-
-.. currentmodule:: pyart.io.common
-
-.. autofunction:: add_2d_latlon_axis

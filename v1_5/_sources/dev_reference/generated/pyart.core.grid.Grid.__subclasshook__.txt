@@ -1,6 +1,0 @@
-pyart.core.grid.Grid.__subclasshook__
-=====================================
-
-.. currentmodule:: pyart.core.grid
-
-.. automethod:: Grid.__subclasshook__

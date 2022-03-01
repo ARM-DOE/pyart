@@ -1,6 +1,0 @@
-pyart.correct.phase\_proc.LP\_solver\_cylp
-==========================================
-
-.. currentmodule:: pyart.correct.phase_proc
-
-.. autofunction:: LP_solver_cylp

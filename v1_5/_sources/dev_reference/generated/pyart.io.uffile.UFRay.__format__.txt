@@ -1,6 +1,0 @@
-pyart.io.uffile.UFRay.__format__
-================================
-
-.. currentmodule:: pyart.io.uffile
-
-.. automethod:: UFRay.__format__

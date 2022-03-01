@@ -1,6 +1,0 @@
-pyart.io.uf_write.UFRayCreator.make_ray
-=======================================
-
-.. currentmodule:: pyart.io.uf_write
-
-.. automethod:: UFRayCreator.make_ray

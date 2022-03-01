@@ -1,6 +1,0 @@
-pyart.graph.gridmapdisplay.GridMapDisplay.\_\_reduce\_ex\_\_
-============================================================
-
-.. currentmodule:: pyart.graph.gridmapdisplay
-
-.. automethod:: GridMapDisplay.__reduce_ex__

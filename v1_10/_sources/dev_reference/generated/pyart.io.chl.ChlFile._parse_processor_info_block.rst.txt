@@ -1,6 +1,0 @@
-pyart.io.chl.ChlFile.\_parse\_processor\_info\_block
-====================================================
-
-.. currentmodule:: pyart.io.chl
-
-.. automethod:: ChlFile._parse_processor_info_block

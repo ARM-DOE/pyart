@@ -1,6 +1,0 @@
-pyart.io._sigmetfile._unpack_structure
-======================================
-
-.. currentmodule:: pyart.io._sigmetfile
-
-.. autofunction:: _unpack_structure

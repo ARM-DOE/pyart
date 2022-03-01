@@ -1,6 +1,0 @@
-pyart.core.Radar.init_rays_per_sweep
-====================================
-
-.. currentmodule:: pyart.core
-
-.. automethod:: Radar.init_rays_per_sweep

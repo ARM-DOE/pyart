@@ -1,6 +1,0 @@
-pyart.graph.CFRadialDisplay.plot_ppi
-====================================
-
-.. currentmodule:: pyart.graph
-
-.. automethod:: CFRadialDisplay.plot_ppi

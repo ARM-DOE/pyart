@@ -1,6 +1,0 @@
-pyart.correct.filters.GateFilter.exclude_equal
-==============================================
-
-.. currentmodule:: pyart.correct.filters
-
-.. automethod:: GateFilter.exclude_equal

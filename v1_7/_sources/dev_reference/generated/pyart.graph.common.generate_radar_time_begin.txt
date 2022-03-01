@@ -1,6 +1,0 @@
-pyart.graph.common.generate_radar_time_begin
-============================================
-
-.. currentmodule:: pyart.graph.common
-
-.. autofunction:: generate_radar_time_begin

@@ -1,6 +1,0 @@
-pyart.graph.plot_cfradial.CFRadialDisplay._get_x_y_z
-====================================================
-
-.. currentmodule:: pyart.graph.plot_cfradial
-
-.. automethod:: CFRadialDisplay._get_x_y_z

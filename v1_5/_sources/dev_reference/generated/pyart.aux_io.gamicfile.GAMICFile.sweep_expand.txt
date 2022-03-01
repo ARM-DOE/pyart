@@ -1,6 +1,0 @@
-pyart.aux_io.gamicfile.GAMICFile.sweep_expand
-=============================================
-
-.. currentmodule:: pyart.aux_io.gamicfile
-
-.. automethod:: GAMICFile.sweep_expand

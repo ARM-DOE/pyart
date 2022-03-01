@@ -1,6 +1,0 @@
-pyart.io.uffile.UFFile.get_pulse_widths
-=======================================
-
-.. currentmodule:: pyart.io.uffile
-
-.. automethod:: UFFile.get_pulse_widths

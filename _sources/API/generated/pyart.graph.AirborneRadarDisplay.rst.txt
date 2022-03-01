@@ -28,6 +28,7 @@ pyart.graph.AirborneRadarDisplay
    ~AirborneRadarDisplay.plot
    ~AirborneRadarDisplay.plot_azimuth_to_rhi
    ~AirborneRadarDisplay.plot_colorbar
+   ~AirborneRadarDisplay.plot_cr_raster
    ~AirborneRadarDisplay.plot_cross_hair
    ~AirborneRadarDisplay.plot_grid_lines
    ~AirborneRadarDisplay.plot_label

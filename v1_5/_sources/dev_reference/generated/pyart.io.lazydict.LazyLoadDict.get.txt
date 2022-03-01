@@ -1,6 +1,0 @@
-pyart.io.lazydict.LazyLoadDict.get
-==================================
-
-.. currentmodule:: pyart.io.lazydict
-
-.. automethod:: LazyLoadDict.get

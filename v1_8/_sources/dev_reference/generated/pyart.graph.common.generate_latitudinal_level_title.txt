@@ -1,6 +1,0 @@
-pyart.graph.common.generate_latitudinal_level_title
-===================================================
-
-.. currentmodule:: pyart.graph.common
-
-.. autofunction:: generate_latitudinal_level_title

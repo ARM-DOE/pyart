@@ -1,6 +1,0 @@
-pyart.graph.radarmapdisplay.RadarMapDisplay.generate_az_rhi_title
-=================================================================
-
-.. currentmodule:: pyart.graph.radarmapdisplay
-
-.. automethod:: RadarMapDisplay.generate_az_rhi_title

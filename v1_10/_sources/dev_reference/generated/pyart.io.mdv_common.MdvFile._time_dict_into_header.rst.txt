@@ -1,6 +1,0 @@
-pyart.io.mdv\_common.MdvFile.\_time\_dict\_into\_header
-=======================================================
-
-.. currentmodule:: pyart.io.mdv_common
-
-.. automethod:: MdvFile._time_dict_into_header

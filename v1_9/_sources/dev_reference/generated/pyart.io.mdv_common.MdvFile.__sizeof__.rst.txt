@@ -1,6 +1,0 @@
-pyart.io.mdv\_common.MdvFile.\_\_sizeof\_\_
-===========================================
-
-.. currentmodule:: pyart.io.mdv_common
-
-.. automethod:: MdvFile.__sizeof__

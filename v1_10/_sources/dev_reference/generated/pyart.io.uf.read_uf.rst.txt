@@ -1,6 +1,0 @@
-pyart.io.uf.read\_uf
-====================
-
-.. currentmodule:: pyart.io.uf
-
-.. autofunction:: read_uf

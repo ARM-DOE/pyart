@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pyart.correct.GateFilter.exclude_invalid &mdash; Py-ART 1.11.7.dev+d5db026 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/plot_directive.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/copybutton.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/clipboard.min.js"></script>
+        <script src="../../../_static/copybutton.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex/" />
+    <link rel="search" title="Search" href="../../../search/" />
+    <link rel="next" title="pyart.correct.GateFilter.exclude_masked" href="../pyart.correct.GateFilter.exclude_masked/" />
+    <link rel="prev" title="pyart.correct.GateFilter.exclude_inside" href="../pyart.correct.GateFilter.exclude_inside/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../" class="icon icon-home"> Py-ART
+          </a>
+              <div class="version">
+                1.11.7.dev+d5db026
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../">API Reference Manual</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../pyart.core/">pyart.core</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pyart.io/">pyart.io</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pyart.aux_io/">pyart.aux_io</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pyart.config/">pyart.config</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../pyart.correct/">pyart.correct</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../pyart.correct.GateFilter/">pyart.correct.GateFilter</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../pyart.correct.GateFilter.copy/">pyart.correct.GateFilter.copy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pyart.correct.GateFilter.exclude_above/">pyart.correct.GateFilter.exclude_above</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pyart.correct.GateFilter.exclude_all/">pyart.correct.GateFilter.exclude_all</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pyart.correct.GateFilter.exclude_below/">pyart.correct.GateFilter.exclude_below</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pyart.correct.GateFilter.exclude_equal/">pyart.correct.GateFilter.exclude_equal</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pyart.correct.GateFilter.exclude_gates/">pyart.correct.GateFilter.exclude_gates</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pyart.correct.GateFilter.exclude_inside/">pyart.correct.GateFilter.exclude_inside</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">pyart.correct.GateFilter.exclude_invalid</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pyart.correct.GateFilter.exclude_masked/">pyart.correct.GateFilter.exclude_masked</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pyart.correct.GateFilter.exclude_none/">pyart.correct.GateFilter.exclude_none</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pyart.correct.GateFilter.exclude_not_equal/">pyart.correct.GateFilter.exclude_not_equal</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pyart.correct.GateFilter.exclude_outside/">pyart.correct.GateFilter.exclude_outside</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pyart.correct.GateFilter.exclude_transition/">pyart.correct.GateFilter.exclude_transition</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pyart.correct.GateFilter.include_above/">pyart.correct.GateFilter.include_above</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pyart.correct.GateFilter.include_all/">pyart.correct.GateFilter.include_all</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pyart.correct.GateFilter.include_below/">pyart.correct.GateFilter.include_below</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pyart.correct.GateFilter.include_equal/">pyart.correct.GateFilter.include_equal</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pyart.correct.GateFilter.include_gates/">pyart.correct.GateFilter.include_gates</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pyart.correct.GateFilter.include_inside/">pyart.correct.GateFilter.include_inside</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pyart.correct.GateFilter.include_none/">pyart.correct.GateFilter.include_none</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pyart.correct.GateFilter.include_not_equal/">pyart.correct.GateFilter.include_not_equal</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pyart.correct.GateFilter.include_not_masked/">pyart.correct.GateFilter.include_not_masked</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pyart.correct.GateFilter.include_not_transition/">pyart.correct.GateFilter.include_not_transition</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pyart.correct.GateFilter.include_outside/">pyart.correct.GateFilter.include_outside</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pyart.correct.GateFilter.include_valid/">pyart.correct.GateFilter.include_valid</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pyart.correct.GateFilter.gate_excluded/">pyart.correct.GateFilter.gate_excluded</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pyart.correct.GateFilter.gate_included/">pyart.correct.GateFilter.gate_included</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../pyart.correct.calculate_attenuation/">pyart.correct.calculate_attenuation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyart.correct.calculate_attenuation_philinear/">pyart.correct.calculate_attenuation_philinear</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyart.correct.calculate_attenuation_zphi/">pyart.correct.calculate_attenuation_zphi</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyart.correct.correct_bias/">pyart.correct.correct_bias</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyart.correct.correct_noise_rhohv/">pyart.correct.correct_noise_rhohv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyart.correct.dealias_fourdd/">pyart.correct.dealias_fourdd</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyart.correct.dealias_region_based/">pyart.correct.dealias_region_based</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyart.correct.dealias_unwrap_phase/">pyart.correct.dealias_unwrap_phase</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyart.correct.despeckle_field/">pyart.correct.despeckle_field</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyart.correct.find_objects/">pyart.correct.find_objects</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyart.correct.moment_based_gate_filter/">pyart.correct.moment_based_gate_filter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyart.correct.phase_proc_lp/">pyart.correct.phase_proc_lp</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyart.correct.phase_proc_lp_gf/">pyart.correct.phase_proc_lp_gf</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../pyart.exceptions/">pyart.exceptions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pyart.retrieve/">pyart.retrieve</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pyart.graph/">pyart.graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pyart.filters/">pyart.filters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pyart.lazydict/">pyart.lazydict</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pyart.map/">pyart.map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pyart.util/">pyart.util</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pyart.bridge/">pyart.bridge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pyart.testing/">pyart.testing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../pyart._debug_info/">pyart._debug_info</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../INSTALL/">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../setting_up_an_environment/">Setting up an Environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributors_guide/">Contributor’s Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Downloads</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://anaconda.org/conda-forge/arm_pyart">Anaconda Cloud</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/ARM-DOE/pyart">GitHub Repo</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/ARM-DOE/pyart/archive/master.zip">Zip File of Repository</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Notebooks</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebooks/basic_ingest_using_test_radar_object/">Creating a basic ingest of a NetCDF file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebooks/changing_fields_and_saving/">Field manipulation and Saving the Radar Object to a file.</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebooks/dealiasing_velocity/">Dealiasing Velocity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebooks/mapping_data_to_a_cartesian_grid/">Mapping Data to a Cartesian Grid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebooks/masking_data_with_gatefilters/">Masking Data With Py-ART Gatefilters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebooks/the_pyart_radar_object_and_indexing/">The Py-ART Radar object and indexing</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Help</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/ARM-DOE/pyart/issues">GitHub Issue Tracker</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://groups.google.com/forum/#!forum/pyart-users">Mailing List</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Science Lead</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://www.anl.gov/profile/scott-m-collis">Scott Collis</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../">Py-ART</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../">API Reference Manual</a> &raquo;</li>
+          <li><a href="../pyart.correct/">pyart.correct</a> &raquo;</li>
+          <li><a href="../pyart.correct.GateFilter/">pyart.correct.GateFilter</a> &raquo;</li>
+      <li>pyart.correct.GateFilter.exclude_invalid</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/API/generated/pyart.correct.GateFilter.exclude_invalid.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="pyart-correct-gatefilter-exclude-invalid">
+<h1>pyart.correct.GateFilter.exclude_invalid<a class="headerlink" href="#pyart-correct-gatefilter-exclude-invalid" title="Permalink to this headline">¶</a></h1>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyart.correct.GateFilter.exclude_invalid">
+<span class="sig-prename descclassname"><span class="pre">GateFilter.</span></span><span class="sig-name descname"><span class="pre">exclude_invalid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_masked</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">op</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'or'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/pyart/filters/gatefilter/#GateFilter.exclude_invalid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyart.correct.GateFilter.exclude_invalid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exclude gates where an invalid value occurs in a field (NaNs or infs).</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../pyart.correct.GateFilter.exclude_inside/" class="btn btn-neutral float-left" title="pyart.correct.GateFilter.exclude_inside" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../pyart.correct.GateFilter.exclude_masked/" class="btn btn-neutral float-right" title="pyart.correct.GateFilter.exclude_masked" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2013-2020, Py-ART developers.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+    <!-- Theme Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-221367849-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-221367849-1', {
+          'anonymize_ip': false,
+      });
+    </script> 
+
+</body>
+</html>

@@ -1,6 +1,0 @@
-pyart.io.nexrad\_level3.\_structure\_size
-=========================================
-
-.. currentmodule:: pyart.io.nexrad_level3
-
-.. autofunction:: _structure_size

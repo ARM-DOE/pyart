@@ -1,6 +1,0 @@
-pyart.util.is_vpt
-=================
-
-.. currentmodule:: pyart.util
-
-.. autofunction:: is_vpt

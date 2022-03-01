@@ -1,6 +1,0 @@
-pyart.core.transforms.\_interpolate\_elevation\_edges
-=====================================================
-
-.. currentmodule:: pyart.core.transforms
-
-.. autofunction:: _interpolate_elevation_edges

@@ -1,6 +1,0 @@
-pyart.io.cfradial.read\_cfradial
-================================
-
-.. currentmodule:: pyart.io.cfradial
-
-.. autofunction:: read_cfradial

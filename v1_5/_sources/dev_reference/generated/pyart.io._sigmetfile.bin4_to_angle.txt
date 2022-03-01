@@ -1,6 +1,0 @@
-pyart.io._sigmetfile.bin4_to_angle
-==================================
-
-.. currentmodule:: pyart.io._sigmetfile
-
-.. autofunction:: bin4_to_angle

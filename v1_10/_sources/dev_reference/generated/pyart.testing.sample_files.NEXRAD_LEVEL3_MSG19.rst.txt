@@ -1,6 +1,0 @@
-pyart.testing.sample\_files.NEXRAD\_LEVEL3\_MSG19
-=================================================
-
-.. currentmodule:: pyart.testing.sample_files
-
-.. autodata:: NEXRAD_LEVEL3_MSG19

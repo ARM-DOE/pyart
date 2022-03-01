@@ -1,6 +1,0 @@
-pyart.io.chl.ChlFile.\_parse\_scan\_seg\_block
-==============================================
-
-.. currentmodule:: pyart.io.chl
-
-.. automethod:: ChlFile._parse_scan_seg_block

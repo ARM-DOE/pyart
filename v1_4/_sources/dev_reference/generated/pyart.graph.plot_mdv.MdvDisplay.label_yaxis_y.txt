@@ -1,6 +1,0 @@
-pyart.graph.plot_mdv.MdvDisplay.label_yaxis_y
-=============================================
-
-.. currentmodule:: pyart.graph.plot_mdv
-
-.. automethod:: MdvDisplay.label_yaxis_y

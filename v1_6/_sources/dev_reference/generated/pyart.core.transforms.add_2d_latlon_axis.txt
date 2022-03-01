@@ -1,6 +1,0 @@
-pyart.core.transforms.add_2d_latlon_axis
-========================================
-
-.. currentmodule:: pyart.core.transforms
-
-.. autofunction:: add_2d_latlon_axis
