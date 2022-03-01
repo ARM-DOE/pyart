@@ -1,14 +1,5 @@
 """
-pyart.retrieve._kdp_proc
-========================
-
 Cython routines for specific differential phase retrievals.
-
-.. autosummary::
-    :toctree: generated/
-
-    lowpass_maesaka_term
-    lowpass_maesaka_jac
 
 """
 

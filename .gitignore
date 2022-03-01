@@ -9,8 +9,10 @@
 *.org
 .project
 .pydevproject
+.spyproject
 *.rej
 .settings/
+.spyproject
 .*.sw[nop]
 .sw[nop]
 *.tmp
@@ -97,8 +99,7 @@ pyart/retrieve/_echo_steinermodule.c
 # Documentation files #
 #######################
 /doc/build
-/doc/source/user_reference/generated
-/doc/source/dev_reference/generated
+/doc/source/API/generated
 /doc/source/auto_examples
 
 # radar data files #

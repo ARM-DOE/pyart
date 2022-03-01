@@ -1,14 +1,5 @@
 """
-pyart.io.arm_sonde
-==================
-
 Utilities for ARM sonde NetCDF files.
-
-.. autosummary::
-    :toctree: generated/
-
-    read_arm_sonde
-    read_arm_sonde_vap
 
 """
 
@@ -73,9 +64,9 @@ def read_arm_sonde_vap(filename, radar=None, target_datetime=None):
     Return
     ------
     profile_datetime : datetime
-        Date and time of the profile
+        Date and time of the profile.
     profile : HorizontalWindProfile
-        Profile of the horizontal winds
+        Profile of the horizontal winds.
 
     """
 

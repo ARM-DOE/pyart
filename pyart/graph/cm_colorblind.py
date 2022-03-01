@@ -1,19 +1,13 @@
 """
-pyart.graph.cm_colorblind
-=========================
-
 Colorblind friendly radar colormaps
-
-.. autosummary::
-    :toctree: generated/
-
-    _generate_cmap
 
 Available colormaps, reversed versions are also provided, these
 colormaps are available within matplotlib with names pyart_COLORMAP':
 
     * HomeyerRainbow
 """
+
+import warnings
 
 import matplotlib as mpl
 import matplotlib.colors as colors
@@ -23,16 +17,17 @@ from ._cm_colorblind import datad, yuv_rainbow_24
 
 
 def _generate_cmap(name, lutsize):
-    """Generates the requested cmap from it's name *name*.  The lut size is
+    """Generates the requested cmap from it's name *name*. The lut size is
     *lutsize*."""
 
     spec = datad[name]
-
     # Generate the colormap object.
-    if 'red' in spec:
-        return colors.LinearSegmentedColormap(name, spec, lutsize)
-    else:
-        return colors.LinearSegmentedColormap.from_list(name, spec, lutsize)
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", FutureWarning)
+        if isinstance(spec, dict) and 'red' in spec.keys():
+            return colors.LinearSegmentedColormap(name, spec, lutsize)
+        else:
+            return colors.LinearSegmentedColormap.from_list(name, spec, lutsize)
 
 cmap_d = dict()
 

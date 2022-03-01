@@ -1,18 +1,10 @@
 """
-pyart.util.simulated_vel
-========================
-
 Function for creating simulated velocity fields.
-
-.. autosummary::
-    :toctree: generated/
-
-    simulated_vel_from_profile
 
 """
 
-from scipy.interpolate import interp1d
 import numpy as np
+from scipy.interpolate import interp1d
 
 from ..config import get_metadata, get_field_name
 
@@ -31,11 +23,11 @@ def simulated_vel_from_profile(
         Profile of horizontal winds.
     interp_kind : str, optional
         Specifies the kind of interpolation used to determine the winds at a
-        given height.  Must be one of 'linear', 'nearest', 'zero', 'slinear',
-        'quadratic', or 'cubic'.  The the documentation for the SciPy
+        given height. Must be one of 'linear', 'nearest', 'zero', 'slinear',
+        'quadratic', or 'cubic'. The the documentation for the SciPy
         scipy.interpolate.interp1d function for descriptions.
     sim_vel_field : str, optional
-        Name to use for the simulated velocity field metadata.  None will use
+        Name to use for the simulated velocity field metadata. None will use
         the default field name from the Py-ART configuration file.
 
     Returns
@@ -53,12 +45,34 @@ def simulated_vel_from_profile(
     elevations = np.deg2rad(radar.elevation['data']).reshape(-1, 1)
     gate_altitudes = radar.gate_altitude['data']
 
+    if isinstance(gate_altitudes, np.ma.MaskedArray):
+        gate_altitudes = gate_altitudes.filled(np.nan)
+
     # prepare wind profile for interpolation
-    height = profile.height
+    if isinstance(profile.height, np.ma.MaskedArray):
+        height = profile.height.filled(np.nan)
+    else:
+        height = profile.height
+
+    height_is_not_nan = ~np.isnan(height)
     winds = np.empty((2, len(height)), dtype=np.float64)
-    winds[0] = profile.u_wind
-    winds[1] = profile.v_wind
-    wind_interp = interp1d(height, winds, kind=interp_kind, bounds_error=False)
+    if isinstance(profile.u_wind, np.ma.MaskedArray):
+        winds[0] = profile.u_wind.filled(np.nan)
+    else:
+        winds[0] = profile.u_wind
+
+    if isinstance(profile.v_wind, np.ma.MaskedArray):
+        winds[1] = profile.v_wind.filled(np.nan)
+    else:
+        winds[1] = profile.v_wind
+
+    wind_is_not_nan = np.logical_and(~np.isnan(winds[0]), ~np.isnan(winds[1]))
+    no_nans = np.logical_and(height_is_not_nan, wind_is_not_nan)
+    height = height[no_nans]
+    winds[0] = winds[0][no_nans]
+    winds[1] = winds[1][no_nans]
+    wind_interp = interp1d(
+        height, winds, kind=interp_kind, bounds_error=False)
 
     # interpolated wind speeds at all gates altitudes
     gate_winds = wind_interp(gate_altitudes)

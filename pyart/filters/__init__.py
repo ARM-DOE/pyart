@@ -1,24 +1,5 @@
 """
-==============================
-Filters (:mod:`pyart.filters`)
-==============================
-
-.. currentmodule:: pyart.filters
-
 Classes for specifying what gates are included and excluded from routines.
-
-Filtering radar data
-====================
-
-.. autosummary::
-    :toctree: generated/
-
-    GateFilter
-    moment_based_gate_filter
-    moment_and_texture_based_gate_filter
-    temp_based_gate_filter
-    iso0_based_gate_filter
-
 
 """
 

@@ -1,32 +1,7 @@
 """
-pyart.core.transforms
-=====================
-
 Transformations between coordinate systems. Routines for converting between
 Cartesian/Cartographic (x, y, z), Geographic (latitude, longitude, altitude)
 and antenna (azimuth, elevation, range) coordinate systems.
-
-.. autosummary::
-    :toctree: generated/
-
-    antenna_to_cartesian
-    antenna_vectors_to_cartesian
-    antenna_to_cartesian_track_relative
-    antenna_to_cartesian_earth_relative
-    antenna_to_cartesian_aircraft_relative
-
-    cartesian_to_geographic
-    cartesian_vectors_to_geographic
-    geographic_to_cartesian
-    cartesian_to_geographic_aeqd
-    geographic_to_cartesian_aeqd
-
-    _interpolate_axes_edges
-    _interpolate_azimuth_edges
-    _interpolate_elevation_edges
-    _interpolate_range_edges
-    _half_angle_complex
-
 
 """
 
@@ -120,7 +95,7 @@ def antenna_vectors_to_cartesian(ranges, azimuths, elevations, edges=False):
         Elevation angles of the rays in degrees.
     edges : bool, optional
         True to calculate the coordinates of the gate edges by interpolating
-        between gates and extrapolating at the boundaries.  False to
+        between gates and extrapolating at the boundaries. False to
         calculate the gate centers.
 
     Returns
@@ -382,7 +357,7 @@ def geographic_to_cartesian(lon, lat, projparams):
     -------
     x, y : array-like
         Cartesian coordinates in meters unless projparams defines a value for R
-        in different units
+        in different units.
 
     """
     if isinstance(projparams, dict) and projparams.get('proj') == 'pyart_aeqd':
@@ -413,7 +388,7 @@ def geographic_to_cartesian_aeqd(lon, lat, lon_0, lat_0, R=6370997.):
 
     Transform a set of geographic coordinates (lat, lon) to
     Cartesian/Cartographic coordinates (x, y) using a azimuthal equidistant
-    map projection [1].
+    map projection [1]_.
 
     .. math::
 
@@ -439,7 +414,7 @@ def geographic_to_cartesian_aeqd(lon, lat, lon_0, lat_0, R=6370997.):
     lon_0, lat_0 : float
         Longitude and latitude, in degrees, of the center of the projection.
     R : float, optional
-        Earth radius in the same units as x and y.  The default value is in
+        Earth radius in the same units as x and y. The default value is in
         units of meters.
 
     Returns
@@ -580,7 +555,7 @@ def cartesian_to_geographic_aeqd(x, y, lon_0, lat_0, R=6370997.):
 
     Transform a set of Cartesian/Cartographic coordinates (x, y) to
     geographic coordinate system (lat, lon) using a azimuthal equidistant
-    map projection [1].
+    map projection [1]_.
 
     .. math::
 
@@ -608,7 +583,7 @@ def cartesian_to_geographic_aeqd(x, y, lon_0, lat_0, R=6370997.):
     lon_0, lat_0 : float
         Longitude and latitude, in degrees, of the center of the projection.
     R : float, optional
-        Earth radius in the same units as x and y.  The default value is in
+        Earth radius in the same units as x and y. The default value is in
         units of meters.
 
     Returns

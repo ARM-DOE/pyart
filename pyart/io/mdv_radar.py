@@ -1,13 +1,5 @@
 """
-pyart.io.mdv_radar
-==================
-
 Utilities for reading of MDV radar files.
-
-.. autosummary::
-    :toctree: generated/
-
-    read_mdv
 
 """
 
@@ -59,7 +51,7 @@ def read_mdv(filename, field_names=None, additional_metadata=None,
         to None to include all fields not specified by exclude_fields.
     delay_field_loading : bool
         True to delay loading of field data from the file until the 'data'
-        key in a particular field dictionary is accessed.  In this case
+        key in a particular field dictionary is accessed. In this case
         the field attribute of the returned Radar object will contain
         LazyLoadDict objects not dict objects. Not all file types support this
         parameter.

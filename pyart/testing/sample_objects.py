@@ -1,28 +1,24 @@
 """
-pyart.testing.sample_objects
-============================
-
 Functions for creating sample Radar and Grid objects.
-
-.. autosummary::
-    :toctree: generated/
-
-    make_empty_ppi_radar
-    make_target_radar
-    make_velocity_aliased_radar
-    make_single_ray_radar
-    make_empty_grid
-    make_target_grid
-    make_normal_storm
 
 """
 
 import numpy as np
+import scipy
 
 from .sample_files import _EXAMPLE_RAYS_FILE
 from ..config import get_metadata
 from ..core.radar import Radar
 from ..core.grid import Grid
+from ..exceptions import MissingOptionalDependency
+
+try:
+    import xarray as xr
+    from ..core.radar_spectra import RadarSpectra
+    _XARRAY_AVAILABLE = True
+except ImportError:
+    _XARRAY_AVAILABLE = False
+
 
 
 def make_empty_ppi_radar(ngates, rays_per_sweep, nsweeps):
@@ -214,7 +210,7 @@ def make_velocity_aliased_rhi_radar(alias=True):
 
 def make_single_ray_radar():
     """
-    Return a PPI radar with a single ray taken from a ARM C-SAPR Radar
+    Return a PPI radar with a single ray taken from a ARM C-SAPR Radar.
 
     Radar object returned has 'reflectivity_horizontal',
     'norm_coherent_power', 'copol_coeff', 'dp_phase_shift', 'diff_phase', and
@@ -364,3 +360,106 @@ def make_normal_storm(sigma, mu):
         'units': 'dBz'}
     test_grid.fields.update({'reflectivity': rdic})
     return test_grid
+
+
+def make_empty_spectra_radar(nrays, ngates, npulses_max):
+    """
+    Return a Spectra Radar object.
+
+    Parameters
+    ----------
+    nrays : int
+        Number of rays in the object.
+    ngates : int
+        Number of gates per ray.
+    npulses_max : int
+        Number of pulses in each gate.
+
+    Returns
+    -------
+    radar : RadarSpectra
+        Radar spectra object with an empty spectra field, other parameters are
+        set to default values.
+
+    """
+    if not _XARRAY_AVAILABLE:
+        raise MissingOptionalDependency(
+            "Xarray is required to use make_empty_spectra_radar "
+            "but is not installed!")
+
+    time_dict = get_metadata('time')
+    _range_dict = get_metadata('range')
+    latitude_dict = get_metadata('latitude')
+    longitude_dict = get_metadata('longitude')
+    altitude_dict = get_metadata('altitude')
+    sweep_number_dict = get_metadata('sweep_number')
+    sweep_mode_dict = get_metadata('sweep_mode')
+    fixed_angle_dict = get_metadata('fixed_angle')
+    sweep_start_ray_index_dict = get_metadata('sweep_start_ray_index')
+    sweep_end_ray_index_dict = get_metadata('sweep_end_ray_index')
+    azimuth_dict = get_metadata('azimuth')
+    elevation_dict = get_metadata('elevation')
+
+    fields = {}
+    scan_type = 'vpt'
+    c = 299792458
+    wavelength = c/34.830*1e-9
+    metadata = {'instrument_name': 'fake_spectra_radar',
+                'wavelength': wavelength}
+    time_dict['units'] = 'seconds since 1989-01-01T00:00:01Z'
+    time = xr.DataArray(np.arange(nrays, dtype='float32'), attrs=time_dict,
+                        dims='time')
+    _range = xr.DataArray(np.linspace(0, 1000, ngates).astype('float32'), 
+                          attrs=_range_dict, dims='range')
+    latitude = xr.DataArray(np.array([36.5], dtype='float64'),
+                            attrs=latitude_dict)
+    longitude = xr.DataArray(np.array([-97.5], dtype='float64'),
+                             attrs=longitude_dict)
+    altitude = xr.DataArray(np.array([200], dtype='float64'),
+                            attrs=altitude_dict)
+
+    sweep_number = xr.DataArray(np.arange(1, dtype='int32'),
+                                attrs=sweep_number_dict)
+    sweep_mode = xr.DataArray(np.array(['spectra'] * 1), attrs=sweep_mode_dict)
+    fixed_angle = xr.DataArray(np.array([0.75] * 1, dtype='float32'),
+                               attrs=fixed_angle_dict)
+    sweep_start_ray_index = xr.DataArray(np.array([0], dtype='int32'),
+                                         attrs=sweep_start_ray_index_dict)
+    sweep_end_ray_index = xr.DataArray(
+        np.array([len(time.values)-1], dtype='int32'),
+        attrs=sweep_end_ray_index_dict)
+
+    azimuth = xr.DataArray(np.arange(nrays, dtype='float32'),
+                           attrs=azimuth_dict, dims='time')
+    elevation = xr.DataArray(np.array([0.75] * nrays, dtype='float32'),
+                             attrs=elevation_dict, dims='time')
+    npulses_max = np.arange(npulses_max, dtype='float32')
+    velocity_bins = xr.DataArray(np.linspace(-10.0, 10.0, len(npulses_max)),
+                                 attrs={}, dims='npulses_max')
+
+    fields = np.zeros(
+        (len(time.values), len(_range.values), len(npulses_max)))
+
+    return RadarSpectra(time, _range, fields, metadata, scan_type,
+                        latitude, longitude, altitude,
+                        sweep_number, sweep_mode, fixed_angle,
+                        sweep_start_ray_index, sweep_end_ray_index,
+                        azimuth, elevation, npulses_max, velocity_bins,
+                        instrument_parameters=None)
+
+
+def make_target_spectra_radar():
+    """
+    Return a spectra radar with a target like spectra field.
+    """
+    if not _XARRAY_AVAILABLE:
+        raise MissingOptionalDependency(
+            "Xarray is required to use make_target_spectra_radar "
+            "but is not installed!")
+
+    radar = make_empty_spectra_radar(10, 20, 50)
+    fdata = np.zeros((10, 20, 50), dtype='float32')
+    max_value = 10**(-10/10)
+    fdata[:, :, :] = 10*np.log10(scipy.signal.gaussian(50, std=7) * max_value)
+    radar.ds['spectra'].values = fdata
+    return radar

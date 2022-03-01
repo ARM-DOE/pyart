@@ -1,22 +1,5 @@
 """
-pyart.io.nexrad_archive
-=======================
-
 Functions for reading NEXRAD Level II Archive files.
-
-.. autosummary::
-    :toctree: generated/
-    :template: dev_template.rst
-
-    _NEXRADLevel2StagedField
-
-.. autosummary::
-    :toctree: generated/
-
-    read_nexrad_archive
-    _find_range_params
-    _find_scans_to_interp
-    _interpolate_scan
 
 """
 
@@ -30,7 +13,7 @@ from .common import make_time_unit_str, _test_arguments, prepare_for_read
 from .nexrad_level2 import NEXRADLevel2File
 from ..lazydict import LazyLoadDict
 from .nexrad_common import get_nexrad_location
-from .nexrad_interpolate import _fast_interpolate_scan
+from .nexrad_interpolate import _fast_interpolate_scan_4, _fast_interpolate_scan_2
 
 
 def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
@@ -44,10 +27,10 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
     Parameters
     ----------
     filename : str
-        Filename of NEXRAD Level 2 Archive file.  The files hosted by
+        Filename of NEXRAD Level 2 Archive file. The files hosted by
         at the NOAA National Climate Data Center [1]_ as well as on the
-        UCAR THREDDS Data Server [2]_ have been tested.  Other NEXRAD
-        Level 2 Archive files may or may not work.  Message type 1 file
+        UCAR THREDDS Data Server [2]_ have been tested. Other NEXRAD
+        Level 2 Archive files may or may not work. Message type 1 file
         and message type 31 files are supported.
     field_names : dict, optional
         Dictionary mapping NEXRAD moments to radar field names. If a
@@ -58,7 +41,7 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
     additional_metadata : dict of dicts, optional
         Dictionary of dictionaries to retrieve metadata from during this read.
         This metadata is not used during any successive file reads unless
-        explicitly included.  A value of None, the default, will not
+        explicitly included. A value of None, the default, will not
         introduct any addition metadata and the file specific or default
         metadata as specified by the metadata configuration file will be used.
     file_field_names : bool, optional
@@ -76,21 +59,21 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
         to None to include all fields not specified by exclude_fields.
     delay_field_loading : bool, optional
         True to delay loading of field data from the file until the 'data'
-        key in a particular field dictionary is accessed.  In this case
+        key in a particular field dictionary is accessed. In this case
         the field attribute of the returned Radar object will contain
         LazyLoadDict objects not dict objects.
     station : str or None, optional
         Four letter ICAO name of the NEXRAD station used to determine the
-        location in the returned radar object.  This parameter is only
+        location in the returned radar object. This parameter is only
         used when the location is not contained in the file, which occur
         in older NEXRAD message 1 files.
     scans : list or None, optional
-        Read only specified scans from the file.  None (the default) will read
+        Read only specified scans from the file. None (the default) will read
         all scans.
     linear_interp : bool, optional
         True (the default) to perform linear interpolation between valid pairs
         of gates in low resolution rays in files mixed resolution rays.
-        False will perform a nearest neighbor interpolation.  This parameter is
+        False will perform a nearest neighbor interpolation. This parameter is
         not used if the resolution of all rays in the file or requested sweeps
         is constant.
 
@@ -151,6 +134,9 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
 
     if nfile._msg_type == '1' and station is not None:
         lat, lon, alt = get_nexrad_location(station)
+    elif 'icao' in nfile.volume_header.keys() and nfile.volume_header['icao'].decode()[0] == 'T':
+        lat, lon, alt = get_nexrad_location(
+            nfile.volume_header['icao'].decode())
     else:
         lat, lon, alt = nfile.location()
     latitude['data'] = np.array([lat], dtype='float64')
@@ -185,7 +171,18 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
     fixed_angle = filemetadata('fixed_angle')
     azimuth['data'] = nfile.get_azimuth_angles(scans)
     elevation['data'] = nfile.get_elevation_angles(scans).astype('float32')
-    fixed_angle['data'] = nfile.get_target_angles(scans)
+    fixed_agl = []
+    for i in nfile.get_target_angles(scans):
+        if i > 180:
+            i = i - 360.
+            warnings.warn("Fixed_angle(s) greater than 180 degrees present."
+                          + " Assuming angle to be negative so subtrating 360",
+                          UserWarning)
+        else:
+            i = i
+        fixed_agl.append(i)
+    fixed_angles = np.array(fixed_agl, dtype='float32')
+    fixed_angle['data'] = fixed_angles
 
     # fields
     max_ngates = len(_range['data'])
@@ -218,8 +215,12 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
                     moment_ngates = scan_info[scan]['ngates'][idx]
                     start = sweep_start_ray_index['data'][scan]
                     end = sweep_end_ray_index['data'][scan]
+                    if interpolate['multiplier'] == '4':
+                        multiplier = '4'
+                    else:
+                        multiplier = '2'
                     _interpolate_scan(mdata, start, end, moment_ngates,
-                                      linear_interp)
+                                      multiplier, linear_interp)
             dic['data'] = mdata
         fields[field_name] = dic
 
@@ -282,22 +283,30 @@ def _find_scans_to_interp(scan_info, first_gate, gate_spacing, filemetadata):
                 interpolate[moment].append(scan_num)
                 # for proper interpolation the gate spacing of the scan to be
                 # interpolated should be 1/4th the spacing of the radar
-                assert spacing == gate_spacing * 4
-                # and the first gate for the scan should be one and half times
-                # the radar spacing past the radar first gate
-                assert first_gate + 1.5 * gate_spacing == first
+                if spacing == gate_spacing * 4:
+                    interpolate['multiplier'] = '4'
+                elif spacing == gate_spacing * 2:
+                    interpolate['multiplier'] = '2'
+                else:
+                    raise ValueError('Gate spacing is neither 1/4 or 1/2')
+                #assert first_gate + 1.5 * gate_spacing == first
     # remove moments with no scans needing interpolation
     interpolate = dict([(k, v) for k, v in interpolate.items() if len(v) != 0])
     return interpolate
 
 
-def _interpolate_scan(mdata, start, end, moment_ngates, linear_interp=True):
+def _interpolate_scan(mdata, start, end, moment_ngates, multiplier,
+                      linear_interp=True):
     """ Interpolate a single NEXRAD moment scan from 1000 m to 250 m. """
     fill_value = -9999
     data = mdata.filled(fill_value)
     scratch_ray = np.empty((data.shape[1], ), dtype=data.dtype)
-    _fast_interpolate_scan(data, scratch_ray, fill_value,
-                           start, end, moment_ngates, linear_interp)
+    if multiplier == '4':
+        _fast_interpolate_scan_4(data, scratch_ray, fill_value,
+                                 start, end, moment_ngates, linear_interp)
+    else:
+        _fast_interpolate_scan_2(data, scratch_ray, fill_value,
+                                 start, end, moment_ngates, linear_interp)
     mdata[:] = np.ma.array(data, mask=(data == fill_value))
 
 

@@ -1,14 +1,5 @@
 """
-pyart.correct._fourdd_interface
-===============================
-
 Cython wrapper around the University of Washington FourDD algorithm.
-
-.. autosummary::
-    :toctree: generated/
-
-    create_soundvolume
-    fourdd_dealias
 
 """
 
@@ -33,20 +24,20 @@ cpdef create_soundvolume(radialVelVolume,
         Radial velocities which will be dealiased, shape used to create
         soundvolume.
     hc : ndarray
-        Sounding heights in meters.  Must be a contiguous one-dimensional
+        Sounding heights in meters. Must be a contiguous one-dimensional
         float32 array.
     sc : ndarray
-        Sounding wind speed in m/s.  Must be a contiguous one-dimensional
+        Sounding wind speed in m/s. Must be a contiguous one-dimensional
         float32 array.
     dc : ndarray
-        Sounding wind direction in degrees.  Must be a contiguous
+        Sounding wind direction in degrees. Must be a contiguous
         one-dimensional float32 array.
     maxshear : float
         Maximum vertical shear which will be incorperated into the created
         volume.
     sign : int
         Sign convention which the radial velocities in the created volume
-        will follow.  A value of 1 represents when positive values
+        will follow. A value of 1 represents when positive values
         velocities are towards the radar, -1 represents when negative
         velocities are towards the radar.
 
@@ -96,7 +87,7 @@ cpdef fourdd_dealias(
         results, this radar should represent the previous volume scan in time.
         If the last velocity volume is unavailable, set this to None.
     soundVolume : _RslVolume or None
-        Volume created from sounding data.  If unavailable, set this to None.
+        Volume created from sounding data. If unavailable, set this to None.
         soundVolume and lastVelVolume cannot both be None.
     filt : int
         Flag controlling Bergen and Albers filter, 1 = yes, 0 = no.
@@ -105,16 +96,16 @@ cpdef fourdd_dealias(
     ----------------
     compthresh : float
         Fraction of the Nyquist velocity to use as a threshold when performing
-        continity (initial) dealiasing.  Velocities differences above this
+        continity (initial) dealiasing. Velocities differences above this
         threshold will not be marked as gate from which to begin unfolding
         during spatial dealiasing.
     compthresh2 : float
         The same as compthresh but the value used during the second pass of
-        dealasing.  This second pass is only performed in both a sounding
+        dealasing. This second pass is only performed in both a sounding
         and last volume are provided.
     thresh : float
         Fraction of the Nyquist velocity to use as a threshold when performing
-        spatial dealiasing.  Horizontally adjacent gates with velocities above
+        spatial dealiasing. Horizontally adjacent gates with velocities above
         this theshold will count against assigning the gate in question the
         velocity value being tested.
     ckval : float
@@ -135,13 +126,13 @@ cpdef fourdd_dealias(
         both a sounding volume and last volume are provided.
     rm : int
         Determines what should be done with gates that are left unfolded
-        after the first pass of dealiasing.  A value of 1 will remove these
+        after the first pass of dealiasing. A value of 1 will remove these
         gates, a value of 0 sets these gates to their initial velocity.  If
         both a sounding volume and last volume are provided this parameter is
         ignored.
     proximity : int
         Number of gates and rays to include of either side of the current gate
-        during window dealiasing.  This value may be doubled in cases where
+        during window dealiasing. This value may be doubled in cases where
         a standard sized window does not capture a sufficient number of
         good valued gates.
     mingood : int

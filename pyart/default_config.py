@@ -83,6 +83,7 @@ radar_estimated_rain_rate = 'radar_estimated_rain_rate'
 radar_echo_classification = 'radar_echo_classification'
 specific_attenuation = 'specific_attenuation'
 specific_differential_attenuation = 'specific_differential_attenuation'
+clutter_filter_power_removed = 'clutter_filter_power_removed'
 
 # Textures
 differential_phase_texture = 'differential_phase_texture'
@@ -182,7 +183,8 @@ DEFAULT_FIELD_NAMES = {
     'path_integrated_attenuation': path_integrated_attenuation,
     'specific_differential_attenuation': specific_differential_attenuation,
     'path_integrated_differential_attenuation':
-    path_integrated_differential_attenuation
+    path_integrated_differential_attenuation,
+    'clutter_filter_power_removed': clutter_filter_power_removed,
 }
 
 
@@ -616,6 +618,21 @@ DEFAULT_METADATA = {
         'valid_max': 1.0,
         'coordinates': 'elevation azimuth range'},
 
+    specific_differential_attenuation: {
+        'units': 'dB/km',
+        'long_name': 'Specific Differential Attenuation',
+        'coordinates': 'elevation azimuth range'},
+
+    path_integrated_attenuation: {
+        'units': 'dB',
+        'long_name': 'Path Integrated Attenuation',
+        'coordinates': 'elevation azimuth range'},
+
+    path_integrated_differential_attenuation: {
+        'units': 'dB',
+        'long_name': 'Path Integrated Differential Attenuation',
+        'coordinates': 'elevation azimuth range'},
+
     # Textures
     differential_phase_texture: {
         'units': 'degrees',
@@ -641,14 +658,24 @@ DEFAULT_METADATA = {
 
     # profile variables
     height: {
+        'units': 'm',
         'long_name': 'Height of radar beam',
-        'standard_name': 'height',
-        'units': 'meters'},
+        'standard_name': 'height'},
+
+    height_over_iso0: {
+        'units': 'm',
+        'long_name': 'Height of radar beam'},
 
     interpolated_profile: {
         'long_name': 'Interpolated profile',
         'standard_name':  'interpolated_profile',
         'units': 'unknown'},
+
+    clutter_filter_power_removed: {
+        'units': 'dB',
+        'long_name': 'Clutter filter power removed',
+        'standard_name': 'clutter_filter_power_removed',
+        'coordinates': 'elevation azimuth range'},
 
     # Grid metadata
 
@@ -805,6 +832,14 @@ nexrad_metadata = {
         'valid_max': 1.0,
         'valid_min': 0.0,
         'coordinates': 'elevation azimuth range'},
+
+    clutter_filter_power_removed: {
+        'units': 'dB',
+        'long_name': 'Clutter filter power removed',
+        'standard_name': 'clutter_filter_power_removed',
+        'valid_max': 73.0,
+        'valid_min': 0.0,
+        'coordinates': 'elevation azimuth range'},
 }
 
 # Metadata for NEXRAD Level 3 Products
@@ -831,6 +866,8 @@ nexrad_level3_metadata = {
                     '80: Big Drops (rain) (BD), '
                     '90: Graupel (GR), '
                     '100: Hail, possibly with rain (HA), '
+                    '110: Large Hail (LH), '
+                    '120: Giant Hail (GH), '
                     '140: Unknown Classification (UK), '
                     '150: Range Folded (RH)'),
         'coordinates': 'elevation azimuth range'},
@@ -940,6 +977,12 @@ sigmet_field_mapping = {
     'UNKNOWN_64': None,                         # Unknown field
     'UNKNOWN_65': None,                         # Unknown field
     'UNKNOWN_66': None,                         # Unknown field
+    'PMI8': None,                               # (75) Polarimetric Meteo Index
+    'PMI16': None,                              # (76) Polarimetric Meteo Index
+    'LOG8': None,                               # (77) Log receiver SNR
+    'LOG16': None,                              # (78) Log receiver SNR
+    'CSP8': None,                               # (77) Doppler channel clutter power
+    'CSP16': None,                              # (78) Doppler channel clutter power
     # there may be more field, add as needed
 }
 
@@ -952,7 +995,8 @@ nexrad_archive_field_mapping = {
     'SW': spectrum_width,
     'ZDR': differential_reflectivity,
     'PHI': differential_phase,
-    'RHO': cross_correlation_ratio
+    'RHO': cross_correlation_ratio,
+    'CFP': clutter_filter_power_removed
 }
 
 # NEXRAD Level II CDM files
@@ -997,6 +1041,7 @@ nexrad_level3_mapping = {
     173: radar_estimated_rain_rate,     # Digital User-Selectable Accum.
     174: radar_estimated_rain_rate,     # Digital 1 hr Diff. Accum.
     175: radar_estimated_rain_rate,     # Digital Storm Total Diff. Accum.
+    176: radar_estimated_rain_rate,     # Digital Inst. Precipitation Rate
     177: radar_echo_classification,     # Hybrid Hydrometeor Classification
     181: reflectivity,                  # Base Reflectivity
     182: velocity,                      # Base Velocity
@@ -1357,6 +1402,8 @@ DEFAULT_FIELD_COLORMAP = {
 
     differential_reflectivity: 'pyart_RefDiff',
     corrected_differential_reflectivity: 'pyart_RefDiff',
+
+    clutter_filter_power_removed: 'pyart_RefDiff',
 
     cross_correlation_ratio: 'pyart_RefDiff',
 

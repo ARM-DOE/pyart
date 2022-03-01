@@ -1,34 +1,15 @@
 """
-pyart.io.cfradial
-=================
-
 Utilities for reading CF/Radial files.
-
-.. autosummary::
-    :toctree: generated/
-    :template: dev_template.rst
-
-    _NetCDFVariableDataExtractor
-
-.. autosummary::
-    :toctree: generated/
-
-    read_cfradial
-    write_cfradial
-    _find_all_meta_group_vars
-    _ncvar_to_dict
-    _unpack_variable_gate_field_dic
-    _create_ncvar
 
 """
 
-import getpass
 import datetime
+import getpass
 import platform
 import warnings
 
-import numpy as np
 import netCDF4
+import numpy as np
 
 from ..config import FileMetadata
 from .common import stringarray_to_chararray, _test_arguments
@@ -100,9 +81,9 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
         to None to include all fields not specified by exclude_fields.
     delay_field_loading : bool
         True to delay loading of field data from the file until the 'data'
-        key in a particular field dictionary is accessed.  In this case
+        key in a particular field dictionary is accessed. In this case
         the field attribute of the returned Radar object will contain
-        LazyLoadDict objects not dict objects.  Delayed field loading will not
+        LazyLoadDict objects not dict objects. Delayed field loading will not
         provide any speedup in file where the number of gates vary between
         rays (ngates_vary=True) and is not recommended.
 
@@ -193,12 +174,19 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
     else:
         ray_angle_res = None
 
-    # first sweep mode determines scan_type
-    try:
-        mode = netCDF4.chartostring(sweep_mode['data'][0])[()].decode('utf-8')
-    except AttributeError:
-        # Python 3, all strings are already unicode.        
-        mode = netCDF4.chartostring(sweep_mode['data'][0])[()]
+    # Uses ARM scan name if present.
+    if hasattr(ncobj, 'scan_name'):
+        mode = ncobj.scan_name
+    else:
+        # first sweep mode determines scan_type
+        try:
+            mode = netCDF4.chartostring(
+                sweep_mode['data'][0])[()].decode('utf-8')
+        except AttributeError:
+            # Python 3, all strings are already unicode.
+            mode = netCDF4.chartostring(sweep_mode['data'][0])[()]
+
+    mode = mode.strip()
 
     # options specified in the CF/Radial standard
     if mode == 'rhi':
@@ -291,7 +279,7 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
         field_name = filemetadata.get_field_name(key)
         if field_name is None:
             if exclude_fields is not None and key in exclude_fields:
-                if key not in include_fields: 
+                if key not in include_fields:
                     continue
             if include_fields is None or key in include_fields:
                 field_name = key
@@ -322,7 +310,7 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
     if radar_calibration == {}:
         radar_calibration = None
 
-    # do not close file is field loading is delayed
+    # do not close file if field loading is delayed
     if not delay_field_loading:
         ncobj.close()
     return Radar(
@@ -399,7 +387,7 @@ class _NetCDFVariableDataExtractor(object):
 
 def _unpack_variable_gate_field_dic(
         dic, shape, ray_n_gates, ray_start_index):
-    """ Create a 2D array from a 1D field data, dic update in place """
+    """ Create a 2D array from a 1D field data, dic update in place. """
     fdata = dic['data']
     data = np.ma.masked_all(shape, dtype=fdata.dtype)
     for i, (gates, idx) in enumerate(zip(ray_n_gates, ray_start_index)):
@@ -505,7 +493,9 @@ def write_cfradial(filename, radar, format='NETCDF4', time_reference=None,
 
     # arm time variables base_time and time_offset if requested
     if arm_time_variables:
-        dt = netCDF4.num2date(radar.time['data'][0], radar.time['units'])
+        dt = netCDF4.num2date(radar.time['data'][0], radar.time['units'],
+                              only_use_cftime_datetimes=False,
+                              only_use_python_datetimes=True)
         td = dt - datetime.datetime.utcfromtimestamp(0)
         base_time = {
             'data': np.array([td.seconds + td.days * 24 * 3600], 'int32'),
@@ -613,11 +603,15 @@ def write_cfradial(filename, radar, format='NETCDF4', time_reference=None,
     # time_coverage_start and time_coverage_end variables
     time_dim = ('string_length', )
     units = radar.time['units']
-    start_dt = netCDF4.num2date(radar.time['data'][0], units)
+    start_dt = netCDF4.num2date(
+        radar.time['data'][0], units, only_use_cftime_datetimes=False,
+        only_use_python_datetimes=True)
     if start_dt.microsecond != 0:
         # truncate to nearest second
         start_dt -= datetime.timedelta(microseconds=start_dt.microsecond)
-    end_dt = netCDF4.num2date(radar.time['data'][-1], units)
+    end_dt = netCDF4.num2date(
+        radar.time['data'][-1], units, only_use_cftime_datetimes=False,
+        only_use_python_datetimes=True)
     if end_dt.microsecond != 0:
         # round up to next second
         end_dt += (datetime.timedelta(seconds=1) -
@@ -704,7 +698,7 @@ def _create_ncvar(dic, dataset, name, dimensions):
     Parameters
     ----------
     dic : dict
-        Radar dictionary to containing variable data and meta-data
+        Radar dictionary to containing variable data and meta-data.
     dataset : Dataset
         NetCDF dataset to create variable in.
     name : str
@@ -720,9 +714,9 @@ def _create_ncvar(dic, dataset, name, dimensions):
         data = np.array(data)
 
     # convert string/unicode arrays to character arrays
-    if data.dtype.char is 'U':  # cast unicode arrays to char arrays
+    if data.dtype.char == 'U':  # cast unicode arrays to char arrays
         data = data.astype('S')
-    if data.dtype.char is 'S' and data.dtype != 'S1':
+    if data.dtype.char == 'S' and data.dtype != 'S1':
         data = stringarray_to_chararray(data)
 
     # determine netCDF variable arguments
@@ -770,12 +764,6 @@ def _create_ncvar(dic, dataset, name, dimensions):
     if 'units' in dic.keys():
         ncvar.setncattr('units', dic['units'])
 
-    # remove _FillValue and replace to make it the third attribute.
-    if '_FillValue' in ncvar.ncattrs():
-        fv = ncvar._FillValue
-        ncvar.delncattr('_FillValue')
-        ncvar.setncattr('_FillValue', fv)
-
     # set all attributes
     for key, value in dic.items():
         if key in special_keys.keys():
@@ -807,7 +795,7 @@ def _calculate_scale_and_offset(dic, dtype, minimum=None, maximum=None):
     Parameters
     ----------
     dic : dict
-        Radar dictionary containing variable data and meta-data
+        Radar dictionary containing variable data and meta-data.
     dtype : Numpy Dtype
         Integer numpy dtype to map to.
     minimum, maximum : float

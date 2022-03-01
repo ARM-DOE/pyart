@@ -1,24 +1,6 @@
 """
-pyart.correct.filters
-=====================
-
 Functions for creating gate filters (masks) which can be used it various
 corrections routines in Py-ART.
-
-.. autosummary::
-    :toctree: generated/
-
-    moment_based_gate_filter
-    moment_and_texture_based_gate_filter
-    calculate_velocity_texture
-    temp_based_gate_filter
-    iso0_based_gate_filter
-
-.. autosummary::
-    :toctree: generated/
-    :template: dev_template.rst
-
-    GateFilter
 
 """
 
@@ -41,7 +23,7 @@ def moment_based_gate_filter(
     * Gates where the instrument is transitioning between sweeps.
     * Gates where the reflectivity is outside the interval min_refl, max_refl.
     * Gates where the normalized coherent power is below min_ncp.
-    * Gates where the cross correlation ratio is below min_rhi.  Using the
+    * Gates where the cross correlation ratio is below min_rhi. Using the
       default parameter this filtering is disabled.
     * Gates where any of the above three fields are masked or contain
       invalid values (NaNs or infs).
@@ -56,23 +38,23 @@ def moment_based_gate_filter(
         Names of the radar fields which contain the reflectivity, normalized
         coherent power (signal quality index) and cross correlation ratio
         (RhoHV) from which the gate filter will be created using the above
-        criteria.  A value of None for any of these parameters will use the
+        criteria. A value of None for any of these parameters will use the
         default field name as defined in the Py-ART configuration file.
     min_ncp, min_rhv : float
         Minimum values for the normalized coherence power and cross
-        correlation ratio.  Gates in these fields below these limits as well as
+        correlation ratio. Gates in these fields below these limits as well as
         gates which are masked or contain invalid values will be excluded and
-        not used in calculation which use the filter.  A value of None will
+        not used in calculation which use the filter. A value of None will
         disable filtering based upon the given field including removing
-        masked or gates with an invalid value.  To disable the thresholding
+        masked or gates with an invalid value. To disable the thresholding
         but retain the masked and invalid filter set the parameter to a value
         below the lowest value in the field.
     min_refl, max_refl : float
-        Minimum and maximum values for the reflectivity.  Gates outside
+        Minimum and maximum values for the reflectivity. Gates outside
         of this interval as well as gates which are masked or contain invalid
         values will be excluded and not used in calculation which use this
         filter. A value or None for one of these parameters will disable the
-        minimum or maximum filtering but retain the other.  A value of None
+        minimum or maximum filtering but retain the other. A value of None
         for both of these values will disable all filtering based upon the
         reflectivity including removing masked or gates with an invalid value.
         To disable the interval filtering but retain the masked and invalid
@@ -82,7 +64,7 @@ def moment_based_gate_filter(
     Returns
     -------
     gatefilter : :py:class:`GateFilter`
-        A gate filter based upon the described criteria.  This can be
+        A gate filter based upon the described criteria. This can be
         used as a gatefilter parameter to various functions in pyart.correct.
 
     """
@@ -151,7 +133,7 @@ def moment_and_texture_based_gate_filter(
         differential reflectivity, texture of the cross correlation ratio,
         texture of differential phase and texture of reflectivity. A value
         of None for any of these parameters will use the default field name
-        as defined in the Py-ART configuration file
+        as defined in the Py-ART configuration file.
     wind_size : int
         Size of the moving window used to compute the ray texture.
     max_textphi, max_textrhv, max_textzdr, max_textrefl : float
@@ -159,7 +141,7 @@ def moment_and_texture_based_gate_filter(
         RhoHV, texture of Zdr and texture of reflectivity. Gates in these
         fields above these limits as well as gates which are masked or contain
         invalid values will be excluded and not used in calculation which use
-        the filter.  A value of None will disable filtering based upon the
+        the filter. A value of None will disable filtering based upon the
         given field including removing masked or gates with an invalid value.
         To disable the thresholding but retain the masked and invalid filter
         set the parameter to a value above the highest value in the field.
@@ -175,7 +157,7 @@ def moment_and_texture_based_gate_filter(
     Returns
     -------
     gatefilter : :py:class:`GateFilter`
-        A gate filter based upon the described criteria.  This can be
+        A gate filter based upon the described criteria. This can be
         used as a gatefilter parameter to various functions in pyart.correct.
 
     """
@@ -257,6 +239,7 @@ def temp_based_gate_filter(radar, temp_field=None, min_temp=0.,
     """
     Create a filter which removes undesired gates based on temperature. Used
     primarily to filter out the melting layer and gates above it.
+
     Parameters
     ----------
     radar : Radar
@@ -274,14 +257,16 @@ def temp_based_gate_filter(radar, temp_field=None, min_temp=0.,
         retain the masked and invalid filter set the parameter to a value
         below the lowest value in the field.
     thickness : float
-        The estimated thickness of the melting layer in m
+        The estimated thickness of the melting layer in m.
     beamwidth : float
-        The radar antenna 3 dB beamwidth [deg]
+        The radar antenna 3 dB beamwidth [deg].
+
     Returns
     -------
     gatefilter : :py:class:`GateFilter`
-        A gate filter based upon the described criteria.  This can be
+        A gate filter based upon the described criteria. This can be
         used as a gatefilter parameter to various functions in pyart.correct.
+
     """
     # parse the field parameters
     if temp_field is None:
@@ -347,6 +332,7 @@ def iso0_based_gate_filter(radar, iso0_field=None, max_h_iso0=0.,
     """
     Create a filter which removes undesired gates based height over the iso0.
     Used primarily to filter out the melting layer and gates above it.
+
     Parameters
     ----------
     radar : Radar
@@ -364,14 +350,16 @@ def iso0_based_gate_filter(radar, iso0_field=None, max_h_iso0=0.,
         retain the masked and invalid filter set the parameter to a value
         below the lowest value in the field.
     thickness : float
-        The estimated thickness of the melting layer in m
+        The estimated thickness of the melting layer in m.
     beamwidth : float
-        The radar antenna 3 dB beamwidth [deg]
+        The radar antenna 3 dB beamwidth [deg].
+
     Returns
     -------
     gatefilter : :py:class:`GateFilter`
-        A gate filter based upon the described criteria.  This can be
+        A gate filter based upon the described criteria. This can be
         used as a gatefilter parameter to various functions in pyart.correct.
+
     """
     # parse the field parameters
     if iso0_field is None:
@@ -449,25 +437,8 @@ class GateFilter(object):
     exclude_based : bool, optional
         True, the default and suggested method, will begin with all gates
         included and then use the exclude methods to exclude gates based on
-        conditions.  False will begin with all gates excluded from which
+        conditions. False will begin with all gates excluded from which
         a set of gates to include should be set using the include methods.
-
-    Attributes
-    ----------
-    gate_excluded : array, dtype=bool
-        Boolean array indicating if a gate should be excluded from a
-        calculation. Elements marked True indicate the corresponding gate
-        should be excluded.  Those marked False should be included.
-        This is read-only attribute, any changes to the array will NOT
-        be reflected in gate_included and will be lost when the attribute is
-        accessed again.
-    gate_included : array, dtype=bool
-        Boolean array indicating if a gate should be included in a
-        calculation. Elements marked True indicate the corresponding gate
-        should be include.  Those marked False should be excluded.
-        This is read-only attribute, any changes to the array will NOT
-        be reflected in gate_excluded and will be lost when the attribute is
-        accessed again.
 
     Examples
     --------
@@ -486,11 +457,11 @@ class GateFilter(object):
         if exclude_based:
             # start with all gates included, exclude gates based on a set
             # of rules using the exclude_ methods.
-            self._gate_excluded = np.zeros(shape, dtype=np.bool)
+            self._gate_excluded = np.zeros(shape, dtype=np.bool_)
         else:
             # start with all gates excluded, include gates based on a set
             # of rules using the include_ methods.
-            self._gate_excluded = np.ones(shape, dtype=np.bool)
+            self._gate_excluded = np.ones(shape, dtype=np.bool_)
 
     # Implemetation is based on marking excluded gates stored in the private
     # _gate_excluded attribute. The gate_included attribute can be found
@@ -504,10 +475,26 @@ class GateFilter(object):
 
     @property
     def gate_included(self):
+        """
+        Boolean array indicating if a gate should be included in a
+        calculation. Elements marked True indicate the corresponding gate
+        should be include. Those marked False should be excluded.
+        This is read-only attribute, any changes to the array will NOT
+        be reflected in gate_excluded and will be lost when the attribute is
+        accessed again.
+        """
         return ~self._gate_excluded.copy()
 
     @property
     def gate_excluded(self):
+        """
+        Boolean array indicating if a gate should be excluded from a
+        calculation. Elements marked True indicate the corresponding gate
+        should be excluded. Those marked False should be included.
+        This is read-only attribute, any changes to the array will NOT
+        be reflected in gate_included and will be lost when the attribute is
+        accessed again.
+        """
         return self._gate_excluded.copy()
 
     def _get_fdata(self, field):
@@ -708,7 +695,7 @@ class GateFilter(object):
             meet any of the conditions. 'and', the default for include
             methods, is typically desired when building up a set of conditions
             where the desired effect is to include gates which meet any of the
-            conditions.  Note that the 'and' method MAY results in including
+            conditions. Note that the 'and' method MAY results in including
             gates which have previously been excluded because they were masked
             or invalid.
 
@@ -754,7 +741,7 @@ class GateFilter(object):
             meet any of the conditions. 'and', the default for include
             methods, is typically desired when building up a set of conditions
             where the desired effect is to include gates which meet any of the
-            conditions.  Note that the 'or' method MAY results in excluding
+            conditions. Note that the 'or' method MAY results in excluding
             gates which have previously been included.
 
         """
@@ -861,7 +848,7 @@ class GateFilter(object):
             meet any of the conditions. 'and', the default for include
             methods, is typically desired when building up a set of conditions
             where the desired effect is to include gates which meet any of the
-            conditions.  Note that the 'or' method MAY results in excluding
+            conditions. Note that the 'or' method MAY results in excluding
             gates which have previously been included.
 
         """

@@ -1,7 +1,4 @@
 """
-pyart.graph._cm
-===============
-
 Data for radar related colormaps.
 
 """

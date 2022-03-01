@@ -1,44 +1,5 @@
 """
-========================================
-Radar Corrections (:mod:`pyart.correct`)
-========================================
-
-.. currentmodule:: pyart.correct
-
 Correct radar fields.
-
-Velocity unfolding
-==================
-
-.. autosummary::
-    :toctree: generated/
-
-    dealias_fourdd
-    dealias_unwrap_phase
-    dealias_region_based
-
-Other corrections
-=================
-
-.. autosummary::
-    :toctree: generated/
-
-    calculate_attenuation
-    calculate_attenuation_zphi
-    calculate_attenuation_philinear
-    phase_proc_lp
-    despeckle_field
-    correct_noise_rhohv
-    correct_bias
-    phase_proc_lp_gf
-
-Helper functions
-================
-
-.. autosummary::
-    :toctree: generated/
-
-    find_objects
 
 """
 

@@ -1,17 +1,5 @@
 """
-pyart.correct._common_dealias
-=============================
-
 Routines used by multiple dealiasing functions.
-
-.. autosummary::
-    :toctree: generated/
-
-    _parse_fields
-    _parse_nyquist_vel
-    _parse_gatefilter
-    _parse_rays_wrap_around
-    _set_limits
 
 """
 

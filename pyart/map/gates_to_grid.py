@@ -1,24 +1,12 @@
 """
-pyart.map.gates_to_grid
-=======================
-
 Generate a Cartesian grid by mapping from radar gates onto the grid.
-
-.. autosummary::
-    :toctree: generated/
-
-    map_gates_to_grid
-    _detemine_cy_weighting_func
-    _find_projparams
-    _parse_gatefilters
-    _determine_fields
-    _find_offsets
-    _find_grid_params
-    _parse_roi_func
 
 """
 
+import warnings
+
 import numpy as np
+
 from ..core.radar import Radar
 from ..core.transforms import geographic_to_cartesian
 from ..filters import GateFilter, moment_based_gate_filter
@@ -31,15 +19,15 @@ def map_gates_to_grid(
         radars, grid_shape, grid_limits, grid_origin=None,
         grid_origin_alt=None, grid_projection=None,
         fields=None, gatefilters=False, map_roi=True,
-        weighting_function='Barnes', toa=17000.0, roi_func='dist_beam',
-        constant_roi=500., z_factor=0.05, xy_factor=0.02, min_radius=500.0,
+        weighting_function='Barnes2', toa=17000.0, roi_func='dist_beam',
+        constant_roi=None, z_factor=0.05, xy_factor=0.02, min_radius=500.0,
         h_factor=1.0, nb=1.5, bsp=1.0, **kwargs):
     """
     Map gates from one or more radars to a Cartesian grid.
 
     Generate a Cartesian grid of points for the requested fields from the
     collected points from one or more radars. For each radar gate that is not
-    filtered a radius of influence is calculated.  The weighted field values
+    filtered a radius of influence is calculated. The weighted field values
     for that gate are added to all grid points within that radius. This
     routine scaled linearly with the number of radar gates and the effective
     grid size.
@@ -50,7 +38,7 @@ def map_gates_to_grid(
     Parameters
     ----------
     roi_func : str or RoIFunction
-        Radius of influence function. A functions which takes an
+        Radius of influence function. A function which takes an
         z, y, x grid location, in meters, and returns a radius (in meters)
         within which all collected points will be included in the weighting
         for that grid points. Examples can be found in the
@@ -84,6 +72,9 @@ def map_gates_to_grid(
     if isinstance(radars, Radar):
         radars = (radars, )
 
+    if len(radars) == 0:
+        raise ValueError('Length of radars tuple cannot be zero')
+
     skip_transform = False
     if len(radars) == 1 and grid_origin_alt is None and grid_origin is None:
         skip_transform = True
@@ -115,6 +106,9 @@ def map_gates_to_grid(
 
         # Copy the field data and masks.
         # TODO method that does not copy field data into new array
+        if nfields == 0:
+            raise ValueError(
+                'There are 0 fields in the radar object to interpolate!')
         shape = (radar.nrays, radar.ngates, nfields)
         field_data = np.empty(shape, dtype='float32')
         field_mask = np.empty(shape, dtype='uint8')
@@ -162,11 +156,17 @@ def map_gates_to_grid(
 
 def _detemine_cy_weighting_func(weighting_function):
     """ Determine cython weight function value. """
-    if weighting_function.upper() == 'NEAREST':
+    if weighting_function.upper() == 'BARNES2':
+        cy_weighting_function = 3
+    elif weighting_function.upper() == 'NEAREST':
         cy_weighting_function = 2
     elif weighting_function.upper() == 'CRESSMAN':
         cy_weighting_function = 1
     elif weighting_function.upper() == 'BARNES':
+        warnings.warn("Barnes weighting function is deprecated."
+                      " Please use Barnes 2 to be consistent with"
+                      " Pauley and Wu 1990. Default will be switched"
+                      " to Barnes2 on June 1st.", DeprecationWarning)
         cy_weighting_function = 0
     else:
         raise ValueError('unknown weighting_function')
@@ -190,8 +190,8 @@ def _find_projparams(grid_origin, radars, grid_projection):
 
     # parse grid_projection
     if grid_projection is None:
-            grid_projection = {
-                'proj': 'pyart_aeqd', '_include_lon_0_lat_0': True}
+        grid_projection = {
+            'proj': 'pyart_aeqd', '_include_lon_0_lat_0': True}
     projparams = grid_projection.copy()
     if projparams.pop('_include_lon_0_lat_0', False):
         projparams['lon_0'] = grid_origin_lon
@@ -225,7 +225,7 @@ def _determine_fields(fields, radars):
 def _find_offsets(radars, projparams, grid_origin_alt):
     """ Find offset between radars and grid origin. """
     # loop over the radars finding offsets from the origin
-    offsets = []    # offsets from the grid origin, in meters, for each radar
+    offsets = [] # offsets from the grid origin, in meters, for each radar
     for radar in radars:
         x_disp, y_disp = geographic_to_cartesian(
             radar.longitude['data'], radar.latitude['data'], projparams)
@@ -268,6 +268,10 @@ def _parse_roi_func(roi_func, constant_roi, z_factor, xy_factor, min_radius,
                     h_factor, nb, bsp, offsets):
     """ Return the Radius of influence object. """
     if not isinstance(roi_func, RoIFunction):
+        if constant_roi is not None:
+            roi_func = 'constant'
+        else:
+            constant_roi = 500.0
         if roi_func == 'constant':
             roi_func = ConstantRoI(constant_roi)
         elif roi_func == 'dist':

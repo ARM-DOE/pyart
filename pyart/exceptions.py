@@ -1,16 +1,5 @@
 """
-pyart.exceptions
-================
-
 Custom Py-ART exceptions.
-
-.. autosummary::
-    :toctree: generated/
-
-    MissingOptionalDependency
-    DeprecatedAttribute
-    DeprecatedFunctionName
-    _deprecated_alias
 
 """
 
@@ -56,6 +45,6 @@ def _deprecated_alias(func, old_name, new_name):
         warnings.warn(
             ("{0} has been deprecated and will be removed in future " +
              "versions of Py-ART, pleases use {1}. ").format(
-                old_name, new_name), category=DeprecatedFunctionName)
+                 old_name, new_name), category=DeprecatedFunctionName)
         return func(*args, **kwargs)
     return wrapper

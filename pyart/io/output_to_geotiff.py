@@ -1,24 +1,14 @@
 """
-pyart.io.write_grid_geotiff
-===========================
-
 Write a Py-ART Grid object to a GeoTIFF file.
-
-.. autosummary::
-    :toctree: generated/
-
-    write_grid_geotiff
-    _get_rgb_values
-    _create_sld
 
 """
 
-from __future__ import division
+import os
+import shutil
+
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.colors as colors
-import os
-import shutil
 from ..exceptions import MissingOptionalDependency
 try:
     from osgeo import gdal
@@ -29,7 +19,7 @@ except ImportError:
 
 def write_grid_geotiff(grid, filename, field, rgb=False, level=None,
                        cmap='viridis', vmin=0, vmax=75, color_levels=None,
-                       warp=False, sld=False):
+                       warp=False, sld=False, use_doublequotes=True):
     """
     Write a Py-ART Grid object to a GeoTIFF file.
 
@@ -88,6 +78,13 @@ def write_grid_geotiff(grid, filename, field, rgb=False, level=None,
                extension.
 
         False - Don't do this.
+
+    use_doublequotes : bool, optional
+        True - Use double quotes in the gdalwarp call (requires warp=True),
+               which may help if that command is producing and error like:
+               'Translating source or target SRS failed'.
+
+        False - Use single quotes instead.
 
     """
     if not IMPORT_FLAG:
@@ -165,9 +162,14 @@ def write_grid_geotiff(grid, filename, field, rgb=False, level=None,
     if warp:
         # Warps TIFF to lat/lon WGS84 projection that is more useful
         # for web mapping applications. Likely changes array shape.
-        os.system('gdalwarp -q -t_srs \'+proj=longlat +ellps=WGS84 ' +
-                  '+datum=WGS84 +no_defs\' ' + ofile + ' ' +
-                  ofile + '_tmp.tif')
+        if use_doublequotes:
+            os.system('gdalwarp -q -t_srs \"+proj=longlat +ellps=WGS84 ' +
+                      '+datum=WGS84 +no_defs\" ' + ofile + ' ' +
+                      ofile + '_tmp.tif')
+        else:
+            os.system('gdalwarp -q -t_srs \'+proj=longlat +ellps=WGS84 ' +
+                      '+datum=WGS84 +no_defs\' ' + ofile + ' ' +
+                      ofile + '_tmp.tif')
         shutil.move(ofile+'_tmp.tif', ofile)
 
 
@@ -180,7 +182,7 @@ def _get_rgb_values(data, vmin, vmax, color_levels, cmap):
     Parameters
     ----------
     data : numpy.ndarray object, dtype int or float
-        Two-dimensional data array
+        Two-dimensional data array.
     vmin : int or float
         Minimum value to color for RGB output or SLD file.
     vmax : int or float
@@ -194,14 +196,14 @@ def _get_rgb_values(data, vmin, vmax, color_levels, cmap):
     Returns
     -------
     rarr : numpy.ndarray object, dtype int
-        Red channel indices (range = 0-255)
+        Red channel indices (range = 0-255).
     barr : numpy.ndarray object, dtype int
-        Blue channel indices (range = 0-255)
+        Blue channel indices (range = 0-255).
     garr : numpy.ndarray object, dtype int
-        Green channel indices (range = 0-255)
+        Green channel indices (range = 0-255).
 
     """
-    frac = (data - vmin) / np.float(vmax-vmin)
+    frac = (data - vmin) / float(vmax-vmin)
     if color_levels is None:
         color_levels = 255
     index = (frac * color_levels).ravel()
@@ -214,11 +216,11 @@ def _get_rgb_values(data, vmin, vmax, color_levels, cmap):
     cmap = plt.cm.get_cmap(cmap)
     for val in index:
         if not np.isnan(val):
-            ind = np.int(np.round(val))
+            ind = int(np.round(val))
             r, g, b, t = cmap(ind)
-            rarr.append(np.int(np.round(r * 255)))
-            garr.append(np.int(np.round(g * 255)))
-            barr.append(np.int(np.round(b * 255)))
+            rarr.append(int(np.round(r * 255)))
+            garr.append(int(np.round(g * 255)))
+            barr.append(int(np.round(b * 255)))
         else:
             rarr.append(np.nan)
             garr.append(np.nan)
@@ -259,7 +261,7 @@ def _create_sld(cmap, vmin, vmax, filename, color_levels=None):
     cmap = plt.cm.get_cmap(cmap)
     if color_levels is None:
         color_levels = 255
-    name, end = filename.split('.')
+    name, _ = filename.split('.')
     ofile = name + '.sld'
     fileobj = open(ofile, 'w')
 

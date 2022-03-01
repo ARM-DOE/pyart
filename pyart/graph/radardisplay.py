@@ -1,14 +1,5 @@
 """
-pyart.graph.radardisplay
-=========================
-
 Class for creating plots from Radar objects.
-
-.. autosummary::
-    :toctree: generated/
-    :template: dev_template.rst
-
-    RadarDisplay
 
 """
 
@@ -18,6 +9,9 @@ import matplotlib.pyplot as plt
 from matplotlib.dates import DateFormatter
 import numpy as np
 import netCDF4
+from scipy.interpolate import griddata
+from pandas.plotting import register_matplotlib_converters
+register_matplotlib_converters()
 
 from . import common
 from ..core.transforms import antenna_to_cartesian
@@ -124,7 +118,7 @@ class RadarDisplay(object):
         Create a plot appropiate for the radar.
 
         This function calls the plotting function corresponding to
-        the scan_type of the radar.  Additional keywords can be passed to
+        the scan_type of the radar. Additional keywords can be passed to
         customize the plot, see the appropiate plot function for the
         allowed keywords.
 
@@ -181,7 +175,7 @@ class RadarDisplay(object):
             Maximum ray value, None for default value, ignored if mask_outside
             is False.
         mask_outside : bool
-            True to mask data outside of vmin, vmax.  False performs no
+            True to mask data outside of vmin, vmax. False performs no
             masking.
         title : str
             Title to label plot with, None to use default title generated from
@@ -193,8 +187,8 @@ class RadarDisplay(object):
             GateFilter instance. None will result in no gatefilter mask being
             applied to data.
         axislabels : (str, str)
-            2-tuple of x-axis, y-axis labels.  None for either label will use
-            the default axis label.  Parameter is ignored if axislabels_flag is
+            2-tuple of x-axis, y-axis labels. None for either label will use
+            the default axis label. Parameter is ignored if axislabels_flag is
             False.
         axislabels_flag : bool
             True to add label the axes, False does not label the axes.
@@ -261,14 +255,14 @@ class RadarDisplay(object):
             Luminance maximum value, None for default value.
             Parameter is ignored is norm is not None.
         norm : Normalize or None, optional
-            matplotlib Normalize instance used to scale luminance data.  If not
-            None the vmax and vmin parameters are ignored.  If None, vmin and
+            matplotlib Normalize instance used to scale luminance data. If not
+            None the vmax and vmin parameters are ignored. If None, vmin and
             vmax are used for luminance scaling.
         cmap : str or None
             Matplotlib colormap name. None will use the default colormap for
             the field being plotted as specified by the Py-ART configuration.
         mask_outside : bool
-            True to mask data outside of vmin, vmax.  False performs no
+            True to mask data outside of vmin, vmax. False performs no
             masking.
         title : str
             Title to label plot with, None to use default title generated from
@@ -277,18 +271,18 @@ class RadarDisplay(object):
         title_datetime_format : str
             Format of datetime in the title (using strftime format).
         title_use_sweep_time : bool
-            True for the current sweep's beginning time to be used for the title.
-            False for the radar's beginning time.
+            True for the current sweep's beginning time to be used for the
+            title. False for the radar's beginning time.
         title_flag : bool
             True to add a title to the plot, False does not add a title.
         axislabels : (str, str)
-            2-tuple of x-axis, y-axis labels.  None for either label will use
-            the default axis label.  Parameter is ignored if axislabels_flag is
+            2-tuple of x-axis, y-axis labels. None for either label will use
+            the default axis label. Parameter is ignored if axislabels_flag is
             False.
         axislabels_flag : bool
             True to add label the axes, False does not label the axes.
         colorbar_flag : bool
-            True to add a colorbar with label to the axis.  False leaves off
+            True to add a colorbar with label to the axis. False leaves off
             the colorbar.
         colorbar_label : str
             Colorbar label, None will use a default label generated from the
@@ -298,12 +292,12 @@ class RadarDisplay(object):
         ticks : array
             Colorbar custom tick label locations.
         ticklabs : array
-                Colorbar custom tick labels.
+            Colorbar custom tick labels.
         edges : bool
             True will interpolate and extrapolate the gate edges from the
             range, azimuth and elevations in the radar, treating these
-            as specifying the center of each gate.  False treats these
-            coordinates themselved as the gate edges, resulting in a plot
+            as specifying the center of each gate. False treats these
+            coordinates themselves as the gate edges, resulting in a plot
             in which the last gate in each ray and the entire last ray are not
             plotted.
         gatefilter : GateFilter
@@ -311,7 +305,7 @@ class RadarDisplay(object):
             applied to data.
         filter_transitions : bool
             True to remove rays where the antenna was in transition between
-            sweeps from the plot.  False will include these rays in the plot.
+            sweeps from the plot. False will include these rays in the plot.
             No rays are filtered when the antenna_transition attribute of the
             underlying radar is not present.
         ax : Axis
@@ -319,9 +313,9 @@ class RadarDisplay(object):
         fig : Figure
             Figure to add the colorbar to. None will use the current figure.
         raster : bool
-            False by default.  Set to true to render the display as a raster
-            rather than a vector in call to pcolormesh.  Saves time in plotting
-            high resolution data over large areas.  Be sure to set the dpi
+            False by default. Set to true to render the display as a raster
+            rather than a vector in call to pcolormesh. Saves time in plotting
+            high resolution data over large areas. Be sure to set the dpi
             of the plot for your application if you save it as a vector format
             (i.e., pdf, eps, svg).
 
@@ -400,8 +394,8 @@ class RadarDisplay(object):
             Luminance maximum value, None for default value.
             Parameter is ignored is norm is not None.
         norm : Normalize or None, optional
-            matplotlib Normalize instance used to scale luminance data.  If not
-            None the vmax and vmin parameters are ignored.  If None, vmin and
+            matplotlib Normalize instance used to scale luminance data. If not
+            None the vmax and vmin parameters are ignored. If None, vmin and
             vmax are used for luminance scaling.
         cmap : str or None
             Matplotlib colormap name. None will use the default colormap for
@@ -413,22 +407,22 @@ class RadarDisplay(object):
         title_datetime_format : str
             Format of datetime in the title (using strftime format).
         title_use_sweep_time : bool
-            True for the current sweep's beginning time to be used for the title.
-            False for the radar's beginning time.
+            True for the current sweep's beginning time to be used for the
+            title. False for the radar's beginning time.
         title_flag : bool
             True to add a title to the plot, False does not add a title.
         axislabels : (str, str)
-            2-tuple of x-axis, y-axis labels.  None for either label will use
-            the default axis label.  Parameter is ignored if axislabels_flag is
+            2-tuple of x-axis, y-axis labels. None for either label will use
+            the default axis label. Parameter is ignored if axislabels_flag is
             False.
         axislabels_flag : bool
             True to add label the axes, False does not label the axes.
         reverse_xaxis : bool or None
             True to reverse the x-axis so the plot reads east to west, False
-            to have east to west.  None (the default) will reverse the axis
+            to have east to west. None (the default) will reverse the axis
             only when all the distances are negative.
         colorbar_flag : bool
-            True to add a colorbar with label to the axis.  False leaves off
+            True to add a colorbar with label to the axis. False leaves off
             the colorbar.
         colorbar_label : str
             Colorbar label, None will use a default label generated from the
@@ -438,12 +432,12 @@ class RadarDisplay(object):
         ticks : array
             Colorbar custom tick label locations.
         ticklabs : array
-                Colorbar custom tick labels.
+            Colorbar custom tick labels.
         edges : bool
             True will interpolate and extrapolate the gate edges from the
             range, azimuth and elevations in the radar, treating these
-            as specifying the center of each gate.  False treats these
-            coordinates themselved as the gate edges, resulting in a plot
+            as specifying the center of each gate. False treats these
+            coordinates themselves as the gate edges, resulting in a plot
             in which the last gate in each ray and the entire last ray are not
             not plotted.
         gatefilter : GateFilter
@@ -451,7 +445,7 @@ class RadarDisplay(object):
             applied to data.
         filter_transitions : bool
             True to remove rays where the antenna was in transition between
-            sweeps from the plot.  False will include these rays in the plot.
+            sweeps from the plot. False will include these rays in the plot.
             No rays are filtered when the antenna_transition attribute of the
             underlying radar is not present.
         ax : Axis
@@ -459,9 +453,9 @@ class RadarDisplay(object):
         fig : Figure
             Figure to add the colorbar to. None will use the current figure.
         raster : bool
-            False by default.  Set to true to render the display as a raster
-            rather than a vector in call to pcolormesh.  Saves time in plotting
-            high resolution data over large areas.  Be sure to set the dpi
+            False by default. Set to true to render the display as a raster
+            rather than a vector in call to pcolormesh. Saves time in plotting
+            high resolution data over large areas. Be sure to set the dpi
             of the plot for your application if you save it as a vector format
             (i.e., pdf, eps, svg).
 
@@ -480,7 +474,13 @@ class RadarDisplay(object):
         data = _mask_outside(mask_outside, data, vmin, vmax)
 
         # plot the data
-        R = np.sqrt(x ** 2 + y ** 2) * np.sign(y)
+        # check for negative values
+        sweep_slice = self._radar.get_slice(sweep)
+        az_mean = np.abs(np.mean(self._radar.azimuth['data'][sweep_slice]))
+        if 89.5 <= az_mean <= 90.0:
+            R = np.sqrt(x ** 2 + y ** 2) * np.sign(x)
+        else:
+            R = np.sqrt(x ** 2 + y ** 2) * np.sign(y)
         if reverse_xaxis is None:
             # reverse if all distances are nearly negative (allow up to 1 m)
             reverse_xaxis = np.all(R < 1.)
@@ -544,14 +544,14 @@ class RadarDisplay(object):
             Luminance maximum value, None for default value.
             Parameter is ignored is norm is not None.
         norm : Normalize or None, optional
-            matplotlib Normalize instance used to scale luminance data.  If not
-            None the vmax and vmin parameters are ignored.  If None, vmin and
+            matplotlib Normalize instance used to scale luminance data. If not
+            None the vmax and vmin parameters are ignored. If None, vmin and
             vmax are used for luminance scaling.
         cmap : str or None
             Matplotlib colormap name. None will use the default colormap for
             the field being plotted as specified by the Py-ART configuration.
         mask_outside : bool
-            True to mask data outside of vmin, vmax.  False performs no
+            True to mask data outside of vmin, vmax. False performs no
             masking.
         title : str
             Title to label plot with, None to use default title generated from
@@ -560,13 +560,13 @@ class RadarDisplay(object):
         title_flag : bool
             True to add a title to the plot, False does not add a title.
         axislabels : (str, str)
-            2-tuple of x-axis, y-axis labels.  None for either label will use
-            the default axis label.  Parameter is ignored if axislabels_flag is
+            2-tuple of x-axis, y-axis labels. None for either label will use
+            the default axis label. Parameter is ignored if axislabels_flag is
             False.
         axislabels_flag : bool
             True to add label the axes, False does not label the axes.
         colorbar_flag : bool
-            True to add a colorbar with label to the axis.  False leaves off
+            True to add a colorbar with label to the axis. False leaves off
             the colorbar.
         colorbar_label : str
             Colorbar label, None will use a default label generated from the
@@ -574,14 +574,14 @@ class RadarDisplay(object):
         ticks : array
             Colorbar custom tick label locations.
         ticklabs : array
-                Colorbar custom tick labels.
+            Colorbar custom tick labels.
         colorbar_orient : 'vertical' or 'horizontal'
             Colorbar orientation.
         edges : bool
             True will interpolate and extrapolate the gate edges from the
             range, azimuth and elevations in the radar, treating these
-            as specifying the center of each gate.  False treats these
-            coordinates themselved as the gate edges, resulting in a plot
+            as specifying the center of each gate. False treats these
+            coordinates themselves as the gate edges, resulting in a plot
             in which the last gate in each ray and the entire last ray are not
             not plotted.
         gatefilter : GateFilter
@@ -589,7 +589,7 @@ class RadarDisplay(object):
             applied to data.
         filter_transitions : bool
             True to remove rays where the antenna was in transition between
-            sweeps from the plot.  False will include these rays in the plot.
+            sweeps from the plot. False will include these rays in the plot.
             No rays are filtered when the antenna_transition attribute of the
             underlying radar is not present.
         time_axis_flag : bool
@@ -606,8 +606,8 @@ class RadarDisplay(object):
         fig : Figure
             Figure to add the colorbar to. None will use the current figure.
         raster : bool
-            False by default.  Set to true to render the display as a raster
-            rather than a vector in call to pcolormesh.  Saves time in plotting
+            False by default. Set to true to render the display as a raster
+            rather than a vector in call to pcolormesh. Saves time in plotting
             high resolution data over large areas.  Be sure to set the dpi
             of the plot for your application if you save it as a vector format
             (i.e., pdf, eps, svg).
@@ -636,7 +636,8 @@ class RadarDisplay(object):
         # set up the time axis
         if time_axis_flag:
             self._set_vpt_time_axis(ax, date_time_form=date_time_form, tz=tz)
-            x = datetimes_from_radar(self._radar)
+            times = datetimes_from_radar(self._radar)
+            x = times.astype('datetime64[ns]')
 
         # mask the data where outside the limits
         data = _mask_outside(mask_outside, data, vmin, vmax)
@@ -701,8 +702,8 @@ class RadarDisplay(object):
             Luminance maximum value, None for default value.
             Parameter is ignored is norm is not None.
         norm : Normalize or None, optional
-            matplotlib Normalize instance used to scale luminance data.  If not
-            None the vmax and vmin parameters are ignored.  If None, vmin and
+            matplotlib Normalize instance used to scale luminance data. If not
+            None the vmax and vmin parameters are ignored. If None, vmin and
             vmax are used for luminance scaling.
         cmap : str or None
             Matplotlib colormap name. None will use the default colormap for
@@ -714,17 +715,17 @@ class RadarDisplay(object):
         title_flag : bool
             True to add a title to the plot, False does not add a title.
         axislabels : (str, str)
-            2-tuple of x-axis, y-axis labels.  None for either label will use
-            the default axis label.  Parameter is ignored if axislabels_flag is
+            2-tuple of x-axis, y-axis labels. None for either label will use
+            the default axis label. Parameter is ignored if axislabels_flag is
             False.
         axislabels_flag : bool
             True to add label the axes, False does not label the axes.
         reverse_xaxis : bool or None
             True to reverse the x-axis so the plot reads east to west, False
-            to have east to west.  None (the default) will reverse the axis
+            to have east to west. None (the default) will reverse the axis
             only when all the distances are negative.
         colorbar_flag : bool
-            True to add a colorbar with label to the axis.  False leaves off
+            True to add a colorbar with label to the axis. False leaves off
             the colorbar.
         colorbar_label : str
             Colorbar label, None will use a default label generated from the
@@ -732,14 +733,14 @@ class RadarDisplay(object):
         ticks : array
             Colorbar custom tick label locations.
         ticklabs : array
-                Colorbar custom tick labels.
+            Colorbar custom tick labels.
         colorbar_orient : 'vertical' or 'horizontal'
             Colorbar orientation.
         edges : bool
             True will interpolate and extrapolate the gate edges from the
             range, azimuth and elevations in the radar, treating these
-            as specifying the center of each gate.  False treats these
-            coordinates themselved as the gate edges, resulting in a plot
+            as specifying the center of each gate. False treats these
+            coordinates themselves as the gate edges, resulting in a plot
             in which the last gate in each ray and the entire last ray are not
             not plotted.
         gatefilter : GateFilter
@@ -747,7 +748,7 @@ class RadarDisplay(object):
             applied to data.
         filter_transitions : bool
             True to remove rays where the antenna was in transition between
-            sweeps from the plot.  False will include these rays in the plot.
+            sweeps from the plot. False will include these rays in the plot.
             No rays are filtered when the antenna_transition attribute of the
             underlying radar is not present.
         ax : Axis
@@ -755,8 +756,8 @@ class RadarDisplay(object):
         fig : Figure
             Figure to add the colorbar to. None will use the current figure.
         raster : bool
-            False by default.  Set to True to render the display as a raster
-            rather than a vector in call to pcolormesh.  Saves time in plotting
+            False by default. Set to True to render the display as a raster
+            rather than a vector in call to pcolormesh. Saves time in plotting
             high resolution data over large areas.  Be sure to set the dpi
             of the plot for your application if you save it as a vector format
             (i.e., pdf, eps, svg).
@@ -804,6 +805,157 @@ class RadarDisplay(object):
                 mappable=pm, label=colorbar_label, orient=colorbar_orient,
                 field=field, ax=ax, fig=fig, ticks=ticks, ticklabs=ticklabs)
 
+    def plot_cr_raster(self, field='reflectivity', target_range=None, ax=None, fig=None,
+                       delta_x=None, delta_y=None, az_limits=None, el_limits=None,
+                       vmin=None, vmax=None, cmap=None, title=None, title_flag=True,
+                       axislabels=[None, None], axislabels_flag=True,
+                       colorbar_flag=True, colorbar_label=None,
+                       colorbar_orient='vertical', ticks=None, ticklabs=None, raster=False):
+        """
+        Plot a corner reflector raster scan
+
+        Parameters
+        ----------
+        field : String
+            Field to plot if other than reflectivity
+        target_range : Float
+            Estimated range of the corner reflector
+
+        Other Parameters
+        ----------------
+        ax : Axis
+            Axis to plot on. None will use the current axis.
+        fig : Figure
+            Figure to add the colorbar to. None will use the current figure.
+        delta_x : Float
+            Azimuth grid spacing for griddata
+        delta_y : Float
+            Elevation grid spacing for griddata
+        az_limits : list
+            Azimuth limits in form [min, max]
+        el_limits : list
+            Elevation limits in form [min, max]
+        vmin : float
+            Luminance minimum value, None for default value.
+            Parameter is ignored is norm is not None.
+        vmax : float
+            Luminance maximum value, None for default value.
+            Parameter is ignored is norm is not None.
+        cmap : str or None
+            Matplotlib colormap name. None will use the default colormap for
+            the field being plotted as specified by the Py-ART configuration.
+        title : str
+            Title to label plot with, None to use default title generated from
+            the field and sweep parameters. Parameter is ignored if title_flag
+            is False.
+        title_flag : bool
+            True to add a title to the plot, False does not add a title.
+        axislabels : (str, str)
+            2-tuple of x-axis, y-axis labels. None for either label will use
+            the default axis label. Parameter is ignored if axislabels_flag is
+            False.
+        axislabels_flag : bool
+            True to add label the axes, False does not label the axes.
+        colorbar_flag : bool
+            True to add a colorbar with label to the axis. False leaves off
+            the colorbar.
+        colorbar_label : str
+            Colorbar label, None will use a default label generated from the
+            field information.
+        ticks : array
+            Colorbar custom tick label locations.
+        ticklabs : array
+            Colorbar custom tick labels.
+        colorbar_orient : 'vertical' or 'horizontal'
+            Colorbar orientation.
+        raster : bool
+            False by default. Set to True to render the display as a raster
+            rather than a vector in call to pcolormesh. Saves time in plotting
+            high resolution data over large areas.  Be sure to set the dpi
+            of the plot for your application if you save it as a vector format
+            (i.e., pdf, eps, svg).
+
+        """
+
+        ax, fig = common.parse_ax_fig(ax, fig)
+
+        # Get data and coordinate information
+        az = self._radar.azimuth['data']
+        el = self._radar.elevation['data']
+        if el[0] is None:
+            raise ValueError(
+                "Elevation is set to None. CR raster plotting is unavailable "
+                "for this dataset. Elevation can be set to None due to not "
+                "being present per Halfword 30 Table V of the ICD for NEXRAD "
+                "level 3 data.")
+
+        rng = self._radar.range['data']
+        data = self._radar.fields[field]['data']
+
+        # Calculate delta for x and y
+        if az_limits is None:
+            min_az = np.nanmin(az)
+            max_az = np.nanmax(az)
+        else:
+            min_az = az_limits[0]
+            max_az = az_limits[1]
+
+        if el_limits is None:
+            min_el = np.nanmin(el)
+            max_el = np.nanmax(el)
+        else:
+            min_el = el_limits[0]
+            max_el = el_limits[1]
+
+        if delta_x is None:
+            delta_x = max_az-min_az
+        if delta_y is None:
+            delta_y = max_el-min_el
+
+        # Get range closest to target_range
+        if target_range is None:
+            target_index = 0
+        else:
+            target_index = np.argmin(np.abs(np.array(rng) - target_range))
+
+        data = data[:, target_index]
+
+        # Geet azimuth and elevation onto a meshgrid
+        xi, yi = np.meshgrid(np.linspace(min_az, max_az, int(delta_x/0.01)),
+                             np.linspace(min_el, max_el, int(delta_y/0.01)))
+
+        # Grid up the data for plotting
+        grid = griddata((az, el), data, (xi, yi), method='linear')
+
+        # Plot data using pcolormesh
+        pm = ax.pcolormesh(xi[0, :], yi[:, 0], grid, vmin=vmin, vmax=vmax, cmap=cmap)
+
+        if title_flag is True:
+            if title is None:
+                time_str = common.generate_radar_time_begin(self._radar)
+                title = ' '.join(['Corner Reflector', field.title(), time_str.strftime('%m/%d/%Y %H:%M:%S')])
+            ax.set_title(title)
+
+        if axislabels_flag is True:
+            if axislabels[0] is None:
+                axislabels[0] = 'Azimuth (deg)'
+            if axislabels[1] is None:
+                axislabels[1] = 'Elevation (deg)'
+            ax.set_xlabel(axislabels[0])
+            ax.set_ylabel(axislabels[1])
+
+        if raster:
+            pm.set_rasterized(True)
+
+        # add plot and field to lists
+        self.plots.append(pm)
+        self.plot_vars.append(field)
+
+        if colorbar_flag:
+            self.plot_colorbar(
+                mappable=pm, label=colorbar_label, orient=colorbar_orient,
+                field=field, ax=ax, fig=fig, ticks=ticks, ticklabs=ticklabs)
+
     def plot_range_rings(self, range_rings, ax=None, col='k', ls='-', lw=2):
         """
         Plot a series of range rings.
@@ -813,7 +965,7 @@ class RadarDisplay(object):
         range_rings : list
             List of locations in km to draw range rings.
         ax : Axis
-            Axis to plot on.  None will use the current axis.
+            Axis to plot on. None will use the current axis.
         col : str or value
             Color to use for range rings.
         ls : str
@@ -837,7 +989,7 @@ class RadarDisplay(object):
         npts: int
             Number of points in the ring, higher for better resolution.
         ax : Axis
-            Axis to plot on.  None will use the current axis.
+            Axis to plot on. None will use the current axis.
         col : str or value
             Color to use for range rings.
         ls : str
@@ -859,7 +1011,7 @@ class RadarDisplay(object):
         Parameters
         ----------
         ax : Axis
-            Axis to plot on.  None will use the current axis.
+            Axis to plot on. None will use the current axis.
         col : str or value
             Color to use for grid lines.
         ls : str
@@ -880,15 +1032,15 @@ class RadarDisplay(object):
             List of labels to place just above symbols.
         locations : list of 2-tuples
             List of latitude, longitude (in degrees) tuples at which symbols
-            will be place.  Labels are placed just above the symbols.
+            will be place. Labels are placed just above the symbols.
         symbols : list of str or str
             List of matplotlib color+marker strings defining symbols to place
-            at given locations.  If a single string is provided, that symbol
+            at given locations. If a single string is provided, that symbol
             will be placed at all locations.
         text_color : str
             Matplotlib color defining the color of the label text.
         ax : Axis
-            Axis to plot on.  None will use the current axis.
+            Axis to plot on. None will use the current axis.
 
         """
         ax = common.parse_ax(ax)
@@ -918,14 +1070,14 @@ class RadarDisplay(object):
             Label text to place just above symbol.
         location : 2-tuples
             Tuple of latitude, longitude (in degrees) at which the symbol
-            will be place.  The label is placed just above the symbol.
+            will be place. The label is placed just above the symbol.
         symbol : str
             Matplotlib color+marker strings defining the symbol to place
             at the given location.
         text_color : str
             Matplotlib color defining the color of the label text.
         ax : Axis
-            Axis to plot on.  None will use the current axis.
+            Axis to plot on. None will use the current axis.
 
         """
         ax = common.parse_ax(ax)
@@ -950,7 +1102,7 @@ class RadarDisplay(object):
         npts: int
             Number of points in the cross-hair, higher for better resolution.
         ax : Axis
-            Axis to plot on.  None will use the current axis.
+            Axis to plot on. None will use the current axis.
 
         """
         ax = common.parse_ax(ax)
@@ -961,33 +1113,34 @@ class RadarDisplay(object):
 
     def plot_colorbar(self, mappable=None, field=None, label=None,
                       orient='vertical', cax=None, ax=None, fig=None,
-                      ticks=None, ticklabs=None):
+                      ticks=None, ticklabs=None, **kwargs):
         """
         Plot a colorbar.
 
         Parameters
         ----------
         mappable : Image, ContourSet, etc.
-            Image, ContourSet, etc to which the colorbar applied.  If None the
+            Image, ContourSet, etc to which the colorbar applied. If None the
             last mappable object will be used.
         field : str
             Field to label colorbar with.
         label : str
-            Colorbar label.  None will use a default value from the last field
+            Colorbar label. None will use a default value from the last field
             plotted.
         orient : str
             Colorbar orientation, either 'vertical' [default] or 'horizontal'.
         cax : Axis
-            Axis onto which the colorbar will be drawn.  None is also valid.
+            Axis onto which the colorbar will be drawn. None is also valid.
         ax : Axes
             Axis onto which the colorbar will be drawn. None is also valid.
         fig : Figure
-            Figure to place colorbar on.  None will use the current figure.
+            Figure to place colorbar on. None will use the current figure.
         ticks : array
             Colorbar custom tick label locations.
         ticklabs : array
-                Colorbar custom tick labels.
+            Colorbar custom tick labels.
         """
+
         if fig is None:
             fig = plt.gcf()
         if mappable is None:
@@ -997,7 +1150,8 @@ class RadarDisplay(object):
                 field = self.plot_vars[-1]
             label = self._get_colorbar_label(field)
 
-        cb = fig.colorbar(mappable, orientation=orient, ax=ax, cax=cax)
+        cb = fig.colorbar(mappable, orientation=orient, ax=ax, cax=cax, **kwargs)
+
         if ticks is not None:
             cb.set_ticks(ticks)
         if ticklabs:
@@ -1005,6 +1159,7 @@ class RadarDisplay(object):
         cb.set_label(label)
 
         self.cbs.append(cb)
+
 
     ##########################
     # Plot adjusting methods #
@@ -1022,7 +1177,7 @@ class RadarDisplay(object):
         ylim : tuple, optional
             2-Tuple containing x-axis limits in km. None uses default limits.
         ax : Axis
-            Axis to adjust.  None will adjust the current axis.
+            Axis to adjust. None will adjust the current axis.
 
         """
         common.set_limits(xlim, ylim, ax)
@@ -1151,7 +1306,8 @@ class RadarDisplay(object):
 
     @staticmethod
     def _set_vpt_time_axis(ax, date_time_form=None, tz=None):
-        """ Set the x axis as a time formatted axis.
+        """
+        Set the x axis as a time formatted axis.
 
         Parameters
         ----------
@@ -1177,7 +1333,9 @@ class RadarDisplay(object):
     # name generator methods #
     ##########################
 
-    def generate_filename(self, field, sweep, ext='png', datetime_format='%Y%m%d%H%M%S', use_sweep_time=False):
+    def generate_filename(self, field, sweep, ext='png',
+                          datetime_format='%Y%m%d%H%M%S',
+                          use_sweep_time=False):
         """
         Generate a filename for a plot.
 
@@ -1203,9 +1361,11 @@ class RadarDisplay(object):
             Filename suitable for saving a plot.
 
         """
-        return common.generate_filename(self._radar, field, sweep, ext, datetime_format, use_sweep_time)
+        return common.generate_filename(
+            self._radar, field, sweep, ext, datetime_format, use_sweep_time)
 
-    def generate_title(self, field, sweep, datetime_format=None, use_sweep_time=True):
+    def generate_title(self, field, sweep, datetime_format=None,
+                       use_sweep_time=True):
         """
         Generate a title for a plot.
 
@@ -1226,7 +1386,8 @@ class RadarDisplay(object):
             Plot title.
 
         """
-        return common.generate_title(self._radar, field, sweep, datetime_format, use_sweep_time)
+        return common.generate_title(
+            self._radar, field, sweep, datetime_format, use_sweep_time)
 
     def generate_vpt_title(self, field):
         """
@@ -1326,7 +1487,7 @@ class RadarDisplay(object):
         if gatefilter is not None:
             mask_filter = gatefilter.gate_excluded
             data = np.ma.masked_array(data, mask_filter)
- 
+
         # filter out antenna transitions
         if filter_transitions and self.antenna_transition is not None:
             in_trans = self.antenna_transition
@@ -1353,7 +1514,7 @@ class RadarDisplay(object):
     def _get_azimuth_rhi_data_x_y_z(self, field, target_azimuth,
                                     edges, mask_tuple,
                                     filter_transitions, gatefilter):
-        """Retrieve and return pseudo-RHI data from a plot function. """
+        """ Retrieve and return pseudo-RHI data from a plot function. """
         # determine which rays from the ppi radar make up the pseudo RHI
         data = self.fields[field]['data']
 
@@ -1379,12 +1540,22 @@ class RadarDisplay(object):
             prhi_rays.append(ray_number + sweep_slice.start)
 
         azimuth = self.azimuths[prhi_rays]
+        if self.elevations[0] is None:
+            raise ValueError(
+                "Elevation is set to None. RHI plotting is unavailable for this "
+                "dataset. Elevation can be set to None due to not being "
+                "present per Halfword 30 Table V of the ICD for NEXRAD level "
+                "3 data.")
         elevation = self.elevations[prhi_rays]
 
         data = data[prhi_rays]
+        rng = self.ranges
+
+        if edges and len(prhi_rays) == 1:
+            rng = self.ranges[:-1]
 
         x, y, z = antenna_vectors_to_cartesian(
-            self.ranges, azimuth, elevation, edges=edges)
+            rng, azimuth, elevation, edges=edges)
         x = (x + self.shift[0]) / 1000.0
         y = (y + self.shift[1]) / 1000.0
         z = z / 1000.0

@@ -1,35 +1,23 @@
+image: Visual Studio 2019
 environment:
 
-  global:
-    # SDK v7.0 MSVC Express 2008's SetEnv.cmd script will fail if the
-    # /E:ON and /V:ON options are not enabled in the batch script intepreter
-    # See: http://stackoverflow.com/a/13751649/163740
-    CMD_IN_ENV: "cmd /E:ON /V:ON /C .\\continuous_integration\\appveyor\\run_with_env.cmd"
+  CONDA_PATH: "C:\\Miniconda"
 
   matrix:
-    - PYTHON_VERSION: "2.7"
-      PYTHON_ARCH: "64"
+    - PYTHON_VERSION: "3.7"
+    - PYTHON_VERSION: "3.8"
 
-# Test only two environments to speed up CI time
-#      PYTHON_VERSION: "3.4"
-#      PYTHON_ARCH: "32"
-
-#      PYTHON_VERSION: "2.7"
-#      PYTHON_ARCH: "64"
-
-    - PYTHON_VERSION: "3.5"
-      PYTHON_ARCH: "64"
+platform:
+    - x64
 
 install:
   # Use the pre-installed Miniconda for the desired arch
-  - ps: if($env:PYTHON_ARCH -eq '32') {
-          $env:path="C:\Miniconda;C:\Miniconda\Scripts;C:Miniconda\Library\bin;$($env:path)"
-        }
-        else {
-          $env:path="C:\Miniconda-x64;C:\Miniconda-x64\Scripts;C:Miniconda-x64\Library\bin;$($env:path)"
-        }
-
-  # DEBUGGING
+  - ps: if($env:PYTHON_VERSION -eq '3.7')
+            { $env:CONDA_PATH="$($env:CONDA_PATH)37" }
+  - ps: if($env:PLATFORM -eq 'x64')
+          { $env:CONDA_PATH="$($env:CONDA_PATH)-x64" }
+  - ps: $env:path="$($env:CONDA_PATH);$($env:CONDA_PATH)\Scripts;$($env:CONDA_PATH)\Library\bin;$($env:PATH)"
+  # Debugging
   #- "SET PATH"
   #- "python --version"
   #- "python -c \"import struct; print(struct.calcsize('P') * 8)\""
@@ -37,25 +25,26 @@ install:
   #- "conda list"
 
   # Create and activate a conda environment with the desired Python version
-  - "conda update --yes --quiet conda"
-  - "conda create --yes --quiet -n matrix_env python=%PYTHON_VERSION%"
-  - "activate matrix_env"
+  - cmd: conda update --yes --quiet conda
+  - cmd: conda config --set changeps1 no
+  - cmd: conda config --add channels conda-forge
+  - cmd: conda config --add channels conda-forge
 
   # Install Py-ART dependecies
-  - "conda install -y -q -c conda-forge numpy scipy matplotlib netcdf4 pytest pytest-cov cython"
+  - cmd: conda create -y -q -n matrix_env python=%PYTHON_VERSON% numpy scipy matplotlib netcdf4 pytest pytest-cov cython cartopy xarray
+  - cmd: activate matrix_env
 
   # Check that we have the expected version and architecture for Python
   # in the conda environment
-  - "python --version"
-  - "python -c \"import struct; print(struct.calcsize('P') * 8)\""
-  - "conda list"
+  - cmd: python --version
+  - cmd: python -c "import struct; print(struct.calcsize('P') * 8)"
+  - cmd: conda list
 
   # build Py-ART
-  - "%CMD_IN_ENV% pip install -e ."
+  - cmd: pip install -e .
 
 build: false
 
 test_script:
   # run the unit tests
-  - "if \"%PYTHON_VERSION%\"==\"2.7\" (pytest -v --cov pyart --ignore pyart/util)"
-  - "if \"%PYTHON_VERSION%\"==\"3.5\" (pytest -v --cov pyart)"
+  - cmd: pytest -v --cov pyart

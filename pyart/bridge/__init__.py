@@ -1,21 +1,12 @@
 """
-================================================
-Bridging to other toolkits (:mod:`pyart.bridge`)
-================================================
-
-.. currentmodule:: pyart.bridge
-
 Py-ART can act as bridge to other community software projects.
 
 The functionality in this namespace is available in other pyart namespaces.
 
-Phase functions
-===============
+Current extensions:
+    * wradlib https://wradlib.org/
 
-.. autosummary::
-    :toctree: generated/
 
-    texture_of_complex_phase
 
 """
 

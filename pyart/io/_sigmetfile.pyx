@@ -1,30 +1,7 @@
 """
-pyart.io._sigmetfile
-====================
-
 A class and supporting functions for reading Sigmet (raw format) files.
 
-.. autosummary::
-    :toctree: generated/
-
-    SigmetFile
-    convert_sigmet_data
-    bin2_to_angle
-    bin4_to_angle
-    _data_types_from_mask
-    _is_bit_set
-    _parse_ray_headers
-    _unpack_structure
-    _unpack_key
-    _unpack_ingest_data_headers
-    _unpack_ingest_data_header
-    _unpack_raw_prod_bhdr
-    _unpack_product_hdr
-    _unpack_ingest_header
-
 """
-from __future__ import print_function
-
 import struct
 import datetime
 import warnings
@@ -300,7 +277,7 @@ cdef class SigmetFile:
         # get the raw data ray-by-ray
         for ray_i in xrange(nrays):
             if self.debug:
-                print("Reading ray: %i of %i" % (ray_i, nrays), end='')
+                print("Reading ray: %i of %i" % (ray_i, nrays))
                 print("self._rbuf_pos is", self._rbuf_pos)
             if self._get_ray(nbins, raw_sweep_data[ray_i]):
                 return None, None, None
@@ -556,13 +533,13 @@ SIGMET_DATA_TYPES = {
     72: 'DBTE16',       # Total Power Enhanced
     73: 'DBZE8',
     74: 'DBZE16',       # Clutter Corrected Reflectivity Enhanced
+    75: 'PMI8',
+    76: 'PMI16',
+    77: 'LOG8',
+    78: 'LOG16',
+    79: 'CSP8',
+    80: 'CSP16',
     # Uknown fields, do not know internal names, some may be user defined.
-    75: 'UNKNOWN_75',
-    76: 'UNKNOWN_76',
-    77: 'UNKNOWN_77',
-    78: 'UNKNOWN_78',
-    79: 'UNKNOWN_79',
-    80: 'UNKNOWN_80',
     81: 'UNKNOWN_81',
     82: 'UNKNOWN_82',
     83: 'UNKNOWN_83',
@@ -639,6 +616,8 @@ def convert_sigmet_data(data_type, data, nbins):
         'SNR16',    # Signal to noise ratio, 2-byte
         'DBTE16',   # Total Power Enhanced, 2-byte
         'DBZE16',   # Clutter corrected reflectivity enhanced, 2-byte
+        'LOG16',    # Log receiver signal-to-noise ratio (dB), 2-byte
+        'CSP16',    # Doppler channel clutter power ratio of dBT to -dBZ, 2-byte
     ]
 
     like_sqi = [
@@ -646,6 +625,7 @@ def convert_sigmet_data(data_type, data, nbins):
         'RHOV',     # " "
         'RHOHV',    # 1-byte RhoHV Format, section 4.3.23
         'SQI',      # 1-byte Signal Quality Index Format, section 4.3.26
+        'PMI8',      # 1-byte Polarimetric Meteo Index, section 4.4.28
     ]
 
     like_sqi2 = [
@@ -653,6 +633,7 @@ def convert_sigmet_data(data_type, data, nbins):
         'RHOH2',    # " "
         'RHOHV2',   # 2-byte RhoHV Format, section 4.3.24
         'SQI2',     # 2-byte Signal Quality Index Format, section 4.3.27
+        'PMI16',    # 2-byte Polarimetric Meteo Index, section 4.4.29
     ]
 
     like_dbt = [
@@ -663,6 +644,8 @@ def convert_sigmet_data(data_type, data, nbins):
         'SNR8',     # Signal to noise ratio, 1-byte
         'DBTE8',    # Total power enhanced, 1-byte
         'DBZE8',    # Clutter corrected reflectivity enhanced, 1-byte
+        'LOG8',     # Log receiver signal-to-noise ratio (dB), 1-byte
+        'CSP8',     # Doppler channel clutter power ratio of dBT to -dBZ, 1-byte
     ]
 
     if data_type_name in like_dbt2:

@@ -38,7 +38,7 @@ please cite:
     DOI: http://doi.org/10.5334/jors.119
 
 Py-ART implements many published scientific methods which should *also* be
-cited if you make use of them.  Refer to the **References** section in the
+cited if you make use of them. Refer to the **References** section in the
 documentation of the functions used for information on these citations.
 
 
@@ -46,7 +46,9 @@ Install
 -------
 
 The easiest method for installing Py-ART is to use the conda packages from
-the latest release.  To do this you must download and install 
+the latest release and use Python 3, as Python 2 support ended January 1st,
+2020 and many packages including Py-ART no longer support Python 2.
+To do this you must download and install 
 `Anaconda <https://www.anaconda.com/download/#>`_ or 
 `Miniconda <https://conda.io/miniconda.html>`_.  
 Then use the following command in a terminal or command prompt to install
@@ -115,31 +117,15 @@ the tools documentation for details on this process.
 Python File Setup
 -----------------
 
-In a new .py file, the top of the code should have the function or class
-location, sphinx comments for template configuration, and the public and
-private functions and classes within the .py file. Public functions and
-classes are listed first and then private functions and classes. Private
-functions and classes should have a underscore in front of the name. A space
-is needed between the last function or class and the closing docstring
-quotation.
+In a new .py file, the top of the code should have a brief introduction to
+the module.
 
 An example:
 
 .. code-block:: python
 
         """
-	pyart.retrieve.velocity_azimuth_display
-	=======================================
-	
-	Retrieval of VADs from a radar object.
-
-	.. autosummary::
-    	    :toctreeL generated/
-    	    :template: dev_template.rst
-
-	    velocity_azimuth_display
-            _inverse_dist_squared
-            _Average1D
+        Retrieval of VADs from a radar object.
 
         """
 
@@ -254,7 +240,7 @@ the __init__.py file under the corresponding pyart folder.
 
 Create a test for your function and have assert from numpy testing test the
 known values to the calculated values. If changes are made in the future to
-pyart, nose will use the test created to see if the function is still valid and
+pyart, pytest will use the test created to see if the function is still valid and
 produces the same values. It works that, it takes known values that are
 obtained from the function, and when pytest is ran, it takes the test
 function and reruns the function and compares the results to the original.

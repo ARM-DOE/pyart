@@ -57,9 +57,8 @@ def test_autoread_nexrad_archive():
 def test_autoread_nexrad_cdm():
     with pyart.testing.InTemporaryDirectory():
         tmpfile = 'tmp_nexrad.nc'
-        f = open(tmpfile, 'wb')
-        f.write(bz2.BZ2File(pyart.testing.NEXRAD_CDM_FILE).read())
-        f.close()
+        with open(tmpfile, 'wb') as f:
+            f.write(bz2.BZ2File(pyart.testing.NEXRAD_CDM_FILE).read())
         radar = pyart.io.read(tmpfile)
         assert radar.metadata['original_container'] == 'NEXRAD Level II'
 

@@ -1,33 +1,5 @@
 """
-pyart.graph.common
-==================
-
 Common graphing routines.
-
-.. autosummary::
-    :toctree: generated/
-
-    parse_ax
-    parse_ax_fig
-    parse_cmap
-    parse_vmin_vmax
-    parse_lon_lat
-    generate_colorbar_label
-    generate_field_name
-    generate_radar_name
-    generate_grid_name
-    generate_radar_time_begin
-    generate_radar_time_sweep
-    generate_grid_time_begin
-    generate_filename
-    generate_grid_filename
-    generate_title
-    generate_grid_title
-    generate_longitudinal_level_title
-    generate_latitudinal_level_title
-    generate_vpt_title
-    generate_ray_title
-    set_limits
 
 """
 
@@ -131,7 +103,8 @@ def generate_radar_time_begin(radar):
     times = radar.time['data'][0]
     units = radar.time['units']
     calendar = radar.time['calendar']
-    return num2date(times, units, calendar)
+    return num2date(times, units, calendar, only_use_cftime_datetimes=False,
+                    only_use_python_datetimes=True)
 
 
 def generate_radar_time_sweep(radar, sweep):
@@ -140,7 +113,8 @@ def generate_radar_time_sweep(radar, sweep):
     times = radar.time['data'][first_ray]
     units = radar.time['units']
     calendar = radar.time['calendar']
-    return num2date(times, units, calendar)
+    return num2date(times, units, calendar, only_use_cftime_datetimes=False,
+                    only_use_python_datetimes=True)
 
 
 def generate_grid_time_begin(grid):
@@ -151,10 +125,12 @@ def generate_grid_time_begin(grid):
         calendar = grid.time['calendar']
     else:
         calendar = 'standard'
-    return num2date(times, units, calendar)
+    return num2date(times, units, calendar, only_use_cftime_datetimes=False,
+                    only_use_python_datetimes=True)
 
 
-def generate_filename(radar, field, sweep, ext='png', datetime_format='%Y%m%d%H%M%S', use_sweep_time=False):
+def generate_filename(radar, field, sweep, ext='png',
+                      datetime_format='%Y%m%d%H%M%S', use_sweep_time=False):
     """
     Generate a filename for a plot.
 
@@ -309,7 +285,7 @@ def generate_longitudinal_level_title(grid, field, level):
         Plot title.
 
     """
-    time_str = generate_grid_time_begin(grid).isoformat() + 'Z'
+    time_str = generate_grid_time_begin(grid).strftime('%Y-%m-%dT%H:%M:%SZ')
     disp = grid.x['data'][level] / 1000.
     if disp >= 0:
         direction = "east"

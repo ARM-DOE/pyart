@@ -1,26 +1,5 @@
 ﻿"""
-pyart.retrieve.quasi_vertical_profile
-=====================================
-
 Retrieval of QVPs from a radar object
-
-.. autosummary::
-    :toctree: generated/
-
-    quasi_vertical_profile
-    compute_qvp
-    compute_rqvp
-    compute_evp
-    compute_svp
-    compute_vp
-    compute_directional_stats
-    project_to_vertical
-    find_rng_index
-    get_target_elevations
-    find_nearest_gate
-    find_neighbour_gates
-    _create_qvp_object
-    _update_qvp_metadata
 
 """
 

@@ -1,7 +1,4 @@
 """
-pyart.aux_io.arm_vpt
-====================
-
 Routines for reading ARM vertically-pointing radar ingest (e.g., a1) files.
 These files are characterized by being NetCDF files that do not fully conform
 to the CF/Radial convention. Nonetheless this module borrows heavily from the

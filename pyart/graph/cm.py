@@ -1,17 +1,5 @@
 """
-pyart.graph.cm
-==============
-
 Radar related colormaps.
-
-.. autosummary::
-    :toctree: generated/
-
-    revcmap
-    _reverser
-    _reverse_cmap_spec
-    _generate_cmap
-
 
 Available colormaps, reversed versions (_r) are also provided, these
 colormaps are available within matplotlib with names 'pyart_COLORMAP':
@@ -60,7 +48,7 @@ colormaps are available within matplotlib with names 'pyart_COLORMAP':
 # http://matplotlib.org/.
 # Copyright (c) 2012-2013 Matplotlib Development Team; All Rights Reserved
 
-from __future__ import print_function, division
+import warnings
 
 import matplotlib as mpl
 import matplotlib.colors as colors
@@ -100,14 +88,15 @@ def revcmap(data):
 def _reverse_cmap_spec(spec):
     """Reverses cmap specification *spec*, can handle both dict and tuple
     type specs."""
-
-    if 'red' in spec:
-        return revcmap(spec)
-    else:
-        revspec = list(reversed(spec))
-        if len(revspec[0]) == 2:    # e.g., (1, (1.0, 0.0, 1.0))
-            revspec = [(1.0 - a, b) for a, b in revspec]
-        return revspec
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", FutureWarning)
+        if isinstance(spec, dict) and 'red' in spec.keys():
+            return revcmap(spec)
+        else:
+            revspec = list(reversed(spec))
+            if len(revspec[0]) == 2:    # e.g., (1, (1.0, 0.0, 1.0))
+                revspec = [(1.0 - a, b) for a, b in revspec]
+            return revspec
 
 
 def _generate_cmap(name, lutsize):
@@ -117,7 +106,7 @@ def _generate_cmap(name, lutsize):
     spec = datad[name]
 
     # Generate the colormap object.
-    if 'red' in spec:
+    if isinstance(spec, dict) and 'red' in spec.keys():
         return colors.LinearSegmentedColormap(name, spec, lutsize)
     else:
         return colors.LinearSegmentedColormap.from_list(name, spec, lutsize)

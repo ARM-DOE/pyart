@@ -1,19 +1,6 @@
 """
-pyart.map._gate_to_grid_map
-===========================
-
 Cython classes and functions for efficient mapping of radar gates to
 a uniform grid.
-
-.. autosummary::
-    :toctree: generated/
-    :template: dev_template.rst
-
-    GateToGridMapper
-    RoIFunction
-    ConstantRoI
-    DistRoI
-    DistBeamRoI
 
 """
 
@@ -21,8 +8,10 @@ from libc.math cimport sqrt, exp, ceil, floor, sin, cos, tan, asin
 from cython.view cimport array as cvarray
 
 cimport cython
+import numpy as np
 
 # constants
+cdef int BARNES2 = 3
 cdef int NEAREST = 2
 cdef int CRESSMAN = 1
 cdef int BARNES = 0
@@ -167,7 +156,7 @@ cdef class GateToGridMapper:
         z, y and x dimensions.
     grid_sum, grid_wsum : 4D float32 array
         Array for collecting grid weighted values and weights for each grid
-        point and field.  Dimension are order z, y, x, and fields. These array
+        point and field. Dimension are order z, y, x, and fields. These array
         are modified in place when mapping gates unto the grid.
 
     """
@@ -177,6 +166,8 @@ cdef class GateToGridMapper:
     cdef int nx, ny, nz, nfields
     cdef float[:, :, :, ::1] grid_sum
     cdef float[:, :, :, ::1] grid_wsum
+    cdef double[:, :, :, :] min_dist2
+    
 
     def __init__(self, tuple grid_shape, tuple grid_starts, tuple grid_steps,
                  float[:, :, :, ::1] grid_sum, float[:, :, :, ::1] grid_wsum):
@@ -200,6 +191,7 @@ cdef class GateToGridMapper:
         self.nfields = grid_sum.shape[3]
         self.grid_sum = grid_sum
         self.grid_wsum = grid_wsum
+        self.min_dist2 = 1e30*np.ones((nz, ny, nx, self.nfields))
         return
 
     @cython.boundscheck(False)
@@ -259,17 +251,17 @@ cdef class GateToGridMapper:
             Array containing masking of the field data for the radar,
             dimension are ordered as nrays, ngates, nfields.
         excluded_gates : 2D uint8 array
-            Array containing gate masking information.  Gates with non-zero
+            Array containing gate masking information. Gates with non-zero
             values will not be included in the mapping.
         offset : tuple of floats
-            Offset of the radar from the grid origin.  Dimension are ordered
+            Offset of the radar from the grid origin. Dimension are ordered
             as z, y, x.
-            Top of atmosphere.  Gates above this level are considered.
+            Top of atmosphere. Gates above this level are considered.
         roi_func : RoIFunction
             Object whose get_roi method returns the radius of influence.
         weighting_function : int
             Function to use for weighting gates based upon distance.
-            0 for Barnes, 1 for Cressman and 2 for Nearest
+            0 for Barnes, 1 for Cressman, 2 for Nearest and 3 for Barnes 2
             neighbor weighting.
 
         """
@@ -307,7 +299,7 @@ cdef class GateToGridMapper:
         cdef float xg, yg, zg, dist, weight, roi2, dist2, min_dist2
         cdef int x_min, x_max, y_min, y_max, z_min, z_max
         cdef int xi, yi, zi, x_argmin, y_argmin, z_argmin
-
+        
         # shift positions so that grid starts at 0
         x -= self.x_start
         y -= self.y_start
@@ -338,7 +330,6 @@ cdef class GateToGridMapper:
         
         if weighting_function == NEAREST:
             # Get the xi, yi, zi of desired weight
-            min_dist2 = 1e30
             x_argmin = -1
             y_argmin = -1
             z_argmin = -1
@@ -348,23 +339,21 @@ cdef class GateToGridMapper:
                         xg = self.x_step * xi
                         yg = self.y_step * yi
                         zg = self.z_step * zi
-                        dist2 = (xg-x)*(xg-x) + (yg-y)*(yg-y) + (zg-z)*(zg-z)
-                        if dist2 < min_dist2:
-                            min_dist2 = dist2
-                            x_argmin = xi
-                            y_argmin = yi
-                            z_argmin = zi
-            
-            for xi in range(x_min, x_max+1):
-                for yi in range(y_min, y_max+1):
-                    for zi in range(z_min, z_max+1):
-                        if (xi == x_argmin and 
-                            yi == y_argmin and 
-                            zi == z_argmin):
-                            for i in range(self.nfields):
-                                self.grid_wsum[zi, yi, xi, i] += 1
-                                self.grid_sum[zi, yi, xi, i] += values[i]
-
+                        dist = ((xg - x)**2 + (yg - y)**2 + (zg - z)**2)
+                        if dist >= roi2:
+                            continue
+                        for i in range(self.nfields):
+                            if dist < self.min_dist2[zi, yi, xi, i]:
+                                self.min_dist2[zi, yi, xi, i] = dist
+                                x_argmin = xi
+                                y_argmin = yi
+                                z_argmin = zi
+                                if masks[i]:
+                                    self.grid_wsum[zi, yi, xi, i] = 0
+                                    self.grid_sum[zi, yi, xi, i] = 0
+                                else:
+                                    self.grid_wsum[z_argmin, y_argmin, x_argmin, i] = 1
+                                    self.grid_sum[z_argmin, y_argmin, x_argmin, i] = values[i]
         else:
             for xi in range(x_min, x_max+1):
                 for yi in range(y_min, y_max+1):
@@ -378,7 +367,9 @@ cdef class GateToGridMapper:
                             continue
 
                         if weighting_function == BARNES:
-                            weight = exp(-(dist2) / (2*roi2)) + 1e-5 
+                            weight = exp(-(dist2) / (2*roi2)) + 1e-5
+                        elif weighting_function == BARNES2:
+                            weight = exp(-(dist2) / (roi2/4)) + 1e-5
                         else: # Cressman
                             weight = (roi2 - dist2) / (roi2 + dist2)
 

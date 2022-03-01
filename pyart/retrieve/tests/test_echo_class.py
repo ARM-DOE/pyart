@@ -1,4 +1,4 @@
-""" Unit Tests for Py-ART's io/mdv.py module. """
+""" Unit Tests for Py-ART's retrieve/echo_class.py module. """
 
 import numpy as np
 import pytest
@@ -6,9 +6,6 @@ import pytest
 import pyart
 
 
-@pytest.mark.skipif(not pyart.retrieve.echo_class._F90_EXTENSIONS_AVAILABLE,
-                    reason=("Py-ART was not built on a system with a Fortran "
-                            "Compiler."))
 def test_steiner_conv_strat():
     grid = pyart.testing.make_storm_grid()
     eclass = pyart.retrieve.steiner_conv_strat(grid)

@@ -1,16 +1,5 @@
 """
-pyart.aux_io.read_gamic
-=======================
-
 Utilities for reading gamic hdf5 files.
-
-.. autosummary::
-    :toctree: generated/
-
-    read_gamic
-    _get_instrument_params
-    _avg_radial_angles
-    _prt_mode_from_unfolding
 
 """
 
@@ -145,7 +134,8 @@ def read_gamic(filename, field_names=None, additional_metadata=None,
 
     # sweep_type
     scan_type = gfile.raw_scan0_group_attr('what', 'scan_type').lower()
-    scan_type = scan_type.decode('utf-8')
+    if hasattr(scan_type, 'decode'):
+        scan_type = scan_type.decode('utf-8')
     # check that all scans in the volume are the same type
     if not gfile.is_file_single_scan_type():
         raise NotImplementedError('Mixed scan_type volume.')
@@ -246,20 +236,21 @@ def read_gamic(filename, field_names=None, additional_metadata=None,
 
     # scan_rate
     scan_rate = filemetadata('scan_rate')
+    scan_rate['data'] = target_scan_rate['data']
     if scan_type == 'ppi':
         azs_names = ['az_speed', 'azimuth_speed']
         azs_name = azs_names[0]
         for azs_name in azs_names:
             if gfile.is_field_in_ray_header(azs_name):
+                scan_rate['data'] = gfile.ray_header(azs_name, 'float32')
                 break
-        scan_rate['data'] = gfile.ray_header(azs_name, 'float32')
     elif scan_type == 'rhi':
         els_names = ['el_speed', 'elevation_speed']
         els_name = els_names[0]
         for els_name in els_names:
             if gfile.is_field_in_ray_header(els_name):
+                scan_rate['data'] = gfile.ray_header(els_name, 'float32')
                 break
-        scan_rate['data'] = gfile.ray_header(els_name, 'float32')
     else:
         scan_rate = None
 
@@ -304,19 +295,16 @@ def _get_instrument_params(gfile, filemetadata, pulse_width):
     dic = filemetadata('pulse_width')
     pw_names = ['pulse_width_us', 'pulse_width_mks', 'pulse_width']
     pw_name = 'pulse_width_us'
+    dic['data'] = None
     for pw_name in pw_names:
         if gfile.is_attr_in_group('/scan0/how', pw_name):
+            if pw_name == 'pulse_width':
+                dic['data'] = gfile.sweep_expand(
+                    pulse_width[gfile.how_attrs(pw_name, 'int')[0]] * 1e-6)
+            else:
+                dic['data'] = gfile.sweep_expand(
+                    gfile.how_attrs(pw_name, 'float32') * 1e-6)
             break
-    if pw_name == 'pulse_width':
-        if not pulse_width:
-            message = ("read_gamic() is missing 'pulse_width' "
-                       "keyword argument")
-            raise TypeError(message)
-        dic['data'] = gfile.sweep_expand(
-            pulse_width[gfile.how_attrs(pw_name, 'int')[0]] * 1e-6)
-    else:
-        dic['data'] = gfile.sweep_expand(
-            gfile.how_attrs(pw_name, 'float32') * 1e-6)
     instrument_params['pulse_width'] = dic
 
     dic = filemetadata('prt')

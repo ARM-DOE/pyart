@@ -1,13 +1,5 @@
 """
-pyart.aux_io.edge_necdf
-=======================
-
 Utilities for reading EDGE NetCDF files.
-
-.. autosummary::
-    :toctree: generated/
-
-    read_edge_netcdf
 
 """
 
