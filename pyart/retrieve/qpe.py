@@ -30,6 +30,15 @@ def est_rain_rate_zpoly(radar, refl_field=None, rr_field=None):
     rain : dict
         Field dictionary containing the rainfall rate.
 
+    References
+    ----------
+    Doelling et al. Systematic variations of Z–R-relationships from drop size
+    distributions measured in northern Germany during seven years. 1998. Atmos.
+    Ocean. Technol, 21, 1545-1556.
+
+    Joss et al. Operational Use of Radar for Precipitation Measurements
+    in Switzerland. 1998. Vdf Hochschulverlag AG ETH Zurich: 134.
+
     """
     # parse the field parameters
     if refl_field is None:
@@ -74,6 +83,11 @@ def est_rain_rate_z(radar, alpha=0.0376, beta=0.6112, refl_field=None,
     rain : dict
         Field dictionary containing the rainfall rate.
 
+    Reference
+    ---------
+    Fabry, Frédéric. Radar Meterology. 2015. Ch 9. pg 148-165.
+    https://doi.org/10.1017/CBO9781107707405
+
     """
     # parse the field parameters
     if refl_field is None:
@@ -113,6 +127,14 @@ def est_rain_rate_kdp(radar, alpha=None, beta=None, kdp_field=None,
     -------
     rain : dict
         Field dictionary containing the rainfall rate.
+
+    Reference
+    ---------
+    Figueras et al. Long-term monitoring of French polarimetric radar data
+    quality and evaluation of several polarimetric quantitative precipitation
+    estimators in ideal conditions for operational implementation at C-band.
+    Quarterly Journal of the Royal Meteorological Society. 2012.
+    https://doi.org/10.1002/qj.1934
 
     """
     # select the coefficients as alpha function of frequency band
@@ -209,7 +231,7 @@ def est_rain_rate_a(radar, alpha=None, beta=None, a_field=None,
 
 def est_rain_rate_zkdp(radar, alphaz=0.0376, betaz=0.6112, alphakdp=None,
                        betakdp=None, refl_field=None, kdp_field=None,
-                       rr_field=None, master_field=None, thresh=None,
+                       rr_field=None, main_field=None, thresh=None,
                        thresh_max=True):
     """
     Estimates rainfall rate from a blending of power law r-kdp and r-z
@@ -231,19 +253,19 @@ def est_rain_rate_zkdp(radar, alphaz=0.0376, betaz=0.6112, alphakdp=None,
         Name of the specific differential phase field to use.
     rr_field : str, optional
         Name of the rainfall rate field.
-    master_field : str, optional
-        Name of the field that is going to act as master. Has to be
+    main_field : str, optional
+        Name of the field that is going to act as main. Has to be
         either refl_field or kdp_field. Default is refl_field.
     thresh : float, optional
-        Value of the threshold that determines when to use the slave
+        Value of the threshold that determines when to use the secondary
         field.
     thresh_max : Bool, optional
-        If true the master field is used up to the thresh value maximum.
-        Otherwise the master field is not used below thresh value.
+        If true the main field is used up to the thresh value maximum.
+        Otherwise the main field is not used below thresh value.
 
     Returns
     -------
-    rain_master : dict
+    rain_main : dict
         Field dictionary containing the rainfall rate.
 
     """
@@ -262,42 +284,42 @@ def est_rain_rate_zkdp(radar, alphaz=0.0376, betaz=0.6112, alphakdp=None,
         radar, alpha=alphakdp, beta=betakdp, kdp_field=kdp_field,
         rr_field=rr_field)
 
-    if master_field == refl_field:
-        slave_field = kdp_field
-        rain_master = rain_z
-        rain_slave = rain_kdp
-    elif master_field == kdp_field:
-        slave_field = refl_field
-        rain_master = rain_kdp
-        rain_slave = rain_z
-    elif master_field is None:
-        master_field = refl_field
-        slave_field = kdp_field
-        rain_master = rain_z
-        rain_slave = rain_kdp
+    if main_field == refl_field:
+        secondary_field = kdp_field
+        rain_main = rain_z
+        rain_secondary = rain_kdp
+    elif main_field == kdp_field:
+        secondary_field = refl_field
+        rain_main = rain_kdp
+        rain_secondary = rain_z
+    elif main_field is None:
+        main_field = refl_field
+        secondary_field = kdp_field
+        rain_main = rain_z
+        rain_secondary = rain_kdp
     else:
-        master_field = refl_field
-        slave_field = kdp_field
-        rain_master = rain_z
-        rain_slave = rain_kdp
+        main_field = refl_field
+        secondary_field = kdp_field
+        rain_main = rain_z
+        rain_secondary = rain_kdp
         thresh = 40.
         thresh_max = True
-        warn('Unknown master field. Using ' + refl_field
+        warn('Unknown main field. Using ' + refl_field
              + ' with threshold ' + str(thresh))
 
     if thresh_max:
-        is_slave = rain_master['data'] > thresh
+        is_secondary = rain_main['data'] > thresh
     else:
-        is_slave = rain_master['data'] < thresh
-    rain_master['data'][is_slave] = (
-        rain_slave['data'][is_slave])
+        is_secondary = rain_main['data'] < thresh
+    rain_main['data'][is_secondary] = (
+        rain_secondary['data'][is_secondary])
 
-    return rain_master
+    return rain_main
 
 
 def est_rain_rate_za(radar, alphaz=0.0376, betaz=0.6112, alphaa=None,
                      betaa=None, refl_field=None, a_field=None, rr_field=None,
-                     master_field=None, thresh=None, thresh_max=False):
+                     main_field=None, thresh=None, thresh_max=False):
     """
     Estimates rainfall rate from a blending of power law r-alpha and r-z
     relations.
@@ -317,19 +339,19 @@ def est_rain_rate_za(radar, alphaz=0.0376, betaz=0.6112, alphaa=None,
         Name of the specific attenuation field to use.
     rr_field : str, optional
         Name of the rainfall rate field.
-    master_field : str, optional
-        Name of the field that is going to act as master. Has to be
+    main_field : str, optional
+        Name of the field that is going to act as main. Has to be
         either refl_field or kdp_field. Default is refl_field.
     thresh : float, optional
-        Value of the threshold that determines when to use the slave
+        Value of the threshold that determines when to use the secondary
         field.
     thresh_max : Bool, optional
-        If true the master field is used up to the thresh value maximum.
-        Otherwise the master field is not used below thresh value.
+        If true the main field is used up to the thresh value maximum.
+        Otherwise the main field is not used below thresh value.
 
     Returns
     -------
-    rain_master : dict
+    rain_main : dict
         Field dictionary containing the rainfall rate.
 
     """
@@ -347,44 +369,44 @@ def est_rain_rate_za(radar, alphaz=0.0376, betaz=0.6112, alphaa=None,
     rain_a = est_rain_rate_a(
         radar, alpha=alphaa, beta=betaa, a_field=a_field, rr_field=rr_field)
 
-    if master_field == refl_field:
-        slave_field = a_field
-        rain_master = rain_z
-        rain_slave = rain_a
-    elif master_field == a_field:
-        slave_field = refl_field
-        rain_master = rain_a
-        rain_slave = rain_z
-    elif master_field is None:
-        master_field = a_field
-        slave_field = refl_field
-        rain_master = rain_a
-        rain_slave = rain_z
+    if main_field == refl_field:
+        secondary_field = a_field
+        rain_main = rain_z
+        rain_secondary = rain_a
+    elif main_field == a_field:
+        secondary_field = refl_field
+        rain_main = rain_a
+        rain_secondary = rain_z
+    elif main_field is None:
+        main_field = a_field
+        secondary_field = refl_field
+        rain_main = rain_a
+        rain_secondary = rain_z
     else:
-        master_field = a_field
-        slave_field = refl_field
-        rain_master = rain_a
-        rain_slave = rain_z
+        main_field = a_field
+        secondary_field = refl_field
+        rain_main = rain_a
+        rain_secondary = rain_z
         thresh = 0.04
         thresh_max = False
-        warn('Unknown master field. Using ' + a_field + ' with threshold '
+        warn('Unknown main field. Using ' + a_field + ' with threshold '
              + str(thresh))
 
     if thresh_max:
-        is_slave = rain_master['data'] > thresh
+        is_secondary = rain_main['data'] > thresh
     else:
-        is_slave = rain_master['data'] < thresh
+        is_secondary = rain_main['data'] < thresh
 
-    rain_master['data'][is_slave] = (
-        rain_slave['data'][is_slave])
+    rain_main['data'][is_secondary] = (
+        rain_secondary['data'][is_secondary])
 
-    return rain_master
+    return rain_main
 
 
 def est_rain_rate_hydro(radar, alphazr=0.0376, betazr=0.6112, alphazs=0.1,
                         betazs=0.5, alphaa=None, betaa=None, mp_factor=0.6,
                         refl_field=None, a_field=None, hydro_field=None,
-                        rr_field=None, master_field=None, thresh=None,
+                        rr_field=None, main_field=None, thresh=None,
                         thresh_max=False):
     """
     Estimates rainfall rate using different relations between R and the
@@ -412,15 +434,15 @@ def est_rain_rate_hydro(radar, alphazr=0.0376, betazr=0.6112, alphazs=0.1,
         Name of the hydrometeor classification field to use.
     rr_field : str, optional
         Name of the rainfall rate field.
-    master_field : str, optional
-        Name of the field that is going to act as master. Has to be
+    main_field : str, optional
+        Name of the field that is going to act as main. Has to be
         either refl_field or kdp_field. Default is refl_field.
     thresh : float, optional
-        Value of the threshold that determines when to use the slave
+        Value of the threshold that determines when to use the secondary
         field.
     thresh_max : Bool, optional
-        If true the master field is used up to the thresh value maximum.
-        Otherwise the master field is not used below thresh value.
+        If true the main field is used up to the thresh value maximum.
+        Otherwise the main field is not used below thresh value.
 
     Returns
     -------
@@ -479,38 +501,38 @@ def est_rain_rate_hydro(radar, alphazr=0.0376, betazr=0.6112, alphazs=0.1,
     rr_data[is_ih] = snow_z['data'][is_ih]
 
     # rain
-    if master_field == refl_field:
-        slave_field = a_field
-        rain_master = rain_z
-        rain_slave = rain_a
-    elif master_field == a_field:
-        slave_field = refl_field
-        rain_master = rain_a
-        rain_slave = rain_z
-    elif master_field is None:
-        master_field = a_field
-        slave_field = refl_field
-        rain_master = rain_a
-        rain_slave = rain_z
+    if main_field == refl_field:
+        secondary_field = a_field
+        rain_main = rain_z
+        rain_secondary = rain_a
+    elif main_field == a_field:
+        secondary_field = refl_field
+        rain_main = rain_a
+        rain_secondary = rain_z
+    elif main_field is None:
+        main_field = a_field
+        secondary_field = refl_field
+        rain_main = rain_a
+        rain_secondary = rain_z
     else:
-        master_field = a_field
-        slave_field = refl_field
-        rain_master = rain_a
-        rain_slave = rain_z
+        main_field = a_field
+        secondary_field = refl_field
+        rain_main = rain_a
+        rain_secondary = rain_z
         thresh = 0.04
         thresh_max = False
-        warn('Unknown master field. Using ' + a_field + ' with threshold ' +
+        warn('Unknown main field. Using ' + a_field + ' with threshold ' +
              str(thresh))
 
     if thresh_max:
-        is_slave = rain_master['data'] > thresh
+        is_secondary = rain_main['data'] > thresh
     else:
-        is_slave = rain_master['data'] < thresh
+        is_secondary = rain_main['data'] < thresh
 
-    rain_master['data'][is_slave] = rain_slave['data'][is_slave]
+    rain_main['data'][is_secondary] = rain_secondary['data'][is_secondary]
 
-    rr_data[is_lr] = rain_master['data'][is_lr]
-    rr_data[is_rn] = rain_master['data'][is_rn]
+    rr_data[is_lr] = rain_main['data'][is_lr]
+    rr_data[is_rn] = rain_main['data'][is_rn]
 
     # mixed phase
     rr_data[is_ws] = mp_factor*rain_z['data'][is_ws]
