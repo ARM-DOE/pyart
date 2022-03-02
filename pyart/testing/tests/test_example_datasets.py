@@ -1,6 +1,6 @@
 import pathlib
 
-from pyart.testing import DATASETS, locate, get_test_data
+from pyart.testing.example_data import DATASETS, locate, get_test_data
 
 
 def test_registry():
