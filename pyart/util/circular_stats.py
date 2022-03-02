@@ -195,3 +195,39 @@ def interval_std(dist, interval_min, interval_max):
     # compute the angular standard dev. and convert back to original interval
     a_std = angular_std(a)
     return a_std * half_width / np.pi
+
+
+def compute_directional_stats(field, avg_type='mean', nvalid_min=1, axis=0):
+    """
+    Computes the mean or the median along one of the axis (ray or range).
+
+    Parameters
+    ----------
+    field : ndarray
+        The radar field data dictionary array. radar.fields[field]['data']
+    avg_type : str
+        The type of average: 'mean' or 'median'.
+    nvalid_min : int
+        The minimum number of points to consider the stats valid. Default 1.
+    axis : int
+        The axis along which to compute (0=ray, 1=range).
+
+    Returns
+    -------
+    values : ndarray 1D
+        The resultant statistics.
+    nvalid : ndarray 1D
+        The number of valid points used in the computation.
+
+    """
+    if avg_type == 'mean':
+        values = np.ma.mean(field, axis=axis)
+    else:
+        values = np.ma.median(field, axis=axis)
+
+    # Set to non-valid if there is not a minimum number of valid gates
+    valid = np.logical_not(np.ma.getmaskarray(field))
+    nvalid = np.sum(valid, axis=0, dtype=int)
+    values[nvalid < nvalid_min] = np.ma.masked
+
+    return values, nvalid

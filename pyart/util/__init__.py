@@ -6,7 +6,7 @@ versions without depreciation, use with caution.
 
 """
 
-from .circular_stats import angular_mean, angular_std
+from .circular_stats import angular_mean, angular_std, compute_directional_stats
 from .circular_stats import angular_mean_deg, angular_std_deg
 from .circular_stats import interval_mean, interval_std
 from .circular_stats import mean_of_two_angles, mean_of_two_angles_deg

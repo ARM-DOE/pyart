@@ -14,6 +14,7 @@ from ..core.transforms import antenna_to_cartesian
 from ..io.common import make_time_unit_str
 from ..util.xsect import cross_section_rhi
 from ..util.datetime_utils import datetime_from_radar
+from ..util.circular_stats import compute_directional_stats
 
 
 def quasi_vertical_profile(
@@ -117,11 +118,12 @@ def quasi_vertical_profile(
     return qvp
 
 
-def compute_qvp(radar, field_names, ref_time=None, angle=0., ang_tol=1.,
-                hmax=10000., hres=50., avg_type='mean', nvalid_min=30,
-                interp_kind='none', qvp=None):
+def compute_qvp_ms(radar, field_names, ref_time=None, angle=0., ang_tol=1.,
+                   hmax=10000., hres=50., avg_type='mean', nvalid_min=30,
+                   interp_kind='none', qvp=None):
     """
-    Computes quasi vertical profiles.
+    Computes quasi vertical profiles method developed by Meteoswiss.
+    This function calculates qvp differently then quasi_vertical_profile.
 
     Parameters
     ----------
@@ -174,6 +176,9 @@ def compute_qvp(radar, field_names, ref_time=None, angle=0., ang_tol=1.,
     if avg_type not in ('mean', 'median'):
         warn('Unsuported statistics ' + avg_type)
         return None
+
+    if type(field_names) is not list:
+        field_names = [field_names]
 
     radar_aux = deepcopy(radar)
     # transform radar into ppi over the required elevation
@@ -279,6 +284,9 @@ def compute_rqvp(radar, field_names, ref_time=None, hmax=10000., hres=2.,
     if avg_type not in ('mean', 'median'):
         warn('Unsuported statistics ' + avg_type)
         return None
+
+    if type(field_names) is not list:
+        field_names = [field_names]
 
     radar_aux = deepcopy(radar)
     # transform radar into ppi over the required elevation
@@ -435,6 +443,9 @@ def compute_evp(radar, field_names, lon, lat, ref_time=None,
         warn('Unsuported statistics ' + avg_type)
         return None
 
+    if type(field_names) is not list:
+        field_names = [field_names]
+
     radar_aux = deepcopy(radar)
     # transform radar into ppi over the required elevation
     if radar_aux.scan_type == 'rhi':
@@ -581,6 +592,9 @@ def compute_svp(radar, field_names, lon, lat, angle, ref_time=None,
         warn('Unsuported statistics ' + avg_type)
         return None
 
+    if type(field_names) is not list:
+        field_names = [field_names]
+
     radar_aux = deepcopy(radar)
     # transform radar into ppi over the required elevation
     if radar_aux.scan_type == 'rhi':
@@ -697,6 +711,10 @@ def compute_vp(radar, field_names, lon, lat, ref_time=None,
         The computed vertical profile
 
     """
+
+    if type(field_names) is not list:
+        field_names = [field_names]
+
     radar_aux = deepcopy(radar)
     # transform radar into ppi over the required elevation
     if radar_aux.scan_type == 'rhi':
@@ -762,42 +780,6 @@ def compute_vp(radar, field_names, lon, lat, ref_time=None,
                  vp_data.reshape(1, vp.ngates)))
 
     return vp
-
-
-def compute_directional_stats(field, avg_type='mean', nvalid_min=1, axis=0):
-    """
-    Computes the mean or the median along one of the axis (ray or range).
-
-    Parameters
-    ----------
-    field : ndarray
-        The radar field.
-    avg_type : str
-        The type of average: 'mean' or 'median'.
-    nvalid_min : int
-        The minimum number of points to consider the stats valid. Default 1.
-    axis : int
-        The axis along which to compute (0=ray, 1=range).
-
-    Returns
-    -------
-    values : ndarray 1D
-        The resultant statistics.
-    nvalid : ndarray 1D
-        The number of valid points used in the computation.
-
-    """
-    if avg_type == 'mean':
-        values = np.ma.mean(field, axis=axis)
-    else:
-        values = np.ma.median(field, axis=axis)
-
-    # Set to non-valid if there is not a minimum number of valid gates
-    valid = np.logical_not(np.ma.getmaskarray(field))
-    nvalid = np.sum(valid, axis=0, dtype=int)
-    values[nvalid < nvalid_min] = np.ma.masked
-
-    return values, nvalid
 
 
 def project_to_vertical(data_in, data_height, grid_height, interp_kind='none',
