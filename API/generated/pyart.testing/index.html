@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyart.testing &mdash; Py-ART 1.11.7.dev+d5db026 documentation</title>
+  <title>pyart.testing &mdash; Py-ART 1.11.7.dev+500f53c documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/plot_directive.css" type="text/css" />
@@ -35,7 +35,7 @@
             <a href="../../../" class="icon icon-home"> Py-ART
           </a>
               <div class="version">
-                1.11.7.dev+d5db026
+                1.11.7.dev+500f53c
               </div>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search/" method="get">
@@ -63,6 +63,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../pyart.bridge/">pyart.bridge</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">pyart.testing</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="../pyart.testing.InTemporaryDirectory/">pyart.testing.InTemporaryDirectory</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyart.testing.get_test_data/">pyart.testing.get_test_data</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../pyart.testing.make_empty_grid/">pyart.testing.make_empty_grid</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../pyart.testing.make_empty_ppi_radar/">pyart.testing.make_empty_ppi_radar</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../pyart.testing.make_empty_rhi_radar/">pyart.testing.make_empty_rhi_radar</a></li>
@@ -182,40 +183,43 @@ and sample objects.</p>
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="../pyart.testing.make_empty_grid/#pyart.testing.make_empty_grid" title="pyart.testing.make_empty_grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_empty_grid</span></code></a>(grid_shape, grid_limits)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../pyart.testing.get_test_data/#pyart.testing.get_test_data" title="pyart.testing.get_test_data"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_test_data</span></code></a>(file)</p></td>
+<td><p>Accesses the desired test data storage :Parameters: <strong>file = str</strong> -- The name of the desired file</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="../pyart.testing.make_empty_grid/#pyart.testing.make_empty_grid" title="pyart.testing.make_empty_grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_empty_grid</span></code></a>(grid_shape, grid_limits)</p></td>
 <td><p>Make an empty grid object without any fields or metadata.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../pyart.testing.make_empty_ppi_radar/#pyart.testing.make_empty_ppi_radar" title="pyart.testing.make_empty_ppi_radar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_empty_ppi_radar</span></code></a>(ngates, rays_per_sweep, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../pyart.testing.make_empty_ppi_radar/#pyart.testing.make_empty_ppi_radar" title="pyart.testing.make_empty_ppi_radar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_empty_ppi_radar</span></code></a>(ngates, rays_per_sweep, ...)</p></td>
 <td><p>Return an Radar object, representing a PPI scan.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../pyart.testing.make_empty_rhi_radar/#pyart.testing.make_empty_rhi_radar" title="pyart.testing.make_empty_rhi_radar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_empty_rhi_radar</span></code></a>(ngates, rays_per_sweep, ...)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../pyart.testing.make_empty_rhi_radar/#pyart.testing.make_empty_rhi_radar" title="pyart.testing.make_empty_rhi_radar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_empty_rhi_radar</span></code></a>(ngates, rays_per_sweep, ...)</p></td>
 <td><p>Return an Radar object, representing a RHI scan.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../pyart.testing.make_empty_spectra_radar/#pyart.testing.make_empty_spectra_radar" title="pyart.testing.make_empty_spectra_radar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_empty_spectra_radar</span></code></a>(nrays, ngates, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../pyart.testing.make_empty_spectra_radar/#pyart.testing.make_empty_spectra_radar" title="pyart.testing.make_empty_spectra_radar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_empty_spectra_radar</span></code></a>(nrays, ngates, ...)</p></td>
 <td><p>Return a Spectra Radar object.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../pyart.testing.make_normal_storm/#pyart.testing.make_normal_storm" title="pyart.testing.make_normal_storm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_normal_storm</span></code></a>(sigma, mu)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../pyart.testing.make_normal_storm/#pyart.testing.make_normal_storm" title="pyart.testing.make_normal_storm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_normal_storm</span></code></a>(sigma, mu)</p></td>
 <td><p>Make a sample Grid with a gaussian storm target.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../pyart.testing.make_single_ray_radar/#pyart.testing.make_single_ray_radar" title="pyart.testing.make_single_ray_radar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_single_ray_radar</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../pyart.testing.make_single_ray_radar/#pyart.testing.make_single_ray_radar" title="pyart.testing.make_single_ray_radar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_single_ray_radar</span></code></a>()</p></td>
 <td><p>Return a PPI radar with a single ray taken from a ARM C-SAPR Radar.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../pyart.testing.make_storm_grid/#pyart.testing.make_storm_grid" title="pyart.testing.make_storm_grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_storm_grid</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../pyart.testing.make_storm_grid/#pyart.testing.make_storm_grid" title="pyart.testing.make_storm_grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_storm_grid</span></code></a>()</p></td>
 <td><p>Make a sample Grid with a rectangular storm target.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../pyart.testing.make_target_grid/#pyart.testing.make_target_grid" title="pyart.testing.make_target_grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_target_grid</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../pyart.testing.make_target_grid/#pyart.testing.make_target_grid" title="pyart.testing.make_target_grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_target_grid</span></code></a>()</p></td>
 <td><p>Make a sample Grid with a rectangular target.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../pyart.testing.make_target_radar/#pyart.testing.make_target_radar" title="pyart.testing.make_target_radar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_target_radar</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../pyart.testing.make_target_radar/#pyart.testing.make_target_radar" title="pyart.testing.make_target_radar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_target_radar</span></code></a>()</p></td>
 <td><p>Return a PPI radar with a target like reflectivity field.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../pyart.testing.make_target_spectra_radar/#pyart.testing.make_target_spectra_radar" title="pyart.testing.make_target_spectra_radar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_target_spectra_radar</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../pyart.testing.make_target_spectra_radar/#pyart.testing.make_target_spectra_radar" title="pyart.testing.make_target_spectra_radar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_target_spectra_radar</span></code></a>()</p></td>
 <td><p>Return a spectra radar with a target like spectra field.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../pyart.testing.make_velocity_aliased_radar/#pyart.testing.make_velocity_aliased_radar" title="pyart.testing.make_velocity_aliased_radar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_velocity_aliased_radar</span></code></a>([alias])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../pyart.testing.make_velocity_aliased_radar/#pyart.testing.make_velocity_aliased_radar" title="pyart.testing.make_velocity_aliased_radar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_velocity_aliased_radar</span></code></a>([alias])</p></td>
 <td><p>Return a PPI radar with a target like reflectivity field.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="../pyart.testing.make_velocity_aliased_rhi_radar/#pyart.testing.make_velocity_aliased_rhi_radar" title="pyart.testing.make_velocity_aliased_rhi_radar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_velocity_aliased_rhi_radar</span></code></a>([alias])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../pyart.testing.make_velocity_aliased_rhi_radar/#pyart.testing.make_velocity_aliased_rhi_radar" title="pyart.testing.make_velocity_aliased_rhi_radar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">make_velocity_aliased_rhi_radar</span></code></a>([alias])</p></td>
 <td><p>Return a RHI radar with a target like reflectivity field.</p></td>
 </tr>
 </tbody>

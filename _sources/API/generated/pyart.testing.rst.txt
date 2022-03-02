@@ -24,6 +24,8 @@
 .. autosummary::
     :toctree: .
     
+    get_test_data
+    
     make_empty_grid
     
     make_empty_ppi_radar
