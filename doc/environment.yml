@@ -27,3 +27,4 @@ dependencies:
       - sphinx_gallery
       - sphinx-copybutton
       - nbsphinx
+      - pooch

@@ -24,5 +24,6 @@ from .sample_objects import make_empty_spectra_radar
 from. sample_objects import make_target_spectra_radar
 from .tmpdirs import InTemporaryDirectory
 from .sample_objects import make_normal_storm
+from .example_data import get_test_data
 
 __all__ = [s for s in dir() if not s.startswith('_')]
