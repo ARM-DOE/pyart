@@ -3,7 +3,7 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - python
+  - python=3.6
   - gdal
   - numpy
   - scipy
@@ -30,3 +30,4 @@ dependencies:
       - sphinx-copybutton
       - nbsphinx
       - pooch
+      - cylp
