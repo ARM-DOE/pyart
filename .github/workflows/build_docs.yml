@@ -31,6 +31,7 @@ jobs:
 
       - name: Install cylp
         run: |
+          sudo apt-get -y install coinor-cbc
           python -m pip install cylp
 
       - name: Set TRMM RSL path
