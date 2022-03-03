@@ -29,11 +29,6 @@ jobs:
           use-mamba: true
           miniforge-variant: Mambaforge
 
-      - name: Install cylp
-        run: |
-          sudo apt-get -y install coinor-cbc
-          python -m pip install cylp
-
       - name: Set TRMM RSL path
         run: |
           export RSL_PATH=$CONDA/pkgs/trmm_rsl-1.49-3
