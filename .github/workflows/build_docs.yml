@@ -40,7 +40,6 @@ jobs:
       - name: Build the site
         run: |
           cd doc
-          ./re
           make dirhtml
       # Push the book's HTML to github-pages
       - name: GitHub Pages action
