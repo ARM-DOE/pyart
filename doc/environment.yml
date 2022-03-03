@@ -30,4 +30,4 @@ dependencies:
       - sphinx-copybutton
       - nbsphinx
       - pooch
-      - clyp
+      - cylp
