@@ -16,15 +16,16 @@ print(__doc__)
 import matplotlib.pyplot as plt
 import netCDF4
 import pyart
+from pyart.testing import get_test_data
 
-SOND_NAME = 'sgpinterpolatedsondeC1.c1.20110510.000000.cdf'
-RADAR_NAME = '095636.mdv'
+radar_file = get_test_data('095636.mdv')
+sonde_file = get_test_data('sgpinterpolatedsondeC1.c1.20110510.000000.cdf')
 
 # read in the data
-radar = pyart.io.read_mdv(RADAR_NAME)
+radar = pyart.io.read_mdv(radar_file)
 
 # read in sonde data
-dt, profile = pyart.io.read_arm_sonde_vap(SOND_NAME, radar=radar)
+dt, profile = pyart.io.read_arm_sonde_vap(sonde_file, radar=radar)
 
 # create a gate filter which specifies gates to exclude from dealiasing
 gatefilter = pyart.filters.GateFilter(radar)
