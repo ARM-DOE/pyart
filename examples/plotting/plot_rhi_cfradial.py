@@ -15,8 +15,9 @@ print(__doc__)
 import matplotlib.pyplot as plt
 import netCDF4
 import pyart
+from pyart.testing import get_test_data
 
-filename = 'sgpxsaprrhicmacI5.c0.20110524.015604_NC4.nc'
+filename = get_test_data('sgpxsaprrhicmacI5.c0.20110524.015604_NC4.nc')
 
 # create the plot using RadarDisplay
 radar = pyart.io.read_cfradial(filename)

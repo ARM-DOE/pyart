@@ -14,12 +14,13 @@ print(__doc__)
 
 import matplotlib.pyplot as plt
 import pyart
+from pyart.testing import get_test_data
 
 # read in the data from both XSAPR radars
-XSAPR_SW_FILE = 'swx_20120520_0641.nc'
-XSAPR_SE_FILE = 'sex_20120520_0641.nc'
-radar_sw = pyart.io.read_cfradial(XSAPR_SW_FILE)
-radar_se = pyart.io.read_cfradial(XSAPR_SE_FILE)
+xsapr_sw_file = get_test_data('swx_20120520_0641.nc')
+xsapr_se_file = get_test_data('sex_20120520_0641.nc')
+radar_sw = pyart.io.read_cfradial(xsapr_sw_file)
+radar_se = pyart.io.read_cfradial(xsapr_se_file)
 
 # filter out gates with reflectivity > 100 from both radars
 gatefilter_se = pyart.filters.GateFilter(radar_se)
