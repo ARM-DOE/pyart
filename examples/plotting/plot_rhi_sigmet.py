@@ -14,9 +14,10 @@ print(__doc__)
 
 import matplotlib.pyplot as plt
 import pyart
+from pyart.testing import get_test_data
 import netCDF4
 
-filename = 'XSW110520113537.RAW7HHL'
+filename = get_test_data('XSW110520113537.RAW7HHL')
 
 # create the plot using RadarDisplay
 radar = pyart.io.read_rsl(filename)

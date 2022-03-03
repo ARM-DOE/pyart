@@ -15,10 +15,11 @@ print(__doc__)
 import numpy as np
 import matplotlib.pyplot as plt
 import pyart
+from pyart.testing import get_test_data
 
 # read in the data
-RADAR_FILE = '110635.mdv'
-radar = pyart.io.read_mdv(RADAR_FILE)
+file = get_test_data('110635.mdv')
+radar = pyart.io.read_mdv(file)
 
 # mask out last 10 gates of each ray, this removes the "ring" around the radar.
 radar.fields['reflectivity']['data'][:, -10:] = np.ma.masked

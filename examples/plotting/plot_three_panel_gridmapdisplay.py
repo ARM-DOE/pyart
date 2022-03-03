@@ -18,9 +18,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 import pyart
+from pyart.testing import get_test_data
 
 # Read in the gridded file, create GridMapDisplay object
-filename = '20110520100000_nexrad_grid.nc'
+filename = get_test_data('20110520100000_nexrad_grid.nc')
 radar = pyart.io.read_grid(filename)
 display = pyart.graph.GridMapDisplay(radar)
 

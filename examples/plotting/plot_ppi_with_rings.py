@@ -17,9 +17,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
 import pyart
+from pyart.testing import get_test_data
 
 # Read in the file, create a RadarMapDisplay object
-filename = 'nsaxsaprppiC1.a1.20140201.184802.nc'
+filename = get_test_data('nsaxsaprppiC1.a1.20140201.184802.nc')
 radar = pyart.io.read(filename)
 display = pyart.graph.RadarMapDisplay(radar)
 

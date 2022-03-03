@@ -29,6 +29,10 @@ jobs:
           use-mamba: true
           miniforge-variant: Mambaforge
 
+      - name: Set TRMM RSL path
+        run: |
+          export RSL_PATH=$CONDA/pkgs/trmm_rsl-1.49-3
+
       - name: Install PyART
         run: |
           pip install -e .
