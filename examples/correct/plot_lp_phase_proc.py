@@ -27,7 +27,7 @@ radar = pyart.io.read_mdv(file)
 # in production so that the entire volume is processed
 radar = radar.extract_sweeps([0])
 
-phidp, kdp = pyart.correct.phase_proc_lp(radar, 0.0, solver='cvxopt', debug=True)
+phidp, kdp = pyart.correct.phase_proc_lp(radar, 0.0, LP_solver='cvxopt', debug=True)
 radar.add_field('corrected_differential_phase', phidp)
 radar.add_field('corrected_specific_diff_phase', kdp)
 
