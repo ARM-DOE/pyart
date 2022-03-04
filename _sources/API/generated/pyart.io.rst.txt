@@ -1,0 +1,58 @@
+﻿pyart.io
+========
+
+.. rubric:: Description
+
+.. automodule:: pyart.io
+
+.. currentmodule:: pyart.io
+
+
+
+
+.. rubric:: Functions
+
+.. autosummary::
+    :toctree: .
+    
+    prepare_for_read
+    
+    read
+    
+    read_arm_sonde
+    
+    read_arm_sonde_vap
+    
+    read_cfradial
+    
+    read_chl
+    
+    read_grid
+    
+    read_grid_mdv
+    
+    read_mdv
+    
+    read_nexrad_archive
+    
+    read_nexrad_cdm
+    
+    read_nexrad_level3
+    
+    read_rsl
+    
+    read_sigmet
+    
+    read_uf
+    
+    write_cfradial
+    
+    write_grid
+    
+    write_grid_geotiff
+    
+    write_grid_mdv
+    
+    write_uf
+    
+

@@ -1,0 +1,6 @@
+pyart.aux\_io.read\_radx\_grid
+==============================
+
+.. currentmodule:: pyart.aux_io
+
+.. autofunction:: read_radx_grid

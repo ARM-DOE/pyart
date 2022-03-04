@@ -1,0 +1,49 @@
+pyart.graph.RadarDisplay
+========================
+
+.. currentmodule:: pyart.graph
+
+.. autoclass:: RadarDisplay
+
+   
+
+.. HACK -- the point here is that we don't want this to appear in the output, but the autosummary should still generate the pages.
+
+.. autosummary::
+   :toctree:
+
+
+   ~RadarDisplay.generate_az_rhi_title
+   ~RadarDisplay.generate_filename
+   ~RadarDisplay.generate_ray_title
+   ~RadarDisplay.generate_title
+   ~RadarDisplay.generate_vpt_title
+   ~RadarDisplay.label_xaxis_r
+   ~RadarDisplay.label_xaxis_rays
+   ~RadarDisplay.label_xaxis_time
+   ~RadarDisplay.label_xaxis_x
+   ~RadarDisplay.label_yaxis_field
+   ~RadarDisplay.label_yaxis_y
+   ~RadarDisplay.label_yaxis_z
+   ~RadarDisplay.plot
+   ~RadarDisplay.plot_azimuth_to_rhi
+   ~RadarDisplay.plot_colorbar
+   ~RadarDisplay.plot_cr_raster
+   ~RadarDisplay.plot_cross_hair
+   ~RadarDisplay.plot_grid_lines
+   ~RadarDisplay.plot_label
+   ~RadarDisplay.plot_labels
+   ~RadarDisplay.plot_ppi
+   ~RadarDisplay.plot_range_ring
+   ~RadarDisplay.plot_range_rings
+   ~RadarDisplay.plot_ray
+   ~RadarDisplay.plot_rhi
+   ~RadarDisplay.plot_vpt
+   ~RadarDisplay.set_aspect_ratio
+   ~RadarDisplay.set_limits
+
+
+
+
+   
+

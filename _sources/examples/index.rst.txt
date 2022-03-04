@@ -1,0 +1,444 @@
+:orphan:
+
+
+
+.. _sphx_glr_examples:
+
+The files used in these examples are available for download_.
+
+.. _download: https://engineering.arm.gov/~jhelmus/pyart_example_data/
+
+
+.. raw:: html
+
+    <div class="sphx-glr-clear"></div>
+
+
+
+.. _sphx_glr_examples_correct:
+
+.. _moment_correct_examples:
+
+Moment correction examples
+--------------------------
+
+Performing radar moment corrections in antenna (radial) coordinates.
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="In this example the reflectivity attenuation is calculated and then corrected for a polarimetri...">
+
+.. only:: html
+
+ .. figure:: /examples/correct/images/thumb/sphx_glr_plot_attenuation_thumb.png
+     :alt: Correct reflectivity attenuation
+
+     :ref:`sphx_glr_examples_correct_plot_attenuation.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/correct/plot_attenuation
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="In this example doppler velocities are dealiased using the Univ. of Washington FourDD algorithm...">
+
+.. only:: html
+
+ .. figure:: /examples/correct/images/thumb/sphx_glr_plot_dealias_thumb.png
+     :alt: Dealias doppler velocities using the FourDD algorithm
+
+     :ref:`sphx_glr_examples_correct_plot_dealias.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/correct/plot_dealias
+.. raw:: html
+
+    <div class="sphx-glr-clear"></div>
+
+
+
+.. _sphx_glr_examples_mapping:
+
+.. _mapping_examples:
+
+Mapping examples
+----------------
+
+Mapping one or multiple radars from antenna coordinates to a Cartesian grid.
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Map the reflectivity field of a single radar from Antenna coordinates to a Cartesian grid.">
+
+.. only:: html
+
+ .. figure:: /examples/mapping/images/thumb/sphx_glr_plot_map_one_radar_to_grid_thumb.png
+     :alt: Map a single radar to a Cartesian grid
+
+     :ref:`sphx_glr_examples_mapping_plot_map_one_radar_to_grid.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/mapping/plot_map_one_radar_to_grid
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Map the reflectivity field of two nearby ARM XSARP radars from antenna coordinates to a Cartesi...">
+
+.. only:: html
+
+ .. figure:: /examples/mapping/images/thumb/sphx_glr_plot_map_two_radars_to_grid_thumb.png
+     :alt: Map two radars to a Cartesian grid
+
+     :ref:`sphx_glr_examples_mapping_plot_map_two_radars_to_grid.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/mapping/plot_map_two_radars_to_grid
+.. raw:: html
+
+    <div class="sphx-glr-clear"></div>
+
+
+
+.. _sphx_glr_examples_plotting:
+
+.. _plotting_examples:
+
+Plotting examples
+-----------------
+
+Plotting real world radar data with Py-ART.
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="An example which creates a RHI plot of a MDV file using a RadarDisplay object.">
+
+.. only:: html
+
+ .. figure:: /examples/plotting/images/thumb/sphx_glr_plot_rhi_mdv_thumb.png
+     :alt: Create a RHI plot from a MDV file
+
+     :ref:`sphx_glr_examples_plotting_plot_rhi_mdv.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/plotting/plot_rhi_mdv
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="An example which creates a PPI plot of a Sigmet file.">
+
+.. only:: html
+
+ .. figure:: /examples/plotting/images/thumb/sphx_glr_plot_ppi_sigmet_thumb.png
+     :alt: Create a PPI plot from a Sigmet file
+
+     :ref:`sphx_glr_examples_plotting_plot_ppi_sigmet.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/plotting/plot_ppi_sigmet
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="An example which extracts a cross section at two azimuth angles from a volume of PPI scans and ...">
+
+.. only:: html
+
+ .. figure:: /examples/plotting/images/thumb/sphx_glr_plot_xsect_thumb.png
+     :alt: Plot a cross section from  a PPI volume
+
+     :ref:`sphx_glr_examples_plotting_plot_xsect.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/plotting/plot_xsect
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="An example which creates a plot containing the first collected scan from a NEXRAD file.">
+
+.. only:: html
+
+ .. figure:: /examples/plotting/images/thumb/sphx_glr_plot_nexrad_reflectivity_thumb.png
+     :alt: Create a plot of NEXRAD reflectivity
+
+     :ref:`sphx_glr_examples_plotting_plot_nexrad_reflectivity.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/plotting/plot_nexrad_reflectivity
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="An example which creates a PPI plot of a MDV file using a RadarDisplay object.">
+
+.. only:: html
+
+ .. figure:: /examples/plotting/images/thumb/sphx_glr_plot_ppi_mdv_thumb.png
+     :alt: Create a PPI plot from a MDV file
+
+     :ref:`sphx_glr_examples_plotting_plot_ppi_mdv.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/plotting/plot_ppi_mdv
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="An example which creates a RHI plot of a Sigmet file using a RadarDisplay object.">
+
+.. only:: html
+
+ .. figure:: /examples/plotting/images/thumb/sphx_glr_plot_rhi_sigmet_thumb.png
+     :alt: Create a RHI plot from a Sigmet file
+
+     :ref:`sphx_glr_examples_plotting_plot_rhi_sigmet.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/plotting/plot_rhi_sigmet
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="An example which creates a two panel RHI plot of a Sigmet file.  The fields included in the two...">
+
+.. only:: html
+
+ .. figure:: /examples/plotting/images/thumb/sphx_glr_plot_rhi_two_panel_thumb.png
+     :alt: Create a two panel RHI plot
+
+     :ref:`sphx_glr_examples_plotting_plot_rhi_two_panel.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/plotting/plot_rhi_two_panel
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="An example which creates a plot containing multiple moments taken from a NEXRAD Archive file.">
+
+.. only:: html
+
+ .. figure:: /examples/plotting/images/thumb/sphx_glr_plot_nexrad_multiple_moments_thumb.png
+     :alt: Create a plot of multiple moments from a NEXRAD file
+
+     :ref:`sphx_glr_examples_plotting_plot_nexrad_multiple_moments.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/plotting/plot_nexrad_multiple_moments
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="An example which creates a multiple panel RHI plot of a CF/Radial file using a RadarDisplay obj...">
+
+.. only:: html
+
+ .. figure:: /examples/plotting/images/thumb/sphx_glr_plot_rhi_cfradial_thumb.png
+     :alt: Create a multiple panel RHI plot from a CF/Radial file
+
+     :ref:`sphx_glr_examples_plotting_plot_rhi_cfradial.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/plotting/plot_rhi_cfradial
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="An example that creates a 3 panel plot of a PPI, latitude slice, and longitude slice using xarr...">
+
+.. only:: html
+
+ .. figure:: /examples/plotting/images/thumb/sphx_glr_plot_three_panel_gridmapdisplay_thumb.png
+     :alt: Create a 3 panel plot using GridMapDisplay
+
+     :ref:`sphx_glr_examples_plotting_plot_three_panel_gridmapdisplay.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/plotting/plot_three_panel_gridmapdisplay
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="An example which creates a PPI plot of a file with a cartopy background and range rings">
+
+.. only:: html
+
+ .. figure:: /examples/plotting/images/thumb/sphx_glr_plot_ppi_with_rings_thumb.png
+     :alt: Create a PPI plot on a cartopy map
+
+     :ref:`sphx_glr_examples_plotting_plot_ppi_with_rings.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/plotting/plot_ppi_with_rings
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="An example which creates an RHI plot of velocity using a RadarDisplay object and adding Reflect...">
+
+.. only:: html
+
+ .. figure:: /examples/plotting/images/thumb/sphx_glr_plot_rhi_data_overlay_thumb.png
+     :alt: Create an RHI plot with reflectivity contour lines from an MDV file
+
+     :ref:`sphx_glr_examples_plotting_plot_rhi_data_overlay.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/plotting/plot_rhi_data_overlay
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="An example which creates an RHI plot of reflectivity using a RadarDisplay object and adding dif...">
+
+.. only:: html
+
+ .. figure:: /examples/plotting/images/thumb/sphx_glr_plot_rhi_contours_differential_reflectivity_thumb.png
+     :alt: Create an RHI plot with reflectivity contour lines from an MDV file
+
+     :ref:`sphx_glr_examples_plotting_plot_rhi_contours_differential_reflectivity.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/plotting/plot_rhi_contours_differential_reflectivity
+.. raw:: html
+
+    <div class="sphx-glr-clear"></div>
+
+
+
+.. only :: html
+
+ .. container:: sphx-glr-footer
+    :class: sphx-glr-footer-gallery
+
+
+  .. container:: sphx-glr-download sphx-glr-download-python
+
+    :download:`Download all examples in Python source code: examples_python.zip </examples/examples_python.zip>`
+
+
+
+  .. container:: sphx-glr-download sphx-glr-download-jupyter
+
+    :download:`Download all examples in Jupyter notebooks: examples_jupyter.zip </examples/examples_jupyter.zip>`
+
+
+.. only:: html
+
+ .. rst-class:: sphx-glr-signature
+
+    `Gallery generated by Sphinx-Gallery <https://sphinx-gallery.github.io>`_

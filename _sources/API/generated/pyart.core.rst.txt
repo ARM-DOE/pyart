@@ -1,0 +1,47 @@
+﻿pyart.core
+==========
+
+.. rubric:: Description
+
+.. automodule:: pyart.core
+
+.. currentmodule:: pyart.core
+
+
+.. rubric:: Classes
+
+.. autosummary::
+    :toctree: .
+    
+    Grid
+    
+    HorizontalWindProfile
+    
+    Radar
+    
+    RadarSpectra
+    
+
+
+
+
+.. rubric:: Functions
+
+.. autosummary::
+    :toctree: .
+    
+    antenna_to_cartesian
+    
+    antenna_vectors_to_cartesian
+    
+    cartesian_to_geographic
+    
+    cartesian_to_geographic_aeqd
+    
+    cartesian_vectors_to_geographic
+    
+    geographic_to_cartesian
+    
+    geographic_to_cartesian_aeqd
+    
+

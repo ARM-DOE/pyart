@@ -1,0 +1,6 @@
+pyart.core.RadarSpectra.nrays
+=============================
+
+.. currentmodule:: pyart.core
+
+.. autoproperty:: RadarSpectra.nrays

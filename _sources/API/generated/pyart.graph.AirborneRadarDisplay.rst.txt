@@ -1,0 +1,50 @@
+pyart.graph.AirborneRadarDisplay
+================================
+
+.. currentmodule:: pyart.graph
+
+.. autoclass:: AirborneRadarDisplay
+
+   
+
+.. HACK -- the point here is that we don't want this to appear in the output, but the autosummary should still generate the pages.
+
+.. autosummary::
+   :toctree:
+
+
+   ~AirborneRadarDisplay.generate_az_rhi_title
+   ~AirborneRadarDisplay.generate_filename
+   ~AirborneRadarDisplay.generate_ray_title
+   ~AirborneRadarDisplay.generate_title
+   ~AirborneRadarDisplay.generate_vpt_title
+   ~AirborneRadarDisplay.label_xaxis_r
+   ~AirborneRadarDisplay.label_xaxis_rays
+   ~AirborneRadarDisplay.label_xaxis_time
+   ~AirborneRadarDisplay.label_xaxis_x
+   ~AirborneRadarDisplay.label_yaxis_field
+   ~AirborneRadarDisplay.label_yaxis_y
+   ~AirborneRadarDisplay.label_yaxis_z
+   ~AirborneRadarDisplay.plot
+   ~AirborneRadarDisplay.plot_azimuth_to_rhi
+   ~AirborneRadarDisplay.plot_colorbar
+   ~AirborneRadarDisplay.plot_cr_raster
+   ~AirborneRadarDisplay.plot_cross_hair
+   ~AirborneRadarDisplay.plot_grid_lines
+   ~AirborneRadarDisplay.plot_label
+   ~AirborneRadarDisplay.plot_labels
+   ~AirborneRadarDisplay.plot_ppi
+   ~AirborneRadarDisplay.plot_range_ring
+   ~AirborneRadarDisplay.plot_range_rings
+   ~AirborneRadarDisplay.plot_ray
+   ~AirborneRadarDisplay.plot_rhi
+   ~AirborneRadarDisplay.plot_sweep_grid
+   ~AirborneRadarDisplay.plot_vpt
+   ~AirborneRadarDisplay.set_aspect_ratio
+   ~AirborneRadarDisplay.set_limits
+
+
+
+
+   
+

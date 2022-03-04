@@ -1,0 +1,35 @@
+﻿pyart.filters
+=============
+
+.. rubric:: Description
+
+.. automodule:: pyart.filters
+
+.. currentmodule:: pyart.filters
+
+
+.. rubric:: Classes
+
+.. autosummary::
+    :toctree: .
+    
+    GateFilter
+    
+
+
+
+
+.. rubric:: Functions
+
+.. autosummary::
+    :toctree: .
+    
+    iso0_based_gate_filter
+    
+    moment_and_texture_based_gate_filter
+    
+    moment_based_gate_filter
+    
+    temp_based_gate_filter
+    
+

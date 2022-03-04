@@ -1,0 +1,53 @@
+﻿pyart.correct
+=============
+
+.. rubric:: Description
+
+.. automodule:: pyart.correct
+
+.. currentmodule:: pyart.correct
+
+
+.. rubric:: Classes
+
+.. autosummary::
+    :toctree: .
+    
+    GateFilter
+    
+
+
+
+
+.. rubric:: Functions
+
+.. autosummary::
+    :toctree: .
+    
+    calculate_attenuation
+    
+    calculate_attenuation_philinear
+    
+    calculate_attenuation_zphi
+    
+    correct_bias
+    
+    correct_noise_rhohv
+    
+    dealias_fourdd
+    
+    dealias_region_based
+    
+    dealias_unwrap_phase
+    
+    despeckle_field
+    
+    find_objects
+    
+    moment_based_gate_filter
+    
+    phase_proc_lp
+    
+    phase_proc_lp_gf
+    
+

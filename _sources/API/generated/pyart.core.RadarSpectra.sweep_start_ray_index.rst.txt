@@ -1,0 +1,6 @@
+pyart.core.RadarSpectra.sweep\_start\_ray\_index
+================================================
+
+.. currentmodule:: pyart.core
+
+.. autoproperty:: RadarSpectra.sweep_start_ray_index
