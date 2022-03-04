@@ -15,16 +15,19 @@ print(__doc__)
 import numpy as np
 import matplotlib.pyplot as plt
 import pyart
+from pyart.testing import get_test_data
+
+file = get_test_data('095636.mdv')
 
 # perform LP phase processing (this takes a while)
-radar = pyart.io.read_mdv('095636.mdv')
+radar = pyart.io.read_mdv(file)
 
 # the next line force only the first sweep to be processed, this
 # significantly speeds up the calculation but should be commented out
 # in production so that the entire volume is processed
 radar = radar.extract_sweeps([0])
 
-phidp, kdp = pyart.correct.phase_proc_lp(radar, 0.0, debug=True)
+phidp, kdp = pyart.correct.phase_proc_lp(radar, 0.0, LP_solver='cvxopt', debug=True)
 radar.add_field('corrected_differential_phase', phidp)
 radar.add_field('corrected_specific_diff_phase', kdp)
 
