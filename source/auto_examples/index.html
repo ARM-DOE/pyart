@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Moment correction examples &mdash; Py-ART 1.11.7.dev+2e7083f documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/copybutton.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery-binder.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery-dataframe.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery-rendered-html.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/clipboard.min.js"></script>
+        <script src="../../_static/copybutton.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex/" />
+    <link rel="search" title="Search" href="../../search/" />
+    <link rel="next" title="Correct reflectivity attenuation" href="correct/plot_attenuation/" />
+    <link rel="prev" title="pyart._debug_info" href="../../API/generated/pyart._debug_info/" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../" class="icon icon-home"> Py-ART
+          </a>
+              <div class="version">
+                1.11.7.dev+2e7083f
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search/" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../API/">API Reference Manual</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Moment correction examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="correct/plot_attenuation/">Correct reflectivity attenuation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="correct/plot_dealias/">Dealias doppler velocities using the FourDD algorithm</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#mapping-examples">Mapping examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="mapping/plot_map_one_radar_to_grid/">Map a single radar to a Cartesian grid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mapping/plot_map_two_radars_to_grid/">Map two radars to a Cartesian grid</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#plotting-examples">Plotting examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="plotting/plot_rhi_mdv/">Create a RHI plot from a MDV file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plotting/plot_ppi_sigmet/">Create a PPI plot from a Sigmet file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plotting/plot_xsect/">Plot a cross section from  a PPI volume</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plotting/plot_nexrad_reflectivity/">Create a plot of NEXRAD reflectivity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plotting/plot_ppi_mdv/">Create a PPI plot from a MDV file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plotting/plot_rhi_sigmet/">Create a RHI plot from a Sigmet file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plotting/plot_rhi_two_panel/">Create a two panel RHI plot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plotting/plot_nexrad_multiple_moments/">Create a plot of multiple moments from a NEXRAD file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plotting/plot_rhi_cfradial/">Create a multiple panel RHI plot from a CF/Radial file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plotting/plot_three_panel_gridmapdisplay/">Create a 3 panel plot using GridMapDisplay</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plotting/plot_ppi_with_rings/">Create a PPI plot on a cartopy map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plotting/plot_rhi_data_overlay/">Create an RHI plot with reflectivity contour lines from an MDV file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plotting/plot_rhi_contours_differential_reflectivity/">Create an RHI plot with reflectivity contour lines from an MDV file</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../INSTALL/">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../setting_up_an_environment/">Setting up an Environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributors_guide/">Contributor’s Guide</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Downloads</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://anaconda.org/conda-forge/arm_pyart">Anaconda Cloud</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/ARM-DOE/pyart">GitHub Repo</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/ARM-DOE/pyart/archive/master.zip">Zip File of Repository</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Notebooks</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/basic_ingest_using_test_radar_object/">Creating a basic ingest of a NetCDF file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/changing_fields_and_saving/">Field manipulation and Saving the Radar Object to a file.</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/dealiasing_velocity/">Dealiasing Velocity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/mapping_data_to_a_cartesian_grid/">Mapping Data to a Cartesian Grid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/masking_data_with_gatefilters/">Masking Data With Py-ART Gatefilters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks/the_pyart_radar_object_and_indexing/">The Py-ART Radar object and indexing</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Help</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/ARM-DOE/pyart/issues">GitHub Issue Tracker</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://groups.google.com/forum/#!forum/pyart-users">Mailing List</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Science Lead</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://www.anl.gov/profile/scott-m-collis">Scott Collis</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../">Py-ART</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../" class="icon icon-home"></a> &raquo;</li>
+      <li>Moment correction examples</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/source/auto_examples/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<p id="sphx-glr-source-auto-examples">The files used in these examples are available for <a class="reference external" href="https://engineering.arm.gov/~jhelmus/pyart_example_data/">download</a>.</p>
+<div class="sphx-glr-clear"></div><section id="moment-correction-examples">
+<span id="moment-correct-examples"></span><span id="sphx-glr-source-auto-examples-correct"></span><h1>Moment correction examples<a class="headerlink" href="#moment-correction-examples" title="Permalink to this headline">¶</a></h1>
+<p>Performing radar moment corrections in antenna (radial) coordinates.</p>
+<div class="sphx-glr-thumbcontainer" tooltip="In this example the reflectivity attenuation is calculated and then corrected for a polarimetri..."><figure class="align-default" id="id3">
+<img alt="Correct reflectivity attenuation" src="../../_images/sphx_glr_plot_attenuation_thumb.png" />
+<figcaption>
+<p><span class="caption-text"><a class="reference internal" href="correct/plot_attenuation/#sphx-glr-source-auto-examples-correct-plot-attenuation-py"><span class="std std-ref">Correct reflectivity attenuation</span></a></span><a class="headerlink" href="#id3" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="In this example doppler velocities are dealiased using the Univ. of Washington FourDD algorithm..."><figure class="align-default" id="id4">
+<img alt="Dealias doppler velocities using the FourDD algorithm" src="../../_images/sphx_glr_plot_dealias_thumb.png" />
+<figcaption>
+<p><span class="caption-text"><a class="reference internal" href="correct/plot_dealias/#sphx-glr-source-auto-examples-correct-plot-dealias-py"><span class="std std-ref">Dealias doppler velocities using the FourDD algorithm</span></a></span><a class="headerlink" href="#id4" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-clear"></div></section>
+<section id="mapping-examples">
+<span id="sphx-glr-source-auto-examples-mapping"></span><span id="id1"></span><h1>Mapping examples<a class="headerlink" href="#mapping-examples" title="Permalink to this headline">¶</a></h1>
+<p>Mapping one or multiple radars from antenna coordinates to a Cartesian grid.</p>
+<div class="sphx-glr-thumbcontainer" tooltip="Map the reflectivity field of a single radar from Antenna coordinates to a Cartesian grid."><figure class="align-default" id="id5">
+<img alt="Map a single radar to a Cartesian grid" src="../../_images/sphx_glr_plot_map_one_radar_to_grid_thumb.png" />
+<figcaption>
+<p><span class="caption-text"><a class="reference internal" href="mapping/plot_map_one_radar_to_grid/#sphx-glr-source-auto-examples-mapping-plot-map-one-radar-to-grid-py"><span class="std std-ref">Map a single radar to a Cartesian grid</span></a></span><a class="headerlink" href="#id5" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="Map the reflectivity field of two nearby ARM XSARP radars from antenna coordinates to a Cartesi..."><figure class="align-default" id="id6">
+<img alt="Map two radars to a Cartesian grid" src="../../_images/sphx_glr_plot_map_two_radars_to_grid_thumb.png" />
+<figcaption>
+<p><span class="caption-text"><a class="reference internal" href="mapping/plot_map_two_radars_to_grid/#sphx-glr-source-auto-examples-mapping-plot-map-two-radars-to-grid-py"><span class="std std-ref">Map two radars to a Cartesian grid</span></a></span><a class="headerlink" href="#id6" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-clear"></div></section>
+<section id="plotting-examples">
+<span id="sphx-glr-source-auto-examples-plotting"></span><span id="id2"></span><h1>Plotting examples<a class="headerlink" href="#plotting-examples" title="Permalink to this headline">¶</a></h1>
+<p>Plotting real world radar data with Py-ART.</p>
+<div class="sphx-glr-thumbcontainer" tooltip="An example which creates a RHI plot of a MDV file using a RadarDisplay object."><figure class="align-default" id="id7">
+<img alt="Create a RHI plot from a MDV file" src="../../_images/sphx_glr_plot_rhi_mdv_thumb.png" />
+<figcaption>
+<p><span class="caption-text"><a class="reference internal" href="plotting/plot_rhi_mdv/#sphx-glr-source-auto-examples-plotting-plot-rhi-mdv-py"><span class="std std-ref">Create a RHI plot from a MDV file</span></a></span><a class="headerlink" href="#id7" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="An example which creates a PPI plot of a Sigmet file."><figure class="align-default" id="id8">
+<img alt="Create a PPI plot from a Sigmet file" src="../../_images/sphx_glr_plot_ppi_sigmet_thumb.png" />
+<figcaption>
+<p><span class="caption-text"><a class="reference internal" href="plotting/plot_ppi_sigmet/#sphx-glr-source-auto-examples-plotting-plot-ppi-sigmet-py"><span class="std std-ref">Create a PPI plot from a Sigmet file</span></a></span><a class="headerlink" href="#id8" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="An example which extracts a cross section at two azimuth angles from a volume of PPI scans and ..."><figure class="align-default" id="id9">
+<img alt="Plot a cross section from  a PPI volume" src="../../_images/sphx_glr_plot_xsect_thumb.png" />
+<figcaption>
+<p><span class="caption-text"><a class="reference internal" href="plotting/plot_xsect/#sphx-glr-source-auto-examples-plotting-plot-xsect-py"><span class="std std-ref">Plot a cross section from  a PPI volume</span></a></span><a class="headerlink" href="#id9" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="An example which creates a plot containing the first collected scan from a NEXRAD file."><figure class="align-default" id="id10">
+<img alt="Create a plot of NEXRAD reflectivity" src="../../_images/sphx_glr_plot_nexrad_reflectivity_thumb.png" />
+<figcaption>
+<p><span class="caption-text"><a class="reference internal" href="plotting/plot_nexrad_reflectivity/#sphx-glr-source-auto-examples-plotting-plot-nexrad-reflectivity-py"><span class="std std-ref">Create a plot of NEXRAD reflectivity</span></a></span><a class="headerlink" href="#id10" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="An example which creates a PPI plot of a MDV file using a RadarDisplay object."><figure class="align-default" id="id11">
+<img alt="Create a PPI plot from a MDV file" src="../../_images/sphx_glr_plot_ppi_mdv_thumb.png" />
+<figcaption>
+<p><span class="caption-text"><a class="reference internal" href="plotting/plot_ppi_mdv/#sphx-glr-source-auto-examples-plotting-plot-ppi-mdv-py"><span class="std std-ref">Create a PPI plot from a MDV file</span></a></span><a class="headerlink" href="#id11" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="An example which creates a RHI plot of a Sigmet file using a RadarDisplay object."><figure class="align-default" id="id12">
+<img alt="Create a RHI plot from a Sigmet file" src="../../_images/sphx_glr_plot_rhi_sigmet_thumb.png" />
+<figcaption>
+<p><span class="caption-text"><a class="reference internal" href="plotting/plot_rhi_sigmet/#sphx-glr-source-auto-examples-plotting-plot-rhi-sigmet-py"><span class="std std-ref">Create a RHI plot from a Sigmet file</span></a></span><a class="headerlink" href="#id12" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="An example which creates a two panel RHI plot of a Sigmet file.  The fields included in the two..."><figure class="align-default" id="id13">
+<img alt="Create a two panel RHI plot" src="../../_images/sphx_glr_plot_rhi_two_panel_thumb.png" />
+<figcaption>
+<p><span class="caption-text"><a class="reference internal" href="plotting/plot_rhi_two_panel/#sphx-glr-source-auto-examples-plotting-plot-rhi-two-panel-py"><span class="std std-ref">Create a two panel RHI plot</span></a></span><a class="headerlink" href="#id13" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="An example which creates a plot containing multiple moments taken from a NEXRAD Archive file."><figure class="align-default" id="id14">
+<img alt="Create a plot of multiple moments from a NEXRAD file" src="../../_images/sphx_glr_plot_nexrad_multiple_moments_thumb.png" />
+<figcaption>
+<p><span class="caption-text"><a class="reference internal" href="plotting/plot_nexrad_multiple_moments/#sphx-glr-source-auto-examples-plotting-plot-nexrad-multiple-moments-py"><span class="std std-ref">Create a plot of multiple moments from a NEXRAD file</span></a></span><a class="headerlink" href="#id14" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="An example which creates a multiple panel RHI plot of a CF/Radial file using a RadarDisplay obj..."><figure class="align-default" id="id15">
+<img alt="Create a multiple panel RHI plot from a CF/Radial file" src="../../_images/sphx_glr_plot_rhi_cfradial_thumb.png" />
+<figcaption>
+<p><span class="caption-text"><a class="reference internal" href="plotting/plot_rhi_cfradial/#sphx-glr-source-auto-examples-plotting-plot-rhi-cfradial-py"><span class="std std-ref">Create a multiple panel RHI plot from a CF/Radial file</span></a></span><a class="headerlink" href="#id15" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="An example that creates a 3 panel plot of a PPI, latitude slice, and longitude slice using xarr..."><figure class="align-default" id="id16">
+<img alt="Create a 3 panel plot using GridMapDisplay" src="../../_images/sphx_glr_plot_three_panel_gridmapdisplay_thumb.png" />
+<figcaption>
+<p><span class="caption-text"><a class="reference internal" href="plotting/plot_three_panel_gridmapdisplay/#sphx-glr-source-auto-examples-plotting-plot-three-panel-gridmapdisplay-py"><span class="std std-ref">Create a 3 panel plot using GridMapDisplay</span></a></span><a class="headerlink" href="#id16" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="An example which creates a PPI plot of a file with a cartopy background and range rings"><figure class="align-default" id="id17">
+<img alt="Create a PPI plot on a cartopy map" src="../../_images/sphx_glr_plot_ppi_with_rings_thumb.png" />
+<figcaption>
+<p><span class="caption-text"><a class="reference internal" href="plotting/plot_ppi_with_rings/#sphx-glr-source-auto-examples-plotting-plot-ppi-with-rings-py"><span class="std std-ref">Create a PPI plot on a cartopy map</span></a></span><a class="headerlink" href="#id17" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="An example which creates an RHI plot of velocity using a RadarDisplay object and adding Reflect..."><figure class="align-default" id="id18">
+<img alt="Create an RHI plot with reflectivity contour lines from an MDV file" src="../../_images/sphx_glr_plot_rhi_data_overlay_thumb.png" />
+<figcaption>
+<p><span class="caption-text"><a class="reference internal" href="plotting/plot_rhi_data_overlay/#sphx-glr-source-auto-examples-plotting-plot-rhi-data-overlay-py"><span class="std std-ref">Create an RHI plot with reflectivity contour lines from an MDV file</span></a></span><a class="headerlink" href="#id18" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="An example which creates an RHI plot of reflectivity using a RadarDisplay object and adding dif..."><figure class="align-default" id="id19">
+<img alt="Create an RHI plot with reflectivity contour lines from an MDV file" src="../../_images/sphx_glr_plot_rhi_contours_differential_reflectivity_thumb.png" />
+<figcaption>
+<p><span class="caption-text"><a class="reference internal" href="plotting/plot_rhi_contours_differential_reflectivity/#sphx-glr-source-auto-examples-plotting-plot-rhi-contours-differential-reflectivity-py"><span class="std std-ref">Create an RHI plot with reflectivity contour lines from an MDV file</span></a></span><a class="headerlink" href="#id19" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-clear"></div><div class="sphx-glr-footer class sphx-glr-footer-gallery docutils container">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/7417f3bcb6ced8c409e5ef6b289cb6fd/auto_examples_python.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">all</span> <span class="pre">examples</span> <span class="pre">in</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">auto_examples_python.zip</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/0a2aa0c4f58078fa414bc2940e859b4f/auto_examples_jupyter.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">all</span> <span class="pre">examples</span> <span class="pre">in</span> <span class="pre">Jupyter</span> <span class="pre">notebooks:</span> <span class="pre">auto_examples_jupyter.zip</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../../API/generated/pyart._debug_info/" class="btn btn-neutral float-left" title="pyart._debug_info" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="correct/plot_attenuation/" class="btn btn-neutral float-right" title="Correct reflectivity attenuation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2013-2020, Py-ART developers.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+    <!-- Theme Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-221367849-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-221367849-1', {
+          'anonymize_ip': false,
+      });
+    </script> 
+
+</body>
+</html>
