@@ -1,6 +1,0 @@
-pyart.core.RadarSpectra.projection
-==================================
-
-.. currentmodule:: pyart.core
-
-.. autoproperty:: RadarSpectra.projection

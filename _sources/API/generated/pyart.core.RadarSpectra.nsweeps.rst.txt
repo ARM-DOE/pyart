@@ -1,6 +1,0 @@
-pyart.core.RadarSpectra.nsweeps
-===============================
-
-.. currentmodule:: pyart.core
-
-.. autoproperty:: RadarSpectra.nsweeps

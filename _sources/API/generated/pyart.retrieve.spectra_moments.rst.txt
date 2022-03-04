@@ -1,6 +1,0 @@
-pyart.retrieve.spectra\_moments
-===============================
-
-.. currentmodule:: pyart.retrieve
-
-.. autofunction:: spectra_moments

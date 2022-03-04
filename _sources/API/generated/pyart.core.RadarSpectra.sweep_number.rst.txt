@@ -1,6 +1,0 @@
-pyart.core.RadarSpectra.sweep\_number
-=====================================
-
-.. currentmodule:: pyart.core
-
-.. autoproperty:: RadarSpectra.sweep_number
