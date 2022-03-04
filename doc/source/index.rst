@@ -8,7 +8,7 @@ The Python ARM Radar Toolkit - Py-ART
    :caption: Documentation
 
    API/index.rst
-   source/auto_examples/index.rst
+   examples/index.rst
    INSTALL
    setting_up_an_environment
    contributors_guide

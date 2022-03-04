@@ -55,7 +55,7 @@ exclude_patterns = ['_build', '**.ipynb_checkpoints']
 extensions.append('sphinx_gallery.gen_gallery')
 sphinx_gallery_conf = {
     'examples_dirs': '../../examples',
-    'gallery_dirs': 'source/auto_examples'
+    'gallery_dirs': 'examples'
 }
 
 
@@ -63,6 +63,8 @@ sphinx_gallery_conf = {
 # https://github.com/matplotlib/matplotlib/blob/f3ed922d935751e08494e5fb5311d3050a3b637b/lib/matplotlib/sphinxext/plot_directive.py#L81
 plot_html_show_source_link = False
 plot_html_show_formats = False
+plot_formats = ['png']
+plot_rcparams = {'savefig.bbox': 'tight'}
 
 # Generate the API documentation when building
 autoclass_content = "both"
@@ -166,6 +168,18 @@ html_sidebars = {
     ]
 }
 
+# Extra variables that will be available to the templates. Used to create the
+# links to the Github repository sources and issues
+html_context = {
+    'doc_path': 'doc',
+    'galleries': sphinx_gallery_conf['gallery_dirs'],
+    'gallery_dir': dict(zip(sphinx_gallery_conf['gallery_dirs'],
+                            sphinx_gallery_conf['examples_dirs'])),
+    'api_dir': 'API/generated',
+    'github_user': 'ARM-DOE',
+    'github_repo': 'pyart',
+    'github_version': 'master',  # Make changes to the main branch
+}
 
 # -- Options for HTMLHelp output ------------------------------------------
 
