@@ -20,8 +20,8 @@ Important Links
 ---------------
 
 - Official source code repository: https://github.com/ARM-DOE/pyart
-- HTML documentation: http://arm-doe.github.io/pyart-docs-travis/
-- Examples: http://arm-doe.github.io/pyart/dev/auto_examples/index.html
+- HTML documentation: https://arm-doe.github.io/pyart
+- Examples: https://arm-doe.github.io/pyart/examples/
 - Mailing List: http://groups.google.com/group/pyart-users/
 - Issue Tracker: https://github.com/ARM-DOE/pyart/issues
 
@@ -69,7 +69,7 @@ Pyart:
 - https://github.com/openradar/AMS-Short-Course-on-Open-Source-Radar-Software
 - https://github.com/EVS-ATMOS/pyart_short_course
 - https://www.youtube.com/watch?v=diiP-Q3bKZw
-- http://arm-doe.github.io/pyart/dev/auto_examples/index.html
+- https://arm-doe.github.io/pyart/examples/
 
 Git:
 
