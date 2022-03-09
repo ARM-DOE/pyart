@@ -17,7 +17,7 @@ jobs:
   build:
     name: python-${{ matrix.os }}-${{ matrix.python-version }}
     if: github.repository == 'ARM-DOE/pyart'
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}-latest
     defaults:
       run:
         shell: bash -l {0}
@@ -25,7 +25,7 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ["3.7", "3.8", "3.9", "3.10"]
-        os: [Windows, macos-latest]
+        os: [macOS, Windows]
         inlcude:
           - os: macos-latest
             PLAT: arm64
