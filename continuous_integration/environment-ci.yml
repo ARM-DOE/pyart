@@ -1,4 +1,4 @@
-name: testenv
+name: pyart-dev
 channels:
   - conda-forge
   - defaults
@@ -15,3 +15,7 @@ dependencies:
   - cartopy
   - cvxopt
   - xarray
+  - pytest-cov
+  - coveralls
+  - flake8
+  - pytest
