@@ -1,6 +1,9 @@
 name: CI
 
 on:
+  schedule:
+  # Runs at 09Z (2am CDT)
+    - cron: "0 9 * * *"
   push:
     branches:
       - main
