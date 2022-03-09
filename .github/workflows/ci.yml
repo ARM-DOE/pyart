@@ -63,4 +63,4 @@ jobs:
         env:
           RSL_PATH: ${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-3
         run: |
-          python -m pytest
+          python -m pytest -v --pyargs pyart
