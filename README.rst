@@ -2,7 +2,7 @@
 The Python ARM Radar Toolkit (Py-ART)
 =====================================
 
-|Travis| |AppVeyor|
+|GithubCI| |CodeCovStatus|
 
 |AnacondaCloud| |CondaDownloads|
 
@@ -10,11 +10,11 @@ The Python ARM Radar Toolkit (Py-ART)
 
 |ARM| |Tweet|
 
-.. |Travis| image:: https://app.travis-ci.com/ARM-DOE/pyart.svg?branch=main
-    :target: https://app.travis-ci.com/github/ARM-DOE/pyart
+.. |GithubCI| image:: https://img.shields.io/github/workflow/status/ARM-DOE/pyart/CI?label=CI&logo=github
+    :target: https://github.com/ARM-DOE/pyart/actions?query=workflow%3ACI
 
-.. |AppVeyor| image:: https://ci.appveyor.com/api/projects/status/9do57qycha65j4v9/branch/master?svg=true
-    :target: https://ci.appveyor.com/project/JonathanHelmus/pyart-l711v/branch/master
+.. |CodeCovStatus| image:: https://img.shields.io/codecov/c/github/ARM-DOE/pyart.svg?logo=codecov
+    :target: https://codecov.io/gh/ARM-DOE/pyart
 
 .. |AnacondaCloud| image:: https://anaconda.org/conda-forge/arm_pyart/badges/version.svg
     :target: https://anaconda.org/conda-forge/arm_pyart

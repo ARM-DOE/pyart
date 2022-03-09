@@ -24,8 +24,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.7", "3.8", "3.9", "3.10"]
-        os: [macOS, Windows]
+        python-version: ["3.6", "3.7", "3.8", "3.9", "3.10"]
+        os: [macOS, linux, Windows]
         inlcude:
           - os: macos-latest
             PLAT: arm64
@@ -64,3 +64,12 @@ jobs:
           RSL_PATH: ${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-3
         run: |
           python -m pytest -v --pyargs pyart
+
+      - name: Upload code coverage to Codecov
+        uses: codecov/codecov-action@v2.1.0
+        with:
+          file: ./coverage.xml
+          flags: unittests
+          env_vars: OS,PYTHON
+          name: codecov-umbrella
+          fail_ci_if_error: false
