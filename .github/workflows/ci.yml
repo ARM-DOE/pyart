@@ -16,6 +16,7 @@ concurrency:
 jobs:
   build:
     name: python-${{ matrix.os }}-${{ matrix.python-version }}
+    if: github.repository == 'ARM-DOE/pyart'
     runs-on: ubuntu-latest
     defaults:
       run:
