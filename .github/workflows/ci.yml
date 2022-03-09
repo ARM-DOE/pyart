@@ -59,7 +59,7 @@ jobs:
           python -m flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
       
       - name: Run Tests
-        id: run tests
+        id: run_tests
         env:
           RSL_PATH: ${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-3
         run: |
