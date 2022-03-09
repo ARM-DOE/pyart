@@ -28,7 +28,8 @@ NOXP_FIELD_NAMES = {
 
 
 def read_noxp_iphex_nc(filename, field_names=None, additional_metadata=None,
-                       file_field_names=False, exclude_fields=None, **kwargs):
+                       file_field_names=False, exclude_fields=None,
+                       include_fields=None, **kwargs):
     """
     Read a NOXP IPHEX netCDF file.
 
