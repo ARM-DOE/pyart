@@ -127,5 +127,5 @@ def test_error_raising_basemap():
 
 
 if __name__ == "__main__":
-    test_gridmapdisplay_simple('figure_gridmapdisplay_simple_basemap.png')
-    test_gridmapdisplay_fancy('figure_gridmapdisplay_fancy_basemap.png')
+    test_gridmapdisplay_simple_basemap('figure_gridmapdisplay_simple_basemap.png')
+    test_gridmapdisplay_fancy_basemap('figure_gridmapdisplay_fancy_basemap.png')

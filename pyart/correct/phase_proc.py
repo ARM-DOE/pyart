@@ -196,7 +196,7 @@ def smooth_masked(raw_data, wind_len=11, min_valid=6, wind_type='median'):
     valid_wind = ['median', 'mean']
     if wind_type not in valid_wind:
         raise ValueError(
-            "Window " + win_type + " is none of " + ' '.join(valid_wind))
+            "Window " + wind_type + " is none of " + ' '.join(valid_wind))
 
     # we want an odd window
     if wind_len % 2 == 0:
