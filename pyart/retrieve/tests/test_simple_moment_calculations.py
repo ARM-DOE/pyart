@@ -14,13 +14,13 @@ foo_field = {'data': np.zeros(
 test_radar.add_field('reflectivity', foo_field)
 
 
-def test_calculate_snr_from_reflectivity(test_radar):
+def test_calculate_snr_from_reflectivity(test_radar=test_radar):
     """Test the calculate_snr_from_reflectivity function from pyart.retrieve"""
     snr = pyart.retrieve.calculate_snr_from_reflectivity(test_radar, toa=500)
     assert snr['data'].mean() < 1e-6
 
 
-def test_compute_noisedBZ(test_radar):
+def test_compute_noisedBZ(test_radar=test_radar):
     """Test the compute_noisedBZ function from pyart.retrieve"""
     noise = pyart.retrieve.compute_noisedBZ(nrays=test_radar.nrays,
                                             noisedBZ_val=1.,
@@ -32,7 +32,7 @@ def test_compute_noisedBZ(test_radar):
     assert noise['data'].max() < 45.
 
 
-def test_compute_snr(test_radar):
+def test_compute_snr(test_radar=test_radar):
     noise = pyart.retrieve.compute_noisedBZ(nrays=test_radar.nrays,
                                             noisedBZ_val=1.,
                                             _range=test_radar.range['data'],
