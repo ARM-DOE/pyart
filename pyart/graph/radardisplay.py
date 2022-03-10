@@ -10,8 +10,6 @@ from matplotlib.dates import DateFormatter
 import numpy as np
 import netCDF4
 from scipy.interpolate import griddata
-from pandas.plotting import register_matplotlib_converters
-register_matplotlib_converters()
 
 from . import common
 from ..core.transforms import antenna_to_cartesian
