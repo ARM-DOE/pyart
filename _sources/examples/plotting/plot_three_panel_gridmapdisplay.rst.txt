@@ -26,7 +26,7 @@ An example that creates a 3 panel plot of a PPI, latitude slice,
 and longitude slice using xarray and a cartopy background.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 10-69
+.. GENERATED FROM PYTHON SOURCE LINES 10-72
 
 
 
@@ -78,6 +78,7 @@ and longitude slice using xarray and a cartopy background.
     # Panel 1: PPI plot of the second tilt.
     ax1 = fig.add_axes(map_panel_axes, projection=projection)
     display.plot_grid('REF', 1, vmin=vmin, vmax=vmax,
+                      ax=ax1,
                       projection=projection,
                       cmap='pyart_HomeyerRainbow')
     display.plot_crosshairs(lon=lon, lat=lat)
@@ -85,6 +86,7 @@ and longitude slice using xarray and a cartopy background.
     # Panel 2: longitude slice
     ax2 = fig.add_axes(x_cut_panel_axes)
     display.plot_longitude_slice('REF', lon=lon, lat=lat,
+                                 ax=ax2,
                                  vmin=vmin, vmax=vmax,
                                  cmap='pyart_HomeyerRainbow')
 
@@ -94,6 +96,7 @@ and longitude slice using xarray and a cartopy background.
     # Panel 3: latitude slice
     ax3 = fig.add_axes(y_cut_panel_axes)
     display.plot_latitude_slice('REF', lon=lon, lat=lat,
+                                ax=ax3,
                                 vmin=vmin, vmax=vmax,
                                 cmap='pyart_HomeyerRainbow')
     ax3.set_ylim([0, 15])
@@ -104,7 +107,7 @@ and longitude slice using xarray and a cartopy background.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  13.159 seconds)
+   **Total running time of the script:** ( 0 minutes  13.569 seconds)
 
 
 .. _sphx_glr_download_examples_plotting_plot_three_panel_gridmapdisplay.py:
