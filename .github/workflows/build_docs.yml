@@ -4,9 +4,11 @@ on:
   push:
     branches:
       - main
+      - add-pydata-theme
   pull_request:
     branches:
       - main
+      - add-pydata-theme
 
 # This job installs dependencies, build the website, and pushes it to `gh-pages`
 jobs:
@@ -49,8 +51,8 @@ jobs:
       # Push the book's HTML to github-pages
       - name: GitHub Pages action
         uses: peaceiris/actions-gh-pages@v3.8.0
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/add-pydata-theme'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: doc/build/html
-          cname: https://arm-doe.github.io/pyart/
+          cname: https:/mgrover1.github.io/pyart/

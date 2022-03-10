@@ -17,6 +17,7 @@ dependencies:
   - cvxopt
   - xarray
   - sphinx
+  - pydata-sphinx-theme>=0.4.3
   - ipython
   - pandoc
   - netcdf4

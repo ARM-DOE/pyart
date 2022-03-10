@@ -93,7 +93,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'Py-ART'
-copyright = '2013-2020, Py-ART developers'
+copyright = '2013-2022, Py-ART developers'
 author = 'Py-ART developers'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -139,7 +139,7 @@ todo_include_todos = False
 # a list of builtin themes.
 #
 
-html_theme = 'sphinx_rtd_theme'
+html_theme = 'pydata_sphinx_theme'
 import sphinx_rtd_theme
 html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 
