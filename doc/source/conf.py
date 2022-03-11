@@ -46,7 +46,11 @@ extensions = [
     'matplotlib.sphinxext.plot_directive',
     'sphinx.ext.napoleon',
     'sphinx_copybutton',
+    'sphinx_gallery.gen_gallery',
+    'sphinx_gallery.load_style',
     'nbsphinx',
+    'myst_nb',
+    'ablog'
 ]
 
 exclude_patterns = ['_build', '**.ipynb_checkpoints']
@@ -85,15 +89,14 @@ templates_path = ['_templates']
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
 #
-# source_suffix = ['.rst', '.md']
-source_suffix = '.rst'
+source_suffix = ['.rst', '.md', '.ipynb']
 
 # The master toctree document.
 master_doc = 'index'
 
 # General information about the project.
 project = 'Py-ART'
-copyright = '2013-2020, Py-ART developers'
+copyright = '2013-2022, Py-ART developers'
 author = 'Py-ART developers'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -124,7 +127,7 @@ language = None
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This patterns also effect to html_static_path and html_extra_path
-exclude_patterns = []
+exclude_patterns = ["*.ipynb"]
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
@@ -139,22 +142,26 @@ todo_include_todos = False
 # a list of builtin themes.
 #
 
-html_theme = 'sphinx_rtd_theme'
-import sphinx_rtd_theme
-html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+html_theme = 'pydata_sphinx_theme'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
 #
 html_theme_options = {
-    'analytics_id': 'UA-221367849-1',
+    'google_analytics_id': 'UA-221367849-1',
+    "github_url": "https://github.com/ARM-DOE/pyart",
+    "twitter_url": "https://twitter.com/Py_ART",
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
+
+html_css_files = ['pyart-theme.css']
+
+html_js_files = ['doc_shared.js']
 
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.
@@ -163,10 +170,23 @@ html_static_path = ['_static']
 # refs: http://alabaster.readthedocs.io/en/latest/installation.html#sidebars
 html_sidebars = {
     '**': [
-        'relations.html',  # needs 'show_related': True theme option to display
         'searchbox.html',
+        'sidebar-nav-bs',
     ]
 }
+
+# Setup the blog portion
+blog_baseurl = 'mgrover1.github.io/pyart/'
+blog_title = 'PyART Blog'
+blog_path = 'blog'
+fontawesome_included = True
+blog_post_pattern = 'blog_posts/*/*'
+post_redirect_refresh = 1
+post_auto_image = 1
+post_auto_excerpt = 2
+
+# Don't execute the jupyter notebooks
+jupyter_execute_notebooks = 'off'
 
 # Extra variables that will be available to the templates. Used to create the
 # links to the Github repository sources and issues
@@ -178,7 +198,7 @@ html_context = {
     'api_dir': 'API/generated',
     'github_user': 'ARM-DOE',
     'github_repo': 'pyart',
-    'github_version': 'master',  # Make changes to the main branch
+    'github_version': 'main',
 }
 
 # -- Options for HTMLHelp output ------------------------------------------
