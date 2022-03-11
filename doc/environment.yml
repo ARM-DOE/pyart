@@ -17,7 +17,6 @@ dependencies:
   - cvxopt
   - xarray
   - sphinx
-  - pydata-sphinx-theme>=0.4.3
   - ipython
   - pandoc
   - netcdf4
@@ -26,8 +25,10 @@ dependencies:
   - pkg-config
   - pip
   - pip:
-      - sphinx_rtd_theme
+      - pydata-sphinx-theme
       - sphinx_gallery
       - sphinx-copybutton
+      - myst_nb
+      - ablog
       - nbsphinx
       - pooch
