@@ -26,5 +26,6 @@ from .sinarame_h5 import write_sinarame_cfradial
 from .rainbow_wrl import read_rainbow_wrl
 from .kazr_spectra import read_kazr_spectra
 from .radx_grid import read_radx_grid
+from .rxm25 import read_rxm25
 
 __all__ = [s for s in dir() if not s.startswith('_')]

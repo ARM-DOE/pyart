@@ -4,18 +4,17 @@ Routines for Ridgeline Instruments RXM-25 formatted NetCDF files.
 """
 
 import datetime
-
-import os, sys, glob
+import pytz
 
 import netCDF4
 import numpy as np
+
 import pyart
 from ..config import get_metadata
 from ..core.radar import Radar
 from ..testing import make_empty_ppi_radar
-import pytz
 
-def read_rxm25(netcdf_file, cfradial_outfile = None, heading = None):
+def read_rxm25(filename, cfradial_outfile=None, heading=None):
     """
     Read in Ridgeline Instruments RXM-25 formatted NetCDF data.
 
@@ -36,20 +35,25 @@ def read_rxm25(netcdf_file, cfradial_outfile = None, heading = None):
         Radar object.
 
     """
-    data  = netCDF4.Dataset(netcdf_file, 'r')
+    data  = netCDF4.Dataset(filename, 'r')
 
     ngates = data.dimensions['Gate'].size
     rays_per_sweep = data.dimensions['Radial'].size
     radar = make_empty_ppi_radar(ngates, rays_per_sweep, 1)
 
-    # Time needs to be converted from nss1970 to nss1989 and added to Radar object
+    # Time needs to be converted from nss1970 to nss1989 and added to
+    # Radar object.
     nineteen89 = datetime.datetime(1989, 1, 1, 0, 0, 1, tzinfo = pytz.utc)
-    baseTime = np.array([datetime.datetime.fromtimestamp(t,tz=pytz.UTC) for t in data.variables['Time'][:]])
-    radar.time['data'] = np.array([t.total_seconds() for t in baseTime - nineteen89])
+    baseTime = np.array(
+        [datetime.datetime.fromtimestamp(
+            t, tz=pytz.UTC) for t in data.variables['Time'][:]])
+    radar.time['data'] = np.array(
+        [t.total_seconds() for t in baseTime - nineteen89])
 
     if heading is not None:
         radar.heading = heading
-        radar.azimuth['data'] = np.mod(data['Azimuth'][:] - radar.heading, 360.)
+        radar.azimuth['data'] = np.mod(
+            data['Azimuth'][:] - radar.heading, 360.)
     else:
         radar.azimuth['data'] = data['Azimuth'][:]
 
@@ -66,8 +70,8 @@ def read_rxm25(netcdf_file, cfradial_outfile = None, heading = None):
 
     radar.range['data'] = np.linspace(
         data['StartRange'][0]/1000,
-       (ngates - 1)*data['GateWidth'][0]/1000 + data['StartRange'][0]/1000,
-       ngates)
+        (ngates - 1)*data['GateWidth'][0]/1000 + data['StartRange'][0]/1000,
+        ngates)
 
     ref = data['Reflectivity'][:]
     norm_pow = data['NormalizedCoherentPower'][:]
@@ -113,6 +117,7 @@ def read_rxm25(netcdf_file, cfradial_outfile = None, heading = None):
     radar.metadata['instrument_name'] = 'RXM-25'
 
     if cfradial_outfile is not None:
-        pyart.io.write_cfradial(cfradial_outfile, radar, arm_time_variables=True)
+        pyart.io.write_cfradial(
+            cfradial_outfile, radar, arm_time_variables=True)
 
     return radar
