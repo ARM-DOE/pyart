@@ -37,6 +37,8 @@
     
     read_rainbow_wrl
     
+    read_rxm25
+    
     read_sinarame_h5
     
     write_sinarame_cfradial

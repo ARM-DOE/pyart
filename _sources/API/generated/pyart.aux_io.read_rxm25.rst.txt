@@ -1,0 +1,6 @@
+pyart.aux\_io.read\_rxm25
+=========================
+
+.. currentmodule:: pyart.aux_io
+
+.. autofunction:: read_rxm25

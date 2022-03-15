@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>pyart.aux_io &#8212; Py-ART 1.11.7.dev+c592b09 documentation</title>
+    <title>pyart.aux_io &#8212; Py-ART 1.11.7.dev+70fd978 documentation</title>
     
   <link href="../../_static/css/theme.css" rel="stylesheet">
   <link href="../../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -901,6 +901,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="pyart.aux_io.read_rainbow_wrl.html">
      pyart.aux_io.read_rainbow_wrl
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="pyart.aux_io.read_rxm25.html">
+     pyart.aux_io.read_rxm25
     </a>
    </li>
    <li class="toctree-l2">
@@ -2918,10 +2923,13 @@ priority.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="pyart.aux_io.read_rainbow_wrl.html#pyart.aux_io.read_rainbow_wrl" title="pyart.aux_io.read_rainbow_wrl"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_rainbow_wrl</span></code></a>(filename[, field_names, ...])</p></td>
 <td><p>Read a RAINBOW file.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyart.aux_io.read_sinarame_h5.html#pyart.aux_io.read_sinarame_h5" title="pyart.aux_io.read_sinarame_h5"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_sinarame_h5</span></code></a>(filename[, field_names, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.aux_io.read_rxm25.html#pyart.aux_io.read_rxm25" title="pyart.aux_io.read_rxm25"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_rxm25</span></code></a>(filename[, cfradial_outfile, heading])</p></td>
+<td><p>Read in Ridgeline Instruments RXM-25 formatted NetCDF data.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.aux_io.read_sinarame_h5.html#pyart.aux_io.read_sinarame_h5" title="pyart.aux_io.read_sinarame_h5"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_sinarame_h5</span></code></a>(filename[, field_names, ...])</p></td>
 <td><p>Read a SINARAME_H5 file.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyart.aux_io.write_sinarame_cfradial.html#pyart.aux_io.write_sinarame_cfradial" title="pyart.aux_io.write_sinarame_cfradial"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_sinarame_cfradial</span></code></a>(path)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.aux_io.write_sinarame_cfradial.html#pyart.aux_io.write_sinarame_cfradial" title="pyart.aux_io.write_sinarame_cfradial"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_sinarame_cfradial</span></code></a>(path)</p></td>
 <td><p>This function takes SINARAME_H5 files (where every file has only one field and one volume) from a folder and writes a CfRadial file for each volume including all fields.</p></td>
 </tr>
 </tbody>
