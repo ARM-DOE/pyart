@@ -5,10 +5,10 @@
 
 Computation times
 =================
-**00:32.656** total execution time for **examples_mapping** files:
+**00:31.459** total execution time for **examples_mapping** files:
 
 +------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_mapping_plot_map_two_radars_to_grid.py` (``plot_map_two_radars_to_grid.py``) | 00:20.910 | 0.0 MB |
+| :ref:`sphx_glr_examples_mapping_plot_map_two_radars_to_grid.py` (``plot_map_two_radars_to_grid.py``) | 00:19.860 | 0.0 MB |
 +------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_mapping_plot_map_one_radar_to_grid.py` (``plot_map_one_radar_to_grid.py``)   | 00:11.746 | 0.0 MB |
+| :ref:`sphx_glr_examples_mapping_plot_map_one_radar_to_grid.py` (``plot_map_one_radar_to_grid.py``)   | 00:11.599 | 0.0 MB |
 +------------------------------------------------------------------------------------------------------+-----------+--------+
