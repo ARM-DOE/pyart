@@ -117,7 +117,7 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
 
     # 4.3 Global variable -> move to metadata dictionary
     if 'volume_number' in ncvars:
-        metadata['volume_number'] = int(ncvars['volume_number'][:])
+        metadata['volume_number'] = int(ncvars['volume_number'][:].flatten())
     else:
         metadata['volume_number'] = 0
 
