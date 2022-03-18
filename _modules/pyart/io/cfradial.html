@@ -350,7 +350,11 @@
 
     <span class="c1"># 4.3 Global variable -&gt; move to metadata dictionary</span>
     <span class="k">if</span> <span class="s1">&#39;volume_number&#39;</span> <span class="ow">in</span> <span class="n">ncvars</span><span class="p">:</span>
-        <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;volume_number&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">ncvars</span><span class="p">[</span><span class="s1">&#39;volume_number&#39;</span><span class="p">][:])</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">isMaskedArray</span><span class="p">(</span><span class="n">ncvars</span><span class="p">[</span><span class="s1">&#39;volume_number&#39;</span><span class="p">][:]):</span>
+            <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;volume_number&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">getdata</span><span class="p">(</span><span class="n">ncvars</span><span class="p">[</span><span class="s1">&#39;volume_number&#39;</span><span class="p">][:]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;volume_number&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">ncvars</span><span class="p">[</span><span class="s1">&#39;volume_number&#39;</span><span class="p">][:])</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;volume_number&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 
