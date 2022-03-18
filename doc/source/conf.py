@@ -149,7 +149,7 @@ html_theme = 'pydata_sphinx_theme'
 # documentation.
 #
 html_theme_options = {
-    'google_analytics_id': 'UA-221367849-1',
+    'google_analytics_id': 'G-304897822',
     "github_url": "https://github.com/ARM-DOE/pyart",
     "twitter_url": "https://twitter.com/Py_ART",
 }
