@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>mgrover1.github.io/pyart/</id>
   <title>PyART Blog</title>
-  <updated>2022-03-21T19:58:01.315358+00:00</updated>
+  <updated>2022-03-21T23:50:26.698756+00:00</updated>
   <link href="mgrover1.github.io/pyart/"/>
   <link href="mgrover1.github.io/pyart/blog/atom.xml" rel="self"/>
   <generator uri="https://ablog.readthedocs.org/" version="0.10.20">ABlog</generator>
@@ -20,5 +20,26 @@
     <summary>Hello All!Welcome to our new documentation page! This is a new section within the docs meant for:</summary>
     <category term="annoucement" label="annoucement"/>
     <published>2022-03-11T00:00:00+00:00</published>
+  </entry>
+  <entry>
+    <id>mgrover1.github.io/pyart/blog_posts/2022/ka-band-pyart-xarray-hvplot.html</id>
+    <title>Building an Intake-esm catalog from CESM2 History Files</title>
+    <updated>2022-03-21T00:00:00+00:00</updated>
+    <author>
+      <name>Max Grover</name>
+    </author>
+    <content type="html">&lt;p&gt;This notebook will walk through how to utilize existing packages in the Python ecosystem (&lt;code class="docutils literal notranslate"&gt;&lt;span class="pre"&gt;PyART&lt;/span&gt;&lt;/code&gt;, &lt;code class="docutils literal notranslate"&gt;&lt;span class="pre"&gt;Xarray&lt;/span&gt;&lt;/code&gt;, and &lt;code class="docutils literal notranslate"&gt;&lt;span class="pre"&gt;hvPlot&lt;/span&gt;&lt;/code&gt;) to visualize data from a vertically pointing Ka-band radar&lt;/p&gt;
+&lt;p&gt;Before starting up this notebook, make sure to download your data from the &lt;a class="reference external" href="https://adc.arm.gov/discovery/#/results/datastream::guckazrcfrgeM1.a1"&gt;ARM data portal&lt;/a&gt;, using this link!&lt;/p&gt;
+&lt;img alt="KAZR radar" src="https://www.arm.gov/uploads/kazrcomp.jpg" /&gt;
+</content>
+    <link href="mgrover1.github.io/pyart/blog_posts/2022/ka-band-pyart-xarray-hvplot.html" rel="alternate"/>
+    <summary>This notebook will walk through how to utilize existing packages in the Python ecosystem (PyART, Xarray, and hvPlot) to visualize data from a vertically pointing Ka-band radarBefore starting up this notebook, make sure to download your data from the ARM data portal, using this link!KAZR radar</summary>
+    <category term="vertical-radar" label="vertical-radar"/>
+    <category term="xarray" label="xarray"/>
+    <category term="ka-band" label="ka-band"/>
+    <category term="interactive" label="interactive"/>
+    <category term="visualization" label="visualization"/>
+    <category term="SAIL" label="SAIL"/>
+    <published>2022-03-21T00:00:00+00:00</published>
   </entry>
 </feed>
