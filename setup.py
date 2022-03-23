@@ -153,6 +153,7 @@ def configuration(parent_package='', top_path=None):
 
     config.add_subpackage('pyart')
     config.add_data_files(('pyart', '*.txt'))
+    config.add_data_files('pyart/testing/registry.txt')
 
     return config
 
