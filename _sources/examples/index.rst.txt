@@ -128,6 +128,27 @@ Mapping one or multiple radars from antenna coordinates to a Cartesian grid.
    :hidden:
 
    /examples/mapping/plot_map_two_radars_to_grid
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Map the reflectivity field of a single radar in Antenna coordinates to another radar in Antenna...">
+
+.. only:: html
+
+ .. figure:: /examples/mapping/images/thumb/sphx_glr_compare_two_radars_gatemapper_thumb.png
+     :alt: Compare Two Radars Using Gatemapper
+
+     :ref:`sphx_glr_examples_mapping_compare_two_radars_gatemapper.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/mapping/compare_two_radars_gatemapper
 .. raw:: html
 
     <div class="sphx-glr-clear"></div>
