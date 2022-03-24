@@ -13,7 +13,6 @@ print(__doc__)
 # License: BSD 3 clause
 
 import cartopy.crs as ccrs
-import cartopy.feature as cfeature
 import matplotlib.pyplot as plt
 import numpy as np
 import warnings
@@ -88,6 +87,8 @@ disp2.plot_ppi_map('reflectivity_horizontal',
                    lat_lines=np.arange(36, 37.25, .25),
                    lon_lines=np.arange(-98, -96.75, .25))
 
+plt.show()
+
 ######################################
 # Now, we can compare our original field from the southwestern radar,
 # to the new remapped field - there are similarities...
@@ -123,6 +124,8 @@ disp2.plot_ppi_map('reflectivity_horizontal',
                    max_lon=-97,
                    lat_lines=np.arange(36, 37.25, .25),
                    lon_lines=np.arange(-98, -96.75, .25))
+
+plt.show()
 
 ######################################
 # **Calculate and Plot the Difference**
@@ -165,6 +168,8 @@ disp1.plot_ppi_map('reflectivity_bias',
                    lat_lines=np.arange(36, 37.25, .25),
                    lon_lines=np.arange(-98, -96.75, .25))
 
+plt.show()
+
 ######################################
 # **Plot a Histogram for Comparison**
 #
@@ -194,3 +199,5 @@ c = plt.pcolormesh(x, y, np.log10(hist), cmap='pyart_HomeyerRainbow')
 plt.colorbar(c, label='$log_{10}$ counts')
 plt.xlabel('XSAPR Southeast $Z_{H}$ [dBZ]')
 plt.ylabel('XSAPR Southwest $Z_{H}$ [dBZ]')
+
+plt.show()

@@ -26,7 +26,7 @@ Map the reflectivity field of a single radar in Antenna coordinates to
 another radar in Antenna coordinates and compare the fields.
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 10-25
+.. GENERATED FROM PYTHON SOURCE LINES 10-24
 
 .. code-block:: default
 
@@ -36,7 +36,6 @@ another radar in Antenna coordinates and compare the fields.
     # License: BSD 3 clause
 
     import cartopy.crs as ccrs
-    import cartopy.feature as cfeature
     import matplotlib.pyplot as plt
     import numpy as np
     import warnings
@@ -46,13 +45,13 @@ another radar in Antenna coordinates and compare the fields.
     warnings.filterwarnings("ignore")
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 26-29
+.. GENERATED FROM PYTHON SOURCE LINES 25-28
 
 **Read in the Data**
 
 For this example, we use two XSAPR radars from our test data.
 
-.. GENERATED FROM PYTHON SOURCE LINES 29-36
+.. GENERATED FROM PYTHON SOURCE LINES 28-35
 
 .. code-block:: default
 
@@ -64,7 +63,7 @@ For this example, we use two XSAPR radars from our test data.
     radar_se = pyart.io.read_cfradial(xsapr_se_file)
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 37-45
+.. GENERATED FROM PYTHON SOURCE LINES 36-44
 
 **Filter and Configure the GateMapper**
 
@@ -75,7 +74,7 @@ We also need to set a tolerance distance (difference in meters
 between the source and destination gate allowed for an
 adequate match), using the tol variable.
 
-.. GENERATED FROM PYTHON SOURCE LINES 45-54
+.. GENERATED FROM PYTHON SOURCE LINES 44-53
 
 .. code-block:: default
 
@@ -89,14 +88,14 @@ adequate match), using the tol variable.
     radar_sw_mapped_to_radar_se = gmapper.mapped_radar(['reflectivity_horizontal'])
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 55-59
+.. GENERATED FROM PYTHON SOURCE LINES 54-58
 
 **Plot the Original Data**
 
 Let's take a look at our original fields - notice the difference
 in reflectivity values!
 
-.. GENERATED FROM PYTHON SOURCE LINES 59-91
+.. GENERATED FROM PYTHON SOURCE LINES 58-92
 
 .. code-block:: default
 
@@ -132,13 +131,15 @@ in reflectivity values!
                        lat_lines=np.arange(36, 37.25, .25),
                        lon_lines=np.arange(-98, -96.75, .25))
 
+    plt.show()
 
-.. GENERATED FROM PYTHON SOURCE LINES 92-94
+
+.. GENERATED FROM PYTHON SOURCE LINES 93-95
 
 Now, we can compare our original field from the southwestern radar,
 to the new remapped field - there are similarities...
 
-.. GENERATED FROM PYTHON SOURCE LINES 94-127
+.. GENERATED FROM PYTHON SOURCE LINES 95-130
 
 .. code-block:: default
 
@@ -175,8 +176,10 @@ to the new remapped field - there are similarities...
                        lat_lines=np.arange(36, 37.25, .25),
                        lon_lines=np.arange(-98, -96.75, .25))
 
+    plt.show()
 
-.. GENERATED FROM PYTHON SOURCE LINES 128-135
+
+.. GENERATED FROM PYTHON SOURCE LINES 131-138
 
 **Calculate and Plot the Difference**
 
@@ -186,7 +189,7 @@ Keep in mind there is a time difference of ~ 1 minute between these plots,
 leading to small difference due to the precipitation moving through the 
 domain over the course of that minute.
 
-.. GENERATED FROM PYTHON SOURCE LINES 135-168
+.. GENERATED FROM PYTHON SOURCE LINES 138-173
 
 .. code-block:: default
 
@@ -223,8 +226,10 @@ domain over the course of that minute.
                        lat_lines=np.arange(36, 37.25, .25),
                        lon_lines=np.arange(-98, -96.75, .25))
 
+    plt.show()
 
-.. GENERATED FROM PYTHON SOURCE LINES 169-174
+
+.. GENERATED FROM PYTHON SOURCE LINES 174-179
 
 **Plot a Histogram for Comparison**
 
@@ -232,7 +237,7 @@ Another way of plotting the comparison here is using
 a 2-dimensional histogram,which is more helpful in this
 case where our scans don't neccessarily match exactly in time.
 
-.. GENERATED FROM PYTHON SOURCE LINES 174-197
+.. GENERATED FROM PYTHON SOURCE LINES 179-204
 
 .. code-block:: default
 
@@ -259,6 +264,8 @@ case where our scans don't neccessarily match exactly in time.
     plt.colorbar(c, label='$log_{10}$ counts')
     plt.xlabel('XSAPR Southeast $Z_{H}$ [dBZ]')
     plt.ylabel('XSAPR Southwest $Z_{H}$ [dBZ]')
+
+    plt.show()
 
 
 .. rst-class:: sphx-glr-timing
