@@ -8,8 +8,9 @@
 
     <title>Setting up an Environment &#8212; Py-ART 1.11.8 documentation</title>
     
-  <link href="../_static/css/theme.css" rel="stylesheet">
-  <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
 
     
   <link rel="stylesheet"
@@ -19,17 +20,8 @@
   <link rel="preload" as="font" type="font/woff2" crossorigin
     href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
-    
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap');
-</style>
-    
-      
-
-    
-
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/css/blank.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
@@ -40,7 +32,8 @@
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css" />
     <link rel="stylesheet" type="text/css" href="../_static/pyart-theme.css" />
     
-  <link rel="preload" as="script" href="../_static/js/index.be7d3bbb2ef33a8344ce.js">
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
 
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
@@ -106,7 +99,7 @@
 </style>
 
   </head>
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
     
     <div class="container-fluid" id="banner"></div>
 
@@ -180,16 +173,12 @@
       <div class="navbar-end-item">
         <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
         <li class="nav-item">
-          <a class="nav-link" href="https://github.com/ARM-DOE/pyart" rel="noopener" target="_blank" title="GitHub">
-            <span><i class="fab fa-github-square"></i></span>
-            <label class="sr-only">GitHub</label>
-          </a>
+          <a class="nav-link" href="https://github.com/ARM-DOE/pyart" rel="noopener" target="_blank" title="GitHub"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="https://twitter.com/Py_ART" rel="noopener" target="_blank" title="Twitter">
-            <span><i class="fab fa-twitter-square"></i></span>
-            <label class="sr-only">Twitter</label>
-          </a>
+          <a class="nav-link" href="https://twitter.com/Py_ART" rel="noopener" target="_blank" title="Twitter"><span><i class="fab fa-twitter-square"></i></span>
+            <label class="sr-only">Twitter</label></a>
         </li>
       </ul>
       </div>
@@ -208,7 +197,8 @@
           
             
             <!-- Only show if we have sidebars configured, else just a small margin  -->
-            <div class="col-12 col-md-3 bd-sidebar"><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+            <div class="col-12 col-md-3 bd-sidebar">
+              <div class="sidebar-start-items"><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
   <i class="icon fas fa-search"></i>
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
 </form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
@@ -233,6 +223,9 @@
 
   </div>
 </nav>
+              </div>
+              <div class="sidebar-end-items">
+              </div>
             </div>
             
           
@@ -243,7 +236,7 @@
               
               <div class="toc-item">
                 
-<div class="tocsection onthispage pt-5 pb-3">
+<div class="tocsection onthispage mt-5 pt-1 pb-3">
     <i class="fas fa-list"></i> On this page
 </div>
 
@@ -295,9 +288,9 @@
               
               <div>
                  <section id="setting-up-an-environment">
-<h1>Setting up an Environment<a class="headerlink" href="#setting-up-an-environment" title="Permalink to this headline">¶</a></h1>
+<h1>Setting up an Environment<a class="headerlink" href="#setting-up-an-environment" title="Permalink to this headline">#</a></h1>
 <section id="anaconda">
-<h2>Anaconda<a class="headerlink" href="#anaconda" title="Permalink to this headline">¶</a></h2>
+<h2>Anaconda<a class="headerlink" href="#anaconda" title="Permalink to this headline">#</a></h2>
 <p>Creating environments using Anaconda is recommended due to the ability to
 create more than one environment. It is also recommended because you can
 keep dependencies separate from one another that might conflict if you had
@@ -316,7 +309,7 @@ on running conda and fixing the environment path, found here:</p>
 </ul>
 </section>
 <section id="setting-a-channel">
-<h2>Setting a Channel<a class="headerlink" href="#setting-a-channel" title="Permalink to this headline">¶</a></h2>
+<h2>Setting a Channel<a class="headerlink" href="#setting-a-channel" title="Permalink to this headline">#</a></h2>
 <p>Anaconda has a cloud that stores many of its packages. It is recommended, at
 times, to use the conda-forge channel instead. Conda-Forge is a community led
 collection of packages, and typically contains the most recent versions of the
@@ -336,7 +329,7 @@ conda-forge as the priority channel, simply do:</p>
 </ul>
 </section>
 <section id="creating-an-environment">
-<h2>Creating an Environment<a class="headerlink" href="#creating-an-environment" title="Permalink to this headline">¶</a></h2>
+<h2>Creating an Environment<a class="headerlink" href="#creating-an-environment" title="Permalink to this headline">#</a></h2>
 <p>There are a few ways to create a conda environment for using Py-ART or other
 packages. One way is to use the environment file, found here:</p>
 <ul class="simple">
@@ -388,7 +381,7 @@ environment, run in the command line:</p>
 <p>depending on what you installed in your environment and want to use for coding.</p>
 </section>
 <section id="adding-optional-dependencies-with-setting-paths">
-<h2>Adding Optional Dependencies with setting Paths<a class="headerlink" href="#adding-optional-dependencies-with-setting-paths" title="Permalink to this headline">¶</a></h2>
+<h2>Adding Optional Dependencies with setting Paths<a class="headerlink" href="#adding-optional-dependencies-with-setting-paths" title="Permalink to this headline">#</a></h2>
 <p>There are other optional dependencies that can enhance the use of Py-ART. One,
 such package is <a class="reference external" href="https://github.com/jjhelmus/CyLP">CyLP</a>. To get CyLP to work,
 installing of the package <a class="reference external" href="https://projects.coin-or.org/Cbc">coincbc</a> is
@@ -415,7 +408,7 @@ to install the CyLP version we want:</p>
 <p>This will install a Python 3 compatible version of CyLP found on GitHub.</p>
 </section>
 <section id="more-information">
-<h2>More Information<a class="headerlink" href="#more-information" title="Permalink to this headline">¶</a></h2>
+<h2>More Information<a class="headerlink" href="#more-information" title="Permalink to this headline">#</a></h2>
 <p>For more an conda and help with conda:</p>
 <ul class="simple">
 <li><p><a class="reference external" href="https://conda.io/docs/">https://conda.io/docs/</a></p></li>
@@ -432,7 +425,7 @@ to install the CyLP version we want:</p>
               
               
               <!-- Previous / next buttons -->
-<div class='prev-next-area'> 
+<div class='prev-next-area'>
     <a class='left-prev' id="prev-link" href="INSTALL.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
@@ -455,7 +448,8 @@ to install the CyLP version we want:</p>
       </div>
     </div>
   
-  <script src="../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
 <footer class="footer mt-5 mt-md-0">
   <div class="container">
     

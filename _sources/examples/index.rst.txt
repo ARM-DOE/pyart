@@ -135,10 +135,10 @@ Mapping one or multiple radars from antenna coordinates to a Cartesian grid.
 
 .. only:: html
 
- .. figure:: /examples/mapping/images/thumb/sphx_glr_compare_two_radars_gatemapper_thumb.png
+ .. figure:: /examples/mapping/images/thumb/sphx_glr_plot_compare_two_radars_gatemapper_thumb.png
      :alt: Compare Two Radars Using Gatemapper
 
-     :ref:`sphx_glr_examples_mapping_compare_two_radars_gatemapper.py`
+     :ref:`sphx_glr_examples_mapping_plot_compare_two_radars_gatemapper.py`
 
 .. raw:: html
 
@@ -148,7 +148,7 @@ Mapping one or multiple radars from antenna coordinates to a Cartesian grid.
 .. toctree::
    :hidden:
 
-   /examples/mapping/compare_two_radars_gatemapper
+   /examples/mapping/plot_compare_two_radars_gatemapper
 .. raw:: html
 
     <div class="sphx-glr-clear"></div>

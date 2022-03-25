@@ -25,7 +25,6 @@ Create a multiple panel RHI plot from a CF/Radial file
 An example which creates a multiple panel RHI plot of a CF/Radial file using
 a RadarDisplay object.
 
-
 .. GENERATED FROM PYTHON SOURCE LINES 10-52
 
 
@@ -87,7 +86,7 @@ a RadarDisplay object.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  3.408 seconds)
+   **Total running time of the script:** ( 0 minutes  2.797 seconds)
 
 
 .. _sphx_glr_download_examples_plotting_plot_rhi_cfradial.py:

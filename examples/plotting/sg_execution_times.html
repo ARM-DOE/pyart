@@ -8,8 +8,9 @@
 
     <title>Computation times &#8212; Py-ART 1.11.8 documentation</title>
     
-  <link href="../../_static/css/theme.css" rel="stylesheet">
-  <link href="../../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
 
     
   <link rel="stylesheet"
@@ -19,17 +20,8 @@
   <link rel="preload" as="font" type="font/woff2" crossorigin
     href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
-    
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap');
-</style>
-    
-      
-
-    
-
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/css/blank.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
@@ -40,7 +32,8 @@
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/pyart-theme.css" />
     
-  <link rel="preload" as="script" href="../../_static/js/index.be7d3bbb2ef33a8344ce.js">
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
 
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
@@ -104,7 +97,7 @@
 </style>
 
   </head>
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
     
     <div class="container-fluid" id="banner"></div>
 
@@ -178,16 +171,12 @@
       <div class="navbar-end-item">
         <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
         <li class="nav-item">
-          <a class="nav-link" href="https://github.com/ARM-DOE/pyart" rel="noopener" target="_blank" title="GitHub">
-            <span><i class="fab fa-github-square"></i></span>
-            <label class="sr-only">GitHub</label>
-          </a>
+          <a class="nav-link" href="https://github.com/ARM-DOE/pyart" rel="noopener" target="_blank" title="GitHub"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="https://twitter.com/Py_ART" rel="noopener" target="_blank" title="Twitter">
-            <span><i class="fab fa-twitter-square"></i></span>
-            <label class="sr-only">Twitter</label>
-          </a>
+          <a class="nav-link" href="https://twitter.com/Py_ART" rel="noopener" target="_blank" title="Twitter"><span><i class="fab fa-twitter-square"></i></span>
+            <label class="sr-only">Twitter</label></a>
         </li>
       </ul>
       </div>
@@ -206,7 +195,8 @@
           
             
             <!-- Only show if we have sidebars configured, else just a small margin  -->
-            <div class="col-12 col-md-3 bd-sidebar"><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+            <div class="col-12 col-md-3 bd-sidebar">
+              <div class="sidebar-start-items"><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
   <i class="icon fas fa-search"></i>
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
 </form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
@@ -214,6 +204,9 @@
     
   </div>
 </nav>
+              </div>
+              <div class="sidebar-end-items">
+              </div>
             </div>
             
           
@@ -246,8 +239,8 @@
               
               <div>
                  <section id="computation-times">
-<span id="sphx-glr-examples-plotting-sg-execution-times"></span><h1>Computation times<a class="headerlink" href="#computation-times" title="Permalink to this headline">¶</a></h1>
-<p><strong>00:58.307</strong> total execution time for <strong>examples_plotting</strong> files:</p>
+<span id="sphx-glr-examples-plotting-sg-execution-times"></span><h1>Computation times<a class="headerlink" href="#computation-times" title="Permalink to this headline">#</a></h1>
+<p><strong>00:52.207</strong> total execution time for <strong>examples_plotting</strong> files:</p>
 <table class="table">
 <colgroup>
 <col style="width: 88%" />
@@ -256,55 +249,55 @@
 </colgroup>
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="plot_three_panel_gridmapdisplay.html#sphx-glr-examples-plotting-plot-three-panel-gridmapdisplay-py"><span class="std std-ref">Create a 3 panel plot using GridMapDisplay</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_three_panel_gridmapdisplay.py</span></code>)</p></td>
-<td><p>00:13.352</p></td>
+<td><p>00:12.277</p></td>
 <td><p>0.0 MB</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="plot_ppi_with_rings.html#sphx-glr-examples-plotting-plot-ppi-with-rings-py"><span class="std std-ref">Create a PPI plot on a cartopy map</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_ppi_with_rings.py</span></code>)</p></td>
-<td><p>00:09.604</p></td>
+<td><p>00:09.245</p></td>
 <td><p>0.0 MB</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="plot_ppi_sigmet.html#sphx-glr-examples-plotting-plot-ppi-sigmet-py"><span class="std std-ref">Create a PPI plot from a Sigmet file</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_ppi_sigmet.py</span></code>)</p></td>
-<td><p>00:07.558</p></td>
+<td><p>00:06.961</p></td>
 <td><p>0.0 MB</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="plot_nexrad_multiple_moments.html#sphx-glr-examples-plotting-plot-nexrad-multiple-moments-py"><span class="std std-ref">Create a plot of multiple moments from a NEXRAD file</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_nexrad_multiple_moments.py</span></code>)</p></td>
-<td><p>00:05.360</p></td>
+<td><p>00:04.490</p></td>
 <td><p>0.0 MB</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="plot_ppi_mdv.html#sphx-glr-examples-plotting-plot-ppi-mdv-py"><span class="std std-ref">Create a PPI plot from a MDV file</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_ppi_mdv.py</span></code>)</p></td>
-<td><p>00:03.960</p></td>
+<td><p>00:03.629</p></td>
 <td><p>0.0 MB</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="plot_rhi_cfradial.html#sphx-glr-examples-plotting-plot-rhi-cfradial-py"><span class="std std-ref">Create a multiple panel RHI plot from a CF/Radial file</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_rhi_cfradial.py</span></code>)</p></td>
-<td><p>00:03.408</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="plot_rhi_sigmet.html#sphx-glr-examples-plotting-plot-rhi-sigmet-py"><span class="std std-ref">Create a RHI plot from a Sigmet file</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_rhi_sigmet.py</span></code>)</p></td>
+<td><p>00:02.838</p></td>
 <td><p>0.0 MB</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="plot_rhi_sigmet.html#sphx-glr-examples-plotting-plot-rhi-sigmet-py"><span class="std std-ref">Create a RHI plot from a Sigmet file</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_rhi_sigmet.py</span></code>)</p></td>
-<td><p>00:03.141</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="plot_rhi_cfradial.html#sphx-glr-examples-plotting-plot-rhi-cfradial-py"><span class="std std-ref">Create a multiple panel RHI plot from a CF/Radial file</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_rhi_cfradial.py</span></code>)</p></td>
+<td><p>00:02.797</p></td>
 <td><p>0.0 MB</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="plot_nexrad_reflectivity.html#sphx-glr-examples-plotting-plot-nexrad-reflectivity-py"><span class="std std-ref">Create a plot of NEXRAD reflectivity</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_nexrad_reflectivity.py</span></code>)</p></td>
-<td><p>00:02.874</p></td>
+<td><p>00:02.376</p></td>
 <td><p>0.0 MB</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="plot_rhi_contours_differential_reflectivity.html#sphx-glr-examples-plotting-plot-rhi-contours-differential-reflectivity-py"><span class="std std-ref">Create an RHI plot with reflectivity contour lines from an MDV file</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_rhi_contours_differential_reflectivity.py</span></code>)</p></td>
-<td><p>00:02.504</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="plot_rhi_two_panel.html#sphx-glr-examples-plotting-plot-rhi-two-panel-py"><span class="std std-ref">Create a two panel RHI plot</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_rhi_two_panel.py</span></code>)</p></td>
+<td><p>00:02.154</p></td>
 <td><p>0.0 MB</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="plot_rhi_two_panel.html#sphx-glr-examples-plotting-plot-rhi-two-panel-py"><span class="std std-ref">Create a two panel RHI plot</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_rhi_two_panel.py</span></code>)</p></td>
-<td><p>00:02.479</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="plot_rhi_contours_differential_reflectivity.html#sphx-glr-examples-plotting-plot-rhi-contours-differential-reflectivity-py"><span class="std std-ref">Create an RHI plot with reflectivity contour lines from an MDV file</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_rhi_contours_differential_reflectivity.py</span></code>)</p></td>
+<td><p>00:01.930</p></td>
 <td><p>0.0 MB</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="plot_xsect.html#sphx-glr-examples-plotting-plot-xsect-py"><span class="std std-ref">Plot a cross section from  a PPI volume</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_xsect.py</span></code>)</p></td>
-<td><p>00:01.617</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="plot_rhi_data_overlay.html#sphx-glr-examples-plotting-plot-rhi-data-overlay-py"><span class="std std-ref">Create an RHI plot with reflectivity contour lines from an MDV file</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_rhi_data_overlay.py</span></code>)</p></td>
+<td><p>00:01.300</p></td>
 <td><p>0.0 MB</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="plot_rhi_data_overlay.html#sphx-glr-examples-plotting-plot-rhi-data-overlay-py"><span class="std std-ref">Create an RHI plot with reflectivity contour lines from an MDV file</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_rhi_data_overlay.py</span></code>)</p></td>
-<td><p>00:01.428</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="plot_xsect.html#sphx-glr-examples-plotting-plot-xsect-py"><span class="std std-ref">Plot a cross section from  a PPI volume</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_xsect.py</span></code>)</p></td>
+<td><p>00:01.279</p></td>
 <td><p>0.0 MB</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="plot_rhi_mdv.html#sphx-glr-examples-plotting-plot-rhi-mdv-py"><span class="std std-ref">Create a RHI plot from a MDV file</span></a> (<code class="docutils literal notranslate"><span class="pre">plot_rhi_mdv.py</span></code>)</p></td>
-<td><p>00:01.021</p></td>
+<td><p>00:00.930</p></td>
 <td><p>0.0 MB</p></td>
 </tr>
 </tbody>
@@ -328,7 +321,8 @@
       </div>
     </div>
   
-  <script src="../../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
 <footer class="footer mt-5 mt-md-0">
   <div class="container">
     

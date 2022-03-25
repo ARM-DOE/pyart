@@ -25,7 +25,6 @@ Create a PPI plot on a cartopy map
 An example which creates a PPI plot of a file with a cartopy background
 and range rings
 
-
 .. GENERATED FROM PYTHON SOURCE LINES 10-55
 
 
@@ -36,22 +35,8 @@ and range rings
    :class: sphx-glr-single-img
 
 
-.. rst-class:: sphx-glr-script-out
-
- Out:
-
- .. code-block:: none
 
 
-    /usr/share/miniconda3/envs/pyart-docs/lib/python3.6/site-packages/cartopy/io/__init__.py:241: DownloadWarning: Downloading: https://naturalearth.s3.amazonaws.com/10m_cultural/ne_10m_admin_1_states_provinces_lines.zip
-      warnings.warn('Downloading: {}'.format(url), DownloadWarning)
-
-
-
-
-
-
-|
 
 .. code-block:: default
 
@@ -104,7 +89,7 @@ and range rings
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  9.604 seconds)
+   **Total running time of the script:** ( 0 minutes  9.245 seconds)
 
 
 .. _sphx_glr_download_examples_plotting_plot_ppi_with_rings.py:

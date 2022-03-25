@@ -8,8 +8,9 @@
 
     <title>Contributor’s Guide &#8212; Py-ART 1.11.8 documentation</title>
     
-  <link href="../_static/css/theme.css" rel="stylesheet">
-  <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
 
     
   <link rel="stylesheet"
@@ -19,17 +20,8 @@
   <link rel="preload" as="font" type="font/woff2" crossorigin
     href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
-    
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap');
-</style>
-    
-      
-
-    
-
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/css/blank.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
@@ -40,7 +32,8 @@
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css" />
     <link rel="stylesheet" type="text/css" href="../_static/pyart-theme.css" />
     
-  <link rel="preload" as="script" href="../_static/js/index.be7d3bbb2ef33a8344ce.js">
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
 
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
@@ -106,7 +99,7 @@
 </style>
 
   </head>
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
     
     <div class="container-fluid" id="banner"></div>
 
@@ -180,16 +173,12 @@
       <div class="navbar-end-item">
         <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
         <li class="nav-item">
-          <a class="nav-link" href="https://github.com/ARM-DOE/pyart" rel="noopener" target="_blank" title="GitHub">
-            <span><i class="fab fa-github-square"></i></span>
-            <label class="sr-only">GitHub</label>
-          </a>
+          <a class="nav-link" href="https://github.com/ARM-DOE/pyart" rel="noopener" target="_blank" title="GitHub"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="https://twitter.com/Py_ART" rel="noopener" target="_blank" title="Twitter">
-            <span><i class="fab fa-twitter-square"></i></span>
-            <label class="sr-only">Twitter</label>
-          </a>
+          <a class="nav-link" href="https://twitter.com/Py_ART" rel="noopener" target="_blank" title="Twitter"><span><i class="fab fa-twitter-square"></i></span>
+            <label class="sr-only">Twitter</label></a>
         </li>
       </ul>
       </div>
@@ -208,7 +197,8 @@
           
             
             <!-- Only show if we have sidebars configured, else just a small margin  -->
-            <div class="col-12 col-md-3 bd-sidebar"><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+            <div class="col-12 col-md-3 bd-sidebar">
+              <div class="sidebar-start-items"><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
   <i class="icon fas fa-search"></i>
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
 </form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
@@ -233,6 +223,9 @@
 
   </div>
 </nav>
+              </div>
+              <div class="sidebar-end-items">
+              </div>
             </div>
             
           
@@ -243,7 +236,7 @@
               
               <div class="toc-item">
                 
-<div class="tocsection onthispage pt-5 pb-3">
+<div class="tocsection onthispage mt-5 pt-1 pb-3">
     <i class="fas fa-list"></i> On this page
 </div>
 
@@ -315,9 +308,9 @@
               
               <div>
                  <section id="contributor-s-guide">
-<h1>Contributor’s Guide<a class="headerlink" href="#contributor-s-guide" title="Permalink to this headline">¶</a></h1>
+<h1>Contributor’s Guide<a class="headerlink" href="#contributor-s-guide" title="Permalink to this headline">#</a></h1>
 <section id="the-python-arm-radar-toolkit-py-art">
-<h2>The Python ARM Radar Toolkit (Py-ART)<a class="headerlink" href="#the-python-arm-radar-toolkit-py-art" title="Permalink to this headline">¶</a></h2>
+<h2>The Python ARM Radar Toolkit (Py-ART)<a class="headerlink" href="#the-python-arm-radar-toolkit-py-art" title="Permalink to this headline">#</a></h2>
 <p>The Python ARM Radar Toolkit, Py-ART, is an open source Python module
 containing a growing collection of weather radar algorithms and utilities
 build on top of the Scientific Python stack and distributed under the
@@ -328,7 +321,7 @@ the radar and atmospheric communities to examine, processes, and analyze
 data from many types of weather radars.</p>
 </section>
 <section id="important-links">
-<h2>Important Links<a class="headerlink" href="#important-links" title="Permalink to this headline">¶</a></h2>
+<h2>Important Links<a class="headerlink" href="#important-links" title="Permalink to this headline">#</a></h2>
 <ul class="simple">
 <li><p>Official source code repository: <a class="reference external" href="https://github.com/ARM-DOE/pyart">https://github.com/ARM-DOE/pyart</a></p></li>
 <li><p>HTML documentation: <a class="reference external" href="http://arm-doe.github.io/pyart-docs-travis/">http://arm-doe.github.io/pyart-docs-travis/</a></p></li>
@@ -338,7 +331,7 @@ data from many types of weather radars.</p>
 </ul>
 </section>
 <section id="citing">
-<h2>Citing<a class="headerlink" href="#citing" title="Permalink to this headline">¶</a></h2>
+<h2>Citing<a class="headerlink" href="#citing" title="Permalink to this headline">#</a></h2>
 <p>If you use the Python ARM Radar Toolkit (Py-ART) to prepare a publication
 please cite:</p>
 <blockquote>
@@ -352,7 +345,7 @@ cited if you make use of them.  Refer to the <strong>References</strong> section
 documentation of the functions used for information on these citations.</p>
 </section>
 <section id="install">
-<h2>Install<a class="headerlink" href="#install" title="Permalink to this headline">¶</a></h2>
+<h2>Install<a class="headerlink" href="#install" title="Permalink to this headline">#</a></h2>
 <p>The easiest method for installing Py-ART is to use the conda packages from
 the latest release.  To do this you must download and install
 <a class="reference external" href="https://www.anaconda.com/download/#">Anaconda</a> or
@@ -368,7 +361,7 @@ the latest version of Py-ART:</p>
 </div>
 </section>
 <section id="resources">
-<h2>Resources<a class="headerlink" href="#resources" title="Permalink to this headline">¶</a></h2>
+<h2>Resources<a class="headerlink" href="#resources" title="Permalink to this headline">#</a></h2>
 <p>Pyart:</p>
 <ul class="simple">
 <li><p><a class="reference external" href="https://github.com/openradar/AMS-Short-Course-on-Open-Source-Radar-Software">https://github.com/openradar/AMS-Short-Course-on-Open-Source-Radar-Software</a></p></li>
@@ -382,7 +375,7 @@ the latest version of Py-ART:</p>
 </ul>
 </section>
 <section id="code-style">
-<h2>Code Style<a class="headerlink" href="#code-style" title="Permalink to this headline">¶</a></h2>
+<h2>Code Style<a class="headerlink" href="#code-style" title="Permalink to this headline">#</a></h2>
 <p>Py-ART follows pep8 coding standards. To make sure your code follows the
 pep8 style, you can use a variety of tools that can check for you. Two
 popular pep8 check modules are pycodestyle and pylint.</p>
@@ -418,7 +411,7 @@ the tools documentation for details on this process.</p>
 </ul>
 </section>
 <section id="python-file-setup">
-<h2>Python File Setup<a class="headerlink" href="#python-file-setup" title="Permalink to this headline">¶</a></h2>
+<h2>Python File Setup<a class="headerlink" href="#python-file-setup" title="Permalink to this headline">#</a></h2>
 <p>In a new .py file, the top of the code should have a brief introduction to
 the module.</p>
 <p>An example:</p>
@@ -525,7 +518,7 @@ statement of what that default value is and why.</p>
 </div>
 </section>
 <section id="testing">
-<h2>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">¶</a></h2>
+<h2>Testing<a class="headerlink" href="#testing" title="Permalink to this headline">#</a></h2>
 <p>When adding a new function to pyart it is important to add your function to
 the __init__.py file under the corresponding pyart folder.</p>
 <p>Create a test for your function and have assert from numpy testing test the
@@ -617,7 +610,7 @@ From within the main pyart directory:</p>
 </ul>
 </section>
 <section id="github">
-<h2>GitHub<a class="headerlink" href="#github" title="Permalink to this headline">¶</a></h2>
+<h2>GitHub<a class="headerlink" href="#github" title="Permalink to this headline">#</a></h2>
 <p>When contributing to pyart, the changes created should be in a new branch
 under your forked repository. Let’s say the user is adding a new map display.
 Instead of creating that new function in your master branch. Create a new
@@ -707,7 +700,7 @@ and TravisCI and Appveyor will automatically rerun.</p>
               
               
               <!-- Previous / next buttons -->
-<div class='prev-next-area'> 
+<div class='prev-next-area'>
     <a class='left-prev' id="prev-link" href="setting_up_an_environment.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
@@ -730,7 +723,8 @@ and TravisCI and Appveyor will automatically rerun.</p>
       </div>
     </div>
   
-  <script src="../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
 <footer class="footer mt-5 mt-md-0">
   <div class="container">
     

@@ -25,7 +25,6 @@ Correct reflectivity attenuation
 In this example the reflectivity attenuation is calculated and then corrected
 for a polarimetric radar using a Z-PHI method implemented in Py-ART.
 
-
 .. GENERATED FROM PYTHON SOURCE LINES 10-53
 
 
@@ -43,7 +42,7 @@ for a polarimetric radar using a Z-PHI method implemented in Py-ART.
  .. code-block:: none
 
 
-    /usr/share/miniconda3/envs/pyart-docs/lib/python3.6/site-packages/numpy/core/fromnumeric.py:748: UserWarning: Warning: 'partition' will ignore the 'mask' of the MaskedArray.
+    /usr/share/miniconda3/envs/pyart-docs/lib/python3.10/site-packages/numpy/core/fromnumeric.py:758: UserWarning: Warning: 'partition' will ignore the 'mask' of the MaskedArray.
       a.partition(kth, axis=axis, kind=kind, order=order)
 
 
@@ -102,7 +101,7 @@ for a polarimetric radar using a Z-PHI method implemented in Py-ART.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  14.810 seconds)
+   **Total running time of the script:** ( 0 minutes  11.704 seconds)
 
 
 .. _sphx_glr_download_examples_correct_plot_attenuation.py:
