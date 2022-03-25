@@ -6,7 +6,7 @@ dependencies:
   - python=3.6
   - gdal
   - numpy
-  - scipy>=1.8
+  - scipy>=1.7
   - matplotlib
   - pandas
   - netcdf4
