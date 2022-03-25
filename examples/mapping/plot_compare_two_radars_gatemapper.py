@@ -15,7 +15,6 @@ print(__doc__)
 import cartopy.crs as ccrs
 import matplotlib.pyplot as plt
 import numpy as np
-import sys
 import warnings
 
 import pyart
@@ -42,9 +41,6 @@ radar_se = pyart.io.read_cfradial(xsapr_se_file)
 # We also need to set a tolerance distance (difference in meters
 # between the source and destination gate allowed for an
 # adequate match), using the tol variable.
-
-# Make sure to set this for the kdtree algorithm used with Gatemapper
-sys.setrecursionlimit(10000)
 
 gatefilter = pyart.filters.GateFilter(radar_sw)
 gatefilter.exclude_below('reflectivity_horizontal', 20)
