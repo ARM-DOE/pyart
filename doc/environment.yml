@@ -3,10 +3,9 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - python=3.6
   - gdal
   - numpy
-  - scipy
+  - scipy>=1.7
   - matplotlib
   - pandas
   - netcdf4

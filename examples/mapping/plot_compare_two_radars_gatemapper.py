@@ -43,7 +43,7 @@ radar_se = pyart.io.read_cfradial(xsapr_se_file)
 # adequate match), using the tol variable.
 
 gatefilter = pyart.filters.GateFilter(radar_sw)
-gatefilter.exclude_below('reflectivity_horizontal', 0)
+gatefilter.exclude_below('reflectivity_horizontal', 20)
 gmapper = pyart.map.GateMapper(radar_sw,
                                radar_se,
                                tol=500.,
@@ -87,8 +87,6 @@ disp2.plot_ppi_map('reflectivity_horizontal',
                    lat_lines=np.arange(36, 37.25, .25),
                    lon_lines=np.arange(-98, -96.75, .25))
 
-plt.show()
-
 ######################################
 # Now, we can compare our original field from the southwestern radar,
 # to the new remapped field - there are similarities...
@@ -124,8 +122,6 @@ disp2.plot_ppi_map('reflectivity_horizontal',
                    max_lon=-97,
                    lat_lines=np.arange(36, 37.25, .25),
                    lon_lines=np.arange(-98, -96.75, .25))
-
-plt.show()
 
 ######################################
 # **Calculate and Plot the Difference**
@@ -168,7 +164,6 @@ disp1.plot_ppi_map('reflectivity_bias',
                    lat_lines=np.arange(36, 37.25, .25),
                    lon_lines=np.arange(-98, -96.75, .25))
 
-plt.show()
 
 ######################################
 # **Plot a Histogram for Comparison**
@@ -190,6 +185,9 @@ bins = np.arange(-10, 60, 1)
 # Create the 2D histogram using the flattened numpy arrays
 hist = np.histogram2d(refl_se.flatten(), refl_sw.flatten(), bins=bins)[0]
 hist = np.ma.masked_where(hist == 0, hist)
+
+# Setup our figure
+fig = plt.figure(figsize=(8, 6))
 
 # Create a 1-1 comparison
 x, y = np.meshgrid((bins[:-1] + bins[1:])/2., (bins[:-1] + bins[1:])/2.)
