@@ -2538,8 +2538,13 @@
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="pyart.map.GateMapper.tolerance.html">
-       pyart.map.GateMapper.tolerance
+      <a class="reference internal" href="pyart.map.GateMapper.distance_tolerance.html">
+       pyart.map.GateMapper.distance_tolerance
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="pyart.map.GateMapper.time_tolerance.html">
+       pyart.map.GateMapper.time_tolerance
       </a>
      </li>
     </ul>
@@ -2871,7 +2876,7 @@
 <h1>pyart.map.GateMapper<a class="headerlink" href="#pyart-map-gatemapper" title="Permalink to this headline">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="pyart.map.GateMapper">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyart.map.</span></span><span class="sig-name descname"><span class="pre">GateMapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src_radar</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pyart.core.Radar.html#pyart.core.Radar" title="pyart.core.radar.Radar"><span class="pre">pyart.core.radar.Radar</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest_radar</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pyart.core.Radar.html#pyart.core.Radar" title="pyart.core.radar.Radar"><span class="pre">pyart.core.radar.Radar</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gatefilter_src</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyart/map/gate_mapper.html#GateMapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyart.map.GateMapper" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyart.map.</span></span><span class="sig-name descname"><span class="pre">GateMapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src_radar</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pyart.core.Radar.html#pyart.core.Radar" title="pyart.core.radar.Radar"><span class="pre">pyart.core.radar.Radar</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">dest_radar</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pyart.core.Radar.html#pyart.core.Radar" title="pyart.core.radar.Radar"><span class="pre">pyart.core.radar.Radar</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">distance_tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">500.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gatefilter_src</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">60.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyart/map/gate_mapper.html#GateMapper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyart.map.GateMapper" title="Permalink to this definition">#</a></dt>
 <dd><p>The GateMapper class will, given one radar’s gate, find the gate in another radar’s volume
 that is closest in location to the specified gate. GateMapper will use a kd-tree in order to generate a
 mapping function that provides the sweep and ray index in the other radar that is closest in physical
@@ -2881,10 +2886,13 @@ radar objects with simple indexing. In addition, returning a mapped radar object
 <dt class="field-odd">Variables</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>src_radar_y</strong> (<em>src_radar_x</em><em>,</em>) – The source radar’s x and y location in the the destination radar’s Cartesian coordinates.</p></li>
-<li><p><strong>~GateMapper.tolerance</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – The tolerance in meters for each gate</p></li>
-<li><p><strong>~GateMapper.gatefilter_src</strong> (<a class="reference internal" href="pyart.filters.GateFilter.html#pyart.filters.GateFilter" title="pyart.filters.GateFilter"><em>pyart.filters.GateFilter</em></a>) – The gatefilter to apply to the source radar data when mapping to the destination.</p></li>
-<li><p><strong>~GateMapper.src_radar</strong> (<a class="reference internal" href="pyart.core.Radar.html#pyart.core.Radar" title="pyart.core.Radar"><em>pyart.core.Radar</em></a>) – The source radar data.</p></li>
-<li><p><strong>~GateMapper.dest_radar</strong> (<a class="reference internal" href="pyart.core.Radar.html#pyart.core.Radar" title="pyart.core.Radar"><em>pyart.core.Radar</em></a>) – The destination radar to map the source radar data onto.</p></li>
+<li><p><strong>distance_tolerance</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – The distance tolerance in meters for each gate in meters.</p></li>
+<li><p><strong>time_tolerance</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.10)"><em>float</em></a>) – The time tolerance in meters for each gate in seconds.</p></li>
+<li><p><strong>gatefilter_src</strong> (<a class="reference internal" href="pyart.filters.GateFilter.html#pyart.filters.GateFilter" title="pyart.filters.GateFilter"><em>pyart.filters.GateFilter</em></a>) – The gatefilter to apply to the source radar data when mapping to the destination.</p></li>
+<li><p><strong>src_radar</strong> (<a class="reference internal" href="pyart.core.Radar.html#pyart.core.Radar" title="pyart.core.Radar"><em>pyart.core.Radar</em></a>) – The source radar data.</p></li>
+<li><p><strong>dest_radar</strong> (<a class="reference internal" href="pyart.core.Radar.html#pyart.core.Radar" title="pyart.core.Radar"><em>pyart.core.Radar</em></a>) – The destination radar to map the source radar data onto.</p></li>
+<li><p><strong>src_radar_time</strong> (<em>float np.array</em>) – The array of times of each gate in the source radar.</p></li>
+<li><p><strong>dest_radar_time</strong> (<em>float np.array</em>) – The array of times of each gate in the destination radar.</p></li>
 </ul>
 </dd>
 </dl>
@@ -2901,13 +2909,14 @@ radar objects with simple indexing. In addition, returning a mapped radar object
 <li><p><strong>src_radar</strong> (<em>pyart.core.Radar</em>) – The source radar data.</p></li>
 <li><p><strong>dest_radar</strong> (<em>pyart.core.Radar</em>) – The destination radar to map the source radar data onto.</p></li>
 <li><p><strong>gatefilter_src</strong> (<em>pyart.filters.GateFilter, or None</em>) – The gatefilter to apply to the source radar data before mapping</p></li>
-<li><p><strong>tol</strong> (<em>float</em>) – The difference in meters between the source and destination gate allowed for an adequate match.</p></li>
+<li><p><strong>distance_tolerance</strong> (<em>float</em>) – The difference in meters between the source and destination gate allowed for an adequate match.</p></li>
+<li><p><strong>time_tolerance</strong> (<em>float</em>) – The difference in time between the source and destination radar rays.</p></li>
 </ul>
 </dd>
 </dl>
 </dd></dl>
 
-<table class="longtable table autosummary">
+<table class="autosummary longtable table autosummary">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -2918,14 +2927,17 @@ radar objects with simple indexing. In addition, returning a mapped radar object
 </tr>
 </tbody>
 </table>
-<table class="longtable table autosummary">
+<table class="autosummary longtable table autosummary">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyart.map.GateMapper.tolerance.html#pyart.map.GateMapper.tolerance" title="pyart.map.GateMapper.tolerance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">tolerance</span></code></a></p></td>
-<td><p>Getter for tolerance property of GateMapper class.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.map.GateMapper.distance_tolerance.html#pyart.map.GateMapper.distance_tolerance" title="pyart.map.GateMapper.distance_tolerance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">distance_tolerance</span></code></a></p></td>
+<td><p>Getter for distance_tolerance property of GateMapper class.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.map.GateMapper.time_tolerance.html#pyart.map.GateMapper.time_tolerance" title="pyart.map.GateMapper.time_tolerance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">time_tolerance</span></code></a></p></td>
+<td><p>Getter for time_tolerance property of GateMapper class.</p></td>
 </tr>
 </tbody>
 </table>
@@ -2975,7 +2987,7 @@ radar objects with simple indexing. In addition, returning a mapped radar object
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.4.0.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0.<br>
 </p>
     </div>
     

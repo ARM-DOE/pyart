@@ -2538,8 +2538,13 @@
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="pyart.map.GateMapper.tolerance.html">
-       pyart.map.GateMapper.tolerance
+      <a class="reference internal" href="pyart.map.GateMapper.distance_tolerance.html">
+       pyart.map.GateMapper.distance_tolerance
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="pyart.map.GateMapper.time_tolerance.html">
+       pyart.map.GateMapper.time_tolerance
       </a>
      </li>
     </ul>
@@ -2880,15 +2885,15 @@ grid = Grid.from_legacy_parameters(fields, axes, metadata).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Variables</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>~Grid.time</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – Time of the grid.</p></li>
-<li><p><strong>~Grid.fields</strong> (<em>dict of dicts</em>) – Moments from radars or other variables.</p></li>
-<li><p><strong>~Grid.metadata</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – Metadata describing the grid.</p></li>
+<li><p><strong>time</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – Time of the grid.</p></li>
+<li><p><strong>fields</strong> (<em>dict of dicts</em>) – Moments from radars or other variables.</p></li>
+<li><p><strong>metadata</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – Metadata describing the grid.</p></li>
 <li><p><strong>origin_altitude</strong> (<em>origin_longitude</em><em>, </em><em>origin_latitude</em><em>,</em>) – Geographic coordinate of the origin of the grid.</p></li>
 <li><p><strong>z</strong> (<em>x</em><em>, </em><em>y</em><em>,</em>) – Distance from the grid origin for each Cartesian coordinate axis in a
 one dimensional array. Defines the spacing along the three grid axes
 which is repeated throughout the grid, making a rectilinear grid.</p></li>
 <li><p><strong>nz</strong> (<em>nx</em><em>, </em><em>ny</em><em>,</em>) – Number of grid points along the given Cartesian dimension.</p></li>
-<li><p><strong>~Grid.projection</strong> (<em>dic</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Projection parameters defining the map projection used to transform
+<li><p><strong>projection</strong> (<em>dic</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><em>str</em></a>) – Projection parameters defining the map projection used to transform
 from Cartesian to geographic coordinates. None will use the default
 dictionary with the ‘proj’ key set to ‘pyart_aeqd’ indicating that
 the native Py-ART azimuthal equidistant projection is used. Other
@@ -2900,10 +2905,10 @@ latitude will be added to the dictionary as ‘lon_0’ and ‘lat_0’.
 Use the <a class="reference internal" href="pyart.core.Grid.get_projparams.html#pyart.core.Grid.get_projparams" title="pyart.core.Grid.get_projparams"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_projparams()</span></code></a> method to retrieve a copy of this
 attribute dictionary with this special key evaluated.</p></li>
 <li><p><strong>radar_altitude</strong> (<em>radar_longitude</em><em>, </em><em>radar_latitude</em><em>,</em>) – Geographic location of the radars which make up the grid.</p></li>
-<li><p><strong>~Grid.radar_time</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a><em> or </em><em>None</em><em>, </em><em>optional</em>) – Start of collection for the radar which make up the grid.</p></li>
-<li><p><strong>~Grid.radar_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a><em> or </em><em>None</em><em>, </em><em>optional</em>) – Names of the radars which make up the grid.</p></li>
-<li><p><strong>~Grid.nradar</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Number of radars whose data was used to make the grid.</p></li>
-<li><p><strong>~Grid.projection_proj</strong> (<em>Proj</em>) – pyproj.Proj instance for the projection specified by the projection
+<li><p><strong>radar_time</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a><em> or </em><em>None</em><em>, </em><em>optional</em>) – Start of collection for the radar which make up the grid.</p></li>
+<li><p><strong>radar_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a><em> or </em><em>None</em><em>, </em><em>optional</em>) – Names of the radars which make up the grid.</p></li>
+<li><p><strong>nradar</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.10)"><em>int</em></a>) – Number of radars whose data was used to make the grid.</p></li>
+<li><p><strong>projection_proj</strong> (<em>Proj</em>) – pyproj.Proj instance for the projection specified by the projection
 attribute. If the ‘pyart_aeqd’ projection is specified accessing this
 attribute will raise a ValueError.</p></li>
 <li><p><strong>point_z</strong> (<em>point_x</em><em>, </em><em>point_y</em><em>,</em>) – The Cartesian locations of all grid points from the origin in the
@@ -2916,7 +2921,7 @@ defined in the <cite>projection</cite> attribute are used to perform an inverse
 map projection from the Cartesian grid point locations relative to
 the grid origin. If these attributes are changed use
 <a class="reference internal" href="pyart.core.Grid.init_point_longitude_latitude.html#pyart.core.Grid.init_point_longitude_latitude" title="pyart.core.Grid.init_point_longitude_latitude"><code class="xref py py-func docutils literal notranslate"><span class="pre">init_point_longitude_latitude()</span></code></a> to reset the attributes.</p></li>
-<li><p><strong>~Grid.point_altitude</strong> (<a class="reference internal" href="pyart.lazydict.LazyLoadDict.html#pyart.lazydict.LazyLoadDict" title="pyart.lazydict.LazyLoadDict"><em>LazyLoadDict</em></a>) – The altitude of each grid point as calculated from the altitude of the
+<li><p><strong>point_altitude</strong> (<a class="reference internal" href="pyart.lazydict.LazyLoadDict.html#pyart.lazydict.LazyLoadDict" title="pyart.lazydict.LazyLoadDict"><em>LazyLoadDict</em></a>) – The altitude of each grid point as calculated from the altitude of the
 grid origin and the Cartesian z location of each grid point.  If this
 attribute is changed use <a class="reference internal" href="pyart.core.Grid.init_point_altitude.html#pyart.core.Grid.init_point_altitude" title="pyart.core.Grid.init_point_altitude"><code class="xref py py-func docutils literal notranslate"><span class="pre">init_point_altitude()</span></code></a> to reset the
 attribute.</p></li>
@@ -2926,7 +2931,7 @@ attribute.</p></li>
 <p>Initalize object.</p>
 </dd></dl>
 
-<table class="longtable table autosummary">
+<table class="autosummary longtable table autosummary">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -2958,7 +2963,7 @@ attribute.</p></li>
 </tr>
 </tbody>
 </table>
-<table class="longtable table autosummary">
+<table class="autosummary longtable table autosummary">
 <colgroup>
 <col style="width: 10%" />
 <col style="width: 90%" />
@@ -3015,7 +3020,7 @@ attribute.</p></li>
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.4.0.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0.<br>
 </p>
     </div>
     

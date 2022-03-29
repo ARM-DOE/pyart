@@ -1,6 +1,0 @@
-pyart.map.GateMapper.tolerance
-==============================
-
-.. currentmodule:: pyart.map
-
-.. autoproperty:: GateMapper.tolerance

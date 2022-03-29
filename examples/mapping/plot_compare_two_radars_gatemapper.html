@@ -403,14 +403,15 @@ another radar in Antenna coordinates and compare the fields.</p>
 <p>We are interested in mapping the southwestern radar to the
 southeastern radar. Before running our gatemapper, we add a
 filter for only positive reflectivity values.
-We also need to set a tolerance distance (difference in meters
+We also need to set a distance (meters) and time (seconds)
 between the source and destination gate allowed for an
-adequate match), using the tol variable.</p>
+adequate match), using the distance_tolerance/time_tolerance variables.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gatefilter</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">GateFilter</span><span class="p">(</span><span class="n">radar_sw</span><span class="p">)</span>
 <span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_below</span><span class="p">(</span><span class="s1">&#39;reflectivity_horizontal&#39;</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
 <span class="n">gmapper</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">GateMapper</span><span class="p">(</span><span class="n">radar_sw</span><span class="p">,</span>
                                <span class="n">radar_se</span><span class="p">,</span>
-                               <span class="n">tol</span><span class="o">=</span><span class="mf">500.</span><span class="p">,</span>
+                               <span class="n">distance_tolerance</span><span class="o">=</span><span class="mf">500.</span><span class="p">,</span>
+                               <span class="n">time_tolerance</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
                                <span class="n">gatefilter_src</span><span class="o">=</span><span class="n">gatefilter</span><span class="p">)</span>
 <span class="n">radar_sw_mapped_to_radar_se</span> <span class="o">=</span> <span class="n">gmapper</span><span class="o">.</span><span class="n">mapped_radar</span><span class="p">([</span><span class="s1">&#39;reflectivity_horizontal&#39;</span><span class="p">])</span>
 </pre></div>
@@ -557,7 +558,7 @@ case where our scans don’t neccessarily match exactly in time.</p>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_compare_two_radars_gatemapper_004.png" srcset="../../_images/sphx_glr_plot_compare_two_radars_gatemapper_004.png" alt="plot compare two radars gatemapper" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  57.665 seconds)</p>
+<img src="../../_images/sphx_glr_plot_compare_two_radars_gatemapper_004.png" srcset="../../_images/sphx_glr_plot_compare_two_radars_gatemapper_004.png" alt="plot compare two radars gatemapper" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  48.593 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-mapping-plot-compare-two-radars-gatemapper-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/5c47e9554453161fc47b899acb767913/plot_compare_two_radars_gatemapper.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_compare_two_radars_gatemapper.py</span></code></a></p>
@@ -613,7 +614,7 @@ case where our scans don’t neccessarily match exactly in time.</p>
     
     <div class="footer-item">
       <p class="sphinx-version">
-Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.4.0.<br>
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0.<br>
 </p>
     </div>
     

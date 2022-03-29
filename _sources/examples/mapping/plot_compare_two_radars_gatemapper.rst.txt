@@ -81,11 +81,11 @@ For this example, we use two XSAPR radars from our test data.
 We are interested in mapping the southwestern radar to the
 southeastern radar. Before running our gatemapper, we add a
 filter for only positive reflectivity values.
-We also need to set a tolerance distance (difference in meters
+We also need to set a distance (meters) and time (seconds)
 between the source and destination gate allowed for an
-adequate match), using the tol variable.
+adequate match), using the distance_tolerance/time_tolerance variables.
 
-.. GENERATED FROM PYTHON SOURCE LINES 44-53
+.. GENERATED FROM PYTHON SOURCE LINES 44-54
 
 .. code-block:: default
 
@@ -94,7 +94,8 @@ adequate match), using the tol variable.
     gatefilter.exclude_below('reflectivity_horizontal', 20)
     gmapper = pyart.map.GateMapper(radar_sw,
                                    radar_se,
-                                   tol=500.,
+                                   distance_tolerance=500.,
+                                   time_tolerance=60,
                                    gatefilter_src=gatefilter)
     radar_sw_mapped_to_radar_se = gmapper.mapped_radar(['reflectivity_horizontal'])
 
@@ -105,14 +106,14 @@ adequate match), using the tol variable.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 54-58
+.. GENERATED FROM PYTHON SOURCE LINES 55-59
 
 **Plot the Original Data**
 
 Let's take a look at our original fields - notice the difference
 in reflectivity values!
 
-.. GENERATED FROM PYTHON SOURCE LINES 58-90
+.. GENERATED FROM PYTHON SOURCE LINES 59-91
 
 .. code-block:: default
 
@@ -160,12 +161,12 @@ in reflectivity values!
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 91-93
+.. GENERATED FROM PYTHON SOURCE LINES 92-94
 
 Now, we can compare our original field from the southwestern radar,
 to the new remapped field - there are similarities...
 
-.. GENERATED FROM PYTHON SOURCE LINES 93-126
+.. GENERATED FROM PYTHON SOURCE LINES 94-127
 
 .. code-block:: default
 
@@ -214,7 +215,7 @@ to the new remapped field - there are similarities...
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 127-134
+.. GENERATED FROM PYTHON SOURCE LINES 128-135
 
 **Calculate and Plot the Difference**
 
@@ -224,7 +225,7 @@ Keep in mind there is a time difference of ~ 1 minute between these plots,
 leading to small difference due to the precipitation moving through the 
 domain over the course of that minute.
 
-.. GENERATED FROM PYTHON SOURCE LINES 134-168
+.. GENERATED FROM PYTHON SOURCE LINES 135-169
 
 .. code-block:: default
 
@@ -274,7 +275,7 @@ domain over the course of that minute.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 169-174
+.. GENERATED FROM PYTHON SOURCE LINES 170-175
 
 **Plot a Histogram for Comparison**
 
@@ -282,7 +283,7 @@ Another way of plotting the comparison here is using
 a 2-dimensional histogram,which is more helpful in this
 case where our scans don't neccessarily match exactly in time.
 
-.. GENERATED FROM PYTHON SOURCE LINES 174-202
+.. GENERATED FROM PYTHON SOURCE LINES 175-203
 
 .. code-block:: default
 
@@ -329,7 +330,7 @@ case where our scans don't neccessarily match exactly in time.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  57.665 seconds)
+   **Total running time of the script:** ( 0 minutes  48.593 seconds)
 
 
 .. _sphx_glr_download_examples_mapping_plot_compare_two_radars_gatemapper.py:

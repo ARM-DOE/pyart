@@ -26,5 +26,6 @@ pyart.map.GateMapper
    :toctree:
 
 
-   ~GateMapper.tolerance
+   ~GateMapper.distance_tolerance
+   ~GateMapper.time_tolerance
 
