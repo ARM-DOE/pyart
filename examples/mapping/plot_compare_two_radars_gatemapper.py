@@ -38,15 +38,16 @@ radar_se = pyart.io.read_cfradial(xsapr_se_file)
 # We are interested in mapping the southwestern radar to the
 # southeastern radar. Before running our gatemapper, we add a
 # filter for only positive reflectivity values.
-# We also need to set a tolerance distance (difference in meters
+# We also need to set a distance (meters) and time (seconds)
 # between the source and destination gate allowed for an
-# adequate match), using the tol variable.
+# adequate match), using the distance_tolerance/time_tolerance variables.
 
 gatefilter = pyart.filters.GateFilter(radar_sw)
 gatefilter.exclude_below('reflectivity_horizontal', 20)
 gmapper = pyart.map.GateMapper(radar_sw,
                                radar_se,
-                               tol=500.,
+                               distance_tolerance=500.,
+                               time_tolerance=60,
                                gatefilter_src=gatefilter)
 radar_sw_mapped_to_radar_se = gmapper.mapped_radar(['reflectivity_horizontal'])
 
