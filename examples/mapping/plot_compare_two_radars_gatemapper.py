@@ -181,7 +181,7 @@ refl_se = reflectivity_se_radar[incl_gates, :]
 refl_sw = reflectivity_sw_radar[incl_gates, :]
 
 # Make sure not include masked values
-values_without_mask = np.logical_and(~refl_se, ~refl_sw)
+values_without_mask = np.logical_and(~refl_se.mask, ~refl_sw.mask)
 refl_se = refl_se[values_without_mask]
 refl_sw = refl_sw[values_without_mask]
 
