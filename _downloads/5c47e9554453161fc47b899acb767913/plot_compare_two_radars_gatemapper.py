@@ -180,6 +180,11 @@ incl_gates = np.argwhere(radar_sw_mapped_to_radar_se.elevation['data'] > 1.)
 refl_se = reflectivity_se_radar[incl_gates, :]
 refl_sw = reflectivity_sw_radar[incl_gates, :]
 
+# Make sure not include masked values
+values_without_mask = np.logical_and(~refl_se.mask, ~refl_sw.mask)
+refl_se = refl_se[values_without_mask]
+refl_sw = refl_sw[values_without_mask]
+
 # Set the bins for our histogram
 bins = np.arange(-10, 60, 1)
 
@@ -192,7 +197,7 @@ fig = plt.figure(figsize=(8, 6))
 
 # Create a 1-1 comparison
 x, y = np.meshgrid((bins[:-1] + bins[1:])/2., (bins[:-1] + bins[1:])/2.)
-c = plt.pcolormesh(x, y, np.log10(hist), cmap='pyart_HomeyerRainbow')
+c = plt.pcolormesh(x, y, np.log10(hist.T), cmap='pyart_HomeyerRainbow')
 
 # Add a colorbar and labels
 plt.colorbar(c, label='$log_{10}$ counts')
