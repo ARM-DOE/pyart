@@ -32,3 +32,4 @@ dependencies:
       - ablog
       - nbsphinx
       - pooch
+      - versioneer
