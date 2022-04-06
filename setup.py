@@ -190,7 +190,7 @@ if os.name == 'posix':
 
 # Check build pyx extensions
 extension_check_build = Extension(
-    'pyart._chunk_build._check_build', sources=['pyart/__check_build/_check_build.pyx'],
+    'pyart._check_build._check_build', sources=['pyart/__check_build/_check_build.pyx'],
     include_dirs=[get_include()])
 
 extensions.append(extension_check_build)
