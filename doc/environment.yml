@@ -22,6 +22,7 @@ dependencies:
   - pytest
   - coin-or-cbc
   - pkg-config
+  - Cython
   - pip
   - pip:
       - pydata-sphinx-theme
@@ -31,4 +32,3 @@ dependencies:
       - ablog
       - nbsphinx
       - pooch
-      - Cython

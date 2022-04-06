@@ -17,9 +17,9 @@ dependencies:
   - coveralls
   - flake8
   - pytest
+  - Cython
   - pip
   - pip:
     - pooch
-    - Cython
     - versioneer
 
