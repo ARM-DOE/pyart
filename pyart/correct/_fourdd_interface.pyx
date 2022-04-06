@@ -3,11 +3,11 @@ Cython wrapper around the University of Washington FourDD algorithm.
 
 """
 
-cimport _fourdd_h
+from pyart.correct cimport _fourdd_h
 cimport numpy as np
 from pyart.io._rsl_interface cimport _RslVolume
 
-from ..io import _rsl_interface
+from pyart.io import _rsl_interface
 
 
 cpdef create_soundvolume(radialVelVolume,

@@ -1,0 +1,8 @@
+numpy
+scipy
+netCDF4
+matplotlib
+pooch
+cftime
+cartopy
+cython

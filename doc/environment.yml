@@ -5,7 +5,7 @@ channels:
 dependencies:
   - gdal
   - numpy
-  - scipy>=1.7
+  - scipy
   - matplotlib
   - pandas
   - netcdf4

@@ -40,10 +40,6 @@ else:
     # print out helpful message if build fails or importing from source tree
     from . import __check_build
 
-    # versioning
-    from .version import git_revision as __git_revision__
-    from .version import version as __version__
-
     # import subpackages
     from . import core
     from . import io
@@ -97,6 +93,12 @@ else:
 
     # Do not use `test` as function name as this leads to a recursion problem
     # with the pytest test suite.
-    test = _test
-    test_verbose = _functools.partial(test, verbose=True)
-    test_verbose.__doc__ = test.__doc__
+    #test = _test
+    #test_verbose = _functools.partial(test, verbose=True)
+    #test_verbose.__doc__ = test.__doc_
+
+    #vdict = get_version()
+    #__version__ = vdict['version']_
+
+from . import _version
+__version__ = _version.get_versions()['version']
