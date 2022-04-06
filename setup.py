@@ -40,28 +40,31 @@ rebuild and reinstall Py-ART after verifying:
 ==============================================================================
 """
 
-CLASSIFIERS = [
-    'Development Status :: 5 - Production/Stable',
-    'Intended Audience :: Science/Research',
-    'Intended Audience :: Developers',
-    'License :: OSI Approved :: BSD License',
-    'Programming Language :: Python',
-    'Programming Language :: Python :: 2',
-    'Programming Language :: Python :: 2.7',
-    'Programming Language :: Python :: 3',
-    'Programming Language :: Python :: 3.6',
-    'Programming Language :: Python :: 3.7',
-    'Programming Language :: C',
-    'Programming Language :: Cython',
-    'Topic :: Scientific/Engineering',
-    'Topic :: Scientific/Engineering :: Atmospheric Science',
-    'Operating System :: POSIX :: Linux',
-    'Operating System :: MacOS :: MacOS X',
-    'Operating System :: Microsoft :: Windows',
-    'Framework :: Matplotlib']
+CLASSIFIERS = """\
+    Development Status :: 5 - Production/Stable
+    Intended Audience :: Science/Research
+    Intended Audience :: Developers
+    License :: OSI Approved :: BSD License
+    Programming Language :: Python
+    Programming Language :: Python :: 3
+    Programming Language :: Python :: 3.6
+    Programming Language :: Python :: 3.7
+    Programming Language :: Python :: 3.8
+    Programming Language :: Python :: 3.9
+    Programming Language :: Python :: 3.10
+    Programming Language :: C
+    Programming Language :: Cython
+    Topic :: Scientific/Engineering
+    Topic :: Scientific/Engineering :: Atmospheric Science
+    Operating System :: POSIX :: Linux
+    Operating System :: MacOS :: MacOS X
+    Operating System :: Microsoft :: Windows
+    Framework :: Matplotlib
+"""
 
 NAME = 'arm_pyart'
 AUTHOR = "Scott Collis, Jonathan Helmus"
+AUTHOR_EMAIL = "scollis@anl.gov"
 MAINTAINER = "Py-ART Developers"
 MAINTAINER_EMAIL = "zsherman@anl.gov, scollis@anl.gov, mgrover@anl.gov"
 DESCRIPTION = DOCLINES[0]
@@ -69,7 +72,7 @@ LONG_DESCRIPTION = "\n".join(DOCLINES[2:])
 URL = "https://github.com/ARM-DOE/pyart"
 DOWNLOAD_URL = "https://github.com/ARM-DOE/pyart"
 LICENSE = 'BSD'
-PLATFORMS = ["Linux", "Mac OS-X", "Unix", "Windows"]
+PLATFORMS = "Linux, Mac OS-X, Unix, Windows"
 SCRIPTS = glob.glob('scripts/*')
 
 
@@ -256,6 +259,7 @@ setup(
     description=DOCLINES[0],
     long_description="\n".join(DOCLINES[2:]),
     author=AUTHOR,
+    author_email=AUTHOR_EMAIL,
     maintainer=MAINTAINER,
     maintainer_email=MAINTAINER_EMAIL,
     url=URL,
