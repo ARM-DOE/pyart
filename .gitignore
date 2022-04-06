@@ -95,6 +95,17 @@ Thumbs.db
 sandbox
 pyart/version.py
 pyart/retrieve/_echo_steinermodule.c
+pyart/io/nexrad_interpolate.c
+pyart/io/_sigmetfile.c
+pyart/__check_build/_check_build.c
+pyart/map/_gate_to_grid_map.c
+pyart/map/ckdtree.c
+pyart/map/_load_nn_field_data.c
+pyart/correct/_unwrap_1d.c
+pyart/correct/_fast_edge_finder.c
+pyart/correct/_unwrap_2d.c
+pyart/correct/_unwrap_3d.c
+pyart/retrieve/_kdp_proc.c
 
 # Documentation files #
 #######################
