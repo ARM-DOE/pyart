@@ -270,8 +270,7 @@ setup(
     install_requires=requirements,
     license=LICENSE,
     platforms=PLATFORMS,
-    classifiers=[
-        CLASSIFIERS],
+    classifiers=CLASSIFIERS,
     zip_safe=False,
     ext_modules=cythonize(
         extensions, compiler_directives={'language_level' : "3"}),
