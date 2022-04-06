@@ -15,9 +15,7 @@ DOCLINES = __doc__.split("\n")
 
 import os
 from os import path
-import shutil
 import sys
-import re
 import subprocess
 import glob
 from numpy import get_include
@@ -63,8 +61,9 @@ CLASSIFIERS = [
     'Framework :: Matplotlib']
 
 NAME = 'arm_pyart'
+AUTHOR = "Scott Collis, Jonathan Helmus"
 MAINTAINER = "Py-ART Developers"
-MAINTAINER_EMAIL = "zsherman@anl.gov, scollis@anl.gov"
+MAINTAINER_EMAIL = "zsherman@anl.gov, scollis@anl.gov, mgrover@anl.gov"
 DESCRIPTION = DOCLINES[0]
 LONG_DESCRIPTION = "\n".join(DOCLINES[2:])
 URL = "https://github.com/ARM-DOE/pyart"
@@ -137,10 +136,8 @@ def check_rsl_path(rsl_lib_path, rsl_include_path):
 rsl_path = os.environ.get('RSL_PATH')
 if rsl_path is None:
     rsl_path = guess_rsl_path()
-print(rsl_path)
 rsl_lib_path = os.path.join(rsl_path, 'lib')
 rsl_include_path = os.path.join(rsl_path, 'include')
-print(rsl_include_path)
 
 # build the RSL IO and FourDD dealiaser if RSL is installed
 if check_rsl_path(rsl_lib_path, rsl_include_path):
@@ -159,9 +156,6 @@ if check_rsl_path(rsl_lib_path, rsl_include_path):
         include_dirs=[
             rsl_include_path, 'pyart/correct/src'] + [get_include()],
         runtime_library_dirs=[rsl_lib_path])
-
-    print(rsl_include_path)
-    print(rsl_lib_path)
 
     # Cython wrapper around RSL io
     extension_rsl = Extension(
@@ -261,9 +255,9 @@ setup(
     cmdclass=cmdclass,
     description=DOCLINES[0],
     long_description="\n".join(DOCLINES[2:]),
-    author=['Scott Collis', 'Jonathan Helmus',
-            'Zachary Sherman', 'Max Grover', 'Robert Jackson'],
-    author_email=['scollis@anl.gov', 'zsherman@anl.gov', 'mgrover.anl,gov'],
+    author=AUTHOR,
+    maintainer=MAINTAINER,
+    maintainer_email=MAINTAINER_EMAIL,
     url=URL,
     packages=find_packages(exclude=['docs']),
     include_package_data=True,
