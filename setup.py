@@ -256,28 +256,6 @@ extension_kdp = Extension(
 
 extensions.append(extension_kdp)
 
-"""
-cython_list = [
-    "pyart/io/nexrad_interpolate.pyx",
-    "pyart/io/_sigmetfile.pyx",
-    "pyart/__check_build/_check_build.pyx",
-    "pyart/map/_gate_to_grid_map.pyx",
-    "pyart/map/ckdtree.pyx",
-    "pyart/map/_load_nn_field_data.pyx",
-    "pyart/correct/_unwrap_1d.pyx",
-    "pyart/correct/_fast_edge_finder.pyx",
-    "pyart/correct/_unwrap_2d.pyx",
-    "pyart/correct/_unwrap_3d.pyx"
-    "pyart/retrieve/_kdp_proc.pyx",]
-
-
-extension_rest = Extension("*", cython_list,
-                           include_dirs=[
-                           get_include()])
-
-extensions.append(extension_rest)
-"""
-
 ## Configure setup.py commands
 cmdclass = versioneer.get_cmdclass()
 cmdclass.update(build_ext=Cython.Distutils.build_ext)
