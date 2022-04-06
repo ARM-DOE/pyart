@@ -71,11 +71,6 @@ URL = "https://github.com/ARM-DOE/pyart"
 DOWNLOAD_URL = "https://github.com/ARM-DOE/pyart"
 LICENSE = 'BSD'
 PLATFORMS = ["Linux", "Mac OS-X", "Unix", "Windows"]
-MAJOR = 1
-MINOR = 11
-MICRO = 8
-ISRELEASED = True
-VERSION = '%d.%d.%d' % (MAJOR, MINOR, MICRO)
 SCRIPTS = glob.glob('scripts/*')
 
 
@@ -273,6 +268,7 @@ setup(
     packages=find_packages(exclude=['docs']),
     include_package_data=True,
     package_data={'pyart': []},
+    scripts=SCRIPTS,
     install_requires=requirements,
     license=LICENSE,
     platforms=PLATFORMS,
