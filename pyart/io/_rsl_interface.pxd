@@ -1,7 +1,7 @@
 """ Shared extensions in _rsl_interface, used by _fourdd_interface. """
 
 
-cimport _rsl_h
+cimport pyart.io._rsl_h as _rsl_h
 
 cdef class _RslVolume:
     cdef _rsl_h.Volume * _Volume

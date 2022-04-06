@@ -38,15 +38,16 @@ radar_se = pyart.io.read_cfradial(xsapr_se_file)
 # We are interested in mapping the southwestern radar to the
 # southeastern radar. Before running our gatemapper, we add a
 # filter for only positive reflectivity values.
-# We also need to set a tolerance distance (difference in meters
+# We also need to set a distance (meters) and time (seconds)
 # between the source and destination gate allowed for an
-# adequate match), using the tol variable.
+# adequate match), using the distance_tolerance/time_tolerance variables.
 
 gatefilter = pyart.filters.GateFilter(radar_sw)
 gatefilter.exclude_below('reflectivity_horizontal', 20)
 gmapper = pyart.map.GateMapper(radar_sw,
                                radar_se,
-                               tol=500.,
+                               distance_tolerance=500.,
+                               time_tolerance=60,
                                gatefilter_src=gatefilter)
 radar_sw_mapped_to_radar_se = gmapper.mapped_radar(['reflectivity_horizontal'])
 
@@ -179,6 +180,11 @@ incl_gates = np.argwhere(radar_sw_mapped_to_radar_se.elevation['data'] > 1.)
 refl_se = reflectivity_se_radar[incl_gates, :]
 refl_sw = reflectivity_sw_radar[incl_gates, :]
 
+# Make sure not include masked values
+values_without_mask = np.logical_and(~refl_se.mask, ~refl_sw.mask)
+refl_se = refl_se[values_without_mask]
+refl_sw = refl_sw[values_without_mask]
+
 # Set the bins for our histogram
 bins = np.arange(-10, 60, 1)
 
@@ -191,7 +197,7 @@ fig = plt.figure(figsize=(8, 6))
 
 # Create a 1-1 comparison
 x, y = np.meshgrid((bins[:-1] + bins[1:])/2., (bins[:-1] + bins[1:])/2.)
-c = plt.pcolormesh(x, y, np.log10(hist), cmap='pyart_HomeyerRainbow')
+c = plt.pcolormesh(x, y, np.log10(hist.T), cmap='pyart_HomeyerRainbow')
 
 # Add a colorbar and labels
 plt.colorbar(c, label='$log_{10}$ counts')
