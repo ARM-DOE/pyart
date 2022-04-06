@@ -169,18 +169,25 @@ html_js_files = ['doc_shared.js']
 # This is required for the alabaster theme
 # refs: http://alabaster.readthedocs.io/en/latest/installation.html#sidebars
 html_sidebars = {
-    'userguide': ['searchbox.html', 'sidebar-nav-bs.html'],
-    'API': ['searchbox.html', 'sidebar-nav-bs.html'],
-    'examples': ['searchbox.html', 'sidebar-nav-bs.html'],
+    'userguide/*': ['searchbox.html', 'sidebar-nav-bs.html'],
+    'API/*': ['searchbox.html', 'sidebar-nav-bs.html'],
+    'examples/*': ['searchbox.html', 'sidebar-nav-bs.html'],
     'notebook-gallery': ['searchbox.html', 'sidebar-nav-bs.html'],
+    'changelog': ['searchbox.html', 'sidebar-nav-bs.html'],
     'blog': [
         'searchbox.html',
-        'search-field.html',
         'sidebar-nav-bs.html',
         'postcard.html',
         'recentposts.html',
         'archives.html',
-    ]
+    ],
+    'blog_posts/*/*': [
+        'searchbox.html',
+        'sidebar-nav-bs.html',
+        'postcard.html',
+        'recentposts.html',
+        'archives.html',
+    ],
 }
 
 # Setup the blog portion
