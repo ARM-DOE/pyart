@@ -72,7 +72,8 @@ LONG_DESCRIPTION = "\n".join(DOCLINES[2:])
 URL = "https://github.com/ARM-DOE/pyart"
 DOWNLOAD_URL = "https://github.com/ARM-DOE/pyart"
 LICENSE = 'BSD'
-PLATFORMS = "Linux, Mac OS-X, Unix, Windows"
+CLASSIFIERS = list(filter(None, CLASSIFIERS.split("\n")))
+PLATFORMS = ["Linux", "Mac OS-X", "Unix", "Windows"]
 SCRIPTS = glob.glob('scripts/*')
 
 
