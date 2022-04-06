@@ -1,5 +1,37 @@
 # Changelog
 
+## PyART v1.12.0
+
+([full changelog](https://github.com/ARM-DOE/pyart/compare/v1.11.8...v1.12.0))
+
+### Bugs fixed
+
+- FIX: Fix doc package version [#1097](https://github.com/ARM-DOE/pyart/pull/1097) ([@mgrover1](https://github.com/mgrover1))
+- FIX: Add revisions to GateMapper example [#1094](https://github.com/ARM-DOE/pyart/pull/1094) ([@mgrover1](https://github.com/mgrover1))
+- FIX: Fix for mac numpy error for masked array volume metadata. [#1080](https://github.com/ARM-DOE/pyart/pull/1080) ([@zssherman](https://github.com/zssherman))
+
+### Maintenance and upkeep improvements
+
+- MNT: Fix for setup.py registry file. [#1087](https://github.com/ARM-DOE/pyart/pull/1087) ([@zssherman](https://github.com/zssherman))
+
+### Other merged PRs
+
+- INSTALL: Use Setuptools For Installation [#1096](https://github.com/ARM-DOE/pyart/pull/1096) ([@mgrover1](https://github.com/mgrover1))
+- ADD: Time tolerance to GateMapper [#1093](https://github.com/ARM-DOE/pyart/pull/1093) ([@rcjackson](https://github.com/rcjackson))
+- Rename Gatemapper Example to Execute [#1090](https://github.com/ARM-DOE/pyart/pull/1090) ([@mgrover1](https://github.com/mgrover1))
+- Add plt.show() [#1089](https://github.com/ARM-DOE/pyart/pull/1089) ([@mgrover1](https://github.com/mgrover1))
+- Add an example for Gatemapper [#1088](https://github.com/ARM-DOE/pyart/pull/1088) ([@mgrover1](https://github.com/mgrover1))
+- This fixes the title of the blog post [#1085](https://github.com/ARM-DOE/pyart/pull/1085) ([@mgrover1](https://github.com/mgrover1))
+- Add a blog post looking at KAZR data [#1084](https://github.com/ARM-DOE/pyart/pull/1084) ([@mgrover1](https://github.com/mgrover1))
+- Fix bug in analytics ID [#1081](https://github.com/ARM-DOE/pyart/pull/1081) ([@mgrover1](https://github.com/mgrover1))
+- Add new google analytics ID [#1079](https://github.com/ARM-DOE/pyart/pull/1079) ([@mgrover1](https://github.com/mgrover1))
+- ADD: Gatefilter to GateMapper. [#1077](https://github.com/ARM-DOE/pyart/pull/1077) ([@rcjackson](https://github.com/rcjackson))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/ARM-DOE/pyart/graphs/contributors?from=2022-03-15&to=2022-04-06&type=c))
+
+[@mgrover1](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Amgrover1+updated%3A2022-03-15..2022-04-06&type=Issues) | [@rcjackson](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Arcjackson+updated%3A2022-03-15..2022-04-06&type=Issues) | [@zssherman](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Azssherman+updated%3A2022-03-15..2022-04-06&type=Issues)
 
 ## PyART v1.11.8
 
