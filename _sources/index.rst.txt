@@ -40,6 +40,13 @@ The Python ARM Radar Toolkit - Py-ART
 .. toctree::
    :maxdepth: 1
    :hidden:
+   :caption: Changelog
+   
+   changelog.md
+
+.. toctree::
+   :maxdepth: 1
+   :hidden:
    :caption: Getting Help
 
    GitHub Issue Tracker <https://github.com/ARM-DOE/pyart/issues>
