@@ -54,6 +54,7 @@ jobs:
 
       - name: Install PyART
         run: |
+          versioneer install
           python -m pip install -e . --no-deps --force-reinstall
 
       - name: Run Linting

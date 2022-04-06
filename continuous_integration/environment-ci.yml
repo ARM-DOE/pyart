@@ -21,4 +21,5 @@ dependencies:
   - pip:
     - pooch
     - Cython
+    - versioneer
 
