@@ -5,7 +5,7 @@ channels:
 dependencies:
   - gdal
   - numpy
-  - scipy>=1.7
+  - scipy
   - matplotlib
   - pandas
   - netcdf4
@@ -22,6 +22,7 @@ dependencies:
   - pytest
   - coin-or-cbc
   - pkg-config
+  - Cython
   - pip
   - pip:
       - pydata-sphinx-theme
