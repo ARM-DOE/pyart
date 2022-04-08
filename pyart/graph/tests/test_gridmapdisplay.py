@@ -8,7 +8,6 @@
 import matplotlib.pyplot as plt
 import pytest
 
-import cartopy.crs as ccrs
 import pyart
 
 @pytest.mark.skipif(not pyart.graph.gridmapdisplay._XARRAY_AVAILABLE,
@@ -38,7 +37,10 @@ def test_gridmapdisplay_imshow(outfile=None):
 
 @pytest.mark.skipif(not pyart.graph.gridmapdisplay._XARRAY_AVAILABLE,
                     reason='Xarray is not installed')
+@pytest.mark.skipif(not pyart.graph.gridmapdisplay._CARTOPY_AVAILABLE,
+                    reason='Cartopy is not installed')
 def test_gridmapdisplay_fancy(outfile=None):
+    import cartopy.crs as ccrs
     # test a bunch of GridMapDisplay functionaliy
     grid = pyart.testing.make_target_grid()
     display = pyart.graph.GridMapDisplay(grid)
