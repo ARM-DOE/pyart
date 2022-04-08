@@ -13,6 +13,12 @@ try:
 except ImportError:
     _PYPROJ_AVAILABLE = False
 
+try:
+    import xarray
+    _XARRAY_AVAILABLE = True
+except ImportError:
+    _XARRAY_AVAILABLE = False
+
 import pyart
 from pyart.lazydict import LazyLoadDict
 import netCDF4
@@ -74,6 +80,8 @@ def test_grid_write_method():
         #  assert grid1.nradar == grid2.nradar
 
 
+@pytest.mark.skipif(not _XARRAY_AVAILABLE,
+                    reason='Xarray is not installed')
 def test_grid_to_xarray():    
     grid = pyart.testing.make_target_grid()
     ds = grid.to_xarray()
