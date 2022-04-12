@@ -184,6 +184,7 @@ html_sidebars = {
     'blog_posts/*/*': [
         'searchbox.html',
         'sidebar-nav-bs.html',
+        'postcard.html',
         'recentposts.html',
         'archives.html',
     ],
