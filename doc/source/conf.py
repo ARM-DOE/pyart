@@ -177,14 +177,13 @@ html_sidebars = {
     'blog': [
         'searchbox.html',
         'sidebar-nav-bs.html',
-        'postcard.html',
+        'tagcloud.html',
         'recentposts.html',
         'archives.html',
     ],
     'blog_posts/*/*': [
         'searchbox.html',
         'sidebar-nav-bs.html',
-        'postcard.html',
         'recentposts.html',
         'archives.html',
     ],
@@ -274,3 +273,10 @@ intersphinx_mapping = {
     'pandas': ('https://pandas.pydata.org/pandas-docs/stable', None),
     'matplotlib': ('https://matplotlib.org', None),
     }
+
+# Add myst extensions
+myst_enable_extensions = ['amsmath',
+                          'colon_fence',
+                          'deflist',
+                          'html_image',
+                          'dollarmath']
