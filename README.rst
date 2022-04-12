@@ -99,6 +99,10 @@ To update an older version of Py-ART to the latest release use::
 
     conda update -c conda-forge arm_pyart
 
+If you are using mamba::
+
+    mamba install arm_pyart
+
 If you do not wish to use Anaconda or Miniconda as a Python environment or want
 to use the latest, unreleased version of Py-ART see the section below on 
 **Installing from source**.
@@ -143,23 +147,27 @@ Other related open source software for working with weather radar data:
   
 * `BALTRAD <https://baltrad.eu/>`_ : Community-based weather radar networking.
 
-* `MMM-Py <https://github.com/nasa/MMM-Py>`_ : 
+* `MMM-Py <https://github.com/nasa/MMM-Py>`_ :
   Marshall MRMS Mosaic Python Toolkit.
 
-* `CSU_RadarTools <https://github.com/CSU-Radarmet/CSU_RadarTools>`_ : 
+* `CSU_RadarTools <https://github.com/CSU-Radarmet/CSU_RadarTools>`_ :
   Colorado State University Radar Tools.
 
 * `TRMM RSL <https://trmm-fc.gsfc.nasa.gov/trmm_gv/software/rsl/>`_ :
   TRMM Radar Software Library.
 
-* `RadX <https://www.ral.ucar.edu/projects/titan/docs/radial_formats/radx.html>`_: 
+* `RadX <https://www.ral.ucar.edu/projects/titan/docs/radial_formats/radx.html>`_ :
   Radx C++ Software Package for Radial Radar Data.
+
+* `PyDDA <https://openradarscience.org/PyDDA/>`_ :
+  Software designed to retrieve wind kinematics in precipitation storm systems
+  from one or more Doppler weather radars.
 
 
 Dependencies
 ============
 
-Py-ART is tested to work under Python 3.6, 3.7 and 3.8
+Py-ART is tested to work under Python 3.6, 3.7, 3.8, 3.9 and 3.10
 
 The required dependencies to install Py-ART in addition to Python are:
 
@@ -167,6 +175,9 @@ The required dependencies to install Py-ART in addition to Python are:
 * `SciPy <https://www.scipy.org>`_
 * `matplotlib <https://matplotlib.org/>`_
 * `netCDF4 <https://github.com/Unidata/netcdf4-python>`_
+* `pooch <https://pypi.org/project/pooch/>`_
+* `Cython <https://cython.readthedocs.io/en/latest/>`_
+* `setuptools <https://setuptools.pypa.io/en/latest/index.html>`_
 
 A working C/C++ compiler is required for some optional modules. An easy method
 to install these dependencies is by using a 
@@ -249,6 +260,10 @@ To install for all users on Unix/Linux::
 
     python setup.py build
     sudo python setup.py install
+
+Development install using pip from within Py-ART directory::
+
+    pip install -e .
 
 
 Development
