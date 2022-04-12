@@ -1,0 +1,1424 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Fixing Weird Patterns When Plotting NEXRAD Level 3 Data &#8212; Py-ART 1.12.1.post1.dev0+g626c714e9 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pyart-theme.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/doc_shared.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-JJEG3CV376"></script>
+<script>
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){ dataLayer.push(arguments); }
+                    gtag('js', new Date());
+                    gtag('config', 'G-JJEG3CV376');
+                </script>
+ 
+<link
+  rel="alternate"
+  type="application/atom+xml"
+  href="../../blog/atom.xml"
+  title="PyART Blog"
+/>
+ 
+<style type="text/css">
+  ul.ablog-archive {
+    list-style: none;
+    overflow: auto;
+    margin-left: 0px;
+  }
+  ul.ablog-archive li {
+    float: left;
+    margin-right: 5px;
+    font-size: 80%;
+  }
+  ul.postlist a {
+    font-style: italic;
+  }
+  ul.postlist-style-disc {
+    list-style-type: disc;
+  }
+  ul.postlist-style-none {
+    list-style-type: none;
+  }
+  ul.postlist-style-circle {
+    list-style-type: circle;
+  }
+</style>
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+  <nav class="navbar navbar-dark navbar-expand-lg bg-arm fixed-top bd-navbar shadow" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+<a class="navbar-brand" href="../../index.html">
+<p class="title">Py-ART</p>
+</a>
+
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../userguide/index.html">
+  User Guide
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../API/index.html">
+  API Reference Manual
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../examples/index.html">
+  Example Gallery
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../notebook-gallery.html">
+  Notebook Gallery
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../blog.html">
+  Blog
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../changelog.html">
+  Changelog
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference external nav-link" href="https://github.com/ARM-DOE/pyart/issues">
+  GitHub Issue Tracker
+ </a>
+</li>
+
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/ARM-DOE/pyart" rel="noopener" target="_blank" title="GitHub"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://twitter.com/Py_ART" rel="noopener" target="_blank" title="Twitter"><span><i class="fab fa-twitter-square"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+  </nav>
+
+
+    <div class="container-fluid" id="banner"></div>
+
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar">
+              <div class="sidebar-start-items">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    
+  </div>
+</nav>  
+<h2>
+   <i class="fa fa-calendar"></i>
+  12 April 2022 
+</h2>
+
+<ul>
+   
+<li id="author">
+  <span
+    ><i class="fa-fw fa fa-user"></i></span
+  >
+   
+  <a href="../../blog/author/max-grover.html">Max Grover</a>  
+</li>
+    
+<li id="tags">
+  <span
+    ><i class="fa-fw fa fa-tags"></i> </span
+  >
+   
+  <a href="../../blog/tag/nexrad.html">NEXRAD</a>   
+  <a href="../../blog/tag/matplotlib.html">matplotlib</a>   
+  <a href="../../blog/tag/visualization.html">visualization</a>   
+  <a href="../../blog/tag/debug.html">debug</a>  
+</li>
+ 
+</ul>
+
+<h3>
+  <a href="../../blog.html">Recent Posts</a>
+</h3>
+<ul>
+   
+  <li>
+    <a href="ka-band-pyart-xarray-hvplot.html"
+      >21 March - Working with Vertically Pointing Radar Data Using PyART, Xarray, and hvPlot</a
+    >
+  </li>
+  
+  <li>
+    <a href="test.html"
+      >11 March - New Docs</a
+    >
+  </li>
+  
+</ul>
+
+<h3>
+  <a href="../../blog/archive.html">Archives</a>
+</h3>
+<ul>
+   
+  <li>
+    <a href="../../blog/2022.html">2022 (3)</a>
+  </li>
+   
+</ul>
+
+              </div>
+              <div class="sidebar-end-items">
+              </div>
+            </div>
+            
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+              
+              <div class="toc-item">
+                
+<div class="tocsection onthispage mt-5 pt-1 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#the-data">
+   The Data
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#data-access">
+     Data Access
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#recreate-the-issue-using-pyart">
+   Recreate the Issue Using PyART
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#imports">
+     Imports
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#read-the-data-using-pyart">
+     Read the data using PyART
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#plot-our-data-using-radarmapdisplay">
+     Plot our Data Using
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       RadarMapDisplay
+      </span>
+     </code>
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#setting-our-matplotlib-style">
+       Setting our Matplotlib style
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#plot-our-data-without-setting-alpha">
+       Plot our data without setting
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         alpha
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#add-in-the-alpha-argument">
+       Add in the
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         alpha
+        </span>
+       </code>
+       argument
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#dig-into-the-issue">
+   Dig into the Issue
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#investigate-plot-ppi-map">
+     Investigate
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       plot_ppi_map
+      </span>
+     </code>
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#investigate-pcolormesh-parameters">
+     Investigate
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       pcolormesh
+      </span>
+     </code>
+     parameters
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#digging-into-edgecolors">
+       Digging into
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         edgecolors
+        </span>
+       </code>
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#try-modifying-the-edgecolors-argument-with-pcolormesh">
+     Try Modifying the
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       edgecolors
+      </span>
+     </code>
+     argument with
+     <code class="docutils literal notranslate">
+      <span class="pre">
+       pcolormesh
+      </span>
+     </code>
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#plot-our-data-with-the-default-edgecolors-argument">
+       Plot our data with the default
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         edgecolors
+        </span>
+       </code>
+       argument
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#plotting-up-our-solution">
+   Plotting up our Solution
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#fixing-the-issue-in-pyart">
+   Fixing the Issue in PyART
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#conclusion">
+   Conclusion
+  </a>
+ </li>
+</ul>
+
+</nav>
+              </div>
+              
+              <div class="toc-item">
+                
+              </div>
+              
+            
+          </div>
+          
+
+          
+          
+            
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                 <section class="tex2jax_ignore mathjax_ignore" id="fixing-weird-patterns-when-plotting-nexrad-level-3-data">
+<h1>Fixing Weird Patterns When Plotting NEXRAD Level 3 Data<a class="headerlink" href="#fixing-weird-patterns-when-plotting-nexrad-level-3-data" title="Permalink to this headline">#</a></h1>
+<p>The motivation here comes from a thread on Twitter, indicating an issue when plotting NEXRAD Level 3 radial velcocity (<code class="docutils literal notranslate"><span class="pre">NOU</span></code>).</p>
+<p>Here is the radar image, plotted by David (<a class="reference external" href="https://twitter.com/dryglick">&#64;dryglick</a>):</p>
+<img src="../images/nexrad-plotting-issue.jpeg" alt="drawing" width="400"/>
+<p>Notice the odd pattern directly north/south and east/west of the radar…</p>
+<p>There appear to be a crosshair of grey/darker pixels in our image.</p>
+<p>This was identified as a <a class="reference external" href="https://en.wikipedia.org/wiki/Moir%C3%A9_pattern">Moiré Pattern</a>, by Ryan May (<a class="reference external" href="https://twitter.com/dopplershift">&#64;dopplershift</a>), lead developer of MetPy, an open source python library for working with meteorological data.</p>
+<section id="the-data">
+<h2>The Data<a class="headerlink" href="#the-data" title="Permalink to this headline">#</a></h2>
+<p>We are using <a class="reference external" href="https://www.ncei.noaa.gov/access/metadata/landing-page/bin/iso?id=gov.noaa.ncdc:C00708">NEXRAD Level 3 Data</a>, which is ground-based radar data in the United States, defined as:</p>
+<p>“NEXRAD Level 3 products are used to remotely detect atmospheric features, such as precipitation, precipitation-type, storms, turbulence and wind, for operational forecasting and data research analysis.”</p>
+<p>This dataset is provided by the National Oceanic and Atmospheric Administration (NOAA).</p>
+<section id="data-access">
+<h3>Data Access<a class="headerlink" href="#data-access" title="Permalink to this headline">#</a></h3>
+<p>We can access this dataset using the <a class="reference external" href="https://www.ncei.noaa.gov/access/search/data-search/weather-radar-level-iii">NCEI NEXRAD Level 3 Search Portal</a>. We <strong>could</strong> access data from Amazon Web Services (AWS) if we were interested in data <strong>after 2020</strong>, but since we are looking at at data from 2018, we need to use the NCEI archive.</p>
+<p>David mentioned he was looking at velocity data (<code class="docutils literal notranslate"><span class="pre">N0U</span></code>) from Elgin Air Force Base in the Panhandle of Florida, with the station identifier of <code class="docutils literal notranslate"><span class="pre">KEVX</span></code>, at <strong>1458 UTC on October 10, 2018</strong>, which was hours before <a class="reference external" href="https://www.nhc.noaa.gov/data/tcr/AL142018_Michael.pdf">Hurricane Michael</a> made landfall along the Gulf Coast.</p>
+<p>We can enter the:</p>
+<ul class="simple">
+<li><p>Radar data field (<code class="docutils literal notranslate"><span class="pre">N0U</span></code>)</p></li>
+<li><p>Location (<code class="docutils literal notranslate"><span class="pre">KEVX</span></code>)</p></li>
+<li><p>Date/time (<code class="docutils literal notranslate"><span class="pre">10/10/2018</span> <span class="pre">at</span> <span class="pre">1458</span> <span class="pre">UTC</span></code>)</p></li>
+</ul>
+<p>into our query. Here is what it should lookl like on the webpage:</p>
+<img src="../images/nexrad-level3-radar-query.png" alt="radar-data-query" width="600"/>
+<p>Once we add this to our cart, and wait for the data to be sent to our email, we download via HTTP (through a website) or FTP.</p>
+<p>We can now unzip the compressed file, then take a look at our data file, reading in the <code class="docutils literal notranslate"><span class="pre">N0U</span></code> (<code class="docutils literal notranslate"><span class="pre">velocity</span></code>) field.</p>
+<p>The specific file we are interested in is:</p>
+<p><code class="docutils literal notranslate"><span class="pre">KMOB_SDUS54_N0UEVX_201810101458</span></code></p>
+</section>
+</section>
+<section id="recreate-the-issue-using-pyart">
+<h2>Recreate the Issue Using PyART<a class="headerlink" href="#recreate-the-issue-using-pyart" title="Permalink to this headline">#</a></h2>
+<section id="imports">
+<h3>Imports<a class="headerlink" href="#imports" title="Permalink to this headline">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cartopy.crs</span> <span class="k">as</span> <span class="nn">ccrs</span>
+<span class="kn">import</span> <span class="nn">cartopy.feature</span> <span class="k">as</span> <span class="nn">cfeature</span>
+<span class="kn">import</span> <span class="nn">matplotlib.colors</span> <span class="k">as</span> <span class="nn">mcolors</span>
+<span class="kn">import</span> <span class="nn">pyart</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>## You are using the Python ARM Radar Toolkit (Py-ART), an open source
+## library for working with weather radar data. Py-ART is partly
+## supported by the U.S. Department of Energy as part of the Atmospheric
+## Radiation Measurement (ARM) Climate Research Facility, an Office of
+## Science user facility.
+##
+## If you use this software to prepare a publication, please cite:
+##
+##     JJ Helmus and SM Collis, JORS 2016, doi: 10.5334/jors.119
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="read-the-data-using-pyart">
+<h3>Read the data using PyART<a class="headerlink" href="#read-the-data-using-pyart" title="Permalink to this headline">#</a></h3>
+<p>When reading into PyART, we can use the <a class="reference external" href="https://arm-doe.github.io/pyart/API/generated/pyart.io.read_nexrad_level3.html#pyart.io.read_nexrad_level3"><code class="docutils literal notranslate"><span class="pre">pyart.io.read_level3</span></code></a> module, <strong>or</strong>, we can use the <a class="reference external" href="https://arm-doe.github.io/pyart/API/generated/pyart.io.read.html#pyart.io.read"><code class="docutils literal notranslate"><span class="pre">pyart.io.read</span></code></a> module which automatically detects the filetype being read in.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;KMOB_SDUS54_N0UEVX_201810101458&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="plot-our-data-using-radarmapdisplay">
+<h3>Plot our Data Using <code class="docutils literal notranslate"><span class="pre">RadarMapDisplay</span></code><a class="headerlink" href="#plot-our-data-using-radarmapdisplay" title="Permalink to this headline">#</a></h3>
+<section id="setting-our-matplotlib-style">
+<h4>Setting our Matplotlib style<a class="headerlink" href="#setting-our-matplotlib-style" title="Permalink to this headline">#</a></h4>
+<p>Before we dig into plotting, let’s set our background to dark since that is what the original image showed and it will be easier to identify the pattern in the data.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;dark_background&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="plot-our-data-without-setting-alpha">
+<h4>Plot our data without setting <code class="docutils literal notranslate"><span class="pre">alpha</span></code><a class="headerlink" href="#plot-our-data-without-setting-alpha" title="Permalink to this headline">#</a></h4>
+<p>Since we want geographical boundaries on our map, let’s use <code class="docutils literal notranslate"><span class="pre">RadarMapDisplay</span></code> with our <code class="docutils literal notranslate"><span class="pre">Radar</span></code> object to create the map.</p>
+<p>When we create our plot, everything looks okay - we don’t see the odd Moiré Pattern…</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span>
+<span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
+<span class="n">display</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span><span class="s1">&#39;velocity&#39;</span><span class="p">,</span>
+                     <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                     <span class="n">vmin</span><span class="o">=-</span><span class="mi">100</span><span class="p">,</span>
+                     <span class="n">vmax</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+                     <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
+                     <span class="n">colorbar_label</span><span class="o">=</span><span class="s1">&#39;radial velocity (m/s)&#39;</span><span class="p">,</span>
+                     <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;pyart_balance&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">88</span><span class="p">,</span> <span class="o">-</span><span class="mi">83</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">28</span><span class="p">,</span> <span class="mi">33</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/plot-nexrad-level3_13_0.png" src="../../_images/plot-nexrad-level3_13_0.png" />
+</div>
+</div>
+</section>
+<section id="add-in-the-alpha-argument">
+<h4>Add in the <code class="docutils literal notranslate"><span class="pre">alpha</span></code> argument<a class="headerlink" href="#add-in-the-alpha-argument" title="Permalink to this headline">#</a></h4>
+<p>When we add in the <code class="docutils literal notranslate"><span class="pre">alpha=0.8</span></code> argument, which adjusts the <em><strong>transparency</strong></em> of our field, we start to see the pattern.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span>
+<span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
+<span class="n">display</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span><span class="s1">&#39;velocity&#39;</span><span class="p">,</span>
+                     <span class="n">alpha</span><span class="o">=</span><span class="mf">.8</span><span class="p">,</span>
+                     <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                     <span class="n">vmin</span><span class="o">=-</span><span class="mi">100</span><span class="p">,</span>
+                     <span class="n">vmax</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+                     <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
+                     <span class="n">colorbar_label</span><span class="o">=</span><span class="s1">&#39;radial velocity (m/s)&#39;</span><span class="p">,</span>
+                     <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;pyart_balance&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">88</span><span class="p">,</span> <span class="o">-</span><span class="mi">83</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">28</span><span class="p">,</span> <span class="mi">33</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/plot-nexrad-level3_16_0.png" src="../../_images/plot-nexrad-level3_16_0.png" />
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="dig-into-the-issue">
+<h2>Dig into the Issue<a class="headerlink" href="#dig-into-the-issue" title="Permalink to this headline">#</a></h2>
+<section id="investigate-plot-ppi-map">
+<h3>Investigate <code class="docutils literal notranslate"><span class="pre">plot_ppi_map</span></code><a class="headerlink" href="#investigate-plot-ppi-map" title="Permalink to this headline">#</a></h3>
+<p>Let’s take a look at the specific plotting call being made with <code class="docutils literal notranslate"><span class="pre">plot_ppi_map</span></code> using <code class="docutils literal notranslate"><span class="pre">??</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>display.plot_ppi_map<span class="o">??</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Red">Signature:</span>
+display<span class=" -Color -Color-Blue">.</span>plot_ppi_map<span class=" -Color -Color-Blue">(</span>
+    field<span class=" -Color -Color-Blue">,</span>
+    sweep<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Cyan">0</span><span class=" -Color -Color-Blue">,</span>
+    mask_tuple<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span>
+    vmin<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span>
+    vmax<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span>
+    cmap<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span>
+    norm<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span>
+    mask_outside<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">False</span><span class=" -Color -Color-Blue">,</span>
+    title<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span>
+    title_flag<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">True</span><span class=" -Color -Color-Blue">,</span>
+    colorbar_flag<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">True</span><span class=" -Color -Color-Blue">,</span>
+    colorbar_label<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span>
+    ax<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span>
+    fig<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span>
+    lat_lines<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span>
+    lon_lines<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span>
+    projection<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span>
+    min_lon<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span>
+    max_lon<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span>
+    min_lat<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span>
+    max_lat<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span>
+    width<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span>
+    height<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span>
+    lon_0<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span>
+    lat_0<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span>
+    resolution<span class=" -Color -Color-Blue">=&#39;110m&#39;,</span>
+    shapefile<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span>
+    shapefile_kwargs<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span>
+    edges<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">True</span><span class=" -Color -Color-Blue">,</span>
+    gatefilter<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span>
+    filter_transitions<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">True</span><span class=" -Color -Color-Blue">,</span>
+    embelish<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">True</span><span class=" -Color -Color-Blue">,</span>
+    raster<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">False</span><span class=" -Color -Color-Blue">,</span>
+    ticks<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span>
+    ticklabs<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span>
+    alpha<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span>
+<span class=" -Color -Color-Blue">)</span>
+<span class=" -Color -Color-Red">Source:</span>   
+    <span class=" -Color -Color-Green">def</span> plot_ppi_map<span class=" -Color -Color-Blue">(</span>
+            self<span class=" -Color -Color-Blue">,</span> field<span class=" -Color -Color-Blue">,</span> sweep<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Cyan">0</span><span class=" -Color -Color-Blue">,</span> mask_tuple<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span>
+            vmin<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span> vmax<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span> cmap<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span> norm<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span> mask_outside<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">False</span><span class=" -Color -Color-Blue">,</span>
+            title<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span> title_flag<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">True</span><span class=" -Color -Color-Blue">,</span>
+            colorbar_flag<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">True</span><span class=" -Color -Color-Blue">,</span> colorbar_label<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span> ax<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span> fig<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span>
+            lat_lines<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span> lon_lines<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span> projection<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span>
+            min_lon<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span> max_lon<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span> min_lat<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span> max_lat<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span>
+            width<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span> height<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span> lon_0<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span> lat_0<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span>
+            resolution<span class=" -Color -Color-Blue">=&#39;110m&#39;,</span> shapefile<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span> shapefile_kwargs<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span>
+            edges<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">True</span><span class=" -Color -Color-Blue">,</span> gatefilter<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span>
+            filter_transitions<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">True</span><span class=" -Color -Color-Blue">,</span> embelish<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">True</span><span class=" -Color -Color-Blue">,</span> raster<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">False</span><span class=" -Color -Color-Blue">,</span>
+            ticks<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span> ticklabs<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span> alpha<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">):</span>
+        <span class=" -Color -Color-Blue">&quot;&quot;&quot;</span>
+<span class=" -Color -Color-Blue">        Plot a PPI volume sweep onto a geographic map.</span>
+
+<span class=" -Color -Color-Blue">        Parameters</span>
+<span class=" -Color -Color-Blue">        ----------</span>
+<span class=" -Color -Color-Blue">        field : str</span>
+<span class=" -Color -Color-Blue">            Field to plot.</span>
+<span class=" -Color -Color-Blue">        sweep : int, optional</span>
+<span class=" -Color -Color-Blue">            Sweep number to plot.</span>
+
+<span class=" -Color -Color-Blue">        Other Parameters</span>
+<span class=" -Color -Color-Blue">        ----------------</span>
+<span class=" -Color -Color-Blue">        mask_tuple : (str, float)</span>
+<span class=" -Color -Color-Blue">            Tuple containing the field name and value below which to mask</span>
+<span class=" -Color -Color-Blue">            field prior to plotting, for example to mask all data where</span>
+<span class=" -Color -Color-Blue">            NCP &lt; 0.5 set mask_tuple to [&#39;NCP&#39;, 0.5]. None performs no masking.</span>
+<span class=" -Color -Color-Blue">        vmin : float</span>
+<span class=" -Color -Color-Blue">            Luminance minimum value, None for default value.</span>
+<span class=" -Color -Color-Blue">            Parameter is ignored is norm is not None.</span>
+<span class=" -Color -Color-Blue">        vmax : float</span>
+<span class=" -Color -Color-Blue">            Luminance maximum value, None for default value.</span>
+<span class=" -Color -Color-Blue">            Parameter is ignored is norm is not None.</span>
+<span class=" -Color -Color-Blue">        norm : Normalize or None, optional</span>
+<span class=" -Color -Color-Blue">            matplotlib Normalize instance used to scale luminance data. If not</span>
+<span class=" -Color -Color-Blue">            None the vmax and vmin parameters are ignored. If None, vmin and</span>
+<span class=" -Color -Color-Blue">            vmax are used for luminance scaling.</span>
+<span class=" -Color -Color-Blue">        cmap : str or None</span>
+<span class=" -Color -Color-Blue">            Matplotlib colormap name. None will use the default colormap for</span>
+<span class=" -Color -Color-Blue">            the field being plotted as specified by the Py-ART configuration.</span>
+<span class=" -Color -Color-Blue">        mask_outside : bool</span>
+<span class=" -Color -Color-Blue">            True to mask data outside of vmin, vmax. False performs no</span>
+<span class=" -Color -Color-Blue">            masking.</span>
+<span class=" -Color -Color-Blue">        title : str</span>
+<span class=" -Color -Color-Blue">            Title to label plot with, None to use default title generated from</span>
+<span class=" -Color -Color-Blue">            the field and tilt parameters. Parameter is ignored if title_flag</span>
+<span class=" -Color -Color-Blue">            is False.</span>
+<span class=" -Color -Color-Blue">        title_flag : bool</span>
+<span class=" -Color -Color-Blue">            True to add a title to the plot, False does not add a title.</span>
+<span class=" -Color -Color-Blue">        colorbar_flag : bool</span>
+<span class=" -Color -Color-Blue">            True to add a colorbar with label to the axis. False leaves off</span>
+<span class=" -Color -Color-Blue">            the colorbar.</span>
+<span class=" -Color -Color-Blue">        ticks : array</span>
+<span class=" -Color -Color-Blue">            Colorbar custom tick label locations.</span>
+<span class=" -Color -Color-Blue">        ticklabs : array</span>
+<span class=" -Color -Color-Blue">            Colorbar custom tick labels.</span>
+<span class=" -Color -Color-Blue">        colorbar_label : str</span>
+<span class=" -Color -Color-Blue">            Colorbar label, None will use a default label generated from the</span>
+<span class=" -Color -Color-Blue">            field information.</span>
+<span class=" -Color -Color-Blue">        ax : Cartopy GeoAxes instance</span>
+<span class=" -Color -Color-Blue">            If None, create GeoAxes instance using other keyword info.</span>
+<span class=" -Color -Color-Blue">            If provided, ax must have a Cartopy crs projection and projection</span>
+<span class=" -Color -Color-Blue">            kwarg below is ignored.</span>
+<span class=" -Color -Color-Blue">        fig : Figure</span>
+<span class=" -Color -Color-Blue">            Figure to add the colorbar to. None will use the current figure.</span>
+<span class=" -Color -Color-Blue">        lat_lines, lon_lines : array or None</span>
+<span class=" -Color -Color-Blue">            Locations at which to draw latitude and longitude lines.</span>
+<span class=" -Color -Color-Blue">            None will use default values which are resonable for maps of</span>
+<span class=" -Color -Color-Blue">            North America.</span>
+<span class=" -Color -Color-Blue">        projection : cartopy.crs class</span>
+<span class=" -Color -Color-Blue">            Map projection supported by cartopy. Used for all subsequent calls</span>
+<span class=" -Color -Color-Blue">            to the GeoAxes object generated. Defaults to LambertConformal</span>
+<span class=" -Color -Color-Blue">            centered on radar.</span>
+<span class=" -Color -Color-Blue">        min_lat, max_lat, min_lon, max_lon : float</span>
+<span class=" -Color -Color-Blue">            Latitude and longitude ranges for the map projection region in</span>
+<span class=" -Color -Color-Blue">            degrees.</span>
+<span class=" -Color -Color-Blue">        width, height : float</span>
+<span class=" -Color -Color-Blue">            Width and height of map domain in meters.</span>
+<span class=" -Color -Color-Blue">            Only this set of parameters or the previous set of parameters</span>
+<span class=" -Color -Color-Blue">            (min_lat, max_lat, min_lon, max_lon) should be specified.</span>
+<span class=" -Color -Color-Blue">            If neither set is specified then the map domain will be determined</span>
+<span class=" -Color -Color-Blue">            from the extend of the radar gate locations.</span>
+<span class=" -Color -Color-Blue">        shapefile : str</span>
+<span class=" -Color -Color-Blue">            Filename for a shapefile to add to map.</span>
+<span class=" -Color -Color-Blue">        shapefile_kwargs : dict</span>
+<span class=" -Color -Color-Blue">            Key word arguments used to format shapefile. Projection defaults</span>
+<span class=" -Color -Color-Blue">            to lat lon (cartopy.crs.PlateCarree())</span>
+<span class=" -Color -Color-Blue">        resolution : &#39;10m&#39;, &#39;50m&#39;, &#39;110m&#39;.</span>
+<span class=" -Color -Color-Blue">            Resolution of NaturalEarthFeatures to use. See Cartopy</span>
+<span class=" -Color -Color-Blue">            documentation for details.</span>
+<span class=" -Color -Color-Blue">        gatefilter : GateFilter</span>
+<span class=" -Color -Color-Blue">            GateFilter instance. None will result in no gatefilter mask being</span>
+<span class=" -Color -Color-Blue">            applied to data.</span>
+<span class=" -Color -Color-Blue">        filter_transitions : bool</span>
+<span class=" -Color -Color-Blue">            True to remove rays where the antenna was in transition between</span>
+<span class=" -Color -Color-Blue">            sweeps from the plot. False will include these rays in the plot.</span>
+<span class=" -Color -Color-Blue">            No rays are filtered when the antenna_transition attribute of the</span>
+<span class=" -Color -Color-Blue">            underlying radar is not present.</span>
+<span class=" -Color -Color-Blue">        edges : bool</span>
+<span class=" -Color -Color-Blue">            True will interpolate and extrapolate the gate edges from the</span>
+<span class=" -Color -Color-Blue">            range, azimuth and elevations in the radar, treating these</span>
+<span class=" -Color -Color-Blue">            as specifying the center of each gate. False treats these</span>
+<span class=" -Color -Color-Blue">            coordinates themselved as the gate edges, resulting in a plot</span>
+<span class=" -Color -Color-Blue">            in which the last gate in each ray and the entire last ray are not</span>
+<span class=" -Color -Color-Blue">            not plotted.</span>
+<span class=" -Color -Color-Blue">        embelish: bool</span>
+<span class=" -Color -Color-Blue">            True by default. Set to False to supress drawing of coastlines</span>
+<span class=" -Color -Color-Blue">            etc.. Use for speedup when specifying shapefiles.</span>
+<span class=" -Color -Color-Blue">            Note that lat lon labels only work with certain projections.</span>
+<span class=" -Color -Color-Blue">        raster : bool</span>
+<span class=" -Color -Color-Blue">            False by default. Set to true to render the display as a raster</span>
+<span class=" -Color -Color-Blue">            rather than a vector in call to pcolormesh. Saves time in plotting</span>
+<span class=" -Color -Color-Blue">            high resolution data over large areas. Be sure to set the dpi</span>
+<span class=" -Color -Color-Blue">            of the plot for your application if you save it as a vector format</span>
+<span class=" -Color -Color-Blue">            (i.e., pdf, eps, svg).</span>
+<span class=" -Color -Color-Blue">        alpha : float or None</span>
+<span class=" -Color -Color-Blue">            Set the alpha tranparency of the radar plot. Useful for</span>
+<span class=" -Color -Color-Blue">            overplotting radar over other datasets.</span>
+
+<span class=" -Color -Color-Blue">        &quot;&quot;&quot;</span>
+        <span class=" -Color -Color-Red"># parse parameters</span>
+        vmin<span class=" -Color -Color-Blue">,</span> vmax <span class=" -Color -Color-Blue">=</span> parse_vmin_vmax<span class=" -Color -Color-Blue">(</span>self<span class=" -Color -Color-Blue">.</span>_radar<span class=" -Color -Color-Blue">,</span> field<span class=" -Color -Color-Blue">,</span> vmin<span class=" -Color -Color-Blue">,</span> vmax<span class=" -Color -Color-Blue">)</span>
+        cmap <span class=" -Color -Color-Blue">=</span> parse_cmap<span class=" -Color -Color-Blue">(</span>cmap<span class=" -Color -Color-Blue">,</span> field<span class=" -Color -Color-Blue">)</span>
+        <span class=" -Color -Color-Green">if</span> lat_lines <span class=" -Color -Color-Green">is</span> <span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">:</span>
+            lat_lines <span class=" -Color -Color-Blue">=</span> np<span class=" -Color -Color-Blue">.</span>arange<span class=" -Color -Color-Blue">(</span><span class=" -Color -Color-Cyan">30</span><span class=" -Color -Color-Blue">,</span> <span class=" -Color -Color-Cyan">46</span><span class=" -Color -Color-Blue">,</span> <span class=" -Color -Color-Cyan">1</span><span class=" -Color -Color-Blue">)</span>
+        <span class=" -Color -Color-Green">if</span> lon_lines <span class=" -Color -Color-Green">is</span> <span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">:</span>
+            lon_lines <span class=" -Color -Color-Blue">=</span> np<span class=" -Color -Color-Blue">.</span>arange<span class=" -Color -Color-Blue">(-</span><span class=" -Color -Color-Cyan">110</span><span class=" -Color -Color-Blue">,</span> <span class=" -Color -Color-Blue">-</span><span class=" -Color -Color-Cyan">75</span><span class=" -Color -Color-Blue">,</span> <span class=" -Color -Color-Cyan">1</span><span class=" -Color -Color-Blue">)</span>
+        lat_0 <span class=" -Color -Color-Blue">=</span> self<span class=" -Color -Color-Blue">.</span>loc<span class=" -Color -Color-Blue">[</span><span class=" -Color -Color-Cyan">0</span><span class=" -Color -Color-Blue">]</span>
+        lon_0 <span class=" -Color -Color-Blue">=</span> self<span class=" -Color -Color-Blue">.</span>loc<span class=" -Color -Color-Blue">[</span><span class=" -Color -Color-Cyan">1</span><span class=" -Color -Color-Blue">]</span>
+
+        <span class=" -Color -Color-Red"># get data for the plot</span>
+        data <span class=" -Color -Color-Blue">=</span> self<span class=" -Color -Color-Blue">.</span>_get_data<span class=" -Color -Color-Blue">(</span>
+            field<span class=" -Color -Color-Blue">,</span> sweep<span class=" -Color -Color-Blue">,</span> mask_tuple<span class=" -Color -Color-Blue">,</span> filter_transitions<span class=" -Color -Color-Blue">,</span> gatefilter<span class=" -Color -Color-Blue">)</span>
+        x<span class=" -Color -Color-Blue">,</span> y <span class=" -Color -Color-Blue">=</span> self<span class=" -Color -Color-Blue">.</span>_get_x_y<span class=" -Color -Color-Blue">(</span>sweep<span class=" -Color -Color-Blue">,</span> edges<span class=" -Color -Color-Blue">,</span> filter_transitions<span class=" -Color -Color-Blue">)</span>
+
+        <span class=" -Color -Color-Red"># mask the data where outside the limits</span>
+        <span class=" -Color -Color-Green">if</span> mask_outside<span class=" -Color -Color-Blue">:</span>
+            data <span class=" -Color -Color-Blue">=</span> np<span class=" -Color -Color-Blue">.</span>ma<span class=" -Color -Color-Blue">.</span>masked_outside<span class=" -Color -Color-Blue">(</span>data<span class=" -Color -Color-Blue">,</span> vmin<span class=" -Color -Color-Blue">,</span> vmax<span class=" -Color -Color-Blue">)</span>
+
+        <span class=" -Color -Color-Red"># Define a figure if None is provided.</span>
+        <span class=" -Color -Color-Green">if</span> fig <span class=" -Color -Color-Green">is</span> <span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">:</span>
+            fig <span class=" -Color -Color-Blue">=</span> plt<span class=" -Color -Color-Blue">.</span>gcf<span class=" -Color -Color-Blue">()</span>
+
+        <span class=" -Color -Color-Red"># initialize instance of GeoAxes if not provided</span>
+        <span class=" -Color -Color-Green">if</span> ax <span class=" -Color -Color-Green">is</span> <span class=" -Color -Color-Green">not</span> <span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">:</span>
+            <span class=" -Color -Color-Green">if</span> hasattr<span class=" -Color -Color-Blue">(</span>ax<span class=" -Color -Color-Blue">,</span> <span class=" -Color -Color-Blue">&#39;projection&#39;):</span>
+                projection <span class=" -Color -Color-Blue">=</span> ax<span class=" -Color -Color-Blue">.</span>projection
+            <span class=" -Color -Color-Green">else</span><span class=" -Color -Color-Blue">:</span>
+                <span class=" -Color -Color-Green">if</span> projection <span class=" -Color -Color-Green">is</span> <span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">:</span>
+                    <span class=" -Color -Color-Red"># set map projection to LambertConformal if none is</span>
+                    <span class=" -Color -Color-Red"># specified.</span>
+                    projection <span class=" -Color -Color-Blue">=</span> cartopy<span class=" -Color -Color-Blue">.</span>crs<span class=" -Color -Color-Blue">.</span>LambertConformal<span class=" -Color -Color-Blue">(</span>
+                        central_longitude<span class=" -Color -Color-Blue">=</span>lon_0<span class=" -Color -Color-Blue">,</span> central_latitude<span class=" -Color -Color-Blue">=</span>lat_0<span class=" -Color -Color-Blue">)</span>
+                    warnings<span class=" -Color -Color-Blue">.</span>warn<span class=" -Color -Color-Blue">(</span>
+                        <span class=" -Color -Color-Blue">&quot;No projection was defined for the axes.&quot;</span>
+                        <span class=" -Color -Color-Blue">+</span> <span class=" -Color -Color-Blue">&quot; Overridding defined axes and using default &quot;</span>
+                        <span class=" -Color -Color-Blue">+</span> <span class=" -Color -Color-Blue">&quot;axes with projection Lambert Conformal.&quot;,</span>
+                        UserWarning<span class=" -Color -Color-Blue">)</span>
+                ax <span class=" -Color -Color-Blue">=</span> plt<span class=" -Color -Color-Blue">.</span>axes<span class=" -Color -Color-Blue">(</span>projection<span class=" -Color -Color-Blue">=</span>projection<span class=" -Color -Color-Blue">)</span>
+
+        <span class=" -Color -Color-Red"># Define GeoAxes if None is provided.</span>
+        <span class=" -Color -Color-Green">else</span><span class=" -Color -Color-Blue">:</span>
+            <span class=" -Color -Color-Green">if</span> projection <span class=" -Color -Color-Green">is</span> <span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">:</span>
+                <span class=" -Color -Color-Red"># set map projection to LambertConformal if none is</span>
+                <span class=" -Color -Color-Red"># specified.</span>
+                projection <span class=" -Color -Color-Blue">=</span> cartopy<span class=" -Color -Color-Blue">.</span>crs<span class=" -Color -Color-Blue">.</span>LambertConformal<span class=" -Color -Color-Blue">(</span>
+                    central_longitude<span class=" -Color -Color-Blue">=</span>lon_0<span class=" -Color -Color-Blue">,</span> central_latitude<span class=" -Color -Color-Blue">=</span>lat_0<span class=" -Color -Color-Blue">)</span>
+                warnings<span class=" -Color -Color-Blue">.</span>warn<span class=" -Color -Color-Blue">(</span>
+                    <span class=" -Color -Color-Blue">&quot;No projection was defined for the axes.&quot;</span>
+                    <span class=" -Color -Color-Blue">+</span> <span class=" -Color -Color-Blue">&quot; Overridding defined axes and using default &quot;</span>
+                    <span class=" -Color -Color-Blue">+</span> <span class=" -Color -Color-Blue">&quot;axes with projection Lambert Conformal.&quot;,</span>
+                    UserWarning<span class=" -Color -Color-Blue">)</span>
+            ax <span class=" -Color -Color-Blue">=</span> plt<span class=" -Color -Color-Blue">.</span>axes<span class=" -Color -Color-Blue">(</span>projection<span class=" -Color -Color-Blue">=</span>projection<span class=" -Color -Color-Blue">)</span>
+
+        <span class=" -Color -Color-Green">if</span> min_lon<span class=" -Color -Color-Blue">:</span>
+            ax<span class=" -Color -Color-Blue">.</span>set_extent<span class=" -Color -Color-Blue">([</span>min_lon<span class=" -Color -Color-Blue">,</span> max_lon<span class=" -Color -Color-Blue">,</span> min_lat<span class=" -Color -Color-Blue">,</span> max_lat<span class=" -Color -Color-Blue">],</span>
+                          crs<span class=" -Color -Color-Blue">=</span>cartopy<span class=" -Color -Color-Blue">.</span>crs<span class=" -Color -Color-Blue">.</span>PlateCarree<span class=" -Color -Color-Blue">())</span>
+        <span class=" -Color -Color-Green">elif</span> width<span class=" -Color -Color-Blue">:</span>
+            ax<span class=" -Color -Color-Blue">.</span>set_extent<span class=" -Color -Color-Blue">([-</span>width<span class=" -Color -Color-Blue">/</span><span class=" -Color -Color-Cyan">2.</span><span class=" -Color -Color-Blue">,</span> width<span class=" -Color -Color-Blue">/</span><span class=" -Color -Color-Cyan">2.</span><span class=" -Color -Color-Blue">,</span> <span class=" -Color -Color-Blue">-</span>height<span class=" -Color -Color-Blue">/</span><span class=" -Color -Color-Cyan">2.</span><span class=" -Color -Color-Blue">,</span> height<span class=" -Color -Color-Blue">/</span><span class=" -Color -Color-Cyan">2.</span><span class=" -Color -Color-Blue">],</span>
+                          crs<span class=" -Color -Color-Blue">=</span>self<span class=" -Color -Color-Blue">.</span>grid_projection<span class=" -Color -Color-Blue">)</span>
+
+        <span class=" -Color -Color-Red"># plot the data</span>
+        <span class=" -Color -Color-Green">if</span> norm <span class=" -Color -Color-Green">is</span> <span class=" -Color -Color-Green">not</span> <span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">:</span>  <span class=" -Color -Color-Red"># if norm is set do not override with vmin/vmax</span>
+            vmin <span class=" -Color -Color-Blue">=</span> vmax <span class=" -Color -Color-Blue">=</span> <span class=" -Color -Color-Green">None</span>
+        pm <span class=" -Color -Color-Blue">=</span> ax<span class=" -Color -Color-Blue">.</span>pcolormesh<span class=" -Color -Color-Blue">(</span>x <span class=" -Color -Color-Blue">*</span> <span class=" -Color -Color-Cyan">1000.</span><span class=" -Color -Color-Blue">,</span> y <span class=" -Color -Color-Blue">*</span> <span class=" -Color -Color-Cyan">1000.</span><span class=" -Color -Color-Blue">,</span> data<span class=" -Color -Color-Blue">,</span> alpha<span class=" -Color -Color-Blue">=</span>alpha<span class=" -Color -Color-Blue">,</span>
+                           vmin<span class=" -Color -Color-Blue">=</span>vmin<span class=" -Color -Color-Blue">,</span> vmax<span class=" -Color -Color-Blue">=</span>vmax<span class=" -Color -Color-Blue">,</span> cmap<span class=" -Color -Color-Blue">=</span>cmap<span class=" -Color -Color-Blue">,</span>
+                           norm<span class=" -Color -Color-Blue">=</span>norm<span class=" -Color -Color-Blue">,</span> transform<span class=" -Color -Color-Blue">=</span>self<span class=" -Color -Color-Blue">.</span>grid_projection<span class=" -Color -Color-Blue">)</span>
+
+        <span class=" -Color -Color-Red"># plot as raster in vector graphics files</span>
+        <span class=" -Color -Color-Green">if</span> raster<span class=" -Color -Color-Blue">:</span>
+            pm<span class=" -Color -Color-Blue">.</span>set_rasterized<span class=" -Color -Color-Blue">(</span><span class=" -Color -Color-Green">True</span><span class=" -Color -Color-Blue">)</span>
+
+        <span class=" -Color -Color-Red"># add embelishments</span>
+        <span class=" -Color -Color-Green">if</span> embelish <span class=" -Color -Color-Green">is</span> <span class=" -Color -Color-Green">True</span><span class=" -Color -Color-Blue">:</span>
+            <span class=" -Color -Color-Red"># Create a feature for States/Admin 1 regions at 1:resolution</span>
+            <span class=" -Color -Color-Red"># from Natural Earth</span>
+            states_provinces <span class=" -Color -Color-Blue">=</span> cartopy<span class=" -Color -Color-Blue">.</span>feature<span class=" -Color -Color-Blue">.</span>NaturalEarthFeature<span class=" -Color -Color-Blue">(</span>
+                category<span class=" -Color -Color-Blue">=&#39;cultural&#39;,</span>
+                name<span class=" -Color -Color-Blue">=&#39;admin_1_states_provinces_lines&#39;,</span>
+                scale<span class=" -Color -Color-Blue">=</span>resolution<span class=" -Color -Color-Blue">,</span>
+                facecolor<span class=" -Color -Color-Blue">=&#39;none&#39;)</span>
+            ax<span class=" -Color -Color-Blue">.</span>coastlines<span class=" -Color -Color-Blue">(</span>resolution<span class=" -Color -Color-Blue">=</span>resolution<span class=" -Color -Color-Blue">)</span>
+            ax<span class=" -Color -Color-Blue">.</span>add_feature<span class=" -Color -Color-Blue">(</span>states_provinces<span class=" -Color -Color-Blue">,</span> edgecolor<span class=" -Color -Color-Blue">=&#39;gray&#39;)</span>
+
+            <span class=" -Color -Color-Red"># labeling gridlines poses some difficulties depending on the</span>
+            <span class=" -Color -Color-Red"># projection, so we need some projection-spectific methods</span>
+            <span class=" -Color -Color-Green">if</span> ax<span class=" -Color -Color-Blue">.</span>projection <span class=" -Color -Color-Green">in</span> <span class=" -Color -Color-Blue">[</span>cartopy<span class=" -Color -Color-Blue">.</span>crs<span class=" -Color -Color-Blue">.</span>PlateCarree<span class=" -Color -Color-Blue">(),</span>
+                                 cartopy<span class=" -Color -Color-Blue">.</span>crs<span class=" -Color -Color-Blue">.</span>Mercator<span class=" -Color -Color-Blue">()]:</span>
+                gl <span class=" -Color -Color-Blue">=</span> ax<span class=" -Color -Color-Blue">.</span>gridlines<span class=" -Color -Color-Blue">(</span>xlocs<span class=" -Color -Color-Blue">=</span>lon_lines<span class=" -Color -Color-Blue">,</span> ylocs<span class=" -Color -Color-Blue">=</span>lat_lines<span class=" -Color -Color-Blue">,</span>
+                                  draw_labels<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">True</span><span class=" -Color -Color-Blue">)</span>
+                gl<span class=" -Color -Color-Blue">.</span>xlabels_top <span class=" -Color -Color-Blue">=</span> <span class=" -Color -Color-Green">False</span>
+                gl<span class=" -Color -Color-Blue">.</span>ylabels_right <span class=" -Color -Color-Blue">=</span> <span class=" -Color -Color-Green">False</span>
+
+            <span class=" -Color -Color-Green">elif</span> isinstance<span class=" -Color -Color-Blue">(</span>ax<span class=" -Color -Color-Blue">.</span>projection<span class=" -Color -Color-Blue">,</span> cartopy<span class=" -Color -Color-Blue">.</span>crs<span class=" -Color -Color-Blue">.</span>LambertConformal<span class=" -Color -Color-Blue">):</span>
+                ax<span class=" -Color -Color-Blue">.</span>figure<span class=" -Color -Color-Blue">.</span>canvas<span class=" -Color -Color-Blue">.</span>draw<span class=" -Color -Color-Blue">()</span>
+                ax<span class=" -Color -Color-Blue">.</span>gridlines<span class=" -Color -Color-Blue">(</span>xlocs<span class=" -Color -Color-Blue">=</span>lon_lines<span class=" -Color -Color-Blue">,</span> ylocs<span class=" -Color -Color-Blue">=</span>lat_lines<span class=" -Color -Color-Blue">)</span>
+
+                <span class=" -Color -Color-Red"># Label the end-points of the gridlines using the custom</span>
+                <span class=" -Color -Color-Red"># tick makers:</span>
+                ax<span class=" -Color -Color-Blue">.</span>xaxis<span class=" -Color -Color-Blue">.</span>set_major_formatter<span class=" -Color -Color-Blue">(</span>
+                    cartopy<span class=" -Color -Color-Blue">.</span>mpl<span class=" -Color -Color-Blue">.</span>gridliner<span class=" -Color -Color-Blue">.</span>LONGITUDE_FORMATTER<span class=" -Color -Color-Blue">)</span>
+                ax<span class=" -Color -Color-Blue">.</span>yaxis<span class=" -Color -Color-Blue">.</span>set_major_formatter<span class=" -Color -Color-Blue">(</span>
+                    cartopy<span class=" -Color -Color-Blue">.</span>mpl<span class=" -Color -Color-Blue">.</span>gridliner<span class=" -Color -Color-Blue">.</span>LATITUDE_FORMATTER<span class=" -Color -Color-Blue">)</span>
+                <span class=" -Color -Color-Green">if</span> _LAMBERT_GRIDLINES<span class=" -Color -Color-Blue">:</span>
+                    lambert_xticks<span class=" -Color -Color-Blue">(</span>ax<span class=" -Color -Color-Blue">,</span> lon_lines<span class=" -Color -Color-Blue">)</span>
+                    lambert_yticks<span class=" -Color -Color-Blue">(</span>ax<span class=" -Color -Color-Blue">,</span> lat_lines<span class=" -Color -Color-Blue">)</span>
+            <span class=" -Color -Color-Green">else</span><span class=" -Color -Color-Blue">:</span>
+                ax<span class=" -Color -Color-Blue">.</span>gridlines<span class=" -Color -Color-Blue">(</span>xlocs<span class=" -Color -Color-Blue">=</span>lon_lines<span class=" -Color -Color-Blue">,</span> ylocs<span class=" -Color -Color-Blue">=</span>lat_lines<span class=" -Color -Color-Blue">)</span>
+
+        <span class=" -Color -Color-Red"># plot the data and optionally the shape file</span>
+        <span class=" -Color -Color-Red"># we need to convert the radar gate locations (x and y) which are in</span>
+        <span class=" -Color -Color-Red"># km to meters we also need to give the original projection of the</span>
+        <span class=" -Color -Color-Red"># data which is stored in self.grid_projection</span>
+
+        <span class=" -Color -Color-Green">if</span> shapefile <span class=" -Color -Color-Green">is</span> <span class=" -Color -Color-Green">not</span> <span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">:</span>
+            <span class=" -Color -Color-Green">from</span> cartopy<span class=" -Color -Color-Blue">.</span>io<span class=" -Color -Color-Blue">.</span>shapereader <span class=" -Color -Color-Green">import</span> Reader
+            <span class=" -Color -Color-Green">if</span> shapefile_kwargs <span class=" -Color -Color-Green">is</span> <span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">:</span>
+                shapefile_kwargs <span class=" -Color -Color-Blue">=</span> <span class=" -Color -Color-Blue">{}</span>
+            <span class=" -Color -Color-Green">if</span> <span class=" -Color -Color-Blue">&#39;crs&#39;</span> <span class=" -Color -Color-Green">not</span> <span class=" -Color -Color-Green">in</span> shapefile_kwargs<span class=" -Color -Color-Blue">:</span>
+                shapefile_kwargs<span class=" -Color -Color-Blue">[&#39;crs&#39;]</span> <span class=" -Color -Color-Blue">=</span> cartopy<span class=" -Color -Color-Blue">.</span>crs<span class=" -Color -Color-Blue">.</span>PlateCarree<span class=" -Color -Color-Blue">()</span>
+            ax<span class=" -Color -Color-Blue">.</span>add_geometries<span class=" -Color -Color-Blue">(</span>Reader<span class=" -Color -Color-Blue">(</span>shapefile<span class=" -Color -Color-Blue">).</span>geometries<span class=" -Color -Color-Blue">(),</span>
+                              <span class=" -Color -Color-Blue">**</span>shapefile_kwargs<span class=" -Color -Color-Blue">)</span>
+
+        <span class=" -Color -Color-Green">if</span> title_flag<span class=" -Color -Color-Blue">:</span>
+            self<span class=" -Color -Color-Blue">.</span>_set_title<span class=" -Color -Color-Blue">(</span>field<span class=" -Color -Color-Blue">,</span> sweep<span class=" -Color -Color-Blue">,</span> title<span class=" -Color -Color-Blue">,</span> ax<span class=" -Color -Color-Blue">)</span>
+
+        <span class=" -Color -Color-Red"># add plot and field to lists</span>
+        self<span class=" -Color -Color-Blue">.</span>plots<span class=" -Color -Color-Blue">.</span>append<span class=" -Color -Color-Blue">(</span>pm<span class=" -Color -Color-Blue">)</span>
+        self<span class=" -Color -Color-Blue">.</span>plot_vars<span class=" -Color -Color-Blue">.</span>append<span class=" -Color -Color-Blue">(</span>field<span class=" -Color -Color-Blue">)</span>
+
+        <span class=" -Color -Color-Green">if</span> colorbar_flag<span class=" -Color -Color-Blue">:</span>
+            self<span class=" -Color -Color-Blue">.</span>plot_colorbar<span class=" -Color -Color-Blue">(</span>
+                mappable<span class=" -Color -Color-Blue">=</span>pm<span class=" -Color -Color-Blue">,</span> label<span class=" -Color -Color-Blue">=</span>colorbar_label<span class=" -Color -Color-Blue">,</span> field<span class=" -Color -Color-Blue">=</span>field<span class=" -Color -Color-Blue">,</span> fig<span class=" -Color -Color-Blue">=</span>fig<span class=" -Color -Color-Blue">,</span>
+                ax<span class=" -Color -Color-Blue">=</span>ax<span class=" -Color -Color-Blue">,</span> ticks<span class=" -Color -Color-Blue">=</span>ticks<span class=" -Color -Color-Blue">,</span> ticklabs<span class=" -Color -Color-Blue">=</span>ticklabs<span class=" -Color -Color-Blue">)</span>
+        <span class=" -Color -Color-Red"># keep track of this GeoAxes object for later</span>
+        self<span class=" -Color -Color-Blue">.</span>ax <span class=" -Color -Color-Blue">=</span> ax
+        <span class=" -Color -Color-Green">return</span>
+<span class=" -Color -Color-Red">File:</span>      ~/git_repos/pyart/pyart/graph/radarmapdisplay.py
+<span class=" -Color -Color-Red">Type:</span>      method
+</pre></div>
+</div>
+</div>
+</div>
+<p>We are using <code class="docutils literal notranslate"><span class="pre">matplotlib.pyplot.pcolormesh</span></code> (<code class="docutils literal notranslate"><span class="pre">plt.pcolormesh</span></code>) here to plot our radar data - using the included parameters:</p>
+<ul class="simple">
+<li><p>alpha (data transparency)</p></li>
+<li><p>vmin (minimum value to plot)</p></li>
+<li><p>vmax (maximum value to plot)</p></li>
+<li><p>cmap (colormap to use)</p></li>
+<li><p>norm (colormap normalization)</p></li>
+<li><p>transform (which projection to use)</p></li>
+</ul>
+<p>For <code class="docutils literal notranslate"><span class="pre">pcolormesh</span></code> parameters <strong>not included in this list</strong>, <code class="docutils literal notranslate"><span class="pre">pyart</span></code> is using the default parameters…</p>
+</section>
+<section id="investigate-pcolormesh-parameters">
+<h3>Investigate <code class="docutils literal notranslate"><span class="pre">pcolormesh</span></code> parameters<a class="headerlink" href="#investigate-pcolormesh-parameters" title="Permalink to this headline">#</a></h3>
+<p>In a similar fashion to the <code class="docutils literal notranslate"><span class="pre">plot_ppi_map</span></code> function from <code class="docutils literal notranslate"><span class="pre">pyart</span></code>, we can take a look at the parameters for <code class="docutils literal notranslate"><span class="pre">plt.pcolormesh</span></code>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plt.pcolormesh<span class="o">?</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Red">Signature:</span>
+plt<span class=" -Color -Color-Blue">.</span>pcolormesh<span class=" -Color -Color-Blue">(</span>
+    <span class=" -Color -Color-Blue">*</span>args<span class=" -Color -Color-Blue">,</span>
+    alpha<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span>
+    norm<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span>
+    cmap<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span>
+    vmin<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span>
+    vmax<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span>
+    shading<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span>
+    antialiased<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">False</span><span class=" -Color -Color-Blue">,</span>
+    data<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span>
+    <span class=" -Color -Color-Blue">**</span>kwargs<span class=" -Color -Color-Blue">,</span>
+<span class=" -Color -Color-Blue">)</span>
+<span class=" -Color -Color-Red">Docstring:</span>
+Create a pseudocolor plot with a non-regular rectangular grid.
+
+Call signature::
+
+    pcolormesh([X, Y,] C, **kwargs)
+
+*X* and *Y* can be used to specify the corners of the quadrilaterals.
+
+.. hint::
+
+   `~.Axes.pcolormesh` is similar to `~.Axes.pcolor`. It is much faster
+   and preferred in most cases. For a detailed discussion on the
+   differences see :ref:`Differences between pcolor() and pcolormesh()
+   &lt;differences-pcolor-pcolormesh&gt;`.
+
+Parameters
+----------
+C : 2D array-like
+    The color-mapped values.
+
+X, Y : array-like, optional
+    The coordinates of the corners of quadrilaterals of a pcolormesh::
+
+        (X[i+1, j], Y[i+1, j])       (X[i+1, j+1], Y[i+1, j+1])
+                              +-----+
+                              |     |
+                              +-----+
+            (X[i, j], Y[i, j])       (X[i, j+1], Y[i, j+1])
+
+    Note that the column index corresponds to the x-coordinate, and
+    the row index corresponds to y. For details, see the
+    :ref:`Notes &lt;axes-pcolormesh-grid-orientation&gt;` section below.
+
+    If ``shading=&#39;flat&#39;`` the dimensions of *X* and *Y* should be one
+    greater than those of *C*, and the quadrilateral is colored due
+    to the value at ``C[i, j]``.  If *X*, *Y* and *C* have equal
+    dimensions, a warning will be raised and the last row and column
+    of *C* will be ignored.
+
+    If ``shading=&#39;nearest&#39;`` or ``&#39;gouraud&#39;``, the dimensions of *X*
+    and *Y* should be the same as those of *C* (if not, a ValueError
+    will be raised).  For ``&#39;nearest&#39;`` the color ``C[i, j]`` is
+    centered on ``(X[i, j], Y[i, j])``.  For ``&#39;gouraud&#39;``, a smooth
+    interpolation is caried out between the quadrilateral corners.
+
+    If *X* and/or *Y* are 1-D arrays or column vectors they will be
+    expanded as needed into the appropriate 2D arrays, making a
+    rectangular grid.
+
+cmap : str or `~matplotlib.colors.Colormap`, default: :rc:`image.cmap`
+    A Colormap instance or registered colormap name. The colormap
+    maps the *C* values to colors.
+
+norm : `~matplotlib.colors.Normalize`, optional
+    The Normalize instance scales the data values to the canonical
+    colormap range [0, 1] for mapping to colors. By default, the data
+    range is mapped to the colorbar range using linear scaling.
+
+vmin, vmax : float, default: None
+    The colorbar range. If *None*, suitable min/max values are
+    automatically chosen by the `.Normalize` instance (defaults to
+    the respective min/max values of *C* in case of the default linear
+    scaling).
+    It is an error to use *vmin*/*vmax* when *norm* is given.
+
+edgecolors : {&#39;none&#39;, None, &#39;face&#39;, color, color sequence}, optional
+    The color of the edges. Defaults to &#39;none&#39;. Possible values:
+
+    - &#39;none&#39; or &#39;&#39;: No edge.
+    - *None*: :rc:`patch.edgecolor` will be used. Note that currently
+      :rc:`patch.force_edgecolor` has to be True for this to work.
+    - &#39;face&#39;: Use the adjacent face color.
+    - A color or sequence of colors will set the edge color.
+
+    The singular form *edgecolor* works as an alias.
+
+alpha : float, default: None
+    The alpha blending value, between 0 (transparent) and 1 (opaque).
+
+shading : {&#39;flat&#39;, &#39;nearest&#39;, &#39;gouraud&#39;, &#39;auto&#39;}, optional
+    The fill style for the quadrilateral; defaults to
+    &#39;flat&#39; or :rc:`pcolor.shading`. Possible values:
+
+    - &#39;flat&#39;: A solid color is used for each quad. The color of the
+      quad (i, j), (i+1, j), (i, j+1), (i+1, j+1) is given by
+      ``C[i, j]``. The dimensions of *X* and *Y* should be
+      one greater than those of *C*; if they are the same as *C*,
+      then a deprecation warning is raised, and the last row
+      and column of *C* are dropped.
+    - &#39;nearest&#39;: Each grid point will have a color centered on it,
+      extending halfway between the adjacent grid centers.  The
+      dimensions of *X* and *Y* must be the same as *C*.
+    - &#39;gouraud&#39;: Each quad will be Gouraud shaded: The color of the
+      corners (i&#39;, j&#39;) are given by ``C[i&#39;, j&#39;]``. The color values of
+      the area in between is interpolated from the corner values.
+      The dimensions of *X* and *Y* must be the same as *C*. When
+      Gouraud shading is used, *edgecolors* is ignored.
+    - &#39;auto&#39;: Choose &#39;flat&#39; if dimensions of *X* and *Y* are one
+      larger than *C*.  Choose &#39;nearest&#39; if dimensions are the same.
+
+    See :doc:`/gallery/images_contours_and_fields/pcolormesh_grids`
+    for more description.
+
+snap : bool, default: False
+    Whether to snap the mesh to pixel boundaries.
+
+rasterized : bool, optional
+    Rasterize the pcolormesh when drawing vector graphics.  This can
+    speed up rendering and produce smaller files for large data sets.
+    See also :doc:`/gallery/misc/rasterization_demo`.
+
+Returns
+-------
+`matplotlib.collections.QuadMesh`
+
+Other Parameters
+----------------
+data : indexable object, optional
+    If given, all parameters also accept a string ``s``, which is
+    interpreted as ``data[s]`` (unless this raises an exception).
+
+**kwargs
+    Additionally, the following arguments are allowed. They are passed
+    along to the `~matplotlib.collections.QuadMesh` constructor:
+
+Properties:
+    agg_filter: a filter function, which takes a (m, n, 3) float array and a dpi value, and returns a (m, n, 3) array
+    alpha: array-like or scalar or None
+    animated: bool
+    antialiased or aa or antialiaseds: bool or list of bools
+    array: (M, N) array-like or M*N array-like
+    capstyle: `.CapStyle` or {&#39;butt&#39;, &#39;projecting&#39;, &#39;round&#39;}
+    clim: (vmin: float, vmax: float)
+    clip_box: `.Bbox`
+    clip_on: bool
+    clip_path: Patch or (Path, Transform) or None
+    cmap: `.Colormap` or str or None
+    color: color or list of rgba tuples
+    edgecolor or ec or edgecolors: color or list of colors or &#39;face&#39;
+    facecolor or facecolors or fc: color or list of colors
+    figure: `.Figure`
+    gid: str
+    hatch: {&#39;/&#39;, &#39;\\&#39;, &#39;|&#39;, &#39;-&#39;, &#39;+&#39;, &#39;x&#39;, &#39;o&#39;, &#39;O&#39;, &#39;.&#39;, &#39;*&#39;}
+    in_layout: bool
+    joinstyle: `.JoinStyle` or {&#39;miter&#39;, &#39;round&#39;, &#39;bevel&#39;}
+    label: object
+    linestyle or dashes or linestyles or ls: str or tuple or list thereof
+    linewidth or linewidths or lw: float or list of floats
+    norm: `.Normalize` or None
+    offset_transform: `.Transform`
+    offsets: (N, 2) or (2,) array-like
+    path_effects: `.AbstractPathEffect`
+    picker: None or bool or float or callable
+    pickradius: float
+    rasterized: bool
+    sketch_params: (scale: float, length: float, randomness: float)
+    snap: bool or None
+    transform: `.Transform`
+    url: str
+    urls: list of str or None
+    visible: bool
+    zorder: float
+
+See Also
+--------
+pcolor : An alternative implementation with slightly different
+    features. For a detailed discussion on the differences see
+    :ref:`Differences between pcolor() and pcolormesh()
+    &lt;differences-pcolor-pcolormesh&gt;`.
+imshow : If *X* and *Y* are each equidistant, `~.Axes.imshow` can be a
+    faster alternative.
+
+Notes
+-----
+**Masked arrays**
+
+*C* may be a masked array. If ``C[i, j]`` is masked, the corresponding
+quadrilateral will be transparent. Masking of *X* and *Y* is not
+supported. Use `~.Axes.pcolor` if you need this functionality.
+
+.. _axes-pcolormesh-grid-orientation:
+
+**Grid orientation**
+
+The grid orientation follows the standard matrix convention: An array
+*C* with shape (nrows, ncolumns) is plotted with the column number as
+*X* and the row number as *Y*.
+
+.. _differences-pcolor-pcolormesh:
+
+**Differences between pcolor() and pcolormesh()**
+
+Both methods are used to create a pseudocolor plot of a 2D array
+using quadrilaterals.
+
+The main difference lies in the created object and internal data
+handling:
+While `~.Axes.pcolor` returns a `.PolyCollection`, `~.Axes.pcolormesh`
+returns a `.QuadMesh`. The latter is more specialized for the given
+purpose and thus is faster. It should almost always be preferred.
+
+There is also a slight difference in the handling of masked arrays.
+Both `~.Axes.pcolor` and `~.Axes.pcolormesh` support masked arrays
+for *C*. However, only `~.Axes.pcolor` supports masked arrays for *X*
+and *Y*. The reason lies in the internal handling of the masked values.
+`~.Axes.pcolor` leaves out the respective polygons from the
+PolyCollection. `~.Axes.pcolormesh` sets the facecolor of the masked
+elements to transparent. You can see the difference when using
+edgecolors. While all edges are drawn irrespective of masking in a
+QuadMesh, the edge between two adjacent masked quadrilaterals in
+`~.Axes.pcolor` is not drawn as the corresponding polygons do not
+exist in the PolyCollection.
+
+Another difference is the support of Gouraud shading in
+`~.Axes.pcolormesh`, which is not available with `~.Axes.pcolor`.
+<span class=" -Color -Color-Red">File:</span>      ~/opt/anaconda3/envs/pyart-docs/lib/python3.9/site-packages/matplotlib/pyplot.py
+<span class=" -Color -Color-Red">Type:</span>      function
+</pre></div>
+</div>
+</div>
+</div>
+<section id="digging-into-edgecolors">
+<h4>Digging into <code class="docutils literal notranslate"><span class="pre">edgecolors</span></code><a class="headerlink" href="#digging-into-edgecolors" title="Permalink to this headline">#</a></h4>
+<p>Notice how one of the arguments included here is <code class="docutils literal notranslate"><span class="pre">edgecolors</span></code>, which by default, is <code class="docutils literal notranslate"><span class="pre">none</span></code>. One of the options here is to set these to be “face”, which is the adjacent data color.</p>
+<p>Let’s test this out with our data to see if changing this parameter makes a difference…</p>
+</section>
+</section>
+<section id="try-modifying-the-edgecolors-argument-with-pcolormesh">
+<h3>Try Modifying the <code class="docutils literal notranslate"><span class="pre">edgecolors</span></code> argument with <code class="docutils literal notranslate"><span class="pre">pcolormesh</span></code><a class="headerlink" href="#try-modifying-the-edgecolors-argument-with-pcolormesh" title="Permalink to this headline">#</a></h3>
+<p>Let’s test this out with our data!</p>
+<p>First, let’s read in the numpy array of data using <code class="docutils literal notranslate"><span class="pre">['data']</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">velocity</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;velocity&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+<span class="n">velocity</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>masked_array(
+  data=[[--, --, --, ..., --, --, --],
+        [--, --, --, ..., --, --, --],
+        [--, --, --, ..., --, --, --],
+        ...,
+        [--, --, --, ..., --, --, --],
+        [--, --, --, ..., --, --, --],
+        [--, --, --, ..., --, --, --]],
+  mask=[[ True,  True,  True, ...,  True,  True,  True],
+        [ True,  True,  True, ...,  True,  True,  True],
+        [ True,  True,  True, ...,  True,  True,  True],
+        ...,
+        [ True,  True,  True, ...,  True,  True,  True],
+        [ True,  True,  True, ...,  True,  True,  True],
+        [ True,  True,  True, ...,  True,  True,  True]],
+  fill_value=1e+20,
+  dtype=float32)
+</pre></div>
+</div>
+</div>
+</div>
+<p>Next, we need to access our coordinates in latitude/longitude form using <code class="docutils literal notranslate"><span class="pre">get_gate_lat_lon_alt(sweep)</span></code></p>
+<p>Since we only have a single sweep, we can set that to 0.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lats</span><span class="p">,</span> <span class="n">lons</span><span class="p">,</span> <span class="n">alt</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">get_gate_lat_lon_alt</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">lats</span><span class="p">,</span> <span class="n">lons</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(array([[30.565   , 30.562763, 30.560526, ..., 27.888458, 27.886227,
+         27.883991],
+        [30.565   , 30.562765, 30.560532, ..., 27.892834, 27.890606,
+         27.888374],
+        [30.565   , 30.562769, 30.56054 , ..., 27.898003, 27.89578 ,
+         27.893553],
+        ...,
+        [30.565   , 30.562756, 30.560509, ..., 27.880096, 27.877857,
+         27.875618],
+        [30.565   , 30.562756, 30.560513, ..., 27.881853, 27.879616,
+         27.877377],
+        [30.565   , 30.56276 , 30.560518, ..., 27.884874, 27.88264 ,
+         27.880404]], dtype=float32),
+ array([[-85.92199 , -85.92222 , -85.92245 , ..., -86.186806, -86.18703 ,
+         -86.18723 ],
+        [-85.92199 , -85.922264, -85.92254 , ..., -86.2396  , -86.23986 ,
+         -86.24012 ],
+        [-85.92199 , -85.92231 , -85.92263 , ..., -86.29231 , -86.29262 ,
+         -86.29292 ],
+        ...,
+        [-85.92199 , -85.92208 , -85.92218 , ..., -86.02802 , -86.02811 ,
+         -86.0282  ],
+        [-85.92199 , -85.92212 , -85.92226 , ..., -86.07571 , -86.07583 ,
+         -86.07595 ],
+        [-85.92199 , -85.92218 , -85.922356, ..., -86.133934, -86.1341  ,
+         -86.13428 ]], dtype=float32))
+</pre></div>
+</div>
+</div>
+</div>
+<section id="plot-our-data-with-the-default-edgecolors-argument">
+<h4>Plot our data with the default <code class="docutils literal notranslate"><span class="pre">edgecolors</span></code> argument<a class="headerlink" href="#plot-our-data-with-the-default-edgecolors-argument" title="Permalink to this headline">#</a></h4>
+<p>Notice how our pattern shows up again - we get the Moiré Pattern…</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">lons</span><span class="p">,</span>
+               <span class="n">lats</span><span class="p">,</span>
+               <span class="n">velocity</span><span class="p">,</span>
+               <span class="n">alpha</span><span class="o">=</span><span class="mf">.8</span><span class="p">,</span>
+               <span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/plot-nexrad-level3_28_0.png" src="../../_images/plot-nexrad-level3_28_0.png" />
+</div>
+</div>
+<p>When we try passing in <code class="docutils literal notranslate"><span class="pre">edgecolors='face'</span></code> instead, it goes away!</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">lons</span><span class="p">,</span>
+               <span class="n">lats</span><span class="p">,</span>
+               <span class="n">velocity</span><span class="p">,</span>
+               <span class="n">alpha</span><span class="o">=</span><span class="mf">.8</span><span class="p">,</span>
+               <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;face&#39;</span>
+               <span class="p">);</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/plot-nexrad-level3_30_0.png" src="../../_images/plot-nexrad-level3_30_0.png" />
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="plotting-up-our-solution">
+<h2>Plotting up our Solution<a class="headerlink" href="#plotting-up-our-solution" title="Permalink to this headline">#</a></h2>
+<p>We found the issue! 😁</p>
+<p>Let’s plot up the original figure, with features, colorbars, and all!</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Setup our figure/geoaxis</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span>
+                 <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
+
+<span class="c1"># Add state borders and the coastline</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">add_feature</span><span class="p">(</span><span class="n">cfeature</span><span class="o">.</span><span class="n">STATES</span><span class="p">,</span>
+               <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span>
+               <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">add_feature</span><span class="p">(</span><span class="n">cfeature</span><span class="o">.</span><span class="n">COASTLINE</span><span class="p">,</span>
+               <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">)</span>
+
+<span class="c1"># Plot our velocity field using pcolormesh with edgecolors argument</span>
+<span class="n">mesh</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">lons</span><span class="p">,</span>
+                     <span class="n">lats</span><span class="p">,</span>
+                     <span class="n">velocity</span><span class="p">,</span>
+                     <span class="n">vmin</span><span class="o">=-</span><span class="mi">100</span><span class="p">,</span>
+                     <span class="n">vmax</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+                     <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;face&#39;</span><span class="p">,</span>
+                     <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;pyart_balance&#39;</span><span class="p">)</span>
+
+<span class="c1"># Configure our colorbar</span>
+<span class="n">cbar</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span>
+<span class="n">cbar</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s1">&#39;Radial Velocity (m/s)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+
+<span class="c1"># Add gridlines</span>
+<span class="n">gl</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">gridlines</span><span class="p">(</span><span class="n">crs</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
+                  <span class="n">draw_labels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                  <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> 
+                  <span class="n">color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> 
+                  <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+                  <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
+
+<span class="c1"># Make sure labels are only plotted on the left and bottom</span>
+<span class="n">gl</span><span class="o">.</span><span class="n">xlabels_top</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">gl</span><span class="o">.</span><span class="n">ylabels_right</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="c1"># Increase the fontsize of our gridline labels</span>
+<span class="n">gl</span><span class="o">.</span><span class="n">xlabel_style</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;fontsize&#39;</span><span class="p">:</span><span class="mi">14</span><span class="p">}</span>
+<span class="n">gl</span><span class="o">.</span><span class="n">ylabel_style</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;fontsize&#39;</span><span class="p">:</span><span class="mi">14</span><span class="p">}</span>
+
+<span class="c1"># Add a title, using time information</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;KEVX (Elgin Air Force Base) </span><span class="se">\n</span><span class="s2"> 0.5 Degree Radial Velocity </span><span class="se">\n</span><span class="s2"> </span><span class="si">{</span><span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">][</span><span class="mi">14</span><span class="p">:]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+          <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;kevz_velocity_2018_10_10_1458.png&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/plot-nexrad-level3_32_0.png" src="../../_images/plot-nexrad-level3_32_0.png" />
+</div>
+</div>
+</section>
+<section id="fixing-the-issue-in-pyart">
+<h2>Fixing the Issue in PyART<a class="headerlink" href="#fixing-the-issue-in-pyart" title="Permalink to this headline">#</a></h2>
+<p>Currently, within PyART, there is not a method of specificying the argument in <code class="docutils literal notranslate"><span class="pre">plot_ppi_map</span></code>, which is why we needed to add that custom section at the end using <code class="docutils literal notranslate"><span class="pre">plt.pcolormesh</span></code> directly.</p>
+<p>We are submitting a pull request (PR) to change the default behavior here (<code class="docutils literal notranslate"><span class="pre">edgecolors='face'</span></code>).</p>
+<p><strong>More importantly, this highlights a current limitation of our plotting API where we cannot specify matplotlib.pcolormesh arguments through <code class="docutils literal notranslate"><span class="pre">plot_ppi_map</span></code>. We will make sure this PR adds the ability to specify plotting arguements to pass to <code class="docutils literal notranslate"><span class="pre">plt.pcolormesh</span></code></strong></p>
+</section>
+<section id="conclusion">
+<h2>Conclusion<a class="headerlink" href="#conclusion" title="Permalink to this headline">#</a></h2>
+<p>Within this post, we explored an odd pattern that shows up when setting <code class="docutils literal notranslate"><span class="pre">alpha</span></code> values when plotting radar data using <code class="docutils literal notranslate"><span class="pre">plot_ppi_map</span></code>(<code class="docutils literal notranslate"><span class="pre">pcolormesh</span></code>). We needed to change the <code class="docutils literal notranslate"><span class="pre">edgecolors</span></code> argument in <code class="docutils literal notranslate"><span class="pre">plt.pcolormesh</span></code> to <code class="docutils literal notranslate"><span class="pre">edgecolors='faces'</span></code>.</p>
+<p>This also highlighted a need in the <code class="docutils literal notranslate"><span class="pre">plot_ppi_map</span></code> method in PyART to allow users to pass plotting arguments to <code class="docutils literal notranslate"><span class="pre">pcolormesh</span></code>.</p>
+<p>We are appreciative of David for raising this question on Twitter, helping us to work together to find a solution and improve our plotting functionality in PyART!</p>
+</section>
+</section>
+
+<div class="section">
+    
+
+<div class="section">
+  <span style="float: left">
+     
+    <a href="ka-band-pyart-xarray-hvplot.html">
+      <i class="fa fa-arrow-circle-left"></i> Working with Vertically Pointing Radar Data Using PyART, Xarray, and hvPlot
+    </a>
+    
+  </span>
+  <span>&nbsp;</span>
+  <span style="float: right">
+    
+  </span>
+</div>
+  
+</div>
+
+              </div>
+              
+              
+              <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+<footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright 2013-2022, Py-ART developers.<br>
+</p>
+    </div>
+    
+    <div class="footer-item">
+      <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0.<br>
+</p>
+    </div>
+    
+  </div>
+</footer>
+  </body>
+</html>
