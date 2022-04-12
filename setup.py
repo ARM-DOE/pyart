@@ -15,9 +15,7 @@ DOCLINES = __doc__.split("\n")
 
 import os
 from os import path
-import shutil
 import sys
-import re
 import subprocess
 import glob
 from numpy import get_include
@@ -42,34 +40,39 @@ rebuild and reinstall Py-ART after verifying:
 ==============================================================================
 """
 
-CLASSIFIERS = [
-    'Development Status :: 5 - Production/Stable',
-    'Intended Audience :: Science/Research',
-    'Intended Audience :: Developers',
-    'License :: OSI Approved :: BSD License',
-    'Programming Language :: Python',
-    'Programming Language :: Python :: 2',
-    'Programming Language :: Python :: 2.7',
-    'Programming Language :: Python :: 3',
-    'Programming Language :: Python :: 3.6',
-    'Programming Language :: Python :: 3.7',
-    'Programming Language :: C',
-    'Programming Language :: Cython',
-    'Topic :: Scientific/Engineering',
-    'Topic :: Scientific/Engineering :: Atmospheric Science',
-    'Operating System :: POSIX :: Linux',
-    'Operating System :: MacOS :: MacOS X',
-    'Operating System :: Microsoft :: Windows',
-    'Framework :: Matplotlib']
+CLASSIFIERS = """\
+    Development Status :: 5 - Production/Stable
+    Intended Audience :: Science/Research
+    Intended Audience :: Developers
+    License :: OSI Approved :: BSD License
+    Programming Language :: Python
+    Programming Language :: Python :: 3
+    Programming Language :: Python :: 3.6
+    Programming Language :: Python :: 3.7
+    Programming Language :: Python :: 3.8
+    Programming Language :: Python :: 3.9
+    Programming Language :: Python :: 3.10
+    Programming Language :: C
+    Programming Language :: Cython
+    Topic :: Scientific/Engineering
+    Topic :: Scientific/Engineering :: Atmospheric Science
+    Operating System :: POSIX :: Linux
+    Operating System :: MacOS :: MacOS X
+    Operating System :: Microsoft :: Windows
+    Framework :: Matplotlib
+"""
 
 NAME = 'arm_pyart'
+AUTHOR = "Scott Collis, Jonathan Helmus"
+AUTHOR_EMAIL = "scollis@anl.gov"
 MAINTAINER = "Py-ART Developers"
-MAINTAINER_EMAIL = "zsherman@anl.gov, scollis@anl.gov"
+MAINTAINER_EMAIL = "zsherman@anl.gov, scollis@anl.gov, mgrover@anl.gov"
 DESCRIPTION = DOCLINES[0]
 LONG_DESCRIPTION = "\n".join(DOCLINES[2:])
 URL = "https://github.com/ARM-DOE/pyart"
 DOWNLOAD_URL = "https://github.com/ARM-DOE/pyart"
 LICENSE = 'BSD'
+CLASSIFIERS = list(filter(None, CLASSIFIERS.split("\n")))
 PLATFORMS = ["Linux", "Mac OS-X", "Unix", "Windows"]
 SCRIPTS = glob.glob('scripts/*')
 
@@ -137,10 +140,8 @@ def check_rsl_path(rsl_lib_path, rsl_include_path):
 rsl_path = os.environ.get('RSL_PATH')
 if rsl_path is None:
     rsl_path = guess_rsl_path()
-print(rsl_path)
 rsl_lib_path = os.path.join(rsl_path, 'lib')
 rsl_include_path = os.path.join(rsl_path, 'include')
-print(rsl_include_path)
 
 # build the RSL IO and FourDD dealiaser if RSL is installed
 if check_rsl_path(rsl_lib_path, rsl_include_path):
@@ -159,9 +160,6 @@ if check_rsl_path(rsl_lib_path, rsl_include_path):
         include_dirs=[
             rsl_include_path, 'pyart/correct/src'] + [get_include()],
         runtime_library_dirs=[rsl_lib_path])
-
-    print(rsl_include_path)
-    print(rsl_lib_path)
 
     # Cython wrapper around RSL io
     extension_rsl = Extension(
@@ -261,9 +259,10 @@ setup(
     cmdclass=cmdclass,
     description=DOCLINES[0],
     long_description="\n".join(DOCLINES[2:]),
-    author=['Scott Collis', 'Jonathan Helmus',
-            'Zachary Sherman', 'Max Grover', 'Robert Jackson'],
-    author_email=['scollis@anl.gov', 'zsherman@anl.gov', 'mgrover.anl,gov'],
+    author=AUTHOR,
+    author_email=AUTHOR_EMAIL,
+    maintainer=MAINTAINER,
+    maintainer_email=MAINTAINER_EMAIL,
     url=URL,
     packages=find_packages(exclude=['docs']),
     include_package_data=True,
@@ -272,8 +271,7 @@ setup(
     install_requires=requirements,
     license=LICENSE,
     platforms=PLATFORMS,
-    classifiers=[
-        CLASSIFIERS],
+    classifiers=CLASSIFIERS,
     zip_safe=False,
     ext_modules=cythonize(
         extensions, compiler_directives={'language_level' : "3"}),

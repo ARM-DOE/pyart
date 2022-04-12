@@ -4,7 +4,12 @@ Routines for Ridgeline Instruments RXM-25 formatted NetCDF files.
 """
 
 import datetime
-import pytz
+
+try:
+    import pytz
+    _PYTZ_AVAILABLE = True
+except ImportError:
+    _PYTZ_AVAILABLE = False
 
 import netCDF4
 import numpy as np
@@ -12,6 +17,7 @@ import numpy as np
 import pyart
 from ..config import get_metadata
 from ..core.radar import Radar
+from ..exceptions import MissingOptionalDependency
 from ..testing import make_empty_ppi_radar
 
 def read_rxm25(filename, cfradial_outfile=None, heading=None):
@@ -35,6 +41,11 @@ def read_rxm25(filename, cfradial_outfile=None, heading=None):
         Radar object.
 
     """
+    if not _PYTZ_AVAILABLE:
+        raise MissingOptionalDependency(
+            "Pytz is required to use read_rxm25 but is " +
+            "not installed")
+
     data  = netCDF4.Dataset(filename, 'r')
 
     ngates = data.dimensions['Gate'].size

@@ -4,5 +4,5 @@ netCDF4
 matplotlib
 pooch
 cftime
-cartopy
 Cython
+versioneer
