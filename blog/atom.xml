@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>mgrover1.github.io/pyart/</id>
   <title>PyART Blog</title>
-  <updated>2022-04-12T19:25:53.757060+00:00</updated>
+  <updated>2022-04-12T20:08:21.346194+00:00</updated>
   <link href="mgrover1.github.io/pyart/"/>
   <link href="mgrover1.github.io/pyart/blog/atom.xml" rel="self"/>
   <generator uri="https://ablog.readthedocs.org/" version="0.10.23">ABlog</generator>
@@ -56,13 +56,13 @@ interactive-kazr-vizinteractive-kazr-viz</summary>
       <name>Max Grover</name>
     </author>
     <content type="html">&lt;div class="ablog-post-excerpt docutils container"&gt;
-&lt;p&gt;The motivation here comes from a thread on Twitter, indicating an issue when plotting NEXRAD Level 3 radial velcocity (&lt;code class="docutils literal notranslate"&gt;&lt;span class="pre"&gt;NOU&lt;/span&gt;&lt;/code&gt;).&lt;/p&gt;
+&lt;p&gt;The motivation here comes from a thread on Twitter, indicating an issue when plotting NEXRAD Level 3 radial velocity (&lt;code class="docutils literal notranslate"&gt;&lt;span class="pre"&gt;NOU&lt;/span&gt;&lt;/code&gt;).&lt;/p&gt;
 &lt;p&gt;Here is the radar image, plotted by David (&lt;a class="reference external" href="https://twitter.com/dryglick"&gt;&amp;#64;dryglick&lt;/a&gt;):&lt;/p&gt;
 &lt;img alt="drawing" src="_images/nexrad-plotting-issue.jpeg" style="width: 400px;" /&gt;
 &lt;/div&gt;
 </content>
     <link href="mgrover1.github.io/pyart/blog_posts/2022/plot-nexrad-level3.html" rel="alternate"/>
-    <summary>The motivation here comes from a thread on Twitter, indicating an issue when plotting NEXRAD Level 3 radial velcocity (NOU).Here is the radar image, plotted by David (@dryglick):drawing</summary>
+    <summary>The motivation here comes from a thread on Twitter, indicating an issue when plotting NEXRAD Level 3 radial velocity (NOU).Here is the radar image, plotted by David (@dryglick):drawing</summary>
     <category term="NEXRAD" label="NEXRAD"/>
     <category term="matplotlib" label="matplotlib"/>
     <category term="visualization" label="visualization"/>
