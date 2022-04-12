@@ -101,7 +101,7 @@ To update an older version of Py-ART to the latest release use::
 
 If you are using mamba::
 
-    mamba install arm_pyart
+    mamba install -c conda-forge arm_pyart
 
 If you do not wish to use Anaconda or Miniconda as a Python environment or want
 to use the latest, unreleased version of Py-ART see the section below on 

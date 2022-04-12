@@ -62,7 +62,7 @@ To update an older version of Py-ART to the latest release use::
 
 If you are using mamba::
 
-    mamba install arm_pyart
+    mamba install -c conda-forge arm_pyart
 
 Resources
 ---------
