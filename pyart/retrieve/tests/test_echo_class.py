@@ -14,7 +14,7 @@ def test_steiner_conv_strat_default():
          2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0]))
 
 @pytest.mark.parametrize('area_relation', ['small', 'medium', 'large', 'sgp'])
-def test_steiner_conv_strat_default(area_relation):
+def test_steiner_conv_strat_modify_area(area_relation):
     grid = pyart.testing.make_storm_grid()
     eclass = pyart.retrieve.steiner_conv_strat(grid,
                                                area_relation=area_relation)
