@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.retrieve.qvp &#8212; Py-ART 1.12.1.post5.dev0+gc27c68f76 documentation</title>
+    <title>pyart.retrieve.qvp &#8212; Py-ART 1.12.1.post6.dev0+gb69fe0a22 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -240,7 +240,7 @@
 <span class="kn">from</span> <span class="nn">..core.transforms</span> <span class="kn">import</span> <span class="n">antenna_to_cartesian</span>
 
 
-<div class="viewcode-block" id="quasi_vertical_profile"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.quasi_vertical_profile.html#pyart.retrieve.quasi_vertical_profile">[docs]</a><span class="k">def</span> <span class="nf">quasi_vertical_profile</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">desired_angle</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="quasi_vertical_profile"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.quasi_vertical_profile.html#pyart.retrieve.quasi_vertical_profile">[docs]</a><span class="k">def</span> <span class="nf">quasi_vertical_profile</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">desired_angle</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Quasi Vertical Profile.</span>
@@ -257,6 +257,8 @@
 <span class="sd">    desired_angle : float</span>
 <span class="sd">        Radar tilt angle to use for indexing radar field data.</span>
 <span class="sd">        None will result in wanted_angle = 20.0</span>
+<span class="sd">    verbose : bool</span>
+<span class="sd">        boolean flag to turn the printing of radar tilts on or off. </span>
 
 <span class="sd">    Other Parameters</span>
 <span class="sd">    ----------------</span>
@@ -295,9 +297,10 @@
     <span class="n">index</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fixed_angle</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">desired_angle</span><span class="p">)</span><span class="o">.</span><span class="n">argmin</span><span class="p">()</span>
     <span class="n">radar_slice</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">get_slice</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
 
-    <span class="c1"># Printing radar tilt angles and radar elevation</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fixed_angle</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
+        <span class="c1"># Printing radar tilt angles and radar elevation</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fixed_angle</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
 
     <span class="c1"># Setting field parameters</span>
     <span class="c1"># If fields is None then all radar fields pulled else defined field is used</span>

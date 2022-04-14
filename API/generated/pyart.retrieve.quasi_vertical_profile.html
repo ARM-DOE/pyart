@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>pyart.retrieve.quasi_vertical_profile &#8212; Py-ART 1.12.1.post5.dev0+gc27c68f76 documentation</title>
+    <title>pyart.retrieve.quasi_vertical_profile &#8212; Py-ART 1.12.1.post6.dev0+gb69fe0a22 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -2882,7 +2882,7 @@
 <h1>pyart.retrieve.quasi_vertical_profile<a class="headerlink" href="#pyart-retrieve-quasi-vertical-profile" title="Permalink to this headline">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyart.retrieve.quasi_vertical_profile">
-<span class="sig-prename descclassname"><span class="pre">pyart.retrieve.</span></span><span class="sig-name descname"><span class="pre">quasi_vertical_profile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desired_angle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fields</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gatefilter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyart/retrieve/qvp.html#quasi_vertical_profile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyart.retrieve.quasi_vertical_profile" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyart.retrieve.</span></span><span class="sig-name descname"><span class="pre">quasi_vertical_profile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">desired_angle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fields</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gatefilter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyart/retrieve/qvp.html#quasi_vertical_profile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyart.retrieve.quasi_vertical_profile" title="Permalink to this definition">#</a></dt>
 <dd><p>Quasi Vertical Profile.</p>
 <p>Creates a QVP object containing fields from a radar object that can
 be used to plot and produce the quasi vertical profile</p>
@@ -2893,6 +2893,7 @@ be used to plot and produce the quasi vertical profile</p>
 <li><p><strong>field</strong> (<em>string</em>) – Radar field to use for QVP calculation.</p></li>
 <li><p><strong>desired_angle</strong> (<em>float</em>) – Radar tilt angle to use for indexing radar field data.
 None will result in wanted_angle = 20.0</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – boolean flag to turn the printing of radar tilts on or off.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Other Parameters</dt>
