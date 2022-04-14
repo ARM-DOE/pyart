@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.graph.radarmapdisplay_basemap &#8212; Py-ART 1.12.1.post8.dev0+g36a0115d6 documentation</title>
+    <title>pyart.graph.radarmapdisplay_basemap &#8212; Py-ART 1.12.1.post9.dev0+ga68bed26f documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -337,7 +337,8 @@
             <span class="n">width</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lon_0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lat_0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">resolution</span><span class="o">=</span><span class="s1">&#39;h&#39;</span><span class="p">,</span> <span class="n">shapefile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">edges</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">basemap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filter_transitions</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">embelish</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-            <span class="n">ticks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ticklabs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">raster</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="n">ticks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ticklabs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">raster</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;face&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plot a PPI volume sweep onto a geographic map.</span>
 
@@ -454,6 +455,10 @@
 <span class="sd">        alpha : float or None</span>
 <span class="sd">            Set the alpha tranparency of the radar plot. Useful for</span>
 <span class="sd">            overplotting radar over other datasets.</span>
+<span class="sd">        edgecolor : str</span>
+<span class="sd">            Set the behavior of the edges of the pixels, by default</span>
+<span class="sd">            it will color them the same as the pixels (faces).</span>
+<span class="sd">        **kwargs : additional keyword arguments to pass to pcolormesh.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># parse parameters</span>
@@ -525,7 +530,8 @@
             <span class="n">vmin</span> <span class="o">=</span> <span class="n">vmax</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">pm</span> <span class="o">=</span> <span class="n">basemap</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_x0</span> <span class="o">+</span> <span class="n">x</span> <span class="o">*</span> <span class="mf">1000.</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_y0</span> <span class="o">+</span> <span class="n">y</span> <span class="o">*</span> <span class="mf">1000.</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span>
-            <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">)</span>
+            <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span>
+            <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="n">edgecolors</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">raster</span><span class="p">:</span>
             <span class="n">pm</span><span class="o">.</span><span class="n">set_rasterized</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
