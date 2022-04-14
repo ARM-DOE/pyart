@@ -27,7 +27,6 @@ def quasi_vertical_profile(radar, desired_angle=None, fields=None, gatefilter=No
         None will result in wanted_angle = 20.0
     verbose : bool
         boolean flag to turn the printing of radar tilts on or off. 
-        Can be very annoying if you process alot of files. 
 
     Other Parameters
     ----------------
