@@ -10,6 +10,7 @@ import warnings
 
 import netCDF4
 import numpy as np
+import xarray as xr
 
 from ..config import FileMetadata
 from .common import stringarray_to_chararray, _test_arguments
@@ -54,7 +55,6 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
                   include_fields=None, delay_field_loading=False, **kwargs):
     """
     Read a Cfradial netCDF file.
-
     Parameters
     ----------
     filename : str
@@ -86,16 +86,13 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
         LazyLoadDict objects not dict objects. Delayed field loading will not
         provide any speedup in file where the number of gates vary between
         rays (ngates_vary=True) and is not recommended.
-
     Returns
     -------
     radar : Radar
         Radar object.
-
     Notes
     -----
     This function has not been tested on "stream" Cfradial files.
-
     """
     # test for non empty kwargs
     _test_arguments(kwargs)
@@ -105,11 +102,10 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
                                 file_field_names, exclude_fields)
 
     # read the data
-    ncobj = netCDF4.Dataset(filename)
-    ncvars = ncobj.variables
+    ncvars = xr.open_dataset(filename, decode_times=False)
 
     # 4.1 Global attribute -> move to metadata dictionary
-    metadata = dict([(k, getattr(ncobj, k)) for k in ncobj.ncattrs()])
+    metadata = dict([(k, getattr(ncvars, k)) for k in ncvars.attrs])
     if 'n_gates_vary' in metadata:
         metadata['n_gates_vary'] = 'false'  # corrected below
 
@@ -117,11 +113,11 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
 
     # 4.3 Global variable -> move to metadata dictionary
     if 'volume_number' in ncvars:
-        if np.ma.isMaskedArray(ncvars['volume_number'][:]):
+        if np.ma.isMaskedArray(ncvars['volume_number']):
             metadata['volume_number'] = int(
-                np.ma.getdata(ncvars['volume_number'][:].flatten()))
+                np.ma.getdata(ncvars['volume_number'].flatten()))
         else:
-            metadata['volume_number'] = int(ncvars['volume_number'][:])
+            metadata['volume_number'] = int(ncvars['volume_number'])
     else:
         metadata['volume_number'] = 0
 
@@ -179,13 +175,12 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
         ray_angle_res = None
 
     # Uses ARM scan name if present.
-    if hasattr(ncobj, 'scan_name'):
-        mode = ncobj.scan_name
+    if hasattr(ncvars, 'scan_name'):
+        mode = ncvars.scan_name
     else:
         # first sweep mode determines scan_type
         try:
-            mode = netCDF4.chartostring(
-                sweep_mode['data'][0])[()].decode('utf-8')
+            mode = sweep_mode['data'].astype(str)[0]
         except AttributeError:
             # Python 3, all strings are already unicode.
             mode = netCDF4.chartostring(sweep_mode['data'][0])[()]
@@ -272,11 +267,11 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
     if 'ray_n_gates' in ncvars:
         # all variables with dimensions of n_points are fields.
         keys = [k for k, v in ncvars.items()
-                if v.dimensions == ('n_points', )]
+                if v.dims == ('n_points', )]
     else:
         # all variables with dimensions of 'time', 'range' are fields
         keys = [k for k, v in ncvars.items()
-                if v.dimensions == ('time', 'range')]
+                if v.dims == ('time', 'range')]
 
     fields = {}
     for key in keys:
@@ -316,7 +311,7 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
 
     # do not close file if field loading is delayed
     if not delay_field_loading:
-        ncobj.close()
+        ncvars.close()
     return Radar(
         time, _range, fields, metadata, scan_type,
         latitude, longitude, altitude,
@@ -338,14 +333,14 @@ def _find_all_meta_group_vars(ncvars, meta_group_name):
     """
     Return a list of all variables which are in a given meta_group.
     """
-    return [k for k, v in ncvars.items() if 'meta_group' in v.ncattrs() and
+    return [k for k, v in ncvars.items() if 'meta_group' in v.attrs and
             v.meta_group == meta_group_name]
 
 
 def _ncvar_to_dict(ncvar, lazydict=False):
     """ Convert a NetCDF Dataset variable to a dictionary. """
     # copy all attribute except for scaling parameters
-    d = dict((k, getattr(ncvar, k)) for k in ncvar.ncattrs()
+    d = dict((k, getattr(ncvar, k)) for k in ncvar.attrs
              if k not in ['scale_factor', 'add_offset'])
     data_extractor = _NetCDFVariableDataExtractor(ncvar)
     if lazydict:
@@ -359,12 +354,10 @@ def _ncvar_to_dict(ncvar, lazydict=False):
 class _NetCDFVariableDataExtractor(object):
     """
     Class facilitating on demand extraction of data from a NetCDF variable.
-
     Parameters
     ----------
     ncvar : netCDF4.Variable
         NetCDF Variable from which data will be extracted.
-
     """
 
     def __init__(self, ncvar):
@@ -373,7 +366,7 @@ class _NetCDFVariableDataExtractor(object):
 
     def __call__(self):
         """ Return an array containing data from the stored variable. """
-        data = self.ncvar[:]
+        data = self.ncvar.data
         if data is np.ma.masked:
             # If the data is a masked scalar, MaskedConstant is returned by
             # NetCDF4 version 1.2.3+. This object does not preserve the dtype

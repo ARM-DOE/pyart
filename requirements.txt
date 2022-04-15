@@ -6,3 +6,4 @@ pooch
 cftime
 Cython
 versioneer
+xarray
