@@ -17,6 +17,8 @@ from .common import stringarray_to_chararray, _test_arguments
 from ..core.radar import Radar
 from ..lazydict import LazyLoadDict
 
+xr.set_options(keep_attrs=True)
+
 
 # Variables and dimensions in the instrument_parameter convention and
 # radar_parameters sub-convention that will be read from and written to
@@ -356,8 +358,8 @@ class _NetCDFVariableDataExtractor(object):
     Class facilitating on demand extraction of data from a NetCDF variable.
     Parameters
     ----------
-    ncvar : netCDF4.Variable
-        NetCDF Variable from which data will be extracted.
+    ncvar : xarray.DataArray
+        Xarray data array from which data will be extracted.
     """
 
     def __init__(self, ncvar):
