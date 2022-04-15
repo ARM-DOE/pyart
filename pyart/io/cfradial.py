@@ -342,8 +342,13 @@ def _find_all_meta_group_vars(ncvars, meta_group_name):
 def _ncvar_to_dict(ncvar, lazydict=False):
     """ Convert a NetCDF Dataset variable to a dictionary. """
     # copy all attribute except for scaling parameters
-    d = dict((k, getattr(ncvar, k)) for k in ncvar.attrs
-             if k not in ['scale_factor', 'add_offset'])
+
+    if type(ncvar) == xr.DataArray:
+        d = dict((k, getattr(ncvar, k)) for k in ncvar.attrs
+                if k not in ['scale_factor', 'add_offset'])
+    else:
+        d = dict((k, getattr(ncvar, k)) for k in ncvar.attrs
+                if k not in ['scale_factor', 'add_offset'])
     data_extractor = _NetCDFVariableDataExtractor(ncvar)
     if lazydict:
         d = LazyLoadDict(d)
