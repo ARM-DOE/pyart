@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.io.common &#8212; Py-ART 1.12.1.post9.dev0+ga68bed26f documentation</title>
+    <title>pyart.io.common &#8212; Py-ART 1.12.1.post10.dev0+gc3e49a8b6 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -240,6 +240,7 @@
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">netCDF4</span>
+<span class="kn">import</span> <span class="nn">fsspec</span>
 
 
 <div class="viewcode-block" id="prepare_for_read"><a class="viewcode-back" href="../../../API/generated/pyart.io.prepare_for_read.html#pyart.io.prepare_for_read">[docs]</a><span class="k">def</span> <span class="nf">prepare_for_read</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
@@ -266,7 +267,7 @@
         <span class="k">return</span> <span class="n">filename</span>
 
     <span class="c1"># look for compressed data by examining the first few bytes</span>
-    <span class="n">fh</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span>
+    <span class="n">fh</span> <span class="o">=</span> <span class="n">fsspec</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">()</span>
     <span class="n">magic</span> <span class="o">=</span> <span class="n">fh</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
     <span class="n">fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
@@ -276,7 +277,7 @@
     <span class="k">if</span> <span class="n">magic</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;BZh&#39;</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">bz2</span><span class="o">.</span><span class="n">BZ2File</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">fsspec</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">()</span></div>
 
 
 <span class="k">def</span> <span class="nf">stringarray_to_chararray</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">numchars</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
