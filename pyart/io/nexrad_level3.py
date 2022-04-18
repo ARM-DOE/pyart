@@ -216,7 +216,7 @@ class NEXRADLevel3File(object):
         self.azimuths = [rad.azimuth for rad in self.gen_data_pack['components'].radials]
 
         # Pull each radial's data into an array
-        self.raw_data = np.empty((nradials, nbins), dtype='uint8')
+        self.raw_data = np.empty((nradials, nbins), dtype='uint16')
         for i in range(0,nradials):
             self.raw_data[i,:] = self.gen_data_pack['components'].radials[i].data
 
@@ -293,7 +293,7 @@ class NEXRADLevel3File(object):
             scale, offset = np.frombuffer(threshold_data[:8], '>f4')
             data = (self.raw_data - offset) / (scale) * 0.01
             mdata = np.ma.array(data, mask=self.raw_data < 1)
-            
+
         elif msg_code in [176]:
             scale, offset = np.frombuffer(threshold_data[:8], '>f4')
             data = (self.raw_data - offset) / (scale)

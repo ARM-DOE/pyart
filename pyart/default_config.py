@@ -875,7 +875,7 @@ nexrad_metadata = {
 nexrad_level3_metadata = {
 
     radar_estimated_rain_rate: {
-        'units': 'inches',
+        'units': 'inches/hour',
         'standard_name': 'radar_estimated_rain_rate',
         'long_name': 'Radar estimated rain rate',
         'coordinates': 'elevation azimuth range'},
