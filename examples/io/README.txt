@@ -3,4 +3,4 @@
 Input/Output Examples
 --------------------------
 
-Reading/writing a vareity of radar data using Py-ART.
+Reading/writing a variety of radar data using Py-ART.

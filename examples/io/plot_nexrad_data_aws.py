@@ -6,8 +6,6 @@ Reading NEXRAD Data from the AWS Cloud
 Within this example, we show how you can remotely access Next Generation Weather Radar (NEXRAD) Data from Amazon Web Services
 and plot quick looks of the datasets.
 
-Note - this example requires both cartopy and s3fs to be installed.
-
 """
 print(__doc__)
 
