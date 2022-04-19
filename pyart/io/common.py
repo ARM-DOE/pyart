@@ -11,7 +11,7 @@ import netCDF4
 import fsspec
 
 
-def prepare_for_read(filename):
+def prepare_for_read(filename, storage_options={'anon':True}}):
     """
     Return a file like object read for reading.
 
@@ -35,7 +35,7 @@ def prepare_for_read(filename):
         return filename
 
     # look for compressed data by examining the first few bytes
-    fh = fsspec.open(filename, 'rb').open()
+    fh = fsspec.open(filename, 'rb', storage_options=storage_options).open()
     magic = fh.read(3)
     fh.close()
 
@@ -45,7 +45,7 @@ def prepare_for_read(filename):
     if magic.startswith(b'BZh'):
         return bz2.BZ2File(filename, 'rb')
 
-    return fsspec.open(filename, 'rb').open()
+    return fsspec.open(filename, 'rb', storage_options=storage_options).open()
 
 
 def stringarray_to_chararray(arr, numchars=None):

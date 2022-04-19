@@ -51,6 +51,9 @@ def read_nexrad_level3(filename, field_names=None, additional_metadata=None,
         List of fields to include from the radar object. This is applied
         after the `file_field_names` and `field_names` parameters. Set
         to None to include all fields not specified by exclude_fields.
+    
+    **kwargs
+        Additional keyword arguments to pass to fsspec to open the dataset
 
     Returns
     -------
@@ -73,7 +76,7 @@ def read_nexrad_level3(filename, field_names=None, additional_metadata=None,
                                 exclude_fields, include_fields)
 
     # open the file
-    nfile = NEXRADLevel3File(prepare_for_read(filename))
+    nfile = NEXRADLevel3File(prepare_for_read(filename, **kwargs))
     nradials = nfile.packet_header['nradials']
     msg_code = nfile.msg_header['code']
 

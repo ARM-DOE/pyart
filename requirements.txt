@@ -7,3 +7,4 @@ cftime
 Cython
 versioneer
 fsspec
+s3fs
