@@ -370,7 +370,7 @@ class _NetCDFVariableDataExtractor(object):
     def __call__(self):
         """ Return an array containing data from the stored variable. """
         data = self.ncvar.data
-        if data is np.ma.masked:
+        if isinstance(data, np.ma.core.MaskedArray):
             # If the data is a masked scalar, MaskedConstant is returned by
             # NetCDF4 version 1.2.3+. This object does not preserve the dtype
             # and fill_value of the original NetCDF variable and causes issues
@@ -379,6 +379,11 @@ class _NetCDFVariableDataExtractor(object):
             # with the correct dtype and fill_value.
             self.ncvar.set_auto_mask(False)
             data = np.ma.array(self.ncvar[:], mask=True)
+
+        # If it's a regular numpy array, convert to a masked array
+        elif isinstance(data, np.ndarray):
+            data = self.ncvar.to_masked_array()
+
         # Use atleast_1d to force the array to be at minimum one dimensional,
         # some version of netCDF return scalar or scalar arrays for scalar
         # NetCDF variables.
