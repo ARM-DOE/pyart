@@ -11,7 +11,7 @@ import netCDF4
 import fsspec
 
 
-def prepare_for_read(filename, storage_options={'anon':True}}):
+def prepare_for_read(filename, storage_options={'anon':True}):
     """
     Return a file like object read for reading.
 
