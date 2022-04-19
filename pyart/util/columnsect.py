@@ -1,18 +1,21 @@
 """
 Function for extracting the radar column above a target
-given position in lat, lon
+given position in latitude, longitude
 
 """
 
 import numpy as np
+import time
 
 from ..core.transforms import antenna_vectors_to_cartesian
 
+# for testing. 
+t0 = time.time()
 
-def sphere_distance(rad_lat, tar_lat, rad_lon, tar_lon):
-
+def sphere_distance(radar_latitude, target_latitude, radar_longitude, 
+                    target_longitude):
     """
-    Calculation of the great circle distance between radar and target
+    Calculated of the great circle distance between radar and target
 
     Assumptions
     -----------
@@ -22,13 +25,13 @@ def sphere_distance(rad_lat, tar_lat, rad_lon, tar_lon):
 
     Parameter
     ---------
-    rad_lat : float, [degrees]
+    radar_latitude : float, [degrees]
         latitude of the radar in degrees
-    tar_lat : float, [degrees]
-        latidude of the target in degrees
-    rad_lon : float, [degrees]
+    target_latitude : float, [degrees]
+        latitude of the target in degrees
+    radar_longitude : float, [degrees]
         longitude of the radar in degrees
-    tar_lon : float, [degrees]
+    target_longitude : float, [degrees]
         longitude of the target in degress
 
     Returns
@@ -36,51 +39,54 @@ def sphere_distance(rad_lat, tar_lat, rad_lon, tar_lon):
     distance : float, [meters]
         Great-Circle Distance between radar and target in meters
     """
-    # check if lat, lons are valid
-    check_lat(rad_lat)
-    check_lat(tar_lat)
-    check_lon(rad_lon)
-    check_lon(tar_lon)
-    # convert latitude/longitudes to radians
-    rad_lat = rad_lat * (np.pi/180.)
-    tar_lat = tar_lat * (np.pi/180.)
-    rad_lon = rad_lon * (np.pi/180.)
-    tar_lon = tar_lon * (np.pi/180.)
-    # difference in latitude
-    d_lat = (tar_lat - rad_lat)
-    # difference in longitude
-    d_lon = (tar_lon - rad_lon)
+    # check if latitude, longitudes are valid
+    check_latitude(radar_latitude)
+    check_latitude(target_latitude)
+    check_longitude(radar_longitude)
+    check_longitude(target_longitude)
+    
+    # convert latitudeitude/longitudegitudes to radians
+    radar_latitude = radar_latitude * (np.pi/180.)
+    target_latitude = target_latitude * (np.pi/180.)
+    radar_longitude = radar_longitude * (np.pi/180.)
+    target_longitude = target_longitude * (np.pi/180.)
+    
+    # difference in latitudeitude
+    d_latitude = (target_latitude - radar_latitude)
+    # difference in longitudegitude
+    d_longitude = (target_longitude - radar_longitude)
+    
     # Haversine formula
-    numerator = ((np.sin(d_lat/2.0)**2.0)
-                 + np.cos(rad_lat) * np.cos(tar_lat)
-                 * (np.sin(d_lon/2.0)**2.0))
+    numerator = ((np.sin(d_latitude/2.0)**2.0)
+                 + np.cos(radar_latitude) * np.cos(target_latitude)
+                 * (np.sin(d_longitude/2.0)**2.0))
     distance = 2 * 6371000 * np.arcsin(np.sqrt(numerator))
 
     # return the output
     return distance
 
 
-def for_azimuth(rad_lat, tar_lat, rad_lon, tar_lon):
-
+def for_azimuth(radar_latitude, target_latitude, radar_longitude,
+                target_longitude):
     """
-    Calculation of inital bearing along a great-circle arc
+    Calculation of inital bearing alongitudeg a great-circle arc
     Known as Forward Azimuth Angle.
 
     Assumptions
     -----------
     Radius of the Earth = 6371 km / 6371000 meters
-    Distance is calculated for a smooth sphere
+    Distance is calculatitudeed for a smooth sphere
     Radar and Target are at the same altitude (need to check)
 
     Parameters
     ----------
-    rad_lat : float, [degrees]
+    radar_latitude : float, [degrees]
         latitude of the radar in degrees
-    tar_lat : float, [degrees]
-        latidude of the target in degrees
-    rad_lon : float, [degrees]
+    target_latitude : float, [degrees]
+        latitude of the target in degrees
+    radar_longitude : float, [degrees]
         longitude of the radar in degrees
-    tar_lon : float, [degrees]
+    target_longitude : float, [degrees]
         longitude of the target in degress
 
     Returns
@@ -90,22 +96,27 @@ def for_azimuth(rad_lat, tar_lat, rad_lon, tar_lon):
         target is located within the scan.
         output is in degrees.
     """
-    # check the input lat/lon
-    check_lat(rad_lat)
-    check_lat(tar_lat)
-    check_lon(rad_lon)
-    check_lon(tar_lon)
-    # convert latitude/longitudes to radians
-    rad_lat = rad_lat * (np.pi/180.)
-    tar_lat = tar_lat * (np.pi/180.)
-    rad_lon = rad_lon * (np.pi/180.)
-    tar_lon = tar_lon * (np.pi/180.)
-    # Differnce in longitudes
-    d_lon = tar_lon - rad_lon
+    # check the input latitude/longitude
+    check_latitude(radar_latitude)
+    check_latitude(target_latitude)
+    check_longitude(radar_longitude)
+    check_longitude(target_longitude)
+    
+    # convert latitudeitude/longitudegitudes to radians
+    radar_latitude = radar_latitude * (np.pi/180.)
+    target_latitude = target_latitude * (np.pi/180.)
+    radar_longitude = radar_longitude * (np.pi/180.)
+    target_longitude = target_longitude * (np.pi/180.)
+    
+    # Differnce in longitudegitudes
+    d_longitude = target_longitude - radar_longitude
+    
     # Determine x,y coordinates for arc tangent function
-    corr_y = np.sin(d_lon) * np.cos(tar_lat)
-    corr_x = ((np.cos(rad_lat) * np.sin(tar_lat))
-              - (np.sin(rad_lat) * np.cos(tar_lat) * np.cos(d_lon)))
+    corr_y = np.sin(d_longitude) * np.cos(target_latitude)
+    corr_x = ((np.cos(radar_latitude) * np.sin(target_latitude))
+              - (np.sin(radar_latitude) * (np.cos(target_latitude) 
+              * np.cos(d_longitude))))
+    
     # Determine forward azimuth angle
     azimuth = np.arctan2(corr_y, corr_x) * (180./np.pi)
 
@@ -116,20 +127,20 @@ def for_azimuth(rad_lat, tar_lat, rad_lon, tar_lon):
     return azimuth
 
 
-def get_fields_latlon(radar, lat, lon):
+def get_field_location(radar, latitude, longitude):
 
     """
-    Given the location (in lat,lon) of a target, extract the radar column
-    above that point for further analysis.
+    Given the location (in latitude, longitude) of a target, extract the
+    radar column above that point for further analysis.
 
     Parameters
     ----------
-    radar : Radar Object
+    radar : pyart.core.Radar Object
         Py-ART Radar Object from which distance to the target, along
         with gates above the target, will be calculated.
-    lat : float, [degrees]
+    latitude : float, [degrees]
         Latitude, in degrees North, of the target.
-    lon : float, [degrees]
+    longitude : float, [degrees]
         Longitude, in degrees East, of the target.
 
     Function Calls
@@ -167,32 +178,39 @@ def get_fields_latlon(radar, lat, lon):
         input radar object.
 
     """
-    # Make sure lat, lons are valid
-    check_lat(lat)
-    check_lon(lon)
+    # Make sure latitude, longitudes are valid
+    check_latitude(latitude)
+    check_longitude(longitude)
+    
     # initiate a dictionary to hold the striped out meat data from each scan
     meta = {'date': [], 'time': [], 'xgate': [], 'ygate': [],
             'zgate': [], 'distance': [], 'azimuth': []
             }
+    
     # initiate a diciontary to hold the moment data.
     moment = {key: [] for key in radar.fields.keys()}
+    
     # call the sphere_distance function
     dis = sphere_distance(radar.latitude['data'][0],
-                          lat,
+                          latitude,
                           radar.longitude['data'][0],
-                          lon)
+                          longitude)
+    
     # call the for_azimuth function
     azim = for_azimuth(radar.latitude['data'][0],
-                       lat,
+                       latitude,
                        radar.longitude['data'][0],
-                       lon)
+                       longitude)
+    
     # call the get_column_ray function
     ray = get_column_rays(radar, azim)
+    
     # add the parameters to the meta dictionary
     meta['date'].append(radar.time['units'].split(' ')[2].split('T')[0])
     meta['time'].append(radar.time['units'].split(' ')[2].split('T')[-1])
     meta['distance'].append(dis / 1000.)
     meta['azimuth'].append(azim)
+    
     # Determine the gates for the rays
     (rhi_x,
      rhi_y,
@@ -200,8 +218,9 @@ def get_fields_latlon(radar, lat, lon):
                                            radar.azimuth['data'][ray],
                                            radar.elevation['data'][ray],
                                            edges=True)
-    # Calculate distance from the x,y coordinates to target
+    # Calculatitudee distance from the x,y coordinates to target
     rhidis = np.sqrt((rhi_x**2) + (rhi_y**2)) * np.sign(rhi_z)
+    t1 = time.time()
     for i in range(len(ray)):
         tar_gate = np.argmin(abs(rhidis[i, 1:] - (dis)))
         for key in moment:
@@ -210,6 +229,8 @@ def get_fields_latlon(radar, lat, lon):
         meta['xgate'].append(rhi_x[i, tar_gate])
         meta['ygate'].append(rhi_y[i, tar_gate])
         meta['zgate'].append(rhi_z[i, tar_gate])
+    t2 = time.time()
+    print("LOOP TIME: ", t2-t1)
     # Combine the meta and moment data
     column = dict(meta)
     column.update(moment)
@@ -220,7 +241,7 @@ def get_fields_latlon(radar, lat, lon):
 def get_column_rays(radar, azimuth):
 
     """
-    Given the location (in lat,lon) of a target, return the rays that
+    Given the location (in latitude,longitude) of a target, return the rays that
     correspond to radar column above the target.
 
     Parameters
@@ -241,7 +262,8 @@ def get_column_rays(radar, azimuth):
         if (azimuth <= 0) or (azimuth >= 360):
             raise ValueError("azimuth not valid (not between 0-360 degrees)")
     else:
-        raise TypeError("radar longitude type not valid")
+        raise TypeError("radar longitudegitude type not valid." 
+                        + " Please convert input to be an int or float")
     # define a list to hold the valid rays
     rays = []
     # check to see which radar scan
@@ -251,7 +273,7 @@ def get_column_rays(radar, azimuth):
             nstop = radar.sweep_end_ray_index['data'][i]
             counter = 0
             for j in range(nstart, nstop):
-                if (abs(radar.azimuth['data'][nstart+counter] -
+                if (abs(radar.azimuth['data'][nstart + counter] -
                         azimuth) < 1):
                     rays.append(nstart+counter)
                 counter += 1
@@ -268,27 +290,35 @@ def get_column_rays(radar, azimuth):
     return rays
 
 
-def check_lat(lat):
+def check_latitude(latitude):
 
     """
     Function to check if input latitude is valid for type and value
     """
-    if (isinstance(lat, int) or isinstance(lat, float) or
-            isinstance(lat, np.floating)) is True:
-        if (lat <= -90) or (lat >= 90):
-            raise ValueError("latitude not valid")
+    if (isinstance(latitude, int) or isinstance(latitude, float) or
+            isinstance(latitude, np.floating)) is True:
+        if (latitude <= -90) or (latitude >= 90):
+            raise ValueError("Latitude not between -90 and 90 degrees, need to"
+                              + "convert to values between -90 and 90")
     else:
-        raise TypeError("latitude type not valid")
+        raise TypeError("Latitude type not valid, need to convert input to be" 
+                         + " an int or float")
 
 
-def check_lon(lon):
+def check_longitude(longitude):
 
     """
     Function to check if input latitude is valid for type and value
     """
-    if (isinstance(lon, int) or isinstance(lon, float) or
-            isinstance(lon, np.floating)) is True:
-        if (lon <= -180) or (lon >= 180):
-            raise ValueError("longitude not valid")
+    if (isinstance(longitude, int) or isinstance(longitude, float) or
+            isinstance(longitude, np.floating)) is True:
+        if (longitude <= -180) or (longitude >= 180):
+            raise ValueError("Longitude not valid between -180 and 180"
+                             + " degrees, need to convert to values between"
+                             + "  -180 and 180")
     else:
-        raise TypeError("longitude type not valid")
+        raise TypeError("Longitude type not valid, need to convert input to"
+                         + " be an int or float")
+
+t3 = time.time()
+print("TOTAL TIME: ", t3-t0)
