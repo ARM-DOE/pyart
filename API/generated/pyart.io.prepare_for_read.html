@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>pyart.io.prepare_for_read &#8212; Py-ART 1.12.1.post11.dev0+g76a071159 documentation</title>
+    <title>pyart.io.prepare_for_read &#8212; Py-ART 1.12.1.post12.dev0+gbf79eaa81 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -159,12 +159,6 @@
 <li class="toctree-l1 nav-item">
  <a class="reference internal nav-link" href="../../changelog.html">
   Changelog
- </a>
-</li>
-
-<li class="toctree-l1 nav-item">
- <a class="reference external nav-link" href="https://github.com/ARM-DOE/pyart/issues">
-  GitHub Issue Tracker
  </a>
 </li>
 
@@ -2882,14 +2876,18 @@
 <h1>pyart.io.prepare_for_read<a class="headerlink" href="#pyart-io-prepare-for-read" title="Permalink to this headline">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyart.io.prepare_for_read">
-<span class="sig-prename descclassname"><span class="pre">pyart.io.</span></span><span class="sig-name descname"><span class="pre">prepare_for_read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyart/io/common.html#prepare_for_read"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyart.io.prepare_for_read" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyart.io.</span></span><span class="sig-name descname"><span class="pre">prepare_for_read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">storage_options</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'anon':</span> <span class="pre">True}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyart/io/common.html#prepare_for_read"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyart.io.prepare_for_read" title="Permalink to this definition">#</a></dt>
 <dd><p>Return a file like object read for reading.</p>
 <p>Open a file for reading in binary mode with transparent decompression of
 Gzip and BZip2 files. The resulting file-like object should be closed.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>filename</strong> (<em>str or file-like object</em>) – Filename or file-like object which will be opened. File-like objects
-will not be examined for compressed data.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>str or file-like object</em>) – Filename or file-like object which will be opened. File-like objects
+will not be examined for compressed data.</p></li>
+<li><p><strong>storage_options</strong> (<em>dict, optional</em>) – Parameters passed to the backend file-system such as Google Cloud Storage,
+Amazon Web Service S3.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>file_like</strong> (<em>file-like object</em>) – File like object from which data can be read.</p>

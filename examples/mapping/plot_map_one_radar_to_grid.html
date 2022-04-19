@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Map a single radar to a Cartesian grid &#8212; Py-ART 1.12.1.post11.dev0+g76a071159 documentation</title>
+    <title>Map a single radar to a Cartesian grid &#8212; Py-ART 1.12.1.post12.dev0+gbf79eaa81 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -51,7 +51,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Map two radars to a Cartesian grid" href="plot_map_two_radars_to_grid.html" />
-    <link rel="prev" title="Dealias doppler velocities using the FourDD algorithm" href="../correct/plot_dealias.html" /> 
+    <link rel="prev" title="Reading NEXRAD Data from the AWS Cloud" href="../io/plot_nexrad_data_aws.html" /> 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -162,12 +162,6 @@
  </a>
 </li>
 
-<li class="toctree-l1 nav-item">
- <a class="reference external nav-link" href="https://github.com/ARM-DOE/pyart/issues">
-  GitHub Issue Tracker
- </a>
-</li>
-
     
 </ul>
       </div>
@@ -220,6 +214,13 @@
  <li class="toctree-l1">
   <a class="reference internal" href="../correct/plot_dealias.html">
    Dealias doppler velocities using the FourDD algorithm
+  </a>
+ </li>
+</ul>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../io/plot_nexrad_data_aws.html">
+   Reading NEXRAD Data from the AWS Cloud
   </a>
  </li>
 </ul>
@@ -417,7 +418,7 @@ Cartesian grid.</p>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  9.377 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  13.315 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-mapping-plot-map-one-radar-to-grid-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/104f550be6404a276421be922bbaee44/plot_map_one_radar_to_grid.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_map_one_radar_to_grid.py</span></code></a></p>
@@ -438,11 +439,11 @@ Cartesian grid.</p>
               
               <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="../correct/plot_dealias.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="../io/plot_nexrad_data_aws.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Dealias doppler velocities using the FourDD algorithm</p>
+            <p class="prev-next-title">Reading NEXRAD Data from the AWS Cloud</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="plot_map_two_radars_to_grid.html" title="next page">

@@ -1,0 +1,12 @@
+
+:orphan:
+
+.. _sphx_glr_examples_io_sg_execution_times:
+
+Computation times
+=================
+**00:25.516** total execution time for **examples_io** files:
+
++-----------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_examples_io_plot_nexrad_data_aws.py` (``plot_nexrad_data_aws.py``) | 00:25.516 | 0.0 MB |
++-----------------------------------------------------------------------------------+-----------+--------+

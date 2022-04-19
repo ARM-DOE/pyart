@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.io.nexrad_archive &#8212; Py-ART 1.12.1.post11.dev0+g76a071159 documentation</title>
+    <title>pyart.io.nexrad_archive &#8212; Py-ART 1.12.1.post12.dev0+gbf79eaa81 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -159,12 +159,6 @@
  </a>
 </li>
 
-<li class="toctree-l1 nav-item">
- <a class="reference external nav-link" href="https://github.com/ARM-DOE/pyart/issues">
-  GitHub Issue Tracker
- </a>
-</li>
-
     
 </ul>
       </div>
@@ -252,7 +246,7 @@
                         <span class="n">file_field_names</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">exclude_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                         <span class="n">include_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">delay_field_loading</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                         <span class="n">station</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scans</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                        <span class="n">linear_interp</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                        <span class="n">linear_interp</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">storage_options</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;anon&#39;</span><span class="p">:</span><span class="kc">True</span><span class="p">},</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Read a NEXRAD Level 2 Archive file.</span>
 
@@ -308,6 +302,11 @@
 <span class="sd">        False will perform a nearest neighbor interpolation. This parameter is</span>
 <span class="sd">        not used if the resolution of all rays in the file or requested sweeps</span>
 <span class="sd">        is constant.</span>
+<span class="sd">    storage_options : dict, optional</span>
+<span class="sd">        Parameters passed to the backend file-system such as Google Cloud Storage,</span>
+<span class="sd">        Amazon Web Service S3.</span>
+<span class="sd">    **kwargs</span>
+<span class="sd">        Additional keyword arguments to pass to fsspec to open the dataset</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -330,7 +329,7 @@
                                 <span class="n">exclude_fields</span><span class="p">,</span> <span class="n">include_fields</span><span class="p">)</span>
 
     <span class="c1"># open the file and retrieve scan information</span>
-    <span class="n">nfile</span> <span class="o">=</span> <span class="n">NEXRADLevel2File</span><span class="p">(</span><span class="n">prepare_for_read</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+    <span class="n">nfile</span> <span class="o">=</span> <span class="n">NEXRADLevel2File</span><span class="p">(</span><span class="n">prepare_for_read</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">storage_options</span><span class="o">=</span><span class="n">storage_options</span><span class="p">))</span>
     <span class="n">scan_info</span> <span class="o">=</span> <span class="n">nfile</span><span class="o">.</span><span class="n">scan_info</span><span class="p">(</span><span class="n">scans</span><span class="p">)</span>
 
     <span class="c1"># time</span>
