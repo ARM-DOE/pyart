@@ -44,14 +44,6 @@ The Python ARM Radar Toolkit - Py-ART
    
    changelog.md
 
-.. toctree::
-   :maxdepth: 1
-   :hidden:
-   :caption: Getting Help
-
-   GitHub Issue Tracker <https://github.com/ARM-DOE/pyart/issues>
-   Mailing List <https://groups.google.com/forum/#!forum/pyart-users>
-
 What is Py-ART?
 ===============
 The Python ARM Radar Toolkit, Py-ART, is a Python module containing a
