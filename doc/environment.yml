@@ -23,6 +23,8 @@ dependencies:
   - coin-or-cbc
   - pkg-config
   - Cython
+  - fsspec
+  - s3fs
   - pip
   - pip:
       - pydata-sphinx-theme
