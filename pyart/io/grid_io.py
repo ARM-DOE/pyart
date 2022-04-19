@@ -8,11 +8,13 @@ import warnings
 
 import netCDF4
 import numpy as np
+import xarray as xr
 
 from ..core.grid import Grid
 from .cfradial import _ncvar_to_dict, _create_ncvar
 from .common import _test_arguments
 
+xr.set_options(keep_attrs=True)
 
 def read_grid(filename, exclude_fields=None, include_fields=None, **kwargs):
     """
@@ -56,22 +58,22 @@ def read_grid(filename, exclude_fields=None, include_fields=None, **kwargs):
         'radar_name', 'radar_time', 'base_time', 'time_offset',
         'ProjectionCoordinateSystem']
 
-    dset = netCDF4.Dataset(filename, mode='r')
+    dset = xr.open_dataset(filename, decode_times=False)
 
     # metadata
-    metadata = dict([(k, getattr(dset, k)) for k in dset.ncattrs()])
+    metadata = dict([(k, getattr(dset, k)) for k in dset.attrs])
 
     # required reserved variables
-    time = _ncvar_to_dict(dset.variables['time'])
-    origin_latitude = _ncvar_to_dict(dset.variables['origin_latitude'])
-    origin_longitude = _ncvar_to_dict(dset.variables['origin_longitude'])
-    origin_altitude = _ncvar_to_dict(dset.variables['origin_altitude'])
-    x = _ncvar_to_dict(dset.variables['x'])
-    y = _ncvar_to_dict(dset.variables['y'])
-    z = _ncvar_to_dict(dset.variables['z'])
+    time = _ncvar_to_dict(dset['time'])
+    origin_latitude = _ncvar_to_dict(dset['origin_latitude'])
+    origin_longitude = _ncvar_to_dict(dset['origin_longitude'])
+    origin_altitude = _ncvar_to_dict(dset['origin_altitude'])
+    x = _ncvar_to_dict(dset['x'])
+    y = _ncvar_to_dict(dset['y'])
+    z = _ncvar_to_dict(dset['z'])
 
     # projection
-    projection = _ncvar_to_dict(dset.variables['projection'])
+    projection = _ncvar_to_dict(dset['projection'])
     projection.pop('data')
     # map _include_lon_0_lat_0 key to bool type
     if '_include_lon_0_lat_0' in projection:
@@ -83,7 +85,7 @@ def read_grid(filename, exclude_fields=None, include_fields=None, **kwargs):
 
     # fields in the file has a shape of (1, nz, ny, nx) with the leading 1
     # indicating time but should shaped (nz, ny, nx) in the Grid object
-    field_shape = tuple([len(dset.dimensions[d]) for d in ['z', 'y', 'x']])
+    field_shape = tuple([len(dset[d]) for d in ['z', 'y', 'x']])
     field_shape_with_time = (1, ) + field_shape
 
     # check all non-reserved variables, those with the correct shape
@@ -96,7 +98,7 @@ def read_grid(filename, exclude_fields=None, include_fields=None, **kwargs):
         if include_fields is not None:
             if field not in include_fields:
                 continue
-        field_dic = _ncvar_to_dict(dset.variables[field])
+        field_dic = _ncvar_to_dict(dset[field])
         if field_dic['data'].shape == field_shape_with_time:
             field_dic['data'].shape = field_shape
             fields[field] = field_dic
@@ -108,27 +110,27 @@ def read_grid(filename, exclude_fields=None, include_fields=None, **kwargs):
 
     # radar_ variables
     if 'radar_latitude' in dset.variables:
-        radar_latitude = _ncvar_to_dict(dset.variables['radar_latitude'])
+        radar_latitude = _ncvar_to_dict(dset['radar_latitude'])
     else:
         radar_latitude = None
 
     if 'radar_longitude' in dset.variables:
-        radar_longitude = _ncvar_to_dict(dset.variables['radar_longitude'])
+        radar_longitude = _ncvar_to_dict(dset['radar_longitude'])
     else:
         radar_longitude = None
 
     if 'radar_altitude' in dset.variables:
-        radar_altitude = _ncvar_to_dict(dset.variables['radar_altitude'])
+        radar_altitude = _ncvar_to_dict(dset['radar_altitude'])
     else:
         radar_altitude = None
 
     if 'radar_name' in dset.variables:
-        radar_name = _ncvar_to_dict(dset.variables['radar_name'])
+        radar_name = _ncvar_to_dict(dset['radar_name'])
     else:
         radar_name = None
 
     if 'radar_time' in dset.variables:
-        radar_time = _ncvar_to_dict(dset.variables['radar_time'])
+        radar_time = _ncvar_to_dict(dset['radar_time'])
     else:
         radar_time = None
 
