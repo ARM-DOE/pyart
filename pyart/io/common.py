@@ -24,6 +24,10 @@ def prepare_for_read(filename, storage_options={'anon':True}):
         Filename or file-like object which will be opened. File-like objects
         will not be examined for compressed data.
 
+    storage_options : dict, optional
+        Parameters passed to the backend file-system such as Google Cloud Storage,
+        Amazon Web Service S3.
+
     Returns
     -------
     file_like : file-like object
@@ -35,7 +39,7 @@ def prepare_for_read(filename, storage_options={'anon':True}):
         return filename
 
     # look for compressed data by examining the first few bytes
-    fh = fsspec.open(filename, 'rb', storage_options=storage_options).open()
+    fh = fsspec.open(filename, mode='rb', **storage_options).open()
     magic = fh.read(3)
     fh.close()
 
@@ -45,7 +49,7 @@ def prepare_for_read(filename, storage_options={'anon':True}):
     if magic.startswith(b'BZh'):
         return bz2.BZ2File(filename, 'rb')
 
-    return fsspec.open(filename, 'rb', storage_options=storage_options).open()
+    return fsspec.open(filename, mode='rb', **storage_options).open()
 
 
 def stringarray_to_chararray(arr, numchars=None):
