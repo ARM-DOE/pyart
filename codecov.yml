@@ -7,6 +7,8 @@ comment: false
 ignore:
   - 'tests/*.py'
   - 'setup.py'
+  - '*.pyx'
+  - 'versioneer.py'
 
 coverage:
   precision: 2

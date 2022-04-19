@@ -115,7 +115,7 @@ class RadarMapDisplay(RadarDisplay):
             resolution='110m', shapefile=None, shapefile_kwargs=None,
             edges=True, gatefilter=None,
             filter_transitions=True, embelish=True, raster=False,
-            ticks=None, ticklabs=None, alpha=None):
+            ticks=None, ticklabs=None, alpha=None, edgecolors='face', **kwargs):
         """
         Plot a PPI volume sweep onto a geographic map.
 
@@ -223,6 +223,10 @@ class RadarMapDisplay(RadarDisplay):
         alpha : float or None
             Set the alpha tranparency of the radar plot. Useful for
             overplotting radar over other datasets.
+        edgecolor : str
+            Set the behavior of the edges of the pixels, by default
+            it will color them the same as the pixels (faces).
+        **kwargs : additional keyword arguments to pass to pcolormesh.
 
         """
         # parse parameters
@@ -291,7 +295,8 @@ class RadarMapDisplay(RadarDisplay):
             vmin = vmax = None
         pm = ax.pcolormesh(x * 1000., y * 1000., data, alpha=alpha,
                            vmin=vmin, vmax=vmax, cmap=cmap,
-                           norm=norm, transform=self.grid_projection)
+                           edgecolors=edgecolors, norm=norm,
+                           transform=self.grid_projection, **kwargs)
 
         # plot as raster in vector graphics files
         if raster:
