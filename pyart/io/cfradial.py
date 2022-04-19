@@ -129,7 +129,7 @@ def read_cfradial(filename, field_names=None, additional_metadata=None,
     # variable when the file is written.
     for var, default_value in global_vars.items():
         if var in ncvars:
-            metadata[var] = str(netCDF4.chartostring(ncvars[var][:]))
+            metadata[var] = ncvars[var].astype(str)
         else:
             metadata[var] = default_value
 
