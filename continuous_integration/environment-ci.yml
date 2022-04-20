@@ -23,4 +23,3 @@ dependencies:
   - pip:
     - pooch
     - versioneer
-

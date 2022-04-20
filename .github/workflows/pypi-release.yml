@@ -8,23 +8,38 @@ jobs:
   build-artifacts:
     runs-on: ubuntu-latest
     if: github.repository == 'ARM-DOE/pyart'
+    defaults:
+      run:
+        shell: bash -l {0}
     steps:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - uses: actions/setup-python@v2
-        name: Install Python
+       # Install dependencies
+      - name: Setup Conda Environment
+        uses: conda-incubator/setup-miniconda@v2
         with:
-          python-version: 3.8
+          environment-file: continuous_integration/environment-ci.yml
+          activate-environment: pyart-dev
+          auto-activate-base: false
+          mamba-version: '*'
+          use-mamba: true
+          miniforge-variant: Mambaforge
+          extra-specs: python=3.8
 
-      - name: Install dependencies
+      - name: Set TRMM RSL path
+        run: |
+          mamba install -c conda-forge trmm_rsl
+          export RSL_PATH=$CONDA/pkgs/trmm_rsl-1.49-3
+
+      - name: Install pip dependencies
         run: |
           python -m pip install --upgrade pip
           python -m pip install build
-          python -m pip install -r requirements.txt
+          python -m pip install twine
       - name: Build tarball and wheels
         run: |
-          python -m pip install -e .
+          python -m pip install -e . --no-deps --force-reinstall
           git clean -xdf
           git restore -SW .
           python -m build --sdist --wheel .
