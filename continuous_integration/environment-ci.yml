@@ -4,7 +4,6 @@ channels:
   - defaults
 dependencies:
   - gdal
-  - trmm_rsl
   - numpy
   - scipy
   - matplotlib

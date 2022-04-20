@@ -29,6 +29,7 @@ jobs:
 
       - name: Set TRMM RSL path
         run: |
+          mamba install -c conda-forge trmm_rsl
           export RSL_PATH=$CONDA/pkgs/trmm_rsl-1.49-3
 
       - name: Install pip dependencies
