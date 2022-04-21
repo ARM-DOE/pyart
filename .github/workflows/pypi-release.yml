@@ -38,16 +38,16 @@ jobs:
         env:
           RSL_PATH: ${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-3 
         run: |
-          pip install --upgrade pip
-          pip install build
-          pip install twine
+          python -m pip install --upgrade pip
+          python -m pip install build
+          python -m pip install twine
       - name: Build tarball and wheels
         env:
           RSL_PATH: ${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-3 
         run: |
           git clean -xdf
           git restore -SW .
-          build --sdist --wheel .
+          python -m build --sdist --wheel .
       - name: Check built artifacts
         env:
           RSL_PATH: ${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-3 
