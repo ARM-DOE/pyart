@@ -8,3 +8,4 @@ Cython
 versioneer
 fsspec
 s3fs
+xarray
