@@ -5,14 +5,12 @@ given position in latitude, longitude
 """
 
 import numpy as np
-import time
+import xarray as xr
 
 from ..core.transforms import antenna_vectors_to_cartesian
 
-# for testing. 
-t0 = time.time()
 
-def sphere_distance(radar_latitude, target_latitude, radar_longitude, 
+def sphere_distance(radar_latitude, target_latitude, radar_longitude,
                     target_longitude):
     """
     Calculated of the great circle distance between radar and target
@@ -44,18 +42,18 @@ def sphere_distance(radar_latitude, target_latitude, radar_longitude,
     check_latitude(target_latitude)
     check_longitude(radar_longitude)
     check_longitude(target_longitude)
-    
+
     # convert latitudeitude/longitudegitudes to radians
     radar_latitude = radar_latitude * (np.pi/180.)
     target_latitude = target_latitude * (np.pi/180.)
     radar_longitude = radar_longitude * (np.pi/180.)
     target_longitude = target_longitude * (np.pi/180.)
-    
+
     # difference in latitudeitude
     d_latitude = (target_latitude - radar_latitude)
     # difference in longitudegitude
     d_longitude = (target_longitude - radar_longitude)
-    
+
     # Haversine formula
     numerator = ((np.sin(d_latitude/2.0)**2.0)
                  + np.cos(radar_latitude) * np.cos(target_latitude)
@@ -101,22 +99,22 @@ def for_azimuth(radar_latitude, target_latitude, radar_longitude,
     check_latitude(target_latitude)
     check_longitude(radar_longitude)
     check_longitude(target_longitude)
-    
+
     # convert latitudeitude/longitudegitudes to radians
     radar_latitude = radar_latitude * (np.pi/180.)
     target_latitude = target_latitude * (np.pi/180.)
     radar_longitude = radar_longitude * (np.pi/180.)
     target_longitude = target_longitude * (np.pi/180.)
-    
+
     # Differnce in longitudegitudes
     d_longitude = target_longitude - radar_longitude
-    
+
     # Determine x,y coordinates for arc tangent function
     corr_y = np.sin(d_longitude) * np.cos(target_latitude)
     corr_x = ((np.cos(radar_latitude) * np.sin(target_latitude))
-              - (np.sin(radar_latitude) * (np.cos(target_latitude) 
-              * np.cos(d_longitude))))
-    
+              - (np.sin(radar_latitude) * (np.cos(target_latitude)
+                                           * np.cos(d_longitude))))
+
     # Determine forward azimuth angle
     azimuth = np.arctan2(corr_y, corr_x) * (180./np.pi)
 
@@ -151,66 +149,35 @@ def get_field_location(radar, latitude, longitude):
 
     Returns
     -------
-    column : dict
-        Dictionary containing the radar column above the target for
-        the various fields within the radar object, as well as,
-        the height gates above that point.
-
-    Dictionary keys:
-    ----------------
-    date : string
-        date of the radar scan in YYYY-MM-DD format
-    time : string
-        beginning time of each scan in HH:MM:SSZ format
-    xgate : list
-        East-west distance to target in m
-    ygate : list
-        North-South distance to target in m
-    zgate : list
-        Height above target in m
-    tardis : float
-        Distance from radar to target in m
-    tarazi : float
-        Forward azimuth angle from radar to target in degrees
-    moments : list
-        Radar fields for the column above the target.
-        Dependent on which radar fields are within the
-        input radar object.
-
+    column : xarray DataSet
+        Xarary Dataset containing the radar column above the target for
+        the various fields within the radar object.
     """
     # Make sure latitude, longitudes are valid
     check_latitude(latitude)
     check_longitude(longitude)
-    
-    # initiate a dictionary to hold the striped out meat data from each scan
-    meta = {'date': [], 'time': [], 'xgate': [], 'ygate': [],
-            'zgate': [], 'distance': [], 'azimuth': []
-            }
-    
+
+    # initiate a dictionary to hold the gates above the radar.
+    zgate = []
+
     # initiate a diciontary to hold the moment data.
     moment = {key: [] for key in radar.fields.keys()}
-    
+
     # call the sphere_distance function
     dis = sphere_distance(radar.latitude['data'][0],
                           latitude,
                           radar.longitude['data'][0],
                           longitude)
-    
+
     # call the for_azimuth function
     azim = for_azimuth(radar.latitude['data'][0],
                        latitude,
                        radar.longitude['data'][0],
                        longitude)
-    
+
     # call the get_column_ray function
     ray = get_column_rays(radar, azim)
-    
-    # add the parameters to the meta dictionary
-    meta['date'].append(radar.time['units'].split(' ')[2].split('T')[0])
-    meta['time'].append(radar.time['units'].split(' ')[2].split('T')[-1])
-    meta['distance'].append(dis / 1000.)
-    meta['azimuth'].append(azim)
-    
+
     # Determine the gates for the rays
     (rhi_x,
      rhi_y,
@@ -218,22 +185,45 @@ def get_field_location(radar, latitude, longitude):
                                            radar.azimuth['data'][ray],
                                            radar.elevation['data'][ray],
                                            edges=True)
-    # Calculatitudee distance from the x,y coordinates to target
+    # Calculate distance from the x,y coordinates to target
     rhidis = np.sqrt((rhi_x**2) + (rhi_y**2)) * np.sign(rhi_z)
-    t1 = time.time()
     for i in range(len(ray)):
         tar_gate = np.argmin(abs(rhidis[i, 1:] - (dis)))
         for key in moment:
-            moment[key].append(radar.fields[key]['data'][ray[i], tar_gate])
-        # fill the meta dictionary for further analysis
-        meta['xgate'].append(rhi_x[i, tar_gate])
-        meta['ygate'].append(rhi_y[i, tar_gate])
-        meta['zgate'].append(rhi_z[i, tar_gate])
-    t2 = time.time()
-    print("LOOP TIME: ", t2-t1)
-    # Combine the meta and moment data
-    column = dict(meta)
-    column.update(moment)
+            if radar.fields[key]['data'][ray[i], tar_gate] is np.ma.masked:
+                moment[key].append(np.nan)
+            else:
+                moment[key].append(radar.fields[key]
+                                   ['data'][ray[i], tar_gate])
+        zgate.append(rhi_z[i, tar_gate])
+
+    # Create a blank list to hold the xarray DataArrays
+    ds_container = []
+    da_meta = ['units', 'standard_name', 'long_name', 'valid_max',
+               'valid_min']
+    # Convert the moment dictionary to xarray DataArray.
+    # Apply radar object meta data to DataArray attribute
+    for key in moment:
+        da = xr.DataArray(moment[key], coords=[zgate],
+                          name=key, dims=['height'])
+        for tag in da_meta:
+            if tag in radar.fields[key]:
+                da.attrs[tag] = radar.fields[key][tag]
+        # Append to ds container
+        ds_container.append(da.to_dataset(name=key))
+
+    # Create a xarray DataSet from the DataArrays
+    column = xr.merge(ds_container)
+    if len(radar.time['units'].split(' ')) > 3:
+        column.attrs['date'] = radar.time['units'].split(' ')[2]
+        column.attrs['time'] = radar.time['units'].split(' ')[3]
+    else:
+        column.attrs['date'] = radar.time['units'].split(' ')[2].split('T')[0]
+        column.attrs['time'] = radar.time['units'].split(' ')[2].split('T')[-1]
+    column.attrs['distance'] = (str(np.around(dis / 1000., 3)) + ' km')
+    column.attrs['azimuth'] = (str(np.around(azim, 3)) + ' degrees')
+    column.attrs['latitude'] = (str(latitude) + ' degrees')
+    column.attrs['longitude'] = (str(longitude) + ' degrees')
 
     return column
 
@@ -241,8 +231,8 @@ def get_field_location(radar, latitude, longitude):
 def get_column_rays(radar, azimuth):
 
     """
-    Given the location (in latitude,longitude) of a target, return the rays that
-    correspond to radar column above the target.
+    Given the location (in latitude,longitude) of a target, return the rays
+    that correspond to radar column above the target.
 
     Parameters
     ----------
@@ -262,7 +252,7 @@ def get_column_rays(radar, azimuth):
         if (azimuth <= 0) or (azimuth >= 360):
             raise ValueError("azimuth not valid (not between 0-360 degrees)")
     else:
-        raise TypeError("radar longitudegitude type not valid." 
+        raise TypeError("radar longitudegitude type not valid."
                         + " Please convert input to be an int or float")
     # define a list to hold the valid rays
     rays = []
@@ -294,21 +284,32 @@ def check_latitude(latitude):
 
     """
     Function to check if input latitude is valid for type and value
+
+    Parameters
+    ----------
+    latitude : int, float
+        Latitude of a location that should be between 90S and 90N
+
     """
     if (isinstance(latitude, int) or isinstance(latitude, float) or
             isinstance(latitude, np.floating)) is True:
         if (latitude <= -90) or (latitude >= 90):
             raise ValueError("Latitude not between -90 and 90 degrees, need to"
-                              + "convert to values between -90 and 90")
+                             + "convert to values between -90 and 90")
     else:
-        raise TypeError("Latitude type not valid, need to convert input to be" 
-                         + " an int or float")
+        raise TypeError("Latitude type not valid, need to convert input to be"
+                        + " an int or float")
 
 
 def check_longitude(longitude):
 
     """
     Function to check if input latitude is valid for type and value
+
+    Parameters
+    ---------
+    longitude : int, float
+        Longitude of a location taht should be between 180W and 180E
     """
     if (isinstance(longitude, int) or isinstance(longitude, float) or
             isinstance(longitude, np.floating)) is True:
@@ -318,7 +319,4 @@ def check_longitude(longitude):
                              + "  -180 and 180")
     else:
         raise TypeError("Longitude type not valid, need to convert input to"
-                         + " be an int or float")
-
-t3 = time.time()
-print("TOTAL TIME: ", t3-t0)
+                        + " be an int or float")
