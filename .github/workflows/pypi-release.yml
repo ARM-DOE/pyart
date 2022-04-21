@@ -88,7 +88,6 @@ jobs:
           python -c "import pyart; print(pyart.__version__)"
   upload-to-pypi:
     needs: test-built-dist
-    if: github.event_name == 'release'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v2
