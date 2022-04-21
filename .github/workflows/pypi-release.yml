@@ -84,8 +84,8 @@ jobs:
       - name: Verify the built dist/wheel is valid
         if: github.event_name == 'push'
         run: |
-          pip install --upgrade pip
-          pip install dist/arm-pyart*.whl
+          python -m pip install --upgrade pip
+          python -m pip install dist/arm_pyart*.whl
           python -c "import pyart; print(pyart.__version__)"
   upload-to-pypi:
     needs: test-built-dist
