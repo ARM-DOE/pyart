@@ -41,6 +41,12 @@
     
     estimate_noise_hs74
     
+    for_azimuth
+    
+    get_column_rays
+    
+    get_field_location
+    
     image_mute_radar
     
     interval_mean
@@ -58,6 +64,8 @@
     rolling_window
     
     simulated_vel_from_profile
+    
+    sphere_distance
     
     texture
     
