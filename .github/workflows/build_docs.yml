@@ -29,6 +29,10 @@ jobs:
           use-mamba: true
           miniforge-variant: Mambaforge
 
+      - name: Fetch all history for all tags and branches
+        run: |
+           git fetch --prune --unshallow
+
       - name: Set TRMM RSL path
         env:
           RSL_PATH: ${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-3 
