@@ -39,8 +39,8 @@ jobs:
           RSL_PATH: ${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-3 
         run: |
           python -m pip install --upgrade pip
-          python -m pip install build
-          python -m pip install twine
+          python -m pip install build twine auditwheel
+
       - name: Build tarball and wheels
         env:
           RSL_PATH: ${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-3 
@@ -48,6 +48,14 @@ jobs:
           git clean -xdf
           git restore -SW .
           python -m build --sdist --wheel .
+
+      - name: Apply audit wheel for linux build and remove old one
+        env:
+          RSL_PATH: ${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-3 
+        run: |
+          python -m auditwheel repair -w dist dist/*
+          rm dist/*-linux_x86_64.whl
+          
       - name: Check built artifacts
         env:
           RSL_PATH: ${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-3 
