@@ -42,18 +42,22 @@ from . import aux_io
 from . import retrieve
 from . import bridge
 
-# Grab the version number
-from . import _version
-__version__ = _version.get_versions()['version']
-
 # root level functions
 from .config import load_config
 from ._debug_info import _debug_info
 
-# test function setup based on scikit-image test function
 import os.path as _osp
 import functools as _functools
+from pkg_resources import DistributionNotFound, get_distribution
 import sys as _sys
+
+# Get the version
+try:
+    print(get_distribution(__name__).version)
+    __version__ = get_distribution(__name__).version
+except DistributionNotFound:
+    # package is not installed
+    __version__ = '0.0.0'
 
 try:
     if _sys.version_info[:2] >= (3, 4):

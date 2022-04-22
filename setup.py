@@ -19,7 +19,6 @@ import sys
 import subprocess
 import glob
 from numpy import get_include
-import versioneer
 
 from setuptools import find_packages, setup, Extension
 from Cython.Build import cythonize
@@ -249,14 +248,8 @@ extension_kdp = Extension(
 
 extensions.append(extension_kdp)
 
-## Configure setup.py commands
-cmdclass = versioneer.get_cmdclass()
-cmdclass.update(build_ext=Cython.Distutils.build_ext)
-
 setup(
     name='arm_pyart',
-    version=versioneer.get_version(),
-    cmdclass=cmdclass,
     description=DOCLINES[0],
     long_description="\n".join(DOCLINES[2:]),
     author=AUTHOR,
@@ -264,15 +257,18 @@ setup(
     maintainer=MAINTAINER,
     maintainer_email=MAINTAINER_EMAIL,
     url=URL,
-    packages=find_packages(exclude=['docs']),
+    packages=find_packages(include=['pyart'], exclude=['docs']),
     include_package_data=True,
-    package_data={'pyart': []},
     scripts=SCRIPTS,
     install_requires=requirements,
     license=LICENSE,
     platforms=PLATFORMS,
     classifiers=CLASSIFIERS,
     zip_safe=False,
+    use_scm_version={
+        'version_scheme': 'post-release',
+        'local_scheme': 'dirty-tag',
+    },
     ext_modules=cythonize(
         extensions, compiler_directives={'language_level' : "3"}),
 )
