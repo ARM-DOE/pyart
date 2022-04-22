@@ -9,7 +9,7 @@ on:
 jobs:
   build-artifacts:
     runs-on: ubuntu-latest
-    if: github.repository == 'ARM-DOE/pyart'
+    if: github.repository == 'mgrover1/pyart'
     defaults:
       run:
         shell: bash -l {0}
