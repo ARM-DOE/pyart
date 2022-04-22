@@ -61,7 +61,7 @@ jobs:
         env:
           RSL_PATH: ${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-3 
         run: |
-          twine check dist/*
+          twine check dist/*-manylinux*.whl
           pwd
           if [ -f dist/arm-pyart-0.0.0.tar.gz ]; then
             echo "❌ INVALID VERSION NUMBER"
