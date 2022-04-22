@@ -53,7 +53,7 @@ jobs:
         env:
           RSL_PATH: ${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-3 
         run: |
-          python -m auditwheel repair -w dist dist/*
+          python -m auditwheel repair -w dist dist/*.whl
           rm dist/*-linux_x86_64.whl
           
       - name: Check built artifacts
