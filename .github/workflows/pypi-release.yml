@@ -55,7 +55,7 @@ jobs:
           RSL_PATH: ${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-3 
         with:
           python-versions: 'cp39-cp39'
-          build-requirements: 'cython numpy'
+          build-requirements: 'setuptools setuptools_scm>=6.2 wheel cython oldest-supported-numpy'
           
       - name: Check built artifacts
         env:
