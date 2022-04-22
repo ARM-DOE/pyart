@@ -48,6 +48,7 @@ jobs:
         with:
           python-versions: 'cp39-cp39'
           build-requirements: 'setuptools setuptools_scm>=6.2 wheel cython oldest-supported-numpy'
+          pre-build-command: 'python -m'
           
       - name: Check built artifacts
         env:
