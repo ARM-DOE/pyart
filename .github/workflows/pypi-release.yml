@@ -51,6 +51,8 @@ jobs:
           
       - name: Build manylinux Python wheels
         uses: RalfG/python-wheels-manylinux-build@v0.4.2-manylinux2014_x86_64
+        env:
+          RSL_PATH: ${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-3 
         with:
           python-versions: 'cp39-cp39m'
           build-requirements: 'cython numpy'
