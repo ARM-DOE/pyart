@@ -8,7 +8,7 @@ on:
 
 jobs:
   build-artifacts:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     if: github.repository == 'ARM-DOE/pyart'
     defaults:
       run:
@@ -39,7 +39,7 @@ jobs:
           RSL_PATH: ${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-3 
         run: |
           python -m pip install --upgrade pip
-          python -m pip install build twine auditwheel
+          python -m pip install build twine
 
       - name: Build tarball and wheels
         env:
@@ -49,19 +49,11 @@ jobs:
           git restore -SW .
           python -m build --sdist --wheel .
           
-      - name: Build manylinux Python wheels
-        uses: RalfG/python-wheels-manylinux-build@v0.4.2-manylinux2014_x86_64
-        env:
-          RSL_PATH: ${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-3 
-        with:
-          python-versions: 'cp39-cp39'
-          build-requirements: 'setuptools setuptools_scm>=6.2 wheel cython oldest-supported-numpy'
-          
       - name: Check built artifacts
         env:
           RSL_PATH: ${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-3 
         run: |
-          twine check dist/*-manylinux*.whl
+          twine check dist/*.whl
           pwd
           if [ -f dist/arm-pyart-0.0.0.tar.gz ]; then
             echo "❌ INVALID VERSION NUMBER"
@@ -76,7 +68,7 @@ jobs:
 
   test-built-dist:
     needs: build-artifacts
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - uses: actions/setup-python@v2
         name: Install Python
@@ -93,19 +85,6 @@ jobs:
       - name: Verify the built dist/wheel is valid
         run: |
           python -m pip install --upgrade pip
-          python -m pip install dist/*-manylinux*.whl
+          python -m pip install wheel setuptools
+          python -m pip install dist/arm_pyart*.whl
           python -c "import pyart; print(pyart.__version__)"
-  upload-to-pypi:
-    needs: test-built-dist
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/download-artifact@v2
-        with:
-          name: releases
-          path: dist
-      - name: Publish package to PyPI
-        uses: pypa/gh-action-pypi-publish@v1.5.0
-        with:
-          user: __token__
-          password: ${{ secrets.PYPI_TOKEN }}
-          verbose: true
