@@ -53,7 +53,6 @@ import sys as _sys
 
 # Get the version
 try:
-    print(get_distribution(__name__).version)
     __version__ = get_distribution(__name__).version
 except DistributionNotFound:
     # package is not installed
