@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>mgrover1.github.io/pyart/</id>
   <title>PyART Blog</title>
-  <updated>2022-04-22T21:28:02.350744+00:00</updated>
+  <updated>2022-04-27T15:21:13.023028+00:00</updated>
   <link href="mgrover1.github.io/pyart/"/>
   <link href="mgrover1.github.io/pyart/blog/atom.xml" rel="self"/>
   <generator uri="https://ablog.readthedocs.org/" version="0.10.25">ABlog</generator>
@@ -68,5 +68,22 @@ interactive-kazr-vizinteractive-kazr-viz</summary>
     <category term="visualization" label="visualization"/>
     <category term="debug" label="debug"/>
     <published>2022-04-12T00:00:00+00:00</published>
+  </entry>
+  <entry>
+    <id>mgrover1.github.io/pyart/blog_posts/2022/first_pullrequest.html</id>
+    <title>Active Py-ART Development - Submitting a Pull Request (PR)</title>
+    <updated>2022-04-26T00:00:00+00:00</updated>
+    <author>
+      <name>Joe O’Brien</name>
+    </author>
+    <content type="html">&lt;div class="ablog-post-excerpt docutils container"&gt;
+&lt;p&gt;The motivation for this blog comes from wanting to change the colorscheme within the default Py-ART documentation images to a more (&lt;a class="reference external" href="https://ntrs.nasa.gov/api/citations/20180004634/downloads/20180004634.pdf"&gt;color vision deficiency friendly color scheme&lt;/a&gt;).&lt;/p&gt;
+&lt;p&gt;Here are the images we are working with:&lt;/p&gt;
+&lt;img alt="drawing" src="_images/PyART_Docs_Original_PPI_image.png" style="width: 400px;" /&gt;
+&lt;/div&gt;
+</content>
+    <link href="mgrover1.github.io/pyart/blog_posts/2022/first_pullrequest.html" rel="alternate"/>
+    <summary>The motivation for this blog comes from wanting to change the colorscheme within the default Py-ART documentation images to a more (color vision deficiency friendly color scheme).Here are the images we are working with:drawing</summary>
+    <published>2022-04-26T00:00:00+00:00</published>
   </entry>
 </feed>

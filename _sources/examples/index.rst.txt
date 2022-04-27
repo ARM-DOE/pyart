@@ -267,6 +267,27 @@ Plotting real world radar data with Py-ART.
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="An example which creates a PPI plot of a MDV file using a RadarDisplay object.">
+
+.. only:: html
+
+ .. figure:: /examples/plotting/images/thumb/sphx_glr_plot_ppi_mdv_thumb.png
+     :alt: Create a PPI plot from a MDV file
+
+     :ref:`sphx_glr_examples_plotting_plot_ppi_mdv.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/plotting/plot_ppi_mdv
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="An example which creates a plot containing the first collected scan from a NEXRAD file.">
 
 .. only:: html
@@ -288,14 +309,14 @@ Plotting real world radar data with Py-ART.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="An example which creates a PPI plot of a MDV file using a RadarDisplay object.">
+    <div class="sphx-glr-thumbcontainer" tooltip="An example which creates a RHI plot of a CF/Radial file using a RadarDisplay object.">
 
 .. only:: html
 
- .. figure:: /examples/plotting/images/thumb/sphx_glr_plot_ppi_mdv_thumb.png
-     :alt: Create a PPI plot from a MDV file
+ .. figure:: /examples/plotting/images/thumb/sphx_glr_plot_rhi_cfradial_singlescan_thumb.png
+     :alt: Create a multiple panel RHI plot from a CF/Radial file
 
-     :ref:`sphx_glr_examples_plotting_plot_ppi_mdv.py`
+     :ref:`sphx_glr_examples_plotting_plot_rhi_cfradial_singlescan.py`
 
 .. raw:: html
 
@@ -305,7 +326,7 @@ Plotting real world radar data with Py-ART.
 .. toctree::
    :hidden:
 
-   /examples/plotting/plot_ppi_mdv
+   /examples/plotting/plot_rhi_cfradial_singlescan
 
 .. raw:: html
 

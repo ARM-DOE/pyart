@@ -1,0 +1,705 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Active Py-ART Development - Submitting a Pull Request (PR) &#8212; Py-ART 0.0.0 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pyart-theme.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/doc_shared.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-JJEG3CV376"></script>
+<script>
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){ dataLayer.push(arguments); }
+                    gtag('js', new Date());
+                    gtag('config', 'G-JJEG3CV376');
+                </script>
+ 
+<link
+  rel="alternate"
+  type="application/atom+xml"
+  href="../../blog/atom.xml"
+  title="PyART Blog"
+/>
+ 
+<style type="text/css">
+  ul.ablog-archive {
+    list-style: none;
+    overflow: auto;
+    margin-left: 0px;
+  }
+  ul.ablog-archive li {
+    float: left;
+    margin-right: 5px;
+    font-size: 80%;
+  }
+  ul.postlist a {
+    font-style: italic;
+  }
+  ul.postlist-style-disc {
+    list-style-type: disc;
+  }
+  ul.postlist-style-none {
+    list-style-type: none;
+  }
+  ul.postlist-style-circle {
+    list-style-type: circle;
+  }
+</style>
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+  <nav class="navbar navbar-dark navbar-expand-lg bg-arm fixed-top bd-navbar shadow" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+<a class="navbar-brand" href="../../index.html">
+<p class="title">Py-ART</p>
+</a>
+
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../userguide/index.html">
+  User Guide
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../API/index.html">
+  API Reference Manual
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../examples/index.html">
+  Example Gallery
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../notebook-gallery.html">
+  Notebook Gallery
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../blog.html">
+  Blog
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../changelog.html">
+  Changelog
+ </a>
+</li>
+
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/ARM-DOE/pyart" rel="noopener" target="_blank" title="GitHub"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://twitter.com/Py_ART" rel="noopener" target="_blank" title="Twitter"><span><i class="fab fa-twitter-square"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+  </nav>
+
+
+    <div class="container-fluid" id="banner"></div>
+
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar">
+              <div class="sidebar-start-items">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    
+  </div>
+</nav>  
+<h2>
+   <i class="fa fa-calendar"></i>
+  26 April 2022 
+</h2>
+
+<ul>
+   
+<li id="author">
+  <span
+    ><i class="fa-fw fa fa-user"></i></span
+  >
+   
+  <a href="../../blog/author/joe-obrien.html">Joe O’Brien</a>  
+</li>
+     
+</ul>
+
+<h3>
+  <a href="../../blog.html">Recent Posts</a>
+</h3>
+<ul>
+   
+  <li>
+    <a href="plot-nexrad-level3.html"
+      >12 April - Fixing Weird Patterns When Plotting NEXRAD Level 3 Data</a
+    >
+  </li>
+  
+  <li>
+    <a href="ka-band-pyart-xarray-hvplot.html"
+      >21 March - Working with Vertically Pointing Radar Data Using PyART, Xarray, and hvPlot</a
+    >
+  </li>
+  
+  <li>
+    <a href="test.html"
+      >11 March - New Docs</a
+    >
+  </li>
+  
+</ul>
+
+<h3>
+  <a href="../../blog/archive.html">Archives</a>
+</h3>
+<ul>
+   
+  <li>
+    <a href="../../blog/2022.html">2022 (4)</a>
+  </li>
+   
+</ul>
+
+              </div>
+              <div class="sidebar-end-items">
+              </div>
+            </div>
+            
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+              
+              <div class="toc-item">
+                
+<div class="tocsection onthispage mt-5 pt-1 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Active Py-ART Development - Submitting a Pull Request (PR)
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#first-if-you-have-not-done-so-already-you-will-need-to-fork-the-py-art-github-repository">
+     First, if you have not done so already, you will need to fork the Py-ART github repository
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#second-in-a-terminal-you-will-need-to-clone-your-remote-fork-with-the-git-clone-command">
+     Second, in a terminal, you will need to clone your remote fork with the “git clone” command
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#third-create-the-pyart-docs-conda-environment">
+     Third, create the “pyart-docs” conda environment
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#fourth-we-will-need-to-install-the-trmm-rsl-library">
+     Fourth, we will need to install the (TRMM RSL Library)
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#lastly-activate-the-pyart-docs-environment-and-install-the-python-script-within-your-forked-repository">
+     Lastly, activate the ‘pyart-docs’ environment and install the python script within your forked repository
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#okay-you-should-be-installed-now-and-ready-to-make-changes-to-the-source-code">
+     OKAY! You should be installed now, and ready to make changes to the source code!
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#first-create-a-new-branch-for-our-changes">
+       1. First, create a New Branch for our Changes
+      </a>
+     </li>
+     <li class="toc-h3 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#push-new-branch-to-remote">
+       2. Push New Branch To Remote
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#now-lets-commit-these-changes-to-github">
+     Now lets commit these changes to github!
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#after-creating-a-pull-request-this-is-what-it-looks-like-on-github">
+     After Creating a Pull Request, this is what it looks like on GitHub
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#hope-this-helped">
+   Hope this helped!
+  </a>
+ </li>
+</ul>
+
+</nav>
+              </div>
+              
+              <div class="toc-item">
+                
+              </div>
+              
+            
+          </div>
+          
+
+          
+          
+            
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                 <section class="tex2jax_ignore mathjax_ignore" id="active-py-art-development-submitting-a-pull-request-pr">
+<h1>Active Py-ART Development - Submitting a Pull Request (PR)<a class="headerlink" href="#active-py-art-development-submitting-a-pull-request-pr" title="Permalink to this headline">#</a></h1>
+<p>The motivation for this blog comes from wanting to change the colorscheme within the default Py-ART documentation images to a more (<a class="reference external" href="https://ntrs.nasa.gov/api/citations/20180004634/downloads/20180004634.pdf">color vision deficiency friendly color scheme</a>).</p>
+<p>Here are the images we are working with:</p>
+<a class="reference internal image-reference" href="../../_images/PyART_Docs_Original_PPI_image.png"><img alt="drawing" src="../../_images/PyART_Docs_Original_PPI_image.png" style="width: 400px;" /></a>
+<a class="reference internal image-reference" href="../../_images/PyART_Docs_OriginalRHI_withJetColorscheme.png"><img alt="drawing" src="../../_images/PyART_Docs_OriginalRHI_withJetColorscheme.png" style="width: 400px;" /></a>
+<p>This is also a good time to illustrate how to get started with
+active development in Py-ART and submitting changes
+to the source code for further collaboration.</p>
+<p>Please refer to the (<a class="reference external" href="https://arm-doe.github.io/pyart/userguide/INSTALL.html">Py-ART Contributor’s Guide</a>) for installation guidence.</p>
+<p>I’ve highlighted some steps of the installation below that tripped me up and might offer some assistance.</p>
+<section id="first-if-you-have-not-done-so-already-you-will-need-to-fork-the-py-art-github-repository">
+<h2>First, if you have not done so already, you will need to fork the Py-ART github repository<a class="headerlink" href="#first-if-you-have-not-done-so-already-you-will-need-to-fork-the-py-art-github-repository" title="Permalink to this headline">#</a></h2>
+<p>by clicking here:
+<a class="reference internal" href="../../_images/pyart_github_clone.png"><img alt="drawing" src="../../_images/pyart_github_clone.png" style="width: 400px;" /></a></p>
+</section>
+<section id="second-in-a-terminal-you-will-need-to-clone-your-remote-fork-with-the-git-clone-command">
+<h2>Second, in a terminal, you will need to clone your remote fork with the “git clone” command<a class="headerlink" href="#second-in-a-terminal-you-will-need-to-clone-your-remote-fork-with-the-git-clone-command" title="Permalink to this headline">#</a></h2>
+<p>git clone https_link_to_your_fork</p>
+<p>If you are unfamiliar with git command line commands, please review this (<a class="reference external" href="https://foundations.projectpythia.org/foundations/getting-started-github.html">getting started documentation</a>)</p>
+</section>
+<section id="third-create-the-pyart-docs-conda-environment">
+<h2>Third, create the “pyart-docs” conda environment<a class="headerlink" href="#third-create-the-pyart-docs-conda-environment" title="Permalink to this headline">#</a></h2>
+<p>We will use the documentation YML file (located at the /pyart/doc/environmental.yml) to create the “pyart-docs” conda environment.</p>
+<p>NOTE: The documentation YML file is slightly different from the /pyart/environmental.yml file and contains the packages needed for active development</p>
+<p>To create a new environment from this YML file, type:</p>
+<p>conda env create -f environment.yml</p>
+</section>
+<section id="fourth-we-will-need-to-install-the-trmm-rsl-library">
+<h2>Fourth, we will need to install the (<a class="reference external" href="https://trmm-fc.gsfc.nasa.gov/trmm_gv/software/rsl/">TRMM RSL Library</a>)<a class="headerlink" href="#fourth-we-will-need-to-install-the-trmm-rsl-library" title="Permalink to this headline">#</a></h2>
+<a class="reference internal image-reference" href="../../_images/TRMM_RSL_webpage.png"><img alt="drawing" src="../../_images/TRMM_RSL_webpage.png" style="width: 400px;" /></a>
+<p>Click on the “Download latest version” button and download the package to a local location (~/opt - for me)</p>
+<p>You will then need to run the installation commands from the RSL library:</p>
+<p>./configure</p>
+<p>make install</p>
+<p>You will need to add the location of the library to your path. For me, this would be the ~/.kshrc file</p>
+<p>export PATH=”/opt/rsl-v1.50/:$PATH”</p>
+</section>
+<section id="lastly-activate-the-pyart-docs-environment-and-install-the-python-script-within-your-forked-repository">
+<h2>Lastly, activate the ‘pyart-docs’ environment and install the python script within your forked repository<a class="headerlink" href="#lastly-activate-the-pyart-docs-environment-and-install-the-python-script-within-your-forked-repository" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span> <span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">e</span> <span class="o">.</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="okay-you-should-be-installed-now-and-ready-to-make-changes-to-the-source-code">
+<h2>OKAY! You should be installed now, and ready to make changes to the source code!<a class="headerlink" href="#okay-you-should-be-installed-now-and-ready-to-make-changes-to-the-source-code" title="Permalink to this headline">#</a></h2>
+<section id="first-create-a-new-branch-for-our-changes">
+<h3>1. First, create a New Branch for our Changes<a class="headerlink" href="#first-create-a-new-branch-for-our-changes" title="Permalink to this headline">#</a></h3>
+<p>git checkout -b newblog_post</p>
+</section>
+<section id="push-new-branch-to-remote">
+<h3>2. Push New Branch To Remote<a class="headerlink" href="#push-new-branch-to-remote" title="Permalink to this headline">#</a></h3>
+<p>git push –set-upstream origin newblog_post</p>
+<p>Let’s first change the PPI image. The original code is located at: /pyart/examples/plotting/plot_ppi_mdv.py</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">=================================</span>
+<span class="sd">Create a PPI plot from a MDV file</span>
+<span class="sd">=================================</span>
+<span class="sd">   </span>
+<span class="sd">An example which creates a PPI plot of a MDV file using a RadarDisplay object.</span>
+<span class="sd">   </span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1"># Author: Jonathan J. Helmus (jhelmus@anl.gov)</span>
+<span class="c1"># License: BSD 3 clause</span>
+ 
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">pyart</span>
+<span class="kn">from</span> <span class="nn">pyart.testing</span> <span class="kn">import</span> <span class="n">get_test_data</span>
+  
+<span class="n">filename</span> <span class="o">=</span> <span class="n">get_test_data</span><span class="p">(</span><span class="s1">&#39;110635.mdv&#39;</span><span class="p">)</span>
+ 
+<span class="c1"># create the plot using RadarDisplay</span>
+<span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_mdv</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+<span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+<span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mf">16.</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;PPI&quot;</span><span class="p">,</span>
+              <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s1">&#39;jet&#39;</span><span class="p">))</span>
+<span class="n">display</span><span class="o">.</span><span class="n">set_limits</span><span class="p">(</span><span class="n">ylim</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">150</span><span class="p">,</span> <span class="mi">150</span><span class="p">],</span> <span class="n">xlim</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">150</span><span class="p">,</span> <span class="mi">150</span><span class="p">])</span>                     
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/first_pullrequest_25_0.png" src="../../_images/first_pullrequest_25_0.png" />
+</div>
+</div>
+<p>Let’s now change the color scheme to one of Py-ART’s (<a class="reference external" href="https://arm-doe.github.io/pyart/API/generated/pyart.graph.html?highlight=homeyerrainbow">colorbind friendly schemes</a>)</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">=================================</span>
+<span class="sd">Create a PPI plot from a MDV file</span>
+<span class="sd">=================================</span>
+<span class="sd">   </span>
+<span class="sd">An example which creates a PPI plot of a MDV file using a RadarDisplay object.</span>
+<span class="sd">   </span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="c1"># Author: Jonathan J. Helmus (jhelmus@anl.gov)</span>
+<span class="c1"># License: BSD 3 clause</span>
+ 
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">pyart</span>
+<span class="kn">from</span> <span class="nn">pyart.testing</span> <span class="kn">import</span> <span class="n">get_test_data</span>
+  
+<span class="n">filename</span> <span class="o">=</span> <span class="n">get_test_data</span><span class="p">(</span><span class="s1">&#39;110635.mdv&#39;</span><span class="p">)</span>
+ 
+<span class="c1"># create the plot using RadarDisplay</span>
+<span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_mdv</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+<span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+<span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mf">16.</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;PPI&quot;</span><span class="p">,</span>
+              <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;pyart_HomeyerRainbow&#39;</span><span class="p">)</span>
+<span class="n">display</span><span class="o">.</span><span class="n">set_limits</span><span class="p">(</span><span class="n">ylim</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">150</span><span class="p">,</span> <span class="mi">150</span><span class="p">],</span> <span class="n">xlim</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">150</span><span class="p">,</span> <span class="mi">150</span><span class="p">])</span>  
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/first_pullrequest_27_0.png" src="../../_images/first_pullrequest_27_0.png" />
+</div>
+</div>
+<p>For the RHI scan, I’ve created a new file to only display one of the sweeps, called “plot_rhi_cfradial_singlescan.py”</p>
+<p>This new file is also located at: /pyart/examples/plotting/</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">======================================================</span>
+<span class="sd">Create a multiple panel RHI plot from a CF/Radial file</span>
+<span class="sd">======================================================</span>
+<span class="sd"> </span>
+<span class="sd">An example which creates a RHI plot of a CF/Radial file using</span>
+<span class="sd">a RadarDisplay object.</span>
+<span class="sd"> </span>
+<span class="sd">&quot;&quot;&quot;</span>
+ 
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">netCDF4</span>
+<span class="kn">import</span> <span class="nn">pyart</span>
+<span class="kn">from</span> <span class="nn">pyart.testing</span> <span class="kn">import</span> <span class="n">get_test_data</span>
+
+<span class="n">filename</span> <span class="o">=</span> <span class="n">get_test_data</span><span class="p">(</span><span class="s1">&#39;sgpxsaprrhicmacI5.c0.20110524.015604_NC4.nc&#39;</span><span class="p">)</span>
+
+<span class="c1"># create the plot using RadarDisplay</span>
+<span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_cfradial</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+<span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">15</span><span class="p">,</span><span class="mi">5</span><span class="p">])</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">hspace</span><span class="o">=</span><span class="mf">0.4</span><span class="p">)</span>
+<span class="n">xlabel</span> <span class="o">=</span> <span class="s1">&#39;Distance from radar (km)&#39;</span>
+<span class="n">ylabel</span> <span class="o">=</span> <span class="s1">&#39;Distance above radar (km)&#39;</span>
+<span class="n">colorbar_label</span> <span class="o">=</span> <span class="s1">&#39;Equivalent reflectivity factor (dBZ)&#39;</span>
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;reflectivity_horizontal&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">20</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+              <span class="n">mask_outside</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;RHI&quot;</span><span class="p">,</span>
+              <span class="n">axislabels</span><span class="o">=</span><span class="p">(</span><span class="n">xlabel</span><span class="p">,</span> <span class="n">ylabel</span><span class="p">),</span>
+              <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s1">&#39;jet&#39;</span><span class="p">),</span>
+              <span class="n">colorbar_label</span><span class="o">=</span><span class="n">colorbar_label</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">display</span><span class="o">.</span><span class="n">set_limits</span><span class="p">(</span><span class="n">ylim</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">15</span><span class="p">],</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+ 
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/first_pullrequest_29_0.png" src="../../_images/first_pullrequest_29_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">======================================================</span>
+<span class="sd">Create a multiple panel RHI plot from a CF/Radial file</span>
+<span class="sd">======================================================</span>
+<span class="sd"> </span>
+<span class="sd">An example which creates a RHI plot of a CF/Radial file using</span>
+<span class="sd">a RadarDisplay object.</span>
+<span class="sd"> </span>
+<span class="sd">&quot;&quot;&quot;</span>
+ 
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">netCDF4</span>
+<span class="kn">import</span> <span class="nn">pyart</span>
+<span class="kn">from</span> <span class="nn">pyart.testing</span> <span class="kn">import</span> <span class="n">get_test_data</span>
+
+<span class="n">filename</span> <span class="o">=</span> <span class="n">get_test_data</span><span class="p">(</span><span class="s1">&#39;sgpxsaprrhicmacI5.c0.20110524.015604_NC4.nc&#39;</span><span class="p">)</span>
+
+<span class="c1"># create the plot using RadarDisplay</span>
+<span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_cfradial</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+<span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">15</span><span class="p">,</span><span class="mi">5</span><span class="p">])</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">hspace</span><span class="o">=</span><span class="mf">0.4</span><span class="p">)</span>
+<span class="n">xlabel</span> <span class="o">=</span> <span class="s1">&#39;Distance from radar (km)&#39;</span>
+<span class="n">ylabel</span> <span class="o">=</span> <span class="s1">&#39;Distance above radar (km)&#39;</span>
+<span class="n">colorbar_label</span> <span class="o">=</span> <span class="s1">&#39;Equivalent reflectivity factor (dBZ)&#39;</span>
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;reflectivity_horizontal&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">20</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+              <span class="n">mask_outside</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;RHI&quot;</span><span class="p">,</span>
+              <span class="n">axislabels</span><span class="o">=</span><span class="p">(</span><span class="n">xlabel</span><span class="p">,</span> <span class="n">ylabel</span><span class="p">),</span>
+              <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;pyart_HomeyerRainbow&#39;</span><span class="p">,</span>
+              <span class="n">colorbar_label</span><span class="o">=</span><span class="n">colorbar_label</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">display</span><span class="o">.</span><span class="n">set_limits</span><span class="p">(</span><span class="n">ylim</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">15</span><span class="p">],</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+ 
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/first_pullrequest_30_0.png" src="../../_images/first_pullrequest_30_0.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="now-lets-commit-these-changes-to-github">
+<h2>Now lets commit these changes to github!<a class="headerlink" href="#now-lets-commit-these-changes-to-github" title="Permalink to this headline">#</a></h2>
+<p>The git ‘status’ command will show which branch we are working on and all changes made</p>
+<p>‘Changes not staged for commit” are all changes I have made to files within my local Py-ART repository.</p>
+<p>‘Untracked files’ are any file that is new to Py-ART, and is currently not submitted to the repository.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># (pyart-docs) git status</span>
+<span class="n">On</span> <span class="n">branch</span> <span class="n">blog_PR</span>
+<span class="n">Changes</span> <span class="ow">not</span> <span class="n">staged</span> <span class="k">for</span> <span class="n">commit</span><span class="p">:</span>
+  <span class="p">(</span><span class="n">use</span> <span class="s2">&quot;git add &lt;file&gt;...&quot;</span> <span class="n">to</span> <span class="n">update</span> <span class="n">what</span> <span class="n">will</span> <span class="n">be</span> <span class="n">committed</span><span class="p">)</span>
+  <span class="p">(</span><span class="n">use</span> <span class="s2">&quot;git restore &lt;file&gt;...&quot;</span> <span class="n">to</span> <span class="n">discard</span> <span class="n">changes</span> <span class="ow">in</span> <span class="n">working</span> <span class="n">directory</span><span class="p">)</span>
+	<span class="n">modified</span><span class="p">:</span>   <span class="o">../../</span><span class="n">doc</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">_static</span><span class="o">/</span><span class="n">ppi</span><span class="o">.</span><span class="n">png</span>
+	<span class="n">modified</span><span class="p">:</span>   <span class="o">../../</span><span class="n">doc</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">_static</span><span class="o">/</span><span class="n">rhi</span><span class="o">.</span><span class="n">png</span>
+	<span class="n">modified</span><span class="p">:</span>   <span class="n">plot_ppi_mdv</span><span class="o">.</span><span class="n">py</span>
+
+<span class="n">Untracked</span> <span class="n">files</span><span class="p">:</span>
+  <span class="p">(</span><span class="n">use</span> <span class="s2">&quot;git add &lt;file&gt;...&quot;</span> <span class="n">to</span> <span class="n">include</span> <span class="ow">in</span> <span class="n">what</span> <span class="n">will</span> <span class="n">be</span> <span class="n">committed</span><span class="p">)</span>
+	<span class="n">plot_rhi_cfradial_singlescan</span><span class="o">.</span><span class="n">py</span>
+
+<span class="n">no</span> <span class="n">changes</span> <span class="n">added</span> <span class="n">to</span> <span class="n">commit</span> <span class="p">(</span><span class="n">use</span> <span class="s2">&quot;git add&quot;</span> <span class="ow">and</span><span class="o">/</span><span class="ow">or</span> <span class="s2">&quot;git commit -a&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>As the git ‘status’ output shows, we need to ‘git add’ to update any features that changed.
+After adding the new images for the docs and updated (and new) code, we need to “git commit” these changes.</p>
+<p>PyART requires a commit statement when submitting a pull request, which I have added above the comment lines, marked by ‘#’</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">pyart</span><span class="o">-</span><span class="n">docs</span><span class="p">)</span> <span class="n">git</span> <span class="n">commit</span> 
+<span class="n">hint</span><span class="p">:</span> <span class="n">Waiting</span> <span class="k">for</span> <span class="n">your</span> <span class="n">editor</span> <span class="n">to</span> <span class="n">close</span> <span class="n">the</span> <span class="n">file</span><span class="o">...</span> 
+   <span class="n">ENH</span><span class="p">:</span> <span class="n">PyART</span> <span class="n">doc</span> <span class="n">static</span> <span class="n">image</span> <span class="n">color</span> <span class="n">schemes</span> <span class="n">changed</span> <span class="n">to</span> <span class="n">colorblind</span> <span class="n">friendly</span> <span class="n">PyART</span> <span class="n">scheme</span><span class="o">.</span>
+   <span class="n">plot_ppi_mdv</span><span class="o">.</span><span class="n">py</span> <span class="n">modified</span> <span class="k">for</span> <span class="n">this</span> <span class="n">change</span><span class="o">.</span> 
+   <span class="n">plot_rhi_cfradial_singlescan</span><span class="o">.</span><span class="n">py</span> <span class="n">created</span> <span class="n">to</span> <span class="n">create</span> <span class="n">one</span> <span class="n">rhi</span> <span class="n">cfradial</span> <span class="n">plot</span> <span class="k">for</span> <span class="n">the</span> <span class="n">docs</span><span class="o">.</span>
+   <span class="c1"># Please enter the commit message for your changes. Lines starting</span>
+   <span class="c1"># with &#39;#&#39; will be ignored, and an empty message aborts the commit.</span>
+   <span class="c1">#</span>
+   <span class="c1"># On branch blog_PR</span>
+   <span class="c1"># Changes to be committed:</span>
+   <span class="c1">#       modified:   ../../doc/source/_static/ppi.png</span>
+   <span class="c1">#       modified:   ../../doc/source/_static/rhi.png</span>
+   <span class="c1">#       modified:   plot_ppi_mdv.py</span>
+   <span class="c1">#       new file:   plot_rhi_cfradial_singlescan.py</span>
+ 
+</pre></div>
+</div>
+</div>
+</div>
+<p>Finally, ‘git push’ will push all these changes to the remote repository (my personal fork of Py-ART), where I can then request a pull-request by going to my ‘branches’</p>
+</section>
+<section id="after-creating-a-pull-request-this-is-what-it-looks-like-on-github">
+<h2>After Creating a Pull Request, this is what it looks like on GitHub<a class="headerlink" href="#after-creating-a-pull-request-this-is-what-it-looks-like-on-github" title="Permalink to this headline">#</a></h2>
+<a class="reference internal image-reference" href="../../_images/pull_request_commitmessage.png"><img alt="drawing" src="../../_images/pull_request_commitmessage.png" style="width: 400px;" /></a>
+<p>Additionally, the Pull Request will show what code has been changed and allows anyone to respond with comments/suggestions</p>
+<a class="reference internal image-reference" href="../../_images/pull_request_changes.png"><img alt="drawing" src="../../_images/pull_request_changes.png" style="width: 400px;" /></a>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="hope-this-helped">
+<h1>Hope this helped!<a class="headerlink" href="#hope-this-helped" title="Permalink to this headline">#</a></h1>
+</section>
+
+<div class="section">
+    
+
+<div class="section">
+  <span style="float: left">
+     
+    <a href="plot-nexrad-level3.html">
+      <i class="fa fa-arrow-circle-left"></i> Fixing Weird Patterns When Plotting NEXRAD Level 3 Data
+    </a>
+    
+  </span>
+  <span>&nbsp;</span>
+  <span style="float: right">
+    
+  </span>
+</div>
+  
+</div>
+
+              </div>
+              
+              
+              <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+<footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright 2013-2022, Py-ART developers.<br>
+</p>
+    </div>
+    
+    <div class="footer-item">
+      <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0.<br>
+</p>
+    </div>
+    
+  </div>
+</footer>
+  </body>
+</html>
