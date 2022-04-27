@@ -380,12 +380,18 @@ to the source code for further collaboration.</p>
 <p>I’ve highlighted some steps of the installation below that tripped me up and might offer some assistance.</p>
 <section id="first-if-you-have-not-done-so-already-you-will-need-to-fork-the-py-art-github-repository">
 <h2>First, if you have not done so already, you will need to fork the Py-ART github repository<a class="headerlink" href="#first-if-you-have-not-done-so-already-you-will-need-to-fork-the-py-art-github-repository" title="Permalink to this headline">#</a></h2>
-<p>by clicking here:
-<a class="reference internal" href="../../_images/pyart_github_clone.png"><img alt="drawing" src="../../_images/pyart_github_clone.png" style="width: 400px;" /></a></p>
+<p>by clicking here:</p>
+<a class="reference internal image-reference" href="../../_images/pyart_github_clone.png"><img alt="drawing" src="../../_images/pyart_github_clone.png" style="width: 400px;" /></a>
 </section>
 <section id="second-in-a-terminal-you-will-need-to-clone-your-remote-fork-with-the-git-clone-command">
 <h2>Second, in a terminal, you will need to clone your remote fork with the “git clone” command<a class="headerlink" href="#second-in-a-terminal-you-will-need-to-clone-your-remote-fork-with-the-git-clone-command" title="Permalink to this headline">#</a></h2>
-<p>git clone https_link_to_your_fork</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https_link_to_your_fork</span>
+</pre></div>
+</div>
+</div>
+</div>
 <p>If you are unfamiliar with git command line commands, please review this (<a class="reference external" href="https://foundations.projectpythia.org/foundations/getting-started-github.html">getting started documentation</a>)</p>
 </section>
 <section id="third-create-the-pyart-docs-conda-environment">
@@ -393,17 +399,41 @@ to the source code for further collaboration.</p>
 <p>We will use the documentation YML file (located at the /pyart/doc/environmental.yml) to create the “pyart-docs” conda environment.</p>
 <p>NOTE: The documentation YML file is slightly different from the /pyart/environmental.yml file and contains the packages needed for active development</p>
 <p>To create a new environment from this YML file, type:</p>
-<p>conda env create -f environment.yml</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">env</span> <span class="n">create</span> <span class="o">-</span><span class="n">f</span> <span class="n">environment</span><span class="o">.</span><span class="n">yml</span>
+</pre></div>
+</div>
+</div>
+</div>
 </section>
 <section id="fourth-we-will-need-to-install-the-trmm-rsl-library">
 <h2>Fourth, we will need to install the (<a class="reference external" href="https://trmm-fc.gsfc.nasa.gov/trmm_gv/software/rsl/">TRMM RSL Library</a>)<a class="headerlink" href="#fourth-we-will-need-to-install-the-trmm-rsl-library" title="Permalink to this headline">#</a></h2>
 <a class="reference internal image-reference" href="../../_images/TRMM_RSL_webpage.png"><img alt="drawing" src="../../_images/TRMM_RSL_webpage.png" style="width: 400px;" /></a>
 <p>Click on the “Download latest version” button and download the package to a local location (~/opt - for me)</p>
 <p>You will then need to run the installation commands from the RSL library:</p>
-<p>./configure</p>
-<p>make install</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span> <span class="o">./</span><span class="n">configure</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span> <span class="n">make</span> <span class="n">install</span> 
+</pre></div>
+</div>
+</div>
+</div>
 <p>You will need to add the location of the library to your path. For me, this would be the ~/.kshrc file</p>
-<p>export PATH=”/opt/rsl-v1.50/:$PATH”</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">PATH</span><span class="o">=</span><span class="s2">&quot;/opt/rsl-v1.50/:$PATH&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
 </section>
 <section id="lastly-activate-the-pyart-docs-environment-and-install-the-python-script-within-your-forked-repository">
 <h2>Lastly, activate the ‘pyart-docs’ environment and install the python script within your forked repository<a class="headerlink" href="#lastly-activate-the-pyart-docs-environment-and-install-the-python-script-within-your-forked-repository" title="Permalink to this headline">#</a></h2>
@@ -419,11 +449,23 @@ to the source code for further collaboration.</p>
 <h2>OKAY! You should be installed now, and ready to make changes to the source code!<a class="headerlink" href="#okay-you-should-be-installed-now-and-ready-to-make-changes-to-the-source-code" title="Permalink to this headline">#</a></h2>
 <section id="first-create-a-new-branch-for-our-changes">
 <h3>1. First, create a New Branch for our Changes<a class="headerlink" href="#first-create-a-new-branch-for-our-changes" title="Permalink to this headline">#</a></h3>
-<p>git checkout -b newblog_post</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">checkout</span> <span class="o">-</span><span class="n">b</span> <span class="n">newblog_post</span>
+</pre></div>
+</div>
+</div>
+</div>
 </section>
 <section id="push-new-branch-to-remote">
 <h3>2. Push New Branch To Remote<a class="headerlink" href="#push-new-branch-to-remote" title="Permalink to this headline">#</a></h3>
-<p>git push –set-upstream origin newblog_post</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">push</span> <span class="o">--</span><span class="nb">set</span><span class="o">-</span><span class="n">upstream</span> <span class="n">origin</span> <span class="n">newblog_post</span>
+</pre></div>
+</div>
+</div>
+</div>
 <p>Let’s first change the PPI image. The original code is located at: /pyart/examples/plotting/plot_ppi_mdv.py</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
