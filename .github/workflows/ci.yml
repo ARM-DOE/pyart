@@ -29,11 +29,7 @@ jobs:
       matrix:
         python-version: ["3.6", "3.7", "3.8", "3.9", "3.10"]
         os: [macOS, ubuntu, Windows]
-        include:
-          - os: macos-latest
-            PLAT: arm64
-            INTERFACE64: ""
-            platform: [x64]
+
     steps:
       - uses: actions/checkout@v2
 
