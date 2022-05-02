@@ -10,8 +10,8 @@ import pytest
 
 import pyart
 
-@pytest.mark.skipif(not pyart.graph.gridmapdisplay._XARRAY_AVAILABLE,
-                    reason='Xarray is not installed')
+@pytest.mark.skipif(not pyart.graph.gridmapdisplay._CARTOPY_AVAILABLE,
+                    reason='Cartopy is not installed')
 def test_gridmapdisplay_simple(outfile=None):
     # test basic GridMapDisplat functionally.
     grid = pyart.testing.make_target_grid()
@@ -22,10 +22,10 @@ def test_gridmapdisplay_simple(outfile=None):
     if outfile:
         fig.savefig(outfile)
 
-@pytest.mark.skipif(not pyart.graph.gridmapdisplay._XARRAY_AVAILABLE,
-                    reason='Xarray is not installed')
+@pytest.mark.skipif(not pyart.graph.gridmapdisplay._CARTOPY_AVAILABLE,
+                    reason='Cartopy is not installed')
 def test_gridmapdisplay_imshow(outfile=None):
-    # test basic GridMapDisplat functionally.
+    # test basic GridMapDisplay functionality.
     grid = pyart.testing.make_target_grid()
     display = pyart.graph.GridMapDisplay(grid)
     fig = plt.figure()
@@ -35,8 +35,6 @@ def test_gridmapdisplay_imshow(outfile=None):
     if outfile:
         fig.savefig(outfile)
 
-@pytest.mark.skipif(not pyart.graph.gridmapdisplay._XARRAY_AVAILABLE,
-                    reason='Xarray is not installed')
 @pytest.mark.skipif(not pyart.graph.gridmapdisplay._CARTOPY_AVAILABLE,
                     reason='Cartopy is not installed')
 def test_gridmapdisplay_fancy(outfile=None):
@@ -80,16 +78,16 @@ def test_gridmapdisplay_fancy(outfile=None):
     if outfile:
         fig.savefig(outfile)
 
-@pytest.mark.skipif(not pyart.graph.gridmapdisplay._XARRAY_AVAILABLE,
-                    reason='Xarray is not installed')
+@pytest.mark.skipif(not pyart.graph.gridmapdisplay._CARTOPY_AVAILABLE,
+                    reason='Cartopy is not installed')
 def test_generate_filename():
     grid = pyart.testing.make_target_grid()
     display = pyart.graph.GridMapDisplay(grid)
     filename = display.generate_filename('reflectivity', 0)
     assert isinstance(filename, str)
 
-@pytest.mark.skipif(not pyart.graph.gridmapdisplay._XARRAY_AVAILABLE,
-                    reason='Xarray is not installed')
+@pytest.mark.skipif(not pyart.graph.gridmapdisplay._CARTOPY_AVAILABLE,
+                    reason='Cartopy is not installed')
 def test_generate_titles():
     grid = pyart.testing.make_target_grid()
     display = pyart.graph.GridMapDisplay(grid)
@@ -100,8 +98,8 @@ def test_generate_titles():
     title = display.generate_latitudinal_level_title('reflectivity', 0)
     assert isinstance(title, str)
 
-@pytest.mark.skipif(not pyart.graph.gridmapdisplay._XARRAY_AVAILABLE,
-                    reason='Xarray is not installed')
+@pytest.mark.skipif(not pyart.graph.gridmapdisplay._CARTOPY_AVAILABLE,
+                    reason='Cartopy is not installed')
 def test_error_raising():
     grid = pyart.testing.make_target_grid()
     display = pyart.graph.GridMapDisplay(grid)
