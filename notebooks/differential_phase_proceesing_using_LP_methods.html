@@ -23,8 +23,8 @@
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css" />
@@ -257,28 +257,28 @@ Scott Collis
 <p>Import system libraries and append py-art path. import pyart</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">basedir</span><span class="o">=</span><span class="s1">&#39;/Users/scollis/local_modules/&#39;</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">basedir</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">pyart.io</span> <span class="kn">import</span> <span class="n">py_mdv</span><span class="p">,</span> <span class="n">radar</span>
-<span class="kn">from</span> <span class="nn">pyart.correct</span> <span class="kn">import</span> <span class="n">cband</span>
-<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span>
-<span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">groupby</span>
-<span class="kn">import</span> <span class="nn">scipy.integrate</span>
-<span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">interp1d</span>
-<span class="kn">from</span> <span class="nn">pyart.graph</span> <span class="kn">import</span> <span class="n">rayplot</span><span class="p">,</span> <span class="n">radar_display</span>
-<span class="kn">from</span> <span class="nn">pyart.correct</span> <span class="kn">import</span> <span class="n">phase_proc</span>
-<span class="kn">import</span> <span class="nn">copy</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pylab</span>
-<span class="kn">import</span> <span class="nn">glpk</span> 
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>basedir=&#39;/Users/scollis/local_modules/&#39;
+import sys
+sys.path.append(basedir)
+from pyart.io import py_mdv, radar
+from pyart.correct import cband
+from time import time
+from itertools import groupby
+import scipy.integrate
+from scipy.interpolate import interp1d
+from pyart.graph import rayplot, radar_display
+from pyart.correct import phase_proc
+import copy
+import numpy as np
+import pylab
+import glpk 
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">reload</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>reload(radar)
 </pre></div>
 </div>
 </div>
@@ -291,10 +291,10 @@ Scott Collis
 <p>Read in the MDV file</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#sample_file_name=&#39;/data/sample_sapr_data/235545.mdv&#39;</span>
-<span class="n">el</span><span class="p">,</span><span class="n">az</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">241</span><span class="p">)</span>
-<span class="n">sample_file_name</span><span class="o">=</span><span class="s1">&#39;/data/095636.mdv&#39;</span>
-<span class="n">my_mdv_object</span><span class="o">=</span><span class="n">py_mdv</span><span class="o">.</span><span class="n">read_mdv</span><span class="p">(</span><span class="n">sample_file_name</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>#sample_file_name=&#39;/data/sample_sapr_data/235545.mdv&#39;
+el,az=(1,241)
+sample_file_name=&#39;/data/095636.mdv&#39;
+my_mdv_object=py_mdv.read_mdv(sample_file_name, debug=True)
 </pre></div>
 </div>
 </div>
@@ -319,7 +319,7 @@ indexing fields
 <p>Now we convert the Py-MDV object to a Py-Radar object. This will help keep the code generic.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">myradar</span><span class="o">=</span><span class="n">radar</span><span class="o">.</span><span class="n">Radar</span><span class="p">(</span><span class="n">my_mdv_object</span><span class="p">)</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>myradar=radar.Radar(my_mdv_object)
 </pre></div>
 </div>
 </div>
@@ -364,13 +364,13 @@ go
 <p>Unfold phase.. Note the deepcopy otherwise it is a link and not a independant copy</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">min_phidp</span><span class="o">=</span><span class="mf">0.01</span><span class="p">;</span> <span class="n">min_ncp</span><span class="o">=</span><span class="mf">0.5</span><span class="p">;</span> <span class="n">min_rhv</span><span class="o">=</span><span class="mf">0.8</span><span class="p">;</span> <span class="n">fzl</span><span class="o">=</span><span class="mf">4000.0</span>
-<span class="n">my_unf</span><span class="o">=</span><span class="n">phase_proc</span><span class="o">.</span><span class="n">get_phidp_unf</span><span class="p">(</span><span class="n">myradar</span><span class="p">,</span> <span class="n">ncp_lev</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">rhohv_lev</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">ncpts</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">doc</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> 
-<span class="c1">#No docking the end of the coverage. This comes later</span>
-<span class="n">my_new_ph</span><span class="o">=</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">myradar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;dp_phase_shift&#39;</span><span class="p">])</span>
-<span class="n">my_unf</span><span class="p">[:,</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">my_unf</span><span class="p">[:,</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
-<span class="n">my_new_ph</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">my_unf</span>
-<span class="n">myradar</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;unf_dp_phase_shift&#39;</span><span class="p">:</span><span class="n">my_new_ph</span><span class="p">})</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>min_phidp=0.01; min_ncp=0.5; min_rhv=0.8; fzl=4000.0
+my_unf=phase_proc.get_phidp_unf(myradar, ncp_lev=0.5, rhohv_lev=0.7, ncpts=2, doc=None) 
+#No docking the end of the coverage. This comes later
+my_new_ph=copy.deepcopy(myradar.fields[&#39;dp_phase_shift&#39;])
+my_unf[:,-1]=my_unf[:,-2]
+my_new_ph[&#39;data&#39;]=my_unf
+myradar.fields.update({&#39;unf_dp_phase_shift&#39;:my_new_ph})
 </pre></div>
 </div>
 </div>
@@ -378,18 +378,18 @@ go
 <p>Now we create some conditional fields which will be used in the construction of the constraints</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">is_low_z</span><span class="o">=</span><span class="n">myradar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;reflectivity_horizontal&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">&lt;</span><span class="mf">10.0</span>
-<span class="n">is_high_z</span><span class="o">=</span><span class="n">myradar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;reflectivity_horizontal&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">&gt;</span><span class="mf">53.0</span>
-<span class="n">z_mod</span><span class="o">=</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">myradar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;reflectivity_horizontal&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
-<span class="n">z_mod</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">is_high_z</span><span class="p">)]</span><span class="o">=</span><span class="mf">53.0</span>
-<span class="n">z_mod</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">is_low_z</span><span class="p">)]</span><span class="o">=</span><span class="mf">10.0</span>
-<span class="c1">#z_mod=z_mod</span>
-<span class="n">not_coherent</span><span class="o">=</span><span class="n">myradar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;norm_coherent_power&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">min_ncp</span>
-<span class="n">not_correlated</span><span class="o">=</span><span class="n">myradar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;copol_coeff&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">min_rhv</span>
-<span class="n">phidp_mod</span><span class="o">=</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">myradar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;unf_dp_phase_shift&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
-<span class="n">phidp_neg</span><span class="o">=</span><span class="n">phidp_mod</span> <span class="o">&lt;</span> <span class="n">min_phidp</span>
-<span class="n">phidp_mod</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">phidp_neg</span><span class="p">)]</span><span class="o">=</span><span class="n">min_phidp</span>
-<span class="n">phidp_mod</span><span class="o">=</span><span class="n">phidp_mod</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>is_low_z=myradar.fields[&#39;reflectivity_horizontal&#39;][&#39;data&#39;] &lt;10.0
+is_high_z=myradar.fields[&#39;reflectivity_horizontal&#39;][&#39;data&#39;] &gt;53.0
+z_mod=copy.deepcopy(myradar.fields[&#39;reflectivity_horizontal&#39;][&#39;data&#39;])
+z_mod[np.where(is_high_z)]=53.0
+z_mod[np.where(is_low_z)]=10.0
+#z_mod=z_mod
+not_coherent=myradar.fields[&#39;norm_coherent_power&#39;][&#39;data&#39;] &lt; min_ncp
+not_correlated=myradar.fields[&#39;copol_coeff&#39;][&#39;data&#39;] &lt; min_rhv
+phidp_mod=copy.deepcopy(myradar.fields[&#39;unf_dp_phase_shift&#39;][&#39;data&#39;])
+phidp_neg=phidp_mod &lt; min_phidp
+phidp_mod[np.where(phidp_neg)]=min_phidp
+phidp_mod=phidp_mod
 </pre></div>
 </div>
 </div>
@@ -400,31 +400,31 @@ where \)</span>\bf{I}<span class="math notranslate nohighlight">\( is the identi
 <p>Note that <span class="math notranslate nohighlight">\(\bf{M}\)</span> contains some side padding to deal with edge issues</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">construct_A_matrix</span><span class="p">(</span><span class="n">radar</span><span class="p">):</span>
-    <span class="n">n_gates</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
-    <span class="n">Identity</span><span class="o">=</span><span class="n">eye</span><span class="p">(</span><span class="n">n_gates</span><span class="p">)</span>
-    <span class="n">St_Gorlv_differential_5pts</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">.2</span><span class="p">,</span> <span class="o">-</span><span class="mf">.1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">.1</span><span class="p">,</span> <span class="mf">.2</span><span class="p">]</span>
-    <span class="n">filt</span><span class="o">=</span><span class="n">St_Gorlv_differential_5pts</span>
-    <span class="n">filter_length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">filt</span><span class="p">)</span>
-    <span class="n">M_matrix_middle</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">ones</span><span class="p">(</span><span class="n">n_gates</span><span class="o">-</span><span class="n">filter_length</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">*</span><span class="mf">0.0</span>
-    <span class="n">posn</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="o">*</span><span class="p">(</span><span class="n">filter_length</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="p">(</span><span class="n">filter_length</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">filter_length</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">diag</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">filter_length</span><span class="p">):</span>
-        <span class="n">M_matrix_middle</span><span class="o">=</span><span class="n">M_matrix_middle</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">ones</span><span class="p">(</span><span class="n">n_gates</span><span class="o">-</span><span class="n">filter_length</span><span class="o">+</span><span class="mi">1</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">posn</span><span class="p">[</span><span class="n">diag</span><span class="p">])),</span> <span class="n">k</span><span class="o">=</span><span class="n">posn</span><span class="p">[</span><span class="n">diag</span><span class="p">])</span><span class="o">*</span><span class="n">filt</span><span class="p">[</span><span class="n">diag</span><span class="p">]</span>
-    <span class="n">side_pad</span><span class="o">=</span><span class="p">(</span><span class="n">filter_length</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
-    <span class="n">M_matrix</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">bmat</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">n_gates</span><span class="o">-</span><span class="n">filter_length</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">side_pad</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">),</span>
-        <span class="n">M_matrix_middle</span><span class="p">,</span> 
-        <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">n_gates</span><span class="o">-</span><span class="n">filter_length</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">side_pad</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)])</span>
-    <span class="n">Z_matrix</span><span class="o">=</span><span class="n">zeros</span><span class="p">([</span><span class="n">n_gates</span><span class="o">-</span><span class="n">filter_length</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_gates</span><span class="p">])</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">bmat</span><span class="p">([[</span><span class="n">Identity</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="o">*</span><span class="n">Identity</span><span class="p">],</span> <span class="p">[</span><span class="n">Identity</span><span class="p">,</span> <span class="n">Identity</span><span class="p">],</span> <span class="p">[</span><span class="n">Z_matrix</span><span class="p">,</span> <span class="n">M_matrix</span><span class="p">]])</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>def construct_A_matrix(radar):
+    n_gates=len(radar.range[&#39;data&#39;])
+    Identity=eye(n_gates)
+    St_Gorlv_differential_5pts=[-.2, -.1, 0, .1, .2]
+    filt=St_Gorlv_differential_5pts
+    filter_length=len(filt)
+    M_matrix_middle=np.diag(ones(n_gates-filter_length+1), k=0)*0.0
+    posn=np.linspace(-1.0*(filter_length-1)/2, (filter_length-1)/2, filter_length)
+    for diag in range(filter_length):
+        M_matrix_middle=M_matrix_middle+np.diag(ones(n_gates-filter_length+1 - np.abs(posn[diag])), k=posn[diag])*filt[diag]
+    side_pad=(filter_length-1)/2
+    M_matrix=np.bmat([np.zeros([n_gates-filter_length+1, side_pad], dtype=float),
+        M_matrix_middle, 
+        np.zeros([n_gates-filter_length+1, side_pad], dtype=float)])
+    Z_matrix=zeros([n_gates-filter_length+1, n_gates])
+    return np.bmat([[Identity, -1.0*Identity], [Identity, Identity], [Z_matrix, M_matrix]])
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">A_Matrix</span><span class="o">=</span><span class="n">construct_A_matrix</span><span class="p">(</span><span class="n">myradar</span><span class="p">)</span>
-<span class="nb">print</span> <span class="n">A_Matrix</span><span class="o">.</span><span class="n">shape</span>
-<span class="nb">print</span> <span class="p">(</span><span class="n">A_Matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">myradar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])),</span> <span class="n">A_Matrix</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">myradar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])))</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>A_Matrix=construct_A_matrix(myradar)
+print A_Matrix.shape
+print (A_Matrix.shape[0]/float(len(myradar.range[&#39;data&#39;])), A_Matrix.shape[1]/float(len(myradar.range[&#39;data&#39;])))
 </pre></div>
 </div>
 </div>
@@ -443,28 +443,28 @@ The B vector is the negatibe and positive modified unfolded <span class="math no
 <p>where n is the number of rays.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">St_Gorlv_differential_5pts</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">.2</span><span class="p">,</span> <span class="o">-</span><span class="mf">.1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">.1</span><span class="p">,</span> <span class="mf">.2</span><span class="p">]</span>
-<span class="n">filt</span><span class="o">=</span><span class="n">St_Gorlv_differential_5pts</span>
-<span class="n">n_gates</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">myradar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
-<span class="n">n_rays</span><span class="o">=</span><span class="n">phidp_mod</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">filter_length</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">filt</span><span class="p">)</span>
-<span class="n">side_pad</span><span class="o">=</span><span class="p">(</span><span class="n">filter_length</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span>
-<span class="nb">print</span> <span class="s2">&quot;Side pad: &quot;</span><span class="p">,</span> <span class="n">side_pad</span>
-<span class="n">top_of_B_vectors</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">bmat</span><span class="p">([[</span><span class="o">-</span><span class="n">phidp_mod</span><span class="p">,</span><span class="n">phidp_mod</span><span class="p">]])</span>
-<span class="nb">print</span> <span class="n">top_of_B_vectors</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">phidp_mod</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="mf">360.0</span><span class="o">*</span><span class="mf">17.0</span>
-<span class="n">data_edges</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">bmat</span><span class="p">([</span><span class="n">phidp_mod</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="n">side_pad</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">n_rays</span><span class="p">,</span> <span class="n">n_gates</span><span class="o">-</span><span class="n">filter_length</span><span class="o">+</span><span class="mi">1</span><span class="p">]),</span> <span class="n">phidp_mod</span><span class="p">[:,</span><span class="o">-</span><span class="n">side_pad</span><span class="p">:]])</span>
-<span class="nb">print</span> <span class="n">data_edges</span><span class="o">.</span><span class="n">shape</span>
-<span class="n">ii</span><span class="o">=</span><span class="n">filter_length</span><span class="o">-</span><span class="mi">1</span>
-<span class="n">jj</span><span class="o">=</span><span class="n">data_edges</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span>
-<span class="n">list_corrl</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">([</span><span class="n">n_rays</span><span class="p">,</span> <span class="n">jj</span><span class="o">-</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
-<span class="nb">print</span> <span class="nb">len</span><span class="p">(</span><span class="n">list_corrl</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">count</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">list_corrl</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
-    <span class="n">list_corrl</span><span class="p">[:,</span> <span class="n">count</span><span class="p">]</span><span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span><span class="o">*</span><span class="p">(</span><span class="n">array</span><span class="p">(</span><span class="n">filt</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">data_edges</span><span class="p">))[:,</span> <span class="n">count</span><span class="p">:</span><span class="n">count</span><span class="o">+</span><span class="n">ii</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="nb">print</span> <span class="n">list_corrl</span><span class="o">.</span><span class="n">shape</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>St_Gorlv_differential_5pts=[-.2, -.1, 0, .1, .2]
+filt=St_Gorlv_differential_5pts
+n_gates=len(myradar.range[&#39;data&#39;])
+n_rays=phidp_mod.shape[0]
+filter_length=len(filt)
+side_pad=(filter_length-1)/2
+print &quot;Side pad: &quot;, side_pad
+top_of_B_vectors=np.bmat([[-phidp_mod,phidp_mod]])
+print top_of_B_vectors.shape, phidp_mod.shape, 360.0*17.0
+data_edges=np.bmat([phidp_mod[:, 0:side_pad], np.zeros([n_rays, n_gates-filter_length+1]), phidp_mod[:,-side_pad:]])
+print data_edges.shape
+ii=filter_length-1
+jj=data_edges.shape[1]-1
+list_corrl=np.zeros([n_rays, jj-ii+1])
+print len(list_corrl)
+for count in range(list_corrl.shape[1]):
+    list_corrl[:, count]= -1.0*(array(filt)*(np.asarray(data_edges))[:, count:count+ii+1]).sum(axis=1)
+print list_corrl.shape
 
-<span class="c1">#list_corrl=np.zeros(jj-ii+1)</span>
-<span class="c1">#for count in range(len(list_corrl)):</span>
-<span class="c1">#    list_corrl[count]= -1.0*(array(SG_df5)*np.squeeze(np.asarray(data_edges))[count:count+ii+1]).sum()</span>
+#list_corrl=np.zeros(jj-ii+1)
+#for count in range(len(list_corrl)):
+#    list_corrl[count]= -1.0*(array(SG_df5)*np.squeeze(np.asarray(data_edges))[count:count+ii+1]).sum()
 </pre></div>
 </div>
 </div>
@@ -491,15 +491,15 @@ The B vector is the negatibe and positive modified unfolded <span class="math no
 <p>where <span class="math notranslate nohighlight">\(w\)</span> is the (inverse) weight, and is determined by trail and error, and in our case is set to 50,000</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sct</span><span class="o">=</span><span class="p">(((</span><span class="mf">10.0</span><span class="o">**</span><span class="p">(</span><span class="mf">0.1</span><span class="o">*</span><span class="n">z_mod</span><span class="p">))</span><span class="o">**</span><span class="mf">0.914</span><span class="p">)</span><span class="o">/</span><span class="mf">60000.0</span><span class="p">)[:,</span> <span class="n">side_pad</span><span class="p">:</span><span class="o">-</span><span class="n">side_pad</span><span class="p">]</span>
-<span class="n">sct</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">sct</span> <span class="o">&lt;</span><span class="mf">0.0</span><span class="p">)]</span><span class="o">=</span><span class="mf">0.0</span>
-<span class="n">sct</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="n">side_pad</span><span class="p">]</span><span class="o">=</span><span class="n">list_corrl</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="n">side_pad</span><span class="p">]</span>
-<span class="n">sct</span><span class="p">[:,</span> <span class="o">-</span><span class="n">side_pad</span><span class="p">:]</span><span class="o">=</span><span class="n">list_corrl</span><span class="p">[:,</span> <span class="o">-</span><span class="n">side_pad</span><span class="p">:]</span>
-<span class="nb">print</span> <span class="n">top_of_B_vectors</span><span class="o">.</span><span class="n">shape</span>
-<span class="nb">print</span> <span class="n">sct</span><span class="o">.</span><span class="n">shape</span>
-<span class="n">B_vectors</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">bmat</span><span class="p">([[</span><span class="n">top_of_B_vectors</span><span class="p">,</span><span class="n">sct</span><span class="p">]])</span>
-<span class="nb">print</span> <span class="n">B_vectors</span><span class="o">.</span><span class="n">shape</span>
-<span class="nb">print</span> <span class="n">A_Matrix</span><span class="o">.</span><span class="n">shape</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>sct=(((10.0**(0.1*z_mod))**0.914)/60000.0)[:, side_pad:-side_pad]
+sct[np.where(sct &lt;0.0)]=0.0
+sct[:, 0:side_pad]=list_corrl[:, 0:side_pad]
+sct[:, -side_pad:]=list_corrl[:, -side_pad:]
+print top_of_B_vectors.shape
+print sct.shape
+B_vectors=np.bmat([[top_of_B_vectors,sct]])
+print B_vectors.shape
+print A_Matrix.shape
 </pre></div>
 </div>
 </div>
@@ -516,18 +516,18 @@ The B vector is the negatibe and positive modified unfolded <span class="math no
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">weights</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">my_new_ph</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-<span class="n">phidp_neg</span><span class="o">=</span><span class="n">my_new_ph</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">&lt;</span><span class="n">min_phidp</span>
-<span class="n">my_new_ph</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">phidp_neg</span><span class="p">)]</span><span class="o">=</span><span class="n">min_phidp</span>
-<span class="c1">#not_coh=my_ncp[el,az, 0:fzl_e] &lt; min_ncp</span>
-<span class="c1">#not_cor=my_rhv[el,az, 0:fzl_e] &lt; min_rhv</span>
-<span class="c1">#need to impliment these up to the FZL</span>
-<span class="n">is_garbage</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">logical_or</span><span class="p">(</span> <span class="n">not_coherent</span><span class="p">,</span> <span class="n">not_correlated</span><span class="p">)</span>
-<span class="n">m</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">is_garbage</span><span class="p">)</span>
-<span class="n">weights</span><span class="p">[</span><span class="n">m</span><span class="p">]</span><span class="o">=</span><span class="mf">1.0</span>
-<span class="nb">print</span> <span class="n">weights</span><span class="o">.</span><span class="n">shape</span>
-<span class="n">nw</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">bmat</span><span class="p">([</span><span class="n">weights</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">weights</span><span class="o">.</span><span class="n">shape</span><span class="p">)])</span>
-<span class="nb">print</span> <span class="n">nw</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">B_vectors</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">A_Matrix</span><span class="o">.</span><span class="n">shape</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>weights=np.zeros(my_new_ph[&#39;data&#39;].shape)
+phidp_neg=my_new_ph[&#39;data&#39;] &lt;min_phidp
+my_new_ph[&#39;data&#39;][np.where(phidp_neg)]=min_phidp
+#not_coh=my_ncp[el,az, 0:fzl_e] &lt; min_ncp
+#not_cor=my_rhv[el,az, 0:fzl_e] &lt; min_rhv
+#need to impliment these up to the FZL
+is_garbage=np.logical_or( not_coherent, not_correlated)
+m=np.where(is_garbage)
+weights[m]=1.0
+print weights.shape
+nw=np.bmat([weights, np.zeros(weights.shape)])
+print nw.shape, B_vectors.shape, A_Matrix.shape
 </pre></div>
 </div>
 </div>
@@ -543,39 +543,39 @@ The B vector is the negatibe and positive modified unfolded <span class="math no
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">raynum</span><span class="o">=</span><span class="mi">330</span>
-<span class="n">mysoln</span><span class="o">=</span><span class="n">zeros</span><span class="p">(</span><span class="n">phidp_mod</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>raynum=330
+mysoln=zeros(phidp_mod.shape)
 
-<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span>
-<span class="kn">import</span> <span class="nn">glpk</span>
-           <span class="c1"># Import the GLPK module</span>
-<span class="n">t0</span><span class="o">=</span><span class="n">time</span><span class="p">()</span>
-<span class="n">lp</span> <span class="o">=</span> <span class="n">glpk</span><span class="o">.</span><span class="n">LPX</span><span class="p">()</span>        <span class="c1"># Create empty problem instance</span>
-<span class="n">lp</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;LP_MIN&#39;</span>     <span class="c1"># Assign symbolic name to problem</span>
-<span class="n">lp</span><span class="o">.</span><span class="n">obj</span><span class="o">.</span><span class="n">maximize</span> <span class="o">=</span> <span class="kc">False</span> <span class="c1"># Set this as a maximization problem</span>
-<span class="c1">#lp.rows.add(2*n)         # Append rows </span>
-<span class="n">lp</span><span class="o">.</span><span class="n">rows</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">n_gates</span><span class="o">+</span><span class="n">n_gates</span><span class="o">-</span><span class="mi">4</span><span class="p">)</span><span class="c1"># Append rows </span>
-<span class="n">lp</span><span class="o">.</span><span class="n">cols</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">n_gates</span><span class="p">)</span>
+from time import time
+import glpk
+           # Import the GLPK module
+t0=time()
+lp = glpk.LPX()        # Create empty problem instance
+lp.name = &#39;LP_MIN&#39;     # Assign symbolic name to problem
+lp.obj.maximize = False # Set this as a maximization problem
+#lp.rows.add(2*n)         # Append rows 
+lp.rows.add(2*n_gates+n_gates-4)# Append rows 
+lp.cols.add(2*n_gates)
 
-<span class="n">glpk</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">term_on</span> <span class="o">=</span> <span class="kc">True</span>
+glpk.env.term_on = True
 
-<span class="k">for</span> <span class="n">cur_row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">n_gates</span><span class="o">+</span><span class="n">n_gates</span><span class="o">-</span><span class="mi">4</span><span class="p">):</span>
-    <span class="n">lp</span><span class="o">.</span><span class="n">rows</span><span class="p">[</span><span class="n">cur_row</span><span class="p">]</span><span class="o">.</span><span class="n">matrix</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">A_Matrix</span><span class="p">[</span><span class="n">cur_row</span><span class="p">,</span> <span class="p">:])))</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">n_gates</span><span class="p">):</span>
-    <span class="n">lp</span><span class="o">.</span><span class="n">cols</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">bounds</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="kc">None</span>
+for cur_row in range(2*n_gates+n_gates-4):
+    lp.rows[cur_row].matrix=list(np.squeeze(np.asarray(A_Matrix[cur_row, :])))
+for i in range(2*n_gates):
+    lp.cols[i].bounds = 0.0, None
 
-<span class="k">for</span> <span class="n">raynum</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">360</span><span class="p">):</span>
-    <span class="n">this_soln</span><span class="o">=</span><span class="n">zeros</span><span class="p">(</span><span class="n">phidp_mod</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-    <span class="c1">#print &quot;Doing&quot;, raynum</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">n_gates</span><span class="o">+</span><span class="n">n_gates</span><span class="o">-</span><span class="mi">4</span><span class="p">):</span>
-        <span class="n">lp</span><span class="o">.</span><span class="n">rows</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">bounds</span> <span class="o">=</span> <span class="n">B_vectors</span><span class="p">[</span><span class="n">raynum</span><span class="p">,</span> <span class="n">i</span><span class="p">],</span> <span class="kc">None</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">n_gates</span><span class="p">):</span>
-        <span class="c1">#lp.cols[i].bounds = 0.0, None</span>
-        <span class="n">lp</span><span class="o">.</span><span class="n">obj</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">nw</span><span class="p">[</span><span class="n">raynum</span><span class="p">,</span><span class="n">i</span><span class="p">]</span>
-    <span class="n">lp</span><span class="o">.</span><span class="n">simplex</span><span class="p">(</span><span class="n">msg_lev</span><span class="o">=</span><span class="n">glpk</span><span class="o">.</span><span class="n">LPX</span><span class="o">.</span><span class="n">MSG_ON</span><span class="p">,</span> <span class="n">meth</span><span class="o">=</span><span class="n">glpk</span><span class="o">.</span><span class="n">LPX</span><span class="o">.</span><span class="n">PRIMAL</span><span class="p">,</span> <span class="n">it_lim</span><span class="o">=</span><span class="mi">7000</span><span class="p">,</span> <span class="n">presolve</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_gates</span><span class="p">):</span>
-        <span class="n">this_soln</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">lp</span><span class="o">.</span><span class="n">cols</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="n">n_gates</span><span class="p">]</span><span class="o">.</span><span class="n">primal</span>
-    <span class="n">mysoln</span><span class="p">[</span><span class="n">raynum</span><span class="p">,</span> <span class="p">:]</span><span class="o">=</span><span class="n">cband</span><span class="o">.</span><span class="n">smooth_and_trim</span><span class="p">(</span><span class="n">this_soln</span><span class="p">,</span> <span class="n">window_len</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="s1">&#39;sg_smooth&#39;</span><span class="p">)</span>
+for raynum in range(360):
+    this_soln=zeros(phidp_mod.shape[1])
+    #print &quot;Doing&quot;, raynum
+    for i in range(2*n_gates+n_gates-4):
+        lp.rows[i].bounds = B_vectors[raynum, i], None
+    for i in range(2*n_gates):
+        #lp.cols[i].bounds = 0.0, None
+        lp.obj[i]=nw[raynum,i]
+    lp.simplex(msg_lev=glpk.LPX.MSG_ON, meth=glpk.LPX.PRIMAL, it_lim=7000, presolve=True)
+    for i in range(n_gates):
+        this_soln[i]=lp.cols[i+n_gates].primal
+    mysoln[raynum, :]=cband.smooth_and_trim(this_soln, window_len=5, window=&#39;sg_smooth&#39;)
 
 
 </pre></div>
@@ -584,46 +584,46 @@ The B vector is the negatibe and positive modified unfolded <span class="math no
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">proc_ph</span><span class="o">=</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">myradar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;dp_phase_shift&#39;</span><span class="p">])</span>
-<span class="n">proc_ph</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">mysoln</span>
-<span class="n">proc_ph</span><span class="p">[</span><span class="s1">&#39;valid_min&#39;</span><span class="p">]</span><span class="o">=</span><span class="mf">0.0</span>
-<span class="n">proc_ph</span><span class="p">[</span><span class="s1">&#39;valid_max&#39;</span><span class="p">]</span><span class="o">=</span><span class="mf">400.0</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>proc_ph=copy.deepcopy(myradar.fields[&#39;dp_phase_shift&#39;])
+proc_ph[&#39;data&#39;]=mysoln
+proc_ph[&#39;valid_min&#39;]=0.0
+proc_ph[&#39;valid_max&#39;]=400.0
 
-<span class="n">myradar</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;proc_dp_phase_shift&#39;</span><span class="p">:</span><span class="n">proc_ph</span><span class="p">})</span>
-<span class="n">kdp</span><span class="o">=</span><span class="n">zeros</span><span class="p">(</span><span class="n">mysoln</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">mysoln</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
-    <span class="n">kdp</span><span class="p">[</span><span class="n">i</span><span class="p">,:]</span><span class="o">=</span><span class="n">cband</span><span class="o">.</span><span class="n">sobel</span><span class="p">(</span><span class="n">mysoln</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:],</span> <span class="n">window_len</span><span class="o">=</span><span class="mi">35</span><span class="p">)</span><span class="o">/</span><span class="p">((</span><span class="n">myradar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">myradar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="mf">1000.0</span><span class="p">)</span>
+myradar.fields.update({&#39;proc_dp_phase_shift&#39;:proc_ph})
+kdp=zeros(mysoln.shape)
+for i in range(mysoln.shape[0]):
+    kdp[i,:]=cband.sobel(mysoln[i, :], window_len=35)/((myradar.range[&#39;data&#39;][1]-myradar.range[&#39;data&#39;][0])/1000.0)
 
-<span class="n">sob_kdp</span><span class="o">=</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">myradar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;diff_phase&#39;</span><span class="p">])</span>
-<span class="n">sob_kdp</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">kdp</span>
-<span class="n">sob_kdp</span><span class="p">[</span><span class="s1">&#39;valid_min&#39;</span><span class="p">]</span><span class="o">=</span><span class="mf">0.0</span>
-<span class="n">sob_kdp</span><span class="p">[</span><span class="s1">&#39;valid_max&#39;</span><span class="p">]</span><span class="o">=</span><span class="mf">20.0</span>
+sob_kdp=copy.deepcopy(myradar.fields[&#39;diff_phase&#39;])
+sob_kdp[&#39;data&#39;]=kdp
+sob_kdp[&#39;valid_min&#39;]=0.0
+sob_kdp[&#39;valid_max&#39;]=20.0
 
-<span class="n">myradar</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;recalculated_diff_phase&#39;</span><span class="p">:</span><span class="n">sob_kdp</span><span class="p">})</span>
+myradar.fields.update({&#39;recalculated_diff_phase&#39;:sob_kdp})
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">d_az</span><span class="p">,</span><span class="n">d_el</span><span class="o">=</span><span class="mi">190</span><span class="p">,</span><span class="mi">0</span>
-<span class="n">f</span><span class="o">=</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">])</span>
-<span class="n">plot</span><span class="p">(</span><span class="n">myradar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;proc_dp_phase_shift&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">d_az</span><span class="o">+</span><span class="mi">360</span><span class="o">*</span><span class="n">d_el</span><span class="p">,</span> <span class="p">:],</span><span class="s1">&#39;b-&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;LP&#39;</span><span class="p">)</span>
-<span class="n">plot</span><span class="p">(</span><span class="n">myradar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;unf_dp_phase_shift&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">d_az</span><span class="o">+</span><span class="mi">360</span><span class="o">*</span><span class="n">d_el</span><span class="p">,</span> <span class="p">:],</span><span class="s1">&#39;g-&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;raw&#39;</span><span class="p">)</span>
-<span class="n">ylim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">290</span><span class="p">])</span>
-<span class="n">twinx</span><span class="p">()</span>
-<span class="c1">#plot(z_mod, &#39;r-&#39;, label=&#39;z&#39;)</span>
-<span class="c1">#xlim([500,1000])</span>
-<span class="c1">#cband.KDP(mysoln, my_mdv_object.range_km[1]-my_mdv_object.range_km[0], 30)</span>
-<span class="n">plot</span><span class="p">(</span><span class="n">myradar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;recalculated_diff_phase&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">d_az</span><span class="o">+</span><span class="mi">360</span><span class="o">*</span><span class="n">d_el</span><span class="p">,</span> <span class="p">:],</span> <span class="s1">&#39;r-&#39;</span><span class="p">)</span>
-<span class="c1">#plot(z_mod/10)</span>
-<span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;dashed&#39;</span><span class="p">)</span>
-<span class="n">f</span><span class="o">=</span><span class="n">figure</span><span class="p">()</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>d_az,d_el=190,0
+f=figure(figsize=[10,5])
+plot(myradar.fields[&#39;proc_dp_phase_shift&#39;][&#39;data&#39;][d_az+360*d_el, :],&#39;b-&#39;,label=&#39;LP&#39;)
+plot(myradar.fields[&#39;unf_dp_phase_shift&#39;][&#39;data&#39;][d_az+360*d_el, :],&#39;g-&#39;, label=&#39;raw&#39;)
+ylim([0,290])
+twinx()
+#plot(z_mod, &#39;r-&#39;, label=&#39;z&#39;)
+#xlim([500,1000])
+#cband.KDP(mysoln, my_mdv_object.range_km[1]-my_mdv_object.range_km[0], 30)
+plot(myradar.fields[&#39;recalculated_diff_phase&#39;][&#39;data&#39;][d_az+360*d_el, :], &#39;r-&#39;)
+#plot(z_mod/10)
+gca().yaxis.grid(color=&#39;gray&#39;, linestyle=&#39;dashed&#39;)
+f=figure()
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/differential_phase_proceesing_using_LP_methods_22_0.png" src="../_images/differential_phase_proceesing_using_LP_methods_22_0.png" />
+<img alt="../_images/ce24a4923524e32821d4cadf9ce953e2c5d137d1f4c5a6b4dff7cc16f5b8f2ec.png" src="../_images/ce24a4923524e32821d4cadf9ce953e2c5d137d1f4c5a6b4dff7cc16f5b8f2ec.png" />
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.figure.Figure at 0x10c953e10&gt;
 </pre></div>
 </div>
@@ -631,37 +631,37 @@ The B vector is the negatibe and positive modified unfolded <span class="math no
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">my_display</span><span class="o">=</span><span class="n">radar_display</span><span class="o">.</span><span class="n">radar_display</span><span class="p">(</span><span class="n">myradar</span><span class="p">)</span>
-<span class="n">f</span><span class="o">=</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">15</span><span class="p">,</span><span class="mi">5</span><span class="p">])</span>
-<span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">my_display</span><span class="o">.</span><span class="n">plot_ppi</span><span class="p">(</span><span class="s1">&#39;proc_dp_phase_shift&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-<span class="n">my_display</span><span class="o">.</span><span class="n">append_x</span><span class="p">()</span>
-<span class="n">my_display</span><span class="o">.</span><span class="n">append_y</span><span class="p">()</span>
-<span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">my_display</span><span class="o">.</span><span class="n">generate_title</span><span class="p">(</span><span class="s1">&#39;proc_dp_phase_shift&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
-<span class="n">my_display</span><span class="o">.</span><span class="n">add_cb</span><span class="p">()</span>
-<span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">my_display</span><span class="o">.</span><span class="n">plot_ppi</span><span class="p">(</span><span class="s1">&#39;recalculated_diff_phase&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-<span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">my_display</span><span class="o">.</span><span class="n">generate_title</span><span class="p">(</span><span class="s1">&#39;recalculated_diff_phase&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
-<span class="n">my_display</span><span class="o">.</span><span class="n">append_x</span><span class="p">()</span>
-<span class="n">my_display</span><span class="o">.</span><span class="n">add_cb</span><span class="p">()</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>my_display=radar_display.radar_display(myradar)
+f=figure(figsize=[15,5])
+subplot(1,2,1)
+my_display.plot_ppi(&#39;proc_dp_phase_shift&#39;, 0)
+my_display.append_x()
+my_display.append_y()
+gca().set_title(my_display.generate_title(&#39;proc_dp_phase_shift&#39;, 0))
+my_display.add_cb()
+subplot(1,2,2)
+my_display.plot_ppi(&#39;recalculated_diff_phase&#39;, 0)
+gca().set_title(my_display.generate_title(&#39;recalculated_diff_phase&#39;, 0))
+my_display.append_x()
+my_display.add_cb()
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/differential_phase_proceesing_using_LP_methods_23_0.png" src="../_images/differential_phase_proceesing_using_LP_methods_23_0.png" />
+<img alt="../_images/2a8d7f27b75aa061c702ca6f29f0e3b47dda1a45fa334f1923f2bf644b79c1e8.png" src="../_images/2a8d7f27b75aa061c702ca6f29f0e3b47dda1a45fa334f1923f2bf644b79c1e8.png" />
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">reload</span><span class="p">(</span><span class="n">rayplot</span><span class="p">)</span>
-<span class="n">myrayplot</span><span class="o">=</span><span class="n">rayplot</span><span class="o">.</span><span class="n">rayplot</span><span class="p">(</span><span class="n">myradar</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">15</span><span class="p">,</span><span class="mi">15</span><span class="p">])</span>
-<span class="n">myrayplot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span><span class="mi">190</span><span class="p">],</span><span class="n">myradar</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-<span class="n">myrayplot</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">wspace</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>reload(rayplot)
+myrayplot=rayplot.rayplot(myradar, figsize=[15,15])
+myrayplot([0,190],myradar.fields.keys())
+myrayplot.fig.subplots_adjust(wspace=1.0)
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/differential_phase_proceesing_using_LP_methods_24_0.png" src="../_images/differential_phase_proceesing_using_LP_methods_24_0.png" />
+<img alt="../_images/b7bd7beb379d2b0c88e421ee21306a2dffcf9376adc1327f747a26a586361f54.png" src="../_images/b7bd7beb379d2b0c88e421ee21306a2dffcf9376adc1327f747a26a586361f54.png" />
 </div>
 </div>
 
