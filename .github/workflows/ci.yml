@@ -50,10 +50,9 @@ jobs:
                echo 'Trmm will not be installed for Windows'
           else
              mamba install -c conda-forge trmm_rsl
-             export RSL_PATH=${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-3 
+             export RSL_PATH=$CONDA/envs/pyart-dev/ 
           fi
-
-          
+ 
       - name: Fetch all history for all tags and branches
         run: |
            git fetch --prune --unshallow
@@ -69,8 +68,6 @@ jobs:
       
       - name: Run Tests
         id: run_tests
-        env:
-          RSL_PATH: ${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-3
         run: |
           python -m pytest -v --pyargs pyart --cov=./ --cov-report=xml
 
