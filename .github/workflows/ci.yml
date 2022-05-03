@@ -54,6 +54,7 @@ jobs:
              mamba install -c conda-forge trmm_rsl
              export RSL_PATH=$CONDA/envs/pyart-dev/
           elif [ '$RUNNER_OS' == 'macOS' ]
+          then
              mamba install -c conda-forge trmm_rsl
              export RSL_PATH=$CONDA/envs/pyart-dev/
           else
