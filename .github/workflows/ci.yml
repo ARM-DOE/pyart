@@ -46,7 +46,13 @@ jobs:
       
       - name: Set TRMM RSL path
         run: |
-          export RSL_PATH=$CONDA/pkgs/trmm_rsl-1.49-3
+          if [ '$RUNNER_OS' == 'Windows' ]; then
+               echo 'Trmm will not be installed for Windows'
+          else
+             mamba install -c conda-forge trmm_rsl
+             export RSL_PATH=${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-3 
+          fi
+
           
       - name: Fetch all history for all tags and branches
         run: |
