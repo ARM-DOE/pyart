@@ -9,11 +9,7 @@ import warnings
 import numpy as np
 
 from ..config import FileMetadata, get_fillvalue
-try:
-    from . import _rsl_interface
-    _RSL_AVAILABLE = True
-except ImportError:
-    _RSL_AVAILABLE = False
+from pyart.io import _rsl_interface
 from ..core.radar import Radar
 from .common import make_time_unit_str
 from ..lazydict import LazyLoadDict
@@ -78,12 +74,6 @@ def read_rsl(filename, field_names=None, additional_metadata=None,
         Radar object.
 
     """
-    # check that TRMM RSL is available
-    if not _RSL_AVAILABLE:
-        raise MissingOptionalDependency(
-            "Py-ART must be build with support for TRMM RSL to use the " +
-            "read_rsl function.")
-
     # create metadata retrieval object
     filemetadata = FileMetadata('rsl', field_names, additional_metadata,
                                 file_field_names, exclude_fields,
