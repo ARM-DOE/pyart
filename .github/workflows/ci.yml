@@ -46,11 +46,19 @@ jobs:
       
       - name: Set TRMM RSL path
         run: |
-          if [ '$RUNNER_OS' == 'Windows' ]; then
-               echo 'Trmm will not be installed for Windows'
-          else
+          if [ '$RUNNER_OS' == 'Windows' ]
+          then
+             echo 'Trmm will not be installed for Windows'
+          elif [ '$RUNNER_OS' == 'ubuntu' ]
+          then
              mamba install -c conda-forge trmm_rsl
-             export RSL_PATH=$CONDA/envs/pyart-dev/ 
+             export RSL_PATH=$CONDA/envs/pyart-dev/
+          elif [ '$RUNNER_OS' == 'macOS' ]
+             mamba install -c conda-forge trmm_rsl
+             export RSL_PATH=$CONDA/envs/pyart-dev/
+          else
+             echo "$RUNNER_OS not supported"
+             exit 1
           fi
  
       - name: Fetch all history for all tags and branches
