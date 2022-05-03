@@ -10,7 +10,7 @@ import numpy as np
 
 from ..config import FileMetadata, get_fillvalue
 try:
-    from . import _rsl_interface
+    from pyart.io import _rsl_interface
     _RSL_AVAILABLE = True
 except ImportError:
     _RSL_AVAILABLE = False
