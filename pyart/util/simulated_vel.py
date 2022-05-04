@@ -69,10 +69,12 @@ def simulated_vel_from_profile(
     wind_is_not_nan = np.logical_and(~np.isnan(winds[0]), ~np.isnan(winds[1]))
     no_nans = np.logical_and(height_is_not_nan, wind_is_not_nan)
     height = height[no_nans]
-    winds[0] = winds[0][no_nans]
-    winds[1] = winds[1][no_nans]
+
+    winds_reshape = np.empty((2, len(winds[0][no_nans])), dtype=np.float64)
+    winds_reshape[0] = winds[0][no_nans]
+    winds_reshape[1] = winds[1][no_nans]
     wind_interp = interp1d(
-        height, winds, kind=interp_kind, bounds_error=False)
+        height, winds_reshape, kind=interp_kind, bounds_error=False)
 
     # interpolated wind speeds at all gates altitudes
     gate_winds = wind_interp(gate_altitudes)
