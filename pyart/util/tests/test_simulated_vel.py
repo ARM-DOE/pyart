@@ -6,9 +6,7 @@ import pytest
 
 import pyart
 
-@pytest.mark.skip(
-    reason=("Test does not fail locally, but does when "
-            "pytest is ran on all of Py-ART. Can't find issue."))
+
 def test_simulated_vel():
 
     radar = pyart.testing.make_target_radar()
