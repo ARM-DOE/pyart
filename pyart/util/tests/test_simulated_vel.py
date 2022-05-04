@@ -7,10 +7,8 @@ import pytest
 import pyart
 
 
-def test_simulated_vel():
-
-    radar = pyart.testing.make_target_radar()
-
+radar = pyart.testing.make_target_radar()
+def test_simulated_velocity_from_profile():
     # profile of 10 m/s winds out of the west at all heights
     height = np.arange(0, 1000, 30)
     speed = np.ones_like(height) * 10.
