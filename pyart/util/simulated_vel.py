@@ -6,7 +6,7 @@ Function for creating simulated velocity fields.
 import numpy as np
 from scipy import interpolate
 
-from ..config import get_metadata
+from ..config import get_metadata, get_fillvalue
 
 
 def simulated_vel_from_profile(
@@ -74,7 +74,8 @@ def simulated_vel_from_profile(
     winds_reshape[0] = winds[0][no_nans]
     winds_reshape[1] = winds[1][no_nans]
     wind_interp = interpolate.interp1d(
-        height, winds_reshape, kind=interp_kind, bounds_error=False)
+        height, winds_reshape, kind=interp_kind, bounds_error=False,
+        fill_value=get_fillvalue())
 
     # interpolated wind speeds at all gates altitudes
     gate_winds = wind_interp(gate_altitudes)
