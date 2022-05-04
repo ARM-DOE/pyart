@@ -38,7 +38,7 @@ def simulated_vel_from_profile(
     """
     # parse parameters
     if sim_vel_field is None:
-        sim_vel_field = get_field_name('simulated_velocity')
+        sim_vel_field = 'simulated_velocity'
 
     # radar parameters
     azimuths = np.deg2rad(radar.azimuth['data']).reshape(-1, 1)
