@@ -4,9 +4,9 @@ Function for creating simulated velocity fields.
 """
 
 import numpy as np
-from scipy.interpolate import interp1d
+from scipy import interpolate
 
-from pyart.config import get_metadata
+from ..config import get_metadata
 
 
 def simulated_vel_from_profile(
@@ -73,7 +73,7 @@ def simulated_vel_from_profile(
     winds_reshape = np.empty((2, len(winds[0][no_nans])), dtype=np.float64)
     winds_reshape[0] = winds[0][no_nans]
     winds_reshape[1] = winds[1][no_nans]
-    wind_interp = interp1d(
+    wind_interp = interpolate.interp1d(
         height, winds_reshape, kind=interp_kind, bounds_error=False)
 
     # interpolated wind speeds at all gates altitudes
