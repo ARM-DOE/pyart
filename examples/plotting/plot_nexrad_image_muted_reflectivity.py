@@ -31,6 +31,7 @@ nexrad_file = 's3://noaa-nexrad-level2/2020/02/07/KBGM/KBGM20200207_132642_V06'
 radar = pyart.io.read_nexrad_archive(nexrad_file)
 
 # Mute radar object
+# Regions where rhoHV < 0.97 and reflectivity > 20 will be muted
 radar = pyart.util.image_mute_radar(radar, field='reflectivity', mute_field='cross_correlation_ratio',
                                     mute_threshold=0.97, field_threshold=20)
 
