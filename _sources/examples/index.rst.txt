@@ -414,6 +414,27 @@ Plotting real world radar data with Py-ART.
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="Image muting reduces the visual prominence of the reflectivities within identified melting and ...">
+
+.. only:: html
+
+ .. figure:: /examples/plotting/images/thumb/sphx_glr_plot_nexrad_image_muted_reflectivity_thumb.png
+     :alt: Create an image-muted reflectivity plot
+
+     :ref:`sphx_glr_examples_plotting_plot_nexrad_image_muted_reflectivity.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/plotting/plot_nexrad_image_muted_reflectivity
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="An example that creates a 3 panel plot of a PPI, latitude slice, and longitude slice using xarr...">
 
 .. only:: html
