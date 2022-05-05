@@ -5,11 +5,12 @@ Create an image-muted reflectivity plot
 An example which creates an image-muted PPI plot from a NEXRAD file.
 
 Image muting reduces the visual prominence of the reflectivities within identified
-melting and mixed precipitation features in winter storms. Reflectivities corresponding to
-melting and mixed precipitation features are deemphasized using a gray scale and the regions
+melting and mixed precipitation features in winter storms (i.e. regions with low
+correlation coefficient values). Reflectivities corresponding to melting and mixed
+precipitation features are deemphasized using a gray scale and the regions
 with just snow and just rain are depicted in a corresponding full-color scale.
 The ultimate utility of image muting radar reflectivity is to reduce the misinterpretation
-of regions of melting or mixed precipitation as opposed to heavy snow or heavy rain
+of regions of melting or mixed precipitation as opposed to heavy snow or heavy rain.
 
 """
 
