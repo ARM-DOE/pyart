@@ -53,5 +53,3 @@ display.plot('muted_reflectivity', 0, vmin=5, vmax=45, cmap=muted_cmap)
 display.set_limits((-300,300), (-300,300))
 ax.set_aspect('equal')
 plt.show()
-
-
