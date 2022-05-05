@@ -432,7 +432,7 @@
         <span class="k">if</span> <span class="n">ref_vdata</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">sref</span> <span class="o">=</span> <span class="n">ref_vdata</span><span class="p">[</span><span class="n">sweep_slice</span><span class="p">]</span>
             <span class="n">gfold</span> <span class="o">=</span> <span class="p">(</span><span class="n">sref</span><span class="o">-</span><span class="n">scorr</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">/</span><span class="n">nyquist_interval</span>
-            <span class="n">gfold</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">gfold</span><span class="p">)</span>
+            <span class="n">gfold</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">gfold</span><span class="p">)</span>
 
             <span class="c1"># Anchor specific regions against reference velocity</span>
             <span class="c1"># Do this by constraining cost function due to difference</span>
