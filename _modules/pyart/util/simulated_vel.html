@@ -230,9 +230,9 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">interp1d</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">interpolate</span>
 
-<span class="kn">from</span> <span class="nn">..config</span> <span class="kn">import</span> <span class="n">get_metadata</span><span class="p">,</span> <span class="n">get_field_name</span>
+<span class="kn">from</span> <span class="nn">..config</span> <span class="kn">import</span> <span class="n">get_metadata</span><span class="p">,</span> <span class="n">get_fillvalue</span>
 
 
 <div class="viewcode-block" id="simulated_vel_from_profile"><a class="viewcode-back" href="../../../API/generated/pyart.util.simulated_vel_from_profile.html#pyart.util.simulated_vel_from_profile">[docs]</a><span class="k">def</span> <span class="nf">simulated_vel_from_profile</span><span class="p">(</span>
@@ -264,7 +264,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># parse parameters</span>
     <span class="k">if</span> <span class="n">sim_vel_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">sim_vel_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s1">&#39;simulated_velocity&#39;</span><span class="p">)</span>
+        <span class="n">sim_vel_field</span> <span class="o">=</span> <span class="s1">&#39;simulated_velocity&#39;</span>
 
     <span class="c1"># radar parameters</span>
     <span class="n">azimuths</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
@@ -295,10 +295,13 @@
     <span class="n">wind_is_not_nan</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
     <span class="n">no_nans</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">height_is_not_nan</span><span class="p">,</span> <span class="n">wind_is_not_nan</span><span class="p">)</span>
     <span class="n">height</span> <span class="o">=</span> <span class="n">height</span><span class="p">[</span><span class="n">no_nans</span><span class="p">]</span>
-    <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">no_nans</span><span class="p">]</span>
-    <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">no_nans</span><span class="p">]</span>
-    <span class="n">wind_interp</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span>
-        <span class="n">height</span><span class="p">,</span> <span class="n">winds</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="n">interp_kind</span><span class="p">,</span> <span class="n">bounds_error</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="n">winds_reshape</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">no_nans</span><span class="p">])),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">winds_reshape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">winds</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">no_nans</span><span class="p">]</span>
+    <span class="n">winds_reshape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">winds</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">no_nans</span><span class="p">]</span>
+    <span class="n">wind_interp</span> <span class="o">=</span> <span class="n">interpolate</span><span class="o">.</span><span class="n">interp1d</span><span class="p">(</span>
+        <span class="n">height</span><span class="p">,</span> <span class="n">winds_reshape</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="n">interp_kind</span><span class="p">,</span> <span class="n">bounds_error</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">fill_value</span><span class="o">=</span><span class="n">get_fillvalue</span><span class="p">())</span>
 
     <span class="c1"># interpolated wind speeds at all gates altitudes</span>
     <span class="n">gate_winds</span> <span class="o">=</span> <span class="n">wind_interp</span><span class="p">(</span><span class="n">gate_altitudes</span><span class="p">)</span>
