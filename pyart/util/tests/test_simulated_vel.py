@@ -6,13 +6,12 @@ import pytest
 
 import pyart
 
+
 @pytest.mark.skip(
     reason=("Test does not fail locally, but does when "
             "pytest is ran on all of Py-ART. Can't find issue."))
-def test_simulated_vel():
-
+def test_simulated_velocity_from_profile():
     radar = pyart.testing.make_target_radar()
-
     # profile of 10 m/s winds out of the west at all heights
     height = np.arange(0, 1000, 30)
     speed = np.ones_like(height) * 10.
