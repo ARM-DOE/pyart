@@ -114,7 +114,7 @@ class RadarMapDisplay(RadarDisplay):
             width=None, height=None, lon_0=None, lat_0=None,
             resolution='110m', shapefile=None, shapefile_kwargs=None,
             edges=True, gatefilter=None,
-            filter_transitions=True, embelish=True, raster=False,
+            filter_transitions=True, embellish=True, raster=False,
             ticks=None, ticklabs=None, alpha=None, edgecolors='face', **kwargs):
         """
         Plot a PPI volume sweep onto a geographic map.
@@ -210,7 +210,7 @@ class RadarMapDisplay(RadarDisplay):
             coordinates themselved as the gate edges, resulting in a plot
             in which the last gate in each ray and the entire last ray are not
             not plotted.
-        embelish: bool
+        embellish: bool
             True by default. Set to False to supress drawing of coastlines
             etc.. Use for speedup when specifying shapefiles.
             Note that lat lon labels only work with certain projections.
@@ -303,7 +303,7 @@ class RadarMapDisplay(RadarDisplay):
             pm.set_rasterized(True)
 
         # add embelishments
-        if embelish is True:
+        if embellish is True:
             # Create a feature for States/Admin 1 regions at 1:resolution
             # from Natural Earth
             states_provinces = cartopy.feature.NaturalEarthFeature(

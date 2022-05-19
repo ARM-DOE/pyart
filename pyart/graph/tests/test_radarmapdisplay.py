@@ -41,7 +41,7 @@ def test_radarmapdisplay_cartopy_preexisting_ax(outfile=None):
     fig = plt.figure()
     ax = plt.axes(projection=cartopy.crs.PlateCarree())
     ax.add_image(Stamen('terrain-background'), 6)
-    display.plot_ppi_map('reflectivity_horizontal', 0, ax=ax, embelish=False)
+    display.plot_ppi_map('reflectivity_horizontal', 0, ax=ax, embellish=False)
     if outfile:
         fig.savefig(outfile)
     plt.close()
