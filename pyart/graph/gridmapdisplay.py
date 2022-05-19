@@ -90,7 +90,7 @@ class GridMapDisplay(object):
                   ax=None, fig=None, lat_lines=None,
                   lon_lines=None, projection=None,
                   embellish=True, ticks=None, ticklabs=None,
-            w=False, **kwargs):
+                  imshow=False, **kwargs):
         """
         Plot the grid using xarray and cartopy.
 
