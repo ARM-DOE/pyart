@@ -315,7 +315,7 @@
                   <span class="n">colorbar_label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">colorbar_orient</span><span class="o">=</span><span class="s1">&#39;vertical&#39;</span><span class="p">,</span>
                   <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lat_lines</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                   <span class="n">lon_lines</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                  <span class="n">embelish</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ticks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ticklabs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                  <span class="n">embellish</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ticks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ticklabs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                   <span class="n">imshow</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plot the grid using xarray and cartopy.</span>
@@ -377,7 +377,7 @@
 <span class="sd">        projection : cartopy.crs class</span>
 <span class="sd">            Map projection supported by cartopy. Used for all subsequent calls</span>
 <span class="sd">            to the GeoAxes object generated. Defaults to PlateCarree.</span>
-<span class="sd">        emblish : bool</span>
+<span class="sd">        embellish : bool</span>
 <span class="sd">            True by default. Set to False to supress drawinf of coastlines</span>
 <span class="sd">            etc... Use for speedup when specifying shapefiles.</span>
 <span class="sd">            Note that lat lon labels only work with certain projections.</span>
@@ -459,7 +459,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">mappables</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pm</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">embelish</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">embellish</span><span class="p">:</span>
             <span class="c1"># Create a feature for States/Admin 1 regions at 1:50m</span>
             <span class="c1"># from Natural Earth</span>
             <span class="n">states</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cartopy_states</span><span class="p">()</span>

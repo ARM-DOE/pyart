@@ -330,7 +330,7 @@
             <span class="n">min_lon</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_lon</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">min_lat</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_lat</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">width</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lon_0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lat_0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">resolution</span><span class="o">=</span><span class="s1">&#39;h&#39;</span><span class="p">,</span> <span class="n">shapefile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">edges</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-            <span class="n">basemap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filter_transitions</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">embelish</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">basemap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filter_transitions</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">embellish</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">ticks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ticklabs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">raster</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
             <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;face&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -434,7 +434,7 @@
 <span class="sd">            coordinates themselved as the gate edges, resulting in a plot</span>
 <span class="sd">            in which the last gate in each ray and the entire last ray are not</span>
 <span class="sd">            not plotted.</span>
-<span class="sd">        embelish: bool</span>
+<span class="sd">        embellish: bool</span>
 <span class="sd">            True by default. Set to false to supress drawing of coastlines</span>
 <span class="sd">            etc.. Use for speedup when specifying shapefiles.</span>
 <span class="sd">        basemap: Basemap instance</span>
@@ -506,7 +506,7 @@
                 <span class="s1">&#39;The cylindrical equidistant projection is not supported&#39;</span><span class="p">)</span>
 
         <span class="c1"># add embelishments</span>
-        <span class="k">if</span> <span class="n">embelish</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">embellish</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
             <span class="n">basemap</span><span class="o">.</span><span class="n">drawcoastlines</span><span class="p">(</span><span class="n">linewidth</span><span class="o">=</span><span class="mf">1.25</span><span class="p">)</span>
             <span class="n">basemap</span><span class="o">.</span><span class="n">drawstates</span><span class="p">()</span>
             <span class="n">basemap</span><span class="o">.</span><span class="n">drawparallels</span><span class="p">(</span>
