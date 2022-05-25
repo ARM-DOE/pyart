@@ -265,17 +265,24 @@
         <span class="k">return</span> <span class="n">filename</span>
 
     <span class="c1"># look for compressed data by examining the first few bytes</span>
-    <span class="n">fh</span> <span class="o">=</span> <span class="n">fsspec</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;rb&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">storage_options</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">()</span>
+    <span class="n">fh</span> <span class="o">=</span> <span class="n">fsspec</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span>
+                     <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;rb&#39;</span><span class="p">,</span>
+                     <span class="n">compression</span><span class="o">=</span><span class="s2">&quot;infer&quot;</span><span class="p">,</span>
+                     <span class="o">**</span><span class="n">storage_options</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">()</span>
     <span class="n">magic</span> <span class="o">=</span> <span class="n">fh</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
     <span class="n">fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
+    <span class="c1"># If the data is still compressed, use gunzip/bz2 to uncompress the data</span>
     <span class="k">if</span> <span class="n">magic</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;</span><span class="se">\x1f\x8b</span><span class="s1">&#39;</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">gzip</span><span class="o">.</span><span class="n">GzipFile</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">magic</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;BZh&#39;</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">bz2</span><span class="o">.</span><span class="n">BZ2File</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">fsspec</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;rb&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">storage_options</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">()</span></div>
+    <span class="k">return</span> <span class="n">fsspec</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span>
+                       <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;rb&#39;</span><span class="p">,</span>
+                       <span class="n">compression</span><span class="o">=</span><span class="s2">&quot;infer&quot;</span><span class="p">,</span>
+                       <span class="o">**</span><span class="n">storage_options</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">()</span></div>
 
 
 <span class="k">def</span> <span class="nf">stringarray_to_chararray</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">numchars</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
