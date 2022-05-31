@@ -1,5 +1,70 @@
 # Changelog
 
+## PyART v1.12.2
+
+([full changelog](https://github.com/ARM-DOE/pyart/compare/v1.12.0...v1.12.2))
+
+### Enhancements made
+
+- ENH: Remove versioneer and add scm [#1136](https://github.com/ARM-DOE/pyart/pull/1136) ([@mgrover1](https://github.com/mgrover1))
+- ENH: Allow pypi to run by triggering manually [#1126](https://github.com/ARM-DOE/pyart/pull/1126) ([@mgrover1](https://github.com/mgrover1))
+- ENH: Add a pypi release action [#1118](https://github.com/ARM-DOE/pyart/pull/1118) ([@mgrover1](https://github.com/mgrover1))
+- ENH: Use fsspec for io in pyart.io.common to read both local and remote files [#1115](https://github.com/ARM-DOE/pyart/pull/1115) ([@mgrover1](https://github.com/mgrover1))
+- ENH: Add ability to pass kwargs in for plots and change default [#1111](https://github.com/ARM-DOE/pyart/pull/1111) ([@mgrover1](https://github.com/mgrover1))
+
+### Bugs fixed
+
+- FIX: remove macos arm builds [#1147](https://github.com/ARM-DOE/pyart/pull/1147) ([@mgrover1](https://github.com/mgrover1))
+- FIX: Add pruning back into workflows [#1143](https://github.com/ARM-DOE/pyart/pull/1143) ([@mgrover1](https://github.com/mgrover1))
+- FIX: Use macOS build for pypi instead of linux [#1141](https://github.com/ARM-DOE/pyart/pull/1141) ([@mgrover1](https://github.com/mgrover1))
+- FIX: Update requirements for many-linux build [#1140](https://github.com/ARM-DOE/pyart/pull/1140) ([@mgrover1](https://github.com/mgrover1))
+- FIX: Use many linux build [#1139](https://github.com/ARM-DOE/pyart/pull/1139) ([@mgrover1](https://github.com/mgrover1))
+- FIX: Only apply fix to the build wheel [#1137](https://github.com/ARM-DOE/pyart/pull/1137) ([@mgrover1](https://github.com/mgrover1))
+- FIX: make sure release uploaded to pypi [#1131](https://github.com/ARM-DOE/pyart/pull/1131) ([@mgrover1](https://github.com/mgrover1))
+- FIX: Make sure versions match for pypi [#1130](https://github.com/ARM-DOE/pyart/pull/1130) ([@mgrover1](https://github.com/mgrover1))
+- FIX: Remove requirement for action to be push [#1129](https://github.com/ARM-DOE/pyart/pull/1129) ([@mgrover1](https://github.com/mgrover1))
+- FIX: fix name of pyart in the pypi verification [#1128](https://github.com/ARM-DOE/pyart/pull/1128) ([@mgrover1](https://github.com/mgrover1))
+- FIX: Add back in the python -m to fix the build [#1127](https://github.com/ARM-DOE/pyart/pull/1127) ([@mgrover1](https://github.com/mgrover1))
+- FIX: fix the pypi build [#1125](https://github.com/ARM-DOE/pyart/pull/1125) ([@mgrover1](https://github.com/mgrover1))
+- FIX: Make sure rsl is installed using python -m [#1124](https://github.com/ARM-DOE/pyart/pull/1124) ([@mgrover1](https://github.com/mgrover1))
+- FIX: Make sure trmm rsl path is specified [#1123](https://github.com/ARM-DOE/pyart/pull/1123) ([@mgrover1](https://github.com/mgrover1))
+- FIX: Add build package to pypi release [#1120](https://github.com/ARM-DOE/pyart/pull/1120) ([@mgrover1](https://github.com/mgrover1))
+- FIX: Update pypi release to only run upon releases [#1119](https://github.com/ARM-DOE/pyart/pull/1119) ([@mgrover1](https://github.com/mgrover1))
+- FIX: Fix IO for NEXRAD Level 3 instantaneous precipitation rate (DPR) [#1116](https://github.com/ARM-DOE/pyart/pull/1116) ([@mgrover1](https://github.com/mgrover1))
+- FIX: Fix typo and back in postcard [#1104](https://github.com/ARM-DOE/pyart/pull/1104) ([@mgrover1](https://github.com/mgrover1))
+- FIX: Fix the missing images in the blog post [#1103](https://github.com/ARM-DOE/pyart/pull/1103) ([@mgrover1](https://github.com/mgrover1))
+
+### Maintenance and upkeep improvements
+
+- MNT: Changing dependency check to Cartopy. [#1148](https://github.com/ARM-DOE/pyart/pull/1148) ([@zssherman](https://github.com/zssherman))
+- MNT: Utilize conda for build due to trmm_rsl. [#1122](https://github.com/ARM-DOE/pyart/pull/1122) ([@zssherman](https://github.com/zssherman))
+- MNT: Cartopy was not optional in the gridmapdisplay unit tests. [#1100](https://github.com/ARM-DOE/pyart/pull/1100) ([@zssherman](https://github.com/zssherman))
+- MNT: Adding pytz as optional dependency. [#1099](https://github.com/ARM-DOE/pyart/pull/1099) ([@zssherman](https://github.com/zssherman))
+
+### Documentation improvements
+
+- DOC: Quick change of a few Jupyter-Notebook cell types  [#1146](https://github.com/ARM-DOE/pyart/pull/1146) ([@jrobrien91](https://github.com/jrobrien91))
+- DOC: Blog post on contributing a pull request  [#1145](https://github.com/ARM-DOE/pyart/pull/1145) ([@jrobrien91](https://github.com/jrobrien91))
+- DOC: Update to readme and contributors guide [#1106](https://github.com/ARM-DOE/pyart/pull/1106) ([@zssherman](https://github.com/zssherman))
+
+### Other merged PRs
+
+- Add Xarray to requirements [#1133](https://github.com/ARM-DOE/pyart/pull/1133) ([@mgrover1](https://github.com/mgrover1))
+- ADD: Add AWS NEXRAD example in new IO section [#1117](https://github.com/ARM-DOE/pyart/pull/1117) ([@mgrover1](https://github.com/mgrover1))
+- ADD: Utility to subset a radar volume for the column above a location [#1113](https://github.com/ARM-DOE/pyart/pull/1113) ([@jrobrien91](https://github.com/jrobrien91))
+- DEL: Deleting submodule setup.py. [#1110](https://github.com/ARM-DOE/pyart/pull/1110) ([@zssherman](https://github.com/zssherman))
+- DEL: Deleting setup.py in each submodule. Was forgotten in setuptools PR. [#1109](https://github.com/ARM-DOE/pyart/pull/1109) ([@zssherman](https://github.com/zssherman))
+- ADD: add verbose flag to qvp code [#1108](https://github.com/ARM-DOE/pyart/pull/1108) ([@dopplerchase](https://github.com/dopplerchase))
+- ADD: Add more tests for test_echo_class [#1107](https://github.com/ARM-DOE/pyart/pull/1107) ([@mgrover1](https://github.com/mgrover1))
+- ADD: Add NEXRAD Blog Post [#1101](https://github.com/ARM-DOE/pyart/pull/1101) ([@mgrover1](https://github.com/mgrover1))
+- ADD: Add changelog section [#1098](https://github.com/ARM-DOE/pyart/pull/1098) ([@mgrover1](https://github.com/mgrover1))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/ARM-DOE/pyart/graphs/contributors?from=2022-04-06&to=2022-05-02&type=c))
+
+[@dopplerchase](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Adopplerchase+updated%3A2022-04-06..2022-05-02&type=Issues) | [@dopplershift](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Adopplershift+updated%3A2022-04-06..2022-05-02&type=Issues) | [@jrobrien91](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Ajrobrien91+updated%3A2022-04-06..2022-05-02&type=Issues) | [@mgrover1](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Amgrover1+updated%3A2022-04-06..2022-05-02&type=Issues) | [@zssherman](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Azssherman+updated%3A2022-04-06..2022-05-02&type=Issues)
+
 ## PyART v1.12.0
 
 ([full changelog](https://github.com/ARM-DOE/pyart/compare/v1.11.8...v1.12.0))
