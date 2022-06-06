@@ -12,7 +12,7 @@ dependencies:
   - wradlib
   - cartopy
   - cvxopt
-  - xarray
+  - xarray>=0.21.1
   - pytest-cov
   - coveralls
   - flake8
