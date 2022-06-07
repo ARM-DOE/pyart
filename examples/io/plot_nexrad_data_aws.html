@@ -21,7 +21,6 @@
     href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
@@ -445,7 +444,7 @@ on March 22, 2022, at 1201:25 UTC. This means our path would look like:</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[&#39;reflectivity&#39;, &#39;differential_phase&#39;, &#39;differential_reflectivity&#39;, &#39;velocity&#39;, &#39;spectrum_width&#39;, &#39;cross_correlation_ratio&#39;, &#39;clutter_filter_power_removed&#39;]
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[&#39;reflectivity&#39;, &#39;spectrum_width&#39;, &#39;clutter_filter_power_removed&#39;, &#39;cross_correlation_ratio&#39;, &#39;differential_phase&#39;, &#39;differential_reflectivity&#39;, &#39;velocity&#39;]
 </pre></div>
 </div>
 <p>Let’s plot the reflectivity/velocity fields as a first step to investigating our dataset.</p>
@@ -475,13 +474,13 @@ on March 22, 2022, at 1201:25 UTC. This means our path would look like:</p>
 </pre></div>
 </div>
 <img src="../../_images/sphx_glr_plot_nexrad_data_aws_001.png" srcset="../../_images/sphx_glr_plot_nexrad_data_aws_001.png" alt="KHGX 0.5 Deg. 2022-03-22T12:01:25.512000Z  Equivalent reflectivity factor, KHGX 0.5 Deg. 2022-03-22T12:01:43.859000Z  Radial velocity of scatterers away from instrument" class = "sphx-glr-single-img"/><p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/usr/share/miniconda3/envs/pyart-docs/lib/python3.10/site-packages/cartopy/mpl/gridliner.py:451: UserWarning: The .xlabels_top attribute is deprecated. Please use .top_labels to toggle visibility instead.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/usr/share/miniconda3/envs/pyart-docs/lib/python3.9/site-packages/cartopy/mpl/gridliner.py:451: UserWarning: The .xlabels_top attribute is deprecated. Please use .top_labels to toggle visibility instead.
   warnings.warn(&#39;The .xlabels_top attribute is deprecated. Please &#39;
-/usr/share/miniconda3/envs/pyart-docs/lib/python3.10/site-packages/cartopy/mpl/gridliner.py:487: UserWarning: The .ylabels_right attribute is deprecated. Please use .right_labels to toggle visibility instead.
+/usr/share/miniconda3/envs/pyart-docs/lib/python3.9/site-packages/cartopy/mpl/gridliner.py:487: UserWarning: The .ylabels_right attribute is deprecated. Please use .right_labels to toggle visibility instead.
   warnings.warn(&#39;The .ylabels_right attribute is deprecated. Please &#39;
-/usr/share/miniconda3/envs/pyart-docs/lib/python3.10/site-packages/cartopy/mpl/gridliner.py:451: UserWarning: The .xlabels_top attribute is deprecated. Please use .top_labels to toggle visibility instead.
+/usr/share/miniconda3/envs/pyart-docs/lib/python3.9/site-packages/cartopy/mpl/gridliner.py:451: UserWarning: The .xlabels_top attribute is deprecated. Please use .top_labels to toggle visibility instead.
   warnings.warn(&#39;The .xlabels_top attribute is deprecated. Please &#39;
-/usr/share/miniconda3/envs/pyart-docs/lib/python3.10/site-packages/cartopy/mpl/gridliner.py:487: UserWarning: The .ylabels_right attribute is deprecated. Please use .right_labels to toggle visibility instead.
+/usr/share/miniconda3/envs/pyart-docs/lib/python3.9/site-packages/cartopy/mpl/gridliner.py:487: UserWarning: The .ylabels_right attribute is deprecated. Please use .right_labels to toggle visibility instead.
   warnings.warn(&#39;The .ylabels_right attribute is deprecated. Please &#39;
 </pre></div>
 </div>
@@ -552,17 +551,17 @@ using the following naming convention:</p>
 </pre></div>
 </div>
 <img src="../../_images/sphx_glr_plot_nexrad_data_aws_002.png" srcset="../../_images/sphx_glr_plot_nexrad_data_aws_002.png" alt="0.5 Deg. 2022-03-22T12:01:25Z  Equivalent reflectivity factor,  0.5 Deg. 2022-03-22T12:01:25Z  Radial velocity of scatterers away from instrument" class = "sphx-glr-single-img"/><p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/usr/share/miniconda3/envs/pyart-docs/lib/python3.10/site-packages/cartopy/mpl/gridliner.py:451: UserWarning: The .xlabels_top attribute is deprecated. Please use .top_labels to toggle visibility instead.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/usr/share/miniconda3/envs/pyart-docs/lib/python3.9/site-packages/cartopy/mpl/gridliner.py:451: UserWarning: The .xlabels_top attribute is deprecated. Please use .top_labels to toggle visibility instead.
   warnings.warn(&#39;The .xlabels_top attribute is deprecated. Please &#39;
-/usr/share/miniconda3/envs/pyart-docs/lib/python3.10/site-packages/cartopy/mpl/gridliner.py:487: UserWarning: The .ylabels_right attribute is deprecated. Please use .right_labels to toggle visibility instead.
+/usr/share/miniconda3/envs/pyart-docs/lib/python3.9/site-packages/cartopy/mpl/gridliner.py:487: UserWarning: The .ylabels_right attribute is deprecated. Please use .right_labels to toggle visibility instead.
   warnings.warn(&#39;The .ylabels_right attribute is deprecated. Please &#39;
-/usr/share/miniconda3/envs/pyart-docs/lib/python3.10/site-packages/cartopy/mpl/gridliner.py:451: UserWarning: The .xlabels_top attribute is deprecated. Please use .top_labels to toggle visibility instead.
+/usr/share/miniconda3/envs/pyart-docs/lib/python3.9/site-packages/cartopy/mpl/gridliner.py:451: UserWarning: The .xlabels_top attribute is deprecated. Please use .top_labels to toggle visibility instead.
   warnings.warn(&#39;The .xlabels_top attribute is deprecated. Please &#39;
-/usr/share/miniconda3/envs/pyart-docs/lib/python3.10/site-packages/cartopy/mpl/gridliner.py:487: UserWarning: The .ylabels_right attribute is deprecated. Please use .right_labels to toggle visibility instead.
+/usr/share/miniconda3/envs/pyart-docs/lib/python3.9/site-packages/cartopy/mpl/gridliner.py:487: UserWarning: The .ylabels_right attribute is deprecated. Please use .right_labels to toggle visibility instead.
   warnings.warn(&#39;The .ylabels_right attribute is deprecated. Please &#39;
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  26.709 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  29.003 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-io-plot-nexrad-data-aws-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/6a0ce1f5a0ee4d253981656149c8e569/plot_nexrad_data_aws.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_nexrad_data_aws.py</span></code></a></p>
