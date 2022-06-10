@@ -39,19 +39,27 @@ def antenna_to_cartesian(ranges, azimuths, elevations):
     The calculation for Cartesian coordinate is adapted from equations
     2.28(b) and 2.28(c) of Doviak and Zrnic [1]_ assuming a
     standard atmosphere (4/3 Earth's radius model).
+
     .. math::
+
         z = \\sqrt{r^2+R^2+2*r*R*sin(\\theta_e)} - R
+
         s = R * arcsin(\\frac{r*cos(\\theta_e)}{R+z})
+
         x = s * sin(\\theta_a)
+
         y = s * cos(\\theta_a)
+
     Where r is the distance from the radar to the center of the gate,
     :math:`\\theta_a` is the azimuth angle, :math:`\\theta_e` is the
     elevation angle, s is the arc length, and R is the effective radius
     of the earth, taken to be 4/3 the mean radius of earth (6371 km).
+
     References
     ----------
     .. [1] Doviak and Zrnic, Doppler Radar and Weather Observations, Second
         Edition, 1993, p. 21.
+
     """
     theta_e = np.deg2rad(elevations) # elevation angle in radians.
     theta_a = np.deg2rad(azimuths) # azimuth angle in radians.
