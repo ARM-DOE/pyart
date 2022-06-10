@@ -259,22 +259,16 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># determine which rays from the ppi radar make up the pseudo RHI</span>
-    
-    <span class="n">prhi_rays</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">target_azimuths</span><span class="p">),</span> <span class="n">radar</span><span class="o">.</span><span class="n">nsweeps</span><span class="p">))</span>
-    <span class="n">valid_azimuths</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">target_azimuths</span><span class="p">),</span> <span class="n">radar</span><span class="o">.</span><span class="n">nsweeps</span><span class="p">))</span>
-    <span class="n">valid_elevations</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">target_azimuths</span><span class="p">),</span> <span class="n">radar</span><span class="o">.</span><span class="n">nsweeps</span><span class="p">))</span>
-    <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">prhi_rays</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">valid_azimuths</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">target_azimuth</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">target_azimuths</span><span class="p">):</span>
-        <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">sweep_slice</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">iter_slice</span><span class="p">():</span>
             <span class="n">sweep_azimuths</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">sweep_slice</span><span class="p">]</span>
-            <span class="n">sweep_elevations</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">sweep_slice</span><span class="p">]</span>
             <span class="n">d_az</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">sweep_azimuths</span> <span class="o">-</span> <span class="n">target_azimuth</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">az_tol</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">ray_number</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">d_az</span><span class="p">)</span>
-                <span class="n">prhi_rays</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">ray_number</span> <span class="o">+</span> <span class="n">sweep_slice</span><span class="o">.</span><span class="n">start</span>
-                <span class="n">valid_azimuths</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">target_azimuth</span>
-                <span class="n">valid_elevations</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">sweep_elevations</span><span class="p">[</span><span class="n">ray_number</span><span class="p">]</span>
+                <span class="n">prhi_rays</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ray_number</span> <span class="o">+</span> <span class="n">sweep_slice</span><span class="o">.</span><span class="n">start</span><span class="p">)</span>
+                <span class="n">valid_azimuths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">target_azimuth</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">d_az_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">d_az</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">d_az_min</span> <span class="o">&gt;</span> <span class="n">az_tol</span><span class="p">:</span>
@@ -287,20 +281,14 @@
                     <span class="n">ray_number</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">d_az</span><span class="p">)</span>
                     <span class="n">prhi_rays</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ray_number</span> <span class="o">+</span> <span class="n">sweep_slice</span><span class="o">.</span><span class="n">start</span><span class="p">)</span>
                     <span class="n">valid_azimuths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">target_azimuth</span><span class="p">)</span>
-                    <span class="n">valid_elevations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sweep_elevations</span><span class="p">[</span><span class="n">ray_number</span><span class="p">])</span>
-                    
-            <span class="n">j</span><span class="o">+=</span><span class="mi">1</span>
-        <span class="n">i</span><span class="o">+=</span><span class="mi">1</span>
 
-    <span class="n">rhi_nsweeps</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">valid_azimuths</span><span class="p">))</span>
+    <span class="n">unique_azimuths</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">valid_azimuths</span><span class="p">)</span>
+    <span class="n">rhi_nsweeps</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">unique_azimuths</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">rhi_nsweeps</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;No azimuth found within tolerance&#39;</span><span class="p">)</span>
-                                                     
-    <span class="n">sorted_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">valid_azimuths</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">sorted_prhi_rays</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">take_along_axis</span><span class="p">(</span><span class="n">prhi_rays</span><span class="p">,</span> <span class="n">sorted_index</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">))</span>
 
     <span class="n">radar_rhi</span> <span class="o">=</span> <span class="n">_construct_xsect_radar</span><span class="p">(</span>
-        <span class="n">radar</span><span class="p">,</span> <span class="s1">&#39;rhi&#39;</span><span class="p">,</span> <span class="n">sorted_prhi_rays</span><span class="p">,</span> <span class="n">rhi_nsweeps</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">valid_azimuths</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)))</span>
+        <span class="n">radar</span><span class="p">,</span> <span class="s1">&#39;rhi&#39;</span><span class="p">,</span> <span class="n">prhi_rays</span><span class="p">,</span> <span class="n">rhi_nsweeps</span><span class="p">,</span> <span class="n">unique_azimuths</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">radar_rhi</span></div>
 

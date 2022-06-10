@@ -5,8 +5,8 @@
 
 Computation times
 =================
-**00:26.698** total execution time for **examples_io** files:
+**00:27.425** total execution time for **examples_io** files:
 
 +-----------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_io_plot_nexrad_data_aws.py` (``plot_nexrad_data_aws.py``) | 00:26.698 | 0.0 MB |
+| :ref:`sphx_glr_examples_io_plot_nexrad_data_aws.py` (``plot_nexrad_data_aws.py``) | 00:27.425 | 0.0 MB |
 +-----------------------------------------------------------------------------------+-----------+--------+
