@@ -34,22 +34,16 @@ def cross_section_ppi(radar, target_azimuths, az_tol=None):
 
     """
     # determine which rays from the ppi radar make up the pseudo RHI
-    
-    prhi_rays = np.zeros((len(target_azimuths), radar.nsweeps))
-    valid_azimuths = np.zeros((len(target_azimuths), radar.nsweeps))
-    valid_elevations = np.zeros((len(target_azimuths), radar.nsweeps))
-    i = 0
+    prhi_rays = []
+    valid_azimuths = []
     for target_azimuth in sorted(target_azimuths):
-        j = 0
         for sweep_slice in radar.iter_slice():
             sweep_azimuths = radar.azimuth['data'][sweep_slice]
-            sweep_elevations = radar.azimuth["data"][sweep_slice]
             d_az = np.abs(sweep_azimuths - target_azimuth)
             if az_tol is None:
                 ray_number = np.argmin(d_az)
-                prhi_rays[i, j] = ray_number + sweep_slice.start
-                valid_azimuths[i, j] = target_azimuth
-                valid_elevations[i, j] = sweep_elevations[ray_number]
+                prhi_rays.append(ray_number + sweep_slice.start)
+                valid_azimuths.append(target_azimuth)
             else:
                 d_az_min = np.min(d_az)
                 if d_az_min > az_tol:
@@ -62,20 +56,14 @@ def cross_section_ppi(radar, target_azimuths, az_tol=None):
                     ray_number = np.argmin(d_az)
                     prhi_rays.append(ray_number + sweep_slice.start)
                     valid_azimuths.append(target_azimuth)
-                    valid_elevations.append(sweep_elevations[ray_number])
-                    
-            j+=1
-        i+=1
 
-    rhi_nsweeps = len(np.unique(valid_azimuths))
+    unique_azimuths = np.unique(valid_azimuths)
+    rhi_nsweeps = len(unique_azimuths)
     if rhi_nsweeps == 0:
         raise ValueError('No azimuth found within tolerance')
-                                                     
-    sorted_index = np.argsort(valid_azimuths, axis=1)
-    sorted_prhi_rays = list(np.ravel(np.take_along_axis(prhi_rays, sorted_index, axis=1)).astype(int))
 
     radar_rhi = _construct_xsect_radar(
-        radar, 'rhi', sorted_prhi_rays, rhi_nsweeps, list(np.unique(np.ravel(valid_azimuths)).astype(int)))
+        radar, 'rhi', prhi_rays, rhi_nsweeps, unique_azimuths)
 
     return radar_rhi
 
