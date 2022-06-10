@@ -22,6 +22,7 @@ PI = np.pi
 def antenna_to_cartesian(ranges, azimuths, elevations):
     """
     Return Cartesian coordinates from antenna coordinates.
+
     Parameters
     ----------
     ranges : array
@@ -30,10 +31,12 @@ def antenna_to_cartesian(ranges, azimuths, elevations):
         Azimuth angle of the radar in degrees.
     elevations : array
         Elevation angle of the radar in degrees.
+
     Returns
     -------
     x, y, z : array
         Cartesian coordinates in meters from the radar.
+
     Notes
     -----
     The calculation for Cartesian coordinate is adapted from equations
