@@ -289,8 +289,8 @@
 <span class="sd">        Edition, 1993, p. 21.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">theta_e</span> <span class="o">=</span> <span class="n">elevations</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">180.0</span>    <span class="c1"># elevation angle in radians.</span>
-    <span class="n">theta_a</span> <span class="o">=</span> <span class="n">azimuths</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">180.0</span>      <span class="c1"># azimuth angle in radians.</span>
+    <span class="n">theta_e</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">elevations</span><span class="p">)</span> <span class="c1"># elevation angle in radians.</span>
+    <span class="n">theta_a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">azimuths</span><span class="p">)</span> <span class="c1"># azimuth angle in radians.</span>
     <span class="n">R</span> <span class="o">=</span> <span class="mf">6371.0</span> <span class="o">*</span> <span class="mf">1000.0</span> <span class="o">*</span> <span class="mf">4.0</span> <span class="o">/</span> <span class="mf">3.0</span>     <span class="c1"># effective radius of earth in meters.</span>
     <span class="n">r</span> <span class="o">=</span> <span class="n">ranges</span> <span class="o">*</span> <span class="mf">1000.0</span>                 <span class="c1"># distances to gates in meters.</span>
 
