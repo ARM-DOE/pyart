@@ -64,8 +64,8 @@ def antenna_to_cartesian(ranges, azimuths, elevations):
         Edition, 1993, p. 21.
 
     """
-    theta_e = elevations * np.pi / 180.0    # elevation angle in radians.
-    theta_a = azimuths * np.pi / 180.0      # azimuth angle in radians.
+    theta_e = np.deg2rad(elevations) # elevation angle in radians.
+    theta_a = np.deg2rad(azimuths) # azimuth angle in radians.
     R = 6371.0 * 1000.0 * 4.0 / 3.0     # effective radius of earth in meters.
     r = ranges * 1000.0                 # distances to gates in meters.
 

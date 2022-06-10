@@ -27,7 +27,7 @@ dependencies:
   - s3fs
   - pip
   - pip:
-      - pydata-sphinx-theme
+      - pydata-sphinx-theme<0.9.0
       - sphinx_gallery
       - sphinx-copybutton
       - myst_nb
