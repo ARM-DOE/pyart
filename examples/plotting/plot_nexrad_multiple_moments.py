@@ -23,7 +23,7 @@ fig = plt.figure(figsize=(10, 10))
 
 ax = fig.add_subplot(221)
 display.plot('velocity', 1, ax=ax, title='Doppler Velocity',
-             colorbar_label='',
+             colorbar_label='', vmin=-32.0, vmax=32.0,
              axislabels=('', 'North South distance from radar (km)'))
 display.set_limits((-300, 300), (-300, 300), ax=ax)
 
