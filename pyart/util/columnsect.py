@@ -229,7 +229,7 @@ def get_field_location(radar, latitude, longitude):
 
     # Create a xarray DataSet from the DataArrays
     column = xr.merge(ds_container)
-    # Add the height as an additional coordinate
+    # Add the time as an additional coordinate
     column = column.assign_coords(coords=dict(time=combined_time))
     if len(radar.time['units'].split(' ')) > 3:
         column.attrs['scan_start_time'] = base_time
@@ -239,7 +239,7 @@ def get_field_location(radar, latitude, longitude):
     column.attrs['azimuth'] = (str(np.around(azim, 3)) + ' degrees')
     column.attrs['latitude'] = (str(latitude) + ' degrees')
     column.attrs['longitude'] = (str(longitude) + ' degrees')
-    return column, ray
+    return column
 
 
 def get_column_rays(radar, azimuth):
