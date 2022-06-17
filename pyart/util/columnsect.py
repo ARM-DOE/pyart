@@ -6,6 +6,7 @@ given position in latitude, longitude
 
 import numpy as np
 import xarray as xr
+import pandas as pd
 
 from ..core.transforms import antenna_vectors_to_cartesian
 
@@ -197,6 +198,19 @@ def get_field_location(radar, latitude, longitude):
                                    ['data'][ray[i], tar_gate])
         zgate.append(rhi_z[i, tar_gate])
 
+    # Determine the time at the center of each ray within the column
+    # Define the start of the radar volume as a numpy datetime object for xr
+    base_time = pd.to_datetime(radar.time['units'].split(' ')[-1].strip('Z'),
+                               format='%Y-%m-%dT%H:%M:%S').to_numpy()
+    # Convert Py-ART radar object time (time since volume start) to time delta
+    # Add to base time to have sequential time within the xr Dataset
+    # for easier future merging/work
+    combined_time = []
+    for i in range(len(ray)):
+        delta = pd.to_timedelta(radar.time['data'][ray[i]], unit='s')
+        total_time = base_time + delta
+        combined_time.append(total_time.to_numpy())
+
     # Create a blank list to hold the xarray DataArrays
     ds_container = []
     da_meta = ['units', 'standard_name', 'long_name', 'valid_max',
@@ -204,7 +218,8 @@ def get_field_location(radar, latitude, longitude):
     # Convert the moment dictionary to xarray DataArray.
     # Apply radar object meta data to DataArray attribute
     for key in moment:
-        da = xr.DataArray(moment[key], coords=[zgate],
+        da = xr.DataArray(moment[key],
+                          coords=dict(height=zgate),
                           name=key, dims=['height'])
         for tag in da_meta:
             if tag in radar.fields[key]:
@@ -214,17 +229,16 @@ def get_field_location(radar, latitude, longitude):
 
     # Create a xarray DataSet from the DataArrays
     column = xr.merge(ds_container)
+    # Add the time as an additional coordinate
+    column = column.assign_coords(coords=dict(time=combined_time))
     if len(radar.time['units'].split(' ')) > 3:
-        column.attrs['date'] = radar.time['units'].split(' ')[2]
-        column.attrs['time'] = radar.time['units'].split(' ')[3]
+        column.attrs['scan_start_time'] = base_time
     else:
-        column.attrs['date'] = radar.time['units'].split(' ')[2].split('T')[0]
-        column.attrs['time'] = radar.time['units'].split(' ')[2].split('T')[-1]
+        column.attrs['scan_start_time'] = base_time
     column.attrs['distance'] = (str(np.around(dis / 1000., 3)) + ' km')
     column.attrs['azimuth'] = (str(np.around(azim, 3)) + ' degrees')
     column.attrs['latitude'] = (str(latitude) + ' degrees')
     column.attrs['longitude'] = (str(longitude) + ' degrees')
-
     return column
 
 
