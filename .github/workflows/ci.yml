@@ -53,6 +53,8 @@ jobs:
            git fetch --prune --unshallow
 
       - name: Install PyART
+        env:
+          RSL_PATH: ${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-3
         run: |
           python -m pip install -e . --no-deps --force-reinstall
 
