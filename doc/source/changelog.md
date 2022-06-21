@@ -4,10 +4,6 @@
 
 ([full changelog](https://github.com/ARM-DOE/pyart/compare/v1.12.2...7dc5d6b8deff4a2e42fd567588be65a88af07127))
 
-### Enhancements made
-
-- ENH: Addition of Time as a Coordinate within extracted column output [#1176](https://github.com/ARM-DOE/pyart/pull/1176) ([@jrobrien91](https://github.com/jrobrien91))
-
 ### Bugs fixed
 
 - FIX: Fix sorting issue with elevations and azimuths [#1171](https://github.com/ARM-DOE/pyart/pull/1171) ([@mgrover1](https://github.com/mgrover1))
