@@ -50,7 +50,7 @@ jobs:
           if [ '$RUNNER_OS' == 'Windows' ]
           then
             echo 'Trmm will not be installed for Windows'
-          elif [ '$RUNNER_OS' == 'ubuntu' ]
+          elif [ '$RUNNER_OS' == 'Linux' ]
           then
             mamba install -c conda-forge trmm_rsl
             export ${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-3
