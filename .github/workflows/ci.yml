@@ -53,11 +53,11 @@ jobs:
           elif [ '$RUNNER_OS' == 'Linux' ]
           then
             mamba install -c conda-forge trmm_rsl
-            export ${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-3
+            export RSL_PATH=$CONDA/pkgs/trmm_rsl-1.49-3
           elif [ '$RUNNER_OS' == 'macOS' ]
           then
             mamba install -c conda-forge trmm_rsl
-            export ${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-3
+            export RSL_PATH=$CONDA/pkgs/trmm_rsl-1.49-3
           fi
           echo "$RSL_PATH"
           
