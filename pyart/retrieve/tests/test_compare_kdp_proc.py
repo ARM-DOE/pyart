@@ -147,7 +147,6 @@ def compare_kdp_estimation_methods():
     plt.subplot(2, 1, 1)
     plt.grid(True)
     plt.title('Kdp estimation')
-    plt.hold(True)
     ranges = prof_psidp.range['data']
     plt.plot(ranges, kdp_mae['data'][0])
     plt.plot(ranges, kdp_vulp['data'][0])
@@ -158,7 +157,6 @@ def compare_kdp_estimation_methods():
     plt.subplot(2, 1, 2)
     plt.grid(True)
     plt.title('Reconstructed Phidp')
-    plt.hold(True)
     ranges = prof_psidp.range['data']
     phidp_mae = 0.5 * (phidp_mae['data'][0] + phidp_mae['data'][0])
     plt.plot(ranges, phidp_mae)
