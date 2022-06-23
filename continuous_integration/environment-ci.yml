@@ -22,5 +22,5 @@ dependencies:
   - pip
   - pip:
     - pooch
-    - pyglpk
+    - glpk
     - versioneer

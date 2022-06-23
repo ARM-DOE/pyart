@@ -33,5 +33,5 @@ dependencies:
       - ablog
       - nbsphinx
       - pooch
-      - pyglpk
+      - glpk
       - versioneer
