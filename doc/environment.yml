@@ -24,6 +24,7 @@ dependencies:
   - Cython
   - fsspec
   - s3fs
+  - glpk
   - pip
   - pip:
       - pydata-sphinx-theme<0.9.0
@@ -33,5 +34,4 @@ dependencies:
       - ablog
       - nbsphinx
       - pooch
-      - glpk==0.4.5
       - versioneer

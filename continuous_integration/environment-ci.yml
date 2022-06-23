@@ -19,8 +19,8 @@ dependencies:
   - pytest
   - Cython
   - fsspec
+  - glpk
   - pip
   - pip:
     - pooch
-    - glpk==0.4.5
     - versioneer
