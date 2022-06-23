@@ -17,10 +17,10 @@ dependencies:
   - coveralls
   - flake8
   - pytest
-  - pyglpk
   - Cython
   - fsspec
   - pip
   - pip:
     - pooch
+    - pyglpk
     - versioneer

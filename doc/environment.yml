@@ -20,7 +20,6 @@ dependencies:
   - pandoc
   - netcdf4
   - pytest
-  - pyglpk
   - pkg-config
   - Cython
   - fsspec
@@ -34,4 +33,5 @@ dependencies:
       - ablog
       - nbsphinx
       - pooch
+      - pyglpk
       - versioneer
