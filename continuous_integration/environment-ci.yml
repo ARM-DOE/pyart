@@ -17,6 +17,7 @@ dependencies:
   - coveralls
   - flake8
   - pytest
+  - pyglpk
   - Cython
   - fsspec
   - pip

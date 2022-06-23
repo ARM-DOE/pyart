@@ -20,7 +20,7 @@ dependencies:
   - pandoc
   - netcdf4
   - pytest
-  - coin-or-cbc
+  - pyglpk
   - pkg-config
   - Cython
   - fsspec
