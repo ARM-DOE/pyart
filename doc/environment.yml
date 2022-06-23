@@ -25,6 +25,7 @@ dependencies:
   - fsspec
   - s3fs
   - glpk
+  - cftime<=1.5.1
   - pip
   - pip:
       - pydata-sphinx-theme<0.9.0
