@@ -5,6 +5,7 @@ for KDP estimation with sample data.
 
 import numpy as np
 import matplotlib.pyplot as plt
+import pytest
 
 from pyart.retrieve.kdp_proc import kdp_maesaka, kdp_vulpiani, kdp_schneebeli
 from pyart.testing import sample_objects
@@ -34,6 +35,7 @@ def _make_real_psidp_radar():
     return radar
 
 
+@pytest.mark.mpl_image_compare(tolerance=30)
 def compare_kdp_estimation_methods():
     # Get profile of noisy psidp
     prof_psidp = _make_real_psidp_radar()
@@ -54,31 +56,28 @@ def compare_kdp_estimation_methods():
                                                               parallel=False,
                                                               band='X')
     # Create figure
-    # plt.figure(figsize=(10, 10))
-    # plt.subplot(2, 1, 1)
-    # plt.grid(True)
-    # plt.title('Kdp estimation')
-    # ranges = prof_psidp.range['data']
-    # plt.plot(ranges, kdp_mae['data'][0])
-    # plt.plot(ranges, kdp_vulp['data'][0])
-    # plt.plot(ranges, kdp_schnee['data'][0])
-    # plt.xlabel('Range [m]')
-    # plt.ylabel('Kdp [deg/km]')
-    # plt.legend(['Maesaka', 'Vulpiani', 'Schneebeli'], loc=0)
-    # plt.subplot(2, 1, 2)
-    # plt.grid(True)
-    # plt.title('Reconstructed Phidp')
-    # ranges = prof_psidp.range['data']
-    # phidp_mae = 0.5 * (phidp_mae['data'][0] + phidp_mae['data'][0])
-    # plt.plot(ranges, phidp_mae)
-    # plt.plot(ranges, phidp_vulp['data'][0])
-    # plt.plot(ranges, phidp_schnee['data'][0])
-    # plt.plot(ranges, prof_psidp.fields['differential_phase']['data'][0])
-    # plt.xlabel('Range [m]')
-    # plt.ylabel('Diff. phase [deg]')
-    # plt.legend(['Maesaka', 'Vulpiani', 'Schneebeli', 'Real Psidp'], loc=0)
+    plt.figure(figsize=(10, 10))
+    plt.subplot(2, 1, 1)
+    plt.grid(True)
+    plt.title('Kdp estimation')
+    ranges = prof_psidp.range['data']
+    plt.plot(ranges, kdp_mae['data'][0])
+    plt.plot(ranges, kdp_vulp['data'][0])
+    plt.plot(ranges, kdp_schnee['data'][0])
+    plt.xlabel('Range [m]')
+    plt.ylabel('Kdp [deg/km]')
+    plt.legend(['Maesaka', 'Vulpiani', 'Schneebeli'], loc=0)
+    plt.subplot(2, 1, 2)
+    plt.grid(True)
+    plt.title('Reconstructed Phidp')
+    ranges = prof_psidp.range['data']
+    phidp_mae = 0.5 * (phidp_mae['data'][0] + phidp_mae['data'][0])
+    plt.plot(ranges, phidp_mae)
+    plt.plot(ranges, phidp_vulp['data'][0])
+    plt.plot(ranges, phidp_schnee['data'][0])
+    plt.plot(ranges, prof_psidp.fields['differential_phase']['data'][0])
+    plt.xlabel('Range [m]')
+    plt.ylabel('Diff. phase [deg]')
+    plt.legend(['Maesaka', 'Vulpiani', 'Schneebeli', 'Real Psidp'], loc=0)
     # Display plot
-    # plt.show()
-
-# Run the function
-compare_kdp_estimation_methods()
+    plt.show()
