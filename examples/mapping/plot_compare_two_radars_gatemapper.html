@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Compare Two Radars Using Gatemapper &#8212; Py-ART 1.12.4.post8 documentation</title>
+    <title>Compare Two Radars Using Gatemapper &#8212; Py-ART 1.12.4.post9 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -471,7 +471,7 @@ in reflectivity values!</p>
                    <span class="n">lon_lines</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.arange.html#numpy.arange" title="numpy.arange" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">arange</span></a><span class="p">(</span><span class="o">-</span><span class="mi">98</span><span class="p">,</span> <span class="o">-</span><span class="mf">96.75</span><span class="p">,</span> <span class="mf">.25</span><span class="p">))</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_compare_two_radars_gatemapper_001.png" srcset="../../_images/sphx_glr_plot_compare_two_radars_gatemapper_001.png" alt="xsapr-sg 1.5 Deg. 2011-05-20T06:42:26.774520Z  Equivalent reflectivity factor, xsapr-sg 1.5 Deg. 2011-05-20T06:41:37.092813Z  Equivalent reflectivity factor" class = "sphx-glr-single-img"/><p>Now, we can compare our original field from the southwestern radar,
+<img src="../../_images/sphx_glr_plot_compare_two_radars_gatemapper_001.png" srcset="../../_images/sphx_glr_plot_compare_two_radars_gatemapper_001.png" alt="xsapr-sg 1.5 Deg. 2011-05-20T06:42:26Z  Equivalent reflectivity factor, xsapr-sg 1.5 Deg. 2011-05-20T06:41:37Z  Equivalent reflectivity factor" class = "sphx-glr-single-img"/><p>Now, we can compare our original field from the southwestern radar,
 to the new remapped field - there are similarities…</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><a href="https://matplotlib.org/stable/api/figure_api.html#matplotlib.figure.Figure" title="matplotlib.figure.Figure" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fig</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.figure.html#matplotlib.pyplot.figure" title="matplotlib.pyplot.figure" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">figure</span></a><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
 <span class="n">ax</span> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplot.html#matplotlib.pyplot.subplot" title="matplotlib.pyplot.subplot" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span></a><span class="p">(</span><span class="mi">121</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
@@ -506,7 +506,7 @@ to the new remapped field - there are similarities…</p>
                    <span class="n">lon_lines</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.arange.html#numpy.arange" title="numpy.arange" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">arange</span></a><span class="p">(</span><span class="o">-</span><span class="mi">98</span><span class="p">,</span> <span class="o">-</span><span class="mf">96.75</span><span class="p">,</span> <span class="mf">.25</span><span class="p">))</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_compare_two_radars_gatemapper_002.png" srcset="../../_images/sphx_glr_plot_compare_two_radars_gatemapper_002.png" alt="xsapr-sg 1.5 Deg. 2011-05-20T06:41:37.092813Z  Equivalent reflectivity factor, xsapr-sg 1.5 Deg. 2011-05-20T06:41:37.092813Z  Equivalent reflectivity factor" class = "sphx-glr-single-img"/><p><strong>Calculate and Plot the Difference</strong></p>
+<img src="../../_images/sphx_glr_plot_compare_two_radars_gatemapper_002.png" srcset="../../_images/sphx_glr_plot_compare_two_radars_gatemapper_002.png" alt="xsapr-sg 1.5 Deg. 2011-05-20T06:41:37Z  Equivalent reflectivity factor, xsapr-sg 1.5 Deg. 2011-05-20T06:41:37Z  Equivalent reflectivity factor" class = "sphx-glr-single-img"/><p><strong>Calculate and Plot the Difference</strong></p>
 <p>It can be difficult to “eyeball” the difference between these two fields.
 Fortunately, now that our radars match coordinates, we can plot a difference.
 Keep in mind there is a time difference of ~ 1 minute between these plots,
@@ -583,7 +583,7 @@ case where our scans don’t neccessarily match exactly in time.</p>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_compare_two_radars_gatemapper_004.png" srcset="../../_images/sphx_glr_plot_compare_two_radars_gatemapper_004.png" alt="plot compare two radars gatemapper" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  57.147 seconds)</p>
+<img src="../../_images/sphx_glr_plot_compare_two_radars_gatemapper_004.png" srcset="../../_images/sphx_glr_plot_compare_two_radars_gatemapper_004.png" alt="plot compare two radars gatemapper" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 1 minutes  0.563 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-mapping-plot-compare-two-radars-gatemapper-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/5c47e9554453161fc47b899acb767913/plot_compare_two_radars_gatemapper.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_compare_two_radars_gatemapper.py</span></code></a></p>

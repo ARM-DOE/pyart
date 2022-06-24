@@ -115,7 +115,7 @@ Let's take a look at a summary of what fields are available.
  .. code-block:: none
 
 
-    ['cross_correlation_ratio', 'differential_reflectivity', 'differential_phase', 'spectrum_width', 'velocity', 'reflectivity', 'clutter_filter_power_removed']
+    ['differential_reflectivity', 'reflectivity', 'velocity', 'spectrum_width', 'differential_phase', 'clutter_filter_power_removed', 'cross_correlation_ratio']
 
 
 
@@ -157,7 +157,7 @@ Note: the reflectivity and velocity fields are in different sweeps, so we will n
 
 
 .. image-sg:: /examples/io/images/sphx_glr_plot_nexrad_data_aws_001.png
-   :alt: KHGX 0.5 Deg. 2022-03-22T12:01:25.512000Z  Equivalent reflectivity factor, KHGX 0.5 Deg. 2022-03-22T12:01:43.859000Z  Radial velocity of scatterers away from instrument
+   :alt: KHGX 0.5 Deg. 2022-03-22T12:01:25Z  Equivalent reflectivity factor, KHGX 0.5 Deg. 2022-03-22T12:01:43Z  Radial velocity of scatterers away from instrument
    :srcset: /examples/io/images/sphx_glr_plot_nexrad_data_aws_001.png
    :class: sphx-glr-single-img
 
@@ -334,7 +334,7 @@ Note: the reflectivity and velocity fields are in different radars, so we need t
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  29.646 seconds)
+   **Total running time of the script:** ( 0 minutes  29.205 seconds)
 
 
 .. _sphx_glr_download_examples_io_plot_nexrad_data_aws.py:

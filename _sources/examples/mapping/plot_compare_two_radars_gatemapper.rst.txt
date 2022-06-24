@@ -153,7 +153,7 @@ in reflectivity values!
 
 
 .. image-sg:: /examples/mapping/images/sphx_glr_plot_compare_two_radars_gatemapper_001.png
-   :alt: xsapr-sg 1.5 Deg. 2011-05-20T06:42:26.774520Z  Equivalent reflectivity factor, xsapr-sg 1.5 Deg. 2011-05-20T06:41:37.092813Z  Equivalent reflectivity factor
+   :alt: xsapr-sg 1.5 Deg. 2011-05-20T06:42:26Z  Equivalent reflectivity factor, xsapr-sg 1.5 Deg. 2011-05-20T06:41:37Z  Equivalent reflectivity factor
    :srcset: /examples/mapping/images/sphx_glr_plot_compare_two_radars_gatemapper_001.png
    :class: sphx-glr-single-img
 
@@ -207,7 +207,7 @@ to the new remapped field - there are similarities...
 
 
 .. image-sg:: /examples/mapping/images/sphx_glr_plot_compare_two_radars_gatemapper_002.png
-   :alt: xsapr-sg 1.5 Deg. 2011-05-20T06:41:37.092813Z  Equivalent reflectivity factor, xsapr-sg 1.5 Deg. 2011-05-20T06:41:37.092813Z  Equivalent reflectivity factor
+   :alt: xsapr-sg 1.5 Deg. 2011-05-20T06:41:37Z  Equivalent reflectivity factor, xsapr-sg 1.5 Deg. 2011-05-20T06:41:37Z  Equivalent reflectivity factor
    :srcset: /examples/mapping/images/sphx_glr_plot_compare_two_radars_gatemapper_002.png
    :class: sphx-glr-single-img
 
@@ -335,7 +335,7 @@ case where our scans don't neccessarily match exactly in time.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  57.147 seconds)
+   **Total running time of the script:** ( 1 minutes  0.563 seconds)
 
 
 .. _sphx_glr_download_examples_mapping_plot_compare_two_radars_gatemapper.py:

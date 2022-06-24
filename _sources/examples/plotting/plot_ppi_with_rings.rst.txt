@@ -30,7 +30,7 @@ and range rings
 
 
 .. image-sg:: /examples/plotting/images/sphx_glr_plot_ppi_with_rings_001.png
-   :alt: xsapr-nsar1 0.5 Deg. 2014-02-01T18:48:28.084000Z  Equivalent reflectivity factor
+   :alt: xsapr-nsar1 0.5 Deg. 2014-02-01T18:48:28Z  Equivalent reflectivity factor
    :srcset: /examples/plotting/images/sphx_glr_plot_ppi_with_rings_001.png
    :class: sphx-glr-single-img
 
@@ -89,7 +89,7 @@ and range rings
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  13.548 seconds)
+   **Total running time of the script:** ( 0 minutes  13.769 seconds)
 
 
 .. _sphx_glr_download_examples_plotting_plot_ppi_with_rings.py:
