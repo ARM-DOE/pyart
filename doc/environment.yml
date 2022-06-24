@@ -4,7 +4,7 @@ channels:
   - defaults
 dependencies:
   - gdal
-  - numpy
+  - numpy<1.23.0
   - scipy
   - matplotlib
   - pandas
