@@ -44,11 +44,11 @@ def compare_kdp_estimation_methods():
                                                  parallel=False)
 
     # Vulpiani method (note windsize is just a guess here..)
-    #kdp_vulp, phidp_vulp = kdp_vulpiani(prof_psidp,
-    #                                    windsize=2,
-    #                                    n_iter=20,
-    #                                    parallel=False,
-    #                                    band='X')
+    kdp_vulp, phidp_vulp = kdp_vulpiani(prof_psidp,
+                                        windsize=2,
+                                        n_iter=20,
+                                        parallel=False,
+                                        band='X')
     # Kalman filter method
     #kdp_schnee, kdp_std_schnee, phidp_schnee = kdp_schneebeli(prof_psidp,
     #                                                          parallel=False,
