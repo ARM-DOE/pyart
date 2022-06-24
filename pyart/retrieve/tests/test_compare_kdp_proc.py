@@ -56,7 +56,7 @@ def compare_kdp_estimation_methods():
                                                               parallel=False,
                                                               band='X')
     # Create figure
-    plt.figure(figsize=(10, 10))
+    fig = plt.figure(figsize=(10, 10))
     plt.subplot(2, 1, 1)
     plt.grid(True)
     plt.title('Kdp estimation')
@@ -79,5 +79,7 @@ def compare_kdp_estimation_methods():
     plt.xlabel('Range [m]')
     plt.ylabel('Diff. phase [deg]')
     plt.legend(['Maesaka', 'Vulpiani', 'Schneebeli', 'Real Psidp'], loc=0)
-    # Display plot
-    plt.show()
+    try:
+        return fig
+    finally:
+        plt.close(fig)
