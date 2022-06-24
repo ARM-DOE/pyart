@@ -50,9 +50,9 @@ def compare_kdp_estimation_methods():
                                         parallel=False,
                                         band='X')
     # Kalman filter method
-    #kdp_schnee, kdp_std_schnee, phidp_schnee = kdp_schneebeli(prof_psidp,
-    #                                                          parallel=False,
-    #                                                          band='X')
+    kdp_schnee, kdp_std_schnee, phidp_schnee = kdp_schneebeli(prof_psidp,
+                                                              parallel=False,
+                                                              band='X')
     # Create figure
     # plt.figure(figsize=(10, 10))
     # plt.subplot(2, 1, 1)
