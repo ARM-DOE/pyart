@@ -44,41 +44,41 @@ def compare_kdp_estimation_methods():
                                                  parallel=False)
 
     # Vulpiani method (note windsize is just a guess here..)
-    kdp_vulp, phidp_vulp = kdp_vulpiani(prof_psidp,
-                                        windsize=2,
-                                        n_iter=20,
-                                        parallel=False,
-                                        band='X')
+    #kdp_vulp, phidp_vulp = kdp_vulpiani(prof_psidp,
+    #                                    windsize=2,
+    #                                    n_iter=20,
+    #                                    parallel=False,
+    #                                    band='X')
     # Kalman filter method
-    kdp_schnee, kdp_std_schnee, phidp_schnee = kdp_schneebeli(prof_psidp,
-                                                              parallel=False,
-                                                              band='X')
+    #kdp_schnee, kdp_std_schnee, phidp_schnee = kdp_schneebeli(prof_psidp,
+    #                                                          parallel=False,
+    #                                                          band='X')
     # Create figure
-    plt.figure(figsize=(10, 10))
-    plt.subplot(2, 1, 1)
-    plt.grid(True)
-    plt.title('Kdp estimation')
-    ranges = prof_psidp.range['data']
-    plt.plot(ranges, kdp_mae['data'][0])
-    plt.plot(ranges, kdp_vulp['data'][0])
-    plt.plot(ranges, kdp_schnee['data'][0])
-    plt.xlabel('Range [m]')
-    plt.ylabel('Kdp [deg/km]')
-    plt.legend(['Maesaka', 'Vulpiani', 'Schneebeli'], loc=0)
-    plt.subplot(2, 1, 2)
-    plt.grid(True)
-    plt.title('Reconstructed Phidp')
-    ranges = prof_psidp.range['data']
-    phidp_mae = 0.5 * (phidp_mae['data'][0] + phidp_mae['data'][0])
-    plt.plot(ranges, phidp_mae)
-    plt.plot(ranges, phidp_vulp['data'][0])
-    plt.plot(ranges, phidp_schnee['data'][0])
-    plt.plot(ranges, prof_psidp.fields['differential_phase']['data'][0])
-    plt.xlabel('Range [m]')
-    plt.ylabel('Diff. phase [deg]')
-    plt.legend(['Maesaka', 'Vulpiani', 'Schneebeli', 'Real Psidp'], loc=0)
+    # plt.figure(figsize=(10, 10))
+    # plt.subplot(2, 1, 1)
+    # plt.grid(True)
+    # plt.title('Kdp estimation')
+    # ranges = prof_psidp.range['data']
+    # plt.plot(ranges, kdp_mae['data'][0])
+    # plt.plot(ranges, kdp_vulp['data'][0])
+    # plt.plot(ranges, kdp_schnee['data'][0])
+    # plt.xlabel('Range [m]')
+    # plt.ylabel('Kdp [deg/km]')
+    # plt.legend(['Maesaka', 'Vulpiani', 'Schneebeli'], loc=0)
+    # plt.subplot(2, 1, 2)
+    # plt.grid(True)
+    # plt.title('Reconstructed Phidp')
+    # ranges = prof_psidp.range['data']
+    # phidp_mae = 0.5 * (phidp_mae['data'][0] + phidp_mae['data'][0])
+    # plt.plot(ranges, phidp_mae)
+    # plt.plot(ranges, phidp_vulp['data'][0])
+    # plt.plot(ranges, phidp_schnee['data'][0])
+    # plt.plot(ranges, prof_psidp.fields['differential_phase']['data'][0])
+    # plt.xlabel('Range [m]')
+    # plt.ylabel('Diff. phase [deg]')
+    # plt.legend(['Maesaka', 'Vulpiani', 'Schneebeli', 'Real Psidp'], loc=0)
     # Display plot
-    plt.show()
+    # plt.show()
 
 # Run the function
 compare_kdp_estimation_methods()
