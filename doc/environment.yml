@@ -20,11 +20,12 @@ dependencies:
   - pandoc
   - netcdf4
   - pytest
-  - coin-or-cbc
   - pkg-config
   - Cython
   - fsspec
   - s3fs
+  - glpk
+  - cftime<=1.5.1
   - pip
   - pip:
       - pydata-sphinx-theme<0.9.0
