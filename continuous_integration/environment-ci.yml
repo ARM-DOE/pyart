@@ -19,6 +19,8 @@ dependencies:
   - pytest
   - Cython
   - fsspec
+  - glpk
+  - cftime<=1.5.1
   - pip
   - pip:
     - pooch
