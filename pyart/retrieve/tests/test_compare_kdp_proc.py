@@ -21,8 +21,7 @@ def _make_real_psidp_radar():
     radar : Radar
             PyART radar instance with differential phase profile in deg.
     """
-    psidp = np.array([[-4.63150024e-01,
-                     -2.33313751e+00, 1.80617523e+00, 7.17742920e-01,
+    psidp = np.array([[-2.33313751e+00, 1.80617523e+00, 7.17742920e-01,
                      1.82811661e+01, 1.89352417e+01, 1.67904205e+01]])
     psidp = np.ma.array(psidp)
     radar = sample_objects.make_empty_ppi_radar(len(psidp[0]), 1, 1)
@@ -46,7 +45,7 @@ def compare_kdp_estimation_methods():
 
     # Vulpiani method (note windsize is just a guess here..)
     kdp_vulp, phidp_vulp = kdp_vulpiani(prof_psidp,
-                                        windsize=5,
+                                        windsize=2,
                                         n_iter=20,
                                         parallel=False,
                                         band='X')
