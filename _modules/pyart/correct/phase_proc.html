@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.correct.phase_proc &#8212; Py-ART 1.12.4.post9 documentation</title>
+    <title>pyart.correct.phase_proc &#8212; Py-ART 1.12.4.post10 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -1208,7 +1208,7 @@
                   <span class="n">low_z</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">high_z</span><span class="o">=</span><span class="mf">53.0</span><span class="p">,</span> <span class="n">min_phidp</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">min_ncp</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
                   <span class="n">min_rhv</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">fzl</span><span class="o">=</span><span class="mf">4000.0</span><span class="p">,</span> <span class="n">sys_phase</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
                   <span class="n">overide_sys_phase</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">nowrap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">really_verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                  <span class="n">LP_solver</span><span class="o">=</span><span class="s1">&#39;cylp&#39;</span><span class="p">,</span> <span class="n">refl_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ncp_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                  <span class="n">LP_solver</span><span class="o">=</span><span class="s1">&#39;pyglpk&#39;</span><span class="p">,</span> <span class="n">refl_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ncp_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                   <span class="n">rhv_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">phidp_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">kdp_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                   <span class="n">unf_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">window_len</span><span class="o">=</span><span class="mi">35</span><span class="p">,</span> <span class="n">proc</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">coef</span><span class="o">=</span><span class="mf">0.914</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -1248,7 +1248,7 @@
 <span class="sd">    really_verbose : bool, optional</span>
 <span class="sd">        True to print LPX messaging. False to suppress.</span>
 <span class="sd">    LP_solver : &#39;pyglpk&#39; or &#39;cvxopt&#39;, &#39;cylp&#39;, or &#39;cylp_mp&#39;, optional</span>
-<span class="sd">        Module to use to solve LP problem. Default is &#39;cylp&#39;.</span>
+<span class="sd">        Module to use to solve LP problem. Default is &#39;pyglpk&#39;.</span>
 <span class="sd">    refl_field, ncp_field, rhv_field, phidp_field, kdp_field : str, optional</span>
 <span class="sd">        Name of field in radar which contains the horizonal reflectivity,</span>
 <span class="sd">        normal coherent power, copolar coefficient, differential phase shift,</span>
@@ -1394,7 +1394,7 @@
 <div class="viewcode-block" id="phase_proc_lp_gf"><a class="viewcode-back" href="../../../API/generated/pyart.correct.phase_proc_lp_gf.html#pyart.correct.phase_proc_lp_gf">[docs]</a><span class="k">def</span> <span class="nf">phase_proc_lp_gf</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">self_const</span><span class="o">=</span><span class="mf">60000.0</span><span class="p">,</span>
                      <span class="n">low_z</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">high_z</span><span class="o">=</span><span class="mf">53.0</span><span class="p">,</span> <span class="n">min_phidp</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">fzl</span><span class="o">=</span><span class="mf">4000.0</span><span class="p">,</span>
                      <span class="n">system_phase</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nowrap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">really_verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                     <span class="n">LP_solver</span><span class="o">=</span><span class="s1">&#39;cylp&#39;</span><span class="p">,</span> <span class="n">refl_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">phidp_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                     <span class="n">LP_solver</span><span class="o">=</span><span class="s1">&#39;pyglpk&#39;</span><span class="p">,</span> <span class="n">refl_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">phidp_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                      <span class="n">kdp_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">unf_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">window_len</span><span class="o">=</span><span class="mi">35</span><span class="p">,</span> <span class="n">proc</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
                      <span class="n">coef</span><span class="o">=</span><span class="mf">0.914</span><span class="p">,</span> <span class="n">ncpts</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">first_gate_sysp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
                      <span class="n">doc</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
@@ -1427,7 +1427,7 @@
 <span class="sd">    really_verbose : bool, optional</span>
 <span class="sd">        True to print LPX messaging. False to suppress.</span>
 <span class="sd">    LP_solver : &#39;pyglpk&#39; or &#39;cvxopt&#39;, &#39;cylp&#39;, or &#39;cylp_mp&#39;, optional</span>
-<span class="sd">        Module to use to solve LP problem. Default is &#39;cylp&#39;.</span>
+<span class="sd">        Module to use to solve LP problem. Default is &#39;pyglpk&#39;.</span>
 <span class="sd">    refl_field, ncp_field, rhv_field, phidp_field, kdp_field : str, optional</span>
 <span class="sd">        Name of field in radar which contains the horizonal reflectivity,</span>
 <span class="sd">        normal coherent power, copolar coefficient, differential phase shift,</span>
