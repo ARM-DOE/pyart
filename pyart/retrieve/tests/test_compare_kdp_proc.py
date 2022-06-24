@@ -134,13 +134,20 @@ def compare_kdp_estimation_methods():
     # Get profile of noisy psidp
     prof_psidp = _make_real_psidp_radar()
     # Maesaka method
-    kdp_mae, phidpf_mae, phidp_mae = kdp_maesaka(prof_psidp, maxiter=1000,
-                                                 check_outliers=False)
+    kdp_mae, phidpf_mae, phidp_mae = kdp_maesaka(prof_psidp,
+                                                 maxiter=1000,
+                                                 check_outliers=False,
+                                                 parallel=False)
+
     # Vulpiani method (note windsize is just a guess here..)
-    kdp_vulp, phidp_vulp = kdp_vulpiani(prof_psidp, windsize=30, n_iter=20,
+    kdp_vulp, phidp_vulp = kdp_vulpiani(prof_psidp,
+                                        windsize=30,
+                                        n_iter=20,
+                                        parallel=False,
                                         band='X')
     # Kalman filter method
     kdp_schnee, kdp_std_schnee, phidp_schnee = kdp_schneebeli(prof_psidp,
+                                                              parallel=False,
                                                               band='X')
     # Create figure
     plt.figure(figsize=(10, 10))
@@ -164,9 +171,10 @@ def compare_kdp_estimation_methods():
     plt.plot(ranges, phidp_schnee['data'][0])
     plt.plot(ranges, prof_psidp.fields['differential_phase']['data'][0])
     plt.xlabel('Range [m]')
-    plt.ylabel(r'Diff. phase [deg]')
+    plt.ylabel('Diff. phase [deg]')
     plt.legend(['Maesaka', 'Vulpiani', 'Schneebeli', 'Real Psidp'], loc=0)
     # Display plot
     plt.show()
+
 # Run the function
 compare_kdp_estimation_methods()
