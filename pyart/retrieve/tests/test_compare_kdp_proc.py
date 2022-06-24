@@ -36,7 +36,7 @@ def _make_real_psidp_radar():
 
 
 @pytest.mark.mpl_image_compare(tolerance=30)
-def compare_kdp_estimation_methods():
+def test_compare_kdp_estimation_methods():
     # Get profile of noisy psidp
     prof_psidp = _make_real_psidp_radar()
     # Maesaka method
