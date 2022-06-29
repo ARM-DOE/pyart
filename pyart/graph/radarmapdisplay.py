@@ -267,7 +267,9 @@ class RadarMapDisplay(RadarDisplay):
                         + " Overridding defined axes and using default "
                         + "axes with projection Lambert Conformal.",
                         UserWarning)
-                ax = plt.axes(projection=projection)
+                with warnings.catch_warnings():
+                    warnings.filterwarnings("ignore")
+                    ax = plt.axes(projection=projection)
 
         # Define GeoAxes if None is provided.
         else:
@@ -281,7 +283,9 @@ class RadarMapDisplay(RadarDisplay):
                     + " Overridding defined axes and using default "
                     + "axes with projection Lambert Conformal.",
                     UserWarning)
-            ax = plt.axes(projection=projection)
+            with warnings.catch_warnings():
+                warnings.filterwarnings("ignore")    
+                ax = plt.axes(projection=projection)
 
         if min_lon:
             ax.set_extent([min_lon, max_lon, min_lat, max_lat],
