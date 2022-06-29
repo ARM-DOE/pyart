@@ -4,7 +4,7 @@ channels:
   - defaults
 dependencies:
   - gdal
-  - numpy<1.23.0
+  - numpy
   - scipy
   - matplotlib
   - netcdf4
@@ -21,7 +21,7 @@ dependencies:
   - Cython
   - fsspec
   - glpk
-  - cftime<=1.5.1
+  - cftime>=1.6.0
   - pip
   - pip:
     - pooch

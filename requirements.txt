@@ -1,9 +1,9 @@
-numpy<1.23.0
+numpy
 scipy
 netCDF4
 matplotlib
 pooch
-cftime<=1.5.1
+cftime>=1.6.0
 Cython
 fsspec
 s3fs
