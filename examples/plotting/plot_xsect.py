@@ -14,8 +14,9 @@ print(__doc__)
 
 import matplotlib.pyplot as plt
 import pyart
+from pyart.testing import get_test_data
 
-filename = 'XSW110520105408.RAW7HHF'
+filename = get_test_data('XSW110520105408.RAW7HHF')
 
 radar = pyart.io.read(filename)
 xsect = pyart.util.cross_section_ppi(radar, [45, 90])

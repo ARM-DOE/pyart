@@ -20,7 +20,7 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
                         file_field_names=False, exclude_fields=None,
                         include_fields=None, delay_field_loading=False,
                         station=None, scans=None,
-                        linear_interp=True, **kwargs):
+                        linear_interp=True, storage_options={'anon':True}, **kwargs):
     """
     Read a NEXRAD Level 2 Archive file.
 
@@ -76,6 +76,11 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
         False will perform a nearest neighbor interpolation. This parameter is
         not used if the resolution of all rays in the file or requested sweeps
         is constant.
+    storage_options : dict, optional
+        Parameters passed to the backend file-system such as Google Cloud Storage,
+        Amazon Web Service S3.
+    **kwargs
+        Additional keyword arguments to pass to fsspec to open the dataset
 
     Returns
     -------
@@ -98,7 +103,7 @@ def read_nexrad_archive(filename, field_names=None, additional_metadata=None,
                                 exclude_fields, include_fields)
 
     # open the file and retrieve scan information
-    nfile = NEXRADLevel2File(prepare_for_read(filename))
+    nfile = NEXRADLevel2File(prepare_for_read(filename, storage_options=storage_options))
     scan_info = nfile.scan_info(scans)
 
     # time

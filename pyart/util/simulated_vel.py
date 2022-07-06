@@ -4,9 +4,9 @@ Function for creating simulated velocity fields.
 """
 
 import numpy as np
-from scipy.interpolate import interp1d
+from scipy import interpolate
 
-from ..config import get_metadata, get_field_name
+from ..config import get_metadata, get_fillvalue
 
 
 def simulated_vel_from_profile(
@@ -38,7 +38,7 @@ def simulated_vel_from_profile(
     """
     # parse parameters
     if sim_vel_field is None:
-        sim_vel_field = get_field_name('simulated_velocity')
+        sim_vel_field = 'simulated_velocity'
 
     # radar parameters
     azimuths = np.deg2rad(radar.azimuth['data']).reshape(-1, 1)
@@ -69,10 +69,13 @@ def simulated_vel_from_profile(
     wind_is_not_nan = np.logical_and(~np.isnan(winds[0]), ~np.isnan(winds[1]))
     no_nans = np.logical_and(height_is_not_nan, wind_is_not_nan)
     height = height[no_nans]
-    winds[0] = winds[0][no_nans]
-    winds[1] = winds[1][no_nans]
-    wind_interp = interp1d(
-        height, winds, kind=interp_kind, bounds_error=False)
+
+    winds_reshape = np.empty((2, len(winds[0][no_nans])), dtype=np.float64)
+    winds_reshape[0] = winds[0][no_nans]
+    winds_reshape[1] = winds[1][no_nans]
+    wind_interp = interpolate.interp1d(
+        height, winds_reshape, kind=interp_kind, bounds_error=False,
+        fill_value=get_fillvalue())
 
     # interpolated wind speeds at all gates altitudes
     gate_winds = wind_interp(gate_altitudes)

@@ -18,7 +18,7 @@ from ..util.circular_stats import compute_directional_stats
 
 
 def quasi_vertical_profile(
-        radar, desired_angle=None, fields=None, gatefilter=None):
+    radar, desired_angle=None, fields=None, gatefilter=None, verbose=False):
 
     """
     Quasi Vertical Profile.
@@ -35,6 +35,8 @@ def quasi_vertical_profile(
     desired_angle : float
         Radar tilt angle to use for indexing radar field data.
         None will result in wanted_angle = 20.0.
+    verbose : bool
+        boolean flag to turn the printing of radar tilts on or off.
 
     Other Parameters
     ----------------
@@ -72,9 +74,10 @@ def quasi_vertical_profile(
     index = abs(radar.fixed_angle['data'] - desired_angle).argmin()
     radar_slice = radar.get_slice(index)
 
-    # Printing radar tilt angles and radar elevation
-    print(radar.fixed_angle['data'])
-    print(radar.elevation['data'][-1])
+    if verbose:
+        # Printing radar tilt angles and radar elevation
+        print(radar.fixed_angle['data'])
+        print(radar.elevation['data'][-1])
 
     # Setting field parameters
     # If fields is None then all radar fields pulled else defined field is used

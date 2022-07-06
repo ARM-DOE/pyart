@@ -42,6 +42,7 @@ fill_value = -9999.0
 # Radar reflectivity fields, DZ
 reflectivity = 'reflectivity'
 corrected_reflectivity = 'corrected_reflectivity'
+reflectivity_texture = 'reflectivity_texture'
 total_power = 'total_power'
 
 # Mean Doppler velocity fields, VEL
@@ -55,9 +56,11 @@ spectrum_width = 'spectrum_width'
 # Differential reflectivity fields, ZDR
 differential_reflectivity = 'differential_reflectivity'
 corrected_differential_reflectivity = 'corrected_differential_reflectivity'
+differential_reflectivity_texture = 'differential_reflectivity_texture'
 
 # Cross correlation ratio, correlation coefficient, RhoHV
 cross_correlation_ratio = 'cross_correlation_ratio'
+cross_correlation_ratio_texture = 'cross_correlation_ratio_texture'
 
 # Normalized coherent power, signal quality index, SQI, NCP
 normalized_coherent_power = 'normalized_coherent_power'
@@ -66,6 +69,7 @@ normalized_coherent_power = 'normalized_coherent_power'
 differential_phase = 'differential_phase'
 unfolded_differential_phase = 'unfolded_differential_phase'
 corrected_differential_phase = 'corrected_differential_phase'
+differential_phase_texture = 'differential_phase_texture'
 
 # Specific differential phase shift, KDP
 specific_differential_phase = 'specific_differential_phase'
@@ -97,6 +101,7 @@ vertical_wind_component = 'vertical_wind_component'
 height = 'height'
 interpolated_profile = 'interpolated_profile'
 height_over_iso0 = 'height_over_iso0'
+temperature = 'temperature'
 
 # path integrated attenuation
 path_integrated_attenuation = 'path_integrated_attenuation'
@@ -180,11 +185,16 @@ DEFAULT_FIELD_NAMES = {
     'height': height,
     'height_over_iso0': height_over_iso0,
     'interpolated_profile': interpolated_profile,
+    'temperature': temperature,
     'path_integrated_attenuation': path_integrated_attenuation,
     'specific_differential_attenuation': specific_differential_attenuation,
     'path_integrated_differential_attenuation':
     path_integrated_differential_attenuation,
     'clutter_filter_power_removed': clutter_filter_power_removed,
+    'reflectivity_texture': reflectivity_texture,
+    'differential_reflectivity_texture': differential_reflectivity_texture,
+    'cross_correlation_ratio_texture': cross_correlation_ratio_texture,
+    'differential_phase_texture': differential_phase_texture,
 }
 
 
@@ -640,6 +650,21 @@ DEFAULT_METADATA = {
         'long_name': 'Texture of differential phase (PhiDP)',
         'coordinates': 'elevation azimuth range'},
 
+    reflectivity_texture: {
+        'units': 'dBZ',
+        'long_name': 'Texture of Reflectivity',
+        'coordinates': 'elevation azimuth range'},
+
+    differential_reflectivity_texture: {
+        'units': 'dB',
+        'long_name': 'Texture of Differential Reflectivity',
+        'coordinates': 'elevation azimuth range'},
+
+    cross_correlation_ratio_texture: {
+        'units': 'ratio',
+        'long_name': 'Texture of Cross Correlation Ratio',
+        'coordinates': 'elevation azimuth range'},
+
     # Wind retrieval fields
     eastward_wind_component: {
         'units': 'meters_per_second',
@@ -670,6 +695,10 @@ DEFAULT_METADATA = {
         'long_name': 'Interpolated profile',
         'standard_name':  'interpolated_profile',
         'units': 'unknown'},
+
+    temperature: {
+        'units': 'degC',
+        'long_name': 'Sounding Temperature'},
 
     clutter_filter_power_removed: {
         'units': 'dB',
@@ -846,7 +875,7 @@ nexrad_metadata = {
 nexrad_level3_metadata = {
 
     radar_estimated_rain_rate: {
-        'units': 'inches',
+        'units': 'inches/hour',
         'standard_name': 'radar_estimated_rain_rate',
         'long_name': 'Radar estimated rain rate',
         'coordinates': 'elevation azimuth range'},

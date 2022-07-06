@@ -13,18 +13,16 @@ print(__doc__)
 
 import matplotlib.pyplot as plt
 import pyart
+from pyart.testing import get_test_data
 
-filename = '110635.mdv'
+filename = get_test_data('110635.mdv')
 
 # create the plot using RadarDisplay
 radar = pyart.io.read_mdv(filename)
 display = pyart.graph.RadarDisplay(radar)
 fig = plt.figure(figsize=[5, 5])
-ax = fig.add_subplot(111, frameon=False)
-display.plot('reflectivity', 0, vmin=-16., vmax=64,
-             mask_tuple=['normalized_coherent_power', 0.5],
-             colorbar_flag=False, title_flag=False,
-             axislabels_flag=False)
-display.set_limits(ylim=[-120, 120], xlim=[-120, 120])
-fig.subplots_adjust(left=0, bottom=0, right=1, top=1, wspace=0, hspace=0)
+ax = fig.add_subplot(111)
+display.plot('reflectivity', 0, vmin=-16., vmax=64, title="PPI",
+              cmap='pyart_HomeyerRainbow')
+display.set_limits(ylim=[-150, 150], xlim=[-150, 150])
 plt.show()

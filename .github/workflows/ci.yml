@@ -1,0 +1,97 @@
+name: CI
+
+on:
+  schedule:
+  # Runs at 09Z (2am CDT)
+    - cron: "0 9 * * *"
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+# This job installs dependencies, build the website, and pushes it to `gh-pages`
+jobs:
+  build:
+    name: ${{ matrix.os }}-${{ matrix.python-version }}
+    if: github.repository == 'ARM-DOE/pyart'
+    runs-on: ${{ matrix.os }}-latest
+    defaults:
+      run:
+        shell: bash -l {0}
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.6", "3.7", "3.8", "3.9", "3.10"]
+        os: [macOS, ubuntu, Windows]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      # Install dependencies
+      - name: Setup Conda Environment
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          environment-file: continuous_integration/environment-ci.yml
+          activate-environment: pyart-dev
+          auto-activate-base: false
+          mamba-version: '*'
+          use-mamba: true
+          miniforge-variant: Mambaforge
+      
+      - name: Set TRMM RSL path
+        shell: bash -l {0}
+        run: |
+          echo "$RUNNER_OS"
+          echo "$RUNNER_OS" == 'Windows'
+          if [ "$RUNNER_OS" == 'Windows' ]; then
+               echo 'Trmm will not be installed for Windows'
+          elif [ "$RUNNER_OS" == 'Linux' ]; then
+               mamba install -c conda-forge trmm_rsl
+               export RSL_PATH=$CONDA/pkgs/trmm_rsl-1.49-3
+          elif [ "$RUNNER_OS" == 'macOS' ]
+          then
+               mamba install -c conda-forge trmm_rsl
+               export RSL_PATH=$CONDA/pkgs/trmm_rsl-1.49-3
+          else
+               mamba install -c conda-forge trmm_rsl
+               export RSL_PATH=$CONDA/pkgs/trmm_rsl-1.49-3
+          fi
+          conda list
+          echo "$RSL_PATH"
+          
+      - name: Fetch all history for all tags and branches
+        run: |
+           git fetch --prune --unshallow
+
+      - name: Install PyART
+        env:
+          RSL_PATH: ${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-3
+        run: |
+          python -m pip install -e . --no-deps --force-reinstall
+
+      - name: Run Linting
+        run: |
+          python -m flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          python -m flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+      
+      - name: Run Tests
+        id: run_tests
+        env:
+          RSL_PATH: ${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-3
+        run: |
+          python -m pytest -v --pyargs pyart --cov=./ --cov-report=xml
+
+      - name: Upload code coverage to Codecov
+        uses: codecov/codecov-action@v2.1.0
+        with:
+          file: ./coverage.xml
+          flags: unittests
+          env_vars: OS,PYTHON
+          name: codecov-umbrella
+          fail_ci_if_error: false

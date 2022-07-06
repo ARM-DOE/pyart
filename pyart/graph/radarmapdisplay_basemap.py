@@ -104,8 +104,9 @@ class RadarMapDisplayBasemap(RadarDisplay):
             min_lon=None, max_lon=None, min_lat=None, max_lat=None,
             width=None, height=None, lon_0=None, lat_0=None,
             resolution='h', shapefile=None, edges=True, gatefilter=None,
-            basemap=None, filter_transitions=True, embelish=True,
-            ticks=None, ticklabs=None, raster=False, alpha=None, **kwargs):
+            basemap=None, filter_transitions=True, embellish=True,
+            ticks=None, ticklabs=None, raster=False, alpha=None,
+            edgecolors='face', **kwargs):
         """
         Plot a PPI volume sweep onto a geographic map.
 
@@ -207,7 +208,7 @@ class RadarMapDisplayBasemap(RadarDisplay):
             coordinates themselved as the gate edges, resulting in a plot
             in which the last gate in each ray and the entire last ray are not
             not plotted.
-        embelish: bool
+        embellish: bool
             True by default. Set to false to supress drawing of coastlines
             etc.. Use for speedup when specifying shapefiles.
         basemap: Basemap instance
@@ -222,6 +223,10 @@ class RadarMapDisplayBasemap(RadarDisplay):
         alpha : float or None
             Set the alpha tranparency of the radar plot. Useful for
             overplotting radar over other datasets.
+        edgecolor : str
+            Set the behavior of the edges of the pixels, by default
+            it will color them the same as the pixels (faces).
+        **kwargs : additional keyword arguments to pass to pcolormesh.
 
         """
         # parse parameters
@@ -275,7 +280,7 @@ class RadarMapDisplayBasemap(RadarDisplay):
                 'The cylindrical equidistant projection is not supported')
 
         # add embelishments
-        if embelish is True:
+        if embellish is True:
             basemap.drawcoastlines(linewidth=1.25)
             basemap.drawstates()
             basemap.drawparallels(
@@ -293,7 +298,8 @@ class RadarMapDisplayBasemap(RadarDisplay):
             vmin = vmax = None
         pm = basemap.pcolormesh(
             self._x0 + x * 1000., self._y0 + y * 1000., data,
-            vmin=vmin, vmax=vmax, cmap=cmap, norm=norm, alpha=alpha)
+            vmin=vmin, vmax=vmax, cmap=cmap, norm=norm,
+            alpha=alpha, edgecolors=edgecolors, **kwargs)
 
         if raster:
             pm.set_rasterized(True)

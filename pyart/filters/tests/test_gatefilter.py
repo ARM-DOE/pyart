@@ -1,5 +1,6 @@
 """ Unit tests for Py-ART's correct/filters.py module. """
 
+import netCDF4
 import numpy as np
 import pytest
 
@@ -396,3 +397,72 @@ def test_gatefilter_include_gates():
     assert gfilter.gate_included[2, 0] is np.False_
     assert gfilter.gate_included[0, 2] is np.False_
     assert gfilter.gate_included[2, 2] is np.True_
+
+
+radar2 = pyart.io.read(pyart.testing.NEXRAD_ARCHIVE_MSG31_FILE)
+def test_moment_based_gate_filter():
+    fdata = np.full((7200, 1832), .5)
+    radar2.add_field('normalized_coherent_power', {'data': fdata})
+
+    gfilter = pyart.correct.moment_based_gate_filter(
+        radar2, min_ncp=0.4, min_refl=-33.0, max_refl=-31.0, min_rhv=0.207)
+    gfilter2 = pyart.correct.moment_based_gate_filter(
+        radar2, min_ncp=0.6, min_refl=-31.0, max_refl=-28.0, min_rhv=0.209)
+
+    assert gfilter.gate_excluded[0, 0] is np.False_
+    assert gfilter.gate_excluded[0, -1] is np.True_
+
+    assert gfilter2.gate_excluded[0, 0] is np.True_
+    assert gfilter2.gate_excluded[0, -1] is np.True_
+
+
+sonde = netCDF4.Dataset(pyart.testing.SONDE_FILE)
+radar3 = pyart.io.read(pyart.testing.NEXRAD_ARCHIVE_MSG31_COMPRESSED_FILE)
+z_dict, temp_dict = pyart.retrieve.map_profile_to_gates(
+    sonde.variables['tdry'][:], sonde.variables['alt'][:], radar3, toa=16500)
+radar3.add_field('temperature', temp_dict, replace_existing=True)
+radar3.add_field('height', z_dict, replace_existing=True)
+
+def test_moment_and_texture_based_gate_filter():
+    gfilter = pyart.filters.moment_and_texture_based_gate_filter(
+        radar3, phi_field='differential_phase', max_textphi=20.,
+        max_textrhv=0.3, max_textzdr=2.85, max_textrefl=8., min_rhv=0.6)
+
+    assert gfilter.gate_excluded[0, 0] is np.True_
+    assert gfilter.gate_excluded[0, -1] is np.True_
+
+    gfilter2 = pyart.filters.moment_and_texture_based_gate_filter(
+        radar3, phi_field='differential_phase', max_textphi=280.,
+        max_textrhv=0.9, max_textzdr=10, max_textrefl=33., min_rhv=0.2)
+
+    assert gfilter2.gate_excluded[0, 0] is np.False_
+    assert gfilter2.gate_excluded[0, -1] is np.True_
+
+
+def test_temp_based_gate_filter():
+    gfilter = pyart.filters.temp_based_gate_filter(radar3, min_temp=17.0)
+
+    assert gfilter.gate_excluded[0, 0] is np.True_
+    assert gfilter.gate_excluded[0, -1] is np.True_
+
+    gfilter2 = pyart.filters.temp_based_gate_filter(
+        radar3, thickness=None, min_temp=17.0)
+
+    assert gfilter2.gate_excluded[0, 27] is np.False_
+    assert gfilter2.gate_excluded[0, -1] is np.True_
+
+
+def test_iso0_based_gate_filter():
+    gfilter = pyart.filters.iso0_based_gate_filter(
+        radar3, iso0_field='height', max_h_iso0=None, thickness=None,
+        beamwidth=1.0)
+
+    assert gfilter.gate_excluded[0, 0] is np.False_
+    assert gfilter.gate_excluded[0, -1] is np.False_
+
+    gfilter2 = pyart.filters.iso0_based_gate_filter(
+        radar3, iso0_field='height', max_h_iso0=1000.,
+        thickness=400., beamwidth=None)
+
+    assert gfilter2.gate_excluded[0, 0] is np.False_
+    assert gfilter2.gate_excluded[0, -1] is np.True_

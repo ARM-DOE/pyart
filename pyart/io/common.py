@@ -8,9 +8,10 @@ import gzip
 
 import numpy as np
 import netCDF4
+import fsspec
 
 
-def prepare_for_read(filename):
+def prepare_for_read(filename, storage_options={'anon':True}):
     """
     Return a file like object read for reading.
 
@@ -23,6 +24,10 @@ def prepare_for_read(filename):
         Filename or file-like object which will be opened. File-like objects
         will not be examined for compressed data.
 
+    storage_options : dict, optional
+        Parameters passed to the backend file-system such as Google Cloud Storage,
+        Amazon Web Service S3.
+
     Returns
     -------
     file_like : file-like object
@@ -34,17 +39,24 @@ def prepare_for_read(filename):
         return filename
 
     # look for compressed data by examining the first few bytes
-    fh = open(filename, 'rb')
+    fh = fsspec.open(filename,
+                     mode='rb',
+                     compression="infer",
+                     **storage_options).open()
     magic = fh.read(3)
     fh.close()
 
+    # If the data is still compressed, use gunzip/bz2 to uncompress the data
     if magic.startswith(b'\x1f\x8b'):
         return gzip.GzipFile(filename, 'rb')
 
     if magic.startswith(b'BZh'):
         return bz2.BZ2File(filename, 'rb')
 
-    return open(filename, 'rb')
+    return fsspec.open(filename,
+                       mode='rb',
+                       compression="infer",
+                       **storage_options).open()
 
 
 def stringarray_to_chararray(arr, numchars=None):

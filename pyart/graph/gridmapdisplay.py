@@ -89,7 +89,7 @@ class GridMapDisplay(object):
                   colorbar_label=None, colorbar_orient='vertical',
                   ax=None, fig=None, lat_lines=None,
                   lon_lines=None, projection=None,
-                  embelish=True, ticks=None, ticklabs=None,
+                  embellish=True, ticks=None, ticklabs=None,
                   imshow=False, **kwargs):
         """
         Plot the grid using xarray and cartopy.
@@ -151,7 +151,7 @@ class GridMapDisplay(object):
         projection : cartopy.crs class
             Map projection supported by cartopy. Used for all subsequent calls
             to the GeoAxes object generated. Defaults to PlateCarree.
-        emblish : bool
+        embellish : bool
             True by default. Set to False to supress drawinf of coastlines
             etc... Use for speedup when specifying shapefiles.
             Note that lat lon labels only work with certain projections.
@@ -202,7 +202,9 @@ class GridMapDisplay(object):
                         + " Overridding defined axes and using default "
                         + "axes with projection Mercator.",
                         UserWarning)
-                ax = plt.axes(projection=projection)
+                with warnings.catch_warnings():
+                    warnings.filterwarnings("ignore")
+                    ax = plt.axes(projection=projection)
 
         # Define GeoAxes if None is provided.
         else:
@@ -215,7 +217,9 @@ class GridMapDisplay(object):
                     + " Overridding defined axes and using default "
                     + "axes with projection Mercator.",
                     UserWarning)
-            ax = plt.axes(projection=projection)
+            with warnings.catch_warnings():
+                warnings.filterwarnings("ignore")
+                ax = plt.axes(projection=projection)
 
         # plot the grid using xarray
         if norm is not None: # if norm is set do not override with vmin/vmax
@@ -233,7 +237,7 @@ class GridMapDisplay(object):
         self.mappables.append(pm)
         self.fields.append(field)
 
-        if embelish:
+        if embellish:
             # Create a feature for States/Admin 1 regions at 1:50m
             # from Natural Earth
             states = self.cartopy_states()

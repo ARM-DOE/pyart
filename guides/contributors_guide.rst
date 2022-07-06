@@ -20,8 +20,8 @@ Important Links
 ---------------
 
 - Official source code repository: https://github.com/ARM-DOE/pyart
-- HTML documentation: http://arm-doe.github.io/pyart-docs-travis/
-- Examples: http://arm-doe.github.io/pyart/dev/auto_examples/index.html
+- HTML documentation: https://arm-doe.github.io/pyart
+- Examples: https://arm-doe.github.io/pyart/examples/
 - Mailing List: http://groups.google.com/group/pyart-users/
 - Issue Tracker: https://github.com/ARM-DOE/pyart/issues
 
@@ -60,6 +60,9 @@ To update an older version of Py-ART to the latest release use::
 
     conda update -c conda-forge arm_pyart
 
+If you are using mamba::
+
+    mamba install -c conda-forge arm_pyart
 
 Resources
 ---------
@@ -69,7 +72,8 @@ Pyart:
 - https://github.com/openradar/AMS-Short-Course-on-Open-Source-Radar-Software
 - https://github.com/EVS-ATMOS/pyart_short_course
 - https://www.youtube.com/watch?v=diiP-Q3bKZw
-- http://arm-doe.github.io/pyart/dev/auto_examples/index.html
+- https://arm-doe.github.io/pyart/examples/
+- https://arm-doe.github.io/pyart/blog.html
 
 Git:
 
@@ -245,7 +249,7 @@ produces the same values. It works that, it takes known values that are
 obtained from the function, and when pytest is ran, it takes the test
 function and reruns the function and compares the results to the original.
 
-An example:
+An example continuing to use the VAD code above:
 
 .. code-block:: python
 
@@ -408,14 +412,18 @@ After fetching, a git merge is needed to pull in the changes.
 
 This is done by::
 
-        git merge upstream/master
+        git merge upstream/main
 
 To prevent a merge commit::
 
-        git merge --ff-only upstream/master
+        git merge --ff-only upstream/main
 
-After creating a pull request through GitHub, two outside checkers,
-Appveyor and TravisCI will determine if the code past all checks. If the
-code fails either tests, as the pull request sits, make changes to fix the
-code and when pushed to GitHub, the pull request will automatically update
-and TravisCI and Appveyor will automatically rerun.
+After creating a pull request through GitHub, GitHub Actions will determine
+if the code past all checks for multiple Python versions as well as Operating
+Systems. If the code fails either tests, as the pull request sits, we will
+provide guidance to make changes to fix the code. Once the code is fixed and
+committed to GitHub, GitHub Actions will automatically rerun. A documentation
+build will also run to update Py-ART's documentation with the new changes.
+Code coverage will also provided statistics if your new code is properly
+unit tested. PEP8 check will also run with changes to fix to keep the code
+to PEP8 standards.

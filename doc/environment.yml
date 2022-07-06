@@ -3,7 +3,6 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - python
   - gdal
   - numpy
   - scipy
@@ -21,9 +20,19 @@ dependencies:
   - pandoc
   - netcdf4
   - pytest
+  - pkg-config
+  - Cython
+  - fsspec
+  - s3fs
+  - glpk
+  - cftime>=1.6.0
   - pip
   - pip:
-      - sphinx_rtd_theme
+      - pydata-sphinx-theme<0.9.0
       - sphinx_gallery
       - sphinx-copybutton
+      - myst_nb
+      - ablog
       - nbsphinx
+      - pooch
+      - versioneer

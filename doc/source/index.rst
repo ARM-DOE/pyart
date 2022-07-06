@@ -3,51 +3,46 @@ The Python ARM Radar Toolkit - Py-ART
 =====================================
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    :hidden:
-   :caption: Documentation
+   :caption: User Guide
+   
+   userguide/index.rst
+
+.. toctree::
+   :maxdepth: 2
+   :hidden:
+   :caption: Reference Guide
 
    API/index.rst
-   source/auto_examples/index.rst
-   INSTALL
-   setting_up_an_environment
-   contributors_guide
+
+.. toctree::
+   :maxdepth: 2
+   :hidden:
+   :caption: Example Gallery
+
+   examples/index.rst
+
+.. toctree::
+   :maxdepth: 2
+   :hidden:
+   :caption: Notebook Gallery
+
+   notebook-gallery.rst
 
 .. toctree::
    :maxdepth: 1
    :hidden:
-   :caption: Downloads
-
-   Anaconda Cloud <https://anaconda.org/conda-forge/arm_pyart>
-   GitHub Repo <https://github.com/ARM-DOE/pyart>
-   Zip File of Repository <https://github.com/ARM-DOE/pyart/archive/master.zip>
+   :caption: Blog
+   
+   blog.md
 
 .. toctree::
    :maxdepth: 1
    :hidden:
-   :caption: Notebooks
-
-   notebooks/basic_ingest_using_test_radar_object.ipynb
-   notebooks/changing_fields_and_saving.ipynb
-   notebooks/dealiasing_velocity.ipynb
-   notebooks/mapping_data_to_a_cartesian_grid.ipynb
-   notebooks/masking_data_with_gatefilters.ipynb
-   notebooks/the_pyart_radar_object_and_indexing.ipynb
-
-.. toctree::
-   :maxdepth: 1
-   :hidden:
-   :caption: Getting Help
-
-   GitHub Issue Tracker <https://github.com/ARM-DOE/pyart/issues>
-   Mailing List <https://groups.google.com/forum/#!forum/pyart-users>
-
-.. toctree::
-   :maxdepth: 1
-   :hidden:
-   :caption: Science Lead
-
-   Scott Collis <https://www.anl.gov/profile/scott-m-collis>
+   :caption: Changelog
+   
+   changelog.md
 
 What is Py-ART?
 ===============

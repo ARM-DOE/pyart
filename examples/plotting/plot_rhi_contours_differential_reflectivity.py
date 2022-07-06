@@ -13,10 +13,11 @@ print(__doc__)
 # License: BSD 3 clause
 import matplotlib.pyplot as plt
 import pyart
+from pyart.testing import get_test_data
 import numpy as np
 import scipy.ndimage as ndimage
 
-filename = '220629.mdv'
+filename = get_test_data('220629.mdv')
 
 # create the plot using RadarDisplay
 sweep = 0

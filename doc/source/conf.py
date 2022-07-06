@@ -46,17 +46,20 @@ extensions = [
     'matplotlib.sphinxext.plot_directive',
     'sphinx.ext.napoleon',
     'sphinx_copybutton',
+    'sphinx_gallery.gen_gallery',
+    'sphinx_gallery.load_style',
     'nbsphinx',
+    'myst_nb',
+    'ablog'
 ]
 
 exclude_patterns = ['_build', '**.ipynb_checkpoints']
 
 # only include examples if the BUILD_PYART_EXAMPLES env. variable is set
-if 'BUILD_PYART_EXAMPLES' in os.environ:
-    extensions.append('sphinx_gallery.gen_gallery')
-    sphinx_gallery_conf = {
-        'examples_dirs': '../../examples',
-        'gallery_dirs': 'source/auto_examples'
+extensions.append('sphinx_gallery.gen_gallery')
+sphinx_gallery_conf = {
+    'examples_dirs': '../../examples',
+    'gallery_dirs': 'examples'
 }
 
 
@@ -64,6 +67,8 @@ if 'BUILD_PYART_EXAMPLES' in os.environ:
 # https://github.com/matplotlib/matplotlib/blob/f3ed922d935751e08494e5fb5311d3050a3b637b/lib/matplotlib/sphinxext/plot_directive.py#L81
 plot_html_show_source_link = False
 plot_html_show_formats = False
+plot_formats = ['png']
+plot_rcparams = {'savefig.bbox': 'tight'}
 
 # Generate the API documentation when building
 autoclass_content = "both"
@@ -84,15 +89,14 @@ templates_path = ['_templates']
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
 #
-# source_suffix = ['.rst', '.md']
-source_suffix = '.rst'
+source_suffix = ['.rst', '.md', '.ipynb']
 
 # The master toctree document.
 master_doc = 'index'
 
 # General information about the project.
 project = 'Py-ART'
-copyright = '2013-2020, Py-ART developers'
+copyright = '2013-2022, Py-ART developers'
 author = 'Py-ART developers'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -123,7 +127,7 @@ language = None
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This patterns also effect to html_static_path and html_extra_path
-exclude_patterns = []
+exclude_patterns = ["*.ipynb"]
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
@@ -138,16 +142,16 @@ todo_include_todos = False
 # a list of builtin themes.
 #
 
-html_theme = 'sphinx_rtd_theme'
-import sphinx_rtd_theme
-html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
+html_theme = 'pydata_sphinx_theme'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
 #
 html_theme_options = {
-    'analytics_id': 'UA-221367849-1',
+    'google_analytics_id': 'G-JJEG3CV376',
+    "github_url": "https://github.com/ARM-DOE/pyart",
+    "twitter_url": "https://twitter.com/Py_ART",
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
@@ -155,18 +159,62 @@ html_theme_options = {
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 
+html_css_files = ['pyart-theme.css']
+
+html_js_files = ['doc_shared.js']
+
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.
 #
 # This is required for the alabaster theme
 # refs: http://alabaster.readthedocs.io/en/latest/installation.html#sidebars
 html_sidebars = {
-    '**': [
-        'relations.html',  # needs 'show_related': True theme option to display
+    'userguide/*': ['searchbox.html', 'sidebar-nav-bs.html'],
+    'API/*': ['searchbox.html', 'sidebar-nav-bs.html'],
+    'examples/*': ['searchbox.html', 'sidebar-nav-bs.html'],
+    'notebook-gallery': ['searchbox.html', 'sidebar-nav-bs.html'],
+    'changelog': ['searchbox.html', 'sidebar-nav-bs.html'],
+    'blog': [
         'searchbox.html',
-    ]
+        'sidebar-nav-bs.html',
+        'tagcloud.html',
+        'recentposts.html',
+        'archives.html',
+    ],
+    'blog_posts/*/*': [
+        'searchbox.html',
+        'sidebar-nav-bs.html',
+        'postcard.html',
+        'recentposts.html',
+        'archives.html',
+    ],
 }
 
+# Setup the blog portion
+blog_baseurl = 'mgrover1.github.io/pyart/'
+blog_title = 'PyART Blog'
+blog_path = 'blog'
+fontawesome_included = True
+blog_post_pattern = 'blog_posts/*/*'
+post_redirect_refresh = 1
+post_auto_image = 1
+post_auto_excerpt = 2
+
+# Don't execute the jupyter notebooks
+jupyter_execute_notebooks = 'off'
+
+# Extra variables that will be available to the templates. Used to create the
+# links to the Github repository sources and issues
+html_context = {
+    'doc_path': 'doc',
+    'galleries': sphinx_gallery_conf['gallery_dirs'],
+    'gallery_dir': dict(zip(sphinx_gallery_conf['gallery_dirs'],
+                            sphinx_gallery_conf['examples_dirs'])),
+    'api_dir': 'API/generated',
+    'github_user': 'ARM-DOE',
+    'github_repo': 'pyart',
+    'github_version': 'main',
+}
 
 # -- Options for HTMLHelp output ------------------------------------------
 
@@ -226,3 +274,10 @@ intersphinx_mapping = {
     'pandas': ('https://pandas.pydata.org/pandas-docs/stable', None),
     'matplotlib': ('https://matplotlib.org', None),
     }
+
+# Add myst extensions
+myst_enable_extensions = ['amsmath',
+                          'colon_fence',
+                          'deflist',
+                          'html_image',
+                          'dollarmath']

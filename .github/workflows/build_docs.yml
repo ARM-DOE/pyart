@@ -29,19 +29,32 @@ jobs:
           use-mamba: true
           miniforge-variant: Mambaforge
 
+      - name: Fetch all history for all tags and branches
+        run: |
+           git fetch --prune --unshallow
+
+      - name: Set TRMM RSL path
+        env:
+          RSL_PATH: ${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-3 
+        run: echo "$RSL_PATH"
+
       - name: Install PyART
+        env:
+          RSL_PATH: ${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-3
         run: |
           pip install -e .
       # Build the website
       - name: Build the site
+        env:
+          RSL_PATH: ${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-3
         run: |
           cd doc
-          make dirhtml
+          make html
       # Push the book's HTML to github-pages
       - name: GitHub Pages action
         uses: peaceiris/actions-gh-pages@v3.8.0
         if: github.ref == 'refs/heads/main'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: doc/build/dirhtml
-          cname: https://arm-doe.github.io/pyart/
+          publish_dir: doc/build/html
+          cname: https:/arm-doe.github.io/pyart/

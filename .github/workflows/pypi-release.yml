@@ -1,0 +1,109 @@
+name: Build distribution
+on:
+  release:
+    types:
+      - published
+      
+  workflow_dispatch: # allows you to trigger the workflow run manually
+
+jobs:
+  build-artifacts:
+    runs-on: macos-latest
+    if: github.repository == 'ARM-DOE/pyart'
+    defaults:
+      run:
+        shell: bash -l {0}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+       # Install dependencies
+      - name: Setup Conda Environment
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          python-version: 3.9
+          environment-file: continuous_integration/environment-ci.yml
+          activate-environment: pyart-dev
+          auto-activate-base: false
+          mamba-version: '*'
+          use-mamba: true
+          miniforge-variant: Mambaforge
+
+      - name: Set TRMM RSL path
+        run: |
+          mamba install -c conda-forge trmm_rsl
+          export RSL_PATH=${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-3 
+
+      - name: Fetch all history for all tags and branches
+        run: |
+           git fetch --prune --unshallow
+
+      - name: Install pip dependencies
+        env:
+          RSL_PATH: ${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-3 
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install build twine
+
+      - name: Build tarball and wheels
+        env:
+          RSL_PATH: ${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-3 
+        run: |
+          git clean -xdf
+          git restore -SW .
+          python -m build --sdist --wheel .
+          
+      - name: Check built artifacts
+        env:
+          RSL_PATH: ${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-3 
+        run: |
+          twine check dist/*.whl
+          pwd
+          if [ -f dist/arm-pyart-0.0.0.tar.gz ]; then
+            echo "❌ INVALID VERSION NUMBER"
+            exit 1
+          else
+            echo "✅ Looks good"
+          fi
+      - uses: actions/upload-artifact@v2
+        with:
+          name: releases
+          path: dist
+
+  test-built-dist:
+    needs: build-artifacts
+    runs-on: macos-latest
+    steps:
+      - uses: actions/setup-python@v2
+        name: Install Python
+        with:
+          python-version: 3.9
+      - uses: actions/download-artifact@v2
+        with:
+          name: releases
+          path: dist
+      - name: List contents of built dist
+        run: |
+          ls -ltrh
+          ls -ltrh dist
+      - name: Verify the built dist/wheel is valid
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install wheel setuptools
+          python -m pip install dist/arm_pyart*.whl
+          python -c "import pyart; print(pyart.__version__)"
+          
+  upload-to-pypi:
+    needs: test-built-dist
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: releases
+          path: dist
+      - name: Publish package to PyPI
+        uses: pypa/gh-action-pypi-publish@v1.5.0
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_TOKEN }}
+          verbose: true

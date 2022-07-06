@@ -14,15 +14,16 @@ print(__doc__)
 
 import matplotlib.pyplot as plt
 import pyart
+from pyart.testing import get_test_data
 
-filename = 'KATX20130717_195021_V06'
+filename = get_test_data('KATX20130717_195021_V06')
 radar = pyart.io.read_nexrad_archive(filename)
 display = pyart.graph.RadarDisplay(radar)
 fig = plt.figure(figsize=(10, 10))
 
 ax = fig.add_subplot(221)
 display.plot('velocity', 1, ax=ax, title='Doppler Velocity',
-             colorbar_label='',
+             colorbar_label='', vmin=-32.0, vmax=32.0,
              axislabels=('', 'North South distance from radar (km)'))
 display.set_limits((-300, 300), (-300, 300), ax=ax)
 

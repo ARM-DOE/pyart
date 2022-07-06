@@ -2,9 +2,14 @@ include *.rst
 recursive-include doc *
 recursive-include examples *.py *.txt
 recursive-include pyart *.c *.h *.pyx *.pxd
+include requirements.txt
 include README.rst
 include LICENSE.txt
 include INSTALL.rst
+include pyart/testing/registry.txt
 include pyart/correct/src/UWASHINGTON_4DD_README
 include pyart/__check_build/README
 include pyart/graph/balance-rgb.txt
+include versioneer.py
+include pyart/_version.py
+include pyart/testing/data/*

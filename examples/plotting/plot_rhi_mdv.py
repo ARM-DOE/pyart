@@ -13,8 +13,9 @@ print(__doc__)
 
 import matplotlib.pyplot as plt
 import pyart
+from pyart.testing import get_test_data
 
-filename = '110041.mdv'
+filename = get_test_data('110041.mdv')
 
 # create the plot using RadarDisplay
 radar = pyart.io.read_mdv(filename)

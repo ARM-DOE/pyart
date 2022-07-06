@@ -10,8 +10,6 @@ from matplotlib.dates import DateFormatter
 import numpy as np
 import netCDF4
 from scipy.interpolate import griddata
-from pandas.plotting import register_matplotlib_converters
-register_matplotlib_converters()
 
 from . import common
 from ..core.transforms import antenna_to_cartesian
@@ -476,8 +474,8 @@ class RadarDisplay(object):
         # plot the data
         # check for negative values
         sweep_slice = self._radar.get_slice(sweep)
-        az_mean = np.abs(np.mean(self._radar.azimuth['data'][sweep_slice]))
-        if 89.5 <= az_mean <= 90.0:
+        az_median = np.abs(np.median(self._radar.azimuth['data'][sweep_slice]))
+        if (89.5 <= az_median <= 90.0) or (269. <= az_median <= 271.):
             R = np.sqrt(x ** 2 + y ** 2) * np.sign(x)
         else:
             R = np.sqrt(x ** 2 + y ** 2) * np.sign(y)
@@ -1468,7 +1466,7 @@ class RadarDisplay(object):
         # filter out antenna transitions
         if filter_transitions and self.antenna_transition is not None:
             in_trans = self.antenna_transition[sweep_slice]
-            data = data[in_trans == 0]
+            data = data[in_trans != 1]
 
         return data
 
@@ -1491,7 +1489,7 @@ class RadarDisplay(object):
         # filter out antenna transitions
         if filter_transitions and self.antenna_transition is not None:
             in_trans = self.antenna_transition
-            data = data[in_trans == 0]
+            data = data[in_trans != 1]
 
         return data.T
 

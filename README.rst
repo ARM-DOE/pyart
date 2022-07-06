@@ -2,7 +2,7 @@
 The Python ARM Radar Toolkit (Py-ART)
 =====================================
 
-|Travis| |AppVeyor|
+|GithubCI| |CodeCovStatus|
 
 |AnacondaCloud| |CondaDownloads|
 
@@ -10,11 +10,11 @@ The Python ARM Radar Toolkit (Py-ART)
 
 |ARM| |Tweet|
 
-.. |Travis| image:: https://app.travis-ci.com/ARM-DOE/pyart.svg?branch=main
-    :target: https://app.travis-ci.com/github/ARM-DOE/pyart
+.. |GithubCI| image:: https://img.shields.io/github/workflow/status/ARM-DOE/pyart/CI?label=CI&logo=github
+    :target: https://github.com/ARM-DOE/pyart/actions?query=workflow%3ACI
 
-.. |AppVeyor| image:: https://ci.appveyor.com/api/projects/status/9do57qycha65j4v9/branch/master?svg=true
-    :target: https://ci.appveyor.com/project/JonathanHelmus/pyart-l711v/branch/master
+.. |CodeCovStatus| image:: https://img.shields.io/codecov/c/github/ARM-DOE/pyart.svg?logo=codecov
+    :target: https://codecov.io/gh/ARM-DOE/pyart
 
 .. |AnacondaCloud| image:: https://anaconda.org/conda-forge/arm_pyart/badges/version.svg
     :target: https://anaconda.org/conda-forge/arm_pyart
@@ -38,7 +38,7 @@ The Python ARM Radar Toolkit, Py-ART, is an open source Python module
 containing a growing collection of weather radar algorithms and utilities
 build on top of the Scientific Python stack and distributed under the
 3-Clause BSD license. Py-ART is used by the 
-`Atmospheric Radiation Measurement (ARM) Climate Research Facility 
+`Atmospheric Radiation Measurement (ARM) User Facility 
 <http://www.arm.gov>`_ for working with data from a number of precipitation
 and cloud radars, but has been designed so that it can be used by others in
 the radar and atmospheric communities to examine, processes, and analyze
@@ -50,7 +50,7 @@ Important Links
 
 - Official source code repository: https://github.com/ARM-DOE/pyart
 - HTML documentation: https://arm-doe.github.io/pyart/
-- Examples: https://arm-doe.github.io/pyart/source/auto_examples/index.html
+- Examples: https://arm-doe.github.io/pyart/examples
 - Mailing List: https://groups.google.com/group/pyart-users/
 - Issue Tracker: https://github.com/ARM-DOE/pyart/issues
 
@@ -99,6 +99,10 @@ To update an older version of Py-ART to the latest release use::
 
     conda update -c conda-forge arm_pyart
 
+If you are using mamba::
+
+    mamba install -c conda-forge arm_pyart
+
 If you do not wish to use Anaconda or Miniconda as a Python environment or want
 to use the latest, unreleased version of Py-ART see the section below on 
 **Installing from source**.
@@ -143,23 +147,27 @@ Other related open source software for working with weather radar data:
   
 * `BALTRAD <https://baltrad.eu/>`_ : Community-based weather radar networking.
 
-* `MMM-Py <https://github.com/nasa/MMM-Py>`_ : 
+* `MMM-Py <https://github.com/nasa/MMM-Py>`_ :
   Marshall MRMS Mosaic Python Toolkit.
 
-* `CSU_RadarTools <https://github.com/CSU-Radarmet/CSU_RadarTools>`_ : 
+* `CSU_RadarTools <https://github.com/CSU-Radarmet/CSU_RadarTools>`_ :
   Colorado State University Radar Tools.
 
 * `TRMM RSL <https://trmm-fc.gsfc.nasa.gov/trmm_gv/software/rsl/>`_ :
   TRMM Radar Software Library.
 
-* `RadX <https://www.ral.ucar.edu/projects/titan/docs/radial_formats/radx.html>`_: 
+* `RadX <https://www.ral.ucar.edu/projects/titan/docs/radial_formats/radx.html>`_ :
   Radx C++ Software Package for Radial Radar Data.
+
+* `PyDDA <https://openradarscience.org/PyDDA/>`_ :
+  Software designed to retrieve wind kinematics in precipitation storm systems
+  from one or more Doppler weather radars.
 
 
 Dependencies
 ============
 
-Py-ART is tested to work under Python 3.6, 3.7 and 3.8
+Py-ART is tested to work under Python 3.6, 3.7, 3.8, 3.9 and 3.10
 
 The required dependencies to install Py-ART in addition to Python are:
 
@@ -167,6 +175,9 @@ The required dependencies to install Py-ART in addition to Python are:
 * `SciPy <https://www.scipy.org>`_
 * `matplotlib <https://matplotlib.org/>`_
 * `netCDF4 <https://github.com/Unidata/netcdf4-python>`_
+* `pooch <https://pypi.org/project/pooch/>`_
+* `Cython <https://cython.readthedocs.io/en/latest/>`_
+* `setuptools <https://setuptools.pypa.io/en/latest/index.html>`_
 
 A working C/C++ compiler is required for some optional modules. An easy method
 to install these dependencies is by using a 
@@ -249,6 +260,10 @@ To install for all users on Unix/Linux::
 
     python setup.py build
     sudo python setup.py install
+
+Development install using pip from within Py-ART directory::
+
+    pip install -e .
 
 
 Development
