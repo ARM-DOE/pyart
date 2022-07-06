@@ -5,12 +5,12 @@
 
 Computation times
 =================
-**01:28.556** total execution time for **examples_mapping** files:
+**01:11.322** total execution time for **examples_mapping** files:
 
 +--------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_mapping_plot_compare_two_radars_gatemapper.py` (``plot_compare_two_radars_gatemapper.py``) | 00:56.465 | 0.0 MB |
+| :ref:`sphx_glr_examples_mapping_plot_compare_two_radars_gatemapper.py` (``plot_compare_two_radars_gatemapper.py``) | 00:48.622 | 0.0 MB |
 +--------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_mapping_plot_map_two_radars_to_grid.py` (``plot_map_two_radars_to_grid.py``)               | 00:19.238 | 0.0 MB |
+| :ref:`sphx_glr_examples_mapping_plot_map_two_radars_to_grid.py` (``plot_map_two_radars_to_grid.py``)               | 00:14.180 | 0.0 MB |
 +--------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_mapping_plot_map_one_radar_to_grid.py` (``plot_map_one_radar_to_grid.py``)                 | 00:12.853 | 0.0 MB |
+| :ref:`sphx_glr_examples_mapping_plot_map_one_radar_to_grid.py` (``plot_map_one_radar_to_grid.py``)                 | 00:08.520 | 0.0 MB |
 +--------------------------------------------------------------------------------------------------------------------+-----------+--------+
