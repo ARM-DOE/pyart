@@ -198,5 +198,4 @@ def test_standardize():
         atol=1e-6)
 
     pytest.raises(
-        ValueError, pyart.retrieve.echo_class._standardize,
-        rhohv, 'foo')
+        ValueError, pyart.retrieve.echo_class._standardize, rhohv, 'foo')
