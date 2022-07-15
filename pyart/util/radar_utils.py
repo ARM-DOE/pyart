@@ -198,7 +198,7 @@ def join_radar(radar1, radar2):
             new_field[sh1[0]:, 0:sh2[1]] = radar2.fields[var]['data']
             new_radar.fields[var]['data'] = new_field
         else:
-            warn("Field "+var+" not present in both radars")
+            print("Field "+var+" not present in both radars")
             fields_to_remove.append(var)
 
     if fields_to_remove:
