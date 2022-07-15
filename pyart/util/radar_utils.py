@@ -104,6 +104,7 @@ def to_vpt(radar, single_scan=True):
     return
 
 
+
 def join_radar(radar1, radar2):
     """
     Combine two radar instances into one.
@@ -135,6 +136,38 @@ def join_radar(radar1, radar2):
     new_radar.nsweeps += radar2.nsweeps
     new_radar.sweep_mode['data'] = np.append(
         radar1.sweep_mode['data'], radar2.sweep_mode['data'])
+    if ((radar1.rays_are_indexed is not None) and
+            (radar2.rays_are_indexed is not None)):
+        new_radar.rays_are_indexed['data'] = np.append(
+            radar1.rays_are_indexed['data'],
+            radar2.rays_are_indexed['data'])
+    else:
+        new_radar.rays_are_indexed = None
+
+    if new_radar.instrument_parameters is not None:
+        if 'nyquist_velocity' in new_radar.instrument_parameters:
+            new_radar.instrument_parameters['nyquist_velocity']['data'] = (
+                np.append(
+                    radar1.instrument_parameters['nyquist_velocity']['data'],
+                    radar2.instrument_parameters['nyquist_velocity']['data']))
+        if 'pulse_width' in new_radar.instrument_parameters:
+            new_radar.instrument_parameters['pulse_width']['data'] = (
+                np.append(
+                    radar1.instrument_parameters['pulse_width']['data'],
+                    radar2.instrument_parameters['pulse_width']['data']))
+        if 'number_of_pulses' in new_radar.instrument_parameters:
+            new_radar.instrument_parameters['number_of_pulses']['data'] = (
+                np.append(
+                    radar1.instrument_parameters['number_of_pulses']['data'],
+                    radar2.instrument_parameters['number_of_pulses']['data']))
+
+    if ((radar1.ray_angle_res is not None) and
+            (radar2.ray_angle_res is not None)):
+        new_radar.ray_angle_res['data'] = np.append(
+            radar1.ray_angle_res['data'],
+            radar2.ray_angle_res['data'])
+    else:
+        new_radar.ray_angle_res = None
 
     if len(radar1.range['data']) >= len(radar2.range['data']):
         new_radar.range['data'] = radar1.range['data']
@@ -151,16 +184,26 @@ def join_radar(radar1, radar2):
     new_radar.time['units'] = datetime_utils.EPOCH_UNITS
     new_radar.nrays = len(new_radar.time['data'])
 
+    fields_to_remove = []
     for var in new_radar.fields.keys():
-        sh1 = radar1.fields[var]['data'].shape
-        sh2 = radar2.fields[var]['data'].shape
-        new_field_shape = (sh1[0] + sh2[0], max(sh1[1], sh2[1]))
-        new_field = np.ma.zeros(new_field_shape)
-        new_field[:] = np.ma.masked
-        new_field.set_fill_value(get_fillvalue())
-        new_field[0:sh1[0], 0:sh1[1]] = radar1.fields[var]['data']
-        new_field[sh1[0]:, 0:sh2[1]] = radar2.fields[var]['data']
-        new_radar.fields[var]['data'] = new_field
+        # if the field is present in both radars combine both fields
+        # otherwise remove it from new radar
+        if var in radar1.fields and var in radar2.fields:
+            sh1 = radar1.fields[var]['data'].shape
+            sh2 = radar2.fields[var]['data'].shape
+            new_field_shape = (sh1[0] + sh2[0], max(sh1[1], sh2[1]))
+            new_field = np.ma.masked_all(new_field_shape)
+            new_field.set_fill_value(get_fillvalue())
+            new_field[0:sh1[0], 0:sh1[1]] = radar1.fields[var]['data']
+            new_field[sh1[0]:, 0:sh2[1]] = radar2.fields[var]['data']
+            new_radar.fields[var]['data'] = new_field
+        else:
+            warn("Field "+var+" not present in both radars")
+            fields_to_remove.append(var)
+
+    if fields_to_remove:
+        for field_name in fields_to_remove:
+            new_radar.fields.pop(field_name, None)
 
     # radar locations
     # TODO moving platforms - any more?
@@ -196,7 +239,9 @@ def join_radar(radar1, radar2):
                                                 radar2.longitude['data'])
         new_radar.altitude['data'] = np.append(radar1.altitude['data'],
                                                radar2.altitude['data'])
+
     return new_radar
+
 
 def image_mute_radar(
         radar, field, mute_field, mute_threshold, field_threshold=None):
