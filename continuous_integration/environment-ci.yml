@@ -21,7 +21,7 @@ dependencies:
   - Cython
   - fsspec
   - glpk
-  - cftime>=1.6.0
+  - cftime
   - pip
   - pip:
     - pooch
