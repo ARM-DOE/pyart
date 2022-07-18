@@ -9,7 +9,7 @@ import warnings
 
 
 # the path to the default configuration file
-_dirname = os.path.dirname(os.path.abspath(__file__))
+_dirname = os.path.dirname(__file__)
 _DEFAULT_CONFIG_FILE = os.path.join(_dirname, 'default_config.py')
 
 

@@ -6,7 +6,7 @@ import warnings
 
 import pyart
 
-dirname = os.path.dirname(os.path.abspath(__file__))
+dirname = os.path.dirname(__file__)
 CUSTOM_CONFIG_FILE = os.path.join(dirname, 'custom_config.py')
 
 
@@ -109,3 +109,4 @@ def test_intergration():
     assert 'reflectivity' not in radar.fields
     assert 'velocity' in radar.fields
     assert radar.time['foo'] == 'bar'
+    pyart.load_config()
