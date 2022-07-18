@@ -3,6 +3,7 @@ channels:
   - conda-forge
   - defaults
 dependencies:
+  - python
   - gdal
   - numpy
   - scipy
@@ -17,7 +18,6 @@ dependencies:
   - pytest-mpl
   - coveralls
   - flake8
-  - pytest
   - Cython
   - fsspec
   - glpk
