@@ -43,6 +43,7 @@ jobs:
           mamba-version: '*'
           use-mamba: true
           miniforge-variant: Mambaforge
+          extra-specs: python=${{ matrix.python-version }}
       
       - name: Set TRMM RSL path
         shell: bash -l {0}
