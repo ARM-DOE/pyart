@@ -85,7 +85,7 @@ jobs:
         env:
           RSL_PATH: ${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-3
         run: |
-          python -m pytest -v --pyargs pyart --cov=./ --cov-report=xml
+          python -m pytest -v pyart --cov=./ --cov-report=xml
 
       - name: Upload code coverage to Codecov
         uses: codecov/codecov-action@v2.1.0
