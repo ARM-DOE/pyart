@@ -6,7 +6,7 @@ import warnings
 
 import pyart
 
-dirname = os.path.dirname(__file__)
+dirname = os.path.dirname(os.path.abspath(__file__))
 CUSTOM_CONFIG_FILE = os.path.join(dirname, 'custom_config.py')
 
 
