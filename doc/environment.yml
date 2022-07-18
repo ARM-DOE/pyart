@@ -18,7 +18,6 @@ dependencies:
   - sphinx
   - ipython
   - pandoc
-  - pytest
   - pkg-config
   - Cython
   - fsspec
