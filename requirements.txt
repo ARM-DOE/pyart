@@ -3,7 +3,7 @@ scipy
 netCDF4
 matplotlib
 pooch
-cftime>=1.6.0
+cftime
 Cython
 fsspec
 s3fs
