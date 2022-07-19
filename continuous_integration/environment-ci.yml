@@ -21,7 +21,6 @@ dependencies:
   - glpk
   - cftime
   - setuptools
-  - libtiff <4.1.0
   - pip
   - pip:
     - pooch
