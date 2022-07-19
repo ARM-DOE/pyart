@@ -109,3 +109,4 @@ def test_intergration():
     assert 'reflectivity' not in radar.fields
     assert 'velocity' in radar.fields
     assert radar.time['foo'] == 'bar'
+    pyart.load_config()

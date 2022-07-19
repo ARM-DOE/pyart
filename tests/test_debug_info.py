@@ -38,9 +38,11 @@ class DisableModules(object):
 def test_debug_info_all_disabled():
     modules = ['numpy', 'scipy', 'matplotlib', 'netCDF4', 'cylp', 'glpk',
                'cvxopt', 'mpl_toolkits', 'platform']
+    save_dict = {}
     for module in modules:
         if module in sys.modules:
-            del sys.modules[module]
+            save_dict[module] = sys.modules[module]
+            sys.modules.pop(module)
     fail_loader = DisableModules(modules)
     sys.meta_path.append(fail_loader)
     with warnings.catch_warnings():
@@ -52,3 +54,5 @@ def test_debug_info_all_disabled():
         assert len(buf.getvalue()) > 0
     # remove the Mocked ImportErrors
     sys.meta_path.remove(fail_loader)
+    for module in save_dict.keys():
+        sys.modules[module] = save_dict[module]
