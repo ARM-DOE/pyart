@@ -5,6 +5,7 @@ dependencies:
   - numpy
   - scipy
   - matplotlib
+  - gdal
   - netcdf4
   - pytest
   - wradlib
