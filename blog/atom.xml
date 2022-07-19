@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>mgrover1.github.io/pyart/</id>
   <title>PyART Blog</title>
-  <updated>2022-07-19T17:37:42.229228+00:00</updated>
+  <updated>2022-07-19T17:41:48.528019+00:00</updated>
   <link href="mgrover1.github.io/pyart/"/>
   <link href="mgrover1.github.io/pyart/blog/atom.xml" rel="self"/>
   <generator uri="https://ablog.readthedocs.org/" version="0.10.26">ABlog</generator>

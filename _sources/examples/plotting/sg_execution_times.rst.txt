@@ -5,36 +5,36 @@
 
 Computation times
 =================
-**01:00.513** total execution time for **examples_plotting** files:
+**01:06.929** total execution time for **examples_plotting** files:
 
 +---------------------------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_plotting_plot_three_panel_gridmapdisplay.py` (``plot_three_panel_gridmapdisplay.py``)                         | 00:12.470 | 0.0 MB |
+| :ref:`sphx_glr_examples_plotting_plot_three_panel_gridmapdisplay.py` (``plot_three_panel_gridmapdisplay.py``)                         | 00:17.393 | 0.0 MB |
 +---------------------------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_plotting_plot_ppi_with_rings.py` (``plot_ppi_with_rings.py``)                                                 | 00:10.721 | 0.0 MB |
+| :ref:`sphx_glr_examples_plotting_plot_ppi_with_rings.py` (``plot_ppi_with_rings.py``)                                                 | 00:10.448 | 0.0 MB |
 +---------------------------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_plotting_plot_ppi_sigmet.py` (``plot_ppi_sigmet.py``)                                                         | 00:07.044 | 0.0 MB |
+| :ref:`sphx_glr_examples_plotting_plot_ppi_sigmet.py` (``plot_ppi_sigmet.py``)                                                         | 00:06.762 | 0.0 MB |
 +---------------------------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_plotting_plot_nexrad_image_muted_reflectivity.py` (``plot_nexrad_image_muted_reflectivity.py``)               | 00:05.144 | 0.0 MB |
+| :ref:`sphx_glr_examples_plotting_plot_nexrad_image_muted_reflectivity.py` (``plot_nexrad_image_muted_reflectivity.py``)               | 00:05.949 | 0.0 MB |
 +---------------------------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_plotting_plot_nexrad_multiple_moments.py` (``plot_nexrad_multiple_moments.py``)                               | 00:04.723 | 0.0 MB |
+| :ref:`sphx_glr_examples_plotting_plot_nexrad_multiple_moments.py` (``plot_nexrad_multiple_moments.py``)                               | 00:04.840 | 0.0 MB |
 +---------------------------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_plotting_plot_ppi_mdv.py` (``plot_ppi_mdv.py``)                                                               | 00:03.299 | 0.0 MB |
+| :ref:`sphx_glr_examples_plotting_plot_ppi_mdv.py` (``plot_ppi_mdv.py``)                                                               | 00:03.578 | 0.0 MB |
 +---------------------------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_plotting_plot_rhi_sigmet.py` (``plot_rhi_sigmet.py``)                                                         | 00:02.876 | 0.0 MB |
+| :ref:`sphx_glr_examples_plotting_plot_rhi_sigmet.py` (``plot_rhi_sigmet.py``)                                                         | 00:02.955 | 0.0 MB |
 +---------------------------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_plotting_plot_nexrad_reflectivity.py` (``plot_nexrad_reflectivity.py``)                                       | 00:02.619 | 0.0 MB |
+| :ref:`sphx_glr_examples_plotting_plot_nexrad_reflectivity.py` (``plot_nexrad_reflectivity.py``)                                       | 00:02.708 | 0.0 MB |
 +---------------------------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_plotting_plot_rhi_cfradial.py` (``plot_rhi_cfradial.py``)                                                     | 00:02.267 | 0.0 MB |
+| :ref:`sphx_glr_examples_plotting_plot_rhi_cfradial.py` (``plot_rhi_cfradial.py``)                                                     | 00:02.415 | 0.0 MB |
 +---------------------------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_plotting_plot_rhi_contours_differential_reflectivity.py` (``plot_rhi_contours_differential_reflectivity.py``) | 00:02.122 | 0.0 MB |
+| :ref:`sphx_glr_examples_plotting_plot_rhi_two_panel.py` (``plot_rhi_two_panel.py``)                                                   | 00:02.218 | 0.0 MB |
 +---------------------------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_plotting_plot_rhi_two_panel.py` (``plot_rhi_two_panel.py``)                                                   | 00:01.872 | 0.0 MB |
+| :ref:`sphx_glr_examples_plotting_plot_rhi_contours_differential_reflectivity.py` (``plot_rhi_contours_differential_reflectivity.py``) | 00:02.079 | 0.0 MB |
 +---------------------------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_plotting_plot_rhi_cfradial_singlescan.py` (``plot_rhi_cfradial_singlescan.py``)                               | 00:01.576 | 0.0 MB |
+| :ref:`sphx_glr_examples_plotting_plot_rhi_cfradial_singlescan.py` (``plot_rhi_cfradial_singlescan.py``)                               | 00:01.544 | 0.0 MB |
 +---------------------------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_plotting_plot_rhi_data_overlay.py` (``plot_rhi_data_overlay.py``)                                             | 00:01.419 | 0.0 MB |
+| :ref:`sphx_glr_examples_plotting_plot_xsect.py` (``plot_xsect.py``)                                                                   | 00:01.462 | 0.0 MB |
 +---------------------------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_plotting_plot_xsect.py` (``plot_xsect.py``)                                                                   | 00:01.319 | 0.0 MB |
+| :ref:`sphx_glr_examples_plotting_plot_rhi_data_overlay.py` (``plot_rhi_data_overlay.py``)                                             | 00:01.427 | 0.0 MB |
 +---------------------------------------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_plotting_plot_rhi_mdv.py` (``plot_rhi_mdv.py``)                                                               | 00:01.042 | 0.0 MB |
+| :ref:`sphx_glr_examples_plotting_plot_rhi_mdv.py` (``plot_rhi_mdv.py``)                                                               | 00:01.150 | 0.0 MB |
 +---------------------------------------------------------------------------------------------------------------------------------------+-----------+--------+
