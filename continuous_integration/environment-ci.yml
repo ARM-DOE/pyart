@@ -1,10 +1,7 @@
 name: pyart-dev
 channels:
   - conda-forge
-  - defaults
 dependencies:
-  - python
-  - gdal
   - numpy
   - scipy
   - matplotlib
