@@ -69,11 +69,9 @@ def test_calculate_velocity_texture():
     assert np.all(texture_field['data'] == 0)
 
     # Test none parameters
-    radar2 = pyart.io.read(pyart.testing.NEXRAD_ARCHIVE_MSG1_FILE)
-    nyq_dict = pyart.config.get_metadata('nyquist_velocity')
+    radar2 = pyart.io.read(pyart.testing.NEXRAD_ARCHIVE_MSG31_FILE)
     texture_field = pyart.retrieve.calculate_velocity_texture(
         radar2, vel_field=None, wind_size=4, nyq=None)
     assert_allclose(
         texture_field['data'][-1][-5:],
-        [0.00224374, 0.00224374, 0.00224374, 0.00224374,
-         0.00224374], atol=1e7)
+        [0.000363, 0.000363, 0.000363, 0.000363, 0.000363], atol=1e-03)
