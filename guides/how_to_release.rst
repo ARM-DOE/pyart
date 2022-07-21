@@ -45,10 +45,10 @@ Update the GitHub Release
 -------------------------
 
 From the ARM-DOE Github page, click on the Releases tab and make a new release.
-Use the existing tag pushed for the version. Include the release notes. Upload
-the tar.gz file from PyPI in the release. Some older releases also included a
-zip file, these are no longer included as PyPI only allows a single source
-distribution to be uploaded.
+https://github.com/ARM-DOE/pyart/releases Use the existing tag pushed for the
+version. Include the release notes. Upload the tar.gz file from PyPI in the
+release. Some older releases also included a zip file, these are no longer
+included as PyPI only allows a single source distribution to be uploaded.
 
 Create and upload a source distribution to PyPI
 -----------------------------------------------
@@ -118,7 +118,7 @@ Note, the conda-forge bot, will sometimes automatically create a PR on the
 arm_pyart-feedstock when a new version is uploaded to PyPI. Thus avoiding
 the conda-forge process above. Be aware, bot will not change pinning of run and
 host dependencies for you. Recommended following the method above if the recipe
-is changing.
+changes.
 
 
 Announce the release on the pyart-user mailing list
