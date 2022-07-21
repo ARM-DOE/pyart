@@ -1,6 +1,7 @@
 """ Unit Tests for Py-ART's retrieve/simple_moment_calculation.py module. """
 
 import numpy as np
+from numpy.testing import assert_allclose
 import pyart
 
 # Setup a test radar object for various retrievals
@@ -66,3 +67,13 @@ def test_calculate_velocity_texture():
     texture_field = pyart.retrieve.calculate_velocity_texture(
         radar, vel_field, wind_size=4, nyq=10)
     assert np.all(texture_field['data'] == 0)
+
+    # Test none parameters
+    radar2 = pyart.io.read(pyart.testing.NEXRAD_ARCHIVE_MSG1_FILE)
+    nyq_dict = pyart.config.get_metadata('nyquist_velocity')
+    texture_field = pyart.retrieve.calculate_velocity_texture(
+        radar2, vel_field=None, wind_size=4, nyq=None)
+    assert_allclose(
+        texture_field['data'][-1][-5:],
+        [0.00224374, 0.00224374, 0.00224374, 0.00224374,
+         0.00224374], atol=1e7)
