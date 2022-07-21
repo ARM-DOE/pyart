@@ -213,7 +213,7 @@ def get_field_location(radar, latitude, longitude):
         total_time = base_time + delta
         combined_time.append(total_time.to_numpy())
 
-    # Create a blank list to hold the^ xarray DataArrays
+    # Create a blank list to hold the xarray DataArrays
     ds_container = []
     da_meta = ['units', 'standard_name', 'long_name', 'valid_max',
                'valid_min', 'coordinates']
