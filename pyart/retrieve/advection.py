@@ -6,7 +6,7 @@ Advection calculations.
 import copy
 
 import numpy as np
-from scipy.ndimage import interpolation
+from scipy.ndimage import shift
 from netCDF4 import num2date
 
 from ..config import get_fillvalue
@@ -147,7 +147,7 @@ def grid_shift(grid, advection, trim_edges=0, field_list=None):
         data = np.ma.filled(data, np.nan)
 
         # shift the data
-        shifted_data = interpolation.shift(
+        shifted_data = shift(
             data, [0, advection[0], advection[1]], prefilter=False)
 
         # mask invalid, trim and place into grid
