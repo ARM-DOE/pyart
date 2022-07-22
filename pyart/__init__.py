@@ -53,7 +53,7 @@ import sys as _sys
 
 # Get the version
 try:
-    __version__ = get_distribution(__name__).version
+    __version__ = get_distribution("arm_pyart").version
 except DistributionNotFound:
     # package is not installed
     __version__ = '0.0.0'

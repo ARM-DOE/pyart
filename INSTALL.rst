@@ -7,7 +7,7 @@ Required Dependencies
 
 Py-ART requires the following software.
 
-* Python__ 3.6.x, 3.7.x or 3.8x
+* Python__ 3.6.x, 3.7.x, 3.8x, 3.9x or 3.10x
 
 __ http://www.python.org
 
@@ -26,6 +26,10 @@ __ http://matplotlib.org/
 * netCDF4__
 
 __ https://github.com/Unidata/netcdf4-python
+
+* Xarray__
+
+__ https://docs.xarray.dev/en/stable/
 
 
 Optional Dependencies

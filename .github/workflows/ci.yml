@@ -27,7 +27,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.6", "3.7", "3.8", "3.9", "3.10"]
+        python-version: ["3.7", "3.8", "3.9", "3.10"]
         os: [macOS, ubuntu, Windows]
 
     steps:
@@ -43,16 +43,36 @@ jobs:
           mamba-version: '*'
           use-mamba: true
           miniforge-variant: Mambaforge
+          python-version: ${{ matrix.python-version }}
       
       - name: Set TRMM RSL path
+        shell: bash -l {0}
         run: |
-          export RSL_PATH=$CONDA/pkgs/trmm_rsl-1.49-3
+          echo "$RUNNER_OS"
+          echo "$RUNNER_OS" == 'Windows'
+          if [ "$RUNNER_OS" == 'Windows' ]; then
+               echo 'Trmm will not be installed for Windows'
+          elif [ "$RUNNER_OS" == 'Linux' ]; then
+               mamba install -c conda-forge trmm_rsl
+               export RSL_PATH=$CONDA/pkgs/trmm_rsl-1.49-3
+          elif [ "$RUNNER_OS" == 'macOS' ]
+          then
+               mamba install -c conda-forge trmm_rsl
+               export RSL_PATH=$CONDA/pkgs/trmm_rsl-1.49-3
+          else
+               mamba install -c conda-forge trmm_rsl
+               export RSL_PATH=$CONDA/pkgs/trmm_rsl-1.49-3
+          fi
+          conda list
+          echo "$RSL_PATH"
           
       - name: Fetch all history for all tags and branches
         run: |
            git fetch --prune --unshallow
 
       - name: Install PyART
+        env:
+          RSL_PATH: ${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-3
         run: |
           python -m pip install -e . --no-deps --force-reinstall
 
@@ -66,7 +86,7 @@ jobs:
         env:
           RSL_PATH: ${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-3
         run: |
-          python -m pytest -v --pyargs pyart --cov=./ --cov-report=xml
+          python -m pytest -v --cov=./ --cov-report=xml
 
       - name: Upload code coverage to Codecov
         uses: codecov/codecov-action@v2.1.0
