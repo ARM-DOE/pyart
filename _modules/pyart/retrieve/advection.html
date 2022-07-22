@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.retrieve.advection &#8212; Py-ART 1.12.7.post2 documentation</title>
+    <title>pyart.retrieve.advection &#8212; Py-ART 1.12.7.post3 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -232,7 +232,7 @@
 <span class="kn">import</span> <span class="nn">copy</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">scipy.ndimage</span> <span class="kn">import</span> <span class="n">interpolation</span>
+<span class="kn">from</span> <span class="nn">scipy.ndimage</span> <span class="kn">import</span> <span class="n">shift</span>
 <span class="kn">from</span> <span class="nn">netCDF4</span> <span class="kn">import</span> <span class="n">num2date</span>
 
 <span class="kn">from</span> <span class="nn">..config</span> <span class="kn">import</span> <span class="n">get_fillvalue</span>
@@ -373,7 +373,7 @@
         <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
 
         <span class="c1"># shift the data</span>
-        <span class="n">shifted_data</span> <span class="o">=</span> <span class="n">interpolation</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span>
+        <span class="n">shifted_data</span> <span class="o">=</span> <span class="n">shift</span><span class="p">(</span>
             <span class="n">data</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">advection</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">advection</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> <span class="n">prefilter</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
         <span class="c1"># mask invalid, trim and place into grid</span>

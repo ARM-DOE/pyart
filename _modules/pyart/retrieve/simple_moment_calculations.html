@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.retrieve.simple_moment_calculations &#8212; Py-ART 1.12.7.post2 documentation</title>
+    <title>pyart.retrieve.simple_moment_calculations &#8212; Py-ART 1.12.7.post3 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -521,9 +521,9 @@
     <span class="n">vel_texture_field</span><span class="p">[</span><span class="s1">&#39;long_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Doppler velocity texture&#39;</span>
     <span class="n">vel_texture_field</span><span class="p">[</span><span class="s1">&#39;standard_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
         <span class="s1">&#39;texture_of_radial_velocity&#39;</span> <span class="o">+</span> <span class="s1">&#39;_of_scatters_away_from_instrument&#39;</span><span class="p">)</span>
-    <span class="n">vel_texture_field</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ndimage</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">median_filter</span><span class="p">(</span><span class="n">vel_texture</span><span class="p">,</span>
-                                                              <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">wind_size</span><span class="p">,</span>
-                                                                    <span class="n">wind_size</span><span class="p">))</span>
+    <span class="n">vel_texture_field</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ndimage</span><span class="o">.</span><span class="n">median_filter</span><span class="p">(</span><span class="n">vel_texture</span><span class="p">,</span>
+                                                      <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">wind_size</span><span class="p">,</span>
+                                                      <span class="n">wind_size</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">vel_texture_field</span></div>
 </pre></div>
 <div class="section">
