@@ -1,24 +1,26 @@
 name: pyart-dev
 channels:
   - conda-forge
-  - defaults
 dependencies:
-  - gdal
   - numpy
   - scipy
   - matplotlib
+  - gdal
   - netcdf4
   - pytest
   - wradlib
   - cartopy
   - cvxopt
-  - xarray>=0.21.1
+  - xarray
   - pytest-cov
+  - pytest-mpl
   - coveralls
   - flake8
-  - pytest
   - Cython
   - fsspec
+  - glpk
+  - cftime
+  - setuptools
   - pip
   - pip:
     - pooch

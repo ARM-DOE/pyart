@@ -1,5 +1,37 @@
 # Changelog
 
+## PyART v1.12.4
+
+([full changelog](https://github.com/ARM-DOE/pyart/compare/v1.12.2...7dc5d6b8deff4a2e42fd567588be65a88af07127))
+
+### Bugs fixed
+
+- FIX: Fix sorting issue with elevations and azimuths [#1171](https://github.com/ARM-DOE/pyart/pull/1171) ([@mgrover1](https://github.com/mgrover1))
+- FIX: Sort elevations and fix rogue radial issue [#1170](https://github.com/ARM-DOE/pyart/pull/1170) ([@mgrover1](https://github.com/mgrover1))
+- FIX: Read in remote compressed data by adding in default compression argument [#1160](https://github.com/ARM-DOE/pyart/pull/1160) ([@mgrover1](https://github.com/mgrover1))
+- FIX: Fix rounding issue with mask arrays, using np.round instead. [#1152](https://github.com/ARM-DOE/pyart/pull/1152) ([@zssherman](https://github.com/zssherman))
+- FIX: Fixes an issue with mismatch arrays. [#1151](https://github.com/ARM-DOE/pyart/pull/1151) ([@zssherman](https://github.com/zssherman))
+
+### Maintenance and upkeep improvements
+
+- MNT: Update vmin vmax to make velocity plot more visible. [#1175](https://github.com/ARM-DOE/pyart/pull/1175) ([@zssherman](https://github.com/zssherman))
+- MNT: Mispelling of embelish [#1158](https://github.com/ARM-DOE/pyart/pull/1158) ([@zssherman](https://github.com/zssherman))
+- MNT: Changing dependency check to Cartopy. [#1148](https://github.com/ARM-DOE/pyart/pull/1148) ([@zssherman](https://github.com/zssherman))
+
+### Other merged PRs
+
+- Update ARM name to remove climate [#1173](https://github.com/ARM-DOE/pyart/pull/1173) ([@mgrover1](https://github.com/mgrover1))
+- Pin version of xarray [#1167](https://github.com/ARM-DOE/pyart/pull/1167) ([@mgrover1](https://github.com/mgrover1))
+- ADD: Update Changelog for v1.12.2 [#1164](https://github.com/ARM-DOE/pyart/pull/1164) ([@mgrover1](https://github.com/mgrover1))
+- Add Image muting plotting example to gallery [#1154](https://github.com/ARM-DOE/pyart/pull/1154) ([@lauratomkins](https://github.com/lauratomkins))
+- TST: Adding unittest for correct bias function. [#1153](https://github.com/ARM-DOE/pyart/pull/1153) ([@zssherman](https://github.com/zssherman))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/ARM-DOE/pyart/graphs/contributors?from=2022-05-02&to=2022-06-21&type=c))
+
+[@jrobrien91](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Ajrobrien91+updated%3A2022-05-02..2022-06-21&type=Issues) | [@lauratomkins](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Alauratomkins+updated%3A2022-05-02..2022-06-21&type=Issues) | [@mgrover1](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Amgrover1+updated%3A2022-05-02..2022-06-21&type=Issues) | [@zssherman](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Azssherman+updated%3A2022-05-02..2022-06-21&type=Issues)
+
 ## PyART v1.12.2
 
 ([full changelog](https://github.com/ARM-DOE/pyart/compare/v1.12.0...v1.12.2))

@@ -474,8 +474,8 @@ class RadarDisplay(object):
         # plot the data
         # check for negative values
         sweep_slice = self._radar.get_slice(sweep)
-        az_mean = np.abs(np.mean(self._radar.azimuth['data'][sweep_slice]))
-        if (89.5 <= az_mean <= 90.0) or (269.5 <= az_mean <= 270.):
+        az_median = np.abs(np.median(self._radar.azimuth['data'][sweep_slice]))
+        if (89.5 <= az_median <= 90.0) or (269. <= az_median <= 271.):
             R = np.sqrt(x ** 2 + y ** 2) * np.sign(x)
         else:
             R = np.sqrt(x ** 2 + y ** 2) * np.sign(y)

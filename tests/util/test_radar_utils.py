@@ -10,6 +10,24 @@ def test_is_vpt():
     pyart.util.to_vpt(radar)
     assert pyart.util.is_vpt(radar)
 
+def test_join_radar():
+    radar1 = pyart.testing.make_empty_ppi_radar(10, 36, 3)
+    radar1.instrument_parameters = {
+        'nyquist_velocity': {'data': np.array([6] * 3)}
+    }
+    field = {'data': np.ones((36 * 3, 10))}
+    radar1.add_field('f1', field)
+    radar1.add_field('f2', field)
+    radar2 = pyart.testing.make_empty_ppi_radar(10, 36, 4)
+    radar2.instrument_parameters = {
+        'nyquist_velocity': {'data': np.array([8] * 4)}
+    }
+    field = {'data': np.ones((36 * 4, 10))}
+    radar2.add_field('f1', field)
+
+    radar3 = pyart.util.join_radar(radar1, radar2)
+    assert 'f1' in radar3.fields
+    assert len(radar3.instrument_parameters['nyquist_velocity']['data']) == 7
 
 def test_to_vpt():
     # single scan

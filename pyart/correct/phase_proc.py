@@ -983,7 +983,7 @@ def phase_proc_lp(radar, offset, debug=False, self_const=60000.0,
                   low_z=10.0, high_z=53.0, min_phidp=0.01, min_ncp=0.5,
                   min_rhv=0.8, fzl=4000.0, sys_phase=0.0,
                   overide_sys_phase=False, nowrap=None, really_verbose=False,
-                  LP_solver='cylp', refl_field=None, ncp_field=None,
+                  LP_solver='pyglpk', refl_field=None, ncp_field=None,
                   rhv_field=None, phidp_field=None, kdp_field=None,
                   unf_field=None, window_len=35, proc=1, coef=0.914):
     """
@@ -1023,7 +1023,7 @@ def phase_proc_lp(radar, offset, debug=False, self_const=60000.0,
     really_verbose : bool, optional
         True to print LPX messaging. False to suppress.
     LP_solver : 'pyglpk' or 'cvxopt', 'cylp', or 'cylp_mp', optional
-        Module to use to solve LP problem. Default is 'cylp'.
+        Module to use to solve LP problem. Default is 'pyglpk'.
     refl_field, ncp_field, rhv_field, phidp_field, kdp_field : str, optional
         Name of field in radar which contains the horizonal reflectivity,
         normal coherent power, copolar coefficient, differential phase shift,
@@ -1169,7 +1169,7 @@ def phase_proc_lp(radar, offset, debug=False, self_const=60000.0,
 def phase_proc_lp_gf(radar, gatefilter=None, debug=False, self_const=60000.0,
                      low_z=10.0, high_z=53.0, min_phidp=0.01, fzl=4000.0,
                      system_phase=None, nowrap=None, really_verbose=False,
-                     LP_solver='cylp', refl_field=None, phidp_field=None,
+                     LP_solver='pyglpk', refl_field=None, phidp_field=None,
                      kdp_field=None, unf_field=None, window_len=35, proc=1,
                      coef=0.914, ncpts=None, first_gate_sysp=None, offset=0.0,
                      doc=0):
@@ -1202,7 +1202,7 @@ def phase_proc_lp_gf(radar, gatefilter=None, debug=False, self_const=60000.0,
     really_verbose : bool, optional
         True to print LPX messaging. False to suppress.
     LP_solver : 'pyglpk' or 'cvxopt', 'cylp', or 'cylp_mp', optional
-        Module to use to solve LP problem. Default is 'cylp'.
+        Module to use to solve LP problem. Default is 'pyglpk'.
     refl_field, ncp_field, rhv_field, phidp_field, kdp_field : str, optional
         Name of field in radar which contains the horizonal reflectivity,
         normal coherent power, copolar coefficient, differential phase shift,
