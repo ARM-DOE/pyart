@@ -247,6 +247,10 @@ class UFRayCreator(object):
         range_start = self.radar.range['meters_to_center_of_first_gate']
         range_start -= (range_step / 2.)  # range bin center to edge
         range_start_km, range_start_m = divmod(range_start, 1000)
+        if isinstance(range_start_m, np.ndarray):
+            range_start_m = range_start_m[0]
+        if isinstance(range_step, np.ndarray):
+            range_step = range_step[0]
         header['range_start_km'] = int(range_start_km)
         header['range_start_m'] = int(round(range_start_m))
         header['range_spacing_m'] = int(round(range_step))
