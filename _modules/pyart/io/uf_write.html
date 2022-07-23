@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.io.uf_write &#8212; Py-ART 1.12.7.post3 documentation</title>
+    <title>pyart.io.uf_write &#8212; Py-ART 1.12.7.post4 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -473,6 +473,10 @@
         <span class="n">range_start</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s1">&#39;meters_to_center_of_first_gate&#39;</span><span class="p">]</span>
         <span class="n">range_start</span> <span class="o">-=</span> <span class="p">(</span><span class="n">range_step</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">)</span>  <span class="c1"># range bin center to edge</span>
         <span class="n">range_start_km</span><span class="p">,</span> <span class="n">range_start_m</span> <span class="o">=</span> <span class="nb">divmod</span><span class="p">(</span><span class="n">range_start</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">range_start_m</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="n">range_start_m</span> <span class="o">=</span> <span class="n">range_start_m</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">range_step</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="n">range_step</span> <span class="o">=</span> <span class="n">range_step</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">header</span><span class="p">[</span><span class="s1">&#39;range_start_km&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">range_start_km</span><span class="p">)</span>
         <span class="n">header</span><span class="p">[</span><span class="s1">&#39;range_start_m&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">range_start_m</span><span class="p">))</span>
         <span class="n">header</span><span class="p">[</span><span class="s1">&#39;range_spacing_m&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">range_step</span><span class="p">))</span>
