@@ -160,6 +160,11 @@ def join_radar(radar1, radar2):
                 np.append(
                     radar1.instrument_parameters['number_of_pulses']['data'],
                     radar2.instrument_parameters['number_of_pulses']['data']))
+        if 'prt' in new_radar.instrument_parameters:
+            new_radar.instrument_parameters['prt']['data'] = (
+                np.append(
+                    radar1.instrument_parameters['prt']['data'],
+                    radar2.instrument_parameters['prt']['data']))
 
     if ((radar1.ray_angle_res is not None) and
             (radar2.ray_angle_res is not None)):
