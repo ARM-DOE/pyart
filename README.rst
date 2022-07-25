@@ -150,6 +150,9 @@ Other related open source software for working with weather radar data:
   
 * `BALTRAD <https://baltrad.eu/>`_ : Community-based weather radar networking.
 
+* `pyrad <https://github.com/MeteoSwiss/pyrad>`_:
+  A real-time data processing framework developed by MeteoSwiss and MeteoFrance. 
+
 * `MMM-Py <https://github.com/nasa/MMM-Py>`_ :
   Marshall MRMS Mosaic Python Toolkit.
 
