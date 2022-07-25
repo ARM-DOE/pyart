@@ -130,6 +130,9 @@ These include:
 * `ARTView <https://github.com/nguy/artview>`_ : 
   Interactive radar viewing browser.
 
+* `pyrad <https://github.com/MeteoSwiss/pyrad>`_:
+  A real-time data processing framework developed by MeteoSwiss and MeteoFrance. 
+
 * `PyTDA <https://github.com/nasa/PyTDA>`_ : 
   Python Turbulence Detection Algorithm.
 
@@ -149,9 +152,6 @@ Other related open source software for working with weather radar data:
   An open source library for weather radar data processing.
   
 * `BALTRAD <https://baltrad.eu/>`_ : Community-based weather radar networking.
-
-* `pyrad <https://github.com/MeteoSwiss/pyrad>`_:
-  A real-time data processing framework developed by MeteoSwiss and MeteoFrance. 
 
 * `MMM-Py <https://github.com/nasa/MMM-Py>`_ :
   Marshall MRMS Mosaic Python Toolkit.
