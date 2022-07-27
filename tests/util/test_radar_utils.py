@@ -69,14 +69,14 @@ def test_cut_radar():
                                                 rng_max = 800, ele_min = 0.75,
                                                 ele_max = 0.75, azi_min = 10,
                                                 azi_max = 100)
-    # assert correct domain
+    # assert correct domain and correct fields
     assert(radarcut.azimuth['data'].min() >= azi_min)
     assert(radarcut.azimuth['data'].max() <= azi_max)
     assert(radarcut.range['data'].min() >= rng_min)
     assert(radarcut.range['data'].max() <= rng_max)
     assert(radarcut.elevation['data'].min() >= ele_min)
     assert(radarcut.elevation['data'].max() <= ele_max)
-    
+    assert(list(radarcut.fields) == ['f1'])
     
 # read in example file
 radar = pyart.io.read_nexrad_archive(pyart.testing.NEXRAD_ARCHIVE_MSG31_FILE)
