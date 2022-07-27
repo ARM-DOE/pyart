@@ -1300,6 +1300,12 @@ def phase_proc_lp_gf(radar, gatefilter=None, debug=False, self_const=60000.0,
 
         start_gate = 0
 
+        if len(radar.range['data'][start_gate:end_gate]) <= 5:
+            mysoln = np.zeros_like(
+                    proc_ph['data'][start_ray:end_ray, start_gate:end_gate])
+            proc_ph['data'][start_ray:end_ray, start_gate:end_gate] = mysoln
+            continue
+
         A_Matrix = construct_A_matrix(
             len(radar.range['data'][start_gate:end_gate]),
             St_Gorlv_differential_5pts)
@@ -1332,6 +1338,7 @@ def phase_proc_lp_gf(radar, gatefilter=None, debug=False, self_const=60000.0,
 
         proc_ph['data'][start_ray:end_ray, start_gate:end_gate] = mysoln
 
+    print("Done LP")
     last_gates = proc_ph['data'][start_ray:end_ray, -16]
     proc_ph['data'][start_ray:end_ray, -16:] = \
         np.meshgrid(np.ones([16]), last_gates)[1]
