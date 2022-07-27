@@ -1338,7 +1338,6 @@ def phase_proc_lp_gf(radar, gatefilter=None, debug=False, self_const=60000.0,
 
         proc_ph['data'][start_ray:end_ray, start_gate:end_gate] = mysoln
 
-    print("Done LP")
     last_gates = proc_ph['data'][start_ray:end_ray, -16]
     proc_ph['data'][start_ray:end_ray, -16:] = \
         np.meshgrid(np.ones([16]), last_gates)[1]
