@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.correct.phase_proc &#8212; Py-ART 1.12.7.post6 documentation</title>
+    <title>pyart.correct.phase_proc &#8212; Py-ART 1.12.7.post7 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -1525,6 +1525,12 @@
             <span class="n">radar</span><span class="p">,</span> <span class="n">sweep</span><span class="p">,</span> <span class="n">fzl</span><span class="p">,</span> <span class="n">doc</span><span class="o">=</span><span class="n">doc</span><span class="p">)</span>
 
         <span class="n">start_gate</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">start_gate</span><span class="p">:</span><span class="n">end_gate</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="mi">5</span><span class="p">:</span>
+            <span class="n">mysoln</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span>
+                    <span class="n">proc_ph</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">start_ray</span><span class="p">:</span><span class="n">end_ray</span><span class="p">,</span> <span class="n">start_gate</span><span class="p">:</span><span class="n">end_gate</span><span class="p">])</span>
+            <span class="n">proc_ph</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">start_ray</span><span class="p">:</span><span class="n">end_ray</span><span class="p">,</span> <span class="n">start_gate</span><span class="p">:</span><span class="n">end_gate</span><span class="p">]</span> <span class="o">=</span> <span class="n">mysoln</span>
+            <span class="k">continue</span>
 
         <span class="n">A_Matrix</span> <span class="o">=</span> <span class="n">construct_A_matrix</span><span class="p">(</span>
             <span class="nb">len</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">start_gate</span><span class="p">:</span><span class="n">end_gate</span><span class="p">]),</span>

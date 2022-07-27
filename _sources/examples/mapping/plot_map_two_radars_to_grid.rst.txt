@@ -81,28 +81,23 @@ coordinates to a Cartesian grid.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  16.099 seconds)
+   **Total running time of the script:** ( 0 minutes  14.554 seconds)
 
 
 .. _sphx_glr_download_examples_mapping_plot_map_two_radars_to_grid.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: plot_map_two_radars_to_grid.py <plot_map_two_radars_to_grid.py>`
 
-     :download:`Download Python source code: plot_map_two_radars_to_grid.py <plot_map_two_radars_to_grid.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: plot_map_two_radars_to_grid.ipynb <plot_map_two_radars_to_grid.ipynb>`
+      :download:`Download Jupyter notebook: plot_map_two_radars_to_grid.ipynb <plot_map_two_radars_to_grid.ipynb>`
 
 
 .. only:: html

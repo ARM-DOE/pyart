@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>mgrover1.github.io/pyart/</id>
   <title>PyART Blog</title>
-  <updated>2022-07-25T14:41:03.038899+00:00</updated>
+  <updated>2022-07-27T19:57:18.313854+00:00</updated>
   <link href="mgrover1.github.io/pyart/"/>
   <link href="mgrover1.github.io/pyart/blog/atom.xml" rel="self"/>
-  <generator uri="https://ablog.readthedocs.org/" version="0.10.26">ABlog</generator>
+  <generator uri="https://ablog.readthedocs.org/" version="0.10.27">ABlog</generator>
   <entry>
     <id>mgrover1.github.io/pyart/blog_posts/2022/test.html</id>
     <title>New Docs</title>
@@ -40,8 +40,8 @@
     <link href="mgrover1.github.io/pyart/blog_posts/2022/ka-band-pyart-xarray-hvplot.html" rel="alternate"/>
     <summary>This notebook will walk through how to utilize existing packages in the Python ecosystem (PyART, Xarray, and hvPlot) to visualize data from a vertically pointing Ka-band radar.By the end of this notebook, you will learn how to create the following visualization:
 interactive-kazr-vizinteractive-kazr-viz</summary>
-    <category term="vertical-radar" label="vertical-radar"/>
     <category term="xarray" label="xarray"/>
+    <category term="vertical-radar" label="vertical-radar"/>
     <category term="ka-band" label="ka-band"/>
     <category term="interactive" label="interactive"/>
     <category term="visualization" label="visualization"/>
@@ -63,10 +63,10 @@ interactive-kazr-vizinteractive-kazr-viz</summary>
 </content>
     <link href="mgrover1.github.io/pyart/blog_posts/2022/plot-nexrad-level3.html" rel="alternate"/>
     <summary>The motivation here comes from a thread on Twitter, indicating an issue when plotting NEXRAD Level 3 radial velocity (NOU).Here is the radar image, plotted by David (@dryglick):drawing</summary>
+    <category term="debug" label="debug"/>
+    <category term="visualization" label="visualization"/>
     <category term="NEXRAD" label="NEXRAD"/>
     <category term="matplotlib" label="matplotlib"/>
-    <category term="visualization" label="visualization"/>
-    <category term="debug" label="debug"/>
     <published>2022-04-12T00:00:00+00:00</published>
   </entry>
   <entry>

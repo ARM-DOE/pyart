@@ -124,28 +124,23 @@ and adding differnential Reflectivity contours from the same MDV file.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  2.413 seconds)
+   **Total running time of the script:** ( 0 minutes  2.040 seconds)
 
 
 .. _sphx_glr_download_examples_plotting_plot_rhi_contours_differential_reflectivity.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: plot_rhi_contours_differential_reflectivity.py <plot_rhi_contours_differential_reflectivity.py>`
 
-     :download:`Download Python source code: plot_rhi_contours_differential_reflectivity.py <plot_rhi_contours_differential_reflectivity.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: plot_rhi_contours_differential_reflectivity.ipynb <plot_rhi_contours_differential_reflectivity.ipynb>`
+      :download:`Download Jupyter notebook: plot_rhi_contours_differential_reflectivity.ipynb <plot_rhi_contours_differential_reflectivity.ipynb>`
 
 
 .. only:: html

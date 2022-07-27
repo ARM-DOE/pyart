@@ -80,28 +80,23 @@ object.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  3.261 seconds)
+   **Total running time of the script:** ( 0 minutes  3.200 seconds)
 
 
 .. _sphx_glr_download_examples_plotting_plot_rhi_sigmet.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: plot_rhi_sigmet.py <plot_rhi_sigmet.py>`
 
-     :download:`Download Python source code: plot_rhi_sigmet.py <plot_rhi_sigmet.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: plot_rhi_sigmet.ipynb <plot_rhi_sigmet.ipynb>`
+      :download:`Download Jupyter notebook: plot_rhi_sigmet.ipynb <plot_rhi_sigmet.ipynb>`
 
 
 .. only:: html

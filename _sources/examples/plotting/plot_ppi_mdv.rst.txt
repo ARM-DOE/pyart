@@ -63,28 +63,23 @@ An example which creates a PPI plot of a MDV file using a RadarDisplay object.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  4.485 seconds)
+   **Total running time of the script:** ( 0 minutes  3.608 seconds)
 
 
 .. _sphx_glr_download_examples_plotting_plot_ppi_mdv.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: plot_ppi_mdv.py <plot_ppi_mdv.py>`
 
-     :download:`Download Python source code: plot_ppi_mdv.py <plot_ppi_mdv.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: plot_ppi_mdv.ipynb <plot_ppi_mdv.ipynb>`
+      :download:`Download Jupyter notebook: plot_ppi_mdv.ipynb <plot_ppi_mdv.ipynb>`
 
 
 .. only:: html

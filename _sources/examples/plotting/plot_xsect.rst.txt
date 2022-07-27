@@ -66,28 +66,23 @@ of PPI scans and plots both cross sections.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  1.577 seconds)
+   **Total running time of the script:** ( 0 minutes  1.326 seconds)
 
 
 .. _sphx_glr_download_examples_plotting_plot_xsect.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: plot_xsect.py <plot_xsect.py>`
 
-     :download:`Download Python source code: plot_xsect.py <plot_xsect.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: plot_xsect.ipynb <plot_xsect.ipynb>`
+      :download:`Download Jupyter notebook: plot_xsect.ipynb <plot_xsect.ipynb>`
 
 
 .. only:: html

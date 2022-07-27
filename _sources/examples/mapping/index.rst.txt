@@ -1,0 +1,81 @@
+
+
+.. _sphx_glr_examples_mapping:
+
+.. _mapping_examples:
+
+Mapping examples
+----------------
+
+Mapping one or multiple radars from antenna coordinates to a Cartesian grid.
+
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Map the reflectivity field of a single radar from Antenna coordinates to a Cartesian grid.">
+
+.. only:: html
+
+  .. image:: /examples/mapping/images/thumb/sphx_glr_plot_map_one_radar_to_grid_thumb.png
+    :alt: Map a single radar to a Cartesian grid
+
+  :ref:`sphx_glr_examples_mapping_plot_map_one_radar_to_grid.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Map a single radar to a Cartesian grid</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Map the reflectivity field of two nearby ARM XSARP radars from antenna coordinates to a Cartesi...">
+
+.. only:: html
+
+  .. image:: /examples/mapping/images/thumb/sphx_glr_plot_map_two_radars_to_grid_thumb.png
+    :alt: Map two radars to a Cartesian grid
+
+  :ref:`sphx_glr_examples_mapping_plot_map_two_radars_to_grid.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Map two radars to a Cartesian grid</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Map the reflectivity field of a single radar in Antenna coordinates to another radar in Antenna...">
+
+.. only:: html
+
+  .. image:: /examples/mapping/images/thumb/sphx_glr_plot_compare_two_radars_gatemapper_thumb.png
+    :alt: Compare Two Radars Using Gatemapper
+
+  :ref:`sphx_glr_examples_mapping_plot_compare_two_radars_gatemapper.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Compare Two Radars Using Gatemapper</div>
+    </div>
+
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/mapping/plot_map_one_radar_to_grid
+   /examples/mapping/plot_map_two_radars_to_grid
+   /examples/mapping/plot_compare_two_radars_gatemapper
+

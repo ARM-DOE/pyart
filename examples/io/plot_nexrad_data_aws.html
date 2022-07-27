@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Reading NEXRAD Data from the AWS Cloud &#8212; Py-ART 1.12.7.post6 documentation</title>
+    <title>Reading NEXRAD Data from the AWS Cloud &#8212; Py-ART 1.12.7.post7 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -50,8 +50,8 @@
     <script src="../../_static/doc_shared.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Map a single radar to a Cartesian grid" href="../mapping/plot_map_one_radar_to_grid.html" />
-    <link rel="prev" title="Dealias doppler velocities using the FourDD algorithm" href="../correct/plot_dealias.html" /> 
+    <link rel="next" title="Mapping examples" href="../mapping/index.html" />
+    <link rel="prev" title="Input/Output Examples" href="index.html" /> 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -203,151 +203,159 @@
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
 </form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
   <div class="bd-toc-item active">
-    <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../correct/plot_attenuation.html">
-   Correct reflectivity attenuation
+    <ul class="current nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../correct/index.html">
+   Moment correction examples
   </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../correct/plot_attenuation.html">
+     Correct reflectivity attenuation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../correct/plot_dealias.html">
+     Dealias doppler velocities using the FourDD algorithm
+    </a>
+   </li>
+  </ul>
  </li>
-</ul>
-<ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../correct/plot_dealias.html">
-   Dealias doppler velocities using the FourDD algorithm
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="index.html">
+   Input/Output Examples
   </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Reading NEXRAD Data from the AWS Cloud
+    </a>
+   </li>
+  </ul>
  </li>
-</ul>
-<ul class="current nav bd-sidenav">
- <li class="toctree-l1 current active">
-  <a class="current reference internal" href="#">
-   Reading NEXRAD Data from the AWS Cloud
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../mapping/index.html">
+   Mapping examples
   </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../mapping/plot_map_one_radar_to_grid.html">
+     Map a single radar to a Cartesian grid
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../mapping/plot_map_two_radars_to_grid.html">
+     Map two radars to a Cartesian grid
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../mapping/plot_compare_two_radars_gatemapper.html">
+     Compare Two Radars Using Gatemapper
+    </a>
+   </li>
+  </ul>
  </li>
-</ul>
-<ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../mapping/plot_map_one_radar_to_grid.html">
-   Map a single radar to a Cartesian grid
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../plotting/index.html">
+   Plotting examples
   </a>
- </li>
-</ul>
-<ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../mapping/plot_map_two_radars_to_grid.html">
-   Map two radars to a Cartesian grid
-  </a>
- </li>
-</ul>
-<ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../mapping/plot_compare_two_radars_gatemapper.html">
-   Compare Two Radars Using Gatemapper
-  </a>
- </li>
-</ul>
-<ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../plotting/plot_rhi_mdv.html">
-   Create a RHI plot from a MDV file
-  </a>
- </li>
-</ul>
-<ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../plotting/plot_ppi_sigmet.html">
-   Create a PPI plot from a Sigmet file
-  </a>
- </li>
-</ul>
-<ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../plotting/plot_xsect.html">
-   Plot a cross section from  a PPI volume
-  </a>
- </li>
-</ul>
-<ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../plotting/plot_ppi_mdv.html">
-   Create a PPI plot from a MDV file
-  </a>
- </li>
-</ul>
-<ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../plotting/plot_nexrad_reflectivity.html">
-   Create a plot of NEXRAD reflectivity
-  </a>
- </li>
-</ul>
-<ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../plotting/plot_rhi_cfradial_singlescan.html">
-   Create a multiple panel RHI plot from a CF/Radial file
-  </a>
- </li>
-</ul>
-<ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../plotting/plot_rhi_sigmet.html">
-   Create a RHI plot from a Sigmet file
-  </a>
- </li>
-</ul>
-<ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../plotting/plot_rhi_two_panel.html">
-   Create a two panel RHI plot
-  </a>
- </li>
-</ul>
-<ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../plotting/plot_nexrad_multiple_moments.html">
-   Create a plot of multiple moments from a NEXRAD file
-  </a>
- </li>
-</ul>
-<ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../plotting/plot_rhi_cfradial.html">
-   Create a multiple panel RHI plot from a CF/Radial file
-  </a>
- </li>
-</ul>
-<ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../plotting/plot_nexrad_image_muted_reflectivity.html">
-   Create an image-muted reflectivity plot
-  </a>
- </li>
-</ul>
-<ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../plotting/plot_three_panel_gridmapdisplay.html">
-   Create a 3 panel plot using GridMapDisplay
-  </a>
- </li>
-</ul>
-<ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../plotting/plot_ppi_with_rings.html">
-   Create a PPI plot on a cartopy map
-  </a>
- </li>
-</ul>
-<ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../plotting/plot_rhi_data_overlay.html">
-   Create an RHI plot with reflectivity contour lines from an MDV file
-  </a>
- </li>
-</ul>
-<ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="../plotting/plot_rhi_contours_differential_reflectivity.html">
-   Create an RHI plot with reflectivity contour lines from an MDV file
-  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plotting/plot_rhi_mdv.html">
+     Create a RHI plot from a MDV file
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plotting/plot_ppi_sigmet.html">
+     Create a PPI plot from a Sigmet file
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plotting/plot_xsect.html">
+     Plot a cross section from  a PPI volume
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plotting/plot_ppi_mdv.html">
+     Create a PPI plot from a MDV file
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plotting/plot_nexrad_reflectivity.html">
+     Create a plot of NEXRAD reflectivity
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plotting/plot_rhi_cfradial_singlescan.html">
+     Create a multiple panel RHI plot from a CF/Radial file
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plotting/plot_rhi_sigmet.html">
+     Create a RHI plot from a Sigmet file
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plotting/plot_rhi_two_panel.html">
+     Create a two panel RHI plot
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plotting/plot_nexrad_multiple_moments.html">
+     Create a plot of multiple moments from a NEXRAD file
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plotting/plot_rhi_cfradial.html">
+     Create a multiple panel RHI plot from a CF/Radial file
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plotting/plot_nexrad_image_muted_reflectivity.html">
+     Create an image-muted reflectivity plot
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plotting/plot_three_panel_gridmapdisplay.html">
+     Create a 3 panel plot using GridMapDisplay
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plotting/plot_ppi_with_rings.html">
+     Create a PPI plot on a cartopy map
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plotting/plot_rhi_data_overlay.html">
+     Create an RHI plot with reflectivity contour lines from an MDV file
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plotting/plot_rhi_contours_differential_reflectivity.html">
+     Create an RHI plot with reflectivity contour lines from an MDV file
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -444,8 +452,7 @@ on March 22, 2022, at 1201:25 UTC. This means our path would look like:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">list</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">radar</span><span class="o">.</span><span class="n">fields</span></a><span class="p">)</span>
 </pre></div>
 </div>
-<p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[&#39;clutter_filter_power_removed&#39;, &#39;cross_correlation_ratio&#39;, &#39;velocity&#39;, &#39;spectrum_width&#39;, &#39;reflectivity&#39;, &#39;differential_phase&#39;, &#39;differential_reflectivity&#39;]
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[&#39;spectrum_width&#39;, &#39;clutter_filter_power_removed&#39;, &#39;differential_reflectivity&#39;, &#39;velocity&#39;, &#39;cross_correlation_ratio&#39;, &#39;differential_phase&#39;, &#39;reflectivity&#39;]
 </pre></div>
 </div>
 <p>Let’s plot the reflectivity/velocity fields as a first step to investigating our dataset.</p>
@@ -474,8 +481,7 @@ on March 22, 2022, at 1201:25 UTC. This means our path would look like:</p>
                      <span class="n">vmax</span><span class="o">=</span><span class="mi">70</span><span class="p">)</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_nexrad_data_aws_001.png" srcset="../../_images/sphx_glr_plot_nexrad_data_aws_001.png" alt="KHGX 0.5 Deg. 2022-03-22T12:01:25Z  Equivalent reflectivity factor, KHGX 0.5 Deg. 2022-03-22T12:01:43Z  Radial velocity of scatterers away from instrument" class = "sphx-glr-single-img"/><p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/usr/share/miniconda3/envs/pyart-docs/lib/python3.10/site-packages/cartopy/mpl/gridliner.py:451: UserWarning: The .xlabels_top attribute is deprecated. Please use .top_labels to toggle visibility instead.
+<img src="../../_images/sphx_glr_plot_nexrad_data_aws_001.png" srcset="../../_images/sphx_glr_plot_nexrad_data_aws_001.png" alt="KHGX 0.5 Deg. 2022-03-22T12:01:25Z  Equivalent reflectivity factor, KHGX 0.5 Deg. 2022-03-22T12:01:43Z  Radial velocity of scatterers away from instrument" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/usr/share/miniconda3/envs/pyart-docs/lib/python3.10/site-packages/cartopy/mpl/gridliner.py:451: UserWarning: The .xlabels_top attribute is deprecated. Please use .top_labels to toggle visibility instead.
   warnings.warn(&#39;The .xlabels_top attribute is deprecated. Please &#39;
 /usr/share/miniconda3/envs/pyart-docs/lib/python3.10/site-packages/cartopy/mpl/gridliner.py:487: UserWarning: The .ylabels_right attribute is deprecated. Please use .right_labels to toggle visibility instead.
   warnings.warn(&#39;The .ylabels_right attribute is deprecated. Please &#39;
@@ -520,7 +526,6 @@ using the following naming convention:</p>
      <span class="p">)</span>
 </pre></div>
 </div>
-<p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>velocity radar object:  [&#39;velocity&#39;] reflectivity radar object:  [&#39;reflectivity&#39;]
 </pre></div>
 </div>
@@ -551,8 +556,7 @@ using the following naming convention:</p>
                               <span class="n">vmax</span><span class="o">=</span><span class="mi">70</span><span class="p">)</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_nexrad_data_aws_002.png" srcset="../../_images/sphx_glr_plot_nexrad_data_aws_002.png" alt="0.5 Deg. 2022-03-22T12:01:25Z  Equivalent reflectivity factor,  0.5 Deg. 2022-03-22T12:01:25Z  Radial velocity of scatterers away from instrument" class = "sphx-glr-single-img"/><p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/usr/share/miniconda3/envs/pyart-docs/lib/python3.10/site-packages/cartopy/mpl/gridliner.py:451: UserWarning: The .xlabels_top attribute is deprecated. Please use .top_labels to toggle visibility instead.
+<img src="../../_images/sphx_glr_plot_nexrad_data_aws_002.png" srcset="../../_images/sphx_glr_plot_nexrad_data_aws_002.png" alt="0.5 Deg. 2022-03-22T12:01:25Z  Equivalent reflectivity factor,  0.5 Deg. 2022-03-22T12:01:25Z  Radial velocity of scatterers away from instrument" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/usr/share/miniconda3/envs/pyart-docs/lib/python3.10/site-packages/cartopy/mpl/gridliner.py:451: UserWarning: The .xlabels_top attribute is deprecated. Please use .top_labels to toggle visibility instead.
   warnings.warn(&#39;The .xlabels_top attribute is deprecated. Please &#39;
 /usr/share/miniconda3/envs/pyart-docs/lib/python3.10/site-packages/cartopy/mpl/gridliner.py:487: UserWarning: The .ylabels_right attribute is deprecated. Please use .right_labels to toggle visibility instead.
   warnings.warn(&#39;The .ylabels_right attribute is deprecated. Please &#39;
@@ -562,8 +566,8 @@ using the following naming convention:</p>
   warnings.warn(&#39;The .ylabels_right attribute is deprecated. Please &#39;
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  23.787 seconds)</p>
-<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-io-plot-nexrad-data-aws-py">
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  20.648 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-io-plot-nexrad-data-aws-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/6a0ce1f5a0ee4d253981656149c8e569/plot_nexrad_data_aws.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_nexrad_data_aws.py</span></code></a></p>
 </div>
@@ -584,17 +588,17 @@ using the following naming convention:</p>
               
               <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="../correct/plot_dealias.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="index.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Dealias doppler velocities using the FourDD algorithm</p>
+            <p class="prev-next-title">Input/Output Examples</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="../mapping/plot_map_one_radar_to_grid.html" title="next page">
+    <a class='right-next' id="next-link" href="../mapping/index.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Map a single radar to a Cartesian grid</p>
+        <p class="prev-next-title">Mapping examples</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
