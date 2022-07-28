@@ -104,10 +104,10 @@ def to_vpt(radar, single_scan=True):
     return
 
 
-def cut_radar(radar, field_names, rng_min=None, rng_max=None, ele_min=None,
+def subset_radar(radar, field_names, rng_min=None, rng_max=None, ele_min=None,
               ele_max=None, azi_min=None, azi_max=None):
     """
-    Cuts the radar object into new dimensions
+    Creates a subset of the radar object along new dimensions
     Parameters
     ----------
     radar : radar object

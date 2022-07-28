@@ -54,7 +54,7 @@ def test_to_vpt():
     assert radar.elevation['data'][0] == 90.0
     assert len(radar.instrument_parameters['prt_mode']['data']) == 108
 
-def test_cut_radar():
+def test_subset_radar():
     radar = pyart.testing.make_empty_ppi_radar(10, 36, 3)
     field = {'data': np.ones((36 * 3, 10))}
     radar.add_field('f1', field)
@@ -65,7 +65,7 @@ def test_cut_radar():
     rng_max = 800
     ele_min = 0.75
     ele_max = 0.75
-    radarcut = pyart.util.radar_utils.cut_radar(radar, ['f1'], rng_min = 200,
+    radarcut = pyart.util.radar_utils.subset_radar(radar, ['f1'], rng_min = 200,
                                                 rng_max = 800, ele_min = 0.75,
                                                 ele_max = 0.75, azi_min = 10,
                                                 azi_max = 100)
