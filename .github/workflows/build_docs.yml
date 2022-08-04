@@ -37,7 +37,7 @@ jobs:
         env:
           RSL_PATH: ${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-h166bdaf_5
         run: |
-          export ${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-h166bdaf_5
+          export RSL_PATH=${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-h166bdaf_5
           echo "$RSL_PATH"
 
       - name: Install PyART
