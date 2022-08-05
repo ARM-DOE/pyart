@@ -11,7 +11,7 @@ on:
 # This job installs dependencies, build the website, and pushes it to `gh-pages`
 jobs:
   deploy-website:
-    runs-on: ubuntu-latest
+    runs-on: macOS
     defaults:
       run:
         shell: bash -l {0}
