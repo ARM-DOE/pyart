@@ -54,14 +54,14 @@ jobs:
                echo 'Trmm will not be installed for Windows'
           elif [ "$RUNNER_OS" == 'Linux' ]; then
                mamba install -c conda-forge trmm_rsl
-               export RSL_PATH=$CONDA/pkgs/trmm_rsl-1.49-3
+               export RSL_PATH=$CONDA/pkgs/
           elif [ "$RUNNER_OS" == 'macOS' ]
           then
                mamba install -c conda-forge trmm_rsl
-               export RSL_PATH=$CONDA/pkgs/trmm_rsl-1.49-3
+               export RSL_PATH=$CONDA/pkgs/
           else
                mamba install -c conda-forge trmm_rsl
-               export RSL_PATH=$CONDA/pkgs/trmm_rsl-1.49-3
+               export RSL_PATH=$CONDA/pkgs/
           fi
           conda list
           echo "$RSL_PATH"
@@ -72,7 +72,7 @@ jobs:
 
       - name: Install PyART
         env:
-          RSL_PATH: ${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-3
+          RSL_PATH: ${{ env.CONDA_PKGS_DIR }}/
         run: |
           python -m pip install -e . --no-deps --force-reinstall
 
@@ -84,7 +84,7 @@ jobs:
       - name: Run Tests
         id: run_tests
         env:
-          RSL_PATH: ${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-3
+          RSL_PATH: ${{ env.CONDA_PKGS_DIR }}/
         run: |
           python -m pytest -v --cov=./ --cov-report=xml
 
