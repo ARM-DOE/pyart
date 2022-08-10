@@ -49,14 +49,13 @@ jobs:
         shell: bash -l {0}
         run: |
           echo "$RUNNER_OS"
-          echo "$RUNNER_OS" == 'windows-latest'
-          if [ "$RUNNER_OS" == 'windows-latest' ]; then
+          if [ "$RUNNER_OS" == 'Windows' ]; then
                echo 'Trmm will not be installed for Windows'
-          elif [ "$RUNNER_OS" == 'ubuntu-latest' ]; then
+          elif [ "$RUNNER_OS" == 'Linux' ]; then
                mamba install -c conda-forge trmm_rsl
                RSL_PATH=$(find "$CONDA_PKGS_DIR" -name '*trmm_rsl-1.49-*' ! -name '*.tar.bz2')
                echo "RSL_PATH=$(echo $RSL_PATH)" >> $GITHUB_ENV
-          elif [ "$RUNNER_OS" == 'macos-latest' ]; then
+          elif [ "$RUNNER_OS" == 'macOS' ]; then
                mamba install -c conda-forge trmm_rsl
                RSL_PATH=$(find "$CONDA_PKGS_DIR" -name '*trmm_rsl-1.49-*' ! -name '*.tar.bz2')
                echo "RSL_PATH=$(echo $RSL_PATH)" >> $GITHUB_ENV
