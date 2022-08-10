@@ -71,17 +71,20 @@ jobs:
            git fetch --prune --unshallow
 
       - name: Install PyART
+        shell: bash -l {0}
         run: |
           echo $RSL_PATH
           python -m pip install -e . --no-deps --force-reinstall
 
       - name: Run Linting
+        shell: bash -l {0}
         run: |
           python -m flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
           python -m flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
       
       - name: Run Tests
         id: run_tests
+        shell: bash -l {0}
         env:
           RSL_PATH: $RSL_PATH
         run: |
