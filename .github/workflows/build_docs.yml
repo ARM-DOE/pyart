@@ -32,20 +32,20 @@ jobs:
 
       - name: Set TRMM RSL path
         env:
-          RSL_PATH: ${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-hac89ed1_5
+          RSL_PATH: ${{ env.MAMBA_ROOT_PREFIX }}/trmm_rsl-1.49-hac89ed1_5
         run: |
-          export RSL_PATH=${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-hac89ed1_5
+          export RSL_PATH=${{ env.MAMBA_ROOT_PREFIX }}/trmm_rsl-1.49-hac89ed1_5
           echo "$RSL_PATH"
 
       - name: Install PyART
         env:
-          RSL_PATH: ${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-hac89ed1_5
+          RSL_PATH: ${{ env.MAMBA_ROOT_PREFIX }}/trmm_rsl-1.49-hac89ed1_5
         run: |
           pip install -e .
       # Build the website
       - name: Build the site
         env:
-          RSL_PATH: ${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-hac89ed1_5
+          RSL_PATH: ${{ env.MAMBA_ROOT_PREFIX }}/trmm_rsl-1.49-hac89ed1_5
         run: |
           cd doc
           make html
