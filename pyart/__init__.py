@@ -57,3 +57,31 @@ try:
 except DistributionNotFound:
     # package is not installed
     __version__ = '0.0.0'
+
+try:
+    if _sys.version_info[:2] >= (3, 4):
+        import importlib as _importlib
+        specs = _importlib.util.find_spec('pytest')
+        specs.loader.exec_module()
+    else:
+        import imp as _imp
+        _imp.find_module('pytest')
+except (AttributeError, ImportError) as error:
+    def _test(verbose=False):
+        """
+        This would invoke the Py-ART test suite, but pytest couldn't
+        be imported so the test suite can not run.
+        """
+        raise ImportError("Could not load pytest. Unit tests not available."
+                            " To run unit tests, please install pytest.")
+else:
+    def _test(verbose=False):
+        """
+        Invoke the Py-ART test suite.
+        """
+        import pytest
+        pkg_dir = _osp.abspath(_osp.dirname(__file__))
+        args = [pkg_dir, '--pyargs', 'pyart']
+        if verbose:
+            args.extend(['-v', '-s'])
+        pytest.main(args=args)
