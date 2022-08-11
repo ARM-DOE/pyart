@@ -8,11 +8,6 @@ import numpy as np
 from netCDF4 import num2date
 from pandas import to_datetime
 
-
-def upsample(x):
-    x_new = np.kron(x, np.ones((2,1)))
-    return x_new 
-
 def composite_reflectivity(radar,rhv_filter=True,rhv_value=0.95,verbose=False):
     
     """
@@ -89,7 +84,8 @@ def composite_reflectivity(radar,rhv_filter=True,rhv_value=0.95,verbose=False):
         
         #if 360 scan, upsample to super res
         if lon.shape[0] < 720:
-            z = upsample(z)
+            #upsample via kron
+            z = np.kron(z, np.ones((2,1)))
         
         #if first sweep, create new dim, otherwise concat them up 
         if sweep == 0:
