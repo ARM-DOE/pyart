@@ -12,6 +12,7 @@ on:
 jobs:
   deploy-website:
     runs-on: macos-latest
+    if: github.repository == 'ARM-DOE/pyart'
     defaults:
       run:
         shell: bash -l {0}
