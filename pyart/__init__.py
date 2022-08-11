@@ -62,7 +62,7 @@ try:
     if _sys.version_info[:2] >= (3, 4):
         import importlib as _importlib
         specs = _importlib.util.find_spec('pytest')
-        specs.loader.exec_module()
+        specs.loader.load_module()
     else:
         import imp as _imp
         _imp.find_module('pytest')
