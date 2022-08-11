@@ -1,8 +1,8 @@
-""" Unit Tests for Py-ART's retrieve/qvp.py module. """
+""" Unit Tests for Py-ART's retrieve/comp_z.py module. """
 
+import copy
 import numpy as np
 from numpy.testing import assert_equal,assert_array_equal
-
 import pyart
 
 
