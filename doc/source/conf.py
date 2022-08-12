@@ -23,7 +23,9 @@ import sys
 
 
 #cwd = Path.cwd().resolve()
+print(sys.path)
 sys.path.insert(0, os.path.abspath('../..'))
+print(sys.path)
 # sys.path.insert(0, str(cwd.parent.parent.parent))
 
 
