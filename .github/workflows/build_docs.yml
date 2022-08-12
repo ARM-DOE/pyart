@@ -42,15 +42,14 @@ jobs:
         env:
           RSL_PATH: ${{ env.MAMBA_ROOT_PREFIX }}/pkgs/trmm_rsl-1.49-hac89ed1_5
         run: |
-          micromamba activate pyart-docs
-          pip install -e . --no-deps --force-reinstall
+          python -m pip install -e . --no-deps --force-reinstall
       # Build the website
       - name: Build the site
         env:
           RSL_PATH: ${{ env.MAMBA_ROOT_PREFIX }}/pkgs/trmm_rsl-1.49-hac89ed1_5
         run: |
           cd doc
-          python -m make html
+          make html
       # Push the book's HTML to github-pages
       - name: GitHub Pages action
         uses: peaceiris/actions-gh-pages@v3.8.0
