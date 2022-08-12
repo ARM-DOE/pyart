@@ -24,7 +24,7 @@ import sys
 
 cwd = Path.cwd().resolve()
 sys.path.insert(0, str(cwd))
-sys.path.insert(0, str(cwd.parent.parent))
+sys.path.insert(0, str(cwd.parent.parent.parent))
 
 
 # -- General configuration ------------------------------------------------
