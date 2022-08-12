@@ -22,7 +22,9 @@ import re
 import sys
 
 
-# sys.path.insert(0, os.path.abspath('../..'))
+cwd = Path.cwd().resolve()
+sys.path.insert(0, str(cwd))
+sys.path.insert(0, str(cwd.parent.parent.parent))
 
 
 # -- General configuration ------------------------------------------------
@@ -59,7 +61,7 @@ exclude_patterns = ['_build', '**.ipynb_checkpoints']
 # only include examples if the BUILD_PYART_EXAMPLES env. variable is set
 extensions.append('sphinx_gallery.gen_gallery')
 sphinx_gallery_conf = {
-    'examples_dirs': '../../examples',
+    'examples_dirs': str(cwd.parent.parent / 'examples'),
     'gallery_dirs': './examples'
 }
 
