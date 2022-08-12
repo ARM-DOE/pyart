@@ -63,6 +63,7 @@ exclude_patterns = ['_build', '**.ipynb_checkpoints']
 # only include examples if the BUILD_PYART_EXAMPLES env. variable is set
 extensions.append('sphinx_gallery.gen_gallery')
 sphinx_gallery_conf = {
+    'doc_module': ('pyart',),
     'examples_dirs': '../../examples',
     'gallery_dirs': 'examples'
 }

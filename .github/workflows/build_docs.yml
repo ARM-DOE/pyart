@@ -50,7 +50,7 @@ jobs:
           RSL_PATH: ${{ env.MAMBA_ROOT_PREFIX }}/pkgs/trmm_rsl-1.49-hac89ed1_5
         run: |
           cd doc
-          make html
+          python -m make html
       # Push the book's HTML to github-pages
       - name: GitHub Pages action
         uses: peaceiris/actions-gh-pages@v3.8.0
