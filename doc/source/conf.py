@@ -16,9 +16,15 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
+import os
+from pathlib import Path
+import re
+import sys
+
+
+cwd = Path.cwd().resolve()
+sys.path.insert(0, str(cwd))
+sys.path.insert(0, str(cwd.parent.parent))
 
 
 # -- General configuration ------------------------------------------------
@@ -30,9 +36,6 @@
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-import os
-import re
-import sys
 
 extensions = [
     'sphinx.ext.autodoc',
@@ -58,7 +61,7 @@ exclude_patterns = ['_build', '**.ipynb_checkpoints']
 # only include examples if the BUILD_PYART_EXAMPLES env. variable is set
 extensions.append('sphinx_gallery.gen_gallery')
 sphinx_gallery_conf = {
-    'examples_dirs': '../../examples',
+    'examples_dirs': str(cwd.parent / 'examples'),
     'gallery_dirs': 'examples'
 }
 
