@@ -60,7 +60,7 @@ exclude_patterns = ['_build', '**.ipynb_checkpoints']
 extensions.append('sphinx_gallery.gen_gallery')
 sphinx_gallery_conf = {
     'examples_dirs': '../../examples',
-    'gallery_dirs': 'examples'
+    'gallery_dirs': './examples'
 }
 
 
