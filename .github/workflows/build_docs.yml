@@ -42,6 +42,7 @@ jobs:
       - name: Install PyART
         env:
           RSL_PATH: ${{ env.MAMBA_ROOT_PREFIX }}/pkgs/trmm_rsl-1.49-hac89ed1_5
+        shell: bash -l {0}
         run: |
           python -m pip install -e . --no-deps --force-reinstall
       # Build the website
