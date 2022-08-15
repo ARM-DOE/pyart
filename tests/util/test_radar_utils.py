@@ -54,7 +54,30 @@ def test_to_vpt():
     assert radar.elevation['data'][0] == 90.0
     assert len(radar.instrument_parameters['prt_mode']['data']) == 108
 
-
+def test_subset_radar():
+    radar = pyart.testing.make_empty_ppi_radar(10, 36, 3)
+    field = {'data': np.ones((36 * 3, 10))}
+    radar.add_field('f1', field)
+    radar.add_field('f2', field)
+    azi_min = 10
+    azi_max = 100
+    rng_min = 200
+    rng_max = 800
+    ele_min = 0.75
+    ele_max = 0.75
+    radarcut = pyart.util.radar_utils.subset_radar(radar, ['f1'], rng_min = 200,
+                                                rng_max = 800, ele_min = 0.75,
+                                                ele_max = 0.75, azi_min = 10,
+                                                azi_max = 100)
+    # assert correct domain and correct fields
+    assert(radarcut.azimuth['data'].min() >= azi_min)
+    assert(radarcut.azimuth['data'].max() <= azi_max)
+    assert(radarcut.range['data'].min() >= rng_min)
+    assert(radarcut.range['data'].max() <= rng_max)
+    assert(radarcut.elevation['data'].min() >= ele_min)
+    assert(radarcut.elevation['data'].max() <= ele_max)
+    assert(list(radarcut.fields) == ['f1'])
+    
 # read in example file
 radar = pyart.io.read_nexrad_archive(pyart.testing.NEXRAD_ARCHIVE_MSG31_FILE)
 def test_image_mute_radar():
