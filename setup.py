@@ -257,7 +257,7 @@ setup(
     maintainer=MAINTAINER,
     maintainer_email=MAINTAINER_EMAIL,
     url=URL,
-    package_dir = {"": "pyart"},
+    packages=find_packages(include=['pyart'], exclude=['doc']),
     include_package_data=True,
     scripts=SCRIPTS,
     install_requires=requirements,
