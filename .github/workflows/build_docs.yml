@@ -50,7 +50,9 @@ jobs:
         run: |
           conda list
           pip show arm-pyart
-          cd doc
+          set -e -o pipefail
+          pushd doc
+          make overridecheck html
           make html
       # Push the book's HTML to github-pages
       - name: GitHub Pages action
