@@ -25,8 +25,8 @@ import sys
 # cwd = Path.cwd().resolve()
 print(sys.path)
 cwd = Path.cwd().resolve()
-sys.path.insert(0, str(cwd))
-sys.path.insert(0, str(cwd.parent.parent))
+# sys.path.insert(0, str(cwd))
+# sys.path.insert(0, str(cwd.parent.parent))
 print(sys.path)
 
 
