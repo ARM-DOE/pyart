@@ -24,8 +24,9 @@ import sys
 
 # cwd = Path.cwd().resolve()
 print(sys.path)
-# sys.path.insert(0, os.path.abspath("."))
-# sys.path.insert(0, os.path.abspath('../../'))
+cwd = Path.cwd().resolve()
+sys.path.insert(0, str(cwd))
+sys.path.insert(0, str(cwd.parent.parent))
 print(sys.path)
 
 
@@ -64,7 +65,7 @@ exclude_patterns = ['_build', '**.ipynb_checkpoints']
 extensions.append('sphinx_gallery.gen_gallery')
 sphinx_gallery_conf = {
     'doc_module': ('pyart',),
-    'examples_dirs': '../../examples',
+    'examples_dirs': str(cwd.parent.parent / 'examples'),
     'gallery_dirs': 'examples'
 }
 
