@@ -27,7 +27,7 @@ dependencies:
   - pip
   - pip:
       - pydata-sphinx-theme<0.9.0
-      - sphinx_gallery
+      - sphinx_gallery<0.11.0
       - sphinx-copybutton
       - myst_nb
       - ablog
