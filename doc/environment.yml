@@ -34,3 +34,4 @@ dependencies:
       - nbsphinx
       - pooch
       - versioneer
+      - setuptools<=63.4.2
