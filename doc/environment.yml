@@ -24,6 +24,7 @@ dependencies:
   - s3fs
   - glpk
   - cftime
+  - setuptools<=63.4.2
   - pip
   - pip:
       - pydata-sphinx-theme<0.9.0
@@ -34,4 +35,3 @@ dependencies:
       - nbsphinx
       - pooch
       - versioneer
-      - setuptools<=63.4.2
