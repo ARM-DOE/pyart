@@ -48,10 +48,7 @@ jobs:
         env:
           RSL_PATH: ${{ env.MAMBA_ROOT_PREFIX }}/pkgs/trmm_rsl-1.49-hac89ed1_5
         run: |
-          conda list
-          pip show arm-pyart
-          set -e -o pipefail
-          pushd doc
+          cd doc
           make html
       # Push the book's HTML to github-pages
       - name: GitHub Pages action
