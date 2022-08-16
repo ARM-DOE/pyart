@@ -35,40 +35,6 @@ Plotting real world radar data with Py-ART.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="An example which creates a PPI plot of a Sigmet file.">
-
-.. only:: html
-
-  .. image:: /examples/plotting/images/thumb/sphx_glr_plot_ppi_sigmet_thumb.png
-    :alt: Create a PPI plot from a Sigmet file
-
-  :ref:`sphx_glr_examples_plotting_plot_ppi_sigmet.py`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">Create a PPI plot from a Sigmet file</div>
-    </div>
-
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="An example which extracts a cross section at two azimuth angles from a volume of PPI scans and ...">
-
-.. only:: html
-
-  .. image:: /examples/plotting/images/thumb/sphx_glr_plot_xsect_thumb.png
-    :alt: Plot a cross section from  a PPI volume
-
-  :ref:`sphx_glr_examples_plotting_plot_xsect.py`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">Plot a cross section from  a PPI volume</div>
-    </div>
-
-
-.. raw:: html
-
     <div class="sphx-glr-thumbcontainer" tooltip="An example which creates a PPI plot of a MDV file using a RadarDisplay object.">
 
 .. only:: html
@@ -81,6 +47,23 @@ Plotting real world radar data with Py-ART.
 .. raw:: html
 
       <div class="sphx-glr-thumbnail-title">Create a PPI plot from a MDV file</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="An example which creates a PPI plot of a Cfradial file.">
+
+.. only:: html
+
+  .. image:: /examples/plotting/images/thumb/sphx_glr_plot_ppi_cfradial_thumb.png
+    :alt: Create a PPI plot from a Cfradial file
+
+  :ref:`sphx_glr_examples_plotting_plot_ppi_cfradial.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Create a PPI plot from a Cfradial file</div>
     </div>
 
 
@@ -103,6 +86,23 @@ Plotting real world radar data with Py-ART.
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="An example which extracts a cross section at two azimuth angles from a volume of PPI scans and ...">
+
+.. only:: html
+
+  .. image:: /examples/plotting/images/thumb/sphx_glr_plot_xsect_thumb.png
+    :alt: Plot a cross section from  a PPI volume
+
+  :ref:`sphx_glr_examples_plotting_plot_xsect.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Plot a cross section from  a PPI volume</div>
+    </div>
+
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="An example which creates a RHI plot of a CF/Radial file using a RadarDisplay object.">
 
 .. only:: html
@@ -120,24 +120,7 @@ Plotting real world radar data with Py-ART.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="An example which creates a RHI plot of a Sigmet file using a RadarDisplay object.">
-
-.. only:: html
-
-  .. image:: /examples/plotting/images/thumb/sphx_glr_plot_rhi_sigmet_thumb.png
-    :alt: Create a RHI plot from a Sigmet file
-
-  :ref:`sphx_glr_examples_plotting_plot_rhi_sigmet.py`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">Create a RHI plot from a Sigmet file</div>
-    </div>
-
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="An example which creates a two panel RHI plot of a Sigmet file.  The fields included in the two...">
+    <div class="sphx-glr-thumbcontainer" tooltip="An example which creates a two panel RHI plot of a cfradial file.  The fields included in the t...">
 
 .. only:: html
 
@@ -280,12 +263,11 @@ Plotting real world radar data with Py-ART.
    :hidden:
 
    /examples/plotting/plot_rhi_mdv
-   /examples/plotting/plot_ppi_sigmet
-   /examples/plotting/plot_xsect
    /examples/plotting/plot_ppi_mdv
+   /examples/plotting/plot_ppi_cfradial
    /examples/plotting/plot_nexrad_reflectivity
+   /examples/plotting/plot_xsect
    /examples/plotting/plot_rhi_cfradial_singlescan
-   /examples/plotting/plot_rhi_sigmet
    /examples/plotting/plot_rhi_two_panel
    /examples/plotting/plot_nexrad_multiple_moments
    /examples/plotting/plot_rhi_cfradial

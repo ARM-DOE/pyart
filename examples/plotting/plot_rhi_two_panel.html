@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Create a two panel RHI plot &#8212; Py-ART 1.12.7.post10 documentation</title>
+    <title>Create a two panel RHI plot &#8212; Py-ART 1.12.7.post12 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -51,7 +51,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Create a plot of multiple moments from a NEXRAD file" href="plot_nexrad_multiple_moments.html" />
-    <link rel="prev" title="Create a RHI plot from a Sigmet file" href="plot_rhi_sigmet.html" /> 
+    <link rel="prev" title="Create a multiple panel RHI plot from a CF/Radial file" href="plot_rhi_cfradial_singlescan.html" /> 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -286,18 +286,13 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="plot_ppi_sigmet.html">
-     Create a PPI plot from a Sigmet file
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="plot_xsect.html">
-     Plot a cross section from  a PPI volume
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="plot_ppi_mdv.html">
      Create a PPI plot from a MDV file
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="plot_ppi_cfradial.html">
+     Create a PPI plot from a Cfradial file
     </a>
    </li>
    <li class="toctree-l2">
@@ -306,13 +301,13 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="plot_rhi_cfradial_singlescan.html">
-     Create a multiple panel RHI plot from a CF/Radial file
+    <a class="reference internal" href="plot_xsect.html">
+     Plot a cross section from  a PPI volume
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="plot_rhi_sigmet.html">
-     Create a RHI plot from a Sigmet file
+    <a class="reference internal" href="plot_rhi_cfradial_singlescan.html">
+     Create a multiple panel RHI plot from a CF/Radial file
     </a>
    </li>
    <li class="toctree-l2 current active">
@@ -402,54 +397,53 @@ to download the full example code</p>
 </div>
 <section class="sphx-glr-example-title" id="create-a-two-panel-rhi-plot">
 <span id="sphx-glr-examples-plotting-plot-rhi-two-panel-py"></span><h1>Create a two panel RHI plot<a class="headerlink" href="#create-a-two-panel-rhi-plot" title="Permalink to this headline">#</a></h1>
-<p>An example which creates a two panel RHI plot of a Sigmet file.  The fields
+<p>An example which creates a two panel RHI plot of a cfradial file.  The fields
 included in the two panels are reflectivity and doppler velocity.</p>
-<img src="../../_images/sphx_glr_plot_rhi_two_panel_001.png" srcset="../../_images/sphx_glr_plot_rhi_two_panel_001.png" alt="RHI xsapr-sgxsapr-sg 2011-05-20T11:36:06ZAzimuth 37.30" class = "sphx-glr-single-img"/><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
+<img src="../../_images/sphx_glr_plot_rhi_two_panel_001.png" srcset="../../_images/sphx_glr_plot_rhi_two_panel_001.png" alt="Reflectivity and Velocity   Azimuth: 37.299°  2011-05-24 01:56:04.0 UTC" class = "sphx-glr-single-img"/><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
 
-<span class="c1"># Author: Jonathan J. Helmus (jhelmus@anl.gov)</span>
+<span class="c1"># Author: Max Grover (mgrover@anl.gov)</span>
 <span class="c1"># License: BSD 3 clause</span>
 
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">pyart</span>
 <span class="kn">from</span> <span class="nn">pyart.testing</span> <span class="kn">import</span> <span class="n">get_test_data</span>
-<span class="kn">import</span> <span class="nn">netCDF4</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 
-<span class="c1"># read the data and create the display object</span>
-<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">filename</span></a> <span class="o">=</span> <span class="n">get_test_data</span><span class="p">(</span><span class="s1">&#39;XSW110520113537.RAW7HHL&#39;</span><span class="p">)</span>
-<span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_rsl</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">filename</span></a><span class="p">)</span>
+<span class="c1"># Read the data and create the display object</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">filename</span></a> <span class="o">=</span> <span class="n">get_test_data</span><span class="p">(</span><span class="s1">&#39;sgpxsaprrhicmacI5.c0.20110524.015604_NC4.nc&#39;</span><span class="p">)</span>
+<span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_cfradial</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">filename</span></a><span class="p">)</span>
 <span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
 
-<span class="c1"># fields to plot and ranges</span>
-<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fields_to_plot</span></a> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">,</span> <span class="s1">&#39;velocity&#39;</span><span class="p">]</span>
-<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ranges</span></a> <span class="o">=</span> <span class="p">[(</span><span class="o">-</span><span class="mi">32</span><span class="p">,</span> <span class="mi">64</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mf">17.0</span><span class="p">,</span> <span class="mf">17.0</span><span class="p">)]</span>
+<span class="c1"># Fields to plot and ranges</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fields_to_plot</span></a> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;reflectivity_horizontal&#39;</span><span class="p">,</span> <span class="s1">&#39;mean_doppler_velocity&#39;</span><span class="p">]</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ranges</span></a> <span class="o">=</span> <span class="p">[(</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mf">17.0</span><span class="p">,</span> <span class="mf">17.0</span><span class="p">)]</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cmaps</span></a> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;pyart_HomeyerRainbow&#39;</span><span class="p">,</span> <span class="s1">&#39;pyart_balance&#39;</span><span class="p">]</span>
 
-<span class="c1"># plot the data</span>
+<span class="c1"># Plot the data</span>
 <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">nplots</span></a> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fields_to_plot</span></a><span class="p">)</span>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.figure.html#matplotlib.pyplot.figure" title="matplotlib.pyplot.figure" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">figure</span></a><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span> <span class="o">*</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">nplots</span></a><span class="p">,</span> <span class="mi">4</span><span class="p">])</span>
 
-<span class="c1"># plot each field</span>
+<span class="c1"># Plot each field</span>
 <span class="k">for</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">plot_num</span></a> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">nplots</span></a><span class="p">):</span>
     <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">field</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fields_to_plot</span></a><span class="p">[</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">plot_num</span></a><span class="p">]</span>
     <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">vmin</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">vmax</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ranges</span></a><span class="p">[</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">plot_num</span></a><span class="p">]</span>
+    <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cmap</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cmaps</span></a><span class="p">[</span><a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">plot_num</span></a><span class="p">]</span>
 
     <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplot.html#matplotlib.pyplot.subplot" title="matplotlib.pyplot.subplot" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span></a><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">nplots</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#int" title="builtins.int" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">plot_num</span></a> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">field</span></a><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">vmin</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">vmin</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">vmax</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">vmax</span></a><span class="p">,</span> <span class="n">title_flag</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">field</span></a><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">vmin</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">vmin</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">vmax</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">vmax</span></a><span class="p">,</span> <span class="n">title_flag</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cmap</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cmap</span></a><span class="p">)</span>
     <span class="n">display</span><span class="o">.</span><span class="n">set_limits</span><span class="p">(</span><span class="n">ylim</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">17</span><span class="p">])</span>
 
-<span class="c1"># set the figure title and show</span>
-<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">instrument_name</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">radar</span><span class="o">.</span><span class="n">metadata</span></a><span class="p">[</span><span class="s1">&#39;instrument_name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
-<span class="n">time_start</span> <span class="o">=</span> <span class="n">netCDF4</span><span class="o">.</span><span class="n">num2date</span><span class="p">(</span>
-    <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">radar</span><span class="o">.</span><span class="n">time</span></a><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">radar</span><span class="o">.</span><span class="n">time</span></a><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">],</span>
-    <span class="n">only_use_cftime_datetimes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">only_use_python_datetimes</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">time_text</span></a> <span class="o">=</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">time_start</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;Z&#39;</span>
-<a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float32" title="numpy.float32" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">azimuth</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">radar</span><span class="o">.</span><span class="n">fixed_angle</span></a><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">title</span></a> <span class="o">=</span> <span class="s1">&#39;RHI &#39;</span> <span class="o">+</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">instrument_name</span></a> <span class="o">+</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">time_text</span></a> <span class="o">+</span> <span class="s1">&#39;Azimuth </span><span class="si">%.2f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float32" title="numpy.float32" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">azimuth</span></a><span class="p">)</span>
-<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.suptitle.html#matplotlib.pyplot.suptitle" title="matplotlib.pyplot.suptitle" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">suptitle</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">title</span></a><span class="p">)</span>
+<span class="c1"># Grab the fixed angle and time from the first sweep</span>
+<a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">fixed_angle</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">radar</span><span class="o">.</span><span class="n">fixed_angle</span></a><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">time</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">radar</span><span class="o">.</span><span class="n">time</span></a><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">][</span><span class="mi">13</span><span class="p">:]</span>
+
+<span class="c1"># Add the metadata to the title</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.suptitle.html#matplotlib.pyplot.suptitle" title="matplotlib.pyplot.suptitle" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">suptitle</span></a><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Reflectivity and Velocity </span><span class="se">\n</span><span class="s2"> Azimuth: </span><span class="si">{</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.around.html#numpy.around" title="numpy.around" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">around</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float64" title="numpy.float64" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">fixed_angle</span></a><span class="p">,</span> <span class="mi">3</span><span class="p">)</span><span class="si">}</span><span class="se">\u00B0</span><span class="s2"> </span><span class="si">{</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">time</span></a><span class="si">}</span><span class="s2"> UTC&quot;</span><span class="p">)</span>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  2.525 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  1.326 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-plotting-plot-rhi-two-panel-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/39f62a5e8d61165f2689c903eb359622/plot_rhi_two_panel.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_rhi_two_panel.py</span></code></a></p>
@@ -470,11 +464,11 @@ included in the two panels are reflectivity and doppler velocity.</p>
               
               <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="plot_rhi_sigmet.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="plot_rhi_cfradial_singlescan.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Create a RHI plot from a Sigmet file</p>
+            <p class="prev-next-title">Create a multiple panel RHI plot from a CF/Radial file</p>
         </div>
     </a>
     <a class='right-next' id="next-link" href="plot_nexrad_multiple_moments.html" title="next page">

@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Plot a cross section from a PPI volume &#8212; Py-ART 1.12.7.post10 documentation</title>
+    <title>Plot a cross section from a PPI volume &#8212; Py-ART 1.12.7.post12 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -50,8 +50,8 @@
     <script src="../../_static/doc_shared.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Create a PPI plot from a MDV file" href="plot_ppi_mdv.html" />
-    <link rel="prev" title="Create a PPI plot from a Sigmet file" href="plot_ppi_sigmet.html" /> 
+    <link rel="next" title="Create a multiple panel RHI plot from a CF/Radial file" href="plot_rhi_cfradial_singlescan.html" />
+    <link rel="prev" title="Create a plot of NEXRAD reflectivity" href="plot_nexrad_reflectivity.html" /> 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -286,8 +286,18 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="plot_ppi_sigmet.html">
-     Create a PPI plot from a Sigmet file
+    <a class="reference internal" href="plot_ppi_mdv.html">
+     Create a PPI plot from a MDV file
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="plot_ppi_cfradial.html">
+     Create a PPI plot from a Cfradial file
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="plot_nexrad_reflectivity.html">
+     Create a plot of NEXRAD reflectivity
     </a>
    </li>
    <li class="toctree-l2 current active">
@@ -296,23 +306,8 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="plot_ppi_mdv.html">
-     Create a PPI plot from a MDV file
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="plot_nexrad_reflectivity.html">
-     Create a plot of NEXRAD reflectivity
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="plot_rhi_cfradial_singlescan.html">
      Create a multiple panel RHI plot from a CF/Radial file
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="plot_rhi_sigmet.html">
-     Create a RHI plot from a Sigmet file
     </a>
    </li>
    <li class="toctree-l2">
@@ -404,7 +399,7 @@ to download the full example code</p>
 <span id="sphx-glr-examples-plotting-plot-xsect-py"></span><h1>Plot a cross section from  a PPI volume<a class="headerlink" href="#plot-a-cross-section-from-a-ppi-volume" title="Permalink to this headline">#</a></h1>
 <p>An example which extracts a cross section at two azimuth angles from a volume
 of PPI scans and plots both cross sections.</p>
-<img src="../../_images/sphx_glr_plot_xsect_001.png" srcset="../../_images/sphx_glr_plot_xsect_001.png" alt="b'xsapr-sgpr2' 45.0 Deg. 2011-05-20T10:54:17Z  Equivalent reflectivity factor, b'xsapr-sgpr2' 90.0 Deg. 2011-05-20T10:54:19Z  Equivalent reflectivity factor" class = "sphx-glr-single-img"/><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
+<img src="../../_images/sphx_glr_plot_xsect_001.png" srcset="../../_images/sphx_glr_plot_xsect_001.png" alt="xsapr-sg 225.0 Deg. 2011-05-20T06:42:20Z  Equivalent reflectivity factor, xsapr-sg 270.0 Deg. 2011-05-20T06:42:22Z  Equivalent reflectivity factor" class = "sphx-glr-single-img"/><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
 
 <span class="c1"># Author: Jonathan J. Helmus (jhelmus@anl.gov)</span>
 <span class="c1"># License: BSD 3 clause</span>
@@ -413,22 +408,30 @@ of PPI scans and plots both cross sections.</p>
 <span class="kn">import</span> <span class="nn">pyart</span>
 <span class="kn">from</span> <span class="nn">pyart.testing</span> <span class="kn">import</span> <span class="n">get_test_data</span>
 
-<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">filename</span></a> <span class="o">=</span> <span class="n">get_test_data</span><span class="p">(</span><span class="s1">&#39;XSW110520105408.RAW7HHF&#39;</span><span class="p">)</span>
-
+<span class="c1"># Read the data, a cfradial file</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">filename</span></a> <span class="o">=</span> <span class="n">get_test_data</span><span class="p">(</span><span class="s1">&#39;swx_20120520_0641.nc&#39;</span><span class="p">)</span>
 <span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">filename</span></a><span class="p">)</span>
-<span class="n">xsect</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">cross_section_ppi</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="p">[</span><span class="mi">45</span><span class="p">,</span> <span class="mi">90</span><span class="p">])</span>
+
+<span class="c1"># Create a cross section at 225 and 270 degrees azimuth</span>
+<span class="n">xsect</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">cross_section_ppi</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="p">[</span><span class="mi">225</span><span class="p">,</span> <span class="mi">270</span><span class="p">])</span>
+
+<span class="c1"># Set the colorbar label</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">colorbar_label</span></a> <span class="o">=</span> <span class="s1">&#39;Equivalent </span><span class="se">\n</span><span class="s1"> reflectivity factor </span><span class="se">\n</span><span class="s1"> (dBZ)&#39;</span>
 
 <span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarDisplay</span><span class="p">(</span><span class="n">xsect</span><span class="p">)</span>
 <a href="https://matplotlib.org/stable/api/figure_api.html#matplotlib.figure.Figure" title="matplotlib.figure.Figure" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fig</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.figure.html#matplotlib.pyplot.figure" title="matplotlib.pyplot.figure" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">figure</span></a><span class="p">()</span>
-<span class="n">ax</span> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/figure_api.html#matplotlib.figure.Figure.add_subplot" title="matplotlib.figure.Figure.add_subplot" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-method"><span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span></a><span class="p">(</span><span class="mi">211</span><span class="p">)</span>
-<span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">32</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">64.</span><span class="p">)</span>
-<span class="n">ax</span> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/figure_api.html#matplotlib.figure.Figure.add_subplot" title="matplotlib.figure.Figure.add_subplot" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-method"><span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span></a><span class="p">(</span><span class="mi">212</span><span class="p">)</span>
-<span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">32</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">64.</span><span class="p">)</span>
+<span class="n">ax1</span> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/figure_api.html#matplotlib.figure.Figure.add_subplot" title="matplotlib.figure.Figure.add_subplot" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-method"><span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span></a><span class="p">(</span><span class="mi">211</span><span class="p">)</span>
+<span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;reflectivity_horizontal&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">32</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">64.</span><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">colorbar_label</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">colorbar_label</span></a><span class="p">)</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.ylim.html#matplotlib.pyplot.ylim" title="matplotlib.pyplot.ylim" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">ylim</span></a><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span>
+<span class="n">ax2</span> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/figure_api.html#matplotlib.figure.Figure.add_subplot" title="matplotlib.figure.Figure.add_subplot" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-method"><span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span></a><span class="p">(</span><span class="mi">212</span><span class="p">)</span>
+<span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;reflectivity_horizontal&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">32</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">64.</span><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">colorbar_label</span></a><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">colorbar_label</span></a><span class="p">)</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.ylim.html#matplotlib.pyplot.ylim" title="matplotlib.pyplot.ylim" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">ylim</span></a><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span>
+
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.tight_layout.html#matplotlib.pyplot.tight_layout" title="matplotlib.pyplot.tight_layout" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span></a><span class="p">()</span>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  2.523 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  2.217 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-plotting-plot-xsect-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/e6e2a2b14268982ea37c6388836c47d1/plot_xsect.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_xsect.py</span></code></a></p>
@@ -449,17 +452,17 @@ of PPI scans and plots both cross sections.</p>
               
               <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="plot_ppi_sigmet.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="plot_nexrad_reflectivity.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Create a PPI plot from a Sigmet file</p>
+            <p class="prev-next-title">Create a plot of NEXRAD reflectivity</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="plot_ppi_mdv.html" title="next page">
+    <a class='right-next' id="next-link" href="plot_rhi_cfradial_singlescan.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Create a PPI plot from a MDV file</p>
+        <p class="prev-next-title">Create a multiple panel RHI plot from a CF/Radial file</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

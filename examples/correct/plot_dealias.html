@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Dealias doppler velocities using the FourDD algorithm &#8212; Py-ART 1.12.7.post10 documentation</title>
+    <title>Dealias doppler velocities using the FourDD algorithm &#8212; Py-ART 1.12.7.post12 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -286,18 +286,13 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../plotting/plot_ppi_sigmet.html">
-     Create a PPI plot from a Sigmet file
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="../plotting/plot_xsect.html">
-     Plot a cross section from  a PPI volume
-    </a>
-   </li>
-   <li class="toctree-l2">
     <a class="reference internal" href="../plotting/plot_ppi_mdv.html">
      Create a PPI plot from a MDV file
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plotting/plot_ppi_cfradial.html">
+     Create a PPI plot from a Cfradial file
     </a>
    </li>
    <li class="toctree-l2">
@@ -306,13 +301,13 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../plotting/plot_rhi_cfradial_singlescan.html">
-     Create a multiple panel RHI plot from a CF/Radial file
+    <a class="reference internal" href="../plotting/plot_xsect.html">
+     Plot a cross section from  a PPI volume
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="../plotting/plot_rhi_sigmet.html">
-     Create a RHI plot from a Sigmet file
+    <a class="reference internal" href="../plotting/plot_rhi_cfradial_singlescan.html">
+     Create a multiple panel RHI plot from a CF/Radial file
     </a>
    </li>
    <li class="toctree-l2">
@@ -411,7 +406,6 @@ used for the initial condition of the dealiasing.</p>
 <span class="c1"># License: BSD 3 clause</span>
 
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">netCDF4</span>
 <span class="kn">import</span> <span class="nn">pyart</span>
 <span class="kn">from</span> <span class="nn">pyart.testing</span> <span class="kn">import</span> <span class="n">get_test_data</span>
 
@@ -432,8 +426,8 @@ used for the initial condition of the dealiasing.</p>
 <span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_outside</span><span class="p">(</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">80</span><span class="p">)</span>
 
 <span class="c1"># perform dealiasing</span>
-<a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dealias_data</span></a> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">correct</span><span class="o">.</span><span class="n">dealias_fourdd</span><span class="p">(</span>
-    <span class="n">radar</span><span class="p">,</span> <span class="n">sonde_profile</span><span class="o">=</span><span class="n">profile</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="n">gatefilter</span><span class="p">)</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dealias_data</span></a> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">correct</span><span class="o">.</span><span class="n">dealias_region_based</span><span class="p">(</span>
+    <span class="n">radar</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="n">gatefilter</span><span class="p">)</span>
 <span class="n">radar</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">&#39;corrected_velocity&#39;</span><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">dealias_data</span></a><span class="p">)</span>
 
 <span class="c1"># create a plot of the first and sixth sweeps</span>
@@ -462,7 +456,7 @@ used for the initial condition of the dealiasing.</p>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  20.756 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 2 minutes  2.472 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-correct-plot-dealias-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/8aa2c48d50735b46c6754539c7f1fc10/plot_dealias.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_dealias.py</span></code></a></p>

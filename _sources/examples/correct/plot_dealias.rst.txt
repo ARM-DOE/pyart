@@ -26,7 +26,7 @@ In this example doppler velocities are dealiased using the Univ. of
 Washington FourDD algorithm implemented in Py-ART.  Sounding data is
 used for the initial condition of the dealiasing.
 
-.. GENERATED FROM PYTHON SOURCE LINES 11-66
+.. GENERATED FROM PYTHON SOURCE LINES 11-65
 
 
 
@@ -47,7 +47,6 @@ used for the initial condition of the dealiasing.
     # License: BSD 3 clause
 
     import matplotlib.pyplot as plt
-    import netCDF4
     import pyart
     from pyart.testing import get_test_data
 
@@ -68,8 +67,8 @@ used for the initial condition of the dealiasing.
     gatefilter.exclude_outside('reflectivity', 0, 80)
 
     # perform dealiasing
-    dealias_data = pyart.correct.dealias_fourdd(
-        radar, sonde_profile=profile, gatefilter=gatefilter)
+    dealias_data = pyart.correct.dealias_region_based(
+        radar, gatefilter=gatefilter)
     radar.add_field('corrected_velocity', dealias_data)
 
     # create a plot of the first and sixth sweeps
@@ -100,7 +99,7 @@ used for the initial condition of the dealiasing.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  20.756 seconds)
+   **Total running time of the script:** ( 2 minutes  2.472 seconds)
 
 
 .. _sphx_glr_download_examples_correct_plot_dealias.py:

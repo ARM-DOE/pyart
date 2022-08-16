@@ -67,6 +67,8 @@
     
     sphere_distance
     
+    subset_radar
+    
     texture
     
     texture_along_ray

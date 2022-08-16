@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Create a PPI plot from a Sigmet file &#8212; Py-ART 1.12.7.post10 documentation</title>
+    <title>Create a PPI plot from a Cfradial file &#8212; Py-ART 1.12.7.post12 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -50,8 +50,8 @@
     <script src="../../_static/doc_shared.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Plot a cross section from a PPI volume" href="plot_xsect.html" />
-    <link rel="prev" title="Create a RHI plot from a MDV file" href="plot_rhi_mdv.html" /> 
+    <link rel="next" title="Create a plot of NEXRAD reflectivity" href="plot_nexrad_reflectivity.html" />
+    <link rel="prev" title="Create a PPI plot from a MDV file" href="plot_ppi_mdv.html" /> 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -285,19 +285,14 @@
      Create a RHI plot from a MDV file
     </a>
    </li>
-   <li class="toctree-l2 current active">
-    <a class="current reference internal" href="#">
-     Create a PPI plot from a Sigmet file
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="plot_xsect.html">
-     Plot a cross section from  a PPI volume
-    </a>
-   </li>
    <li class="toctree-l2">
     <a class="reference internal" href="plot_ppi_mdv.html">
      Create a PPI plot from a MDV file
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Create a PPI plot from a Cfradial file
     </a>
    </li>
    <li class="toctree-l2">
@@ -306,13 +301,13 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="plot_rhi_cfradial_singlescan.html">
-     Create a multiple panel RHI plot from a CF/Radial file
+    <a class="reference internal" href="plot_xsect.html">
+     Plot a cross section from  a PPI volume
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="plot_rhi_sigmet.html">
-     Create a RHI plot from a Sigmet file
+    <a class="reference internal" href="plot_rhi_cfradial_singlescan.html">
+     Create a multiple panel RHI plot from a CF/Radial file
     </a>
    </li>
    <li class="toctree-l2">
@@ -397,41 +392,42 @@
               <div>
                  <div class="sphx-glr-download-link-note admonition note">
 <p class="admonition-title">Note</p>
-<p>Click <a class="reference internal" href="#sphx-glr-download-examples-plotting-plot-ppi-sigmet-py"><span class="std std-ref">here</span></a>
+<p>Click <a class="reference internal" href="#sphx-glr-download-examples-plotting-plot-ppi-cfradial-py"><span class="std std-ref">here</span></a>
 to download the full example code</p>
 </div>
-<section class="sphx-glr-example-title" id="create-a-ppi-plot-from-a-sigmet-file">
-<span id="sphx-glr-examples-plotting-plot-ppi-sigmet-py"></span><h1>Create a PPI plot from a Sigmet file<a class="headerlink" href="#create-a-ppi-plot-from-a-sigmet-file" title="Permalink to this headline">#</a></h1>
-<p>An example which creates a PPI plot of a Sigmet file.</p>
-<img src="../../_images/sphx_glr_plot_ppi_sigmet_001.png" srcset="../../_images/sphx_glr_plot_ppi_sigmet_001.png" alt="b'xsapr-sgxsapr-sg' 0.5 Deg. 2011-05-20T10:54:16Z  Equivalent reflectivity factor" class = "sphx-glr-single-img"/><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
+<section class="sphx-glr-example-title" id="create-a-ppi-plot-from-a-cfradial-file">
+<span id="sphx-glr-examples-plotting-plot-ppi-cfradial-py"></span><h1>Create a PPI plot from a Cfradial file<a class="headerlink" href="#create-a-ppi-plot-from-a-cfradial-file" title="Permalink to this headline">#</a></h1>
+<p>An example which creates a PPI plot of a Cfradial file.</p>
+<img src="../../_images/sphx_glr_plot_ppi_cfradial_001.png" srcset="../../_images/sphx_glr_plot_ppi_cfradial_001.png" alt="xsapr-sg 0.5 Deg. 2011-05-20T06:42:11Z  Equivalent reflectivity factor" class = "sphx-glr-single-img"/><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
 
-<span class="c1"># Author: Jonathan J. Helmus (jhelmus@anl.gov)</span>
+<span class="c1"># Author: Max Grover (mgrover@anl.gov)</span>
 <span class="c1"># License: BSD 3 clause</span>
 
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">pyart</span>
 <span class="kn">from</span> <span class="nn">pyart.testing</span> <span class="kn">import</span> <span class="n">get_test_data</span>
 
-<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">filename</span></a> <span class="o">=</span> <span class="n">get_test_data</span><span class="p">(</span><span class="s1">&#39;XSW110520105408.RAW7HHF&#39;</span><span class="p">)</span>
+<span class="c1"># Locate the test data and read in using main read method</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">filename</span></a> <span class="o">=</span> <span class="n">get_test_data</span><span class="p">(</span><span class="s1">&#39;swx_20120520_0641.nc&#39;</span><span class="p">)</span>
+<span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">filename</span></a><span class="p">)</span>
 
-<span class="c1"># create the plot using RadarDisplay (recommended method)</span>
-<span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_rsl</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">filename</span></a><span class="p">)</span>
+<span class="c1"># Setup the display, which automatically detects this is a ppi scan</span>
 <span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
 <a href="https://matplotlib.org/stable/api/figure_api.html#matplotlib.figure.Figure" title="matplotlib.figure.Figure" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fig</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.figure.html#matplotlib.pyplot.figure" title="matplotlib.pyplot.figure" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">figure</span></a><span class="p">()</span>
 <span class="n">ax</span> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/figure_api.html#matplotlib.figure.Figure.add_subplot" title="matplotlib.figure.Figure.add_subplot" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-method"><span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span></a><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
-<span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">32</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">64.</span><span class="p">)</span>
+<span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s1">&#39;reflectivity_horizontal&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">32</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">64.</span><span class="p">)</span>
 <span class="n">display</span><span class="o">.</span><span class="n">plot_range_rings</span><span class="p">([</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">])</span>
 <span class="n">display</span><span class="o">.</span><span class="n">plot_cross_hair</span><span class="p">(</span><span class="mf">5.</span><span class="p">)</span>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  10.049 seconds)</p>
-<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-plotting-plot-ppi-sigmet-py">
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  2.292 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-plotting-plot-ppi-cfradial-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/b70a6782d80a4e49bc92108153ca53f8/plot_ppi_sigmet.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_ppi_sigmet.py</span></code></a></p>
+<p><a class="reference download internal" download="" href="../../_downloads/31d27ac372a5b89e9290b12692b2ae38/plot_ppi_cfradial.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_ppi_cfradial.py</span></code></a></p>
 </div>
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/6bfb4e912f79002708201c463e2d5f2e/plot_ppi_sigmet.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_ppi_sigmet.ipynb</span></code></a></p>
+<p><a class="reference download internal" download="" href="../../_downloads/751fe0e4b5cf105479c4ca535d4af7ea/plot_ppi_cfradial.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_ppi_cfradial.ipynb</span></code></a></p>
 </div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
@@ -446,17 +442,17 @@ to download the full example code</p>
               
               <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='left-prev' id="prev-link" href="plot_rhi_mdv.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="plot_ppi_mdv.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Create a RHI plot from a MDV file</p>
+            <p class="prev-next-title">Create a PPI plot from a MDV file</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="plot_xsect.html" title="next page">
+    <a class='right-next' id="next-link" href="plot_nexrad_reflectivity.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Plot a cross section from  a PPI volume</p>
+        <p class="prev-next-title">Create a plot of NEXRAD reflectivity</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
