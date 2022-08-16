@@ -24,20 +24,6 @@ from setuptools import find_packages, setup, Extension
 from Cython.Build import cythonize
 import Cython
 
-RSL_MISSING_WARNING = """
-==============================================================================
-WARNING: RSL LIBS AND HEADERS COULD NOT BE FOUND AT THE PROVIDED LOCATION.
-Py-ART will be build without bindings to the NASA TRMM RSL library but some
-functionality will not be available.  If this functionality is desired please
-rebuild and reinstall Py-ART after verifying:
-    1. The NASA TRMM RSL library is installed and accessable.  This package
-       can be obtained from:
-            http://trmm-fc.gsfc.nasa.gov/trmm_gv/software/rsl/.
-    2. The RSL_PATH environmental variable points to where RSL is installed
-       (the libs in $RSL_PATH/lib, the headers in $RSL_PATH/include).
-       Currently the RSL_PATH variable is set to: %s
-==============================================================================
-"""
 
 CLASSIFIERS = """\
     Development Status :: 5 - Production/Stable
@@ -172,9 +158,6 @@ if check_rsl_path(rsl_lib_path, rsl_include_path):
 
     extensions.append(extension_rsl)
     extensions.append(extension_4dd)
-else:
-    import warnings
-    warnings.warn(RSL_MISSING_WARNING % (rsl_path))
 
 libraries = []
 if os.name == 'posix':

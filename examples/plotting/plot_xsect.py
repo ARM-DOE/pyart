@@ -16,16 +16,24 @@ import matplotlib.pyplot as plt
 import pyart
 from pyart.testing import get_test_data
 
-filename = get_test_data('XSW110520105408.RAW7HHF')
-
+# Read the data, a cfradial file
+filename = get_test_data('swx_20120520_0641.nc')
 radar = pyart.io.read(filename)
-xsect = pyart.util.cross_section_ppi(radar, [45, 90])
+
+# Create a cross section at 225 and 270 degrees azimuth
+xsect = pyart.util.cross_section_ppi(radar, [225, 270])
+
+# Set the colorbar label
+colorbar_label = 'Equivalent \n reflectivity factor \n (dBZ)'
 
 display = pyart.graph.RadarDisplay(xsect)
 fig = plt.figure()
-ax = fig.add_subplot(211)
-display.plot('reflectivity', 0, vmin=-32, vmax=64.)
-ax = fig.add_subplot(212)
-display.plot('reflectivity', 1, vmin=-32, vmax=64.)
+ax1 = fig.add_subplot(211)
+display.plot('reflectivity_horizontal', 0, vmin=-32, vmax=64., colorbar_label=colorbar_label)
+plt.ylim(0, 15)
+ax2 = fig.add_subplot(212)
+display.plot('reflectivity_horizontal', 1, vmin=-32, vmax=64., colorbar_label=colorbar_label)
+plt.ylim(0, 15)
+
 plt.tight_layout()
 plt.show()

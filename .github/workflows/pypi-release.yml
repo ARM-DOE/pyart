@@ -29,33 +29,22 @@ jobs:
           use-mamba: true
           miniforge-variant: Mambaforge
 
-      - name: Set TRMM RSL path
-        run: |
-          mamba install -c conda-forge trmm_rsl
-          export RSL_PATH=${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-3 
-
       - name: Fetch all history for all tags and branches
         run: |
            git fetch --prune --unshallow
 
       - name: Install pip dependencies
-        env:
-          RSL_PATH: ${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-3 
         run: |
           python -m pip install --upgrade pip
           python -m pip install build twine
 
       - name: Build tarball and wheels
-        env:
-          RSL_PATH: ${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-3 
         run: |
           git clean -xdf
           git restore -SW .
           python -m build --sdist --wheel .
           
       - name: Check built artifacts
-        env:
-          RSL_PATH: ${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-3 
         run: |
           twine check dist/*.whl
           pwd
