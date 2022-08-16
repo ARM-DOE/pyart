@@ -42,7 +42,7 @@ jobs:
         env:
           RSL_PATH: ${{ env.MAMBA_ROOT_PREFIX }}/pkgs/trmm_rsl-1.49-hac89ed1_5
         run: |
-          pip install -e . --no-deps --force-reinstall
+          pip install -e .
       # Build the website
       - name: Build the site
         env:
