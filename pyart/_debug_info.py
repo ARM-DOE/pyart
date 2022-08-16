@@ -75,11 +75,6 @@ def _debug_info(stream=None):
         netCDF4_version = "MISSING"
 
     try:
-        rsl_version = pyart.io._rsl_interface._RSL_VERSION_STR
-    except:
-        rsl_version = "MISSING"
-
-    try:
         import cylp
         cylp_available = "Available"
     except:
@@ -121,7 +116,6 @@ def _debug_info(stream=None):
     print("", file=stream)
 
     print("---- Optional dependencies ----", file=stream)
-    print("TRMM RSL version:", rsl_version, file=stream)
     print("CyLP:", cylp_available, file=stream)
     print("PyGLPK version:", glpk_version, file=stream)
     print("CVXOPT version:", cvxopt_version, file=stream)

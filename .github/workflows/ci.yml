@@ -44,27 +44,6 @@ jobs:
           use-mamba: true
           miniforge-variant: Mambaforge
           python-version: ${{ matrix.python-version }}
-      
-      - name: Set TRMM RSL path
-        shell: bash -l {0}
-        run: |
-          echo "$RUNNER_OS"
-          if [ "$RUNNER_OS" == 'Windows' ]; then
-               echo 'Trmm will not be installed for Windows'
-          elif [ "$RUNNER_OS" == 'Linux' ]; then
-               mamba install -c conda-forge trmm_rsl
-               RSL_PATH=$(find "$CONDA_PKGS_DIR" -name '*trmm_rsl-1.49-*' ! -name '*.tar.bz2')
-               echo "RSL_PATH=$(echo $RSL_PATH)" >> $GITHUB_ENV
-          elif [ "$RUNNER_OS" == 'macOS' ]; then
-               mamba install -c conda-forge trmm_rsl
-               RSL_PATH=$(find "$CONDA_PKGS_DIR" -name '*trmm_rsl-1.49-*' ! -name '*.tar.bz2')
-               echo "RSL_PATH=$(echo $RSL_PATH)" >> $GITHUB_ENV
-          else
-               mamba install -c conda-forge trmm_rsl
-               RSL_PATH=$(find "$CONDA_PKGS_DIR" -name '*trmm_rsl-1.49-*' ! -name '*.tar.bz2')
-               echo "RSL_PATH=$(echo $RSL_PATH)" >> $GITHUB_ENV
-          fi
-          conda list
           
       - name: Fetch all history for all tags and branches
         run: |
@@ -73,7 +52,6 @@ jobs:
       - name: Install PyART
         shell: bash -l {0}
         run: |
-          echo $RSL_PATH
           python -m pip install -e . --no-deps --force-reinstall
 
       - name: Run Linting
@@ -85,8 +63,6 @@ jobs:
       - name: Run Tests
         id: run_tests
         shell: bash -l {0}
-        env:
-          RSL_PATH: $RSL_PATH
         run: |
           python -m pytest -v --cov=./ --cov-report=xml
 
