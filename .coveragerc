@@ -5,6 +5,10 @@ omit =
     */setup.py
     */tests*
     pyart/aux_io/*
+	pyart/io/rsl.py
+	pyart/correct/dealias.py
+	pyart/graph/gridmapdisplay_basemap.py
+	pyart/graph/radarmapdisplay_basemap.py
 
 [report]
 exclude_lines =
