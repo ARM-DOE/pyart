@@ -5,6 +5,8 @@ omit =
     */setup.py
     */tests*
     pyart/aux_io/*
+	tests/io/test_rsl.py
+	tests/correct/test_dealias.py
 
 [report]
 exclude_lines =
