@@ -1,5 +1,6 @@
 import numpy as np
 from datatree import DataTree
+import xarray as xr
 
 def create_dataset_from_sweep(radar, sweep=0, field=None):
     """

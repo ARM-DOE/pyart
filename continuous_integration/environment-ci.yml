@@ -21,8 +21,8 @@ dependencies:
   - glpk
   - cftime
   - setuptools
-  - xarray-datatree
   - pip
   - pip:
     - pooch
     - versioneer
+    - xarray-datatree

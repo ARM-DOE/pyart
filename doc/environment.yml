@@ -23,7 +23,6 @@ dependencies:
   - s3fs
   - glpk
   - cftime
-  - xarray-datatree
   - pip
   - pip:
       - pydata-sphinx-theme<0.9.0
@@ -34,3 +33,4 @@ dependencies:
       - nbsphinx
       - pooch
       - versioneer
+      - xarray-datatree
