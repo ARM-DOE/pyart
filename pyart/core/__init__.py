@@ -7,6 +7,7 @@ from .radar import Radar
 from .radar_spectra import RadarSpectra
 from .grid import Grid
 from .wind_profile import HorizontalWindProfile
+from .xradar import create_dataset_from_sweep, convert_to_xradar
 
 from .transforms import antenna_to_cartesian
 from .transforms import antenna_vectors_to_cartesian
