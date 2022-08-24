@@ -1,3 +1,4 @@
+from datatree import DataTree
 import pyart
 import xarray as xr
 
@@ -10,4 +11,4 @@ def test_create_dataset_from_sweep(test_radar=test_radar):
 
 def test_convert_to_xradar(test_radar=test_radar):
     xradar_dataset = pyart.core.xradar.convert_to_xradar(test_radar)
-    assert isinstance(xradar_dataset, xc.Collection)
+    assert isinstance(xradar_dataset, DataTree)
