@@ -42,7 +42,7 @@ def create_dataset_from_sweep(radar, sweep=0, field=None):
              range=range),
     )
     
-    return ds.chunk()
+    return ds
 
 
 def convert_to_xradar(radar):
