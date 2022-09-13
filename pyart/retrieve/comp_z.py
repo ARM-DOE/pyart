@@ -33,6 +33,9 @@ def composite_reflectivity(radar, field='reflectivity', gatefilter=None):
     ----------
     radar : Radar
         Radar object used.
+    field : str
+        Reflectivity field name to use to look up reflectivity data. In the
+        radar object. Default field name is 'reflectivity'.
     gatefilter : GateFilter
         GateFilter instance. None will result in no gatefilter mask being
         applied to data. 
