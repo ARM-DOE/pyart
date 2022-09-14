@@ -212,8 +212,8 @@ def test_mdv_degree_grid():
     grid = pyart.io.read_grid_mdv(
         pyart.testing.MDV_GRID_FILE, file_field_names=True)
 
-    assert 'refl' in grid.fields.keys()
-    fdata = grid.fields['refl']['data']
+    assert 'ref' in grid.fields.keys()
+    fdata = grid.fields['ref']['data']
     assert fdata.shape == (1, 1837, 3661)
     assert np.ma.is_masked(fdata[0, 0, 0])
     assert_almost_equal(fdata[0, 130, 2536], 20.0, 1)

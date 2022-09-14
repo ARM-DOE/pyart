@@ -995,9 +995,9 @@ sigmet_field_mapping = {
     'HCLASS': radar_echo_classification,        # (55) Hydrometeor class
     'HCLASS2': radar_echo_classification,       # (56) Hydrometeor class
     'ZDRC': corrected_differential_reflectivity,
-                                                # (57) Corrected diff. refl.
+                                                # (57) Corrected diff. ref.
     'ZDRC2': corrected_differential_reflectivity,
-                                                # (58) Corrected diff. refl.
+                                                # (58) Corrected diff. ref.
     'UNKNOWN_59': None,                         # Unknown field
     'UNKNOWN_60': None,                         # Unknown field
     'UNKNOWN_61': None,                         # Unknown field
@@ -1290,11 +1290,11 @@ gamic_field_mapping = {
     'ZDR': corrected_differential_reflectivity,
                         # Differential reflectivity from corrected timeseries
     'UZDR': differential_reflectivity,
-                        # Diff. refl. from uncorrected timeseries
-    'AZDR': None,       # Diff. refl., rainfall atten. corr., corr t.s.
-    'ZDR1': None,       # Diff. refl., corr. t.s., 1st LAG algo.
-    'UZDR1': None,      # Diff. refl., uncorr. t.s., 1st LAG algo.
-    'AZDR1': None,      # Diff. refl., rain. atten. corr., corr. t.s., 1st LAG
+                        # Diff. ref. from uncorrected timeseries
+    'AZDR': None,       # Diff. ref., rainfall atten. corr., corr t.s.
+    'ZDR1': None,       # Diff. ref., corr. t.s., 1st LAG algo.
+    'UZDR1': None,      # Diff. ref., uncorr. t.s., 1st LAG algo.
+    'AZDR1': None,      # Diff. ref., rain. atten. corr., corr. t.s., 1st LAG
 
     'PHI': corrected_differential_phase,
                         # Differential phase from corrected timeseries

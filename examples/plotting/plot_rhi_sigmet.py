@@ -39,7 +39,7 @@ display.plot('reflectivity', 0, vmin=-32, vmax=64,
 display.set_limits(ylim=[0, 17])
 
 cax = fig.add_axes([.9, .1, 0.02, .8])
-colorbar_label = 'Eq refl fact (dBz)'
+colorbar_label = 'Eq ref fact (dBz)'
 display.plot_colorbar(fig=fig, cax=cax, label=colorbar_label)
 
 plt.show()
