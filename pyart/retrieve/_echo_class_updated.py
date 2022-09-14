@@ -144,45 +144,45 @@ def _revised_conv_strat(refl, dx, dy, alwaysConvThres=42, bkgRad_km=11,
     # count convective cores
     corecount = np.count_nonzero(conv_core_array)
 
+    # t1 = time.time()
+    # # Do an initial assignment of convsf array
+    # conv_strat_array = yuter_convsf.classify_conv_strat_array(refl, conv_strat_array, conv_core_array,
+    #                                                           NOSFCECHO, CONV, SF, WEAKECHO, CS_CORE,
+    #                                                           minDBZused, weakEchoThres)
+    # t2 = time.time()
+    # print("Time to do initial convective stratiform assignment: {0} seconds".format(t2 - t1))
+
+    # Assign convective radii based on background reflectivity
     t1 = time.time()
-    # Do an initial assignment of convsf array
+    convRadiuskm = yuter_convsf.assignConvRadiuskm_array(ze_bkg, dBZformaxconvradius=dBZforMaxConvRadius, maxConvRadius=maxConvRad_km)
+
+    # Incorporate convective radius using binary dilation
+    # Create empty array for assignment
+    temp_assignment = np.zeros_like(conv_core_array)
+
+    # Loop through radii
+    for radius in np.arange(1, maxConvRad_km+1):
+        # create mask array for radius incorporation
+        conv_mask_array = yuter_convsf.init_conv_radius_mask(maxConvDiameter, radius, dx / 1000, dy / 1000, centerConvMask_x)
+        # find location of radius
+        temp = convRadiuskm == radius
+        # get cores for given radius
+        temp_core = np.ma.masked_where(~temp, conv_core_array)
+        # dilate cores
+        temp_dilated = scipy.ndimage.binary_dilation(temp_core.filled(0), conv_mask_array)
+        # add to assignment array
+        temp_assignment = temp_assignment + temp_dilated
+
+    # add dilated cores to original array
+    conv_core_array[temp_assignment>=1] = CS_CORE
+
+    t2 = time.time()
+    print("Time to apply convective radius: {0} seconds".format(t2 - t1))
+
+    # Now do convective stratiform classification
     conv_strat_array = yuter_convsf.classify_conv_strat_array(refl, conv_strat_array, conv_core_array,
                                                               NOSFCECHO, CONV, SF, WEAKECHO, CS_CORE,
                                                               minDBZused, weakEchoThres)
-    t2 = time.time()
-    print("Time to do initial convective stratiform assignment: {0} seconds".format(t2 - t1))
-
-    # Assign convective radii based on background reflectivity
-    convRadiuskm = yuter_convsf.assignConvRadiuskm_array(ze_bkg, dBZformaxconvradius=dBZforMaxConvRadius, maxConvRadius=maxConvRad_km)
-
-    if incorp_rad:
-        t1 = time.time()
-        # Loop through array for a final time to incorporate the convective radii
-        for j in np.arange(0, convRadiuskm.shape[1], 1):
-
-            for i in np.arange(0, convRadiuskm.shape[0], 1):
-
-                # if point is a convective core, find radius, get convective mask radius and incorporate radius
-                if conv_core_array[j, i] == CS_CORE:
-                    convRadius = np.floor(convRadiuskm[j,i])
-
-                    if convRadius == 1:
-                        conv_mask_array = yuter_convsf.init_conv_radius_mask(maxConvDiameter, 1, dx / 1000, dy / 1000, centerConvMask_x)
-                    elif convRadius > 1:
-                        if convRadius == 2:
-                            conv_mask_array = yuter_convsf.init_conv_radius_mask(maxConvDiameter, 2, dx / 1000, dy / 1000, centerConvMask_x)
-                        elif convRadius == 3:
-                            conv_mask_array = yuter_convsf.init_conv_radius_mask(maxConvDiameter, 3, dx / 1000, dy / 1000, centerConvMask_x)
-                        elif convRadius == 4:
-                            conv_mask_array = yuter_convsf.init_conv_radius_mask(maxConvDiameter, 4, dx / 1000, dy / 1000, centerConvMask_x)
-                        elif convRadius == 5:
-                            conv_mask_array = yuter_convsf.init_conv_radius_mask(maxConvDiameter, 5, dx / 1000, dy / 1000, centerConvMask_x)
-
-                    conv_strat_array = yuter_convsf.incorporateConvRadius(conv_strat_array, i, j, maxConvDiameter,
-                                                                          conv_mask_array, NOSFCECHO, CONV)
-
-        t2 = time.time()
-        print("Time to apply convective radius: {0} seconds".format(t2 - t1))
 
     return ze_bkg, conv_core_array, conv_strat_array
 
@@ -209,3 +209,34 @@ def _revised_conv_strat(refl, dx, dy, alwaysConvThres=42, bkgRad_km=11,
     # convmaskarray3 = yuter_convsf.init_conv_radius_mask(maxConvDiameter, 3, dx / 1000, dy / 1000, centerConvMask_x)
     # convmaskarray4 = yuter_convsf.init_conv_radius_mask(maxConvDiameter, 4, dx / 1000, dy / 1000, centerConvMask_x)
     # convmaskarray5 = yuter_convsf.init_conv_radius_mask(maxConvDiameter, 5, dx / 1000, dy / 1000, centerConvMask_x)
+
+# if incorp_rad:
+#     t1 = time.time()
+#     # Loop through array for a final time to incorporate the convective radii
+#     for j in np.arange(0, convRadiuskm.shape[1], 1):
+#
+#         for i in np.arange(0, convRadiuskm.shape[0], 1):
+#
+#             # if point is a convective core, find radius, get convective mask radius and incorporate radius
+#             if conv_core_array[j, i] == CS_CORE:
+#                 convRadius = np.floor(convRadiuskm[j, i])
+#
+#                 if convRadius == 1:
+#                     conv_mask_array = yuter_convsf.init_conv_radius_mask(maxConvDiameter, 1, dx / 1000, dy / 1000,
+#                                                                          centerConvMask_x)
+#                 elif convRadius > 1:
+#                     if convRadius == 2:
+#                         conv_mask_array = yuter_convsf.init_conv_radius_mask(maxConvDiameter, 2, dx / 1000, dy / 1000,
+#                                                                              centerConvMask_x)
+#                     elif convRadius == 3:
+#                         conv_mask_array = yuter_convsf.init_conv_radius_mask(maxConvDiameter, 3, dx / 1000, dy / 1000,
+#                                                                              centerConvMask_x)
+#                     elif convRadius == 4:
+#                         conv_mask_array = yuter_convsf.init_conv_radius_mask(maxConvDiameter, 4, dx / 1000, dy / 1000,
+#                                                                              centerConvMask_x)
+#                     elif convRadius == 5:
+#                         conv_mask_array = yuter_convsf.init_conv_radius_mask(maxConvDiameter, 5, dx / 1000, dy / 1000,
+#                                                                              centerConvMask_x)
+#
+#                 conv_strat_array = yuter_convsf.incorporateConvRadius(conv_strat_array, i, j, maxConvDiameter,
+#                                                                       conv_mask_array, NOSFCECHO, CONV)
