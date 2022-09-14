@@ -6,6 +6,7 @@ given position in latitude, longitude
 
 import numpy as np
 import xarray as xr
+import pandas as pd
 
 from ..core.transforms import antenna_vectors_to_cartesian
 
@@ -178,13 +179,13 @@ def get_field_location(radar, latitude, longitude):
     # call the get_column_ray function
     ray = get_column_rays(radar, azim)
 
-    # Determine the gates for the rays
+    # Determine the center of each gate for the subsetted rays.
     (rhi_x,
      rhi_y,
      rhi_z) = antenna_vectors_to_cartesian(radar.range['data'],
                                            radar.azimuth['data'][ray],
                                            radar.elevation['data'][ray],
-                                           edges=True)
+                                           edges=False)
     # Calculate distance from the x,y coordinates to target
     rhidis = np.sqrt((rhi_x**2) + (rhi_y**2)) * np.sign(rhi_z)
     for i in range(len(ray)):
@@ -195,36 +196,77 @@ def get_field_location(radar, latitude, longitude):
             else:
                 moment[key].append(radar.fields[key]
                                    ['data'][ray[i], tar_gate])
-        zgate.append(rhi_z[i, tar_gate])
+        # Add radar elevation to height gates
+        # to define height as center of each gate above sea level
+        zgate.append(rhi_z[i, tar_gate] + radar.altitude['data'][0])
+
+    # Determine the time at the center of each ray within the column
+    # Define the start of the radar volume as a numpy datetime object for xr
+    base_time = pd.to_datetime(radar.time['units'].split(' ')[-1].strip('Z'),
+                               format='%Y-%m-%dT%H:%M:%S').to_numpy()
+    # Convert Py-ART radar object time (time since volume start) to time delta
+    # Add to base time to have sequential time within the xr Dataset
+    # for easier future merging/work
+    combined_time = []
+    for i in range(len(ray)):
+        delta = pd.to_timedelta(radar.time['data'][ray[i]], unit='s')
+        total_time = base_time + delta
+        combined_time.append(total_time.to_numpy())
 
     # Create a blank list to hold the xarray DataArrays
     ds_container = []
     da_meta = ['units', 'standard_name', 'long_name', 'valid_max',
-               'valid_min']
+               'valid_min', 'coordinates']
     # Convert the moment dictionary to xarray DataArray.
     # Apply radar object meta data to DataArray attribute
     for key in moment:
-        da = xr.DataArray(moment[key], coords=[zgate],
-                          name=key, dims=['height'])
-        for tag in da_meta:
-            if tag in radar.fields[key]:
-                da.attrs[tag] = radar.fields[key][tag]
-        # Append to ds container
-        ds_container.append(da.to_dataset(name=key))
+        if key != 'height':
+            da = xr.DataArray(moment[key],
+                              coords=dict(height=zgate),
+                              name=key, dims=['height'])
+            for tag in da_meta:
+                if tag in radar.fields[key]:
+                    da.attrs[tag] = radar.fields[key][tag]
+            # Append to ds container
+            ds_container.append(da.to_dataset(name=key))
+
+    # Add additional DataArrays 'base_time' and 'time_offset'
+    # if not present within the radar object.
+    da_base = xr.DataArray(base_time, name='base_time')
+    da_offset = xr.DataArray(combined_time,
+                             coords=dict(height=zgate),
+                             name='time_offset', dims=['height'])
+    ds_container.append(da_base.to_dataset(name='base_time'))
+    ds_container.append(da_offset.to_dataset(name='time_offset'))
 
     # Create a xarray DataSet from the DataArrays
     column = xr.merge(ds_container)
-    if len(radar.time['units'].split(' ')) > 3:
-        column.attrs['date'] = radar.time['units'].split(' ')[2]
-        column.attrs['time'] = radar.time['units'].split(' ')[3]
-    else:
-        column.attrs['date'] = radar.time['units'].split(' ')[2].split('T')[0]
-        column.attrs['time'] = radar.time['units'].split(' ')[2].split('T')[-1]
-    column.attrs['distance'] = (str(np.around(dis / 1000., 3)) + ' km')
-    column.attrs['azimuth'] = (str(np.around(azim, 3)) + ' degrees')
-    column.attrs['latitude'] = (str(latitude) + ' degrees')
-    column.attrs['longitude'] = (str(longitude) + ' degrees')
 
+    # Assign Attributes for the Height and Times
+    height_des = ('Height Above Sea Level [in meters] for the Center of Each'
+                  + ' Radar Gate Above the Target Location')
+    column.height.attrs.update(long_name='Height of Radar Beam',
+                               units='m',
+                               standard_name='height',
+                               description=height_des)
+
+    column.base_time.attrs.update(long_name='UTC Reference Time',
+                                  units='seconds')
+
+    time_long = 'Time in Seconds Since Volume Start'
+    time_des = ("Time in Seconds Since Volume Start that Cooresponds"
+               + " to the Center of Each Height Gate"
+               + " Above the Target Location")
+    column.time_offset.attrs.update(long_name=time_long,
+                                    units='seconds',
+                                    description=time_des)
+
+    # Assign Global Attributes to the DataSet
+    column.attrs['distance_from_radar'] = (str(np.around(dis / 1000., 3))
+                                          + ' km')
+    column.attrs['azimuth'] = (str(np.around(azim, 3)) + ' degrees')
+    column.attrs['latitude_of_location'] = (str(latitude) + ' degrees')
+    column.attrs['longitude_of_location'] = (str(longitude) + ' degrees')
     return column
 
 

@@ -572,7 +572,7 @@ def _get_coeff_rkdp(freq):
 
     warn('Radar frequency out of range. '
          + 'Coefficients only applied to S, C or X band. '
-         + freq_band + ' band coefficients will be used.')
+         + freq_band_aux + ' band coefficients will be used.')
 
     return coeff_rkdp_dict[freq_band_aux]
 
@@ -629,7 +629,7 @@ def _get_coeff_ra(freq):
 
     warn('Radar frequency out of range. '
          + 'Coefficients only applied to S, C or X band. '
-         + freq_band + ' band coefficients will be used.')
+         + freq_band_aux + ' band coefficients will be used.')
 
     return coeff_ra_dict[freq_band_aux]
 

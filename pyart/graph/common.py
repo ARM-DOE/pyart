@@ -100,7 +100,7 @@ def generate_grid_name(grid):
 def generate_radar_time_begin(radar):
     """ Return time begin in datetime instance. """
     # datetime object describing first sweep time
-    times = radar.time['data'][0]
+    times = int(radar.time['data'][0])
     units = radar.time['units']
     calendar = radar.time['calendar']
     return num2date(times, units, calendar, only_use_cftime_datetimes=False,
@@ -110,7 +110,7 @@ def generate_radar_time_begin(radar):
 def generate_radar_time_sweep(radar, sweep):
     """ Return time that a specific sweep began in a datetime instance. """
     first_ray = radar.sweep_start_ray_index['data'][sweep]
-    times = radar.time['data'][first_ray]
+    times = int(radar.time['data'][first_ray])
     units = radar.time['units']
     calendar = radar.time['calendar']
     return num2date(times, units, calendar, only_use_cftime_datetimes=False,
@@ -119,7 +119,7 @@ def generate_radar_time_sweep(radar, sweep):
 
 def generate_grid_time_begin(grid):
     """ Return time begin in datetime instance. """
-    times = grid.time['data'][0]
+    times = int(grid.time['data'][0])
     units = grid.time['units']
     if 'calendar' in grid.time:
         calendar = grid.time['calendar']

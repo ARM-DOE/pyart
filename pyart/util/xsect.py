@@ -36,7 +36,7 @@ def cross_section_ppi(radar, target_azimuths, az_tol=None):
     # determine which rays from the ppi radar make up the pseudo RHI
     prhi_rays = []
     valid_azimuths = []
-    for target_azimuth in target_azimuths:
+    for target_azimuth in sorted(target_azimuths):
         for sweep_slice in radar.iter_slice():
             sweep_azimuths = radar.azimuth['data'][sweep_slice]
             d_az = np.abs(sweep_azimuths - target_azimuth)
@@ -57,12 +57,13 @@ def cross_section_ppi(radar, target_azimuths, az_tol=None):
                     prhi_rays.append(ray_number + sweep_slice.start)
                     valid_azimuths.append(target_azimuth)
 
-    rhi_nsweeps = len(valid_azimuths)
+    unique_azimuths = np.unique(valid_azimuths)
+    rhi_nsweeps = len(unique_azimuths)
     if rhi_nsweeps == 0:
         raise ValueError('No azimuth found within tolerance')
 
     radar_rhi = _construct_xsect_radar(
-        radar, 'rhi', prhi_rays, rhi_nsweeps, valid_azimuths)
+        radar, 'rhi', prhi_rays, rhi_nsweeps, unique_azimuths)
 
     return radar_rhi
 

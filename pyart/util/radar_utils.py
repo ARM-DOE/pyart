@@ -104,6 +104,204 @@ def to_vpt(radar, single_scan=True):
     return
 
 
+def subset_radar(radar, field_names, rng_min=None, rng_max=None, ele_min=None,
+              ele_max=None, azi_min=None, azi_max=None):
+    """
+    Creates a subset of the radar object along new dimensions
+    Parameters
+    ----------
+    radar : radar object
+        The radar object containing the data
+    field_names : str or None
+        The fields to keep in the new radar
+    rng_min, rng_max : float
+        The range limits [m]. If None the entire coverage of the radar is
+        going to be used
+    ele_min, ele_max, azi_min, azi_max : float or None
+        The limits of the grid [deg]. If None the limits will be the limits
+        of the radar volume
+    Returns
+    -------
+    radar : radar object
+        The radar object containing only the desired data
+    """
+    radar_aux = copy.deepcopy(radar)
+
+    if (rng_min is None and rng_max is None and ele_min is None and
+            ele_max is None and azi_min is None and azi_max is None):
+        return radar_aux
+
+    if rng_min is None:
+        rng_min = 0.
+    if rng_max is None:
+        rng_max = np.max(radar_aux.range['data'])
+
+    ind_rng = np.where(np.logical_and(
+        radar_aux.range['data'] >= rng_min,
+        radar_aux.range['data'] <= rng_max))[0]
+
+    if ind_rng.size == 0:
+        print('No range bins between '+str(rng_min)+' and '+str(rng_max)+' m')
+        return None
+
+    # Determine angle limits
+    if radar_aux.scan_type == 'ppi':
+        if ele_min is None:
+            ele_min = np.min(radar_aux.fixed_angle['data'])
+        if ele_max is None:
+            ele_max = np.max(radar_aux.fixed_angle['data'])
+        if azi_min is None:
+            azi_min = np.min(radar_aux.azimuth['data'])
+        if azi_max is None:
+            azi_max = np.max(radar_aux.azimuth['data'])
+    else:
+        if ele_min is None:
+            ele_min = np.min(radar_aux.elevation['data'])
+        if ele_max is None:
+            ele_max = np.max(radar_aux.elevation['data'])
+        if azi_min is None:
+            azi_min = np.min(radar_aux.fixed_angle['data'])
+        if azi_max is None:
+            azi_max = np.max(radar_aux.fixed_angle['data'])
+
+    if radar_aux.scan_type == 'ppi':
+        # Get radar elevation angles within limits
+        ele_vec = np.sort(radar_aux.fixed_angle['data'])
+        ele_vec = ele_vec[
+            np.logical_and(ele_vec >= ele_min, ele_vec <= ele_max)]
+        if ele_vec.size == 0:
+            print('No elevation angles between '+str(ele_min)+' and ' +
+                 str(ele_max))
+            return None
+
+        # get sweeps corresponding to the desired elevation angles
+        ind_sweeps = []
+        for ele in ele_vec:
+            ind_sweeps.append(
+                np.where(radar_aux.fixed_angle['data'] == ele)[0][0])
+        radar_aux = radar_aux.extract_sweeps(ind_sweeps)
+
+        # Get indices of rays within limits
+        if azi_min < azi_max:
+            ind_rays = np.where(np.logical_and(
+                radar_aux.azimuth['data'] >= azi_min,
+                radar_aux.azimuth['data'] <= azi_max))[0]
+        else:
+            ind_rays = np.where(np.logical_or(
+                radar_aux.azimuth['data'] >= azi_min,
+                radar_aux.azimuth['data'] <= azi_max))[0]
+
+    else:
+        # Get radar azimuth angles within limits
+        azi_vec = radar_aux.fixed_angle['data']
+        if azi_min < azi_max:
+            azi_vec = np.sort(azi_vec[
+                np.logical_and(azi_vec >= azi_min, azi_vec <= azi_max)])
+        else:
+            azi_vec = azi_vec[
+                np.logical_or(azi_vec >= azi_min, azi_vec <= azi_max)]
+        if azi_vec.size == 0:
+            print('No azimuth angles between '+str(azi_min)+' and ' +
+                 str(azi_max))
+            return None
+
+        # get sweeps corresponding to the desired azimuth angles
+        ind_sweeps = []
+        for azi in azi_vec:
+            ind_sweeps.append(
+                np.where(radar_aux.fixed_angle['data'] == azi)[0][0])
+        radar_aux = radar_aux.extract_sweeps(ind_sweeps)
+
+        # Get indices of rays within limits
+        ind_rays = np.where(np.logical_and(
+            radar_aux.elevation['data'] >= ele_min,
+            radar_aux.elevation['data'] <= ele_max))[0]
+
+    # get new sweep start index and stop index
+    sweep_start_inds = copy.deepcopy(radar_aux.sweep_start_ray_index['data'])
+    sweep_end_inds = copy.deepcopy(radar_aux.sweep_end_ray_index['data'])
+
+    nrays = 0
+    ind_rays_aux = []
+    for j in range(radar_aux.nsweeps):
+        # get ray indices for this sweep
+        ind_rays_sweep = ind_rays[np.logical_and(
+            ind_rays >= sweep_start_inds[j], ind_rays <= sweep_end_inds[j])]
+        # order rays
+        if radar_aux.scan_type == 'ppi':
+            ind = np.argsort(radar_aux.azimuth['data'][ind_rays_sweep])
+            ind_rays_sweep = ind_rays_sweep[ind]
+            # avoid large gaps in data
+            azimuths = radar_aux.azimuth['data'][ind_rays_sweep]
+            azi_steps = azimuths[1:]-azimuths[:-1]
+            ind_gap = np.where(azi_steps > 2*np.median(azi_steps))[0]
+            if ind_gap.size > 0:
+                ind_rays_sweep = np.append(
+                    ind_rays_sweep[ind_gap[0]+1:],
+                    ind_rays_sweep[:ind_gap[0]+1])
+            ind_rays_aux.extend(ind_rays_sweep)
+        else:
+            ind = np.argsort(radar_aux.elevation['data'][ind_rays_sweep])
+            ind_rays_aux.extend(ind_rays_sweep[ind])
+
+        rays_in_sweep = ind_rays_sweep.size
+        radar_aux.rays_per_sweep['data'][j] = rays_in_sweep
+        if j == 0:
+            radar_aux.sweep_start_ray_index['data'][j] = 0
+        else:
+            radar_aux.sweep_start_ray_index['data'][j] = int(
+                radar_aux.sweep_end_ray_index['data'][j-1]+1)
+        radar_aux.sweep_end_ray_index['data'][j] = (
+            radar_aux.sweep_start_ray_index['data'][j]+rays_in_sweep-1)
+        nrays += rays_in_sweep
+
+    ind_rays = np.array(ind_rays_aux)
+
+    # Update metadata
+    radar_aux.range['data'] = radar_aux.range['data'][ind_rng]
+    radar_aux.time['data'] = radar_aux.time['data'][ind_rays]
+    radar_aux.azimuth['data'] = radar_aux.azimuth['data'][ind_rays]
+    radar_aux.elevation['data'] = radar_aux.elevation['data'][ind_rays]
+    radar_aux.init_gate_x_y_z()
+    radar_aux.init_gate_longitude_latitude()
+    radar_aux.init_gate_altitude()
+    radar_aux.nrays = nrays
+    radar_aux.ngates = ind_rng.size
+
+    if radar_aux.instrument_parameters is not None:
+        if 'nyquist_velocity' in radar_aux.instrument_parameters:
+            radar_aux.instrument_parameters['nyquist_velocity']['data'] = (
+                radar_aux.instrument_parameters['nyquist_velocity']['data'][
+                    ind_rays])
+        if 'pulse_width' in radar_aux.instrument_parameters:
+            radar_aux.instrument_parameters['pulse_width']['data'] = (
+                radar_aux.instrument_parameters['pulse_width']['data'][
+                    ind_rays])
+        if 'number_of_pulses' in radar_aux.instrument_parameters:
+            radar_aux.instrument_parameters['number_of_pulses']['data'] = (
+                radar_aux.instrument_parameters['number_of_pulses']['data'][
+                    ind_rays])
+
+    # Get new fields
+    if field_names is None:
+        radar_aux.fields = dict()
+    else:
+        fields_aux = copy.deepcopy(radar_aux.fields)
+        radar_aux.fields = dict()
+        for field_name in field_names:
+            if field_name not in fields_aux:
+                print('Field '+field_name+' not available')
+                continue
+
+            fields_aux[field_name]['data'] = (
+                fields_aux[field_name]['data'][:, ind_rng])
+            fields_aux[field_name]['data'] = (
+                fields_aux[field_name]['data'][ind_rays, :])
+            radar_aux.add_field(field_name, fields_aux[field_name])
+
+    return radar_aux
+
+
 def join_radar(radar1, radar2):
     """
     Combine two radar instances into one.
@@ -135,6 +333,43 @@ def join_radar(radar1, radar2):
     new_radar.nsweeps += radar2.nsweeps
     new_radar.sweep_mode['data'] = np.append(
         radar1.sweep_mode['data'], radar2.sweep_mode['data'])
+    if ((radar1.rays_are_indexed is not None) and
+            (radar2.rays_are_indexed is not None)):
+        new_radar.rays_are_indexed['data'] = np.append(
+            radar1.rays_are_indexed['data'],
+            radar2.rays_are_indexed['data'])
+    else:
+        new_radar.rays_are_indexed = None
+
+    if new_radar.instrument_parameters is not None:
+        if 'nyquist_velocity' in new_radar.instrument_parameters:
+            new_radar.instrument_parameters['nyquist_velocity']['data'] = (
+                np.append(
+                    radar1.instrument_parameters['nyquist_velocity']['data'],
+                    radar2.instrument_parameters['nyquist_velocity']['data']))
+        if 'pulse_width' in new_radar.instrument_parameters:
+            new_radar.instrument_parameters['pulse_width']['data'] = (
+                np.append(
+                    radar1.instrument_parameters['pulse_width']['data'],
+                    radar2.instrument_parameters['pulse_width']['data']))
+        if 'number_of_pulses' in new_radar.instrument_parameters:
+            new_radar.instrument_parameters['number_of_pulses']['data'] = (
+                np.append(
+                    radar1.instrument_parameters['number_of_pulses']['data'],
+                    radar2.instrument_parameters['number_of_pulses']['data']))
+        if 'prt' in new_radar.instrument_parameters:
+            new_radar.instrument_parameters['prt']['data'] = (
+                np.append(
+                    radar1.instrument_parameters['prt']['data'],
+                    radar2.instrument_parameters['prt']['data']))
+
+    if ((radar1.ray_angle_res is not None) and
+            (radar2.ray_angle_res is not None)):
+        new_radar.ray_angle_res['data'] = np.append(
+            radar1.ray_angle_res['data'],
+            radar2.ray_angle_res['data'])
+    else:
+        new_radar.ray_angle_res = None
 
     if len(radar1.range['data']) >= len(radar2.range['data']):
         new_radar.range['data'] = radar1.range['data']
@@ -151,16 +386,26 @@ def join_radar(radar1, radar2):
     new_radar.time['units'] = datetime_utils.EPOCH_UNITS
     new_radar.nrays = len(new_radar.time['data'])
 
+    fields_to_remove = []
     for var in new_radar.fields.keys():
-        sh1 = radar1.fields[var]['data'].shape
-        sh2 = radar2.fields[var]['data'].shape
-        new_field_shape = (sh1[0] + sh2[0], max(sh1[1], sh2[1]))
-        new_field = np.ma.zeros(new_field_shape)
-        new_field[:] = np.ma.masked
-        new_field.set_fill_value(get_fillvalue())
-        new_field[0:sh1[0], 0:sh1[1]] = radar1.fields[var]['data']
-        new_field[sh1[0]:, 0:sh2[1]] = radar2.fields[var]['data']
-        new_radar.fields[var]['data'] = new_field
+        # if the field is present in both radars combine both fields
+        # otherwise remove it from new radar
+        if var in radar1.fields and var in radar2.fields:
+            sh1 = radar1.fields[var]['data'].shape
+            sh2 = radar2.fields[var]['data'].shape
+            new_field_shape = (sh1[0] + sh2[0], max(sh1[1], sh2[1]))
+            new_field = np.ma.masked_all(new_field_shape)
+            new_field.set_fill_value(get_fillvalue())
+            new_field[0:sh1[0], 0:sh1[1]] = radar1.fields[var]['data']
+            new_field[sh1[0]:, 0:sh2[1]] = radar2.fields[var]['data']
+            new_radar.fields[var]['data'] = new_field
+        else:
+            print("Field "+var+" not present in both radars")
+            fields_to_remove.append(var)
+
+    if fields_to_remove:
+        for field_name in fields_to_remove:
+            new_radar.fields.pop(field_name, None)
 
     # radar locations
     # TODO moving platforms - any more?
@@ -196,7 +441,9 @@ def join_radar(radar1, radar2):
                                                 radar2.longitude['data'])
         new_radar.altitude['data'] = np.append(radar1.altitude['data'],
                                                radar2.altitude['data'])
+
     return new_radar
+
 
 def image_mute_radar(
         radar, field, mute_field, mute_threshold, field_threshold=None):
