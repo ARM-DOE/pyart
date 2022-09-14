@@ -18,35 +18,24 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      # Install dependencies
-      - name: Setup Conda Environment
-        uses: conda-incubator/setup-miniconda@v2
+      # Create environment using micromamba
+      - name: Install Conda environment with Micromamba
+        uses: mamba-org/provision-with-micromamba@main
         with:
           environment-file: doc/environment.yml
-          activate-environment: pyart-docs
-          auto-activate-base: false
-          mamba-version: '*'
-          use-mamba: true
-          miniforge-variant: Mambaforge
+          environment-name: pyart-docs
+          cache-downloads: true
 
       - name: Fetch all history for all tags and branches
         run: |
            git fetch --prune --unshallow
 
-      - name: Set TRMM RSL path
-        env:
-          RSL_PATH: ${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-3 
-        run: echo "$RSL_PATH"
-
       - name: Install PyART
-        env:
-          RSL_PATH: ${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-3
         run: |
           pip install -e .
+
       # Build the website
       - name: Build the site
-        env:
-          RSL_PATH: ${{ env.CONDA_PKGS_DIR }}/trmm_rsl-1.49-3
         run: |
           cd doc
           make html

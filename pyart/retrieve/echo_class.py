@@ -373,36 +373,37 @@ def _mass_centers_table():
     """
     nclasses = 9
     nvariables = 5
-    mass_centers = np.zeros((nclasses, nvariables))
+    mass_centers_c = np.zeros((nclasses, nvariables))
+    mass_centers_x = np.zeros((nclasses, nvariables))
 
     mass_centers_dict = dict()
     # C-band centroids derived for MeteoSwiss Albis radar
     #                       Zh        ZDR     kdp   RhoHV    delta_Z
-    mass_centers[0, :] = [13.5829,  0.4063, 0.0497, 0.9868,  1330.3]  # DS
-    mass_centers[1, :] = [02.8453,  0.2457, 0.0000, 0.9798,  0653.8]  # CR
-    mass_centers[2, :] = [07.6597,  0.2180, 0.0019, 0.9799, -1426.5]  # LR
-    mass_centers[3, :] = [31.6815,  0.3926, 0.0828, 0.9978,  0535.3]  # GR
-    mass_centers[4, :] = [39.4703,  1.0734, 0.4919, 0.9876, -1036.3]  # RN
-    mass_centers[5, :] = [04.8267, -0.5690, 0.0000, 0.9691,  0869.8]  # VI
-    mass_centers[6, :] = [30.8613,  0.9819, 0.1998, 0.9845, -0066.1]  # WS
-    mass_centers[7, :] = [52.3969,  2.1094, 2.4675, 0.9730, -1550.2]  # MH
-    mass_centers[8, :] = [50.6186, -0.0649, 0.0946, 0.9904,  1179.9]  # IH/HDG
+    mass_centers_c[0, :] = [13.5829,  0.4063, 0.0497, 0.9868,  1330.3]  # DS
+    mass_centers_c[1, :] = [02.8453,  0.2457, 0.0000, 0.9798,  0653.8]  # CR
+    mass_centers_c[2, :] = [07.6597,  0.2180, 0.0019, 0.9799, -1426.5]  # LR
+    mass_centers_c[3, :] = [31.6815,  0.3926, 0.0828, 0.9978,  0535.3]  # GR
+    mass_centers_c[4, :] = [39.4703,  1.0734, 0.4919, 0.9876, -1036.3]  # RN
+    mass_centers_c[5, :] = [04.8267, -0.5690, 0.0000, 0.9691,  0869.8]  # VI
+    mass_centers_c[6, :] = [30.8613,  0.9819, 0.1998, 0.9845, -0066.1]  # WS
+    mass_centers_c[7, :] = [52.3969,  2.1094, 2.4675, 0.9730, -1550.2]  # MH
+    mass_centers_c[8, :] = [50.6186, -0.0649, 0.0946, 0.9904,  1179.9]  # IH/HDG
 
-    mass_centers_dict.update({'C': mass_centers})
+    mass_centers_dict.update({'C': mass_centers_c})
 
     # X-band centroids derived for MeteoSwiss DX50 radar
     #                       Zh        ZDR     kdp    RhoHV   delta_Z
-    mass_centers[0, :] = [19.0770,  0.4139, 0.0099, 0.9841,  1061.7]  # DS
-    mass_centers[1, :] = [03.9877,  0.5040, 0.0000, 0.9642,  0856.6]  # CR
-    mass_centers[2, :] = [20.7982,  0.3177, 0.0004, 0.9858, -1375.1]  # LR
-    mass_centers[3, :] = [34.7124, -0.3748, 0.0988, 0.9828,  1224.2]  # GR
-    mass_centers[4, :] = [33.0134,  0.6614, 0.0819, 0.9802, -1169.8]  # RN
-    mass_centers[5, :] = [08.2610, -0.4681, 0.0000, 0.9722,  1100.7]  # VI
-    mass_centers[6, :] = [35.1801,  1.2830, 0.1322, 0.9162, -0159.8]  # WS
-    mass_centers[7, :] = [52.4539,  2.3714, 1.1120, 0.9382, -1618.5]  # MH
-    mass_centers[8, :] = [44.2216, -0.3419, 0.0687, 0.9683,  1272.7]  # IH/HDG
+    mass_centers_x[0, :] = [19.0770,  0.4139, 0.0099, 0.9841,  1061.7]  # DS
+    mass_centers_x[1, :] = [03.9877,  0.5040, 0.0000, 0.9642,  0856.6]  # CR
+    mass_centers_x[2, :] = [20.7982,  0.3177, 0.0004, 0.9858, -1375.1]  # LR
+    mass_centers_x[3, :] = [34.7124, -0.3748, 0.0988, 0.9828,  1224.2]  # GR
+    mass_centers_x[4, :] = [33.0134,  0.6614, 0.0819, 0.9802, -1169.8]  # RN
+    mass_centers_x[5, :] = [08.2610, -0.4681, 0.0000, 0.9722,  1100.7]  # VI
+    mass_centers_x[6, :] = [35.1801,  1.2830, 0.1322, 0.9162, -0159.8]  # WS
+    mass_centers_x[7, :] = [52.4539,  2.3714, 1.1120, 0.9382, -1618.5]  # MH
+    mass_centers_x[8, :] = [44.2216, -0.3419, 0.0687, 0.9683,  1272.7]  # IH/HDG
 
-    mass_centers_dict.update({'X': mass_centers})
+    mass_centers_dict.update({'X': mass_centers_x})
 
     return mass_centers_dict
 

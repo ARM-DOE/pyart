@@ -64,6 +64,7 @@ cross_correlation_ratio_texture = 'cross_correlation_ratio_texture'
 
 # Normalized coherent power, signal quality index, SQI, NCP
 normalized_coherent_power = 'normalized_coherent_power'
+logarithmic_cross_correlation_ratio = 'logarithmic_cross_correlation_ratio'
 
 # Differential phase shift, PhiDP
 differential_phase = 'differential_phase'
@@ -75,13 +76,18 @@ differential_phase_texture = 'differential_phase_texture'
 specific_differential_phase = 'specific_differential_phase'
 corrected_specific_differential_phase = 'corrected_specific_differential_phase'
 
-# Linear depolarization ration (h - horizontal, v - vertical), LDR
+# Linear depolarization ratio (h - horizontal, v - vertical), LDR
 linear_depolarization_ratio = 'linear_polarization_ratio'
 linear_depolarization_ratio_h = 'linear_depolarization_ratio_h'
 linear_depolarization_ratio_v = 'linear_depolarization_ratio_v'
 
+# Circular depolarization ratio
+circular_depolarization_ratio = 'circular_depolarization_ratio'
+
 # Misc fields
 signal_to_noise_ratio = 'signal_to_noise_ratio'
+noisedBZ_hh = 'noisedBZ_hh'
+noisedBZ_vv = 'noisedBZ_vv'
 rain_rate = 'rain_rate'
 radar_estimated_rain_rate = 'radar_estimated_rain_rate'
 radar_echo_classification = 'radar_echo_classification'
@@ -163,6 +169,7 @@ DEFAULT_FIELD_NAMES = {
     'corrected_differential_reflectivity':
     corrected_differential_reflectivity,
     'cross_correlation_ratio': cross_correlation_ratio,
+    'logarithmic_cross_correlation_ratio': logarithmic_cross_correlation_ratio,
     'normalized_coherent_power': normalized_coherent_power,
     'differential_phase': differential_phase,
     'unfolded_differential_phase': unfolded_differential_phase,
@@ -173,7 +180,10 @@ DEFAULT_FIELD_NAMES = {
     'linear_depolarization_ratio': linear_depolarization_ratio,
     'linear_depolarization_ratio_h': linear_depolarization_ratio_h,
     'linear_depolarization_ratio_v': linear_depolarization_ratio_v,
+    'circular_depolarization_ratio': circular_depolarization_ratio,
     'signal_to_noise_ratio': signal_to_noise_ratio,
+    'noisedBZ_hh': noisedBZ_hh,
+    'noisedBZ_vv': noisedBZ_vv,
     'rain_rate': rain_rate,
     'radar_estimated_rain_rate': radar_estimated_rain_rate,
     'radar_echo_classification': radar_echo_classification,
@@ -534,6 +544,11 @@ DEFAULT_METADATA = {
         'valid_min': 0.0,
         'coordinates': 'elevation azimuth range'},
 
+    logarithmic_cross_correlation_ratio: {
+        'units': 'ratio',
+        'long_name': 'Logarithmic cross correlation ratio',
+        'coordinates': 'elevation azimuth range'},
+
     normalized_coherent_power: {
         'units': 'ratio',
         'standard_name': 'normalized_coherent_power',
@@ -575,7 +590,6 @@ DEFAULT_METADATA = {
         'long_name': 'Corrected specific differential phase (KDP)',
         'coordinates': 'elevation azimuth range'},
 
-
     # Depolarization ratio fields
     linear_depolarization_ratio: {
         'units': 'dB',
@@ -595,11 +609,26 @@ DEFAULT_METADATA = {
         'long_name': 'Linear depolarization ratio vertical',
         'coordinates': 'elevation azimuth range'},
 
+    circular_depolarization_ratio: {
+        'units': 'dB',
+        'long_name': 'Circular depolarization ratio',
+        'coordinates': 'elevation azimuth range'},
+
     # Misc fields
     signal_to_noise_ratio: {
         'units': 'dB',
         'standard_name': 'signal_to_noise_ratio',
         'long_name': 'Signal to noise ratio',
+        'coordinates': 'elevation azimuth range'},
+
+    noisedBZ_hh: {
+        'units': 'dBZ',
+        'long_name': 'noise in dBZ horizontal',
+        'coordinates': 'elevation azimuth range'},
+
+    noisedBZ_vv: {
+        'units': 'dBZ',
+        'long_name': 'noise in dBZ vertical',
         'coordinates': 'elevation azimuth range'},
 
     rain_rate: {
@@ -1435,6 +1464,7 @@ DEFAULT_FIELD_COLORMAP = {
     clutter_filter_power_removed: 'pyart_RefDiff',
 
     cross_correlation_ratio: 'pyart_RefDiff',
+    logarithmic_cross_correlation_ratio: 'pyart_RefDiff',
 
     differential_phase: 'pyart_Wild25',
     unfolded_differential_phase: 'pyart_Wild25',
@@ -1446,6 +1476,7 @@ DEFAULT_FIELD_COLORMAP = {
     linear_depolarization_ratio: 'pyart_SCook18',
     linear_depolarization_ratio_h: 'pyart_SCook18',
     linear_depolarization_ratio_v: 'pyart_SCook18',
+    circular_depolarization_ratio: 'pyart_SCook18',
 
     rain_rate: 'pyart_RRate11',
     radar_estimated_rain_rate: 'pyart_RRate11',
@@ -1457,6 +1488,9 @@ DEFAULT_FIELD_COLORMAP = {
     differential_phase_texture: 'pyart_BlueBrown11',
     height: 'pyart_SCook18',
     interpolated_profile: 'pyart_SCook18',
+
+    noisedBZ_hh: 'pyart_HomeyerRainbow',
+    noisedBZ_vv: 'pyart_HomeyerRainbow',
 
     # Additional reflectivity like fields
     'CZ': 'pyart_HomeyerRainbow',

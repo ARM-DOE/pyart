@@ -39,17 +39,24 @@ def prepare_for_read(filename, storage_options={'anon':True}):
         return filename
 
     # look for compressed data by examining the first few bytes
-    fh = fsspec.open(filename, mode='rb', **storage_options).open()
+    fh = fsspec.open(filename,
+                     mode='rb',
+                     compression="infer",
+                     **storage_options).open()
     magic = fh.read(3)
     fh.close()
 
+    # If the data is still compressed, use gunzip/bz2 to uncompress the data
     if magic.startswith(b'\x1f\x8b'):
         return gzip.GzipFile(filename, 'rb')
 
     if magic.startswith(b'BZh'):
         return bz2.BZ2File(filename, 'rb')
 
-    return fsspec.open(filename, mode='rb', **storage_options).open()
+    return fsspec.open(filename,
+                       mode='rb',
+                       compression="infer",
+                       **storage_options).open()
 
 
 def stringarray_to_chararray(arr, numchars=None):

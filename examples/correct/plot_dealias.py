@@ -14,7 +14,6 @@ print(__doc__)
 # License: BSD 3 clause
 
 import matplotlib.pyplot as plt
-import netCDF4
 import pyart
 from pyart.testing import get_test_data
 
@@ -35,8 +34,8 @@ gatefilter.exclude_invalid('reflectivity')
 gatefilter.exclude_outside('reflectivity', 0, 80)
 
 # perform dealiasing
-dealias_data = pyart.correct.dealias_fourdd(
-    radar, sonde_profile=profile, gatefilter=gatefilter)
+dealias_data = pyart.correct.dealias_region_based(
+    radar, gatefilter=gatefilter)
 radar.add_field('corrected_velocity', dealias_data)
 
 # create a plot of the first and sixth sweeps

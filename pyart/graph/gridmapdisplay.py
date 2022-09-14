@@ -202,7 +202,9 @@ class GridMapDisplay(object):
                         + " Overridding defined axes and using default "
                         + "axes with projection Mercator.",
                         UserWarning)
-                ax = plt.axes(projection=projection)
+                with warnings.catch_warnings():
+                    warnings.filterwarnings("ignore")
+                    ax = plt.axes(projection=projection)
 
         # Define GeoAxes if None is provided.
         else:
@@ -215,7 +217,9 @@ class GridMapDisplay(object):
                     + " Overridding defined axes and using default "
                     + "axes with projection Mercator.",
                     UserWarning)
-            ax = plt.axes(projection=projection)
+            with warnings.catch_warnings():
+                warnings.filterwarnings("ignore")
+                ax = plt.axes(projection=projection)
 
         # plot the grid using xarray
         if norm is not None: # if norm is set do not override with vmin/vmax
