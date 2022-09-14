@@ -7,7 +7,7 @@ import time
 import scipy.ndimage
 
 def _revised_conv_strat(refl, dx, dy, alwaysConvThres=42, bkgRad_km=11,
-                        useCosine=True, minZeDiff=8, convThresB=55, scalarDiff=1.5,
+                        useCosine=True, minZeDiff=8, convThresB=55, scalarDiff=1.5, addFlag=False,
                         weakEchoThres=5.0, minDBZused=5.0, applyLargeRadialMask=False,
                         largeRadialMask_minRadkm=0, largeRadialMask_maxRadkm=170,
                         dBZforMaxConvRadius = 30, maxConvRad_km = 5.0, dBaveraging=False, incorp_rad=False):
@@ -137,7 +137,7 @@ def _revised_conv_strat(refl, dx, dy, alwaysConvThres=42, bkgRad_km=11,
         conv_core_array = yuter_convsf.convcore_cos_scheme_array(refl, ze_bkg, minZeDiff, convThresB, alwaysConvThres,
                                                                  CS_CORE)
     else:
-        conv_core_array = yuter_convsf.convcore_scaled_array(refl, ze_bkg, scalarDiff, alwaysConvThres, CS_CORE)
+        conv_core_array = yuter_convsf.convcore_scaled_array(refl, ze_bkg, scalarDiff, alwaysConvThres, CS_CORE, addition=addFlag)
 
     t2 = time.time()
     print("Time to get convective cores: {0} seconds".format(t2 - t1))

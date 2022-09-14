@@ -248,7 +248,7 @@ def convcore_cos_scheme_array(refl, ze_bkg, minZeDiff, convThresB, alwaysConvThr
 
     return conv_core_array
 
-def convcore_scaled_array(refl, ze_bkg, minZeFactor, alwaysConvThres, CS_CORE):
+def convcore_scaled_array(refl, ze_bkg, minZeFactor, alwaysConvThres, CS_CORE, addition=False):
     # otherconvthres = absconvthres
     # intense = truncZconvthres
     """
@@ -277,7 +277,10 @@ def convcore_scaled_array(refl, ze_bkg, minZeFactor, alwaysConvThres, CS_CORE):
     conv_core_array = np.zeros_like(refl)
 
     # calculate zeDiff for entire array
-    zeDiff = minZeFactor * ze_bkg
+    if addition:
+        zeDiff = minZeFactor + ze_bkg
+    else:
+        zeDiff = minZeFactor * ze_bkg
     zeDiff[zeDiff < 0] = 0 # where difference less than zero, set to zero
     zeDiff[ze_bkg < 0] = 0 # where background less than zero, set to zero
 
