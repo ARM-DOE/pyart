@@ -38,10 +38,7 @@ ax = plt.subplot(111, projection=ccrs.PlateCarree())
 # Visualize the reflectivity field, using the lowest sweep with
 # latitude and longitude lines
 display.plot_ppi_map('reflectivity_horizontal',
-                     0,
-                     ax=ax,
-                     vmin=-32,
-                     vmax=64.,
+                     0, ax=ax,vmin=-32, vmax=64.,
                      lon_lines=np.arange(-98, -97, .2),
                      lat_lines=np.arange(36, 37, .2))
 
