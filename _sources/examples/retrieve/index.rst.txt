@@ -1,0 +1,44 @@
+
+
+.. _sphx_glr_examples_retrieve:
+
+.. _retrieve_examples:
+
+Retrieval Examples
+------------------
+
+Retrievals from various radars, such as additional fields or subsets of the data.
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Given a radar and a point, extract the column of radar data values above a point">
+
+.. only:: html
+
+  .. image:: /examples/retrieve/images/thumb/sphx_glr_plot_column_subset_thumb.png
+    :alt: Extract a radar column above a point
+
+  :ref:`sphx_glr_examples_retrieve_plot_column_subset.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Extract a radar column above a point</div>
+    </div>
+
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /examples/retrieve/plot_column_subset
+
