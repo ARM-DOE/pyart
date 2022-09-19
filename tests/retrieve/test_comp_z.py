@@ -3,7 +3,7 @@
 import copy
 
 import numpy as np
-from numpy.testing import assert_equal,assert_array_equal
+from numpy.testing import assert_equal, assert_array_equal
 
 import pyart
 
@@ -28,7 +28,7 @@ def test_composite_z():
 
     compz = pyart.retrieve.composite_reflectivity(
         radar, field=ref_field, gatefilter=gatefilter)
-    assert_equal(compz['composite_reflectivity']['data'].max(), 0)
+    assert_equal(compz.fields['composite_reflectivity']['data'].max(), 0)
     
     ################# Second test ################
     # Insert 1 layer of all 40 dBZ
@@ -49,7 +49,7 @@ def test_composite_z():
     radar.add_field('reflectivity', z_new, replace_existing=True)
     compz = pyart.retrieve.composite_reflectivity(
         radar, field=ref_field, gatefilter=gatefilter)
-    assert_equal(compz['composite_reflectivity']['data'].max(), 40)
+    assert_equal(compz.fields['composite_reflectivity']['data'].max(), 40)
    
     ################# Third test ################
     # Have dBZ increase according to range bin 
@@ -75,5 +75,5 @@ def test_composite_z():
 
     # choose a random az
     random_az = np.random.randint(0, 720)
-    assert_array_equal(compz['composite_reflectivity']['data'][random_az, :],
+    assert_array_equal(compz.fields['composite_reflectivity']['data'][random_az, :],
                        np.arange(0, z.shape[1]))
