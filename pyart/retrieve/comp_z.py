@@ -61,6 +61,7 @@ def composite_reflectivity(radar, field='reflectivity', gatefilter=None):
 
         # grab radar data 
         z = radar.get_field(sweep, field)
+        z_dtype = z["data"].dtype
 
         # Use gatefilter
         if gatefilter is not None:
@@ -105,6 +106,9 @@ def composite_reflectivity(radar, field='reflectivity', gatefilter=None):
 
             # Apply the interpolation
             z = z_interpolator(ranges, azimuth_final)
+
+        # Ensure the dtype is consistent for z
+        z = np.array(z, dtype=z_dtype)
 
         # if first sweep, create new dim, otherwise concat them up 
         if sweep == minimum_sweep:
