@@ -8,6 +8,7 @@ import copy
 import numpy as np
 from netCDF4 import num2date
 from pandas import to_datetime
+from scipy.interpolate import interp2d
 
 from pyart.core import Radar
 
@@ -49,8 +50,12 @@ def composite_reflectivity(radar, field='reflectivity', gatefilter=None):
         composite field.
 
     """
+
+    # Determine the lowest sweep (used for metadata and such)
+    minimum_sweep = np.min(radar.sweep_number["data"])
+
     # loop over all measured sweeps 
-    for sweep in radar.sweep_number['data']:
+    for sweep in sorted(radar.sweep_number['data']):
         # get start and stop index numbers
         sweep_slice = radar.get_slice(sweep)
 
@@ -66,32 +71,43 @@ def composite_reflectivity(radar, field='reflectivity', gatefilter=None):
         lon = radar.gate_longitude['data'][sweep_slice, :]
         lat = radar.gate_latitude['data'][sweep_slice, :]
 
+        # get the range and time
+        ranges = radar.range["data"]
+        time = radar.time["data"]
+
         # get azimuth
         az = radar.azimuth['data'][sweep_slice]
         # get order of azimuths 
         az_ids = np.argsort(az)
 
         # reorder azs so they are in order 
+        az = az[az_ids]
         z = z[az_ids]
         lon = lon[az_ids]
         lat = lat[az_ids]
+        time = time[az_ids]
 
         # if the first sweep, store re-ordered lons/lats
-        if sweep == 0:
-            azimuth_final = radar.azimuth['data'][sweep_slice]
-            time_final = radar.azimuth['data'][sweep_slice]
+        if sweep == minimum_sweep:
+            azimuth_final = az
+            time_final = time
             lon_0 = copy.deepcopy(lon)
             lon_0[-1, :] = lon_0[0, :]
             lat_0 = copy.deepcopy(lat)
             lat_0[-1, :] = lat_0[0, :]
 
-        # if 360 scan, upsample to super res
-        if lon.shape[0] < 720:
-            # upsample via kron
-            z = np.kron(z, np.ones((2, 1)))
+        else:
+            # Configure the intperpolator
+            z_interpolator = interp2d(ranges,
+                                      az,
+                                      z,
+                                      kind='linear')
+
+            # Apply the interpolation
+            z = z_interpolator(ranges, azimuth_final)
 
         # if first sweep, create new dim, otherwise concat them up 
-        if sweep == 0:
+        if sweep == minimum_sweep:
             z_stack = copy.deepcopy(z[np.newaxis, :, :])
             az_final = radar.azimuth['data']
         else:
