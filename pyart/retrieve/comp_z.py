@@ -9,6 +9,8 @@ import numpy as np
 from netCDF4 import num2date
 from pandas import to_datetime
 
+from pyart.core import Radar
+
 
 def composite_reflectivity(radar, field='reflectivity', gatefilter=None):
 
