@@ -23,7 +23,7 @@ def test_composite_z():
     z_old = radar.fields['reflectivity']
 
     z_new = copy.deepcopy(z_old)
-    z_new['data'] = z
+    z_new['data'] = z.astype("float32")
     radar.add_field('reflectivity', z_new, replace_existing=True)
 
     compz = pyart.retrieve.composite_reflectivity(
@@ -45,7 +45,7 @@ def test_composite_z():
             z[s_idx:e_idx, :] = 40 
 
     z_new = copy.deepcopy(z_old)
-    z_new['data'] = z
+    z_new['data'] = z.astype("float32")
     radar.add_field('reflectivity', z_new, replace_existing=True)
     compz = pyart.retrieve.composite_reflectivity(
         radar, field=ref_field, gatefilter=gatefilter)
@@ -68,7 +68,7 @@ def test_composite_z():
                 np.arange(0, z.shape[1])[np.newaxis, :], (e_idx - s_idx, 1))
 
     z_new = copy.deepcopy(z_old)
-    z_new['data'] = z
+    z_new['data'] = z.astype("float32")
     radar.add_field('reflectivity', z_new, replace_existing=True)
     compz = pyart.retrieve.composite_reflectivity(
         radar, field=ref_field, gatefilter=gatefilter)
