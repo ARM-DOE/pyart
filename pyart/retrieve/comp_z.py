@@ -61,7 +61,7 @@ def composite_reflectivity(radar, field='reflectivity', gatefilter=None):
 
         # grab radar data 
         z = radar.get_field(sweep, field)
-        z_dtype = z["data"].dtype
+        z_dtype = z.dtype
 
         # Use gatefilter
         if gatefilter is not None:
