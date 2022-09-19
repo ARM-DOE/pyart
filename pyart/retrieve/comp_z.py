@@ -49,25 +49,23 @@ def composite_reflectivity(radar, field='reflectivity', gatefilter=None):
     """
     # loop over all measured sweeps 
     for sweep in radar.sweep_number['data']:
-
         # get start and stop index numbers
-        s_idx = radar.sweep_start_ray_index['data'][sweep]
-        e_idx = radar.sweep_end_ray_index['data'][sweep] + 1
+        sweep_slice = radar.get_slice(sweep)
 
         # grab radar data 
         z = radar.get_field(sweep, field)
 
         # Use gatefilter
         if gatefilter is not None:
-            mask_sweep = gatefilter.gate_excluded[s_idx:e_idx, :]
+            mask_sweep = gatefilter.gate_excluded[sweep_slice, :]
             z = np.ma.masked_array(z, mask_sweep)
 
         # extract lat lons 
-        lon = radar.gate_longitude['data'][s_idx:e_idx, :]
-        lat = radar.gate_latitude['data'][s_idx:e_idx, :]
+        lon = radar.gate_longitude['data'][sweep_slice, :]
+        lat = radar.gate_latitude['data'][sweep_slice, :]
 
         # get azimuth
-        az = radar.azimuth['data'][s_idx:e_idx]
+        az = radar.azimuth['data'][sweep_slice]
         # get order of azimuths 
         az_ids = np.argsort(az)
 
@@ -75,9 +73,11 @@ def composite_reflectivity(radar, field='reflectivity', gatefilter=None):
         z = z[az_ids]
         lon = lon[az_ids]
         lat = lat[az_ids]
- 
+
         # if the first sweep, store re-ordered lons/lats
         if sweep == 0:
+            azimuth_final = radar.azimuth['data'][sweep_slice]
+            time_final = radar.azimuth['data'][sweep_slice]
             lon_0 = copy.deepcopy(lon)
             lon_0[-1, :] = lon_0[0, :]
             lat_0 = copy.deepcopy(lat)
@@ -91,8 +91,9 @@ def composite_reflectivity(radar, field='reflectivity', gatefilter=None):
         # if first sweep, create new dim, otherwise concat them up 
         if sweep == 0:
             z_stack = copy.deepcopy(z[np.newaxis, :, :])
+            az_final = radar.azimuth['data']
         else:
-            z_stack = np.concatenate([z_stack,z[np.newaxis, :, :]])
+            z_stack = np.concatenate([z_stack, z[np.newaxis, :, :]])
 
     # now that the stack is made, take max across vertical 
     compz = z_stack.max(axis=0)
@@ -103,14 +104,52 @@ def composite_reflectivity(radar, field='reflectivity', gatefilter=None):
     dtime = dtime.mean()
 
     # return dict, because this is was pyart does with lots of things 
-    comp_dict = {}
-    comp_dict['longitude'] = {'data': lon_0, 'units': 'degrees',
-                              'info': 'reordered longitude grid, [az,range]'}
-    comp_dict['latitude'] = {'data': lat_0, 'units': 'degrees',
-                             'info': 'reordered latitude grid, [az,range]'}
-    comp_dict['composite_reflectivity'] = {
+    fields = {}
+    fields['composite_reflectivity'] = {
         'data': compz, 'units': 'dBZ',
-        'info': 'composite refelctivity computed from calculating the max radar value in each radar gate vertically after reordering'}
-    comp_dict['time'] = {'data': dtime, 'units': 'timestamp',
-                         'info': 'mean time of all scans'}
-    return comp_dict
+        'long_name': 'composite_reflectivity',
+        'comment': 'composite reflectivity computed from calculating the max radar value in each radar gate vertically after reordering'}
+
+    time = radar.time.copy()
+    time['data'] = time_final
+    time['mean'] = dtime
+
+    gate_longitude = radar.gate_longitude.copy()
+    gate_longitude['data'] = lon_0
+    gate_longitude['comment'] = 'reordered longitude grid, [az,range]'
+    gate_latitude = radar.gate_latitude.copy()
+    gate_latitude['data'] = lat_0
+    gate_latitude['comment'] = 'reordered latitude grid, [az,range]'
+
+
+    _range = radar.range.copy()
+    metadata = radar.metadata.copy()
+    scan_type = radar.scan_type
+    latitude = radar.latitude.copy()
+    longitude = radar.longitude.copy()
+    altitude = radar.altitude.copy()
+    instrument_parameters = radar.instrument_parameters.copy()
+
+    sweep_number = radar.sweep_number.copy()
+    sweep_number['data'] = np.array([0], dtype='int32')
+    sweep_mode = radar.sweep_mode.copy()
+    sweep_mode['data'] = np.array([radar.sweep_mode['data'][0]])
+    ray_shape = compz.shape[0]
+    azimuth = radar.azimuth.copy()
+    azimuth['data'] = azimuth_final
+    elevation = radar.elevation.copy()
+    elevation['data'] = np.zeros(ray_shape, dtype='float32')
+    fixed_angle = radar.fixed_angle.copy()
+    fixed_angle['data'] = np.array([0.0], dtype='float32')
+    sweep_start_ray_index = radar.sweep_start_ray_index.copy()
+    sweep_start_ray_index['data'] = np.array([0], dtype='int32')
+    sweep_end_ray_index = radar.sweep_end_ray_index.copy()
+    sweep_end_ray_index['data'] = np.array([ray_shape-1], dtype='int32')
+
+    return Radar(
+        time, _range, fields, metadata, scan_type,
+        latitude, longitude, altitude,
+        sweep_number, sweep_mode, fixed_angle, sweep_start_ray_index,
+        sweep_end_ray_index,
+        azimuth, elevation,
+        instrument_parameters=instrument_parameters)
