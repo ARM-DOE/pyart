@@ -1,10 +1,10 @@
 """
-====================================
-Extract a radar column above a point
-====================================
+========================================
+Calculate and Plot Composite Reflectivity
+=========================================
 
-Given a radar and a point, extract the column of radar data values above
-a point
+Calculates and plots the composite reflectivity, or the
+maximum reflectivity across all of the elevations.
 """
 
 # Author: Maxwell Grover (mgrover@anl.gov)
