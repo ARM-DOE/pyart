@@ -55,7 +55,7 @@ def test_gridmapdisplay_fancy(outfile=None):
     display.plot_grid('reflectivity', axislabels_flag=True)
 
     ax3 = plt.subplot(333)
-    display.plot_colorbar()
+    display.plot_colorbar(ax=ax3)
 
     ax4 = plt.subplot(334)
     display.plot_latitude_slice('reflectivity', mask_outside=True)
@@ -73,7 +73,7 @@ def test_gridmapdisplay_fancy(outfile=None):
 
     ax8 = plt.subplot(338)
     del display.grid.fields['reflectivity']['long_name']
-    display.plot_colorbar()
+    display.plot_colorbar(ax=ax8)
 
     if outfile:
         fig.savefig(outfile)
