@@ -107,9 +107,6 @@ def composite_reflectivity(radar, field='reflectivity', gatefilter=None):
             # Apply the interpolation
             z = z_interpolator(ranges, azimuth_final)
 
-        # Ensure the dtype is consistent for z
-        z = np.array(z, dtype=z_dtype)
-
         # if first sweep, create new dim, otherwise concat them up 
         if sweep == minimum_sweep:
             z_stack = copy.deepcopy(z[np.newaxis, :, :])
@@ -118,7 +115,7 @@ def composite_reflectivity(radar, field='reflectivity', gatefilter=None):
             z_stack = np.concatenate([z_stack, z[np.newaxis, :, :]])
 
     # now that the stack is made, take max across vertical 
-    compz = z_stack.max(axis=0)
+    compz = z_stack.max(axis=0).astype(z_dtype)
 
     # since we are using the whole volume scan, report mean time 
     dtime = to_datetime(num2date(radar.time['data'],
@@ -150,7 +147,7 @@ def composite_reflectivity(radar, field='reflectivity', gatefilter=None):
     latitude = radar.latitude.copy()
     longitude = radar.longitude.copy()
     altitude = radar.altitude.copy()
-    instrument_parameters = radar.instrument_parameters.copy()
+    instrument_parameters = radar.instrument_parameters
 
     sweep_number = radar.sweep_number.copy()
     sweep_number['data'] = np.array([0], dtype='int32')
