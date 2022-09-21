@@ -34,7 +34,7 @@ jobs:
       
       - name: Fetch all history for all tags and branches
         run: |
-          git fetch --prune --unshallow
+           git fetch --prune --unshallow
 
       - name: Build wheels for CPython
         uses: pypa/cibuildwheel@v2.9.0
