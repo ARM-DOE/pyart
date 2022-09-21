@@ -91,6 +91,7 @@ jobs:
         python -m pip install oldest-supported-numpy
         python -m pip install --upgrade wheel
         python -m pip install --upgrade setuptools
+        python -m pip install --upgrade setuptools_scm
     - name: build pyart
       shell: bash
       run: |
