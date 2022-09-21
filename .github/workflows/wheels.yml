@@ -11,6 +11,10 @@ on:
       - '.github/workflows/wheels.yml'
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build_wheels:
     name: Build wheels on ${{ matrix.os }}
@@ -27,6 +31,10 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
+      
+      - name: Fetch all history for all tags and branches
+        run: |
+          git fetch --prune --unshallow
 
       - name: Build wheels for CPython
         uses: pypa/cibuildwheel@v2.9.0
