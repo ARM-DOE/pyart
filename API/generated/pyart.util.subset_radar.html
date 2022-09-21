@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>pyart.util.subset_radar &#8212; Py-ART 1.12.7.post16 documentation</title>
+    <title>pyart.util.subset_radar &#8212; Py-ART 1.12.7.post17 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -1229,6 +1229,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="pyart.retrieve.calculate_velocity_texture.html">
      pyart.retrieve.calculate_velocity_texture
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="pyart.retrieve.composite_reflectivity.html">
+     pyart.retrieve.composite_reflectivity
     </a>
    </li>
    <li class="toctree-l2">
@@ -2902,20 +2907,20 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="pyart.util.subset_radar">
 <span class="sig-prename descclassname"><span class="pre">pyart.util.</span></span><span class="sig-name descname"><span class="pre">subset_radar</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field_names</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rng_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rng_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ele_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ele_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">azi_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">azi_max</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyart/util/radar_utils.html#subset_radar"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyart.util.subset_radar" title="Permalink to this definition">#</a></dt>
-<dd><p>Creates a subset of the radar object along new dimensions
-:Parameters: * <strong>radar</strong> (<em>radar object</em>) – The radar object containing the data</p>
-<blockquote>
-<div><ul class="simple">
-<li><p><strong>field_names</strong> (<em>str or None</em>) – The fields to keep in the new radar</p></li>
-<li><p><strong>rng_min, rng_max</strong> (<em>float</em>) – The range limits [m]. If None the entire coverage of the radar is
-going to be used</p></li>
-<li><p><strong>ele_min, ele_max, azi_min, azi_max</strong> (<em>float or None</em>) – The limits of the grid [deg]. If None the limits will be the limits
-of the radar volume</p></li>
-</ul>
-</div></blockquote>
+<dd><p>Creates a subset of the radar object along new dimensions.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><strong>radar</strong> (<em>radar object</em>) – The radar object containing only the desired data</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>radar</strong> (<em>radar object</em>) – The radar object containing the data.</p></li>
+<li><p><strong>field_names</strong> (<em>str or None</em>) – The fields to keep in the new radar.</p></li>
+<li><p><strong>rng_min, rng_max</strong> (<em>float</em>) – The range limits [m]. If None the entire coverage of the radar is
+going to be used.</p></li>
+<li><p><strong>ele_min, ele_max, azi_min, azi_max</strong> (<em>float or None</em>) – The limits of the grid [deg]. If None the limits will be the limits
+of the radar volume.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>radar</strong> (<em>radar object</em>) – The radar object containing only the desired data.</p>
 </dd>
 </dl>
 </dd></dl>

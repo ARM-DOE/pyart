@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.util.radar_utils &#8212; Py-ART 1.12.7.post16 documentation</title>
+    <title>pyart.util.radar_utils &#8212; Py-ART 1.12.7.post17 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -333,23 +333,26 @@
 <div class="viewcode-block" id="subset_radar"><a class="viewcode-back" href="../../../API/generated/pyart.util.subset_radar.html#pyart.util.subset_radar">[docs]</a><span class="k">def</span> <span class="nf">subset_radar</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field_names</span><span class="p">,</span> <span class="n">rng_min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rng_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ele_min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
               <span class="n">ele_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">azi_min</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">azi_max</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Creates a subset of the radar object along new dimensions</span>
+<span class="sd">    Creates a subset of the radar object along new dimensions.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    radar : radar object</span>
-<span class="sd">        The radar object containing the data</span>
+<span class="sd">        The radar object containing the data.</span>
 <span class="sd">    field_names : str or None</span>
-<span class="sd">        The fields to keep in the new radar</span>
+<span class="sd">        The fields to keep in the new radar.</span>
 <span class="sd">    rng_min, rng_max : float</span>
 <span class="sd">        The range limits [m]. If None the entire coverage of the radar is</span>
-<span class="sd">        going to be used</span>
+<span class="sd">        going to be used.</span>
 <span class="sd">    ele_min, ele_max, azi_min, azi_max : float or None</span>
 <span class="sd">        The limits of the grid [deg]. If None the limits will be the limits</span>
-<span class="sd">        of the radar volume</span>
+<span class="sd">        of the radar volume.</span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    radar : radar object</span>
-<span class="sd">        The radar object containing only the desired data</span>
+<span class="sd">        The radar object containing only the desired data.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">radar_aux</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
 

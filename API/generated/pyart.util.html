@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>pyart.util &#8212; Py-ART 1.12.7.post16 documentation</title>
+    <title>pyart.util &#8212; Py-ART 1.12.7.post17 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -1229,6 +1229,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="pyart.retrieve.calculate_velocity_texture.html">
      pyart.retrieve.calculate_velocity_texture
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="pyart.retrieve.composite_reflectivity.html">
+     pyart.retrieve.composite_reflectivity
     </a>
    </li>
    <li class="toctree-l2">
@@ -2989,7 +2994,7 @@ versions without depreciation, use with caution.</p>
 <td><p>Calculated of the great circle distance between radar and target</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="pyart.util.subset_radar.html#pyart.util.subset_radar" title="pyart.util.subset_radar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">subset_radar</span></code></a>(radar, field_names[, rng_min, ...])</p></td>
-<td><p>Creates a subset of the radar object along new dimensions :Parameters: * <strong>radar</strong> (<em>radar object</em>) -- The radar object containing the data              * <strong>field_names</strong> (<em>str or None</em>) -- The fields to keep in the new radar              * <strong>rng_min, rng_max</strong> (<em>float</em>) -- The range limits [m]. If None the entire coverage of the radar is                going to be used              * <strong>ele_min, ele_max, azi_min, azi_max</strong> (<em>float or None</em>) -- The limits of the grid [deg]. If None the limits will be the limits                of the radar volume.</p></td>
+<td><p>Creates a subset of the radar object along new dimensions.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="pyart.util.texture.html#pyart.util.texture" title="pyart.util.texture"><code class="xref py py-obj docutils literal notranslate"><span class="pre">texture</span></code></a>(radar, var)</p></td>
 <td><p>Determine a texture field using an 11pt stdev texarray=texture(pyradarobj, field).</p></td>

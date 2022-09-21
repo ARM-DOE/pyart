@@ -19,6 +19,8 @@
     
     calculate_velocity_texture
     
+    composite_reflectivity
+    
     compute_cdr
     
     compute_l
