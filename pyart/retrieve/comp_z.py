@@ -49,6 +49,11 @@ def composite_reflectivity(radar, field='reflectivity', gatefilter=None):
         The radar object containing the radar dimensions, metadata and
         composite field.
 
+    References
+    ----------
+    American Meteorological Society, 2022: "Composite reflectivity". Glossary of Meteorology, 
+    http://glossary.ametsoc.org/wiki/Composite_reflectivity
+
     """
 
     # Determine the lowest sweep (used for metadata and such)
