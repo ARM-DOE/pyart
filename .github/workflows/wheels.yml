@@ -13,7 +13,7 @@ on:
 
 env:
   CIBW_TEST_REQUIRES: pytest
-  CIBW_TEST_COMMAND: "pytest pyart/tests"
+  CIBW_TEST_COMMAND: "pytest {project}/tests"
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
