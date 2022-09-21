@@ -97,7 +97,7 @@ column of values.
  .. code-block:: none
 
 
-    <matplotlib.collections.PathCollection object at 0x7f32780db700>
+    <matplotlib.collections.PathCollection object at 0x7fc8e50ddc70>
 
 
 
@@ -190,14 +190,14 @@ above our point, which is stored in our new dataset
  .. code-block:: none
 
 
-    [<matplotlib.lines.Line2D object at 0x7f32780b5dc0>]
+    [<matplotlib.lines.Line2D object at 0x7fc8e509a7c0>]
 
 
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  3.111 seconds)
+   **Total running time of the script:** ( 0 minutes  2.804 seconds)
 
 
 .. _sphx_glr_download_examples_retrieve_plot_column_subset.py:

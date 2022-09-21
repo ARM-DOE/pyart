@@ -1,5 +1,91 @@
 # Changelog
 
+## Py-ART v1.12.7
+
+([full changelog](https://github.com/ARM-DOE/pyart/compare/v1.12.6...v1.12.7))
+
+### Bugs fixed
+
+- FIX: Fix for only python 3.10 being used. [#1208](https://github.com/ARM-DOE/pyart/pull/1208) ([@zssherman](https://github.com/zssherman))
+- FIX: update join_radar to also append instrument parameters [#1204](https://github.com/ARM-DOE/pyart/pull/1204) ([@wolfidan](https://github.com/wolfidan))
+- FIX: Fix link to cookbooks in user guide [#1201](https://github.com/ARM-DOE/pyart/pull/1201) ([@mgrover1](https://github.com/mgrover1))
+- FIX: Str for warning of coefficient band used was wrong. [#1198](https://github.com/ARM-DOE/pyart/pull/1198) ([@zssherman](https://github.com/zssherman))
+- FIX: C-band values being set by x-band. [#1196](https://github.com/ARM-DOE/pyart/pull/1196) ([@zssherman](https://github.com/zssherman))
+
+### Maintenance and upkeep improvements
+
+- MNT: Added warning catch for axes. [#1191](https://github.com/ARM-DOE/pyart/pull/1191) ([@zssherman](https://github.com/zssherman))
+
+### Other merged PRs
+
+- Remove pinning for specific cftime [#1211](https://github.com/ARM-DOE/pyart/pull/1211) ([@mgrover1](https://github.com/mgrover1))
+- TST: Moving tests to test module within Py-ART main directory. [#1207](https://github.com/ARM-DOE/pyart/pull/1207) ([@zssherman](https://github.com/zssherman))
+- ADD: Add pypi stats to readme [#1206](https://github.com/ARM-DOE/pyart/pull/1206) ([@mgrover1](https://github.com/mgrover1))
+- TST: Adding unitests for rain rate module. [#1200](https://github.com/ARM-DOE/pyart/pull/1200) ([@zssherman](https://github.com/zssherman))
+- ADD: Add cookbook section in user guide [#1199](https://github.com/ARM-DOE/pyart/pull/1199) ([@mgrover1](https://github.com/mgrover1))
+- TST: Adding unit tests for whole echoclass module. [#1197](https://github.com/ARM-DOE/pyart/pull/1197) ([@zssherman](https://github.com/zssherman))
+- DEL: Deleted convv.py, looks to be a test added awhile back. [#1195](https://github.com/ARM-DOE/pyart/pull/1195) ([@zssherman](https://github.com/zssherman))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/ARM-DOE/pyart/graphs/contributors?from=2022-06-29&to=2022-07-19&type=c))
+
+[@mgrover1](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Amgrover1+updated%3A2022-06-29..2022-07-19&type=Issues) | [@rcjackson](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Arcjackson+updated%3A2022-06-29..2022-07-19&type=Issues) | [@wolfidan](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Awolfidan+updated%3A2022-06-29..2022-07-19&type=Issues) | [@zssherman](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Azssherman+updated%3A2022-06-29..2022-07-19&type=Issues)
+
+## Py-ART v1.12.6
+
+([full changelog](https://github.com/ARM-DOE/pyart/compare/v1.12.5...v1.12.6))
+
+### Bugs fixed
+
+- FIX: Update requirements with cftime + numpy [#1190](https://github.com/ARM-DOE/pyart/pull/1190) ([@mgrover1](https://github.com/mgrover1))
+
+### Other merged PRs
+
+- ADD: Add in tests for KDP/PHI DP functions [#1184](https://github.com/ARM-DOE/pyart/pull/1184) ([@mgrover1](https://github.com/mgrover1))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/ARM-DOE/pyart/graphs/contributors?from=2022-06-24&to=2022-06-29&type=c))
+
+[@mgrover1](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Amgrover1+updated%3A2022-06-24..2022-06-29&type=Issues) | [@zssherman](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Azssherman+updated%3A2022-06-24..2022-06-29&type=Issues)
+
+## Py-ART v1.12.5
+
+([full changelog](https://github.com/ARM-DOE/pyart/compare/v1.12.4...v1.12.5))
+
+### Enhancements made
+
+- ENH: Change default LP solver to pyglpk [#1183](https://github.com/ARM-DOE/pyart/pull/1183) ([@mgrover1](https://github.com/mgrover1))
+- ENH: Addition of Time as a Coordinate within extracted column output [#1176](https://github.com/ARM-DOE/pyart/pull/1176) ([@jrobrien91](https://github.com/jrobrien91))
+
+### Bugs fixed
+
+- FIX: add pinned version of numpy [#1187](https://github.com/ARM-DOE/pyart/pull/1187) ([@mgrover1](https://github.com/mgrover1))
+- FIX: Add revised fix for RHI near 270 [#1185](https://github.com/ARM-DOE/pyart/pull/1185) ([@mgrover1](https://github.com/mgrover1))
+- FIX: Fix incorrect version showing up in docs (API) [#1181](https://github.com/ARM-DOE/pyart/pull/1181) ([@mgrover1](https://github.com/mgrover1))
+- FIX: Fix rsl not running in test suite [#1178](https://github.com/ARM-DOE/pyart/pull/1178) ([@mgrover1](https://github.com/mgrover1))
+- FIX: Fix sorting issue with elevations and azimuths [#1171](https://github.com/ARM-DOE/pyart/pull/1171) ([@mgrover1](https://github.com/mgrover1))
+
+### Maintenance and upkeep improvements
+
+- MNT: Update vmin vmax to make velocity plot more visible. [#1175](https://github.com/ARM-DOE/pyart/pull/1175) ([@zssherman](https://github.com/zssherman))
+
+### Documentation improvements
+
+- DOC: Updating docs to represent python versions. [#1180](https://github.com/ARM-DOE/pyart/pull/1180) ([@zssherman](https://github.com/zssherman))
+
+### Other merged PRs
+
+- ADD: v1.12.4 section to changelog [#1177](https://github.com/ARM-DOE/pyart/pull/1177) ([@mgrover1](https://github.com/mgrover1))
+- Update ARM name to remove climate [#1173](https://github.com/ARM-DOE/pyart/pull/1173) ([@mgrover1](https://github.com/mgrover1))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/ARM-DOE/pyart/graphs/contributors?from=2022-06-10&to=2022-06-24&type=c))
+
+[@jrobrien91](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Ajrobrien91+updated%3A2022-06-10..2022-06-24&type=Issues) | [@mgrover1](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Amgrover1+updated%3A2022-06-10..2022-06-24&type=Issues) | [@sobitp59](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Asobitp59+updated%3A2022-06-10..2022-06-24&type=Issues) | [@zssherman](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Azssherman+updated%3A2022-06-10..2022-06-24&type=Issues)
+
 ## PyART v1.12.4
 
 ([full changelog](https://github.com/ARM-DOE/pyart/compare/v1.12.2...7dc5d6b8deff4a2e42fd567588be65a88af07127))
