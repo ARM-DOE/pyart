@@ -40,6 +40,9 @@ jobs:
         run: |
            git fetch --prune --unshallow
 
+      - name: Install netcdf4
+        run: python -m pip install netCDF4
+
       - name: Build wheels for CPython
         uses: pypa/cibuildwheel@v2.9.0
         with:
