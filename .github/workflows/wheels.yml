@@ -5,7 +5,7 @@ on:
     branches:
       - main
     tags:
-      - 'pyart-*'
+      - 'v*'
   pull_request:
     paths:
       - '.github/workflows/wheels.yml'
