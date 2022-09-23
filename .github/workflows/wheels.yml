@@ -53,6 +53,7 @@ jobs:
           CIBW_ENVIRONMENT: "LDFLAGS='-static-libstdc++'"
           CIBW_ARCHS_WINDOWS: "auto"
           CIBW_BUILD_VERBOSITY: 1
+          CIBW_ENVIRONMENT: PIP_ONLY_BINARY=":all:"
 
       - uses: actions/upload-artifact@v3
         with:
