@@ -50,7 +50,7 @@ jobs:
           CIBW_ARCHS_LINUX: "x86_64"
           CIBW_ARCHS_MACOS: x86_64 arm64
           MACOSX_DEPLOYMENT_TARGET: "10.9" # as of CIBW 2.9, this is the default value, pin it so it can't be bumped silently
-          CIBW_ARCHS_WINDOWS: "auto"
+          CIBW_ARCHS_WINDOWS: "auto64"
           CIBW_BUILD_VERBOSITY: 1
           CIBW_ENVIRONMENT: PIP_ONLY_BINARY=":all:"
 
