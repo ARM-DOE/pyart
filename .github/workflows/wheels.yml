@@ -40,9 +40,6 @@ jobs:
         run: |
            git fetch --prune --unshallow
 
-      - name: Install netcdf4
-        run: python -m pip install netCDF4
-
       - name: Build wheels for CPython
         uses: pypa/cibuildwheel@v2.9.0
         with:
@@ -53,6 +50,7 @@ jobs:
           CIBW_ARCHS_LINUX: "x86_64"
           CIBW_ARCHS_MACOS: x86_64 arm64
           MACOSX_DEPLOYMENT_TARGET: "10.9" # as of CIBW 2.9, this is the default value, pin it so it can't be bumped silently
+          CIBW_ENVIRONMENT: "LDFLAGS='-static-libstdc++'"
           CIBW_ARCHS_WINDOWS: "auto"
           CIBW_BUILD_VERBOSITY: 1
 
