@@ -1,5 +1,51 @@
 # Changelog
 
+## Py-ART v1.13.0
+
+([full changelog](https://github.com/ARM-DOE/pyart/compare/v1.12.7...v1.13.0))
+
+### Enhancements made
+
+- ENH: Add column example to docs [#1263](https://github.com/ARM-DOE/pyart/pull/1263) ([@mgrover1](https://github.com/mgrover1))
+- ENH: Composite Reflectivity Function  [#1235](https://github.com/ARM-DOE/pyart/pull/1235) ([@dopplerchase](https://github.com/dopplerchase))
+- ENH: Corrected Height Gates to be height above sea level [#1215](https://github.com/ARM-DOE/pyart/pull/1215) ([@jrobrien91](https://github.com/jrobrien91))
+
+### Bugs fixed
+
+- FIX: Make datetime parsing more general for columnsect [#1261](https://github.com/ARM-DOE/pyart/pull/1261) ([@mgrover1](https://github.com/mgrover1))
+- FIX: Fix the reference documentation links [#1241](https://github.com/ARM-DOE/pyart/pull/1241) ([@mgrover1](https://github.com/mgrover1))
+- FIX: Pin previous version of shapely [#1240](https://github.com/ARM-DOE/pyart/pull/1240) ([@mgrover1](https://github.com/mgrover1))
+- FIX: Return zero phase for sweeps completely filtered out with gatefi… [#1226](https://github.com/ARM-DOE/pyart/pull/1226) ([@rcjackson](https://github.com/rcjackson))
+- FIX: join_radar also joins pulse repititon times iparam [#1218](https://github.com/ARM-DOE/pyart/pull/1218) ([@wx4stg](https://github.com/wx4stg))
+- FIX: fix writing IRIS sigmet files to UF [#1216](https://github.com/ARM-DOE/pyart/pull/1216) ([@wx4stg](https://github.com/wx4stg))
+
+### Maintenance and upkeep improvements
+
+- MNT: Remove trmm_rsl from CI optional, remove from debug info. [#1239](https://github.com/ARM-DOE/pyart/pull/1239) ([@zssherman](https://github.com/zssherman))
+- MNT: Remove pinning for specific cftime [#1211](https://github.com/ARM-DOE/pyart/pull/1211) ([@mgrover1](https://github.com/mgrover1))
+
+### Documentation improvements
+
+- DOC: Updated pyart doc to include column code, fix incorrect syntax and more. [#1231](https://github.com/ARM-DOE/pyart/pull/1231) ([@zssherman](https://github.com/zssherman))
+- DOC: Updating Py-ART's how to release doc and removing most of ci_setup doc [#1213](https://github.com/ARM-DOE/pyart/pull/1213) ([@zssherman](https://github.com/zssherman))
+
+### Other merged PRs
+
+- ADD: Add changelog from previous releases [#1265](https://github.com/ARM-DOE/pyart/pull/1265) ([@mgrover1](https://github.com/mgrover1))
+- ADD: Add composite reflectivity citation [#1264](https://github.com/ARM-DOE/pyart/pull/1264) ([@mgrover1](https://github.com/mgrover1))
+- ADD: Add xradar basic functions [#1251](https://github.com/ARM-DOE/pyart/pull/1251) ([@mgrover1](https://github.com/mgrover1))
+- DEL: Remove load module section [#1234](https://github.com/ARM-DOE/pyart/pull/1234) ([@mgrover1](https://github.com/mgrover1))
+- ADD: Trmm test [#1228](https://github.com/ARM-DOE/pyart/pull/1228) ([@zssherman](https://github.com/zssherman))
+- ADD: addition of subset_radar function in radar_utils [#1227](https://github.com/ARM-DOE/pyart/pull/1227) ([@wolfidan](https://github.com/wolfidan))
+- ADD: Add pyrad to the readme [#1220](https://github.com/ARM-DOE/pyart/pull/1220) ([@mgrover1](https://github.com/mgrover1))
+- TST: Fix median filter depreciation warnings as well as more tests for simple moments. [#1214](https://github.com/ARM-DOE/pyart/pull/1214) ([@zssherman](https://github.com/zssherman))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/ARM-DOE/pyart/graphs/contributors?from=2022-07-19&to=2022-09-21&type=c))
+
+[@dopplerchase](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Adopplerchase+updated%3A2022-07-19..2022-09-21&type=Issues) | [@jfigui](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Ajfigui+updated%3A2022-07-19..2022-09-21&type=Issues) | [@jrobrien91](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Ajrobrien91+updated%3A2022-07-19..2022-09-21&type=Issues) | [@kmuehlbauer](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Akmuehlbauer+updated%3A2022-07-19..2022-09-21&type=Issues) | [@mgrover1](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Amgrover1+updated%3A2022-07-19..2022-09-21&type=Issues) | [@rcjackson](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Arcjackson+updated%3A2022-07-19..2022-09-21&type=Issues) | [@srbrodzik](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Asrbrodzik+updated%3A2022-07-19..2022-09-21&type=Issues) | [@wolfidan](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Awolfidan+updated%3A2022-07-19..2022-09-21&type=Issues) | [@wx4stg](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Awx4stg+updated%3A2022-07-19..2022-09-21&type=Issues) | [@zssherman](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Azssherman+updated%3A2022-07-19..2022-09-21&type=Issues)
+
 ## Py-ART v1.12.7
 
 ([full changelog](https://github.com/ARM-DOE/pyart/compare/v1.12.6...v1.12.7))
