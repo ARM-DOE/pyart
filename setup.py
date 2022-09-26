@@ -20,7 +20,7 @@ import subprocess
 import glob
 from numpy import get_include
 
-from setuptools import find_packages, setup, Extension
+from setuptools import find_namespace_packages, setup, Extension
 from Cython.Build import cythonize
 import Cython
 
@@ -240,10 +240,11 @@ setup(
     maintainer=MAINTAINER,
     maintainer_email=MAINTAINER_EMAIL,
     url=URL,
-    packages=find_packages(include=['pyart'], exclude=['docs']),
+    packages=find_namespace_packages(include=['pyart'], exclude=['docs']),
     include_package_data=True,
     scripts=SCRIPTS,
     install_requires=requirements,
+    setup_requires='setuptools_scm',
     license=LICENSE,
     platforms=PLATFORMS,
     classifiers=CLASSIFIERS,
