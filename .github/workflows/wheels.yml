@@ -1,0 +1,101 @@
+name: Build CI Wheels
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+  pull_request:
+    paths:
+      - '.github/workflows/wheels.yml'
+  workflow_dispatch:
+
+env:
+  CIBW_TEST_REQUIRES: pytest
+  CIBW_TEST_COMMAND: "pytest {project}/tests"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build_wheels:
+    name: Build wheels on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [
+          ubuntu-20.04,
+          windows-2019,
+          macos-11,
+        ]
+      fail-fast: false
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+      
+      - name: Fetch all history for all tags and branches
+        run: |
+           git fetch --prune --unshallow
+
+      - name: Build wheels for CPython
+        uses: pypa/cibuildwheel@v2.9.0
+        with:
+          output-dir: dist
+        env:
+          CIBW_BUILD: "cp38-* cp39-* cp310-*"
+          CIBW_SKIP: "*-musllinux_*"  #  numpy doesn't have wheels for musllinux so we can't build some quickly and without bloating
+          CIBW_ARCHS_LINUX: "x86_64"
+          CIBW_ARCHS_MACOS: x86_64 arm64
+          MACOSX_DEPLOYMENT_TARGET: "10.9" # as of CIBW 2.9, this is the default value, pin it so it can't be bumped silently
+          CIBW_ARCHS_WINDOWS: "auto64"
+          CIBW_BUILD_VERBOSITY: 1
+          CIBW_ENVIRONMENT: PIP_ONLY_BINARY=":all:"
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: wheels
+          path: ./dist/*.whl
+
+  build_sdist:
+    name: Build source distribution
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Build sdist
+        run: pipx run build --sdist
+
+      - name: Upload sdist
+        uses: actions/upload-artifact@v3
+        with:
+          name: sdist
+          path: dist/*.tar.gz
+
+  deploy:
+    name: Publish to PyPI
+    needs: [build_wheels, build_sdist]
+    runs-on: ubuntu-latest
+    # upload to PyPI on every tag starting with 'v-'
+    if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v')
+    steps:
+      - name: Download sdist
+        uses: actions/download-artifact@v3
+        with:
+          name: sdist
+          path: dist
+
+      - name: Download wheels
+        uses: actions/download-artifact@v3
+        with:
+          name: wheels
+          path: dist
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@v1.4.2
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_TOKEN }}
