@@ -146,23 +146,27 @@ def _revised_conv_strat(refl, dx, dy, alwaysConvThres=42, bkgRad_km=11,
 
     return refl_bkg, conv_core_array, conv_strat_array
 
+# functions
 
 def radialDistanceMask(mask_array, minradiuskm, maxradiuskm, x_pixsize,
                        y_pixsize, centerx, centery, circular=True):
     """
-    Computes a radial distance mask, everything with distance between minradiuskm and maxradiuskm is assigned 1, everything else is assigned 0. This version can handle rectangular arrays and pixels as well as square ones.
-
+    Computes a radial distance mask, everything with distance between minradiuskm
+    and maxradiuskm is assigned 1, everything else is assigned 0. This version can
+    handle rectangular arrays and pixels as well as square ones.
 
     Parameters
     ----------
     mask_array : array
         Array to mask
     minradiuskm, maxradiuskm : float
-        The minimum and maximum radius of the non-maked region in kilometers.
+        The minimum and maximum radius of the non-masked region in kilometers.
     x_pixsize, y_pixsize : float
         The pixel size in the x- and y-dimension in kilometers, respectively
     centerx, centery : int
         The center pixel in the x- and y-dimension, respectively
+    circular : bool
+        True returns circular mask
 
     Returns
     -------
@@ -198,8 +202,8 @@ def radialDistanceMask(mask_array, minradiuskm, maxradiuskm, x_pixsize,
 
 def backgroundIntensity(refl, bkg_mask_array, dBaveraging):
     """
-    For a pixel in the array determine the average intensity of the surrounding pixels in the window.
-    The window is passed in as mask_array
+    Calculate the background of the given refl array. The footprint used to
+    calculate the average for each pixel is given by bkg_mask_array
 
     Parameters
     ----------
@@ -235,82 +239,88 @@ def backgroundIntensity(refl, bkg_mask_array, dBaveraging):
     return refl_bkg
 
 
-def convcore_cos_scheme(refl, z_bkg, maxDiff, zeroDiffCosVal, alwaysConvThres, CS_CORE):
+def convcore_cos_scheme(refl, refl_bkg, maxDiff, zeroDiffCosVal, alwaysConvThres, CS_CORE):
     """
-    Cosine scheme for determining is convective core
+    Function for assigning convective cores based on a cosine function
 
     Parameters
     ----------
-    zeVal : float
-        Reflectivity value of point
+    refl : array
+        Reflectivity values
     refl_bkg : float
-        Reflectivity value of background value
+        Background average of reflectivity values
     maxDiff : float
-        Minimum difference between zeVal and refl_bkg needed for convective classification
+        Maximum difference between refl and refl_bkg needed for convective classification
     zeroDiffCosVal : float
-        Convective threshold used in the cosine function
+        Value where the cosine function returns a zero difference
     alwaysConvThres : float
         All values above this threshold considered to be convective
+    CS_CORE : int
+        Value assigned to convective pixels
 
     Returns
     -------
-    is_core : bool
-        Boolean if point is convective (1) or not (0)
+    conv_core_array : array
+        Array of booleans if point is convective (1) or not (0)
     """
 
     # initialize entire array to not a convective core
     conv_core_array = np.zeros_like(refl)
 
     # calculate zeDiff for entire array
-    zDiff = maxDiff * np.cos((np.pi * z_bkg) / (2 * zeroDiffCosVal))
+    zDiff = maxDiff * np.cos((np.pi * refl_bkg) / (2 * zeroDiffCosVal))
     zDiff[zDiff < 0] = 0 # where difference less than zero, set to zero
-    zDiff[z_bkg < 0] = maxDiff # where background less than zero, set to min diff
+    zDiff[refl_bkg < 0] = maxDiff # where background less than zero, set to min diff
 
     # set values
     conv_core_array[refl >= alwaysConvThres] = CS_CORE # where Z is greater than alwaysConvThres, set to core
-    conv_core_array[(refl - z_bkg) >= zDiff] = CS_CORE # where difference exceeeds minimum, set to core
+    conv_core_array[(refl - refl_bkg) >= zDiff] = CS_CORE # where difference exceeeds minimum, set to core
 
     return conv_core_array
 
 
-def convcore_scaled(refl, z_bkg, maxDiff, alwaysConvThres, CS_CORE, addition=False):
+def convcore_scaled(refl, refl_bkg, maxDiff, alwaysConvThres, CS_CORE, addition=False):
 
     """
-    Cosine scheme for determining is convective core
+    Function for assigning convective cores based on a scalar difference
 
     Parameters
     ----------
-    zeVal : float
-        Reflectivity value of point
-    z_bkg : float
-        Reflectivity value of background value
-    minZediff : float
-        Minimum difference between zeVal and refl_bkg needed for convective classification
-    convThresB : float
-        Convective threshold used in the cosine function
+    refl : array
+        Reflectivity values
+    refl_bkg : float
+        Background average of reflectivity values
+    maxDiff : float
+        Maximum difference between refl and refl_bkg needed for convective classification
     alwaysConvThres : float
         All values above this threshold considered to be convective
+    CS_CORE : int
+        Value assigned to convective pixels
+    addition : bool
+        Boolean to determine if scalar should be added (True) or multiplied (False)
 
     Returns
     -------
-    is_core : bool
-        Boolean if point is convective (1) or not (0)
+    conv_core_array : array
+        Array of booleans if point is convective (1) or not (0)
     """
 
     # initialize entire array to not a convective core
     conv_core_array = np.zeros_like(refl)
 
-    # calculate zeDiff for entire array
+    # calculate zDiff for entire array
+    # if addition, add difference. Else, multiply difference
     if addition:
-        zeDiff = maxDiff + z_bkg
+        zDiff = maxDiff + refl_bkg
     else:
-        zeDiff = maxDiff * z_bkg
-    zeDiff[zeDiff < 0] = 0 # where difference less than zero, set to zero
-    zeDiff[z_bkg < 0] = 0 # where background less than zero, set to zero
+        zDiff = maxDiff * refl_bkg
+
+    zDiff[zDiff < 0] = 0 # where difference less than zero, set to zero
+    zDiff[refl_bkg < 0] = 0 # where background less than zero, set to zero
 
     # set values
     conv_core_array[refl >= alwaysConvThres] = CS_CORE # where Z is greater than alwaysConvThres, set to core
-    conv_core_array[refl >= zeDiff] = CS_CORE # where difference exceeeds minimum, set to core
+    conv_core_array[refl >= zDiff] = CS_CORE # where difference exceeeds minimum, set to core
 
     return conv_core_array
 
@@ -331,19 +341,18 @@ def init_conv_radius_mask(maxConvDiameter, radius_km, xspacing, yspacing, center
 
     Returns
     -------
-    mean : conv_mask_array
+   conv_mask_array : array
         array masked based on distance of convective diameter
     """
 
     conv_mask_array = np.zeros((maxConvDiameter, maxConvDiameter))
-    conv_mask_array = radialDistanceMask(conv_mask_array, 0, radius_km, xspacing, yspacing, centerConvMask_x,
-                                         centerConvMask_x, True)
+    conv_mask_array = radialDistanceMask(conv_mask_array, 0, radius_km, xspacing, yspacing,
+                                         centerConvMask_x, centerConvMask_x, True)
 
     return conv_mask_array
 
 def assignConvRadiuskm(refl_bkg, dBZformaxconvradius, maxConvRadius=5):
-    # alternative version for assigning convective radii
-    # returns array the same size as refl_bkg with values for convective radii
+
     """
     Assigns the convective radius in kilometers based on the background reflectivity
 
