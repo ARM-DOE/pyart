@@ -1,8 +1,4 @@
 import numpy as np
-import sys
-
-sys.path.append('C:\\Users\\lmtomkin\\Documents\\GitHub\\pyart_convsf\\pyart\\retrieve\\')
-
 import scipy.ndimage
 
 
@@ -79,7 +75,8 @@ def _revised_conv_strat(refl, dx, dy, alwaysConvThres=42, bkgRad_km=11,
     # calculate maximum convective diameter from max. convective radius (input)
     maxConvDiameter = int(np.floor((maxConvRad_km / (dx / 1000)) * 2))
     # if diameter is even, make odd
-    if maxConvDiameter % 2 == 0: maxConvDiameter = maxConvDiameter + 1
+    if maxConvDiameter % 2 == 0:
+        maxConvDiameter = maxConvDiameter + 1
     # find center point
     centerConvMask_x = int(np.floor(maxConvDiameter / 2))
 
@@ -87,7 +84,8 @@ def _revised_conv_strat(refl, dx, dy, alwaysConvThres=42, bkgRad_km=11,
     # calculate number of pixels for background array given requested background radius and dx
     bkgDiameter_pix = int(np.floor((bkgRad_km / (dx / 1000)) * 2))
     # set diameter to odd if even
-    if bkgDiameter_pix % 2 == 0: bkgDiameter_pix = bkgDiameter_pix + 1
+    if bkgDiameter_pix % 2 == 0:
+        bkgDiameter_pix = bkgDiameter_pix + 1
     # find center point
     bkg_center = int(np.floor(bkgDiameter_pix / 2))
     # create background array
@@ -191,18 +189,18 @@ def radialDistanceMask(mask_array, minradiuskm, maxradiuskm, x_pixsize,
             if circular:
                 x_range_sq = ((centerx - i) * x_pixsize) ** 2
                 y_range_sq = ((centery - j) * y_pixsize) ** 2
-                range = np.sqrt(x_range_sq + y_range_sq)
+                circ_range = np.sqrt(x_range_sq + y_range_sq)
             # if circular is False, use square mask
             else:
                 x_range = abs(int(np.floor(centerx - i) * x_pixsize))
                 y_range = abs(int(np.floor(centery - j) * y_pixsize))
 
                 if x_range > y_range:
-                    range = x_range
+                    circ_range = x_range
                 else:
-                    range = y_range
+                    circ_range = y_range
             # if range is within min and max, set to True
-            if (range <= maxradiuskm) and (range >= minradiuskm):
+            if (circ_range <= maxradiuskm) and (circ_range >= minradiuskm):
                 mask_array[j, i] = 1
             else:
                 mask_array[j, i] = 0
@@ -257,7 +255,7 @@ def convcore_cos_scheme(refl, refl_bkg, maxDiff, zeroDiffCosVal, alwaysConvThres
     ----------
     refl : array
         Reflectivity values
-    refl_bkg : float
+    refl_bkg : array
         Background average of reflectivity values
     maxDiff : float
         Maximum difference between refl and refl_bkg needed for convective classification
@@ -297,7 +295,7 @@ def convcore_scaled(refl, refl_bkg, maxDiff, alwaysConvThres, CS_CORE, addition=
     ----------
     refl : array
         Reflectivity values
-    refl_bkg : float
+    refl_bkg : array
         Background average of reflectivity values
     maxDiff : float
         Maximum difference between refl and refl_bkg needed for convective classification
@@ -344,7 +342,7 @@ def init_conv_radius_mask(maxConvDiameter, radius_km, xspacing, yspacing, center
         maximum convective diameter in kilometers
     radius_km : int
         convective radius in kilometers
-    xpacing, yspacing : float
+    xspacing, yspacing : float
         x- and y-dimension pixel size in meters, respectively
     centerConvMask_x : int
         index of center point
