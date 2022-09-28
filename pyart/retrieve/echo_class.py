@@ -107,10 +107,13 @@ def steiner_conv_strat(grid, dx=None, dy=None, intense=42.0,
                           '2 = Convective')}
 
 
-def conv_strat(grid, dx=None, dy=None, intense=42.0,
-               work_level=3000.0, peak_relation='default',
-               area_relation='medium', bkg_rad=11000.0,
-               use_intense=True, fill_value=None,
+def conv_strat(grid, dx=None, dy=None, alwaysConvThres=42, bkgRad_km=11,
+               useCosine=True, maxDiff=8, zeroDiffCosVal=55,
+               scalarDiff=1.5, addition=True,
+               weakEchoThres=5.0, mindBZused=5.0,
+               dBaveraging=False, applyLgRadialMask=False,
+               lgRadialMask_minRadkm=0, lgRadialMask_maxRadkm=170,
+               dBZforMaxConvRad=30, maxConvRad_km=5.0, fill_value=None,
                refl_field=None, estimateFlag=True, estimateOffset=5):
     """
     Partition reflectivity into convective-stratiform using the Yuter
@@ -123,30 +126,42 @@ def conv_strat(grid, dx=None, dy=None, intense=42.0,
     dx, dy : float, optional
         The x- and y-dimension resolutions in meters, respectively. If None
         the resolution is determined from the first two axes values.
-    intense : float, optional
-        The intensity value in dBZ. Grid points with a reflectivity
-        value greater or equal to the intensity are automatically
-        flagged as convective. See reference for more information.
-    work_level : float, optional
-        The working level (separation altitude) in meters. This is the height
-        at which the partitioning will be done, and should minimize bright band
-        contamination. See reference for more information.
-    peak_relation : 'default' or 'sgp', optional
-        The peakedness relation. See reference for more information.
-    area_relation : 'small', 'medium', 'large', or 'sgp', optional
-        The convective area relation. See reference for more information.
-    bkg_rad : float, optional
-        The background radius in meters. See reference for more information.
-    use_intense : bool, optional
-        True to use the intensity criteria.
-    fill_value : float, optional
-         Missing value used to signify bad data points. A value of None
-         will use the default fill value as defined in the Py-ART
-         configuration file.
-    refl_field : str, optional
-         Field in grid to use as the reflectivity during partitioning. None
-         will use the default reflectivity field name from the Py-ART
-         configuration file.
+    refl : array
+        array of reflectivity values
+    x, y : array
+        x and y coordinates of reflectivity array, respectively
+    dx, dy : float
+        The x- and y-dimension resolutions in meters, respectively.
+    alwaysConvThres : float, optional
+        Threshold for points that are always convective. All values above the threshold are classifed as convective
+    bkgRad_km : float, optional
+        Radius to compute background reflectivity in kilometers. Default is 11 km
+    useCosine : bool, optional
+        Boolean used to determine if cosine scheme should be used for identifying convective cores (True) or a scalar scheme (False)
+    maxDiff : float, optional
+        Maximum difference between background average and reflectivity in order to be classified as convective.
+        a value in Yuter and Houze (1997)
+    zeroDiffCosVal : float, optional
+        Value where difference between background average and reflectivity is zero in the cosine function
+        b value in Yuter and Houze (1997)
+    scalarDiff : float, optional
+        If using a scalar difference scheme, this value is the multiplier or addition to the background average
+    addition : bool, optional
+        Determines if a multiplier (False) or addition (True) in the scalar difference scheme should be used
+    weakEchoThres : float, optional
+        Threshold for determining weak echo. All values below this threshold will be considered weak echo
+    minDBZused : float, optional
+        Minimum dBZ value used for classification. All values below this threshold will be considered no surface echo
+    dBaveraging : bool, optional
+        True if using dBZ values that need to be converted to linear Z before averaging. False for other types of values
+    applyRadialMask : bool, optional
+        Flag to set a large radial mask for algorithm
+    lgRadialMask_minRadkm, lgRadialMask_maxkm : float, optional
+        Values for setting the large radial mask
+    dBZforMaxConvRadius : float, optional
+        dBZ for maximum convective radius. Convective cores with values above this will have the maximum convective radius
+    maxConvRad_km : float, optional
+        Maximum radius around convective cores to classify as convective. Default is 5 km
 
     Returns
     -------
@@ -183,22 +198,70 @@ def conv_strat(grid, dx=None, dy=None, intense=42.0,
     ze = np.ma.copy(grid.fields[refl_field]['data'])
     ze = ze.filled(np.NaN)
 
-    convsf_best = _revised_conv_strat(ze, x, y, z)
+    _, _, convsf_best = _revised_conv_strat(ze, dx, dy, alwaysConvThres=alwaysConvThres, bkgRad_km=bkgRad_km,
+                                      useCosine=useCosine, maxDiff=maxDiff, zeroDiffCosVal=zeroDiffCosVal,
+                                      scalarDiff=scalarDiff, addition=addition,
+                                      weakEchoThres=weakEchoThres, mindBZused=mindBZused,
+                                      dBaveraging=dBaveraging, applyLgRadialMask=applyLgRadialMask,
+                                      lgRadialMask_minRadkm=lgRadialMask_minRadkm, lgRadialMask_maxRadkm=lgRadialMask_maxRadkm,
+                                      dBZforMaxConvRad=dBZforMaxConvRad, maxConvRad_km=maxConvRad_km)
+
+    convsf_dict = {'convsf':{
+        'data': convsf_best,
+        'standard_name': 'convsf',
+        'long_name': 'Convective stratiform classification',
+        'valid_min': 0,
+        'valid_max': 3,
+        'comment_1': ('Convective-stratiform echo '
+                      'classification based on '
+                      'Yuter and Houze (1997)'),
+        'comment_2': ('0 = Undefined, 1 = Stratiform, '
+                      '2 = Convective')}}
 
     if estimateFlag:
-        convsf_under = _revised_conv_strat(ze - estimateOffset, x, y, z)
-        convsf_over = _revised_conv_strat(ze + estimateOffset, x, y, z)
+        convsf_under = _revised_conv_strat(ze - estimateOffset, dx, dy, alwaysConvThres=alwaysConvThres, bkgRad_km=bkgRad_km,
+                                           useCosine=useCosine, maxDiff=maxDiff, zeroDiffCosVal=zeroDiffCosVal,
+                                           scalarDiff=scalarDiff, addition=addition,
+                                           weakEchoThres=weakEchoThres, mindBZused=mindBZused,
+                                           dBaveraging=dBaveraging, applyLgRadialMask=applyLgRadialMask,
+                                           lgRadialMask_minRadkm=lgRadialMask_minRadkm, lgRadialMask_maxRadkm=lgRadialMask_maxRadkm,
+                                           dBZforMaxConvRad=dBZforMaxConvRad, maxConvRad_km=maxConvRad_km)
 
-    return {'data': eclass.astype(np.int32),
-            'standard_name': 'convsf_classification',
-            'long_name': 'Convective stratiform classification',
+        convsf_over  = _revised_conv_strat(ze + estimateOffset, dx, dy, alwaysConvThres=alwaysConvThres, bkgRad_km=bkgRad_km,
+                                           useCosine=useCosine, maxDiff=maxDiff, zeroDiffCosVal=zeroDiffCosVal,
+                                           scalarDiff=scalarDiff, addition=addition,
+                                           weakEchoThres=weakEchoThres, mindBZused=mindBZused,
+                                           dBaveraging=dBaveraging, applyLgRadialMask=applyLgRadialMask,
+                                           lgRadialMask_minRadkm=lgRadialMask_minRadkm, lgRadialMask_maxRadkm=lgRadialMask_maxRadkm,
+                                           dBZforMaxConvRad=dBZforMaxConvRad, maxConvRad_km=maxConvRad_km)
+
+        convsf_dict['convsf_under'] =  {
+            'data': convsf_under,
+            'standard_name': 'convsf_under',
+            'long_name': 'Convective stratiform classification (Underestimate)',
             'valid_min': 0,
-            'valid_max': 2,
+            'valid_max': 3,
             'comment_1': ('Convective-stratiform echo '
                           'classification based on '
                           'Yuter and Houze (1997)'),
             'comment_2': ('0 = Undefined, 1 = Stratiform, '
                           '2 = Convective')}
+
+        convsf_dict['convsf_over'] =  {
+            'data': convsf_under,
+            'standard_name': 'convsf_under',
+            'long_name': 'Convective stratiform classification (Overestimate)',
+            'valid_min': 0,
+            'valid_max': 3,
+            'comment_1': ('Convective-stratiform echo '
+                          'classification based on '
+                          'Yuter and Houze (1997)'),
+            'comment_2': ('0 = Undefined, 1 = Stratiform, '
+                          '2 = Convective')}
+
+
+
+    return convsf_dict
 
 
 def hydroclass_semisupervised(radar, mass_centers=None,
