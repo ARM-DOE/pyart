@@ -107,23 +107,26 @@ def to_vpt(radar, single_scan=True):
 def subset_radar(radar, field_names, rng_min=None, rng_max=None, ele_min=None,
               ele_max=None, azi_min=None, azi_max=None):
     """
-    Creates a subset of the radar object along new dimensions
+    Creates a subset of the radar object along new dimensions.
+
     Parameters
     ----------
     radar : radar object
-        The radar object containing the data
+        The radar object containing the data.
     field_names : str or None
-        The fields to keep in the new radar
+        The fields to keep in the new radar.
     rng_min, rng_max : float
         The range limits [m]. If None the entire coverage of the radar is
-        going to be used
+        going to be used.
     ele_min, ele_max, azi_min, azi_max : float or None
         The limits of the grid [deg]. If None the limits will be the limits
-        of the radar volume
+        of the radar volume.
+
     Returns
     -------
     radar : radar object
-        The radar object containing only the desired data
+        The radar object containing only the desired data.
+
     """
     radar_aux = copy.deepcopy(radar)
 
