@@ -2,8 +2,6 @@ import numpy as np
 import sys
 sys.path.append('C:\\Users\\lmtomkin\\Documents\\GitHub\\pyart_convsf\\pyart\\retrieve\\')
 
-import yuter_convsf
-import time
 import scipy.ndimage
 
 def _revised_conv_strat(refl, dx, dy, alwaysConvThres=42, bkgRad_km=11,
@@ -103,7 +101,7 @@ def _revised_conv_strat(refl, dx, dy, alwaysConvThres=42, bkgRad_km=11,
     #%% Convective stratiform detection
 
     # Compute background radius
-    refl_bkg = yuter_convsf.backgroundIntensity_array(refl, bkg_mask_array, dBaveraging)
+    refl_bkg = backgroundIntensity(refl, bkg_mask_array, dBaveraging)
     # mask background average
     refl_bkg = np.ma.masked_where(refl.mask, refl_bkg)
 
@@ -126,7 +124,7 @@ def _revised_conv_strat(refl, dx, dy, alwaysConvThres=42, bkgRad_km=11,
     # Loop through radii
     for radius in np.arange(1, maxConvRad_km+1):
         # create mask array for radius incorporation
-        conv_mask_array = yuter_convsf.init_conv_radius_mask(maxConvDiameter, radius, dx / 1000, dy / 1000, centerConvMask_x)
+        conv_mask_array = init_conv_radius_mask(maxConvDiameter, radius, dx / 1000, dy / 1000, centerConvMask_x)
         # find location of radius
         temp = convRadiuskm == radius
         # get cores for given radius
@@ -197,6 +195,44 @@ def radialDistanceMask(mask_array, minradiuskm, maxradiuskm, x_pixsize,
                 mask_array[j, i] = 0
 
     return mask_array
+
+def backgroundIntensity(refl, bkg_mask_array, dBaveraging):
+    """
+    For a pixel in the array determine the average intensity of the surrounding pixels in the window.
+    The window is passed in as mask_array
+
+    Parameters
+    ----------
+    refl : array
+        Reflectivity array to compute average
+    bkg_mask_array : array
+        Array of radial points to use for average
+    dBaveraging : bool
+        If True, converts dBZ to linear Z before averaging
+
+    Returns
+    -------
+    refl_bkg : array
+        Array of average values
+    """
+
+    # if dBaverage is true, convert reflectivity to linear Z
+    if dBaveraging:
+        refl = 10 ** (refl / 10)
+
+    # calculate background reflectivity with circular footprint
+    refl_bkg = scipy.ndimage.generic_filter(refl.filled(np.nan), function=np.nanmean, mode='constant',
+                                            footprint=bkg_mask_array.astype(bool), cval=np.nan)
+    # mask where original reflectivity is invalid
+    refl_bkg = np.ma.masked_where(refl.mask, refl_bkg)
+
+    # if dBaveraging is true, convert background reflectivity to dBZ
+    if dBaveraging:
+        refl_bkg = 10 * np.log10(refl_bkg)
+        # mask where original reflectivity is invalid
+        refl_bkg = np.ma.masked_where(refl.mask, refl_bkg)
+
+    return refl_bkg
 
 
 def convcore_cos_scheme(refl, z_bkg, maxDiff, zeroDiffCosVal, alwaysConvThres, CS_CORE):
