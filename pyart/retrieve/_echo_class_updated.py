@@ -7,10 +7,14 @@ import time
 import scipy.ndimage
 
 def _revised_conv_strat(refl, dx, dy, alwaysConvThres=42, bkgRad_km=11,
-                        useCosine=True, minZeDiff=8, convThresB=55, scalarDiff=1.5, addFlag=False,
-                        weakEchoThres=5.0, minDBZused=5.0, applyLargeRadialMask=False,
-                        largeRadialMask_minRadkm=0, largeRadialMask_maxRadkm=170,
-                        dBZforMaxConvRadius = 30, maxConvRad_km = 5.0, dBaveraging=False, incorp_rad=False):
+                        useCosine=True, maxDiff=8, zeroDiffCosValue=55,
+                        weakEchoThres=5.0, mindBZused=5.0,
+                        scalarDiff=1.5, addition=True,
+                        dBaveraging=False, applyLgRadialMask=False,
+                        lgRadialMask_minRadkm=0, lgRadialMask_maxRadkm=170,
+                        dBZforMaxConvRad=30, maxConvRad_km=5.0,
+                        incorpConvRad=True):
+
     """
     We perform the Steiner et al. (1995) algorithm for echo classification
     using only the reflectivity field in order to classify each grid point
@@ -58,14 +62,7 @@ def _revised_conv_strat(refl, dx, dy, alwaysConvThres=42, bkgRad_km=11,
         # quit
 
     #%% Set up arrays and values for convective stratiform algorithm
-    # create Ze arrays for under and overestimate
-    # need to run through 3 times - need to figure out best way to do this
-    # refl = grid.fields['reflectivity']['data'][0,:,:]
-    # refl = np.ma.masked_invalid(refl)
-    # refl_under = refl.copy() - 5
-    # refl_over = refl.copy() + 5
-     # loop through 3 times
-    t1 = time.time()
+
     # create empty arrays
     ze_bkg = np.zeros(refl.shape, dtype=float)
     conv_core_array = np.zeros(refl.shape, dtype=float)
@@ -84,10 +81,8 @@ def _revised_conv_strat(refl, dx, dy, alwaysConvThres=42, bkgRad_km=11,
     WEAKECHO = 3
     SF = 1
     CONV = 2
-    t2 = time.time()
-    print("Time to set up arrays: {0} seconds".format(t2-t1))
+
     #%% Set up mask arrays
-    t1 = time.time()
     # prepare for convective mask arrays
     # calculate maximum convective diameter from max. convective radius (input)
     maxConvDiameter = int(np.floor((maxConvRad_km / (dx / 1000)) * 2))
@@ -114,47 +109,30 @@ def _revised_conv_strat(refl, dx, dy, alwaysConvThres=42, bkgRad_km=11,
     # initialize array with 1 (calculate convective stratiform over entire array)
     mask_array[:] = 1
     # if True, create radial mask
-    if applyLargeRadialMask:
-        mask_array = yuter_convsf.radialDistanceMask_array(mask_array, largeRadialMask_minRadkm, largeRadialMask_maxRadkm,
+    if applyLgRadialMask:
+        mask_array = yuter_convsf.radialDistanceMask_array(mask_array, lgRadialMask_minRadkm, lgRadialMask_maxRadkm,
                                                            x_pixsize=dx/1000, y_pixsize=dy/1000, centerx=int(np.floor(refl.shape[0] / 2)),
                                                            centery=int(np.floor(refl.shape[1] / 2)), circular=True)
 
-    t2 = time.time()
-    print("Time to set up mask arrays: {0} seconds".format(t2 - t1))
     #%% Convective stratiform detection
-    t1 = time.time()
+
     # Compute background radius
     ze_bkg = yuter_convsf.backgroundIntensity_array(refl, bkg_mask_array, dBaveraging)
     # mask background average
     ze_bkg = np.ma.masked_where(refl.mask, ze_bkg)
 
-    t2 = time.time()
-    print("Time to calculate background average: {0} seconds".format(t2 - t1))
-
-    t1 = time.time()
     # Get convective core array from cosine scheme, or scalar scheme
     if useCosine:
-        conv_core_array = yuter_convsf.convcore_cos_scheme_array(refl, ze_bkg, minZeDiff, convThresB, alwaysConvThres,
+        conv_core_array = yuter_convsf.convcore_cos_scheme_array(refl, ze_bkg, maxDiff, zeroDiffCosValue, alwaysConvThres,
                                                                  CS_CORE)
     else:
-        conv_core_array = yuter_convsf.convcore_scaled_array(refl, ze_bkg, scalarDiff, alwaysConvThres, CS_CORE, addition=addFlag)
+        conv_core_array = yuter_convsf.convcore_scaled_array(refl, ze_bkg, scalarDiff, alwaysConvThres, CS_CORE, addition=addition)
 
-    t2 = time.time()
-    print("Time to get convective cores: {0} seconds".format(t2 - t1))
     # count convective cores
     corecount = np.count_nonzero(conv_core_array)
 
-    # t1 = time.time()
-    # # Do an initial assignment of convsf array
-    # conv_strat_array = yuter_convsf.classify_conv_strat_array(refl, conv_strat_array, conv_core_array,
-    #                                                           NOSFCECHO, CONV, SF, WEAKECHO, CS_CORE,
-    #                                                           minDBZused, weakEchoThres)
-    # t2 = time.time()
-    # print("Time to do initial convective stratiform assignment: {0} seconds".format(t2 - t1))
-
     # Assign convective radii based on background reflectivity
-    t1 = time.time()
-    convRadiuskm = yuter_convsf.assignConvRadiuskm_array(ze_bkg, dBZformaxconvradius=dBZforMaxConvRadius, maxConvRadius=maxConvRad_km)
+    convRadiuskm = yuter_convsf.assignConvRadiuskm_array(ze_bkg, dBZformaxconvradius=dBZforMaxConvRad, maxConvRadius=maxConvRad_km)
 
     # Incorporate convective radius using binary dilation
     # Create empty array for assignment
@@ -174,15 +152,13 @@ def _revised_conv_strat(refl, dx, dy, alwaysConvThres=42, bkgRad_km=11,
         temp_assignment = temp_assignment + temp_dilated
 
     # add dilated cores to original array
-    conv_core_array[temp_assignment>=1] = CS_CORE
-
-    t2 = time.time()
-    print("Time to apply convective radius: {0} seconds".format(t2 - t1))
+    conv_core_copy = np.copy(conv_core_array)
+    conv_core_copy[temp_assignment >= 1] = CS_CORE
 
     # Now do convective stratiform classification
-    conv_strat_array = yuter_convsf.classify_conv_strat_array(refl, conv_strat_array, conv_core_array,
+    conv_strat_array = yuter_convsf.classify_conv_strat_array(refl, conv_strat_array, conv_core_copy,
                                                               NOSFCECHO, CONV, SF, WEAKECHO, CS_CORE,
-                                                              minDBZused, weakEchoThres)
+                                                              mindBZused, weakEchoThres)
 
     return ze_bkg, conv_core_array, conv_strat_array
 
