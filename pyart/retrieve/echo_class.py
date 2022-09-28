@@ -8,6 +8,7 @@ import numpy as np
 from ..config import get_fillvalue, get_field_name, get_metadata
 from ..exceptions import MissingOptionalDependency
 from ._echo_class import steiner_class_buff
+from ._echo_class_updated import _revised_conv_strat
 
 from warnings import warn
 
@@ -102,6 +103,100 @@ def steiner_conv_strat(grid, dx=None, dy=None, intense=42.0,
             'comment_1': ('Convective-stratiform echo '
                           'classification based on '
                           'Steiner et al. (1995)'),
+            'comment_2': ('0 = Undefined, 1 = Stratiform, '
+                          '2 = Convective')}
+
+
+def conv_strat(grid, dx=None, dy=None, intense=42.0,
+               work_level=3000.0, peak_relation='default',
+               area_relation='medium', bkg_rad=11000.0,
+               use_intense=True, fill_value=None,
+               refl_field=None, estimateFlag=True, estimateOffset=5):
+    """
+    Partition reflectivity into convective-stratiform using the Yuter
+    and Houze (1997) algorithm.
+
+    Parameters
+    ----------
+    grid : Grid
+        Grid containing reflectivity field to partition.
+    dx, dy : float, optional
+        The x- and y-dimension resolutions in meters, respectively. If None
+        the resolution is determined from the first two axes values.
+    intense : float, optional
+        The intensity value in dBZ. Grid points with a reflectivity
+        value greater or equal to the intensity are automatically
+        flagged as convective. See reference for more information.
+    work_level : float, optional
+        The working level (separation altitude) in meters. This is the height
+        at which the partitioning will be done, and should minimize bright band
+        contamination. See reference for more information.
+    peak_relation : 'default' or 'sgp', optional
+        The peakedness relation. See reference for more information.
+    area_relation : 'small', 'medium', 'large', or 'sgp', optional
+        The convective area relation. See reference for more information.
+    bkg_rad : float, optional
+        The background radius in meters. See reference for more information.
+    use_intense : bool, optional
+        True to use the intensity criteria.
+    fill_value : float, optional
+         Missing value used to signify bad data points. A value of None
+         will use the default fill value as defined in the Py-ART
+         configuration file.
+    refl_field : str, optional
+         Field in grid to use as the reflectivity during partitioning. None
+         will use the default reflectivity field name from the Py-ART
+         configuration file.
+
+    Returns
+    -------
+    eclass : dict
+        Steiner convective-stratiform classification dictionary.
+
+    References
+    ----------
+    Steiner, M. R., R. A. Houze Jr., and S. E. Yuter, 1995: Climatological
+    Characterization of Three-Dimensional Storm Structure from Operational
+    Radar and Rain Gauge Data. J. Appl. Meteor., 34, 1978-2007.
+
+    """
+    # Get fill value
+    if fill_value is None:
+        fill_value = get_fillvalue()
+
+    # Parse field parameters
+    if refl_field is None:
+        refl_field = get_field_name('reflectivity')
+
+    # parse dx and dy
+    if dx is None:
+        dx = grid.x['data'][1] - grid.x['data'][0]
+    if dy is None:
+        dy = grid.y['data'][1] - grid.y['data'][0]
+
+    # Get coordinates
+    x = grid.x['data']
+    y = grid.y['data']
+    z = grid.z['data']
+
+    # Get reflectivity data
+    ze = np.ma.copy(grid.fields[refl_field]['data'])
+    ze = ze.filled(np.NaN)
+
+    convsf_best = _revised_conv_strat(ze, x, y, z)
+
+    if estimateFlag:
+        convsf_under = _revised_conv_strat(ze - estimateOffset, x, y, z)
+        convsf_over = _revised_conv_strat(ze + estimateOffset, x, y, z)
+
+    return {'data': eclass.astype(np.int32),
+            'standard_name': 'convsf_classification',
+            'long_name': 'Convective stratiform classification',
+            'valid_min': 0,
+            'valid_max': 2,
+            'comment_1': ('Convective-stratiform echo '
+                          'classification based on '
+                          'Yuter and Houze (1997)'),
             'comment_2': ('0 = Undefined, 1 = Stratiform, '
                           '2 = Convective')}
 
