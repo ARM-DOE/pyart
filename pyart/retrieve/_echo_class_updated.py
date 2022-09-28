@@ -61,20 +61,6 @@ def _revised_conv_strat(refl, dx, dy, alwaysConvThres=42, bkgRad_km=11,
         print("Max conv radius must be less than 5 km, exiting")
         # quit
 
-    #%% Set up arrays and values for convective stratiform algorithm
-
-    # create empty arrays
-    refl_bkg = np.zeros(refl.shape, dtype=float)
-    conv_core_array = np.zeros(refl.shape, dtype=float)
-    conv_strat_array = np.zeros(refl.shape, dtype=float)
-    mask_array = np.zeros(refl.shape, dtype=float)
-
-    # fill with missing (nan)
-    refl_bkg[:] = np.nan
-    conv_core_array[:] = np.nan
-    conv_strat_array[:] = np.nan
-    mask_array[:] = np.nan
-
     # Constants to fill arrays with
     CS_CORE = 3
     NOSFCECHO = 0
@@ -106,6 +92,7 @@ def _revised_conv_strat(refl, dx, dy, alwaysConvThres=42, bkgRad_km=11,
 
     # Create large mask array for determining where to calculate convective stratiform
     # initialize array with 1 (calculate convective stratiform over entire array)
+    mask_array = np.zeros(refl.shape, dtype=float)
     mask_array[:] = 1
     # if True, create radial mask
     if applyLgRadialMask:
