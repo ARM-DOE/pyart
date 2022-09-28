@@ -93,7 +93,7 @@ def steiner_conv_strat(grid, dx=None, dy=None, intense=42.0,
                                 work_level=work_level, intense=intense,
                                 peak_relation=peak_relation,
                                 area_relation=area_relation,
-                                use_intense=use_intense,)
+                                use_intense=use_intense, )
 
     return {'data': eclass.astype(np.int32),
             'standard_name': 'echo_classification',
@@ -126,12 +126,6 @@ def conv_strat(grid, dx=None, dy=None, alwaysConvThres=42, bkgRad_km=11,
     dx, dy : float, optional
         The x- and y-dimension resolutions in meters, respectively. If None
         the resolution is determined from the first two axes values.
-    refl : array
-        array of reflectivity values
-    x, y : array
-        x and y coordinates of reflectivity array, respectively
-    dx, dy : float
-        The x- and y-dimension resolutions in meters, respectively.
     alwaysConvThres : float, optional
         Threshold for points that are always convective. All values above the threshold are classifed as convective
     bkgRad_km : float, optional
@@ -150,15 +144,15 @@ def conv_strat(grid, dx=None, dy=None, alwaysConvThres=42, bkgRad_km=11,
         Determines if a multiplier (False) or addition (True) in the scalar difference scheme should be used
     weakEchoThres : float, optional
         Threshold for determining weak echo. All values below this threshold will be considered weak echo
-    minDBZused : float, optional
+    mindBZused : float, optional
         Minimum dBZ value used for classification. All values below this threshold will be considered no surface echo
     dBaveraging : bool, optional
         True if using dBZ values that need to be converted to linear Z before averaging. False for other types of values
-    applyRadialMask : bool, optional
+    applyLgRadialMask : bool, optional
         Flag to set a large radial mask for algorithm
-    lgRadialMask_minRadkm, lgRadialMask_maxkm : float, optional
+    lgRadialMask_minRadkm, lgRadialMask_maxRadkm : float, optional
         Values for setting the large radial mask
-    dBZforMaxConvRadius : float, optional
+    dBZforMaxConvRad : float, optional
         dBZ for maximum convective radius. Convective cores with values above this will have the maximum convective radius
     maxConvRad_km : float, optional
         Maximum radius around convective cores to classify as convective. Default is 5 km
@@ -199,14 +193,15 @@ def conv_strat(grid, dx=None, dy=None, alwaysConvThres=42, bkgRad_km=11,
     ze = ze.filled(np.NaN)
 
     _, _, convsf_best = _revised_conv_strat(ze, dx, dy, alwaysConvThres=alwaysConvThres, bkgRad_km=bkgRad_km,
-                                      useCosine=useCosine, maxDiff=maxDiff, zeroDiffCosVal=zeroDiffCosVal,
-                                      scalarDiff=scalarDiff, addition=addition,
-                                      weakEchoThres=weakEchoThres, mindBZused=mindBZused,
-                                      dBaveraging=dBaveraging, applyLgRadialMask=applyLgRadialMask,
-                                      lgRadialMask_minRadkm=lgRadialMask_minRadkm, lgRadialMask_maxRadkm=lgRadialMask_maxRadkm,
-                                      dBZforMaxConvRad=dBZforMaxConvRad, maxConvRad_km=maxConvRad_km)
+                                            useCosine=useCosine, maxDiff=maxDiff, zeroDiffCosVal=zeroDiffCosVal,
+                                            scalarDiff=scalarDiff, addition=addition,
+                                            weakEchoThres=weakEchoThres, mindBZused=mindBZused,
+                                            dBaveraging=dBaveraging, applyLgRadialMask=applyLgRadialMask,
+                                            lgRadialMask_minRadkm=lgRadialMask_minRadkm,
+                                            lgRadialMask_maxRadkm=lgRadialMask_maxRadkm,
+                                            dBZforMaxConvRad=dBZforMaxConvRad, maxConvRad_km=maxConvRad_km)
 
-    convsf_dict = {'convsf':{
+    convsf_dict = {'convsf': {
         'data': convsf_best,
         'standard_name': 'convsf',
         'long_name': 'Convective stratiform classification',
@@ -219,23 +214,27 @@ def conv_strat(grid, dx=None, dy=None, alwaysConvThres=42, bkgRad_km=11,
                       '2 = Convective')}}
 
     if estimateFlag:
-        convsf_under = _revised_conv_strat(ze - estimateOffset, dx, dy, alwaysConvThres=alwaysConvThres, bkgRad_km=bkgRad_km,
+        convsf_under = _revised_conv_strat(ze - estimateOffset, dx, dy, alwaysConvThres=alwaysConvThres,
+                                           bkgRad_km=bkgRad_km,
                                            useCosine=useCosine, maxDiff=maxDiff, zeroDiffCosVal=zeroDiffCosVal,
                                            scalarDiff=scalarDiff, addition=addition,
                                            weakEchoThres=weakEchoThres, mindBZused=mindBZused,
                                            dBaveraging=dBaveraging, applyLgRadialMask=applyLgRadialMask,
-                                           lgRadialMask_minRadkm=lgRadialMask_minRadkm, lgRadialMask_maxRadkm=lgRadialMask_maxRadkm,
+                                           lgRadialMask_minRadkm=lgRadialMask_minRadkm,
+                                           lgRadialMask_maxRadkm=lgRadialMask_maxRadkm,
                                            dBZforMaxConvRad=dBZforMaxConvRad, maxConvRad_km=maxConvRad_km)
 
-        convsf_over  = _revised_conv_strat(ze + estimateOffset, dx, dy, alwaysConvThres=alwaysConvThres, bkgRad_km=bkgRad_km,
-                                           useCosine=useCosine, maxDiff=maxDiff, zeroDiffCosVal=zeroDiffCosVal,
-                                           scalarDiff=scalarDiff, addition=addition,
-                                           weakEchoThres=weakEchoThres, mindBZused=mindBZused,
-                                           dBaveraging=dBaveraging, applyLgRadialMask=applyLgRadialMask,
-                                           lgRadialMask_minRadkm=lgRadialMask_minRadkm, lgRadialMask_maxRadkm=lgRadialMask_maxRadkm,
-                                           dBZforMaxConvRad=dBZforMaxConvRad, maxConvRad_km=maxConvRad_km)
+        convsf_over = _revised_conv_strat(ze + estimateOffset, dx, dy, alwaysConvThres=alwaysConvThres,
+                                          bkgRad_km=bkgRad_km,
+                                          useCosine=useCosine, maxDiff=maxDiff, zeroDiffCosVal=zeroDiffCosVal,
+                                          scalarDiff=scalarDiff, addition=addition,
+                                          weakEchoThres=weakEchoThres, mindBZused=mindBZused,
+                                          dBaveraging=dBaveraging, applyLgRadialMask=applyLgRadialMask,
+                                          lgRadialMask_minRadkm=lgRadialMask_minRadkm,
+                                          lgRadialMask_maxRadkm=lgRadialMask_maxRadkm,
+                                          dBZforMaxConvRad=dBZforMaxConvRad, maxConvRad_km=maxConvRad_km)
 
-        convsf_dict['convsf_under'] =  {
+        convsf_dict['convsf_under'] = {
             'data': convsf_under,
             'standard_name': 'convsf_under',
             'long_name': 'Convective stratiform classification (Underestimate)',
@@ -247,7 +246,7 @@ def conv_strat(grid, dx=None, dy=None, alwaysConvThres=42, bkgRad_km=11,
             'comment_2': ('0 = Undefined, 1 = Stratiform, '
                           '2 = Convective')}
 
-        convsf_dict['convsf_over'] =  {
+        convsf_dict['convsf_over'] = {
             'data': convsf_under,
             'standard_name': 'convsf_under',
             'long_name': 'Convective stratiform classification (Overestimate)',
@@ -258,8 +257,6 @@ def conv_strat(grid, dx=None, dy=None, alwaysConvThres=42, bkgRad_km=11,
                           'Yuter and Houze (1997)'),
             'comment_2': ('0 = Undefined, 1 = Stratiform, '
                           '2 = Convective')}
-
-
 
     return convsf_dict
 
@@ -348,7 +345,7 @@ def hydroclass_semisupervised(radar, mass_centers=None,
     temp = radar.fields[temp_field]['data']
 
     # convert temp in relative height respect to iso0
-    relh = temp*(1000./lapse_rate)
+    relh = temp * (1000. / lapse_rate)
 
     # standardize data
     refl_std = _standardize(refl, 'Zh')
@@ -397,7 +394,7 @@ def _standardize(data, field_name, mx=None, mn=None):
 
     """
     if field_name == 'relH':
-        field_std = 2./(1.+np.ma.exp(-0.005*data))-1.
+        field_std = 2. / (1. + np.ma.exp(-0.005 * data)) - 1.
         return field_std
 
     if (mx is None) or (mn is None):
@@ -411,12 +408,12 @@ def _standardize(data, field_name, mx=None, mn=None):
 
     if field_name == 'KDP':
         data[data < -0.5] = -0.5
-        data = 10.*np.ma.log10(data+0.6)
+        data = 10. * np.ma.log10(data + 0.6)
     elif field_name == 'RhoHV':
-        data = 10.*np.ma.log10(1.-data)
+        data = 10. * np.ma.log10(1. - data)
 
     mask = np.ma.getmaskarray(data)
-    field_std = 2.*(data-mn)/(mx-mn)-1.
+    field_std = 2. * (data - mn) / (mx - mn) - 1.
     field_std[data < mn] = -1.
     field_std[data > mx] = 1.
     field_std[mask] = np.ma.masked
@@ -425,7 +422,7 @@ def _standardize(data, field_name, mx=None, mn=None):
 
 
 def _assign_to_class(zh, zdr, kdp, rhohv, relh, mass_centers,
-                    weights=np.array([1., 1., 1., 0.75, 0.5])):
+                     weights=np.array([1., 1., 1., 0.75, 0.5])):
     """
     Assigns an hydrometeor class to a radar range bin computing
     the distance between the radar variables an a centroid.
@@ -466,7 +463,7 @@ def _assign_to_class(zh, zdr, kdp, rhohv, relh, mass_centers,
             centroids_class.reshape(nvariables, 1, 1),
             (nvariables, nrays, nbins))
         dist[i, :, :] = np.ma.sqrt(np.ma.sum(
-            ((centroids_class-data)**2.)*weights_mat, axis=0))
+            ((centroids_class - data) ** 2.) * weights_mat, axis=0))
 
     # use very large fill_value so that masked entries will be sorted at the
     # end. There should not be any masked entry anyway
@@ -478,7 +475,7 @@ def _assign_to_class(zh, zdr, kdp, rhohv, relh, mass_centers,
 
     # Entries with non-valid reflectivity values are set to 0 (No class)
     mask = np.ma.getmaskarray(zh)
-    hydroclass = class_vec[0, :, :]+1
+    hydroclass = class_vec[0, :, :] + 1
     hydroclass[mask] = 0
 
     return hydroclass, min_dist
@@ -537,29 +534,29 @@ def _mass_centers_table():
     mass_centers_dict = dict()
     # C-band centroids derived for MeteoSwiss Albis radar
     #                       Zh        ZDR     kdp   RhoHV    delta_Z
-    mass_centers_c[0, :] = [13.5829,  0.4063, 0.0497, 0.9868,  1330.3]  # DS
-    mass_centers_c[1, :] = [02.8453,  0.2457, 0.0000, 0.9798,  0653.8]  # CR
-    mass_centers_c[2, :] = [07.6597,  0.2180, 0.0019, 0.9799, -1426.5]  # LR
-    mass_centers_c[3, :] = [31.6815,  0.3926, 0.0828, 0.9978,  0535.3]  # GR
-    mass_centers_c[4, :] = [39.4703,  1.0734, 0.4919, 0.9876, -1036.3]  # RN
-    mass_centers_c[5, :] = [04.8267, -0.5690, 0.0000, 0.9691,  0869.8]  # VI
-    mass_centers_c[6, :] = [30.8613,  0.9819, 0.1998, 0.9845, -0066.1]  # WS
-    mass_centers_c[7, :] = [52.3969,  2.1094, 2.4675, 0.9730, -1550.2]  # MH
-    mass_centers_c[8, :] = [50.6186, -0.0649, 0.0946, 0.9904,  1179.9]  # IH/HDG
+    mass_centers_c[0, :] = [13.5829, 0.4063, 0.0497, 0.9868, 1330.3]  # DS
+    mass_centers_c[1, :] = [02.8453, 0.2457, 0.0000, 0.9798, 0653.8]  # CR
+    mass_centers_c[2, :] = [07.6597, 0.2180, 0.0019, 0.9799, -1426.5]  # LR
+    mass_centers_c[3, :] = [31.6815, 0.3926, 0.0828, 0.9978, 0535.3]  # GR
+    mass_centers_c[4, :] = [39.4703, 1.0734, 0.4919, 0.9876, -1036.3]  # RN
+    mass_centers_c[5, :] = [04.8267, -0.5690, 0.0000, 0.9691, 0869.8]  # VI
+    mass_centers_c[6, :] = [30.8613, 0.9819, 0.1998, 0.9845, -0066.1]  # WS
+    mass_centers_c[7, :] = [52.3969, 2.1094, 2.4675, 0.9730, -1550.2]  # MH
+    mass_centers_c[8, :] = [50.6186, -0.0649, 0.0946, 0.9904, 1179.9]  # IH/HDG
 
     mass_centers_dict.update({'C': mass_centers_c})
 
     # X-band centroids derived for MeteoSwiss DX50 radar
     #                       Zh        ZDR     kdp    RhoHV   delta_Z
-    mass_centers_x[0, :] = [19.0770,  0.4139, 0.0099, 0.9841,  1061.7]  # DS
-    mass_centers_x[1, :] = [03.9877,  0.5040, 0.0000, 0.9642,  0856.6]  # CR
-    mass_centers_x[2, :] = [20.7982,  0.3177, 0.0004, 0.9858, -1375.1]  # LR
-    mass_centers_x[3, :] = [34.7124, -0.3748, 0.0988, 0.9828,  1224.2]  # GR
-    mass_centers_x[4, :] = [33.0134,  0.6614, 0.0819, 0.9802, -1169.8]  # RN
-    mass_centers_x[5, :] = [08.2610, -0.4681, 0.0000, 0.9722,  1100.7]  # VI
-    mass_centers_x[6, :] = [35.1801,  1.2830, 0.1322, 0.9162, -0159.8]  # WS
-    mass_centers_x[7, :] = [52.4539,  2.3714, 1.1120, 0.9382, -1618.5]  # MH
-    mass_centers_x[8, :] = [44.2216, -0.3419, 0.0687, 0.9683,  1272.7]  # IH/HDG
+    mass_centers_x[0, :] = [19.0770, 0.4139, 0.0099, 0.9841, 1061.7]  # DS
+    mass_centers_x[1, :] = [03.9877, 0.5040, 0.0000, 0.9642, 0856.6]  # CR
+    mass_centers_x[2, :] = [20.7982, 0.3177, 0.0004, 0.9858, -1375.1]  # LR
+    mass_centers_x[3, :] = [34.7124, -0.3748, 0.0988, 0.9828, 1224.2]  # GR
+    mass_centers_x[4, :] = [33.0134, 0.6614, 0.0819, 0.9802, -1169.8]  # RN
+    mass_centers_x[5, :] = [08.2610, -0.4681, 0.0000, 0.9722, 1100.7]  # VI
+    mass_centers_x[6, :] = [35.1801, 1.2830, 0.1322, 0.9162, -0159.8]  # WS
+    mass_centers_x[7, :] = [52.4539, 2.3714, 1.1120, 0.9382, -1618.5]  # MH
+    mass_centers_x[8, :] = [44.2216, -0.3419, 0.0687, 0.9683, 1272.7]  # IH/HDG
 
     mass_centers_dict.update({'X': mass_centers_x})
 
@@ -610,6 +607,7 @@ def get_freq_band(freq):
     warn('Unknown frequency band')
 
     return None
+
 
 def yuter_conv_strat():
     print('Hello World!')
