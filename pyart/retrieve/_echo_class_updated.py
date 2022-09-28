@@ -141,6 +141,7 @@ def _revised_conv_strat(refl, dx, dy, alwaysConvThres=42, bkgRad_km=11,
     conv_core_copy[temp_assignment >= 1] = CS_CORE
 
     # Now do convective stratiform classification
+    conv_strat_array = np.zeros_like(refl)
     conv_strat_array = classify_conv_strat_array(refl, conv_strat_array, conv_core_copy,
                                                  NOSFCECHO, CONV, SF, WEAKECHO, CS_CORE,
                                                  mindBZused, weakEchoThres)
