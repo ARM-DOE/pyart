@@ -57,6 +57,14 @@ def _revised_conv_strat(refl, dx, dy, always_conv_thres=42, bkg_rad_km=11,
     max_conv_rad_km : float, optional
         Maximum radius around convective cores to classify as convective. Default is 5 km
 
+   Returns
+    -------
+    refl_bkg : array
+        Array of background values
+    conv_core_array : array
+        Array of initial convective cores
+    conv_strat_array : array
+        Array of convective stratiform classifcation with convective radii applied
     """
 
     if max_conv_rad_km > 5:
@@ -364,7 +372,7 @@ def create_conv_radius_mask(max_conv_diameter, radius_km, x_spacing, y_spacing, 
 
 def assign_conv_radius_km(refl_bkg, val_for_max_conv_rad, max_conv_rad=5):
     """
-    Assigns the convective radius in kilometers based on the background reflectivity
+    Assigns the convective radius in kilometers based on the background values
 
     Parameters
     ----------
@@ -378,7 +386,7 @@ def assign_conv_radius_km(refl_bkg, val_for_max_conv_rad, max_conv_rad=5):
     Returns
     -------
     convRadiuskm : array
-        array of convective radii based on background values and dBZ for max. conv radius
+        array of convective radii based on background values and val for max. conv radius
     """
 
     convRadiuskm = np.ones_like(refl_bkg)
