@@ -8,7 +8,7 @@ def _revised_conv_strat(refl, dx, dy, always_conv_thres=42, bkg_rad_km=11,
                         weak_echo_thres=5.0, min_dBZ_used=5.0,
                         dB_averaging=False, apply_lg_rad_mask=False,
                         lg_rad_mask_min_rad_km=0, lg_rad_mask_max_rad_km=170,
-                        dBZ_for_max_conv_rad=30, max_conv_rad_km=5.0):
+                        val_for_max_conv_rad=30, max_conv_rad_km=5.0):
     """
     We perform the Yuter and Houze (1997) algorithm for echo classification
     using only the reflectivity field in order to classify each grid point
@@ -52,7 +52,7 @@ def _revised_conv_strat(refl, dx, dy, always_conv_thres=42, bkg_rad_km=11,
         Flag to set a large radial mask for algorithm
     lg_rad_mask_min_rad_km, lg_rad_mask_max_rad_km : float, optional
         Values for setting the large radial mask
-    dBZ_for_max_conv_rad : float, optional
+    val_for_max_conv_rad : float, optional
         dBZ for maximum convective radius. Convective cores with values above this will have the maximum convective radius
     max_conv_rad_km : float, optional
         Maximum radius around convective cores to classify as convective. Default is 5 km
@@ -91,8 +91,8 @@ def _revised_conv_strat(refl, dx, dy, always_conv_thres=42, bkg_rad_km=11,
     # create background array
     bkg_mask_array = np.ones((bkgDiameter_pix, bkgDiameter_pix), dtype=float)
     # mask outside circular region
-    bkg_mask_array = create_radial_mask(bkg_mask_array, minradiuskm=0, maxradiuskm=bkg_rad_km, x_pixsize=dx / 1000,
-                                        y_pixsize=dy / 1000, centerx=bkg_center, centery=bkg_center, circular=True)
+    bkg_mask_array = create_radial_mask(bkg_mask_array, min_rad_km=0, max_rad_km=bkg_rad_km, x_pixsize=dx / 1000,
+                                        y_pixsize=dy / 1000, center_x=bkg_center, center_y=bkg_center, circular=True)
 
     # Create large mask array for determining where to calculate convective stratiform
     # initialize array with 1 (calculate convective stratiform over entire array)
@@ -101,8 +101,8 @@ def _revised_conv_strat(refl, dx, dy, always_conv_thres=42, bkg_rad_km=11,
     # if True, create radial mask
     if apply_lg_rad_mask:
         mask_array = create_radial_mask(mask_array, lg_rad_mask_min_rad_km, lg_rad_mask_max_rad_km, x_pixsize=dx / 1000,
-                                        y_pixsize=dy / 1000, centerx=int(np.floor(refl.shape[0] / 2)),
-                                        centery=int(np.floor(refl.shape[1] / 2)), circular=True)
+                                        y_pixsize=dy / 1000, center_x=int(np.floor(refl.shape[0] / 2)),
+                                        center_y=int(np.floor(refl.shape[1] / 2)), circular=True)
 
     # %% Convective stratiform detection
 
@@ -116,14 +116,14 @@ def _revised_conv_strat(refl, dx, dy, always_conv_thres=42, bkg_rad_km=11,
         conv_core_array = convcore_cos_scheme(refl, refl_bkg, max_diff, zero_diff_cos_val, always_conv_thres, CS_CORE)
     else:
         conv_core_array = convcore_scalar_scheme(refl, refl_bkg, scalar_diff, always_conv_thres, CS_CORE,
-                                                 addition=use_addition)
+                                                 use_addition=use_addition)
 
     # count convective cores
     corecount = np.count_nonzero(conv_core_array)
 
     # Assign convective radii based on background reflectivity
-    convRadiuskm = assign_conv_radius_km(refl_bkg, dBZformaxconvradius=dBZ_for_max_conv_rad,
-                                         maxConvRadius=max_conv_rad_km)
+    convRadiuskm = assign_conv_radius_km(refl_bkg, val_for_max_conv_rad=val_for_max_conv_rad,
+                                         max_conv_rad=max_conv_rad_km)
 
     # Incorporate convective radius using binary dilation
     # Create empty array for assignment
@@ -157,8 +157,8 @@ def _revised_conv_strat(refl, dx, dy, always_conv_thres=42, bkg_rad_km=11,
 
 # functions
 
-def create_radial_mask(mask_array, minradiuskm, maxradiuskm, x_pixsize,
-                       y_pixsize, centerx, centery, circular=True):
+def create_radial_mask(mask_array, min_rad_km, max_rad_km, x_pixsize,
+                       y_pixsize, center_x, center_y, circular=True):
     """
     Computes a radial distance mask, everything with distance between minradiuskm
     and maxradiuskm is assigned 1, everything else is assigned 0. This version can
@@ -168,11 +168,11 @@ def create_radial_mask(mask_array, minradiuskm, maxradiuskm, x_pixsize,
     ----------
     mask_array : array
         Array to mask
-    minradiuskm, maxradiuskm : float
+    min_rad_km, max_rad_km : float
         The minimum and maximum radius of the non-masked region in kilometers.
     x_pixsize, y_pixsize : float
         The pixel size in the x- and y-dimension in kilometers, respectively
-    centerx, centery : int
+    center_x, center_y : int
         The center pixel in the x- and y-dimension, respectively
     circular : bool
         True returns circular mask
@@ -189,20 +189,20 @@ def create_radial_mask(mask_array, minradiuskm, maxradiuskm, x_pixsize,
         for i in np.arange(0, xsize, 1):
             # compute range to pixel
             if circular:
-                x_range_sq = ((centerx - i) * x_pixsize) ** 2
-                y_range_sq = ((centery - j) * y_pixsize) ** 2
+                x_range_sq = ((center_x - i) * x_pixsize) ** 2
+                y_range_sq = ((center_y - j) * y_pixsize) ** 2
                 circ_range = np.sqrt(x_range_sq + y_range_sq)
             # if circular is False, use square mask
             else:
-                x_range = abs(int(np.floor(centerx - i) * x_pixsize))
-                y_range = abs(int(np.floor(centery - j) * y_pixsize))
+                x_range = abs(int(np.floor(center_x - i) * x_pixsize))
+                y_range = abs(int(np.floor(center_y - j) * y_pixsize))
 
                 if x_range > y_range:
                     circ_range = x_range
                 else:
                     circ_range = y_range
             # if range is within min and max, set to True
-            if (circ_range <= maxradiuskm) and (circ_range >= minradiuskm):
+            if (circ_range <= max_rad_km) and (circ_range >= min_rad_km):
                 mask_array[j, i] = 1
             else:
                 mask_array[j, i] = 0
@@ -210,7 +210,7 @@ def create_radial_mask(mask_array, minradiuskm, maxradiuskm, x_pixsize,
     return mask_array
 
 
-def calc_bkg_intensity(refl, bkg_mask_array, dBaveraging):
+def calc_bkg_intensity(refl, bkg_mask_array, dB_averaging):
     """
     Calculate the background of the given refl array. The footprint used to
     calculate the average for each pixel is given by bkg_mask_array
@@ -221,7 +221,7 @@ def calc_bkg_intensity(refl, bkg_mask_array, dBaveraging):
         Reflectivity array to compute average
     bkg_mask_array : array
         Array of radial points to use for average
-    dBaveraging : bool
+    dB_averaging : bool
         If True, converts dBZ to linear Z before averaging
 
     Returns
@@ -231,7 +231,7 @@ def calc_bkg_intensity(refl, bkg_mask_array, dBaveraging):
     """
 
     # if dBaverage is true, convert reflectivity to linear Z
-    if dBaveraging:
+    if dB_averaging:
         refl = 10 ** (refl / 10)
 
     # calculate background reflectivity with circular footprint
@@ -241,7 +241,7 @@ def calc_bkg_intensity(refl, bkg_mask_array, dBaveraging):
     refl_bkg = np.ma.masked_where(refl.mask, refl_bkg)
 
     # if dBaveraging is true, convert background reflectivity to dBZ
-    if dBaveraging:
+    if dB_averaging:
         refl_bkg = 10 * np.log10(refl_bkg)
         # mask where original reflectivity is invalid
         refl_bkg = np.ma.masked_where(refl.mask, refl_bkg)
@@ -249,7 +249,7 @@ def calc_bkg_intensity(refl, bkg_mask_array, dBaveraging):
     return refl_bkg
 
 
-def convcore_cos_scheme(refl, refl_bkg, maxDiff, zeroDiffCosVal, alwaysConvThres, CS_CORE):
+def convcore_cos_scheme(refl, refl_bkg, max_diff, zero_diff_cos_val, always_conv_thres, CS_CORE):
     """
     Function for assigning convective cores based on a cosine function
 
@@ -259,11 +259,11 @@ def convcore_cos_scheme(refl, refl_bkg, maxDiff, zeroDiffCosVal, alwaysConvThres
         Reflectivity values
     refl_bkg : array
         Background average of reflectivity values
-    maxDiff : float
+    max_diff : float
         Maximum difference between refl and refl_bkg needed for convective classification
-    zeroDiffCosVal : float
+    zero_diff_cos_val : float
         Value where the cosine function returns a zero difference
-    alwaysConvThres : float
+    always_conv_thres : float
         All values above this threshold considered to be convective
     CS_CORE : int
         Value assigned to convective pixels
@@ -278,18 +278,18 @@ def convcore_cos_scheme(refl, refl_bkg, maxDiff, zeroDiffCosVal, alwaysConvThres
     conv_core_array = np.zeros_like(refl)
 
     # calculate zeDiff for entire array
-    zDiff = maxDiff * np.cos((np.pi * refl_bkg) / (2 * zeroDiffCosVal))
+    zDiff = max_diff * np.cos((np.pi * refl_bkg) / (2 * zero_diff_cos_val))
     zDiff[zDiff < 0] = 0  # where difference less than zero, set to zero
-    zDiff[refl_bkg < 0] = maxDiff  # where background less than zero, set to min diff
+    zDiff[refl_bkg < 0] = max_diff  # where background less than zero, set to min diff
 
     # set values
-    conv_core_array[refl >= alwaysConvThres] = CS_CORE  # where Z is greater than alwaysConvThres, set to core
+    conv_core_array[refl >= always_conv_thres] = CS_CORE  # where Z is greater than alwaysConvThres, set to core
     conv_core_array[(refl - refl_bkg) >= zDiff] = CS_CORE  # where difference exceeeds minimum, set to core
 
     return conv_core_array
 
 
-def convcore_scalar_scheme(refl, refl_bkg, maxDiff, alwaysConvThres, CS_CORE, addition=False):
+def convcore_scalar_scheme(refl, refl_bkg, max_diff, always_conv_thres, CS_CORE, use_addition=False):
     """
     Function for assigning convective cores based on a scalar difference
 
@@ -299,13 +299,13 @@ def convcore_scalar_scheme(refl, refl_bkg, maxDiff, alwaysConvThres, CS_CORE, ad
         Reflectivity values
     refl_bkg : array
         Background average of reflectivity values
-    maxDiff : float
+    max_diff : float
         Maximum difference between refl and refl_bkg needed for convective classification
-    alwaysConvThres : float
+    always_conv_thres : float
         All values above this threshold considered to be convective
     CS_CORE : int
         Value assigned to convective pixels
-    addition : bool
+    use_addition : bool
         Boolean to determine if scalar should be added (True) or multiplied (False)
 
     Returns
@@ -319,34 +319,34 @@ def convcore_scalar_scheme(refl, refl_bkg, maxDiff, alwaysConvThres, CS_CORE, ad
 
     # calculate zDiff for entire array
     # if addition, add difference. Else, multiply difference
-    if addition:
-        zDiff = maxDiff + refl_bkg
+    if use_addition:
+        zDiff = max_diff + refl_bkg
     else:
-        zDiff = maxDiff * refl_bkg
+        zDiff = max_diff * refl_bkg
 
     zDiff[zDiff < 0] = 0  # where difference less than zero, set to zero
     zDiff[refl_bkg < 0] = 0  # where background less than zero, set to zero
 
     # set values
-    conv_core_array[refl >= alwaysConvThres] = CS_CORE  # where Z is greater than alwaysConvThres, set to core
+    conv_core_array[refl >= always_conv_thres] = CS_CORE  # where Z is greater than alwaysConvThres, set to core
     conv_core_array[refl >= zDiff] = CS_CORE  # where difference exceeeds minimum, set to core
 
     return conv_core_array
 
 
-def create_conv_radius_mask(maxConvDiameter, radius_km, xspacing, yspacing, centerConvMask_x):
+def create_conv_radius_mask(max_conv_diameter, radius_km, x_spacing, y_spacing, center_conv_mask_x):
     """
     Does and initial convective stratiform classification
 
     Parameters
     ----------
-    maxConvDiameter : int
+    max_conv_diameter : int
         maximum convective diameter in kilometers
     radius_km : int
         convective radius in kilometers
-    xspacing, yspacing : float
+    x_spacing, y_spacing : float
         x- and y-dimension pixel size in meters, respectively
-    centerConvMask_x : int
+    center_conv_mask_x : int
         index of center point
 
     Returns
@@ -355,14 +355,14 @@ def create_conv_radius_mask(maxConvDiameter, radius_km, xspacing, yspacing, cent
         array masked based on distance of convective diameter
     """
 
-    conv_mask_array = np.zeros((maxConvDiameter, maxConvDiameter))
-    conv_mask_array = create_radial_mask(conv_mask_array, 0, radius_km, xspacing, yspacing, centerConvMask_x,
-                                         centerConvMask_x, True)
+    conv_mask_array = np.zeros((max_conv_diameter, max_conv_diameter))
+    conv_mask_array = create_radial_mask(conv_mask_array, 0, radius_km, x_spacing, y_spacing, center_conv_mask_x,
+                                         center_conv_mask_x, True)
 
     return conv_mask_array
 
 
-def assign_conv_radius_km(refl_bkg, dBZformaxconvradius, maxConvRadius=5):
+def assign_conv_radius_km(refl_bkg, val_for_max_conv_rad, max_conv_rad=5):
     """
     Assigns the convective radius in kilometers based on the background reflectivity
 
@@ -370,9 +370,9 @@ def assign_conv_radius_km(refl_bkg, dBZformaxconvradius, maxConvRadius=5):
     ----------
     refl_bkg : array
         array of background reflectivity values
-    dBZformaxconvradius : float
+    val_for_max_conv_rad : float
         reflectivity value for maximum convective radius (5 km)
-    maxConvRadius : float, optional
+    max_conv_rad : float, optional
         maximum convective radius in kilometers
 
     Returns
@@ -383,10 +383,10 @@ def assign_conv_radius_km(refl_bkg, dBZformaxconvradius, maxConvRadius=5):
 
     convRadiuskm = np.ones_like(refl_bkg)
 
-    convRadiuskm[refl_bkg >= (dBZformaxconvradius - 15)] = maxConvRadius - 3
-    convRadiuskm[refl_bkg >= (dBZformaxconvradius - 10)] = maxConvRadius - 2
-    convRadiuskm[refl_bkg >= (dBZformaxconvradius - 5)] = maxConvRadius - 1
-    convRadiuskm[refl_bkg >= dBZformaxconvradius] = maxConvRadius
+    convRadiuskm[refl_bkg >= (val_for_max_conv_rad - 15)] = max_conv_rad - 3
+    convRadiuskm[refl_bkg >= (val_for_max_conv_rad - 10)] = max_conv_rad - 2
+    convRadiuskm[refl_bkg >= (val_for_max_conv_rad - 5)] = max_conv_rad - 1
+    convRadiuskm[refl_bkg >= val_for_max_conv_rad] = max_conv_rad
 
     return convRadiuskm
 
@@ -421,8 +421,8 @@ def classify_conv_strat_array(refl, conv_strat_array, conv_core_array,
 
     Returns
     -------
-    mean : conv_strat_array
-        conv_strat_array with initial classifications
+    conv_strat_array : array
+        array of classifications
     """
 
     # assuming order so that each point is only assigned one time, no overlapping assignment

@@ -193,12 +193,14 @@ def conv_strat(grid, dx=None, dy=None, always_conv_thres=42, bkg_rad_km=11,
     ze = ze.filled(np.NaN)
 
     _, _, convsf_best = _revised_conv_strat(ze, dx, dy, always_conv_thres=always_conv_thres, bkg_rad_km=bkg_rad_km,
-                                            use_cosine=use_cosine, max_diff=max_diff, zero_diff_cos_val=zero_diff_cos_val,
-                                            scalar_diff=scalar_diff, use_addition=use_addition,
-                                            weak_echo_thres=weak_echo_thres, min_dBZ_used=min_dBZ_used,
-                                            dB_averaging=dB_averaging, apply_lg_rad_mask=apply_lg_rad_mask,
-                                            lg_rad_mask_min_rad_km=lg_rad_mask_min_rad_km, lg_rad_mask_max_rad_km=lg_rad_mask_max_rad_km,
-                                            dBZ_for_max_conv_rad=dBZ_for_max_conv_rad, max_conv_rad_km=max_conv_rad_km)
+                                            use_cosine=use_cosine, max_diff=max_diff,
+                                            zero_diff_cos_val=zero_diff_cos_val, scalar_diff=scalar_diff,
+                                            use_addition=use_addition, weak_echo_thres=weak_echo_thres,
+                                            min_dBZ_used=min_dBZ_used, dB_averaging=dB_averaging,
+                                            apply_lg_rad_mask=apply_lg_rad_mask,
+                                            lg_rad_mask_min_rad_km=lg_rad_mask_min_rad_km,
+                                            lg_rad_mask_max_rad_km=lg_rad_mask_max_rad_km,
+                                            val_for_max_conv_rad=dBZ_for_max_conv_rad, max_conv_rad_km=max_conv_rad_km)
 
     convsf_dict = {'convsf': {
         'data': convsf_best,
@@ -213,21 +215,25 @@ def conv_strat(grid, dx=None, dy=None, always_conv_thres=42, bkg_rad_km=11,
                       '2 = Convective')}}
 
     if estimateFlag:
-        convsf_under = _revised_conv_strat(ze - estimateOffset, dx, dy, always_conv_thres=always_conv_thres, bkg_rad_km=bkg_rad_km,
-                                           use_cosine=use_cosine, max_diff=max_diff, zero_diff_cos_val=zero_diff_cos_val,
-                                           scalar_diff=scalar_diff, use_addition=use_addition,
-                                           weak_echo_thres=weak_echo_thres, min_dBZ_used=min_dBZ_used,
-                                           dB_averaging=dB_averaging, apply_lg_rad_mask=apply_lg_rad_mask,
-                                           lg_rad_mask_min_rad_km=lg_rad_mask_min_rad_km, lg_rad_mask_max_rad_km=lg_rad_mask_max_rad_km,
-                                           dBZ_for_max_conv_rad=dBZ_for_max_conv_rad, max_conv_rad_km=max_conv_rad_km)
+        convsf_under = _revised_conv_strat(ze - estimateOffset, dx, dy, always_conv_thres=always_conv_thres,
+                                           bkg_rad_km=bkg_rad_km, use_cosine=use_cosine, max_diff=max_diff,
+                                           zero_diff_cos_val=zero_diff_cos_val, scalar_diff=scalar_diff,
+                                           use_addition=use_addition, weak_echo_thres=weak_echo_thres,
+                                           min_dBZ_used=min_dBZ_used, dB_averaging=dB_averaging,
+                                           apply_lg_rad_mask=apply_lg_rad_mask,
+                                           lg_rad_mask_min_rad_km=lg_rad_mask_min_rad_km,
+                                           lg_rad_mask_max_rad_km=lg_rad_mask_max_rad_km,
+                                           val_for_max_conv_rad=dBZ_for_max_conv_rad, max_conv_rad_km=max_conv_rad_km)
 
-        convsf_over = _revised_conv_strat(ze + estimateOffset, dx, dy, always_conv_thres=always_conv_thres, bkg_rad_km=bkg_rad_km,
-                                           use_cosine=use_cosine, max_diff=max_diff, zero_diff_cos_val=zero_diff_cos_val,
-                                           scalar_diff=scalar_diff, use_addition=use_addition,
-                                           weak_echo_thres=weak_echo_thres, min_dBZ_used=min_dBZ_used,
-                                           dB_averaging=dB_averaging, apply_lg_rad_mask=apply_lg_rad_mask,
-                                           lg_rad_mask_min_rad_km=lg_rad_mask_min_rad_km, lg_rad_mask_max_rad_km=lg_rad_mask_max_rad_km,
-                                           dBZ_for_max_conv_rad=dBZ_for_max_conv_rad, max_conv_rad_km=max_conv_rad_km)
+        convsf_over = _revised_conv_strat(ze + estimateOffset, dx, dy, always_conv_thres=always_conv_thres,
+                                          bkg_rad_km=bkg_rad_km, use_cosine=use_cosine, max_diff=max_diff,
+                                          zero_diff_cos_val=zero_diff_cos_val, scalar_diff=scalar_diff,
+                                          use_addition=use_addition, weak_echo_thres=weak_echo_thres,
+                                          min_dBZ_used=min_dBZ_used, dB_averaging=dB_averaging,
+                                          apply_lg_rad_mask=apply_lg_rad_mask,
+                                          lg_rad_mask_min_rad_km=lg_rad_mask_min_rad_km,
+                                          lg_rad_mask_max_rad_km=lg_rad_mask_max_rad_km,
+                                          val_for_max_conv_rad=dBZ_for_max_conv_rad, max_conv_rad_km=max_conv_rad_km)
 
         convsf_dict['convsf_under'] = {
             'data': convsf_under,
