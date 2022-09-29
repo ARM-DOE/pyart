@@ -109,7 +109,7 @@ def steiner_conv_strat(grid, dx=None, dy=None, intense=42.0,
 
 def conv_strat(grid, dx=None, dy=None, always_conv_thres=42, bkg_rad_km=11,
                use_cosine=True, max_diff=8, zero_diff_cos_val=55,
-               scalar_diff=1.5, use_addition=True,
+               scalar_diff=1.5, use_addition=True, calc_thres=0.75,
                weak_echo_thres=5.0, min_dBZ_used=5.0,
                dB_averaging=False, apply_lg_rad_mask=False,
                lg_rad_mask_min_rad_km=0, lg_rad_mask_max_rad_km=170,
@@ -142,6 +142,8 @@ def conv_strat(grid, dx=None, dy=None, always_conv_thres=42, bkg_rad_km=11,
         If using a scalar difference scheme, this value is the multiplier or addition to the background average
     use_addition : bool, optional
         Determines if a multiplier (False) or addition (True) in the scalar difference scheme should be used
+    calc_thres : float, optional
+        Minimum percentage of points needed to be considered in background average calculation
     weak_echo_thres : float, optional
         Threshold for determining weak echo. All values below this threshold will be considered weak echo
     min_dBZ_used : float, optional
@@ -195,7 +197,7 @@ def conv_strat(grid, dx=None, dy=None, always_conv_thres=42, bkg_rad_km=11,
     _, _, convsf_best = _revised_conv_strat(ze, dx, dy, always_conv_thres=always_conv_thres, bkg_rad_km=bkg_rad_km,
                                             use_cosine=use_cosine, max_diff=max_diff,
                                             zero_diff_cos_val=zero_diff_cos_val, scalar_diff=scalar_diff,
-                                            use_addition=use_addition, weak_echo_thres=weak_echo_thres,
+                                            use_addition=use_addition, calc_thres=calc_thres, weak_echo_thres=weak_echo_thres,
                                             min_dBZ_used=min_dBZ_used, dB_averaging=dB_averaging,
                                             apply_lg_rad_mask=apply_lg_rad_mask,
                                             lg_rad_mask_min_rad_km=lg_rad_mask_min_rad_km,
@@ -218,7 +220,7 @@ def conv_strat(grid, dx=None, dy=None, always_conv_thres=42, bkg_rad_km=11,
         convsf_under = _revised_conv_strat(ze - estimateOffset, dx, dy, always_conv_thres=always_conv_thres,
                                            bkg_rad_km=bkg_rad_km, use_cosine=use_cosine, max_diff=max_diff,
                                            zero_diff_cos_val=zero_diff_cos_val, scalar_diff=scalar_diff,
-                                           use_addition=use_addition, weak_echo_thres=weak_echo_thres,
+                                           use_addition=use_addition, calc_thres=calc_thres, weak_echo_thres=weak_echo_thres,
                                            min_dBZ_used=min_dBZ_used, dB_averaging=dB_averaging,
                                            apply_lg_rad_mask=apply_lg_rad_mask,
                                            lg_rad_mask_min_rad_km=lg_rad_mask_min_rad_km,
@@ -228,7 +230,7 @@ def conv_strat(grid, dx=None, dy=None, always_conv_thres=42, bkg_rad_km=11,
         convsf_over = _revised_conv_strat(ze + estimateOffset, dx, dy, always_conv_thres=always_conv_thres,
                                           bkg_rad_km=bkg_rad_km, use_cosine=use_cosine, max_diff=max_diff,
                                           zero_diff_cos_val=zero_diff_cos_val, scalar_diff=scalar_diff,
-                                          use_addition=use_addition, weak_echo_thres=weak_echo_thres,
+                                          use_addition=use_addition, calc_thres=calc_thres, weak_echo_thres=weak_echo_thres,
                                           min_dBZ_used=min_dBZ_used, dB_averaging=dB_averaging,
                                           apply_lg_rad_mask=apply_lg_rad_mask,
                                           lg_rad_mask_min_rad_km=lg_rad_mask_min_rad_km,

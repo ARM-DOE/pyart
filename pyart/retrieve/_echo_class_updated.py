@@ -4,7 +4,7 @@ import scipy.ndimage
 
 def _revised_conv_strat(refl, dx, dy, always_conv_thres=42, bkg_rad_km=11,
                         use_cosine=True, max_diff=8, zero_diff_cos_val=55,
-                        scalar_diff=1.5, use_addition=True,
+                        scalar_diff=1.5, use_addition=True, calc_thres=0.75,
                         weak_echo_thres=5.0, min_dBZ_used=5.0,
                         dB_averaging=False, apply_lg_rad_mask=False,
                         lg_rad_mask_min_rad_km=0, lg_rad_mask_max_rad_km=170,
@@ -42,6 +42,8 @@ def _revised_conv_strat(refl, dx, dy, always_conv_thres=42, bkg_rad_km=11,
         If using a scalar difference scheme, this value is the multiplier or addition to the background average
     use_addition : bool, optional
         Determines if a multiplier (False) or addition (True) in the scalar difference scheme should be used
+    calc_thres : float, optional
+        Minimum percentage of points needed to be considered in background average calculation
     weak_echo_thres : float, optional
         Threshold for determining weak echo. All values below this threshold will be considered weak echo
     min_dBZ_used : float, optional
@@ -115,7 +117,7 @@ def _revised_conv_strat(refl, dx, dy, always_conv_thres=42, bkg_rad_km=11,
     # %% Convective stratiform detection
 
     # Compute background radius
-    refl_bkg = calc_bkg_intensity(refl, bkg_mask_array, dB_averaging)
+    refl_bkg = calc_bkg_intensity(refl, bkg_mask_array, dB_averaging, calc_thres)
     # mask background average
     refl_bkg = np.ma.masked_where(refl.mask, refl_bkg)
 
@@ -218,7 +220,7 @@ def create_radial_mask(mask_array, min_rad_km, max_rad_km, x_pixsize,
     return mask_array
 
 
-def calc_bkg_intensity(refl, bkg_mask_array, dB_averaging):
+def calc_bkg_intensity(refl, bkg_mask_array, dB_averaging, calc_thres=None):
     """
     Calculate the background of the given refl array. The footprint used to
     calculate the average for each pixel is given by bkg_mask_array
@@ -231,6 +233,8 @@ def calc_bkg_intensity(refl, bkg_mask_array, dB_averaging):
         Array of radial points to use for average
     dB_averaging : bool
         If True, converts dBZ to linear Z before averaging
+    calc_thres : float
+        Minimum percentage of points needed to be considered in background average calculation
 
     Returns
     -------
@@ -245,6 +249,17 @@ def calc_bkg_intensity(refl, bkg_mask_array, dB_averaging):
     # calculate background reflectivity with circular footprint
     refl_bkg = scipy.ndimage.generic_filter(refl.filled(np.nan), function=np.nanmean, mode='constant',
                                             footprint=bkg_mask_array.astype(bool), cval=np.nan)
+
+    # if calc_thres is not none, then calculate the number of points used to calculate average
+    if calc_thres is not None:
+        # count valid points
+        refl_count = scipy.ndimage.generic_filter(refl.filled(0), function=np.count_nonzero, mode='constant',
+                                                footprint=bkg_mask_array.astype(bool), cval=0)
+        # find threshold number of points
+        val = calc_thres * np.count_nonzero(bkg_mask_array)
+        # mask out values
+        refl_bkg = np.ma.masked_where(refl_count < val, refl_bkg)
+
     # mask where original reflectivity is invalid
     refl_bkg = np.ma.masked_where(refl.mask, refl_bkg)
 
