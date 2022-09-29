@@ -159,8 +159,8 @@ def conv_strat(grid, dx=None, dy=None, always_conv_thres=42, bkg_rad_km=11,
 
     Returns
     -------
-    eclass : dict
-        Steiner convective-stratiform classification dictionary.
+    convsf_dict : dict
+        Convective-stratiform classification dictionary.
 
     References
     ----------
@@ -608,7 +608,3 @@ def get_freq_band(freq):
     warn('Unknown frequency band')
 
     return None
-
-
-def yuter_conv_strat():
-    print('Hello World!')
