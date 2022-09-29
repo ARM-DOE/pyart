@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Reading NEXRAD Data from the AWS Cloud &#8212; Py-ART 1.13.1.post1 documentation</title>
+    <title>Reading NEXRAD Data from the AWS Cloud &#8212; Py-ART 1.13.2.post1 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -23,8 +23,7 @@
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.1ae1adf31bcec4f5a66e594d147bbc00e33ac08d67b8f5697420a1436a24298a.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css" />
@@ -41,11 +40,6 @@
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
-    <script>let toggleHintShow = 'Click to show';</script>
-    <script>let toggleHintHide = 'Click to hide';</script>
-    <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="../../_static/togglebutton.js"></script>
-    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="../../_static/doc_shared.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -469,7 +463,7 @@ on March 22, 2022, at 1201:25 UTC. This means our path would look like:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">list</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">radar</span><span class="o">.</span><span class="n">fields</span></a><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[&#39;differential_phase&#39;, &#39;clutter_filter_power_removed&#39;, &#39;reflectivity&#39;, &#39;spectrum_width&#39;, &#39;cross_correlation_ratio&#39;, &#39;velocity&#39;, &#39;differential_reflectivity&#39;]
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[&#39;reflectivity&#39;, &#39;spectrum_width&#39;, &#39;clutter_filter_power_removed&#39;, &#39;velocity&#39;, &#39;differential_phase&#39;, &#39;differential_reflectivity&#39;, &#39;cross_correlation_ratio&#39;]
 </pre></div>
 </div>
 <p>Let’s plot the reflectivity/velocity fields as a first step to investigating our dataset.</p>
@@ -498,17 +492,7 @@ on March 22, 2022, at 1201:25 UTC. This means our path would look like:</p>
                      <span class="n">vmax</span><span class="o">=</span><span class="mi">70</span><span class="p">)</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_nexrad_data_aws_001.png" srcset="../../_images/sphx_glr_plot_nexrad_data_aws_001.png" alt="KHGX 0.5 Deg. 2022-03-22T12:01:25Z  Equivalent reflectivity factor, KHGX 0.5 Deg. 2022-03-22T12:01:43Z  Radial velocity of scatterers away from instrument" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/runner/micromamba-root/envs/pyart-docs/lib/python3.10/site-packages/cartopy/mpl/gridliner.py:451: UserWarning: The .xlabels_top attribute is deprecated. Please use .top_labels to toggle visibility instead.
-  warnings.warn(&#39;The .xlabels_top attribute is deprecated. Please &#39;
-/home/runner/micromamba-root/envs/pyart-docs/lib/python3.10/site-packages/cartopy/mpl/gridliner.py:487: UserWarning: The .ylabels_right attribute is deprecated. Please use .right_labels to toggle visibility instead.
-  warnings.warn(&#39;The .ylabels_right attribute is deprecated. Please &#39;
-/home/runner/micromamba-root/envs/pyart-docs/lib/python3.10/site-packages/cartopy/mpl/gridliner.py:451: UserWarning: The .xlabels_top attribute is deprecated. Please use .top_labels to toggle visibility instead.
-  warnings.warn(&#39;The .xlabels_top attribute is deprecated. Please &#39;
-/home/runner/micromamba-root/envs/pyart-docs/lib/python3.10/site-packages/cartopy/mpl/gridliner.py:487: UserWarning: The .ylabels_right attribute is deprecated. Please use .right_labels to toggle visibility instead.
-  warnings.warn(&#39;The .ylabels_right attribute is deprecated. Please &#39;
-</pre></div>
-</div>
-<p>Within this plot, we see that the velocity data still has regions that are folded, indicating the dataset has not yet been dealiased.</p>
+<img src="../../_images/sphx_glr_plot_nexrad_data_aws_001.png" srcset="../../_images/sphx_glr_plot_nexrad_data_aws_001.png" alt="KHGX 0.5 Deg. 2022-03-22T12:01:25Z  Equivalent reflectivity factor, KHGX 0.5 Deg. 2022-03-22T12:01:43Z  Radial velocity of scatterers away from instrument" class = "sphx-glr-single-img"/><p>Within this plot, we see that the velocity data still has regions that are folded, indicating the dataset has not yet been dealiased.</p>
 </section>
 <section id="read-nexrad-level-3-data">
 <h2>Read NEXRAD Level 3 Data<a class="headerlink" href="#read-nexrad-level-3-data" title="Permalink to this headline">#</a></h2>
@@ -573,17 +557,7 @@ using the following naming convention:</p>
                               <span class="n">vmax</span><span class="o">=</span><span class="mi">70</span><span class="p">)</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_nexrad_data_aws_002.png" srcset="../../_images/sphx_glr_plot_nexrad_data_aws_002.png" alt="0.5 Deg. 2022-03-22T12:01:25Z  Equivalent reflectivity factor,  0.5 Deg. 2022-03-22T12:01:25Z  Radial velocity of scatterers away from instrument" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/runner/micromamba-root/envs/pyart-docs/lib/python3.10/site-packages/cartopy/mpl/gridliner.py:451: UserWarning: The .xlabels_top attribute is deprecated. Please use .top_labels to toggle visibility instead.
-  warnings.warn(&#39;The .xlabels_top attribute is deprecated. Please &#39;
-/home/runner/micromamba-root/envs/pyart-docs/lib/python3.10/site-packages/cartopy/mpl/gridliner.py:487: UserWarning: The .ylabels_right attribute is deprecated. Please use .right_labels to toggle visibility instead.
-  warnings.warn(&#39;The .ylabels_right attribute is deprecated. Please &#39;
-/home/runner/micromamba-root/envs/pyart-docs/lib/python3.10/site-packages/cartopy/mpl/gridliner.py:451: UserWarning: The .xlabels_top attribute is deprecated. Please use .top_labels to toggle visibility instead.
-  warnings.warn(&#39;The .xlabels_top attribute is deprecated. Please &#39;
-/home/runner/micromamba-root/envs/pyart-docs/lib/python3.10/site-packages/cartopy/mpl/gridliner.py:487: UserWarning: The .ylabels_right attribute is deprecated. Please use .right_labels to toggle visibility instead.
-  warnings.warn(&#39;The .ylabels_right attribute is deprecated. Please &#39;
-</pre></div>
-</div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  19.543 seconds)</p>
+<img src="../../_images/sphx_glr_plot_nexrad_data_aws_002.png" srcset="../../_images/sphx_glr_plot_nexrad_data_aws_002.png" alt="0.5 Deg. 2022-03-22T12:01:25Z  Equivalent reflectivity factor,  0.5 Deg. 2022-03-22T12:01:25Z  Radial velocity of scatterers away from instrument" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  23.872 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-io-plot-nexrad-data-aws-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/6a0ce1f5a0ee4d253981656149c8e569/plot_nexrad_data_aws.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_nexrad_data_aws.py</span></code></a></p>
