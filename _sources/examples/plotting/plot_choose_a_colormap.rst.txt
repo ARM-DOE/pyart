@@ -51,28 +51,13 @@ and how to add them to your own plots.
 
 **Plot the available colormaps**
 
-Let's see which colormaps are available directly from Py-ART,
-starting by creating a list of the colormaps available in Py-ART
+Let's see which colormaps are available directly from Py-ART!
+We use a helper function from matplotlib to plot this.
 
-.. GENERATED FROM PYTHON SOURCE LINES 26-65
+.. GENERATED FROM PYTHON SOURCE LINES 26-50
 
 .. code-block:: default
 
-
-    cmaps = [("Colorblind Friendly", ["LangRainbow12", "HomeyerRainbow", "balance"]),
-             ('Non-Colorblind Friendly Colormaps', ["BlueBrown10", "BlueBrown11", 
-                                                    "BrBu10", "BrBu12", "Bu10", "Bu7",
-                                                    "BuDOr12", "BuDOr18", "BuDRd12",
-                                                    "BuDRd18", "BuGr14", "BuGy8", 
-                                                    "BuOr10", "BuOr12", "BuOr8",
-                                                    "BuOrR14", "Carbone11", "Carbone17",
-                                                    "Carbone42", "Cat12", "EWilson17",
-                                                    "GrMg16", "Gray5", "Gray9",
-                                                    "NWSRef", "NWSVel", "NWS_SPW", 
-                                                    "PD17", "RRate11", "RdYlBu11b",
-                                                    "RefDiff", "SCook18", "StepSeq25",
-                                                    "SymGray12", "Theodore16", "Wild25"]),
-            ]
 
     # Setup some helper functions and ranges to visualize our colormaps, from matplotlib
     gradient = np.linspace(0, 1, 256)
@@ -104,7 +89,7 @@ starting by creating a list of the colormaps available in Py-ART
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 66-71
+.. GENERATED FROM PYTHON SOURCE LINES 51-56
 
 **Colorblind Friendly Colormaps**
 
@@ -112,7 +97,7 @@ We recommend starting with these colorblind friendly colormaps.
 These colormaps are the most inclusive, and should be used where
 possible.
 
-.. GENERATED FROM PYTHON SOURCE LINES 71-74
+.. GENERATED FROM PYTHON SOURCE LINES 56-59
 
 .. code-block:: default
 
@@ -131,14 +116,14 @@ possible.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 75-79
+.. GENERATED FROM PYTHON SOURCE LINES 60-64
 
 **Perceptually Uniform Colormaps**
 
 More generally, perceptually uniform colormaps are colormaps where
 the lightness value increases monotonically through the colormaps.
 
-.. GENERATED FROM PYTHON SOURCE LINES 79-82
+.. GENERATED FROM PYTHON SOURCE LINES 64-67
 
 .. code-block:: default
 
@@ -157,14 +142,14 @@ the lightness value increases monotonically through the colormaps.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 83-87
+.. GENERATED FROM PYTHON SOURCE LINES 68-72
 
 **Diverging Colormaps**
 
 Diverging colormaps are helpful when showing positive and negative
 values. This is when the 0 value is meaningful (ex. velocity)
 
-.. GENERATED FROM PYTHON SOURCE LINES 87-93
+.. GENERATED FROM PYTHON SOURCE LINES 72-78
 
 .. code-block:: default
 
@@ -186,7 +171,7 @@ values. This is when the 0 value is meaningful (ex. velocity)
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 94-99
+.. GENERATED FROM PYTHON SOURCE LINES 79-84
 
 **Field-Specific Colormaps**
 
@@ -194,7 +179,7 @@ There are some colormaps that useful for specific fields, such as
 "BlueBrown10" for terrain, or NWSRef for the National Weather Service
 reflectivity field
 
-.. GENERATED FROM PYTHON SOURCE LINES 99-107
+.. GENERATED FROM PYTHON SOURCE LINES 84-92
 
 .. code-block:: default
 
@@ -218,14 +203,14 @@ reflectivity field
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 108-112
+.. GENERATED FROM PYTHON SOURCE LINES 93-97
 
 **Plot Using a Colormap from Matplotlib**
 
 Now, we can apply one of these colorbars to plot and
 compare to a colormap from matplotlib, starting with the matplotlib example.
 
-.. GENERATED FROM PYTHON SOURCE LINES 112-124
+.. GENERATED FROM PYTHON SOURCE LINES 97-109
 
 .. code-block:: default
 
@@ -253,7 +238,7 @@ compare to a colormap from matplotlib, starting with the matplotlib example.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 125-131
+.. GENERATED FROM PYTHON SOURCE LINES 110-116
 
 **Plot Using a Colormap from Py-ART**
 
@@ -262,7 +247,7 @@ to remember to add the pyart_ string in front of the
 colormap, as shown below.
 Setup a display to plot the data
 
-.. GENERATED FROM PYTHON SOURCE LINES 131-137
+.. GENERATED FROM PYTHON SOURCE LINES 116-122
 
 .. code-block:: default
 
@@ -287,7 +272,7 @@ Setup a display to plot the data
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  2.866 seconds)
+   **Total running time of the script:** ( 0 minutes  2.880 seconds)
 
 
 .. _sphx_glr_download_examples_plotting_plot_choose_a_colormap.py:
