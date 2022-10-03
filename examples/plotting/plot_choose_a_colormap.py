@@ -21,23 +21,8 @@ from pyart.testing import get_test_data
 ######################################
 # **Plot the available colormaps**
 #
-# Let's see which colormaps are available directly from Py-ART,
-# starting by creating a list of the colormaps available in Py-ART
-
-cmaps = [("Colorblind Friendly", ["LangRainbow12", "HomeyerRainbow", "balance"]),
-         ('Non-Colorblind Friendly Colormaps', ["BlueBrown10", "BlueBrown11", 
-                                                "BrBu10", "BrBu12", "Bu10", "Bu7",
-                                                "BuDOr12", "BuDOr18", "BuDRd12",
-                                                "BuDRd18", "BuGr14", "BuGy8", 
-                                                "BuOr10", "BuOr12", "BuOr8",
-                                                "BuOrR14", "Carbone11", "Carbone17",
-                                                "Carbone42", "Cat12", "EWilson17",
-                                                "GrMg16", "Gray5", "Gray9",
-                                                "NWSRef", "NWSVel", "NWS_SPW", 
-                                                "PD17", "RRate11", "RdYlBu11b",
-                                                "RefDiff", "SCook18", "StepSeq25",
-                                                "SymGray12", "Theodore16", "Wild25"]),
-        ]
+# Let's see which colormaps are available directly from Py-ART!
+# We use a helper function from matplotlib to plot this.
 
 # Setup some helper functions and ranges to visualize our colormaps, from matplotlib
 gradient = np.linspace(0, 1, 256)
