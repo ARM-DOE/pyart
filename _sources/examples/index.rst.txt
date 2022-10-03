@@ -423,6 +423,23 @@ Plotting real world radar data with Py-ART.
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="This is an example of what colormaps are available in Py-ART, and how to add them to your own p...">
+
+.. only:: html
+
+  .. image:: /examples/plotting/images/thumb/sphx_glr_plot_choose_a_colormap_thumb.png
+    :alt: Choose a Colormap for your Plot
+
+  :ref:`sphx_glr_examples_plotting_plot_choose_a_colormap.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Choose a Colormap for your Plot</div>
+    </div>
+
+
+.. raw:: html
+
     </div>
 
 

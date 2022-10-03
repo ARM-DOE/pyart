@@ -9,6 +9,9 @@
   --mystnb-stdout-border-color: #f7f7f7;
   --mystnb-stderr-border-color: #f7f7f7;
   --mystnb-traceback-border-color: #ffd6d6;
+  --mystnb-hide-prompt-opacity: 70%;
+  --mystnb-source-border-radius: .4em;
+  --mystnb-source-border-width: 1px;
 }
 
 /* Whole cell */
@@ -36,69 +39,11 @@ div.cell div.cell_input,
 div.cell details.above-input>summary {
   padding-left: 0em;
   padding-right: 0em;
-  border: 1px var(--mystnb-source-border-color) solid;
+  border: var(--mystnb-source-border-width) var(--mystnb-source-border-color) solid;
   background-color: var(--mystnb-source-bg-color);
   border-left-color: var(--mystnb-source-margin-color);
   border-left-width: medium;
-  border-radius: .4em;
-}
-
-div.cell details.above-input div.cell_input {
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-  border-top: 1px var(--mystnb-source-border-color) dashed;
-}
-
-div.cell details.above-input>summary {
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-  border-bottom: 1px var(--mystnb-source-border-color) dashed;
-  padding-left: 1em;
-  margin-bottom: 0;
-}
-
-div.cell details.above-output>summary {
-  background-color: var(--mystnb-source-bg-color);
-  padding-left: 1em;
-  padding-right: 0em;
-  border: 1px var(--mystnb-source-border-color) solid;
-  border-bottom: 1px var(--mystnb-source-border-color) dashed;
-  border-left-color: blue;
-  border-left-width: medium;
-  border-top-left-radius: .4em;
-  border-top-right-radius: .4em;
-}
-
-div.cell details.hide>summary::marker {
-  opacity: 50%;
-}
-
-div.cell details.hide>summary>span {
-  opacity: 50%;
-}
-
-div.cell details.hide[open]>summary>span.collapsed {
-  display: none;
-}
-
-div.cell details.hide:not([open])>summary>span.expanded {
-  display: none;
-}
-
-@keyframes collapsed-fade-in {
-  0% {
-    opacity: 0;
-  }
-
-  100% {
-    opacity: 1;
-  }
-}
-
-div.cell details.hide[open]>summary~* {
-  -moz-animation: collapsed-fade-in 0.3s ease-in-out;
-  -webkit-animation: collapsed-fade-in 0.3s ease-in-out;
-  animation: collapsed-fade-in 0.3s ease-in-out;
+  border-radius: var(--mystnb-source-border-radius);
 }
 
 div.cell_input>div,
@@ -138,6 +83,75 @@ div.cell_output div.output>div.highlight {
 .cell_output .output.traceback {
   background: var(--mystnb-traceback-bg-color);
   border: 1px solid var(--mystnb-traceback-border-color);
+}
+
+/* Collapsible cell content */
+div.cell details.above-input div.cell_input {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-top: var(--mystnb-source-border-width) var(--mystnb-source-border-color) dashed;
+}
+
+div.cell div.cell_input.above-output-prompt {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+div.cell details.above-input>summary {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom: var(--mystnb-source-border-width) var(--mystnb-source-border-color) dashed;
+  padding-left: 1em;
+  margin-bottom: 0;
+}
+
+div.cell details.above-output>summary {
+  background-color: var(--mystnb-source-bg-color);
+  padding-left: 1em;
+  padding-right: 0em;
+  border: var(--mystnb-source-border-width) var(--mystnb-source-border-color) solid;
+  border-radius: var(--mystnb-source-border-radius);
+  border-left-color: var(--mystnb-source-margin-color);
+  border-left-width: medium;
+}
+
+div.cell details.below-input>summary {
+  background-color: var(--mystnb-source-bg-color);
+  padding-left: 1em;
+  padding-right: 0em;
+  border: var(--mystnb-source-border-width) var(--mystnb-source-border-color) solid;
+  border-top: none;
+  border-bottom-left-radius: var(--mystnb-source-border-radius);
+  border-bottom-right-radius: var(--mystnb-source-border-radius);
+  border-left-color: var(--mystnb-source-margin-color);
+  border-left-width: medium;
+}
+
+div.cell details.hide>summary>span {
+  opacity: var(--mystnb-hide-prompt-opacity);
+}
+
+div.cell details.hide[open]>summary>span.collapsed {
+  display: none;
+}
+
+div.cell details.hide:not([open])>summary>span.expanded {
+  display: none;
+}
+
+@keyframes collapsed-fade-in {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+div.cell details.hide[open]>summary~* {
+  -moz-animation: collapsed-fade-in 0.3s ease-in-out;
+  -webkit-animation: collapsed-fade-in 0.3s ease-in-out;
+  animation: collapsed-fade-in 0.3s ease-in-out;
 }
 
 /* Math align to the left */
