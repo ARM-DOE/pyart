@@ -2,7 +2,7 @@ import numpy as np
 import scipy.ndimage
 
 
-def _revised_conv_strat(refl, dx, dy, always_conv_thres=42, bkg_rad_km=11,
+def _revised_conv_strat(refl, dx, dy, always_core_thres=42, bkg_rad_km=11,
                         use_cosine=True, max_diff=8, zero_diff_cos_val=55,
                         scalar_diff=1.5, use_addition=True, calc_thres=0.75,
                         weak_echo_thres=5.0, min_dBZ_used=5.0,
@@ -26,7 +26,7 @@ def _revised_conv_strat(refl, dx, dy, always_conv_thres=42, bkg_rad_km=11,
         x and y coordinates of reflectivity array, respectively
     dx, dy : float
         The x- and y-dimension resolutions in meters, respectively.
-    always_conv_thres : float, optional
+    always_core_thres : float, optional
         Threshold for points that are always convective. All values above the threshold are classifed as convective
     bkg_rad_km : float, optional
         Radius to compute background reflectivity in kilometers. Default is 11 km
@@ -123,9 +123,9 @@ def _revised_conv_strat(refl, dx, dy, always_conv_thres=42, bkg_rad_km=11,
 
     # Get convective core array from cosine scheme, or scalar scheme
     if use_cosine:
-        conv_core_array = convcore_cos_scheme(refl, refl_bkg, max_diff, zero_diff_cos_val, always_conv_thres, CS_CORE)
+        conv_core_array = convcore_cos_scheme(refl, refl_bkg, max_diff, zero_diff_cos_val, always_core_thres, CS_CORE)
     else:
-        conv_core_array = convcore_scalar_scheme(refl, refl_bkg, scalar_diff, always_conv_thres, CS_CORE,
+        conv_core_array = convcore_scalar_scheme(refl, refl_bkg, scalar_diff, always_core_thres, CS_CORE,
                                                  use_addition=use_addition)
 
     # count convective cores

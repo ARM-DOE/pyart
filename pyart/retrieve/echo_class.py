@@ -107,7 +107,7 @@ def steiner_conv_strat(grid, dx=None, dy=None, intense=42.0,
                           '2 = Convective')}
 
 
-def conv_strat(grid, dx=None, dy=None, always_conv_thres=42, bkg_rad_km=11,
+def conv_strat(grid, dx=None, dy=None, always_core_thres=42, bkg_rad_km=11,
                use_cosine=True, max_diff=8, zero_diff_cos_val=55,
                scalar_diff=1.5, use_addition=True, calc_thres=0.75,
                weak_echo_thres=5.0, min_dBZ_used=5.0,
@@ -126,7 +126,7 @@ def conv_strat(grid, dx=None, dy=None, always_conv_thres=42, bkg_rad_km=11,
     dx, dy : float, optional
         The x- and y-dimension resolutions in meters, respectively. If None
         the resolution is determined from the first two axes values.
-    always_conv_thres : float, optional
+    always_core_thres : float, optional
         Threshold for points that are always convective. All values above the threshold are classifed as convective
     bkg_rad_km : float, optional
         Radius to compute background reflectivity in kilometers. Default is 11 km
@@ -194,12 +194,12 @@ def conv_strat(grid, dx=None, dy=None, always_conv_thres=42, bkg_rad_km=11,
     ze = np.ma.copy(grid.fields[refl_field]['data'])
     ze = ze.filled(np.NaN)
 
-    _, _, convsf_best = _revised_conv_strat(ze, dx, dy, always_conv_thres=always_conv_thres, bkg_rad_km=bkg_rad_km,
+    _, _, convsf_best = _revised_conv_strat(ze, dx, dy, always_core_thres=always_core_thres, bkg_rad_km=bkg_rad_km,
                                             use_cosine=use_cosine, max_diff=max_diff,
                                             zero_diff_cos_val=zero_diff_cos_val, scalar_diff=scalar_diff,
-                                            use_addition=use_addition, calc_thres=calc_thres, weak_echo_thres=weak_echo_thres,
-                                            min_dBZ_used=min_dBZ_used, dB_averaging=dB_averaging,
-                                            apply_lg_rad_mask=apply_lg_rad_mask,
+                                            use_addition=use_addition, calc_thres=calc_thres,
+                                            weak_echo_thres=weak_echo_thres, min_dBZ_used=min_dBZ_used,
+                                            dB_averaging=dB_averaging, apply_lg_rad_mask=apply_lg_rad_mask,
                                             lg_rad_mask_min_rad_km=lg_rad_mask_min_rad_km,
                                             lg_rad_mask_max_rad_km=lg_rad_mask_max_rad_km,
                                             val_for_max_conv_rad=dBZ_for_max_conv_rad, max_conv_rad_km=max_conv_rad_km)
@@ -217,22 +217,22 @@ def conv_strat(grid, dx=None, dy=None, always_conv_thres=42, bkg_rad_km=11,
                       '2 = Convective')}}
 
     if estimateFlag:
-        convsf_under = _revised_conv_strat(ze - estimateOffset, dx, dy, always_conv_thres=always_conv_thres,
+        convsf_under = _revised_conv_strat(ze - estimateOffset, dx, dy, always_core_thres=always_core_thres,
                                            bkg_rad_km=bkg_rad_km, use_cosine=use_cosine, max_diff=max_diff,
                                            zero_diff_cos_val=zero_diff_cos_val, scalar_diff=scalar_diff,
-                                           use_addition=use_addition, calc_thres=calc_thres, weak_echo_thres=weak_echo_thres,
-                                           min_dBZ_used=min_dBZ_used, dB_averaging=dB_averaging,
-                                           apply_lg_rad_mask=apply_lg_rad_mask,
+                                           use_addition=use_addition, calc_thres=calc_thres,
+                                           weak_echo_thres=weak_echo_thres, min_dBZ_used=min_dBZ_used,
+                                           dB_averaging=dB_averaging, apply_lg_rad_mask=apply_lg_rad_mask,
                                            lg_rad_mask_min_rad_km=lg_rad_mask_min_rad_km,
                                            lg_rad_mask_max_rad_km=lg_rad_mask_max_rad_km,
                                            val_for_max_conv_rad=dBZ_for_max_conv_rad, max_conv_rad_km=max_conv_rad_km)
 
-        convsf_over = _revised_conv_strat(ze + estimateOffset, dx, dy, always_conv_thres=always_conv_thres,
+        convsf_over = _revised_conv_strat(ze + estimateOffset, dx, dy, always_core_thres=always_core_thres,
                                           bkg_rad_km=bkg_rad_km, use_cosine=use_cosine, max_diff=max_diff,
                                           zero_diff_cos_val=zero_diff_cos_val, scalar_diff=scalar_diff,
-                                          use_addition=use_addition, calc_thres=calc_thres, weak_echo_thres=weak_echo_thres,
-                                          min_dBZ_used=min_dBZ_used, dB_averaging=dB_averaging,
-                                          apply_lg_rad_mask=apply_lg_rad_mask,
+                                          use_addition=use_addition, calc_thres=calc_thres,
+                                          weak_echo_thres=weak_echo_thres, min_dBZ_used=min_dBZ_used,
+                                          dB_averaging=dB_averaging, apply_lg_rad_mask=apply_lg_rad_mask,
                                           lg_rad_mask_min_rad_km=lg_rad_mask_min_rad_km,
                                           lg_rad_mask_max_rad_km=lg_rad_mask_max_rad_km,
                                           val_for_max_conv_rad=dBZ_for_max_conv_rad, max_conv_rad_km=max_conv_rad_km)
