@@ -4,7 +4,7 @@ Radar retrievals.
 """
 
 from .kdp_proc import kdp_maesaka, kdp_schneebeli, kdp_vulpiani
-from .echo_class import steiner_conv_strat, hydroclass_semisupervised, yuter_conv_strat
+from .echo_class import steiner_conv_strat, conv_strat, hydroclass_semisupervised
 from .echo_class import get_freq_band
 from .gate_id import map_profile_to_gates, fetch_radar_time_profile
 from .simple_moment_calculations import calculate_snr_from_reflectivity
