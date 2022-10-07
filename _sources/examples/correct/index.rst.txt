@@ -35,18 +35,18 @@ Performing radar moment corrections in antenna (radial) coordinates.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="In this example doppler velocities are dealiased using the Univ. of Washington FourDD algorithm...">
+    <div class="sphx-glr-thumbcontainer" tooltip="In this example doppler velocities are dealiased using the ial condition of the dealiasing, usi...">
 
 .. only:: html
 
   .. image:: /examples/correct/images/thumb/sphx_glr_plot_dealias_thumb.png
-    :alt: Dealias doppler velocities using the FourDD algorithm
+    :alt: Dealias doppler velocities using the Region Based Algorithm
 
   :ref:`sphx_glr_examples_correct_plot_dealias.py`
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">Dealias doppler velocities using the FourDD algorithm</div>
+      <div class="sphx-glr-thumbnail-title">Dealias doppler velocities using the Region Based Algorithm</div>
     </div>
 
 
