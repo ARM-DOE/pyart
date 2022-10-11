@@ -324,8 +324,8 @@ class RadarMapDisplay(RadarDisplay):
                                  cartopy.crs.Mercator()]:
                 gl = ax.gridlines(xlocs=lon_lines, ylocs=lat_lines,
                                   draw_labels=True)
-                gl.xlabels_top = False
-                gl.ylabels_right = False
+                gl.top_labels = False
+                gl.right_labels = False
 
             elif isinstance(ax.projection, cartopy.crs.LambertConformal):
                 ax.figure.canvas.draw()
