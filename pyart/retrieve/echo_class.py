@@ -217,7 +217,7 @@ def conv_strat(grid, dx=None, dy=None, always_core_thres=42, bkg_rad_km=11,
                       '2 = Convective')}}
 
     if estimateFlag:
-        convsf_under = _revised_conv_strat(ze - estimateOffset, dx, dy, always_core_thres=always_core_thres,
+        _, _, convsf_under = _revised_conv_strat(ze - estimateOffset, dx, dy, always_core_thres=always_core_thres,
                                            bkg_rad_km=bkg_rad_km, use_cosine=use_cosine, max_diff=max_diff,
                                            zero_diff_cos_val=zero_diff_cos_val, scalar_diff=scalar_diff,
                                            use_addition=use_addition, calc_thres=calc_thres,
@@ -227,7 +227,7 @@ def conv_strat(grid, dx=None, dy=None, always_core_thres=42, bkg_rad_km=11,
                                            lg_rad_mask_max_rad_km=lg_rad_mask_max_rad_km,
                                            val_for_max_conv_rad=dBZ_for_max_conv_rad, max_conv_rad_km=max_conv_rad_km)
 
-        convsf_over = _revised_conv_strat(ze + estimateOffset, dx, dy, always_core_thres=always_core_thres,
+        _, _, convsf_over = _revised_conv_strat(ze + estimateOffset, dx, dy, always_core_thres=always_core_thres,
                                           bkg_rad_km=bkg_rad_km, use_cosine=use_cosine, max_diff=max_diff,
                                           zero_diff_cos_val=zero_diff_cos_val, scalar_diff=scalar_diff,
                                           use_addition=use_addition, calc_thres=calc_thres,
