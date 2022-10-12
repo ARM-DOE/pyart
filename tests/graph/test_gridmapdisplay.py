@@ -111,6 +111,22 @@ def test_error_raising():
     display.mappables.append(None) # mock the mappable
     pytest.raises(ValueError, display.plot_colorbar)
 
+@pytest.mark.mpl_image_compare(tolerance=30)
+@pytest.mark.skipif(not pyart.graph.gridmapdisplay._METPY_AVAILABLE,
+                    reason='MetPy is not installed')
+def test_gridmapdisplay_cross_section(outfile=None):
+    # test basic GridMapDisplay cross section functionality.
+    start = (34.8, -98.75)
+    end = (38.6, -96.45)
+    fig = plt.figure()
+    grid = pyart.testing.make_target_grid()
+    display = pyart.graph.GridMapDisplay(grid)
+    display.plot_cross_section('reflectivity', start, end, x_axis='lat', vmin=-5, vmax=35)
+    try:
+        return fig
+    finally:
+        plt.close(fig)
+
 if __name__ == '__main__':
     test_gridmapdisplay_simple('figure_grid_mapdisplay_simple.png')
     test_gridmapdisplay_fancy('figure_gridmapdisplay_fancy.png')
