@@ -1,12 +1,10 @@
 """
-=====================================================
-Dealias doppler velocities using the FourDD algorithm
-=====================================================
+===========================================================
+Dealias doppler velocities using the Region Based Algorithm
+===========================================================
 
-In this example doppler velocities are dealiased using the Univ. of
-Washington FourDD algorithm implemented in Py-ART.  Sounding data is
-used for the initial condition of the dealiasing.
-
+In this example doppler velocities are dealiased using the ial condition of the dealiasing,
+using the region-based dealiasing algorithm in Py-ART.
 """
 print(__doc__)
 
