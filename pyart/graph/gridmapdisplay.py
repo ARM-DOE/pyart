@@ -690,7 +690,7 @@ class GridMapDisplay(object):
         """
         if not _METPY_AVAILABLE:
             raise MissingOptionalDependency(
-                'MetPy is required to use GridMapDisplay but is not '
+                'MetPy is required to use plot_cross_section but is not '
                 + 'installed!')
 
         from metpy.interpolate import cross_section
@@ -752,7 +752,6 @@ class GridMapDisplay(object):
                                orientation=colorbar_orient, field=field,
                                ax=ax, fig=fig, ticks=ticks, ticklabs=ticklabs)
         return
-
 
     def plot_colorbar(self, mappable=None, orientation='horizontal', label=None,
                       cax=None, ax=None, fig=None, field=None, ticks=None,
