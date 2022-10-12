@@ -34,10 +34,10 @@ def _revised_conv_strat(refl, dx, dy, always_core_thres=42, bkg_rad_km=11,
         Boolean used to determine if cosine scheme should be used for identifying convective cores (True) or a scalar scheme (False)
     max_diff : float, optional
         Maximum difference between background average and reflectivity in order to be classified as convective.
-        a value in Yuter and Houze (1997)
+        "a" value in Eqn. B1 in Yuter and Houze (1997)
     zero_diff_cos_val : float, optional
         Value where difference between background average and reflectivity is zero in the cosine function
-        b value in Yuter and Houze (1997)
+        "b" value in Eqn. B1 in Yuter and Houze (1997)
     scalar_diff : float, optional
         If using a scalar difference scheme, this value is the multiplier or addition to the background average
     use_addition : bool, optional
@@ -64,14 +64,10 @@ def _revised_conv_strat(refl, dx, dy, always_core_thres=42, bkg_rad_km=11,
     refl_bkg : array
         Array of background values
     conv_core_array : array
-        Array of initial convective cores
+        Array of initial convective cores (identified convective elements without convective radii applied)
     conv_strat_array : array
         Array of convective stratiform classifcation with convective radii applied
     """
-
-    if max_conv_rad_km > 5:
-        print("Max conv radius must be less than 5 km, exiting")
-        # quit
 
     # Constants to fill arrays with
     CS_CORE = 3
@@ -80,26 +76,26 @@ def _revised_conv_strat(refl, dx, dy, always_core_thres=42, bkg_rad_km=11,
     SF = 1
     CONV = 2
 
-    # %% Set up mask arrays
+    # %% Set up mask arrays for background average and
     # prepare for convective mask arrays
     # calculate maximum convective diameter from max. convective radius (input)
-    maxConvDiameter = int(np.floor((max_conv_rad_km / (dx / 1000)) * 2))
+    max_conv_diameter = int(np.floor((max_conv_rad_km / (dx / 1000)) * 2))
     # if diameter is even, make odd
-    if maxConvDiameter % 2 == 0:
-        maxConvDiameter = maxConvDiameter + 1
+    if max_conv_diameter % 2 == 0:
+        max_conv_diameter = max_conv_diameter + 1
     # find center point
-    centerConvMask_x = int(np.floor(maxConvDiameter / 2))
+    center_conv_mask_x = int(np.floor(max_conv_diameter / 2))
 
     # prepare background mask array for computing background average
     # calculate number of pixels for background array given requested background radius and dx
-    bkgDiameter_pix = int(np.floor((bkg_rad_km / (dx / 1000)) * 2))
+    bkg_diameter_pix = int(np.floor((bkg_rad_km / (dx / 1000)) * 2))
     # set diameter to odd if even
-    if bkgDiameter_pix % 2 == 0:
-        bkgDiameter_pix = bkgDiameter_pix + 1
+    if bkg_diameter_pix % 2 == 0:
+        bkg_diameter_pix = bkg_diameter_pix + 1
     # find center point
-    bkg_center = int(np.floor(bkgDiameter_pix / 2))
+    bkg_center = int(np.floor(bkg_diameter_pix / 2))
     # create background array
-    bkg_mask_array = np.ones((bkgDiameter_pix, bkgDiameter_pix), dtype=float)
+    bkg_mask_array = np.ones((bkg_diameter_pix, bkg_diameter_pix), dtype=float)
     # mask outside circular region
     bkg_mask_array = create_radial_mask(bkg_mask_array, min_rad_km=0, max_rad_km=bkg_rad_km, x_pixsize=dx / 1000,
                                         y_pixsize=dy / 1000, center_x=bkg_center, center_y=bkg_center, circular=True)
@@ -128,12 +124,9 @@ def _revised_conv_strat(refl, dx, dy, always_core_thres=42, bkg_rad_km=11,
         conv_core_array = convcore_scalar_scheme(refl, refl_bkg, scalar_diff, always_core_thres, CS_CORE,
                                                  use_addition=use_addition)
 
-    # count convective cores
-    corecount = np.count_nonzero(conv_core_array)
-
     # Assign convective radii based on background reflectivity
-    convRadiuskm = assign_conv_radius_km(refl_bkg, val_for_max_conv_rad=val_for_max_conv_rad,
-                                         max_conv_rad=max_conv_rad_km)
+    conv_radius_km = assign_conv_radius_km(refl_bkg, val_for_max_conv_rad=val_for_max_conv_rad,
+                                           max_conv_rad=max_conv_rad_km)
 
     # Incorporate convective radius using binary dilation
     # Create empty array for assignment
@@ -142,9 +135,9 @@ def _revised_conv_strat(refl, dx, dy, always_core_thres=42, bkg_rad_km=11,
     # Loop through radii
     for radius in np.arange(1, max_conv_rad_km + 1):
         # create mask array for radius incorporation
-        conv_mask_array = create_conv_radius_mask(maxConvDiameter, radius, dx / 1000, dy / 1000, centerConvMask_x)
+        conv_mask_array = create_conv_radius_mask(max_conv_diameter, radius, dx / 1000, dy / 1000, center_conv_mask_x)
         # find location of radius
-        temp = convRadiuskm == radius
+        temp = conv_radius_km == radius
         # get cores for given radius
         temp_core = np.ma.masked_where(~temp, conv_core_array)
         # dilate cores
@@ -185,7 +178,7 @@ def create_radial_mask(mask_array, min_rad_km, max_rad_km, x_pixsize,
     center_x, center_y : int
         The center pixel in the x- and y-dimension, respectively
     circular : bool
-        True returns circular mask
+        True returns circular mask, False returns a rectangular mask.
 
     Returns
     -------
@@ -272,7 +265,7 @@ def calc_bkg_intensity(refl, bkg_mask_array, dB_averaging, calc_thres=None):
     return refl_bkg
 
 
-def convcore_cos_scheme(refl, refl_bkg, max_diff, zero_diff_cos_val, always_conv_thres, CS_CORE):
+def convcore_cos_scheme(refl, refl_bkg, max_diff, zero_diff_cos_val, always_core_thres, CS_CORE):
     """
     Function for assigning convective cores based on a cosine function
 
@@ -286,7 +279,7 @@ def convcore_cos_scheme(refl, refl_bkg, max_diff, zero_diff_cos_val, always_conv
         Maximum difference between refl and refl_bkg needed for convective classification
     zero_diff_cos_val : float
         Value where the cosine function returns a zero difference
-    always_conv_thres : float
+    always_core_thres : float
         All values above this threshold considered to be convective
     CS_CORE : int
         Value assigned to convective pixels
@@ -303,16 +296,16 @@ def convcore_cos_scheme(refl, refl_bkg, max_diff, zero_diff_cos_val, always_conv
     # calculate zeDiff for entire array
     zDiff = max_diff * np.cos((np.pi * refl_bkg) / (2 * zero_diff_cos_val))
     zDiff[zDiff < 0] = 0  # where difference less than zero, set to zero
-    zDiff[refl_bkg < 0] = max_diff  # where background less than zero, set to min diff
+    zDiff[refl_bkg < 0] = max_diff  # where background less than zero, set to max. diff
 
     # set values
-    conv_core_array[refl >= always_conv_thres] = CS_CORE  # where Z is greater than alwaysConvThres, set to core
+    conv_core_array[refl >= always_core_thres] = CS_CORE  # where Z is greater than always_core_thres, set to core
     conv_core_array[(refl - refl_bkg) >= zDiff] = CS_CORE  # where difference exceeeds minimum, set to core
 
     return conv_core_array
 
 
-def convcore_scalar_scheme(refl, refl_bkg, max_diff, always_conv_thres, CS_CORE, use_addition=False):
+def convcore_scalar_scheme(refl, refl_bkg, max_diff, always_core_thres, CS_CORE, use_addition=False):
     """
     Function for assigning convective cores based on a scalar difference
 
@@ -324,7 +317,7 @@ def convcore_scalar_scheme(refl, refl_bkg, max_diff, always_conv_thres, CS_CORE,
         Background average of reflectivity values
     max_diff : float
         Maximum difference between refl and refl_bkg needed for convective classification
-    always_conv_thres : float
+    always_core_thres : float
         All values above this threshold considered to be convective
     CS_CORE : int
         Value assigned to convective pixels
@@ -351,7 +344,7 @@ def convcore_scalar_scheme(refl, refl_bkg, max_diff, always_conv_thres, CS_CORE,
     zDiff[refl_bkg < 0] = 0  # where background less than zero, set to zero
 
     # set values
-    conv_core_array[refl >= always_conv_thres] = CS_CORE  # where Z is greater than alwaysConvThres, set to core
+    conv_core_array[refl >= always_core_thres] = CS_CORE  # where Z is greater than always_core_thres, set to core
     conv_core_array[refl >= zDiff] = CS_CORE  # where difference exceeeds minimum, set to core
 
     return conv_core_array
