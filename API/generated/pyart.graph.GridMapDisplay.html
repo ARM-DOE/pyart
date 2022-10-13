@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>pyart.graph.GridMapDisplay &#8212; Py-ART 1.13.2.post4 documentation</title>
+    <title>pyart.graph.GridMapDisplay &#8212; Py-ART 1.13.2.post5 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -1585,6 +1585,11 @@
       </a>
      </li>
      <li class="toctree-l3">
+      <a class="reference internal" href="pyart.graph.GridMapDisplay.plot_cross_section.html">
+       pyart.graph.GridMapDisplay.plot_cross_section
+      </a>
+     </li>
+     <li class="toctree-l3">
       <a class="reference internal" href="pyart.graph.GridMapDisplay.plot_crosshairs.html">
        pyart.graph.GridMapDisplay.plot_crosshairs
       </a>
@@ -2950,22 +2955,25 @@ with a cartopy projection.</p>
 <tr class="row-even"><td><p><a class="reference internal" href="pyart.graph.GridMapDisplay.plot_colorbar.html#pyart.graph.GridMapDisplay.plot_colorbar" title="pyart.graph.GridMapDisplay.plot_colorbar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_colorbar</span></code></a>([mappable, orientation, ...])</p></td>
 <td><p>Plot a colorbar.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyart.graph.GridMapDisplay.plot_crosshairs.html#pyart.graph.GridMapDisplay.plot_crosshairs" title="pyart.graph.GridMapDisplay.plot_crosshairs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_crosshairs</span></code></a>([lon, lat, linestyle, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.graph.GridMapDisplay.plot_cross_section.html#pyart.graph.GridMapDisplay.plot_cross_section" title="pyart.graph.GridMapDisplay.plot_cross_section"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_cross_section</span></code></a>(field, start, end[, ...])</p></td>
+<td><p>Plot a cross section through a set of given points (latitude, longitude).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.graph.GridMapDisplay.plot_crosshairs.html#pyart.graph.GridMapDisplay.plot_crosshairs" title="pyart.graph.GridMapDisplay.plot_crosshairs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_crosshairs</span></code></a>([lon, lat, linestyle, ...])</p></td>
 <td><p>Plot crosshairs at a given longitude and latitude.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyart.graph.GridMapDisplay.plot_grid.html#pyart.graph.GridMapDisplay.plot_grid" title="pyart.graph.GridMapDisplay.plot_grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_grid</span></code></a>(field[, level, vmin, vmax, norm, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.graph.GridMapDisplay.plot_grid.html#pyart.graph.GridMapDisplay.plot_grid" title="pyart.graph.GridMapDisplay.plot_grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_grid</span></code></a>(field[, level, vmin, vmax, norm, ...])</p></td>
 <td><p>Plot the grid using xarray and cartopy.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyart.graph.GridMapDisplay.plot_latitude_slice.html#pyart.graph.GridMapDisplay.plot_latitude_slice" title="pyart.graph.GridMapDisplay.plot_latitude_slice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_latitude_slice</span></code></a>(field[, lon, lat])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.graph.GridMapDisplay.plot_latitude_slice.html#pyart.graph.GridMapDisplay.plot_latitude_slice" title="pyart.graph.GridMapDisplay.plot_latitude_slice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_latitude_slice</span></code></a>(field[, lon, lat])</p></td>
 <td><p>Plot a slice along a given latitude.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyart.graph.GridMapDisplay.plot_latitudinal_level.html#pyart.graph.GridMapDisplay.plot_latitudinal_level" title="pyart.graph.GridMapDisplay.plot_latitudinal_level"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_latitudinal_level</span></code></a>(field, y_index[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.graph.GridMapDisplay.plot_latitudinal_level.html#pyart.graph.GridMapDisplay.plot_latitudinal_level" title="pyart.graph.GridMapDisplay.plot_latitudinal_level"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_latitudinal_level</span></code></a>(field, y_index[, ...])</p></td>
 <td><p>Plot a slice along a given latitude.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyart.graph.GridMapDisplay.plot_longitude_slice.html#pyart.graph.GridMapDisplay.plot_longitude_slice" title="pyart.graph.GridMapDisplay.plot_longitude_slice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_longitude_slice</span></code></a>(field[, lon, lat])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.graph.GridMapDisplay.plot_longitude_slice.html#pyart.graph.GridMapDisplay.plot_longitude_slice" title="pyart.graph.GridMapDisplay.plot_longitude_slice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_longitude_slice</span></code></a>(field[, lon, lat])</p></td>
 <td><p>Plot a slice along a given longitude.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyart.graph.GridMapDisplay.plot_longitudinal_level.html#pyart.graph.GridMapDisplay.plot_longitudinal_level" title="pyart.graph.GridMapDisplay.plot_longitudinal_level"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_longitudinal_level</span></code></a>(field, x_index[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.graph.GridMapDisplay.plot_longitudinal_level.html#pyart.graph.GridMapDisplay.plot_longitudinal_level" title="pyart.graph.GridMapDisplay.plot_longitudinal_level"><code class="xref py py-obj docutils literal notranslate"><span class="pre">plot_longitudinal_level</span></code></a>(field, x_index[, ...])</p></td>
 <td><p>Plot a slice along a given longitude.</p></td>
 </tr>
 </tbody>

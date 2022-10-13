@@ -21,6 +21,7 @@ pyart.graph.GridMapDisplay
    ~GridMapDisplay.generate_latitudinal_level_title
    ~GridMapDisplay.generate_longitudinal_level_title
    ~GridMapDisplay.plot_colorbar
+   ~GridMapDisplay.plot_cross_section
    ~GridMapDisplay.plot_crosshairs
    ~GridMapDisplay.plot_grid
    ~GridMapDisplay.plot_latitude_slice
