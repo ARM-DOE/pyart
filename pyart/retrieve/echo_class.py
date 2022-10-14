@@ -126,6 +126,7 @@ def conv_strat(grid, dx=None, dy=None, always_core_thres=42, bkg_rad_km=11,
         the resolution is determined from the first two axes values parsed from grid object.
     always_core_thres : float, optional
         Threshold for points that are always convective. All values above the threshold are classifed as convective
+        See Yuter et al. (2005) for more detail.
     bkg_rad_km : float, optional
         Radius to compute background reflectivity in kilometers. Default is 11 km
     use_cosine : bool, optional
@@ -146,6 +147,7 @@ def conv_strat(grid, dx=None, dy=None, always_core_thres=42, bkg_rad_km=11,
         Threshold for determining weak echo. All values below this threshold will be considered weak echo
     min_dBZ_used : float, optional
         Minimum dBZ value used for classification. All values below this threshold will be considered no surface echo
+        See Yuter and Houze (1997) and Yuter et al. (2005) for more detail.
     dB_averaging : bool, optional
         True if using dBZ reflectivity values that need to be converted to linear Z before averaging. False for
         other non-dBZ values (i.e. snow rate)
@@ -176,6 +178,10 @@ def conv_strat(grid, dx=None, dy=None, always_core_thres=42, bkg_rad_km=11,
     Yuter, S. E., and R. A. Houze, Jr., 1997: Measurements of raindrop size
     distributions over the Pacific warm pool and implications for Z-R relations.
     J. Appl. Meteor., 36, 847-867.
+
+    Yuter, S. E., R. A. Houze, Jr., E. A. Smith, T. T. Wilheit, and E. Zipser,
+    2005: Physical characterization of tropical oceanic convection observed in
+    KWAJEX. J. Appl. Meteor., 44, 385-415.
 
     """
 
@@ -244,7 +250,7 @@ def conv_strat(grid, dx=None, dy=None, always_core_thres=42, bkg_rad_km=11,
                                                 zero_diff_cos_val=zero_diff_cos_val, scalar_diff=scalar_diff,
                                                 use_addition=use_addition, calc_thres=calc_thres,
                                                 weak_echo_thres=weak_echo_thres, min_dBZ_used=min_dBZ_used,
-                                                dB_averaging=dB_averaging, 
+                                                dB_averaging=dB_averaging,
                                                 val_for_max_conv_rad=dBZ_for_max_conv_rad, max_conv_rad_km=max_conv_rad_km)
 
         # save into dictionaries
