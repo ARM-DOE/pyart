@@ -6,9 +6,7 @@ def _revised_conv_strat(refl, dx, dy, always_core_thres=42, bkg_rad_km=11,
                         use_cosine=True, max_diff=8, zero_diff_cos_val=55,
                         scalar_diff=1.5, use_addition=True, calc_thres=0.75,
                         weak_echo_thres=5.0, min_dBZ_used=5.0,
-                        dB_averaging=False, apply_lg_rad_mask=False,
-                        lg_rad_mask_min_rad_km=0, lg_rad_mask_max_rad_km=170,
-                        val_for_max_conv_rad=30, max_conv_rad_km=5.0):
+                        dB_averaging=False, val_for_max_conv_rad=30, max_conv_rad_km=5.0):
     """
     We perform the Yuter and Houze (1997) algorithm for echo classification
     using only the reflectivity field in order to classify each grid point
@@ -50,10 +48,6 @@ def _revised_conv_strat(refl, dx, dy, always_core_thres=42, bkg_rad_km=11,
         Minimum dBZ value used for classification. All values below this threshold will be considered no surface echo
     dB_averaging : bool, optional
         True if using dBZ values that need to be converted to linear Z before averaging. False for other types of values
-    apply_lg_rad_mask : bool, optional
-        Flag to set a large radial mask for algorithm
-    lg_rad_mask_min_rad_km, lg_rad_mask_max_rad_km : float, optional
-        Values for setting the large radial mask
     val_for_max_conv_rad : float, optional
         dBZ for maximum convective radius. Convective cores with values above this will have the maximum convective radius
     max_conv_rad_km : float, optional
@@ -99,16 +93,6 @@ def _revised_conv_strat(refl, dx, dy, always_core_thres=42, bkg_rad_km=11,
     # mask outside circular region
     bkg_mask_array = create_radial_mask(bkg_mask_array, min_rad_km=0, max_rad_km=bkg_rad_km, x_pixsize=dx / 1000,
                                         y_pixsize=dy / 1000, center_x=bkg_center, center_y=bkg_center, circular=True)
-
-    # Create large mask array for determining where to calculate convective stratiform
-    # initialize array with 1 (calculate convective stratiform over entire array)
-    mask_array = np.zeros(refl.shape, dtype=float)
-    mask_array[:] = 1
-    # if True, create radial mask
-    if apply_lg_rad_mask:
-        mask_array = create_radial_mask(mask_array, lg_rad_mask_min_rad_km, lg_rad_mask_max_rad_km, x_pixsize=dx / 1000,
-                                        y_pixsize=dy / 1000, center_x=int(np.floor(refl.shape[0] / 2)),
-                                        center_y=int(np.floor(refl.shape[1] / 2)), circular=True)
 
     # %% Convective stratiform detection
 

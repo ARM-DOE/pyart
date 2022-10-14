@@ -111,10 +111,8 @@ def conv_strat(grid, dx=None, dy=None, always_core_thres=42, bkg_rad_km=11,
                use_cosine=True, max_diff=8, zero_diff_cos_val=55,
                scalar_diff=1.5, use_addition=True, calc_thres=0.75,
                weak_echo_thres=5.0, min_dBZ_used=5.0,
-               dB_averaging=False, apply_lg_rad_mask=False,
-               lg_rad_mask_min_rad_km=0, lg_rad_mask_max_rad_km=170,
-               dBZ_for_max_conv_rad=30, max_conv_rad_km=5.0, fill_value=None,
-               refl_field=None, estimate_flag=True, estimate_offset=5):
+               dB_averaging=False, dBZ_for_max_conv_rad=30, max_conv_rad_km=5.0,
+               fill_value=None, refl_field=None, estimate_flag=True, estimate_offset=5):
     """
     Partition reflectivity into convective-stratiform using the Yuter
     and Houze (1997) algorithm.
@@ -151,10 +149,6 @@ def conv_strat(grid, dx=None, dy=None, always_core_thres=42, bkg_rad_km=11,
     dB_averaging : bool, optional
         True if using dBZ reflectivity values that need to be converted to linear Z before averaging. False for
         other non-dBZ values (i.e. snow rate)
-    apply_lg_rad_mask : bool, optional
-        Flag to set a large radial mask for algorithm
-    lg_rad_mask_min_rad_km, lg_rad_mask_max_rad_km : float, optional
-        Values for setting the large radial mask
     dBZ_for_max_conv_rad : float, optional
         dBZ for maximum convective radius. Convective cores with values above this will have the maximum convective radius
     max_conv_rad_km : float, optional
@@ -219,9 +213,7 @@ def conv_strat(grid, dx=None, dy=None, always_core_thres=42, bkg_rad_km=11,
                                             zero_diff_cos_val=zero_diff_cos_val, scalar_diff=scalar_diff,
                                             use_addition=use_addition, calc_thres=calc_thres,
                                             weak_echo_thres=weak_echo_thres, min_dBZ_used=min_dBZ_used,
-                                            dB_averaging=dB_averaging, apply_lg_rad_mask=apply_lg_rad_mask,
-                                            lg_rad_mask_min_rad_km=lg_rad_mask_min_rad_km,
-                                            lg_rad_mask_max_rad_km=lg_rad_mask_max_rad_km,
+                                            dB_averaging=dB_averaging,
                                             val_for_max_conv_rad=dBZ_for_max_conv_rad, max_conv_rad_km=max_conv_rad_km)
 
     # put data into a dictionary to be added as a field
@@ -244,9 +236,7 @@ def conv_strat(grid, dx=None, dy=None, always_core_thres=42, bkg_rad_km=11,
                                                  zero_diff_cos_val=zero_diff_cos_val, scalar_diff=scalar_diff,
                                                  use_addition=use_addition, calc_thres=calc_thres,
                                                  weak_echo_thres=weak_echo_thres, min_dBZ_used=min_dBZ_used,
-                                                 dB_averaging=dB_averaging, apply_lg_rad_mask=apply_lg_rad_mask,
-                                                 lg_rad_mask_min_rad_km=lg_rad_mask_min_rad_km,
-                                                 lg_rad_mask_max_rad_km=lg_rad_mask_max_rad_km,
+                                                 dB_averaging=dB_averaging,
                                                  val_for_max_conv_rad=dBZ_for_max_conv_rad, max_conv_rad_km=max_conv_rad_km)
 
         _, _, convsf_over = _revised_conv_strat(ze + estimate_offset, dx, dy, always_core_thres=always_core_thres,
@@ -254,9 +244,7 @@ def conv_strat(grid, dx=None, dy=None, always_core_thres=42, bkg_rad_km=11,
                                                 zero_diff_cos_val=zero_diff_cos_val, scalar_diff=scalar_diff,
                                                 use_addition=use_addition, calc_thres=calc_thres,
                                                 weak_echo_thres=weak_echo_thres, min_dBZ_used=min_dBZ_used,
-                                                dB_averaging=dB_averaging, apply_lg_rad_mask=apply_lg_rad_mask,
-                                                lg_rad_mask_min_rad_km=lg_rad_mask_min_rad_km,
-                                                lg_rad_mask_max_rad_km=lg_rad_mask_max_rad_km,
+                                                dB_averaging=dB_averaging, 
                                                 val_for_max_conv_rad=dBZ_for_max_conv_rad, max_conv_rad_km=max_conv_rad_km)
 
         # save into dictionaries
