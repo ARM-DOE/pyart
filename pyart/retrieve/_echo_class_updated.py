@@ -245,8 +245,12 @@ def calc_bkg_intensity(refl, bkg_mask_array, dB_averaging, calc_thres=None):
     if dB_averaging:
         refl = 10 ** (refl / 10)
 
+    # check if reflectivity is masked array
+    if np.ma.isMaskedArray(refl):
+        refl = refl.filled(np.nan)
+
     # calculate background reflectivity with circular footprint
-    refl_bkg = scipy.ndimage.generic_filter(refl.filled(np.nan), function=np.nanmean, mode='constant',
+    refl_bkg = scipy.ndimage.generic_filter(refl, function=np.nanmean, mode='constant',
                                             footprint=bkg_mask_array.astype(bool), cval=np.nan)
 
     # if calc_thres is not none, then calculate the number of points used to calculate average
