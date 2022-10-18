@@ -108,7 +108,7 @@ def steiner_conv_strat(grid, dx=None, dy=None, intense=42.0,
 
 
 def conv_strat(grid, dx=None, dy=None, level_m=None, always_core_thres=42, bkg_rad_km=11,
-               use_cosine=True, max_diff=8, zero_diff_cos_val=55,
+               use_cosine=True, max_diff=5, zero_diff_cos_val=55,
                scalar_diff=1.5, use_addition=True, calc_thres=0.75,
                weak_echo_thres=5.0, min_dBZ_used=5.0,dB_averaging=False,
                remove_small_objects=True, min_km2_size=10,
@@ -226,7 +226,7 @@ def conv_strat(grid, dx=None, dy=None, level_m=None, always_core_thres=42, bkg_r
         zslice = np.argmin(np.abs(z - level_m))
         ze = np.ma.copy(grid.fields[refl_field]['data'][zslice, :, :])
 
-    ze = ze.filled(np.NaN)
+    #ze = ze.filled(np.NaN)
 
     # run convective stratiform algorithm
     _, _, convsf_best = _revised_conv_strat(ze, dx, dy, always_core_thres=always_core_thres, bkg_rad_km=bkg_rad_km,
