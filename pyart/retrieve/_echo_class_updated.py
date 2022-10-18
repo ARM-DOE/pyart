@@ -3,7 +3,7 @@ import scipy.ndimage
 
 
 def _revised_conv_strat(refl, dx, dy, always_core_thres=42, bkg_rad_km=11,
-                        use_cosine=True, max_diff=8, zero_diff_cos_val=55,
+                        use_cosine=True, max_diff=5, zero_diff_cos_val=55,
                         scalar_diff=1.5, use_addition=True, calc_thres=0.75,
                         weak_echo_thres=5.0, min_dBZ_used=5.0, dB_averaging=False,
                         remove_small_objects=True, min_km2_size=10,
@@ -100,7 +100,8 @@ def _revised_conv_strat(refl, dx, dy, always_core_thres=42, bkg_rad_km=11,
                                         y_pixsize=dy / 1000, center_x=bkg_center, center_y=bkg_center, circular=True)
 
     # %% Convective stratiform detection
-
+    # start by making reflectivity a masked array
+    refl = np.ma.masked_invalid(refl)
     # Compute background radius
     refl_bkg = calc_bkg_intensity(refl, bkg_mask_array, dB_averaging, calc_thres)
     # mask reflectivity field
@@ -152,7 +153,7 @@ def _revised_conv_strat(refl, dx, dy, always_core_thres=42, bkg_rad_km=11,
         temp_assignment = temp_assignment + temp_dilated
 
     # add dilated cores to original array
-    conv_core_copy = np.copy(conv_core_array)
+    conv_core_copy = np.ma.copy(conv_core_array)
     conv_core_copy[temp_assignment >= 1] = CS_CORE
 
     # Now do convective stratiform classification
@@ -160,6 +161,8 @@ def _revised_conv_strat(refl, dx, dy, always_core_thres=42, bkg_rad_km=11,
     conv_strat_array = classify_conv_strat_array(refl, conv_strat_array, conv_core_copy,
                                                  NOSFCECHO, CONV, SF, WEAKECHO, CS_CORE,
                                                  min_dBZ_used, weak_echo_thres)
+    # mask where reflectivity is masked
+    conv_strat_array = np.ma.masked_where(refl.mask, conv_strat_array)
 
     return refl_bkg, conv_core_array, conv_strat_array
 
@@ -245,12 +248,8 @@ def calc_bkg_intensity(refl, bkg_mask_array, dB_averaging, calc_thres=None):
     if dB_averaging:
         refl = 10 ** (refl / 10)
 
-    # check if reflectivity is masked array
-    if np.ma.isMaskedArray(refl):
-        refl = refl.filled(np.nan)
-
     # calculate background reflectivity with circular footprint
-    refl_bkg = scipy.ndimage.generic_filter(refl, function=np.nanmean, mode='constant',
+    refl_bkg = scipy.ndimage.generic_filter(refl.filled(np.nan), function=np.nanmean, mode='constant',
                                             footprint=bkg_mask_array.astype(bool), cval=np.nan)
 
     # if calc_thres is not none, then calculate the number of points used to calculate average
