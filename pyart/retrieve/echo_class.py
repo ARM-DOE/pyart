@@ -287,7 +287,7 @@ def conv_strat(grid, dx=None, dy=None, level_m=None, always_core_thres=42, bkg_r
                           '2 = Convective')}
 
         convsf_dict['convsf_over'] = {
-            'data': convsf_under,
+            'data': convsf_over,
             'standard_name': 'convsf_under',
             'long_name': 'Convective stratiform classification (Overestimate)',
             'valid_min': 0,
