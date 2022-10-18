@@ -5,8 +5,9 @@ import scipy.ndimage
 def _revised_conv_strat(refl, dx, dy, always_core_thres=42, bkg_rad_km=11,
                         use_cosine=True, max_diff=8, zero_diff_cos_val=55,
                         scalar_diff=1.5, use_addition=True, calc_thres=0.75,
-                        weak_echo_thres=5.0, min_dBZ_used=5.0,
-                        dB_averaging=False, val_for_max_conv_rad=30, max_conv_rad_km=5.0):
+                        weak_echo_thres=5.0, min_dBZ_used=5.0, dB_averaging=False,
+                        remove_small_objects=True, min_km2_size=10,
+                        val_for_max_conv_rad=30, max_conv_rad_km=5.0):
     """
     We perform the Yuter and Houze (1997) algorithm for echo classification
     using only the reflectivity field in order to classify each grid point
@@ -48,10 +49,14 @@ def _revised_conv_strat(refl, dx, dy, always_core_thres=42, bkg_rad_km=11,
         Minimum dBZ value used for classification. All values below this threshold will be considered no surface echo
     dB_averaging : bool, optional
         True if using dBZ values that need to be converted to linear Z before averaging. False for other types of values
+    remove_small_objects : bool, optional
+        Determines if small objects should be removed from convective core array. Default is True.
+    min_km2_size : float, optional
+        Minimum size of convective cores to be considered. Cores less than this size will be removed. Default is 10 km^2.
     val_for_max_conv_rad : float, optional
         dBZ for maximum convective radius. Convective cores with values above this will have the maximum convective radius
     max_conv_rad_km : float, optional
-        Maximum radius around convective cores to classify as convective. Default is 5 km
+        Maximum radius around convective cores to classify as convective. Default is 5 km.
 
    Returns
     -------
@@ -98,8 +103,8 @@ def _revised_conv_strat(refl, dx, dy, always_core_thres=42, bkg_rad_km=11,
 
     # Compute background radius
     refl_bkg = calc_bkg_intensity(refl, bkg_mask_array, dB_averaging, calc_thres)
-    # mask background average
-    refl_bkg = np.ma.masked_where(refl.mask, refl_bkg)
+    # mask reflectivity field
+    refl = np.ma.masked_where(refl_bkg.mask, refl)
 
     # Get convective core array from cosine scheme, or scalar scheme
     if use_cosine:
@@ -111,6 +116,23 @@ def _revised_conv_strat(refl, dx, dy, always_core_thres=42, bkg_rad_km=11,
     # Assign convective radii based on background reflectivity
     conv_radius_km = assign_conv_radius_km(refl_bkg, val_for_max_conv_rad=val_for_max_conv_rad,
                                            max_conv_rad=max_conv_rad_km)
+
+    # remove small objects in convective core array
+    if remove_small_objects:
+        # calculate minimum pixel size given dx and dy
+        min_pix_size = min_km2_size / ((dx/1000) * (dy/1000))
+        # label connected objects in convective core array
+        cc_labels, _ = scipy.ndimage.label(conv_core_array)
+        # mask labels where convective core array is masked
+        cc_labels = np.ma.masked_where(conv_core_array.mask, cc_labels)
+
+        # loop through each unique label
+        for lab in np.unique(cc_labels):
+            # calculate number of pixels for each label
+            size_lab = np.count_nonzero(cc_labels == lab)
+            # if number of pixels is less than minimum, then remove core
+            if size_lab < min_pix_size:
+                conv_core_array[cc_labels == lab] = 0
 
     # Incorporate convective radius using binary dilation
     # Create empty array for assignment

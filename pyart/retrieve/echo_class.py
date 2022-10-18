@@ -110,12 +110,13 @@ def steiner_conv_strat(grid, dx=None, dy=None, intense=42.0,
 def conv_strat(grid, dx=None, dy=None, always_core_thres=42, bkg_rad_km=11,
                use_cosine=True, max_diff=8, zero_diff_cos_val=55,
                scalar_diff=1.5, use_addition=True, calc_thres=0.75,
-               weak_echo_thres=5.0, min_dBZ_used=5.0,
-               dB_averaging=False, dBZ_for_max_conv_rad=30, max_conv_rad_km=5.0,
+               weak_echo_thres=5.0, min_dBZ_used=5.0,dB_averaging=False,
+               remove_small_objects=True, min_km2_size=10,
+               val_for_max_conv_rad=30, max_conv_rad_km=5.0,
                fill_value=None, refl_field=None, estimate_flag=True, estimate_offset=5):
     """
-    Partition reflectivity into convective-stratiform using the Yuter
-    and Houze (1997) algorithm.
+    Partition reflectivity into convective-stratiform using the Yuter et al. (2005)
+    and Yuter and Houze (1997) algorithm.
 
     Parameters
     ----------
@@ -151,7 +152,11 @@ def conv_strat(grid, dx=None, dy=None, always_core_thres=42, bkg_rad_km=11,
     dB_averaging : bool, optional
         True if using dBZ reflectivity values that need to be converted to linear Z before averaging. False for
         other non-dBZ values (i.e. snow rate)
-    dBZ_for_max_conv_rad : float, optional
+    remove_small_objects : bool, optional
+        Determines if small objects should be removed from convective core array. Default is True.
+    min_km2_size : float, optional
+        Minimum size of convective cores to be considered. Cores less than this size will be removed. Default is 10 km^2.
+    val_for_max_conv_rad : float, optional
         dBZ for maximum convective radius. Convective cores with values above this will have the maximum convective radius
     max_conv_rad_km : float, optional
         Maximum radius around convective cores to classify as convective. Default is 5 km
@@ -220,7 +225,8 @@ def conv_strat(grid, dx=None, dy=None, always_core_thres=42, bkg_rad_km=11,
                                             use_addition=use_addition, calc_thres=calc_thres,
                                             weak_echo_thres=weak_echo_thres, min_dBZ_used=min_dBZ_used,
                                             dB_averaging=dB_averaging,
-                                            val_for_max_conv_rad=dBZ_for_max_conv_rad, max_conv_rad_km=max_conv_rad_km)
+                                            remove_small_objects=remove_small_objects, min_km2_size=min_km2_size,
+                                            val_for_max_conv_rad=val_for_max_conv_rad, max_conv_rad_km=max_conv_rad_km)
 
     # put data into a dictionary to be added as a field
     convsf_dict = {'convsf': {
@@ -243,7 +249,9 @@ def conv_strat(grid, dx=None, dy=None, always_core_thres=42, bkg_rad_km=11,
                                                  use_addition=use_addition, calc_thres=calc_thres,
                                                  weak_echo_thres=weak_echo_thres, min_dBZ_used=min_dBZ_used,
                                                  dB_averaging=dB_averaging,
-                                                 val_for_max_conv_rad=dBZ_for_max_conv_rad, max_conv_rad_km=max_conv_rad_km)
+                                                 remove_small_objects=remove_small_objects, min_km2_size=min_km2_size,
+                                                 val_for_max_conv_rad=val_for_max_conv_rad,
+                                                 max_conv_rad_km=max_conv_rad_km)
 
         _, _, convsf_over = _revised_conv_strat(ze + estimate_offset, dx, dy, always_core_thres=always_core_thres,
                                                 bkg_rad_km=bkg_rad_km, use_cosine=use_cosine, max_diff=max_diff,
@@ -251,7 +259,9 @@ def conv_strat(grid, dx=None, dy=None, always_core_thres=42, bkg_rad_km=11,
                                                 use_addition=use_addition, calc_thres=calc_thres,
                                                 weak_echo_thres=weak_echo_thres, min_dBZ_used=min_dBZ_used,
                                                 dB_averaging=dB_averaging,
-                                                val_for_max_conv_rad=dBZ_for_max_conv_rad, max_conv_rad_km=max_conv_rad_km)
+                                                remove_small_objects=remove_small_objects, min_km2_size=min_km2_size,
+                                                val_for_max_conv_rad=val_for_max_conv_rad,
+                                                max_conv_rad_km=max_conv_rad_km)
 
         # save into dictionaries
         convsf_dict['convsf_under'] = {
