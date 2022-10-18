@@ -107,7 +107,7 @@ def steiner_conv_strat(grid, dx=None, dy=None, intense=42.0,
                           '2 = Convective')}
 
 
-def conv_strat(grid, dx=None, dy=None, always_core_thres=42, bkg_rad_km=11,
+def conv_strat(grid, dx=None, dy=None, level_m=None, always_core_thres=42, bkg_rad_km=11,
                use_cosine=True, max_diff=8, zero_diff_cos_val=55,
                scalar_diff=1.5, use_addition=True, calc_thres=0.75,
                weak_echo_thres=5.0, min_dBZ_used=5.0,dB_averaging=False,
@@ -125,6 +125,8 @@ def conv_strat(grid, dx=None, dy=None, always_core_thres=42, bkg_rad_km=11,
     dx, dy : float, optional
         The x- and y-dimension resolutions in meters, respectively. If None
         the resolution is determined from the first two axes values parsed from grid object.
+    level_m : float, optional
+        Desired height to classify with convective stratiform algorithm.
     always_core_thres : float, optional
         Threshold for points that are always convective. All values above the threshold are classifed as convective
         See Yuter et al. (2005) for more detail.
@@ -214,8 +216,16 @@ def conv_strat(grid, dx=None, dy=None, always_core_thres=42, bkg_rad_km=11,
     y = grid.y['data']
     z = grid.z['data']
 
-    # Get reflectivity data
-    ze = np.ma.copy(grid.fields[refl_field]['data'])
+    # Get reflectivity data at desired level
+    if level_m is None:
+        try:
+            ze = np.ma.copy(grid.fields[refl_field]['data'][0, :, :])
+        except:
+            ze = np.ma.copy(grid.fields[refl_field]['data'][:, :])
+    else:
+        zslice = np.argmin(np.abs(z - level_m))
+        ze = np.ma.copy(grid.fields[refl_field]['data'][zslice, :, :])
+
     ze = ze.filled(np.NaN)
 
     # run convective stratiform algorithm
