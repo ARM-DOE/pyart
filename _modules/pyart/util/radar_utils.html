@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.util.radar_utils &#8212; Py-ART 1.13.2.post5 documentation</title>
+    <title>pyart.util.radar_utils &#8212; Py-ART 1.13.2.post6 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -599,6 +599,14 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">new_radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">radar2</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
     <span class="n">new_radar</span><span class="o">.</span><span class="n">ngates</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="p">((</span><span class="n">radar1</span><span class="o">.</span><span class="n">target_scan_rate</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span>
+            <span class="p">(</span><span class="n">radar2</span><span class="o">.</span><span class="n">target_scan_rate</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)):</span>
+        <span class="n">new_radar</span><span class="o">.</span><span class="n">target_scan_rate</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">radar1</span><span class="o">.</span><span class="n">target_scan_rate</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">],</span>
+            <span class="n">radar2</span><span class="o">.</span><span class="n">target_scan_rate</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">new_radar</span><span class="o">.</span><span class="n">target_scan_rate</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="c1"># to combine times we need to reference them to a standard</span>
     <span class="c1"># for this we&#39;ll use epoch time</span>
