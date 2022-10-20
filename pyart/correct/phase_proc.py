@@ -661,8 +661,7 @@ def LP_solver_cvxopt(A_Matrix, B_vectors, weights, solver='glpk'):
     LP_solver_cylp : Solve LP problem using the cylp module.
     LP_solver_cylp_mp : Solve LP problem using the cylp module
                         using multi processes.
-    LP_solver_scipy: Solve LP problem using the SciPy linear programming
-                     module
+
     """
     from cvxopt import matrix, solvers
     n_gates = weights.shape[1] // 2
@@ -722,8 +721,7 @@ def LP_solver_pyglpk(A_Matrix, B_vectors, weights, it_lim=7000, presolve=True,
     LP_solver_cylp : Solve LP problem using the cylp module.
     LP_solver_cylp_mp : Solve LP problem using the cylp module
                         using multi processes.
-    LP_solver_scipy: Solve LP problem using the SciPy linear programming
-                     module
+
     """
     import glpk
 
@@ -815,48 +813,6 @@ def solve_cylp(model, B_vectors, weights, ray, chunksize):
 
     return soln
 
-def LP_solver_scipy(A_matrix, B_vectors, weights):
-    """
-
-    Solve the linear programming problem given in Giangrande et al 2012 using
-    the SciPy linear programming module.
-
-    Parameters
-    ----------
-    A_Matrix : matrix
-        Row augmented A matrix, see :py:func:`construct_A_matrix`
-    B_vectors : matrix
-        Matrix containing B vectors, see :py:func:`construct_B_vectors`
-    weights : array
-        Weights.
-
-    Returns
-    -------
-    soln : array
-        Solution to LP problem.
-
-    See Also
-    --------
-    LP_solver_cvxopt : Solve LP problem using the CVXOPT module.
-    LP_solver_pyglpk : Solve LP problem using the PyGLPK module.
-    LP_solver_cylp : Solve LP problem using the CyLP module using single
-                     process.
-    LP_solver_cylp_mp : Solve LP problem using the cylp module
-                        using multi processes.
-    """
-
-    from scipy.optimize import linprog
-
-    n_rays = B_vectors.shape[0]
-    n_gates = weights.shape[1] // 2
-    soln = np.zeros((n_rays, n_gates))
-    for i in range(n_rays):
-        result = linprog(weights[i, :], A_ub=-A_matrix, b_ub=-B_vectors[i, :])
-        res = result['x'][n_gates:2*n_gates]
-        
-        soln[i, :] = smooth_and_trim_scan(res[np.newaxis, :], window_len=5, window='sg_smooth')
-        
-    return soln
 
 def LP_solver_cylp_mp(A_Matrix, B_vectors, weights, really_verbose=False,
                       proc=1):
@@ -888,8 +844,6 @@ def LP_solver_cylp_mp(A_Matrix, B_vectors, weights, really_verbose=False,
     LP_solver_pyglpk : Solve LP problem using the PyGLPK module.
     LP_solver_cylp : Solve LP problem using the CyLP module using single
                      process.
-    LP_solver_scipy: Solve LP problem using the SciPy linear programming
-                     module
 
     """
     from cylp.cy.CyClpSimplex import CyClpSimplex
@@ -1068,7 +1022,7 @@ def phase_proc_lp(radar, offset, debug=False, self_const=60000.0,
         Gate number to begin phase unwrapping. None will unwrap all phases.
     really_verbose : bool, optional
         True to print LPX messaging. False to suppress.
-    LP_solver : 'pyglpk' or 'cvxopt', 'cylp', or 'cylp_mp', or 'scipy', optional
+    LP_solver : 'pyglpk' or 'cvxopt', 'cylp', or 'cylp_mp', optional
         Module to use to solve LP problem. Default is 'pyglpk'.
     refl_field, ncp_field, rhv_field, phidp_field, kdp_field : str, optional
         Name of field in radar which contains the horizonal reflectivity,
@@ -1181,8 +1135,6 @@ def phase_proc_lp(radar, offset, debug=False, self_const=60000.0,
             mysoln = LP_solver_cylp_mp(A_Matrix, B_vectors, nw,
                                        really_verbose=really_verbose,
                                        proc=proc)
-        elif LP_solver == 'scipy':
-            mysoln = LP_solver_scipy(A_Matrix, B_vectors, nw)
         else:
             raise ValueError('unknown LP_solver:' + LP_solver)
 
@@ -1249,7 +1201,7 @@ def phase_proc_lp_gf(radar, gatefilter=None, debug=False, self_const=60000.0,
         Gate number to begin phase unwrapping. None will unwrap all phases.
     really_verbose : bool, optional
         True to print LPX messaging. False to suppress.
-    LP_solver : 'pyglpk' or 'cvxopt', 'cylp', or 'cylp_mp', or 'scipy', optional
+    LP_solver : 'pyglpk' or 'cvxopt', 'cylp', or 'cylp_mp', optional
         Module to use to solve LP problem. Default is 'pyglpk'.
     refl_field, ncp_field, rhv_field, phidp_field, kdp_field : str, optional
         Name of field in radar which contains the horizonal reflectivity,
@@ -1381,8 +1333,6 @@ def phase_proc_lp_gf(radar, gatefilter=None, debug=False, self_const=60000.0,
             mysoln = LP_solver_cylp_mp(A_Matrix, B_vectors, nw,
                                        really_verbose=really_verbose,
                                        proc=proc)
-        elif LP_solver == 'scipy':
-            mysoln = LP_solver_scipy(A_Matrix, B_vectors, nw)
         else:
             raise ValueError('unknown LP_solver:' + LP_solver)
 
