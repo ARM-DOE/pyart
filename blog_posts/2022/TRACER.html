@@ -1,0 +1,1448 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Blending Observations from TRACER using Py-ART &#8212; Py-ART 1.13.2.post8 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pyart-theme.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../_static/doc_shared.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-JJEG3CV376"></script>
+<script>
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){ dataLayer.push(arguments); }
+                    gtag('js', new Date());
+                    gtag('config', 'G-JJEG3CV376');
+                </script>
+ 
+<link
+  rel="alternate"
+  type="application/atom+xml"
+  href="../../blog/atom.xml"
+  title="PyART Blog"
+/>
+ 
+<style type="text/css">
+  ul.ablog-archive {
+    list-style: none;
+    overflow: auto;
+    margin-left: 0px;
+  }
+  ul.ablog-archive li {
+    float: left;
+    margin-right: 5px;
+    font-size: 80%;
+  }
+  ul.postlist a {
+    font-style: italic;
+  }
+  ul.postlist-style-disc {
+    list-style-type: disc;
+  }
+  ul.postlist-style-none {
+    list-style-type: none;
+  }
+  ul.postlist-style-circle {
+    list-style-type: circle;
+  }
+</style>
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+  <nav class="navbar navbar-dark navbar-expand-lg bg-arm fixed-top bd-navbar shadow" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+<a class="navbar-brand" href="../../index.html">
+<p class="title">Py-ART</p>
+</a>
+
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../userguide/index.html">
+  User Guide
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../API/index.html">
+  API Reference Manual
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../examples/index.html">
+  Example Gallery
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../notebook-gallery.html">
+  Notebook Gallery
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../blog.html">
+  Blog
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../changelog.html">
+  Changelog
+ </a>
+</li>
+
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/ARM-DOE/pyart" rel="noopener" target="_blank" title="GitHub"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://twitter.com/Py_ART" rel="noopener" target="_blank" title="Twitter"><span><i class="fab fa-twitter-square"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+  </nav>
+
+
+    <div class="container-fluid" id="banner"></div>
+
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar">
+              <div class="sidebar-start-items">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    
+  </div>
+</nav>
+<h3>
+  <a href="../../blog.html">Recent Posts</a>
+</h3>
+<ul>
+   
+  <li>
+    <a href="first_pullrequest.html"
+      >26 April - Active Py-ART Development - Submitting a Pull Request (PR)</a
+    >
+  </li>
+  
+  <li>
+    <a href="plot-nexrad-level3.html"
+      >12 April - Fixing Weird Patterns When Plotting NEXRAD Level 3 Data</a
+    >
+  </li>
+  
+  <li>
+    <a href="ka-band-pyart-xarray-hvplot.html"
+      >21 March - Working with Vertically Pointing Radar Data Using PyART, Xarray, and hvPlot</a
+    >
+  </li>
+  
+  <li>
+    <a href="test.html"
+      >11 March - New Docs</a
+    >
+  </li>
+  
+</ul>
+
+<h3>
+  <a href="../../blog/archive.html">Archives</a>
+</h3>
+<ul>
+   
+  <li>
+    <a href="../../blog/2022.html">2022 (4)</a>
+  </li>
+   
+</ul>
+
+              </div>
+              <div class="sidebar-end-items">
+              </div>
+            </div>
+            
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+              
+              <div class="toc-item">
+                
+<div class="tocsection onthispage mt-5 pt-1 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Blending Observations from TRACER using Py-ART
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#imports">
+     Imports
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#goes-data-access">
+   GOES data access
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#csapr-data-access">
+   CSAPR data access
+  </a>
+  <ul class="visible nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#load-lma-flash-data">
+     Load LMA Flash data
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#june-17th-case">
+     June 17th case
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#june-17-rhi">
+     June 17 RHI
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+</nav>
+              </div>
+              
+              <div class="toc-item">
+                
+              </div>
+              
+            
+          </div>
+          
+
+          
+          
+            
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                 <section class="tex2jax_ignore mathjax_ignore" id="blending-observations-from-tracer-using-py-art">
+<h1>Blending Observations from TRACER using Py-ART<a class="headerlink" href="#blending-observations-from-tracer-using-py-art" title="Permalink to this headline">#</a></h1>
+<p>The TRacking Aerosol Convection Interactions (TRACER) field experiment was a U.S. Department of Energy IOP with the goal of studying the lifecycle of convection over Houston as well as potential aerosol impacts on this lifecycle. Houston is uniquely suited for this kind of field experiment where seabreeze convection forms off of the coast of Houston in cleaner air conditions and then approaches the more polluted Houston region. For more information about the TRACER field experiment, click <a class="reference external" href="https://www.arm.gov/research/campaigns/amf2021tracer">here</a>.</p>
+<p>This post will show how to plot overlays of Texas A&amp;M University Lightning Mapping Array data over GOES and ARM CSAPR2 data for a case of wildfire smoke entraining into developing convection sampled during July 12 and 13, 2022. In addition, we highlight a case that was tracked by CSAPR2 for 90 minutes on June 17, 2022.</p>
+<section id="imports">
+<h2>Imports<a class="headerlink" href="#imports" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyart</span>
+<span class="kn">import</span> <span class="nn">act</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">s3fs</span>
+<span class="kn">import</span> <span class="nn">cartopy.crs</span> <span class="k">as</span> <span class="nn">ccrs</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="kn">from</span> <span class="nn">scipy.spatial</span> <span class="kn">import</span> <span class="n">KDTree</span>
+<span class="o">%</span><span class="k">matplotlib</span> inline
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="goes-data-access">
+<h1>GOES data access<a class="headerlink" href="#goes-data-access" title="Permalink to this headline">#</a></h1>
+<p>All of the NOAA GOES satellite data are available on Amazon Web Services for download. Therefore, you can use the s3fs tool to download the required data. We will download band 13, which is the longwave infrared band of GOES. In order to only download the band 13 files, we will ensure that there is a “C13” in the filename as this denotes the band number for each file.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use the anonymous credentials to access public data</span>
+<span class="n">fs</span> <span class="o">=</span> <span class="n">s3fs</span><span class="o">.</span><span class="n">S3FileSystem</span><span class="p">(</span><span class="n">anon</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">day_no</span> <span class="o">=</span> <span class="mi">168</span>    <span class="c1"># Day number of year (here is June 17th, 16th on leap year)</span>
+<span class="n">year</span> <span class="o">=</span> <span class="mi">2022</span>
+<span class="n">hour</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">files</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">fs</span><span class="o">.</span><span class="n">ls</span><span class="p">(</span><span class="s1">&#39;noaa-goes16/ABI-L1b-RadC/</span><span class="si">%d</span><span class="s1">/</span><span class="si">%d</span><span class="s1">/</span><span class="si">%02d</span><span class="s1">/&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">year</span><span class="p">,</span> <span class="n">day_no</span><span class="p">,</span> <span class="n">hour</span><span class="p">)))</span>
+<span class="n">band</span> <span class="o">=</span> <span class="s2">&quot;13&quot;</span>
+<span class="k">for</span> <span class="n">fi</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;C13&quot;</span> <span class="ow">in</span> <span class="n">fi</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Downloading </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">fi</span><span class="p">)</span>
+        <span class="n">fs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">fi</span><span class="p">,</span> <span class="s1">&#39;../data/&#39;</span> <span class="o">+</span> <span class="n">fi</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Downloading noaa-goes16/ABI-L1b-RadC/2022/168/20/OR_ABI-L1b-RadC-M6C13_G16_s20221682001178_e20221682003562_c20221682004026.nc
+Downloading noaa-goes16/ABI-L1b-RadC/2022/168/20/OR_ABI-L1b-RadC-M6C13_G16_s20221682006178_e20221682008562_c20221682009028.nc
+Downloading noaa-goes16/ABI-L1b-RadC/2022/168/20/OR_ABI-L1b-RadC-M6C13_G16_s20221682011178_e20221682013562_c20221682014023.nc
+Downloading noaa-goes16/ABI-L1b-RadC/2022/168/20/OR_ABI-L1b-RadC-M6C13_G16_s20221682016178_e20221682018562_c20221682019019.nc
+Downloading noaa-goes16/ABI-L1b-RadC/2022/168/20/OR_ABI-L1b-RadC-M6C13_G16_s20221682021178_e20221682023563_c20221682024031.nc
+Downloading noaa-goes16/ABI-L1b-RadC/2022/168/20/OR_ABI-L1b-RadC-M6C13_G16_s20221682026178_e20221682028562_c20221682029025.nc
+Downloading noaa-goes16/ABI-L1b-RadC/2022/168/20/OR_ABI-L1b-RadC-M6C13_G16_s20221682031178_e20221682033562_c20221682034018.nc
+Downloading noaa-goes16/ABI-L1b-RadC/2022/168/20/OR_ABI-L1b-RadC-M6C13_G16_s20221682036178_e20221682038562_c20221682039022.nc
+Downloading noaa-goes16/ABI-L1b-RadC/2022/168/20/OR_ABI-L1b-RadC-M6C13_G16_s20221682041178_e20221682043562_c20221682044024.nc
+Downloading noaa-goes16/ABI-L1b-RadC/2022/168/20/OR_ABI-L1b-RadC-M6C13_G16_s20221682046178_e20221682048562_c20221682049023.nc
+Downloading noaa-goes16/ABI-L1b-RadC/2022/168/20/OR_ABI-L1b-RadC-M6C13_G16_s20221682051178_e20221682053562_c20221682054018.nc
+Downloading noaa-goes16/ABI-L1b-RadC/2022/168/20/OR_ABI-L1b-RadC-M6C13_G16_s20221682056178_e20221682058562_c20221682059029.nc
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">goes_ds</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span><span class="s1">&#39;../data/OR_ABI-L1b-RadC-M6C13_G16_s20221932006173_e20221932008557_c20221932009023.nc&#39;</span><span class="p">)</span>
+<span class="n">goes_ds</span>    
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div><svg style="position: absolute; width: 0; height: 0; overflow: hidden">
+<defs>
+<symbol id="icon-database" viewBox="0 0 32 32">
+<path d="M16 0c-8.837 0-16 2.239-16 5v4c0 2.761 7.163 5 16 5s16-2.239 16-5v-4c0-2.761-7.163-5-16-5z"></path>
+<path d="M16 17c-8.837 0-16-2.239-16-5v6c0 2.761 7.163 5 16 5s16-2.239 16-5v-6c0 2.761-7.163 5-16 5z"></path>
+<path d="M16 26c-8.837 0-16-2.239-16-5v6c0 2.761 7.163 5 16 5s16-2.239 16-5v-6c0 2.761-7.163 5-16 5z"></path>
+</symbol>
+<symbol id="icon-file-text2" viewBox="0 0 32 32">
+<path d="M28.681 7.159c-0.694-0.947-1.662-2.053-2.724-3.116s-2.169-2.030-3.116-2.724c-1.612-1.182-2.393-1.319-2.841-1.319h-15.5c-1.378 0-2.5 1.121-2.5 2.5v27c0 1.378 1.122 2.5 2.5 2.5h23c1.378 0 2.5-1.122 2.5-2.5v-19.5c0-0.448-0.137-1.23-1.319-2.841zM24.543 5.457c0.959 0.959 1.712 1.825 2.268 2.543h-4.811v-4.811c0.718 0.556 1.584 1.309 2.543 2.268zM28 29.5c0 0.271-0.229 0.5-0.5 0.5h-23c-0.271 0-0.5-0.229-0.5-0.5v-27c0-0.271 0.229-0.5 0.5-0.5 0 0 15.499-0 15.5 0v7c0 0.552 0.448 1 1 1h7v19.5z"></path>
+<path d="M23 26h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
+<path d="M23 22h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
+<path d="M23 18h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
+</symbol>
+</defs>
+</svg>
+<style>/* CSS stylesheet for displaying xarray objects in jupyterlab.
+ *
+ */
+
+:root {
+  --xr-font-color0: var(--jp-content-font-color0, rgba(0, 0, 0, 1));
+  --xr-font-color2: var(--jp-content-font-color2, rgba(0, 0, 0, 0.54));
+  --xr-font-color3: var(--jp-content-font-color3, rgba(0, 0, 0, 0.38));
+  --xr-border-color: var(--jp-border-color2, #e0e0e0);
+  --xr-disabled-color: var(--jp-layout-color3, #bdbdbd);
+  --xr-background-color: var(--jp-layout-color0, white);
+  --xr-background-color-row-even: var(--jp-layout-color1, white);
+  --xr-background-color-row-odd: var(--jp-layout-color2, #eeeeee);
+}
+
+html[theme=dark],
+body[data-theme=dark],
+body.vscode-dark {
+  --xr-font-color0: rgba(255, 255, 255, 1);
+  --xr-font-color2: rgba(255, 255, 255, 0.54);
+  --xr-font-color3: rgba(255, 255, 255, 0.38);
+  --xr-border-color: #1F1F1F;
+  --xr-disabled-color: #515151;
+  --xr-background-color: #111111;
+  --xr-background-color-row-even: #111111;
+  --xr-background-color-row-odd: #313131;
+}
+
+.xr-wrap {
+  display: block !important;
+  min-width: 300px;
+  max-width: 700px;
+}
+
+.xr-text-repr-fallback {
+  /* fallback to plain text repr when CSS is not injected (untrusted notebook) */
+  display: none;
+}
+
+.xr-header {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  margin-bottom: 4px;
+  border-bottom: solid 1px var(--xr-border-color);
+}
+
+.xr-header > div,
+.xr-header > ul {
+  display: inline;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.xr-obj-type,
+.xr-array-name {
+  margin-left: 2px;
+  margin-right: 10px;
+}
+
+.xr-obj-type {
+  color: var(--xr-font-color2);
+}
+
+.xr-sections {
+  padding-left: 0 !important;
+  display: grid;
+  grid-template-columns: 150px auto auto 1fr 20px 20px;
+}
+
+.xr-section-item {
+  display: contents;
+}
+
+.xr-section-item input {
+  display: none;
+}
+
+.xr-section-item input + label {
+  color: var(--xr-disabled-color);
+}
+
+.xr-section-item input:enabled + label {
+  cursor: pointer;
+  color: var(--xr-font-color2);
+}
+
+.xr-section-item input:enabled + label:hover {
+  color: var(--xr-font-color0);
+}
+
+.xr-section-summary {
+  grid-column: 1;
+  color: var(--xr-font-color2);
+  font-weight: 500;
+}
+
+.xr-section-summary > span {
+  display: inline-block;
+  padding-left: 0.5em;
+}
+
+.xr-section-summary-in:disabled + label {
+  color: var(--xr-font-color2);
+}
+
+.xr-section-summary-in + label:before {
+  display: inline-block;
+  content: '►';
+  font-size: 11px;
+  width: 15px;
+  text-align: center;
+}
+
+.xr-section-summary-in:disabled + label:before {
+  color: var(--xr-disabled-color);
+}
+
+.xr-section-summary-in:checked + label:before {
+  content: '▼';
+}
+
+.xr-section-summary-in:checked + label > span {
+  display: none;
+}
+
+.xr-section-summary,
+.xr-section-inline-details {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.xr-section-inline-details {
+  grid-column: 2 / -1;
+}
+
+.xr-section-details {
+  display: none;
+  grid-column: 1 / -1;
+  margin-bottom: 5px;
+}
+
+.xr-section-summary-in:checked ~ .xr-section-details {
+  display: contents;
+}
+
+.xr-array-wrap {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 20px auto;
+}
+
+.xr-array-wrap > label {
+  grid-column: 1;
+  vertical-align: top;
+}
+
+.xr-preview {
+  color: var(--xr-font-color3);
+}
+
+.xr-array-preview,
+.xr-array-data {
+  padding: 0 5px !important;
+  grid-column: 2;
+}
+
+.xr-array-data,
+.xr-array-in:checked ~ .xr-array-preview {
+  display: none;
+}
+
+.xr-array-in:checked ~ .xr-array-data,
+.xr-array-preview {
+  display: inline-block;
+}
+
+.xr-dim-list {
+  display: inline-block !important;
+  list-style: none;
+  padding: 0 !important;
+  margin: 0;
+}
+
+.xr-dim-list li {
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+}
+
+.xr-dim-list:before {
+  content: '(';
+}
+
+.xr-dim-list:after {
+  content: ')';
+}
+
+.xr-dim-list li:not(:last-child):after {
+  content: ',';
+  padding-right: 5px;
+}
+
+.xr-has-index {
+  font-weight: bold;
+}
+
+.xr-var-list,
+.xr-var-item {
+  display: contents;
+}
+
+.xr-var-item > div,
+.xr-var-item label,
+.xr-var-item > .xr-var-name span {
+  background-color: var(--xr-background-color-row-even);
+  margin-bottom: 0;
+}
+
+.xr-var-item > .xr-var-name:hover span {
+  padding-right: 5px;
+}
+
+.xr-var-list > li:nth-child(odd) > div,
+.xr-var-list > li:nth-child(odd) > label,
+.xr-var-list > li:nth-child(odd) > .xr-var-name span {
+  background-color: var(--xr-background-color-row-odd);
+}
+
+.xr-var-name {
+  grid-column: 1;
+}
+
+.xr-var-dims {
+  grid-column: 2;
+}
+
+.xr-var-dtype {
+  grid-column: 3;
+  text-align: right;
+  color: var(--xr-font-color2);
+}
+
+.xr-var-preview {
+  grid-column: 4;
+}
+
+.xr-var-name,
+.xr-var-dims,
+.xr-var-dtype,
+.xr-preview,
+.xr-attrs dt {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 10px;
+}
+
+.xr-var-name:hover,
+.xr-var-dims:hover,
+.xr-var-dtype:hover,
+.xr-attrs dt:hover {
+  overflow: visible;
+  width: auto;
+  z-index: 1;
+}
+
+.xr-var-attrs,
+.xr-var-data {
+  display: none;
+  background-color: var(--xr-background-color) !important;
+  padding-bottom: 5px !important;
+}
+
+.xr-var-attrs-in:checked ~ .xr-var-attrs,
+.xr-var-data-in:checked ~ .xr-var-data {
+  display: block;
+}
+
+.xr-var-data > table {
+  float: right;
+}
+
+.xr-var-name span,
+.xr-var-data,
+.xr-attrs {
+  padding-left: 25px !important;
+}
+
+.xr-attrs,
+.xr-var-attrs,
+.xr-var-data {
+  grid-column: 1 / -1;
+}
+
+dl.xr-attrs {
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 125px auto;
+}
+
+.xr-attrs dt,
+.xr-attrs dd {
+  padding: 0;
+  margin: 0;
+  float: left;
+  padding-right: 10px;
+  width: auto;
+}
+
+.xr-attrs dt {
+  font-weight: normal;
+  grid-column: 1;
+}
+
+.xr-attrs dt:hover span {
+  display: inline-block;
+  background: var(--xr-background-color);
+  padding-right: 10px;
+}
+
+.xr-attrs dd {
+  grid-column: 2;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.xr-icon-database,
+.xr-icon-file-text2 {
+  display: inline-block;
+  vertical-align: middle;
+  width: 1em;
+  height: 1.5em !important;
+  stroke-width: 0;
+  stroke: currentColor;
+  fill: currentColor;
+}
+</style><pre class='xr-text-repr-fallback'>&lt;xarray.Dataset&gt;
+Dimensions:                                           (y: 1500, x: 2500,
+                                                       number_of_time_bounds: 2,
+                                                       number_of_image_bounds: 2,
+                                                       band: 1,
+                                                       num_star_looks: 24)
+Coordinates:
+    t                                                 datetime64[ns] 2022-07-...
+  * y                                                 (y) float64 0.1282 ... ...
+  * x                                                 (x) float64 -0.1013 ......
+    y_image                                           float32 0.08624
+    x_image                                           float32 -0.03136
+    band_id                                           (band) int8 13
+    band_wavelength                                   (band) float32 10.33
+    t_star_look                                       (num_star_looks) datetime64[ns] ...
+    band_wavelength_star_look                         (num_star_looks) float32 ...
+Dimensions without coordinates: number_of_time_bounds, number_of_image_bounds,
+                                band, num_star_looks
+Data variables: (12/37)
+    Rad                                               (y, x) float32 ...
+    DQF                                               (y, x) float32 ...
+    time_bounds                                       (number_of_time_bounds) datetime64[ns] ...
+    goes_imager_projection                            int32 -2147483647
+    y_image_bounds                                    (number_of_image_bounds) float32 ...
+    x_image_bounds                                    (number_of_image_bounds) float32 ...
+    ...                                                ...
+    algorithm_dynamic_input_data_container            int32 -2147483647
+    processing_parm_version_container                 int32 -2147483647
+    algorithm_product_version_container               int32 -2147483647
+    star_id                                           (num_star_looks) float32 ...
+    channel_integration_time                          float64 336.0
+    channel_gain_field                                float64 0.0
+Attributes: (12/30)
+    naming_authority:          gov.nesdis.noaa
+    Conventions:               CF-1.7
+    standard_name_vocabulary:  CF Standard Name Table (v35, 20 July 2016)
+    institution:               DOC/NOAA/NESDIS &gt; U.S. Department of Commerce,...
+    project:                   GOES
+    production_site:           WCDAS
+    ...                        ...
+    timeline_id:               ABI Mode 6
+    date_created:              2022-07-12T20:09:02.3Z
+    time_coverage_start:       2022-07-12T20:06:17.3Z
+    time_coverage_end:         2022-07-12T20:08:55.7Z
+    LUT_Filenames:             SpaceLookParams(FM1A_CDRL79RevP_PR_09_00_02)-6...
+    id:                        f45b564c-dcb9-498a-ac56-da80a1d735a5</pre><div class='xr-wrap' style='display:none'><div class='xr-header'><div class='xr-obj-type'>xarray.Dataset</div></div><ul class='xr-sections'><li class='xr-section-item'><input id='section-89c98ab0-d38e-4295-ab8b-2ae89b8a97f6' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-89c98ab0-d38e-4295-ab8b-2ae89b8a97f6' class='xr-section-summary'  title='Expand/collapse section'>Dimensions:</label><div class='xr-section-inline-details'><ul class='xr-dim-list'><li><span class='xr-has-index'>y</span>: 1500</li><li><span class='xr-has-index'>x</span>: 2500</li><li><span>number_of_time_bounds</span>: 2</li><li><span>number_of_image_bounds</span>: 2</li><li><span>band</span>: 1</li><li><span>num_star_looks</span>: 24</li></ul></div><div class='xr-section-details'></div></li><li class='xr-section-item'><input id='section-61189355-d5f1-4e2d-978e-67a31c785124' class='xr-section-summary-in' type='checkbox'  checked><label for='section-61189355-d5f1-4e2d-978e-67a31c785124' class='xr-section-summary' >Coordinates: <span>(9)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span>t</span></div><div class='xr-var-dims'>()</div><div class='xr-var-dtype'>datetime64[ns]</div><div class='xr-var-preview xr-preview'>...</div><input id='attrs-172eecf5-7947-4951-a5af-e87bc49b54f1' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-172eecf5-7947-4951-a5af-e87bc49b54f1' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-84d43060-5029-4198-b8e6-ede75c331258' class='xr-var-data-in' type='checkbox'><label for='data-84d43060-5029-4198-b8e6-ede75c331258' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>long_name :</span></dt><dd>J2000 epoch mid-point between the start and end image scan in seconds</dd><dt><span>standard_name :</span></dt><dd>time</dd><dt><span>axis :</span></dt><dd>T</dd><dt><span>bounds :</span></dt><dd>time_bounds</dd></dl></div><div class='xr-var-data'><pre>array(&#x27;2022-07-12T20:07:36.537394048&#x27;, dtype=&#x27;datetime64[ns]&#x27;)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>y</span></div><div class='xr-var-dims'>(y)</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>0.1282 0.1282 ... 0.04432 0.04427</div><input id='attrs-184062b0-686a-4cbe-a796-9751bddc1a99' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-184062b0-686a-4cbe-a796-9751bddc1a99' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-fc9dcd89-0f82-4862-86cb-1e90d94a0ab4' class='xr-var-data-in' type='checkbox'><label for='data-fc9dcd89-0f82-4862-86cb-1e90d94a0ab4' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>units :</span></dt><dd>rad</dd><dt><span>axis :</span></dt><dd>Y</dd><dt><span>long_name :</span></dt><dd>GOES fixed grid projection y-coordinate</dd><dt><span>standard_name :</span></dt><dd>projection_y_coordinate</dd></dl></div><div class='xr-var-data'><pre>array([0.128212, 0.128156, 0.1281  , ..., 0.04438 , 0.044324, 0.044268])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>x</span></div><div class='xr-var-dims'>(x)</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>-0.1013 -0.1013 ... 0.03856 0.03861</div><input id='attrs-8cb82638-9b4a-43dd-b32d-f8167b260c68' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-8cb82638-9b4a-43dd-b32d-f8167b260c68' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-19cc104a-ec4c-47f0-ad5f-d3fd42919994' class='xr-var-data-in' type='checkbox'><label for='data-19cc104a-ec4c-47f0-ad5f-d3fd42919994' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>units :</span></dt><dd>rad</dd><dt><span>axis :</span></dt><dd>X</dd><dt><span>long_name :</span></dt><dd>GOES fixed grid projection x-coordinate</dd><dt><span>standard_name :</span></dt><dd>projection_x_coordinate</dd></dl></div><div class='xr-var-data'><pre>array([-0.101332, -0.101276, -0.10122 , ...,  0.0385  ,  0.038556,  0.038612])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>y_image</span></div><div class='xr-var-dims'>()</div><div class='xr-var-dtype'>float32</div><div class='xr-var-preview xr-preview'>...</div><input id='attrs-0fac4978-b9eb-45bf-bae0-2b9b8ff02df8' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-0fac4978-b9eb-45bf-bae0-2b9b8ff02df8' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-bf6055db-c829-4386-aa4d-342587f4076c' class='xr-var-data-in' type='checkbox'><label for='data-bf6055db-c829-4386-aa4d-342587f4076c' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>long_name :</span></dt><dd>GOES-R fixed grid projection y-coordinate center of image</dd><dt><span>standard_name :</span></dt><dd>projection_y_coordinate</dd><dt><span>units :</span></dt><dd>rad</dd><dt><span>axis :</span></dt><dd>Y</dd></dl></div><div class='xr-var-data'><pre>array(0.08624, dtype=float32)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>x_image</span></div><div class='xr-var-dims'>()</div><div class='xr-var-dtype'>float32</div><div class='xr-var-preview xr-preview'>...</div><input id='attrs-0046f586-df09-4f57-8a84-dafbf63f3c98' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-0046f586-df09-4f57-8a84-dafbf63f3c98' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-6e500298-f4f2-4425-8529-05c051ed99ec' class='xr-var-data-in' type='checkbox'><label for='data-6e500298-f4f2-4425-8529-05c051ed99ec' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>long_name :</span></dt><dd>GOES-R fixed grid projection x-coordinate center of image</dd><dt><span>standard_name :</span></dt><dd>projection_x_coordinate</dd><dt><span>units :</span></dt><dd>rad</dd><dt><span>axis :</span></dt><dd>X</dd></dl></div><div class='xr-var-data'><pre>array(-0.03136, dtype=float32)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>band_id</span></div><div class='xr-var-dims'>(band)</div><div class='xr-var-dtype'>int8</div><div class='xr-var-preview xr-preview'>...</div><input id='attrs-2b2daf4c-28a6-4907-b94f-66773e939e82' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-2b2daf4c-28a6-4907-b94f-66773e939e82' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-9920e4d6-55a3-4298-b391-f7c2e0113609' class='xr-var-data-in' type='checkbox'><label for='data-9920e4d6-55a3-4298-b391-f7c2e0113609' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>long_name :</span></dt><dd>ABI band number</dd><dt><span>standard_name :</span></dt><dd>sensor_band_identifier</dd><dt><span>units :</span></dt><dd>1</dd></dl></div><div class='xr-var-data'><pre>array([13], dtype=int8)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>band_wavelength</span></div><div class='xr-var-dims'>(band)</div><div class='xr-var-dtype'>float32</div><div class='xr-var-preview xr-preview'>...</div><input id='attrs-bb89fdd1-0cb8-47c4-8961-023c2e27b5d1' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-bb89fdd1-0cb8-47c4-8961-023c2e27b5d1' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-c7305fbc-6b75-4921-9786-e140b071f8fc' class='xr-var-data-in' type='checkbox'><label for='data-c7305fbc-6b75-4921-9786-e140b071f8fc' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>long_name :</span></dt><dd>ABI band central wavelength</dd><dt><span>standard_name :</span></dt><dd>sensor_band_central_radiation_wavelength</dd><dt><span>units :</span></dt><dd>um</dd></dl></div><div class='xr-var-data'><pre>array([10.33], dtype=float32)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>t_star_look</span></div><div class='xr-var-dims'>(num_star_looks)</div><div class='xr-var-dtype'>datetime64[ns]</div><div class='xr-var-preview xr-preview'>...</div><input id='attrs-c78766c1-0026-49f4-805c-c3c7b3dab211' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-c78766c1-0026-49f4-805c-c3c7b3dab211' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-19285e1e-5f8e-48f8-8437-e2c48d1f1c58' class='xr-var-data-in' type='checkbox'><label for='data-19285e1e-5f8e-48f8-8437-e2c48d1f1c58' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>long_name :</span></dt><dd>J2000 epoch time of star observed in seconds</dd><dt><span>standard_name :</span></dt><dd>time</dd><dt><span>axis :</span></dt><dd>T</dd></dl></div><div class='xr-var-data'><pre>array([&#x27;2000-01-01T11:43:21.000000000&#x27;, &#x27;2000-01-01T11:43:21.000000000&#x27;,
+       &#x27;2000-01-01T11:43:21.000000000&#x27;, &#x27;2000-01-01T11:43:21.000000000&#x27;,
+       &#x27;2000-01-01T11:43:21.000000000&#x27;, &#x27;2000-01-01T11:43:21.000000000&#x27;,
+       &#x27;2000-01-01T11:43:21.000000000&#x27;, &#x27;2000-01-01T11:43:21.000000000&#x27;,
+       &#x27;2000-01-01T11:43:21.000000000&#x27;, &#x27;2000-01-01T11:43:21.000000000&#x27;,
+       &#x27;2000-01-01T11:43:21.000000000&#x27;, &#x27;2000-01-01T11:43:21.000000000&#x27;,
+       &#x27;2000-01-01T11:43:21.000000000&#x27;, &#x27;2000-01-01T11:43:21.000000000&#x27;,
+       &#x27;2000-01-01T11:43:21.000000000&#x27;, &#x27;2000-01-01T11:43:21.000000000&#x27;,
+       &#x27;2000-01-01T11:43:21.000000000&#x27;, &#x27;2000-01-01T11:43:21.000000000&#x27;,
+       &#x27;2000-01-01T11:43:21.000000000&#x27;, &#x27;2000-01-01T11:43:21.000000000&#x27;,
+       &#x27;2000-01-01T11:43:21.000000000&#x27;, &#x27;2000-01-01T11:43:21.000000000&#x27;,
+       &#x27;2000-01-01T11:43:21.000000000&#x27;, &#x27;2000-01-01T11:43:21.000000000&#x27;],
+      dtype=&#x27;datetime64[ns]&#x27;)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>band_wavelength_star_look</span></div><div class='xr-var-dims'>(num_star_looks)</div><div class='xr-var-dtype'>float32</div><div class='xr-var-preview xr-preview'>...</div><input id='attrs-d8b87784-ef2b-4712-b0c7-e12bfc5f234a' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-d8b87784-ef2b-4712-b0c7-e12bfc5f234a' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-48d6f44d-7550-4d65-bc3f-94cac766c500' class='xr-var-data-in' type='checkbox'><label for='data-48d6f44d-7550-4d65-bc3f-94cac766c500' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>long_name :</span></dt><dd>ABI band central wavelength associated with observed star</dd><dt><span>standard_name :</span></dt><dd>sensor_band_central_radiation_wavelength</dd><dt><span>units :</span></dt><dd>um</dd></dl></div><div class='xr-var-data'><pre>array([-999., -999., -999., -999., -999., -999., -999., -999., -999., -999.,
+       -999., -999., -999., -999., -999., -999., -999., -999., -999., -999.,
+       -999., -999., -999., -999.], dtype=float32)</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-7cdc628f-ef5b-445f-89b2-844e1e035286' class='xr-section-summary-in' type='checkbox'  ><label for='section-7cdc628f-ef5b-445f-89b2-844e1e035286' class='xr-section-summary' >Data variables: <span>(37)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span>Rad</span></div><div class='xr-var-dims'>(y, x)</div><div class='xr-var-dtype'>float32</div><div class='xr-var-preview xr-preview'>...</div><input id='attrs-76caa932-b822-468a-af21-566768c6af14' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-76caa932-b822-468a-af21-566768c6af14' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-cc3e5a0f-f406-4e75-85a5-04e1c4e5fef8' class='xr-var-data-in' type='checkbox'><label for='data-cc3e5a0f-f406-4e75-85a5-04e1c4e5fef8' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>long_name :</span></dt><dd>ABI L1b Radiances</dd><dt><span>standard_name :</span></dt><dd>toa_outgoing_radiance_per_unit_wavenumber</dd><dt><span>sensor_band_bit_depth :</span></dt><dd>12</dd><dt><span>valid_range :</span></dt><dd>[   0 4094]</dd><dt><span>units :</span></dt><dd>mW m-2 sr-1 (cm-1)-1</dd><dt><span>resolution :</span></dt><dd>y: 0.000056 rad x: 0.000056 rad</dd><dt><span>grid_mapping :</span></dt><dd>goes_imager_projection</dd><dt><span>cell_methods :</span></dt><dd>t: point area: point</dd><dt><span>ancillary_variables :</span></dt><dd>DQF</dd></dl></div><div class='xr-var-data'><pre>[3750000 values with dtype=float32]</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>DQF</span></div><div class='xr-var-dims'>(y, x)</div><div class='xr-var-dtype'>float32</div><div class='xr-var-preview xr-preview'>...</div><input id='attrs-5519149a-db47-4482-9248-4096a967635c' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-5519149a-db47-4482-9248-4096a967635c' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-bae83e9f-07f5-4e72-9518-c6aee78e42e7' class='xr-var-data-in' type='checkbox'><label for='data-bae83e9f-07f5-4e72-9518-c6aee78e42e7' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>long_name :</span></dt><dd>ABI L1b Radiances data quality flags</dd><dt><span>standard_name :</span></dt><dd>status_flag</dd><dt><span>valid_range :</span></dt><dd>[0 4]</dd><dt><span>units :</span></dt><dd>1</dd><dt><span>grid_mapping :</span></dt><dd>goes_imager_projection</dd><dt><span>cell_methods :</span></dt><dd>t: point area: point</dd><dt><span>flag_values :</span></dt><dd>[0 1 2 3 4]</dd><dt><span>flag_meanings :</span></dt><dd>good_pixel_qf conditionally_usable_pixel_qf out_of_range_pixel_qf no_value_pixel_qf focal_plane_temperature_threshold_exceeded_qf</dd><dt><span>number_of_qf_values :</span></dt><dd>5</dd><dt><span>percent_good_pixel_qf :</span></dt><dd>1.0</dd><dt><span>percent_conditionally_usable_pixel_qf :</span></dt><dd>0.0</dd><dt><span>percent_out_of_range_pixel_qf :</span></dt><dd>0.0</dd><dt><span>percent_no_value_pixel_qf :</span></dt><dd>0.0</dd><dt><span>percent_focal_plane_temperature_threshold_exceeded_qf :</span></dt><dd>0.0</dd></dl></div><div class='xr-var-data'><pre>[3750000 values with dtype=float32]</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>time_bounds</span></div><div class='xr-var-dims'>(number_of_time_bounds)</div><div class='xr-var-dtype'>datetime64[ns]</div><div class='xr-var-preview xr-preview'>...</div><input id='attrs-3e4730b3-c204-4493-a004-c19fb57423f6' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-3e4730b3-c204-4493-a004-c19fb57423f6' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-a7e18c9c-897c-464c-b360-a179f7677dfa' class='xr-var-data-in' type='checkbox'><label for='data-a7e18c9c-897c-464c-b360-a179f7677dfa' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>long_name :</span></dt><dd>Scan start and end times in seconds since epoch (2000-01-01 12:00:00)</dd></dl></div><div class='xr-var-data'><pre>array([&#x27;2022-07-12T20:06:17.326423040&#x27;, &#x27;2022-07-12T20:08:55.748365056&#x27;],
+      dtype=&#x27;datetime64[ns]&#x27;)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>goes_imager_projection</span></div><div class='xr-var-dims'>()</div><div class='xr-var-dtype'>int32</div><div class='xr-var-preview xr-preview'>...</div><input id='attrs-c7d7798c-9dfe-4093-8203-e3a316e8c54a' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-c7d7798c-9dfe-4093-8203-e3a316e8c54a' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-efaf3a59-1347-4f4e-8554-d38733d8ea4a' class='xr-var-data-in' type='checkbox'><label for='data-efaf3a59-1347-4f4e-8554-d38733d8ea4a' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>long_name :</span></dt><dd>GOES-R ABI fixed grid projection</dd><dt><span>grid_mapping_name :</span></dt><dd>geostationary</dd><dt><span>perspective_point_height :</span></dt><dd>35786023.0</dd><dt><span>semi_major_axis :</span></dt><dd>6378137.0</dd><dt><span>semi_minor_axis :</span></dt><dd>6356752.31414</dd><dt><span>inverse_flattening :</span></dt><dd>298.2572221</dd><dt><span>latitude_of_projection_origin :</span></dt><dd>0.0</dd><dt><span>longitude_of_projection_origin :</span></dt><dd>-75.0</dd><dt><span>sweep_angle_axis :</span></dt><dd>x</dd></dl></div><div class='xr-var-data'><pre>array(-2147483647, dtype=int32)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>y_image_bounds</span></div><div class='xr-var-dims'>(number_of_image_bounds)</div><div class='xr-var-dtype'>float32</div><div class='xr-var-preview xr-preview'>...</div><input id='attrs-853e5173-0bd4-401a-96ad-373e0a0e9aac' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-853e5173-0bd4-401a-96ad-373e0a0e9aac' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-f960d6cd-41e9-482d-9f61-f8f18dca7f3b' class='xr-var-data-in' type='checkbox'><label for='data-f960d6cd-41e9-482d-9f61-f8f18dca7f3b' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>long_name :</span></dt><dd>GOES-R fixed grid projection y-coordinate north/south extent of image</dd><dt><span>units :</span></dt><dd>rad</dd></dl></div><div class='xr-var-data'><pre>array([0.12824, 0.04424], dtype=float32)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>x_image_bounds</span></div><div class='xr-var-dims'>(number_of_image_bounds)</div><div class='xr-var-dtype'>float32</div><div class='xr-var-preview xr-preview'>...</div><input id='attrs-7bbbf2c9-af18-4ac3-9468-3d45452aaab1' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-7bbbf2c9-af18-4ac3-9468-3d45452aaab1' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-c3739ed1-46a0-4635-b034-7bbc46cd6ac8' class='xr-var-data-in' type='checkbox'><label for='data-c3739ed1-46a0-4635-b034-7bbc46cd6ac8' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>long_name :</span></dt><dd>GOES-R fixed grid projection x-coordinate west/east extent of image</dd><dt><span>units :</span></dt><dd>rad</dd></dl></div><div class='xr-var-data'><pre>array([-0.10136,  0.03864], dtype=float32)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>nominal_satellite_subpoint_lat</span></div><div class='xr-var-dims'>()</div><div class='xr-var-dtype'>float32</div><div class='xr-var-preview xr-preview'>...</div><input id='attrs-7510a8e8-21a1-480c-824e-a2feaab256cd' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-7510a8e8-21a1-480c-824e-a2feaab256cd' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-6a40c661-536d-41fa-9e43-9a42f8ff9318' class='xr-var-data-in' type='checkbox'><label for='data-6a40c661-536d-41fa-9e43-9a42f8ff9318' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>long_name :</span></dt><dd>nominal satellite subpoint latitude (platform latitude)</dd><dt><span>standard_name :</span></dt><dd>latitude</dd><dt><span>units :</span></dt><dd>degrees_north</dd></dl></div><div class='xr-var-data'><pre>array(0.)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>nominal_satellite_subpoint_lon</span></div><div class='xr-var-dims'>()</div><div class='xr-var-dtype'>float32</div><div class='xr-var-preview xr-preview'>...</div><input id='attrs-b5e6f422-7927-4853-ada3-f81228fd51dc' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-b5e6f422-7927-4853-ada3-f81228fd51dc' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-ca36323d-c23c-4053-955c-a5d56fc475b1' class='xr-var-data-in' type='checkbox'><label for='data-ca36323d-c23c-4053-955c-a5d56fc475b1' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>long_name :</span></dt><dd>nominal satellite subpoint longitude (platform longitude)</dd><dt><span>standard_name :</span></dt><dd>longitude</dd><dt><span>units :</span></dt><dd>degrees_east</dd></dl></div><div class='xr-var-data'><pre>array(-75.199997)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>nominal_satellite_height</span></div><div class='xr-var-dims'>()</div><div class='xr-var-dtype'>float32</div><div class='xr-var-preview xr-preview'>...</div><input id='attrs-e0177353-acb3-4b9d-b7d6-2231d11c292c' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-e0177353-acb3-4b9d-b7d6-2231d11c292c' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-b52bf819-aa05-4667-a638-e6a5c38713da' class='xr-var-data-in' type='checkbox'><label for='data-b52bf819-aa05-4667-a638-e6a5c38713da' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>long_name :</span></dt><dd>nominal satellite height above GRS 80 ellipsoid (platform altitude)</dd><dt><span>standard_name :</span></dt><dd>height_above_reference_ellipsoid</dd><dt><span>units :</span></dt><dd>km</dd></dl></div><div class='xr-var-data'><pre>array(35786.023438)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>geospatial_lat_lon_extent</span></div><div class='xr-var-dims'>()</div><div class='xr-var-dtype'>float32</div><div class='xr-var-preview xr-preview'>...</div><input id='attrs-7483ceaa-40b0-4dbf-8a03-978807360f7f' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-7483ceaa-40b0-4dbf-8a03-978807360f7f' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-35e9f990-cf42-47c4-ba79-92d41a210aaa' class='xr-var-data-in' type='checkbox'><label for='data-35e9f990-cf42-47c4-ba79-92d41a210aaa' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>long_name :</span></dt><dd>geospatial latitude and longitude references</dd><dt><span>geospatial_westbound_longitude :</span></dt><dd>-152.10928</dd><dt><span>geospatial_northbound_latitude :</span></dt><dd>56.76145</dd><dt><span>geospatial_eastbound_longitude :</span></dt><dd>-52.94688</dd><dt><span>geospatial_southbound_latitude :</span></dt><dd>14.57134</dd><dt><span>geospatial_lat_center :</span></dt><dd>30.083002</dd><dt><span>geospatial_lon_center :</span></dt><dd>-87.096954</dd><dt><span>geospatial_lat_nadir :</span></dt><dd>0.0</dd><dt><span>geospatial_lon_nadir :</span></dt><dd>-75.0</dd><dt><span>geospatial_lat_units :</span></dt><dd>degrees_north</dd><dt><span>geospatial_lon_units :</span></dt><dd>degrees_east</dd></dl></div><div class='xr-var-data'><pre>array(9.96921e+36, dtype=float32)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>yaw_flip_flag</span></div><div class='xr-var-dims'>()</div><div class='xr-var-dtype'>float32</div><div class='xr-var-preview xr-preview'>...</div><input id='attrs-21cf729d-b665-4864-a5df-48551292910f' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-21cf729d-b665-4864-a5df-48551292910f' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-e3cd69a3-02b8-4515-b638-fa4d362e574c' class='xr-var-data-in' type='checkbox'><label for='data-e3cd69a3-02b8-4515-b638-fa4d362e574c' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>long_name :</span></dt><dd>Flag indicating the spacecraft is operating in yaw flip configuration</dd><dt><span>valid_range :</span></dt><dd>[0 1]</dd><dt><span>units :</span></dt><dd>1</dd><dt><span>flag_values :</span></dt><dd>[0 1]</dd><dt><span>flag_meanings :</span></dt><dd>false true</dd></dl></div><div class='xr-var-data'><pre>array(0.)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>esun</span></div><div class='xr-var-dims'>()</div><div class='xr-var-dtype'>float32</div><div class='xr-var-preview xr-preview'>...</div><input id='attrs-8aef0de0-8893-4427-a8ff-7d3ffd009c3d' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-8aef0de0-8893-4427-a8ff-7d3ffd009c3d' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-51f65e7c-27ab-45e4-b42e-404e36853dfd' class='xr-var-data-in' type='checkbox'><label for='data-51f65e7c-27ab-45e4-b42e-404e36853dfd' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>long_name :</span></dt><dd>bandpass-weighted solar irradiance at the mean Earth-Sun distance</dd><dt><span>standard_name :</span></dt><dd>toa_shortwave_irradiance_per_unit_wavelength</dd><dt><span>units :</span></dt><dd>W m-2 um-1</dd><dt><span>cell_methods :</span></dt><dd>t: mean</dd></dl></div><div class='xr-var-data'><pre>array(nan)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>kappa0</span></div><div class='xr-var-dims'>()</div><div class='xr-var-dtype'>float32</div><div class='xr-var-preview xr-preview'>...</div><input id='attrs-7eafceb1-a56d-434b-8b00-64a758e5390c' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-7eafceb1-a56d-434b-8b00-64a758e5390c' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-ebc96592-61b5-481c-9415-ba053d040948' class='xr-var-data-in' type='checkbox'><label for='data-ebc96592-61b5-481c-9415-ba053d040948' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>long_name :</span></dt><dd>Inverse of the incoming top of atmosphere radiance at current earth-sun distance (PI d2 esun-1)-1, where d is the ratio of instantaneous Earth-Sun distance divided by the mean Earth-Sun distance, esun is the bandpass-weighted solar irradiance and PI is a standard constant used to convert ABI L1b radiance to reflectance</dd><dt><span>units :</span></dt><dd>(W m-2 um-1)-1</dd><dt><span>cell_methods :</span></dt><dd>t: mean</dd></dl></div><div class='xr-var-data'><pre>array(nan)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>planck_fk1</span></div><div class='xr-var-dims'>()</div><div class='xr-var-dtype'>float32</div><div class='xr-var-preview xr-preview'>...</div><input id='attrs-cfb6f27d-fcf9-4355-bed5-49cc05b3d681' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-cfb6f27d-fcf9-4355-bed5-49cc05b3d681' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-ee061bdf-efa9-4df2-8a53-a341ae367691' class='xr-var-data-in' type='checkbox'><label for='data-ee061bdf-efa9-4df2-8a53-a341ae367691' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>long_name :</span></dt><dd>wavenumber-dependent coefficient (2 h c2/ nu3) used in the ABI emissive band monochromatic brightness temperature computation, where nu =central wavenumber and h and c are standard constants</dd><dt><span>units :</span></dt><dd>W m-1</dd></dl></div><div class='xr-var-data'><pre>array(10803.299805)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>planck_fk2</span></div><div class='xr-var-dims'>()</div><div class='xr-var-dtype'>float32</div><div class='xr-var-preview xr-preview'>...</div><input id='attrs-8da5004c-d466-49a4-a1a9-d2f6ede9e5e3' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-8da5004c-d466-49a4-a1a9-d2f6ede9e5e3' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-9efddaf4-0e4b-4dbf-aefa-6f0e2bd3c58f' class='xr-var-data-in' type='checkbox'><label for='data-9efddaf4-0e4b-4dbf-aefa-6f0e2bd3c58f' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>long_name :</span></dt><dd>wavenumber-dependent coefficient (h c nu/b) used in the ABI emissive band monochromatic brightness temperature computation, where nu = central wavenumber and h, c, and b are standard constants</dd><dt><span>units :</span></dt><dd>K</dd></dl></div><div class='xr-var-data'><pre>array(1392.73999)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>planck_bc1</span></div><div class='xr-var-dims'>()</div><div class='xr-var-dtype'>float32</div><div class='xr-var-preview xr-preview'>...</div><input id='attrs-04740a1e-05e2-4b89-a907-57ecec062d70' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-04740a1e-05e2-4b89-a907-57ecec062d70' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-bf6c377a-0977-426a-b713-7fb98507c14e' class='xr-var-data-in' type='checkbox'><label for='data-bf6c377a-0977-426a-b713-7fb98507c14e' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>long_name :</span></dt><dd>spectral bandpass correction offset for brightness temperature (B(nu) - bc_1)/bc_2 where B()=planck_function() and nu=wavenumber</dd><dt><span>units :</span></dt><dd>K</dd></dl></div><div class='xr-var-data'><pre>array(0.0755)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>planck_bc2</span></div><div class='xr-var-dims'>()</div><div class='xr-var-dtype'>float32</div><div class='xr-var-preview xr-preview'>...</div><input id='attrs-9e48b4c8-29a9-446d-8387-3d6ef5035f52' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-9e48b4c8-29a9-446d-8387-3d6ef5035f52' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-2b320d0c-8d08-4a6d-a04e-26dc30c04cd2' class='xr-var-data-in' type='checkbox'><label for='data-2b320d0c-8d08-4a6d-a04e-26dc30c04cd2' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>long_name :</span></dt><dd>spectral bandpass correction scale factor for brightness temperature (B(nu) - bc_1)/bc_2 where B()=planck_function() and nu=wavenumber</dd><dt><span>units :</span></dt><dd>1</dd></dl></div><div class='xr-var-data'><pre>array(0.99975)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>valid_pixel_count</span></div><div class='xr-var-dims'>()</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>...</div><input id='attrs-552b8cee-e1d4-4ecb-af06-c3ae1ce352dd' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-552b8cee-e1d4-4ecb-af06-c3ae1ce352dd' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-9cdfbb65-00fa-4242-97bb-64f4d77424c5' class='xr-var-data-in' type='checkbox'><label for='data-9cdfbb65-00fa-4242-97bb-64f4d77424c5' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>long_name :</span></dt><dd>number of good and conditionally usable pixels</dd><dt><span>units :</span></dt><dd>count</dd><dt><span>grid_mapping :</span></dt><dd>goes_imager_projection</dd><dt><span>cell_methods :</span></dt><dd>t: sum area: sum (interval: 0.000056 rad comment: good and conditionally usable quality pixels only)</dd></dl></div><div class='xr-var-data'><pre>array(3702838.)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>missing_pixel_count</span></div><div class='xr-var-dims'>()</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>...</div><input id='attrs-92d681d8-a823-4a5a-b34e-2b4e4ffd4d50' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-92d681d8-a823-4a5a-b34e-2b4e4ffd4d50' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-f7e2f5d8-a462-45a1-b2de-b6fa7df25a57' class='xr-var-data-in' type='checkbox'><label for='data-f7e2f5d8-a462-45a1-b2de-b6fa7df25a57' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>long_name :</span></dt><dd>number of missing pixels</dd><dt><span>units :</span></dt><dd>count</dd><dt><span>grid_mapping :</span></dt><dd>goes_imager_projection</dd><dt><span>cell_methods :</span></dt><dd>t: sum area: sum (interval: 0.000056 rad comment: missing ABI fixed grid pixels only)</dd></dl></div><div class='xr-var-data'><pre>array(0.)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>saturated_pixel_count</span></div><div class='xr-var-dims'>()</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>...</div><input id='attrs-2b6ecd29-92a5-46b6-9a29-fdad8e666384' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-2b6ecd29-92a5-46b6-9a29-fdad8e666384' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-3797dc45-05ed-477a-a1d3-808523a5b23d' class='xr-var-data-in' type='checkbox'><label for='data-3797dc45-05ed-477a-a1d3-808523a5b23d' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>long_name :</span></dt><dd>number of saturated pixels</dd><dt><span>units :</span></dt><dd>count</dd><dt><span>grid_mapping :</span></dt><dd>goes_imager_projection</dd><dt><span>cell_methods :</span></dt><dd>t: sum area: sum (interval: 0.000056 rad comment: radiometrically saturated geolocated/not missing pixels only)</dd></dl></div><div class='xr-var-data'><pre>array(0.)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>undersaturated_pixel_count</span></div><div class='xr-var-dims'>()</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>...</div><input id='attrs-69255d01-d561-4d5c-9b6f-7c7382120553' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-69255d01-d561-4d5c-9b6f-7c7382120553' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-4095f3d4-0e17-4d19-b9b8-e702e3b1591f' class='xr-var-data-in' type='checkbox'><label for='data-4095f3d4-0e17-4d19-b9b8-e702e3b1591f' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>long_name :</span></dt><dd>number of undersaturated pixels</dd><dt><span>units :</span></dt><dd>count</dd><dt><span>grid_mapping :</span></dt><dd>goes_imager_projection</dd><dt><span>cell_methods :</span></dt><dd>t: sum area: sum (interval: 0.000056 rad comment: radiometrically undersaturated geolocated/not missing pixels only)</dd></dl></div><div class='xr-var-data'><pre>array(0.)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>focal_plane_temperature_threshold_exceeded_count</span></div><div class='xr-var-dims'>()</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>...</div><input id='attrs-573482dd-471c-4461-91c7-cd90d698ac5a' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-573482dd-471c-4461-91c7-cd90d698ac5a' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-2648f5b6-b61f-4a2b-baae-768d1248d4c3' class='xr-var-data-in' type='checkbox'><label for='data-2648f5b6-b61f-4a2b-baae-768d1248d4c3' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>long_name :</span></dt><dd>number of pixels whose temperatures exceeded the threshold</dd><dt><span>units :</span></dt><dd>count</dd><dt><span>grid_mapping :</span></dt><dd>goes_imager_projection</dd><dt><span>cell_methods :</span></dt><dd>t: sum area: sum (interval: 0.000056 rad comment: temperature exceeded pixels only)</dd></dl></div><div class='xr-var-data'><pre>array(0.)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>min_radiance_value_of_valid_pixels</span></div><div class='xr-var-dims'>()</div><div class='xr-var-dtype'>float32</div><div class='xr-var-preview xr-preview'>...</div><input id='attrs-158e8aa7-5e94-4d96-b56e-2e4840f20a09' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-158e8aa7-5e94-4d96-b56e-2e4840f20a09' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-2787acee-85c3-46bb-9b63-e629463b92ab' class='xr-var-data-in' type='checkbox'><label for='data-2787acee-85c3-46bb-9b63-e629463b92ab' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>long_name :</span></dt><dd>minimum radiance value of pixels</dd><dt><span>standard_name :</span></dt><dd>toa_outgoing_radiance_per_unit_wavenumber</dd><dt><span>valid_range :</span></dt><dd>[ -1.6443 185.5699]</dd><dt><span>units :</span></dt><dd>mW m-2 sr-1 (cm-1)-1</dd><dt><span>grid_mapping :</span></dt><dd>goes_imager_projection</dd><dt><span>cell_methods :</span></dt><dd>t: sum area: minimum (interval: 0.000056 rad comment: good and conditionally usable quality pixels only)</dd></dl></div><div class='xr-var-data'><pre>array(8.849287)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>max_radiance_value_of_valid_pixels</span></div><div class='xr-var-dims'>()</div><div class='xr-var-dtype'>float32</div><div class='xr-var-preview xr-preview'>...</div><input id='attrs-d233a70c-4739-43f2-b443-9dfb127b5f4c' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-d233a70c-4739-43f2-b443-9dfb127b5f4c' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-de2644a9-fc8a-4faa-b6d6-e7be6dee24a3' class='xr-var-data-in' type='checkbox'><label for='data-de2644a9-fc8a-4faa-b6d6-e7be6dee24a3' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>long_name :</span></dt><dd>maximum radiance value of pixels</dd><dt><span>standard_name :</span></dt><dd>toa_outgoing_radiance_per_unit_wavenumber</dd><dt><span>valid_range :</span></dt><dd>[ -1.6443 185.5699]</dd><dt><span>units :</span></dt><dd>mW m-2 sr-1 (cm-1)-1</dd><dt><span>grid_mapping :</span></dt><dd>goes_imager_projection</dd><dt><span>cell_methods :</span></dt><dd>t: sum area: maximum (interval: 0.000056 rad comment: good and conditionally usable quality pixels only)</dd></dl></div><div class='xr-var-data'><pre>array(154.23053)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>mean_radiance_value_of_valid_pixels</span></div><div class='xr-var-dims'>()</div><div class='xr-var-dtype'>float32</div><div class='xr-var-preview xr-preview'>...</div><input id='attrs-c93c4724-3db7-40eb-b6f1-415b8473e145' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-c93c4724-3db7-40eb-b6f1-415b8473e145' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-295ebb34-0a93-45a6-9fb3-f024fe708db3' class='xr-var-data-in' type='checkbox'><label for='data-295ebb34-0a93-45a6-9fb3-f024fe708db3' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>long_name :</span></dt><dd>mean radiance value of pixels</dd><dt><span>standard_name :</span></dt><dd>toa_outgoing_radiance_per_unit_wavenumber</dd><dt><span>valid_range :</span></dt><dd>[ -1.6443 185.5699]</dd><dt><span>units :</span></dt><dd>mW m-2 sr-1 (cm-1)-1</dd><dt><span>grid_mapping :</span></dt><dd>goes_imager_projection</dd><dt><span>cell_methods :</span></dt><dd>t: sum area: mean (interval: 0.000056 rad comment: good and conditionally usable quality pixels only)</dd></dl></div><div class='xr-var-data'><pre>array(85.197975)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>std_dev_radiance_value_of_valid_pixels</span></div><div class='xr-var-dims'>()</div><div class='xr-var-dtype'>float32</div><div class='xr-var-preview xr-preview'>...</div><input id='attrs-bb59b461-25a7-4712-81f4-b414072964c7' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-bb59b461-25a7-4712-81f4-b414072964c7' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-f279158c-08cb-484e-bdca-325726c655d2' class='xr-var-data-in' type='checkbox'><label for='data-f279158c-08cb-484e-bdca-325726c655d2' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>long_name :</span></dt><dd>standard deviation of radiance values of pixels</dd><dt><span>standard_name :</span></dt><dd>toa_outgoing_radiance_per_unit_wavenumber</dd><dt><span>units :</span></dt><dd>mW m-2 sr-1 (cm-1)-1</dd><dt><span>grid_mapping :</span></dt><dd>goes_imager_projection</dd><dt><span>cell_methods :</span></dt><dd>t: sum area: standard_deviation (interval: 0.000056 rad comment: good and conditionally usable quality pixels only)</dd></dl></div><div class='xr-var-data'><pre>array(24.985853)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>maximum_focal_plane_temperature</span></div><div class='xr-var-dims'>()</div><div class='xr-var-dtype'>float32</div><div class='xr-var-preview xr-preview'>...</div><input id='attrs-cbf75d27-3dea-44f0-978b-ac2791721ddb' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-cbf75d27-3dea-44f0-978b-ac2791721ddb' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-7eed0c1a-bd91-4939-9d50-e25f7a27024d' class='xr-var-data-in' type='checkbox'><label for='data-7eed0c1a-bd91-4939-9d50-e25f7a27024d' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>long_name :</span></dt><dd>maximum focal plane temperature value</dd><dt><span>valid_range :</span></dt><dd>[  0. 999.]</dd><dt><span>units :</span></dt><dd>K</dd></dl></div><div class='xr-var-data'><pre>array(59.951939)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>focal_plane_temperature_threshold_increasing</span></div><div class='xr-var-dims'>()</div><div class='xr-var-dtype'>float32</div><div class='xr-var-preview xr-preview'>...</div><input id='attrs-b95f8cbb-bdef-41d1-87d7-b0797b7d9611' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-b95f8cbb-bdef-41d1-87d7-b0797b7d9611' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-1f12e575-783c-4f9c-920b-4afceb84ad85' class='xr-var-data-in' type='checkbox'><label for='data-1f12e575-783c-4f9c-920b-4afceb84ad85' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>long_name :</span></dt><dd>focal plane temperature threshold increasing bounds value</dd><dt><span>valid_range :</span></dt><dd>[  0. 999.]</dd><dt><span>units :</span></dt><dd>K</dd></dl></div><div class='xr-var-data'><pre>array(81.)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>focal_plane_temperature_threshold_decreasing</span></div><div class='xr-var-dims'>()</div><div class='xr-var-dtype'>float32</div><div class='xr-var-preview xr-preview'>...</div><input id='attrs-a2d3f251-0fb1-444b-8b04-33f24797fb36' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-a2d3f251-0fb1-444b-8b04-33f24797fb36' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-6deb07df-4366-4380-a6e0-c7d84f9d9d46' class='xr-var-data-in' type='checkbox'><label for='data-6deb07df-4366-4380-a6e0-c7d84f9d9d46' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>long_name :</span></dt><dd>focal plane temperature threshold decreasing bounds value</dd><dt><span>valid_range :</span></dt><dd>[  0. 999.]</dd><dt><span>units :</span></dt><dd>K</dd></dl></div><div class='xr-var-data'><pre>array(81.)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>percent_uncorrectable_L0_errors</span></div><div class='xr-var-dims'>()</div><div class='xr-var-dtype'>float32</div><div class='xr-var-preview xr-preview'>...</div><input id='attrs-a1eb2990-67cf-41dc-8849-3b907b7d472a' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-a1eb2990-67cf-41dc-8849-3b907b7d472a' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-480614a2-5215-4225-9df0-cf168f9662ed' class='xr-var-data-in' type='checkbox'><label for='data-480614a2-5215-4225-9df0-cf168f9662ed' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>long_name :</span></dt><dd>percent data lost due to uncorrectable L0 errors</dd><dt><span>valid_range :</span></dt><dd>[0. 1.]</dd><dt><span>units :</span></dt><dd>percent</dd><dt><span>grid_mapping :</span></dt><dd>goes_imager_projection</dd><dt><span>cell_methods :</span></dt><dd>t: sum area: sum (uncorrectable L0 errors only)</dd></dl></div><div class='xr-var-data'><pre>array(0.)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>earth_sun_distance_anomaly_in_AU</span></div><div class='xr-var-dims'>()</div><div class='xr-var-dtype'>float32</div><div class='xr-var-preview xr-preview'>...</div><input id='attrs-9960fe5f-10da-4388-aa7f-35c85efdf3d0' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-9960fe5f-10da-4388-aa7f-35c85efdf3d0' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-983d4d6f-bb6f-4344-9280-d5faeff9ca96' class='xr-var-data-in' type='checkbox'><label for='data-983d4d6f-bb6f-4344-9280-d5faeff9ca96' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>long_name :</span></dt><dd>earth sun distance anomaly in astronomical units</dd><dt><span>units :</span></dt><dd>ua</dd><dt><span>cell_methods :</span></dt><dd>t: mean</dd></dl></div><div class='xr-var-data'><pre>array(1.016543)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>algorithm_dynamic_input_data_container</span></div><div class='xr-var-dims'>()</div><div class='xr-var-dtype'>int32</div><div class='xr-var-preview xr-preview'>...</div><input id='attrs-5b553158-4b9d-4e3c-bbc5-46b39b1f52b2' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-5b553158-4b9d-4e3c-bbc5-46b39b1f52b2' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-a24bc162-a2e3-48f9-9825-335d053ad481' class='xr-var-data-in' type='checkbox'><label for='data-a24bc162-a2e3-48f9-9825-335d053ad481' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>long_name :</span></dt><dd>container for filenames of dynamic algorithm input data</dd><dt><span>input_ABI_L0_data :</span></dt><dd>OR_ABI-L0-C-M6_G16_s20221932006173_e20221932008557_c*.nc</dd></dl></div><div class='xr-var-data'><pre>array(-2147483647, dtype=int32)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>processing_parm_version_container</span></div><div class='xr-var-dims'>()</div><div class='xr-var-dtype'>int32</div><div class='xr-var-preview xr-preview'>...</div><input id='attrs-d40be699-a499-41a7-bf75-793cdcc8900d' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-d40be699-a499-41a7-bf75-793cdcc8900d' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-2ba5b784-f7e3-4757-84ec-260cf3546d26' class='xr-var-data-in' type='checkbox'><label for='data-2ba5b784-f7e3-4757-84ec-260cf3546d26' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>long_name :</span></dt><dd>container for processing parameter filenames</dd><dt><span>L1b_processing_parm_version :</span></dt><dd>OR-PARM-RAD_G16_v01r00.zip</dd></dl></div><div class='xr-var-data'><pre>array(-2147483647, dtype=int32)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>algorithm_product_version_container</span></div><div class='xr-var-dims'>()</div><div class='xr-var-dtype'>int32</div><div class='xr-var-preview xr-preview'>...</div><input id='attrs-aa16ec6f-087a-4abc-b33d-eee1626e4e30' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-aa16ec6f-087a-4abc-b33d-eee1626e4e30' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-5ddc711f-89d9-4924-b954-ceb6e879f916' class='xr-var-data-in' type='checkbox'><label for='data-5ddc711f-89d9-4924-b954-ceb6e879f916' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>long_name :</span></dt><dd>container for algorithm package filename and product version</dd><dt><span>algorithm_version :</span></dt><dd>OR_ABI-L1b-ALG-RAD_v01r00.zip</dd><dt><span>product_version :</span></dt><dd>v01r00</dd></dl></div><div class='xr-var-data'><pre>array(-2147483647, dtype=int32)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>star_id</span></div><div class='xr-var-dims'>(num_star_looks)</div><div class='xr-var-dtype'>float32</div><div class='xr-var-preview xr-preview'>...</div><input id='attrs-20d88ca0-8cba-47cd-933b-24b5b824f776' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-20d88ca0-8cba-47cd-933b-24b5b824f776' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-0619eec9-1e3f-444e-bd55-59327f6f8a26' class='xr-var-data-in' type='checkbox'><label for='data-0619eec9-1e3f-444e-bd55-59327f6f8a26' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>long_name :</span></dt><dd>ABI star catalog identifier associated with observed star</dd></dl></div><div class='xr-var-data'><pre>array([nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan, nan,
+       nan, nan, nan, nan, nan, nan, nan, nan, nan, nan], dtype=float32)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>channel_integration_time</span></div><div class='xr-var-dims'>()</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>...</div><input id='attrs-823396f0-f292-4c85-914b-8f9b6656f213' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-823396f0-f292-4c85-914b-8f9b6656f213' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-182a7e5a-9ded-4ced-88a4-0d6091a6bc94' class='xr-var-data-in' type='checkbox'><label for='data-182a7e5a-9ded-4ced-88a4-0d6091a6bc94' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>long_name :</span></dt><dd>Channel-dependent Channel Integration Time, as defined in the VNIR or IR Channel Configuration Table Telemetry</dd><dt><span>units :</span></dt><dd>count</dd></dl></div><div class='xr-var-data'><pre>array(336.)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>channel_gain_field</span></div><div class='xr-var-dims'>()</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>...</div><input id='attrs-c6406785-1f32-4a3b-a7a2-a350e6957216' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-c6406785-1f32-4a3b-a7a2-a350e6957216' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-ea9dfcb2-34bc-449a-b304-5bf18d69fd30' class='xr-var-data-in' type='checkbox'><label for='data-ea9dfcb2-34bc-449a-b304-5bf18d69fd30' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>long_name :</span></dt><dd>Channel-dependent Gain Field, as defined in the VNIR or IR Channel Configuration Table Telemetry</dd><dt><span>units :</span></dt><dd>1</dd></dl></div><div class='xr-var-data'><pre>array(0.)</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-aba6a814-bea6-4b51-a1ea-ade10da6ebd2' class='xr-section-summary-in' type='checkbox'  ><label for='section-aba6a814-bea6-4b51-a1ea-ade10da6ebd2' class='xr-section-summary' >Attributes: <span>(30)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><dl class='xr-attrs'><dt><span>naming_authority :</span></dt><dd>gov.nesdis.noaa</dd><dt><span>Conventions :</span></dt><dd>CF-1.7</dd><dt><span>standard_name_vocabulary :</span></dt><dd>CF Standard Name Table (v35, 20 July 2016)</dd><dt><span>institution :</span></dt><dd>DOC/NOAA/NESDIS &gt; U.S. Department of Commerce, National Oceanic and Atmospheric Administration, National Environmental Satellite, Data, and Information Services</dd><dt><span>project :</span></dt><dd>GOES</dd><dt><span>production_site :</span></dt><dd>WCDAS</dd><dt><span>production_environment :</span></dt><dd>OE</dd><dt><span>spatial_resolution :</span></dt><dd>2km at nadir</dd><dt><span>Metadata_Conventions :</span></dt><dd>Unidata Dataset Discovery v1.0</dd><dt><span>orbital_slot :</span></dt><dd>GOES-East</dd><dt><span>platform_ID :</span></dt><dd>G16</dd><dt><span>instrument_type :</span></dt><dd>GOES-R Series Advanced Baseline Imager (ABI)</dd><dt><span>scene_id :</span></dt><dd>CONUS</dd><dt><span>instrument_ID :</span></dt><dd>FM1</dd><dt><span>title :</span></dt><dd>ABI L1b Radiances</dd><dt><span>summary :</span></dt><dd>Single emissive band ABI L1b Radiance Products are digital maps of outgoing radiance values at the top of the atmosphere for IR bands.</dd><dt><span>keywords :</span></dt><dd>SPECTRAL/ENGINEERING &gt; INFRARED WAVELENGTHS &gt; INFRARED RADIANCE</dd><dt><span>keywords_vocabulary :</span></dt><dd>NASA Global Change Master Directory (GCMD) Earth Science Keywords, Version 7.0.0.0.0</dd><dt><span>iso_series_metadata_id :</span></dt><dd>a70be540-c38b-11e0-962b-0800200c9a66</dd><dt><span>license :</span></dt><dd>Unclassified data.  Access is restricted to approved users only.</dd><dt><span>processing_level :</span></dt><dd>National Aeronautics and Space Administration (NASA) L1b</dd><dt><span>cdm_data_type :</span></dt><dd>Image</dd><dt><span>dataset_name :</span></dt><dd>OR_ABI-L1b-RadC-M6C13_G16_s20221932006173_e20221932008557_c20221932009023.nc</dd><dt><span>production_data_source :</span></dt><dd>Realtime</dd><dt><span>timeline_id :</span></dt><dd>ABI Mode 6</dd><dt><span>date_created :</span></dt><dd>2022-07-12T20:09:02.3Z</dd><dt><span>time_coverage_start :</span></dt><dd>2022-07-12T20:06:17.3Z</dd><dt><span>time_coverage_end :</span></dt><dd>2022-07-12T20:08:55.7Z</dd><dt><span>LUT_Filenames :</span></dt><dd>SpaceLookParams(FM1A_CDRL79RevP_PR_09_00_02)-637827000.0.h5 QTableBand13(FM1A_CDRL79RevH_DO_08_00_00)-582860861.0.h5 CalTargetTimeIntervals(FM1A_CDRL79RevP_DO_08_00_01)-611906620.0.h5 BandSaturationLimits(FM1A_CDRL79RevH_DO_08_00_00)-600000000.0.h5 SolarSpaceLookParams(FM1A_ADR1233_PR_09_08_25)-709281036.0.h5 DeadRowListParams(FM1A_CDRL79RevH_DO_08_00_00)-600000000.0.h5 Mirror_Record(FM1A_CDRL79RevG_DO_07_00_00)-582860861.0.h5 KalmanAstroConsts(FM1A_CDRL79RevH_DO_08_00_00)-600000000.0.xml KalmanFilterControls(FM1A_PR_09_08_02)-677650371.0.xml KalmanMeasMaxSensibles(FMAA_INT_ONLY_DO_09_01_00)-652936814.0.xml KalmanPreprocessorControls(FM1A_CDRL79RevJ_PR_09_06_02)-657795700.0.xml KalmanReferenceData(FM1A_CDRL79RevH_DO_08_00_00)-888.0.xml KalmanStarCatalogs(FM1A_CDRL79RevH_DO_08_00_00)-600000000.0.xml ABI_NavigationRDP_Band13(FM1A_CDRL79RevJ_DO_07_00_00)-582860861.0.xml ABI_NavigationParameters_Band13(FM1A_CDRL79RevH_DO_07_00_00)-582860861.0.xml ABI_ResamplingImplementation_Band13(FM1A_CDRL79RevH_DO_07_02_00)-602129336.0.xml ABI_ResamplingParameters_Band13(FM1A_CDRL79RevJ_DO_07_00_00)-582860861.0.xml StarLookParams(FM1A_CDRL79RevH_DO_08_00_00)-600000000.0.h5 StarDetectionParams(FM1A_CDRL79RevJ_DO_07_00_00)-582860861.0.xml ResamplingScaledConversion(FMAA_INT_ONLY_DO_08_00_00)-1111.0.xml BlockReleaseRegions(FMAA_INT_ONLY_DO_08_00_00)-2222.0.csv IR_RetrievalParameters(FM1A_CDRL79RevH_DO_09_01_00)-652936750.0.h5 RadianceLUT_Band13(FM1A_CDRL79RevE_DO_08_00_00)-582860861.0.h5 ICT_Record(FM1A_TMABI_18_159_PR_09_00_02)-637827000.0.h5 ICM_ConversionConsts(FM1A_CDRL43-18_DO_09_01_00)-652936750.0.h5 ICM_SensorCoefficients(FM1A_TMABI_18_159_TMABI_18_533_DO_09_05_00)-676949608.0.h5</dd><dt><span>id :</span></dt><dd>f45b564c-dcb9-498a-ac56-da80a1d735a5</dd></dl></div></li></ul></div></div></div></div>
+</div>
+<p>The following code in Python was created by the NOAA/NESDIS/STAR Aerosols and Atmospheric Composition Science Team to convert the GOES projection values to lat/lon coordinates that are more useful for selecting a sub-domain of GOES to plot. The original code used the netCDF4 library, so it was adapted to xarray by Bobby Jackson.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Calculate latitude and longitude from GOES ABI fixed grid projection data</span>
+<span class="c1"># GOES ABI fixed grid projection is a map projection relative to the GOES satellite</span>
+<span class="c1"># Units: latitude in °N (°S &lt; 0), longitude in °E (°W &lt; 0)</span>
+<span class="c1"># See GOES-R Product User Guide (PUG) Volume 5 (L2 products) Section 4.2.8 for details &amp; example of calculations</span>
+<span class="c1"># &quot;file_id&quot; is an ABI L1b or L2 .nc file opened using the netCDF4 library</span>
+
+<span class="k">def</span> <span class="nf">calculate_degrees</span><span class="p">(</span><span class="n">file_id</span><span class="p">):</span>
+    
+    <span class="c1"># Read in GOES ABI fixed grid projection variables and constants</span>
+    <span class="n">x_coordinate_1d</span> <span class="o">=</span> <span class="n">file_id</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">][:]</span>  <span class="c1"># E/W scanning angle in radians</span>
+    <span class="n">y_coordinate_1d</span> <span class="o">=</span> <span class="n">file_id</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">][:]</span>  <span class="c1"># N/S elevation angle in radians</span>
+    <span class="n">projection_info</span> <span class="o">=</span> <span class="n">file_id</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;goes_imager_projection&#39;</span><span class="p">]</span>
+    <span class="n">lon_origin</span> <span class="o">=</span> <span class="n">projection_info</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;longitude_of_projection_origin&quot;</span><span class="p">]</span>
+    <span class="n">H</span> <span class="o">=</span> <span class="n">projection_info</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;perspective_point_height&quot;</span><span class="p">]</span> <span class="o">+</span> \
+        <span class="n">projection_info</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;semi_major_axis&quot;</span><span class="p">]</span>
+    <span class="n">r_eq</span> <span class="o">=</span> <span class="n">projection_info</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;semi_major_axis&quot;</span><span class="p">]</span>
+    <span class="n">r_pol</span> <span class="o">=</span> <span class="n">projection_info</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;semi_minor_axis&quot;</span><span class="p">]</span>
+    
+    <span class="c1"># Create 2D coordinate matrices from 1D coordinate vectors</span>
+    <span class="n">x_coordinate_2d</span><span class="p">,</span> <span class="n">y_coordinate_2d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">x_coordinate_1d</span><span class="p">,</span> <span class="n">y_coordinate_1d</span><span class="p">)</span>
+    
+    <span class="c1"># Equations to calculate latitude and longitude</span>
+    <span class="n">lambda_0</span> <span class="o">=</span> <span class="p">(</span><span class="n">lon_origin</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span><span class="o">/</span><span class="mf">180.0</span>  
+    <span class="n">a_var</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x_coordinate_2d</span><span class="p">),</span><span class="mf">2.0</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">x_coordinate_2d</span><span class="p">),</span><span class="mf">2.0</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">y_coordinate_2d</span><span class="p">),</span><span class="mf">2.0</span><span class="p">)</span><span class="o">+</span><span class="p">(((</span><span class="n">r_eq</span><span class="o">*</span><span class="n">r_eq</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">r_pol</span><span class="o">*</span><span class="n">r_pol</span><span class="p">))</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">y_coordinate_2d</span><span class="p">),</span><span class="mf">2.0</span><span class="p">))))</span>
+    <span class="n">b_var</span> <span class="o">=</span> <span class="o">-</span><span class="mf">2.0</span><span class="o">*</span><span class="n">H</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">x_coordinate_2d</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">y_coordinate_2d</span><span class="p">)</span>
+    <span class="n">c_var</span> <span class="o">=</span> <span class="p">(</span><span class="n">H</span><span class="o">**</span><span class="mf">2.0</span><span class="p">)</span><span class="o">-</span><span class="p">(</span><span class="n">r_eq</span><span class="o">**</span><span class="mf">2.0</span><span class="p">)</span>
+    <span class="n">r_s</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="o">*</span><span class="n">b_var</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">b_var</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">-</span><span class="p">(</span><span class="mf">4.0</span><span class="o">*</span><span class="n">a_var</span><span class="o">*</span><span class="n">c_var</span><span class="p">)))</span><span class="o">/</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">a_var</span><span class="p">)</span>
+    <span class="n">s_x</span> <span class="o">=</span> <span class="n">r_s</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">x_coordinate_2d</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">y_coordinate_2d</span><span class="p">)</span>
+    <span class="n">s_y</span> <span class="o">=</span> <span class="o">-</span> <span class="n">r_s</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x_coordinate_2d</span><span class="p">)</span>
+    <span class="n">s_z</span> <span class="o">=</span> <span class="n">r_s</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">x_coordinate_2d</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">y_coordinate_2d</span><span class="p">)</span>
+    
+    <span class="c1"># Ignore numpy errors for sqrt of negative number; occurs for GOES-16 ABI CONUS sector data</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">seterr</span><span class="p">(</span><span class="nb">all</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+    
+    <span class="n">abi_lat</span> <span class="o">=</span> <span class="p">(</span><span class="mf">180.0</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arctan</span><span class="p">(((</span><span class="n">r_eq</span><span class="o">*</span><span class="n">r_eq</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">r_pol</span><span class="o">*</span><span class="n">r_pol</span><span class="p">))</span><span class="o">*</span><span class="p">((</span><span class="n">s_z</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(((</span><span class="n">H</span><span class="o">-</span><span class="n">s_x</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">H</span><span class="o">-</span><span class="n">s_x</span><span class="p">))</span><span class="o">+</span><span class="p">(</span><span class="n">s_y</span><span class="o">*</span><span class="n">s_y</span><span class="p">))))))</span>
+    <span class="n">abi_lon</span> <span class="o">=</span> <span class="p">(</span><span class="n">lambda_0</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan</span><span class="p">(</span><span class="n">s_y</span><span class="o">/</span><span class="p">(</span><span class="n">H</span><span class="o">-</span><span class="n">s_x</span><span class="p">)))</span><span class="o">*</span><span class="p">(</span><span class="mf">180.0</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">abi_lat</span><span class="p">,</span> <span class="n">abi_lon</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Calculate the latitude and longitude coordinates of the GOES data and then crop the data to our region of interest: 25 to 35 <span class="math notranslate nohighlight">\(^{\circ} N\)</span> and 100 to 95 <span class="math notranslate nohighlight">\(^{\circ} W\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lat</span><span class="p">,</span> <span class="n">lon</span> <span class="o">=</span> <span class="n">calculate_degrees</span><span class="p">(</span><span class="n">goes_ds</span><span class="p">)</span>
+<span class="n">lat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">lat</span><span class="p">,</span> <span class="o">-</span><span class="mi">9999</span><span class="p">)</span>
+<span class="n">lon</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="o">-</span><span class="mi">9999</span><span class="p">)</span>
+<span class="n">lat_range</span> <span class="o">=</span> <span class="p">(</span><span class="mf">25.</span><span class="p">,</span> <span class="mf">35.</span><span class="p">)</span>
+<span class="n">lon_range</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mf">100.</span><span class="p">,</span> <span class="o">-</span><span class="mf">95.</span><span class="p">)</span>
+<span class="n">lat_min</span> <span class="o">=</span> <span class="n">lat</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">lat_max</span> <span class="o">=</span> <span class="n">lat</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">lat_min_bound</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">lat_min</span> <span class="o">-</span> <span class="n">lat_range</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+<span class="n">lat_max_bound</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">lat_max</span> <span class="o">-</span> <span class="n">lat_range</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+<span class="n">lon_min</span> <span class="o">=</span> <span class="n">lon</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">lon_max</span> <span class="o">=</span> <span class="n">lon</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">lon_min_bound</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">lon_min</span> <span class="o">-</span> <span class="n">lon_range</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+<span class="n">lon_max_bound</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">lon_max</span> <span class="o">-</span> <span class="n">lon_range</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="csapr-data-access">
+<h1>CSAPR data access<a class="headerlink" href="#csapr-data-access" title="Permalink to this headline">#</a></h1>
+<p>The a1-level CSAPR data are available for public use on <a class="reference external" href="https://adc.arm.gov/discovery/">ARM Data Disovery</a>. In addition, we can use the Atmospheric Community Toolkit to download the July 12 and 13 CSAPR data. The DOI for the CSAPR2 a1-level data is 10.5439/1467901, which if accessed will bring you to the download page on ARM Data Discovery.</p>
+<p>The first block of code below will look at the automated catalogue of CSAPR data created by Adam Theisen. This provides us with a view of what scanning mode the CSAPR was in for a given time period as well as the scanning geometry and precipitation coverage.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cell_track_info</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;https://raw.githubusercontent.com/AdamTheisen/cell-track-stats/main/data/houcsapr.20220617.csv&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">],</span> <span class="n">parse_dates</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">cell_track_info</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Unnamed: 0</th>
+      <th>scan_mode</th>
+      <th>scan_name</th>
+      <th>template_name</th>
+      <th>azimuth_min</th>
+      <th>azimuth_max</th>
+      <th>elevation_min</th>
+      <th>elevation_max</th>
+      <th>range_min</th>
+      <th>range_max</th>
+      <th>cell_azimuth</th>
+      <th>cell_range</th>
+      <th>cell_zh</th>
+      <th>ngates_gt_0</th>
+      <th>ngates_gt_10</th>
+      <th>ngates_gt_30</th>
+      <th>ngates_gt_50</th>
+      <th>ngates_gt_10_5km</th>
+      <th>ngates_gt40_5km</th>
+      <th>ngates</th>
+    </tr>
+    <tr>
+      <th>time</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2022-06-17 00:00:03</th>
+      <td>0</td>
+      <td>rhi</td>
+      <td>rhi</td>
+      <td>hou-rhi-cell-track-05-deg</td>
+      <td>303.74450</td>
+      <td>303.74450</td>
+      <td>0.637207</td>
+      <td>4.383545</td>
+      <td>0.0</td>
+      <td>109900.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2022-06-17 00:06:09</th>
+      <td>1</td>
+      <td>ppi</td>
+      <td>ppi</td>
+      <td>hou-ppi-cell-track-05-deg</td>
+      <td>297.59216</td>
+      <td>307.63367</td>
+      <td>3.021240</td>
+      <td>3.988037</td>
+      <td>0.0</td>
+      <td>109900.0</td>
+      <td>297.910767</td>
+      <td>700.0</td>
+      <td>30.930866</td>
+      <td>59</td>
+      <td>30</td>
+      <td>3</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>78</td>
+    </tr>
+    <tr>
+      <th>2022-06-17 00:06:40</th>
+      <td>2</td>
+      <td>rhi</td>
+      <td>rhi</td>
+      <td>hou-rhi-cell-track-05-deg</td>
+      <td>302.64587</td>
+      <td>302.64587</td>
+      <td>0.637207</td>
+      <td>4.383545</td>
+      <td>0.0</td>
+      <td>109900.0</td>
+      <td>302.645874</td>
+      <td>1800.0</td>
+      <td>-0.776333</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>2022-06-17 00:06:59</th>
+      <td>3</td>
+      <td>rhi</td>
+      <td>rhi</td>
+      <td>hou-rhi-cell-track-05-deg</td>
+      <td>302.55798</td>
+      <td>302.59094</td>
+      <td>0.637207</td>
+      <td>4.383545</td>
+      <td>0.0</td>
+      <td>109900.0</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2022-06-17 00:07:18</th>
+      <td>4</td>
+      <td>rhi</td>
+      <td>rhi</td>
+      <td>hou-rhi-cell-track-05-deg</td>
+      <td>302.97546</td>
+      <td>302.99744</td>
+      <td>0.637207</td>
+      <td>4.383545</td>
+      <td>0.0</td>
+      <td>109900.0</td>
+      <td>302.975464</td>
+      <td>900.0</td>
+      <td>-2.972101</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>2022-06-17 23:39:46</th>
+      <td>2826</td>
+      <td>rhi</td>
+      <td>rhi</td>
+      <td>hou-rhi-cell-track-10-deg</td>
+      <td>301.48132</td>
+      <td>301.50330</td>
+      <td>0.648193</td>
+      <td>9.382324</td>
+      <td>0.0</td>
+      <td>109900.0</td>
+      <td>301.503296</td>
+      <td>62400.0</td>
+      <td>40.327583</td>
+      <td>990</td>
+      <td>989</td>
+      <td>210</td>
+      <td>0</td>
+      <td>134</td>
+      <td>0</td>
+      <td>995</td>
+    </tr>
+    <tr>
+      <th>2022-06-17 23:40:02</th>
+      <td>2827</td>
+      <td>rhi</td>
+      <td>rhi</td>
+      <td>hou-rhi-cell-track-10-deg</td>
+      <td>305.70007</td>
+      <td>305.70007</td>
+      <td>0.648193</td>
+      <td>9.404297</td>
+      <td>0.0</td>
+      <td>109900.0</td>
+      <td>305.700073</td>
+      <td>13600.0</td>
+      <td>29.037998</td>
+      <td>12</td>
+      <td>6</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>20</td>
+    </tr>
+    <tr>
+      <th>2022-06-17 23:40:16</th>
+      <td>2828</td>
+      <td>rhi</td>
+      <td>rhi</td>
+      <td>hou-rhi-cell-track-10-deg</td>
+      <td>297.23510</td>
+      <td>297.26807</td>
+      <td>0.648193</td>
+      <td>9.382324</td>
+      <td>0.0</td>
+      <td>109900.0</td>
+      <td>297.235107</td>
+      <td>700.0</td>
+      <td>28.459156</td>
+      <td>28</td>
+      <td>25</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>34</td>
+    </tr>
+    <tr>
+      <th>2022-06-17 23:40:29</th>
+      <td>2829</td>
+      <td>ppi</td>
+      <td>ppi</td>
+      <td>hou-ppi-cell-track-10-deg</td>
+      <td>296.08704</td>
+      <td>306.16150</td>
+      <td>2.999268</td>
+      <td>6.998291</td>
+      <td>0.0</td>
+      <td>109900.0</td>
+      <td>300.646362</td>
+      <td>59100.0</td>
+      <td>33.882927</td>
+      <td>807</td>
+      <td>783</td>
+      <td>27</td>
+      <td>0</td>
+      <td>63</td>
+      <td>0</td>
+      <td>830</td>
+    </tr>
+    <tr>
+      <th>2022-06-17 23:40:54</th>
+      <td>2830</td>
+      <td>rhi</td>
+      <td>rhi</td>
+      <td>hou-rhi-cell-track-10-deg</td>
+      <td>301.05835</td>
+      <td>301.08032</td>
+      <td>0.648193</td>
+      <td>9.382324</td>
+      <td>0.0</td>
+      <td>109900.0</td>
+      <td>301.058350</td>
+      <td>62800.0</td>
+      <td>37.198204</td>
+      <td>767</td>
+      <td>767</td>
+      <td>75</td>
+      <td>0</td>
+      <td>76</td>
+      <td>0</td>
+      <td>773</td>
+    </tr>
+  </tbody>
+</table>
+<p>2831 rows × 20 columns</p>
+</div></div></div>
+</div>
+<p>For this notebook we are interested in the time periods where the CSAPR was scanning in PPI mode. For this entire time period, the CSAPR was in cell-tracking mode, meaning that it was focused on a single convective cell in the Houston region. This scanning strategy will have a much more frequent scans over a smaller area covered by a single convective cell and is designed to track the lifecycle of a convective cell.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">start_hour</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">end_hour</span> <span class="o">=</span> <span class="mi">21</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;All PPI scan times between </span><span class="si">%d</span><span class="s2"> UTC and </span><span class="si">%d</span><span class="s2"> UTC:&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">start_hour</span><span class="p">,</span> <span class="n">end_hour</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">cell_track_info</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">index</span><span class="o">.</span><span class="n">hour</span> <span class="o">&gt;=</span> <span class="mi">20</span> <span class="ow">and</span> <span class="n">index</span><span class="o">.</span><span class="n">hour</span> <span class="o">&lt;</span> <span class="n">end_hour</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">cell_track_info</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">scan_mode</span> <span class="o">==</span> <span class="s2">&quot;ppi&quot;</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>All PPI scan times between 20 UTC and 21 UTC:
+2022-06-17 20:00:07
+2022-06-17 20:00:51
+2022-06-17 20:01:34
+2022-06-17 20:02:17
+2022-06-17 20:03:05
+2022-06-17 20:03:48
+2022-06-17 20:04:31
+2022-06-17 20:05:22
+2022-06-17 20:06:08
+2022-06-17 20:06:59
+2022-06-17 20:07:43
+2022-06-17 20:08:29
+2022-06-17 20:09:15
+2022-06-17 20:09:56
+2022-06-17 20:10:53
+2022-06-17 20:11:39
+2022-06-17 20:14:24
+2022-06-17 20:16:25
+2022-06-17 20:18:27
+2022-06-17 20:20:25
+2022-06-17 20:22:31
+2022-06-17 20:24:30
+2022-06-17 20:26:31
+2022-06-17 20:28:30
+2022-06-17 20:30:31
+2022-06-17 20:32:29
+2022-06-17 20:34:30
+2022-06-17 20:36:30
+2022-06-17 20:38:31
+2022-06-17 20:40:32
+2022-06-17 20:42:33
+2022-06-17 20:44:31
+2022-06-17 20:46:31
+2022-06-17 20:48:25
+2022-06-17 20:50:27
+2022-06-17 20:52:21
+2022-06-17 20:54:20
+2022-06-17 20:56:22
+2022-06-17 20:57:51
+2022-06-17 20:59:19
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">csapr</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;/Users/rjackson/TRACER-PAWS-NEXRAD-LMA/data/houcsapr2cfrS2.a1.20220712.200714.nc&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="load-lma-flash-data">
+<h2>Load LMA Flash data<a class="headerlink" href="#load-lma-flash-data" title="Permalink to this headline">#</a></h2>
+<p>Here we load the data from the Houston Lightning Mapping Array. The data are in standard netCDF format that is easily read by xarray.
+The data are currently available for order at https://data.eol.ucar.edu/cgi-bin/codiac/fgr_form/id=100.016. Both the flash density data and locations of each flash are stored in the file.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lma_ds</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span><span class="s1">&#39;/Users/rjackson/TRACER-PAWS-NEXRAD-LMA/data/LYLOUT_220712_000000_86400_map500m.nc&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="june-17th-case">
+<h2>June 17th case<a class="headerlink" href="#june-17th-case" title="Permalink to this headline">#</a></h2>
+<p>This is a case of a storm that was tracked by CSAPR for about 90 minutes during the afternoon of June 17th 2022. We will use the same code from above to plot the radar/LMA overlays over the GOES IR radiance data for this case. This first block of code combines the above code to load and subset all of the necessary data for the overlays.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">goes_ds</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span><span class="s1">&#39;../data/OR_ABI-L1b-RadC-M6C13_G16_s20221682056178_e20221682058562_c20221682059029.nc&#39;</span><span class="p">)</span>
+<span class="n">csapr</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;/Users/rjackson/TRACER-PAWS-NEXRAD-LMA/data/houcsapr2cfrS2.a1.20220617.203229.nc&#39;</span><span class="p">)</span>
+<span class="n">lma_ds</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span><span class="s1">&#39;/Users/rjackson/TRACER-PAWS-NEXRAD-LMA/data/LYLOUT_220617_000000_86400_map500m.nc&#39;</span><span class="p">)</span>
+<span class="n">lma_ds</span>
+<span class="n">lat</span><span class="p">,</span> <span class="n">lon</span> <span class="o">=</span> <span class="n">calculate_degrees</span><span class="p">(</span><span class="n">goes_ds</span><span class="p">)</span>
+<span class="n">lat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">lat</span><span class="p">,</span> <span class="o">-</span><span class="mi">9999</span><span class="p">)</span>
+<span class="n">lon</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="o">-</span><span class="mi">9999</span><span class="p">)</span>
+<span class="n">lat_range</span> <span class="o">=</span> <span class="p">(</span><span class="mf">25.</span><span class="p">,</span> <span class="mf">35.</span><span class="p">)</span>
+<span class="n">lon_range</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mf">100.</span><span class="p">,</span> <span class="o">-</span><span class="mf">95.</span><span class="p">)</span>
+<span class="n">lat_min</span> <span class="o">=</span> <span class="n">lat</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">lat_max</span> <span class="o">=</span> <span class="n">lat</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">lat_min_bound</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">lat_min</span> <span class="o">-</span> <span class="n">lat_range</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+<span class="n">lat_max_bound</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">lat_max</span> <span class="o">-</span> <span class="n">lat_range</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+<span class="n">lon_min</span> <span class="o">=</span> <span class="n">lon</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">lon_max</span> <span class="o">=</span> <span class="n">lon</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">lon_min_bound</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">lon_min</span> <span class="o">-</span> <span class="n">lon_range</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+<span class="n">lon_max_bound</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">lon_max</span> <span class="o">-</span> <span class="n">lon_range</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Here, we use cartopy to plot the GOES/LMA data and then the RadarMapDisplay object to overlay the radar data on top of the GOES/LMA data.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">subplot_kw</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">()))</span>
+<span class="n">Rad</span> <span class="o">=</span> <span class="n">goes_ds</span><span class="o">.</span><span class="n">Rad</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">lat_max_bound</span><span class="p">:</span><span class="n">lat_min_bound</span><span class="p">,</span>
+                         <span class="n">lon_max_bound</span><span class="p">:</span><span class="n">lon_min_bound</span><span class="p">]</span>
+<span class="n">gatefilter</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">GateFilter</span><span class="p">(</span><span class="n">csapr</span><span class="p">)</span>
+<span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_below</span><span class="p">(</span><span class="s1">&#39;normalized_coherent_power&#39;</span><span class="p">,</span> <span class="mf">0.50</span><span class="p">)</span>
+
+<span class="n">disp</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">csapr</span><span class="p">)</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">lon</span><span class="p">[</span><span class="n">lat_max_bound</span><span class="p">:</span><span class="n">lat_min_bound</span><span class="p">,</span>
+                  <span class="n">lon_max_bound</span><span class="p">:</span><span class="n">lon_min_bound</span><span class="p">],</span>
+                  <span class="n">lat</span><span class="p">[</span><span class="n">lat_max_bound</span><span class="p">:</span><span class="n">lat_min_bound</span><span class="p">,</span>
+                  <span class="n">lon_max_bound</span><span class="p">:</span><span class="n">lon_min_bound</span><span class="p">],</span> <span class="n">Rad</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;binary&#39;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">150</span><span class="p">)</span>
+<span class="n">disp</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="n">gatefilter</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">sweep</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">10</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;GOES IR Radiance [W $m^{-2}\ sr^{-1}]$&#39;</span><span class="p">)</span>
+
+<span class="n">flash_times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">lma_ds</span><span class="o">.</span><span class="n">flash_time_start</span><span class="o">.</span><span class="n">values</span> <span class="o">&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">(</span><span class="s1">&#39;2022-06-17T20:31:00&#39;</span><span class="p">),</span>
+                                         <span class="n">lma_ds</span><span class="o">.</span><span class="n">flash_time_start</span><span class="o">.</span><span class="n">values</span> <span class="o">&lt;</span> <span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">(</span><span class="s1">&#39;2022-06-17T20:33:00&#39;</span><span class="p">))))</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">lma_ds</span><span class="o">.</span><span class="n">flash_center_longitude</span><span class="p">[</span><span class="n">flash_times</span><span class="p">],</span> <span class="n">lma_ds</span><span class="o">.</span><span class="n">flash_center_latitude</span><span class="p">[</span><span class="n">flash_times</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;+&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">([</span><span class="o">-</span><span class="mi">96</span><span class="p">,</span> <span class="o">-</span><span class="mf">94.25</span><span class="p">])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="mf">28.5</span><span class="p">,</span> <span class="mf">30.25</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;&gt;:14: DeprecationWarning: invalid escape sequence &#39;\ &#39;
+&lt;&gt;:14: DeprecationWarning: invalid escape sequence &#39;\ &#39;
+/var/folders/xf/43jvg_v90fx7z1sj2j1v8h0w0000gn/T/ipykernel_41252/2371313213.py:14: DeprecationWarning: invalid escape sequence &#39;\ &#39;
+  plt.colorbar(c, label=&#39;GOES IR Radiance [W $m^{-2}\ sr^{-1}]$&#39;)
+/Users/rjackson/opt/anaconda3/envs/pyart_env2/lib/python3.10/site-packages/cartopy/mpl/gridliner.py:451: UserWarning: The .xlabels_top attribute is deprecated. Please use .top_labels to toggle visibility instead.
+  warnings.warn(&#39;The .xlabels_top attribute is deprecated. Please &#39;
+/Users/rjackson/opt/anaconda3/envs/pyart_env2/lib/python3.10/site-packages/cartopy/mpl/gridliner.py:487: UserWarning: The .ylabels_right attribute is deprecated. Please use .right_labels to toggle visibility instead.
+  warnings.warn(&#39;The .ylabels_right attribute is deprecated. Please &#39;
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(28.5, 30.25)
+</pre></div>
+</div>
+<img alt="../../_images/53bb6a0c91c33d045d65f23fabad1966894e643ee93c7442450ec0420d6eda10.png" src="../../_images/53bb6a0c91c33d045d65f23fabad1966894e643ee93c7442450ec0420d6eda10.png" />
+</div>
+</div>
+</section>
+<section id="june-17-rhi">
+<h2>June 17 RHI<a class="headerlink" href="#june-17-rhi" title="Permalink to this headline">#</a></h2>
+<p>We are also interested in the Range-Height Indicator scans provided by CSAPR2 as this cell evolves. The RHI scans will provide a vertical-cross section of the microphysical properties of the storm as it evolves. Finally, this block of code will plot the altitudes and locations of each lightning strike overlaid over the RHI scan. SciPy’s KDTree is used to find the nearest neighbors between the LMA lightning strike locations and the latitude and longitude locations of each gate in the RHI. After the nearest neighbors are found this provides us the altitude and range where the approximate location of the lightning strike would be.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">csapr_rhi</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;/Users/rjackson/TRACER-PAWS-NEXRAD-LMA/data/houcsapr2cfrS2.a1.20220617.203012.nc&#39;</span><span class="p">)</span>
+<span class="n">gatefilter</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">GateFilter</span><span class="p">(</span><span class="n">csapr_rhi</span><span class="p">)</span>
+<span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_below</span><span class="p">(</span><span class="s1">&#39;normalized_coherent_power&#39;</span><span class="p">,</span> <span class="mf">0.50</span><span class="p">)</span>
+
+<span class="n">flash_times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argwhere</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">lma_ds</span><span class="o">.</span><span class="n">flash_time_start</span><span class="o">.</span><span class="n">values</span> <span class="o">&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">(</span><span class="s1">&#39;2022-06-17T20:30:00&#39;</span><span class="p">),</span>
+                                         <span class="n">lma_ds</span><span class="o">.</span><span class="n">flash_time_start</span><span class="o">.</span><span class="n">values</span> <span class="o">&lt;</span> <span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">(</span><span class="s1">&#39;2022-06-17T20:31:00&#39;</span><span class="p">))))</span>
+<span class="n">flash_alts</span> <span class="o">=</span> <span class="n">lma_ds</span><span class="o">.</span><span class="n">flash_init_altitude</span><span class="p">[</span><span class="n">flash_times</span><span class="p">]</span>
+<span class="n">flash_lons</span> <span class="o">=</span> <span class="n">lma_ds</span><span class="o">.</span><span class="n">flash_init_longitude</span><span class="p">[</span><span class="n">flash_times</span><span class="p">]</span>
+<span class="n">flash_lats</span> <span class="o">=</span> <span class="n">lma_ds</span><span class="o">.</span><span class="n">flash_init_latitude</span><span class="p">[</span><span class="n">flash_times</span><span class="p">]</span>
+<span class="n">rhi_lons</span> <span class="o">=</span> <span class="n">csapr_rhi</span><span class="o">.</span><span class="n">gate_longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+<span class="n">rhi_lats</span> <span class="o">=</span> <span class="n">csapr_rhi</span><span class="o">.</span><span class="n">gate_latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+<span class="n">rhi_alts</span> <span class="o">=</span> <span class="n">csapr_rhi</span><span class="o">.</span><span class="n">gate_altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+
+<span class="n">kdtree_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">rhi_lons</span><span class="p">,</span> <span class="n">rhi_lats</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">kdtree</span> <span class="o">=</span> <span class="n">KDTree</span><span class="p">(</span><span class="n">kdtree_data</span><span class="p">)</span>
+<span class="n">inp_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">flash_lons</span><span class="p">,</span> <span class="n">flash_lats</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">dist</span><span class="p">,</span> <span class="n">where_in_rhi</span> <span class="o">=</span> <span class="n">kdtree</span><span class="o">.</span><span class="n">query</span><span class="p">(</span><span class="n">inp_data</span><span class="p">)</span>
+
+<span class="n">flash_ranges</span> <span class="o">=</span> <span class="n">csapr_rhi</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">where_in_rhi</span> <span class="o">%</span> <span class="n">csapr_rhi</span><span class="o">.</span><span class="n">ngates</span><span class="p">]</span>
+<span class="n">disp</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">csapr_rhi</span><span class="p">)</span>
+<span class="n">disp</span><span class="o">.</span><span class="n">plot_rhi</span><span class="p">(</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="n">gatefilter</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">flash_alts</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">flash_ranges</span><span class="o">/</span><span class="mf">1e3</span><span class="p">,</span> <span class="n">flash_alts</span><span class="o">/</span><span class="mf">1e3</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;+&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">30</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">15</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(51,)
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(0.0, 15.0)
+</pre></div>
+</div>
+<img alt="../../_images/84dc2e07db4f7f509657394cce865f1fe6e06793f5aa2c8602be2a66b8b69335.png" src="../../_images/84dc2e07db4f7f509657394cce865f1fe6e06793f5aa2c8602be2a66b8b69335.png" />
+</div>
+</div>
+</section>
+</section>
+
+<div class="section">
+   
+</div>
+
+              </div>
+              
+              
+              <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+<footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright 2013-2022, Py-ART developers.<br>
+</p>
+    </div>
+    
+    <div class="footer-item">
+      <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0.<br>
+</p>
+    </div>
+    
+  </div>
+</footer>
+  </body>
+</html>
