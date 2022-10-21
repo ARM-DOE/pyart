@@ -417,3 +417,12 @@ Appveyor and TravisCI will determine if the code past all checks. If the
 code fails either tests, as the pull request sits, make changes to fix the
 code and when pushed to GitHub, the pull request will automatically update
 and TravisCI and Appveyor will automatically rerun.
+
+Blog Posts
+----------
+
+You can also contribute by adding blog posts. To get started with
+blog posts, check out the blog post notebook template in the
+`doc/source/blog_posts/` directory. Move the blog post to a
+directory with the corresponding year (ex. `2022`), and follow the
+contribution process outlined above.
