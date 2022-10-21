@@ -15,6 +15,12 @@ try:
 except ImportError:
     _CARTOPY_AVAILABLE = False
 
+try:
+    import metpy
+    _METPY_AVAILABLE = True
+except ImportError:
+    _METPY_AVAILABLE = False
+
 from pyart.graph import common
 from pyart.exceptions import MissingOptionalDependency
 from pyart.core.transforms import _interpolate_axes_edges
@@ -597,6 +603,152 @@ class GridMapDisplay(object):
 
         if colorbar_flag:
             self.plot_colorbar(mappable=pm, label=colorbar_label,
+                               orientation=colorbar_orient, field=field,
+                               ax=ax, fig=fig, ticks=ticks, ticklabs=ticklabs)
+        return
+    
+    def plot_cross_section(self, field, start, end,
+                           steps=100, interp_type='linear', x_axis=None,
+                           vmin=None, vmax=None,
+                           norm=None, cmap=None,
+                           title=None, title_flag=True,
+                           axislabels_flag=True,
+                           colorbar_flag=True, colorbar_label=None,
+                           colorbar_orient='vertical',
+                           ax=None, fig=None, ticks=None,
+                           ticklabs=None, **kwargs):
+        """
+        Plot a cross section through a set of given points (latitude, longitude).
+
+        This uses the MetPy cross section interpolation function.
+
+        Additional arguments are passed to Matplotlib's pcolormesh function.
+
+        Parameters
+        ----------
+        field : str
+            Field to be plotted.
+        start : tuple
+            A latitude-longitude pair designating the start point of the cross section
+            (units are degrees north and degrees east).
+        end : tuple
+            A latitude-longitude pair designating the end point of the cross section
+            (units are degrees north and degrees east).
+        steps: int
+            The number of points along the geodesic between the start and the end point
+            (including the end points) to use in the cross section. Defaults to 100.
+        interp_type: str
+            The interpolation method, either ‘linear’ or ‘nearest’
+            (see xarray.DataArray.interp() for details). Defaults to ‘linear’.
+        x_axis: str
+            Field to use for plotting along the x-axis (ex. Latitude).
+            Defaults to number of points from the first point.
+        vmin, vmax : float
+            Lower and upper range for the colormesh. If either parameter is
+            None, a value will be determined from the field attributes (if
+            available) or the default values of -8, 64 will be used.
+            Parameters are ignored is norm is not None.
+        norm : Normalize or None, optional
+            matplotlib Normalize instance used to scale luminance data. If not
+            None the vmax and vmin parameters are ignored. If None, vmin and
+            vmax are used for luminance scaling.
+        cmap : str or None
+            Matplotlib colormap name. None will use the default colormap for
+            the field being plotted as specified by the Py-ART configuration.
+        mask_outside : bool
+            True to mask data outside of vmin, vmax. False performs no
+            masking.
+        title : str
+            Title to label plot with, None to use default title generated from
+            the field and lat,lon parameters. Parameter is ignored if
+            title_flag is False.
+        title_flag : bool
+            True to add a title to the plot, False does not add a title.
+        axislabels : (str, str)
+            2-tuple of x-axis, y-axis labels. None for either label will use
+            the default axis label. Parameter is ignored if axislabels_flag is
+            False.
+        axislabels_flag : bool
+            True to add label the axes, False does not label the axes.
+        colorbar_flag : bool
+            True to add a colorbar with label to the axis. False leaves off
+            the colorbar.
+        colorbar_label : str
+            Colorbar label, None will use a default label generated from the
+            field information.
+        colorbar_orient : 'vertical' or 'horizontal'
+            Colorbar orientation.
+        ax : Axis
+            Axis to plot on. None will use the current axis.
+        fig : Figure
+            Figure to add the colorbar to. None will use the current figure.
+        ticks : array
+            Colorbar custom tick label locations.
+        ticklabs : array
+            Colorbar custom tick labels.
+
+        """
+        if not _METPY_AVAILABLE:
+            raise MissingOptionalDependency(
+                'MetPy is required to use plot_cross_section but is not '
+                + 'installed!')
+
+        from metpy.interpolate import cross_section
+
+        # parse parameters
+        ax, fig = common.parse_ax_fig(ax, fig)
+        vmin, vmax = common.parse_vmin_vmax(self.grid, field, vmin, vmax)
+        cmap = common.parse_cmap(cmap, field)
+
+        # Convert the grid into an xarray object
+        ds= self.grid.to_xarray()
+
+        # Extract the proj parameters
+        proj_params = self.grid.get_projparams()
+
+        # Convert the projection information into cartopy
+        radar_crs = cartopy.crs.AzimuthalEquidistant(central_longitude=proj_params["lon_0"],
+                                                     central_latitude=proj_params["lat_0"])
+        
+        # Now, convert that to cf-compliant coordinate information and assign it to data
+        projection_info = radar_crs.to_cf()
+        ds = ds.metpy.assign_crs(projection_info)
+
+        # Calculate the cross section, which returns a dataset
+        ds = cross_section(ds, start, end, steps, interp_type).set_coords(('lat', 'lon'))
+
+        # Convert from meters to km for the different variables
+        ds["z"] = ds["z"] / 1000
+        ds.z.attrs["units"] = 'Distance above radar (km)'
+
+        if x_axis == 'y':
+            ds["y"] = ds["y"] / 1000
+            ds.y.attrs["units"] = 'North South distance from radar (km)'
+        
+        if x_axis == 'x':
+            ds["x"] = ds["x"] / 1000
+            ds.y.attrs["units"] = 'East West distance from radar (km)'
+
+        # Plot the data
+        plot = ds[field].plot(y='z', x=x_axis, vmin=vmin, vmax=vmax, norm=norm,
+                              add_colorbar=False, ax=ax, cmap=cmap, **kwargs)
+
+
+
+        self.mappables.append(plot)
+        self.fields.append(field)
+
+        if axislabels_flag:
+            ax.set_ylabel(ds.z.attrs["units"])
+
+        if title_flag:
+            if title is None:
+                ax.set_title(common.generate_cross_section_title(self.grid, field, start, end))
+            else:
+                ax.set_title(title)
+
+        if colorbar_flag:
+            self.plot_colorbar(mappable=plot, label=colorbar_label,
                                orientation=colorbar_orient, field=field,
                                ax=ax, fig=fig, ticks=ticks, ticklabs=ticklabs)
         return

@@ -12,6 +12,7 @@ dependencies:
   - cartopy
   - cvxopt
   - xarray
+  - metpy
   - pytest-cov
   - pytest-mpl
   - coveralls
