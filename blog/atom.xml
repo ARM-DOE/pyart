@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>mgrover1.github.io/pyart/</id>
   <title>PyART Blog</title>
-  <updated>2022-10-21T17:19:10.225424+00:00</updated>
+  <updated>2022-10-21T18:29:42.442288+00:00</updated>
   <link href="mgrover1.github.io/pyart/"/>
   <link href="mgrover1.github.io/pyart/blog/atom.xml" rel="self"/>
   <generator uri="https://ablog.readthedocs.org/" version="0.10.29">ABlog</generator>
@@ -85,5 +85,26 @@ interactive-kazr-vizinteractive-kazr-viz</summary>
     <link href="mgrover1.github.io/pyart/blog_posts/2022/first_pullrequest.html" rel="alternate"/>
     <summary>The motivation for this blog comes from wanting to change the colorscheme within the default Py-ART documentation images to a more (color vision deficiency friendly color scheme).Here are the images we are working with:drawing</summary>
     <published>2022-04-26T00:00:00+00:00</published>
+  </entry>
+  <entry>
+    <id>mgrover1.github.io/pyart/blog_posts/2022/TRACER.html</id>
+    <title>Blending Observations from TRACER using Py-ART</title>
+    <updated>2022-10-21T00:00:00+00:00</updated>
+    <author>
+      <name>Bobby Jackson</name>
+    </author>
+    <content type="html">&lt;div class="ablog-post-excerpt docutils container"&gt;
+&lt;p&gt;The TRacking Aerosol Convection Interactions (TRACER) field experiment was a U.S. Department of Energy IOP with the goal of studying the lifecycle of convection over Houston as well as potential aerosol impacts on this lifecycle. Houston is uniquely suited for this kind of field experiment where seabreeze convection forms off of the coast of Houston in cleaner air conditions and then approaches the more polluted Houston region. For more information about the TRACER field experiment, click &lt;a class="reference external" href="https://www.arm.gov/research/campaigns/amf2021tracer"&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;This post will show how to plot overlays of Texas A&amp;amp;M University Lightning Mapping Array data over GOES and ARM CSAPR2 data for a case of wildfire smoke entraining into developing convection sampled during July 12 and 13, 2022. In addition, we highlight a case that was tracked by CSAPR2 for 90 minutes on June 17, 2022.&lt;/p&gt;
+&lt;img alt="_images/53bb6a0c91c33d045d65f23fabad1966894e643ee93c7442450ec0420d6eda10.png" src="_images/53bb6a0c91c33d045d65f23fabad1966894e643ee93c7442450ec0420d6eda10.png" /&gt;
+&lt;/div&gt;
+</content>
+    <link href="mgrover1.github.io/pyart/blog_posts/2022/TRACER.html" rel="alternate"/>
+    <summary>The TRacking Aerosol Convection Interactions (TRACER) field experiment was a U.S. Department of Energy IOP with the goal of studying the lifecycle of convection over Houston as well as potential aerosol impacts on this lifecycle. Houston is uniquely suited for this kind of field experiment where seabreeze convection forms off of the coast of Houston in cleaner air conditions and then approaches the more polluted Houston region. For more information about the TRACER field experiment, click here.This post will show how to plot overlays of Texas A&amp;M University Lightning Mapping Array data over GOES and ARM CSAPR2 data for a case of wildfire smoke entraining into developing convection sampled during July 12 and 13, 2022. In addition, we highlight a case that was tracked by CSAPR2 for 90 minutes on June 17, 2022.</summary>
+    <category term="TRACER" label="TRACER"/>
+    <category term="aerosol" label="aerosol"/>
+    <category term="cloud" label="cloud"/>
+    <category term="radar" label="radar"/>
+    <published>2022-10-21T00:00:00+00:00</published>
   </entry>
 </feed>
