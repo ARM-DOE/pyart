@@ -117,6 +117,3 @@ cbar = plt.colorbar(mappable=display.plots[0], fraction=0.04, ax=axsB)
 #pos = cbar.ax.get_position()
 cbar.ax.set_aspect('auto')
 cbar.set_label(label='Horizontal Reflectivity Factor ($Z_{H}$) (dBZ)', fontsize=12)
-
-#
-plt.savefig('tmp2.png')
