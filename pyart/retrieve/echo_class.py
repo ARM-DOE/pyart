@@ -110,7 +110,7 @@ def steiner_conv_strat(grid, dx=None, dy=None, intense=42.0,
 def conv_strat(grid, dx=None, dy=None, level_m=None, always_core_thres=42, bkg_rad_km=11,
                use_cosine=True, max_diff=5, zero_diff_cos_val=55,
                scalar_diff=1.5, use_addition=True, calc_thres=0.75,
-               weak_echo_thres=5.0, min_dBZ_used=5.0,dB_averaging=False,
+               weak_echo_thres=5.0, min_dBZ_used=5.0,dB_averaging=True,
                remove_small_objects=True, min_km2_size=10,
                val_for_max_conv_rad=30, max_conv_rad_km=5.0,
                fill_value=None, refl_field=None, estimate_flag=True, estimate_offset=5):
