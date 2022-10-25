@@ -131,7 +131,7 @@ def conv_strat(grid, dx=None, dy=None, level_m=None, always_core_thres=42, bkg_r
         Threshold for points that are always convective. All values above the threshold are classifed as convective
         See Yuter et al. (2005) for more detail.
     bkg_rad_km : float, optional
-        Radius to compute background reflectivity in kilometers. Default is 11 km
+        Radius to compute background reflectivity in kilometers. Default is 11 km. Recommended to be at least 3 x grid spacing
     use_cosine : bool, optional
         Boolean used to determine if a cosine scheme (see Yuter and Houze (1997)) should be used for identifying convective cores (True) or if a simpler scalar scheme (False) should be used.
     max_diff : float, optional
@@ -204,12 +204,18 @@ def conv_strat(grid, dx=None, dy=None, level_m=None, always_core_thres=42, bkg_r
     # Parse field parameters
     if refl_field is None:
         refl_field = get_field_name('reflectivity')
+        dB_averaging = True
 
     # parse dx and dy if None
     if dx is None:
         dx = grid.x['data'][1] - grid.x['data'][0]
     if dy is None:
         dy = grid.y['data'][1] - grid.y['data'][0]
+
+    # add catch for background radius size
+    if bkg_rad_km < 2 * 1000 * dx or bkg_rad_km < 2 * 1000 * dy:
+        print("Background radius for averaging must be at least 2 times dx and dy, exiting")
+        raise
 
     # Get coordinates
     x = grid.x['data']
@@ -225,8 +231,6 @@ def conv_strat(grid, dx=None, dy=None, level_m=None, always_core_thres=42, bkg_r
     else:
         zslice = np.argmin(np.abs(z - level_m))
         ze = np.ma.copy(grid.fields[refl_field]['data'][zslice, :, :])
-
-    #ze = ze.filled(np.NaN)
 
     # run convective stratiform algorithm
     _, _, convsf_best = _revised_conv_strat(ze, dx, dy, always_core_thres=always_core_thres, bkg_rad_km=bkg_rad_km,

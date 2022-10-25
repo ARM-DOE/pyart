@@ -28,7 +28,7 @@ def _revised_conv_strat(refl, dx, dy, always_core_thres=42, bkg_rad_km=11,
     always_core_thres : float, optional
         Threshold for points that are always convective. All values above the threshold are classifed as convective
     bkg_rad_km : float, optional
-        Radius to compute background reflectivity in kilometers. Default is 11 km
+        Radius to compute background reflectivity in kilometers. Default is 11 km. Recommended to be at least 3 x grid spacing
     use_cosine : bool, optional
         Boolean used to determine if cosine scheme should be used for identifying convective cores (True) or a scalar scheme (False)
     max_diff : float, optional
