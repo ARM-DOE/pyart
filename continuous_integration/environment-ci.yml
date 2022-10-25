@@ -9,7 +9,7 @@ dependencies:
   - netcdf4
   - pytest
   - wradlib
-  - cartopy>=0.21.0
+  - cartopy
   - cvxopt
   - xarray
   - metpy
@@ -22,7 +22,7 @@ dependencies:
   - glpk
   - cftime
   - setuptools
-  - shapely
+  - shapely<1.8.3
   - pip
   - pip:
     - cibuildwheel
