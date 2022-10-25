@@ -9,7 +9,7 @@ dependencies:
   - netcdf4
   - pytest
   - wradlib
-  - cartopy
+  - cartopy>=0.21.0
   - cvxopt
   - xarray
   - metpy
