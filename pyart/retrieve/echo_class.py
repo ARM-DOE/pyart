@@ -213,7 +213,7 @@ def conv_strat(grid, dx=None, dy=None, level_m=None, always_core_thres=42, bkg_r
         dy = grid.y['data'][1] - grid.y['data'][0]
 
     # add catch for background radius size
-    if bkg_rad_km < 2 * 1000 * dx or bkg_rad_km < 2 * 1000 * dy:
+    if bkg_rad_km * 1000 < 2 * dx or bkg_rad_km * 1000 < 2 * dy:
         print("Background radius for averaging must be at least 2 times dx and dy, exiting")
         raise
 
