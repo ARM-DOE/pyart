@@ -251,7 +251,7 @@ def conv_strat(grid, dx=None, dy=None, level_m=None, always_core_thres=42, bkg_r
         'valid_max': 3,
         'comment_1': ('Convective-stratiform echo '
                       'classification based on '
-                      'Yuter and Houze (1997)'),
+                      'Yuter and Houze (1997) and Yuter et al. (2005)'),
         'comment_2': ('0 = Undefined, 1 = Stratiform, '
                       '2 = Convective')}}
 
@@ -286,7 +286,7 @@ def conv_strat(grid, dx=None, dy=None, level_m=None, always_core_thres=42, bkg_r
             'valid_max': 3,
             'comment_1': ('Convective-stratiform echo '
                           'classification based on '
-                          'Yuter and Houze (1997)'),
+                          'Yuter and Houze (1997) and Yuter et al. (2005)'),
             'comment_2': ('0 = Undefined, 1 = Stratiform, '
                           '2 = Convective')}
 
