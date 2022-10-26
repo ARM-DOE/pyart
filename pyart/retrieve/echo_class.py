@@ -112,7 +112,7 @@ def conv_strat(grid, dx=None, dy=None, level_m=None, always_core_thres=42, bkg_r
                weak_echo_thres=5.0, min_dBZ_used=5.0,dB_averaging=True,
                remove_small_objects=True, min_km2_size=10,
                val_for_max_conv_rad=30, max_conv_rad_km=5.0,
-               fill_value=None, refl_field=None, estimate_flag=True, estimate_offset=5):
+               refl_field=None, estimate_flag=True, estimate_offset=5):
     """
     Partition reflectivity into convective-stratiform using the Yuter et al. (2005)
     and Yuter and Houze (1997) algorithm.
@@ -161,9 +161,6 @@ def conv_strat(grid, dx=None, dy=None, level_m=None, always_core_thres=42, bkg_r
         dBZ for maximum convective radius. Convective cores with values above this will have the maximum convective radius
     max_conv_rad_km : float, optional
         Maximum radius around convective cores to classify as convective. Default is 5 km
-    fill_value : float, optional
-        Missing value used to signify bad data points. A value of None will use the default fill value as
-        defined in the Py-ART configuration file.
     refl_field : str, optional
         Field in grid to use as the reflectivity during partitioning. None will use the default reflectivity
         field name from the Py-ART configuration file.
@@ -196,10 +193,6 @@ def conv_strat(grid, dx=None, dy=None, level_m=None, always_core_thres=42, bkg_r
         print("Max conv radius must be less than 5 km, exiting")
         raise
 
-    # Get fill value for reflectivity field
-    if fill_value is None:
-        fill_value = get_fillvalue()
-
     # Parse field parameters
     if refl_field is None:
         refl_field = get_field_name('reflectivity')
@@ -217,8 +210,6 @@ def conv_strat(grid, dx=None, dy=None, level_m=None, always_core_thres=42, bkg_r
         raise
 
     # Get coordinates
-    x = grid.x['data']
-    y = grid.y['data']
     z = grid.z['data']
 
     # Get reflectivity data at desired level
