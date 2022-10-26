@@ -134,7 +134,7 @@ class RadarDisplay(object):
         plot_vpt : Plot a VPT scan
 
         """
-        if self.scan_type == 'ppi':
+        if (self.scan_type == 'ppi' or self.scan_type == 'sector'):
             self.plot_ppi(field, sweep, **kwargs)
         elif self.scan_type == 'rhi':
             self.plot_rhi(field, sweep, **kwargs)
