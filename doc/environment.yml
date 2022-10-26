@@ -10,24 +10,24 @@ dependencies:
   - pandas
   - netcdf4
   - pytest
-  - trmm_rsl
   - wradlib
+  - metpy
   - cartopy
   - cvxopt
   - xarray
   - sphinx
   - ipython
   - pandoc
-  - netcdf4
-  - pytest
-  - coin-or-cbc
   - pkg-config
   - Cython
   - fsspec
   - s3fs
+  - glpk
+  - cftime
+  - shapely<1.8.3
   - pip
   - pip:
-      - pydata-sphinx-theme
+      - pydata-sphinx-theme<0.9.0
       - sphinx_gallery
       - sphinx-copybutton
       - myst_nb

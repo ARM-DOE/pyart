@@ -31,8 +31,9 @@ def test_sphere_distance():
 def test_get_field_location():
     # test to make sure column above location is pulled correctly
     column = pyart.util.columnsect.get_field_location(radar, 47.97, -122.20)
+    
     # check to make sure z-gate is pulled correctly.
-    test_height = abs(column.height[0] - 367)
+    test_height = abs(column.height[0] - 564)
     assert (test_height < 0.001)
 
     # check to make sure reflectivity value is minimum

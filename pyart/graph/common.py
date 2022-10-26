@@ -100,7 +100,7 @@ def generate_grid_name(grid):
 def generate_radar_time_begin(radar):
     """ Return time begin in datetime instance. """
     # datetime object describing first sweep time
-    times = radar.time['data'][0]
+    times = int(radar.time['data'][0])
     units = radar.time['units']
     calendar = radar.time['calendar']
     return num2date(times, units, calendar, only_use_cftime_datetimes=False,
@@ -110,7 +110,7 @@ def generate_radar_time_begin(radar):
 def generate_radar_time_sweep(radar, sweep):
     """ Return time that a specific sweep began in a datetime instance. """
     first_ray = radar.sweep_start_ray_index['data'][sweep]
-    times = radar.time['data'][first_ray]
+    times = int(radar.time['data'][first_ray])
     units = radar.time['units']
     calendar = radar.time['calendar']
     return num2date(times, units, calendar, only_use_cftime_datetimes=False,
@@ -119,7 +119,7 @@ def generate_radar_time_sweep(radar, sweep):
 
 def generate_grid_time_begin(grid):
     """ Return time begin in datetime instance. """
-    times = grid.time['data'][0]
+    times = int(grid.time['data'][0])
     units = grid.time['units']
     if 'calendar' in grid.time:
         calendar = grid.time['calendar']
@@ -197,6 +197,63 @@ def generate_grid_filename(grid, field, level, ext='png'):
     time_s = generate_grid_time_begin(grid).strftime('%Y%m%d%H%M%S')
     level_s = str(level).zfill(2)
     return '%s_%s_%s_%s.%s' % (name_s, field_s, level_s, time_s, ext)
+
+def generate_cross_section_title(grid, field, start, end):
+    """
+    Generate a title for a plot.
+
+    Parameters
+    ----------
+    grid : Grid
+        Radar structure.
+    field : str
+        Field plotted.
+    start : tuple
+        Latitude-Longitude pair of starting points
+    end: tuple
+        Latitude-Longitude pair of ending poins
+
+    Returns
+    -------
+    title : str
+        Plot title.
+
+    """
+    
+    # Grab information about the grid
+    time_str = generate_grid_time_begin(grid).strftime('%Y-%m-%dT%H:%M:%SZ')
+    field_name = generate_field_name(grid, field)
+    
+    # Deal with the latitude/longitude part
+    start_lat, start_lon = start
+    end_lat, end_lon = end
+    
+    degree_symbol = u'\N{DEGREE SIGN}'
+    
+    # Add degrees latitude/longitude labels
+    
+    if start_lat < 0:
+        start_lat_string = f"{-start_lat}{degree_symbol}S"
+    else:
+        start_lat_string = f"{start_lat}{degree_symbol}N"
+    
+    if end_lat < 0:
+        end_lat_string = f'{-end_lat}{degree_symbol}S'
+    else:
+        end_lat_string = f'{end_lat}{degree_symbol}N' 
+    
+    if start_lon < 0:
+        start_lon_string = f'{-start_lon}{degree_symbol}W'
+    else:
+        start_lon_string = f'{start_lon}{degree_symbol}E'
+    
+    if end_lon < 0:
+        end_lon_string = f'{-end_lon}{degree_symbol}W'
+    else:
+        end_lon_string = f'{end_lon}{degree_symbol}E'
+    
+    return (f"({start_lat_string}, {start_lon_string})"
+            f" to ({end_lat_string}, {end_lon_string}) \n {time_str} \n {field_name}")
 
 
 def generate_title(radar, field, sweep, datetime_format=None, use_sweep_time=True):

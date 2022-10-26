@@ -7,4 +7,4 @@ cftime
 Cython
 fsspec
 s3fs
-xarray
+xarray!=0.21.0

@@ -4,7 +4,7 @@ The Python ARM Radar Toolkit (Py-ART)
 
 |GithubCI| |CodeCovStatus|
 
-|AnacondaCloud| |CondaDownloads|
+|AnacondaCloud| |PyPiDownloads| |CondaDownloads|
 
 |DocsUsers| |DocsGuides|
 
@@ -18,6 +18,9 @@ The Python ARM Radar Toolkit (Py-ART)
 
 .. |AnacondaCloud| image:: https://anaconda.org/conda-forge/arm_pyart/badges/version.svg
     :target: https://anaconda.org/conda-forge/arm_pyart
+
+.. |PyPiDownloads| image:: https://img.shields.io/pypi/dm/arm_pyart.svg
+    :target: https://pypi.org/project/arm-pyart/
 
 .. |CondaDownloads| image:: https://anaconda.org/conda-forge/arm_pyart/badges/downloads.svg
     :target: https://anaconda.org/conda-forge/arm_pyart/files
@@ -38,7 +41,7 @@ The Python ARM Radar Toolkit, Py-ART, is an open source Python module
 containing a growing collection of weather radar algorithms and utilities
 build on top of the Scientific Python stack and distributed under the
 3-Clause BSD license. Py-ART is used by the 
-`Atmospheric Radiation Measurement (ARM) Climate Research Facility 
+`Atmospheric Radiation Measurement (ARM) User Facility 
 <http://www.arm.gov>`_ for working with data from a number of precipitation
 and cloud radars, but has been designed so that it can be used by others in
 the radar and atmospheric communities to examine, processes, and analyze
@@ -126,6 +129,9 @@ These include:
 
 * `ARTView <https://github.com/nguy/artview>`_ : 
   Interactive radar viewing browser.
+
+* `pyrad <https://github.com/MeteoSwiss/pyrad>`_ :
+  A real-time data processing framework developed by MeteoSwiss and MeteoFrance. 
 
 * `PyTDA <https://github.com/nasa/PyTDA>`_ : 
   Python Turbulence Detection Algorithm.
