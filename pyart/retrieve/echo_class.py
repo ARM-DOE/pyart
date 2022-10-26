@@ -7,8 +7,7 @@ import numpy as np
 
 from ..config import get_fillvalue, get_field_name, get_metadata
 from ..exceptions import MissingOptionalDependency
-from ._echo_class import steiner_class_buff
-from ._echo_class_updated import _revised_conv_strat
+from ._echo_class import steiner_class_buff, _revised_conv_strat
 
 from warnings import warn
 
