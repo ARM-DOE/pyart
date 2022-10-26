@@ -252,8 +252,8 @@ def conv_strat(grid, dx=None, dy=None, level_m=None, always_core_thres=42, bkg_r
         'comment_1': ('Convective-stratiform echo '
                       'classification based on '
                       'Yuter and Houze (1997) and Yuter et al. (2005)'),
-        'comment_2': ('0 = Undefined, 1 = Stratiform, '
-                      '2 = Convective')}}
+        'comment_2': ('0 = No surface echo/Undefined, 1 = Stratiform, '
+                      '2 = Convective, 3 = weak echo')}}
 
     # If estimation is True, run the algorithm on the field with offset subtracted and the field with the offset added
     if estimate_flag:
@@ -288,7 +288,7 @@ def conv_strat(grid, dx=None, dy=None, level_m=None, always_core_thres=42, bkg_r
                           'classification based on '
                           'Yuter and Houze (1997) and Yuter et al. (2005)'),
             'comment_2': ('0 = Undefined, 1 = Stratiform, '
-                          '2 = Convective')}
+                          '2 = Convective, 3 = weak echo')}
 
         convsf_dict['convsf_over'] = {
             'data': convsf_over,
@@ -300,7 +300,7 @@ def conv_strat(grid, dx=None, dy=None, level_m=None, always_core_thres=42, bkg_r
                           'classification based on '
                           'Yuter and Houze (1997)'),
             'comment_2': ('0 = Undefined, 1 = Stratiform, '
-                          '2 = Convective')}
+                          '2 = Convective, 3 = weak echo')}
 
     return convsf_dict
 
