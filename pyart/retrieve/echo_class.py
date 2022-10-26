@@ -3,13 +3,12 @@ Functions for echo classification.
 
 """
 
+from warnings import warn
+
 import numpy as np
 
-from ..config import get_fillvalue, get_field_name, get_metadata
-from ..exceptions import MissingOptionalDependency
 from ._echo_class import steiner_class_buff, _revised_conv_strat
-
-from warnings import warn
+from ..config import get_fillvalue, get_field_name, get_metadata
 
 
 def steiner_conv_strat(grid, dx=None, dy=None, intense=42.0,
@@ -130,9 +129,11 @@ def conv_strat(grid, dx=None, dy=None, level_m=None, always_core_thres=42, bkg_r
         Threshold for points that are always convective. All values above the threshold are classifed as convective
         See Yuter et al. (2005) for more detail.
     bkg_rad_km : float, optional
-        Radius to compute background reflectivity in kilometers. Default is 11 km. Recommended to be at least 3 x grid spacing
+        Radius to compute background reflectivity in kilometers. Default is 11 km. Recommended to be at least 3 x
+        grid spacing
     use_cosine : bool, optional
-        Boolean used to determine if a cosine scheme (see Yuter and Houze (1997)) should be used for identifying convective cores (True) or if a simpler scalar scheme (False) should be used.
+        Boolean used to determine if a cosine scheme (see Yuter and Houze (1997)) should be used for identifying
+        convective cores (True) or if a simpler scalar scheme (False) should be used.
     max_diff : float, optional
         Maximum difference between background average and reflectivity in order to be classified as convective.
         "a" value in Eqn. B1 in Yuter and Houze (1997)
@@ -156,9 +157,11 @@ def conv_strat(grid, dx=None, dy=None, level_m=None, always_core_thres=42, bkg_r
     remove_small_objects : bool, optional
         Determines if small objects should be removed from convective core array. Default is True.
     min_km2_size : float, optional
-        Minimum size of convective cores to be considered. Cores less than this size will be removed. Default is 10 km^2.
+        Minimum size of convective cores to be considered. Cores less than this size will be removed. Default is 10
+        km^2.
     val_for_max_conv_rad : float, optional
-        dBZ for maximum convective radius. Convective cores with values above this will have the maximum convective radius
+        dBZ for maximum convective radius. Convective cores with values above this will have the maximum convective
+        radius
     max_conv_rad_km : float, optional
         Maximum radius around convective cores to classify as convective. Default is 5 km
     refl_field : str, optional
@@ -169,7 +172,8 @@ def conv_strat(grid, dx=None, dy=None, level_m=None, always_core_thres=42, bkg_r
         wih the estimate_offset added and the same field with the estimate_offset subtracted.
         Default is True (recommended)
     estimate_offset : float, optional
-        Value used to offset the reflectivity values by for the over/underestimation application. Default value is 5 dBZ.
+        Value used to offset the reflectivity values by for the over/underestimation application. Default value is 5
+        dBZ.
 
     Returns
     -------
