@@ -241,9 +241,11 @@ def _revised_conv_strat(refl, dx, dy, always_core_thres=42, bkg_rad_km=11,
     always_core_thres : float, optional
         Threshold for points that are always convective. All values above the threshold are classifed as convective
     bkg_rad_km : float, optional
-        Radius to compute background reflectivity in kilometers. Default is 11 km. Recommended to be at least 3 x grid spacing
+        Radius to compute background reflectivity in kilometers. Default is 11 km. Recommended to be at least 3 x
+        grid spacing
     use_cosine : bool, optional
-        Boolean used to determine if cosine scheme should be used for identifying convective cores (True) or a scalar scheme (False)
+        Boolean used to determine if cosine scheme should be used for identifying convective cores (True) or a scalar
+        scheme (False)
     max_diff : float, optional
         Maximum difference between background average and reflectivity in order to be classified as convective.
         "a" value in Eqn. B1 in Yuter and Houze (1997)
@@ -265,9 +267,11 @@ def _revised_conv_strat(refl, dx, dy, always_core_thres=42, bkg_rad_km=11,
     remove_small_objects : bool, optional
         Determines if small objects should be removed from convective core array. Default is True.
     min_km2_size : float, optional
-        Minimum size of convective cores to be considered. Cores less than this size will be removed. Default is 10 km^2.
+        Minimum size of convective cores to be considered. Cores less than this size will be removed. Default is 10
+        km^2.
     val_for_max_conv_rad : float, optional
-        dBZ for maximum convective radius. Convective cores with values above this will have the maximum convective radius
+        dBZ for maximum convective radius. Convective cores with values above this will have the maximum convective
+        radius
     max_conv_rad_km : float, optional
         Maximum radius around convective cores to classify as convective. Default is 5 km.
 
