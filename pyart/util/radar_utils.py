@@ -380,6 +380,14 @@ def join_radar(radar1, radar2):
         new_radar.range['data'] = radar2.range['data']
     new_radar.ngates = len(new_radar.range['data'])
 
+    if ((radar1.target_scan_rate is not None) and
+            (radar2.target_scan_rate is not None)):
+        new_radar.target_scan_rate['data'] = np.append(
+            radar1.target_scan_rate['data'],
+            radar2.target_scan_rate['data'])
+    else:
+        new_radar.target_scan_rate = None
+
     # to combine times we need to reference them to a standard
     # for this we'll use epoch time
     r1num = datetime_utils.datetimes_from_radar(radar1, epoch=True)
