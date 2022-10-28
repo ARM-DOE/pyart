@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.retrieve.echo_class &#8212; Py-ART 1.13.3.post1 documentation</title>
+    <title>pyart.retrieve.echo_class &#8212; Py-ART 1.13.3.post2 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -374,13 +374,18 @@
     <span class="c1"># select the centroids as a function of frequency band</span>
     <span class="k">if</span> <span class="n">mass_centers</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># assign coefficients according to radar frequency</span>
-        <span class="k">if</span> <span class="s1">&#39;frequency&#39;</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span><span class="p">:</span>
-            <span class="n">mass_centers</span> <span class="o">=</span> <span class="n">_get_mass_centers</span><span class="p">(</span>
-                <span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span><span class="p">[</span><span class="s1">&#39;frequency&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s1">&#39;frequency&#39;</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span><span class="p">:</span>
+                <span class="n">mass_centers</span> <span class="o">=</span> <span class="n">_get_mass_centers</span><span class="p">(</span>
+                    <span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span><span class="p">[</span><span class="s1">&#39;frequency&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">mass_centers</span> <span class="o">=</span> <span class="n">_mass_centers_table</span><span class="p">()[</span><span class="s1">&#39;C&#39;</span><span class="p">]</span>
+                <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Radar frequency unknown. &#39;</span> <span class="o">+</span>
+                     <span class="s1">&#39;Default coefficients for C band will be applied.&#39;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">mass_centers</span> <span class="o">=</span> <span class="n">_mass_centers_table</span><span class="p">()[</span><span class="s1">&#39;C&#39;</span><span class="p">]</span>
-            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Radar frequency unknown. &#39;</span> <span class="o">+</span>
-                 <span class="s1">&#39;Default coefficients for C band will be applied&#39;</span><span class="p">)</span>
+            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Radar instrument parameters is empty. So frequency is &#39;</span> <span class="o">+</span>
+                 <span class="s1">&#39;unknown. Default coefficients for C band will be applied.&#39;</span><span class="p">)</span>
 
     <span class="c1"># parse the field parameters</span>
     <span class="k">if</span> <span class="n">refl_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
