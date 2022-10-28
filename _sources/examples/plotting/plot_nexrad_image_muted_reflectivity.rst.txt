@@ -31,7 +31,7 @@ with just snow and just rain are depicted in a corresponding full-color scale.
 The ultimate utility of image muting radar reflectivity is to reduce the misinterpretation
 of regions of melting or mixed precipitation as opposed to heavy snow or heavy rain.
 
-.. GENERATED FROM PYTHON SOURCE LINES 16-56
+.. GENERATED FROM PYTHON SOURCE LINES 16-58
 
 
 
@@ -51,8 +51,10 @@ of regions of melting or mixed precipitation as opposed to heavy snow or heavy r
 
     #Author: Laura Tomkins (lmtomkin@ncsu.edu)
     #License: BSD 3 clause
-    #citation: Tomkins et al., Image Muting of Mixed Precipitation to Improve Identification of
-    # Regions of Heavy Snow in Radar Data, 2022, in prep.
+    #citation: Tomkins, L. M., Yuter, S. E., Miller, M. A., and Allen, L. R., 2022:
+    # Image muting of mixed precipitation to improve identification of regions
+    # of heavy snow in radar data. Atmos. Meas. Tech., 15, 5515–5525,
+    # https://doi.org/10.5194/amt-15-5515-2022
 
     import pyart
     import numpy as np
@@ -90,7 +92,7 @@ of regions of melting or mixed precipitation as opposed to heavy snow or heavy r
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  6.263 seconds)
+   **Total running time of the script:** ( 0 minutes  5.937 seconds)
 
 
 .. _sphx_glr_download_examples_plotting_plot_nexrad_image_muted_reflectivity.py:
