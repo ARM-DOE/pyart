@@ -163,9 +163,9 @@ def hydroclass_semisupervised(radar, mass_centers=None,
                 warn('Radar frequency unknown. ' +
                      'Default coefficients for C band will be applied.')
         else:
-             mass_centers = _mass_centers_table()['C']
-             warn('Radar instrument parameters is empty. So frequency is ' +
-                  'unknown. Default coefficients for C band will be applied.')
+            mass_centers = _mass_centers_table()['C']
+            warn('Radar instrument parameters is empty. So frequency is ' +
+                 'unknown. Default coefficients for C band will be applied.')
 
     # parse the field parameters
     if refl_field is None:
