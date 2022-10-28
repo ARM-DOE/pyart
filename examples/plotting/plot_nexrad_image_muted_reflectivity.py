@@ -18,8 +18,10 @@ print(__doc__)
 
 #Author: Laura Tomkins (lmtomkin@ncsu.edu)
 #License: BSD 3 clause
-#citation: Tomkins et al., Image Muting of Mixed Precipitation to Improve Identification of
-# Regions of Heavy Snow in Radar Data, 2022, in prep.
+#citation: Tomkins, L. M., Yuter, S. E., Miller, M. A., and Allen, L. R., 2022:
+# Image muting of mixed precipitation to improve identification of regions
+# of heavy snow in radar data. Atmos. Meas. Tech., 15, 5515–5525,
+# https://doi.org/10.5194/amt-15-5515-2022
 
 import pyart
 import numpy as np
