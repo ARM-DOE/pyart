@@ -96,7 +96,7 @@ class GridMapDisplay():
                   colorbar_label=None, colorbar_orient='vertical',
                   ax=None, fig=None, lat_lines=None,
                   lon_lines=None, projection=None,
-                  embellish=True, add_lines=True, ticks=None, ticklabs=None,
+                  embellish=True, add_grid_lines=True, ticks=None, ticklabs=None,
                   imshow=False, **kwargs):
         """
         Plot the grid using xarray and cartopy.
@@ -161,7 +161,7 @@ class GridMapDisplay():
         embellish : bool
             True by default. Set to False to supress drawing of coastlines
             etc... Use for speedup when specifying shapefiles.
-        add_lines : bool
+        add_grid_lines : bool
             True by default. Set to False to supress drawing of lat/lon lines
             Note that lat lon labels only work with certain projections.
         ticks : array
@@ -248,7 +248,7 @@ class GridMapDisplay():
             ax.add_feature(coastlines, linestyle='-', edgecolor='k',
                            linewidth=2)
 
-        if add_lines:
+        if add_grid_lines:
             if lon_lines is None:
                 lon_lines = np.linspace(
                     np.around(ds.lon.min()-.1, decimals=2),
