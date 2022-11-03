@@ -113,7 +113,7 @@ class RadarMapDisplay(RadarDisplay):
             width=None, height=None, lon_0=None, lat_0=None,
             resolution='110m', shapefile=None, shapefile_kwargs=None,
             edges=True, gatefilter=None,
-            filter_transitions=True, embellish=True, add_lines=True,
+            filter_transitions=True, embellish=True, add_grid_lines=True,
             raster=False, ticks=None, ticklabs=None, alpha=None,
             edgecolors='face', **kwargs):
         """
@@ -213,7 +213,7 @@ class RadarMapDisplay(RadarDisplay):
         embellish: bool
             True by default. Set to False to supress drawing of coastlines
             etc.. Use for speedup when specifying shapefiles.
-        add_lines : bool
+        add_grid_lines : bool
             True by default. Set to False to supress drawing of lat/lon lines
             Note that lat lon labels only work with certain projections.
         raster : bool
@@ -316,7 +316,7 @@ class RadarMapDisplay(RadarDisplay):
             ax.coastlines(resolution=resolution)
             ax.add_feature(states_provinces, edgecolor='gray')
 
-        if add_lines:
+        if add_grid_lines:
             if lat_lines is None:
                 lat_lines = np.arange(30, 46, 1)
             if lon_lines is None:
