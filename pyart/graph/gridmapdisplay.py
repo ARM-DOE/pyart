@@ -95,7 +95,7 @@ class GridMapDisplay(object):
                   colorbar_label=None, colorbar_orient='vertical',
                   ax=None, fig=None, lat_lines=None,
                   lon_lines=None, projection=None,
-                  embellish=True, ticks=None, ticklabs=None,
+                  embellish=True, add_lines=True, ticks=None, ticklabs=None,
                   imshow=False, **kwargs):
         """
         Plot the grid using xarray and cartopy.
@@ -158,9 +158,10 @@ class GridMapDisplay(object):
             Map projection supported by cartopy. Used for all subsequent calls
             to the GeoAxes object generated. Defaults to PlateCarree.
         embellish : bool
-            True by default. Set to False to supress drawinf of coastlines
+            True by default. Set to False to supress drawing of coastlines
             etc... Use for speedup when specifying shapefiles.
-            Note that lat lon labels only work with certain projections.
+        add_lines : bool
+            True by default. Set to False to supress drawing of lat/lon lines 
         ticks : array
             Colorbar custom tick label locations.
         ticklabs : array
@@ -252,6 +253,7 @@ class GridMapDisplay(object):
             ax.add_feature(coastlines, linestyle='-', edgecolor='k',
                            linewidth=2)
 
+        if add_lines:
             # labeling gridlines poses some difficulties depending on the
             # projection, so we need some projection-specific methods
             if ax.projection in [cartopy.crs.PlateCarree(),
