@@ -682,7 +682,30 @@ def classify_conv_strat_array(refl, conv_strat_array, conv_core_array,
 
     return conv_strat_array
 
-def plot_convstrat_scheme(always_core_thres, use_cosine, max_diff, zero_diff_cos_val, use_addition=False, scalar_diff=None):
+def plot_convstrat_scheme(always_core_thres, use_cosine, max_diff=None, zero_diff_cos_val=None,
+                          use_addition=False, scalar_diff=None):
+    """
+    Plots the scheme used in the convective stratiform classification
+
+    Parameters
+    ----------
+     always_core_thres : float
+        All values above this threshold considered to be convective
+    use_cosine : bool
+        Boolean used to determine if cosine scheme should be used for identifying convective cores (True) or a scalar
+        scheme (False)
+    max_diff : float, optional
+        Maximum difference between background average and reflectivity in order to be classified as convective.
+        "a" value in Eqn. B1 in Yuter and Houze (1997)
+    zero_diff_cos_val : float, optional
+        Value where difference between background average and reflectivity is zero in the cosine function
+        "b" value in Eqn. B1 in Yuter and Houze (1997)
+    use_addition : bool, optional
+        Determines if a multiplier (False) or addition (True) in the scalar difference scheme should be used
+    scalar_diff : float, optional
+        If using a scalar difference scheme, this value is the multiplier or addition to the background average
+
+    """
 
     # create array of background values
     bkg_vals = np.linspace(0, 60, 100)
