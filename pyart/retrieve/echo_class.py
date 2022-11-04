@@ -108,7 +108,7 @@ def steiner_conv_strat(grid, dx=None, dy=None, intense=42.0,
 def conv_strat(grid, dx=None, dy=None, level_m=None, always_core_thres=42, bkg_rad_km=11,
                use_cosine=True, max_diff=5, zero_diff_cos_val=55,
                scalar_diff=1.5, use_addition=True, calc_thres=0.75,
-               weak_echo_thres=5.0, min_dBZ_used=5.0,dB_averaging=True,
+               weak_echo_thres=5.0, min_dBZ_used=5.0, dB_averaging=True,
                remove_small_objects=True, min_km2_size=10,
                val_for_max_conv_rad=30, max_conv_rad_km=5.0,
                refl_field=None, estimate_flag=True, estimate_offset=5):
@@ -185,10 +185,11 @@ def conv_strat(grid, dx=None, dy=None, level_m=None, always_core_thres=42, bkg_r
     Yuter, S. E., and R. A. Houze, Jr., 1997: Measurements of raindrop size
     distributions over the Pacific warm pool and implications for Z-R relations.
     J. Appl. Meteor., 36, 847-867.
+    https://doi.org/10.1175/1520-0450(1997)036%3C0847:MORSDO%3E2.0.CO;2
 
     Yuter, S. E., R. A. Houze, Jr., E. A. Smith, T. T. Wilheit, and E. Zipser,
     2005: Physical characterization of tropical oceanic convection observed in
-    KWAJEX. J. Appl. Meteor., 44, 385-415.
+    KWAJEX. J. Appl. Meteor., 44, 385-415. https://doi.org/10.1175/JAM2206.1
 
     """
 
