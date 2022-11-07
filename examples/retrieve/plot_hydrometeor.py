@@ -18,11 +18,11 @@ import pyart
 from open_radar_data import DATASETS
 
 # Read in a sample file
-filename = get_test_data('MLL2217907250U.003.nc')
+filename = DATASETS.fetch('MLL2217907250U.003.nc')
 radar = pyart.io.read_cfradial(filename)
 
 # Read temperature preinterpolated from NWP model
-filename = get_test_data('20220628072500_savevol_COSMO_LOOKUP_TEMP.nc')
+filename = DATASETS.fetch('20220628072500_savevol_COSMO_LOOKUP_TEMP.nc')
 nwp_temp = pyart.io.read_cfradial(filename)
 
 # Add temperature to radar object as new field

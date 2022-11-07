@@ -13,10 +13,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 import pyart
-from pyart.testing import get_test_data
+from open_radar_data import DATASETS
 
 # Read in a sample file
-filename = get_test_data('MLA2119412050U.nc')
+filename = DATASETS.fetch('MLA2119412050U.nc')
 radar = pyart.io.read_cfradial(filename)
 
 # Loop on all sweeps and compute VAD
