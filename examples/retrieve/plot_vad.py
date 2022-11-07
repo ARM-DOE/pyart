@@ -44,3 +44,5 @@ ax[0].set_xlabel('Wind speed [m/s]')
 ax[1].set_xlabel('Wind direction [deg]')
 ax[0].set_ylabel('Altitude [m]')
 fig.suptitle('Wind profile obtained from VAD')
+
+# %%

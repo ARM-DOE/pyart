@@ -28,7 +28,7 @@ nwp_temp = pyart.io.read_cfradial(filename)
 radar.add_field('temperature', nwp_temp.fields['temperature'])
 
 # Compute attenuation
-out = pyart.correct.calculate_attenuation_zphi(radar, fzl = 4200,
+out = pyart.correct.calculate_attenuation_zphi(radar,
                            phidp_field = 'uncorrected_differential_phase',
                            temp_field = 'temperature',
                            temp_ref = 'temperature')
@@ -80,3 +80,5 @@ ax.set_aspect('equal', 'box')
 # MH = melting hail
 # IH/HDG = dry hail / high density graupel
 
+
+# %%
