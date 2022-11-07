@@ -10,34 +10,37 @@ Calculates a VAD and plots a vertical profile of wind
 # License: BSD 3 clause
 
 import numpy as np
+import matplotlib.pyplot as plt
+
 import pyart
 from pyart.testing import get_test_data
-import matplotlib.pyplot as plt
 
 # Read in a sample file
 filename = get_test_data('MLA2119412050U.nc')
 radar = pyart.io.read_cfradial(filename)
 
 # Loop on all sweeps and compute VAD
-zlevels = np.arange(100,5000,100) # height above radar
+zlevels = np.arange(100, 5000, 100) # height above radar
 u_allsweeps = []
 v_allsweeps = [] 
 
 for idx in range(radar.nsweeps):
     radar_1sweep = radar.extract_sweeps([idx])
-    vad = pyart.retrieve.vad_browning(radar_1sweep,
-                    'corrected_velocity', z_want = zlevels)
+    vad = pyart.retrieve.vad_browning(
+        radar_1sweep,
+        'corrected_velocity',
+        z_want=zlevels)
     u_allsweeps.append(vad.u_wind)
     v_allsweeps.append(vad.v_wind)
     
 # Average U and V over all sweeps and compute magnitude and angle
-u_avg = np.nanmean(np.array(u_allsweeps), axis = 0)
-v_avg = np.nanmean(np.array(v_allsweeps), axis = 0)
+u_avg = np.nanmean(np.array(u_allsweeps), axis=0)
+v_avg = np.nanmean(np.array(v_allsweeps), axis=0)
 orientation = np.rad2deg(np.arctan2(-u_avg, -v_avg))%360
 speed = np.sqrt(u_avg**2 + v_avg**2)
 
 # Display vertical profile of wind
-fig,ax = plt.subplots(1,2, sharey=True)
+fig, ax = plt.subplots(1, 2, sharey=True)
 ax[0].plot(speed*2, zlevels+radar.altitude['data'])
 ax[1].plot(orientation, zlevels+radar.altitude['data'])
 ax[0].set_xlabel('Wind speed [m/s]')
