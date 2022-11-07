@@ -15,7 +15,7 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 
 import pyart
-from pyart.testing import get_test_data
+from open_radar_data import DATASETS
 
 # Read in a sample file
 filename = get_test_data('MLL2217907250U.003.nc')
