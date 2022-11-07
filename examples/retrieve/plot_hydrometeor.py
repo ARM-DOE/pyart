@@ -79,6 +79,3 @@ ax.set_aspect('equal', 'box')
 # WS = wet snow
 # MH = melting hail
 # IH/HDG = dry hail / high density graupel
-
-
-# %%
