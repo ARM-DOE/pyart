@@ -89,6 +89,21 @@ def _check_dicts_similar(dic1, dic2):
             assert dic2[k] == v
 
 
+def test_write_grid_fields_list():
+    grid1 = pyart.testing.make_target_grid()
+    with pyart.testing.InTemporaryDirectory():
+        tmpfile = 'tmp_grid.nc'
+        tmpfile_warn = 'tmp_ppi_warn.nc'
+        fields = ['reflectivity']
+        _format = 'NETCDF4'
+        pyart.io.write_grid(tmpfile, grid1, fields=fields)
+        grid2 = pyart.io.read_grid(tmpfile)
+        assert 'reflectivity' in grid2.fields.keys()
+        fields = ['foo']
+        assert_warns(UserWarning, pyart.io.write_grid,
+                     tmpfile_warn, grid1, _format, fields)
+
+
 def test_grid_write_point_vars():
     grid1 = pyart.testing.make_target_grid()
 
@@ -109,7 +124,6 @@ def test_grid_write_point_vars():
 
 def test_grid_write_arm_time_vars():
     grid1 = pyart.testing.make_target_grid()
-
     with pyart.testing.InTemporaryDirectory():
         tmpfile = 'tmp_grid.nc'
         pyart.io.write_grid(tmpfile, grid1, arm_time_variables=True)

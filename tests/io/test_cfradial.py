@@ -4,7 +4,7 @@ import warnings
 
 import numpy as np
 from numpy.ma.core import MaskedArray
-from numpy.testing import assert_array_equal, assert_almost_equal
+from numpy.testing import assert_array_equal, assert_almost_equal, assert_warns
 import netCDF4
 import pytest
 
@@ -276,6 +276,24 @@ def test_write_ppi():
         ref = netCDF4.Dataset(pyart.testing.CFRADIAL_PPI_FILE)
         dset = netCDF4.Dataset(tmpfile)
         check_dataset_to_ref(dset, ref)
+        dset.close()
+
+
+def test_write_ppi_fields_list():
+    # Test if fields parameter is being used for writing specific fields.
+    with pyart.testing.InTemporaryDirectory():
+        tmpfile = 'tmp_ppi.nc'
+        tmpfile_warn = 'tmp_ppi_warn.nc'
+        fields = ['reflectivity_horizontal']
+        _format = 'NETCDF4'
+        radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
+        pyart.io.write_cfradial(tmpfile, radar, fields=fields)
+        ref = netCDF4.Dataset(pyart.testing.CFRADIAL_PPI_FILE)
+        dset = netCDF4.Dataset(tmpfile)
+        check_dataset_to_ref(dset, ref)
+        fields = ['foo']
+        assert_warns(UserWarning, pyart.io.write_cfradial,
+                     tmpfile_warn, radar, _format, fields)
         dset.close()
 
 
