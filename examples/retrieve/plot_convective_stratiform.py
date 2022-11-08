@@ -70,18 +70,16 @@ import cartopy.crs as ccrs
 # convective core. We plot some examples of the schemes below:
 
 # plot cosine scheme
-pyart.retrieve._echo_class.plot_convstrat_scheme(always_core_thres=30, use_cosine=True, max_diff=5,
-                                                 zero_diff_cos_val=45)
+pyart.graph.plot_convstrat_scheme(always_core_thres=30, use_cosine=True, max_diff=5, zero_diff_cos_val=45)
 # when zero_diff_cos_val is greater than always_core_thres, the difference becomes zero at the zero_diff_cos_val
-pyart.retrieve._echo_class.plot_convstrat_scheme(always_core_thres=55, use_cosine=True, max_diff=5,
-                                                 zero_diff_cos_val=45)
+pyart.graph.plot_convstrat_scheme(always_core_thres=55, use_cosine=True, max_diff=5, zero_diff_cos_val=45)
 # alternatively, we can use a simpler scalar difference instead of a cosine scheme
-pyart.retrieve._echo_class.plot_convstrat_scheme(always_core_thres=40, use_cosine=False, max_diff=None,
-                                                 zero_diff_cos_val=None, use_addition=True, scalar_diff=2)
+pyart.graph.plot_convstrat_scheme(always_core_thres=40, use_cosine=False, max_diff=None,
+                                  zero_diff_cos_val=None, use_addition=True, scalar_diff=2)
 # if you are interested in picking up weak features, you can also use the scalar difference as a multiplier instead,
 # so very weak features do not have to be that different from the background to be classified as convective.
-pyart.retrieve._echo_class.plot_convstrat_scheme(always_core_thres=40, use_cosine=False, max_diff=None,
-                                                 zero_diff_cos_val=None, use_addition=False, scalar_diff=2)
+pyart.graph.plot_convstrat_scheme(always_core_thres=40, use_cosine=False, max_diff=None,
+                                  zero_diff_cos_val=None, use_addition=False, scalar_diff=2)
 
 ######################################
 # Once the cores are identified, there is an option to remove speckles (`remove_small_objects`) smaller than a  given
