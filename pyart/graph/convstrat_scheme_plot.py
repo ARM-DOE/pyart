@@ -74,4 +74,3 @@ def plot_convstrat_scheme(always_core_thres, use_cosine, max_diff=None, zero_dif
     ax.set_ylabel('Difference (dBZ - dBZ$_{background}$)')
     ax.set_xlabel('Background Value (dBZ$_{background}$)')
     ax.set_title('Convective Stratiform Equation')
-    plt.show()
