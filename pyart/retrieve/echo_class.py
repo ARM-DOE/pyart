@@ -125,7 +125,7 @@ def conv_strat_yuter(grid, dx=None, dy=None, level_m=None, always_core_thres=42,
         The x- and y-dimension resolutions in meters, respectively. If None
         the resolution is determined from the first two axes values parsed from grid object.
     level_m : float, optional
-        Desired height to classify with convective stratiform algorithm.
+        Desired height in meters to classify with convective stratiform algorithm.
     always_core_thres : float, optional
         Threshold for points that are always convective. All values above the threshold are classifed as convective
         See Yuter et al. (2005) for more detail.
