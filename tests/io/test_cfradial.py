@@ -284,16 +284,16 @@ def test_write_ppi_fields_list():
     with pyart.testing.InTemporaryDirectory():
         tmpfile = 'tmp_ppi.nc'
         tmpfile_warn = 'tmp_ppi_warn.nc'
-        fields = ['reflectivity_horizontal']
+        include_fields = ['reflectivity_horizontal']
         _format = 'NETCDF4'
         radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
-        pyart.io.write_cfradial(tmpfile, radar, fields=fields)
+        pyart.io.write_cfradial(tmpfile, radar, include_fields=include_fields)
         ref = netCDF4.Dataset(pyart.testing.CFRADIAL_PPI_FILE)
         dset = netCDF4.Dataset(tmpfile)
         check_dataset_to_ref(dset, ref)
-        fields = ['foo']
+        include_fields = ['foo']
         assert_warns(UserWarning, pyart.io.write_cfradial,
-                     tmpfile_warn, radar, _format, fields)
+                     tmpfile_warn, radar, _format, include_fields)
         dset.close()
 
 

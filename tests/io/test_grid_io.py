@@ -94,14 +94,14 @@ def test_write_grid_fields_list():
     with pyart.testing.InTemporaryDirectory():
         tmpfile = 'tmp_grid.nc'
         tmpfile_warn = 'tmp_ppi_warn.nc'
-        fields = ['reflectivity']
+        include_fields = ['reflectivity']
         _format = 'NETCDF4'
-        pyart.io.write_grid(tmpfile, grid1, fields=fields)
+        pyart.io.write_grid(tmpfile, grid1, include_fields=include_fields)
         grid2 = pyart.io.read_grid(tmpfile)
         assert 'reflectivity' in grid2.fields.keys()
-        fields = ['foo']
+        include_fields = ['foo']
         assert_warns(UserWarning, pyart.io.write_grid,
-                     tmpfile_warn, grid1, _format, fields)
+                     tmpfile_warn, grid1, _format, include_fields)
 
 
 def test_grid_write_point_vars():

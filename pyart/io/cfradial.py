@@ -400,7 +400,7 @@ def _unpack_variable_gate_field_dic(
     return
 
 
-def write_cfradial(filename, radar, format='NETCDF4', fields=None,
+def write_cfradial(filename, radar, format='NETCDF4', include_fields=None,
                    time_reference=None, arm_time_variables=False):
     """
     Write a Radar object to a CF/Radial compliant netCDF file.
@@ -437,8 +437,9 @@ def write_cfradial(filename, radar, format='NETCDF4', fields=None,
         NetCDF format, one of 'NETCDF4', 'NETCDF4_CLASSIC',
         'NETCDF3_CLASSIC' or 'NETCDF3_64BIT'. See netCDF4 documentation for
         details.
-    fields : list, optional
-        Included fields for the generated NETCDF4 file. Default is None.
+    include_fields : list, optional
+        Fields to write out to NETCDF file. Default is None and will include
+        all fields from the original radar object.
     time_reference : bool
         True to include a time_reference variable, False will not include
         this variable. The default, None, will include the time_reference
@@ -533,30 +534,30 @@ def write_cfradial(filename, radar, format='NETCDF4', fields=None,
 
     # fields
     field_check = 0
-    if fields is not None:
+    if include_fields is not None:
         for field, dic in radar.fields.items():
-            if field in fields:
+            if field in include_fields:
                 field_check += 1
                 _create_ncvar(dic, dataset, field, ('time', 'range'))
             else:
                 continue
         if field_check == 0:
             warnings.warn('No new fields were added, as no field matches were '
-                          'made. Please check that field names in the field '
-                          'list match up with fields in the radar object.',
-                          UserWarning)
+                          'made. Please check that field names in the include '
+                          'field list match up with the field names in the '
+                          'radar object.', UserWarning)
     else:
         for field, dic in radar.fields.items():
             _create_ncvar(dic, dataset, field, ('time', 'range'))
 
     # field names attribute
-    if 'field_names' not in dataset.ncattrs() and fields is None:
+    if 'field_names' not in dataset.ncattrs() and include_fields is None:
         dataset.setncattr('field_names', ', '.join(radar.fields.keys()))
-    elif 'field_names' not in dataset.ncattrs() and fields is not None:
-        dataset.setncattr('field_names', ', '.join(fields))
-    elif 'field_names' in dataset.ncattrs() and fields is not None:
+    elif 'field_names' not in dataset.ncattrs() and include_fields is not None:
+        dataset.setncattr('field_names', ', '.join(include_fields))
+    elif 'field_names' in dataset.ncattrs() and include_fields is not None:
         dataset.delncattr('field_names')
-        dataset.setncattr('field_names', ', '.join(fields))
+        dataset.setncattr('field_names', ', '.join(include_fields))
 
     # sweep parameters
     _create_ncvar(radar.sweep_number, dataset, 'sweep_number', ('sweep', ))
