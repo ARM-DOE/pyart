@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>pyart.io.write_cfradial &#8212; Py-ART 1.13.3.post6 documentation</title>
+    <title>pyart.io.write_cfradial &#8212; Py-ART 1.13.3.post7 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -2904,7 +2904,7 @@
 <h1>pyart.io.write_cfradial<a class="headerlink" href="#pyart-io-write-cfradial" title="Permalink to this headline">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyart.io.write_cfradial">
-<span class="sig-prename descclassname"><span class="pre">pyart.io.</span></span><span class="sig-name descname"><span class="pre">write_cfradial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'NETCDF4'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_reference</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arm_time_variables</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyart/io/cfradial.html#write_cfradial"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyart.io.write_cfradial" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyart.io.</span></span><span class="sig-name descname"><span class="pre">write_cfradial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'NETCDF4'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">include_fields</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_reference</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arm_time_variables</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyart/io/cfradial.html#write_cfradial"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyart.io.write_cfradial" title="Permalink to this definition">#</a></dt>
 <dd><p>Write a Radar object to a CF/Radial compliant netCDF file.</p>
 <p>The files produced by this routine follow the <a class="reference external" href="http://www.ral.ucar.edu/projects/titan/docs/radial_formats/cfradial.html">CF/Radial standard</a>.
 Attempts are also made to to meet many of the standards outlined in the
@@ -2933,6 +2933,8 @@ keys in the radar attribute dictionaries.</p>
 <li><p><strong>format</strong> (<em>str, optional</em>) – NetCDF format, one of ‘NETCDF4’, ‘NETCDF4_CLASSIC’,
 ‘NETCDF3_CLASSIC’ or ‘NETCDF3_64BIT’. See netCDF4 documentation for
 details.</p></li>
+<li><p><strong>include_fields</strong> (<em>list, optional</em>) – Fields to write out to NETCDF file. Default is None and will include
+all fields from the original radar object.</p></li>
 <li><p><strong>time_reference</strong> (<em>bool</em>) – True to include a time_reference variable, False will not include
 this variable. The default, None, will include the time_reference
 variable when the first time value is non-zero.</p></li>

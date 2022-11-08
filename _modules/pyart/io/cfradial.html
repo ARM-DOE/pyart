@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.io.cfradial &#8212; Py-ART 1.13.3.post6 documentation</title>
+    <title>pyart.io.cfradial &#8212; Py-ART 1.13.3.post7 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -619,8 +619,8 @@
     <span class="k">return</span>
 
 
-<div class="viewcode-block" id="write_cfradial"><a class="viewcode-back" href="../../../API/generated/pyart.io.write_cfradial.html#pyart.io.write_cfradial">[docs]</a><span class="k">def</span> <span class="nf">write_cfradial</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">radar</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;NETCDF4&#39;</span><span class="p">,</span> <span class="n">time_reference</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                   <span class="n">arm_time_variables</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="write_cfradial"><a class="viewcode-back" href="../../../API/generated/pyart.io.write_cfradial.html#pyart.io.write_cfradial">[docs]</a><span class="k">def</span> <span class="nf">write_cfradial</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">radar</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;NETCDF4&#39;</span><span class="p">,</span> <span class="n">include_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                   <span class="n">time_reference</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">arm_time_variables</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Write a Radar object to a CF/Radial compliant netCDF file.</span>
 
@@ -656,6 +656,9 @@
 <span class="sd">        NetCDF format, one of &#39;NETCDF4&#39;, &#39;NETCDF4_CLASSIC&#39;,</span>
 <span class="sd">        &#39;NETCDF3_CLASSIC&#39; or &#39;NETCDF3_64BIT&#39;. See netCDF4 documentation for</span>
 <span class="sd">        details.</span>
+<span class="sd">    include_fields : list, optional</span>
+<span class="sd">        Fields to write out to NETCDF file. Default is None and will include</span>
+<span class="sd">        all fields from the original radar object.</span>
 <span class="sd">    time_reference : bool</span>
 <span class="sd">        True to include a time_reference variable, False will not include</span>
 <span class="sd">        this variable. The default, None, will include the time_reference</span>
@@ -708,9 +711,6 @@
     <span class="k">if</span> <span class="s1">&#39;Conventions&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataset</span><span class="o">.</span><span class="n">ncattrs</span><span class="p">():</span>
         <span class="n">dataset</span><span class="o">.</span><span class="n">setncattr</span><span class="p">(</span><span class="s1">&#39;Conventions&#39;</span><span class="p">,</span> <span class="s2">&quot;CF/Radial&quot;</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="s1">&#39;field_names&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataset</span><span class="o">.</span><span class="n">ncattrs</span><span class="p">():</span>
-        <span class="n">dataset</span><span class="o">.</span><span class="n">setncattr</span><span class="p">(</span><span class="s1">&#39;field_names&#39;</span><span class="p">,</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
-
     <span class="c1"># history should be the last attribute, ARM standard</span>
     <span class="n">dataset</span><span class="o">.</span><span class="n">setncattr</span><span class="p">(</span><span class="s1">&#39;history&#39;</span><span class="p">,</span> <span class="n">history</span><span class="p">)</span>
 
@@ -752,8 +752,31 @@
                       <span class="s1">&#39;antenna_transition&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">,</span> <span class="p">))</span>
 
     <span class="c1"># fields</span>
-    <span class="k">for</span> <span class="n">field</span><span class="p">,</span> <span class="n">dic</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="n">_create_ncvar</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">,</span> <span class="s1">&#39;range&#39;</span><span class="p">))</span>
+    <span class="n">field_check</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">if</span> <span class="n">include_fields</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">field</span><span class="p">,</span> <span class="n">dic</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">include_fields</span><span class="p">:</span>
+                <span class="n">field_check</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">_create_ncvar</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">,</span> <span class="s1">&#39;range&#39;</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">continue</span>
+        <span class="k">if</span> <span class="n">field_check</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;No new fields were added, as no field matches were &#39;</span>
+                          <span class="s1">&#39;made. Please check that field names in the include &#39;</span>
+                          <span class="s1">&#39;field list match up with the field names in the &#39;</span>
+                          <span class="s1">&#39;radar object.&#39;</span><span class="p">,</span> <span class="ne">UserWarning</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">field</span><span class="p">,</span> <span class="n">dic</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">_create_ncvar</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">,</span> <span class="s1">&#39;range&#39;</span><span class="p">))</span>
+
+    <span class="c1"># field names attribute</span>
+    <span class="k">if</span> <span class="s1">&#39;field_names&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataset</span><span class="o">.</span><span class="n">ncattrs</span><span class="p">()</span> <span class="ow">and</span> <span class="n">include_fields</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">dataset</span><span class="o">.</span><span class="n">setncattr</span><span class="p">(</span><span class="s1">&#39;field_names&#39;</span><span class="p">,</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+    <span class="k">elif</span> <span class="s1">&#39;field_names&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataset</span><span class="o">.</span><span class="n">ncattrs</span><span class="p">()</span> <span class="ow">and</span> <span class="n">include_fields</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">dataset</span><span class="o">.</span><span class="n">setncattr</span><span class="p">(</span><span class="s1">&#39;field_names&#39;</span><span class="p">,</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">include_fields</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="s1">&#39;field_names&#39;</span> <span class="ow">in</span> <span class="n">dataset</span><span class="o">.</span><span class="n">ncattrs</span><span class="p">()</span> <span class="ow">and</span> <span class="n">include_fields</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">dataset</span><span class="o">.</span><span class="n">delncattr</span><span class="p">(</span><span class="s1">&#39;field_names&#39;</span><span class="p">)</span>
+        <span class="n">dataset</span><span class="o">.</span><span class="n">setncattr</span><span class="p">(</span><span class="s1">&#39;field_names&#39;</span><span class="p">,</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">include_fields</span><span class="p">))</span>
 
     <span class="c1"># sweep parameters</span>
     <span class="n">_create_ncvar</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">sweep_number</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="s1">&#39;sweep_number&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;sweep&#39;</span><span class="p">,</span> <span class="p">))</span>
