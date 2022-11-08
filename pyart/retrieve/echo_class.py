@@ -105,7 +105,7 @@ def steiner_conv_strat(grid, dx=None, dy=None, intense=42.0,
                           '2 = Convective')}
 
 
-def conv_strat(grid, dx=None, dy=None, level_m=None, always_core_thres=42, bkg_rad_km=11,
+def conv_strat_yuter(grid, dx=None, dy=None, level_m=None, always_core_thres=42, bkg_rad_km=11,
                use_cosine=True, max_diff=5, zero_diff_cos_val=55,
                scalar_diff=1.5, use_addition=True, calc_thres=0.75,
                weak_echo_thres=5.0, min_dBZ_used=5.0, dB_averaging=True,
