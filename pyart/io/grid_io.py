@@ -347,8 +347,8 @@ def write_grid(filename, grid, format='NETCDF4',
             else:
                 continue
         if field_check == 0:
-            warnings.warn('No new fields were added, as no field matches '
-                          'were made. Please check that field names in field '
+            warnings.warn('No new fields were added, as no field matches were '
+                          'made. Please check that field names in the field '
                           'list match up with fields in the radar object.',
                           UserWarning)
     else:

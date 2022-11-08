@@ -541,9 +541,10 @@ def write_cfradial(filename, radar, format='NETCDF4', fields=None,
             else:
                 continue
         if field_check == 0:
-            warnings.warn('No new fields were added, as no field matches '
-                          'were made. Please check field names in field '
-                          'list match up with fields in the radar object.')
+            warnings.warn('No new fields were added, as no field matches were '
+                          'made. Please check that field names in the field '
+                          'list match up with fields in the radar object.',
+                          UserWarning)
     else:
         for field, dic in radar.fields.items():
             _create_ncvar(dic, dataset, field, ('time', 'range'))
