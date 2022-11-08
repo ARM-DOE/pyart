@@ -51,6 +51,40 @@ Retrievals from various radars, such as additional fields or subsets of the data
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="Calculates a VAD and plots a vertical profile of wind">
+
+.. only:: html
+
+  .. image:: /examples/retrieve/images/thumb/sphx_glr_plot_vad_thumb.png
+    :alt: Calculate and Plot VAD profile
+
+  :ref:`sphx_glr_examples_retrieve_plot_vad.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Calculate and Plot VAD profile</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Calculates a hydrometeor classification and displays the results">
+
+.. only:: html
+
+  .. image:: /examples/retrieve/images/thumb/sphx_glr_plot_hydrometeor_thumb.png
+    :alt: Calculate and Plot hydrometeor classification
+
+  :ref:`sphx_glr_examples_retrieve_plot_hydrometeor.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Calculate and Plot hydrometeor classification</div>
+    </div>
+
+
+.. raw:: html
+
     </div>
 
 
@@ -59,4 +93,6 @@ Retrievals from various radars, such as additional fields or subsets of the data
 
    /examples/retrieve/plot_column_subset
    /examples/retrieve/plot_composite_reflectivity
+   /examples/retrieve/plot_vad
+   /examples/retrieve/plot_hydrometeor
 
