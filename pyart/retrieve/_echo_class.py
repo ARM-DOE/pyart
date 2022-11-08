@@ -221,17 +221,17 @@ def _revised_conv_strat(refl, dx, dy, always_core_thres=42, bkg_rad_km=11,
                         weak_echo_thres=5.0, min_dBZ_used=5.0, dB_averaging=True,
                         remove_small_objects=True, min_km2_size=10,
                         val_for_max_conv_rad=30, max_conv_rad_km=5.0,
-                        CS_CORE=3, NOSFCECHO=0, WEAKECHO=3, SF=1, CONV=2):
+                        cs_core=3, nosfcecho=0, weakecho=3, sf=1, conv=2):
     """
     We perform the Yuter and Houze (1997) algorithm for echo classification
     using only the reflectivity field in order to classify each grid point
     as either convective, stratiform or undefined. Grid points are
     classified as follows,
 
-    NOSFCECHO = No Surface Echo/ Undefined
-    SF = Stratiform
-    CONV = Convective
-    WEAKECHO = Weak Echo
+    nosfcecho = No Surface Echo/ Undefined
+    sf = Stratiform
+    conv = Convective
+    weakecho = Weak Echo
 
     refl : array
         array of reflectivity values
@@ -275,15 +275,15 @@ def _revised_conv_strat(refl, dx, dy, always_core_thres=42, bkg_rad_km=11,
         radius
     max_conv_rad_km : float, optional
         Maximum radius around convective cores to classify as convective. Default is 5 km.
-    CS_CORE : int, optional
+    cs_core : int, optional
         Value for points classified as convective cores
-    NOSFCECHO : int, optional
+    nosfcecho : int, optional
         Value for points classified as no surface echo, based on min_dBZ_used
-    WEAKECHO : int, optional
+    weakecho : int, optional
         Value for points classified as weak echo, based on weak_echo_thres
-    SF : int, optional
+    sf : int, optional
         Value for points classified as stratiform
-    CONV : int, optional
+    conv : int, optional
         Value for points classified as convective
 
    Returns
@@ -330,9 +330,9 @@ def _revised_conv_strat(refl, dx, dy, always_core_thres=42, bkg_rad_km=11,
 
     # Get convective core array from cosine scheme, or scalar scheme
     if use_cosine:
-        conv_core_array = convcore_cos_scheme(refl, refl_bkg, max_diff, zero_diff_cos_val, always_core_thres, CS_CORE)
+        conv_core_array = convcore_cos_scheme(refl, refl_bkg, max_diff, zero_diff_cos_val, always_core_thres, cs_core)
     else:
-        conv_core_array = convcore_scalar_scheme(refl, refl_bkg, scalar_diff, always_core_thres, CS_CORE,
+        conv_core_array = convcore_scalar_scheme(refl, refl_bkg, scalar_diff, always_core_thres, cs_core,
                                                  use_addition=use_addition)
 
     # Assign convective radii based on background reflectivity
@@ -375,12 +375,12 @@ def _revised_conv_strat(refl, dx, dy, always_core_thres=42, bkg_rad_km=11,
 
     # add dilated cores to original array
     conv_core_copy = np.ma.copy(conv_core_array)
-    conv_core_copy[temp_assignment >= 1] = CS_CORE
+    conv_core_copy[temp_assignment >= 1] = cs_core
 
     # Now do convective stratiform classification
     conv_strat_array = np.zeros_like(refl)
     conv_strat_array = classify_conv_strat_array(refl, conv_strat_array, conv_core_copy,
-                                                 NOSFCECHO, CONV, SF, WEAKECHO, CS_CORE,
+                                                 nosfcecho, conv, sf, weakecho, cs_core,
                                                  min_dBZ_used, weak_echo_thres)
     # mask where reflectivity is masked
     conv_strat_array = np.ma.masked_where(refl.mask, conv_strat_array)
