@@ -220,17 +220,18 @@ def _revised_conv_strat(refl, dx, dy, always_core_thres=42, bkg_rad_km=11,
                         scalar_diff=1.5, use_addition=True, calc_thres=0.75,
                         weak_echo_thres=5.0, min_dBZ_used=5.0, dB_averaging=True,
                         remove_small_objects=True, min_km2_size=10,
-                        val_for_max_conv_rad=30, max_conv_rad_km=5.0):
+                        val_for_max_conv_rad=30, max_conv_rad_km=5.0,
+                        CS_CORE=3, NOSFCECHO=0, WEAKECHO=3, SF=1, CONV=2):
     """
     We perform the Yuter and Houze (1997) algorithm for echo classification
     using only the reflectivity field in order to classify each grid point
     as either convective, stratiform or undefined. Grid points are
     classified as follows,
 
-    0 = No Surface Echo/ Undefined
-    1 = Stratiform
-    2 = Convective
-    3 = Weak Echo
+    NOSFCECHO = No Surface Echo/ Undefined
+    SF = Stratiform
+    CONV = Convective
+    WEAKECHO = Weak Echo
 
     refl : array
         array of reflectivity values
@@ -274,6 +275,16 @@ def _revised_conv_strat(refl, dx, dy, always_core_thres=42, bkg_rad_km=11,
         radius
     max_conv_rad_km : float, optional
         Maximum radius around convective cores to classify as convective. Default is 5 km.
+    CS_CORE : int, optional
+        Value for points classified as convective cores
+    NOSFCECHO : int, optional
+        Value for points classified as no surface echo, based on min_dBZ_used
+    WEAKECHO : int, optional
+        Value for points classified as weak echo, based on weak_echo_thres
+    SF : int, optional
+        Value for points classified as stratiform
+    CONV : int, optional
+        Value for points classified as convective
 
    Returns
     -------
@@ -284,13 +295,6 @@ def _revised_conv_strat(refl, dx, dy, always_core_thres=42, bkg_rad_km=11,
     conv_strat_array : array
         Array of convective stratiform classifcation with convective radii applied
     """
-
-    # Constants to fill arrays with
-    CS_CORE = 3
-    NOSFCECHO = 0
-    WEAKECHO = 3
-    SF = 1
-    CONV = 2
 
     # Set up mask arrays for background average and
     # prepare for convective mask arrays
