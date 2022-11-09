@@ -37,7 +37,7 @@ def calculate_attenuation_zphi(radar, doc=None, fzl=None, smooth_window_len=5,
     ----------
     radar : Radar
         Radar object to use for attenuation calculations. Must have
-        phidp and ref fields.
+        phidp and refl fields.
     doc : float, optional
         Number of gates at the end of each ray to to remove from the
         calculation.
@@ -243,7 +243,7 @@ def calculate_attenuation_zphi(radar, doc=None, fzl=None, smooth_window_len=5,
 
         if end_gate_arr[ray] > smooth_window_len:
             # extract the ray's phase shift,
-            # init. ref. correction and mask
+            # init. refl. correction and mask
             ray_phase_shift = corr_phidp[ray, 0:end_gate_arr[ray]]
             ray_mask = mask[ray, 0:end_gate_arr[ray]]
             ray_refl_linear = refl_linear[ray, 0:end_gate_arr[ray]]
@@ -335,7 +335,7 @@ def calculate_attenuation_philinear(
     ----------
     radar : Radar
         Radar object to use for attenuation calculations. Must have
-        phidp and ref fields.
+        phidp and refl fields.
     doc : float, optional
         Number of gates at the end of each ray to to remove from the
         calculation.
@@ -922,7 +922,7 @@ def calculate_attenuation(radar, z_offset, debug=False, doc=15, fzl=4000.0,
         for i in range(start_ray, end_ray):
             # perform attenuation calculation on a single ray
 
-            # extract the ray's phase shift and init. ref. correction
+            # extract the ray's phase shift and init. refl. correction
             ray_phase_shift = proc_dp_phase_shift[i, 0:end_gate]
             ray_init_refl = init_refl_correct[i, 0:end_gate]
 
