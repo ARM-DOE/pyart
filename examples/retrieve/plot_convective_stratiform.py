@@ -117,9 +117,9 @@ dx = grid.x['data'][1] - grid.x['data'][0]
 dy = grid.y['data'][1] - grid.y['data'][0]
 
 # convective stratiform classification
-convsf_dict = pyart.retrieve.conv_strat(grid, dx, dy, refl_field='reflectivity_horizontal', always_core_thres=40,
-                                        bkg_rad_km=20, use_cosine=True, max_diff=5, zero_diff_cos_val=55,
-                                        weak_echo_thres=10, max_conv_rad_km=2)
+convsf_dict = pyart.retrieve.conv_strat_yuter(grid, dx, dy, refl_field='reflectivity_horizontal', always_core_thres=40,
+                                              bkg_rad_km=20, use_cosine=True, max_diff=5, zero_diff_cos_val=55,
+                                              weak_echo_thres=10, max_conv_rad_km=2)
 
 # add to grid object
 # mask zero values (no surface echo)
@@ -213,9 +213,9 @@ dx = grid.x['data'][1] - grid.x['data'][0]
 dy = grid.y['data'][1] - grid.y['data'][0]
 
 # convective stratiform classification
-convsf_dict = pyart.retrieve.conv_strat(grid, dx, dy, refl_field='reflectivity', always_core_thres=40,
-                                        bkg_rad_km=20, use_cosine=True, max_diff=3, zero_diff_cos_val=55,
-                                        weak_echo_thres=5, max_conv_rad_km=2, estimate_flag=False)
+convsf_dict = pyart.retrieve.conv_strat_yuter(grid, dx, dy, refl_field='reflectivity', always_core_thres=40,
+                                              bkg_rad_km=20, use_cosine=True, max_diff=3, zero_diff_cos_val=55,
+                                              weak_echo_thres=5, max_conv_rad_km=2, estimate_flag=False)
 
 # add to grid object
 # mask zero values (no surface echo)
@@ -294,9 +294,10 @@ dx = grid.x['data'][1] - grid.x['data'][0]
 dy = grid.y['data'][1] - grid.y['data'][0]
 
 # convective stratiform classification
-convsf_dict = pyart.retrieve.conv_strat(grid, dx, dy, refl_field='snow_rate', dB_averaging=False,always_core_thres=4,
-                                        bkg_rad_km=40, use_cosine=True, max_diff=1.5, zero_diff_cos_val=5,
-                                        weak_echo_thres=0, min_dBZ_used=0, max_conv_rad_km=1, estimate_flag=False)
+convsf_dict = pyart.retrieve.conv_strat_yuter(grid, dx, dy, refl_field='snow_rate', dB_averaging=False,
+                                            always_core_thres=4,bkg_rad_km=40, use_cosine=True, max_diff=1.5,
+                                            zero_diff_cos_val=5,weak_echo_thres=0, min_dBZ_used=0,
+                                            max_conv_rad_km=1, estimate_flag=False)
 
 # add to grid object
 # mask zero values (no surface echo)
