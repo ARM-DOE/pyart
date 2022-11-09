@@ -23,6 +23,13 @@ def test_attenuation():
     assert_allclose(ref['cor_z'], cor_z['data'].data, rtol=1e-2, atol=1e-3)
 
 
+def test_attenuation_gatefilter():
+    spec_at, cor_z = perform_attenuation(use_gatefilter=True)
+    ref = np.load(REFERENCE_RAYS_FILE)
+    assert_allclose(ref['spec_at'], spec_at['data'], rtol=1e-2, atol=1e-3)
+    assert_allclose(ref['cor_z'], cor_z['data'].data, rtol=1e-2, atol=1e-3)
+
+
 def perform_attenuation_zphi():
     """ Perform attenuation correction on a single ray radar. """
     radar = pyart.testing.make_single_ray_radar()
@@ -49,12 +56,16 @@ def perform_attenuation_philinear():
     return spec_at, pia_dict, cor_z, spec_diff_at, pida_dict, cor_zdr
 
 
-def perform_attenuation():
+def perform_attenuation(use_gatefilter=False):
     """ Perform attenuation correction on a single ray radar. """
     radar = pyart.testing.make_single_ray_radar()
+    if use_gatefilter:
+        gatefilter = pyart.filters.GateFilter(radar)
+    else:
+        gatefilter = None
     a = radar.fields['reflectivity']['data']
     radar.fields['reflectivity']['data'] = np.ma.array(a)
-    spec_at, cor_z = pyart.correct.calculate_attenuation(radar, 0.0)
+    spec_at, cor_z = pyart.correct.calculate_attenuation(radar, 0.0, gatefilter=gatefilter)
     return spec_at, cor_z
 
 
@@ -104,7 +115,7 @@ def test_specific_diff_attenuation():
     assert_allclose(ref['spec_at'], spec_at['data'], rtol=1e-2, atol=1e-3)
     assert_allclose(ref['cor_z'], cor_z['data'], rtol=1e-2, atol=1e-3)
     assert_allclose(ref['pia_dict'], pia_dict['data'], rtol=1e-2, atol=1e-3)
-    assert_allclose(ref['spec_diff_at'], spec_diff_at['data'], 
+    assert_allclose(ref['spec_diff_at'], spec_diff_at['data'],
                     rtol=1e-2, atol=1e-3)
     assert_allclose(ref['pida_dict'], pida_dict['data'], rtol=1e-2, atol=1e-3)
     assert_allclose(ref['cor_zdr'], cor_zdr['data'], rtol=1e-2, atol=1e-3)
@@ -115,7 +126,7 @@ def test_specific_diff_attenuation():
     assert_allclose(ref['spec_at'], spec_at['data'], rtol=1e-2, atol=1e-3)
     assert_allclose(ref['cor_z'], cor_z['data'], rtol=1e-2, atol=1e-3)
     assert_allclose(ref['pia_dict'], pia_dict['data'], rtol=1e-2, atol=1e-3)
-    assert_allclose(ref['spec_diff_at'], spec_diff_at['data'], 
+    assert_allclose(ref['spec_diff_at'], spec_diff_at['data'],
                     rtol=1e-2, atol=1e-3)
     assert_allclose(ref['pida_dict'], pida_dict['data'], rtol=1e-2, atol=1e-3)
     assert_allclose(ref['cor_zdr'], cor_zdr['data'], rtol=1e-2, atol=1e-3)
