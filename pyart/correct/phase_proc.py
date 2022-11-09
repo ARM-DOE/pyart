@@ -358,7 +358,7 @@ def smooth_and_trim_scan(x, window_len=11, window='hanning'):
         The smoothed signal with length equal to the input signal.
 
     """
-    from scipy.ndimage.filters import convolve1d
+    from scipy.ndimage import convolve1d
 
     if x.ndim != 2:
         raise ValueError("smooth only accepts 2 dimension arrays.")
@@ -1151,7 +1151,7 @@ def phase_proc_lp(radar, offset, debug=False, self_const=60000.0,
     sobel = sobel/(abs(sobel).sum())
     sobel = sobel[::-1]
     gate_spacing = (radar.range['data'][1] - radar.range['data'][0]) / 1000.
-    kdp = (scipy.ndimage.filters.convolve1d(proc_ph['data'], sobel, axis=1) /
+    kdp = (scipy.ndimage.convolve1d(proc_ph['data'], sobel, axis=1) /
            ((window_len / 3.0) * 2.0 * gate_spacing))
 
     # copy the KDP metadata from existing field or create anew
@@ -1349,7 +1349,7 @@ def phase_proc_lp_gf(radar, gatefilter=None, debug=False, self_const=60000.0,
     sobel = sobel / (abs(sobel).sum())
     sobel = sobel[::-1]
     gate_spacing = (radar.range['data'][1] - radar.range['data'][0]) / 1000.
-    kdp = (scipy.ndimage.filters.convolve1d(proc_ph['data'], sobel, axis=1) /
+    kdp = (scipy.ndimage.convolve1d(proc_ph['data'], sobel, axis=1) /
            ((window_len / 3.0) * 2.0 * gate_spacing))
 
     # copy the KDP metadata from existing field or create anew

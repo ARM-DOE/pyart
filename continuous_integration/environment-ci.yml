@@ -28,3 +28,4 @@ dependencies:
     - cibuildwheel
     - pooch
     - versioneer
+    - git+https://github.com/openradar/open-radar-data
