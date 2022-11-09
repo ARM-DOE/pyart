@@ -22,9 +22,9 @@ def test_steiner_conv_strat_modify_area(area_relation):
     assert eclass['data'].min() == 0
     assert eclass['data'].max() == 2
 
-def test_conv_strat_default():
+def test_conv_strat__yuter_default():
     grid = pyart.testing.make_storm_grid()
-    dict = pyart.retrieve.conv_strat(grid, bkg_rad_km=50)
+    dict = pyart.retrieve.conv_strat_yuter(grid, bkg_rad_km=50)
 
     assert 'convsf' in dict.keys()
     assert 'convsf_under' in dict.keys()
@@ -33,9 +33,9 @@ def test_conv_strat_default():
         [0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
          2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0]))
 
-def test_conv_strat_noest():
+def test_conv_strat_yuter_noest():
     grid = pyart.testing.make_storm_grid()
-    dict = pyart.retrieve.conv_strat(grid, bkg_rad_km=50, estimate_flag=False)
+    dict = pyart.retrieve.conv_strat_yuter(grid, bkg_rad_km=50, estimate_flag=False)
 
     assert 'convsf' in dict.keys()
     assert 'convsf_under' not in dict.keys()
