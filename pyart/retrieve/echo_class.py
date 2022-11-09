@@ -3,13 +3,12 @@ Functions for echo classification.
 
 """
 
+from warnings import warn
+
 import numpy as np
 
+from ._echo_class import steiner_class_buff, _revised_conv_strat
 from ..config import get_fillvalue, get_field_name, get_metadata
-from ..exceptions import MissingOptionalDependency
-from ._echo_class import steiner_class_buff
-
-from warnings import warn
 
 
 def steiner_conv_strat(grid, dx=None, dy=None, intense=42.0,
@@ -92,7 +91,7 @@ def steiner_conv_strat(grid, dx=None, dy=None, intense=42.0,
                                 work_level=work_level, intense=intense,
                                 peak_relation=peak_relation,
                                 area_relation=area_relation,
-                                use_intense=use_intense,)
+                                use_intense=use_intense, )
 
     return {'data': eclass.astype(np.int32),
             'standard_name': 'echo_classification',
@@ -104,6 +103,213 @@ def steiner_conv_strat(grid, dx=None, dy=None, intense=42.0,
                           'Steiner et al. (1995)'),
             'comment_2': ('0 = Undefined, 1 = Stratiform, '
                           '2 = Convective')}
+
+
+def conv_strat_yuter(grid, dx=None, dy=None, level_m=None, always_core_thres=42, bkg_rad_km=11,
+               use_cosine=True, max_diff=5, zero_diff_cos_val=55,
+               scalar_diff=1.5, use_addition=True, calc_thres=0.75,
+               weak_echo_thres=5.0, min_dBZ_used=5.0, dB_averaging=True,
+               remove_small_objects=True, min_km2_size=10,
+               val_for_max_conv_rad=30, max_conv_rad_km=5.0,
+               cs_core=3, nosfcecho=0, weakecho=3, sf=1, conv=2,
+               refl_field=None, estimate_flag=True, estimate_offset=5):
+    """
+    Partition reflectivity into convective-stratiform using the Yuter et al. (2005)
+    and Yuter and Houze (1997) algorithm.
+
+    Parameters
+    ----------
+    grid : Grid
+        Grid containing reflectivity field to partition.
+    dx, dy : float, optional
+        The x- and y-dimension resolutions in meters, respectively. If None
+        the resolution is determined from the first two axes values parsed from grid object.
+    level_m : float, optional
+        Desired height in meters to classify with convective stratiform algorithm.
+    always_core_thres : float, optional
+        Threshold for points that are always convective. All values above the threshold are classifed as convective
+        See Yuter et al. (2005) for more detail.
+    bkg_rad_km : float, optional
+        Radius to compute background reflectivity in kilometers. Default is 11 km. Recommended to be at least 3 x
+        grid spacing
+    use_cosine : bool, optional
+        Boolean used to determine if a cosine scheme (see Yuter and Houze (1997)) should be used for identifying
+        convective cores (True) or if a simpler scalar scheme (False) should be used.
+    max_diff : float, optional
+        Maximum difference between background average and reflectivity in order to be classified as convective.
+        "a" value in Eqn. B1 in Yuter and Houze (1997)
+    zero_diff_cos_val : float, optional
+        Value where difference between background average and reflectivity is zero in the cosine function
+        "b" value in Eqn. B1 in Yuter and Houze (1997)
+    scalar_diff : float, optional
+        If using a scalar difference scheme, this value is the multiplier or addition to the background average
+    use_addition : bool, optional
+        Determines if a multiplier (False) or addition (True) in the scalar difference scheme should be used
+    calc_thres : float, optional
+        Minimum percentage of points needed to be considered in background average calculation
+    weak_echo_thres : float, optional
+        Threshold for determining weak echo. All values below this threshold will be considered weak echo
+    min_dBZ_used : float, optional
+        Minimum dBZ value used for classification. All values below this threshold will be considered no surface echo
+        See Yuter and Houze (1997) and Yuter et al. (2005) for more detail.
+    dB_averaging : bool, optional
+        True if using dBZ reflectivity values that need to be converted to linear Z before averaging. False for
+        other non-dBZ values (i.e. snow rate)
+    remove_small_objects : bool, optional
+        Determines if small objects should be removed from convective core array. Default is True.
+    min_km2_size : float, optional
+        Minimum size of convective cores to be considered. Cores less than this size will be removed. Default is 10
+        km^2.
+    val_for_max_conv_rad : float, optional
+        dBZ for maximum convective radius. Convective cores with values above this will have the maximum convective
+        radius
+    max_conv_rad_km : float, optional
+        Maximum radius around convective cores to classify as convective. Default is 5 km
+    cs_core : int, optional
+        Value for points classified as convective cores
+    nosfcecho : int, optional
+        Value for points classified as no surface echo, based on min_dBZ_used
+    weakecho : int, optional
+        Value for points classified as weak echo, based on weak_echo_thres
+    sf : int, optional
+        Value for points classified as stratiform
+    conv : int, optional
+        Value for points classified as convective
+    refl_field : str, optional
+        Field in grid to use as the reflectivity during partitioning. None will use the default reflectivity
+        field name from the Py-ART configuration file.
+    estimate_flag : bool, optional
+        Determines if over/underestimation should be applied. If true, the algorithm will also be run on the same field
+        wih the estimate_offset added and the same field with the estimate_offset subtracted.
+        Default is True (recommended)
+    estimate_offset : float, optional
+        Value used to offset the reflectivity values by for the over/underestimation application. Default value is 5
+        dBZ.
+
+    Returns
+    -------
+    convsf_dict : dict
+        Convective-stratiform classification dictionary.
+
+    References
+    ----------
+    Yuter, S. E., and R. A. Houze, Jr., 1997: Measurements of raindrop size
+    distributions over the Pacific warm pool and implications for Z-R relations.
+    J. Appl. Meteor., 36, 847-867.
+    https://doi.org/10.1175/1520-0450(1997)036%3C0847:MORSDO%3E2.0.CO;2
+
+    Yuter, S. E., R. A. Houze, Jr., E. A. Smith, T. T. Wilheit, and E. Zipser,
+    2005: Physical characterization of tropical oceanic convection observed in
+    KWAJEX. J. Appl. Meteor., 44, 385-415. https://doi.org/10.1175/JAM2206.1
+
+    """
+
+    # Maxmimum convective radius must be less than 5 km
+    if max_conv_rad_km > 5:
+        print("Max conv radius must be less than 5 km, exiting")
+        raise
+
+    # Parse field parameters
+    if refl_field is None:
+        refl_field = get_field_name('reflectivity')
+        dB_averaging = True
+
+    # parse dx and dy if None
+    if dx is None:
+        dx = grid.x['data'][1] - grid.x['data'][0]
+    if dy is None:
+        dy = grid.y['data'][1] - grid.y['data'][0]
+
+    # add catch for background radius size
+    if bkg_rad_km * 1000 < 2 * dx or bkg_rad_km * 1000 < 2 * dy:
+        print("Background radius for averaging must be at least 2 times dx and dy, exiting")
+        raise
+
+    # Get coordinates
+    z = grid.z['data']
+
+    # Get reflectivity data at desired level
+    if level_m is None:
+        try:
+            ze = np.ma.copy(grid.fields[refl_field]['data'][0, :, :])
+        except:
+            ze = np.ma.copy(grid.fields[refl_field]['data'][:, :])
+    else:
+        zslice = np.argmin(np.abs(z - level_m))
+        ze = np.ma.copy(grid.fields[refl_field]['data'][zslice, :, :])
+
+    # run convective stratiform algorithm
+    _, _, convsf_best = _revised_conv_strat(ze, dx, dy, always_core_thres=always_core_thres, bkg_rad_km=bkg_rad_km,
+                                            use_cosine=use_cosine, max_diff=max_diff,
+                                            zero_diff_cos_val=zero_diff_cos_val, scalar_diff=scalar_diff,
+                                            use_addition=use_addition, calc_thres=calc_thres,
+                                            weak_echo_thres=weak_echo_thres, min_dBZ_used=min_dBZ_used,
+                                            dB_averaging=dB_averaging, remove_small_objects=remove_small_objects,
+                                            min_km2_size=min_km2_size, val_for_max_conv_rad=val_for_max_conv_rad,
+                                            max_conv_rad_km=max_conv_rad_km, cs_core=cs_core, nosfcecho=nosfcecho,
+                                            weakecho=weakecho, sf=sf, conv=conv)
+
+    # put data into a dictionary to be added as a field
+    convsf_dict = {'convsf': {
+        'data': convsf_best,
+        'standard_name': 'convsf',
+        'long_name': 'Convective stratiform classification',
+        'valid_min': 0,
+        'valid_max': 3,
+        'comment_1': ('Convective-stratiform echo '
+                      'classification based on '
+                      'Yuter and Houze (1997) and Yuter et al. (2005)'),
+        'comment_2': ('0 = No surface echo/Undefined, 1 = Stratiform, '
+                      '2 = Convective, 3 = weak echo')}}
+
+    # If estimation is True, run the algorithm on the field with offset subtracted and the field with the offset added
+    if estimate_flag:
+        _, _, convsf_under = _revised_conv_strat(ze - estimate_offset, dx, dy, always_core_thres=always_core_thres,
+                                                 bkg_rad_km=bkg_rad_km, use_cosine=use_cosine, max_diff=max_diff,
+                                                 zero_diff_cos_val=zero_diff_cos_val, scalar_diff=scalar_diff,
+                                                 use_addition=use_addition, calc_thres=calc_thres,
+                                                 weak_echo_thres=weak_echo_thres, min_dBZ_used=min_dBZ_used,
+                                                 dB_averaging=dB_averaging, remove_small_objects=remove_small_objects,
+                                                 min_km2_size=min_km2_size, val_for_max_conv_rad=val_for_max_conv_rad,
+                                                 max_conv_rad_km=max_conv_rad_km, cs_core=cs_core, nosfcecho=nosfcecho,
+                                                 weakecho=weakecho, sf=sf, conv=conv)
+
+        _, _, convsf_over = _revised_conv_strat(ze + estimate_offset, dx, dy, always_core_thres=always_core_thres,
+                                                bkg_rad_km=bkg_rad_km, use_cosine=use_cosine, max_diff=max_diff,
+                                                zero_diff_cos_val=zero_diff_cos_val, scalar_diff=scalar_diff,
+                                                use_addition=use_addition, calc_thres=calc_thres,
+                                                weak_echo_thres=weak_echo_thres, min_dBZ_used=min_dBZ_used,
+                                                dB_averaging=dB_averaging, remove_small_objects=remove_small_objects,
+                                                min_km2_size=min_km2_size, val_for_max_conv_rad=val_for_max_conv_rad,
+                                                max_conv_rad_km=max_conv_rad_km, cs_core=cs_core, nosfcecho=nosfcecho,
+                                                weakecho=weakecho, sf=sf, conv=conv)
+
+        # save into dictionaries
+        convsf_dict['convsf_under'] = {
+            'data': convsf_under,
+            'standard_name': 'convsf_under',
+            'long_name': 'Convective stratiform classification (Underestimate)',
+            'valid_min': 0,
+            'valid_max': 3,
+            'comment_1': ('Convective-stratiform echo '
+                          'classification based on '
+                          'Yuter and Houze (1997) and Yuter et al. (2005)'),
+            'comment_2': ('0 = Undefined, 1 = Stratiform, '
+                          '2 = Convective, 3 = weak echo')}
+
+        convsf_dict['convsf_over'] = {
+            'data': convsf_over,
+            'standard_name': 'convsf_under',
+            'long_name': 'Convective stratiform classification (Overestimate)',
+            'valid_min': 0,
+            'valid_max': 3,
+            'comment_1': ('Convective-stratiform echo '
+                          'classification based on '
+                          'Yuter and Houze (1997)'),
+            'comment_2': ('0 = Undefined, 1 = Stratiform, '
+                          '2 = Convective, 3 = weak echo')}
+
+    return convsf_dict
 
 
 def hydroclass_semisupervised(radar, mass_centers=None,
@@ -195,7 +401,7 @@ def hydroclass_semisupervised(radar, mass_centers=None,
     temp = radar.fields[temp_field]['data']
 
     # convert temp in relative height respect to iso0
-    relh = temp*(1000./lapse_rate)
+    relh = temp * (1000. / lapse_rate)
 
     # standardize data
     refl_std = _standardize(refl, 'Zh')
@@ -244,7 +450,7 @@ def _standardize(data, field_name, mx=None, mn=None):
 
     """
     if field_name == 'relH':
-        field_std = 2./(1.+np.ma.exp(-0.005*data))-1.
+        field_std = 2. / (1. + np.ma.exp(-0.005 * data)) - 1.
         return field_std
 
     if (mx is None) or (mn is None):
@@ -258,12 +464,12 @@ def _standardize(data, field_name, mx=None, mn=None):
 
     if field_name == 'KDP':
         data[data < -0.5] = -0.5
-        data = 10.*np.ma.log10(data+0.6)
+        data = 10. * np.ma.log10(data + 0.6)
     elif field_name == 'RhoHV':
-        data = 10.*np.ma.log10(1.-data)
+        data = 10. * np.ma.log10(1. - data)
 
     mask = np.ma.getmaskarray(data)
-    field_std = 2.*(data-mn)/(mx-mn)-1.
+    field_std = 2. * (data - mn) / (mx - mn) - 1.
     field_std[data < mn] = -1.
     field_std[data > mx] = 1.
     field_std[mask] = np.ma.masked
@@ -272,7 +478,7 @@ def _standardize(data, field_name, mx=None, mn=None):
 
 
 def _assign_to_class(zh, zdr, kdp, rhohv, relh, mass_centers,
-                    weights=np.array([1., 1., 1., 0.75, 0.5])):
+                     weights=np.array([1., 1., 1., 0.75, 0.5])):
     """
     Assigns an hydrometeor class to a radar range bin computing
     the distance between the radar variables an a centroid.
@@ -313,7 +519,7 @@ def _assign_to_class(zh, zdr, kdp, rhohv, relh, mass_centers,
             centroids_class.reshape(nvariables, 1, 1),
             (nvariables, nrays, nbins))
         dist[i, :, :] = np.ma.sqrt(np.ma.sum(
-            ((centroids_class-data)**2.)*weights_mat, axis=0))
+            ((centroids_class - data) ** 2.) * weights_mat, axis=0))
 
     # use very large fill_value so that masked entries will be sorted at the
     # end. There should not be any masked entry anyway
@@ -325,7 +531,7 @@ def _assign_to_class(zh, zdr, kdp, rhohv, relh, mass_centers,
 
     # Entries with non-valid reflectivity values are set to 0 (No class)
     mask = np.ma.getmaskarray(zh)
-    hydroclass = class_vec[0, :, :]+1
+    hydroclass = class_vec[0, :, :] + 1
     hydroclass[mask] = 0
 
     return hydroclass, min_dist
@@ -384,29 +590,29 @@ def _mass_centers_table():
     mass_centers_dict = dict()
     # C-band centroids derived for MeteoSwiss Albis radar
     #                       Zh        ZDR     kdp   RhoHV    delta_Z
-    mass_centers_c[0, :] = [13.5829,  0.4063, 0.0497, 0.9868,  1330.3]  # DS
-    mass_centers_c[1, :] = [02.8453,  0.2457, 0.0000, 0.9798,  0653.8]  # CR
-    mass_centers_c[2, :] = [07.6597,  0.2180, 0.0019, 0.9799, -1426.5]  # LR
-    mass_centers_c[3, :] = [31.6815,  0.3926, 0.0828, 0.9978,  0535.3]  # GR
-    mass_centers_c[4, :] = [39.4703,  1.0734, 0.4919, 0.9876, -1036.3]  # RN
-    mass_centers_c[5, :] = [04.8267, -0.5690, 0.0000, 0.9691,  0869.8]  # VI
-    mass_centers_c[6, :] = [30.8613,  0.9819, 0.1998, 0.9845, -0066.1]  # WS
-    mass_centers_c[7, :] = [52.3969,  2.1094, 2.4675, 0.9730, -1550.2]  # MH
-    mass_centers_c[8, :] = [50.6186, -0.0649, 0.0946, 0.9904,  1179.9]  # IH/HDG
+    mass_centers_c[0, :] = [13.5829, 0.4063, 0.0497, 0.9868, 1330.3]  # DS
+    mass_centers_c[1, :] = [02.8453, 0.2457, 0.0000, 0.9798, 0653.8]  # CR
+    mass_centers_c[2, :] = [07.6597, 0.2180, 0.0019, 0.9799, -1426.5]  # LR
+    mass_centers_c[3, :] = [31.6815, 0.3926, 0.0828, 0.9978, 0535.3]  # GR
+    mass_centers_c[4, :] = [39.4703, 1.0734, 0.4919, 0.9876, -1036.3]  # RN
+    mass_centers_c[5, :] = [04.8267, -0.5690, 0.0000, 0.9691, 0869.8]  # VI
+    mass_centers_c[6, :] = [30.8613, 0.9819, 0.1998, 0.9845, -0066.1]  # WS
+    mass_centers_c[7, :] = [52.3969, 2.1094, 2.4675, 0.9730, -1550.2]  # MH
+    mass_centers_c[8, :] = [50.6186, -0.0649, 0.0946, 0.9904, 1179.9]  # IH/HDG
 
     mass_centers_dict.update({'C': mass_centers_c})
 
     # X-band centroids derived for MeteoSwiss DX50 radar
     #                       Zh        ZDR     kdp    RhoHV   delta_Z
-    mass_centers_x[0, :] = [19.0770,  0.4139, 0.0099, 0.9841,  1061.7]  # DS
-    mass_centers_x[1, :] = [03.9877,  0.5040, 0.0000, 0.9642,  0856.6]  # CR
-    mass_centers_x[2, :] = [20.7982,  0.3177, 0.0004, 0.9858, -1375.1]  # LR
-    mass_centers_x[3, :] = [34.7124, -0.3748, 0.0988, 0.9828,  1224.2]  # GR
-    mass_centers_x[4, :] = [33.0134,  0.6614, 0.0819, 0.9802, -1169.8]  # RN
-    mass_centers_x[5, :] = [08.2610, -0.4681, 0.0000, 0.9722,  1100.7]  # VI
-    mass_centers_x[6, :] = [35.1801,  1.2830, 0.1322, 0.9162, -0159.8]  # WS
-    mass_centers_x[7, :] = [52.4539,  2.3714, 1.1120, 0.9382, -1618.5]  # MH
-    mass_centers_x[8, :] = [44.2216, -0.3419, 0.0687, 0.9683,  1272.7]  # IH/HDG
+    mass_centers_x[0, :] = [19.0770, 0.4139, 0.0099, 0.9841, 1061.7]  # DS
+    mass_centers_x[1, :] = [03.9877, 0.5040, 0.0000, 0.9642, 0856.6]  # CR
+    mass_centers_x[2, :] = [20.7982, 0.3177, 0.0004, 0.9858, -1375.1]  # LR
+    mass_centers_x[3, :] = [34.7124, -0.3748, 0.0988, 0.9828, 1224.2]  # GR
+    mass_centers_x[4, :] = [33.0134, 0.6614, 0.0819, 0.9802, -1169.8]  # RN
+    mass_centers_x[5, :] = [08.2610, -0.4681, 0.0000, 0.9722, 1100.7]  # VI
+    mass_centers_x[6, :] = [35.1801, 1.2830, 0.1322, 0.9162, -0159.8]  # WS
+    mass_centers_x[7, :] = [52.4539, 2.3714, 1.1120, 0.9382, -1618.5]  # MH
+    mass_centers_x[8, :] = [44.2216, -0.3419, 0.0687, 0.9683, 1272.7]  # IH/HDG
 
     mass_centers_dict.update({'X': mass_centers_x})
 
