@@ -595,9 +595,9 @@ sigmet_field_mapping = {
     'HCLASS': radar_echo_classification,        # (55) Hydrometeor class
     'HCLASS2': radar_echo_classification,       # (56) Hydrometeor class
     'ZDRC': corrected_differential_reflectivity,
-                                                # (57) Corrected diff. ref.
+                                                # (57) Corrected diff. refl.
     'ZDRC2': corrected_differential_reflectivity,
-                                                # (58) Corrected diff. ref.
+                                                # (58) Corrected diff. refl.
 }
 
 
