@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.correct.attenuation &#8212; Py-ART 1.14.0.post1 documentation</title>
+    <title>pyart.correct.attenuation &#8212; Py-ART 1.14.0.post2 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -235,6 +235,7 @@
 <span class="kn">from</span> <span class="nn">.phase_proc</span> <span class="kn">import</span> <span class="n">smooth_masked</span><span class="p">,</span> <span class="n">det_process_range</span><span class="p">,</span> <span class="n">smooth_and_trim</span>
 <span class="kn">from</span> <span class="nn">..filters</span> <span class="kn">import</span> <span class="n">temp_based_gate_filter</span><span class="p">,</span> <span class="n">iso0_based_gate_filter</span>
 <span class="kn">from</span> <span class="nn">..retrieve</span> <span class="kn">import</span> <span class="n">get_freq_band</span>
+<span class="kn">from</span> <span class="nn">..filters</span> <span class="kn">import</span> <span class="n">GateFilter</span>
 
 
 <div class="viewcode-block" id="calculate_attenuation_zphi"><a class="viewcode-back" href="../../../API/generated/pyart.correct.calculate_attenuation_zphi.html#pyart.correct.calculate_attenuation_zphi">[docs]</a><span class="k">def</span> <span class="nf">calculate_attenuation_zphi</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">doc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fzl</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">smooth_window_len</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
@@ -470,7 +471,7 @@
             <span class="c1"># perform calculation if there is valid data</span>
             <span class="n">last_six_good</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
                 <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">ray_mask</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">6</span><span class="p">:]</span>
-            <span class="k">if</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">last_six_good</span><span class="p">))</span> <span class="o">==</span> <span class="mi">6</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">last_six_good</span><span class="p">))</span> <span class="o">==</span> <span class="mi">6</span><span class="p">:</span>
                 <span class="n">phidp_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">ray_phase_shift</span><span class="p">[</span><span class="n">last_six_good</span><span class="p">])</span>
                 <span class="n">self_cons_number</span> <span class="o">=</span> <span class="p">(</span>
                     <span class="mf">10.0</span> <span class="o">**</span> <span class="p">(</span><span class="mf">0.1</span> <span class="o">*</span> <span class="n">beta</span> <span class="o">*</span> <span class="n">a_coef</span> <span class="o">*</span> <span class="n">phidp_max</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span>
@@ -1017,9 +1018,9 @@
 
 
 <div class="viewcode-block" id="calculate_attenuation"><a class="viewcode-back" href="../../../API/generated/pyart.correct.calculate_attenuation.html#pyart.correct.calculate_attenuation">[docs]</a><span class="k">def</span> <span class="nf">calculate_attenuation</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">z_offset</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">doc</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span> <span class="n">fzl</span><span class="o">=</span><span class="mf">4000.0</span><span class="p">,</span>
-                          <span class="n">rhv_min</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">ncp_min</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">a_coef</span><span class="o">=</span><span class="mf">0.06</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
-                          <span class="n">refl_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ncp_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rhv_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                          <span class="n">phidp_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">spec_at_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                          <span class="n">gatefilter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rhv_min</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">ncp_min</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">a_coef</span><span class="o">=</span><span class="mf">0.06</span><span class="p">,</span>
+                          <span class="n">beta</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">refl_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ncp_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                          <span class="n">rhv_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">phidp_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">spec_at_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                           <span class="n">corr_refl_field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate the attenuation from a polarimetric radar using Z-PHI method.</span>
@@ -1040,6 +1041,10 @@
 <span class="sd">    fzl : float, optional</span>
 <span class="sd">        Freezing layer, gates above this point are not included in the</span>
 <span class="sd">        correction.</span>
+<span class="sd">    gatefilter : GateFilter, optional</span>
+<span class="sd">        The gates to exclude from the calculation. This, combined with</span>
+<span class="sd">        the gates above fzl, will be excluded from the correction. Set to</span>
+<span class="sd">        None to not use a gatefilter.</span>
 <span class="sd">    rhv_min : float, optional</span>
 <span class="sd">        Minimum copol_coeff value to consider valid.</span>
 <span class="sd">    ncp_min : float, optional</span>
@@ -1109,18 +1114,25 @@
     <span class="k">if</span> <span class="n">corr_refl_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">corr_refl_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s1">&#39;corrected_reflectivity&#39;</span><span class="p">)</span>
 
-    <span class="c1"># extract fields and parameters from radar</span>
-    <span class="n">norm_coherent_power</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">ncp_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
-    <span class="n">copol_coeff</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">rhv_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+    <span class="c1"># Extract fields and parameters from radar</span>
     <span class="n">reflectivity_horizontal</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">refl_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
     <span class="n">proc_dp_phase_shift</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">phidp_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
     <span class="n">nsweeps</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">nsweeps</span><span class="p">)</span>
 
-    <span class="c1"># determine where the reflectivity is valid, mask out bad locations.</span>
-    <span class="n">is_cor</span> <span class="o">=</span> <span class="n">copol_coeff</span> <span class="o">&gt;</span> <span class="n">rhv_min</span>
-    <span class="n">is_coh</span> <span class="o">=</span> <span class="n">norm_coherent_power</span> <span class="o">&gt;</span> <span class="n">ncp_min</span>
-    <span class="n">is_good</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">is_cor</span><span class="p">,</span> <span class="n">is_coh</span><span class="p">)</span>
-    <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_not</span><span class="p">(</span><span class="n">is_good</span><span class="p">)</span>
+    <span class="c1"># Determine where the reflectivity is valid, mask out bad locations.</span>
+
+    <span class="k">if</span> <span class="n">gatefilter</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">gatefilter</span> <span class="o">=</span> <span class="n">GateFilter</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
+
+    <span class="c1"># Filter out the invalid values and apply rho_hv and ncp corrections</span>
+    <span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_invalid</span><span class="p">(</span><span class="n">refl_field</span><span class="p">)</span>
+    <span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_below</span><span class="p">(</span><span class="n">rhv_field</span><span class="p">,</span> <span class="n">rhv_min</span><span class="p">)</span>
+    <span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_below</span><span class="p">(</span><span class="n">ncp_field</span><span class="p">,</span> <span class="n">ncp_min</span><span class="p">)</span>
+
+    <span class="c1"># Assign the mask to a variable</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">gatefilter</span><span class="o">.</span><span class="n">gate_excluded</span>
+
+    <span class="c1"># Apply this mask to the reflectivity field</span>
     <span class="n">refl</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">reflectivity_horizontal</span> <span class="o">+</span> <span class="n">z_offset</span><span class="p">)</span>
 
     <span class="c1"># calculate initial reflectivity correction and gate spacing (in km)</span>
@@ -1146,7 +1158,7 @@
             <span class="n">ray_init_refl</span> <span class="o">=</span> <span class="n">init_refl_correct</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="n">end_gate</span><span class="p">]</span>
 
             <span class="c1"># perform calculation</span>
-            <span class="n">last_six_good</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">is_good</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="n">end_gate</span><span class="p">])[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">6</span><span class="p">:]</span>
+            <span class="n">last_six_good</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="o">~</span><span class="n">mask</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">:</span><span class="n">end_gate</span><span class="p">])[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">6</span><span class="p">:]</span>
             <span class="n">phidp_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">ray_phase_shift</span><span class="p">[</span><span class="n">last_six_good</span><span class="p">])</span>
             <span class="n">sm_refl</span> <span class="o">=</span> <span class="n">smooth_and_trim</span><span class="p">(</span><span class="n">ray_init_refl</span><span class="p">,</span> <span class="n">window_len</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
             <span class="n">reflectivity_linear</span> <span class="o">=</span> <span class="mf">10.0</span> <span class="o">**</span> <span class="p">(</span><span class="mf">0.1</span> <span class="o">*</span> <span class="n">beta</span> <span class="o">*</span> <span class="n">sm_refl</span><span class="p">)</span>
