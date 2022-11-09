@@ -28,3 +28,12 @@
 
 
 
+
+.. rubric:: Functions
+
+.. autosummary::
+    :toctree: .
+    
+    plot_convstrat_scheme
+    
+

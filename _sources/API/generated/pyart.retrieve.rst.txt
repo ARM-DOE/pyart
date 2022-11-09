@@ -29,6 +29,8 @@
     
     compute_snr
     
+    conv_strat_yuter
+    
     dealias_spectra
     
     est_rain_rate_a

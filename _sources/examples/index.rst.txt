@@ -541,6 +541,23 @@ Retrievals from various radars, such as additional fields or subsets of the data
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="References ---------- Steiner, M. R., R. A. Houze Jr., and S. E. Yuter, 1995: Climatological Ch...">
+
+.. only:: html
+
+  .. image:: /examples/retrieve/images/thumb/sphx_glr_plot_convective_stratiform_thumb.png
+    :alt: Convective-Stratiform classification
+
+  :ref:`sphx_glr_examples_retrieve_plot_convective_stratiform.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Convective-Stratiform classification</div>
+    </div>
+
+
+.. raw:: html
+
     </div>
 
 

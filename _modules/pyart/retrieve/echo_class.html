@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.retrieve.echo_class &#8212; Py-ART 1.13.3.post7 documentation</title>
+    <title>pyart.retrieve.echo_class &#8212; Py-ART 1.14.0.post1 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -222,13 +222,12 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
+<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
+
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
+<span class="kn">from</span> <span class="nn">._echo_class</span> <span class="kn">import</span> <span class="n">steiner_class_buff</span><span class="p">,</span> <span class="n">_revised_conv_strat</span>
 <span class="kn">from</span> <span class="nn">..config</span> <span class="kn">import</span> <span class="n">get_fillvalue</span><span class="p">,</span> <span class="n">get_field_name</span><span class="p">,</span> <span class="n">get_metadata</span>
-<span class="kn">from</span> <span class="nn">..exceptions</span> <span class="kn">import</span> <span class="n">MissingOptionalDependency</span>
-<span class="kn">from</span> <span class="nn">._echo_class</span> <span class="kn">import</span> <span class="n">steiner_class_buff</span>
-
-<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
 
 
 <div class="viewcode-block" id="steiner_conv_strat"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.steiner_conv_strat.html#pyart.retrieve.steiner_conv_strat">[docs]</a><span class="k">def</span> <span class="nf">steiner_conv_strat</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dy</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">intense</span><span class="o">=</span><span class="mf">42.0</span><span class="p">,</span>
@@ -311,7 +310,7 @@
                                 <span class="n">work_level</span><span class="o">=</span><span class="n">work_level</span><span class="p">,</span> <span class="n">intense</span><span class="o">=</span><span class="n">intense</span><span class="p">,</span>
                                 <span class="n">peak_relation</span><span class="o">=</span><span class="n">peak_relation</span><span class="p">,</span>
                                 <span class="n">area_relation</span><span class="o">=</span><span class="n">area_relation</span><span class="p">,</span>
-                                <span class="n">use_intense</span><span class="o">=</span><span class="n">use_intense</span><span class="p">,)</span>
+                                <span class="n">use_intense</span><span class="o">=</span><span class="n">use_intense</span><span class="p">,</span> <span class="p">)</span>
 
     <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="n">eclass</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span>
             <span class="s1">&#39;standard_name&#39;</span><span class="p">:</span> <span class="s1">&#39;echo_classification&#39;</span><span class="p">,</span>
@@ -323,6 +322,213 @@
                           <span class="s1">&#39;Steiner et al. (1995)&#39;</span><span class="p">),</span>
             <span class="s1">&#39;comment_2&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;0 = Undefined, 1 = Stratiform, &#39;</span>
                           <span class="s1">&#39;2 = Convective&#39;</span><span class="p">)}</span></div>
+
+
+<div class="viewcode-block" id="conv_strat_yuter"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.conv_strat_yuter.html#pyart.retrieve.conv_strat_yuter">[docs]</a><span class="k">def</span> <span class="nf">conv_strat_yuter</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dy</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">level_m</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">always_core_thres</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">bkg_rad_km</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span>
+               <span class="n">use_cosine</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">max_diff</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">zero_diff_cos_val</span><span class="o">=</span><span class="mi">55</span><span class="p">,</span>
+               <span class="n">scalar_diff</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">use_addition</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">calc_thres</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span>
+               <span class="n">weak_echo_thres</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">min_dBZ_used</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">dB_averaging</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+               <span class="n">remove_small_objects</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">min_km2_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+               <span class="n">val_for_max_conv_rad</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">max_conv_rad_km</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span>
+               <span class="n">cs_core</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">nosfcecho</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">weakecho</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">sf</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">conv</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+               <span class="n">refl_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">estimate_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">estimate_offset</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Partition reflectivity into convective-stratiform using the Yuter et al. (2005)</span>
+<span class="sd">    and Yuter and Houze (1997) algorithm.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    grid : Grid</span>
+<span class="sd">        Grid containing reflectivity field to partition.</span>
+<span class="sd">    dx, dy : float, optional</span>
+<span class="sd">        The x- and y-dimension resolutions in meters, respectively. If None</span>
+<span class="sd">        the resolution is determined from the first two axes values parsed from grid object.</span>
+<span class="sd">    level_m : float, optional</span>
+<span class="sd">        Desired height in meters to classify with convective stratiform algorithm.</span>
+<span class="sd">    always_core_thres : float, optional</span>
+<span class="sd">        Threshold for points that are always convective. All values above the threshold are classifed as convective</span>
+<span class="sd">        See Yuter et al. (2005) for more detail.</span>
+<span class="sd">    bkg_rad_km : float, optional</span>
+<span class="sd">        Radius to compute background reflectivity in kilometers. Default is 11 km. Recommended to be at least 3 x</span>
+<span class="sd">        grid spacing</span>
+<span class="sd">    use_cosine : bool, optional</span>
+<span class="sd">        Boolean used to determine if a cosine scheme (see Yuter and Houze (1997)) should be used for identifying</span>
+<span class="sd">        convective cores (True) or if a simpler scalar scheme (False) should be used.</span>
+<span class="sd">    max_diff : float, optional</span>
+<span class="sd">        Maximum difference between background average and reflectivity in order to be classified as convective.</span>
+<span class="sd">        &quot;a&quot; value in Eqn. B1 in Yuter and Houze (1997)</span>
+<span class="sd">    zero_diff_cos_val : float, optional</span>
+<span class="sd">        Value where difference between background average and reflectivity is zero in the cosine function</span>
+<span class="sd">        &quot;b&quot; value in Eqn. B1 in Yuter and Houze (1997)</span>
+<span class="sd">    scalar_diff : float, optional</span>
+<span class="sd">        If using a scalar difference scheme, this value is the multiplier or addition to the background average</span>
+<span class="sd">    use_addition : bool, optional</span>
+<span class="sd">        Determines if a multiplier (False) or addition (True) in the scalar difference scheme should be used</span>
+<span class="sd">    calc_thres : float, optional</span>
+<span class="sd">        Minimum percentage of points needed to be considered in background average calculation</span>
+<span class="sd">    weak_echo_thres : float, optional</span>
+<span class="sd">        Threshold for determining weak echo. All values below this threshold will be considered weak echo</span>
+<span class="sd">    min_dBZ_used : float, optional</span>
+<span class="sd">        Minimum dBZ value used for classification. All values below this threshold will be considered no surface echo</span>
+<span class="sd">        See Yuter and Houze (1997) and Yuter et al. (2005) for more detail.</span>
+<span class="sd">    dB_averaging : bool, optional</span>
+<span class="sd">        True if using dBZ reflectivity values that need to be converted to linear Z before averaging. False for</span>
+<span class="sd">        other non-dBZ values (i.e. snow rate)</span>
+<span class="sd">    remove_small_objects : bool, optional</span>
+<span class="sd">        Determines if small objects should be removed from convective core array. Default is True.</span>
+<span class="sd">    min_km2_size : float, optional</span>
+<span class="sd">        Minimum size of convective cores to be considered. Cores less than this size will be removed. Default is 10</span>
+<span class="sd">        km^2.</span>
+<span class="sd">    val_for_max_conv_rad : float, optional</span>
+<span class="sd">        dBZ for maximum convective radius. Convective cores with values above this will have the maximum convective</span>
+<span class="sd">        radius</span>
+<span class="sd">    max_conv_rad_km : float, optional</span>
+<span class="sd">        Maximum radius around convective cores to classify as convective. Default is 5 km</span>
+<span class="sd">    cs_core : int, optional</span>
+<span class="sd">        Value for points classified as convective cores</span>
+<span class="sd">    nosfcecho : int, optional</span>
+<span class="sd">        Value for points classified as no surface echo, based on min_dBZ_used</span>
+<span class="sd">    weakecho : int, optional</span>
+<span class="sd">        Value for points classified as weak echo, based on weak_echo_thres</span>
+<span class="sd">    sf : int, optional</span>
+<span class="sd">        Value for points classified as stratiform</span>
+<span class="sd">    conv : int, optional</span>
+<span class="sd">        Value for points classified as convective</span>
+<span class="sd">    refl_field : str, optional</span>
+<span class="sd">        Field in grid to use as the reflectivity during partitioning. None will use the default reflectivity</span>
+<span class="sd">        field name from the Py-ART configuration file.</span>
+<span class="sd">    estimate_flag : bool, optional</span>
+<span class="sd">        Determines if over/underestimation should be applied. If true, the algorithm will also be run on the same field</span>
+<span class="sd">        wih the estimate_offset added and the same field with the estimate_offset subtracted.</span>
+<span class="sd">        Default is True (recommended)</span>
+<span class="sd">    estimate_offset : float, optional</span>
+<span class="sd">        Value used to offset the reflectivity values by for the over/underestimation application. Default value is 5</span>
+<span class="sd">        dBZ.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    convsf_dict : dict</span>
+<span class="sd">        Convective-stratiform classification dictionary.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Yuter, S. E., and R. A. Houze, Jr., 1997: Measurements of raindrop size</span>
+<span class="sd">    distributions over the Pacific warm pool and implications for Z-R relations.</span>
+<span class="sd">    J. Appl. Meteor., 36, 847-867.</span>
+<span class="sd">    https://doi.org/10.1175/1520-0450(1997)036%3C0847:MORSDO%3E2.0.CO;2</span>
+
+<span class="sd">    Yuter, S. E., R. A. Houze, Jr., E. A. Smith, T. T. Wilheit, and E. Zipser,</span>
+<span class="sd">    2005: Physical characterization of tropical oceanic convection observed in</span>
+<span class="sd">    KWAJEX. J. Appl. Meteor., 44, 385-415. https://doi.org/10.1175/JAM2206.1</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Maxmimum convective radius must be less than 5 km</span>
+    <span class="k">if</span> <span class="n">max_conv_rad_km</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Max conv radius must be less than 5 km, exiting&quot;</span><span class="p">)</span>
+        <span class="k">raise</span>
+
+    <span class="c1"># Parse field parameters</span>
+    <span class="k">if</span> <span class="n">refl_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">refl_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">)</span>
+        <span class="n">dB_averaging</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="c1"># parse dx and dy if None</span>
+    <span class="k">if</span> <span class="n">dx</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">dx</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">dy</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">dy</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># add catch for background radius size</span>
+    <span class="k">if</span> <span class="n">bkg_rad_km</span> <span class="o">*</span> <span class="mi">1000</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">dx</span> <span class="ow">or</span> <span class="n">bkg_rad_km</span> <span class="o">*</span> <span class="mi">1000</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">dy</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Background radius for averaging must be at least 2 times dx and dy, exiting&quot;</span><span class="p">)</span>
+        <span class="k">raise</span>
+
+    <span class="c1"># Get coordinates</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">z</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+
+    <span class="c1"># Get reflectivity data at desired level</span>
+    <span class="k">if</span> <span class="n">level_m</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">ze</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">refl_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:])</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">ze</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">refl_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][:,</span> <span class="p">:])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">zslice</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">z</span> <span class="o">-</span> <span class="n">level_m</span><span class="p">))</span>
+        <span class="n">ze</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">refl_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">zslice</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:])</span>
+
+    <span class="c1"># run convective stratiform algorithm</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">convsf_best</span> <span class="o">=</span> <span class="n">_revised_conv_strat</span><span class="p">(</span><span class="n">ze</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">always_core_thres</span><span class="o">=</span><span class="n">always_core_thres</span><span class="p">,</span> <span class="n">bkg_rad_km</span><span class="o">=</span><span class="n">bkg_rad_km</span><span class="p">,</span>
+                                            <span class="n">use_cosine</span><span class="o">=</span><span class="n">use_cosine</span><span class="p">,</span> <span class="n">max_diff</span><span class="o">=</span><span class="n">max_diff</span><span class="p">,</span>
+                                            <span class="n">zero_diff_cos_val</span><span class="o">=</span><span class="n">zero_diff_cos_val</span><span class="p">,</span> <span class="n">scalar_diff</span><span class="o">=</span><span class="n">scalar_diff</span><span class="p">,</span>
+                                            <span class="n">use_addition</span><span class="o">=</span><span class="n">use_addition</span><span class="p">,</span> <span class="n">calc_thres</span><span class="o">=</span><span class="n">calc_thres</span><span class="p">,</span>
+                                            <span class="n">weak_echo_thres</span><span class="o">=</span><span class="n">weak_echo_thres</span><span class="p">,</span> <span class="n">min_dBZ_used</span><span class="o">=</span><span class="n">min_dBZ_used</span><span class="p">,</span>
+                                            <span class="n">dB_averaging</span><span class="o">=</span><span class="n">dB_averaging</span><span class="p">,</span> <span class="n">remove_small_objects</span><span class="o">=</span><span class="n">remove_small_objects</span><span class="p">,</span>
+                                            <span class="n">min_km2_size</span><span class="o">=</span><span class="n">min_km2_size</span><span class="p">,</span> <span class="n">val_for_max_conv_rad</span><span class="o">=</span><span class="n">val_for_max_conv_rad</span><span class="p">,</span>
+                                            <span class="n">max_conv_rad_km</span><span class="o">=</span><span class="n">max_conv_rad_km</span><span class="p">,</span> <span class="n">cs_core</span><span class="o">=</span><span class="n">cs_core</span><span class="p">,</span> <span class="n">nosfcecho</span><span class="o">=</span><span class="n">nosfcecho</span><span class="p">,</span>
+                                            <span class="n">weakecho</span><span class="o">=</span><span class="n">weakecho</span><span class="p">,</span> <span class="n">sf</span><span class="o">=</span><span class="n">sf</span><span class="p">,</span> <span class="n">conv</span><span class="o">=</span><span class="n">conv</span><span class="p">)</span>
+
+    <span class="c1"># put data into a dictionary to be added as a field</span>
+    <span class="n">convsf_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;convsf&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="n">convsf_best</span><span class="p">,</span>
+        <span class="s1">&#39;standard_name&#39;</span><span class="p">:</span> <span class="s1">&#39;convsf&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;long_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Convective stratiform classification&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;valid_min&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s1">&#39;valid_max&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+        <span class="s1">&#39;comment_1&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;Convective-stratiform echo &#39;</span>
+                      <span class="s1">&#39;classification based on &#39;</span>
+                      <span class="s1">&#39;Yuter and Houze (1997) and Yuter et al. (2005)&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;comment_2&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;0 = No surface echo/Undefined, 1 = Stratiform, &#39;</span>
+                      <span class="s1">&#39;2 = Convective, 3 = weak echo&#39;</span><span class="p">)}}</span>
+
+    <span class="c1"># If estimation is True, run the algorithm on the field with offset subtracted and the field with the offset added</span>
+    <span class="k">if</span> <span class="n">estimate_flag</span><span class="p">:</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">convsf_under</span> <span class="o">=</span> <span class="n">_revised_conv_strat</span><span class="p">(</span><span class="n">ze</span> <span class="o">-</span> <span class="n">estimate_offset</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">always_core_thres</span><span class="o">=</span><span class="n">always_core_thres</span><span class="p">,</span>
+                                                 <span class="n">bkg_rad_km</span><span class="o">=</span><span class="n">bkg_rad_km</span><span class="p">,</span> <span class="n">use_cosine</span><span class="o">=</span><span class="n">use_cosine</span><span class="p">,</span> <span class="n">max_diff</span><span class="o">=</span><span class="n">max_diff</span><span class="p">,</span>
+                                                 <span class="n">zero_diff_cos_val</span><span class="o">=</span><span class="n">zero_diff_cos_val</span><span class="p">,</span> <span class="n">scalar_diff</span><span class="o">=</span><span class="n">scalar_diff</span><span class="p">,</span>
+                                                 <span class="n">use_addition</span><span class="o">=</span><span class="n">use_addition</span><span class="p">,</span> <span class="n">calc_thres</span><span class="o">=</span><span class="n">calc_thres</span><span class="p">,</span>
+                                                 <span class="n">weak_echo_thres</span><span class="o">=</span><span class="n">weak_echo_thres</span><span class="p">,</span> <span class="n">min_dBZ_used</span><span class="o">=</span><span class="n">min_dBZ_used</span><span class="p">,</span>
+                                                 <span class="n">dB_averaging</span><span class="o">=</span><span class="n">dB_averaging</span><span class="p">,</span> <span class="n">remove_small_objects</span><span class="o">=</span><span class="n">remove_small_objects</span><span class="p">,</span>
+                                                 <span class="n">min_km2_size</span><span class="o">=</span><span class="n">min_km2_size</span><span class="p">,</span> <span class="n">val_for_max_conv_rad</span><span class="o">=</span><span class="n">val_for_max_conv_rad</span><span class="p">,</span>
+                                                 <span class="n">max_conv_rad_km</span><span class="o">=</span><span class="n">max_conv_rad_km</span><span class="p">,</span> <span class="n">cs_core</span><span class="o">=</span><span class="n">cs_core</span><span class="p">,</span> <span class="n">nosfcecho</span><span class="o">=</span><span class="n">nosfcecho</span><span class="p">,</span>
+                                                 <span class="n">weakecho</span><span class="o">=</span><span class="n">weakecho</span><span class="p">,</span> <span class="n">sf</span><span class="o">=</span><span class="n">sf</span><span class="p">,</span> <span class="n">conv</span><span class="o">=</span><span class="n">conv</span><span class="p">)</span>
+
+        <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">convsf_over</span> <span class="o">=</span> <span class="n">_revised_conv_strat</span><span class="p">(</span><span class="n">ze</span> <span class="o">+</span> <span class="n">estimate_offset</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">always_core_thres</span><span class="o">=</span><span class="n">always_core_thres</span><span class="p">,</span>
+                                                <span class="n">bkg_rad_km</span><span class="o">=</span><span class="n">bkg_rad_km</span><span class="p">,</span> <span class="n">use_cosine</span><span class="o">=</span><span class="n">use_cosine</span><span class="p">,</span> <span class="n">max_diff</span><span class="o">=</span><span class="n">max_diff</span><span class="p">,</span>
+                                                <span class="n">zero_diff_cos_val</span><span class="o">=</span><span class="n">zero_diff_cos_val</span><span class="p">,</span> <span class="n">scalar_diff</span><span class="o">=</span><span class="n">scalar_diff</span><span class="p">,</span>
+                                                <span class="n">use_addition</span><span class="o">=</span><span class="n">use_addition</span><span class="p">,</span> <span class="n">calc_thres</span><span class="o">=</span><span class="n">calc_thres</span><span class="p">,</span>
+                                                <span class="n">weak_echo_thres</span><span class="o">=</span><span class="n">weak_echo_thres</span><span class="p">,</span> <span class="n">min_dBZ_used</span><span class="o">=</span><span class="n">min_dBZ_used</span><span class="p">,</span>
+                                                <span class="n">dB_averaging</span><span class="o">=</span><span class="n">dB_averaging</span><span class="p">,</span> <span class="n">remove_small_objects</span><span class="o">=</span><span class="n">remove_small_objects</span><span class="p">,</span>
+                                                <span class="n">min_km2_size</span><span class="o">=</span><span class="n">min_km2_size</span><span class="p">,</span> <span class="n">val_for_max_conv_rad</span><span class="o">=</span><span class="n">val_for_max_conv_rad</span><span class="p">,</span>
+                                                <span class="n">max_conv_rad_km</span><span class="o">=</span><span class="n">max_conv_rad_km</span><span class="p">,</span> <span class="n">cs_core</span><span class="o">=</span><span class="n">cs_core</span><span class="p">,</span> <span class="n">nosfcecho</span><span class="o">=</span><span class="n">nosfcecho</span><span class="p">,</span>
+                                                <span class="n">weakecho</span><span class="o">=</span><span class="n">weakecho</span><span class="p">,</span> <span class="n">sf</span><span class="o">=</span><span class="n">sf</span><span class="p">,</span> <span class="n">conv</span><span class="o">=</span><span class="n">conv</span><span class="p">)</span>
+
+        <span class="c1"># save into dictionaries</span>
+        <span class="n">convsf_dict</span><span class="p">[</span><span class="s1">&#39;convsf_under&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="n">convsf_under</span><span class="p">,</span>
+            <span class="s1">&#39;standard_name&#39;</span><span class="p">:</span> <span class="s1">&#39;convsf_under&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;long_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Convective stratiform classification (Underestimate)&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;valid_min&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s1">&#39;valid_max&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+            <span class="s1">&#39;comment_1&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;Convective-stratiform echo &#39;</span>
+                          <span class="s1">&#39;classification based on &#39;</span>
+                          <span class="s1">&#39;Yuter and Houze (1997) and Yuter et al. (2005)&#39;</span><span class="p">),</span>
+            <span class="s1">&#39;comment_2&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;0 = Undefined, 1 = Stratiform, &#39;</span>
+                          <span class="s1">&#39;2 = Convective, 3 = weak echo&#39;</span><span class="p">)}</span>
+
+        <span class="n">convsf_dict</span><span class="p">[</span><span class="s1">&#39;convsf_over&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="n">convsf_over</span><span class="p">,</span>
+            <span class="s1">&#39;standard_name&#39;</span><span class="p">:</span> <span class="s1">&#39;convsf_under&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;long_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Convective stratiform classification (Overestimate)&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;valid_min&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s1">&#39;valid_max&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+            <span class="s1">&#39;comment_1&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;Convective-stratiform echo &#39;</span>
+                          <span class="s1">&#39;classification based on &#39;</span>
+                          <span class="s1">&#39;Yuter and Houze (1997)&#39;</span><span class="p">),</span>
+            <span class="s1">&#39;comment_2&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;0 = Undefined, 1 = Stratiform, &#39;</span>
+                          <span class="s1">&#39;2 = Convective, 3 = weak echo&#39;</span><span class="p">)}</span>
+
+    <span class="k">return</span> <span class="n">convsf_dict</span></div>
 
 
 <div class="viewcode-block" id="hydroclass_semisupervised"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.hydroclass_semisupervised.html#pyart.retrieve.hydroclass_semisupervised">[docs]</a><span class="k">def</span> <span class="nf">hydroclass_semisupervised</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">mass_centers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -414,7 +620,7 @@
     <span class="n">temp</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">temp_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
 
     <span class="c1"># convert temp in relative height respect to iso0</span>
-    <span class="n">relh</span> <span class="o">=</span> <span class="n">temp</span><span class="o">*</span><span class="p">(</span><span class="mf">1000.</span><span class="o">/</span><span class="n">lapse_rate</span><span class="p">)</span>
+    <span class="n">relh</span> <span class="o">=</span> <span class="n">temp</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1000.</span> <span class="o">/</span> <span class="n">lapse_rate</span><span class="p">)</span>
 
     <span class="c1"># standardize data</span>
     <span class="n">refl_std</span> <span class="o">=</span> <span class="n">_standardize</span><span class="p">(</span><span class="n">refl</span><span class="p">,</span> <span class="s1">&#39;Zh&#39;</span><span class="p">)</span>
@@ -463,7 +669,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">field_name</span> <span class="o">==</span> <span class="s1">&#39;relH&#39;</span><span class="p">:</span>
-        <span class="n">field_std</span> <span class="o">=</span> <span class="mf">2.</span><span class="o">/</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.005</span><span class="o">*</span><span class="n">data</span><span class="p">))</span><span class="o">-</span><span class="mf">1.</span>
+        <span class="n">field_std</span> <span class="o">=</span> <span class="mf">2.</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.005</span> <span class="o">*</span> <span class="n">data</span><span class="p">))</span> <span class="o">-</span> <span class="mf">1.</span>
         <span class="k">return</span> <span class="n">field_std</span>
 
     <span class="k">if</span> <span class="p">(</span><span class="n">mx</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">mn</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
@@ -477,12 +683,12 @@
 
     <span class="k">if</span> <span class="n">field_name</span> <span class="o">==</span> <span class="s1">&#39;KDP&#39;</span><span class="p">:</span>
         <span class="n">data</span><span class="p">[</span><span class="n">data</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.5</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="mf">10.</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">data</span><span class="o">+</span><span class="mf">0.6</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="mf">10.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">data</span> <span class="o">+</span> <span class="mf">0.6</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">field_name</span> <span class="o">==</span> <span class="s1">&#39;RhoHV&#39;</span><span class="p">:</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="mf">10.</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="mf">1.</span><span class="o">-</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="mf">10.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="mf">1.</span> <span class="o">-</span> <span class="n">data</span><span class="p">)</span>
 
     <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">getmaskarray</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-    <span class="n">field_std</span> <span class="o">=</span> <span class="mf">2.</span><span class="o">*</span><span class="p">(</span><span class="n">data</span><span class="o">-</span><span class="n">mn</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">mx</span><span class="o">-</span><span class="n">mn</span><span class="p">)</span><span class="o">-</span><span class="mf">1.</span>
+    <span class="n">field_std</span> <span class="o">=</span> <span class="mf">2.</span> <span class="o">*</span> <span class="p">(</span><span class="n">data</span> <span class="o">-</span> <span class="n">mn</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">mx</span> <span class="o">-</span> <span class="n">mn</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1.</span>
     <span class="n">field_std</span><span class="p">[</span><span class="n">data</span> <span class="o">&lt;</span> <span class="n">mn</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.</span>
     <span class="n">field_std</span><span class="p">[</span><span class="n">data</span> <span class="o">&gt;</span> <span class="n">mx</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.</span>
     <span class="n">field_std</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked</span>
@@ -491,7 +697,7 @@
 
 
 <span class="k">def</span> <span class="nf">_assign_to_class</span><span class="p">(</span><span class="n">zh</span><span class="p">,</span> <span class="n">zdr</span><span class="p">,</span> <span class="n">kdp</span><span class="p">,</span> <span class="n">rhohv</span><span class="p">,</span> <span class="n">relh</span><span class="p">,</span> <span class="n">mass_centers</span><span class="p">,</span>
-                    <span class="n">weights</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])):</span>
+                     <span class="n">weights</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Assigns an hydrometeor class to a radar range bin computing</span>
 <span class="sd">    the distance between the radar variables an a centroid.</span>
@@ -532,7 +738,7 @@
             <span class="n">centroids_class</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">nvariables</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
             <span class="p">(</span><span class="n">nvariables</span><span class="p">,</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">nbins</span><span class="p">))</span>
         <span class="n">dist</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
-            <span class="p">((</span><span class="n">centroids_class</span><span class="o">-</span><span class="n">data</span><span class="p">)</span><span class="o">**</span><span class="mf">2.</span><span class="p">)</span><span class="o">*</span><span class="n">weights_mat</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+            <span class="p">((</span><span class="n">centroids_class</span> <span class="o">-</span> <span class="n">data</span><span class="p">)</span> <span class="o">**</span> <span class="mf">2.</span><span class="p">)</span> <span class="o">*</span> <span class="n">weights_mat</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
 
     <span class="c1"># use very large fill_value so that masked entries will be sorted at the</span>
     <span class="c1"># end. There should not be any masked entry anyway</span>
@@ -544,7 +750,7 @@
 
     <span class="c1"># Entries with non-valid reflectivity values are set to 0 (No class)</span>
     <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">getmaskarray</span><span class="p">(</span><span class="n">zh</span><span class="p">)</span>
-    <span class="n">hydroclass</span> <span class="o">=</span> <span class="n">class_vec</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span><span class="o">+</span><span class="mi">1</span>
+    <span class="n">hydroclass</span> <span class="o">=</span> <span class="n">class_vec</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">+</span> <span class="mi">1</span>
     <span class="n">hydroclass</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 
     <span class="k">return</span> <span class="n">hydroclass</span><span class="p">,</span> <span class="n">min_dist</span>
@@ -603,29 +809,29 @@
     <span class="n">mass_centers_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
     <span class="c1"># C-band centroids derived for MeteoSwiss Albis radar</span>
     <span class="c1">#                       Zh        ZDR     kdp   RhoHV    delta_Z</span>
-    <span class="n">mass_centers_c</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">13.5829</span><span class="p">,</span>  <span class="mf">0.4063</span><span class="p">,</span> <span class="mf">0.0497</span><span class="p">,</span> <span class="mf">0.9868</span><span class="p">,</span>  <span class="mf">1330.3</span><span class="p">]</span>  <span class="c1"># DS</span>
-    <span class="n">mass_centers_c</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">02.8453</span><span class="p">,</span>  <span class="mf">0.2457</span><span class="p">,</span> <span class="mf">0.0000</span><span class="p">,</span> <span class="mf">0.9798</span><span class="p">,</span>  <span class="mf">0653.8</span><span class="p">]</span>  <span class="c1"># CR</span>
-    <span class="n">mass_centers_c</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">07.6597</span><span class="p">,</span>  <span class="mf">0.2180</span><span class="p">,</span> <span class="mf">0.0019</span><span class="p">,</span> <span class="mf">0.9799</span><span class="p">,</span> <span class="o">-</span><span class="mf">1426.5</span><span class="p">]</span>  <span class="c1"># LR</span>
-    <span class="n">mass_centers_c</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">31.6815</span><span class="p">,</span>  <span class="mf">0.3926</span><span class="p">,</span> <span class="mf">0.0828</span><span class="p">,</span> <span class="mf">0.9978</span><span class="p">,</span>  <span class="mf">0535.3</span><span class="p">]</span>  <span class="c1"># GR</span>
-    <span class="n">mass_centers_c</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">39.4703</span><span class="p">,</span>  <span class="mf">1.0734</span><span class="p">,</span> <span class="mf">0.4919</span><span class="p">,</span> <span class="mf">0.9876</span><span class="p">,</span> <span class="o">-</span><span class="mf">1036.3</span><span class="p">]</span>  <span class="c1"># RN</span>
-    <span class="n">mass_centers_c</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">04.8267</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5690</span><span class="p">,</span> <span class="mf">0.0000</span><span class="p">,</span> <span class="mf">0.9691</span><span class="p">,</span>  <span class="mf">0869.8</span><span class="p">]</span>  <span class="c1"># VI</span>
-    <span class="n">mass_centers_c</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">30.8613</span><span class="p">,</span>  <span class="mf">0.9819</span><span class="p">,</span> <span class="mf">0.1998</span><span class="p">,</span> <span class="mf">0.9845</span><span class="p">,</span> <span class="o">-</span><span class="mf">0066.1</span><span class="p">]</span>  <span class="c1"># WS</span>
-    <span class="n">mass_centers_c</span><span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">52.3969</span><span class="p">,</span>  <span class="mf">2.1094</span><span class="p">,</span> <span class="mf">2.4675</span><span class="p">,</span> <span class="mf">0.9730</span><span class="p">,</span> <span class="o">-</span><span class="mf">1550.2</span><span class="p">]</span>  <span class="c1"># MH</span>
-    <span class="n">mass_centers_c</span><span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">50.6186</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0649</span><span class="p">,</span> <span class="mf">0.0946</span><span class="p">,</span> <span class="mf">0.9904</span><span class="p">,</span>  <span class="mf">1179.9</span><span class="p">]</span>  <span class="c1"># IH/HDG</span>
+    <span class="n">mass_centers_c</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">13.5829</span><span class="p">,</span> <span class="mf">0.4063</span><span class="p">,</span> <span class="mf">0.0497</span><span class="p">,</span> <span class="mf">0.9868</span><span class="p">,</span> <span class="mf">1330.3</span><span class="p">]</span>  <span class="c1"># DS</span>
+    <span class="n">mass_centers_c</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">02.8453</span><span class="p">,</span> <span class="mf">0.2457</span><span class="p">,</span> <span class="mf">0.0000</span><span class="p">,</span> <span class="mf">0.9798</span><span class="p">,</span> <span class="mf">0653.8</span><span class="p">]</span>  <span class="c1"># CR</span>
+    <span class="n">mass_centers_c</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">07.6597</span><span class="p">,</span> <span class="mf">0.2180</span><span class="p">,</span> <span class="mf">0.0019</span><span class="p">,</span> <span class="mf">0.9799</span><span class="p">,</span> <span class="o">-</span><span class="mf">1426.5</span><span class="p">]</span>  <span class="c1"># LR</span>
+    <span class="n">mass_centers_c</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">31.6815</span><span class="p">,</span> <span class="mf">0.3926</span><span class="p">,</span> <span class="mf">0.0828</span><span class="p">,</span> <span class="mf">0.9978</span><span class="p">,</span> <span class="mf">0535.3</span><span class="p">]</span>  <span class="c1"># GR</span>
+    <span class="n">mass_centers_c</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">39.4703</span><span class="p">,</span> <span class="mf">1.0734</span><span class="p">,</span> <span class="mf">0.4919</span><span class="p">,</span> <span class="mf">0.9876</span><span class="p">,</span> <span class="o">-</span><span class="mf">1036.3</span><span class="p">]</span>  <span class="c1"># RN</span>
+    <span class="n">mass_centers_c</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">04.8267</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5690</span><span class="p">,</span> <span class="mf">0.0000</span><span class="p">,</span> <span class="mf">0.9691</span><span class="p">,</span> <span class="mf">0869.8</span><span class="p">]</span>  <span class="c1"># VI</span>
+    <span class="n">mass_centers_c</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">30.8613</span><span class="p">,</span> <span class="mf">0.9819</span><span class="p">,</span> <span class="mf">0.1998</span><span class="p">,</span> <span class="mf">0.9845</span><span class="p">,</span> <span class="o">-</span><span class="mf">0066.1</span><span class="p">]</span>  <span class="c1"># WS</span>
+    <span class="n">mass_centers_c</span><span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">52.3969</span><span class="p">,</span> <span class="mf">2.1094</span><span class="p">,</span> <span class="mf">2.4675</span><span class="p">,</span> <span class="mf">0.9730</span><span class="p">,</span> <span class="o">-</span><span class="mf">1550.2</span><span class="p">]</span>  <span class="c1"># MH</span>
+    <span class="n">mass_centers_c</span><span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">50.6186</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0649</span><span class="p">,</span> <span class="mf">0.0946</span><span class="p">,</span> <span class="mf">0.9904</span><span class="p">,</span> <span class="mf">1179.9</span><span class="p">]</span>  <span class="c1"># IH/HDG</span>
 
     <span class="n">mass_centers_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="n">mass_centers_c</span><span class="p">})</span>
 
     <span class="c1"># X-band centroids derived for MeteoSwiss DX50 radar</span>
     <span class="c1">#                       Zh        ZDR     kdp    RhoHV   delta_Z</span>
-    <span class="n">mass_centers_x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">19.0770</span><span class="p">,</span>  <span class="mf">0.4139</span><span class="p">,</span> <span class="mf">0.0099</span><span class="p">,</span> <span class="mf">0.9841</span><span class="p">,</span>  <span class="mf">1061.7</span><span class="p">]</span>  <span class="c1"># DS</span>
-    <span class="n">mass_centers_x</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">03.9877</span><span class="p">,</span>  <span class="mf">0.5040</span><span class="p">,</span> <span class="mf">0.0000</span><span class="p">,</span> <span class="mf">0.9642</span><span class="p">,</span>  <span class="mf">0856.6</span><span class="p">]</span>  <span class="c1"># CR</span>
-    <span class="n">mass_centers_x</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">20.7982</span><span class="p">,</span>  <span class="mf">0.3177</span><span class="p">,</span> <span class="mf">0.0004</span><span class="p">,</span> <span class="mf">0.9858</span><span class="p">,</span> <span class="o">-</span><span class="mf">1375.1</span><span class="p">]</span>  <span class="c1"># LR</span>
-    <span class="n">mass_centers_x</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">34.7124</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.3748</span><span class="p">,</span> <span class="mf">0.0988</span><span class="p">,</span> <span class="mf">0.9828</span><span class="p">,</span>  <span class="mf">1224.2</span><span class="p">]</span>  <span class="c1"># GR</span>
-    <span class="n">mass_centers_x</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">33.0134</span><span class="p">,</span>  <span class="mf">0.6614</span><span class="p">,</span> <span class="mf">0.0819</span><span class="p">,</span> <span class="mf">0.9802</span><span class="p">,</span> <span class="o">-</span><span class="mf">1169.8</span><span class="p">]</span>  <span class="c1"># RN</span>
-    <span class="n">mass_centers_x</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">08.2610</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.4681</span><span class="p">,</span> <span class="mf">0.0000</span><span class="p">,</span> <span class="mf">0.9722</span><span class="p">,</span>  <span class="mf">1100.7</span><span class="p">]</span>  <span class="c1"># VI</span>
-    <span class="n">mass_centers_x</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">35.1801</span><span class="p">,</span>  <span class="mf">1.2830</span><span class="p">,</span> <span class="mf">0.1322</span><span class="p">,</span> <span class="mf">0.9162</span><span class="p">,</span> <span class="o">-</span><span class="mf">0159.8</span><span class="p">]</span>  <span class="c1"># WS</span>
-    <span class="n">mass_centers_x</span><span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">52.4539</span><span class="p">,</span>  <span class="mf">2.3714</span><span class="p">,</span> <span class="mf">1.1120</span><span class="p">,</span> <span class="mf">0.9382</span><span class="p">,</span> <span class="o">-</span><span class="mf">1618.5</span><span class="p">]</span>  <span class="c1"># MH</span>
-    <span class="n">mass_centers_x</span><span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">44.2216</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.3419</span><span class="p">,</span> <span class="mf">0.0687</span><span class="p">,</span> <span class="mf">0.9683</span><span class="p">,</span>  <span class="mf">1272.7</span><span class="p">]</span>  <span class="c1"># IH/HDG</span>
+    <span class="n">mass_centers_x</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">19.0770</span><span class="p">,</span> <span class="mf">0.4139</span><span class="p">,</span> <span class="mf">0.0099</span><span class="p">,</span> <span class="mf">0.9841</span><span class="p">,</span> <span class="mf">1061.7</span><span class="p">]</span>  <span class="c1"># DS</span>
+    <span class="n">mass_centers_x</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">03.9877</span><span class="p">,</span> <span class="mf">0.5040</span><span class="p">,</span> <span class="mf">0.0000</span><span class="p">,</span> <span class="mf">0.9642</span><span class="p">,</span> <span class="mf">0856.6</span><span class="p">]</span>  <span class="c1"># CR</span>
+    <span class="n">mass_centers_x</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">20.7982</span><span class="p">,</span> <span class="mf">0.3177</span><span class="p">,</span> <span class="mf">0.0004</span><span class="p">,</span> <span class="mf">0.9858</span><span class="p">,</span> <span class="o">-</span><span class="mf">1375.1</span><span class="p">]</span>  <span class="c1"># LR</span>
+    <span class="n">mass_centers_x</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">34.7124</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.3748</span><span class="p">,</span> <span class="mf">0.0988</span><span class="p">,</span> <span class="mf">0.9828</span><span class="p">,</span> <span class="mf">1224.2</span><span class="p">]</span>  <span class="c1"># GR</span>
+    <span class="n">mass_centers_x</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">33.0134</span><span class="p">,</span> <span class="mf">0.6614</span><span class="p">,</span> <span class="mf">0.0819</span><span class="p">,</span> <span class="mf">0.9802</span><span class="p">,</span> <span class="o">-</span><span class="mf">1169.8</span><span class="p">]</span>  <span class="c1"># RN</span>
+    <span class="n">mass_centers_x</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">08.2610</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.4681</span><span class="p">,</span> <span class="mf">0.0000</span><span class="p">,</span> <span class="mf">0.9722</span><span class="p">,</span> <span class="mf">1100.7</span><span class="p">]</span>  <span class="c1"># VI</span>
+    <span class="n">mass_centers_x</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">35.1801</span><span class="p">,</span> <span class="mf">1.2830</span><span class="p">,</span> <span class="mf">0.1322</span><span class="p">,</span> <span class="mf">0.9162</span><span class="p">,</span> <span class="o">-</span><span class="mf">0159.8</span><span class="p">]</span>  <span class="c1"># WS</span>
+    <span class="n">mass_centers_x</span><span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">52.4539</span><span class="p">,</span> <span class="mf">2.3714</span><span class="p">,</span> <span class="mf">1.1120</span><span class="p">,</span> <span class="mf">0.9382</span><span class="p">,</span> <span class="o">-</span><span class="mf">1618.5</span><span class="p">]</span>  <span class="c1"># MH</span>
+    <span class="n">mass_centers_x</span><span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">44.2216</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.3419</span><span class="p">,</span> <span class="mf">0.0687</span><span class="p">,</span> <span class="mf">0.9683</span><span class="p">,</span> <span class="mf">1272.7</span><span class="p">]</span>  <span class="c1"># IH/HDG</span>
 
     <span class="n">mass_centers_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;X&#39;</span><span class="p">:</span> <span class="n">mass_centers_x</span><span class="p">})</span>
 
