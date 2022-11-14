@@ -788,6 +788,52 @@ class Radar(object):
         self.fields[field_name] = dic
         return
 
+    def add_filter(self, gatefilter, replace_existing=False,
+                   include_fields=None):
+        """
+        Updates the radar object with an applied gatefilter provided
+        by the user on fields within the radar object.
+
+        Parameters
+        ----------
+        gatefilter : GateFilter
+          GateFilter instance. This filter will exclude equal to
+          the conditions provided in the gatefilter.
+        replace_existing : bool, optional
+          If True, replaces the fields in the radar object with
+          copies of those fields with the applied gatefilter.
+          False will return new fields with the appended 'filtered_'
+          prefix.
+        include_fields : list, optional
+          List of fields to have filtered applied to. If none, all
+          fields will have applied filter.
+
+        """
+        # If include_fields is None, sets list to all fields to include.
+        if include_fields is None:
+            include_fields = [*self.fields.keys()]
+
+        try:
+            # Replace current fields with masked versions with applied gatefilter.
+            if replace_existing:
+                for field in include_fields:
+                    self.fields[field]['data'] = np.ma.masked_where(
+                        gatefilter.gate_excluded, self.fields[field]['data'])
+            # Add new fields with prefix 'filtered_'
+            else:
+                for field in include_fields:
+                    field_dict = copy.deepcopy(self.fields[field])
+                    field_dict['data'] = np.ma.masked_where(
+                        gatefilter.gate_excluded, field_dict['data'])
+                    self.add_field('filtered_'+field, field_dict, replace_existing=True)
+
+        # If fields don't match up throw an error.
+        except KeyError:
+            raise KeyError(field + ' not found in the original radar object, '
+                           'please check that names in the include_fields list '
+                           'match those in the radar object.')
+        return
+
     def add_field_like(self, existing_field_name, field_name, data,
                        replace_existing=False):
         """
