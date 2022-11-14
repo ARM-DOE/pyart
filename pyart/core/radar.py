@@ -792,13 +792,14 @@ class Radar(object):
                    include_fields=None):
         """
         Updates the radar object with an applied gatefilter provided
-        by the user on fields within the radar object.
+        by the user that masks values in fields within the radar object.
 
         Parameters
         ----------
         gatefilter : GateFilter
             GateFilter instance. This filter will exclude equal to
-            the conditions provided in the gatefilter.
+            the conditions provided in the gatefilter and mask values
+            in fields specified or all fields if include_fields is None.
         replace_existing : bool, optional
             If True, replaces the fields in the radar object with
             copies of those fields with the applied gatefilter.
