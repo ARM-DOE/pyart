@@ -797,16 +797,16 @@ class Radar(object):
         Parameters
         ----------
         gatefilter : GateFilter
-          GateFilter instance. This filter will exclude equal to
-          the conditions provided in the gatefilter.
+            GateFilter instance. This filter will exclude equal to
+            the conditions provided in the gatefilter.
         replace_existing : bool, optional
-          If True, replaces the fields in the radar object with
-          copies of those fields with the applied gatefilter.
-          False will return new fields with the appended 'filtered_'
-          prefix.
+            If True, replaces the fields in the radar object with
+            copies of those fields with the applied gatefilter.
+            False will return new fields with the appended 'filtered_'
+            prefix.
         include_fields : list, optional
-          List of fields to have filtered applied to. If none, all
-          fields will have applied filter.
+            List of fields to have filtered applied to. If none, all
+            fields will have applied filter.
 
         """
         # If include_fields is None, sets list to all fields to include.
