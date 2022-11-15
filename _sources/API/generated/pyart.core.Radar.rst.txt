@@ -15,6 +15,7 @@ pyart.core.Radar
 
    ~Radar.add_field
    ~Radar.add_field_like
+   ~Radar.add_filter
    ~Radar.check_field_exists
    ~Radar.extract_sweeps
    ~Radar.get_azimuth

@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>pyart.core.Radar &#8212; Py-ART 1.14.0.post2 documentation</title>
+    <title>pyart.core.Radar &#8212; Py-ART 1.14.0.post3 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -309,6 +309,11 @@
      <li class="toctree-l3">
       <a class="reference internal" href="pyart.core.Radar.add_field_like.html">
        pyart.core.Radar.add_field_like
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="pyart.core.Radar.add_filter.html">
+       pyart.core.Radar.add_filter
       </a>
      </li>
      <li class="toctree-l3">
@@ -3030,79 +3035,82 @@ set to None, indicating these parameters are not available</p></li>
 <tr class="row-even"><td><p><a class="reference internal" href="pyart.core.Radar.add_field_like.html#pyart.core.Radar.add_field_like" title="pyart.core.Radar.add_field_like"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_field_like</span></code></a>(existing_field_name, ...[, ...])</p></td>
 <td><p>Add a field to the object with metadata from a existing field.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyart.core.Radar.check_field_exists.html#pyart.core.Radar.check_field_exists" title="pyart.core.Radar.check_field_exists"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_field_exists</span></code></a>(field_name)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.core.Radar.add_filter.html#pyart.core.Radar.add_filter" title="pyart.core.Radar.add_filter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_filter</span></code></a>(gatefilter[, replace_existing, ...])</p></td>
+<td><p>Updates the radar object with an applied gatefilter provided by the user that masks values in fields within the radar object.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.core.Radar.check_field_exists.html#pyart.core.Radar.check_field_exists" title="pyart.core.Radar.check_field_exists"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_field_exists</span></code></a>(field_name)</p></td>
 <td><p>Check that a field exists in the fields dictionary.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyart.core.Radar.extract_sweeps.html#pyart.core.Radar.extract_sweeps" title="pyart.core.Radar.extract_sweeps"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_sweeps</span></code></a>(sweeps)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.core.Radar.extract_sweeps.html#pyart.core.Radar.extract_sweeps" title="pyart.core.Radar.extract_sweeps"><code class="xref py py-obj docutils literal notranslate"><span class="pre">extract_sweeps</span></code></a>(sweeps)</p></td>
 <td><p>Create a new radar contains only the data from select sweeps.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyart.core.Radar.get_azimuth.html#pyart.core.Radar.get_azimuth" title="pyart.core.Radar.get_azimuth"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_azimuth</span></code></a>(sweep[, copy])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.core.Radar.get_azimuth.html#pyart.core.Radar.get_azimuth" title="pyart.core.Radar.get_azimuth"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_azimuth</span></code></a>(sweep[, copy])</p></td>
 <td><p>Return an array of azimuth angles for a given sweep.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyart.core.Radar.get_elevation.html#pyart.core.Radar.get_elevation" title="pyart.core.Radar.get_elevation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_elevation</span></code></a>(sweep[, copy])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.core.Radar.get_elevation.html#pyart.core.Radar.get_elevation" title="pyart.core.Radar.get_elevation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_elevation</span></code></a>(sweep[, copy])</p></td>
 <td><p>Return an array of elevation angles for a given sweep.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyart.core.Radar.get_end.html#pyart.core.Radar.get_end" title="pyart.core.Radar.get_end"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_end</span></code></a>(sweep)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.core.Radar.get_end.html#pyart.core.Radar.get_end" title="pyart.core.Radar.get_end"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_end</span></code></a>(sweep)</p></td>
 <td><p>Return the ending ray for a given sweep.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyart.core.Radar.get_field.html#pyart.core.Radar.get_field" title="pyart.core.Radar.get_field"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_field</span></code></a>(sweep, field_name[, copy])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.core.Radar.get_field.html#pyart.core.Radar.get_field" title="pyart.core.Radar.get_field"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_field</span></code></a>(sweep, field_name[, copy])</p></td>
 <td><p>Return the field data for a given sweep.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyart.core.Radar.get_gate_area.html#pyart.core.Radar.get_gate_area" title="pyart.core.Radar.get_gate_area"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_gate_area</span></code></a>(sweep)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.core.Radar.get_gate_area.html#pyart.core.Radar.get_gate_area" title="pyart.core.Radar.get_gate_area"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_gate_area</span></code></a>(sweep)</p></td>
 <td><p>Return the area of each gate in a sweep.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyart.core.Radar.get_gate_lat_lon_alt.html#pyart.core.Radar.get_gate_lat_lon_alt" title="pyart.core.Radar.get_gate_lat_lon_alt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_gate_lat_lon_alt</span></code></a>(sweep[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.core.Radar.get_gate_lat_lon_alt.html#pyart.core.Radar.get_gate_lat_lon_alt" title="pyart.core.Radar.get_gate_lat_lon_alt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_gate_lat_lon_alt</span></code></a>(sweep[, ...])</p></td>
 <td><p>Return the longitude, latitude and altitude gate locations.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyart.core.Radar.get_gate_x_y_z.html#pyart.core.Radar.get_gate_x_y_z" title="pyart.core.Radar.get_gate_x_y_z"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_gate_x_y_z</span></code></a>(sweep[, edges, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.core.Radar.get_gate_x_y_z.html#pyart.core.Radar.get_gate_x_y_z" title="pyart.core.Radar.get_gate_x_y_z"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_gate_x_y_z</span></code></a>(sweep[, edges, ...])</p></td>
 <td><p>Return the x, y and z gate locations in meters for a given sweep.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyart.core.Radar.get_nyquist_vel.html#pyart.core.Radar.get_nyquist_vel" title="pyart.core.Radar.get_nyquist_vel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_nyquist_vel</span></code></a>(sweep[, check_uniform])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.core.Radar.get_nyquist_vel.html#pyart.core.Radar.get_nyquist_vel" title="pyart.core.Radar.get_nyquist_vel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_nyquist_vel</span></code></a>(sweep[, check_uniform])</p></td>
 <td><p>Return the Nyquist velocity in meters per second for a given sweep.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyart.core.Radar.get_slice.html#pyart.core.Radar.get_slice" title="pyart.core.Radar.get_slice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_slice</span></code></a>(sweep)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.core.Radar.get_slice.html#pyart.core.Radar.get_slice" title="pyart.core.Radar.get_slice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_slice</span></code></a>(sweep)</p></td>
 <td><p>Return a slice for selecting rays for a given sweep.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyart.core.Radar.get_start.html#pyart.core.Radar.get_start" title="pyart.core.Radar.get_start"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_start</span></code></a>(sweep)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.core.Radar.get_start.html#pyart.core.Radar.get_start" title="pyart.core.Radar.get_start"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_start</span></code></a>(sweep)</p></td>
 <td><p>Return the starting ray index for a given sweep.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyart.core.Radar.get_start_end.html#pyart.core.Radar.get_start_end" title="pyart.core.Radar.get_start_end"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_start_end</span></code></a>(sweep)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.core.Radar.get_start_end.html#pyart.core.Radar.get_start_end" title="pyart.core.Radar.get_start_end"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_start_end</span></code></a>(sweep)</p></td>
 <td><p>Return the starting and ending ray for a given sweep.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyart.core.Radar.info.html#pyart.core.Radar.info" title="pyart.core.Radar.info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">info</span></code></a>([level, out])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.core.Radar.info.html#pyart.core.Radar.info" title="pyart.core.Radar.info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">info</span></code></a>([level, out])</p></td>
 <td><p>Print information on radar.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyart.core.Radar.init_gate_altitude.html#pyart.core.Radar.init_gate_altitude" title="pyart.core.Radar.init_gate_altitude"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_gate_altitude</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.core.Radar.init_gate_altitude.html#pyart.core.Radar.init_gate_altitude" title="pyart.core.Radar.init_gate_altitude"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_gate_altitude</span></code></a>()</p></td>
 <td><p>Initialize the gate_altitude attribute.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyart.core.Radar.init_gate_longitude_latitude.html#pyart.core.Radar.init_gate_longitude_latitude" title="pyart.core.Radar.init_gate_longitude_latitude"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_gate_longitude_latitude</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.core.Radar.init_gate_longitude_latitude.html#pyart.core.Radar.init_gate_longitude_latitude" title="pyart.core.Radar.init_gate_longitude_latitude"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_gate_longitude_latitude</span></code></a>()</p></td>
 <td><p>Initialize or reset the gate_longitude and gate_latitude attributes.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyart.core.Radar.init_gate_x_y_z.html#pyart.core.Radar.init_gate_x_y_z" title="pyart.core.Radar.init_gate_x_y_z"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_gate_x_y_z</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.core.Radar.init_gate_x_y_z.html#pyart.core.Radar.init_gate_x_y_z" title="pyart.core.Radar.init_gate_x_y_z"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_gate_x_y_z</span></code></a>()</p></td>
 <td><p>Initialize or reset the gate_{x, y, z} attributes.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyart.core.Radar.init_rays_per_sweep.html#pyart.core.Radar.init_rays_per_sweep" title="pyart.core.Radar.init_rays_per_sweep"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_rays_per_sweep</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.core.Radar.init_rays_per_sweep.html#pyart.core.Radar.init_rays_per_sweep" title="pyart.core.Radar.init_rays_per_sweep"><code class="xref py py-obj docutils literal notranslate"><span class="pre">init_rays_per_sweep</span></code></a>()</p></td>
 <td><p>Initialize or reset the rays_per_sweep attribute.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyart.core.Radar.iter_azimuth.html#pyart.core.Radar.iter_azimuth" title="pyart.core.Radar.iter_azimuth"><code class="xref py py-obj docutils literal notranslate"><span class="pre">iter_azimuth</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.core.Radar.iter_azimuth.html#pyart.core.Radar.iter_azimuth" title="pyart.core.Radar.iter_azimuth"><code class="xref py py-obj docutils literal notranslate"><span class="pre">iter_azimuth</span></code></a>()</p></td>
 <td><p>Return an iterator which returns sweep azimuth data.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyart.core.Radar.iter_elevation.html#pyart.core.Radar.iter_elevation" title="pyart.core.Radar.iter_elevation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">iter_elevation</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.core.Radar.iter_elevation.html#pyart.core.Radar.iter_elevation" title="pyart.core.Radar.iter_elevation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">iter_elevation</span></code></a>()</p></td>
 <td><p>Return an iterator which returns sweep elevation data.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyart.core.Radar.iter_end.html#pyart.core.Radar.iter_end" title="pyart.core.Radar.iter_end"><code class="xref py py-obj docutils literal notranslate"><span class="pre">iter_end</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.core.Radar.iter_end.html#pyart.core.Radar.iter_end" title="pyart.core.Radar.iter_end"><code class="xref py py-obj docutils literal notranslate"><span class="pre">iter_end</span></code></a>()</p></td>
 <td><p>Return an iterator over the sweep end indices.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyart.core.Radar.iter_field.html#pyart.core.Radar.iter_field" title="pyart.core.Radar.iter_field"><code class="xref py py-obj docutils literal notranslate"><span class="pre">iter_field</span></code></a>(field_name)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.core.Radar.iter_field.html#pyart.core.Radar.iter_field" title="pyart.core.Radar.iter_field"><code class="xref py py-obj docutils literal notranslate"><span class="pre">iter_field</span></code></a>(field_name)</p></td>
 <td><p>Return an iterator which returns sweep field data.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyart.core.Radar.iter_slice.html#pyart.core.Radar.iter_slice" title="pyart.core.Radar.iter_slice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">iter_slice</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.core.Radar.iter_slice.html#pyart.core.Radar.iter_slice" title="pyart.core.Radar.iter_slice"><code class="xref py py-obj docutils literal notranslate"><span class="pre">iter_slice</span></code></a>()</p></td>
 <td><p>Return an iterator which returns sweep slice objects.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyart.core.Radar.iter_start.html#pyart.core.Radar.iter_start" title="pyart.core.Radar.iter_start"><code class="xref py py-obj docutils literal notranslate"><span class="pre">iter_start</span></code></a>()</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.core.Radar.iter_start.html#pyart.core.Radar.iter_start" title="pyart.core.Radar.iter_start"><code class="xref py py-obj docutils literal notranslate"><span class="pre">iter_start</span></code></a>()</p></td>
 <td><p>Return an iterator over the sweep start indices.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyart.core.Radar.iter_start_end.html#pyart.core.Radar.iter_start_end" title="pyart.core.Radar.iter_start_end"><code class="xref py py-obj docutils literal notranslate"><span class="pre">iter_start_end</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.core.Radar.iter_start_end.html#pyart.core.Radar.iter_start_end" title="pyart.core.Radar.iter_start_end"><code class="xref py py-obj docutils literal notranslate"><span class="pre">iter_start_end</span></code></a>()</p></td>
 <td><p>Return an iterator over the sweep start and end indices.</p></td>
 </tr>
 </tbody>

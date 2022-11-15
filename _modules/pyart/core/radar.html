@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.core.radar &#8212; Py-ART 1.14.0.post2 documentation</title>
+    <title>pyart.core.radar &#8212; Py-ART 1.14.0.post3 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -1005,6 +1005,53 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
         <span class="c1"># add the field</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">dic</span>
+        <span class="k">return</span></div>
+
+<div class="viewcode-block" id="Radar.add_filter"><a class="viewcode-back" href="../../../API/generated/pyart.core.Radar.add_filter.html#pyart.core.Radar.add_filter">[docs]</a>    <span class="k">def</span> <span class="nf">add_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gatefilter</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                   <span class="n">include_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Updates the radar object with an applied gatefilter provided</span>
+<span class="sd">        by the user that masks values in fields within the radar object.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        gatefilter : GateFilter</span>
+<span class="sd">            GateFilter instance. This filter will exclude equal to</span>
+<span class="sd">            the conditions provided in the gatefilter and mask values</span>
+<span class="sd">            in fields specified or all fields if include_fields is None.</span>
+<span class="sd">        replace_existing : bool, optional</span>
+<span class="sd">            If True, replaces the fields in the radar object with</span>
+<span class="sd">            copies of those fields with the applied gatefilter.</span>
+<span class="sd">            False will return new fields with the appended &#39;filtered_&#39;</span>
+<span class="sd">            prefix.</span>
+<span class="sd">        include_fields : list, optional</span>
+<span class="sd">            List of fields to have filtered applied to. If none, all</span>
+<span class="sd">            fields will have applied filter.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># If include_fields is None, sets list to all fields to include.</span>
+        <span class="k">if</span> <span class="n">include_fields</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">include_fields</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">keys</span><span class="p">()]</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Replace current fields with masked versions with applied gatefilter.</span>
+            <span class="k">if</span> <span class="n">replace_existing</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">include_fields</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span>
+                        <span class="n">gatefilter</span><span class="o">.</span><span class="n">gate_excluded</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
+            <span class="c1"># Add new fields with prefix &#39;filtered_&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">include_fields</span><span class="p">:</span>
+                    <span class="n">field_dict</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">])</span>
+                    <span class="n">field_dict</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span>
+                        <span class="n">gatefilter</span><span class="o">.</span><span class="n">gate_excluded</span><span class="p">,</span> <span class="n">field_dict</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">&#39;filtered_&#39;</span><span class="o">+</span><span class="n">field</span><span class="p">,</span> <span class="n">field_dict</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># If fields don&#39;t match up throw an error.</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">field</span> <span class="o">+</span> <span class="s1">&#39; not found in the original radar object, &#39;</span>
+                           <span class="s1">&#39;please check that names in the include_fields list &#39;</span>
+                           <span class="s1">&#39;match those in the radar object.&#39;</span><span class="p">)</span>
         <span class="k">return</span></div>
 
 <div class="viewcode-block" id="Radar.add_field_like"><a class="viewcode-back" href="../../../API/generated/pyart.core.Radar.add_field_like.html#pyart.core.Radar.add_field_like">[docs]</a>    <span class="k">def</span> <span class="nf">add_field_like</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">existing_field_name</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span>
