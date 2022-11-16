@@ -12,6 +12,7 @@ dependencies:
   - cartopy
   - cvxopt
   - xarray
+  - metpy
   - pytest-cov
   - pytest-mpl
   - coveralls
@@ -27,3 +28,4 @@ dependencies:
     - cibuildwheel
     - pooch
     - versioneer
+    - git+https://github.com/openradar/open-radar-data

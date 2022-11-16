@@ -380,6 +380,14 @@ def join_radar(radar1, radar2):
         new_radar.range['data'] = radar2.range['data']
     new_radar.ngates = len(new_radar.range['data'])
 
+    if ((radar1.target_scan_rate is not None) and
+            (radar2.target_scan_rate is not None)):
+        new_radar.target_scan_rate['data'] = np.append(
+            radar1.target_scan_rate['data'],
+            radar2.target_scan_rate['data'])
+    else:
+        new_radar.target_scan_rate = None
+
     # to combine times we need to reference them to a standard
     # for this we'll use epoch time
     r1num = datetime_utils.datetimes_from_radar(radar1, epoch=True)
@@ -474,6 +482,13 @@ def image_mute_radar(
     -------
     radar : Radar
         Radar object with 2 new fields from input field, one muted and one not muted.
+
+    References
+    ----------
+    Tomkins, L. M., Yuter, S. E., Miller, M. A., and Allen, L. R., 2022:
+    Image muting of mixed precipitation to improve identification of regions
+    of heavy snow in radar data. Atmos. Meas. Tech., 15, 5515–5525,
+    https://doi.org/10.5194/amt-15-5515-2022
 
     """
     # add checks for field availability
