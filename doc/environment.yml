@@ -24,7 +24,7 @@ dependencies:
   - s3fs
   - glpk
   - cftime
-  - shapely<1.8.3
+  - shapely
   - pip
   - pip:
       - pydata-sphinx-theme<0.9.0

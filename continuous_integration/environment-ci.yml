@@ -22,7 +22,7 @@ dependencies:
   - glpk
   - cftime
   - setuptools
-  - shapely<1.8.3
+  - shapely
   - pip
   - pip:
     - cibuildwheel
