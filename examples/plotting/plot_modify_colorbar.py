@@ -26,7 +26,7 @@ from pyart.testing import get_test_data
 # and take a look at the colorbar
 #
 # Notice: the colorbar is not perfect 
-# and slighltly overlaps the PPI display
+# and slightly overlaps the PPI display
 
 # Define figure
 fig = plt.figure()
@@ -69,11 +69,17 @@ gl.right_labels = False
 gl.xlabel_style = {'size': 14}
 gl.ylabel_style = {'size': 14}
 
+# delete the display object
+del display
+
 ############################################
 # ** Colorbar Position / Title Manipulation
 
 # Now, let's update the colorbar position
 # to match the display
+
+# Create the Radar Map Display (defines x,y as lat/lons)
+#display = pyart.graph.RadarMapDisplay(radar)
 
 # Define figure
 fig = plt.figure()
@@ -81,18 +87,18 @@ fig = plt.figure()
 # Create a subplot with correct cartopy projection
 axsB = plt.subplot(111, projection=ccrs.PlateCarree())
 
-# Create the display again
-# Note: colorbar_flag is set to False
-#   to not initally create the colorbar. 
-display.plot_ppi_map('reflectivity_horizontal',
-                      2,
-                      ax=axsB,
-                      vmin=-30,
-                      vmax=60,
-                      embellish=False,
-                      norm=None,
-                      cmap='pyart_HomeyerRainbow',
-                      colorbar_flag=False)
+# Create the Radar Map Display (defines x,y as lat/lons)
+display = pyart.graph.RadarMapDisplay(radar)
+
+# Create the display again 
+ppi_map = display.plot_ppi_map('reflectivity_horizontal',
+                                2,
+                                ax=axsB,
+                                vmin=-30,
+                                vmax=60,
+                                embellish=False,
+                                norm=None,
+                                cmap='pyart_HomeyerRainbow')
 
 # Add gridlines
 gl = axsB.gridlines(crs=ccrs.PlateCarree(),
@@ -108,12 +114,13 @@ plt.gca().xaxis.set_major_locator(plt.NullLocator())
 gl.top_labels = False
 gl.right_labels = False
 
+# Define the size of the grid labels
 gl.xlabel_style = {'size': 12}
 gl.ylabel_style = {'size': 12}
 
 # Define the colorbar from the RadarMapDisplay object
-#Modify the colorbar title and size
-cbar = plt.colorbar(mappable=display.plots[0], fraction=0.04, ax=axsB)
-#pos = cbar.ax.get_position()
-cbar.ax.set_aspect('auto')
+cbar = display.cbs[0]
+# Modify the colorbar label and size
 cbar.set_label(label='Horizontal Reflectivity Factor ($Z_{H}$) (dBZ)', fontsize=12)
+# Modify the number of colorbar ticks 
+cbar.set_ticks([-20, 0, 20, 40, 60])
