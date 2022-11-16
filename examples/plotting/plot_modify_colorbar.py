@@ -78,9 +78,6 @@ del display
 # Now, let's update the colorbar position
 # to match the display
 
-# Create the Radar Map Display (defines x,y as lat/lons)
-#display = pyart.graph.RadarMapDisplay(radar)
-
 # Define figure
 fig = plt.figure()
 
