@@ -38,11 +38,21 @@ def yuv_rainbow_24(nc):
 # Thyng, K. M., Greene, C. A., Hetland, R. D., Zimmerle, H. M., & DiMarco, S. F. (2016).
 # True colors of oceanography. Oceanography, 29(3), 10.
 
-# HomeyerRainbow developed by Cameron Homeyer with assistance from Bobby Jackson
-
-
 data_dir = os.path.split(__file__)[0]
 bal_rgb_vals = np.genfromtxt(os.path.join(data_dir, 'balance-rgb.txt'))
 
+
+# "Spectral"-like colormaps for radar reflectivity
+# ChaseSpectral developed by Randy Chase with assistance from Sam Gardner and Jonathan Thielen
+# SpectralExtended developed by Jonathan Thielen based on ChaseSpectral
+
+chase_spectral_rgb_vals = np.genfromtxt(os.path.join(data_dir, 'chase-spectral-rgb.txt'))
+spectral_ext_rgb_vals = np.genfromtxt(os.path.join(data_dir, 'spectral-extended-rgb.txt'))
+
+
+# HomeyerRainbow developed by Cameron Homeyer with assistance from Bobby Jackson
+
 datad = {'HomeyerRainbow': yuv_rainbow_24(15),
-         'balance': bal_rgb_vals}
+         'balance': bal_rgb_vals,
+         'ChaseSpectral': chase_spectral_rgb_vals,
+         'SpectralExtended': spectral_ext_rgb_vals}
