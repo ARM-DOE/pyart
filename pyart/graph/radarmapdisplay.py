@@ -97,7 +97,6 @@ class RadarMapDisplay(RadarDisplay):
         self.ax = None
         self._x0 = None     # x axis radar location in map coords (meters)
         self._y0 = None     # y axis radar location in map coords (meters)
-        return
 
     def _check_ax(self):
         """ Check that a GeoAxes object exists, raise ValueError if not """
@@ -114,8 +113,9 @@ class RadarMapDisplay(RadarDisplay):
             width=None, height=None, lon_0=None, lat_0=None,
             resolution='110m', shapefile=None, shapefile_kwargs=None,
             edges=True, gatefilter=None,
-            filter_transitions=True, embellish=True, raster=False,
-            ticks=None, ticklabs=None, alpha=None, edgecolors='face', **kwargs):
+            filter_transitions=True, embellish=True, add_grid_lines=True,
+            raster=False, ticks=None, ticklabs=None, alpha=None,
+            edgecolors='face', **kwargs):
         """
         Plot a PPI volume sweep onto a geographic map.
 
@@ -213,6 +213,8 @@ class RadarMapDisplay(RadarDisplay):
         embellish: bool
             True by default. Set to False to supress drawing of coastlines
             etc.. Use for speedup when specifying shapefiles.
+        add_grid_lines : bool
+            True by default. Set to False to supress drawing of lat/lon lines
             Note that lat lon labels only work with certain projections.
         raster : bool
             False by default. Set to true to render the display as a raster
@@ -232,10 +234,6 @@ class RadarMapDisplay(RadarDisplay):
         # parse parameters
         vmin, vmax = parse_vmin_vmax(self._radar, field, vmin, vmax)
         cmap = parse_cmap(cmap, field)
-        if lat_lines is None:
-            lat_lines = np.arange(30, 46, 1)
-        if lon_lines is None:
-            lon_lines = np.arange(-110, -75, 1)
         lat_0 = self.loc[0]
         lon_0 = self.loc[1]
 
@@ -284,13 +282,13 @@ class RadarMapDisplay(RadarDisplay):
                     + "axes with projection Lambert Conformal.",
                     UserWarning)
             with warnings.catch_warnings():
-                warnings.filterwarnings("ignore")    
+                warnings.filterwarnings("ignore")
                 ax = plt.axes(projection=projection)
 
-        if min_lon:
+        if min_lon is not None:
             ax.set_extent([min_lon, max_lon, min_lat, max_lat],
                           crs=cartopy.crs.PlateCarree())
-        elif width:
+        elif width is not None and height is not None:
             ax.set_extent([-width/2., width/2., -height/2., height/2.],
                           crs=self.grid_projection)
 
@@ -317,6 +315,12 @@ class RadarMapDisplay(RadarDisplay):
                 facecolor='none')
             ax.coastlines(resolution=resolution)
             ax.add_feature(states_provinces, edgecolor='gray')
+
+        if add_grid_lines:
+            if lat_lines is None:
+                lat_lines = np.arange(30, 46, 1)
+            if lon_lines is None:
+                lon_lines = np.arange(-110, -75, 1)
 
             # labeling gridlines poses some difficulties depending on the
             # projection, so we need some projection-spectific methods
@@ -370,7 +374,6 @@ class RadarMapDisplay(RadarDisplay):
                 ax=ax, ticks=ticks, ticklabs=ticklabs)
         # keep track of this GeoAxes object for later
         self.ax = ax
-        return
 
     def plot_point(self, lon, lat, symbol='ro', label_text=None,
                    label_offset=(None, None), **kwargs):
@@ -401,7 +404,7 @@ class RadarMapDisplay(RadarDisplay):
             lon_offset = 0.01
         if lat_offset is None:
             lat_offset = 0.01
-        if 'transform' not in kwargs.keys():
+        if 'transform' not in kwargs:
             kwargs['transform'] = cartopy.crs.PlateCarree()
         self.ax.plot(lon, lat, symbol, **kwargs)
         if label_text is not None:
@@ -429,11 +432,12 @@ class RadarMapDisplay(RadarDisplay):
 
         """
         self._check_ax()
-        if 'transform' not in kwargs.keys():
+        if 'transform' not in kwargs:
             kwargs['transform'] = cartopy.crs.PlateCarree()
         self.ax.plot(line_lons, line_lats, line_style, **kwargs)
 
-    def plot_line_xy(self, line_x, line_y, color='r', line_style='-', **kwargs):
+    def plot_line_xy(self, line_x, line_y, color='r', line_style='-',
+                     **kwargs):
         """
         Plot a line segments on the current map given radar x, y values.
 
@@ -453,7 +457,7 @@ class RadarMapDisplay(RadarDisplay):
 
         """
         self._check_ax()
-        if 'transform' not in kwargs.keys():
+        if 'transform' not in kwargs:
             kwargs['transform'] = self.grid_projection
         self.ax.plot(line_x, line_y, color, line_style, **kwargs)
 
@@ -539,7 +543,9 @@ def lambert_yticks(ax, ticks):
 
 
 def _lambert_ticks(ax, ticks, tick_location, line_constructor, tick_extractor):
-    """ Get the tick locations and labels for a Lambert Conformal projection. """
+    """
+    Get the tick locations and labels for a Lambert Conformal projection.
+    """
     outline_patch = sgeom.LineString(
         ax.spines['geo'].get_path().vertices.tolist())
     axis = find_side(outline_patch, tick_location)

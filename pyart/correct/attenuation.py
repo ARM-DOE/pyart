@@ -16,6 +16,7 @@ from ..config import get_metadata, get_field_name, get_fillvalue
 from .phase_proc import smooth_masked, det_process_range, smooth_and_trim
 from ..filters import temp_based_gate_filter, iso0_based_gate_filter
 from ..retrieve import get_freq_band
+from ..filters import GateFilter
 
 
 def calculate_attenuation_zphi(radar, doc=None, fzl=None, smooth_window_len=5,
@@ -251,7 +252,7 @@ def calculate_attenuation_zphi(radar, doc=None, fzl=None, smooth_window_len=5,
             # perform calculation if there is valid data
             last_six_good = np.where(
                 np.ndarray.flatten(ray_mask) == 0)[0][-6:]
-            if(len(last_six_good)) == 6:
+            if (len(last_six_good)) == 6:
                 phidp_max = np.median(ray_phase_shift[last_six_good])
                 self_cons_number = (
                     10.0 ** (0.1 * beta * a_coef * phidp_max) - 1.0)
@@ -798,9 +799,9 @@ def _param_attphilinear_table():
 
 
 def calculate_attenuation(radar, z_offset, debug=False, doc=15, fzl=4000.0,
-                          rhv_min=0.8, ncp_min=0.5, a_coef=0.06, beta=0.8,
-                          refl_field=None, ncp_field=None, rhv_field=None,
-                          phidp_field=None, spec_at_field=None,
+                          gatefilter=None, rhv_min=0.8, ncp_min=0.5, a_coef=0.06,
+                          beta=0.8, refl_field=None, ncp_field=None,
+                          rhv_field=None, phidp_field=None, spec_at_field=None,
                           corr_refl_field=None):
     """
     Calculate the attenuation from a polarimetric radar using Z-PHI method.
@@ -821,6 +822,10 @@ def calculate_attenuation(radar, z_offset, debug=False, doc=15, fzl=4000.0,
     fzl : float, optional
         Freezing layer, gates above this point are not included in the
         correction.
+    gatefilter : GateFilter, optional
+        The gates to exclude from the calculation. This, combined with
+        the gates above fzl, will be excluded from the correction. Set to
+        None to not use a gatefilter.
     rhv_min : float, optional
         Minimum copol_coeff value to consider valid.
     ncp_min : float, optional
@@ -890,18 +895,25 @@ def calculate_attenuation(radar, z_offset, debug=False, doc=15, fzl=4000.0,
     if corr_refl_field is None:
         corr_refl_field = get_field_name('corrected_reflectivity')
 
-    # extract fields and parameters from radar
-    norm_coherent_power = radar.fields[ncp_field]['data']
-    copol_coeff = radar.fields[rhv_field]['data']
+    # Extract fields and parameters from radar
     reflectivity_horizontal = radar.fields[refl_field]['data']
     proc_dp_phase_shift = radar.fields[phidp_field]['data']
     nsweeps = int(radar.nsweeps)
 
-    # determine where the reflectivity is valid, mask out bad locations.
-    is_cor = copol_coeff > rhv_min
-    is_coh = norm_coherent_power > ncp_min
-    is_good = np.logical_and(is_cor, is_coh)
-    mask = np.logical_not(is_good)
+    # Determine where the reflectivity is valid, mask out bad locations.
+
+    if gatefilter is None:
+        gatefilter = GateFilter(radar)
+
+    # Filter out the invalid values and apply rho_hv and ncp corrections
+    gatefilter.exclude_invalid(refl_field)
+    gatefilter.exclude_below(rhv_field, rhv_min)
+    gatefilter.exclude_below(ncp_field, ncp_min)
+
+    # Assign the mask to a variable
+    mask = gatefilter.gate_excluded
+
+    # Apply this mask to the reflectivity field
     refl = np.ma.masked_where(mask, reflectivity_horizontal + z_offset)
 
     # calculate initial reflectivity correction and gate spacing (in km)
@@ -927,7 +939,7 @@ def calculate_attenuation(radar, z_offset, debug=False, doc=15, fzl=4000.0,
             ray_init_refl = init_refl_correct[i, 0:end_gate]
 
             # perform calculation
-            last_six_good = np.where(is_good[i, 0:end_gate])[0][-6:]
+            last_six_good = np.where(~mask[i, 0:end_gate])[0][-6:]
             phidp_max = np.median(ray_phase_shift[last_six_good])
             sm_refl = smooth_and_trim(ray_init_refl, window_len=5)
             reflectivity_linear = 10.0 ** (0.1 * beta * sm_refl)

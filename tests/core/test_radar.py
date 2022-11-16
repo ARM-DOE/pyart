@@ -501,6 +501,43 @@ def test_add_field_like_errors():
     pytest.raises(ValueError, radar.add_field_like, 'foo', 'bar', [])
 
 
+def test_add_filter():
+    radar = pyart.io.read(pyart.testing.NEXRAD_ARCHIVE_MSG1_FILE)
+    # Add basic filter
+    gatefilter = pyart.filters.GateFilter(radar)
+    gatefilter.exclude_below('reflectivity', 10.1)
+
+    # Test replace_existing False
+    radar.add_filter(gatefilter, replace_existing=False,
+                     include_fields=None)
+    assert 'filtered_velocity' in radar.fields.keys()
+    assert 'filtered_spectrum_width' in radar.fields.keys()
+    assert 'filtered_reflectivity' in radar.fields.keys()
+    del radar
+
+    # Test replace_existing True
+    radar2 = pyart.io.read(pyart.testing.NEXRAD_ARCHIVE_MSG1_FILE)
+    # Test replace_existing True
+    radar2.add_filter(gatefilter, replace_existing=True,
+                      include_fields=None)
+    assert len(np.argwhere(radar2.fields['reflectivity']['data'] <=10.0)) == 0
+    del radar2
+
+    # Testing for error and include_fields
+    include_fields_bad = ['foo']
+    replace_existing = False
+    radar3 = pyart.io.read(pyart.testing.NEXRAD_ARCHIVE_MSG1_FILE)
+    pytest.raises(KeyError, radar3.add_filter, gatefilter,
+                  replace_existing, include_fields_bad)
+
+    include_fields_good = ['reflectivity']
+    radar3.add_filter(gatefilter, replace_existing, include_fields_good)
+    assert len(np.argwhere(radar3.fields['filtered_reflectivity']['data'] <=10.0)) == 0
+    assert len(np.argwhere(radar3.fields['reflectivity']['data'] <=10.0)) == 35762
+    assert sum([1 for d in radar3.fields.keys() if 'filtered' in d]) == 1
+    del radar3
+
+
 @pytest.mark.parametrize(
     "level", ['standard', 's', 'compact', 'c', 'full', 'f'])
 def test_info_levels(level):
