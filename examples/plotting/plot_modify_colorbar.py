@@ -1,6 +1,6 @@
 """
 =================================
-Modifiy a Colorbar for your Plot
+Modify a Colorbar for your Plot
 =================================
 
 This is an example of how to modify a colobar
