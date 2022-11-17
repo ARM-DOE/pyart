@@ -5,6 +5,9 @@ Available colormaps, reversed versions are also provided, these
 colormaps are available within matplotlib with names pyart_COLORMAP':
 
     * HomeyerRainbow
+    * balance
+    * ChaseSpectral
+    * SpectralExtended
 """
 
 import warnings

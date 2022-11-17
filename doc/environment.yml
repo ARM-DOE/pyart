@@ -24,7 +24,7 @@ dependencies:
   - s3fs
   - glpk
   - cftime
-  - shapely<1.8.3
+  - shapely
   - pip
   - pip:
       - git+https://github.com/openradar/open-radar-data
