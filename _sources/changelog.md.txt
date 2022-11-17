@@ -1,5 +1,134 @@
 # Changelog
 
+## Py-ART v1.14.1
+
+([full changelog](https://github.com/ARM-DOE/pyart/compare/v1.14.0...v1.14.1))
+
+### Enhancements made
+
+- ENH: Add gatefilter to attenuation module [#1324](https://github.com/ARM-DOE/pyart/pull/1324) ([@mgrover1](https://github.com/mgrover1))
+- ENH: Adding fields parameter to specify list of writing to file. [#1319](https://github.com/ARM-DOE/pyart/pull/1319) ([@zssherman](https://github.com/zssherman))
+- ENH: Improved convective stratiform functions [#1314](https://github.com/ARM-DOE/pyart/pull/1314) ([@lauratomkins](https://github.com/lauratomkins))
+
+### Other merged PRs
+
+- ADD: Adding add_filter function to radar.py. [#1326](https://github.com/ARM-DOE/pyart/pull/1326) ([@zssherman](https://github.com/zssherman))
+- Add Spectral-like colormaps based on pyart#1320 [#1325](https://github.com/ARM-DOE/pyart/pull/1325) ([@jthielen](https://github.com/jthielen))
+- Add ci for Python 3.11 [#1303](https://github.com/ARM-DOE/pyart/pull/1303) ([@mgrover1](https://github.com/mgrover1))
+- ADD: Colorbar Manipulation Example [#1300](https://github.com/ARM-DOE/pyart/pull/1300) ([@jrobrien91](https://github.com/jrobrien91))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/ARM-DOE/pyart/graphs/contributors?from=2022-11-08&to=2022-11-16&type=c))
+
+[@dopplerchase](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Adopplerchase+updated%3A2022-11-08..2022-11-16&type=Issues) | [@jjhelmus](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Ajjhelmus+updated%3A2022-11-08..2022-11-16&type=Issues) | [@jrobrien91](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Ajrobrien91+updated%3A2022-11-08..2022-11-16&type=Issues) | [@jthielen](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Ajthielen+updated%3A2022-11-08..2022-11-16&type=Issues) | [@lauratomkins](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Alauratomkins+updated%3A2022-11-08..2022-11-16&type=Issues) | [@mgrover1](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Amgrover1+updated%3A2022-11-08..2022-11-16&type=Issues) | [@wx4stg](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Awx4stg+updated%3A2022-11-08..2022-11-16&type=Issues) | [@zssherman](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Azssherman+updated%3A2022-11-08..2022-11-16&type=Issues)
+
+
+## Py-ART v1.14.0
+
+([full changelog](https://github.com/ARM-DOE/pyart/compare/v1.13.3...v1.14.0))
+
+### Enhancements made
+
+- ENH: Adding simple antivirus workflow similiar to what Adam implemented in ACT. [#1307](https://github.com/ARM-DOE/pyart/pull/1307) ([@zssherman](https://github.com/zssherman))
+- ENH: Add fix to blog post, add docs on how to write a blog post [#1299](https://github.com/ARM-DOE/pyart/pull/1299) ([@mgrover1](https://github.com/mgrover1))
+
+### Bugs fixed
+
+- FIX: Phase processing code throwing deprecation warnings for scipy.ndimage.filters.convolve1d [#1313](https://github.com/ARM-DOE/pyart/pull/1313) ([@rcjackson](https://github.com/rcjackson))
+- FIX: Add check for when instrument parameters is None. [#1306](https://github.com/ARM-DOE/pyart/pull/1306) ([@zssherman](https://github.com/zssherman))
+
+### Documentation improvements
+
+- DOC: Added two pyart examples (VAD and hydrometeors) [#1317](https://github.com/ARM-DOE/pyart/pull/1317) ([@wolfidan](https://github.com/wolfidan))
+
+### Other merged PRs
+
+- Plot grid modif [#1311](https://github.com/ARM-DOE/pyart/pull/1311) ([@jfigui](https://github.com/jfigui))
+- Add image muting citation to function and example [#1304](https://github.com/ARM-DOE/pyart/pull/1304) ([@lauratomkins](https://github.com/lauratomkins))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/ARM-DOE/pyart/graphs/contributors?from=2022-10-21&to=2022-11-08&type=c))
+
+[@gamaanderson](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Agamaanderson+updated%3A2022-10-21..2022-11-08&type=Issues) | [@hhuangwx](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Ahhuangwx+updated%3A2022-10-21..2022-11-08&type=Issues) | [@jfigui](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Ajfigui+updated%3A2022-10-21..2022-11-08&type=Issues) | [@jjhelmus](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Ajjhelmus+updated%3A2022-10-21..2022-11-08&type=Issues) | [@josephhardinee](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Ajosephhardinee+updated%3A2022-10-21..2022-11-08&type=Issues) | [@kmuehlbauer](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Akmuehlbauer+updated%3A2022-10-21..2022-11-08&type=Issues) | [@lauratomkins](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Alauratomkins+updated%3A2022-10-21..2022-11-08&type=Issues) | [@meteoswiss-mdr](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Ameteoswiss-mdr+updated%3A2022-10-21..2022-11-08&type=Issues) | [@mgrover1](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Amgrover1+updated%3A2022-10-21..2022-11-08&type=Issues) | [@nguy](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Anguy+updated%3A2022-10-21..2022-11-08&type=Issues) | [@rcjackson](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Arcjackson+updated%3A2022-10-21..2022-11-08&type=Issues) | [@scollis](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Ascollis+updated%3A2022-10-21..2022-11-08&type=Issues) | [@tjlang](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Atjlang+updated%3A2022-10-21..2022-11-08&type=Issues) | [@wolfidan](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Awolfidan+updated%3A2022-10-21..2022-11-08&type=Issues) | [@zssherman](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Azssherman+updated%3A2022-10-21..2022-11-08&type=Issues)
+
+
+## Py-ART v1.13.3
+
+([full changelog](https://github.com/ARM-DOE/pyart/compare/v1.13.2...v1.13.3))
+
+### Enhancements made
+
+- ENH: Add fix to blog post, add docs on how to write a blog post [#1299](https://github.com/ARM-DOE/pyart/pull/1299) ([@mgrover1](https://github.com/mgrover1))
+- ENH: Check for sector scans and use ppi. [#1294](https://github.com/ARM-DOE/pyart/pull/1294) ([@zssherman](https://github.com/zssherman))
+- ENH: Add cross section functionality [#1290](https://github.com/ARM-DOE/pyart/pull/1290) ([@mgrover1](https://github.com/mgrover1))
+
+### Bugs fixed
+
+- FIX: Remove old list of colormaps [#1285](https://github.com/ARM-DOE/pyart/pull/1285) ([@mgrover1](https://github.com/mgrover1))
+- FIX: Use new api to toggle top and right labels [#1279](https://github.com/ARM-DOE/pyart/pull/1279) ([@mgrover1](https://github.com/mgrover1))
+- FIX: Fix for backwards compatibility for matplotlib 3.6. [#1278](https://github.com/ARM-DOE/pyart/pull/1278) ([@zssherman](https://github.com/zssherman))
+
+### Documentation improvements
+
+- DOC: Add a new colormap example [#1284](https://github.com/ARM-DOE/pyart/pull/1284) ([@mgrover1](https://github.com/mgrover1))
+
+### Other merged PRs
+
+- ADD: TRACER blog post [#1296](https://github.com/ARM-DOE/pyart/pull/1296) ([@rcjackson](https://github.com/rcjackson))
+- Update join radar to account for target_scan_rate [#1292](https://github.com/ARM-DOE/pyart/pull/1292) ([@nguy](https://github.com/nguy))
+- Fix title of dealias example [#1287](https://github.com/ARM-DOE/pyart/pull/1287) ([@mgrover1](https://github.com/mgrover1))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/ARM-DOE/pyart/graphs/contributors?from=2022-09-26&to=2022-10-21&type=c))
+
+[@mgrover1](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Amgrover1+updated%3A2022-09-26..2022-10-21&type=Issues) | [@nguy](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Anguy+updated%3A2022-09-26..2022-10-21&type=Issues) | [@rcjackson](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Arcjackson+updated%3A2022-09-26..2022-10-21&type=Issues) | [@review-notebook-app](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Areview-notebook-app+updated%3A2022-09-26..2022-10-21&type=Issues) | [@zssherman](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Azssherman+updated%3A2022-09-26..2022-10-21&type=Issues)
+
+
+## Py-ART v1.13.2
+
+([full changelog](https://github.com/ARM-DOE/pyart/compare/v1.13.1...v1.13.2))
+
+### Enhancements made
+
+- ENH: Add cibuildwheel to build wheels [#1267](https://github.com/ARM-DOE/pyart/pull/1267) ([@mgrover1](https://github.com/mgrover1))
+
+### Bugs fixed
+
+- FIX: Fix for backwards compatibility for matplotlib 3.6. [#1278](https://github.com/ARM-DOE/pyart/pull/1278) ([@zssherman](https://github.com/zssherman))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/ARM-DOE/pyart/graphs/contributors?from=2022-09-26&to=2022-09-26&type=c))
+
+[@mgrover1](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Amgrover1+updated%3A2022-09-26..2022-09-26&type=Issues) | [@ocefpaf](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Aocefpaf+updated%3A2022-09-26..2022-09-26&type=Issues) | [@zssherman](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Azssherman+updated%3A2022-09-26..2022-09-26&type=Issues)
+
+
+## Py-ART v1.13.1
+
+([full changelog](https://github.com/ARM-DOE/pyart/compare/v1.13.0...v1.13.1))
+
+### Enhancements made
+
+- ENH: Add cibuildwheel to build wheels [#1267](https://github.com/ARM-DOE/pyart/pull/1267) ([@mgrover1](https://github.com/mgrover1))
+
+### Maintenance and upkeep improvements
+
+- MNT: Update to find namespace packages to fix setuptools warning. [#1275](https://github.com/ARM-DOE/pyart/pull/1275) ([@zssherman](https://github.com/zssherman))
+
+### Other merged PRs
+
+- Update changelog for v1.13.0 [#1276](https://github.com/ARM-DOE/pyart/pull/1276) ([@mgrover1](https://github.com/mgrover1))
+- ADD: Add changelog from previous releases [#1265](https://github.com/ARM-DOE/pyart/pull/1265) ([@mgrover1](https://github.com/mgrover1))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/ARM-DOE/pyart/graphs/contributors?from=2022-09-21&to=2022-09-26&type=c))
+
+[@dcedgren](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Adcedgren+updated%3A2022-09-21..2022-09-26&type=Issues) | [@dopplershift](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Adopplershift+updated%3A2022-09-21..2022-09-26&type=Issues) | [@gamaanderson](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Agamaanderson+updated%3A2022-09-21..2022-09-26&type=Issues) | [@jfigui](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Ajfigui+updated%3A2022-09-21..2022-09-26&type=Issues) | [@Jillinger](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3AJillinger+updated%3A2022-09-21..2022-09-26&type=Issues) | [@jjhelmus](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Ajjhelmus+updated%3A2022-09-21..2022-09-26&type=Issues) | [@mgrover1](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Amgrover1+updated%3A2022-09-21..2022-09-26&type=Issues) | [@ocefpaf](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Aocefpaf+updated%3A2022-09-21..2022-09-26&type=Issues) | [@scollis](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Ascollis+updated%3A2022-09-21..2022-09-26&type=Issues) | [@zhaobudaola](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Azhaobudaola+updated%3A2022-09-21..2022-09-26&type=Issues) | [@zssherman](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Azssherman+updated%3A2022-09-21..2022-09-26&type=Issues)
+
 ## Py-ART v1.13.0
 
 ([full changelog](https://github.com/ARM-DOE/pyart/compare/v1.12.7...v1.13.0))
