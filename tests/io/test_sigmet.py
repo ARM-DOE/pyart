@@ -38,7 +38,8 @@ def test_range():
     assert 'data' in radar.range
     assert 'spacing_is_constant' in radar.range
     assert radar.range['data'].shape == (25, )
-    assert_almost_equal(radar.range['data'][1], 62, 0)
+    assert_almost_equal(radar.range['data'][0], 0, 0)
+    assert_almost_equal(radar.range['data'][3], 192.5, 0)
 
 
 # fields attribute is tested later

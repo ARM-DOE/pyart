@@ -280,7 +280,8 @@ def read_sigmet(filename, field_names=None, additional_metadata=None,
     gate_0 = range_info['first_bin_range'] / 100.       # meters
     gate_nbin = range_info['last_bin_range'] / 100.     # meters
     gate_size = round((gate_nbin - gate_0) / (nbins))
-    _range['data'] = gate_0 + gate_size * np.arange(nbins, dtype='float32')
+    _range['data'] = np.linspace(gate_0, gate_nbin, nbins, dtype='float32')
+    gate_size = round(np.diff(_range['data'])[0])
     _range['meters_to_center_of_first_gate'] = np.array([gate_0],
                                                         dtype='float32')
     _range['meters_between_gates'] = np.array([gate_size], dtype='float32')
