@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>mgrover1.github.io/pyart/</id>
   <title>PyART Blog</title>
-  <updated>2022-11-17T15:59:36.979369+00:00</updated>
+  <updated>2022-11-23T19:37:12.562271+00:00</updated>
   <link href="mgrover1.github.io/pyart/"/>
   <link href="mgrover1.github.io/pyart/blog/atom.xml" rel="self"/>
   <generator uri="https://ablog.readthedocs.org/" version="0.10.33">ABlog</generator>
@@ -106,5 +106,27 @@ interactive-kazr-vizinteractive-kazr-viz</summary>
     <category term="cloud" label="cloud"/>
     <category term="radar" label="radar"/>
     <published>2022-10-21T00:00:00+00:00</published>
+  </entry>
+  <entry>
+    <id>mgrover1.github.io/pyart/blog_posts/2022/hail-analysis-spc.html</id>
+    <title>Hail Storm Visualization Using Py-ART and Pandas!</title>
+    <updated>2022-11-23T00:00:00+00:00</updated>
+    <author>
+      <name>Russ Schumacher</name>
+    </author>
+    <content type="html">&lt;div class="ablog-post-excerpt docutils container"&gt;
+&lt;p&gt;Within this post, we will walk through how to combine radar and storm report data, creating an animation of the two!&lt;/p&gt;
+&lt;p&gt;On September 7, 2021, a strong line of thunderstorms passed through Southern Wisconsin and Northern Illinois, leaving a trail of hail and wind damage in its path.&lt;/p&gt;
+&lt;img alt="Hail Image" src="https://www.weather.gov/images/mkx/events/2021/Sept_07_Hail/RecapOfSevereStorms.png" /&gt;
+&lt;/div&gt;
+</content>
+    <link href="mgrover1.github.io/pyart/blog_posts/2022/hail-analysis-spc.html" rel="alternate"/>
+    <summary>Within this post, we will walk through how to combine radar and storm report data, creating an animation of the two!On September 7, 2021, a strong line of thunderstorms passed through Southern Wisconsin and Northern Illinois, leaving a trail of hail and wind damage in its path.Hail Image</summary>
+    <category term="NEXRAD" label="NEXRAD"/>
+    <category term="SPC" label="SPC"/>
+    <category term="hail" label="hail"/>
+    <category term="matplotlib" label="matplotlib"/>
+    <category term="visualization" label="visualization"/>
+    <published>2022-11-23T00:00:00+00:00</published>
   </entry>
 </feed>
