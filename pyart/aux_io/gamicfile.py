@@ -42,6 +42,11 @@ class GAMICFile(object):
         self.total_rays = sum(self.rays_per_sweep)
         self.gates_per_sweep = self.how_attrs('bin_count', 'int32')
         self.max_num_gates = max(self.gates_per_sweep)
+        # check uniformity of range_step, raise if not uniform
+        range_samples = self.how_attrs('range_samples', 'int32')
+        range_step = self.how_attrs('range_step', 'float') * range_samples
+        if len(np.unique(range_step)) > 1:
+            raise ValueError('range scale changes between sweeps')
         # starting and ending ray for each sweep
         self.start_ray = np.cumsum(np.append([0], self.rays_per_sweep[:-1]))
         self.end_ray = np.cumsum(self.rays_per_sweep) - 1
