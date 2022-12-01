@@ -40,6 +40,13 @@ class GAMICFile(object):
         self._scans = ['scan%i' % (i) for i in range(self.nsweeps)]
         self.rays_per_sweep = self.how_attrs('ray_count', 'int32')
         self.total_rays = sum(self.rays_per_sweep)
+        self.gates_per_sweep = self.how_attrs('bin_count', 'int32')
+        self.max_num_gates = max(self.gates_per_sweep)
+        # check uniformity of range_step, raise if not uniform
+        range_samples = self.how_attrs('range_samples', 'int32')
+        range_step = self.how_attrs('range_step', 'float') * range_samples
+        if len(np.unique(range_step)) > 1:
+            raise ValueError('range scale changes between sweeps')
         # starting and ending ray for each sweep
         self.start_ray = np.cumsum(np.append([0], self.rays_per_sweep[:-1]))
         self.end_ray = np.cumsum(self.rays_per_sweep) - 1
@@ -132,8 +139,7 @@ class GAMICFile(object):
 
     def moment_data(self, group, dtype):
         """ Read in moment data from all sweeps. """
-        ngates = int(self._hfile['/scan0/how'].attrs['bin_count'])
-        data = np.ma.zeros((self.total_rays, ngates), dtype=dtype)
+        data = np.ma.zeros((self.total_rays, self.max_num_gates), dtype=dtype)
         data[:] = np.ma.masked      # volume data initially all masked
         for scan, start, end in zip(self._scans, self.start_ray, self.end_ray):
             # read in sweep data if field exists in scan.

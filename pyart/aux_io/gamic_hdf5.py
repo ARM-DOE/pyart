@@ -164,7 +164,7 @@ def read_gamic(filename, field_names=None, additional_metadata=None,
 
     # range
     _range = filemetadata('range')
-    ngates = int(gfile.raw_scan0_group_attr('how', 'bin_count'))
+    ngates = gfile.max_num_gates
     range_start = float(gfile.raw_scan0_group_attr('how', 'range_start'))
     #n_samples insertion
     range_samples = int(gfile.raw_scan0_group_attr('how', 'range_samples')) 

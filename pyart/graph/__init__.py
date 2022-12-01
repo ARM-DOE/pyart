@@ -49,6 +49,8 @@ Colorblind friendly
     * LangRainbow12
     * HomeyerRainbow
     * balance
+    * ChaseSpectral
+    * SpectralExtended
 
 """
 

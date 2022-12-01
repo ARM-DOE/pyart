@@ -143,7 +143,7 @@ def read_grid(filename, exclude_fields=None, include_fields=None, **kwargs):
         radar_time=radar_time)
 
 
-def write_grid(filename, grid, format='NETCDF4',
+def write_grid(filename, grid, format='NETCDF4', include_fields=None,
                write_proj_coord_sys=True, proj_coord_sys=None,
                arm_time_variables=False, arm_alt_lat_lon_variables=False,
                write_point_x_y_z=False, write_point_lon_lat_alt=False):
@@ -175,6 +175,9 @@ def write_grid(filename, grid, format='NETCDF4',
         netCDF format, one of 'NETCDF4', 'NETCDF4_CLASSIC',
         'NETCDF3_CLASSIC' or 'NETCDF3_64BIT'. See netCDF4 documentation for
         details.
+    include_fields : list, optional
+        Fields to write out to NETCDF file. Default is None and will include
+        all fields from the original grid object.
     write_proj_coord_sys bool, optional
         True to write information on the coordinate transform used in the map
         projection to the ProjectionCoordinateSystem variable following the CDM
@@ -334,11 +337,27 @@ def write_grid(filename, grid, format='NETCDF4',
         _create_ncvar(grid.point_altitude, dset, 'point_altitude', dims)
 
     # field variables
-    for field, field_dic in grid.fields.items():
-        # append 1, to the shape of all data to indicate the time var.
-        field_dic['data'].shape = (1, ) + field_dic['data'].shape
-        _create_ncvar(field_dic, dset, field, ('time', 'z', 'y', 'x'))
-        field_dic['data'].shape = field_dic['data'].shape[1:]
+    field_check = 0
+    if include_fields is not None:
+        for field, field_dic in grid.fields.items():
+            if field in include_fields:
+                field_check += 1
+                field_dic['data'].shape = (1, ) + field_dic['data'].shape
+                _create_ncvar(field_dic, dset, field, ('time', 'z', 'y', 'x'))
+                field_dic['data'].shape = field_dic['data'].shape[1:]
+            else:
+                continue
+        if field_check == 0:
+            warnings.warn('No new fields were added, as no field matches were '
+                          'made. Please check that field names in the include '
+                          'fields list match up with field names in the radar '
+                          'object.', UserWarning)
+    else:
+        for field, field_dic in grid.fields.items():
+            # append 1, to the shape of all data to indicate the time var.
+            field_dic['data'].shape = (1, ) + field_dic['data'].shape
+            _create_ncvar(field_dic, dset, field, ('time', 'z', 'y', 'x'))
+            field_dic['data'].shape = field_dic['data'].shape[1:]
 
     # metadata
     for k, v in grid.metadata.items():
