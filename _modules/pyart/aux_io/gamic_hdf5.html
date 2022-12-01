@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.aux_io.gamic_hdf5 &#8212; Py-ART 1.14.1.post3 documentation</title>
+    <title>pyart.aux_io.gamic_hdf5 &#8212; Py-ART 1.14.1.post4 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -383,7 +383,7 @@
 
     <span class="c1"># range</span>
     <span class="n">_range</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;range&#39;</span><span class="p">)</span>
-    <span class="n">ngates</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">gfile</span><span class="o">.</span><span class="n">raw_scan0_group_attr</span><span class="p">(</span><span class="s1">&#39;how&#39;</span><span class="p">,</span> <span class="s1">&#39;bin_count&#39;</span><span class="p">))</span>
+    <span class="n">ngates</span> <span class="o">=</span> <span class="n">gfile</span><span class="o">.</span><span class="n">max_num_gates</span>
     <span class="n">range_start</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">gfile</span><span class="o">.</span><span class="n">raw_scan0_group_attr</span><span class="p">(</span><span class="s1">&#39;how&#39;</span><span class="p">,</span> <span class="s1">&#39;range_start&#39;</span><span class="p">))</span>
     <span class="c1">#n_samples insertion</span>
     <span class="n">range_samples</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">gfile</span><span class="o">.</span><span class="n">raw_scan0_group_attr</span><span class="p">(</span><span class="s1">&#39;how&#39;</span><span class="p">,</span> <span class="s1">&#39;range_samples&#39;</span><span class="p">))</span> 
