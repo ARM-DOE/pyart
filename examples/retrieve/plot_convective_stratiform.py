@@ -4,27 +4,6 @@ Convective-Stratiform classification
 =======================================
 This example shows how to use the updated convective stratiform classifcation algorithm. We show 3 examples,
 a summer convective example, an example from Hurricane Ian, and an example from a winter storm.
-
-References
-----------
-Steiner, M. R., R. A. Houze Jr., and S. E. Yuter, 1995: Climatological
-Characterization of Three-Dimensional Storm Structure from Operational
-Radar and Rain Gauge Data. J. Appl. Meteor., 34, 1978-2007.
-https://doi.org/10.1175/1520-0450(1995)034<1978:CCOTDS>2.0.CO;2.
-
-Yuter, S. E., and R. A. Houze, Jr., 1997: Measurements of raindrop size
-distributions over the Pacific warm pool and implications for Z-R relations.
-J. Appl. Meteor., 36, 847-867.
-https://doi.org/10.1175/1520-0450(1997)036%3C0847:MORSDO%3E2.0.CO;2
-
-Yuter, S. E., R. A. Houze, Jr., E. A. Smith, T. T. Wilheit, and E. Zipser,
-2005: Physical characterization of tropical oceanic convection observed in
-KWAJEX. J. Appl. Meteor., 44, 385-415. https://doi.org/10.1175/JAM2206.1
-
-Rasmussen, R., M. Dixon, S. Vasiloff, F. Hage, S. Knight, J. Vivekanandan,
-and M. Xu, 2003: Snow Nowcasting Using a Real-Time Correlation of Radar
-Reflectivity with Snow Gauge Accumulation. J. Appl. Meteorol. Climatol., 42, 20–36.
-https://doi.org/10.1175/1520-0450(2003)042%3C0020:SNUART%3E2.0.CO;2
 """
 
 print(__doc__)
@@ -40,33 +19,34 @@ import matplotlib.colors as mcolors
 import cartopy.crs as ccrs
 
 ######################################
-# **How the algorithm works**
+# How the algorithm works
+# ----------
 # This first section describes how the convective-stratiform algorithm works (see references for full details). This
 # algorithm is a feature detection algorithm and classifies fields as "convective" or "stratiform". The algorithm is
 # designed to detect features in a reflectivity field but can also detect features in fields such as rain rate or
 # snow rate. In this section we describe the steps of the convective stratiform algorithm and the variables used in
 # the function.
 # The first step of the algorithm calculates a background average of the field with a circular footprint using a radius
-# provided by `bkg_rad_km`. A larger radius will yield a smoother field. The radius needs to be at least double the
-# grid spacing, but we recommend at least three times the grid spacing. If using reflectivity, `dB_averaging` should be set
+# provided by ``bkg_rad_km``. A larger radius will yield a smoother field. The radius needs to be at least double the
+# grid spacing, but we recommend at least three times the grid spacing. If using reflectivity, ``dB_averaging`` should be set
 # to True to convert reflectivity to linear Z before averaging, False for rescaled fields such as rain or snow rate.
-# `calc_thres` determines the minimum fraction of a circle that is considered in the background average calculation
+# ``calc_thres`` determines the minimum fraction of a circle that is considered in the background average calculation
 # (default is 0.75, so the points along the edges where there is less than 75% of a full circle of data,
 # the algorithm is not run).
 # Once the background average has been calculated, the original field is compared to the background average.  In
 # order for points to be considered "convective cores" they must exceed the background value by a certain value or
-# simply be greater than the `always_core_thres`. This value is determined by either a cosine scheme, or a scalar
-# value (i.e. the reflectivity value must be X times the background value (multiplier; `use_addition=False`),
-# or  X greater than the background value (`use_addition=True`) where X is the `scalar_diff`).
-# `use_cosine` determines if a cosine scheme or scalar scheme is to be used. If `use_cosine` is True,
-# then the `max_diff` and `zero_diff_cos_val` come into use. These values define the cosine scheme that is used  to
+# simply be greater than the ``always_core_thres``. This value is determined by either a cosine scheme, or a scalar
+# value (i.e. the reflectivity value must be X times the background value (multiplier; ``use_addition=False``),
+# or  X greater than the background value (``use_addition=True``) where X is the ``scalar_diff``).
+# ``use_cosine`` determines if a cosine scheme or scalar scheme is to be used. If ``use_cosine`` is True,
+# then the ``max_diff`` and ``zero_diff_cos_val`` come into use. These values define the cosine scheme that is used  to
 # determine the minimum difference between the background and reflectivity value in order for a core to be
-# identified. `max_diff` is the maximum difference between the field and the background for a core to be identified,
-# or where the cosine function crosses the y-axis. The `zero_diff_cos_val` is where the difference between the  field
+# identified. ``max_diff`` is the maximum difference between the field and the background for a core to be identified,
+# or where the cosine function crosses the y-axis. The ``zero_diff_cos_val`` is where the difference between the  field
 # and the background is zero, or where the cosine function crosses the x-axis. Note, if
-# `always_core_thres` < `zero_diff_cos_val`, `zero_diff_cos_val` only helps define the shape of the cosine curve and
-# all values greater than `always_core_thres` will be considered a convective core. If
-# `always_core_thres` > `zero_diff_cos_val` then all values greater than `zero_diff_cos_val` will be considered a
+# ``always_core_thres`` < ``zero_diff_cos_val``, ``zero_diff_cos_val`` only helps define the shape of the cosine curve and
+# all values greater than ``always_core_thres`` will be considered a convective core. If
+# ``always_core_thres`` > ``zero_diff_cos_val`` then all values greater than ``zero_diff_cos_val`` will be considered a
 # convective core. We plot some examples of the schemes below:
 
 # plot cosine scheme
@@ -82,19 +62,22 @@ pyart.graph.plot_convstrat_scheme(always_core_thres=40, use_cosine=False, max_di
                                   zero_diff_cos_val=None, use_addition=False, scalar_diff=2)
 
 ######################################
-# Once the cores are identified, there is an option to remove speckles (`remove_small_objects`) smaller than a  given
-# size (`min_km2_size`).
+# Once the cores are identified, there is an option to remove speckles (``remove_small_objects``) smaller than a  given
+# size (``min_km2_size``).
 # After the convective cores are identified, We then incorporate convective radii using
-# `val_for_max_conv_rad` and `max_conv_rad_km`. The convective radii act as a dilation and are used to classify
+# ``val_for_max_conv_rad`` and ``max_conv_rad_km``. The convective radii act as a dilation and are used to classify
 # additional points around the cores as convective that may not have been identified previously.  The
-# `val_for_max_conv_rad` is the value where the maximum convective radius is applied and the `max_conv_rad_km` is the
-# maximum convective radius. Values less than the `val_for_max_conv_rad` are assigned a convective radius using a step
+# ``val_for_max_conv_rad`` is the value where the maximum convective radius is applied and the ``max_conv_rad_km`` is the
+# maximum convective radius. Values less than the ``val_for_max_conv_rad`` are assigned a convective radius using a step
 # function.
-# Finally, the points are classified as NOSFCECHO (threshold set with `min_dBZ_used`; 0), WEAKECHO (threshold set with
-# `weak_echo_thres`; 3), SF (stratiform; 1), CONV (convective; 2).
+# Finally, the points are classified as NOSFCECHO (threshold set with ``min_dBZ_used``; 0), WEAKECHO (threshold set with
+# ``weak_echo_thres``; 3), SF (stratiform; 1), CONV (convective; 2).
 
 ######################################
+# Examples
+# ----------
 # **Classification of summer convective example**
+#
 # Our first example classifies echo from a summer convective event. We use a cosine scheme to classify the convective
 # points.
 
@@ -136,22 +119,22 @@ grid.add_field('convsf', convsf_dict['convsf'], replace_existing=True)
 display = pyart.graph.GridMapDisplay(grid)
 magma_r_cmap = plt.get_cmap('magma_r')
 ref_cmap = mcolors.LinearSegmentedColormap.from_list('ref_cmap', magma_r_cmap(np.linspace(0, 0.9, magma_r_cmap.N)))
-projection = ccrs.LambertConformal(central_latitude=radar.latitude['data'][0],
+projection = ccrs.AlbersEqualArea(central_latitude=radar.latitude['data'][0],
                                    central_longitude=radar.longitude['data'][0])
 ######################################
 # Note how the convective stratiform field has less data around the edges compared to the reflectivity
 # field. This is because the function is designed to only compute the background radius where the footprint has 75%
 # of data, so along the edges there is not enough data to fulfill this requirement. The footprint percentage can be
-# changed using the variable `calc_thres`.
+# changed using the variable ``calc_thres``.
 
 # plot
 plt.figure(figsize=(10,4))
 ax1=plt.subplot(1,2,1, projection=projection)
-display.plot_grid('reflectivity_horizontal', vmin=5, vmax=45, cmap=ref_cmap, projection=projection,
+display.plot_grid('reflectivity_horizontal', vmin=5, vmax=45, cmap=ref_cmap,
                   transform=ccrs.PlateCarree(), ax=ax1)
 ax2=plt.subplot(1,2,2, projection=projection)
-display.plot_grid('convsf', vmin=0, vmax=2, cmap=plt.get_cmap('viridis', 3), projection=projection, ax=ax2,
-                  transform=ccrs.PlateCarree(), ticks=[1/3, 1, 5/3], ticklabs=['', 'Stratiform', 'Convective'])
+display.plot_grid('convsf', vmin=0, vmax=2, cmap=plt.get_cmap('viridis', 3), ax=ax2, transform=ccrs.PlateCarree(),
+                  ticks=[1/3, 1, 5/3], ticklabs=['', 'Stratiform', 'Convective'])
 plt.show()
 
 
@@ -159,8 +142,8 @@ plt.show()
 # In addition to the default convective-stratiform classification, the function also returns an underestimate
 # (convsf_under) and an overestimate (convsf_over) to take into consideration the uncertainty when choosing
 # classification parameters. The under and overestimate use the same parameters, but vary the input field by a
-# certain value (default is 5 dBZ, can be changed with `estimate_offset`). The estimation can be turned off (
-# `estimate_flag=False`), but we recommend keeping it turned on.
+# certain value (default is 5 dBZ, can be changed with ``estimate_offset``). The estimation can be turned off (
+# ``estimate_flag=False``), but we recommend keeping it turned on.
 
 # mask weak echo and no surface echo
 convsf_masked = np.ma.masked_equal(convsf_dict['convsf']['data'], 0)
@@ -193,6 +176,7 @@ plt.show()
 
 ######################################
 # **Tropical example**
+#
 # Let's get a NEXRAD file from Hurricane Ian
 
 # Read in file
@@ -232,21 +216,22 @@ grid.add_field('convsf', convsf_dict['convsf'], replace_existing=True)
 display = pyart.graph.GridMapDisplay(grid)
 magma_r_cmap = plt.get_cmap('magma_r')
 ref_cmap = mcolors.LinearSegmentedColormap.from_list('ref_cmap', magma_r_cmap(np.linspace(0, 0.9, magma_r_cmap.N)))
-projection = ccrs.LambertConformal(central_latitude=radar.latitude['data'][0],
+projection = ccrs.AlbersEqualArea(central_latitude=radar.latitude['data'][0],
                                    central_longitude=radar.longitude['data'][0])
 # plot
 plt.figure(figsize=(10,4))
 ax1=plt.subplot(1,2,1, projection=projection)
-display.plot_grid('reflectivity', vmin=5, vmax=45, cmap=ref_cmap, projection=projection,
+display.plot_grid('reflectivity', vmin=5, vmax=45, cmap=ref_cmap,
                   transform=ccrs.PlateCarree(), ax=ax1, axislabels_flag=False)
 ax2=plt.subplot(1,2,2, projection=projection)
-display.plot_grid('convsf', vmin=0, vmax=2, cmap=plt.get_cmap('viridis', 3), projection=projection,
+display.plot_grid('convsf', vmin=0, vmax=2, cmap=plt.get_cmap('viridis', 3),
                   axislabels_flag=False, transform=ccrs.PlateCarree(), ticks=[1/3, 1, 5/3],
                   ticklabs=['', 'Stratiform', 'Convective'], ax=ax2)
 plt.show()
 
 ######################################
 # **Winter storm example with image muting**
+#
 # Here is a final example of the convective stratiform classification using an example from a winter storm. Before
 # doing the classification, we image mute the reflectivity to remove regions with melting or mixed precipitation. We
 # then rescale the reflectivity to snow rate (Rasumussen et al. 2003). We recommend using a rescaled reflectivity
@@ -314,21 +299,43 @@ grid.add_field('convsf', convsf_dict['convsf'], replace_existing=True)
 display = pyart.graph.GridMapDisplay(grid)
 magma_r_cmap = plt.get_cmap('magma_r')
 ref_cmap = mcolors.LinearSegmentedColormap.from_list('ref_cmap', magma_r_cmap(np.linspace(0, 0.9, magma_r_cmap.N)))
-projection = ccrs.LambertConformal(central_latitude=radar.latitude['data'][0],
+projection = ccrs.AlbersEqualArea(central_latitude=radar.latitude['data'][0],
                                    central_longitude=radar.longitude['data'][0])
 # plot
 plt.figure(figsize=(10,4))
 ax1=plt.subplot(1,2,1, projection=projection)
-display.plot_grid('snow_rate', vmin=0, vmax=10, cmap=plt.get_cmap('viridis'), projection=projection,
+display.plot_grid('snow_rate', vmin=0, vmax=10, cmap=plt.get_cmap('viridis'),
                   transform=ccrs.PlateCarree(), ax=ax1, axislabels_flag=False)
 ax2=plt.subplot(1,2,2, projection=projection)
-display.plot_grid('convsf', vmin=0, vmax=2, cmap=plt.get_cmap('viridis', 3), projection=projection,
+display.plot_grid('convsf', vmin=0, vmax=2, cmap=plt.get_cmap('viridis', 3),
                   axislabels_flag=False, transform=ccrs.PlateCarree(), ticks=[1/3, 1, 5/3],
                   ticklabs=['', 'Stratiform', 'Convective'], ax=ax2)
 plt.show()
 
 ######################################
-# **Summary of recommendations and best practices**
-# - Tune your parameters to your specific purpose
-# - Use a rescaled field if possible (i.e. linear reflectivity, rain or snow rate)
-# - Keep `estimate_flag=True` to see uncertainty in classification
+# Summary of recommendations and best practices
+# ----------
+# * Tune your parameters to your specific purpose
+# * Use a rescaled field if possible (i.e. linear reflectivity, rain or snow rate)
+# * Keep ``estimate_flag=True`` to see uncertainty in classification
+#
+# References
+# ----------
+# Steiner, M. R., R. A. Houze Jr., and S. E. Yuter, 1995: Climatological
+# Characterization of Three-Dimensional Storm Structure from Operational
+# Radar and Rain Gauge Data. J. Appl. Meteor., 34, 1978-2007.
+# https://doi.org/10.1175/1520-0450(1995)034<1978:CCOTDS>2.0.CO;2.
+#
+# Yuter, S. E., and R. A. Houze, Jr., 1997: Measurements of raindrop size
+# distributions over the Pacific warm pool and implications for Z-R relations.
+# J. Appl. Meteor., 36, 847-867.
+# https://doi.org/10.1175/1520-0450(1997)036%3C0847:MORSDO%3E2.0.CO;2
+#
+# Yuter, S. E., R. A. Houze, Jr., E. A. Smith, T. T. Wilheit, and E. Zipser,
+# 2005: Physical characterization of tropical oceanic convection observed in
+# KWAJEX. J. Appl. Meteor., 44, 385-415. https://doi.org/10.1175/JAM2206.1
+#
+# Rasmussen, R., M. Dixon, S. Vasiloff, F. Hage, S. Knight, J. Vivekanandan,
+# and M. Xu, 2003: Snow Nowcasting Using a Real-Time Correlation of Radar
+# Reflectivity with Snow Gauge Accumulation. J. Appl. Meteorol. Climatol., 42, 20–36.
+# https://doi.org/10.1175/1520-0450(2003)042%3C0020:SNUART%3E2.0.CO;2
