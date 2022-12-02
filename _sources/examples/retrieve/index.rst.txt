@@ -85,7 +85,7 @@ Retrievals from various radars, such as additional fields or subsets of the data
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="References ---------- Steiner, M. R., R. A. Houze Jr., and S. E. Yuter, 1995: Climatological Ch...">
+    <div class="sphx-glr-thumbcontainer" tooltip="Convective-Stratiform classification">
 
 .. only:: html
 
