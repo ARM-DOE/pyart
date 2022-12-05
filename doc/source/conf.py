@@ -32,7 +32,6 @@
 # ones.
 import os
 import re
-import sys
 
 extensions = [
     "sphinx.ext.autodoc",

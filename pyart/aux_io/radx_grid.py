@@ -5,15 +5,13 @@ Reading and RadX Grid objects.
 
 """
 
-import datetime
 import warnings
 
 import netCDF4
-import numpy as np
 
 from ..config import get_metadata
 from ..core import Grid
-from ..io.cfradial import _create_ncvar, _ncvar_to_dict
+from ..io.cfradial import _ncvar_to_dict
 from ..io.common import _test_arguments
 
 
@@ -130,7 +128,7 @@ def read_radx_grid(filename, exclude_fields=None, **kwargs):
     z["data"] = z["data"] * 1000
     z["units"] = "m"
 
-    ### projection
+    # Projection
     # Below has been significantly altered form the original rad_grid to
     # obtain the correct info from the radx file to be plotted with Cartopy.
     # Create necessary projection params dict for cartopy and pyart from
@@ -163,7 +161,6 @@ def read_radx_grid(filename, exclude_fields=None, **kwargs):
             field_dic["data"].shape = field_shape
             fields[field] = field_dic
         else:
-            bad_shape = field_dic["data"].shape
             warnings.warn("Field %s skipped due to incorrect shape" % (field))
 
     # radar_ variables

@@ -1,11 +1,11 @@
-""" Unit Tests for Py-ART's graph/radar_display.py module. """
-# execute this script to create figure_plot_radar_display_*.png files.
+"""
+Unit Tests for Py-ART's graph/radar_display.py module.
+Execute this script to create figure_plot_radar_display_*.png files.
+TODO use matplotlib's @image_comparison decorator to compare to file
+in baseline_images directory. Current this test only determines if files can
+be created, not that they are correct.
+"""
 
-# TODO use matplotlib's @image_comparison decorator to compare to file
-# in baseline_images directory. Current this test only determines if files can
-# be created, not that they are correct.
-
-import datetime
 import warnings
 
 import matplotlib.pyplot as plt
@@ -103,7 +103,7 @@ def test_radardisplay_cr_raster(outfile=None):
     display = pyart.graph.RadarDisplay(radar)
     fig = plt.figure()
     ax = fig.add_subplot(111)
-    display.plot_cr_raster(target_range=478.0, el_limits=[-0.5, 2.5])
+    display.plot_cr_raster(ax=ax, target_range=478.0, el_limits=[-0.5, 2.5])
     if outfile:
         fig.savefig(outfile)
     plt.close()
@@ -175,7 +175,9 @@ def test_radardisplay_plot_azimuth_to_rhi_reverse(outfile=None):
     display = pyart.graph.RadarDisplay(radar)
     fig = plt.figure()
     ax = fig.add_subplot(111)
-    display.plot_azimuth_to_rhi("reflectivity_horizontal", 45.0, reverse_xaxis=True)
+    display.plot_azimuth_to_rhi(
+        "reflectivity_horizontal", 45.0, ax=ax, reverse_xaxis=True
+    )
     plt.close()
 
 
