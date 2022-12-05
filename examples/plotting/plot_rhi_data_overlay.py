@@ -12,12 +12,13 @@ print(__doc__)
 # Author: Cory Weber (cweber@anl.gov)
 # License: BSD 3 clause
 import matplotlib.pyplot as plt
-import pyart
-from pyart.testing import get_test_data
 import numpy as np
 import scipy.ndimage as spyi
 
-filename = get_test_data('034142.mdv')
+import pyart
+from pyart.testing import get_test_data
+
+filename = get_test_data("034142.mdv")
 
 # create the plot using RadarDisplay
 sweep = 2
@@ -32,8 +33,16 @@ ax = fig.add_subplot(111)
 # https://github.com/ARM-DOE/pyart/blob/master/pyart/graph/cm.py
 # for more information
 
-display.plot('velocity', sweep=sweep, vmin=-20, vmax=20.0, fig=fig,
-             ax=ax, cmap='pyart_BuDRd18', colorbar_label='Velocity (m/s)')
+display.plot(
+    "velocity",
+    sweep=sweep,
+    vmin=-20,
+    vmax=20.0,
+    fig=fig,
+    ax=ax,
+    cmap="pyart_BuDRd18",
+    colorbar_label="Velocity (m/s)",
+)
 
 # line commented out to show reflectivity
 # display.plot('reflectivity', sweep=sweep, vmin=-0, vmax=45.0, fig=fig,ax=ax)
@@ -41,7 +50,7 @@ display.plot('velocity', sweep=sweep, vmin=-20, vmax=20.0, fig=fig,
 # get data
 start = radar.get_start(sweep)
 end = radar.get_end(sweep) + 1
-data = radar.get_field(sweep, 'reflectivity')
+data = radar.get_field(sweep, "reflectivity")
 x, y, z = radar.get_gate_x_y_z(sweep, edges=False)
 
 x /= 1000.0
@@ -52,7 +61,7 @@ z /= 1000.0
 data = spyi.gaussian_filter(data, sigma=1.2)
 
 # calculate (R)ange
-R = np.sqrt(x ** 2 + y ** 2) * np.sign(y)
+R = np.sqrt(x**2 + y**2) * np.sign(y)
 R = -R
 display.set_limits(xlim=[25, 0], ylim=[0, 5])
 
@@ -60,26 +69,27 @@ display.set_limits(xlim=[25, 0], ylim=[0, 5])
 # creates steps 35 to 100 by 5
 levels = np.arange(35, 100, 5)
 # adds coutours to plot
-contours = ax.contour(R, z, data, levels, linewidths=1.5, colors='k',
-                      linestyles='solid', antialiased=True)
+contours = ax.contour(
+    R, z, data, levels, linewidths=1.5, colors="k", linestyles="solid", antialiased=True
+)
 
 # adds contour labels (fmt= '%r' displays 10.0 vs 10.0000)
-plt.clabel(contours, levels, fmt='%r', inline=True, fontsize=10)
+plt.clabel(contours, levels, fmt="%r", inline=True, fontsize=10)
 
 
 # format plot
 # add grid (dotted lines, major axis only)
-ax.grid(color='k', linestyle=':', linewidth=1, which='major')
+ax.grid(color="k", linestyle=":", linewidth=1, which="major")
 
 # horizontal
-ax.axhline(0.9, 0, 1, linestyle='solid', color='k', linewidth=2)
-ax.axhline(1.3, 0, 1, linestyle='dashed', color='k', linewidth=2)
+ax.axhline(0.9, 0, 1, linestyle="solid", color="k", linewidth=2)
+ax.axhline(1.3, 0, 1, linestyle="dashed", color="k", linewidth=2)
 
 # vertical
-ax.axvline(15, 0, 1, linestyle='solid', color='#00b4ff', linewidth=2)
-ax.axvline(4.5, 0, 1, linestyle='solid', color='#ff6800', linewidth=2)
+ax.axvline(15, 0, 1, linestyle="solid", color="#00b4ff", linewidth=2)
+ax.axvline(4.5, 0, 1, linestyle="solid", color="#ff6800", linewidth=2)
 
 # setting matplotlib overrides display.plot defaults
-ax.set_ylabel('Altitude above CP-2 (km)')
+ax.set_ylabel("Altitude above CP-2 (km)")
 
 plt.show()

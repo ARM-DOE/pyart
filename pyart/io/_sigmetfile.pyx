@@ -2,13 +2,14 @@
 A class and supporting functions for reading Sigmet (raw format) files.
 
 """
-import struct
 import datetime
+import struct
 import warnings
 
 import numpy as np
-cimport numpy as np
+
 cimport cython
+cimport numpy as np
 
 RECORD_SIZE = 6144      # Raw product file blocked into 6144 byte records
 

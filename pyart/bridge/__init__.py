@@ -10,6 +10,7 @@ Current extensions:
 
 """
 
-from .wradlib_bridge import texture_of_complex_phase
 from .. import retrieve as _retrieve
+from .wradlib_bridge import texture_of_complex_phase
+
 _retrieve.texture_of_complex_phase = texture_of_complex_phase

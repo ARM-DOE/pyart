@@ -2,13 +2,13 @@ import pkg_resources
 import pooch
 
 DATASETS = pooch.create(
-    path=pooch.os_cache('pyart-datasets'),
-    base_url='https://adc.arm.gov/pyart/example_data/',
-    env='PYART_DATASETS_DIR',
+    path=pooch.os_cache("pyart-datasets"),
+    base_url="https://adc.arm.gov/pyart/example_data/",
+    env="PYART_DATASETS_DIR",
 )
 
 
-with pkg_resources.resource_stream('pyart.testing', 'registry.txt') as registry_file:
+with pkg_resources.resource_stream("pyart.testing", "registry.txt") as registry_file:
     DATASETS.load_registry(registry_file)
 
 

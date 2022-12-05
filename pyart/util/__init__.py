@@ -6,21 +6,33 @@ versions without depreciation, use with caution.
 
 """
 
-from .circular_stats import angular_mean, angular_std
-from .circular_stats import angular_mean_deg, angular_std_deg
-from .circular_stats import interval_mean, interval_std
-from .circular_stats import mean_of_two_angles, mean_of_two_angles_deg
-from .datetime_utils import datetime_from_radar, datetimes_from_radar
-from .datetime_utils import datetime_from_dataset, datetimes_from_dataset
-from .datetime_utils import datetime_from_grid
-from .xsect import cross_section_ppi, cross_section_rhi
+from .circular_stats import (
+    angular_mean,
+    angular_mean_deg,
+    angular_std,
+    angular_std_deg,
+    interval_mean,
+    interval_std,
+    mean_of_two_angles,
+    mean_of_two_angles_deg,
+)
+from .columnsect import (
+    for_azimuth,
+    get_column_rays,
+    get_field_location,
+    sphere_distance,
+)
+from .datetime_utils import (
+    datetime_from_dataset,
+    datetime_from_grid,
+    datetime_from_radar,
+    datetimes_from_dataset,
+    datetimes_from_radar,
+)
 from .hildebrand_sekhon import estimate_noise_hs74
-from .radar_utils import is_vpt, to_vpt, join_radar, image_mute_radar
-from .radar_utils import subset_radar
+from .radar_utils import image_mute_radar, is_vpt, join_radar, subset_radar, to_vpt
+from .sigmath import angular_texture_2d, rolling_window, texture, texture_along_ray
 from .simulated_vel import simulated_vel_from_profile
-from .sigmath import texture_along_ray, rolling_window
-from .sigmath import texture, angular_texture_2d
-from .columnsect import get_field_location, get_column_rays
-from .columnsect import for_azimuth, sphere_distance
+from .xsect import cross_section_ppi, cross_section_rhi
 
-__all__ = [s for s in dir() if not s.startswith('_')]
+__all__ = [s for s in dir() if not s.startswith("_")]

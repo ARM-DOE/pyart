@@ -53,10 +53,10 @@ included as PyPI only allows a single source distribution to be uploaded.
 Create and upload a source distribution to PyPI
 -----------------------------------------------
 
-To create a release and the associated source distribution on PyPI, begin by 
+To create a release and the associated source distribution on PyPI, begin by
 cloning the ARM-DOE repository into a temporary location and checking out the
 tagged release. Starting from a fresh clone is recommended to prevent any
-extra files from accidentally being included in the source distribution. 
+extra files from accidentally being included in the source distribution.
 
 With the tagged version checked out, generate the source distribution file
 using ``python setup.py sdist --formats=gztar``. This will create a
@@ -64,10 +64,10 @@ arm_pyart-X.X.X.tar.gz file in the dist directory. Tests should be run to check
 that this file can be used to install a working version of Py-ART.
 
 Once tested the tar.gz source distribution file can be uploaded to PyPI using
-`twine <https://pypi.python.org/pypi/twine>`_, installing if needed, with the 
+`twine <https://pypi.python.org/pypi/twine>`_, installing if needed, with the
 command ``twine upload dist/*``. This command will prompt the user for their
 PyPI credentials.  After uploading check that this file is available for
-download from 
+download from
 `pypi.python.org/pypi/arm_pyart <https://pypi.python.org/pypi/arm_pyart>`_.
 
 Some older releases also included a zip file, these are no longer included as
@@ -101,7 +101,7 @@ your fork. Then clone the fork and checkout a new branch. Update the first
 few lines of the ``recipe/meta.yaml`` with the new version number and a sha256
 hash of the file on PyPI. Check this change in as a new commit. Next rerender
 the feedstock using ``conda smithy rerender``, installing ``conda-smithy``
-if needed.  
+if needed.
 
 Finally, push the branch up to your fork and create a pull request against the
 conda-forge feedstock. The CI services will test the recipe by building conda

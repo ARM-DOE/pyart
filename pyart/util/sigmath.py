@@ -36,7 +36,7 @@ def angular_texture_2d(image, N, interval):
     # transform distribution from original interval to [-pi, pi]
     interval_max = interval
     interval_min = -interval
-    half_width = (interval_max - interval_min) / 2.
+    half_width = (interval_max - interval_min) / 2.0
     center = interval_min + half_width
 
     # Calculate parameters needed for angular std. dev
@@ -51,25 +51,25 @@ def angular_texture_2d(image, N, interval):
     ns = N**2
 
     # Calculate norm over specified window
-    xmean = xs/ns
-    ymean = ys/ns
+    xmean = xs / ns
+    ymean = ys / ns
     norm = np.sqrt(xmean**2 + ymean**2)
     std_dev = np.sqrt(-2 * np.log(norm)) * (half_width) / np.pi
     return std_dev
 
 
 def rolling_window(a, window):
-    """ Create a rolling window object for application of functions
-    eg: result=np.ma.std(array, 11), 1). """
+    """Create a rolling window object for application of functions
+    eg: result=np.ma.std(array, 11), 1)."""
     shape = a.shape[:-1] + (a.shape[-1] - window + 1, window)
-    strides = a.strides + (a.strides[-1], )
+    strides = a.strides + (a.strides[-1],)
     return np.lib.stride_tricks.as_strided(a, shape=shape, strides=strides)
 
 
 def texture(radar, var):
-    """ Determine a texture field using an 11pt stdev
-    texarray=texture(pyradarobj, field). """
-    fld = radar.fields[var]['data']
+    """Determine a texture field using an 11pt stdev
+    texarray=texture(pyradarobj, field)."""
+    fld = radar.fields[var]["data"]
     print(fld.shape)
     tex = np.ma.zeros(fld.shape)
     for timestep in range(tex.shape[0]):
@@ -100,8 +100,8 @@ def texture_along_ray(radar, var, wind_size=7):
         The texture of the specified field.
 
     """
-    half_wind = int((wind_size-1)/2)
-    fld = radar.fields[var]['data']
+    half_wind = int((wind_size - 1) / 2)
+    fld = radar.fields[var]["data"]
     tex = np.ma.zeros(fld.shape)
     for timestep in range(tex.shape[0]):
         ray = np.ma.std(rolling_window(fld[timestep, :], wind_size), 1)

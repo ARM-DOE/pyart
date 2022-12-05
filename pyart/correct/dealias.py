@@ -6,21 +6,35 @@ Front end to the University of Washington 4DD code for Doppler dealiasing.
 import numpy as np
 
 from ..config import get_field_name, get_fillvalue, get_metadata
+
 try:
     from ..io import _rsl_interface
     from . import _fourdd_interface
+
     _FOURDD_AVAILABLE = True
 except ImportError:
     _FOURDD_AVAILABLE = False
-from ._common_dealias import _parse_gatefilter, _set_limits
 from ..exceptions import MissingOptionalDependency
+from ._common_dealias import _parse_gatefilter, _set_limits
 
 
 def dealias_fourdd(
-        radar, last_radar=None, sonde_profile=None, gatefilter=False,
-        filt=1, rsl_badval=131072.0, keep_original=False, set_limits=True,
-        vel_field=None, corr_vel_field=None, last_vel_field=None,
-        debug=False, max_shear=0.05, sign=1, **kwargs):
+    radar,
+    last_radar=None,
+    sonde_profile=None,
+    gatefilter=False,
+    filt=1,
+    rsl_badval=131072.0,
+    keep_original=False,
+    set_limits=True,
+    vel_field=None,
+    corr_vel_field=None,
+    last_vel_field=None,
+    debug=False,
+    max_shear=0.05,
+    sign=1,
+    **kwargs
+):
     """
     Dealias Doppler velocities using the 4DD algorithm.
 
@@ -167,19 +181,20 @@ def dealias_fourdd(
     if not _FOURDD_AVAILABLE:
         raise MissingOptionalDependency(
             "Py-ART must be build with support for TRMM RSL to use"
-            + " the dealias_fourdd function.")
+            + " the dealias_fourdd function."
+        )
 
     # verify that sounding data or last_volume is provided
     if (sonde_profile is None) and (last_radar is None):
-        raise ValueError('sonde_profile or last_radar must be provided.')
+        raise ValueError("sonde_profile or last_radar must be provided.")
 
     # parse the field parameters
     if vel_field is None:
-        vel_field = get_field_name('velocity')
+        vel_field = get_field_name("velocity")
     if corr_vel_field is None:
-        corr_vel_field = get_field_name('corrected_velocity')
+        corr_vel_field = get_field_name("corrected_velocity")
     if last_vel_field is None:
-        last_vel_field = get_field_name('corrected_velocity')
+        last_vel_field = get_field_name("corrected_velocity")
 
     # get fill value
     fill_value = get_fillvalue()
@@ -193,8 +208,7 @@ def dealias_fourdd(
     vel_volume = _create_rsl_volume(radar, vel_field, 1, rsl_badval, excluded)
 
     if last_radar is not None:
-        last_vel_volume = _create_rsl_volume(
-            last_radar, last_vel_field, 1, rsl_badval)
+        last_vel_volume = _create_rsl_volume(last_radar, last_vel_field, 1, rsl_badval)
     else:
         last_vel_volume = None
 
@@ -209,25 +223,27 @@ def dealias_fourdd(
             raise ValueError("Too many sounding heights, maximum is 999")
 
         success, sound_volume = _fourdd_interface.create_soundvolume(
-            vel_volume, height, speed, wdir, sign, max_shear)
+            vel_volume, height, speed, wdir, sign, max_shear
+        )
         if success == 0:
-            raise ValueError('Error when loading sounding data.')
+            raise ValueError("Error when loading sounding data.")
     else:
         sound_volume = None
 
     # perform dealiasing
     if debug:
         return _fourdd_interface.fourdd_dealias(
-            vel_volume, last_vel_volume, sound_volume,
-            filt, debug=True, **kwargs)
+            vel_volume, last_vel_volume, sound_volume, filt, debug=True, **kwargs
+        )
 
     _, data = _fourdd_interface.fourdd_dealias(
-        vel_volume, last_vel_volume, sound_volume, filt, debug=False, **kwargs)
+        vel_volume, last_vel_volume, sound_volume, filt, debug=False, **kwargs
+    )
 
     # prepare data for output, set bad values and mask data
     is_bad_data = np.logical_or(np.isnan(data), data == rsl_badval)
     if keep_original:
-        vel_array = radar.fields[vel_field]['data']
+        vel_array = radar.fields[vel_field]["data"]
         data = np.where(is_bad_data, vel_array, data)
     else:
         data[is_bad_data] = fill_value
@@ -235,11 +251,11 @@ def dealias_fourdd(
 
     # return field dictionary containing dealiased Doppler velocities
     vr_corr = get_metadata(corr_vel_field)
-    vr_corr['data'] = data
-    vr_corr['_FillValue'] = data.fill_value
+    vr_corr["data"] = data
+    vr_corr["_FillValue"] = data.fill_value
 
     if set_limits:
-        nyquist_vel = radar.instrument_parameters['nyquist_velocity']['data']
+        nyquist_vel = radar.instrument_parameters["nyquist_velocity"]["data"]
         _set_limits(data, nyquist_vel, vr_corr)
     return vr_corr
 
@@ -249,14 +265,15 @@ def _create_rsl_volume(radar, field_name, vol_num, rsl_badval, excluded=None):
     Create a RSLVolume containing data from a field in radar.
     """
     fill_value = get_fillvalue()
-    fdata = np.copy(radar.fields[field_name]['data']).astype(np.float32)
+    fdata = np.copy(radar.fields[field_name]["data"]).astype(np.float32)
     fdata = np.ma.filled(fdata, fill_value)
     is_bad = np.logical_or(fdata == fill_value, np.isnan(fdata))
     fdata[is_bad] = rsl_badval
     if excluded is not None:
         fdata[excluded] = rsl_badval
-    rays_per_sweep = (radar.sweep_end_ray_index['data'] -
-                      radar.sweep_start_ray_index['data'] + 1)
+    rays_per_sweep = (
+        radar.sweep_end_ray_index["data"] - radar.sweep_start_ray_index["data"] + 1
+    )
     rays_per_sweep = rays_per_sweep.astype(np.int32)
     rsl_volume = _rsl_interface.create_volume(fdata, rays_per_sweep, vol_num)
     _rsl_interface._label_volume(rsl_volume, radar)

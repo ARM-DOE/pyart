@@ -13,17 +13,26 @@ import pyart
 
 
 # Top level Figure generating tests
-@pytest.mark.skipif(not pyart.graph.radarmapdisplay._CARTOPY_AVAILABLE,
-                    reason="Cartopy is not installed.")
+@pytest.mark.skipif(
+    not pyart.graph.radarmapdisplay._CARTOPY_AVAILABLE,
+    reason="Cartopy is not installed.",
+)
 def test_radarmapdisplay_cartopy_ppi(outfile=None):
     radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
     display = pyart.graph.RadarMapDisplay(radar, shift=(0.1, 0.0))
     display.plot_ppi_map(
-        'reflectivity_horizontal', 0, colorbar_flag=True,
-        title="Fancy PPI Map", mask_tuple=('reflectivity_horizontal', -100),
-        min_lon=-100, max_lon=-93, min_lat=33, max_lat=38,
-        mask_outside=True)
-    display.plot_point(-95, 35, label_text='TEXT')
+        "reflectivity_horizontal",
+        0,
+        colorbar_flag=True,
+        title="Fancy PPI Map",
+        mask_tuple=("reflectivity_horizontal", -100),
+        min_lon=-100,
+        max_lon=-93,
+        min_lat=33,
+        max_lat=38,
+        mask_outside=True,
+    )
+    display.plot_point(-95, 35, label_text="TEXT")
     display.plot_range_rings([15, 30])
     display.plot_line_geo(np.array([-95, -95]), np.array([33, 38]))
     if outfile:
@@ -31,17 +40,20 @@ def test_radarmapdisplay_cartopy_ppi(outfile=None):
     plt.close()
 
 
-@pytest.mark.skipif(not pyart.graph.radarmapdisplay._CARTOPY_AVAILABLE,
-                    reason="Cartopy is not installed.")
+@pytest.mark.skipif(
+    not pyart.graph.radarmapdisplay._CARTOPY_AVAILABLE,
+    reason="Cartopy is not installed.",
+)
 def test_radarmapdisplay_cartopy_preexisting_ax(outfile=None):
     import cartopy
     from cartopy.io.img_tiles import Stamen
+
     radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
     display = pyart.graph.RadarMapDisplay(radar, shift=(0.1, 0.0))
     fig = plt.figure()
     ax = plt.axes(projection=cartopy.crs.PlateCarree())
-    ax.add_image(Stamen('terrain-background'), 6)
-    display.plot_ppi_map('reflectivity_horizontal', 0, ax=ax, embellish=False)
+    ax.add_image(Stamen("terrain-background"), 6)
+    display.plot_ppi_map("reflectivity_horizontal", 0, ax=ax, embellish=False)
     if outfile:
         fig.savefig(outfile)
     plt.close()
@@ -66,14 +78,16 @@ def test_radarmapdisplay_cartopy_auto_range():
 """
 
 
-@pytest.mark.skipif(not pyart.graph.radarmapdisplay._CARTOPY_AVAILABLE,
-                    reason="Cartopy is not installed.")
+@pytest.mark.skipif(
+    not pyart.graph.radarmapdisplay._CARTOPY_AVAILABLE,
+    reason="Cartopy is not installed.",
+)
 def test_error_raising():
     radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
     display = pyart.graph.RadarMapDisplay(radar, shift=(0.1, 0.0))
     # no cartopy
     pytest.raises(ValueError, display.plot_range_ring, 10)
 
+
 if __name__ == "__main__":
-    test_radarmapdisplay_cartopy_ppi(
-        'figure_radarmapdisplay_cartopy_ppi.png')
+    test_radarmapdisplay_cartopy_ppi("figure_radarmapdisplay_cartopy_ppi.png")

@@ -10,14 +10,15 @@ from scipy.signal import convolve2d
 from ..config import get_fillvalue
 from ..filters.gatefilter import GateFilter
 
-BAD = get_fillvalue() # Get default fill value.
+BAD = get_fillvalue()  # Get default fill value.
 DELTA = 5.0  # deg, allowable gap between PPI edges to be considered full 360
 # To do:
 # Testing
 
 
-def find_objects(radar, field, threshold, sweeps=None, smooth=None,
-                 gatefilter=None, delta=DELTA):
+def find_objects(
+    radar, field, threshold, sweeps=None, smooth=None, gatefilter=None, delta=DELTA
+):
     """
     Find objects (i.e., contiguous gates) in one or more sweeps that match
     thresholds. Filtering & smoothing are available prior to labeling objects.
@@ -59,14 +60,13 @@ def find_objects(radar, field, threshold, sweeps=None, smooth=None,
 
     """
     if field not in radar.fields.keys():
-        raise KeyError('Failed -', field, 'field not found in Radar object.')
+        raise KeyError("Failed -", field, "field not found in Radar object.")
     sweeps = _check_sweeps(sweeps, radar)
     tlo, thi = _check_threshold(threshold)
     objcnt = 0
     label_storage = []
     for iswp in sweeps:
-        data = _get_data(radar, iswp, field, tlo, thi, smooth,
-                         gatefilter=gatefilter)
+        data = _get_data(radar, iswp, field, tlo, thi, smooth, gatefilter=gatefilter)
         az = radar.get_azimuth(iswp, copy=False)
         if _check_for_360(az, delta):
             # If 360 or close, account for the periodic boundary
@@ -76,13 +76,13 @@ def find_objects(radar, field, threshold, sweeps=None, smooth=None,
         labels[labels != 0] += objcnt
         objcnt += nobj
         label_storage = _append_labels(labels, label_storage)
-    label_storage = np.ma.masked_where(
-        label_storage == 0, label_storage)
+    label_storage = np.ma.masked_where(label_storage == 0, label_storage)
     return _generate_dict(label_storage)
 
 
-def despeckle_field(radar, field, label_dict=None, threshold=-100,
-                    size=10, gatefilter=None, delta=DELTA):
+def despeckle_field(
+    radar, field, label_dict=None, threshold=-100, size=10, gatefilter=None, delta=DELTA
+):
     """
     Despeckle a radar volume by identifying small objects in each scan and
     masking them out. User can define which field to investigate, as well as
@@ -121,17 +121,18 @@ def despeckle_field(radar, field, label_dict=None, threshold=-100,
 
     """
     if field not in radar.fields.keys():
-        raise KeyError('Failed -', field, 'field not found in Radar object.')
+        raise KeyError("Failed -", field, "field not found in Radar object.")
     if label_dict is None:
         # Label everything in the radar object's field
-        label_dict = find_objects(radar, field, threshold,
-                                  gatefilter=gatefilter, delta=delta)
+        label_dict = find_objects(
+            radar, field, threshold, gatefilter=gatefilter, delta=delta
+        )
     if gatefilter is None:
         gatefilter = GateFilter(radar)
-    labels = label_dict['data']
+    labels = label_dict["data"]
 
     # Get a copy of the field in the volume
-    data = 1.0 * radar.fields[field]['data']
+    data = 1.0 * radar.fields[field]["data"]
     mask_filter = gatefilter.gate_excluded
     data = np.ma.masked_array(data, mask_filter)
     data = data.filled(fill_value=BAD)
@@ -241,14 +242,13 @@ def _check_for_360(az, delta):
 
     """
     # Check for small gap in azimuths
-    if np.abs(az[0]-az[-1]) < delta or np.abs(az[0]-az[-1]) > 360 - delta:
+    if np.abs(az[0] - az[-1]) < delta or np.abs(az[0] - az[-1]) > 360 - delta:
         # Confirm small gap and not just narrow sector
         if np.max(az) - np.min(az) > 360 - delta:
             # Confirm not narrow sector near true north
-            if True not in (np.sin(np.deg2rad(az)) <
-                            np.sin(np.deg2rad(360-delta))) or \
-                    True not in (np.sin(np.deg2rad(az)) >
-                                 np.sin(np.deg2rad(delta))):
+            if True not in (
+                np.sin(np.deg2rad(az)) < np.sin(np.deg2rad(360 - delta))
+            ) or True not in (np.sin(np.deg2rad(az)) > np.sin(np.deg2rad(delta))):
                 return False
             else:
                 return True
@@ -278,9 +278,9 @@ def _check_sweeps(sweeps, radar):
 
     """
     if sweeps is None:
-        sweeps = np.arange(len(radar.sweep_number['data']))
+        sweeps = np.arange(len(radar.sweep_number["data"]))
     else:
-        if hasattr(sweeps, '__len__'):
+        if hasattr(sweeps, "__len__"):
             sweeps = np.asarray(sweeps)
         else:
             sweeps = np.asarray([sweeps])
@@ -308,14 +308,15 @@ def _check_threshold(threshold):
         in the hunt for objects. None means no upper bound.
 
     """
-    if not hasattr(threshold, '__len__'):
+    if not hasattr(threshold, "__len__"):
         threshold = np.asarray([threshold])
     if len(threshold) == 2:
         tlo = threshold[0]
         thi = threshold[1]
     elif len(threshold) > 2 or np.ndim(threshold) > 1:
-        raise IndexError('Fix threshold argument! Must be single scalar ' +
-                         'or 2-element tuple')
+        raise IndexError(
+            "Fix threshold argument! Must be single scalar " + "or 2-element tuple"
+        )
     else:
         tlo = threshold[0]
         thi = None
@@ -340,13 +341,13 @@ def _generate_dict(label_storage):
 
     """
     label_dict = {}
-    label_dict['data'] = label_storage
-    label_dict['units'] = 'None'
-    label_dict['long_name'] = 'Objects in Scan'
-    label_dict['standard_name'] = 'objects_in_scan'
-    label_dict['coordinates'] = 'elevation azimuth range'
-    label_dict['valid_max'] = np.max(label_storage)
-    label_dict['valid_min'] = 1
+    label_dict["data"] = label_storage
+    label_dict["units"] = "None"
+    label_dict["long_name"] = "Objects in Scan"
+    label_dict["standard_name"] = "objects_in_scan"
+    label_dict["coordinates"] = "elevation azimuth range"
+    label_dict["valid_max"] = np.max(label_storage)
+    label_dict["valid_min"] = 1
     return label_dict
 
 
@@ -389,7 +390,7 @@ def _get_data(radar, iswp, field, tlo, thi, window, gatefilter=None):
     data = radar.get_field(iswp, field, copy=True)
     if gatefilter is not None:
         start, end = radar.get_start_end(iswp)
-        mask_filter = gatefilter.gate_excluded[start:end+1]
+        mask_filter = gatefilter.gate_excluded[start : end + 1]
         data = np.ma.masked_array(data, mask_filter)
     else:
         data = np.ma.masked_array(data)
@@ -398,8 +399,7 @@ def _get_data(radar, iswp, field, tlo, thi, window, gatefilter=None):
     if thi is None:
         cond = np.logical_or(data < tlo, data == BAD)
     else:
-        cond = np.logical_or(
-            data == BAD, np.logical_or(data < tlo, data > thi))
+        cond = np.logical_or(data == BAD, np.logical_or(data < tlo, data > thi))
     data[cond] = 0
     data[~cond] = 1
     return data
@@ -425,7 +425,7 @@ def _get_labels(data):
         Number of distinct objects identified in sweep.
 
     """
-    matrix = np.ones((3, 3), dtype='int16')
+    matrix = np.ones((3, 3), dtype="int16")
     labels, nobj = label(data, structure=matrix)
     return labels, nobj
 
@@ -451,8 +451,13 @@ def _smooth_data(data, window):
 
     """
     if window is not None:
-        return np.ma.masked_array(convolve2d(
-            data, np.ones((1, window))/np.float(window),
-            mode='same', boundary='symm'))
+        return np.ma.masked_array(
+            convolve2d(
+                data,
+                np.ones((1, window)) / np.float(window),
+                mode="same",
+                boundary="symm",
+            )
+        )
     else:
         return data

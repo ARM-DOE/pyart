@@ -1,7 +1,8 @@
-import pyart
+from copy import deepcopy
+
 import numpy as np
 
-from copy import deepcopy
+import pyart
 
 
 def test_gatemapper():
@@ -11,14 +12,15 @@ def test_gatemapper():
     new_radar.latitude["data"] = old_radar.latitude["data"] + 0.001
     new_radar.longitude["data"] = old_radar.longitude["data"] + 0.001
     gate_mapper = pyart.map.GateMapper(new_radar, old_radar)
-    mapped_radar = gate_mapper.mapped_radar(['reflectivity'])
+    mapped_radar = gate_mapper.mapped_radar(["reflectivity"])
 
     # Test point outside of 1 min tolerance
     assert gate_mapper[20, 20] == (None, None)
     assert gate_mapper[4, 4] == (26, 11)
-    assert mapped_radar.fields[
-        'reflectivity']['data'][26, 11] == old_radar.fields[
-                'reflectivity']['data'][4, 4]
+    assert (
+        mapped_radar.fields["reflectivity"]["data"][26, 11]
+        == old_radar.fields["reflectivity"]["data"][4, 4]
+    )
 
 
 def test_gatemapper_gatefilter():
@@ -28,9 +30,8 @@ def test_gatemapper_gatefilter():
     new_radar.latitude["data"] = old_radar.latitude["data"] + 0.001
     new_radar.longitude["data"] = old_radar.longitude["data"] + 0.001
     gatefilter = pyart.filters.GateFilter(old_radar)
-    gatefilter.exclude_below('reflectivity', 40)
-    gate_mapper = pyart.map.GateMapper(new_radar, old_radar,
-                                       gatefilter_src=gatefilter)
-    mapped_radar = gate_mapper.mapped_radar(['reflectivity'])
+    gatefilter.exclude_below("reflectivity", 40)
+    gate_mapper = pyart.map.GateMapper(new_radar, old_radar, gatefilter_src=gatefilter)
+    mapped_radar = gate_mapper.mapped_radar(["reflectivity"])
     assert gate_mapper[4, 4] == (26, 11)
-    assert np.ma.is_masked(mapped_radar.fields['reflectivity']['data'][26, 11])
+    assert np.ma.is_masked(mapped_radar.fields["reflectivity"]["data"][26, 11])

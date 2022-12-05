@@ -7,7 +7,7 @@ from warnings import warn
 
 import numpy as np
 
-from ..config import get_metadata, get_field_name, get_fillvalue
+from ..config import get_field_name, get_fillvalue, get_metadata
 from .echo_class import get_freq_band
 
 
@@ -42,28 +42,28 @@ def est_rain_rate_zpoly(radar, refl_field=None, rr_field=None):
     """
     # parse the field parameters
     if refl_field is None:
-        refl_field = get_field_name('reflectivity')
+        refl_field = get_field_name("reflectivity")
     if rr_field is None:
-        rr_field = get_field_name('radar_estimated_rain_rate')
+        rr_field = get_field_name("radar_estimated_rain_rate")
 
     radar.check_field_exists(refl_field)
-    refl = radar.fields[refl_field]['data']
+    refl = radar.fields[refl_field]["data"]
 
-    refl2 = refl*refl
-    refl3 = refl*refl2
-    refl4 = refl*refl3
+    refl2 = refl * refl
+    refl3 = refl * refl2
+    refl4 = refl * refl3
 
     rr_data = np.ma.power(
-        10., -2.3+0.17*refl-5.1e-3*refl2+9.8e-5*refl3-6e-7*refl4)
+        10.0, -2.3 + 0.17 * refl - 5.1e-3 * refl2 + 9.8e-5 * refl3 - 6e-7 * refl4
+    )
 
     rain = get_metadata(rr_field)
-    rain['data'] = rr_data
+    rain["data"] = rr_data
 
     return rain
 
 
-def est_rain_rate_z(radar, alpha=0.0376, beta=0.6112, refl_field=None,
-                    rr_field=None):
+def est_rain_rate_z(radar, alpha=0.0376, beta=0.6112, refl_field=None, rr_field=None):
     """
     Estimates rainfall rate from reflectivity using a power law.
 
@@ -91,23 +91,22 @@ def est_rain_rate_z(radar, alpha=0.0376, beta=0.6112, refl_field=None,
     """
     # parse the field parameters
     if refl_field is None:
-        refl_field = get_field_name('reflectivity')
+        refl_field = get_field_name("reflectivity")
     if rr_field is None:
-        rr_field = get_field_name('radar_estimated_rain_rate')
+        rr_field = get_field_name("radar_estimated_rain_rate")
 
     radar.check_field_exists(refl_field)
-    refl = radar.fields[refl_field]['data']
+    refl = radar.fields[refl_field]["data"]
 
-    rr_data = alpha*np.ma.power(np.ma.power(10., 0.1*refl), beta)
+    rr_data = alpha * np.ma.power(np.ma.power(10.0, 0.1 * refl), beta)
 
     rain = get_metadata(rr_field)
-    rain['data'] = rr_data
+    rain["data"] = rr_data
 
     return rain
 
 
-def est_rain_rate_kdp(radar, alpha=None, beta=None, kdp_field=None,
-                      rr_field=None):
+def est_rain_rate_kdp(radar, alpha=None, beta=None, kdp_field=None, rr_field=None):
     """
     Estimates rainfall rate from kdp using alpha power law.
 
@@ -140,34 +139,36 @@ def est_rain_rate_kdp(radar, alpha=None, beta=None, kdp_field=None,
     # select the coefficients as alpha function of frequency band
     if alpha is None or beta is None:
         # assign coefficients according to radar frequency
-        if 'frequency' in radar.instrument_parameters:
+        if "frequency" in radar.instrument_parameters:
             alpha, beta = _get_coeff_rkdp(
-                radar.instrument_parameters['frequency']['data'][0])
+                radar.instrument_parameters["frequency"]["data"][0]
+            )
         else:
-            alpha, beta = _coeff_rkdp_table()['C']
-            warn('Radar frequency unknown. '
-                 + 'Default coefficients for C band will be applied.')
+            alpha, beta = _coeff_rkdp_table()["C"]
+            warn(
+                "Radar frequency unknown. "
+                + "Default coefficients for C band will be applied."
+            )
 
     # parse the field parameters
     if kdp_field is None:
-        kdp_field = get_field_name('specific_differential_phase')
+        kdp_field = get_field_name("specific_differential_phase")
     if rr_field is None:
-        rr_field = get_field_name('radar_estimated_rain_rate')
+        rr_field = get_field_name("radar_estimated_rain_rate")
 
     radar.check_field_exists(kdp_field)
-    kdp = radar.fields[kdp_field]['data']
+    kdp = radar.fields[kdp_field]["data"]
 
-    kdp[kdp < 0] = 0.
-    rr_data = alpha*np.ma.power(kdp, beta)
+    kdp[kdp < 0] = 0.0
+    rr_data = alpha * np.ma.power(kdp, beta)
 
     rain = get_metadata(rr_field)
-    rain['data'] = rr_data
+    rain["data"] = rr_data
 
     return rain
 
 
-def est_rain_rate_a(radar, alpha=None, beta=None, a_field=None,
-                    rr_field=None):
+def est_rain_rate_a(radar, alpha=None, beta=None, a_field=None, rr_field=None):
     """
     Estimates rainfall rate from specific attenuation using alpha power law.
 
@@ -204,35 +205,47 @@ def est_rain_rate_a(radar, alpha=None, beta=None, a_field=None,
     # select the coefficients as alpha function of frequency band
     if alpha is None or beta is None:
         # assign coefficients according to radar frequency
-        if 'frequency' in radar.instrument_parameters:
+        if "frequency" in radar.instrument_parameters:
             alpha, beta = _get_coeff_ra(
-                radar.instrument_parameters['frequency']['data'][0])
+                radar.instrument_parameters["frequency"]["data"][0]
+            )
         else:
-            alpha, beta = _coeff_ra_table()['C']
-            warn('Radar frequency unknown. '
-                 + 'Default coefficients for C band will be applied.')
+            alpha, beta = _coeff_ra_table()["C"]
+            warn(
+                "Radar frequency unknown. "
+                + "Default coefficients for C band will be applied."
+            )
 
     # parse the field parameters
     if a_field is None:
-        a_field = get_field_name('specific_attenuation')
+        a_field = get_field_name("specific_attenuation")
     if rr_field is None:
-        rr_field = get_field_name('radar_estimated_rain_rate')
+        rr_field = get_field_name("radar_estimated_rain_rate")
 
     radar.check_field_exists(a_field)
-    att = radar.fields[a_field]['data']
+    att = radar.fields[a_field]["data"]
 
-    rr_data = alpha*np.ma.power(att, beta)
+    rr_data = alpha * np.ma.power(att, beta)
 
     rain = get_metadata(rr_field)
-    rain['data'] = rr_data
+    rain["data"] = rr_data
 
     return rain
 
 
-def est_rain_rate_zkdp(radar, alphaz=0.0376, betaz=0.6112, alphakdp=None,
-                       betakdp=None, refl_field=None, kdp_field=None,
-                       rr_field=None, main_field=None, thresh=None,
-                       thresh_max=True):
+def est_rain_rate_zkdp(
+    radar,
+    alphaz=0.0376,
+    betaz=0.6112,
+    alphakdp=None,
+    betakdp=None,
+    refl_field=None,
+    kdp_field=None,
+    rr_field=None,
+    main_field=None,
+    thresh=None,
+    thresh_max=True,
+):
     """
     Estimates rainfall rate from a blending of power law r-kdp and r-z
     relations.
@@ -271,18 +284,18 @@ def est_rain_rate_zkdp(radar, alphaz=0.0376, betaz=0.6112, alphakdp=None,
     """
     # parse the field parameters
     if refl_field is None:
-        refl_field = get_field_name('reflectivity')
+        refl_field = get_field_name("reflectivity")
     if kdp_field is None:
-        kdp_field = get_field_name('specific_differential_phase')
+        kdp_field = get_field_name("specific_differential_phase")
     if rr_field is None:
-        rr_field = get_field_name('radar_estimated_rain_rate')
+        rr_field = get_field_name("radar_estimated_rain_rate")
 
     rain_z = est_rain_rate_z(
-        radar, alpha=alphaz, beta=betaz, refl_field=refl_field,
-        rr_field=rr_field)
+        radar, alpha=alphaz, beta=betaz, refl_field=refl_field, rr_field=rr_field
+    )
     rain_kdp = est_rain_rate_kdp(
-        radar, alpha=alphakdp, beta=betakdp, kdp_field=kdp_field,
-        rr_field=rr_field)
+        radar, alpha=alphakdp, beta=betakdp, kdp_field=kdp_field, rr_field=rr_field
+    )
 
     if main_field == refl_field:
         secondary_field = kdp_field
@@ -302,24 +315,34 @@ def est_rain_rate_zkdp(radar, alphaz=0.0376, betaz=0.6112, alphakdp=None,
         secondary_field = kdp_field
         rain_main = rain_z
         rain_secondary = rain_kdp
-        thresh = 40.
+        thresh = 40.0
         thresh_max = True
-        warn('Unknown main field. Using ' + refl_field
-             + ' with threshold ' + str(thresh))
+        warn(
+            "Unknown main field. Using " + refl_field + " with threshold " + str(thresh)
+        )
 
     if thresh_max:
-        is_secondary = rain_main['data'] > thresh
+        is_secondary = rain_main["data"] > thresh
     else:
-        is_secondary = rain_main['data'] < thresh
-    rain_main['data'][is_secondary] = (
-        rain_secondary['data'][is_secondary])
+        is_secondary = rain_main["data"] < thresh
+    rain_main["data"][is_secondary] = rain_secondary["data"][is_secondary]
 
     return rain_main
 
 
-def est_rain_rate_za(radar, alphaz=0.0376, betaz=0.6112, alphaa=None,
-                     betaa=None, refl_field=None, a_field=None, rr_field=None,
-                     main_field=None, thresh=None, thresh_max=False):
+def est_rain_rate_za(
+    radar,
+    alphaz=0.0376,
+    betaz=0.6112,
+    alphaa=None,
+    betaa=None,
+    refl_field=None,
+    a_field=None,
+    rr_field=None,
+    main_field=None,
+    thresh=None,
+    thresh_max=False,
+):
     """
     Estimates rainfall rate from a blending of power law r-alpha and r-z
     relations.
@@ -357,17 +380,18 @@ def est_rain_rate_za(radar, alphaz=0.0376, betaz=0.6112, alphaa=None,
     """
     # parse the field parameters
     if refl_field is None:
-        refl_field = get_field_name('reflectivity')
+        refl_field = get_field_name("reflectivity")
     if a_field is None:
-        a_field = get_field_name('specific_attenuation')
+        a_field = get_field_name("specific_attenuation")
     if rr_field is None:
-        rr_field = get_field_name('radar_estimated_rain_rate')
+        rr_field = get_field_name("radar_estimated_rain_rate")
 
     rain_z = est_rain_rate_z(
-        radar, alpha=alphaz, beta=betaz, refl_field=refl_field,
-        rr_field=rr_field)
+        radar, alpha=alphaz, beta=betaz, refl_field=refl_field, rr_field=rr_field
+    )
     rain_a = est_rain_rate_a(
-        radar, alpha=alphaa, beta=betaa, a_field=a_field, rr_field=rr_field)
+        radar, alpha=alphaa, beta=betaa, a_field=a_field, rr_field=rr_field
+    )
 
     if main_field == refl_field:
         secondary_field = a_field
@@ -389,25 +413,35 @@ def est_rain_rate_za(radar, alphaz=0.0376, betaz=0.6112, alphaa=None,
         rain_secondary = rain_z
         thresh = 0.04
         thresh_max = False
-        warn('Unknown main field. Using ' + a_field + ' with threshold '
-             + str(thresh))
+        warn("Unknown main field. Using " + a_field + " with threshold " + str(thresh))
 
     if thresh_max:
-        is_secondary = rain_main['data'] > thresh
+        is_secondary = rain_main["data"] > thresh
     else:
-        is_secondary = rain_main['data'] < thresh
+        is_secondary = rain_main["data"] < thresh
 
-    rain_main['data'][is_secondary] = (
-        rain_secondary['data'][is_secondary])
+    rain_main["data"][is_secondary] = rain_secondary["data"][is_secondary]
 
     return rain_main
 
 
-def est_rain_rate_hydro(radar, alphazr=0.0376, betazr=0.6112, alphazs=0.1,
-                        betazs=0.5, alphaa=None, betaa=None, mp_factor=0.6,
-                        refl_field=None, a_field=None, hydro_field=None,
-                        rr_field=None, main_field=None, thresh=None,
-                        thresh_max=False):
+def est_rain_rate_hydro(
+    radar,
+    alphazr=0.0376,
+    betazr=0.6112,
+    alphazs=0.1,
+    betazs=0.5,
+    alphaa=None,
+    betaa=None,
+    mp_factor=0.6,
+    refl_field=None,
+    a_field=None,
+    hydro_field=None,
+    rr_field=None,
+    main_field=None,
+    thresh=None,
+    thresh_max=False,
+):
     """
     Estimates rainfall rate using different relations between R and the
     polarimetric variables depending on the hydrometeor type.
@@ -452,19 +486,19 @@ def est_rain_rate_hydro(radar, alphazr=0.0376, betazr=0.6112, alphazs=0.1,
     """
     # parse the field parameters
     if refl_field is None:
-        refl_field = get_field_name('reflectivity')
+        refl_field = get_field_name("reflectivity")
     if a_field is None:
-        a_field = get_field_name('specific_attenuation')
+        a_field = get_field_name("specific_attenuation")
     if hydro_field is None:
-        hydro_field = get_field_name('radar_echo_classification')
+        hydro_field = get_field_name("radar_echo_classification")
     if rr_field is None:
-        rr_field = get_field_name('radar_estimated_rain_rate')
+        rr_field = get_field_name("radar_estimated_rain_rate")
 
     # extract fields and parameters from radar
     if hydro_field in radar.fields:
-        hydroclass = radar.fields[hydro_field]['data']
+        hydroclass = radar.fields[hydro_field]["data"]
     else:
-        raise KeyError('Field not available: ' + hydro_field)
+        raise KeyError("Field not available: " + hydro_field)
 
     # get the location of each hydrometeor class
     is_ds = hydroclass == 1
@@ -479,26 +513,27 @@ def est_rain_rate_hydro(radar, alphazr=0.0376, betazr=0.6112, alphazs=0.1,
 
     # compute z-r (in rain) z-r in snow and z-a relations
     rain_z = est_rain_rate_z(
-        radar, alpha=alphazr, beta=betazr, refl_field=refl_field,
-        rr_field=rr_field)
+        radar, alpha=alphazr, beta=betazr, refl_field=refl_field, rr_field=rr_field
+    )
     snow_z = est_rain_rate_z(
-        radar, alpha=alphazs, beta=betazs, refl_field=refl_field,
-        rr_field=rr_field)
+        radar, alpha=alphazs, beta=betazs, refl_field=refl_field, rr_field=rr_field
+    )
     rain_a = est_rain_rate_a(
-        radar, alpha=alphaa, beta=betaa, a_field=a_field, rr_field=rr_field)
+        radar, alpha=alphaa, beta=betaa, a_field=a_field, rr_field=rr_field
+    )
 
     # initialize rainfall rate field
-    rr_data = np.ma.zeros(hydroclass.shape, dtype='float32')
+    rr_data = np.ma.zeros(hydroclass.shape, dtype="float32")
     rr_data[:] = np.ma.masked
     rr_data.set_fill_value(get_fillvalue())
 
     # apply the relations for each type
     # solid phase
-    rr_data[is_ds] = snow_z['data'][is_ds]
-    rr_data[is_cr] = snow_z['data'][is_cr]
-    rr_data[is_vi] = snow_z['data'][is_vi]
-    rr_data[is_gr] = snow_z['data'][is_gr]
-    rr_data[is_ih] = snow_z['data'][is_ih]
+    rr_data[is_ds] = snow_z["data"][is_ds]
+    rr_data[is_cr] = snow_z["data"][is_cr]
+    rr_data[is_vi] = snow_z["data"][is_vi]
+    rr_data[is_gr] = snow_z["data"][is_gr]
+    rr_data[is_ih] = snow_z["data"][is_ih]
 
     # rain
     if main_field == refl_field:
@@ -521,25 +556,24 @@ def est_rain_rate_hydro(radar, alphazr=0.0376, betazr=0.6112, alphazs=0.1,
         rain_secondary = rain_z
         thresh = 0.04
         thresh_max = False
-        warn('Unknown main field. Using ' + a_field + ' with threshold ' +
-             str(thresh))
+        warn("Unknown main field. Using " + a_field + " with threshold " + str(thresh))
 
     if thresh_max:
-        is_secondary = rain_main['data'] > thresh
+        is_secondary = rain_main["data"] > thresh
     else:
-        is_secondary = rain_main['data'] < thresh
+        is_secondary = rain_main["data"] < thresh
 
-    rain_main['data'][is_secondary] = rain_secondary['data'][is_secondary]
+    rain_main["data"][is_secondary] = rain_secondary["data"][is_secondary]
 
-    rr_data[is_lr] = rain_main['data'][is_lr]
-    rr_data[is_rn] = rain_main['data'][is_rn]
+    rr_data[is_lr] = rain_main["data"][is_lr]
+    rr_data[is_rn] = rain_main["data"][is_rn]
 
     # mixed phase
-    rr_data[is_ws] = mp_factor*rain_z['data'][is_ws]
-    rr_data[is_mh] = mp_factor*rain_z['data'][is_mh]
+    rr_data[is_ws] = mp_factor * rain_z["data"][is_ws]
+    rr_data[is_mh] = mp_factor * rain_z["data"][is_mh]
 
     rain = get_metadata(rr_field)
-    rain['data'] = rr_data
+    rain["data"] = rr_data
 
     return rain
 
@@ -566,13 +600,16 @@ def _get_coeff_rkdp(freq):
         return coeff_rkdp_dict[freq_band]
 
     if freq < 2e9:
-        freq_band_aux = 'S'
+        freq_band_aux = "S"
     elif freq > 12e9:
-        freq_band_aux = 'X'
+        freq_band_aux = "X"
 
-    warn('Radar frequency out of range. '
-         + 'Coefficients only applied to S, C or X band. '
-         + freq_band_aux + ' band coefficients will be used.')
+    warn(
+        "Radar frequency out of range. "
+        + "Coefficients only applied to S, C or X band. "
+        + freq_band_aux
+        + " band coefficients will be used."
+    )
 
     return coeff_rkdp_dict[freq_band_aux]
 
@@ -590,13 +627,13 @@ def _coeff_rkdp_table():
     coeff_rkdp_dict = dict()
 
     # S band: Beard and Chuang coefficients
-    coeff_rkdp_dict.update({'S': (50.70, 0.8500)})
+    coeff_rkdp_dict.update({"S": (50.70, 0.8500)})
 
     # C band: Beard and Chuang coefficients
-    coeff_rkdp_dict.update({'C': (29.70, 0.8500)})
+    coeff_rkdp_dict.update({"C": (29.70, 0.8500)})
 
     # X band: Brandes coefficients
-    coeff_rkdp_dict.update({'X': (15.81, 0.7992)})
+    coeff_rkdp_dict.update({"X": (15.81, 0.7992)})
 
     return coeff_rkdp_dict
 
@@ -623,13 +660,16 @@ def _get_coeff_ra(freq):
         return coeff_ra_dict[freq_band]
 
     if freq < 2e9:
-        freq_band_aux = 'S'
+        freq_band_aux = "S"
     elif freq > 12e9:
-        freq_band_aux = 'X'
+        freq_band_aux = "X"
 
-    warn('Radar frequency out of range. '
-         + 'Coefficients only applied to S, C or X band. '
-         + freq_band_aux + ' band coefficients will be used.')
+    warn(
+        "Radar frequency out of range. "
+        + "Coefficients only applied to S, C or X band. "
+        + freq_band_aux
+        + " band coefficients will be used."
+    )
 
     return coeff_ra_dict[freq_band_aux]
 
@@ -647,12 +687,12 @@ def _coeff_ra_table():
     coeff_ra_dict = dict()
 
     # S band: at 10 deg C according to tables from Ryzhkov et al. 2014
-    coeff_ra_dict.update({'S': (3100., 1.03)})
+    coeff_ra_dict.update({"S": (3100.0, 1.03)})
 
     # C band: at 10 deg C according to tables from Diederich et al. 2015
-    coeff_ra_dict.update({'C': (250., 0.91)})
+    coeff_ra_dict.update({"C": (250.0, 0.91)})
 
     # X band: at 10 deg C according to tables from Diederich et al. 2015
-    coeff_ra_dict.update({'X': (45.5, 0.83)})
+    coeff_ra_dict.update({"X": (45.5, 0.83)})
 
     return coeff_ra_dict

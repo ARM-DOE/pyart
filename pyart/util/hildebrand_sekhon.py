@@ -5,6 +5,7 @@ Estimation of noise in Doppler spectra using the Hildebrand Sekhon method.
 
 import numpy as np
 
+
 def estimate_noise_hs74(spectrum, navg=1, nnoise_min=1):
     """
     Estimate noise parameters of a Doppler spectrum.
@@ -49,26 +50,26 @@ def estimate_noise_hs74(spectrum, navg=1, nnoise_min=1):
     sorted_spectrum = np.sort(spectrum)
     nnoise = len(spectrum)  # default to all points in the spectrum as noise
 
-    rtest = 1+1/navg
-    sum1 = 0.
-    sum2 = 0.
+    rtest = 1 + 1 / navg
+    sum1 = 0.0
+    sum2 = 0.0
     for i, pwr in enumerate(sorted_spectrum):
-        npts = i+1
+        npts = i + 1
         sum1 += pwr
-        sum2 += pwr*pwr
+        sum2 += pwr * pwr
 
         if npts < nnoise_min:
             continue
 
-        if npts*sum2 < sum1*sum1*rtest:
+        if npts * sum2 < sum1 * sum1 * rtest:
             nnoise = npts
         else:
             # partial spectrum no longer has characteristics of white noise.
             sum1 -= pwr
-            sum2 -= pwr*pwr
+            sum2 -= pwr * pwr
             break
 
-    mean = sum1/nnoise
-    var = sum2/nnoise-mean*mean
-    threshold = sorted_spectrum[nnoise-1]
+    mean = sum1 / nnoise
+    var = sum2 / nnoise - mean * mean
+    threshold = sorted_spectrum[nnoise - 1]
     return mean, threshold, var, nnoise

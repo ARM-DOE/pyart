@@ -18,26 +18,26 @@ def test_colormaps_exist():
 
 
 def test_colormaps_registered():
-    cmap = matplotlib.cm.get_cmap('pyart_HomeyerRainbow')
+    cmap = matplotlib.cm.get_cmap("pyart_HomeyerRainbow")
     assert isinstance(cmap, matplotlib.colors.Colormap)
 
-    cmap = matplotlib.cm.get_cmap('pyart_HomeyerRainbow_r')
+    cmap = matplotlib.cm.get_cmap("pyart_HomeyerRainbow_r")
     assert isinstance(cmap, matplotlib.colors.Colormap)
 
-    cmap = matplotlib.cm.get_cmap('pyart_balance')
+    cmap = matplotlib.cm.get_cmap("pyart_balance")
     assert isinstance(cmap, matplotlib.colors.Colormap)
 
-    cmap = matplotlib.cm.get_cmap('pyart_balance_r')
+    cmap = matplotlib.cm.get_cmap("pyart_balance_r")
     assert isinstance(cmap, matplotlib.colors.Colormap)
 
-    cmap = matplotlib.cm.get_cmap('pyart_ChaseSpectral')
+    cmap = matplotlib.cm.get_cmap("pyart_ChaseSpectral")
     assert isinstance(cmap, matplotlib.colors.Colormap)
 
-    cmap = matplotlib.cm.get_cmap('pyart_ChaseSpectral_r')
+    cmap = matplotlib.cm.get_cmap("pyart_ChaseSpectral_r")
     assert isinstance(cmap, matplotlib.colors.Colormap)
 
-    cmap = matplotlib.cm.get_cmap('pyart_SpectralExtended')
+    cmap = matplotlib.cm.get_cmap("pyart_SpectralExtended")
     assert isinstance(cmap, matplotlib.colors.Colormap)
 
-    cmap = matplotlib.cm.get_cmap('pyart_SpectralExtended_r')
+    cmap = matplotlib.cm.get_cmap("pyart_SpectralExtended_r")
     assert isinstance(cmap, matplotlib.colors.Colormap)

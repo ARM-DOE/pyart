@@ -11,6 +11,7 @@ import numpy as np
 
 try:
     import xarray as xr
+
     _XARRAY_AVAILABLE = True
 except ImportError:
     _XARRAY_AVAILABLE = False
@@ -20,7 +21,7 @@ from ..exceptions import MissingOptionalDependency
 from .transforms import antenna_vectors_to_cartesian, cartesian_to_geographic
 
 
-class RadarSpectra(object):
+class RadarSpectra:
     """
     A class for storing antenna coordinate radar spectra data.
     The structure of the Radar class is based on the CF/Radial Data file
@@ -161,51 +162,73 @@ class RadarSpectra(object):
         Number of sweep in the volume.
 
     """
-    def __init__(self, time, _range, fields, metadata, scan_type,
-                 latitude, longitude, altitude,
-                 sweep_number, sweep_mode, fixed_angle, sweep_start_ray_index,
-                 sweep_end_ray_index,
-                 azimuth, elevation, npulses_max, velocity_bins,
-                 altitude_agl=None,
-                 target_scan_rate=None, rays_are_indexed=None,
-                 ray_angle_res=None,
-                 scan_rate=None, antenna_transition=None,
-                 instrument_parameters=None,
-                 radar_calibration=None, georefs_applied=None
-                ):
-        warnings.warn("Radar Spectra object is in early development, "
-                      "errors may arise, use at your own risk! ")
+
+    def __init__(
+        self,
+        time,
+        _range,
+        fields,
+        metadata,
+        scan_type,
+        latitude,
+        longitude,
+        altitude,
+        sweep_number,
+        sweep_mode,
+        fixed_angle,
+        sweep_start_ray_index,
+        sweep_end_ray_index,
+        azimuth,
+        elevation,
+        npulses_max,
+        velocity_bins,
+        altitude_agl=None,
+        target_scan_rate=None,
+        rays_are_indexed=None,
+        ray_angle_res=None,
+        scan_rate=None,
+        antenna_transition=None,
+        instrument_parameters=None,
+        radar_calibration=None,
+        georefs_applied=None,
+    ):
+        warnings.warn(
+            "Radar Spectra object is in early development, "
+            "errors may arise, use at your own risk! "
+        )
         if not _XARRAY_AVAILABLE:
             raise MissingOptionalDependency(
-                "Xarray is required to use RadarSpectra but is "
-                "not installed!")
-        self.field_names = ['spectra']
+                "Xarray is required to use RadarSpectra but is " "not installed!"
+            )
+        self.field_names = ["spectra"]
 
         self.ds = xr.Dataset(
             data_vars={
-                'spectra': (('time', 'range', 'npulses_max'), fields),
-                'velocity_bins': velocity_bins,
-                'scan_type': scan_type,
-                'latitude': latitude,
-                'longitude': longitude,
-                'altitude': altitude,
-                'sweep_number': sweep_number,
-                'sweep_mode': sweep_mode,
-                'fixed_angle': fixed_angle,
-                'sweep_start_ray_index': sweep_start_ray_index,
-                'sweep_end_ray_index': sweep_end_ray_index,
-                'azimuth': azimuth,
-                'elevation': elevation},
-            coords={'time': time,
-                    'range': _range,
-                    'npulses_max': npulses_max},
-            attrs=metadata)
+                "spectra": (("time", "range", "npulses_max"), fields),
+                "velocity_bins": velocity_bins,
+                "scan_type": scan_type,
+                "latitude": latitude,
+                "longitude": longitude,
+                "altitude": altitude,
+                "sweep_number": sweep_number,
+                "sweep_mode": sweep_mode,
+                "fixed_angle": fixed_angle,
+                "sweep_start_ray_index": sweep_start_ray_index,
+                "sweep_end_ray_index": sweep_end_ray_index,
+                "azimuth": azimuth,
+                "elevation": elevation,
+            },
+            coords={"time": time, "range": _range, "npulses_max": npulses_max},
+            attrs=metadata,
+        )
 
-        self.ds['ngates'] = len(_range.values)
-        self.ds['nrays'] = len(time.values)
-        self.ds['nsweeps'] = len(sweep_number.values)
-        self.ds.attrs['projection'] = {'proj': 'pyart_aeqd',
-                                       '_include_lon_0_lat_0': True}
+        self.ds["ngates"] = len(_range.values)
+        self.ds["nrays"] = len(time.values)
+        self.ds["nsweeps"] = len(sweep_number.values)
+        self.ds.attrs["projection"] = {
+            "proj": "pyart_aeqd",
+            "_include_lon_0_lat_0": True,
+        }
 
         # initalize attributes with lazy load dictionaries
         self.init_rays_per_sweep()
@@ -323,14 +346,14 @@ class RadarSpectra(object):
 
     @property
     def projection(self):
-        return self.ds.attrs['projection']
+        return self.ds.attrs["projection"]
 
     def init_rays_per_sweep(self):
-        """ Initialize or reset the rays_per_sweep attribute. """
+        """Initialize or reset the rays_per_sweep attribute."""
         _rays_per_sweep_data_factory(self.ds)
 
     def init_gate_x_y_z(self):
-        """ Initialize or reset the gate_{x, y, z} attributes. """
+        """Initialize or reset the gate_{x, y, z} attributes."""
         _gate_data_factory(self.ds)
 
     def init_gate_longitude_latitude(self):
@@ -340,34 +363,34 @@ class RadarSpectra(object):
         _gate_lon_lat_data_factory(self.ds)
 
     def init_gate_altitude(self):
-        """ Initialize the gate_altitude attribute. """
+        """Initialize the gate_altitude attribute."""
         _gate_altitude_data_factory(self.ds)
 
     def _check_sweep_in_range(self, sweep):
-        """ Check that a sweep number is in range. """
+        """Check that a sweep number is in range."""
         if sweep < 0 or sweep >= self.nsweeps:
-            raise IndexError('Sweep out of range: ', sweep)
+            raise IndexError("Sweep out of range: ", sweep)
 
         # get methods
 
     def get_start(self, sweep):
-        """ Return the starting ray index for a given sweep. """
+        """Return the starting ray index for a given sweep."""
         self._check_sweep_in_range(sweep)
         return self.sweep_start_ray_index.values[sweep]
 
     def get_end(self, sweep):
-        """ Return the ending ray for a given sweep. """
+        """Return the ending ray for a given sweep."""
         self._check_sweep_in_range(sweep)
         return self.sweep_end_ray_index.values[sweep]
 
     def get_start_end(self, sweep):
-        """ Return the starting and ending ray for a given sweep. """
+        """Return the starting and ending ray for a given sweep."""
         return self.get_start(sweep), self.get_end(sweep)
 
     def get_slice(self, sweep):
-        """ Return a slice for selecting rays for a given sweep. """
+        """Return a slice for selecting rays for a given sweep."""
         start, end = self.get_start_end(sweep)
-        return slice(start, end+1)
+        return slice(start, end + 1)
 
     def check_field_exists(self, field_name):
         """
@@ -381,123 +404,129 @@ class RadarSpectra(object):
 
         """
         if field_name not in self.fields.keys():
-            raise KeyError('Field not available: ' + field_name)
+            raise KeyError("Field not available: " + field_name)
 
     # Iterators
     def iter_start(self):
-        """ Return an iterator over the sweep start indices. """
+        """Return an iterator over the sweep start indices."""
         return (s for s in self.sweep_start_ray_index.values)
 
     def iter_end(self):
-        """ Return an iterator over the sweep end indices. """
+        """Return an iterator over the sweep end indices."""
         return (s for s in self.sweep_end_ray_index.values)
 
     def iter_start_end(self):
-        """ Return an iterator over the sweep start and end indices. """
+        """Return an iterator over the sweep start and end indices."""
         return ((s, e) for s, e in zip(self.iter_start(), self.iter_end()))
 
     def iter_slice(self):
-        """ Return an iterator which returns sweep slice objects. """
-        return (slice(s, e+1) for s, e in self.iter_start_end())
+        """Return an iterator which returns sweep slice objects."""
+        return (slice(s, e + 1) for s, e in self.iter_start_end())
 
     def iter_field(self, field_name):
-        """ Return an iterator which returns sweep field data. """
+        """Return an iterator which returns sweep field data."""
         self.check_field_exists(field_name)
         return (self.fields[field_name].values[s] for s in self.iter_slice())
 
     def iter_azimuth(self):
-        """ Return an iterator which returns sweep azimuth data. """
+        """Return an iterator which returns sweep azimuth data."""
         return (self.azimuth.values[s] for s in self.iter_slice())
 
     def iter_elevation(self):
-        """ Return an iterator which returns sweep elevation data. """
+        """Return an iterator which returns sweep elevation data."""
         return (self.elevation.values[s] for s in self.iter_slice())
 
     def to_vpt(self):
-        """ Returns a simple Radar object in VPT scan type with spectra moments
-        such as reflectivity and mean velocity. """
-        from ..testing import make_empty_ppi_radar
+        """Returns a simple Radar object in VPT scan type with spectra moments
+        such as reflectivity and mean velocity."""
         from ..retrieve import spectra_moments
+        from ..testing import make_empty_ppi_radar
         from ..util import to_vpt
 
         rng_len = len(self.range.values)
         time_len = len(self.time.values)
         vpt_radar = make_empty_ppi_radar(
-            ngates=rng_len, rays_per_sweep=time_len, nsweeps=1)
+            ngates=rng_len, rays_per_sweep=time_len, nsweeps=1
+        )
 
         fields = spectra_moments(self)
 
-        rng_dict = get_metadata('range')
-        rng_dict['data'] = self.range.values
+        rng_dict = get_metadata("range")
+        rng_dict["data"] = self.range.values
 
-        time_dict = get_metadata('time')
-        time_dict['data'] = self.time.values
+        time_dict = get_metadata("time")
+        time_dict["data"] = self.time.values
 
         vpt_radar.range = rng_dict
         vpt_radar.time = time_dict
         vpt_radar.fields = fields
-        vpt_radar.metadata['instrument_name'] = 'KAZR'
+        vpt_radar.metadata["instrument_name"] = "KAZR"
         to_vpt(vpt_radar)
         return vpt_radar
 
 
 def _rays_per_sweep_data_factory(radar):
-    """ Return a function which returns the number of rays per sweep. """
-    rays_per_sweep_dict = get_metadata('rays_per_sweep')
+    """Return a function which returns the number of rays per sweep."""
+    rays_per_sweep_dict = get_metadata("rays_per_sweep")
     rays_per_sweep = (
-        radar.sweep_end_ray_index.values -
-        radar.sweep_start_ray_index.values + 1)
-    radar['rays_per_sweep'] = xr.DataArray(np.array(rays_per_sweep),
-                                           attrs=rays_per_sweep_dict)
+        radar.sweep_end_ray_index.values - radar.sweep_start_ray_index.values + 1
+    )
+    radar["rays_per_sweep"] = xr.DataArray(
+        np.array(rays_per_sweep), attrs=rays_per_sweep_dict
+    )
 
 
 def _gate_data_factory(radar):
-    """ Return a function which returns the Cartesian locations of gates. """
+    """Return a function which returns the Cartesian locations of gates."""
     ranges = radar.range.values
     azimuths = radar.azimuth.values
     elevations = radar.elevation.values
     cartesian_coords = antenna_vectors_to_cartesian(
-        ranges, azimuths, elevations, edges=False)
+        ranges, azimuths, elevations, edges=False
+    )
 
     # load x, y, and z data except for the coordinate in question
-    gate_x_dict = get_metadata('gate_x')
-    radar['gate_x'] = xr.DataArray(cartesian_coords[0],
-                                   dims=('time', 'range'),
-                                   attrs=gate_x_dict)
-    gate_y_dict = get_metadata('gate_y')
-    radar['gate_y'] = xr.DataArray(cartesian_coords[1],
-                                   dims=('time', 'range'),
-                                   attrs=gate_y_dict)
-    gate_z_dict = get_metadata('gate_z')
-    radar['gate_z'] = xr.DataArray(cartesian_coords[2],
-                                   dims=('time', 'range'),
-                                   attrs=gate_z_dict)
+    gate_x_dict = get_metadata("gate_x")
+    radar["gate_x"] = xr.DataArray(
+        cartesian_coords[0], dims=("time", "range"), attrs=gate_x_dict
+    )
+    gate_y_dict = get_metadata("gate_y")
+    radar["gate_y"] = xr.DataArray(
+        cartesian_coords[1], dims=("time", "range"), attrs=gate_y_dict
+    )
+    gate_z_dict = get_metadata("gate_z")
+    radar["gate_z"] = xr.DataArray(
+        cartesian_coords[2], dims=("time", "range"), attrs=gate_z_dict
+    )
+
 
 def _gate_lon_lat_data_factory(radar):
-    """ Return a function which returns the geographic locations of gates. """
+    """Return a function which returns the geographic locations of gates."""
     x = radar.gate_x.values
     y = radar.gate_y.values
     projparams = radar.projection.copy()
-    if projparams.pop('_include_lon_0_lat_0', False):
-        projparams['lon_0'] = radar.longitude.values
-        projparams['lat_0'] = radar.latitude.values
+    if projparams.pop("_include_lon_0_lat_0", False):
+        projparams["lon_0"] = radar.longitude.values
+        projparams["lat_0"] = radar.latitude.values
     geographic_coords = cartesian_to_geographic(x, y, projparams)
     # set the other geographic coordinate
-    gate_latitude_dict = get_metadata('gate_latitude')
-    radar['gate_latitude'] = xr.DataArray(geographic_coords[1],
-                                          dims=('time', 'range'),
-                                          attrs=gate_latitude_dict)
-    gate_longitude_dict = get_metadata('gate_longitude')
-    radar['gate_longitude'] = xr.DataArray(geographic_coords[0],
-                                           dims=('time', 'range'),
-                                           attrs=gate_longitude_dict)
+    gate_latitude_dict = get_metadata("gate_latitude")
+    radar["gate_latitude"] = xr.DataArray(
+        geographic_coords[1], dims=("time", "range"), attrs=gate_latitude_dict
+    )
+    gate_longitude_dict = get_metadata("gate_longitude")
+    radar["gate_longitude"] = xr.DataArray(
+        geographic_coords[0], dims=("time", "range"), attrs=gate_longitude_dict
+    )
+
 
 def _gate_altitude_data_factory(radar):
-    """ Return a function which returns the gate altitudes. """
+    """Return a function which returns the gate altitudes."""
     try:
         alt = radar.altitude.values + radar.gate_z.values
     except ValueError:
         alt = np.mean(radar.altitude.values) + radar.gate_z.values
-    gate_altitude_dict = get_metadata('gate_altitude')
-    radar['gate_altitude'] = xr.DataArray(alt, dims=('time', 'range'),
-                                          attrs=gate_altitude_dict)
+    gate_altitude_dict = get_metadata("gate_altitude")
+    radar["gate_altitude"] = xr.DataArray(
+        alt, dims=("time", "range"), attrs=gate_altitude_dict
+    )

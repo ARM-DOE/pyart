@@ -14,16 +14,16 @@ however, may not be used in any advertising or publicity to endorse or
 promote any products or commercial entity unless specific written permission
 is obtained from the University of Washington.  The user also understands
 that the University of Washington is not obligated to provide the user with
-any support, consulting, training, or assistance of any kind with regard to 
+any support, consulting, training, or assistance of any kind with regard to
 the use, operation, and performance of this software nor to provide the user
 with any updates, revisions, new versions, or "bug fixes."
 
-THIS SOFTWARE IS PROVIDED BY THE UNIVERSITY OF WASHINGTON "AS IS" AND ANY 
+THIS SOFTWARE IS PROVIDED BY THE UNIVERSITY OF WASHINGTON "AS IS" AND ANY
 EXPRESS OR IMPLIED WARRANTIES, INCLUDING BUT NOT LIMITED TO, THE IMPLIED
-WARRANTIES OF MECHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE 
+WARRANTIES OF MECHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
 DISCLAIMED.  IN NO EVENT SHALL THE UNIVERSITY OF WASHINGTON BE LIABLE FOR
 ANY SPECIAL, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER,
-INCLUDING BUT NOT LIMITED TO CLAIMS ASSOCIATED WITH THE LOSS OF DATA OR 
+INCLUDING BUT NOT LIMITED TO CLAIMS ASSOCIATED WITH THE LOSS OF DATA OR
 PROFITS, WHICH MAY RESULT FROM AN ACTION IN CONTRACT, NEGLIGENCE, OR OTHER
 TORTIOUS CLAIM THAT ARISES OUT OF OR IN CONNECTION WITH THE ACCESS, USE, OR
 PREFORMANCE OF THIS SOFTWARE.
@@ -32,9 +32,8 @@ PREFORMANCE OF THIS SOFTWARE.
 Appended by Sandy 16 June 2008
 
 To build this software under Linux,
-edit set_build_env to set 
+edit set_build_env to set
 	setenv HOST_OS LINUX
 
 Then from this directory execute build.sh,
 resultant executable is FourDD.
-

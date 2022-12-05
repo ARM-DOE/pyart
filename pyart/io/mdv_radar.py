@@ -8,14 +8,21 @@ from netCDF4 import date2num
 
 from ..config import FileMetadata, get_fillvalue
 from ..core.radar import Radar
-from .common import make_time_unit_str, _test_arguments, prepare_for_read
 from ..lazydict import LazyLoadDict
 from . import mdv_common
+from .common import _test_arguments, make_time_unit_str, prepare_for_read
 
 
-def read_mdv(filename, field_names=None, additional_metadata=None,
-             file_field_names=False, exclude_fields=None,
-             include_fields=None, delay_field_loading=False, **kwargs):
+def read_mdv(
+    filename,
+    field_names=None,
+    additional_metadata=None,
+    file_field_names=False,
+    exclude_fields=None,
+    include_fields=None,
+    delay_field_loading=False,
+    **kwargs
+):
     """
     Read a MDV file.
 
@@ -71,9 +78,14 @@ def read_mdv(filename, field_names=None, additional_metadata=None,
     _test_arguments(kwargs)
 
     # create metadata retrieval object
-    filemetadata = FileMetadata('mdv', field_names, additional_metadata,
-                                file_field_names, exclude_fields,
-                                include_fields)
+    filemetadata = FileMetadata(
+        "mdv",
+        field_names,
+        additional_metadata,
+        file_field_names,
+        exclude_fields,
+        include_fields,
+    )
 
     mdvfile = mdv_common.MdvFile(prepare_for_read(filename))
 
@@ -83,22 +95,22 @@ def read_mdv(filename, field_names=None, additional_metadata=None,
     nele = len(el_deg)
     scan_type = mdvfile.projection
 
-    if scan_type not in ['ppi', 'rhi']:
-        raise NotImplementedError('No support for scan_type %s.' % scan_type)
+    if scan_type not in ["ppi", "rhi"]:
+        raise NotImplementedError("No support for scan_type %s." % scan_type)
 
     # time
-    time = filemetadata('time')
-    units = make_time_unit_str(mdvfile.times['time_begin'])
-    time['units'] = units
-    time_start = date2num(mdvfile.times['time_begin'], units)
-    time_end = date2num(mdvfile.times['time_end'], units)
-    time['data'] = np.linspace(time_start, time_end, naz * nele)
+    time = filemetadata("time")
+    units = make_time_unit_str(mdvfile.times["time_begin"])
+    time["units"] = units
+    time_start = date2num(mdvfile.times["time_begin"], units)
+    time_end = date2num(mdvfile.times["time_end"], units)
+    time["data"] = np.linspace(time_start, time_end, naz * nele)
 
     # range
-    _range = filemetadata('range')
-    _range['data'] = np.array(range_km * 1000.0, dtype='float32')
-    _range['meters_to_center_of_first_gate'] = _range['data'][0]
-    _range['meters_between_gates'] = (_range['data'][1] - _range['data'][0])
+    _range = filemetadata("range")
+    _range["data"] = np.array(range_km * 1000.0, dtype="float32")
+    _range["meters_to_center_of_first_gate"] = _range["data"][0]
+    _range["meters_between_gates"] = _range["data"][1] - _range["data"][0]
 
     # fields
     fields = {}
@@ -109,121 +121,129 @@ def read_mdv(filename, field_names=None, additional_metadata=None,
 
         # create and store the field dictionary
         field_dic = filemetadata(field_name)
-        field_dic['_FillValue'] = get_fillvalue()
+        field_dic["_FillValue"] = get_fillvalue()
         dataextractor = mdv_common._MdvVolumeDataExtractor(
-            mdvfile, mdvfile.fields.index(mdv_field), get_fillvalue())
+            mdvfile, mdvfile.fields.index(mdv_field), get_fillvalue()
+        )
         if delay_field_loading:
             field_dic = LazyLoadDict(field_dic)
-            field_dic.set_lazy('data', dataextractor)
+            field_dic.set_lazy("data", dataextractor)
         else:
-            field_dic['data'] = dataextractor()
+            field_dic["data"] = dataextractor()
         fields[field_name] = field_dic
 
     # metadata
-    metadata = filemetadata('metadata')
+    metadata = filemetadata("metadata")
     for meta_key, mdv_key in mdv_common.MDV_METADATA_MAP.items():
         metadata[meta_key] = mdvfile.master_header[mdv_key]
 
     # latitude
-    latitude = filemetadata('latitude')
-    latitude['data'] = np.array([mdvfile.radar_info['latitude_deg']],
-                                dtype='float64')
+    latitude = filemetadata("latitude")
+    latitude["data"] = np.array([mdvfile.radar_info["latitude_deg"]], dtype="float64")
     # longitude
-    longitude = filemetadata('longitude')
-    longitude['data'] = np.array([mdvfile.radar_info['longitude_deg']],
-                                 dtype='float64')
+    longitude = filemetadata("longitude")
+    longitude["data"] = np.array([mdvfile.radar_info["longitude_deg"]], dtype="float64")
     # altitude
-    altitude = filemetadata('altitude')
-    altitude['data'] = np.array([mdvfile.radar_info['altitude_km'] * 1000.0],
-                                dtype='float64')
+    altitude = filemetadata("altitude")
+    altitude["data"] = np.array(
+        [mdvfile.radar_info["altitude_km"] * 1000.0], dtype="float64"
+    )
 
     # sweep_number, sweep_mode, fixed_angle, sweep_start_ray_index,
     # sweep_end_ray_index
-    sweep_number = filemetadata('sweep_number')
-    sweep_mode = filemetadata('sweep_mode')
-    fixed_angle = filemetadata('fixed_angle')
-    sweep_start_ray_index = filemetadata('sweep_start_ray_index')
-    sweep_end_ray_index = filemetadata('sweep_end_ray_index')
-    len_time = len(time['data'])
+    sweep_number = filemetadata("sweep_number")
+    sweep_mode = filemetadata("sweep_mode")
+    fixed_angle = filemetadata("fixed_angle")
+    sweep_start_ray_index = filemetadata("sweep_start_ray_index")
+    sweep_end_ray_index = filemetadata("sweep_end_ray_index")
+    len_time = len(time["data"])
 
-    if scan_type == 'ppi':
+    if scan_type == "ppi":
         nsweeps = nele
-        sweep_number['data'] = np.arange(nsweeps, dtype='int32')
-        sweep_mode['data'] = np.array(
-            nsweeps * ['azimuth_surveillance'], dtype='S')
-        fixed_angle['data'] = np.array(el_deg, dtype='float32')
-        sweep_start_ray_index['data'] = np.arange(0, len_time, naz,
-                                                  dtype='int32')
-        sweep_end_ray_index['data'] = np.arange(naz - 1, len_time, naz,
-                                                dtype='int32')
+        sweep_number["data"] = np.arange(nsweeps, dtype="int32")
+        sweep_mode["data"] = np.array(nsweeps * ["azimuth_surveillance"], dtype="S")
+        fixed_angle["data"] = np.array(el_deg, dtype="float32")
+        sweep_start_ray_index["data"] = np.arange(0, len_time, naz, dtype="int32")
+        sweep_end_ray_index["data"] = np.arange(naz - 1, len_time, naz, dtype="int32")
 
-    elif scan_type == 'rhi':
+    elif scan_type == "rhi":
         nsweeps = naz
-        sweep_number['data'] = np.arange(nsweeps, dtype='int32')
-        sweep_mode['data'] = np.array(nsweeps * ['rhi'], dtype='S')
-        fixed_angle['data'] = np.array(az_deg, dtype='float32')
-        sweep_start_ray_index['data'] = np.arange(0, len_time, nele,
-                                                  dtype='int32')
-        sweep_end_ray_index['data'] = np.arange(nele - 1, len_time, nele,
-                                                dtype='int32')
+        sweep_number["data"] = np.arange(nsweeps, dtype="int32")
+        sweep_mode["data"] = np.array(nsweeps * ["rhi"], dtype="S")
+        fixed_angle["data"] = np.array(az_deg, dtype="float32")
+        sweep_start_ray_index["data"] = np.arange(0, len_time, nele, dtype="int32")
+        sweep_end_ray_index["data"] = np.arange(nele - 1, len_time, nele, dtype="int32")
 
     # azimuth, elevation
-    azimuth = filemetadata('azimuth')
-    elevation = filemetadata('elevation')
+    azimuth = filemetadata("azimuth")
+    elevation = filemetadata("elevation")
 
-    if scan_type == 'ppi':
-        azimuth['data'] = np.tile(az_deg, nele)
-        elevation['data'] = np.array(el_deg).repeat(naz)
+    if scan_type == "ppi":
+        azimuth["data"] = np.tile(az_deg, nele)
+        elevation["data"] = np.array(el_deg).repeat(naz)
 
-    elif scan_type == 'rhi':
-        azimuth['data'] = np.array(az_deg).repeat(nele)
-        elevation['data'] = np.tile(el_deg, naz)
+    elif scan_type == "rhi":
+        azimuth["data"] = np.array(az_deg).repeat(nele)
+        elevation["data"] = np.tile(el_deg, naz)
 
     # instrument parameters
     # we will set 4 parameters in the instrument_parameters dict
     # prt, prt_mode, unambiguous_range, and nyquist_velocity
 
     # TODO prt mode: Need to fix this.. assumes dual if two prts
-    if mdvfile.radar_info['prt2_s'] == 0.0:
-        prt_mode_str = 'fixed'
+    if mdvfile.radar_info["prt2_s"] == 0.0:
+        prt_mode_str = "fixed"
     else:
-        prt_mode_str = 'dual'
+        prt_mode_str = "dual"
 
-    prt_mode = filemetadata('prt_mode')
-    prt = filemetadata('prt')
-    unambiguous_range = filemetadata('unambiguous_range')
-    nyquist_velocity = filemetadata('nyquist_velocity')
-    beam_width_h = filemetadata('radar_beam_width_h')
-    beam_width_v = filemetadata('radar_beam_width_v')
+    prt_mode = filemetadata("prt_mode")
+    prt = filemetadata("prt")
+    unambiguous_range = filemetadata("unambiguous_range")
+    nyquist_velocity = filemetadata("nyquist_velocity")
+    beam_width_h = filemetadata("radar_beam_width_h")
+    beam_width_v = filemetadata("radar_beam_width_v")
 
-    prt_mode['data'] = np.array([prt_mode_str] * nsweeps, dtype='S')
-    prt['data'] = np.array([mdvfile.radar_info['prt_s']] * nele * naz,
-                           dtype='float32')
+    prt_mode["data"] = np.array([prt_mode_str] * nsweeps, dtype="S")
+    prt["data"] = np.array([mdvfile.radar_info["prt_s"]] * nele * naz, dtype="float32")
 
-    urange_m = mdvfile.radar_info['unambig_range_km'] * 1000.0
-    unambiguous_range['data'] = np.array([urange_m] * naz * nele,
-                                         dtype='float32')
+    urange_m = mdvfile.radar_info["unambig_range_km"] * 1000.0
+    unambiguous_range["data"] = np.array([urange_m] * naz * nele, dtype="float32")
 
-    uvel_mps = mdvfile.radar_info['unambig_vel_mps']
-    nyquist_velocity['data'] = np.array([uvel_mps] * naz * nele,
-                                        dtype='float32')
-    beam_width_h['data'] = np.array(
-        [mdvfile.radar_info['horiz_beam_width_deg']], dtype='float32')
-    beam_width_v['data'] = np.array(
-        [mdvfile.radar_info['vert_beam_width_deg']], dtype='float32')
+    uvel_mps = mdvfile.radar_info["unambig_vel_mps"]
+    nyquist_velocity["data"] = np.array([uvel_mps] * naz * nele, dtype="float32")
+    beam_width_h["data"] = np.array(
+        [mdvfile.radar_info["horiz_beam_width_deg"]], dtype="float32"
+    )
+    beam_width_v["data"] = np.array(
+        [mdvfile.radar_info["vert_beam_width_deg"]], dtype="float32"
+    )
 
-    instrument_parameters = {'prt_mode': prt_mode, 'prt': prt,
-                             'unambiguous_range': unambiguous_range,
-                             'nyquist_velocity': nyquist_velocity,
-                             'radar_beam_width_h': beam_width_h,
-                             'radar_beam_width_v': beam_width_v}
+    instrument_parameters = {
+        "prt_mode": prt_mode,
+        "prt": prt,
+        "unambiguous_range": unambiguous_range,
+        "nyquist_velocity": nyquist_velocity,
+        "radar_beam_width_h": beam_width_h,
+        "radar_beam_width_v": beam_width_v,
+    }
 
     if not delay_field_loading:
         mdvfile.close()
     return Radar(
-        time, _range, fields, metadata, scan_type,
-        latitude, longitude, altitude,
-        sweep_number, sweep_mode, fixed_angle, sweep_start_ray_index,
+        time,
+        _range,
+        fields,
+        metadata,
+        scan_type,
+        latitude,
+        longitude,
+        altitude,
+        sweep_number,
+        sweep_mode,
+        fixed_angle,
+        sweep_start_ray_index,
         sweep_end_ray_index,
-        azimuth, elevation,
-        instrument_parameters=instrument_parameters)
+        azimuth,
+        elevation,
+        instrument_parameters=instrument_parameters,
+    )

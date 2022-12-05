@@ -13,19 +13,18 @@ priority.
 
 """
 
+from .arm_vpt import read_kazr
+from .d3r_gcpex_nc import read_d3r_gcpex_nc
+from .edge_netcdf import read_edge_netcdf
+from .gamic_hdf5 import read_gamic
+from .kazr_spectra import read_kazr_spectra
+from .noxp_iphex_nc import read_noxp_iphex_nc
+from .odim_h5 import read_odim_h5
 from .pattern import read_pattern
 from .radx import read_radx
-from .d3r_gcpex_nc import read_d3r_gcpex_nc
-from .noxp_iphex_nc import read_noxp_iphex_nc
-from .arm_vpt import read_kazr
-from .edge_netcdf import read_edge_netcdf
-from .odim_h5 import read_odim_h5
-from .gamic_hdf5 import read_gamic
-from .sinarame_h5 import read_sinarame_h5
-from .sinarame_h5 import write_sinarame_cfradial
-from .rainbow_wrl import read_rainbow_wrl
-from .kazr_spectra import read_kazr_spectra
 from .radx_grid import read_radx_grid
+from .rainbow_wrl import read_rainbow_wrl
 from .rxm25 import read_rxm25
+from .sinarame_h5 import read_sinarame_h5, write_sinarame_cfradial
 
-__all__ = [s for s in dir() if not s.startswith('_')]
+__all__ = [s for s in dir() if not s.startswith("_")]

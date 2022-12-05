@@ -13,7 +13,7 @@ from ..lazydict import LazyLoadDict
 from .transforms import antenna_vectors_to_cartesian, cartesian_to_geographic
 
 
-class Radar(object):
+class Radar:
     """
     A class for storing antenna coordinate radar data.
 
@@ -156,30 +156,42 @@ class Radar(object):
 
     """
 
-    def __init__(self, time, _range, fields, metadata, scan_type,
-                 latitude, longitude, altitude,
+    def __init__(
+        self,
+        time,
+        _range,
+        fields,
+        metadata,
+        scan_type,
+        latitude,
+        longitude,
+        altitude,
+        sweep_number,
+        sweep_mode,
+        fixed_angle,
+        sweep_start_ray_index,
+        sweep_end_ray_index,
+        azimuth,
+        elevation,
+        altitude_agl=None,
+        target_scan_rate=None,
+        rays_are_indexed=None,
+        ray_angle_res=None,
+        scan_rate=None,
+        antenna_transition=None,
+        instrument_parameters=None,
+        radar_calibration=None,
+        rotation=None,
+        tilt=None,
+        roll=None,
+        drift=None,
+        heading=None,
+        pitch=None,
+        georefs_applied=None,
+    ):
 
-                 sweep_number, sweep_mode, fixed_angle, sweep_start_ray_index,
-                 sweep_end_ray_index,
-
-                 azimuth, elevation,
-
-                 altitude_agl=None,
-                 target_scan_rate=None, rays_are_indexed=None,
-                 ray_angle_res=None,
-
-                 scan_rate=None, antenna_transition=None,
-
-                 instrument_parameters=None,
-                 radar_calibration=None,
-
-                 rotation=None, tilt=None, roll=None, drift=None, heading=None,
-                 pitch=None, georefs_applied=None,
-
-                 ):
-
-        if 'calendar' not in time:
-            time['calendar'] = 'gregorian'
+        if "calendar" not in time:
+            time["calendar"] = "gregorian"
         self.time = time
         self.range = _range
 
@@ -199,7 +211,7 @@ class Radar(object):
         self.sweep_end_ray_index = sweep_end_ray_index
 
         self.target_scan_rate = target_scan_rate  # optional
-        self.rays_are_indexed = rays_are_indexed    # optional
+        self.rays_are_indexed = rays_are_indexed  # optional
         self.ray_angle_res = ray_angle_res  # optional
 
         self.azimuth = azimuth
@@ -217,10 +229,10 @@ class Radar(object):
         self.instrument_parameters = instrument_parameters  # optional
         self.radar_calibration = radar_calibration  # optional
 
-        self.ngates = len(_range['data'])
-        self.nrays = len(time['data'])
-        self.nsweeps = len(sweep_number['data'])
-        self.projection = {'proj': 'pyart_aeqd', '_include_lon_0_lat_0': True}
+        self.ngates = len(_range["data"])
+        self.nrays = len(time["data"])
+        self.nsweeps = len(sweep_number["data"])
+        self.projection = {"proj": "pyart_aeqd", "_include_lon_0_lat_0": True}
 
         # initalize attributes with lazy load dictionaries
         self.init_rays_per_sweep()
@@ -229,20 +241,20 @@ class Radar(object):
         self.init_gate_altitude()
 
     def __getstate__(self):
-        """ Return object's state which can be pickled. """
+        """Return object's state which can be pickled."""
         state = self.__dict__.copy()  # copy the objects state
         # Remove unpicklable entries (those which are lazily loaded
-        del state['rays_per_sweep']
-        del state['gate_x']
-        del state['gate_y']
-        del state['gate_z']
-        del state['gate_longitude']
-        del state['gate_latitude']
-        del state['gate_altitude']
+        del state["rays_per_sweep"]
+        del state["gate_x"]
+        del state["gate_y"]
+        del state["gate_z"]
+        del state["gate_longitude"]
+        del state["gate_latitude"]
+        del state["gate_altitude"]
         return state
 
     def __setstate__(self, state):
-        """ Restore unpicklable entries from pickled object. """
+        """Restore unpicklable entries from pickled object."""
         self.__dict__.update(state)
         self.init_rays_per_sweep()
         self.init_gate_x_y_z()
@@ -251,48 +263,48 @@ class Radar(object):
 
     # Attribute init/reset method
     def init_rays_per_sweep(self):
-        """ Initialize or reset the rays_per_sweep attribute. """
-        lazydic = LazyLoadDict(get_metadata('rays_per_sweep'))
-        lazydic.set_lazy('data', _rays_per_sweep_data_factory(self))
+        """Initialize or reset the rays_per_sweep attribute."""
+        lazydic = LazyLoadDict(get_metadata("rays_per_sweep"))
+        lazydic.set_lazy("data", _rays_per_sweep_data_factory(self))
         self.rays_per_sweep = lazydic
 
     def init_gate_x_y_z(self):
-        """ Initialize or reset the gate_{x, y, z} attributes. """
-        gate_x = LazyLoadDict(get_metadata('gate_x'))
-        gate_x.set_lazy('data', _gate_data_factory(self, 0))
+        """Initialize or reset the gate_{x, y, z} attributes."""
+        gate_x = LazyLoadDict(get_metadata("gate_x"))
+        gate_x.set_lazy("data", _gate_data_factory(self, 0))
         self.gate_x = gate_x
 
-        gate_y = LazyLoadDict(get_metadata('gate_y'))
-        gate_y.set_lazy('data', _gate_data_factory(self, 1))
+        gate_y = LazyLoadDict(get_metadata("gate_y"))
+        gate_y.set_lazy("data", _gate_data_factory(self, 1))
         self.gate_y = gate_y
 
-        gate_z = LazyLoadDict(get_metadata('gate_z'))
-        gate_z.set_lazy('data', _gate_data_factory(self, 2))
+        gate_z = LazyLoadDict(get_metadata("gate_z"))
+        gate_z.set_lazy("data", _gate_data_factory(self, 2))
         self.gate_z = gate_z
 
     def init_gate_longitude_latitude(self):
         """
         Initialize or reset the gate_longitude and gate_latitude attributes.
         """
-        gate_longitude = LazyLoadDict(get_metadata('gate_longitude'))
-        gate_longitude.set_lazy('data', _gate_lon_lat_data_factory(self, 0))
+        gate_longitude = LazyLoadDict(get_metadata("gate_longitude"))
+        gate_longitude.set_lazy("data", _gate_lon_lat_data_factory(self, 0))
         self.gate_longitude = gate_longitude
 
-        gate_latitude = LazyLoadDict(get_metadata('gate_latitude'))
-        gate_latitude.set_lazy('data', _gate_lon_lat_data_factory(self, 1))
+        gate_latitude = LazyLoadDict(get_metadata("gate_latitude"))
+        gate_latitude.set_lazy("data", _gate_lon_lat_data_factory(self, 1))
         self.gate_latitude = gate_latitude
 
     def init_gate_altitude(self):
-        """ Initialize the gate_altitude attribute. """
-        gate_altitude = LazyLoadDict(get_metadata('gate_altitude'))
-        gate_altitude.set_lazy('data', _gate_altitude_data_factory(self))
+        """Initialize the gate_altitude attribute."""
+        gate_altitude = LazyLoadDict(get_metadata("gate_altitude"))
+        gate_altitude.set_lazy("data", _gate_altitude_data_factory(self))
         self.gate_altitude = gate_altitude
 
     # private functions for checking limits, etc.
     def _check_sweep_in_range(self, sweep):
-        """ Check that a sweep number is in range. """
+        """Check that a sweep number is in range."""
         if sweep < 0 or sweep >= self.nsweeps:
-            raise IndexError('Sweep out of range: ', sweep)
+            raise IndexError("Sweep out of range: ", sweep)
         return
 
     # public check functions
@@ -309,60 +321,60 @@ class Radar(object):
 
         """
         if field_name not in self.fields:
-            raise KeyError('Field not available: ' + field_name)
+            raise KeyError("Field not available: " + field_name)
         return
 
     # Iterators
 
     def iter_start(self):
-        """ Return an iterator over the sweep start indices. """
-        return (s for s in self.sweep_start_ray_index['data'])
+        """Return an iterator over the sweep start indices."""
+        return (s for s in self.sweep_start_ray_index["data"])
 
     def iter_end(self):
-        """ Return an iterator over the sweep end indices. """
-        return (s for s in self.sweep_end_ray_index['data'])
+        """Return an iterator over the sweep end indices."""
+        return (s for s in self.sweep_end_ray_index["data"])
 
     def iter_start_end(self):
-        """ Return an iterator over the sweep start and end indices. """
+        """Return an iterator over the sweep start and end indices."""
         return ((s, e) for s, e in zip(self.iter_start(), self.iter_end()))
 
     def iter_slice(self):
-        """ Return an iterator which returns sweep slice objects. """
-        return (slice(s, e+1) for s, e in self.iter_start_end())
+        """Return an iterator which returns sweep slice objects."""
+        return (slice(s, e + 1) for s, e in self.iter_start_end())
 
     def iter_field(self, field_name):
-        """ Return an iterator which returns sweep field data. """
+        """Return an iterator which returns sweep field data."""
         self.check_field_exists(field_name)
-        return (self.fields[field_name]['data'][s] for s in self.iter_slice())
+        return (self.fields[field_name]["data"][s] for s in self.iter_slice())
 
     def iter_azimuth(self):
-        """ Return an iterator which returns sweep azimuth data. """
-        return (self.azimuth['data'][s] for s in self.iter_slice())
+        """Return an iterator which returns sweep azimuth data."""
+        return (self.azimuth["data"][s] for s in self.iter_slice())
 
     def iter_elevation(self):
-        """ Return an iterator which returns sweep elevation data. """
-        return (self.elevation['data'][s] for s in self.iter_slice())
+        """Return an iterator which returns sweep elevation data."""
+        return (self.elevation["data"][s] for s in self.iter_slice())
 
     # get methods
 
     def get_start(self, sweep):
-        """ Return the starting ray index for a given sweep. """
+        """Return the starting ray index for a given sweep."""
         self._check_sweep_in_range(sweep)
-        return self.sweep_start_ray_index['data'][sweep]
+        return self.sweep_start_ray_index["data"][sweep]
 
     def get_end(self, sweep):
-        """ Return the ending ray for a given sweep. """
+        """Return the ending ray for a given sweep."""
         self._check_sweep_in_range(sweep)
-        return self.sweep_end_ray_index['data'][sweep]
+        return self.sweep_end_ray_index["data"][sweep]
 
     def get_start_end(self, sweep):
-        """ Return the starting and ending ray for a given sweep. """
+        """Return the starting and ending ray for a given sweep."""
         return self.get_start(sweep), self.get_end(sweep)
 
     def get_slice(self, sweep):
-        """ Return a slice for selecting rays for a given sweep. """
+        """Return a slice for selecting rays for a given sweep."""
         start, end = self.get_start_end(sweep)
-        return slice(start, end+1)
+        return slice(start, end + 1)
 
     def get_field(self, sweep, field_name, copy=False):
         """
@@ -391,7 +403,7 @@ class Radar(object):
         """
         self.check_field_exists(field_name)
         s = self.get_slice(sweep)
-        data = self.fields[field_name]['data'][s]
+        data = self.fields[field_name]["data"][s]
         if copy:
             return data.copy()
         else:
@@ -417,7 +429,7 @@ class Radar(object):
 
         """
         s = self.get_slice(sweep)
-        azimuths = self.azimuth['data'][s]
+        azimuths = self.azimuth["data"][s]
         if copy:
             return azimuths.copy()
         else:
@@ -443,7 +455,7 @@ class Radar(object):
 
         """
         s = self.get_slice(sweep)
-        elevation = self.elevation['data'][s]
+        elevation = self.elevation["data"][s]
         if copy:
             return elevation.copy()
         else:
@@ -489,16 +501,17 @@ class Radar(object):
 
         if filter_transitions and self.antenna_transition is not None:
             sweep_slice = self.get_slice(sweep)
-            valid = self.antenna_transition['data'][sweep_slice] == 0
+            valid = self.antenna_transition["data"][sweep_slice] == 0
             azimuths = azimuths[valid]
             elevations = elevations[valid]
 
         return antenna_vectors_to_cartesian(
-            self.range['data'], azimuths, elevations, edges=edges)
+            self.range["data"], azimuths, elevations, edges=edges
+        )
 
     def get_gate_area(self, sweep):
         """
-        Return the area of each gate in a sweep. Units of area will be the 
+        Return the area of each gate in a sweep. Units of area will be the
         same as those of the range variable, squared.
 
         Assumptions:
@@ -516,21 +529,22 @@ class Radar(object):
 
         """
         s = self.get_slice(sweep)
-        azimuths = self.azimuth['data'][s]
-        ranges = self.range['data']
+        azimuths = self.azimuth["data"][s]
+        ranges = self.range["data"]
 
-        circular_area = np.pi * ranges ** 2
+        circular_area = np.pi * ranges**2
         annular_area = np.diff(circular_area)
 
-        d_azimuths = np.diff(azimuths) / 360. # Fraction of a full circle
+        d_azimuths = np.diff(azimuths) / 360.0  # Fraction of a full circle
 
-        dca, daz = np.meshgrid(annular_area,d_azimuths)
+        dca, daz = np.meshgrid(annular_area, d_azimuths)
 
         area = np.abs(dca * daz)
         return area
 
-    def get_gate_lat_lon_alt(self, sweep, reset_gate_coords=False,
-                             filter_transitions=False):
+    def get_gate_lat_lon_alt(
+        self, sweep, reset_gate_coords=False, filter_transitions=False
+    ):
         """
         Return the longitude, latitude and altitude gate locations.
         Longitude and latitude are in degrees and altitude in meters.
@@ -566,24 +580,24 @@ class Radar(object):
         s = self.get_slice(sweep)
 
         if reset_gate_coords:
-            gate_latitude = LazyLoadDict(get_metadata('gate_latitude'))
-            gate_latitude.set_lazy('data', _gate_lon_lat_data_factory(self, 1))
+            gate_latitude = LazyLoadDict(get_metadata("gate_latitude"))
+            gate_latitude.set_lazy("data", _gate_lon_lat_data_factory(self, 1))
             self.gate_latitude = gate_latitude
 
-            gate_longitude = LazyLoadDict(get_metadata('gate_longitude'))
-            gate_longitude.set_lazy('data', _gate_lon_lat_data_factory(self, 0))
+            gate_longitude = LazyLoadDict(get_metadata("gate_longitude"))
+            gate_longitude.set_lazy("data", _gate_lon_lat_data_factory(self, 0))
             self.gate_longitude = gate_longitude
 
-            gate_altitude = LazyLoadDict(get_metadata('gate_altitude'))
-            gate_altitude.set_lazy('data', _gate_altitude_data_factory(self))
+            gate_altitude = LazyLoadDict(get_metadata("gate_altitude"))
+            gate_altitude.set_lazy("data", _gate_altitude_data_factory(self))
             self.gate_altitude = gate_altitude
 
-        lat = self.gate_latitude['data'][s]
-        lon = self.gate_longitude['data'][s]
-        alt = self.gate_altitude['data'][s]
+        lat = self.gate_latitude["data"][s]
+        lon = self.gate_longitude["data"][s]
+        alt = self.gate_altitude["data"][s]
 
         if filter_transitions and self.antenna_transition is not None:
-            valid = self.antenna_transition['data'][s] == 0
+            valid = self.antenna_transition["data"][s] == 0
             lat = lat[valid]
             lon = lon[valid]
             alt = alt[valid]
@@ -615,17 +629,17 @@ class Radar(object):
         """
         s = self.get_slice(sweep)
         try:
-            nyq_vel = self.instrument_parameters['nyquist_velocity']['data'][s]
-        except:
-            raise LookupError('Nyquist velocity unavailable')
+            nyq_vel = self.instrument_parameters["nyquist_velocity"]["data"][s]
+        except TypeError:
+            raise LookupError("Nyquist velocity unavailable")
         if check_uniform:
             if np.any(nyq_vel != nyq_vel[0]):
-                raise Exception('Nyquist velocities are not uniform in sweep')
+                raise Exception("Nyquist velocities are not uniform in sweep")
         return float(nyq_vel[0])
 
     # Methods
 
-    def info(self, level='standard', out=sys.stdout):
+    def info(self, level="standard", out=sys.stdout):
         """
         Print information on radar.
 
@@ -639,122 +653,122 @@ class Radar(object):
             to standard out (the screen).
 
         """
-        if level == 'c':
-            level = 'compact'
-        elif level == 's':
-            level = 'standard'
-        elif level == 'f':
-            level = 'full'
+        if level == "c":
+            level = "compact"
+        elif level == "s":
+            level = "standard"
+        elif level == "f":
+            level = "full"
 
-        if level not in ['standard', 'compact', 'full']:
-            raise ValueError('invalid level parameter')
+        if level not in ["standard", "compact", "full"]:
+            raise ValueError("invalid level parameter")
 
-        self._dic_info('altitude', level, out)
-        self._dic_info('altitude_agl', level, out)
-        self._dic_info('antenna_transition', level, out)
-        self._dic_info('azimuth', level, out)
-        self._dic_info('elevation', level, out)
+        self._dic_info("altitude", level, out)
+        self._dic_info("altitude_agl", level, out)
+        self._dic_info("antenna_transition", level, out)
+        self._dic_info("azimuth", level, out)
+        self._dic_info("elevation", level, out)
 
-        print('fields:', file=out)
+        print("fields:", file=out)
         for field_name, field_dic in self.fields.items():
             self._dic_info(field_name, level, out, field_dic, 1)
 
-        self._dic_info('fixed_angle', level, out)
+        self._dic_info("fixed_angle", level, out)
 
         if self.instrument_parameters is None:
-            print('instrument_parameters: None', file=out)
+            print("instrument_parameters: None", file=out)
         else:
-            print('instrument_parameters:', file=out)
+            print("instrument_parameters:", file=out)
             for name, dic in self.instrument_parameters.items():
                 self._dic_info(name, level, out, dic, 1)
 
-        self._dic_info('latitude', level, out)
-        self._dic_info('longitude', level, out)
+        self._dic_info("latitude", level, out)
+        self._dic_info("longitude", level, out)
 
-        print('nsweeps:', self.nsweeps, file=out)
-        print('ngates:', self.ngates, file=out)
-        print('nrays:', self.nrays, file=out)
+        print("nsweeps:", self.nsweeps, file=out)
+        print("ngates:", self.ngates, file=out)
+        print("nrays:", self.nrays, file=out)
 
         if self.radar_calibration is None:
-            print('radar_calibration: None', file=out)
+            print("radar_calibration: None", file=out)
         else:
-            print('radar_calibration:', file=out)
+            print("radar_calibration:", file=out)
             for name, dic in self.radar_calibration.items():
                 self._dic_info(name, level, out, dic, 1)
 
-        self._dic_info('range', level, out)
-        self._dic_info('scan_rate', level, out)
-        print('scan_type:', self.scan_type, file=out)
-        self._dic_info('sweep_end_ray_index', level, out)
-        self._dic_info('sweep_mode', level, out)
-        self._dic_info('sweep_number', level, out)
-        self._dic_info('sweep_start_ray_index', level, out)
-        self._dic_info('target_scan_rate', level, out)
-        self._dic_info('time', level, out)
+        self._dic_info("range", level, out)
+        self._dic_info("scan_rate", level, out)
+        print("scan_type:", self.scan_type, file=out)
+        self._dic_info("sweep_end_ray_index", level, out)
+        self._dic_info("sweep_mode", level, out)
+        self._dic_info("sweep_number", level, out)
+        self._dic_info("sweep_start_ray_index", level, out)
+        self._dic_info("target_scan_rate", level, out)
+        self._dic_info("time", level, out)
 
         # Airborne radar parameters
         if self.rotation is not None:
-            self._dic_info('rotation', level, out)
+            self._dic_info("rotation", level, out)
         if self.tilt is not None:
-            self._dic_info('tilt', level, out)
+            self._dic_info("tilt", level, out)
         if self.roll is not None:
-            self._dic_info('roll', level, out)
+            self._dic_info("roll", level, out)
         if self.drift is not None:
-            self._dic_info('drift', level, out)
+            self._dic_info("drift", level, out)
         if self.heading is not None:
-            self._dic_info('heading', level, out)
+            self._dic_info("heading", level, out)
         if self.pitch is not None:
-            self._dic_info('pitch', level, out)
+            self._dic_info("pitch", level, out)
         if self.georefs_applied is not None:
-            self._dic_info('georefs_applied', level, out)
+            self._dic_info("georefs_applied", level, out)
 
         # always print out all metadata last
-        self._dic_info('metadata', 'full', out)
+        self._dic_info("metadata", "full", out)
 
     def _dic_info(self, attr, level, out, dic=None, ident_level=0):
-        """ Print information on a dictionary attribute. """
+        """Print information on a dictionary attribute."""
         if dic is None:
             dic = getattr(self, attr)
 
-        ilvl0 = '\t' * ident_level
-        ilvl1 = '\t' * (ident_level + 1)
+        ilvl0 = "\t" * ident_level
+        ilvl1 = "\t" * (ident_level + 1)
 
         if dic is None:
-            print(str(attr) + ': None', file=out)
+            print(str(attr) + ": None", file=out)
             return
 
         # make a string summary of the data key if it exists.
-        if 'data' not in dic:
-            d_str = 'Missing'
-        elif not isinstance(dic['data'], np.ndarray):
-            d_str = '<not a ndarray>'
+        if "data" not in dic:
+            d_str = "Missing"
+        elif not isinstance(dic["data"], np.ndarray):
+            d_str = "<not a ndarray>"
         else:
-            data = dic['data']
+            data = dic["data"]
             t = (data.dtype, data.shape)
-            d_str = '<ndarray of type: %s and shape: %s>' % t
+            d_str = "<ndarray of type: %s and shape: %s>" % t
 
         # compact, only data summary
-        if level == 'compact':
-            print(ilvl0 + str(attr) + ':', d_str, file=out)
+        if level == "compact":
+            print(ilvl0 + str(attr) + ":", d_str, file=out)
 
         # standard, all keys, only summary for data
-        elif level == 'standard':
-            print(ilvl0 + str(attr) + ':', file=out)
-            print(ilvl1 + 'data:', d_str, file=out)
+        elif level == "standard":
+            print(ilvl0 + str(attr) + ":", file=out)
+            print(ilvl1 + "data:", d_str, file=out)
             for key, val in dic.items():
-                if key == 'data':
+                if key == "data":
                     continue
-                print(ilvl1 + key + ':', val, file=out)
+                print(ilvl1 + key + ":", val, file=out)
 
         # full, all keys, full data
-        elif level == 'full':
-            print(str(attr) + ':', file=out)
-            if 'data' in dic:
-                print(ilvl1 + 'data:', dic['data'], file=out)
+        elif level == "full":
+            print(str(attr) + ":", file=out)
+            if "data" in dic:
+                print(ilvl1 + "data:", dic["data"], file=out)
             for key, val in dic.items():
-                if key == 'data':
+                if key == "data":
                     continue
-                print(ilvl1 + key + ':', val, file=out)
+                print(ilvl1 + key + ":", val, file=out)
 
         return
 
@@ -776,11 +790,11 @@ class Radar(object):
         """
         # check that the field dictionary to add is valid
         if field_name in self.fields and replace_existing is False:
-            err = 'A field with name: %s already exists' % (field_name)
+            err = "A field with name: %s already exists" % (field_name)
             raise ValueError(err)
-        if 'data' not in dic:
+        if "data" not in dic:
             raise KeyError("dic must contain a 'data' key")
-        if dic['data'].shape != (self.nrays, self.ngates):
+        if dic["data"].shape != (self.nrays, self.ngates):
             t = (self.nrays, self.ngates)
             err = "'data' has invalid shape, should be (%i, %i)" % t
             raise ValueError(err)
@@ -788,8 +802,7 @@ class Radar(object):
         self.fields[field_name] = dic
         return
 
-    def add_filter(self, gatefilter, replace_existing=False,
-                   include_fields=None):
+    def add_filter(self, gatefilter, replace_existing=False, include_fields=None):
         """
         Updates the radar object with an applied gatefilter provided
         by the user that masks values in fields within the radar object.
@@ -818,25 +831,32 @@ class Radar(object):
             # Replace current fields with masked versions with applied gatefilter.
             if replace_existing:
                 for field in include_fields:
-                    self.fields[field]['data'] = np.ma.masked_where(
-                        gatefilter.gate_excluded, self.fields[field]['data'])
+                    self.fields[field]["data"] = np.ma.masked_where(
+                        gatefilter.gate_excluded, self.fields[field]["data"]
+                    )
             # Add new fields with prefix 'filtered_'
             else:
                 for field in include_fields:
                     field_dict = copy.deepcopy(self.fields[field])
-                    field_dict['data'] = np.ma.masked_where(
-                        gatefilter.gate_excluded, field_dict['data'])
-                    self.add_field('filtered_'+field, field_dict, replace_existing=True)
+                    field_dict["data"] = np.ma.masked_where(
+                        gatefilter.gate_excluded, field_dict["data"]
+                    )
+                    self.add_field(
+                        "filtered_" + field, field_dict, replace_existing=True
+                    )
 
         # If fields don't match up throw an error.
         except KeyError:
-            raise KeyError(field + ' not found in the original radar object, '
-                           'please check that names in the include_fields list '
-                           'match those in the radar object.')
+            raise KeyError(
+                field + " not found in the original radar object, "
+                "please check that names in the include_fields list "
+                "match those in the radar object."
+            )
         return
 
-    def add_field_like(self, existing_field_name, field_name, data,
-                       replace_existing=False):
+    def add_field_like(
+        self, existing_field_name, field_name, data, replace_existing=False
+    ):
         """
         Add a field to the object with metadata from a existing field.
 
@@ -870,15 +890,14 @@ class Radar(object):
 
         """
         if existing_field_name not in self.fields:
-            err = 'field %s does not exist in object' % (existing_field_name)
+            err = "field %s does not exist in object" % (existing_field_name)
             raise ValueError(err)
         dic = {}
         for k, v in self.fields[existing_field_name].items():
-            if k != 'data':
+            if k != "data":
                 dic[k] = v
-        dic['data'] = data
-        return self.add_field(field_name, dic,
-                              replace_existing=replace_existing)
+        dic["data"] = data
+        return self.add_field(field_name, dic, replace_existing=replace_existing)
 
     def extract_sweeps(self, sweeps):
         """
@@ -898,31 +917,33 @@ class Radar(object):
         """
 
         # parse and verify parameters
-        sweeps = np.array(sweeps, dtype='int32')
+        sweeps = np.array(sweeps, dtype="int32")
         if np.any(sweeps > (self.nsweeps - 1)):
-            raise ValueError('invalid sweeps indices in sweeps parameter')
+            raise ValueError("invalid sweeps indices in sweeps parameter")
         if np.any(sweeps < 0):
-            raise ValueError('only positive sweeps can be extracted')
+            raise ValueError("only positive sweeps can be extracted")
 
         def mkdic(dic, select):
-            """ Make a dictionary, selecting out select from data key """
+            """Make a dictionary, selecting out select from data key"""
             if dic is None:
                 return None
             d = dic.copy()
-            if 'data' in d and select is not None:
-                d['data'] = d['data'][select].copy()
+            if "data" in d and select is not None:
+                d["data"] = d["data"][select].copy()
             return d
 
         # create array of rays which select the sweeps selected and
         # the number of rays per sweep.
-        ray_count = (self.sweep_end_ray_index['data'] -
-                     self.sweep_start_ray_index['data'] + 1)[sweeps]
-        ssri = self.sweep_start_ray_index['data'][sweeps]
+        ray_count = (
+            self.sweep_end_ray_index["data"] - self.sweep_start_ray_index["data"] + 1
+        )[sweeps]
+        ssri = self.sweep_start_ray_index["data"][sweeps]
         rays = np.concatenate(
-            [range(s, s+e) for s, e in zip(ssri, ray_count)]).astype('int32')
+            [range(s, s + e) for s, e in zip(ssri, ray_count)]
+        ).astype("int32")
 
         # radar location attribute dictionary selector
-        if len(self.altitude['data']) == 1:
+        if len(self.altitude["data"]) == 1:
             loc_select = None
         else:
             loc_select = sweeps
@@ -946,10 +967,11 @@ class Radar(object):
         sweep_mode = mkdic(self.sweep_mode, sweeps)
         fixed_angle = mkdic(self.fixed_angle, sweeps)
         sweep_start_ray_index = mkdic(self.sweep_start_ray_index, None)
-        sweep_start_ray_index['data'] = np.cumsum(
-            np.append([0], ray_count[:-1]), dtype='int32')
+        sweep_start_ray_index["data"] = np.cumsum(
+            np.append([0], ray_count[:-1]), dtype="int32"
+        )
         sweep_end_ray_index = mkdic(self.sweep_end_ray_index, None)
-        sweep_end_ray_index['data'] = np.cumsum(ray_count, dtype='int32') - 1
+        sweep_end_ray_index["data"] = np.cumsum(ray_count, dtype="int32") - 1
         target_scan_rate = mkdic(self.target_scan_rate, sweeps)
 
         azimuth = mkdic(self.azimuth, rays)
@@ -965,15 +987,15 @@ class Radar(object):
         else:
             instrument_parameters = {}
             for key, dic in self.instrument_parameters.items():
-                if dic['data'].ndim != 0:
-                    dim0_size = dic['data'].shape[0]
+                if dic["data"].ndim != 0:
+                    dim0_size = dic["data"].shape[0]
                 else:
                     dim0_size = -1
                 if dim0_size == self.nsweeps:
                     fdic = mkdic(dic, sweeps)
                 elif dim0_size == self.nrays:
                     fdic = mkdic(dic, rays)
-                else:   # keep everything
+                else:  # keep everything
                     fdic = mkdic(dic, None)
                 instrument_parameters[key] = fdic
 
@@ -987,79 +1009,101 @@ class Radar(object):
         else:
             radar_calibration = {}
             for key, dic in self.radar_calibration.items():
-                if key == 'r_calib_index':
+                if key == "r_calib_index":
                     radar_calibration[key] = mkdic(dic, rays)
                 else:
                     radar_calibration[key] = mkdic(dic, None)
 
-        return Radar(time, _range, fields, metadata, scan_type,
-                     latitude, longitude, altitude,
-                     sweep_number, sweep_mode, fixed_angle,
-                     sweep_start_ray_index, sweep_end_ray_index,
-                     azimuth, elevation,
-                     altitude_agl=altitude_agl,
-                     target_scan_rate=target_scan_rate,
-                     scan_rate=scan_rate,
-                     antenna_transition=antenna_transition,
-                     instrument_parameters=instrument_parameters,
-                     radar_calibration=radar_calibration)
+        return Radar(
+            time,
+            _range,
+            fields,
+            metadata,
+            scan_type,
+            latitude,
+            longitude,
+            altitude,
+            sweep_number,
+            sweep_mode,
+            fixed_angle,
+            sweep_start_ray_index,
+            sweep_end_ray_index,
+            azimuth,
+            elevation,
+            altitude_agl=altitude_agl,
+            target_scan_rate=target_scan_rate,
+            scan_rate=scan_rate,
+            antenna_transition=antenna_transition,
+            instrument_parameters=instrument_parameters,
+            radar_calibration=radar_calibration,
+        )
 
 
 def _rays_per_sweep_data_factory(radar):
-    """ Return a function which returns the number of rays per sweep. """
+    """Return a function which returns the number of rays per sweep."""
+
     def _rays_per_sweep_data():
-        """ The function which returns the number of rays per sweep. """
-        return (radar.sweep_end_ray_index['data'] -
-                radar.sweep_start_ray_index['data'] + 1)
+        """The function which returns the number of rays per sweep."""
+        return (
+            radar.sweep_end_ray_index["data"] - radar.sweep_start_ray_index["data"] + 1
+        )
+
     return _rays_per_sweep_data
 
 
 def _gate_data_factory(radar, coordinate):
-    """ Return a function which returns the Cartesian locations of gates. """
+    """Return a function which returns the Cartesian locations of gates."""
+
     def _gate_data():
-        """ The function which returns the Cartesian locations of gates. """
-        ranges = radar.range['data']
-        azimuths = radar.azimuth['data']
-        elevations = radar.elevation['data']
+        """The function which returns the Cartesian locations of gates."""
+        ranges = radar.range["data"]
+        azimuths = radar.azimuth["data"]
+        elevations = radar.elevation["data"]
         cartesian_coords = antenna_vectors_to_cartesian(
-            ranges, azimuths, elevations, edges=False)
+            ranges, azimuths, elevations, edges=False
+        )
         # load x, y, and z data except for the coordinate in question
         if coordinate != 0:
-            radar.gate_x['data'] = cartesian_coords[0]
+            radar.gate_x["data"] = cartesian_coords[0]
         if coordinate != 1:
-            radar.gate_y['data'] = cartesian_coords[1]
+            radar.gate_y["data"] = cartesian_coords[1]
         if coordinate != 2:
-            radar.gate_z['data'] = cartesian_coords[2]
+            radar.gate_z["data"] = cartesian_coords[2]
         return cartesian_coords[coordinate]
+
     return _gate_data
 
 
 def _gate_lon_lat_data_factory(radar, coordinate):
-    """ Return a function which returns the geographic locations of gates. """
+    """Return a function which returns the geographic locations of gates."""
+
     def _gate_lon_lat_data():
-        """ The function which returns the geographic locations gates. """
-        x = radar.gate_x['data']
-        y = radar.gate_y['data']
+        """The function which returns the geographic locations gates."""
+        x = radar.gate_x["data"]
+        y = radar.gate_y["data"]
         projparams = radar.projection.copy()
-        if projparams.pop('_include_lon_0_lat_0', False):
-            projparams['lon_0'] = radar.longitude['data'][0]
-            projparams['lat_0'] = radar.latitude['data'][0]
+        if projparams.pop("_include_lon_0_lat_0", False):
+            projparams["lon_0"] = radar.longitude["data"][0]
+            projparams["lat_0"] = radar.latitude["data"][0]
         geographic_coords = cartesian_to_geographic(x, y, projparams)
         # set the other geographic coordinate
         if coordinate == 0:
-            radar.gate_latitude['data'] = geographic_coords[1]
+            radar.gate_latitude["data"] = geographic_coords[1]
         else:
-            radar.gate_longitude['data'] = geographic_coords[0]
+            radar.gate_longitude["data"] = geographic_coords[0]
         return geographic_coords[coordinate]
+
     return _gate_lon_lat_data
 
 
 def _gate_altitude_data_factory(radar):
-    """ Return a function which returns the gate altitudes. """
+    """Return a function which returns the gate altitudes."""
+
     def _gate_altitude_data():
-        """ The function which returns the gate altitudes. """
+        """The function which returns the gate altitudes."""
         try:
-            return radar.altitude['data'] + radar.gate_z['data']
+            return radar.altitude["data"] + radar.gate_z["data"]
         except ValueError:
-            return np.mean(radar.altitude['data']) + radar.gate_z['data']
+            return np.mean(radar.altitude["data"]) + radar.gate_z["data"]
+
     return _gate_altitude_data

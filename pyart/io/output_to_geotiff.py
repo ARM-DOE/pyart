@@ -6,20 +6,34 @@ Write a Py-ART Grid object to a GeoTIFF file.
 import os
 import shutil
 
-import numpy as np
-import matplotlib.pyplot as plt
 import matplotlib.colors as colors
+import matplotlib.pyplot as plt
+import numpy as np
+
 from ..exceptions import MissingOptionalDependency
+
 try:
     from osgeo import gdal
+
     IMPORT_FLAG = True
 except ImportError:
     IMPORT_FLAG = False
 
 
-def write_grid_geotiff(grid, filename, field, rgb=False, level=None,
-                       cmap='viridis', vmin=0, vmax=75, color_levels=None,
-                       warp=False, sld=False, use_doublequotes=True):
+def write_grid_geotiff(
+    grid,
+    filename,
+    field,
+    rgb=False,
+    level=None,
+    cmap="viridis",
+    vmin=0,
+    vmax=75,
+    color_levels=None,
+    warp=False,
+    sld=False,
+    use_doublequotes=True,
+):
     """
     Write a Py-ART Grid object to a GeoTIFF file.
 
@@ -88,27 +102,26 @@ def write_grid_geotiff(grid, filename, field, rgb=False, level=None,
 
     """
     if not IMPORT_FLAG:
-        raise MissingOptionalDependency(
-            'GDAL not detected, GeoTIFF output failure!')
+        raise MissingOptionalDependency("GDAL not detected, GeoTIFF output failure!")
 
     if field not in grid.fields.keys():
-        raise KeyError('Failed -', field, 'field not found in Grid object.')
+        raise KeyError("Failed -", field, "field not found in Grid object.")
 
     # Determine whether filename template already contains a suffix
     # If not, append an appropriate one.
-    if '.' not in filename:
+    if "." not in filename:
         name = filename
-        end = 'tif'
+        end = "tif"
         ofile = name + "." + end
     else:
         ofile = filename
-    nz, ny, nx = grid.fields[field]['data'].shape
-    dist = max(grid.x['data'])
-    rangestep = grid.x['data'][1] - grid.x['data'][2]
-    lat = grid.origin_latitude['data'][0]
-    lon = grid.origin_longitude['data'][0]
+    nz, ny, nx = grid.fields[field]["data"].shape
+    dist = max(grid.x["data"])
+    rangestep = grid.x["data"][1] - grid.x["data"][2]
+    lat = grid.origin_latitude["data"][0]
+    lon = grid.origin_longitude["data"][0]
     # Check if masked array; if so, fill missing data
-    filled = np.ma.filled(grid.fields[field]['data'], fill_value=-32768)
+    filled = np.ma.filled(grid.fields[field]["data"], fill_value=-32768)
     if level is None:
         data = np.amax(filled, 0)
     else:
@@ -116,31 +129,37 @@ def write_grid_geotiff(grid, filename, field, rgb=False, level=None,
     data = data.astype(float)
     data[data == -32768] = np.nan
 
-    iproj = 'PROJCS["unnamed",GEOGCS["WGS 84",DATUM["unknown",' + \
-        'SPHEROID["WGS84",6378137,298.257223563]],' + \
-        'PRIMEM["Greenwich",0],' + \
-        'UNIT["degree",0.0174532925199433]],' + \
-        'PROJECTION["Azimuthal_Equidistant"],' + \
-        'PARAMETER["latitude_of_center",' + str(lat) + '],' + \
-        'PARAMETER["longitude_of_center",' + str(lon) + '],' + \
-        'PARAMETER["false_easting",0],' + \
-        'PARAMETER["false_northing",0],' + \
-        'UNIT["metre",1,AUTHORITY["EPSG","9001"]]]'
+    iproj = (
+        'PROJCS["unnamed",GEOGCS["WGS 84",DATUM["unknown",'
+        + 'SPHEROID["WGS84",6378137,298.257223563]],'
+        + 'PRIMEM["Greenwich",0],'
+        + 'UNIT["degree",0.0174532925199433]],'
+        + 'PROJECTION["Azimuthal_Equidistant"],'
+        + 'PARAMETER["latitude_of_center",'
+        + str(lat)
+        + "],"
+        + 'PARAMETER["longitude_of_center",'
+        + str(lon)
+        + "],"
+        + 'PARAMETER["false_easting",0],'
+        + 'PARAMETER["false_northing",0],'
+        + 'UNIT["metre",1,AUTHORITY["EPSG","9001"]]]'
+    )
     out_driver = gdal.GetDriverByName("GTiff")
 
     # Output dataset depends on rgb flag
     if not rgb:
         # Single-channel, floating-point output
-        dst_options = ['COMPRESS=LZW', 'ALPHA=YES']
+        dst_options = ["COMPRESS=LZW", "ALPHA=YES"]
         dst_ds = out_driver.Create(
-            ofile, data.shape[1], data.shape[0], 1,
-            gdal.GDT_Float32, dst_options)
+            ofile, data.shape[1], data.shape[0], 1, gdal.GDT_Float32, dst_options
+        )
     else:
         # Assign data RGB levels based on value relative to vmax/vmin
-        rarr, garr, barr = _get_rgb_values(
-            data, vmin, vmax, color_levels, cmap)
-        dst_ds = out_driver.Create(ofile, data.shape[1],
-                                   data.shape[0], 3, gdal.GDT_Byte)
+        rarr, garr, barr = _get_rgb_values(data, vmin, vmax, color_levels, cmap)
+        dst_ds = out_driver.Create(
+            ofile, data.shape[1], data.shape[0], 3, gdal.GDT_Byte
+        )
 
     # Common Projection and GeoTransform
     dst_ds.SetGeoTransform([-dist, -rangestep, 0, dist, 0, rangestep])
@@ -163,14 +182,24 @@ def write_grid_geotiff(grid, filename, field, rgb=False, level=None,
         # Warps TIFF to lat/lon WGS84 projection that is more useful
         # for web mapping applications. Likely changes array shape.
         if use_doublequotes:
-            os.system('gdalwarp -q -t_srs \"+proj=longlat +ellps=WGS84 ' +
-                      '+datum=WGS84 +no_defs\" ' + ofile + ' ' +
-                      ofile + '_tmp.tif')
+            os.system(
+                'gdalwarp -q -t_srs "+proj=longlat +ellps=WGS84 '
+                + '+datum=WGS84 +no_defs" '
+                + ofile
+                + " "
+                + ofile
+                + "_tmp.tif"
+            )
         else:
-            os.system('gdalwarp -q -t_srs \'+proj=longlat +ellps=WGS84 ' +
-                      '+datum=WGS84 +no_defs\' ' + ofile + ' ' +
-                      ofile + '_tmp.tif')
-        shutil.move(ofile+'_tmp.tif', ofile)
+            os.system(
+                "gdalwarp -q -t_srs '+proj=longlat +ellps=WGS84 "
+                + "+datum=WGS84 +no_defs' "
+                + ofile
+                + " "
+                + ofile
+                + "_tmp.tif"
+            )
+        shutil.move(ofile + "_tmp.tif", ofile)
 
 
 def _get_rgb_values(data, vmin, vmax, color_levels, cmap):
@@ -203,7 +232,7 @@ def _get_rgb_values(data, vmin, vmax, color_levels, cmap):
         Green channel indices (range = 0-255).
 
     """
-    frac = (data - vmin) / float(vmax-vmin)
+    frac = (data - vmin) / float(vmax - vmin)
     if color_levels is None:
         color_levels = 255
     index = (frac * color_levels).ravel()
@@ -261,24 +290,28 @@ def _create_sld(cmap, vmin, vmax, filename, color_levels=None):
     cmap = plt.cm.get_cmap(cmap)
     if color_levels is None:
         color_levels = 255
-    name, _ = filename.split('.')
-    ofile = name + '.sld'
-    fileobj = open(ofile, 'w')
+    name, _ = filename.split(".")
+    ofile = name + ".sld"
+    fileobj = open(ofile, "w")
 
-    header = """<?xml version="1.0" encoding="UTF-8"?>
+    header = (
+        """<?xml version="1.0" encoding="UTF-8"?>
 <sld:StyledLayerDescriptor xmlns="http://www.opengis.net/sld" xmlns:sld="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:gml="http://www.opengis.net/gml" version="1.0.0">
     <sld:UserLayer>
         <sld:LayerFeatureConstraints>
             <sld:FeatureTypeConstraint/>
         </sld:LayerFeatureConstraints>
         <sld:UserStyle>
-            <sld:Name>""" + str(name) + """</sld:Name>
+            <sld:Name>"""
+        + str(name)
+        + """</sld:Name>
             <sld:FeatureTypeStyle>
                 <sld:Name>name</sld:Name>
                 <sld:FeatureTypeName>Feature</sld:FeatureTypeName>
                 <sld:Rule>
                     <sld:RasterSymbolizer>
                         <sld:ColorMap>"""
+    )
     fileobj.write(header)
 
     for i in np.arange(color_levels + 1):
@@ -289,9 +322,15 @@ def _create_sld(cmap, vmin, vmax, filename, color_levels=None):
         else:
             op = 1.0
         hexval = colors.rgb2hex(rgbt[0:3])
-        wstr = '\n                            <sld:ColorMapEntry color=\"' + \
-            str(hexval).upper() + '\" opacity=\"' + str(op) + \
-            '\" quantity=\"' + str(val) + '\"/>'
+        wstr = (
+            '\n                            <sld:ColorMapEntry color="'
+            + str(hexval).upper()
+            + '" opacity="'
+            + str(op)
+            + '" quantity="'
+            + str(val)
+            + '"/>'
+        )
         fileobj.write(wstr)
 
     footer = """

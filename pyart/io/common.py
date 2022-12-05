@@ -6,12 +6,12 @@ Input/output routines common to many file formats.
 import bz2
 import gzip
 
-import numpy as np
-import netCDF4
 import fsspec
+import netCDF4
+import numpy as np
 
 
-def prepare_for_read(filename, storage_options={'anon':True}):
+def prepare_for_read(filename, storage_options={"anon": True}):
     """
     Return a file like object read for reading.
 
@@ -35,28 +35,24 @@ def prepare_for_read(filename, storage_options={'anon':True}):
 
     """
     # if a file-like object was provided, return
-    if hasattr(filename, 'read'):   # file-like object
+    if hasattr(filename, "read"):  # file-like object
         return filename
 
     # look for compressed data by examining the first few bytes
-    fh = fsspec.open(filename,
-                     mode='rb',
-                     compression="infer",
-                     **storage_options).open()
+    fh = fsspec.open(filename, mode="rb", compression="infer", **storage_options).open()
     magic = fh.read(3)
     fh.close()
 
     # If the data is still compressed, use gunzip/bz2 to uncompress the data
-    if magic.startswith(b'\x1f\x8b'):
-        return gzip.GzipFile(filename, 'rb')
+    if magic.startswith(b"\x1f\x8b"):
+        return gzip.GzipFile(filename, "rb")
 
-    if magic.startswith(b'BZh'):
-        return bz2.BZ2File(filename, 'rb')
+    if magic.startswith(b"BZh"):
+        return bz2.BZ2File(filename, "rb")
 
-    return fsspec.open(filename,
-                       mode='rb',
-                       compression="infer",
-                       **storage_options).open()
+    return fsspec.open(
+        filename, mode="rb", compression="infer", **storage_options
+    ).open()
 
 
 def stringarray_to_chararray(arr, numchars=None):
@@ -86,19 +82,20 @@ def stringarray_to_chararray(arr, numchars=None):
 
     arr_numchars = carr.shape[-1]
     if numchars <= arr_numchars:
-        raise ValueError('numchars must be >= %i' % (arr_numchars))
-    chararr = np.zeros(arr.shape + (numchars, ), dtype='S1')
+        raise ValueError("numchars must be >= %i" % (arr_numchars))
+    chararr = np.zeros(arr.shape + (numchars,), dtype="S1")
     chararr[..., :arr_numchars] = carr[:]
     return chararr
 
 
 def _test_arguments(dic):
-    """ Issue a warning if receive non-empty argument dict. """
+    """Issue a warning if receive non-empty argument dict."""
     if dic:
         import warnings
-        warnings.warn('Unexpected arguments: %s' % dic.keys())
+
+        warnings.warn("Unexpected arguments: %s" % dic.keys())
 
 
 def make_time_unit_str(dtobj):
-    """ Return a time unit string from a datetime object. """
+    """Return a time unit string from a datetime object."""
     return "seconds since " + dtobj.strftime("%Y-%m-%dT%H:%M:%SZ")

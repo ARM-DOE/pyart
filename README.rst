@@ -37,15 +37,15 @@ The Python ARM Radar Toolkit (Py-ART)
 .. |Tweet| image:: https://img.shields.io/twitter/url/http/shields.io.svg?style=social
     :target: https://twitter.com/Py_ART
 
-The Python ARM Radar Toolkit, Py-ART, is an open source Python module 
+The Python ARM Radar Toolkit, Py-ART, is an open source Python module
 containing a growing collection of weather radar algorithms and utilities
 build on top of the Scientific Python stack and distributed under the
-3-Clause BSD license. Py-ART is used by the 
-`Atmospheric Radiation Measurement (ARM) User Facility 
+3-Clause BSD license. Py-ART is used by the
+`Atmospheric Radiation Measurement (ARM) User Facility
 <http://www.arm.gov>`_ for working with data from a number of precipitation
 and cloud radars, but has been designed so that it can be used by others in
 the radar and atmospheric communities to examine, processes, and analyze
-data from many types of weather radars. 
+data from many types of weather radars.
 
 
 Important Links
@@ -80,8 +80,8 @@ Install
 The easiest method for installing Py-ART is to use the conda packages from
 the latest release and use Python 3, as Python 2 support ended January 1st,
 2020 and many packages including Py-ART no longer support Python 2.
-To do this you must download and install 
-`Anaconda <https://www.anaconda.com/download/#>`_ or 
+To do this you must download and install
+`Anaconda <https://www.anaconda.com/download/#>`_ or
 `Miniconda <https://conda.io/miniconda.html>`_.
 With Anaconda or Miniconda install, it is recommended to create a new conda
 environment when using Py-ART or even other packages. To create a new
@@ -107,7 +107,7 @@ If you are using mamba::
     mamba install -c conda-forge arm_pyart
 
 If you do not wish to use Anaconda or Miniconda as a Python environment or want
-to use the latest, unreleased version of Py-ART see the section below on 
+to use the latest, unreleased version of Py-ART see the section below on
 **Installing from source**.
 
 
@@ -127,16 +127,16 @@ Extensions and related software
 A number of projects are available which extend the functionality of Py-ART.
 These include:
 
-* `ARTView <https://github.com/nguy/artview>`_ : 
+* `ARTView <https://github.com/nguy/artview>`_ :
   Interactive radar viewing browser.
 
 * `pyrad <https://github.com/MeteoSwiss/pyrad>`_ :
-  A real-time data processing framework developed by MeteoSwiss and MeteoFrance. 
+  A real-time data processing framework developed by MeteoSwiss and MeteoFrance.
 
-* `PyTDA <https://github.com/nasa/PyTDA>`_ : 
+* `PyTDA <https://github.com/nasa/PyTDA>`_ :
   Python Turbulence Detection Algorithm.
 
-* `SingleDop <https://github.com/nasa/SingleDop>`_ : 
+* `SingleDop <https://github.com/nasa/SingleDop>`_ :
   Single Doppler Retrieval Toolkit.
 
 * `DualPol <https://github.com/nasa/DualPol>`_ :
@@ -150,7 +150,7 @@ Other related open source software for working with weather radar data:
 
 * `wradlib <https://wradlib.org>`_ :
   An open source library for weather radar data processing.
-  
+
 * `BALTRAD <https://baltrad.eu/>`_ : Community-based weather radar networking.
 
 * `MMM-Py <https://github.com/nasa/MMM-Py>`_ :
@@ -186,7 +186,7 @@ The required dependencies to install Py-ART in addition to Python are:
 * `setuptools <https://setuptools.pypa.io/en/latest/index.html>`_
 
 A working C/C++ compiler is required for some optional modules. An easy method
-to install these dependencies is by using a 
+to install these dependencies is by using a
 `Scientific Python distributions <http://scipy.org/install.html>`_.
 `Anaconda <https://www.anaconda.com/distribution/>`_ will install all of
 the above packages by default on Windows, Linux and Mac computers and is
@@ -202,10 +202,10 @@ Optional Dependences
 The above Python modules are require before installing Py-ART, additional
 functionality is available of the following modules are installed.
 
-* `TRMM Radar Software Library (RSL) 
-  <https://trmm-fc.gsfc.nasa.gov/trmm_gv/software/rsl/>`_.  
-  If installed Py-ART will be able to read in radar data in a number of 
-  additional formats (Lassen, McGill, Universal Format, and RADTEC) and 
+* `TRMM Radar Software Library (RSL)
+  <https://trmm-fc.gsfc.nasa.gov/trmm_gv/software/rsl/>`_.
+  If installed Py-ART will be able to read in radar data in a number of
+  additional formats (Lassen, McGill, Universal Format, and RADTEC) and
   perform automatic dealiasing of Doppler velocities.  RSL should be
   install prior to installing Py-ART. The environmental variable `RSL_PATH`
   should point to the location where RSL was installed if RSL was not
@@ -218,10 +218,10 @@ functionality is available of the following modules are installed.
 
 * A linear programming solver and Python wrapper to use the LP phase
   processing method. `CyLP <https://github.com/mpy/CyLP>`_ is recommended as
-  it gives the fastest results, but 
-  `PyGLPK <https://tfinley.net/software/pyglpk/>`_ and 
-  `CVXOPT <https://cvxopt.org/>`_ are also supported. The underlying LP 
-  solvers `CBC <https://projects.coin-or.org/Cbc>`_ or 
+  it gives the fastest results, but
+  `PyGLPK <https://tfinley.net/software/pyglpk/>`_ and
+  `CVXOPT <https://cvxopt.org/>`_ are also supported. The underlying LP
+  solvers `CBC <https://projects.coin-or.org/Cbc>`_ or
   `GLPK <https://www.gnu.org/software/glpk/>`_ will also be required depending
   on which wrapper is used. When using `CyLP <https://github.com/mpy/CyLP>`_
   a path to coincbc is needed by setting the `COIN_INSTALL_DIR` path, such as
@@ -245,15 +245,15 @@ functionality is available of the following modules are installed.
 
 * `gdal <https://pypi.python.org/pypi/GDAL/>`_.
   Required to output GeoTIFFs from `Grid` objects.
- 
+
 Installing from source
 ======================
 
 Installing Py-ART from source is the only way to get the latest updates and
 enhancement to the software that have not yet made it into a release.
 The latest source code for Py-ART can be obtained from the GitHub repository,
-https://github.com/ARM-DOE/pyart. Either download and unpack the 
-`zip file <https://github.com/ARM-DOE/pyart/archive/master.zip>`_ of 
+https://github.com/ARM-DOE/pyart. Either download and unpack the
+`zip file <https://github.com/ARM-DOE/pyart/archive/master.zip>`_ of
 the source code or use git to checkout the repository::
 
     git clone https://github.com/ARM-DOE/pyart.git
@@ -281,7 +281,7 @@ the package are welcomed from all users.
 Code
 ----
 The latest source code can be obtained with the command::
- 
+
     git clone https://github.com/ARM-DOE/pyart.git
 
 If you are planning on making changes that you would like included in Py-ART,

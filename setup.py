@@ -13,17 +13,16 @@ of weather radars.
 
 DOCLINES = __doc__.split("\n")
 
-import os
-from os import path
-import sys
-import subprocess
 import glob
-from numpy import get_include
+import os
+import subprocess
+import sys
+from os import path
 
-from setuptools import find_namespace_packages, setup, Extension
-from Cython.Build import cythonize
 import Cython
-
+from Cython.Build import cythonize
+from numpy import get_include
+from setuptools import Extension, find_namespace_packages, setup
 
 CLASSIFIERS = """\
     Development Status :: 5 - Production/Stable
@@ -47,7 +46,7 @@ CLASSIFIERS = """\
     Framework :: Matplotlib
 """
 
-NAME = 'arm_pyart'
+NAME = "arm_pyart"
 AUTHOR = "Scott Collis, Jonathan Helmus"
 AUTHOR_EMAIL = "scollis@anl.gov"
 MAINTAINER = "Py-ART Developers"
@@ -56,10 +55,10 @@ DESCRIPTION = DOCLINES[0]
 LONG_DESCRIPTION = "\n".join(DOCLINES[2:])
 URL = "https://github.com/ARM-DOE/pyart"
 DOWNLOAD_URL = "https://github.com/ARM-DOE/pyart"
-LICENSE = 'BSD'
+LICENSE = "BSD"
 CLASSIFIERS = list(filter(None, CLASSIFIERS.split("\n")))
 PLATFORMS = ["Linux", "Mac OS-X", "Unix", "Windows"]
-SCRIPTS = glob.glob('scripts/*')
+SCRIPTS = glob.glob("scripts/*")
 
 
 # This is a bit hackish: we are setting a global variable so that the main
@@ -87,13 +86,15 @@ pip install --upgrade pip
 
 here = path.abspath(path.dirname(__file__))
 
-with open(path.join(here, 'README.rst'), encoding='utf-8') as readme_file:
+with open(path.join(here, "README.rst"), encoding="utf-8") as readme_file:
     readme = readme_file.read()
 
-with open(path.join(here, 'requirements.txt')) as requirements_file:
+with open(path.join(here, "requirements.txt")) as requirements_file:
     # Parse requirements.txt, ignoring any commented-out lines.
     requirements = [
-        line for line in requirements_file.read().splitlines() if not line.startswith('#')
+        line
+        for line in requirements_file.read().splitlines()
+        if not line.startswith("#")
     ]
 
 
@@ -101,93 +102,104 @@ extensions = []
 
 # RSL Path if present
 def guess_rsl_path():
-    return {'darwin': '/usr/local/trmm',
-            'linux2': '/usr/local/trmm',
-            'linux': '/usr/local/trmm',
-            'win32': 'XXX'}[sys.platform]
+    return {
+        "darwin": "/usr/local/trmm",
+        "linux2": "/usr/local/trmm",
+        "linux": "/usr/local/trmm",
+        "win32": "XXX",
+    }[sys.platform]
 
 
 def check_rsl_path(rsl_lib_path, rsl_include_path):
 
-    ext = {'darwin': 'dylib',
-           'linux2': 'so',
-           'linux': 'so',
-           'win32': 'DLL'}[sys.platform]
-    lib_file = os.path.join(rsl_lib_path, 'librsl.' + ext)
+    ext = {"darwin": "dylib", "linux2": "so", "linux": "so", "win32": "DLL"}[
+        sys.platform
+    ]
+    lib_file = os.path.join(rsl_lib_path, "librsl." + ext)
     if os.path.isfile(lib_file) is False:
         return False
 
-    inc_file = os.path.join(rsl_include_path, 'rsl.h')
+    inc_file = os.path.join(rsl_include_path, "rsl.h")
     if os.path.isfile(inc_file) is False:
         return False
     return True
 
-rsl_path = os.environ.get('RSL_PATH')
+
+rsl_path = os.environ.get("RSL_PATH")
 if rsl_path is None:
     rsl_path = guess_rsl_path()
-rsl_lib_path = os.path.join(rsl_path, 'lib')
-rsl_include_path = os.path.join(rsl_path, 'include')
+rsl_lib_path = os.path.join(rsl_path, "lib")
+rsl_include_path = os.path.join(rsl_path, "include")
 
 # build the RSL IO and FourDD dealiaser if RSL is installed
 if check_rsl_path(rsl_lib_path, rsl_include_path):
     fourdd_sources = [
-        'pyart/correct/src/dealias_fourdd.c',
-        'pyart/correct/src/sounding_to_volume.c',
-        'pyart/correct/src/helpers.c'
-  ]
+        "pyart/correct/src/dealias_fourdd.c",
+        "pyart/correct/src/sounding_to_volume.c",
+        "pyart/correct/src/helpers.c",
+    ]
 
     # Cython wrapper around FourDD
     extension_4dd = Extension(
-        'pyart.correct._fourdd_interface',
-        sources=['pyart/correct/_fourdd_interface.pyx',] + fourdd_sources,
-        libraries=['rsl'],
+        "pyart.correct._fourdd_interface",
+        sources=[
+            "pyart/correct/_fourdd_interface.pyx",
+        ]
+        + fourdd_sources,
+        libraries=["rsl"],
         library_dirs=[rsl_lib_path],
-        include_dirs=[
-            rsl_include_path, 'pyart/correct/src'] + [get_include()],
-        runtime_library_dirs=[rsl_lib_path])
+        include_dirs=[rsl_include_path, "pyart/correct/src"] + [get_include()],
+        runtime_library_dirs=[rsl_lib_path],
+    )
 
     # Cython wrapper around RSL io
     extension_rsl = Extension(
-        'pyart.io._rsl_interface',
-        sources=['pyart/io/_rsl_interface.pyx'],
-        libraries=['rsl'],
+        "pyart.io._rsl_interface",
+        sources=["pyart/io/_rsl_interface.pyx"],
+        libraries=["rsl"],
         library_dirs=[rsl_lib_path],
-        include_dirs=[
-            rsl_include_path] + [get_include()],
-        runtime_library_dirs=[rsl_lib_path],)
+        include_dirs=[rsl_include_path] + [get_include()],
+        runtime_library_dirs=[rsl_lib_path],
+    )
 
     extensions.append(extension_rsl)
     extensions.append(extension_4dd)
 
 libraries = []
-if os.name == 'posix':
-    libraries.append('m')
+if os.name == "posix":
+    libraries.append("m")
 
 # Check build pyx extensions
 extension_check_build = Extension(
-    'pyart.__check_build._check_build', sources=['pyart/__check_build/_check_build.pyx'],
-    include_dirs=[get_include()])
+    "pyart.__check_build._check_build",
+    sources=["pyart/__check_build/_check_build.pyx"],
+    include_dirs=[get_include()],
+)
 
 extensions.append(extension_check_build)
 
 # Correct pyx extensions
 extension_edge_finder = Extension(
-    'pyart.correct._fast_edge_finder', sources=['pyart/correct/_fast_edge_finder.pyx'],
-    include_dirs=[get_include()])
+    "pyart.correct._fast_edge_finder",
+    sources=["pyart/correct/_fast_edge_finder.pyx"],
+    include_dirs=[get_include()],
+)
 
 extension_1d = Extension(
-    'pyart.correct._unwrap_1d', sources=['pyart/correct/_unwrap_1d.pyx'],
-    include_dirs=[get_include()])
+    "pyart.correct._unwrap_1d",
+    sources=["pyart/correct/_unwrap_1d.pyx"],
+    include_dirs=[get_include()],
+)
 
-unwrap_sources_2d = [
-    'pyart/correct/_unwrap_2d.pyx', 'pyart/correct/unwrap_2d_ljmu.c']
-extension_2d = Extension('pyart.correct._unwrap_2d', sources=unwrap_sources_2d,
-                         include_dirs=[get_include()])
+unwrap_sources_2d = ["pyart/correct/_unwrap_2d.pyx", "pyart/correct/unwrap_2d_ljmu.c"]
+extension_2d = Extension(
+    "pyart.correct._unwrap_2d", sources=unwrap_sources_2d, include_dirs=[get_include()]
+)
 
-unwrap_sources_3d = [
-    'pyart/correct/_unwrap_3d.pyx', 'pyart/correct/unwrap_3d_ljmu.c']
-extension_3d = Extension('pyart.correct._unwrap_3d', sources=unwrap_sources_3d,
-                         include_dirs=[get_include()])
+unwrap_sources_3d = ["pyart/correct/_unwrap_3d.pyx", "pyart/correct/unwrap_3d_ljmu.c"]
+extension_3d = Extension(
+    "pyart.correct._unwrap_3d", sources=unwrap_sources_3d, include_dirs=[get_include()]
+)
 
 extensions.append(extension_edge_finder)
 extensions.append(extension_1d)
@@ -196,29 +208,39 @@ extensions.append(extension_3d)
 
 # IO pyx extensions
 extension_sigmet = Extension(
-    'pyart.io._sigmetfile', sources=['pyart/io/_sigmetfile.pyx'],
-    include_dirs=[get_include()])
+    "pyart.io._sigmetfile",
+    sources=["pyart/io/_sigmetfile.pyx"],
+    include_dirs=[get_include()],
+)
 
 extension_nexrad = Extension(
-    'pyart.io.nexrad_interpolate', sources=['pyart/io/nexrad_interpolate.pyx'],
-    include_dirs=[get_include()])
+    "pyart.io.nexrad_interpolate",
+    sources=["pyart/io/nexrad_interpolate.pyx"],
+    include_dirs=[get_include()],
+)
 
 extensions.append(extension_sigmet)
 extensions.append(extension_nexrad)
 
 # Map pyx extensions
 extension_ckd = Extension(
-    'pyart.map.ckdtree', sources=['pyart/map/ckdtree.pyx'],
+    "pyart.map.ckdtree",
+    sources=["pyart/map/ckdtree.pyx"],
     include_dirs=[get_include()],
-    libraries=libraries)
+    libraries=libraries,
+)
 
 extension_load_nn = Extension(
-    'pyart.map._load_nn_field_data', sources=['pyart/map/_load_nn_field_data.pyx'],
-    include_dirs=[get_include()])
+    "pyart.map._load_nn_field_data",
+    sources=["pyart/map/_load_nn_field_data.pyx"],
+    include_dirs=[get_include()],
+)
 
 extension_gate_to_grid = Extension(
-    'pyart.map._gate_to_grid_map', sources=['pyart/map/_gate_to_grid_map.pyx'],
-    libraries=libraries)
+    "pyart.map._gate_to_grid_map",
+    sources=["pyart/map/_gate_to_grid_map.pyx"],
+    libraries=libraries,
+)
 
 extensions.append(extension_ckd)
 extensions.append(extension_load_nn)
@@ -227,12 +249,13 @@ extensions.append(extension_gate_to_grid)
 
 # Retrieve pyx extensions
 extension_kdp = Extension(
-    'pyart.retrieve._kdp_proc', sources=['pyart/retrieve/_kdp_proc.pyx'])
+    "pyart.retrieve._kdp_proc", sources=["pyart/retrieve/_kdp_proc.pyx"]
+)
 
 extensions.append(extension_kdp)
 
 setup(
-    name='arm_pyart',
+    name="arm_pyart",
     description=DOCLINES[0],
     long_description="\n".join(DOCLINES[2:]),
     author=AUTHOR,
@@ -240,19 +263,18 @@ setup(
     maintainer=MAINTAINER,
     maintainer_email=MAINTAINER_EMAIL,
     url=URL,
-    packages=find_namespace_packages(include=['pyart'], exclude=['docs']),
+    packages=find_namespace_packages(include=["pyart"], exclude=["docs"]),
     include_package_data=True,
     scripts=SCRIPTS,
     install_requires=requirements,
-    setup_requires='setuptools_scm',
+    setup_requires="setuptools_scm",
     license=LICENSE,
     platforms=PLATFORMS,
     classifiers=CLASSIFIERS,
     zip_safe=False,
     use_scm_version={
-        'version_scheme': 'post-release',
-        'local_scheme': 'dirty-tag',
+        "version_scheme": "post-release",
+        "local_scheme": "dirty-tag",
     },
-    ext_modules=cythonize(
-        extensions, compiler_directives={'language_level' : "3"}),
+    ext_modules=cythonize(extensions, compiler_directives={"language_level": "3"}),
 )

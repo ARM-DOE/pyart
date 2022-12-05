@@ -12,11 +12,12 @@ print(__doc__)
 # License: BSD 3 clause
 
 
-import pyart
-import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.colors as mcolors
 import cartopy.crs as ccrs
+import matplotlib.colors as mcolors
+import matplotlib.pyplot as plt
+import numpy as np
+
+import pyart
 
 ######################################
 # How the algorithm works
@@ -50,16 +51,32 @@ import cartopy.crs as ccrs
 # convective core. We plot some examples of the schemes below:
 
 # plot cosine scheme
-pyart.graph.plot_convstrat_scheme(always_core_thres=30, use_cosine=True, max_diff=5, zero_diff_cos_val=45)
+pyart.graph.plot_convstrat_scheme(
+    always_core_thres=30, use_cosine=True, max_diff=5, zero_diff_cos_val=45
+)
 # when zero_diff_cos_val is greater than always_core_thres, the difference becomes zero at the zero_diff_cos_val
-pyart.graph.plot_convstrat_scheme(always_core_thres=55, use_cosine=True, max_diff=5, zero_diff_cos_val=45)
+pyart.graph.plot_convstrat_scheme(
+    always_core_thres=55, use_cosine=True, max_diff=5, zero_diff_cos_val=45
+)
 # alternatively, we can use a simpler scalar difference instead of a cosine scheme
-pyart.graph.plot_convstrat_scheme(always_core_thres=40, use_cosine=False, max_diff=None,
-                                  zero_diff_cos_val=None, use_addition=True, scalar_diff=2)
+pyart.graph.plot_convstrat_scheme(
+    always_core_thres=40,
+    use_cosine=False,
+    max_diff=None,
+    zero_diff_cos_val=None,
+    use_addition=True,
+    scalar_diff=2,
+)
 # if you are interested in picking up weak features, you can also use the scalar difference as a multiplier instead,
 # so very weak features do not have to be that different from the background to be classified as convective.
-pyart.graph.plot_convstrat_scheme(always_core_thres=40, use_cosine=False, max_diff=None,
-                                  zero_diff_cos_val=None, use_addition=False, scalar_diff=2)
+pyart.graph.plot_convstrat_scheme(
+    always_core_thres=40,
+    use_cosine=False,
+    max_diff=None,
+    zero_diff_cos_val=None,
+    use_addition=False,
+    scalar_diff=2,
+)
 
 ######################################
 # Once the cores are identified, there is an option to remove speckles (``remove_small_objects``) smaller than a  given
@@ -83,7 +100,7 @@ pyart.graph.plot_convstrat_scheme(always_core_thres=40, use_cosine=False, max_di
 
 # Now let's do a classification with our parameters
 # read in file
-filename = pyart.testing.get_test_data('swx_20120520_0641.nc')
+filename = pyart.testing.get_test_data("swx_20120520_0641.nc")
 radar = pyart.io.read(filename)
 
 # extract the lowest sweep
@@ -91,36 +108,52 @@ radar = radar.extract_sweeps([0])
 
 # interpolate to grid
 grid = pyart.map.grid_from_radars(
-    (radar,), grid_shape=(1, 201, 201),
+    (radar,),
+    grid_shape=(1, 201, 201),
     grid_limits=((0, 10000), (-50000.0, 50000.0), (-50000.0, 50000.0)),
-    fields=['reflectivity_horizontal'])
+    fields=["reflectivity_horizontal"],
+)
 
 # get dx dy
-dx = grid.x['data'][1] - grid.x['data'][0]
-dy = grid.y['data'][1] - grid.y['data'][0]
+dx = grid.x["data"][1] - grid.x["data"][0]
+dy = grid.y["data"][1] - grid.y["data"][0]
 
 # convective stratiform classification
-convsf_dict = pyart.retrieve.conv_strat_yuter(grid, dx, dy, refl_field='reflectivity_horizontal', always_core_thres=40,
-                                              bkg_rad_km=20, use_cosine=True, max_diff=5, zero_diff_cos_val=55,
-                                              weak_echo_thres=10, max_conv_rad_km=2)
+convsf_dict = pyart.retrieve.conv_strat_yuter(
+    grid,
+    dx,
+    dy,
+    refl_field="reflectivity_horizontal",
+    always_core_thres=40,
+    bkg_rad_km=20,
+    use_cosine=True,
+    max_diff=5,
+    zero_diff_cos_val=55,
+    weak_echo_thres=10,
+    max_conv_rad_km=2,
+)
 
 # add to grid object
 # mask zero values (no surface echo)
-convsf_masked = np.ma.masked_equal(convsf_dict['convsf']['data'], 0)
+convsf_masked = np.ma.masked_equal(convsf_dict["convsf"]["data"], 0)
 # mask 3 values (weak echo)
 convsf_masked = np.ma.masked_equal(convsf_masked, 3)
 # add dimension to array to add to grid object
-convsf_dict['convsf']['data'] = convsf_masked[None,:,:]
+convsf_dict["convsf"]["data"] = convsf_masked[None, :, :]
 # add field
-grid.add_field('convsf', convsf_dict['convsf'], replace_existing=True)
+grid.add_field("convsf", convsf_dict["convsf"], replace_existing=True)
 
 # create plot using GridMapDisplay
 # plot variables
 display = pyart.graph.GridMapDisplay(grid)
-magma_r_cmap = plt.get_cmap('magma_r')
-ref_cmap = mcolors.LinearSegmentedColormap.from_list('ref_cmap', magma_r_cmap(np.linspace(0, 0.9, magma_r_cmap.N)))
-projection = ccrs.AlbersEqualArea(central_latitude=radar.latitude['data'][0],
-                                   central_longitude=radar.longitude['data'][0])
+magma_r_cmap = plt.get_cmap("magma_r")
+ref_cmap = mcolors.LinearSegmentedColormap.from_list(
+    "ref_cmap", magma_r_cmap(np.linspace(0, 0.9, magma_r_cmap.N))
+)
+projection = ccrs.AlbersEqualArea(
+    central_latitude=radar.latitude["data"][0],
+    central_longitude=radar.longitude["data"][0],
+)
 ######################################
 # Note how the convective stratiform field has less data around the edges compared to the reflectivity
 # field. This is because the function is designed to only compute the background radius where the footprint has 75%
@@ -128,13 +161,27 @@ projection = ccrs.AlbersEqualArea(central_latitude=radar.latitude['data'][0],
 # changed using the variable ``calc_thres``.
 
 # plot
-plt.figure(figsize=(10,4))
-ax1=plt.subplot(1,2,1, projection=projection)
-display.plot_grid('reflectivity_horizontal', vmin=5, vmax=45, cmap=ref_cmap,
-                  transform=ccrs.PlateCarree(), ax=ax1)
-ax2=plt.subplot(1,2,2, projection=projection)
-display.plot_grid('convsf', vmin=0, vmax=2, cmap=plt.get_cmap('viridis', 3), ax=ax2, transform=ccrs.PlateCarree(),
-                  ticks=[1/3, 1, 5/3], ticklabs=['', 'Stratiform', 'Convective'])
+plt.figure(figsize=(10, 4))
+ax1 = plt.subplot(1, 2, 1, projection=projection)
+display.plot_grid(
+    "reflectivity_horizontal",
+    vmin=5,
+    vmax=45,
+    cmap=ref_cmap,
+    transform=ccrs.PlateCarree(),
+    ax=ax1,
+)
+ax2 = plt.subplot(1, 2, 2, projection=projection)
+display.plot_grid(
+    "convsf",
+    vmin=0,
+    vmax=2,
+    cmap=plt.get_cmap("viridis", 3),
+    ax=ax2,
+    transform=ccrs.PlateCarree(),
+    ticks=[1 / 3, 1, 5 / 3],
+    ticklabs=["", "Stratiform", "Convective"],
+)
 plt.show()
 
 
@@ -146,32 +193,41 @@ plt.show()
 # ``estimate_flag=False``), but we recommend keeping it turned on.
 
 # mask weak echo and no surface echo
-convsf_masked = np.ma.masked_equal(convsf_dict['convsf']['data'], 0)
+convsf_masked = np.ma.masked_equal(convsf_dict["convsf"]["data"], 0)
 convsf_masked = np.ma.masked_equal(convsf_masked, 3)
-convsf_dict['convsf']['data'] = convsf_masked
+convsf_dict["convsf"]["data"] = convsf_masked
 # underest.
-convsf_masked = np.ma.masked_equal(convsf_dict['convsf_under']['data'], 0)
+convsf_masked = np.ma.masked_equal(convsf_dict["convsf_under"]["data"], 0)
 convsf_masked = np.ma.masked_equal(convsf_masked, 3)
-convsf_dict['convsf_under']['data'] = convsf_masked
+convsf_dict["convsf_under"]["data"] = convsf_masked
 # overest.
-convsf_masked = np.ma.masked_equal(convsf_dict['convsf_over']['data'], 0)
+convsf_masked = np.ma.masked_equal(convsf_dict["convsf_over"]["data"], 0)
 convsf_masked = np.ma.masked_equal(convsf_masked, 3)
-convsf_dict['convsf_over']['data'] = convsf_masked
+convsf_dict["convsf_over"]["data"] = convsf_masked
 
 # Plot each estimation
-plt.figure(figsize=(10,4))
-ax1=plt.subplot(131)
-ax1.pcolormesh(convsf_dict['convsf']['data'][0,:,:], vmin=0, vmax=2, cmap=plt.get_cmap('viridis', 3))
-ax1.set_title('Best estimate')
-ax1.set_aspect('equal')
-ax2=plt.subplot(132)
-ax2.pcolormesh(convsf_dict['convsf_under']['data'], vmin=0, vmax=2, cmap=plt.get_cmap('viridis', 3))
-ax2.set_title('Underestimate')
-ax2.set_aspect('equal')
-ax3=plt.subplot(133)
-ax3.pcolormesh(convsf_dict['convsf_over']['data'], vmin=0, vmax=2, cmap=plt.get_cmap('viridis', 3))
-ax3.set_title('Overestimate')
-ax3.set_aspect('equal')
+plt.figure(figsize=(10, 4))
+ax1 = plt.subplot(131)
+ax1.pcolormesh(
+    convsf_dict["convsf"]["data"][0, :, :],
+    vmin=0,
+    vmax=2,
+    cmap=plt.get_cmap("viridis", 3),
+)
+ax1.set_title("Best estimate")
+ax1.set_aspect("equal")
+ax2 = plt.subplot(132)
+ax2.pcolormesh(
+    convsf_dict["convsf_under"]["data"], vmin=0, vmax=2, cmap=plt.get_cmap("viridis", 3)
+)
+ax2.set_title("Underestimate")
+ax2.set_aspect("equal")
+ax3 = plt.subplot(133)
+ax3.pcolormesh(
+    convsf_dict["convsf_over"]["data"], vmin=0, vmax=2, cmap=plt.get_cmap("viridis", 3)
+)
+ax3.set_title("Overestimate")
+ax3.set_aspect("equal")
 plt.show()
 
 ######################################
@@ -180,7 +236,7 @@ plt.show()
 # Let's get a NEXRAD file from Hurricane Ian
 
 # Read in file
-nexrad_file = 's3://noaa-nexrad-level2/2022/09/28/KTBW/KTBW20220928_190142_V06'
+nexrad_file = "s3://noaa-nexrad-level2/2022/09/28/KTBW/KTBW20220928_190142_V06"
 radar = pyart.io.read_nexrad_archive(nexrad_file)
 
 # extract the lowest sweep
@@ -188,45 +244,77 @@ radar = radar.extract_sweeps([0])
 
 # interpolate to grid
 grid = pyart.map.grid_from_radars(
-    (radar,), grid_shape=(1, 201, 201),
+    (radar,),
+    grid_shape=(1, 201, 201),
     grid_limits=((0, 10000), (-200000.0, 200000.0), (-200000.0, 200000.0)),
-    fields=['reflectivity'])
+    fields=["reflectivity"],
+)
 
 # get dx dy
-dx = grid.x['data'][1] - grid.x['data'][0]
-dy = grid.y['data'][1] - grid.y['data'][0]
+dx = grid.x["data"][1] - grid.x["data"][0]
+dy = grid.y["data"][1] - grid.y["data"][0]
 
 # convective stratiform classification
-convsf_dict = pyart.retrieve.conv_strat_yuter(grid, dx, dy, refl_field='reflectivity', always_core_thres=40,
-                                              bkg_rad_km=20, use_cosine=True, max_diff=3, zero_diff_cos_val=55,
-                                              weak_echo_thres=5, max_conv_rad_km=2, estimate_flag=False)
+convsf_dict = pyart.retrieve.conv_strat_yuter(
+    grid,
+    dx,
+    dy,
+    refl_field="reflectivity",
+    always_core_thres=40,
+    bkg_rad_km=20,
+    use_cosine=True,
+    max_diff=3,
+    zero_diff_cos_val=55,
+    weak_echo_thres=5,
+    max_conv_rad_km=2,
+    estimate_flag=False,
+)
 
 # add to grid object
 # mask zero values (no surface echo)
-convsf_masked = np.ma.masked_equal(convsf_dict['convsf']['data'], 0)
+convsf_masked = np.ma.masked_equal(convsf_dict["convsf"]["data"], 0)
 # mask 3 values (weak echo)
 convsf_masked = np.ma.masked_equal(convsf_masked, 3)
 # add dimension to array to add to grid object
-convsf_dict['convsf']['data'] = convsf_masked[None,:,:]
+convsf_dict["convsf"]["data"] = convsf_masked[None, :, :]
 # add field
-grid.add_field('convsf', convsf_dict['convsf'], replace_existing=True)
+grid.add_field("convsf", convsf_dict["convsf"], replace_existing=True)
 
 # create plot using GridMapDisplay
 # plot variables
 display = pyart.graph.GridMapDisplay(grid)
-magma_r_cmap = plt.get_cmap('magma_r')
-ref_cmap = mcolors.LinearSegmentedColormap.from_list('ref_cmap', magma_r_cmap(np.linspace(0, 0.9, magma_r_cmap.N)))
-projection = ccrs.AlbersEqualArea(central_latitude=radar.latitude['data'][0],
-                                   central_longitude=radar.longitude['data'][0])
+magma_r_cmap = plt.get_cmap("magma_r")
+ref_cmap = mcolors.LinearSegmentedColormap.from_list(
+    "ref_cmap", magma_r_cmap(np.linspace(0, 0.9, magma_r_cmap.N))
+)
+projection = ccrs.AlbersEqualArea(
+    central_latitude=radar.latitude["data"][0],
+    central_longitude=radar.longitude["data"][0],
+)
 # plot
-plt.figure(figsize=(10,4))
-ax1=plt.subplot(1,2,1, projection=projection)
-display.plot_grid('reflectivity', vmin=5, vmax=45, cmap=ref_cmap,
-                  transform=ccrs.PlateCarree(), ax=ax1, axislabels_flag=False)
-ax2=plt.subplot(1,2,2, projection=projection)
-display.plot_grid('convsf', vmin=0, vmax=2, cmap=plt.get_cmap('viridis', 3),
-                  axislabels_flag=False, transform=ccrs.PlateCarree(), ticks=[1/3, 1, 5/3],
-                  ticklabs=['', 'Stratiform', 'Convective'], ax=ax2)
+plt.figure(figsize=(10, 4))
+ax1 = plt.subplot(1, 2, 1, projection=projection)
+display.plot_grid(
+    "reflectivity",
+    vmin=5,
+    vmax=45,
+    cmap=ref_cmap,
+    transform=ccrs.PlateCarree(),
+    ax=ax1,
+    axislabels_flag=False,
+)
+ax2 = plt.subplot(1, 2, 2, projection=projection)
+display.plot_grid(
+    "convsf",
+    vmin=0,
+    vmax=2,
+    cmap=plt.get_cmap("viridis", 3),
+    axislabels_flag=False,
+    transform=ccrs.PlateCarree(),
+    ticks=[1 / 3, 1, 5 / 3],
+    ticklabs=["", "Stratiform", "Convective"],
+    ax=ax2,
+)
 plt.show()
 
 ######################################
@@ -242,7 +330,7 @@ plt.show()
 # reflecitivity.
 
 # Read in file
-nexrad_file = 's3://noaa-nexrad-level2/2021/02/07/KOKX/KOKX20210207_161413_V06'
+nexrad_file = "s3://noaa-nexrad-level2/2021/02/07/KOKX/KOKX20210207_161413_V06"
 radar = pyart.io.read_nexrad_archive(nexrad_file)
 
 # extract the lowest sweep
@@ -250,66 +338,102 @@ radar = radar.extract_sweeps([0])
 
 # interpolate to grid
 grid = pyart.map.grid_from_radars(
-    (radar,), grid_shape=(1, 201, 201),
+    (radar,),
+    grid_shape=(1, 201, 201),
     grid_limits=((0, 10000), (-200000.0, 200000.0), (-200000.0, 200000.0)),
-    fields=['reflectivity', 'cross_correlation_ratio'])
+    fields=["reflectivity", "cross_correlation_ratio"],
+)
 
 # image mute grid object
-grid = pyart.util.image_mute_radar(grid, 'reflectivity', 'cross_correlation_ratio', 0.97, 20)
+grid = pyart.util.image_mute_radar(
+    grid, "reflectivity", "cross_correlation_ratio", 0.97, 20
+)
 
 # convect non-muted reflectivity to snow rate
-nonmuted_ref = grid.fields['nonmuted_reflectivity']['data'][0,:,:]
+nonmuted_ref = grid.fields["nonmuted_reflectivity"]["data"][0, :, :]
 nonmuted_ref = np.ma.masked_invalid(nonmuted_ref)
 
 nonmuted_ref_linear = 10 ** (nonmuted_ref / 10)  # mm6/m3
-snow_rate = (nonmuted_ref_linear/57.3)**(1/1.67) #
+snow_rate = (nonmuted_ref_linear / 57.3) ** (1 / 1.67)  #
 
 # add to grid
 snow_rate_dict = {
-        'data': snow_rate[None,:,:],
-        'standard_name': 'snow_rate',
-        'long_name': 'Snow rate converted from linear reflectivity',
-        'units': 'mm/hr',
-        'valid_min': 0,
-        'valid_max': 40500}
-grid.add_field('snow_rate', snow_rate_dict, replace_existing=True)
+    "data": snow_rate[None, :, :],
+    "standard_name": "snow_rate",
+    "long_name": "Snow rate converted from linear reflectivity",
+    "units": "mm/hr",
+    "valid_min": 0,
+    "valid_max": 40500,
+}
+grid.add_field("snow_rate", snow_rate_dict, replace_existing=True)
 
 # get dx dy
-dx = grid.x['data'][1] - grid.x['data'][0]
-dy = grid.y['data'][1] - grid.y['data'][0]
+dx = grid.x["data"][1] - grid.x["data"][0]
+dy = grid.y["data"][1] - grid.y["data"][0]
 
 # convective stratiform classification
-convsf_dict = pyart.retrieve.conv_strat_yuter(grid, dx, dy, refl_field='snow_rate', dB_averaging=False,
-                                            always_core_thres=4,bkg_rad_km=40, use_cosine=True, max_diff=1.5,
-                                            zero_diff_cos_val=5,weak_echo_thres=0, min_dBZ_used=0,
-                                            max_conv_rad_km=1, estimate_flag=False)
+convsf_dict = pyart.retrieve.conv_strat_yuter(
+    grid,
+    dx,
+    dy,
+    refl_field="snow_rate",
+    dB_averaging=False,
+    always_core_thres=4,
+    bkg_rad_km=40,
+    use_cosine=True,
+    max_diff=1.5,
+    zero_diff_cos_val=5,
+    weak_echo_thres=0,
+    min_dBZ_used=0,
+    max_conv_rad_km=1,
+    estimate_flag=False,
+)
 
 # add to grid object
 # mask zero values (no surface echo)
-convsf_masked = np.ma.masked_equal(convsf_dict['convsf']['data'], 0)
+convsf_masked = np.ma.masked_equal(convsf_dict["convsf"]["data"], 0)
 # mask 3 values (weak echo)
 convsf_masked = np.ma.masked_equal(convsf_masked, 3)
 # add dimension to array to add to grid object
-convsf_dict['convsf']['data'] = convsf_masked[None,:,:]
+convsf_dict["convsf"]["data"] = convsf_masked[None, :, :]
 # add field
-grid.add_field('convsf', convsf_dict['convsf'], replace_existing=True)
+grid.add_field("convsf", convsf_dict["convsf"], replace_existing=True)
 
 # create plot using GridMapDisplay
 # plot variables
 display = pyart.graph.GridMapDisplay(grid)
-magma_r_cmap = plt.get_cmap('magma_r')
-ref_cmap = mcolors.LinearSegmentedColormap.from_list('ref_cmap', magma_r_cmap(np.linspace(0, 0.9, magma_r_cmap.N)))
-projection = ccrs.AlbersEqualArea(central_latitude=radar.latitude['data'][0],
-                                   central_longitude=radar.longitude['data'][0])
+magma_r_cmap = plt.get_cmap("magma_r")
+ref_cmap = mcolors.LinearSegmentedColormap.from_list(
+    "ref_cmap", magma_r_cmap(np.linspace(0, 0.9, magma_r_cmap.N))
+)
+projection = ccrs.AlbersEqualArea(
+    central_latitude=radar.latitude["data"][0],
+    central_longitude=radar.longitude["data"][0],
+)
 # plot
-plt.figure(figsize=(10,4))
-ax1=plt.subplot(1,2,1, projection=projection)
-display.plot_grid('snow_rate', vmin=0, vmax=10, cmap=plt.get_cmap('viridis'),
-                  transform=ccrs.PlateCarree(), ax=ax1, axislabels_flag=False)
-ax2=plt.subplot(1,2,2, projection=projection)
-display.plot_grid('convsf', vmin=0, vmax=2, cmap=plt.get_cmap('viridis', 3),
-                  axislabels_flag=False, transform=ccrs.PlateCarree(), ticks=[1/3, 1, 5/3],
-                  ticklabs=['', 'Stratiform', 'Convective'], ax=ax2)
+plt.figure(figsize=(10, 4))
+ax1 = plt.subplot(1, 2, 1, projection=projection)
+display.plot_grid(
+    "snow_rate",
+    vmin=0,
+    vmax=10,
+    cmap=plt.get_cmap("viridis"),
+    transform=ccrs.PlateCarree(),
+    ax=ax1,
+    axislabels_flag=False,
+)
+ax2 = plt.subplot(1, 2, 2, projection=projection)
+display.plot_grid(
+    "convsf",
+    vmin=0,
+    vmax=2,
+    cmap=plt.get_cmap("viridis", 3),
+    axislabels_flag=False,
+    transform=ccrs.PlateCarree(),
+    ticks=[1 / 3, 1, 5 / 3],
+    ticklabs=["", "Stratiform", "Convective"],
+    ax=ax2,
+)
 plt.show()
 
 ######################################

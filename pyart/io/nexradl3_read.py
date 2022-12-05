@@ -7,13 +7,20 @@ import numpy as np
 
 from ..config import FileMetadata, get_fillvalue
 from ..core.radar import Radar
-from .common import make_time_unit_str, _test_arguments, prepare_for_read
+from .common import _test_arguments, make_time_unit_str, prepare_for_read
 from .nexrad_level3 import NEXRADLevel3File
 
 
-def read_nexrad_level3(filename, field_names=None, additional_metadata=None,
-                       file_field_names=False, exclude_fields=None,
-                       include_fields=None, storage_options={'anon':True}, **kwargs):
+def read_nexrad_level3(
+    filename,
+    field_names=None,
+    additional_metadata=None,
+    file_field_names=False,
+    exclude_fields=None,
+    include_fields=None,
+    storage_options={"anon": True},
+    **kwargs
+):
     """
     Read a NEXRAD Level 3 product.
 
@@ -70,26 +77,33 @@ def read_nexrad_level3(filename, field_names=None, additional_metadata=None,
     _test_arguments(kwargs)
 
     # create metadata retrieval object
-    filemetadata = FileMetadata('nexrad_level3', field_names,
-                                additional_metadata, file_field_names,
-                                exclude_fields, include_fields)
+    filemetadata = FileMetadata(
+        "nexrad_level3",
+        field_names,
+        additional_metadata,
+        file_field_names,
+        exclude_fields,
+        include_fields,
+    )
 
     # open the file
-    nfile = NEXRADLevel3File(prepare_for_read(filename, storage_options=storage_options))
-    nradials = nfile.packet_header['nradials']
-    msg_code = nfile.msg_header['code']
+    nfile = NEXRADLevel3File(
+        prepare_for_read(filename, storage_options=storage_options)
+    )
+    nradials = nfile.packet_header["nradials"]
+    msg_code = nfile.msg_header["code"]
 
     # time
-    time = filemetadata('time')
+    time = filemetadata("time")
     time_start = nfile.get_volume_start_datetime()
-    time['units'] = make_time_unit_str(time_start)
-    time['data'] = np.zeros((nradials, ), dtype='float64')
+    time["units"] = make_time_unit_str(time_start)
+    time["data"] = np.zeros((nradials,), dtype="float64")
 
     # range
-    _range = filemetadata('range')
-    _range['data'] = nfile.get_range()
-    _range['meters_to_center_of_first_gate'] = _range['data'][0]
-    _range['meters_between_gates'] = _range['data'][1] - _range['data'][0]
+    _range = filemetadata("range")
+    _range["data"] = nfile.get_range()
+    _range["meters_to_center_of_first_gate"] = _range["data"][0]
+    _range["meters_between_gates"] = _range["data"][1] - _range["data"][0]
 
     # fields
     fields = {}
@@ -98,58 +112,69 @@ def read_nexrad_level3(filename, field_names=None, additional_metadata=None,
         fields = {}
     else:
         dic = filemetadata(field_name)
-        dic['_FillValue'] = get_fillvalue()
-        dic['data'] = nfile.get_data()
+        dic["_FillValue"] = get_fillvalue()
+        dic["data"] = nfile.get_data()
         fields = {field_name: dic}
 
     # metadata
-    metadata = filemetadata('metadata')
-    metadata['original_container'] = 'NEXRAD Level 3'
+    metadata = filemetadata("metadata")
+    metadata["original_container"] = "NEXRAD Level 3"
 
     # scan_type
-    scan_type = 'ppi'
+    scan_type = "ppi"
 
     # latitude, longitude, altitude
-    latitude = filemetadata('latitude')
-    longitude = filemetadata('longitude')
-    altitude = filemetadata('altitude')
+    latitude = filemetadata("latitude")
+    longitude = filemetadata("longitude")
+    altitude = filemetadata("altitude")
 
     lat, lon, height = nfile.get_location()
     # Nexrad altitude is in feet, convert to meters unless user's
     # default config has units in feet.
-    if altitude['units'] == 'meters':
+    if altitude["units"] == "meters":
         height = height * 0.3048
-    latitude['data'] = np.array([lat], dtype='float64')
-    longitude['data'] = np.array([lon], dtype='float64')
-    altitude['data'] = np.array([height], dtype='float64')
+    latitude["data"] = np.array([lat], dtype="float64")
+    longitude["data"] = np.array([lon], dtype="float64")
+    altitude["data"] = np.array([height], dtype="float64")
 
     # sweep_number, sweep_mode, fixed_angle, sweep_start_ray_index
     # sweep_end_ray_index
-    sweep_number = filemetadata('sweep_number')
-    sweep_mode = filemetadata('sweep_mode')
-    sweep_start_ray_index = filemetadata('sweep_start_ray_index')
-    sweep_end_ray_index = filemetadata('sweep_end_ray_index')
+    sweep_number = filemetadata("sweep_number")
+    sweep_mode = filemetadata("sweep_mode")
+    sweep_start_ray_index = filemetadata("sweep_start_ray_index")
+    sweep_end_ray_index = filemetadata("sweep_end_ray_index")
 
-    sweep_number['data'] = np.array([0], dtype='int32')
-    sweep_mode['data'] = np.array(1 * ['azimuth_surveillance'], dtype='S')
+    sweep_number["data"] = np.array([0], dtype="int32")
+    sweep_mode["data"] = np.array(1 * ["azimuth_surveillance"], dtype="S")
 
-    sweep_start_ray_index['data'] = np.array([0], dtype='int32')
-    sweep_end_ray_index['data'] = np.array([nradials - 1], dtype='int32')
+    sweep_start_ray_index["data"] = np.array([0], dtype="int32")
+    sweep_end_ray_index["data"] = np.array([nradials - 1], dtype="int32")
 
     # azimuth, elevation, fixed_angle
-    azimuth = filemetadata('azimuth')
-    elevation = filemetadata('elevation')
-    fixed_angle = filemetadata('fixed_angle')
-    azimuth['data'] = nfile.get_azimuth()
+    azimuth = filemetadata("azimuth")
+    elevation = filemetadata("elevation")
+    fixed_angle = filemetadata("fixed_angle")
+    azimuth["data"] = nfile.get_azimuth()
     elev = nfile.get_elevation()
-    elevation['data'] = np.ones((nradials, ), dtype='float32') * elev
-    fixed_angle['data'] = np.array([elev], dtype='float32')
+    elevation["data"] = np.ones((nradials,), dtype="float32") * elev
+    fixed_angle["data"] = np.array([elev], dtype="float32")
 
     nfile.close()
     return Radar(
-        time, _range, fields, metadata, scan_type,
-        latitude, longitude, altitude,
-        sweep_number, sweep_mode, fixed_angle, sweep_start_ray_index,
+        time,
+        _range,
+        fields,
+        metadata,
+        scan_type,
+        latitude,
+        longitude,
+        altitude,
+        sweep_number,
+        sweep_mode,
+        fixed_angle,
+        sweep_start_ray_index,
         sweep_end_ray_index,
-        azimuth, elevation,
-        instrument_parameters=None)
+        azimuth,
+        elevation,
+        instrument_parameters=None,
+    )

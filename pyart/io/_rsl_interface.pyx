@@ -5,15 +5,15 @@ Cython wrapper around the NASA TRMM RSL library.
 
 cimport pyart.io._rsl_h as _rsl_h
 
-
 # the next line is required so that RSL_F_LIST and RSL_INVF_LIST can be
 # properly wrapped as Cython does not export the typedef from _rsl_h
 # define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION" [-W#warnings]
 ctypedef unsigned short Range
 import numpy as np
-cimport numpy as np
-from datetime import datetime, timedelta
 
+cimport numpy as np
+
+from datetime import datetime, timedelta
 
 _RSL_VERSION_STR = _rsl_h._RSL_VERSION_STR
 

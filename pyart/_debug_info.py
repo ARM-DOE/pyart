@@ -34,72 +34,84 @@ def _debug_info(stream=None):
 
     try:
         import pyart
+
         pyart_version = pyart.__version__
     except:
         pyart_version = "MISSING"
 
     try:
         import platform
+
         python_version = platform.python_version()
     except:
         python_version = "MISSING"
 
     try:
         import numpy
+
         numpy_version = numpy.__version__
     except:
         numpy_version = "MISSING"
 
     try:
         import numpy
+
         numpy_version = numpy.__version__
     except:
         numpy_version = "MISSING"
 
     try:
         import scipy
+
         scipy_version = scipy.__version__
     except:
         scipy_version = "MISSING"
 
     try:
         import matplotlib
+
         matplotlib_version = matplotlib.__version__
     except:
         matplotlib_version = "MISSING"
 
     try:
         import netCDF4
+
         netCDF4_version = netCDF4.__version__
     except:
         netCDF4_version = "MISSING"
 
     try:
         import cylp
+
         cylp_available = "Available"
     except:
         cylp_available = "MISSING"
 
     try:
         import glpk
+
         glpk_version = "%i.%i" % (glpk.env.version)
     except:
         glpk_version = "MISSING"
 
     try:
         import cvxopt.info
+
         cvxopt_version = cvxopt.info.version
     except:
         cvxopt_version = "MISSING"
 
     try:
         import cartopy
+
         cartopy_version = cartopy.__version__
     except:
         cartopy_version = "MISSING"
 
     try:
         import pytest
+
         pytest_version = pytest.__version__
     except:
         pytest_version = "MISSING"
@@ -121,6 +133,7 @@ def _debug_info(stream=None):
     print("CVXOPT version:", cvxopt_version, file=stream)
     print("Cartopy version:", cartopy_version, file=stream)
     print("pytest version:", pytest_version, file=stream)
+
 
 if __name__ == "__main__":
 

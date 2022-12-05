@@ -4,11 +4,12 @@ a uniform grid.
 
 """
 
-from libc.math cimport sqrt, exp, ceil, floor, sin, cos, tan, asin
-from cython.view cimport array as cvarray
-
 cimport cython
+from cython.view cimport array as cvarray
+from libc.math cimport asin, ceil, cos, exp, floor, sin, sqrt, tan
+
 import numpy as np
+
 
 # constants
 cdef int BARNES2 = 3
@@ -167,7 +168,7 @@ cdef class GateToGridMapper:
     cdef float[:, :, :, ::1] grid_sum
     cdef float[:, :, :, ::1] grid_wsum
     cdef double[:, :, :, :] min_dist2
-    
+
 
     def __init__(self, tuple grid_shape, tuple grid_starts, tuple grid_steps,
                  float[:, :, :, ::1] grid_sum, float[:, :, :, ::1] grid_wsum):
@@ -226,9 +227,9 @@ cdef class GateToGridMapper:
     @cython.boundscheck(False)
     @cython.wraparound(False)
     def map_gates_to_grid(
-            self, 
+            self,
             int ngates, int nrays,
-            float[:, ::1] gate_z, float[:, ::1] gate_y, float[:, ::1] gate_x, 
+            float[:, ::1] gate_z, float[:, ::1] gate_y, float[:, ::1] gate_x,
             float[:, :, ::1] field_data,
             char[:, :, ::1] field_mask, char[:, ::1] excluded_gates,
             float toa, RoIFunction roi_func, int weighting_function):
@@ -299,7 +300,7 @@ cdef class GateToGridMapper:
         cdef float xg, yg, zg, dist, weight, roi2, dist2, min_dist2
         cdef int x_min, x_max, y_min, y_max, z_min, z_max
         cdef int xi, yi, zi, x_argmin, y_argmin, z_argmin
-        
+
         # shift positions so that grid starts at 0
         x -= self.x_start
         y -= self.y_start
@@ -327,7 +328,7 @@ cdef class GateToGridMapper:
             return 0
 
         roi2 = roi * roi
-        
+
         if weighting_function == NEAREST:
             # Get the xi, yi, zi of desired weight
             x_argmin = -1

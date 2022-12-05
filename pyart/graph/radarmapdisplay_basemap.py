@@ -6,15 +6,17 @@ Class for creating plots on a geographic map using a Radar object and Basemap.
 import warnings
 
 import numpy as np
+
 try:
     from mpl_toolkits.basemap import Basemap
+
     _BASEMAP_AVAILABLE = True
 except ImportError:
     _BASEMAP_AVAILABLE = False
 
-from .radardisplay import RadarDisplay
-from .common import parse_ax_fig, parse_vmin_vmax, parse_cmap
 from ..exceptions import MissingOptionalDependency
+from .common import parse_ax_fig, parse_cmap, parse_vmin_vmax
+from .radardisplay import RadarDisplay
 
 
 class RadarMapDisplayBasemap(RadarDisplay):
@@ -68,45 +70,77 @@ class RadarMapDisplayBasemap(RadarDisplay):
     """
 
     def __init__(self, radar, shift=(0.0, 0.0)):
-        """ Initialize the object. """
+        """Initialize the object."""
         # check that basemap is available
         if not _BASEMAP_AVAILABLE:
             raise MissingOptionalDependency(
                 "Basemap is required to use RadarMapDisplayBasemap but is not "
-                + "installed")
+                + "installed"
+            )
 
-        warnings.warn("RadarMapDisplayBasemap is deprecated in favor of "
-                      + "RadarMapDisplay. Basemap is still optional to use, "
-                      + "but there will be no support if an error appears.",
-                      DeprecationWarning)
+        warnings.warn(
+            "RadarMapDisplayBasemap is deprecated in favor of "
+            + "RadarMapDisplay. Basemap is still optional to use, "
+            + "but there will be no support if an error appears.",
+            DeprecationWarning,
+        )
 
         # initalize the base class
         RadarDisplay.__init__(self, radar, shift=shift)
 
         # additional attributes needed for plotting on a basemap.
         self.basemap = None
-        self._x0 = None     # x axis radar location in map coords (meters)
-        self._y0 = None     # y axis radar location in map coords (meters)
+        self._x0 = None  # x axis radar location in map coords (meters)
+        self._y0 = None  # y axis radar location in map coords (meters)
         return
 
     def _check_basemap(self):
-        """ Check that basemap is not None, raise ValueError if it is. """
+        """Check that basemap is not None, raise ValueError if it is."""
         if self.basemap is None:
-            raise ValueError('no basemap plotted')
+            raise ValueError("no basemap plotted")
 
     def plot_ppi_map(
-            self, field, sweep=0, mask_tuple=None,
-            vmin=None, vmax=None, cmap=None, norm=None, mask_outside=False,
-            title=None, title_flag=True,
-            colorbar_flag=True, colorbar_label=None, ax=None, fig=None,
-            lat_lines=None, lon_lines=None,
-            projection='lcc', area_thresh=10000,
-            min_lon=None, max_lon=None, min_lat=None, max_lat=None,
-            width=None, height=None, lon_0=None, lat_0=None,
-            resolution='h', shapefile=None, edges=True, gatefilter=None,
-            basemap=None, filter_transitions=True, embellish=True,
-            ticks=None, ticklabs=None, raster=False, alpha=None,
-            edgecolors='face', **kwargs):
+        self,
+        field,
+        sweep=0,
+        mask_tuple=None,
+        vmin=None,
+        vmax=None,
+        cmap=None,
+        norm=None,
+        mask_outside=False,
+        title=None,
+        title_flag=True,
+        colorbar_flag=True,
+        colorbar_label=None,
+        ax=None,
+        fig=None,
+        lat_lines=None,
+        lon_lines=None,
+        projection="lcc",
+        area_thresh=10000,
+        min_lon=None,
+        max_lon=None,
+        min_lat=None,
+        max_lat=None,
+        width=None,
+        height=None,
+        lon_0=None,
+        lat_0=None,
+        resolution="h",
+        shapefile=None,
+        edges=True,
+        gatefilter=None,
+        basemap=None,
+        filter_transitions=True,
+        embellish=True,
+        ticks=None,
+        ticklabs=None,
+        raster=False,
+        alpha=None,
+        edgecolors="face",
+        **kwargs
+    ):
         """
         Plot a PPI volume sweep onto a geographic map.
 
@@ -243,8 +277,7 @@ class RadarMapDisplayBasemap(RadarDisplay):
             lon_0 = self.loc[1]
 
         # get data for the plot
-        data = self._get_data(
-            field, sweep, mask_tuple, filter_transitions, gatefilter)
+        data = self._get_data(field, sweep, mask_tuple, filter_transitions, gatefilter)
         x, y = self._get_x_y(sweep, edges, filter_transitions)
 
         # mask the data where outside the limits
@@ -253,40 +286,51 @@ class RadarMapDisplayBasemap(RadarDisplay):
 
         # create the basemap if not provided
         if type(basemap) != Basemap:
-            using_corners = (None not in [min_lon, min_lat, max_lon, max_lat])
+            using_corners = None not in [min_lon, min_lat, max_lon, max_lat]
             if using_corners:
                 basemap = Basemap(
-                    llcrnrlon=min_lon, llcrnrlat=min_lat,
-                    urcrnrlon=max_lon, urcrnrlat=max_lat,
-                    lat_0=lat_0, lon_0=lon_0, projection=projection,
-                    area_thresh=area_thresh, resolution=resolution, ax=ax,
-                    **kwargs)
-            else:   # using width and height
+                    llcrnrlon=min_lon,
+                    llcrnrlat=min_lat,
+                    urcrnrlon=max_lon,
+                    urcrnrlat=max_lat,
+                    lat_0=lat_0,
+                    lon_0=lon_0,
+                    projection=projection,
+                    area_thresh=area_thresh,
+                    resolution=resolution,
+                    ax=ax,
+                    **kwargs
+                )
+            else:  # using width and height
                 # map domain determined from location of radar gates
                 if width is None:
-                    width = (x.max() - x.min()) * 1000.
+                    width = (x.max() - x.min()) * 1000.0
                 if height is None:
-                    height = (y.max() - y.min()) * 1000.
+                    height = (y.max() - y.min()) * 1000.0
                 basemap = Basemap(
-                    width=width, height=height, lon_0=lon_0, lat_0=lat_0,
-                    projection=projection, area_thresh=area_thresh,
-                    resolution=resolution, ax=ax, **kwargs)
+                    width=width,
+                    height=height,
+                    lon_0=lon_0,
+                    lat_0=lat_0,
+                    projection=projection,
+                    area_thresh=area_thresh,
+                    resolution=resolution,
+                    ax=ax,
+                    **kwargs
+                )
 
         # The cylindrical equidistant projection does not support conversions
         # from geographic (lon/lat) to map projection (x/y) coordinates and
         # therefore cannot be used.
-        if basemap.projection == 'cyl':
-            raise ValueError(
-                'The cylindrical equidistant projection is not supported')
+        if basemap.projection == "cyl":
+            raise ValueError("The cylindrical equidistant projection is not supported")
 
         # add embelishments
         if embellish is True:
             basemap.drawcoastlines(linewidth=1.25)
             basemap.drawstates()
-            basemap.drawparallels(
-                lat_lines, labels=[True, False, False, False])
-            basemap.drawmeridians(
-                lon_lines, labels=[False, False, False, True])
+            basemap.drawparallels(lat_lines, labels=[True, False, False, False])
+            basemap.drawmeridians(lon_lines, labels=[False, False, False, True])
         self.basemap = basemap
         self._x0, self._y0 = basemap(self.loc[1], self.loc[0])
 
@@ -297,15 +341,23 @@ class RadarMapDisplayBasemap(RadarDisplay):
         if norm is not None:  # if norm is set do not override with vmin/vmax
             vmin = vmax = None
         pm = basemap.pcolormesh(
-            self._x0 + x * 1000., self._y0 + y * 1000., data,
-            vmin=vmin, vmax=vmax, cmap=cmap, norm=norm,
-            alpha=alpha, edgecolors=edgecolors, **kwargs)
+            self._x0 + x * 1000.0,
+            self._y0 + y * 1000.0,
+            data,
+            vmin=vmin,
+            vmax=vmax,
+            cmap=cmap,
+            norm=norm,
+            alpha=alpha,
+            edgecolors=edgecolors,
+            **kwargs
+        )
 
         if raster:
             pm.set_rasterized(True)
 
         if shapefile is not None:
-            basemap.readshapefile(shapefile, 'shapefile', ax=ax)
+            basemap.readshapefile(shapefile, "shapefile", ax=ax)
 
         if title_flag:
             self._set_title(field, sweep, title, ax)
@@ -316,12 +368,25 @@ class RadarMapDisplayBasemap(RadarDisplay):
 
         if colorbar_flag:
             self.plot_colorbar(
-                mappable=pm, label=colorbar_label, field=field, fig=fig,
-                ax=ax, ticks=ticks, ticklabs=ticklabs)
+                mappable=pm,
+                label=colorbar_label,
+                field=field,
+                fig=fig,
+                ax=ax,
+                ticks=ticks,
+                ticklabs=ticklabs,
+            )
         return
 
-    def plot_point(self, lon, lat, symbol='ro', label_text=None,
-                   label_offset=(None, None), **kwargs):
+    def plot_point(
+        self,
+        lon,
+        lat,
+        symbol="ro",
+        label_text=None,
+        label_offset=(None, None),
+        **kwargs
+    ):
         """
         Plot a point on the current map.
 
@@ -353,11 +418,10 @@ class RadarMapDisplayBasemap(RadarDisplay):
         if label_text is not None:
             # basemap does not have a text method so we must determine
             # the x and y points and plot them on the basemap's axis.
-            x_text, y_text = self.basemap(
-                lon + lon_offset, lat + lat_offset)
+            x_text, y_text = self.basemap(lon + lon_offset, lat + lat_offset)
             self.basemap.ax.text(x_text, y_text, label_text)
 
-    def plot_line_geo(self, line_lons, line_lats, line_style='r-', **kwargs):
+    def plot_line_geo(self, line_lons, line_lats, line_style="r-", **kwargs):
         """
         Plot a line segments on the current map given values in lat and lon.
 
@@ -374,10 +438,9 @@ class RadarMapDisplayBasemap(RadarDisplay):
 
         """
         self._check_basemap()
-        self.basemap.plot(
-            line_lons, line_lats, line_style, latlon=True, **kwargs)
+        self.basemap.plot(line_lons, line_lats, line_style, latlon=True, **kwargs)
 
-    def plot_line_xy(self, line_x, line_y, line_style='r-', **kwargs):
+    def plot_line_xy(self, line_x, line_y, line_style="r-", **kwargs):
         """
         Plot a line segments on the current map given radar x, y values.
 
@@ -394,11 +457,13 @@ class RadarMapDisplayBasemap(RadarDisplay):
 
         """
         self._check_basemap()
-        self.basemap.plot(self._x0 + line_x, self._y0 + line_y, line_style,
-                          latlon=False, **kwargs)
+        self.basemap.plot(
+            self._x0 + line_x, self._y0 + line_y, line_style, latlon=False, **kwargs
+        )
 
-    def plot_range_ring(self, range_ring_location_km, npts=360,
-                        line_style='k-', **kwargs):
+    def plot_range_ring(
+        self, range_ring_location_km, npts=360, line_style="k-", **kwargs
+    ):
         """
         Plot a single range ring on the map.
 
@@ -417,11 +482,11 @@ class RadarMapDisplayBasemap(RadarDisplay):
         """
         # The RadarDisplay.plot_range_rings uses a col parameter to specify
         # the line color, deal with this here.
-        if 'col' in kwargs:
-            color = kwargs.pop('col')
-            kwargs['c'] = color
+        if "col" in kwargs:
+            color = kwargs.pop("col")
+            kwargs["c"] = color
         self._check_basemap()
-        angle = np.linspace(0., 2.0 * np.pi, npts)
-        xpts = range_ring_location_km * 1000. * np.sin(angle)
-        ypts = range_ring_location_km * 1000. * np.cos(angle)
+        angle = np.linspace(0.0, 2.0 * np.pi, npts)
+        xpts = range_ring_location_km * 1000.0 * np.sin(angle)
+        ypts = range_ring_location_km * 1000.0 * np.cos(angle)
         self.plot_line_xy(xpts, ypts, line_style=line_style, **kwargs)

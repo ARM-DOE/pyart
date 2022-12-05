@@ -6,7 +6,7 @@ The Python ARM Radar Toolkit - Py-ART
    :maxdepth: 2
    :hidden:
    :caption: User Guide
-   
+
    userguide/index.rst
 
 .. toctree::
@@ -34,14 +34,14 @@ The Python ARM Radar Toolkit - Py-ART
    :maxdepth: 1
    :hidden:
    :caption: Blog
-   
+
    blog.md
 
 .. toctree::
    :maxdepth: 1
    :hidden:
    :caption: Changelog
-   
+
    changelog.md
 
 What is Py-ART?
@@ -118,8 +118,8 @@ Install
 The easiest method for installing Py-ART is to use the conda packages from
 the latest release and use Python 3, as Python 2 support ended January 1st,
 2020 and many packages including Py-ART no longer support Python 2.
-To do this you must download and install 
-`Anaconda <https://www.anaconda.com/download/#>`_ or 
+To do this you must download and install
+`Anaconda <https://www.anaconda.com/download/#>`_ or
 `Miniconda <https://conda.io/miniconda.html>`_.
 With Anaconda or Miniconda install, it is recommended to create a new conda
 environment when using Py-ART or even other packages. To create a new

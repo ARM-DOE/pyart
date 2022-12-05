@@ -62,7 +62,7 @@ import struct
 import numpy as np
 
 
-class UFFile(object):
+class UFFile:
     """
     A class for reading data from Universal Format (UF) files.
 
@@ -85,13 +85,13 @@ class UFFile(object):
     """
 
     def __init__(self, filename):
-        """ initialize. """
+        """initialize."""
 
         # open the file if file object not passed
-        if hasattr(filename, 'read'):
+        if hasattr(filename, "read"):
             fobj = filename
         else:
-            fobj = open(filename, 'rb')
+            fobj = open(filename, "rb")
         self._fh = fobj
 
         # UF files come in three 'flavors' depending upon the size of the
@@ -105,16 +105,16 @@ class UFFile(object):
         # determine padding around records
         buf = fobj.read(8)
         try:
-            padding = buf.index(b'UF')
+            padding = buf.index(b"UF")
         except ValueError:
-            raise IOError('file in not a valid UF file')
+            raise OSError("file in not a valid UF file")
 
         # read in the records, store as a list of rays
         self.rays = []
         while len(buf) == 8:  # read until EOF reached
 
             # record size stored as a 2-byte int start at byte 2
-            record_size = struct.unpack('>h', buf[padding+2:padding+4])[0] * 2
+            record_size = struct.unpack(">h", buf[padding + 2 : padding + 4])[0] * 2
 
             # read in full record
             bytes_read = len(buf) - padding
@@ -141,20 +141,20 @@ class UFFile(object):
         self.last_ray_in_sweep = last_ray_in_sweep
 
     def close(self):
-        """ Close the file. """
+        """Close the file."""
         self._fh.close()
 
     def _get_ray_sweep_numbers(self):
-        """ Return an array of the sweep_number stored in each ray. """
-        ray_sweep_numbers = np.empty((self.nrays, ), dtype='int32')
+        """Return an array of the sweep_number stored in each ray."""
+        ray_sweep_numbers = np.empty((self.nrays,), dtype="int32")
         for i, ray in enumerate(self.rays):
-            ray_sweep_numbers[i] = ray.mandatory_header['sweep_number']
+            ray_sweep_numbers[i] = ray.mandatory_header["sweep_number"]
         return ray_sweep_numbers
 
     def _get_sweep_limits(self):
-        """ Return arrays of indices of first and last ray in each sweep. """
-        first_ray_in_sweep = np.empty(self.nsweeps, dtype='int32')
-        last_ray_in_sweep = np.empty(self.nsweeps, dtype='int32')
+        """Return arrays of indices of first and last ray in each sweep."""
+        first_ray_in_sweep = np.empty(self.nsweeps, dtype="int32")
+        last_ray_in_sweep = np.empty(self.nsweeps, dtype="int32")
         unique_sweep_numbers = np.unique(self.ray_sweep_numbers)
         for i, sweep_number in enumerate(unique_sweep_numbers):
             matches = np.where(self.ray_sweep_numbers == sweep_number)
@@ -163,17 +163,17 @@ class UFFile(object):
         return first_ray_in_sweep, last_ray_in_sweep
 
     def get_field_data(self, field_number):
-        """ Return a 2D array of scale/masked field data for the volume. """
+        """Return a 2D array of scale/masked field data for the volume."""
         # Assumes that no rays contain more gates than the first ray and
         # that the missing_data_value and scale_factor are identical for all
         # rays.  Additional the order and number of the fields are assumed to
         # be identical between rays.
         first_ray = self.rays[0]
         ngates = len(first_ray.field_raw_data[field_number])
-        missing_data_value = first_ray.mandatory_header['missing_data_value']
-        scale_factor = first_ray.field_headers[field_number]['scale_factor']
+        missing_data_value = first_ray.mandatory_header["missing_data_value"]
+        scale_factor = first_ray.field_headers[field_number]["scale_factor"]
 
-        raw_data = np.empty((self.nrays, ngates), 'int16')
+        raw_data = np.empty((self.nrays, ngates), "int16")
         for i, ray in enumerate(self.rays):
             ray_data = ray.field_raw_data[field_number]
             bins = len(ray_data)
@@ -185,38 +185,38 @@ class UFFile(object):
         return np.ma.masked_array(data, mask)
 
     def get_azimuths(self):
-        """ Return an array of azimuth angles for each ray in degrees. """
-        azimuth = np.empty((self.nrays, ), dtype='float32')
+        """Return an array of azimuth angles for each ray in degrees."""
+        azimuth = np.empty((self.nrays,), dtype="float32")
         for i, ray in enumerate(self.rays):
-            azimuth[i] = ray.mandatory_header['azimuth'] / 64.
+            azimuth[i] = ray.mandatory_header["azimuth"] / 64.0
         return azimuth
 
     def get_elevations(self):
-        """ Return an array of elevation angles for each ray in degrees. """
-        elevation = np.empty((self.nrays, ), dtype='float32')
+        """Return an array of elevation angles for each ray in degrees."""
+        elevation = np.empty((self.nrays,), dtype="float32")
         for i, ray in enumerate(self.rays):
-            elevation[i] = ray.mandatory_header['elevation'] / 64.
+            elevation[i] = ray.mandatory_header["elevation"] / 64.0
         return elevation
 
     def get_sweep_rates(self):
-        """ Return an array of sweep rates for each ray in degrees/sec. """
-        sweep_rates = np.empty((self.nrays, ), dtype='float32')
+        """Return an array of sweep rates for each ray in degrees/sec."""
+        sweep_rates = np.empty((self.nrays,), dtype="float32")
         for i, ray in enumerate(self.rays):
-            sweep_rates[i] = ray.mandatory_header['sweep_rate'] / 64.
+            sweep_rates[i] = ray.mandatory_header["sweep_rate"] / 64.0
         return sweep_rates
 
     def get_pulse_widths(self):
-        """ Return an array of pulse widths for each ray in meters. """
-        pulse_widths = np.empty((self.nrays, ), dtype='float32')
+        """Return an array of pulse widths for each ray in meters."""
+        pulse_widths = np.empty((self.nrays,), dtype="float32")
         for i, ray in enumerate(self.rays):
-            pulse_widths[i] = ray.field_headers[0]['pulse_width_m']
+            pulse_widths[i] = ray.field_headers[0]["pulse_width_m"]
         return pulse_widths
 
     def get_prts(self):
-        """ Return an array of prts for each ray in microseconds. """
-        prts = np.empty((self.nrays, ), dtype='float32')
+        """Return an array of prts for each ray in microseconds."""
+        prts = np.empty((self.nrays,), dtype="float32")
         for i, ray in enumerate(self.rays):
-            prts[i] = ray.field_headers[0]['prt_ms']
+            prts[i] = ray.field_headers[0]["prt_ms"]
         return prts
 
     def get_nyquists(self):
@@ -227,42 +227,42 @@ class UFFile(object):
         """
         field_headers = self.rays[0].field_headers
         try:
-            field_idx = ['nyquist' in fh for fh in field_headers].index(True)
+            field_idx = ["nyquist" in fh for fh in field_headers].index(True)
         except ValueError:
             return None  # True not in list
-        nyquist = np.empty((self.nrays, ), dtype='float32')
+        nyquist = np.empty((self.nrays,), dtype="float32")
         for i, ray in enumerate(self.rays):
-            scale = ray.field_headers[field_idx]['scale_factor']
+            scale = ray.field_headers[field_idx]["scale_factor"]
             try:
-                nyquist[i] = ray.field_headers[field_idx]['nyquist'] / scale
+                nyquist[i] = ray.field_headers[field_idx]["nyquist"] / scale
             except KeyError:
                 return None  # nyquist not in field header
         return nyquist
 
     def get_sweep_fixed_angles(self):
-        """ Return an array of fixed angles for each sweep in degrees. """
-        fixed = np.empty((self.nsweeps, ), dtype='float32')
+        """Return an array of fixed angles for each sweep in degrees."""
+        fixed = np.empty((self.nsweeps,), dtype="float32")
         for i, ray_num in enumerate(self.first_ray_in_sweep):
-            fixed[i] = self.rays[ray_num].mandatory_header['fixed_angle'] / 64.
+            fixed[i] = self.rays[ray_num].mandatory_header["fixed_angle"] / 64.0
         return fixed
 
     def get_sweep_polarizations(self):
-        """ Return an array of polarization modes for each sweep. """
+        """Return an array of polarization modes for each sweep."""
         modes = []
         for ray_num in self.first_ray_in_sweep:
             ray = self.rays[ray_num]
-            polarization = ray.field_headers[0]['polarization']
+            polarization = ray.field_headers[0]["polarization"]
             if polarization > 3:
                 polarization = 3
             modes.append(POLARIZATION_STR[polarization])
         return np.array(modes)
 
     def get_datetimes(self):
-        """ Return a list of datetimes for each ray. """
+        """Return a list of datetimes for each ray."""
         return [ray.get_datetime() for ray in self.rays]
 
 
-class UFRay(object):
+class UFRay:
     """
     A class for reading data from a single ray (record) in a UF file.
 
@@ -291,34 +291,36 @@ class UFRay(object):
     """
 
     def __init__(self, record):
-        """ Initalize the object. """
+        """Initalize the object."""
 
         self._buf = record
 
         # read in the mandatory header
-        self.mandatory_header = _unpack_from_buf(
-            self._buf, 0, UF_MANDATORY_HEADER)
+        self.mandatory_header = _unpack_from_buf(self._buf, 0, UF_MANDATORY_HEADER)
 
         # read in optional header (if present)
         self.optional_header = None
-        if self.mandatory_header['offset_optional_header'] != 0:
-            offset = (self.mandatory_header['offset_optional_header'] - 1) * 2
+        if self.mandatory_header["offset_optional_header"] != 0:
+            offset = (self.mandatory_header["offset_optional_header"] - 1) * 2
             self.optional_header = _unpack_from_buf(
-                self._buf, offset, UF_OPTIONAL_HEADER)
+                self._buf, offset, UF_OPTIONAL_HEADER
+            )
 
         # read in data header
-        offset = (self.mandatory_header['offset_data_header'] - 1) * 2
+        offset = (self.mandatory_header["offset_data_header"] - 1) * 2
         self.data_header = _unpack_from_buf(self._buf, offset, UF_DATA_HEADER)
 
         # read in field position information
         self.field_positions = [
-            _unpack_from_buf(self._buf, offset + 6 + i*4, UF_FIELD_POSITION)
-            for i in range(self.data_header['record_nfields'])]
+            _unpack_from_buf(self._buf, offset + 6 + i * 4, UF_FIELD_POSITION)
+            for i in range(self.data_header["record_nfields"])
+        ]
 
         # read field headers and data
         self.field_headers = []
-        self.field_raw_data = [self.get_field_data(i) for i in
-                               range(self.data_header['record_nfields'])]
+        self.field_raw_data = [
+            self.get_field_data(i) for i in range(self.data_header["record_nfields"])
+        ]
 
         return
 
@@ -329,31 +331,31 @@ class UFRay(object):
         Field header is appended to the list in the field_headers attribute.
         """
         position = self.field_positions[field_number]
-        offset = (position['offset_field_header'] - 1) * 2
+        offset = (position["offset_field_header"] - 1) * 2
         field_header = _unpack_from_buf(self._buf, offset, UF_FIELD_HEADER)
         self.field_headers.append(field_header)
-        data_offset = (field_header['data_offset'] - 1) * 2
+        data_offset = (field_header["data_offset"] - 1) * 2
 
         # read in field specific parameters
-        if position['data_type'] in [b'VF', b'VE', b'VR', b'VT', b'VP']:
+        if position["data_type"] in [b"VF", b"VE", b"VR", b"VT", b"VP"]:
             if (data_offset - offset) == 42:
-                vel_header = _unpack_from_buf(self._buf, offset+38, UF_FSI_VEL)
+                vel_header = _unpack_from_buf(self._buf, offset + 38, UF_FSI_VEL)
                 field_header.update(vel_header)
 
-        data_str = self._buf[data_offset:data_offset+field_header['nbins']*2]
-        raw_data = np.frombuffer(data_str, dtype='>i2')
+        data_str = self._buf[data_offset : data_offset + field_header["nbins"] * 2]
+        raw_data = np.frombuffer(data_str, dtype=">i2")
         return raw_data
 
     def get_datetime(self):
-        """ Return a datetime object for the ray. """
-        year = self.mandatory_header['year']
+        """Return a datetime object for the ray."""
+        year = self.mandatory_header["year"]
         if year < 1900:
-            year += 2000   # years after 2000, 11 -> 2011
-        month = self.mandatory_header['month']
-        day = self.mandatory_header['day']
-        hour = self.mandatory_header['hour']
-        minute = self.mandatory_header['minute']
-        second = self.mandatory_header['second']
+            year += 2000  # years after 2000, 11 -> 2011
+        month = self.mandatory_header["month"]
+        day = self.mandatory_header["day"]
+        hour = self.mandatory_header["hour"]
+        minute = self.mandatory_header["minute"]
+        second = self.mandatory_header["second"]
         if hour == 24:
             # Some UF writers incorrectly specify midnight as 24:00:00
             # rather than 00:00:00.  Handle this case explicitly
@@ -368,36 +370,36 @@ class UFRay(object):
         return datetime.datetime(year, month, day, hour, minute, second)
 
     def get_location(self):
-        """ Return the latitude, longitude and height of the ray. """
-        lat_deg = self.mandatory_header['latitude_degrees']
-        lat_min = self.mandatory_header['latitude_minutes']
-        lat_sec = self.mandatory_header['latitude_seconds'] / 64.
-        latitude = lat_deg + (lat_min + lat_sec / 60.) / 60.
+        """Return the latitude, longitude and height of the ray."""
+        lat_deg = self.mandatory_header["latitude_degrees"]
+        lat_min = self.mandatory_header["latitude_minutes"]
+        lat_sec = self.mandatory_header["latitude_seconds"] / 64.0
+        latitude = lat_deg + (lat_min + lat_sec / 60.0) / 60.0
 
-        lon_deg = self.mandatory_header['longitude_degrees']
-        lon_min = self.mandatory_header['longitude_minutes']
-        lon_sec = self.mandatory_header['longitude_seconds'] / 64.
-        longitude = lon_deg + (lon_min + lon_sec / 60.) / 60.
+        lon_deg = self.mandatory_header["longitude_degrees"]
+        lon_min = self.mandatory_header["longitude_minutes"]
+        lon_sec = self.mandatory_header["longitude_seconds"] / 64.0
+        longitude = lon_deg + (lon_min + lon_sec / 60.0) / 60.0
 
-        height = self.mandatory_header['height_above_sea_level']
+        height = self.mandatory_header["height_above_sea_level"]
 
         return latitude, longitude, height
 
 
 def _structure_size(structure):
-    """ Find the size of a structure in bytes. """
-    return struct.calcsize('>' + ''.join([i[1] for i in structure]))
+    """Find the size of a structure in bytes."""
+    return struct.calcsize(">" + "".join([i[1] for i in structure]))
 
 
 def _unpack_from_buf(buf, pos, structure):
-    """ Unpack a structure from a buffer. """
+    """Unpack a structure from a buffer."""
     size = _structure_size(structure)
-    return _unpack_structure(buf[pos:pos + size], structure)
+    return _unpack_structure(buf[pos : pos + size], structure)
 
 
 def _unpack_structure(string, structure):
-    """ Unpack a structure from a string """
-    fmt = '>' + ''.join([i[1] for i in structure])  # UF is big-endian
+    """Unpack a structure from a string"""
+    fmt = ">" + "".join([i[1] for i in structure])  # UF is big-endian
     lst = struct.unpack(fmt, string)
     return dict(zip([i[0] for i in structure], lst))
 
@@ -419,105 +421,105 @@ def _unpack_structure(string, structure):
 
 # UF structures
 
-POLARIZATION_STR = ['horizontal', 'vertical', 'circular', 'elliptical']
+POLARIZATION_STR = ["horizontal", "vertical", "circular", "elliptical"]
 
-INT16 = 'h'
+INT16 = "h"
 
 UF_MANDATORY_HEADER = (
-    ('uf_string', '2s'),
-    ('record_length', INT16),
-    ('offset_optional_header', INT16),
-    ('offset_local_use_header', INT16),
-    ('offset_data_header', INT16),
-    ('record_number', INT16),
-    ('volume_number', INT16),
-    ('ray_number', INT16),
-    ('ray_record_number', INT16),
-    ('sweep_number', INT16),
-    ('radar_name', '8s'),
-    ('site_name', '8s'),
-    ('latitude_degrees', INT16),
-    ('latitude_minutes', INT16),
-    ('latitude_seconds', INT16),
-    ('longitude_degrees', INT16),
-    ('longitude_minutes', INT16),
-    ('longitude_seconds', INT16),
-    ('height_above_sea_level', INT16),
-    ('year', INT16),
-    ('month', INT16),
-    ('day', INT16),
-    ('hour', INT16),
-    ('minute', INT16),
-    ('second', INT16),
-    ('time_zone', '2s'),
-    ('azimuth', INT16),
-    ('elevation', INT16),
-    ('sweep_mode', INT16),
-    ('fixed_angle', INT16),
-    ('sweep_rate', INT16),
-    ('generation_year', INT16),
-    ('generation_month', INT16),
-    ('generation_day', INT16),
-    ('generation_facility_name', '8s'),
-    ('missing_data_value', INT16),
+    ("uf_string", "2s"),
+    ("record_length", INT16),
+    ("offset_optional_header", INT16),
+    ("offset_local_use_header", INT16),
+    ("offset_data_header", INT16),
+    ("record_number", INT16),
+    ("volume_number", INT16),
+    ("ray_number", INT16),
+    ("ray_record_number", INT16),
+    ("sweep_number", INT16),
+    ("radar_name", "8s"),
+    ("site_name", "8s"),
+    ("latitude_degrees", INT16),
+    ("latitude_minutes", INT16),
+    ("latitude_seconds", INT16),
+    ("longitude_degrees", INT16),
+    ("longitude_minutes", INT16),
+    ("longitude_seconds", INT16),
+    ("height_above_sea_level", INT16),
+    ("year", INT16),
+    ("month", INT16),
+    ("day", INT16),
+    ("hour", INT16),
+    ("minute", INT16),
+    ("second", INT16),
+    ("time_zone", "2s"),
+    ("azimuth", INT16),
+    ("elevation", INT16),
+    ("sweep_mode", INT16),
+    ("fixed_angle", INT16),
+    ("sweep_rate", INT16),
+    ("generation_year", INT16),
+    ("generation_month", INT16),
+    ("generation_day", INT16),
+    ("generation_facility_name", "8s"),
+    ("missing_data_value", INT16),
 )
 
 UF_OPTIONAL_HEADER = (
-    ('project_name', '8s'),
-    ('baseline_azimuth', INT16),
-    ('baseline_elevation', INT16),
-    ('volume_hour', INT16),
-    ('volume_minute', INT16),
-    ('volume_second', INT16),
-    ('tape_name', '8s'),
-    ('flag', INT16)
+    ("project_name", "8s"),
+    ("baseline_azimuth", INT16),
+    ("baseline_elevation", INT16),
+    ("volume_hour", INT16),
+    ("volume_minute", INT16),
+    ("volume_second", INT16),
+    ("tape_name", "8s"),
+    ("flag", INT16),
 )
 
 UF_DATA_HEADER = (
-    ('ray_nfields', INT16),
-    ('ray_nrecords', INT16),
-    ('record_nfields', INT16),
+    ("ray_nfields", INT16),
+    ("ray_nrecords", INT16),
+    ("record_nfields", INT16),
 )
 
 UF_FIELD_POSITION = (
-    ('data_type', '2s'),
-    ('offset_field_header', INT16),
+    ("data_type", "2s"),
+    ("offset_field_header", INT16),
 )
 
 UF_FIELD_HEADER = (
-    ('data_offset', INT16),
-    ('scale_factor', INT16),
-    ('range_start_km', INT16),
-    ('range_start_m', INT16),
-    ('range_spacing_m', INT16),
-    ('nbins', INT16),
-    ('pulse_width_m', INT16),
-    ('beam_width_h', INT16),    # degrees * 64
-    ('beam_width_v', INT16),    # degrees * 64
-    ('bandwidth', INT16),       # Reciever bandwidth in MHz * 16
-    ('polarization', INT16),    # 1: hort, 2: vert 3: circular, 4: ellip
-    ('wavelength_cm', INT16),   # cm * 64
-    ('sample_size', INT16),
-    ('threshold_data', '2s'),
-    ('threshold_value', INT16),
-    ('scale', INT16),
-    ('edit_code', '2s'),
-    ('prt_ms', INT16),
-    ('bits_per_bin', INT16),    # Must be 16
+    ("data_offset", INT16),
+    ("scale_factor", INT16),
+    ("range_start_km", INT16),
+    ("range_start_m", INT16),
+    ("range_spacing_m", INT16),
+    ("nbins", INT16),
+    ("pulse_width_m", INT16),
+    ("beam_width_h", INT16),  # degrees * 64
+    ("beam_width_v", INT16),  # degrees * 64
+    ("bandwidth", INT16),  # Reciever bandwidth in MHz * 16
+    ("polarization", INT16),  # 1: hort, 2: vert 3: circular, 4: ellip
+    ("wavelength_cm", INT16),  # cm * 64
+    ("sample_size", INT16),
+    ("threshold_data", "2s"),
+    ("threshold_value", INT16),
+    ("scale", INT16),
+    ("edit_code", "2s"),
+    ("prt_ms", INT16),
+    ("bits_per_bin", INT16),  # Must be 16
 )
 
 UF_FSI_VEL = (
-    ('nyquist', INT16),
-    ('spare', INT16),
+    ("nyquist", INT16),
+    ("spare", INT16),
 )
 
 # This structure is defined but not used in Py-ART
 # No sample file which contain the structure could be found.
 UF_FSI_DM = (
-    ('radar_constant', INT16),
-    ('noise_power', INT16),
-    ('reciever_gain', INT16),
-    ('peak_power', INT16),
-    ('antenna_gain', INT16),
-    ('pulse_duration', INT16),
+    ("radar_constant", INT16),
+    ("noise_power", INT16),
+    ("reciever_gain", INT16),
+    ("peak_power", INT16),
+    ("antenna_gain", INT16),
+    ("pulse_duration", INT16),
 )

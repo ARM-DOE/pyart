@@ -40,9 +40,10 @@ DAMAGE.
 import numpy as np
 import scipy.sparse
 
-cimport numpy as np
-cimport libc.stdlib as stdlib
 cimport cython
+cimport libc.stdlib as stdlib
+cimport numpy as np
+
 
 cdef extern from "limits.h":
     long LONG_MAX
@@ -116,12 +117,12 @@ cdef inline int list_append(list results, np.intp_t i) except -1:
         # Other platforms
         results.append(i)
     return 0
-    
+
 
 
 # Priority queue
 # ==============
-cdef union heapcontents:    # FIXME: Unions are not always portable, verify this 
+cdef union heapcontents:    # FIXME: Unions are not always portable, verify this
     np.intp_t intdata     # union is never used in an ABI dependent way.
     char* ptrdata
 
@@ -133,7 +134,7 @@ cdef class heap(object):
     cdef np.intp_t n
     cdef heapitem* heap
     cdef np.intp_t space
-    
+
     def __init__(heap self, np.intp_t initial_size):
         cdef void *tmp
         self.space = initial_size
@@ -141,7 +142,7 @@ cdef class heap(object):
         tmp = stdlib.malloc(sizeof(heapitem)*self.space)
         if tmp == NULL:
             raise MemoryError
-        self.heap = <heapitem*> tmp  
+        self.heap = <heapitem*> tmp
         self.n = 0
 
     def __dealloc__(heap self):
@@ -167,27 +168,27 @@ cdef class heap(object):
         self.n += 1
         if self.n > self.space:
             self._resize(2 * self.space + 1)
-            
+
         i = self.n - 1
         self.heap[i] = item
-        
+
         while i > 0 and self.heap[i].priority < self.heap[(i - 1) // 2].priority:
             t = self.heap[(i - 1) // 2]
             self.heap[(i - 1) // 2] = self.heap[i]
             self.heap[i] = t
             i = (i - 1) // 2
         return 0
-    
-    
+
+
     cdef heapitem peek(heap self):
         return self.heap[0]
-    
-    
+
+
     @cython.cdivision(True)
     cdef int remove(heap self) except -1:
         cdef heapitem t
         cdef np.intp_t i, j, k, l
-    
+
         self.heap[0] = self.heap[self.n-1]
         self.n -= 1
         # No point in freeing up space as the heap empties.
@@ -197,9 +198,9 @@ cdef class heap(object):
         i=0
         j=1
         k=2
-        while ((j<self.n and 
+        while ((j<self.n and
                     self.heap[i].priority > self.heap[j].priority or
-                k<self.n and 
+                k<self.n and
                     self.heap[i].priority > self.heap[k].priority)):
             if k<self.n and self.heap[j].priority>self.heap[k].priority:
                 l = k
@@ -212,7 +213,7 @@ cdef class heap(object):
             j = 2*i+1
             k = 2*i+2
         return 0
-    
+
     cdef int pop(heap self, heapitem *it) except -1:
         it[0] = self.peek()
         self.remove()
@@ -226,13 +227,13 @@ cdef inline np.float64_t dmax(np.float64_t x, np.float64_t y):
         return x
     else:
         return y
-        
+
 cdef inline np.float64_t dabs(np.float64_t x):
     if x>0:
         return x
     else:
         return -x
-        
+
 # Utility for building a coo matrix incrementally
 cdef class coo_entries:
     cdef:
@@ -242,7 +243,7 @@ cdef class coo_entries:
         np.intp_t *i_data
         np.intp_t *j_data
         np.float64_t *v_data
-    
+
     def __init__(self):
         self.n = 0
         self.n_max = 10
@@ -301,7 +302,7 @@ cdef inline np.float64_t _distance_p(np.float64_t *x, np.float64_t *y,
             z = x[i] - y[i]
             r += z*z
             if r>upperbound:
-                return r 
+                return r
     elif p==infinity:
         for i in range(k):
             r = dmax(r,dabs(x[i]-y[i]))
@@ -342,7 +343,7 @@ cdef class Rectangle:
 cdef inline np.float64_t min_dist_point_interval_p(np.float64_t* x,
                                                    Rectangle rect,
                                                    np.intp_t k,
-                                                   np.float64_t p):    
+                                                   np.float64_t p):
     """Compute the minimum distance along dimension k between x and
     a point in the hyperrectangle.
     """
@@ -483,23 +484,23 @@ cdef class RectRectDistanceTracker(object):
             raise MemoryError
         self.stack = <RR_stack_item*> tmp
         return 0
-    
+
     cdef int _free_stack(self) except -1:
         if self.stack != <RR_stack_item*> NULL:
             stdlib.free(self.stack)
         return 0
-    
+
 
     def __init__(self, Rectangle rect1, Rectangle rect2,
                  np.float64_t p, np.float64_t eps, np.float64_t upper_bound):
-        
+
         if rect1.m != rect2.m:
             raise ValueError("rect1 and rect2 have different dimensions")
 
         self.rect1 = rect1
         self.rect2 = rect2
         self.p = p
-        
+
         # internally we represent all distances as distance ** p
         if p != infinity and upper_bound != infinity:
             self.upper_bound = upper_bound ** p
@@ -543,7 +544,7 @@ cdef class RectRectDistanceTracker(object):
         # Push onto stack
         if self.stack_size == self.stack_max_size:
             self._resize_stack(self.stack_max_size * 2)
-            
+
         cdef RR_stack_item *item = &self.stack[self.stack_size]
         self.stack_size += 1
         item.which = which
@@ -569,25 +570,25 @@ cdef class RectRectDistanceTracker(object):
         else:
             self.min_distance = min_dist_rect_rect_p_inf(self.rect1, self.rect2)
             self.max_distance = max_dist_rect_rect_p_inf(self.rect1, self.rect2)
-            
+
         return 0
 
-    
+
     cdef inline int push_less_of(self, np.intp_t which,
                                  innernode *node) except -1:
         return self.push(which, LESS, node.split_dim, node.split)
 
-    
+
     cdef inline int push_greater_of(self, np.intp_t which,
                                     innernode *node) except -1:
         return self.push(which, GREATER, node.split_dim, node.split)
 
-    
+
     cdef inline int pop(self) except -1:
         # Pop from stack
         self.stack_size -= 1
         assert self.stack_size >= 0
-        
+
         cdef RR_stack_item* item = &self.stack[self.stack_size]
         self.min_distance = item.min_distance
         self.max_distance = item.max_distance
@@ -598,7 +599,7 @@ cdef class RectRectDistanceTracker(object):
         else:
             self.rect2.mins[item.split_dim] = item.min_along_dim
             self.rect2.maxes[item.split_dim] = item.max_along_dim
-        
+
         return 0
 
 # Point-to-rectangle distance tracker
@@ -663,7 +664,7 @@ cdef class PointRectDistanceTracker(object):
             raise MemoryError
         self.stack = <RP_stack_item*> tmp
         return 0
-    
+
     cdef int _free_stack(self) except -1:
         if self.stack != <RP_stack_item*> NULL:
             stdlib.free(self.stack)
@@ -675,7 +676,7 @@ cdef class PointRectDistanceTracker(object):
         self.pt = pt
         self.rect = rect
         self.p = p
-        
+
         # internally we represent all distances as distance ** p
         if p != infinity and upper_bound != infinity:
             self.upper_bound = upper_bound ** p
@@ -713,16 +714,16 @@ cdef class PointRectDistanceTracker(object):
         # Push onto stack
         if self.stack_size == self.stack_max_size:
             self._resize_stack(self.stack_max_size * 2)
-            
+
         cdef RP_stack_item *item = &self.stack[self.stack_size]
         self.stack_size += 1
-        
+
         item.split_dim = split_dim
         item.min_distance = self.min_distance
         item.max_distance = self.max_distance
         item.min_along_dim = self.rect.mins[split_dim]
         item.max_along_dim = self.rect.maxes[split_dim]
-            
+
         if self.p != infinity:
             self.min_distance -= min_dist_point_interval_p(self.pt, self.rect, split_dim, self.p)
             self.max_distance -= max_dist_point_interval_p(self.pt, self.rect, split_dim, self.p)
@@ -738,28 +739,28 @@ cdef class PointRectDistanceTracker(object):
         else:
             self.min_distance = min_dist_point_rect_p_inf(self.pt, self.rect)
             self.max_distance = max_dist_point_rect_p_inf(self.pt, self.rect)
-            
+
         return 0
 
-    
+
     cdef inline int push_less_of(self, innernode* node) except -1:
         return self.push(LESS, node.split_dim, node.split)
 
-    
+
     cdef inline int push_greater_of(self, innernode* node) except -1:
         return self.push(GREATER, node.split_dim, node.split)
 
-    
+
     cdef inline int pop(self) except -1:
         self.stack_size -= 1
         assert self.stack_size >= 0
-        
+
         cdef RP_stack_item* item = &self.stack[self.stack_size]
         self.min_distance = item.min_distance
         self.max_distance = item.max_distance
         self.rect.mins[item.split_dim] = item.min_along_dim
         self.rect.maxes[item.split_dim] = item.max_along_dim
-        
+
         return 0
 
 # Tree structure
@@ -770,7 +771,7 @@ cdef struct innernode:
     np.float64_t split
     innernode* less
     innernode* greater
-    
+
 cdef struct leafnode:
     np.intp_t split_dim
     np.intp_t children
@@ -796,33 +797,33 @@ cdef class cKDTree:
 
     This class provides an index into a set of k-dimensional points
     which can be used to rapidly look up the nearest neighbors of any
-    point. 
+    point.
 
-    The algorithm used is described in Maneewongvatana and Mount 1999. 
+    The algorithm used is described in Maneewongvatana and Mount 1999.
     The general idea is that the kd-tree is a binary trie, each of whose
     nodes represents an axis-aligned hyperrectangle. Each node specifies
     an axis and splits the set of points based on whether their coordinate
-    along that axis is greater than or less than a particular value. 
+    along that axis is greater than or less than a particular value.
 
-    During construction, the axis and splitting point are chosen by the 
+    During construction, the axis and splitting point are chosen by the
     "sliding midpoint" rule, which ensures that the cells do not all
-    become long and thin. 
+    become long and thin.
 
-    The tree can be queried for the r closest neighbors of any given point 
-    (optionally returning only those within some maximum distance of the 
-    point). It can also be queried, with a substantial gain in efficiency, 
+    The tree can be queried for the r closest neighbors of any given point
+    (optionally returning only those within some maximum distance of the
+    point). It can also be queried, with a substantial gain in efficiency,
     for the r approximate closest neighbors.
 
-    For large dimensions (20 is already large) do not expect this to run 
+    For large dimensions (20 is already large) do not expect this to run
     significantly faster than brute force. High-dimensional nearest-neighbor
     queries are a substantial open problem in computer science.
 
     Parameters
     ----------
     data : array-like, shape (n,m)
-        The n data points of dimension mto be indexed. This array is 
-        not copied unless this is necessary to produce a contiguous 
-        array of doubles, and so modifying this data will result in 
+        The n data points of dimension mto be indexed. This array is
+        not copied unless this is necessary to produce a contiguous
+        array of doubles, and so modifying this data will result in
         bogus results.
     leafsize : positive integer
         The number of points at which the algorithm switches over to
@@ -830,7 +831,7 @@ cdef class cKDTree:
 
     """
 
-    cdef innernode* tree 
+    cdef innernode* tree
     cdef readonly np.ndarray data
     cdef np.float64_t* raw_data
     cdef readonly np.intp_t n, m
@@ -868,7 +869,7 @@ cdef class cKDTree:
         cdef np.float64_t*mids
         if end_idx-start_idx<=self.leafsize:
             n = <leafnode*>stdlib.malloc(sizeof(leafnode))
-            if n == <leafnode*> NULL: 
+            if n == <leafnode*> NULL:
                 raise MemoryError
             n.split_dim = -1
             n.children = end_idx - start_idx
@@ -876,7 +877,7 @@ cdef class cKDTree:
             n.end_idx = end_idx
             return <innernode*>n
         else:
-            d = 0 
+            d = 0
             size = 0
             for i in range(self.m):
                 if maxes[i]-mins[i] > size:
@@ -887,7 +888,7 @@ cdef class cKDTree:
             if maxval==minval:
                 # all points are identical; warn user?
                 n = <leafnode*>stdlib.malloc(sizeof(leafnode))
-                if n == <leafnode*> NULL: 
+                if n == <leafnode*> NULL:
                     raise MemoryError
                 n.split_dim = -1
                 n.children = end_idx - start_idx
@@ -948,7 +949,7 @@ cdef class cKDTree:
                 mids = <np.float64_t*>stdlib.malloc(sizeof(np.float64_t)*self.m)
                 if mids == <np.float64_t*> NULL:
                     raise MemoryError
-                        
+
                 for i in range(self.m):
                     mids[i] = maxes[i]
                 mids[d] = split
@@ -960,7 +961,7 @@ cdef class cKDTree:
                 ni.greater = self.__build(p,end_idx,maxes,mids)
 
                 ni.children = ni.less.children + ni.greater.children
-            
+
             except:
                 # free ni if it cannot be returned
                 if ni !=  <innernode*> NULL:
@@ -975,7 +976,7 @@ cdef class cKDTree:
             ni.split_dim = d
             ni.split = split
             return ni
-                    
+
     cdef __free_tree(cKDTree self, innernode* node):
         if node.split_dim!=-1:
             self.__free_tree(node.less)
@@ -992,13 +993,13 @@ cdef class cKDTree:
     # query
     # -----
 
-    cdef int __query(cKDTree self, 
-            np.float64_t*result_distances, 
-            np.intp_t*result_indices, 
-            np.float64_t*x, 
-            np.intp_t k, 
-            np.float64_t eps, 
-            np.float64_t p, 
+    cdef int __query(cKDTree self,
+            np.float64_t*result_distances,
+            np.intp_t*result_indices,
+            np.float64_t*x,
+            np.intp_t k,
+            np.float64_t eps,
+            np.float64_t p,
             np.float64_t distance_upper_bound) except -1:
 
         cdef heap q
@@ -1032,7 +1033,7 @@ cdef class cKDTree:
         # entries are (-distance**p, i)
         neighbors = heap(k)
 
-        inf = inf2 = <nodeinfo*> NULL    
+        inf = inf2 = <nodeinfo*> NULL
 
         try:
             # set up first nodeinfo
@@ -1081,7 +1082,7 @@ cdef class cKDTree:
                         d = _distance_p(
                                 self.raw_data+self.raw_indices[i]*self.m,
                                 x,p,self.m,distance_upper_bound)
-                            
+
                         if d<distance_upper_bound:
                             # replace furthest neighbor
                             if neighbors.n==k:
@@ -1093,7 +1094,7 @@ cdef class cKDTree:
                             # adjust upper bound for efficiency
                             if neighbors.n==k:
                                 distance_upper_bound = -neighbors.peek().priority
-                    
+
                     # done with this node, get another
                     stdlib.free(inf)
                     inf = <nodeinfo*> NULL
@@ -1109,7 +1110,7 @@ cdef class cKDTree:
                     inode = <innernode*>inf.node
 
                     # we don't push cells that are too far onto the queue at all,
-                    # but since the distance_upper_bound decreases, we might get 
+                    # but since the distance_upper_bound decreases, we might get
                     # here even if the cell's too far
                     if min_distance>distance_upper_bound*epsfac:
 
@@ -1142,7 +1143,7 @@ cdef class cKDTree:
                     inf2 = <nodeinfo*>stdlib.malloc(sizeof(nodeinfo)+self.m*sizeof(np.float64_t))
                     if inf2 == <nodeinfo*> NULL:
                         raise MemoryError
-            
+
                     it2.contents.ptrdata = <char*> inf2
                     inf2.node = far
                     # most side distances unchanged
@@ -1161,7 +1162,7 @@ cdef class cKDTree:
                             inf.side_distances[inode.split_dim] + \
                             inf2.side_distances[inode.split_dim]
                     else:
-                        inf2.side_distances[inode.split_dim] = dabs(inode.split - 
+                        inf2.side_distances[inode.split_dim] = dabs(inode.split -
                                                                     x[inode.split_dim])**p
                         far_min_distance = min_distance - \
                             inf.side_distances[inode.split_dim] + \
@@ -1179,7 +1180,7 @@ cdef class cKDTree:
                         # just in case
                         it2.contents.ptrdata = <char*> NULL
 
-            # fill output arrays with sorted neighbors 
+            # fill output arrays with sorted neighbors
             for i in range(neighbors.n-1,-1,-1):
                 neighbors.pop(&neighbor)
                 result_indices[i] = neighbor.contents.intdata
@@ -1205,7 +1206,7 @@ cdef class cKDTree:
     def query(cKDTree self, object x, np.intp_t k=1, np.float64_t eps=0,
               np.float64_t p=2, np.float64_t distance_upper_bound=infinity):
         """query(self, x, k=1, eps=0, p=2, distance_upper_bound=np.inf)
-        
+
         Query the kd-tree for nearest neighbors
 
         Parameters
@@ -1215,11 +1216,11 @@ cdef class cKDTree:
         k : integer
             The number of nearest neighbors to return.
         eps : non-negative float
-            Return approximate nearest neighbors; the kth returned value 
-            is guaranteed to be no further than (1+eps) times the 
+            Return approximate nearest neighbors; the kth returned value
+            is guaranteed to be no further than (1+eps) times the
             distance to the real k-th nearest neighbor.
         p : float, 1<=p<=infinity
-            Which Minkowski p-norm to use. 
+            Which Minkowski p-norm to use.
             1 is the sum-of-absolute-values "Manhattan" distance
             2 is the usual Euclidean distance
             infinity is the maximum-coordinate-difference distance
@@ -1232,7 +1233,7 @@ cdef class cKDTree:
         Returns
         -------
         d : array of floats
-            The distances to the nearest neighbors. 
+            The distances to the nearest neighbors.
             If x has shape tuple+(self.m,), then d has shape tuple+(k,).
             Missing neighbors are indicated with infinite distances.
         i : ndarray of ints
@@ -1299,7 +1300,7 @@ cdef class cKDTree:
                 if k==1:
                     return np.reshape(dd[...,0],retshape), np.reshape(ii[...,0],retshape).astype(int)
                 else:
-                    return np.reshape(dd,retshape+(k,)), np.reshape(ii,retshape+(k,)).astype(int)     
+                    return np.reshape(dd,retshape+(k,)), np.reshape(ii,retshape+(k,)).astype(int)
 
             else:
                 # ... most other platforms
@@ -1355,12 +1356,12 @@ cdef class cKDTree:
             self.__query_ball_point_traverse_checking(
                 results, node.less, tracker)
             tracker.pop()
-            
+
             tracker.push_greater_of(node)
             self.__query_ball_point_traverse_checking(
                 results, node.greater, tracker)
             tracker.pop()
-            
+
         return 0
 
 
@@ -1373,7 +1374,7 @@ cdef class cKDTree:
         tracker = PointRectDistanceTracker()
         tracker.init(x, Rectangle(self.mins, self.maxes),
                      p, eps, r)
-        
+
         results = []
         self.__query_ball_point_traverse_checking(
             results, self.tree, tracker)
@@ -1383,7 +1384,7 @@ cdef class cKDTree:
     def query_ball_point(cKDTree self, object x, np.float64_t r,
                          np.float64_t p=2., np.float64_t eps=0):
         """query_ball_point(self, x, r, p, eps)
-        
+
         Find all points within distance r of point(s) x.
 
         Parameters
@@ -1424,7 +1425,7 @@ cdef class cKDTree:
 
         """
         cdef np.ndarray[np.float64_t, ndim=1, mode="c"] xx
-        
+
         x = np.asarray(x).astype(np.float64)
         if x.shape[-1] != self.m:
             raise ValueError("Searching for a %d-dimensional point in a " \
@@ -1452,23 +1453,23 @@ cdef class cKDTree:
         cdef leafnode *lnode2
         cdef list results_i
         cdef np.intp_t i, j
-        
+
         if node1.split_dim == -1:  # leaf node
             lnode1 = <leafnode*>node1
-            
+
             if node2.split_dim == -1:  # leaf node
                 lnode2 = <leafnode*>node2
-                
+
                 for i in range(lnode1.start_idx, lnode1.end_idx):
                     results_i = results[self.raw_indices[i]]
                     for j in range(lnode2.start_idx, lnode2.end_idx):
                         list_append(results_i, other.raw_indices[j])
             else:
-                
+
                 self.__query_ball_tree_traverse_no_checking(other, results, node1, node2.less)
                 self.__query_ball_tree_traverse_no_checking(other, results, node1, node2.greater)
         else:
-            
+
             self.__query_ball_tree_traverse_no_checking(other, results, node1.less, node2)
             self.__query_ball_tree_traverse_no_checking(other, results, node1.greater, node2)
 
@@ -1494,10 +1495,10 @@ cdef class cKDTree:
             self.__query_ball_tree_traverse_no_checking(other, results, node1, node2)
         elif node1.split_dim == -1:  # 1 is leaf node
             lnode1 = <leafnode*>node1
-            
+
             if node2.split_dim == -1:  # 1 & 2 are leaves
                 lnode2 = <leafnode*>node2
-                
+
                 # brute-force
                 for i in range(lnode1.start_idx, lnode1.end_idx):
                     results_i = results[self.raw_indices[i]]
@@ -1508,61 +1509,61 @@ cdef class cKDTree:
                             tracker.p, self.m, tracker.upper_bound)
                         if d <= tracker.upper_bound:
                             list_append(results_i, other.raw_indices[j])
-                            
+
             else:  # 1 is a leaf node, 2 is inner node
 
                 tracker.push_less_of(2, node2)
                 self.__query_ball_tree_traverse_checking(
                     other, results, node1, node2.less, tracker)
                 tracker.pop()
-                    
+
                 tracker.push_greater_of(2, node2)
                 self.__query_ball_tree_traverse_checking(
                     other, results, node1, node2.greater, tracker)
                 tracker.pop()
-            
-                
+
+
         else:  # 1 is an inner node
             if node2.split_dim == -1:  # 1 is an inner node, 2 is a leaf node
                 tracker.push_less_of(1, node1)
                 self.__query_ball_tree_traverse_checking(
                     other, results, node1.less, node2, tracker)
                 tracker.pop()
-                    
+
                 tracker.push_greater_of(1, node1)
                 self.__query_ball_tree_traverse_checking(
                     other, results, node1.greater, node2, tracker)
                 tracker.pop()
-                
+
             else: # 1 & 2 are inner nodes
-                
+
                 tracker.push_less_of(1, node1)
                 tracker.push_less_of(2, node2)
                 self.__query_ball_tree_traverse_checking(
                     other, results, node1.less, node2.less, tracker)
                 tracker.pop()
-                    
+
                 tracker.push_greater_of(2, node2)
                 self.__query_ball_tree_traverse_checking(
                     other, results, node1.less, node2.greater, tracker)
                 tracker.pop()
                 tracker.pop()
 
-                
+
                 tracker.push_greater_of(1, node1)
                 tracker.push_less_of(2, node2)
                 self.__query_ball_tree_traverse_checking(
                     other, results, node1.greater, node2.less, tracker)
                 tracker.pop()
-                    
+
                 tracker.push_greater_of(2, node2)
                 self.__query_ball_tree_traverse_checking(
                     other, results, node1.greater, node2.greater, tracker)
                 tracker.pop()
                 tracker.pop()
-            
+
         return 0
-            
+
 
     def query_ball_tree(cKDTree self, cKDTree other,
                         np.float64_t r, np.float64_t p=2., np.float64_t eps=0):
@@ -1602,7 +1603,7 @@ cdef class cKDTree:
             Rectangle(self.mins, self.maxes),
             Rectangle(other.mins, other.maxes),
             p, eps, r)
-        
+
         results = [[] for i in range(self.n)]
         self.__query_ball_tree_traverse_checking(
             other, results, self.tree, other.tree, tracker)
@@ -1621,10 +1622,10 @@ cdef class cKDTree:
         cdef leafnode *lnode2
         cdef list results_i
         cdef np.intp_t i, j, min_j
-        
+
         if node1.split_dim == -1:  # leaf node
             lnode1 = <leafnode*>node1
-            
+
             if node2.split_dim == -1:  # leaf node
                 lnode2 = <leafnode*>node2
 
@@ -1634,12 +1635,12 @@ cdef class cKDTree:
                         min_j = i + 1
                     else:
                         min_j = lnode2.start_idx
-                        
+
                     for j in range(min_j, lnode2.end_idx):
                         set_add_ordered_pair(results,
                                              self.raw_indices[i],
                                              self.raw_indices[j])
-                            
+
             else:
                 self.__query_pairs_traverse_no_checking(results, node1, node2.less)
                 self.__query_pairs_traverse_no_checking(results, node1, node2.greater)
@@ -1676,19 +1677,19 @@ cdef class cKDTree:
             self.__query_pairs_traverse_no_checking(results, node1, node2)
         elif node1.split_dim == -1:  # 1 is leaf node
             lnode1 = <leafnode*>node1
-            
+
             if node2.split_dim == -1:  # 1 & 2 are leaves
                 lnode2 = <leafnode*>node2
-                
+
                 # brute-force
                 for i in range(lnode1.start_idx, lnode1.end_idx):
-                    
+
                     # Special care here to avoid duplicate pairs
                     if node1 == node2:
                         min_j = i + 1
                     else:
                         min_j = lnode2.start_idx
-                        
+
                     for j in range(min_j, lnode2.end_idx):
                         d = _distance_p(
                             self.raw_data + self.raw_indices[i] * self.m,
@@ -1698,43 +1699,43 @@ cdef class cKDTree:
                             set_add_ordered_pair(results,
                                                  self.raw_indices[i],
                                                  self.raw_indices[j])
-                            
+
             else:  # 1 is a leaf node, 2 is inner node
                 tracker.push_less_of(2, node2)
                 self.__query_pairs_traverse_checking(
                     results, node1, node2.less, tracker)
                 tracker.pop()
-                    
+
                 tracker.push_greater_of(2, node2)
                 self.__query_pairs_traverse_checking(
                     results, node1, node2.greater, tracker)
                 tracker.pop()
-                
+
         else:  # 1 is an inner node
             if node2.split_dim == -1:  # 1 is an inner node, 2 is a leaf node
                 tracker.push_less_of(1, node1)
                 self.__query_pairs_traverse_checking(
                     results, node1.less, node2, tracker)
                 tracker.pop()
-                
+
                 tracker.push_greater_of(1, node1)
                 self.__query_pairs_traverse_checking(
                     results, node1.greater, node2, tracker)
                 tracker.pop()
-                
+
             else: # 1 and 2 are inner nodes
                 tracker.push_less_of(1, node1)
                 tracker.push_less_of(2, node2)
                 self.__query_pairs_traverse_checking(
                     results, node1.less, node2.less, tracker)
                 tracker.pop()
-                    
+
                 tracker.push_greater_of(2, node2)
                 self.__query_pairs_traverse_checking(
                     results, node1.less, node2.greater, tracker)
                 tracker.pop()
                 tracker.pop()
-                    
+
                 tracker.push_greater_of(1, node1)
                 if node1 != node2:
                     # Avoid traversing (node1.less, node2.greater) and
@@ -1745,15 +1746,15 @@ cdef class cKDTree:
                     self.__query_pairs_traverse_checking(
                         results, node1.greater, node2.less, tracker)
                     tracker.pop()
-                    
+
                 tracker.push_greater_of(2, node2)
                 self.__query_pairs_traverse_checking(
                     results, node1.greater, node2.greater, tracker)
                 tracker.pop()
                 tracker.pop()
-                
+
         return 0
-            
+
 
     def query_pairs(cKDTree self, np.float64_t r, np.float64_t p=2.,
                     np.float64_t eps=0):
@@ -1781,16 +1782,16 @@ cdef class cKDTree:
             positions are close.
 
         """
-        
+
         tracker = RectRectDistanceTracker(
             Rectangle(self.mins, self.maxes),
             Rectangle(self.mins, self.maxes),
             p, eps, r)
-        
+
         results = set()
         self.__query_pairs_traverse_checking(
             results, self.tree, self.tree, tracker)
-        
+
         return results
 
 
@@ -1834,7 +1835,7 @@ cdef class cKDTree:
                 lnode1 = <leafnode*>node1
                 if node2.split_dim == -1:  # 1 & 2 are leaves
                     lnode2 = <leafnode*>node2
-                    
+
                     # brute-force
                     for i in range(lnode1.start_idx, lnode1.end_idx):
                         for j in range(lnode2.start_idx, lnode2.end_idx):
@@ -1848,7 +1849,7 @@ cdef class cKDTree:
                             for l in range(n_queries):
                                 if d <= r[idx[l]]:
                                     results[idx[l]] += 1
-                                
+
                 else:  # 1 is a leaf node, 2 is inner node
                     tracker.push_less_of(2, node2)
                     self.__count_neighbors_traverse(
@@ -1861,7 +1862,7 @@ cdef class cKDTree:
                         other, n_queries, r, results, idx,
                         node1, node2.greater, tracker)
                     tracker.pop()
-                
+
             else:  # 1 is an inner node
                 if node2.split_dim == -1:  # 1 is an inner node, 2 is a leaf node
                     tracker.push_less_of(1, node1)
@@ -1869,13 +1870,13 @@ cdef class cKDTree:
                         other, n_queries, r, results, idx,
                         node1.less, node2, tracker)
                     tracker.pop()
-                    
+
                     tracker.push_greater_of(1, node1)
                     self.__count_neighbors_traverse(
                         other, n_queries, r, results, idx,
                         node1.greater, node2, tracker)
                     tracker.pop()
-                    
+
                 else: # 1 and 2 are inner nodes
                     tracker.push_less_of(1, node1)
                     tracker.push_less_of(2, node2)
@@ -1883,28 +1884,28 @@ cdef class cKDTree:
                         other, n_queries, r, results, idx,
                         node1.less, node2.less, tracker)
                     tracker.pop()
-                        
+
                     tracker.push_greater_of(2, node2)
                     self.__count_neighbors_traverse(
                         other, n_queries, r, results, idx,
                         node1.less, node2.greater, tracker)
                     tracker.pop()
                     tracker.pop()
-                        
+
                     tracker.push_greater_of(1, node1)
                     tracker.push_less_of(2, node2)
                     self.__count_neighbors_traverse(
                         other, n_queries, r, results, idx,
                         node1.greater, node2.less, tracker)
                     tracker.pop()
-                        
+
                     tracker.push_greater_of(2, node2)
                     self.__count_neighbors_traverse(
                         other, n_queries, r, results, idx,
                         node1.greater, node2.greater, tracker)
                     tracker.pop()
                     tracker.pop()
-                    
+
         return 0
 
     @cython.boundscheck(False)
@@ -1968,7 +1969,7 @@ cdef class cKDTree:
             Rectangle(self.mins, self.maxes),
             Rectangle(other.mins, other.maxes),
             p, 0.0, 0.0)
-        
+
         # Go!
         results = np.zeros((n_queries,), dtype=np.intp)
         idx = np.arange(n_queries, dtype=np.intp)
@@ -1976,7 +1977,7 @@ cdef class cKDTree:
                                         &real_r[0], &results[0], &idx[0],
                                         self.tree, other.tree,
                                         tracker)
-        
+
         if np.shape(r) == ():
             if results[0] <= <np.intp_t> LONG_MAX:
                 return int(results[0])
@@ -1997,15 +1998,15 @@ cdef class cKDTree:
         cdef list results_i
         cdef np.float64_t d
         cdef np.intp_t i, j, min_j
-                
+
         if tracker.min_distance > tracker.upper_bound:
             return 0
         elif node1.split_dim == -1:  # 1 is leaf node
             lnode1 = <leafnode*>node1
-            
+
             if node2.split_dim == -1:  # 1 & 2 are leaves
                 lnode2 = <leafnode*>node2
-                
+
                 # brute-force
                 for i in range(lnode1.start_idx, lnode1.end_idx):
                     # Special care here to avoid duplicate pairs
@@ -2013,7 +2014,7 @@ cdef class cKDTree:
                         min_j = i+1
                     else:
                         min_j = lnode2.end_idx
-                        
+
                     for j in range(min_j, lnode2.end_idx):
                         d = _distance_p(
                             self.raw_data + self.raw_indices[i] * self.m,
@@ -2031,37 +2032,37 @@ cdef class cKDTree:
                 self.__sparse_distance_matrix_traverse(
                     other, results, node1, node2.less, tracker)
                 tracker.pop()
-                    
+
                 tracker.push_greater_of(2, node2)
                 self.__sparse_distance_matrix_traverse(
                     other, results, node1, node2.greater, tracker)
                 tracker.pop()
-                
+
         else:  # 1 is an inner node
             if node2.split_dim == -1:  # 1 is an inner node, 2 is a leaf node
                 tracker.push_less_of(1, node1)
                 self.__sparse_distance_matrix_traverse(
                     other, results, node1.less, node2, tracker)
                 tracker.pop()
-                
+
                 tracker.push_greater_of(1, node1)
                 self.__sparse_distance_matrix_traverse(
                     other, results, node1.greater, node2, tracker)
                 tracker.pop()
-                
+
             else: # 1 and 2 are inner nodes
                 tracker.push_less_of(1, node1)
                 tracker.push_less_of(2, node2)
                 self.__sparse_distance_matrix_traverse(
                     other, results, node1.less, node2.less, tracker)
                 tracker.pop()
-                    
+
                 tracker.push_greater_of(2, node2)
                 self.__sparse_distance_matrix_traverse(
                     other, results, node1.less, node2.greater, tracker)
                 tracker.pop()
                 tracker.pop()
-                    
+
                 tracker.push_greater_of(1, node1)
                 if node1 != node2:
                     # Avoid traversing (node1.less, node2.greater) and
@@ -2072,15 +2073,15 @@ cdef class cKDTree:
                     self.__sparse_distance_matrix_traverse(
                         other, results, node1.greater, node2.less, tracker)
                     tracker.pop()
-                    
+
                 tracker.push_greater_of(2, node2)
                 self.__sparse_distance_matrix_traverse(
                     other, results, node1.greater, node2.greater, tracker)
                 tracker.pop()
                 tracker.pop()
-                
+
         return 0
-            
+
     def sparse_distance_matrix(cKDTree self, cKDTree other,
                                np.float64_t max_distance,
                                np.float64_t p=2.):
@@ -2115,10 +2116,10 @@ cdef class cKDTree:
             Rectangle(self.mins, self.maxes),
             Rectangle(other.mins, other.maxes),
             p, 0, max_distance)
-        
+
         results = coo_entries()
         self.__sparse_distance_matrix_traverse(other, results,
                                                self.tree, other.tree,
                                                tracker)
-        
+
         return results.to_matrix(shape=(self.n, other.n)).todok()

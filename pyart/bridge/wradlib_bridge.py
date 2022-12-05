@@ -5,17 +5,17 @@ Py-ART methods linking to wradlib functions, http://wradlib.org/
 
 try:
     import wradlib
+
     _WRADLIB_AVAILABLE = True
 except ImportError:
     _WRADLIB_AVAILABLE = False
 import numpy as np
 
-from ..config import get_metadata, get_field_name
+from ..config import get_field_name, get_metadata
 from ..exceptions import MissingOptionalDependency
 
 
-def texture_of_complex_phase(radar, phidp_field=None,
-                             phidp_texture_field=None):
+def texture_of_complex_phase(radar, phidp_field=None, phidp_texture_field=None):
     """
     Calculate the texture of the differential phase field.
 
@@ -51,27 +51,27 @@ def texture_of_complex_phase(radar, phidp_field=None,
     if not _WRADLIB_AVAILABLE:
         raise MissingOptionalDependency(
             "wradlib is required to use texture_of_complex_phase but is "
-            + "not installed")
+            + "not installed"
+        )
 
     # parse field names
     if phidp_field is None:
-        phidp_field = get_field_name('differential_phase')
+        phidp_field = get_field_name("differential_phase")
 
     if phidp_texture_field is None:
-        phidp_texture_field = get_field_name('differential_phase')
+        phidp_texture_field = get_field_name("differential_phase")
 
     # Grab the phase data
-    phidp = radar.fields[phidp_field]['data']
+    phidp = radar.fields[phidp_field]["data"]
 
     # convert to complex number
-    complex_phase = np.exp(1j*(phidp*np.pi/180.0))
+    complex_phase = np.exp(1j * (phidp * np.pi / 180.0))
 
     # calculate texture using wradlib
-    w_texture_complex = wradlib.dp.texture(
-        (np.real(complex_phase) + 1.0) * 180)
+    w_texture_complex = wradlib.dp.texture((np.real(complex_phase) + 1.0) * 180)
 
     texture_field = get_metadata(phidp_texture_field)
-    texture_field['data'] = w_texture_complex
-    texture_field['standard_name'] = 'texture_of_differential_phase_hv'
-    texture_field['long_name'] = 'Texture of differential phase'
+    texture_field["data"] = w_texture_complex
+    texture_field["standard_name"] = "texture_of_differential_phase_hv"
+    texture_field["long_name"] = "Texture of differential phase"
     return texture_field

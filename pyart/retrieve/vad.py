@@ -11,9 +11,7 @@ from ..config import get_field_name
 from ..core import HorizontalWindProfile
 
 
-
-def vad_michelson(radar, vel_field=None, z_want=None,
-                  gatefilter=None):
+def vad_michelson(radar, vel_field=None, z_want=None, gatefilter=None):
     """
     Velocity azimuth display.
 
@@ -36,7 +34,7 @@ def vad_michelson(radar, vel_field=None, z_want=None,
     Returns
     -------
     vad : HorizontalWindProfile
-	A velocity azimuth display object containing height, speed, direction,
+        A velocity azimuth display object containing height, speed, direction,
         u_wind, v_wind from a radar object.
 
     References
@@ -48,16 +46,18 @@ def vad_michelson(radar, vel_field=None, z_want=None,
     Norrkoping.
 
     """
-    warnings.warn("vad_michelson function is currently having issues, "
-                  "working on a fix. Please use vad_browning in the meantime. "
-                  "See issue #992 for more details: "
-                  "https://github.com/ARM-DOE/pyart/issues/992")
+    warnings.warn(
+        "vad_michelson function is currently having issues, "
+        "working on a fix. Please use vad_browning in the meantime. "
+        "See issue #992 for more details: "
+        "https://github.com/ARM-DOE/pyart/issues/992"
+    )
     speeds = []
     angles = []
     heights = []
 
     # Pulling z data from radar
-    z_gate_data = radar.gate_z['data']
+    z_gate_data = radar.gate_z["data"]
 
     # Setting parameters
     if z_want is None:
@@ -65,34 +65,32 @@ def vad_michelson(radar, vel_field=None, z_want=None,
 
     # Parse field parameters
     if vel_field is None:
-        radar.check_field_exists('velocity')
-        vel_field = get_field_name('velocity')
+        radar.check_field_exists("velocity")
+        vel_field = get_field_name("velocity")
 
     # Selecting what velocity data to use based on gatefilter
     if gatefilter is not None:
         velocities = np.ma.masked_where(
-            gatefilter.gate_excluded,
-            radar.fields[vel_field]['data'])
+            gatefilter.gate_excluded, radar.fields[vel_field]["data"]
+        )
     else:
-        velocities = radar.fields[vel_field]['data']
+        velocities = radar.fields[vel_field]["data"]
 
     # Getting radar sweep index values
-    for i in range(len(radar.sweep_start_ray_index['data'])):
-        index_start = radar.sweep_start_ray_index['data'][i]
-        index_end = radar.sweep_end_ray_index['data'][i]
+    for i in range(len(radar.sweep_start_ray_index["data"])):
+        index_start = radar.sweep_start_ray_index["data"][i]
+        index_end = radar.sweep_end_ray_index["data"][i]
         if not (index_end - index_start) % 2 == 0:
             index_end = index_end - 1
 
         used_velocities = velocities[index_start:index_end]
-        azimuth = radar.azimuth['data'][index_start:index_end]
-        elevation = radar.fixed_angle['data'][i]
+        azimuth = radar.azimuth["data"][index_start:index_end]
+        elevation = radar.fixed_angle["data"][i]
 
         # Calculating speed and angle
-        speed, angle = _vad_calculation_m(
-            used_velocities, azimuth, elevation)
+        speed, angle = _vad_calculation_m(used_velocities, azimuth, elevation)
 
-        print('max height', z_gate_data[index_start, :].max(),
-              'meters')
+        print("max height", z_gate_data[index_start, :].max(), "meters")
 
         # Filling empty arrays with data
         speeds.append(speed)
@@ -112,17 +110,16 @@ def vad_michelson(radar, vel_field=None, z_want=None,
     u_ordered, v_ordered = _sd_to_uv(speed_ordered, angle_ordered)
     u_mean = _interval_mean(u_ordered, height_ordered, z_want)
     v_mean = _interval_mean(v_ordered, height_ordered, z_want)
-    vad = HorizontalWindProfile.from_u_and_v(
-        z_want, u_mean, v_mean)
+    vad = HorizontalWindProfile.from_u_and_v(z_want, u_mean, v_mean)
     return vad
 
 
 def _vad_calculation_m(velocity_field, azimuth, elevation):
-    """ Calculates VAD for a scan, returns speed and angle
+    """Calculates VAD for a scan, returns speed and angle
     outdic = vad_algorithm(velocity_field, azimuth, elevation)
     velocity_field is a 2D array, azimuth is a 1D array,
     elevation is a number. All in degrees, m outdic contains
-    speed and angle. """
+    speed and angle."""
 
     # Creating array with radar velocity data
     nrays, nbins = velocity_field.shape
@@ -172,40 +169,48 @@ def _vad_calculation_m(velocity_field, azimuth, elevation):
     sumcos2 = np.nansum(cos2, 0)
 
     # Calculating speed and angle values
-    b_value = (sumcminu_mcos - (sumsincos*sumcminu_msin / sumsin2)) / (
-        sumcos2 - (sumsincos**2) / sumsin2)
-    a_value = (sumcminu_msin - b_value*sumsincos) / sumsin2
-    speed = np.sqrt(a_value**2 + b_value**2) / np.cos(
-        np.deg2rad(elevation))
+    b_value = (sumcminu_mcos - (sumsincos * sumcminu_msin / sumsin2)) / (
+        sumcos2 - (sumsincos**2) / sumsin2
+    )
+    a_value = (sumcminu_msin - b_value * sumsincos) / sumsin2
+    speed = np.sqrt(a_value**2 + b_value**2) / np.cos(np.deg2rad(elevation))
     angle = np.arctan2(a_value, b_value)
     return speed, angle
 
 
 def _interval_mean(data, current_z, wanted_z):
-    """ Find the mean of data indexed by current_z
-        at wanted_z on intervals wanted_z+/- delta
-        wanted_z. """
+    """Find the mean of data indexed by current_z
+    at wanted_z on intervals wanted_z+/- delta
+    wanted_z."""
     delta = wanted_z[1] - wanted_z[0]
-    pos_lower = [np.argsort((current_z - (
-        wanted_z[i] - delta / 2.0))**2)[0]
-                 for i in range(len(wanted_z))]
-    pos_upper = [np.argsort((current_z - (
-        wanted_z[i] + delta / 2.0))**2)[0]
-                 for i in range(len(wanted_z))]
-    mean_values = np.array([data[pos_lower[i]:pos_upper[i]].mean()
-                            for i in range(len(pos_upper))])
+    pos_lower = [
+        np.argsort((current_z - (wanted_z[i] - delta / 2.0)) ** 2)[0]
+        for i in range(len(wanted_z))
+    ]
+    pos_upper = [
+        np.argsort((current_z - (wanted_z[i] + delta / 2.0)) ** 2)[0]
+        for i in range(len(wanted_z))
+    ]
+    mean_values = np.array(
+        [data[pos_lower[i] : pos_upper[i]].mean() for i in range(len(pos_upper))]
+    )
     return mean_values
 
 
 def _sd_to_uv(speed, direction):
-    """ Takes speed and direction to create u_mean and v_mean. """
+    """Takes speed and direction to create u_mean and v_mean."""
     return (np.sin(direction) * speed), (np.cos(direction) * speed)
 
 
 def vad_browning(
-        radar, velocity, z_want=None,
-        valid_ray_min=16, gatefilter=None, window=2,
-        weight='equal'):
+    radar,
+    velocity,
+    z_want=None,
+    valid_ray_min=16,
+    gatefilter=None,
+    window=2,
+    weight="equal",
+):
     """
     Velocity azimuth display.
     Note: This code uses only one sweep. Before using the
@@ -260,47 +265,46 @@ def vad_browning(
     Radar. J. Appl. Meteor., 7, 105–113
 
     """
-    velocities = radar.fields[velocity]['data']
+    velocities = radar.fields[velocity]["data"]
     if gatefilter is not None:
-        velocities = np.ma.masked_where(
-            gatefilter.gate_excluded, velocities)
-    azimuths = radar.azimuth['data'][:]
-    elevation = radar.fixed_angle['data'][0]
+        velocities = np.ma.masked_where(gatefilter.gate_excluded, velocities)
+    azimuths = radar.azimuth["data"][:]
+    elevation = radar.fixed_angle["data"][0]
 
-    u_wind, v_wind = _vad_calculation_b(velocities, azimuths,
-                                        elevation, valid_ray_min)
+    u_wind, v_wind = _vad_calculation_b(velocities, azimuths, elevation, valid_ray_min)
     bad = np.logical_or(np.isnan(u_wind), np.isnan(v_wind))
     good_u_wind = u_wind[~bad]
     good_v_wind = v_wind[~bad]
-    radar_height = radar.gate_z['data'][0]
+    radar_height = radar.gate_z["data"][0]
     good_height = radar_height[~bad]
     if z_want is None:
         z_want = np.linspace(0, 1000, 100)[:50]
     try:
-        print('max height', np.max(good_height), ' meters')
-        print('min height', np.min(good_height), ' meters')
+        print("max height", np.max(good_height), " meters")
+        print("min height", np.min(good_height), " meters")
     except ValueError:
-        raise ValueError('Not enough data in this radar sweep ' \
-                         'for a vad calculation.')
+        raise ValueError(
+            "Not enough data in this radar sweep " "for a vad calculation."
+        )
 
-    u_interp = _Average1D(good_height, good_u_wind,
-                          z_want[1] - z_want[0] / window, weight)
-    v_interp = _Average1D(good_height, good_v_wind,
-                          z_want[1] - z_want[0] / window, weight)
+    u_interp = _Average1D(
+        good_height, good_u_wind, z_want[1] - z_want[0] / window, weight
+    )
+    v_interp = _Average1D(
+        good_height, good_v_wind, z_want[1] - z_want[0] / window, weight
+    )
 
     u_wanted = u_interp(z_want)
     v_wanted = v_interp(z_want)
-    u_wanted = np.ma.masked_equal(u_wanted, 99999.)
-    v_wanted = np.ma.masked_equal(v_wanted, 99999.)
+    u_wanted = np.ma.masked_equal(u_wanted, 99999.0)
+    v_wanted = np.ma.masked_equal(v_wanted, 99999.0)
 
-    vad = HorizontalWindProfile.from_u_and_v(
-        z_want, u_wanted, v_wanted)
+    vad = HorizontalWindProfile.from_u_and_v(z_want, u_wanted, v_wanted)
     return vad
 
 
-def _vad_calculation_b(velocities, azimuths,
-                       elevation, valid_ray_min):
-    """ Calculates VAD for a scan and returns u_mean and
+def _vad_calculation_b(velocities, azimuths, elevation, valid_ray_min):
+    """Calculates VAD for a scan and returns u_mean and
     v_mean. velocities is a 2D array, azimuths is a 1D
     array, elevation is a number.
     Note:
@@ -358,9 +362,9 @@ def _vad_calculation_b(velocities, azimuths,
     b_2 = sum_cos_vel_dev
 
     # solve for the x vector
-    determinant = a*d - b*c
-    x_1 = (d*b_1 - b*b_2) / determinant
-    x_2 = (a*b_2 - c*b_1) / determinant
+    determinant = a * d - b * c
+    x_1 = (d * b_1 - b * b_2) / determinant
+    x_2 = (a * b_2 - c * b_1) / determinant
 
     # calculate horizontal components of winds
     elevation_scale = 1 / np.cos(np.deg2rad(elevation))
@@ -370,28 +374,28 @@ def _vad_calculation_b(velocities, azimuths,
 
 
 def _inverse_dist_squared(dist):
-    """ Obtaining distance weights by using distance weighting
+    """Obtaining distance weights by using distance weighting
     interpolation, using the inverse distance-squared relationship.
     """
     weights = 1 / (dist * dist)
-    weights[np.isnan(weights)] = 99999.
+    weights[np.isnan(weights)] = 99999.0
     return weights
 
 
-class _Average1D(object):
-    """ Used to find the nearest gate height and horizontal wind
-    value with respect to the user's desired height. """
-    def __init__(self, x, y, window, weight,
-                 fill_value=99999.):
+class _Average1D:
+    """Used to find the nearest gate height and horizontal wind
+    value with respect to the user's desired height."""
+
+    def __init__(self, x, y, window, weight, fill_value=99999.0):
         sort_idx = np.argsort(x)
         self.x_sorted = x[sort_idx]
         self.y_sorted = y[sort_idx]
         self.window = window
         self.fill_value = fill_value
 
-        if weight == 'equal':
+        if weight == "equal":
             self.weight_func = lambda x: None
-        elif weight == 'idw':
+        elif weight == "idw":
             self.weight_func = _inverse_dist_squared
         elif callable(weight):
             self.weight_func = weight

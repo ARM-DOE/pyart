@@ -54,14 +54,13 @@ Colorblind friendly
 
 """
 
-from .radardisplay import RadarDisplay
-from . import cm
-from . import cm_colorblind
-from .radardisplay_airborne import AirborneRadarDisplay
+from . import cm, cm_colorblind
+from .convstrat_scheme_plot import plot_convstrat_scheme
 from .gridmapdisplay import GridMapDisplay
 from .gridmapdisplay_basemap import GridMapDisplayBasemap
+from .radardisplay import RadarDisplay
+from .radardisplay_airborne import AirborneRadarDisplay
 from .radarmapdisplay import RadarMapDisplay
 from .radarmapdisplay_basemap import RadarMapDisplayBasemap
-from .convstrat_scheme_plot import plot_convstrat_scheme
 
-__all__ = [s for s in dir() if not s.startswith('_')]
+__all__ = [s for s in dir() if not s.startswith("_")]

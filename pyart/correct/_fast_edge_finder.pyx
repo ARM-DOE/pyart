@@ -5,8 +5,8 @@ Cython routine for quickly finding edges between connected regions.
 
 import numpy as np
 
-cimport numpy as np
 cimport cython
+cimport numpy as np
 
 
 @cython.boundscheck(False)

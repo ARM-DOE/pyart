@@ -7,7 +7,7 @@ API Reference Manual
 :Release: |version|
 :Date: |today|
 
-This guide provides documentation for all modules, function, methods, 
+This guide provides documentation for all modules, function, methods,
 and classes within Py-ART for those in the public API.
 
 Documentation is broken down by directory and module.
@@ -16,7 +16,7 @@ Documentation is broken down by directory and module.
 
 .. autosummary::
    :toctree: generated/
-    
+
    core
    io
    aux_io

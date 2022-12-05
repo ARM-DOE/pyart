@@ -38,7 +38,7 @@ def cross_section_ppi(radar, target_azimuths, az_tol=None):
     valid_azimuths = []
     for target_azimuth in sorted(target_azimuths):
         for sweep_slice in radar.iter_slice():
-            sweep_azimuths = radar.azimuth['data'][sweep_slice]
+            sweep_azimuths = radar.azimuth["data"][sweep_slice]
             d_az = np.abs(sweep_azimuths - target_azimuth)
             if az_tol is None:
                 ray_number = np.argmin(d_az)
@@ -47,11 +47,15 @@ def cross_section_ppi(radar, target_azimuths, az_tol=None):
             else:
                 d_az_min = np.min(d_az)
                 if d_az_min > az_tol:
-                    warn('WARNING: No azimuth found whithin tolerance '
-                         + 'for angle '+str(target_azimuth)
-                         + '. Minimum distance to radar azimuth '
-                         + str(d_az_min) + ' larger than tolerance '
-                         + str(az_tol))
+                    warn(
+                        "WARNING: No azimuth found whithin tolerance "
+                        + "for angle "
+                        + str(target_azimuth)
+                        + ". Minimum distance to radar azimuth "
+                        + str(d_az_min)
+                        + " larger than tolerance "
+                        + str(az_tol)
+                    )
                 else:
                     ray_number = np.argmin(d_az)
                     prhi_rays.append(ray_number + sweep_slice.start)
@@ -60,10 +64,11 @@ def cross_section_ppi(radar, target_azimuths, az_tol=None):
     unique_azimuths = np.unique(valid_azimuths)
     rhi_nsweeps = len(unique_azimuths)
     if rhi_nsweeps == 0:
-        raise ValueError('No azimuth found within tolerance')
+        raise ValueError("No azimuth found within tolerance")
 
     radar_rhi = _construct_xsect_radar(
-        radar, 'rhi', prhi_rays, rhi_nsweeps, unique_azimuths)
+        radar, "rhi", prhi_rays, rhi_nsweeps, unique_azimuths
+    )
 
     return radar_rhi
 
@@ -98,7 +103,7 @@ def cross_section_rhi(radar, target_elevations, el_tol=None):
     valid_elevations = []
     for target_elevation in target_elevations:
         for sweep_slice in radar.iter_slice():
-            sweep_elevations = radar.elevation['data'][sweep_slice]
+            sweep_elevations = radar.elevation["data"][sweep_slice]
             d_el = np.abs(sweep_elevations - target_elevation)
             if el_tol is None:
                 ray_number = np.argmin(d_el)
@@ -107,11 +112,15 @@ def cross_section_rhi(radar, target_elevations, el_tol=None):
             else:
                 d_el_min = np.min(d_el)
                 if d_el_min > el_tol:
-                    warn('WARNING: No elevation found whithin tolerance '
-                         + 'for angle '+str(target_elevation)
-                         + '. Minimum distance to radar elevation '
-                         + str(d_el_min) + ' larger than tolerance '
-                         + str(el_tol))
+                    warn(
+                        "WARNING: No elevation found whithin tolerance "
+                        + "for angle "
+                        + str(target_elevation)
+                        + ". Minimum distance to radar elevation "
+                        + str(d_el_min)
+                        + " larger than tolerance "
+                        + str(el_tol)
+                    )
                 else:
                     ray_number = np.argmin(d_el)
                     pppi_rays.append(ray_number + sweep_slice.start)
@@ -119,16 +128,16 @@ def cross_section_rhi(radar, target_elevations, el_tol=None):
 
     ppi_nsweeps = len(valid_elevations)
     if ppi_nsweeps == 0:
-        raise ValueError('No elevation found within tolerance')
+        raise ValueError("No elevation found within tolerance")
 
     radar_ppi = _construct_xsect_radar(
-        radar, 'ppi', pppi_rays, ppi_nsweeps, valid_elevations)
+        radar, "ppi", pppi_rays, ppi_nsweeps, valid_elevations
+    )
 
     return radar_ppi
 
 
-def _construct_xsect_radar(
-        radar, scan_type, pxsect_rays, xsect_nsweeps, target_angles):
+def _construct_xsect_radar(radar, scan_type, pxsect_rays, xsect_nsweeps, target_angles):
     """
     Constructs a new radar object that contains cross-sections at fixed angles
     of a PPI or RHI volume scan.
@@ -161,53 +170,63 @@ def _construct_xsect_radar(
     altitude = _copy_dic(radar.altitude)
     metadata = _copy_dic(radar.metadata)
 
-    time = _copy_dic(radar.time, excluded_keys=['data'])
-    time['data'] = radar.time['data'][pxsect_rays].copy()
+    time = _copy_dic(radar.time, excluded_keys=["data"])
+    time["data"] = radar.time["data"][pxsect_rays].copy()
 
-    azimuth = _copy_dic(radar.azimuth, excluded_keys=['data'])
-    azimuth['data'] = radar.azimuth['data'][pxsect_rays].copy()
+    azimuth = _copy_dic(radar.azimuth, excluded_keys=["data"])
+    azimuth["data"] = radar.azimuth["data"][pxsect_rays].copy()
 
-    elevation = _copy_dic(radar.elevation, excluded_keys=['data'])
-    elevation['data'] = radar.elevation['data'][pxsect_rays].copy()
+    elevation = _copy_dic(radar.elevation, excluded_keys=["data"])
+    elevation["data"] = radar.elevation["data"][pxsect_rays].copy()
 
     fields = {}
     for field_name, orig_field_dic in radar.fields.items():
-        field_dic = _copy_dic(orig_field_dic, excluded_keys=['data'])
-        field_dic['data'] = orig_field_dic['data'][pxsect_rays].copy()
+        field_dic = _copy_dic(orig_field_dic, excluded_keys=["data"])
+        field_dic["data"] = orig_field_dic["data"][pxsect_rays].copy()
         fields[field_name] = field_dic
 
-    sweep_number = _copy_dic(radar.sweep_number, excluded_keys=['data'])
-    sweep_number['data'] = np.arange(xsect_nsweeps, dtype='int32')
+    sweep_number = _copy_dic(radar.sweep_number, excluded_keys=["data"])
+    sweep_number["data"] = np.arange(xsect_nsweeps, dtype="int32")
 
-    sweep_mode = _copy_dic(radar.sweep_mode, excluded_keys=['data'])
-    sweep_mode['data'] = np.array([scan_type]*xsect_nsweeps)
+    sweep_mode = _copy_dic(radar.sweep_mode, excluded_keys=["data"])
+    sweep_mode["data"] = np.array([scan_type] * xsect_nsweeps)
 
-    fixed_angle = _copy_dic(radar.fixed_angle, excluded_keys=['data'])
-    fixed_angle['data'] = np.array(target_angles, dtype='float32')
+    fixed_angle = _copy_dic(radar.fixed_angle, excluded_keys=["data"])
+    fixed_angle["data"] = np.array(target_angles, dtype="float32")
 
     sweep_start_ray_index = _copy_dic(
-        radar.sweep_start_ray_index, excluded_keys=['data'])
-    ssri = np.arange(xsect_nsweeps, dtype='int32') * radar.nsweeps
-    sweep_start_ray_index['data'] = ssri
+        radar.sweep_start_ray_index, excluded_keys=["data"]
+    )
+    ssri = np.arange(xsect_nsweeps, dtype="int32") * radar.nsweeps
+    sweep_start_ray_index["data"] = ssri
 
-    sweep_end_ray_index = _copy_dic(
-        radar.sweep_end_ray_index, excluded_keys=['data'])
-    seri = (np.arange(xsect_nsweeps, dtype='int32') *
-            radar.nsweeps + radar.nsweeps-1)
-    sweep_end_ray_index['data'] = seri
+    sweep_end_ray_index = _copy_dic(radar.sweep_end_ray_index, excluded_keys=["data"])
+    seri = np.arange(xsect_nsweeps, dtype="int32") * radar.nsweeps + radar.nsweeps - 1
+    sweep_end_ray_index["data"] = seri
 
     radar_xsect = Radar(
-        time, _range, fields, metadata, scan_type,
-        latitude, longitude, altitude,
-        sweep_number, sweep_mode, fixed_angle,
-        sweep_start_ray_index, sweep_end_ray_index,
-        azimuth, elevation)
+        time,
+        _range,
+        fields,
+        metadata,
+        scan_type,
+        latitude,
+        longitude,
+        altitude,
+        sweep_number,
+        sweep_mode,
+        fixed_angle,
+        sweep_start_ray_index,
+        sweep_end_ray_index,
+        azimuth,
+        elevation,
+    )
 
     return radar_xsect
 
 
 def _copy_dic(orig_dic, excluded_keys=None):
-    """ Return a copy of the original dictionary copying each element. """
+    """Return a copy of the original dictionary copying each element."""
     if excluded_keys is None:
         excluded_keys = []
     dic = {}
