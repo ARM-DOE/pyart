@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.correct.region_dealias &#8212; Py-ART 1.14.1.post6 documentation</title>
+    <title>pyart.correct.region_dealias &#8212; Py-ART 1.14.1.post7 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -680,9 +680,8 @@
         <span class="n">diffs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">(</span><span class="n">vels_slice_means</span><span class="p">[</span><span class="n">reg</span><span class="p">]</span> <span class="o">-</span> <span class="n">vels_without_cur</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">diffs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">the_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">diffs</span><span class="p">)</span>
-            <span class="n">vel_wo_cur</span> <span class="o">=</span> <span class="n">vels_without_cur</span><span class="p">[</span><span class="n">the_min</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">vel_wo_cur</span> <span class="o">=</span> <span class="n">vels_slice_means</span><span class="p">[</span><span class="n">reg</span><span class="p">]</span>
+            <span class="n">the_min</span> <span class="o">=</span> <span class="mi">0</span>
 
         <span class="k">if</span> <span class="n">the_min</span> <span class="o">&lt;</span> <span class="n">v_nyq_vel</span><span class="p">:</span>
             <span class="n">gradient_vector</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
