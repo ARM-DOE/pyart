@@ -24,9 +24,10 @@ dependencies:
   - s3fs
   - glpk
   - cftime
-  - shapely<1.8.3
+  - shapely
   - pip
   - pip:
+      - git+https://github.com/openradar/open-radar-data
       - pydata-sphinx-theme<0.9.0
       - sphinx_gallery
       - sphinx-copybutton

@@ -54,7 +54,10 @@ def plot_color_gradients(cmap_category, cmap_list):
 # These colormaps are the most inclusive, and should be used where
 # possible.
 
-plot_color_gradients("Colorblind Friendly", ["LangRainbow12", "HomeyerRainbow", "balance"])
+plot_color_gradients(
+    "Colorblind Friendly",
+    ["LangRainbow12", "HomeyerRainbow", "balance", "ChaseSpectral", "SpectralExtended"]
+)
 
 ######################################
 # **Perceptually Uniform Colormaps**

@@ -49,6 +49,8 @@ Colorblind friendly
     * LangRainbow12
     * HomeyerRainbow
     * balance
+    * ChaseSpectral
+    * SpectralExtended
 
 """
 
@@ -60,5 +62,6 @@ from .gridmapdisplay import GridMapDisplay
 from .gridmapdisplay_basemap import GridMapDisplayBasemap
 from .radarmapdisplay import RadarMapDisplay
 from .radarmapdisplay_basemap import RadarMapDisplayBasemap
+from .convstrat_scheme_plot import plot_convstrat_scheme
 
 __all__ = [s for s in dir() if not s.startswith('_')]
