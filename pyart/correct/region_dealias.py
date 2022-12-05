@@ -460,9 +460,8 @@ def _gradient(nyq_vector, vels_slice_means, svels_slice_means,
         diffs = np.square(vels_slice_means[reg] - vels_without_cur)
         if len(diffs) > 0:
             the_min = np.argmin(diffs)
-            vel_wo_cur = vels_without_cur[the_min]
         else:
-            vel_wo_cur = vels_slice_means[reg]
+            the_min = 0
 
         if the_min < v_nyq_vel:
             gradient_vector[i] = 0
