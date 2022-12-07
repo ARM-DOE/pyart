@@ -40,10 +40,10 @@ fmt = (
     "16s8s8s12s28sh16s16shIIhhiiHHh12sHiiiiiHhHhhhHhhhhHH18sIIIIIIHHIIh"
     + "32shhhBB2s8sI4s"
 )
-l = list(struct.unpack(fmt, f.read(308)))
-l[23] = 154000  # last_bin_range
-l[24] = 25  # number_bins
-out.write(struct.pack(fmt, *l))
+packet = list(struct.unpack(fmt, f.read(308)))
+packet[23] = 154000  # last_bin_range
+packet[24] = 25  # number_bins
+out.write(struct.pack(fmt, *packet))
 
 # padding to next record
 out.write(f.read(6144 - 640))  # padding to next record
@@ -59,10 +59,10 @@ out.write(f.read(12))  # no change
 # -> volume_scan_start_time
 # ->
 fmt = "80shhi12s12shhhh4s8s16sh16shIIhhHHHhiiiiiiiIh2s8sI16s228s"
-l = list(struct.unpack(fmt, f.read(480)))
-l[2] = 1  # number_sweeps_completed
-l[22] = 20  # number_rays_sweep
-out.write(struct.pack(fmt, *l))
+packet = list(struct.unpack(fmt, f.read(480)))
+packet[2] = 1  # number_sweeps_completed
+packet[22] = 20  # number_rays_sweep
+out.write(struct.pack(fmt, *packet))
 
 # task_configuration (2612 bytes)
 # -> structure_header (12 byes)
@@ -78,10 +78,10 @@ out.write(f.read(4))
 
 # ---> current_data_type_mask (24 bytes)
 fmt = "IIIIII"
-l = list(struct.unpack(fmt, f.read(24)))
-l[0] = 512  # mask_word_0 indicating field 9 (DBZ2), 2 ** 9
-l[2] = 0  # mask_word_1 indicating no fields
-out.write(struct.pack(fmt, *l))
+packet = list(struct.unpack(fmt, f.read(24)))
+packet[0] = 512  # mask_word_0 indicating field 9 (DBZ2), 2 ** 9
+packet[2] = 0  # mask_word_1 indicating no fields
+out.write(struct.pack(fmt, *packet))
 
 # ---> original_data_type_mask, task_dsp_mode, etc (292 bytes)
 out.write(f.read(292))
@@ -92,17 +92,17 @@ out.write(f.read(320))  # no change
 
 # -> task_range_info (160 bytes) - file at 7408 seek
 fmt = "iihhiiHh136s"
-l = list(struct.unpack(fmt, f.read(160)))
-l[1] = 154000  # last_bin_range
-l[2] = 25  # number_input_bins
-l[3] = 25  # number_output_bins
-out.write(struct.pack(fmt, *l))
+packet = list(struct.unpack(fmt, f.read(160)))
+packet[1] = 154000  # last_bin_range
+packet[2] = 25  # number_input_bins
+packet[3] = 25  # number_output_bins
+out.write(struct.pack(fmt, *packet))
 
 # -> task_scan_info (320 bytes)
 fmt = "Hh2sh200s112s"
-l = list(struct.unpack(fmt, f.read(320)))
-l[3] = 1  # number_sweeps
-out.write(struct.pack(fmt, *l))
+packet = list(struct.unpack(fmt, f.read(320)))
+packet[3] = 1  # number_sweeps
+out.write(struct.pack(fmt, *packet))
 
 # -> task_misc_info (320 bytes)
 out.write(f.read(320))  # no change
@@ -138,11 +138,11 @@ f.read(76)
 
 # ingest_data_header for field 9
 fmt = "12s12shhhhhHhH36s"
-l = list(struct.unpack(fmt, f.read(76)))
-l[3] = 20  # number_rays_sweep
-l[5] = 20  # number_rays_file_expected
-l[6] = 20  # number_rays_file_actual
-out.write(struct.pack(fmt, *l))
+packet = list(struct.unpack(fmt, f.read(76)))
+packet[3] = 20  # number_rays_sweep
+packet[5] = 20  # number_rays_file_expected
+packet[6] = 20  # number_rays_file_actual
+out.write(struct.pack(fmt, *packet))
 
 # compressed ray data
 code = np.ones((33), dtype="int16")

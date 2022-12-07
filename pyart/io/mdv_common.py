@@ -694,67 +694,67 @@ class MdvFile:
 
     # get_ methods for reading headers
 
-    def _unpack_mapped_tuple(self, l, mapper):
+    def _unpack_mapped_tuple(self, packet, mapper):
         """Create a dictionary from a tuple using a mapper."""
         d = {}
         for item in mapper:
             if item[2] == item[1] + 1:
-                d[item[0]] = l[item[1]]
+                d[item[0]] = packet[item[1]]
             else:
-                d[item[0]] = l[item[1] : item[2]]
+                d[item[0]] = packet[item[1] : item[2]]
             if isinstance(d[item[0]], bytes):
                 d[item[0]] = d[item[0]].decode("ascii").split("\x00", 1)[0]
         return d
 
     def _pack_mapped(self, d, mapper, fmt):
         """Create a packed string using a mapper and format."""
-        l = [0] * mapper[-1][2]
+        packet = [0] * mapper[-1][2]
         for item in mapper:
             if item[2] == item[1] + 1:
-                l[item[1]] = d[item[0]]
-                if hasattr(l[item[1]], "encode"):  # encode str/unicode
-                    l[item[1]] = l[item[1]].encode("ascii")
+                packet[item[1]] = d[item[0]]
+                if hasattr(packet[item[1]], "encode"):  # encode str/unicode
+                    packet[item[1]] = packet[item[1]].encode("ascii")
             else:
-                l[item[1] : item[2]] = d[item[0]]
+                packet[item[1] : item[2]] = d[item[0]]
         # cast to string as Python < 2.7.7 pack does not except unicode
         fmt = str(fmt)
-        return struct.pack(fmt, *l)
+        return struct.pack(fmt, *packet)
 
     def _get_master_header(self):
         """Read the MDV master header, return a dict."""
         # the file pointer must be set at the correct location prior to call
         if self.fileptr is None:
-            l = [0] * self.master_header_mapper[-1][2]
-            l[0] = 1016
-            l[1] = 14142
-            l[2] = 1
-            l[9] = 1
-            l[16] = 1
-            l[17] = 1
-            l[63] = ""
-            l[64] = ""
-            l[65] = ""
-            l[66] = 1016
+            packet = [0] * self.master_header_mapper[-1][2]
+            packet[0] = 1016
+            packet[1] = 14142
+            packet[2] = 1
+            packet[9] = 1
+            packet[16] = 1
+            packet[17] = 1
+            packet[63] = ""
+            packet[64] = ""
+            packet[65] = ""
+            packet[66] = 1016
         else:
-            l = struct.unpack(
+            packet = struct.unpack(
                 self.master_header_fmt,
                 self.fileptr.read(struct.calcsize(self.master_header_fmt)),
             )
-        return self._unpack_mapped_tuple(l, self.master_header_mapper)
+        return self._unpack_mapped_tuple(packet, self.master_header_mapper)
 
     def _write_master_header(self):
         """Write the MDV master header."""
         # the file pointer must be set at the correct location prior to call
         d = self.master_header
-        l = [0] * self.master_header_mapper[-1][2]
+        packet = [0] * self.master_header_mapper[-1][2]
         for item in self.master_header_mapper:
             if item[2] == item[1] + 1:
-                l[item[1]] = d[item[0]]
-                if hasattr(l[item[1]], "encode"):  # encode str/unicode
-                    l[item[1]] = l[item[1]].encode("ascii")
+                packet[item[1]] = d[item[0]]
+                if hasattr(packet[item[1]], "encode"):  # encode str/unicode
+                    packet[item[1]] = packet[item[1]].encode("ascii")
             else:
-                l[item[1] : item[2]] = d[item[0]]
-        string = struct.pack(self.master_header_fmt, *l)
+                packet[item[1] : item[2]] = d[item[0]]
+        string = struct.pack(self.master_header_fmt, *packet)
         self.fileptr.write(string)
 
     def _get_field_headers(self, nfields):
@@ -772,22 +772,22 @@ class MdvFile:
         """Read a single field header, return a dict."""
         # the file pointer must be set at the correct location prior to call
         if self.fileptr is None:
-            l = [0] * self.field_header_mapper[-1][2]
-            l[0] = 408
-            l[1] = 14143
-            l[57] = 1  # scale
-            l[71] = ""
-            l[72] = ""
-            l[73] = ""
-            l[74] = ""
-            l[75] = ""
-            l[76] = 408
+            packet = [0] * self.field_header_mapper[-1][2]
+            packet[0] = 408
+            packet[1] = 14143
+            packet[57] = 1  # scale
+            packet[71] = ""
+            packet[72] = ""
+            packet[73] = ""
+            packet[74] = ""
+            packet[75] = ""
+            packet[76] = 408
         else:
-            l = struct.unpack(
+            packet = struct.unpack(
                 self.field_header_fmt,
                 self.fileptr.read(struct.calcsize(self.field_header_fmt)),
             )
-        return self._unpack_mapped_tuple(l, self.field_header_mapper)
+        return self._unpack_mapped_tuple(packet, self.field_header_mapper)
 
     def _write_field_header(self, d):
         """Write the a single field header."""
@@ -810,16 +810,16 @@ class MdvFile:
         """Read a single vlevel header, return a dict."""
         # the file pointer must be set at the correct location prior to call
         if self.fileptr is None:
-            l = [0] * self.vlevel_header_mapper[-1][2]
-            l[0] = 1016
-            l[1] = 14144
-            l[255] = 1016
+            packet = [0] * self.vlevel_header_mapper[-1][2]
+            packet[0] = 1016
+            packet[1] = 14144
+            packet[255] = 1016
         else:
-            l = struct.unpack(
+            packet = struct.unpack(
                 self.vlevel_header_fmt,
                 self.fileptr.read(struct.calcsize(self.vlevel_header_fmt)),
             )
-        return self._unpack_mapped_tuple(l, self.vlevel_header_mapper)
+        return self._unpack_mapped_tuple(packet, self.vlevel_header_mapper)
 
     def _write_vlevel_header(self, d):
         """Write the a single vfield header."""
@@ -842,17 +842,17 @@ class MdvFile:
         """Get a single chunk header, return a dict."""
         # the file pointer must be set at the correct location prior to call
         if self.fileptr is None:
-            l = [0] * self.chunk_header_mapper[-1][2]
-            l[0] = 504
-            l[1] = 14145
-            l[7] = ""
-            l[8] = 504
+            packet = [0] * self.chunk_header_mapper[-1][2]
+            packet[0] = 504
+            packet[1] = 14145
+            packet[7] = ""
+            packet[8] = 504
         else:
-            l = struct.unpack(
+            packet = struct.unpack(
                 self.chunk_header_fmt,
                 self.fileptr.read(struct.calcsize(self.chunk_header_fmt)),
             )
-        return self._unpack_mapped_tuple(l, self.chunk_header_mapper)
+        return self._unpack_mapped_tuple(packet, self.chunk_header_mapper)
 
     def _write_chunk_header(self, d):
         """Write the a single chunk header."""
@@ -921,15 +921,15 @@ class MdvFile:
         """Get the radar information, return dict."""
         # the file pointer must be set at the correct location prior to call
         if self.fileptr is None:
-            l = [0] * self.radar_info_mapper[-1][2]
-            l[40] = ""
-            l[41] = ""
+            packet = [0] * self.radar_info_mapper[-1][2]
+            packet[40] = ""
+            packet[41] = ""
         else:
-            l = struct.unpack(
+            packet = struct.unpack(
                 self.radar_info_fmt,
                 self.fileptr.read(struct.calcsize(self.radar_info_fmt)),
             )
-        return self._unpack_mapped_tuple(l, self.radar_info_mapper)
+        return self._unpack_mapped_tuple(packet, self.radar_info_mapper)
 
     def _write_radar_info(self, d):
         """Write radar information."""
@@ -943,29 +943,29 @@ class MdvFile:
         SIZE_FLOAT = 4.0
         nelevations = np.floor(nbytes / SIZE_FLOAT)
         fmt = ">%df" % (nelevations)
-        l = struct.unpack(fmt, self.fileptr.read(struct.calcsize(fmt)))
-        return np.array(l)
+        packet = struct.unpack(fmt, self.fileptr.read(struct.calcsize(fmt)))
+        return np.array(packet)
 
-    def _write_elevs(self, l):
+    def _write_elevs(self, packet):
         """Write an array of elevation."""
         # the file pointer must be set at the correct location prior to call
-        fmt = ">%df" % (len(l))
+        fmt = ">%df" % (len(packet))
         # cast to string as Python < 2.7.7 pack does not except unicode
         fmt = str(fmt)
-        string = struct.pack(fmt, *l)
+        string = struct.pack(fmt, *packet)
         self.fileptr.write(string)
 
     def _get_calib(self):
         """Get the calibration information, return a dict."""
         # the file pointer must be set at the correct location prior to call
         if self.fileptr is None:
-            l = [0] * self.calib_mapper[-1][2]
-            l[0] = ""
+            packet = [0] * self.calib_mapper[-1][2]
+            packet[0] = ""
         else:
-            l = struct.unpack(
+            packet = struct.unpack(
                 self.calib_fmt, self.fileptr.read(struct.calcsize(self.calib_fmt))
             )
-        return self._unpack_mapped_tuple(l, self.calib_mapper)
+        return self._unpack_mapped_tuple(packet, self.calib_mapper)
 
     def _write_calib(self, d):
         """Write calibration information."""
@@ -977,13 +977,13 @@ class MdvFile:
         """Get compression infomation, return a dict."""
         # the file pointer must be set at the correct location prior to call
         if self.fileptr is None:
-            l = [0] * self.compression_info_mapper[-1][2]
+            packet = [0] * self.compression_info_mapper[-1][2]
         else:
-            l = struct.unpack(
+            packet = struct.unpack(
                 self.compression_info_fmt,
                 self.fileptr.read(struct.calcsize(self.compression_info_fmt)),
             )
-        return self._unpack_mapped_tuple(l, self.compression_info_mapper)
+        return self._unpack_mapped_tuple(packet, self.compression_info_mapper)
 
     def _write_compression_info(self, d):
         """Write compression infomation."""
@@ -1009,22 +1009,22 @@ class MdvFile:
         # the file pointer must be set at the correct location prior to call
         fmt = ">%iI %iI" % (nlevels, nlevels)
         if self.fileptr:
-            l = struct.unpack(fmt, self.fileptr.read(struct.calcsize(fmt)))
+            packet = struct.unpack(fmt, self.fileptr.read(struct.calcsize(fmt)))
         else:
-            l = [0] * 2 * nlevels
+            packet = [0] * 2 * nlevels
         d = {}
-        d["vlevel_offsets"] = l[:nlevels]
-        d["vlevel_nbytes"] = l[nlevels : 2 * nlevels]
+        d["vlevel_offsets"] = packet[:nlevels]
+        d["vlevel_nbytes"] = packet[nlevels : 2 * nlevels]
         return d
 
     def _write_levels_info(self, nlevels, d):
         """write levels information, return a dict."""
         # the file pointer must be set at the correct location prior to call
         fmt = "%iI %iI" % (nlevels, nlevels)
-        l = d["vlevel_offsets"] + d["vlevel_nbytes"]
+        packet = d["vlevel_offsets"] + d["vlevel_nbytes"]
         # cast to string as Python < 2.7.7 pack does not except unicode
         fmt = str(fmt)
-        string = struct.pack(fmt, *l)
+        string = struct.pack(fmt, *packet)
         self.fileptr.write(string)
 
     def _calc_file_offsets(self):
