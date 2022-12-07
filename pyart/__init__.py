@@ -27,33 +27,27 @@ import warnings as _warnings
 
 _warnings.simplefilter("always", DeprecationWarning)
 
-import functools as _functools
-import os.path as _osp
-import sys as _sys
-
 from pkg_resources import DistributionNotFound, get_distribution
 
 # import subpackages
 # print out helpful message if build fails or importing from source tree
-from . import (
-    __check_build,
-    aux_io,
-    bridge,
-    config,
-    core,
-    correct,
-    filters,
-    graph,
-    io,
-    map,
-    retrieve,
-    testing,
-    util,
-)
-from ._debug_info import _debug_info
+from . import __check_build  # noqa
+from . import aux_io  # noqa
+from . import bridge  # noqa
+from . import config  # noqa
+from . import core  # noqa
+from . import correct  # noqa
+from . import filters  # noqa
+from . import graph  # noqa
+from . import io  # noqa
+from . import map  # noqa
+from . import retrieve  # noqa
+from . import testing  # noqa
+from . import util  # noqa
+from ._debug_info import _debug_info  # noqa
 
 # root level functions
-from .config import load_config
+from .config import load_config  # noqa
 
 # Get the version
 try:

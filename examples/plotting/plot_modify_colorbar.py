@@ -14,7 +14,6 @@ print(__doc__)
 
 import cartopy.crs as ccrs
 import matplotlib.pyplot as plt
-import numpy as np
 
 import pyart
 from pyart.testing import get_test_data

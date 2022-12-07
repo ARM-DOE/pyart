@@ -15,11 +15,9 @@ DOCLINES = __doc__.split("\n")
 
 import glob
 import os
-import subprocess
 import sys
 from os import path
 
-import Cython
 from Cython.Build import cythonize
 from numpy import get_include
 from setuptools import Extension, find_namespace_packages, setup
@@ -99,6 +97,7 @@ with open(path.join(here, "requirements.txt")) as requirements_file:
 
 
 extensions = []
+
 
 # RSL Path if present
 def guess_rsl_path():

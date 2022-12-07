@@ -6,16 +6,11 @@ Class for creating plots from Radar objects.
 import warnings
 
 import matplotlib.pyplot as plt
-import netCDF4
 import numpy as np
 from matplotlib.dates import DateFormatter
 from scipy.interpolate import griddata
 
-from ..core.transforms import (
-    antenna_to_cartesian,
-    antenna_vectors_to_cartesian,
-    geographic_to_cartesian_aeqd,
-)
+from ..core.transforms import antenna_vectors_to_cartesian, geographic_to_cartesian_aeqd
 from ..util.datetime_utils import datetimes_from_radar
 from . import common
 

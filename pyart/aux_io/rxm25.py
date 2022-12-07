@@ -18,7 +18,6 @@ import numpy as np
 import pyart
 
 from ..config import get_metadata
-from ..core.radar import Radar
 from ..exceptions import MissingOptionalDependency
 from ..testing import make_empty_ppi_radar
 

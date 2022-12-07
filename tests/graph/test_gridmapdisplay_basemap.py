@@ -40,42 +40,43 @@ def test_gridmapdisplay_fancy_basemap(outfile=None):
     display.debug = True
     fig = plt.figure()
 
-    ax = fig.add_subplot(331)
-    display.plot_basemap(ax=ax, resolution=RESOLUTION)
+    ax1 = fig.add_subplot(331)
+    display.plot_basemap(ax=ax1, resolution=RESOLUTION)
     display.plot_grid(
         "reflectivity",
         vmin=-5.0,
         vmax=35,
+        ax=ax1,
         mask_outside=True,
         axislabels_flag=True,
         axislabels=("foo", "bar"),
         title="Special title",
     )
-    display.plot_crosshairs(line_style="b--")
+    display.plot_crosshairs(ax=ax1, line_style="b--")
 
-    ax = fig.add_subplot(332)
-    display.plot_grid("reflectivity", axislabels_flag=True)
+    ax2 = fig.add_subplot(332)
+    display.plot_grid("reflectivity", ax=ax2, axislabels_flag=True)
 
-    ax = fig.add_subplot(333)
-    display.plot_colorbar()
+    ax3 = fig.add_subplot(333)
+    display.plot_colorbar(ax=ax3)
 
-    ax = fig.add_subplot(334)
-    display.plot_latitude_slice("reflectivity", mask_outside=True)
+    ax4 = fig.add_subplot(334)
+    display.plot_latitude_slice("reflectivity", ax=ax4, mask_outside=True)
 
-    ax = fig.add_subplot(335)
-    display.plot_latitude_slice("reflectivity", title="Lat title")
+    ax5 = fig.add_subplot(335)
+    display.plot_latitude_slice("reflectivity", ax=ax5, title="Lat title")
 
-    ax = fig.add_subplot(336)
+    ax6 = fig.add_subplot(336)
     grid.fields["reflectivity"]["valid_min"] = 0.0
     grid.fields["reflectivity"]["valid_max"] = 30.0
-    display.plot_longitude_slice("reflectivity", mask_outside=True)
+    display.plot_longitude_slice("reflectivity", ax=ax6, mask_outside=True)
 
-    ax = fig.add_subplot(337)
-    display.plot_longitude_slice("reflectivity", title="Lon title")
+    ax7 = fig.add_subplot(337)
+    display.plot_longitude_slice("reflectivity", ax=ax7, title="Lon title")
 
-    ax = fig.add_subplot(338)
+    ax8 = fig.add_subplot(338)
     del display.grid.fields["reflectivity"]["long_name"]
-    display.plot_colorbar()
+    display.plot_colorbar(ax=ax8)
 
     if outfile:
         fig.savefig(outfile)
@@ -126,7 +127,7 @@ def test_generate_titles_basemap():
 def test_get_basemap():
     grid = pyart.testing.make_target_grid()
     display = pyart.graph.GridMapDisplayBasemap(grid)
-    basemap = display.get_basemap()
+    display.get_basemap()
 
 
 @pytest.mark.skipif(

@@ -56,6 +56,7 @@ def test_gridmapdisplay_fancy(outfile=None):
         "reflectivity",
         vmin=-5.0,
         vmax=35.0,
+        ax=ax1,
         mask_outside=True,
         axislabels=("foo", "bar"),
         axislabels_flag=True,
@@ -64,24 +65,24 @@ def test_gridmapdisplay_fancy(outfile=None):
     display.plot_crosshairs(color="b")
 
     ax2 = plt.subplot(332, projection=projection)
-    display.plot_grid("reflectivity", axislabels_flag=True)
+    display.plot_grid("reflectivity", ax=ax2, axislabels_flag=True)
 
     ax3 = plt.subplot(333)
     display.plot_colorbar(ax=ax3)
 
     ax4 = plt.subplot(334)
-    display.plot_latitude_slice("reflectivity", mask_outside=True)
+    display.plot_latitude_slice("reflectivity", ax=ax4, mask_outside=True)
 
     ax5 = plt.subplot(335)
-    display.plot_latitude_slice("reflectivity", title="Lat title")
+    display.plot_latitude_slice("reflectivity", ax=ax5, title="Lat title")
 
     ax6 = plt.subplot(336)
     grid.fields["reflectivity"]["valid_min"] = 0
     grid.fields["reflectivity"]["valid_max"] = 30
-    display.plot_longitude_slice("reflectivity", mask_outside=True)
+    display.plot_longitude_slice("reflectivity", ax=ax6, mask_outside=True)
 
     ax7 = plt.subplot(337)
-    display.plot_longitude_slice("reflectivity", title="Lon title")
+    display.plot_longitude_slice("reflectivity", ax=ax7, title="Lon title")
 
     ax8 = plt.subplot(338)
     del display.grid.fields["reflectivity"]["long_name"]

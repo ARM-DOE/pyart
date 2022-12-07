@@ -15,13 +15,11 @@ except ImportError:
     _PYPROJ_AVAILABLE = False
 
 try:
-    import xarray
+    import xarray  # noqa
 
     _XARRAY_AVAILABLE = True
 except ImportError:
     _XARRAY_AVAILABLE = False
-
-import datetime
 
 import netCDF4
 
