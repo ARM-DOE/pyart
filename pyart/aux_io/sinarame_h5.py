@@ -449,8 +449,6 @@ def write_sinarame_cfradial(path):
                     print("Radar didn't exist, creating")
                     radar = read_sinarame_h5(file, file_field_names=True)
 
-        cal_temps = "gregorian"
-
         time1 = num2date(
             radar.time["data"][0],
             radar.time["units"],
