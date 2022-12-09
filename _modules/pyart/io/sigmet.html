@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.io.sigmet &#8212; Py-ART 1.14.1.post7 documentation</title>
+    <title>pyart.io.sigmet &#8212; Py-ART 1.14.1.post8 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -684,7 +684,7 @@
         <span class="n">ref_time</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;XHDR&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">ref_time</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="n">ref_time</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">ref_time</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="n">metadata</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="mi">0</span><span class="p">]][</span><span class="s1">&#39;time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;int32&#39;</span><span class="p">)</span>
+        <span class="n">ref_time</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">metadata</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]][</span><span class="s1">&#39;time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;int32&#39;</span><span class="p">)</span>
     <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">for</span> <span class="n">nrays</span> <span class="ow">in</span> <span class="n">rays_per_sweep</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">nrays</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">nrays</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
@@ -708,7 +708,7 @@
         <span class="n">ref_time</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;XHDR&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">ref_time</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="n">ref_time</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">ref_time</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="n">metadata</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="mi">0</span><span class="p">]][</span><span class="s1">&#39;time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;int32&#39;</span><span class="p">)</span>
+        <span class="n">ref_time</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">metadata</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]][</span><span class="s1">&#39;time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;int32&#39;</span><span class="p">)</span>
     <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">for</span> <span class="n">nrays</span> <span class="ow">in</span> <span class="n">rays_per_sweep</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">nrays</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">nrays</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
@@ -736,7 +736,7 @@
         <span class="n">ref_time</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;XHDR&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">ref_time</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="n">ref_time</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">ref_time</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="n">metadata</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="mi">0</span><span class="p">]][</span><span class="s1">&#39;time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;int32&#39;</span><span class="p">)</span>
+        <span class="n">ref_time</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">metadata</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]][</span><span class="s1">&#39;time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;int32&#39;</span><span class="p">)</span>
     <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">for</span> <span class="n">nrays</span> <span class="ow">in</span> <span class="n">rays_per_sweep</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">nrays</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">nrays</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
@@ -773,7 +773,7 @@
         <span class="n">ref_time</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;XHDR&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">ref_time</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="n">ref_time</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">ref_time</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="n">metadata</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="mi">0</span><span class="p">]][</span><span class="s1">&#39;time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;int32&#39;</span><span class="p">)</span>
+        <span class="n">ref_time</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">metadata</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]][</span><span class="s1">&#39;time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;int32&#39;</span><span class="p">)</span>
 
     <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">for</span> <span class="n">nrays</span> <span class="ow">in</span> <span class="n">rays_per_sweep</span><span class="p">:</span>
@@ -812,7 +812,7 @@
         <span class="n">ref_time</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;XHDR&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">ref_time</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="n">ref_time</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">ref_time</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="n">metadata</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="mi">0</span><span class="p">]][</span><span class="s1">&#39;time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;int32&#39;</span><span class="p">)</span>
+        <span class="n">ref_time</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">metadata</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]][</span><span class="s1">&#39;time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;int32&#39;</span><span class="p">)</span>
 
     <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">for</span> <span class="n">nrays</span> <span class="ow">in</span> <span class="n">rays_per_sweep</span><span class="p">:</span>
@@ -851,7 +851,7 @@
         <span class="n">ref_time</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;XHDR&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">ref_time</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="n">ref_time</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">ref_time</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="n">metadata</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="mi">0</span><span class="p">]][</span><span class="s1">&#39;time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;int32&#39;</span><span class="p">)</span>
+        <span class="n">ref_time</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">metadata</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]][</span><span class="s1">&#39;time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;int32&#39;</span><span class="p">)</span>
 
     <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">for</span> <span class="n">nrays</span> <span class="ow">in</span> <span class="n">rays_per_sweep</span><span class="p">:</span>
