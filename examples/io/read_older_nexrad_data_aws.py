@@ -62,7 +62,7 @@ radar = pyart.io.read_nexrad_archive(aws_nexrad_level2_file, station='KHNX')
 print(radar.latitude['data'])
 print(radar.longitude['data'])
 
-# Everything now looks correct as this is in Handord CA!
+# Everything now looks correct as this is in Handford CA!
 
 ##########################################
 # We can create a plot as well utilizing Cartopy to see how it looks.
