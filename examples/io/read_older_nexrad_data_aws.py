@@ -36,7 +36,7 @@ import pyart
 
 aws_nexrad_level2_file = "s3://noaa-nexrad-level2/2006/07/24/KHNX/KHNX20060724_020338.gz"
 
-# Note: Older files do note contain the 'V06' but instead '.gz'
+# Note: Older files do not contain the 'V06' but instead '.gz' in the AWS path.
 
 ######################################
 # We can use the **pyart.io.read_nexrad_archive** module to access our data, passing in the filepath.
@@ -53,7 +53,7 @@ print(radar.longitude['data'])
 # metadata (message 31) for the coordinates.
 #
 # Lucky for us, we can provide the station in Py-ART's NEXRAD reader, which will
-# pull the coordinate information from a save dictionary found within Py-ART.
+# pull the coordinate information from a dictionary found within Py-ART.
 
 radar = pyart.io.read_nexrad_archive(aws_nexrad_level2_file, station='KHNX')
 
