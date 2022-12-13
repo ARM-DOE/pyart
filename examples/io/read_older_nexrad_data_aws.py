@@ -31,10 +31,12 @@ import pyart
 #
 #    ``s3://noaa-nexrad-level2/year/month/date/radarsite/{radarsite}{year}{month}{date}_{hour}{minute}{second}.gz``
 # 
-# Where in our case, we are using a sample data file from Handford, CA (KHGX)
-# on July 24, 2006, at 0203:38 UTC. This means our path would look like:
+# Where in our case, we are using a sample data file from Handford, CA (KHNX)
+# on July 24, 2006, at 0203:38 UTC. This means our path would look like this:
 
 aws_nexrad_level2_file = "s3://noaa-nexrad-level2/2006/07/24/KHNX/KHNX20060724_020338.gz"
+
+# Note: Older files do note contain the 'V06' but instead '.gz'
 
 ######################################
 # We can use the **pyart.io.read_nexrad_archive** module to access our data, passing in the filepath.
