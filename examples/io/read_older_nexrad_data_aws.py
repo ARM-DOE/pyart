@@ -21,11 +21,11 @@ import pyart
 # Read older NEXRAD Level 2 Data
 # ------------------------------
 #
-# Older NEXRAD files have the tendency to not contain some of the required
-# metadata for Py-ART's NEXRAD reader. This usually results in missing
-# latitude and longitude data, so after reading with Py-ART, both coordinates
-# have a value of 0. This example, we will show how to properly read in an
-# older NEXRAD file.
+# Older NEXRAD files prior to 2008, have the tendency to not contain some of
+# the required metadata for Py-ART's NEXRAD reader. This usually results in
+# missing latitude and longitude data, so after reading with Py-ART, both
+# coordinates have a value of 0. This example, we will show how to properly
+# read in an older NEXRAD file.
 #
 # First we want to get an older file from amazon web service:
 #
