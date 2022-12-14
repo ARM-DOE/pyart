@@ -1,0 +1,592 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Reading Older NEXRAD Data and Fixing Latitude and Longitude Issues &#8212; Py-ART 1.14.1.post10 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pyart-theme.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/doc_shared.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Reading NEXRAD Data from the AWS Cloud" href="plot_nexrad_data_aws.html" />
+    <link rel="prev" title="Input/Output Examples" href="index.html" /> 
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-JJEG3CV376"></script>
+<script>
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){ dataLayer.push(arguments); }
+                    gtag('js', new Date());
+                    gtag('config', 'G-JJEG3CV376');
+                </script>
+ 
+<link
+  rel="alternate"
+  type="application/atom+xml"
+  href="../../blog/atom.xml"
+  title="PyART Blog"
+/>
+ 
+<style type="text/css">
+  ul.ablog-archive {
+    list-style: none;
+    overflow: auto;
+    margin-left: 0px;
+  }
+  ul.ablog-archive li {
+    float: left;
+    margin-right: 5px;
+    font-size: 80%;
+  }
+  ul.postlist a {
+    font-style: italic;
+  }
+  ul.postlist-style-disc {
+    list-style-type: disc;
+  }
+  ul.postlist-style-none {
+    list-style-type: none;
+  }
+  ul.postlist-style-circle {
+    list-style-type: circle;
+  }
+</style>
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+  <nav class="navbar navbar-dark navbar-expand-lg bg-arm fixed-top bd-navbar shadow" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+<a class="navbar-brand" href="../../index.html">
+<p class="title">Py-ART</p>
+</a>
+
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../userguide/index.html">
+  User Guide
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../API/index.html">
+  API Reference Manual
+ </a>
+</li>
+
+<li class="toctree-l1 current active nav-item">
+ <a class="reference internal nav-link" href="../index.html">
+  Example Gallery
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../notebook-gallery.html">
+  Notebook Gallery
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../blog.html">
+  Blog
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../changelog.html">
+  Changelog
+ </a>
+</li>
+
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/ARM-DOE/pyart" rel="noopener" target="_blank" title="GitHub"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://twitter.com/Py_ART" rel="noopener" target="_blank" title="Twitter"><span><i class="fab fa-twitter-square"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+  </nav>
+
+
+    <div class="container-fluid" id="banner"></div>
+
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar">
+              <div class="sidebar-start-items"><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    <ul class="current nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../correct/index.html">
+   Moment correction examples
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../correct/plot_attenuation.html">
+     Correct reflectivity attenuation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../correct/plot_dealias.html">
+     Dealias doppler velocities using the Region Based Algorithm
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="index.html">
+   Input/Output Examples
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Reading Older NEXRAD Data and Fixing Latitude and Longitude Issues
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="plot_nexrad_data_aws.html">
+     Reading NEXRAD Data from the AWS Cloud
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../mapping/index.html">
+   Mapping examples
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../mapping/plot_map_one_radar_to_grid.html">
+     Map a single radar to a Cartesian grid
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../mapping/plot_map_two_radars_to_grid.html">
+     Map two radars to a Cartesian grid
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../mapping/plot_compare_two_radars_gatemapper.html">
+     Compare Two Radars Using Gatemapper
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../plotting/index.html">
+   Plotting examples
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plotting/plot_rhi_mdv.html">
+     Create a RHI plot from a MDV file
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plotting/plot_ppi_mdv.html">
+     Create a PPI plot from a MDV file
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plotting/plot_ppi_cfradial.html">
+     Create a PPI plot from a Cfradial file
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plotting/plot_nexrad_reflectivity.html">
+     Create a plot of NEXRAD reflectivity
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plotting/plot_xsect.html">
+     Plot a cross section from  a PPI volume
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plotting/plot_rhi_cfradial_singlescan.html">
+     Create a multiple panel RHI plot from a CF/Radial file
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plotting/plot_rhi_two_panel.html">
+     Create a two panel RHI plot
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plotting/plot_nexrad_multiple_moments.html">
+     Create a plot of multiple moments from a NEXRAD file
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plotting/plot_rhi_cfradial.html">
+     Create a multiple panel RHI plot from a CF/Radial file
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plotting/plot_nexrad_image_muted_reflectivity.html">
+     Create an image-muted reflectivity plot
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plotting/plot_three_panel_gridmapdisplay.html">
+     Create a 3 panel plot using GridMapDisplay
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plotting/plot_ppi_with_rings.html">
+     Create a PPI plot on a cartopy map
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plotting/plot_rhi_data_overlay.html">
+     Create an RHI plot with reflectivity contour lines from an MDV file
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plotting/plot_cross_section.html">
+     Plot a Cross Section from a Grid
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plotting/plot_rhi_contours_differential_reflectivity.html">
+     Create an RHI plot with reflectivity contour lines from an MDV file
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plotting/plot_choose_a_colormap.html">
+     Choose a Colormap for your Plot
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../plotting/plot_modify_colorbar.html">
+     Modify a Colorbar for your Plot
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../retrieve/index.html">
+   Retrieval Examples
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../retrieve/plot_column_subset.html">
+     Extract a radar column above a point
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../retrieve/plot_composite_reflectivity.html">
+     Calculate and Plot Composite Reflectivity
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../retrieve/plot_vad.html">
+     Calculate and Plot VAD profile
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../retrieve/plot_hydrometeor.html">
+     Calculate and Plot hydrometeor classification
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../retrieve/plot_convective_stratiform.html">
+     Convective-Stratiform classification
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+  </div>
+</nav>
+              </div>
+              <div class="sidebar-end-items">
+              </div>
+            </div>
+            
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+              
+              <div class="toc-item">
+                
+<div class="tocsection onthispage mt-5 pt-1 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#read-older-nexrad-level-2-data">
+   Read older NEXRAD Level 2 Data
+  </a>
+ </li>
+</ul>
+
+</nav>
+              </div>
+              
+              <div class="toc-item">
+                
+              </div>
+              
+            
+          </div>
+          
+
+          
+          
+            
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                 <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-examples-io-read-older-nexrad-data-aws-py"><span class="std std-ref">here</span></a>
+to download the full example code</p>
+</div>
+<section class="sphx-glr-example-title" id="reading-older-nexrad-data-and-fixing-latitude-and-longitude-issues">
+<span id="sphx-glr-examples-io-read-older-nexrad-data-aws-py"></span><h1>Reading Older NEXRAD Data and Fixing Latitude and Longitude Issues<a class="headerlink" href="#reading-older-nexrad-data-and-fixing-latitude-and-longitude-issues" title="Permalink to this headline">#</a></h1>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
+
+
+<span class="c1"># Author: Zachary Sherman (zsherman@anl.gov)</span>
+<span class="c1"># License: BSD 3 clause</span>
+</pre></div>
+</div>
+<p>Import our required packages.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">cartopy.crs</span> <span class="k">as</span> <span class="nn">ccrs</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="kn">import</span> <span class="nn">pyart</span>
+</pre></div>
+</div>
+<section id="read-older-nexrad-level-2-data">
+<h2>Read older NEXRAD Level 2 Data<a class="headerlink" href="#read-older-nexrad-level-2-data" title="Permalink to this headline">#</a></h2>
+<p>Older NEXRAD files prior to 2008, have the tendency to not contain some of
+the required metadata for Py-ART’s NEXRAD reader. This usually results in
+missing latitude and longitude data, so after reading with Py-ART, both
+coordinates have a value of 0. This example, we will show how to properly
+read in an older NEXRAD file.</p>
+<p>First we want to get an older file from amazon web service:</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">s3://noaa-nexrad-level2/year/month/date/radarsite/{radarsite}{year}{month}{date}_{hour}{minute}{second}.gz</span></code></p>
+</div></blockquote>
+<p>Where in our case, we are using a sample data file from Handford, CA (KHNX)
+on July 24, 2006, at 0203:38 UTC. This means our path would look like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">aws_nexrad_level2_file</span> <span class="o">=</span> <span class="s2">&quot;s3://noaa-nexrad-level2/2006/07/24/KHNX/KHNX20060724_020338.gz&quot;</span>
+
+<span class="c1"># Note: Older files do not contain the &#39;V06&#39; but instead &#39;.gz&#39; in the AWS path.</span>
+</pre></div>
+</div>
+<p>We can use the <strong>pyart.io.read_nexrad_archive</strong> module to access our data, passing in the filepath.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_nexrad_archive</span><span class="p">(</span><span class="n">aws_nexrad_level2_file</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now let us take a look at the radar latitude and longitude data.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>This is clearly not correct! The problem is the reader could not find the
+metadata (message 31) for the coordinates.</p>
+<p>Lucky for us, we can provide the station in Py-ART’s NEXRAD reader, which will
+pull the coordinate information from a dictionary found within Py-ART.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_nexrad_archive</span><span class="p">(</span><span class="n">aws_nexrad_level2_file</span><span class="p">,</span> <span class="n">station</span><span class="o">=</span><span class="s1">&#39;KHNX&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Again, let us take a look at the radar latitude and longitude data.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
+
+<span class="c1"># Everything now looks correct as this is in Handford CA!</span>
+</pre></div>
+</div>
+<p>We can create a plot as well utilizing Cartopy to see how it looks.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
+
+<span class="c1"># Setting projection and ploting the first tilt.</span>
+<span class="n">projection</span> <span class="o">=</span> <span class="n">ccrs</span><span class="o">.</span><span class="n">LambertConformal</span><span class="p">(</span><span class="n">central_latitude</span><span class="o">=</span><span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                                   <span class="n">central_longitude</span><span class="o">=</span><span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="n">fig</span> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.figure.html#matplotlib.pyplot.figure" title="matplotlib.pyplot.figure" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">figure</span></a><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+<span class="n">display</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">20</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">54</span><span class="p">,</span>
+                     <span class="n">projection</span><span class="o">=</span><span class="n">projection</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="s1">&#39;10m&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-io-read-older-nexrad-data-aws-py">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/37b3bee0749cec6d641a31e85431bbe9/read_older_nexrad_data_aws.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">read_older_nexrad_data_aws.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/0ca9482de0ac437378b85f5b8939c6b8/read_older_nexrad_data_aws.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">read_older_nexrad_data_aws.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
+</section>
+
+<div class="section">
+   
+</div>
+
+              </div>
+              
+              
+              <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="index.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Input/Output Examples</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="plot_nexrad_data_aws.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Reading NEXRAD Data from the AWS Cloud</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+<footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright 2013-2022, Py-ART developers.<br>
+</p>
+    </div>
+    
+    <div class="footer-item">
+      <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0.<br>
+</p>
+    </div>
+    
+  </div>
+</footer>
+  </body>
+</html>

@@ -17,6 +17,23 @@ Reading/writing a variety of radar data using Py-ART.
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="Reading Older NEXRAD Data and Fixing Latitude and Longitude Issues">
+
+.. only:: html
+
+  .. image:: /examples/io/images/thumb/sphx_glr_read_older_nexrad_data_aws_thumb.png
+    :alt: Reading Older NEXRAD Data and Fixing Latitude and Longitude Issues
+
+  :ref:`sphx_glr_examples_io_read_older_nexrad_data_aws.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Reading Older NEXRAD Data and Fixing Latitude and Longitude Issues</div>
+    </div>
+
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="Within this example, we show how you can remotely access Next Generation Weather Radar (NEXRAD)...">
 
 .. only:: html
@@ -40,5 +57,6 @@ Reading/writing a variety of radar data using Py-ART.
 .. toctree::
    :hidden:
 
+   /examples/io/read_older_nexrad_data_aws
    /examples/io/plot_nexrad_data_aws
 
