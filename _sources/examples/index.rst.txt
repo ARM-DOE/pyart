@@ -83,14 +83,14 @@ Reading/writing a variety of radar data using Py-ART.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Reading Older NEXRAD Data and Fixing Latitude and Longitude Issues">
+    <div class="sphx-glr-thumbcontainer" tooltip="In this example, we will show how to read in older NEXRAD files prior to 2008 that are missing ...">
 
 .. only:: html
 
-  .. image:: /examples/io/images/thumb/sphx_glr_read_older_nexrad_data_aws_thumb.png
+  .. image:: /examples/io/images/thumb/sphx_glr_plot_older_nexrad_data_aws_thumb.png
     :alt: Reading Older NEXRAD Data and Fixing Latitude and Longitude Issues
 
-  :ref:`sphx_glr_examples_io_read_older_nexrad_data_aws.py`
+  :ref:`sphx_glr_examples_io_plot_older_nexrad_data_aws.py`
 
 .. raw:: html
 

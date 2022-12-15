@@ -90,15 +90,6 @@ We can use the **pyart.io.read_nexrad_archive** module to access our data, passi
 
 
 
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    /home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/botocore/utils.py:15: DeprecationWarning: 'cgi' is deprecated and slated for removal in Python 3.13
-      import cgi
-    /home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/botocore/httpsession.py:41: DeprecationWarning: 'urllib3.contrib.pyopenssl' module is deprecated and will be removed in a future release of urllib3 2.x. Read more in this issue: https://github.com/urllib3/urllib3/issues/2680
-      from urllib3.contrib.pyopenssl import orig_util_SSLContext as SSLContext
-
 
 
 
@@ -122,7 +113,7 @@ Let's take a look at a summary of what fields are available.
  .. code-block:: none
 
 
-    ['cross_correlation_ratio', 'differential_reflectivity', 'spectrum_width', 'differential_phase', 'clutter_filter_power_removed', 'reflectivity', 'velocity']
+    ['differential_phase', 'clutter_filter_power_removed', 'differential_reflectivity', 'spectrum_width', 'cross_correlation_ratio', 'velocity', 'reflectivity']
 
 
 
@@ -309,7 +300,7 @@ Note: the reflectivity and velocity fields are in different radars, so we need t
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  22.033 seconds)
+   **Total running time of the script:** ( 0 minutes  20.444 seconds)
 
 
 .. _sphx_glr_download_examples_io_plot_nexrad_data_aws.py:

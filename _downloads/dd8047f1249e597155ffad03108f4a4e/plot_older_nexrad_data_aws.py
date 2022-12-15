@@ -2,6 +2,10 @@
 ==================================================================
 Reading Older NEXRAD Data and Fixing Latitude and Longitude Issues
 ==================================================================
+
+In this example, we will show how to read in older NEXRAD files prior
+to 2008 that are missing some coordinate metadata.
+
 """
 print(__doc__)
 
@@ -34,9 +38,9 @@ import pyart
 # Where in our case, we are using a sample data file from Handford, CA (KHNX)
 # on July 24, 2006, at 0203:38 UTC. This means our path would look like this:
 
-aws_nexrad_level2_file = "s3://noaa-nexrad-level2/2006/07/24/KHNX/KHNX20060724_020338.gz"
-
 # Note: Older files do not contain the 'V06' but instead '.gz' in the AWS path.
+
+aws_nexrad_level2_file = "s3://noaa-nexrad-level2/2006/07/24/KHNX/KHNX20060724_020338.gz"
 
 ######################################
 # We can use the **pyart.io.read_nexrad_archive** module to access our data, passing in the filepath.
@@ -62,9 +66,9 @@ radar = pyart.io.read_nexrad_archive(aws_nexrad_level2_file, station='KHNX')
 print(radar.latitude['data'])
 print(radar.longitude['data'])
 
+##########################################
 # Everything now looks correct as this is in Handford CA!
 
-##########################################
 # We can create a plot as well utilizing Cartopy to see how it looks.
 display = pyart.graph.RadarMapDisplay(radar)
 

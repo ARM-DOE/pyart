@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Reading Older NEXRAD Data and Fixing Latitude and Longitude Issues &#8212; Py-ART 1.14.1.post10 documentation</title>
+    <title>Reading Older NEXRAD Data and Fixing Latitude and Longitude Issues &#8212; Py-ART 1.14.1.post11 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -453,11 +453,13 @@
               <div>
                  <div class="sphx-glr-download-link-note admonition note">
 <p class="admonition-title">Note</p>
-<p>Click <a class="reference internal" href="#sphx-glr-download-examples-io-read-older-nexrad-data-aws-py"><span class="std std-ref">here</span></a>
+<p>Click <a class="reference internal" href="#sphx-glr-download-examples-io-plot-older-nexrad-data-aws-py"><span class="std std-ref">here</span></a>
 to download the full example code</p>
 </div>
 <section class="sphx-glr-example-title" id="reading-older-nexrad-data-and-fixing-latitude-and-longitude-issues">
-<span id="sphx-glr-examples-io-read-older-nexrad-data-aws-py"></span><h1>Reading Older NEXRAD Data and Fixing Latitude and Longitude Issues<a class="headerlink" href="#reading-older-nexrad-data-and-fixing-latitude-and-longitude-issues" title="Permalink to this headline">#</a></h1>
+<span id="sphx-glr-examples-io-plot-older-nexrad-data-aws-py"></span><h1>Reading Older NEXRAD Data and Fixing Latitude and Longitude Issues<a class="headerlink" href="#reading-older-nexrad-data-and-fixing-latitude-and-longitude-issues" title="Permalink to this headline">#</a></h1>
+<p>In this example, we will show how to read in older NEXRAD files prior
+to 2008 that are missing some coordinate metadata.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
 
 
@@ -485,53 +487,132 @@ read in an older NEXRAD file.</p>
 </div></blockquote>
 <p>Where in our case, we are using a sample data file from Handford, CA (KHNX)
 on July 24, 2006, at 0203:38 UTC. This means our path would look like this:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">aws_nexrad_level2_file</span> <span class="o">=</span> <span class="s2">&quot;s3://noaa-nexrad-level2/2006/07/24/KHNX/KHNX20060724_020338.gz&quot;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Note: Older files do not contain the &#39;V06&#39; but instead &#39;.gz&#39; in the AWS path.</span>
 
-<span class="c1"># Note: Older files do not contain the &#39;V06&#39; but instead &#39;.gz&#39; in the AWS path.</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">aws_nexrad_level2_file</span></a> <span class="o">=</span> <span class="s2">&quot;s3://noaa-nexrad-level2/2006/07/24/KHNX/KHNX20060724_020338.gz&quot;</span>
 </pre></div>
 </div>
 <p>We can use the <strong>pyart.io.read_nexrad_archive</strong> module to access our data, passing in the filepath.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_nexrad_archive</span><span class="p">(</span><span class="n">aws_nexrad_level2_file</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_nexrad_archive</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">aws_nexrad_level2_file</span></a><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/botocore/utils.py:15: DeprecationWarning: &#39;cgi&#39; is deprecated and slated for removal in Python 3.13
+  import cgi
+/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/botocore/httpsession.py:41: DeprecationWarning: &#39;urllib3.contrib.pyopenssl&#39; module is deprecated and will be removed in a future release of urllib3 2.x. Read more in this issue: https://github.com/urllib3/urllib3/issues/2680
+  from urllib3.contrib.pyopenssl import orig_util_SSLContext as SSLContext
+/home/runner/work/pyart/pyart/pyart/io/nexrad_archive.py:214: UserWarning: Gate spacing is not constant, interpolating data in scans [0, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15] for moment REF.
+  warnings.warn(
 </pre></div>
 </div>
 <p>Now let us take a look at the radar latitude and longitude data.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">radar</span><span class="o">.</span><span class="n">latitude</span></a><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">radar</span><span class="o">.</span><span class="n">longitude</span></a><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[0.]
+[0.]
 </pre></div>
 </div>
 <p>This is clearly not correct! The problem is the reader could not find the
 metadata (message 31) for the coordinates.</p>
 <p>Lucky for us, we can provide the station in Py-ART’s NEXRAD reader, which will
 pull the coordinate information from a dictionary found within Py-ART.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_nexrad_archive</span><span class="p">(</span><span class="n">aws_nexrad_level2_file</span><span class="p">,</span> <span class="n">station</span><span class="o">=</span><span class="s1">&#39;KHNX&#39;</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_nexrad_archive</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">aws_nexrad_level2_file</span></a><span class="p">,</span> <span class="n">station</span><span class="o">=</span><span class="s1">&#39;KHNX&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/runner/work/pyart/pyart/pyart/io/nexrad_archive.py:214: UserWarning: Gate spacing is not constant, interpolating data in scans [0, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15] for moment REF.
+  warnings.warn(
 </pre></div>
 </div>
 <p>Again, let us take a look at the radar latitude and longitude data.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
-
-<span class="c1"># Everything now looks correct as this is in Handford CA!</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">radar</span><span class="o">.</span><span class="n">latitude</span></a><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">radar</span><span class="o">.</span><span class="n">longitude</span></a><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
-<p>We can create a plot as well utilizing Cartopy to see how it looks.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[36.31417]
+[-119.63111]
+</pre></div>
+</div>
+<p>Everything now looks correct as this is in Handford CA!</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># We can create a plot as well utilizing Cartopy to see how it looks.</span>
+<span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
 
 <span class="c1"># Setting projection and ploting the first tilt.</span>
-<span class="n">projection</span> <span class="o">=</span> <span class="n">ccrs</span><span class="o">.</span><span class="n">LambertConformal</span><span class="p">(</span><span class="n">central_latitude</span><span class="o">=</span><span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
-                                   <span class="n">central_longitude</span><span class="o">=</span><span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">projection</span> <span class="o">=</span> <span class="n">ccrs</span><span class="o">.</span><span class="n">LambertConformal</span><span class="p">(</span><span class="n">central_latitude</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">radar</span><span class="o">.</span><span class="n">latitude</span></a><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                                   <span class="n">central_longitude</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">radar</span><span class="o">.</span><span class="n">longitude</span></a><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
 
-<span class="n">fig</span> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.figure.html#matplotlib.pyplot.figure" title="matplotlib.pyplot.figure" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">figure</span></a><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+<a href="https://matplotlib.org/stable/api/figure_api.html#matplotlib.figure.Figure" title="matplotlib.figure.Figure" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fig</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.figure.html#matplotlib.pyplot.figure" title="matplotlib.pyplot.figure" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">figure</span></a><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
 <span class="n">display</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">20</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">54</span><span class="p">,</span>
                      <span class="n">projection</span><span class="o">=</span><span class="n">projection</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="s1">&#39;10m&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
-<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-io-read-older-nexrad-data-aws-py">
+<img src="../../_images/sphx_glr_plot_older_nexrad_data_aws_001.png" srcset="../../_images/sphx_glr_plot_older_nexrad_data_aws_001.png" alt="KHNX 0.4 Deg. 2006-07-24T02:03:37Z  Equivalent reflectivity factor" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:827: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
+  multi_line_string = cartopy.trace.project_linear(linear_ring,
+/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/io/__init__.py:241: DownloadWarning: Downloading: https://naturalearth.s3.amazonaws.com/10m_physical/ne_10m_coastline.zip
+  warnings.warn(f&#39;Downloading: {url}&#39;, DownloadWarning)
+/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:814: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
+  return cartopy.trace.project_linear(geometry, src_crs, self)
+/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:814: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
+  return cartopy.trace.project_linear(geometry, src_crs, self)
+/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:814: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
+  return cartopy.trace.project_linear(geometry, src_crs, self)
+/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:814: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
+  return cartopy.trace.project_linear(geometry, src_crs, self)
+/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:814: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
+  return cartopy.trace.project_linear(geometry, src_crs, self)
+/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:814: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
+  return cartopy.trace.project_linear(geometry, src_crs, self)
+/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:814: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
+  return cartopy.trace.project_linear(geometry, src_crs, self)
+/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:814: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
+  return cartopy.trace.project_linear(geometry, src_crs, self)
+/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:814: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
+  return cartopy.trace.project_linear(geometry, src_crs, self)
+/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:827: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
+  multi_line_string = cartopy.trace.project_linear(linear_ring,
+/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/io/__init__.py:241: DownloadWarning: Downloading: https://naturalearth.s3.amazonaws.com/10m_cultural/ne_10m_admin_1_states_provinces_lines.zip
+  warnings.warn(f&#39;Downloading: {url}&#39;, DownloadWarning)
+/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:814: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
+  return cartopy.trace.project_linear(geometry, src_crs, self)
+/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:814: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
+  return cartopy.trace.project_linear(geometry, src_crs, self)
+/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:814: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
+  return cartopy.trace.project_linear(geometry, src_crs, self)
+/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:814: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
+  return cartopy.trace.project_linear(geometry, src_crs, self)
+/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:814: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
+  return cartopy.trace.project_linear(geometry, src_crs, self)
+/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:814: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
+  return cartopy.trace.project_linear(geometry, src_crs, self)
+/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:814: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
+  return cartopy.trace.project_linear(geometry, src_crs, self)
+/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:814: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
+  return cartopy.trace.project_linear(geometry, src_crs, self)
+/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:814: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
+  return cartopy.trace.project_linear(geometry, src_crs, self)
+/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:814: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
+  return cartopy.trace.project_linear(geometry, src_crs, self)
+/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:814: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
+  return cartopy.trace.project_linear(geometry, src_crs, self)
+/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:814: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
+  return cartopy.trace.project_linear(geometry, src_crs, self)
+/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:814: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
+  return cartopy.trace.project_linear(geometry, src_crs, self)
+/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:827: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
+  multi_line_string = cartopy.trace.project_linear(linear_ring,
+/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/shapely/set_operations.py:133: RuntimeWarning: invalid value encountered in intersection
+  return lib.intersection(a, b, **kwargs)
+/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:827: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
+  multi_line_string = cartopy.trace.project_linear(linear_ring,
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  11.595 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-io-plot-older-nexrad-data-aws-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/37b3bee0749cec6d641a31e85431bbe9/read_older_nexrad_data_aws.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">read_older_nexrad_data_aws.py</span></code></a></p>
+<p><a class="reference download internal" download="" href="../../_downloads/dd8047f1249e597155ffad03108f4a4e/plot_older_nexrad_data_aws.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_older_nexrad_data_aws.py</span></code></a></p>
 </div>
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/0ca9482de0ac437378b85f5b8939c6b8/read_older_nexrad_data_aws.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">read_older_nexrad_data_aws.ipynb</span></code></a></p>
+<p><a class="reference download internal" download="" href="../../_downloads/949d311bfe8355d0dbad6706fc359cce/plot_older_nexrad_data_aws.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_older_nexrad_data_aws.ipynb</span></code></a></p>
 </div>
 </div>
 <p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
