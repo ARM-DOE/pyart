@@ -105,6 +105,7 @@ def test_map_to_grid_masked_refl_field():
     # mask the last gate of the first ray
     fdata = radar.fields['reflectivity']['data']
     fdata = np.ma.masked_invalid(fdata)
+    fdata.mask = False
     fdata.mask[0, -1] = [True]
     radar.fields['reflectivity']['data'] = fdata
 
