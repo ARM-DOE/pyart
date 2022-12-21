@@ -36,81 +36,77 @@ def _debug_info(stream=None):
         import pyart
 
         pyart_version = pyart.__version__
-    except AttributeError:
+    except:
         pyart_version = "MISSING"
 
     try:
         import platform
 
         python_version = platform.python_version()
-    except AttributeError:
+    except:
         python_version = "MISSING"
 
     try:
         import numpy
 
         numpy_version = numpy.__version__
-    except AttributeError:
+    except:
         numpy_version = "MISSING"
 
     try:
         import scipy
 
         scipy_version = scipy.__version__
-    except AttributeError:
+    except:
         scipy_version = "MISSING"
 
     try:
         import matplotlib
 
         matplotlib_version = matplotlib.__version__
-    except Exception as e:
-        print(e)
+    except:
         matplotlib_version = "MISSING"
 
     try:
         import netCDF4
 
         netCDF4_version = netCDF4.__version__
-    except AttributeError:
+    except:
         netCDF4_version = "MISSING"
 
     try:
         import cylp  # noqa
 
         cylp_available = "Available"
-    except Exception as e:
-        print(e)
+    except:
         cylp_available = "MISSING"
 
     try:
         import glpk
 
         glpk_version = "%i.%i" % (glpk.env.version)
-    except Exception as e:
-        print(e)
+    except:
         glpk_version = "MISSING"
 
     try:
         import cvxopt.info
 
         cvxopt_version = cvxopt.info.version
-    except Exception as e:
-        print(e)
+    except:
         cvxopt_version = "MISSING"
 
     try:
         import cartopy
 
         cartopy_version = cartopy.__version__
-    except AttributeError:
+    except:
         cartopy_version = "MISSING"
 
     try:
         import pytest
 
         pytest_version = pytest.__version__
-    except AttributeError:
+    except:
         pytest_version = "MISSING"
 
     print("Py-ART version:", pyart_version, file=stream)

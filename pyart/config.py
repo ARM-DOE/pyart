@@ -315,7 +315,7 @@ class FileMetadata:
         if field_name in self._exclude_fields:
             return None  # field is excluded
         elif self._include_fields is not None:
-            if not field_name in self._include_fields:
+            if field_name not in self._include_fields:
                 return None
             else:
                 return field_name

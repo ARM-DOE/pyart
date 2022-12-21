@@ -5,9 +5,9 @@ onto the radar gates.
 """
 
 try:
-    from netCDF4 import DatetimeGregorian, datetime, num2date
+    from netCDF4 import DatetimeGregorian, num2date
 except ImportError:
-    from cftime import num2date, datetime, DatetimeGregorian
+    from cftime import num2date, DatetimeGregorian
 
 import numpy as np
 from scipy import interpolate

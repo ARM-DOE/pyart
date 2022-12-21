@@ -25,6 +25,7 @@ def test_radarmapdisplay_ppi_basemap(outfile=None):
     display.plot_ppi_map(
         "reflectivity_horizontal",
         0,
+        ax=ax,
         colorbar_flag=True,
         title="Fancy PPI Map",
         mask_tuple=("reflectivity_horizontal", -100),
@@ -54,7 +55,7 @@ def test_radarmapdisplay_auto_range_basemap():
     display = pyart.graph.RadarMapDisplayBasemap(radar, shift=(0.1, 0.0))
     fig = plt.figure()
     ax = fig.add_subplot(111)
-    display.plot_ppi_map("reflectivity_horizontal", resolution="c")
+    display.plot_ppi_map("reflectivity_horizontal", ax=ax, resolution="c")
     assert round(display.basemap.latmax, 2) == 36.85
     assert round(display.basemap.latmin, 2) == 36.13
     assert round(display.basemap.lonmax, 2) == -97.15
