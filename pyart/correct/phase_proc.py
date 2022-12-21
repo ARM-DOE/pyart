@@ -228,9 +228,10 @@ def smooth_masked(raw_data, wind_len=11, min_valid=6, wind_type="median"):
         nvalid >= min_valid, valid[:, half_wind:-half_wind]
     ).nonzero()
 
-    data_smooth[ind_valid[0], ind_valid[1] + half_wind] = eval(
-        "np.ma." + wind_type + "(data_wind, axis=-1)"
-    )[ind_valid]
+    if data_wind is not None:
+        data_smooth[ind_valid[0], ind_valid[1] + half_wind] = eval(
+            "np.ma." + wind_type + "(data_wind, axis=-1)"
+        )[ind_valid]
 
     return data_smooth
 
@@ -824,10 +825,8 @@ def solve_cylp(model, B_vectors, weights, ray, chunksize):
 
     """
     from cylp.cy.CyClpSimplex import CyClpSimplex
-    from cylp.py.modeling.CyLPModel import CyLPArray, CyLPModel
 
     n_gates = weights.shape[1] // 2
-    n_rays = B_vectors.shape[0]
     soln = np.zeros([chunksize, n_gates])
 
     # import LP model in solver
@@ -884,7 +883,6 @@ def LP_solver_cylp_mp(A_Matrix, B_vectors, weights, really_verbose=False, proc=1
     """
     import multiprocessing as mp
 
-    from cylp.cy.CyClpSimplex import CyClpSimplex
     from cylp.py.modeling.CyLPModel import CyLPArray, CyLPModel
 
     n_gates = weights.shape[1] // 2

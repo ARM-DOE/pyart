@@ -154,7 +154,7 @@ def read_kazr(
         if field_name is None:
             if exclude_fields is not None and key in exclude_fields:
                 continue
-            if include_fields is not None and not key in include_fields:
+            if include_fields is not None and key not in include_fields:
                 continue
             field_name = key
         fields[field_name] = cfradial._ncvar_to_dict(ncvars[key])
