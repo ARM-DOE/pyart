@@ -18,7 +18,6 @@ import os
 import sys
 from os import path
 
-from setuptools import find_packages, setup, Extension
 from Cython.Build import cythonize
 from numpy import get_include
 from setuptools import Extension, find_namespace_packages, setup
@@ -263,7 +262,7 @@ setup(
     maintainer=MAINTAINER,
     maintainer_email=MAINTAINER_EMAIL,
     url=URL,
-    packages=find_namespace_packages(include=['pyart'], exclude=['docs']),
+    packages=find_namespace_packages(include=["pyart"], exclude=["docs"]),
     include_package_data=True,
     scripts=SCRIPTS,
     install_requires=requirements,

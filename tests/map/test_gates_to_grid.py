@@ -125,7 +125,7 @@ def test_map_to_grid_masked_refl_field():
     fdata = np.ma.masked_invalid(fdata)
     fdata.mask = False
     fdata.mask[0, -1] = [True]
-    radar.fields['reflectivity']['data'] = fdata
+    radar.fields["reflectivity"]["data"] = fdata
 
     grids = pyart.map.map_gates_to_grid((radar,), **COMMON_MAP_TO_GRID_ARGS)
     center_slice = grids["reflectivity"][1, 4, :]

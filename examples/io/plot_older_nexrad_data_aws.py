@@ -21,7 +21,7 @@ import matplotlib.pyplot as plt
 
 import pyart
 
-######################################%%
+######################################
 # Read older NEXRAD Level 2 Data
 # ------------------------------
 #
@@ -34,13 +34,15 @@ import pyart
 # First we want to get an older file from amazon web service:
 #
 #    ``s3://noaa-nexrad-level2/year/month/date/radarsite/{radarsite}{year}{month}{date}_{hour}{minute}{second}.gz``
-# 
+#
 # Where in our case, we are using a sample data file from Handford, CA (KHNX)
 # on July 24, 2006, at 0203:38 UTC. This means our path would look like this:
 
 # Note: Older files do not contain the 'V06' but instead '.gz' in the AWS path.
 
-aws_nexrad_level2_file = "s3://noaa-nexrad-level2/2006/07/24/KHNX/KHNX20060724_020338.gz"
+aws_nexrad_level2_file = (
+    "s3://noaa-nexrad-level2/2006/07/24/KHNX/KHNX20060724_020338.gz"
+)
 
 ######################################
 # We can use the **pyart.io.read_nexrad_archive** module to access our data, passing in the filepath.
@@ -49,8 +51,8 @@ radar = pyart.io.read_nexrad_archive(aws_nexrad_level2_file)
 
 ######################################
 # Now let us take a look at the radar latitude and longitude data.
-print(radar.latitude['data'])
-print(radar.longitude['data'])
+print(radar.latitude["data"])
+print(radar.longitude["data"])
 
 ######################################
 # This is clearly not correct! The problem is the reader could not find the
@@ -59,12 +61,12 @@ print(radar.longitude['data'])
 # Lucky for us, we can provide the station in Py-ART's NEXRAD reader, which will
 # pull the coordinate information from a dictionary found within Py-ART.
 
-radar = pyart.io.read_nexrad_archive(aws_nexrad_level2_file, station='KHNX')
+radar = pyart.io.read_nexrad_archive(aws_nexrad_level2_file, station="KHNX")
 
 ######################################
 # Again, let us take a look at the radar latitude and longitude data.
-print(radar.latitude['data'])
-print(radar.longitude['data'])
+print(radar.latitude["data"])
+print(radar.longitude["data"])
 
 ##########################################
 # Everything now looks correct as this is in Handford CA!
@@ -73,9 +75,12 @@ print(radar.longitude['data'])
 display = pyart.graph.RadarMapDisplay(radar)
 
 # Setting projection and ploting the first tilt.
-projection = ccrs.LambertConformal(central_latitude=radar.latitude['data'][0],
-                                   central_longitude=radar.longitude['data'][0])
+projection = ccrs.LambertConformal(
+    central_latitude=radar.latitude["data"][0],
+    central_longitude=radar.longitude["data"][0],
+)
 
-fig = plt.figure(figsize=(6,6))
-display.plot_ppi_map('reflectivity', 0, vmin=-20, vmax=54,
-                     projection=projection, resolution='10m')
+fig = plt.figure(figsize=(6, 6))
+display.plot_ppi_map(
+    "reflectivity", 0, vmin=-20, vmax=54, projection=projection, resolution="10m"
+)
