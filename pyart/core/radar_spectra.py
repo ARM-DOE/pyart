@@ -3,8 +3,6 @@ A general central radial scanning (or dwelling) instrument class.
 
 """
 
-import copy
-import sys
 import warnings
 
 import numpy as np

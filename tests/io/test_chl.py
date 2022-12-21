@@ -283,7 +283,7 @@ def check_field_first_point(field, value):
 
 
 def test_read_open_file():
-    radar = pyart.io.read_chl(open(pyart.testing.CHL_RHI_FILE, "rb"))
+    pyart.io.read_chl(open(pyart.testing.CHL_RHI_FILE, "rb"))
 
 
 def test_read_chl_time():

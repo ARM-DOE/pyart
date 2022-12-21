@@ -190,7 +190,7 @@ def test_get_freq():
     assert freq_band_x == "X"
 
     freq_band_bad = pyart.retrieve.get_freq_band(10)
-    assert freq_band_bad == None
+    assert freq_band_bad is None
 
 
 def test_mass_centers_dict():

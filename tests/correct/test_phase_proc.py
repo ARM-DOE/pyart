@@ -15,14 +15,14 @@ import numpy as np
 import pytest
 
 try:
-    import cvxopt
+    import cvxopt  # noqa
 
     cvxopt_available = True
 except ImportError:
     cvxopt_available = False
 
 try:
-    import glpk
+    import glpk  # noqa
 
     glpk_available = True
 except ImportError:
@@ -30,7 +30,7 @@ except ImportError:
 
 
 try:
-    import cylp.cy
+    import cylp.cy  # noqa
 
     cylp_available = True
 except ImportError:

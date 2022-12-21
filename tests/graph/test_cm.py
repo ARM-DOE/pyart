@@ -12,10 +12,10 @@ def test_colormaps_exist():
 
 
 def test_colormaps_registered():
-    cmap = matplotlib.cm.get_cmap("pyart_NWSRef")
+    cmap = matplotlib.colormaps.get_cmap("pyart_NWSRef")
     assert isinstance(cmap, matplotlib.colors.Colormap)
 
-    cmap = matplotlib.cm.get_cmap("pyart_NWSRef_r")
+    cmap = matplotlib.colormaps.get_cmap("pyart_NWSRef_r")
     assert isinstance(cmap, matplotlib.colors.Colormap)
 
 

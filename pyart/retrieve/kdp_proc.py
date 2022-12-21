@@ -165,10 +165,10 @@ def kdp_schneebeli(
     phidp_rec = np.zeros(psidp_o.shape) * np.nan
     phidp_rec = np.ma.masked_array(phidp_rec, fill_value=fill_value)
 
-    for i, l in enumerate(list_est):
-        kdp[i, 0 : len(l[0])] = l[0]
-        kdp_stdev[i, 0 : len(l[1])] = l[1]
-        phidp_rec[i, 0 : len(l[2])] = l[2]
+    for i, size in enumerate(list_est):
+        kdp[i, 0 : len(size[0])] = size[0]
+        kdp_stdev[i, 0 : len(size[1])] = size[1]
+        phidp_rec[i, 0 : len(size[2])] = size[2]
 
     # Mask the estimated Kdp and reconstructed Phidp with the mask of original
     # psidp
@@ -909,9 +909,9 @@ def kdp_vulpiani(
     phidp_rec[:] = np.ma.masked
     phidp_rec.set_fill_value(fill_value)
 
-    for i, l in enumerate(list_est):
-        kdp[i, 0 : len(l[0])] = l[0]
-        phidp_rec[i, 0 : len(l[1])] = l[1]
+    for i, size in enumerate(list_est):
+        kdp[i, 0 : len(size[0])] = size[0]
+        phidp_rec[i, 0 : len(size[1])] = size[1]
 
     # Mask the estimated Kdp and reconstructed Phidp with the mask of original
     # psidp
@@ -969,8 +969,8 @@ def _kdp_vulpiani_profile(psidp_in, dr, windsize=10, band="X", n_iter=10, interp
 
     """
     mask = np.ma.getmaskarray(psidp_in)
-    l = windsize
-    l2 = int(l / 2)
+    size = windsize
+    l2 = int(size / 2)
     drm = dr / 1000.0
 
     if mask.all() is True:
@@ -1021,7 +1021,9 @@ def _kdp_vulpiani_profile(psidp_in, dr, windsize=10, band="X", n_iter=10, interp
 
     # first guess
     # In the core of the profile
-    kdp_calc[l2 : nn - l2] = (psidp[l:nn] - psidp[0 : nn - l]) / (2.0 * l * drm)
+    kdp_calc[l2 : nn - l2] = (psidp[size:nn] - psidp[0 : nn - size]) / (
+        2.0 * size * drm
+    )
 
     # set ray extremes to 0
     kdp_calc[0:l2] = 0.0
@@ -1047,8 +1049,8 @@ def _kdp_vulpiani_profile(psidp_in, dr, windsize=10, band="X", n_iter=10, interp
         phidp_rec = np.ma.cumsum(kdp_calc) * 2.0 * drm
 
         # In the core of the profile
-        kdp_calc[l2 : nn - l2] = (phidp_rec[l:nn] - phidp_rec[0 : nn - l]) / (
-            2.0 * l * drm
+        kdp_calc[l2 : nn - l2] = (phidp_rec[size:nn] - phidp_rec[0 : nn - size]) / (
+            2.0 * size * drm
         )
 
         # set ray extremes to 0
@@ -1154,8 +1156,8 @@ def filter_psidp(
 
             len_sub = nan_right - nan_left
 
-            for j, l in enumerate(len_sub):
-                if l < minsize_seq:
+            for j, size in enumerate(len_sub):
+                if size < minsize_seq:
                     mask[i, nan_left[j] - 1 : nan_right[j] + 1] = True
 
             # median filter

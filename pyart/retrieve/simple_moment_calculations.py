@@ -162,7 +162,7 @@ def compute_l(radar, rhohv_field=None, l_field=None):
 
     Returns
     -------
-    l : dict
+    l_field_out : dict
         L field.
 
     """
@@ -181,10 +181,10 @@ def compute_l(radar, rhohv_field=None, l_field=None):
     rhohv[rhohv >= 1.0] = 0.9999
     l_data = -np.ma.log10(1.0 - rhohv)
 
-    l = get_metadata(l_field)
-    l["data"] = l_data
+    l_field_out = get_metadata(l_field)
+    l_field_out["data"] = l_data
 
-    return l
+    return l_field_out
 
 
 def compute_cdr(radar, rhohv_field=None, zdr_field=None, cdr_field=None):

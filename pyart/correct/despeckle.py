@@ -186,7 +186,6 @@ def _adjust_for_periodic_boundary(data):
     i2 = labels.shape[0] // 2
     old_labs = np.unique(labels[i2][labels[i2] > 0])
     for i, lab in enumerate(old_labs):
-        cond = labels == lab
         indices = np.where(labels[i2] == lab)
         new_lab = np.unique(labels[i1][indices[0]])[0]
         labels[labels == lab] = new_lab

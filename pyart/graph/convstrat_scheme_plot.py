@@ -54,7 +54,6 @@ def plot_convstrat_scheme(
     diff[bkg_vals > always_core_thres] = 0
 
     # Now plot
-    fig = plt.figure()
     ax = plt.gca()
     # plot difference line
     ax.plot(bkg_vals, diff, lw=2, color="black")
