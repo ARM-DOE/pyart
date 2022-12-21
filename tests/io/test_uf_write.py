@@ -11,7 +11,6 @@ import warnings
 
 import netCDF4
 import numpy as np
-from numpy.testing import assert_almost_equal, assert_raises
 
 import pyart
 from pyart.io.uf_write import UF_MISSING_VALUE, UFRayCreator, write_uf

@@ -31,13 +31,13 @@ def test_tuple_spec():
         (1.0, 0.0, 0.0),
         (0.5, 0.0, 0.0),
     )
-    spec_reversed = cm._reverse_cmap_spec(_seismic_data)
+    cm._reverse_cmap_spec(_seismic_data)
 
     spec = ((0, 1), (0, 1))
-    spec_reversed = cm._reverse_cmap_spec(spec)
+    cm._reverse_cmap_spec(spec)
 
     cm.datad["foo"] = _seismic_data
-    cmap = cm._generate_cmap("foo", 1)
+    cm._generate_cmap("foo", 1)
     assert isinstance(cm.NWSRef_r, matplotlib.colors.Colormap)
 
 

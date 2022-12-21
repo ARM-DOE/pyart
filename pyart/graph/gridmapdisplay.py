@@ -10,14 +10,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 try:
-    import cartopy
+    import cartopy  # noqa
 
     _CARTOPY_AVAILABLE = True
 except ImportError:
     _CARTOPY_AVAILABLE = False
 
 try:
-    import metpy
+    import metpy  # noqa
 
     _METPY_AVAILABLE = True
 except ImportError:
@@ -28,14 +28,14 @@ from pyart.exceptions import MissingOptionalDependency
 from pyart.graph import common
 
 try:
-    import xarray
+    import xarray  # noqa
 
     _XARRAY_AVAILABLE = True
 except ImportError:
     _XARRAY_AVAILABLE = False
 
 try:
-    import netCDF4
+    import netCDF4  # noqa
 
     _NETCDF4_AVAILABLE = True
 except ImportError:

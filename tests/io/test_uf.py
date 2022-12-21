@@ -9,7 +9,7 @@ except ImportError:
 
 import numpy as np
 import pytest
-from numpy.testing import assert_almost_equal, assert_raises, assert_warns
+from numpy.testing import assert_almost_equal, assert_warns
 
 import pyart
 from pyart.io.uffile import UFFile, UFRay
@@ -46,7 +46,7 @@ def test_sweep_number():
     assert np.allclose(radar.sweep_number["data"], np.array([0]))
 
 
-def test_scan_type():
+def test_scan_type_ppi():
     assert radar.scan_type == "ppi"
 
 
@@ -99,7 +99,7 @@ def test_raises_ioerror():
 
 def test_read_fileobj():
     fh = open(pyart.testing.UF_FILE, "rb")
-    radar = pyart.io.read_uf(fh)
+    pyart.io.read_uf(fh)
     fh.close()
 
 
@@ -162,7 +162,7 @@ def test_frequency():
     )
 
 
-def test_scan_type():
+def test_scan_type_uf():
     ufile = UFFile(pyart.testing.UF_FILE)
     ufray = ufile.rays[0]
 

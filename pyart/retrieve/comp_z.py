@@ -112,7 +112,6 @@ def composite_reflectivity(radar, field="reflectivity", gatefilter=None):
         # if first sweep, create new dim, otherwise concat them up
         if sweep == minimum_sweep:
             z_stack = copy.deepcopy(z[np.newaxis, :, :])
-            az_final = radar.azimuth["data"]
         else:
             z_stack = np.concatenate([z_stack, z[np.newaxis, :, :]])
 

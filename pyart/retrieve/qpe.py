@@ -298,21 +298,17 @@ def est_rain_rate_zkdp(
     )
 
     if main_field == refl_field:
-        secondary_field = kdp_field
         rain_main = rain_z
         rain_secondary = rain_kdp
     elif main_field == kdp_field:
-        secondary_field = refl_field
         rain_main = rain_kdp
         rain_secondary = rain_z
     elif main_field is None:
         main_field = refl_field
-        secondary_field = kdp_field
         rain_main = rain_z
         rain_secondary = rain_kdp
     else:
         main_field = refl_field
-        secondary_field = kdp_field
         rain_main = rain_z
         rain_secondary = rain_kdp
         thresh = 40.0
@@ -394,21 +390,17 @@ def est_rain_rate_za(
     )
 
     if main_field == refl_field:
-        secondary_field = a_field
         rain_main = rain_z
         rain_secondary = rain_a
     elif main_field == a_field:
-        secondary_field = refl_field
         rain_main = rain_a
         rain_secondary = rain_z
     elif main_field is None:
         main_field = a_field
-        secondary_field = refl_field
         rain_main = rain_a
         rain_secondary = rain_z
     else:
         main_field = a_field
-        secondary_field = refl_field
         rain_main = rain_a
         rain_secondary = rain_z
         thresh = 0.04
@@ -537,21 +529,17 @@ def est_rain_rate_hydro(
 
     # rain
     if main_field == refl_field:
-        secondary_field = a_field
         rain_main = rain_z
         rain_secondary = rain_a
     elif main_field == a_field:
-        secondary_field = refl_field
         rain_main = rain_a
         rain_secondary = rain_z
     elif main_field is None:
         main_field = a_field
-        secondary_field = refl_field
         rain_main = rain_a
         rain_secondary = rain_z
     else:
         main_field = a_field
-        secondary_field = refl_field
         rain_main = rain_a
         rain_secondary = rain_z
         thresh = 0.04

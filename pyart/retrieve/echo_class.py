@@ -654,7 +654,7 @@ def _assign_to_class(
     class_vec = dist.argsort(axis=0, fill_value=10e40)
 
     # get minimum distance. Acts as a confidence value
-    dist_sorted = dist.sort(axis=0, fill_value=10e40)
+    dist.sort(axis=0, fill_value=10e40)
     min_dist = dist[0, :, :]
 
     # Entries with non-valid reflectivity values are set to 0 (No class)

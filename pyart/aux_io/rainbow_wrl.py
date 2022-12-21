@@ -7,7 +7,7 @@ Routines for reading RAINBOW files (Used by SELEX) using the wradlib library
 import os
 
 try:
-    import wradlib
+    import wradlib  # noqa
 
     _WRADLIB_AVAILABLE = True
     # `read_rainbow` as of wradlib version 1.0.0
@@ -193,7 +193,6 @@ def read_rainbow_wrl(
     field_dic = filemetadata(field_name)
 
     # other metadata
-    scan_rate = filemetadata("scan_rate")
     frequency = filemetadata("frequency")
 
     # get general file information

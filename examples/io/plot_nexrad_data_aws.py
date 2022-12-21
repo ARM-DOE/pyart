@@ -17,7 +17,7 @@ import matplotlib.pyplot as plt
 
 import pyart
 
-######################################%%
+######################################
 # Read NEXRAD Level 2 Data
 # ------------------------
 #
@@ -78,7 +78,7 @@ display.plot_ppi_map(
 #######################################
 # Within this plot, we see that the velocity data still has regions that are folded, indicating the dataset has not yet been dealiased.
 
-#######################################%%
+#######################################
 # Read NEXRAD Level 3 Data
 # ------------------------
 # We can also access NEXRAD Level 3 data using Py-ART!

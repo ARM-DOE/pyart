@@ -3,13 +3,12 @@ A class for plotting grid objects with a basemap.
 
 """
 
-import warnings
 
 import matplotlib.pyplot as plt
 import numpy as np
 
 try:
-    from mpl_toolkits.basemap import Basemap, pyproj
+    from mpl_toolkits.basemap import Basemap
 
     _BASEMAP_AVAILABLE = True
 except ImportError:

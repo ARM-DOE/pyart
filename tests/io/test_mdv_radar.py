@@ -358,7 +358,7 @@ def test_rhi_field_data():
 
 def test_open_from_file_obj():
     fh = open(pyart.testing.MDV_PPI_FILE, "rb")
-    radar = pyart.io.read_mdv(pyart.testing.MDV_PPI_FILE)
+    pyart.io.read_mdv(pyart.testing.MDV_PPI_FILE)
     fh.close()
 
 

@@ -7,7 +7,7 @@ from pyart.retrieve import spectra_moments
 from pyart.testing import make_target_spectra_radar
 
 try:
-    import xarray as xr
+    import xarray as xr  # noqa
 
     _XARRAY_AVAILABLE = True
 except ImportError:

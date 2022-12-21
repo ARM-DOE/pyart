@@ -1,7 +1,6 @@
 """ Unit tests for Py-ART's util/simulated_vel.py module. """
 
 import numpy as np
-import pytest
 from numpy.testing import assert_almost_equal
 
 import pyart

@@ -16,7 +16,9 @@ def test_composite_z():
     gatefilter.exclude_transition()
     gatefilter.exclude_below("cross_correlation_ratio", 0.95)
 
-    ################# Trivial first test, all 0s ################
+    #################################
+    # Trivial first test, all 0s
+    #################################
 
     # make fake radar data with 0 everywhere
     z = np.zeros(radar.fields["reflectivity"]["data"].shape)
@@ -31,8 +33,10 @@ def test_composite_z():
     )
     assert_equal(compz.fields["composite_reflectivity"]["data"].max(), 0)
 
-    ################# Second test ################
+    #################################
     # Insert 1 layer of all 40 dBZ
+    #################################
+
     z = np.zeros(radar.fields["reflectivity"]["data"].shape)
 
     # choose random sweep, it shouldnt matter which one.
@@ -53,8 +57,10 @@ def test_composite_z():
     )
     assert_equal(compz.fields["composite_reflectivity"]["data"].max(), 40)
 
-    ################# Third test ################
+    ##########################################
     # Have dBZ increase according to range bin
+    ##########################################
+
     z = np.zeros(radar.fields["reflectivity"]["data"].shape)
 
     # choose random sweep, it shouldnt matter which one.

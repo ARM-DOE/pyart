@@ -6,9 +6,6 @@ from a two scan RHI volume.
 All field data is left untouched.
 """
 
-import struct
-
-import numpy as np
 
 # parameters
 INFILE = "CHL20120705_230123"

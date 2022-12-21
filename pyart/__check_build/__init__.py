@@ -46,6 +46,6 @@ source directory.
 
 
 try:
-    from ._check_build import check_build
+    from ._check_build import check_build  # noqa
 except ImportError as e:
     raise_build_error(e)

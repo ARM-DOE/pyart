@@ -15,7 +15,7 @@ FLOAT = np.float32
 BYTE = np.byte
 INT = np.int32
 SHORT = np.int16
-STRING = unicode
+STRING = np.unicode_
 CHAR = np.dtype("S1")
 
 
