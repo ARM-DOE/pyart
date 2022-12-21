@@ -10,7 +10,7 @@ The Python ARM Radar Toolkit (Py-ART)
 
 |ARM| |Tweet|
 
-.. |GithubCI| image:: https://img.shields.io/github/workflow/status/ARM-DOE/pyart/CI?label=CI&logo=github
+.. |GithubCI| image:: https://github.com/ARM-DOE/pyart/actions/workflows/ci.yml/badge.svg
     :target: https://github.com/ARM-DOE/pyart/actions?query=workflow%3ACI
 
 .. |CodeCovStatus| image:: https://img.shields.io/codecov/c/github/ARM-DOE/pyart.svg?logo=codecov
