@@ -60,22 +60,21 @@ def test_radarmapdisplay_cartopy_preexisting_ax(outfile=None):
 
 
 # Tests of methods, these tests do not generate figures
-""" XXX Determine why this is failing
-@pytest.mark.skipif(not pyart.graph.radarmapdisplay_cartopy._CARTOPY_AVAILABLE,
-                    reason="Cartopy is not installed.")
-def test_radarmapdisplay_cartopy_auto_range():
-    # test the auto_range=True function
-    import cartopy
-    radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
-    display = pyart.graph.RadarMapDisplayCartopy(radar, shift=(0.1, 0.0))
-    display.plot_ppi_map('reflectivity_horizontal')
-    extent = display.ax.get_extent(cartopy.crs.PlateCarree())
-    assert round(extent[3], 2) == 36.85
-    assert round(extent[2], 2) == 36.13
-    assert round(extent[1], 2) == -97.15
-    assert round(extent[0], 2) == -98.04
-    plt.close()
-"""
+#  XXX Determine why this is failing
+# @pytest.mark.skipif(not pyart.graph.radarmapdisplay_cartopy._CARTOPY_AVAILABLE,
+#                    reason="Cartopy is not installed.")
+# def test_radarmapdisplay_cartopy_auto_range():
+# test the auto_range=True function
+#    import cartopy
+#    radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
+#    display = pyart.graph.RadarMapDisplayCartopy(radar, shift=(0.1, 0.0))
+#    display.plot_ppi_map('reflectivity_horizontal')
+#    extent = display.ax.get_extent(cartopy.crs.PlateCarree())
+#    assert round(extent[3], 2) == 36.85
+#    assert round(extent[2], 2) == 36.13
+#    assert round(extent[1], 2) == -97.15
+#    assert round(extent[0], 2) == -98.04
+#    plt.close()
 
 
 @pytest.mark.skipif(
