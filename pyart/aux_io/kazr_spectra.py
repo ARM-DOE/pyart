@@ -75,7 +75,7 @@ def read_kazr_spectra(
     """
     if not _XARRAY_AVAILABLE:
         raise MissingOptionalDependency(
-            "Xarray is required to read KAZR spectra files " "but is not installed!"
+            "Xarray is required to read KAZR spectra files but is not installed!"
         )
     # test for non empty kwargs
     _test_arguments(kwargs)
