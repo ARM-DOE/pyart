@@ -20,7 +20,7 @@ from os import path
 
 from Cython.Build import cythonize
 from numpy import get_include
-from setuptools import Extension, find_namespace_packages, setup
+from setuptools import Extension, find_packages, setup
 
 CLASSIFIERS = """\
     Development Status :: 5 - Production/Stable
@@ -262,7 +262,7 @@ setup(
     maintainer=MAINTAINER,
     maintainer_email=MAINTAINER_EMAIL,
     url=URL,
-    packages=find_namespace_packages(include=["pyart"], exclude=["docs"]),
+    packages=find_packages(exclude=["docs"]),
     include_package_data=True,
     scripts=SCRIPTS,
     install_requires=requirements,
