@@ -266,77 +266,77 @@ def _revised_conv_strat(
     conv=2,
 ):
     """
-     We perform the Yuter and Houze (1997) algorithm for echo classification
-     using only the reflectivity field in order to classify each grid point
-     as either convective, stratiform or undefined. Grid points are
-     classified as follows,
+    We perform the Yuter and Houze (1997) algorithm for echo classification
+    using only the reflectivity field in order to classify each grid point
+    as either convective, stratiform or undefined. Grid points are
+    classified as follows,
 
-     nosfcecho = No Surface Echo/ Undefined
-     sf = Stratiform
-     conv = Convective
-     weakecho = Weak Echo
+    nosfcecho = No Surface Echo/ Undefined
+    sf = Stratiform
+    conv = Convective
+    weakecho = Weak Echo
 
-     refl : array
-         array of reflectivity values
-     x, y : array
-         x and y coordinates of reflectivity array, respectively
-     dx, dy : float
-         The x- and y-dimension resolutions in meters, respectively.
-     always_core_thres : float, optional
-         Threshold for points that are always convective. All values above the threshold are classifed as convective
-     bkg_rad_km : float, optional
-         Radius to compute background reflectivity in kilometers. Default is 11 km. Recommended to be at least 3 x
-         grid spacing
-     use_cosine : bool, optional
-         Boolean used to determine if cosine scheme should be used for identifying convective cores (True) or a scalar
-         scheme (False)
-     max_diff : float, optional
-         Maximum difference between background average and reflectivity in order to be classified as convective.
-         "a" value in Eqn. B1 in Yuter and Houze (1997)
-     zero_diff_cos_val : float, optional
-         Value where difference between background average and reflectivity is zero in the cosine function
-         "b" value in Eqn. B1 in Yuter and Houze (1997)
-     scalar_diff : float, optional
-         If using a scalar difference scheme, this value is the multiplier or addition to the background average
-     use_addition : bool, optional
-         Determines if a multiplier (False) or addition (True) in the scalar difference scheme should be used
-     calc_thres : float, optional
-         Minimum percentage of points needed to be considered in background average calculation
-     weak_echo_thres : float, optional
-         Threshold for determining weak echo. All values below this threshold will be considered weak echo
-     min_dBZ_used : float, optional
-         Minimum dBZ value used for classification. All values below this threshold will be considered no surface echo
-     dB_averaging : bool, optional
-         True if using dBZ values that need to be converted to linear Z before averaging. False for other types of values
-     remove_small_objects : bool, optional
-         Determines if small objects should be removed from convective core array. Default is True.
-     min_km2_size : float, optional
-         Minimum size of convective cores to be considered. Cores less than this size will be removed. Default is 10
-         km^2.
-     val_for_max_conv_rad : float, optional
-         dBZ for maximum convective radius. Convective cores with values above this will have the maximum convective
-         radius
-     max_conv_rad_km : float, optional
-         Maximum radius around convective cores to classify as convective. Default is 5 km.
-     cs_core : int, optional
-         Value for points classified as convective cores
-     nosfcecho : int, optional
-         Value for points classified as no surface echo, based on min_dBZ_used
-     weakecho : int, optional
-         Value for points classified as weak echo, based on weak_echo_thres
-     sf : int, optional
-         Value for points classified as stratiform
-     conv : int, optional
-         Value for points classified as convective
+    refl : array
+        array of reflectivity values
+    x, y : array
+        x and y coordinates of reflectivity array, respectively
+    dx, dy : float
+        The x- and y-dimension resolutions in meters, respectively.
+    always_core_thres : float, optional
+        Threshold for points that are always convective. All values above the threshold are classifed as convective
+    bkg_rad_km : float, optional
+        Radius to compute background reflectivity in kilometers. Default is 11 km. Recommended to be at least 3 x
+        grid spacing
+    use_cosine : bool, optional
+        Boolean used to determine if cosine scheme should be used for identifying convective cores (True) or a scalar
+        scheme (False)
+    max_diff : float, optional
+        Maximum difference between background average and reflectivity in order to be classified as convective.
+        "a" value in Eqn. B1 in Yuter and Houze (1997)
+    zero_diff_cos_val : float, optional
+        Value where difference between background average and reflectivity is zero in the cosine function
+        "b" value in Eqn. B1 in Yuter and Houze (1997)
+    scalar_diff : float, optional
+        If using a scalar difference scheme, this value is the multiplier or addition to the background average
+    use_addition : bool, optional
+        Determines if a multiplier (False) or addition (True) in the scalar difference scheme should be used
+    calc_thres : float, optional
+        Minimum percentage of points needed to be considered in background average calculation
+    weak_echo_thres : float, optional
+        Threshold for determining weak echo. All values below this threshold will be considered weak echo
+    min_dBZ_used : float, optional
+        Minimum dBZ value used for classification. All values below this threshold will be considered no surface echo
+    dB_averaging : bool, optional
+        True if using dBZ values that need to be converted to linear Z before averaging. False for other types of values
+    remove_small_objects : bool, optional
+        Determines if small objects should be removed from convective core array. Default is True.
+    min_km2_size : float, optional
+        Minimum size of convective cores to be considered. Cores less than this size will be removed. Default is 10
+        km^2.
+    val_for_max_conv_rad : float, optional
+        dBZ for maximum convective radius. Convective cores with values above this will have the maximum convective
+        radius
+    max_conv_rad_km : float, optional
+        Maximum radius around convective cores to classify as convective. Default is 5 km.
+    cs_core : int, optional
+        Value for points classified as convective cores
+    nosfcecho : int, optional
+        Value for points classified as no surface echo, based on min_dBZ_used
+    weakecho : int, optional
+        Value for points classified as weak echo, based on weak_echo_thres
+    sf : int, optional
+        Value for points classified as stratiform
+    conv : int, optional
+        Value for points classified as convective
 
     Returns
-     -------
-     refl_bkg : array
-         Array of background values
-     conv_core_array : array
-         Array of initial convective cores (identified convective elements without convective radii applied)
-     conv_strat_array : array
-         Array of convective stratiform classifcation with convective radii applied
+    -------
+    refl_bkg : array
+        Array of background values
+    conv_core_array : array
+        Array of initial convective cores (identified convective elements without convective radii applied)
+    conv_strat_array : array
+        Array of convective stratiform classifcation with convective radii applied
     """
 
     # Set up mask arrays for background average and
@@ -690,23 +690,23 @@ def create_conv_radius_mask(
     max_conv_diameter, radius_km, x_spacing, y_spacing, center_conv_mask_x
 ):
     """
-     Does and initial convective stratiform classification
+    Does and initial convective stratiform classification
 
-     Parameters
-     ----------
-     max_conv_diameter : int
-         maximum convective diameter in kilometers
-     radius_km : int
-         convective radius in kilometers
-     x_spacing, y_spacing : float
-         x- and y-dimension pixel size in meters, respectively
-     center_conv_mask_x : int
-         index of center point
+    Parameters
+    ----------
+    max_conv_diameter : int
+        maximum convective diameter in kilometers
+    radius_km : int
+        convective radius in kilometers
+    x_spacing, y_spacing : float
+        x- and y-dimension pixel size in meters, respectively
+    center_conv_mask_x : int
+        index of center point
 
-     Returns
-     -------
+    Returns
+    -------
     conv_mask_array : array
-         array masked based on distance of convective diameter
+        array masked based on distance of convective diameter
     """
 
     conv_mask_array = np.zeros((max_conv_diameter, max_conv_diameter))

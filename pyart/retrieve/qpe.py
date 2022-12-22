@@ -147,7 +147,7 @@ def est_rain_rate_kdp(radar, alpha=None, beta=None, kdp_field=None, rr_field=Non
             alpha, beta = _coeff_rkdp_table()["C"]
             warn(
                 "Radar frequency unknown. "
-                + "Default coefficients for C band will be applied."
+                "Default coefficients for C band will be applied."
             )
 
     # parse the field parameters
@@ -213,7 +213,7 @@ def est_rain_rate_a(radar, alpha=None, beta=None, a_field=None, rr_field=None):
             alpha, beta = _coeff_ra_table()["C"]
             warn(
                 "Radar frequency unknown. "
-                + "Default coefficients for C band will be applied."
+                "Default coefficients for C band will be applied."
             )
 
     # parse the field parameters
