@@ -283,25 +283,25 @@ def get_column_rays(radar, azimuth):
 
     Parameters
     ----------
-    radar    : Radar Object
-               Py-ART Radar Object from which distance to the target, along
-               with gates above the target, will be calculated.
-    azimuth  : float,int
-               forward azimuth angle from radar to target in degrees.
+    radar : Radar Object
+        Py-ART Radar Object from which distance to the target, along
+        with gates above the target, will be calculated.
+    azimuth : float,int
+        forward azimuth angle from radar to target in degrees.
 
     Returns
     -------
     nrays : List
-            radar ray indices that correspond to the column above a
-            target location
+        radar ray indices that correspond to the column above a
+        target location.
     """
     if isinstance(azimuth, int) or isinstance(azimuth, float) is True:
         if (azimuth <= 0) or (azimuth >= 360):
             raise ValueError("azimuth not valid (not between 0-360 degrees)")
     else:
         raise TypeError(
-            "radar longitudegitude type not valid."
-            + " Please convert input to be an int or float"
+            "radar azimuth type not valid."
+            " Please convert input to be an int or float."
         )
     # define a list to hold the valid rays
     rays = []
@@ -331,7 +331,7 @@ def get_column_rays(radar, azimuth):
 def check_latitude(latitude):
 
     """
-    Function to check if input latitude is valid for type and value
+    Function to check if input latitude is valid for type and value.
 
     Parameters
     ----------
@@ -346,19 +346,19 @@ def check_latitude(latitude):
     ) is True:
         if (latitude <= -90) or (latitude >= 90):
             raise ValueError(
-                "Latitude not between -90 and 90 degrees, need to"
-                + "convert to values between -90 and 90"
+                "Latitude not between -90 and 90 degrees, need to "
+                "convert to values between -90 and 90"
             )
     else:
         raise TypeError(
-            "Latitude type not valid, need to convert input to be" + " an int or float"
+            "Latitude type not valid, need to convert input to be an int or float"
         )
 
 
 def check_longitude(longitude):
 
     """
-    Function to check if input latitude is valid for type and value
+    Function to check if input latitude is valid for type and value.
 
     Parameters
     ---------
@@ -373,10 +373,10 @@ def check_longitude(longitude):
         if (longitude <= -180) or (longitude >= 180):
             raise ValueError(
                 "Longitude not valid between -180 and 180"
-                + " degrees, need to convert to values between"
-                + "  -180 and 180"
+                " degrees, need to convert to values between"
+                "  -180 and 180"
             )
     else:
         raise TypeError(
-            "Longitude type not valid, need to convert input to" + " be an int or float"
+            "Longitude type not valid, need to convert input to be an int or float"
         )
