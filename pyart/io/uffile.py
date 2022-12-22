@@ -107,7 +107,7 @@ class UFFile:
         try:
             padding = buf.index(b"UF")
         except ValueError:
-            raise IOError("file in not a valid UF file")
+            raise OSError("file in not a valid UF file")
 
         # read in the records, store as a list of rays
         self.rays = []

@@ -99,7 +99,7 @@ def read_nexrad_cdm(
     dattrs = dataset.ncattrs()
     dvars = dataset.variables
     if "cdm_data_type" not in dattrs or dataset.cdm_data_type != "RADIAL":
-        raise IOError("%s is not a valid CDM NetCDF file" % (filename))
+        raise OSError("%s is not a valid CDM NetCDF file" % (filename))
 
     # determine the scan information
     scan_info = _scan_info(dvars)
