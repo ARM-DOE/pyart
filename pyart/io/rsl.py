@@ -92,7 +92,7 @@ def read_rsl(
     if not _RSL_AVAILABLE:
         raise MissingOptionalDependency(
             "Py-ART must be build with support for TRMM RSL to use the "
-            + "read_rsl function."
+            "read_rsl function."
         )
 
     # create metadata retrieval object

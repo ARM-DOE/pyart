@@ -151,7 +151,7 @@ def read_sigmet(
     nsweeps, nrays, nbins = sigmet_data[first_data_type].shape
 
     if nsweeps == 0:
-        raise OSError("File contains no readable sweep data.")
+        raise IOError("File contains no readable sweep data.")
 
     # ignore extended header if user requested
     if ignore_xhdr:

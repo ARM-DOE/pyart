@@ -197,7 +197,7 @@ def read_nexrad_archive(
             i = i - 360.0
             warnings.warn(
                 "Fixed_angle(s) greater than 180 degrees present."
-                + " Assuming angle to be negative so subtrating 360",
+                " Assuming angle to be negative so subtrating 360",
                 UserWarning,
             )
         else:
