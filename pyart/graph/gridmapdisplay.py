@@ -77,15 +77,15 @@ class GridMapDisplay:
         # check that cartopy and xarray are available
         if not _CARTOPY_AVAILABLE:
             raise MissingOptionalDependency(
-                "Cartopy is required to use GridMapDisplay but is not " "installed!"
+                "Cartopy is required to use GridMapDisplay but is not installed!"
             )
         if not _XARRAY_AVAILABLE:
             raise MissingOptionalDependency(
-                "Xarray is required to use GridMapDisplay but is not " "installed!"
+                "Xarray is required to use GridMapDisplay but is not installed!"
             )
         if not _NETCDF4_AVAILABLE:
             raise MissingOptionalDependency(
-                "netCDF4 is required to use GridMapDisplay but is not " "installed!"
+                "netCDF4 is required to use GridMapDisplay but is not installed!"
             )
 
         # set attributes

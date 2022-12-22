@@ -51,7 +51,7 @@ class GridMapDisplayBasemap:
         # check that basemap is available
         if not _BASEMAP_AVAILABLE:
             raise MissingOptionalDependency(
-                "Basemap is required to use GridMapDisplay but is not " + "installed"
+                "Basemap is required to use GridMapDisplay but is not installed"
             )
 
         # set attributes
