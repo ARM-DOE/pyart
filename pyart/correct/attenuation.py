@@ -167,7 +167,7 @@ def calculate_attenuation_zphi(
             a_coef, beta, c, d = _param_attzphi_table()["C"]
             warn(
                 "Radar frequency unknown. Default coefficients "
-                + "for C band will be applied."
+                "for C band will be applied."
             )
 
     # parse the field parameters

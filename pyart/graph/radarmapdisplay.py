@@ -81,7 +81,7 @@ class RadarMapDisplay(RadarDisplay):
         # check that cartopy is available
         if not _CARTOPY_AVAILABLE:
             raise MissingOptionalDependency(
-                "Cartopy is required to use RadarMapDisplay but is " + "not installed"
+                "Cartopy is required to use RadarMapDisplay but is not installed"
             )
 
         # initalize the base class
@@ -96,7 +96,7 @@ class RadarMapDisplay(RadarDisplay):
             )
 
         elif not isinstance(grid_projection, cartopy.crs.Projection):
-            raise TypeError("grid_projection keyword must " + "be a cartopy.crs object")
+            raise TypeError("grid_projection keyword must be a cartopy.crs object")
         self.grid_projection = grid_projection
         self.ax = None
         self._x0 = None  # x axis radar location in map coords (meters)

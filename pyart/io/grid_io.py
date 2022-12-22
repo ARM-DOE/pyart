@@ -282,8 +282,8 @@ def write_grid(
         if proj_coord_sys is None:
             warnings.warn(
                 "Cannot determine ProjectionCoordinateSystem parameter for "
-                + "the given projection, the file will not be written "
-                + "without this information."
+                "the given projection, the file will not be written "
+                "without this information."
             )
 
         else:

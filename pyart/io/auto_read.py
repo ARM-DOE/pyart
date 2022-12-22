@@ -80,7 +80,7 @@ def read(filename, use_rsl=False, **kwargs):
             radar = read(bzfile, use_rsl, **kwargs)
         except:
             raise ValueError(
-                "Bzip file cannot be read compressed, " "uncompress and try again"
+                "Bzip file cannot be read compressed, uncompress and try again"
             )
         finally:
             bzfile.close()
@@ -93,7 +93,7 @@ def read(filename, use_rsl=False, **kwargs):
             radar = read(gzfile, use_rsl, **kwargs)
         except:
             raise ValueError(
-                "Gzip file cannot be read compressed, " "uncompress and try again"
+                "Gzip file cannot be read compressed, uncompress and try again"
             )
         finally:
             gzfile.close()
