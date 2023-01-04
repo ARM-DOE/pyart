@@ -14,3 +14,15 @@ dependencies:
   - arm_pyart
   - xarray
   - pip
+  - pip:
+    - wheel
+    - watchdog
+    - flake8
+    - tox
+    - coverage
+    - Sphinx
+    - twine
+    - pytest
+    - black
+    - isort
+    - pre_commit
