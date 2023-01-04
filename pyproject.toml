@@ -6,3 +6,6 @@ requires = [
   "cython",
   "oldest-supported-numpy"
 ]
+
+[tool.black]
+line-length = 88

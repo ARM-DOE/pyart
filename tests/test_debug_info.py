@@ -4,6 +4,7 @@ import sys
 import warnings
 
 import pyart
+
 try:
     from StringIO import StringIO
 except ImportError:
@@ -25,19 +26,27 @@ def test_debug_stdout():
 
 # Class for Mocking ImportErrors from
 # http://stackoverflow.com/questions/2481511/mocking-importerror-in-python
-class DisableModules(object):
-
+class DisableModules:
     def __init__(self, modules):
         self.modules = modules
 
     def find_module(self, fullname):
         if fullname in self.modules:
-            raise ImportError('Debug import failure for %s' % fullname)
+            raise ImportError("Debug import failure for %s" % fullname)
 
 
 def test_debug_info_all_disabled():
-    modules = ['numpy', 'scipy', 'matplotlib', 'netCDF4', 'cylp', 'glpk',
-               'cvxopt', 'mpl_toolkits', 'platform']
+    modules = [
+        "numpy",
+        "scipy",
+        "matplotlib",
+        "netCDF4",
+        "cylp",
+        "glpk",
+        "cvxopt",
+        "mpl_toolkits",
+        "platform",
+    ]
     save_dict = {}
     for module in modules:
         if module in sys.modules:
@@ -46,7 +55,7 @@ def test_debug_info_all_disabled():
     fail_loader = DisableModules(modules)
     sys.meta_path.append(fail_loader)
     with warnings.catch_warnings():
-        warnings.simplefilter('ignore')
+        warnings.simplefilter("ignore")
         # test to see that something is written when _debug_info is called
         # we don't care what is written, just that something is.
         buf = StringIO()

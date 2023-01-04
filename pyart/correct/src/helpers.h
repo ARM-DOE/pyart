@@ -18,9 +18,9 @@
 #ifndef FDD_H
 #define FDD_H
 
-#include <rsl.h> /* Sweep */ 
+#include <rsl.h> /* Sweep */
 
 float ray_val(Ray *ray, int index);
-void ray_set(Ray *ray, int index, float val); 
+void ray_set(Ray *ray, int index, float val);
 
 #endif /* DEALIAS_H */

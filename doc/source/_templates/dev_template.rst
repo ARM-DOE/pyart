@@ -13,7 +13,7 @@
    |
 
    **Private methods**
-   
+
    .. autosummary::
        :toctree:
 
@@ -22,7 +22,7 @@
          ~{{ name }}.{{ item }}
          {%- endif -%}
       {%- endfor %}
-   
+
    {% endif %}
 {% endblock %}
 

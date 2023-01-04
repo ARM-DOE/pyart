@@ -36,21 +36,20 @@ This module is taken from the nibable project.  The following license applies:
 
 # emacs: -*- mode: python-mode; py-indent-offset: 4; indent-tabs-mode: nil -*-
 # vi: set ft=python sts=4 ts=4 sw=4 et:
-### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ##
+##############################################################################
 #
 #   See COPYING file distributed along with the NiBabel package for the
 #   copyright and license terms.
 #
-### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ##
-""" Contexts for *with* statement providing temporary directories. """
+##############################################################################
 
 import os
 import shutil
-from tempfile import template, mkdtemp
+from tempfile import mkdtemp, template
 
 
-class TemporaryDirectory(object):
-    """ Create and return a temporary directory. This has the same
+class TemporaryDirectory:
+    """Create and return a temporary directory. This has the same
     behavior as mkdtemp but can be used as a context manager.
 
     Upon exiting the context, the directory and everything contained
@@ -58,14 +57,15 @@ class TemporaryDirectory(object):
 
     Examples
     --------
-    >>> import os
-    >>> with TemporaryDirectory() as tmpdir:
-    ...     fname = os.path.join(tmpdir, 'example_file.txt')
-    ...     with open(fname, 'wt') as fobj:
-    ...         _ = fobj.write('a string\\n')
-    >>> os.path.exists(tmpdir)
+    import os
+    with TemporaryDirectory() as tmpdir:
+        fname = os.path.join(tmpdir, 'example_file.txt')
+        with open(fname, 'wt') as fobj:
+            _ = fobj.write('a string\\n')
+    os.path.exists(tmpdir)
     False
     """
+
     def __init__(self, suffix="", prefix=template, dir=None):
         self.name = mkdtemp(suffix, prefix, dir)
         self._closed = False
@@ -84,7 +84,7 @@ class TemporaryDirectory(object):
 
 
 class InTemporaryDirectory(TemporaryDirectory):
-    """ Create, return, and change directory to a temporary directory.
+    """Create, return, and change directory to a temporary directory.
 
     Examples
     --------
@@ -99,18 +99,19 @@ class InTemporaryDirectory(TemporaryDirectory):
     >>> os.getcwd() == my_cwd
     True
     """
+
     def __enter__(self):
         self._pwd = os.getcwd()
         os.chdir(self.name)
-        return super(InTemporaryDirectory, self).__enter__()
+        return super().__enter__()
 
     def __exit__(self, exc, value, tb):
         os.chdir(self._pwd)
-        return super(InTemporaryDirectory, self).__exit__(exc, value, tb)
+        return super().__exit__(exc, value, tb)
 
 
-class InGivenDirectory(object):
-    """ Change directory to given directory for duration of ``with`` block.
+class InGivenDirectory:
+    """Change directory to given directory for duration of ``with`` block.
     Useful when you want to use `InTemporaryDirectory` for the final test, but
     you are still debugging. For example, you may want to do this in the end:
 
@@ -132,8 +133,9 @@ class InGivenDirectory(object):
     again.
 
     """
+
     def __init__(self, path=None):
-        """ Initialize directory context manager
+        """Initialize directory context manager
 
         Parameters
         ----------

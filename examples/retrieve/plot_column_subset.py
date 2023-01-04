@@ -10,14 +10,15 @@ a point
 # Author: Maxwell Grover (mgrover@anl.gov)
 # License: BSD 3 clause
 
-import pyart
-import numpy as np
-import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
+import matplotlib.pyplot as plt
+import numpy as np
+
+import pyart
 from pyart.testing import get_test_data
 
 # Read in some test data
-filename = get_test_data('swx_20120520_0641.nc')
+filename = get_test_data("swx_20120520_0641.nc")
 radar = pyart.io.read(filename)
 
 ######################################
@@ -28,8 +29,8 @@ radar = pyart.io.read(filename)
 # This will provide some context as to where we are extracting our
 # column of values.
 
-site_lon = -97.73 # longitude in degrees
-site_lat = 36.41 # latitdue in degrees
+site_lon = -97.73  # longitude in degrees
+site_lat = 36.41  # latitdue in degrees
 
 # Setup the RadarMapDisplay and add our projection
 display = pyart.graph.RadarMapDisplay(radar)
@@ -37,18 +38,21 @@ ax = plt.subplot(111, projection=ccrs.PlateCarree())
 
 # Visualize the reflectivity field, using the lowest sweep with
 # latitude and longitude lines
-display.plot_ppi_map('reflectivity_horizontal',
-                     0, ax=ax,vmin=-32, vmax=64.,
-                     lon_lines=np.arange(-98, -97, .2),
-                     lat_lines=np.arange(36, 37, .2))
+display.plot_ppi_map(
+    "reflectivity_horizontal",
+    0,
+    ax=ax,
+    vmin=-32,
+    vmax=64.0,
+    lon_lines=np.arange(-98, -97, 0.2),
+    lat_lines=np.arange(36, 37, 0.2),
+)
 
 # Plot our site location on top of the radar image
-ax.scatter(site_lon,
-           site_lat,
-           color='black');
+ax.scatter(site_lon, site_lat, color="black")
 
 ######################################
-# Now that we have our point defined, and our radar object, we can use the following 
+# Now that we have our point defined, and our radar object, we can use the following
 # utility function in Py-ART to subset a column
 ds = pyart.util.columnsect.get_field_location(radar, site_lat, site_lon)
 
@@ -61,4 +65,4 @@ print(ds)
 #
 # Let's visualize the reflectivity values in the column
 # above our point, which is stored in our new dataset
-ds.corrected_reflectivity_horizontal.plot(y='height');
+ds.corrected_reflectivity_horizontal.plot(y="height")

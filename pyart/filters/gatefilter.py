@@ -13,8 +13,15 @@ from ..util import texture_along_ray
 
 
 def moment_based_gate_filter(
-        radar, ncp_field=None, rhv_field=None, refl_field=None,
-        min_ncp=0.5, min_rhv=None, min_refl=-20., max_refl=100.0):
+    radar,
+    ncp_field=None,
+    rhv_field=None,
+    refl_field=None,
+    min_ncp=0.5,
+    min_rhv=None,
+    min_refl=-20.0,
+    max_refl=100.0,
+):
     """
     Create a filter which removes undesired gates based on moments.
 
@@ -70,11 +77,11 @@ def moment_based_gate_filter(
     """
     # parse the field parameters
     if refl_field is None:
-        refl_field = get_field_name('reflectivity')
+        refl_field = get_field_name("reflectivity")
     if ncp_field is None:
-        ncp_field = get_field_name('normalized_coherent_power')
+        ncp_field = get_field_name("normalized_coherent_power")
     if rhv_field is None:
-        rhv_field = get_field_name('cross_correlation_ratio')
+        rhv_field = get_field_name("cross_correlation_ratio")
 
     # filter gates based upon field parameters
     gatefilter = GateFilter(radar)
@@ -100,10 +107,22 @@ def moment_based_gate_filter(
 
 
 def moment_and_texture_based_gate_filter(
-        radar, zdr_field=None, rhv_field=None, phi_field=None, refl_field=None,
-        textzdr_field=None, textrhv_field=None, textphi_field=None,
-        textrefl_field=None, wind_size=7, max_textphi=20., max_textrhv=0.3,
-        max_textzdr=2.85, max_textrefl=8., min_rhv=0.6):
+    radar,
+    zdr_field=None,
+    rhv_field=None,
+    phi_field=None,
+    refl_field=None,
+    textzdr_field=None,
+    textrhv_field=None,
+    textphi_field=None,
+    textrefl_field=None,
+    wind_size=7,
+    max_textphi=20.0,
+    max_textrhv=0.3,
+    max_textzdr=2.85,
+    max_textrefl=8.0,
+    min_rhv=0.6,
+):
     """
     Create a filter which removes undesired gates based on texture of moments.
 
@@ -163,21 +182,21 @@ def moment_and_texture_based_gate_filter(
     """
     # parse the field parameters
     if refl_field is None:
-        refl_field = get_field_name('reflectivity')
+        refl_field = get_field_name("reflectivity")
     if zdr_field is None:
-        zdr_field = get_field_name('differential_reflectivity')
+        zdr_field = get_field_name("differential_reflectivity")
     if rhv_field is None:
-        rhv_field = get_field_name('cross_correlation_ratio')
+        rhv_field = get_field_name("cross_correlation_ratio")
     if phi_field is None:
-        phi_field = get_field_name('uncorrected_differential_phase')
+        phi_field = get_field_name("uncorrected_differential_phase")
     if textrefl_field is None:
-        textrefl_field = get_field_name('reflectivity_texture')
+        textrefl_field = get_field_name("reflectivity_texture")
     if textzdr_field is None:
-        textzdr_field = get_field_name('differential_reflectivity_texture')
+        textzdr_field = get_field_name("differential_reflectivity_texture")
     if textrhv_field is None:
-        textrhv_field = get_field_name('cross_correlation_ratio_texture')
+        textrhv_field = get_field_name("cross_correlation_ratio_texture")
     if textphi_field is None:
-        textphi_field = get_field_name('differential_phase_texture')
+        textphi_field = get_field_name("differential_phase_texture")
 
     # make deepcopy of input radar (we do not want to modify the original)
     radar_aux = deepcopy(radar)
@@ -186,26 +205,25 @@ def moment_and_texture_based_gate_filter(
     if (max_textphi is not None) and (phi_field in radar_aux.fields):
         textphi = texture_along_ray(radar_aux, phi_field, wind_size=wind_size)
         tphi = get_metadata(textphi_field)
-        tphi['data'] = textphi
+        tphi["data"] = textphi
         radar_aux.add_field(textphi_field, tphi)
 
     if (max_textrhv is not None) and (rhv_field in radar_aux.fields):
         textrho = texture_along_ray(radar_aux, rhv_field, wind_size=wind_size)
         trhv = get_metadata(textrhv_field)
-        trhv['data'] = textrho
+        trhv["data"] = textrho
         radar_aux.add_field(textrhv_field, trhv)
 
     if (max_textzdr is not None) and (zdr_field in radar_aux.fields):
         textzdr = texture_along_ray(radar_aux, zdr_field, wind_size=wind_size)
         tzdr = get_metadata(textzdr_field)
-        tzdr['data'] = textzdr
+        tzdr["data"] = textzdr
         radar_aux.add_field(textzdr_field, tzdr)
 
     if (max_textrefl is not None) and (refl_field in radar_aux.fields):
-        textrefl = texture_along_ray(
-            radar_aux, refl_field, wind_size=wind_size)
+        textrefl = texture_along_ray(radar_aux, refl_field, wind_size=wind_size)
         trefl = get_metadata(textrefl_field)
-        trefl['data'] = textrefl
+        trefl["data"] = textrefl
         radar_aux.add_field(textrefl_field, trefl)
 
     # filter gates based upon field parameters
@@ -234,8 +252,9 @@ def moment_and_texture_based_gate_filter(
     return gatefilter
 
 
-def temp_based_gate_filter(radar, temp_field=None, min_temp=0.,
-                           thickness=400., beamwidth=None):
+def temp_based_gate_filter(
+    radar, temp_field=None, min_temp=0.0, thickness=400.0, beamwidth=None
+):
     """
     Create a filter which removes undesired gates based on temperature. Used
     primarily to filter out the melting layer and gates above it.
@@ -270,7 +289,7 @@ def temp_based_gate_filter(radar, temp_field=None, min_temp=0.,
     """
     # parse the field parameters
     if temp_field is None:
-        temp_field = get_field_name('temperature')
+        temp_field = get_field_name("temperature")
 
     # make deepcopy of input radar (we do not want to modify the original)
     radar_aux = deepcopy(radar)
@@ -283,43 +302,42 @@ def temp_based_gate_filter(radar, temp_field=None, min_temp=0.,
         gatefilter.exclude_masked(temp_field)
         gatefilter.exclude_invalid(temp_field)
 
-    deltar = radar.range['data'][1]-radar.range['data'][0]
+    deltar = radar.range["data"][1] - radar.range["data"][0]
     if beamwidth is not None:
-        beam_rad = beamwidth*np.pi/180.
+        beam_rad = beamwidth * np.pi / 180.0
     if thickness is not None:
         temp = radar_aux.fields[temp_field]
-        temp['data'] = np.ma.masked_where(
-            gatefilter.gate_excluded == 1, temp['data'])
+        temp["data"] = np.ma.masked_where(gatefilter.gate_excluded == 1, temp["data"])
         for ray in range(radar_aux.nrays):
-            gate_h_ray = radar_aux.gate_altitude['data'][ray, :]
+            gate_h_ray = radar_aux.gate_altitude["data"][ray, :]
             # index of first excluded gate
             ind_r = np.where(gatefilter.gate_excluded[ray, :] == 1)[0]
             if ind_r.size > 0:
                 # some gates are excluded: find the maximum height
                 ind_r = ind_r[0]
                 if beamwidth is None:
-                    hmax = gate_h_ray[ind_r]-thickness
+                    hmax = gate_h_ray[ind_r] - thickness
                 else:
                     # consider also the radar volume
                     # maximum altitude at the end of the volume
-                    if ind_r < radar_aux.ngates-2:
+                    if ind_r < radar_aux.ngates - 2:
                         hmax = (
-                            (gate_h_ray[ind_r] + gate_h_ray[ind_r+1])/2. -
-                            thickness)
+                            gate_h_ray[ind_r] + gate_h_ray[ind_r + 1]
+                        ) / 2.0 - thickness
                     else:
-                        hmax = gate_h_ray[ind_r]-thickness
+                        hmax = gate_h_ray[ind_r] - thickness
                     beam_radius = (
-                        (radar.range['data'][ind_r]+deltar/2.)*beam_rad/2.)
-                    delta_h = (
-                        beam_radius
-                        * np.cos(radar.elevation['data'][ray]*np.pi/180.))
+                        (radar.range["data"][ind_r] + deltar / 2.0) * beam_rad / 2.0
+                    )
+                    delta_h = beam_radius * np.cos(
+                        radar.elevation["data"][ray] * np.pi / 180.0
+                    )
                     hmax -= delta_h
 
-                ind_hmax = np.where(
-                    radar_aux.gate_altitude['data'][ray, :] > hmax)[0]
+                ind_hmax = np.where(radar_aux.gate_altitude["data"][ray, :] > hmax)[0]
                 if ind_hmax.size > 0:
                     ind_hmax = ind_hmax[0]
-                    temp['data'][ray, ind_hmax:] = np.ma.masked
+                    temp["data"][ray, ind_hmax:] = np.ma.masked
         radar_aux.add_field(temp_field, temp, replace_existing=True)
         gatefilter = GateFilter(radar_aux)
         gatefilter.exclude_masked(temp_field)
@@ -327,8 +345,9 @@ def temp_based_gate_filter(radar, temp_field=None, min_temp=0.,
     return gatefilter
 
 
-def iso0_based_gate_filter(radar, iso0_field=None, max_h_iso0=0.,
-                           thickness=400., beamwidth=None):
+def iso0_based_gate_filter(
+    radar, iso0_field=None, max_h_iso0=0.0, thickness=400.0, beamwidth=None
+):
     """
     Create a filter which removes undesired gates based height over the iso0.
     Used primarily to filter out the melting layer and gates above it.
@@ -363,7 +382,7 @@ def iso0_based_gate_filter(radar, iso0_field=None, max_h_iso0=0.,
     """
     # parse the field parameters
     if iso0_field is None:
-        iso0_field = get_field_name('height_over_iso0')
+        iso0_field = get_field_name("height_over_iso0")
 
     # make deepcopy of input radar (we do not want to modify the original)
     radar_aux = deepcopy(radar)
@@ -376,43 +395,42 @@ def iso0_based_gate_filter(radar, iso0_field=None, max_h_iso0=0.,
         gatefilter.exclude_masked(iso0_field)
         gatefilter.exclude_invalid(iso0_field)
 
-    deltar = radar.range['data'][1]-radar.range['data'][0]
+    deltar = radar.range["data"][1] - radar.range["data"][0]
     if beamwidth is not None:
-        beam_rad = beamwidth*np.pi/180.
+        beam_rad = beamwidth * np.pi / 180.0
     if thickness is not None:
         iso0 = radar_aux.fields[iso0_field]
-        iso0['data'] = np.ma.masked_where(
-            gatefilter.gate_excluded == 1, iso0['data'])
+        iso0["data"] = np.ma.masked_where(gatefilter.gate_excluded == 1, iso0["data"])
         for ray in range(radar_aux.nrays):
-            gate_h_ray = radar_aux.gate_altitude['data'][ray, :]
+            gate_h_ray = radar_aux.gate_altitude["data"][ray, :]
             # index of first excluded gate
             ind_r = np.where(gatefilter.gate_excluded[ray, :] == 1)[0]
             if ind_r.size > 0:
                 # some gates are excluded: find the maximum height
                 ind_r = ind_r[0]
                 if beamwidth is None:
-                    hmax = gate_h_ray[ind_r]-thickness
+                    hmax = gate_h_ray[ind_r] - thickness
                 else:
                     # consider also the radar volume
                     # maximum altitude at the end of the volume
-                    if ind_r < radar_aux.ngates-2:
+                    if ind_r < radar_aux.ngates - 2:
                         hmax = (
-                            (gate_h_ray[ind_r] + gate_h_ray[ind_r+1])/2. -
-                            thickness)
+                            gate_h_ray[ind_r] + gate_h_ray[ind_r + 1]
+                        ) / 2.0 - thickness
                     else:
-                        hmax = gate_h_ray[ind_r]-thickness
+                        hmax = gate_h_ray[ind_r] - thickness
                     beam_radius = (
-                        (radar.range['data'][ind_r]+deltar/2.)*beam_rad/2.)
-                    delta_h = (
-                        beam_radius
-                        * np.cos(radar.elevation['data'][ray]*np.pi/180.))
+                        (radar.range["data"][ind_r] + deltar / 2.0) * beam_rad / 2.0
+                    )
+                    delta_h = beam_radius * np.cos(
+                        radar.elevation["data"][ray] * np.pi / 180.0
+                    )
                     hmax -= delta_h
 
-                ind_hmax = np.where(
-                    radar_aux.gate_altitude['data'][ray, :] > hmax)[0]
+                ind_hmax = np.where(radar_aux.gate_altitude["data"][ray, :] > hmax)[0]
                 if ind_hmax.size > 0:
                     ind_hmax = ind_hmax[0]
-                    iso0['data'][ray, ind_hmax:] = np.ma.masked
+                    iso0["data"][ray, ind_hmax:] = np.ma.masked
         radar_aux.add_field(iso0_field, iso0, replace_existing=True)
         gatefilter = GateFilter(radar_aux)
         gatefilter.exclude_masked(iso0_field)
@@ -420,7 +438,7 @@ def iso0_based_gate_filter(radar, iso0_field=None, max_h_iso0=0.,
     return gatefilter
 
 
-class GateFilter(object):
+class GateFilter:
     """
     A class for building a boolean arrays for filtering gates based on
     a set of condition typically based on the values in the radar fields.
@@ -451,7 +469,7 @@ class GateFilter(object):
     """
 
     def __init__(self, radar, exclude_based=True):
-        """ initialize """
+        """initialize"""
         self._radar = radar
         shape = (radar.nrays, radar.ngates)
         if exclude_based:
@@ -468,7 +486,7 @@ class GateFilter(object):
     # by taking the ones complement of gates_included.
 
     def copy(self):
-        """ Return a copy of the gatefilter. """
+        """Return a copy of the gatefilter."""
         a = GateFilter(self._radar)
         a._gate_excluded = self._gate_excluded.copy()
         return a
@@ -498,12 +516,12 @@ class GateFilter(object):
         return self._gate_excluded.copy()
 
     def _get_fdata(self, field):
-        """ Check that the field exists and retrieve field data. """
+        """Check that the field exists and retrieve field data."""
         self._radar.check_field_exists(field)
-        return self._radar.fields[field]['data']
+        return self._radar.fields[field]["data"]
 
     def _merge(self, marked, op, exclude_masked):
-        """ Merge an array of marked gates with the exclude array. """
+        """Merge an array of marked gates with the exclude array."""
         # exclude masked elements in marked by replacing them with the value
         # of the exclude_masked flag.  This does nothing if marked is a
         # non-masked array.
@@ -513,11 +531,11 @@ class GateFilter(object):
 
         # merge array of marked gates with existing excluded gates
         # using the specified operation.
-        if op == 'or':
+        if op == "or":
             self._gate_excluded = np.logical_or(self._gate_excluded, marked)
-        elif op == 'and':
+        elif op == "and":
             self._gate_excluded = np.logical_and(self._gate_excluded, marked)
-        elif op == 'new':
+        elif op == "new":
             self._gate_excluded = marked
         else:
             raise ValueError("invalid 'op' parameter: ", op)
@@ -527,7 +545,7 @@ class GateFilter(object):
     # exclude methods #
     ###################
 
-    def exclude_transition(self, trans_value=1, exclude_masked=True, op='or'):
+    def exclude_transition(self, trans_value=1, exclude_masked=True, op="or"):
         """
         Exclude all gates in rays marked as in transition between sweeps.
 
@@ -564,13 +582,14 @@ class GateFilter(object):
         """
         marked = np.zeros_like(self._gate_excluded)
         if self._radar.antenna_transition is not None:
-            transition_data = self._radar.antenna_transition['data']
+            transition_data = self._radar.antenna_transition["data"]
             in_transition = transition_data == trans_value
             marked[in_transition] = True
         return self._merge(marked, op, exclude_masked)
 
-    def exclude_below(self, field, value, exclude_masked=True, op='or',
-                      inclusive=False):
+    def exclude_below(
+        self, field, value, exclude_masked=True, op="or", inclusive=False
+    ):
         """
         Exclude gates where a given field is below a given value.
 
@@ -608,18 +627,20 @@ class GateFilter(object):
             marked = self._get_fdata(field) < value
         return self._merge(marked, op, exclude_masked)
 
-    def exclude_above(self, field, value, exclude_masked=True, op='or',
-                      inclusive=False):
-        """ Exclude gates where a given field is above a given value. """
+    def exclude_above(
+        self, field, value, exclude_masked=True, op="or", inclusive=False
+    ):
+        """Exclude gates where a given field is above a given value."""
         if inclusive:
             marked = self._get_fdata(field) >= value
         else:
             marked = self._get_fdata(field) > value
         return self._merge(marked, op, exclude_masked)
 
-    def exclude_inside(self, field, v1, v2, exclude_masked=True, op='or',
-                       inclusive=True):
-        """ Exclude gates where a given field is inside a given interval. """
+    def exclude_inside(
+        self, field, v1, v2, exclude_masked=True, op="or", inclusive=True
+    ):
+        """Exclude gates where a given field is inside a given interval."""
         if v2 < v1:
             (v1, v2) = (v2, v1)
         fdata = self._get_fdata(field)
@@ -629,9 +650,10 @@ class GateFilter(object):
             marked = (fdata > v1) & (fdata < v2)
         return self._merge(marked, op, exclude_masked)
 
-    def exclude_outside(self, field, v1, v2, exclude_masked=True, op='or',
-                        inclusive=False):
-        """ Exclude gates where a given field is outside a given interval. """
+    def exclude_outside(
+        self, field, v1, v2, exclude_masked=True, op="or", inclusive=False
+    ):
+        """Exclude gates where a given field is outside a given interval."""
         if v2 < v1:
             (v1, v2) = (v2, v1)
         fdata = self._get_fdata(field)
@@ -641,39 +663,39 @@ class GateFilter(object):
             marked = (fdata < v1) | (fdata > v2)
         return self._merge(marked, op, exclude_masked)
 
-    def exclude_equal(self, field, value, exclude_masked=True, op='or'):
-        """ Exclude gates where a given field is equal to a value. """
-        marked = (self._get_fdata(field) == value)
+    def exclude_equal(self, field, value, exclude_masked=True, op="or"):
+        """Exclude gates where a given field is equal to a value."""
+        marked = self._get_fdata(field) == value
         return self._merge(marked, op, exclude_masked)
 
-    def exclude_not_equal(self, field, value, exclude_masked=True, op='or'):
-        """ Exclude gates where a given field is not equal to a value. """
-        marked = (self._get_fdata(field) != value)
+    def exclude_not_equal(self, field, value, exclude_masked=True, op="or"):
+        """Exclude gates where a given field is not equal to a value."""
+        marked = self._get_fdata(field) != value
         return self._merge(marked, op, exclude_masked)
 
     def exclude_all(self):
-        """ Exclude all gates. """
+        """Exclude all gates."""
         self._gate_excluded = np.ones_like(self._gate_excluded)
         return
 
     def exclude_none(self):
-        """ Exclude no gates, include all gates. """
+        """Exclude no gates, include all gates."""
         self._gate_excluded = np.zeros_like(self._gate_excluded)
         return
 
-    def exclude_masked(self, field, exclude_masked=True, op='or'):
-        """ Exclude gates where a given field is masked. """
+    def exclude_masked(self, field, exclude_masked=True, op="or"):
+        """Exclude gates where a given field is masked."""
         marked = np.ma.getmaskarray(self._get_fdata(field))
         return self._merge(marked, op, exclude_masked)
 
-    def exclude_invalid(self, field, exclude_masked=True, op='or'):
+    def exclude_invalid(self, field, exclude_masked=True, op="or"):
         """
         Exclude gates where an invalid value occurs in a field (NaNs or infs).
         """
         marked = ~np.isfinite(self._get_fdata(field))
         return self._merge(marked, op, exclude_masked)
 
-    def exclude_gates(self, mask, exclude_masked=True, op='or'):
+    def exclude_gates(self, mask, exclude_masked=True, op="or"):
         """
         Exclude gates where a given mask is equal True.
 
@@ -700,18 +722,17 @@ class GateFilter(object):
             or invalid.
 
         """
-        fdata = next(iter(self._radar.fields.values()))['data']
+        fdata = next(iter(self._radar.fields.values()))["data"]
         if mask.shape != fdata.shape:
             raise ValueError("mask array must be the same size as a field.")
-        marked = np.array(mask, dtype='bool')
+        marked = np.array(mask, dtype="bool")
         return self._merge(marked, op, exclude_masked)
 
     ####################
     # include_ methods #
     ####################
 
-    def include_not_transition(
-            self, trans_value=0, exclude_masked=True, op='and'):
+    def include_not_transition(self, trans_value=0, exclude_masked=True, op="and"):
         """
         Include all gates in rays not marked as in transition between sweeps.
 
@@ -749,32 +770,35 @@ class GateFilter(object):
             include = np.ones_like(self._gate_excluded)  # include all gates
         else:
             include = np.zeros_like(self._gate_excluded)
-            transition_data = self._radar.antenna_transition['data']
-            not_in_transition = (transition_data == trans_value)
+            transition_data = self._radar.antenna_transition["data"]
+            not_in_transition = transition_data == trans_value
             include[not_in_transition] = True
         return self._merge(~include, op, exclude_masked)
 
-    def include_below(self, field, value, exclude_masked=True, op='and',
-                      inclusive=False):
-        """ Include gates where a given field is below a given value. """
+    def include_below(
+        self, field, value, exclude_masked=True, op="and", inclusive=False
+    ):
+        """Include gates where a given field is below a given value."""
         if inclusive:
             marked = self._get_fdata(field) <= value
         else:
             marked = self._get_fdata(field) < value
         self._merge(~marked, op, exclude_masked)
 
-    def include_above(self, field, value, exclude_masked=True, op='and',
-                      inclusive=False):
-        """ Include gates where a given field is above a given value. """
+    def include_above(
+        self, field, value, exclude_masked=True, op="and", inclusive=False
+    ):
+        """Include gates where a given field is above a given value."""
         if inclusive:
             marked = self._get_fdata(field) >= value
         else:
             marked = self._get_fdata(field) > value
         self._merge(~marked, op, exclude_masked)
 
-    def include_inside(self, field, v1, v2, exclude_masked=True, op='and',
-                       inclusive=True):
-        """ Include gates where a given field is inside a given interval. """
+    def include_inside(
+        self, field, v1, v2, exclude_masked=True, op="and", inclusive=True
+    ):
+        """Include gates where a given field is inside a given interval."""
         if v2 < v1:
             (v1, v2) = (v2, v1)
         fdata = self._get_fdata(field)
@@ -784,9 +808,10 @@ class GateFilter(object):
             marked = (fdata > v1) & (fdata < v2)
         return self._merge(~marked, op, exclude_masked)
 
-    def include_outside(self, field, v1, v2, exclude_masked=True, op='and',
-                        inclusive=False):
-        """ Include gates where a given field is outside a given interval. """
+    def include_outside(
+        self, field, v1, v2, exclude_masked=True, op="and", inclusive=False
+    ):
+        """Include gates where a given field is outside a given interval."""
         if v2 < v1:
             (v1, v2) = (v2, v1)
         fdata = self._get_fdata(field)
@@ -796,37 +821,37 @@ class GateFilter(object):
             marked = (fdata < v1) | (fdata > v2)
         return self._merge(~marked, op, exclude_masked)
 
-    def include_equal(self, field, value, exclude_masked=True, op='and'):
-        """ Include gates where a given field is equal to a value. """
-        marked = (self._get_fdata(field) == value)
+    def include_equal(self, field, value, exclude_masked=True, op="and"):
+        """Include gates where a given field is equal to a value."""
+        marked = self._get_fdata(field) == value
         return self._merge(~marked, op, exclude_masked)
 
-    def include_not_equal(self, field, value, exclude_masked=True, op='and'):
-        """ Include gates where a given field is not equal to a value. """
-        marked = (self._get_fdata(field) != value)
+    def include_not_equal(self, field, value, exclude_masked=True, op="and"):
+        """Include gates where a given field is not equal to a value."""
+        marked = self._get_fdata(field) != value
         return self._merge(~marked, op, exclude_masked)
 
     def include_all(self):
-        """ Include all gates. """
+        """Include all gates."""
         self._gate_excluded = np.zeros_like(self._gate_excluded)
 
     def include_none(self):
-        """ Include no gates, exclude all gates. """
+        """Include no gates, exclude all gates."""
         self._gate_excluded = np.ones_like(self._gate_excluded)
 
-    def include_not_masked(self, field, exclude_masked=True, op='and'):
-        """ Include gates where a given field in not masked. """
+    def include_not_masked(self, field, exclude_masked=True, op="and"):
+        """Include gates where a given field in not masked."""
         marked = np.ma.getmaskarray(self._get_fdata(field))
         return self._merge(marked, op, exclude_masked)
 
-    def include_valid(self, field, exclude_masked=True, op='and'):
+    def include_valid(self, field, exclude_masked=True, op="and"):
         """
         Include gates where a valid value occurs in a field (not NaN or inf).
         """
         marked = np.isfinite(self._get_fdata(field))
         return self._merge(~marked, op, exclude_masked)
 
-    def include_gates(self, mask, exclude_masked=True, op='and'):
+    def include_gates(self, mask, exclude_masked=True, op="and"):
         """
         Include gates where a given mask is equal True.
 
@@ -852,8 +877,8 @@ class GateFilter(object):
             gates which have previously been included.
 
         """
-        fdata = next(iter(self._radar.fields.values()))['data']
+        fdata = next(iter(self._radar.fields.values()))["data"]
         if mask.shape != fdata.shape:
             raise ValueError("Mask array must be the same size as a field.")
-        marked = ~np.array(mask, dtype='bool')
+        marked = ~np.array(mask, dtype="bool")
         return self._merge(marked, op, exclude_masked)

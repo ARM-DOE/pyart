@@ -6,11 +6,12 @@ Function for creating simulated velocity fields.
 import numpy as np
 from scipy import interpolate
 
-from ..config import get_metadata, get_fillvalue
+from ..config import get_fillvalue, get_metadata
 
 
 def simulated_vel_from_profile(
-        radar, profile, interp_kind='linear', sim_vel_field=None):
+    radar, profile, interp_kind="linear", sim_vel_field=None
+):
     """
     Create simulated radial velocities from a profile of horizontal winds.
 
@@ -38,12 +39,12 @@ def simulated_vel_from_profile(
     """
     # parse parameters
     if sim_vel_field is None:
-        sim_vel_field = 'simulated_velocity'
+        sim_vel_field = "simulated_velocity"
 
     # radar parameters
-    azimuths = np.deg2rad(radar.azimuth['data']).reshape(-1, 1)
-    elevations = np.deg2rad(radar.elevation['data']).reshape(-1, 1)
-    gate_altitudes = radar.gate_altitude['data']
+    azimuths = np.deg2rad(radar.azimuth["data"]).reshape(-1, 1)
+    elevations = np.deg2rad(radar.elevation["data"]).reshape(-1, 1)
+    gate_altitudes = radar.gate_altitude["data"]
 
     if isinstance(gate_altitudes, np.ma.MaskedArray):
         gate_altitudes = gate_altitudes.filled(np.nan)
@@ -74,8 +75,12 @@ def simulated_vel_from_profile(
     winds_reshape[0] = winds[0][no_nans]
     winds_reshape[1] = winds[1][no_nans]
     wind_interp = interpolate.interp1d(
-        height, winds_reshape, kind=interp_kind, bounds_error=False,
-        fill_value=get_fillvalue())
+        height,
+        winds_reshape,
+        kind=interp_kind,
+        bounds_error=False,
+        fill_value=get_fillvalue(),
+    )
 
     # interpolated wind speeds at all gates altitudes
     gate_winds = wind_interp(gate_altitudes)
@@ -83,9 +88,10 @@ def simulated_vel_from_profile(
     gate_v = np.ma.masked_invalid(gate_winds[1])
 
     # calculate the radial velocity for all gates
-    radial_vel = (gate_u * np.sin(azimuths) * np.cos(elevations) +
-                  gate_v * np.cos(azimuths) * np.cos(elevations))
+    radial_vel = gate_u * np.sin(azimuths) * np.cos(elevations) + gate_v * np.cos(
+        azimuths
+    ) * np.cos(elevations)
 
     sim_vel = get_metadata(sim_vel_field)
-    sim_vel['data'] = radial_vel
+    sim_vel["data"] = radial_vel
     return sim_vel

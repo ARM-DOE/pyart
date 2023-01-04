@@ -10,18 +10,37 @@ import numpy as np
 from ..core.radar import Radar
 from ..core.transforms import geographic_to_cartesian
 from ..filters import GateFilter, moment_based_gate_filter
-
-from ._gate_to_grid_map import GateToGridMapper
-from ._gate_to_grid_map import RoIFunction, ConstantRoI, DistBeamRoI, DistRoI
+from ._gate_to_grid_map import (
+    ConstantRoI,
+    DistBeamRoI,
+    DistRoI,
+    GateToGridMapper,
+    RoIFunction,
+)
 
 
 def map_gates_to_grid(
-        radars, grid_shape, grid_limits, grid_origin=None,
-        grid_origin_alt=None, grid_projection=None,
-        fields=None, gatefilters=False, map_roi=True,
-        weighting_function='Barnes2', toa=17000.0, roi_func='dist_beam',
-        constant_roi=None, z_factor=0.05, xy_factor=0.02, min_radius=500.0,
-        h_factor=1.0, nb=1.5, bsp=1.0, **kwargs):
+    radars,
+    grid_shape,
+    grid_limits,
+    grid_origin=None,
+    grid_origin_alt=None,
+    grid_projection=None,
+    fields=None,
+    gatefilters=False,
+    map_roi=True,
+    weighting_function="Barnes2",
+    toa=17000.0,
+    roi_func="dist_beam",
+    constant_roi=None,
+    z_factor=0.05,
+    xy_factor=0.02,
+    min_radius=500.0,
+    h_factor=1.0,
+    nb=1.5,
+    bsp=1.0,
+    **kwargs
+):
     """
     Map gates from one or more radars to a Cartesian grid.
 
@@ -70,10 +89,10 @@ def map_gates_to_grid(
     """
     # make a tuple if passed a radar object as the first argument
     if isinstance(radars, Radar):
-        radars = (radars, )
+        radars = (radars,)
 
     if len(radars) == 0:
-        raise ValueError('Length of radars tuple cannot be zero')
+        raise ValueError("Length of radars tuple cannot be zero")
 
     skip_transform = False
     if len(radars) == 1 and grid_origin_alt is None and grid_origin is None:
@@ -81,9 +100,9 @@ def map_gates_to_grid(
 
     if grid_origin_alt is None:
         try:
-            grid_origin_alt = float(radars[0].altitude['data'])
+            grid_origin_alt = float(radars[0].altitude["data"])
         except TypeError:
-            grid_origin_alt = np.mean(radars[0].altitude['data'])
+            grid_origin_alt = np.mean(radars[0].altitude["data"])
 
     gatefilters = _parse_gatefilters(gatefilters, radars)
     cy_weighting_function = _detemine_cy_weighting_func(weighting_function)
@@ -91,15 +110,25 @@ def map_gates_to_grid(
     fields = _determine_fields(fields, radars)
     grid_starts, grid_steps = _find_grid_params(grid_shape, grid_limits)
     offsets = _find_offsets(radars, projparams, grid_origin_alt)
-    roi_func = _parse_roi_func(roi_func, constant_roi, z_factor, xy_factor,
-                               min_radius, h_factor, nb, bsp, offsets)
+    roi_func = _parse_roi_func(
+        roi_func,
+        constant_roi,
+        z_factor,
+        xy_factor,
+        min_radius,
+        h_factor,
+        nb,
+        bsp,
+        offsets,
+    )
 
     # prepare grid storage arrays
     nfields = len(fields)
-    grid_sum = np.zeros(grid_shape + (nfields, ), dtype=np.float32)
-    grid_wsum = np.zeros(grid_shape + (nfields, ), dtype=np.float32)
+    grid_sum = np.zeros(grid_shape + (nfields,), dtype=np.float32)
+    grid_wsum = np.zeros(grid_shape + (nfields,), dtype=np.float32)
     gatemapper = GateToGridMapper(
-        grid_shape, grid_starts, grid_steps, grid_sum, grid_wsum)
+        grid_shape, grid_starts, grid_steps, grid_sum, grid_wsum
+    )
 
     # project gates from each radar onto the grid
     for radar, gatefilter in zip(radars, gatefilters):
@@ -107,13 +136,12 @@ def map_gates_to_grid(
         # Copy the field data and masks.
         # TODO method that does not copy field data into new array
         if nfields == 0:
-            raise ValueError(
-                'There are 0 fields in the radar object to interpolate!')
+            raise ValueError("There are 0 fields in the radar object to interpolate!")
         shape = (radar.nrays, radar.ngates, nfields)
-        field_data = np.empty(shape, dtype='float32')
-        field_mask = np.empty(shape, dtype='uint8')
+        field_data = np.empty(shape, dtype="float32")
+        field_mask = np.empty(shape, dtype="uint8")
         for i, field in enumerate(fields):
-            fdata = radar.fields[field]['data']
+            fdata = radar.fields[field]["data"]
             field_data[:, :, i] = np.ma.getdata(fdata)
             field_mask[:, :, i] = np.ma.getmaskarray(fdata)
 
@@ -122,98 +150,107 @@ def map_gates_to_grid(
             gatefilter = GateFilter(radar)  # include all gates
         elif gatefilter is None:
             gatefilter = moment_based_gate_filter(radar, **kwargs)
-        excluded_gates = gatefilter.gate_excluded.astype('uint8')
+        excluded_gates = gatefilter.gate_excluded.astype("uint8")
 
         # calculate gate locations relative to the grid origin
         if skip_transform:
             # single radar, grid centered at radar location
-            gate_x = radar.gate_x['data']
-            gate_y = radar.gate_y['data']
+            gate_x = radar.gate_x["data"]
+            gate_y = radar.gate_y["data"]
         else:
             gate_x, gate_y = geographic_to_cartesian(
-                radar.gate_longitude['data'], radar.gate_latitude['data'],
-                projparams)
-        gate_z = radar.gate_altitude['data'] - grid_origin_alt
+                radar.gate_longitude["data"], radar.gate_latitude["data"], projparams
+            )
+        gate_z = radar.gate_altitude["data"] - grid_origin_alt
 
         # map the gates onto the grid
         gatemapper.map_gates_to_grid(
-            radar.ngates, radar.nrays, gate_z.astype('float32'),
-            gate_y.astype('float32'), gate_x.astype('float32'),
-            field_data, field_mask, excluded_gates,
-            toa, roi_func, cy_weighting_function)
+            radar.ngates,
+            radar.nrays,
+            gate_z.astype("float32"),
+            gate_y.astype("float32"),
+            gate_x.astype("float32"),
+            field_data,
+            field_mask,
+            excluded_gates,
+            toa,
+            roi_func,
+            cy_weighting_function,
+        )
 
     # create and return the grid dictionary
     mweight = np.ma.masked_equal(grid_wsum, 0)
     msum = np.ma.masked_array(grid_sum, mweight.mask)
-    grids = dict(
-        [(f, msum[..., i] / mweight[..., i]) for i, f in enumerate(fields)])
+    grids = {f: msum[..., i] / mweight[..., i] for i, f in enumerate(fields)}
     if map_roi:
         roi_array = np.empty(grid_shape, dtype=np.float32)
         gatemapper.find_roi_for_grid(roi_array, roi_func)
-        grids['ROI'] = roi_array
+        grids["ROI"] = roi_array
     return grids
 
 
 def _detemine_cy_weighting_func(weighting_function):
-    """ Determine cython weight function value. """
-    if weighting_function.upper() == 'BARNES2':
+    """Determine cython weight function value."""
+    if weighting_function.upper() == "BARNES2":
         cy_weighting_function = 3
-    elif weighting_function.upper() == 'NEAREST':
+    elif weighting_function.upper() == "NEAREST":
         cy_weighting_function = 2
-    elif weighting_function.upper() == 'CRESSMAN':
+    elif weighting_function.upper() == "CRESSMAN":
         cy_weighting_function = 1
-    elif weighting_function.upper() == 'BARNES':
-        warnings.warn("Barnes weighting function is deprecated."
-                      " Please use Barnes 2 to be consistent with"
-                      " Pauley and Wu 1990. Default will be switched"
-                      " to Barnes2 on June 1st.", DeprecationWarning)
+    elif weighting_function.upper() == "BARNES":
+        warnings.warn(
+            "Barnes weighting function is deprecated."
+            " Please use Barnes 2 to be consistent with"
+            " Pauley and Wu 1990. Default will be switched"
+            " to Barnes2 on June 1st.",
+            DeprecationWarning,
+        )
         cy_weighting_function = 0
     else:
-        raise ValueError('unknown weighting_function')
+        raise ValueError("unknown weighting_function")
     return cy_weighting_function
 
 
 def _find_projparams(grid_origin, radars, grid_projection):
-    """ Determine the projection parameter. """
+    """Determine the projection parameter."""
 
     # parse grid_origin
     if grid_origin is None:
         try:
-            lat = float(radars[0].latitude['data'])
-            lon = float(radars[0].longitude['data'])
+            lat = float(radars[0].latitude["data"])
+            lon = float(radars[0].longitude["data"])
         except TypeError:
-            lat = np.mean(radars[0].latitude['data'])
-            lon = np.mean(radars[0].longitude['data'])
+            lat = np.mean(radars[0].latitude["data"])
+            lon = np.mean(radars[0].longitude["data"])
         grid_origin = (lat, lon)
 
     grid_origin_lat, grid_origin_lon = grid_origin
 
     # parse grid_projection
     if grid_projection is None:
-        grid_projection = {
-            'proj': 'pyart_aeqd', '_include_lon_0_lat_0': True}
+        grid_projection = {"proj": "pyart_aeqd", "_include_lon_0_lat_0": True}
     projparams = grid_projection.copy()
-    if projparams.pop('_include_lon_0_lat_0', False):
-        projparams['lon_0'] = grid_origin_lon
-        projparams['lat_0'] = grid_origin_lat
+    if projparams.pop("_include_lon_0_lat_0", False):
+        projparams["lon_0"] = grid_origin_lon
+        projparams["lat_0"] = grid_origin_lat
     return projparams
 
 
 def _parse_gatefilters(gatefilters, radars):
-    """ Parse the gatefilters parameter. """
+    """Parse the gatefilters parameter."""
     if isinstance(gatefilters, GateFilter):
-        gatefilters = (gatefilters, )  # make tuple if single filter passed
+        gatefilters = (gatefilters,)  # make tuple if single filter passed
     if gatefilters is False:
-        gatefilters = (False, ) * len(radars)
+        gatefilters = (False,) * len(radars)
     if gatefilters is None:
-        gatefilters = (None, ) * len(radars)
+        gatefilters = (None,) * len(radars)
     if len(gatefilters) != len(radars):
-        raise ValueError('Length of gatefilters must match length of radars')
+        raise ValueError("Length of gatefilters must match length of radars")
     return gatefilters
 
 
 def _determine_fields(fields, radars):
-    """ Determine which field should be mapped to the grid. """
+    """Determine which field should be mapped to the grid."""
     if fields is None:
         fields = set(radars[0].fields.keys())
         for radar in radars[1:]:
@@ -223,23 +260,24 @@ def _determine_fields(fields, radars):
 
 
 def _find_offsets(radars, projparams, grid_origin_alt):
-    """ Find offset between radars and grid origin. """
+    """Find offset between radars and grid origin."""
     # loop over the radars finding offsets from the origin
-    offsets = [] # offsets from the grid origin, in meters, for each radar
+    offsets = []  # offsets from the grid origin, in meters, for each radar
     for radar in radars:
         x_disp, y_disp = geographic_to_cartesian(
-            radar.longitude['data'], radar.latitude['data'], projparams)
+            radar.longitude["data"], radar.latitude["data"], projparams
+        )
         try:
-            z_disp = float(radar.altitude['data']) - grid_origin_alt
+            z_disp = float(radar.altitude["data"]) - grid_origin_alt
             offsets.append((z_disp, float(y_disp), float(x_disp)))
         except TypeError:
-            z_disp = np.mean(radar.altitude['data']) - grid_origin_alt
+            z_disp = np.mean(radar.altitude["data"]) - grid_origin_alt
             offsets.append((z_disp, np.mean(y_disp), np.mean(x_disp)))
     return offsets
 
 
 def _find_grid_params(grid_shape, grid_limits):
-    """ Find the starting points and step size of the grid. """
+    """Find the starting points and step size of the grid."""
     nz, ny, nx = grid_shape
     zr, yr, xr = grid_limits
     z_start, z_stop = zr
@@ -247,37 +285,38 @@ def _find_grid_params(grid_shape, grid_limits):
     x_start, x_stop = xr
 
     if nz == 1:
-        z_step = 0.
+        z_step = 0.0
     else:
-        z_step = (z_stop - z_start) / (nz - 1.)
+        z_step = (z_stop - z_start) / (nz - 1.0)
     if ny == 1:
-        y_step = 0.
+        y_step = 0.0
     else:
-        y_step = (y_stop - y_start) / (ny - 1.)
+        y_step = (y_stop - y_start) / (ny - 1.0)
     if nx == 1:
-        x_step = 0.
+        x_step = 0.0
     else:
-        x_step = (x_stop - x_start) / (nx - 1.)
+        x_step = (x_stop - x_start) / (nx - 1.0)
 
     grid_starts = (z_start, y_start, x_start)
     grid_steps = (z_step, y_step, x_step)
     return grid_starts, grid_steps
 
 
-def _parse_roi_func(roi_func, constant_roi, z_factor, xy_factor, min_radius,
-                    h_factor, nb, bsp, offsets):
-    """ Return the Radius of influence object. """
+def _parse_roi_func(
+    roi_func, constant_roi, z_factor, xy_factor, min_radius, h_factor, nb, bsp, offsets
+):
+    """Return the Radius of influence object."""
     if not isinstance(roi_func, RoIFunction):
         if constant_roi is not None:
-            roi_func = 'constant'
+            roi_func = "constant"
         else:
             constant_roi = 500.0
-        if roi_func == 'constant':
+        if roi_func == "constant":
             roi_func = ConstantRoI(constant_roi)
-        elif roi_func == 'dist':
+        elif roi_func == "dist":
             roi_func = DistRoI(z_factor, xy_factor, min_radius, offsets)
-        elif roi_func == 'dist_beam':
+        elif roi_func == "dist_beam":
             roi_func = DistBeamRoI(h_factor, nb, bsp, min_radius, offsets)
         else:
-            raise ValueError('unknown roi_func: %s' % roi_func)
+            raise ValueError("unknown roi_func: %s" % roi_func)
     return roi_func

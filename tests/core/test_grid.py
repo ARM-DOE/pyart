@@ -4,39 +4,42 @@ import functools
 import pickle
 
 import numpy as np
-from numpy.testing import assert_almost_equal, assert_equal
 import pytest
+from numpy.testing import assert_almost_equal, assert_equal
 
 try:
     import pyproj
+
     _PYPROJ_AVAILABLE = True
 except ImportError:
     _PYPROJ_AVAILABLE = False
 
 try:
-    import xarray
+    import xarray  # noqa
+
     _XARRAY_AVAILABLE = True
 except ImportError:
     _XARRAY_AVAILABLE = False
 
+import netCDF4
+
 import pyart
 from pyart.lazydict import LazyLoadDict
-import netCDF4
-import datetime
+
 
 def test_grid_picklable():
     grid = pyart.testing.make_target_grid()
     picklestring = pickle.dumps(grid)
     grid_new = pickle.loads(picklestring)
-    assert 'data' in grid.point_x
-    assert 'data' in grid_new.point_x
+    assert "data" in grid.point_x
+    assert "data" in grid_new.point_x
 
 
 def test_grid_write_method():
     grid1 = pyart.testing.make_target_grid()
 
     with pyart.testing.InTemporaryDirectory():
-        tmpfile = 'tmp_grid.nc'
+        tmpfile = "tmp_grid.nc"
         grid1.write(tmpfile)
         grid2 = pyart.io.read_grid(tmpfile)
 
@@ -80,21 +83,18 @@ def test_grid_write_method():
         #  assert grid1.nradar == grid2.nradar
 
 
-@pytest.mark.skipif(not _XARRAY_AVAILABLE,
-                    reason='Xarray is not installed')
-def test_grid_to_xarray():    
+@pytest.mark.skipif(not _XARRAY_AVAILABLE, reason="Xarray is not installed")
+def test_grid_to_xarray():
     grid = pyart.testing.make_target_grid()
     ds = grid.to_xarray()
 
     lon, lat = pyart.core.Grid.get_point_longitude_latitude(grid)
-    time = np.array(
-        [netCDF4.num2date(grid.time['data'][0],
-                          grid.time['units'])])
+    time = np.array([netCDF4.num2date(grid.time["data"][0], grid.time["units"])])
     lon = lon[0, :]
     lat = lat[:, 0]
-    z = grid.z['data']
-    y = grid.y['data']
-    x = grid.x['data']
+    z = grid.z["data"]
+    y = grid.y["data"]
+    x = grid.x["data"]
 
     assert_equal(ds.x.data, x)
     assert_equal(ds.y.data, y)
@@ -107,7 +107,7 @@ def test_grid_to_xarray():
 def _check_dicts_similar(dic1, dic2):
     for k, v in dic1.items():
         print("Checking key:", k)
-        if k == 'data':
+        if k == "data":
             assert_almost_equal(v, dic2[k])
         else:
             assert dic2[k] == v
@@ -128,117 +128,119 @@ def test_grid_class():
 
     assert isinstance(grid.metadata, dict)
     assert isinstance(grid.fields, dict)
-    assert isinstance(grid.fields['reflectivity'], dict)
-    assert grid.fields['reflectivity']['data'].shape == (nz, ny, nx)
+    assert isinstance(grid.fields["reflectivity"], dict)
+    assert grid.fields["reflectivity"]["data"].shape == (nz, ny, nx)
 
     assert isinstance(grid.time, dict)
-    assert grid.time['data'].shape == (1, )
+    assert grid.time["data"].shape == (1,)
 
     assert isinstance(grid.origin_longitude, dict)
-    assert grid.origin_longitude['data'].shape == (1, )
+    assert grid.origin_longitude["data"].shape == (1,)
 
     assert isinstance(grid.origin_latitude, dict)
-    assert grid.origin_latitude['data'].shape == (1, )
+    assert grid.origin_latitude["data"].shape == (1,)
 
     assert isinstance(grid.origin_altitude, dict)
-    assert grid.origin_altitude['data'].shape == (1, )
+    assert grid.origin_altitude["data"].shape == (1,)
 
     assert isinstance(grid.x, dict)
-    assert grid.x['data'].shape == (nx, )
+    assert grid.x["data"].shape == (nx,)
 
     assert isinstance(grid.y, dict)
-    assert grid.y['data'].shape == (ny, )
+    assert grid.y["data"].shape == (ny,)
 
     assert isinstance(grid.z, dict)
-    assert grid.z['data'].shape == (nz, )
+    assert grid.z["data"].shape == (nz,)
 
     assert isinstance(grid.point_x, LazyLoadDict)
-    assert grid.point_x['data'].shape == (nz, ny, nx)
-    assert_almost_equal(
-        grid.point_x['data'][0, 0, :], grid.x['data'][:])
-    assert_almost_equal(
-        grid.point_x['data'][1, 1, :], grid.x['data'][:])
+    assert grid.point_x["data"].shape == (nz, ny, nx)
+    assert_almost_equal(grid.point_x["data"][0, 0, :], grid.x["data"][:])
+    assert_almost_equal(grid.point_x["data"][1, 1, :], grid.x["data"][:])
 
     assert isinstance(grid.point_y, LazyLoadDict)
-    assert grid.point_y['data'].shape == (nz, ny, nx)
-    assert_almost_equal(
-        grid.point_y['data'][0, :, 0], grid.y['data'][:])
-    assert_almost_equal(
-        grid.point_y['data'][1, :, 1], grid.y['data'][:])
+    assert grid.point_y["data"].shape == (nz, ny, nx)
+    assert_almost_equal(grid.point_y["data"][0, :, 0], grid.y["data"][:])
+    assert_almost_equal(grid.point_y["data"][1, :, 1], grid.y["data"][:])
 
     assert isinstance(grid.point_z, LazyLoadDict)
-    assert grid.point_z['data'].shape == (nz, ny, nx)
-    assert_almost_equal(
-        grid.point_z['data'][:, 0, 0], grid.z['data'][:])
-    assert_almost_equal(
-        grid.point_z['data'][:, 1, 1], grid.z['data'][:])
+    assert grid.point_z["data"].shape == (nz, ny, nx)
+    assert_almost_equal(grid.point_z["data"][:, 0, 0], grid.z["data"][:])
+    assert_almost_equal(grid.point_z["data"][:, 1, 1], grid.z["data"][:])
 
     assert isinstance(grid.point_longitude, LazyLoadDict)
-    assert grid.point_longitude['data'].shape == (nz, ny, nx)
-    assert_almost_equal(grid.point_longitude['data'][0, 0, 159], -98.1, 1)
+    assert grid.point_longitude["data"].shape == (nz, ny, nx)
+    assert_almost_equal(grid.point_longitude["data"][0, 0, 159], -98.1, 1)
 
     grid.init_point_longitude_latitude()
     assert isinstance(grid.point_latitude, LazyLoadDict)
-    assert grid.point_latitude['data'].shape == (nz, ny, nx)
-    assert_almost_equal(grid.point_latitude['data'][0, 200, 0], 36.7, 1)
+    assert grid.point_latitude["data"].shape == (nz, ny, nx)
+    assert_almost_equal(grid.point_latitude["data"][0, 200, 0], 36.7, 1)
 
     assert isinstance(grid.point_altitude, LazyLoadDict)
-    assert grid.point_altitude['data'].shape == (nz, ny, nx)
-    assert_almost_equal(grid.point_altitude['data'][0, 0, 0], 300, 0)
-    assert_almost_equal(grid.point_altitude['data'][1, 0, 0], 800, 0)
+    assert grid.point_altitude["data"].shape == (nz, ny, nx)
+    assert_almost_equal(grid.point_altitude["data"][0, 0, 0], 300, 0)
+    assert_almost_equal(grid.point_altitude["data"][1, 0, 0], 800, 0)
 
     assert isinstance(grid.radar_latitude, dict)
-    assert grid.radar_latitude['data'].shape == (nradar, )
+    assert grid.radar_latitude["data"].shape == (nradar,)
 
     assert isinstance(grid.radar_longitude, dict)
-    assert grid.radar_longitude['data'].shape == (nradar, )
+    assert grid.radar_longitude["data"].shape == (nradar,)
 
     assert isinstance(grid.radar_altitude, dict)
-    assert grid.radar_altitude['data'].shape == (nradar, )
+    assert grid.radar_altitude["data"].shape == (nradar,)
 
     assert isinstance(grid.radar_time, dict)
-    assert grid.radar_time['data'].shape == (nradar, )
+    assert grid.radar_time["data"].shape == (nradar,)
 
     assert isinstance(grid.radar_name, dict)
-    assert grid.radar_name['data'].shape == (nradar, )
+    assert grid.radar_name["data"].shape == (nradar,)
 
 
 def test_add_field():
     grid = pyart.testing.make_target_grid()
 
-    assert 'velocity' not in grid.fields
-    field_dict = {'data': np.ones((2, 400, 320))}
-    grid.add_field('velocity', field_dict)
-    assert 'velocity' in grid.fields
-    assert grid.fields['velocity']['data'].shape == (2, 400, 320)
+    assert "velocity" not in grid.fields
+    field_dict = {"data": np.ones((2, 400, 320))}
+    grid.add_field("velocity", field_dict)
+    assert "velocity" in grid.fields
+    assert grid.fields["velocity"]["data"].shape == (2, 400, 320)
 
     # Existing fields can be replaced if requested
-    assert_almost_equal(grid.fields['reflectivity']['data'][0, 0, 0], 0)
-    grid.add_field('reflectivity', field_dict, replace_existing=True)
-    assert_almost_equal(grid.fields['reflectivity']['data'][0, 0, 0], 1)
+    assert_almost_equal(grid.fields["reflectivity"]["data"][0, 0, 0], 0)
+    grid.add_field("reflectivity", field_dict, replace_existing=True)
+    assert_almost_equal(grid.fields["reflectivity"]["data"][0, 0, 0], 1)
 
 
 def test_add_field_raises():
     grid = pyart.testing.make_target_grid()
 
     # No 'data' key in field_dict raises a KeyError
-    pytest.raises(KeyError, grid.add_field, 'field_name', {})
+    pytest.raises(KeyError, grid.add_field, "field_name", {})
 
     # Adding a field which already exists raises a ValueError
-    field_dict = {'data': np.ones((2, 400, 320))}
-    pytest.raises(ValueError, grid.add_field, 'reflectivity', field_dict)
+    field_dict = {"data": np.ones((2, 400, 320))}
+    pytest.raises(ValueError, grid.add_field, "reflectivity", field_dict)
 
     # Incorrect field_shapes raise a ValueError
-    field_dict = {'data': np.ones((1, 1, 1))}
-    pytest.raises(ValueError, grid.add_field, 'field_name', field_dict)
+    field_dict = {"data": np.ones((1, 1, 1))}
+    pytest.raises(ValueError, grid.add_field, "field_name", field_dict)
 
 
 def test_projection_argument():
     grid = pyart.core.Grid(
-        time={}, fields={}, metadata={},
-        origin_latitude={}, origin_longitude={}, origin_altitude={},
-        x={'data': [1]}, y={'data': [1]}, z={'data': [1]},
-        radar_latitude={'data': [1]}, projection={})
+        time={},
+        fields={},
+        metadata={},
+        origin_latitude={},
+        origin_longitude={},
+        origin_altitude={},
+        x={"data": [1]},
+        y={"data": [1]},
+        z={"data": [1]},
+        radar_latitude={"data": [1]},
+        projection={},
+    )
     assert grid.projection == {}
 
 
@@ -247,13 +249,21 @@ def test_inconsistent_radar_arguments():
     #  partially instantiate a Grid class with fake data and a radar_latitude
     # argument indicating a single radar
     partial_grid = functools.partial(
-        pyart.core.Grid, time={}, fields={}, metadata={},
-        origin_latitude={}, origin_longitude={}, origin_altitude={},
-        x={'data': [1]}, y={'data': [1]}, z={'data': [1]},
-        radar_latitude={'data': [1]})
+        pyart.core.Grid,
+        time={},
+        fields={},
+        metadata={},
+        origin_latitude={},
+        origin_longitude={},
+        origin_altitude={},
+        x={"data": [1]},
+        y={"data": [1]},
+        z={"data": [1]},
+        radar_latitude={"data": [1]},
+    )
 
     # radar_ arguments indicating 2 radars should raise a ValueError
-    bad = {'data': [1, 2]}
+    bad = {"data": [1, 2]}
     pytest.raises(ValueError, partial_grid, radar_longitude=bad)
     pytest.raises(ValueError, partial_grid, radar_altitude=bad)
     pytest.raises(ValueError, partial_grid, radar_time=bad)
@@ -262,39 +272,38 @@ def test_inconsistent_radar_arguments():
 
 def test_init_point_altitude():
     grid = pyart.testing.make_target_grid()
-    assert_almost_equal(grid.point_altitude['data'][0, 0, 0], 300, 0)
-    assert_almost_equal(grid.point_altitude['data'][1, 0, 0], 800, 0)
+    assert_almost_equal(grid.point_altitude["data"][0, 0, 0], 300, 0)
+    assert_almost_equal(grid.point_altitude["data"][1, 0, 0], 800, 0)
 
-    grid.origin_altitude['data'][0] = 555.
-    assert_almost_equal(grid.point_altitude['data'][0, 0, 0], 300, 0)
-    assert_almost_equal(grid.point_altitude['data'][1, 0, 0], 800, 0)
+    grid.origin_altitude["data"][0] = 555.0
+    assert_almost_equal(grid.point_altitude["data"][0, 0, 0], 300, 0)
+    assert_almost_equal(grid.point_altitude["data"][1, 0, 0], 800, 0)
 
     grid.init_point_altitude()
-    assert_almost_equal(grid.point_altitude['data'][0, 0, 0], 555, 0)
-    assert_almost_equal(grid.point_altitude['data'][1, 0, 0], 1055, 0)
+    assert_almost_equal(grid.point_altitude["data"][0, 0, 0], 555, 0)
+    assert_almost_equal(grid.point_altitude["data"][1, 0, 0], 1055, 0)
 
 
 def test_init_point_longitude_latitude():
     grid = pyart.testing.make_target_grid()
 
-    assert_almost_equal(grid.point_longitude['data'][0, 0, 159], -98.1, 1)
-    assert_almost_equal(grid.point_latitude['data'][0, 200, 0], 36.7, 1)
+    assert_almost_equal(grid.point_longitude["data"][0, 0, 159], -98.1, 1)
+    assert_almost_equal(grid.point_latitude["data"][0, 200, 0], 36.7, 1)
 
-    grid.origin_longitude['data'][0] = -80.0
-    grid.origin_latitude['data'][0] = 40.0
-    assert_almost_equal(grid.point_longitude['data'][0, 0, 159], -98.1, 1)
-    assert_almost_equal(grid.point_latitude['data'][0, 200, 0], 36.7, 1)
+    grid.origin_longitude["data"][0] = -80.0
+    grid.origin_latitude["data"][0] = 40.0
+    assert_almost_equal(grid.point_longitude["data"][0, 0, 159], -98.1, 1)
+    assert_almost_equal(grid.point_latitude["data"][0, 200, 0], 36.7, 1)
 
     grid.init_point_longitude_latitude()
-    assert_almost_equal(grid.point_longitude['data'][0, 0, 159], -80.0, 1)
-    assert_almost_equal(grid.point_latitude['data'][0, 200, 0], 40.0, 1)
+    assert_almost_equal(grid.point_longitude["data"][0, 0, 159], -80.0, 1)
+    assert_almost_equal(grid.point_latitude["data"][0, 200, 0], 40.0, 1)
 
 
-@pytest.mark.skipif(not _PYPROJ_AVAILABLE,
-                    reason="PyProj is not installed.")
+@pytest.mark.skipif(not _PYPROJ_AVAILABLE, reason="PyProj is not installed.")
 def test_projection_proj():
     grid = pyart.testing.make_target_grid()
-    grid.projection['proj'] = 'aeqd'
+    grid.projection["proj"] = "aeqd"
     assert isinstance(grid.projection_proj, pyproj.Proj)
 
 
@@ -310,14 +319,14 @@ def test_projection_proj_raised():
 def test_init_point_x_y_z():
     grid = pyart.testing.make_target_grid()
     assert isinstance(grid.point_x, LazyLoadDict)
-    assert grid.point_x['data'].shape == (2, 400, 320)
-    assert grid.point_x['data'][0, 0, 0] == grid.x['data'][0]
+    assert grid.point_x["data"].shape == (2, 400, 320)
+    assert grid.point_x["data"][0, 0, 0] == grid.x["data"][0]
 
-    grid.x['data'][0] = -500000.
-    assert grid.point_x['data'][0, 0, 0] != grid.x['data'][0]
+    grid.x["data"][0] = -500000.0
+    assert grid.point_x["data"][0, 0, 0] != grid.x["data"][0]
 
     grid.init_point_x_y_z()
-    assert grid.point_x['data'][0, 0, 0] == grid.x['data'][0]
+    assert grid.point_x["data"][0, 0, 0] == grid.x["data"][0]
 
 
 def test_get_point_longitude_latitude():

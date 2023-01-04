@@ -52,6 +52,7 @@ import warnings
 
 import matplotlib as mpl
 import matplotlib.colors as colors
+
 from ._cm import datad
 
 cmap_d = dict()
@@ -61,10 +62,12 @@ cmap_d = dict()
 
 
 def _reverser(f):
-    """ perform reversal. """
+    """perform reversal."""
+
     def freversed(x):
-        """ f specific reverser. """
+        """f specific reverser."""
         return f(1 - x)
+
     return freversed
 
 
@@ -90,11 +93,11 @@ def _reverse_cmap_spec(spec):
     type specs."""
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", FutureWarning)
-        if isinstance(spec, dict) and 'red' in spec.keys():
+        if isinstance(spec, dict) and "red" in spec.keys():
             return revcmap(spec)
         else:
             revspec = list(reversed(spec))
-            if len(revspec[0]) == 2:    # e.g., (1, (1.0, 0.0, 1.0))
+            if len(revspec[0]) == 2:  # e.g., (1, (1.0, 0.0, 1.0))
                 revspec = [(1.0 - a, b) for a, b in revspec]
             return revspec
 
@@ -106,12 +109,13 @@ def _generate_cmap(name, lutsize):
     spec = datad[name]
 
     # Generate the colormap object.
-    if isinstance(spec, dict) and 'red' in spec.keys():
+    if isinstance(spec, dict) and "red" in spec.keys():
         return colors.LinearSegmentedColormap(name, spec, lutsize)
     else:
         return colors.LinearSegmentedColormap.from_list(name, spec, lutsize)
 
-LUTSIZE = mpl.rcParams['image.lut']
+
+LUTSIZE = mpl.rcParams["image.lut"]
 
 # need this list because datad is changed in loop
 _cmapnames = list(datad.keys())
@@ -121,7 +125,7 @@ _cmapnames = list(datad.keys())
 for cmapname in _cmapnames:
     spec = datad[cmapname]
     spec_reversed = _reverse_cmap_spec(spec)
-    datad[cmapname + '_r'] = spec_reversed
+    datad[cmapname + "_r"] = spec_reversed
 
 # Precache the cmaps with ``lutsize = LUTSIZE`` ...
 
@@ -133,7 +137,7 @@ locals().update(cmap_d)
 
 # register the colormaps so that can be accessed with the names pyart_XXX
 for name, cmap in cmap_d.items():
-    full_name = 'pyart_' + name
+    full_name = "pyart_" + name
     # Matplotlib 3.6.0 colormap registering changed.
     try:
         mpl.colormaps.register(name=full_name, cmap=cmap, force=True)

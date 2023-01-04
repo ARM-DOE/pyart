@@ -4,7 +4,7 @@ Interpolation of NEXRAD moments from 1000 meter to 250 meter gate spacing.
 """
 
 def _fast_interpolate_scan_4(
-        float[:, :] data, float[:] scratch_ray, float fill_value, 
+        float[:, :] data, float[:] scratch_ray, float fill_value,
         int start, int end, int moment_ngates, int linear_interp):
     """ Interpolate a single NEXRAD moment scan from 1000 m to 250 m. """
     # This interpolation scheme is only valid for NEXRAD data where a 4:1

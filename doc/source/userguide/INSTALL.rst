@@ -37,7 +37,7 @@ without these packages.
 
 * `TRMM RSL <https://trmm-fc.gsfc.nasa.gov/trmm_gv/software/rsl/>`_
 
-* `CyLP <https://github.com/mpy/CyLP>`_ or 
+* `CyLP <https://github.com/mpy/CyLP>`_ or
   `PyGLPK <https://tfinley.net/software/pyglpk/>`_ or
   `CVXOPT <https://cvxopt.org/>`_ and their dependencies.
 
@@ -123,25 +123,25 @@ Frequently asked questions
   https://docs.conda.io/projects/conda-build/en/latest/resources/compiler-tools.html
   Once the proper compilers are installed, reinstall CyLP.
 
-* I'm getting a segfault or another error in python when using 
+* I'm getting a segfault or another error in python when using
   ``pyart.io.read_rsl()`` with IRIS/other files.
-  
+
   This is due to a bug in RSL, and can be remedied by adding
   ``-fno-stack-protector -D_FORTIFY_SOURCE=0`` to the CFLAGS parameter of the
   makefile of RSL.  This issue has been fixed with the release of rsl-v1.44.
 
 * I'm having trouble getting PyGLPK to compile on my 64-bit operating system.
-  
+
   Change the line in the setup.py file from
-  
+
   ::
-  
+
       define_macros = macros, extra_compile_args=['-m32'], extra_link_args=['-m32'],
-  
+
   to
-  
+
   ::
-  
+
       define_macros = macros, extra_compile_args=['-m64'], extra_link_args=['-m64'],
 
   Then build and install PyGLPK as recommended in the PYGLPK README.txt file.

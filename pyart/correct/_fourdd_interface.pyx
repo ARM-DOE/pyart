@@ -3,8 +3,9 @@ Cython wrapper around the University of Washington FourDD algorithm.
 
 """
 
-from pyart.correct cimport _fourdd_h
 cimport numpy as np
+
+from pyart.correct cimport _fourdd_h
 from pyart.io._rsl_interface cimport _RslVolume
 
 from pyart.io import _rsl_interface

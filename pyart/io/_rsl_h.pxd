@@ -1,53 +1,53 @@
 """ Cython Declarations for NASA TRMM RSL rsl.h file """
 
 cdef extern from "rsl.h":
-   
+
     cdef char[6] _RSL_VERSION_STR "RSL_VERSION_STR"
 
     # data structures
     ctypedef unsigned short Range
-    
+
     ctypedef struct Ray_header:
-        int   month 
-        int   day  
-        int   year  
-        int   hour  
+        int   month
+        int   day
+        int   year
+        int   hour
         int   minute
-        float sec 
-        float unam_rng 
-        float azimuth 
-        int   ray_num   
-        float elev    
-        int   elev_num  
+        float sec
+        float unam_rng
+        float azimuth
+        int   ray_num
+        float elev
+        int   elev_num
         int   range_bin1
-        int   gate_size 
-        float  vel_res  
+        int   gate_size
+        float  vel_res
         float sweep_rate
-        int prf         
-        int prf2        
-        float azim_rate 
-        float fix_angle 
+        int prf
+        int prf2
+        float azim_rate
+        float fix_angle
         float pitch
-        float roll      
-        float heading   
+        float roll
+        float heading
         float pitch_rate
-        float roll_rate 
+        float roll_rate
         float heading_rate
         float lat
-        float lon       
-        int   alt      
-        float rvc     
+        float lon
+        int   alt
+        float rvc
         float vel_east
         float vel_north
-        float vel_up    
-        int   pulse_count 
-        float pulse_width 
-        float beam_width 
-        float frequency   
-        float wavelength  
-        float nyq_vel  
-        float (*f)(Range x)     
-        Range (*invf)(float x) 
+        float vel_up
+        int   pulse_count
+        float pulse_width
+        float beam_width
+        float frequency
+        float wavelength
+        float nyq_vel
+        float (*f)(Range x)
+        Range (*invf)(float x)
         int   nbins
 
     ctypedef struct Ray:
@@ -55,26 +55,26 @@ cdef extern from "rsl.h":
         Range * range
 
     ctypedef struct Sweep_header:
-        int sweep_num         
+        int sweep_num
         float elev
-        float azimuth 
-        float beam_width 
-        float vert_half_bw 
+        float azimuth
+        float beam_width
+        float vert_half_bw
         float horz_half_bw
         int nrays
-        float (*f)(Range x) 
+        float (*f)(Range x)
         Range (*invf)(float x)
 
-    ctypedef struct Sweep:           
-        Sweep_header h   
+    ctypedef struct Sweep:
+        Sweep_header h
         Ray **ray
 
     ctypedef struct Volume_header:
-        char *type_str 
+        char *type_str
         int nsweeps
-        float calibr_const   
-        float (*f)(Range x)   
-        Range (*invf)(float x) 
+        float calibr_const
+        float (*f)(Range x)
+        Range (*invf)(float x)
 
     ctypedef struct Volume:
         Volume_header h
@@ -86,46 +86,46 @@ cdef extern from "rsl.h":
         float sec
         char radar_type[50]
         int nvolumes
-        int number     
-        char name[8]     
+        int number
+        char name[8]
         char radar_name[8]
-        char project[24] 
-        char city[15]  
-        char state[3]    
+        char project[24]
+        char city[15]
+        char state[3]
         char country[15]
         int latd
-        int latm 
-        int lats  
-        int lond  
-        int lonm  
-        int lons   
-        int height 
-        int spulse 
+        int latm
+        int lats
+        int lond
+        int lonm
+        int lons
+        int height
+        int spulse
         int lpulse
-        int scan_mode 
+        int scan_mode
         int vcp
 
     ctypedef struct Radar:
         Radar_header h
         Volume **v
-    
+
     # function definitions
     Radar * RSL_anyformat_to_radar(char *infile)
     Radar * RSL_wsr88d_to_radar(char *infile, char *call_or_first_tape_file)
-    
+
     Volume * RSL_copy_volume(Volume *v)
-    
+
     Volume * RSL_new_volume(int max_sweeps)
-    Sweep * RSL_new_sweep(int max_rays) 
+    Sweep * RSL_new_sweep(int max_rays)
     Ray * RSL_new_ray(int max_bins)
-   
+
     void RSL_free_ray(Ray *r)
     void RSL_free_sweep(Sweep *s)
     void RSL_free_volume(Volume *v)
     void RSL_free_radar(Radar *r)
-    
+
     void RSL_print_version()
-    
+
     # conversion functions
     float DZ_F(Range x)
     float VR_F(Range x)
@@ -160,7 +160,7 @@ cdef extern from "rsl.h":
     float HC_F(Range x)
     float VC_F(Range x)
     float SD_F(Range x)
-    
+
     Range DZ_INVF(float x)
     Range VR_INVF(float x)
     Range SW_INVF(float x)

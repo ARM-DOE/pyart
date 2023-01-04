@@ -10,8 +10,8 @@ http://www2.mmm.ucar.edu/imagearchive/WSI/mdv/
 # all data point have been read.  Therefore a file truncated at a break in the
 # RLE can still be read but data past the last data point will be filled with
 # random data.  Here we end after the first non-keyed RLE byte.
-infile = open('000000.mdv', 'rb')
-outfile = open('example_mdv_grid.mdv', 'wb')
+infile = open("000000.mdv", "rb")
+outfile = open("example_mdv_grid.mdv", "wb")
 outfile.write(infile.read(8134))
 infile.close()
 outfile.close()

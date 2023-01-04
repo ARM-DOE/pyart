@@ -66,16 +66,16 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
 import bz2
+import struct
+import warnings
 from collections import namedtuple
 from datetime import datetime, timedelta
-import struct
 from xdrlib import Unpacker
-import warnings
 
 import numpy as np
 
 
-class NEXRADLevel3File(object):
+class NEXRADLevel3File:
     """
     A Class for accessing data in NEXRAD Level III (3) files.
 
@@ -103,30 +103,31 @@ class NEXRADLevel3File(object):
     """
 
     def __init__(self, filename):
-        """ initalize the object. """
+        """initalize the object."""
         # read the entire file into memory
-        if hasattr(filename, 'read'):
+        if hasattr(filename, "read"):
             fhandle = filename
         else:
-            fhandle = open(filename, 'rb')
-        buf = fhandle.read()    # string buffer containing file data
+            fhandle = open(filename, "rb")
+        buf = fhandle.read()  # string buffer containing file data
         self._fh = fhandle
 
         # Text header
         # Format of Text header is SDUSXX KYYYY DDHHMM\r\r\nAAABBB\r\r\n
         # Sometime additional padding is present before the Text header
-        record_padding = buf.find(b'SDUS')
+        record_padding = buf.find(b"SDUS")
         if record_padding == -1:
-            raise ValueError('Not a valid NEXRAD Level 3 file.')
-        self.text_header = buf[:30 + record_padding]
-        bpos = 30 + record_padding      # current reading position in buffer
+            raise ValueError("Not a valid NEXRAD Level 3 file.")
+        self.text_header = buf[: 30 + record_padding]
+        bpos = 30 + record_padding  # current reading position in buffer
 
         # Read and decode 18 byte Message Header Block
         self.msg_header = _unpack_from_buf(buf, bpos, MESSAGE_HEADER)
-        if self.msg_header['code'] not in SUPPORTED_PRODUCTS:
-            code = self.msg_header['code']
+        if self.msg_header["code"] not in SUPPORTED_PRODUCTS:
+            code = self.msg_header["code"]
             raise NotImplementedError(
-                'Level3 product with code %i is not supported' % (code))
+                "Level3 product with code %i is not supported" % (code)
+            )
         bpos += 18
 
         # Read and decode 102 byte Product Description Block
@@ -134,15 +135,19 @@ class NEXRADLevel3File(object):
         bpos += 102
 
         # Check product version number
-        ver = self.prod_descr['version']
-        supp_ver = SUPPORTED_VERSION_NUMBERS[self.msg_header['code']]
+        ver = self.prod_descr["version"]
+        supp_ver = SUPPORTED_VERSION_NUMBERS[self.msg_header["code"]]
         if ver > supp_ver:
-            warnings.warn('Radar product version is %d. Py-ART implementation \
+            warnings.warn(
+                "Radar product version is %d. Py-ART implementation \
             supports max version of %d. Most recent product version has not \
-            yet been implemented/tested.' % (ver,supp_ver), UserWarning)
+            yet been implemented/tested."
+                % (ver, supp_ver),
+                UserWarning,
+            )
 
         # Uncompress symbology block if necessary
-        if buf[bpos:bpos+2] == b'BZ':
+        if buf[bpos : bpos + 2] == b"BZ":
             buf2 = bz2.decompress(buf[bpos:])
         else:
             buf2 = buf[bpos:]
@@ -150,7 +155,7 @@ class NEXRADLevel3File(object):
         # Read and decode symbology header
         self.symbology_header = _unpack_from_buf(buf2, 0, SYMBOLOGY_HEADER)
 
-        packet_code = struct.unpack('>h', buf2[16:18])[0]
+        packet_code = struct.unpack(">h", buf2[16:18])[0]
         assert packet_code in SUPPORTED_PACKET_CODES
 
         bpos = 16
@@ -161,31 +166,31 @@ class NEXRADLevel3File(object):
             self._read_symbology_block(buf2, bpos, packet_code)
 
     def close(self):
-        """ Close the file. """
+        """Close the file."""
         self._fh.close()
 
     def _read_symbology_block(self, buf2, pos, packet_code):
         self.packet_header = _unpack_from_buf(buf2, 16, RADIAL_PACKET_HEADER)
         self.radial_headers = []
-        nbins = self.packet_header['nbins']
-        nradials = self.packet_header['nradials']
-        nbytes = _unpack_from_buf(buf2, 30, RADIAL_HEADER)['nbytes']
+        nbins = self.packet_header["nbins"]
+        nradials = self.packet_header["nradials"]
+        nbytes = _unpack_from_buf(buf2, 30, RADIAL_HEADER)["nbytes"]
         if packet_code == 16 and nbytes != nbins:
             nbins = nbytes  # sometimes these do not match, use nbytes
-        self.raw_data = np.empty((nradials, nbins), dtype='uint8')
+        self.raw_data = np.empty((nradials, nbins), dtype="uint8")
         pos = 30
 
         for radial in self.raw_data:
             radial_header = _unpack_from_buf(buf2, pos, RADIAL_HEADER)
             pos += 6
             if packet_code == 16:
-                radial[:] = np.frombuffer(buf2[pos:pos+nbins], '>u1')
-                pos += radial_header['nbytes']
+                radial[:] = np.frombuffer(buf2[pos : pos + nbins], ">u1")
+                pos += radial_header["nbytes"]
             else:
                 assert packet_code == AF1F
                 # decode run length encoding
-                rle_size = radial_header['nbytes'] * 2
-                rle = np.frombuffer(buf2[pos:pos+rle_size], dtype='>u1')
+                rle_size = radial_header["nbytes"] * 2
+                rle = np.frombuffer(buf2[pos : pos + rle_size], dtype=">u1")
                 colors = np.bitwise_and(rle, 0b00001111)
                 runs = np.bitwise_and(rle, 0b11110000) // 16
                 radial[:] = np.repeat(colors, runs)
@@ -193,74 +198,81 @@ class NEXRADLevel3File(object):
             self.radial_headers.append(radial_header)
 
     def _read_symbology_block_28(self, buf2, bpos, packet_code):
-        """ Read symbology block for Packet Code 28 (Product 176). """
+        """Read symbology block for Packet Code 28 (Product 176)."""
         self.packet_header = _unpack_from_buf(buf2, bpos, GEN_DATA_PACK_HEADER)
         bpos += 8
 
         # Read number of bytes (2 HW) and return
-        num_bytes = self.packet_header['num_bytes']
-        hunk = buf2[bpos : bpos+num_bytes]
+        num_bytes = self.packet_header["num_bytes"]
+        hunk = buf2[bpos : bpos + num_bytes]
         xdrparser = Level3XDRParser(hunk)
         self.gen_data_pack = xdrparser(packet_code)
 
         # Rearrange some of the info so it matches the format of packet codes
         # 16 and AF1F so method calls can be done properly
-        self.packet_header['nradials'] = len(self.gen_data_pack['components'].radials)
-        nradials = self.packet_header['nradials']
-        self.packet_header['nbins'] = self.gen_data_pack['components'].radials[0].num_bins
-        nbins = self.packet_header['nbins']
-        self.packet_header['first_bin'] = self.gen_data_pack['components'].first_gate
-        self.packet_header['range_scale'] = 1000 # 1000m in 1 km
+        self.packet_header["nradials"] = len(self.gen_data_pack["components"].radials)
+        nradials = self.packet_header["nradials"]
+        self.packet_header["nbins"] = (
+            self.gen_data_pack["components"].radials[0].num_bins
+        )
+        nbins = self.packet_header["nbins"]
+        self.packet_header["first_bin"] = self.gen_data_pack["components"].first_gate
+        self.packet_header["range_scale"] = 1000  # 1000m in 1 km
 
         # Read azimuths
-        self.azimuths = [rad.azimuth for rad in self.gen_data_pack['components'].radials]
+        self.azimuths = [
+            rad.azimuth for rad in self.gen_data_pack["components"].radials
+        ]
 
         # Pull each radial's data into an array
-        self.raw_data = np.empty((nradials, nbins), dtype='uint16')
-        for i in range(0,nradials):
-            self.raw_data[i,:] = self.gen_data_pack['components'].radials[i].data
+        self.raw_data = np.empty((nradials, nbins), dtype="uint16")
+        for i in range(0, nradials):
+            self.raw_data[i, :] = self.gen_data_pack["components"].radials[i].data
 
     def get_location(self):
-        """ Return the latitude, longitude and height of the radar. """
-        latitude = self.prod_descr['latitude'] * 0.001
-        longitude = self.prod_descr['longitude'] * 0.001
-        height = self.prod_descr['height']
+        """Return the latitude, longitude and height of the radar."""
+        latitude = self.prod_descr["latitude"] * 0.001
+        longitude = self.prod_descr["longitude"] * 0.001
+        height = self.prod_descr["height"]
         return latitude, longitude, height
 
     def get_azimuth(self):
-        """ Return an array of starting azimuth angles in degrees. """
-        if self.packet_header['packet_code'] == 28:
+        """Return an array of starting azimuth angles in degrees."""
+        if self.packet_header["packet_code"] == 28:
             azimuths = self.azimuths
         else:
-            azimuths = [d['angle_start'] * 0.1 for d in self.radial_headers]
-        return np.array(azimuths, dtype='float32')
+            azimuths = [d["angle_start"] * 0.1 for d in self.radial_headers]
+        return np.array(azimuths, dtype="float32")
 
     def get_range(self):
-        """ Return an array of gate range spacing in meters. """
+        """Return an array of gate range spacing in meters."""
         nbins = self.raw_data.shape[1]
-        first_bin = self.packet_header['first_bin']
-        range_scale = (self.packet_header['range_scale'] *
-                       PRODUCT_RANGE_RESOLUTION[self.msg_header['code']])
-        return np.arange(nbins, dtype='float32') * range_scale + first_bin
+        first_bin = self.packet_header["first_bin"]
+        range_scale = (
+            self.packet_header["range_scale"]
+            * PRODUCT_RANGE_RESOLUTION[self.msg_header["code"]]
+        )
+        return np.arange(nbins, dtype="float32") * range_scale + first_bin
 
     def get_elevation(self):
-        """ Return the sweep elevation angle in degrees. """
-        hw30 = self.prod_descr['halfwords_30']
-        if self.msg_header['code'] in ELEVATION_ANGLE:
-            elevation = struct.unpack('>h', hw30)[0] * 0.1
+        """Return the sweep elevation angle in degrees."""
+        hw30 = self.prod_descr["halfwords_30"]
+        if self.msg_header["code"] in ELEVATION_ANGLE:
+            elevation = struct.unpack(">h", hw30)[0] * 0.1
         else:
             elevation = 0.0
         return elevation
 
     def get_volume_start_datetime(self):
-        """ Return a datetime of the start of the radar volume. """
-        return _datetime_from_mdate_mtime(self.prod_descr['vol_scan_date'],
-                                          self.prod_descr['vol_scan_time'])
+        """Return a datetime of the start of the radar volume."""
+        return _datetime_from_mdate_mtime(
+            self.prod_descr["vol_scan_date"], self.prod_descr["vol_scan_time"]
+        )
 
     def get_data(self):
-        """ Return a masked array containing the field data. """
-        msg_code = self.msg_header['code']
-        threshold_data = self.prod_descr['threshold_data']
+        """Return a masked array containing the field data."""
+        msg_code = self.msg_header["code"]
+        threshold_data = self.prod_descr["threshold_data"]
 
         if msg_code in _8_OR_16_LEVELS:
             mdata = self._get_data_8_or_16_levels()
@@ -269,33 +281,33 @@ class NEXRADLevel3File(object):
             mdata = self._get_data_msg_134()
 
         elif msg_code in [94, 99, 182, 186]:
-            hw31, hw32 = np.frombuffer(threshold_data[:4], '>i2')
-            data = (self.raw_data - 2) * (hw32/10.) + hw31/10.
+            hw31, hw32 = np.frombuffer(threshold_data[:4], ">i2")
+            data = (self.raw_data - 2) * (hw32 / 10.0) + hw31 / 10.0
             mdata = np.ma.array(data, mask=self.raw_data < 2)
 
         elif msg_code in [32]:
-            hw31, hw32 = np.frombuffer(threshold_data[:4], '>i2')
-            data = (self.raw_data) * (hw32/10.) + hw31/10.
+            hw31, hw32 = np.frombuffer(threshold_data[:4], ">i2")
+            data = (self.raw_data) * (hw32 / 10.0) + hw31 / 10.0
             mdata = np.ma.array(data, mask=self.raw_data < 2)
 
         elif msg_code in [138]:
-            hw31, hw32 = np.frombuffer(threshold_data[:4], '>i2')
-            data = self.raw_data * (hw32/100.) + hw31/100.
+            hw31, hw32 = np.frombuffer(threshold_data[:4], ">i2")
+            data = self.raw_data * (hw32 / 100.0) + hw31 / 100.0
             mdata = np.ma.array(data)
 
         elif msg_code in [159, 161, 163]:
-            scale, offset = np.frombuffer(threshold_data[:8], '>f4')
+            scale, offset = np.frombuffer(threshold_data[:8], ">f4")
             data = (self.raw_data - offset) / (scale)
             mdata = np.ma.array(data, mask=self.raw_data < 2)
 
         elif msg_code in [170, 172, 173, 174, 175]:
             # units are 0.01 inches
-            scale, offset = np.frombuffer(threshold_data[:8], '>f4')
+            scale, offset = np.frombuffer(threshold_data[:8], ">f4")
             data = (self.raw_data - offset) / (scale) * 0.01
             mdata = np.ma.array(data, mask=self.raw_data < 1)
 
         elif msg_code in [176]:
-            scale, offset = np.frombuffer(threshold_data[:8], '>f4')
+            scale, offset = np.frombuffer(threshold_data[:8], ">f4")
             data = (self.raw_data - offset) / (scale)
             mdata = np.ma.array(data, mask=self.raw_data < 1)
 
@@ -313,33 +325,34 @@ class NEXRADLevel3File(object):
             # contains.
             mdata = np.ma.array(self.raw_data.copy())
 
-        return mdata.astype('float32')
+        return mdata.astype("float32")
 
     def _get_data_8_or_16_levels(self):
-        """ Return a masked array for products with 8 or 16 data levels. """
-        thresh = np.frombuffer(self.prod_descr['threshold_data'], '>B')
+        """Return a masked array for products with 8 or 16 data levels."""
+        thresh = np.frombuffer(self.prod_descr["threshold_data"], ">B")
         flags = thresh[::2]
         values = thresh[1::2]
 
         sign = np.choose(np.bitwise_and(flags, 0x01), [1, -1])
         bad = np.bitwise_and(flags, 0x80) == 128
-        scale = 1.
+        scale = 1.0
         if flags[0] & 2**5:
-            scale = 1/20.
+            scale = 1 / 20.0
         if flags[0] & 2**4:
-            scale = 1/10.
+            scale = 1 / 10.0
 
         data_levels = values * sign * scale
-        data_levels[bad] = -999 # sentinal for bad data points
+        data_levels[bad] = -999  # sentinal for bad data points
 
         data = np.choose(self.raw_data, data_levels)
         mdata = np.ma.masked_equal(data, -999)
         return mdata
 
     def _get_data_msg_134(self):
-        """ Return a masked array for product with message code 134. """
+        """Return a masked array for product with message code 134."""
         hw31, hw32, hw33, hw34, hw35 = np.frombuffer(
-            self.prod_descr['threshold_data'][:10], '>i2')
+            self.prod_descr["threshold_data"][:10], ">i2"
+        )
         linear_scale = _int16_to_float16(hw31)
         linear_offset = _int16_to_float16(hw32)
         log_start = hw33
@@ -348,7 +361,7 @@ class NEXRADLevel3File(object):
         # linear scale data
         data = np.zeros(self.raw_data.shape, dtype=np.float32)
         lin = self.raw_data < log_start
-        data[lin] = ((self.raw_data[lin] - linear_offset) / (linear_scale))
+        data[lin] = (self.raw_data[lin] - linear_offset) / (linear_scale)
         # log scale data
         log = self.raw_data >= log_start
         data[log] = np.exp((self.raw_data[log] - log_offset) / (log_scale))
@@ -357,36 +370,36 @@ class NEXRADLevel3File(object):
 
 
 def _datetime_from_mdate_mtime(mdate, mtime):
-    """ Returns a datetime for a given message date and time. """
+    """Returns a datetime for a given message date and time."""
     epoch = datetime.utcfromtimestamp(0)
     return epoch + timedelta(days=mdate - 1, seconds=mtime)
 
 
 def _structure_size(structure):
-    """ Find the size of a structure in bytes. """
-    return struct.calcsize('>' + ''.join([i[1] for i in structure]))
+    """Find the size of a structure in bytes."""
+    return struct.calcsize(">" + "".join([i[1] for i in structure]))
 
 
 def _unpack_from_buf(buf, pos, structure):
-    """ Unpack a structure from a buffer. """
+    """Unpack a structure from a buffer."""
     size = _structure_size(structure)
-    return _unpack_structure(buf[pos:pos + size], structure)
+    return _unpack_structure(buf[pos : pos + size], structure)
 
 
 def _unpack_structure(string, structure):
-    """ Unpack a structure from a string """
-    fmt = '>' + ''.join([i[1] for i in structure]) # NEXRAD is big-endian
+    """Unpack a structure from a string"""
+    fmt = ">" + "".join([i[1] for i in structure])  # NEXRAD is big-endian
     lst = struct.unpack(fmt, string)
     return dict(zip([i[0] for i in structure], lst))
 
 
 def nexrad_level3_message_code(filename):
-    """ Return the message (product) code for a NEXRAD Level 3 file. """
-    fhl = open(filename, 'r')
+    """Return the message (product) code for a NEXRAD Level 3 file."""
+    fhl = open(filename)
     buf = fhl.read(48)
     fhl.close()
     msg_header = _unpack_from_buf(buf, 30, MESSAGE_HEADER)
-    return msg_header['code']
+    return msg_header["code"]
 
 
 # NEXRAD Level III file structures, sizes, and static data
@@ -398,17 +411,17 @@ def nexrad_level3_message_code(filename):
 
 class Level3XDRParser(Unpacker):
     """Handle XDR-formatted Level 3 NEXRAD products.
-    
+
     This class is virtually identical to the Metpy implementation. It has been
     pulled into this module to avoid future changes to the Metpy package from
     breaking something. The class may be imported from Metpy as a dependency
     if someday the project has matured so that features breaking are unlikely.
-    
+
     This class has been modified from MetPy
     Copyright (c) 2009,2015,2016,2017 MetPy Developers.
     Distributed under the terms of the BSD 3-Clause License.
     SPDX-License-Identifier: BSD-3-Clause
-    
+
     Redistribution and use in source and binary forms, with or without
     modification, are permitted provided that the following conditions are met:
 
@@ -443,8 +456,7 @@ class Level3XDRParser(Unpacker):
         if packet_code == 28:
             xdr.update(self._unpack_prod_desc())
         else:
-            raise NotImplementedError(
-                  'Unknown XDR Component: %d' % (packet_code))
+            raise NotImplementedError("Unknown XDR Component: %d" % (packet_code))
 
         # Check that we got it all
         self.done()
@@ -452,33 +464,33 @@ class Level3XDRParser(Unpacker):
 
     def unpack_string(self):
         """Unpack the internal data as a string."""
-        return Unpacker.unpack_string(self).decode('ascii')
+        return Unpacker.unpack_string(self).decode("ascii")
 
     def _unpack_prod_desc(self):
         xdr = {}
 
         # NOTE: The ICD incorrectly lists op-mode, vcp, el_num, and
         # spare as int*2. Changing to int*4 makes things parse correctly.
-        xdr['name'] = self.unpack_string()
-        xdr['description'] = self.unpack_string()
-        xdr['code'] = self.unpack_int()
-        xdr['type'] = self.unpack_int()
-        xdr['prod_time'] = self.unpack_uint()
-        xdr['radar_name'] = self.unpack_string()
-        xdr['latitude'] = self.unpack_float()
-        xdr['longitude'] = self.unpack_float()
-        xdr['height'] = self.unpack_float()
-        xdr['vol_time'] = self.unpack_uint()
-        xdr['el_time'] = self.unpack_uint()
-        xdr['el_angle'] = self.unpack_float()
-        xdr['vol_num'] = self.unpack_int()
-        xdr['op_mode'] = self.unpack_int()
-        xdr['vcp_num'] = self.unpack_int()
-        xdr['el_num'] = self.unpack_int()
-        xdr['compression'] = self.unpack_int()
-        xdr['uncompressed_size'] = self.unpack_int()
-        xdr['parameters'] = self._unpack_parameters()
-        xdr['components'] = self._unpack_components()
+        xdr["name"] = self.unpack_string()
+        xdr["description"] = self.unpack_string()
+        xdr["code"] = self.unpack_int()
+        xdr["type"] = self.unpack_int()
+        xdr["prod_time"] = self.unpack_uint()
+        xdr["radar_name"] = self.unpack_string()
+        xdr["latitude"] = self.unpack_float()
+        xdr["longitude"] = self.unpack_float()
+        xdr["height"] = self.unpack_float()
+        xdr["vol_time"] = self.unpack_uint()
+        xdr["el_time"] = self.unpack_uint()
+        xdr["el_angle"] = self.unpack_float()
+        xdr["vol_num"] = self.unpack_int()
+        xdr["op_mode"] = self.unpack_int()
+        xdr["vcp_num"] = self.unpack_int()
+        xdr["el_num"] = self.unpack_int()
+        xdr["compression"] = self.unpack_int()
+        xdr["uncompressed_size"] = self.unpack_int()
+        xdr["parameters"] = self._unpack_parameters()
+        xdr["components"] = self._unpack_components()
 
         return xdr
 
@@ -518,8 +530,7 @@ class Level3XDRParser(Unpacker):
                 if i < num - 1:
                     self.unpack_int()  # Another pointer for the 'list' ?
             except KeyError:
-                raise NotImplementedError(
-                      'Unknown XDR Component: %d' % (code))
+                raise NotImplementedError("Unknown XDR Component: %d" % (code))
                 break
 
         if num == 1:
@@ -527,51 +538,60 @@ class Level3XDRParser(Unpacker):
 
         return ret
 
-    radial_fmt = namedtuple('RadialComponent', ['description', 'gate_width',
-                                                'first_gate', 'parameters',
-                                                'radials'])
-    radial_data_fmt = namedtuple('RadialData', ['azimuth', 'elevation', 'width',
-                                                'num_bins', 'attributes',
-                                                'data'])
+    radial_fmt = namedtuple(
+        "RadialComponent",
+        ["description", "gate_width", "first_gate", "parameters", "radials"],
+    )
+    radial_data_fmt = namedtuple(
+        "RadialData",
+        ["azimuth", "elevation", "width", "num_bins", "attributes", "data"],
+    )
 
     def _unpack_radial(self):
-        ret = self.radial_fmt(description=self.unpack_string(),
-                              gate_width=self.unpack_float(),
-                              first_gate=self.unpack_float(),
-                              parameters=self._unpack_parameters(),
-                              radials=None)
+        ret = self.radial_fmt(
+            description=self.unpack_string(),
+            gate_width=self.unpack_float(),
+            first_gate=self.unpack_float(),
+            parameters=self._unpack_parameters(),
+            radials=None,
+        )
         num_rads = self.unpack_int()
         rads = []
         for _ in range(num_rads):
             # ICD is wrong, says num_bins is float, should be int
-            rads.append(self.radial_data_fmt(azimuth=self.unpack_float(),
-                                             elevation=self.unpack_float(),
-                                             width=self.unpack_float(),
-                                             num_bins=self.unpack_int(),
-                                             attributes=self.unpack_string(),
-                                             data=self.unpack_array(self.unpack_int)))
+            rads.append(
+                self.radial_data_fmt(
+                    azimuth=self.unpack_float(),
+                    elevation=self.unpack_float(),
+                    width=self.unpack_float(),
+                    num_bins=self.unpack_int(),
+                    attributes=self.unpack_string(),
+                    data=self.unpack_array(self.unpack_int),
+                )
+            )
         return ret._replace(radials=rads)
 
-    text_fmt = namedtuple('TextComponent', ['parameters', 'text'])
+    text_fmt = namedtuple("TextComponent", ["parameters", "text"])
 
     def _unpack_text(self):
-        return self.text_fmt(parameters=self._unpack_parameters(),
-                             text=self.unpack_string())
+        return self.text_fmt(
+            parameters=self._unpack_parameters(), text=self.unpack_string()
+        )
 
     _component_lookup = {1: _unpack_radial, 4: _unpack_text}
 
 
 def _int16_to_float16(val):
-    """ Convert a 16 bit interger into a 16 bit float. """
+    """Convert a 16 bit interger into a 16 bit float."""
     # NEXRAD Level III float16 format defined on page 3-33.
     # Differs from IEEE 768-2008 format so np.float16 cannot be used.
     sign = (val & 0b1000000000000000) / 0b1000000000000000
     exponent = (val & 0b0111110000000000) / 0b0000010000000000
-    fraction = (val & 0b0000001111111111)
+    fraction = val & 0b0000001111111111
     if exponent == 0:
-        return (-1)**sign * 2 * (0 + (fraction/2**10.))
+        return (-1) ** sign * 2 * (0 + (fraction / 2**10.0))
     else:
-        return (-1)**sign * 2**(exponent-16) * (1 + fraction/2**10.)
+        return (-1) ** sign * 2 ** (exponent - 16) * (1 + fraction / 2**10.0)
 
 
 _8_OR_16_LEVELS = [19, 20, 25, 27, 28, 30, 56, 78, 79, 80, 169, 171, 181]
@@ -581,39 +601,39 @@ _8_OR_16_LEVELS = [19, 20, 25, 27, 28, 30, 56, 78, 79, 80, 169, 171, 181]
 ELEVATION_ANGLE = [19, 20, 25, 27, 28, 30, 56, 94, 99, 159, 161, 163, 165]
 
 PRODUCT_RANGE_RESOLUTION = {
-    19: 1.,     # 124 nm
-    20: 2.,     # 248 nm
-    25: 0.25,   # 32 nm
-    27: 1.,
+    19: 1.0,  # 124 nm
+    20: 2.0,  # 248 nm
+    25: 0.25,  # 32 nm
+    27: 1.0,
     28: 0.25,
-    30: 1.,
-    32: 1.,
-    34: 1.,
-    56: 1.,
-    78: 1.,
-    79: 1.,
-    80: 1.,
-    94: 1.,
+    30: 1.0,
+    32: 1.0,
+    34: 1.0,
+    56: 1.0,
+    78: 1.0,
+    79: 1.0,
+    80: 1.0,
+    94: 1.0,
     99: 0.25,
-    134: 1000.,
-    135: 1000.,
-    138: 1.,
+    134: 1000.0,
+    135: 1000.0,
+    138: 1.0,
     159: 0.25,
     161: 0.25,
     163: 0.25,
     165: 0.25,
-    169: 1.,
-    170: 1.,
-    171: 1.,
-    172: 1.,
-    173: 1.,
-    174: 1.,
-    175: 1.,
+    169: 1.0,
+    170: 1.0,
+    171: 1.0,
+    172: 1.0,
+    173: 1.0,
+    174: 1.0,
+    175: 1.0,
     176: 0.25,
     177: 0.25,
-    181: 150.,
-    182: 150.,
-    186: 300.,
+    181: 150.0,
+    182: 150.0,
+    186: 300.0,
 }
 
 # Per "Products with Version Numbers" table in ICD
@@ -655,12 +675,12 @@ SUPPORTED_VERSION_NUMBERS = {
 
 # format of structure elements
 # Figure E-1, page E-1
-BYTE = 'B'      # not in table but used in Product Description
-INT2 = 'h'
-INT4 = 'i'
-UINT4 = 'I'
-REAL4 = 'f'
-LONG = 'l'
+BYTE = "B"  # not in table but used in Product Description
+INT2 = "h"
+INT4 = "i"
+UINT4 = "I"
+REAL4 = "f"
+LONG = "l"
 
 # 3.3.1 Graphic Product Messages
 
@@ -668,13 +688,13 @@ LONG = 'l'
 # 18 bytes, 9 halfwords
 # Figure 3-3, page 3-7.
 MESSAGE_HEADER = (
-    ('code', INT2),     # message code
-    ('date', INT2),     # date of message, days since 1 Jan, 1970
-    ('time', INT4),     # time of message, seconds since midnight
-    ('length', INT4),   # length of message in bytes
-    ('source', INT2),   # Source ID
-    ('dest', INT2),     # Destination ID
-    ('nblocks', INT2),  # Number of blocks in the message (inclusive)
+    ("code", INT2),  # message code
+    ("date", INT2),  # date of message, days since 1 Jan, 1970
+    ("time", INT4),  # time of message, seconds since midnight
+    ("length", INT4),  # length of message in bytes
+    ("source", INT2),  # Source ID
+    ("dest", INT2),  # Destination ID
+    ("nblocks", INT2),  # Number of blocks in the message (inclusive)
 )
 
 # Graphic Product Message: Product Description Block
@@ -682,29 +702,29 @@ MESSAGE_HEADER = (
 # 102 bytes, 51 halfwords (halfwords 10-60)
 # Figure 3-6, pages 3-31 and 3-32
 PRODUCT_DESCRIPTION = (
-    ('divider', INT2),          # Delineate blocks, -1
-    ('latitude', INT4),         # Latitude of radar, degrees, + for north
-    ('longitude', INT4),        # Longitude of radar, degrees, + for east
-    ('height', INT2),           # Height of radar, feet abouve mean sea level
-    ('product_code', INT2),     # NEXRAD product code
-    ('operational_mode', INT2),  # 0 = Maintenance, 1 = Clean Air, 2 = Precip
-    ('vcp', INT2),              # Volume Coverage Pattern of scan strategy
-    ('sequence_num', INT2),     # Sequence Number of the request.
-    ('vol_scan_num', INT2),     # Volume Scan number, 1 to 80.
-    ('vol_scan_date', INT2),    # Volume Scan start date, days since 1/1/1970
-    ('vol_scan_time', INT4),    # Volume Scan start time, sec since midnight
-    ('product_date', INT2),     # Product Generation Date, days since 1/1/1970
-    ('product_time', INT4),     # Product Generation Time, sec since midnight
-    ('halfwords_27_28', '4s'),  # Product dependent parameters 1 and 2
-    ('elevation_num', INT2),    # Elevation number within volume scan
-    ('halfwords_30', '2s'),     # Product dependent parameter 3
-    ('threshold_data', '32s'),  # Data to determine threshold level values
-    ('halfwords_47_53', '14s'),  # Product dependent parameters 4-10
-    ('version', BYTE),          # Version, 0
-    ('spot_blank', BYTE),       # 1 = Spot blank ON, 0 = Blanking OFF
-    ('offet_symbology', INT4),  # halfword offset to Symbology block
-    ('offset_graphic', INT4),   # halfword offset to Graphic block
-    ('offset_tabular', INT4)    # halfword offset to Tabular block
+    ("divider", INT2),  # Delineate blocks, -1
+    ("latitude", INT4),  # Latitude of radar, degrees, + for north
+    ("longitude", INT4),  # Longitude of radar, degrees, + for east
+    ("height", INT2),  # Height of radar, feet abouve mean sea level
+    ("product_code", INT2),  # NEXRAD product code
+    ("operational_mode", INT2),  # 0 = Maintenance, 1 = Clean Air, 2 = Precip
+    ("vcp", INT2),  # Volume Coverage Pattern of scan strategy
+    ("sequence_num", INT2),  # Sequence Number of the request.
+    ("vol_scan_num", INT2),  # Volume Scan number, 1 to 80.
+    ("vol_scan_date", INT2),  # Volume Scan start date, days since 1/1/1970
+    ("vol_scan_time", INT4),  # Volume Scan start time, sec since midnight
+    ("product_date", INT2),  # Product Generation Date, days since 1/1/1970
+    ("product_time", INT4),  # Product Generation Time, sec since midnight
+    ("halfwords_27_28", "4s"),  # Product dependent parameters 1 and 2
+    ("elevation_num", INT2),  # Elevation number within volume scan
+    ("halfwords_30", "2s"),  # Product dependent parameter 3
+    ("threshold_data", "32s"),  # Data to determine threshold level values
+    ("halfwords_47_53", "14s"),  # Product dependent parameters 4-10
+    ("version", BYTE),  # Version, 0
+    ("spot_blank", BYTE),  # 1 = Spot blank ON, 0 = Blanking OFF
+    ("offet_symbology", INT4),  # halfword offset to Symbology block
+    ("offset_graphic", INT4),  # halfword offset to Graphic block
+    ("offset_tabular", INT4),  # halfword offset to Tabular block
 )
 
 # Graphic Product Message: Product Symbology Block
@@ -713,16 +733,16 @@ PRODUCT_DESCRIPTION = (
 # Figure 3-6 (Sheet 8), pages 3-40
 
 SYMBOLOGY_HEADER = (
-    ('divider', INT2),          # Delineate blocks, -1
-    ('id', INT2),               # Block ID, 1
-    ('block_length', INT4),     # Length of block in bytes
-    ('layers', INT2),           # Number of data layers
-    ('layer_divider', INT2),    # Delineate data layers, -1
-    ('layer_length', INT4)      # Length of data layer in bytes
+    ("divider", INT2),  # Delineate blocks, -1
+    ("id", INT2),  # Block ID, 1
+    ("block_length", INT4),  # Length of block in bytes
+    ("layers", INT2),  # Number of data layers
+    ("layer_divider", INT2),  # Delineate data layers, -1
+    ("layer_length", INT4)  # Length of data layer in bytes
     # Display data packets
 )
 
-AF1F = -20705       # struct.unpack('>h', 'AF1F'.decode('hex'))
+AF1F = -20705  # struct.unpack('>h', 'AF1F'.decode('hex'))
 SUPPORTED_PACKET_CODES = [16, AF1F, 28]
 
 # Digital Radial Data Array Packet - Packet Code 16 (Sheet 2)
@@ -731,27 +751,27 @@ SUPPORTED_PACKET_CODES = [16, AF1F, 28]
 # Radial Data Packet - Packet Code AF1F
 # Figure 3-10 (Sheet 1 and 2), page 3-113
 RADIAL_PACKET_HEADER = (
-    ('packet_code', INT2),      # Packet Code, Type 16
-    ('first_bin', INT2),        # Location of first range bin.
-    ('nbins', INT2),            # Number of range bins.
-    ('i_sweep_center', INT2),   # I coordinate of center of sweep.
-    ('j_sweep_center', INT2),   # J coordinate of center of sweep.
-    ('range_scale', INT2),      # Range Scale factor
-    ('nradials', INT2)          # Total number of radials in the product
+    ("packet_code", INT2),  # Packet Code, Type 16
+    ("first_bin", INT2),  # Location of first range bin.
+    ("nbins", INT2),  # Number of range bins.
+    ("i_sweep_center", INT2),  # I coordinate of center of sweep.
+    ("j_sweep_center", INT2),  # J coordinate of center of sweep.
+    ("range_scale", INT2),  # Range Scale factor
+    ("nradials", INT2),  # Total number of radials in the product
 )
 
 RADIAL_HEADER = (
-    ('nbytes', INT2),           # Number of bytes in the radial.
-    ('angle_start', INT2),      # Starting angle at which data was collected.
-    ('angle_delta', INT2)       # Delta angle from previous radial.
+    ("nbytes", INT2),  # Number of bytes in the radial.
+    ("angle_start", INT2),  # Starting angle at which data was collected.
+    ("angle_delta", INT2),  # Delta angle from previous radial.
 )
 
 # Generic Data Packet - Packet Code 28
 # Figure 3-15c (Sheet 1), page 3-132
 GEN_DATA_PACK_HEADER = (
-    ('packet_code', INT2),      # Packet Code, Type 28
-    ('reserved', INT2),         # Reserved for future use. Should be set to 0.
-    ('num_bytes', LONG),        # Number of bytes to follow in this packet
+    ("packet_code", INT2),  # Packet Code, Type 28
+    ("reserved", INT2),  # Reserved for future use. Should be set to 0.
+    ("num_bytes", LONG),  # Number of bytes to follow in this packet
 )
 
 # A list of the NEXRAD Level 3 Product supported by this module taken
@@ -760,58 +780,58 @@ GEN_DATA_PACK_HEADER = (
 #   Code    # Product Name
 #   -----   -----------------------
 SUPPORTED_PRODUCTS = [
-    19,     # Base Reflectivity
-    20,     # Base Reflectivity
-    25,     # Base Velocity
-    27,     # Base Velocity
-    28,     # Base Spectrum Width
-    30,     # Base Spectrum Width
-    32,     # Digital Hybrid Scan
-    34,     # Clutter Filter Control
-    56,     # Storm Relative Mean
-            # Radial Velocity
-    78,     # Surface Rainfall Accum.
-            # (1 hr)
-    79,     # Surface Rainfall Accum.
-            # (3 hr)
-    80,     # Storm Total Rainfall
-            # Accumulation
-    94,     # Base Reflectivity Data
-            # Array
-    99,     # Base Velocity Data
-            # Array
-    134,    # High Resolution VIL
-    135,    # Enhanced Echo Tops
-    138,    # Digital Storm Total
-            # Precipitation
-    159,    # Digital Differential
-            # Reflectivity
-    161,    # Digital Correlation
-            # Coefficient
-    163,    # Digital Specific
-            # Differential Phase
-    165,    # Digital Hydrometeor
-            # Classification
-    169,    # One Hour Accumulation
-    170,    # Digital Accumulation
-            # Array
-    171,    # Storm Total
-            # Accumulation
-    172,    # Digital Storm Total
-            # Accumulation
-    173,    # Digital User-Selectable
-            # Accumulation
-    174,    # Digital One-Hour
-            # Difference Accumulation
-    175,    # Digital Storm Total
-            # Difference Accumulation
-    176,    # Digital Instantaneous
-            # Precipitation Rate
-    177,    # Hybrid Hydrometeor
-            # Classification
-    181,    # Base Reflectivity
-    182,    # Base Velocity
-    186,    # Base Reflectivity
+    19,  # Base Reflectivity
+    20,  # Base Reflectivity
+    25,  # Base Velocity
+    27,  # Base Velocity
+    28,  # Base Spectrum Width
+    30,  # Base Spectrum Width
+    32,  # Digital Hybrid Scan
+    34,  # Clutter Filter Control
+    56,  # Storm Relative Mean
+    # Radial Velocity
+    78,  # Surface Rainfall Accum.
+    # (1 hr)
+    79,  # Surface Rainfall Accum.
+    # (3 hr)
+    80,  # Storm Total Rainfall
+    # Accumulation
+    94,  # Base Reflectivity Data
+    # Array
+    99,  # Base Velocity Data
+    # Array
+    134,  # High Resolution VIL
+    135,  # Enhanced Echo Tops
+    138,  # Digital Storm Total
+    # Precipitation
+    159,  # Digital Differential
+    # Reflectivity
+    161,  # Digital Correlation
+    # Coefficient
+    163,  # Digital Specific
+    # Differential Phase
+    165,  # Digital Hydrometeor
+    # Classification
+    169,  # One Hour Accumulation
+    170,  # Digital Accumulation
+    # Array
+    171,  # Storm Total
+    # Accumulation
+    172,  # Digital Storm Total
+    # Accumulation
+    173,  # Digital User-Selectable
+    # Accumulation
+    174,  # Digital One-Hour
+    # Difference Accumulation
+    175,  # Digital Storm Total
+    # Difference Accumulation
+    176,  # Digital Instantaneous
+    # Precipitation Rate
+    177,  # Hybrid Hydrometeor
+    # Classification
+    181,  # Base Reflectivity
+    182,  # Base Velocity
+    186,  # Base Reflectivity
 ]
 
 # It should be possible to add support for these NEXRAD Level 3 products

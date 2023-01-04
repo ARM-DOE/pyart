@@ -7,10 +7,9 @@ import os
 import traceback
 import warnings
 
-
 # the path to the default configuration file
 _dirname = os.path.dirname(__file__)
-_DEFAULT_CONFIG_FILE = os.path.join(_dirname, 'default_config.py')
+_DEFAULT_CONFIG_FILE = os.path.join(_dirname, "default_config.py")
 
 
 def load_config(filename=None):
@@ -61,10 +60,12 @@ def load_config(filename=None):
 
     try:
         from importlib.machinery import SourceFileLoader
-        cfile = SourceFileLoader('metadata_config', filename).load_module()
+
+        cfile = SourceFileLoader("metadata_config", filename).load_module()
     except ImportError:
         import imp
-        cfile = imp.load_source('metadata_config', filename)
+
+        cfile = imp.load_source("metadata_config", filename)
 
     _DEFAULT_METADATA = cfile.DEFAULT_METADATA
     _FILE_SPECIFIC_METADATA = cfile.FILE_SPECIFIC_METADATA
@@ -75,21 +76,24 @@ def load_config(filename=None):
     _DEFAULT_FIELD_LIMITS = cfile.DEFAULT_FIELD_LIMITS
     return
 
+
 # load the configuration from the enviromental parameter if it is set
 # if the load fails issue a warning and load the default config.
-_config_file = os.environ.get('PYART_CONFIG')
+_config_file = os.environ.get("PYART_CONFIG")
 if _config_file is None:
     load_config(_DEFAULT_CONFIG_FILE)
 else:
     try:
         load_config(_config_file)
     except:
-        msg = ("\nLoading configuration from PYART_CONFIG enviromental "
-               "variable failed:"
-               "\n--- START IGNORED TRACEBACK --- \n" +
-               traceback.format_exc() +
-               "\n --- END IGNORED TRACEBACK ---"
-               "\nLoading default configuration")
+        msg = (
+            "\nLoading configuration from PYART_CONFIG enviromental "
+            "variable failed:"
+            "\n--- START IGNORED TRACEBACK --- \n"
+            + traceback.format_exc()
+            + "\n --- END IGNORED TRACEBACK ---"
+            "\nLoading default configuration"
+        )
         warnings.warn(msg)
         load_config(_DEFAULT_CONFIG_FILE)
 
@@ -129,6 +133,7 @@ def get_field_colormap(field):
         return _DEFAULT_FIELD_COLORMAP[field]
     else:
         import matplotlib.cm
+
         return matplotlib.cm.get_cmap().name
 
 
@@ -182,7 +187,7 @@ def get_field_mapping(filetype):
     return _FIELD_MAPPINGS[filetype].copy()
 
 
-class FileMetadata():
+class FileMetadata:
     """
     A class for accessing metadata needed when reading files.
 
@@ -203,9 +208,15 @@ class FileMetadata():
 
     """
 
-    def __init__(self, filetype, field_names=None, additional_metadata=None,
-                 file_field_names=False, exclude_fields=None,
-                 include_fields=None):
+    def __init__(
+        self,
+        filetype,
+        field_names=None,
+        additional_metadata=None,
+        file_field_names=False,
+        exclude_fields=None,
+        include_fields=None,
+    ):
         """
         Initialize.
         """
@@ -299,12 +310,12 @@ class FileMetadata():
         elif file_field_name in self._field_names:
             field_name = self._field_names[file_field_name]
         else:
-            return None # field is not mapped
+            return None  # field is not mapped
 
         if field_name in self._exclude_fields:
-            return None # field is excluded
+            return None  # field is excluded
         elif self._include_fields is not None:
-            if not field_name in self._include_fields:
+            if field_name not in self._include_fields:
                 return None
             else:
                 return field_name

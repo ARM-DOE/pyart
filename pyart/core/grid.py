@@ -8,12 +8,14 @@ from netCDF4 import num2date
 
 try:
     import xarray
+
     _XARRAY_AVAILABLE = True
 except ImportError:
     _XARRAY_AVAILABLE = False
 
 try:
     import pyproj
+
     _PYPROJ_AVAILABLE = True
 except ImportError:
     _PYPROJ_AVAILABLE = False
@@ -21,11 +23,10 @@ except ImportError:
 from ..config import get_metadata
 from ..exceptions import MissingOptionalDependency
 from ..lazydict import LazyLoadDict
-from .transforms import cartesian_to_geographic
-from .transforms import cartesian_vectors_to_geographic
+from .transforms import cartesian_to_geographic, cartesian_vectors_to_geographic
 
 
-class Grid(object):
+class Grid:
     """
     A class for storing rectilinear gridded radar data in Cartesian coordinate.
 
@@ -94,11 +95,26 @@ class Grid(object):
         attribute.
 
     """
-    def __init__(self, time, fields, metadata,
-                 origin_latitude, origin_longitude, origin_altitude, x, y, z,
-                 projection=None, radar_latitude=None, radar_longitude=None,
-                 radar_altitude=None, radar_time=None, radar_name=None):
-        """ Initalize object. """
+
+    def __init__(
+        self,
+        time,
+        fields,
+        metadata,
+        origin_latitude,
+        origin_longitude,
+        origin_altitude,
+        x,
+        y,
+        z,
+        projection=None,
+        radar_latitude=None,
+        radar_longitude=None,
+        radar_altitude=None,
+        radar_time=None,
+        radar_name=None,
+    ):
+        """Initalize object."""
 
         self.time = time
         self.fields = fields
@@ -109,12 +125,11 @@ class Grid(object):
         self.x = x
         self.y = y
         self.z = z
-        self.nx = len(x['data'])
-        self.ny = len(y['data'])
-        self.nz = len(z['data'])
+        self.nx = len(x["data"])
+        self.ny = len(y["data"])
+        self.nz = len(z["data"])
         if projection is None:
-            self.projection = {
-                'proj': 'pyart_aeqd', '_include_lon_0_lat_0': True}
+            self.projection = {"proj": "pyart_aeqd", "_include_lon_0_lat_0": True}
         else:
             self.projection = projection
 
@@ -133,19 +148,19 @@ class Grid(object):
         return
 
     def __getstate__(self):
-        """ Return object's state which can be pickled. """
+        """Return object's state which can be pickled."""
         state = self.__dict__.copy()  # copy the objects state
         # Remove unpicklable entries (those which are lazily loaded
-        del state['point_x']
-        del state['point_y']
-        del state['point_z']
-        del state['point_latitude']
-        del state['point_longitude']
-        del state['point_altitude']
+        del state["point_x"]
+        del state["point_y"]
+        del state["point_z"]
+        del state["point_latitude"]
+        del state["point_longitude"]
+        del state["point_altitude"]
         return state
 
     def __setstate__(self, state):
-        """ Restore unpicklable entries from pickled object. """
+        """Restore unpicklable entries from pickled object."""
         self.__dict__.update(state)
         self.init_point_x_y_z()
         self.init_point_longitude_latitude()
@@ -156,22 +171,24 @@ class Grid(object):
         # Proj instance as specified by the projection attribute.
         # Raises a ValueError if the pyart_aeqd projection is specified.
         projparams = self.get_projparams()
-        if projparams['proj'] == 'pyart_aeqd':
+        if projparams["proj"] == "pyart_aeqd":
             raise ValueError(
-                'Proj instance can not be made for the pyart_aeqd projection')
+                "Proj instance can not be made for the pyart_aeqd projection"
+            )
         if not _PYPROJ_AVAILABLE:
             raise MissingOptionalDependency(
                 "PyProj is required to create a Proj instance but it "
-                + "is not installed")
+                + "is not installed"
+            )
         proj = pyproj.Proj(projparams)
         return proj
 
     def get_projparams(self):
-        """ Return a projparam dict from the projection attribute. """
+        """Return a projparam dict from the projection attribute."""
         projparams = self.projection.copy()
-        if projparams.pop('_include_lon_0_lat_0', False):
-            projparams['lon_0'] = self.origin_longitude['data'][0]
-            projparams['lat_0'] = self.origin_latitude['data'][0]
+        if projparams.pop("_include_lon_0_lat_0", False):
+            projparams["lon_0"] = self.origin_longitude["data"][0]
+            projparams["lat_0"] = self.origin_latitude["data"][0]
         return projparams
 
     def _find_and_check_nradar(self):
@@ -186,67 +203,72 @@ class Grid(object):
         nradar = 0
 
         if self.radar_latitude is not None:
-            nradar = len(self.radar_latitude['data'])
+            nradar = len(self.radar_latitude["data"])
             nradar_set = True
 
         if self.radar_longitude is not None:
-            if nradar_set and len(self.radar_longitude['data']) != nradar:
+            if nradar_set and len(self.radar_longitude["data"]) != nradar:
                 raise ValueError("Inconsistent length of radar_ arguments.")
-            nradar = len(self.radar_longitude['data'])
+            nradar = len(self.radar_longitude["data"])
             nradar_set = True
 
         if self.radar_altitude is not None:
-            if nradar_set and len(self.radar_altitude['data']) != nradar:
+            if nradar_set and len(self.radar_altitude["data"]) != nradar:
                 raise ValueError("Inconsistent length of radar_ arguments.")
-            nradar = len(self.radar_altitude['data'])
+            nradar = len(self.radar_altitude["data"])
             nradar_set = True
 
         if self.radar_time is not None:
-            if nradar_set and len(self.radar_time['data']) != nradar:
+            if nradar_set and len(self.radar_time["data"]) != nradar:
                 raise ValueError("Inconsistent length of radar_ arguments.")
-            nradar = len(self.radar_time['data'])
+            nradar = len(self.radar_time["data"])
             nradar_set = True
 
         if self.radar_name is not None:
-            if nradar_set and len(self.radar_name['data']) != nradar:
+            if nradar_set and len(self.radar_name["data"]) != nradar:
                 raise ValueError("Inconsistent length of radar_ arguments.")
-            nradar = len(self.radar_name['data'])
+            nradar = len(self.radar_name["data"])
             nradar_set = True
 
         return nradar
 
     # Attribute init/reset methods
     def init_point_x_y_z(self):
-        """ Initialize or reset the point_{x, y, z} attributes. """
-        self.point_x = LazyLoadDict(get_metadata('point_x'))
-        self.point_x.set_lazy('data', _point_data_factory(self, 'x'))
+        """Initialize or reset the point_{x, y, z} attributes."""
+        self.point_x = LazyLoadDict(get_metadata("point_x"))
+        self.point_x.set_lazy("data", _point_data_factory(self, "x"))
 
-        self.point_y = LazyLoadDict(get_metadata('point_y'))
-        self.point_y.set_lazy('data', _point_data_factory(self, 'y'))
+        self.point_y = LazyLoadDict(get_metadata("point_y"))
+        self.point_y.set_lazy("data", _point_data_factory(self, "y"))
 
-        self.point_z = LazyLoadDict(get_metadata('point_z'))
-        self.point_z.set_lazy('data', _point_data_factory(self, 'z'))
+        self.point_z = LazyLoadDict(get_metadata("point_z"))
+        self.point_z.set_lazy("data", _point_data_factory(self, "z"))
 
     def init_point_longitude_latitude(self):
         """
         Initialize or reset the point_{longitude, latitudes} attributes.
         """
-        point_longitude = LazyLoadDict(get_metadata('point_longitude'))
-        point_longitude.set_lazy('data', _point_lon_lat_data_factory(self, 0))
+        point_longitude = LazyLoadDict(get_metadata("point_longitude"))
+        point_longitude.set_lazy("data", _point_lon_lat_data_factory(self, 0))
         self.point_longitude = point_longitude
 
-        point_latitude = LazyLoadDict(get_metadata('point_latitude'))
-        point_latitude.set_lazy('data', _point_lon_lat_data_factory(self, 1))
+        point_latitude = LazyLoadDict(get_metadata("point_latitude"))
+        point_latitude.set_lazy("data", _point_lon_lat_data_factory(self, 1))
         self.point_latitude = point_latitude
 
     def init_point_altitude(self):
-        """ Initialize the point_altitude attribute. """
-        point_altitude = LazyLoadDict(get_metadata('point_altitude'))
-        point_altitude.set_lazy('data', _point_altitude_data_factory(self))
+        """Initialize the point_altitude attribute."""
+        point_altitude = LazyLoadDict(get_metadata("point_altitude"))
+        point_altitude.set_lazy("data", _point_altitude_data_factory(self))
         self.point_altitude = point_altitude
 
-    def write(self, filename, format='NETCDF4', arm_time_variables=False,
-              arm_alt_lat_lon_variables=False):
+    def write(
+        self,
+        filename,
+        format="NETCDF4",
+        arm_time_variables=False,
+        arm_alt_lat_lon_variables=False,
+    ):
         """
         Write the the Grid object to a NetCDF file.
 
@@ -268,9 +290,13 @@ class Grid(object):
         # delayed import to avoid circular import
         from ..io.grid_io import write_grid
 
-        write_grid(filename, self, format=format,
-                   arm_time_variables=arm_time_variables,
-                   arm_alt_lat_lon_variables=arm_alt_lat_lon_variables)
+        write_grid(
+            filename,
+            self,
+            format=format,
+            arm_time_variables=arm_time_variables,
+            arm_alt_lat_lon_variables=arm_alt_lat_lon_variables,
+        )
 
     def to_xarray(self):
         """
@@ -287,52 +313,59 @@ class Grid(object):
         x, y, z : dict, 1D
             Distance from the grid origin for each Cartesian coordinate axis
             in a one dimensional array.
-            
+
         """
 
         if not _XARRAY_AVAILABLE:
             raise MissingOptionalDependency(
-                'Xarray is required to use Grid.to_xarray but is not '
-                 + 'installed!')
+                "Xarray is required to use Grid.to_xarray but is not " + "installed!"
+            )
 
         lon, lat = self.get_point_longitude_latitude()
-        z = self.z['data']
-        y = self.y['data']
-        x = self.x['data']
+        z = self.z["data"]
+        y = self.y["data"]
+        x = self.x["data"]
 
-        time = np.array([num2date(self.time['data'][0],
-                                  self.time['units'])])
-        
+        time = np.array([num2date(self.time["data"][0], self.time["units"])])
+
         ds = xarray.Dataset()
         for field in list(self.fields.keys()):
-            field_data = self.fields[field]['data']
-            data = xarray.DataArray(np.ma.expand_dims(field_data, 0),
-                                    dims=('time', 'z', 'y', 'x'),
-                                    coords={'time' : (['time'], time),
-                                            'z' : (['z'], z),
-                                            'lat' : (['y'], lat[:, 0]),
-                                            'lon' : (['x'], lon[0, :]),
-                                            'y' : (['y'], y),
-                                            'x' : (['x'], x)})
+            field_data = self.fields[field]["data"]
+            data = xarray.DataArray(
+                np.ma.expand_dims(field_data, 0),
+                dims=("time", "z", "y", "x"),
+                coords={
+                    "time": (["time"], time),
+                    "z": (["z"], z),
+                    "lat": (["y"], lat[:, 0]),
+                    "lon": (["x"], lon[0, :]),
+                    "y": (["y"], y),
+                    "x": (["x"], x),
+                },
+            )
             for meta in list(self.fields[field].keys()):
-                if meta != 'data':
+                if meta != "data":
                     data.attrs.update({meta: self.fields[field][meta]})
 
             ds[field] = data
-            ds.lon.attrs = [('long_name', 'longitude of grid cell center'),
-                            ('units', 'degree_E'),
-                            ('standard_name', 'Longitude')]
-            ds.lat.attrs = [('long_name', 'latitude of grid cell center'),
-                            ('units', 'degree_N'),
-                            ('standard_name', 'Latitude')]
+            ds.lon.attrs = [
+                ("long_name", "longitude of grid cell center"),
+                ("units", "degree_E"),
+                ("standard_name", "Longitude"),
+            ]
+            ds.lat.attrs = [
+                ("long_name", "latitude of grid cell center"),
+                ("units", "degree_N"),
+                ("standard_name", "Latitude"),
+            ]
 
-            ds.z.attrs = get_metadata('z')
-            ds.y.attrs = get_metadata('y')
-            ds.x.attrs = get_metadata('x')
-            
-            ds.z.encoding['_FillValue'] = None
-            ds.lat.encoding['_FillValue'] = None
-            ds.lon.encoding['_FillValue'] = None
+            ds.z.attrs = get_metadata("z")
+            ds.y.attrs = get_metadata("y")
+            ds.x.attrs = get_metadata("x")
+
+            ds.z.encoding["_FillValue"] = None
+            ds.lat.encoding["_FillValue"] = None
+            ds.lon.encoding["_FillValue"] = None
             ds.close()
         return ds
 
@@ -353,12 +386,12 @@ class Grid(object):
 
         """
         # checks to make sure input field dictionary is valid
-        if 'data' not in field_dict:
+        if "data" not in field_dict:
             raise KeyError('Field dictionary must contain a "data" key')
         if field_name in self.fields and replace_existing is False:
-            raise ValueError('A field named %s already exists' % (field_name))
-        if field_dict['data'].shape != (self.nz, self.ny, self.nx):
-            raise ValueError('Field has invalid shape')
+            raise ValueError("A field named %s already exists" % (field_name))
+        if field_dict["data"].shape != (self.nz, self.ny, self.nx):
+            raise ValueError("Field has invalid shape")
 
         self.fields[field_name] = field_dict
 
@@ -385,35 +418,38 @@ class Grid(object):
             grid points or edges between grid points for the given height.
 
         """
-        x = self.x['data']
-        y = self.y['data']
+        x = self.x["data"]
+        y = self.y["data"]
         projparams = self.get_projparams()
         return cartesian_vectors_to_geographic(x, y, projparams, edges=edges)
 
 
 def _point_data_factory(grid, coordinate):
-    """ Return a function which returns the locations of all points. """
+    """Return a function which returns the locations of all points."""
+
     def _point_data():
-        """ The function which returns the locations of all points. """
-        reg_x = grid.x['data']
-        reg_y = grid.y['data']
-        reg_z = grid.z['data']
-        if coordinate == 'x':
+        """The function which returns the locations of all points."""
+        reg_x = grid.x["data"]
+        reg_y = grid.y["data"]
+        reg_z = grid.z["data"]
+        if coordinate == "x":
             return np.tile(reg_x, (len(reg_z), len(reg_y), 1)).swapaxes(2, 2)
-        elif coordinate == 'y':
+        elif coordinate == "y":
             return np.tile(reg_y, (len(reg_z), len(reg_x), 1)).swapaxes(1, 2)
         else:
-            assert coordinate == 'z'
+            assert coordinate == "z"
             return np.tile(reg_z, (len(reg_x), len(reg_y), 1)).swapaxes(0, 2)
+
     return _point_data
 
 
 def _point_lon_lat_data_factory(grid, coordinate):
-    """ Return a function which returns the geographic locations of points. """
+    """Return a function which returns the geographic locations of points."""
+
     def _point_lon_lat_data():
-        """ The function which returns the geographic point locations. """
-        x = grid.point_x['data']
-        y = grid.point_y['data']
+        """The function which returns the geographic point locations."""
+        x = grid.point_x["data"]
+        y = grid.point_y["data"]
         projparams = grid.get_projparams()
         geographic_coords = cartesian_to_geographic(x, y, projparams)
         # Set point_latitude['data'] when point_longitude['data'] is evaluated
@@ -421,16 +457,19 @@ def _point_lon_lat_data_factory(grid, coordinate):
         # the same map projection and that the map projection only needs to be
         # evaluated once.
         if coordinate == 0:
-            grid.point_latitude['data'] = geographic_coords[1]
+            grid.point_latitude["data"] = geographic_coords[1]
         else:
-            grid.point_longitude['data'] = geographic_coords[0]
+            grid.point_longitude["data"] = geographic_coords[0]
         return geographic_coords[coordinate]
+
     return _point_lon_lat_data
 
 
 def _point_altitude_data_factory(grid):
-    """ Return a function which returns the point altitudes. """
+    """Return a function which returns the point altitudes."""
+
     def _point_altitude_data():
-        """ The function which returns the point altitudes. """
-        return grid.origin_altitude['data'][0] + grid.point_z['data']
+        """The function which returns the point altitudes."""
+        return grid.origin_altitude["data"][0] + grid.point_z["data"]
+
     return _point_altitude_data

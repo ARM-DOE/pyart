@@ -1,8 +1,15 @@
-import numpy as np
 import matplotlib.pyplot as plt
+import numpy as np
 
-def plot_convstrat_scheme(always_core_thres, use_cosine, max_diff=None, zero_diff_cos_val=None,
-                          use_addition=False, scalar_diff=None):
+
+def plot_convstrat_scheme(
+    always_core_thres,
+    use_cosine,
+    max_diff=None,
+    zero_diff_cos_val=None,
+    use_addition=False,
+    scalar_diff=None,
+):
     """
     Plots the scheme used in the convective stratiform classification
 
@@ -47,30 +54,29 @@ def plot_convstrat_scheme(always_core_thres, use_cosine, max_diff=None, zero_dif
     diff[bkg_vals > always_core_thres] = 0
 
     # Now plot
-    fig = plt.figure()
     ax = plt.gca()
     # plot difference line
-    ax.plot(bkg_vals, diff, lw=2, color='black')
+    ax.plot(bkg_vals, diff, lw=2, color="black")
     # plot always core thres
-    ax.axvline(x=always_core_thres, lw=1, ls='--', color='red')
-    ax.text(always_core_thres+2, 1, 'Always Core Thres.', color='red')
+    ax.axvline(x=always_core_thres, lw=1, ls="--", color="red")
+    ax.text(always_core_thres + 2, 1, "Always Core Thres.", color="red")
     if use_cosine:
         # plot zero difference cosine value
-        ax.axvline(x=zero_diff_cos_val, lw=1, ls='--', color='green')
-        ax.text(zero_diff_cos_val+2, 0.75, 'Zero Diff. Cosine Val.', color='green')
+        ax.axvline(x=zero_diff_cos_val, lw=1, ls="--", color="green")
+        ax.text(zero_diff_cos_val + 2, 0.75, "Zero Diff. Cosine Val.", color="green")
         # plot max difference
-        ax.axhline(y=max_diff, lw=1, ls='--', color='blue')
-        ax.text(10, max_diff+0.05, 'Max. Diff.', color='blue')
+        ax.axhline(y=max_diff, lw=1, ls="--", color="blue")
+        ax.text(10, max_diff + 0.05, "Max. Diff.", color="blue")
     elif use_addition:
         # plot scalar
-        ax.axhline(y=scalar_diff, lw=1, ls='--', color='orange')
-        ax.text(10, scalar_diff+0.05, 'Scalar Diff.', color='orange')
+        ax.axhline(y=scalar_diff, lw=1, ls="--", color="orange")
+        ax.text(10, scalar_diff + 0.05, "Scalar Diff.", color="orange")
     # add grid
     ax.grid()
     # set axis limits
     ax.set_ylim([0, np.max(diff) + 0.2])
     ax.set_xlim([np.min(bkg_vals), np.max(bkg_vals)])
     # set axis labels and title
-    ax.set_ylabel('Difference (dBZ - dBZ$_{background}$)')
-    ax.set_xlabel('Background Value (dBZ$_{background}$)')
-    ax.set_title('Convective Stratiform Equation')
+    ax.set_ylabel("Difference (dBZ - dBZ$_{background}$)")
+    ax.set_xlabel("Background Value (dBZ$_{background}$)")
+    ax.set_title("Convective Stratiform Equation")

@@ -5,20 +5,19 @@ Functions and classes common between MDV grid and radar files.
 
 # Code is adapted from Nitin Bharadwaj's Matlab code
 
-import struct
 import bz2
+import datetime
 import gzip
+import struct
 import zlib
 from io import BytesIO
-import datetime
 
 import numpy as np
 
 from ..core.transforms import antenna_to_cartesian
 
 # mapping from MDV name space to CF-Radial name space
-MDV_METADATA_MAP = {'instrument_name': 'data_set_source',
-                    'source': 'data_set_info'}
+MDV_METADATA_MAP = {"instrument_name": "data_set_source", "source": "data_set_info"}
 
 # Information about the MDV file structure
 MDV_CHUNK_INFO_LEN = 480
@@ -60,14 +59,14 @@ COMPRESSION_BZIP = 4  # bzip2
 COMPRESSION_GZIP = 5  # Lempel-Ziv in gzip format
 
 #  ***************** COMPRESSION CODE *******************
-TA_NOT_COMPRESSED = 0x2f2f2f2f
-GZIP_COMPRESSED = 0xf7f7f7f7
-GZIP_NOT_COMPRESSED = 0xf8f8f8f8
-BZIP_COMPRESSED = 0xf3f3f3f3
-BZIP_NOT_COMPRESSED = 0xf4f4f4f4
-ZLIB_COMPRESSED = 0xf5f5f5f5
-ZLIB_NOT_COMPRESSED = 0xf6f6f6f6
-RL8_COMPRESSION = 0xfe0103fd
+TA_NOT_COMPRESSED = 0x2F2F2F2F
+GZIP_COMPRESSED = 0xF7F7F7F7
+GZIP_NOT_COMPRESSED = 0xF8F8F8F8
+BZIP_COMPRESSED = 0xF3F3F3F3
+BZIP_NOT_COMPRESSED = 0xF4F4F4F4
+ZLIB_COMPRESSED = 0xF5F5F5F5
+ZLIB_NOT_COMPRESSED = 0xF6F6F6F6
+RL8_COMPRESSION = 0xFE0103FD
 
 #  ***************** TRANSFORM *******************
 DATA_TRANSFORM_NONE = 0  # None
@@ -88,7 +87,7 @@ DS_RADAR_CALIB_NAME_LEN = 16
 DS_RADAR_CALIB_MISSING = -9999.0
 
 
-class MdvFile(object):
+class MdvFile:
     """
     A file object for MDV data.
 
@@ -118,10 +117,11 @@ class MdvFile(object):
     read/write capacity.
 
     """
+
     # formats for use in the struct lib
     # mapper are used to convert tuples to dics, the formats is as follows:
     # (var_name, initial_position_in_tuple, final_position_in_tuple)
-    master_header_fmt = b'>28i 8i i 5i 6f 3f 12f 512s 128s 128s i'
+    master_header_fmt = b">28i 8i i 5i 6f 3f 12f 512s 128s 128s i"
     master_header_mapper = [
         ("record_len1", 0, 1),
         ("struct_id", 1, 2),
@@ -162,10 +162,10 @@ class MdvFile(object):
         ("data_set_info", 63, 64),
         ("data_set_name", 64, 65),
         ("data_set_source", 65, 66),
-        ("record_len2", 66, 67)
+        ("record_len2", 66, 67),
     ]
 
-    field_header_fmt = '>17i 10i 9i 4i f f 8f 12f 4f 5f 64s 16s 16s 16s 16s i'
+    field_header_fmt = ">17i 10i 9i 4i f f 8f 12f 4f 5f 64s 16s 16s 16s 16s i"
     field_header_mapper = [
         ("record_len1", 0, 1),
         ("struct_id", 1, 2),
@@ -221,10 +221,10 @@ class MdvFile(object):
         ("units", 73, 74),
         ("transform", 74, 75),
         ("unused_char", 75, 76),
-        ("record_len2", 76, 77)
+        ("record_len2", 76, 77),
     ]
 
-    vlevel_header_fmt = '>i i 122i 4i 122f 5f i'
+    vlevel_header_fmt = ">i i 122i 4i 122f 5f i"
     vlevel_header_mapper = [
         ("record_len1", 0, 1),
         ("struct_id", 1, 2),
@@ -232,10 +232,10 @@ class MdvFile(object):
         ("unused_si32", 124, 128),
         ("level", 128, 250),
         ("unused_fl32", 250, 255),
-        ("record_len2", 255, 256)
+        ("record_len2", 255, 256),
     ]
 
-    chunk_header_fmt = '>5i 2i 480s i'
+    chunk_header_fmt = ">5i 2i 480s i"
     chunk_header_mapper = [
         ("record_len1", 0, 1),
         ("struct_id", 1, 2),
@@ -244,19 +244,19 @@ class MdvFile(object):
         ("size", 4, 5),
         ("unused_si32", 5, 7),
         ("info", 7, 8),
-        ("record_len2", 8, 9)
+        ("record_len2", 8, 9),
     ]
 
-    compression_info_fmt = '>I I I I 2I'
+    compression_info_fmt = ">I I I I 2I"
     compression_info_mapper = [
         ("magic_cookie", 0, 1),
         ("nbytes_uncompressed", 1, 2),
         ("nbytes_compressed", 2, 3),
         ("nbytes_coded", 3, 4),
-        ("spare", 4, 6)
+        ("spare", 4, 6),
     ]
 
-    radar_info_fmt = '>12i 2i 22f 4f 40s 40s'
+    radar_info_fmt = ">12i 2i 22f 4f 40s 40s"
     radar_info_mapper = [
         ("radar_id", 0, 1),
         ("radar_type", 1, 2),
@@ -295,10 +295,10 @@ class MdvFile(object):
         ("prt2_s", 35, 36),
         ("spare_floats", 36, 40),
         ("radar_name", 40, 41),
-        ("scan_type_name", 41, 42)
+        ("scan_type_name", 41, 42),
     ]
 
-    calib_fmt = '>16s 6i 51f 14f'
+    calib_fmt = ">16s 6i 51f 14f"
     calib_mapper = [
         ("radar_name", 0, 1),
         ("year", 1, 2),
@@ -358,20 +358,20 @@ class MdvFile(object):
         ("I0_h_cx_dbm", 55, 56),
         ("I0_v_co_dbm", 56, 57),
         ("I0_v_cx_dbm", 57, 58),
-        ("spare", 58, 72)
+        ("spare", 58, 72),
     ]
 
     def __init__(self, filename, debug=False, read_fields=False):
-        """ initalize """
+        """initalize"""
         if debug:
             print("Opening file for reading: ", filename)
         if filename is None:
             # will creat empty structures, to be filled and written later
             self.fileptr = None
-        elif hasattr(filename, 'read'):
+        elif hasattr(filename, "read"):
             self.fileptr = filename
         else:
-            self.fileptr = open(filename, 'rb')
+            self.fileptr = open(filename, "rb")
 
         if debug:
             print("Getting master header")
@@ -379,7 +379,7 @@ class MdvFile(object):
 
         if debug:
             print("getting field headers")
-        nfields = self.master_header['nfields']
+        nfields = self.master_header["nfields"]
         self.field_headers = self._get_field_headers(nfields)
 
         if debug:
@@ -388,27 +388,26 @@ class MdvFile(object):
 
         if debug:
             print("getting chunk headers")
-        nchunks = self.master_header['nchunks']
+        nchunks = self.master_header["nchunks"]
         self.chunk_headers = self._get_chunk_headers(nchunks)
 
         if debug:
             print("Getting Chunk Data")
         # store raw chunk data, used for unknown chunk information
-        self.chunk_data = [None] * self.master_header['nchunks']
-        self.radar_info, self.elevations, self.calib_info = self._get_chunks(
-            debug)
+        self.chunk_data = [None] * self.master_header["nchunks"]
+        self.radar_info, self.elevations, self.calib_info = self._get_chunks(debug)
 
-        if self.master_header['nfields'] > 0:
+        if self.master_header["nfields"] > 0:
             projections = {
-                PROJ_LATLON: 'latlon',
-                PROJ_LAMBERT_CONF: 'lambert_conform',
-                PROJ_POLAR_STEREO: 'polar_stereographic',
-                PROJ_FLAT: 'flat',
-                PROJ_POLAR_RADAR: 'ppi',
-                PROJ_OBLIQUE_STEREO: 'oblique_stereographic',
-                PROJ_RHI_RADAR: 'rhi',
+                PROJ_LATLON: "latlon",
+                PROJ_LAMBERT_CONF: "lambert_conform",
+                PROJ_POLAR_STEREO: "polar_stereographic",
+                PROJ_FLAT: "flat",
+                PROJ_POLAR_RADAR: "ppi",
+                PROJ_OBLIQUE_STEREO: "oblique_stereographic",
+                PROJ_RHI_RADAR: "rhi",
             }
-            self.projection = projections[self.field_headers[0]['proj_type']]
+            self.projection = projections[self.field_headers[0]["proj_type"]]
 
         if debug:
             print("Making usable time objects")
@@ -446,16 +445,19 @@ class MdvFile(object):
         """
         if debug:
             print("Opening file for writing:", filename)
-        if hasattr(filename, 'write'):
+        if hasattr(filename, "write"):
             self.fileptr = filename
         else:
-            self.fileptr = open(filename, 'wb')
+            self.fileptr = open(filename, "wb")
         file_start = self.fileptr.tell()
 
         # write fields and chunk so that offsets can be calculated
         # headers are initially zeros
-        headers_size = (1024 + (416 + 1024) * self.master_header["nfields"] +
-                        512 * self.master_header["nchunks"])
+        headers_size = (
+            1024
+            + (416 + 1024) * self.master_header["nfields"]
+            + 512 * self.master_header["nchunks"]
+        )
         self.fileptr.write(b"\x00" * headers_size)
 
         if debug:
@@ -523,13 +525,13 @@ class MdvFile(object):
         if debug:
             print("No data found in object, populating")
 
-        nz = field_header['nz']
-        ny = field_header['ny']
-        nx = field_header['nx']
+        nz = field_header["nz"]
+        ny = field_header["ny"]
+        nx = field_header["nx"]
 
         # read the header
-        field_data = np.zeros([nz, ny, nx], dtype='float32')
-        self.fileptr.seek(field_header['field_data_offset'])
+        field_data = np.zeros([nz, ny, nx], dtype="float32")
+        self.fileptr.seek(field_header["field_data_offset"])
         self._get_levels_info(nz)  # dict not used, but need to seek.
 
         for sw in range(nz):
@@ -538,46 +540,46 @@ class MdvFile(object):
 
             # get the compressed level data
             compr_info = self._get_compression_info()
-            if compr_info['magic_cookie'] == 0xfe0103fd:
+            if compr_info["magic_cookie"] == 0xFE0103FD:
                 # Run length encoding only has 20 bytes of compression
                 # information with slightly different order, back up
                 # 4 bytes to read all of the compressed data.
                 self.fileptr.seek(-4, 1)
-                compr_data = self.fileptr.read(compr_info['spare'][0])
+                compr_data = self.fileptr.read(compr_info["spare"][0])
             else:
-                compr_data = self.fileptr.read(compr_info['nbytes_coded'])
-            encoding_type = field_header['encoding_type']
+                compr_data = self.fileptr.read(compr_info["nbytes_coded"])
+            encoding_type = field_header["encoding_type"]
             if encoding_type == ENCODING_INT8:
-                fmt = '>%iB' % (nx * ny)
-                np_form = '>B'
+                fmt = ">%iB" % (nx * ny)
+                np_form = ">B"
             elif encoding_type == ENCODING_INT16:
-                fmt = '>%iH' % (nx * ny)
-                np_form = '>H'
+                fmt = ">%iH" % (nx * ny)
+                np_form = ">H"
             elif encoding_type == ENCODING_FLOAT32:
-                fmt = '>%if' % (nx * ny)
-                np_form = '>f'
+                fmt = ">%if" % (nx * ny)
+                np_form = ">f"
             else:
-                raise NotImplementedError('encoding: ', encoding_type)
+                raise NotImplementedError("encoding: ", encoding_type)
 
             # decompress the level data
-            if compr_info['magic_cookie'] == GZIP_COMPRESSED:
+            if compr_info["magic_cookie"] == GZIP_COMPRESSED:
                 cd_fobj = BytesIO(compr_data)
                 gzip_file_handle = gzip.GzipFile(fileobj=cd_fobj)
                 decompr_data = gzip_file_handle.read(struct.calcsize(fmt))
                 gzip_file_handle.close()
-            elif compr_info['magic_cookie'] == ZLIB_COMPRESSED:
+            elif compr_info["magic_cookie"] == ZLIB_COMPRESSED:
                 decompr_data = zlib.decompress(compr_data)
-            elif compr_info['magic_cookie'] == BZIP_COMPRESSED:
+            elif compr_info["magic_cookie"] == BZIP_COMPRESSED:
                 decompr_data = bz2.decompress(compr_data)
-            elif compr_info['magic_cookie'] == TA_NOT_COMPRESSED:
+            elif compr_info["magic_cookie"] == TA_NOT_COMPRESSED:
                 decompr_data = compr_data
-            elif compr_info['magic_cookie'] == GZIP_NOT_COMPRESSED:
+            elif compr_info["magic_cookie"] == GZIP_NOT_COMPRESSED:
                 decompr_data = compr_data
-            elif compr_info['magic_cookie'] == ZLIB_NOT_COMPRESSED:
+            elif compr_info["magic_cookie"] == ZLIB_NOT_COMPRESSED:
                 decompr_data = compr_data
-            elif compr_info['magic_cookie'] == BZIP_NOT_COMPRESSED:
+            elif compr_info["magic_cookie"] == BZIP_NOT_COMPRESSED:
                 decompr_data = compr_data
-            elif compr_info['magic_cookie'] == RL8_COMPRESSION:
+            elif compr_info["magic_cookie"] == RL8_COMPRESSION:
                 # Run length encoding of 8-bit data
                 # Compression info is in a different order, namely
                 # int32 : RL8_FLAG (0xfe0103fd)
@@ -585,21 +587,21 @@ class MdvFile(object):
                 # int32 : nbytes_array (bytes of encoded data with header)
                 # int32 : nbytes_full (bytes of unencoded data, no header)
                 # int32 : nbytes_coded (bytes of encoded data, no header)
-                key = compr_info['nbytes_uncompressed']
-                decompr_size = compr_info['nbytes_coded']
+                key = compr_info["nbytes_uncompressed"]
+                decompr_size = compr_info["nbytes_coded"]
                 decompr_data = _decode_rle8(compr_data, key, decompr_size)
             else:
-                raise NotImplementedError('unknown compression mode')
+                raise NotImplementedError("unknown compression mode")
 
             # read the decompressed data, reshape and mask
-            sw_data = np.frombuffer(decompr_data, np_form).astype('float32')
+            sw_data = np.frombuffer(decompr_data, np_form).astype("float32")
             sw_data.shape = (ny, nx)
-            mask = sw_data == field_header['bad_data_value']
+            mask = sw_data == field_header["bad_data_value"]
             np.putmask(sw_data, mask, [np.NaN])
 
             # scale and offset the data, store in field_data
-            scale = field_header['scale']
-            bias = field_header['bias']
+            scale = field_header["scale"]
+            bias = field_header["bias"]
             field_data[sw, :, :] = sw_data * scale + bias
 
         # store data as object attribute and return
@@ -607,12 +609,12 @@ class MdvFile(object):
         return field_data
 
     def read_all_fields(self):
-        """ Read all fields, storing data to field name attributes. """
-        for i in range(self.master_header['nfields']):
+        """Read all fields, storing data to field name attributes."""
+        for i in range(self.master_header["nfields"]):
             self.read_a_field(i)
 
     def close(self):
-        """ Close the MDV file. """
+        """Close the MDV file."""
         self.fileptr.close()
 
     ###################
@@ -620,17 +622,17 @@ class MdvFile(object):
     ###################
 
     def _write_a_field(self, fnum):
-        """ write field number 'fnum' to mdv file. """
+        """write field number 'fnum' to mdv file."""
         # the file pointer must be set at the correct location prior to call
         field_header = self.field_headers[fnum]
-        if field_header['compression_type'] != 3:
+        if field_header["compression_type"] != 3:
             import warnings
-            warnings.warn(
-                "compression_type not implemented, converting to zlib")
-            field_header['compression_type'] = 3
+
+            warnings.warn("compression_type not implemented, converting to zlib")
+            field_header["compression_type"] = 3
 
         field_data = self.fields_data[fnum]
-        nz = field_header['nz']
+        nz = field_header["nz"]
         # save file position
         field_start = self.fileptr.tell()
         # write zeros to vlevel_offsets and vlevel_nbytes, these will
@@ -642,39 +644,40 @@ class MdvFile(object):
         for sw in range(nz):
             vlevel_offsets[sw] = field_size
             # apply scaling, offset and masking to field data
-            scale = field_header['scale']
-            bias = field_header['bias']
+            scale = field_header["scale"]
+            bias = field_header["bias"]
             sw_data = (field_data[sw, :, :] - bias) / scale
-            if hasattr(sw_data, 'mask'):
+            if hasattr(sw_data, "mask"):
                 sw_data = np.where(
-                    sw_data.mask, field_header['bad_data_value'], sw_data)
+                    sw_data.mask, field_header["bad_data_value"], sw_data
+                )
 
             # encode field data to the correct type, round when necessary
-            encoding_type = field_header['encoding_type']
+            encoding_type = field_header["encoding_type"]
             if encoding_type == ENCODING_INT8:
                 sw_data = np.round(sw_data).astype(np.uint8)
-                np_form = '>B'
+                np_form = ">B"
             elif encoding_type == ENCODING_INT16:
                 sw_data = np.round(sw_data).astype(np.uint16)
-                np_form = '>H'
+                np_form = ">H"
             elif encoding_type == ENCODING_FLOAT32:
                 sw_data = sw_data.astype(np.float32)
-                np_form = '>f'
+                np_form = ">f"
             else:
-                raise NotImplementedError('encoding: ', encoding_type)
+                raise NotImplementedError("encoding: ", encoding_type)
             uncompr_data = np.array(sw_data, dtype=np_form).tostring()
             compr_data = zlib.compress(uncompr_data)
             if len(compr_data) > len(uncompr_data):
-                magic = 0xf6f6f6f6
+                magic = 0xF6F6F6F6
                 compr_data = uncompr_data
             else:
-                magic = 0xf5f5f5f5
+                magic = 0xF5F5F5F5
             compr_info = {
-                'magic_cookie': magic,
-                'nbytes_uncompressed': len(uncompr_data),
-                'nbytes_compressed': len(compr_data) + 24,
-                'nbytes_coded': len(compr_data),
-                'spare': [0, 0],
+                "magic_cookie": magic,
+                "nbytes_uncompressed": len(uncompr_data),
+                "nbytes_compressed": len(compr_data) + 24,
+                "nbytes_coded": len(compr_data),
+                "spare": [0, 0],
             }
 
             self._write_compression_info(compr_info)
@@ -684,355 +687,359 @@ class MdvFile(object):
         # rewrite vlevel_offsets and vlevel_nbytes with corrected data
         field_end = self.fileptr.tell()
         self.fileptr.seek(field_start)
-        vlevels_dic = {'vlevel_offsets': vlevel_offsets,
-                       'vlevel_nbytes': vlevel_nbytes}
+        vlevels_dic = {"vlevel_offsets": vlevel_offsets, "vlevel_nbytes": vlevel_nbytes}
         self._write_levels_info(nz, vlevels_dic)
         self.fileptr.seek(field_end)
         field_header["volume_size"] = field_size + 2 * 4 * nz
 
     # get_ methods for reading headers
 
-    def _unpack_mapped_tuple(self, l, mapper):
-        """ Create a dictionary from a tuple using a mapper. """
+    def _unpack_mapped_tuple(self, packet, mapper):
+        """Create a dictionary from a tuple using a mapper."""
         d = {}
         for item in mapper:
             if item[2] == item[1] + 1:
-                d[item[0]] = l[item[1]]
+                d[item[0]] = packet[item[1]]
             else:
-                d[item[0]] = l[item[1]:item[2]]
+                d[item[0]] = packet[item[1] : item[2]]
             if isinstance(d[item[0]], bytes):
-                d[item[0]] = d[item[0]].decode('ascii').split('\x00', 1)[0]
+                d[item[0]] = d[item[0]].decode("ascii").split("\x00", 1)[0]
         return d
 
     def _pack_mapped(self, d, mapper, fmt):
-        """ Create a packed string using a mapper and format. """
-        l = [0] * mapper[-1][2]
+        """Create a packed string using a mapper and format."""
+        packet = [0] * mapper[-1][2]
         for item in mapper:
             if item[2] == item[1] + 1:
-                l[item[1]] = d[item[0]]
-                if hasattr(l[item[1]], 'encode'):   # encode str/unicode
-                    l[item[1]] = l[item[1]].encode('ascii')
+                packet[item[1]] = d[item[0]]
+                if hasattr(packet[item[1]], "encode"):  # encode str/unicode
+                    packet[item[1]] = packet[item[1]].encode("ascii")
             else:
-                l[item[1]:item[2]] = d[item[0]]
+                packet[item[1] : item[2]] = d[item[0]]
         # cast to string as Python < 2.7.7 pack does not except unicode
         fmt = str(fmt)
-        return struct.pack(fmt, *l)
+        return struct.pack(fmt, *packet)
 
     def _get_master_header(self):
-        """ Read the MDV master header, return a dict. """
+        """Read the MDV master header, return a dict."""
         # the file pointer must be set at the correct location prior to call
         if self.fileptr is None:
-            l = [0] * self.master_header_mapper[-1][2]
-            l[0] = 1016
-            l[1] = 14142
-            l[2] = 1
-            l[9] = 1
-            l[16] = 1
-            l[17] = 1
-            l[63] = ""
-            l[64] = ""
-            l[65] = ""
-            l[66] = 1016
+            packet = [0] * self.master_header_mapper[-1][2]
+            packet[0] = 1016
+            packet[1] = 14142
+            packet[2] = 1
+            packet[9] = 1
+            packet[16] = 1
+            packet[17] = 1
+            packet[63] = ""
+            packet[64] = ""
+            packet[65] = ""
+            packet[66] = 1016
         else:
-            l = struct.unpack(
+            packet = struct.unpack(
                 self.master_header_fmt,
-                self.fileptr.read(struct.calcsize(self.master_header_fmt)))
-        return self._unpack_mapped_tuple(l, self.master_header_mapper)
+                self.fileptr.read(struct.calcsize(self.master_header_fmt)),
+            )
+        return self._unpack_mapped_tuple(packet, self.master_header_mapper)
 
     def _write_master_header(self):
-        """ Write the MDV master header. """
+        """Write the MDV master header."""
         # the file pointer must be set at the correct location prior to call
         d = self.master_header
-        l = [0] * self.master_header_mapper[-1][2]
+        packet = [0] * self.master_header_mapper[-1][2]
         for item in self.master_header_mapper:
             if item[2] == item[1] + 1:
-                l[item[1]] = d[item[0]]
-                if hasattr(l[item[1]], 'encode'):   # encode str/unicode
-                    l[item[1]] = l[item[1]].encode('ascii')
+                packet[item[1]] = d[item[0]]
+                if hasattr(packet[item[1]], "encode"):  # encode str/unicode
+                    packet[item[1]] = packet[item[1]].encode("ascii")
             else:
-                l[item[1]:item[2]] = d[item[0]]
-        string = struct.pack(self.master_header_fmt, *l)
+                packet[item[1] : item[2]] = d[item[0]]
+        string = struct.pack(self.master_header_fmt, *packet)
         self.fileptr.write(string)
 
     def _get_field_headers(self, nfields):
-        """ Read nfields field headers, return a list of dicts. """
+        """Read nfields field headers, return a list of dicts."""
         # the file pointer must be set at the correct location prior to call
         return [self._get_field_header() for i in range(nfields)]
 
     def _write_field_headers(self, nfields):
-        """ Write nfields field headers. """
+        """Write nfields field headers."""
         # the file pointer must be set at the correct location prior to call
         for i in range(nfields):
             self._write_field_header(self.field_headers[i])
 
     def _get_field_header(self):
-        """ Read a single field header, return a dict. """
+        """Read a single field header, return a dict."""
         # the file pointer must be set at the correct location prior to call
         if self.fileptr is None:
-            l = [0] * self.field_header_mapper[-1][2]
-            l[0] = 408
-            l[1] = 14143
-            l[57] = 1  # scale
-            l[71] = ""
-            l[72] = ""
-            l[73] = ""
-            l[74] = ""
-            l[75] = ""
-            l[76] = 408
+            packet = [0] * self.field_header_mapper[-1][2]
+            packet[0] = 408
+            packet[1] = 14143
+            packet[57] = 1  # scale
+            packet[71] = ""
+            packet[72] = ""
+            packet[73] = ""
+            packet[74] = ""
+            packet[75] = ""
+            packet[76] = 408
         else:
-            l = struct.unpack(
+            packet = struct.unpack(
                 self.field_header_fmt,
-                self.fileptr.read(struct.calcsize(self.field_header_fmt)))
-        return self._unpack_mapped_tuple(l, self.field_header_mapper)
+                self.fileptr.read(struct.calcsize(self.field_header_fmt)),
+            )
+        return self._unpack_mapped_tuple(packet, self.field_header_mapper)
 
     def _write_field_header(self, d):
-        """ Write the a single field header. """
+        """Write the a single field header."""
         # the file pointer must be set at the correct location prior to call
-        string = self._pack_mapped(
-            d, self.field_header_mapper, self.field_header_fmt)
+        string = self._pack_mapped(d, self.field_header_mapper, self.field_header_fmt)
         self.fileptr.write(string)
 
     def _get_vlevel_headers(self, nfields):
-        """ Read nfields vlevel headers, return a list of dicts. """
+        """Read nfields vlevel headers, return a list of dicts."""
         # the file pointer must be set at the correct location prior to call
         return [self._get_vlevel_header() for i in range(nfields)]
 
     def _write_vlevel_headers(self, nfields):
-        """ Write nfields vlevel headers. """
+        """Write nfields vlevel headers."""
         # the file pointer must be set at the correct location prior to call
         for i in range(nfields):
             self._write_vlevel_header(self.vlevel_headers[i])
 
     def _get_vlevel_header(self):
-        """ Read a single vlevel header, return a dict. """
+        """Read a single vlevel header, return a dict."""
         # the file pointer must be set at the correct location prior to call
         if self.fileptr is None:
-            l = [0] * self.vlevel_header_mapper[-1][2]
-            l[0] = 1016
-            l[1] = 14144
-            l[255] = 1016
+            packet = [0] * self.vlevel_header_mapper[-1][2]
+            packet[0] = 1016
+            packet[1] = 14144
+            packet[255] = 1016
         else:
-            l = struct.unpack(
+            packet = struct.unpack(
                 self.vlevel_header_fmt,
-                self.fileptr.read(struct.calcsize(self.vlevel_header_fmt)))
-        return self._unpack_mapped_tuple(l, self.vlevel_header_mapper)
+                self.fileptr.read(struct.calcsize(self.vlevel_header_fmt)),
+            )
+        return self._unpack_mapped_tuple(packet, self.vlevel_header_mapper)
 
     def _write_vlevel_header(self, d):
-        """  Write the a single vfield header. """
+        """Write the a single vfield header."""
         # the file pointer must be set at the correct location prior to call
-        string = self._pack_mapped(
-            d, self.vlevel_header_mapper, self.vlevel_header_fmt)
+        string = self._pack_mapped(d, self.vlevel_header_mapper, self.vlevel_header_fmt)
         self.fileptr.write(string)
 
     def _get_chunk_headers(self, nchunks):
-        """ Get nchunk chunk headers, return a list of dicts. """
+        """Get nchunk chunk headers, return a list of dicts."""
         # the file pointer must be set at the correct location prior to call
         return [self._get_chunk_header() for i in range(nchunks)]
 
     def _write_chunk_headers(self, nchunks):
-        """ Write nchunk chunk headers. """
+        """Write nchunk chunk headers."""
         # the file pointer must be set at the correct location prior to call
         for i in range(nchunks):
             self._write_chunk_header(self.chunk_headers[i])
 
     def _get_chunk_header(self):
-        """ Get a single chunk header, return a dict. """
+        """Get a single chunk header, return a dict."""
         # the file pointer must be set at the correct location prior to call
         if self.fileptr is None:
-            l = [0] * self.chunk_header_mapper[-1][2]
-            l[0] = 504
-            l[1] = 14145
-            l[7] = ""
-            l[8] = 504
+            packet = [0] * self.chunk_header_mapper[-1][2]
+            packet[0] = 504
+            packet[1] = 14145
+            packet[7] = ""
+            packet[8] = 504
         else:
-            l = struct.unpack(
+            packet = struct.unpack(
                 self.chunk_header_fmt,
-                self.fileptr.read(struct.calcsize(self.chunk_header_fmt)))
-        return self._unpack_mapped_tuple(l, self.chunk_header_mapper)
+                self.fileptr.read(struct.calcsize(self.chunk_header_fmt)),
+            )
+        return self._unpack_mapped_tuple(packet, self.chunk_header_mapper)
 
     def _write_chunk_header(self, d):
-        """  Write the a single chunk header. """
+        """Write the a single chunk header."""
         # the file pointer must be set at the correct location prior to call
-        string = self._pack_mapped(
-            d, self.chunk_header_mapper, self.chunk_header_fmt)
+        string = self._pack_mapped(d, self.chunk_header_mapper, self.chunk_header_fmt)
         self.fileptr.write(string)
 
     def _get_chunks(self, debug=False):
-        """ Get data in chunks, return radar_info, elevations, calib_info. """
+        """Get data in chunks, return radar_info, elevations, calib_info."""
         # the file pointer must be set at the correct location prior to call
         radar_info, elevations, calib_info = None, [], None
         for cnum, curr_chunk_header in enumerate(self.chunk_headers):
 
-            chunk_id = curr_chunk_header['chunk_id']
-            self.fileptr.seek(curr_chunk_header['chunk_data_offset'])
+            chunk_id = curr_chunk_header["chunk_id"]
+            self.fileptr.seek(curr_chunk_header["chunk_data_offset"])
 
             if chunk_id == CHUNK_DSRADAR_PARAMS:
                 if debug:
-                    print('Getting radar info')
+                    print("Getting radar info")
                 radar_info = self._get_radar_info()
 
             elif chunk_id == CHUNK_DSRADAR_ELEVATIONS:
                 if debug:
-                    print('getting elevations')
-                elevations = self._get_elevs(curr_chunk_header['size'])
+                    print("getting elevations")
+                elevations = self._get_elevs(curr_chunk_header["size"])
 
             elif chunk_id == CHUNK_DSRADAR_CALIB:
                 if debug:
-                    print('getting cal')
+                    print("getting cal")
                 calib_info = self._get_calib()
 
             else:
                 if debug:
-                    print('getting unknown chunk %i' % chunk_id)
+                    print("getting unknown chunk %i" % chunk_id)
                 self.chunk_data[cnum] = self._get_unknown_chunk(cnum)
 
         return radar_info, elevations, calib_info
 
     def _write_chunks(self, debug=False):
-        """ write chunks data """
+        """write chunks data"""
         # the file pointer must be set at the correct location prior to call
         for cnum, curr_chunk_header in enumerate(self.chunk_headers):
-            chunk_id = curr_chunk_header['chunk_id']
+            chunk_id = curr_chunk_header["chunk_id"]
 
             if chunk_id == CHUNK_DSRADAR_PARAMS:
                 if debug:
-                    print('writing radar info')
+                    print("writing radar info")
                 self._write_radar_info(self.radar_info)
 
             elif chunk_id == CHUNK_DSRADAR_ELEVATIONS:
                 if debug:
-                    print('writing elevations')
+                    print("writing elevations")
                 self._write_elevs(self.elevations)
 
             elif chunk_id == CHUNK_DSRADAR_CALIB:
                 if debug:
-                    print('writing cal')
+                    print("writing cal")
                 self._write_calib(self.calib_info)
 
             else:
                 if debug:
-                    print('writing unknown chunk %i' % chunk_id)
+                    print("writing unknown chunk %i" % chunk_id)
                 self._write_unknown_chunk(self.chunk_data[cnum])
 
     def _get_radar_info(self):
-        """ Get the radar information, return dict. """
+        """Get the radar information, return dict."""
         # the file pointer must be set at the correct location prior to call
         if self.fileptr is None:
-            l = [0] * self.radar_info_mapper[-1][2]
-            l[40] = ""
-            l[41] = ""
+            packet = [0] * self.radar_info_mapper[-1][2]
+            packet[40] = ""
+            packet[41] = ""
         else:
-            l = struct.unpack(
+            packet = struct.unpack(
                 self.radar_info_fmt,
-                self.fileptr.read(struct.calcsize(self.radar_info_fmt)))
-        return self._unpack_mapped_tuple(l, self.radar_info_mapper)
+                self.fileptr.read(struct.calcsize(self.radar_info_fmt)),
+            )
+        return self._unpack_mapped_tuple(packet, self.radar_info_mapper)
 
     def _write_radar_info(self, d):
-        """  Write radar information. """
+        """Write radar information."""
         # the file pointer must be set at the correct location prior to call
-        string = self._pack_mapped(
-            d, self.radar_info_mapper, self.radar_info_fmt)
+        string = self._pack_mapped(d, self.radar_info_mapper, self.radar_info_fmt)
         self.fileptr.write(string)
 
     def _get_elevs(self, nbytes):
-        """ Return an array of elevation read from current file position. """
+        """Return an array of elevation read from current file position."""
         # the file pointer must be set at the correct location prior to call
         SIZE_FLOAT = 4.0
         nelevations = np.floor(nbytes / SIZE_FLOAT)
-        fmt = '>%df' % (nelevations)
-        l = struct.unpack(fmt, self.fileptr.read(struct.calcsize(fmt)))
-        return np.array(l)
+        fmt = ">%df" % (nelevations)
+        packet = struct.unpack(fmt, self.fileptr.read(struct.calcsize(fmt)))
+        return np.array(packet)
 
-    def _write_elevs(self, l):
-        """ Write an array of elevation. """
+    def _write_elevs(self, packet):
+        """Write an array of elevation."""
         # the file pointer must be set at the correct location prior to call
-        fmt = '>%df' % (len(l))
+        fmt = ">%df" % (len(packet))
         # cast to string as Python < 2.7.7 pack does not except unicode
         fmt = str(fmt)
-        string = struct.pack(fmt, *l)
+        string = struct.pack(fmt, *packet)
         self.fileptr.write(string)
 
     def _get_calib(self):
-        """ Get the calibration information, return a dict. """
+        """Get the calibration information, return a dict."""
         # the file pointer must be set at the correct location prior to call
         if self.fileptr is None:
-            l = [0] * self.calib_mapper[-1][2]
-            l[0] = ""
+            packet = [0] * self.calib_mapper[-1][2]
+            packet[0] = ""
         else:
-            l = struct.unpack(
-                self.calib_fmt,
-                self.fileptr.read(struct.calcsize(self.calib_fmt)))
-        return self._unpack_mapped_tuple(l, self.calib_mapper)
+            packet = struct.unpack(
+                self.calib_fmt, self.fileptr.read(struct.calcsize(self.calib_fmt))
+            )
+        return self._unpack_mapped_tuple(packet, self.calib_mapper)
 
     def _write_calib(self, d):
-        """  Write calibration information. """
+        """Write calibration information."""
         # the file pointer must be set at the correct location prior to call
-        string = self._pack_mapped(
-            d, self.calib_mapper, self.calib_fmt)
+        string = self._pack_mapped(d, self.calib_mapper, self.calib_fmt)
         self.fileptr.write(string)
 
     def _get_compression_info(self):
-        """ Get compression infomation, return a dict. """
+        """Get compression infomation, return a dict."""
         # the file pointer must be set at the correct location prior to call
         if self.fileptr is None:
-            l = [0] * self.compression_info_mapper[-1][2]
+            packet = [0] * self.compression_info_mapper[-1][2]
         else:
-            l = struct.unpack(
+            packet = struct.unpack(
                 self.compression_info_fmt,
-                self.fileptr.read(struct.calcsize(self.compression_info_fmt)))
-        return self._unpack_mapped_tuple(l, self.compression_info_mapper)
+                self.fileptr.read(struct.calcsize(self.compression_info_fmt)),
+            )
+        return self._unpack_mapped_tuple(packet, self.compression_info_mapper)
 
     def _write_compression_info(self, d):
-        """ Write compression infomation. """
+        """Write compression infomation."""
         # the file pointer must be set at the correct location prior to call
         string = self._pack_mapped(
-            d, self.compression_info_mapper, self.compression_info_fmt)
+            d, self.compression_info_mapper, self.compression_info_fmt
+        )
         self.fileptr.write(string)
 
     def _get_unknown_chunk(self, cnum):
-        """ Get raw data from chunk. """
+        """Get raw data from chunk."""
         # the file pointer must be set at the correct location prior to call
-        size = self.chunk_headers[cnum]['size']
+        size = self.chunk_headers[cnum]["size"]
         return self.fileptr.read(size)
 
     def _write_unknown_chunk(self, data):
-        """ Write raw data from chunk. """
+        """Write raw data from chunk."""
         # the file pointer must be set at the correct location prior to call
         self.fileptr.write(data)
 
     def _get_levels_info(self, nlevels):
-        """ Get nlevel information, return a dict. """
+        """Get nlevel information, return a dict."""
         # the file pointer must be set at the correct location prior to call
-        fmt = '>%iI %iI' % (nlevels, nlevels)
+        fmt = ">%iI %iI" % (nlevels, nlevels)
         if self.fileptr:
-            l = struct.unpack(fmt, self.fileptr.read(struct.calcsize(fmt)))
+            packet = struct.unpack(fmt, self.fileptr.read(struct.calcsize(fmt)))
         else:
-            l = [0] * 2 * nlevels
+            packet = [0] * 2 * nlevels
         d = {}
-        d['vlevel_offsets'] = l[:nlevels]
-        d['vlevel_nbytes'] = l[nlevels: 2 * nlevels]
+        d["vlevel_offsets"] = packet[:nlevels]
+        d["vlevel_nbytes"] = packet[nlevels : 2 * nlevels]
         return d
 
     def _write_levels_info(self, nlevels, d):
-        """ write levels information, return a dict. """
+        """write levels information, return a dict."""
         # the file pointer must be set at the correct location prior to call
-        fmt = '%iI %iI' % (nlevels, nlevels)
-        l = d['vlevel_offsets'] + d['vlevel_nbytes']
+        fmt = "%iI %iI" % (nlevels, nlevels)
+        packet = d["vlevel_offsets"] + d["vlevel_nbytes"]
         # cast to string as Python < 2.7.7 pack does not except unicode
         fmt = str(fmt)
-        string = struct.pack(fmt, *l)
+        string = struct.pack(fmt, *packet)
         self.fileptr.write(string)
 
     def _calc_file_offsets(self):
-        """ Calculate file offsets. """
+        """Calculate file offsets."""
         self.master_header["field_hdr_offset"] = 1024
         self.master_header["vlevel_hdr_offset"] = (
-            1024 + 416 * self.master_header["nfields"])
+            1024 + 416 * self.master_header["nfields"]
+        )
         self.master_header["chunk_hdr_offset"] = (
-            1024 + (416 + 1024) * self.master_header["nfields"])
+            1024 + (416 + 1024) * self.master_header["nfields"]
+        )
 
-        file_pos = (self.master_header["chunk_hdr_offset"] +
-                    512 * self.master_header["nchunks"])
+        file_pos = (
+            self.master_header["chunk_hdr_offset"] + 512 * self.master_header["nchunks"]
+        )
         for i in range(self.master_header["nfields"]):
             self.field_headers[i]["field_data_offset"] = file_pos
             file_pos = file_pos + self.field_headers[i]["volume_size"]
@@ -1042,71 +1049,78 @@ class MdvFile(object):
             file_pos = file_pos + self.chunk_headers[i]["size"]
 
     def _make_time_dict(self):
-        """ Return a time dictionary. """
+        """Return a time dictionary."""
         t_base = datetime.datetime(1970, 1, 1, 00, 00)
-        tb = datetime.timedelta(seconds=self.master_header['time_begin'])
-        te = datetime.timedelta(seconds=self.master_header['time_end'])
-        tc = datetime.timedelta(seconds=self.master_header['time_centroid'])
-        return {'time_begin': t_base + tb, 'time_end': t_base + te,
-                'time_centroid': t_base + tc}
+        tb = datetime.timedelta(seconds=self.master_header["time_begin"])
+        te = datetime.timedelta(seconds=self.master_header["time_end"])
+        tc = datetime.timedelta(seconds=self.master_header["time_centroid"])
+        return {
+            "time_begin": t_base + tb,
+            "time_end": t_base + te,
+            "time_centroid": t_base + tc,
+        }
 
     def _time_dict_into_header(self):
-        """ Complete time information in master_header from the time dict. """
-        self.master_header['time_begin'] = self._secs_since_epoch(
-            self.times['time_begin'])
-        self.master_header['time_end'] = self._secs_since_epoch(
-            self.times['time_end'])
-        self.master_header['time_centroid'] = self._secs_since_epoch(
-            self.times['time_centroid'])
+        """Complete time information in master_header from the time dict."""
+        self.master_header["time_begin"] = self._secs_since_epoch(
+            self.times["time_begin"]
+        )
+        self.master_header["time_end"] = self._secs_since_epoch(self.times["time_end"])
+        self.master_header["time_centroid"] = self._secs_since_epoch(
+            self.times["time_centroid"]
+        )
 
     def _secs_since_epoch(self, dt):
-        """ Return the number of seconds since the epoch for a datetime. """
+        """Return the number of seconds since the epoch for a datetime."""
         epoch = datetime.datetime(1970, 1, 1, 0, 0)
         td = dt - epoch
         # use td.total_seconds() in Python 2.7+
-        return int((td.microseconds + (td.seconds + td.days * 24 * 3600) *
-                    10**6) / 10**6)
+        return int(
+            (td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6
+        )
 
     # misc. methods
     # XXX move some where else, there are not general mdv operations
     def _calc_geometry(self):
-        """ Calculate geometry, return az_deg, range_km, el_deg. """
-        nsweeps = self.master_header['max_nz']
-        nrays = self.master_header['max_ny']
-        ngates = self.master_header['max_nx']
-        grid_minx = self.field_headers[0]['grid_minx']
-        grid_miny = self.field_headers[0]['grid_miny']
-        grid_dx = self.field_headers[0]['grid_dx']
-        grid_dy = self.field_headers[0]['grid_dy']
+        """Calculate geometry, return az_deg, range_km, el_deg."""
+        nsweeps = self.master_header["max_nz"]
+        nrays = self.master_header["max_ny"]
+        ngates = self.master_header["max_nx"]
+        grid_minx = self.field_headers[0]["grid_minx"]
+        grid_miny = self.field_headers[0]["grid_miny"]
+        grid_dx = self.field_headers[0]["grid_dx"]
+        grid_dy = self.field_headers[0]["grid_dy"]
 
         range_km = grid_minx + np.arange(ngates) * grid_dx
 
-        if self.field_headers[0]['proj_type'] == PROJ_RHI_RADAR:
+        if self.field_headers[0]["proj_type"] == PROJ_RHI_RADAR:
             el_deg = grid_miny + np.arange(nrays) * grid_dy
-            az_deg = self.vlevel_headers[0]['level'][0:nsweeps]
-        elif self.field_headers[0]['proj_type'] == PROJ_POLAR_RADAR:
+            az_deg = self.vlevel_headers[0]["level"][0:nsweeps]
+        elif self.field_headers[0]["proj_type"] == PROJ_POLAR_RADAR:
             az_deg = grid_miny + np.arange(nrays) * grid_dy
-            el_deg = self.vlevel_headers[0]['level'][0:nsweeps]
+            el_deg = self.vlevel_headers[0]["level"][0:nsweeps]
         else:
-            proj_type = self.field_headers[0]['proj_type']
-            message = ("Unsupported projection type: %i, " % (proj_type) +
-                       "is MDV file in antenna coordinates?")
+            proj_type = self.field_headers[0]["proj_type"]
+            message = (
+                "Unsupported projection type: %i, " % (proj_type)
+                + "is MDV file in antenna coordinates?"
+            )
             raise NotImplementedError(message)
 
         return az_deg, range_km, el_deg
 
     def _make_carts_dict(self):
-        """ Return a carts dictionary, distances in meters. """
+        """Return a carts dictionary, distances in meters."""
         az_deg, range_km, el_deg = self._calc_geometry()
         # simple calculation involving 4/3 earth radius
-        nsweeps = self.master_header['max_nz']
-        nrays = self.master_header['max_ny']
-        ngates = self.master_header['max_nx']
+        nsweeps = self.master_header["max_nz"]
+        nrays = self.master_header["max_ny"]
+        ngates = self.master_header["max_nx"]
         xx = np.empty([nsweeps, nrays, ngates], dtype=np.float32)
         yy = np.empty([nsweeps, nrays, ngates], dtype=np.float32)
         zz = np.empty([nsweeps, nrays, ngates], dtype=np.float32)
 
-        if self.projection == 'rhi':
+        if self.projection == "rhi":
             rg, ele = np.meshgrid(range_km, el_deg)
             rg = np.array(rg, dtype=np.float64)
             ele = np.array(ele, dtype=np.float64)
@@ -1117,7 +1131,7 @@ class MdvFile(object):
                 xx[aznum, :, :] = x
                 yy[aznum, :, :] = y
 
-        elif self.projection == 'ppi':
+        elif self.projection == "ppi":
             rg, azg = np.meshgrid(range_km, az_deg)
             rg = np.array(rg, dtype=np.float64)
             azg = np.array(azg, dtype=np.float64)
@@ -1128,21 +1142,21 @@ class MdvFile(object):
                 xx[elnum, :, :] = x
                 yy[elnum, :, :] = y
 
-        return {'x': xx, 'y': yy, 'z': zz}
+        return {"x": xx, "y": yy, "z": zz}
 
     def _make_fields_list(self):
-        """ Return a list of fields. """
+        """Return a list of fields."""
         fh = self.field_headers
-        return [fh[i]['field_name'] for i in range(len(fh))]
+        return [fh[i]["field_name"] for i in range(len(fh))]
 
 
 def _decode_rle8(compr_data, key, decompr_size):
-    """ Decode 8-bit MDV run length encoding. """
+    """Decode 8-bit MDV run length encoding."""
     # Encoding is described in section 7 of:
     # http://rap.ucar.edu/projects/IHL/RalHtml/protocols/mdv_file/
     # This function would benefit greate by being rewritten in Cython
-    data = np.frombuffer(compr_data, dtype='>B')
-    out = np.empty((decompr_size, ), dtype='uint8')
+    data = np.frombuffer(compr_data, dtype=">B")
+    out = np.empty((decompr_size,), dtype="uint8")
     data_ptr = 0
     out_ptr = 0
     while data_ptr != len(data):
@@ -1151,16 +1165,16 @@ def _decode_rle8(compr_data, key, decompr_size):
             out[out_ptr] = v
             data_ptr += 1
             out_ptr += 1
-        else:   # run length encoded
-            count = data[data_ptr+1]
-            value = data[data_ptr+2]
-            out[out_ptr:out_ptr+count] = value
+        else:  # run length encoded
+            count = data[data_ptr + 1]
+            value = data[data_ptr + 2]
+            out[out_ptr : out_ptr + count] = value
             data_ptr += 3
             out_ptr += count
     return out.tobytes()
 
 
-class _MdvVolumeDataExtractor(object):
+class _MdvVolumeDataExtractor:
     """
     Class facilitating on demand extraction of data from a MDV file.
 
@@ -1179,14 +1193,14 @@ class _MdvVolumeDataExtractor(object):
     """
 
     def __init__(self, mdvfile, field_num, fillvalue, two_dims=True):
-        """ initialize the object. """
+        """initialize the object."""
         self.mdvfile = mdvfile
         self.field_num = field_num
         self.fillvalue = fillvalue
         self.two_dims = two_dims
 
     def __call__(self):
-        """ Return an array containing data from the referenced volume. """
+        """Return an array containing data from the referenced volume."""
         # grab data from MDV object, mask and reshape
         data = self.mdvfile.read_a_field(self.field_num)
         data[np.where(np.isnan(data))] = self.fillvalue

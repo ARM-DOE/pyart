@@ -7,14 +7,17 @@ import warnings
 
 import numpy as np
 import scipy.ndimage as ndimage
-
 from scipy.optimize import fmin_l_bfgs_b
 
-from ..config import get_metadata, get_fillvalue
-from ._common_dealias import _parse_fields, _parse_gatefilter, _set_limits
-from ._common_dealias import _parse_rays_wrap_around, _parse_nyquist_vel
+from ..config import get_fillvalue, get_metadata
+from ._common_dealias import (
+    _parse_fields,
+    _parse_gatefilter,
+    _parse_nyquist_vel,
+    _parse_rays_wrap_around,
+    _set_limits,
+)
 from ._fast_edge_finder import _fast_edge_finder
-
 
 # Possible future improvements to the region based dealiasing algorithm:
 #
@@ -34,11 +37,23 @@ from ._fast_edge_finder import _fast_edge_finder
 
 
 def dealias_region_based(
-        radar, ref_vel_field=None, interval_splits=3, interval_limits=None,
-        skip_between_rays=100, skip_along_ray=100, centered=True,
-        nyquist_vel=None, check_nyquist_uniform=True, gatefilter=False,
-        rays_wrap_around=None, keep_original=False, set_limits=True,
-        vel_field=None, corr_vel_field=None, **kwargs):
+    radar,
+    ref_vel_field=None,
+    interval_splits=3,
+    interval_limits=None,
+    skip_between_rays=100,
+    skip_along_ray=100,
+    centered=True,
+    nyquist_vel=None,
+    check_nyquist_uniform=True,
+    gatefilter=False,
+    rays_wrap_around=None,
+    keep_original=False,
+    set_limits=True,
+    vel_field=None,
+    corr_vel_field=None,
+    **kwargs
+):
     """
     Dealias Doppler velocities using a region based algorithm.
 
@@ -133,7 +148,7 @@ def dealias_region_based(
     if ref_vel_field is None:
         ref_vdata = None
     else:
-        ref_vdata = radar.fields[ref_vel_field]['data']
+        ref_vdata = radar.fields[ref_vel_field]["data"]
 
     # exclude masked and invalid velocity gates
     gatefilter.exclude_masked(vel_field)
@@ -141,24 +156,25 @@ def dealias_region_based(
     gfilter = gatefilter.gate_excluded
 
     # perform dealiasing
-    vdata = radar.fields[vel_field]['data'].view(np.ndarray)
-    data = vdata.copy()     # dealiased velocities
+    vdata = radar.fields[vel_field]["data"].view(np.ndarray)
+    data = vdata.copy()  # dealiased velocities
 
     # loop over sweeps
     for nsweep, sweep_slice in enumerate(radar.iter_slice()):
 
         # extract sweep data
-        sdata = vdata[sweep_slice].copy()   # is a copy needed here?
+        sdata = vdata[sweep_slice].copy()  # is a copy needed here?
         scorr = data[sweep_slice]
         sfilter = gfilter[sweep_slice]
 
         # find nyquist velocity and interval segmentation limits
-        nyquist_interval = nyquist_vel[nsweep] * 2.
+        nyquist_interval = nyquist_vel[nsweep] * 2.0
         if interval_limits is None:
             nvel = nyquist_vel[nsweep]
             valid_sdata = sdata[~sfilter]
             s_interval_limits = _find_sweep_interval_splits(
-                nvel, interval_splits, valid_sdata, nsweep)
+                nvel, interval_splits, valid_sdata, nsweep
+            )
         else:
             s_interval_limits = interval_limits
 
@@ -173,8 +189,13 @@ def dealias_region_based(
 
         # find all edges between regions
         indices, edge_count, velos = _edge_sum_and_count(
-            labels, num_masked_gates, sdata, rays_wrap_around,
-            skip_between_rays, skip_along_ray)
+            labels,
+            num_masked_gates,
+            sdata,
+            rays_wrap_around,
+            skip_between_rays,
+            skip_along_ray,
+        )
 
         # no unfolding required if no edges exist between regions
         if len(edge_count) == 0:
@@ -182,8 +203,9 @@ def dealias_region_based(
 
         # find the number of folds in the regions
         region_tracker = _RegionTracker(region_sizes)
-        edge_tracker = _EdgeTracker(indices, edge_count, velos,
-                                    nyquist_interval, nfeatures+1)
+        edge_tracker = _EdgeTracker(
+            indices, edge_count, velos, nyquist_interval, nfeatures + 1
+        )
         while True:
             if _combine_regions(region_tracker, edge_tracker):
                 break
@@ -192,8 +214,7 @@ def dealias_region_based(
         # so that the average number of gate folds is zero.
         if centered:
             gates_dealiased = region_sizes.sum()
-            total_folds = np.sum(
-                region_sizes * region_tracker.unwrap_number[1:])
+            total_folds = np.sum(region_sizes * region_tracker.unwrap_number[1:])
             sweep_offset = int(round(float(total_folds) / gates_dealiased))
             if sweep_offset != 0:
                 region_tracker.unwrap_number -= sweep_offset
@@ -205,7 +226,7 @@ def dealias_region_based(
         # anchor unfolded velocities against reference velocity
         if ref_vdata is not None:
             sref = ref_vdata[sweep_slice]
-            gfold = (sref-scorr).mean()/nyquist_interval
+            gfold = (sref - scorr).mean() / nyquist_interval
             gfold = np.ma.round(gfold)
 
             # Anchor specific regions against reference velocity
@@ -213,41 +234,55 @@ def dealias_region_based(
             # from reference velocity and to 2D continuity
             new_interval_limits = np.linspace(scorr.min(), scorr.max(), 10)
             labels_corr, nfeatures_corr = _find_regions(
-                scorr, sfilter, new_interval_limits)
-            
+                scorr, sfilter, new_interval_limits
+            )
+
             # If we only have one region, just adjust the whole sweep by
             # x nyquist intervals
             if nfeatures_corr < 2:
                 scorr = scorr + gfold * nyquist_interval
             else:
-                bounds_list = [(x, y) for (x, y) in zip(
-                    -6*np.ones(nfeatures_corr), 5*np.ones(nfeatures_corr))]
+                bounds_list = [
+                    (x, y)
+                    for (x, y) in zip(
+                        -6 * np.ones(nfeatures_corr), 5 * np.ones(nfeatures_corr)
+                    )
+                ]
                 scorr_means = np.zeros(nfeatures_corr)
                 sref_means = np.zeros(nfeatures_corr)
-                for reg in range(1, nfeatures_corr+1):
-                    scorr_means[reg-1] = np.ma.mean(scorr[labels_corr == reg])
-                    sref_means[reg-1] = np.ma.mean(sref[labels_corr == reg])
+                for reg in range(1, nfeatures_corr + 1):
+                    scorr_means[reg - 1] = np.ma.mean(scorr[labels_corr == reg])
+                    sref_means[reg - 1] = np.ma.mean(sref[labels_corr == reg])
 
                 def cost_function(x):
-                    return _cost_function(x, scorr_means, sref_means,
-                                          nyquist_interval, nfeatures_corr)
+                    return _cost_function(
+                        x, scorr_means, sref_means, nyquist_interval, nfeatures_corr
+                    )
 
                 def gradient(x):
-                    return _gradient(x, scorr_means, sref_means,
-                                     nyquist_interval, nfeatures_corr)
+                    return _gradient(
+                        x, scorr_means, sref_means, nyquist_interval, nfeatures_corr
+                    )
 
                 nyq_adjustments = fmin_l_bfgs_b(
-                    cost_function, gfold*np.ones((nfeatures_corr)), disp=True,
-                    fprime=gradient, bounds=bounds_list, maxiter=200, pgtol=nyquist_interval)
+                    cost_function,
+                    gfold * np.ones(nfeatures_corr),
+                    disp=True,
+                    fprime=gradient,
+                    bounds=bounds_list,
+                    maxiter=200,
+                    pgtol=nyquist_interval,
+                )
 
                 i = 0
                 for reg in range(1, nfeatures_corr):
-                    scorr[labels == reg] += (nyquist_interval *
-                                             np.round(nyq_adjustments[0][i]))
+                    scorr[labels == reg] += nyquist_interval * np.round(
+                        nyq_adjustments[0][i]
+                    )
                     i = i + 1
 
     # fill_value from the velocity dictionary if present
-    fill_value = radar.fields[vel_field].get('_FillValue', get_fillvalue())
+    fill_value = radar.fields[vel_field].get("_FillValue", get_fillvalue())
 
     # mask filtered gates
     if np.any(gfilter):
@@ -255,12 +290,12 @@ def dealias_region_based(
 
     # restore original values where dealiasing not applied
     if keep_original:
-        data[gfilter] = radar.fields[vel_field]['data'][gfilter]
+        data[gfilter] = radar.fields[vel_field]["data"][gfilter]
 
     # return field dictionary containing dealiased Doppler velocities
     corr_vel = get_metadata(corr_vel_field)
-    corr_vel['data'] = data
-    corr_vel['_FillValue'] = fill_value
+    corr_vel["data"] = data
+    corr_vel["_FillValue"] = fill_value
 
     if set_limits:
         # set valid_min and valid_max in corr_vel
@@ -270,20 +305,21 @@ def dealias_region_based(
 
 
 def _find_sweep_interval_splits(nyquist, interval_splits, velocities, nsweep):
-    """ Return the interval limits for a given sweep. """
+    """Return the interval limits for a given sweep."""
     # The Nyquist interval is split into interval_splits  equal sized areas.
     # If velocities outside the Nyquist are present the number and
     # limits of the interval splits must be adjusted so that theses
     # velocities are included in one of the splits.
     add_start = add_end = 0
-    interval = (2. * nyquist) / (interval_splits)
+    interval = (2.0 * nyquist) / (interval_splits)
     # no change from default if all gates filtered
     if len(velocities) != 0:
         max_vel = velocities.max()
         min_vel = velocities.min()
         if max_vel > nyquist or min_vel < -nyquist:
-            msg = ("Velocities outside of the Nyquist interval found in "
-                   "sweep %i." % (nsweep))
+            msg = "Velocities outside of the Nyquist interval found in " "sweep %i." % (
+                nsweep
+            )
             warnings.warn(msg, UserWarning)
             # additional intervals must be added to capture the velocities
             # outside the nyquist limits
@@ -342,8 +378,9 @@ def _find_regions(vel, gfilter, limits):
     return label, nfeatures
 
 
-def _edge_sum_and_count(labels, num_masked_gates, data,
-                        rays_wrap_around, max_gap_x, max_gap_y):
+def _edge_sum_and_count(
+    labels, num_masked_gates, data, rays_wrap_around, max_gap_x, max_gap_y
+):
     """
     Find all edges between labels regions.
 
@@ -354,8 +391,13 @@ def _edge_sum_and_count(labels, num_masked_gates, data,
         total_nodes += labels.shape[0] * 2
 
     indices, velocities = _fast_edge_finder(
-        labels.astype('int32'), data.astype('float32'),
-        rays_wrap_around, max_gap_x, max_gap_y, total_nodes)
+        labels.astype("int32"),
+        data.astype("float32"),
+        rays_wrap_around,
+        max_gap_x,
+        max_gap_y,
+        total_nodes,
+    )
     index1, index2 = indices
     vel1, vel2 = velocities
     count = np.ones_like(vel1, dtype=np.int32)
@@ -374,13 +416,12 @@ def _edge_sum_and_count(labels, num_masked_gates, data,
     vel2 = vel2[order]
     count = count[order]
 
-    unique_mask = ((index1[1:] != index1[:-1]) |
-                   (index2[1:] != index2[:-1]))
+    unique_mask = (index1[1:] != index1[:-1]) | (index2[1:] != index2[:-1])
     unique_mask = np.append(True, unique_mask)
     index1 = index1[unique_mask]
     index2 = index2[unique_mask]
 
-    unique_inds, = np.nonzero(unique_mask)
+    (unique_inds,) = np.nonzero(unique_mask)
     vel1 = np.add.reduceat(vel1, unique_inds, dtype=vel1.dtype)
     vel2 = np.add.reduceat(vel2, unique_inds, dtype=vel2.dtype)
     count = np.add.reduceat(count, unique_inds, dtype=count.dtype)
@@ -389,7 +430,7 @@ def _edge_sum_and_count(labels, num_masked_gates, data,
 
 
 def _combine_regions(region_tracker, edge_tracker):
-    """ Returns True when done. """
+    """Returns True when done."""
     # Edge parameters from edge with largest weight
     status, extra = edge_tracker.pop_edge()
     if status:
@@ -422,18 +463,21 @@ def _combine_regions(region_tracker, edge_tracker):
 
 # Minimize cost function that is sum of difference between regions and
 # sounding
-def _cost_function(nyq_vector, vels_slice_means,
-                   svels_slice_means, v_nyq_vel, nfeatures):
-    """ Cost function for minimization in region based algorithm. """
+def _cost_function(
+    nyq_vector, vels_slice_means, svels_slice_means, v_nyq_vel, nfeatures
+):
+    """Cost function for minimization in region based algorithm."""
     cost = 0
     i = 0
 
     for reg in range(nfeatures):
         add_value = 0
         # Deviance from sounding
-        add_value = (vels_slice_means[reg] +
-                        np.round(nyq_vector[i]) * v_nyq_vel -
-                        svels_slice_means[reg])**2
+        add_value = (
+            vels_slice_means[reg]
+            + np.round(nyq_vector[i]) * v_nyq_vel
+            - svels_slice_means[reg]
+        ) ** 2
 
         if np.isfinite(add_value):
             cost += add_value
@@ -442,18 +486,19 @@ def _cost_function(nyq_vector, vels_slice_means,
     return cost
 
 
-def _gradient(nyq_vector, vels_slice_means, svels_slice_means,
-              v_nyq_vel, nfeatures):
-    """ Gradient of cost function for minimization
-        in region based algorithm. """
+def _gradient(nyq_vector, vels_slice_means, svels_slice_means, v_nyq_vel, nfeatures):
+    """Gradient of cost function for minimization
+    in region based algorithm."""
     gradient_vector = np.zeros(len(nyq_vector))
     i = 0
     for reg in range(nfeatures):
-        add_value = (vels_slice_means[reg] +
-                     np.round(nyq_vector[i])*v_nyq_vel -
-                     svels_slice_means[reg])
+        add_value = (
+            vels_slice_means[reg]
+            + np.round(nyq_vector[i]) * v_nyq_vel
+            - svels_slice_means[reg]
+        )
         if np.isfinite(add_value):
-            gradient_vector[i] = 2*add_value*v_nyq_vel
+            gradient_vector[i] = 2 * add_value * v_nyq_vel
 
         # Regional continuity
         vels_without_cur = np.delete(vels_slice_means, reg)
@@ -471,29 +516,29 @@ def _gradient(nyq_vector, vels_slice_means, svels_slice_means,
     return gradient_vector
 
 
-class _RegionTracker(object):
+class _RegionTracker:
     """
     Tracks the location of radar volume regions contained in each node
     as the network is reduced.
     """
 
     def __init__(self, region_sizes):
-        """ initalize. """
+        """initalize."""
         # number of gates in each node
         nregions = len(region_sizes) + 1
-        self.node_size = np.zeros(nregions, dtype='int32')
+        self.node_size = np.zeros(nregions, dtype="int32")
         self.node_size[1:] = region_sizes[:]
 
         # array of lists containing the regions in each node
-        self.regions_in_node = np.zeros(nregions, dtype='object')
+        self.regions_in_node = np.zeros(nregions, dtype="object")
         for i in range(nregions):
             self.regions_in_node[i] = [i]
 
         # number of unwrappings to apply to dealias each region
-        self.unwrap_number = np.zeros(nregions, dtype='int32')
+        self.unwrap_number = np.zeros(nregions, dtype="int32")
 
     def merge_nodes(self, node_a, node_b):
-        """ Merge node b into node a. """
+        """Merge node b into node a."""
 
         # move all regions from node_b to node_a
         regions_to_merge = self.regions_in_node[node_b]
@@ -506,7 +551,7 @@ class _RegionTracker(object):
         return
 
     def unwrap_node(self, node, nwrap):
-        """ Unwrap all gates contained a node. """
+        """Unwrap all gates contained a node."""
         if nwrap == 0:
             return
         # for each region in node add nwrap
@@ -515,16 +560,15 @@ class _RegionTracker(object):
         return
 
     def get_node_size(self, node):
-        """ Return the number of gates in a node. """
+        """Return the number of gates in a node."""
         return self.node_size[node]
 
 
-class _EdgeTracker(object):
-    """ A class for tracking edges in a dynamic network. """
+class _EdgeTracker:
+    """A class for tracking edges in a dynamic network."""
 
-    def __init__(self, indices, edge_count, velocities, nyquist_interval,
-                 nnodes):
-        """ initialize """
+    def __init__(self, indices, edge_count, velocities, nyquist_interval, nnodes):
+        """initialize"""
 
         nedges = int(len(indices[0]) / 2)
 
@@ -542,7 +586,7 @@ class _EdgeTracker(object):
         self._last_base_node = -1
 
         # array of linked lists pointing to each node
-        self.edges_in_node = np.zeros(nnodes, dtype='object')
+        self.edges_in_node = np.zeros(nnodes, dtype="object")
         for i in range(nnodes):
             self.edges_in_node[i] = []
 
@@ -555,7 +599,7 @@ class _EdgeTracker(object):
                 continue
             self.node_alpha[edge] = i
             self.node_beta[edge] = j
-            self.sum_diff[edge] = ((vel - nvel) / nyquist_interval)
+            self.sum_diff[edge] = (vel - nvel) / nyquist_interval
             self.weight[edge] = count
             self.edges_in_node[i].append(edge)
             self.edges_in_node[j].append(edge)
@@ -567,7 +611,7 @@ class _EdgeTracker(object):
         self.priority_queue = []
 
     def merge_nodes(self, base_node, merge_node, foo_edge):
-        """ Merge nodes. """
+        """Merge nodes."""
 
         # remove edge between base and merge nodes
         self.weight[foo_edge] = -999
@@ -609,8 +653,7 @@ class _EdgeTracker(object):
             neighbor = self.node_beta[edge_num]
             if self._common_finder[neighbor]:
                 base_edge_num = self._common_index[neighbor]
-                self._combine_edges(base_edge_num, edge_num,
-                                    merge_node, neighbor)
+                self._combine_edges(base_edge_num, edge_num, merge_node, neighbor)
             # if not fill in _common_ arrays.
             else:
                 self._common_finder[neighbor] = True
@@ -623,14 +666,13 @@ class _EdgeTracker(object):
         self._last_base_node = int(base_node)
         return
 
-    def _combine_edges(self, base_edge, merge_edge,
-                       merge_node, neighbor_node):
-        """ Combine edges into a single edge.  """
+    def _combine_edges(self, base_edge, merge_edge, merge_node, neighbor_node):
+        """Combine edges into a single edge."""
         # Merging nodes MUST be set to alpha prior to calling this function
 
         # combine edge weights
         self.weight[base_edge] += self.weight[merge_edge]
-        self.weight[merge_edge] = -999.
+        self.weight[merge_edge] = -999.0
 
         # combine sums
         self.sum_diff[base_edge] += self.sum_diff[merge_edge]
@@ -647,18 +689,18 @@ class _EdgeTracker(object):
         # self.priority_queue.sort()
 
     def _reverse_edge_direction(self, edge):
-        """ Reverse an edges direction, change alpha and beta. """
+        """Reverse an edges direction, change alpha and beta."""
         # swap nodes
         old_alpha = int(self.node_alpha[edge])
         old_beta = int(self.node_beta[edge])
         self.node_alpha[edge] = old_beta
         self.node_beta[edge] = old_alpha
         # swap sums
-        self.sum_diff[edge] = -1. * self.sum_diff[edge]
+        self.sum_diff[edge] = -1.0 * self.sum_diff[edge]
         return
 
     def unwrap_node(self, node, nwrap):
-        """ Unwrap a node. """
+        """Unwrap a node."""
         if nwrap == 0:
             return
         # add weight * nwrap to each edge in node
@@ -672,7 +714,7 @@ class _EdgeTracker(object):
         return
 
     def pop_edge(self):
-        """ Pop edge with largest weight. Return node numbers and diff. """
+        """Pop edge with largest weight. Return node numbers and diff."""
 
         # if len(priority_queue) == 0:
         #     return True, None

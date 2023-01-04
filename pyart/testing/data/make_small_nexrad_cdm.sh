@@ -9,6 +9,6 @@ java -classpath toolsUI-4.3.jar ucar.nc2.FileWriter \
      -in KATX20130717_195021_V06_DUMMY -out example_nexrad_cdm
 rm KATX20130717_195021_V06_DUMMY
 
-# compress 
+# compress
 rm example_nexrad_cdm.bz2
 bzip2 -z --best example_nexrad_cdm

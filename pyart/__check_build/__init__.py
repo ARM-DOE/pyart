@@ -24,23 +24,28 @@ def raise_build_error(e):
         msg = INPLACE_MSG
     dir_content = list()
     for i, filename in enumerate(os.listdir(local_dir)):
-        if ((i + 1) % 3):
+        if (i + 1) % 3:
             dir_content.append(filename.ljust(26))
         else:
-            dir_content.append(filename + '\n')
-    raise ImportError("""%s
+            dir_content.append(filename + "\n")
+    raise ImportError(
+        """{}
 ___________________________________________________________________________
-Contents of %s:
-%s
+Contents of {}:
+{}
 ___________________________________________________________________________
 It seems that Py-ART has not been built correctly.
 
 If you have installed Py-ART from source, please do not forget
 to build the package before using it: run `python setup.py install` in the
 source directory.
-%s""" % (e, local_dir, ''.join(dir_content).strip(), msg))
+{}""".format(
+            e, local_dir, "".join(dir_content).strip(), msg
+        )
+    )
+
 
 try:
-    from ._check_build import check_build
+    from ._check_build import check_build  # noqa
 except ImportError as e:
     raise_build_error(e)

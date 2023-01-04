@@ -1,8 +1,8 @@
 """ Unit Tests for Py-ART's core/wind_profile.py module. """
 
 import numpy as np
-from numpy.testing import assert_almost_equal
 import pytest
+from numpy.testing import assert_almost_equal
 
 from pyart.core import HorizontalWindProfile
 
@@ -22,8 +22,8 @@ def test_horizontalwindprofile_class():
 
 def test_horizontalwindprofile_from_u_and_v():
     height = np.arange(5)
-    u_wind = [0, -1, 0, 1, -np.sqrt(2)/2.]
-    v_wind = [-1, 0, 1, 0, -np.sqrt(2)/2.]
+    u_wind = [0, -1, 0, 1, -np.sqrt(2) / 2.0]
+    v_wind = [-1, 0, 1, 0, -np.sqrt(2) / 2.0]
     hprofile = HorizontalWindProfile.from_u_and_v(height, u_wind, v_wind)
 
     assert_almost_equal(hprofile.height, [0, 1, 2, 3, 4])
@@ -45,5 +45,12 @@ def test_horizontalwindprofile_location_error():
     speed = [1, 1]
     direction = [1, 2]
     lat = [1]
-    pytest.raises(ValueError, HorizontalWindProfile, height, speed, direction,
-                  latitude=lat, longitude=None)
+    pytest.raises(
+        ValueError,
+        HorizontalWindProfile,
+        height,
+        speed,
+        direction,
+        latitude=lat,
+        longitude=None,
+    )
