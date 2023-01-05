@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.config &#8212; Py-ART 1.14.1.post14 documentation</title>
+    <title>pyart.config &#8212; Py-ART 1.14.1.post15 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -279,9 +279,14 @@
     <span class="k">global</span> <span class="n">_DEFAULT_FIELD_LIMITS</span>
 
     <span class="k">try</span><span class="p">:</span>
-        <span class="kn">from</span> <span class="nn">importlib.machinery</span> <span class="kn">import</span> <span class="n">SourceFileLoader</span>
+        <span class="kn">from</span> <span class="nn">importlib.util</span> <span class="kn">import</span> <span class="n">module_from_spec</span><span class="p">,</span> <span class="n">spec_from_file_location</span>
 
-        <span class="n">cfile</span> <span class="o">=</span> <span class="n">SourceFileLoader</span><span class="p">(</span><span class="s2">&quot;metadata_config&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">load_module</span><span class="p">()</span>
+        <span class="n">spec</span> <span class="o">=</span> <span class="n">spec_from_file_location</span><span class="p">(</span><span class="s2">&quot;metadata_config&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+        <span class="c1"># assert spec is not None</span>
+        <span class="n">cfile</span> <span class="o">=</span> <span class="n">module_from_spec</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
+        <span class="c1"># assert spec.loader is not None</span>
+        <span class="n">spec</span><span class="o">.</span><span class="n">loader</span><span class="o">.</span><span class="n">exec_module</span><span class="p">(</span><span class="n">cfile</span><span class="p">)</span>
+
     <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
         <span class="kn">import</span> <span class="nn">imp</span>
 
@@ -292,8 +297,13 @@
     <span class="n">_FIELD_MAPPINGS</span> <span class="o">=</span> <span class="n">cfile</span><span class="o">.</span><span class="n">FIELD_MAPPINGS</span>
     <span class="n">_FILL_VALUE</span> <span class="o">=</span> <span class="n">cfile</span><span class="o">.</span><span class="n">FILL_VALUE</span>
     <span class="n">_DEFAULT_FIELD_NAMES</span> <span class="o">=</span> <span class="n">cfile</span><span class="o">.</span><span class="n">DEFAULT_FIELD_NAMES</span>
-    <span class="n">_DEFAULT_FIELD_COLORMAP</span> <span class="o">=</span> <span class="n">cfile</span><span class="o">.</span><span class="n">DEFAULT_FIELD_COLORMAP</span>
-    <span class="n">_DEFAULT_FIELD_LIMITS</span> <span class="o">=</span> <span class="n">cfile</span><span class="o">.</span><span class="n">DEFAULT_FIELD_LIMITS</span>
+
+    <span class="c1"># These last two are optional</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">_DEFAULT_FIELD_COLORMAP</span> <span class="o">=</span> <span class="n">cfile</span><span class="o">.</span><span class="n">DEFAULT_FIELD_COLORMAP</span>
+        <span class="n">_DEFAULT_FIELD_LIMITS</span> <span class="o">=</span> <span class="n">cfile</span><span class="o">.</span><span class="n">DEFAULT_FIELD_LIMITS</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">pass</span>
     <span class="k">return</span></div>
 
 
