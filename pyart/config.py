@@ -59,9 +59,14 @@ def load_config(filename=None):
     global _DEFAULT_FIELD_LIMITS
 
     try:
-        from importlib.machinery import SourceFileLoader
+        from importlib.util import module_from_spec, spec_from_file_location
 
-        cfile = SourceFileLoader("metadata_config", filename).load_module()
+        spec = spec_from_file_location("metadata_config", filename)
+        assert spec is not None
+        cfile = module_from_spec(spec)
+        assert spec.loader is not None
+        spec.loader.exec_module(cfile)
+
     except ImportError:
         import imp
 
