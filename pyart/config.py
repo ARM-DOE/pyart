@@ -62,9 +62,9 @@ def load_config(filename=None):
         from importlib.util import module_from_spec, spec_from_file_location
 
         spec = spec_from_file_location("metadata_config", filename)
-        assert spec is not None
+        # assert spec is not None
         cfile = module_from_spec(spec)
-        assert spec.loader is not None
+        # assert spec.loader is not None
         spec.loader.exec_module(cfile)
 
     except ImportError:
@@ -77,8 +77,13 @@ def load_config(filename=None):
     _FIELD_MAPPINGS = cfile.FIELD_MAPPINGS
     _FILL_VALUE = cfile.FILL_VALUE
     _DEFAULT_FIELD_NAMES = cfile.DEFAULT_FIELD_NAMES
-    _DEFAULT_FIELD_COLORMAP = cfile.DEFAULT_FIELD_COLORMAP
-    _DEFAULT_FIELD_LIMITS = cfile.DEFAULT_FIELD_LIMITS
+
+    # These last two are optional
+    try:
+        _DEFAULT_FIELD_COLORMAP = cfile.DEFAULT_FIELD_COLORMAP
+        _DEFAULT_FIELD_LIMITS = cfile.DEFAULT_FIELD_LIMITS
+    except:
+        pass
     return
 
 
